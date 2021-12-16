@@ -9,7 +9,8 @@ import VueLazyload from 'vue-lazyload';
 import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon, Checkbox,
   Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions, Tag, Tooltip,
-  Divider, Message, Notification, Tabs, Tree, TimePicker, InputNumber, Breadcrumb, Empty, PageHeader, TreeSelect, Popover, Avatar, Card
+  Divider, Message, Notification, Tabs, Tree, TimePicker, InputNumber, Breadcrumb,
+  Empty, PageHeader, TreeSelect, Popover, Avatar, Card, Cascader
 } from '@codeages/design-vue';
 import Clipboard from 'v-clipboard';
 
@@ -52,6 +53,7 @@ if (!window.Vue) {
   Vue.use(Avatar)
   Vue.use(Card)
   Vue.use(Clipboard)
+  Vue.use(Cascader)
 
   Vue.prototype.$message = Message;
   Vue.prototype.$notification = Notification;

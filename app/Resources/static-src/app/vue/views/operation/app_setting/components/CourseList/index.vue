@@ -12,7 +12,12 @@
       </div>
 
       <div :class="{ clearfix: moduleData.displayStyle === 'distichous' }">
-        <component :is="currentComponent" v-for="(item, index) in moduleData.limit" :key="index" />
+        <component
+          :is="currentComponent"
+          v-for="item in list"
+          :key="item.id"
+          :item="item"
+        />
       </div>
     </div>
   </layout>
@@ -20,6 +25,7 @@
 
 <script>
 import _ from 'lodash';
+import { Course } from 'common/vue/service/index.js';
 import moduleMixin from '../moduleMixin';
 import ColumnItem from './ColumnItem.vue';
 import RowItem from './RowItem.vue';
@@ -33,6 +39,43 @@ export default {
     currentComponent() {
       const { displayStyle } = this.moduleData;
       return displayStyle === 'distichous' ? ColumnItem : RowItem;
+    }
+  },
+
+  data() {
+    return {
+      list: []
+    }
+  },
+
+  mounted() {
+    this.fetchCourse();
+  },
+
+  watch: {
+    moduleData: {
+      handler: function() {
+        this.fetchCourse();
+      },
+      deep: true
+    }
+  },
+
+  methods: {
+    async fetchCourse() {
+      const { sort, limit, lastDays, categoryId, sourceType, items } = this.moduleData;
+      if (sourceType === 'custom') {
+        this.list = items;
+        return;
+      }
+      const params = {
+        sort,
+        limit,
+        lastDays,
+        categoryId
+      };
+      const { data } = await Course.searchCourses(params);
+      this.list = data;
     }
   }
 }

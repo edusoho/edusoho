@@ -43,61 +43,62 @@
         </a-radio-group>
       </div>
 
-      <div v-if="isCustom" class="design-editor__item">
+      <div v-show="moduleData.sourceType === 'custom'" class="design-editor__item">
         <span class="design-editor__required">课程分类：</span>
          <a-button size="small">选择课程</a-button>
       </div>
 
-      <template v-else>
-        <div class="design-editor__item">
-          <span>课程分类：</span>
-          <a-select
-            style="width: 200px;"
-            size="small"
-          >
-            <a-select-option v-for="item in 8" :key="item">{{ item  }}</a-select-option>
-          </a-select>
-        </div>
+      <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
+        <span>课程分类：</span>
+        <a-cascader
+          style="width: 200px;"
+          size="small"
+          :options="options"
+          change-on-select
+          :default-value="[moduleData.categoryId]"
+          :field-names="{ label: 'name', value: 'id', children: 'children' }"
+          @change="(value) => handleChange({ key: 'categoryId', value: value[value.length - 1] })"
+        />
+      </div>
 
-        <div class="design-editor__item">
-          <span>排列顺序：</span>
-          <a-select
-            :style="{ width: showLastDays ? '90px' : '200px' }"
-            size="small"
-            :default-value="moduleData.sort"
-            @change="(value) => handleChange({ key: 'sort', value })"
-          >
-            <a-select-option key="-studentNum">加入最多</a-select-option>
-            <a-select-option key="-createdTime">最近创建</a-select-option>
-            <a-select-option key="-rating">评分最高</a-select-option>
-            <a-select-option key="recommendedSeq">推荐课程</a-select-option>
-          </a-select>
-          <a-select
-            v-if="showLastDays"
-            style="width: 106px;"
-            size="small"
-            :default-value="moduleData.lastDays"
-            @change="(value) => handleChange({ key: 'lastDays', value })"
-          >
-            <a-select-option key="7">最近 7 天</a-select-option>
-            <a-select-option key="30">最近 30 天</a-select-option>
-            <a-select-option key="90">最近 90 天</a-select-option>
-            <a-select-option key="0">历史所有</a-select-option>
-          </a-select>
-        </div>
+      <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
+        <span>排列顺序：</span>
+        <a-select
+          :style="{ width: showLastDays ? '90px' : '200px' }"
+          size="small"
+          :default-value="moduleData.sort"
+          @change="(value) => handleChange({ key: 'sort', value })"
+        >
+          <a-select-option key="-studentNum">加入最多</a-select-option>
+          <a-select-option key="-createdTime">最近创建</a-select-option>
+          <a-select-option key="-rating">评分最高</a-select-option>
+          <a-select-option key="recommendedSeq">推荐课程</a-select-option>
+        </a-select>
+        <a-select
+          v-show="showLastDays"
+          style="width: 106px;"
+          size="small"
+          :default-value="moduleData.lastDays"
+          @change="(value) => handleChange({ key: 'lastDays', value })"
+        >
+          <a-select-option key="7">最近 7 天</a-select-option>
+          <a-select-option key="30">最近 30 天</a-select-option>
+          <a-select-option key="90">最近 90 天</a-select-option>
+          <a-select-option key="0">历史所有</a-select-option>
+        </a-select>
+      </div>
 
-        <div class="design-editor__item">
-          <span>显示个数：</span>
-          <a-select
-            style="width: 200px;"
-            size="small"
-            :default-value="moduleData.limit"
-            @change="(value) => handleChange({ key: 'limit', value })"
-          >
-            <a-select-option v-for="item in 8" :key="item">{{ item  }}</a-select-option>
-          </a-select>
-        </div>
-      </template>
+      <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
+        <span>显示个数：</span>
+        <a-select
+          style="width: 200px;"
+          size="small"
+          :default-value="moduleData.limit"
+          @change="(value) => handleChange({ key: 'limit', value })"
+        >
+          <a-select-option v-for="item in 8" :key="item">{{ item  }}</a-select-option>
+        </a-select>
+      </div>
     </div>
   </edit-layout>
 </template>
@@ -122,6 +123,12 @@ export default {
     EditLayout
   },
 
+  data() {
+    return {
+      options: []
+    }
+  },
+
   computed: {
     showLastDays() {
       const { sort } = this.moduleData;
@@ -131,10 +138,6 @@ export default {
     isCustom() {
       const { sourceType } = this.moduleData;
       return sourceType === 'custom';
-    },
-
-    courseCategories() {
-      return state.courseCategories;
     }
   },
 
@@ -151,9 +154,11 @@ export default {
     },
 
     async fetchCategories() {
-      if (_.size(state.courseCategories)) return;
-      const data = await Categories.get({ query: { type: 'course' }});
-      mutations.setCourseCategories(data);
+      if (!_.size(state.courseCategories)) {
+        const data = await Categories.get({ query: { type: 'course' }});
+        mutations.setCourseCategories(data);
+      };
+      this.options = state.courseCategories;
     }
   }
 }

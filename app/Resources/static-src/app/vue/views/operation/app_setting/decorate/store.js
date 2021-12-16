@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import _ from 'lodash';
 
 export const state = Vue.observable({
   courseCategory: [], // 课程分类数据
@@ -7,6 +8,16 @@ export const state = Vue.observable({
   courseCategories: [], // 课程分类
   classroomCategories: [], // 班级分类
 });
+
+function deleteEmptyChildren(data) {
+  _.forEach(data, item => {
+    if (!_.size(item.children)) {
+      delete item.children;
+    } else {
+      deleteEmptyChildren(item.children);
+    }
+  });
+}
 
 export const mutations = {
   setCourseCategory(data) {
@@ -22,6 +33,8 @@ export const mutations = {
   },
 
   setCourseCategories(data) {
+    deleteEmptyChildren(data);
+    data.unshift({ name: '全部', id: '0' });
     state.courseCategories = data;
   },
 
