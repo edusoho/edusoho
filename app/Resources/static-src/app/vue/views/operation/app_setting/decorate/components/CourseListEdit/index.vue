@@ -45,7 +45,23 @@
 
       <div v-show="moduleData.sourceType === 'custom'" class="design-editor__item">
         <span class="design-editor__required">课程分类：</span>
-         <a-button size="small" @click="handleSelectCourse">选择课程</a-button>
+        <a-button size="small" @click="handleSelectCourse">选择课程</a-button>
+      </div>
+
+      <div v-show="moduleData.sourceType === 'custom'" class="design-editor__item">
+        <draggable
+          class="course-list"
+          v-model="moduleData.items"
+          v-bind="dragOptions"
+          @start="drag = true"
+          @end="drag = false"
+        >
+          <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+            <div class="course-list__item" v-for="item in moduleData.items" :key="item.id">
+              {{ item.title || item.courseSetTitle }}
+            </div>
+          </transition-group>
+        </draggable>
       </div>
 
       <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
@@ -108,6 +124,7 @@
 <script>
 import _ from 'lodash';
 import EditLayout from '../EditLayout.vue';
+import Draggable from 'vuedraggable';
 import { state, mutations } from 'app/vue/views/operation/app_setting/decorate/store.js';
 import { Categories } from 'common/vue/service/index.js';
 import SeleteCourseModal from './SeleteCourseModal.vue';
@@ -124,12 +141,14 @@ export default {
 
   components: {
     EditLayout,
-    SeleteCourseModal
+    SeleteCourseModal,
+    Draggable
   },
 
   data() {
     return {
-      options: []
+      options: [],
+      drag: false
     }
   },
 
@@ -142,6 +161,15 @@ export default {
     isCustom() {
       const { sourceType } = this.moduleData;
       return sourceType === 'custom';
+    },
+
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      }
     }
   },
 
@@ -178,3 +206,21 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.course-list {
+  padding-right: 8px;
+  padding-left: 8px;
+  background: rgba(237, 237, 237, 0.53);
+
+  &__item {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    cursor: move;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+</style>

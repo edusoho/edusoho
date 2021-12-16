@@ -113,6 +113,7 @@ export default {
 
   &__item {
     padding: 8px 0;
+    cursor: move;
     border-bottom: 1px solid #eee;
 
     &:last-child {

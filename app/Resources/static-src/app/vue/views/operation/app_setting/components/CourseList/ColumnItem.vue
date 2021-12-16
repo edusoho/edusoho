@@ -1,16 +1,25 @@
 <template>
   <div class="column-item pull-left">
-    <div class="column-item__img"></div>
+    <div class="column-item__img">
+      <img :src="item.courseSet.cover.middle" alt="">
+    </div>
     <div class="column-item__info">
-      <div class="column-item__title text-overflow">课程名称</div>
-      <div class="column-item__price">课程价格</div>
+      <div class="column-item__title text-overflow">{{ item.title || item.courseSetTitle }}</div>
+      <div class="column-item__price">{{ item.price }} 元</div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'CourseListItem'
+  name: 'CourseListItem',
+
+  props: {
+    item: {
+      type: Object,
+      required: true
+    }
+  }
 }
 </script>
 
