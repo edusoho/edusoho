@@ -22,3 +22,6 @@ export * from './Plugins';
 export * from './Coupon';
 export * from './Category';
 export * from './Categories';
+export * from './ItemBankExercises';
+export * from './ItemBankCategory';
+export * from './OpenCourse';

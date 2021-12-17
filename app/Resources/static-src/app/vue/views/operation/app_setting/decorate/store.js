@@ -7,6 +7,7 @@ export const state = Vue.observable({
   openCourseCategory: [], // 公开课分类数据
   courseCategories: [], // 课程分类
   classroomCategories: [], // 班级分类
+  itemBankCategories: [] // 题库分类
 });
 
 function deleteEmptyChildren(data) {
@@ -42,5 +43,11 @@ export const mutations = {
     deleteEmptyChildren(data);
     data.unshift({ name: '全部', id: '0' });
     state.classroomCategories = data;
+  },
+
+  setItemBankCategories(data) {
+    deleteEmptyChildren(data);
+    data.unshift({ name: '全部', id: '0' });
+    state.itemBankCategories = data;
   }
 };
