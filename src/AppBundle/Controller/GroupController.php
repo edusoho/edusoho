@@ -18,7 +18,7 @@ class GroupController extends BaseController
 {
     public function indexAction()
     {
-        $activeGroup = $this->getGroupService()->searchGroups(['status' => 'open'], ['memberNum' => 'DESC'], 0, 12);
+        $activeGroup = $this->getGroupService()->searchGroups(['status' => 'open'], ['recommended' => 'DESC', 'recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC', 'memberNum' => 'DESC'], 0, 12);
         $recentlyThread = $this->getThreadService()->searchThreads(
             [
                 'createdTime' => time() - 30 * 24 * 60 * 60,
@@ -88,7 +88,7 @@ class GroupController extends BaseController
 
         $groups = $this->getGroupService()->searchGroups(
             ['title' => $keyWord, 'status' => 'open'],
-            ['createdTime' => 'DESC'], $paginator->getOffsetCount(),
+            ['recommended' => 'DESC', 'recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC', 'createdTime' => 'DESC'], $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 

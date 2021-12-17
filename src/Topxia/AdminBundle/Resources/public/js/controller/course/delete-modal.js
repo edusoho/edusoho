@@ -19,11 +19,13 @@ define(function (require, exports, module) {
           if (response.success) {
             $.post($('#delete-btn').data('url'), function (resp) {
               if (resp.code == 0) {
-                Notify.success(Translator.trans('admin.course.delete_success_hint'));
+                Notify.success(resp.message);
                 location.reload();
               } else {
-                Notify.success(Translator.trans('admin.course.delete_failed_hint') + '：' + resp.message);
+                Notify.success(Translator.trans('site.delete_fail_hint') + '：' + resp.message);
               }
+            }).error(function (e) {
+              Notify.danger(e.responseJSON.error.message);
             });
           } else {
             $('.js-delete-btn').button('reset');

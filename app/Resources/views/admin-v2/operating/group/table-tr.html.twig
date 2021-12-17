@@ -49,10 +49,16 @@
        <li><a href="{{path('group_show',{id:group.id})}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> {{'admin.operation_group.viewGroup_btn'|trans}}</a></li>
 
        {% if group.status=='open'%}
-       <li><a href="javascript:" class="close-group" title="{{ 'admin.operation_group.closeGroup_title'|trans({'%groupTitle%':group.title}) }}" data-url="{{path('admin_v2_group_close',{id:group.id})}}"><span class="glyphicon glyphicon-off"></span> {{'admin.operation_group.closeGroup_btn'|trans }}</a></li>
+         <li><a href="javascript:" class="close-group" title="{{ 'admin.operation_group.closeGroup_title'|trans({'%groupTitle%':group.title}) }}" data-url="{{path('admin_v2_group_close',{id:group.id})}}"><span class="glyphicon glyphicon-off"></span> {{'admin.operation_group.closeGroup_btn'|trans }}</a></li>
+         {% if group.recommended %}
+           <li><a href="javascript:" class="cancel-recommend-group" title="{{ 'admin.operation_group.cancelRecommendGroup_title'|trans({'%groupTitle%': group.title}) }}" data-url="{{ path('admin_v2_group_cancel_recommend', {id: group.id}) }}"><span class="glyphicon glyphicon-hand-right"></span> {{ 'common.cancel_recommend.btn'|trans }}</a></li>
+         {% else %}
+           <li><a href="javascript:" class="recommend-group" title="{{ 'admin.operation_group.recommendGroup_title'|trans({'%groupTitle%': group.title}) }}" data-url="{{ path('admin_v2_group_recommend', {id: group.id}) }}" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-hand-up"></span> {{ 'admin.operation_group.recommendGroup_btn'|trans }}</a></li>
+         {% endif %}
 
        {% else %}
-       <li><a href="javascript:" class="open-group" title="{{ 'admin.operation_group.openGroup_title'|trans({'%groupTitle%':group.title}) }}" data-url="{{path('admin_v2_group_open',{id:group.id})}}"><span class="glyphicon glyphicon-ok"></span>{{'admin.operation_group.openGroup_btn'|trans}}</a></li>
+         <li><a href="javascript:" class="open-group" title="{{ 'admin.operation_group.openGroup_title'|trans({'%groupTitle%':group.title}) }}" data-url="{{path('admin_v2_group_open',{id:group.id})}}"><span class="glyphicon glyphicon-ok"></span> {{'admin.operation_group.openGroup_btn'|trans}}</a></li>
+         <li><a href="javascript:" class="delete-group" title="{{ 'admin.operation_group.deleteGroup_title'|trans({'%groupTitle%': group.title}) }}" data-url="{{ path('admin_v2_group_delete', {id: group.id}) }}"><span class="glyphicon glyphicon-trash"></span> {{ 'admin.operation_group.deleteGroup_btn'|trans }}</a></li>
 
        {% endif %}
 

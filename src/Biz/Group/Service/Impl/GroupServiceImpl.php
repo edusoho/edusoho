@@ -8,8 +8,10 @@ use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\Group\Dao\GroupDao;
 use Biz\Group\Dao\MemberDao;
+use Biz\Group\Dao\ThreadDao;
 use Biz\Group\GroupException;
 use Biz\Group\Service\GroupService;
+use Biz\Group\Service\ThreadService;
 use Codeages\Biz\Framework\Event\Event;
 
 class GroupServiceImpl extends BaseService implements GroupService
@@ -107,6 +109,45 @@ class GroupServiceImpl extends BaseService implements GroupService
         $this->dispatchEvent('group.open', $group);
 
         return $group;
+    }
+
+    public function deleteGroup($id)
+    {
+        $group = $this->getGroup($id);
+        if ('close' != $group['status']) {
+            $this->createNewException(GroupException::DELETE_GROUP_REQUIRE_CLOSE());
+        }
+        $this->beginTransaction();
+        try {
+            $this->getGroupThreadService()->deleteThreadsByGroupId($id);
+            $this->getGroupMemberDao()->deleteByGroupId($id);
+            $this->getGroupDao()->delete($id);
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->rollback();
+        }
+    }
+
+    public function recommendGroup($id, $number)
+    {
+        if (!is_numeric($number)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+
+        return $this->updateGroup($id, [
+            'recommended' => 1,
+            'recommendedSeq' => (int) $number,
+            'recommendedTime' => time(),
+        ]);
+    }
+
+    public function cancelRecommendGroup($id)
+    {
+        return $this->updateGroup($id, [
+            'recommended' => 0,
+            'recommendedSeq' => 0,
+            'recommendedTime' => 0,
+        ]);
     }
 
     public function closeGroup($id)
@@ -331,6 +372,14 @@ class GroupServiceImpl extends BaseService implements GroupService
     protected function getGroupDao()
     {
         return $this->createDao('Group:GroupDao');
+    }
+
+    /**
+     * @return ThreadService
+     */
+    protected function getGroupThreadService()
+    {
+        return $this->createService('Group:ThreadService');
     }
 
     /**

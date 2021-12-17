@@ -734,6 +734,7 @@ admin_v2.information_collect.operate.update_tab: 'Update'
 admin_v2.operation.group_menu: Group Discussions
 admin_v2.operation.group.group_tab: Groups
 admin_v2.operation.group.group_tab.create_group_btn: Add Group
+admin_v2.operation.group.group_recommend_tab: Group Recommend
 admin_v2.operation.group.group_thread_tab: Group Discussions
 
 #运营-内容管理-私信管理
