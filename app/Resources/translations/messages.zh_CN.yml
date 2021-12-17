@@ -8,7 +8,7 @@ site.online_school_about: 网校简介
 site.online_school_logo: 网校LOGO
 site.register_link_url: 注册链接的地址
 site.not_support_cloud_video: >
-  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。
+  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a> <br/> 安卓端允许在微信内置浏览器中观看。
 site.not_support_cloud_video_upgrade: >
   <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请用微信打开或<a href="%mobileUrl%" target="parent">下载App</a>。
 site.currency.CNY: 元
@@ -6938,7 +6938,7 @@ admin.edu_cloud.edu_video.open_radio: 开启
 admin.edu_cloud.edu_video.close_radio: 关闭
 admin.edu_cloud.edu_video.normal_mode_tips: >
   选择普通模式，<span class="text-success">新上传</span>的视频文件在手机浏览器下默认使用通用格式播放，增强了视频课时对手机浏览器的兼容性；<br/><span class="text-danger">但普通模式的视频在某些情况下有被盗的风险，请谨慎开启。</span>
-admin.edu_cloud.edu_video.encryption_mode_tips: '选择加密模式，能极大的提升视频的安全性，但可能导致视频课时在某些陈旧的手机浏览器上无法正常播放。'
+admin.edu_cloud.edu_video.encryption_mode_tips: 选择加密模式，能极大的提升视频的安全性，但可能导致视频课时在某些陈旧的手机浏览器上无法正常播放。
 admin.edu_cloud.edu_video.transcode_quality: 视频转码画质
 admin.edu_cloud.edu_video.transcode_quality_low: >
   流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%
@@ -6993,7 +6993,7 @@ admin.edu_cloud.edu_video.finger_print_time: 秒
 admin.edu_cloud.edu_video.finger_print_opacity_label: 指纹不透明度：
 admin.edu_cloud.edu_video.finger_print_opacity_tips: 请输入0～1之间的一位小数,数字越小越透明
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 云视频防盗增强
-admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。安卓端仅允许在微信APP内置浏览器中观看
 admin.edu_cloud.edu_video.enable_hls_encryption_plus_upgrade_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在微信外的其他手机浏览器中播放，系统会引导用户使用微信或App观看。
 admin.edu_cloud.edu_video.buy_flow_tips: >
   开通流量年包，视频流量更划算。<a class="" href="%bugUrl%" target="_blank">什么是流量年包？</a>
