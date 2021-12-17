@@ -72,6 +72,14 @@ import poster from '../components/Poster/index.vue';
 import poster_edit from './components/PosterEdit/index.vue';
 import graphic_navigation from '../components/GraphicNavigation/index.vue';
 import graphic_navigation_edit from './components/GraphicNavigationEdit/index.vue';
+import course_list from '../components/CourseList/index.vue';
+import course_list_edit from './components/CourseListEdit/index.vue';
+import classroom_list from '../components/ClassroomList/index.vue';
+import classroom_list_edit from './components/ClassroomListEdit/index.vue';
+import open_course_list from '../components/OpenCourseList/index.vue';
+import open_course_list_edit from './components/OpenCourseListEdit/index.vue';
+import item_bank_exercise from '../components/ItemBankExercise/index.vue';
+import item_bank_exercise_edit from './components/ItemBankExerciseEdit/index.vue';
 
 export default {
   components: {
@@ -89,7 +97,15 @@ export default {
     poster,
     poster_edit,
     graphic_navigation,
-    graphic_navigation_edit
+    graphic_navigation_edit,
+    course_list,
+    course_list_edit,
+    classroom_list,
+    classroom_list_edit,
+    open_course_list,
+    open_course_list_edit,
+    item_bank_exercise,
+    item_bank_exercise_edit
   },
 
   data() {
@@ -256,6 +272,11 @@ export default {
           return;
         }
 
+        if (key === 'remove') {
+          this.modules[currentIndex].data.splice(index, 1);
+          return;
+        }
+
         if (key === 'type') {
           this.modules[currentIndex].data[index].link.type = value;
           return;
@@ -267,6 +288,11 @@ export default {
         }
 
         this.modules[currentIndex].data[index][key] = value;
+        return;
+      }
+
+      if (type === 'course_list' || type === 'classroom_list') {
+        this.modules[currentIndex].data[key] = value;
       }
     },
 

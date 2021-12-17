@@ -49,8 +49,8 @@
         &::after {
           content: "*";
           position: absolute;
-          top: -2px;
-          left: -10px;
+          top: -4px;
+          left: -8px;
           color: red;
           font-size: 18px;
         }
@@ -63,5 +63,9 @@
       border-bottom: none;
     }
   }
+}
+
+/deep/ label {
+  font-weight: normal !important;
 }
 </style>

@@ -82,6 +82,11 @@ export default {
         return;
       }
 
+      if (type === 'remove' && _.size(this.moduleData) === 1) {
+        this.$message.info('不得少于 1 个');
+        return;
+      }
+
       this.update({
         key: type,
         value
