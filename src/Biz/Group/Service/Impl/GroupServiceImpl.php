@@ -8,7 +8,6 @@ use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\Group\Dao\GroupDao;
 use Biz\Group\Dao\MemberDao;
-use Biz\Group\Dao\ThreadDao;
 use Biz\Group\GroupException;
 use Biz\Group\Service\GroupService;
 use Biz\Group\Service\ThreadService;

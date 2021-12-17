@@ -560,7 +560,6 @@ class GroupController extends BaseController
                 $orderBys = ['createdTime' => 'DESC'];
                 break;
             default:
-
                 $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
