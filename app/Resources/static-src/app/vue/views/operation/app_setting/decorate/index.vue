@@ -291,7 +291,7 @@ export default {
         return;
       }
 
-      if (type === 'course_list' || type === 'classroom_list') {
+      if (type === 'course_list' || type === 'classroom_list' || type === 'item_bank_exercise') {
         this.modules[currentIndex].data[key] = value;
       }
     },

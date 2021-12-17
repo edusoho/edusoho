@@ -63,11 +63,7 @@ export default {
 
   methods: {
     async fetchItemBank() {
-      const { sort, limit, lastDays, categoryId, sourceType, items } = this.moduleData;
-      if (sourceType === 'custom') {
-        this.list = items;
-        return;
-      }
+      const { sort, limit, lastDays, categoryId } = this.moduleData;
       const params = {
         params: {
           sort,
