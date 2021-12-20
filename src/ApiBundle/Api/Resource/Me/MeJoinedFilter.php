@@ -4,7 +4,7 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\Resource\Filter;
 
-class MeLiveFilter extends Filter
+class MeJoinedFilter extends Filter
 {
     protected $publicFields = [
         'id', 'subtitle', 'courseSet', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
