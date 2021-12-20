@@ -251,7 +251,7 @@ class ReportServiceTest extends BaseTestCase
             ['id' => 1, 'mediaId' => 1, 'second' => 20],
         ];
         $this->mockBiz('Marker:MarkerService', [
-            ['functionName' => 'findMarkersByMediaId', 'runTimes' => 1, 'returnValue' => $markers],
+            ['functionName' => 'findMarkersByActivityId', 'runTimes' => 1, 'returnValue' => $markers],
         ]);
     }
 

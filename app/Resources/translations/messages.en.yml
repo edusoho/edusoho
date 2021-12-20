@@ -10828,4 +10828,7 @@ course.live_replay.length: length
 course.live_replay.start_time: Start Time
 course.live_replay_manage.live_replay_empty: replay deleted
 course.live_replay.tips: The current version only supports viewing of live playback sessions on the PC side, and does not currently support the mobile side
+
+course.lesson.display: '%part_name% %number% : %title%'
+course.task.display: '%taskName%.%taskNumber%:%taskTitle%'
 common.cancel_recommend.btn: Cancel Recommend
