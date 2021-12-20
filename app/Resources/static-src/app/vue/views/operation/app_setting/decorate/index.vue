@@ -115,7 +115,8 @@ export default {
       currentModule: {},
       drag: false,
       vipLevels: [],
-      validatorResult: true
+      validatorResult: true,
+      alreadyMessage: false
     }
   },
 
@@ -245,26 +246,14 @@ export default {
     updateEdit(params) {
       const { type, data, key, value, index } = params;
       const currentIndex = this.currentModule.index;
+
       if (type === 'swiper') {
         this.modules[currentIndex].data = data;
         return;
       }
 
-      if (type === 'vip') {
-        if (key === 'sort') {
-          this.modules[currentIndex].data.items.reverse();
-        }
-        this.modules[currentIndex].data[key] = value;
-        return;
-      }
-
-      if (type === 'coupon') {
-        this.modules[currentIndex].data[key] = value;
-        return;
-      }
-
-      if (type === 'poster') {
-        this.modules[currentIndex].data[key] = value;
+      if (type === 'vip' && key === 'sort') {
+        this.modules[currentIndex].data.items.reverse();
         return;
       }
 
@@ -293,7 +282,17 @@ export default {
         return;
       }
 
-      if (type === 'course_list' || type === 'classroom_list' || type === 'item_bank_exercise' || type === 'open_course_list') {
+      const types = [
+        'course_list',
+        'classroom_list',
+        'item_bank_exercise',
+        'open_course_list',
+        'poster',
+        'coupon',
+        'vip'
+      ];
+
+      if (_.includes(types, type)) {
         this.modules[currentIndex].data[key] = value;
       }
     },
@@ -305,14 +304,14 @@ export default {
         const length = _.size(data);
 
         if (!length) {
-          this.$message.error('请完善轮播图模块信息！');
+          if (!this.alreadyMessage) this.$message.error('请完善轮播图模块信息！');
           return false;
         }
 
         _.forEach(data, (item, index) => {
           const { uri } = item.image;
           if (!uri) {
-            this.$message.error('请完善轮播图模块信息！');
+            if (!this.alreadyMessage) this.$message.error('请完善轮播图模块信息！');
             return false;
           }
         });
@@ -332,7 +331,7 @@ export default {
         const length = _.size(items);
 
         if (!title || (sourceType === 'custom' && !length)) {
-          this.$message.error(messages[type]);
+          if (!this.alreadyMessage) this.$message.error(messages[type]);
           return false;
         }
         return true;
@@ -342,7 +341,7 @@ export default {
       if (type === 'poster') {
         const { uri } = data.image;
         if (!uri) {
-          this.$message.error('请完善广告模块信息！');
+          if (!this.alreadyMessage) this.$message.error('请完善广告模块信息！');
           return false;
         }
         return true;
@@ -353,7 +352,7 @@ export default {
         _.forEach(data, (item, index) => {
           const { title, image: { uri }, link: { type } } = item;
           if (!title || !uri || !type) {
-            this.$message.error('请完善图文导航模块信息！');
+            if (!this.alreadyMessage) this.$message.error('请完善图文导航模块信息！');
             return false;
           }
         });
@@ -365,7 +364,7 @@ export default {
         const length = _.size(data.items);
 
         if (!length) {
-          this.$message.error('请完善优惠券模块信息！');
+          if (!this.alreadyMessage) this.$message.error('请完善优惠券模块信息！');
           return false;
         }
         return true;
@@ -376,6 +375,7 @@ export default {
       _.forEach(this.modules, (module, index) => {
         const result = this.moduleValidator(module);
         if (!result) {
+          this.alreadyMessage = true;
           this.validatorResult = false;
         }
         this.$set(module, 'validatorResult', result);
