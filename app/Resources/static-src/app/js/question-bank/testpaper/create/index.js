@@ -13,6 +13,7 @@ class TestpaperForm {
     this.$modal = $('#testpaper-confirm-modal');
     this.sections = [];
     this.questionsCount = 0;
+    this.$score = null;
     this.$typeNav = this.$form.find('#testpaper-question-nav');
     new BatchSelect(this.$questionForm);
     this._initEvent();
@@ -22,6 +23,7 @@ class TestpaperForm {
   }
 
   _initEvent() {
+
     this.$form.on('click', '.js-request-save', event => this._confirmSave(event));
     this.$modal.on('click','.js-confirm-submit', event => this._submitSave(event));
     this.$typeNav.on('click', 'li', event => this._changeNav(event));
@@ -33,13 +35,26 @@ class TestpaperForm {
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
     $('.modal').on('selectQuestion', (event, typeQuestions) => this.selectQuestion(event, typeQuestions));
     this.initSortList();
+    this.initTestpaperScore();
+  }
+
+  initTestpaperScore() {
+    this.$score = $('#testpaper-items-manager').find('.score-validate');
+    this.$score.on('blur', event => this._processScore(event));
+  }
+
+  _processScore(event) {
+    let $target = $(event.target);
+
+    this._validateQuestionScore($target);
+
+    return false;
   }
 
   _confirmSave() {
-    let isOk = this._validateScore();
     let status = this.validator.form();
 
-    if (!status || !isOk) {
+    if (!status) {
       return;
     }
 
@@ -119,42 +134,29 @@ class TestpaperForm {
   }
 
   getItemQuestion(that) {
-    let questionScore = parseFloat($(that).find('.js-question-score').attr('data-score'));
     let question = {
       id: $(that).data('questionId'),
-      score: questionScore
+      score: Number($(that).find('.js-score').val()),
     };
-    if ($(that).find('.js-miss-score').length > 0) {
-      question['miss_score'] = parseFloat($(that).find('.js-miss-score').data('missScore'));
+    if($(that).data('type') == 'fill' && $(that).find('.js-score-type').val() == 'option'){
+      question.score = question.score * $(that).data('questionAnswer').length;
     }
-
+    if($(that).data('type') == 'material'&& $(that).data('questionType') == 'text' && $(that).find('.js-score-type').val() == 'option'){
+      question.score = question.score * $(that).data('questionAnswer').length;
+    }
+    if($(that).find('.js-score-type').length){
+      question.scoreType = $(that).find('.js-score-type').val();
+      if($(that).data('type') == 'fill' || $(that).data('questionType') == 'text'){
+        question.otherScore = Number($(that).find('.js-score').val());
+      }else{
+        question.otherScore = Number($(that).find('.js-miss-choice-score').val());
+      }
+    }
+    if(($(that).data('type') === 'choice' || $(that).data('type') ==='uncertain_choice') && $(that).find('.js-score-type').val() == 'question'){
+      question.missScore = question.otherScore;
+    }
+    console.log(question);
     return question;
-  }
-
-  _validateScore() {
-    let isOk = true;
-
-    if (this.$form.find('.js-question-score').length === 0) {
-      cd.message({type: 'danger', message: Translator.trans('activity.testpaper_manage.question_required_error_hint') });
-      isOk = false;
-    }
-
-    this.$form.find('.js-question-score').each(function() {
-      let itemType = $(this).closest('tr').data('type');
-      let score = $(this).data('score');
-
-      if (score == '0' && itemType !== 'material') {
-        cd.message({type: 'danger', message: Translator.trans('activity.testpaper_manage.question_score_empty_hint') });
-        isOk = false;
-      }
-
-      if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(score) && itemType !== 'material') {
-        cd.message({type: 'danger', message: Translator.trans('activity.testpaper_manage.question_score_error_hint') });
-        isOk = false;
-      }
-    });
-
-    return isOk;
   }
 
   _changeNav(event) {
@@ -199,40 +201,119 @@ class TestpaperForm {
   }
 
   showScoreModal(event) {
+    $('.js-score-modal').find('.score-item').addClass('hidden');
+    $('.js-score-modal').find('.js-score-item-num').html(0);
     let $checked = this.$form.find('[data-role="batch-item"]:checked');
     if ($checked.length > 0) {
       let self = this;
-      let types = ['choice', 'uncertain_choice', 'material'];
-      $checked.each(function() {
-        let $missScore = self.$scoreModal.find('.js-miss-score-field');
-        if ($.inArray($(this).closest('tr').data('type'), types) !== -1) {
-          $missScore.removeClass('hidden');
-        } else {
-          $missScore.addClass('hidden');
+      let type = $(event.currentTarget).data('type');
+      $('.js-score-modal').find('.js-tab-type').val(type);
+      if( type !== 'material'){
+        $('.js-score-modal').find('.js-score-set-'+type).removeClass('hidden');
+        $('.js-score-modal').find('.js-score-set-'+type).find('.js-score-item-num').html($checked.length);
+      }else{
+        let arr = {'single_choice':'single_choice', 'choice':'choice', 'uncertain_choice':'uncertain_choice', 'true_false': 'determine', 'text':'fill', 'rich_text': 'essay'};
+        for (const key in arr) {
+          let count = this.$form.find(`.js-material-checkbox-${key}:checked`).length;
+          $('.js-score-modal').find('.js-score-set-'+arr[key]).find('.js-score-item-num').html(count);
         }
-      });
+
+        $('.js-score-modal').find('.score-item').removeClass('hidden');
+      }
+
       this.$scoreModal.modal('show');
     }
   }
 
   batchSetScore(event) {
+    let self = this;
     if (this.scoreValidator.form()) {
-      let $score = this.$scoreModal.find('input[name="score"]');
-      let $missScore = this.$scoreModal.find('input[name="missScore"]');
-      let scoreObj = {
-        score: parseFloat($score.val()),
-        missScore: ($missScore.val() == '') ? 0 : parseFloat($missScore.val()),
-      };
-      let self = this;
-      this.$form.find('[data-role="batch-item"]:checked').each(function() {
-        self.setScore($(this).parents('tr'), scoreObj);
-      });
-
+      let type = $('.js-score-modal').find('.js-tab-type').val();
+      switch (type){
+      case 'single_choice':
+        self.__setJsScore(type);
+        break;
+      case 'choice':
+        self.__setJsScore(type);
+        self.__setSelectJsScore(type);
+        break;
+      case 'uncertain_choice':
+        self.__setJsScore(type);
+        self.__setSelectJsScore(type);
+        break;
+      case 'determine':
+        self.__setJsScore(type);
+        break;
+      case 'fill':
+        self.__setJsScore(type);
+        self.__setSelectJsScore(type);
+        break;
+      case 'essay':
+        self.__setJsScore(type);
+        break;
+      default:
+        self.__setMaterialScore(type);
+        break;
+      }
       cd.message({ type: 'success', message: Translator.trans('subject.score_update_success') });
       this.$scoreModal.modal('hide');
-      $score.val('');
-      $missScore.val('');
     }
+    return false;
+  }
+
+  __setMaterialScore(){
+    let self =this;
+    let parent = $('#testpaper-table-material');
+    let target = null;
+    $('.js-score-modal').find('.score-item').each(function(index,item) {
+      let type = $(this).data('type');
+      switch (type){
+      case 'single_choice':
+        target = parent.find('.js-material-single_choice');
+        self.__setJsScore('single_choice', target);
+        break;
+      case 'choice':
+        target = parent.find('.js-material-choice');
+        self.__setJsScore('choice', target);
+        target = parent.find('.js-material-miss-choice');
+        self.__setSelectJsScore('choice', target);
+        break;
+      case 'uncertain_choice':
+        target = parent.find('.js-material-uncertain_choice');
+        self.__setJsScore('uncertain_choice', target);
+        target = parent.find('.js-material-miss-uncertain_choice');
+        self.__setSelectJsScore('uncertain_choice', target);
+        break;
+      case 'determine':
+        target = parent.find('.js-material-true_false');
+        self.__setJsScore('determine', target);
+        break;
+      case 'fill':
+        target = parent.find('.js-material-text');
+        self.__setJsScore('fill', target);
+        self.__setSelectJsScore('fill', target);
+        break;
+      default:
+        target = parent.find('.js-material-rich_text');
+        self.__setJsScore('essay', target);
+        break;
+      }
+    });
+
+  }
+
+  __setSelectJsScore(type, target = null){
+    let $target = target ? target :$('#testpaper-table-'+type);
+    let miss_score = $('.js-score-modal').find('.js-score-set-'+type).find('.js-miss-choice-score').val();
+    $target.find('.js-miss-choice-score').val(miss_score);
+    let select = $('.js-score-modal').find('.js-score-set-'+type).find('.js-score-type').val();
+    $target.find('.js-score-type').val(select);
+  }
+
+  __setJsScore(type, target = null){
+    let $target = target ? target :$('#testpaper-table-'+type);
+    let score = $('.js-score-modal').find('.js-score-set-'+type).find('.js-score').val();
+    $target.find('.js-score').val(score);
   }
 
   setScore($item, scoreObj) {
@@ -295,6 +376,7 @@ class TestpaperForm {
           $tbody.append(html);
           $tbody.trigger('lengthChange');
           self.refreshSeqs(type);
+          self.initTestpaperScore();
         });
       }
     });
@@ -330,6 +412,9 @@ class TestpaperForm {
           maxlength: 500,
           trim: true,
         },
+        scores: {
+          scoreValidate: true
+        }
       },
       messages: {
         name: {
@@ -342,6 +427,17 @@ class TestpaperForm {
         },
       }
     });
+    let self = this;
+    $.validator.addMethod('scoreValidate', function (value, element) {
+      $('#testpaper-items-manager').find('.jq-validate-error').remove();
+      ($('#testpaper-items-manager').find('.score-validate')).each(function (event) {
+        self._validateQuestionScore($(this));
+      });
+
+      return $('#testpaper-items-manager').find('.jq-validate-error').length === 0;
+
+    }, $.validator.format(Translator.trans('testpaper.scoer.validator')));
+
     this._initEditor(this.validator);
   }
 
@@ -349,34 +445,80 @@ class TestpaperForm {
     this.scoreValidator = $('#batch-set-score-form').validate({
       onkeyup: false,
       rules: {
-        score: {
-          required: true,
-          max: 999,
-          min: 0,
-          es_score: true
+        scores: {
+          scoreSetValidate:true,
         },
-        missScore: {
-          required: false,
-          max: 999,
-          min: 0,
-          noMoreThan: '#score',
-          es_score: true
-        }
       },
       messages: {
-        missScore: {
-          noMoreThan: Translator.trans('subject.miss_score_no_more_than_score'),
-        }
       }
     });
+    let self =this;
+    $.validator.addMethod( 'scoreSetValidate', function(value, element, param) {
+      $('#batch-set-score-form').find('.jq-validate-error').remove();
 
-    $.validator.addMethod( 'noMoreThan', function(value, element, param) {
-      if (value == '') {
-        return true;
-      } else {
-        return parseFloat(value) <= parseFloat($(param).val());
+      ($('#batch-set-score-form').find('.score-validate')).each(function (event) {
+        let $parent = $(this).parents('.js-question-item');
+        if($parent.hasClass('hidden')){
+          return;
+        }
+        if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test($(this).val())) {
+          self._appendError($(this), Translator.trans('validate.valid_score_input.message'));
+          return;
+        }else{
+          self._removeError($(this));
+        }
+        if($(this).hasClass('js-miss-choice-score')) {
+          let type = $parent.find('.js-score-type').val();
+          if($(this).val() > $parent.find('.js-score').val()){
+            if(type === 'question'){
+              self._appendError($(this), Translator.trans('course.miss_score.validator'));
+            }
+            if(type === 'option' ){
+              self._appendError($(this), Translator.trans('testpaper.option_score.validator'));
+            }
+          }
+        }
+      });
+
+      return $('#batch-set-score-form').find('.jq-validate-error').length === 0;
+    }, '' );
+  }
+
+  _validateQuestionScore($target){
+    if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test($target.val())) {
+      this._appendError($target, Translator.trans('validate.valid_score_input.message'));
+      return false;
+    }else{
+      this._removeError($target);
+    }
+
+    let $parent = $target.parents('.js-question-tr');
+    if($parent.data('questionType') === 'choice' || $parent.data('questionType') === 'uncertain_choice'){
+      let $answer = $parent.data('questionAnswer');
+      let type = $parent.find('.js-score-type').val();
+
+      let value = $parent.find('.js-score').val();
+      let missValue = $parent.find('.js-miss-choice-score').val();
+
+      if(type === 'question' && (missValue > value)){
+        this._appendError($target, Translator.trans('course.miss_score.validator'));
+        return false;
       }
-    }, 'Please enter a lesser value.' );
+
+      if(type === 'option' && (missValue * $answer.length > value)){
+        this._appendError($target, Translator.trans('course.option_score.validator'));
+        return false;
+      }
+    }
+  }
+
+  _appendError($event, message){
+    if($event.parents('.js-question-item').find('.jq-validate-error').length ==0){
+      $event.parents('.js-question-item').append(`<p class="form-error-message jq-validate-error">${message}</p>`);
+    }
+  }
+  _removeError($event){
+    $event.parents('.js-question-item').find('.jq-validate-error').remove();
   }
 
   _submitSave(event) {

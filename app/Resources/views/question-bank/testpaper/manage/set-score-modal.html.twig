@@ -1,5 +1,5 @@
 <div class="modal cd-modal in js-score-modal" aria-hidden="true">
-  <div class="modal-dialog cd-modal-dialog" data-clear="{{ closeClear|default(0) }}">
+  <div class="modal-dialog cd-modal-dialog" style="width: 600px !important;" data-clear="{{ closeClear|default(0) }}">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -9,23 +9,92 @@
       </div>
 
       <div class="modal-body">
-        <form class="form-horizontal subject-state-form mt20" id="batch-set-score-form">
-          <div class="form-group cd-mb24">
-            <div class="col-md-3 control-label subject-state-form__label">
-              <label class="control-label-required" for="score">{{ 'course.testpaper_manage.question.score'|trans }}</label>
+        <form style="font-weight: 400;" class="form-horizontal subject-state-form mt20 testpaper-batch-set-score" id="batch-set-score-form">
+          <div class="js-score-set-single_choice score-item hidden" data-type="single_choice">
+           <span class="score-item-type">【{{'question.type.single_choice'|trans}}】</span>
+           <div class="score-item-count-div">
+             <span class="score-item-count"> {{'form.field.amount'|trans}}：</span><span class="js-score-item-num"></span>
+           </div>
+           <div class="score-item-score-div js-question-item"><span class="score-item-score-lab">{{'testpaper.score_set.option'|trans}}：</span>
+             <input type="text" class="form-control score-validate js-score" name="single_choice_score" value="2" aria-label="...">
+             <span class="score-empty">\</span>
+           </div>
+          </div>
+          <div class="js-score-set-choice score-item hidden" data-type="choice">
+            <span class="score-item-type">【{{'question.type.multiple_choice'|trans}}】</span>
+            <div class="score-item-count-div">
+              <span class="score-item-count"> {{'form.field.amount'|trans}}：</span><span class="js-score-item-num"></span>
             </div>
-            <div class="col-md-9 controls pl0">
-              <input id="score" type="text" class="form-control" name="score" required="required">
+            <div class="score-item-score-div js-question-item"><span class="score-item-score-lab">{{'testpaper.score_set.option'|trans}}：</span>
+              <input type="text" class="form-control score-validate js-score" name="choice_score" value="2" style="width: 120px;position: absolute;" aria-label="...">
+              <div class="input-group">
+                <div class="input-group-btn">
+                  <select class="btn btn-default dropdown-toggle js-score-type" name="choice_scoreType" style="width: 60px;height: 34px; padding: 0px 5px !important;">
+                    <option value="question" selected="selected">{{ 'course.homework.score_set.select.question2'|trans }}</option>
+                    <option value="option">{{ 'course.homework.score_set.select.option2'|trans }}</option>
+                  </select>
+                </div>
+                <input type="text" class="form-control score-validate js-miss-choice-score" name="choice_option" value="0" style="width: 60px" aria-label="...">
+              </div>
             </div>
           </div>
-          <div class="form-group hidden js-miss-score-field cd-mb24">
-            <div class="col-md-3 control-label subject-state-form__label">
-              <label for="missScore">{{ 'course.testpaper_manage.import.re_edit.miss_score'|trans }}</label>
+          <div class="js-score-set-uncertain_choice score-item hidden" data-type="uncertain_choice">
+            <span class="score-item-type">【{{'course.testpaper_manage.import.re_edit.uncertain_choice'|trans}}】</span>
+            <div class="score-item-count-div">
+              <span class="score-item-count"> {{'form.field.amount'|trans}}：</span><span class="js-score-item-num"></span>
             </div>
-            <div class="col-md-9 controls pl0">
-              <input id="missScore" type="text" class="form-control" name="missScore">
+            <div class="score-item-score-div js-question-item"><span class="score-item-score-lab">{{'testpaper.score_set.option'|trans}}：</span>
+              <input type="text" class="form-control score-validate js-score" name="uncertain_choice_score" value="2" style="width: 120px;position: absolute;" aria-label="...">
+              <div class="input-group">
+                <div class="input-group-btn">
+                  <select class="btn btn-default dropdown-toggle js-score-type" name="uncertain_choice_scoreType" style="width: 60px;height: 34px; padding: 0px 5px !important;">
+                    <option value="question" selected="selected">{{ 'course.homework.score_set.select.question2'|trans }}</option>
+                    <option value="option">{{ 'course.homework.score_set.select.option2'|trans }}</option>
+                  </select>
+                </div>
+                <input type="text" class="form-control score-validate js-miss-choice-score" name="uncertain_choice_option" value="0" style="width: 60px" aria-label="...">
+              </div>
             </div>
           </div>
+          <div class="js-score-set-determine score-item hidden" data-type="determine">
+            <span class="score-item-type">【{{'question.type.determine'|trans}}】</span>
+            <div class="score-item-count-div">
+              <span class="score-item-count"> {{'form.field.amount'|trans}}：</span><span class="js-score-item-num"></span>
+            </div>
+            <div class="score-item-score-div js-question-item"><span class="score-item-score-lab">{{'testpaper.score_set.option'|trans}}：</span>
+              <input type="text" class="form-control score-validate js-score" name="true_false" value="2" aria-label="...">
+              <span class="score-empty">\</span>
+            </div>
+          </div>
+          <div class="js-score-set-fill score-item hidden" data-type="fill">
+            <span class="score-item-type">【{{'question.type.fill'|trans}}】</span>
+            <div class="score-item-count-div">
+              <span class="score-item-count"> {{'form.field.amount'|trans}}：</span><span class="js-score-item-num"></span>
+            </div>
+            <div class="score-item-score-div js-question-item">
+              <div class="input-group input-select">
+                <div class="input-group-btn">
+                  <select class="btn btn-default dropdown-toggle  js-score-type" name="text_scoreType" style="width: 60px;height: 34px; padding: 0px !important;">
+                    <option value="question" selected="selected">{{ 'course.homework.score_set.select.question1'|trans }}</option><option value="option">{{ 'course.homework.score_set.select.option1'|trans }}</option>
+                  </select>
+                </div>
+                <input type="text" class="form-control score-validate js-fill-score js-score" name="text_score" value="2" style="width: 140px;left: 51px" aria-label="...">
+              </div>
+              <span class="score-empty" style="margin-left: 75px">\</span>
+            </div>
+          </div>
+          <div class="js-score-set-essay score-item hidden" data-type="essay">
+            <span class="score-item-type">【{{'question.type.essay'|trans}}】</span>
+            <div class="score-item-count-div">
+              <span class="score-item-count"> {{'form.field.amount'|trans}}：</span><span class="js-score-item-num"></span>
+            </div>
+            <div class="score-item-score-div js-question-item"><span class="score-item-score-lab">{{'testpaper.score_set.option'|trans}}：</span>
+              <input type="text" class="form-control score-validate js-score" name="rich_text_score" value="2" aria-label="...">
+              <span class="score-empty">\</span>
+            </div>
+          </div>
+          <input class="hidden" name="scores">
+          <input class="hidden js-tab-type" name="tabType">
         </form>
       </div>
 

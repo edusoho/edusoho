@@ -12100,4 +12100,5 @@ course.homework.score_set.select.question1: 每题
 course.homework.score_set.select.option1: 每空
 course.homework.score_set.select.question2: 漏选得分
 course.homework.score_set.select.option2: 每项正确得分
+testpaper.score_set.option: 每题分值
 

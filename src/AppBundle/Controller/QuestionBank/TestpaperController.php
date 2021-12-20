@@ -126,7 +126,7 @@ class TestpaperController extends BaseController
             }
 
             $assessment['bank_id'] = $questionBank['itemBankId'];
-
+            $assessment['sections'] = $this->processAssessmentSections($assessment['sections']);
             $this->getAssessmentService()->createAssessment($assessment);
 
             return $this->createJsonResponse([
@@ -139,6 +139,35 @@ class TestpaperController extends BaseController
             'questionBank' => $questionBank,
             'showBaseInfo' => '1',
         ]);
+    }
+
+    private function processAssessmentSections($sections)
+    {
+        foreach ($sections as &$section) {
+            $items = $section['items'];
+            foreach ($items as &$item) {
+                $questionsIds = ArrayToolkit::column($item['questions'], 'id');
+                $questions = $this->getItemService()->findQuestionsByQuestionIds($questionsIds);
+                $questions = ArrayToolkit::index($questions, 'id');
+                $itemQuestions = [];
+                foreach ($item['questions'] as &$question) {
+                    $question['score_rule'] = [
+                        'score' => $question['score'],
+                        'scoreType' => empty($question['scoreType']) ? 'question' : $question['scoreType'],
+                        'otherScore' => empty($question['otherScore']) ? 0 : $question['otherScore'],
+                    ];
+                    $itemQuestions[] = array_merge(
+                        $questions[$question['id']],
+                        $question
+                    );
+                }
+
+                $item['questions'] = $itemQuestions;
+            }
+            $section['items'] = $items;
+        }
+
+        return $sections;
     }
 
     public function createRandomTestpaperAction(Request $request, $id)
