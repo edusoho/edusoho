@@ -102,6 +102,11 @@ abstract class Item
 
         $seq = 1;
         foreach ($item['questions'] as &$question) {
+            $question['score_rule'] = [
+                'score' => $question['score'],
+                'scoreType' => $question['scoreType'],
+                'otherScore' => $question['otherScore'],
+            ];
             $question['seq'] = $seq++;
             $question['case_sensitive'] = (isset($question['case_sensitive']) && $question['case_sensitive'] == false) ? 0 : 1;
             $question = $this->getQuestionProcessor()->process($question);
