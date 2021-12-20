@@ -25,3 +25,4 @@ export * from './Categories';
 export * from './ItemBankExercises';
 export * from './ItemBankCategory';
 export * from './OpenCourse';
+export * from './Pages';

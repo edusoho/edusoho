@@ -9,7 +9,7 @@ export default {
 
     currentModuleType: {
       type: String,
-      required: true
+      default: ''
     },
 
     moduleData: {

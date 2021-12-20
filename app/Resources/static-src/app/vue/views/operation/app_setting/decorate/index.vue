@@ -53,7 +53,7 @@
 <script>
 import _ from 'lodash';
 import ModuleCounter from 'app/vue/utils/module-counter.js';
-import { Vip } from 'common/vue/service';
+import { Vip, Pages } from 'common/vue/service';
 
 import { DefaultData } from './default-data';
 
@@ -137,10 +137,20 @@ export default {
   },
 
   mounted() {
-    this.moduleCountInit();
+    this.fetchDiscovery();
   },
 
   methods: {
+    async fetchDiscovery() {
+      const params = {
+        params: { mode: 'published' }
+      };
+      const data = await Pages.appsDiscovery(params);
+
+      this.modules = Object.values(data);
+      this.moduleCountInit();
+    },
+
     scrollBottom() {
       const top = this.$refs.mainContainer.clientHeight;
       this.$refs.previewContainer.scrollTo({ top: top, behavior: 'smooth' });
@@ -403,6 +413,7 @@ export default {
     },
 
     handleClickSave() {
+      const data = {};
       _.forEach(this.modules, (module, index) => {
         const result = this.moduleValidator(module);
         if (!result) {
@@ -410,13 +421,23 @@ export default {
           this.validatorResult = false;
         }
         this.$set(module, 'validatorResult', result);
-        module.moduleType = `${module.type}-${index}`;
+        const moduleType = `${module.type}-${index}`;
+        module.moduleType = moduleType;
+        data[moduleType] = module;
       });
 
-      if (this.validatorResult) {
-        console.log('14312442142');
-      }
-      // console.log(this.modules);
+      // 校验不通过
+      if (!this.validatorResult) return;
+
+      const params = {
+        params: {
+          type: 'discovery',
+          mode: 'published'
+        },
+        data
+      };
+
+      Pages.appsSettings(params);
     }
   }
 }
