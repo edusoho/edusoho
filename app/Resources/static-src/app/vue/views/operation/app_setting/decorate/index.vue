@@ -5,8 +5,8 @@
     <div class="decorate-main clearfix">
       <left-choose-container @add-module="addModule" />
 
-      <section class="center-preview-container pull-left">
-        <div class="main-preview-container">
+      <section ref="previewContainer" class="center-preview-container pull-left">
+        <div ref="mainContainer" class="main-preview-container">
           <find-head />
 
           <draggable
@@ -52,7 +52,7 @@
 
 <script>
 import _ from 'lodash';
-
+import ModuleCounter from 'app/vue/utils/module-counter.js';
 import { Vip } from 'common/vue/service';
 
 import { DefaultData } from './default-data';
@@ -114,6 +114,7 @@ export default {
       modules: [],
       currentModule: {},
       drag: false,
+      typeCount: {},
       vipLevels: [],
       validatorResult: true,
       alreadyMessage: false
@@ -135,8 +136,31 @@ export default {
     }
   },
 
+  mounted() {
+    this.moduleCountInit();
+  },
+
   methods: {
+    scrollBottom() {
+      const top = this.$refs.mainContainer.clientHeight;
+      this.$refs.previewContainer.scrollTo({ top: top, behavior: 'smooth' });
+    },
+
+    // 模块类型计数初始化
+    moduleCountInit() {
+      const typeCount = new ModuleCounter();
+      _.forEach(this.modules, item => {
+        typeCount.addByType(item.type);
+      });
+      this.typeCount = typeCount;
+    },
+
     addModule(type) {
+      if (this.typeCount.getCounterByType(type) >= 5) {
+        this.$message.warning('同一类型组件最多添加 5 个');
+        return;
+      }
+
       const info = _.cloneDeep(DefaultData[type]);
       if (type === 'vip') {
         this.getVipLevels();
@@ -145,7 +169,14 @@ export default {
       }
 
       this.modules.push(info);
+      this.typeCount.addByType(type);
       this.changeCurrentModule(info, _.size(this.modules) - 1);
+      // 滚动到底部
+      clearInterval(this.timer);
+      this.timer = null;
+      this.timer = setTimeout(() => {
+        this.scrollBottom();
+      }, 500);
     },
 
     async getVipLevels() {
