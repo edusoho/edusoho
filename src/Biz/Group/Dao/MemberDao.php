@@ -9,4 +9,6 @@ interface MemberDao extends GeneralDaoInterface
     public function findByUserId($userId);
 
     public function getByGroupIdAndUserId($groupId, $userId);
+
+    public function deleteByGroupId($groupId);
 }

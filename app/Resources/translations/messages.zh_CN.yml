@@ -6398,9 +6398,16 @@ admin.operation_group.edit_btn: 编辑
 admin.operation_group.viewGroup_btn: 查看小组
 admin.operation_group.closeGroup_btn: 关闭小组
 admin.operation_group.openGroup_btn: 开启小组
+admin.operation_group.recommendGroup_btn: 推荐小组
+admin.operation_group.deleteGroup_btn: 删除小组
 admin.operation_group.transferGroup_btn: 转移小组
 admin.operation_group.closeGroup_title: 关闭小组(%groupTitle%)
 admin.operation_group.openGroup_title: 开启小组(%groupTitle%)
+admin.operation_group.recommendGroup_title: 推荐小组(%groupTitle%)
+admin.operation_group.cancelRecommendGroup_title: 取消推荐小组(%groupTitle%)
+admin.operation_group.deleteGroup_title: 删除小组(%groupTitle%)
+admin.operation_group.recommend.modal_title: 设置推荐小组
+admin.operation_group.recommend.empty: 暂无推荐小组
 admin.operation_group.modal.enter_user_name: 请输入用户名
 admin.operation_group.modal.transfer_to: 转移给
 admin.operation_group.modal.user_name.data_display: 用户名
@@ -10721,6 +10728,7 @@ exception.group.not_found: 小组不存在
 exception.group.duplicate_join: 已在小组内，不要重复加入
 exception.group.not_found_member: 成员不存在
 exception.group.title_required: 缺少标题
+exception.group.delete_group_require_close: 未关闭的小组不能删除
 exception.comment.not_found: 评论不存在
 exception.comment.forbidden_delete: 无权限删除评论！
 exception.comment.objecttype_invalid: 不存在当前这种评论对象
@@ -12083,3 +12091,4 @@ course.live_replay.tips: 当前版本仅支持PC端查看直播回放课时，�
 
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%%taskNumber%： %taskTitle%'
+common.cancel_recommend.btn: 取消推荐

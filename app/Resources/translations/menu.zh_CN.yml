@@ -735,6 +735,7 @@ admin_v2.information_collect.detail: 用户信息采集 > 详情
 admin_v2.operation.group_menu: 小组管理
 admin_v2.operation.group.group_tab: 小组管理
 admin_v2.operation.group.group_tab.create_group_btn: 创建小组
+admin_v2.operation.group.group_recommend_tab: 小组推荐
 admin_v2.operation.group.group_thread_tab: 小组话题管理
 
 #运营-内容管理-私信管理

@@ -5406,9 +5406,16 @@ admin.operation_group.edit_btn: Edit
 admin.operation_group.viewGroup_btn: 'View Group'
 admin.operation_group.closeGroup_btn: 'Close Group'
 admin.operation_group.openGroup_btn: 'Open Group'
+admin.operation_group.deleteGroup_btn: 'Delete Group'
+admin.operation_group.recommendGroup_btn: 'Recommend Group'
 admin.operation_group.transferGroup_btn: 'Transfer Group'
 admin.operation_group.closeGroup_title: 'Close Group(%groupTitle%)'
 admin.operation_group.openGroup_title: 'Open Group(%groupTitle%)'
+admin.operation_group.recommendGroup_title: 'Recommend Group(%groupTitle%)'
+admin.operation_group.cancelRecommendGroup_title: 'Cancel Recommend Group(%groupTitle%)'
+admin.operation_group.deleteGroup_title: 'Delete Group(%groupTitle%)'
+admin.operation_group.recommend.modal_title: 'Recommend Group Setting'
+admin.operation_group.recommend.empty: 'No recommendation group'
 admin.operation_group.modal.enter_user_name: 'Please enter username'
 admin.operation_group.modal.transfer_to: 'Transfer To'
 admin.operation_group.modal.user_name.data_display: Username
@@ -9436,6 +9443,7 @@ exception.group.not_found: Group does not exist
 exception.group.duplicate_join: Already in the group, don't repeat
 exception.group.not_found_member: Member does not exist
 exception.group.title_required: Missing title
+exception.group.delete_group_require_close: Unclosed groups cannot be deleted
 exception.comment.not_found: Comment does not exist
 exception.comment.forbidden_delete: No permission to delete comments！
 exception.comment.objecttype_invalid: There is no current comment object
@@ -10823,3 +10831,4 @@ course.live_replay.tips: The current version only supports viewing of live playb
 
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%.%taskNumber%:%taskTitle%'
+common.cancel_recommend.btn: Cancel Recommend

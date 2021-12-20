@@ -44,6 +44,23 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
         return $this->db()->delete($this->table, ['threadId' => $threadId]);
     }
 
+    public function findByThreadIds(array $threadIds)
+    {
+        return $this->findInField('threadId', $threadIds);
+    }
+
+    public function deleteByThreadIds(array $threadIds)
+    {
+        if (empty($threadIds)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($threadIds) - 1).'?';
+        $sql = "DELETE FROM {$this->table} WHERE `threadId` IN ({$marks});";
+
+        return $this->db()->executeUpdate($sql, $threadIds);
+    }
+
     public function declares()
     {
         return [

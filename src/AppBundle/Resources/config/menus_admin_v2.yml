@@ -975,6 +975,10 @@ admin_v2:
                                             router_name: group_add
                                             group: topBtn
                                             blank: 1
+                                admin_v2_operation_group_recommend_list:
+                                    name: admin_v2.operation.group.group_recommend_tab
+                                    router_name: admin_v2_group_recommend_list
+                                    disable: true
                                 admin_v2_operation_group_thread:
                                     name: admin_v2.operation.group.group_thread_tab
                                     disable: true
