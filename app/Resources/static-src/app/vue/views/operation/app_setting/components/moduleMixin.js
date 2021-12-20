@@ -25,6 +25,11 @@ export default {
     isLast: {
       type: Boolean,
       required: true
+    },
+
+    validatorResult: {
+      type: Boolean,
+      default: true
     }
   },
 

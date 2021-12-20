@@ -3,6 +3,7 @@
     :active="moduleType === currentModuleType"
     :is-first="isFirst"
     :is-last="isLast"
+    :validator-result="validatorResult"
     @event-actions="handleClickAction"
   >
     <div class="open-course-list">

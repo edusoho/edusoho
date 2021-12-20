@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div class="active" v-show="active" />
+    <div :class="activeClass" v-show="active || !validatorResult" />
   </div>
 </template>
 
@@ -37,6 +37,17 @@ export default {
     isLast: {
       type: Boolean,
       required: true
+    },
+
+    validatorResult: {
+      type: Boolean,
+      default: true
+    }
+  },
+
+  computed: {
+    activeClass() {
+      return this.active ? 'active' : (!this.validatorResult ? 'active-error' : '');
     }
   },
 
@@ -59,14 +70,23 @@ export default {
     pointer-events: none;
   }
 
-  .active {
+  .active,
+  .active-error {
     position: absolute;
     z-index: 11;
     top: -2px;
     left: -2px;
     right: -2px;
     bottom: -2px;
-    border: 2px solid #31a1ff;
+    border: 2px solid;
+  }
+
+  .active {
+    border-color: #31a1ff;
+  }
+
+  .active-error {
+    border-color: red;
   }
 
   .edit-operate {

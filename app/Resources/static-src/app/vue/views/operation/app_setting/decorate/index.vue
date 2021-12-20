@@ -25,6 +25,7 @@
                 :current-module-type="currentModule.type"
                 :is-first="index === 0"
                 :is-last="index === lastModuleIndex"
+                :validator-result="module.validatorResult"
                 @click.native="changeCurrentModule(module, index)"
                 @event-actions="handleClickActions"
               />
@@ -113,7 +114,8 @@ export default {
       modules: [],
       currentModule: {},
       drag: false,
-      vipLevels: []
+      vipLevels: [],
+      validatorResult: true
     }
   },
 
@@ -296,11 +298,94 @@ export default {
       }
     },
 
+    moduleValidator(module) {
+      const { data, type } = module;
+      // 轮播图
+      if (type === 'slide_show') {
+        const length = _.size(data);
+
+        if (!length) {
+          this.$message.error('请完善轮播图模块信息！');
+          return false;
+        }
+
+        _.forEach(data, (item, index) => {
+          const { uri } = item.image;
+          if (!uri) {
+            this.$message.error('请完善轮播图模块信息！');
+            return false;
+          }
+        });
+        return true;
+      }
+
+      // 课程、班级
+      if (_.includes(['course_list', 'classroom_list', 'open_course_list', 'item_bank_exercise'], type)) {
+        const messages = {
+          course_list: '请完善课程模块信息！',
+          classroom_list: '请完善班级模块信息！',
+          open_course_list: '请完善公开课模块信息！',
+          item_bank_exercise: '请完善题库模块信息！'
+        };
+
+        const { title, sourceType, items } = data;
+        const length = _.size(items);
+
+        if (!title || (sourceType === 'custom' && !length)) {
+          this.$message.error(messages[type]);
+          return false;
+        }
+        return true;
+      }
+
+      // 图片广告
+      if (type === 'poster') {
+        const { uri } = data.image;
+        if (!uri) {
+          this.$message.error('请完善广告模块信息！');
+          return false;
+        }
+        return true;
+      }
+
+      // 图文导航
+      if (type === 'graphic_navigation') {
+        _.forEach(data, (item, index) => {
+          const { title, image: { uri }, link: { type } } = item;
+          if (!title || !uri || !type) {
+            this.$message.error('请完善图文导航模块信息！');
+            return false;
+          }
+        });
+        return true;
+      }
+
+       // 优惠券
+      if (type === 'coupon') {
+        const length = _.size(data.items);
+
+        if (!length) {
+          this.$message.error('请完善优惠券模块信息！');
+          return false;
+        }
+        return true;
+      }
+    },
+
     handleClickSave() {
       _.forEach(this.modules, (module, index) => {
+        const result = this.moduleValidator(module);
+        if (!result) {
+          this.validatorResult = false;
+        }
+        this.$set(module, 'validatorResult', result);
         module.moduleType = `${module.type}-${index}`;
       });
-      console.log(this.modules);
+
+      if (this.validatorResult) {
+        console.log('14312442142');
+      }
+      // console.log(this.modules);
     }
   }
 }
@@ -310,7 +395,6 @@ export default {
 .decorate-container {
   width: 100%;
   height: 100%;
-
   .decorate-main {
     overflow-y: hidden;
     position: relative;
@@ -349,5 +433,4 @@ export default {
     }
   }
 }
-
 </style>
