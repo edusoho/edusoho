@@ -124,6 +124,17 @@ class MeJoined extends AbstractResource
         $data = array_merge(array_values($this->orderByLastViewTime($courseSets, $uniqueMemberIds)), $courses, $classrooms, $members);
         array_multisort(ArrayToolkit::column($data, 'lastLearnTime'), SORT_DESC, $data);
 
+        return $this->transformCover($data);
+    }
+
+    private function transformCover($data)
+    {
+        foreach ($data as &$value) {
+            $value['cover']['small'] = AssetHelper::getFurl(empty($value['cover']['small']) ? '' : $value['cover']['small'], 'item_bank_exercise.png');
+            $value['cover']['middle'] = AssetHelper::getFurl(empty($value['cover']['middle']) ? '' : $value['cover']['middle'], 'item_bank_exercise.png');
+            $value['cover']['large'] = AssetHelper::getFurl(empty($value['cover']['large']) ? '' : $value['cover']['large'], 'item_bank_exercise.png');
+        }
+
         return $data;
     }
 
