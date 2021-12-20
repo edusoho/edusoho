@@ -32,7 +32,7 @@ class PartRightScoreRule extends ScoreRule
             return [
                 'name' => self::RULE,
                 'score' => empty($question['miss_score']) ? 0 : $question['miss_score'],
-                'rule' => empty($question['score_rule']) ?[]:$question['score_rule'],
+                'score_rule' => empty($question['score_rule']) ?[]:$question['score_rule'],
             ];
         }
 

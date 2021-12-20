@@ -33,10 +33,10 @@
       <div class="input-group">
         <div class="input-group-btn">
           <select class="btn btn-default dropdown-toggle  js-score-type" name="scoreType[{{ question.id }}]" style="width: 60px;height: 34px; padding: 0px !important;">
-            <option value="question" selected="selected">{{ 'course.homework.score_set.select.question1'|trans }}</option><option value="option">{{ 'course.homework.score_set.select.option1'|trans }}</option>
+            <option value="question" {% if question.score_rule['scoreType']|default('question') == 'question' %}selected="selected" {% endif %}>{{ 'course.homework.score_set.select.question1'|trans }}</option><option value="option" {% if question.score_rule['scoreType']|default('question') == 'option' %}selected="selected" {% endif %}>{{ 'course.homework.score_set.select.option1'|trans }}</option>
           </select>
         </div>
-        <input type="text" class="form-control score-validate js-fill-score js-score" name="choiceScore[{{ question.id }}]" value="{{ question.score|default(0)|score_text }}" style="width: 60px;" aria-label="...">
+        <input type="text" class="form-control score-validate js-fill-score js-score" name="choiceScore[{{ question.id }}]" value="{{ question.score_rule['otherScore']|default(0)|score_text }}" style="width: 60px;" aria-label="...">
       </div>
     {% endif %}
   </td>
@@ -45,11 +45,11 @@
       <div class="input-group">
         <div class="input-group-btn">
           <select class="btn btn-default dropdown-toggle js-score-type" name="scoreType[{{ question.id }}]" style="width: 60px;height: 34px; padding: 0px 5px !important;">
-            <option value="question" selected="selected">{{ 'course.homework.score_set.select.question2'|trans }}</option>
-            <option value="option">{{ 'course.homework.score_set.select.option2'|trans }}</option>
+            <option value="question" {% if question.score_rule['scoreType']|default('question') == 'question' %}selected="selected" {% endif %}>{{ 'course.homework.score_set.select.question2'|trans }}</option>
+            <option value="option" {% if question.score_rule['scoreType']|default('question') == 'option' %}selected="selected" {% endif %}>{{ 'course.homework.score_set.select.option2'|trans }}</option>
           </select>
         </div>
-        <input type="text" class="form-control score-validate js-miss-choice-score" name="choiceScore[{{ question.id }}]" style="width: 60px" aria-label="...">
+        <input type="text" class="form-control score-validate js-miss-choice-score" name="choiceScore[{{ question.id }}]" value="{{question.score_rule['otherScore']|default(0)|score_text}}" style="width: 60px" aria-label="...">
       </div>
     </td>
   {% elseif item.type == 'material' %}

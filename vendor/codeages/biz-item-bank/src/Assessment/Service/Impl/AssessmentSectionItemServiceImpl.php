@@ -3,9 +3,9 @@
 namespace Codeages\Biz\ItemBank\Assessment\Service\Impl;
 
 use Codeages\Biz\Framework\Util\ArrayToolkit;
-use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\Assessment\Dao\AssessmentSectionItemDao;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
+use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class AssessmentSectionItemServiceImpl extends BaseService implements AssessmentSectionItemService
@@ -53,12 +53,19 @@ class AssessmentSectionItemServiceImpl extends BaseService implements Assessment
                     'isDelete' => 1,
                 ];
             }
+
+            if(!empty($scoreRule['rule'])) {
+                $scoreRule['rule'] = ArrayToolkit::index($scoreRule['rule'], 'name');
+                if(!empty($scoreRule['rule']['part_right']) && !empty($scoreRule['rule']['part_right']['score_rule'])) {
+                    $question['score_rule']  = $scoreRule['rule']['part_right']['score_rule'];
+                }
+            }
             $item['questions'][] = $question;
         }
 
         return $item;
     }
-
+    
     public function createAssessmentSectionItem($item, $section)
     {
         $questionScoreRule = [];
