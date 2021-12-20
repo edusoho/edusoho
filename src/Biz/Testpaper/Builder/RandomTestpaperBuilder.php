@@ -68,11 +68,15 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
                 ],
                 'item_count' => $section['count'],
                 'name' => $section['name'],
-                'score' => $fields['scores'][$type],
+                'score' => empty($fields['scores'][$type]) ? 0 : $fields['scores'][$type],
             ];
 
-            if (!empty($fields['missScores'][$type])) {
-                $section['miss_score'] = $fields['missScores'][$type];
+            if (isset($fields['choiceScore'][$type])) {
+                $section['choiceScore'] = $fields['choiceScore'][$type];
+            }
+
+            if (!empty($fields['scoreType'][$type])) {
+                $section['scoreType'] = $fields['scoreType'][$type];
             }
 
             if ('difficulty' == $fields['mode']) {
@@ -91,6 +95,19 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
             foreach ($section['items'] as &$item) {
                 foreach ($item['questions'] as &$question) {
                     $question['score'] = $section['score'];
+                    $scoreType = empty($section['scoreType']) ? 'question' : $section['scoreType'];
+                    $otherScore = empty($section['choiceScore']) ? 0 : $section['choiceScore'];
+                    if ('text' == $question['answer_mode']) {
+                        $question['score'] = 'question' == $scoreType ? $otherScore : $otherScore * count($question['answer']);
+                    }
+                    $question['score_rule'] = [
+                        'score' => $question['score'],
+                        'scoreType' => $scoreType,
+                        'otherScore' => $otherScore,
+                    ];
+                    if (in_array($question['answer_mode'], ['choice', 'uncertain_choice'])) {
+                        $question['miss_score'] = $otherScore;
+                    }
                     if (!empty($section['miss_score'])) {
                         $question['miss_score'] = $section['miss_score'];
                     }
