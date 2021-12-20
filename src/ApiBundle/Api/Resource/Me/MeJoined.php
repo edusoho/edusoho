@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -35,6 +36,7 @@ class MeJoined extends AbstractResource
         foreach ($members as $member) {
             $courseSets[$member['courseSetId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
             $courseSets[$member['courseSetId']]['meJoinedType'] = 'live';
+            $courseSets[$member['courseSetId']]['cover'] = $this->transformCover($courseSets[$member['courseSetId']]['cover'], 'course');
         }
 
         //课程
@@ -72,6 +74,7 @@ class MeJoined extends AbstractResource
             if (isset($courses[$member['courseId']])) {
                 $courses[$member['courseId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
                 $courses[$member['courseId']]['meJoinedType'] = 'course';
+                $courses[$member['courseId']]['cover'] = $this->transformCover($courses[$member['courseId']]['cover'], 'course');
             }
         }
 
@@ -95,6 +98,7 @@ class MeJoined extends AbstractResource
         foreach ($members as $member) {
             $classrooms[$member['classroomId']]['meJoinedType'] = 'classroom';
             $classrooms[$member['classroomId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
+            $classrooms[$member['classroomId']]['cover'] = $this->transformCover($classrooms[$member['classroomId']]['cover'], 'classroom');
         }
 
         //题库
@@ -119,23 +123,22 @@ class MeJoined extends AbstractResource
             }
             $member['meJoinedType'] = 'itemBankExercise';
             $member['lastLearnTime'] = $member['updatedTime'];
+            $member['itemBankExercise']['cover'] = $this->transformCover($member['itemBankExercise']['cover'], 'item_bank_exercise');
         }
 
         $data = array_merge(array_values($this->orderByLastViewTime($courseSets, $uniqueMemberIds)), $courses, $classrooms, $members);
         array_multisort(ArrayToolkit::column($data, 'lastLearnTime'), SORT_DESC, $data);
 
-        return $this->transformCover($data);
+        return $data;
     }
 
-    private function transformCover($data)
+    private function transformCover($cover, $type)
     {
-        foreach ($data as &$value) {
-            $value['cover']['small'] = AssetHelper::getFurl(empty($value['cover']['small']) ? '' : $value['cover']['small'], 'item_bank_exercise.png');
-            $value['cover']['middle'] = AssetHelper::getFurl(empty($value['cover']['middle']) ? '' : $value['cover']['middle'], 'item_bank_exercise.png');
-            $value['cover']['large'] = AssetHelper::getFurl(empty($value['cover']['large']) ? '' : $value['cover']['large'], 'item_bank_exercise.png');
-        }
+        $cover['small'] = AssetHelper::getFurl(empty($cover['small']) ? '' : $cover['small'], $type.'.png');
+        $cover['middle'] = AssetHelper::getFurl(empty($cover['middle']) ? '' : $cover['middle'], $type.'.png');
+        $cover['large'] = AssetHelper::getFurl(empty($cover['large']) ? '' : $cover['large'], $type.'.png');
 
-        return $data;
+        return $cover;
     }
 
     /**
