@@ -28,6 +28,10 @@ class MeCourse extends AbstractResource
             PHP_INT_MAX
         );
 
+        foreach ($members as $member) {
+            $member['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
+        }
+
         $courseConditions = [
             'ids' => ArrayToolkit::column($members, 'courseId') ?: [0],
             'excludeTypes' => ['reservation'],
@@ -46,6 +50,14 @@ class MeCourse extends AbstractResource
         $total = $this->getCourseService()->countCourses($courseConditions);
 
         $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
+
+        $members = ArrayToolkit::index($members, 'courseId');
+        foreach ($courses as &$course) {
+            if (isset($members[$course['id']])) {
+                $course['lastLearnTime'] = $members[$course['id']]['lastLearnTime'];
+            }
+        }
+        array_multisort(ArrayToolkit::column($courses, 'lastLearnTime'), SORT_DESC, $courses);
 
         return $this->makePagingObject($courses, $total, $offset, $limit);
     }
