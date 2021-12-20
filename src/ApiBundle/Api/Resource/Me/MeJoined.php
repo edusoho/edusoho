@@ -59,6 +59,10 @@ class MeJoined extends AbstractResource
             'excludeTypes' => ['reservation'],
         ];
 
+        if (!empty($courseSets)) {
+            $courseConditions['excludeCourseSetIds'] = ArrayToolkit::column($courseSets, 'id');
+        }
+
         $courses = $this->getCourseService()->searchCourses(
             $courseConditions,
             [],
