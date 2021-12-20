@@ -10834,3 +10834,4 @@ course.live_replay.tips: The current version only supports viewing of live playb
 course.homework.pass_score: Set passing score
 course.homework.pass_score.tip1: 'Full marks：'
 course.homework.pass_score.tip2: Qualified if the score is reached
+testpaper.score_set.option: question score

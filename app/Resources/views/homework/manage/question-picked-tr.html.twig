@@ -22,7 +22,7 @@
         <div class="input-group">
           <div class="input-group-btn">
             <select class="btn btn-default dropdown-toggle  js-score-type" name="scoreType[{{ question.questions[0].id }}]" style="width: 60px;height: 34px; padding: 0px !important;">
-              <option value="question" selected="selected">每题</option><option value="option">每空</option>
+              <option value="question" selected="selected">{{ 'course.homework.score_set.select.question1'|trans }}</option><option value="option">{{ 'course.homework.score_set.select.option1'|trans }}</option>
             </select>
           </div>
           <input type="text" class="form-control score-validate js-fill-score js-score" name="choiceScore[{{ question.questions[0].id }}]" style="width: 60px;" aria-label="...">
@@ -33,8 +33,8 @@
         <div class="input-group" style="margin-left: 128px;">
           <div class="input-group-btn">
             <select class="btn btn-default dropdown-toggle js-score-type" name="scoreType[{{ question.questions[0].id }}]" style="width: 60px;height: 34px; padding: 0px 5px !important;">
-              <option value="question" selected="selected">漏选得分</option>
-              <option value="option">每项正确得分</option>
+              <option value="question" selected="selected">{{ 'course.homework.score_set.select.question2'|trans }}</option>
+              <option value="option">{{ 'course.homework.score_set.select.option2'|trans }}</option>
             </select>
           </div>
           <input type="text" class="form-control score-validate js-miss-choice-score" name="choiceScore[{{ question.questions[0].id }}]" style="width: 60px" aria-label="...">
