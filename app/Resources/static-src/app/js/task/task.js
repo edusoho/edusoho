@@ -20,6 +20,7 @@ export default class TaskShow extends Emitter {
 
   init() {
     this.initPlugin();
+    this.initShowSidebar();
     this.initSidebar();
     if (this.mode != 'preview') {
       this.initTaskPipe();
@@ -28,6 +29,21 @@ export default class TaskShow extends Emitter {
     this.initLearnContent();
     this.initPlaySequence();
 
+  }
+
+  initShowSidebar() {
+    let status = !!localStorage.getItem('dashboard-tool');
+    let sidebarWidth = 360;
+    let content_right, side_right;
+    if (status) {
+      side_right = '-' + sidebarWidth + 'px';
+      content_right = sidebarWidth +  35 +'px';
+    } else {
+      side_right = '0px';
+      content_right = '35px';
+    }
+    this.element.find('#dashboard-content').css('right', content_right);
+    this.element.find('#dashboard-sidebar').css('right', side_right);
   }
 
   initPlaySequence() {

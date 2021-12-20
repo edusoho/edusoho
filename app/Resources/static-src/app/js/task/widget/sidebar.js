@@ -34,8 +34,9 @@ export default class TaskSidebar extends Emitter {
   }
 
   renderToolbar() {
+    let className = this.showStatus ? 'active' : '';
     let html = `
-      <div class="dashboard-toolbar js-dashboard-toolbar">
+      <div class="dashboard-toolbar js-dashboard-toolbar ${className}">
         <i class="es-icon es-icon-angledoubleleft"></i>
       </div>
     `;
@@ -98,9 +99,11 @@ export default class TaskSidebar extends Emitter {
   operationContent($btn) {
     if ($btn.hasClass('active')) {
       this.foldContent();
+      localStorage.setItem('dashboard-tool', false);
       $btn.removeClass('active');
     } else {
       $btn.addClass('active');
+      localStorage.setItem('dashboard-tool', true);
       this.popupContent();
     }
   }
