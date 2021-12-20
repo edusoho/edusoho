@@ -74,7 +74,7 @@ class MeJoined extends AbstractResource
             if (isset($courses[$member['courseId']])) {
                 $courses[$member['courseId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
                 $courses[$member['courseId']]['meJoinedType'] = 'course';
-                $courses[$member['courseId']]['cover'] = $this->transformCover($courses[$member['courseId']]['cover'], 'course');
+                $courses[$member['courseId']]['courseSet']['cover'] = $this->transformCover($courses[$member['courseId']]['courseSet']['cover'], 'course');
             }
         }
 
