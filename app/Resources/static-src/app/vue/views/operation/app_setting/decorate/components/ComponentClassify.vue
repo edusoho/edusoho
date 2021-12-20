@@ -7,15 +7,14 @@
     <template v-if="classify.components">
       <div v-show="isActive" class="add-component-lists">
         <div class="clearfix">
-          <div
+          <component-classify-item
             v-for="component in classify.components"
             :key="component.type"
-            class="add-list-item pull-left"
-            @click="addModule(component.type)"
-          >
-            <svg-icon :icon="component.icon" />
-            <div class="component-title">{{ component.title }}</div>
-          </div>
+            :component="component"
+            :coupon-enabled="couponEnabled"
+            :vip-enabled="vipEnabled"
+            @click.native="addModule(component.type)"
+          />
         </div>
         <div class="arrow-content" :style="{ top: (88 * index + 44) + 'px' }"></div>
       </div>
@@ -24,7 +23,8 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import ComponentClassifyItem from './ComponentClassifyItem.vue';
+
 export default {
   props: {
     classify: {
@@ -40,7 +40,21 @@ export default {
     currentClassify: {
       type: Number,
       required: true
+    },
+
+    vipEnabled: {
+      type: Boolean,
+      default: false
+    },
+
+    couponEnabled: {
+      type: Boolean,
+      default: false
     }
+  },
+
+  components: {
+    ComponentClassifyItem
   },
 
   computed: {
@@ -102,44 +116,6 @@ export default {
     z-index: 10;
     padding: 11px;
     color: #333;
-
-    .add-list-item {
-      position: relative;
-      width: 78px;
-      height: 72px;
-      text-align: center;
-      border-radius: 2px;
-      cursor: pointer;
-      margin-left: 10px;
-      transition: all 0.3s ease;
-
-      .svg-icon {
-        font-size: 24px;
-        display: block;
-        margin: 8px auto;
-      }
-
-      .component-title {
-        color: #4a4a4a;
-        line-height: 16px;
-        height: 16px;
-        font-size: 12px;
-      }
-
-      &.limit-add {
-        opacity: 0.3;
-        cursor: not-allowed;
-      }
-
-      &:nth-of-type(even) {
-        margin-left: 0;
-      }
-
-      &:hover {
-        background: #31a1ff;
-        color: #fff;
-      }
-    }
 
     .arrow-content {
       position: absolute;

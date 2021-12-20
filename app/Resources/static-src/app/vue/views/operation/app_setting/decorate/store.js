@@ -2,6 +2,8 @@ import Vue from 'vue';
 import _ from 'lodash';
 
 export const state = Vue.observable({
+  vipSetting: {},
+  couponSetting: {},
   courseCategory: [], // 课程分类数据
   classroomCategory: [], // 班级分类数据
   openCourseCategory: [], // 公开课分类数据
@@ -21,6 +23,14 @@ function deleteEmptyChildren(data) {
 }
 
 export const mutations = {
+  setVipSetting(data) {
+    state.vipSetting = data;
+  },
+
+  setCouponSetting(data) {
+    state.couponSetting = data;
+  },
+
   setCourseCategory(data) {
     state.courseCategory = data;
   },

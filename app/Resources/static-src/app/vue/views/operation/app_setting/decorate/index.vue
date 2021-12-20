@@ -3,7 +3,11 @@
     <the-header @save="handleClickSave" />
 
     <div class="decorate-main clearfix">
-      <left-choose-container @add-module="addModule" />
+      <left-choose-container
+        @add-module="addModule"
+        :coupon-enabled="couponEnabled"
+        :vip-enabled="vipEnabled"
+      />
 
       <section ref="previewContainer" class="center-preview-container pull-left">
         <div ref="mainContainer" class="main-preview-container">
@@ -53,7 +57,8 @@
 <script>
 import _ from 'lodash';
 import ModuleCounter from 'app/vue/utils/module-counter.js';
-import { Vip, Pages } from 'common/vue/service';
+import { Vip, Pages, Setting } from 'common/vue/service';
+import { state, mutations } from 'app/vue/views/operation/app_setting/decorate/store.js';
 
 import { DefaultData } from './default-data';
 
@@ -117,7 +122,9 @@ export default {
       typeCount: {},
       vipLevels: [],
       validatorResult: true,
-      alreadyMessage: false
+      alreadyMessage: false,
+      couponEnabled: null,
+      vipEnabled: null
     }
   },
 
@@ -138,6 +145,8 @@ export default {
 
   mounted() {
     this.fetchDiscovery();
+    this.fetchVipSetting();
+    this.fetchCouponSetting();
   },
 
   methods: {
@@ -149,6 +158,22 @@ export default {
 
       this.modules = Object.values(data);
       this.moduleCountInit();
+    },
+
+    async fetchVipSetting() {
+      if (!_.size(state.vipSetting)) {
+        const vipSetting = await Setting.get('vip');
+        mutations.setVipSetting(vipSetting);
+      };
+      this.vipEnabled = !!state.vipSetting.enabled;
+    },
+
+    async fetchCouponSetting() {
+      if (!_.size(state.couponSetting)) {
+        const couponSetting = await Setting.get('coupon');
+        mutations.setCouponSetting(couponSetting);
+      };
+      this.couponEnabled = !!state.couponSetting.enabled;
     },
 
     scrollBottom() {

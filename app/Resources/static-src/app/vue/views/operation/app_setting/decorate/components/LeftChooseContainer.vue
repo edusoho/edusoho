@@ -7,6 +7,8 @@
         :index="index"
         :classify="classify"
         :current-classify="currentClassify"
+        :coupon-enabled="couponEnabled"
+        :vip-enabled="vipEnabled"
         @add-module="addModule"
         @change-classify="changeClassify"
       />
@@ -43,6 +45,18 @@ import ComponentClassify from './ComponentClassify.vue';
 
 export default {
   name: 'LeftChooseContainer',
+
+  props: {
+    vipEnabled: {
+      type: Boolean,
+      default: false
+    },
+
+    couponEnabled: {
+      type: Boolean,
+      default: false
+    }
+  },
 
   components: {
     ComponentClassify
