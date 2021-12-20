@@ -33,7 +33,7 @@ class MeJoined extends AbstractResource
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($uniqueMemberIds);
 
         foreach ($members as $member) {
-            $courseSets[$member['courseSetId']]['lastLearnTime'] = $member['lastLearnTime'];
+            $courseSets[$member['courseSetId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
             $courseSets[$member['courseSetId']]['meJoinedType'] = 'live';
         }
 
@@ -70,7 +70,7 @@ class MeJoined extends AbstractResource
         $courses = ArrayToolkit::index($courses, 'id');
         foreach ($members as $member) {
             if (isset($courses[$member['courseId']])) {
-                $courses[$member['courseId']]['lastLearnTime'] = $member['lastLearnTime'];
+                $courses[$member['courseId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
                 $courses[$member['courseId']]['meJoinedType'] = 'course';
             }
         }
@@ -94,7 +94,7 @@ class MeJoined extends AbstractResource
 
         foreach ($members as $member) {
             $classrooms[$member['classroomId']]['meJoinedType'] = 'classroom';
-            $classrooms[$member['classroomId']]['lastLearnTime'] = $member['lastLearnTime'];
+            $classrooms[$member['classroomId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
         }
 
         //题库
@@ -146,9 +146,6 @@ class MeJoined extends AbstractResource
                 $course = $courses[$courseId];
                 $course['learnedNum'] = $member['learnedNum'];
                 $course['learnedCompulsoryTaskNum'] = $member['learnedCompulsoryTaskNum'];
-                /*
-                 * @TODO 2017-06-29 业务变更、字段变更:publishedTaskNum变更为compulsoryTaskNum,兼容一段时间
-                 */
                 $course['publishedTaskNum'] = $course['compulsoryTaskNum'];
                 $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
                 $orderedCourses[] = $course;
