@@ -28,9 +28,10 @@ class MeCourse extends AbstractResource
             PHP_INT_MAX
         );
 
-        foreach ($members as $member) {
+        foreach ($members as &$member) {
             $member['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
         }
+        array_multisort(ArrayToolkit::column($members, 'lastLearnTime'), SORT_DESC, $members);
 
         $courseConditions = [
             'ids' => ArrayToolkit::column($members, 'courseId') ?: [0],
