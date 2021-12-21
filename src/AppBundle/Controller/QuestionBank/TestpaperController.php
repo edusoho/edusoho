@@ -239,7 +239,7 @@ class TestpaperController extends BaseController
             if ($this->calculateItemCount($assessment['sections']) > 2000) {
                 return $this->createMessageResponse('error', '试卷题目数量不能超过2000！');
             }
-
+            $assessment['sections'] = $this->processAssessmentSections($assessment['sections']);
             $this->getAssessmentService()->updateAssessment($assessmentId, $assessment);
 
             return $this->createJsonResponse([
