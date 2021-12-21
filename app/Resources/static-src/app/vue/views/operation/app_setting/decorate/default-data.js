@@ -51,17 +51,17 @@ const DefaultData = {
     data: [
       {
         title: '分类课',
-        image: { url: '/static-dist/app/img/vue/decorate/gn_classification.png' },
+        image: { uri: '/static-dist/app/img/vue/decorate/gn_classification.png' },
         link: { type: 'openCourse' }
       },
       {
         title: '免费课',
-        image: { url: '/static-dist/app/img/vue/decorate/gn_free.png' },
+        image: { uri: '/static-dist/app/img/vue/decorate/gn_free.png' },
         link: { type: 'course' }
       },
       {
         title: '热门班',
-        image: { url: '/static-dist/app/img/vue/decorate/gn_hot.png' },
+        image: { uri: '/static-dist/app/img/vue/decorate/gn_hot.png' },
         link: { type: 'classroom' }
       }
     ]

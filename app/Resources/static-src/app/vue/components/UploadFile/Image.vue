@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display: inline-block;">
     <a-upload
       accept="image/*"
       :file-list="[]"
@@ -7,7 +7,7 @@
       @change="handleChange"
     >
       <slot name="content">
-        <a-button>上传图片</a-button>
+        <a-button type="primary">上传图片</a-button>
       </slot>
     </a-upload>
 
