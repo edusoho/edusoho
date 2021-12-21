@@ -16,13 +16,13 @@
           <draggable
             v-model="modules"
             v-bind="dragOptions"
-            @start="drag = true"
+            @start="draggableStart"
             @end="draggableEnd"
           >
             <transition-group type="transition" :name="!drag ? 'flip-list' : null">
               <component
                 v-for="(module, index) in modules"
-                :key="index"
+                :key="module.oldKey"
                 :is="module.type"
                 :module-data="module.data"
                 :module-type="`${module.type}-${index}`"
@@ -118,7 +118,7 @@ export default {
       modules: [],
       currentModule: {},
       drag: false,
-      typeCount: {},
+      typeCount: new ModuleCounter(),
       vipLevels: [],
       validatorResult: true,
       alreadyMessage: false,
@@ -154,8 +154,13 @@ export default {
         params: { mode: 'published' }
       };
       const data = await Pages.appsDiscovery(params);
+      const modules = Object.values(data);
 
-      this.modules = Object.values(data);
+      _.forEach(modules, (module, index) => {
+        module.oldKey = index;
+      });
+
+      this.modules = modules;
       this.moduleCountInit();
     },
 
@@ -182,11 +187,9 @@ export default {
 
     // 模块类型计数初始化
     moduleCountInit() {
-      const typeCount = new ModuleCounter();
       _.forEach(this.modules, item => {
-        typeCount.addByType(item.type);
+        this.typeCount.addByType(item.type);
       });
-      this.typeCount = typeCount;
     },
 
     addModule(type) {
@@ -202,6 +205,7 @@ export default {
         info.data.items = tempLevels;
       }
 
+      info.oldKey = _.size(this.modules);
       this.modules.push(info);
       this.typeCount.addByType(type);
       this.changeCurrentModule(info, _.size(this.modules) - 1);
@@ -238,6 +242,11 @@ export default {
       _.assign(this, {
         currentModule
       });
+    },
+
+    draggableStart() {
+      this.drag = true;
+      this.currentModule = {};
     },
 
     draggableEnd({ newIndex }) {

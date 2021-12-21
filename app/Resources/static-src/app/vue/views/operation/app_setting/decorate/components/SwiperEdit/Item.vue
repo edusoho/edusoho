@@ -8,14 +8,6 @@
     />
     <div class="image-item__img pull-left">
       <img :src="item.image.uri" />
-      <!-- <a-upload
-        accept="image/*"
-        :file-list="[]"
-        :customRequest="() => {}"
-        @change="changeUploadPicture"
-      >
-        <div class="re-upload">修改</div>
-      </a-upload> -->
       <upload-image :aspect-ratio="5 / 2" @success="handleUploadSuccess">
         <template #content>
           <div class="re-upload">修改</div>
