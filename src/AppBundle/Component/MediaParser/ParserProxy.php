@@ -8,12 +8,21 @@ class ParserProxy
 {
     private $mockedParser = null;
 
+    public function getParsers()
+    {
+        return [
+            'youku' => 'YoukuVideo',
+            'qqvideo' => 'QQVideo',
+            'NeteaseOpenCourse' => 'NeteaseOpenCourse',
+            'bilibili' => 'BiLiBiLiVideo',
+            'iqiyi' => 'IQiYiVideo',
+        ];
+    }
+
     public function parseItem($url)
     {
-        $parsers = array('YoukuVideo', 'QQVideo', 'NeteaseOpenCourse', 'TudouVideo');
-
         $kernel = ServiceKernel::instance();
-        $extras = array();
+        $extras = [];
 
         if ($kernel->hasParameter('media_parser')) {
             $extras = $kernel->getParameter('media_parser');
@@ -34,7 +43,7 @@ class ParserProxy
             }
         }
 
-        foreach ($parsers as $parserName) {
+        foreach ($this->getParsers() as $parserName) {
             $parser = $this->createParser("{$parserName}ItemParser");
 
             if (!$parser->detect($url)) {
@@ -49,21 +58,17 @@ class ParserProxy
 
     public function prepareMediaUri($video)
     {
-        if ('self' != $video['mediaSource']) {
-            if ('youku' == $video['mediaSource']) {
-                $parser = $this->createParser('YoukuVideoItemParser');
-            } elseif ('NeteaseOpenCourse' == $video['mediaSource']) {
-                $parser = $this->createParser('NeteaseOpenCourseItemParser');
-            } elseif ('qqvideo' == $video['mediaSource']) {
-                $parser = $this->createParser('QQVideoItemParser');
-            } else {
-                throw ParserException::PARSER_NOT_SUPPORT();
-            }
-
-            return $parser->prepareMediaUri($video);
+        if ('self' == $video['mediaSource']) {
+            return $video;
         }
 
-        return $video;
+        $parsers = $this->getParsers();
+        if (empty($parsers[$video['mediaSource']])) {
+            throw ParserException::PARSER_NOT_SUPPORT();
+        }
+        $parser = $this->createParser($parsers[$video['mediaSource']].'ItemParser');
+
+        return $parser->prepareMediaUri($video);
     }
 
     public function prepareYoukuMediaUri($video)

@@ -20,6 +20,8 @@ interface CourseDao extends GeneralDaoInterface
 
     public function findCoursesByIds($ids);
 
+    public function findCoursesByCategoryIds($categoryIds);
+
     public function findCourseSetIncomesByCourseSetIds(array $courseSetIds);
 
     public function sumTotalIncomeByIds(array $ids);

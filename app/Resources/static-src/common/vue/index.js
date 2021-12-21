@@ -73,9 +73,10 @@ if (!window.Vue) {
 }
 
 if (!window.Vue) {
-  Vue.filter('trans', (value = '', options = {}) => {
-    return Translator.trans(value, options)
-  })
+  Vue.filter('trans', (value = '', params = {}) => {
+    if (!value) return '';
+    return Translator.trans(value, params);
+  });
 
   Vue.filter('formatHtml', (value = '') => {
     return value && value.replace(/<(?:.|\n)*?>/gm, '')

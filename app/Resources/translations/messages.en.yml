@@ -137,10 +137,10 @@ site.twig.extension.smarttime.previous_second: %diff% second ago
 site.twig.extension.smarttime.previous_minute: %diff% minute ago
 site.twig.extension.smarttime.previous_hour: %diff% hour ago
 site.twig.extension.smarttime.previous_day: %diff% day ago
-site.twig.extension.time_interval.minute: %diff% minute
+site.twig.extension.time_interval.minute: '%diff% minute'
 site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
 site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
-site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease is now suported
+site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease, Bilibili, Iqiyi is now suported
 site.user_password.error_tips: Bad credentials
 
 site.mobile_bind.ignore: skip
@@ -960,6 +960,7 @@ course.marketing_setup.course_award: Course Award
 course.teacher_setup: 'Teachers'
 course.teacher_setup.exist_teacher: 'Exist teachers'
 course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teacher role.'
+course.teacher_setup.exist_teacher.add_tips_v2: 'Can only add users with teacher privileges, sorted under the first teacher of the other teachers are live teaching assistant status'
 course.members_manage: 'Students'
 course.members_manage.official_student: Students
 course.members_manage.official_student.search: Search
@@ -1151,7 +1152,8 @@ course.replay_manage.tips: >
   <div><b>Attention please, you can not generate an online video after uploading a video file!</b></div>
 course.replay_manage.unpublished: Unpublished
 course.replay_manage.live_not_stop: 'Live not finished'
-course.replay_manage.ungenerated: 'Ungenerated playback'
+course.replay_manage.ungenerated: 'Generating playback'
+course.replay_manage.generated_fail: 'Playback generation failed, click on the record to regenerate'
 course.replay_manage.generated: 'Generated playback'
 course.replay_manage.video_generated.file_exsist: 'The video has been uploaded'
 course.replay_manage.video_generated.file_not_exsist: 'The video has been deleted'
@@ -1374,6 +1376,7 @@ course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'
 course.tab.summary: 'Intro'
 course.tab.certificate: 'Certificate'
+course.activity.replay: 'Replay'
 course.activity.video: 'Video'
 course.activity.audio: Audio
 course.activity.live: Live
@@ -1526,7 +1529,7 @@ course.testpaper_manage.publish_btn: 'Publish'
 course.testpaper_manage.publish_tips: 'Are you sure to publish the %name%? Test paper can''t be edit if published.'
 course.testpaper_manage.close_btn: 'Close the test paper'
 course.testpaper_manage.close_tips: 'Are you sure to close the test paper %name%？'
-course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in %taskName%, are you sure to close?'
+course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in %taskName%, close the test paper may prevent students from participating in the test, please do not close the test paper.'
 course.testpaper_manage.edit_btn: 'Edit the test paper info'
 course.testpaper_manage.manage_btn: 'Edit the test questions'
 course.testpaper_manage.repead_btn: Re-generate
@@ -1623,6 +1626,7 @@ course.testpaper_manage.analysis_card.avg_score: 'Avg Score:'
 course.testpaper_manage.analysis_card.avg_score_tip: Figure up first submited score
 
 course.course_files: 'Files manage'
+course.course_resource: Resource manage
 course.course_files.content_title: 'Files manage'
 course.course_files.create_btn: 'Add'
 course.course_files.name: Name
@@ -1887,6 +1891,10 @@ course.plan_task.activity_manage.video.last: 'Learning to the end'
 course.plan_task.activity_manage.video.learn_time: 'Learning time'
 course.plan_task.activity_manage.video.buy_tips: 'Buy this course immediately to get full of your learning.'
 course.plan_task.activity_manage.video.try_watch_tips: 'You can try it for free before %tryLookLength% minutes after purchase and can be viewed intact.'
+
+course.plan_task.activity_manage.replay: Live replay
+course.plan_task.activity_manage.replay.time: 'Duration'
+
 course.plan_task.activity_manage.create_btn: 'Go to the course forum'
 course.recommend_course.content_title: 'Recommended course'
 course.recommend_course.empty_tips: 'No recommended course'
@@ -6463,7 +6471,7 @@ admin.role_manage.nickname: Creator
 admin.role_manage.operation: Action
 admin.role_manage.role.empty: 'No role'
 admin.role_manage.keyword.placeholer: Keywords
-admin.role_manage.help_block: '<p>1 The 4 default role cannot be edited or deleted</p><p>2 Code cannot be modified after a role is created </p>'
+admin.role_manage.help_block: '<p>1 The 6 default role cannot be edited or deleted</p><p>2 Code cannot be modified after a role is created </p>'
 admin.role_manage.modal.show_modal: 'Role details'
 admin.role_manage.modal.edit_modal: 'Edit Role'
 admin.role_manage.modal.create_modal: 'Add roles'
@@ -9236,6 +9244,10 @@ exception.parsed.failed.netease: Failed to get video information of Netease Open
 exception.parsed.failed.letv: Failed to get video information of Letv
 exception.parsed.failed.qq: Failed to get video information of QQ video
 exception.parsed.failed.youku: Failed to get video information of Youku
+exception.parsed.failed.bilibili: Failed to get video information of bilibili
+exception.parsed.failed.bilibili_video_id: Failed to get video id of bilibili
+exception.parsed.failed.iqiyi: Failed to get video information of iqiyi
+exception.parsed.failed.iqiyi_video_id: Failed to get video id of iqiyi
 exception.parser.not.support: This video type is not supported
 
 exception.announcement.notfound: Announcement not found
@@ -10017,6 +10029,7 @@ admin_v2.default.switch_old_version_btn: Back to old version
 exception.common_upgrade_v2_error: Has been upgraded to the new version
 exception.switch_old_version.permission_error: Please contact super administrator or administrator operation
 exception.switch_old_version.error: Has been upgraded to the old version
+exception.fields_format_error: Fields format error
 admin_v2.setting.navigation.foot.tips: "Besides Qingqiu、Default A、Default B、Yazhi，please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> Web setting</a> and edit.\n"
 admin_v2.setting_course.course_list_page_seq.help_block: 'Address: Domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "operating" - "Web Setting" - "Purchased Theme" - "setting". Course order settings are only supported by ink-only theme and simplicity theme.'
 
@@ -10585,6 +10598,7 @@ admin.classroom_manage.statistics.course.title_tips: >
 admin.classroom_manage.statistics.course.total_learn_time: 'The course is accumulated study time (minutes): %mins%'
 
 classroom.manage.data_statictics: Data Statistics
+classroom.manage.live_statictics: Live Statistics
 classroom.manage.data_statistics.overview.student_num: Student Number
 classroom.manage.data_statistics.overview.auditor_num: Auditor
 classroom.manage.data_statistics.overview.finished_num: Finished Num
@@ -10791,3 +10805,18 @@ exception.teacher_qualification_not_enable: Teacher qualification not enable
 exception.teacher_qualification_not_teacher: Teacher qualification not teacher
 homepage.teacher_qualification.code: 'Teacher qualification code'
 homepage.teacher_qualification.more: 'More'
+
+course.live_replay_manage.lesson_title_th: Live lesson title
+course.live_replay_manage.live_length_th: Live length
+course.live_replay_manage.live_anchor_th: Live anchor
+course.live_replay_manage.live_time_th: Live time
+course.live_replay.tag_select_default: Replay tag
+course.live_replay.share_btn: Share
+course.live_replay.un_share_btn:  UnShare
+course.live_replay.remove_btn: Remove
+course.live_replay.title: Live Title
+course.live_replay.teacher: Teacher
+course.live_replay.length: length
+course.live_replay.start_time: Start Time
+course.live_replay_manage.live_replay_empty: replay deleted
+course.live_replay.tips: The current version only supports viewing of live playback sessions on the PC side, and does not currently support the mobile side

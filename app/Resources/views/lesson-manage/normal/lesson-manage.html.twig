@@ -52,6 +52,7 @@
     {% endif %}
     {% set status = lesson.status|default('create') == 'published' ? 1 : 0 %}
     <ul class="dropdown-menu task-manage-item__dropdown">
+      {% include 'lesson-manage/common/marker-manage-btn.html.twig' with {course: course, task: task} %}
       <li>
         <a class='js-publish-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">
           {{'course.plan_task.publish_btn'|trans}}{{ 'course.lesson'|trans }}

@@ -35,6 +35,10 @@ class ClassroomEntity extends BaseGoodsEntity
         return $classroom['hitNum'];
     }
 
+    public function hitSpecs($specs)
+    {
+    }
+
     public function getSpecsByTargetId($targetId)
     {
         $product = $this->getProductService()->getProductByTargetIdAndType($targetId, 'classroom');

@@ -5,8 +5,13 @@
 {% set side_nav = 'my-teaching-classroom' %}
 
 {% block main %}
-  <div>
-
+  <div class="my-teaching-status">
+    <ul>
+      <li {% if tab == 'publish' %}class="active" {% endif %}><a href="{{path('my_teaching_classrooms',{'tab': 'publish'})}}">{{'course.status.published'|trans}}</a></li>
+      <li {% if tab == 'unPublish' %}class="active" {% endif %}><a href="{{path('my_teaching_classrooms',{'tab': 'unPublish'})}}">{{'course.status.unpublished'|trans}}</a></li>
+      <li {% if tab == 'closed' %}class="active" {% endif %}><a href="{{path('my_teaching_classrooms',{'tab': 'closed'})}}">{{'course.status.closed'|trans}}</a></li>
+    </ul>
+  </div>
     {% for classroom in classrooms %}
       <div class="cd-mb32">
         <div class="courseset-manage-header clearfix">

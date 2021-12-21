@@ -52,17 +52,29 @@
       {{lesson.title|sub_text(30)}}
 
       {% if task.activity.mediaType is same as('live') %}
-        {% if not task.activity.ext.roomCreated|default(true) %}
-          <span class="color-warning">{{ 'course.plan_task.edit_tips'|trans }}</span>
-        {% elseif task.activity.endTime < date().timestamp %}
-          <span class="color-gray cd-ml8">{{ 'course.plan_task.live_finish_tips'|trans }}</span>
+        {% set isFinished = is_live_finished(task.activity.id, 'course') %}
+        {% if isFinished %}
+          {% if task.activity.ext.replayStatus == 'ungenerated' %}
+            {% if "now"|date("U") >= task.activity.endTime+3*3600 %}
+              <span class="cd-text-danger cd-ml8">({{'course.replay_manage.generated_fail'|trans}})</span>
+            {% else %}
+              <span class="text-warning cd-ml8">({{'course.replay_manage.ungenerated'|trans}})</span>
+            {% endif %}
+          {% elseif task.activity.ext.replayStatus in ['generated', 'videoGenerated'] %}
+            <span class="text-warning cd-ml8">({{'course.replay_manage.generated'|trans}})</span>
+          {% endif %}
         {% else %}
-          <span class="color-success mls">
-          {{ task.activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ task.activity.endTime|date('H:i')|trans }}</span>
+          {% if not task.activity.ext.roomCreated|default(true) %}
+            <span class="color-warning">{{ 'course.plan_task.edit_tips'|trans }}</span>
+          {% else %}
+            <span class="color-success mls">
+            {{ task.activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ task.activity.endTime|date('H:i')|trans }}</span>
+          {% endif %}
         {% endif %}
       {% else %}
-        {% if task.activity.length|activity_length_format(task.activity.mediaType) %}<span class="mls">
-          （{{ task.activity.length|activity_length_format(task.activity.mediaType) }}）</span>{% endif %}
+        {% if task.activity.length|activity_length_format(task.activity.mediaType) %}
+          <span class="mls">（{{ task.activity.length|activity_length_format(task.activity.mediaType) }}）</span>
+        {% endif %}
       {% endif %}
     </div>
 

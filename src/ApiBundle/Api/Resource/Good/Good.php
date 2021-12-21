@@ -44,6 +44,11 @@ class Good extends AbstractResource
 
         $this->getGoodsService()->hitGoods($goods['id']);
 
+        if ($request->query->get('targetId')) {
+            $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $request->query->get('targetId'));
+            $this->getGoodsService()->hitGoodsSpecs($goodsSpecs['id']);
+        }
+
         return $goods;
     }
 
@@ -106,6 +111,7 @@ class Good extends AbstractResource
                 $spec['canVipJoin'] = 'ok' == $this->getVipService()->checkUserVipRight($user['id'], $goods['type'], $spec['targetId']);
             }
             $spec['teacherIds'] = $goodsEntity->getSpecsTeacherIds($goods, $spec);
+            $spec['services'] = $spec['services'] ?: [];
         }
         $this->getOCUtil()->multiple($goods['specs'], ['teacherIds']);
     }

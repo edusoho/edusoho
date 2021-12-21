@@ -8,6 +8,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Common\CommonException;
 use Biz\Course\MaterialException;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
@@ -74,6 +75,17 @@ class CourseSetFileManageController extends BaseController
             'now' => time(),
             'filesQuote' => $filesQuote,
             'subtitles' => $subtitles,
+        ]);
+    }
+
+    public function livePlaybackAction(Request $request, $id)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+        $course = $this->getCourseService()->getCourse($courseSet['defaultCourseId']);
+
+        return $this->render('courseset-manage/file/live-playback.html.twig', [
+            'courseSet' => $courseSet,
+            'course' => $course,
         ]);
     }
 
@@ -324,6 +336,14 @@ class CourseSetFileManageController extends BaseController
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 
     protected function getCloudFileService()

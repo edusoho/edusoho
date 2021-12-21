@@ -5,6 +5,7 @@ namespace Tests\Unit\Course\Copy;
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\Course\Copy\CourseSetCoursesCopy;
+use Biz\Course\Service\CourseService;
 
 class CourseSetCoursesCopeTest extends BaseTestCase
 {
@@ -31,8 +32,11 @@ class CourseSetCoursesCopeTest extends BaseTestCase
 
         $this->assertNotEmpty($courses);
         $this->assertEquals(2, $courses[0]['courseSetId']);
-
+        foreach ($courses as $course) {
+            $this->getCourseService()->publishCourse($course['id']);
+        }
         $courseSet = $this->getCourseSetDao()->get($courseSet['id']);
+
         $this->assertEquals(1, $courseSet['minCoursePrice']);
         $this->assertEquals(10, $courseSet['maxCoursePrice']);
     }
@@ -158,5 +162,13 @@ class CourseSetCoursesCopeTest extends BaseTestCase
     protected function getCourseSetDao()
     {
         return $this->biz->dao('Course:CourseSetDao');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 }
