@@ -7,15 +7,20 @@
       @click="handleClickRemove"
     />
     <div class="image-item__img pull-left">
-      <img :src="item.image.url" />
-      <a-upload
+      <img :src="item.image.uri" />
+      <!-- <a-upload
         accept="image/*"
         :file-list="[]"
         :customRequest="() => {}"
         @change="changeUploadPicture"
       >
         <div class="re-upload">修改</div>
-      </a-upload>
+      </a-upload> -->
+      <upload-image :aspect-ratio="5 / 2" @success="handleUploadSuccess">
+        <template #content>
+          <div class="re-upload">修改</div>
+        </template>
+      </upload-image>
     </div>
     <div class="image-item__content pull-left">
       <a-dropdown>
@@ -38,6 +43,8 @@
 </template>
 
 <script>
+import UploadImage from 'app/vue/components/UploadFile/Image.vue';
+
 export default {
   name: 'SwiperEditItem',
 
@@ -53,20 +60,18 @@ export default {
     }
   },
 
-  methods: {
-    changeUploadPicture(info) {
-      const reader = new FileReader();
+  components: {
+    UploadImage
+  },
 
-      reader.onload = (event) => {
-        const params = {
-          type: 'edit',
-          index: this.index,
-          imgUrl: event.target.result,
-          imgName: info.file.originFileObj.name
-        };
-        this.$emit('update-image', params);
+  methods: {
+    handleUploadSuccess(data) {
+      const params = {
+        key: 'edit',
+        index: this.index,
+        value: data
       };
-      reader.readAsDataURL(info.file.originFileObj);
+      this.$emit('update-image', params);
     },
 
     selectLink({ key }) {
@@ -78,10 +83,7 @@ export default {
     },
 
     handleClickRemove() {
-      const params = {
-        index: this.index
-      };
-      this.$emit('remove', params);
+      this.$emit('remove', this.index);
     }
   }
 }

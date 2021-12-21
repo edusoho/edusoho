@@ -45,7 +45,6 @@
           v-if="currentModule.editComponent"
           :key="currentModule.index"
           :is="currentModule.editComponent"
-          :module-info="modules[currentModule.index].data"
           :module-data="modules[currentModule.index].data"
           @update-edit="updateEdit"
         />
@@ -314,7 +313,27 @@ export default {
       const currentIndex = this.currentModule.index;
 
       if (type === 'swiper') {
-        this.modules[currentIndex].data = data;
+        if (key === 'add') {
+          this.modules[currentIndex].data.push(value);
+          return;
+        }
+
+        if (key === 'edit') {
+          this.modules[currentIndex].data[index].image = value;
+          return;
+        }
+
+        if (key === 'remove') {
+          this.modules[currentIndex].data.splice(index, 1);
+          return;
+        }
+
+        if (key === 'drag') {
+          this.modules[currentIndex].data = value;
+          return;
+        }
+
+        this.modules[currentIndex].data[index][key] = value;
         return;
       }
 

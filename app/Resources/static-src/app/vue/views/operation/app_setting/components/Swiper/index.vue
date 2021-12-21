@@ -15,7 +15,7 @@
             class="swiper-slide"
           >
             <div class="swiper-slide-container">
-              <img :src="item.image.url">
+              <img :src="item.image.uri">
             </div>
           </div>
         </template>
