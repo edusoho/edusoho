@@ -64,7 +64,7 @@ import { DefaultData } from './default-data';
 
 import Draggable from 'vuedraggable';
 import TheHeader from './components/TheHeader.vue';
-import LeftChooseContainer from './components/LeftChooseContainer.vue';
+import LeftChooseContainer from './components/LeftChooseContainer/index.vue';
 
 import FindHead from '../components/FindHead.vue';
 import FindFooter from '../components/FindFooter.vue';
