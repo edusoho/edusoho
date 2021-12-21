@@ -28,7 +28,7 @@ class ScoreRuleProcessor
                 continue;
             }
             $ruleClass = $this->biz['score_rule.'.$rule['name']];
-            $reviewResult = $ruleClass->review($questionResult, $rule['score']);
+            $reviewResult = $ruleClass->review($questionResult, $rule);
             if (!empty($reviewResult['status'])) {
                 return $reviewResult;
             }
