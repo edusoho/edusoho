@@ -465,7 +465,8 @@ export default {
       }
     },
 
-    handleClickSave() {
+    async handleClickSave() {
+      this.alreadyMessage = false;
       const data = {};
       _.forEach(this.modules, (module, index) => {
         const result = this.moduleValidator(module);
@@ -490,7 +491,11 @@ export default {
         data
       };
 
-      Pages.appsSettings(params);
+      try {
+        await Pages.appsSettings(params);
+      } finally {
+        this.$message.success('保存成功！');
+      }
     }
   }
 }
