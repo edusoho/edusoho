@@ -1009,10 +1009,16 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $course['lesson'] = $lesson;
 
             $course['liveStatus'] = $this->filterLessonStatus($lesson['startTime'], $lesson['endTime']);
+            $course['liveStatus'] = ('end' == $course['liveStatus'] && $this->hasReplay($lesson['replayStatus'])) ? 'hasReplay' : $course['liveStatus'];
             $results[] = $course;
         }
 
         return $results;
+    }
+
+    protected function hasReplay($replayStatus)
+    {
+        return ('generated' == $replayStatus || 'videoGenerated' == $replayStatus) ? true : false;
     }
 
     protected function filterLessonStatus($startTime, $endTime)
@@ -1028,8 +1034,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         if ($startTime > time()) {
             return 'ahead';
         }
-
-        return 'hasReplay';
     }
 
     protected function _prepareLiveCourseLessonConditions($conditions)
