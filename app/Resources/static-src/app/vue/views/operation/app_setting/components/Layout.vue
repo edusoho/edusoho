@@ -3,7 +3,7 @@
     <div class="component-contaienr">
       <slot />
     </div>
-    <div class="edit-operate" v-show="active">
+    <div class="edit-operate" v-show="active && !preview">
       <div class="operate-active" v-if="!isFirst" @click.stop="handleClickActions('up')">
         <a-icon type="arrow-up" />
       </div>
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div :class="activeClass" v-show="active || !validatorResult" />
+    <div :class="activeClass" v-show="(active || !validatorResult) && !preview" />
   </div>
 </template>
 
@@ -42,6 +42,11 @@ export default {
     validatorResult: {
       type: Boolean,
       default: true
+    },
+
+    preview: {
+      type: Boolean,
+      required: true
     }
   },
 

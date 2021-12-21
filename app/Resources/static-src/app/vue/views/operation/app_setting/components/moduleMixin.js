@@ -19,15 +19,20 @@ export default {
 
     isFirst: {
       type: Boolean,
-      required: true
+      default: false
     },
 
     isLast: {
       type: Boolean,
-      required: true
+      default: false
     },
 
     validatorResult: {
+      type: Boolean,
+      default: true
+    },
+
+    preview: {
       type: Boolean,
       default: true
     }

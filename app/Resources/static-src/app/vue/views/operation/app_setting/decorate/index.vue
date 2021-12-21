@@ -34,6 +34,7 @@
                 :current-module-type="currentModule.type"
                 :is-first="index === 0"
                 :is-last="index === lastModuleIndex"
+                :preview="preview"
                 :validator-result="module.validatorResult"
                 @click.native="changeCurrentModule(module, index)"
                 @event-actions="handleClickActions"
