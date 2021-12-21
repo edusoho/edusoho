@@ -26,3 +26,8 @@ export * from './ItemBankExercises';
 export * from './ItemBankCategory';
 export * from './OpenCourse';
 export * from './Pages';
+export * from './LiveReplay';
+export * from './LiveStatistic';
+export * from './Classroom';
+export * from './CourseCategory';
+export * from './CourseTag';

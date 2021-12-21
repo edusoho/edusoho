@@ -3,11 +3,9 @@
 {% endblock %}
 
 {% block title %}
-  {% if hasMulCourses %}
     <a class="cd-link-major" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}" target="_blank">
-      {{ course.title|raw }}
+      {{ course.title|default('')|raw }}
     </a>
-  {% endif %}
 {% endblock %}
 
 {% block planType %}

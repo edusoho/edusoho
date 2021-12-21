@@ -16,43 +16,23 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ClassroomController extends BaseController
 {
-    public function teachingAction(Request $request)
+    public function teachingAction(Request $request, $tab = 'publish')
     {
         $user = $this->getCurrentUser();
-
         if (!$user->isTeacher()) {
-            return   $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $orderBy = ['createdTime' => 'desc'];
+        $conditions = $this->buildTeachingClassroomConditions($tab);
 
-        $classroomMembers = $this->getClassroomService()->searchMembers(
-            ['role' => 'teacher', 'userId' => $user->getId()],
-            $orderBy,
-            0,
-            PHP_INT_MAX
-        );
-        $classroomMembers = array_merge(
-            $classroomMembers,
-            $this->getClassroomService()->searchMembers(
-                ['role' => 'assistant', 'userId' => $user->getId()],
-                $orderBy,
-                0,
-                PHP_INT_MAX
-            )
-        );
-        $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
-
-        if (empty($classroomIds)) {
+        if (empty($conditions['classroomIds'])) {
             return $this->render('my/teaching/classroom.html.twig', [
                 'classrooms' => [],
                 'members' => [],
                 'paginator' => [],
+                'tab' => $tab,
             ]);
         }
-
-        $conditions = ['classroomIds' => $classroomIds];
-
         $paginator = new Paginator(
             $this->get('request'),
             $this->getClassroomService()->countClassrooms($conditions),
@@ -61,12 +41,10 @@ class ClassroomController extends BaseController
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            $orderBy,
+            ['createdTime' => 'desc'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
 
         foreach ($classrooms as $key => $classroom) {
             $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
@@ -77,9 +55,33 @@ class ClassroomController extends BaseController
 
         return $this->render('my/teaching/classroom.html.twig', [
             'classrooms' => $classrooms,
-            'members' => $members,
             'paginator' => $paginator,
+            'tab' => $tab,
         ]);
+    }
+
+    protected function buildTeachingClassroomConditions($tab)
+    {
+        $classroomMembers = $this->getClassroomService()->searchMembers(
+            ['role' => 'teacher', 'userId' => $this->getCurrentUser()->getId()],
+            [],
+            0,
+            PHP_INT_MAX
+        );
+        $classroomMembers = array_merge(
+            $classroomMembers,
+            $this->getClassroomService()->searchMembers(
+                ['role' => 'assistant', 'userId' => $this->getCurrentUser()->getId()],
+                [],
+                0,
+                PHP_INT_MAX
+            )
+        );
+        $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
+
+        $status = ['publish' => 'published', 'unPublish' => 'draft', 'closed' => 'closed'];
+
+        return ['classroomIds' => $classroomIds, 'status' => $status[$tab]];
     }
 
     public function classroomAction()

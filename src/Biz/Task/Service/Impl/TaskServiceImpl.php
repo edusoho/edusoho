@@ -545,9 +545,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->findTasksByCourseIds(ArrayToolkit::column($courses, 'id'));
     }
 
-    public function searchTasks($conditions, $orderBy, $start, $limit)
+    public function searchTasks($conditions, $orderBy, $start, $limit, $columns = [])
     {
-        return $this->getTaskDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getTaskDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function findTestpapers($tasks, $type)
@@ -701,7 +701,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (empty($taskResult)) {
             $task = $this->getTask($taskId);
             $activity = $this->getActivityService()->getActivity($task['activityId']);
-            if ('live' === $activity['mediaType']) {
+            if (in_array($activity['mediaType'], ['live', 'replay'])) {
                 $this->trigger($task['id'], 'start', ['task' => $task]);
                 $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
             } else {

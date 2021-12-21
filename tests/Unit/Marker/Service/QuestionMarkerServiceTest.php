@@ -150,16 +150,23 @@ class QuestionMarkerServiceTest extends BaseTestCase
                 'withParams' => [2],
             ],
         ]);
+        $this->mockBiz('Activity:ActivityService', [
+            [
+                'functionName' => 'getActivity',
+                'returnValue' => ['ext' => ['mediaId' => 1]],
+                'withParams' => [],
+            ],
+        ]);
 
         $this->getMarkerService()->addMarker(1, $fields);
         $this->getMarkerService()->addMarker(2, $fields);
 
-        $this->assertEmpty($this->getQuestionMarkerService()->findQuestionMarkersMetaByMediaId(2333));
+        $this->assertEmpty($this->getQuestionMarkerService()->findQuestionMarkersMetaByActivityId(2333));
 
         $questionMarker = $this->getQuestionMarkerService()->addQuestionMarker(1, 1, 1);
         $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker(1, 1, 1);
 
-        $result = $this->getQuestionMarkerService()->findQuestionMarkersMetaByMediaId(1);
+        $result = $this->getQuestionMarkerService()->findQuestionMarkersMetaByActivityId(1);
         $this->assertCount(3, $result);
     }
 

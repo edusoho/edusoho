@@ -31,16 +31,28 @@ class CallbackController extends BaseController
                 return $this->createJsonResponse(['message' => $e->getMessage(), 'trans' => $e->getTraceAsString()]);
             }
         }
+        $route = 'homepage';
         try {
             $adminUser = $this->getUserService()->getUserByType('system');
             $this->authenticateUser($adminUser);
             $orderInfo = $this->getScrmSdk()->verifyOrder($query['order_id'], $query['receipt_token']);
             $specs = $this->getGoodsService()->getGoodsSpecs($orderInfo['specsId']);
             $goods = $this->getGoodsService()->getGoods($specs['goodsId']);
+            if ('course' === $goods['type']) {
+                $route = 'my_course_show';
+            } elseif ('classroom' === $goods['type']) {
+                $route = 'classroom_show';
+            }
+            if (!empty($orderInfo['orderStatus']) && 'paid' === $orderInfo['orderStatus']) {
+                $goodsEntityFactory = $this->getGoodsEntitiyFactory();
+                $goodsEntity = $goodsEntityFactory->create($goods['type']);
 
-            $goodsMediatorFactory = $this->getGoodsMediatorFactory();
-            $mediator = $goodsMediatorFactory->create($goods['type']);
-            $mediator->join($existUser, $specs, ['userInfo' => $userInfo, 'orderInfo' => $orderInfo]);
+                if (!$goodsEntity->isSpecsMember($goods, $specs, $existUser['id'])) {
+                    $goodsMediatorFactory = $this->getGoodsMediatorFactory();
+                    $mediator = $goodsMediatorFactory->create($goods['type']);
+                    $mediator->join($existUser, $specs, ['userInfo' => $userInfo, 'orderInfo' => $orderInfo]);
+                }
+            }
         } catch (\Exception $e) {
             $this->authenticateUser([
                 'id' => 0,
@@ -63,14 +75,6 @@ class CallbackController extends BaseController
         if (2 == $this->setting('wap.version') && DeviceToolkit::isMobileClient()) {
             $token = $this->getUserService()->makeToken('mobile_login', $existUser['id'], time() + 3600 * 24 * 30, []);
             $param['loginToken'] = $token;
-        }
-
-        if ('course' === $goods['type']) {
-            $route = 'my_course_show';
-        } elseif ('classroom' === $goods['type']) {
-            $route = 'classroom_show';
-        } else {
-            $route = 'homepage';
         }
 
         return $this->redirect($this->generateUrl($route, $param));
@@ -169,5 +173,15 @@ class CallbackController extends BaseController
         $biz = $this->getBiz();
 
         return $biz['scrm_goods_mediator_factory'];
+    }
+
+    /*
+        * @return GoodsEntityFactory
+        */
+    protected function getGoodsEntitiyFactory()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['goods.entity.factory'];
     }
 }

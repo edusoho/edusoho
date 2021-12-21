@@ -164,7 +164,7 @@ class CourseSetController extends BaseController
         if ('live' == $courseSet['type']) {
             $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
-            if (empty($course['maxStudentNum'])) {
+            if ($course['maxStudentNum'] < 0) {
                 return $this->createJsonResponse([
                     'success' => false,
                     'message' => '直播课程发布前需要在计划设置中设置课程人数',

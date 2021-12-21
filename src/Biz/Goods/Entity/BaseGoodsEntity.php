@@ -29,6 +29,8 @@ abstract class BaseGoodsEntity
 
     abstract public function hitTarget($goods);
 
+    abstract public function hitSpecs($specs);
+
     abstract public function getSpecsByTargetId($targetId);
 
     abstract public function canManageTarget($goods);

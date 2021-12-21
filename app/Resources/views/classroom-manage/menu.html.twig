@@ -78,6 +78,11 @@
             {{ 'classroom.manage.data_statictics'|trans }}
           </a>
         </li>
+        <li class="cd-sidebar__item {% if side_nav == 'live-statistics' %}active{% endif %}">
+          <a href="{{ path('classroom_live_statistics', { id: classroom.id }) }}">
+            {{ 'classroom.manage.live_statictics'|trans }}
+          </a>
+        </li>
         <li class="cd-sidebar__item {% if side_nav == 'sign-statistics' %}active{% endif %}">
           <a href="{{ path('classroom_sign_statistics', {id: classroom.id}) }}">
             {{ 'classroom.manage.sign_statictics'|trans }}

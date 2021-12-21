@@ -23,11 +23,11 @@ use Symfony\Component\HttpFoundation\Request;
 class QuestionMarkerController extends BaseController
 {
     //新的云播放器需要的弹题数据
-    public function showQuestionMakersAction(Request $request, $mediaId)
+    public function showQuestionMakersAction(Request $request, $activityId)
     {
         $isPreview = $request->query->get('isPreview', false);
         $user = $this->getCurrentUser();
-        $questionMakers = $this->getQuestionMarkerService()->findQuestionMarkersMetaByMediaId($mediaId);
+        $questionMakers = $this->getQuestionMarkerService()->findQuestionMarkersMetaByActivityId($activityId);
         $questionMarkerResults = $this->getQuestionMarkerResultService()->findByUserIdAndMarkerIds($user['id'], array_column($questionMakers, 'markerId'));
         $questionMarkerResults = ArrayToolkit::group($questionMarkerResults, 'questionMarkerId');
         $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($questionMakers, 'questionId'), true);
@@ -182,7 +182,7 @@ class QuestionMarkerController extends BaseController
         }
 
         if (empty($data['markerId'])) {
-            $result = $this->getMarkerService()->addMarker($activity['ext']['file']['id'], $data);
+            $result = $this->getMarkerService()->addMarker($activity['id'], $data);
 
             return $this->createJsonResponse($result);
         } else {
@@ -308,7 +308,7 @@ class QuestionMarkerController extends BaseController
 
         $file = $video['ext']['file'];
 
-        $markerIds = ArrayToolkit::column($this->getMarkerService()->findMarkersByMediaId($file['id']), 'id');
+        $markerIds = ArrayToolkit::column($this->getMarkerService()->findMarkersByActivityId($task['activityId']), 'id');
         $questionMarkerIds = ArrayToolkit::column(
             $this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds($markerIds),
             'questionId'

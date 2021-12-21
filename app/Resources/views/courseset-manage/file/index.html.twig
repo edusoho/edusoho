@@ -27,7 +27,16 @@
   {{ web_macro.flash_messages() }}
   <div role="courseset-manage-file">
     <div class="courseset-manage-body__title">
-      {{'course.course_files.content_title'|trans}}
+      {{ 'course.course_resource'|trans }}
+    </div>
+
+    <div class="btn-group btn-group-sm mv16">
+      <a href="{{ path('course_set_manage_files', { id: courseSet.id }) }}" class="btn btn-default active">
+        {{ 'course.course_files'|trans }}
+      </a>
+      <a href="{{ path('course_set_manage_files_live_playback', { id: courseSet.id }) }}" class="btn btn-default">
+        {{ 'course.activity.replay'|trans }}
+      </a>
     </div>
 
     <div id="file-manage-panel" data-file-status-url="{{path('course_set_manage_file_status')}}">

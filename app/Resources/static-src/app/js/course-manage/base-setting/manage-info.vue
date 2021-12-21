@@ -45,6 +45,7 @@
                         v-bind:vip-enabled="vipEnabled"
                         v-bind:vip-levels="vipLevels"
                         v-bind:service-tags="serviceTags"
+                        v-bind:live-capacity-url="liveCapacityUrl"
         ></market-setting>
 
         <el-row>

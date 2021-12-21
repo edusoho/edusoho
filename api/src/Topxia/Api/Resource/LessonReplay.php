@@ -21,7 +21,9 @@ class LessonReplay extends BaseResource
         if (!$this->getCourseService()->canTakeCourse($task['courseId'])) {
             return ['message' => 'Access Denied'];
         }
-
+        if ('replay' == $task['type']) {
+            $activity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+        }
         if ('videoGenerated' == $activity['ext']['replayStatus']) {
             return json_decode($this->sendRequest('GET', $this->getHttpHost().$app['url_generator']->generate('get_lesson', ['id' => $task['id']]), [sprintf('X-Auth-Token: %s', $request->headers->get('X-Auth-Token'))]), true);
         }
@@ -73,7 +75,7 @@ class LessonReplay extends BaseResource
                     'nickname' => $user['nickname'],
                     'device' => $device,
                     'protocol' => $protocol,
-                    'role' => $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']),
+                    'role' => 'replay' == $task['type'] ? 'student' : $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']),
                 ];
 
                 foreach ($visibleReplays as $index => $visibleReplay) {

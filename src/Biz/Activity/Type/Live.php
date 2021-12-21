@@ -123,7 +123,7 @@ class Live extends Activity
             $this->getUploadFileService()->updateUsedCount($fileId);
         }
 
-        $conditions = ['type' => 'live', 'mediaId' => $targetId];
+        $conditions = ['mediaType' => 'live', 'mediaId' => $targetId];
         $count = $this->getActivityService()->count($conditions);
         if (1 == $count) {
             return $this->getLiveActivityService()->deleteLiveActivity($targetId);

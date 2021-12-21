@@ -38,7 +38,7 @@ class CourseBuyController extends BuyFlowController
     {
         $course = $this->getCourseService()->getCourse($id);
 
-        return $course['maxStudentNum'] - $course['studentNum'] <= 0 && 'live' == $course['type'];
+        return ($course['maxStudentNum'] > 0 && $course['maxStudentNum'] - $course['studentNum'] <= 0) && 'live' == $course['type'];
     }
 
     protected function needApproval($id)

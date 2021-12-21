@@ -83,7 +83,7 @@ class CourseController extends CourseBaseController
             if (!empty($courseMember)) {
                 //周期课程且未开始时，不做跳转
                 if ('date' != $course['expiryMode'] || $course['expiryStartDate'] < time()) {
-                    return $this->redirect(($this->generateUrl('my_course_show', ['id' => $id])));
+                    return $this->redirectToRoute('my_course_show', ['id' => $id]);
                 }
             }
         }
@@ -92,7 +92,7 @@ class CourseController extends CourseBaseController
             $product = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
             $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
 
-            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'targetId' => $course['id'], 'preview' => 'guest' == $request->query->get('previewAs', '') ? 1 : 0]));
+            return $this->redirectToRoute('goods_show', ['id' => $goods['id'], 'targetId' => $course['id'], 'preview' => 'guest' == $preview ? 1 : 0]);
         }
 
         if ($this->isPluginInstalled('Discount')) {
@@ -109,24 +109,20 @@ class CourseController extends CourseBaseController
 
         $isCourseTeacher = $this->getMemberService()->isCourseTeacher($id, $user['id']);
 
-        if (!($this->getMemberService()->isCourseTeacher($id, $user['id']))) {
+        if (!$isCourseTeacher) {
             $this->getCourseService()->hitCourse($id);
         }
-
-        $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
-
-        $member = $this->getCourseMember($request, $course);
 
         return $this->render(
             'course/course-show.html.twig',
             [
                 'tab' => $tab,
-                'tags' => $tags,
+                'tags' => $this->findCourseSetTagsByCourseSetId($course['courseSetId']),
                 'course' => $course,
                 'categoryTag' => $this->calculateCategoryTag($course),
                 'classroom' => $classroom,
                 'isCourseTeacher' => $isCourseTeacher,
-                'navMember' => $member,
+                'navMember' => $this->getCourseMember($request, $course),
             ]
         );
     }

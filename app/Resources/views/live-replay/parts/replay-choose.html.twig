@@ -1,0 +1,52 @@
+<div class="chooser-content">
+	<div class="row ">
+		<div class="col-sm-4 controls material-tags">
+			<input type="text" id="materialTags" name="material-tags" class="width-200 select2-offscreen" tabindex="-1"
+						 data-url="{{ path('tag_match') }}"
+						 data-explain="{{ 'course.base.tag_tips'|trans }}">
+		</div>
+    <div class="controls col-sm-3">
+      <select class="form-control" id="keywordType">
+        {{ select_options(dict('replayKeyWordType'), 'activityTitle') }}
+      </select>
+    </div>
+		<div class="col-sm-5 material-search-form">
+      <span class="input-group js-file-name-group">
+        <input name="file-filter-by-name" class="form-control  js-file-name" type="text"
+               placeholder="{{'file_chooser.course_file.input_placeholder'|trans({'%placeholder%':placeholder|default(null)})}}">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default js-browser-search"
+                  data-url="{{ path('replay_choose') }}" data-loading-text="{{'form.btn.search.submiting'|trans}}">{{'form.btn.search'|trans}}</button>
+        </span>
+      </span>
+		</div>
+		<div class="col-sm-6 material-search-form visible-xs mtm">
+      <span class="input-group js-file-name-group">
+        <input name="file-filter-by-name" class="form-control width-150 js-file-name" type="text"
+               placeholder="{{'file_chooser.course_file.input_placeholder'|trans({'%placeholder%':placeholder|default(null)})}}">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default js-browser-search mbm"
+                  data-url="{{ path('replay_choose') }}" data-loading-text="{{'form.btn.search.submiting'|trans}}">{{'form.btn.search'|trans}}</button>
+        </span>
+      </span>
+		</div>
+		<div class="js-file-owner-group col-sm-offset-6 col-sm-6 mtm hidden ">
+      <span class="file-filter-by-owner-container" style="">
+        <select name="file-filter-by-owner" class="js-file-owner form-control">
+          <option value="">{{'file_chooser.materiallib_choose.choose_teacher'|trans}}</option>
+        </select>
+      </span>
+		</div>
+	</div>
+</div>
+
+<div class="js-material-lib-search-form">
+	<input type="hidden" name="tagId" value="">
+  <input type="hidden" name="courseSetId" value="{{ courseSetId|default('') }}">
+  <input type="hidden" name="page" value="1">
+	<input type="hidden" name="keyword">
+  <input type="hidden" name="keywordType" value="activityTitle">
+</div>
+<div class="js-material-list chooser-list-parent" style="min-height: 150px">
+	<div class="empty">{{'file_chooser.materiallib_choose.wating'|trans}}</div>
+</div>

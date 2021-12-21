@@ -94,6 +94,7 @@ class MaterialLibChoose extends Chooser {
     this._loadList();
   }
 
+
   _switchFileSourceSelect(event) {
     let that = event.currentTarget;
     $('input[name=sourceFrom]').val($(that).val());

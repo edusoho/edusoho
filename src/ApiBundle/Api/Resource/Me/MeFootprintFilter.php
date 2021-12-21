@@ -103,7 +103,7 @@ class MeFootprintFilter extends Filter
         if (empty($footprint['target'])) {
             return $footprint;
         }
-
+        $isReplay = empty($footprint['target']['task']['isReplay']) ? 0 : 1;
         $courseItemFilter = new CourseItemFilter();
         $courseItemFilter->setMode(Filter::SIMPLE_MODE);
 
@@ -122,6 +122,7 @@ class MeFootprintFilter extends Filter
 
         $courseItemFilter->filter($footprint['target']);
 
+        $footprint['target']['task']['isReplay'] = $isReplay;
         $footprint['target']['course'] = $course;
         $footprint['target']['classroom'] = $classroom;
         $footprint['target']['activity'] = $activity;
