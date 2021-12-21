@@ -32,7 +32,7 @@
 <script>
 import Swiper from 'swiper/dist/idangerous.swiper.min.js';
 import 'swiper/dist/idangerous.swiper.css';
-import moduleMixin from './moduleMixin';
+import moduleMixin from '../moduleMixin';
 
 export default {
   name: 'Swiper',

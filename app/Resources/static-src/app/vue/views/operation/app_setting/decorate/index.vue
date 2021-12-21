@@ -68,10 +68,10 @@ import LeftChooseContainer from './components/LeftChooseContainer/index.vue';
 
 import FindHead from '../components/FindHead.vue';
 import FindFooter from '../components/FindFooter.vue';
-import slide_show from '../components/Swiper.vue';
-import slide_show_edit from './components/SwiperEdit.vue';
-import vip from '../components/Vip.vue';
-import vip_edit from './components/VipEdit.vue';
+import slide_show from '../components/Swiper/index.vue';
+import slide_show_edit from './components/SwiperEdit/index.vue';
+import vip from '../components/Vip/index.vue';
+import vip_edit from './components/VipEdit/index.vue';
 import coupon from '../components/Coupon/index.vue';
 import coupon_edit from './components/CouponEdit/index.vue';
 import poster from '../components/Poster/index.vue';

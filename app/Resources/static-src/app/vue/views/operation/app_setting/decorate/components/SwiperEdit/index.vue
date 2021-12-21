@@ -12,7 +12,7 @@
           @end="draggableEnd"
         >
           <transition-group type="transition" :name="!drag ? 'flip-list' : null">
-            <swiper-edit-item
+            <item
               v-for="(item, index) in moduleData"
               :key="item.oldKey"
               :index="index"
@@ -57,12 +57,12 @@
 <script>
 import _ from 'lodash';
 import Draggable from 'vuedraggable';
-import EditLayout from './EditLayout.vue';
-import SwiperEditItem from './SwiperEditItem.vue';
+import EditLayout from '../EditLayout.vue';
+import Item from './Item.vue';
 import PictureCropperModal from 'app/vue/components/PictureCropperModal.vue';
-import CustomLinkModal from './CustomLinkModal.vue';
-import CourseLinkModal from './CourseLinkModal.vue';
-import ClassroomLinkModal from './ClassroomLinkModal.vue';
+import CustomLinkModal from '../CustomLinkModal.vue';
+import CourseLinkModal from '../CourseLinkModal.vue';
+import ClassroomLinkModal from '../ClassroomLinkModal.vue';
 
 export default {
   name: 'SwiperEdit',
@@ -77,7 +77,7 @@ export default {
   components: {
     Draggable,
     EditLayout,
-    SwiperEditItem,
+    Item,
     PictureCropperModal,
     CustomLinkModal,
     CourseLinkModal,
