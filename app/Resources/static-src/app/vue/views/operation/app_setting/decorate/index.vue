@@ -1,9 +1,14 @@
 <template>
   <div class="decorate-container">
-    <the-header @save="handleClickSave" />
+    <the-header
+      :preview="preview"
+      @save="handleClickSave"
+      @preview="handleClickPreview"
+    />
 
     <div class="decorate-main clearfix">
       <left-choose-container
+        :preview="preview"
         @add-module="addModule"
         :coupon-enabled="couponEnabled"
         :vip-enabled="vipEnabled"
@@ -40,8 +45,9 @@
         </div>
       </section>
 
-      <aside class="right-edit-container pull-left">
+      <aside class="right-edit-container pull-left" :class="{ 'right-edit-container--blank': preview }">
         <component
+          v-show="!preview"
           v-if="currentModule.editComponent"
           :key="currentModule.index"
           :is="currentModule.editComponent"
@@ -123,7 +129,8 @@ export default {
       validatorResult: true,
       alreadyMessage: false,
       couponEnabled: null,
-      vipEnabled: null
+      vipEnabled: null,
+      preview: false
     }
   },
 
@@ -493,9 +500,15 @@ export default {
 
       try {
         await Pages.appsSettings(params);
-      } finally {
         this.$message.success('保存成功！');
+        window.location.href = '/admin/v2/setting/mobile_discoveries';
+      } catch (errpr) {
+        this.$message.error('保存失败！');
       }
+    },
+
+    handleClickPreview(value) {
+      this.preview = value;
     }
   }
 }
@@ -540,6 +553,10 @@ export default {
       width: 384px;
       height: 100%;
       background-color: #fff;
+
+      &--blank {
+        background-color: #f5f7fa;
+      }
     }
   }
 }

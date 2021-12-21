@@ -1,6 +1,6 @@
 <template>
-  <aside class="left-choose-container pull-left">
-    <div class="component-add-container">
+  <aside class="left-choose-container pull-left" :class="{ 'left-choose-container--blank': preview }">
+    <div v-show="!preview" class="component-add-container">
       <component-classify
         v-for="(classify, index) in Classifys"
         :key="index"
@@ -55,6 +55,11 @@ export default {
     couponEnabled: {
       type: Boolean,
       default: false
+    },
+
+    preview: {
+      type: Boolean,
+      required: true
     }
   },
 
@@ -86,6 +91,10 @@ export default {
   width: 80px;
   height: 100%;
   background: #243042;
+
+  &--blank {
+    background-color: #f5f7fa;
+  }
 
   .component-add-container {
     position: relative;
