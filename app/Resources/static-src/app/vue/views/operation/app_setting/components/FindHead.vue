@@ -1,7 +1,7 @@
 <template>
   <div class="app-header">
-    <img src="/static-dist/app/img/vue/app_head.png" />
-    <div class="app-header__search clearfix">
+    <img v-show="topHeader" src="/static-dist/app/img/vue/app_head.png" />
+    <div class="app-header__search clearfix" :class="{ mt16: !topHeader }">
       <div class="school-title pull-left">网校名称</div>
       <a-input class="pull-right" placeholder="搜索课程、班级">
         <a-icon slot="prefix" type="search" />
@@ -9,6 +9,17 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    topHeader: {
+      type: Boolean,
+      default: true
+    }
+  }
+}
+</script>
 
 <style lang="less" scoped>
 .app-header {
