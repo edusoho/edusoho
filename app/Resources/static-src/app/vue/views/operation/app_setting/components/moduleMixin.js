@@ -9,7 +9,7 @@ export default {
 
     currentModuleType: {
       type: String,
-      required: true
+      default: ''
     },
 
     moduleData: {
@@ -25,6 +25,11 @@ export default {
     isLast: {
       type: Boolean,
       required: true
+    },
+
+    validatorResult: {
+      type: Boolean,
+      default: true
     }
   },
 

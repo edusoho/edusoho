@@ -3,10 +3,14 @@
     <the-header @save="handleClickSave" />
 
     <div class="decorate-main clearfix">
-      <left-choose-container @add-module="addModule" />
+      <left-choose-container
+        @add-module="addModule"
+        :coupon-enabled="couponEnabled"
+        :vip-enabled="vipEnabled"
+      />
 
-      <section class="center-preview-container pull-left">
-        <div class="main-preview-container">
+      <section ref="previewContainer" class="center-preview-container pull-left">
+        <div ref="mainContainer" class="main-preview-container">
           <find-head />
 
           <draggable
@@ -25,6 +29,7 @@
                 :current-module-type="currentModule.type"
                 :is-first="index === 0"
                 :is-last="index === lastModuleIndex"
+                :validator-result="module.validatorResult"
                 @click.native="changeCurrentModule(module, index)"
                 @event-actions="handleClickActions"
               />
@@ -51,8 +56,9 @@
 
 <script>
 import _ from 'lodash';
-
-import { Vip } from 'common/vue/service';
+import ModuleCounter from 'app/vue/utils/module-counter.js';
+import { Vip, Pages, Setting } from 'common/vue/service';
+import { state, mutations } from 'app/vue/views/operation/app_setting/decorate/store.js';
 
 import { DefaultData } from './default-data';
 
@@ -113,7 +119,12 @@ export default {
       modules: [],
       currentModule: {},
       drag: false,
-      vipLevels: []
+      typeCount: {},
+      vipLevels: [],
+      validatorResult: true,
+      alreadyMessage: false,
+      couponEnabled: null,
+      vipEnabled: null
     }
   },
 
@@ -132,8 +143,59 @@ export default {
     }
   },
 
+  mounted() {
+    this.fetchDiscovery();
+    this.fetchVipSetting();
+    this.fetchCouponSetting();
+  },
+
   methods: {
+    async fetchDiscovery() {
+      const params = {
+        params: { mode: 'published' }
+      };
+      const data = await Pages.appsDiscovery(params);
+
+      this.modules = Object.values(data);
+      this.moduleCountInit();
+    },
+
+    async fetchVipSetting() {
+      if (!_.size(state.vipSetting)) {
+        const vipSetting = await Setting.get('vip');
+        mutations.setVipSetting(vipSetting);
+      };
+      this.vipEnabled = !!state.vipSetting.enabled;
+    },
+
+    async fetchCouponSetting() {
+      if (!_.size(state.couponSetting)) {
+        const couponSetting = await Setting.get('coupon');
+        mutations.setCouponSetting(couponSetting);
+      };
+      this.couponEnabled = !!state.couponSetting.enabled;
+    },
+
+    scrollBottom() {
+      const top = this.$refs.mainContainer.clientHeight;
+      this.$refs.previewContainer.scrollTo({ top: top, behavior: 'smooth' });
+    },
+
+    // 模块类型计数初始化
+    moduleCountInit() {
+      const typeCount = new ModuleCounter();
+      _.forEach(this.modules, item => {
+        typeCount.addByType(item.type);
+      });
+      this.typeCount = typeCount;
+    },
+
     addModule(type) {
+      if (this.typeCount.getCounterByType(type) >= 5) {
+        this.$message.warning('同一类型组件最多添加 5 个');
+        return;
+      }
+
       const info = _.cloneDeep(DefaultData[type]);
       if (type === 'vip') {
         this.getVipLevels();
@@ -142,7 +204,14 @@ export default {
       }
 
       this.modules.push(info);
+      this.typeCount.addByType(type);
       this.changeCurrentModule(info, _.size(this.modules) - 1);
+      // 滚动到底部
+      clearInterval(this.timer);
+      this.timer = null;
+      this.timer = setTimeout(() => {
+        this.scrollBottom();
+      }, 500);
     },
 
     async getVipLevels() {
@@ -243,26 +312,14 @@ export default {
     updateEdit(params) {
       const { type, data, key, value, index } = params;
       const currentIndex = this.currentModule.index;
+
       if (type === 'swiper') {
         this.modules[currentIndex].data = data;
         return;
       }
 
-      if (type === 'vip') {
-        if (key === 'sort') {
-          this.modules[currentIndex].data.items.reverse();
-        }
-        this.modules[currentIndex].data[key] = value;
-        return;
-      }
-
-      if (type === 'coupon') {
-        this.modules[currentIndex].data[key] = value;
-        return;
-      }
-
-      if (type === 'poster') {
-        this.modules[currentIndex].data[key] = value;
+      if (type === 'vip' && key === 'sort') {
+        this.modules[currentIndex].data.items.reverse();
         return;
       }
 
@@ -291,16 +348,121 @@ export default {
         return;
       }
 
-      if (type === 'course_list' || type === 'classroom_list' || type === 'item_bank_exercise' || type === 'open_course_list') {
+      const types = [
+        'course_list',
+        'classroom_list',
+        'item_bank_exercise',
+        'open_course_list',
+        'poster',
+        'coupon',
+        'vip'
+      ];
+
+      if (_.includes(types, type)) {
         this.modules[currentIndex].data[key] = value;
       }
     },
 
+    moduleValidator(module) {
+      const { data, type } = module;
+      // 轮播图
+      if (type === 'slide_show') {
+        const length = _.size(data);
+
+        if (!length) {
+          if (!this.alreadyMessage) this.$message.error('请完善轮播图模块信息！');
+          return false;
+        }
+
+        _.forEach(data, (item, index) => {
+          const { uri } = item.image;
+          if (!uri) {
+            if (!this.alreadyMessage) this.$message.error('请完善轮播图模块信息！');
+            return false;
+          }
+        });
+        return true;
+      }
+
+      // 课程、班级
+      if (_.includes(['course_list', 'classroom_list', 'open_course_list', 'item_bank_exercise'], type)) {
+        const messages = {
+          course_list: '请完善课程模块信息！',
+          classroom_list: '请完善班级模块信息！',
+          open_course_list: '请完善公开课模块信息！',
+          item_bank_exercise: '请完善题库模块信息！'
+        };
+
+        const { title, sourceType, items } = data;
+        const length = _.size(items);
+
+        if (!title || (sourceType === 'custom' && !length)) {
+          if (!this.alreadyMessage) this.$message.error(messages[type]);
+          return false;
+        }
+        return true;
+      }
+
+      // 图片广告
+      if (type === 'poster') {
+        const { uri } = data.image;
+        if (!uri) {
+          if (!this.alreadyMessage) this.$message.error('请完善广告模块信息！');
+          return false;
+        }
+        return true;
+      }
+
+      // 图文导航
+      if (type === 'graphic_navigation') {
+        _.forEach(data, (item, index) => {
+          const { title, image: { uri }, link: { type } } = item;
+          if (!title || !uri || !type) {
+            if (!this.alreadyMessage) this.$message.error('请完善图文导航模块信息！');
+            return false;
+          }
+        });
+        return true;
+      }
+
+       // 优惠券
+      if (type === 'coupon') {
+        const length = _.size(data.items);
+
+        if (!length) {
+          if (!this.alreadyMessage) this.$message.error('请完善优惠券模块信息！');
+          return false;
+        }
+        return true;
+      }
+    },
+
     handleClickSave() {
+      const data = {};
       _.forEach(this.modules, (module, index) => {
-        module.moduleType = `${module.type}-${index}`;
+        const result = this.moduleValidator(module);
+        if (!result) {
+          this.alreadyMessage = true;
+          this.validatorResult = false;
+        }
+        this.$set(module, 'validatorResult', result);
+        const moduleType = `${module.type}-${index}`;
+        module.moduleType = moduleType;
+        data[moduleType] = module;
       });
-      console.log(this.modules);
+
+      // 校验不通过
+      if (!this.validatorResult) return;
+
+      const params = {
+        params: {
+          type: 'discovery',
+          mode: 'published'
+        },
+        data
+      };
+
+      Pages.appsSettings(params);
     }
   }
 }
@@ -310,7 +472,6 @@ export default {
 .decorate-container {
   width: 100%;
   height: 100%;
-
   .decorate-main {
     overflow-y: hidden;
     position: relative;
@@ -349,5 +510,4 @@ export default {
     }
   }
 }
-
 </style>
