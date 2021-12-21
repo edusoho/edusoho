@@ -23,12 +23,6 @@
       @update-image="handleUpdateImage"
       @upload-image="handleUploadImage"
     />
-
-    <picture-cropper-modal
-      ref="pictureCropperModal"
-      :aspect-ratio="1 / 1"
-      @success="cropperSuccess"
-    />
   </edit-layout>
 </template>
 
@@ -37,7 +31,6 @@ import _ from 'lodash';
 import EditLayout from '../EditLayout.vue';
 import Item from './Item.vue';
 import ModityImageModal from './ModityImageModal.vue';
-import PictureCropperModal from 'app/vue/components/PictureCropperModal.vue';
 
 export default {
   name: 'GraphicNavigationEdit',
@@ -52,8 +45,7 @@ export default {
   components: {
     EditLayout,
     Item,
-    ModityImageModal,
-    PictureCropperModal
+    ModityImageModal
   },
 
   data() {
@@ -93,20 +85,20 @@ export default {
       });
     },
 
-    handleUpdateImage({ url }) {
+    handleUpdateImage({ uri }) {
       const params = {
         key: 'image',
-        value: { url }
+        value: { uri }
       };
       this.update(params);
     },
 
-    handleUploadImage(params) {
-      this.$refs.pictureCropperModal.showModal(params);
-    },
-
-    cropperSuccess(data) {
-      this.handleUpdateImage({ url: data.url });
+    handleUploadImage(data) {
+      const params = {
+        key: 'image',
+        value: data
+      };
+      this.update(params);
     },
 
     update(params) {

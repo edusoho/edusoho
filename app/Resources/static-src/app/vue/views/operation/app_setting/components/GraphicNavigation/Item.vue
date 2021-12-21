@@ -1,7 +1,7 @@
 <template>
   <div class="gn-item">
     <div class="gn-item__img">
-      <img :src="item.image.url || '/static-dist/app/img/vue/decorate/gn_empty.png'">
+      <img :src="item.image.uri || '/static-dist/app/img/vue/decorate/gn_empty.png'">
     </div>
     <div class="gn-item__title text-overflow">{{ item.title }}</div>
   </div>

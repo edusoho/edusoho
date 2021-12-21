@@ -1,19 +1,19 @@
 <template>
   <div class="app-footer clearfix">
     <div class="app-footer__item pull-left">
-      <svg-icon icon="icon-check-circle" />
+      <svg-icon icon="icon-find" />
       <div>发现</div>
     </div>
     <div class="app-footer__item pull-left">
-      <svg-icon icon="icon-check-circle" />
+      <svg-icon icon="icon-study" />
       <div>学习</div>
     </div>
     <div class="app-footer__item pull-left">
-      <svg-icon icon="icon-check-circle" />
+      <svg-icon icon="icon-dynamic" />
       <div>动态</div>
     </div>
     <div class="app-footer__item pull-left">
-      <svg-icon icon="icon-check-circle" />
+      <svg-icon icon="icon-me" />
       <div>我的</div>
     </div>
   </div>
@@ -33,6 +33,10 @@
   &__item {
     width: 25%;
     text-align: center;
+
+    .svg-icon {
+      font-size: 20px;
+    }
   }
 }
 </style>

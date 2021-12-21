@@ -1,9 +1,14 @@
 <template>
   <div class="decorate-container">
-    <the-header @save="handleClickSave" />
+    <the-header
+      :preview="preview"
+      @save="handleClickSave"
+      @preview="handleClickPreview"
+    />
 
     <div class="decorate-main clearfix">
       <left-choose-container
+        :preview="preview"
         @add-module="addModule"
         :coupon-enabled="couponEnabled"
         :vip-enabled="vipEnabled"
@@ -16,19 +21,20 @@
           <draggable
             v-model="modules"
             v-bind="dragOptions"
-            @start="drag = true"
+            @start="draggableStart"
             @end="draggableEnd"
           >
             <transition-group type="transition" :name="!drag ? 'flip-list' : null">
               <component
                 v-for="(module, index) in modules"
-                :key="index"
+                :key="module.oldKey"
                 :is="module.type"
                 :module-data="module.data"
                 :module-type="`${module.type}-${index}`"
                 :current-module-type="currentModule.type"
                 :is-first="index === 0"
                 :is-last="index === lastModuleIndex"
+                :preview="preview"
                 :validator-result="module.validatorResult"
                 @click.native="changeCurrentModule(module, index)"
                 @event-actions="handleClickActions"
@@ -40,12 +46,12 @@
         </div>
       </section>
 
-      <aside class="right-edit-container pull-left">
+      <aside class="right-edit-container pull-left" :class="{ 'right-edit-container--blank': preview }">
         <component
+          v-show="!preview"
           v-if="currentModule.editComponent"
           :key="currentModule.index"
           :is="currentModule.editComponent"
-          :module-info="modules[currentModule.index].data"
           :module-data="modules[currentModule.index].data"
           @update-edit="updateEdit"
         />
@@ -64,14 +70,14 @@ import { DefaultData } from './default-data';
 
 import Draggable from 'vuedraggable';
 import TheHeader from './components/TheHeader.vue';
-import LeftChooseContainer from './components/LeftChooseContainer.vue';
+import LeftChooseContainer from './components/LeftChooseContainer/index.vue';
 
 import FindHead from '../components/FindHead.vue';
 import FindFooter from '../components/FindFooter.vue';
-import slide_show from '../components/Swiper.vue';
-import slide_show_edit from './components/SwiperEdit.vue';
-import vip from '../components/Vip.vue';
-import vip_edit from './components/VipEdit.vue';
+import slide_show from '../components/Swiper/index.vue';
+import slide_show_edit from './components/SwiperEdit/index.vue';
+import vip from '../components/Vip/index.vue';
+import vip_edit from './components/VipEdit/index.vue';
 import coupon from '../components/Coupon/index.vue';
 import coupon_edit from './components/CouponEdit/index.vue';
 import poster from '../components/Poster/index.vue';
@@ -119,12 +125,13 @@ export default {
       modules: [],
       currentModule: {},
       drag: false,
-      typeCount: {},
+      typeCount: new ModuleCounter(),
       vipLevels: [],
       validatorResult: true,
       alreadyMessage: false,
       couponEnabled: null,
-      vipEnabled: null
+      vipEnabled: null,
+      preview: false
     }
   },
 
@@ -155,8 +162,13 @@ export default {
         params: { mode: 'published' }
       };
       const data = await Pages.appsDiscovery(params);
+      const modules = Object.values(data);
 
-      this.modules = Object.values(data);
+      _.forEach(modules, (module, index) => {
+        module.oldKey = index;
+      });
+
+      this.modules = modules;
       this.moduleCountInit();
     },
 
@@ -183,11 +195,9 @@ export default {
 
     // 模块类型计数初始化
     moduleCountInit() {
-      const typeCount = new ModuleCounter();
       _.forEach(this.modules, item => {
-        typeCount.addByType(item.type);
+        this.typeCount.addByType(item.type);
       });
-      this.typeCount = typeCount;
     },
 
     addModule(type) {
@@ -203,6 +213,7 @@ export default {
         info.data.items = tempLevels;
       }
 
+      info.oldKey = _.size(this.modules);
       this.modules.push(info);
       this.typeCount.addByType(type);
       this.changeCurrentModule(info, _.size(this.modules) - 1);
@@ -239,6 +250,11 @@ export default {
       _.assign(this, {
         currentModule
       });
+    },
+
+    draggableStart() {
+      this.drag = true;
+      this.currentModule = {};
     },
 
     draggableEnd({ newIndex }) {
@@ -314,7 +330,27 @@ export default {
       const currentIndex = this.currentModule.index;
 
       if (type === 'swiper') {
-        this.modules[currentIndex].data = data;
+        if (key === 'add') {
+          this.modules[currentIndex].data.push(value);
+          return;
+        }
+
+        if (key === 'edit') {
+          this.modules[currentIndex].data[index].image = value;
+          return;
+        }
+
+        if (key === 'remove') {
+          this.modules[currentIndex].data.splice(index, 1);
+          return;
+        }
+
+        if (key === 'drag') {
+          this.modules[currentIndex].data = value;
+          return;
+        }
+
+        this.modules[currentIndex].data[index][key] = value;
         return;
       }
 
@@ -437,7 +473,8 @@ export default {
       }
     },
 
-    handleClickSave() {
+    async handleClickSave() {
+      this.alreadyMessage = false;
       const data = {};
       _.forEach(this.modules, (module, index) => {
         const result = this.moduleValidator(module);
@@ -462,7 +499,17 @@ export default {
         data
       };
 
-      Pages.appsSettings(params);
+      try {
+        await Pages.appsSettings(params);
+        this.$message.success('保存成功！');
+        window.location.href = '/admin/v2/setting/mobile_discoveries';
+      } catch (errpr) {
+        this.$message.error('保存失败！');
+      }
+    },
+
+    handleClickPreview(value) {
+      this.preview = value;
     }
   }
 }
@@ -507,6 +554,10 @@ export default {
       width: 384px;
       height: 100%;
       background-color: #fff;
+
+      &--blank {
+        background-color: #f5f7fa;
+      }
     }
   }
 }

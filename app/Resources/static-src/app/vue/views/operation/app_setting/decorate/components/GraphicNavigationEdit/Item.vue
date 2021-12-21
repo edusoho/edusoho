@@ -2,7 +2,7 @@
   <div class="gn-item clearfix">
     <div class="gn-item__img pull-left">
       <div class="modity-mask" @click="handleModityImage">更换图片</div>
-      <img :src="item.image.url || '/static-dist/app/img/vue/decorate/gn_empty.png'">
+      <img :src="item.image.uri || '/static-dist/app/img/vue/decorate/gn_empty.png'">
     </div>
     <div class="gn-form pull-left">
       <div class="gn-form__item">

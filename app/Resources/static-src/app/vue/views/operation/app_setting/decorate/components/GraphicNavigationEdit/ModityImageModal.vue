@@ -14,19 +14,13 @@
     </div>
     <template #footer>
       <a-button @click="handleCancel">取消</a-button>
-      <a-upload
-        accept="image/*"
-        :file-list="[]"
-        :customRequest="() => {}"
-        @change="handleUploadImage"
-      >
-        <a-button type="primary">上传图片</a-button>
-      </a-upload>
+      <upload-image :aspect-ratio="1 / 1" @success="handleUploadSuccess" />
     </template>
   </a-modal>
 </template>
 <script>
 import _ from 'lodash';
+import UploadImage from 'app/vue/components/UploadFile/Image.vue';
 
 const images = [
   'gn_classification.png',
@@ -41,6 +35,10 @@ const images = [
 
 export default {
   name: 'ModityImageModal',
+
+  components: {
+    UploadImage
+  },
 
   data() {
     return {
@@ -62,23 +60,14 @@ export default {
 
     handleClickSeleted(value) {
       this.$emit('update-image', {
-        url: value
+        uri: value
       });
       this.visible = false;
     },
 
-    handleUploadImage(info) {
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        const params = {
-          imgUrl: event.target.result,
-          imgName: info.file.originFileObj.name
-        };
-        this.$emit('upload-image', params);
-        this.visible = false;
-      };
-      reader.readAsDataURL(info.file.originFileObj);
+    handleUploadSuccess(data) {
+      this.$emit('upload-image', data);
+      this.visible = false;
     }
   }
 };

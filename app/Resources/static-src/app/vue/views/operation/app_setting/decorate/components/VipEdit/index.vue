@@ -40,7 +40,7 @@
 
 <script>
 import _ from 'lodash';
-import EditLayout from './EditLayout.vue';
+import EditLayout from '../EditLayout.vue';
 
 export default {
   name: 'VipEdit',

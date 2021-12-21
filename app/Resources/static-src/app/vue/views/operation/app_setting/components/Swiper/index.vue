@@ -3,6 +3,7 @@
     :active="moduleType === currentModuleType"
     :is-first="isFirst"
     :is-last="isLast"
+    :preview="preview"
     :validator-result="validatorResult"
     @event-actions="handleClickAction"
   >
@@ -15,7 +16,7 @@
             class="swiper-slide"
           >
             <div class="swiper-slide-container">
-              <img :src="item.image.url">
+              <img :src="item.image.uri">
             </div>
           </div>
         </template>
@@ -32,7 +33,7 @@
 <script>
 import Swiper from 'swiper/dist/idangerous.swiper.min.js';
 import 'swiper/dist/idangerous.swiper.css';
-import moduleMixin from './moduleMixin';
+import moduleMixin from '../moduleMixin';
 
 export default {
   name: 'Swiper',

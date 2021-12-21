@@ -99,7 +99,6 @@ export default {
     .svg-icon {
       color: #fff;
     }
-
     .classify-title {
       color: #fff;
     }

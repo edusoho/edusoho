@@ -3,6 +3,7 @@
     :active="moduleType === currentModuleType"
     :is-first="isFirst"
     :is-last="isLast"
+    :preview="preview"
     :validator-result="validatorResult"
     @event-actions="handleClickAction"
   >

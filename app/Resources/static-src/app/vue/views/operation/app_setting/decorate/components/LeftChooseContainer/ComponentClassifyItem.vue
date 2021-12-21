@@ -55,6 +55,7 @@ export default {
   cursor: pointer;
   margin-left: 10px;
   transition: all 0.3s ease;
+  color: #4a4a4a;
 
   .svg-icon {
     font-size: 24px;
@@ -63,7 +64,6 @@ export default {
   }
 
   .component-title {
-    color: #4a4a4a;
     line-height: 16px;
     height: 16px;
     font-size: 12px;

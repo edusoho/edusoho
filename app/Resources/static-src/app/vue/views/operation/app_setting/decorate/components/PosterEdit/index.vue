@@ -6,16 +6,13 @@
       <div class="design-editor__item clearfix">
         <span class="design-editor__required pull-left">广告图片：</span>
         <div class="poster-image pull-left">
-          <img class="poster-image__img" v-if="moduleData.image.url" :src="moduleData.image.url" />
-          <a-upload
-            accept="image/*"
-            :file-list="[]"
-            :customRequest="() => {}"
-            @change="handleChange"
-          >
-            <div class="poster-image__modify" v-if="moduleData.image.url">更换图片</div>
-            <div v-else class="poster-image__add">+ 添加图片</div>
-          </a-upload>
+          <img class="poster-image__img" v-if="moduleData.image.uri" :src="moduleData.image.uri" />
+          <upload-image :crop="false" @success="uploadImageSuccess">
+            <template #content>
+              <div class="poster-image__modify" v-if="moduleData.image.uri">更换图片</div>
+              <div v-else class="poster-image__add">+ 添加图片</div>
+            </template>
+          </upload-image>
         </div>
       </div>
 
@@ -63,10 +60,10 @@
 <script>
 import _ from 'lodash';
 import EditLayout from '../EditLayout.vue';
-import { UploadToken, File } from 'common/vue/service';
 import CustomLinkModal from '../CustomLinkModal.vue';
 import CourseLinkModal from '../CourseLinkModal.vue';
 import ClassroomLinkModal from '../ClassroomLinkModal.vue';
+import UploadImage from 'app/vue/components/UploadFile/Image.vue';
 
 export default {
   name: 'PosterEdit',
@@ -82,13 +79,8 @@ export default {
     EditLayout,
     CustomLinkModal,
     CourseLinkModal,
-    ClassroomLinkModal
-  },
-
-  data() {
-    return {
-      uploadToken: {}
-    }
+    ClassroomLinkModal,
+    UploadImage
   },
 
   computed: {
@@ -112,31 +104,8 @@ export default {
   },
 
   methods: {
-    async getUploadToken() {
-      this.uploadToken = await UploadToken.get('default');
-    },
-
-    async handleChange(info) {
-      const blob = info.file.originFileObj;
-
-      if (!this.uploadToken.expiry || (new Date() >= new Date(this.uploadToken.expiry))) {
-        await this.getUploadToken();
-      }
-
-      const formData = new FormData();
-
-      formData.append('file', blob, this.imgName);
-      formData.append('token', this.uploadToken.token);
-
-      try {
-        const data = await File.uploadFile(formData);
-        this.update({ key: 'image', value: data });
-      } catch(error) {
-        const { status } = error.response;
-        if (status == 413) {
-          Vue.prototype.$message.error('文件过大，请上传小于 2M 的文件！');
-        }
-      }
+    uploadImageSuccess(data) {
+      this.update({ key: 'image', value: data });
     },
 
     handleChangeResponsive(e) {
