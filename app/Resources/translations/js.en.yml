@@ -1883,6 +1883,20 @@ radio.visible_only_to_yourself: Visible only to yourself
 message.removal_succeeded: Removal succeeded
 message.edit_succeeded: Edit succeeded
 message.file_too_large: The file is too large, please upload a file smaller than 2M!
+message.saved_successfully: Saved successfully!
+message.save_failed: Save failed!
+message.coupon_module_information: Please complete the coupon module information!
+message.gn_module_information: Please complete the graphic navigation module information!
+message.advertising_module_information: Please complete the advertising module information!
+message.qusetion_bank_module_information: Please complete the question bank module information!
+message.open_class_module_information: Please complete the open class module information!
+message.classroom_module_information: Please complete the class module information!
+message.course_module_information: Please complete the course module information!
+message.carousel_module_information: Please complete the carousel picture module information!
+message.go_to_open: Go to open
+message.coupon_function_is_not_activated: Coupon function is not activated
+message.membership_function_is_not_activated: Membership function is not activated
+message.add_up_to: Add up to 5 components of the same type
 
 live.playback.tip.remove_association: Live playback will remove the association from the course
 live.playback.tip.cannot_be_used_normally: If the live playback is referenced, removing it will cause the referenced task to be unable to work normally
@@ -1936,6 +1950,7 @@ course.live_replay.share_tip: Please confirm to share this live playback to the 
 course.live_replay.un_share_tip: Please confirm to remove this live playback from the shared live playback library？
 course.live_replay.delete_tip:  Please confirm to remove this live playback？
 
+all: All
 coupon: Coupon
 collar_roll: Collar roll
 available_range: Available range
@@ -1959,3 +1974,6 @@ app.footer.dynamic: Dynamic
 app.footer.mine: Mine
 app.header.school_name: School name
 app.header.search: Search for courses, classes
+classification_class: Classification class
+free_lesson: Free lesson
+popular_class: Popular class

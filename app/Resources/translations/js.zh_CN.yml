@@ -1838,6 +1838,20 @@ radio.visible_only_to_yourself: 仅自己可见
 message.removal_succeeded: 移除成功
 message.edit_succeeded: 编辑成功
 message.file_too_large: 文件过大，请上传小于 2M 的文件！
+message.saved_successfully: 保存成功！
+message.save_failed: 保存失败！
+message.coupon_module_information: 请完善优惠券模块信息！
+message.gn_module_information: 请完善图文导航模块信息！
+message.advertising_module_information: 请完善广告模块信息！
+message.qusetion_bank_module_information: 请完善题库模块信息！
+message.open_class_module_information: 请完善公开课模块信息！
+message.classroom_module_information: 请完善班级模块信息！
+message.course_module_information: 请完善课程模块信息！
+message.carousel_module_information: 请完善轮播图模块信息！
+message.go_to_open: 去开通
+message.coupon_function_is_not_activated: 优惠券功能未开通
+message.membership_function_is_not_activated: 会员功能未开通
+message.add_up_to: 同一类型组件最多添加 5 个
 
 live.playback.tip.remove_association: 直播回放将从该课程中移除关联
 live.playback.tip.cannot_be_used_normally: 直播回放若被引用，移除会引起引用任务无法正常使用
@@ -1891,6 +1905,7 @@ course.live_replay.share_tip: 请确认将此直播回放共享到共享直播�
 course.live_replay.un_share_tip:  请确认将此直播回放从共享直播回放资源库移除？
 course.live_replay.delete_tip:  请确认将此直播回放移除？
 
+all: 全部
 coupon: 优惠卷
 collar_roll: 领卷
 available_range: 可用范围
@@ -1914,3 +1929,6 @@ app.footer.dynamic: 动态
 app.footer.mine: 我的
 app.header.school_name: 网校名称
 app.header.search: 搜索课程、班级
+classification_class: 分类课
+free_lesson: 免费课
+popular_class: 热门课

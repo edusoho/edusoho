@@ -50,17 +50,17 @@ const DefaultData = {
     moduleType: '',
     data: [
       {
-        title: '分类课',
+        title: Translator.trans('classification_class'),
         image: { uri: '/static-dist/app/img/vue/decorate/gn_classification.png' },
         link: { type: 'openCourse' }
       },
       {
-        title: '免费课',
+        title: Translator.trans('free_lesson'),
         image: { uri: '/static-dist/app/img/vue/decorate/gn_free.png' },
         link: { type: 'course' }
       },
       {
-        title: '热门班',
+        title: Translator.trans('popular_class'),
         image: { uri: '/static-dist/app/img/vue/decorate/gn_hot.png' },
         link: { type: 'classroom' }
       }

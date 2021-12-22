@@ -202,15 +202,15 @@ export default {
 
     addModule(type) {
       if (this.typeCount.getCounterByType(type) >= 5) {
-        this.$message.warning('同一类型组件最多添加 5 个');
+        this.$message.warning(Translator.trans('message.add_up_to'));
         return;
       }
 
       if (type === 'vip' && !this.vipEnabled) {
         this.$confirm({
-          title: '会员功能未开启',
-          okText: '去开启',
-          okType: '取消',
+          title: Translator.trans('message.membership_function_is_not_activated'),
+          okText: Translator.trans('message.go_to_open'),
+          cancelText: Translator.trans('site.cancel'),
           onOk() {
             window.open('/admin/v2/setting/vip');
           }
@@ -220,9 +220,9 @@ export default {
 
       if (type === 'coupon' && !this.couponEnabled) {
         this.$confirm({
-          title: '优惠券功能未开通',
-          okText: '去开通',
-          okType: '取消',
+          title: Translator.trans('message.coupon_function_is_not_activated'),
+          okText: Translator.trans('message.go_to_open'),
+          cancelText: Translator.trans('site.cancel'),
           onOk() {
             window.open('/admin/v2/coupon');
           }
@@ -324,6 +324,7 @@ export default {
       const { index } = this.currentModule;
       this.currentModule = {};
       this.modules.splice(index, 1);
+      this.typeCount.removeByType(this.modules[index].type);
 
       let newIndex;
 
@@ -430,14 +431,14 @@ export default {
         const length = _.size(data);
 
         if (!length) {
-          if (!this.alreadyMessage) this.$message.error('请完善轮播图模块信息！');
+          if (!this.alreadyMessage) this.$message.error(Translator.trans('message.carousel_module_information'));
           return false;
         }
 
         _.forEach(data, (item, index) => {
           const { uri } = item.image;
           if (!uri) {
-            if (!this.alreadyMessage) this.$message.error('请完善轮播图模块信息！');
+            if (!this.alreadyMessage) this.$message.error(Translator.trans('message.carousel_module_information'));
             return false;
           }
         });
@@ -447,17 +448,17 @@ export default {
       // 课程、班级
       if (_.includes(['course_list', 'classroom_list', 'open_course_list', 'item_bank_exercise'], type)) {
         const messages = {
-          course_list: '请完善课程模块信息！',
-          classroom_list: '请完善班级模块信息！',
-          open_course_list: '请完善公开课模块信息！',
-          item_bank_exercise: '请完善题库模块信息！'
+          course_list: 'message.course_module_information',
+          classroom_list: 'message.classroom_module_information',
+          open_course_list: 'message.open_class_module_information',
+          item_bank_exercise: 'message.qusetion_bank_module_information'
         };
 
         const { title, sourceType, items } = data;
         const length = _.size(items);
 
         if (!title || (sourceType === 'custom' && !length)) {
-          if (!this.alreadyMessage) this.$message.error(messages[type]);
+          if (!this.alreadyMessage) this.$message.error(Translator.trans(messages[type]));
           return false;
         }
         return true;
@@ -467,7 +468,7 @@ export default {
       if (type === 'poster') {
         const { uri } = data.image;
         if (!uri) {
-          if (!this.alreadyMessage) this.$message.error('请完善广告模块信息！');
+          if (!this.alreadyMessage) this.$message.error(Translator.trans('message.advertising_module_information'));
           return false;
         }
         return true;
@@ -478,7 +479,7 @@ export default {
         _.forEach(data, (item, index) => {
           const { title, image: { uri }, link: { type } } = item;
           if (!title || !uri || !type) {
-            if (!this.alreadyMessage) this.$message.error('请完善图文导航模块信息！');
+            if (!this.alreadyMessage) this.$message.error(Translator.trans('message.gn_module_information'));
             return false;
           }
         });
@@ -490,7 +491,7 @@ export default {
         const length = _.size(data.items);
 
         if (!length) {
-          if (!this.alreadyMessage) this.$message.error('请完善优惠券模块信息！');
+          if (!this.alreadyMessage) this.$message.error(Translator.trans('message.coupon_module_information'));
           return false;
         }
         return true;
@@ -525,10 +526,10 @@ export default {
 
       try {
         await Pages.appsSettings(params);
-        this.$message.success('保存成功！');
+        this.$message.success(Translator.trans('message.saved_successfully'));
         window.location.href = '/admin/v2/setting/mobile_discoveries';
       } catch (errpr) {
-        this.$message.error('保存失败！');
+        this.$message.error(Translator.trans('message.save_failed'));
       }
     },
 
