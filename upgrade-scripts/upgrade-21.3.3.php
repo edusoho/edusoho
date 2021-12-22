@@ -52,6 +52,8 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'clearAppUserToken',
+            'addTeacherQualificationTable',
+            'addTableIndexJob'
         );
 
         $funcNames = array();
@@ -94,6 +96,72 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->logger('info', '删除未绑定手机号的用户的手机登录token的过期时间大于七天的数据');
         }
 
+        return 1;
+    }
+
+    public function addTeacherQualificationTable()
+    {
+        if (!$this->isTableExist('teacher_qualification')) {
+            $this->getConnection()->exec("
+                 CREATE TABLE IF NOT EXISTS `teacher_qualification` (
+                `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+		        `user_id` int(10) unsigned NOT NULL DEFAULT 0,
+		        `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '教师资质照片',
+                `avatarFileId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '文件id',
+		        `code` varchar(64) NOT NULL DEFAULT '' COMMENT '教师资质编号',
+		        `created_time` int(10) unsigned NOT NULL DEFAULT 0,
+                `updated_time` int(10) unsigned NOT NULL DEFAULT 0,
+                PRIMARY KEY (`id`)
+		    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+            $this->logger('info', '新增teacher_qualification');
+        }
+        return 1;
+    }
+
+    public function addTableIndexJob()
+    {
+        if ($this->isJobExist('HandlingTimeConsumingUpdateStructuresJob')) {
+            return 1;
+        }
+
+        $currentTime = time();
+        $time = strtotime(date('Y-m-d', $currentTime) . '02:00:00');
+
+        if ($currentTime > $time) {
+            $time = strtotime(date('Y-m-d', strtotime('+1 day')) . '02:00:00');
+        }
+
+        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+              `name`,
+              `expression`,
+              `class`,
+              `args`,
+              `priority`,
+              `pre_fire_time`,
+              `next_fire_time`,
+              `misfire_threshold`,
+              `misfire_policy`,
+              `enabled`,
+              `creator_id`,
+              `updated_time`,
+              `created_time`
+        ) VALUES (
+              'HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              'Biz\\\\UpdateDatabaseStructure\\\\\Job\\\\HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              '200',
+              '0',
+              '{$time}',
+              '300',
+              'executing',
+              '1',
+              '0',
+              '{$currentTime}',
+              '{$currentTime}'
+        )");
+        $this->logger('info', 'INSERT增加索引的定时任务HandlingTimeConsumingUpdateStructuresJob');
         return 1;
     }
 
