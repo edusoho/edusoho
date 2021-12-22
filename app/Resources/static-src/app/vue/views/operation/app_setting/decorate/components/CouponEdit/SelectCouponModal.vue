@@ -6,14 +6,14 @@
     @cancel="handleCancel"
   >
     <template #title>
-      选择优惠券
-      <span class="modal-title-tips">仅显示未过期的优惠券</span>
+      {{ 'decorate.choose_a_coupon' | trans }}
+      <span class="modal-title-tips">{{ 'decorate.only_show_coupons_no_expired' | trans }}</span>
     </template>
 
     <div>
       <a-input-search
         v-model="keyword"
-        placeholder="搜索优惠卷"
+        :placeholder="'decorate.search_for_coupons' | trans"
         style="width: 240px;"
         allow-clear
         @search="onSearch"
@@ -43,33 +43,33 @@ import { Coupon } from 'common/vue/service/index.js';
 
 const columns = [
   {
-    title: '优惠卷名称',
+    title: Translator.trans('decorate.coupon_name'),
     dataIndex: 'name',
     width: '20%'
   },
   {
-    title: '前缀',
+    title: Translator.trans('decorate.prefix'),
     dataIndex: 'prefix',
     width: '15%'
   },
   {
-    title: '优惠内容',
+    title: Translator.trans('decorate.offer_content'),
     width: '30%',
     customRender: function(record) {
       const { type, rate, targetDetail: { numType, product } } = record;
 
-      let discountType = '折扣';
-      let text = '折';
-      let targetType = '全部商品';
+      let discountType = Translator.trans('decorate.discount');
+      let text = Translator.trans('fold');
+      let targetType = Translator.trans('all_products');
 
       if (numType === 'single') {
         switch (product) {
           case 'course':
           case 'classroom':
-            targetType = '指定商品';
+            targetType = Translator.trans('designated_goods');
             break;
           case 'vip':
-            targetType = '指定会员';
+            targetType = Translator.trans('designated_member');
             break;
           default:
             targetType = '';
@@ -77,16 +77,16 @@ const columns = [
       } else if (numType === 'all') {
         switch (product) {
           case 'course':
-            targetType = '全部课程';
+            targetType = Translator.trans('all_courses');
             break;
           case 'classroom':
-            targetType = '全部班级';
+            targetType = Translator.trans('all_classes');
             break;
           case 'all':
-            targetType = '全部商品';
+            targetType = Translator.trans('all_products');
             break;
           case 'vip':
-            targetType = '全部会员';
+            targetType = Translator.trans('all_members');
             break;
           default:
             targetType = '';
@@ -95,7 +95,7 @@ const columns = [
         switch (product) {
           case 'course':
           case 'classroom':
-            targetType = '部分商品';
+            targetType = Translator.trans('some_products');
             break;
           default:
             targetType = '';
@@ -103,15 +103,15 @@ const columns = [
       }
 
       if (type === 'minus') {
-        discountType = '抵价';
-        text = '元';
+        discountType = Translator.trans('decorate.trade_in');
+        text = Translator.trans('cny');
       }
 
       return `${discountType} ${rate} ${text} / ${targetType}`;
     }
   },
   {
-    title: '剩余/总量',
+    title: Translator.trans('decorate.remaining_total'),
     width: '15%',
     customRender: function(record) {
       const { unreceivedNum, generatedNum } = record;
@@ -119,20 +119,20 @@ const columns = [
     }
   },
   {
-    title: '有效期至',
+    title: Translator.trans('decorate.valid_until'),
     width: '20%',
     customRender: function(record) {
       const { deadlineMode, deadline, fixedDay } = record;
 
       if (deadlineMode === 'day') {
-        return `领取${fixedDay}天内有效`;
+        return Translator.trans('decorate.valid_within_fixed_day_of_receipt', { fixedDay: fixedDay });
       }
 
       if (deadlineMode === 'time') {
         return moment(deadline).format('YYYY-MM-DD');
       }
 
-      return '未知日期';
+      return Translator.trans('decorate.unknown_date');
     }
   }
 ];

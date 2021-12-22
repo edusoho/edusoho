@@ -2007,3 +2007,21 @@ decorate.amount_of_goods: Amount of goods
 decorate.creation_time: Creation time
 decorate.operate: Operate
 decorate.search_class: Search class
+decorate.coupon: Coupon
+decorate.only_show_coupons_no_expired: Only show coupons that have not expired
+decorate.title: Title
+decorate.show: Show
+decorate.do_not_show: Do not show
+decorate.coupon_selection: Coupon selection
+decorate.add_coupon: Add coupon
+decorate.choose_a_coupon: Choose a coupon
+decorate.search_for_coupons: Search for coupons
+decorate.coupon_name: Coupon name
+decorate.prefix: Prefix
+decorate.offer_content: Offer content
+decorate.discount: Discount
+decorate.trade_in: Trade in
+decorate.valid_until: Valid until
+decorate.remaining_total: Remaining/Total
+decorate.valid_within_fixed_day_of_receipt: Valid within %fixedDay% day of receipt
+decorate.nknown_date: Unknown date
