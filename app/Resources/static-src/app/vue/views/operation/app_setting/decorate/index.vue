@@ -206,6 +206,30 @@ export default {
         return;
       }
 
+      if (type === 'vip' && !this.vipEnabled) {
+        this.$confirm({
+          title: '会员功能未开启',
+          okText: '去开启',
+          okType: '取消',
+          onOk() {
+            window.open('/admin/v2/setting/vip');
+          }
+        });
+        return;
+      }
+
+      if (type === 'coupon' && !this.couponEnabled) {
+        this.$confirm({
+          title: '优惠券功能未开通',
+          okText: '去开通',
+          okType: '取消',
+          onOk() {
+            window.open('/admin/v2/coupon');
+          }
+        });
+        return;
+      }
+
       const info = _.cloneDeep(DefaultData[type]);
       if (type === 'vip') {
         this.getVipLevels();
