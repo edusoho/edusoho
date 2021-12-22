@@ -54,6 +54,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             $subjectiveScore = $this->sumSubjectiveScore($answerQuestionReports);
             $score = $this->sumScore($answerQuestionReports);
+
             $answerReport = $this->getAnswerReportService()->create([
                 'user_id' => $answerRecord['user_id'],
                 'assessment_id' => $assessmentResponse['assessment_id'],

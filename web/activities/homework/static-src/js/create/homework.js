@@ -171,8 +171,8 @@ export default class Homework {
       let $answer = $parent.data('questionAnswer');
       let type = $parent.find('.js-score-type').val();
 
-      let value = $parent.find('.js-score').val();
-      let missValue = $parent.find('.js-miss-choice-score').val();
+      let value = Number($parent.find('.js-score').val());
+      let missValue = Number($parent.find('.js-miss-choice-score').val());
 
       if(type === 'question' && (missValue > value)){
         this._appendError($target, Translator.trans('course.miss_score.validator'));
