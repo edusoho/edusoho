@@ -2112,7 +2112,7 @@ course.plan_task.activity_manage.homework.info: 作业说明
 course.plan_task.activity_manage.homework.total: >
   本次作业<span class="color-primary">%itemCount%题</span>
 course.plan_task.activity_manage.homework.choose_question: 选择题目
-course.plan_task.activity_manage.homework.save_tips: 提示：保存后题目将不能再添加或移除。
+course.plan_task.activity_manage.homework.save_tips: 提示：发布后题目将不能再添加或删除。
 course.plan_task.activity_manage.homework.submit: 提交作业
 course.plan_task.activity_manage.homework.start_btn: 开始做题
 course.plan_task.activity_manage.homework.reviewing_tips: 老师正在批阅作业，批阅完成后会以站内私信通知您批阅结果，请稍等。

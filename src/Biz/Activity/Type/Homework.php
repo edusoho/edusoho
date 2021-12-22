@@ -2,13 +2,17 @@
 
 namespace Biz\Activity\Type;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\HomeworkActivityService;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class Homework extends Activity
@@ -23,6 +27,17 @@ class Homework extends Activity
         $homework = $this->getHomeworkActivityService()->get($targetId);
         if ($homework) {
             $homework['assessment'] = $this->getAssessmentService()->getAssessment($homework['assessmentId']);
+            $questions = $homework['assessment'] ? $this->getSectionItemService()->findSectionItemDetailByAssessmentId($homework['assessment']['id']) : [];
+            $itemBankIds = array_unique(ArrayToolkit::column($questions, 'bank_id'));
+            $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId(array_shift($itemBankIds));
+            $categories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
+            $categories = ArrayToolkit::index($categories, 'id');
+            $extData = [
+                'questionBank' => $questionBank,
+                'categories' => $categories,
+                'questions' => $questions,
+            ];
+            $homework = array_merge($homework, $extData);
         }
 
         return $homework;
@@ -163,18 +178,28 @@ class Homework extends Activity
 
     public function update($targetId, &$fields, $activity)
     {
-        $homework = $this->get($targetId);
-
+        $homework = $this->getHomeworkActivityService()->get($targetId);
         if (!$homework) {
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
-
-        $filterFields = [
+        $accessment = [
             'name' => $fields['title'],
             'description' => $fields['description'],
         ];
+        if (!empty($fields['questionIds'])) {
+            $items = $this->getItemService()->findItemsByIds($fields['questionIds'], true);
+            $items = $this->processItemQuestions($items, $fields);
+            $bankIds = array_column($items, 'bank_id');
+            $accessment['bank_id'] = array_shift($bankIds);
+            $accessment['sections'] = [
+                [
+                    'name' => '作业题目',
+                    'items' => $items,
+                ],
+            ];
+        }
 
-        $this->getAssessmentService()->updateBasicAssessment($homework['assessmentId'], $filterFields);
+        $this->getAssessmentService()->updateAssessment($homework['assessmentId'], $accessment);
 
         return $homework;
     }
@@ -244,5 +269,29 @@ class Homework extends Activity
     protected function getHomeworkActivityService()
     {
         return $this->getBiz()->service('Activity:HomeworkActivityService');
+    }
+
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->getBiz()->service('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return ItemCategoryService
+     */
+    protected function getItemCategoryService()
+    {
+        return $this->getBiz()->service('ItemBank:Item:ItemCategoryService');
+    }
+
+    /**
+     * @return AssessmentSectionItemService
+     */
+    protected function getSectionItemService()
+    {
+        return $this->getBiz()->service('ItemBank:Assessment:AssessmentSectionItemService');
     }
 }

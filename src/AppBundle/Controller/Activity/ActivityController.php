@@ -75,6 +75,7 @@ class ActivityController extends BaseController
     public function contentModalAction($type, $courseId, $activityId = 0)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
+        $courseTask = $this->getTaskService()->getTaskByCourseIdAndActivityId($course['id'], $activityId);
         if (!empty($activityId)) {
             $activity = $this->getActivityService()->getActivity($activityId, true);
         } else {
@@ -86,6 +87,7 @@ class ActivityController extends BaseController
                 'customComments' => [],
             ];
         }
+        $activity['hasPublished'] = $courseTask['has_published'];
         $container = $this->get('activity_runtime_container');
 
         return $container->content($activity);
