@@ -10,7 +10,7 @@
     <div class="course-list">
       <div class="clearfix">
         <div class="course-list__title pull-left text-overflow">{{ moduleData.title }}</div>
-        <div class="course-list__more pull-right">查看更多<a-icon type="right" /></div>
+        <div class="course-list__more pull-right">{{ 'site.btn.see_more' | trans }}<a-icon type="right" /></div>
       </div>
 
       <div :class="{ clearfix: moduleData.displayStyle === 'distichous' }">

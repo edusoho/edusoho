@@ -8,7 +8,7 @@
       <div class="open-course-info__title text-overflow">{{ item.title }}</div>
       <div class="open-course-info__bottom clearfix">
         <div class="open-course-time pull-left">{{ time }}</div>
-        <div class="open-course-btn pull-right">进入直播</div>
+        <div class="open-course-btn pull-right">{{ 'site.btn.enter_live' | trans }}</div>
       </div>
     </div>
   </div>

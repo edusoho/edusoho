@@ -5,7 +5,7 @@
     </div>
     <div class="column-item__info">
       <div class="column-item__title text-overflow">{{ item.title || item.courseSetTitle }}</div>
-      <div class="column-item__price">{{ item.price }} 元</div>
+      <div class="column-item__price">{{ item.price }} {{ 'cny' | trans }}</div>
     </div>
   </div>
 </template>

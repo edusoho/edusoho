@@ -1818,6 +1818,7 @@ site.btn.view_playback: 查看回放
 site.btn.confirm: 确认
 site.btn.edit: 编辑
 site.btn.see_more: 查看更多
+site.btn.enter_live: 进入直播
 
 admin.mobile_setting.discovery_tips: 注：使用发现页配置功能，app版本需要升级到4.5.39及以上
 
@@ -1903,3 +1904,4 @@ all_courses: 全部课程
 all_classes: 全部班级
 all_members: 全部会员
 some_products: 部分商品
+ad_pictures: 广告图片

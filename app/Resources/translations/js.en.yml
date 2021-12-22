@@ -1863,6 +1863,7 @@ site.btn.view_playback: View playback
 site.btn.confirm: Confirm
 site.btn.edit: Edit
 site.btn.see_more: See more
+site.btn.enter_live: Enter live
 
 admin.mobile_setting.discovery_tips: Notice：Using the discovery page configuration function, the app version needs to be upgraded to 4.5.39 and above
 
@@ -1948,3 +1949,4 @@ all_courses: All courses
 all_classes: All classes
 all_members: All members
 some_products: Some products
+ad_pictures: Ad pictures
