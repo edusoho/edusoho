@@ -663,6 +663,7 @@ group.post.reply_hint: Reply
 group.post.reply_fail_hint: Posted reply failed, please try again
 
 cny: CNY
+fold: Fold
 pay.security.password.save_fail_hint: The payment password setting failed
 
 user.account.refund_cancel_title: Cancel refund application
@@ -1934,6 +1935,16 @@ course.live_replay.share_tip: Please confirm to share this live playback to the 
 course.live_replay.un_share_tip: Please confirm to remove this live playback from the shared live playback library？
 course.live_replay.delete_tip:  Please confirm to remove this live playback？
 
+coupon: Coupon
+collar_roll: Collar roll
+available_range: Available range
 upload_image: Upload image
 picture_cropping: Picture cropping
 classroom_course_num: Total <span>%courseNum%</span> courses
+all_products: All products
+designated_goods: Designated goods
+designated_member: Designated member
+all_courses: All courses
+all_classes: All classes
+all_members: All members
+some_products: Some products

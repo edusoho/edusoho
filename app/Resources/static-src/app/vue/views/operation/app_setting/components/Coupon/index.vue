@@ -7,7 +7,7 @@
     :validator-result="validatorResult"
     @event-actions="handleClickAction"
   >
-    <div class="coupon-title" v-if="moduleData.titleShow === 'show'">优惠券</div>
+    <div class="coupon-title" v-if="moduleData.titleShow === 'show'">{{ 'coupon' | trans }}</div>
 
     <div :class="['coupon-container', moduleType]">
       <div v-if="moduleData.items.length > 1" class="swiper-wrapper clearfix">
@@ -26,7 +26,7 @@
         <coupon-item v-for="item in moduleData.items" :key="item.id" :coupon="item" />
       </template>
 
-      <div v-else class="empty">优惠卷</div>
+      <div v-else class="empty">{{ 'coupon' | trans }}</div>
     </div>
   </layout>
 </template>

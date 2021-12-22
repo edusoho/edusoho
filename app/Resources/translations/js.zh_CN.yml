@@ -608,6 +608,7 @@ group.post.reply_hint: 回复
 group.post.reply_fail_hint: 发表回复失败，请重试
 
 cny: 元
+fold: 折
 pay.security.password.save_fail_hint: 支付密码设置失败
 
 user.account.refund_cancel_title: 取消退款
@@ -1889,6 +1890,16 @@ course.live_replay.share_tip: 请确认将此直播回放共享到共享直播�
 course.live_replay.un_share_tip:  请确认将此直播回放从共享直播回放资源库移除？
 course.live_replay.delete_tip:  请确认将此直播回放移除？
 
+coupon: 优惠卷
+collar_roll: 领卷
+available_range: 可用范围
 upload_image: 上传图片
 picture_cropping: 图片裁剪
 classroom_course_num: 共<span>%courseNum%</span>门课程
+all_products: 全部商品
+designated_goods: 指定商品
+designated_member: 指定会员
+all_courses: 全部课程
+all_classes: 全部班级
+all_members: 全部会员
+some_products: 部分商品
