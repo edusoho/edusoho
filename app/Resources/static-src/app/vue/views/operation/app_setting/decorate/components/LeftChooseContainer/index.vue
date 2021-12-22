@@ -19,24 +19,24 @@
 <script>
 const Classifys = [
   {
-    title: '基础组件',
+    title: Translator.trans('decorate.basic'),
     icon: 'icon-base',
     components: [
-      { title: '轮播图', icon: 'icon-lunbotu', type: 'slide_show' },
-      { title: '图文导航', icon: 'icon-tuwendaohang', type: 'graphic_navigation' },
-      { title: '图片广告', icon: 'icon-tuwenguanggao', type: 'poster' },
-      { title: '课程列表', icon: 'icon-kechengliebiao', type: 'course_list' },
-      { title: '班级列表', icon: 'icon-banjiliebiao', type: 'classroom_list' },
-      { title: '题库列表', icon: 'icon-item-bank', type: 'item_bank_exercise' },
-      { title: '公开课列表', icon: 'icon-open-course', type: 'open_course_list' }
+      { title: Translator.trans('decorate.carousel'), icon: 'icon-lunbotu', type: 'slide_show' },
+      { title: Translator.trans('decorate.graphic_navigation'), icon: 'icon-tuwendaohang', type: 'graphic_navigation' },
+      { title: Translator.trans('decorate.image_ad'), icon: 'icon-tuwenguanggao', type: 'poster' },
+      { title: Translator.trans('decorate.curriculum_schedule'), icon: 'icon-kechengliebiao', type: 'course_list' },
+      { title: Translator.trans('decorate.class_list'), icon: 'icon-banjiliebiao', type: 'classroom_list' },
+      { title: Translator.trans('decorate.question_bank_list'), icon: 'icon-item-bank', type: 'item_bank_exercise' },
+      { title: Translator.trans('decorate.open_class_list'), icon: 'icon-open-course', type: 'open_course_list' }
     ]
   },
   {
-    title: '营销组件',
+    title: Translator.trans('decorate.marketing'),
     icon: 'icon-marketing',
     components: [
-      { title: '优惠卷', icon: 'icon-youhuiquan', type: 'coupon' },
-      { title: '会员专区', icon: 'icon-huiyuanzhuanqu', type: 'vip' }
+      { title: Translator.trans('decorate.coupon'), icon: 'icon-youhuiquan', type: 'coupon' },
+      { title: Translator.trans('decorate.members_only'), icon: 'icon-huiyuanzhuanqu', type: 'vip' }
     ]
   }
 ];

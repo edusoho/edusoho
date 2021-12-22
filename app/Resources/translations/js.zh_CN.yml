@@ -2001,3 +2001,12 @@ decorate.select_image: 选择图片
 decorate.title2: 标题
 decorate.question_bank_list_settings: 题库列表设置
 decorate.question_bank_classification: 题库分类
+decorate.basic: 基础组件
+decorate.carousel: 轮播图
+decorate.graphic_navigation: 图文导航
+decorate.image_ad: 图片广告
+decorate.curriculum_schedule: 课程列表
+decorate.class_list: 班级列表
+decorate.question_bank_list: 题库列表
+decorate.open_class_list: 公开课列表
+decorate.marketing: 营销组件

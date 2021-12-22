@@ -2046,3 +2046,12 @@ decorate.select_image: Select Image
 decorate.title2: Title
 decorate.question_bank_list_settings: Question bank list settings
 decorate.question_bank_classification: Question bank classification
+decorate.basic: Basic
+decorate.carousel: Carousel
+decorate.graphic_navigation: Graphic Navigation
+decorate.image_ad: Image ad
+decorate.curriculum_schedule: Curriculum schedule
+decorate.class_list: Class list
+decorate.question_bank_list: Question bank list
+decorate.open_class_list: Open class list
+decorate.marketing: Marketing
