@@ -1831,6 +1831,7 @@ radio.visible_only_to_yourself: 仅自己可见
 
 message.removal_succeeded: 移除成功
 message.edit_succeeded: 编辑成功
+message.file_too_large: 文件过大，请上传小于 2M 的文件！
 
 live.playback.tip.remove_association: 直播回放将从该课程中移除关联
 live.playback.tip.cannot_be_used_normally: 直播回放若被引用，移除会引起引用任务无法正常使用
@@ -1883,3 +1884,6 @@ course.live_replay.un_share_btn:  取消共享
 course.live_replay.share_tip: 请确认将此直播回放共享到共享直播回放资源库?
 course.live_replay.un_share_tip:  请确认将此直播回放从共享直播回放资源库移除？
 course.live_replay.delete_tip:  请确认将此直播回放移除？
+
+upload_image: 上传图片
+picture_cropping: 图片裁剪

@@ -1876,6 +1876,7 @@ radio.visible_only_to_yourself: Visible only to yourself
 
 message.removal_succeeded: Removal succeeded
 message.edit_succeeded: Edit succeeded
+message.file_too_large: The file is too large, please upload a file smaller than 2M!
 
 live.playback.tip.remove_association: Live playback will remove the association from the course
 live.playback.tip.cannot_be_used_normally: If the live playback is referenced, removing it will cause the referenced task to be unable to work normally
@@ -1928,3 +1929,6 @@ course.live_replay.un_share_btn: UnShare
 course.live_replay.share_tip: Please confirm to share this live playback to the shared live playback resource library?
 course.live_replay.un_share_tip: Please confirm to remove this live playback from the shared live playback library？
 course.live_replay.delete_tip:  Please confirm to remove this live playback？
+
+upload_image: Upload image
+picture_cropping: Picture cropping
