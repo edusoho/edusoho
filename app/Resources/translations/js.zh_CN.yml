@@ -1820,6 +1820,9 @@ site.btn.edit: 编辑
 site.btn.see_more: 查看更多
 site.btn.enter_live: 进入直播
 site.btn.save: 保存
+site.btn.exit_editing: 退出编辑
+site.btn.preview: 预览
+site.btn.exit_preview: 退出预览
 
 admin.mobile_setting.discovery_tips: 注：使用发现页配置功能，app版本需要升级到4.5.39及以上
 
@@ -2038,3 +2041,5 @@ decorate.choose: 选择
 decorate.link_address: 链接地址
 decorate.please_enter_the_link_address: 请输入链接地址
 decorate.link_wrong: 链接有误，请以 http:// 或者 https:// 开头
+decorate.are_you_sure_exiting_editing: 确定退出编辑？
+decorate.exiting_editing_not_save: 退出编辑将不会保存修改。
