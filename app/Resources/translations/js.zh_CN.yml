@@ -1905,3 +1905,12 @@ all_classes: 全部班级
 all_members: 全部会员
 some_products: 部分商品
 ad_pictures: 广告图片
+carousel: 轮播图
+members_only: 会员专区
+free_classroom_course_num: %courseNum% 门课程， %classroomNum% 门班级
+app.footer.find: 发现
+app.footer.learn: 学习
+app.footer.dynamic: 动态
+app.footer.mine: 我的
+app.header.school_name: 网校名称
+app.header.search: 搜索课程、班级

@@ -2,19 +2,19 @@
   <div class="app-footer clearfix">
     <div class="app-footer__item pull-left">
       <svg-icon icon="icon-find" />
-      <div>发现</div>
+      <div>{{ 'app.footer.find' | trans }}</div>
     </div>
     <div class="app-footer__item pull-left">
       <svg-icon icon="icon-study" />
-      <div>学习</div>
+      <div>{{ 'app.footer.learn' | trans }}</div>
     </div>
     <div class="app-footer__item pull-left">
       <svg-icon icon="icon-dynamic" />
-      <div>动态</div>
+      <div>{{ 'app.footer.dynamic' | trans }}</div>
     </div>
     <div class="app-footer__item pull-left">
       <svg-icon icon="icon-me" />
-      <div>我的</div>
+      <div>{{ 'app.footer.mine' | trans }}</div>
     </div>
   </div>
 </template>

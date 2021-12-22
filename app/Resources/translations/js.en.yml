@@ -1950,3 +1950,12 @@ all_classes: All classes
 all_members: All members
 some_products: Some products
 ad_pictures: Ad pictures
+carousel: Carousel
+members_only: Members Only
+free_classroom_course_num: %courseNum% courses， %classroomNum% classes
+app.footer.find: Find
+app.footer.learn: Learn
+app.footer.dynamic: Dynamic
+app.footer.mine: Mine
+app.header.school_name: School name
+app.header.search: Search for courses, classes
