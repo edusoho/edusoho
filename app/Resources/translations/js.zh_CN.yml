@@ -2026,3 +2026,8 @@ decorate.mobile_phone_screen: 自适应手机屏幕
 decorate.turn_on: 开启
 decorate.closure: 关闭
 decorate.revise: 修改
+decorate.carousel: 轮播图
+decorate.add_content: 添加内容
+decorate.carousel_tip1: 建议图片尺寸为750x300px，支持 jpg/png/gif 格式，大小不超过2MB
+decorate.carousel_tip2: 最多添加5个图片，拖动选中的图片可对其排序
+decorate.site_link: 站内链接

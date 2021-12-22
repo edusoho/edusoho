@@ -10,24 +10,24 @@
       <img :src="item.image.uri" />
       <upload-image :aspect-ratio="5 / 2" @success="handleUploadSuccess">
         <template #content>
-          <div class="re-upload">修改</div>
+          <div class="re-upload">{{ 'decorate.revise' | trans }}</div>
         </template>
       </upload-image>
     </div>
     <div class="image-item__content pull-left">
       <a-dropdown>
         <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
-          站内链接<a-icon type="down" />
+          {{ 'decorate.site_link' | trans }}<a-icon type="down" />
         </a>
         <a-menu slot="overlay" @click="selectLink">
-          <a-menu-item key="course">选择课程</a-menu-item>
-          <a-menu-item key="classroom">选择班级</a-menu-item>
-          <a-menu-item key="vip">选择会员</a-menu-item>
+          <a-menu-item key="course">{{ 'decorate.choose_a_course' | trans }}</a-menu-item>
+          <a-menu-item key="classroom">{{ 'decorate.select_class' | trans }}</a-menu-item>
+          <a-menu-item key="vip">{{ 'decorate.select_member' | trans }}</a-menu-item>
         </a-menu>
       </a-dropdown>
       <div style="margin-top: 18px;" @click="selectLink({ key: 'custom' })">
         <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
-          自定义链接
+          {{ 'decorate.custom_link' | trans }}
         </a>
       </div>
     </div>

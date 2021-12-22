@@ -2071,3 +2071,8 @@ decorate.mobile_phone_screen: Adaptive mobile phone screen
 decorate.turn_on: Turn on
 decorate.closure: Closure
 decorate.revise: Revise
+decorate.carousel: Carousel
+decorate.add_content: Add content
+decorate.carousel_tip1: The recommended image size is 750x300px, supports jpg/png/gif format, and the size does not exceed 2MB
+decorate.carousel_tip2: Add up to 5 pictures, drag the selected pictures to sort them
+decorate.site_link: Site link
