@@ -1980,3 +1980,11 @@ decorate.valid_until: 有效期至
 decorate.remaining_total: 剩余/总量
 decorate.valid_within_fixed_day_of_receipt: 领取%fixedDay%天内有效
 decorate.unknown_date: 未知日期
+decorate.course_list_setting: 课程列表设置
+decorate.course_source: 课程来源
+decorate.course_sorts: 课程分类
+decorate.choose_a_course: 选择课程
+decorate.recommended_courses: 推荐课程
+decorate.show_only_published_courses: 仅显示已发布课程
+decorate.course_title: 课程名称
+decorate.search_course: 搜索课程

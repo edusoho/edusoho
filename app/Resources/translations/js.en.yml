@@ -2025,3 +2025,11 @@ decorate.valid_until: Valid until
 decorate.remaining_total: Remaining/Total
 decorate.valid_within_fixed_day_of_receipt: Valid within %fixedDay% day of receipt
 decorate.nknown_date: Unknown date
+decorate.course_list_setting: Course list setting
+decorate.course_source: Course source
+decorate.course_sorts: Course sorts
+decorate.choose_a_course: Choose a course
+decorate.recommended_courses: Recommended courses
+decorate.show_only_published_courses: Show only published courses
+decorate.course_title: Course Title
+decorate.search_course: Search course
