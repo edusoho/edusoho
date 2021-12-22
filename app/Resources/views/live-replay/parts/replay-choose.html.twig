@@ -5,12 +5,12 @@
 						 data-url="{{ path('tag_match') }}"
 						 data-explain="{{ 'course.base.tag_tips'|trans }}">
 		</div>
-    <div class="controls col-sm-3 pll">
+    <div class="controls col-sm-3">
       <select class="form-control" id="keywordType">
         {{ select_options(dict('replayKeyWordType'), 'activityTitle') }}
       </select>
     </div>
-		<div class="col-sm-5 material-search-form" style="margin-left: -20px">
+		<div class="col-sm-5 material-search-form">
       <span class="input-group js-file-name-group">
         <input name="file-filter-by-name" class="form-control  js-file-name" type="text"
                placeholder="{{'file_chooser.course_file.input_placeholder'|trans({'%placeholder%':placeholder|default(null)})}}">

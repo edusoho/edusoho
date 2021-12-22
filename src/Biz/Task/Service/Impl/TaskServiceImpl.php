@@ -765,7 +765,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (empty($taskResult)) {
             $task = $this->getTask($taskId);
             $activity = $this->getActivityService()->getActivity($task['activityId']);
-            if ('live' === $activity['mediaType']) {
+            if (in_array($activity['mediaType'], ['live', 'replay'])) {
                 $this->trigger($task['id'], 'start', ['task' => $task]);
                 $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
             } else {
