@@ -3,9 +3,9 @@
 namespace Biz\Activity\Dao\Impl;
 
 use Biz\Activity\Dao\HomeworkActivityDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class HomeworkActivityDaoImpl extends GeneralDaoImpl implements HomeworkActivityDao
+class HomeworkActivityDaoImpl extends AdvancedDaoImpl implements HomeworkActivityDao
 {
     protected $table = 'activity_homework';
 
@@ -27,6 +27,11 @@ class HomeworkActivityDaoImpl extends GeneralDaoImpl implements HomeworkActivity
     public function findByAnswerSceneIds($answerSceneIds)
     {
         return $this->findInField('answerSceneId', $answerSceneIds);
+    }
+
+    public function findByAssessmentId($assessmentId)
+    {
+        return $this->findByFields(['assessmentId' => $assessmentId]);
     }
 
     public function declares()

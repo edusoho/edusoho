@@ -221,7 +221,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
 
     public function publishTask($task)
     {
-        return $this->getTaskDao()->update($task['id'], ['status' => 'published', 'has_published' => 1]);
+        return $this->getTaskDao()->update($task['id'], ['status' => 'published']);
     }
 
     public function unpublishTask($task)

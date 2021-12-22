@@ -25,11 +25,6 @@
       position: relative;
     }
   </style>
-  {% if questions is not defined and activity.ext is defined and activity.ext is not empty %}
-    {% set questionBank = activity.ext.questionBank %}
-    {% set categories = activity.ext.categories %}
-    {% set questions = activity.ext.questions %}
-  {% endif %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
     <form class="form-horizontal" id="step2-form">
       <div class="form-group">
@@ -50,7 +45,13 @@
                     data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ activity.ext.assessment.description|default('') }}</textarea>
         </div>
       </div>
-      {% if activity.hasPublished != 1 %}
+      {% if activity.canEdit|default(0) or (activity.ext is defined and activity.ext.has_published is defined and activity.ext.has_published != 1)  %}
+
+        {% if questions is not defined and activity.ext is defined and activity.ext is not empty %}
+          {% set questionBank = activity.ext.questionBank %}
+          {% set categories = activity.ext.categories %}
+          {% set questions = activity.ext.questions %}
+        {% endif %}
       <div class="form-group">
         <div class="col-sm-2 control-label">
           <label for="homework-about-field" class="control-label-required">{{ 'course.plan_task.activity_manage.homework.choose_question'|trans }}</label>

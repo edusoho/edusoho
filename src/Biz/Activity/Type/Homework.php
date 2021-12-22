@@ -5,6 +5,7 @@ namespace Biz\Activity\Type;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\HomeworkActivityService;
+use Biz\Course\Service\CourseSetService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -27,6 +28,12 @@ class Homework extends Activity
         $homework = $this->getHomeworkActivityService()->get($targetId);
         if ($homework) {
             $homework['assessment'] = $this->getAssessmentService()->getAssessment($homework['assessmentId']);
+            if (empty($homework['has_published'])) {
+                $homeworks = $this->getHomeworkActivityService()->findByAssessmentId($homework['assessmentId']);
+                $homework['has_published'] = in_array(1, ArrayToolkit::column($homeworks, 'has_published'));
+            }
+        }
+        if (isset($homework['has_published']) && empty($homework['has_published'])) {
             $questions = $homework['assessment'] ? $this->getSectionItemService()->findSectionItemDetailByAssessmentId($homework['assessment']['id']) : [];
             $itemBankIds = array_unique(ArrayToolkit::column($questions, 'bank_id'));
             $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId(array_shift($itemBankIds));
@@ -293,5 +300,13 @@ class Homework extends Activity
     protected function getSectionItemService()
     {
         return $this->getBiz()->service('ItemBank:Assessment:AssessmentSectionItemService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
     }
 }

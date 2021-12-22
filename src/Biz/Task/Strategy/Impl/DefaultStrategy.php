@@ -175,7 +175,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     {
         $tasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
         foreach ($tasks as $task) {
-            $this->getTaskDao()->update($task['id'], ['status' => 'published', 'has_published' => 1]);
+            $this->getTaskDao()->update($task['id'], ['status' => 'published']);
         }
         $task['status'] = 'published';
 
