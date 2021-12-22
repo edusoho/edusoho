@@ -1945,6 +1945,7 @@ decorate.class_classification: 班级分类
 decorate.customize: 自定义
 decorate.select_class: 选择班级
 decorate.order: 排列顺序
+decorate.order2: 排列顺序：
 decorate.join_the_most: 加入最多
 decorate.recently_created: 最近创建
 decorate.highest_rated: 评分最高
@@ -2031,3 +2032,5 @@ decorate.add_content: 添加内容
 decorate.carousel_tip1: 建议图片尺寸为750x300px，支持 jpg/png/gif 格式，大小不超过2MB
 decorate.carousel_tip2: 最多添加5个图片，拖动选中的图片可对其排序
 decorate.site_link: 站内链接
+decorate.low_to_hign: 从低到高
+decorate.hign_to_low: 从高到低

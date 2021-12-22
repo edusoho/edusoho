@@ -1990,6 +1990,7 @@ decorate.class_classification: Class classification
 decorate.customize: Customize
 decorate.select_class: Select class
 decorate.order: Order
+decorate.order2: Order：
 decorate.join_the_most: Join the most
 decorate.recently_created: Recently created
 decorate.highest_rated: Highest rated
@@ -2076,3 +2077,5 @@ decorate.add_content: Add content
 decorate.carousel_tip1: The recommended image size is 750x300px, supports jpg/png/gif format, and the size does not exceed 2MB
 decorate.carousel_tip2: Add up to 5 pictures, drag the selected pictures to sort them
 decorate.site_link: Site link
+decorate.low_to_hign: Low to high
+decorate.hign_to_low: High to low
