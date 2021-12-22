@@ -2055,3 +2055,8 @@ decorate.class_list: Class list
 decorate.question_bank_list: Question bank list
 decorate.open_class_list: Open class list
 decorate.marketing: Marketing
+decorate.all: All
+decorate.open_class_list_settings: Open class list settings
+decorate.choose_an_open_class: Choose an open class
+decorate.only_show_published_public_classes: Only show published public classes
+decorate.search_for_public_classes: Search for public classes

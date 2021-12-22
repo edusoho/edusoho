@@ -2,20 +2,20 @@
   <a-modal
     :visible="visible"
     :width="900"
-    ok-text="保存"
+    :ok-text="'site.btn.save' | trans"
     @cancel="handleCancel"
     @ok="handleOk"
   >
     <template #title>
-      选择公开课
-      <span class="modal-title-tips">仅显示已发布公开课</span>
+      {{ 'decorate.choose_an_open_class' | trans }}
+      <span class="modal-title-tips">{{ 'decorate.only_show_published_public_classes' | trans }}</span>
     </template>
 
     <div>
-      选择公开课：
+      {{ 'decorate.choose_an_open_class' | trans }}：
       <a-select
         show-search
-        placeholder="搜索公开课"
+        :placeholder="'decorate.search_for_public_classes' | trans"
         style="width: 300px"
         :default-active-first-option="false"
         :show-arrow="false"
@@ -39,7 +39,7 @@
       :data-source="selectList"
     >
       <span slot="action" slot-scope="text, record">
-        <a class="ant-dropdown-link" @click="handleRemove(record.key)">移除</a>
+        <a class="ant-dropdown-link" @click="handleRemove(record.key)">{{ 'decorate.remove' | trans }}</a>
       </span>
     </a-table>
   </a-modal>
@@ -50,12 +50,12 @@ import { OpenCourse } from 'common/vue/service/index.js';
 
 const columns = [
   {
-    title: '课程名称',
+    title: Translator.trans('decorate.course_title'),
     dataIndex: 'title',
     width: '40%'
   },
   {
-    title: '创建时间',
+    title: Translator.trans('decorate.creation_time'),
     dataIndex: 'createdTime',
     width: '40%',
     customRender: function(text) {
@@ -63,7 +63,7 @@ const columns = [
     }
   },
   {
-    title: '操作',
+    title: Translator.trans('decorate.operate'),
     width: '20%',
     scopedSlots: { customRender: 'action' }
   }

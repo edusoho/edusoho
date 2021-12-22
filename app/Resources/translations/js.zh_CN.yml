@@ -2010,3 +2010,8 @@ decorate.class_list: 班级列表
 decorate.question_bank_list: 题库列表
 decorate.open_class_list: 公开课列表
 decorate.marketing: 营销组件
+decorate.all: 所有
+decorate.open_class_list_settings: 公开课列表设置
+decorate.choose_an_open_class: 选择公开课
+decorate.only_show_published_public_classes: 仅显示已发布公开课
+decorate.search_for_public_classes: 搜索公开课

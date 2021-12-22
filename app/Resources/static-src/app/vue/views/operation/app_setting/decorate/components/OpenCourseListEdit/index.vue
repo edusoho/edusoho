@@ -1,12 +1,12 @@
 <template>
   <edit-layout>
-    <template #title>公开课列表设置</template>
+    <template #title>{{ 'decorate.open_class_list_settings' | trans }}</template>
 
     <div class="design-editor">
       <div class="design-editor__item">
-        <span class="design-editor__required">列表名称：</span>
+        <span class="design-editor__required">{{ 'decorate.list_name' | trans }}：</span>
         <a-input
-          placeholder="请输入列表名称"
+          :placeholder="'decorate.please_enter_the_name_of_the_list' | trans"
           style="width: 200px;"
           size="small"
           :default-value="moduleData.title"
@@ -16,23 +16,23 @@
       </div>
 
       <div class="design-editor__item">
-        <span>课程来源：</span>
+        <span>{{ 'decorate.course_source' | trans }}：</span>
         <a-radio-group
           :default-value="moduleData.sourceType"
           @change="(e) => handleChange({ key: 'sourceType', value: e.target.value })"
         >
           <a-radio value="condition">
-            课程分类
+            {{ 'decorate.course_sorts' | trans }}
           </a-radio>
           <a-radio value="custom">
-            自定义
+            {{ 'decorate.customize' | trans }}
           </a-radio>
         </a-radio-group>
       </div>
 
       <div v-show="moduleData.sourceType === 'custom'" class="design-editor__item">
-        <span class="design-editor__required">课程分类：</span>
-        <a-button size="small" @click="handleSelect">选择课程</a-button>
+        <span class="design-editor__required">{{ 'decorate.course_sorts' | trans }}：</span>
+        <a-button size="small" @click="handleSelect">{{ 'decorate.choose_a_course' | trans }}</a-button>
       </div>
 
       <div v-show="moduleData.sourceType === 'custom'" class="design-editor__item">
@@ -52,7 +52,7 @@
       </div>
 
       <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
-        <span>课程分类：</span>
+        <span>{{ 'decorate.course_sorts' | trans }}：</span>
         <a-cascader
           style="width: 200px;"
           size="small"
@@ -65,22 +65,22 @@
       </div>
 
       <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
-        <span>排列顺序：</span>
+        <span>{{ 'decorate.order' | trans }}：</span>
         <a-select
           style="width: 200px;"
           size="small"
           :default-value="moduleData.limitDays"
           @change="(value) => handleChange({ key: 'limitDays', value })"
         >
-          <a-select-option key="7">前后 7 天</a-select-option>
-          <a-select-option key="30">前后 30 天</a-select-option>
-          <a-select-option key="90">前后 90 天</a-select-option>
-          <a-select-option key="0">所有</a-select-option>
+          <a-select-option key="7">{{ 'decorate.last_7_days' | trans }}</a-select-option>
+          <a-select-option key="30">{{ 'decorate.last_30_days' | trans }}</a-select-option>
+          <a-select-option key="90">{{ 'decorate.last_90_days' | trans }}</a-select-option>
+          <a-select-option key="0">{{ 'decorate.all' | trans }}</a-select-option>
         </a-select>
       </div>
 
       <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
-        <span>显示个数：</span>
+        <span>{{ 'decorate.display_number' | trans }}：</span>
         <a-select
           style="width: 200px;"
           size="small"
