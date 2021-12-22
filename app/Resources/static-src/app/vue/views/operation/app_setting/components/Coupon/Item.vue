@@ -10,13 +10,13 @@
       </div>
       <div class="coupon-item__btn pull-left">
         <a-button size="small">
-          领卷
+          {{ 'collar_roll' | trans }}
         </a-button>
       </div>
     </div>
     <div class="coupon-item__middle" />
     <div class="coupon-item__bottom">
-      可用范围：{{ availableRange }}
+      {{ 'available_range' | trans }}：{{ availableRange }}
     </div>
   </div>
 </template>
@@ -39,11 +39,11 @@ export default {
 
   computed: {
     faceValue() {
-      let text = '折';
+      let text = Translator.trans('fold');
       const { type, rate } = this.coupon;
 
       if (type === 'minus') {
-        text = '元';
+        text = Translator.trans('cny');
       }
 
       return `${rate} ${text}`;
@@ -68,16 +68,16 @@ export default {
     availableRange() {
       const { numType, product } = this.coupon.targetDetail;
 
-      let targetType = '全部商品';
+      let targetType = Translator.trans('all_products');
 
       if (numType === 'single') {
         switch (product) {
           case 'course':
           case 'classroom':
-            targetType = '指定商品';
+            targetType = Translator.trans('designated_goods');
             break;
           case 'vip':
-            targetType = '指定会员';
+            targetType = Translator.trans('designated_member');
             break;
           default:
             targetType = '';
@@ -85,16 +85,16 @@ export default {
       } else if (numType === 'all') {
         switch (product) {
           case 'course':
-            targetType = '全部课程';
+            targetType = Translator.trans('all_courses');
             break;
           case 'classroom':
-            targetType = '全部班级';
+            targetType = Translator.trans('all_classes');
             break;
           case 'all':
-            targetType = '全部商品';
+            targetType = Translator.trans('all_products');
             break;
           case 'vip':
-            targetType = '全部会员';
+            targetType = Translator.trans('all_members');
             break;
           default:
             targetType = '';
@@ -103,7 +103,7 @@ export default {
         switch (product) {
           case 'course':
           case 'classroom':
-            targetType = '部分商品';
+            targetType = Translator.trans('some_products');
             break;
           default:
             targetType = '';

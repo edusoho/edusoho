@@ -1,13 +1,13 @@
 <template>
   <header class="decorate-header clearfix">
     <div class="pull-left mt8">
-      <a-button type="link" @click="handleClickExit">退出编辑</a-button>
+      <a-button type="link" @click="handleClickExit">{{ 'site.btn.exit_editing' | trans }}</a-button>
     </div>
     <div class="pull-right mt8">
       <a-space size="large">
-        <a-button v-if="preview" @click="handleClickPreview(false)">退出预览</a-button>
-        <a-button v-else @click="handleClickPreview(true)">预览</a-button>
-        <a-button type="primary" @click="handleClickSave">保存</a-button>
+        <a-button v-if="preview" @click="handleClickPreview(false)">{{ 'site.btn.exit_preview' | trans }}</a-button>
+        <a-button v-else @click="handleClickPreview(true)">{{ 'site.btn.preview' | trans }}</a-button>
+        <a-button type="primary" @click="handleClickSave">{{ 'site.btn.save' | trans }}</a-button>
       </a-space>
     </div>
   </header>
@@ -35,11 +35,11 @@ export default {
 
     handleClickExit() {
       this.$confirm({
-        title: '确定退出编辑？',
-        content: '推出编辑将不会保存修改。',
-        okText: '确定',
+        title: Translator.trans('decorate.are_you_sure_exiting_editing'),
+        content: Translator.trans('decorate.exiting_editing_not_save'),
+        okText: Translator.trans('site.confirm'),
         okType: 'danger',
-        cancelText: '取消',
+        cancelText: Translator.trans('site.cancel'),
         onOk() {
           window.location.href = '/admin/v2/setting/mobile_discoveries';
         }

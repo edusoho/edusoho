@@ -1,14 +1,14 @@
 <template>
   <div class="gn-item clearfix">
     <div class="gn-item__img pull-left">
-      <div class="modity-mask" @click="handleModityImage">更换图片</div>
+      <div class="modity-mask" @click="handleModityImage">{{ 'decorate.change_picture' | trans }}</div>
       <img :src="item.image.uri || '/static-dist/app/img/vue/decorate/gn_empty.png'">
     </div>
     <div class="gn-form pull-left">
       <div class="gn-form__item">
-        <span class="gn-form__label gn-form__label--required">标题：</span>
+        <span class="gn-form__label gn-form__label--required">{{ 'decorate.title2' | trans }}：</span>
         <a-input
-          placeholder="请输入标题"
+          :placeholder="'decorate.please_enter_a_title' | trans"
           size="small"
           style="width: 160px;"
           allow-clear
@@ -17,16 +17,16 @@
         />
       </div>
       <div class="gn-form__item">
-        <span class="gn-form__label gn-form__label--required">链接来源：</span>
+        <span class="gn-form__label gn-form__label--required">{{ 'decorate.link_source' | trans }}：</span>
         <a-select
           size="small"
           :default-value="item.link.type"
           style="width: 132px"
-          placeholder="请选择"
+          :placeholder="'decorate.please_choose' | trans"
           @change="handleCategory"
         >
           <a-select-option v-for="category in categorys" :key="category.key">
-            {{ category.text }}
+            {{ category.text | trans }}
           </a-select-option>
         </a-select>
       </div>
@@ -35,7 +35,7 @@
         <a-select
           size="small"
           style="width: 118px"
-          placeholder="请选择"
+          :placeholder="'decorate.please_choose' | trans"
           @change="handleSecondCategory"
         >
           <a-select-option v-for="category in categoryInfo.list" :key="category.id">
@@ -55,10 +55,10 @@
 
 <script>
 const categorys = [
-  { text: '会员专区', key: 'vip' },
-  { text: '公开课分类', key: 'openCourse' },
-  { text: '班级分类', key: 'classroom' },
-  { text: '课程分类', key: 'course' }
+  { text: 'decorate.members_only', key: 'vip' },
+  { text: 'decorate.open_class_classification', key: 'openCourse' },
+  { text: 'decorate.class_classification', key: 'classroom' },
+  { text: 'decorate.course_sorts', key: 'course' }
 ];
 
 import _ from 'lodash';
@@ -129,19 +129,19 @@ export default {
 
       const store = {
         openCourse: {
-          text: '公开课分类',
+          text: Translator.trans('decorate.open_class_classification'),
           stateKey: 'openCourseCategory',
           mutationsKey: 'setOpenCourseCategory',
           query: { type: 'course' }
         },
         course: {
-          text: '课程分类',
+          text: Translator.trans('decorate.course_sorts'),
           stateKey: 'courseCategory',
           mutationsKey: 'setCourseCategory',
           query: { type: 'course' }
         },
         classroom: {
-          text: '班级分类',
+          text: Translator.trans('decorate.class_classification'),
           stateKey: 'classroomCategory',
           mutationsKey: 'setClassroomCategory',
           query: { type: 'classroom' }

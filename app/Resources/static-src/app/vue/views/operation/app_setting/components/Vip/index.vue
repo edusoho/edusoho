@@ -7,7 +7,7 @@
     :validator-result="validatorResult"
     @event-actions="handleClickAction"
   >
-    <div class="vip-title" v-if="moduleData.titleShow === 'show'">会员专区</div>
+    <div class="vip-title" v-if="moduleData.titleShow === 'show'">{{ 'members_only' | trans }}</div>
     <div :class="['vip-container', moduleType]">
       <div class="swiper-wrapper clearfix">
         <div
@@ -18,7 +18,9 @@
           <div class="swiper-slide-container">
             <div class="vip-info">
               <div class="vip-info__name text-overflow">{{ item.name }}</div>
-              <div class="vip-info__free">{{ item.freeCourseNum }} 门课程，{{ item.freeClassroomNum }} 门班级</div>
+              <div class="vip-info__free">
+                {{ 'free_classroom_course_num' | trans({ courseNum: item.freeCourseNum, classroomNum: item.freeClassroomNum }) }}
+              </div>
             </div>
             <img :src="item.background">
           </div>

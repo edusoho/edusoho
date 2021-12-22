@@ -10,7 +10,7 @@
     <div class="open-course-list">
       <div class="clearfix">
         <div class="open-course-list__title pull-left text-overflow">{{ moduleData.title }}</div>
-        <div class="open-course-list__more pull-right">查看更多<a-icon type="right" /></div>
+        <div class="open-course-list__more pull-right">{{ 'site.btn.see_more' | trans }}<a-icon type="right" /></div>
       </div>
 
       <div v-if="list.length" :class="['open-course-container mt16', moduleType]">

@@ -1,9 +1,9 @@
 <template>
   <edit-layout>
-    <template #title>轮播图</template>
+    <template #title>{{ 'decorate.carousel' | trans }}</template>
 
     <div class="design-editor">
-      <div class="design-editor__title">添加内容</div>
+      <div class="design-editor__title">{{ 'decorate.add_content' | trans }}</div>
       <div class="design-editor__image">
         <draggable
           v-model="myList"
@@ -28,14 +28,14 @@
           <upload-image :aspect-ratio="5 / 2" @success="handleAddSwiper">
             <template #content>
               <div class="add-btn-input">
-                +添加图片
+                +{{ 'decorate.add_pictures' | trans }}
               </div>
             </template>
           </upload-image>
         </div>
 
-        <div class="image-tips">·建议图片尺寸为750x300px，支持 jpg/png/gif 格式，大小不超过2MB</div>
-        <div class="image-tips">·最多添加5个图片，拖动选中的图片可对其排序</div>
+        <div class="image-tips">·{{ 'decorate.carousel_tip1' | trans }}</div>
+        <div class="image-tips">·{{ 'decorate.carousel_tip2' | trans }}</div>
       </div>
     </div>
 

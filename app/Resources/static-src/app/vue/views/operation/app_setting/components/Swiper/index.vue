@@ -22,7 +22,7 @@
         </template>
 
         <div v-else class="swiper-slide">
-          <div class="swiper-slide-container">轮播图</div>
+          <div class="swiper-slide-container">{{ 'carousel' | trans }}</div>
         </div>
       </div>
       <div class="pagination" />

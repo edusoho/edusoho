@@ -1,24 +1,24 @@
 <template>
   <edit-layout>
-    <template #title>优惠卷</template>
-    <template #subtitle>（仅显示未过期的优惠券）</template>
+    <template #title>{{ 'decorate.coupon' | trans }}</template>
+    <template #subtitle>（{{ 'decorate.only_show_coupons_no_expired' | trans }}）</template>
 
     <div class="design-editor">
       <div class="design-editor__item">
-        <span>标题栏：</span>
+        <span>{{ 'decorate.title' | trans }}：</span>
         <a-radio-group :default-value="moduleData.titleShow" @change="changeShowTitle">
           <a-radio value="show">
-            显示
+            {{ 'decorate.show' | trans }}
           </a-radio>
           <a-radio value="unshow">
-            不显示
+            {{ 'decorate.do_not_show' | trans }}
           </a-radio>
         </a-radio-group>
       </div>
 
       <div class="design-editor__item">
-        <span class="design-editor__required">优惠券选择：</span>
-        <a-button size="small" @click="handleSelectCoupon">添加优惠卷</a-button>
+        <span class="design-editor__required">{{ 'decorate.coupon_selection' | trans }}：</span>
+        <a-button size="small" @click="handleSelectCoupon">{{ 'decorate.add_coupon' | trans }}</a-button>
       </div>
 
       <div class="design-editor__item">

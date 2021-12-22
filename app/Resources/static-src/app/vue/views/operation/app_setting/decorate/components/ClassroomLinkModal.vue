@@ -5,20 +5,20 @@
     @cancel="handleCancel"
   >
     <template #title>
-      选择班级
-      <span class="modal-title-tips">仅显示已发布班级</span>
+      {{ 'decorate.select_class' | trans }}
+      <span class="modal-title-tips">{{ 'decorate.show_only_published_classes' | trans }}</span>
     </template>
 
     <template #footer>
       <a-button key="back" @click="handleCancel">
-        取消
+        {{ 'site.cancel' | trans }}
       </a-button>
     </template>
 
     <div>
       <a-input-search
         v-model="keyword"
-        placeholder="搜索班级"
+        :placeholder="'decorate.search_class' | trans"
         style="width: 240px;"
         allow-clear
         @search="onSearch"
@@ -35,7 +35,7 @@
       @change="handleTableChange"
     >
       <span slot="action" slot-scope="text, record">
-        <a class="ant-dropdown-link" @click="handleSelect(record)">选择</a>
+        <a class="ant-dropdown-link" @click="handleSelect(record)">{{ 'decorate.choose' | trans }}</a>
       </span>
     </a-table>
   </a-modal>
@@ -46,25 +46,25 @@ import { Classroom } from 'common/vue/service/index.js';
 
 const columns = [
   {
-    title: '班级名称',
+    title: Translator.trans('decorate.class_name'),
     dataIndex: 'title',
     width: '40%'
   },
   {
-    title: '商品价格',
+    title: Translator.trans('decorate.commodity_price'),
     dataIndex: 'price',
     width: '15%',
     customRender: function(text) {
-      return `${text} 元`;
+      return `${text} ${Translator.trans('cny')}`;
     }
   },
   {
-    title: '商品数量',
+    title: Translator.trans('decorate.amount_of_goods'),
     dataIndex: 'courseNum',
     width: '15%'
   },
   {
-    title: '创建时间',
+    title: Translator.trans('decorate.creation_time'),
     dataIndex: 'createdTime',
     width: '20%',
     customRender: function(text) {
@@ -72,7 +72,7 @@ const columns = [
     }
   },
   {
-    title: '操作',
+    title: Translator.trans('decorate.operate'),
     width: '10%',
     scopedSlots: { customRender: 'action' }
   }

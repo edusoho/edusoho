@@ -1,6 +1,6 @@
 <template>
   <edit-layout>
-    <template #title>图文导航设置</template>
+    <template #title>{{ 'decorate.graphic_navigation_settings' | trans }}</template>
 
     <div class="design-editor">
       <div class="design-editor__item" v-for="(item, index) in moduleData" :key="index">
@@ -13,7 +13,7 @@
 
       <div class="design-editor__item" v-if="moduleData.length < 8">
         <a-button type="primary" block @click="handleClickAdd">
-          添加图文导航
+          {{ 'decorate.add_graphic_navigation' | trans }}
         </a-button>
       </div>
     </div>
@@ -75,7 +75,7 @@ export default {
       }
 
       if (type === 'remove' && _.size(this.moduleData) === 1) {
-        this.$message.info('不得少于 1 个');
+        this.$message.info(Translator.trans('decorate.not_less_than'));
         return;
       }
 

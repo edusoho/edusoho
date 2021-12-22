@@ -1,7 +1,7 @@
 <template>
   <a-modal
     :visible="visible"
-    title="自定义链接"
+    :title="'decorate.custom_link' | trans"
     @ok="handleOk"
     @cancel="handleCancel"
   >
@@ -12,7 +12,7 @@
       :label-col="labelCol"
       :wrapper-col="wrapperCol"
     >
-      <a-form-model-item label="链接地址" prop="link">
+      <a-form-model-item :label="'decorate.link_address' | trans" prop="link">
         <a-input v-model="form.link" placeholder="http://" />
       </a-form-model-item>
     </a-form-model>
@@ -24,9 +24,9 @@ const pattern = /^http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?$/i;
 
 const checkLink = (rule, value, callback) => {
   if (value === '') {
-    callback(new Error('请输入链接地址'));
+    callback(new Error(Translator.trans('decorate.please_enter_the_link_address')));
   } else if (!pattern.test(value)) {
-    callback(new Error('链接有误，请以 http:// 或者 https:// 开头'));
+    callback(new Error(Translator.trans('decorate.link_wrong')));
   } else {
     callback();
   }

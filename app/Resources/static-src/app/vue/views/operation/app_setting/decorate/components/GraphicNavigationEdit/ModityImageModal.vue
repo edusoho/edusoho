@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    title="选择图片"
+    :title="'decorate.select_image' | trans"
     :visible="visible"
     @cancel="handleCancel"
   >
@@ -13,7 +13,7 @@
       >
     </div>
     <template #footer>
-      <a-button @click="handleCancel">取消</a-button>
+      <a-button @click="handleCancel">{{ 'site.cancel' | trans }}</a-button>
       <upload-image :aspect-ratio="1 / 1" @success="handleUploadSuccess" />
     </template>
   </a-modal>

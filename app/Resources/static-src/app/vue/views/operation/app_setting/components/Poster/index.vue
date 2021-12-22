@@ -9,7 +9,7 @@
   >
     <div class="poster">
       <img v-if="moduleData.image.uri" :src="moduleData.image.uri" alt="">
-      <div v-else class="poster-empty">广告图片</div>
+      <div v-else class="poster-empty">{{ 'ad_pictures' | trans }}</div>
     </div>
   </layout>
 </template>

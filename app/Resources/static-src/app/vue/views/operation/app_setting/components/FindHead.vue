@@ -2,8 +2,8 @@
   <div class="app-header">
     <img v-show="topHeader" src="/static-dist/app/img/vue/app_head.png" />
     <div class="app-header__search clearfix" :class="{ mt16: !topHeader }">
-      <div class="school-title pull-left">网校名称</div>
-      <a-input class="pull-right" placeholder="搜索课程、班级">
+      <div class="school-title pull-left">{{ 'app.header.school_name' | trans }}</div>
+      <a-input class="pull-right" :placeholder="'app.header.search' | trans">
         <a-icon slot="prefix" type="search" />
       </a-input>
     </div>

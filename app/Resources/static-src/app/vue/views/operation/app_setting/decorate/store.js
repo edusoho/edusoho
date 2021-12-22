@@ -22,6 +22,8 @@ function deleteEmptyChildren(data) {
   });
 }
 
+const all = Translator.trans('all');
+
 export const mutations = {
   setVipSetting(data) {
     state.vipSetting = data;
@@ -45,19 +47,19 @@ export const mutations = {
 
   setCourseCategories(data) {
     deleteEmptyChildren(data);
-    data.unshift({ name: '全部', id: '0' });
+    data.unshift({ name: all, id: '0' });
     state.courseCategories = data;
   },
 
   setClassroomCategories(data) {
     deleteEmptyChildren(data);
-    data.unshift({ name: '全部', id: '0' });
+    data.unshift({ name: all, id: '0' });
     state.classroomCategories = data;
   },
 
   setItemBankCategories(data) {
     deleteEmptyChildren(data);
-    data.unshift({ name: '全部', id: '0' });
+    data.unshift({ name: all, id: '0' });
     state.itemBankCategories = data;
   }
 };

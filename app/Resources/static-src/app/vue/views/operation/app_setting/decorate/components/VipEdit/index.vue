@@ -1,26 +1,26 @@
 <template>
   <edit-layout>
-    <template #title>会员专区</template>
+    <template #title>{{ 'decorate.members_only' | trans }}</template>
 
     <div class="design-editor">
       <a-form-model :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-model-item label="标题栏">
+        <a-form-model-item :label="'decorate.title' | trans">
           <a-radio-group :default-value="moduleData.titleShow" @change="changeShowTitle">
             <a-radio value="show">
-              显示
+              {{ 'decorate.show' | trans }}
             </a-radio>
             <a-radio value="unshow">
-              不显示
+              {{ 'decorate.do_not_show' | trans }}
             </a-radio>
           </a-radio-group>
         </a-form-model-item>
-        <a-form-model-item label="排列顺序：">
+        <a-form-model-item :label="'decorate.order2' | trans">
           <a-radio-group :default-value="moduleData.sort" @change="changeSort">
             <a-radio value="asc">
-              从低到高
+              {{ 'decorate.low_to_hign' | trans }}
             </a-radio>
             <a-radio value="desc">
-              从高到低
+              {{ 'decorate.hign_to_low' | trans }}
             </a-radio>
           </a-radio-group>
         </a-form-model-item>

@@ -17,8 +17,8 @@
       </div>
     </div>
     <div class="app-find__right pull-left">
-      <h4>注：使用发现页配置功能，app版本需要升级到4.5.39及以上</h4>
-      <a-button class="mt16" type="primary" @click="handleClick">编辑</a-button>
+      <h4>{{ 'admin.mobile_setting.discovery_tips' | trans }}</h4>
+      <a-button class="mt16" type="primary" @click="handleClick">{{ 'site.btn.edit' | trans }}</a-button>
     </div>
   </div>
 </template>

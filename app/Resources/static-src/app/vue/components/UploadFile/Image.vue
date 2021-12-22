@@ -7,7 +7,7 @@
       @change="handleChange"
     >
       <slot name="content">
-        <a-button type="primary">上传图片</a-button>
+        <a-button type="primary">{{ 'upload_image' | trans }}</a-button>
       </slot>
     </a-upload>
 
@@ -18,6 +18,8 @@
       :confirm-loading="confirmLoading"
       :visible="visible"
       :mask-closable="false"
+      :ok-text="'site.confirm' | trans"
+      :cancel-text="'site.cancel' | trans"
       @ok="handleOk"
       @cancel="handleCancel"
     >
@@ -54,7 +56,7 @@ export default {
 
     title: {
       type: String,
-      default: '图片裁剪',
+      default: Translator.trans('picture_cropping'),
     },
 
     // 裁剪比例
@@ -137,7 +139,7 @@ export default {
       } catch(error) {
         const { status } = error.response;
         if (status == 413) {
-          Vue.prototype.$message.error('文件过大，请上传小于 2M 的文件！');
+          Vue.prototype.$message.error(Translator.trans('message.file_too_large'));
         }
       } finally {
         this.crop && _.assign(this, {
