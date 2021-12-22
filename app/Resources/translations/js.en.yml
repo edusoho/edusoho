@@ -2079,3 +2079,7 @@ decorate.carousel_tip2: Add up to 5 pictures, drag the selected pictures to sort
 decorate.site_link: Site link
 decorate.low_to_hign: Low to high
 decorate.hign_to_low: High to low
+decorate.choose: Choose
+decorate.link_address: Link address
+decorate.please_enter_the_link_address: Please enter the link address
+decorate.link_wrong: The link is wrong, please start with http:// or https://

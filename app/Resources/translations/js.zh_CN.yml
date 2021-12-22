@@ -2034,3 +2034,7 @@ decorate.carousel_tip2: 最多添加5个图片，拖动选中的图片可对其�
 decorate.site_link: 站内链接
 decorate.low_to_hign: 从低到高
 decorate.hign_to_low: 从高到低
+decorate.choose: 选择
+decorate.link_address: 链接地址
+decorate.please_enter_the_link_address: 请输入链接地址
+decorate.link_wrong: 链接有误，请以 http:// 或者 https:// 开头
