@@ -23,12 +23,12 @@ const Classifys = [
     icon: 'icon-base',
     components: [
       { title: '轮播图', icon: 'icon-lunbotu', type: 'slide_show' },
+      { title: '图文导航', icon: 'icon-tuwendaohang', type: 'graphic_navigation' },
+      { title: '图片广告', icon: 'icon-tuwenguanggao', type: 'poster' },
       { title: '课程列表', icon: 'icon-kechengliebiao', type: 'course_list' },
       { title: '班级列表', icon: 'icon-banjiliebiao', type: 'classroom_list' },
-      { title: '图片广告', icon: 'icon-tuwenguanggao', type: 'poster' },
-      { title: '图文导航', icon: 'icon-tuwendaohang', type: 'graphic_navigation' },
-      { title: '公开课列表', icon: 'icon-open-course', type: 'open_course_list' },
-      { title: '题库列表', icon: 'icon-item-bank', type: 'item_bank_exercise' }
+      { title: '题库列表', icon: 'icon-item-bank', type: 'item_bank_exercise' },
+      { title: '公开课列表', icon: 'icon-open-course', type: 'open_course_list' }
     ]
   },
   {

@@ -1819,6 +1819,7 @@ site.btn.confirm: 确认
 site.btn.edit: 编辑
 site.btn.see_more: 查看更多
 site.btn.enter_live: 进入直播
+site.btn.save: 保存
 
 admin.mobile_setting.discovery_tips: 注：使用发现页配置功能，app版本需要升级到4.5.39及以上
 
@@ -1932,3 +1933,32 @@ app.header.search: 搜索课程、班级
 classification_class: 分类课
 free_lesson: 免费课
 popular_class: 热门课
+
+decorate.class_list_settings: 班级列表设置
+decorate.list_name: 列表名称
+decorate.please_enter_the_name_of_the_list: 请输入列表名称
+decorate.arrangement: 排列方式
+decorate.row_by_column: 一行一列
+decorate.one_row_and_two_columns: 一行两列
+decorate.class_source: 班级来源
+decorate.class_classification: 班级分类
+decorate.customize: 自定义
+decorate.select_class: 选择班级
+decorate.order: 排列顺序
+decorate.join_the_most: 加入最多
+decorate.recently_created: 最近创建
+decorate.highest_rated: 评分最高
+decorate.recommended_class: 推荐班级
+decorate.last_7_days: 最近 7 天
+decorate.last_30_days: 最近 30 天
+decorate.last_90_days: 最近 90 天
+decorate.history: 历史所有
+decorate.display_number: 显示个数
+decorate.show_only_published_classes: 仅显示已发布班级
+decorate.remove: 移除
+decorate.class_name: 班级名称
+decorate.commodity_price: 商品价格
+decorate.amount_of_goods: 商品数量
+decorate.creation_time: 创建时间
+decorate.operate: 操作
+decorate.search_class: 搜索班级

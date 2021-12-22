@@ -1864,6 +1864,7 @@ site.btn.confirm: Confirm
 site.btn.edit: Edit
 site.btn.see_more: See more
 site.btn.enter_live: Enter live
+site.btn.save: Save
 
 admin.mobile_setting.discovery_tips: Notice：Using the discovery page configuration function, the app version needs to be upgraded to 4.5.39 and above
 
@@ -1977,3 +1978,32 @@ app.header.search: Search for courses, classes
 classification_class: Classification class
 free_lesson: Free lesson
 popular_class: Popular class
+
+decorate.class_list_settings: Class list settings
+decorate.list_name: List name
+decorate.please_enter_the_name_of_the_list: Please enter the name of the list
+decorate.arrangement: Arrangement
+decorate.row_by_column: Row by column
+decorate.one_row_and_two_columns: One row and two columns
+decorate.class_source: Class source
+decorate.class_classification: Class classification
+decorate.customize: Customize
+decorate.select_class: Select class
+decorate.order: Order
+decorate.join_the_most: Join the most
+decorate.recently_created: Recently created
+decorate.highest_rated: Highest rated
+decorate.recommended_class: Recommended class
+decorate.last_7_days: Last 7 days
+decorate.last_30_days: Last 30 days
+decorate.last_90_days: Last 90 days
+decorate.history: History
+decorate.display_number: Display number
+decorate.show_only_published_classes: Show only published classes
+decorate.remove: Remove
+decorate.class_name: Class name
+decorate.commodity_price: Commodity price
+decorate.amount_of_goods: Amount of goods
+decorate.creation_time: Creation time
+decorate.operate: Operate
+decorate.search_class: Search class
