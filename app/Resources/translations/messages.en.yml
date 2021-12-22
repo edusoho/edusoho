@@ -4620,6 +4620,7 @@ admin.classroom_manage.manage.name_th: '%name% Title'
 admin.classroom_manage.manage.course_number_th: 'Course Number'
 admin.classroom_manage.manage.student_number_th: 'Student Number'
 admin.classroom_manage.manage.price_th: Price
+admin.classroom_manage.manage.creator: Creator/Date
 admin.classroom_manage.manage.status_th: Status
 admin.classroom_manage.manage.operate_th: Action
 admin.classroom_manage.manage.empty: 'No %name% Record!'
@@ -10604,6 +10605,7 @@ admin.classroom_manage.statistics.course.title_tips: >
     2.Other statistical data items are real-time data.<br/>
   </span>
 admin.classroom_manage.statistics.course.total_learn_time: 'The course is accumulated study time (minutes): %mins%'
+admin.classroom_manage.recommend.tips: Priority shall be given to the recommended serial number from small to large, and those not recommended shall be in reverse order according to the creation time
 
 classroom.manage.data_statictics: Data Statistics
 classroom.manage.live_statictics: Live Statistics

@@ -54,6 +54,7 @@
         <th>{{ 'admin.classroom_manage.manage.student_number_th'|trans }}</th>
         <th width="12%">{{ 'admin.classroom_manage.manage.price_th'|trans }}</th>
         <th>{{ 'admin.classroom_manage.manage.status_th'|trans }}</th>
+        <th>{{ 'admin.classroom_manage.manage.creator'|trans }}</th>
         <th>{{ 'admin.classroom_manage.manage.operate_th'|trans }}</th>
       </tr>
       </thead>
@@ -61,7 +62,8 @@
 
       {% for classroom in classroomInfo %}
         {% set category = categories[classroom.categoryId]|default(null) %}
-        {% include 'admin-v2/teach/classroom/table-tr.html.twig' with {classroom:classroom,category:category} %}
+        {% set user = users[classroom.creator]|default(null) %}
+        {% include 'admin-v2/teach/classroom/table-tr.html.twig' with {classroom:classroom,category:category,user:user} %}
 
       {% endfor %}
 

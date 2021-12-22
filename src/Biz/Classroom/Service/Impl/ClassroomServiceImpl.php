@@ -2473,7 +2473,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'hitNum' => ['hitNum' => 'DESC'],
             'rating' => ['rating' => 'DESC'],
             'studentNum' => ['studentNum' => 'DESC'],
-            'recommendedSeq' => ['recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC'],
+            'recommendedSeq' => ['recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC', 'createdTime' => 'DESC'],
             'hotSeq' => ['hotSeq' => 'DESC', 'studentNum' => 'DESC', 'id' => 'DESC'],
         ];
         if (isset($typeOrderByMap[$order])) {
