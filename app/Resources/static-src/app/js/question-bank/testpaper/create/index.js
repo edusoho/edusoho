@@ -304,7 +304,7 @@ class TestpaperForm {
 
   __setSelectJsScore(type, target = null){
     let $target = target ? target :$('#testpaper-table-'+type);
-    let miss_score = $('.js-score-modal').find('.js-score-set-'+type).find('.js-miss-choice-score').val();
+    let miss_score = Number($('.js-score-modal').find('.js-score-set-'+type).find('.js-miss-choice-score').val());
     $target.find('.js-miss-choice-score').val(miss_score);
     let select = $('.js-score-modal').find('.js-score-set-'+type).find('.js-score-type').val();
     $target.find('.js-score-type').val(select);
@@ -312,7 +312,7 @@ class TestpaperForm {
 
   __setJsScore(type, target = null){
     let $target = target ? target :$('#testpaper-table-'+type);
-    let score = $('.js-score-modal').find('.js-score-set-'+type).find('.js-score').val();
+    let score = Number($('.js-score-modal').find('.js-score-set-'+type).find('.js-score').val());
     $target.find('.js-score').val(score);
   }
 
@@ -469,7 +469,7 @@ class TestpaperForm {
         }
         if($(this).hasClass('js-miss-choice-score')) {
           let type = $parent.find('.js-score-type').val();
-          if($(this).val() > $parent.find('.js-score').val()){
+          if(Number($(this).val()) > Number($parent.find('.js-score').val())){
             if(type === 'question'){
               self._appendError($(this), Translator.trans('course.miss_score.validator'));
             }
@@ -497,8 +497,8 @@ class TestpaperForm {
       let $answer = $parent.data('questionAnswer');
       let type = $parent.find('.js-score-type').val();
 
-      let value = $parent.find('.js-score').val();
-      let missValue = $parent.find('.js-miss-choice-score').val();
+      let value = Number($parent.find('.js-score').val());
+      let missValue = Number($parent.find('.js-miss-choice-score').val());
 
       if(type === 'question' && (missValue > value)){
         this._appendError($target, Translator.trans('course.miss_score.validator'));

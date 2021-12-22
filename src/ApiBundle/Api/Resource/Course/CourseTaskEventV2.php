@@ -10,7 +10,6 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
-use Biz\Task\TaskException;
 use Biz\Visualization\Service\DataCollectService;
 use Biz\Visualization\Service\LearnControlService;
 
@@ -303,10 +302,6 @@ class CourseTaskEventV2 extends AbstractResource
         if (('start' !== $eventName) && empty($request->request->get('sign'))) {
             throw CommonException::ERROR_PARAMETER();
         }
-
-//        if ((self::EVENT_START === $eventName) && $this->getTaskService()->canStartTask($taskId)) {
-//            throw TaskException::LOCKED_TASK();
-//        }
     }
 
     protected function getMyLearnedTime(array $activity)
