@@ -1860,6 +1860,9 @@ site.btn.detail: More
 site.btn.remove_playback: Remove playback
 site.btn.view_playback: View playback
 site.btn.confirm: Confirm
+site.btn.edit: Edit
+
+admin.mobile_setting.discovery_tips: Notice：Using the discovery page configuration function, the app version needs to be upgraded to 4.5.39 and above
 
 modal.title.edit: Edit
 modal.content.remove_playback_resources: Are you sure to remove playback resources?
