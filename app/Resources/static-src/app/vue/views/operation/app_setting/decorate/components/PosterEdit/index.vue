@@ -1,23 +1,23 @@
 <template>
   <edit-layout>
-    <template #title>图片广告设置</template>
+    <template #title>{{ 'decorate.image_ad_settings' | trans }}</template>
 
     <div class="design-editor">
       <div class="design-editor__item clearfix">
-        <span class="design-editor__required pull-left">广告图片：</span>
+        <span class="design-editor__required pull-left">{{ 'ad_pictures' | trans }}：</span>
         <div class="poster-image pull-left">
           <img class="poster-image__img" v-if="moduleData.image.uri" :src="moduleData.image.uri" />
           <upload-image :crop="false" @success="uploadImageSuccess">
             <template #content>
-              <div class="poster-image__modify" v-if="moduleData.image.uri">更换图片</div>
-              <div v-else class="poster-image__add">+ 添加图片</div>
+              <div class="poster-image__modify" v-if="moduleData.image.uri">{{ 'decorate.change_picture' | trans }}</div>
+              <div v-else class="poster-image__add">+ {{ 'decorate.add_pictures' | trans }}</div>
             </template>
           </upload-image>
         </div>
       </div>
 
       <div class="design-editor__item clearfix">
-        <span class="pull-left">选择链接：</span>
+        <span class="pull-left">{{ 'decorate.select_link' | trans }}：</span>
         <div
           v-show="selectdLink"
           class="pull-left text-overflow selectd-link"
@@ -30,22 +30,22 @@
             {{ selectText }}<a-icon type="down" />
           </a>
           <a-menu slot="overlay" @click="handleSelectLink">
-            <a-menu-item key="course">选择课程</a-menu-item>
-            <a-menu-item key="classroom">选择班级</a-menu-item>
-            <a-menu-item key="vip">选择会员</a-menu-item>
-            <a-menu-item key="custom">自定义链接</a-menu-item>
+            <a-menu-item key="course">{{ 'decorate.choose_a_course' | trans }}</a-menu-item>
+            <a-menu-item key="classroom">{{ 'decorate.select_class' | trans }}</a-menu-item>
+            <a-menu-item key="vip">{{ 'decorate.select_member' | trans }}</a-menu-item>
+            <a-menu-item key="custom">{{ 'decorate.custom_link' | trans }}</a-menu-item>
           </a-menu>
         </a-dropdown>
       </div>
 
       <div class="design-editor__item">
-        <span>自适应手机屏幕：</span>
+        <span>{{ 'decorate.mobile_phone_screen' | trans }}：</span>
         <a-radio-group :default-value="moduleData.responsive" @change="handleChangeResponsive">
           <a-radio value="1">
-            开启
+            {{ 'decorate.turn_on' | trans }}
           </a-radio>
           <a-radio value="0">
-            关闭
+            {{ 'decorate.closure' | trans }}
           </a-radio>
         </a-radio-group>
       </div>
@@ -88,7 +88,7 @@ export default {
       const { target, type, url } = this.moduleData.link;
       if (!type && url) return url;
 
-      if (type === 'vip') return '会员专区';
+      if (type === 'vip') return Translator.trans('members_only');
 
       if (_.includes(['classroom', 'course'], type)) {
         const { title, displayedTitle } = target;
@@ -99,7 +99,7 @@ export default {
     },
 
     selectText() {
-      return this.selectdLink ? '修改' : '选择链接';
+      return this.selectdLink ? Translator.trans('decorate.revise') : Translator.trans('decorate.select_link');
     }
   },
 

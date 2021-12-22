@@ -2015,3 +2015,14 @@ decorate.open_class_list_settings: 公开课列表设置
 decorate.choose_an_open_class: 选择公开课
 decorate.only_show_published_public_classes: 仅显示已发布公开课
 decorate.search_for_public_classes: 搜索公开课
+decorate.image_ad_settings: 图片广告设置
+decorate.add_pictures: 添加图片
+decorate.select_link: 选择链接
+decorate.choose_a_course: 选择课程
+decorate.select_class: 选择班级
+decorate.select_member: 选择会员
+decorate.custom_link: 自定义链接
+decorate.mobile_phone_screen: 自适应手机屏幕
+decorate.turn_on: 开启
+decorate.closure: 关闭
+decorate.revise: 修改
