@@ -2033,3 +2033,14 @@ decorate.recommended_courses: Recommended courses
 decorate.show_only_published_courses: Show only published courses
 decorate.course_title: Course Title
 decorate.search_course: Search course
+decorate.graphic_navigation_settings: Graphic navigation settings
+decorate.add_graphic_navigation: Add graphic navigation
+decorate.not_less_than: Not less than 1
+decorate.change_picture: Change picture
+decorate.please_enter_a_title: Please enter a title
+decorate.link_source: Link source
+decorate.please_choose: Please choose
+decorate.members_only: Members Only
+decorate.open_class_classification: Open class classification
+decorate.select_image: Select Image
+decorate.title2: Title

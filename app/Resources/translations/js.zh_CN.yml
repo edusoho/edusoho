@@ -1988,3 +1988,14 @@ decorate.recommended_courses: 推荐课程
 decorate.show_only_published_courses: 仅显示已发布课程
 decorate.course_title: 课程名称
 decorate.search_course: 搜索课程
+decorate.graphic_navigation_settings: 图文导航设置
+decorate.add_graphic_navigation: 添加图文导航
+decorate.not_less_than: 不得少于 1 个
+decorate.change_picture: 更换图片
+decorate.please_enter_a_title: 请输入标题
+decorate.link_source: 链接来源
+decorate.please_choose: 请选择
+decorate.members_only: 会员专区
+decorate.open_class_classification: 公开课分类
+decorate.select_image: 选择图片
+decorate.title2: 标题
