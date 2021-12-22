@@ -90,7 +90,7 @@ export default {
 .left-choose-container {
   width: 80px;
   height: 100%;
-  background: #243042;
+  background: #333;
 
   &--blank {
     background-color: #f5f7fa;
