@@ -6,8 +6,8 @@
     </div>
     <div class="column-item__info">
       <div class="column-item__title text-overflow">{{ item.title }}</div>
-      <div class="column-item__subtitle">共 <span>{{ item.courseNum }}</span> 门课程</div>
-      <div class="column-item__price">{{ item.price }} 元</div>
+      <div class="column-item__subtitle" v-html="subtitle" />
+      <div class="column-item__price">{{ item.price }} {{ 'cny' | trans }}</div>
     </div>
   </div>
 </template>
@@ -20,6 +20,12 @@ export default {
     item: {
       type: Object,
       required: true
+    }
+  },
+
+  computed: {
+    subtitle() {
+      return Translator.trans('classroom_course_num', { courseNum: this.item.courseNum });
     }
   }
 }
@@ -79,7 +85,7 @@ export default {
     color: #999;
     line-height: 16px;
 
-    span {
+    /deep/ span {
       margin-right: 2px;
       margin-left: 2px;
       color: #ff5c3b;

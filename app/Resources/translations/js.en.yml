@@ -1861,6 +1861,7 @@ site.btn.remove_playback: Remove playback
 site.btn.view_playback: View playback
 site.btn.confirm: Confirm
 site.btn.edit: Edit
+site.btn.see_more: See more
 
 admin.mobile_setting.discovery_tips: Notice：Using the discovery page configuration function, the app version needs to be upgraded to 4.5.39 and above
 
@@ -1935,3 +1936,4 @@ course.live_replay.delete_tip:  Please confirm to remove this live playback？
 
 upload_image: Upload image
 picture_cropping: Picture cropping
+classroom_course_num: Total <span>%courseNum%</span> courses

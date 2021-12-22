@@ -1816,6 +1816,7 @@ site.btn.remove_playback: 移除回放
 site.btn.view_playback: 查看回放
 site.btn.confirm: 确认
 site.btn.edit: 编辑
+site.btn.see_more: 查看更多
 
 admin.mobile_setting.discovery_tips: 注：使用发现页配置功能，app版本需要升级到4.5.39及以上
 
@@ -1890,3 +1891,4 @@ course.live_replay.delete_tip:  请确认将此直播回放移除？
 
 upload_image: 上传图片
 picture_cropping: 图片裁剪
+classroom_course_num: 共<span>%courseNum%</span>门课程
