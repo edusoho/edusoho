@@ -64,6 +64,7 @@ class ClassroomController extends BaseController
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classroomInfo, 'categoryId'));
 
         $classroomStatusNum = $this->getDifferentClassroomNum($conditions);
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($classroomInfo, 'creator'));
 
         return $this->render('admin-v2/teach/classroom/index.html.twig', [
             'classroomInfo' => $classroomInfo,
@@ -73,6 +74,7 @@ class ClassroomController extends BaseController
             'priceAll' => $priceAll,
             'coinPriceAll' => $coinPriceAll,
             'categories' => $categories,
+            'users' => $users,
         ]);
     }
 

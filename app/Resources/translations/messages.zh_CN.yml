@@ -5486,6 +5486,7 @@ admin.classroom_manage.manage.name_th: %name%名称
 admin.classroom_manage.manage.course_number_th: 课程数
 admin.classroom_manage.manage.student_number_th: 学员数
 admin.classroom_manage.manage.price_th: 价格
+admin.classroom_manage.manage.creator: 创建者/时间
 admin.classroom_manage.manage.status_th: 状态
 admin.classroom_manage.manage.operate_th: 操作
 admin.classroom_manage.manage.empty: 暂无%name%信息!
@@ -11864,6 +11865,7 @@ admin.classroom_manage.statistics.course.title_tips: >
     2.其他统计数据项均为实时数据。<br/>
   </span>
 admin.classroom_manage.statistics.course.total_learn_time: 课程被累加学习时长（分）：%mins%
+admin.classroom_manage.recommend.tips: 优先按推荐序号由小至大排序，未推荐的按创建时间倒序
 
 classroom.manage.data_statictics: 数据概览
 classroom.manage.live_statictics: 直播统计
