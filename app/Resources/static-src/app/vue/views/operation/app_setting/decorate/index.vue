@@ -351,7 +351,7 @@ export default {
     },
 
     updateEdit(params) {
-      const { type, data, key, value, index } = params;
+      const { type, key, value, index } = params;
       const currentIndex = this.currentModule.index;
 
       if (type === 'swiper') {

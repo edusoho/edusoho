@@ -164,7 +164,7 @@ export default {
     handleUpdateLink(data) {
       const params = {
         key: 'link',
-        vlaue: data
+        value: data
       }
       this.update(params);
     },
