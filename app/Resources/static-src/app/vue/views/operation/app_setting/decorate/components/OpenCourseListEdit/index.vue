@@ -4,11 +4,10 @@
 
     <div class="design-editor">
       <div class="design-editor__item">
-        <span class="design-editor__required">{{ 'decorate.list_name' | trans }}：</span>
+        <span class="design-editor__label design-editor__required">{{ 'decorate.list_name' | trans }}：</span>
         <a-input
           :placeholder="'decorate.please_enter_the_name_of_the_list' | trans"
-          style="width: 200px;"
-          size="small"
+          style="width: 240px;"
           :default-value="moduleData.title"
           allow-clear
           @change="(e) => handleChange({ key: 'title', value: e.target.value })"
@@ -16,7 +15,7 @@
       </div>
 
       <div class="design-editor__item">
-        <span>{{ 'decorate.course_source' | trans }}：</span>
+        <span class="design-editor__label">{{ 'decorate.course_source' | trans }}：</span>
         <a-radio-group
           :default-value="moduleData.sourceType"
           @change="(e) => handleChange({ key: 'sourceType', value: e.target.value })"
@@ -31,8 +30,8 @@
       </div>
 
       <div v-show="moduleData.sourceType === 'custom'" class="design-editor__item">
-        <span class="design-editor__required">{{ 'decorate.course_sorts' | trans }}：</span>
-        <a-button size="small" @click="handleSelect">{{ 'decorate.choose_a_course' | trans }}</a-button>
+        <span class="design-editor__label design-editor__required">{{ 'decorate.course_sorts' | trans }}：</span>
+        <a-button @click="handleSelect">{{ 'decorate.choose_a_course' | trans }}</a-button>
       </div>
 
       <div v-show="moduleData.sourceType === 'custom'" class="design-editor__item">
@@ -45,17 +44,16 @@
         >
           <transition-group type="transition" :name="!drag ? 'flip-list' : null">
             <div class="course-list__item" v-for="item in moduleData.items" :key="item.id">
-              {{ item.title || item.courseSetTitle }}
+              <a-icon type="drag" style="color: #999;" /> {{ item.title || item.courseSetTitle }}
             </div>
           </transition-group>
         </draggable>
       </div>
 
       <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
-        <span>{{ 'decorate.course_sorts' | trans }}：</span>
+        <span class="design-editor__label">{{ 'decorate.course_sorts' | trans }}：</span>
         <a-cascader
-          style="width: 200px;"
-          size="small"
+          style="width: 240px;"
           :options="options"
           change-on-select
           :default-value="[moduleData.categoryId]"
@@ -65,10 +63,9 @@
       </div>
 
       <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
-        <span>{{ 'decorate.order' | trans }}：</span>
+        <span class="design-editor__label">{{ 'decorate.order' | trans }}：</span>
         <a-select
-          style="width: 200px;"
-          size="small"
+          style="width: 240px;"
           :default-value="moduleData.limitDays"
           @change="(value) => handleChange({ key: 'limitDays', value })"
         >
@@ -80,10 +77,9 @@
       </div>
 
       <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
-        <span>{{ 'decorate.display_number' | trans }}：</span>
+        <span class="design-editor__label">{{ 'decorate.display_number' | trans }}：</span>
         <a-select
-          style="width: 200px;"
-          size="small"
+          style="width: 240px;"
           :default-value="moduleData.limit"
           @change="(value) => handleChange({ key: 'limit', value })"
         >

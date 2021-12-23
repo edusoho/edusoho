@@ -66,6 +66,7 @@ export default {
     bottom: 8px;
     font-size: 12px;
     font-weight: 500;
+    color: #ff5c3b;
     line-height: 16px;
   }
 }

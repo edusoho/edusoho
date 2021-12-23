@@ -4,11 +4,10 @@
 
     <div class="design-editor">
       <div class="design-editor__item">
-        <span class="design-editor__required">{{ 'decorate.list_name' | trans }}：</span>
+        <span class="design-editor__label design-editor__required">{{ 'decorate.list_name' | trans }}：</span>
         <a-input
           :placeholder="'decorate.please_enter_the_name_of_the_list' | trans"
-          style="width: 200px;"
-          size="small"
+          style="width: 240px;"
           :default-value="moduleData.title"
           allow-clear
           @change="(e) => handleChange({ key: 'title', value: e.target.value })"
@@ -16,11 +15,10 @@
       </div>
 
       <div class="design-editor__item">
-        <span>{{ 'decorate.arrangement' | trans }}：</span>
+        <span class="design-editor__label">{{ 'decorate.arrangement' | trans }}：</span>
         <a-select
-          style="width: 200px;"
+          style="width: 240px;"
           :default-value="moduleData.displayStyle"
-          size="small"
           @change="(value) => handleChange({ key: 'displayStyle', value })"
         >
           <a-select-option key="row">{{ 'decorate.row_by_column' | trans }}</a-select-option>
@@ -29,10 +27,9 @@
       </div>
 
       <div class="design-editor__item">
-        <span>{{ 'decorate.question_bank_classification' | trans }}：</span>
+        <span class="design-editor__label">{{ 'decorate.question_bank_classification' | trans }}：</span>
         <a-cascader
-          style="width: 200px;"
-          size="small"
+          style="width: 240px;"
           :options="options"
           change-on-select
           :default-value="[moduleData.categoryId]"
@@ -42,10 +39,9 @@
       </div>
 
       <div class="design-editor__item">
-        <span>{{ 'decorate.order' | trans }}：</span>
+        <span class="design-editor__label">{{ 'decorate.order' | trans }}：</span>
         <a-select
-          style="width: 90px;"
-          size="small"
+          style="width: 116px;"
           :default-value="moduleData.sort"
           @change="(value) => handleChange({ key: 'sort', value })"
         >
@@ -55,8 +51,7 @@
           <a-select-option key="recommendedSeq">{{ 'decorate.recommended_courses' | trans }}</a-select-option>
         </a-select>
         <a-select
-          style="width: 106px;"
-          size="small"
+          style="width: 120px;"
           :default-value="moduleData.lastDays"
           @change="(value) => handleChange({ key: 'lastDays', value })"
         >
@@ -68,10 +63,9 @@
       </div>
 
       <div class="design-editor__item">
-        <span>{{ 'decorate.display_number' | trans }}：</span>
+        <span class="design-editor__label">{{ 'decorate.display_number' | trans }}：</span>
         <a-select
-          style="width: 200px;"
-          size="small"
+          style="width: 240px;"
           :default-value="moduleData.limit"
           @change="(value) => handleChange({ key: 'limit', value })"
         >

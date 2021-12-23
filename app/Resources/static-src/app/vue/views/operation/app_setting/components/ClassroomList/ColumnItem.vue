@@ -37,7 +37,7 @@ export default {
   margin-top: 16px;
   width: 164px;
   border-radius: 8px;
-  box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.05);
 
   &:nth-of-type(odd) {
     margin-right: 15px;
@@ -99,6 +99,7 @@ export default {
     font-size: 12px;
     font-weight: 500;
     line-height: 16px;
+    color: #ff5c3b;
   }
 }
 </style>

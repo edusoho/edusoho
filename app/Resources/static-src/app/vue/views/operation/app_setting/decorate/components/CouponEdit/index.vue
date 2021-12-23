@@ -5,7 +5,7 @@
 
     <div class="design-editor">
       <div class="design-editor__item">
-        <span>{{ 'decorate.title' | trans }}：</span>
+        <span class="design-editor__label">{{ 'decorate.title' | trans }}：</span>
         <a-radio-group :default-value="moduleData.titleShow" @change="changeShowTitle">
           <a-radio value="show">
             {{ 'decorate.show' | trans }}
@@ -17,8 +17,8 @@
       </div>
 
       <div class="design-editor__item">
-        <span class="design-editor__required">{{ 'decorate.coupon_selection' | trans }}：</span>
-        <a-button size="small" @click="handleSelectCoupon">{{ 'decorate.add_coupon' | trans }}</a-button>
+        <span class="design-editor__label design-editor__required">{{ 'decorate.coupon_selection' | trans }}：</span>
+        <a-button @click="handleSelectCoupon">{{ 'decorate.add_coupon' | trans }}</a-button>
       </div>
 
       <div class="design-editor__item">
@@ -31,7 +31,7 @@
         >
           <transition-group type="transition" :name="!drag ? 'flip-list' : null">
             <div class="coupon-list__item" v-for="item in moduleData.items" :key="item.id">
-              {{ item.name }}
+              <a-icon type="drag" style="color: #999;" /> {{ item.name }}
             </div>
           </transition-group>
         </draggable>

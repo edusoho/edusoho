@@ -70,13 +70,12 @@ export default {
         this.list = items;
         return;
       }
-      const params = {
+      const { data } = await Classroom.search({
         sort,
         limit,
         lastDays,
         categoryId
-      };
-      const { data } = await Classroom.search(params);
+      });
       this.list = data;
     }
   }

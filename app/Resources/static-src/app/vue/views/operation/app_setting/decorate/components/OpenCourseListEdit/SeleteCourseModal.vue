@@ -118,8 +118,8 @@ export default {
       });
     },
 
-    handleRemove(value) {
-      this.selectList.splice(value, 1);
+    handleRemove(index) {
+      this.selectList.splice(index, 1);
     },
 
     handleOk() {
