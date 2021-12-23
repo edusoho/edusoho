@@ -67,6 +67,8 @@ export default {
 
   computed: {
     selectdLink() {
+      if (!this.item.link) return '';
+
       const { target, type, url } = this.item.link;
       if (!type && url) return url;
 
