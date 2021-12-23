@@ -109,12 +109,12 @@ export default {
     },
 
     handleSelect(record) {
-      const { displayedTitle, id, title  } = record;
+      const { displayedTitle, goodsId, title  } = record;
       const params = {
         type: 'classroom',
         target: {
           displayedTitle,
-          id,
+          id: goodsId,
           title
         },
         url: ''
