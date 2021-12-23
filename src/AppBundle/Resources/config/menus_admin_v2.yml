@@ -529,7 +529,7 @@ admin_v2:
                                 admin_v2_cloud_attachment:
                                     name: admin_v2.cloud.attachment.basic_tab
                                 admin_v2_question_bank_attachment:
-                                  name: 题库附件
+                                  name: admin_v2.cloud.question_bank.attachment.basic_tab
                                 admin_v2_live_playback:
                                     name: admin_v2.live_playback.basic_tab
                                 admin_v2_cloud_file_setting:

@@ -1055,3 +1055,4 @@ admin_v2.vip_user.operation_record_tab: 会员用户操作记录
 admin.wap_setting.find: 发现页设置
 admin.wap_setting.version_setting: 版本设置
 admin.wap_setting.pay_setting: 支付设置
+admin_v2.cloud.question_bank.attachment.basic_tab: 题库附件
