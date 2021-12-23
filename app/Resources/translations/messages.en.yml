@@ -1819,7 +1819,7 @@ course.plan_task.activity_manage.homework.finished_condition_tips: '<p class="gr
 course.plan_task.activity_manage.homework.info: 'Assignment description'
 course.plan_task.activity_manage.homework.total: 'The assignment has total <span class="color-primary">%itemCount% questions</span>'
 course.plan_task.activity_manage.homework.choose_question: 'Choose question'
-course.plan_task.activity_manage.homework.save_tips: 'Tip：The saved questions will no longer be added or removed.'
+course.plan_task.activity_manage.homework.save_tips: 'Tip：The published questions will no longer be added or delete.'
 course.plan_task.activity_manage.homework.submit: Submit
 course.plan_task.activity_manage.homework.start_btn: Start
 course.plan_task.activity_manage.homework.reviewing_tips: 'The teacher is approving the job. After completing the consultation, the teacher will inform you of the results. Please wait.'
