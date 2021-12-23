@@ -3,39 +3,37 @@
     <template #title>{{ 'decorate.carousel' | trans }}</template>
 
     <div class="design-editor">
-      <div class="design-editor__title">{{ 'decorate.add_content' | trans }}</div>
-      <div class="design-editor__image">
-        <draggable
-          v-model="myList"
-          v-bind="dragOptions"
-          @start="drag = true"
-          @end="drag = false"
-        >
-          <transition-group type="transition" :name="!drag ? 'flip-list' : null">
-            <item
-              v-for="(item, index) in moduleData"
-              :key="item.oldKey"
-              :index="index"
-              :item="item"
-              @update-image="handleUpdateImage"
-              @select-link="handleSelectLink"
-              @remove="handleClickRemove"
-            />
-          </transition-group>
-        </draggable>
+      <draggable
+        v-model="myList"
+        v-bind="dragOptions"
+        @start="drag = true"
+        @end="drag = false"
+      >
+        <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+          <item
+            v-for="(item, index) in moduleData"
+            :key="item.oldKey"
+            :index="index"
+            :item="item"
+            @update-image="handleUpdateImage"
+            @select-link="handleSelectLink"
+            @remove-link="handleRemoveLink"
+            @remove="handleClickRemove"
+          />
+        </transition-group>
+      </draggable>
 
-        <div class="add-btn-input">
-          <upload-image :aspect-ratio="5 / 2" @success="handleAddSwiper">
-            <template #content>
-              <div class="add-btn-input">
-                +{{ 'decorate.add_pictures' | trans }}
-              </div>
-            </template>
-          </upload-image>
-        </div>
+      <div class="design-editor__item">
+        <upload-image class="upload-image" :aspect-ratio="5 / 2" @success="handleAddSwiper">
+          <template #content>
+            <a-button type="primary" block>{{ 'decorate.add_pictures' | trans }}</a-button>
+          </template>
+        </upload-image>
+      </div>
 
-        <div class="image-tips">·{{ 'decorate.carousel_tip1' | trans }}</div>
-        <div class="image-tips">·{{ 'decorate.carousel_tip2' | trans }}</div>
+      <div class="design-editor__tips">
+        <div>·{{ 'decorate.carousel_tip1' | trans }}</div>
+        <div>·{{ 'decorate.carousel_tip2' | trans }}</div>
       </div>
     </div>
 
@@ -117,7 +115,7 @@ export default {
         key: 'add',
         value: {
           image: data,
-          link: { type: '', target: null, url: 'javascript:;' },
+          link: {},
           oldKey
         }
       };
@@ -161,6 +159,19 @@ export default {
       }
     },
 
+    handleRemoveLink(index) {
+      this.currentIndex = index;
+      const params = {
+        key: 'link',
+        value: {
+          target: null,
+          type: '',
+          url: ''
+        }
+      };
+      this.update(params);
+    },
+
     handleUpdateLink(data) {
       const params = {
         key: 'link',
@@ -192,36 +203,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.design-editor {
-  &__title {
-    margin-bottom: 10px;
-    color: #a3a0a0;
-  }
-
-  &__image {
-    width: 100%;
-    padding: 8px;
-    background: rgba(237, 237, 237, 0.53);
-
-    .add-btn-input {
-      width: 100%;
-      height: 54px;
-      line-height: 54px;
-      cursor: pointer;
-      text-align: center;
-      background-color: #fff;
-
-      /deep/ .ant-upload {
-        color: #31a1ff;
-        width: 100%;
-      }
-    }
-
-    .image-tips {
-      margin-top: 10px;
-      font-size: 12px;
-      color: #888;
-    }
+.upload-image {
+  display: block !important;
+  /deep/ .ant-upload.ant-upload-select {
+    display: block;
   }
 }
 </style>

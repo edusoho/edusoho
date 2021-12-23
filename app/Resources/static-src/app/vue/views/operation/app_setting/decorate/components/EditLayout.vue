@@ -59,6 +59,13 @@
           font-size: 18px;
         }
       }
+
+      &__tips {
+        padding: 8px;
+        background: rgba(237, 237, 237, 0.53);
+        font-size: 12px;
+        color: #666;
+      }
     }
 
     .design-editor:last-child {

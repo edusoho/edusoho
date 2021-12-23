@@ -1,35 +1,44 @@
 <template>
-  <div class="image-item clearfix">
+  <div class="image-item">
     <a-icon
       class="remove-btn"
       type="close-circle"
       theme="filled"
       @click="handleClickRemove"
     />
-    <div class="image-item__img pull-left">
+    <div class="image-item__img">
       <img :src="item.image.uri" />
-      <upload-image :aspect-ratio="5 / 2" @success="handleUploadSuccess">
-        <template #content>
-          <div class="re-upload">{{ 'decorate.revise' | trans }}</div>
-        </template>
-      </upload-image>
+
+      <div class="re-upload">
+        <upload-image :aspect-ratio="5 / 2" @success="handleUploadSuccess">
+          <template #content>
+            <div class="re-upload-text">
+              {{ 'decorate.revise' | trans }}
+            </div>
+          </template>
+        </upload-image>
+      </div>
     </div>
-    <div class="image-item__content pull-left">
-      <a-dropdown>
+    <div class="mt16 clearfix">
+      <span class="pull-left" style="font-size: 14px; color: #666;">{{ 'decorate.select_link' | trans }}：</span>
+      <div
+        v-show="selectdLink"
+        class="pull-left text-overflow selectd-link"
+      >
+          {{ selectdLink }}
+          <a-icon @click="handleModity" type="close-circle" />
+        </div>
+      <a-dropdown class="pull-left">
         <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
-          {{ 'decorate.site_link' | trans }}<a-icon type="down" />
+          {{ selectText }}<a-icon type="down" />
         </a>
         <a-menu slot="overlay" @click="selectLink">
           <a-menu-item key="course">{{ 'decorate.choose_a_course' | trans }}</a-menu-item>
           <a-menu-item key="classroom">{{ 'decorate.select_class' | trans }}</a-menu-item>
           <a-menu-item key="vip">{{ 'decorate.select_member' | trans }}</a-menu-item>
+          <a-menu-item key="custom">{{ 'decorate.custom_link' | trans }}</a-menu-item>
         </a-menu>
       </a-dropdown>
-      <div style="margin-top: 18px;" @click="selectLink({ key: 'custom' })">
-        <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
-          {{ 'decorate.custom_link' | trans }}
-        </a>
-      </div>
     </div>
   </div>
 </template>
@@ -56,6 +65,26 @@ export default {
     UploadImage
   },
 
+  computed: {
+    selectdLink() {
+      const { target, type, url } = this.item.link;
+      if (!type && url) return url;
+
+      if (type === 'vip') return Translator.trans('members_only');
+
+      if (_.includes(['classroom', 'course'], type)) {
+        const { title, displayedTitle } = target;
+        return title || displayedTitle;
+      }
+
+      return '';
+    },
+
+    selectText() {
+      return this.selectdLink ? Translator.trans('decorate.revise') : Translator.trans('decorate.select_link');
+    }
+  },
+
   methods: {
     handleUploadSuccess(data) {
       const params = {
@@ -74,6 +103,10 @@ export default {
       this.$emit('select-link', params);
     },
 
+    handleModity() {
+      this.$emit('remove-link', this.index);
+    },
+
     handleClickRemove() {
       this.$emit('remove', this.index);
     }
@@ -84,11 +117,10 @@ export default {
 <style lang="less" scoped>
 .image-item {
   position: relative;
-  padding: 10px 6px;
-  margin-bottom: 10px;
+  padding: 15px 10px;
+  margin-bottom: 24px;
   width: 100%;
-  border-radius: 2px;
-  border: 1px solid #eee;
+  border: 1px solid #e1e1e1;
   background-color: #fff;
   font-size: 12px;
   cursor: move;
@@ -111,28 +143,63 @@ export default {
 
   &__img {
     position: relative;
-    margin-right: 10px;
-    width: 150px;
-    height: 60px;
-    border-radius: 2px;
+    width: 100%;
+    height: auto;
 
     img {
       width: 100%;
     }
 
     .re-upload {
+      display: none;
       position: absolute;
-      bottom: 0;
+      top: 0;
       left: 0;
       width: 100%;
-      height: 20px;
-      line-height: 20px;
+      height: 100%;
       cursor: pointer;
       opacity: 0.5;
-      font-size: 12px;
-      text-align: center;
       color: #fff;
       background: black;
+
+      .re-upload-text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        line-height: 124px;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        font-size: 18px;
+        color: #fff;
+      }
+    }
+
+    &:hover {
+      .re-upload {
+        display: block;
+      }
+    }
+  }
+
+  .selectd-link {
+    position: relative;
+    padding-right: 30px;
+    max-width: 160px;
+    font-size: 14px;
+
+    i {
+      position: absolute;
+      right: 12px;
+      top: 3px;
+      display: none;
+      color: #31A1FF;
+    }
+
+    &:hover {
+      i {
+        display: block;
+      }
     }
   }
 
