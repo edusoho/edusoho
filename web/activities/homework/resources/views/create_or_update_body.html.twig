@@ -60,8 +60,8 @@
           <a id="picker_homework_items"
              data-url="{{ path('course_set_manage_homework_question_picker',{id:activity.fromCourseSetId,targetType:'homework'}) }}"
              data-pick-url="{{ path('course_set_manage_homework_question_picked', {courseSetId:activity.fromCourseSetId}) }}"
-             class="btn btn-info btn-sm js-pick-modal" data-role="pick-item"><i
-              class="es-icon es-icon-anonymous-iconfont"></i>
+             class="btn btn-info btn-sm js-pick-modal" data-role="pick-item">
+            <i class="es-icon es-icon-anonymous-iconfont"></i>
             {{ 'course.plan_task.activity_manage.homework.choose_question'|trans }}
           </a>
           <input type="hidden" name="questionLength" value="{% if questions|default(null) %} questionItems.lenght {% endif %}">
@@ -90,7 +90,7 @@
           </table>
           <div class="js-cached-question hidden"></div>
           <input type="hidden" class="js-origin-bank">
-          <input type="hidden" class="js-current-bank">
+          <input type="hidden" class="js-current-bank" value="{{ questionBank.id|default() }}">
           <input type="hidden" class="js-homework-scores-input" name="scores">
           <div class="mbl">
             <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{ 'course.testpaper_manage.question.select_all'|trans }}

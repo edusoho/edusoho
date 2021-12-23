@@ -35,9 +35,11 @@ class Homework extends Activity
         }
         if (isset($homework['has_published']) && empty($homework['has_published'])) {
             $questions = $homework['assessment'] ? $this->getSectionItemService()->findSectionItemDetailByAssessmentId($homework['assessment']['id']) : [];
-            $itemBankIds = array_unique(ArrayToolkit::column($questions, 'bank_id'));
-            $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId(array_shift($itemBankIds));
-            $categories = [];
+            $questionBank = $categories = [];
+            if ($questions) {
+                $itemBankIds = array_unique(ArrayToolkit::column($questions, 'bank_id'));
+                $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId(array_shift($itemBankIds));
+            }
             if ($questionBank) {
                 $categories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
                 $categories = ArrayToolkit::index($categories, 'id');
