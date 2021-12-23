@@ -23,7 +23,7 @@
         </transition-group>
       </draggable>
 
-      <div class="design-editor__item">
+      <div class="design-editor__item" v-if="moduleData.length < 5">
         <upload-image class="upload-image" :aspect-ratio="5 / 2" @success="handleAddSwiper">
           <template #content>
             <a-button type="primary" block>{{ 'decorate.add_pictures' | trans }}</a-button>
