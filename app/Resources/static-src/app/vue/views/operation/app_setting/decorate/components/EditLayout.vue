@@ -45,7 +45,6 @@
 
       &__label {
         color: #666;
-        font-size: 16px;
       }
 
       &__required {

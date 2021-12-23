@@ -259,6 +259,8 @@ export default {
     }
 
     &__label {
+      color: #666;
+
       &--required {
         position: relative;
 
