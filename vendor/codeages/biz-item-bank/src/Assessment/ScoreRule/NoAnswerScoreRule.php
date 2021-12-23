@@ -8,7 +8,7 @@ class NoAnswerScoreRule extends ScoreRule
 {
     const RULE = 'no_answer';
 
-    public function review($questionResult, $score)
+    public function review($questionResult, $rule)
     {
         if ('wrong' == $questionResult['result']) {
             foreach ($questionResult['response_points_result'] as $result) {
@@ -17,7 +17,7 @@ class NoAnswerScoreRule extends ScoreRule
                 }
             }
 
-            return ['status' => AnswerQuestionReportService::STATUS_NOANSWER, 'score' => $score];
+            return ['status' => AnswerQuestionReportService::STATUS_NOANSWER, 'score' => $rule['score']];
         }
 
         return ['status' => '', 'score' => 0];

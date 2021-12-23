@@ -8,7 +8,7 @@ abstract class ScoreRule
 
     const RULE = '';
 
-    abstract public function review($questionResult, $score);
+    abstract public function review($questionResult, $rule);
 
     abstract public function processRule($question);
 

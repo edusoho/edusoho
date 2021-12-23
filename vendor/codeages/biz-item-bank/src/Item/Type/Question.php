@@ -77,6 +77,7 @@ class Question
         );
 
         return [
+            'answer_mode' => $question['answer_mode'],
             'question_id' => $questionId,
             'result' => $reviewResult['result'],
             'response_points_result' => $reviewResult['response_points_result'],

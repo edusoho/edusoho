@@ -8,6 +8,7 @@ use Biz\Activity\Service\HomeworkActivityService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
@@ -36,8 +37,11 @@ class Homework extends Activity
             $questions = $homework['assessment'] ? $this->getSectionItemService()->findSectionItemDetailByAssessmentId($homework['assessment']['id']) : [];
             $itemBankIds = array_unique(ArrayToolkit::column($questions, 'bank_id'));
             $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId(array_shift($itemBankIds));
-            $categories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
-            $categories = ArrayToolkit::index($categories, 'id');
+            $categories = [];
+            if ($questionBank) {
+                $categories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
+                $categories = ArrayToolkit::index($categories, 'id');
+            }
             $extData = [
                 'questionBank' => $questionBank,
                 'categories' => $categories,
@@ -234,6 +238,13 @@ class Homework extends Activity
             return true;
         }
 
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
+        if (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status'] && 'score' === $activity['finishType'] && $answerReport['score'] >= $activity['finishData']) {
+            $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['passed']);
+
+            return true;
+        }
+
         return false;
     }
 
@@ -299,5 +310,13 @@ class Homework extends Activity
     protected function getSectionItemService()
     {
         return $this->getBiz()->service('ItemBank:Assessment:AssessmentSectionItemService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerReportService');
     }
 }
