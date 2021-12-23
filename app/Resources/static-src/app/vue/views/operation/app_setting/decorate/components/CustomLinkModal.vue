@@ -58,17 +58,16 @@ export default {
 
     handleOk() {
       this.$refs.customLinkForm.validate(valid => {
-        if (valid) {
-          const params = {
-            type: '',
-            target: null,
-            url: this.form.link
-          };
-          this.$emit('update-link', params);
-          this.handleCancel();
-        } else {
+        if (!valid) {
           return false;
         }
+
+        this.$emit('update-link', {
+          type: '',
+          target: null,
+          url: this.form.link
+        });
+        this.handleCancel();
       });
     },
 

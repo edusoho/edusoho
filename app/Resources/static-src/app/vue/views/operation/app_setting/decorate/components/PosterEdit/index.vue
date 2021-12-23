@@ -7,7 +7,7 @@
         <span class="design-editor__label design-editor__required pull-left">{{ 'ad_pictures' | trans }}：</span>
         <div class="poster-image pull-left">
           <img class="poster-image__img" v-if="moduleData.image.uri" :src="moduleData.image.uri" />
-          <upload-image :crop="false" @success="uploadImageSuccess">
+          <upload-image :isCrop="false" @success="uploadImageSuccess">
             <template #content>
               <div class="poster-image__modify" v-if="moduleData.image.uri">{{ 'decorate.change_picture' | trans }}</div>
               <div v-else class="poster-image__add">+ {{ 'decorate.add_pictures' | trans }}</div>

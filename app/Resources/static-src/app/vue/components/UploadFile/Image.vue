@@ -12,7 +12,7 @@
     </a-upload>
 
     <a-modal
-      v-if="crop"
+      v-if="isCrop"
       :title="title"
       :key="cropperKey"
       :confirm-loading="confirmLoading"
@@ -49,7 +49,7 @@ export default {
 
   props: {
     // 是否裁剪
-    crop: {
+    isCrop: {
       type: Boolean,
       default: true
     },
@@ -61,7 +61,8 @@ export default {
 
     // 裁剪比例
     aspectRatio: {
-      type: Number
+      type: Number,
+      default: 1 / 1
     }
   },
 
@@ -75,7 +76,7 @@ export default {
   },
 
   mounted() {
-    this.crop && this.toBlobPolyfillInIE();
+    this.isCrop && this.toBlobPolyfillInIE();
   },
 
   methods: {
@@ -106,7 +107,7 @@ export default {
       reader.readAsDataURL(info.file.originFileObj);
       reader.onload = (event) => {
         this.imgUrl = event.target.result;
-        if (this.crop) {
+        if (this.isCrop) {
           _.assign(this, {
             cropperKey: this.cropperKey + 1,
             visible: true
@@ -139,10 +140,10 @@ export default {
       } catch(error) {
         const { status } = error.response;
         if (status == 413) {
-          Vue.prototype.$message.error(Translator.trans('message.file_too_large'));
+          this.$message.error(Translator.trans('message.file_too_large'));
         }
       } finally {
-        this.crop && _.assign(this, {
+        this.isCrop && _.assign(this, {
           confirmLoading: false,
           visible: false
         });
