@@ -43,6 +43,11 @@
         margin-bottom: 24px;
       }
 
+      &__label {
+        color: #666;
+        font-size: 16px;
+      }
+
       &__required {
         position: relative;
 

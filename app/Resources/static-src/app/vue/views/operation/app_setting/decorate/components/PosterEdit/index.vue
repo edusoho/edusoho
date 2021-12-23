@@ -4,7 +4,7 @@
 
     <div class="design-editor">
       <div class="design-editor__item clearfix">
-        <span class="design-editor__required pull-left">{{ 'ad_pictures' | trans }}：</span>
+        <span class="design-editor__label design-editor__required pull-left">{{ 'ad_pictures' | trans }}：</span>
         <div class="poster-image pull-left">
           <img class="poster-image__img" v-if="moduleData.image.uri" :src="moduleData.image.uri" />
           <upload-image :crop="false" @success="uploadImageSuccess">
@@ -17,7 +17,7 @@
       </div>
 
       <div class="design-editor__item clearfix">
-        <span class="pull-left">{{ 'decorate.select_link' | trans }}：</span>
+        <span class="design-editor__label pull-left">{{ 'decorate.select_link' | trans }}：</span>
         <div
           v-show="selectdLink"
           class="pull-left text-overflow selectd-link"
@@ -39,7 +39,7 @@
       </div>
 
       <div class="design-editor__item">
-        <span>{{ 'decorate.mobile_phone_screen' | trans }}：</span>
+        <span class="design-editor__label">{{ 'decorate.mobile_phone_screen' | trans }}：</span>
         <a-radio-group :default-value="moduleData.responsive" @change="handleChangeResponsive">
           <a-radio value="1">
             {{ 'decorate.turn_on' | trans }}
