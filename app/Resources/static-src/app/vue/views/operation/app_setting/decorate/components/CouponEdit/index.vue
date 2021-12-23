@@ -31,7 +31,7 @@
         >
           <transition-group type="transition" :name="!drag ? 'flip-list' : null">
             <div class="coupon-list__item" v-for="item in moduleData.items" :key="item.id">
-              {{ item.name }}
+              <a-icon type="drag" style="color: #999;" /> {{ item.name }}
             </div>
           </transition-group>
         </draggable>

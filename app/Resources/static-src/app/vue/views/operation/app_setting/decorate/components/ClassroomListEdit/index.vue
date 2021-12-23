@@ -58,7 +58,7 @@
         >
           <transition-group type="transition" :name="!drag ? 'flip-list' : null">
             <div class="classroom-list__item" v-for="item in moduleData.items" :key="item.id">
-              {{ item.title || item.courseSetTitle }}
+              <a-icon type="drag" style="color: #999;" /> {{ item.title || item.courseSetTitle }}
             </div>
           </transition-group>
         </draggable>
