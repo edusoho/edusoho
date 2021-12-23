@@ -34,6 +34,7 @@
         <span class="gn-form__label">{{ categoryInfo.text }}：</span>
         <a-select
           size="small"
+          :default-value="item.link.categoryId"
           :style="{ width: categoryInfo.stateKey === 'openCourseCategory' ? '118px' : '132px' }"
           :placeholder="'decorate.please_choose' | trans"
           @change="handleSecondCategory"

@@ -397,10 +397,13 @@ export default {
 
         if (key === 'type') {
           this.modules[currentIndex].data[index].link.type = value;
+          this.modules[currentIndex].data[index].link.conditions = {};
+          this.modules[currentIndex].data[index].link.categoryId = undefined;
           return;
         }
 
         if (key === 'conditions') {
+          this.modules[currentIndex].data[index].link.categoryId = value.categoryId;
           this.modules[currentIndex].data[index].link.conditions = value;
           return;
         }
