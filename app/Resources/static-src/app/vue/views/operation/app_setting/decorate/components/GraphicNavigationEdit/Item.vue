@@ -34,7 +34,7 @@
         <span class="gn-form__label">{{ categoryInfo.text }}：</span>
         <a-select
           size="small"
-          style="width: 118px"
+          :style="{ width: categoryInfo.stateKey === 'openCourseCategory' ? '118px' : '132px' }"
           :placeholder="'decorate.please_choose' | trans"
           @change="handleSecondCategory"
         >
@@ -158,6 +158,7 @@ export default {
 
       this.categoryInfo = {
         text,
+        stateKey,
         list: state[stateKey]
       };
     },
