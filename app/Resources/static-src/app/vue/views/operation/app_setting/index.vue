@@ -1,6 +1,6 @@
 <template>
   <div class="app-find clearfix" :style="{ height: getMaxHeight + 'px' }">
-    <div class="app-find__left pull-left" :style="{ transform: 'scale(' + getScale + ')' }">
+    <div class="app-find__left pull-left ml24" :style="{ transform: 'scale(' + getScale + ')' }">
       <img class="app-find-box" src="/static-dist/app/img/vue/phone.png">
       <div class="app-find-container">
         <find-head :top-header="false" />
@@ -61,7 +61,9 @@ export default {
 
   computed: {
     getMaxHeight() {
-      return $(window).height() - 230;
+      const height = $(window).height() - 230;
+      const maxHeight = 800;
+      return height > maxHeight ? maxHeight : height;
     },
 
     getScale() {
@@ -124,7 +126,7 @@ export default {
 
   &__right {
     margin-top: 100px;
-    width: calc(100% - 450px);
+    width: calc(100% - 480px);
   }
 }
 </style>
