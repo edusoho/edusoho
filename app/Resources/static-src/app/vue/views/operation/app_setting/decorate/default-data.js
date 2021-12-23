@@ -1,3 +1,5 @@
+const { origin } = window.location;
+
 const DefaultData = {
   slide_show: {
     type: 'slide_show',
@@ -51,17 +53,17 @@ const DefaultData = {
     data: [
       {
         title: Translator.trans('classification_class'),
-        image: { uri: '/static-dist/app/img/vue/decorate/gn_classification.png' },
+        image: { uri: `${origin}/static-dist/app/img/vue/decorate/gn_classification.png` },
         link: { type: 'openCourse' }
       },
       {
         title: Translator.trans('free_lesson'),
-        image: { uri: '/static-dist/app/img/vue/decorate/gn_free.png' },
+        image: { uri: `${origin}/static-dist/app/img/vue/decorate/gn_free.png` },
         link: { type: 'course' }
       },
       {
         title: Translator.trans('popular_class'),
-        image: { uri: '/static-dist/app/img/vue/decorate/gn_hot.png' },
+        image: { uri: `${origin}/static-dist/app/img/vue/decorate/gn_hot.png` },
         link: { type: 'classroom' }
       }
     ]

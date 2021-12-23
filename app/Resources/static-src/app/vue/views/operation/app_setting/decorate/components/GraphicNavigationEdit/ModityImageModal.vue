@@ -60,7 +60,7 @@ export default {
 
     handleClickSeleted(value) {
       this.$emit('update-image', {
-        uri: value
+        uri: `${window.location.origin}${value}`
       });
       this.visible = false;
     },
