@@ -56,6 +56,9 @@ admin_v2.user.destroy_account_manage_menu: Destroy
 admin_v2.user.destroy_account.basic_tab: Destroy Record
 admin_v2.user.destroy_account.destroyed_tab: Destroyed
 
+#用户管理-销客助手
+admin_v2.user.scrm_menu: Scrm
+
 ##实名认证管理模块
 admin.user.approval.basic_tab: Authentication'
 
