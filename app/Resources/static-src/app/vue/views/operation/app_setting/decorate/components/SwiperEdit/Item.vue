@@ -72,7 +72,7 @@ export default {
 
       if (type === 'vip') return Translator.trans('members_only');
 
-      if (_.includes(['classroom', 'course'], type)) {
+      if (_.includes(['classroom', 'course'], type) && target) {
         const { title, displayedTitle } = target;
         return title || displayedTitle;
       }
