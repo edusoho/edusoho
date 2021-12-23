@@ -3,37 +3,40 @@
     <template #title>{{ 'decorate.members_only' | trans }}</template>
 
     <div class="design-editor">
-      <a-form-model :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-model-item :label="'decorate.title' | trans">
-          <a-radio-group :default-value="moduleData.titleShow" @change="changeShowTitle">
-            <a-radio value="show">
-              {{ 'decorate.show' | trans }}
-            </a-radio>
-            <a-radio value="unshow">
-              {{ 'decorate.do_not_show' | trans }}
-            </a-radio>
-          </a-radio-group>
-        </a-form-model-item>
-        <a-form-model-item :label="'decorate.order2' | trans">
-          <a-radio-group :default-value="moduleData.sort" @change="changeSort">
-            <a-radio value="asc">
-              {{ 'decorate.low_to_hign' | trans }}
-            </a-radio>
-            <a-radio value="desc">
-              {{ 'decorate.hign_to_low' | trans }}
-            </a-radio>
-          </a-radio-group>
-        </a-form-model-item>
-        <div class="vip-list">
-          <div
-            class="vip-list__item text-overflow"
-            v-for="(item, index) in moduleData.items"
-            :key="index"
-          >
-            {{ item.name }}
-          </div>
+      <div class="design-editor__item">
+        <span class="design-editor__label">{{ 'decorate.title' | trans }}：</span>
+        <a-radio-group :default-value="moduleData.titleShow" @change="changeShowTitle">
+          <a-radio value="show">
+            {{ 'decorate.show' | trans }}
+          </a-radio>
+          <a-radio value="unshow">
+            {{ 'decorate.do_not_show' | trans }}
+          </a-radio>
+        </a-radio-group>
+      </div>
+
+      <div class="design-editor__item">
+        <span class="design-editor__label">{{ 'decorate.order' | trans }}：</span>
+        <a-radio-group :default-value="moduleData.sort" @change="changeSort">
+          <a-radio value="asc">
+            {{ 'decorate.low_to_hign' | trans }}
+          </a-radio>
+          <a-radio value="desc">
+            {{ 'decorate.hign_to_low' | trans }}
+          </a-radio>
+        </a-radio-group>
+      </div>
+
+      <div class="vip-list">
+        <div
+          class="vip-list__item text-overflow"
+          v-for="(item, index) in moduleData.items"
+          :key="index"
+        >
+          {{ item.name }}
         </div>
-      </a-form-model>
+      </div>
+
     </div>
   </edit-layout>
 </template>
@@ -54,13 +57,6 @@ export default {
 
   components: {
     EditLayout
-  },
-
-  data() {
-    return {
-      labelCol: { span: 5 },
-      wrapperCol: { span: 18 }
-    }
   },
 
   mounted() {
