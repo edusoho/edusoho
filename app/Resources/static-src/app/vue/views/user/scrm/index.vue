@@ -11,8 +11,8 @@
       </div>
       <div class="scrm-sec__content">EduSoho销客助手是一个面向教培机构的私域流量运营工具，提供了引流获客、客户运营、社群运营、企业风控等功能。EduSoho销客助手与EduSoho网校一起为机构提供了招生、教务、教学和服务的整体解决方案。</div>
       <div class="scrm-sec__btn">
-        <a-button class="mr16">前往销客助手</a-button>
-        <a-button type="primary">立即开通</a-button>
+        <a-button class="mr16" @click="handleClickGoScrm">前往销客助手</a-button>
+        <a-button type="primary" @click="showModal">立即开通</a-button>
       </div>
     </div>
 
@@ -32,6 +32,21 @@
         </div>
       </div>
     </div>
+
+    <a-modal
+      title="开通EduSoho销客助手"
+      :visible="visible"
+      :footer="null"
+      :width="584"
+      @cancel="handleCancel"
+    >
+      <div class="modal-content">
+        <div class="modal-content__title"></div>
+        <div class="modal-content__desc"></div>
+        <div class="modal-content__title"></div>
+        <div class="modal-content__desc"></div>
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -66,7 +81,22 @@ const characteristic = [
 export default {
   data() {
     return {
-      characteristic
+      characteristic,
+      visible: false
+    }
+  },
+
+  methods: {
+    handleClickGoScrm() {
+      window.open('https://scrm.edusoho.com');
+    },
+
+    handleCancel() {
+      this.visible = false;
+    },
+
+    showModal() {
+      this.visible = true;
     }
   }
 }
@@ -179,6 +209,24 @@ export default {
         }
       }
     }
+  }
+}
+
+.modal-content {
+  padding-left: 128px;
+
+  &__title {
+    font-weight: 500;
+    font-size: 18px;
+    color: #333;
+    line-height: 24px;
+  }
+
+  &__desc {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #666;
+    line-height: 22px;
   }
 }
 </style>
