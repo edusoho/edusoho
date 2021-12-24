@@ -102,7 +102,9 @@ class MeJoined extends AbstractResource
         foreach ($members as $member) {
             $classrooms[$member['classroomId']]['meJoinedType'] = 'classroom';
             $classrooms[$member['classroomId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
-            $classrooms[$member['classroomId']]['cover'] = $this->transformCover($classrooms[$member['classroomId']]['cover'], 'classroom');
+            $classrooms[$member['classroomId']]['smallPicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
+            $classrooms[$member['classroomId']]['middlePicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
+            $classrooms[$member['classroomId']]['largePicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
         }
 
         //题库
