@@ -12,8 +12,9 @@
       <div class="re-upload">
         <upload-image :aspect-ratio="5 / 2" @success="handleUploadSuccess">
           <template #content>
+            <div class="re-upload-mask" />
             <div class="re-upload-text">
-              {{ 'decorate.revise' | trans }}
+              {{ 'decorate.change_picture' | trans }}
             </div>
           </template>
         </upload-image>
@@ -159,9 +160,16 @@ export default {
       width: 100%;
       height: 100%;
       cursor: pointer;
-      opacity: 0.5;
-      color: #fff;
-      background: black;
+
+      .re-upload-mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.6;
+        background: black;
+      }
 
       .re-upload-text {
         position: absolute;
