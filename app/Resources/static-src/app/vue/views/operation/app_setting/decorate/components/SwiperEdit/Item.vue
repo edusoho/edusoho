@@ -70,8 +70,7 @@ export default {
       if (!this.item.link) return '';
 
       const { target, type, url } = this.item.link;
-      if (!type && url) return url;
-
+      if (type === 'url') return url;
       if (type === 'vip') return Translator.trans('members_only');
 
       if (_.includes(['classroom', 'course'], type) && target) {

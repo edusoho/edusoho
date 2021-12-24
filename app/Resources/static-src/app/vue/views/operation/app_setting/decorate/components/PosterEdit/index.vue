@@ -86,8 +86,7 @@ export default {
   computed: {
     selectdLink() {
       const { target, type, url } = this.moduleData.link;
-      if (!type && url) return url;
-
+      if (type === 'url') return url;
       if (type === 'vip') return Translator.trans('members_only');
 
       if (_.includes(['classroom', 'course'], type)) {
