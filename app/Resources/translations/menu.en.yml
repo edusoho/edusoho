@@ -1040,3 +1040,4 @@ admin_v2.vip_user.operation_record_tab: VIP operation records
 admin.wap_setting.find: 'Discovery page settings'
 admin.wap_setting.version_setting: 'Version setting'
 admin.wap_setting.pay_setting: 'Payment setting'
+admin_v2.cloud.question_bank.attachment.basic_tab: Question Attachment

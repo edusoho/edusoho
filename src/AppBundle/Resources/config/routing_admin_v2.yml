@@ -609,6 +609,10 @@ admin_v2_cloud_attachment:
     path: /cloud_attachment
     defaults:
         _controller: 'AppBundle:AdminV2/Teach/CloudFile:attachmentList'
+admin_v2_question_bank_attachment:
+    path: /question_bank_attachment
+    defaults:
+      _controller: 'AppBundle:AdminV2/Teach/CloudFile:questionBankAttachmentList'
 admin_v2_cloud_file:
     path: /cloud_files
     defaults:
