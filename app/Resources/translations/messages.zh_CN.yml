@@ -149,6 +149,8 @@ site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%�
 site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课、BiLiBiLi、爱奇艺的视频页面地址导入
 site.btn.detail: 详情
 site.setting.finished: 已设置
+site.setting.goto: 前往设置
+site.setting.cancel: 暂不填写
 site.setting.unfinished: 未设置
 site.verify.finished: 已验证
 site.verify.unfinished: 未验证
@@ -5967,6 +5969,10 @@ admin.setting.navigation.status.closed: 关闭
 admin.setting.navigation.edit_btn: 编辑
 admin.setting.navigation.add_child_menu_btn: 添加二级导航
 admin.setting.consult.customer_service_function: 客服功能
+admin.setting.consult.check_tips: >
+  为了更好地为用户提供高效优质服务,请您设置客服联系电话
+  <br>
+  提升服务质量
 admin.setting.consult.phone_error: 联系电话设置错误
 admin.setting.consult.floating_bar: 浮动条颜色
 admin.setting.consult.delete_btn: 删除

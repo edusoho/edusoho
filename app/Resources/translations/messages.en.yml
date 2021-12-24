@@ -123,6 +123,8 @@ site.badge.try_watch: Preview
 site.badge.free: Free
 site.btn.detail: more
 site.setting.finished: Setting finished
+site.setting.goto: Setting
+site.setting.cancel: Cancel
 site.setting.unfinished: Setting unfinished
 site.verify.finished: Verify finished
 site.verify.unfinished: Verify unfinished
@@ -5015,6 +5017,10 @@ admin.setting.navigation.status.closed: Disable
 admin.setting.navigation.edit_btn: Edit
 admin.setting.navigation.add_child_menu_btn: 'Add Child Menu'
 admin.setting.consult.customer_service_function: 'Customer service'
+admin.setting.consult.check_tips: >
+  In order to better provide users with efficient and high-quality services, please set up a customer service contact number
+  <br>
+  Improve service quality
 admin.setting.consult.phone_error: Phone Error
 admin.setting.consult.floating_bar: 'Color of the floating bar'
 admin.setting.consult.delete_btn: Delete

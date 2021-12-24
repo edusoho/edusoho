@@ -174,13 +174,10 @@
          aria-labelledby="mySmallModalLabel" data-url="{{ path('admin_v2_setting_consult_setting_validate') }}">
       <div class="modal-dialog" role="document">
         <div class="modal-content tac">
-          <div class="modal-body">
-            <p>为了更好地为用户提供高效优质服务,请您设置客服联系电话</p>
-            <p>提示服务质量</p>
-          </div>
+          <div class="modal-body">{{ 'admin.setting.consult.check_tips'|trans|raw }}</div>
           <div class="row" style="border-top: 1px solid">
-            <div class="col-sm-6" style="padding: 10px 0; border-right: 1px solid;">赞不填写</div>
-            <a href="{{ path('admin_v2_setting_consult_setting') }}" class="col-sm-6 btn" style="padding: 10px 0; color: green;">前往设置</a>
+            <div class="col-sm-6" style="padding: 10px 0; border-right: 1px solid;">{{ 'site.setting.cancel'|trans }}</div>
+            <a href="{{ path('admin_v2_setting_consult_setting') }}" class="col-sm-6 btn" style="padding: 10px 0; color: green;">{{ 'site.setting.goto'|trans }}</a>
           </div>
         </div>
       </div>
