@@ -63,7 +63,7 @@ export default {
         }
 
         this.$emit('update-link', {
-          type: '',
+          type: 'url',
           target: null,
           url: this.form.link
         });
