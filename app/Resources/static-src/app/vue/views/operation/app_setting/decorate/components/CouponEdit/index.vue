@@ -1,7 +1,6 @@
 <template>
   <edit-layout>
     <template #title>{{ 'decorate.coupon' | trans }}</template>
-    <template #subtitle>（{{ 'decorate.only_show_coupons_no_expired' | trans }}）</template>
 
     <div class="design-editor">
       <div class="design-editor__item">
@@ -35,6 +34,10 @@
             </div>
           </transition-group>
         </draggable>
+      </div>
+
+      <div class="design-editor__tips">
+        <div>·{{ 'decorate.only_show_coupons_no_expired' | trans }}</div>
       </div>
     </div>
 

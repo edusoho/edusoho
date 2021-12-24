@@ -86,6 +86,10 @@
           <a-select-option v-for="item in 8" :key="item">{{ item  }}</a-select-option>
         </a-select>
       </div>
+
+      <div class="design-editor__tips">
+        <div>·{{ 'decorate.open_course_tip1' | trans }}</div>
+      </div>
     </div>
 
     <selete-course-modal ref="modal" @update-items="handleUpdateItems" />

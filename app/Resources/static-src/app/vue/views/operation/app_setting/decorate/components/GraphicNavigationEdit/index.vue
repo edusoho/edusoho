@@ -16,6 +16,11 @@
           {{ 'decorate.add_graphic_navigation' | trans }}
         </a-button>
       </div>
+
+      <div class="design-editor__tips">
+        <div>·{{ 'decorate.gn_tip1' | trans }}</div>
+        <div>·{{ 'decorate.gn_tip2' | trans }}</div>
+      </div>
     </div>
 
     <modity-image-modal

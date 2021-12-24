@@ -49,6 +49,10 @@
           </a-radio>
         </a-radio-group>
       </div>
+
+      <div class="design-editor__tips">
+        <div>·{{ 'decorate.poster_tip1' | trans }}</div>
+      </div>
     </div>
 
     <custom-link-modal ref="customLink" @update-link="handleUpdateLink" />

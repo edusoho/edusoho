@@ -2032,8 +2032,8 @@ decorate.closure: 关闭
 decorate.revise: 修改
 decorate.carousel: 轮播图
 decorate.add_content: 添加内容
-decorate.carousel_tip1: 建议图片尺寸为750x300px，支持 jpg/png/gif 格式，大小不超过2MB
-decorate.carousel_tip2: 最多添加5个图片，拖动选中的图片可对其排序
+decorate.carousel_tip1: 建议图片尺寸为 750x300px，支持 jpg/png/gif 格式，大小不超过 2 MB
+decorate.carousel_tip2: 最多添加 5 个轮播图，拖动选中的图片可对其排序
 decorate.site_link: 站内链接
 decorate.low_to_hign: 从低到高
 decorate.hign_to_low: 从高到低
@@ -2043,3 +2043,7 @@ decorate.please_enter_the_link_address: 请输入链接地址
 decorate.link_wrong: 链接有误，请以 http:// 或者 https:// 开头
 decorate.are_you_sure_exiting_editing: 确定退出编辑？
 decorate.exiting_editing_not_save: 退出编辑将不会保存修改。
+decorate.gn_tip1: 建议图片尺寸为 80x80px，支持 jpg/png/gif 格式，大小不超过 2 MB
+decorate.gn_tip2: 最多添加 8 个图文导航
+decorate.poster_tip1: 建议图片尺寸为 750px，支持 jpg/png/gif 格式，大小不超过 2 MB
+decorate.open_course_tip1: 仅含直播公开课内容，不包含录播公开课

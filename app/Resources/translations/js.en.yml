@@ -2088,3 +2088,7 @@ decorate.please_enter_the_link_address: Please enter the link address
 decorate.link_wrong: The link is wrong, please start with http:// or https://
 decorate.are_you_sure_exiting_editing: Are you sure to exit editing?
 decorate.exiting_editing_not_save: Exiting editing will not save the changes.
+decorate.gn_tip1: The recommended image size is 80x80px, supports jpg/png/gif format, and the size does not exceed 2 MB
+decorate.gn_tip2: Add up to 8 graphic navigation
+decorate.poster_tip1: The recommended image size is 750px, supports jpg/png/gif format, and the size does not exceed 2 MB
+decorate.open_course_tip1: Contains only the content of the live broadcast public class, does not include the recorded public class
