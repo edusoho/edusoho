@@ -143,7 +143,7 @@ export default {
         limit: pageSize,
         offset: pageSize * (current - 1),
         sort: '-createdTime',
-        title: this.keyword
+        courseSetTitle: this.keyword
       };
 
       const { data, paging: { total } } = await Course.searchCourses(params);

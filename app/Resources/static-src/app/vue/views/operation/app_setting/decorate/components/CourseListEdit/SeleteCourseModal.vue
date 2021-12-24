@@ -111,7 +111,7 @@ export default {
     async fetch() {
       const params = {
         sort: '-createdTime',
-        title: this.keyword
+        courseSetTitle: this.keyword
       };
 
       const { data } = await Course.searchCourses(params);
