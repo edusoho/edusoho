@@ -1277,6 +1277,9 @@ admin.setting.cloud.validate_old.video_fingerprint_time.display: Cloud video fin
 admin.setting.cloud.validate_old.video_fingerprint_opacity.display: Cloud video fingerprint display opacity
 admin.setting.consult_setting.upload_qrcode_success_hint: Upload WeChat QR code successfully!
 admin.setting.consult_setting.setting_max_num_hint: Set up to 10..
+admin.setting.consult_setting.setting_consult_phone.empty_hint: Not Empty
+admin.setting.consult_setting.setting_consult_name.empty_hint: Not People
+admin.setting.consult_setting.setting_consult_phone.error_hint: Not Set
 admin.setting.consult_setting.delete_hint: Are you sure you want to delete?
 admin.setting.course_avatar.select_default_pic.message: Please select the default course image file to upload
 admin.setting.course.upload_live_course_logo_success_hint: Upload the live course LOGO success!

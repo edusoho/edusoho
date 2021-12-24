@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\AdminV2\Operating;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
@@ -39,15 +40,12 @@ class SiteSettingController extends BaseController
         $consult = array_merge($default, $consult);
         if ('POST' == $request->getMethod()) {
             $consult = $request->request->all();
-
             foreach ($consult['qq'] as &$qq) {
                 $qq['url'] = $this->purifyHtml($qq['url'], true);
             }
-
             foreach ($consult['qqgroup'] as &$group) {
                 $group['url'] = $this->purifyHtml($group['url'], true);
             }
-
             ksort($consult['qq']);
             ksort($consult['qqgroup']);
             ksort($consult['phone']);
@@ -55,8 +53,20 @@ class SiteSettingController extends BaseController
                 $fields = explode('?', $consult['webchatURI']);
                 $consult['webchatURI'] = $fields[0].'?time='.time();
             }
-            $this->getSettingService()->set('consult', $consult);
-            $this->setFlashMessage('success', 'site.save.success');
+            $errorMessage = '';
+            foreach ($consult['phone'] as $phone) {
+                preg_replace('/[^\d]/', '', $phone['name']);
+                preg_replace('/[^\d]/', '', $phone['number']);
+                if (empty($phone['name']) || empty($phone['number']) || 4008041114 == $phone['number'] || 4008041114 == $phone['number']) {
+                    $errorMessage = 'admin.setting.consult.phone_error';
+                    break;
+                }
+            }
+            if (!$errorMessage) {
+                $this->getSettingService()->set('consult', $consult);
+                $this->setFlashMessage('success', 'site.save.success');
+            }
+            $this->setFlashMessage('danger', $errorMessage);
         }
 
         return $this->render('admin-v2/operating/site-setting/consult-setting.html.twig', [
@@ -148,6 +158,21 @@ class SiteSettingController extends BaseController
             'path' => $consult['webchatURI'],
             'url' => $this->container->get('assets.default_package_util')->getUrl($consult['webchatURI']),
         ];
+
+        return $this->createJsonResponse($response);
+    }
+
+    public function validateConsultSettingAction()
+    {
+        $response = [];
+        $user = $this->getCurrentUser();
+        if (in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
+            $consult = $this->getSettingService()->get('consult', []);
+            $phoneNumbers = ArrayToolkit::column($consult['phone'], 'number');
+            if ([''] === array_unique($phoneNumbers)) {
+                $response['error'] = 'empty';
+            }
+        }
 
         return $this->createJsonResponse($response);
     }

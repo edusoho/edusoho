@@ -1222,6 +1222,9 @@ admin.setting.cloud.validate_old.video_fingerprint_time.display: 云视频指纹
 admin.setting.cloud.validate_old.video_fingerprint_opacity.display: 云视频指纹不透明度
 admin.setting.consult_setting.upload_qrcode_success_hint: 上传微信二维码成功！
 admin.setting.consult_setting.setting_max_num_hint: 最多设置10个..
+admin.setting.consult_setting.setting_consult_phone.empty_hint: 联系电话
+admin.setting.consult_setting.setting_consult_name.empty_hint: 联系人
+admin.setting.consult_setting.setting_consult_phone.error_hint: 联系电话不被允许
 admin.setting.consult_setting.delete_hint: 确认要删除吗？
 admin.setting.course_avatar.select_default_pic.message: 请选择要上传的默认课程图片文件
 admin.setting.course.upload_live_course_logo_success_hint: 上传直播课程的LOGO成功！

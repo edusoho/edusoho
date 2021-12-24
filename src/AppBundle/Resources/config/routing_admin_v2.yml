@@ -1165,6 +1165,10 @@ admin_v2_setting_consult_setting:
     path: /setting/consult-setting
     defaults:
         _controller: 'AppBundle:AdminV2/Operating/SiteSetting:consultSetting'
+admin_v2_setting_consult_setting_validate:
+    path: /setting/consult/validate
+    defaults:
+      _controller: 'AppBundle:AdminV2/Operating/SiteSetting:validateConsultSetting'
 admin_v2_setting_consult_upload:
     path: /setting/consult-upload
     defaults:

@@ -5967,6 +5967,7 @@ admin.setting.navigation.status.closed: 关闭
 admin.setting.navigation.edit_btn: 编辑
 admin.setting.navigation.add_child_menu_btn: 添加二级导航
 admin.setting.consult.customer_service_function: 客服功能
+admin.setting.consult.phone_error: 联系电话设置错误
 admin.setting.consult.floating_bar: 浮动条颜色
 admin.setting.consult.delete_btn: 删除
 admin.setting.consult.add_btn: 新增
