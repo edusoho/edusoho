@@ -604,6 +604,7 @@ export default {
           top: -64px;
           width: 432px;
           height: 878px;
+          z-index: -1;
         }
 
         &--scalc {
