@@ -423,6 +423,11 @@ export default {
       ];
 
       if (_.includes(types, type)) {
+        if (key === 'categoryId') {
+          this.modules[currentIndex].data[key] = value[value.length - 1];
+          this.modules[currentIndex].data.categoryIds = value;
+          return;
+        }
         this.modules[currentIndex].data[key] = value;
       }
     },
@@ -503,6 +508,7 @@ export default {
 
     async handleClickSave() {
       this.alreadyMessage = false;
+      this.validatorResult = true;
       const data = {};
       _.forEach(this.modules, (module, index) => {
         const result = this.moduleValidator(module);

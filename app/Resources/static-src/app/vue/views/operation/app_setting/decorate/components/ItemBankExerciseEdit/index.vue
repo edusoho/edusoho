@@ -32,9 +32,9 @@
           style="width: 240px;"
           :options="options"
           change-on-select
-          :default-value="[moduleData.categoryId]"
+          :default-value="moduleData.categoryIds"
           :field-names="{ label: 'name', value: 'id', children: 'children' }"
-          @change="(value) => handleChange({ key: 'categoryId', value: value[value.length - 1] })"
+          @change="(value) => handleChange({ key: 'categoryId', value })"
         />
       </div>
 
