@@ -4,6 +4,11 @@
 
 {% do script(['app/vue/views/user/scrm/index.js']) %}
 
-{% block main %}
-  <div id="app"></div>
+{% block content %}
+  {% include 'admin-v2/widget/side-bar.html.twig' %}
+  <div class="cd-layout-aside">
+    <div id="app">
+      {% include "vue-components/loading.html.twig" %}
+    </div>
+  </div>
 {% endblock %}
