@@ -104,7 +104,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function getRecentLiveTaskStatus($courseId)
     {
-        $tasks = $this->searchTasks(['status' => 'published', 'type' => 'live', 'courseId' => $courseId], ['startTime' => 'DESC'], 0, PHP_INT_MAX);
+        $tasks = $this->searchTasks(['status' => 'published', 'type' => 'live', 'courseId' => $courseId], ['startTime' => 'ASC'], 0, PHP_INT_MAX);
         if (0 == count($tasks)) {
             return 'null';
         }
@@ -121,13 +121,13 @@ class TaskServiceImpl extends BaseService implements TaskService
             if ('living' == $status) {
                 $hasLivingTask = true;
 
-                return $status;
+                $status = 'living';
             }
 
             if ('ahead' == $status && !$hasLivingTask) {
                 $hasAheadTask = true;
 
-                return $status;
+                $status = 'ahead';
             }
 
             $hasReplay = $this->hasReplay($task['activityId']);
@@ -135,13 +135,15 @@ class TaskServiceImpl extends BaseService implements TaskService
             if ('end' == $status && !$hasAheadTask && $hasReplay) {
                 $hasEndTaskAndHasReplay = true;
 
-                return 'hasReplay';
+                $status = 'hasReplay';
             }
 
             if ('end' == $status && !$hasEndTaskAndHasReplay && !$hasReplay) {
-                return $status;
+                $status = 'end';
             }
         }
+
+        return $status;
     }
 
     protected function hasReplay($activityId)
