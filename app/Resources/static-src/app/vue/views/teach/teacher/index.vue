@@ -23,11 +23,16 @@
           <a class="ml8" @click="edit(record.id)">{{ text }}</a>
       </template>
 
+      <div slot="display" slot-scope="item">
+        <a-checkbox :checked="item.display === '1'" @change="(e) => changeDisplay(e.target.checked, item.id)" />
+      </div>
 
       <div slot="promoteInfo" slot-scope="item">
-        <a-checkbox :checked="item.isPromoted" @change="(e) => changePromoted(e.target.checked, item.id)"></a-checkbox>
-        <span v-if="item.isPromoted" class="color-gray text-sm">{{ item.promotedSeq }}</span>
-        <a v-if="item.isPromoted" class="set-number" href="javascript:;" @click="clickSetNumberModal(item.id)">序号设置</a>
+        <a-button v-if="item.display === '0'" type="link" disabled>推荐</a-button>
+        <template v-else>
+          <a-button type="link">推荐序号{{ item.promotedSeq }}</a-button>
+          <a class="set-number" href="javascript:;" @click="clickSetNumberModal(item.id)"><a-icon type="edit" /></a>
+        </template>
       </div>
 
       <template slot="qualification" slot-scope="qualification">
@@ -130,7 +135,7 @@
 <script>
 import _ from 'lodash';
 import AsideLayout from 'app/vue/views/layouts/aside.vue';
-import { Teacher, UserProfiles, Setting } from "common/vue/service";
+import { Teacher, UserProfiles, Setting, User } from "common/vue/service";
 import userInfoTable from "../../components/userInfoTable";
 import EditorQualification from 'app/vue/views/components/Teacher/EditorQualification.vue';
 
@@ -162,7 +167,11 @@ const columns = [
     ellipsis: true,
   },
   {
-    title: "是否推荐",
+    title: "在网校显示",
+    scopedSlots: { customRender: "display" },
+  },
+  {
+    title: "首页推荐",
     scopedSlots: { customRender: "promoteInfo" },
   },
   {
@@ -329,6 +338,47 @@ export default {
       _.forEach(this.pageData, item => {
         if (item.id == id) {
           item.isPromoted = checked;
+          return false;
+        }
+      });
+    },
+
+    async changeDisplay(checked, id) {
+      const params = {
+        query: { id },
+        params: {
+          display: checked ? 1 : 0
+        }
+      };
+
+      let result = {};
+
+      if (checked) {
+        result = await User.mdityDisplay(params);
+        this.changeDisplayCallBack(result, id, checked);
+        return;
+      }
+
+      const that = this;
+
+      this.$confirm({
+        title: '取消教师展示？',
+        content: '确认取消教师展示？取消后已首页推荐教师也将会取消。',
+        okText: '确定',
+        cancelText: '取消',
+        async onOk() {
+          result = await User.mdityDisplay(params);
+          that.changeDisplayCallBack(result, id, checked);
+        }
+      });
+    },
+
+    changeDisplayCallBack(result = {}, id, checked) {
+      if (!result.id) return;
+
+      _.forEach(this.pageData, item => {
+        if (item.id == id) {
+          item.display = checked ? '1' : '0';
           return false;
         }
       });

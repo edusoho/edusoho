@@ -126,7 +126,7 @@ class User extends AbstractResource
         if (!$user->hasPermission('admin_v2')) {
             throw new AccessDeniedException();
         }
-        $fields = $request->query->all();
+        $fields = $request->request->all();
         $update = [];
         if (isset($fields['display'])) {
             $display = empty($fields['display']) ? 0 : 1;
