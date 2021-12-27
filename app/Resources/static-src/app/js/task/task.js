@@ -35,7 +35,7 @@ export default class TaskShow extends Emitter {
     let status = localStorage.getItem('dashboard-tool');
     let sidebarWidth = 360;
     let content_right, side_right;
-    if (status === 'true') {
+    if (status !== 'false') {
       side_right = '0';
       content_right = sidebarWidth +  35 +'px';
     } else {
