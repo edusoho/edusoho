@@ -34,7 +34,8 @@ export default class TaskSidebar extends Emitter {
   }
 
   renderToolbar() {
-    let className = this.showStatus ? 'active' : '';
+    const status = localStorage.getItem('dashboard-tool');
+    let className = status === 'true' ? 'active' : '';
     let html = `
       <div class="dashboard-toolbar js-dashboard-toolbar ${className}">
         <i class="es-icon es-icon-angledoubleleft"></i>

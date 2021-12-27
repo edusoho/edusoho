@@ -32,14 +32,14 @@ export default class TaskShow extends Emitter {
   }
 
   initShowSidebar() {
-    let status = !!localStorage.getItem('dashboard-tool');
+    let status = localStorage.getItem('dashboard-tool');
     let sidebarWidth = 360;
     let content_right, side_right;
-    if (status) {
-      side_right = '-' + sidebarWidth + 'px';
+    if (status === 'true') {
+      side_right = '0';
       content_right = sidebarWidth +  35 +'px';
     } else {
-      side_right = '0px';
+      side_right = '-' + sidebarWidth + 'px';
       content_right = '35px';
     }
     this.element.find('#dashboard-content').css('right', content_right);
