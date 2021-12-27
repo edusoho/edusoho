@@ -121,7 +121,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             if ('living' == $status) {
                 $hasLivingTask = true;
 
-                $status = 'living';
+                return $status;
             }
 
             if ('ahead' == $status && !$hasLivingTask) {
