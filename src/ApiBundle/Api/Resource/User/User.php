@@ -9,6 +9,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\EncryptionToolkit;
+use AppBundle\Common\Exception\AccessDeniedException;
 use AppBundle\Common\MathToolkit;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
@@ -110,6 +111,29 @@ class User extends AbstractResource
         $this->getLogService()->info('mobile', 'register', "用户{$user['nickname']}通过手机注册成功", ['userId' => $user['id']]);
 
         return $user;
+    }
+
+    /**
+     * 更新用户信息接口,暂只更新讲师管理是否在网校显示字段
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function update(ApiRequest $request, $id)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->hasPermission('admin_v2')) {
+            throw new AccessDeniedException();
+        }
+        $fields = $request->query->all();
+        $update = [];
+        if (isset($fields['display'])) {
+            $display = empty($fields['display']) ? 0 : 1;
+            $update = $this->getUserService()->updateUser($id, ['display' => $display]);
+        }
+
+        return $update;
     }
 
     private function getPassword($password, $host)

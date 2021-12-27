@@ -51,6 +51,11 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
+    public function updateUser($id, array $fields)
+    {
+        return $this->getUserDao()->update($id, $fields);
+    }
+
     public function getUserAndProfile($id)
     {
         $user = $this->getUserDao()->get($id);
