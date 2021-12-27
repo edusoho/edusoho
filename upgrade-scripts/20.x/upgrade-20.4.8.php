@@ -184,6 +184,15 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function addTableIndexJob()
     {
+        if ($this->getConnection()->fetchColumn("SELECT COUNT(*) FROM `course_member`") < 100000) {
+            if (!$this->isFieldExist('course_member', 'learnedElectiveTaskNum')) {
+                $this->getConnection()->exec("
+                    ALTER TABLE `course_member` ADD COLUMN `learnedElectiveTaskNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学习的选修任务数量' AFTER `learnedCompulsoryTaskNum`;
+                ");
+            }
+            return 1;
+        }
+
         if ($this->isJobExist('HandlingTimeConsumingUpdateStructuresJob')) {
             return 1;
         }
