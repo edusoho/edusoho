@@ -10,7 +10,7 @@ export default class TaskSidebar extends Emitter {
   }
 
   init() {
-    this.fixIconInChrome();
+    // this.fixIconInChrome();
     this.fetchPlugins()
       .then((plugins) => {
         this.plugins = plugins;
