@@ -206,6 +206,10 @@ export default {
         margin-right: 338px;
       }
 
+      &__btn {
+        margin: 24px 0 8px 0;
+      }
+
       &__img {
         right: 97px;
       }
