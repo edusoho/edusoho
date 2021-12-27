@@ -18,17 +18,33 @@
 
     <div class="scrm-sec">
       <div class="scrm-sec__title">产品特性</div>
-      <div class="scrm-characteristic clearfix">
-        <div
-          v-for="(item, index) in characteristic"
-          :key="index"
-          class="scrm-characteristic__item pull-left"
-        >
-          <div class="characteristic-img">
-            <img :src="item.img" :alt="item.title">
+      <div class="scrm-characteristic">
+        <div class="characteristic-box">
+          <div
+            v-for="(item, index) in characteristic1"
+            :key="index"
+            class="scrm-characteristic__item"
+          >
+            <div class="characteristic-img">
+              <img :src="item.img" :alt="item.title">
+            </div>
+            <div class="characteristic-title">{{ item.title }}</div>
+            <div class="characteristic-desc">{{ item.desc }}</div>
           </div>
-          <div class="characteristic-title">{{ item.title }}</div>
-          <div class="characteristic-desc">{{ item.desc }}</div>
+        </div>
+
+        <div class="characteristic-box" style="margin-top: 60px;">
+          <div
+            v-for="(item, index) in characteristic2"
+            :key="index"
+            class="scrm-characteristic__item"
+          >
+            <div class="characteristic-img">
+              <img :src="item.img" :alt="item.title">
+            </div>
+            <div class="characteristic-title">{{ item.title }}</div>
+            <div class="characteristic-desc">{{ item.desc }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -58,7 +74,7 @@
 </template>
 
 <script>
-const characteristic = [
+const characteristic1 = [
   {
     img: '/static-dist/app/img/vue/scrm1.png',
     title: '引流获客，高效构建客户池',
@@ -73,7 +89,10 @@ const characteristic = [
     img: '/static-dist/app/img/vue/scrm3.png',
     title: '快速客户跟进，提升效率',
     desc: '发送资料、标注属性功能提升客户对产品、员工对客户的了解，快捷回复、群发消息、标准话术库等提升客户跟进的效率。'
-  },
+  }
+];
+
+const characteristic2 = [
   {
     img: '/static-dist/app/img/vue/scrm4.png',
     title: '客户管理，实现客户资源企业化',
@@ -83,13 +102,19 @@ const characteristic = [
     img: '/static-dist/app/img/vue/scrm5.png',
     title: '销售分析，一目了然业绩情况',
     desc: '对企业营销的整体情况进行分析；当销售完成客户跟进后，管理员还可对销售的销售效果进行分析。'
+  },
+  {
+    img: '/static-dist/app/img/vue/scrm6.png',
+    title: '直播公开课',
+    desc: '机构快速开设直播公开课，学员可在直播间购买正课；学员可邀请好友到直播间学习，实现裂变。'
   }
-]
+];
 export default {
   data() {
     return {
-      characteristic,
-      visible: true
+      characteristic1,
+      characteristic2,
+      visible: false
     }
   },
 
@@ -177,6 +202,7 @@ export default {
 
     @media (max-width: 1500px) {
       &__content {
+        margin-left: 0;
         margin-right: 338px;
       }
 
@@ -188,7 +214,19 @@ export default {
     .scrm-characteristic {
       padding: 50px 72px 26px;
 
+      @media (max-width: 1500px) {
+        padding: 50px 0 26px;
+      }
+
+      .characteristic-box {
+        position: relative;
+        padding: 0 320px;
+        height: 315px;
+      }
+
       &__item {
+        position: absolute;
+        top: 0;
         width: 320px;
         height: 315px;
 
@@ -214,6 +252,19 @@ export default {
           color: #666;
           line-height: 22px;
         }
+      }
+
+      &__item:nth-child(1) {
+        left: 0;
+      }
+
+      &__item:nth-child(2) {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      &__item:nth-child(3) {
+        right: 0;
       }
     }
   }
