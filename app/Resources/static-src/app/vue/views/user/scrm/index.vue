@@ -40,11 +40,18 @@
       :width="584"
       @cancel="handleCancel"
     >
-      <div class="modal-content">
-        <div class="modal-content__title"></div>
-        <div class="modal-content__desc"></div>
-        <div class="modal-content__title"></div>
-        <div class="modal-content__desc"></div>
+      <div class="scrm-modal">
+        <div class="scrm-modal__title">已有阔知专属商务经理或客服</div>
+        <div class="scrm-modal__desc">请联系您的商务经理或客服开通</div>
+        <div class="scrm-modal__title" style="margin-top: 36px;">没有阔知专属商务经理或客服</div>
+        <div class="scrm-modal__desc">请扫下面二维码添加专属商务经理为您服务</div>
+        <div class="scrm-modal__img">
+          <img src="/static-dist/app/img/vue/scrm-qr.png" alt="">
+        </div>
+        <div class="scrm-modal__tips">
+          注：开通EduSoho前须先开通企业微信
+          <a class="ml8" href="https://work.weixin.qq.com" target="_blank">去开通企业微信</a>
+        </div>
       </div>
     </a-modal>
   </div>
@@ -82,7 +89,7 @@ export default {
   data() {
     return {
       characteristic,
-      visible: false
+      visible: true
     }
   },
 
@@ -212,14 +219,27 @@ export default {
   }
 }
 
-.modal-content {
+.scrm-modal {
   padding-left: 128px;
 
   &__title {
+    position: relative;
     font-weight: 500;
     font-size: 18px;
     color: #333;
     line-height: 24px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -16px;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #1890ff;
+    }
   }
 
   &__desc {
@@ -227,6 +247,28 @@ export default {
     font-size: 16px;
     color: #666;
     line-height: 22px;
+  }
+
+  &__img {
+    margin-top: 18px;
+    width: 246px;
+    height: 246px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__tips {
+    margin-top: 18px;
+    font-size: 12px;
+    color: #999;
+    line-height: 16px;
+
+    a {
+      font-size: 12px;
+    }
   }
 }
 </style>
