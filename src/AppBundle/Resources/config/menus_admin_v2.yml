@@ -1159,6 +1159,7 @@ admin_v2:
                                     disable: true
                         admin_v2_scrm:
                             name: admin_v2.user.scrm_menu
+                            class: js-new-corner-mark
                             children:
                                 admin_v2_scrm_manage:
                                     name: admin_v2.user.scrm_menu
