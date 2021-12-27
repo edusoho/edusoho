@@ -14,34 +14,37 @@
         :vip-enabled="vipEnabled"
       />
 
-      <section ref="previewContainer" class="center-preview-container pull-left">
-        <div ref="mainContainer" class="main-preview-container">
-          <find-head />
+      <section ref="previewContainer" class="center-preview-container pull-left" :class="{ 'center-preview-container--py0': preview }">
+        <div ref="mainContainer" class="main-preview-container" :class="{ 'main-preview-container--scalc': preview }">
+          <img v-show="preview" class="app-find-box" src="/static-dist/app/img/vue/phone.png">
 
-          <draggable
-            v-model="modules"
-            v-bind="dragOptions"
-            @start="draggableStart"
-            @end="draggableEnd"
-          >
-            <transition-group type="transition" :name="!drag ? 'flip-list' : null">
-              <component
-                v-for="(module, index) in modules"
-                :key="module.oldKey"
-                :is="module.type"
-                :module-data="module.data"
-                :module-type="`${module.type}-${index}`"
-                :current-module-type="currentModule.type"
-                :is-first="index === 0"
-                :is-last="index === lastModuleIndex"
-                :preview="preview"
-                :validator-result="module.validatorResult"
-                @click.native="changeCurrentModule(module, index)"
-                @event-actions="handleClickActions"
-              />
-            </transition-group>
-          </draggable>
+          <find-head :top-header="!preview" />
 
+          <div :class="{ 'preview-container-scroll': preview }">
+            <draggable
+              v-model="modules"
+              v-bind="dragOptions"
+              @start="draggableStart"
+              @end="draggableEnd"
+            >
+              <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+                <component
+                  v-for="(module, index) in modules"
+                  :key="module.oldKey"
+                  :is="module.type"
+                  :module-data="module.data"
+                  :module-type="`${module.type}-${index}`"
+                  :current-module-type="currentModule.type"
+                  :is-first="index === 0"
+                  :is-last="index === lastModuleIndex"
+                  :preview="preview"
+                  :validator-result="module.validatorResult"
+                  @click.native="changeCurrentModule(module, index)"
+                  @event-actions="handleClickActions"
+                />
+              </transition-group>
+            </draggable>
+          </div>
           <find-footer />
         </div>
       </section>
@@ -568,8 +571,22 @@ export default {
       scrollbar-width: none;
       -ms-overflow-style: none;
 
+      &--py0 {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
       &::-webkit-scrollbar {
         display: none;
+      }
+
+      .preview-container-scroll {
+        overflow-y: auto;
+        height: 658px;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
       }
 
       .main-preview-container {
@@ -577,9 +594,22 @@ export default {
         padding-bottom: 50px;
         margin: 0 auto;
         width: 375px;
-        min-height: 90%;
+        min-height: 658px;
         box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.05);
         background-color: #f5f5f5;
+
+        .app-find-box {
+          position: absolute;
+          left: -29px;
+          top: -64px;
+          width: 432px;
+          height: 878px;
+          z-index: -1;
+        }
+
+        &--scalc {
+          transform: scale(0.8);
+        }
       }
     }
 

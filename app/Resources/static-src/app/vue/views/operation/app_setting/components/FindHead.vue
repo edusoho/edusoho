@@ -53,15 +53,15 @@ export default {
     padding: 0 16px;
 
     .school-title {
-      font-size: 18px;
+      font-size: 16px;
       color: #333;
       font-weight: 600;
       line-height: 28px;
-      max-width: 45%;
+      max-width: 68%;
     }
 
     /deep/ .ant-input-affix-wrapper {
-      width: 184px;
+      width: 30%;
       .ant-input {
         height: 28px;
         border-radius: 24px;
