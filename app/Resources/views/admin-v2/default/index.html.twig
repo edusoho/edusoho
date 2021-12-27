@@ -170,14 +170,24 @@
     </div>
 
     {# 客服电话未设置或者设置为阔知4008041114是提示修改 #}
-    <div id="consultTips" class="modal fade" aria-hidden="true" tabindex="-1" role="dialog"
-         aria-labelledby="mySmallModalLabel" data-url="{{ path('admin_v2_setting_consult_setting_validate') }}">
+    <div
+      id="consultTips"
+      class="modal fade consult-tips"
+      aria-hidden="true"
+      tabindex="-1"
+      role="dialog"
+      data-backdrop="static"
+      aria-labelledby="mySmallModalLabel"
+      data-url="{{ path('admin_v2_setting_consult_setting_validate') }}"
+    >
       <div class="modal-dialog" role="document">
         <div class="modal-content tac">
           <div class="modal-body">{{ 'admin.setting.consult.check_tips'|trans|raw }}</div>
-          <div class="row" style="border-top: 1px solid">
-            <div class="col-sm-6" style="padding: 10px 0; border-right: 1px solid;">{{ 'site.setting.cancel'|trans }}</div>
-            <a href="{{ path('admin_v2_setting_consult_setting') }}" class="col-sm-6 btn" style="padding: 10px 0; color: green;">{{ 'site.setting.goto'|trans }}</a>
+          <div class="modal-bottom clearfix">
+            <div class="modal-bottom__cancel pull-left">{{ 'site.setting.cancel'|trans }}</div>
+            <a href="{{ path('admin_v2_setting_consult_setting') }}">
+              <div class="modal-bottom__confirm pull-left">{{ 'site.setting.goto'|trans }}</div>
+            </a>
           </div>
         </div>
       </div>
