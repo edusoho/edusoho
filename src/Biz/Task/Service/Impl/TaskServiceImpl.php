@@ -104,7 +104,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function getRecentLiveTaskStatus($courseId)
     {
-        $tasks = $this->searchTasks(['status' => 'published', 'type' => 'live', 'courseId' => $courseId], ['startTime' => 'ASC'], 0, PHP_INT_MAX);
+        $tasks = $this->searchTasks(['status' => 'published', 'type' => 'live', 'courseId' => $courseId], ['startTime' => 'DESC'], 0, PHP_INT_MAX);
         if (0 == count($tasks)) {
             return 'null';
         }
