@@ -1,23 +1,23 @@
 <template>
   <div class="aside-container">
     <div class="aside-header">
-      <div class="aside-header__title">销客助手</div>
+      <div class="aside-header__title">{{ 'scrm.title' | trans }}</div>
     </div>
 
     <div class="scrm-sec">
-      <div class="scrm-sec__title">EduSoho销客助手</div>
+      <div class="scrm-sec__title">{{ 'scrm.edusoho_title' | trans }}</div>
       <div class="scrm-sec__img">
         <img src="/static-dist/app/img/vue/scrm-right.png" alt="">
       </div>
-      <div class="scrm-sec__content">EduSoho销客助手是一个面向教培机构的私域流量运营工具，提供了引流获客、客户运营、社群运营、企业风控等功能。EduSoho销客助手与EduSoho网校一起为机构提供了招生、教务、教学和服务的整体解决方案。</div>
+      <div class="scrm-sec__content">{{ 'scrm.desc' | trans }}</div>
       <div class="scrm-sec__btn">
-        <a-button class="mr16" @click="handleClickGoScrm">前往销客助手</a-button>
-        <a-button type="primary" @click="showModal">立即开通</a-button>
+        <a-button class="mr16" @click="handleClickGoScrm">{{ 'scrm.go_to_scrm' | trans }}</a-button>
+        <a-button type="primary" @click="showModal">{{ 'scrm.open_now' | trans }}</a-button>
       </div>
     </div>
 
     <div class="scrm-sec">
-      <div class="scrm-sec__title">产品特性</div>
+      <div class="scrm-sec__title">{{ 'scrm.product_features' | trans }}</div>
       <div class="scrm-characteristic">
         <div class="characteristic-box">
           <div
@@ -50,23 +50,23 @@
     </div>
 
     <a-modal
-      title="开通EduSoho销客助手"
+      :title="'scrm.open_edusoho_scrm' | trans"
       :visible="visible"
       :footer="null"
       :width="584"
       @cancel="handleCancel"
     >
       <div class="scrm-modal">
-        <div class="scrm-modal__title">已有阔知专属商务经理或客服</div>
-        <div class="scrm-modal__desc">请联系您的商务经理或客服开通</div>
-        <div class="scrm-modal__title" style="margin-top: 36px;">没有阔知专属商务经理或客服</div>
-        <div class="scrm-modal__desc">请扫下面二维码添加专属商务经理为您服务</div>
+        <div class="scrm-modal__title">{{ 'scrm.hava_a_dedicated_business_manager' | trans }}</div>
+        <div class="scrm-modal__desc">{{ 'scrm.contact_your_business_manager' | trans }}</div>
+        <div class="scrm-modal__title" style="margin-top: 36px;">{{ 'scrm.no_knowledgeable_business_manager' | trans }}</div>
+        <div class="scrm-modal__desc">{{ 'scrm.please_scan_the_qr_code' | trans }}</div>
         <div class="scrm-modal__img">
           <img src="/static-dist/app/img/vue/scrm-qr.png" alt="">
         </div>
         <div class="scrm-modal__tips">
-          注：开通EduSoho前须先开通企业微信
-          <a class="ml8" href="https://work.weixin.qq.com" target="_blank">去开通企业微信</a>
+          {{ 'scrm.note' | trans }}
+          <a class="ml8" href="https://work.weixin.qq.com" target="_blank">{{ 'scrm.to_open_corporate_wechat' | trans }}</a>
         </div>
       </div>
     </a-modal>
@@ -77,36 +77,36 @@
 const characteristic1 = [
   {
     img: '/static-dist/app/img/vue/scrm1.png',
-    title: '引流获客，高效构建客户池',
-    desc: '基于企业微信的好友和社群特性，为教培机构提供灵活的获客工具，帮助培训机构高效构建客户池。'
+    title: Translator.trans('scrm.attract_customers'),
+    desc: Translator.trans('scrm.based_on_the_friend')
   },
   {
     img: '/static-dist/app/img/vue/scrm2.png',
-    title: '线上成交，真正做到无缝对接',
-    desc: '精细化营销管理，提升转化效率；客户通过线上成交后，可自动开通教学平台账号实施培训，真正做到无缝对接。'
+    title: Translator.trans('scrm.online_transaction_truly'),
+    desc: Translator.trans('scrm.refined_marketing_management_improves_conversion_efficiency')
   },
   {
     img: '/static-dist/app/img/vue/scrm3.png',
-    title: '快速客户跟进，提升效率',
-    desc: '发送资料、标注属性功能提升客户对产品、员工对客户的了解，快捷回复、群发消息、标准话术库等提升客户跟进的效率。'
+    title: Translator.trans('scrm.fast_customer_follow_up_improve_efficiency'),
+    desc: Translator.trans('scrm.functions_of_sending_information')
   }
 ];
 
 const characteristic2 = [
   {
     img: '/static-dist/app/img/vue/scrm4.png',
-    title: '客户管理，实现客户资源企业化',
-    desc: '通过后台查看企业客户整体信息，包括客户基本信息、好友关系、群聊信息、客户跟进状态等，实现客户资源的企业化。'
+    title: Translator.trans('scrm.customer_management'),
+    desc: Translator.trans('scrm.view_the_overall_information')
   },
   {
     img: '/static-dist/app/img/vue/scrm5.png',
-    title: '销售分析，一目了然业绩情况',
-    desc: '对企业营销的整体情况进行分析；当销售完成客户跟进后，管理员还可对销售的销售效果进行分析。'
+    title: Translator.trans('scrm.sales_analysis_performance_status_at_a_glance'),
+    desc: Translator.trans('scrm.analyze_the_overall_situation_of_the_company_is_marketing')
   },
   {
     img: '/static-dist/app/img/vue/scrm6.png',
-    title: '直播公开课',
-    desc: '机构快速开设直播公开课，学员可在直播间购买正课；学员可邀请好友到直播间学习，实现裂变。'
+    title: Translator.trans('scrm.live_open_class'),
+    desc: Translator.trans('scrm.set_up_live_open_classes')
   }
 ];
 export default {
