@@ -507,6 +507,8 @@ export default {
         }
         return true;
       }
+
+      return true;
     },
 
     async handleClickSave() {
