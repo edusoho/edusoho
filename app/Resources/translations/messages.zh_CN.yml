@@ -6554,7 +6554,7 @@ admin.operation_certificate.certificate.resource_choose: 选择发放对象
 admin.operation_certificate.certificate.resource_choose_btn: 选择......
 admin.operation_certificate.certificate.template_choose: 选择证书模板
 admin.operation_certificate.certificate.code: 证书编码
-admin.operation_certificate.certificate.code.placeholder: 1至6位数字或英文字母，不区分大小写
+admin.operation_certificate.certificate.code.placeholder: 1至20位数字或英文字母，不区分大小写
 admin.operation_certificate.certificate.expiry_day: 证书有效期
 admin.operation_certificate.certificate.expiry_day.forever: 长期有效
 admin.operation_certificate.certificate.expiry_day.placeholder: 输入证书有效期，空值位长期有效
