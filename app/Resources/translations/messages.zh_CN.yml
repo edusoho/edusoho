@@ -10995,6 +10995,7 @@ wechat.notification.fans_list.profile_picture: 微信头像
 wechat.notification.fans_list.nickname: 微信昵称
 wechat.notification.fans_list.username: 网校用户名
 wechat.notification.fans_list.subscribe_time: 关注时间
+wechat.notification.fans_list.new_tips: 根据相关法律法规，为保障用户合法权益，2021年12月27日之后，公众号“用户信息获取接口”不再提供用户昵称、头像信息
 wechat.notification.fans_list.tips: 粉丝列表每30分钟刷新一次数据
 wechat.notification.fans_list.user_num: 用户数量：
 wechat.notification.fans_list.fans_list_empty: 暂无粉丝
