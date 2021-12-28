@@ -3,7 +3,7 @@
 <meta content="telephone=no" name="format-detection" />
 {% if context.isEncryptionPlus|default(false) and setting('magic.security_video_player', 0) == 1 and is_mobile_client() and not is_micro_messenger() %}
   <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'site.not_support_cloud_video_upgrade'|trans({'%mobileUrl%':path('mobile')})|raw}}</div>
-{% elseif context.isEncryptionPlus|default(false) and setting('magic.security_video_player', 0) == 0 and is_mobile_client() and not is_micro_messenger() and not is_android_client() %}
+{% elseif context.isEncryptionPlus|default(false) and setting('magic.security_video_player', 0) == 0 and is_mobile_client() and ( not is_micro_messenger() or not is_android_client()) %}
   <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'site.not_support_cloud_video'|trans({'%mobileUrl%':path('mobile')})|raw}}</div>
 {% else %}
   {% if file|default(null) %}
