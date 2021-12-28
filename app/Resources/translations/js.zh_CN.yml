@@ -383,7 +383,7 @@ course.buy.price_free_hint: 去学习
 course.chapter: '第%number%%chapter_name%%colon% %title%'
 course.unit: '第%number%%part_name%%colon% %title%'
 course.lesson: '%part_name% %number% : %title%'
-course.catalogue.task_status.task: %taskName%%taskNumber%： %taskTitle%
+course.catalogue.task_status.task: '%taskName%%taskNumber%： %taskTitle%'
 
 course.thread_replay_failed_hint: 发表回复失败，请重试
 course.thread_delete_hint: 您真的要删除该回帖吗？
@@ -1125,6 +1125,7 @@ admin.file.delete_hint: 真的要删除该文件吗？
 admin.group.operating_hint: %trigger%吗？
 admin.group.operating_success_hint: %trigger%成功！
 admin.group.operating_fail_hint: %trigger%失败
+admin.group.delete_hint: 删除小组，将删除小组的话题、成员、回复等信息。真的要删除该小组吗？
 admin.group.thread_delete_hint: 确定要删除话题吗？
 admin.group.thread_delete_pick_hint: 确定要删除话题吗？
 admin.keyword.delete_hint: 确定删除此关键字吗？

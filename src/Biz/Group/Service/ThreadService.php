@@ -98,4 +98,6 @@ interface ThreadService
     public function addPostAttach($files, $threadId, $postId);
 
     public function getTradeByUserIdAndThreadId($userId, $threadId);
+
+    public function deleteThreadsByGroupId($groupId);
 }

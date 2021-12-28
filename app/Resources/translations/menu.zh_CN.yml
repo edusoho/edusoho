@@ -735,6 +735,7 @@ admin_v2.information_collect.detail: 用户信息采集 > 详情
 admin_v2.operation.group_menu: 小组管理
 admin_v2.operation.group.group_tab: 小组管理
 admin_v2.operation.group.group_tab.create_group_btn: 创建小组
+admin_v2.operation.group.group_recommend_tab: 小组推荐
 admin_v2.operation.group.group_thread_tab: 小组话题管理
 
 #运营-内容管理-私信管理
@@ -1054,3 +1055,4 @@ admin_v2.vip_user.operation_record_tab: 会员用户操作记录
 admin.wap_setting.find: 发现页设置
 admin.wap_setting.version_setting: 版本设置
 admin.wap_setting.pay_setting: 支付设置
+admin_v2.cloud.question_bank.attachment.basic_tab: 题库附件

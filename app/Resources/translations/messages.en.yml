@@ -4620,6 +4620,7 @@ admin.classroom_manage.manage.name_th: '%name% Title'
 admin.classroom_manage.manage.course_number_th: 'Course Number'
 admin.classroom_manage.manage.student_number_th: 'Student Number'
 admin.classroom_manage.manage.price_th: Price
+admin.classroom_manage.manage.creator: Creator/Date
 admin.classroom_manage.manage.status_th: Status
 admin.classroom_manage.manage.operate_th: Action
 admin.classroom_manage.manage.empty: 'No %name% Record!'
@@ -5406,9 +5407,16 @@ admin.operation_group.edit_btn: Edit
 admin.operation_group.viewGroup_btn: 'View Group'
 admin.operation_group.closeGroup_btn: 'Close Group'
 admin.operation_group.openGroup_btn: 'Open Group'
+admin.operation_group.deleteGroup_btn: 'Delete Group'
+admin.operation_group.recommendGroup_btn: 'Recommend Group'
 admin.operation_group.transferGroup_btn: 'Transfer Group'
 admin.operation_group.closeGroup_title: 'Close Group(%groupTitle%)'
 admin.operation_group.openGroup_title: 'Open Group(%groupTitle%)'
+admin.operation_group.recommendGroup_title: 'Recommend Group(%groupTitle%)'
+admin.operation_group.cancelRecommendGroup_title: 'Cancel Recommend Group(%groupTitle%)'
+admin.operation_group.deleteGroup_title: 'Delete Group(%groupTitle%)'
+admin.operation_group.recommend.modal_title: 'Recommend Group Setting'
+admin.operation_group.recommend.empty: 'No recommendation group'
 admin.operation_group.modal.enter_user_name: 'Please enter username'
 admin.operation_group.modal.transfer_to: 'Transfer To'
 admin.operation_group.modal.user_name.data_display: Username
@@ -5558,7 +5566,7 @@ admin.operation_certificate.certificate.resource_choose: Selecting Issue Target
 admin.operation_certificate.certificate.resource_choose_btn: select......
 admin.operation_certificate.certificate.template_choose: Selecting Template
 admin.operation_certificate.certificate.code: Certificate Code
-admin.operation_certificate.certificate.code.placeholder: 1 to 6 digits or letters of the alphabet, not case sensitive
+admin.operation_certificate.certificate.code.placeholder: 1 to 20 digits or letters of the alphabet, not case sensitive
 admin.operation_certificate.certificate.expiry_day: Certificate validity
 admin.operation_certificate.certificate.expiry_day.placeholder: Enter the validity of the certificate, the empty value is valid for a long time
 admin.operation_certificate.certificate.auto_issue: automatic issue
@@ -9436,6 +9444,7 @@ exception.group.not_found: Group does not exist
 exception.group.duplicate_join: Already in the group, don't repeat
 exception.group.not_found_member: Member does not exist
 exception.group.title_required: Missing title
+exception.group.delete_group_require_close: Unclosed groups cannot be deleted
 exception.comment.not_found: Comment does not exist
 exception.comment.forbidden_delete: No permission to delete comments！
 exception.comment.objecttype_invalid: There is no current comment object
@@ -10597,6 +10606,7 @@ admin.classroom_manage.statistics.course.title_tips: >
     2.Other statistical data items are real-time data.<br/>
   </span>
 admin.classroom_manage.statistics.course.total_learn_time: 'The course is accumulated study time (minutes): %mins%'
+admin.classroom_manage.recommend.tips: Priority shall be given to the recommended serial number from small to large, and those not recommended shall be in reverse order according to the creation time
 
 classroom.manage.data_statictics: Data Statistics
 classroom.manage.live_statictics: Live Statistics
@@ -10821,3 +10831,7 @@ course.live_replay.length: length
 course.live_replay.start_time: Start Time
 course.live_replay_manage.live_replay_empty: replay deleted
 course.live_replay.tips: The current version only supports viewing of live playback sessions on the PC side, and does not currently support the mobile side
+
+course.lesson.display: '%part_name% %number% : %title%'
+course.task.display: '%taskName%.%taskNumber%:%taskTitle%'
+common.cancel_recommend.btn: Cancel Recommend

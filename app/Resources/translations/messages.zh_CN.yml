@@ -5486,6 +5486,7 @@ admin.classroom_manage.manage.name_th: %name%名称
 admin.classroom_manage.manage.course_number_th: 课程数
 admin.classroom_manage.manage.student_number_th: 学员数
 admin.classroom_manage.manage.price_th: 价格
+admin.classroom_manage.manage.creator: 创建者/时间
 admin.classroom_manage.manage.status_th: 状态
 admin.classroom_manage.manage.operate_th: 操作
 admin.classroom_manage.manage.empty: 暂无%name%信息!
@@ -6398,9 +6399,16 @@ admin.operation_group.edit_btn: 编辑
 admin.operation_group.viewGroup_btn: 查看小组
 admin.operation_group.closeGroup_btn: 关闭小组
 admin.operation_group.openGroup_btn: 开启小组
+admin.operation_group.recommendGroup_btn: 推荐小组
+admin.operation_group.deleteGroup_btn: 删除小组
 admin.operation_group.transferGroup_btn: 转移小组
 admin.operation_group.closeGroup_title: 关闭小组(%groupTitle%)
 admin.operation_group.openGroup_title: 开启小组(%groupTitle%)
+admin.operation_group.recommendGroup_title: 推荐小组(%groupTitle%)
+admin.operation_group.cancelRecommendGroup_title: 取消推荐小组(%groupTitle%)
+admin.operation_group.deleteGroup_title: 删除小组(%groupTitle%)
+admin.operation_group.recommend.modal_title: 设置推荐小组
+admin.operation_group.recommend.empty: 暂无推荐小组
 admin.operation_group.modal.enter_user_name: 请输入用户名
 admin.operation_group.modal.transfer_to: 转移给
 admin.operation_group.modal.user_name.data_display: 用户名
@@ -6546,7 +6554,7 @@ admin.operation_certificate.certificate.resource_choose: 选择发放对象
 admin.operation_certificate.certificate.resource_choose_btn: 选择......
 admin.operation_certificate.certificate.template_choose: 选择证书模板
 admin.operation_certificate.certificate.code: 证书编码
-admin.operation_certificate.certificate.code.placeholder: 1至6位数字或英文字母，不区分大小写
+admin.operation_certificate.certificate.code.placeholder: 1至20位数字或英文字母，不区分大小写
 admin.operation_certificate.certificate.expiry_day: 证书有效期
 admin.operation_certificate.certificate.expiry_day.forever: 长期有效
 admin.operation_certificate.certificate.expiry_day.placeholder: 输入证书有效期，空值位长期有效
@@ -10721,6 +10729,7 @@ exception.group.not_found: 小组不存在
 exception.group.duplicate_join: 已在小组内，不要重复加入
 exception.group.not_found_member: 成员不存在
 exception.group.title_required: 缺少标题
+exception.group.delete_group_require_close: 未关闭的小组不能删除
 exception.comment.not_found: 评论不存在
 exception.comment.forbidden_delete: 无权限删除评论！
 exception.comment.objecttype_invalid: 不存在当前这种评论对象
@@ -11857,6 +11866,7 @@ admin.classroom_manage.statistics.course.title_tips: >
     2.其他统计数据项均为实时数据。<br/>
   </span>
 admin.classroom_manage.statistics.course.total_learn_time: 课程被累加学习时长（分）：%mins%
+admin.classroom_manage.recommend.tips: 优先按推荐序号由小至大排序，未推荐的按创建时间倒序
 
 classroom.manage.data_statictics: 数据概览
 classroom.manage.live_statictics: 直播统计
@@ -12081,3 +12091,7 @@ course.live_replay.length: 回放时长
 course.live_replay.start_time: 直播时间
 course.live_replay_manage.live_replay_empty: 直播回放已被删除
 course.live_replay.tips: 当前版本仅支持PC端查看直播回放课时，暂不支持移动端
+
+course.lesson.display: '%part_name% %number% : %title%'
+course.task.display: '%taskName%%taskNumber%： %taskTitle%'
+common.cancel_recommend.btn: 取消推荐

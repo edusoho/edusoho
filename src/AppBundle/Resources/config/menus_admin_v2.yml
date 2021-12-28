@@ -528,6 +528,8 @@ admin_v2:
                                     router_name: admin_v2_cloud_file
                                 admin_v2_cloud_attachment:
                                     name: admin_v2.cloud.attachment.basic_tab
+                                admin_v2_question_bank_attachment:
+                                  name: admin_v2.cloud.question_bank.attachment.basic_tab
                                 admin_v2_live_playback:
                                     name: admin_v2.live_playback.basic_tab
                                 admin_v2_cloud_file_setting:
@@ -975,6 +977,10 @@ admin_v2:
                                             router_name: group_add
                                             group: topBtn
                                             blank: 1
+                                admin_v2_operation_group_recommend_list:
+                                    name: admin_v2.operation.group.group_recommend_tab
+                                    router_name: admin_v2_group_recommend_list
+                                    disable: true
                                 admin_v2_operation_group_thread:
                                     name: admin_v2.operation.group.group_thread_tab
                                     disable: true
