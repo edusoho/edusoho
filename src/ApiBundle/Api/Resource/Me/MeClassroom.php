@@ -32,8 +32,18 @@ class MeClassroom extends AbstractResource
 
             return $this->makePagingObject($classrooms, $total, $offset, $limit);
         } else {
-            $classrooms = $this->getClassrooms($conditions, [], 0, $total);
+            $members = $this->getClassroomService()->searchMembers($conditions, [], 0, $total);
+            $classroomIds = ArrayToolkit::column($members, 'classroomId');
+
+            $classrooms = array_values($this->getClassroomService()->findClassroomsByIds($classroomIds));
             $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
+            $classrooms = ArrayToolkit::index($classrooms, 'id');
+
+            foreach ($members as $member) {
+                $classrooms[$member['classroomId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
+            }
+
+            array_multisort(ArrayToolkit::column($classrooms, 'lastLearnTime'), SORT_DESC, $classrooms);
 
             return $classrooms;
         }
