@@ -6,7 +6,7 @@
 {% set weChatUser = data('WeChatUser', {userId: app.user.id|default(-1)}) %}
 {% do script(['libs/ltc-sdk-server.js', 'libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js']) %}
 
-{% set showSidebar = app.request.cookies.get('dashboard-tool') %}
+{% set showSidebar = app.request.cookies.get('show-sidebar') %}
 
 {% block body %}
   {% set preview = app.request.query.get('preview')  %}
@@ -133,14 +133,6 @@
 
       </div>
     </div>
-    <p>{{ showSidebar }}</p>
-    
-    {# {% if showSidebar != 0 %}
-      1
-    {% else %}
-    0
-    {% endif %} #}
-
     <div class="dashboard-sidebar hidden-xs" id="dashboard-sidebar" style="{% if showSidebar != 0 %} right: 0; {% endif %}">
 
     </div>
