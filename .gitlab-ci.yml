@@ -7,9 +7,9 @@ stages:
 variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-  FROM_VERSION: 21.4.5
-  VERSION: 21.4.6
-  H5VERSION: release/21.4.5
+  FROM_VERSION: 21.4.8
+  VERSION: 21.4.9
+  H5VERSION: release/21.4.8
 
 before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml

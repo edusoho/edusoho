@@ -663,6 +663,7 @@ group.post.reply_hint: Reply
 group.post.reply_fail_hint: Posted reply failed, please try again
 
 cny: CNY
+fold: Fold
 pay.security.password.save_fail_hint: The payment password setting failed
 
 user.account.refund_cancel_title: Cancel refund application
@@ -1860,6 +1861,15 @@ site.btn.detail: More
 site.btn.remove_playback: Remove playback
 site.btn.view_playback: View playback
 site.btn.confirm: Confirm
+site.btn.edit: Edit
+site.btn.see_more: See more
+site.btn.enter_live: Enter live
+site.btn.save: Save
+site.btn.exit_editing: Exit editinng
+site.btn.preview: Preview
+site.btn.exit_preview: Exit preview
+
+admin.mobile_setting.discovery_tips: Notice：Using the discovery page configuration function, the app version needs to be upgraded to 4.5.39 and above
 
 modal.title.edit: Edit
 modal.content.remove_playback_resources: Are you sure to remove playback resources?
@@ -1876,6 +1886,21 @@ radio.visible_only_to_yourself: Visible only to yourself
 
 message.removal_succeeded: Removal succeeded
 message.edit_succeeded: Edit succeeded
+message.file_too_large: The file is too large, please upload a file smaller than 2M!
+message.saved_successfully: Saved successfully!
+message.save_failed: Save failed!
+message.coupon_module_information: Please complete the coupon module information!
+message.gn_module_information: Please complete the graphic navigation module information!
+message.advertising_module_information: Please complete the advertising module information!
+message.qusetion_bank_module_information: Please complete the question bank module information!
+message.open_class_module_information: Please complete the open class module information!
+message.classroom_module_information: Please complete the class module information!
+message.course_module_information: Please complete the course module information!
+message.carousel_module_information: Please complete the carousel picture module information!
+message.go_to_open: Go to open
+message.coupon_function_is_not_activated: Coupon function is not activated
+message.membership_function_is_not_activated: Membership function is not activated
+message.add_up_to: Add up to 5 components of the same type
 
 live.playback.tip.remove_association: Live playback will remove the association from the course
 live.playback.tip.cannot_be_used_normally: If the live playback is referenced, removing it will cause the referenced task to be unable to work normally
@@ -1928,3 +1953,142 @@ course.live_replay.un_share_btn: UnShare
 course.live_replay.share_tip: Please confirm to share this live playback to the shared live playback resource library?
 course.live_replay.un_share_tip: Please confirm to remove this live playback from the shared live playback library？
 course.live_replay.delete_tip:  Please confirm to remove this live playback？
+
+all: All
+coupon: Coupon
+collar_roll: Collar roll
+available_range: Available range
+upload_image: Upload image
+picture_cropping: Picture cropping
+classroom_course_num: Total <span>%courseNum%</span> courses
+all_products: All products
+designated_goods: Designated goods
+designated_member: Designated member
+all_courses: All courses
+all_classes: All classes
+all_members: All members
+some_products: Some products
+ad_pictures: Ad pictures
+carousel: Carousel
+members_only: Members Only
+free_classroom_course_num: %courseNum% courses， %classroomNum% classes
+app.footer.find: Find
+app.footer.learn: Learn
+app.footer.dynamic: Dynamic
+app.footer.mine: Mine
+app.header.school_name: School name
+app.header.search: Search
+classification_class: Classification class
+free_lesson: Free lesson
+popular_class: Popular class
+
+decorate.class_list_settings: Class list settings
+decorate.list_name: List name
+decorate.please_enter_the_name_of_the_list: Please enter the name of the list
+decorate.arrangement: Arrangement
+decorate.row_by_column: Row by column
+decorate.one_row_and_two_columns: One row and two columns
+decorate.class_source: Class source
+decorate.class_classification: Class classification
+decorate.customize: Customize
+decorate.select_class: Select class
+decorate.order: Order
+decorate.order2: Order：
+decorate.join_the_most: Join the most
+decorate.recently_created: Recently created
+decorate.highest_rated: Highest rated
+decorate.recommended_class: Recommended class
+decorate.last_7_days: Last 7 days
+decorate.last_30_days: Last 30 days
+decorate.last_90_days: Last 90 days
+decorate.history: History
+decorate.display_number: Display number
+decorate.show_only_published_classes: Show only published classes
+decorate.remove: Remove
+decorate.class_name: Class name
+decorate.commodity_price: Commodity price
+decorate.amount_of_goods: Amount of goods
+decorate.creation_time: Creation time
+decorate.operate: Operate
+decorate.search_class: Search class
+decorate.coupon: Coupon
+decorate.only_show_coupons_no_expired: Only show coupons that have not expired
+decorate.title: Title
+decorate.show: Show
+decorate.do_not_show: Do not show
+decorate.coupon_selection: Coupon selection
+decorate.add_coupon: Add coupon
+decorate.choose_a_coupon: Choose a coupon
+decorate.search_for_coupons: Search for coupons
+decorate.coupon_name: Coupon name
+decorate.prefix: Prefix
+decorate.offer_content: Offer content
+decorate.discount: Discount
+decorate.trade_in: Trade in
+decorate.valid_until: Valid until
+decorate.remaining_total: Remaining/Total
+decorate.valid_within_fixed_day_of_receipt: Valid within %fixedDay% day of receipt
+decorate.nknown_date: Unknown date
+decorate.course_list_setting: Course list setting
+decorate.course_source: Course source
+decorate.course_sorts: Course sorts
+decorate.choose_a_course: Choose a course
+decorate.recommended_courses: Recommended courses
+decorate.show_only_published_courses: Show only published courses
+decorate.course_title: Course Title
+decorate.search_course: Search course
+decorate.graphic_navigation_settings: Graphic navigation settings
+decorate.add_graphic_navigation: Add graphic navigation
+decorate.not_less_than: Not less than 1
+decorate.change_picture: Change picture
+decorate.please_enter_a_title: Please enter a title
+decorate.link_source: Link source
+decorate.please_choose: Please choose
+decorate.members_only: Members Only
+decorate.open_class_classification: Open class classification
+decorate.select_image: Select Image
+decorate.title2: Title
+decorate.question_bank_list_settings: Question bank list settings
+decorate.question_bank_classification: Question bank classification
+decorate.basic: Basic
+decorate.carousel: Carousel
+decorate.graphic_navigation: Graphic Navigation
+decorate.image_ad: Image ad
+decorate.curriculum_schedule: Curriculum schedule
+decorate.class_list: Class list
+decorate.question_bank_list: Question bank list
+decorate.open_class_list: Open class list
+decorate.marketing: Marketing
+decorate.all: All
+decorate.open_class_list_settings: Open class list settings
+decorate.choose_an_open_class: Choose an open class
+decorate.only_show_published_public_classes: Only show published public classes
+decorate.search_for_public_classes: Search for public classes
+decorate.image_ad_settings: Image ad settings
+decorate.add_pictures: Add pictures
+decorate.select_link: Select link
+decorate.choose_a_course: Choose a course
+decorate.select_class: Select class
+decorate.select_member: Select member
+decorate.custom_link: Custom link
+decorate.mobile_phone_screen: Adaptive mobile phone screen
+decorate.turn_on: Turn on
+decorate.closure: Closure
+decorate.revise: Revise
+decorate.carousel: Carousel
+decorate.add_content: Add content
+decorate.carousel_tip1: The recommended image size is 750x300px, supports jpg/png/gif format, and the size does not exceed 2MB
+decorate.carousel_tip2: Add up to 5 pictures, drag the selected pictures to sort them
+decorate.site_link: Site link
+decorate.low_to_hign: Low to high
+decorate.hign_to_low: High to low
+decorate.choose: Choose
+decorate.link_address: Link address
+decorate.please_enter_the_link_address: Please enter the link address
+decorate.link_wrong: The link is wrong, please start with http:// or https://
+decorate.are_you_sure_exiting_editing: Are you sure to exit editing?
+decorate.exiting_editing_not_save: Exiting editing will not save the changes.
+decorate.gn_tip1: The recommended image size is 80x80px, supports jpg/png/gif format, and the size does not exceed 2 MB
+decorate.gn_tip2: Add up to 8 graphic navigation
+decorate.poster_tip1: The recommended image size is 750px, supports jpg/png/gif format, and the size does not exceed 2 MB
+decorate.open_course_tip1: Contains only the content of the live broadcast public class, does not include the recorded public class

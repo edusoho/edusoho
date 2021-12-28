@@ -1,0 +1,30 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_mobile_discoveries_settings' %}
+
+{% do script(['app/vue/views/operation/app_setting/decorate/index.js']) %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <style>
+    html {
+      min-width: 1200px;
+    }
+
+    body {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  <body>
+    <div id="app"></div>
+     {% block scriptBoot %}
+      {% include 'old-script_boot.html.twig' with { script_main: asset('bundles/topxiaadmin/js/admin-app-v2.js') } %}
+      {% include 'admin-v2/default/script-webpack.html.twig' %}
+      {% include 'admin-v2/script_boot.html.twig'  with { state: 0 } %}
+    {% endblock %}
+  </body>
+{% endblock %}
