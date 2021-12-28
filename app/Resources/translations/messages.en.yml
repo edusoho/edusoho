@@ -6567,6 +6567,7 @@ admin.setting_course.learning_time_statistical_dimension: Statistical dimension 
 admin.setting_course.effective_learning_time.playing.help_block: The actual playing time was taken as the learning time statistics
 admin.setting_course.effective_learning_time.page.help_block: The page stay time is taken as the learning time statistics
 admin.setting_course.effective_learning_time.playing_time: Video playing time
+admin.setting_course.effective_learning_time.end_time: End Time
 admin.setting_course.effective_learning_time.page_time: Page stay time
 admin.setting_course.effective_learning_time.accumulated_merge: The learning hours are directly accumulated and combined
 admin.setting_course.effective_learning_time.reweighted_merge: The learning hours were reweighted and then merged
@@ -6946,6 +6947,9 @@ admin.setting_course.video_play_setting.play_rule.auto_pause.help_block: When th
 admin.setting_course.video_play_setting.play_rule.no_action.help_block: When the system detects that the user is not focusing on learning, the PC side will continue to maintain the current play.
 admin.setting_course.video_play_setting.play_rule.auto_pause: automatic pause
 admin.setting_course.video_play_setting.play_rule.no_action: no intervention
+admin.setting_course.video_play_setting.learn_config: Video Learn Config
+admin.setting_course.video_play_setting.complate_config: Video Complate Config
+admin.setting_course.video_play_setting.default: Default
 admin.article_setting.edit: 'Edit articles'
 admin.article_setting.title: 'Article headlines'
 admin.article_setting.category: Column
@@ -10534,8 +10538,9 @@ exception.homework.not_found_result: The homework result does not exist
 
 activity_manage.finish_tips_time: Stat at least %finishDetail% minutes.
 activity_manage.finish_tips_watch_time: Watch at least %finishDetail% minutes.
-+course.plan_task.activity_manage.video.time_at_least: Stay at least
-+course.plan_task.activity_manage.video.watch_time_at_least: Watch at least
+course.plan_task.activity_manage.video.time_at_least: Stay at least
+course.plan_task.activity_manage.video.watch_time_at_least: Watch at least
+course.plan_task.activity_manage.video.not_completed_prohibited: When the task is not completed, the player progress dragging is prohibited
 activity_manage.time_last_tips: >
   Remaining<span class="color-danger js-finish-time">%time% minutes</span> completed
 activity_manage.finished_tips: >
