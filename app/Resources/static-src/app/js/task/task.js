@@ -4,6 +4,7 @@ import TaskPipe from './widget/task-pipe';
 import Emitter from 'common/es-event-emitter';
 import PagedCourseLesson from 'app/js/courseset/show/paged-course-lesson';
 import 'store';
+import Cookies from 'js-cookie';
 
 export default class TaskShow extends Emitter {
   constructor({ element, mode }) {
@@ -20,7 +21,7 @@ export default class TaskShow extends Emitter {
 
   init() {
     this.initPlugin();
-    this.initShowSidebar();
+    // this.initShowSidebar();
     this.initSidebar();
     if (this.mode != 'preview') {
       this.initTaskPipe();
@@ -32,10 +33,10 @@ export default class TaskShow extends Emitter {
   }
 
   initShowSidebar() {
-    let status = localStorage.getItem('dashboard-tool');
+    let showSidebar = Cookies.get('show-sidebar');
     let sidebarWidth = 360;
     let content_right, side_right;
-    if (status !== 'false') {
+    if (showSidebar != 0) {
       side_right = '0';
       content_right = sidebarWidth +  35 +'px';
     } else {

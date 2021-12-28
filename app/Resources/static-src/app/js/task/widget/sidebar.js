@@ -1,6 +1,6 @@
 import Emitter from 'component-emitter';
 import { chapterAnimate } from 'app/common/widget/chapter-animate';
-
+import Cookies from 'js-cookie';
 export default class TaskSidebar extends Emitter {
   constructor({element, url}) {
     super();
@@ -34,8 +34,8 @@ export default class TaskSidebar extends Emitter {
   }
 
   renderToolbar() {
-    const status = localStorage.getItem('dashboard-tool');
-    let className = status !== 'false' ? 'active' : '';
+    const showSidebar = Cookies.get('show-sidebar');
+    let className = showSidebar != 0 ? 'active' : '';
     let html = `
       <div class="dashboard-toolbar js-dashboard-toolbar ${className}">
         <i class="es-icon es-icon-angledoubleleft"></i>
@@ -100,11 +100,11 @@ export default class TaskSidebar extends Emitter {
   operationContent($btn) {
     if ($btn.hasClass('active')) {
       this.foldContent();
-      localStorage.setItem('dashboard-tool', false);
+      Cookies.set('show-sidebar', 0);
       $btn.removeClass('active');
     } else {
       $btn.addClass('active');
-      localStorage.setItem('dashboard-tool', true);
+      Cookies.set('show-sidebar', 1);
       this.popupContent();
     }
   }
