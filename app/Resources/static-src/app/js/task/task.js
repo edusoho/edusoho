@@ -4,7 +4,6 @@ import TaskPipe from './widget/task-pipe';
 import Emitter from 'common/es-event-emitter';
 import PagedCourseLesson from 'app/js/courseset/show/paged-course-lesson';
 import 'store';
-import Cookies from 'js-cookie';
 
 export default class TaskShow extends Emitter {
   constructor({ element, mode }) {
