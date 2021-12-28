@@ -198,3 +198,38 @@
     }
   }
 }
+
+.default-comment {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 8px;
+
+  &:hover .default-comment-list {
+    display: block !important;
+  }
+
+  &-list {
+    position: absolute;
+    top: 26px;
+    left: 30%;
+    padding: 8px 16px;
+    width: 270px;
+    transform: translateX(-50%);
+    text-align: left;
+    background-color: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    z-index: 9;
+
+    &__item {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+
+      &:hover {
+        color: #46c37b;
+      }
+    }
+  }
+}

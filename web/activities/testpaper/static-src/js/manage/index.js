@@ -61,7 +61,16 @@ class Testpaper {
         '              </td>\n' +
         '              <td class="form-inline">\n' +
         '                <textarea name="comment['+ii+']" rows="1" class="form-control js-comment-content" style="width: 339px;margin-right: 15px;"></textarea>\n' +
-        '                <a href="javascript:;" class="js-default-comment">' + Translator.trans('activity.testpaper_manage.default_comment') + '</a>\n' +
+        '                <div class="default-comment">\n' +
+        '                  <a href="javascript:;" class="js-default-comment">' + Translator.trans('activity.testpaper_manage.default_comment') + '</a>\n' +
+        '                   <div class="default-comment-list hidden">' +
+        '                   <div class="default-comment-list__item js-default-comment-item">' + Translator.trans('activity.testpaper_manage.default_comment1') + '</div>' +
+        '                    <div class="default-comment-list__item js-default-comment-item">' + Translator.trans('activity.testpaper_manage.default_comment2') + '</div>' +
+        '                    <div class="default-comment-list__item js-default-comment-item">' + Translator.trans('activity.testpaper_manage.default_comment3') + '</div>' +
+        '                    <div class="default-comment-list__item js-default-comment-item">' + Translator.trans('activity.testpaper_manage.default_comment4') + '</div>' +
+        '                    <div class="default-comment-list__item js-default-comment-item">' + Translator.trans('activity.testpaper_manage.default_comment5') + '</div>' +
+        '                  </div>' +
+        '                </div>\n' +
         '              </td>\n' +
         '              <td class="form-inline vertical-middle">\n' +
         '                <a href="javascript:;" class="js-comment-remove">' + Translator.trans('activity.testpaper_manage.comment_remove') + '</a>\n' +
@@ -71,14 +80,16 @@ class Testpaper {
       $customCommentTable.removeClass('hidden');
       ii++;
     });
-    $customCommentTable.on('focus', '.js-comment-content', function () {
-      $(this).attr('rows', 13);
-    });
-    $customCommentTable.on('blur', '.js-comment-content', function () {
-      $(this).attr('rows', 1);
+    $customCommentTable.on('input', '.js-comment-content', function (e) {
+      const scrollHeight = e.target.scrollHeight - 12;
+      $(this).height(scrollHeight);
     });
     $customCommentTable.on('click', '.js-comment-remove', function () {
       $(this).parent().parent().remove();
+    });
+
+    $customCommentTable.on('click', '.js-default-comment-item', function () {
+      $(this).parent().parent().siblings('.js-comment-content').val($(this).text());
     });
   }
 

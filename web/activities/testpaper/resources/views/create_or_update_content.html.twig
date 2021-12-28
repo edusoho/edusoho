@@ -89,7 +89,16 @@
                   </td>
                   <td class="form-inline">
                     <textarea name="comment[{{ key }}]" rows="1" class="form-control js-comment-content" style="width: 339px;margin-right: 15px;">{{ item.comment|default('') }}</textarea>
-                    <a href="javascript:;" class="js-default-comment">{{ 'course.plan_task.activity_manage.testpaper.default_comment'|trans }}</a>
+                    <div class="default-comment">
+                      <a href="javascript:;" class="default-comment__btn js-default-comment">{{ 'course.plan_task.activity_manage.testpaper.default_comment' | trans }}</a>
+                      <div class="default-comment-list hidden">
+                        <div class="default-comment-list__item js-default-comment-item">{{ 'course.plan_task.activity_manage.testpaper.default_comment1' | trans }}</div>
+                        <div class="default-comment-list__item js-default-comment-item">{{ 'course.plan_task.activity_manage.testpaper.default_comment2' | trans }}</div>
+                        <div class="default-comment-list__item js-default-comment-item">{{ 'course.plan_task.activity_manage.testpaper.default_comment3' | trans }}</div>
+                        <div class="default-comment-list__item js-default-comment-item">{{ 'course.plan_task.activity_manage.testpaper.default_comment4' | trans }}</div>
+                        <div class="default-comment-list__item js-default-comment-item">{{ 'course.plan_task.activity_manage.testpaper.default_comment5' | trans }}</div>
+                      </div>
+                    </div>
                   </td>
                   <td class="form-inline vertical-middle">
                     <a href="javascript:;" class="js-comment-remove">{{ 'course.plan_task.activity_manage.testpaper.comment_remove'|trans }}</a>
