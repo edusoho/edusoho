@@ -1817,6 +1817,7 @@ course.plan_task.activity_manage.exercise.confirm_submit_tips: 'Are you sure to 
 course.plan_task.activity_manage.flash.play_tips: 'Note：Flash is not supported on mobile'
 course.plan_task.activity_manage.homework.finished_condition_tips: '<p class="gray-darker mbs">Meet below conditions:</p>Submit assignment'
 course.plan_task.activity_manage.homework.info: 'Assignment description'
+course.plan_task.activity_manage.homework.can_not_edit_tips: This assignment has been cited in other copied courses, and the title cannot be edited temporarily
 course.plan_task.activity_manage.homework.total: 'The assignment has total <span class="color-primary">%itemCount% questions</span>'
 course.plan_task.activity_manage.homework.choose_question: 'Choose question'
 course.plan_task.activity_manage.homework.save_tips: 'Tip：The published questions will no longer be added or delete.'

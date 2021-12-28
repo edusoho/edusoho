@@ -162,6 +162,7 @@ class Homework extends Activity
             $activity = $this->getHomeworkActivityService()->create([
                 'answerSceneId' => $answerScene['id'],
                 'assessmentId' => $homework['assessmentId'],
+                'has_published' => 1,
             ]);
 
             $this->getBiz()['db']->commit();
