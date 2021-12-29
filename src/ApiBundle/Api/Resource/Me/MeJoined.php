@@ -63,7 +63,6 @@ class MeJoined extends AbstractResource
 
     protected function getCourses()
     {
-        $conditions = $request->query->all();
         $conditions['status'] = 'published';
         $conditions['classroomId'] = 0;
         $conditions['joinedType'] = 'course';
