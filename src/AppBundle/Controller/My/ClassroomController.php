@@ -101,8 +101,12 @@ class ClassroomController extends BaseController
         $members = array_merge($members, $assistants);
         $members = ArrayToolkit::index($members, 'classroomId');
 
-        $classroomIds = ArrayToolkit::column($members, 'classroomId');
+        foreach ($members as &$member) {
+            $member['lastLearnTime'] = !empty($member['lastLearnTime']) ? $member['lastLearnTime'] : $member['createdTime'];
+        }
+        array_multisort(ArrayToolkit::column($members, 'lastLearnTime'), SORT_DESC, $members);
 
+        $classroomIds = ArrayToolkit::column($members, 'classroomId');
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         foreach ($classrooms as $key => $classroom) {
