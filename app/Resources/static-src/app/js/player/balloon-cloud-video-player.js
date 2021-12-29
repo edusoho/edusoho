@@ -14,6 +14,14 @@ class BalloonCloudVideoPlayer extends Emitter {
   }
 
   setup() {
+    const resultStatus = $('[name="task-result-status"]', window.parent.document).val();
+    const mode = $('[name="mode"]', window.parent.document).val();
+    const activityFinishType = $('#video-content').data('finishType');
+    const activityFinishData = $('#video-content').data('finishData');
+    const disableProgressBar = ((resultStatus === 'start' || resultStatus === 'none') && 'learn' === mode && activityFinishType === 'end' && activityFinishData);
+    const disableSeek = disableProgressBar ? 'forward' : 'none';
+
+    console.log(disableSeek);
     let element = this.options.element;
 
     var self = this;
@@ -62,7 +70,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       });
     }
 
-    if (self.options.enablePlaybackRates) {
+    if (disableProgressBar && self.options.enablePlaybackRates) {
       extConfig = Object.assign(extConfig, {
         playbackRates: ['0.5', '1.0', '1.25', '1.5', '2.0']
       });
@@ -109,6 +117,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       disableSentry: app.cloudDisableLogReport,
       disableControlBar: self.options.disableControlBar,
       disableProgressBar: self.options.disableProgressBar,
+      disableSeek: disableSeek,
       playlist: self.options.url,
       rememberLastPos: rememberLastPos,
       initPos: self.options.customPos,

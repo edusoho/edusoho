@@ -2190,6 +2190,7 @@ course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可�
 course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
 course.plan_task.activity_manage.video.time_at_least: 至少停留
 course.plan_task.activity_manage.video.watch_time_at_least: 至少播放
+course.plan_task.activity_manage.video.not_completed_prohibited: 任务未完成时,禁止播放器进度拖拽
 
 course.plan_task.activity_manage.replay: 直播回放
 course.plan_task.activity_manage.replay.time: 直播回放时长
@@ -7846,10 +7847,14 @@ admin.setting_course.video_play_setting.play_rule.auto_pause.help_block: 当系�
 admin.setting_course.video_play_setting.play_rule.no_action.help_block: 当系统检测到用户处于非专注学习时，PC端将继续维持当前播放
 admin.setting_course.video_play_setting.play_rule.auto_pause: 自动暂停
 admin.setting_course.video_play_setting.play_rule.no_action: 不做干预
+admin.setting_course.video_play_setting.learn_config: 视频课时学习配置
+admin.setting_course.video_play_setting.complate_config: 视频课时完成条件配置
+admin.setting_course.video_play_setting.default: 默认完成条件
 admin.setting_course.effective_learning_time_rule: 在线视频课时有效学习时长统计规则
 admin.setting_course.learning_time_statistical_dimension: 学习时长统计维度
 admin.setting_course.effective_learning_time.playing.help_block: 以实际播放时长作为学习时长统计
 admin.setting_course.effective_learning_time.page.help_block: 以页面停留时长作为学习时长统计
+admin.setting_course.effective_learning_time.end_time: 学习到最后
 admin.setting_course.effective_learning_time.playing_time: 视频播放时长
 admin.setting_course.effective_learning_time.page_time: 页面停留时长
 admin.setting_course.effective_learning_time.reweighted_merge: 各处学习时长去重后再合并
