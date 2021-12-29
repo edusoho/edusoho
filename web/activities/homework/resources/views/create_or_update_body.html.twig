@@ -101,12 +101,18 @@
           <p class="js-subjective-remask" data-type="homework"></p>
         </div>
       </div>
-      {% endif %}
       <div class="form-group">
         <div class="col-sm-8 col-sm-offset-2">
           <p class="help-block color-warning">{{ 'course.plan_task.activity_manage.homework.save_tips'|trans }}</p>
         </div>
       </div>
+      {% else %}
+      <div class="form-group">
+        <div class="col-sm-8 col-sm-offset-2">
+          <p class="help-block color-danger">{{ 'course.plan_task.activity_manage.homework.can_not_edit_tips'|trans }}</p>
+        </div>
+      </div>
+      {% endif %}
     </form>
   </div>
 {% endblock %}

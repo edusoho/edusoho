@@ -2109,6 +2109,7 @@ course.plan_task.activity_manage.exercise.finished_condition: 提交练习
 course.plan_task.activity_manage.flash.play_tips: 注意：Flash在移动端上无法播放!
 course.plan_task.activity_manage.homework.finished_condition: 提交作业
 course.plan_task.activity_manage.homework.info: 作业说明
+course.plan_task.activity_manage.homework.can_not_edit_tips: 该作业已在其他复制课程中引用,题目暂不可编辑
 course.plan_task.activity_manage.homework.total: >
   本次作业<span class="color-primary">%itemCount%题</span>
 course.plan_task.activity_manage.homework.choose_question: 选择题目
