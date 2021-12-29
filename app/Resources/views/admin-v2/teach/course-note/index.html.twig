@@ -52,7 +52,7 @@
         <tr data-role="item">
           <td><input value="{{ note.id }}" type="checkbox"  data-role="batch-item" ></td>
           <td>
-              <div class="short-long-text">
+              <div class="short-long-text short-long-text--img">
                 <div class="short-text">{{ note.content|plain_text(100) }} <span class="trigger">({{ 'admin.course_thread.expand_td'|trans }})</span></div>
                 <div class="long-text">{{ note.content|raw }} <span class="trigger">({{ 'admin.course_thread.collapse_td'|trans }})</span></div>
               </div>
