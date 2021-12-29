@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
+use Biz\Group\GroupException;
 use Biz\Group\Service\GroupService;
 use Biz\Group\Service\ThreadService;
 use Biz\System\Service\SettingService;
@@ -108,6 +109,10 @@ class GroupController extends BaseController
     {
         $group = $this->getGroupService()->getGroup($id);
 
+        if (empty($group)) {
+            $this->createNewException(GroupException::NOTFOUND_GROUP());
+        }
+
         if ('close' == $group['status']) {
             return $this->createMessageResponse('info', '该小组已被关闭');
         }
@@ -124,7 +129,7 @@ class GroupController extends BaseController
             return $this->redirect($this->generateUrl('group_member', ['id' => $group['id']]));
         }
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getThreadService()->countThreads($conditions),
             $conditions['num']
         );
@@ -142,11 +147,6 @@ class GroupController extends BaseController
         $owners = $this->getUserService()->findUsersByIds($ownerIds);
 
         $lastPostMembers = $this->getUserService()->findUsersByIds($userIds);
-
-        $activeMembers = $this->getGroupService()->searchMembers(['groupId' => $id, 'role' => 'member'],
-            ['postNum' => 'DESC'], 0, 15);
-
-        $memberIds = ArrayToolkit::column($activeMembers, 'userId');
 
         $groupAbout = strip_tags($group['about'], '');
 
@@ -173,7 +173,9 @@ class GroupController extends BaseController
     public function groupMemberAction(Request $request, $id)
     {
         $group = $this->getGroupService()->getGroup($id);
-
+        if (empty($group)) {
+            $this->createNewException(GroupException::NOTFOUND_GROUP());
+        }
         if ('close' == $group['status']) {
             return $this->createMessageResponse('info', '该小组已被关闭');
         }
