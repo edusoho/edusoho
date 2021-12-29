@@ -183,11 +183,15 @@ class ClassroomController extends BaseController
         return $this->renderClassroomTr($id, $classroom);
     }
 
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
+        $isCheckPasswordLifeTime = $request->getSession()->get('checkPassword');
+        if (!$isCheckPasswordLifeTime || $isCheckPasswordLifeTime < time()) {
+            return $this->render('admin-v2/teach/course/delete.html.twig', ['deleteUrl' => $this->generateUrl('admin_v2_classroom_delete', ['id' => $id])]);
+        }
         $this->getClassroomService()->deleteClassroom($id);
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(['code' => 0, 'message' => $this->trans('site.delete_success_hint')]);
     }
 
     public function recommendAction(Request $request, $id)

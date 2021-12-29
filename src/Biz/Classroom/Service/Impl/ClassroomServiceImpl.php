@@ -719,7 +719,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
             }
 
-            if ('draft' !== $classroom['status']) {
+            if ('published' === $classroom['status']) {
                 $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
             }
 
@@ -903,7 +903,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     $this->getCourseSetService()->unlockCourseSet($course['courseSetId'], true);
                 }
 
-                $this->getCourseSetService()->resetParentIdByCourseId($course['id']);
+                $this->getCourseSetService()->deleteCourseSet($course['id']);
 
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
 

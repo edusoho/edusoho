@@ -1115,7 +1115,7 @@ admin.classroom.choose_success_hint: Choose classroom success
 admin.classroom.operation_success_hint: successfully！
 admin.classroom.operation_fail_hint: failure
 admin.classroom.operation_hint: ？
-admin.classroom.delete_hint: Really want to delete the classroom?
+admin.classroom.delete_hint: Deleting a class will delete the chapters, class hours, students and other information of all courses in the class. Are you sure you want to delete this class?
 admin.classroom.delete_success_hint: successfully deleted!
 admin.classroom.cancel_recommend_hint: "%title% ?"
 admin.classroom.cancel_recommend_success_hint: "%title% successfully!"
