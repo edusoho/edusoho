@@ -1124,6 +1124,8 @@ admin.file.delete_hint: 真的要删除该文件吗？
 admin.group.operating_hint: %trigger%吗？
 admin.group.operating_success_hint: %trigger%成功！
 admin.group.operating_fail_hint: %trigger%失败
+admin.group.recommend_success_hint: 设置推荐小组操作成功!
+admin.group.recommend_fail_hint: 设置推荐小组操作失败!
 admin.group.delete_hint: 删除小组，将删除小组的话题、成员、回复等信息。真的要删除该小组吗？
 admin.group.thread_delete_hint: 确定要删除话题吗？
 admin.group.thread_delete_pick_hint: 确定要删除话题吗？
