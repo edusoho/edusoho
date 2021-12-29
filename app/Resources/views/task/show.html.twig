@@ -6,6 +6,8 @@
 {% set weChatUser = data('WeChatUser', {userId: app.user.id|default(-1)}) %}
 {% do script(['libs/ltc-sdk-server.js', 'libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js']) %}
 
+{% set showSidebar = app.request.cookies.get('show-sidebar') %}
+
 {% block body %}
   {% set preview = app.request.query.get('preview')  %}
 
@@ -22,7 +24,7 @@
   </div>
 
   <div class="task-dashboard-page js-task-dashboard-page">
-    <div class="dashboard-content" id="dashboard-content">
+    <div class="dashboard-content" id="dashboard-content" style="{% if showSidebar != 0 %} right: 395px; {% endif %}">
       <div class="dashboard-header">
         <a class="back-link js-back-link" href="{{ path('my_course_show',{id:course.id}) }}">
           <i class="es-icon es-icon-chevronleft"></i>{{ 'course.task.learning.back_course_btn'|trans }}
@@ -131,7 +133,7 @@
 
       </div>
     </div>
-    <div class="dashboard-sidebar hidden-xs" id="dashboard-sidebar">
+    <div class="dashboard-sidebar hidden-xs" id="dashboard-sidebar" style="{% if showSidebar != 0 %} right: 0; {% endif %}">
 
     </div>
   </div>
