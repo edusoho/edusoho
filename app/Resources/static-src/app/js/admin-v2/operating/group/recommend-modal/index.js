@@ -32,7 +32,7 @@ class Recommend {
       $(e.currentTarget).button('submiting').addClass('disabled');
       $.post(this.$form.attr('action'), this.$form.serialize(), html => {
         this.$form.parents('.modal').modal('hide');
-        notify('success', Translator.trans('admin.course.recommend_success_hint'));
+        notify('success', Translator.trans('admin.group.recommend_success_hint'));
         const $tr = $(html);
         $('#' + $tr.attr('id')).replaceWith($tr);
 
@@ -44,13 +44,13 @@ class Recommend {
 
           $tbody.find('tr').remove();
           for (let tr in trs) {
-            if(!isNaN(parseInt(tr,10))){
+            if (!isNaN(parseInt(tr, 10))) {
               $(trs[tr]).appendTo($tbody);
             }
           }
         }
-      }).error(function(){
-        notify('danger', Translator.trans('admin.course.recommend_fail_hint'));
+      }).error(function () {
+        notify('danger', Translator.trans('admin.group.recommend_fail_hint'));
       });
     });
   }
