@@ -2096,3 +2096,29 @@ decorate.gn_tip1: The recommended image size is 80x80px, supports jpg/png/gif fo
 decorate.gn_tip2: Add up to 8 graphic navigation
 decorate.poster_tip1: The recommended image size is 750px, supports jpg/png/gif format, and the size does not exceed 2 MB
 decorate.open_course_tip1: Contains only the content of the live broadcast public class, does not include the recorded public class
+
+scrm.title: Scrm
+scrm.edusoho_title: EduSoho Scrm
+scrm.desc: EduSoho Scrm is a private domain traffic operation tool for education and training institutions, providing functions such as attracting customers, customer operations, community operations, and corporate risk control. EduSoho Scrm and EduSoho Online School provide institutions with a total solution for enrollment, educational administration, teaching and service.
+scrm.go_to_scrm: Go to Scrm
+scrm.open_now: Open now
+scrm.product_features: Product features
+scrm.open_edusoho_scrm: Open EduSoho Scrm
+scrm.hava_a_dedicated_business_manager: Have a dedicated business manager or customer service for Kuozhi
+scrm.contact_your_business_manager: Please contact your business manager or customer service to activate
+scrm.no_knowledgeable_business_manager: No knowledgeable business manager or customer service
+scrm.please_scan_the_qr_code: Please scan the QR code below to add a dedicated business manager to serve you
+scrm.note: Note, Before opening EduSoho, you must first activate corporate WeChat
+scrm.to_open_corporate_wechat: To open corporate WeChat
+scrm.attract_customers: Attract customers and build a customer pool efficiently
+scrm.based_on_the_friend: Based on the friend and community characteristics of enterprise WeChat, it provides flexible customer acquisition tools for education and training institutions, and helps training institutions to efficiently build customer pools.
+scrm.online_transaction_truly seamless: Online transaction, truly seamless
+scrm.refined_marketing_management_improves_conversion_efficiency: Refined marketing management improves conversion efficiency; after customers pass online transactions, they can automatically open teaching platform accounts for training, truly seamless connection.
+scrm.fast_customer_follow_up_improve_efficiency: Fast customer follow-up, improve efficiency
+scrm.functions_of_sending_information: The functions of sending information and labeling attributes improve the customer's understanding of the product and employees' understanding of the customer, and quick reply, group messaging, standard speech library, etc. improve the efficiency of customer follow-up.
+scrm.customer_management: Customer management, realizing the enterpriseization of customer resources
+scrm.view_the_overall_information : View the overall information of corporate customers through the background, including basic customer information, friend relationships, group chat information, customer follow-up status, etc., to realize the corporateization of customer resources.
+scrm.sales_analysis_performance_status_at_a_glance: Sales analysis, performance status at a glance
+scrm.analyze_the_overall_situation_of_the_company_is_marketing: Analyze the overall situation of the company's marketing; when the sales are completed and the customer follows up, the administrator can also analyze the sales effects of the sales.
+scrm.live_open_class: Live open class
+scrm.set_up_live_open_classes: Institutions quickly set up live open classes, and students can purchase regular classes in the live room; students can invite friends to study in the live room to achieve fission.
