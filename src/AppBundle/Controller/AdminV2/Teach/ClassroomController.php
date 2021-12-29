@@ -191,7 +191,7 @@ class ClassroomController extends BaseController
         }
         $this->getClassroomService()->deleteClassroom($id);
 
-        return $this->createJsonResponse(['code' => 0, 'message' => '删除班级成功']);
+        return $this->createJsonResponse(['code' => 0, 'message' => $this->trans('site.delete_success_hint')]);
     }
 
     public function recommendAction(Request $request, $id)
