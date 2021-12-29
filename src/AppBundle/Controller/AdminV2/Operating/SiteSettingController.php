@@ -62,11 +62,12 @@ class SiteSettingController extends BaseController
                     break;
                 }
             }
-            if (!$errorMessage) {
+            if ($errorMessage) {
+                $this->setFlashMessage('danger', $errorMessage);
+            } else {
                 $this->getSettingService()->set('consult', $consult);
                 $this->setFlashMessage('success', 'site.save.success');
             }
-            $this->setFlashMessage('danger', $errorMessage);
         }
 
         return $this->render('admin-v2/operating/site-setting/consult-setting.html.twig', [
