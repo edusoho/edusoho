@@ -64,7 +64,7 @@ const showCloudAd = () => {
 const showConsultTips = () => {
   const $consult = $("#consultTips");
   $.get($consult.data('url'), (res) => {
-    if (res) {
+    if (res.error != undefined) {
       $consult.modal();
     }
   });
