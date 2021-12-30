@@ -2443,7 +2443,7 @@ class WebExtension extends \Twig_Extension
             return $items;
         }
 
-        foreach ($selectFormItems as  $item) {
+        foreach ($selectFormItems as $item) {
             $formItem = FormItemFectory::create($item['code'])->getData();
             $items[$item['code']] = array_merge($formItem, $item);
         }
