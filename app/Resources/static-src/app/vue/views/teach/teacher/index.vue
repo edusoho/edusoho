@@ -24,11 +24,11 @@
       </template>
 
       <div slot="display" slot-scope="item">
-        <a-checkbox :checked="item.display === '1'" @change="(e) => changeDisplay(e.target.checked, item.id)" />
+        <a-checkbox :checked="item.showable === '1'" @change="(e) => changeDisplay(e.target.checked, item.id)" />
       </div>
 
       <div slot="promoteInfo" slot-scope="item">
-        <a-button v-if="item.display === '0'" type="link" disabled>推荐</a-button>
+        <a-button v-if="item.showable === '0'" type="link" disabled>推荐</a-button>
         <template v-else>
           <a-button type="link">推荐序号{{ item.promotedSeq }}</a-button>
           <a class="set-number" href="javascript:;" @click="clickSetNumberModal(item.id)"><a-icon type="edit" /></a>
@@ -347,7 +347,7 @@ export default {
       const params = {
         query: { id },
         params: {
-          display: checked ? 1 : 0
+          showable: checked ? 1 : 0
         }
       };
 
@@ -378,7 +378,7 @@ export default {
 
       _.forEach(this.pageData, item => {
         if (item.id == id) {
-          item.display = checked ? '1' : '0';
+          item.showable = checked ? '1' : '0';
           return false;
         }
       });

@@ -128,9 +128,9 @@ class User extends AbstractResource
         }
         $fields = $request->request->all();
         $update = [];
-        if (isset($fields['display'])) {
-            $display = empty($fields['display']) ? 0 : 1;
-            $update = $this->getUserService()->updateUser($id, ['display' => $display]);
+        if (isset($fields['showable'])) {
+            $showable = empty($fields['showable']) ? 0 : 1;
+            $update = $this->getUserService()->updateUser($id, ['showable' => $showable]);
         }
 
         return $update;

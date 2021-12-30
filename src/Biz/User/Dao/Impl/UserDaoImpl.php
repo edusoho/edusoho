@@ -311,6 +311,7 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
                 'orgCode = :orgCode',
                 'distributorToken = :distributorToken',
                 'destroyed = :destroyed',
+                'showable = :showable',
             ],
         ];
     }
