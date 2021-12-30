@@ -55,9 +55,9 @@ class SiteSettingController extends BaseController
             $errorMessage = '';
             if ((int) $consult['enabled']) {
                 foreach ($consult['phone'] as $phone) {
-                    preg_replace('/[^\d]/', '', $phone['name']);
-                    preg_replace('/[^\d]/', '', $phone['number']);
-                    if (empty($phone['name']) || empty($phone['number']) || 4008041114 == $phone['number'] || 4008041114 == $phone['number']) {
+                    $name = preg_replace('/[^\d]/', '', $phone['name']);
+                    $number = preg_replace('/[^\d]/', '', $phone['number']);
+                    if (empty($phone['name']) || empty($phone['number']) || 4008041114 == $name || 4008041114 == $number) {
                         $errorMessage = 'admin.setting.consult.phone_error';
                         break;
                     }
