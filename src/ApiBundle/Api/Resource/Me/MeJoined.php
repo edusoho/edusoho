@@ -139,13 +139,12 @@ class MeJoined extends AbstractResource
         $user = $this->getCurrentUser();
         $conditions = ['role' => 'student', 'userId' => $user['id']];
         $total = $this->getItemBankExerciseMemberService()->count($conditions);
-        list($offset, $limit) = $this->getOffsetAndLimit($request);
 
         $members = $this->getItemBankExerciseMemberService()->search(
             $conditions,
             ['updatedTime' => 'DESC'],
-            $offset,
-            $limit
+            0,
+            PHP_INT_MAX
         );
 
         $itemBankExercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($members, 'exerciseId'));
