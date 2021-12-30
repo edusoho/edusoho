@@ -1,28 +1,37 @@
 {% extends 'layout.html.twig' %}
+
 {% do script(['libs/jquery-validation.js', 'libs/ltc-sdk-client.js', 'app/js/task-manage/finish/index.js'], 500) %}
+
 {% set bodyClass = 'task-iframe-body' %}
+
 {% block body %}
   <div class="tab-content" id="iframe-content">
-  {% set selectTips = {'time': 'activity_manage.finish_select_tips_time', 'end': 'activity_manage.finish_select_tips_end'} %}
-  {% set timeOptions = ['time', 'watchTime'] %}
-  {% set defaultCondition = conditions[0] %}
-  {% if activity.mediaType == 'video' %}
-    {% set statisticsSetting = setting('videoEffectiveTimeStatistics') %}
-    {% set defaultCondition = statisticsSetting.statistical_dimension|default('page') == 'page' ? {"type": "time", "value": 1} : {"type": "watchTime", "value": 1}%}
-  {% endif %}
-  
+    {% set selectTips = {'time': 'activity_manage.finish_select_tips_time', 'end': 'activity_manage.finish_select_tips_end'} %}
+    {% set timeOptions = ['time', 'watchTime'] %}
+    {% set defaultCondition = conditions[0] %}
+    {% if activity.mediaType == 'video' %}
+      {% set statisticsSetting = setting('videoEffectiveTimeStatistics') %}
+      {% if statisticsSetting.statistical_dimension|default('page') == 'page' %}
+        {% set defaultCondition = {"type": "time", "value": 1} %}
+      {% elseif statisticsSetting.statistical_dimension|default('page') == 'playing' %}
+        {% set defaultCondition = {"type": "watchTime", "value": 1} %}
+      {% else %}
+        {% set defaultCondition = {"type": "end", "value": ""} %}
+      {% endif %}
+    {% endif %}
+
     <div class="tab-pane js-course-tasks-pane active">
-        <form class="form-horizontal" id="step3-form" >
-          <div class="form-group">
-            <div class="col-sm-2 control-label">
-              <label for="condition-select">
-                {{ 'course.plan_task.activity_manage.finished_condition'|trans }}
+      <form class="form-horizontal" id="step3-form">
+        <div class="form-group">
+          <div class="col-sm-2 control-label">
+            <label for="condition-select">
+              {{ 'course.plan_task.activity_manage.finished_condition'|trans }}
               {% if activity.mediaType == 'video' %}
                 <span data-toggle="popover" data-trigger="hover" data-placement="bottom" title="" data-html="true" data-content="{{ 'activity_manage.video.finish_tips'|trans }}" class="link-medium es-icon es-icon-help ml5"></span>
               {% endif %}
-              </label>
-            </div>
-            <div class="col-sm-4 {% if conditions|length == 1 %}form-control-static{% endif %}">
+            </label>
+          </div>
+          <div class="col-sm-4 {% if conditions|length == 1 %}form-control-static{% endif %}">
             {% if conditions|length == 1 %}
               {{ defaultCondition['describe']|default(selectTips[defaultCondition['type']]|default(''))|trans }}
               <input type="hidden" id="finish-type" value="{{ defaultCondition['type'] }}" name="finishType">
@@ -46,33 +55,42 @@
                 </select>
               {% endif %}
             {% endif %}
+          </div>
+        </div>
+        <div id="conditions">
+          <div id="conditions-time" class="form-group" {% if activity['finishType']|default(defaultCondition['type']) not in timeOptions %} style="display: none;"{% endif %}>
+            <div class="col-sm-2 control-label">
+              <label for="watchTime">
+                <span id="timeLabel" class="{% if activity['finishType']|default(defaultCondition['type']) != 'time' %} hidden {% endif %}">{{ 'course.plan_task.activity_manage.video.time_at_least'|trans }}</span>
+                <span id="watchTimeLabel" class="{% if activity['finishType']|default(defaultCondition['type']) != 'watchTime' %} hidden {% endif %}">{{ 'course.plan_task.activity_manage.video.watch_time_at_least'|trans }}</span>
+              </label>
+            </div>
+            <div class="col-sm-4">
+              <input class="form-control" id="watchTime" type="text" name="watchTime" value="{% if activity['finishType']|default() in timeOptions %}{{ activity['finishData']|default() }}{% elseif defaultCondition['type'] in timeOptions %}{{ defaultCondition['value']|default('1') }}{% endif %}">
+            </div>
+            <div class="col-sm-4">
+              <p class="form-control-static">
+                分
+              </p>
             </div>
           </div>
-          <div class="" id="conditions" >
-            <div id="conditions-time" class="form-group" {% if activity['finishType']|default(defaultCondition['type']) not in timeOptions %} style="display: none;"{% endif %}>
-              <div class="col-sm-2 control-label">
-                <label for="watchTime">
-                  <span id="timeLabel" class="{% if activity['finishType']|default(defaultCondition['type']) != 'time' %} hidden {% endif %}">{{'course.plan_task.activity_manage.video.time_at_least'|trans}}</span>
-                  <span id="watchTimeLabel" class="{% if activity['finishType']|default(defaultCondition['type']) != 'watchTime' %} hidden {% endif %}">{{'course.plan_task.activity_manage.video.watch_time_at_least'|trans}}</span>
-                </label>
-              </div>
-              <div class="col-sm-4">
-                <input class="form-control" id="watchTime" type="text"  name="watchTime" value="{% if activity['finishType']|default() in timeOptions %}{{ activity['finishData']|default() }}{% elseif defaultCondition['type'] in timeOptions %}{{ defaultCondition['value']|default('1') }}{% endif %}">
-              </div>
-              <div class="col-sm-4">
-                <p class="form-control-static">
-                  分
-                </p>
-              </div>
+          {% for condition in conditions %}
+            {% if condition['html']|default() %}
+              {% include("@activity/"~ activity.mediaType ~"/resources/views/" ~ condition['html']) with {condition: condition} %}
+            {% endif %}
+          {% endfor %}
+        </div>
+        <input type="hidden" id="finish-data" name="finishData" value="{{ activity['finishData']|default(defaultCondition['value']|default()) }}">
+        <div id="endConditions" class="{% if activity['finishType']|default(defaultCondition['type']) != 'end' %}hidden{% endif %} form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="js-end-rule" {% if activity['finishData']|default(defaultCondition['value']) %} checked {% endif %}> {{ 'course.plan_task.activity_manage.video.not_completed_prohibited'|trans }}
+              </label>
             </div>
-            {% for condition in conditions %}
-              {% if condition['html']|default() %}
-                {% include("@activity/"~ activity.mediaType ~"/resources/views/" ~ condition['html']) with {condition: condition} %}
-              {% endif %}
-            {% endfor %}
           </div>
-          <input type="hidden" id="finish-data" name="finishData" value="{{ activity['finishData']|default(defaultCondition['value']|default()) }}">
-        </form>
+        </div>
+      </form>
     </div>
   </div>
 {% endblock %}

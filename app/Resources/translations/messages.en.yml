@@ -5,7 +5,7 @@ site.online_school_name: 'Site Name'
 site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
 site.register_link_url: 'Register URL'
-site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent"> download the App</a>.'
+site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent"> download the App</a>.<br/> Android allows viewing in wechat's built-in browser.'
 site.not_support_cloud_video_upgrade: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please open in wechat or go to<a href="%mobileUrl%" target="parent"> download the App</a>.'
 site.currency.CNY: CNY
 site.date.year: Year
@@ -123,6 +123,8 @@ site.badge.try_watch: Preview
 site.badge.free: Free
 site.btn.detail: more
 site.setting.finished: Setting finished
+site.setting.goto: Setting
+site.setting.cancel: Cancel
 site.setting.unfinished: Setting unfinished
 site.verify.finished: Verify finished
 site.verify.unfinished: Verify unfinished
@@ -4620,6 +4622,7 @@ admin.classroom_manage.manage.name_th: '%name% Title'
 admin.classroom_manage.manage.course_number_th: 'Course Number'
 admin.classroom_manage.manage.student_number_th: 'Student Number'
 admin.classroom_manage.manage.price_th: Price
+admin.classroom_manage.manage.creator: Creator/Date
 admin.classroom_manage.manage.status_th: Status
 admin.classroom_manage.manage.operate_th: Action
 admin.classroom_manage.manage.empty: 'No %name% Record!'
@@ -5015,6 +5018,11 @@ admin.setting.navigation.status.closed: Disable
 admin.setting.navigation.edit_btn: Edit
 admin.setting.navigation.add_child_menu_btn: 'Add Child Menu'
 admin.setting.consult.customer_service_function: 'Customer service'
+admin.setting.consult.check_tips: >
+  In order to better provide users with efficient and high-quality services, please set up a customer service contact number
+  <br>
+  Improve service quality
+admin.setting.consult.phone_error: Phone Error
 admin.setting.consult.floating_bar: 'Color of the floating bar'
 admin.setting.consult.delete_btn: Delete
 admin.setting.consult.add_btn: Delete
@@ -5565,7 +5573,7 @@ admin.operation_certificate.certificate.resource_choose: Selecting Issue Target
 admin.operation_certificate.certificate.resource_choose_btn: select......
 admin.operation_certificate.certificate.template_choose: Selecting Template
 admin.operation_certificate.certificate.code: Certificate Code
-admin.operation_certificate.certificate.code.placeholder: 1 to 6 digits or letters of the alphabet, not case sensitive
+admin.operation_certificate.certificate.code.placeholder: 1 to 20 digits or letters of the alphabet, not case sensitive
 admin.operation_certificate.certificate.expiry_day: Certificate validity
 admin.operation_certificate.certificate.expiry_day.placeholder: Enter the validity of the certificate, the empty value is valid for a long time
 admin.operation_certificate.certificate.auto_issue: automatic issue
@@ -5915,7 +5923,7 @@ admin.edu_cloud.edu_video.finger_print_time: Second
 admin.edu_cloud.edu_video.finger_print_opacity_label: 'Cloud video fingerprint opacity'
 admin.edu_cloud.edu_video.finger_print_opacity_tips: 'The recommended opacity is between 0 and 1 seconds,The smaller the number, the more transparent'
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 'Cloud video security enhancements'
-admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the H5 browser, the system will guide the user to use App view.'
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the H5 browser, the system will guide the user to use App view. Android is only allowed to view in the built-in browser of wechat app'
 admin.edu_cloud.edu_video.enable_hls_encryption_plus_upgrade_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the H5 browser except Wechat, the system will guide the user to use Wechat or App view.'
 admin.edu_cloud.edu_video.buy_flow_tips: 'Open traffic annual package, video traffic more cost-effective. <a class="" href="%bugUrl%" target="_blank"> What is a traffic package? </a>'
 admin.edu_cloud.edu_video.start_buy: "Contact official immediately opened: <span class = \"text-primary\"> 4008041114 </ span> \n"
@@ -6566,6 +6574,7 @@ admin.setting_course.learning_time_statistical_dimension: Statistical dimension 
 admin.setting_course.effective_learning_time.playing.help_block: The actual playing time was taken as the learning time statistics
 admin.setting_course.effective_learning_time.page.help_block: The page stay time is taken as the learning time statistics
 admin.setting_course.effective_learning_time.playing_time: Video playing time
+admin.setting_course.effective_learning_time.end_time: End Time
 admin.setting_course.effective_learning_time.page_time: Page stay time
 admin.setting_course.effective_learning_time.accumulated_merge: The learning hours are directly accumulated and combined
 admin.setting_course.effective_learning_time.reweighted_merge: The learning hours were reweighted and then merged
@@ -6945,6 +6954,9 @@ admin.setting_course.video_play_setting.play_rule.auto_pause.help_block: When th
 admin.setting_course.video_play_setting.play_rule.no_action.help_block: When the system detects that the user is not focusing on learning, the PC side will continue to maintain the current play.
 admin.setting_course.video_play_setting.play_rule.auto_pause: automatic pause
 admin.setting_course.video_play_setting.play_rule.no_action: no intervention
+admin.setting_course.video_play_setting.learn_config: Video Learn Config
+admin.setting_course.video_play_setting.complate_config: Video Complate Config
+admin.setting_course.video_play_setting.default: Default
 admin.article_setting.edit: 'Edit articles'
 admin.article_setting.title: 'Article headlines'
 admin.article_setting.category: Column
@@ -9706,6 +9718,7 @@ wechat.notification.fans_list.user_num: "User Num:"
 wechat.notification.fans_list.fans_list_empty: No fan
 wechat.notification.fans_list.no_wechat_bind: WeChat service number is not bound yet
 wechat.notification.fans_list.placeholder: Please enter keywords
+wechat.notification.fans_list.new_tips: According to relevant laws and regulations, in order to protect the legitimate rights and interests of users, official account number "user information acquisition interface" no longer provides user nicknames and avatar information after December 27, 2021.
 wechat.notification.send_days: Send Days
 wechat.notification.course_remind_conditions: 'For at least one student who has not completed and has not quit the teaching program, a notice is sent at a fixed frequency and at a fixed time.'
 wechat.notification.tooltip_hint: Wechat service number notice does not support marketing messages such as advertisements and all other messages that may cause harassment to users. If the notice fails to be sent, it may be that the keywords such as task name and course name contain illegal content.
@@ -10038,6 +10051,7 @@ exception.common_upgrade_v2_error: Has been upgraded to the new version
 exception.switch_old_version.permission_error: Please contact super administrator or administrator operation
 exception.switch_old_version.error: Has been upgraded to the old version
 exception.fields_format_error: Fields format error
+exception.common_upgrade_app_version: The current version does not support this function, please upgrade to the latest version to use
 admin_v2.setting.navigation.foot.tips: "Besides Qingqiu、Default A、Default B、Yazhi，please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> Web setting</a> and edit.\n"
 admin_v2.setting_course.course_list_page_seq.help_block: 'Address: Domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "operating" - "Web Setting" - "Purchased Theme" - "setting". Course order settings are only supported by ink-only theme and simplicity theme.'
 
@@ -10533,8 +10547,9 @@ exception.homework.not_found_result: The homework result does not exist
 
 activity_manage.finish_tips_time: Stat at least %finishDetail% minutes.
 activity_manage.finish_tips_watch_time: Watch at least %finishDetail% minutes.
-+course.plan_task.activity_manage.video.time_at_least: Stay at least
-+course.plan_task.activity_manage.video.watch_time_at_least: Watch at least
+course.plan_task.activity_manage.video.time_at_least: Stay at least
+course.plan_task.activity_manage.video.watch_time_at_least: Watch at least
+course.plan_task.activity_manage.video.not_completed_prohibited: When the task is not completed, the player progress dragging is prohibited
 activity_manage.time_last_tips: >
   Remaining<span class="color-danger js-finish-time">%time% minutes</span> completed
 activity_manage.finished_tips: >
@@ -10604,6 +10619,7 @@ admin.classroom_manage.statistics.course.title_tips: >
     2.Other statistical data items are real-time data.<br/>
   </span>
 admin.classroom_manage.statistics.course.total_learn_time: 'The course is accumulated study time (minutes): %mins%'
+admin.classroom_manage.recommend.tips: Priority shall be given to the recommended serial number from small to large, and those not recommended shall be in reverse order according to the creation time
 
 classroom.manage.data_statictics: Data Statistics
 classroom.manage.live_statictics: Live Statistics

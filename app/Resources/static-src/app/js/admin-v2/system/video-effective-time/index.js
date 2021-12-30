@@ -52,7 +52,7 @@ $('input:radio[name="play_rule"]').click(function(){
 
 $('input:radio[name="statistical_dimension"]').click(function(){
   let value = $('input:radio[name="statistical_dimension"]:checked').val();
-  if(value == 'playing') {
+  if(value != 'page') {
     $('.js-statistical-dimension-help').html(Translator.trans('admin_v2.video_effective_time_setting.statistical_dimension.playing.help_block'));
   } else {
     $('.js-statistical-dimension-help').html(Translator.trans('admin_v2.video_effective_time_setting.statistical_dimension.page.help_block'));

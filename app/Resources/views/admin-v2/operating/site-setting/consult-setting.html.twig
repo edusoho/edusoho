@@ -42,22 +42,6 @@
           <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button"
                   title="{{ 'admin.setting.consult.delete_btn'|trans }}">×
           </button>
-          </input>
-        </div>
-      </div>
-    </div>
-
-    <div data-role="phone-template" style="display:none">
-      <div class="row form-group has-feedback">
-        <div class="controls col-md-4 col-md-offset-2">
-          <input type="text" name="" class="form-control" value="" placeholder="">
-        </div>
-        <div class="controls col-md-4">
-          <input type="text" name="" class="form-control" value="" placeholder="">
-          <button class="close delete-btn form-control-feedback" data-role="phone-item-delete" type="button"
-                  title="{{ 'admin.setting.consult.delete_btn'|trans }}">×
-          </button>
-          </input>
         </div>
       </div>
     </div>
@@ -75,7 +59,6 @@
           <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button"
                   title="{{ 'admin.setting.consult.delete_btn'|trans }}">×
           </button>
-          </input>
         </div>
       </div>
     </div>
@@ -165,6 +148,21 @@
         </div>
       </div>
     </fieldset>
+
+{#    联系设置模板#}
+    <div data-role="phone-template" style="display:none">
+      <div class="row form-group has-feedback">
+        <div class="controls col-md-4 col-md-offset-2">
+          <input type="text" name="" class="form-control" value="" placeholder="">
+        </div>
+        <div class="controls col-md-4">
+          <input type="text" name="" class="form-control" value="" placeholder="">
+          <button class="close delete-btn form-control-feedback" data-role="phone-item-delete" type="button"
+                  title="{{ 'admin.setting.consult.delete_btn'|trans }}">×
+          </button>
+        </div>
+      </div>
+    </div>
 
     <fieldset>
       <legend>{{ 'admin.setting.consult.phone_setting'|trans }}</legend>

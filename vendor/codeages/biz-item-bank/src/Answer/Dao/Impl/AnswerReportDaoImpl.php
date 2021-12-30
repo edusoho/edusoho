@@ -19,6 +19,13 @@ class AnswerReportDaoImpl extends AdvancedDaoImpl implements AnswerReportDao
         return $this->findByFields(['answer_scene_id' => $answerSceneId]);
     }
 
+    public function deleteByAssessmentId($assessmentId)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE assessment_id = ?";
+
+        return $this->db()->executeUpdate($sql, [$assessmentId]);
+    }
+
     public function declares()
     {
         return [

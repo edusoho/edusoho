@@ -6,4 +6,6 @@ interface AnswerQuestionReportDao
     public function findByIds($ids);
 
     public function findByAnswerRecordId($answerRecordId);
+
+    public function deleteByAssessmentId($assessmentId);
 }

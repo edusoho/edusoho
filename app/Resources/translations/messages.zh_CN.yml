@@ -8,7 +8,7 @@ site.online_school_about: 网校简介
 site.online_school_logo: 网校LOGO
 site.register_link_url: 注册链接的地址
 site.not_support_cloud_video: >
-  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。
+  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a> <br/> 安卓端允许在微信内置浏览器中观看。
 site.not_support_cloud_video_upgrade: >
   <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请用微信打开或<a href="%mobileUrl%" target="parent">下载App</a>。
 site.currency.CNY: 元
@@ -149,6 +149,8 @@ site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%�
 site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课、BiLiBiLi、爱奇艺的视频页面地址导入
 site.btn.detail: 详情
 site.setting.finished: 已设置
+site.setting.goto: 前往设置
+site.setting.cancel: 暂不填写
 site.setting.unfinished: 未设置
 site.verify.finished: 已验证
 site.verify.unfinished: 未验证
@@ -2190,6 +2192,7 @@ course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可�
 course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
 course.plan_task.activity_manage.video.time_at_least: 至少停留
 course.plan_task.activity_manage.video.watch_time_at_least: 至少播放
+course.plan_task.activity_manage.video.not_completed_prohibited: 任务未完成时,禁止播放器进度拖拽
 
 course.plan_task.activity_manage.replay: 直播回放
 course.plan_task.activity_manage.replay.time: 直播回放时长
@@ -5486,6 +5489,7 @@ admin.classroom_manage.manage.name_th: %name%名称
 admin.classroom_manage.manage.course_number_th: 课程数
 admin.classroom_manage.manage.student_number_th: 学员数
 admin.classroom_manage.manage.price_th: 价格
+admin.classroom_manage.manage.creator: 创建者/时间
 admin.classroom_manage.manage.status_th: 状态
 admin.classroom_manage.manage.operate_th: 操作
 admin.classroom_manage.manage.empty: 暂无%name%信息!
@@ -5967,6 +5971,11 @@ admin.setting.navigation.status.closed: 关闭
 admin.setting.navigation.edit_btn: 编辑
 admin.setting.navigation.add_child_menu_btn: 添加二级导航
 admin.setting.consult.customer_service_function: 客服功能
+admin.setting.consult.check_tips: >
+  为了更好地为用户提供高效优质服务,请您设置客服联系电话
+  <br>
+  提升服务质量
+admin.setting.consult.phone_error: 联系电话设置错误
 admin.setting.consult.floating_bar: 浮动条颜色
 admin.setting.consult.delete_btn: 删除
 admin.setting.consult.add_btn: 新增
@@ -6553,7 +6562,7 @@ admin.operation_certificate.certificate.resource_choose: 选择发放对象
 admin.operation_certificate.certificate.resource_choose_btn: 选择......
 admin.operation_certificate.certificate.template_choose: 选择证书模板
 admin.operation_certificate.certificate.code: 证书编码
-admin.operation_certificate.certificate.code.placeholder: 1至6位数字或英文字母，不区分大小写
+admin.operation_certificate.certificate.code.placeholder: 1至20位数字或英文字母，不区分大小写
 admin.operation_certificate.certificate.expiry_day: 证书有效期
 admin.operation_certificate.certificate.expiry_day.forever: 长期有效
 admin.operation_certificate.certificate.expiry_day.placeholder: 输入证书有效期，空值位长期有效
@@ -6945,7 +6954,7 @@ admin.edu_cloud.edu_video.open_radio: 开启
 admin.edu_cloud.edu_video.close_radio: 关闭
 admin.edu_cloud.edu_video.normal_mode_tips: >
   选择普通模式，<span class="text-success">新上传</span>的视频文件在手机浏览器下默认使用通用格式播放，增强了视频课时对手机浏览器的兼容性；<br/><span class="text-danger">但普通模式的视频在某些情况下有被盗的风险，请谨慎开启。</span>
-admin.edu_cloud.edu_video.encryption_mode_tips: '选择加密模式，能极大的提升视频的安全性，但可能导致视频课时在某些陈旧的手机浏览器上无法正常播放。'
+admin.edu_cloud.edu_video.encryption_mode_tips: 选择加密模式，能极大的提升视频的安全性，但可能导致视频课时在某些陈旧的手机浏览器上无法正常播放。
 admin.edu_cloud.edu_video.transcode_quality: 视频转码画质
 admin.edu_cloud.edu_video.transcode_quality_low: >
   流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%
@@ -7000,7 +7009,7 @@ admin.edu_cloud.edu_video.finger_print_time: 秒
 admin.edu_cloud.edu_video.finger_print_opacity_label: 指纹不透明度：
 admin.edu_cloud.edu_video.finger_print_opacity_tips: 请输入0～1之间的一位小数,数字越小越透明
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 云视频防盗增强
-admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。安卓端仅允许在微信APP内置浏览器中观看
 admin.edu_cloud.edu_video.enable_hls_encryption_plus_upgrade_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在微信外的其他手机浏览器中播放，系统会引导用户使用微信或App观看。
 admin.edu_cloud.edu_video.buy_flow_tips: >
   开通流量年包，视频流量更划算。<a class="" href="%bugUrl%" target="_blank">什么是流量年包？</a>
@@ -7845,10 +7854,14 @@ admin.setting_course.video_play_setting.play_rule.auto_pause.help_block: 当系�
 admin.setting_course.video_play_setting.play_rule.no_action.help_block: 当系统检测到用户处于非专注学习时，PC端将继续维持当前播放
 admin.setting_course.video_play_setting.play_rule.auto_pause: 自动暂停
 admin.setting_course.video_play_setting.play_rule.no_action: 不做干预
+admin.setting_course.video_play_setting.learn_config: 视频课时学习配置
+admin.setting_course.video_play_setting.complate_config: 视频课时完成条件配置
+admin.setting_course.video_play_setting.default: 默认完成条件
 admin.setting_course.effective_learning_time_rule: 在线视频课时有效学习时长统计规则
 admin.setting_course.learning_time_statistical_dimension: 学习时长统计维度
 admin.setting_course.effective_learning_time.playing.help_block: 以实际播放时长作为学习时长统计
 admin.setting_course.effective_learning_time.page.help_block: 以页面停留时长作为学习时长统计
+admin.setting_course.effective_learning_time.end_time: 学习到最后
 admin.setting_course.effective_learning_time.playing_time: 视频播放时长
 admin.setting_course.effective_learning_time.page_time: 页面停留时长
 admin.setting_course.effective_learning_time.reweighted_merge: 各处学习时长去重后再合并
@@ -10994,6 +11007,7 @@ wechat.notification.fans_list.profile_picture: 微信头像
 wechat.notification.fans_list.nickname: 微信昵称
 wechat.notification.fans_list.username: 网校用户名
 wechat.notification.fans_list.subscribe_time: 关注时间
+wechat.notification.fans_list.new_tips: 根据相关法律法规，为保障用户合法权益，2021年12月27日之后，公众号“用户信息获取接口”不再提供用户昵称、头像信息
 wechat.notification.fans_list.tips: 粉丝列表每30分钟刷新一次数据
 wechat.notification.fans_list.user_num: 用户数量：
 wechat.notification.fans_list.fans_list_empty: 暂无粉丝
@@ -11329,6 +11343,7 @@ exception.common_upgrade_v2_error: 已经升级到新版
 exception.switch_old_version.permission_error: 请联系超级管理员或管理员操作
 exception.switch_old_version.error: 已经切回到旧版后台
 exception.fields_format_error: 参数格式错误
+exception.common_upgrade_app_version: 当前版本不支持该功能，请升级至最新版本使用
 admin_v2.default.switch_old_version_btn: 回到旧版后台
 admin_v2.setting.navigation.foot.tips: >
   清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往
@@ -11864,6 +11879,7 @@ admin.classroom_manage.statistics.course.title_tips: >
     2.其他统计数据项均为实时数据。<br/>
   </span>
 admin.classroom_manage.statistics.course.total_learn_time: 课程被累加学习时长（分）：%mins%
+admin.classroom_manage.recommend.tips: 优先按推荐序号由小至大排序，未推荐的按创建时间倒序
 
 classroom.manage.data_statictics: 数据概览
 classroom.manage.live_statictics: 直播统计

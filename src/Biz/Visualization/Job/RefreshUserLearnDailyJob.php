@@ -18,7 +18,7 @@ class RefreshUserLearnDailyJob extends BaseRefreshJob
         $totalPage = ceil($this->biz['db']->fetchColumn('SELECT COUNT(*) FROM `user_learn_daily`') / self::LIMIT);
         for ($page = 0; $page < $totalPage; ++$page) {
             $start = $page * self::LIMIT;
-            if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
+            if (empty($statisticsSetting) || 'page' != $statisticsSetting['statistical_dimension']) {
                 $this->refreshByWatchDaily($start, self::LIMIT);
             } else {
                 $this->refreshByStayDaily($start, self::LIMIT);

@@ -783,6 +783,9 @@ admin_v2.user.destroy_account_manage_menu: 注销管理
 admin_v2.user.destroy_account.basic_tab: 注销申请
 admin_v2.user.destroy_account.destroyed_tab: 注销记录
 
+#用户管理-销客助手
+admin_v2.user.scrm_menu: 销客助手
+
 #交易-商品订单
 admin_v2.trade.order_manage.basic_group: 订单管理
 admin_v2.trade.goods_order.menu: 商品订单
@@ -942,7 +945,7 @@ admin_v2.system.course.avatar_tab: 默认图片
 admin_v2.system.course.classroom_tab: 班级
 admin_v2.system.course.open_course_tab: 公开课
 admin_v2.system.course.task_multiple_open_tab: 课时多开配置
-admin_v2.system.course.video_task_tab: 视频课时学习配置
+admin_v2.system.course.video_task_tab: 视频课时配置
 
 admin_v2.system.roles_menu: 角色权限
 admin_v2.system.roles.basic_tab: 角色权限
@@ -1055,3 +1058,4 @@ admin_v2.vip_user.operation_record_tab: 会员用户操作记录
 admin.wap_setting.find: 发现页设置
 admin.wap_setting.version_setting: 版本设置
 admin.wap_setting.pay_setting: 支付设置
+admin_v2.cloud.question_bank.attachment.basic_tab: 题库附件

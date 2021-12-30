@@ -185,6 +185,11 @@ class MobileSettingController extends BaseController
         return $this->render('admin-v2/operating/mobile-setting/mobile.setting.discoveries.html.twig', []);
     }
 
+    public function appDecorateAction(Request $request)
+    {
+        return $this->render('admin-v2/operating/mobile-setting/app-decorate.html.twig', []);
+    }
+
     /**
      * @return CourseService
      */

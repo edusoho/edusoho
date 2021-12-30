@@ -251,6 +251,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'course_v8.id = :id',
                 'course_v8.courseSetId = :courseSetId',
                 'course_v8.courseSetId IN (:courseSetIds)',
+                'course_v8.courseSetId NOT IN (:excludeCourseSetIds)',
                 'course_v8.updatedTime >= :updatedTime_GE',
                 'course_v8.status = :status',
                 'course_v8.type = :type',

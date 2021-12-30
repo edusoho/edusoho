@@ -609,6 +609,10 @@ admin_v2_cloud_attachment:
     path: /cloud_attachment
     defaults:
         _controller: 'AppBundle:AdminV2/Teach/CloudFile:attachmentList'
+admin_v2_question_bank_attachment:
+    path: /question_bank_attachment
+    defaults:
+      _controller: 'AppBundle:AdminV2/Teach/CloudFile:questionBankAttachmentList'
 admin_v2_cloud_file:
     path: /cloud_files
     defaults:
@@ -923,6 +927,12 @@ admin_v2_setting_mobile_discoveries:
         _controller: 'AppBundle:AdminV2/Operating/MobileSetting:mobileDiscoveries'
     permissions:
         - admin_v2_setting_mobile
+admin_v2_setting_app_decorate:
+    path: /setting/app_decorate
+    defaults:
+        _controller: 'AppBundle:AdminV2/Operating/MobileSetting:appDecorate'
+    permissions:
+        - admin_v2_setting_mobile
 admin_v2_operation_mobile_customization_upgrade:
     path: /operation/mobile/customization_upgrade
     defaults:
@@ -1165,6 +1175,10 @@ admin_v2_setting_consult_setting:
     path: /setting/consult-setting
     defaults:
         _controller: 'AppBundle:AdminV2/Operating/SiteSetting:consultSetting'
+admin_v2_setting_consult_setting_validate:
+    path: /setting/consult/validate
+    defaults:
+      _controller: 'AppBundle:AdminV2/Operating/SiteSetting:validateConsultSetting'
 admin_v2_setting_consult_upload:
     path: /setting/consult-upload
     defaults:
@@ -1934,6 +1948,10 @@ admin_v2_show_idcard:
         _controller: 'AppBundle:AdminV2/User/UserApproval:showIdcard'
     permissions:
         - admin_v2_approval_manage
+admin_v2_scrm:
+    path: /scrm
+    defaults:
+        _controller: 'AppBundle:AdminV2/User/Scrm:index'
 admin_v2_destroy_account_record:
     path: /destroy_account/record
     defaults:
