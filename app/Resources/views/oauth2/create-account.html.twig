@@ -81,6 +81,8 @@
           </div>
         </div>
       {% else %}
+
+      {% if setting('auth.register_mode')|default('') != 'mobile' %}
         <div class="form-group cd-form-group">
           <label class="control-label" for="originalEmailAccount">
             {{'user.oauth.register_account.binding_account_by_email'|trans}}
@@ -90,6 +92,7 @@
             <input type="text" name="originalEmailAccount" id="originalEmailAccount" class="form-control input-lg" data-url="{{path('original_account_check', {type: 'email'})}}">
           </div>
         </div>
+      {% endif %}
 
         <div class="form-group cd-form-group">
           <label class="control-label" for="originalAccountPassword">{{ 'user.oauth.login_by_email'|trans }}{{ 'user.register.password_label'|trans }}</label>
