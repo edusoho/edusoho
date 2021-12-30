@@ -4297,6 +4297,7 @@ admin.course_manage.manage.count: "Courses：<strong class=\"inflow-num\">%cours
 admin.course_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>(s) \n"
 admin.course_manage.manage.closed_count: "Closed：<strong class=\"inflow-num\">%closedNum%</strong> \n"
 admin.course_manage.manage.unpublish_count: "Unpublished：<strong class=\"inflow-num\">%unPublishedNum%</strong>\n"
+admin.course_set_manage.recommend.tips: Priority shall be given to the recommended serial number from small to large, and those not recommended shall be in reverse order according to the creation time
 admin.course_set_manage.manage.number: Id
 admin.course_manage_modal.manage.number: Id
 admin.course_manage.manage.number: Id

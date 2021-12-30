@@ -722,7 +722,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'recommended' => ['recommendedTime' => 'DESC'],
             'rating' => ['rating' => 'DESC'],
             'studentNum' => ['studentNum' => 'DESC'],
-            'recommendedSeq' => ['recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC'],
+            'recommendedSeq' => ['recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC', 'createdTime' => 'DESC'],
             'hotSeq' => ['hotSeq' => 'DESC', 'studentNum' => 'DESC', 'id' => 'DESC'],
         ];
         if (isset($typeOrderByMap[$order])) {

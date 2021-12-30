@@ -62,7 +62,7 @@
     </td>
 
     <td>
-    {{ admin_macro.user_link(user) }}
+    {{ admin_macro.user_link(user|default) }}
     <br>
     <span class="text-muted text-sm">{{ classroom.createdTime|date('Y-n-d H:i') }}</span>
     </td>
