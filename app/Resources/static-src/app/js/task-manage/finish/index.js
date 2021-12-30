@@ -47,7 +47,7 @@ if ($selectFinish.length) {
 
   $('#js-end-rule').on('change', function () {
     if ($(this).is(':checked')) {
-      $('#finish-data').val($('#watchTime').val()); // 禁止拖动
+      $('#finish-data').val(parseInt($('#watchTime').val()) ? $('#watchTime').val() : 1); // 禁止拖动
     } else {
       $('#finish-data').val(''); // 不禁止拖动
     }
