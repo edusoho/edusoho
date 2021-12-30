@@ -9,6 +9,8 @@ interface UserService
 {
     public function getUser($id, $lock = false);
 
+    public function updateUser($id, array $fields);
+
     public function getUserAndProfile($id);
 
     public function initSystemUsers();
