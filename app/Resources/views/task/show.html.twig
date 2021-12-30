@@ -6,7 +6,7 @@
 {% set weChatUser = data('WeChatUser', {userId: app.user.id|default(-1)}) %}
 {% do script(['libs/ltc-sdk-server.js', 'libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js']) %}
 
-{% set showSidebar = app.request.cookies.get('show-sidebar') %}
+{% set showSidebar = app.request.cookies.get('show-sidebar') | default(1) %}
 
 {% block body %}
   {% set preview = app.request.query.get('preview')  %}
