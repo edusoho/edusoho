@@ -2,9 +2,7 @@
 
 namespace AppBundle\Controller\AdminV2\User;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
-use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ScrmController extends BaseController
