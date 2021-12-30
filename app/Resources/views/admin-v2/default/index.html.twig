@@ -168,29 +168,29 @@
         </a>
       </div>
     </div>
+  </div>
 
-    {# 客服电话未设置或者设置为阔知4008041114是提示修改 #}
+  {# 客服电话未设置或者设置为阔知4008041114是提示修改 #}
+  {% if false == isSetConsult %}
     <div
-      id="consultTips"
-      class="modal fade consult-tips"
-      aria-hidden="true"
+      class="modal fade consult-tips in"
+      style="display: block;"
       tabindex="-1"
       role="dialog"
       data-backdrop="static"
       aria-labelledby="mySmallModalLabel"
-      data-url="{{ path('admin_v2_setting_consult_setting_validate') }}"
     >
       <div class="modal-dialog" role="document">
         <div class="modal-content tac">
           <div class="modal-body">{{ 'admin.setting.consult.check_tips'|trans|raw }}</div>
-          <div class="modal-bottom clearfix">
-            <div class="modal-bottom__cancel pull-left">{{ 'site.setting.cancel'|trans }}</div>
+          <div class="modal-bottom">
             <a href="{{ path('admin_v2_setting_consult_setting') }}">
-              <div class="modal-bottom__confirm pull-left">{{ 'site.setting.goto'|trans }}</div>
+              <div class="modal-bottom__confirm">{{ 'site.setting.goto'|trans }}</div>
             </a>
           </div>
         </div>
       </div>
     </div>
-  </div>
+    <div class="modal-backdrop fade in"></div>
+  {% endif %}
 {% endblock %}

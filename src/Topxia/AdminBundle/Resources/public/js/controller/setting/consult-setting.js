@@ -6,8 +6,7 @@ define(function (require, exports, module) {
   var WebUploader = require('edusoho.webuploader');
 
   exports.run = function () {
-    var nextIndex = $('[data-role=item-add]').attr('data-length');
-    nextIndex = parseInt(nextIndex);
+    var phoneNextIndex = parseInt($('[data-role=phone-item-add]').attr('data-length'));
 
     var validator = new Validator({
       element: '#consult-setting-form',
@@ -19,26 +18,51 @@ define(function (require, exports, module) {
       return !(4008041114 == value);
     }, Translator.trans('admin.setting.consult_setting.setting_consult_phone.error_hint'));
 
-    validator.on('itemValidated', function (err, mes, form) {
-      console.log(err)
-      console.log(mes)
-      console.log(form)
-    });
-
-    for (var i = 0; i < nextIndex; i++) {
-      validator.addItem({
-        element: '[name="phone[' + i + '][name]"]',
-        required: true,
-        display: Translator.trans('admin.setting.consult_setting.setting_consult_name.empty_hint'),
-        rule: 'phoneValidate',
-      });
-      validator.addItem({
-        element: '[name="phone[' + i + '][number]"]',
-        required: true,
-        display: Translator.trans('admin.setting.consult_setting.setting_consult_phone.empty_hint'),
-        rule: 'phoneValidate',
-      });
+    var $consultEnable = parseInt($('.js-consult-enable:checked').val());
+    if ($consultEnable) {
+      $('.js-add-phone').removeClass('hidden');
+      for (var i = 0; i < phoneNextIndex; i++) {
+        validator.addItem({
+          element: '[name="phone[' + i + '][name]"]',
+          required: true,
+          display: Translator.trans('admin.setting.consult_setting.setting_consult_name.empty_hint'),
+          rule: 'phoneValidate',
+        });
+        validator.addItem({
+          element: '[name="phone[' + i + '][number]"]',
+          required: true,
+          display: Translator.trans('admin.setting.consult_setting.setting_consult_phone.empty_hint'),
+          rule: 'phoneValidate',
+        });
+      }
     }
+    $('.js-consult-enable').on('click', function () {
+      $consultEnable = parseInt($(this).val());
+      if ($consultEnable) {
+        $('.js-add-phone').removeClass('hidden');
+      } else {
+        $('.js-add-phone').addClass('hidden');
+      }
+      for (var i = 0; i < phoneNextIndex; i++) {
+        if ($consultEnable) {
+          validator.addItem({
+            element: '[name="phone[' + i + '][name]"]',
+            required: true,
+            display: Translator.trans('admin.setting.consult_setting.setting_consult_name.empty_hint'),
+            rule: 'phoneValidate',
+          });
+          validator.addItem({
+            element: '[name="phone[' + i + '][number]"]',
+            required: true,
+            display: Translator.trans('admin.setting.consult_setting.setting_consult_phone.empty_hint'),
+            rule: 'phoneValidate',
+          });
+        } else {
+          validator.removeItem('[name="phone[' + i + '][name]"]');
+          validator.removeItem('[name="phone[' + i + '][number]"]');
+        }
+      }
+    });
 
     $("#qq-property-tips").popover({
       html: true,
@@ -71,6 +95,8 @@ define(function (require, exports, module) {
     });
 
     $('[data-role=item-add]').on('click', function () {
+      var nextIndex = $(this).attr('data-length');
+      nextIndex = parseInt(nextIndex);
       if (nextIndex > 9) {
         Notify.danger(Translator.trans('admin.setting.consult_setting.setting_max_num_hint'));
         return;
@@ -105,14 +131,14 @@ define(function (require, exports, module) {
       $(this).attr('data-length', nextIndex);
     });
 
-    $('[data-role=phone-item-delete]').on('click', function () {
+    $('#consult-phone').on('click', '[data-role=phone-item-delete]',function () {
+      validator.removeItem($(this).prev());
+      validator.removeItem($(this).parent().prev().children(0));
       $(this).closest('.has-feedback').remove();
     });
 
     $('[data-role=phone-item-add]').on('click', function () {
-      var nextIndex = $(this).attr('data-length');
-      nextIndex = parseInt(nextIndex);
-      if (nextIndex > 9) {
+      if (phoneNextIndex > 9) {
         Notify.danger(Translator.trans('admin.setting.consult_setting.setting_max_num_hint'));
         return;
       }
@@ -123,8 +149,8 @@ define(function (require, exports, module) {
       var middleplaceholder = $first.find('input:eq(1)').attr('placeholder');
       var firstname = $first.find('input:first').attr('name');
       var middlename = $first.find('input:eq(1)').attr('name');
-      firstname = firstname.replace(/\d/, nextIndex);
-      middlename = middlename.replace(/\d/, nextIndex);
+      firstname = firstname.replace(/\d/, phoneNextIndex);
+      middlename = middlename.replace(/\d/, phoneNextIndex);
       $template.find('input:first').attr('placeholder', fisrtplaceholder);
       $template.find('input:eq(1)').attr('placeholder', middleplaceholder);
       $template.find('input:first').attr('name', firstname);
@@ -133,22 +159,19 @@ define(function (require, exports, module) {
       $template.find('input:first').attr('name', '');
       $template.find('input:eq(1)').attr('name', '');
       validator.addItem({
-        element: '[name="phone[' + nextIndex + '][name]"]',
+        element: '[name="phone[' + phoneNextIndex + '][name]"]',
         required: true,
         display: Translator.trans('admin.setting.consult_setting.setting_consult_name.empty_hint'),
         rule: 'phoneValidate',
       });
       validator.addItem({
-        element: '[name="phone[' + nextIndex + '][number]"]',
+        element: '[name="phone[' + phoneNextIndex + '][number]"]',
         required: true,
         display: Translator.trans('admin.setting.consult_setting.setting_consult_phone.empty_hint'),
         rule: 'phoneValidate',
       });
-      $('[data-role=phone-item-delete]').on('click', function () {
-        $(this).closest('.has-feedback').remove();
-      });
-      nextIndex = nextIndex + 1;
-      $(this).attr('data-length', nextIndex);
+      phoneNextIndex = phoneNextIndex + 1;
+      $(this).attr('data-length', phoneNextIndex);
     });
 
     $('[data-parentId=consult-qqgroup]').on('click', function () {
