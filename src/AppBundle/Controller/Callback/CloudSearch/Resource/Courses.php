@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
-use AppBundle\Controller\Callback\CloudSearch\BaseProvider;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Controller\Callback\CloudSearch\BaseProvider;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -22,7 +22,7 @@ class Courses extends BaseProvider
         $conditions['parentId'] = 0;
         $conditions['updatedTime_GE'] = $cursor;
 
-        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, array('updatedTime' => 'ASC'), $start, $limit);
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, ['updatedTime' => 'ASC'], $start, $limit);
         $courseSets = $this->build($courseSets);
         $next = $this->nextCursorPaging($cursor, $start, $limit, $courseSets);
 
@@ -50,12 +50,12 @@ class Courses extends BaseProvider
 
         foreach ($courseSets as &$courseSet) {
             if (isset($categories[$courseSet['categoryId']])) {
-                $courseSet['category'] = array(
+                $courseSet['category'] = [
                     'id' => $categories[$courseSet['categoryId']]['id'],
                     'name' => $categories[$courseSet['categoryId']]['name'],
-                );
+                ];
             } else {
-                $courseSet['category'] = array();
+                $courseSet['category'] = [];
             }
         }
 
@@ -71,14 +71,14 @@ class Courses extends BaseProvider
 
         foreach ($courseSets as &$courseSet) {
             $courseSetTagIds = $courseSet['tags'];
-            $courseSet['tags'] = array();
+            $courseSet['tags'] = [];
             if (!empty($courseSetTagIds)) {
                 foreach ($courseSetTagIds as $index => $courseSetTagId) {
                     if (isset($tags[$courseSetTagId])) {
-                        $courseSet['tags'][$index] = array(
+                        $courseSet['tags'][$index] = [
                             'id' => $tags[$courseSetTagId]['id'],
                             'name' => $tags[$courseSetTagId]['name'],
-                        );
+                        ];
                     }
                 }
             }
@@ -101,6 +101,7 @@ class Courses extends BaseProvider
                 $totalTaskNum += $course['taskNum'];
             }
             $courseSets[$index]['totalTaskNum'] = $totalTaskNum;
+            $courseSets[$index]['summary'] = $this->purifyHtml($courseSets[$index]['summary']);
         }
 
         return $courseSets;
