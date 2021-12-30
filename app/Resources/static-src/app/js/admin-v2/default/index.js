@@ -61,15 +61,6 @@ const showCloudAd = () => {
   });
 };
 
-const showConsultTips = () => {
-  const $consult = $("#consultTips");
-  $.get($consult.data('url'), (res) => {
-    if (res.error != undefined) {
-      $consult.modal();
-    }
-  });
-};
-
 const loadFirst = () => {
   //六步任务助手
   const $stepsDom = $('.js-steps');
@@ -167,7 +158,6 @@ loadStep();
 window.onload = () => {
   showCloudAd();
   setScrollEventListen();
-  showConsultTips();
 };
 $('.js-no-network').click(function () {
   cd.message({type: 'danger', 'message': Translator.trans('admin.can_not_link_data')});

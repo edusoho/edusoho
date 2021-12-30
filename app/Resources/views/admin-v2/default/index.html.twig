@@ -168,17 +168,17 @@
         </a>
       </div>
     </div>
+  </div>
 
-    {# 客服电话未设置或者设置为阔知4008041114是提示修改 #}
+  {# 客服电话未设置或者设置为阔知4008041114是提示修改 #}
+  {% if false == isSetConsult %}
     <div
-      id="consultTips"
-      class="modal fade consult-tips"
-      aria-hidden="true"
+      class="modal fade consult-tips in"
+      style="display: block;"
       tabindex="-1"
       role="dialog"
       data-backdrop="static"
       aria-labelledby="mySmallModalLabel"
-      data-url="{{ path('admin_v2_setting_consult_setting_validate') }}"
     >
       <div class="modal-dialog" role="document">
         <div class="modal-content tac">
@@ -191,5 +191,6 @@
         </div>
       </div>
     </div>
-  </div>
+    <div class="modal-backdrop fade in"></div>
+  {% endif %}
 {% endblock %}
