@@ -153,7 +153,7 @@ class GroupController extends BaseController
         }
         $this->getGroupService()->deleteGroup($id);
 
-        return $this->createJsonResponse(['success' => true, 'message' => '删除小组成功']);
+        return $this->createJsonResponse(['success' => true, 'message' => '删除小组成功', 'code' => 0]);
     }
 
     public function closeGroupAction($id)
