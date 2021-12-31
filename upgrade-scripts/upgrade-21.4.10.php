@@ -133,11 +133,11 @@ class EduSohoUpgrade extends AbstractUpdater
             foreach ($consult['phone'] as &$item) {
                 $itemName = preg_replace('/[^\d]/', '', $item['name']);
                 $itemNumber = preg_replace('/[^\d]/', '', $item['number']);
-                if ($notSetPhone == $itemName) {
+                if ($notSetPhone == $itemName || empty($item['name'])) {
                     $update = true;
-                    $item['name'] = $phone ?: '';
+                    $item['name'] = '客服';
                 }
-                if ($notSetPhone == $itemNumber) {
+                if ($notSetPhone == $itemNumber || empty($item['number'])) {
                     $update = true;
                     $item['number'] = $phone ?: '';
                 }
