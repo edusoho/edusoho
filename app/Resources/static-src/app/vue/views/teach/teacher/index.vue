@@ -150,24 +150,20 @@ const columns = [
     scopedSlots: { customRender: "nickname" },
   },
   {
-    title: "现带班课总数",
+    title: "在教班课/学员总数",
     dataIndex: 'liveMultiClassNum',
     ellipsis: true,
+    customRender: function(text, record) {
+      return `${text}/${record.liveMultiClassStudentNum}`;
+    }
   },
   {
-    title: "现学员总数",
-    dataIndex: 'liveMultiClassStudentNum',
-    ellipsis: true,
-  },
-  {
-    title: "已结课班课总数",
+    title: "完结班课/学员总数",
     dataIndex: 'endMultiClassNum',
     ellipsis: true,
-  },
-  {
-    title: "已结课班课学员总数",
-    dataIndex: 'endMultiClassStudentNum',
-    ellipsis: true,
+    customRender: function(text, record) {
+      return `${text}/${record.endMultiClassStudentNum}`;
+    }
   },
   {
     title: "在网校显示",
