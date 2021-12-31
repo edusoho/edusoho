@@ -55,7 +55,7 @@ define(function(require, exports, module) {
 
     Validator.addRule('certificate_code', function(options) {
       var value = $(options.element).val();
-      return /^[a-zA-Z0-9]+$/i.test(value);
+      return /^[a-zA-Z0-9-]+$/i.test(value);
     }, Translator.trans('admin_v2.certificate.code.check'));
 
     Validator.addRule('deadline_check', function(options) {

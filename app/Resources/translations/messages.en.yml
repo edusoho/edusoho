@@ -5890,6 +5890,8 @@ admin.edu_cloud.edu_video.normal_mode_tips: 'Select normal mode, <span class="te
 admin.edu_cloud.edu_video.encryption_mode_tips: 'Choosing an encryption mode can greatly improve the security of the video, but it may cause the video class to not play properly on some old mobile browsers.'
 
 admin.edu_cloud.edu_video.transcode_quality: 'Transcode quality'
+admin.edu_cloud.edu_video.doc_quality: 'DOC quality'
+admin.edu_cloud.doc_quality.high: High Quality
 admin.edu_cloud.edu_video.transcode_quality_low: "Smooth <span class = \"text-muted\"> (for PPT) </ span>\n"
 admin.edu_cloud.edu_video.transcode_quality_normal: "Standard <span class = \"text-muted\"> (for screen recording, camera capture) </ span>\n"
 admin.edu_cloud.edu_video.transcode_quality_high: "Fine <span class = \"text-muted\"> (for dynamic movies)</ span> \n"
