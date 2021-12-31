@@ -181,6 +181,13 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             $params['directives'] = array_merge($params['directives'], ['convertAll' => true, 'output' => 'ppt', 'imgEncrypt' => false]);
         }
 
+        if ('document' == $file['type']) {
+            $setting = $this->getSettingService()->get('storage', []);
+            if (!empty($setting['doc_quality']) && 'high' == $setting['doc_quality']) {
+                $params['directives'] = array_merge($params['directives'], ['docQuality' => 'high']);
+            }
+        }
+
         return $this->getResourceService()->startUpload($params);
     }
 
