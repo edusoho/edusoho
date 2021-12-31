@@ -85,7 +85,7 @@
           <div class="col-sm-offset-2 col-sm-10">
             <div class="checkbox">
               <label>
-                <input type="checkbox" id="js-end-rule" {% if activity['finishData']|default(defaultCondition['value']) %} checked {% endif %}> {{ 'course.plan_task.activity_manage.video.not_completed_prohibited'|trans }}
+                <input type="checkbox" id="js-end-rule" {% if activity['finishData']|default(defaultCondition['value'])|default('') %} checked {% endif %}> {{ 'course.plan_task.activity_manage.video.not_completed_prohibited'|trans }}
               </label>
             </div>
           </div>
