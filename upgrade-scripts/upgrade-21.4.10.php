@@ -123,14 +123,15 @@ class EduSohoUpgrade extends AbstractUpdater
             $conditions = [
                 'roles' => '|ROLE_SUPER_ADMIN|',
                 'locked' => 0,
-                'excludeVerifiedMobile' => '',
+                'verifiedMobile' => '1',
             ];
-            $count = $this->getUserDao()->count($conditions);
-            $supperAdminMobile = $this->getUserDao()->search($conditions, [], 0, $count, ['verifiedMobile']);
+            $supperAdminMobile = $this->getUserDao()->search($conditions, [], 0, 1, ['verifiedMobile']);
             $supperAdminMobile = array_column($supperAdminMobile, 'verifiedMobile');
             $phone = reset($supperAdminMobile);
             $update = false;
             foreach ($consult['phone'] as &$item) {
+                $item['name'] = '';
+                $item['number'] = '4008041114';
                 $itemName = preg_replace('/[^\d]/', '', $item['name']);
                 $itemNumber = preg_replace('/[^\d]/', '', $item['number']);
                 if ($notSetPhone == $itemName || empty($item['name'])) {
@@ -142,6 +143,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     $item['number'] = $phone ?: '';
                 }
             }
+
             if ($update) {
                 $this->getSettingService()->set('consult', $consult);
             }
