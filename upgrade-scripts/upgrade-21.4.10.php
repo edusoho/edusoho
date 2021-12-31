@@ -60,7 +60,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if (0 == $index) {
             $this->logger('info', '开始执行升级脚本');
-            $this->deleteCache();
 
             return array(
                 'index' => $this->generateIndex(1, 1),
@@ -88,7 +87,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function userAddShowable()
     {
-        if (!isFieldExist('user', 'showable')) {
+        if (!$this->isFieldExist('user', 'showable')) {
             $sql = "ALTER TABLE `user` ADD COLUMN `showable` tinyint(1) unsigned NOT NULL DEFAULT 1 COMMENT '在网校显示';";
             $this->getConnection()->exec($sql);
         }
@@ -157,19 +156,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $result = $this->getConnection()->fetchAssoc($sql);
 
         return empty($result) ? false : true;
-    }
-
-    protected function deleteCache()
-    {
-        $cachePath = $this->biz['cache_directory'];
-        $filesystem = new Filesystem();
-        $filesystem->remove($cachePath);
-
-        clearstatcache(true);
-
-        $this->logger('info', '删除缓存');
-
-        return 1;
     }
 
     /**
