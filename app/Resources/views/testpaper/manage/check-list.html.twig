@@ -3,10 +3,12 @@
 {% do script(['app/js/testpaper-manage/check-list/index.js']) %}
 
 {% for task in tasks if task %}
-  {% set resultListRout = targetType|default('course') ~ '_manage_testpaper_result_list' %}
-  {% set testpaper = testpapers[task.testId]|default(null) %}
-  {% set statusNum = resultStatusNum[task.activityId]|default(null) %}
-  {% include 'testpaper/manage/check-list-item.html.twig' with {task:task, testpaper:testpaper,targetResultInfo:statusNum,targetId:targetId,type:type} %}
+  {% if task.testId|default(null)gs %}
+    {% set resultListRout = targetType|default('course') ~ '_manage_testpaper_result_list' %}
+    {% set testpaper = testpapers[task.testId]|default(null) %}
+    {% set statusNum = resultStatusNum[task.activityId]|default(null) %}
+    {% include 'testpaper/manage/check-list-item.html.twig' with {task:task, testpaper:testpaper,targetResultInfo:statusNum,targetId:targetId,type:type} %}
+  {% endif %}
 {% else %}
   <div class="empty">{{'course.testpaper_check.empty'|trans}}</div>
 {% endfor %}
