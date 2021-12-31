@@ -30,7 +30,10 @@
       <div slot="promoteInfo" slot-scope="item">
         <a-button v-if="item.showable === '0'" type="link" disabled>推荐</a-button>
         <template v-else>
-          <a-button type="link">推荐序号{{ item.promotedSeq }}</a-button>
+          <a-button type="link">
+            <template v-if="item.isPromoted">推荐序号{{ item.promotedSeq }}</template>
+            <template v-else>推荐</template>
+          </a-button>
           <a class="set-number" href="javascript:;" @click="clickSetNumberModal(item.id)"><a-icon type="edit" /></a>
         </template>
       </div>
@@ -362,8 +365,8 @@ export default {
       const that = this;
 
       this.$confirm({
-        title: '取消教师展示？',
-        content: '确认取消教师展示？取消后已首页推荐教师也将会取消。',
+        // title: '取消教师展示？',
+        content: '取消教师显示后，将无法设置首页推荐。确定取消？',
         okText: '确定',
         cancelText: '取消',
         async onOk() {
