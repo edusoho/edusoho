@@ -34,7 +34,7 @@
             <template v-if="item.isPromoted">推荐序号{{ item.promotedSeq }}</template>
             <template v-else>推荐</template>
           </a-button>
-          <a class="set-number" href="javascript:;" @click="clickSetNumberModal(item.id)"><a-icon type="edit" /></a>
+          <a class="set-number" href="javascript:;" @click="clickSetNumberModal(item)"><a-icon type="edit" /></a>
         </template>
       </div>
 
@@ -109,10 +109,13 @@
         <a-form-item label="序号" extra="请输入0-10000的整数">
           <a-input-number
             style="width: 100%;"
-            v-decorator="['number', { rules: [
-              { required: true, message: '请输入序号' },
-              { validator: validateRange, message: '请输入0-10000的整数' },
-            ]}]"
+            v-decorator="[ 'number', {
+              rules: [
+                { required: true, message: '请输入序号' },
+                { validator: validateRange, message: '请输入0-10000的整数' }
+              ],
+              initialValue: promotedSeq
+            }]"
           />
         </a-form-item>
       </a-form>
@@ -209,6 +212,7 @@ export default {
       pagination: {},
       keyWord: '',
       setNumId: 0,
+      promotedSeq: undefined,
       modalVisible: false,
       form: this.$form.createForm(this, { name: 'set_number' }),
       qualificationVisible: false, // 编辑教师资质
@@ -283,8 +287,9 @@ export default {
       this.visible = false;
     },
 
-    clickSetNumberModal(id) {
+    clickSetNumberModal({ id, promotedSeq }) {
       this.setNumId = id;
+      this.promotedSeq = promotedSeq;
       this.modalVisible = true;
     },
 
@@ -296,6 +301,7 @@ export default {
             _.forEach(this.pageData, item => {
               if (item.id == this.setNumId) {
                 item.promotedSeq = values.number;
+                item.isPromoted = true;
                 return false;
               }
             });
@@ -362,7 +368,7 @@ export default {
 
       this.$confirm({
         // title: '取消教师展示？',
-        content: '取消教师显示后，将无法设置首页推荐。确定取消？',
+        content: '取消教师显示，将同时取消首页推荐。确定取消？',
         okText: '确定',
         cancelText: '取消',
         async onOk() {
@@ -378,6 +384,10 @@ export default {
       _.forEach(this.pageData, item => {
         if (item.id == id) {
           item.showable = checked ? '1' : '0';
+          if (!checked) {
+            item.isPromoted = false;
+            item.promotedSeq = 0;
+          }
           return false;
         }
       });
