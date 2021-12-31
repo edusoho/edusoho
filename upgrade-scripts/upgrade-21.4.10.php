@@ -51,6 +51,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'userAddShowable',
             'updateConsultPhoneSetting',
+            'groupAddRecommended',
         );
 
         $funcNames = array();
@@ -89,6 +90,25 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         if (!$this->isFieldExist('user', 'showable')) {
             $sql = "ALTER TABLE `user` ADD COLUMN `showable` tinyint(1) unsigned NOT NULL DEFAULT 1 COMMENT '在网校显示';";
+            $this->getConnection()->exec($sql);
+        }
+
+        return 1;
+    }
+
+    protected function groupAddRecommended()
+    {
+        $sql = '';
+        if (!$this->isFieldExist('groups', 'recommended')) {
+            $sql .= "ALTER TABLE `groups` ADD COLUMN `recommended` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否推荐' after `ownerId`;";
+        }
+        if (!$this->isFieldExist('groups', 'recommendedSeq')) {
+            $sql .= "ALTER TABLE `groups` ADD COLUMN `recommendedSeq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐序号' after `recommended`;";
+        }
+        if (!$this->isFieldExist('groups', 'recommendedTime')) {
+            $sql .= "ALTER TABLE `groups` ADD COLUMN `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间' after `recommendedSeq`;";
+        }
+        if ($sql) {
             $this->getConnection()->exec($sql);
         }
 
