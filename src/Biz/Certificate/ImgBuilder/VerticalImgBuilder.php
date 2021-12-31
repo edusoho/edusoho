@@ -79,10 +79,12 @@ class VerticalImgBuilder extends ImgBuilder
 
     protected function setCertificateCode(Certificate $certificate)
     {
+        $length = mb_strlen('证书编号：' . $certificate->getCertificateCode(), 'utf-8');
+        $x = 1240 * $this->imageXRatio - $length * $this->defaultFontSize * 0.22 * 0.5;
         $this->imageTtfText(
             [
-                'x' => 1480 * $this->imageXRatio,
-                'y' => 900 * $this->imageYRatio,
+                'x' => $x,
+                'y' => 850 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
@@ -93,8 +95,8 @@ class VerticalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 1714 * $this->imageXRatio,
-                'y' => 900 * $this->imageYRatio,
+                'x' => $x + 234 * $this->imageXRatio,
+                'y' => 850 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
