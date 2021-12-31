@@ -123,6 +123,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $conditions = [
                 'roles' => '|ROLE_SUPER_ADMIN|',
                 'locked' => 0,
+                'excludeVerifiedMobile' => '',
             ];
             $count = $this->getUserDao()->count($conditions);
             $supperAdminMobile = $this->getUserDao()->search($conditions, [], 0, $count, ['verifiedMobile']);
