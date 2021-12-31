@@ -5,7 +5,7 @@ site.online_school_name: 'Site Name'
 site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
 site.register_link_url: 'Register URL'
-site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent"> download the App</a>.<br/> Android allows viewing in wechat's built-in browser.'
+site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent"> download the App</a>.Android allows viewing in wechat's built-in browser.'
 site.not_support_cloud_video_upgrade: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please open in wechat or go to<a href="%mobileUrl%" target="parent"> download the App</a>.'
 site.currency.CNY: CNY
 site.date.year: Year
@@ -5890,6 +5890,8 @@ admin.edu_cloud.edu_video.normal_mode_tips: 'Select normal mode, <span class="te
 admin.edu_cloud.edu_video.encryption_mode_tips: 'Choosing an encryption mode can greatly improve the security of the video, but it may cause the video class to not play properly on some old mobile browsers.'
 
 admin.edu_cloud.edu_video.transcode_quality: 'Transcode quality'
+admin.edu_cloud.edu_video.doc_quality: 'DOC quality'
+admin.edu_cloud.doc_quality.high: High Quality
 admin.edu_cloud.edu_video.transcode_quality_low: "Smooth <span class = \"text-muted\"> (for PPT) </ span>\n"
 admin.edu_cloud.edu_video.transcode_quality_normal: "Standard <span class = \"text-muted\"> (for screen recording, camera capture) </ span>\n"
 admin.edu_cloud.edu_video.transcode_quality_high: "Fine <span class = \"text-muted\"> (for dynamic movies)</ span> \n"

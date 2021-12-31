@@ -3,7 +3,7 @@
 {% do script(['app/js/testpaper-manage/check-list/index.js']) %}
 
 {% for task in tasks if task %}
-  {% if task.testId|default(null)gs %}
+  {% if task.testId|default(null) %}
     {% set resultListRout = targetType|default('course') ~ '_manage_testpaper_result_list' %}
     {% set testpaper = testpapers[task.testId]|default(null) %}
     {% set statusNum = resultStatusNum[task.activityId]|default(null) %}
