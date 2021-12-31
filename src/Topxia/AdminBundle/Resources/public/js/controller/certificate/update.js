@@ -43,7 +43,7 @@ define(function(require, exports, module) {
       validator.addItem({
         element: '[name="code"]',
         required: true,
-        rule: 'remote certificate_code',
+        rule: 'maxlength{max:20} remote certificate_code',
         errormessageRemote: Translator.trans('admin_v2.certificate.code.exist')
       });
 
