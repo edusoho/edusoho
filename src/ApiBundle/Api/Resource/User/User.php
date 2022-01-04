@@ -114,7 +114,7 @@ class User extends AbstractResource
     }
 
     /**
-     * 更新用户信息接口,暂只更新讲师管理是否在网校显示字段
+     * 更新用户信息接口,暂只更新讲师管理是否在网校显示字段,并且取消推荐
      *
      * @param $id
      *
@@ -130,7 +130,12 @@ class User extends AbstractResource
         $update = [];
         if (isset($fields['showable'])) {
             $showable = empty($fields['showable']) ? 0 : 1;
-            $update = $this->getUserService()->updateUser($id, ['showable' => $showable]);
+            $updateFields = ['showable' => $showable];
+            if (!$showable) {
+                $updateFields['promoted'] = 0;
+                $updateFields['promotedSeq'] = 0;
+            }
+            $update = $this->getUserService()->updateUser($id, $updateFields);
         }
 
         return $update;
