@@ -51,6 +51,11 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
+    public function updateUser($id, array $fields)
+    {
+        return $this->getUserDao()->update($id, $fields);
+    }
+
     public function getUserAndProfile($id)
     {
         $user = $this->getUserDao()->get($id);
@@ -882,6 +887,9 @@ class UserServiceImpl extends BaseService implements UserService
     public function isMobileRegisterMode()
     {
         $authSetting = $this->getSettingService()->get('auth');
+        if (isset($authSetting['register_enabled']) && 'closed' === $authSetting['register_enabled']) {
+            return false;
+        }
 
         return !empty($authSetting['register_mode']) && (('email_or_mobile' == $authSetting['register_mode']) || ('mobile' == $authSetting['register_mode']));
     }

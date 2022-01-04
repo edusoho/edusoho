@@ -16,6 +16,25 @@ class MeJoined extends AbstractResource
     public function search(ApiRequest $request)
     {
         //直播
+        $liveCourseSets = $this->getLiveCourseSets();
+
+        //课程
+        $courses = $this->getCourses();
+
+        //班级
+        $classrooms = $this->getClassrooms();
+
+        //题库
+        $itemBanks = $this->getItemBanks();
+
+        $data = array_merge($liveCourseSets, $courses, $classrooms, $itemBanks);
+        array_multisort(ArrayToolkit::column($data, 'lastLearnTime'), SORT_DESC, $data);
+
+        return $data;
+    }
+
+    protected function getLiveCourseSets()
+    {
         $allLiveCourseSets = $this->getCourseSetService()->searchCourseSets(
             ['status' => 'published', 'type' => 'live', 'parentId' => 0],
             ['createdTime' => 'DESC'],
@@ -39,8 +58,11 @@ class MeJoined extends AbstractResource
             $courseSets[$member['courseSetId']]['cover'] = $this->transformCover($courseSets[$member['courseSetId']]['cover'], 'course');
         }
 
-        //课程
-        $conditions = $request->query->all();
+        return array_values($this->orderByLastViewTime($courseSets, $uniqueMemberIds));
+    }
+
+    protected function getCourses()
+    {
         $conditions['status'] = 'published';
         $conditions['classroomId'] = 0;
         $conditions['joinedType'] = 'course';
@@ -82,9 +104,11 @@ class MeJoined extends AbstractResource
             }
         }
 
-        //班级
-        $querys = $request->query->all();
+        return $courses;
+    }
 
+    protected function getClassrooms()
+    {
         $conditions = [
             'userId' => $this->getCurrentUser()->getId(),
             'role' => 'student',
@@ -107,17 +131,20 @@ class MeJoined extends AbstractResource
             $classrooms[$member['classroomId']]['largePicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
         }
 
-        //题库
+        return $classrooms;
+    }
+
+    protected function getItemBanks()
+    {
         $user = $this->getCurrentUser();
         $conditions = ['role' => 'student', 'userId' => $user['id']];
         $total = $this->getItemBankExerciseMemberService()->count($conditions);
-        list($offset, $limit) = $this->getOffsetAndLimit($request);
 
         $members = $this->getItemBankExerciseMemberService()->search(
             $conditions,
             ['updatedTime' => 'DESC'],
-            $offset,
-            $limit
+            0,
+            PHP_INT_MAX
         );
 
         $itemBankExercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($members, 'exerciseId'));
@@ -132,10 +159,7 @@ class MeJoined extends AbstractResource
             $member['itemBankExercise']['cover'] = $this->transformCover($member['itemBankExercise']['cover'], 'item_bank_exercise');
         }
 
-        $data = array_merge(array_values($this->orderByLastViewTime($courseSets, $uniqueMemberIds)), $courses, $classrooms, $members);
-        array_multisort(ArrayToolkit::column($data, 'lastLearnTime'), SORT_DESC, $data);
-
-        return $data;
+        return $members;
     }
 
     private function transformCover($cover, $type)

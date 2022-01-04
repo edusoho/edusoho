@@ -82,7 +82,7 @@ abstract class AbstractQuestion
     protected function matchStem(&$question, $line, &$preNode)
     {
         if (QuestionElement::STEM == $preNode) {
-            $question['stem'] .= (empty($question['stem']) ? '' : '<br/>').preg_replace('/^((\d{0,5}(\.|、|。|\s))|((\(|（)\d{0,5}(\)|）)))/', '', $line);
+            $question['stem'] .= empty($question['stem']) ? preg_replace('/^((\d{0,5}(\.|、|。|\s))|((\(|（)\d{0,5}(\)|）)))/', '', $line) : '<br/>'.$line;
 
             return true;
         }

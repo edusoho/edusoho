@@ -44,6 +44,8 @@ class OpenCoursePlayer {
 
       let mediaSourceActionsMap = {
         'iframe': this.onIframe,
+        'bilibili': this.onIframe,
+        'iqiyi': this.onIframe,
         'self': this.onVideo,
       };
       let caller = mediaSourceActionsMap[lesson.mediaSource] ? mediaSourceActionsMap[lesson.mediaSource].bind(this) : undefined;

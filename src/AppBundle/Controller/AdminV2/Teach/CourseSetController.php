@@ -124,7 +124,7 @@ class CourseSetController extends BaseController
 
         $isCheckPasswordLifeTime = $request->getSession()->get('checkPassword');
         if (!$isCheckPasswordLifeTime || $isCheckPasswordLifeTime < time()) {
-            return $this->render('admin-v2/teach/course/delete.html.twig', ['courseSet' => $courseSet]);
+            return $this->render('admin-v2/teach/course/delete.html.twig', ['deleteUrl' => $this->generateUrl('admin_v2_course_set_delete', ['id' => $courseSet['id']])]);
         }
 
         $this->getCourseSetService()->deleteCourseSet($id);

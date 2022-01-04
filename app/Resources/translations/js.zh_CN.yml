@@ -383,7 +383,7 @@ course.buy.price_free_hint: 去学习
 course.chapter: '第%number%%chapter_name%%colon% %title%'
 course.unit: '第%number%%part_name%%colon% %title%'
 course.lesson: '%part_name% %number% : %title%'
-course.catalogue.task_status.task: %taskName%%taskNumber%： %taskTitle%
+course.catalogue.task_status.task: '%taskName%%taskNumber%： %taskTitle%'
 
 course.thread_replay_failed_hint: 发表回复失败，请重试
 course.thread_delete_hint: 您真的要删除该回帖吗？
@@ -1058,7 +1058,7 @@ admin.classroom.choose_success_hint: 指定班级成功
 admin.classroom.operation_success_hint: 成功！
 admin.classroom.operation_fail_hint: 失败
 admin.classroom.operation_hint: 吗？
-admin.classroom.delete_hint: 真的要删除该班级吗？
+admin.classroom.delete_hint: 删除班级，将删除班级中所有课程的章节、课时、学员等信息。确认要删除该班级吗？
 admin.classroom.delete_success_hint: 删除成功！
 admin.classroom.cancel_recommend_hint: "%title%吗？"
 admin.classroom.cancel_recommend_success_hint: "%title%成功！"
@@ -1125,6 +1125,9 @@ admin.file.delete_hint: 真的要删除该文件吗？
 admin.group.operating_hint: %trigger%吗？
 admin.group.operating_success_hint: %trigger%成功！
 admin.group.operating_fail_hint: %trigger%失败
+admin.group.recommend_success_hint: 设置推荐小组操作成功!
+admin.group.recommend_fail_hint: 设置推荐小组操作失败!
+admin.group.delete_hint: 删除小组，将删除小组的话题、成员、回复等信息。真的要删除该小组吗？
 admin.group.thread_delete_hint: 确定要删除话题吗？
 admin.group.thread_delete_pick_hint: 确定要删除话题吗？
 admin.keyword.delete_hint: 确定删除此关键字吗？
@@ -1222,6 +1225,9 @@ admin.setting.cloud.validate_old.video_fingerprint_time.display: 云视频指纹
 admin.setting.cloud.validate_old.video_fingerprint_opacity.display: 云视频指纹不透明度
 admin.setting.consult_setting.upload_qrcode_success_hint: 上传微信二维码成功！
 admin.setting.consult_setting.setting_max_num_hint: 最多设置10个..
+admin.setting.consult_setting.setting_consult_phone.empty_hint: 联系电话
+admin.setting.consult_setting.setting_consult_name.empty_hint: 联系人
+admin.setting.consult_setting.setting_consult_phone.error_hint: 联系电话不被允许
 admin.setting.consult_setting.delete_hint: 确认要删除吗？
 admin.setting.course_avatar.select_default_pic.message: 请选择要上传的默认课程图片文件
 admin.setting.course.upload_live_course_logo_success_hint: 上传直播课程的LOGO成功！
@@ -1614,7 +1620,7 @@ exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请
 
 admin_v2.certificate.template.delete_hint: 模板被删除后，使用该模板的证书将不会受到影响。是否删除模板?
 admin_v2.certificate.code.exist: 该证书编码已存在
-admin_v2.certificate.code.check: 1至6位数字或英文字母，不区分大小写
+admin_v2.certificate.code.check: 1至20位数字或英文字母，不区分大小写
 admin_v2.certificate.expiry_day.check: 请输入1-6000的非负整数
 admin_v2.certificate.target_id.check: 请选择发放对象
 admin_v2.certificate.template_id.check: 请选择证书模板
@@ -2047,3 +2053,29 @@ decorate.gn_tip1: 建议图片尺寸为 80x80px，支持 jpg/png/gif 格式，�
 decorate.gn_tip2: 最多添加 8 个图文导航
 decorate.poster_tip1: 建议图片尺寸为 750px，支持 jpg/png/gif 格式，大小不超过 2 MB
 decorate.open_course_tip1: 仅含直播公开课内容，不包含录播公开课
+
+scrm.title: 销客助手
+scrm.edusoho_title: EduSoho销客助手
+scrm.desc: EduSoho销客助手是一个面向教培机构的私域流量运营工具，提供了引流获客、客户运营、社群运营、企业风控等功能。EduSoho销客助手与EduSoho网校一起为机构提供了招生、教务、教学和服务的整体解决方案。
+scrm.go_to_scrm: 前往销客助手
+scrm.open_now: 立即开通
+scrm.product_features: 产品特性
+scrm.open_edusoho_scrm: 开通EduSoho销客助手
+scrm.hava_a_dedicated_business_manager: 已有阔知专属商务经理或客服
+scrm.contact_your_business_manager: 请联系您的商务经理或客服开通
+scrm.no_knowledgeable_business_manager: 没有阔知专属商务经理或客服
+scrm.please_scan_the_qr_code: 请扫下面二维码添加专属商务经理为您服务
+scrm.note: 注：开通EduSoho前须先开通企业微信
+scrm.to_open_corporate_wechat: 去开通企业微信
+scrm.attract_customers: 引流获客，高效构建客户池
+scrm.based_on_the_friend: 基于企业微信的好友和社群特性，为教培机构提供灵活的获客工具，帮助培训机构高效构建客户池。
+scrm.online_transaction_truly: 线上成交，真正做到无缝对接
+scrm.refined_marketing_management_improves_conversion_efficiency: 精细化营销管理，提升转化效率；客户通过线上成交后，可自动开通教学平台账号实施培训，真正做到无缝对接。
+scrm.fast_customer_follow_up_improve_efficiency: 快速客户跟进，提升效率
+scrm.functions_of_sending_information: 发送资料、标注属性功能提升客户对产品、员工对客户的了解，快捷回复、群发消息、标准话术库等提升客户跟进的效率。
+scrm.customer_management: 客户管理，实现客户资源企业化
+scrm.view_the_overall_information: 通过后台查看企业客户整体信息，包括客户基本信息、好友关系、群聊信息、客户跟进状态等，实现客户资源的企业化。
+scrm.sales_analysis_performance_status_at_a_glance: 销售分析，一目了然业绩情况
+scrm.analyze_the_overall_situation_of_the_company_is_marketing: 对企业营销的整体情况进行分析；当销售完成客户跟进后，管理员还可对销售的销售效果进行分析。
+scrm.live_open_class: 直播公开课
+scrm.set_up_live_open_classes: 机构快速开设直播公开课，学员可在直播间购买正课；学员可邀请好友到直播间学习，实现裂变。
