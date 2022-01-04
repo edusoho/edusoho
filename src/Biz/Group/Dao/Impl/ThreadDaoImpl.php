@@ -14,6 +14,16 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         return $this->findInField('id', $ids);
     }
 
+    public function findByGroupId($groupId)
+    {
+        return $this->findByFields(['groupId' => $groupId]);
+    }
+
+    public function deleteByGroupId($groupId)
+    {
+        return $this->db()->delete($this->table(), ['groupId' => $groupId]);
+    }
+
     public function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {

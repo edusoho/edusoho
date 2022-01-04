@@ -99,10 +99,11 @@ class ClassroomController extends BaseController
         ], null, 0, PHP_INT_MAX);
 
         $members = array_merge($members, $assistants);
+        foreach ($members as &$member) {
+            $member['lastLearnTime'] = !empty($member['lastLearnTime']) ? $member['lastLearnTime'] : $member['createdTime'];
+        }
         $members = ArrayToolkit::index($members, 'classroomId');
-
         $classroomIds = ArrayToolkit::column($members, 'classroomId');
-
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         foreach ($classrooms as $key => $classroom) {
@@ -118,7 +119,9 @@ class ClassroomController extends BaseController
 
             $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $user['id']);
             $classrooms[$key]['learningProgressPercent'] = $progress['percent'];
+            $classrooms[$key]['lastLearnTime'] = $members[$classroom['id']]['lastLearnTime'];
         }
+        array_multisort(ArrayToolkit::column($classrooms, 'lastLearnTime'), SORT_DESC, $classrooms);
 
         return $this->render('my/learning/classroom/classroom.html.twig', [
             'classrooms' => $classrooms,

@@ -24,7 +24,7 @@ export default class Create {
           },
         },
         code: {
-          maxlength: 6,
+          maxlength: 20,
           certificate_code: true,
           es_remote: true,
           required: {
@@ -81,7 +81,7 @@ export default class Create {
 }
 
 jQuery.validator.addMethod('certificate_code', function (value, element, params) {
-  return this.optional(element) || /^[a-zA-Z0-9]+$/i.test(value);
+  return this.optional(element) || /^[a-zA-Z0-9-]+$/i.test(value);
 }, jQuery.validator.format(Translator.trans('admin_v2.certificate.code.check')));
 
 jQuery.validator.addMethod('deadline_check', function () {

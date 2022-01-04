@@ -94,7 +94,7 @@ class ActivityController extends BaseController
 
     public function finishModalAction($activityId = 0, $type, $courseId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $this->getCourseService()->tryManageCourse($courseId);
         if (!empty($activityId)) {
             $activity = $this->getActivityService()->getActivity($activityId);
         } else {
@@ -104,7 +104,6 @@ class ActivityController extends BaseController
                 'fromCourseId' => $courseId,
             ];
         }
-
         $activityConfigManage = $this->get('activity_config_manager');
         $config = $activityConfigManage->getInstalledActivity($type);
 

@@ -2,6 +2,11 @@
 
 namespace Codeages\Biz\ItemBank\Assessment\Service\Impl;
 
+use Codeages\Biz\ItemBank\Answer\Dao\AnswerQuestionReportDao;
+use Codeages\Biz\ItemBank\Answer\Dao\AnswerRecordDao;
+use Codeages\Biz\ItemBank\Answer\Dao\AnswerReportDao;
+use Codeages\Biz\ItemBank\Answer\Dao\AnswerSceneDao;
+use Codeages\Biz\ItemBank\Answer\Dao\AnswerSceneQuestionReportDao;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService;
@@ -129,13 +134,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
 
             $this->getAssessmentDao()->delete($assessmentId);
 
-            $this->getSectionService()->deleteAssessmentSectionsByAssessmentId($assessmentId);
-
-            $this->getSectionItemService()->deleteAssessmentSectionItemsByAssessmentId($assessmentId);
-
-            if (1 == $assessment['displayable']) {
-                $this->getItemBankService()->updateAssessmentNum($assessment['bank_id'], -1);
-            }
+            $this->processDeleteAssessment($assessment);
 
             $this->dispatch('assessment.delete', $assessment);
 
@@ -145,6 +144,18 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         } catch (\Exception $e) {
             $this->rollback();
             throw $e;
+        }
+    }
+
+    protected function processDeleteAssessment($assessment){
+        $this->getSectionService()->deleteAssessmentSectionsByAssessmentId($assessment['id']);
+        $this->getSectionItemService()->deleteAssessmentSectionItemsByAssessmentId($assessment['id']);
+        if (1 == $assessment['displayable']) {
+            $this->getItemBankService()->updateAssessmentNum($assessment['bank_id'], -1);
+        }
+        $daoArr = ['AnswerReportDao', 'AnswerRecordDao', 'AnswerQuestionReportDao'];
+        foreach ($daoArr as $dao){
+            $this->biz->dao('ItemBank:Answer:'.$dao)->deleteByAssessmentId($assessment['id']);
         }
     }
 

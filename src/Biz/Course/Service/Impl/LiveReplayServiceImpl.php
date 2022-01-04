@@ -206,7 +206,14 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     {
         $liveActivity = $this->getLiveActivityService()->getByLiveId($liveId);
         $activity = $this->getActivityService()->getByMediaIdAndMediaType($liveActivity['id'], 'live');
-
+        $replayCount = $this->getLessonReplayDao()->count([
+            'courseId' => $activity['fromCourseId'],
+            'lessonId' => $activity['id'],
+            'type' => 'live',
+        ]);
+        if ($replayCount) {
+            return $replayDatas;
+        }
         $replays = [];
         foreach ($replayDatas as $data) {
             $replays[] = $this->addReplay([
@@ -220,8 +227,10 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             ]);
         }
 
-        $this->getLiveActivityDao()->update($liveActivity['id'], ['replayStatus' => 'generated']);
-        $this->dispatchEvent('live.replay.generate', $replays);
+        if ('closed' == $liveActivity['progressStatus']) {
+            $this->getLiveActivityDao()->update($liveActivity['id'], ['replayStatus' => 'generated']);
+            $this->dispatchEvent('live.replay.generate', $replays);
+        }
 
         return $replayDatas;
     }

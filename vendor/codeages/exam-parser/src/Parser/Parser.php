@@ -100,11 +100,13 @@ class Parser
         $lines = preg_replace('/^(答案|参考答案|正确答案|\[答案\]|\[参考答案\]|\[正确答案\]|【答案】|【正确答案】|【参考答案】)(：|:|)/', '<#答案#>', $lines);
         $lines = preg_replace('/^(难度|\[难度\]|【难度】)/', '<#难度#>', $lines);
         $lines = preg_replace('/^(分数|\[分数\]|【分数】)/', '<#分数#>', $lines);
+        $lines = preg_replace('/^(<#答案#>|<#难度#>)(\S+?)(分数|\[分数\]|【分数】)/', '$1$2'.PHP_EOL.'<#分数#>', $lines);
         $lines = preg_replace('/^(解析|\[解析\]|【解析】)/', '<#解析#>', $lines);
         $lines = preg_replace('/^([A-J])(\.|、|。)/', '<#$1#>', $lines, -1, $count);
         $lines = preg_replace('/(\(正确\)|（正确）)\s{0,}/', '<#正确#>', $lines);
         $lines = preg_replace('/(\(错误\)|（错误）)\s{0,}/', '<#错误#>', $lines);
         $lines = preg_replace('/【不定项选择题】/', '<#不定项选择题#>', $lines);
+        $lines = explode(PHP_EOL, implode(PHP_EOL, $lines));
 
         if (0 === strpos(trim($lines[0]), self::CODE_MATERIAL_START_SIGNAL)) {
             $type = 'material';
