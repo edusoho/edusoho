@@ -42,6 +42,8 @@ class CommonException extends AbstractException
 
     const FIELDS_FORMAT_ERROR = 500317;
 
+    const UPGRADE_APP_VERSION = 4050301;
+
     public $messages = [
         4030301 => 'exception.common_drag_captcha_error',
         4030302 => 'exception.common_drag_captcha_expired',
@@ -60,5 +62,6 @@ class CommonException extends AbstractException
         4030315 => 'exception.switch_old_version.permission_error',
         4030316 => 'exception.switch_old_version.error',
         500317 => 'exception.fields_format_error',
+        4050301 => 'exception.common_upgrade_app_version',
     ];
 }

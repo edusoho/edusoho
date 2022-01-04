@@ -39,15 +39,12 @@ class SiteSettingController extends BaseController
         $consult = array_merge($default, $consult);
         if ('POST' == $request->getMethod()) {
             $consult = $request->request->all();
-
             foreach ($consult['qq'] as &$qq) {
                 $qq['url'] = $this->purifyHtml($qq['url'], true);
             }
-
             foreach ($consult['qqgroup'] as &$group) {
                 $group['url'] = $this->purifyHtml($group['url'], true);
             }
-
             ksort($consult['qq']);
             ksort($consult['qqgroup']);
             ksort($consult['phone']);
@@ -55,8 +52,23 @@ class SiteSettingController extends BaseController
                 $fields = explode('?', $consult['webchatURI']);
                 $consult['webchatURI'] = $fields[0].'?time='.time();
             }
-            $this->getSettingService()->set('consult', $consult);
-            $this->setFlashMessage('success', 'site.save.success');
+            $errorMessage = '';
+            if ((int) $consult['enabled']) {
+                foreach ($consult['phone'] as $phone) {
+                    $name = preg_replace('/[^\d]/', '', $phone['name']);
+                    $number = preg_replace('/[^\d]/', '', $phone['number']);
+                    if (empty($phone['name']) || empty($phone['number']) || 4008041114 == $name || 4008041114 == $number) {
+                        $errorMessage = 'admin.setting.consult.phone_error';
+                        break;
+                    }
+                }
+            }
+            if ($errorMessage) {
+                $this->setFlashMessage('danger', $errorMessage);
+            } else {
+                $this->getSettingService()->set('consult', $consult);
+                $this->setFlashMessage('success', 'site.save.success');
+            }
         }
 
         return $this->render('admin-v2/operating/site-setting/consult-setting.html.twig', [

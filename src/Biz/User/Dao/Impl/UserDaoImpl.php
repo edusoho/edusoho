@@ -302,6 +302,7 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
                 'level >= :greatLevel',
                 'UPPER(verifiedMobile) LIKE :verifiedMobile',
                 'verifiedMobile = :wholeVerifiedMobile',
+                'verifiedMobile != :excludeVerifiedMobile',
                 'type LIKE :type',
                 'id IN ( :userIds)',
                 'inviteCode = :inviteCode',
@@ -311,6 +312,7 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
                 'orgCode = :orgCode',
                 'distributorToken = :distributorToken',
                 'destroyed = :destroyed',
+                'showable = :showable',
             ],
         ];
     }

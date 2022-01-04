@@ -239,6 +239,10 @@ class DefaultController extends BaseController
     public function feedbackAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->redirect($this->generateUrl('login', ['goto' => $this->generateUrl('feedback', $request->query->all())]));
+        }
+
         if (!$this->getWebExtension()->isSaas() || (!$user->isAdmin() && !$user->isTeacher())) {
             throw $this->createNotFoundException();
         }

@@ -1,6 +1,6 @@
 import Emitter from 'component-emitter';
 import { chapterAnimate } from 'app/common/widget/chapter-animate';
-
+import Cookies from 'js-cookie';
 export default class TaskSidebar extends Emitter {
   constructor({element, url}) {
     super();
@@ -10,7 +10,7 @@ export default class TaskSidebar extends Emitter {
   }
 
   init() {
-    this.fixIconInChrome();
+    // this.fixIconInChrome();
     this.fetchPlugins()
       .then((plugins) => {
         this.plugins = plugins;
@@ -34,8 +34,10 @@ export default class TaskSidebar extends Emitter {
   }
 
   renderToolbar() {
+    const showSidebar = Cookies.get('show-sidebar');
+    let className = showSidebar != 0 ? 'active' : '';
     let html = `
-      <div class="dashboard-toolbar js-dashboard-toolbar">
+      <div class="dashboard-toolbar js-dashboard-toolbar ${className}">
         <i class="es-icon es-icon-angledoubleleft"></i>
       </div>
     `;
@@ -98,9 +100,11 @@ export default class TaskSidebar extends Emitter {
   operationContent($btn) {
     if ($btn.hasClass('active')) {
       this.foldContent();
+      Cookies.set('show-sidebar', 0);
       $btn.removeClass('active');
     } else {
       $btn.addClass('active');
+      Cookies.set('show-sidebar', 1);
       this.popupContent();
     }
   }

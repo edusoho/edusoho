@@ -27,8 +27,8 @@ class HorizontalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 1800 * $this->imageXRatio - $length * $this->defaultFontSize * 0.5,
-                'y' => 452 * $this->imageYRatio,
+                'x' => 1754 * $this->imageXRatio - $length * $this->defaultFontSize * 0.5,
+                'y' => 402 * $this->imageYRatio,
                 'fontSize' => $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 3,
@@ -64,7 +64,7 @@ class HorizontalImgBuilder extends ImgBuilder
         foreach ($contents as $key => $content) {
             $this->imageTtfText(
                 [
-                    'x' => 592 * $this->imageXRatio,
+                    'x' => 542 * $this->imageXRatio,
                     'y' => 1113 * $this->imageYRatio + $key * 112,
                     'fontSize' => $this->defaultFontSize * 0.5,
                     'color' => 51,
@@ -78,10 +78,12 @@ class HorizontalImgBuilder extends ImgBuilder
 
     protected function setCertificateCode(Certificate $certificate)
     {
+        $length = mb_strlen('证书编号：'.$certificate->getCertificateCode(), 'utf-8');
+        $x = 1754 * $this->imageXRatio - $length * $this->defaultFontSize * 0.26 * 0.5;
         $this->imageTtfText(
             [
-                'x' => 2313 * $this->imageXRatio,
-                'y' => 820 * $this->imageYRatio,
+                'x' => $x,
+                'y' => 700 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
@@ -92,8 +94,8 @@ class HorizontalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 2613 * $this->imageXRatio,
-                'y' => 820 * $this->imageYRatio,
+                'x' => $x + 300 * $this->imageXRatio,
+                'y' => 700 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,

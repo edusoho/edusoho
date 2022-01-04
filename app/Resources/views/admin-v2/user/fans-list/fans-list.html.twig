@@ -21,7 +21,9 @@
 
   <a class="gray-primary pull-right ptm" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="{{ 'wechat.notification.fans_list.tips'|trans }}"><i class="glyphicon glyphicon-question-sign text-muted"></i></a>
 </form>
-<p class="text-muted"><span class="mrl">{{ 'wechat.notification.fans_list.user_num'|trans }}<strong class="inflow-num">{{ currentNum|default(0) }}</strong></span></p>
+<p class="text-muted"><span class="mrl">{{ 'wechat.notification.fans_list.user_num'|trans }}<strong class="inflow-num">{{ currentNum|default(0) }}</strong></span>
+<span class="pull-right"><strong>{{ 'wechat.notification.fans_list.new_tips'|trans|raw }}</strong></span>
+</p>
 <table class="table table-striped table-hover" id="notification-table" style="word-break:break-all;">
   <thead>
     <tr>

@@ -64,6 +64,7 @@ class ClassroomController extends BaseController
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classroomInfo, 'categoryId'));
 
         $classroomStatusNum = $this->getDifferentClassroomNum($conditions);
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($classroomInfo, 'creator'));
 
         return $this->render('admin-v2/teach/classroom/index.html.twig', [
             'classroomInfo' => $classroomInfo,
@@ -73,6 +74,7 @@ class ClassroomController extends BaseController
             'priceAll' => $priceAll,
             'coinPriceAll' => $coinPriceAll,
             'categories' => $categories,
+            'users' => $users,
         ]);
     }
 
@@ -181,11 +183,15 @@ class ClassroomController extends BaseController
         return $this->renderClassroomTr($id, $classroom);
     }
 
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
+        $isCheckPasswordLifeTime = $request->getSession()->get('checkPassword');
+        if (!$isCheckPasswordLifeTime || $isCheckPasswordLifeTime < time()) {
+            return $this->render('admin-v2/teach/course/delete.html.twig', ['deleteUrl' => $this->generateUrl('admin_v2_classroom_delete', ['id' => $id])]);
+        }
         $this->getClassroomService()->deleteClassroom($id);
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(['code' => 0, 'message' => $this->trans('site.delete_success_hint')]);
     }
 
     public function recommendAction(Request $request, $id)

@@ -81,22 +81,25 @@
           </div>
         </div>
       {% else %}
-        <div class="form-group cd-form-group">
-          <label class="control-label" for="originalEmailAccount">
-            {{'user.oauth.register_account.binding_account_by_email'|trans}}
-            {% if setting('login_bind.mobile_bind_mode', 'constraint') != 'constraint' %}<span class="color-success">（{{'form.field.optional'|trans}}）</span>{% endif %}
-          </label>
-          <div class="controls">
-            <input type="text" name="originalEmailAccount" id="originalEmailAccount" class="form-control input-lg" data-url="{{path('original_account_check', {type: 'email'})}}">
-          </div>
-        </div>
 
-        <div class="form-group cd-form-group">
-          <label class="control-label" for="originalAccountPassword">{{ 'user.oauth.login_by_email'|trans }}{{ 'user.register.password_label'|trans }}</label>
-          <div class="controls">
-            <input type="password" name="originalAccountPassword" id="originalAccountPassword" class="form-control input-lg">
+        {% if setting('auth.register_mode')|default('') != 'mobile' %}
+          <div class="form-group cd-form-group">
+            <label class="control-label" for="originalEmailAccount">
+              {{'user.oauth.register_account.binding_account_by_email'|trans}}
+              {% if setting('login_bind.mobile_bind_mode', 'constraint') != 'constraint' %}<span class="color-success">（{{'form.field.optional'|trans}}）</span>{% endif %}
+            </label>
+            <div class="controls">
+              <input type="text" name="originalEmailAccount" id="originalEmailAccount" class="form-control input-lg" data-url="{{path('original_account_check', {type: 'email'})}}">
+            </div>
           </div>
-        </div>
+
+          <div class="form-group cd-form-group">
+            <label class="control-label" for="originalAccountPassword">{{ 'user.oauth.login_by_email'|trans }}{{ 'user.register.password_label'|trans }}</label>
+            <div class="controls">
+              <input type="password" name="originalAccountPassword" id="originalAccountPassword" class="form-control input-lg">
+            </div>
+          </div>
+        {% endif %}
       {% endif %}
 
       {% if (setting('invite.invite_code_setting')|default(0) == 1) and not inviteUser|default() %}

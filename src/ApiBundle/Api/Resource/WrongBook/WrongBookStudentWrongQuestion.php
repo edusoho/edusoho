@@ -103,23 +103,34 @@ class WrongBookStudentWrongQuestion extends AbstractResource
 
     protected function getCourseWrongQuestionSources($wrongQuestionScenes, $activityScenes)
     {
+        $taskIds = ArrayToolkit::column($wrongQuestionScenes, 'source_id');
+        $tasks = $this->getCourseTaskService()->findTasksByIds($taskIds);
+        $tasks = ArrayToolkit::index($tasks, 'id');
+
+        $fromCourseSetIds = ArrayToolkit::column($tasks, 'fromCourseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($fromCourseSetIds);
+
+        $testpaperIds = ArrayToolkit::column($wrongQuestionScenes, 'testpaper_id');
+        $itemCategorys = $this->getItemCategoryService()->findItemCategoriesByIds($testpaperIds);
+
+        $assessments = $this->getAssessmentService()->findAssessmentsByIds($testpaperIds);
         $sources = [];
         foreach ($wrongQuestionScenes as $wrongQuestion) {
             $itemId = $wrongQuestion['item_id'];
             $sceneId = $wrongQuestion['answer_scene_id'];
             $activity = $activityScenes[$sceneId];
             if ('course_task' === $wrongQuestion['source_type']) {
-                $courseTask = $this->getCourseTaskService()->getTask($wrongQuestion['source_id']);
-                $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
+                $courseTask = $tasks[$wrongQuestion['source_id']];
+                $courseSet = $courseSets[$activity['fromCourseSetId']];
                 $sources[$itemId]['courseName'][] = $courseSet['title'];
                 $sources[$itemId]['sourceName'][] = $courseTask['title'];
                 $sources[$itemId]['sourceType'][] = $activity['mediaType'];
             } elseif ('item_bank_chapter' === $wrongQuestion['source_type']) {
-                $itemCategory = $this->getItemCategoryService()->getItemCategory($wrongQuestion['testpaper_id']);
+                $itemCategory = $itemCategorys[$wrongQuestion['testpaper_id']];
                 $sources[$itemId]['sourceName'][] = $itemCategory['name'];
                 $sources[$itemId]['sourceType'][] = 'chapter';
             } elseif ('item_bank_assessment' === $wrongQuestion['source_type']) {
-                $assessment = $this->getAssessmentService()->getAssessment($wrongQuestion['testpaper_id']);
+                $assessment = $assessments[$wrongQuestion['testpaper_id']];
                 $sources[$itemId]['sourceName'][] = $assessment['name'];
                 $sources[$itemId]['sourceType'][] = 'testpaper';
             } elseif ('wrong_question_exercise' === $wrongQuestion['source_type']) {

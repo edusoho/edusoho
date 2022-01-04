@@ -19,6 +19,11 @@ class MemberDaoImpl extends GeneralDaoImpl implements MemberDao
         return $this->getByFields(['groupId' => $groupId, 'userId' => $userId]);
     }
 
+    public function deleteByGroupId($groupId)
+    {
+        return $this->db()->delete($this->table(), ['groupId' => $groupId]);
+    }
+
     public function declares()
     {
         return [

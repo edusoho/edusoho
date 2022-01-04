@@ -16,10 +16,13 @@ class GroupException extends AbstractException
 
     const TITLE_REQUIRED = 5003604;
 
+    const DELETE_GROUP_REQUIRE_CLOSE = 4033605;
+
     public $messages = [
         4043601 => 'exception.group.not_found',
         5003602 => 'exception.group.duplicate_join',
         4043603 => 'exception.group.not_found_member',
         5003604 => 'exception.group.title_required',
+        4033605 => 'exception.group.delete_group_require_close',
     ];
 }

@@ -20,7 +20,7 @@ class RefreshCoursePlanLearnDailyJob extends BaseRefreshJob
 
         for ($page = 0; $page < $totalPage; ++$page) {
             $start = $page * self::LIMIT;
-            if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
+            if (empty($statisticsSetting) || 'page' != $statisticsSetting['statistical_dimension']) {
                 $this->refreshByWatchDaily($start, self::LIMIT);
             } else {
                 $this->refreshByStayDaily($start, self::LIMIT);

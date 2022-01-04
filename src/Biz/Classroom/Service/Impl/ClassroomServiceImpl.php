@@ -719,7 +719,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
             }
 
-            if ('draft' !== $classroom['status']) {
+            if ('published' === $classroom['status']) {
                 $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
             }
 
@@ -903,7 +903,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     $this->getCourseSetService()->unlockCourseSet($course['courseSetId'], true);
                 }
 
-                $this->getCourseSetService()->resetParentIdByCourseId($course['id']);
+                $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
 
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
 
@@ -2473,7 +2473,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'hitNum' => ['hitNum' => 'DESC'],
             'rating' => ['rating' => 'DESC'],
             'studentNum' => ['studentNum' => 'DESC'],
-            'recommendedSeq' => ['recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC'],
+            'recommendedSeq' => ['recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC', 'createdTime' => 'DESC'],
             'hotSeq' => ['hotSeq' => 'DESC', 'studentNum' => 'DESC', 'id' => 'DESC'],
         ];
         if (isset($typeOrderByMap[$order])) {

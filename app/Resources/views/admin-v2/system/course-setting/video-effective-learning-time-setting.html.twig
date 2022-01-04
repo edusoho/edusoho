@@ -4,35 +4,41 @@
 {% do script(['app/js/admin-v2/system/video-effective-time/index.js']) %}
 
 {% block main %}
-  <form class="form-horizontal" id="video-effective-time-form" data-url="{{ path('admin_v2_video_task_setting') }}" novalidate>
+  <form class="form-horizontal" id="video-effective-time-form" data-url="{{ path('admin_v2_video_task_setting') }}"
+        novalidate>
+    <legend>{{ 'admin.setting_course.video_play_setting.learn_config'|trans }}</legend>
     <div class="row form-group">
       <div class="col-md-3 control-label">
-        <label >{{'admin.setting_course.video_play_setting.play_rule'|trans}}</label>
-        <a data-toggle="tooltip" data-placement="top" data-container="body" title="{{ 'admin.setting_course.video_play_setting.play_rule.tips'|trans }}"><i class="es-icon es-icon-help"></i></a>
+        <label>{{ 'admin.setting_course.video_play_setting.play_rule'|trans }}</label>
+        <a data-toggle="tooltip" data-placement="top" data-container="body"
+           title="{{ 'admin.setting_course.video_play_setting.play_rule.tips'|trans }}"><i
+            class="es-icon es-icon-help"></i></a>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('play_rule', {'auto_pause':'admin.setting_course.video_play_setting.play_rule.auto_pause'|trans, 'no_action':'admin.setting_course.video_play_setting.play_rule.no_action'|trans}, effectiveTimeSetting.play_rule) }}
-        <div class="help-block js-play-role-help" >
+        <div class="help-block js-play-role-help">
           {% if effectiveTimeSetting.play_rule == 'auto_pause' %}
-            {{'admin.setting_course.video_play_setting.play_rule.auto_pause.help_block'|trans}}
+            {{ 'admin.setting_course.video_play_setting.play_rule.auto_pause.help_block'|trans }}
           {% else %}
-            {{'admin.setting_course.video_play_setting.play_rule.no_action.help_block'|trans}}
+            {{ 'admin.setting_course.video_play_setting.play_rule.no_action.help_block'|trans }}
           {% endif %}
         </div>
       </div>
     </div>
-
+    <legend>{{ 'admin.setting_course.video_play_setting.complate_config'|trans }}</legend>
     <div class="row form-group">
       <div class="col-md-3 control-label">
-        <label >{{'admin.setting_course.learning_time_statistical_dimension'|trans}}</label>
+        <label>{{ 'admin.setting_course.video_play_setting.default'|trans }}</label>
       </div>
-      <div class="controls col-md-8 radios js-check-radio" data-url="{{ path('admin_v2_video_task_setting_job_check') }}" data-value="{{ effectiveTimeSetting.statistical_dimension }}">
-        {{ radios('statistical_dimension', {'playing':'admin.setting_course.effective_learning_time.playing_time'|trans, 'page':'admin.setting_course.effective_learning_time.page_time'|trans}, effectiveTimeSetting.statistical_dimension) }}
-        <div class="help-block js-statistical-dimension-help" >
-          {% if effectiveTimeSetting.statistical_dimension == 'playing' %}
-            {{'admin.setting_course.effective_learning_time.playing.help_block'|trans}}
+      <div class="controls col-md-8 radios js-check-radio"
+           data-url="{{ path('admin_v2_video_task_setting_job_check') }}"
+           data-value="{{ effectiveTimeSetting.statistical_dimension }}">
+        {{ radios('statistical_dimension', {'end':'admin.setting_course.effective_learning_time.end_time'|trans, 'playing':'admin.setting_course.effective_learning_time.playing_time'|trans, 'page':'admin.setting_course.effective_learning_time.page_time'|trans}, effectiveTimeSetting.statistical_dimension) }}
+        <div class="help-block js-statistical-dimension-help">
+          {% if effectiveTimeSetting.statistical_dimension == 'page' %}
+            {{ 'admin.setting_course.effective_learning_time.page.help_block'|trans }}
           {% else %}
-            {{'admin.setting_course.effective_learning_time.page.help_block'|trans}}
+            {{ 'admin.setting_course.effective_learning_time.playing.help_block'|trans }}
           {% endif %}
         </div>
       </div>
@@ -41,7 +47,7 @@
     <div class="row form-group">
       <div class="col-md-3 control-label"></div>
       <div class="controls col-md-8">
-        <button type="button" class="btn btn-primary js-setting-submit">{{'form.btn.submit'|trans}}</button>
+        <button type="button" class="btn btn-primary js-setting-submit">{{ 'form.btn.submit'|trans }}</button>
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

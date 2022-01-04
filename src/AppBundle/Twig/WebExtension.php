@@ -188,6 +188,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('render_notification', [$this, 'renderNotification']),
             new \Twig_SimpleFunction('route_exsit', [$this, 'routeExists']),
             new \Twig_SimpleFunction('is_micro_messenger', [$this, 'isMicroMessenger']),
+            new \Twig_SimpleFunction('is_android_client', [$this, 'isAndroidClient']),
             new \Twig_SimpleFunction('wx_js_sdk_config', [$this, 'weixinConfig']),
             new \Twig_SimpleFunction('plugin_update_notify', [$this, 'pluginUpdateNotify']),
             new \Twig_SimpleFunction('tag_equal', [$this, 'tagEqual']),
@@ -860,6 +861,11 @@ class WebExtension extends \Twig_Extension
     public function isMicroMessenger()
     {
         return false !== strpos($this->requestStack->getMasterRequest()->headers->get('User-Agent'), 'MicroMessenger');
+    }
+
+    public function isAndroidClient()
+    {
+        return false !== strpos($this->requestStack->getMasterRequest()->headers->get('User-Agent'), 'Android');
     }
 
     public function renameLocale($locale)
@@ -2437,7 +2443,7 @@ class WebExtension extends \Twig_Extension
             return $items;
         }
 
-        foreach ($selectFormItems as  $item) {
+        foreach ($selectFormItems as $item) {
             $formItem = FormItemFectory::create($item['code'])->getData();
             $items[$item['code']] = array_merge($formItem, $item);
         }
