@@ -610,6 +610,7 @@ group.post.reply_hint: 回复
 group.post.reply_fail_hint: 发表回复失败，请重试
 
 cny: 元
+fold: 折
 pay.security.password.save_fail_hint: 支付密码设置失败
 
 user.account.refund_cancel_title: 取消退款
@@ -1817,6 +1818,15 @@ site.btn.detail: 详情
 site.btn.remove_playback: 移除回放
 site.btn.view_playback: 查看回放
 site.btn.confirm: 确认
+site.btn.edit: 编辑
+site.btn.see_more: 查看更多
+site.btn.enter_live: 进入直播
+site.btn.save: 保存
+site.btn.exit_editing: 退出编辑
+site.btn.preview: 预览
+site.btn.exit_preview: 退出预览
+
+admin.mobile_setting.discovery_tips: 注：使用发现页配置功能，app版本需要升级到4.5.39及以上
 
 modal.title.edit: 编辑
 modal.content.remove_playback_resources: 是否确认移除回放资源？
@@ -1833,6 +1843,21 @@ radio.visible_only_to_yourself: 仅自己可见
 
 message.removal_succeeded: 移除成功
 message.edit_succeeded: 编辑成功
+message.file_too_large: 文件过大，请上传小于 2M 的文件！
+message.saved_successfully: 保存成功！
+message.save_failed: 保存失败！
+message.coupon_module_information: 请完善优惠券模块信息！
+message.gn_module_information: 请完善图文导航模块信息！
+message.advertising_module_information: 请完善广告模块信息！
+message.qusetion_bank_module_information: 请完善题库模块信息！
+message.open_class_module_information: 请完善公开课模块信息！
+message.classroom_module_information: 请完善班级模块信息！
+message.course_module_information: 请完善课程模块信息！
+message.carousel_module_information: 请完善轮播图模块信息！
+message.go_to_open: 去开通
+message.coupon_function_is_not_activated: 优惠券功能未开通
+message.membership_function_is_not_activated: 会员功能未开通
+message.add_up_to: 同一类型组件最多添加 5 个
 
 live.playback.tip.remove_association: 直播回放将从该课程中移除关联
 live.playback.tip.cannot_be_used_normally: 直播回放若被引用，移除会引起引用任务无法正常使用
@@ -1892,3 +1917,139 @@ course.miss_score.validator: 漏选分值不得超过题目分值
 course.option_score.validator: 选项总分不得超过题目分值
 testpaper.scoer.validator: 请检查各题型题目分数设置，存在题目设置错误
 testpaper.option_score.validator: 每项分值不得超过每题分值
+
+all: 全部
+coupon: 优惠卷
+collar_roll: 领卷
+available_range: 可用范围
+upload_image: 上传图片
+picture_cropping: 图片裁剪
+classroom_course_num: 共<span>%courseNum%</span>门课程
+all_products: 全部商品
+designated_goods: 指定商品
+designated_member: 指定会员
+all_courses: 全部课程
+all_classes: 全部班级
+all_members: 全部会员
+some_products: 部分商品
+ad_pictures: 广告图片
+carousel: 轮播图
+members_only: 会员专区
+free_classroom_course_num: %courseNum% 门课程， %classroomNum% 门班级
+app.footer.find: 发现
+app.footer.learn: 学习
+app.footer.dynamic: 动态
+app.footer.mine: 我的
+app.header.school_name: 网校名称
+app.header.search: 搜索
+classification_class: 分类课
+free_lesson: 免费课
+popular_class: 热门课
+
+decorate.class_list_settings: 班级列表设置
+decorate.list_name: 列表名称
+decorate.please_enter_the_name_of_the_list: 请输入列表名称
+decorate.arrangement: 排列方式
+decorate.row_by_column: 一行一列
+decorate.one_row_and_two_columns: 一行两列
+decorate.class_source: 班级来源
+decorate.class_classification: 班级分类
+decorate.customize: 自定义
+decorate.select_class: 选择班级
+decorate.order: 排列顺序
+decorate.order2: 排列顺序：
+decorate.join_the_most: 加入最多
+decorate.recently_created: 最近创建
+decorate.highest_rated: 评分最高
+decorate.recommended_class: 推荐班级
+decorate.last_7_days: 最近 7 天
+decorate.last_30_days: 最近 30 天
+decorate.last_90_days: 最近 90 天
+decorate.history: 历史所有
+decorate.display_number: 显示个数
+decorate.show_only_published_classes: 仅显示已发布班级
+decorate.remove: 移除
+decorate.class_name: 班级名称
+decorate.commodity_price: 商品价格
+decorate.amount_of_goods: 商品数量
+decorate.creation_time: 创建时间
+decorate.operate: 操作
+decorate.search_class: 搜索班级
+decorate.coupon: 优惠卷
+decorate.only_show_coupons_no_expired: 仅显示未过期的优惠券
+decorate.title: 标题栏
+decorate.show: 显示
+decorate.do_not_show: 不显示
+decorate.coupon_selection: 优惠券选择
+decorate.add_coupon: 添加优惠卷
+decorate.choose_a_coupon: 选择优惠券
+decorate.search_for_coupons: 搜索优惠卷
+decorate.coupon_name: 优惠卷名称
+decorate.prefix: 前缀
+decorate.offer_content: 优惠内容
+decorate.discount: 折扣
+decorate.trade_in: 抵价
+decorate.valid_until: 有效期至
+decorate.remaining_total: 剩余/总量
+decorate.valid_within_fixed_day_of_receipt: 领取%fixedDay%天内有效
+decorate.unknown_date: 未知日期
+decorate.course_list_setting: 课程列表设置
+decorate.course_source: 课程来源
+decorate.course_sorts: 课程分类
+decorate.choose_a_course: 选择课程
+decorate.recommended_courses: 推荐课程
+decorate.show_only_published_courses: 仅显示已发布课程
+decorate.course_title: 课程名称
+decorate.search_course: 搜索课程
+decorate.graphic_navigation_settings: 图文导航设置
+decorate.add_graphic_navigation: 添加图文导航
+decorate.not_less_than: 不得少于 1 个
+decorate.change_picture: 更换图片
+decorate.please_enter_a_title: 请输入标题
+decorate.link_source: 链接来源
+decorate.please_choose: 请选择
+decorate.members_only: 会员专区
+decorate.open_class_classification: 公开课分类
+decorate.select_image: 选择图片
+decorate.title2: 标题
+decorate.question_bank_list_settings: 题库列表设置
+decorate.question_bank_classification: 题库分类
+decorate.basic: 基础组件
+decorate.carousel: 轮播图
+decorate.graphic_navigation: 图文导航
+decorate.image_ad: 图片广告
+decorate.curriculum_schedule: 课程列表
+decorate.class_list: 班级列表
+decorate.question_bank_list: 题库列表
+decorate.open_class_list: 公开课列表
+decorate.marketing: 营销组件
+decorate.all: 所有
+decorate.open_class_list_settings: 公开课列表设置
+decorate.choose_an_open_class: 选择公开课
+decorate.only_show_published_public_classes: 仅显示已发布公开课
+decorate.search_for_public_classes: 搜索公开课
+decorate.image_ad_settings: 图片广告设置
+decorate.add_pictures: 添加图片
+decorate.select_link: 选择链接
+decorate.select_member: 选择会员
+decorate.custom_link: 自定义链接
+decorate.mobile_phone_screen: 自适应手机屏幕
+decorate.turn_on: 开启
+decorate.closure: 关闭
+decorate.revise: 修改
+decorate.add_content: 添加内容
+decorate.carousel_tip1: 建议图片尺寸为 750x300px，支持 jpg/png/gif 格式，大小不超过 2 MB
+decorate.carousel_tip2: 最多添加 5 个轮播图，拖动选中的图片可对其排序
+decorate.site_link: 站内链接
+decorate.low_to_hign: 从低到高
+decorate.hign_to_low: 从高到低
+decorate.choose: 选择
+decorate.link_address: 链接地址
+decorate.please_enter_the_link_address: 请输入链接地址
+decorate.link_wrong: 链接有误，请以 http:// 或者 https:// 开头
+decorate.are_you_sure_exiting_editing: 确定退出编辑？
+decorate.exiting_editing_not_save: 退出编辑将不会保存修改。
+decorate.gn_tip1: 建议图片尺寸为 80x80px，支持 jpg/png/gif 格式，大小不超过 2 MB
+decorate.gn_tip2: 最多添加 8 个图文导航
+decorate.poster_tip1: 建议图片尺寸为 750px，支持 jpg/png/gif 格式，大小不超过 2 MB
+decorate.open_course_tip1: 仅含直播公开课内容，不包含录播公开课

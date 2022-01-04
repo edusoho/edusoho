@@ -102,6 +102,72 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
     }
 
+    public function getRecentLiveTaskStatus($courseId)
+    {
+        $tasks = $this->searchTasks(['status' => 'published', 'type' => 'live', 'courseId' => $courseId], ['startTime' => 'ASC'], 0, PHP_INT_MAX);
+        if (0 == count($tasks)) {
+            return 'null';
+        }
+
+        if (1 == count($tasks)) {
+            $task = array_shift($tasks);
+            $status = $this->filterLiveTaskStatus($task['startTime'], $task['endTime']);
+
+            return (!$this->hasReplay($task['activityId'])) ? $status : 'hasReplay';
+        }
+
+        foreach ($tasks as $task) {
+            $status = $this->filterLiveTaskStatus($task['startTime'], $task['endTime']);
+            if ('living' == $status) {
+                $hasLivingTask = true;
+
+                return $status;
+            }
+
+            if ('ahead' == $status && !$hasLivingTask) {
+                $hasAheadTask = true;
+
+                $status = 'ahead';
+            }
+
+            $hasReplay = $this->hasReplay($task['activityId']);
+
+            if ('end' == $status && !$hasAheadTask && $hasReplay) {
+                $hasEndTaskAndHasReplay = true;
+
+                $status = 'hasReplay';
+            }
+
+            if ('end' == $status && !$hasEndTaskAndHasReplay && !$hasReplay) {
+                $status = 'end';
+            }
+        }
+
+        return $status;
+    }
+
+    protected function hasReplay($activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+
+        return (isset($activity['ext']['replayStatus']) && ('generated' == $activity['ext']['replayStatus'] || 'videoGenerated' == $activity['ext']['replayStatus'])) ? true : false;
+    }
+
+    protected function filterLiveTaskStatus($startTime, $endTime)
+    {
+        if ($startTime <= time() && time() <= $endTime) {
+            return 'living';
+        }
+
+        if (time() > $endTime) {
+            return 'end';
+        }
+
+        if ($startTime > time()) {
+            return 'ahead';
+        }
+    }
+
     protected function createActivity($fields)
     {
         $activity = $this->getActivityService()->createActivity($fields);
