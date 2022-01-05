@@ -12133,3 +12133,7 @@ testpaper.score_set.option: 每题分值
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%%taskNumber%： %taskTitle%'
 common.cancel_recommend.btn: 取消推荐
+
+review.result.fail: 不通过
+review.result.pass: 通过
+review.result.amend_comment: 修改评价
