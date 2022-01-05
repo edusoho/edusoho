@@ -1822,7 +1822,7 @@ course.plan_task.activity_manage.homework.info: 'Assignment description'
 course.plan_task.activity_manage.homework.can_not_edit_tips: This assignment has been cited in other copied courses, and the title cannot be edited temporarily
 course.plan_task.activity_manage.homework.total: 'The assignment has total <span class="color-primary">%itemCount% questions</span>'
 course.plan_task.activity_manage.homework.choose_question: 'Choose question'
-course.plan_task.activity_manage.homework.save_tips: 'Tip：The published questions will no longer be added or delete.'
+course.plan_task.activity_manage.homework.save_tips: 'The published questions will no longer be added or delete.'
 course.plan_task.activity_manage.homework.submit: Submit
 course.plan_task.activity_manage.homework.start_btn: Start
 course.plan_task.activity_manage.homework.reviewing_tips: 'The teacher is approving the job. After completing the consultation, the teacher will inform you of the results. Please wait.'
@@ -1883,6 +1883,7 @@ course.plan_task.activity_manage.testpaper.mode.require_credit: 'Limit credits'
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credits required to take the test, 0 is no limitation'
 course.plan_task.activity_manage.testpaper.pass: 'Pass mark'
 course.plan_task.activity_manage.testpaper.score_pass: 'Pass Score'
+course.plan_task.activity_manage.homework.score_pass: 'Pass Score'
 course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not start, please come back at %startTime%.'
 course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points</span>.'
 course.plan_task.activity_manage.testpaper.pass_score: "pass score is <span class=\"color-primary\">%finishScore% points</span>.\n"
@@ -10867,3 +10868,4 @@ testpaper.score_set.option: question score
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%.%taskNumber%:%taskTitle%'
 common.cancel_recommend.btn: Cancel Recommend
+course.homework.score_title.tips: "Multiple choice score setting:<br>No points for wrong or multiple choices.<br>Missed selection: missed selection and no error, a fixed score.<br>Each item: if there is no wrong item, the score of the correct item is added up."
