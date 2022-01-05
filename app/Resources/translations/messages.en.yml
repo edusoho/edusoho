@@ -10867,7 +10867,3 @@ testpaper.score_set.option: question score
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%.%taskNumber%:%taskTitle%'
 common.cancel_recommend.btn: Cancel Recommend
-
-review.result.fail: Fail
-review.result.pass: Pass
-review.result.amend_comment: Amend comment
