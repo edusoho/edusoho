@@ -27,7 +27,7 @@ class GroupThreadController extends BaseController
 
         $groupinfo = $this->getGroupService()->getGroup($id);
 
-        if (!$groupinfo) {
+        if (empty($groupinfo) || 'close' == $groupinfo['status']) {
             return $this->createMessageResponse('info', '该小组已被关闭');
         }
 
