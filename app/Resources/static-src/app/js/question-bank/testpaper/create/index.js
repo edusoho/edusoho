@@ -216,9 +216,10 @@ class TestpaperForm {
         for (const key in arr) {
           let count = this.$form.find(`.js-material-checkbox-${key}:checked`).length;
           $('.js-score-modal').find('.js-score-set-'+arr[key]).find('.js-score-item-num').html(count);
+          if(count >0){
+            $('.js-score-modal').find('.js-score-set-'+arr[key]).removeClass('hidden');
+          }
         }
-
-        $('.js-score-modal').find('.score-item').removeClass('hidden');
       }
 
       this.$scoreModal.modal('show');

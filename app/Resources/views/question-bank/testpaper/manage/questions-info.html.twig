@@ -37,10 +37,20 @@
             <th width="8%">{{'course.testpaper_manage.question.seq'|trans}}</th>
             <th width="35%">{{'course.testpaper_manage.question.stem'|trans}}</th>
             {% if type in ['choice', 'uncertain_choice', 'material'] %}
-              <th width="10%">{{'course.testpaper_manage.question.score'|trans}}</th>
+              <th width="10%">{{'course.testpaper_manage.question.score'|trans}}
+              <span class="link-medium es-icon es-icon-help ml5"
+            data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+            data-content="{{ 'course.homework.score_title.tips'|trans()|raw}}">
+      </span>
+              </th>
               <th width="10%">{{'course.testpaper_manage.create.questions_setup.missing_score'|trans}}</th>
             {% else %}
-              <th width="20%">{{'course.testpaper_manage.question.score'|trans}}</th>
+              <th width="20%">{{'course.testpaper_manage.question.score'|trans}}
+              <span class="link-medium es-icon es-icon-help ml5"
+            data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+            data-content="{{ 'course.homework.score_title.tips'|trans()|raw}}">
+      </span>
+              </th>
             {% endif %}
             <th width="10%">{{'course.testpaper_manage.question.difficulty'|trans}}</th>
             <th width="20%">{{'course.testpaper_manage.question.operation'|trans}}</th>
@@ -59,7 +69,7 @@
         <p>
           <label class="inline-block vertical-top checkbox-inline"><input type="checkbox" data-role="batch-select">{{'course.testpaper_manage.question.select_all'|trans}}</label>
           {% if type != 'material' %}
-            <button type="button" class="cd-btn cd-btn-default cd-btn-sm mlm mts" data-role="batch-delete-btn"  data-name="{{'course.testpaper_manage.question.content'|trans}}">{{'course.testpaper_manage.delete_btn'|trans}}</button>
+            <button type="button" class="cd-btn cd-btn-default cd-btn-sm mlm mts" data-role="batch-delete-btn"  data-name="{{'course.testpaper_manage.question.content'|trans}}">{{'form.btn.remove'|trans}}</button>
           {% endif %}
           <button type="button" class="cd-btn cd-btn-default cd-btn-sm mlm mts" data-role="set-score-btn" data-type="{{ type }}" data-name="{{'course.testpaper_manage.question.content'|trans}}">{{'my.teaching.question_bank.question.set_score'|trans}}</button>
         </p>

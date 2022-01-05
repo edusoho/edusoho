@@ -75,7 +75,12 @@
               <th width="5%"><input type="checkbox" data-role="batch-select"></th>
               <th width="30%">{{ 'course.testpaper_manage.question.stem'|trans }}</th>
               <th width="15%">{{ 'course.testpaper_manage.question.type'|trans }}</th>
-              <th width="30">{{ 'course.question_manage.manage.score'|trans }}</th>
+              <th width="30">{{ 'course.question_manage.manage.score'|trans }}
+                <span class="link-medium es-icon es-icon-help ml5"
+            data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+            data-content="{{ 'course.homework.score_title.tips'|trans()|raw}}">
+      </span>
+              </th>
               <th width="10%">{{ 'course.testpaper_manage.question.difficulty'|trans }}</th>
               <th width="10%">{{ 'course.testpaper_manage.question.operation'|trans }}</th>
             </tr>
@@ -95,14 +100,14 @@
           <div class="mbl">
             <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{ 'course.testpaper_manage.question.select_all'|trans }}
             </label>
-            <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn" data-name="{{ 'course.testpaper_manage.question.content'|trans }}">{{ 'course.testpaper_manage.question.operation.delete_btn'|trans }}</button>
+            <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn" data-name="{{ 'course.testpaper_manage.question.content'|trans }}">{{ 'form.btn.remove'|trans }}</button>
           </div>
           <span class="color-danger js-help-redmine"></span>
           <p class="js-subjective-remask" data-type="homework"></p>
         </div>
       </div>
       <div class="form-group">
-        <div class="col-sm-8 col-sm-offset-2">
+        <div class="col-sm-8" style="margin-left: 50px">
           <p class="help-block color-warning">{{ 'course.plan_task.activity_manage.homework.save_tips'|trans }}</p>
         </div>
       </div>

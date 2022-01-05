@@ -25,7 +25,7 @@
     },
     {
       "type": "score",
-      "describe": "course.plan_task.activity_manage.testpaper.score_pass",
+      "describe": "course.plan_task.activity_manage.homework.score_pass",
       "html": "conditions.html.twig",
       "value": "0"
     }

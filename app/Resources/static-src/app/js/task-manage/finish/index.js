@@ -16,8 +16,7 @@ if ($selectFinish.length) {
       $('#watchTime').rules('remove');
     }
     $('#homeworkScore').rules('remove');
-    switch(val)
-    {
+    switch (val) {
     case 'time':
       $('#conditions-time').show();
       if (!$('#watchTime').val()) {
@@ -25,39 +24,18 @@ if ($selectFinish.length) {
         $('#watchTime').val($options.data('value'));
         $('#finish-data').val($options.data('value'));
       }
-
-    switch (val) {
-      case 'time':
-        $('#conditions-time').show();
-        if (!$('#watchTime').val()) {
-          let $options = $('#finish-type option:selected');
-          $('#watchTime').val($options.data('value'));
-          $('#finish-data').val($options.data('value'));
-        }
-        $('#watchTimeLabel').hasClass('hidden') ? null : $('#watchTimeLabel').addClass('hidden');
-        $('#timeLabel').hasClass('hidden') ? $('#timeLabel').removeClass('hidden') : null;
-        break;
-      case 'watchTime':
-        $('#conditions-time').show();
-        if (!$('#watchTime').val()) {
-          let $options = $('#finish-type option:selected');
-          $('#watchTime').val($options.data('value'));
-          $('#finish-data').val($options.data('value'));
-        }
-        $('#watchTimeLabel').hasClass('hidden') ? $('#watchTimeLabel').removeClass('hidden') : null;
-        $('#timeLabel').hasClass('hidden') ? null : $('#timeLabel').addClass('hidden');
-        break;
-      case 'end':
-        $('#endConditions').removeClass('hidden');
-        break;
-      default:
-        $selectFinish.trigger('selectChange', val);
-    }
-  });
-
-<<<<<<< HEAD
+      $('#watchTimeLabel').hasClass('hidden') ? null : $('#watchTimeLabel').addClass('hidden');
+      $('#timeLabel').hasClass('hidden') ? $('#timeLabel').removeClass('hidden') : null;
+      break;
+    case 'watchTime':
+      $('#conditions-time').show();
+      if (!$('#watchTime').val()) {
+        let $options = $('#finish-type option:selected');
+        $('#watchTime').val($options.data('value'));
+        $('#finish-data').val($options.data('value'));
+      }
       $('#watchTimeLabel').hasClass('hidden') ? $('#watchTimeLabel').removeClass('hidden') : null;
-      $('#timeLabel').hasClass('hidden') ? null :$('#timeLabel').addClass('hidden');
+      $('#timeLabel').hasClass('hidden') ? null : $('#timeLabel').addClass('hidden');
       break;
     case 'score':
       if($('.js-homework-score').length >0){
@@ -75,18 +53,20 @@ if ($selectFinish.length) {
       }
       break;
     case 'end':
+      $('#endConditions').removeClass('hidden');
       break;
     default:
       $selectFinish.trigger('selectChange', val);
-=======
+    }
+  });
   $('#js-end-rule').on('change', function () {
     if ($(this).is(':checked')) {
       $('#finish-data').val(parseInt($('#watchTime').val()) ? $('#watchTime').val() : 1); // 禁止拖动
     } else {
       $('#finish-data').val(''); // 不禁止拖动
->>>>>>> cf26a799ba6e8068fc14ce11d00aef2584b65ba5
     }
   });
+  
 }
 
 let validate = $('#step3-form').validate({
@@ -113,15 +93,11 @@ if (!$('#conditions-time').is(':hidden')) {
   });
 }
 
-<<<<<<< HEAD
 $('#homeworkScore').on('change', function() {
   $('#finish-data').val($(this).val());
 });
 
-$('#watchTime').on('change', function() {
-=======
 $('#watchTime').on('change', function () {
->>>>>>> cf26a799ba6e8068fc14ce11d00aef2584b65ba5
   $('#finish-data').val($(this).val());
 });
 

@@ -145,7 +145,7 @@ export default class Homework {
       messages: {
         description: Translator.trans('activity.homework_manage.question_homework_hint'),
         questionLength: Translator.trans('activity.homework_manage.question_required_error_hint'),
-        scores: Translator.trans('请检查分数设置'),
+        scores: Translator.trans(''),
       },
     });
     this.initCkeditor(this.validator);

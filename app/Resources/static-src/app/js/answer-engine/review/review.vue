@@ -11,6 +11,7 @@
       :cdnHost="cdnHost"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
+      :media-type="mediaType"
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
       @getReviewData="getReviewData"
@@ -34,6 +35,7 @@
         showAttachment: $('[name=show_attachment]').val(),
         cdnHost: $('[name=cdn_host]').val(),
         fileId: 0,
+        mediaType: $('[name=media_type]').val(),
       };
     },
     created() {

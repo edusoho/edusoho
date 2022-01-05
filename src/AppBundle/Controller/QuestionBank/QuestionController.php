@@ -164,6 +164,10 @@ class QuestionController extends BaseController
                     $question['stem'] = preg_replace('/\[\[\]\]/', '[['.$answer.']]', $question['stem'], 1);
                 }
             }
+            if (!empty($question['score_rule'])) {
+                $question['scoreType'] = $question['score_rule']['scoreType'];
+                $question['otherScore'] = $question['score_rule']['otherScore'];
+            }
         }
 
         return $item;

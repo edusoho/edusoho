@@ -2115,7 +2115,7 @@ course.plan_task.activity_manage.homework.can_not_edit_tips: 该作业已在其�
 course.plan_task.activity_manage.homework.total: >
   本次作业<span class="color-primary">%itemCount%题</span>
 course.plan_task.activity_manage.homework.choose_question: 选择题目
-course.plan_task.activity_manage.homework.save_tips: 提示：发布后题目将不能再添加或删除。
+course.plan_task.activity_manage.homework.save_tips: 发布后题目将不能再添加或移除。
 course.plan_task.activity_manage.homework.submit: 提交作业
 course.plan_task.activity_manage.homework.start_btn: 开始做题
 course.plan_task.activity_manage.homework.reviewing_tips: 老师正在批阅作业，批阅完成后会以站内私信通知您批阅结果，请稍等。
@@ -2178,6 +2178,7 @@ course.plan_task.activity_manage.testpaper.mode.require_credit: 限制学分
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 参加此次考试所需的学分，０分则不限制。
 course.plan_task.activity_manage.testpaper.pass: 分数达标
 course.plan_task.activity_manage.testpaper.score_pass: 考试合格
+course.plan_task.activity_manage.homework.score_pass: 作业合格
 course.plan_task.activity_manage.testpaper.finish_tip: 提示：若任务完成条件选择了“考试合格”，则学员的考试分数必须达到上一步中设置的“合格分数”，才能完成此任务。
 course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始，请在%startTime%之后再来
 course.plan_task.activity_manage.testpaper.total_question: >
@@ -12133,3 +12134,8 @@ testpaper.score_set.option: 每题分值
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%%taskNumber%： %taskTitle%'
 common.cancel_recommend.btn: 取消推荐
+course.homework.score_title.tips: "多选题分值设置：<br>错选和多选不得分。<br>漏选：漏选且无错项时，得固定分值。<br>每项：漏选且无错项时，累加正确选项的分值。"
+
+review.result.fail: 不通过
+review.result.pass: 通过
+review.result.amend_comment: 修改评价
