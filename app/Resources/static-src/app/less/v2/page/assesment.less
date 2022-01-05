@@ -66,3 +66,109 @@
     }
   }
 }
+
+.review-result {
+  position: relative;
+  min-height: 160px;
+  text-align: left;
+
+  &__icon {
+    position: absolute;
+    top: 40px;
+    left: 180px;
+    width: 133px;
+    height: 80px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__content {
+    margin-left: 377px;
+
+    .result-status {
+      font-size: 24px;
+      line-height: 32px;
+      font-weight: 500;
+
+      &--unpassed {
+        color: #ff8836;
+      }
+
+      &--passed {
+        color: #46c37b;
+      }
+    }
+
+    .teacher-comment {
+      position: relative;
+      padding-right: 16px;
+      margin-top: 16px;
+      font-size: 16px;
+      color: #999;
+      line-height: 24px;
+
+      &__label {
+        position: absolute;
+        top: 8px;
+        left: 0;
+      }
+
+      &__content {
+        position: relative;
+        margin-left: 84px;
+        padding: 8px 12px 28px;
+        min-height: 68px;
+        background: #ecf9f1;
+        border-radius: 8px;
+
+        .modify-comment-btn {
+          position: absolute;
+          right: 12px;
+          bottom: 8px;
+          font-size: 14px;
+          color: #46c37b;
+          line-height: 20px;
+          cursor: pointer;
+        }
+      }
+
+      &__input {
+        margin-left: 84px;
+
+        .comment-textarea {
+          padding: 8px;
+          width: 100%;
+          min-height: 150px;
+          line-height: 1.5;
+          background: #fff;
+          border: 1px solid #dedede;
+          border-radius: 8px;
+          outline: none;
+        }
+
+        .comment-select {
+          padding-left: 8px;
+          margin-top: 8px;
+          width: 100%;
+          height: 38px;
+          border: 1px solid #dedede;
+          border-radius: 8px;
+          outline: none;
+        }
+
+        .comment-btn {
+          margin-top: 24px;
+          text-align: right;
+
+          button {
+            padding: 0 10px;
+            margin-left: 20px;
+          }
+        }
+      }
+    }
+  }
+}
