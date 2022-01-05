@@ -53,6 +53,11 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             $payload['encrypt'] = 3;
         }
 
+        //开启云视频防盗增强后，安卓端微信内置浏览器可以观看视频
+        if (strpos($userAgent, 'android') >= 0 && strpos($userAgent, 'MicroMessenger') >= 0) {
+            $payload['encrypt'] = 0;
+        }
+
         $context['token'] = 'cloud' == $file['storage'] ? $this->makePlayToken($file, 600, $payload) : '';
         $context['resNo'] = $file['globalId'];
 
