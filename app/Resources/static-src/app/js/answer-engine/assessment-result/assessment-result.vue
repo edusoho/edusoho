@@ -12,6 +12,7 @@
       :downloadAttachmentCallback="downloadAttachmentCallback"
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
+      @error-correction="errorCorrection"
     ></assessment-result>
   </div>
 </template>
@@ -115,6 +116,10 @@
             self.fileId = 0;
           })
         });
+      },
+
+      errorCorrection(params) {
+        console.log('errorCorrection', params);
       }
     }
   }
