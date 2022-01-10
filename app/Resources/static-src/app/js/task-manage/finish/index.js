@@ -39,6 +39,7 @@ if ($selectFinish.length) {
         break;
       case 'end':
         $('#endConditions').removeClass('hidden');
+        $('#finish-data').val('');
         break;
       default:
         $selectFinish.trigger('selectChange', val);
