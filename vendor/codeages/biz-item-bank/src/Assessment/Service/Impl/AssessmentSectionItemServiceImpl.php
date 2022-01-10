@@ -15,6 +15,11 @@ class AssessmentSectionItemServiceImpl extends BaseService implements Assessment
         return $this->getAssessmentSectionItemDao()->get($id);
     }
 
+    public function getItemByAssessmentIdAndItemId($assessmentId, $itemId)
+    {
+        return $this->getAssessmentSectionItemDao()->getByAssessmentIdAndItemId($assessmentId, $itemId);
+    }
+
     public function findSectionItemsByAssessmentId($assessmentId)
     {
         return $this->getAssessmentSectionItemDao()->findByAssessmentId($assessmentId);

@@ -72,4 +72,6 @@ interface AnswerService
      * @return AnswerReport
      */
     public function review(array $reviewReport);
+
+    public function reviseFillAnswer($answerRecordId, $fillData);
 }
