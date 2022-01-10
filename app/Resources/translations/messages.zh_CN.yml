@@ -2158,6 +2158,11 @@ course.plan_task.activity_manage.testpaper.comment_content: 评语内容
 course.plan_task.activity_manage.testpaper.comment_operation: 操作
 course.plan_task.activity_manage.testpaper.add_comment: 添加评语
 course.plan_task.activity_manage.testpaper.default_comment: 默认评语
+course.plan_task.activity_manage.testpaper.default_comment1: 继续努力，继续进步！
+course.plan_task.activity_manage.testpaper.default_comment2: 不错，有进步，再努力些就会更棒！
+course.plan_task.activity_manage.testpaper.default_comment3: 你真棒！我为你骄傲！
+course.plan_task.activity_manage.testpaper.default_comment4: 有点松懈了吧？继续加油吧！
+course.plan_task.activity_manage.testpaper.default_comment5: 用心、专注、坚持，你能做的更好的！
 course.plan_task.activity_manage.testpaper.comment_remove: 移除
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 course.plan_task.activity_manage.testpaper.times: 考试次数

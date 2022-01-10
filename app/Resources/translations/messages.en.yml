@@ -1863,6 +1863,11 @@ course.plan_task.activity_manage.testpaper.comment_content: Content
 course.plan_task.activity_manage.testpaper.comment_operation: Operation
 course.plan_task.activity_manage.testpaper.add_comment: Add
 course.plan_task.activity_manage.testpaper.default_comment: Default
+course.plan_task.activity_manage.testpaper.default_comment1: Keep working hard and keep improving!
+course.plan_task.activity_manage.testpaper.default_comment2: Yes, if there is progress, it will be even better if you work harder!
+course.plan_task.activity_manage.testpaper.default_comment3: You are awesome! I am proud of you!
+course.plan_task.activity_manage.testpaper.default_comment4: A little slack, right? Keep going!
+course.plan_task.activity_manage.testpaper.default_comment5: With heart, focus and persistence, you can do better!
 course.plan_task.activity_manage.testpaper.comment_remove: Remove
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Hour, No limitation.'

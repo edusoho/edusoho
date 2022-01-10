@@ -347,6 +347,11 @@ activity.testpaper_manage.required_error_hint: Please enter the score
 activity.testpaper_manage.question_options: Option
 activity.testpaper_manage.questions_length_hint: The maximum number of questions is 2,000
 activity.testpaper_manage.default_comment: Default Comment
+activity.testpaper_manage.default_comment1: Keep working hard and keep improving!
+activity.testpaper_manage.default_comment2: Yes, if there is progress, it will be even better if you work harder!
+activity.testpaper_manage.default_comment3: You are awesome! I am proud of you!
+activity.testpaper_manage.default_comment4: A little slack, right? Keep going!
+activity.testpaper_manage.default_comment5: With heart, focus and persistence, you can do better!
 activity.testpaper_manage.comment_remove: Remove
 
 activity.text_manage.save_draft_hint: (Draft saved at %createdTime%)
