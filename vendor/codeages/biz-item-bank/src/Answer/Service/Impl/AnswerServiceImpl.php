@@ -332,11 +332,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $answerReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
             $answerReports = ArrayToolkit::index($answerReports, 'item_id');
             $answerReportQuestion = $answerReports[$fillData['item_id']];
-            $score = $this->processFillQuestionReviseScore($answerRecord, $answerReportQuestion, $fillData);
-            $answerReportQuestion = $this->getAnswerQuestionReportDao()->update($answerReportQuestion['id'], [
-                'score' => $score,
-                'revise' => $revise,
-            ]);
+            $answerReportQuestion = $this->processFillQuestionReviseScore($answerRecord, $answerReportQuestion, $fillData);
             $answerReports[$answerReportQuestion['item_id']] = $answerReportQuestion;
             $answerReport = $this->processReviseAnswerReport($answerRecord, $answerReports);
             $this->dispatch('answer.finished', $answerReport);
@@ -407,7 +403,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         if($rightCount == count($answers)){
             $this->getWrongQuestionDao()->batchDelete(['item_id'=>$item['id'], 'user_id'=>$answerRecord['user_id'], 'answer_scene_id' => $answerRecord['answer_scene_id']]);
         }
-        return $score;
+        return $this->getAnswerQuestionReportDao()->update($answerReportQuestion['id'], [
+            'score' => $score,
+            'revise' => $revise,
+        ]);
     }
 
     protected function getQuestionReportScoreAndStatus($answerScene, $questionReport, $reviewQuestionReport, $assessmentQuestion)
