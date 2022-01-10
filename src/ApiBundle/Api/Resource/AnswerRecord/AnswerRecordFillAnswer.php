@@ -14,7 +14,7 @@ class AnswerRecordFillAnswer extends AbstractResource
         if (empty($answerRecord)) {
             return false;
         }
-        $answerData = $request->request->get('answerData', []);
+        $answerData = $request->request->all();
         if (empty($answerData)) {
             return false;
         }
