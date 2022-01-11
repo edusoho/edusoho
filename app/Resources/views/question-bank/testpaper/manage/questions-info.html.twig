@@ -38,18 +38,15 @@
             <th width="35%">{{'course.testpaper_manage.question.stem'|trans}}</th>
             {% if type in ['choice', 'uncertain_choice', 'material'] %}
               <th width="10%">{{'course.testpaper_manage.question.score'|trans}}
+                {% set tran = 'course.homework.score_title.tips.'~type%}
               <span class="link-medium es-icon es-icon-help ml5"
-            data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
-            data-content="{{ 'course.homework.score_title.tips'|trans()|raw}}">
-      </span>
+                data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+                data-content="{{ tran|trans()|raw}}">
+              </span>
               </th>
               <th width="10%">{{'course.testpaper_manage.create.questions_setup.missing_score'|trans}}</th>
             {% else %}
               <th width="20%">{{'course.testpaper_manage.question.score'|trans}}
-              <span class="link-medium es-icon es-icon-help ml5"
-            data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
-            data-content="{{ 'course.homework.score_title.tips'|trans()|raw}}">
-      </span>
               </th>
             {% endif %}
             <th width="10%">{{'course.testpaper_manage.question.difficulty'|trans}}</th>

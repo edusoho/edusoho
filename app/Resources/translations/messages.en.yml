@@ -10879,7 +10879,9 @@ testpaper.score_set.option: question score
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%.%taskNumber%:%taskTitle%'
 common.cancel_recommend.btn: Cancel Recommend
-course.homework.score_title.tips: "Multiple choice score setting:<br>No points for wrong or multiple choices.<br>Missed selection: missed selection and no error, a fixed score.<br>Each item: if there is no wrong item, the score of the correct item is added up."
+course.homework.score_title.tips.choice: "Multiple choice score setting:<br>No points for wrong or multiple choices.<br>Missed selection: missed selection and no error, a fixed score.<br>Each item: if there is no wrong item, the score of the correct item is added up."
+course.homework.score_title.tips.uncertain_choice: "Uncertain choice score setting:<br>No points for wrong or multiple choices.<br>Missed selection: missed selection and no error, a fixed score.<br>Each item: if there is no wrong item, the score of the correct item is added up."
+course.homework.score_title.tips.material: "Multiple choice and Uncertain choice  score setting:<br>No points for wrong or multiple choices.<br>Missed selection: missed selection and no error, a fixed score.<br>Each item: if there is no wrong item, the score of the correct item is added up."
 
 review.result.fail: Fail
 review.result.pass: Pass
