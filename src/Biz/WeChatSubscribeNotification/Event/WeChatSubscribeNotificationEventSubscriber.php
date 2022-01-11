@@ -51,6 +51,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             'thread.create' => 'onClassroomQuestionCreate',
             'course.thread.post.create' => 'onCourseQuestionAnswerCreate',
             'thread.post.create' => 'onClassroomQuestionAnswerCreate',
+            'answer.comment.update' => 'onAnswerCommentUpdate ',
         ];
     }
 
@@ -643,6 +644,75 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             empty($templateCodes[$activity['mediaType']]) ? '' : $templateCodes[$activity['mediaType']],
             "wechat_subscribe_notify_{$activity['mediaType']}",
         ];
+    }
+
+    public function onAnswerCommentUpdate(Event $event)
+    {
+        $answerReport = $event->getSubject();
+        $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
+        if (empty($activity) || !in_array($activity['mediaType'], ['testpaper', 'homework'])) {
+            return;
+        }
+
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        if (empty($task)) {
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'wechat_subscribe_notification_error', '发送微信订阅通知失败:获取任务失败', $activity);
+
+            return;
+        }
+
+        $user = $this->getUserService()->getUser($answerRecord['user_id']);
+        if (empty($user) || $user['locked']) {
+            return;
+        }
+
+        $weChatUser = $this->getWeChatService()->searchWeChatUsers(['userId' => $answerRecord['user_id']], ['lastRefreshTime' => 'ASC'], 0, 1, ['id', 'openId']);
+        $weChatUser = empty($weChatUser) ? [] : $weChatUser[0];
+        if (empty($weChatUser['openId'])) {
+            return $this->sendHomeworkOrTestpaperCommentSms($user['id'], $task, $activity);
+        }
+
+        $templateCode = MessageSubscribeTemplateUtil::TEMPLATE_COMMENT_MODIFY;
+        $templateId = $this->getWeChatService()->getSubscribeTemplateId($templateCode);
+        if (empty($templateId)) {
+            return $this->sendHomeworkOrTestpaperCommentSms($user['id'], $task, $activity);
+        }
+
+        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+        $data = [
+            'thing1' => ['value' => $this->plainTextByLength($course['title'], 18)],
+            'thing12' => ['value' => 'testpaper' === $activity['mediaType'] ? '考试' : '作业'],
+            'thing10' => ['value' => $this->plainTextByLength($task['title'], 18)],
+            'thing2' => ['value' => empty($answerReport['comment']) ? '--' : $this->plainTextByLength($answerReport['comment'], 20)],
+            'time4' => ['value' => date('Y-m-d H:i', time())],
+        ];
+
+        $list[] = [
+            'template_id' => $templateId,
+            'template_args' => $data,
+            'channel' => $this->getWeChatService()->getWeChatSendChannel(),
+            'to_id' => $weChatUser['openId'],
+            'goto' => ['type' => 'url', 'url' => $this->generateUrl('course_task_show', ['courseId' => $task['courseId'], 'id' => $task['id']], UrlGeneratorInterface::ABSOLUTE_URL)],
+        ];
+
+        $this->getWeChatService()->sendSubscribeWeChatNotification($templateCode, "wechat_subscribe_notify_{$activity['mediaType']}_comment_modify", $list);
+    }
+
+    protected function sendHomeworkOrTestpaperCommentSms($userId, $task, $activity)
+    {
+        $params = [
+            'course' => '课程：'.$this->getCourseNameByCourseId($task['courseId']),
+            'task' => $task['title'],
+            'type' => 'testpaper' === $activity['mediaType'] ? '考试' : '作业',
+            'url' => $this->generateUrl('course_task_show', ['courseId' => $task['courseId'], 'id' => $task['id']], UrlGeneratorInterface::ABSOLUTE_URL),
+        ];
+        $smsType = 'sms_comment_modify';
+        $subscribeSmsType = MessageSubscribeTemplateUtil::TEMPLATE_COMMENT_MODIFY;
+
+        if ($this->getWeChatService()->isSubscribeSmsEnabled($subscribeSmsType) && !$this->getWeChatService()->isSubscribeSmsEnabled($smsType)) {
+            return $this->getWeChatService()->sendSubscribeSms($subscribeSmsType, [$userId], SmsType::COMMENT_MODIFY_NOTIFY, $params);
+        }
     }
 
     /**

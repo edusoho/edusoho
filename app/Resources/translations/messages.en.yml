@@ -6126,6 +6126,8 @@ admin.edu_cloud.edu_sms.homework_checked: 'The homework is completed'
 admin.edu_cloud.edu_sms.homework_checked_tips: 'The homework of Course：<Course Name>-<Study Task name> is reviewed. Please check.'
 admin.edu_cloud.edu_sms.testpaper_checked: 'Testpaper marked'
 admin.edu_cloud.edu_sms.testpaper_checked_tips: 'Your test paper in the "lesson name" - course: "course name" has been marked by teacher, have a look! %smsScoolName%'
+admin.edu_cloud.edu_sms.comment_modify: 'Comment modify'
+admin.edu_cloud.edu_sms.comment_modify_tips: 'Course: 《course name》- task name：[task name [exam/homework] task] teacher comment is modify，click to view [link url]'
 admin.edu_cloud.edu_sms.invite_rewards_not_enough: 'Insufficient invitation to register'
 admin.edu_cloud.edu_sms.coupon_not_enough_tips: 'The [Invitation Registration] activity rewards you set [the coupon name] is only 50, please pay attention to the remaining coupons.'
 admin.edu_cloud.edu_sms.invite_rewards_is_exhausted: 'Invite registration rewards to be exhausted'
@@ -9764,6 +9766,7 @@ wechat.notification.template.vip_expired: 'Dear student, the membership you purc
 wechat.notification.message_subscribe_template.live_start: "Subscription course opening reminder <br> <br> Course Title: [task name] <br> time: [live broadcast start time (accurate to minutes)] <br> Lecturer: [teacher user name] [if any, additional display of teacher's mobile phone number] <br> remarks: [n times left] notice, please enter the course learning page to subscribe"
 wechat.notification.message_subscribe_template.homework_result: "Assignment correction completion notice <br> <br> Title: [task name] <br> assignment status: [assignment status] ([n remaining] notices) <br> comments: [comments]"
 wechat.notification.message_subscribe_template.exam_result: "Examination result notice <br> <br> examination name: [task name] <br> score: [examination score] <br> warm tips: [n times left] notice, please enter the course learning page to subscribe"
+wechat.notification.message_subscribe_template.comment_modify: "Comment completion notice <br> <br> correlated curriculum: [curriculum name] <br> review type: [exam/homework] <br> title: [task name] <br> content: [comment] <br> review time: [review time]"
 wechat.notification.message_subscribe_template.lesson_add: "New notice on course <br> <br> Course: [Course name] ([course category]) <br> teacher: [teacher user name] <br> time: [task release time] or [live broadcast start time] <br> remarks: [n times left] notice, please enter the course learning page to subscribe"
 wechat.notification.message_subscribe_template.ask_question: "Student question reminder <br> Course Name: ([if it is a class, show class 2 characters]) [Course name] or [class name] <br> questioner: [student user name] ([n times left] notice) <br> question: [question title] <br> question time: [question submission time] <br> <br> Course Name"
 wechat.notification.message_subscribe_template.position.lesson_page_student: 'Course learning page <br> (course participants)'
@@ -9772,6 +9775,7 @@ wechat.notification.message_subscribe_template.position.lesson_page_teacher: 'Co
 wechat.notification.message_subscribe_sms.template.live_start: "[online education] course: [Course name] - learning task: [learning task name] will be broadcast on [broadcast time]! Link address"
 wechat.notification.message_subscribe_sms.template.homework_result: "[online education] the homework of your course: [Course name] [learning task name] has been reviewed by the teacher. Come and have a look"
 wechat.notification.message_subscribe_sms.template.exam_result: "[online education] the test paper of your course: [Course name] [learning task name] has been reviewed by the teacher. Come and have a look"
+wechat.notification.message_subscribe_sms.template.comment_modify: "[online education] course: 《[Course name]》 - learning task: [[task name][exam/homework] task] teacher comments have been revised，click to view [Link address]"
 wechat.notification.message_subscribe_sms.template.lesson_add: 'General course: <br> [online education] your course: [Course name] - learning task: [learning task name] has been published! Link address <br> live broadcast: <br> [online education] course: [Course name] - learning task: [learning task name] will be broadcast on [broadcast time]! Link address'
 wechat.notification.message_subscribe_sms.template.vip_expired: '[online education] Dear students, the membership you purchased is about to expire: <br> opening time: [opening time] <br> expiration time: [expiration time] <br> please renew it in time to avoid affecting your study'
 wechat.notification.message_subscribe_sms.template.homework_or_testpaper_need_review: '[online education] Dear teacher, you still have uncorrected assignments / papers today: <br> time: [date of the day, accurate to day] <br> number: [number of uncorrected assignments and papers submitted in the past 24 hours] <br> please correct them in time。'
@@ -9788,6 +9792,7 @@ wechat.notification.template.homework_or_testpaper_need_review.rule: 'For at lea
 wechat.notification.template.live_start.rule: 'A notification will be sent to participants at the designated time before the live class begins.'
 wechat.notification.template.homework_result.rule: 'When the homework contains subjective questions, the teacher will send the results to the students after reviewing.'
 wechat.notification.template.exam_result.rule: 'When there are subjective questions in the test paper, the teacher will send the results to the students after reviewing.'
+wechat.notification.template.comment_modify.rule: 'When the teacher finishes adding or modifying the teacher comments, the teacher will send the result to the students after the modification.'
 wechat.notification.template.lesson_add.rule: 'A notification is sent to participants when new assignments are posted.'
 wechat.notification.template.charge_success.rule: 'A notification will be sent when students successfully recharge their virtual currency.'
 wechat.notification.template.buy_success.rule: 'A notification is sent when a student has successfully purchased a course, class, or membership.'
@@ -9804,6 +9809,7 @@ wechat.notification.template_name.vip_expired: 'Vip Expired'
 wechat.notification.template_name.live_start: 'Course Start'
 wechat.notification.template_name.homework_result: 'Homework Result'
 wechat.notification.template_name.exam_result: 'Exam Result'
+wechat.notification.template_name.comment_modify: 'Comment To Modify'
 wechat.notification.template_name.lesson_add: 'Lesson Add'
 wechat.notification.template_name.charge_success: 'Charge Success'
 wechat.notification.template_name.buy_success: 'Buy Success'

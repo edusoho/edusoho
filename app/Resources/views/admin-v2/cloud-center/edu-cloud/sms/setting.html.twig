@@ -361,6 +361,28 @@
           </tr>
           <tr>
             <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.comment_modify'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.comment_modify_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+            <td>
+              <label>
+                <input type="radio" name="sms_comment_modify" value="on"
+                       {% if (setting('cloud_sms.sms_comment_modify')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="sms_comment_modify" value="off"
+                       {% if (setting('cloud_sms.sms_comment_modify')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
             <td>{{ 'admin.edu_cloud.edu_sms.invite_rewards_not_enough'|trans }}</td>
             <td>
               【<span id="js-sms-school-name">
