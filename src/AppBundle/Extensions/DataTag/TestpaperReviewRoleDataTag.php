@@ -3,6 +3,7 @@
 namespace AppBundle\Extensions\DataTag;
 
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
@@ -34,8 +35,18 @@ class TestpaperReviewRoleDataTag extends BaseDataTag implements DataTag
     {
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerSceneId);
         $activity = $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
-
+        $homeWorkActivity = $this->getHomeworkActivityService()->getByAnswerSceneId($answerSceneId);
+        $homeWorkActivity = $this->getActivityService()->getByMediaIdAndMediaType($homeWorkActivity['id'], 'homework');
+        $activity = empty($activity) ? $homeWorkActivity : $activity;
         return $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->getServiceKernel()->getBiz()->service('Activity:HomeworkActivityService');
     }
 
     /**
