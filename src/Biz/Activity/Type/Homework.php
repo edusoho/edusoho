@@ -70,7 +70,7 @@ class Homework extends Activity
                 'limited_time' => 0,
                 'do_times' => 0,
                 'redo_interval' => 0,
-                'need_score' => 0,
+                'need_score' => 1,
                 'manual_marking' => 1,
                 'start_time' => 0,
             ]);
@@ -154,7 +154,7 @@ class Homework extends Activity
                 'limited_time' => 0,
                 'do_times' => 0,
                 'redo_interval' => 0,
-                'need_score' => 0,
+                'need_score' => 1,
                 'manual_marking' => 1,
                 'start_time' => 0,
             ]);
