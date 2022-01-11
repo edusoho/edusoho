@@ -172,7 +172,7 @@ abstract class ImgBuilder
             return chunk_split(base64_encode($gambar));
         }
 
-        return  '';
+        return '';
     }
 
     protected function deleteFile($file)
