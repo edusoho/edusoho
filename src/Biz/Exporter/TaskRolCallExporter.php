@@ -16,7 +16,7 @@ class TaskRolCallExporter extends BaseSheetAddStyleExporter
     {
         $time = date('Y_m_d_H_i', time());
 
-        return  "直播点名统计_{$time}.xls";
+        return "直播点名统计_{$time}.xls";
     }
 
     public function getSortedHeadingRow()

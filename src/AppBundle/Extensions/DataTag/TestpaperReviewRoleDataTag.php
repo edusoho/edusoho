@@ -12,18 +12,18 @@ class TestpaperReviewRoleDataTag extends BaseDataTag implements DataTag
 {
     public function getData(array $arguments)
     {
-        $answerSceneId  = 0;
-        if(isset($arguments['answerRecordId'])){
+        $answerSceneId = 0;
+        if (isset($arguments['answerRecordId'])) {
             $answerRecord = $this->getAnswerRecordService()->get($arguments['answerRecordId']);
             $answerSceneId = $answerRecord['answer_scene_id'];
         }
-        if(isset($arguments['answerSceneId'])) {
+        if (isset($arguments['answerSceneId'])) {
             $answerSceneId = $arguments['answerSceneId'];
         }
 
         $task = $this->getTaskByAnswerSceneId($answerSceneId);
 
-        if(empty($task)){
+        if (empty($task)) {
             return false;
         }
 

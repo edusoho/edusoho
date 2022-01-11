@@ -158,7 +158,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                 'typeClass' => '\Biz\Activity\Type\Testpaper',
                 'controller' => 'AppBundle:Activity/Testpaper',
                 'canFree' => false,
-                'visible' => function ($courseSet, $course) use ($biz) {
+                'visible' => function ($courseSet, $course) {
                     return true;
                 },
             ],
@@ -170,7 +170,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                 'typeClass' => '\Biz\Activity\Type\Homework',
                 'controller' => 'AppBundle:Activity/Homework',
                 'canFree' => false,
-                'visible' => function ($courseSet, $course) use ($biz) {
+                'visible' => function ($courseSet, $course) {
                     return true;
                 },
             ],
@@ -182,7 +182,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                 'typeClass' => '\Biz\Activity\Type\Exercise',
                 'controller' => 'AppBundle:Activity/Exercise',
                 'canFree' => false,
-                'visible' => function ($courseSet, $course) use ($biz) {
+                'visible' => function ($courseSet, $course) {
                     return true;
                 },
             ],

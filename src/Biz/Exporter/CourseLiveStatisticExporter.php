@@ -16,7 +16,7 @@ class CourseLiveStatisticExporter extends BaseSheetAddStyleExporter
     {
         $time = date('Y_m_d_H_i', time());
 
-        return  "课程直播统计_{$time}.xls";
+        return "课程直播统计_{$time}.xls";
     }
 
     public function getSortedHeadingRow()
