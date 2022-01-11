@@ -2,6 +2,7 @@
   <div id="app" class="ibs-vue">
     <item-review
       :role="role"
+      :activity="activity"
       :assessment="assessment"
       :answerReport="answerReport"
       :answerRecord="answerRecord"
@@ -36,6 +37,7 @@
         cdnHost: $('[name=cdn_host]').val(),
         fileId: 0,
         mediaType: $('[name=media_type]').val(),
+        activity: {}
       };
     },
     created() {
@@ -52,6 +54,7 @@
             request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
           }
         }).done(function (res) {
+          that.activity = res.activity;
           that.answerRecord = res.answer_record;
           if ('finished' == that.answerRecord.status) {
             location.href = $('[name=success_goto_url]').val();
