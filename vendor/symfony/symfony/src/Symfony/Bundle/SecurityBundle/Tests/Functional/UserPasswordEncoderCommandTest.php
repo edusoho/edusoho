@@ -38,7 +38,7 @@ class UserPasswordEncoderCommandTest extends AbstractWebTestCase
             'user-class' => 'Symfony\Component\Security\Core\User\User',
             '--empty-salt' => true,
         ], ['decorated' => false]);
-        $expected = str_replace("\n", PHP_EOL, file_get_contents(__DIR__.'/app/PasswordEncode/emptysalt.txt'));
+        $expected = str_replace("\n", \PHP_EOL, file_get_contents(__DIR__.'/app/PasswordEncode/emptysalt.txt'));
 
         $this->assertEquals($expected, $this->passwordEncoderCommandTester->getDisplay());
     }
@@ -50,7 +50,7 @@ class UserPasswordEncoderCommandTest extends AbstractWebTestCase
         ], ['interactive' => false]);
 
         $this->assertStringContainsString('[ERROR] The password must not be empty.', $this->passwordEncoderCommandTester->getDisplay());
-        $this->assertEquals($statusCode, 1);
+        $this->assertEquals(1, $statusCode);
     }
 
     public function testEncodePasswordBcrypt()
@@ -245,7 +245,7 @@ EOTXT
 
     protected function setUp()
     {
-        putenv('COLUMNS='.(119 + \strlen(PHP_EOL)));
+        putenv('COLUMNS='.(119 + \strlen(\PHP_EOL)));
         $kernel = $this->createKernel(['test_case' => 'PasswordEncode']);
         $kernel->boot();
 
@@ -263,7 +263,7 @@ EOTXT
 
     private function setupArgon2i()
     {
-        putenv('COLUMNS='.(119 + \strlen(PHP_EOL)));
+        putenv('COLUMNS='.(119 + \strlen(\PHP_EOL)));
         $kernel = $this->createKernel(['test_case' => 'PasswordEncode', 'root_config' => 'argon2i.yml']);
         $kernel->boot();
 

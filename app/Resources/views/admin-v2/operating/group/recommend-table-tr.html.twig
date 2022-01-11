@@ -1,0 +1,33 @@
+{% import 'admin-v2/macro.html.twig' as admin_macro %}
+
+<tr id="group-tr-{{ group.id }}" data-sort="{{ group.recommendedSeq }}">
+  <td>{{ group.recommendedSeq }}</td>
+  <td>
+    <a href="{{ path('group_show', {id: group.id}) }}" target="_blank"><strong>{{ group.title }}</strong></a>
+  </td>
+  <td>
+    <a target="_blank" href="{{ path('user_show', {id: owners[group.ownerId].id}) }}">{{ owners[group.ownerId].nickname }}</a>
+  </td>
+  <td>
+    {{ group.recommendedTime|date('Y-m-d') }}
+  </td>
+  <td>
+
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_v2_group_recommend', {id: group.id, ref: 'recommendList'}) }}">{{ 'admin.course_manage.recommend.set_seq_btn'|trans }}</a>
+
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+
+        <li>
+          <a class="cancel-recommend-group" href="javascript:" title="{{ 'common.cancel_recommend.btn'|trans }}" data-url="{{ path('admin_v2_group_cancel_recommend', {id: group.id}) }}">
+            <span class="glyphicon glyphicon-hand-right"></span> {{ 'admin.course_manage.recommend.cancel_seq_btn'|trans }}
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </td>
+</tr>

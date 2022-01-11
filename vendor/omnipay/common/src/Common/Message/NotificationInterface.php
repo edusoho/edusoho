@@ -21,8 +21,8 @@ interface NotificationInterface extends MessageInterface
     /**
      * Was the transaction successful?
      *
-     * @return string Transaction status, one of {@see STATUS_COMPLETED}, {@see #STATUS_PENDING},
-     * or {@see #STATUS_FAILED}.
+     * @return string Transaction status, one of {@link NotificationInterface::STATUS_COMPLETED},
+     * {@link NotificationInterface::STATUS_PENDING}, or {@link NotificationInterface::STATUS_FAILED}.
      */
     public function getTransactionStatus();
 

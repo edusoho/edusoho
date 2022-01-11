@@ -57,7 +57,7 @@ class EnvVarProcessor implements EnvVarProcessorInterface
                 throw new RuntimeException(sprintf('Invalid file name: env var "%s" is non-scalar.', $name));
             }
             if (!file_exists($file)) {
-                throw new RuntimeException(sprintf('Env "file:%s" not found: %s does not exist.', $name, $file));
+                throw new RuntimeException(sprintf('Env "file:%s" not found: "%s" does not exist.', $name, $file));
             }
 
             return file_get_contents($file);
@@ -82,7 +82,7 @@ class EnvVarProcessor implements EnvVarProcessorInterface
         }
 
         if (!is_scalar($env)) {
-            throw new RuntimeException(sprintf('Non-scalar env var "%s" cannot be cast to %s.', $name, $prefix));
+            throw new RuntimeException(sprintf('Non-scalar env var "%s" cannot be cast to "%s".', $name, $prefix));
         }
 
         if ('string' === $prefix) {
@@ -124,12 +124,12 @@ class EnvVarProcessor implements EnvVarProcessorInterface
         if ('json' === $prefix) {
             $env = json_decode($env, true);
 
-            if (JSON_ERROR_NONE !== json_last_error()) {
-                throw new RuntimeException(sprintf('Invalid JSON in env var "%s": '.json_last_error_msg(), $name));
+            if (\JSON_ERROR_NONE !== json_last_error()) {
+                throw new RuntimeException(sprintf('Invalid JSON in env var "%s": ', $name).json_last_error_msg());
             }
 
             if (!\is_array($env)) {
-                throw new RuntimeException(sprintf('Invalid JSON env var "%s": array expected, %s given.', $name, \gettype($env)));
+                throw new RuntimeException(sprintf('Invalid JSON env var "%s": array expected, "%s" given.', $name, \gettype($env)));
             }
 
             return $env;

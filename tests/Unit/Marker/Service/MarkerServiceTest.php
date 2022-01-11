@@ -87,7 +87,7 @@ class MarkerServiceTest extends BaseTestCase
         return $markers;
     }
 
-    public function testFindMarkersByMediaId()
+    public function testFindMarkersByActivityId()
     {
         $fields = [
             'second' => 30,
@@ -99,16 +99,16 @@ class MarkerServiceTest extends BaseTestCase
         $this->mockUploadFile(2);
         $this->getMarkerService()->addMarker(2, $fields);
 
-        $result = $this->getMarkerService()->findMarkersByMediaId(1);
+        $result = $this->getMarkerService()->findMarkersByActivityId(1);
         $this->assertCount(1, $result);
 
-        $result = $this->getMarkerService()->findMarkersByMediaId(122313);
+        $result = $this->getMarkerService()->findMarkersByActivityId(122313);
         $this->assertEmpty($result);
     }
 
-    public function testFIndMarkersMetaByMediaId()
+    public function testFIndMarkersMetaByActivityId()
     {
-        $result = $this->getMarkerService()->findMarkersMetaByMediaId(231232112);
+        $result = $this->getMarkerService()->findMarkersMetaByActivityId(231232112);
         $this->assertEmpty($result);
 
         $fields = [
@@ -134,7 +134,7 @@ class MarkerServiceTest extends BaseTestCase
         $this->mockUploadFile(2);
         $this->getMarkerService()->addMarker(2, $fields);
 
-        $result = $this->getMarkerService()->findMarkersMetaByMediaId(1);
+        $result = $this->getMarkerService()->findMarkersMetaByActivityId(1);
         $this->assertCount(1, $result);
     }
 

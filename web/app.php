@@ -36,7 +36,7 @@ $loader = require_once __DIR__.'/../app/autoload.php';
 require_once __DIR__.'/../app/bootstrap.php.cache';
 
 $kernel = new AppKernel('prod', false);
-$kernel->loadClassCache();
+//$kernel->loadClassCache();
 $request = Request::createFromGlobals();
 $kernel->setRequest($request);
 $response = $kernel->handle($request);

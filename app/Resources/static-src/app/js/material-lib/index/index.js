@@ -1,6 +1,8 @@
 import DetailWidget from './detail';
 import BatchSelect from 'app/common/widget/res-batch-select';
 import Select from 'app/common/input-select';
+import notify from 'common/notify';
+
 
 class MaterialWidget {
   constructor(element) {
@@ -84,6 +86,27 @@ class MaterialWidget {
       this.onClickUnshareBtn(event);
     });
 
+    $('.replay-list').on('click', '.js-live-my', (event) => {
+      this.onClickLiveReplay(event);
+    });
+
+    $('.replay-list').on('click', '.js-live-share', (event) => {
+      this.onClickLiveReplay(event);
+    });
+
+    $('.replay-list').on('click', '.pagination li', (event) => {
+      this.onClickLiveReplay(event);
+    });
+
+    $('.replay-list').on('click', '.js-live-replay-search-btn', (event) => {
+      this.onClickLiveReplaySearch(event);
+    });
+    $('.replay-list').on('click', '.js-live-share-btn', (event) => {
+      this.onLiveReplayShare(event);
+    });
+    $('.replay-list').on('click', '.js-live-delete-btn', (event) => {
+      this.onLiveReplayRemove(event);
+    });
     this.element.on('click', '.pagination li', (event) => {
       this.onClickPagination(event);
     });
@@ -102,7 +125,6 @@ class MaterialWidget {
       iframe.remove();
     }, 5 * 60 * 1000);
   }
-
   batchDownload() {
     const self = this;
     let urls = [];
@@ -129,7 +151,6 @@ class MaterialWidget {
       );
     });
   }
-
   onClickTabs(event) {
     let $target = $(event.currentTarget);
     $target.closest('.js-material-tabs').find('.active').removeClass('active');
@@ -153,13 +174,11 @@ class MaterialWidget {
     }
     this.renderTable();
   }
-
   // 搜索
   onClickSearchBtn(event) {
     this.renderTable();
     event.preventDefault();
   }
-
   // 下拉菜单编辑
   onClickDetailBtn(event) {
     if (!this.DetailBtnActive) {
@@ -217,7 +236,20 @@ class MaterialWidget {
     $target.closest('ul').find('li.active').removeClass('active');
     $target.parent().addClass('active');
     $target.closest('ul').siblings('input[name="sourceFrom"]').val($target.parent().data('value'));
-
+    if($target.hasClass('js-live-replay')){
+      $('.replay-list').removeClass('hidden');
+      $('.file-list').addClass('hidden');
+      $('#myShare').addClass('hide');
+      $('.js-material-btn-group').addClass('hide');
+      $('#shareMaterials').addClass('hide');
+      $('.js-manage-batch-btn').addClass('hide');
+      $('.js-upload-file-btn').addClass('hide');
+      $('#material-lib-batch-btn-bar').hide();
+      this.onClickLiveReplay(event);
+      return ;
+    }
+    $('.replay-list').addClass('hidden');
+    $('.file-list').removeClass('hidden');
     if ($target.closest('ul').siblings('input[name="sourceFrom"]').val() == 'my') {
       this.attribute = 'mine';
       $('#myShare').removeClass('hide');
@@ -240,6 +272,64 @@ class MaterialWidget {
 
     }
     this.renderTable();
+  }
+  onClickLiveReplay(event) {
+    let self = this;
+    let $target = $(event.currentTarget);
+    $.get($target.data('url'), function(data) {
+      $('.replay-list').html(data);
+      self.onInitLiveSearchTime();
+    });
+  }
+  onClickLiveReplaySearch() {
+    let self = this;
+    let $target = $('.replay-list').find('#live-replay-form');
+    $.get($target.attr('action'), $target.serialize(), function(data) {
+      $('.replay-list').html(data);
+      self.onInitLiveSearchTime();
+    });
+  }
+  onInitLiveSearchTime()
+  {
+    $('.replay-list').find('[name=startTime]').datetimepicker({
+      language: document.documentElement.lang,
+      autoclose: true
+    });
+    $('.replay-list').find('[name=endTime]').datetimepicker({
+      language: document.documentElement.lang,
+      autoclose: true,
+    });
+  }
+  onLiveReplayShare(event){
+    let self = this;
+    let $target = $(event.currentTarget);
+    let $input = $target.parent('.share-li').find('input');
+    let $val = $input.val();
+    let $confirm = $val == 0 ? Translator.trans('course.live_replay.share_tip'): Translator.trans('course.live_replay.un_share_tip');
+    if (!confirm($confirm)) {
+      return ;
+    }
+    $.post($target.data('url'), function(data) {
+      if ($val > 0) {
+        $input.val(0);
+        $target.html(Translator.trans('course.live_replay.share_btn'));
+      } else {
+        $input.val(1);
+        $target.html(Translator.trans('course.live_replay.un_share_btn'));
+      }
+      notify('success', data.message);
+    });
+  }
+  onLiveReplayRemove(event){
+    let self = this;
+    let $target = $(event.currentTarget);
+    if (!confirm(Translator.trans('course.live_replay.delete_tip'))) {
+      return ;
+    }
+    $.post($target.data('url'), function(data) {
+      $target.parents('tr').remove();
+      notify('success', data.message);
+    });
   }
   onClickCollectBtn(event) {
     let self = this;
@@ -325,7 +415,6 @@ class MaterialWidget {
     $('#select-tag-items').val(ids);
     $('#tag-modal').modal('show');
   }
-
   onClickShareBtn(event) {
     cd.confirm({
       title: '共享',
@@ -428,13 +517,13 @@ class MaterialWidget {
         const _this = this;
         $(this).popover('show');
         $('.popover').on('mouseleave', function () {
-            $(_this).popover('hide');
+          $(_this).popover('hide');
         });
       }).on('mouseleave', function () {
         const _this = this;
         setTimeout(function () {
           if (!$('.popover:hover').length) {
-            $(_this).popover("hide");
+            $(_this).popover('hide');
           }
         }, 300);
       });
@@ -516,7 +605,6 @@ class MaterialWidget {
 }
 
 let materialWidget = new MaterialWidget();
-
 $('#modal').on('click','.file-delete-form-btn', function(event) {
   let $form = $('#file-delete-form');
 

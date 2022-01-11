@@ -70,8 +70,19 @@
                     </el-radio>
                 </el-col>
             </el-form-item>
+          <el-form-item v-if="courseSet.type === 'live'"
+                        :label="'course.plan_setup.member_numbers'|trans"
+                        prop="maxStudentNum">
+            <el-col :span="8">
+              <el-input v-model="marketingForm.maxStudentNum" ref="maxStudentNum"></el-input>
+             <div class="course-mangae-info__tip js-expiry-tip ml0">{{ 'course.plan_setup.member_numbers.tips'|trans }}</div>
+            </el-col>
+            <div v-if="liveCapacity !== null && parseInt(marketingForm.maxStudentNum) > parseInt(liveCapacity)" class="el-form-item__error">
+              {{'course.manage.max_capacity_hint'|trans({capacity: liveCapacity})}}
+            </div>
+          </el-form-item>
 
-            <el-form-item :label="'course.marketing_setup.expiry_date'|trans"
+          <el-form-item :label="'course.marketing_setup.expiry_date'|trans"
                           :prop="marketingForm.enableBuyExpiryTime == 1 ? 'buyExpiryTime': 'enableBuyExpiryTime'">
                 <el-col :span="8">
                     <el-radio v-for="buyExpiryTimeEnabledRadio in buyExpiryTimeEnabledRadios"
@@ -260,6 +271,7 @@
             courseSet: {},
             courseProduct: {},
             notifies: {},
+            liveCapacityUrl: '',
             canModifyCoursePrice: true,
             buyBeforeApproval: false,
             vipInstalled: false,
@@ -318,6 +330,7 @@
             }
 
             let form = {
+                maxStudentNum: this.course.maxStudentNum,
                 originPrice: this.course.originPrice,
                 buyable: this.course.buyable,
                 enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? '1' : '0',
@@ -335,8 +348,12 @@
             if (this.vipInstalled && this.vipEnabled) {
                 Object.assign(form, {vipLevelId: this.course.vipLevelId})
             }
-
+            let liveCapacity = null;
+            this.$axios.get(this.liveCapacityUrl).then((response) => {
+              this.liveCapacity = response.data.capacity;
+            });
             return {
+                liveCapacity: liveCapacity,
                 buyableRadios: [
                     {
                         value: '1',
@@ -393,6 +410,18 @@
                 },
                 marketingForm: form,
                 formRule: {
+                    maxStudentNum: [
+                      {
+                        required: true,
+                        message: Translator.trans('course.manage.max_student_num_error_hint'),
+                        trigger: 'blur'
+                      },
+                      {
+                        validator: validation.digits_0,
+                        message: Translator.trans('validate.unsigned_integer.student_message'),
+                        trigger: 'blur'
+                      },
+                    ],
                     deadline: [
                         {
                             required: true,

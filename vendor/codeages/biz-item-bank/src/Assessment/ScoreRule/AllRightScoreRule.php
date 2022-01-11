@@ -8,10 +8,10 @@ class AllRightScoreRule extends ScoreRule
 {
     const RULE = 'all_right';
 
-    public function review($questionResult, $score)
+    public function review($questionResult, $rule)
     {
         if ('right' == $questionResult['result']) {
-            return ['status' => AnswerQuestionReportService::STATUS_RIGHT, 'score' => $score];
+            return ['status' => AnswerQuestionReportService::STATUS_RIGHT, 'score' => $rule['score']];
         }
 
         return ['status' => '', 'score' => 0];

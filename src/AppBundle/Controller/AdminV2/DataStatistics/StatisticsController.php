@@ -376,7 +376,7 @@ class StatisticsController extends BaseController
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
-        $courseSetconditions = $timeRange;
+        $courseSetConditions = $timeRange;
         $courseSetConditions['parentId'] = 0;
 
         $count = $this->getCourseSetService()->countCourseSets($courseSetConditions);
@@ -393,8 +393,6 @@ class StatisticsController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        $courseSetData = '';
 
         if ('trend' == $tab) {
             $courseSetData = $this->getCourseSetService()->analysisCourseSetDataByTime(

@@ -75,7 +75,10 @@ final class Cache implements CacheInterface
         ]);
 
         if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new \UnexpectedValueException(sprintf('Can not encode cache signature to JSON, error: "%s". If you have non-UTF8 chars in your signature, like in license for `header_comment`, consider enabling `ext-mbstring` or install `symfony/polyfill-mbstring`.', json_last_error_msg()));
+            throw new \UnexpectedValueException(sprintf(
+                'Can not encode cache signature to JSON, error: "%s". If you have non-UTF8 chars in your signature, like in license for `header_comment`, consider enabling `ext-mbstring` or install `symfony/polyfill-mbstring`.',
+                json_last_error_msg()
+            ));
         }
 
         return $json;
@@ -93,7 +96,11 @@ final class Cache implements CacheInterface
         $data = json_decode($json, true);
 
         if (null === $data && JSON_ERROR_NONE !== json_last_error()) {
-            throw new \InvalidArgumentException(sprintf('Value needs to be a valid JSON string, got "%s", error: "%s".', $json, json_last_error_msg()));
+            throw new \InvalidArgumentException(sprintf(
+                'Value needs to be a valid JSON string, got "%s", error: "%s".',
+                $json,
+                json_last_error_msg()
+            ));
         }
 
         $requiredKeys = [
@@ -108,7 +115,10 @@ final class Cache implements CacheInterface
         $missingKeys = array_diff_key(array_flip($requiredKeys), $data);
 
         if (\count($missingKeys)) {
-            throw new \InvalidArgumentException(sprintf('JSON data is missing keys "%s"', implode('", "', $missingKeys)));
+            throw new \InvalidArgumentException(sprintf(
+                'JSON data is missing keys "%s"',
+                implode('", "', $missingKeys)
+            ));
         }
 
         $signature = new Signature(

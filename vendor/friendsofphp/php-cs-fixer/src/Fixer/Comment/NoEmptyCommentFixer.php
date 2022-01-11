@@ -89,6 +89,11 @@ final class NoEmptyCommentFixer extends AbstractFixer
     {
         $commentType = $this->getCommentType($tokens[$index]->getContent());
         $empty = $this->isEmptyComment($tokens[$index]->getContent());
+
+        if (self::TYPE_SLASH_ASTERISK === $commentType) {
+            return [$index, $index, $empty];
+        }
+
         $start = $index;
         $count = \count($tokens);
         ++$index;
@@ -157,7 +162,7 @@ final class NoEmptyCommentFixer extends AbstractFixer
     {
         static $mapper = [
             self::TYPE_HASH => '|^#\s*$|', // single line comment starting with '#'
-            self::TYPE_SLASH_ASTERISK => '|^/\*\s*\*/$|', // comment starting with '/*' and ending with '*/' (but not a PHPDoc)
+            self::TYPE_SLASH_ASTERISK => '|^/\*[\s\*]*\*+/$|', // comment starting with '/*' and ending with '*/' (but not a PHPDoc)
             self::TYPE_DOUBLE_SLASH => '|^//\s*$|', // single line comment starting with '//'
         ];
 

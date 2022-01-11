@@ -2,9 +2,9 @@
 
 namespace Biz\Activity\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface HomeworkActivityDao extends GeneralDaoInterface
+interface HomeworkActivityDao extends AdvancedDaoInterface
 {
     public function getByAnswerSceneId($answerSceneId);
 
@@ -13,4 +13,6 @@ interface HomeworkActivityDao extends GeneralDaoInterface
     public function findByIds($ids);
 
     public function findByAnswerSceneIds($answerSceneIds);
+
+    public function findByAssessmentId($assessmentId);
 }

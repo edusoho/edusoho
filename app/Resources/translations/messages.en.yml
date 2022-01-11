@@ -5,7 +5,7 @@ site.online_school_name: 'Site Name'
 site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
 site.register_link_url: 'Register URL'
-site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent"> download the App</a>.'
+site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent"> download the App</a>.Android allows viewing in wechat is built-in browser.'
 site.not_support_cloud_video_upgrade: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please open in wechat or go to<a href="%mobileUrl%" target="parent"> download the App</a>.'
 site.currency.CNY: CNY
 site.date.year: Year
@@ -123,6 +123,8 @@ site.badge.try_watch: Preview
 site.badge.free: Free
 site.btn.detail: more
 site.setting.finished: Setting finished
+site.setting.goto: Setting
+site.setting.cancel: Cancel
 site.setting.unfinished: Setting unfinished
 site.verify.finished: Verify finished
 site.verify.unfinished: Verify unfinished
@@ -137,10 +139,11 @@ site.twig.extension.smarttime.previous_second: %diff% second ago
 site.twig.extension.smarttime.previous_minute: %diff% minute ago
 site.twig.extension.smarttime.previous_hour: %diff% hour ago
 site.twig.extension.smarttime.previous_day: %diff% day ago
-site.twig.extension.time_interval.minute: %diff% minute
+site.twig.extension.time_interval.second: '%diff% second'
+site.twig.extension.time_interval.minute: '%diff% minute'
 site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
 site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
-site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease is now suported
+site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease, Bilibili, Iqiyi is now suported
 site.user_password.error_tips: Bad credentials
 
 site.mobile_bind.ignore: skip
@@ -960,6 +963,7 @@ course.marketing_setup.course_award: Course Award
 course.teacher_setup: 'Teachers'
 course.teacher_setup.exist_teacher: 'Exist teachers'
 course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teacher role.'
+course.teacher_setup.exist_teacher.add_tips_v2: 'Can only add users with teacher privileges, sorted under the first teacher of the other teachers are live teaching assistant status'
 course.members_manage: 'Students'
 course.members_manage.official_student: Students
 course.members_manage.official_student.search: Search
@@ -1151,7 +1155,8 @@ course.replay_manage.tips: >
   <div><b>Attention please, you can not generate an online video after uploading a video file!</b></div>
 course.replay_manage.unpublished: Unpublished
 course.replay_manage.live_not_stop: 'Live not finished'
-course.replay_manage.ungenerated: 'Ungenerated playback'
+course.replay_manage.ungenerated: 'Generating playback'
+course.replay_manage.generated_fail: 'Playback generation failed, click on the record to regenerate'
 course.replay_manage.generated: 'Generated playback'
 course.replay_manage.video_generated.file_exsist: 'The video has been uploaded'
 course.replay_manage.video_generated.file_not_exsist: 'The video has been deleted'
@@ -1173,6 +1178,7 @@ course.cover_image.content_title: 'Cover'
 course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270px. <br>The maxium size should less than <strong>2MB</strong>.\n"
 course.cover_image.upload_btn: 'Select the image to upload'
 course.expiry_date: 'Available'
+vip.course.expiry_date: 'Vip Available'
 course.expiry_date.days_mode: "%expiryDays% day(s)\n"
 course.expiry_date.days_mode.total_days: '%expiryDays% in total'
 course.expiry_date.end_date_mode: "End Date：%expiryEndDate%\n"
@@ -1363,7 +1369,7 @@ course.plan_info: >
   <p>3. Support the same course content, but provide courses with different service levels(Exp: Video class, Live class, Answering class).</p>
   <p>4. Support to set up multiple classes according to the students' learning ability(Exp: Fast class, Slow class).</p>
   <p class="cd-mt24">Welcome
-
+course.testpaper_export.btn: Exporting transcript
 course.tab.tasks: 'Syllabus'
 course.tab.threads: 'Discussions'
 course.tab.discussions: 'Discussions'
@@ -1373,6 +1379,7 @@ course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'
 course.tab.summary: 'Intro'
 course.tab.certificate: 'Certificate'
+course.activity.replay: 'Replay'
 course.activity.video: 'Video'
 course.activity.audio: Audio
 course.activity.live: Live
@@ -1525,7 +1532,7 @@ course.testpaper_manage.publish_btn: 'Publish'
 course.testpaper_manage.publish_tips: 'Are you sure to publish the %name%? Test paper can''t be edit if published.'
 course.testpaper_manage.close_btn: 'Close the test paper'
 course.testpaper_manage.close_tips: 'Are you sure to close the test paper %name%？'
-course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in %taskName%, are you sure to close?'
+course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in %taskName%, close the test paper may prevent students from participating in the test, please do not close the test paper.'
 course.testpaper_manage.edit_btn: 'Edit the test paper info'
 course.testpaper_manage.manage_btn: 'Edit the test questions'
 course.testpaper_manage.repead_btn: Re-generate
@@ -1622,6 +1629,7 @@ course.testpaper_manage.analysis_card.avg_score: 'Avg Score:'
 course.testpaper_manage.analysis_card.avg_score_tip: Figure up first submited score
 
 course.course_files: 'Files manage'
+course.course_resource: Resource manage
 course.course_files.content_title: 'Files manage'
 course.course_files.create_btn: 'Add'
 course.course_files.name: Name
@@ -1811,9 +1819,10 @@ course.plan_task.activity_manage.exercise.confirm_submit_tips: 'Are you sure to 
 course.plan_task.activity_manage.flash.play_tips: 'Note：Flash is not supported on mobile'
 course.plan_task.activity_manage.homework.finished_condition_tips: '<p class="gray-darker mbs">Meet below conditions:</p>Submit assignment'
 course.plan_task.activity_manage.homework.info: 'Assignment description'
+course.plan_task.activity_manage.homework.can_not_edit_tips: This assignment has been cited in other copied courses, and the title cannot be edited temporarily
 course.plan_task.activity_manage.homework.total: 'The assignment has total <span class="color-primary">%itemCount% questions</span>'
 course.plan_task.activity_manage.homework.choose_question: 'Choose question'
-course.plan_task.activity_manage.homework.save_tips: 'Tip：The saved questions will no longer be added or removed.'
+course.plan_task.activity_manage.homework.save_tips: 'The published questions will no longer be added or delete.'
 course.plan_task.activity_manage.homework.submit: Submit
 course.plan_task.activity_manage.homework.start_btn: Start
 course.plan_task.activity_manage.homework.reviewing_tips: 'The teacher is approving the job. After completing the consultation, the teacher will inform you of the results. Please wait.'
@@ -1848,6 +1857,18 @@ course.plan_task.activity_manage.testpaper.choose: 'Please choose test paper'
 course.plan_task.activity_manage.testpaper.create: "There is no testpaper, pleas e<a href=\"%testpaperUrl%\" target=\"_parent\">create</a>\n"
 course.plan_task.activity_manage.testpaper.empty_tips: 'If you can not find a testpaper, please make sure that the testpaper has been published'
 course.plan_task.activity_manage.testpaper.qualified_score: Qualified Score
+course.plan_task.activity_manage.testpaper.auto_comment: Comments
+course.plan_task.activity_manage.testpaper.score: Scorc
+course.plan_task.activity_manage.testpaper.comment_content: Content
+course.plan_task.activity_manage.testpaper.comment_operation: Operation
+course.plan_task.activity_manage.testpaper.add_comment: Add
+course.plan_task.activity_manage.testpaper.default_comment: Default
+course.plan_task.activity_manage.testpaper.default_comment1: Keep working hard and keep improving!
+course.plan_task.activity_manage.testpaper.default_comment2: Yes, if there is progress, it will be even better if you work harder!
+course.plan_task.activity_manage.testpaper.default_comment3: You are awesome! I am proud of you!
+course.plan_task.activity_manage.testpaper.default_comment4: A little slack, right? Keep going!
+course.plan_task.activity_manage.testpaper.default_comment5: With heart, focus and persistence, you can do better!
+course.plan_task.activity_manage.testpaper.comment_remove: Remove
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Hour, No limitation.'
 course.plan_task.activity_manage.testpaper.time_length_tips: 0 Minute, No limitation.
@@ -1867,6 +1888,7 @@ course.plan_task.activity_manage.testpaper.mode.require_credit: 'Limit credits'
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credits required to take the test, 0 is no limitation'
 course.plan_task.activity_manage.testpaper.pass: 'Pass mark'
 course.plan_task.activity_manage.testpaper.score_pass: 'Pass Score'
+course.plan_task.activity_manage.homework.score_pass: 'Pass Score'
 course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not start, please come back at %startTime%.'
 course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points</span>.'
 course.plan_task.activity_manage.testpaper.pass_score: "pass score is <span class=\"color-primary\">%finishScore% points</span>.\n"
@@ -1886,6 +1908,10 @@ course.plan_task.activity_manage.video.last: 'Learning to the end'
 course.plan_task.activity_manage.video.learn_time: 'Learning time'
 course.plan_task.activity_manage.video.buy_tips: 'Buy this course immediately to get full of your learning.'
 course.plan_task.activity_manage.video.try_watch_tips: 'You can try it for free before %tryLookLength% minutes after purchase and can be viewed intact.'
+
+course.plan_task.activity_manage.replay: Live replay
+course.plan_task.activity_manage.replay.time: 'Duration'
+
 course.plan_task.activity_manage.create_btn: 'Go to the course forum'
 course.recommend_course.content_title: 'Recommended course'
 course.recommend_course.empty_tips: 'No recommended course'
@@ -2119,6 +2145,7 @@ classroom.price: Price
 classroom.buy_classroom.vip_free: 'Free for VIP'
 classroom.block_content_title: 'In %name%'''
 classroom.expiryDays: 'Effective date'
+vip.classroom.expiryDays: 'Vip Effective date'
 classroom.vip_checked_fail_tips: 'The course ~ %classroomName% ~ is no longer free for VIP.'
 classroom.not_vip_member_tips: 'You can not learn the course ~ %classroomName% ~, since your membership has expired.'
 classroom.exit: Exit
@@ -3717,6 +3744,8 @@ my.teaching.open_course.student_setting.join_time: 'Enroll At'
 my.teaching.open_course.student_setting.send_message_btn: 'Send Message'
 my.teaching.open_course.student_setting.view_detail_btn: Details
 my.teaching.open_course.liveTimeSet.title: 'Time Settings'
+my.teaching.open_course.live_replay.set: 'Live Playback Settings'
+my.teaching.open_course.live_replay.is_permission: 'Whether to allow viewing of live replay'
 my.teaching.open_course.liveTimeSet.start_time: 'Start At'
 my.teaching.open_course.liveTimeSet.start_time.help_block: 'Teacher could enter the live 1 hour earlier to prepare the teaching material'
 my.teaching.open_course.liveTimeSet.live_length: Duration
@@ -3747,6 +3776,7 @@ my.teaching.open_course.lesson.header.content.end.tips: Finished
 my.teaching.open_course.lesson.header.live_course_end: 'Live has ended'
 my.teaching.open_course.lesson.header.view_replay_btn: 'Watch Replay'
 my.teaching.open_course.lesson.header.view_replay.tips: 'Please come back later bucause the replay is still in building'
+my.teaching.open_course.lesson.header.view_replay_not_permitted.tips: 'The live replay is set to be unavailable for viewing'
 my.teaching.open_course.lesson.header.lesson_finished: 'Lesson finished'
 my.teaching.open_course.lesson.header.lesson_share: 'Share it to your friends if you like it.'
 my.teaching.open_course.lesson.header.lesson_share_btn: Share
@@ -4282,6 +4312,7 @@ admin.course_manage.manage.count: "Courses：<strong class=\"inflow-num\">%cours
 admin.course_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>(s) \n"
 admin.course_manage.manage.closed_count: "Closed：<strong class=\"inflow-num\">%closedNum%</strong> \n"
 admin.course_manage.manage.unpublish_count: "Unpublished：<strong class=\"inflow-num\">%unPublishedNum%</strong>\n"
+admin.course_set_manage.recommend.tips: Priority shall be given to the recommended serial number from small to large, and those not recommended shall be in reverse order according to the creation time
 admin.course_set_manage.manage.number: Id
 admin.course_manage_modal.manage.number: Id
 admin.course_manage.manage.number: Id
@@ -4607,6 +4638,7 @@ admin.classroom_manage.manage.name_th: '%name% Title'
 admin.classroom_manage.manage.course_number_th: 'Course Number'
 admin.classroom_manage.manage.student_number_th: 'Student Number'
 admin.classroom_manage.manage.price_th: Price
+admin.classroom_manage.manage.creator: Creator/Date
 admin.classroom_manage.manage.status_th: Status
 admin.classroom_manage.manage.operate_th: Action
 admin.classroom_manage.manage.empty: 'No %name% Record!'
@@ -5002,6 +5034,11 @@ admin.setting.navigation.status.closed: Disable
 admin.setting.navigation.edit_btn: Edit
 admin.setting.navigation.add_child_menu_btn: 'Add Child Menu'
 admin.setting.consult.customer_service_function: 'Customer service'
+admin.setting.consult.check_tips: >
+  In order to better provide users with efficient and high-quality services, please set up a customer service contact number
+  <br>
+  Improve service quality
+admin.setting.consult.phone_error: Phone Error
 admin.setting.consult.floating_bar: 'Color of the floating bar'
 admin.setting.consult.delete_btn: Delete
 admin.setting.consult.add_btn: Delete
@@ -5393,9 +5430,16 @@ admin.operation_group.edit_btn: Edit
 admin.operation_group.viewGroup_btn: 'View Group'
 admin.operation_group.closeGroup_btn: 'Close Group'
 admin.operation_group.openGroup_btn: 'Open Group'
+admin.operation_group.deleteGroup_btn: 'Delete Group'
+admin.operation_group.recommendGroup_btn: 'Recommend Group'
 admin.operation_group.transferGroup_btn: 'Transfer Group'
 admin.operation_group.closeGroup_title: 'Close Group(%groupTitle%)'
 admin.operation_group.openGroup_title: 'Open Group(%groupTitle%)'
+admin.operation_group.recommendGroup_title: 'Recommend Group(%groupTitle%)'
+admin.operation_group.cancelRecommendGroup_title: 'Cancel Recommend Group(%groupTitle%)'
+admin.operation_group.deleteGroup_title: 'Delete Group(%groupTitle%)'
+admin.operation_group.recommend.modal_title: 'Recommend Group Setting'
+admin.operation_group.recommend.empty: 'No recommendation group'
 admin.operation_group.modal.enter_user_name: 'Please enter username'
 admin.operation_group.modal.transfer_to: 'Transfer To'
 admin.operation_group.modal.user_name.data_display: Username
@@ -5524,12 +5568,12 @@ admin.operation_certificate.template.certificate.title_hint: optional fill in
 admin.operation_certificate.template.certificate.title.default: Certificate of course certification
 admin.operation_certificate.template.certificate.recipient: Information on the grantee
 admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）classmate：
-admin.operation_certificate.template.certificate.recipient_hint: Optional, support add Name：$name$ Username：$username$
+admin.operation_certificate.template.certificate.recipient_hint: Optional, support add Name：$name$ Username：$username$ Idcard： $idcard$
 admin.operation_certificate.template.certificate.empty_recipient_hint: TIP:If the online school does not set [Name] as a required field, the grantee information will be empty if the student does not fill in the name.
 admin.operation_certificate.template.certificate.content: Text of certificate
 admin.operation_certificate.template.certificate.content.default.course: Due to your excellent learning performance in the [$courseName$] course, you have finally completed the course and passed the final assessment, we hereby issue this certificate!
 admin.operation_certificate.template.certificate.content.default.classroom: Due to your excellent learning performance in the [$classroomName$] classroom, you have finally completed the course and passed the final assessment, we hereby issue this certificate!
-admin.operation_certificate.template.certificate.content_hint: 'Optional, support for adding Name: $name$ User name: $username$'
+admin.operation_certificate.template.certificate.content_hint: 'Optional, support for adding Name: $name$ User name: $username$  idcard: $idcard$'
 admin.operation_certificate.template.certificate.content_hint.course: 'Course name: $courseName$'
 admin.operation_certificate.template.certificate.content_hint.classroom: 'Class name: $classroomName$'
 admin.operation_certificate.template.certificate.qrcode: Certificate Verification QR Code
@@ -5545,7 +5589,7 @@ admin.operation_certificate.certificate.resource_choose: Selecting Issue Target
 admin.operation_certificate.certificate.resource_choose_btn: select......
 admin.operation_certificate.certificate.template_choose: Selecting Template
 admin.operation_certificate.certificate.code: Certificate Code
-admin.operation_certificate.certificate.code.placeholder: 1 to 6 digits or letters of the alphabet, not case sensitive
+admin.operation_certificate.certificate.code.placeholder: 1 to 20 digits or letters of the alphabet, not case sensitive
 admin.operation_certificate.certificate.expiry_day: Certificate validity
 admin.operation_certificate.certificate.expiry_day.placeholder: Enter the validity of the certificate, the empty value is valid for a long time
 admin.operation_certificate.certificate.auto_issue: automatic issue
@@ -5861,6 +5905,8 @@ admin.edu_cloud.edu_video.normal_mode_tips: 'Select normal mode, <span class="te
 admin.edu_cloud.edu_video.encryption_mode_tips: 'Choosing an encryption mode can greatly improve the security of the video, but it may cause the video class to not play properly on some old mobile browsers.'
 
 admin.edu_cloud.edu_video.transcode_quality: 'Transcode quality'
+admin.edu_cloud.edu_video.doc_quality: 'DOC quality'
+admin.edu_cloud.doc_quality.high: High Quality
 admin.edu_cloud.edu_video.transcode_quality_low: "Smooth <span class = \"text-muted\"> (for PPT) </ span>\n"
 admin.edu_cloud.edu_video.transcode_quality_normal: "Standard <span class = \"text-muted\"> (for screen recording, camera capture) </ span>\n"
 admin.edu_cloud.edu_video.transcode_quality_high: "Fine <span class = \"text-muted\"> (for dynamic movies)</ span> \n"
@@ -5895,7 +5941,7 @@ admin.edu_cloud.edu_video.finger_print_time: Second
 admin.edu_cloud.edu_video.finger_print_opacity_label: 'Cloud video fingerprint opacity'
 admin.edu_cloud.edu_video.finger_print_opacity_tips: 'The recommended opacity is between 0 and 1 seconds,The smaller the number, the more transparent'
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 'Cloud video security enhancements'
-admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the H5 browser, the system will guide the user to use App view.'
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the H5 browser, the system will guide the user to use App view. Android is only allowed to view in the built-in browser of wechat app'
 admin.edu_cloud.edu_video.enable_hls_encryption_plus_upgrade_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the H5 browser except Wechat, the system will guide the user to use Wechat or App view.'
 admin.edu_cloud.edu_video.buy_flow_tips: 'Open traffic annual package, video traffic more cost-effective. <a class="" href="%bugUrl%" target="_blank"> What is a traffic package? </a>'
 admin.edu_cloud.edu_video.start_buy: "Contact official immediately opened: <span class = \"text-primary\"> 4008041114 </ span> \n"
@@ -6460,7 +6506,7 @@ admin.role_manage.nickname: Creator
 admin.role_manage.operation: Action
 admin.role_manage.role.empty: 'No role'
 admin.role_manage.keyword.placeholer: Keywords
-admin.role_manage.help_block: '<p>1 The 4 default role cannot be edited or deleted</p><p>2 Code cannot be modified after a role is created </p>'
+admin.role_manage.help_block: '<p>1 The 6 default role cannot be edited or deleted</p><p>2 Code cannot be modified after a role is created </p>'
 admin.role_manage.modal.show_modal: 'Role details'
 admin.role_manage.modal.edit_modal: 'Edit Role'
 admin.role_manage.modal.create_modal: 'Add roles'
@@ -6548,6 +6594,7 @@ admin.setting_course.learning_time_statistical_dimension: Statistical dimension 
 admin.setting_course.effective_learning_time.playing.help_block: The actual playing time was taken as the learning time statistics
 admin.setting_course.effective_learning_time.page.help_block: The page stay time is taken as the learning time statistics
 admin.setting_course.effective_learning_time.playing_time: Video playing time
+admin.setting_course.effective_learning_time.end_time: End Time
 admin.setting_course.effective_learning_time.page_time: Page stay time
 admin.setting_course.effective_learning_time.accumulated_merge: The learning hours are directly accumulated and combined
 admin.setting_course.effective_learning_time.reweighted_merge: The learning hours were reweighted and then merged
@@ -6927,6 +6974,9 @@ admin.setting_course.video_play_setting.play_rule.auto_pause.help_block: When th
 admin.setting_course.video_play_setting.play_rule.no_action.help_block: When the system detects that the user is not focusing on learning, the PC side will continue to maintain the current play.
 admin.setting_course.video_play_setting.play_rule.auto_pause: automatic pause
 admin.setting_course.video_play_setting.play_rule.no_action: no intervention
+admin.setting_course.video_play_setting.learn_config: Video Learn Config
+admin.setting_course.video_play_setting.complate_config: Video Complate Config
+admin.setting_course.video_play_setting.default: Default
 admin.article_setting.edit: 'Edit articles'
 admin.article_setting.title: 'Article headlines'
 admin.article_setting.category: Column
@@ -7492,6 +7542,9 @@ course.homework_check.review.empty: 'No data found'
 course.homework_check.review.name: Name
 course.homework_check.review.score: Score
 course.homework_check.review.submit_time: 'Submit time'
+course.homework_check.review.submit_num: Submit Num
+course.testpaper_check.review.submit_num: Submit Num
+course.homework_check.review.submit_num_detail: num %num%
 course.homework_check.review.status: Status
 course.homework_check.review.reviewer: Reviewer
 course.homework_check.review.operation: Action
@@ -9233,6 +9286,10 @@ exception.parsed.failed.netease: Failed to get video information of Netease Open
 exception.parsed.failed.letv: Failed to get video information of Letv
 exception.parsed.failed.qq: Failed to get video information of QQ video
 exception.parsed.failed.youku: Failed to get video information of Youku
+exception.parsed.failed.bilibili: Failed to get video information of bilibili
+exception.parsed.failed.bilibili_video_id: Failed to get video id of bilibili
+exception.parsed.failed.iqiyi: Failed to get video information of iqiyi
+exception.parsed.failed.iqiyi_video_id: Failed to get video id of iqiyi
 exception.parser.not.support: This video type is not supported
 
 exception.announcement.notfound: Announcement not found
@@ -9269,6 +9326,7 @@ exception.task.forbidden_preview_task: You can not preview task
 exception.task.type_invalid: Task type invalid
 exception.task.live_replay_not_found: Task replay not found
 exception.task.live_replay_invalid: Task replay invalid
+exception.task.forbidden_publish_sync_task: This task is still being synchronized. Please publish it later (60 seconds at most)
 exception.course.not_found: The course plan doesn't exist
 exception.course.forbidden_take_course: Can't access the teaching plan
 exception.course.learnmode_invalid: Learning mode error
@@ -9420,6 +9478,7 @@ exception.group.not_found: Group does not exist
 exception.group.duplicate_join: Already in the group, don't repeat
 exception.group.not_found_member: Member does not exist
 exception.group.title_required: Missing title
+exception.group.delete_group_require_close: Unclosed groups cannot be deleted
 exception.comment.not_found: Comment does not exist
 exception.comment.forbidden_delete: No permission to delete comments！
 exception.comment.objecttype_invalid: There is no current comment object
@@ -9447,6 +9506,7 @@ exception.opencourse.forbidden_manage_course: You are not a teacher or administr
 exception.opencourse.itemids_invalid: Lesson number error
 exception.opencourse.is_not_member: You are not member of course
 exception.opencourse.check_password_required: Did not enter the correct verification password
+exception.opencourse.replay_not_permitted: Live replay is set to not allowed to watch
 exception.blacklist.forbidden_take: Permission denied
 exception.blacklist.duplicate_add: Already in the blacklist, don't add it repeatedly
 exception.blacklist.not_found: Blacklist does not exist
@@ -9681,6 +9741,7 @@ wechat.notification.fans_list.user_num: "User Num:"
 wechat.notification.fans_list.fans_list_empty: No fan
 wechat.notification.fans_list.no_wechat_bind: WeChat service number is not bound yet
 wechat.notification.fans_list.placeholder: Please enter keywords
+wechat.notification.fans_list.new_tips: According to relevant laws and regulations, in order to protect the legitimate rights and interests of users, official account number "user information acquisition interface" no longer provides user nicknames and avatar information after December 27, 2021.
 wechat.notification.send_days: Send Days
 wechat.notification.course_remind_conditions: 'For at least one student who has not completed and has not quit the teaching program, a notice is sent at a fixed frequency and at a fixed time.'
 wechat.notification.tooltip_hint: Wechat service number notice does not support marketing messages such as advertisements and all other messages that may cause harassment to users. If the notice fails to be sent, it may be that the keywords such as task name and course name contain illegal content.
@@ -10016,6 +10077,8 @@ admin_v2.default.switch_old_version_btn: Back to old version
 exception.common_upgrade_v2_error: Has been upgraded to the new version
 exception.switch_old_version.permission_error: Please contact super administrator or administrator operation
 exception.switch_old_version.error: Has been upgraded to the old version
+exception.fields_format_error: Fields format error
+exception.common_upgrade_app_version: The current version does not support this function, please upgrade to the latest version to use
 admin_v2.setting.navigation.foot.tips: "Besides Qingqiu、Default A、Default B、Yazhi，please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> Web setting</a> and edit.\n"
 admin_v2.setting_course.course_list_page_seq.help_block: 'Address: Domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "operating" - "Web Setting" - "Purchased Theme" - "setting". Course order settings are only supported by ink-only theme and simplicity theme.'
 
@@ -10511,8 +10574,9 @@ exception.homework.not_found_result: The homework result does not exist
 
 activity_manage.finish_tips_time: Stat at least %finishDetail% minutes.
 activity_manage.finish_tips_watch_time: Watch at least %finishDetail% minutes.
-+course.plan_task.activity_manage.video.time_at_least: Stay at least
-+course.plan_task.activity_manage.video.watch_time_at_least: Watch at least
+course.plan_task.activity_manage.video.time_at_least: Stay at least
+course.plan_task.activity_manage.video.watch_time_at_least: Watch at least
+course.plan_task.activity_manage.video.not_completed_prohibited: When the task is not completed, the player progress dragging is prohibited
 activity_manage.time_last_tips: >
   Remaining<span class="color-danger js-finish-time">%time% minutes</span> completed
 activity_manage.finished_tips: >
@@ -10582,8 +10646,10 @@ admin.classroom_manage.statistics.course.title_tips: >
     2.Other statistical data items are real-time data.<br/>
   </span>
 admin.classroom_manage.statistics.course.total_learn_time: 'The course is accumulated study time (minutes): %mins%'
+admin.classroom_manage.recommend.tips: Priority shall be given to the recommended serial number from small to large, and those not recommended shall be in reverse order according to the creation time
 
 classroom.manage.data_statictics: Data Statistics
+classroom.manage.live_statictics: Live Statistics
 classroom.manage.data_statistics.overview.student_num: Student Number
 classroom.manage.data_statistics.overview.auditor_num: Auditor
 classroom.manage.data_statistics.overview.finished_num: Finished Num
@@ -10790,3 +10856,31 @@ exception.teacher_qualification_not_enable: Teacher qualification not enable
 exception.teacher_qualification_not_teacher: Teacher qualification not teacher
 homepage.teacher_qualification.code: 'Teacher qualification code'
 homepage.teacher_qualification.more: 'More'
+
+course.live_replay_manage.lesson_title_th: Live lesson title
+course.live_replay_manage.live_length_th: Live length
+course.live_replay_manage.live_anchor_th: Live anchor
+course.live_replay_manage.live_time_th: Live time
+course.live_replay.tag_select_default: Replay tag
+course.live_replay.share_btn: Share
+course.live_replay.un_share_btn:  UnShare
+course.live_replay.remove_btn: Remove
+course.live_replay.title: Live Title
+course.live_replay.teacher: Teacher
+course.live_replay.length: length
+course.live_replay.start_time: Start Time
+course.live_replay_manage.live_replay_empty: replay deleted
+course.live_replay.tips: The current version only supports viewing of live playback sessions on the PC side, and does not currently support the mobile side
+course.homework.pass_score: Set passing score
+course.homework.pass_score.tip1: 'Full marks：'
+course.homework.pass_score.tip2: Qualified if the score is reached
+testpaper.score_set.option: question score
+
+course.lesson.display: '%part_name% %number% : %title%'
+course.task.display: '%taskName%.%taskNumber%:%taskTitle%'
+common.cancel_recommend.btn: Cancel Recommend
+course.homework.score_title.tips: "Multiple choice score setting:<br>No points for wrong or multiple choices.<br>Missed selection: missed selection and no error, a fixed score.<br>Each item: if there is no wrong item, the score of the correct item is added up."
+
+review.result.fail: Fail
+review.result.pass: Pass
+review.result.amend_comment: Amend comment

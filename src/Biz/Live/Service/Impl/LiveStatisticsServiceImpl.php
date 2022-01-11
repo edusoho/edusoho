@@ -9,6 +9,7 @@ use Biz\Common\CommonException;
 use Biz\Live\Dao\LiveStatisticsDao;
 use Biz\Live\LiveStatisticsProcessor\LiveStatisticsProcessorFactory;
 use Biz\Live\Service\LiveStatisticsService;
+use Biz\LiveStatistics\Dao\LiveMemberStatisticsDao;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\Util\EdusohoLiveClient;
 
@@ -46,12 +47,54 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
         $exist = $this->getVisitorStatisticsByLiveId($liveId);
 
         if (empty($exist)) {
-            return $this->createLiveVisitorStatistics($liveId);
+            $exist = $this->createLiveVisitorStatistics($liveId);
+        } else {
+            $statistics = $this->generateStatisticsByLiveIdAndType($liveId, self::STATISTICS_TYPE_VISITOR);
+            $exist = $this->getLiveStatisticsDao()->update($exist['id'], $statistics);
         }
+        $this->syncLiveMember($liveId, $exist);
 
-        $statistics = $this->generateStatisticsByLiveIdAndType($liveId, self::STATISTICS_TYPE_VISITOR);
+        return $exist;
+    }
 
-        return empty($statistics['data']['detail']) ? $exist : $this->getLiveStatisticsDao()->update($exist['id'], $statistics);
+    protected function syncLiveMember($liveId, $statistics)
+    {
+        $liveMembers = $this->getLiveMemberStatisticsDao()->search(['liveId' => $liveId], [], 0, PHP_INT_MAX, ['userId']);
+        $userIds = \AppBundle\Common\ArrayToolkit::column($liveMembers, 'userId');
+        $create = [];
+        if (empty($statistics['data']['detail']) || (!empty($statistics['data']['sync']) && time() - $statistics['data']['syncTime'] < 2 * 3600)) {
+            return;
+        }
+        $count = $this->getUserDao()->count([]);
+        foreach ($statistics['data']['detail'] as $user) {
+            $userId = $user['userId'];
+            if ($userId > $count) {
+                $baseUser = $this->getUserDao()->getByNickname($user['nickname']);
+                if (empty($baseUser)) {
+                    continue;
+                }
+                $userId = $baseUser['id'];
+            }
+            if (!empty($create[$live['liveId'].'-'.$userId]) || empty($user['firstJoin']) || in_array($userId, $userIds)) {
+                continue;
+            }
+            $create[$liveId.'-'.$userId] = [
+                'liveId' => $liveId,
+                'userId' => $userId,
+                'firstEnterTime' => $user['firstJoin'],
+                'watchDuration' => empty($user['learnTime']) || $user['learnTime'] < 0 ? 0 : $user['learnTime'],
+                'checkinNum' => 0,
+                'requestTime' => time(),
+                'chatNum' => 0,
+                'answerNum' => 0,
+            ];
+        }
+        if (!empty($create)) {
+            $this->getLiveMemberStatisticsDao()->batchCreate(array_values($create));
+        }
+        $statistics['data']['sync'] = 1;
+        $statistics['data']['syncTime'] = time();
+        $this->getLiveStatisticsDao()->update($statistics['id'], $statistics);
     }
 
     public function getCheckinStatisticsByLiveId($liveId)
@@ -140,5 +183,18 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
     protected function getS2B2CFacadeService()
     {
         return $this->createService('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return LiveMemberStatisticsDao
+     */
+    protected function getLiveMemberStatisticsDao()
+    {
+        return $this->createDao('LiveStatistics:LiveMemberStatisticsDao');
+    }
+
+    protected function getUserDao()
+    {
+        return $this->createDao('User:UserDao');
     }
 }

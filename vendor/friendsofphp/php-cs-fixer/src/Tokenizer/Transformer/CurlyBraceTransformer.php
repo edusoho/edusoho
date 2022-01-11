@@ -37,25 +37,6 @@ final class CurlyBraceTransformer extends AbstractTransformer
     /**
      * {@inheritdoc}
      */
-    public function getCustomTokens()
-    {
-        return [
-            CT::T_CURLY_CLOSE,
-            CT::T_DOLLAR_CLOSE_CURLY_BRACES,
-            CT::T_DYNAMIC_PROP_BRACE_OPEN,
-            CT::T_DYNAMIC_PROP_BRACE_CLOSE,
-            CT::T_DYNAMIC_VAR_BRACE_OPEN,
-            CT::T_DYNAMIC_VAR_BRACE_CLOSE,
-            CT::T_ARRAY_INDEX_CURLY_BRACE_OPEN,
-            CT::T_ARRAY_INDEX_CURLY_BRACE_CLOSE,
-            CT::T_GROUP_IMPORT_BRACE_OPEN,
-            CT::T_GROUP_IMPORT_BRACE_CLOSE,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getRequiredPhpVersionId()
     {
         return 50000;
@@ -75,6 +56,25 @@ final class CurlyBraceTransformer extends AbstractTransformer
         if (\PHP_VERSION_ID >= 70000) {
             $this->transformIntoGroupUseBraces($tokens, $token, $index);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomTokens()
+    {
+        return [
+            CT::T_CURLY_CLOSE,
+            CT::T_DOLLAR_CLOSE_CURLY_BRACES,
+            CT::T_DYNAMIC_PROP_BRACE_OPEN,
+            CT::T_DYNAMIC_PROP_BRACE_CLOSE,
+            CT::T_DYNAMIC_VAR_BRACE_OPEN,
+            CT::T_DYNAMIC_VAR_BRACE_CLOSE,
+            CT::T_ARRAY_INDEX_CURLY_BRACE_OPEN,
+            CT::T_ARRAY_INDEX_CURLY_BRACE_CLOSE,
+            CT::T_GROUP_IMPORT_BRACE_OPEN,
+            CT::T_GROUP_IMPORT_BRACE_CLOSE,
+        ];
     }
 
     /**
@@ -122,7 +122,7 @@ final class CurlyBraceTransformer extends AbstractTransformer
 
     private function transformIntoDynamicPropBraces(Tokens $tokens, Token $token, $index)
     {
-        if (!$token->isGivenKind(T_OBJECT_OPERATOR)) {
+        if (!$token->isObjectOperator()) {
             return;
         }
 
@@ -181,7 +181,7 @@ final class CurlyBraceTransformer extends AbstractTransformer
 
         if (
             $tokens[$prevIndex]->isGivenKind(T_STRING)
-            && !$tokens[$tokens->getPrevMeaningfulToken($prevIndex)]->isGivenKind(T_OBJECT_OPERATOR)
+            && !$tokens[$tokens->getPrevMeaningfulToken($prevIndex)]->isObjectOperator()
         ) {
             return;
         }

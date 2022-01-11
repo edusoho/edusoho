@@ -114,6 +114,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'length',
             'authUrl',
             'jumpUrl',
+            'replayEnable',
         ]);
 
         return $fields;
@@ -149,6 +150,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'updateTime',
             'orgId',
             'orgCode',
+            'replayEnable',
         ]);
 
         $courseFields = $this->_filterCourseFields($courseFields);
@@ -1005,10 +1007,33 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             }
 
             $course['lesson'] = $lesson;
+
+            $course['liveStatus'] = $this->filterLessonStatus($lesson['startTime'], $lesson['endTime']);
+            $course['liveStatus'] = ('end' == $course['liveStatus'] && $this->hasReplay($lesson['replayStatus'])) ? 'hasReplay' : $course['liveStatus'];
             $results[] = $course;
         }
 
         return $results;
+    }
+
+    protected function hasReplay($replayStatus)
+    {
+        return ('generated' == $replayStatus || 'videoGenerated' == $replayStatus) ? true : false;
+    }
+
+    protected function filterLessonStatus($startTime, $endTime)
+    {
+        if ($startTime <= time() && time() <= $endTime) {
+            return 'living';
+        }
+
+        if (time() > $endTime) {
+            return 'end';
+        }
+
+        if ($startTime > time()) {
+            return 'ahead';
+        }
     }
 
     protected function _prepareLiveCourseLessonConditions($conditions)
@@ -1092,6 +1117,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'updateTime' => time(),
             'orgCode' => '1.',
             'orgId' => '1',
+            'replayEnable' => 0,
         ]);
 
         if (isset($fields['tags'])) {

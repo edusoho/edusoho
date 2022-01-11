@@ -268,10 +268,10 @@ XML;
     {
         $source = <<<XML
 <?xml version="1.0"?>
-<document index="-12.11">Name</document>
+<document index="12.11">Name</document>
 XML;
 
-        $this->assertSame(['@index' => -12.11, '#' => 'Name'], $this->encoder->decode($source, 'xml'));
+        $this->assertSame(['@index' => 12.11, '#' => 'Name'], $this->encoder->decode($source, 'xml'));
     }
 
     public function testDecodeNegativeFloatAttribute()
@@ -282,6 +282,16 @@ XML;
 XML;
 
         $this->assertSame(['@index' => -12.11, '#' => 'Name'], $this->encoder->decode($source, 'xml'));
+    }
+
+    public function testDecodeFloatAttributeWithZeroWholeNumber()
+    {
+        $source = <<<XML
+<?xml version="1.0"?>
+<document index="0.123">Name</document>
+XML;
+
+        $this->assertSame(['@index' => 0.123, '#' => 'Name'], $this->encoder->decode($source, 'xml'));
     }
 
     public function testNoTypeCastAttribute()
@@ -658,6 +668,20 @@ XML;
 XML;
 
         $actualXml = $this->encoder->encode(['foo' => true, 'bar' => false], 'xml');
+
+        $this->assertEquals($expectedXml, $actualXml);
+    }
+
+    public function testEncodeXmlWithDomNodeValue()
+    {
+        $expectedXml = <<<'XML'
+<?xml version="1.0"?>
+<response><foo>bar</foo><bar>foo &amp; bar</bar></response>
+
+XML;
+        $document = new \DOMDocument();
+
+        $actualXml = $this->encoder->encode(['foo' => $document->createTextNode('bar'), 'bar' => $document->createTextNode('foo & bar')], 'xml');
 
         $this->assertEquals($expectedXml, $actualXml);
     }

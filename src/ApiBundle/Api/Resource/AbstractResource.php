@@ -10,6 +10,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Topxia\Service\Common\ServiceKernel;
 
 /**
  * @OA\Info(title="EduSoho接口", version="default", description="EduSoho接口，随版本动态变化")
@@ -180,6 +181,11 @@ abstract class AbstractResource
     public function invokeResource(ApiRequest $apiRequest)
     {
         return $this->container->get('api_resource_kernel')->handleApiRequest($apiRequest);
+    }
+
+    protected function trans($message, $arguments = [], $domain = null, $locale = null)
+    {
+        return ServiceKernel::instance()->trans($message, $arguments, $domain, $locale);
     }
 
     protected function makePagingObject($objects, $total, $offset, $limit)

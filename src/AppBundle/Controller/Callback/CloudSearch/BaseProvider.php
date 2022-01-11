@@ -3,14 +3,14 @@
 namespace AppBundle\Controller\Callback\CloudSearch;
 
 use Biz\Common\CommonException;
-use Symfony\Component\HttpFoundation\Request;
 use Codeages\Biz\Framework\Context\BizAware;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class BaseProvider extends BizAware
 {
     public function get(Request $request)
     {
-        return array();
+        return [];
     }
 
     public function checkToken($token)
@@ -22,7 +22,7 @@ abstract class BaseProvider extends BizAware
     {
         $token = explode(':', $token);
 
-        if (count($token) != 3) {
+        if (3 != count($token)) {
             throw new \RuntimeException('API Token格式不正确！');
         }
 
@@ -32,7 +32,7 @@ abstract class BaseProvider extends BizAware
             throw new \RuntimeException('API Token不正确！');
         }
 
-        $settings = $this->getSettingService()->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', []);
 
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             throw new \RuntimeException('系统尚未配置AccessKey/SecretKey');
@@ -63,14 +63,14 @@ abstract class BaseProvider extends BizAware
 
     public function encodeKeysign($request, $role = 'guest', $lifetime = 600)
     {
-        $settings = $this->getSettingService()->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', []);
 
-        $policy = array(
+        $policy = [
             'method' => $request->getMethod(),
             'uri' => $request->getRequestUri(),
             'role' => $role,
             'deadline' => time() + $lifetime,
-        );
+        ];
 
         $encoded = $this->encodeBase64(json_encode($policy));
 
@@ -81,16 +81,16 @@ abstract class BaseProvider extends BizAware
 
     protected function encodeBase64($string)
     {
-        $find = array('+', '/');
-        $replace = array('-', '_');
+        $find = ['+', '/'];
+        $replace = ['-', '_'];
 
         return str_replace($find, $replace, base64_encode($string));
     }
 
     protected function decodeBase64($string)
     {
-        $find = array('-', '_');
-        $replace = array('+', '/');
+        $find = ['-', '_'];
+        $replace = ['+', '/'];
 
         return base64_decode(str_replace($find, $replace, $string));
     }
@@ -99,37 +99,37 @@ abstract class BaseProvider extends BizAware
     {
         $end = end($currentRows);
         if (empty($end)) {
-            return array(
+            return [
                 'cursor' => $currentCursor + 1,
                 'start' => 0,
                 'limit' => $currentLimit,
                 'eof' => true,
-            );
+            ];
         }
 
         if (count($currentRows) < $currentLimit) {
-            return array(
+            return [
                 'cursor' => $end['updatedTime'] + 1,
                 'start' => 0,
                 'limit' => $currentLimit,
                 'eof' => true,
-            );
+            ];
         }
 
         if ($end['updatedTime'] != $currentCursor) {
-            $next = array(
+            $next = [
                 'cursor' => $end['updatedTime'],
                 'start' => 0,
                 'limit' => $currentLimit,
                 'eof' => false,
-            );
+            ];
         } else {
-            $next = array(
+            $next = [
                 'cursor' => $currentCursor,
                 'start' => $currentStart + $currentLimit,
                 'limit' => $currentLimit,
                 'eof' => false,
-            );
+            ];
         }
 
         return $next;
@@ -137,18 +137,18 @@ abstract class BaseProvider extends BizAware
 
     protected function error($code, $message)
     {
-        return array('error' => array(
+        return ['error' => [
             'code' => $code,
             'message' => $message,
-        ));
+        ]];
     }
 
     protected function wrap($resources, $total)
     {
         if (is_array($total)) {
-            return array('resources' => $resources, 'next' => $total);
+            return ['resources' => $resources, 'next' => $total];
         } else {
-            return array('resources' => $resources, 'total' => $total ?: 0);
+            return ['resources' => $resources, 'total' => $total ?: 0];
         }
     }
 
@@ -197,7 +197,7 @@ abstract class BaseProvider extends BizAware
 
     protected function singlecallBuild($name, $res)
     {
-        return array_shift($this->callBuild($name, array($res)));
+        return array_shift($this->callBuild($name, [$res]));
     }
 
     protected function checkRequiredFields($requestData, $requiredFields)
@@ -231,7 +231,7 @@ abstract class BaseProvider extends BizAware
         if (empty($path)) {
             return '';
         }
-        if (strpos($path, $this->getHttpHost().'://') !== false) {
+        if (false !== strpos($path, $this->getHttpHost().'://')) {
             return $path;
         }
         $path = str_replace('public://', '', $path);
@@ -248,6 +248,14 @@ abstract class BaseProvider extends BizAware
         return $schema."://{$_SERVER['HTTP_HOST']}";
     }
 
+    protected function purifyHtml($html, $trusted = false)
+    {
+        $biz = $this->getBiz();
+        $htmlHelper = $biz['html_helper'];
+
+        return $htmlHelper->purify($html, $trusted);
+    }
+
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
@@ -262,7 +270,7 @@ abstract class BaseProvider extends BizAware
     {
         $biz = $this->getBiz();
 
-        return isset($biz['user']) ? $biz['user'] : array();
+        return isset($biz['user']) ? $biz['user'] : [];
     }
 
     protected function createService($alias)

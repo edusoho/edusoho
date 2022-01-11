@@ -71,6 +71,32 @@ class CloudFileController extends BaseController
         return $this->render('admin-v2/teach/cloud-attachment/error.html.twig', []);
     }
 
+    public function questionBankAttachmentListAction(Request $request)
+    {
+        try {
+            $api = CloudAPIFactory::create('leaf');
+            $result = $api->get('/me');
+            if (empty($result['accessCloud'])) {
+                return $this->render('admin-v2/cloud-center/edu-cloud/not-access.html.twig', ['menu' => 'admin_v2_cloud_attachment']);
+            }
+        } catch (\RuntimeException $e) {
+            return $this->render('admin-v2/teach/cloud-attachment/api-error.html.twig', []);
+        }
+
+        $storageSetting = $this->getSettingService()->get('storage', []);
+
+        if (isset($result['hasStorage']) && '1' == $result['hasStorage'] && 'cloud' == $storageSetting['upload_mode']) {
+            return $this->render('admin-v2/teach/question-bank-attachment/index.html.twig');
+        }
+
+        return $this->render('admin-v2/teach/cloud-attachment/error.html.twig', []);
+    }
+
+    public function livePlaybackAction(Request $request)
+    {
+        return $this->render('admin-v2/teach/cloud-resources/live-playback.html.twig');
+    }
+
     public function renderAction(Request $request)
     {
         $conditions = $request->query->all();

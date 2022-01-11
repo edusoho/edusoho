@@ -31,7 +31,7 @@ class WrongBookStudentWrongQuestion extends AbstractResource
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $offset, $limit);
-        $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions, $conditions['answer_scene_ids']);
+        $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions);
         $wrongQuestionCount = $this->getWrongQuestionService()->countWrongQuestionsWithDistinctItem($conditions);
 
         return $this->makePagingObject($wrongQuestions, $wrongQuestionCount, $offset, $limit);
@@ -52,14 +52,26 @@ class WrongBookStudentWrongQuestion extends AbstractResource
         if ('exercise' === $targetType && 'testpaper' === $conditions['exerciseMediaType'] && !empty($conditions['testpaperId'])) {
             $prepareConditions['testpaper_id'] = $conditions['testpaperId'];
         }
+        if (!empty($conditions['itemType']) || !empty($conditions['itemTitle'])) {
+            $wrongBookPools = $this->getWrongQuestionService()->searchWrongBookPool(['target_type' => $targetType, 'target_id' => $targetId], [], 0, PHP_INT_MAX);
+            $wrongCollections = $this->getWrongQuestionService()->searchWrongQuestionCollect(['pool_ids' => array_column($wrongBookPools, 'id') ?: [-1]], [], 0, PHP_INT_MAX, ['item_id']);
+            $itemConditions = [
+                'type' => $conditions['itemType'] ?? '',
+                'keyword' => $conditions['itemTitle'] ?? '',
+                'ids' => array_values(array_unique(array_column($wrongCollections, 'item_id'))) ?: [-1],
+            ];
+            $items = $this->getItemService()->searchItems($itemConditions, [], 0, PHP_INT_MAX, ['id']);
+            $prepareConditions['item_ids'] = array_column($items, 'id') ?: [-1];
+        }
 
         return $prepareConditions;
     }
 
-    protected function makeCourseWrongQuestionInfo($wrongQuestions, $sceneIds)
+    protected function makeCourseWrongQuestionInfo($wrongQuestions)
     {
         $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
         $items = $this->getItemService()->findItemsByIds($itemIds);
+        $sceneIds = ArrayToolkit::column($wrongQuestions, 'answer_scene_id');
         $wrongQuestionScenes = $this->getWrongQuestionService()->findWrongQuestionBySceneIds($sceneIds);
         $sceneIds = array_unique(ArrayToolkit::column($wrongQuestionScenes, 'answer_scene_id'));
         $activityScenes = $this->getActivityScenes($sceneIds);
@@ -91,23 +103,34 @@ class WrongBookStudentWrongQuestion extends AbstractResource
 
     protected function getCourseWrongQuestionSources($wrongQuestionScenes, $activityScenes)
     {
+        $taskIds = ArrayToolkit::column($wrongQuestionScenes, 'source_id');
+        $tasks = $this->getCourseTaskService()->findTasksByIds($taskIds);
+        $tasks = ArrayToolkit::index($tasks, 'id');
+
+        $fromCourseSetIds = ArrayToolkit::column($tasks, 'fromCourseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($fromCourseSetIds);
+
+        $testpaperIds = ArrayToolkit::column($wrongQuestionScenes, 'testpaper_id');
+        $itemCategorys = $this->getItemCategoryService()->findItemCategoriesByIds($testpaperIds);
+
+        $assessments = $this->getAssessmentService()->findAssessmentsByIds($testpaperIds);
         $sources = [];
         foreach ($wrongQuestionScenes as $wrongQuestion) {
             $itemId = $wrongQuestion['item_id'];
             $sceneId = $wrongQuestion['answer_scene_id'];
             $activity = $activityScenes[$sceneId];
             if ('course_task' === $wrongQuestion['source_type']) {
-                $courseTask = $this->getCourseTaskService()->getTask($wrongQuestion['source_id']);
-                $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
+                $courseTask = $tasks[$wrongQuestion['source_id']];
+                $courseSet = $courseSets[$activity['fromCourseSetId']];
                 $sources[$itemId]['courseName'][] = $courseSet['title'];
                 $sources[$itemId]['sourceName'][] = $courseTask['title'];
                 $sources[$itemId]['sourceType'][] = $activity['mediaType'];
             } elseif ('item_bank_chapter' === $wrongQuestion['source_type']) {
-                $itemCategory = $this->getItemCategoryService()->getItemCategory($wrongQuestion['testpaper_id']);
+                $itemCategory = $itemCategorys[$wrongQuestion['testpaper_id']];
                 $sources[$itemId]['sourceName'][] = $itemCategory['name'];
                 $sources[$itemId]['sourceType'][] = 'chapter';
             } elseif ('item_bank_assessment' === $wrongQuestion['source_type']) {
-                $assessment = $this->getAssessmentService()->getAssessment($wrongQuestion['testpaper_id']);
+                $assessment = $assessments[$wrongQuestion['testpaper_id']];
                 $sources[$itemId]['sourceName'][] = $assessment['name'];
                 $sources[$itemId]['sourceType'][] = 'testpaper';
             } elseif ('wrong_question_exercise' === $wrongQuestion['source_type']) {

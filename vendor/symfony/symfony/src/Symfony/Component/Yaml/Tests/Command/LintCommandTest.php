@@ -34,7 +34,7 @@ class LintCommandTest extends TestCase
         $ret = $tester->execute(['filename' => $filename], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
         $this->assertEquals(0, $ret, 'Returns 0 in case of success');
-        $this->assertRegExp('/^\/\/ OK in /', trim($tester->getDisplay()));
+        $this->assertMatchesRegularExpression('/^\/\/ OK in /', trim($tester->getDisplay()));
     }
 
     public function testLintIncorrectFile()
@@ -123,11 +123,11 @@ YAML;
     {
         foreach ($this->files as $file) {
             if (file_exists($file)) {
-                unlink($file);
+                @unlink($file);
             }
         }
 
-        rmdir(sys_get_temp_dir().'/framework-yml-lint-test');
+        @rmdir(sys_get_temp_dir().'/framework-yml-lint-test');
     }
 }
 

@@ -213,7 +213,7 @@ class LiveReplayServiceTest extends BaseTestCase
                         'provider' => 'ESLive',
                         'user' => 'admin@admin.com',
                         'nickname' => 'admin',
-                        'role' => 'teacher',
+                        'role' => 'student',
                         'userId' => '1',
                     ]],
                 ],
@@ -356,6 +356,10 @@ class LiveReplayServiceTest extends BaseTestCase
                 [
                     'functionName' => 'getBySyncIdGTAndLiveId',
                     'returnValue' => ['id' => 1],
+                ],
+                [
+                    'functionName' => 'updateLiveActivityWithoutEvent',
+                    'returnValue' => [],
                 ],
             ]
         );

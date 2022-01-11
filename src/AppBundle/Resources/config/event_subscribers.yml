@@ -516,3 +516,18 @@ services:
         tags:
             -
                 name: codeages_plugin.event.subscriber
+    live_status_event_subscriber:
+      class: Biz\Live\Event\LiveStatusSubscriber
+      arguments:
+        - '@biz'
+      public: true
+      tags:
+        - name: codeages_plugin.event.subscriber
+
+    favorite_event_subscriber:
+      class: Biz\Favorite\Event\FavoriteEventSubscriber
+      arguments:
+        - '@biz'
+      public: true
+      tags:
+        - name: codeages_plugin.event.subscriber

@@ -102,6 +102,72 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
     }
 
+    public function getRecentLiveTaskStatus($courseId)
+    {
+        $tasks = $this->searchTasks(['status' => 'published', 'type' => 'live', 'courseId' => $courseId], ['startTime' => 'ASC'], 0, PHP_INT_MAX);
+        if (0 == count($tasks)) {
+            return 'null';
+        }
+
+        if (1 == count($tasks)) {
+            $task = array_shift($tasks);
+            $status = $this->filterLiveTaskStatus($task['startTime'], $task['endTime']);
+
+            return (!$this->hasReplay($task['activityId'])) ? $status : 'hasReplay';
+        }
+
+        foreach ($tasks as $task) {
+            $status = $this->filterLiveTaskStatus($task['startTime'], $task['endTime']);
+            if ('living' == $status) {
+                $hasLivingTask = true;
+
+                return $status;
+            }
+
+            if ('ahead' == $status && !$hasLivingTask) {
+                $hasAheadTask = true;
+
+                $status = 'ahead';
+            }
+
+            $hasReplay = $this->hasReplay($task['activityId']);
+
+            if ('end' == $status && !$hasAheadTask && $hasReplay) {
+                $hasEndTaskAndHasReplay = true;
+
+                $status = 'hasReplay';
+            }
+
+            if ('end' == $status && !$hasEndTaskAndHasReplay && !$hasReplay) {
+                $status = 'end';
+            }
+        }
+
+        return $status;
+    }
+
+    protected function hasReplay($activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+
+        return (isset($activity['ext']['replayStatus']) && ('generated' == $activity['ext']['replayStatus'] || 'videoGenerated' == $activity['ext']['replayStatus'])) ? true : false;
+    }
+
+    protected function filterLiveTaskStatus($startTime, $endTime)
+    {
+        if ($startTime <= time() && time() <= $endTime) {
+            return 'living';
+        }
+
+        if (time() > $endTime) {
+            return 'end';
+        }
+
+        if ($startTime > time()) {
+            return 'ahead';
+        }
+    }
+
     protected function createActivity($fields)
     {
         $activity = $this->getActivityService()->createActivity($fields);
@@ -197,7 +263,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         if (!$this->canPublish($task['id'])) {
-            return false;
+            $this->createNewException(TaskException::FORBIDDEN_PUBLISH_SYNC_TASK());
         }
 
         $strategy = $this->createCourseStrategy($task['courseId']);
@@ -545,9 +611,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->findTasksByCourseIds(ArrayToolkit::column($courses, 'id'));
     }
 
-    public function searchTasks($conditions, $orderBy, $start, $limit)
+    public function searchTasks($conditions, $orderBy, $start, $limit, $columns = [])
     {
-        return $this->getTaskDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getTaskDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function findTestpapers($tasks, $type)
@@ -701,7 +767,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (empty($taskResult)) {
             $task = $this->getTask($taskId);
             $activity = $this->getActivityService()->getActivity($task['activityId']);
-            if ('live' === $activity['mediaType']) {
+            if (in_array($activity['mediaType'], ['live', 'replay'])) {
                 $this->trigger($task['id'], 'start', ['task' => $task]);
                 $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
             } else {

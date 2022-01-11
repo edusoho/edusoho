@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
@@ -21,18 +21,18 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class UserController extends BaseController
 {
-    private $keywordType = array('verifiedMobile', 'idcard');
+    private $keywordType = ['verifiedMobile', 'idcard'];
 
     public function indexAction(Request $request)
     {
         $fields = $request->query->all();
 
-        $conditions = array(
+        $conditions = [
             'roles' => '',
             'keywordType' => '',
             'keyword' => '',
             'keywordUserType' => '',
-        );
+        ];
 
         $conditions = array_merge($conditions, $fields);
         $conditions = $this->fillOrgCode($conditions);
@@ -46,7 +46,7 @@ class UserController extends BaseController
 
         $users = $this->getUserService()->searchUsers(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -57,7 +57,7 @@ class UserController extends BaseController
             $profilesCount = $this->getUserService()->searchUserProfileCount($preConditions);
             $userProfiles = $this->getUserService()->searchUserProfiles(
                 $preConditions,
-                array('id' => 'DESC'),
+                ['id' => 'DESC'],
                 0,
                 $profilesCount
             );
@@ -70,7 +70,7 @@ class UserController extends BaseController
             } elseif ('idcard' == $conditions['keywordType']) {
                 unset($conditions['keywordType']);
                 unset($conditions['keyword']);
-                $conditions['userIds'] = empty($userIds) ? array(0) : $userIds;
+                $conditions['userIds'] = empty($userIds) ? [0] : $userIds;
             }
 
             $userCount = $this->getUserService()->countUsers($conditions);
@@ -82,7 +82,7 @@ class UserController extends BaseController
 
             $users = $this->getUserService()->searchUsers(
                 $conditions,
-                array('createdTime' => 'DESC'),
+                ['createdTime' => 'DESC'],
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
@@ -101,21 +101,21 @@ class UserController extends BaseController
 
         $allRoles = $this->getAllRoles();
 
-        return $this->render('admin/user/index.html.twig', array(
+        return $this->render('admin/user/index.html.twig', [
             'users' => $users,
             'allRoles' => $allRoles,
             'userCount' => $userCount,
             'paginator' => $paginator,
             'profiles' => $profiles,
             'showUserExport' => $showUserExport,
-        ));
+        ]);
     }
 
     protected function getAllRoles()
     {
-        $roles = $this->getRoleService()->searchRoles(array(), 'created', 0, PHP_INT_MAX);
+        $roles = $this->getRoleService()->searchRoles([], 'created', 0, PHP_INT_MAX);
 
-        $roleDicts = array();
+        $roleDicts = [];
         foreach ($roles as $role) {
             $roleDicts[$role['code']] = $role['name'];
         }
@@ -161,9 +161,9 @@ class UserController extends BaseController
     protected function validateResult($result, $message)
     {
         if ('success' === $result) {
-            $response = array('success' => true, 'message' => '');
+            $response = ['success' => true, 'message' => ''];
         } else {
-            $response = array('success' => false, 'message' => $message);
+            $response = ['success' => false, 'message' => $message];
         }
 
         return $this->createJsonResponse($response);
@@ -255,11 +255,11 @@ class UserController extends BaseController
 
         $fields = $this->getFields();
 
-        return $this->render('admin/user/edit-modal.html.twig', array(
+        return $this->render('admin/user/edit-modal.html.twig', [
             'user' => $user,
             'profile' => $profile,
             'fields' => $fields,
-        ));
+        ]);
     }
 
     public function orgUpdateAction(Request $request, $id)
@@ -273,10 +273,10 @@ class UserController extends BaseController
 
         $org = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
 
-        return $this->render('admin/user/update-org-modal.html.twig', array(
+        return $this->render('admin/user/update-org-modal.html.twig', [
             'user' => $user,
             'org' => $org,
-        ));
+        ]);
     }
 
     public function showAction(Request $request, $id)
@@ -287,11 +287,11 @@ class UserController extends BaseController
 
         $fields = $this->getFields();
 
-        return $this->render('admin/user/show-modal.html.twig', array(
+        return $this->render('admin/user/show-modal.html.twig', [
             'user' => $user,
             'profile' => $profile,
             'fields' => $fields,
-        ));
+        ]);
     }
 
     public function rolesAction(Request $request, $id)
@@ -305,34 +305,34 @@ class UserController extends BaseController
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
             if (!empty($roles)) {
-                $roleSet = $this->getRoleService()->searchRoles(array(), 'created', 0, 9999);
+                $roleSet = $this->getRoleService()->searchRoles([], 'created', 0, 9999);
                 $rolesByIndexCode = ArrayToolkit::index($roleSet, 'code');
                 $roleNames = $this->getRoleNames($roles, $rolesByIndexCode);
 
-                $message = array(
+                $message = [
                     'userId' => $currentUser['id'],
                     'userName' => $currentUser['nickname'],
                     'role' => implode(',', $roleNames),
-                );
+                ];
 
                 $this->getNotifiactionService()->notify($user['id'], 'role', $message);
             }
             $user = $this->getUserService()->getUser($id);
 
-            return $this->render('admin/user/user-table-tr.html.twig', array(
+            return $this->render('admin/user/user-table-tr.html.twig', [
                 'user' => $user,
                 'profile' => $this->getUserService()->getUserProfile($id),
-            ));
+            ]);
         }
 
-        return $this->render('admin/user/roles-modal.html.twig', array(
+        return $this->render('admin/user/roles-modal.html.twig', [
             'user' => $user,
-        ));
+        ]);
     }
 
     protected function getRoleNames($roles, $roleSet)
     {
-        $roleNames = array();
+        $roleNames = [];
         $roles = array_unique($roles);
 
         $userRoleDict = $this->get('codeages_plugin.dict_twig_extension')->getDict('userRole');
@@ -365,10 +365,10 @@ class UserController extends BaseController
             $partnerAvatar = null;
         }
 
-        return $this->render('admin/user/user-avatar-modal.html.twig', array(
+        return $this->render('admin/user/user-avatar-modal.html.twig', [
             'user' => $user,
             'partnerAvatar' => $partnerAvatar,
-        ));
+        ]);
     }
 
     protected function getFields()
@@ -414,12 +414,12 @@ class UserController extends BaseController
         $fileId = $request->getSession()->get('fileId');
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
-        return $this->render('admin/user/user-avatar-crop-modal.html.twig', array(
+        return $this->render('admin/user/user-avatar-crop-modal.html.twig', [
             'user' => $user,
             'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,
-        ));
+        ]);
     }
 
     public function lockAction($id)
@@ -427,20 +427,20 @@ class UserController extends BaseController
         $this->getUserService()->lockUser($id);
         $this->kickUserLogout($id);
 
-        return $this->render('admin/user/user-table-tr.html.twig', array(
+        return $this->render('admin/user/user-table-tr.html.twig', [
             'user' => $this->getUserService()->getUser($id),
             'profile' => $this->getUserService()->getUserProfile($id),
-        ));
+        ]);
     }
 
     public function unlockAction($id)
     {
         $this->getUserService()->unlockUser($id);
 
-        return $this->render('admin/user/user-table-tr.html.twig', array(
+        return $this->render('admin/user/user-table-tr.html.twig', [
             'user' => $this->getUserService()->getUser($id),
             'profile' => $this->getUserService()->getUserProfile($id),
-        ));
+        ]);
     }
 
     public function sendPasswordResetEmailAction(Request $request, $id)
@@ -452,18 +452,18 @@ class UserController extends BaseController
         }
 
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
-        $site = $this->setting('site', array());
+        $site = $this->setting('site', []);
         try {
-            $mailOptions = array(
+            $mailOptions = [
                 'to' => $user['email'],
                 'template' => 'email_reset_password',
-                'params' => array(
+                'params' => [
                     'nickname' => $user['nickname'],
-                    'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL),
+                    'verifyurl' => $this->generateUrl('password_reset_update', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL),
                     'sitename' => $site['name'],
                     'siteurl' => $site['url'],
-                ),
-            );
+                ],
+            ];
             $mailFactory = $this->getBiz()->offsetGet('mail_factory');
             $mail = $mailFactory($mailOptions);
             $mail->send();
@@ -486,20 +486,20 @@ class UserController extends BaseController
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
 
-        $site = $this->getSettingService()->get('site', array());
-        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
+        $site = $this->getSettingService()->get('site', []);
+        $verifyurl = $this->generateUrl('register_email_verify', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
 
         try {
-            $mailOptions = array(
+            $mailOptions = [
                 'to' => $user['email'],
                 'template' => 'email_registration',
-                'params' => array(
+                'params' => [
                     'sitename' => $site['name'],
                     'siteurl' => $site['url'],
                     'verifyurl' => $verifyurl,
                     'nickname' => $user['nickname'],
-                ),
-            );
+                ],
+            ];
 
             $mailFactory = $this->getBiz()->offsetGet('mail_factory');
             $mail = $mailFactory($mailOptions);
@@ -525,9 +525,9 @@ class UserController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('admin/user/change-password-modal.html.twig', array(
+        return $this->render('admin/user/change-password-modal.html.twig', [
             'user' => $user,
-        ));
+        ]);
     }
 
     protected function kickUserLogout($userId)
@@ -543,9 +543,9 @@ class UserController extends BaseController
     protected function getUserProfileConditions($conditions)
     {
         if ('verifiedMobile' == $conditions['keywordType']) {
-            return array('mobile' => $conditions['keyword']);
+            return ['mobile' => $conditions['keyword']];
         } else {
-            return array('idcard' => $conditions['keyword']);
+            return ['idcard' => $conditions['keyword']];
         }
     }
 

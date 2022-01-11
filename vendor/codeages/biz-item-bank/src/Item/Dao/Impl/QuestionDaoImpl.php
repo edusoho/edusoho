@@ -44,6 +44,7 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
             'serializes' => [
                 'answer' => 'json',
                 'response_points' => 'json',
+                'score_rule' => 'json',
             ],
         ];
     }

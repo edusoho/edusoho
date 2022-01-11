@@ -1,15 +1,18 @@
 # composer/xdebug-handler
 
 [![packagist](https://img.shields.io/packagist/v/composer/xdebug-handler.svg)](https://packagist.org/packages/composer/xdebug-handler)
-[![linux build](https://img.shields.io/travis/composer/xdebug-handler/master.svg?label=linux+build)](https://travis-ci.org/composer/xdebug-handler)
-[![windows build](https://img.shields.io/appveyor/ci/Seldaek/xdebug-handler/master.svg?label=windows+build)](https://ci.appveyor.com/project/Seldaek/xdebug-handler)
+[![Continuous Integration](https://github.com/composer/xdebug-handler/workflows/Continuous%20Integration/badge.svg?branch=main)](https://github.com/composer/xdebug-handler/actions)
 ![license](https://img.shields.io/github/license/composer/xdebug-handler.svg)
 ![php](https://img.shields.io/packagist/php-v/composer/xdebug-handler.svg?colorB=8892BF&label=php)
 
-Restart a CLI process without loading the Xdebug extension.
+Restart a CLI process without loading the Xdebug extension, unless `xdebug.mode=off`.
 
 Originally written as part of [composer/composer](https://github.com/composer/composer),
 now extracted and made available as a stand-alone library.
+
+### Version 2
+
+Support added for Xdebug3. See [UPGRADE](UPGRADE.md) for more information.
 
 ## Installation
 
@@ -32,20 +35,10 @@ $xdebug->check();
 unset($xdebug);
 ```
 
-The constructor takes two parameters:
-
-#### _$envPrefix_
-This is used to create distinct environment variables and is upper-cased and prepended to default base values. The above example enables the use of:
+The constructor takes a single parameter, `$envPrefix`, which is upper-cased and prepended to default base values to create two distinct environment variables. The above example enables the use of:
 
 - `MYAPP_ALLOW_XDEBUG=1` to override automatic restart and allow Xdebug
 - `MYAPP_ORIGINAL_INIS` to obtain ini file locations in a restarted process
-
-#### _$colorOption_
-This optional value is added to the restart command-line and is needed to force color output in a piped child process. Only long-options are supported, for example `--ansi` or `--colors=always` etc.
-
-If the original command-line contains an argument that pattern matches this value (for example `--no-ansi`, `--colors=never`) then _$colorOption_ is ignored.
-
-If the pattern match ends with `=auto` (for example `--colors=auto`), the argument is replaced by _$colorOption_. Otherwise it is added at either the end of the command-line, or preceding the first double-dash `--` delimiter.
 
 ## Advanced Usage
 
@@ -63,11 +56,17 @@ A temporary ini file is created from the loaded (and scanned) ini files, with an
 
 * `MYAPP_ALLOW_XDEBUG` is set with internal data to flag and use in the restart.
 * The command-line and environment are [configured](#process-configuration) for the restart.
-* The application is restarted in a new process using `passthru`.
+* The application is restarted in a new process.
     * The restart settings are stored in the environment.
     * `MYAPP_ALLOW_XDEBUG` is unset.
     * The application runs and exits.
 * The main process exits with the exit code from the restarted process.
+
+#### Signal handling
+From PHP 7.1 with the pcntl extension loaded, asynchronous signal handling is automatically enabled. `SIGINT` is set to `SIG_IGN` in the parent
+process and restored to `SIG_DFL` in the restarted process (if no other handler has been set).
+
+From PHP 7.4 on Windows, `CTRL+C` and `CTRL+BREAK` handling is ignored in the parent process and automatically enabled in the restarted process.
 
 ### Limitations
 There are a few things to be aware of when running inside a restarted process.
@@ -123,6 +122,9 @@ use Composer\XdebugHandler\XdebugHandler;
 $version = XdebugHandler::getSkippedVersion();
 # $version: '2.6.0' (for example), or an empty string
 ```
+
+#### _isXdebugActive()_
+Returns true if Xdebug is loaded and is running in an active mode (if it supports modes). Returns false if Xdebug is not loaded, or it is running with `xdebug.mode=off`.
 
 ### Setter methods
 These methods implement a fluent interface and must be called before the main `check()` method.
@@ -232,15 +234,16 @@ The following environment settings can be used to troubleshoot unexpected behavi
 ### Extending the library
 The API is defined by classes and their accessible elements that are not annotated as @internal. The main class has two protected methods that can be overridden to provide additional functionality:
 
-#### _requiresRestart($isLoaded)_
-By default the process will restart if Xdebug is loaded. Extending this method allows an application to decide, by returning a boolean (or equivalent) value. It is only called if `MYAPP_ALLOW_XDEBUG` is empty, so it will not be called in the restarted process (where this variable contains internal data), or if the restart has been overridden.
+#### _requiresRestart($default)_
+By default the process will restart if Xdebug is loaded and not running with `xdebug.mode=off`. Extending this method allows an application to decide, by returning a boolean (or equivalent) value.
+It is only called if `MYAPP_ALLOW_XDEBUG` is empty, so it will not be called in the restarted process (where this variable contains internal data), or if the restart has been overridden.
 
 Note that the [setMainScript()](#setmainscriptscript) and [setPersistent()](#setpersistent) setters can be used here, if required.
 
 #### _restart($command)_
 An application can extend this to modify the temporary ini file, its location given in the `tmpIni` property. New settings can be safely appended to the end of the data, which is `PHP_EOL` terminated.
 
-Note that the `$command` parameter is the escaped command-line string that will be used for the new process and must be treated accordingly.
+The `$command` parameter is an array of unescaped command-line arguments that will be used for the new process.
 
 Remember to finish with `parent::restart($command)`.
 
@@ -259,7 +262,7 @@ class MyRestarter extends XdebugHandler
 {
     private $required;
 
-    protected function requiresRestart($isLoaded)
+    protected function requiresRestart($default)
     {
         if (Command::isHelp()) {
             # No need to disable Xdebug for this
@@ -267,7 +270,7 @@ class MyRestarter extends XdebugHandler
         }
 
         $this->required = (bool) ini_get('phar.readonly');
-        return $isLoaded || $this->required;
+        return $this->required || $default;
     }
 
     protected function restart($command)

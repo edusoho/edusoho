@@ -80,6 +80,11 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $this->findInField('id', $ids);
     }
 
+    public function findCoursesByCategoryIds($categoryIds)
+    {
+        return $this->findInField('categoryId', $categoryIds);
+    }
+
     public function findPriceIntervalByCourseSetIds($courseSetIds)
     {
         if (empty($courseSetIds)) {
@@ -246,6 +251,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'course_v8.id = :id',
                 'course_v8.courseSetId = :courseSetId',
                 'course_v8.courseSetId IN (:courseSetIds)',
+                'course_v8.courseSetId NOT IN (:excludeCourseSetIds)',
                 'course_v8.updatedTime >= :updatedTime_GE',
                 'course_v8.status = :status',
                 'course_v8.type = :type',
@@ -260,6 +266,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'course_v8.originCoinPrice > :originCoinPrice_GT',
                 'course_v8.originCoinPrice = :originCoinPrice',
                 'course_v8.title LIKE :titleLike',
+                'course_v8.teacherIds LIKE :teacherIds',
                 'course_v8.courseSetTitle LIKE :courseSetTitleLike',
                 'course_v8.creator = :userId',
                 'course_v8.recommended = :recommended',

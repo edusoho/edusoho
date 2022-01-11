@@ -15,7 +15,6 @@ use Biz\Classroom\Dao\ClassroomMemberDao;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
-use Biz\Course\Dao\CourseNoteDao;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -30,16 +29,14 @@ use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\Product\Service\ProductService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
-use Biz\Taxonomy\Service\TagService;
 use Biz\Taxonomy\TagOwnerManager;
 use Biz\Thread\Service\ThreadService;
-use Biz\User\Service\StatusService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Order\Service\OrderService;
-use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -348,6 +345,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 }
 
                 $this->setClassroomCourses($classroomId, $newCourseIds);
+                $newTasks = $this->getTaskService()->findTasksByCourseIds($newCourseIds);
+                $this->dispatchEvent('course.task.copy', $newTasks);
             }
             $this->dispatchEvent(
                 'classroom.course.create',
@@ -720,7 +719,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
             }
 
-            if ('draft' !== $classroom['status']) {
+            if ('published' === $classroom['status']) {
                 $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
             }
 
@@ -904,7 +903,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     $this->getCourseSetService()->unlockCourseSet($course['courseSetId'], true);
                 }
 
-                $this->getCourseSetService()->resetParentIdByCourseId($course['id']);
+                $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
 
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
 
@@ -1100,7 +1099,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $courseSetIds = array_intersect(ArrayToolkit::column($teacherCourseSets, 'courseSetId'), $courseSetIds);
         }
 
-        return  $courseSetIds;
+        return $courseSetIds;
     }
 
     // becomeStudent的逻辑条件，写注释
@@ -2474,7 +2473,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'hitNum' => ['hitNum' => 'DESC'],
             'rating' => ['rating' => 'DESC'],
             'studentNum' => ['studentNum' => 'DESC'],
-            'recommendedSeq' => ['recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC'],
+            'recommendedSeq' => ['recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC', 'createdTime' => 'DESC'],
             'hotSeq' => ['hotSeq' => 'DESC', 'studentNum' => 'DESC', 'id' => 'DESC'],
         ];
         if (isset($typeOrderByMap[$order])) {
@@ -2682,14 +2681,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     }
 
     /**
-     * @return TagService
-     */
-    protected function getTagService()
-    {
-        return $this->createService('Taxonomy:TagService');
-    }
-
-    /**
      * @return CourseService
      */
     protected function getCourseService()
@@ -2735,30 +2726,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
-    }
-
-    /**
-     * @return VipRightService
-     */
-    protected function getVipRightService()
-    {
-        return $this->createService('VipPlugin:Marketing:VipRightService');
-    }
-
-    /**
-     * @return CourseNoteDao
-     */
-    protected function getNoteDao()
-    {
-        return $this->createDao('Course:CourseNoteDao');
-    }
-
-    /**
-     * @return StatusService
-     */
-    protected function getStatusService()
-    {
-        return $this->createService('User:StatusService');
     }
 
     /**
@@ -2850,11 +2817,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $biz['goods.entity.factory'];
     }
 
-    protected function getCourseMemberDao()
-    {
-        return $this->createDao('Course:CourseMemberDao');
-    }
-
     /**
      * @return CourseThreadService
      */
@@ -2869,5 +2831,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getThreadService()
     {
         return $this->createService('Thread:ThreadService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }

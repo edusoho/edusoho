@@ -16,8 +16,9 @@ use PhpCsFixer\Doctrine\Annotation\Tokens as DoctrineAnnotationTokens;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
-use PhpCsFixer\Tokenizer\Token as PhpToken;
-use PhpCsFixer\Tokenizer\Tokens as PhpTokens;
+use PhpCsFixer\Tokenizer\CT;
+use PhpCsFixer\Tokenizer\Token;
+use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
 
 /**
@@ -33,7 +34,7 @@ abstract class AbstractDoctrineAnnotationFixer extends AbstractFixer implements 
     /**
      * {@inheritdoc}
      */
-    public function isCandidate(PhpTokens $tokens)
+    public function isCandidate(Tokens $tokens)
     {
         return $tokens->isTokenKindFound(T_DOC_COMMENT);
     }
@@ -41,24 +42,24 @@ abstract class AbstractDoctrineAnnotationFixer extends AbstractFixer implements 
     /**
      * {@inheritdoc}
      */
-    protected function applyFix(\SplFileInfo $file, PhpTokens $phpTokens)
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
         // fetch indexes one time, this is safe as we never add or remove a token during fixing
-        $analyzer = new TokensAnalyzer($phpTokens);
+        $analyzer = new TokensAnalyzer($tokens);
         $this->classyElements = $analyzer->getClassyElements();
 
-        /** @var PhpToken $docCommentToken */
-        foreach ($phpTokens->findGivenKind(T_DOC_COMMENT) as $index => $docCommentToken) {
-            if (!$this->nextElementAcceptsDoctrineAnnotations($phpTokens, $index)) {
+        /** @var Token $docCommentToken */
+        foreach ($tokens->findGivenKind(T_DOC_COMMENT) as $index => $docCommentToken) {
+            if (!$this->nextElementAcceptsDoctrineAnnotations($tokens, $index)) {
                 continue;
             }
 
-            $tokens = DoctrineAnnotationTokens::createFromDocComment(
+            $doctrineAnnotationTokens = DoctrineAnnotationTokens::createFromDocComment(
                 $docCommentToken,
                 $this->configuration['ignored_tags']
             );
-            $this->fixAnnotations($tokens);
-            $phpTokens[$index] = new PhpToken([T_DOC_COMMENT, $tokens->getCode()]);
+            $this->fixAnnotations($doctrineAnnotationTokens);
+            $tokens[$index] = new Token([T_DOC_COMMENT, $doctrineAnnotationTokens->getCode()]);
         }
     }
 
@@ -183,6 +184,12 @@ abstract class AbstractDoctrineAnnotationFixer extends AbstractFixer implements 
                     'enduml',
                     'startuml',
 
+                    // Psalm
+                    'psalm',
+
+                    // PHPStan
+                    'phpstan',
+
                     // other
                     'fix',
                     'FIXME',
@@ -198,7 +205,7 @@ abstract class AbstractDoctrineAnnotationFixer extends AbstractFixer implements 
      *
      * @return bool
      */
-    private function nextElementAcceptsDoctrineAnnotations(PhpTokens $tokens, $index)
+    private function nextElementAcceptsDoctrineAnnotations(Tokens $tokens, $index)
     {
         do {
             $index = $tokens->getNextMeaningfulToken($index);
@@ -212,7 +219,7 @@ abstract class AbstractDoctrineAnnotationFixer extends AbstractFixer implements 
             return true;
         }
 
-        while ($tokens[$index]->isGivenKind([T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FINAL, T_ABSTRACT])) {
+        while ($tokens[$index]->isGivenKind([T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FINAL, T_ABSTRACT, T_NS_SEPARATOR, T_STRING, CT::T_NULLABLE_TYPE])) {
             $index = $tokens->getNextMeaningfulToken($index);
         }
 

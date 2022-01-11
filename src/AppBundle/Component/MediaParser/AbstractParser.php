@@ -6,6 +6,8 @@ abstract class AbstractParser
 {
     protected $mockedSender = null;
 
+    protected $userAgent = '';
+
     public function parse($url)
     {
         $isSuccess = false;
@@ -32,11 +34,11 @@ abstract class AbstractParser
         $parsedInfo['type'] = 'video';
 
         if ($isSuccess) {
-            $parsedInfo['files'] = array(
-                array(
+            $parsedInfo['files'] = [
+                [
                     'url' => $urlSuffix,
-                ),
-            );
+                ],
+            ];
 
             return $parsedInfo;
         } else {
@@ -103,12 +105,14 @@ abstract class AbstractParser
         curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-        // curl_setopt($curl, CURLOPT_USERAGENT, $this->options['user_agent']);
 
+        if ($this->userAgent) {
+            curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
+        }
         $content = curl_exec($curl);
         $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
 
-        return array('code' => $code, 'content' => $content);
+        return ['code' => $code, 'content' => $content];
     }
 }

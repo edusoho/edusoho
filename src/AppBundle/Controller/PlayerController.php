@@ -36,8 +36,9 @@ class PlayerController extends BaseController
             $options['watchLimitTime'] = $context['watchTimeLimit'];
         }
 
+        $userAgent = $request->headers->get('User-Agent', '');
         // 获取播放必须的token和resNo，以及一些个性化播放器参数
-        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file, '', $options);
+        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file, $userAgent, $options);
         if (is_array($context)) {
             $playerContext = array_merge($playerContext, $context);
         }

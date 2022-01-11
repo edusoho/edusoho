@@ -281,6 +281,14 @@ questionType:
     essay: Q&A
     material: Material
 
+itemQuestionType:
+    single_choice: Single choice
+    choice: Multiple choice
+    uncertain_choice: Indefinite choice
+    text: Gap filling
+    true_false: True or False
+    rich_text: Q&A
+
 difficulty:
     simple: Simple
     normal: Normal
@@ -597,6 +605,11 @@ reportAuditStatus:
     illegal: Illegal
 
 multiClassStatus:
-  not_start: Not Start
-  live: live
-  end: End
+    not_start: Not Start
+    live: live
+    end: End
+
+replayKeyWordType:
+    activityTitle: live Title
+    anchor: teacher
+    courseTitle: course Title

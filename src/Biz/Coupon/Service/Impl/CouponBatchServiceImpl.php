@@ -463,7 +463,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             case 'vip':
                 if ($this->isPluginInstalled('Vip')) {
                     //vip业务没有修改，沿用原来的id
-                    $target = $this->getLevelService()->getLevel($targetId);
+                    $target = $this->getLevelService()->getLevel($batch['targetId']);
                 } else {
                     $target = null;
                 }

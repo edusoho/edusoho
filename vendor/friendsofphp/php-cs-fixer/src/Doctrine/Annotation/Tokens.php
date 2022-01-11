@@ -41,6 +41,7 @@ final class Tokens extends \SplFixedArray
         $content = $input->getContent();
         $ignoredTextPosition = 0;
         $currentPosition = 0;
+        $token = null;
         while (false !== $nextAtPosition = strpos($content, '@', $currentPosition)) {
             if (0 !== $nextAtPosition && !Preg::match('/\s/', $content[$nextAtPosition - 1])) {
                 $currentPosition = $nextAtPosition + 1;
@@ -134,7 +135,7 @@ final class Tokens extends \SplFixedArray
      *
      * @param int $index
      *
-     * @return int|null
+     * @return null|int
      */
     public function getNextMeaningfulToken($index)
     {
@@ -146,7 +147,7 @@ final class Tokens extends \SplFixedArray
      *
      * @param int $index
      *
-     * @return int|null
+     * @return null|int
      */
     public function getPreviousMeaningfulToken($index)
     {
@@ -159,7 +160,7 @@ final class Tokens extends \SplFixedArray
      * @param string|string[] $type
      * @param int             $index
      *
-     * @return int|null
+     * @return null|int
      */
     public function getNextTokenOfType($type, $index)
     {
@@ -172,7 +173,7 @@ final class Tokens extends \SplFixedArray
      * @param string|string[] $type
      * @param int             $index
      *
-     * @return int|null
+     * @return null|int
      */
     public function getPreviousTokenOfType($type, $index)
     {
@@ -184,7 +185,7 @@ final class Tokens extends \SplFixedArray
      *
      * @param int $index
      *
-     * @return int|null
+     * @return null|int
      */
     public function getAnnotationEnd($index)
     {
@@ -228,7 +229,7 @@ final class Tokens extends \SplFixedArray
      *
      * @param int $index
      *
-     * @return int|null
+     * @return null|int
      */
     public function getArrayEnd($index)
     {
@@ -292,7 +293,10 @@ final class Tokens extends \SplFixedArray
                 $type = \get_class($token);
             }
 
-            throw new \InvalidArgumentException(sprintf('Token must be an instance of PhpCsFixer\\Doctrine\\Annotation\\Token, %s given.', $type));
+            throw new \InvalidArgumentException(sprintf(
+                'Token must be an instance of PhpCsFixer\\Doctrine\\Annotation\\Token, %s given.',
+                $type
+            ));
         }
 
         if (null === $index) {
@@ -311,7 +315,7 @@ final class Tokens extends \SplFixedArray
     public function offsetUnset($index)
     {
         if (!isset($this[$index])) {
-            throw new \OutOfBoundsException(sprintf('Index %s is invalid or does not exist.', $index));
+            throw new \OutOfBoundsException(sprintf('Index "%s" is invalid or does not exist.', $index));
         }
 
         $max = \count($this) - 1;
@@ -329,7 +333,7 @@ final class Tokens extends \SplFixedArray
      * @param int $index
      * @param int $direction
      *
-     * @return int|null
+     * @return null|int
      */
     private function getMeaningfulTokenSibling($index, $direction)
     {
@@ -353,7 +357,7 @@ final class Tokens extends \SplFixedArray
      * @param string|string[] $type
      * @param int             $direction
      *
-     * @return int|null
+     * @return null|int
      */
     private function getTokenOfTypeSibling($index, $type, $direction)
     {

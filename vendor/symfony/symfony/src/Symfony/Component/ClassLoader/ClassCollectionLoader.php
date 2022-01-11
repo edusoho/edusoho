@@ -12,7 +12,7 @@
 namespace Symfony\Component\ClassLoader;
 
 if (\PHP_VERSION_ID >= 70000) {
-    @trigger_error('The '.__NAMESPACE__.'\ClassCollectionLoader class is deprecated since Symfony 3.3 and will be removed in 4.0.', E_USER_DEPRECATED);
+    @trigger_error('The '.__NAMESPACE__.'\ClassCollectionLoader class is deprecated since Symfony 3.3 and will be removed in 4.0.', \E_USER_DEPRECATED);
 }
 
 /**
@@ -63,7 +63,7 @@ class ClassCollectionLoader
 
         // cache the core classes
         if (!is_dir($cacheDir) && !@mkdir($cacheDir, 0777, true) && !is_dir($cacheDir)) {
-            throw new \RuntimeException(sprintf('Class Collection Loader was not able to create directory "%s"', $cacheDir));
+            throw new \RuntimeException(sprintf('Class Collection Loader was not able to create directory "%s".', $cacheDir));
         }
         $cacheDir = rtrim(realpath($cacheDir) ?: $cacheDir, '/'.\DIRECTORY_SEPARATOR);
         $cache = $cacheDir.'/'.$name.$extension;
@@ -133,7 +133,7 @@ class ClassCollectionLoader
         // cache the core classes
         $cacheDir = \dirname($cache);
         if (!is_dir($cacheDir) && !@mkdir($cacheDir, 0777, true) && !is_dir($cacheDir)) {
-            throw new \RuntimeException(sprintf('Class Collection Loader was not able to create directory "%s"', $cacheDir));
+            throw new \RuntimeException(sprintf('Class Collection Loader was not able to create directory "%s".', $cacheDir));
         }
 
         $spacesRegex = '(?:\s*+(?:(?:\#|//)[^\n]*+\n|/\*(?:(?<!\*/).)++)?+)*+';
@@ -216,21 +216,26 @@ REGEX;
         $inNamespace = false;
         $tokens = token_get_all($source);
 
+        $nsTokens = [\T_WHITESPACE => true, \T_NS_SEPARATOR => true, \T_STRING => true];
+        if (\defined('T_NAME_QUALIFIED')) {
+            $nsTokens[T_NAME_QUALIFIED] = true;
+        }
+
         for ($i = 0; isset($tokens[$i]); ++$i) {
             $token = $tokens[$i];
             if (!isset($token[1]) || 'b"' === $token) {
                 $rawChunk .= $token;
-            } elseif (\in_array($token[0], [T_COMMENT, T_DOC_COMMENT])) {
+            } elseif (\in_array($token[0], [\T_COMMENT, \T_DOC_COMMENT])) {
                 // strip comments
                 continue;
-            } elseif (T_NAMESPACE === $token[0]) {
+            } elseif (\T_NAMESPACE === $token[0]) {
                 if ($inNamespace) {
                     $rawChunk .= "}\n";
                 }
                 $rawChunk .= $token[1];
 
                 // namespace name and whitespaces
-                while (isset($tokens[++$i][1]) && \in_array($tokens[$i][0], [T_WHITESPACE, T_NS_SEPARATOR, T_STRING])) {
+                while (isset($tokens[++$i][1], $nsTokens[$tokens[$i][0]])) {
                     $rawChunk .= $tokens[$i][1];
                 }
                 if ('{' === $tokens[$i]) {
@@ -240,15 +245,15 @@ REGEX;
                     $rawChunk = rtrim($rawChunk)."\n{";
                     $inNamespace = true;
                 }
-            } elseif (T_START_HEREDOC === $token[0]) {
+            } elseif (\T_START_HEREDOC === $token[0]) {
                 $output .= self::compressCode($rawChunk).$token[1];
                 do {
                     $token = $tokens[++$i];
                     $output .= isset($token[1]) && 'b"' !== $token ? $token[1] : $token;
-                } while (T_END_HEREDOC !== $token[0]);
+                } while (\T_END_HEREDOC !== $token[0]);
                 $output .= "\n";
                 $rawChunk = '';
-            } elseif (T_CONSTANT_ENCAPSED_STRING === $token[0]) {
+            } elseif (\T_CONSTANT_ENCAPSED_STRING === $token[0]) {
                 $output .= self::compressCode($rawChunk).$token[1];
                 $rawChunk = '';
             } else {
@@ -336,7 +341,7 @@ REGEX;
             try {
                 $reflectionClass = new \ReflectionClass($class);
             } catch (\ReflectionException $e) {
-                throw new \InvalidArgumentException(sprintf('Unable to load class "%s"', $class));
+                throw new \InvalidArgumentException(sprintf('Unable to load class "%s".', $class));
             }
 
             $map = array_merge($map, self::getClassHierarchy($reflectionClass));

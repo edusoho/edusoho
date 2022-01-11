@@ -271,7 +271,7 @@ admin_v2:
                                             group: groupButton
                                             router_params:
                                                 id: (classroom.id)
-                                            visible: ( classroom.status=='draft' )
+                                            visible: ( classroom.status=='draft' or classroom.status=='closed' )
                                         admin_v2_sms_prepare:
                                             name: admin_v2.btn.sms_send_btn
                                             router_name: admin_v2_sms_prepare
@@ -528,6 +528,10 @@ admin_v2:
                                     router_name: admin_v2_cloud_file
                                 admin_v2_cloud_attachment:
                                     name: admin_v2.cloud.attachment.basic_tab
+                                admin_v2_question_bank_attachment:
+                                  name: admin_v2.cloud.question_bank.attachment.basic_tab
+                                admin_v2_live_playback:
+                                    name: admin_v2.live_playback.basic_tab
                                 admin_v2_cloud_file_setting:
                                   name: admin_v2.cloud.file_setting.basic_tab
                                 admin_v2_cloud_attachment_setting:
@@ -973,6 +977,10 @@ admin_v2:
                                             router_name: group_add
                                             group: topBtn
                                             blank: 1
+                                admin_v2_operation_group_recommend_list:
+                                    name: admin_v2.operation.group.group_recommend_tab
+                                    router_name: admin_v2_group_recommend_list
+                                    disable: true
                                 admin_v2_operation_group_thread:
                                     name: admin_v2.operation.group.group_thread_tab
                                     disable: true
@@ -1137,37 +1145,6 @@ admin_v2:
                                             class: 'btn cancel-approval'
                                             mode: none
                                             group: groupButton
-                        # admin_v2_teacher:
-                        #     quick_entrance_icon: 'teacher'
-                        #     router_name: admin_v2_teacher
-                        #     name: admin_v2.user.teacher_menu
-                        #     children:
-                        #         admin_v2_teacher_manage:
-                        #             name: admin_v2.user.teacher.basic_tab
-                        #             router_name: admin_v2_teacher
-                        #             disable: true
-                        #             children:
-                        #                 admin_v2_teacher_promote:
-                        #                     name: admin_v2.user.teacher.basic_tab.promote_btn
-                        #                     class: promote-teacher
-                        #                     mode: modal
-                        #                     icon: 'glyphicon glyphicon-hand-up'
-                        #                     group: groupButton
-                        #                     visible: (user.promoted == 0)
-                        #                     router_params:
-                        #                         id: (user.id)
-                        #                         type: teacherList
-                        #                 admin_v2_teacher_promote_cancel:
-                        #                     name: admin_v2.btn.recommend_cancel_btn
-                        #                     class: cancel-promote-teacher
-                        #                     mode: none
-                        #                     group: groupButton
-                        #                     visible: (user.promoted == 1)
-                        #                     router_params:
-                        #                         id: (user.id)
-                        #         admin_v2_teacher_promote_list:
-                        #             name: admin_v2.user.teacher.promote_list_tab
-                        #             disable: true
                         admin_v2_destroy_account:
                             router_name: admin_v2_destroy_account_record
                             name: admin_v2.user.destroy_account_manage_menu
@@ -1180,6 +1157,13 @@ admin_v2:
                                     name: admin_v2.user.destroy_account.destroyed_tab
                                     router_name: admin_v2_destroyed_account
                                     disable: true
+                        admin_v2_scrm:
+                            name: admin_v2.user.scrm_menu
+                            class: js-new-corner-mark
+                            children:
+                                admin_v2_scrm_manage:
+                                    name: admin_v2.user.scrm_menu
+                                    router_name: admin_v2_scrm
         # 交易模块
         admin_v2_trade:
             quick_entrance_icon_class: 'icon-color-yellow'
@@ -1714,7 +1698,7 @@ admin_v2:
                         admin_v2is_s2b2c_enabled_cloud_data_lab_manage:
                             name: admin_v2.cloud.data_lab
                             class: js-new-corner-mark
-                            visible: (cloudStatus() and not is_s2b2c_enabled())
+                            visible: false
                             children:
                                 admin_v2_cloud_data_lab:
                                     name: admin_v2.cloud.data_lab
@@ -1749,7 +1733,7 @@ admin_v2:
                         #功能实验室
                         admin_v2_cloud_feature_lab:
                             name: admin_v2.cloud.feature_lab
-                            visible: (cloudStatus() and not is_s2b2c_enabled())
+                            visible: false
                             children:
                                 admin_v2_cloud_feature_lab_setting:
                                     name: admin_v2.cloud.feature_lab

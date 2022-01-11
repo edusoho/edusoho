@@ -12,7 +12,7 @@
 
 namespace PhpCsFixer\Fixer\PhpUnit;
 
-use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Fixer\AbstractPhpUnitFixer;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
 use PhpCsFixer\FixerConfiguration\AllowedValueSubset;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverRootless;
@@ -26,7 +26,7 @@ use PhpCsFixer\Tokenizer\Tokens;
 /**
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  */
-final class PhpUnitConstructFixer extends AbstractFixer implements ConfigurationDefinitionFixerInterface
+final class PhpUnitConstructFixer extends AbstractPhpUnitFixer implements ConfigurationDefinitionFixerInterface
 {
     private static $assertionFixers = [
         'assertSame' => 'fixAssertPositive',
@@ -34,14 +34,6 @@ final class PhpUnitConstructFixer extends AbstractFixer implements Configuration
         'assertNotEquals' => 'fixAssertNegative',
         'assertNotSame' => 'fixAssertNegative',
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isCandidate(Tokens $tokens)
-    {
-        return $tokens->isTokenKindFound(T_STRING);
-    }
 
     /**
      * {@inheritdoc}
@@ -61,18 +53,26 @@ final class PhpUnitConstructFixer extends AbstractFixer implements Configuration
             [
                 new CodeSample(
                     '<?php
-$this->assertEquals(false, $b);
-$this->assertSame(true, $a);
-$this->assertNotEquals(null, $c);
-$this->assertNotSame(null, $d);
+final class FooTest extends \PHPUnit_Framework_TestCase {
+    public function testSomething() {
+        $this->assertEquals(false, $b);
+        $this->assertSame(true, $a);
+        $this->assertNotEquals(null, $c);
+        $this->assertNotSame(null, $d);
+    }
+}
 '
                 ),
                 new CodeSample(
                     '<?php
-$this->assertEquals(false, $b);
-$this->assertSame(true, $a);
-$this->assertNotEquals(null, $c);
-$this->assertNotSame(null, $d);
+final class FooTest extends \PHPUnit_Framework_TestCase {
+    public function testSomething() {
+        $this->assertEquals(false, $b);
+        $this->assertSame(true, $a);
+        $this->assertNotEquals(null, $c);
+        $this->assertNotSame(null, $d);
+    }
+}
 ',
                     ['assertions' => ['assertSame', 'assertNotSame']]
                 ),
@@ -95,7 +95,7 @@ $this->assertNotSame(null, $d);
     /**
      * {@inheritdoc}
      */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    protected function applyPhpUnitClassFix(Tokens $tokens, $startIndex, $endIndex)
     {
         // no assertions to be fixed - fast return
         if (empty($this->configuration['assertions'])) {
@@ -105,7 +105,7 @@ $this->assertNotSame(null, $d);
         foreach ($this->configuration['assertions'] as $assertionMethod) {
             $assertionFixer = self::$assertionFixers[$assertionMethod];
 
-            for ($index = 0, $limit = $tokens->count(); $index < $limit; ++$index) {
+            for ($index = $startIndex; $index < $endIndex; ++$index) {
                 $index = $this->{$assertionFixer}($tokens, $index, $assertionMethod);
 
                 if (null === $index) {

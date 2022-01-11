@@ -30,6 +30,7 @@
     <input type="hidden" name="success_goto_url" value='{{ successGotoUrl }}'>
     <input type="hidden" name="success_continue_goto_url" value='{{ successContinueGotoUrl }}'>
     <input type="hidden" name="role" value='{{ role }}'>
+    <input type="hidden" name="media_type" value='{{ activity.mediaType }}'>
     {% block footer %}
         {% if showHeader|default(1) %}{{ parent() }}{% endif %}
     {% endblock %}

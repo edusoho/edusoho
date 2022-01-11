@@ -10,6 +10,7 @@ use Biz\Certificate\Service\CertificateService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\LessonService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\System\Service\SettingService;
@@ -70,6 +71,7 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('latest_live_task', [$this, 'getLatestLiveTask']),
             new \Twig_SimpleFunction('can_obtain_certificates', [$this, 'canObtainCertificates']),
             new \Twig_SimpleFunction('can_buy_course', [$this, 'canBuyCourse']),
+            new \Twig_SimpleFunction('display_task_title', [$this, 'displayTaskTitle']),
         ];
     }
 
@@ -379,6 +381,37 @@ class CourseExtension extends \Twig_Extension
         return $course['approval'] && 'approved' !== $user['approvalStatus'];
     }
 
+    public function displayTaskTitle($task)
+    {
+        $number = $this->getTaskService()->countTasks(['categoryId' => $task['categoryId'], 'seq_LT' => $task['seq']]);
+        if ($number) {
+            $task['number'] = $number;
+        } else {
+            $lesson = $this->getLessonService()->getLesson($task['categoryId']);
+            $task['number'] = $lesson['number'];
+        }
+        if ($task['isOptional']) {
+            return $this->trans('course.task.display', [
+                '%taskName%' => $this->trans('course.optional_task'),
+                '%taskNumber%' => '',
+                '%taskTitle%' => $task['title'],
+            ]);
+        }
+        if ('lesson' == $task['mode']) {
+            return $this->trans('course.lesson.display', [
+                '%part_name%' => $this->trans('site.data.lesson'),
+                '%number%' => $task['number'],
+                '%title%' => $task['title'],
+            ]);
+        }
+
+        return $this->trans('course.task.display', [
+            '%taskName%' => $this->trans($this->getCourseChapterAlias('task')),
+            '%taskNumber%' => $task['number'],
+            '%taskTitle%' => $task['title'],
+        ]);
+    }
+
     protected function isUserAvatarEmpty()
     {
         $user = $this->biz['user'];
@@ -440,6 +473,11 @@ class CourseExtension extends \Twig_Extension
         return empty($certificates) ? false : true;
     }
 
+    protected function trans($key, $parameters = [])
+    {
+        return $this->container->get('translator')->trans($key, $parameters);
+    }
+
     /**
      * @return SettingService
      */
@@ -494,6 +532,14 @@ class CourseExtension extends \Twig_Extension
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
+    }
+
+    /**
+     * @return LessonService
+     */
+    protected function getLessonService()
+    {
+        return $this->biz->service('Course:LessonService');
     }
 
     /**

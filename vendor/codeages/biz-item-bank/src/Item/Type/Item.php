@@ -3,12 +3,12 @@
 namespace Codeages\Biz\ItemBank\Item\Type;
 
 use Codeages\Biz\Framework\Util\ArrayToolkit;
-use Codeages\Biz\ItemBank\Util\Validator\Validator;
 use Codeages\Biz\ItemBank\ErrorCode;
-use Codeages\Biz\ItemBank\Item\Exception\ItemException;
-use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Codeages\Biz\ItemBank\ItemBank\Exception\ItemBankException;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
+use Codeages\Biz\ItemBank\Item\Exception\ItemException;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Codeages\Biz\ItemBank\Util\Validator\Validator;
 
 abstract class Item
 {
@@ -102,6 +102,11 @@ abstract class Item
 
         $seq = 1;
         foreach ($item['questions'] as &$question) {
+            $question['score_rule'] = [
+                'score' => $question['score'],
+                'scoreType' => empty($question['scoreType']) ? 'question':$question['scoreType'],
+                'otherScore' => empty($question['scoreType']) ? $question['score'] : $question['otherScore'],
+            ];
             $question['seq'] = $seq++;
             $question['case_sensitive'] = (isset($question['case_sensitive']) && $question['case_sensitive'] == false) ? 0 : 1;
             $question = $this->getQuestionProcessor()->process($question);

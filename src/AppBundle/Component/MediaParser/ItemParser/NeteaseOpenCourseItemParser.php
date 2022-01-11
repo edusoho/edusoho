@@ -12,7 +12,7 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
     protected function parseForWebUrl($item, $url)
     {
         $parseUrl = parse_url($url);
-        $query = empty($parseUrl['query']) ? array() : $this->convertUrlQuery($parseUrl['query']);
+        $query = empty($parseUrl['query']) ? [] : $this->convertUrlQuery($parseUrl['query']);
         if (!empty($query['pid'])) {
             $response = $this->fetchUrl(self::API_URL."/mob/{$query['pid']}/getMoviesForAndroid.do");
         }
@@ -30,23 +30,31 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
         $item['uuid'] = 'NeteaseOpenCourse:'.$item['id'];
         $item['name'] = $video['title'];
         $item['page'] = $url;
-        $item['pictures'] = array(
-            array('url' => empty($video['imgPath']) ? '' : $video['imgPath']),
-        );
+        $item['pictures'] = [
+            ['url' => empty($video['imgPath']) ? '' : $video['imgPath']],
+        ];
 
-        $item['files'] = array(
-            array(
+        $item['files'] = [
+            [
                 'url' => $this->getMp4Url($video),
                 'type' => 'mp4',
-            ),
-        );
+            ],
+        ];
+
+        preg_match('/pid=(.*?)&mid=(.*?)$/', $url, $matches);
+        if (!empty($data['videoList']) && !empty($matches[2])) {
+            $videoList = ArrayToolkit::index($data['videoList'], 'mid');
+            $midArr = $videoList[$matches[2]];
+            $item['name'] = empty($midArr['title']) ? $item['name'] : $midArr['title'];
+            $item['files']['url'] = empty($midArr['mp4SdUrl']) ? $item['files']['url'] : $midArr['mp4SdUrl'];
+        }
 
         return $item;
     }
 
     protected function getUrlPrefixes()
     {
-        return array('v.163.com/movie/', 'open.163.com/movie/', 'open.163.com/newview/movie');
+        return ['v.163.com/movie/', 'open.163.com/movie/', 'open.163.com/newview/movie'];
     }
 
     protected function convertMediaUri($video)
@@ -61,16 +69,16 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
 
     protected function getDefaultParsedInfo()
     {
-        return array(
+        return [
             'source' => 'NeteaseOpenCourse',
             'name' => '网易公开课视频',
-        );
+        ];
     }
 
     protected function convertUrlQuery($query)
     {
         $queryParts = explode('&', $query);
-        $params = array();
+        $params = [];
         foreach ($queryParts as $param) {
             $item = explode('=', $param);
             $params[$item[0]] = $item[1];
@@ -81,14 +89,14 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
 
     protected function getMp4Url($video)
     {
-        $urlList = array(
+        $urlList = [
             'mp4ShdUrl',
             'mp4HdUrl',
             'mp4SdUrl',
             'mp4ShdUrlOrign',
             'mp4HdUrlOrign',
             'mp4SdUrlOrign',
-        );
+        ];
 
         foreach ($urlList as $urlKey) {
             if (!empty($video[$urlKey])) {

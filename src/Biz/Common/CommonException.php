@@ -40,7 +40,11 @@ class CommonException extends AbstractException
 
     const SWITCH_OLD_VERSION_ERROR = 4030316;
 
-    public $messages = array(
+    const FIELDS_FORMAT_ERROR = 500317;
+
+    const UPGRADE_APP_VERSION = 4050301;
+
+    public $messages = [
         4030301 => 'exception.common_drag_captcha_error',
         4030302 => 'exception.common_drag_captcha_expired',
         4030303 => 'exception.common_drag_captcha_required',
@@ -57,5 +61,7 @@ class CommonException extends AbstractException
         4030314 => 'exception.common_upgrade_v2_error',
         4030315 => 'exception.switch_old_version.permission_error',
         4030316 => 'exception.switch_old_version.error',
-    );
+        500317 => 'exception.fields_format_error',
+        4050301 => 'exception.common_upgrade_app_version',
+    ];
 }
