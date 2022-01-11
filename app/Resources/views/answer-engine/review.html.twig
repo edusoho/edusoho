@@ -19,7 +19,6 @@
   {% endif %}
 {% endblock %}
 
-{% set isErrorCorrection = data('TestpaperReviewRole', { answerRecordId: answerRecord.id | default(null)}) %}
 
 {% block body %}
     {% block header %}
@@ -33,7 +32,6 @@
     <input type="hidden" name="success_continue_goto_url" value='{{ successContinueGotoUrl }}'>
     <input type="hidden" name="role" value='{{ role }}'>
     <input type="hidden" name="media_type" value='{{ activity.mediaType }}'>
-    <input type="hidden" name="is_error_correction" value='{{ isErrorCorrection }}'>
 
     {% block footer %}
         {% if showHeader|default(1) %}{{ parent() }}{% endif %}

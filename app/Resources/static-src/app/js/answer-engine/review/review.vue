@@ -3,7 +3,6 @@
     <item-review
       :role="role"
       :activity="activity"
-      :is-error-correction="isErrorCorrection"
       :assessment="assessment"
       :answerReport="answerReport"
       :answerRecord="answerRecord"
@@ -39,7 +38,6 @@
         fileId: 0,
         mediaType: $('[name=media_type]').val(),
         activity: {},
-        isErrorCorrection: $('[name=is_error_correction]').val()
       };
     },
     created() {

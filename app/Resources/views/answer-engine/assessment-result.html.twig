@@ -9,4 +9,8 @@
 
 {% include 'answer-engine/common.html.twig' %}
 {% include 'attachment-upload/upload-data.html.twig' %}
+
+{% set isErrorCorrection = data('TestpaperReviewRole', { answerRecordId: answerRecordId | default(null)}) %}
+
 <input type="hidden" name="answer_record_id" value='{{ answerRecordId }}'>
+<input type="hidden" name="is_error_correction" value='{{ isErrorCorrection }}'>
