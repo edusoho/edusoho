@@ -505,12 +505,12 @@ class TestpaperForm {
       let value = Number($parent.find('.js-score').val());
       let missValue = Number($parent.find('.js-miss-choice-score').val());
 
-      if(type === 'question' && (missValue > value)){
+      if(type === 'question' && (missValue > value) && $target.hasClass('js-miss-choice-score')){
         this._appendError($target, Translator.trans('course.miss_score.validator'));
         return false;
       }
 
-      if(type === 'option' && (missValue * $answer.length > value)){
+      if(type === 'option' && (missValue * $answer.length > value) && $target.hasClass('js-miss-choice-score')){
         this._appendError($target, Translator.trans('course.option_score.validator'));
         return false;
       }
