@@ -19,6 +19,7 @@
   {% endif %}
 {% endblock %}
 
+{% set isModityComment = data('TestpaperReviewRole', {answerRecordId: answerRecord.id | default(null)}) %}
 
 {% block body %}
   {% block header %}
@@ -51,7 +52,9 @@
                 <div class="teacher-comment__label">{{ 'testpaper.result.comment'|trans }}：</div>
                 <div class="teacher-comment__content js-comment-box">
                   <textarea class="js-comment-content">{{ answerReport.comment|default('') }}</textarea>
-                  <span class="modify-comment-btn js-modify-btn">{{ 'review.result.amend_comment' | trans }}</span>
+                  {% if isModityComment %}
+                    <span class="modify-comment-btn js-modify-btn">{{ 'review.result.amend_comment' | trans }}</span>
+                  {% endif %}
                 </div>
 
                 <div class="teacher-comment__input hidden js-modify-comment-box">
