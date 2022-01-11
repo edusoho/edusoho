@@ -93,7 +93,7 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
                 $questionReports = [];
                 foreach ($itemReport as $questionReport) {
                     $questionReport['attachments'] = empty($attachments[$questionReport['id']]) ? [] : $attachments[$questionReport['id']];
-                    $questionReports[] = ArrayToolkit::parts($questionReport, ['id', 'question_id', 'total_score', 'score', 'comment', 'status', 'response', 'attachments']);
+                    $questionReports[] = ArrayToolkit::parts($questionReport, ['id', 'question_id', 'total_score', 'score', 'comment', 'status', 'response', 'attachments', 'revise']);
                 }
 
                 $itemReportGroupByStatus = ArrayToolkit::group($questionReports, 'status');
@@ -164,6 +164,7 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
                 'comment' => empty($answerQuestionReports[$questionId]) ? '' : $answerQuestionReports[$questionId]['comment'],
                 'created_time' => empty($answerQuestionReports[$questionId]) ? '0' : $answerQuestionReports[$questionId]['created_time'],
                 'updated_time' => empty($answerQuestionReports[$questionId]) ? '0' : $answerQuestionReports[$questionId]['updated_time'],
+                'revise' => empty($answerQuestionReports[$questionId]) ? [] : $answerQuestionReports[$questionId]['revise']
             ];
         }
 

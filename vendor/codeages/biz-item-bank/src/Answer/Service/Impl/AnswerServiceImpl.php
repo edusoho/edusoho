@@ -2,14 +2,17 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
-use Codeages\Biz\ItemBank\BaseService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\ErrorCode;
-use Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException;
+use Biz\WrongBook\Dao\WrongQuestionDao;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
-use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
+use Codeages\Biz\ItemBank\BaseService;
+use Codeages\Biz\ItemBank\ErrorCode;
+use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 
 class AnswerServiceImpl extends BaseService implements AnswerService
@@ -317,6 +320,95 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $answerReport;
     }
 
+    public function reviseFillAnswer($answerRecordId, $fillData)
+    {
+        if(empty($fillData)){
+            return ;
+        }
+
+        try {
+            $this->beginTransaction();
+            $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+            $answerReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
+            $answerReports = ArrayToolkit::index($answerReports, 'item_id');
+            $answerReportQuestion = $answerReports[$fillData['item_id']];
+            $answerReportQuestion = $this->processFillQuestionReviseScore($answerRecord, $answerReportQuestion, $fillData);
+            $answerReports[$answerReportQuestion['item_id']] = $answerReportQuestion;
+            $answerReport = $this->processReviseAnswerReport($answerRecord, $answerReports);
+            $this->dispatch('answer.finished', $answerReport);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    protected function processReviseAnswerReport($answerRecord, $answerReports)
+    {
+        $answerReports = array_values($answerReports);
+        $subjectiveScore = $this->sumSubjectiveScore($answerReports);
+        $score = $this->sumScore($answerReports);
+        return $this->getAnswerReportService()->update($answerRecord['answer_report_id'], [
+            'total_score' => $this->sumTotalScore($answerReports),
+            'score' => $score,
+            'subjective_score' => $subjectiveScore,
+            'objective_score' => $score - $subjectiveScore,
+            'right_rate' => $this->sumRightRate($answerReports),
+            'right_question_count' => $this->getRightQuestionCount($answerReports),
+        ]);
+
+    }
+
+    protected function processFillQuestionReviseScore($answerRecord, $answerReportQuestion, $fillData)
+    {
+        $item = $this->getSectionItemService()->getItemByAssessmentIdAndItemId($answerReportQuestion['assessment_id'], $fillData['item_id']);
+        $questions = \AppBundle\Common\ArrayToolkit::index($item['score_rule'], 'question_id');
+        $questionRule = $questions[$answerReportQuestion['question_id']]['rule'];
+        $questionRule = \AppBundle\Common\ArrayToolkit::index($questionRule, 'name');
+        $question = $this->getQuestionDao()->get($answerReportQuestion['question_id']);
+        $answers = [];
+        foreach ($question['answer'] as $answer)
+        {
+            $answers[] = explode('|', $pointAnswer);
+        }
+        $result = [];
+        foreach ($answerReportQuestion['response'] as $key => $response)
+        {
+            $result[] = !empty($response) && in_array($response, $answers[$key]) ? 1 : 0;
+        }
+        $rightCount = 0;
+        $revise =$answerReportQuestion['revise'];
+        foreach ($fillData['answer'] as $key=>$value){
+            if(!empty($revise[$key])){
+                $rightCount ++;
+                continue;
+            }else{
+                $revise[$key] = 0;
+            }
+            if(!empty($result[$key]) || (empty($result[$key])&&!empty($value))){
+                $revise[$key] = 1;
+                $rightCount ++;
+                continue;
+            }
+        }
+        $rule = $questionRule['part_right'];
+        if($rule['score_rule']['scoreType'] == 'question'){
+            $score  = $rightCount == count($answers) ? $item['score'] :0.0;
+        }
+        if($rule['score_rule']['scoreType'] == 'option'){
+            $totle = $rule['score_rule']['otherScore'] *$rightCount;
+            $score  = $totle > $answerReportQuestion['score'] && $totle<$answerReportQuestion['total_score'] ? $totle : $answerReportQuestion['score'];
+        }
+
+        if($rightCount == count($answers)){
+            $this->getWrongQuestionDao()->batchDelete(['item_id'=>$item['id'], 'user_id'=>$answerRecord['user_id'], 'answer_scene_id' => $answerRecord['answer_scene_id']]);
+        }
+        return $this->getAnswerQuestionReportDao()->update($answerReportQuestion['id'], [
+            'score' => $score,
+            'revise' => $revise,
+        ]);
+    }
+
     protected function getQuestionReportScoreAndStatus($answerScene, $questionReport, $reviewQuestionReport, $assessmentQuestion)
     {
         if (empty($reviewQuestionReport) || empty($assessmentQuestion)) {
@@ -578,5 +670,34 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getItemService()
     {
         return $this->biz->service('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return QuestionDao
+     */
+    protected function getQuestionDao()
+    {
+        return $this->biz->dao('ItemBank:Item:QuestionDao');
+    }
+
+    /**
+     * @return AssessmentSectionItemService
+     */
+    protected function getSectionItemService()
+    {
+        return $this->biz->service('ItemBank:Assessment:AssessmentSectionItemService');
+    }
+
+    protected function getAnswerQuestionReportDao()
+    {
+        return $this->biz->dao('ItemBank:Answer:AnswerQuestionReportDao');
+    }
+
+    /**
+     * @return WrongQuestionDao
+     */
+    protected function getWrongQuestionDao()
+    {
+        return $this->biz->dao('WrongBook:WrongQuestionDao');
     }
 }
