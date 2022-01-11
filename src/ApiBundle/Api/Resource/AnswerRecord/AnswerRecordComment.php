@@ -15,7 +15,7 @@ class AnswerRecordComment extends AbstractResource
         }
         $comment = $request->request->get('comment', '');
         $answerReport = $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['comment' => $comment]);
-
+        $this->dispatchEvent('answer.comment.update', new Event($answerReport));
         return $answerReport;
     }
 

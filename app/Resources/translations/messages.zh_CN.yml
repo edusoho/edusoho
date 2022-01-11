@@ -7244,6 +7244,8 @@ admin.edu_cloud.edu_sms.homework_checked: 作业完成批阅
 admin.edu_cloud.edu_sms.homework_checked_tips: 您的课程：《课程名称》-《学习任务名称》的作业已被老师批阅，快来看看吧!
 admin.edu_cloud.edu_sms.testpaper_checked: 试卷完成批阅
 admin.edu_cloud.edu_sms.testpaper_checked_tips: 您的课程：《课程名称》-《学习任务名称》的试卷已被老师批阅，快来看看吧!
+admin.edu_cloud.edu_sms.comment_modify: 评语修改通知
+admin.edu_cloud.edu_sms.comment_modify_tips: 课程：《课程名称》-学习任务：[任务名称[考试/评语]任务]的教师评语已修改，点击查看[链接地址]
 admin.edu_cloud.edu_sms.invite_rewards_not_enough: 邀请注册奖励不足
 admin.edu_cloud.edu_sms.coupon_not_enough_tips: 您设置的［邀请注册］活动奖励［优惠券名称］仅剩 50 张，请及时关注剩余优惠券数量。
 admin.edu_cloud.edu_sms.invite_rewards_is_exhausted: 邀请注册奖励消耗完
@@ -11059,6 +11061,7 @@ wechat.notification.template.vip_expired: '亲爱的学员，您购买的会员�
 wechat.notification.message_subscribe_template.live_start: "订阅课程开课提醒<br><br>课程标题：[任务名]<br>时间：[直播开始时间（精确到分钟）]<br>主讲老师：[老师用户名] [如果有，额外显示老师手机号]<br>备注：[剩N次]通知，请进入课程学习页订阅"
 wechat.notification.message_subscribe_template.homework_result: "作业批改完成通知<br><br>标题：[任务名]<br>作业情况：[作业情况]([剩N次]通知)<br>评语：[评语]"
 wechat.notification.message_subscribe_template.exam_result: "考试成绩通知<br><br>考试名称：[任务名]<br>分数：[考试的分数]<br>温馨提示：[剩N次]通知，请进入课程学习页订阅"
+wechat.notification.message_subscribe_template.comment_modify: "点评完成提醒<br><br>相关课程：[课程名]<br>点评类别：[考试/作业]<br>作业标题：[任务名]<br>点评内容：[评语]<br>点评时间：[点评时间]"
 wechat.notification.message_subscribe_template.lesson_add: "课程上新通知<br><br>课程：[课程名]([课程类别])<br>老师：[教师用户名]<br>时间：[任务发布时间]或[直播开始时间]<br>备注：[剩N次]通知，请进入课程学习页订阅"
 wechat.notification.message_subscribe_template.ask_question: "学生提问提醒<br>课程名称: ([如果是班级，显示班级2字])[课程名称] 或 [班级名称]<br>提问者：[学生用户名]([剩N次]通知)<br>提问问题：[问题标题]<br>提问时间: [问题提交时间]"
 wechat.notification.message_subscribe_template.position.lesson_page_student: '课程学习页<br>（课程学员）'
@@ -11067,6 +11070,7 @@ wechat.notification.message_subscribe_template.position.lesson_page_teacher: '�
 wechat.notification.message_subscribe_sms.template.live_start: "【 在线教育 】 课程：[课程名称]－学习任务：[学习任务名称]将在［开播时间］开播！链接地址<br>"
 wechat.notification.message_subscribe_sms.template.homework_result: "【 在线教育 】 您的课程：[课程名称]-[学习任务名称]的作业已被老师批阅，快来看看吧!<br>"
 wechat.notification.message_subscribe_sms.template.exam_result: "【 在线教育 】 您的课程：[课程名称]-[学习任务名称]的试卷已被老师批阅，快来看看吧!<br>"
+wechat.notification.message_subscribe_sms.template.comment_modify: "【 在线教育 】 课程：《[课程名称]》-学习任务：【[任务名称][作业/考试]任务】的教师评语已修改，点击查看【网校链接】"
 wechat.notification.message_subscribe_sms.template.lesson_add: '普通课程:<br>【 在线教育 】 您的课程：[课程名称]－学习任务：[学习任务名称]已发布！链接地址<br>直播:<br>【 在线教育 】 课程：[课程名称]－学习任务：[学习任务名称]将在［开播时间］开播！链接地址'
 wechat.notification.message_subscribe_sms.template.vip_expired: '【 在线教育 】亲爱的学员，您购买的会员即将到期:<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
 wechat.notification.message_subscribe_sms.template.homework_or_testpaper_need_review: '【 在线教育 】尊敬的老师，您今日仍有作业/试卷未批改:<br>时间：[当日日期，精确到天]<br>数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
@@ -11083,6 +11087,7 @@ wechat.notification.template.homework_or_testpaper_need_review.rule: '针对至�
 wechat.notification.template.live_start.rule: '直播课开始前，会在指定时间发送通知给课程学员。'
 wechat.notification.template.homework_result.rule: '当作业中含有主观题时，老师批阅完成后会将结果发送给学员。'
 wechat.notification.template.exam_result.rule: '当试卷中含有主观题时，老师批阅完成后会将结果发送给学员。'
+wechat.notification.template.comment_modify.rule: '当教师完成教师评语的添加或修改，老师修改完成后会将结果发送给学员。'
 wechat.notification.template.lesson_add.rule: '当课程有新的任务发布时，会发一条通知给课程学员。'
 wechat.notification.template.charge_success.rule: '当学员成功充值虚拟币时，会发送一条通知。'
 wechat.notification.template.buy_success.rule: '当学员成功购买课程、班级或会员时，会发送一条通知。'
@@ -11099,6 +11104,7 @@ wechat.notification.template_name.vip_expired: '会员到期提醒'
 wechat.notification.template_name.live_start: '课程开课通知'
 wechat.notification.template_name.homework_result: '作业结果通知'
 wechat.notification.template_name.exam_result: '考试结果通知'
+wechat.notification.template_name.comment_modify: '评语修改通知'
 wechat.notification.template_name.lesson_add: '课程更新提醒'
 wechat.notification.template_name.charge_success: '充值成功通知'
 wechat.notification.template_name.buy_success: '购买成功通知'
