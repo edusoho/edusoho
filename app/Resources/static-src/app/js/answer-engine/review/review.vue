@@ -3,6 +3,7 @@
     <item-review
       :role="role"
       :activity="activity"
+      :is-error-correction="isErrorCorrection"
       :assessment="assessment"
       :answerReport="answerReport"
       :answerRecord="answerRecord"
@@ -37,7 +38,8 @@
         cdnHost: $('[name=cdn_host]').val(),
         fileId: 0,
         mediaType: $('[name=media_type]').val(),
-        activity: {}
+        activity: {},
+        isErrorCorrection: $('[name=is_error_correction]').val()
       };
     },
     created() {
