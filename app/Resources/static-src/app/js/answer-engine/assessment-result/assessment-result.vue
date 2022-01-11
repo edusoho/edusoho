@@ -10,6 +10,7 @@
       :cdnHost="cdnHost"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
+      :is-error-correction="isErrorCorrection"
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
       @error-correction="errorCorrection"
@@ -31,6 +32,7 @@
         },
         showAttachment: $('[name=show_attachment]').val(),
         cdnHost: $('[name=cdn_host]').val(),
+        isErrorCorrection: $('[name=is_error_correction]').val(),
         fileId: 0,
       };
     },
