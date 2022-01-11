@@ -1926,7 +1926,7 @@ course.homework.score.tip2: 请输入不大于试卷总分的数值
 course.scoer.validator: 请检查题目分数设置，存在题目设置错误
 course.miss_score.validator: 漏选分值不得超过题目分值
 course.option_score.validator: 选项总分不得超过题目分值
-testpaper.scoer.validator: 请检查各题型题目分数设置，存在题目设置错误
+testpaper.scoer.validator: 分值设置有误，请检查各题型题目分值设置
 testpaper.option_score.validator: 每项分值不得超过每题分值
 
 all: 全部

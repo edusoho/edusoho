@@ -1,5 +1,6 @@
 import BatchSelect from '../../../../common/widget/batch-select';
 import 'jquery-sortable';
+import notify from 'common/notify';
 
 class TestpaperForm {
   constructor($form) {
@@ -435,9 +436,12 @@ class TestpaperForm {
         self._validateQuestionScore($(this));
       });
 
+      if($('#testpaper-items-manager').find('.jq-validate-error').length > 0){
+        notify('danger', Translator.trans('testpaper.scoer.validator'));
+      }
       return $('#testpaper-items-manager').find('.jq-validate-error').length === 0;
 
-    }, $.validator.format(Translator.trans('testpaper.scoer.validator')));
+    }, $.validator.format(Translator.trans('')));
 
     this._initEditor(this.validator);
   }
