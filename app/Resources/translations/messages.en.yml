@@ -10882,7 +10882,8 @@ common.cancel_recommend.btn: Cancel Recommend
 course.homework.score_title.tips.choice: "Multiple choice score setting:<br>No points for wrong or multiple choices.<br>Missed selection: missed selection and no error, a fixed score.<br>Each item: if there is no wrong item, the score of the correct item is added up."
 course.homework.score_title.tips.uncertain_choice: "Uncertain choice score setting:<br>No points for wrong or multiple choices.<br>Missed selection: missed selection and no error, a fixed score.<br>Each item: if there is no wrong item, the score of the correct item is added up."
 course.homework.score_title.tips.material: "Multiple choice and Uncertain choice  score setting:<br>No points for wrong or multiple choices.<br>Missed selection: missed selection and no error, a fixed score.<br>Each item: if there is no wrong item, the score of the correct item is added up."
-
+course.homework.score.tip: 'Note: When there are homework qualification requirements, you need to set the topic score'
+course.homework.score.finish.tip: 'Note: The score is only used as a basis for judging the qualification of the homework, not for students to show'
 review.result.fail: Fail
 review.result.pass: Pass
 review.result.amend_comment: Amend comment

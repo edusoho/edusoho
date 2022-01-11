@@ -37,6 +37,9 @@ class TestpaperForm {
     $('.modal').on('selectQuestion', (event, typeQuestions) => this.selectQuestion(event, typeQuestions));
     this.initSortList();
     this.initTestpaperScore();
+    if($('#testpaper-form').data('import')) {
+      notify('danger', Translator.trans('testpaper.import.tip'));
+    }
   }
 
   initTestpaperScore() {

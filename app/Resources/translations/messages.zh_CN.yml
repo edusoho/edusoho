@@ -12140,6 +12140,8 @@ course.homework.score_set.select.question1: 每题
 course.homework.score_set.select.option1: 每空
 course.homework.score_set.select.question2: 漏选得分
 course.homework.score_set.select.option2: 每项正确得分
+course.homework.score.tip: 注：有作业合格要求时，需要设置题目分值
+course.homework.score.finish.tip: 注：得分仅作为作业合格的判断依据，不学员展示
 testpaper.score_set.option: 每题分值
 
 course.lesson.display: '%part_name% %number% : %title%'

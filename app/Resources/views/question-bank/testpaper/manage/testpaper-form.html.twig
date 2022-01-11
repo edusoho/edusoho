@@ -23,7 +23,7 @@
       {% block panel_body %}
         <div class="panel-body question-list-container js-testpaper-container">
           <div class="mtl">
-            <form id="testpaper-form" class="form-horizontal" method="post" data-url="
+            <form id="testpaper-form" data-import={{ isImport }} class="form-horizontal" method="post" data-url="
               {% if testpaper is defined %}
                 {{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, assessmentId: testpaper.id}) }}
               {% else %}

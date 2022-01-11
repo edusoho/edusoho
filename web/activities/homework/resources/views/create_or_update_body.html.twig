@@ -67,6 +67,7 @@
           <input type="hidden" name="questionLength" value="{% if questions|default(null) %} questionItems.lenght {% endif %}">
         </div>
       </div>
+        <p class="help-block color-warning pull-right" style="margin-top: -25px">{{ 'course.homework.score.tip'|trans }}</p>
       <div class="form-group">
         <div class="col-sm-12" style="margin-left: 50px; padding-right: 60px;">
           <table class="table" id="question-table">

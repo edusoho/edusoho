@@ -2090,3 +2090,4 @@ scrm.sales_analysis_performance_status_at_a_glance: 销售分析，一目了然�
 scrm.analyze_the_overall_situation_of_the_company_is_marketing: 对企业营销的整体情况进行分析；当销售完成客户跟进后，管理员还可对销售的销售效果进行分析。
 scrm.live_open_class: 直播公开课
 scrm.set_up_live_open_classes: 机构快速开设直播公开课，学员可在直播间购买正课；学员可邀请好友到直播间学习，实现裂变。
+testpaper.import.tip: 试卷导入成功，请在当前页面调整试卷分值。（注：多选题和不定项选题新增“每项”设置，填空题新增“每空”设置。）

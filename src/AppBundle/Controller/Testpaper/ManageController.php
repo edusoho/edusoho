@@ -672,9 +672,9 @@ class ManageController extends BaseController
             'displayable' => 1,
             'sections' => $this->assembleSections($items),
         ];
-        $this->getAssessmentService()->importAssessment($assessment);
+        $assessment =  $this->getAssessmentService()->importAssessment($assessment);
 
-        return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_testpaper_list', ['id' => $questionBank['id']])]);
+        return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_testpaper_edit', ['id' => $questionBank['id'], 'assessmentId'=>$assessment['id'], 'isImport'=> 1])]);
     }
 
     protected function assembleSections($items)
