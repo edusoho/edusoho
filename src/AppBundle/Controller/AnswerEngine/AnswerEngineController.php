@@ -8,6 +8,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AnswerEngineController extends BaseController
 {
@@ -61,6 +62,7 @@ class AnswerEngineController extends BaseController
             'answerRecordId' => $answerRecordId,
             'role' => $role,
             'activity' => $activity,
+            'goBackUrl' => $this->generateUrl('course_manage_testpaper_result_list', ['id' => $activity['fromCourseId'], 'testpaperId'=>$answerRecord['assessment_id'], 'activityId'=>$activity['id']], UrlGeneratorInterface::ABSOLUTE_URL)
         ]);
     }
 
