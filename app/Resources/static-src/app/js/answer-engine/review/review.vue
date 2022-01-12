@@ -15,6 +15,7 @@
       :media-type="mediaType"
       :finish-type="finishType"
       :submit-list="submitList"
+      @cancel="handleCancel"
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
       @getReviewData="getReviewData"
@@ -183,6 +184,10 @@
 
       handleViewHistoricalResult(params) {
         window.open(`/homework/result/${params.answer_record_id}/show?action=check`);
+      },
+
+      handleCancel() {
+        location.href = $('[name=goto_back_url]').val();
       }
     }
   }
