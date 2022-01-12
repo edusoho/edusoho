@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\AnswerRecord;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\System\Service\LogService;
+use Codeages\Biz\Framework\Event\Event;
 
 class AnswerRecordComment extends AbstractResource
 {
