@@ -41,9 +41,10 @@ class MeJoined extends AbstractResource
             0,
             PHP_INT_MAX
         );
+        $courseSetIds = empty(array_column($allLiveCourseSets, 'id')) ? [-1] : array_column($allLiveCourseSets, 'id');
 
         $members = $this->getCourseMemberService()->searchMembers(
-            ['courseSetIds' => array_column($allLiveCourseSets, 'id'), 'userId' => $this->getCurrentUser()->getId()],
+            ['courseSetIds' => $courseSetIds, 'userId' => $this->getCurrentUser()->getId()],
             ['lastLearnTime' => 'DESC'],
             0,
             PHP_INT_MAX
