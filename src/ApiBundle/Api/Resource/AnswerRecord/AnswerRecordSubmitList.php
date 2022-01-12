@@ -21,6 +21,7 @@ class AnswerRecordSubmitList extends AbstractResource
             [
                 'user_id' => $answerRecord['user_id'],
                 'assessment_id' => $answerRecord['assessment_id'],
+                'exclude_id' => $request->query->get('hasSelf', 0) ? -1 : $answerRecord['answer_report_id'],
             ],
             ['id' => 'ASC'],
             0,
