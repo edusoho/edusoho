@@ -7772,7 +7772,7 @@ activity.live.replay_guid_1: >
 activity.live.replay_guid: >
   Teachers: Live platform
   <span class='color-info'>after class </span>and
-  <span class='color-info'>live time</span> after the end, <span class='color-info'>the recording management of the class </span> management clicks to generate playback.
+  <span class='color-info'>live time</span> after the end,Live playback can be automatically generated
 
 activity.live.default_notice: >
   <p>The live broadcast starts at %startTimeFormat% and ends at %endTimeFormat%<p>

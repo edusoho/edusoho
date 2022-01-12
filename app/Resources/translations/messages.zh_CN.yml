@@ -9043,8 +9043,7 @@ activity.live.replay_guid_1: >
 activity.live.replay_guid: >
   老师们：直播平台
   <span class='color-info'>下课后</span>且
-  <span class='color-info'>直播时间</span>结束后，在课时管理的
-  <span class='color-info'>录播管理</span>点击生成回放。
+  <span class='color-info'>直播时间</span>结束后，直播回放可自动生成。
 
 activity.live.default_notice: >
   <p>直播将于%startTimeFormat%开始，于%endTimeFormat%结束<p>
