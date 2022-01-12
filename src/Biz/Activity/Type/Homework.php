@@ -30,7 +30,7 @@ class Homework extends Activity
             $homework['assessment'] = $this->getAssessmentService()->getAssessment($homework['assessmentId']);
             if (empty($homework['has_published'])) {
                 $homeworks = $this->getHomeworkActivityService()->findByAssessmentId($homework['assessmentId']);
-                $homework['has_published'] = in_array(1, ArrayToolkit::column($homeworks, 'has_published'));
+                $homework['isQuote'] = $homework['has_published'] = in_array(1, ArrayToolkit::column($homeworks, 'has_published'));
             }
         }
         if (isset($homework['has_published']) && empty($homework['has_published'])) {
@@ -163,7 +163,7 @@ class Homework extends Activity
             $activity = $this->getHomeworkActivityService()->create([
                 'answerSceneId' => $answerScene['id'],
                 'assessmentId' => $homework['assessmentId'],
-                'has_published' => 1,
+                'has_published' => 2,
             ]);
 
             $this->getBiz()['db']->commit();

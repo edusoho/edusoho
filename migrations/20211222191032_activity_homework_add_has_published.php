@@ -10,7 +10,7 @@ class ActivityHomeworkAddHasPublished extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("ALTER TABLE `activity_homework` ADD COLUMN `has_published` tinyint NOT NULL DEFAULT 0 COMMENT '是否发布过';");
+        $biz['db']->exec("ALTER TABLE `activity_homework` ADD COLUMN `has_published` tinyint NOT NULL DEFAULT 0 COMMENT '是否发布过0-未发布,1-已发布,2-被引用';");
     }
 
     /**
