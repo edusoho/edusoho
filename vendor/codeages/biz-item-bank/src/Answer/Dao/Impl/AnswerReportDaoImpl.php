@@ -33,7 +33,7 @@ class AnswerReportDaoImpl extends AdvancedDaoImpl implements AnswerReportDao
                 'created_time',
                 'updated_time',
             ],
-            'orderbys' => [],
+            'orderbys' => ['id', 'created_time'],
             'serializes' => [],
             'conditions' => [
                 'user_id = :user_id',
