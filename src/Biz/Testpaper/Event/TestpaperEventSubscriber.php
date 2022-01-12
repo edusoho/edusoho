@@ -58,7 +58,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         if (empty($activity['mediaType']) || !in_array($activity['mediaType'], ['homework', 'testpaper'])) {
             return;
         }
-        $this->processHomeWorkPassed($activity, $answerRecord);
+        $this->processAnswerReportPassed($activity, $answerRecord);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
         $user = $this->getBiz()['user'];
         $message = [
