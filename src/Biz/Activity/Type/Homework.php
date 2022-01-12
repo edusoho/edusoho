@@ -236,15 +236,11 @@ class Homework extends Activity
         if (empty($answerRecord)) {
             return false;
         }
-
         if ('submit' === $activity['finishType'] && in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED])) {
             return true;
         }
-
         $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
         if (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status'] && 'score' === $activity['finishType'] && $answerReport['score'] >= $activity['finishData']) {
-            $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['passed']);
-
             return true;
         }
 

@@ -19,6 +19,7 @@ use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
 use Biz\User\Service\TokenService;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -279,7 +280,7 @@ class ManageController extends BaseController
         $answerReports = ArrayToolkit::index($this->getAnswerReportService()->findByIds(ArrayToolkit::column($answerRecords, 'answer_report_id')), 'id');
         $studentIds = ArrayToolkit::column($answerRecords, 'user_id');
         $teacherIds = ArrayToolkit::column($answerReports, 'review_user_id');
-        $userIds = array_merge($studentIds, $teacherIds);
+        $userIds = array_values(array_unique(array_merge($studentIds, $teacherIds)));
         $users = $this->getUserService()->findUsersByIds($userIds);
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
@@ -303,7 +304,7 @@ class ManageController extends BaseController
                 $member .= $answerReport['score'].',';
                 $member .= $answerScene['pass_score'].',';
                 $member .= $this->getPassStatus($answerReport['grade']).',';
-                $reviewer = $this->getReviewer($users[$answerRecord['review_user_id']], $answerRecord);
+                $reviewer = $this->getReviewer($users[$answerReport['review_user_id']], $answerRecord);
                 $member .= is_numeric($reviewer) ? $reviewer."\t".',' : $reviewer.','; //批阅人
                 $member .= $answerReport['comment'] ? $answerReport['comment'].',' : '-'.','; //教师评语
 
@@ -358,10 +359,10 @@ class ManageController extends BaseController
                 $passStatus = $this->trans('良好');
                 break;
             case 'passed':
-                $passStatus = $this->trans('合格');
+                $passStatus = $this->trans('通过');
                 break;
             case 'unpassed':
-                $passStatus = $this->trans('不合格');
+                $passStatus = $this->trans('不通过');
                 break;
             default:
                 $passStatus = '-';
