@@ -70,10 +70,10 @@ class Homework extends Activity
                 'limited_time' => 0,
                 'do_times' => 0,
                 'redo_interval' => 0,
-                'need_score' => $fields['finishType'] == 'score' ? 1 : 0,
+                'need_score' => 'score' == $fields['finishType'] ? 1 : 0,
                 'manual_marking' => 1,
                 'start_time' => 0,
-                'pass_score' => $fields['finishData']
+                'pass_score' => $fields['finishData'],
             ]);
 
             $assessment = $this->createAssessment($fields['title'], $fields);
@@ -155,7 +155,7 @@ class Homework extends Activity
                 'limited_time' => 0,
                 'do_times' => 0,
                 'redo_interval' => 0,
-                'need_score' => $activity['finishType'] == 'score' ? 1 : 0,
+                'need_score' => 'score' == $activity['finishType'] ? 1 : 0,
                 'manual_marking' => 1,
                 'start_time' => 0,
             ]);
@@ -213,10 +213,10 @@ class Homework extends Activity
             ];
         }
 
-        $answerScene =$this->getAnswerSceneService()->get($homework['answerSceneId']);
+        $answerScene = $this->getAnswerSceneService()->get($homework['answerSceneId']);
         $answerScene['pass_score'] = $fields['finishData'];
-        $answerScene['need_score'] = $fields['finishType'] == 'score' ? 1 : 0;
-        $this->getAnswerSceneService()->update($homework['answerSceneId'],$answerScene);
+        $answerScene['need_score'] = 'score' == $fields['finishType'] ? 1 : 0;
+        $this->getAnswerSceneService()->update($homework['answerSceneId'], $answerScene);
         $this->getAssessmentService()->updateAssessment($homework['assessmentId'], $accessment);
 
         return $homework;
