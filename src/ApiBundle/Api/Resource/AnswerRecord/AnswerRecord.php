@@ -42,7 +42,7 @@ class AnswerRecord extends AbstractResource
             'assessment' => $assessment,
             'answer_scene' => $answerScene,
             'resultShow' => empty($testpaperActivity) ? true : $this->getResultShow($answerRecord, $answerScene, $answerReport),
-            'activity' => empty($testpaperActivity) ? [] : $testpaperActivity,
+            'activity' => empty($testpaperActivity) ? (object)[] : $testpaperActivity,
         ];
     }
 
