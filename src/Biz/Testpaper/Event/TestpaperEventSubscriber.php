@@ -4,6 +4,8 @@ namespace Biz\Testpaper\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -21,9 +23,9 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onAnswerSubmitted(Event $event)
     {
         $answerRecord = $event->getSubject();
-
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
+        $this->processHomeWorkPassed($activity, $answerRecord);
         if ('reviewing' == $answerRecord['status']) {
-            $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
             if (empty($activity['mediaType']) || !in_array($activity['mediaType'], ['homework', 'testpaper'])) {
                 return;
             }
@@ -56,7 +58,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         if (empty($activity['mediaType']) || !in_array($activity['mediaType'], ['homework', 'testpaper'])) {
             return;
         }
-
+        $this->processHomeWorkPassed($activity, $answerRecord);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
         $user = $this->getBiz()['user'];
         $message = [
@@ -70,6 +72,22 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         ];
 
         $result = $this->getNotificationService()->notify($answerRecord['user_id'], 'test-paper', $message);
+    }
+
+    protected function processHomeWorkPassed($activity, $answerRecord)
+    {
+        if (empty($activity['mediaType']) || empty($answerRecord) || $activity['mediaType'] != 'homework') {
+            return;
+        }
+        if ('submit' === $activity['finishType'] && in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED])) {
+            $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' =>'passed']);
+            return;
+        }
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
+        if (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status'] && 'score' === $activity['finishType'] && $answerReport['score'] >= $activity['finishData']) {
+            $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' =>'passed']);
+            return;
+        }
     }
 
     public function getTestpaperService()
@@ -127,5 +145,13 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     public function getAnswerRecordService()
     {
         return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerReportService');
     }
 }

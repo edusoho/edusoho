@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\SubmitAnswer;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class SubmitAnswer extends AbstractResource
 {
@@ -19,6 +20,9 @@ class SubmitAnswer extends AbstractResource
         return $this->getAnswerService()->submitAnswer($assessmentResponse);
     }
 
+    /**
+     * @return AnswerService
+     */
     protected function getAnswerService()
     {
         return $this->service('ItemBank:Answer:AnswerService');

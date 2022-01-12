@@ -254,7 +254,7 @@ class TestpaperController extends BaseController
         return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', [
             'questionBank' => $questionBank,
             'testpaper' => $assessment,
-            'isImport' => $request->query->get('isImport', 1),
+            'isImport' => $request->query->get('isImport', 0),
             'sections' => $this->setSectionsTypeAndQuestionCount($assessmentDetail['sections']),
             'itemCategories' => $itemCategories,
             'showBaseInfo' => $request->query->get('showBaseInfo', '1'),
