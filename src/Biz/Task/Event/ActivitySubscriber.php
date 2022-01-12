@@ -39,7 +39,7 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
             $homeworks = [];
             foreach ($activities as $activity) {
                 $homeworks[$activity['mediaId']] = [
-                    'has_published' => 1,
+                    'has_published' => 2,
                 ];
             }
             $this->getHomeworkActivityService()->batchUpdate(array_keys($homeworks), $homeworks);

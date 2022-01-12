@@ -2,6 +2,7 @@
 
 namespace Biz\Testpaper\Event;
 
+use Biz\Activity\Service\TestpaperActivityService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
@@ -47,6 +48,8 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
                     $this->getNotificationService()->notify($teacherId, 'test-paper', $message);
                 }
             }
+        } else {
+            $this->processComment($activity, $answerRecord);
         }
     }
 
@@ -79,16 +82,35 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         if (empty($activity['mediaType']) || empty($answerRecord)) {
             return;
         }
-        if($activity['mediaType'] == 'homework'){
+        if ('homework' == $activity['mediaType']) {
             if ('submit' === $activity['finishType'] && in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED])) {
-                $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' =>'passed']);
+                $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' => 'passed']);
+
                 return;
             }
         }
         $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
         if (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status'] && 'score' === $activity['finishType'] && $answerReport['score'] >= $activity['finishData']) {
-            $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' =>'passed']);
+            $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' => 'passed']);
+
             return;
+        }
+    }
+
+    protected function processComment($activity, $answerRecord)
+    {
+        if ('testpaper' == $activity['mediaType'] && $testPaper = $this->getTestpaperActivityService()->getActivity($activity['mediaId'])) {
+            $comment = '';
+            $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+            foreach ($testPaper['customComments'] as $customComment) {
+                if ($customComment['start'] <= $answerReport['score'] && $answerReport['score'] <= $customComment['end']) {
+                    $comment = $customComment['comment'];
+                    break;
+                }
+            }
+            if ($comment) {
+                $this->getAnswerReportService()->update($answerReport['id'], ['comment' => $comment]);
+            }
         }
     }
 
@@ -155,5 +177,13 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     protected function getAnswerReportService()
     {
         return $this->getBiz()->service('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->getBiz()->service('Activity:TestpaperActivityService');
     }
 }

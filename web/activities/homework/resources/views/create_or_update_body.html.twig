@@ -45,7 +45,7 @@
                     data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ activity.ext.assessment.description|default('') }}</textarea>
         </div>
       </div>
-      {% if activity.canEdit|default(0) or (activity.ext is defined and activity.ext.has_published is defined and activity.ext.has_published != 1)  %}
+      {% if activity.canEdit|default(0) or (activity.ext is defined and activity.ext.has_published is defined and activity.ext.has_published == 0)  %}
 
         {% if questions is not defined and activity.ext is defined and activity.ext is not empty %}
           {% set questionBank = activity.ext.questionBank %}
@@ -112,7 +112,8 @@
           <p class="help-block color-warning">{{ 'course.plan_task.activity_manage.homework.save_tips'|trans }}</p>
         </div>
       </div>
-      {% else %}
+      {% endif %}
+      {% if activity.ext is defined and ((activity.ext.has_published is defined and activity.ext.has_published == 2) or (activity.ext.isQuote is defined and activity.ext.isQuote)) %}
       <div class="form-group">
         <div class="col-sm-8 col-sm-offset-2">
           <p class="help-block color-danger">{{ 'course.plan_task.activity_manage.homework.can_not_edit_tips'|trans }}</p>
