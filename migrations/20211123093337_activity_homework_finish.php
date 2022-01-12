@@ -24,7 +24,6 @@ class ActivityHomeworkFinish extends Migration
         $biz = $this->getContainer();
         $biz['db']->exec('
             ALTER TABLE `activity_testpaper` DROP COLUMN `comment_data`;
-            ALTER TABLE `activity_homework` DROP COLUMN `finish_condition`;
         ');
     }
 }

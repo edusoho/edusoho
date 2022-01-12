@@ -74,7 +74,7 @@ class HomeworkController extends BaseController
         ]);
     }
 
-    public function showResultAction(Request $request, $answerRecordId)
+    public function showResultAction(Request $request, $answerRecordId, $type = 'default')
     {
         if (!$this->canLookAnswerRecord($answerRecordId)) {
             $this->createNewException(CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR());
@@ -92,13 +92,13 @@ class HomeworkController extends BaseController
         } else {
             $restartUrl = '';
         }
-
         return $this->render('homework/result.html.twig', [
             'answerReport' => $answerReport,
             'answerRecord' => $answerRecord,
             'answerRecordId' => $answerRecordId,
             'assessment' => $assessment,
             'restartUrl' => $restartUrl,
+            'type' => $type
         ]);
     }
 
