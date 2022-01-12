@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\AnswerRecord;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\System\Service\LogService;
 
 class AnswerRecordComment extends AbstractResource
 {
@@ -16,7 +17,16 @@ class AnswerRecordComment extends AbstractResource
         $comment = $request->request->get('comment', '');
         $answerReport = $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['comment' => $comment]);
         $this->dispatchEvent('answer.comment.update', new Event($answerReport));
+        $this->getLogService()->info('course', 'answer-record', "修改评语", ['answerRecord'=> $answerRecord, 'userId' => $this->getCurrentUser()->getId()]);
         return $answerReport;
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->service('System:LogService');
     }
 
     protected function getAnswerReportService()

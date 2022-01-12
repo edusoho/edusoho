@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use Biz\System\Service\LogService;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
@@ -325,7 +326,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         if(empty($fillData)){
             return ;
         }
-
         try {
             $this->beginTransaction();
             $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
@@ -336,6 +336,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $answerReports[$answerReportQuestion['item_id']] = $answerReportQuestion;
             $answerReport = $this->processReviseAnswerReport($answerRecord, $answerReports);
             $this->dispatch('answer.finished', $answerReport);
+            $this->getLogService()->info('course', 'revise-fill-answer', "修改了学员填空题得分", ['answerRecordId'=>$answerRecordId, 'userId' => $this->getCurrentUser()->getId(),'data'=>$fillData]);
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -699,5 +700,13 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getWrongQuestionDao()
     {
         return $this->biz->dao('WrongBook:WrongQuestionDao');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->biz->service('System:LogService');
     }
 }
