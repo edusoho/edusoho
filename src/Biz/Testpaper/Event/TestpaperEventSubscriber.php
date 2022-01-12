@@ -24,7 +24,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $answerRecord = $event->getSubject();
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
-        $this->processHomeWorkPassed($activity, $answerRecord);
+        $this->processAnswerReportPassed($activity, $answerRecord);
         if ('reviewing' == $answerRecord['status']) {
             if (empty($activity['mediaType']) || !in_array($activity['mediaType'], ['homework', 'testpaper'])) {
                 return;
@@ -74,14 +74,16 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         $result = $this->getNotificationService()->notify($answerRecord['user_id'], 'test-paper', $message);
     }
 
-    protected function processHomeWorkPassed($activity, $answerRecord)
+    protected function processAnswerReportPassed($activity, $answerRecord)
     {
-        if (empty($activity['mediaType']) || empty($answerRecord) || $activity['mediaType'] != 'homework') {
+        if (empty($activity['mediaType']) || empty($answerRecord)) {
             return;
         }
-        if ('submit' === $activity['finishType'] && in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED])) {
-            $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' =>'passed']);
-            return;
+        if($activity['mediaType'] == 'homework'){
+            if ('submit' === $activity['finishType'] && in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED])) {
+                $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' =>'passed']);
+                return;
+            }
         }
         $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
         if (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status'] && 'score' === $activity['finishType'] && $answerReport['score'] >= $activity['finishData']) {
