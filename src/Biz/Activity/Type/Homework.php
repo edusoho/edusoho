@@ -73,6 +73,7 @@ class Homework extends Activity
                 'need_score' => $fields['finishType'] == 'score' ? 1 : 0,
                 'manual_marking' => 1,
                 'start_time' => 0,
+                'pass_score' => $fields['finishData']
             ]);
 
             $assessment = $this->createAssessment($fields['title'], $fields);
@@ -213,6 +214,7 @@ class Homework extends Activity
         }
 
         $answerScene =$this->getAnswerSceneService()->get($homework['answerSceneId']);
+        $answerScene['pass_score'] = $fields['finishData'];
         $answerScene['need_score'] = $fields['finishType'] == 'score' ? 1 : 0;
         $this->getAnswerSceneService()->update($homework['answerSceneId'],$answerScene);
         $this->getAssessmentService()->updateAssessment($homework['assessmentId'], $accessment);
