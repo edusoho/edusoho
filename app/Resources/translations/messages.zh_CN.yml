@@ -11,7 +11,7 @@ site.not_support_cloud_video: >
   <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。安卓端允许在微信内置浏览器中观看。
 site.not_support_cloud_video_upgrade: >
   <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请用微信打开或<a href="%mobileUrl%" target="parent">下载App</a>。
-site.currency.CNY: 
+site.currency.CNY: 元
 site.date.year: 年
 site.date.month: 月
 site.date.day: 天
