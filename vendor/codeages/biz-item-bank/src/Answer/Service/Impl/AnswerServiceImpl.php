@@ -336,12 +336,13 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $answerReports[$answerReportQuestion['item_id']] = $answerReportQuestion;
             $answerReport = $this->processReviseAnswerReport($answerRecord, $answerReports);
             $this->dispatch('answer.finished', $answerReport);
-            $this->getLogService()->info('course', 'revise-fill-answer', "修改了学员填空题得分", ['answerRecordId'=>$answerRecordId, 'userId' => $this->getCurrentUser()->getId(),'data'=>$fillData]);
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
+            return false;
             throw $e;
         }
+        return true;
     }
 
     protected function processReviseAnswerReport($answerRecord, $answerReports)
@@ -702,11 +703,4 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $this->biz->dao('WrongBook:WrongQuestionDao');
     }
 
-    /**
-     * @return LogService
-     */
-    protected function getLogService()
-    {
-        return $this->biz->service('System:LogService');
-    }
 }
