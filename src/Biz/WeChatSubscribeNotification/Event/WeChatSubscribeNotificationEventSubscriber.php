@@ -51,7 +51,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             'thread.create' => 'onClassroomQuestionCreate',
             'course.thread.post.create' => 'onCourseQuestionAnswerCreate',
             'thread.post.create' => 'onClassroomQuestionAnswerCreate',
-            'answer.comment.update' => 'onAnswerCommentUpdate ',
+            'answer.comment.update' => 'onAnswerCommentUpdate',
         ];
     }
 
