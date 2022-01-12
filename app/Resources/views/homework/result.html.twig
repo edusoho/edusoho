@@ -28,6 +28,7 @@
 
   {% if answerRecord.status == 'finished' %}
     <input type="hidden" class="js-answer-record-id" value='{{ answerRecord.id }}'>
+    <input type="hidden" class="js-testpaper-type" value='{{ type|default('default') }}'>
     <div class="ibs-vue">
       <div class="ant-row">
         <div class="ant-col ant-col-offset-2 ibs-resutl-item">
@@ -50,9 +51,9 @@
               </div>
               <div class="teacher-comment">
                 <div class="teacher-comment__label">{{ 'testpaper.result.comment'|trans }}：</div>
-                <div class="teacher-comment__content js-comment-box {% if isModityComment %} teacher-comment__content--pb28 {% endif %}">
+                <div class="teacher-comment__content js-comment-box {% if isModityComment and type|default('default') == 'default' %} teacher-comment__content--pb28 {% endif %}">
                   <textarea disabled class="js-comment-content">{{ answerReport.comment|default('') }}</textarea>
-                  {% if isModityComment %}
+                  {% if isModityComment and type|default('default') == 'default' %}
                     <span class="modify-comment-btn js-modify-btn">{{ 'review.result.amend_comment' | trans }}</span>
                   {% endif %}
                 </div>
