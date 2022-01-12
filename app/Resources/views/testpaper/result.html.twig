@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="teacher-comment__input hidden js-modify-comment-box">
-                  <textarea class="comment-textarea js-comment-textarea" name="comment-textarea" rows="5">{{ answerReport.comment|default('') }}</textarea>
+                  <textarea maxlength="1500" class="comment-textarea js-comment-textarea" name="comment-textarea" rows="5">{{ answerReport.comment|default('') }}</textarea>
                   <select name="comment-select" class="comment-select js-comment-select">
                     {{ 'course.homework_check.review.common_comments' | trans | raw }}
                   </select>
