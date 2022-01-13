@@ -1,5 +1,5 @@
 <div class="modal cd-modal in js-score-modal" aria-hidden="true">
-  <div class="modal-dialog cd-modal-dialog" style="width: 600px !important;" data-clear="{{ closeClear|default(0) }}">
+  <div class="modal-dialog cd-modal-dialog" style="width: 615px !important;" data-clear="{{ closeClear|default(0) }}">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -17,7 +17,11 @@
            </div>
            <div class="score-item-score-div js-question-item"><span class="score-item-score-lab">{{'testpaper.score_set.option'|trans}}：</span>
              <input type="text" class="form-control score-validate js-score" name="single_choice_score" value="2" aria-label="...">
+             <span class="score-empty">\</span>
            </div>
+            <div class="score-item-tip">
+              {{'course.testpaper_manage.analysis_card.total_score'|trans}}<span class="js-score-totle">0</span>{{'site.data.score'|trans}}
+            </div>
           </div>
           <div class="js-score-set-choice score-item hidden" data-type="choice">
             <span class="score-item-type">【{{'question.type.multiple_choice'|trans}}】</span>
@@ -35,6 +39,9 @@
                 </div>
                 <input type="text" class="form-control score-validate js-miss-choice-score" name="choice_option" value="0" style="width: 60px" aria-label="...">
               </div>
+            </div>
+            <div class="score-item-tip">
+              {{'course.testpaper_manage.analysis_card.total_score'|trans}}<span class="js-score-totle">0</span>{{'site.data.score'|trans}}
             </div>
           </div>
           <div class="js-score-set-uncertain_choice score-item hidden" data-type="uncertain_choice">
@@ -54,6 +61,9 @@
                 <input type="text" class="form-control score-validate js-miss-choice-score" name="uncertain_choice_option" value="0" style="width: 60px" aria-label="...">
               </div>
             </div>
+            <div class="score-item-tip">
+              {{'course.testpaper_manage.analysis_card.total_score'|trans}}<span class="js-score-totle">0</span>{{'site.data.score'|trans}}
+            </div>
           </div>
           <div class="js-score-set-determine score-item hidden" data-type="determine">
             <span class="score-item-type">【{{'question.type.determine'|trans}}】</span>
@@ -62,6 +72,10 @@
             </div>
             <div class="score-item-score-div js-question-item"><span class="score-item-score-lab">{{'testpaper.score_set.option'|trans}}：</span>
               <input type="text" class="form-control score-validate js-score" name="true_false" value="2" aria-label="...">
+              <span class="score-empty">\</span>
+            </div>
+            <div class="score-item-tip">
+              {{'course.testpaper_manage.analysis_card.total_score'|trans}}<span class="js-score-totle">0</span>{{'site.data.score'|trans}}
             </div>
           </div>
           <div class="js-score-set-fill score-item hidden" data-type="fill">
@@ -77,7 +91,11 @@
                   </select>
                 </div>
                 <input type="text" class="form-control score-validate js-fill-score js-score" name="text_score" value="2" style="width: 140px;left: 51px" aria-label="...">
+                <span class="score-empty" style="margin-left: 15px">\</span>
               </div>
+            </div>
+            <div class="score-item-tip" style="float: inline-end !important;">
+              {{'course.testpaper_manage.analysis_card.total_score'|trans}}<span class="js-score-totle">0</span>{{'site.data.score'|trans}}
             </div>
           </div>
           <div class="js-score-set-essay score-item hidden" data-type="essay">
@@ -87,6 +105,10 @@
             </div>
             <div class="score-item-score-div js-question-item"><span class="score-item-score-lab">{{'testpaper.score_set.option'|trans}}：</span>
               <input type="text" class="form-control score-validate js-score" name="rich_text_score" value="2" aria-label="...">
+              <span class="score-empty">\</span>
+            </div>
+            <div class="score-item-tip">
+              {{'course.testpaper_manage.analysis_card.total_score'|trans}}<span class="js-score-totle">0</span>{{'site.data.score'|trans}}
             </div>
           </div>
           <input class="hidden" name="scores">
