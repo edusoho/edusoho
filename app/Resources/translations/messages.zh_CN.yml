@@ -12150,7 +12150,7 @@ common.cancel_recommend.btn: 取消推荐
 course.homework.score_title.tips.choice: "多选题分值设置：<br>错选和多选不得分。<br>漏选：漏选且无错项时，得固定分值。<br>每项：漏选且无错项时，累加正确选项的分值。"
 course.homework.score_title.tips.uncertain_choice: "不定项选择分值设置：<br>错选和多选不得分。<br>漏选：漏选且无错项时，得固定分值。<br>每项：漏选且无错项时，累加正确选项的分值。"
 course.homework.score_title.tips.material: "多选题和不定项选择分值设置：<br>错选和多选不得分。<br>漏选：漏选且无错项时，得固定分值。<br>每项：漏选且无错项时，累加正确选项的分值。"
-
+course.homework.score_title.tips: "多选题和不定项选择分值设置：<br>错选和多选不得分。<br>漏选：漏选且无错项时，得固定分值。<br>每项：漏选且无错项时，累加正确选项的分值。"
 review.result.fail: 未通过
 review.result.pass: 通过
 review.result.comment_tips: 修改评语后，将向学员发送评语修改通知
