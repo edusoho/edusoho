@@ -51,6 +51,10 @@
 }
 .mycart-object-card .object-message {
     line-height:80px;
+
+    @media(max-width: 500px) {
+      line-height: 40px;
+    }
 }
 .mycart-message-card {
     height:150px;
@@ -60,6 +64,13 @@
     text-align:right;
     margin-top:20px;
     margin-right:20px;
+
+    @media(max-width: 500px) {
+      margin-top: 0;
+      margin-right: 0;
+      width: 100%;
+      text-align: center;
+    }
 }
 .mycart-message-right img {
     height:80px;
