@@ -67,7 +67,7 @@
     "html5shiv": "3.7.3",
     "iframe-resizer": "3.5.5",
     "intro.js": "2.4.0",
-    "item-bank": "git+ssh://git@coding.codeages.work/item-bank/js-sdk.git#97a0bde34802f62c88635ad5392206a6b04c9898",
+    "item-bank": "git+ssh://git@coding.codeages.work/item-bank/js-sdk.git#767cc9ddd174fd98d896f0bc2a43d08e7af0f2e1",
     "jquery": "3.2.1",
     "jquery-base64": "^1.0.0",
     "jquery-blurr": "0.1.2",
