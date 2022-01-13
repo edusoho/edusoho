@@ -6,4 +6,16 @@
 
 {% set tran = 'api.notification.'~data.type~'.comment.'~data.mode %}
 
-{{ tran|trans({'%who%':who, '%what%':what}) }}{{ do }}
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {{ tran|trans({'%who%':who, '%what%':what}) }}{{ do }}
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime|date('site.date_format_H_i_s'|trans) }}
+    </div>
+  </div>
+</li>
