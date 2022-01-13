@@ -370,14 +370,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $questionRule = \AppBundle\Common\ArrayToolkit::index($questionRule, 'name');
         $question = $this->getQuestionDao()->get($answerReportQuestion['question_id']);
         $answers = [];
-        foreach ($question['answer'] as $answer)
+        foreach ($question['answer'] as $key =>$answer)
         {
-            $answers[] = explode('|', $pointAnswer);
+            $answers[$key] = explode('|', $answer);
         }
         $result = [];
         foreach ($answerReportQuestion['response'] as $key => $response)
         {
-            $result[] = !empty($response) && in_array($response, $answers[$key]) ? 1 : 0;
+            $result[$key] = !empty($response) && in_array($response, $answers[$key]) ? 1 : 0;
         }
         $rightCount = 0;
         $revise =$answerReportQuestion['revise'];
@@ -406,6 +406,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         if($rightCount == count($answers)){
             $this->getWrongQuestionDao()->batchDelete(['item_id'=>$item['id'], 'user_id'=>$answerRecord['user_id'], 'answer_scene_id' => $answerRecord['answer_scene_id']]);
         }
+
         return $this->getAnswerQuestionReportDao()->update($answerReportQuestion['id'], [
             'score' => $score,
             'revise' => $revise,

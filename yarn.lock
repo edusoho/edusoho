@@ -6148,9 +6148,9 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-"item-bank@git+ssh://git@coding.codeages.work/item-bank/js-sdk.git#35796daccf774953a2123d20e30565a647cef8d1":
+"item-bank@git+ssh://git@coding.codeages.work/item-bank/js-sdk.git#97a0bde34802f62c88635ad5392206a6b04c9898":
   version "1.0.29"
-  resolved "git+ssh://git@coding.codeages.work/item-bank/js-sdk.git#35796daccf774953a2123d20e30565a647cef8d1"
+  resolved "git+ssh://git@coding.codeages.work/item-bank/js-sdk.git#97a0bde34802f62c88635ad5392206a6b04c9898"
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
