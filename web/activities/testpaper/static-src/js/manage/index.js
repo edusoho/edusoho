@@ -60,7 +60,7 @@ class Testpaper {
         '                <input type="text" class="form-control" name="end['+ii+']" style="width: 47px;">\n' +
         '              </td>\n' +
         '              <td class="form-inline">\n' +
-        '                <textarea name="comment['+ii+']" rows="1" class="form-control js-comment-content" style="width: 339px;margin-right: 15px;"></textarea>\n' +
+        '                <textarea name="comment['+ii+']" rows="1" maxlength="1500" class="form-control js-comment-content" style="width: 339px;margin-right: 15px;"></textarea>\n' +
         '                <div class="default-comment">\n' +
         '                  <a href="javascript:;" class="js-default-comment">' + Translator.trans('activity.testpaper_manage.default_comment') + '</a>\n' +
         '                   <div class="default-comment-list hidden">' +
