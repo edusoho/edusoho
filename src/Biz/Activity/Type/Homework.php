@@ -73,7 +73,7 @@ class Homework extends Activity
                 'need_score' => 'score' == $fields['finishType'] ? 1 : 0,
                 'manual_marking' => 1,
                 'start_time' => 0,
-                'pass_score' => $fields['finishData'],
+                'pass_score' => empty($fields['finishData'])?0:$fields['finishData'],
             ]);
 
             $assessment = $this->createAssessment($fields['title'], $fields);
