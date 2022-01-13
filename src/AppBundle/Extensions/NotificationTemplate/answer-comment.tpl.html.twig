@@ -2,7 +2,8 @@
 {% import 'macro.html.twig' as macro %}
 {% set who = data.userName %}
 {% set what = data.name %}
-{% set do = macro.link('admin.live_manage.show_detail'|trans, path('homework_result_show',{answerRecordId:data.id,action:'my'})) %}
+
+{% set do = macro.link('admin.live_manage.show_detail'|trans, path(data.type~'_result_show',{answerRecordId:data.id,action:'my'})) %}
 
 {% set tran = 'api.notification.'~data.type~'.comment.'~data.mode %}
 
