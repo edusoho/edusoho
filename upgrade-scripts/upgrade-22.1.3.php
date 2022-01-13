@@ -99,6 +99,15 @@ class EduSohoUpgrade extends AbstractUpdater
         if(!$this->isFieldExist('activity_testpaper', 'customComments')){
             $this->getConnection()->exec("ALTER TABLE `activity_testpaper` ADD COLUMN `customComments` text COMMENT '自动评语';");
         }
+
+        if(!$this->isFieldExist('biz_answer_question_report', 'revise')){
+            $this->getConnection()->exec("ALTER TABLE `biz_answer_question_report` ADD COLUMN `revise` text COMMENT '纠正';");
+        }
+
+        if(!$this->isFieldExist('activity_homework', 'has_published')){
+            $this->getConnection()->exec("ALTER TABLE `activity_homework` ADD COLUMN `has_published` tinyint NOT NULL DEFAULT 0 COMMENT '是否发布过0-未发布,1-已发布,2-被引用';");
+        }
+
         return 1;
     }
 
