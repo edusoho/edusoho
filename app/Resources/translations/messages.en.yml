@@ -1880,6 +1880,7 @@ course.plan_task.activity_manage.testpaper.show_answer: Show the answer and anal
 course.plan_task.activity_manage.testpaper.show_answer_tips: The setting takes effect when the number of exams is not limited.
 course.plan_task.activity_manage.testpaper.redo_interval: 'Retry interval'
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 'Retry Time Interval: Start time after completion of approval. '
+course.plan_task.activity_manage.testpaper.comment_tips: 'Scoring interval setting rules: 1. The scoring interval includes the lower limit and upper limit of the interval. 2. When the student score is greater than or equal to the lower limit of the interval or less than the upper limit of the interval, the comments of the interval will be automatically displayed. 3. If there are overlapping score ranges, the comments ranked at the top in the comment list will be displayed first.'
 course.plan_task.activity_manage.testpaper.time: Time
 course.plan_task.activity_manage.testpaper.time_tips: 'Students can only take the exam within the time frame.'
 course.plan_task.activity_manage.testpaper.mode.always: 'No limitation'
@@ -10886,4 +10887,5 @@ course.homework.score.tip: 'Note: When there are homework qualification requirem
 course.homework.score.finish.tip: 'Note: The score is only used as a basis for judging the qualification of the homework, not for students to show'
 review.result.fail: Fail
 review.result.pass: Pass
+review.result.comment_tips: After modifying the comment, a comment modification notice will be sent to the students
 review.result.amend_comment: Amend comment
