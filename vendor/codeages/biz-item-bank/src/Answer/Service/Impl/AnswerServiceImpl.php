@@ -4,6 +4,7 @@ namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
 use Biz\System\Service\LogService;
 use Biz\WrongBook\Dao\WrongQuestionDao;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
@@ -393,15 +394,15 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 continue;
             }
         }
+
         $rule = $questionRule['part_right'];
         if($rule['score_rule']['scoreType'] == 'question'){
-            $score  = $rightCount == count($answers) ? $item['score'] :0.0;
+            $score  = $rightCount == count($answers) ? $item['score'] : 0.0;
         }
         if($rule['score_rule']['scoreType'] == 'option'){
             $totle = $rule['score_rule']['otherScore'] *$rightCount;
-            $score  = $totle > $answerReportQuestion['score'] && $totle<$answerReportQuestion['total_score'] ? $totle : $answerReportQuestion['score'];
+            $score  = $totle >= $answerReportQuestion['score'] && $totle<=$answerReportQuestion['total_score'] ? $totle : $answerReportQuestion['score'];
         }
-
         if($rightCount == count($answers)){
             $this->getWrongQuestionDao()->batchDelete(['item_id'=>$item['id'], 'user_id'=>$answerRecord['user_id'], 'answer_scene_id' => $answerRecord['answer_scene_id']]);
         }
