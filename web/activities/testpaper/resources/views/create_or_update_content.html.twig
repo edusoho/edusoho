@@ -78,7 +78,10 @@
               <tr>
                 <th>
                   {{ 'course.plan_task.activity_manage.testpaper.score'|trans }}
-                  <i class="es-icon es-icon-help color-gray" data-toggle="tooltip" data-placement="right" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.comment_tips'|trans }}"></i>
+                  <span class="link-medium es-icon es-icon-help ml5"
+                        data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+                        data-content="{{ 'course.plan_task.activity_manage.testpaper.comment_tips'|trans()|raw}}">
+      </span>
                 </th>
                 <th>{{ 'course.plan_task.activity_manage.testpaper.comment_content'|trans }}</th>
                 <th>{{ 'course.plan_task.activity_manage.testpaper.comment_operation'|trans }}</th>
