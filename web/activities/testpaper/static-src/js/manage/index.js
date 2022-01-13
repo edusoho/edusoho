@@ -56,8 +56,8 @@ class Testpaper {
     $('#addComment').on('click', function () {
       let tr = '<tr>\n' +
         '              <td class="form-inline">\n' +
-        '                <input type="text" class="form-control" name="start['+ii+']" style="width: 47px;"> -\n' +
-        '                <input type="text" class="form-control" name="end['+ii+']" style="width: 47px;">\n' +
+        '                <input type="text" class="form-control" name="start['+ii+']" style="width: 47px; padding: 6px;"> -\n' +
+        '                <input type="text" class="form-control" name="end['+ii+']" style="width: 47px; padding: 6px;">\n' +
         '              </td>\n' +
         '              <td class="form-inline">\n' +
         '                <textarea name="comment['+ii+']" rows="1" maxlength="1500" class="form-control js-comment-content" style="width: 339px;margin-right: 15px;"></textarea>\n' +
