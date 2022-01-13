@@ -288,11 +288,11 @@ class ClassroomManageController extends BaseController
         $condition = array_merge($condition, ['classroomId' => $id, 'role' => 'student']);
         $this->filterDeadlineConditions($condition, $request->request->get('expired'));
 
-        $students = $this->getClassroomService()->searchMembers(
+        $students = $this->getClassroomService()->searchMembersByClassroomId(
+            $id,
             $condition,
-            ['createdTime' => 'DESC'],
             0,
-            $this->getClassroomService()->searchMemberCount($condition)
+            $this->getClassroomService()->countMembersByClassroomId($id, $condition)
         );
 
         $studentIds = ArrayToolkit::column($students, 'userId');

@@ -31,7 +31,9 @@ class PartRightScoreRule extends ScoreRule
             return ['status' => '', 'score' => 0];
         }
 
-        return ['status' => AnswerQuestionReportService::STATUS_PART_RIGHT, 'score' => $rule['score']];
+        $score = in_array($questionResult['answer_mode'], ['uncertain_choice', 'choice']) ? $rule['score_rule']['otherScore'] : 0;
+
+        return ['status' => AnswerQuestionReportService::STATUS_PART_RIGHT, 'score' => $score];
     }
 
     protected function processScore($questionResult, $rule)

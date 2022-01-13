@@ -12153,4 +12153,10 @@ course.homework.score_title.tips.material: "多选题和不定项选择分值设
 
 review.result.fail: 未通过
 review.result.pass: 通过
+review.result.comment_tips: 修改评语后，将向学员发送评语修改通知
 review.result.amend_comment: 修改评价
+testpaper.import.tip: 试卷导入成功，请在当前页面调整试卷分值。（注：多选题和不定项选题新增“每项”设置，填空题新增“每空”设置。）
+course.plan_task.activity_manage.testpaper.comment_tips: 得分区间设置规则：<br>1、得分区间包含区间下限和区间上限。<br>2、当学员得分，大于等于区间下限或小于区间上限，自动显示该区间评语。<br>3、如果存在得分区间重叠情况，优先显示在评语列表中排序靠前的评语。
+
+
+

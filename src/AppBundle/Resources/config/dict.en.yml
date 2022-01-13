@@ -390,7 +390,7 @@ userInfoFields:
     weixin: Wechat
 
 passedStatus:
-    none: '-'
+    none: Unqualified
     excellent: Excellent
     good: Good
     passed: Passed

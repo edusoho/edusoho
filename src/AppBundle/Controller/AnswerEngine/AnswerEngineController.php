@@ -62,7 +62,7 @@ class AnswerEngineController extends BaseController
             'answerRecordId' => $answerRecordId,
             'role' => $role,
             'activity' => $activity,
-            'goBackUrl' => $this->generateUrl('course_manage_testpaper_result_list', ['id' => $activity['fromCourseId'], 'testpaperId'=>$answerRecord['assessment_id'], 'activityId'=>$activity['id']], UrlGeneratorInterface::ABSOLUTE_URL)
+            'goBackUrl' => $this->generateUrl('course_manage_testpaper_result_list', ['id' => $activity['fromCourseId'], 'testpaperId'=>$answerRecord['assessment_id'], 'activityId'=>$activity['id'], 'status'=>'reviewing'], UrlGeneratorInterface::ABSOLUTE_URL)
         ]);
     }
 

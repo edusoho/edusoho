@@ -37,9 +37,13 @@ class TestpaperForm {
     $('.modal').on('selectQuestion', (event, typeQuestions) => this.selectQuestion(event, typeQuestions));
     this.initSortList();
     this.initTestpaperScore();
-    if($('#testpaper-form').data('import')) {
-      notify('danger', Translator.trans('testpaper.import.tip'));
-    }
+
+    $('.js-score').on('change',function (event){
+      let parent = $(this).parents('.score-item');
+      let count = Number(parent.find('.js-score-item-num').html());
+      let value = Number($(this).val());
+      parent.find('.js-score-totle').html(count*value);
+    });
   }
 
   initTestpaperScore() {
@@ -225,7 +229,12 @@ class TestpaperForm {
           }
         }
       }
-
+      $('.js-score').each(function (){
+        let parent = $(this).parents('.score-item');
+        let count = Number(parent.find('.js-score-item-num').html());
+        let value = Number($(this).val());
+        parent.find('.js-score-totle').html(count*value);
+      });
       this.$scoreModal.modal('show');
     }
   }

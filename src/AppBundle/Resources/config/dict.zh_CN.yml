@@ -408,7 +408,7 @@ userInfoFields:
     weixin: 微信
 
 passedStatus:
-    none: '-'
+    none: 不合格
     excellent: 优秀
     good: 良好
     passed: 合格

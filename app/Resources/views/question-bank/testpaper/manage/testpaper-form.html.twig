@@ -23,7 +23,10 @@
       {% block panel_body %}
         <div class="panel-body question-list-container js-testpaper-container">
           <div class="mtl">
-            <form id="testpaper-form" data-import={{ isImport|default(0) }} class="form-horizontal" method="post" data-url="
+            {% if isImport|default(0) %}
+              <div style="background: #FFFBE6;border: 1px solid #FFE58F;border-radius: 4px;padding: 16px;margin-bottom: 25px;margin-left: 20px;font-size: 14px;color: #333333;letter-spacing: 0;font-weight: 400;">{{ 'testpaper.import.tip'|trans }}</div>
+            {% endif %}
+            <form id="testpaper-form" class="form-horizontal" method="post" data-url="
               {% if testpaper is defined %}
                 {{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, assessmentId: testpaper.id}) }}
               {% else %}
