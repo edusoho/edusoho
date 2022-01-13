@@ -2,6 +2,7 @@
 
 namespace Biz\Testpaper\Event;
 
+use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -75,6 +76,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         ];
 
         $result = $this->getNotificationService()->notify($answerRecord['user_id'], 'test-paper', $message);
+        $this->notify($answerRecord);
     }
 
     protected function processAnswerReportPassed($activity, $answerRecord)
@@ -110,8 +112,33 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
             }
             if ($comment) {
                 $this->getAnswerReportService()->update($answerReport['id'], ['comment' => $comment]);
+                $this->notify($answerRecord);
             }
         }
+    }
+
+    protected function notify($answerRecord)
+    {
+        $user = $this->getBiz()['user'];
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
+        $message = [
+            'id' => $answerRecord['id'],
+            'courseId' => $activity['fromCourseId'],
+            'name' => $activity['title'],
+            'userId' => $user['id'],
+            'userName' => $user['nickname'],
+            'type' => $activity['mediaType'],
+            'mode' => 'create'
+        ];
+        $this->getNotificationService()->notify($answerRecord['user_id'], 'answer-comment', $message);
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     public function getTestpaperService()
@@ -132,14 +159,6 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     public function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return ActivityService
-     */
-    public function getActivityService()
-    {
-        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     public function getStatusService()
