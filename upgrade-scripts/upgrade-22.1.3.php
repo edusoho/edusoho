@@ -1,5 +1,8 @@
 <?php
 
+use Biz\Activity\Dao\ActivityDao;
+use Biz\Activity\Dao\HomeworkActivityDao;
+use Biz\Task\Dao\TaskDao;
 use Codeages\Biz\ItemBank\Item\Dao\ItemDao;
 use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
 use Symfony\Component\Filesystem\Filesystem;
@@ -56,6 +59,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'processTable',
             'processAssessmentSectionItem',
             'processAssessmentQuestion',
+            'processHomeworkActivity'
         );
 
         $funcNames = array();
@@ -113,7 +117,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function processAssessmentSectionItem($page)
     {
-        $sectionItems = $this->getAssessmentSectionItemDao()->search([],['created_time'=>'ASC'],($page-1) * 500, 500);
+        $sectionItems = $this->getAssessmentSectionItemDao()->search([],['created_time'=>'ASC'],($page-1) * 1500, 1500);
         if(empty($sectionItems)){
             return 1;
         }
@@ -162,17 +166,20 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function processAssessmentQuestion($page)
     {
-        $sectionQuestions = $this->getQuestionDao()->search([],['created_time'=>'ASC'],($page-1) * 500, 500);
+        $sectionQuestions = $this->getQuestionDao()->search([],['created_time'=>'ASC'],($page-1) * 1500, 1500);
         if(empty($sectionQuestions)){
             return 1;
         }
         $update = [];
         foreach ($sectionQuestions as $sectionQuestion){
+            if(!empty($sectionQuestion['score_rule'])){
+                continue;
+            }
             $update[$sectionQuestion['id']] = [
                 'score_rule' => [
                 'score' => $sectionQuestion['score'],
                 'scoreType' => 'question',
-                'otherScore' => $sectionQuestion['answer_mode'] == 'text' ?$sectionQuestion['score'] : 0,
+                'otherScore' => $sectionQuestion['answer_mode'] == 'text' ? $sectionQuestion['score'] : 0,
             ]];
         }
         if(!empty($update)){
@@ -181,6 +188,57 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('info', '修改biz_question');
 
         return $page+1;
+    }
+
+    public function processHomeworkActivity($page)
+    {
+        $tasks = $this->getTaskDao()->search(['type'=> 'homework'],['createdTime'=>'ASC'],($page-1) * 1000, 1000);
+        if(empty($tasks)){
+            return 1;
+        }
+        $activityIds = array_column($tasks, 'activityId');
+        $activities = $this->getActivityDao()->findByIds($activityIds);
+        $activities = array_column($activities, null, 'id');
+        $update = [];
+        foreach ($tasks as $task){
+            if(empty($activities[$task['activityId']])){
+                continue;
+            }
+            $activity = $activities[$task['activityId']];
+            $update[$activity['mediaId']] = [
+                'has_published' => $task['copyId'] >0 ? 2 : ($task['status'] == 'create' ? 0:1),
+            ];
+        }
+        if(!empty($update)){
+            $this->getHomeworkActivityDao()->batchUpdate(array_keys($update), $update, 'id');
+        }
+        $this->logger('info', '修改HomeworkActivity');
+
+        return $page+1;
+    }
+
+    /**
+     * @return HomeworkActivityDao
+     */
+    protected function getHomeworkActivityDao()
+    {
+        return $this->createDao('Activity:HomeworkActivityDao');
+    }
+
+    /**
+     * @return TaskDao
+     */
+    protected function getTaskDao()
+    {
+        return $this->createDao('Task:TaskDao');
+    }
+
+    /**
+     * @return ActivityDao
+     */
+    protected function getActivityDao()
+    {
+        return $this->createDao('Activity:ActivityDao');
     }
 
     /**
