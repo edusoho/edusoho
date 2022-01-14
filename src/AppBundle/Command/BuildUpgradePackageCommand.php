@@ -65,6 +65,8 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $this->generateFiles($diffFile);
 
+        $this->generateH5();
+
         $this->copyUpgradeScript();
 
         $this->buildVendor();
@@ -74,6 +76,15 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->printChangeLog();
 
         $this->style->success('  编制升级包完毕');
+    }
+
+    private function generateH5()
+    {
+        $source = $this->packageDir.'source/web/h5/static/js/';
+        system("cp -rf web/h5/static/js/*  {$source}");
+
+        $source = $this->packageDir.'source/web/h5/admin/static/js/';
+        system("cp -rf web/h5/admin/static/js/*  {$source}");
     }
 
     private function generateFiles($diffFile)
