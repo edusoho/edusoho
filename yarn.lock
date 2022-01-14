@@ -6148,9 +6148,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-"item-bank@git+ssh://git@coding.codeages.work/item-bank/js-sdk.git#cc058a1af4db7da77772e60adb5214753189df91":
+item-bank@^1.0.30:
   version "1.0.30"
-  resolved "git+ssh://git@coding.codeages.work/item-bank/js-sdk.git#cc058a1af4db7da77772e60adb5214753189df91"
+  resolved "https://registry.npmjs.org/item-bank/-/item-bank-1.0.30.tgz#dde66bd60f29e089302d6248f001365d55b03faa"
+  integrity sha512-Ms9J90kVBmg5UpXFoDDdmaFREmFPhneBGZlAse4I3Ojf6O2VZYRzlRXMaozyp5X7NtPWUdEiNlmfTo2xvjQrxQ==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
