@@ -50,7 +50,7 @@ class UserLessonStatisticsExporterTest extends BaseTestCase
         $result = $exporter->buildCondition($conditions);
         $this->assertEquals([], $result['userIds']);
 
-        $conditions = ['nickname' => 'la'];
+        $conditions = ['keyword' => 'la'];
 
         $result = $exporter->buildCondition($conditions);
         $this->assertEquals(1, $result['userIds'][0]);
@@ -205,7 +205,7 @@ class UserLessonStatisticsExporterTest extends BaseTestCase
         ];
         $data = ReflectionUtils::invokeMethod($exporter, 'handleStatistics', [$users, $memberTaskData]);
 
-        $this->assertArrayEquals(['test', '11123455678', 'test', 'test', 'test', 'test', '图文课时', '必修', 0, 120, 60, '完成'], $data[0]);
+        $this->assertArrayEquals(['test', '11123455678'."\t", 'test', 'test', 'test', 'test', '图文课时', '必修', 0, 120, 60, '完成'], $data[0]);
     }
 
     public function testGetContent()

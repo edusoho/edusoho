@@ -4,7 +4,7 @@ namespace Tests\Unit\AppBundle\Component\Export\UserLearnStatistics;
 
 use AppBundle\Common\ReflectionUtils;
 use AppBundle\Component\Export\UserLearnStatistics\UserCourseStatisticsExporter;
-use  Biz\BaseTestCase;
+use Biz\BaseTestCase;
 
 class UserCourseStatisticsExporterTest extends BaseTestCase
 {
@@ -47,7 +47,7 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
         $result = $exporter->buildCondition($conditions);
         $this->assertEquals([], $result['userIds']);
 
-        $conditions = ['nickname' => 'la'];
+        $conditions = ['keyword' => 'la'];
 
         $result = $exporter->buildCondition($conditions);
         $this->assertEquals(1, $result['userIds'][0]);
@@ -169,7 +169,7 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
         ];
         $data = ReflectionUtils::invokeMethod($exporter, 'handleStatistics', [$users, $courseMemberData]);
 
-        $this->assertArrayEquals(['test', '11123455678', 'test', 'test', 'test', 120, 5, 2, '40%'], $data[0]);
+        $this->assertArrayEquals(['test', '11123455678'."\t", 'test', 'test', 'test', 120, 5, 2, '40%'], $data[0]);
     }
 
     public function testGetContent()
