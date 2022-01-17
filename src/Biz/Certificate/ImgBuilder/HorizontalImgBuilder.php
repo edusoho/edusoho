@@ -79,11 +79,11 @@ class HorizontalImgBuilder extends ImgBuilder
     protected function setCertificateCode(Certificate $certificate)
     {
         $length = mb_strlen('证书编号：'.$certificate->getCertificateCode(), 'utf-8');
-        $x = 1754 * $this->imageXRatio - $length * $this->defaultFontSize * 0.26 * 0.5;
+        $x = 650 * $this->imageXRatio;
         $this->imageTtfText(
             [
                 'x' => $x,
-                'y' => 700 * $this->imageYRatio,
+                'y' => 2088 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
@@ -95,7 +95,7 @@ class HorizontalImgBuilder extends ImgBuilder
         return $this->imageTtfText(
             [
                 'x' => $x + 300 * $this->imageXRatio,
-                'y' => 700 * $this->imageYRatio,
+                'y' => 2088 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
@@ -186,12 +186,12 @@ class HorizontalImgBuilder extends ImgBuilder
         }
         $qrCode = $this->buildQrCode($certificate->getCertificateQrCodeUrl());
         $qrCode = $this->_imageCreateFromImageOrString($qrCode);
-        imagecopymerge($this->image, $qrCode, 650 * $this->imageXRatio, 1808 * $this->imageYRatio, 0, 0, 400 * $this->imageXRatio, 400 * $this->imageXRatio, 100);
+        imagecopymerge($this->image, $qrCode, 650 * $this->imageXRatio, 1708 * $this->imageYRatio, 0, 0, 258 * $this->imageXRatio, 258 * $this->imageXRatio, 100);
 
         return $this->imageTtfText(
             [
                 'x' => 660 * $this->imageXRatio,
-                'y' => 1808 * $this->imageYRatio,
+                'y' => 1708 * $this->imageYRatio,
                 'fontSize' => 0.25 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,

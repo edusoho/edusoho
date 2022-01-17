@@ -172,7 +172,7 @@ abstract class ImgBuilder
             return chunk_split(base64_encode($gambar));
         }
 
-        return  '';
+        return '';
     }
 
     protected function deleteFile($file)
@@ -303,7 +303,7 @@ abstract class ImgBuilder
     {
         $qrCode = new QrCode();
         $qrCode->setText($url);
-        $qrCode->setSize(400 * $this->imageXRatio);
+        $qrCode->setSize(258 * $this->imageXRatio);
         $qrCode->setPadding(0);
         $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 1]);
         $img = $qrCode->get('jpg');
