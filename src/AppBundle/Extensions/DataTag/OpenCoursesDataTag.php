@@ -43,7 +43,7 @@ class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
     protected function filterConditions($arguments)
     {
         $conditions = array('status' => 'published');
-        $orderBy = array('createdTime' => 'DESC');
+        $orderBy = array('recommendedSeq' => 'ASC');
 
         if (!empty($arguments['orderBy']) && $arguments['orderBy'] == 'recommendedSeq') {
             $conditions['recommended'] = 1;
