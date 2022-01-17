@@ -92,13 +92,14 @@ class HomeworkController extends BaseController
         } else {
             $restartUrl = '';
         }
+
         return $this->render('homework/result.html.twig', [
             'answerReport' => $answerReport,
             'answerRecord' => $answerRecord,
             'answerRecordId' => $answerRecordId,
             'assessment' => $assessment,
             'restartUrl' => $restartUrl,
-            'type' => $type
+            'type' => $type,
         ]);
     }
 
