@@ -6,6 +6,8 @@ interface AssessmentSectionItemService
 {
     public function getAssessmentSectionItem($id);
 
+    public function getItemByAssessmentIdAndItemId($assessmentId, $itemId);
+
     public function findSectionItemsByAssessmentId($assessmentId);
 
     public function findSectionItemDetailByAssessmentId($assessmentId);

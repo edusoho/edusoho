@@ -22,6 +22,12 @@
     {
       "type": "submit",
       "describe": "course.plan_task.activity_manage.homework.finished_condition"
+    },
+    {
+      "type": "score",
+      "describe": "course.plan_task.activity_manage.homework.score_pass",
+      "html": "conditions.html.twig",
+      "value": "0"
     }
   ]
 }

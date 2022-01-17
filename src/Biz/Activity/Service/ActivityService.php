@@ -86,4 +86,6 @@ interface ActivityService
     public function findManageReplayActivityIds($conditions);
 
     public function getActivityByAnswerSceneId($answerSceneId);
+
+    public function orderAssessmentSubmitNumber($userIds, $answerSceneId);
 }

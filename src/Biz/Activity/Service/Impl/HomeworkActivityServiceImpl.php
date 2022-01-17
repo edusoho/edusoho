@@ -13,6 +13,16 @@ class HomeworkActivityServiceImpl extends BaseService implements HomeworkActivit
         return $this->getHomeworkActivityDao()->create($homeworkActivity);
     }
 
+    public function batchUpdate($identifies, $updateColumnsList, $identifyColumn = 'id')
+    {
+        return $this->getHomeworkActivityDao()->batchUpdate($identifies, $updateColumnsList, $identifyColumn);
+    }
+
+    public function update($homeworkActivityId, array $fields)
+    {
+        return $this->getHomeworkActivityDao()->update($homeworkActivityId, $fields);
+    }
+
     public function getByAnswerSceneId($answerSceneId)
     {
         return $this->getHomeworkActivityDao()->getByAnswerSceneId($answerSceneId);
@@ -36,6 +46,11 @@ class HomeworkActivityServiceImpl extends BaseService implements HomeworkActivit
     public function findByAnswerSceneIds($answerSceneIds)
     {
         return $this->getHomeworkActivityDao()->findByAnswerSceneIds($answerSceneIds);
+    }
+
+    public function findByAssessmentId($assessmentId)
+    {
+        return $this->getHomeworkActivityDao()->findByAssessmentId($assessmentId);
     }
 
     public function delete($id)

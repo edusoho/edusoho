@@ -10,8 +10,10 @@
       :cdnHost="cdnHost"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
+      :is-error-correction="isErrorCorrection"
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
+      @error-correction="errorCorrection"
     ></assessment-result>
   </div>
 </template>
@@ -30,6 +32,7 @@
         },
         showAttachment: $('[name=show_attachment]').val(),
         cdnHost: $('[name=cdn_host]').val(),
+        isErrorCorrection: $('[name=is_error_correction]').val(),
         fileId: 0,
       };
     },
@@ -115,6 +118,26 @@
             self.fileId = 0;
           })
         });
+      },
+
+      errorCorrection(params) {
+        const answerRecordId = $("[name='answer_record_id']").val();
+
+        $.ajax({
+          url: `/api/answerRecord/${answerRecordId}/fillAnswer`,
+          type: 'POST',
+          async: false,
+          headers: {
+            'Accept':'application/vnd.edusoho.v2+json'
+          },
+          data: params,
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+          }
+        }).done(function (res) {
+          console.log(res);
+        })
       }
     }
   }

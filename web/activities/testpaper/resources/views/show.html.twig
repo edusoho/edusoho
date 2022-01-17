@@ -7,7 +7,7 @@
     {% if not latestAnswerRecord %}
       {% include('@activity/testpaper/resources/views/show/index.html.twig') %}
     {% elseif latestAnswerRecord and  (latestAnswerRecord.status == 'finished' or latestAnswerRecord.status == 'reviewing') %}
-      {{ render(controller('AppBundle:Testpaper/Testpaper:showResult', {answerRecordId: latestAnswerRecord.id})) }}
+      {{ render(controller('AppBundle:Testpaper/Testpaper:showResult', {answerRecordId: latestAnswerRecord.id, type: 'activity'})) }}
     {% else %}
       {% include('@activity/testpaper/resources/views/show/do-testpaper.html.twig') %}
     {% endif %}

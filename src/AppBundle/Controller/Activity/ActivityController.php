@@ -83,6 +83,8 @@ class ActivityController extends BaseController
                 'mediaType' => $type,
                 'fromCourseId' => $courseId,
                 'fromCourseSetId' => $course['courseSetId'],
+                'customComments' => [],
+                'canEdit' => 1,
             ];
         }
         $container = $this->get('activity_runtime_container');

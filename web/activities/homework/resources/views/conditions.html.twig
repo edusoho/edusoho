@@ -1,0 +1,17 @@
+{% set assessment =  data('HomeworkAssessment', {activityId:activity.id|default(0)} )%}
+<div class="form-group js-homework-score" {% if activity.finishType|default('submit') == 'submit' %}style="display: none;"{% endif %}>
+  <div class="col-sm-2 control-label"></div>
+  <div class="col-sm-7">
+    <div style="">
+      <span style="float:left;line-height: 36px;">{{'course.homework.pass_score'|trans}}</span>
+      <input class="form-control" id="homeworkScore" style="margin-left:10px; margin-right:10px; max-width: 160px;float:left;" type="text" name="homeworkScore"  value="{{ activity.finishData|default(0) }}">
+      <span style="float:left;line-height: 36px;">{{'course.homework.pass_score.tip1'|trans}}</span>
+      <span class="js-finish-score" style="float:left;line-height: 36px;">{{ assessment.total_score|default('--')}}</span>
+      <span style="float:left;line-height: 36px;margin-left: 5px">{{ 'site.data.score'|trans }}</span>
+    </div>
+    <div style="margin-top: 40px">
+      <p class="help-block" style="margin-left: 95px; color: #b1b1b1">{{'course.homework.pass_score.tip2'|trans}}</p>
+      <p class="help-block color-warning" style="">{{'course.homework.score.finish.tip'|trans}}</p>
+    </div>
+  </div>
+</div>

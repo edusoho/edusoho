@@ -1,0 +1,22 @@
+{% set data = notification.content %}
+{% import 'macro.html.twig' as macro %}
+{% set who = data.userName %}
+{% set what = data.name %}
+
+{% set do = macro.link('admin.live_manage.show_detail'|trans, path(data.type~'_result_show',{answerRecordId:data.id,action:'my'})) %}
+
+{% set tran = 'api.notification.'~data.type~'.comment.'~data.mode %}
+
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {{ tran|trans({'%who%':who, '%what%':what}) }}{{ do }}
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime|date('site.date_format_H_i_s'|trans) }}
+    </div>
+  </div>
+</li>

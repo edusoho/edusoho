@@ -11,6 +11,7 @@
       <th>{{'course.homework_check.review.name'|trans}}</th>
       <th>{{'course.homework_check.review.score'|trans}}</th>
       <th>{{'course.homework_check.review.submit_time'|trans}}</th>
+      <th>{% if activity.mediaType == 'testpaper' %}{{'course.testpaper_check.review.submit_num'|trans}}{% else %}{{'course.homework_check.review.submit_num'|trans}}{% endif %}</th>
       <th>{{'course.homework_check.review.status'|trans}}</th>
       <th>{{'course.homework_check.review.reviewer'|trans}}</th>
       <th>{{'course.homework_check.review.operation'|trans}}</th>
@@ -31,6 +32,7 @@
           {% else %} -- {% endif %}
         </td>
         <td>{% if answerRecord.status != 'doing' %}{{ answerRecord.end_time|date('Y-m-d H:i:s') }}{% else %}--{% endif %}</td>
+        <td>{{ 'course.homework_check.review.submit_num_detail'|trans({'%num%':answerRecord.submit_num}) }}</td>
         <td>
           {% if answerRecord.status == 'doing' %}
             <span class="color-danger">{{'site.default.doing'|trans}}</span>

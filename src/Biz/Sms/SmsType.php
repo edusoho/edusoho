@@ -85,4 +85,9 @@ class SmsType
      * 问题回复通知短信模板id  您在${title}中的发表的问题有了新的回答。 提问时间：${day} 回复内容：${content}
      */
     const QUESTION_ANSWER_NOTIFY = 2263;
+
+    /**
+     * 评语修改通知短信模板id  课程：《{$course}》-学习任务：[{$task}{$type}任务]的教师评语已修改，点击查看[{$url}]
+     */
+    const COMMENT_MODIFY_NOTIFY = 2312;
 }

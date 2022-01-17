@@ -15,37 +15,51 @@ if ($selectFinish.length) {
     } else {
       $('#watchTime').rules('remove');
     }
-
+    $('#homeworkScore').rules('remove');
     switch (val) {
-      case 'time':
-        $('#conditions-time').show();
-        if (!$('#watchTime').val()) {
-          let $options = $('#finish-type option:selected');
-          $('#watchTime').val($options.data('value'));
-          $('#finish-data').val($options.data('value'));
-        }
-        $('#watchTimeLabel').hasClass('hidden') ? null : $('#watchTimeLabel').addClass('hidden');
-        $('#timeLabel').hasClass('hidden') ? $('#timeLabel').removeClass('hidden') : null;
-        break;
-      case 'watchTime':
-        $('#conditions-time').show();
-        if (!$('#watchTime').val()) {
-          let $options = $('#finish-type option:selected');
-          $('#watchTime').val($options.data('value'));
-          $('#finish-data').val($options.data('value'));
-        }
-        $('#watchTimeLabel').hasClass('hidden') ? $('#watchTimeLabel').removeClass('hidden') : null;
-        $('#timeLabel').hasClass('hidden') ? null : $('#timeLabel').addClass('hidden');
-        break;
-      case 'end':
-        $('#endConditions').removeClass('hidden');
-        $('#finish-data').val('');
-        break;
-      default:
-        $selectFinish.trigger('selectChange', val);
+    case 'time':
+      $('#conditions-time').show();
+      if (!$('#watchTime').val()) {
+        let $options = $('#finish-type option:selected');
+        $('#watchTime').val($options.data('value'));
+        $('#finish-data').val($options.data('value'));
+      }
+      $('#watchTimeLabel').hasClass('hidden') ? null : $('#watchTimeLabel').addClass('hidden');
+      $('#timeLabel').hasClass('hidden') ? $('#timeLabel').removeClass('hidden') : null;
+      break;
+    case 'watchTime':
+      $('#conditions-time').show();
+      if (!$('#watchTime').val()) {
+        let $options = $('#finish-type option:selected');
+        $('#watchTime').val($options.data('value'));
+        $('#finish-data').val($options.data('value'));
+      }
+      $('#watchTimeLabel').hasClass('hidden') ? $('#watchTimeLabel').removeClass('hidden') : null;
+      $('#timeLabel').hasClass('hidden') ? null : $('#timeLabel').addClass('hidden');
+      break;
+    case 'score':
+      if($('.js-homework-score').length >0){
+        let val = $('#task-create-content-iframe', parent.document).contents().find('.js-homework-scores-input').val();
+        $('.js-finish-score').html(val);
+        $('#homeworkScore').rules('add', {
+          required: true,
+          es_score: true,
+          homework_score: true,
+          messages: {
+            required: Translator.trans('course.homework.score.tip1')
+          }
+        });
+        $('.js-homework-score').show();
+      }
+      break;
+    case 'end':
+      $('#endConditions').removeClass('hidden');
+      $('#finish-data').val('');
+      break;
+    default:
+      $selectFinish.trigger('selectChange', val);
     }
   });
-
   $('#js-end-rule').on('change', function () {
     if ($(this).is(':checked')) {
       $('#finish-data').val(parseInt($('#watchTime').val()) ? $('#watchTime').val() : 1); // 禁止拖动
@@ -53,6 +67,7 @@ if ($selectFinish.length) {
       $('#finish-data').val(''); // 不禁止拖动
     }
   });
+  
 }
 
 let validate = $('#step3-form').validate({
@@ -63,6 +78,9 @@ let validate = $('#step3-form').validate({
     watchTime: {
       positive_integer: true,
     },
+    homeworkScore: {
+      es_score: true,
+    }
   }
 });
 
@@ -75,6 +93,10 @@ if (!$('#conditions-time').is(':hidden')) {
     }
   });
 }
+
+$('#homeworkScore').on('change', function() {
+  $('#finish-data').val($(this).val());
+});
 
 $('#watchTime').on('change', function () {
   $('#finish-data').val($(this).val());
@@ -93,3 +115,7 @@ window.ltc.on('getCondition', function (msg) {
     });
   }
 });
+
+$.validator.addMethod('homework_score', function (value, element) {
+  return this.optional(element) || value <= Number($('.js-finish-score').html());
+}, $.validator.format(Translator.trans('course.homework.score.tip2')));

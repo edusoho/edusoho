@@ -243,6 +243,13 @@ t.add("activity.testpaper_manage.difficulty_percentage", "\u56f0\u96be%difficult
 t.add("activity.testpaper_manage.required_error_hint", "\u8bf7\u8f93\u5165\u5206\u6570", "js", "zh_CN");
 t.add("activity.testpaper_manage.question_options", "\u9009\u9879", "js", "zh_CN");
 t.add("activity.testpaper_manage.questions_length_hint", "\u9898\u76ee\u6570\u91cf\u6700\u591a\u4e3a2000", "js", "zh_CN");
+t.add("activity.testpaper_manage.default_comment", "\u9ed8\u8ba4\u8bc4\u8bed", "js", "zh_CN");
+t.add("activity.testpaper_manage.default_comment1", "\u7ee7\u7eed\u52aa\u529b\uff0c\u7ee7\u7eed\u8fdb\u6b65\uff01", "js", "zh_CN");
+t.add("activity.testpaper_manage.default_comment2", "\u4e0d\u9519\uff0c\u6709\u8fdb\u6b65\uff0c\u518d\u52aa\u529b\u4e9b\u5c31\u4f1a\u66f4\u68d2\uff01", "js", "zh_CN");
+t.add("activity.testpaper_manage.default_comment3", "\u4f60\u771f\u68d2\uff01\u6211\u4e3a\u4f60\u9a84\u50b2\uff01", "js", "zh_CN");
+t.add("activity.testpaper_manage.default_comment4", "\u6709\u70b9\u677e\u61c8\u4e86\u5427\uff1f\u7ee7\u7eed\u52a0\u6cb9\u5427\uff01", "js", "zh_CN");
+t.add("activity.testpaper_manage.default_comment5", "\u7528\u5fc3\u3001\u4e13\u6ce8\u3001\u575a\u6301\uff0c\u4f60\u80fd\u505a\u7684\u66f4\u597d\u7684\uff01", "js", "zh_CN");
+t.add("activity.testpaper_manage.comment_remove", "\u79fb\u9664", "js", "zh_CN");
 t.add("activity.text_manage.save_draft_hint", "(\u8349\u7a3f\u5df2\u4e8e%createdTime%\u4fdd\u5b58)", "js", "zh_CN");
 t.add("activity.text_manage.finish_detail_required_error_hint", "\u8bf7\u8f93\u5165\u81f3\u5c11\u89c2\u770b\u591a\u5c11\u5206\u949f", "js", "zh_CN");
 t.add("activity.video_manage.delete_success_hint", "\u5220\u9664\u5b57\u5e55\u6210\u529f", "js", "zh_CN");
@@ -1682,6 +1689,13 @@ t.add("course.live_replay.un_share_btn", "\u53d6\u6d88\u5171\u4eab", "js", "zh_C
 t.add("course.live_replay.share_tip", "\u8bf7\u786e\u8ba4\u5c06\u6b64\u76f4\u64ad\u56de\u653e\u5171\u4eab\u5230\u5171\u4eab\u76f4\u64ad\u56de\u653e\u8d44\u6e90\u5e93?", "js", "zh_CN");
 t.add("course.live_replay.un_share_tip", "\u8bf7\u786e\u8ba4\u5c06\u6b64\u76f4\u64ad\u56de\u653e\u4ece\u5171\u4eab\u76f4\u64ad\u56de\u653e\u8d44\u6e90\u5e93\u79fb\u9664\uff1f", "js", "zh_CN");
 t.add("course.live_replay.delete_tip", "\u8bf7\u786e\u8ba4\u5c06\u6b64\u76f4\u64ad\u56de\u653e\u79fb\u9664\uff1f", "js", "zh_CN");
+t.add("course.homework.score.tip1", "\u8bf7\u8f93\u5165\u5408\u683c\u5206\u6570", "js", "zh_CN");
+t.add("course.homework.score.tip2", "\u8bf7\u8f93\u5165\u4e0d\u5927\u4e8e\u8bd5\u5377\u603b\u5206\u7684\u6570\u503c", "js", "zh_CN");
+t.add("course.scoer.validator", "\u8bf7\u68c0\u67e5\u9898\u76ee\u5206\u6570\u8bbe\u7f6e\uff0c\u5b58\u5728\u9898\u76ee\u8bbe\u7f6e\u9519\u8bef", "js", "zh_CN");
+t.add("course.miss_score.validator", "\u6f0f\u9009\u5206\u503c\u4e0d\u5f97\u8d85\u8fc7\u9898\u76ee\u5206\u503c", "js", "zh_CN");
+t.add("course.option_score.validator", "\u9009\u9879\u603b\u5206\u4e0d\u5f97\u8d85\u8fc7\u9898\u76ee\u5206\u503c", "js", "zh_CN");
+t.add("testpaper.scoer.validator", "\u5206\u503c\u8bbe\u7f6e\u6709\u8bef\uff0c\u8bf7\u68c0\u67e5\u5404\u9898\u578b\u9898\u76ee\u5206\u503c\u8bbe\u7f6e", "js", "zh_CN");
+t.add("testpaper.option_score.validator", "\u6bcf\u9879\u5206\u503c\u4e0d\u5f97\u8d85\u8fc7\u6bcf\u9898\u5206\u503c", "js", "zh_CN");
 t.add("all", "\u5168\u90e8", "js", "zh_CN");
 t.add("coupon", "\u4f18\u60e0\u5377", "js", "zh_CN");
 t.add("collar_roll", "\u9886\u5377", "js", "zh_CN");
@@ -1841,4 +1855,5 @@ t.add("scrm.sales_analysis_performance_status_at_a_glance", "\u9500\u552e\u5206\
 t.add("scrm.analyze_the_overall_situation_of_the_company_is_marketing", "\u5bf9\u4f01\u4e1a\u8425\u9500\u7684\u6574\u4f53\u60c5\u51b5\u8fdb\u884c\u5206\u6790\uff1b\u5f53\u9500\u552e\u5b8c\u6210\u5ba2\u6237\u8ddf\u8fdb\u540e\uff0c\u7ba1\u7406\u5458\u8fd8\u53ef\u5bf9\u9500\u552e\u7684\u9500\u552e\u6548\u679c\u8fdb\u884c\u5206\u6790\u3002", "js", "zh_CN");
 t.add("scrm.live_open_class", "\u76f4\u64ad\u516c\u5f00\u8bfe", "js", "zh_CN");
 t.add("scrm.set_up_live_open_classes", "\u673a\u6784\u5feb\u901f\u5f00\u8bbe\u76f4\u64ad\u516c\u5f00\u8bfe\uff0c\u5b66\u5458\u53ef\u5728\u76f4\u64ad\u95f4\u8d2d\u4e70\u6b63\u8bfe\uff1b\u5b66\u5458\u53ef\u9080\u8bf7\u597d\u53cb\u5230\u76f4\u64ad\u95f4\u5b66\u4e60\uff0c\u5b9e\u73b0\u88c2\u53d8\u3002", "js", "zh_CN");
+t.add("testpaper.import.tip", "\u8bd5\u5377\u5bfc\u5165\u6210\u529f\uff0c\u8bf7\u5728\u5f53\u524d\u9875\u9762\u8c03\u6574\u8bd5\u5377\u5206\u503c\u3002\uff08\u6ce8\uff1a\u591a\u9009\u9898\u548c\u4e0d\u5b9a\u9879\u9009\u9898\u65b0\u589e\u201c\u6bcf\u9879\u201d\u8bbe\u7f6e\uff0c\u586b\u7a7a\u9898\u65b0\u589e\u201c\u6bcf\u7a7a\u201d\u8bbe\u7f6e\u3002\uff09", "js", "zh_CN");
 })(Translator);

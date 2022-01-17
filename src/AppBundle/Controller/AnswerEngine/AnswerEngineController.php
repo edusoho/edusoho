@@ -8,6 +8,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AnswerEngineController extends BaseController
 {
@@ -52,6 +53,7 @@ class AnswerEngineController extends BaseController
     public function reviewAnswerAction(Request $request, $answerRecordId, $successGotoUrl, $successContinueGotoUrl = '', $role = 'teacher')
     {
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
 
         return $this->render('answer-engine/review.html.twig', [
             'assessment' => $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']),
@@ -59,6 +61,8 @@ class AnswerEngineController extends BaseController
             'successContinueGotoUrl' => $successContinueGotoUrl,
             'answerRecordId' => $answerRecordId,
             'role' => $role,
+            'activity' => $activity,
+            'goBackUrl' => $this->generateUrl('course_manage_testpaper_result_list', ['id' => $activity['fromCourseId'], 'testpaperId'=>$answerRecord['assessment_id'], 'activityId'=>$activity['id'], 'status'=>'reviewing'], UrlGeneratorInterface::ABSOLUTE_URL)
         ]);
     }
 
@@ -104,5 +108,10 @@ class AnswerEngineController extends BaseController
     protected function getAnswerSceneService()
     {
         return $this->createService('ItemBank:Answer:AnswerSceneService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 }

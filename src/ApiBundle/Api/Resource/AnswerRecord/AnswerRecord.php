@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\AnswerRecord;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
+use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Activity\Type\Testpaper;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
@@ -36,13 +37,23 @@ class AnswerRecord extends AbstractResource
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerScene['id']);
 
+
         return [
             'answer_report' => $answerReport,
             'answer_record' => $this->wrapperAnswerRecord($answerRecord),
             'assessment' => $assessment,
-            'answer_scene' => $answerScene,
+            'answer_scene' => $this->wrapperAnswerScene($answerScene),
             'resultShow' => empty($testpaperActivity) ? true : $this->getResultShow($answerRecord, $answerScene, $answerReport),
+            'activity' => empty($testpaperActivity) ? (object)[] : $testpaperActivity,
         ];
+    }
+
+    protected function wrapperAnswerScene($answerScene)
+    {
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerScene['id']);
+        $answerScene['fromType'] = $activity['mediaType'];
+        $answerScene['reviewType'] =  $activity['mediaType'] == 'testpaper' || $activity['finishType'] == 'score'  ? 'score' : 'true_false';
+        return $answerScene;
     }
 
     protected function wrapperAnswerRecord($answerRecord)
@@ -124,5 +135,13 @@ class AnswerRecord extends AbstractResource
     protected function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->service('Activity:ActivityService');
     }
 }

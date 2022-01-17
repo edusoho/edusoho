@@ -54,18 +54,18 @@ abstract class BaseSheetAddStyleExporter
         }
 
         if (!empty($save) && $this->filesystem->exists($path.'/'.$this->getExportFileName())) {
-            return  true;
+            return true;
         }
         $this->PHPExcel = new \PHPExcel();
         $this->buildExportSheetData($params);
 
         $objWriter = new \PHPExcel_Writer_Excel5($this->PHPExcel);
         if (empty($save)) {
-            return  $objWriter;
+            return $objWriter;
         }
         $objWriter->save($path.'/'.$this->getExportFileName());
 
-        return  true;
+        return true;
     }
 
     // 自定义导出格式  行高 合并单元格 样式 数据 等

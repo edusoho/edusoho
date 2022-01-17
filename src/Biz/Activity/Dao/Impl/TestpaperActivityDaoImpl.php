@@ -43,6 +43,8 @@ class TestpaperActivityDaoImpl extends AdvancedDaoImpl implements TestpaperActiv
             ],
             'serializes' => [
                 'finishCondition' => 'json',
+                'comment_data' => 'json',
+                'customComments' => 'json',
             ],
         ];
     }
