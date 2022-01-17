@@ -19,7 +19,6 @@ use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
 use Biz\User\Service\TokenService;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -673,9 +672,9 @@ class ManageController extends BaseController
             'displayable' => 1,
             'sections' => $this->assembleSections($items),
         ];
-        $assessment =  $this->getAssessmentService()->importAssessment($assessment);
+        $assessment = $this->getAssessmentService()->importAssessment($assessment);
 
-        return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_testpaper_edit', ['id' => $questionBank['id'], 'assessmentId'=>$assessment['id'], 'isImport'=> 1])]);
+        return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_testpaper_edit', ['id' => $questionBank['id'], 'assessmentId' => $assessment['id'], 'isImport' => 1])]);
     }
 
     protected function assembleSections($items)

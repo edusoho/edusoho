@@ -38,6 +38,7 @@ class TestpaperReviewRoleDataTag extends BaseDataTag implements DataTag
         $homeWorkActivity = $this->getHomeworkActivityService()->getByAnswerSceneId($answerSceneId);
         $homeWorkActivity = $this->getActivityService()->getByMediaIdAndMediaType($homeWorkActivity['id'], 'homework');
         $activity = empty($activity) ? $homeWorkActivity : $activity;
+
         return $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
     }
 

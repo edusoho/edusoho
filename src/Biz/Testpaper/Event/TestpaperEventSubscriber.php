@@ -93,9 +93,9 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         }
         $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
         if (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status'] && 'score' === $activity['finishType']) {
-            if($answerReport['score'] >= $activity['finishData']){
+            if ($answerReport['score'] >= $activity['finishData']) {
                 $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' => 'passed']);
-            }else{
+            } else {
                 $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' => 'unpassed']);
             }
         }
@@ -130,7 +130,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
             'userId' => $user['id'],
             'userName' => $user['nickname'],
             'type' => $activity['mediaType'],
-            'mode' => 'create'
+            'mode' => 'create',
         ];
         $this->getNotificationService()->notify($answerRecord['user_id'], 'answer-comment', $message);
     }

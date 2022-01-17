@@ -3,12 +3,12 @@
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Filesystem\Filesystem;
 
 class BuildUpgradePackageCommand extends BaseCommand
 {
@@ -148,31 +148,31 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function getBundleFile($file)
     {
-        if (stripos($file, 'src/Topxia/WebBundle/Resources/public') === 0) {
+        if (0 === stripos($file, 'src/Topxia/WebBundle/Resources/public')) {
             return str_ireplace('src/Topxia/WebBundle/Resources/public', 'web/bundles/topxiaweb', $file);
         }
 
-        if (stripos($file, 'src/Topxia/AdminBundle/Resources/public') === 0) {
+        if (0 === stripos($file, 'src/Topxia/AdminBundle/Resources/public')) {
             return str_ireplace('src/Topxia/AdminBundle/Resources/public', 'web/bundles/topxiaadmin', $file);
         }
 
-        if (stripos($file, 'src/Topxia/MobileBundleV2/Resources/public') === 0) {
+        if (0 === stripos($file, 'src/Topxia/MobileBundleV2/Resources/public')) {
             return str_ireplace('src/Topxia/MobileBundleV2/Resources/public', 'web/bundles/topxiamobilebundlev2', $file);
         }
 
-        if (stripos($file, 'src/Classroom/ClassroomBundle/Resources/public') === 0) {
+        if (0 === stripos($file, 'src/Classroom/ClassroomBundle/Resources/public')) {
             return str_ireplace('src/Classroom/ClassroomBundle/Resources/public', 'web/bundles/classroom', $file);
         }
 
-        if (stripos($file, 'src/SensitiveWord/SensitiveWordBundle/Resources/public') === 0) {
+        if (0 === stripos($file, 'src/SensitiveWord/SensitiveWordBundle/Resources/public')) {
             return str_ireplace('src/SensitiveWord/SensitiveWordBundle/Resources/public', 'web/bundles/sensitiveword', $file);
         }
 
-        if (stripos($file, 'src/MaterialLib/MaterialLibBundle/Resources/public') === 0) {
+        if (0 === stripos($file, 'src/MaterialLib/MaterialLibBundle/Resources/public')) {
             return str_ireplace('src/MaterialLib/MaterialLibBundle/Resources/public', 'web/bundles/materiallib', $file);
         }
 
-        if (stripos($file, 'src/Org/OrgBundle/Resources/public') === 0) {
+        if (0 === stripos($file, 'src/Org/OrgBundle/Resources/public')) {
             return str_ireplace('src/Org/OrgBundle/Resources/public', 'web/bundles/org', $file);
         }
 
@@ -194,10 +194,10 @@ class BuildUpgradePackageCommand extends BaseCommand
             $this->filesystem->copy($path, $targetPath, true);
 
             if (is_dir($upgradesDir)) {
-                $this->filesystem->mirror($upgradesDir, realpath($this->packageDir).'/source/scripts/'.$this->version, null, array(
+                $this->filesystem->mirror($upgradesDir, realpath($this->packageDir).'/source/scripts/'.$this->version, null, [
                     'override' => true,
                     'copy_on_windows' => true,
-                ));
+                ]);
             }
         }
     }
@@ -237,7 +237,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         $askPrint = false;
         while (!feof($file)) {
             $line = trim(fgets($file));
-            if (strpos($line, $this->version) !== false) {
+            if (false !== strpos($line, $this->version)) {
                 $print = true;
             }
 
@@ -302,10 +302,10 @@ class BuildUpgradePackageCommand extends BaseCommand
         $dir = $this->packageDir.'source/vendor/';
 
         $command = $this->getApplication()->find('build:vendor');
-        $input = new ArrayInput(array(
+        $input = new ArrayInput([
             'command' => 'build:vendor',
             'folder' => $dir,
-        ));
+        ]);
         $command->run($input, $this->output);
     }
 
@@ -316,7 +316,7 @@ class BuildUpgradePackageCommand extends BaseCommand
      */
     private function processFiles($diffFile)
     {
-        $fileLines = array();
+        $fileLines = [];
         $handle = fopen($diffFile, 'r');
         while (($line = fgets($handle)) !== false) {
             array_push($fileLines, $line);
@@ -329,11 +329,11 @@ class BuildUpgradePackageCommand extends BaseCommand
     private function invalidFiles($fileLines)
     {
         $this->output->writeln('<comment>  本次升级需要注意一下文件</comment>');
-        $invalidFiles = array();
+        $invalidFiles = [];
         foreach ($fileLines as $key => $line) {
             list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
-            if (empty($opFile) || !in_array($op, array('M', 'A', 'D', 'R'))) {
+            if (empty($opFile) || !in_array($op, ['M', 'A', 'D', 'R'])) {
                 array_push($invalidFiles, $op.' '.$opFile.' -> '.$newFile);
                 continue;
             }
@@ -345,41 +345,41 @@ class BuildUpgradePackageCommand extends BaseCommand
     private function ingoredFiles($fileLines)
     {
         $this->output->writeln('<info>  本次升级将忽略以下文件</info>');
-        $ignoreFiles = array();
+        $ignoreFiles = [];
         foreach ($fileLines as $line) {
             list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
-            if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
+            if (0 === strpos($opFile, 'app/DoctrineMigrations')) {
                 array_push($ignoreFiles, $opFile);
                 continue;
             }
 
-            if (strpos($opFile, 'tests') === 0 || strpos($newFile, 'tests') === 0) {
+            if (0 === strpos($opFile, 'tests') || 0 === strpos($newFile, 'tests')) {
                 array_push($ignoreFiles, $opFile);
                 continue;
             }
 
-            if (strpos($opFile, 'migrations') === 0) {
+            if (0 === strpos($opFile, 'migrations')) {
                 array_push($ignoreFiles, $opFile);
                 continue;
             }
 
-            if (strpos($opFile, 'plugins') === 0 || strpos($newFile, 'plugins')) {
+            if (0 === strpos($opFile, 'plugins') || strpos($newFile, 'plugins')) {
                 array_push($ignoreFiles, $opFile);
                 continue;
             }
 
-            if (strpos($opFile, 'web/install') === 0) {
+            if (0 === strpos($opFile, 'web/install')) {
                 array_push($ignoreFiles, $opFile);
                 continue;
             }
 
-            if (strpos($opFile, 'doc') === 0) {
+            if (0 === strpos($opFile, 'doc')) {
                 array_push($ignoreFiles, $opFile);
                 continue;
             }
             //注意，为了本地视频播放问题，忽略该文件，如果有版本改动，还是要先第一次修复，之后再改动
-            if ($opFile === 'vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/BinaryFileResponse.php') {
+            if ('vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/BinaryFileResponse.php' === $opFile) {
                 array_push($ignoreFiles, $opFile);
                 continue;
             }
@@ -391,11 +391,11 @@ class BuildUpgradePackageCommand extends BaseCommand
     private function renamedFiles($fileLines)
     {
         $this->output->writeln('<info>  本次升级将重命名以下文件</info>');
-        $renamedFiles = array();
+        $renamedFiles = [];
         foreach ($fileLines as $line) {
             list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
-            if (strpos($op, 'R') === 0) {
+            if (0 === strpos($op, 'R')) {
                 $this->insertDelete($opFile, $this->packageDir);
                 $this->copyFileAndDir($newFile, $this->packageDir);
                 array_push($renamedFiles, "{$op}  : {$opFile} -> {$newFile}");
@@ -408,14 +408,14 @@ class BuildUpgradePackageCommand extends BaseCommand
     private function addedFiles($fileLines)
     {
         $this->output->writeln('<info>  本次升级将增加以下文件</info>');
-        $addedFiles = array();
+        $addedFiles = [];
         foreach ($fileLines as $line) {
             list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
             $opBundleFile = $this->getBundleFile($opFile);
             $newBundleFile = $this->getBundleFile($newFile);
 
-            if ($op == 'A') {
+            if ('A' == $op) {
                 $this->copyFileAndDir($opFile, $this->packageDir);
                 array_push($addedFiles, $opFile);
                 if ($opBundleFile) {
@@ -424,7 +424,7 @@ class BuildUpgradePackageCommand extends BaseCommand
                 }
             }
 
-            if (strpos($op, 'R') === 0) {
+            if (0 === strpos($op, 'R')) {
                 if ($newBundleFile) {
                     $this->copyFileAndDir($newBundleFile, $this->packageDir);
                     array_push($addedFiles, $newBundleFile);
@@ -438,13 +438,13 @@ class BuildUpgradePackageCommand extends BaseCommand
     private function updatedFiles($fileLines)
     {
         $this->output->writeln('<info>  本次升级将更新以下文件</info>');
-        $updatedFiles = array();
+        $updatedFiles = [];
         foreach ($fileLines as $line) {
             list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
             $opBundleFile = $this->getBundleFile($opFile);
 
-            if ($op == 'M') {
+            if ('M' == $op) {
                 $this->copyFileAndDir($opFile, $this->packageDir);
                 array_push($updatedFiles, $opFile);
                 if ($opBundleFile) {
@@ -460,13 +460,13 @@ class BuildUpgradePackageCommand extends BaseCommand
     private function deletedFiles($fileLines)
     {
         $this->output->writeln('<info>  本次升级将删除以下文件</info>');
-        $deletedFiles = array();
+        $deletedFiles = [];
         foreach ($fileLines as $line) {
             list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
             $opBundleFile = $this->getBundleFile($opFile);
 
-            if ($op == 'D') {
+            if ('D' == $op) {
                 $this->insertDelete($opFile, $this->packageDir);
                 array_push($deletedFiles, $opFile);
                 if ($opBundleFile) {
@@ -475,7 +475,7 @@ class BuildUpgradePackageCommand extends BaseCommand
                 }
             }
 
-            if (strpos($op, 'R') === 0) {
+            if (0 === strpos($op, 'R')) {
                 if ($opBundleFile) {
                     $this->insertDelete($opBundleFile, $this->packageDir);
                     array_push($deletedFiles, $opFile);
@@ -489,11 +489,11 @@ class BuildUpgradePackageCommand extends BaseCommand
     private function migrationFiles($fileLines)
     {
         $this->output->writeln('<info>  正在检测migrations目录文件</info>');
-        $migrationFiles = array();
+        $migrationFiles = [];
         foreach ($fileLines as $line) {
             list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
-            if (preg_match('/^(\w+.*\/)?migrations\/\d+.*\.php$/', $opFile, $matches) === 1) {
+            if (1 === preg_match('/^(\w+.*\/)?migrations\/\d+.*\.php$/', $opFile, $matches)) {
                 array_push($migrationFiles, $opFile);
             }
         }
@@ -511,10 +511,10 @@ class BuildUpgradePackageCommand extends BaseCommand
     {
         $this->output->writeln('<info>  正在检测web/assets/libs目录文件</info>');
 
-        $webAssetsFiles = array();
+        $webAssetsFiles = [];
         foreach ($fileLines as $line) {
             list($op, $opFile, $newFile) = $this->parseFileLine($line);
-            if (strpos($opFile, 'web/assets/libs') === 0) {
+            if (0 === strpos($opFile, 'web/assets/libs')) {
                 array_push($webAssetsFiles, $op.' '.$opFile);
             }
         }
@@ -555,6 +555,6 @@ class BuildUpgradePackageCommand extends BaseCommand
         $splitLine = preg_split('/\s+/', $line);
         list($op, $opFile, $newFile) = $splitLine;
 
-        return array($op, $opFile, $newFile);
+        return [$op, $opFile, $newFile];
     }
 }
