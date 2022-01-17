@@ -257,6 +257,66 @@
                 </el-col>
                 <el-input class="hidden" type="hidden" v-model="marketingForm.services"></el-input>
             </el-form-item>
+
+          <el-form-item>
+            <label slot="label">
+              引流设置
+              <el-popover
+                placement="top"
+                content="将已购用户引流至私域流量池"
+                trigger="hover"
+              >
+                <i class="es-icon es-icon-help text-normal course-mangae-info__help" slot="reference"></i>
+              </el-popover>
+            </label>
+            <el-col :span="18">
+              <el-radio
+                v-for="drainageRadio in drainageRadios"
+                v-model="marketingForm.drainage"
+                :key="drainageRadio.value"
+                :value="drainageRadio.value"
+                :label="drainageRadio.value"
+                class="cd-radio"
+              >
+                {{ drainageRadio.label }}
+              </el-radio>
+            </el-col>
+          </el-form-item>
+
+          <template v-if="marketingForm.drainage === '1'">
+            <el-form-item label="二维码设置">
+              <el-col :span="18">
+                上传图片
+              </el-col>
+            </el-form-item>
+
+            <el-form-item label="引流文案">
+              <el-col :span="18">
+                <el-input
+                  type="text"
+                  placeholder="请输入内容"
+                  v-model="marketingForm.drainageText"
+                  maxlength="20"
+                  show-word-limit
+                />
+              </el-col>
+            </el-form-item>
+
+            <el-form-item label="引流页样式">
+              <el-col :span="18">
+                加入/支付完成页
+                <el-popover
+                  placement="top-start"
+                  title="标题"
+                  width="200"
+                  trigger="hover"
+                >
+                  <div>content</div>
+                  <el-button type="text" slot="reference">查看详情</el-button>
+                </el-popover>
+              </el-col>
+            </el-form-item>
+          </template>
         </el-form>
     </div>
 </template>
@@ -343,6 +403,8 @@
                 expiryStartDate: this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate,
                 expiryEndDate: this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate,
                 services: this.course.services,
+                drainage: this.course.drainage || '0',
+                drainageText: this.course.drainageText || '',
             };
 
             if (this.vipInstalled && this.vipEnabled) {
@@ -383,6 +445,10 @@
                         value: '0',
                         label: Translator.trans('site.datagrid.radios.no'),
                     }
+                ],
+                drainageRadios: [
+                  { value: '1', label: '开启' },
+                  { value: '0', label: '关闭' }
                 ],
                 today: Date.now(),
                 dateOptions: {
