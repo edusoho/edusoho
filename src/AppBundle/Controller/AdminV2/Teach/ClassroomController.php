@@ -443,6 +443,7 @@ class ClassroomController extends BaseController
             'classroomCoursesNum' => $classroomCoursesNum,
             'coinPriceAll' => $coinPriceAll,
             'priceAll' => $priceAll,
+            'user' => $this->getUserService()->getUser($classroom['creator']),
         ]);
     }
 
