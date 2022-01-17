@@ -15,6 +15,7 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
 
         $result = [
             'user.learn.statistics.nickname',
+            'user.learn.statistics.mobile',
             'user.learn.statistics.join.classroom.num',
             'user.learn.statistics.exit.classroom.num',
             'user.learn.statistics.join.course.num',
@@ -46,7 +47,7 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
         $result = $expoter->buildCondition($contisions);
         $this->assertEquals([], $result['userIds']);
 
-        $contisions = ['nickname' => 'la'];
+        $contisions = ['keyword' => 'la'];
 
         $result = $expoter->buildCondition($contisions);
         $this->assertEquals(1, $result['userIds'][0]);
@@ -104,6 +105,7 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
             [
                 'id' => 1,
                 'nickname' => 'lalal',
+                'verifiedMobile' => '33333',
             ],
         ];
         $statistics = [
@@ -122,6 +124,7 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
 
         $this->assertArrayEquals([
             'lalal',
+            '33333'."\t",
             '3',
             '4',
             '35',
@@ -141,6 +144,7 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
         $data = $expoter->getContent(0, 10);
         $this->assertArrayEquals([
             'admin',
+            '--',
             '0',
             '0',
             '0',
