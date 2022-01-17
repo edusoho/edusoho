@@ -25,7 +25,11 @@ class LearnStatisticsController extends BaseController
         ];
         $conditions = $request->query->all();
         $conditions = array_merge($defaultCondition, $conditions);
-        $userConditions = ['destroyed' => 0, 'nickname' => $conditions['nickname']];
+        $userConditions = ['destroyed' => 0, 'nickname' => $conditions['keyword']];
+        if ('mobile' == $conditions['keywordType']) {
+            unset($userConditions['nickname']);
+            $userConditions['verifiedMobile'] = $conditions['keyword'];
+        }
         $paginator = new Paginator(
             $request,
             $this->getUserService()->countUsers($userConditions),
@@ -50,7 +54,7 @@ class LearnStatisticsController extends BaseController
             'users' => $users,
             'recordEndTime' => $recordEndTime,
             'isDefault' => $conditions['isDefault'],
-            'isInit' => $this->getInitStatus(),
+            'isInit' => true,
             'userLearnRecords' => $this->getActivityDataDailyStatisticsService()->findUserLearnRecords($conditions),
         ]);
     }
