@@ -2,8 +2,12 @@
 
 namespace Biz\Testpaper\Event;
 
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -21,9 +25,9 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onAnswerSubmitted(Event $event)
     {
         $answerRecord = $event->getSubject();
-
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
+        $this->processAnswerReportPassed($activity, $answerRecord);
         if ('reviewing' == $answerRecord['status']) {
-            $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
             if (empty($activity['mediaType']) || !in_array($activity['mediaType'], ['homework', 'testpaper'])) {
                 return;
             }
@@ -45,6 +49,8 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
                     $this->getNotificationService()->notify($teacherId, 'test-paper', $message);
                 }
             }
+        } else {
+            $this->processComment($activity, $answerRecord);
         }
     }
 
@@ -56,7 +62,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         if (empty($activity['mediaType']) || !in_array($activity['mediaType'], ['homework', 'testpaper'])) {
             return;
         }
-
+        $this->processAnswerReportPassed($activity, $answerRecord);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
         $user = $this->getBiz()['user'];
         $message = [
@@ -70,6 +76,71 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         ];
 
         $result = $this->getNotificationService()->notify($answerRecord['user_id'], 'test-paper', $message);
+        $this->notify($answerRecord);
+    }
+
+    protected function processAnswerReportPassed($activity, $answerRecord)
+    {
+        if (empty($activity['mediaType']) || empty($answerRecord)) {
+            return;
+        }
+        if ('homework' == $activity['mediaType']) {
+            if ('submit' === $activity['finishType'] && in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED])) {
+                $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' => 'passed']);
+
+                return;
+            }
+        }
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
+        if (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status'] && 'score' === $activity['finishType']) {
+            if ($answerReport['score'] >= $activity['finishData']) {
+                $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' => 'passed']);
+            } else {
+                $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' => 'unpassed']);
+            }
+        }
+    }
+
+    protected function processComment($activity, $answerRecord)
+    {
+        if ('testpaper' == $activity['mediaType'] && $testPaper = $this->getTestpaperActivityService()->getActivity($activity['mediaId'])) {
+            $comment = '';
+            $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+            foreach ($testPaper['customComments'] as $customComment) {
+                if ($customComment['start'] <= $answerReport['score'] && $answerReport['score'] <= $customComment['end']) {
+                    $comment = $customComment['comment'];
+                    break;
+                }
+            }
+            if ($comment) {
+                $this->getAnswerReportService()->update($answerReport['id'], ['comment' => $comment]);
+                $this->notify($answerRecord);
+            }
+        }
+    }
+
+    protected function notify($answerRecord)
+    {
+        $user = $this->getBiz()['user'];
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
+        $message = [
+            'id' => $answerRecord['id'],
+            'courseId' => $activity['fromCourseId'],
+            'name' => $activity['title'],
+            'userId' => $user['id'],
+            'userName' => $user['nickname'],
+            'type' => $activity['mediaType'],
+            'mode' => 'create',
+        ];
+        $this->getNotificationService()->notify($answerRecord['user_id'], 'answer-comment', $message);
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     public function getTestpaperService()
@@ -90,14 +161,6 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     public function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return ActivityService
-     */
-    public function getActivityService()
-    {
-        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     public function getStatusService()
@@ -127,5 +190,21 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     public function getAnswerRecordService()
     {
         return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->getBiz()->service('Activity:TestpaperActivityService');
     }
 }

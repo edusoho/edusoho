@@ -139,6 +139,7 @@ site.twig.extension.smarttime.previous_second: %diff% second ago
 site.twig.extension.smarttime.previous_minute: %diff% minute ago
 site.twig.extension.smarttime.previous_hour: %diff% hour ago
 site.twig.extension.smarttime.previous_day: %diff% day ago
+site.twig.extension.time_interval.second: '%diff% second'
 site.twig.extension.time_interval.minute: '%diff% minute'
 site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
 site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
@@ -1368,7 +1369,7 @@ course.plan_info: >
   <p>3. Support the same course content, but provide courses with different service levels(Exp: Video class, Live class, Answering class).</p>
   <p>4. Support to set up multiple classes according to the students' learning ability(Exp: Fast class, Slow class).</p>
   <p class="cd-mt24">Welcome
-
+course.testpaper_export.btn: Exporting transcript
 course.tab.tasks: 'Syllabus'
 course.tab.threads: 'Discussions'
 course.tab.discussions: 'Discussions'
@@ -1818,9 +1819,10 @@ course.plan_task.activity_manage.exercise.confirm_submit_tips: 'Are you sure to 
 course.plan_task.activity_manage.flash.play_tips: 'Note：Flash is not supported on mobile'
 course.plan_task.activity_manage.homework.finished_condition_tips: '<p class="gray-darker mbs">Meet below conditions:</p>Submit assignment'
 course.plan_task.activity_manage.homework.info: 'Assignment description'
+course.plan_task.activity_manage.homework.can_not_edit_tips: This assignment has been cited in other copied courses, and the title cannot be edited temporarily
 course.plan_task.activity_manage.homework.total: 'The assignment has total <span class="color-primary">%itemCount% questions</span>'
 course.plan_task.activity_manage.homework.choose_question: 'Choose question'
-course.plan_task.activity_manage.homework.save_tips: 'Tip：The saved questions will no longer be added or removed.'
+course.plan_task.activity_manage.homework.save_tips: 'The published questions will no longer be added or delete.'
 course.plan_task.activity_manage.homework.submit: Submit
 course.plan_task.activity_manage.homework.start_btn: Start
 course.plan_task.activity_manage.homework.reviewing_tips: 'The teacher is approving the job. After completing the consultation, the teacher will inform you of the results. Please wait.'
@@ -1855,6 +1857,18 @@ course.plan_task.activity_manage.testpaper.choose: 'Please choose test paper'
 course.plan_task.activity_manage.testpaper.create: "There is no testpaper, pleas e<a href=\"%testpaperUrl%\" target=\"_parent\">create</a>\n"
 course.plan_task.activity_manage.testpaper.empty_tips: 'If you can not find a testpaper, please make sure that the testpaper has been published'
 course.plan_task.activity_manage.testpaper.qualified_score: Qualified Score
+course.plan_task.activity_manage.testpaper.auto_comment: Comments
+course.plan_task.activity_manage.testpaper.score: Scorc
+course.plan_task.activity_manage.testpaper.comment_content: Content
+course.plan_task.activity_manage.testpaper.comment_operation: Operation
+course.plan_task.activity_manage.testpaper.add_comment: Add
+course.plan_task.activity_manage.testpaper.default_comment: Default
+course.plan_task.activity_manage.testpaper.default_comment1: Keep working hard and keep improving!
+course.plan_task.activity_manage.testpaper.default_comment2: Yes, if there is progress, it will be even better if you work harder!
+course.plan_task.activity_manage.testpaper.default_comment3: You are awesome! I am proud of you!
+course.plan_task.activity_manage.testpaper.default_comment4: A little slack, right? Keep going!
+course.plan_task.activity_manage.testpaper.default_comment5: With heart, focus and persistence, you can do better!
+course.plan_task.activity_manage.testpaper.comment_remove: Remove
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Hour, No limitation.'
 course.plan_task.activity_manage.testpaper.time_length_tips: 0 Minute, No limitation.
@@ -1866,6 +1880,7 @@ course.plan_task.activity_manage.testpaper.show_answer: Show the answer and anal
 course.plan_task.activity_manage.testpaper.show_answer_tips: The setting takes effect when the number of exams is not limited.
 course.plan_task.activity_manage.testpaper.redo_interval: 'Retry interval'
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 'Retry Time Interval: Start time after completion of approval. '
+course.plan_task.activity_manage.testpaper.comment_tips: 'Scoring interval setting rules: 1. The scoring interval includes the lower limit and upper limit of the interval. 2. When the student score is greater than or equal to the lower limit of the interval or less than the upper limit of the interval, the comments of the interval will be automatically displayed. 3. If there are overlapping score ranges, the comments ranked at the top in the comment list will be displayed first.'
 course.plan_task.activity_manage.testpaper.time: Time
 course.plan_task.activity_manage.testpaper.time_tips: 'Students can only take the exam within the time frame.'
 course.plan_task.activity_manage.testpaper.mode.always: 'No limitation'
@@ -1874,6 +1889,7 @@ course.plan_task.activity_manage.testpaper.mode.require_credit: 'Limit credits'
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credits required to take the test, 0 is no limitation'
 course.plan_task.activity_manage.testpaper.pass: 'Pass mark'
 course.plan_task.activity_manage.testpaper.score_pass: 'Pass Score'
+course.plan_task.activity_manage.homework.score_pass: 'Pass Score'
 course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not start, please come back at %startTime%.'
 course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points</span>.'
 course.plan_task.activity_manage.testpaper.pass_score: "pass score is <span class=\"color-primary\">%finishScore% points</span>.\n"
@@ -6111,6 +6127,8 @@ admin.edu_cloud.edu_sms.homework_checked: 'The homework is completed'
 admin.edu_cloud.edu_sms.homework_checked_tips: 'The homework of Course：<Course Name>-<Study Task name> is reviewed. Please check.'
 admin.edu_cloud.edu_sms.testpaper_checked: 'Testpaper marked'
 admin.edu_cloud.edu_sms.testpaper_checked_tips: 'Your test paper in the "lesson name" - course: "course name" has been marked by teacher, have a look! %smsScoolName%'
+admin.edu_cloud.edu_sms.comment_modify: 'Comment modify'
+admin.edu_cloud.edu_sms.comment_modify_tips: 'Course: 《course name》- task name：[task name [exam/homework] task] teacher comment is modify，click to view [link url]'
 admin.edu_cloud.edu_sms.invite_rewards_not_enough: 'Insufficient invitation to register'
 admin.edu_cloud.edu_sms.coupon_not_enough_tips: 'The [Invitation Registration] activity rewards you set [the coupon name] is only 50, please pay attention to the remaining coupons.'
 admin.edu_cloud.edu_sms.invite_rewards_is_exhausted: 'Invite registration rewards to be exhausted'
@@ -7525,6 +7543,9 @@ course.homework_check.review.empty: 'No data found'
 course.homework_check.review.name: Name
 course.homework_check.review.score: Score
 course.homework_check.review.submit_time: 'Submit time'
+course.homework_check.review.submit_num: Submit Num
+course.testpaper_check.review.submit_num: Submit Num
+course.homework_check.review.submit_num_detail: num %num%
 course.homework_check.review.status: Status
 course.homework_check.review.reviewer: Reviewer
 course.homework_check.review.operation: Action
@@ -9746,6 +9767,7 @@ wechat.notification.template.vip_expired: 'Dear student, the membership you purc
 wechat.notification.message_subscribe_template.live_start: "Subscription course opening reminder <br> <br> Course Title: [task name] <br> time: [live broadcast start time (accurate to minutes)] <br> Lecturer: [teacher user name] [if any, additional display of teacher's mobile phone number] <br> remarks: [n times left] notice, please enter the course learning page to subscribe"
 wechat.notification.message_subscribe_template.homework_result: "Assignment correction completion notice <br> <br> Title: [task name] <br> assignment status: [assignment status] ([n remaining] notices) <br> comments: [comments]"
 wechat.notification.message_subscribe_template.exam_result: "Examination result notice <br> <br> examination name: [task name] <br> score: [examination score] <br> warm tips: [n times left] notice, please enter the course learning page to subscribe"
+wechat.notification.message_subscribe_template.comment_modify: "Comment completion notice <br> <br> correlated curriculum: [curriculum name] <br> review type: [exam/homework] <br> title: [task name] <br> content: [comment] <br> review time: [review time]"
 wechat.notification.message_subscribe_template.lesson_add: "New notice on course <br> <br> Course: [Course name] ([course category]) <br> teacher: [teacher user name] <br> time: [task release time] or [live broadcast start time] <br> remarks: [n times left] notice, please enter the course learning page to subscribe"
 wechat.notification.message_subscribe_template.ask_question: "Student question reminder <br> Course Name: ([if it is a class, show class 2 characters]) [Course name] or [class name] <br> questioner: [student user name] ([n times left] notice) <br> question: [question title] <br> question time: [question submission time] <br> <br> Course Name"
 wechat.notification.message_subscribe_template.position.lesson_page_student: 'Course learning page <br> (course participants)'
@@ -9754,6 +9776,7 @@ wechat.notification.message_subscribe_template.position.lesson_page_teacher: 'Co
 wechat.notification.message_subscribe_sms.template.live_start: "[online education] course: [Course name] - learning task: [learning task name] will be broadcast on [broadcast time]! Link address"
 wechat.notification.message_subscribe_sms.template.homework_result: "[online education] the homework of your course: [Course name] [learning task name] has been reviewed by the teacher. Come and have a look"
 wechat.notification.message_subscribe_sms.template.exam_result: "[online education] the test paper of your course: [Course name] [learning task name] has been reviewed by the teacher. Come and have a look"
+wechat.notification.message_subscribe_sms.template.comment_modify: "[online education] course: 《[Course name]》 - learning task: [[task name][exam/homework] task] teacher comments have been revised，click to view [Link address]"
 wechat.notification.message_subscribe_sms.template.lesson_add: 'General course: <br> [online education] your course: [Course name] - learning task: [learning task name] has been published! Link address <br> live broadcast: <br> [online education] course: [Course name] - learning task: [learning task name] will be broadcast on [broadcast time]! Link address'
 wechat.notification.message_subscribe_sms.template.vip_expired: '[online education] Dear students, the membership you purchased is about to expire: <br> opening time: [opening time] <br> expiration time: [expiration time] <br> please renew it in time to avoid affecting your study'
 wechat.notification.message_subscribe_sms.template.homework_or_testpaper_need_review: '[online education] Dear teacher, you still have uncorrected assignments / papers today: <br> time: [date of the day, accurate to day] <br> number: [number of uncorrected assignments and papers submitted in the past 24 hours] <br> please correct them in time。'
@@ -9770,6 +9793,7 @@ wechat.notification.template.homework_or_testpaper_need_review.rule: 'For at lea
 wechat.notification.template.live_start.rule: 'A notification will be sent to participants at the designated time before the live class begins.'
 wechat.notification.template.homework_result.rule: 'When the homework contains subjective questions, the teacher will send the results to the students after reviewing.'
 wechat.notification.template.exam_result.rule: 'When there are subjective questions in the test paper, the teacher will send the results to the students after reviewing.'
+wechat.notification.template.comment_modify.rule: 'When the teacher finishes adding or modifying the teacher comments, the teacher will send the result to the students after the modification.'
 wechat.notification.template.lesson_add.rule: 'A notification is sent to participants when new assignments are posted.'
 wechat.notification.template.charge_success.rule: 'A notification will be sent when students successfully recharge their virtual currency.'
 wechat.notification.template.buy_success.rule: 'A notification is sent when a student has successfully purchased a course, class, or membership.'
@@ -9786,6 +9810,7 @@ wechat.notification.template_name.vip_expired: 'Vip Expired'
 wechat.notification.template_name.live_start: 'Course Start'
 wechat.notification.template_name.homework_result: 'Homework Result'
 wechat.notification.template_name.exam_result: 'Exam Result'
+wechat.notification.template_name.comment_modify: 'Comment To Modify'
 wechat.notification.template_name.lesson_add: 'Lesson Add'
 wechat.notification.template_name.charge_success: 'Charge Success'
 wechat.notification.template_name.buy_success: 'Buy Success'
@@ -10847,7 +10872,23 @@ course.live_replay.length: length
 course.live_replay.start_time: Start Time
 course.live_replay_manage.live_replay_empty: replay deleted
 course.live_replay.tips: The current version only supports viewing of live playback sessions on the PC side, and does not currently support the mobile side
+course.homework.pass_score: Set passing score
+course.homework.pass_score.tip1: 'Full marks：'
+course.homework.pass_score.tip2: Qualified if the score is reached
+testpaper.score_set.option: question score
 
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%.%taskNumber%:%taskTitle%'
 common.cancel_recommend.btn: Cancel Recommend
+course.homework.score_title.tips.choice: "Multiple choice score setting:<br>No points for wrong or multiple choices.<br>Missed selection: missed selection and no error, a fixed score.<br>Each item: if there is no wrong item, the score of the correct item is added up."
+course.homework.score_title.tips.uncertain_choice: "Uncertain choice score setting:<br>No points for wrong or multiple choices.<br>Missed selection: missed selection and no error, a fixed score.<br>Each item: if there is no wrong item, the score of the correct item is added up."
+course.homework.score_title.tips.material: "Multiple choice and Uncertain choice  score setting:<br>No points for wrong or multiple choices.<br>Missed selection: missed selection and no error, a fixed score.<br>Each item: if there is no wrong item, the score of the correct item is added up."
+course.homework.score_title.tips: "Multiple choice and Uncertain choice  score setting:<br>No points for wrong or multiple choices.<br>Missed selection: missed selection and no error, a fixed score.<br>Each item: if there is no wrong item, the score of the correct item is added up."
+course.homework.score.tip: 'Note: When there are homework qualification requirements, you need to set the topic score'
+course.homework.score.finish.tip: 'Note: The score is only used as a basis for judging the qualification of the homework, not for students to show'
+
+review.result.fail: Fail
+review.result.pass: Pass
+review.result.comment_tips: After modifying the comment, a comment modification notice will be sent to the students
+review.result.amend_comment: Amend comment
+testpaper.import.tip: "The test paper is imported successfully, please adjust the test paper score on the current page. (Note: 'Each item' setting is added for multiple-choice and variable-choice questions, and 'Each blank' setting is added for fill-in-the-blank questions.)"

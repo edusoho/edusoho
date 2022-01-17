@@ -74,7 +74,7 @@ class HomeworkManageController extends BaseTestpaperController
             return $this->createJsonResponse(['result' => 'error', 'message' => 'json_response.must_choose_question.message']);
         }
 
-        $questions = $this->getItemService()->findItemsByIds($itemIds);
+        $questions = $this->getItemService()->findItemsByIds($itemIds, true);
 
         $itemBankIds = array_unique(array_column($questions, 'bank_id'));
         if (count($itemBankIds) > 1) {

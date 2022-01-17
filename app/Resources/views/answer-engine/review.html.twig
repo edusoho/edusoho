@@ -19,6 +19,7 @@
   {% endif %}
 {% endblock %}
 
+
 {% block body %}
     {% block header %}
         {% if showHeader|default(1) %}{{ parent() }}{% endif %}
@@ -29,7 +30,11 @@
     <input type="hidden" name="answer_record_id" value='{{ answerRecordId }}'>
     <input type="hidden" name="success_goto_url" value='{{ successGotoUrl }}'>
     <input type="hidden" name="success_continue_goto_url" value='{{ successContinueGotoUrl }}'>
+    <input type="hidden" name="goto_back_url" value='{{ goBackUrl }}'>
     <input type="hidden" name="role" value='{{ role }}'>
+    <input type="hidden" name="media_type" value='{{ activity.mediaType }}'>
+    <input type="hidden" name="finishType" value='{{ activity.finishType }}'>
+
     {% block footer %}
         {% if showHeader|default(1) %}{{ parent() }}{% endif %}
     {% endblock %}

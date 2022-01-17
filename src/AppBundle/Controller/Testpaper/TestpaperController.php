@@ -47,7 +47,7 @@ class TestpaperController extends BaseController
         ]);
     }
 
-    public function showResultAction(Request $request, $answerRecordId)
+    public function showResultAction(Request $request, $answerRecordId, $type = 'default')
     {
         if (!$this->canLookAnswerRecord($answerRecordId)) {
             $this->createNewException(CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR());
@@ -74,6 +74,7 @@ class TestpaperController extends BaseController
             'assessment' => $assessment,
             'restartUrl' => $restartUrl,
             'answerShow' => $this->getAnswerShow($answerRecord['answer_scene_id'], $answerRecord['status'], $answerScene['pass_score'], $answerReport['score']),
+            'type' => $type,
         ]);
     }
 

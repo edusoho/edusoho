@@ -293,6 +293,13 @@ activity.testpaper_manage.difficulty_percentage: 困难%difficultyPercentage%%
 activity.testpaper_manage.required_error_hint: 请输入分数
 activity.testpaper_manage.question_options: 选项
 activity.testpaper_manage.questions_length_hint: 题目数量最多为2000
+activity.testpaper_manage.default_comment: 默认评语
+activity.testpaper_manage.default_comment1: 继续努力，继续进步！
+activity.testpaper_manage.default_comment2: 不错，有进步，再努力些就会更棒！
+activity.testpaper_manage.default_comment3: 你真棒！我为你骄傲！
+activity.testpaper_manage.default_comment4: 有点松懈了吧？继续加油吧！
+activity.testpaper_manage.default_comment5: 用心、专注、坚持，你能做的更好的！
+activity.testpaper_manage.comment_remove: 移除
 
 activity.text_manage.save_draft_hint: (草稿已于%createdTime%保存)
 activity.text_manage.finish_detail_required_error_hint: 请输入至少观看多少分钟
@@ -1914,6 +1921,13 @@ course.live_replay.un_share_btn:  取消共享
 course.live_replay.share_tip: 请确认将此直播回放共享到共享直播回放资源库?
 course.live_replay.un_share_tip:  请确认将此直播回放从共享直播回放资源库移除？
 course.live_replay.delete_tip:  请确认将此直播回放移除？
+course.homework.score.tip1: 请输入合格分数
+course.homework.score.tip2: 请输入不大于试卷总分的数值
+course.scoer.validator: 请检查题目分数设置，存在题目设置错误
+course.miss_score.validator: 漏选分值不得超过题目分值
+course.option_score.validator: 选项总分不得超过题目分值
+testpaper.scoer.validator: 分值设置有误，请检查各题型题目分值设置
+testpaper.option_score.validator: 每项分值不得超过每题分值
 
 all: 全部
 coupon: 优惠卷
@@ -2028,15 +2042,12 @@ decorate.search_for_public_classes: 搜索公开课
 decorate.image_ad_settings: 图片广告设置
 decorate.add_pictures: 添加图片
 decorate.select_link: 选择链接
-decorate.choose_a_course: 选择课程
-decorate.select_class: 选择班级
 decorate.select_member: 选择会员
 decorate.custom_link: 自定义链接
 decorate.mobile_phone_screen: 自适应手机屏幕
 decorate.turn_on: 开启
 decorate.closure: 关闭
 decorate.revise: 修改
-decorate.carousel: 轮播图
 decorate.add_content: 添加内容
 decorate.carousel_tip1: 建议图片尺寸为 750x300px，支持 jpg/png/gif 格式，大小不超过 2 MB
 decorate.carousel_tip2: 最多添加 5 个轮播图，拖动选中的图片可对其排序
@@ -2079,3 +2090,4 @@ scrm.sales_analysis_performance_status_at_a_glance: 销售分析，一目了然�
 scrm.analyze_the_overall_situation_of_the_company_is_marketing: 对企业营销的整体情况进行分析；当销售完成客户跟进后，管理员还可对销售的销售效果进行分析。
 scrm.live_open_class: 直播公开课
 scrm.set_up_live_open_classes: 机构快速开设直播公开课，学员可在直播间购买正课；学员可邀请好友到直播间学习，实现裂变。
+testpaper.import.tip: "试卷导入成功，请在当前页面调整试卷分值。（注：多选题和不定项选题新增“每项”设置，填空题新增“每空”设置。）"

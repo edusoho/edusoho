@@ -11,7 +11,7 @@ site.not_support_cloud_video: >
   <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。安卓端允许在微信内置浏览器中观看。
 site.not_support_cloud_video_upgrade: >
   <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请用微信打开或<a href="%mobileUrl%" target="parent">下载App</a>。
-site.currency.CNY: 
+site.currency.CNY: 元
 site.date.year: 年
 site.date.month: 月
 site.date.day: 天
@@ -143,6 +143,7 @@ site.twig.extension.smarttime.previous_second: %diff%秒前
 site.twig.extension.smarttime.previous_minute: %diff%分钟前
 site.twig.extension.smarttime.previous_hour: %diff%小时前
 site.twig.extension.smarttime.previous_day: %diff%天前
+site.twig.extension.time_interval.second: '%diff% 秒'
 site.twig.extension.time_interval.minute: '%diff%分'
 site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%秒'
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
@@ -1262,6 +1263,9 @@ course.homework_check.review.empty: 暂无数据
 course.homework_check.review.name: 姓名
 course.homework_check.review.score: 成绩
 course.homework_check.review.submit_time: 提交时间
+course.homework_check.review.submit_num: 作业次数
+course.homework_check.review.submit_num_detail: 第%num%次
+course.testpaper_check.review.submit_num: 考试次数
 course.homework_check.review.status: 状态
 course.homework_check.review.reviewer: 批阅人
 course.homework_check.review.operation: 操作
@@ -1597,6 +1601,7 @@ course.plan_info: >
   <p>3、支持相同课程内容，但提供不同服务等级的课程：视频班、直播班、答疑班；</p>
   <p>4、支持根据学员的学习能力，开设多个教学班：快班、慢班；</p>
   <p class="cd-mt24">欢迎您使用教学计划管理，新的功能将更好的支持您开展教学工作，您的声音是我们前进的动力！</p>
+course.testpaper_export.btn: 导出成绩单
 
 
 # 课程扩展
@@ -2106,10 +2111,11 @@ course.plan_task.activity_manage.exercise.finished_condition: 提交练习
 course.plan_task.activity_manage.flash.play_tips: 注意：Flash在移动端上无法播放!
 course.plan_task.activity_manage.homework.finished_condition: 提交作业
 course.plan_task.activity_manage.homework.info: 作业说明
+course.plan_task.activity_manage.homework.can_not_edit_tips: 该作业已在其他复制课程中引用,题目暂不可编辑
 course.plan_task.activity_manage.homework.total: >
   本次作业<span class="color-primary">%itemCount%题</span>
 course.plan_task.activity_manage.homework.choose_question: 选择题目
-course.plan_task.activity_manage.homework.save_tips: 提示：保存后题目将不能再添加或移除。
+course.plan_task.activity_manage.homework.save_tips: 发布后题目将不能再添加或移除。
 course.plan_task.activity_manage.homework.submit: 提交作业
 course.plan_task.activity_manage.homework.start_btn: 开始做题
 course.plan_task.activity_manage.homework.reviewing_tips: 老师正在批阅作业，批阅完成后会以站内私信通知您批阅结果，请稍等。
@@ -2146,6 +2152,18 @@ course.plan_task.activity_manage.testpaper.create: >
   还没有试卷，请先去<a href="%testpaperUrl%" target="_parent">创建</a>
 course.plan_task.activity_manage.testpaper.empty_tips: 如果找不到试卷，请先确定该试卷已经发布
 course.plan_task.activity_manage.testpaper.qualified_score: 合格分数
+course.plan_task.activity_manage.testpaper.auto_comment: 自动评语
+course.plan_task.activity_manage.testpaper.score: 得分区间
+course.plan_task.activity_manage.testpaper.comment_content: 评语内容
+course.plan_task.activity_manage.testpaper.comment_operation: 操作
+course.plan_task.activity_manage.testpaper.add_comment: 添加评语
+course.plan_task.activity_manage.testpaper.default_comment: 默认评语
+course.plan_task.activity_manage.testpaper.default_comment1: 继续努力，继续进步！
+course.plan_task.activity_manage.testpaper.default_comment2: 不错，有进步，再努力些就会更棒！
+course.plan_task.activity_manage.testpaper.default_comment3: 你真棒！我为你骄傲！
+course.plan_task.activity_manage.testpaper.default_comment4: 有点松懈了吧？继续加油吧！
+course.plan_task.activity_manage.testpaper.default_comment5: 用心、专注、坚持，你能做的更好的！
+course.plan_task.activity_manage.testpaper.comment_remove: 移除
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 course.plan_task.activity_manage.testpaper.times: 考试次数
 course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
@@ -2165,6 +2183,7 @@ course.plan_task.activity_manage.testpaper.mode.require_credit: 限制学分
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 参加此次考试所需的学分，０分则不限制。
 course.plan_task.activity_manage.testpaper.pass: 分数达标
 course.plan_task.activity_manage.testpaper.score_pass: 考试合格
+course.plan_task.activity_manage.homework.score_pass: 作业合格
 course.plan_task.activity_manage.testpaper.finish_tip: 提示：若任务完成条件选择了“考试合格”，则学员的考试分数必须达到上一步中设置的“合格分数”，才能完成此任务。
 course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始，请在%startTime%之后再来
 course.plan_task.activity_manage.testpaper.total_question: >
@@ -7225,6 +7244,8 @@ admin.edu_cloud.edu_sms.homework_checked: 作业完成批阅
 admin.edu_cloud.edu_sms.homework_checked_tips: 您的课程：《课程名称》-《学习任务名称》的作业已被老师批阅，快来看看吧!
 admin.edu_cloud.edu_sms.testpaper_checked: 试卷完成批阅
 admin.edu_cloud.edu_sms.testpaper_checked_tips: 您的课程：《课程名称》-《学习任务名称》的试卷已被老师批阅，快来看看吧!
+admin.edu_cloud.edu_sms.comment_modify: 评语修改通知
+admin.edu_cloud.edu_sms.comment_modify_tips: 课程：《课程名称》-学习任务：[任务名称[考试/评语]任务]的教师评语已修改，点击查看[链接地址]
 admin.edu_cloud.edu_sms.invite_rewards_not_enough: 邀请注册奖励不足
 admin.edu_cloud.edu_sms.coupon_not_enough_tips: 您设置的［邀请注册］活动奖励［优惠券名称］仅剩 50 张，请及时关注剩余优惠券数量。
 admin.edu_cloud.edu_sms.invite_rewards_is_exhausted: 邀请注册奖励消耗完
@@ -11040,6 +11061,7 @@ wechat.notification.template.vip_expired: '亲爱的学员，您购买的会员�
 wechat.notification.message_subscribe_template.live_start: "订阅课程开课提醒<br><br>课程标题：[任务名]<br>时间：[直播开始时间（精确到分钟）]<br>主讲老师：[老师用户名] [如果有，额外显示老师手机号]<br>备注：[剩N次]通知，请进入课程学习页订阅"
 wechat.notification.message_subscribe_template.homework_result: "作业批改完成通知<br><br>标题：[任务名]<br>作业情况：[作业情况]([剩N次]通知)<br>评语：[评语]"
 wechat.notification.message_subscribe_template.exam_result: "考试成绩通知<br><br>考试名称：[任务名]<br>分数：[考试的分数]<br>温馨提示：[剩N次]通知，请进入课程学习页订阅"
+wechat.notification.message_subscribe_template.comment_modify: "点评完成提醒<br><br>相关课程：[课程名]<br>点评类别：[考试/作业]<br>作业标题：[任务名]<br>点评内容：[评语]<br>点评时间：[点评时间]"
 wechat.notification.message_subscribe_template.lesson_add: "课程上新通知<br><br>课程：[课程名]([课程类别])<br>老师：[教师用户名]<br>时间：[任务发布时间]或[直播开始时间]<br>备注：[剩N次]通知，请进入课程学习页订阅"
 wechat.notification.message_subscribe_template.ask_question: "学生提问提醒<br>课程名称: ([如果是班级，显示班级2字])[课程名称] 或 [班级名称]<br>提问者：[学生用户名]([剩N次]通知)<br>提问问题：[问题标题]<br>提问时间: [问题提交时间]"
 wechat.notification.message_subscribe_template.position.lesson_page_student: '课程学习页<br>（课程学员）'
@@ -11048,6 +11070,7 @@ wechat.notification.message_subscribe_template.position.lesson_page_teacher: '�
 wechat.notification.message_subscribe_sms.template.live_start: "【 在线教育 】 课程：[课程名称]－学习任务：[学习任务名称]将在［开播时间］开播！链接地址<br>"
 wechat.notification.message_subscribe_sms.template.homework_result: "【 在线教育 】 您的课程：[课程名称]-[学习任务名称]的作业已被老师批阅，快来看看吧!<br>"
 wechat.notification.message_subscribe_sms.template.exam_result: "【 在线教育 】 您的课程：[课程名称]-[学习任务名称]的试卷已被老师批阅，快来看看吧!<br>"
+wechat.notification.message_subscribe_sms.template.comment_modify: "【 在线教育 】 课程：《[课程名称]》-学习任务：【[任务名称][作业/考试]任务】的教师评语已修改，点击查看【网校链接】"
 wechat.notification.message_subscribe_sms.template.lesson_add: '普通课程:<br>【 在线教育 】 您的课程：[课程名称]－学习任务：[学习任务名称]已发布！链接地址<br>直播:<br>【 在线教育 】 课程：[课程名称]－学习任务：[学习任务名称]将在［开播时间］开播！链接地址'
 wechat.notification.message_subscribe_sms.template.vip_expired: '【 在线教育 】亲爱的学员，您购买的会员即将到期:<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
 wechat.notification.message_subscribe_sms.template.homework_or_testpaper_need_review: '【 在线教育 】尊敬的老师，您今日仍有作业/试卷未批改:<br>时间：[当日日期，精确到天]<br>数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
@@ -11064,6 +11087,7 @@ wechat.notification.template.homework_or_testpaper_need_review.rule: '针对至�
 wechat.notification.template.live_start.rule: '直播课开始前，会在指定时间发送通知给课程学员。'
 wechat.notification.template.homework_result.rule: '当作业中含有主观题时，老师批阅完成后会将结果发送给学员。'
 wechat.notification.template.exam_result.rule: '当试卷中含有主观题时，老师批阅完成后会将结果发送给学员。'
+wechat.notification.template.comment_modify.rule: '当教师完成教师评语的添加或修改，老师修改完成后会将结果发送给学员。'
 wechat.notification.template.lesson_add.rule: '当课程有新的任务发布时，会发一条通知给课程学员。'
 wechat.notification.template.charge_success.rule: '当学员成功充值虚拟币时，会发送一条通知。'
 wechat.notification.template.buy_success.rule: '当学员成功购买课程、班级或会员时，会发送一条通知。'
@@ -11080,6 +11104,7 @@ wechat.notification.template_name.vip_expired: '会员到期提醒'
 wechat.notification.template_name.live_start: '课程开课通知'
 wechat.notification.template_name.homework_result: '作业结果通知'
 wechat.notification.template_name.exam_result: '考试结果通知'
+wechat.notification.template_name.comment_modify: '评语修改通知'
 wechat.notification.template_name.lesson_add: '课程更新提醒'
 wechat.notification.template_name.charge_success: '充值成功通知'
 wechat.notification.template_name.buy_success: '购买成功通知'
@@ -12108,6 +12133,30 @@ course.live_replay.start_time: 直播时间
 course.live_replay_manage.live_replay_empty: 直播回放已被删除
 course.live_replay.tips: 当前版本仅支持PC端查看直播回放课时，暂不支持移动端
 
+course.homework.pass_score: 设置合格分数
+course.homework.pass_score.tip1: '作业满分为：'
+course.homework.pass_score.tip2: 分数达到则合格
+course.homework.score_set.select.question1: 每题
+course.homework.score_set.select.option1: 每空
+course.homework.score_set.select.question2: 漏选得分
+course.homework.score_set.select.option2: 每项正确得分
+course.homework.score.tip: 注：有作业合格要求时，需要设置题目分值
+course.homework.score.finish.tip: 注：得分仅作为作业合格的判断依据，不对学员展示
+testpaper.score_set.option: 每题分值
+
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%%taskNumber%： %taskTitle%'
 common.cancel_recommend.btn: 取消推荐
+course.homework.score_title.tips.choice: "多选题分值设置：<br>错选和多选不得分。<br>漏选：漏选且无错项时，得固定分值。<br>每项：漏选且无错项时，累加正确选项的分值。"
+course.homework.score_title.tips.uncertain_choice: "不定项选择分值设置：<br>错选和多选不得分。<br>漏选：漏选且无错项时，得固定分值。<br>每项：漏选且无错项时，累加正确选项的分值。"
+course.homework.score_title.tips.material: "多选题和不定项选择分值设置：<br>错选和多选不得分。<br>漏选：漏选且无错项时，得固定分值。<br>每项：漏选且无错项时，累加正确选项的分值。"
+course.homework.score_title.tips: "多选题和不定项选择分值设置：<br>错选和多选不得分。<br>漏选：漏选且无错项时，得固定分值。<br>每项：漏选且无错项时，累加正确选项的分值。"
+review.result.fail: 未通过
+review.result.pass: 通过
+review.result.comment_tips: 修改评语后，将向学员发送评语修改通知
+review.result.amend_comment: 修改评价
+testpaper.import.tip: 试卷导入成功，请在当前页面调整试卷分值。（注：多选题和不定项选题新增“每项”设置，填空题新增“每空”设置。）
+course.plan_task.activity_manage.testpaper.comment_tips: 得分区间设置规则：<br>1、得分区间包含区间下限和区间上限。<br>2、当学员得分，大于等于区间下限或小于区间上限，自动显示该区间评语。<br>3、如果存在得分区间重叠情况，优先显示在评语列表中排序靠前的评语。
+
+
+

@@ -7,7 +7,7 @@ class Testpaper {
 
     $('#finish-type').on('selectChange', function(e, value){
       if ('score' == value) {
-        $('#score-condition').show();
+        $('#js-test-and-comment').show();
       }
     });
   }

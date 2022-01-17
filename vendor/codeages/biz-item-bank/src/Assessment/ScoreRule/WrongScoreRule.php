@@ -8,10 +8,10 @@ class WrongScoreRule extends ScoreRule
 {
     const RULE = 'wrong';
 
-    public function review($questionResult, $score)
+    public function review($questionResult, $rule)
     {
         if ('wrong' == $questionResult['result'] && in_array('wrong', $questionResult['response_points_result'])) {
-            return ['status' => AnswerQuestionReportService::STATUS_WRONG, 'score' => $score];
+            return ['status' => AnswerQuestionReportService::STATUS_WRONG, 'score' => $rule['score']];
         }
 
         return ['status' => '', 'score' => 0];

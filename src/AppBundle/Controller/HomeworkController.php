@@ -74,7 +74,7 @@ class HomeworkController extends BaseController
         ]);
     }
 
-    public function showResultAction(Request $request, $answerRecordId)
+    public function showResultAction(Request $request, $answerRecordId, $type = 'default')
     {
         if (!$this->canLookAnswerRecord($answerRecordId)) {
             $this->createNewException(CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR());
@@ -99,6 +99,7 @@ class HomeworkController extends BaseController
             'answerRecordId' => $answerRecordId,
             'assessment' => $assessment,
             'restartUrl' => $restartUrl,
+            'type' => $type,
         ]);
     }
 

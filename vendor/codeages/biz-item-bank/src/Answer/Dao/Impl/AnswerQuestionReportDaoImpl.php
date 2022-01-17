@@ -34,7 +34,8 @@ class AnswerQuestionReportDaoImpl extends AdvancedDaoImpl implements AnswerQuest
             ],
             'orderbys' => [],
             'serializes' => [
-                'response' => 'json'
+                'response' => 'json',
+                'revise' => 'json'
             ],
             'conditions' => [
                 'answer_record_id = :answer_record_id',

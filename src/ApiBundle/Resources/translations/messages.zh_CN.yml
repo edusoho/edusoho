@@ -5,3 +5,7 @@ api.notification.test-paper.perusal: 【完成】%who% 刚刚完成了%what%，�
 api.notification.test-paper.read: 【批阅】%who% 刚刚批阅了%what%
 api.notification.materialLib.share: '%who% 已将资料分享给你'
 api.notification.homework-submit.perusal: 【完成】%who% 刚刚完成了作业，请及时批阅
+api.notification.testpaper.comment.create: 【考试】%who% 刚刚添加了【%what%】的教师评语，点击
+api.notification.testpaper.comment.update: 【考试】%who% 刚刚修改了【%what%】的教师评语，点击
+api.notification.homework.comment.create: 【作业】%who% 刚刚添加了【%what%】的教师评语，点击
+api.notification.homework.comment.update: 【作业】%who% 刚刚修改了【%what%】的教师评语，点击

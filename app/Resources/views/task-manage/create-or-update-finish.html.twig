@@ -20,6 +20,8 @@
       {% endif %}
     {% endif %}
 
+    {% set finishType = activity['finishType']|default(defaultCondition['type']) %}
+
     <div class="tab-pane js-course-tasks-pane active">
       <form class="form-horizontal" id="step3-form">
         <div class="form-group">
@@ -58,11 +60,11 @@
           </div>
         </div>
         <div id="conditions">
-          <div id="conditions-time" class="form-group" {% if activity['finishType']|default(defaultCondition['type']) not in timeOptions %} style="display: none;"{% endif %}>
+          <div id="conditions-time" class="form-group" {% if finishType not in timeOptions %} style="display: none;"{% endif %}>
             <div class="col-sm-2 control-label">
               <label for="watchTime">
-                <span id="timeLabel" class="{% if activity['finishType']|default(defaultCondition['type']) != 'time' %} hidden {% endif %}">{{ 'course.plan_task.activity_manage.video.time_at_least'|trans }}</span>
-                <span id="watchTimeLabel" class="{% if activity['finishType']|default(defaultCondition['type']) != 'watchTime' %} hidden {% endif %}">{{ 'course.plan_task.activity_manage.video.watch_time_at_least'|trans }}</span>
+                <span id="timeLabel" class="{% if finishType != 'time' %} hidden {% endif %}">{{ 'course.plan_task.activity_manage.video.time_at_least'|trans }}</span>
+                <span id="watchTimeLabel" class="{% if finishType != 'watchTime' %} hidden {% endif %}">{{ 'course.plan_task.activity_manage.video.watch_time_at_least'|trans }}</span>
               </label>
             </div>
             <div class="col-sm-4">
@@ -81,11 +83,11 @@
           {% endfor %}
         </div>
         <input type="hidden" id="finish-data" name="finishData" value="{{ activity['finishData']|default(defaultCondition['value']|default()) }}">
-        <div id="endConditions" class="{% if activity['finishType']|default(defaultCondition['type']) != 'end' %}hidden{% endif %} form-group">
+        <div id="endConditions" class="{% if finishType != 'end' %}hidden{% endif %} form-group">
           <div class="col-sm-offset-2 col-sm-10">
             <div class="checkbox">
               <label>
-                <input type="checkbox" id="js-end-rule" {% if activity['finishData']|default(defaultCondition['value']|default('')) %} checked {% endif %}> {{ 'course.plan_task.activity_manage.video.not_completed_prohibited'|trans }}
+                <input type="checkbox" id="js-end-rule" {% if 'end' == finishType and activity['finishData']|default() %} checked {% endif %}> {{ 'course.plan_task.activity_manage.video.not_completed_prohibited'|trans }}
               </label>
             </div>
           </div>
