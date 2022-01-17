@@ -74,7 +74,7 @@ export default class PaySDK {
     let gateway = '';
     switch (payment) {
     case 'wechat':
-      if (isWechat) {
+      if (isWechat && isMobile) {
         gateway = 'WechatPay_Js';
       } else if (isMobile) {
         gateway = 'WechatPay_MWeb';
