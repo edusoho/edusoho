@@ -4,7 +4,7 @@ namespace Tests\Unit\AppBundle\Component\Export\UserLearnStatistics;
 
 use AppBundle\Common\ReflectionUtils;
 use AppBundle\Component\Export\UserLearnStatistics\UserLessonStatisticsExporter;
-use  Biz\BaseTestCase;
+use Biz\BaseTestCase;
 
 class UserLessonStatisticsExporterTest extends BaseTestCase
 {
