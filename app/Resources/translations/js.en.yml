@@ -2136,3 +2136,4 @@ scrm.analyze_the_overall_situation_of_the_company_is_marketing: Analyze the over
 scrm.live_open_class: Live open class
 scrm.set_up_live_open_classes: Institutions quickly set up live open classes, and students can purchase regular classes in the live room; students can invite friends to study in the live room to achieve fission.
 testpaper.import.tip: "The test paper is imported successfully, please adjust the test paper score on the current page. (Note: 'Each item' setting is added for multiple-choice and variable-choice questions, and 'Each blank' setting is added for fill-in-the-blank questions.)"
+user_field.select_type.tip: One per line, up to 20 characters per sub-item

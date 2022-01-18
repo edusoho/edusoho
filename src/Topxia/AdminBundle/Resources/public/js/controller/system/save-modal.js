@@ -16,7 +16,7 @@ define(function(require, exports, module) {
         }
       });
       return maxLength;
-    }, Translator.trans('admin.post.name_max_message'));
+    }, Translator.trans('user_field.select_type.tip'));
 
     var $form = $('#field-save-form');
     var validator = new Validator({

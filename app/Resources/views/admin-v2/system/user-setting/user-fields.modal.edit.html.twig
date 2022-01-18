@@ -37,10 +37,10 @@
             </div>
 
             <div class="form-group js-select-edit-content {% if not (field.fieldName == '下拉列表') %}hidden{% endif %}" >
-              <label class="col-md-4 control-label" for="select-list-edit">下拉列表内容</label>
+              <label class="col-md-4 control-label" for="select-list-edit">{{'user_field.select_type.lab'|trans}}</label>
               <div class="col-md-6 controls">
-                <textarea id="select-list-edit" name="detail" class="form-control" rows="10" data-widget-cid="widget-7" data-explain="可批量添加子项，一行一个，每个子项最多输入20个字符">{{ field.detail }}</textarea>
-              </div>
+                <textarea id="select-list-edit" name="detail" class="form-control" rows="10" data-widget-cid="widget-7" >{{ field.detail }}</textarea>
+                <div class="help-block" style=""><span class="">{{'user_field.select_type.tip'|trans}}</span></div>
             </div>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
        </div>
