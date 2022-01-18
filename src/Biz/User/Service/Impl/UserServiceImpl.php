@@ -1116,6 +1116,11 @@ class UserServiceImpl extends BaseService implements UserService
             'varcharField8' => '',
             'varcharField9' => '',
             'varcharField10' => '',
+            'selectField1' => '',
+            'selectField2' => '',
+            'selectField3' => '',
+            'selectField4' => '',
+            'selectField5' => '',
         ]);
 
         if (empty($fields)) {

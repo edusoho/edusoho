@@ -7747,6 +7747,7 @@ admin.user_fields.modal.init_fields.disabled.tips: 已满5个
 admin.user_fields.modal.float_fields: 小数
 admin.user_fields.modal.float_fields.tips: 还可以添加%floatCount%个字段,保留到两位小数
 admin.user_fields.modal.date_fields: 日期
+admin.user_fields.modal.select_list_fields: 下拉列表
 admin.user_fields.modal.date_fields.tips: 还可以添加%5-dateCount%个字段
 admin.user_avatar.customer_default_avatar: 自定义默认头像
 admin.user_avatar.customer_default_avatar.help_block: 请上传jpg, gif, png格式的图片

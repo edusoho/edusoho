@@ -6488,6 +6488,7 @@ admin.user_fields.modal.init_fields.disabled.tips: 'Reach limit 5'
 admin.user_fields.modal.float_fields: Decimal
 admin.user_fields.modal.float_fields.tips: 'You can add %floatCount% field, reserved to two decimal places'
 admin.user_fields.modal.date_fields: Date
+admin.user_fields.modal.select_list_fields: Select List
 admin.user_fields.modal.date_fields.tips: 'You can add %5-dateCount% field'
 admin.user_avatar.customer_default_avatar: 'Customize default avatar'
 admin.user_avatar.customer_default_avatar.help_block: 'You can upload JPG, GIF or PNG files'

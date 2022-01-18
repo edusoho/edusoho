@@ -234,7 +234,19 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_assistant', [$this, 'isAssistant']),
             new \Twig_SimpleFunction('is_saas', [$this, 'isSaas']),
             new \Twig_SimpleFunction('is_teacher_role', [$this, 'isTeacherRole']),
+            new \Twig_SimpleFunction('user_info_select', [$this, 'userInfoSelect']),
         ];
+    }
+
+    public function userInfoSelect($detail)
+    {
+        $detail = json_decode($detail);
+        $options = [];
+        foreach ($detail as $value) {
+            $options[$value] = $value;
+        }
+
+        return $options;
     }
 
     public function isTeacherRole($userId)
