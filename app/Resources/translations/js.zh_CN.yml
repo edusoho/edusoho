@@ -1615,7 +1615,6 @@ drainage.view_detail: 查看详情
 drainage.qr_no_empty: 二维码不能为空
 drainage.setting_tips: 将已购用户引流至私域流量池
 
-
 site.twig.extension.smarttime.future: 未来
 site.twig.extension.smarttime.hardly: 刚刚
 site.twig.extension.smarttime.previous_second: %diff%秒前
