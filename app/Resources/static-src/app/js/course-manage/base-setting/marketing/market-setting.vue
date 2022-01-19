@@ -286,7 +286,16 @@
           <template v-if="marketingForm.drainage === '1'">
             <el-form-item label="二维码设置">
               <el-col :span="18">
-                上传图片
+                <el-upload
+                  action=""
+                  class="qr-uploader"
+                  :show-file-list="false"
+                  :http-request="customUploadImage"
+                >
+                  <img v-if="marketingForm.qrUrl" :src="marketingForm.qrUrl" class="qr">
+                  <i v-else class="el-icon-plus qr-uploader-icon"></i>
+                  <div slot="tip" class="el-upload__tip">请上传jpg, gif, png格式的图</div>
+                </el-upload>
               </el-col>
             </el-form-item>
 
@@ -306,12 +315,11 @@
               <el-col :span="18">
                 加入/支付完成页
                 <el-popover
+                  popper-class="el-popover-drainage-img"
                   placement="top-start"
-                  title="标题"
-                  width="200"
                   trigger="hover"
                 >
-                  <div>content</div>
+                  <img src="/static-dist/app/img/vue/drainage.png" alt="">
                   <el-button type="text" slot="reference">查看详情</el-button>
                 </el-popover>
               </el-col>
@@ -323,6 +331,7 @@
 
 <script>
     import * as validation from 'common/element-validation';
+    import { File } from 'common/vue/service';
 
     export default {
         name: "market-setting",
@@ -376,6 +385,15 @@
             },
             getFormData() {
                 return this.marketingForm;
+            },
+
+            customUploadImage(info) {
+              const formData = new FormData();
+              formData.append('file', info.file);
+              formData.append('group', 'system');
+              this.$axios.post('/api/file', formData).then((res) => {
+                this.marketingForm.qrUrl = res.data.uri;
+              });
             }
         },
         data() {
@@ -405,6 +423,7 @@
                 services: this.course.services,
                 drainage: this.course.drainage || '0',
                 drainageText: this.course.drainageText || '',
+                qrUrl: this.course.qrUrl || ''
             };
 
             if (this.vipInstalled && this.vipEnabled) {
