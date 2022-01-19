@@ -37,7 +37,8 @@ export default class DownLoad {
     this.$form.on('click', '.js-video-import', () => this.importLink());
     this.$form.on('click', '.js-add-file-list', () => this.addFile());
     this.$form.on('blur', '#title', (event) => this.changeTitle(event));
-    
+
+
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {valid:this.validator2.form(), data:window.ltc.getFormSerializeObject($('#step2-form'))});
     });
@@ -63,11 +64,17 @@ export default class DownLoad {
   }
 
   initFileChooser() {
+    let self = this;
+    $('#media').on('click', function (){
+      self.addFile();
+    });
     const fileSelect = (file) => {
       $('#media').val(JSON.stringify(file));
+      $('#media').click();
       chooserUiOpen();
       $('#title').val(this.firstName);
       $('.js-current-file').text(file.name);
+
     };
 
     const fileChooser = new FileChooser();
@@ -106,6 +113,7 @@ export default class DownLoad {
   }
 
   addFile() {
+    console.log('dddddd');
     const $media = $('#media');
     const $materials = $('#materials');
     const $successTipDom = $('.js-success-redmine');
@@ -176,14 +184,14 @@ export default class DownLoad {
       item_tpl = `
         <li class="download-item" data-id="${ this.media.link }">
           <a class="gray-primary" href="${ this.media.link }" target="_blank">${ this.media.summary ? this.media.summary : this.media.name }<span class="glyphicon glyphicon-new-window text-muted text-sm mlm" title="${ Translator.trans('activity.download_manage.materials_delete_btn')}"></span></a>
-          <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
+          <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="cd-icon cd-icon-close"></i></a>
         </li>
       `;
     } else {
       item_tpl = `
         <li class="download-item" data-id="${ this.media.id }">
           <a class="gray-primary" href="/materiallib/${ this.media.id }/download">${ this.media.name }</a>
-          <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
+          <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="cd-icon cd-icon-close"></i></a>
         </li>
       `;
     }

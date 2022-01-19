@@ -105,20 +105,34 @@
   list-style: none;
   padding-left: 0;
   .border-radius(4px);
-  background-color: #f8fbfd;
   li {
-    padding: 10px 15px 0 ;
+    padding: 12px 16px;
+    background: #F5F5F5;
+    border-radius: 4px;
+    height: 44px;
+    margin-bottom: 8px;
+    .download-item-left {
+      width: 284px;
+      float: left;
+    }
     &:last-child {
       padding-bottom: 10px;
     }
     >a {
-      color: @gray-darker;
-      font-weight: bold;
+      max-width: 280px;
+      font-size: 14px;
+      color: #333333;
+      text-align: left;
+      line-height: 20px;
+      font-weight: 500;
     }
-    .btn-delete {
-      visibility: hidden;
+    .js-btn-delete {
+      float: right;
       font-size: 16px;
-      color:@gray;
+      color:#999;
+    }
+    .cd-icon-close {
+      font-size:20px;
     }
     &:hover {
       >.btn-delete {

@@ -32,6 +32,7 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
     {
         return array(
             'orderbys' => [
+                'id',
                 'created_time',
             ],
             'serializes' => [
