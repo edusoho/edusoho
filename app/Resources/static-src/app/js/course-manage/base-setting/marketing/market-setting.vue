@@ -260,10 +260,10 @@
 
           <el-form-item>
             <label slot="label">
-              引流设置
+              {{ 'drainage.setting' | trans }}
               <el-popover
                 placement="top"
-                content="将已购用户引流至私域流量池"
+                :content="'drainage.setting_tips' | trans"
                 trigger="hover"
               >
                 <i class="es-icon es-icon-help text-normal course-mangae-info__help" slot="reference"></i>
@@ -284,7 +284,7 @@
           </el-form-item>
 
           <template v-if="marketingForm.drainageEnabled">
-            <el-form-item label="二维码设置" prop="drainageImage">
+            <el-form-item :label="'drainage.qr_setting' | trans" prop="drainageImage">
               <el-col :span="18">
                 <el-upload
                   action=""
@@ -294,16 +294,16 @@
                 >
                   <img v-if="marketingForm.drainageImage" :src="marketingForm.drainageImage" class="qr">
                   <i v-else class="el-icon-plus qr-uploader-icon"></i>
-                  <div slot="tip" class="el-upload__tip">请上传jpg, gif, png格式的图</div>
+                  <div slot="tip" class="el-upload__tip">{{ 'drainage.upload_tips' | trans }}</div>
                 </el-upload>
               </el-col>
             </el-form-item>
 
-            <el-form-item label="引流文案">
+            <el-form-item :label="'drainage.text' | trans">
               <el-col :span="18">
                 <el-input
                   type="text"
-                  placeholder="请输入内容"
+                  :placeholder="'drainage.placeholder' | trans"
                   v-model="marketingForm.drainageText"
                   maxlength="20"
                   show-word-limit
@@ -311,16 +311,16 @@
               </el-col>
             </el-form-item>
 
-            <el-form-item label="引流页样式">
+            <el-form-item :label="'drainage.style' | trans">
               <el-col :span="18">
-                加入/支付完成页
+                {{ 'drainage.style_tips' | trans }}
                 <el-popover
                   popper-class="el-popover-drainage-img"
                   placement="top-start"
                   trigger="hover"
                 >
                   <img src="/static-dist/app/img/vue/drainage.png" alt="">
-                  <el-button type="text" slot="reference">查看详情</el-button>
+                  <el-button type="text" slot="reference">{{ 'drainage.view_detail' | trans }}</el-button>
                 </el-popover>
               </el-col>
             </el-form-item>
@@ -465,8 +465,14 @@
                     }
                 ],
                 drainageRadios: [
-                  { value: 1, label: '开启' },
-                  { value: 0, label: '关闭' }
+                  {
+                    value: 1,
+                    label: Translator.trans('course.info.video.convert.audio.start')
+                  },
+                  {
+                    value: 0,
+                    label:  Translator.trans('course.info.video.convert.audio.close')
+                  }
                 ],
                 today: Date.now(),
                 dateOptions: {
@@ -577,7 +583,7 @@
                         }
                     ],
                     drainageImage: [
-                      { required: true,  message: '二维码不能为空' }
+                      { required: true,  message: Translator.trans('drainage.qr_no_empty') }
                     ]
                 },
                 deadlineTypeRadio: {

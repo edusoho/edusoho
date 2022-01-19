@@ -1604,6 +1604,17 @@ vip.level.free_learning_new: 会员免费兑换
 site.default.none: 无
 form.btn.save: 保存
 
+drainage.setting: 引流设置
+drainage.qr_setting: 二维码设置
+drainage.upload_tips: 请上传jpg, gif, png格式的图
+drainage.text: 引流文案
+drainage.placeholder: 请输入内容
+drainage.style: 引流页样式
+drainage.style_tips: 加入/支付完成页
+drainage.view_detail: 查看详情
+drainage.qr_no_empty: 二维码不能为空
+drainage.setting_tips: 将已购用户引流至私域流量池
+
 
 site.twig.extension.smarttime.future: 未来
 site.twig.extension.smarttime.hardly: 刚刚
