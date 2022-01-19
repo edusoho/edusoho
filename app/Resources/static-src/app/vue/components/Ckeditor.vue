@@ -41,6 +41,10 @@ export default {
           filebrowserFlashUploadUrl: this.flashUploadUrl
         });
       });
+    },
+
+    getData() {
+      return this.editor.getData();
     }
   }
 }

@@ -3,7 +3,9 @@
     <template #title>购买协议设置</template>
     <div class="single-content-sec">
       <a-form-model
+        ref="ruleForm"
         :model="form"
+        :rules="rules"
         :label-col="{ span: 4 }"
         :wrapper-col="{ span: 14 }"
       >
@@ -19,8 +21,8 @@
             <a-input v-model="form.name" />
           </a-form-model-item>
 
-          <a-form-model-item label="协议内容">
-            <ckeditor />
+          <a-form-model-item label="协议内容" prop="content">
+            <ckeditor ref="ckeditor" />
           </a-form-model-item>
 
           <a-form-model-item label="样式设置">
@@ -60,18 +62,25 @@ export default {
         name: '',
         content: '',
         style: 0
-      }
+      },
+      rules: {
+        content: [
+          { required: true, message: '协议内容不能为空' }
+        ]
+      },
     };
   },
 
   methods: {
     onSubmit() {
-      console.log('submit!', this.form);
+      this.form.content = this.$refs.ckeditor.getData();
+
+      this.$refs.ruleForm.validate(valid => {
+        if (!valid) return false;
+
+        console.log('submit!!');
+      });
     }
   }
 }
 </script>
-
-<style lang="less" scoped>
-
-</style>
