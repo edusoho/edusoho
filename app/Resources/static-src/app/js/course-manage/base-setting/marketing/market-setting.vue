@@ -272,7 +272,7 @@
             <el-col :span="18">
               <el-radio
                 v-for="drainageRadio in drainageRadios"
-                v-model="marketingForm.drainage"
+                v-model="marketingForm.drainageEnabled"
                 :key="drainageRadio.value"
                 :value="drainageRadio.value"
                 :label="drainageRadio.value"
@@ -283,8 +283,8 @@
             </el-col>
           </el-form-item>
 
-          <template v-if="marketingForm.drainage === '1'">
-            <el-form-item label="二维码设置">
+          <template v-if="marketingForm.drainageEnabled">
+            <el-form-item label="二维码设置" prop="drainageImage">
               <el-col :span="18">
                 <el-upload
                   action=""
@@ -292,7 +292,7 @@
                   :show-file-list="false"
                   :http-request="customUploadImage"
                 >
-                  <img v-if="marketingForm.qrUrl" :src="marketingForm.qrUrl" class="qr">
+                  <img v-if="marketingForm.drainageImage" :src="marketingForm.drainageImage" class="qr">
                   <i v-else class="el-icon-plus qr-uploader-icon"></i>
                   <div slot="tip" class="el-upload__tip">请上传jpg, gif, png格式的图</div>
                 </el-upload>
@@ -331,7 +331,6 @@
 
 <script>
     import * as validation from 'common/element-validation';
-    import { File } from 'common/vue/service';
 
     export default {
         name: "market-setting",
@@ -392,7 +391,7 @@
               formData.append('file', info.file);
               formData.append('group', 'system');
               this.$axios.post('/api/file', formData).then((res) => {
-                this.marketingForm.qrUrl = res.data.uri;
+                this.marketingForm.drainageImage = res.data.uri;
               });
             }
         },
@@ -421,9 +420,9 @@
                 expiryStartDate: this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate,
                 expiryEndDate: this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate,
                 services: this.course.services,
-                drainage: this.course.drainage || '0',
-                drainageText: this.course.drainageText || '',
-                qrUrl: this.course.qrUrl || ''
+                drainageEnabled: this.course.drainageEnabled,
+                drainageText: this.course.drainageText,
+                drainageImage: this.course.drainageImage
             };
 
             if (this.vipInstalled && this.vipEnabled) {
@@ -466,8 +465,8 @@
                     }
                 ],
                 drainageRadios: [
-                  { value: '1', label: '开启' },
-                  { value: '0', label: '关闭' }
+                  { value: 1, label: '开启' },
+                  { value: 0, label: '关闭' }
                 ],
                 today: Date.now(),
                 dateOptions: {
@@ -576,6 +575,9 @@
                             message: Translator.trans('course.manage.deadline_end_date_error_hint'),
                             trigger: 'blur'
                         }
+                    ],
+                    drainageImage: [
+                      { required: true,  message: '二维码不能为空' }
                     ]
                 },
                 deadlineTypeRadio: {
