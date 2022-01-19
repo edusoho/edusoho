@@ -20,13 +20,13 @@
           </a-form-model-item>
 
           <a-form-model-item label="协议内容">
-            <a-input v-model="form.desc" type="textarea" />
+            <ckeditor />
           </a-form-model-item>
 
           <a-form-model-item label="样式设置">
             <a-radio-group v-model="form.style">
-              <a-radio value="1">勾选确认</a-radio>
-              <a-radio value="0">弹出确认</a-radio>
+              <a-radio :value="0">勾选确认</a-radio>
+              <a-radio :value="1">弹出确认</a-radio>
             </a-radio-group>
           </a-form-model-item>
         </template>
@@ -43,25 +43,23 @@
 
 <script>
 import AdminContainer from 'app/vue/views/layouts/AdminContainer.vue';
+import Ckeditor from 'app/vue/components/Ckeditor.vue';
 
 export default {
   name: 'PurchaseAgreementSettings',
 
   components: {
-    AdminContainer
+    AdminContainer,
+    Ckeditor
   },
 
   data() {
     return {
       form: {
-        isOpen: 0,
+        isOpen: 1,
         name: '',
-        region: undefined,
-        date1: undefined,
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        content: '',
+        style: 0
       }
     };
   },
