@@ -41,6 +41,20 @@
 
   .aside-content {
     margin-top: 16px;
+
+    // 仅有一个模块时使用
+    .single-content-sec {
+      padding: 24px;
+      // 60px（导航）+ 26px（title）+ 32px（padding）+ 16px（margin-top）= 134px;
+      min-height: calc(100vh - 134px);
+      background-color: #fff;
+    }
+
+    .multiple-content-sec {
+      padding: 24px;
+      min-height: calc(100vh - 134px);
+      background-color: #fff;
+    }
   }
 }
 </style>
