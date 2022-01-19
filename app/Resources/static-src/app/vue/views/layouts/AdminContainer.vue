@@ -5,7 +5,9 @@
         <slot name="title"></slot>
       </div>
     </div>
-    <slot></slot>
+    <div class="aside-content">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -35,6 +37,10 @@
         border-radius: 1px;
       }
     }
+  }
+
+  .aside-content {
+    margin-top: 16px;
   }
 }
 </style>
