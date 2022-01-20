@@ -257,6 +257,74 @@
                 </el-col>
                 <el-input class="hidden" type="hidden" v-model="marketingForm.services"></el-input>
             </el-form-item>
+
+          <el-form-item>
+            <label slot="label">
+              {{ 'drainage.setting' | trans }}
+              <el-popover
+                placement="top"
+                :content="'drainage.setting_tips' | trans"
+                trigger="hover"
+              >
+                <i class="es-icon es-icon-help text-normal course-mangae-info__help" slot="reference"></i>
+              </el-popover>
+            </label>
+            <el-col :span="18">
+              <el-radio
+                v-for="drainageRadio in drainageRadios"
+                v-model="marketingForm.drainageEnabled"
+                :key="drainageRadio.value"
+                :value="drainageRadio.value"
+                :label="drainageRadio.value"
+                class="cd-radio"
+              >
+                {{ drainageRadio.label }}
+              </el-radio>
+            </el-col>
+          </el-form-item>
+
+          <template v-if="marketingForm.drainageEnabled">
+            <el-form-item :label="'drainage.qr_setting' | trans" prop="drainageImage">
+              <el-col :span="18">
+                <el-upload
+                  action=""
+                  class="qr-uploader"
+                  :show-file-list="false"
+                  :http-request="customUploadImage"
+                >
+                  <img v-if="marketingForm.drainageImage" :src="marketingForm.drainageImage" class="qr">
+                  <i v-else class="el-icon-plus qr-uploader-icon"></i>
+                  <div slot="tip" class="el-upload__tip">{{ 'drainage.upload_tips' | trans }}</div>
+                </el-upload>
+              </el-col>
+            </el-form-item>
+
+            <el-form-item :label="'drainage.text' | trans">
+              <el-col :span="18">
+                <el-input
+                  type="text"
+                  :placeholder="'drainage.placeholder' | trans"
+                  v-model="marketingForm.drainageText"
+                  maxlength="20"
+                  show-word-limit
+                />
+              </el-col>
+            </el-form-item>
+
+            <el-form-item :label="'drainage.style' | trans">
+              <el-col :span="18">
+                {{ 'drainage.style_tips' | trans }}
+                <el-popover
+                  popper-class="el-popover-drainage-img"
+                  placement="top-start"
+                  trigger="hover"
+                >
+                  <img src="/static-dist/app/img/vue/drainage.png" alt="">
+                  <el-button type="text" slot="reference">{{ 'drainage.view_detail' | trans }}</el-button>
+                </el-popover>
+              </el-col>
+            </el-form-item>
+          </template>
         </el-form>
     </div>
 </template>
@@ -316,6 +384,15 @@
             },
             getFormData() {
                 return this.marketingForm;
+            },
+
+            customUploadImage(info) {
+              const formData = new FormData();
+              formData.append('file', info.file);
+              formData.append('group', 'system');
+              this.$axios.post('/api/file', formData).then((res) => {
+                this.marketingForm.drainageImage = res.data.uri;
+              });
             }
         },
         data() {
@@ -343,6 +420,9 @@
                 expiryStartDate: this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate,
                 expiryEndDate: this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate,
                 services: this.course.services,
+                drainageEnabled: this.course.drainageEnabled,
+                drainageText: this.course.drainageText,
+                drainageImage: this.course.drainageImage
             };
 
             if (this.vipInstalled && this.vipEnabled) {
@@ -383,6 +463,16 @@
                         value: '0',
                         label: Translator.trans('site.datagrid.radios.no'),
                     }
+                ],
+                drainageRadios: [
+                  {
+                    value: 1,
+                    label: Translator.trans('course.info.video.convert.audio.start')
+                  },
+                  {
+                    value: 0,
+                    label:  Translator.trans('course.info.video.convert.audio.close')
+                  }
                 ],
                 today: Date.now(),
                 dateOptions: {
@@ -491,6 +581,9 @@
                             message: Translator.trans('course.manage.deadline_end_date_error_hint'),
                             trigger: 'blur'
                         }
+                    ],
+                    drainageImage: [
+                      { required: true,  message: Translator.trans('drainage.qr_no_empty') }
                     ]
                 },
                 deadlineTypeRadio: {

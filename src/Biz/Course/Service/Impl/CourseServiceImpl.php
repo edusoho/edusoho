@@ -245,6 +245,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course['title'] = $this->purifyHtml($course['title'], true);
         $course['status'] = 'draft';
         $course['creator'] = $this->getCurrentUser()->getId();
+        $course['drainage'] = ['enabled' => 0, 'image' => '', 'text' => ''];
         try {
             $this->beginTransaction();
 
@@ -359,6 +360,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'services',
                 'tryLookLength',
                 'watchLimit',
+                'drainage',
             ]
         );
 
