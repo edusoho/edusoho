@@ -290,6 +290,10 @@ userKeyWordTypes:
     nickname: 用户名
     email: 邮件地址
 
+userStatisticsTypes:
+  nickname: 用户名
+  mobile: 手机号
+
 questionType:
     single_choice: 单选题
     choice: 多选题

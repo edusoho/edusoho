@@ -272,6 +272,10 @@ userKeyWordTypes:
     nickname: Nickname
     email: Email
 
+userStatisticsTypes:
+    nickname: Nickname
+    mobile: Mobile
+
 questionType:
     single_choice: Single choice
     choice: Multiple choice
