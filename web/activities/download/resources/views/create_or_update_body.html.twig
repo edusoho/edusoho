@@ -22,8 +22,8 @@
         <div class="col-sm-10">
           <ul class="download-list" id="material-list">
             {% for media in medias|default() %}
-              <li class="download-item" data-id="{{ media.link|default(media.fileId) }}">
-                <div class="download-item-left">
+              <li class="download-item clearfix" data-id="{{ media.link|default(media.fileId) }}">
+                <div class="download-item-left pull-left text-overflow">
                   {% if media.link|default(null) %}
                     <a href="{{ media.link }}" target="_blank">{{ media.title }}</a>
                     <span class="glyphicon glyphicon-new-window color-gray text-sm" title="{{ 'course.plan_task.activity_manage.download.link_file'|trans }}"></span>
@@ -31,9 +31,9 @@
                     <a class="gray-primary" href="{{ path('material_download',{ fileId:media.fileId }) }}" target="_blank">{{ media.title }}</a>
                   {% endif %}
                 </div>
-                <div class="download-item-right">
-                  <span style="margin-left: 8px;">简介：</span>
-                  <input class="" value="dsdfs">
+                <div class="download-item-right pull-left">
+                  <label>简介：</label>
+                  <input placeholder="请输入简介（选填）" value="">
                 </div>
                 <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="{{ 'course.plan_task.activity_manage.download.delete_btn'|trans }}"><i class="cd-icon cd-icon-close"></i></a>
               </li>

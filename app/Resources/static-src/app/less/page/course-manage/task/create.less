@@ -102,23 +102,48 @@
 }
 
 .download-list {
-  list-style: none;
   padding-left: 0;
+  list-style: none;
   .border-radius(4px);
+
   li {
-    padding: 12px 16px;
+    position: relative;
+    padding: 6px 36px 6px 16px;
+    margin-bottom: 8px;
+    height: 44px;
     background: #F5F5F5;
     border-radius: 4px;
-    height: 44px;
-    margin-bottom: 8px;
-    .download-item-left {
-      width: 284px;
-      float: left;
-    }
+
     &:last-child {
       padding-bottom: 10px;
     }
-    >a {
+
+    .download-item-left,
+    .download-item-right {
+      width: 50%;
+      line-height: 32px;
+    }
+
+    .download-item-left {
+      padding-right: 16px;
+    }
+
+    .download-item-right {
+      label {
+        margin: 0;
+        font-weight: 400;
+      }
+
+      input {
+        width: calc(100% - 60px);
+        height: 32px;
+        border: none;
+        outline: none;
+        background: #f5f5f5;
+      }
+    }
+
+    > a {
       max-width: 280px;
       font-size: 14px;
       color: #333333;
@@ -126,17 +151,23 @@
       line-height: 20px;
       font-weight: 500;
     }
+
     .js-btn-delete {
-      float: right;
+      position: absolute;
+      right: 16px;
+      top: 14px;
       font-size: 16px;
-      color:#999;
+      color: #999;
     }
+
     .cd-icon-close {
-      font-size:20px;
+      font-size: 20px;
     }
+
     &:hover {
       >.btn-delete {
         visibility: visible;
+
         &:hover {
           color: @brand-primary;
         }
