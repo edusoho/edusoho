@@ -29,11 +29,21 @@
             <a-radio-group v-model="form.type">
               <div style="margin-top: 2px;">
                 <a-radio value="tick">勾选确认</a-radio>
-                <a-button style="padding: 0;" type="link">查看详情</a-button>
+                <a-popover placement="topLeft">
+                  <template slot="content">
+                    <img src="/static-dist/app/img/vue/agreement-1.png" alt="">
+                  </template>
+                  <a-button style="padding: 0;" type="link">查看详情</a-button>
+                </a-popover>
               </div>
               <div style="margin-top: 2px;">
                 <a-radio value="eject">弹出确认</a-radio>
-                <a-button style="padding: 0;" type="link">查看详情</a-button>
+                <a-popover placement="topLeft">
+                  <template slot="content">
+                    <img src="/static-dist/app/img/vue/agreement-2.png" alt="">
+                  </template>
+                  <a-button style="padding: 0;" type="link">查看详情</a-button>
+                </a-popover>
               </div>
             </a-radio-group>
           </a-form-model-item>
