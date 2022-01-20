@@ -8,7 +8,7 @@ use Biz\Course\Copy\AbstractEntityCopy;
 
 class ActivityCopy extends AbstractEntityCopy
 {
-    protected function copyEntity($source, $config = array())
+    protected function copyEntity($source, $config = [])
     {
         $courseId = $source['id'];
         $newCourseId = $config['newCourse']['id'];
@@ -22,43 +22,43 @@ class ActivityCopy extends AbstractEntityCopy
         $activities = $this->getActivityDao()->findByCourseId($courseId);
 
         if (empty($activities)) {
-            return array();
+            return [];
         }
 
-        $activityMap = array();
+        $activityMap = [];
         foreach ($activities as $activity) {
             $newActivity = $this->filterFields($activity);
 
             $newActivity['fromUserId'] = $this->biz['user']['id'];
             $newActivity['fromCourseId'] = $newCourseId;
             $newActivity['fromCourseSetId'] = $courseSetId;
-            $newActivity['copyId'] = $isCopy ? $activity['id'] : 0;
+            $newActivity['copyId'] = $isCopy || 'live' == $newActivity['mediaType'] ? $activity['id'] : 0;
 
-            $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
+            $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, [
                 'refLiveroom' => $activity['fromCourseSetId'] != $courseSetId,
                 'newActivity' => $newActivity,
                 'isCopy' => $isCopy,
-            ));
+            ]);
             //对于testpaper，mediaId指向testpaper_activity.id
             if (!empty($ext)) {
                 $newActivity['mediaId'] = $ext['id'];
             }
 
-            if ($newActivity['mediaType'] == 'live' && !$isCopy) { // 教学计划复制
+            if ('live' == $newActivity['mediaType'] && !$isCopy) { // 教学计划复制
                 $newActivity['startTime'] = time();
                 $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
-            } elseif ($newActivity['mediaType'] == 'live' && $isCopy) { // 班级课程复制
+            } elseif ('live' == $newActivity['mediaType'] && $isCopy) { // 班级课程复制
                 $newActivity['startTime'] = $activity['startTime'];
                 $newActivity['endTime'] = $activity['endTime'];
             }
             $newActivity = $this->getActivityDao()->create($newActivity);
 
-            $this->copyMaterial($activity, array(
+            $this->copyMaterial($activity, [
                 'newActivity' => $newActivity,
                 'newCourseId' => $newCourseId,
                 'newCourseSetId' => $courseSetId,
                 'isCopy' => $isCopy,
-            ));
+            ]);
             $activityMap[$activity['id']] = $newActivity['id'];
         }
 
@@ -74,7 +74,7 @@ class ActivityCopy extends AbstractEntityCopy
 
     protected function getFields()
     {
-        return array(
+        return [
             'mediaType',
             'title',
             'remark',
@@ -84,7 +84,7 @@ class ActivityCopy extends AbstractEntityCopy
             'endTime',
             'finishType',
             'finishData',
-        );
+        ];
     }
 
     /**
