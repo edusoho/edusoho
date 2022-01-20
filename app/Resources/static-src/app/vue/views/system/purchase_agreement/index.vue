@@ -10,15 +10,15 @@
         :wrapper-col="{ span: 14 }"
       >
         <a-form-model-item label="用户购买协议">
-          <a-radio-group v-model="form.isOpen">
+          <a-radio-group v-model="form.enabled">
             <a-radio :value="1">开启</a-radio>
             <a-radio :value="0">关闭</a-radio>
           </a-radio-group>
         </a-form-model-item>
 
-        <template v-if="form.isOpen">
+        <template v-if="form.enabled">
           <a-form-model-item label="名称">
-            <a-input v-model="form.name" />
+            <a-input v-model="form.title" />
           </a-form-model-item>
 
           <a-form-model-item label="协议内容" prop="content">
@@ -26,9 +26,9 @@
           </a-form-model-item>
 
           <a-form-model-item label="样式设置">
-            <a-radio-group v-model="form.style">
-              <a-radio :value="0">勾选确认</a-radio>
-              <a-radio :value="1">弹出确认</a-radio>
+            <a-radio-group v-model="form.type">
+              <a-radio value="tick">勾选确认</a-radio>
+              <a-radio value="eject">弹出确认</a-radio>
             </a-radio-group>
           </a-form-model-item>
         </template>
@@ -58,10 +58,10 @@ export default {
   data() {
     return {
       form: {
-        isOpen: 1,
-        name: '',
+        enabled: 1,
+        title: '',
         content: '',
-        style: 0
+        type: 'tick'
       },
       rules: {
         content: [
@@ -78,7 +78,7 @@ export default {
       this.$refs.ruleForm.validate(valid => {
         if (!valid) return false;
 
-        console.log('submit!!');
+        console.log(this.form);
       });
     }
   }
