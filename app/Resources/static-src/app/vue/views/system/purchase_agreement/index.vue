@@ -1,6 +1,6 @@
 <template>
   <admin-container>
-    <template #title>购买协议设置</template>
+    <template #title>{{ 'admin.system.purchase_agreement_setting' | trans }}</template>
     <div class="single-content-sec" v-show="!loading">
       <a-form-model
         ref="ruleForm"
@@ -9,40 +9,40 @@
         :label-col="{ span: 4 }"
         :wrapper-col="{ span: 14 }"
       >
-        <a-form-model-item label="用户购买协议">
+        <a-form-model-item :label="'admin.system.purchase_agreement' | trans">
           <a-radio-group v-model="form.enabled">
-            <a-radio :value="1">开启</a-radio>
-            <a-radio :value="0">关闭</a-radio>
+            <a-radio :value="1">{{ 'decorate.turn_on' | trans }}</a-radio>
+            <a-radio :value="0">{{ 'decorate.closure' | trans }}</a-radio>
           </a-radio-group>
         </a-form-model-item>
 
         <div v-show="form.enabled">
-          <a-form-model-item label="名称">
+          <a-form-model-item :label="'admin.system.purchase_agreement.title' | trans">
             <a-input v-model="form.title" />
           </a-form-model-item>
 
-          <a-form-model-item label="协议内容" prop="content">
+          <a-form-model-item :label="'admin.system.purchase_agreement.content' | trans" prop="content">
             <ckeditor ref="ckeditor" />
           </a-form-model-item>
 
-          <a-form-model-item label="样式设置">
+          <a-form-model-item :label="'admin.system.purchase_agreement.style_settings' | trans">
             <a-radio-group v-model="form.type">
               <div style="margin-top: 2px;">
-                <a-radio value="tick">勾选确认</a-radio>
+                <a-radio value="tick">{{ 'admin.system.purchase_agreement.check_to_confirm' | trans }}</a-radio>
                 <a-popover placement="topLeft">
                   <template slot="content">
                     <img src="/static-dist/app/img/vue/agreement-1.png" alt="">
                   </template>
-                  <a-button style="padding: 0;" type="link">查看详情</a-button>
+                  <a-button style="padding: 0;" type="link">{{ 'admin.system.purchase_agreement.see_details' | trans }}</a-button>
                 </a-popover>
               </div>
               <div style="margin-top: 2px;">
-                <a-radio value="eject">弹出确认</a-radio>
+                <a-radio value="eject">{{ 'admin.system.purchase_agreement.popup_confirmation' | trans }}</a-radio>
                 <a-popover placement="topLeft">
                   <template slot="content">
                     <img src="/static-dist/app/img/vue/agreement-2.png" alt="">
                   </template>
-                  <a-button style="padding: 0;" type="link">查看详情</a-button>
+                  <a-button style="padding: 0;" type="link">{{ 'admin.system.purchase_agreement.see_details' | trans }}</a-button>
                 </a-popover>
               </div>
             </a-radio-group>
@@ -51,7 +51,7 @@
 
         <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
           <a-button type="primary" @click="onSubmit">
-            提交
+            {{ 'admin.system.purchase_agreement.submit' | trans }}
           </a-button>
         </a-form-model-item>
       </a-form-model>
@@ -91,7 +91,7 @@ export default {
       },
       rules: {
         content: [
-          { required: true, message: '协议内容不能为空' }
+          { required: true, message: Translator.trans('admin.system.purchase_agreement.content_empty') }
         ]
       },
     };
@@ -106,7 +106,7 @@ export default {
       const { enabled, title, content, type } = await PurchaseAgreement.get();
       _.assign(this.form, {
         enabled,
-        title: title || '用户购买协议',
+        title: title || Translator.trans('admin.system.purchase_agreement'),
         content,
         type
       });
@@ -122,9 +122,9 @@ export default {
 
         try {
           await PurchaseAgreement.update({ data: this.form });
-          this.$message.success('保存成功！')
+          this.$message.success(Translator.trans('admin.system.purchase_agreement.saved_successfully'));
         } catch (error) {
-          this.$message.error('保存失败！')
+          this.$message.error(Translator.trans('admin.system.purchase_agreement.save_failed'));
         }
       });
     }
