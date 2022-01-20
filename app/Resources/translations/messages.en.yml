@@ -1273,6 +1273,7 @@ course.teacher: Tearcher：
 course.reward_point.award: Reward Point Award
 course.reward_point.course_award: Course Award
 course.teacher.content_title: Teacher
+course.drainage.content_title: Teaching Service
 course.advanced.content_title: Students with excellent grades last week
 course.characteristic.content_title: 'Course features'
 course.newest_students.content_title: 'New students'
@@ -6488,6 +6489,7 @@ admin.user_fields.modal.init_fields.disabled.tips: 'Reach limit 5'
 admin.user_fields.modal.float_fields: Decimal
 admin.user_fields.modal.float_fields.tips: 'You can add %floatCount% field, reserved to two decimal places'
 admin.user_fields.modal.date_fields: Date
+admin.user_fields.modal.select_list_fields: Select List
 admin.user_fields.modal.date_fields.tips: 'You can add %5-dateCount% field'
 admin.user_avatar.customer_default_avatar: 'Customize default avatar'
 admin.user_avatar.customer_default_avatar.help_block: 'You can upload JPG, GIF or PNG files'
@@ -10892,3 +10894,5 @@ review.result.pass: Pass
 review.result.comment_tips: After modifying the comment, a comment modification notice will be sent to the students
 review.result.amend_comment: Amend comment
 testpaper.import.tip: "The test paper is imported successfully, please adjust the test paper score on the current page. (Note: 'Each item' setting is added for multiple-choice and variable-choice questions, and 'Each blank' setting is added for fill-in-the-blank questions.)"
+user_field.select_type.lab: options
+user_field.select_type.tip: Sub-items can be added in batches, one per line, each sub-item can be input up to 20 characters

@@ -1610,6 +1610,16 @@ vip.level.free_learning_new: 会员免费兑换
 site.default.none: 无
 form.btn.save: 保存
 
+drainage.setting: 引流设置
+drainage.qr_setting: 二维码设置
+drainage.upload_tips: 请上传jpg, gif, png格式的图
+drainage.text: 引流文案
+drainage.placeholder: 请输入内容
+drainage.style: 引流页样式
+drainage.style_tips: 加入/支付完成页
+drainage.view_detail: 查看详情
+drainage.qr_no_empty: 二维码不能为空
+drainage.setting_tips: 将已购用户引流至私域流量池
 
 site.twig.extension.smarttime.future: 未来
 site.twig.extension.smarttime.hardly: 刚刚
@@ -2103,3 +2113,4 @@ admin.system.purchase_agreement.submit: 提交
 admin.system.purchase_agreement.content_empty: 协议内容不能为空
 admin.system.purchase_agreement.saved_successfully: 保存成功！
 admin.system.purchase_agreement.save_failed: 保存失败！
+user_field.select_type.tip: 一行一个，每个子项最多输入20个字符

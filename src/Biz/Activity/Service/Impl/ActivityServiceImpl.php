@@ -318,6 +318,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->getByMediaIdAndMediaType($mediaId, $mediaType);
     }
 
+    public function getByMediaIdAndMediaTypeAndCourseId($mediaId, $mediaType, $courseId)
+    {
+        return $this->getActivityDao()->getByMediaIdAndMediaTypeAndCourseId($mediaId, $mediaType, $courseId);
+    }
+
     /**
      * @param $conditions
      *

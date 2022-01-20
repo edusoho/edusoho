@@ -65,6 +65,7 @@ class UserLearnStatisticsExporter extends Exporter
 
             if ($statistic) {
                 $member[] = $nickname;
+                $member[] = empty($user['verifiedMobile']) ? '--' : $user['verifiedMobile']."\t";
                 $member[] = $statistic['joinedClassroomNum'];
                 $member[] = $statistic['exitClassroomNum'];
                 $member[] = $statistic['joinedCourseNum'];
@@ -75,6 +76,7 @@ class UserLearnStatisticsExporter extends Exporter
             } else {
                 $member = [
                     $nickname,
+                    empty($user['verifiedMobile']) ? '--' : $user['verifiedMobile']."\t",
                     0,
                     0,
                     0,
@@ -95,6 +97,7 @@ class UserLearnStatisticsExporter extends Exporter
     {
         return [
             'user.learn.statistics.nickname',
+            'user.learn.statistics.mobile',
             'user.learn.statistics.join.classroom.num',
             'user.learn.statistics.exit.classroom.num',
             'user.learn.statistics.join.course.num',
@@ -107,18 +110,23 @@ class UserLearnStatisticsExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        if (!empty($conditions['nickname'])) {
+        $conditions['userIds'] = [];
+        if (!empty($conditions['keyword'])) {
+            $userConditions = ['nickname' => $conditions['keyword']];
+            if ('mobile' == $conditions['keywordType']) {
+                unset($userConditions['nickname']);
+                $userConditions['verifiedMobile'] = $conditions['keyword'];
+            }
             $users = $this->getUserService()->searchUsers(
-                ['nickname' => $conditions['nickname']],
+                $userConditions,
                 [],
                 0,
-                PHP_INT_MAX
+                PHP_INT_MAX,
+                ['id']
             );
-
             $conditions['userIds'] = ArrayToolkit::column($users, 'id');
-            unset($conditions['nickname']);
-        } else {
-            $conditions['userIds'] = [];
+            unset($conditions['keywordType']);
+            unset($conditions['keyword']);
         }
 
         $conditions['destroyed'] = 0;

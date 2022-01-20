@@ -63,7 +63,7 @@ class MeCourseMember extends AbstractResource
     private function getCourseMemberExpire($member)
     {
         $course = $this->getCourseService()->getCourse($member['courseId']);
-        if (empty($course) || empty($member) || 'published' != $course['status']) {
+        if (empty($course) || empty($member)) {
             return [
                 'status' => 0,
                 'deadline' => 0,
