@@ -27,11 +27,11 @@
 
           <a-form-model-item label="样式设置">
             <a-radio-group v-model="form.type">
-              <div style="margin-top: 8px;">
+              <div style="margin-top: 2px;">
                 <a-radio value="tick">勾选确认</a-radio>
                 <a-button style="padding: 0;" type="link">查看详情</a-button>
               </div>
-              <div style="margin-top: 8px;">
+              <div style="margin-top: 2px;">
                 <a-radio value="eject">弹出确认</a-radio>
                 <a-button style="padding: 0;" type="link">查看详情</a-button>
               </div>
