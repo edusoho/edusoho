@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 use Biz\Activity\Service\ActivityService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\File\Service\UploadFileService;
 use Biz\MultiClass\Service\MultiClassService;
@@ -124,9 +125,15 @@ class LiveExtension extends \Twig_Extension
     {
         if (LiveReplayService::REPLAY_GENERATE_STATUS === $activity['ext']['replayStatus']) {
             $originActivity = $this->getOriginActivity($activity);
-            $copyId = empty($originActivity['copyId']) ? $originActivity['id'] : $originActivity['copyId'];
+            $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+            $lessonId = empty($originActivity['copyId']) ? $originActivity['id'] : $originActivity['copyId'];
+            if (!empty($course['parentId']) && empty($originActivity['copyId'])) {
+                $parentActivity = $this->getActivityService()->getByMediaIdAndMediaTypeAndCourseId($originActivity['mediaId'], 'live', $course['parentId']);
+                $lessonId = empty($parentActivity) ? $lessonId : $parentActivity['id'];
+            }
+            $lessonId = empty($lessonId) && !empty($activity['copyId']) ? $activity['copyId'] : $lessonId;
 
-            $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
+            $replays = $this->getLiveReplayService()->findReplayByLessonId($lessonId);
 
             $replays = array_filter($replays, function ($replay) {
                 // 过滤掉被隐藏的录播回放
@@ -283,5 +290,13 @@ class LiveExtension extends \Twig_Extension
     protected function getMultiClassService()
     {
         return $this->biz->service('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 }
