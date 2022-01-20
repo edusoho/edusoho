@@ -11,7 +11,7 @@ class PurchaseAgreement extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
-        return $this->getSettingService()->get('course_purchase_agreement', []);
+        return $this->getSettingService()->get('course_purchase_agreement', ['enabled' => 0, 'title' => '', 'content' => '', 'type' => 'tick']);
     }
 
     public function add(ApiRequest $request)

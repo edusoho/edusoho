@@ -1,7 +1,7 @@
 <template>
   <admin-container>
     <template #title>购买协议设置</template>
-    <div class="single-content-sec">
+    <div class="single-content-sec" v-show="!loading">
       <a-form-model
         ref="ruleForm"
         :model="form"
@@ -16,7 +16,7 @@
           </a-radio-group>
         </a-form-model-item>
 
-        <template v-if="form.enabled">
+        <div v-show="form.enabled">
           <a-form-model-item label="名称">
             <a-input v-model="form.title" />
           </a-form-model-item>
@@ -31,7 +31,7 @@
               <a-radio value="eject">弹出确认</a-radio>
             </a-radio-group>
           </a-form-model-item>
-        </template>
+        </div>
 
         <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
           <a-button type="primary" @click="onSubmit">
@@ -44,8 +44,11 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import AdminContainer from 'app/vue/views/layouts/AdminContainer.vue';
 import Ckeditor from 'app/vue/components/Ckeditor.vue';
+
+import { PurchaseAgreement } from 'common/vue/service';
 
 export default {
   name: 'PurchaseAgreementSettings',
@@ -57,6 +60,7 @@ export default {
 
   data() {
     return {
+      loading: true,
       form: {
         enabled: 1,
         title: '',
@@ -71,14 +75,34 @@ export default {
     };
   },
 
+  mounted() {
+    this.fetchPurchaseAgreement();
+  },
+
   methods: {
+    async fetchPurchaseAgreement() {
+      const { enabled, title, content, type } = await PurchaseAgreement.get();
+      _.assign(this.form, {
+        enabled,
+        title: title || '用户购买协议',
+        content,
+        type
+      });
+      this.loading = false;
+      this.$nextTick(() => {
+        this.$refs.ckeditor.setData(content);
+      });
+    },
+
     onSubmit() {
       this.form.content = this.$refs.ckeditor.getData();
 
-      this.$refs.ruleForm.validate(valid => {
+      this.$refs.ruleForm.validate(async valid => {
         if (!valid) return false;
 
-        console.log(this.form);
+        await PurchaseAgreement.update({
+          data: this.form
+        });
       });
     }
   }

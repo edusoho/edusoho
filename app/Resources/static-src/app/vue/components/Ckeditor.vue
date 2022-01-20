@@ -45,6 +45,10 @@ export default {
 
     getData() {
       return this.editor.getData();
+    },
+
+    setData(value) {
+      this.editor.setData(value);
     }
   }
 }
