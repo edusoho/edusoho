@@ -214,6 +214,15 @@
                 <div class="help-block" style="display:none;"></div>
               </div>
             </div>
+          {% elseif userField.type=="select" %}
+            <div class="form-group">
+              <label for="{{ userField.fieldName }}" class="col-sm-3 control-label">{{ userField.title }}</label>
+              <div class="col-sm-6  controls">
+                <select class="form-control" id="condition-select" name="{{ userField.fieldName }}">
+                  {{ select_options(user_info_select(userField.detail), '') }}
+                </select>
+              </div>
+            </div>
           {% endif %}
 
         {% endif %}

@@ -26,6 +26,7 @@
                     <option value="int" num="{{'admin.user_fields.modal.init_fields.tips'|trans({'%intCount%': 5-intCount})}}" {% if intCount==5 %}disabled="disabled"{% endif %}>{{'admin.user_fields.modal.init_fields'|trans}}{% if intCount==5 %}({{'admin.user_fields.modal.init_fields.disabled.tips'|trans}}){% endif %}</option>
                     <option value="float" num="{{'admin.user_fields.modal.float_fields.tips'|trans({'%floatCount%': 5-floatCount})}}" {% if floatCount==5 %}disabled="disabled"{% endif %}>{{'admin.user_fields.modal.float_fields'|trans}}{% if floatCount==5 %}({{'admin.user_fields.modal.init_fields.disabled.tips'|trans}}){% endif %}</option>
                     <option value="date" num="{{ 'admin.user_fields.modal.date_fields.tips'|trans({'%5-dateCount%':5-dateCount}) }}" {% if dateCount==5 %}disabled="disabled"{% endif %}>{{'admin.user_fields.modal.date_fields'|trans}}{% if dateCount==5 %}({{'admin.user_fields.modal.init_fields.disabled.tips'|trans}}){% endif %}</option>
+                    <option value="select" num="{{ 'admin.user_fields.modal.date_fields.tips'|trans({'%5-dateCount%':5-selectCount}) }}" {% if selectCount==5 %}disabled="disabled"{% endif %}>{{'admin.user_fields.modal.select_list_fields'|trans}}{% if dateCount==5 %}({{'admin.user_fields.modal.init_fields.disabled.tips'|trans}}){% endif %}</option>
                   </select>
                   <div class="help-block" id="type_num" style="color:green;" ></div>
               </div>
@@ -41,6 +42,13 @@
             <div class="form-group "> 
              <label class="col-md-4 control-label">{{'admin.user_fields.fields_enabled'|trans}}</label>
              <div class="col-md-2"><input type="checkbox"  checked=checked name="field_enabled" vaule="1" style="height:18px;width:18px;"></div>
+            </div>
+            <div class="form-group js-select-content hidden" >
+              <label class="col-md-4 control-label" for="select-list">{{'user_field.select_type.lab'|trans}}</label>
+              <div class="col-md-6 controls">
+                <textarea id="select-list" name="detail" class="form-control" rows="10" data-widget-cid="widget-7" ></textarea>
+                <div class="help-block" style=""><span class="">{{'user_field.select_type.tip'|trans}}</span></div>
+            </div>
             </div>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
        </div> 

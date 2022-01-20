@@ -7748,6 +7748,7 @@ admin.user_fields.modal.init_fields.disabled.tips: 已满5个
 admin.user_fields.modal.float_fields: 小数
 admin.user_fields.modal.float_fields.tips: 还可以添加%floatCount%个字段,保留到两位小数
 admin.user_fields.modal.date_fields: 日期
+admin.user_fields.modal.select_list_fields: 下拉列表
 admin.user_fields.modal.date_fields.tips: 还可以添加%5-dateCount%个字段
 admin.user_avatar.customer_default_avatar: 自定义默认头像
 admin.user_avatar.customer_default_avatar.help_block: 请上传jpg, gif, png格式的图片
@@ -12157,6 +12158,6 @@ review.result.comment_tips: 修改评语后，将向学员发送评语修改通�
 review.result.amend_comment: 修改评价
 testpaper.import.tip: 试卷导入成功，请在当前页面调整试卷分值。（注：多选题和不定项选题新增“每项”设置，填空题新增“每空”设置。）
 course.plan_task.activity_manage.testpaper.comment_tips: 得分区间设置规则：<br>1、得分区间包含区间下限和区间上限。<br>2、当学员得分，大于等于区间下限或小于区间上限，自动显示该区间评语。<br>3、如果存在得分区间重叠情况，优先显示在评语列表中排序靠前的评语。
-
-
+user_field.select_type.lab: 下拉列表内容
+user_field.select_type.tip: 可批量添加子项，一行一个，每个子项最多输入20个字符
 
