@@ -17,11 +17,6 @@ export default {
     }
   },
 
-  async mounted() {
-    await this.getEditorUploadToken();
-    this.initCkeditor();
-  },
-
   methods: {
     async getEditorUploadToken() {
       const { token } = await UploadToken.get('course');
@@ -29,7 +24,8 @@ export default {
       this.flashUploadUrl += token;
     },
 
-    initCkeditor() {
+    async initCkeditor(content = '') {
+      await this.getEditorUploadToken();
       loadScript(`${CKEDITOR_BASEPATH}/ckeditor.js`,(err) => {
         if (err) throw err;
         this.editor = CKEDITOR.replace('summary', {
@@ -40,15 +36,19 @@ export default {
           filebrowserImageUploadUrl: this.imageUploadUrl,
           filebrowserFlashUploadUrl: this.flashUploadUrl
         });
+        this.editor.on('instanceReady', () => {
+          this.setData(content);
+        });
       });
     },
 
     getData() {
-      return this.editor.getData();
+      return this.editor.getData(this.content);
     },
 
-    setData(value) {
-      this.editor.setData(value);
+    setData(content) {
+      if (!content) return;
+      this.editor.setData(content);
     }
   }
 }

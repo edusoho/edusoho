@@ -27,8 +27,14 @@
 
           <a-form-model-item label="样式设置">
             <a-radio-group v-model="form.type">
-              <a-radio value="tick">勾选确认</a-radio>
-              <a-radio value="eject">弹出确认</a-radio>
+              <div style="margin-top: 8px;">
+                <a-radio value="tick">勾选确认</a-radio>
+                <a-button style="padding: 0;" type="link">查看详情</a-button>
+              </div>
+              <div style="margin-top: 8px;">
+                <a-radio value="eject">弹出确认</a-radio>
+                <a-button style="padding: 0;" type="link">查看详情</a-button>
+              </div>
             </a-radio-group>
           </a-form-model-item>
         </div>
@@ -67,6 +73,12 @@ export default {
         content: '',
         type: 'tick'
       },
+      radioStyle: {
+        display: 'block',
+        marginTop: '4px',
+        height: '30px',
+        lineHeight: '30px',
+      },
       rules: {
         content: [
           { required: true, message: '协议内容不能为空' }
@@ -88,10 +100,8 @@ export default {
         content,
         type
       });
+      this.$refs.ckeditor.initCkeditor(content);
       this.loading = false;
-      this.$nextTick(() => {
-        this.$refs.ckeditor.setData(content);
-      });
     },
 
     onSubmit() {
