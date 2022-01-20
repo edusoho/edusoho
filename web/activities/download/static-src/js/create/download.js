@@ -182,15 +182,28 @@ export default class DownLoad {
     let item_tpl = '';
     if (this.media.link) {
       item_tpl = `
-        <li class="download-item" data-id="${ this.media.link }">
-          <a class="gray-primary" href="${ this.media.link }" target="_blank">${ this.media.summary ? this.media.summary : this.media.name }<span class="glyphicon glyphicon-new-window text-muted text-sm mlm" title="${ Translator.trans('activity.download_manage.materials_delete_btn')}"></span></a>
+        <li class="download-item clearfix" data-id="${ this.media.link }">
+          <div class="download-item-left pull-left text-overflow">
+            <a href="${ this.media.link }" target="_blank">${ this.media.summary ? this.media.summary : this.media.name }</a>
+            <span class="glyphicon glyphicon-new-window color-gray text-sm"></span>
+          </div>
+          <div class="download-item-right pull-left">
+            <label>简介：</label>
+            <input placeholder="请输入简介（选填）" value="">
+          </div>
           <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="cd-icon cd-icon-close"></i></a>
         </li>
       `;
     } else {
       item_tpl = `
-        <li class="download-item" data-id="${ this.media.id }">
-          <a class="gray-primary" href="/materiallib/${ this.media.id }/download">${ this.media.name }</a>
+        <li class="download-item clearfix" data-id="${ this.media.id }">
+          <div class="download-item-left pull-left text-overflow">
+            <a class="gray-primary" href="/materiallib/${ this.media.id }/download">${ this.media.name }</a>
+          </div>
+          <div class="download-item-right pull-left">
+            <label>简介：</label>
+            <input placeholder="请输入简介（选填）" value="">
+          </div>
           <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="cd-icon cd-icon-close"></i></a>
         </li>
       `;
