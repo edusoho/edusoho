@@ -100,9 +100,12 @@ export default {
       this.$refs.ruleForm.validate(async valid => {
         if (!valid) return false;
 
-        await PurchaseAgreement.update({
-          data: this.form
-        });
+        try {
+          await PurchaseAgreement.update({ data: this.form });
+          this.$message.success('保存成功！')
+        } catch (error) {
+          this.$message.error('保存失败！')
+        }
       });
     }
   }
