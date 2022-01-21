@@ -87,8 +87,10 @@ class Setting extends AbstractResource
     public function getcoursePurchaseAgreement()
     {
         $result = $this->getSettingService()->get('course_purchase_agreement', ['enabled' => 0, 'title' => '', 'content' => '', 'type' => 'tick']);
+        unset($result['content']);
+        $result['open'] = empty($result['enabled']) || 'tick' == $result['type'] ? 0 : 1;
 
-        return ['open' => empty($result['enabled']) ? 0 : 1];
+        return $result;
     }
 
     public function getLocale($request)
