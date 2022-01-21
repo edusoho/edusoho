@@ -200,6 +200,10 @@
 									<input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="js-{{field.type}} form-control" value="{{ profile[field.fieldName]|default('') }}">
 								{% elseif field.type == "varchar" %}
 									<input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="form-control" value="{{ profile[field.fieldName]|default('') }}">
+                {% elseif field.type == "select" %}
+                  <select class="form-control" id="condition-select" name="profile[{{ field.fieldName }}]">
+                    {{ select_options(user_info_select(field.detail), profile[field.fieldName]|default('')) }}
+                  </select>
 								{% endif %}
 							</div>
 						</div>
