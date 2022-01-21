@@ -37,4 +37,10 @@ export default [
     method: 'GET',
     disableLoading: true,
   },
+  {
+    // 获取购买协议配置
+    name: 'getPurchaseAgreement',
+    url: '/settings/course_purchase_agreement',
+    method: 'GET'
+  },
 ];
