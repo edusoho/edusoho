@@ -18,6 +18,7 @@ class AssessmentDaoImpl extends AdvancedDaoImpl implements AssessmentDao
     {
         return array(
             'orderbys' => [
+                'id',
                 'created_time',
             ],
             'timestamps' => [

@@ -32,6 +32,7 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
     {
         return array(
             'orderbys' => [
+                'id',
                 'created_time',
             ],
             'serializes' => [
@@ -45,6 +46,7 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
             ],
             'conditions' => [
                 'id = :id',
+                'assessment_id = :assessment_id',
                 'assessment_id in (:assessmentIds)',
             ],
         );
