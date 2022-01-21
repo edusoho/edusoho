@@ -391,6 +391,7 @@ export default {
     buy: '立即购买'
   },
   courseLearning: {
+    teachingService: '教学服务',
     title: '课程详情',
     intro: '课程介绍',
     catalogue: '目录',

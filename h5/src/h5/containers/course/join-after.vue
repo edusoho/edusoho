@@ -32,7 +32,7 @@
 
           <div v-if="details.drainage && details.drainage.enabled == '1'" class="drainage-btn" @click="showDrainage = true">
             <i class="iconfont icon-drainage" style="margin-right: 4px;"></i>
-            教学服务
+            {{ $t('courseLearning.teachingService') }}
           </div>
 
           <!-- 助教 -->

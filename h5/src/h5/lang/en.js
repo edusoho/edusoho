@@ -391,6 +391,7 @@ export default {
     buy: 'Buy now'
   },
   courseLearning: {
+    teachingService: 'Teaching service',
     title: 'Details',
     intro: 'Intro',
     catalogue: 'Catalogue',
