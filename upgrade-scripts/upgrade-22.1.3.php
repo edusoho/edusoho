@@ -117,7 +117,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function processAssessmentSectionItem($page)
     {
-        $sectionItems = $this->getAssessmentSectionItemDao()->search([],['created_time'=>'ASC'],($page-1) * 1500, 1500);
+        $sectionItems = $this->getAssessmentSectionItemDao()->search([],['id'=>'ASC'],($page-1) * 5000, 5000, ['id', 'score_rule']);
         if(empty($sectionItems)){
             return 1;
         }
@@ -134,12 +134,12 @@ class EduSohoUpgrade extends AbstractUpdater
                 if(!empty($questionRules['part_right'])){
                     $questionRules['part_right'] = [
                         'name'=> 'part_right',
-                         'score' => $allRight['score'],
-                         'score_rule' => [
-                             'score' => $allRight['score'],
-                             'scoreType' => 'question',
-                             'otherScore' => $questionRules['part_right']['score'],
-                         ]
+                        'score' => $allRight['score'],
+                        'score_rule' => [
+                            'score' => $allRight['score'],
+                            'scoreType' => 'question',
+                            'otherScore' => $questionRules['part_right']['score'],
+                        ]
                     ];
                 }else{
                     $questionRules['part_right'] = [
@@ -160,13 +160,15 @@ class EduSohoUpgrade extends AbstractUpdater
         if(!empty($update)){
             $this->getAssessmentSectionItemDao()->batchUpdate(array_keys($update), $update, 'id');
         }
-        $this->logger('info', '修改AssessmentSectionItem');
+        unset($sectionItems);
+        unset($update);
+        $this->logger('info', '修改AssessmentSectionItem'.$page);
         return $page+1;
     }
 
     public function processAssessmentQuestion($page)
     {
-        $sectionQuestions = $this->getQuestionDao()->search([],['created_time'=>'ASC'],($page-1) * 1500, 1500);
+        $sectionQuestions = $this->getQuestionDao()->search([],['id'=>'ASC'],($page-1) * 3000, 3000);
         if(empty($sectionQuestions)){
             return 1;
         }
@@ -177,15 +179,15 @@ class EduSohoUpgrade extends AbstractUpdater
             }
             $update[$sectionQuestion['id']] = [
                 'score_rule' => [
-                'score' => $sectionQuestion['score'],
-                'scoreType' => 'question',
-                'otherScore' => $sectionQuestion['answer_mode'] == 'text' ? $sectionQuestion['score'] : 0,
-            ]];
+                    'score' => $sectionQuestion['score'],
+                    'scoreType' => 'question',
+                    'otherScore' => $sectionQuestion['answer_mode'] == 'text' ? $sectionQuestion['score'] : 0,
+                ]];
         }
         if(!empty($update)){
             $this->getQuestionDao()->batchUpdate(array_keys($update), $update, 'id');
         }
-        $this->logger('info', '修改biz_question');
+        $this->logger('info', '修改biz_question'.$page);
 
         return $page+1;
     }
