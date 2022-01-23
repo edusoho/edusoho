@@ -198,6 +198,7 @@
       />
       <div
         class="purchase-agreement__content"
+        ref="agreement"
         :class="{ 'purchase-agreement__content--btn': purchaseAgreement.open == 1 }"
         v-html="purchaseAgreement.content"
       />
@@ -206,6 +207,7 @@
         class="purchase-agreement__btn"
         type="primary"
         block
+        :disabled="agreementDisabled"
         @click="handleClickAgreeContinue"
       >同意并继续</van-button>
     </van-dialog>
@@ -219,6 +221,7 @@ import Api from '@/api';
 import { Toast } from 'vant';
 import collectUserInfoMixins from '@/mixins/collectUserInfo/index.js';
 import infoCollection from '@/components/info-collection.vue';
+import _ from 'lodash';
 export default {
   components: {
     eCourse,
@@ -255,7 +258,8 @@ export default {
       hasCollectUserInfo: false,
       isAgree: false,
       purchaseAgreement: {},
-      showPurchaseAgreement: false
+      showPurchaseAgreement: false,
+      agreementDisabled: true
     };
   },
   created() {
@@ -652,7 +656,9 @@ export default {
         this.purchaseAgreement = res;
         if (res.open == 1) {
           this.showPurchaseAgreement = true;
+          this.initAgreeContinueDisabled();
         }
+        this.agreementDisabled = false;
       });
     },
 
@@ -676,6 +682,37 @@ export default {
     handleClickAgreeContinue() {
       this.isAgree = true;
       this.showPurchaseAgreement = false;
+    },
+
+    initAgreeContinueDisabled() {
+      this.$nextTick(() => {
+        const el = this.$refs.agreement;
+        const elHeight = el.offsetHeight;
+        const elScrollHeight = el.scrollHeight;
+
+        if (elScrollHeight <= elHeight) return;
+
+        this.agreementDisabled = true;
+
+        const maxScroll = elScrollHeight - elHeight;
+
+        this.throttledScrollHandler = _.debounce(() => {
+          this.handleScroll(el, maxScroll);
+        }, 100);
+
+        el.addEventListener('scroll', this.throttledScrollHandler);
+      });
+    },
+
+    handleScroll(el, maxScroll) {
+      console.log('scroll');
+      const elScrollTop = el.scrollTop;
+      if (maxScroll - elScrollTop <= 20) {
+        el.removeEventListener('scroll', this.throttledScrollHandler);
+        this.agreementDisabled = false;
+      } else {
+        this.agreementDisabled = true;
+      }
     }
   },
 };
