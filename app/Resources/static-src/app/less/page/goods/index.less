@@ -30,3 +30,61 @@
     .box-shadow(0 6px 6px 0 rgba(0, 0, 0, .2));
   }
 }
+
+
+.order-purchase-agreement {
+  margin-bottom: 12px;
+  text-align: right;
+
+  .check {
+    position: relative !important;
+    top: 3px !important;
+    width: 16px !important;
+    height: 16px !important;
+  }
+  .agreement-title {
+    color: @brand-primary;
+  }
+}
+
+.agreement-modal {
+ .modal-dialog {
+   width: 400px;
+   max-height: 580px;
+   background: #FFFFFF;
+   border-radius: 8px;
+   .modal-content {
+     background: #FFFFFF;
+     padding: 16px;
+     width: 400px;
+     max-height: 536px;
+     overflow-y: scroll;
+     border-radius: 8px 8px 0px 0px !important;
+     .center {
+       height: 24px;
+       font-size: 16px;
+       font-weight: 500;
+       color: #333333;
+       line-height: 24px;
+       text-align: center;
+     }
+   }
+ }
+
+  .btn-bottom {
+    &:hover {
+      cursor:pointer;
+    }
+    height: 44px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #FFFFFF;
+    line-height: 44px;
+    text-align: center;
+    background: @brand-primary;
+    border-radius: 0px 0px 8px 8px;
+  }
+  .disabled {
+    background: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), 0.5);
+  }
+}
