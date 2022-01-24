@@ -27,6 +27,7 @@ class AssessmentSectionDaoImpl extends AdvancedDaoImpl implements AssessmentSect
     {
         return array(
             'orderbys' => [
+                'id',
                 'created_time',
             ],
             'timestamps' => [
