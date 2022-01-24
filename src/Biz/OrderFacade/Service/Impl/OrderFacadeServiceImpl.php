@@ -162,6 +162,10 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             $this->getWorkflowService()->adjustPrice($order['id'], MathToolkit::simple($price, 100));
         }
 
+        if ('SCRM' == $joinType && 0 == (int) $order['pay_amount']) {
+            return $order;
+        }
+
         $this->getWorkflowService()->paying($order['id'], []);
 
         $data = [

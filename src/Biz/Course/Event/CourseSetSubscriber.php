@@ -106,7 +106,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
         $courseSet = $event->getSubject();
         $this->getChapterDao()->update(['courseId' => $courseSet['defaultCourseId']], ['copyId' => 0]);
         $this->getTaskDao()->update(['courseId' => $courseSet['defaultCourseId']], ['copyId' => 0]);
-        $this->getActivityDao()->update(['fromCourseId' => $courseSet['defaultCourseId']], ['copyId' => 0]);
+        $this->getActivityDao()->update(['fromCourseId' => $courseSet['defaultCourseId'], 'excludeMediaType' => 'live'], ['copyId' => 0]);
     }
 
     /**
