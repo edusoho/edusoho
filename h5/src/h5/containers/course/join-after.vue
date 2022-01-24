@@ -16,7 +16,7 @@
     <div class="join-after__content">
       <keep-alive>
         <!-- 目录 -->
-        <div v-if="active == 0">
+        <div style="position: relative;" v-if="active == 0">
           <div class="course-info" @click="gotoGoodsPage">
             <div class="course-info__left">
               <div class="title text-overflow" :class="{ 'title--full': !details.goodsId }">{{ details.courseSet && details.courseSet.title }}</div>
@@ -28,6 +28,11 @@
               </div>
             </div>
             <van-icon name="arrow" v-if="details.goodsId" />
+          </div>
+
+          <div v-if="details.drainage && details.drainage.enabled == '1'" class="drainage-btn" @click="showDrainage = true">
+            <i class="iconfont icon-drainage" style="margin-right: 4px;"></i>
+            {{ $t('courseLearning.teachingService') }}
           </div>
 
           <!-- 助教 -->
@@ -88,6 +93,23 @@
     </van-action-sheet>
 
     <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
+
+    <van-popup
+      v-if="details.drainage && details.drainage.enabled == '1'"
+      class="drainage-popup"
+      v-model="showDrainage"
+      round
+      closeable
+      position="bottom"
+    >
+      <div class="drainage-popup__title">{{ details.drainage.text }}</div>
+      <div class="drainage-popup__img">
+        <img :src="details.drainage.image" alt="">
+      </div>
+      <van-button class="drainage-popup__btn" type="primary" block>
+        {{ isWeixin ? $t('courseLearning.longPressThePicture') : $t('courseLearning.longPressThePicture2') }}
+      </van-button>
+    </van-popup>
   </div>
 </template>
 <script>
@@ -172,7 +194,8 @@ export default {
       show: false,
       show_course_review: this.$store.state.goods.show_course_review,
       assistantShow: false,
-      showTabs: true // 是否显示 tabs
+      showTabs: true, // 是否显示 tabs
+      showDrainage: false
     };
   },
 
@@ -256,6 +279,12 @@ export default {
       this.offsetTop = IMGHEIGHT + NAVBARHEIGHT;
       this.offsetHeight = SELFHEIGHT;
     });
+
+    // 第一次进入，自动弹出引流弹窗
+    if (!localStorage.getItem('first_drainage')) {
+      this.showDrainage = true;
+      localStorage.setItem('first_drainage', 1);
+    }
   },
   async created() {
     this.showDialog();
@@ -570,7 +599,7 @@ export default {
 
     .learning-progress {
       position: relative;
-      width: vw(250);
+      width: vw(230);
       height: vw(8);
       background: #f5f5f5;
       border-radius: 4px;
@@ -653,6 +682,50 @@ export default {
       margin-bottom: vw(10);
       font-size: vw(14);
     }
+  }
+}
+
+.drainage-btn {
+  position: absolute;
+  top: vw(40);;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: vw(92);
+  height: vw(32);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 100px 0 0 100px;
+  font-size: vw(12);
+  color: $primary-color;
+}
+
+.drainage-popup {
+  box-sizing: border-box;
+  padding: 48px 16px 60px;
+  min-height: 40%;
+  text-align: center;
+
+  &__title {
+    color: #333;
+  }
+
+  &__img {
+    margin: vw(16) auto 0;
+    width: vw(140);
+    min-height: vw(140);
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &__btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
 }
 </style>

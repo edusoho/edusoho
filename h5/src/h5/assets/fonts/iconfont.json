@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "27375320",
+      "name": "drainage",
+      "font_class": "drainage",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
       "icon_id": "26095827",
       "name": "replay",
       "font_class": "replay",
