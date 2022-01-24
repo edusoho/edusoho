@@ -12,7 +12,6 @@ class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
      *   orderType  可选 排序规则
      *   categoryId 可选 分类ID
      *
-     *
      * @param array $arguments 参数
      *
      * @return array 课程列表
@@ -24,12 +23,12 @@ class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
 
         $courses = $this->getOpenCourseService()->searchCourses($conditions, $orderBy, 0, $arguments['count']);
 
-        if (!empty($arguments['orderBy']) && $arguments['orderBy'] == 'recommendedSeq') {
+        if (!empty($arguments['orderBy']) && 'recommendedSeq' == $arguments['orderBy']) {
             if (count($courses) < $arguments['count']) {
-                $unrecommendedCourses = $this->getOpenCourseService()->searchCourses(array(
-                    'status' => 'published',
+                $unrecommendedCourses = $this->getOpenCourseService()->searchCourses([
+                    'status' => 'published   ',
                     'recommended' => 0,
-                ), array('createdTime' => 'DESC'),
+                ], ['createdTime' => 'DESC'],
                     0, ($arguments['count'] - count($courses))
                 );
 
@@ -42,21 +41,21 @@ class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
 
     protected function filterConditions($arguments)
     {
-        $conditions = array('status' => 'published');
-        $orderBy = array('recommendedSeq' => 'ASC');
+        $conditions = ['status' => 'published'];
+        $orderBy = ['recommendedSeq' => 'ASC'];
 
-        if (!empty($arguments['orderBy']) && $arguments['orderBy'] == 'recommendedSeq') {
+        if (!empty($arguments['orderBy']) && 'recommendedSeq' == $arguments['orderBy']) {
             $conditions['recommended'] = 1;
-            $orderBy = array('recommendedSeq' => 'ASC');
-        } elseif (!empty($arguments['orderBy']) && $arguments['orderBy'] == 'hitNum') {
-            $orderBy = array('hitNum' => 'DESC');
+            $orderBy = ['recommendedSeq' => 'ASC'];
+        } elseif (!empty($arguments['orderBy']) && 'hitNum' == $arguments['orderBy']) {
+            $orderBy = ['hitNum' => 'DESC'];
         }
 
         if (!empty($arguments['categoryId'])) {
             $conditions['categoryId'] = $arguments['categoryId'];
         }
 
-        return array($conditions, $orderBy);
+        return [$conditions, $orderBy];
     }
 
     protected function getOpenCourseService()
