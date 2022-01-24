@@ -49,7 +49,7 @@ class MeClassroomMember extends AbstractResource
     private function getClassroomMemberExpire($member)
     {
         $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
-        if (empty($classroom) || empty($member) || 'published' != $classroom['status']) {
+        if (empty($classroom) || empty($member)) {
             return [
                 'status' => 0,
                 'deadline' => 0,

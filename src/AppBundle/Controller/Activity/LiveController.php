@@ -275,14 +275,14 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $activity = $this->getActivityService()->getActivity($activityId);
 
         $sourceActivityId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+        $sourceActivity = $this->getActivityService()->getActivity($sourceActivityId, true);
 
         $replay = $this->getLiveReplayService()->getReplay($replayId);
 
-        if (empty($replay) || $replay['lessonId'] != $sourceActivityId || (bool) $replay['hidden']) {
+        if (empty($replay) || empty($sourceActivity) || (bool) $replay['hidden']) {
             $this->createNewException(TaskException::LIVE_REPLAY_NOT_FOUND());
         }
 
-        $sourceActivity = $this->getActivityService()->getActivity($sourceActivityId, true);
         $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'], $request->isSecure());
 
         if (!empty($result) && !empty($result['resourceNo'])) {
