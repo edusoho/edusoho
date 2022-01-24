@@ -255,9 +255,9 @@ export default {
         position: 'bottom',
       });
     },
-    isAndroid() {
-      return !!navigator.userAgent.match(new RegExp('android', 'i'));
-    },
+    // isAndroid() {
+    //   return !!navigator.userAgent.match(new RegExp('android', 'i'));
+    // },
     initHead() {
       if (['video', 'audio', 'ppt'].includes(this.sourceType)) {
         window.scrollTo(0, 0);
@@ -415,6 +415,13 @@ export default {
       this.$store.commit('UPDATE_LOADING_STATUS', true);
       this.initPlayer(options);
     },
+
+    isAndroid() {
+      const u = navigator.userAgent;
+      const android = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+      return android;
+    },
+
     formateVedioData(player) {
       const media = player.media;
       const timelimit = media.timeLimit;
@@ -431,8 +438,8 @@ export default {
       if (media.isEncryptionPlus && !this.isWechat() && securityVideoPlayer) {
         Toast('该浏览器不支持云视频播放，请用微信打开或下载App');
         return;
-      } else if (media.isEncryptionPlus && !securityVideoPlayer) {
-        Toast('该浏览器不支持云视频播放，请下载App');
+      } else if (media.isEncryptionPlus && !securityVideoPlayer && (!this.isWechat() || !this.isAndroid())) {
+        Toast('该浏览器不支持云视频播放，请下载App，安卓端仅允许在微信App内置浏览器中观看');
         return;
       }
 
