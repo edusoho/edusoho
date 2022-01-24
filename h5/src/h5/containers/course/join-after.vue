@@ -278,13 +278,15 @@ export default {
       // 这里要得到top的距离和元素自身的高度
       this.offsetTop = IMGHEIGHT + NAVBARHEIGHT;
       this.offsetHeight = SELFHEIGHT;
-    });
 
-    // 第一次进入，自动弹出引流弹窗
-    if (!localStorage.getItem('first_drainage')) {
-      this.showDrainage = true;
-      localStorage.setItem('first_drainage', 1);
-    }
+      // 第一次进入，自动弹出引流弹窗
+      if (this.details.drainage
+          && this.details.drainage.enabled == '1'
+          && !localStorage.getItem('first_drainage')) {
+        this.showDrainage = true;
+        localStorage.setItem('first_drainage', 1);
+      }
+    });
   },
   async created() {
     this.showDialog();
