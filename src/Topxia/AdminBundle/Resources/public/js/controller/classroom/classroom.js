@@ -21,7 +21,7 @@ define(function (require, exports, module) {
     });
 
     // 确认后,弹出密码确认框;确认后删除
-    $('.delete-classroom').on('click', function () {
+    $table.on('click', '.delete-classroom', function () {
       if (!confirm(Translator.trans('admin.classroom.delete_hint'))) {
         return;
       }

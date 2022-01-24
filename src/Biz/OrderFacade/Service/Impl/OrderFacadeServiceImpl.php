@@ -151,8 +151,14 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $order = $this->getWorkflowService()->start($orderFields, $orderItems);
 
         $price = empty($orderFields['create_extra']['price']) ? 0 : $orderFields['create_extra']['price'];
+        //修复来自SCRM订单价格不能大于原价
+        $joinType = isset($orderFields['create_extra']['joinType']) ? $orderFields['create_extra']['joinType'] : '';
 
-        if ($price > 0 && !MathToolkit::isEqual($order['pay_amount'], MathToolkit::simple($price, 100))) {
+        if ($price > 0 && !MathToolkit::isEqual($order['pay_amount'], MathToolkit::simple($price, 100)) && 'SCRM' != $joinType) {
+            $this->getWorkflowService()->adjustPrice($order['id'], MathToolkit::simple($price, 100));
+        }
+
+        if ('SCRM' == $joinType && $order['pay_amount'] > MathToolkit::simple($price, 100)) {
             $this->getWorkflowService()->adjustPrice($order['id'], MathToolkit::simple($price, 100));
         }
 

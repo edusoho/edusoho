@@ -6,7 +6,7 @@
 
 {% block order_body %}
   {% set currency = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default' %}
-
+  {% set purchaseAgreement = setting('course_purchase_agreement')|default([]) %}
   <div class="order-center">
     <form id="order-create-form" method="post" action="{{path('order_create')}}" 
     data-price-calculate="{{ path('order_calculate_price') }}"
@@ -71,7 +71,12 @@
           </div>
         </div>
       </div>
-
+      {% if purchaseAgreement.enabled|default(0) %}
+        <div class="text-right order-purchase-agreement" >
+          <input type="checkbox" class="check js-agreement-check" data-type="{{ purchaseAgreement.type|default('tick') }}">
+          <span style="margin-left: 3px;font-size: 14px;font-weight: 400;color: #999999;line-height: 20px;">{{'user.register.i_agree'|trans}}<a href="javascript:;" class="js-preview-modal agreement-title">《{{ purchaseAgreement.title|default('用户购买协议')}}》</a></span>
+        </div>
+      {% endif %}
       <div class="text-right">
         <button class="btn cd-btn cd-btn-primary cd-btn-lg" id="order-create-btn" type="submit" data-loading-text="{{ 'order.confirm.submit_btn_loading'|trans }}">
           {{'order.confirm.submit_btn'|trans}}
@@ -83,4 +88,5 @@
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
   </div>
+  {% include  'order/show/purchase-agreement.html.twig' with {id:'check-modal', backdrop: purchaseAgreement.type|default('tick') == 'eject'} %}
 {% endblock %}
