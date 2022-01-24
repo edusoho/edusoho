@@ -175,6 +175,7 @@ export default {
       finishDialog: false, // 下一课时弹出模态框
       lastWatchTime: 0, // 上一次暂停上报的视频时间
       nowWatchTime: 0, // 当前刚看时间计时
+      activity: {}
     };
   },
   computed: {
@@ -276,6 +277,7 @@ export default {
     },
     getFinishCondition() {
       this.getCourseData(this.selectedPlanId, this.taskId).then(res => {
+        this.activity = res.activity;
         this.finishCondition = res.activity && res.activity.finishCondition;
       });
     },
@@ -462,6 +464,14 @@ export default {
       if (!canTryLookable) {
         delete options.pluck;
       }
+
+      const { finishType, finishData  } = this.activity;
+      if (finishType == 'end' && finishData == '1') {
+        options.controlBar = {
+          disableProgressBar: true
+        };
+      }
+
       this.$store.commit('UPDATE_LOADING_STATUS', true);
       this.initPlayer(options);
     },
