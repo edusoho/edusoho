@@ -78,7 +78,6 @@ class HorizontalImgBuilder extends ImgBuilder
 
     protected function setCertificateCode(Certificate $certificate)
     {
-        $length = mb_strlen('证书编号：'.$certificate->getCertificateCode(), 'utf-8');
         $x = 650 * $this->imageXRatio;
         $this->imageTtfText(
             [
