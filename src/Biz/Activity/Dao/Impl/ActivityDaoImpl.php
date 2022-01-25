@@ -115,6 +115,7 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'mediaType = :mediaType',
             'fromCourseId IN (:courseIds)',
             'title like :title',
+            'mediaType <> :excludeMediaType',
             'fromCourseId NOT IN (:excludeCourseIds)',
             'mediaType IN (:mediaTypes)',
             'mediaId IN (:mediaIds)',
