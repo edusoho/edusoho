@@ -1549,7 +1549,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
         $member = $this->getCourseMember($course['id'], $userId);
         if (empty($course['compulsoryTaskNum'])) {
-            $isFinished = false;
+            $isFinished = true;
         } else {
             $isFinished = (int) ($member['learnedCompulsoryTaskNum'] / $course['compulsoryTaskNum']) >= 1;
         }

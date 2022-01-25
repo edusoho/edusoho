@@ -509,6 +509,7 @@ class UserController extends BaseController
             }
 
             $userInfo = $this->saveUserInfo($request, $user);
+            $goto = strstr($goto, '/fill/userinfo') ? $this->generateUrl('homepage') : $goto;
 
             return $this->redirect($goto);
         }
@@ -688,6 +689,7 @@ class UserController extends BaseController
             'dateField1', 'dateField2', 'dateField3', 'dateField4', 'dateField5',
             'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField10', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9',
             'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10',
+            'selectField1', 'selectField2', 'selectField3', 'selectField4', 'selectField5',
         ]);
 
         if (isset($formData['email']) && !empty($formData['email'])) {

@@ -1,0 +1,11 @@
+{% if course.drainage|default([]) and course.drainage['enabled']|default(0) %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ 'course.drainage.content_title'|trans }}</h3>
+    </div>
+    <div class="panel-body" style="text-align: center">
+      <p style="min-height: 24px;font-size: 16px;font-weight: 400;color: #000000;line-height: 24px;text-align: center;margin-bottom: 6px">{{ course.drainage['text'] }}</p>
+      <img src="{{ course.drainage['image'] }}" style="width: 190px;height: 190px"/>
+    </div>
+  </div>
+{% endif %}

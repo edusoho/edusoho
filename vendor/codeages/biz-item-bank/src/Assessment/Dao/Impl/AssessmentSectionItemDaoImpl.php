@@ -31,13 +31,14 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
     public function declares()
     {
         return array(
-            'orderbys' => [
-                'created_time',
-            ],
             'serializes' => [
                 'score_rule' => 'json',
                 'answer_mode' => 'json',
                 'question_scores' => 'json',
+            ],
+            'orderbys' => [
+                'id',
+                'created_time',
             ],
             'timestamps' => [
                 'created_time',
@@ -45,6 +46,7 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
             ],
             'conditions' => [
                 'id = :id',
+                'assessment_id = :assessment_id',
                 'assessment_id in (:assessmentIds)',
             ],
         );

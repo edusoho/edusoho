@@ -272,17 +272,16 @@ class LiveController extends BaseActivityController implements ActivityActionInt
 
     public function replayUrlAction(Request $request, $courseId, $activityId, $replayId)
     {
-        $activity = $this->getActivityService()->getActivity($activityId);
-
+        $activity = $this->getActivityService()->getActivity($activityId, true);
         $sourceActivityId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+        $sourceActivity = $this->getActivityService()->getActivity($sourceActivityId, true);
 
         $replay = $this->getLiveReplayService()->getReplay($replayId);
-
-        if (empty($replay) || $replay['lessonId'] != $sourceActivityId || (bool) $replay['hidden']) {
+        $sourceActivity = empty($sourceActivity) ? $activity : $sourceActivity;
+        if (empty($replay) || (bool) $replay['hidden']) {
             $this->createNewException(TaskException::LIVE_REPLAY_NOT_FOUND());
         }
 
-        $sourceActivity = $this->getActivityService()->getActivity($sourceActivityId, true);
         $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'], $request->isSecure());
 
         if (!empty($result) && !empty($result['resourceNo'])) {

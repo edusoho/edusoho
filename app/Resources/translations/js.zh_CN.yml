@@ -195,8 +195,7 @@ activity.live.replay_guid_1: >
 activity.live.replay_guid: >
   老师们：直播平台
   <span class='color-info'>下课后</span>且
-  <span class='color-info'>直播时间</span>结束后，在课时管理的
-  <span class='color-info'>录播管理</span>点击生成回放。
+  <span class='color-info'>直播时间</span>结束后，直播回放可自动生成。
 activity.live.notice_title: 直播时间
 activity.live.default_notice: >
   <p>直播将于%startTimeFormat%开始，于%endTimeFormat%结束<p>
@@ -1611,6 +1610,16 @@ vip.level.free_learning_new: 会员免费兑换
 site.default.none: 无
 form.btn.save: 保存
 
+drainage.setting: 引流设置
+drainage.qr_setting: 二维码设置
+drainage.upload_tips: 请上传jpg, gif, png格式的图
+drainage.text: 引流文案
+drainage.placeholder: 请输入内容
+drainage.style: 引流页样式
+drainage.style_tips: 加入/支付完成页
+drainage.view_detail: 查看详情
+drainage.qr_no_empty: 二维码不能为空
+drainage.setting_tips: 将已购用户引流至私域流量池
 
 site.twig.extension.smarttime.future: 未来
 site.twig.extension.smarttime.hardly: 刚刚
@@ -2091,3 +2100,17 @@ scrm.analyze_the_overall_situation_of_the_company_is_marketing: 对企业营销�
 scrm.live_open_class: 直播公开课
 scrm.set_up_live_open_classes: 机构快速开设直播公开课，学员可在直播间购买正课；学员可邀请好友到直播间学习，实现裂变。
 testpaper.import.tip: "试卷导入成功，请在当前页面调整试卷分值。（注：多选题和不定项选题新增“每项”设置，填空题新增“每空”设置。）"
+
+admin.system.purchase_agreement_setting: 购买协议设置
+admin.system.purchase_agreement: 用户购买协议
+admin.system.purchase_agreement.title: 名称 
+admin.system.purchase_agreement.content: 协议内容
+admin.system.purchase_agreement.style_settings: 样式设置
+admin.system.purchase_agreement.check_to_confirm: 勾选确认
+admin.system.purchase_agreement.popup_confirmation: 弹出确认
+admin.system.purchase_agreement.see_details: 查看详情
+admin.system.purchase_agreement.submit: 提交
+admin.system.purchase_agreement.content_empty: 协议内容不能为空
+admin.system.purchase_agreement.saved_successfully: 保存成功！
+admin.system.purchase_agreement.save_failed: 保存失败！
+user_field.select_type.tip: 一行一个，每个子项最多输入20个字符

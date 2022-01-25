@@ -526,7 +526,11 @@ class CourseManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $data['services'] = empty($data['services']) ? [] : $data['services'];
-
+            $data['drainage'] = [
+                'enabled' => empty($data['drainageEnabled']) ? 0 : $data['drainageEnabled'],
+                'image' => empty($data['drainageImage']) ? '' : $data['drainageImage'],
+                'text' => empty($data['drainageText']) ? '' : $data['drainageText'],
+            ];
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
             if (in_array($courseSet['type'], ['live', 'reservation']) || !empty($courseSet['parentId'])) {
                 $this->getCourseSetService()->updateCourseSet($courseSetId, $data);
@@ -589,6 +593,9 @@ class CourseManageController extends BaseController
             $course['vipLevelId'] = empty($vipRight) || !in_array($vipRight['vipLevelId'], $vipLevelIds) ? '0' : $vipRight['vipLevelId'];
         }
         $course['title'] = empty(trim($course['title'])) ? '默认计划' : $course['title'];
+        $course['drainageEnabled'] = empty($course['drainage']['enabled']) ? 0 : 1;
+        $course['drainageImage'] = empty($course['drainage']['image']) ? '' : $course['drainage']['image'];
+        $course['drainageText'] = empty($course['drainage']['text']) ? '' : $course['drainage']['text'];
 
         return $this->render(
             'course-manage/info.html.twig',

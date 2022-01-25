@@ -1662,6 +1662,17 @@ vip.level.free_learning_new: Free for Vip
 site.default.none: None
 form.btn.save: Save
 
+drainage.setting: Drainage settings
+drainage.qr_setting: QR code settings
+drainage.upload_tips: Please upload pictures in jpg, gif, png format
+drainage.text: Drainage copy
+drainage.placeholder: Please enter content
+drainage.style: Drain page style
+drainage.style_tips: Join/Payment Completion Page
+drainage.view_detail: see details
+drainage.qr_no_empty: QR code cannot be empty
+drainage.setting_tips: Drain purchased users to the private domain traffic pool
+
 site.twig.extension.smarttime.future: Feature
 site.twig.extension.smarttime.hardly: A moment ago
 site.twig.extension.smarttime.previous_second: %diff% second ago
@@ -2136,3 +2147,16 @@ scrm.analyze_the_overall_situation_of_the_company_is_marketing: Analyze the over
 scrm.live_open_class: Live open class
 scrm.set_up_live_open_classes: Institutions quickly set up live open classes, and students can purchase regular classes in the live room; students can invite friends to study in the live room to achieve fission.
 testpaper.import.tip: "The test paper is imported successfully, please adjust the test paper score on the current page. (Note: 'Each item' setting is added for multiple-choice and variable-choice questions, and 'Each blank' setting is added for fill-in-the-blank questions.)"
+admin.system.purchase_agreement_setting: Purchase Agreement Settings
+admin.system.purchase_agreement: Purchase agreement
+admin.system.purchase_agreement.title: Title
+admin.system.purchase_agreement.content: Content
+admin.system.purchase_agreement.style_settings: Style settings
+admin.system.purchase_agreement.check_to_confirm: Check to confirm
+admin.system.purchase_agreement.popup_confirmation: Popup confirmation
+admin.system.purchase_agreement.see_details: See details
+admin.system.purchase_agreement.submit: Submit
+admin.system.purchase_agreement.content_empty: Protocol content cannot be empty
+admin.system.purchase_agreement.saved_successfully: Saved successfully!
+admin.system.purchase_agreement.save_failed: Save failed!
+user_field.select_type.tip: One per line, up to 20 characters per sub-item

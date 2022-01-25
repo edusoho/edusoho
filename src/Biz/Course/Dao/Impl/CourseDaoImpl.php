@@ -231,6 +231,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'audiences' => 'delimiter',
                 'services' => 'delimiter',
                 'teacherIds' => 'delimiter',
+                'drainage' => 'json',
             ],
             'orderbys' => [
                 'hitNum',

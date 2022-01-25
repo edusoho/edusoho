@@ -18,6 +18,8 @@ use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class Homework extends Activity
 {
+    private $isQuote = 2;
+
     protected function registerListeners()
     {
         return [];
@@ -30,7 +32,7 @@ class Homework extends Activity
             $homework['assessment'] = $this->getAssessmentService()->getAssessment($homework['assessmentId']);
             if (empty($homework['has_published'])) {
                 $homeworks = $this->getHomeworkActivityService()->findByAssessmentId($homework['assessmentId']);
-                $homework['isQuote'] = $homework['has_published'] = in_array(1, ArrayToolkit::column($homeworks, 'has_published'));
+                $homework['isQuote'] = $homework['has_published'] = in_array($this->isQuote, ArrayToolkit::column($homeworks, 'has_published'));
             }
         }
         if (isset($homework['has_published']) && empty($homework['has_published'])) {
@@ -163,7 +165,7 @@ class Homework extends Activity
             $activity = $this->getHomeworkActivityService()->create([
                 'answerSceneId' => $answerScene['id'],
                 'assessmentId' => $homework['assessmentId'],
-                'has_published' => 2,
+                'has_published' => $this->isQuote,
             ]);
 
             $this->getBiz()['db']->commit();
