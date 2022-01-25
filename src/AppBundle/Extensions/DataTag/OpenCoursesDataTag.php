@@ -43,6 +43,9 @@ class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
     {
         $conditions = ['status' => 'published'];
         $orderBy = ['recommendedSeq' => 'ASC'];
+        if (empty($arguments['orderBy'])) {
+            $conditions['recommended'] = 1;
+        }
 
         if (!empty($arguments['orderBy']) && 'recommendedSeq' == $arguments['orderBy']) {
             $conditions['recommended'] = 1;

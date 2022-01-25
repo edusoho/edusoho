@@ -45,7 +45,7 @@ class VerticalImgBuilder extends ImgBuilder
         return $this->imageTtfText(
             [
                 'x' => 502 * $this->imageXRatio,
-                'y' => 1300 * $this->imageYRatio,
+                'y' => 1000 * $this->imageYRatio,
                 'fontSize' => 0.5 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
@@ -66,7 +66,7 @@ class VerticalImgBuilder extends ImgBuilder
             $this->imageTtfText(
                 [
                     'x' => 454 * $this->imageXRatio,
-                    'y' => 1456 * $this->imageYRatio + $key * 112,
+                    'y' => 1156 * $this->imageYRatio + $key * 112,
                     'fontSize' => 0.5 * $this->defaultFontSize,
                     'color' => 51,
                     'fontWeight' => 1,
@@ -79,12 +79,11 @@ class VerticalImgBuilder extends ImgBuilder
 
     protected function setCertificateCode(Certificate $certificate)
     {
-        $length = mb_strlen('证书编号：'.$certificate->getCertificateCode(), 'utf-8');
-        $x = 1240 * $this->imageXRatio - $length * $this->defaultFontSize * 0.22 * 0.5;
+        $x = 490 * $this->imageXRatio;
         $this->imageTtfText(
             [
                 'x' => $x,
-                'y' => 850 * $this->imageYRatio,
+                'y' => 2910 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
@@ -96,7 +95,7 @@ class VerticalImgBuilder extends ImgBuilder
         return $this->imageTtfText(
             [
                 'x' => $x + 234 * $this->imageXRatio,
-                'y' => 850 * $this->imageYRatio,
+                'y' => 2910 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
@@ -187,7 +186,7 @@ class VerticalImgBuilder extends ImgBuilder
         }
         $qrCode = $this->buildQrCode($certificate->getCertificateQrCodeUrl());
         $qrCode = $this->_imageCreateFromImageOrString($qrCode);
-        imagecopymerge($this->image, $qrCode, 490 * $this->imageXRatio, 2580 * $this->imageYRatio, 0, 0, 400 * $this->imageXRatio, 400 * $this->imageXRatio, 100);
+        imagecopymerge($this->image, $qrCode, 490 * $this->imageXRatio, 2580 * $this->imageYRatio, 0, 0, 258 * $this->imageXRatio, 258 * $this->imageXRatio, 100);
 
         return $this->imageTtfText(
             [

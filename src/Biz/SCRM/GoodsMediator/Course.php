@@ -24,6 +24,7 @@ class Course extends AbstractMediator
                 'reason' => OperateReason::JOIN_BY_IMPORT,
                 'reasonType' => OperateReason::JOIN_BY_IMPORT_TYPE,
                 'isAdminAdded' => 1,
+                'joinType' => 'SCRM',
             ];
             $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $specs['targetId'], $data);
         }

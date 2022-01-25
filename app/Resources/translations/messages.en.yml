@@ -10896,3 +10896,4 @@ review.result.amend_comment: Amend comment
 testpaper.import.tip: "The test paper is imported successfully, please adjust the test paper score on the current page. (Note: 'Each item' setting is added for multiple-choice and variable-choice questions, and 'Each blank' setting is added for fill-in-the-blank questions.)"
 user_field.select_type.lab: options
 user_field.select_type.tip: Sub-items can be added in batches, one per line, each sub-item can be input up to 20 characters
+purchase.bth: agree and continue
