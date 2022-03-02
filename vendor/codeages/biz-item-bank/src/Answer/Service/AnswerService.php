@@ -73,5 +73,11 @@ interface AnswerService
      */
     public function review(array $reviewReport);
 
+    /**
+     * 纠错
+     * @param $answerRecordId
+     * @param $fillData
+     * @return mixed
+     */
     public function reviseFillAnswer($answerRecordId, $fillData);
 }

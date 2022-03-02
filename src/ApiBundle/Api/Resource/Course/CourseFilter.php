@@ -38,6 +38,7 @@ class CourseFilter extends Filter
         Converter::timestampToDate($data['buyExpiryTime']);
 
         $data['services'] = AssetHelper::callAppExtensionMethod('transServiceTags', [ServiceToolkit::getServicesByCodes($data['services'])]);
+        $data['drainage'] = empty($data['drainage']) ? ['enabled' => 0, 'image' => '', 'text' => ''] : $data['drainage'];
 
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);
