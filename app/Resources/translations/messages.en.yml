@@ -4720,6 +4720,7 @@ admin.question_bank.manage.model: >
   <p class="question-bank-model-title question-bank-model__special"><i class="es-icon es-icon-Explain"></i>PS</p>
   <p class="question-bank-model-text">The questions and testpapers in the courses are all moved to the question bank now.</p>
 
+admin.question_bank.manage.delete_question: '%user% deleted %num% questions in <<%questionBank%>>'
 admin.category_manage.name_th: Title
 admin.category_manage.code_th: Code
 admin.category_manage.operate_th: Action
@@ -8339,6 +8340,7 @@ log.action.question_bank.update_teacher: Update Manager
 log.action.question_bank.create_category: Create Bank Category
 log.action.question_bank.delete_category: Delete Bank Category
 log.action.question_bank.update_category: Update Bank Category
+log.action.question_bank.delete_question: Delete Question
 log.action.item_bank_exercise.add_student: 'Add student'
 log.action.item_bank_exercise.remove_student: Remove Student
 log.action.item_bank_exercise.delete_exercise: Delete Item Exercise
