@@ -1605,6 +1605,7 @@ classroom.amount: 相当于
 site.open: 开启
 site.date.day: 天
 course.marketing_setup.services.provide_services: 承诺提供服务
+course.marketing_setup.services.course_list_display: 目录展示
 vip.level.free_learning: 会员免费学
 vip.level.free_learning_new: 会员免费兑换
 site.default.none: 无
