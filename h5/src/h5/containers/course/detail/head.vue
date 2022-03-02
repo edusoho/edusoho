@@ -438,8 +438,10 @@ export default {
       if (media.isEncryptionPlus && !this.isWechat() && securityVideoPlayer) {
         Toast('该浏览器不支持云视频播放，请用微信打开或下载App');
         return;
-      } else if (media.isEncryptionPlus && !securityVideoPlayer && (!this.isWechat() || !this.isAndroid())) {
-        Toast('该浏览器不支持云视频播放，请下载App，安卓端仅允许在微信App内置浏览器中观看');
+      } else if (media.isEncryptionPlus && !securityVideoPlayer) {
+        Toast('该浏览器不支持云视频播放，请下载App');
+        // else if (media.isEncryptionPlus && !securityVideoPlayer && (!this.isWechat() || !this.isAndroid()))
+        // Toast('该浏览器不支持云视频播放，请下载App，安卓端仅允许在微信App内置浏览器中观看');
         return;
       }
 

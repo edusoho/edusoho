@@ -163,7 +163,7 @@
             shape="square"
             @click="handleClickAgree"
           >
-            我已阅读并同意<span class="order__agreement__btn" @click.stop="handleClickViewAgreement">《用户购买协议》</span>
+            我已阅读并同意<span class="order__agreement__btn" @click.stop="handleClickViewAgreement">《{{ purchaseAgreement.title }}》</span>
           </van-checkbox>
         </div>
       </div>
@@ -369,7 +369,7 @@ export default {
   methods: {
     shouldCollectUserInfo() {
       if (!this.isAgree) {
-        Toast('请勾选');
+        Toast('请先勾选协议');
         return;
       }
       if (
@@ -705,7 +705,6 @@ export default {
     },
 
     handleScroll(el, maxScroll) {
-      console.log('scroll');
       const elScrollTop = el.scrollTop;
       if (maxScroll - elScrollTop <= 20) {
         el.removeEventListener('scroll', this.throttledScrollHandler);

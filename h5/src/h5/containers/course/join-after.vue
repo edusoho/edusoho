@@ -267,6 +267,15 @@ export default {
     $route(to, from) {
       this.resetFrom();
     },
+
+    details(newDetails, oldDetails) {
+      const drainage = newDetails.drainage;
+
+      if (drainage && drainage.enabled == '1' && !localStorage.getItem('first_drainage')) {
+        this.showDrainage = true;
+        localStorage.setItem('first_drainage', 1);
+      }
+    }
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
@@ -279,12 +288,6 @@ export default {
       this.offsetTop = IMGHEIGHT + NAVBARHEIGHT;
       this.offsetHeight = SELFHEIGHT;
     });
-
-    // 第一次进入，自动弹出引流弹窗
-    if (!localStorage.getItem('first_drainage')) {
-      this.showDrainage = true;
-      localStorage.setItem('first_drainage', 1);
-    }
   },
   async created() {
     this.showDialog();
