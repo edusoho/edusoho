@@ -156,6 +156,16 @@
             </div>
           </div>
         </div>
+        <div class="order__agreement" v-if="purchaseAgreement.enabled == 1">
+          <van-checkbox
+            :value="isAgree"
+            icon-size="16"
+            shape="square"
+            @click="handleClickAgree"
+          >
+            我已阅读并同意<span class="order__agreement__btn" @click.stop="handleClickViewAgreement">《{{ purchaseAgreement.title }}》</span>
+          </van-checkbox>
+        </div>
       </div>
     </div>
     <div class="order-footer">
@@ -172,6 +182,35 @@
         {{ $t('order.pay2') }}
       </div>
     </div>
+
+    <van-dialog
+      v-if="purchaseAgreement.enabled == 1"
+      class="purchase-agreement"
+      v-model="showPurchaseAgreement"
+      :show-confirm-button="false"
+    >
+      <h2 class="purchase-agreement__title">《{{ purchaseAgreement.title }}》</h2>
+      <van-icon
+        v-if="purchaseAgreement.open != 1"
+        class="purchase-agreement__close"
+        name="cross"
+        @click="showPurchaseAgreement = false"
+      />
+      <div
+        class="purchase-agreement__content"
+        ref="agreement"
+        :class="{ 'purchase-agreement__content--btn': purchaseAgreement.open == 1 }"
+        v-html="purchaseAgreement.content"
+      />
+      <van-button
+        v-if="purchaseAgreement.open == 1"
+        class="purchase-agreement__btn"
+        type="primary"
+        block
+        :disabled="agreementDisabled"
+        @click="handleClickAgreeContinue"
+      >同意并继续</van-button>
+    </van-dialog>
   </div>
 </template>
 <script>
@@ -182,6 +221,7 @@ import Api from '@/api';
 import { Toast } from 'vant';
 import collectUserInfoMixins from '@/mixins/collectUserInfo/index.js';
 import infoCollection from '@/components/info-collection.vue';
+import _ from 'lodash';
 export default {
   components: {
     eCourse,
@@ -216,6 +256,10 @@ export default {
       timeoutId: -1,
       isShowForm: false,
       hasCollectUserInfo: false,
+      isAgree: false,
+      purchaseAgreement: {},
+      showPurchaseAgreement: false,
+      agreementDisabled: true
     };
   },
   created() {
@@ -223,6 +267,7 @@ export default {
       this.targetUnit = undefined;
       this.targetNum = undefined;
     }
+    this.fetchPurchaseAgreement();
     this.confirmOrder();
     this.getSettings();
   },
@@ -323,6 +368,10 @@ export default {
   },
   methods: {
     shouldCollectUserInfo() {
+      if (!this.isAgree) {
+        Toast('请先勾选协议');
+        return;
+      }
       if (
         this.IsCollectUserInfoType &&
         !this.hasCollectUserInfo &&
@@ -601,6 +650,117 @@ export default {
           Toast.fail(err.message);
         });
     },
+
+    fetchPurchaseAgreement() {
+      Api.getPurchaseAgreement().then(res => {
+        this.purchaseAgreement = res;
+        if (res.open == 1) {
+          this.showPurchaseAgreement = true;
+          this.initAgreeContinueDisabled();
+        }
+        this.agreementDisabled = false;
+      });
+    },
+
+    handleClickAgree() {
+      if (this.isAgree) {
+        this.isAgree = false;
+        return;
+      }
+
+      if (this.purchaseAgreement.open == 0) {
+        this.isAgree = !this.isAgree;
+      } else {
+        this.showPurchaseAgreement = true;
+      }
+    },
+
+    handleClickViewAgreement() {
+      this.showPurchaseAgreement = true;
+    },
+
+    handleClickAgreeContinue() {
+      this.isAgree = true;
+      this.showPurchaseAgreement = false;
+    },
+
+    initAgreeContinueDisabled() {
+      this.$nextTick(() => {
+        const el = this.$refs.agreement;
+        const elHeight = el.offsetHeight;
+        const elScrollHeight = el.scrollHeight;
+
+        if (elScrollHeight <= elHeight) return;
+
+        this.agreementDisabled = true;
+
+        const maxScroll = elScrollHeight - elHeight;
+
+        this.throttledScrollHandler = _.debounce(() => {
+          this.handleScroll(el, maxScroll);
+        }, 100);
+
+        el.addEventListener('scroll', this.throttledScrollHandler);
+      });
+    },
+
+    handleScroll(el, maxScroll) {
+      const elScrollTop = el.scrollTop;
+      if (maxScroll - elScrollTop <= 20) {
+        el.removeEventListener('scroll', this.throttledScrollHandler);
+        this.agreementDisabled = false;
+      } else {
+        this.agreementDisabled = true;
+      }
+    }
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+.purchase-agreement {
+  top: 50%;
+  height: 90%;
+
+
+  /deep/ .van-dialog__content {
+    height: 100%;
+  }
+
+  &__title {
+    margin: vw(10) vw(26);
+    text-align: center;
+    font-size: vw(16);
+    font-weight: 500;
+    color: #333;
+    line-height: vw(24);
+  }
+
+  &__close {
+    position: absolute;
+    padding: 6px;
+    top: 6px;
+    right: 6px;
+    font-size: 20px;
+  }
+
+  &__content {
+    overflow-y: scroll;
+    padding: 0 vw(16) vw(16);
+    height: calc(100% - 44px);
+    word-wrap: break-word;
+    box-sizing: border-box;
+
+    &--btn {
+      height: calc(100% - 86px);
+    }
+  }
+
+  &__btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+}
+</style>
