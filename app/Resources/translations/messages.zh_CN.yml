@@ -5599,6 +5599,7 @@ admin.question_bank.manage.model: >
 
   <p class="question-bank-model-title question-bank-model__special"><i class="es-icon es-icon-Explain"></i>特别说明</p>
   <p class="question-bank-model-text">老数据处理：原课程中的题目和试卷都搬迁到新版题库中了，原先教师有权限管理的题库，现在依然有权限管理</p>
+admin.question_bank.manage.delete_question: '%user%用户, 在 <<%questionBank%题库>> 中删除了%num%道题目'
 
 
 #　分类管理
@@ -9562,6 +9563,7 @@ log.action.question_bank.update_teacher: 修改授权教师
 log.action.question_bank.create_category: 创建题库分类
 log.action.question_bank.delete_category: 删除题库分类
 log.action.question_bank.update_category: 更新题库分类
+log.action.question_bank.delete_question: 删除题库题目
 log.action.destroy_account_record.create: 申请注销帐号
 log.action.destroy_account_record.pass: 通过注销帐号申请
 log.action.destroy_account_record.reject: 拒绝注销帐号申请
