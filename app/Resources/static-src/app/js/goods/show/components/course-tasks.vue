@@ -14,7 +14,7 @@
             return {
                courseItems: [],
                hasOptional: false,
-               renderUrl: `/course/${this.sku.targetId}/task/list/render/default?showOptional=1`,
+               renderUrl: `/course/${this.sku.targetId}/task/list/render/default?showOptional=1&goodList=1`,
                pagedCourseTask: null,
             };
         },
@@ -34,7 +34,7 @@
         },
         methods: {
             getTasksListInfo() {
-                this.renderUrl = `/course/${this.sku.targetId}/task/list/render/default?showOptional=1`;
+                this.renderUrl = `/course/${this.sku.targetId}/task/list/render/default?showOptional=1&goodList=1`;
                 $('.js-tasks-show').data('url', this.renderUrl);
                 $('.js-tasks-show').html('');
                 try {
