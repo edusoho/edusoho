@@ -117,6 +117,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       disableSentry: app.cloudDisableLogReport,
       disableControlBar: self.options.disableControlBar,
       disableProgressBar: self.options.disableProgressBar,
+      disableFullscreen: self.options.disableFullscreen,
       disableSeek: disableSeek,
       playlist: self.options.url,
       rememberLastPos: rememberLastPos,
@@ -167,6 +168,10 @@ class BalloonCloudVideoPlayer extends Emitter {
       data['type'] = self.convertQuestionType(data.type, 'cloud');
       self.emit('answered', data);
     });
+
+    player.on('requestFullscreen', function(data) {
+      self.emit('requestFullscreen', data);
+    })
 
     this.player = player;
     this._registerChannel();
