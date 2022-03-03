@@ -90,7 +90,7 @@ class LegacyCloseRequest
         $converted['_input_charset'] = 'utf-8';
         $converted['partner'] = $this->options['key'];
         $converted['trade_role'] = 'B';
-        $converted['sign_type'] = 'MD5';
+        $converted['sign_type'] = 'RSA';
         $converted['out_order_no'] = $params['out_trade_no'];
         $converted['service'] = 'close_trade';
 

@@ -7105,8 +7105,8 @@ admin.payment_setting.alipay_api_type.mobile.hint: >
 admin.payment_setting.alipay_api_type.escow: 'Secured transaction interface'
 admin.payment_setting.alipay_api_type.dualfun: 'Standard dual-interface'
 admin.payment_setting.alipay_api_hint: 'You can get the PID and KEY after applying the Alipay interface access successfully<a href="%alipayApplication%" target="_blank"> How to apply? </a><br>If you need to use "immediate payment interface" in moblie app, please access the <a href="%mobileAlipayApplication%" target="blank"> Mobile Web payment </a><br>'
-admin.payment_setting.alipay_secret: 'MD5 Key'
-admin.payment_setting.alipay_hint: Log in [Ant Financial·Open Platform]-[Service Market]-[Key Management], <a href="%alipayUrl%" target="_blank">View PID and MD5 Secret Keys</a>.
+admin.payment_setting.alipay_secret: 'RSA Key'
+admin.payment_setting.alipay_hint: Log in [Ant Financial·Open Platform]-[Service Market]-[Key Management], <a href="%alipayUrl%" target="_blank">View PID and Secret RSA Keys</a>.
 admin.payment_setting.alipay_account: 'Alipay account'
 admin.payment_setting.alipay_mobile_payment_hint: 'If you need to turn on mobile app payment, please enter your Alipay account.'
 admin.payment_setting.open_alipay_api: 'Enable Alipay transaction closed interface'
@@ -8897,7 +8897,7 @@ log.attr.system.update_settings.payment.alipay_enabled: Alipay payment function
 log.attr.system.update_settings.payment.alipay_enabled.1: Open
 log.attr.system.update_settings.payment.alipay_enabled.0: Closed
 log.attr.system.update_settings.payment.alipay_key: Alipay PID
-log.attr.system.update_settings.payment.alipay_secret: Alipay MD5 key
+log.attr.system.update_settings.payment.alipay_secret: Alipay RSA key
 log.attr.system.update_settings.payment.alipay_account: Alipay account
 log.attr.system.update_settings.payment.wxpay_enabled: WeChat payment function
 log.attr.system.update_settings.payment.wxpay_enabled.1: Open

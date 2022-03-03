@@ -8464,9 +8464,9 @@ admin.payment_setting.alipay_api_type.mobile: 手机网站支付接口
 admin.payment_setting.alipay_api_type.mobile.hint: >
   开通此接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">阔知学堂</span>支付，需前往支付宝开通，查看
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
-admin.payment_setting.alipay_secret: MD5密钥
+admin.payment_setting.alipay_secret: RSA密钥
 admin.payment_setting.alipay_hint: >
-  登录【蚂蚁金服·开放平台】-【服务市场】-【密钥管理】，可<a href="%alipayUrl%" target="_blank">查看PID和MD5秘钥</a>。
+  登录【蚂蚁金服·开放平台】-【服务市场】-【密钥管理】，可<a href="%alipayUrl%" target="_blank">查看PID和RSA秘钥</a>。
 admin.payment_setting.alipay_account: 支付宝账户
 admin.payment_setting.alipay_mobile_payment_hint: 如需开启移动客户端支付，需填写支付宝账户。
 admin.payment_setting.open_alipay_api: 启用支付宝交易关闭接口
@@ -10122,7 +10122,7 @@ log.attr.system.update_settings.payment.alipay_enabled: 支付宝支付功能
 log.attr.system.update_settings.payment.alipay_enabled.1: 开启
 log.attr.system.update_settings.payment.alipay_enabled.0: 关闭
 log.attr.system.update_settings.payment.alipay_key: 支付宝PID
-log.attr.system.update_settings.payment.alipay_secret: 支付宝MD5密钥
+log.attr.system.update_settings.payment.alipay_secret: 支付宝RSA密钥
 log.attr.system.update_settings.payment.alipay_account: 支付宝账户
 log.attr.system.update_settings.payment.wxpay_enabled: 微信支付功能
 log.attr.system.update_settings.payment.wxpay_enabled.1: 开启
