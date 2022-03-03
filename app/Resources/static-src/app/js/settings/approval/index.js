@@ -1,6 +1,10 @@
 $('#approval-form').validate({
   rules: {
-    idcard: 'required idcardNumber',
+    idcard: {
+      required: true,
+      maxlength: 50,
+      only_alphanumeric: true
+    },
     truename: {
       required: true,
       chinese: true,
@@ -19,10 +23,10 @@ $('#approval-form').validate({
       required: Translator.trans('user.fields.idcard_back_placeholder')
     }
   },
-  submitHandler: function(form) {
+  submitHandler: function (form) {
     const $form = $(form);
     const $btn = $form.find('[type="submit"]');
-    $('.js-input-val').each(function() {
+    $('.js-input-val').each(function () {
       const $this = $(this);
       const spaceVal = $this.val();
       const finalVal = $.trim(spaceVal);
