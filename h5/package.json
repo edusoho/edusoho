@@ -16,8 +16,7 @@
     "lint:fix": "eslint  --fix  --ext .js --ext .jsx --ext .vue src/",
     "style-lint": "stylelint  src/**/*.scss",
     "style-lint:fix": "stylelint src/**/*.scss --fix",
-    "format-code": "prettier-eslint --write \"src/**/*.js\" \"src/**/*.vue\"",
-    "try6": "php vendor/bin/dep deploy dev"
+    "format-code": "prettier-eslint --write \"src/**/*.js\" \"src/**/*.vue\""
   },
   "husky": {
     "hooks": {
@@ -83,7 +82,6 @@
     "load-script": "^1.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
-    "n": "0.1.2",
     "node-sass": "^4.12.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
