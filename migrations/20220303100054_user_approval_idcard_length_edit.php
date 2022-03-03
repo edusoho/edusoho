@@ -11,7 +11,7 @@ class UserApprovalIdcardLengthEdit extends Migration
     {
         if (!$this->isFieldExist('user_approval', 'idcard')) {
             $biz = $this->getContainer();
-            $biz['db']->exec("ALTER TABLE `user_approval` MODIFY `idcard` VARCHAR(51);");
+            $biz['db']->exec('ALTER TABLE `user_approval` MODIFY `idcard` VARCHAR(51);');
         }
     }
 
@@ -20,7 +20,6 @@ class UserApprovalIdcardLengthEdit extends Migration
      */
     public function down()
     {
-
     }
 
     protected function isFieldExist($table, $filedName)
