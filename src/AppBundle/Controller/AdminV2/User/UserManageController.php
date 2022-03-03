@@ -504,6 +504,10 @@ class UserManageController extends BaseController
 
     public function deleteAction($id)
     {
+        if ($id == $this->getCurrentUser()->getId()) {
+            $this->createNewException(UserException::DELETE_USER_PERMISSION_DENIED());
+        }
+
         $this->getUserService()->deleteUser($id);
 
         return $this->createJsonResponse(true);

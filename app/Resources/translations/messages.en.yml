@@ -9288,6 +9288,7 @@ exception.user.not_match_bind_email: Does not match the bound mailbox
 exception.user.login_limit: Login restriction！
 exception.user.datefield_invalid: Date type field is not filled in by date format
 exception.user.file_permission_denied: No file access
+exception.user.delete_user_permission_denied: Can not delete current user
 
 exception.parsed.failed.netease: Failed to get video information of Netease Open Class
 exception.parsed.failed.letv: Failed to get video information of Letv
