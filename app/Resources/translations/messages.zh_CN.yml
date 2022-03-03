@@ -9367,6 +9367,7 @@ log.action.user.edit: 修改
 log.action.user.update: 修改
 log.action.user.send_email_verify: 邮箱验证
 log.action.user.nickname_change: 修改昵称
+log.action.user.delete_user: 删除用户
 log.action.user.password-changed: 重置密码
 log.action.user.pay-password-changed: 重置支付密码
 log.action.user.password-security-answers: 设置安全问题
@@ -9690,6 +9691,7 @@ log.action.template.user.nickname_change: 更新了<strong class="color-success"
 log.action.template.user.avatar-changed: 更新了<strong class="color-success">用户</strong> %title%的头像
 log.action.template.user.change_role: 更新了<strong class="color-success">用户</strong> %title%的用户组
 log.action.template.user.lock: 封禁了<strong class="color-success">用户</strong> %title%
+log.action.template.user.delete_user: 删除了<strong class="color-success">用户</strong> %title%
 log.action.template.user.unlock: 解禁了<strong class="color-success">用户</strong> %title%
 log.action.template.thread.create: 新建了<strong class="color-success">话题</strong> 《%title%》
 log.action.template.thread.update: 更新了<strong class="color-success">话题</strong> 《%title%》

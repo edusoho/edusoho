@@ -502,6 +502,13 @@ class UserManageController extends BaseController
         ]);
     }
 
+    public function deleteAction($id)
+    {
+        $this->getUserService()->deleteUser($id);
+
+        return $this->createJsonResponse(true);
+    }
+
     public function sendPasswordResetEmailAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);

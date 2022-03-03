@@ -34,6 +34,7 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\BlacklistService;
 use Biz\User\Service\InviteRecordService;
 use Biz\User\Service\NotificationService;
+use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
@@ -1573,6 +1574,67 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
+    public function deleteUser($id)
+    {
+        $user = $this->getUser($id);
+
+        if (empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
+        try {
+            $this->beginTransaction();
+            //更新用户信息
+            $userFields = [
+                'nickname' => '删除用户_'.$id,
+                'email' => $this->generateEmail($user),
+                'emailVerified' => 0,
+                'verifiedMobile' => '',
+                'smallAvatar' => '',
+                'mediumAvatar' => '',
+                'largeAvatar' => '',
+                'destroyed' => 1,
+            ];
+
+            $userProfile = [
+                'idcard' => '',
+                'mobile' => '',
+            ];
+            $this->getProfileDao()->update($id, $userProfile);
+            $this->changeUserRoles($id, ['ROLE_USER']);
+
+            $data = $this->getUserDao()->update($id, $userFields);
+
+            //清除用户绑定信息
+            $this->deleteUserBindByUserId($id);
+
+            //清除用户登录token
+            $this->getTokenService()->destroyTokensByUserId($id);
+
+            //清楚用户课程问题/话题数据
+            $this->getCourseThreadService()->deleteThreadsByUserId($id);
+
+            //清楚用户班级问题/话题数据
+            $this->getThreadService()->deleteThreadsByUserId($id);
+
+            //清楚用户小组问题/话题数据
+            $this->getGroupService()->deleteGroupsByUserId($id);
+            $this->getGroupThreadService()->deleteThreadsByUserId($id);
+            $this->getGroupThreadService()->deleteThreadPostsByUserId($id);
+
+            //清楚用户课程笔记数据
+            $this->getNoteService()->deleteNotesByUserId($id);
+
+            //清楚用户课程/班级评价数据
+            $this->getReviewService()->deleteReviewsByUserId($id);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->getLogger()->error($e->getMessage());
+            $this->rollback();
+        }
+    }
+
     public function promoteUser($id, $number)
     {
         $user = $this->getUser($id);
@@ -2528,6 +2590,44 @@ class UserServiceImpl extends BaseService implements UserService
     protected function getOrgService()
     {
         return $this->createService('Org:OrgService');
+    }
+
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
+    }
+
+    protected function getReviewService()
+    {
+        return $this->createService('Review:ReviewService');
+    }
+
+    protected function getNoteService()
+    {
+        return $this->createService('Course:CourseNoteService');
+    }
+
+    protected function getGroupThreadService()
+    {
+        return $this->createService('Group:ThreadService');
+    }
+
+    protected function getGroupService()
+    {
+        return $this->createService('Group:GroupService');
+    }
+
+    protected function getCourseThreadService()
+    {
+        return $this->createService('Course:ThreadService');
+    }
+
+    protected function getThreadService()
+    {
+        return $this->createService('Thread:ThreadService');
     }
 
     public function getKernel()

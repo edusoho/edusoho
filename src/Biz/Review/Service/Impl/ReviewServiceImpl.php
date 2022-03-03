@@ -109,6 +109,13 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         return true;
     }
 
+    public function deleteReviewsByUserId($userId)
+    {
+        $this->getReviewDao()->deleteByUserId($userId);
+
+        return true;
+    }
+
     public function countReviews($conditions)
     {
         return $this->getReviewDao()->count($conditions);
