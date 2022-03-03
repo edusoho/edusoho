@@ -165,6 +165,7 @@ class LoggerTest extends BaseTestCase
                 'approved' => '实名认证成功',
                 'approval_fail' => '实名认证失败',
                 'password-reset' => '重置密码',
+                'delete_user' => '删除用户',
             ],
             'system' => [
                 'email_send_check' => '邮件自检',
