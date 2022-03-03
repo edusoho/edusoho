@@ -1611,21 +1611,21 @@ class UserServiceImpl extends BaseService implements UserService
             //清除用户登录token
             $this->getTokenService()->destroyTokensByUserId($id);
 
-            //清楚用户课程问题/话题数据
+            //清除用户课程问题/话题数据
             $this->getCourseThreadService()->deleteThreadsByUserId($id);
 
-            //清楚用户班级问题/话题数据
+            //清除用户班级问题/话题数据
             $this->getThreadService()->deleteThreadsByUserId($id);
 
-            //清楚用户小组问题/话题数据
+            //清除用户小组问题/话题数据
             $this->getGroupService()->deleteGroupsByUserId($id);
             $this->getGroupThreadService()->deleteThreadsByUserId($id);
             $this->getGroupThreadService()->deleteThreadPostsByUserId($id);
 
-            //清楚用户课程笔记数据
+            //清除用户课程笔记数据
             $this->getNoteService()->deleteNotesByUserId($id);
 
-            //清楚用户课程/班级评价数据
+            //清除用户课程/班级评价数据
             $this->getReviewService()->deleteReviewsByUserId($id);
 
             $this->commit();
