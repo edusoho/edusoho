@@ -90,6 +90,7 @@ class StudentExporterTest extends BaseTestCase
             'user.fields.company_label',
             'user.fields.career_label',
             'user.fields.title_label',
+            'course.members_manage.export.field_learn_time',
             'student.profile.weibo',
         ];
 
@@ -209,6 +210,7 @@ class StudentExporterTest extends BaseTestCase
                 'company',
                 'job',
                 'title',
+                '0',
                 'weibo',
                 '111',
             ],
@@ -228,6 +230,7 @@ class StudentExporterTest extends BaseTestCase
                 'company2',
                 'job2',
                 'title2',
+                '0',
                 'weibo2',
                 '222',
             ],
