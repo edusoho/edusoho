@@ -128,13 +128,13 @@ class StudentExporterTest extends BaseTestCase
                             'userId' => 1,
                             'createdTime' => 1,
                             'learnedCompulsoryTaskNum' => 2,
-                            'learningTime' => 0
+                            'learningTime' => 0,
                         ],
                         [
                             'userId' => 2,
                             'createdTime' => 33,
                             'learnedCompulsoryTaskNum' => 3,
-                            'learningTime' => 0
+                            'learningTime' => 0,
                         ],
                     ],
                 ],
