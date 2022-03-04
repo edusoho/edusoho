@@ -1603,7 +1603,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getProfileDao()->update($id, $userProfile);
             $this->changeUserRoles($id, ['ROLE_USER']);
 
-            $data = $this->getUserDao()->update($id, $userFields);
+            $this->getUserDao()->update($id, $userFields);
 
             //清除用户绑定信息
             $this->deleteUserBindByUserId($id);
@@ -1632,9 +1632,8 @@ class UserServiceImpl extends BaseService implements UserService
         } catch (\Exception $e) {
             $this->getLogger()->error($e->getMessage());
             $this->rollback();
+            throw $e;
         }
-
-        return true;
     }
 
     public function promoteUser($id, $number)

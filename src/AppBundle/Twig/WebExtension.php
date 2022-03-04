@@ -843,7 +843,7 @@ class WebExtension extends \Twig_Extension
             return false;
         }
 
-        return in_array('ROLE_SUPER_ADMIN', $currentUser['roles']) ?: false;
+        return in_array('ROLE_SUPER_ADMIN', $currentUser['roles']);
     }
 
     public function getUserVipLevel($userId)
