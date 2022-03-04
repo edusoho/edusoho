@@ -116,7 +116,9 @@ class ClassroomController extends BaseController
 
             $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $user['id']);
             $classrooms[$key]['learningProgressPercent'] = $progress['percent'];
+            $classrooms[$key]['lastLearnTime'] = $members[$classroom['id']]['createdTime'];
         }
+        array_multisort(ArrayToolkit::column($classrooms, 'lastLearnTime'), SORT_DESC, $classrooms);
 
         return $this->render('my/learning/classroom/classroom.html.twig', [
             'classrooms' => $classrooms,
