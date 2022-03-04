@@ -764,6 +764,7 @@ admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: '发送密码重置�
 admin_v2.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮件'
 admin_v2.user.basic.basic_tab.lock_btn: '封禁用户'
 admin_v2.user.basic.basic_tab.unlock_btn: '解禁用户'
+admin_v2.user.basic.basic_tab.delete_btn: '删除用户'
 admin_v2.user.basic.basic_tab.org_update_btn: '修改用户组织机构'
 
 #用户-用户管理-实名认证

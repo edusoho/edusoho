@@ -337,6 +337,11 @@ class GroupServiceImpl extends BaseService implements GroupService
         $this->reCountGroupMember($groupId);
     }
 
+    public function deleteGroupsByUserId($userId)
+    {
+        return $this->getGroupDao()->deleteByUserId($userId);
+    }
+
     protected function prepareGroupConditions($conditions)
     {
         if (isset($conditions['ownerName']) && '' !== $conditions['ownerName']) {

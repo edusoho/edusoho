@@ -19,6 +19,11 @@ class GroupDaoImpl extends GeneralDaoImpl implements GroupDao
         return $this->findInField('id', $ids);
     }
 
+    public function deleteByUserId($userId)
+    {
+        return $this->db()->delete($this->table(), ['ownerId' => $userId]);
+    }
+
     public function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {

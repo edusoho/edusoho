@@ -8144,6 +8144,7 @@ log.action.user.edit: 'Edit'
 log.action.user.update: 'Edit'
 log.action.user.send_email_verify: 'Email verification'
 log.action.user.nickname_change: 'Change nickname'
+log.action.user.delete_user: 'Delete user'
 log.action.user.password-changed: 'Change password'
 log.action.user.pay-password-changed: 'Change payment password'
 log.action.user.verifiedMobile-changed: 'Change mobile'
@@ -8462,6 +8463,7 @@ log.action.template.user.nickname_change: Updated the nickname of<strong class="
 log.action.template.user.avatar-changed: Updated the avatar of<strong class="color-success"> user </strong> %title%
 log.action.template.user.change_role: Updated the roles of<strong class="color-success"> user </strong> %title%
 log.action.template.user.lock: Locked the<strong class="color-success"> user </strong> %title%
+log.action.template.user.delete_user: Delete the<strong class="color-success"> user </strong> %title%
 log.action.template.user.unlock: Unlocked the<strong class="color-success"> user </strong> %title%
 log.action.template.thread.create: Created a new<strong class="color-success"> topic </strong> 《%title%》
 log.action.template.thread.update: Updated the<strong class="color-success"> topic </strong> 《%title%》
@@ -9286,6 +9288,7 @@ exception.user.not_match_bind_email: Does not match the bound mailbox
 exception.user.login_limit: Login restriction！
 exception.user.datefield_invalid: Date type field is not filled in by date format
 exception.user.file_permission_denied: No file access
+exception.user.delete_user_permission_denied: Can not delete current user
 
 exception.parsed.failed.netease: Failed to get video information of Netease Open Class
 exception.parsed.failed.letv: Failed to get video information of Letv

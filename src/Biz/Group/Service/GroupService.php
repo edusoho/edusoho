@@ -26,6 +26,8 @@ interface GroupService
 
     public function deleteGroup($id);
 
+    public function deleteGroupsByUserId($userId);
+
     public function recommendGroup($id, $number);
 
     public function cancelRecommendGroup($id);

@@ -36,6 +36,8 @@ interface ThreadService
      */
     public function deleteThread($threadId);
 
+    public function deleteThreadsByUserId($userId);
+
     public function setThreadSticky($threadId);
 
     public function cancelThreadSticky($threadId);
