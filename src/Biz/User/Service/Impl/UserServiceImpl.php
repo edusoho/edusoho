@@ -1633,6 +1633,8 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getLogger()->error($e->getMessage());
             $this->rollback();
         }
+
+        return true;
     }
 
     public function promoteUser($id, $number)

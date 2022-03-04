@@ -508,9 +508,9 @@ class UserManageController extends BaseController
             $this->createNewException(UserException::DELETE_USER_PERMISSION_DENIED());
         }
 
-        $this->getUserService()->deleteUser($id);
+        $result = $this->getUserService()->deleteUser($id);
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse($result);
     }
 
     public function sendPasswordResetEmailAction(Request $request, $id)
