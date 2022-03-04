@@ -14,6 +14,11 @@
       data-user-name="{{app.user.username|default('')}}"
       {# data-image-info="{{ pptPlayer.result.images|json_encode() }}" #}
       {# data-token-url="{{ path('activity_ppt_token', {mediaId: activity.mediaId}) }}" #}
+      {% if setting('storage.video_fingerprint') and app.user %}
+        data-fingerprint="{{ finger_print() }}"
+        data-fingerprint-src="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+        data-fingerprint-time="{{ setting('storage.video_fingerprint_time')|default(0.5) * 1000 }}"
+      {% endif %}
       {% if setting('magic.ppt_watermark') %}
         data-watermark-url="{{ path('cloud_ppt_watermark') }}"
       {% endif %}>

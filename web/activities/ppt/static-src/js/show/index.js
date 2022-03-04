@@ -70,7 +70,8 @@ const endFinishTip = (pageNumber) => {
 
 const newPlayer = (token) => {
   let finalToken = token ? token : $element.data('token');
-  const pptPlayer = new QiQiuYun.Player({
+  const container = $('#activity-ppt-content');
+  const playerConfig = {
     id: 'activity-ppt-content',
     // 环境配置
     sdkBaseUri: app.cloudSdkBaseUri,
@@ -82,7 +83,19 @@ const newPlayer = (token) => {
       id: $element.data('userId'),
       name: $element.data('userName')
     }
-  });
+  }
+
+  const fingerprint = container.data('fingerprint');
+  const fingerprintTime = container.data('fingerprintTime');
+
+  if (fingerprint) {
+    playerConfig.fingerprint = {
+      html: fingerprint,
+      duration: fingerprintTime
+    }
+  }
+
+  const pptPlayer = new QiQiuYun.Player(playerConfig);
 
   pptPlayer.on('ready', (data) => {
     toggleText(currentType);

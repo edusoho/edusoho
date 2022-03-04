@@ -16,7 +16,8 @@ initDocPlayer();
 onFullScreen();
 
 function initDocPlayer() {
-  new QiQiuYun.Player({
+  const container = $('#document-content');
+  const playerConfig = {
     id: 'document-content',
     // playServer: app.cloudPlayServer,
     sdkBaseUri: app.cloudSdkBaseUri,
@@ -28,8 +29,18 @@ function initDocPlayer() {
       id: $element.data('userId'),
       name: $element.data('userName')
     }
-  });
+  }
+  const fingerprint = container.data('fingerprint');
+  const fingerprintTime = container.data('fingerprintTime');
 
+  if (fingerprint) {
+    playerConfig.fingerprint = {
+      html: fingerprint,
+      duration: fingerprintTime
+    }
+  }
+
+  new QiQiuYun.Player(playerConfig);
 }
 
 
