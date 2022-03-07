@@ -2907,18 +2907,6 @@ admin_v2_cloud_data_lab:
     path: /edu_cloud/data/lab
     defaults:
         _controller: 'AppBundle:AdminV2/CloudCenter/DataLab:data'
-admin_v2_cloud_data_lab_setting:
-    path: /edu_cloud/data/lab/setting
-    defaults:
-        _controller: 'AppBundle:AdminV2/CloudCenter/DataLab:settting'
-admin_v2_cloud_data_lab_setting_enable_modal:
-    path: /edu_cloud/data/lab/setting/modal/enable
-    defaults:
-        _controller: 'AppBundle:AdminV2/CloudCenter/DataLab:enable'
-admin_v2_cloud_data_lab_setting_disable_modal:
-    path: /edu_cloud/data/lab/setting/modal/disable
-    defaults:
-        _controller: 'AppBundle:AdminV2/CloudCenter/DataLab:disable'
 admin_v2_cloud_face_identify_setting:
     path: /edu_cloud/face_identify/setting
     defaults:
