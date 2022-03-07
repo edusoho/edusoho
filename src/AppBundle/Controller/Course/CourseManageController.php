@@ -96,7 +96,6 @@ class CourseManageController extends BaseController
     public function replayAction(Request $request, $courseSetId, $courseId)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-
         if ($courseSet['locked']) {
             return $this->redirectToRoute(
                 'course_set_manage_sync',
@@ -106,26 +105,20 @@ class CourseManageController extends BaseController
                 ]
             );
         }
-
         $course = $this->getCourseService()->tryManageCourse($courseId);
-
         $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
-
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
-
         $liveTasks = array_filter(
             $tasks,
             function ($task) {
                 return 'live' === $task['type'] && 'published' === $task['status'];
             }
         );
-
         foreach ($liveTasks as $key => $task) {
             $task['isEnd'] = $this->get('web.twig.live_extension')->isLiveFinished($task['activityId'], 'course');
             $task['file'] = $this->_getLiveReplayMedia($task);
             $liveTasks[$key] = $task;
         }
-
         $default = $this->getSettingService()->get('default', []);
         $lessons = $this->getCourseLessonService()->findLessonsByCourseId($courseId);
         $lessons = ArrayToolkit::index($lessons, 'id');
@@ -197,7 +190,6 @@ class CourseManageController extends BaseController
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $replays = $this->getLiveReplayService()->findReplayByLessonId($activity['id']);
-
         if ('POST' == $request->getMethod()) {
             $ids = $request->request->get('visibleReplays');
             $this->getLiveReplayService()->updateReplayShow($ids, $activity['id']);

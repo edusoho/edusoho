@@ -62,7 +62,7 @@ class CreateOrderResponse extends BaseAbstractResponse
                 'timeStamp' => time() . '',
             ];
 
-            $data['signType'] = 'RSA';
+            $data['signType'] = 'MD5';
             $data['paySign']  = Helper::sign($data, $this->request->getApiKey());
         } else {
             $data = null;

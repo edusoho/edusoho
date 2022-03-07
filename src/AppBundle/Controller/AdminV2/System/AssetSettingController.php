@@ -37,6 +37,8 @@ class AssetSettingController extends BaseController
             'alipay_enabled' => 0,
             'alipay_key' => '',
             'alipay_secret' => '',
+            'alipay_public_key' => '', //内容为字符串,存储为文件使用,保存的是文件路径
+            'rsa_private_key' => '', //需要上传文件,保存的是文件路径
             'alipay_account' => '',
             'alipay_type' => 'direct',
             'tenpay_enabled' => 0,
@@ -64,11 +66,8 @@ class AssetSettingController extends BaseController
                 $payment['llpay_enabled'] = 0;
             }
             $payment['disabled_message'] = empty($payment['disabled_message']) ? $default['disabled_message'] : $payment['disabled_message'];
-
             $formerPayment = $this->getSettingService()->get('payment');
-
             $payment = array_merge($formerPayment, $payment);
-
             $this->getSettingService()->set('payment', $payment);
             $this->setFlashMessage('success', 'site.save.success');
         }

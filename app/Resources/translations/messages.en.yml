@@ -453,7 +453,7 @@ order.status: 'Order Status'
 order.deduct: Order deduct
 order.item_type: Order type
 order.product_type: Product type
-order.source:  source
+order.source: source
 order.status.created: Unfishined
 order.status.paid: Piad
 order.status.cancel: Closed
@@ -499,7 +499,7 @@ order.export_btn: 'Export'
 order.confirm: 'Confirm'
 order.confirm.pay_total: Total
 order.confirm.pay_rmb: 'Price'
-order.confirm.pay_points:  'You can use %num% points, use'
+order.confirm.pay_points: 'You can use %num% points, use'
 order.confirm.point: 'points'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
@@ -2126,7 +2126,7 @@ open_course.file_format_conversion_hint: (File format converting)
 open_course.file_format_conversion_failed_hint: (File format conversion failed)
 open_course.unpublish_success_hint: Lesson unpublished!
 open_course.lesson.create_success: Lesson create success
-open_course.lesson.create_error:  Lesson create error
+open_course.lesson.create_error: Lesson create error
 classroom: Class
 column: Column
 classroom.name: Class Name
@@ -3062,7 +3062,7 @@ homepage.learning_course.teacher_name: 'Teacher ：%nickname%'
 homepage.learning_course.learning_progress: '%percent% finished'
 homepage.recommend_classroom.content_title: 'Recommend Classes'
 homepage.recommend_classroom.more: "More %moreClassrooms%\n"
-site.datagrid.filter.class_more : More
+site.datagrid.filter.class_more: More
 homepage.article.content_title: 'Latest %article_name%'
 homepage.student_comment.content_title: 'Student reviews'
 homepage.student_comment.from: "from <a class=\"link-dark\" href=\"%courseUrl%\">《%courseTitle%》</a>\n"
@@ -3104,7 +3104,7 @@ cloud_file.process_status.error: 'Convert failed'
 cloud_file.transcoding_tips: 'Video transcoding is not completed, please wait ...'
 
 cloud_file.transcoding_tips.error_code_40100001.reason: The current file format is abnormal and does not support transcoding.
-cloud_file.transcoding_tips.error_code_40100001.solution:  This file format does not support transcoding. Please use the relevant video format conversion software such as format factory, convert it to FLV or MP4 format, and then re-upload and transcode.
+cloud_file.transcoding_tips.error_code_40100001.solution: This file format does not support transcoding. Please use the relevant video format conversion software such as format factory, convert it to FLV or MP4 format, and then re-upload and transcode.
 cloud_file.transcoding_tips.error_code_40100002.reason: The current file is deleted and transcoding is not supported.
 cloud_file.transcoding_tips.error_code_40100002.solution: The source file has been deleted and cannot be transcoded. Please re-upload and then transcode.
 cloud_file.transcoding_tips.error_code_40100003.reason: The current file format is abnormal and does not support transcoding.
@@ -4302,7 +4302,7 @@ admin.course_manage.manage.vip_grade: 'VIP Level'
 admin.course_manage.manage.duration: 'Duration'
 admin.course_manage.manage.introduction: 'Introduction'
 admin.course_manage.manage.member_benefits: 'Member Benefits'
-admin.course_manage.manage.newest_member : 'Newest Member'
+admin.course_manage.manage.newest_member: 'Newest Member'
 admin.course_manage.manage.vip_grade_removed: 'This VIP level has been removed'
 admin.course_manage.manage.vip_grade_count: '%count% VIP level'
 admin.course_manage.manage.live: Live
@@ -4898,7 +4898,7 @@ admin.setting.site.icp: ICP
 admin.setting.site.icp_url: ICP Link
 admin.setting.site.website_statistics_analysis: 'Website analytics code deployment'
 admin.setting.site.icp_record_information: 'ICP record information'
-admin.setting.site.public_security_record_information:  'Public security record information'
+admin.setting.site.public_security_record_information: 'Public security record information'
 admin.setting.site.analytics: 'Analytics Code'
 admin.setting.site.analytics.help_block: "<p class=\"help-block\">Analytics code is used to import 3rd part analytics tool. You can get the code form 3rd part analytics provider and put it into your site.</p> <p class=\"help-block\">Analysis data include where visitors come from，which site users come from，use what keywords，total visitor numbers，visit number per day, visit IPs per day，visitor average duration in site, etc.</p> <p class=\"help-block\">Analytics tool can analyze PV trends to help improve market promotion and optimize the site resource. Suggest to use <a href=\"http://tongji.baidu.com\" target=\"_blank\">Baidu Analytics</a>、<a target=\"_blank\" href=\"http://www.umeng.com/\">CNZZ</a></p>\n"
 admin.setting.site.website_status: 'Site Status'
@@ -4906,7 +4906,7 @@ admin.setting.site.website_status.open: Enable
 admin.setting.site.website_status.closed: Disable
 admin.setting.site.closed_note: 'Announcement of website shutdown'
 admin.setting.site.ICP_record: ' How to add the ICP record number to the bottom of the website?'
-admin.setting.site.public_security_record : ' How to add the public security record icon and number to the bottom of the website?'
+admin.setting.site.public_security_record: ' How to add the public security record icon and number to the bottom of the website?'
 admin.setting.site.closed_note.help_block: 'Users will see this announcement when the website is shutdown'
 admin.setting.site.recordUrl.help_block: Start with "http://" and end with the record number. Please fill in the complete link to the public security record number. Example:http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: Name
@@ -7104,8 +7104,11 @@ admin.payment_setting.alipay_api_type.mobile.hint: >
 admin.payment_setting.alipay_api_type.escow: 'Secured transaction interface'
 admin.payment_setting.alipay_api_type.dualfun: 'Standard dual-interface'
 admin.payment_setting.alipay_api_hint: 'You can get the PID and KEY after applying the Alipay interface access successfully<a href="%alipayApplication%" target="_blank"> How to apply? </a><br>If you need to use "immediate payment interface" in moblie app, please access the <a href="%mobileAlipayApplication%" target="blank"> Mobile Web payment </a><br>'
-admin.payment_setting.alipay_secret: 'RSA Key'
-admin.payment_setting.alipay_hint: Log in [Ant Financial·Open Platform]-[Service Market]-[Key Management], <a href="%alipayUrl%" target="_blank">View PID and Secret RSA Keys</a>.
+admin.payment_setting.alipay_md5_secret: MD5 KEY
+admin.payment_setting.alipay_secret: 'Alipay Public Key'
+admin.payment_setting.developer_private_secret: Developer Private Key
+admin.payment_setting.developer_private_secret.has_upload: Developer Private Key Has Upload
+admin.payment_setting.alipay_hint: Log in [Alipay·Open Platform]-[Account center]-[Key Management]-[mapi gateway product key], <a href="%alipayUrl%" target="_blank">View PID, MD5 Key and Alipay public Key</a>.
 admin.payment_setting.alipay_account: 'Alipay account'
 admin.payment_setting.alipay_mobile_payment_hint: 'If you need to turn on mobile app payment, please enter your Alipay account.'
 admin.payment_setting.open_alipay_api: 'Enable Alipay transaction closed interface'
@@ -7938,11 +7941,11 @@ reward_point.reply_discussion_hint_unlimited: >
   Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: unlimited / day
 reward_point.reply_question_hint: >
   Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: %daily_limit% %name% / day
-reward_point.reply_question_hint_unlimited:  >
+reward_point.reply_question_hint_unlimited: >
   Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: unlimited / day
 reward_point.create_question_hint: >
   Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: %daily_limit% %name% / day
-reward_point.create_question_hint_unlimited:  >
+reward_point.create_question_hint_unlimited: >
   Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: unlimited / day
 reward_point.create_discussion_hint: >
   Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: %daily_limit% %name% / day
@@ -9890,7 +9893,7 @@ coupon.target_type.course: Course
 coupon.target_type.all: Full Site
 coupon.target_type.classroom_all: All classerooms
 coupon.target_type.classroom_specific: Designated classroom
-coupon.target_type.vip_all : All vip
+coupon.target_type.vip_all: All vip
 coupon.target_type.vip_specific: Designated vip
 coupon.target_type.course_all: All courses
 coupon.target_type.course_specific: Designated course
@@ -10242,7 +10245,7 @@ admin_v2.app_center.resource_settlement.filter_placeholder: Choose status
 admin_v2.app_center.resource_settlement.order.pay: Paying
 admin_v2.app_center.resource_settlement.order.paid: Paid
 admin_v2.app_center.resource_settlement.order.refunded: Refunded
-admin_v2.app_center.resource_settlement.switch_show_debt:  Only show debt(%amount% owed)
+admin_v2.app_center.resource_settlement.switch_show_debt: Only show debt(%amount% owed)
 
 admin_v2.app_center.resource_settlement.order.title: Title
 admin_v2.app_center.resource_settlement.order.sn: Sn
@@ -10712,7 +10715,7 @@ admin_v2.system.user_content_control.thread_manage: Thread Manage
 admin_v2.system.user_content_control.course_question_manage: Course Question Manage
 admin_v2.system.user_content_control.classroom_question_manage: Classroom Question Manage
 admin_v2.system.user_content_control.course_thread_manage: Course Question Manage
-admin_v2.system.user_content_control.classroom_thread_manage:  Classroom Thread Manage
+admin_v2.system.user_content_control.classroom_thread_manage: Classroom Thread Manage
 admin_v2.system.user_content_control.group_thread_manage: Group Thread Manage
 admin_v2.system.user_content_control.private_message_manage: Private Message Manage
 admin_v2.system.user_content_control.note_manage: Note Manage
@@ -10818,7 +10821,7 @@ exception.multi_class.assistant_not_found: Assistant not found
 exception.multi_class.assistant_student_not_found: Assistant student relationship not found
 exception.multi_class.multi_class_assistant_require: The Multi class assistants need to be set up
 exception.multi_class.multi_class_assistant.number_exceed: The Multi class assistants exceed the maximum number of people
-exception.multi_class.multi_class_data_fields_missing : The Multi class data fields missing
+exception.multi_class.multi_class_data_fields_missing: The Multi class data fields missing
 exception.multi_class.multi_class_course_not_match: The Multi class course not match
 exception.multi_class.product_not_found: The product not found
 exception.multi_class.cannot_delete_default_product: The default product can not delete
@@ -10866,7 +10869,7 @@ course.live_replay_manage.live_anchor_th: Live anchor
 course.live_replay_manage.live_time_th: Live time
 course.live_replay.tag_select_default: Replay tag
 course.live_replay.share_btn: Share
-course.live_replay.un_share_btn:  UnShare
+course.live_replay.un_share_btn: UnShare
 course.live_replay.remove_btn: Remove
 course.live_replay.title: Live Title
 course.live_replay.teacher: Teacher
