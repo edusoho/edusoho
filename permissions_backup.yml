@@ -379,8 +379,6 @@ admin_cloud_data_lab_manage:
     - admin_v2_cloud_data_lab_manage
 admin_cloud_data_lab:
     - admin_v2_cloud_data_lab
-admin_cloud_data_lab_setting:
-    - admin_v2_cloud_data_lab_setting
 admin_cloud_face_identify_manage:
     - admin_v2_cloud_face_identify
 admin_cloud_face_identify:

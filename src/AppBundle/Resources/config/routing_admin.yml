@@ -2702,18 +2702,6 @@ admin_cloud_face_identify:
     path: /face_identify/setting
     defaults:
         _controller: 'AppBundle:Admin/FeatureLab:faceIdentify'
-admin_cloud_data_lab_setting:
-    path: /data/lab/setting
-    defaults:
-        _controller: 'AppBundle:Admin/DataLab:settting'
-admin_cloud_data_lab_setting_enable_modal:
-    path: /data/lab/setting/modal/enable
-    defaults:
-        _controller: 'AppBundle:Admin/DataLab:enable'
-admin_cloud_data_lab_setting_disable_modal:
-    path: /data/lab/setting/modal/disable
-    defaults:
-        _controller: 'AppBundle:Admin/DataLab:disable'
 admin_wechat_app:
     path: /wechat_app
     defaults:

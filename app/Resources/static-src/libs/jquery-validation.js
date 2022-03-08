@@ -431,6 +431,9 @@ $.validator.addMethod('nickname', function(value, element, params) {
 
 $.validator.addMethod('es_remote', function(value, element, params) {
   console.log('es_remote');
+  if($('[name="registerVisitId"]') && 'undefined' !== window._VISITOR_ID){
+    $('[name="registerVisitId"]').val(window._VISITOR_ID)
+  }
   let url = $(element).data('url') ? $(element).data('url') : null;
   let type = params.type ? params.type : 'GET';
   let data = params.data ? params.data : { value: value };
