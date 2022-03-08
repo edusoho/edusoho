@@ -17,47 +17,50 @@ if ($selectFinish.length) {
     }
     $('#homeworkScore').rules('remove');
     switch (val) {
-    case 'time':
-      $('#conditions-time').show();
-      if (!$('#watchTime').val()) {
-        let $options = $('#finish-type option:selected');
-        $('#watchTime').val($options.data('value'));
-        $('#finish-data').val($options.data('value'));
-      }
-      $('#watchTimeLabel').hasClass('hidden') ? null : $('#watchTimeLabel').addClass('hidden');
-      $('#timeLabel').hasClass('hidden') ? $('#timeLabel').removeClass('hidden') : null;
-      break;
-    case 'watchTime':
-      $('#conditions-time').show();
-      if (!$('#watchTime').val()) {
-        let $options = $('#finish-type option:selected');
-        $('#watchTime').val($options.data('value'));
-        $('#finish-data').val($options.data('value'));
-      }
-      $('#watchTimeLabel').hasClass('hidden') ? $('#watchTimeLabel').removeClass('hidden') : null;
-      $('#timeLabel').hasClass('hidden') ? null : $('#timeLabel').addClass('hidden');
-      break;
-    case 'score':
-      if($('.js-homework-score').length >0){
-        let val = $('#task-create-content-iframe', parent.document).contents().find('.js-homework-scores-input').val();
-        $('.js-finish-score').html(val);
-        $('#homeworkScore').rules('add', {
-          required: true,
-          es_score: true,
-          homework_score: true,
-          messages: {
-            required: Translator.trans('course.homework.score.tip1')
-          }
-        });
-        $('.js-homework-score').show();
-      }
-      break;
-    case 'end':
-      $('#endConditions').removeClass('hidden');
-      $('#finish-data').val('');
-      break;
-    default:
-      $selectFinish.trigger('selectChange', val);
+      case 'time':
+        $('#conditions-time').show();
+        if (!$('#watchTime').val()) {
+          let $options = $('#finish-type option:selected');
+          $('#watchTime').val($options.data('value'));
+          $('#finish-data').val($options.data('value'));
+        }
+        $('#watchTimeLabel').hasClass('hidden') ? null : $('#watchTimeLabel').addClass('hidden');
+        $('#timeLabel').hasClass('hidden') ? $('#timeLabel').removeClass('hidden') : null;
+        break;
+      case 'watchTime':
+        $('#conditions-time').show();
+        if (!$('#watchTime').val()) {
+          let $options = $('#finish-type option:selected');
+          $('#watchTime').val($options.data('value'));
+          $('#finish-data').val($options.data('value'));
+        }
+        $('#watchTimeLabel').hasClass('hidden') ? $('#watchTimeLabel').removeClass('hidden') : null;
+        $('#timeLabel').hasClass('hidden') ? null : $('#timeLabel').addClass('hidden');
+        break;
+      case 'score':
+        if ($('.js-homework-score').length > 0) {
+          let val = $('#task-create-content-iframe', parent.document).contents().find('.js-homework-scores-input').val();
+          $('.js-finish-score').html(val);
+          $('#homeworkScore').rules('add', {
+            required: true,
+            es_score: true,
+            homework_score: true,
+            messages: {
+              required: Translator.trans('course.homework.score.tip1')
+            }
+          });
+          $('.js-homework-score').show();
+        }
+        break;
+      case 'end':
+        $('#endConditions').removeClass('hidden');
+        $('#finish-data').val('');
+        if ($('#js-end-rule').is(':checked')) {
+          $('#finish-data').val(1);
+        }
+        break;
+      default:
+        $selectFinish.trigger('selectChange', val);
     }
   });
   $('#js-end-rule').on('change', function () {
@@ -67,7 +70,6 @@ if ($selectFinish.length) {
       $('#finish-data').val(''); // 不禁止拖动
     }
   });
-  
 }
 
 let validate = $('#step3-form').validate({
@@ -94,7 +96,7 @@ if (!$('#conditions-time').is(':hidden')) {
   });
 }
 
-$('#homeworkScore').on('change', function() {
+$('#homeworkScore').on('change', function () {
   $('#finish-data').val($(this).val());
 });
 
