@@ -47,7 +47,8 @@ export default class UserInfoFieldsItemValidate extends ParentUserInfo {
         },
         idcard: {
           required: true,
-          idcardNumber: true,
+          maxlength: 50,
+          only_alphanumeric: true
         },
         gender: {
           required: true,

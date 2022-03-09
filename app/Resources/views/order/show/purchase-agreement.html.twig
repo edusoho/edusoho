@@ -1,0 +1,11 @@
+<div class="modal fade agreement-modal" id="{{ id|default('agreement-modal') }}" tabindex="-1" role="dialog" {% if backdrop|default(false) %}data-backdrop="static"{% endif %} aria-labelledby="myModalLabel" aria-hidden="false">
+  <div class="modal-dialog">
+    <div class="modal-content js-purchase-content" >
+      <h3 class="center">{{ purchaseAgreement.title|default('')|raw }}</h3>
+      <p style="word-wrap:break-word;word-break:keep-all;white-space:pre-wrap;">{{ purchaseAgreement.content|default('')|raw }}</p>
+    </div>
+    <div class="btn-bottom js-purchase-btn disabled">
+        {{'purchase.bth'|trans}}
+    </div>
+  </div>
+</div>

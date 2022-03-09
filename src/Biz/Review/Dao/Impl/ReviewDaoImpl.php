@@ -61,6 +61,13 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
         return $this->db()->executeQuery($sql, [$targetType, $targetId]);
     }
 
+    public function deleteByUserId($userId)
+    {
+        $sql = "DELETE FROM {$this->table()} WHERE userId = ?";
+
+        return $this->db()->executeQuery($sql, [$userId]);
+    }
+
 //    TODO: 暂时兼容后台评价管理列表，后续应删除 ---------- 开始
     public function countCourseReviews($conditions)
     {

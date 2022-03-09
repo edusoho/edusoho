@@ -91,7 +91,10 @@ class QuestionController extends BaseController
             $fields['category_id'] = empty($fields['category_id']) ? $categoryId : $fields['category_id'];
             $item = $this->getItemService()->createItem($fields);
 
-            $goto = $request->query->get('goto', $this->generateUrl('question_bank_manage_question_list', ['id' => $id]));
+            $goto = $request->query->get(
+                'goto',
+                $this->generateUrl('question_bank_manage_question_list', ['id' => $id])
+            );
             if ('continue' === $fields['submission']) {
                 $urlParams = ArrayToolkit::parts($item, ['difficulty']);
                 $urlParams['id'] = $id;
@@ -235,6 +238,20 @@ class QuestionController extends BaseController
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
         $this->getItemService()->deleteItem($itemId);
+        $user = $this->getCurrentUser();
+        $this->getLogService()->info(
+            'question_bank',
+            'delete_question',
+            $this->trans(
+                'admin.question_bank.manage.delete_question',
+                [
+                    '%user%' => $user['nickname'],
+                    '%questionBank%' => $questionBank['name'],
+                    '%num%' => 1,
+                ]
+            ),
+            $item
+        );
 
         return $this->createJsonResponse(true);
     }
@@ -287,7 +304,9 @@ class QuestionController extends BaseController
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
-        $template = $request->query->get('isNew') ? 'question-manage/preview.html.twig' : 'question-manage/preview-modal.html.twig';
+        $template = $request->query->get(
+            'isNew'
+        ) ? 'question-manage/preview.html.twig' : 'question-manage/preview-modal.html.twig';
 
         return $this->render($template, [
             'item' => $item,
@@ -302,7 +321,9 @@ class QuestionController extends BaseController
 
         $bank = $this->getQuestionBankService()->getQuestionBank($id);
         $fileName = $this->getExportFileName($id);
-        $path = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory').DIRECTORY_SEPARATOR.$fileName;
+        $path = $this->get('kernel')->getContainer()->getParameter(
+                'topxia.disk.local_directory'
+            ).DIRECTORY_SEPARATOR.$fileName;
 
         $conditions = $request->query->all();
         if (isset($conditions['ids']) && !empty($conditions['ids'])) {
@@ -317,7 +338,13 @@ class QuestionController extends BaseController
         );
 
         if (empty($result)) {
-            return $this->createMessageResponse('info', '导出题目为空', null, 3000, $this->generateUrl('question_bank_manage_question_list', ['id' => $id]));
+            return $this->createMessageResponse(
+                'info',
+                '导出题目为空',
+                null,
+                3000,
+                $this->generateUrl('question_bank_manage_question_list', ['id' => $id])
+            );
         }
 
         $headers = [

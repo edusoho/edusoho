@@ -115,6 +115,7 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'mediaType = :mediaType',
             'fromCourseId IN (:courseIds)',
             'title like :title',
+            'mediaType <> :excludeMediaType',
             'fromCourseId NOT IN (:excludeCourseIds)',
             'mediaType IN (:mediaTypes)',
             'mediaId IN (:mediaIds)',
@@ -145,6 +146,11 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
     public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId)
     {
         return $this->getByFields(['mediaId' => $mediaId, 'mediaType' => $mediaType, 'copyId' => $copyId]);
+    }
+
+    public function getByMediaIdAndMediaTypeAndCourseId($mediaId, $mediaType, $courseId)
+    {
+        return $this->getByFields(['mediaId' => $mediaId, 'mediaType' => $mediaType, 'fromCourseId' => $courseId]);
     }
 
     public function getByMediaIdAndMediaType($mediaId, $mediaType)

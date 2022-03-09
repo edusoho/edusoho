@@ -760,6 +760,16 @@ class CourseController extends CourseBaseController
         return $bindUrl;
     }
 
+    public function drainageAction($course, $member = [])
+    {
+        return $this->render(
+            'course/widgets/drainage.html.twig',
+            [
+                'course' => $course,
+            ]
+        );
+    }
+
     public function newestStudentsAction($course, $member = [])
     {
         $conditions = [

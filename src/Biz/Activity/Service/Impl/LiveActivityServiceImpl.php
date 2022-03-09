@@ -106,7 +106,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
             'roomCreated' => $live['id'] > 0 ? 1 : 0,
             'fileIds' => $activity['fileIds'],
-            'liveStartTime' => $activity['startTime'],
+            'liveStartTime' => empty($activity['startTime']) ? 0 : $activity['startTime'],
             'liveEndTime' => $activity['startTime'] + $activity['length'] * 60,
             'anchorId' => $this->getCurrentUser()->getId(),
             'coursewareIds' => empty($live['coursewareIds']) ? [] : $live['coursewareIds'],
@@ -221,7 +221,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     public function closeLive($liveId, $closeTime)
     {
         $liveActivity = $this->getLiveActivityDao()->getByLiveId($liveId);
-        if (empty($liveActivity)) {
+        if (empty($liveActivity) || (!empty($liveActivity['startTime']) && time() < $liveActivity['startTime']) || EdusohoLiveClient::LIVE_STATUS_LIVING != $liveActivity['progressStatus']) {
             return;
         }
         $activities = $this->getActivityDao()->findActivitiesByMediaIdsAndMediaType([$liveActivity['id']], 'live');

@@ -31,3 +31,4 @@ export * from './LiveStatistic';
 export * from './Classroom';
 export * from './CourseCategory';
 export * from './CourseTag';
+export * from './PurchaseAgreement';

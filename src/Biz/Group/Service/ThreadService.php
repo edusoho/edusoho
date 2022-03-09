@@ -79,6 +79,8 @@ interface ThreadService
 
     public function deleteGoods($id);
 
+    public function deleteThreadsByUserId($userId);
+
     public function getTradeByUserIdAndGoodsId($userId, $goodsId);
 
     public function getGoods($attachId);

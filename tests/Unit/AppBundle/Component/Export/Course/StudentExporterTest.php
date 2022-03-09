@@ -90,6 +90,7 @@ class StudentExporterTest extends BaseTestCase
             'user.fields.company_label',
             'user.fields.career_label',
             'user.fields.title_label',
+            'course.members_manage.export.field_learn_time',
             'student.profile.weibo',
         ];
 
@@ -127,11 +128,13 @@ class StudentExporterTest extends BaseTestCase
                             'userId' => 1,
                             'createdTime' => 1,
                             'learnedCompulsoryTaskNum' => 2,
+                            'learningTime' => 0,
                         ],
                         [
                             'userId' => 2,
                             'createdTime' => 33,
                             'learnedCompulsoryTaskNum' => 3,
+                            'learningTime' => 0,
                         ],
                     ],
                 ],
@@ -209,6 +212,7 @@ class StudentExporterTest extends BaseTestCase
                 'company',
                 'job',
                 'title',
+                '-',
                 'weibo',
                 '111',
             ],
@@ -228,6 +232,7 @@ class StudentExporterTest extends BaseTestCase
                 'company2',
                 'job2',
                 'title2',
+                '-',
                 'weibo2',
                 '222',
             ],

@@ -965,6 +965,7 @@ course.teacher_setup.exist_teacher: 'Exist teachers'
 course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teacher role.'
 course.teacher_setup.exist_teacher.add_tips_v2: 'Can only add users with teacher privileges, sorted under the first teacher of the other teachers are live teaching assistant status'
 course.members_manage: 'Students'
+course.members_manage.export.field_learn_time: The cumulative learning time of students
 course.members_manage.official_student: Students
 course.members_manage.official_student.search: Search
 course.members_manage.official_student.batch_upload_deadline: Batch modification validity period
@@ -1273,6 +1274,7 @@ course.teacher: Tearcher：
 course.reward_point.award: Reward Point Award
 course.reward_point.course_award: Course Award
 course.teacher.content_title: Teacher
+course.drainage.content_title: Teaching Service
 course.advanced.content_title: Students with excellent grades last week
 course.characteristic.content_title: 'Course features'
 course.newest_students.content_title: 'New students'
@@ -4719,6 +4721,7 @@ admin.question_bank.manage.model: >
   <p class="question-bank-model-title question-bank-model__special"><i class="es-icon es-icon-Explain"></i>PS</p>
   <p class="question-bank-model-text">The questions and testpapers in the courses are all moved to the question bank now.</p>
 
+admin.question_bank.manage.delete_question: '%user% deleted %num% questions in <<%questionBank%>>'
 admin.category_manage.name_th: Title
 admin.category_manage.code_th: Code
 admin.category_manage.operate_th: Action
@@ -6488,6 +6491,7 @@ admin.user_fields.modal.init_fields.disabled.tips: 'Reach limit 5'
 admin.user_fields.modal.float_fields: Decimal
 admin.user_fields.modal.float_fields.tips: 'You can add %floatCount% field, reserved to two decimal places'
 admin.user_fields.modal.date_fields: Date
+admin.user_fields.modal.select_list_fields: Select List
 admin.user_fields.modal.date_fields.tips: 'You can add %5-dateCount% field'
 admin.user_avatar.customer_default_avatar: 'Customize default avatar'
 admin.user_avatar.customer_default_avatar.help_block: 'You can upload JPG, GIF or PNG files'
@@ -7102,8 +7106,8 @@ admin.payment_setting.alipay_api_type.mobile.hint: >
 admin.payment_setting.alipay_api_type.escow: 'Secured transaction interface'
 admin.payment_setting.alipay_api_type.dualfun: 'Standard dual-interface'
 admin.payment_setting.alipay_api_hint: 'You can get the PID and KEY after applying the Alipay interface access successfully<a href="%alipayApplication%" target="_blank"> How to apply? </a><br>If you need to use "immediate payment interface" in moblie app, please access the <a href="%mobileAlipayApplication%" target="blank"> Mobile Web payment </a><br>'
-admin.payment_setting.alipay_secret: 'MD5 Key'
-admin.payment_setting.alipay_hint: Log in [Ant Financial·Open Platform]-[Service Market]-[Key Management], <a href="%alipayUrl%" target="_blank">View PID and MD5 Secret Keys</a>.
+admin.payment_setting.alipay_secret: 'RSA Key'
+admin.payment_setting.alipay_hint: Log in [Ant Financial·Open Platform]-[Service Market]-[Key Management], <a href="%alipayUrl%" target="_blank">View PID and Secret RSA Keys</a>.
 admin.payment_setting.alipay_account: 'Alipay account'
 admin.payment_setting.alipay_mobile_payment_hint: 'If you need to turn on mobile app payment, please enter your Alipay account.'
 admin.payment_setting.open_alipay_api: 'Enable Alipay transaction closed interface'
@@ -8141,6 +8145,7 @@ log.action.user.edit: 'Edit'
 log.action.user.update: 'Edit'
 log.action.user.send_email_verify: 'Email verification'
 log.action.user.nickname_change: 'Change nickname'
+log.action.user.delete_user: 'Delete user'
 log.action.user.password-changed: 'Change password'
 log.action.user.pay-password-changed: 'Change payment password'
 log.action.user.verifiedMobile-changed: 'Change mobile'
@@ -8337,6 +8342,7 @@ log.action.question_bank.update_teacher: Update Manager
 log.action.question_bank.create_category: Create Bank Category
 log.action.question_bank.delete_category: Delete Bank Category
 log.action.question_bank.update_category: Update Bank Category
+log.action.question_bank.delete_question: Delete Question
 log.action.item_bank_exercise.add_student: 'Add student'
 log.action.item_bank_exercise.remove_student: Remove Student
 log.action.item_bank_exercise.delete_exercise: Delete Item Exercise
@@ -8458,6 +8464,7 @@ log.action.template.user.nickname_change: Updated the nickname of<strong class="
 log.action.template.user.avatar-changed: Updated the avatar of<strong class="color-success"> user </strong> %title%
 log.action.template.user.change_role: Updated the roles of<strong class="color-success"> user </strong> %title%
 log.action.template.user.lock: Locked the<strong class="color-success"> user </strong> %title%
+log.action.template.user.delete_user: Delete the<strong class="color-success"> user </strong> %title%
 log.action.template.user.unlock: Unlocked the<strong class="color-success"> user </strong> %title%
 log.action.template.thread.create: Created a new<strong class="color-success"> topic </strong> 《%title%》
 log.action.template.thread.update: Updated the<strong class="color-success"> topic </strong> 《%title%》
@@ -8893,7 +8900,7 @@ log.attr.system.update_settings.payment.alipay_enabled: Alipay payment function
 log.attr.system.update_settings.payment.alipay_enabled.1: Open
 log.attr.system.update_settings.payment.alipay_enabled.0: Closed
 log.attr.system.update_settings.payment.alipay_key: Alipay PID
-log.attr.system.update_settings.payment.alipay_secret: Alipay MD5 key
+log.attr.system.update_settings.payment.alipay_secret: Alipay RSA key
 log.attr.system.update_settings.payment.alipay_account: Alipay account
 log.attr.system.update_settings.payment.wxpay_enabled: WeChat payment function
 log.attr.system.update_settings.payment.wxpay_enabled.1: Open
@@ -9282,6 +9289,7 @@ exception.user.not_match_bind_email: Does not match the bound mailbox
 exception.user.login_limit: Login restriction！
 exception.user.datefield_invalid: Date type field is not filled in by date format
 exception.user.file_permission_denied: No file access
+exception.user.delete_user_permission_denied: Can not delete current user
 
 exception.parsed.failed.netease: Failed to get video information of Netease Open Class
 exception.parsed.failed.letv: Failed to get video information of Letv
@@ -10892,3 +10900,6 @@ review.result.pass: Pass
 review.result.comment_tips: After modifying the comment, a comment modification notice will be sent to the students
 review.result.amend_comment: Amend comment
 testpaper.import.tip: "The test paper is imported successfully, please adjust the test paper score on the current page. (Note: 'Each item' setting is added for multiple-choice and variable-choice questions, and 'Each blank' setting is added for fill-in-the-blank questions.)"
+user_field.select_type.lab: options
+user_field.select_type.tip: Sub-items can be added in batches, one per line, each sub-item can be input up to 20 characters
+purchase.bth: agree and continue

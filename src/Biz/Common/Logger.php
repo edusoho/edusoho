@@ -258,6 +258,7 @@ class Logger
                 'edit' => '修改',
                 'send_email_verify' => '邮箱验证',
                 'nickname_change' => '修改昵称',
+                'delete_user' => '删除用户',
                 'password-changed' => '重置密码',
                 'pay-password-changed' => '充值支付密码',
                 'verifiedMobile-changed' => '重置手机',

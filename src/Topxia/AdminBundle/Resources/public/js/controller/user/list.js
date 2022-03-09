@@ -28,6 +28,26 @@ define(function(require, exports, module) {
             });
         });
 
+        $table.on('click', '.delete-user', function() {
+            var $trigger = $(this);
+
+            if (!confirm(Translator.trans('admin.user.lock_operational_hint',{title:$trigger.attr('title')}))) {
+                return;
+            }
+
+            $.post($(this).data('url'), function(result) {
+                Notify.success(Translator.trans('admin.user.lock_operational_success_hint',{title:$trigger.attr('title')}));
+                window.location.reload();
+            }).error(function(e, textStatus, errorThrown) {
+                var $json = jQuery.parseJSON(e.responseText);
+                if($json.error.message){
+                    Notify.danger(Translator.trans($json.error.message));
+                }else{
+                    Notify.danger(Translator.trans('admin.user.lock_operational_fail_hint',{title:$trigger.attr('title')}));
+                }
+            });
+        });
+
         $table.on('click', '.send-passwordreset-email', function() {
             Notify.info(Translator.trans('admin.user.sending_passwordreset_email_hint'), 60);
             $.post($(this).data('url'), function(response) {

@@ -118,6 +118,11 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'uri' => 'AppBundle:Course/Course:teachers',
                 'renderType' => 'render',
             ],
+            //最新学员
+            'drainage' => [
+                'uri' => 'AppBundle:Course/Course:drainage',
+                'renderType' => 'render',
+            ],
             'assistantInfo' => [
                 'uri' => 'AppBundle:Course/Course:assistantInfo',
                 'renderType' => 'render',
@@ -137,6 +142,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
 
         $forGuestWidgets = [
             'teachers' => $widgets['teachers'],
+            'drainage' => $widgets['drainage'],
             'characteristic' => $widgets['characteristic'],
             'newestStudents' => $widgets['newestStudents'],
             'studentActivity' => $widgets['studentActivity'],
@@ -146,6 +152,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
             'otherCourses' => $widgets['otherCourses'],
             'belongClassroom' => $widgets['belongClassroom'],
             'teachers' => $widgets['teachers'],
+            'drainage' => $widgets['drainage'],
             'assistantInfo' => $widgets['assistantInfo'],
             'newestStudents' => $widgets['newestStudents'],
             'studentActivity' => $widgets['studentActivity'],

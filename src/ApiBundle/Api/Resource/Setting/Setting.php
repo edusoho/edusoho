@@ -21,7 +21,7 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification', 'openStudentInfo',
+        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification', 'openStudentInfo', 'course_purchase_agreement',
     ];
 
     public static function convertUnderline($str)
@@ -82,6 +82,14 @@ class Setting extends AbstractResource
         return [
             'qualification' => intval($enable),
         ];
+    }
+
+    public function getcoursePurchaseAgreement()
+    {
+        $result = $this->getSettingService()->get('course_purchase_agreement', ['enabled' => 0, 'title' => '', 'content' => '', 'type' => 'tick']);
+        $result['open'] = empty($result['enabled']) || 'tick' == $result['type'] ? 0 : 1;
+
+        return $result;
     }
 
     public function getLocale($request)

@@ -1,6 +1,7 @@
 import PlayerFactory from './player-factory';
 import EsMessenger from '../../common/messenger';
 import DurationStorage from '../../common/duration-storage';
+import UAParser from 'ua-parser-js';
 
 class Show {
 
@@ -69,6 +70,7 @@ class Show {
 
   initPlayer() {
     const customPos = parseInt(this.lastLearnTime) ? parseInt(this.lastLearnTime) : 0;
+    const ua = new UAParser();
     let options = {
       element: '#lesson-player',
       content: this.content,
@@ -82,6 +84,7 @@ class Show {
       timelimit: this.timelimit,
       enablePlaybackRates: this.enablePlaybackRates,
       disableModeSelection: this.disableModeSelection,
+      disableFullscreen: ['mobile', 'tablet'].indexOf(ua.getDevice().type) > -1,
       videoH5: this.videoH5,
       controlBar: {
         disableVolumeButton: this.disableVolumeButton,
@@ -244,6 +247,10 @@ class Show {
       if (!this.isCloudVideoPalyer() && !this.isCloudAudioPlayer()) {
         DurationStorage.del(this.userId, this.fileId);
       }
+    });
+
+    player.on('requestFullscreen', (msg) => {
+      messenger.sendToParent('requestFullscreen', msg);
     });
   }
 

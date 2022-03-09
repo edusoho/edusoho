@@ -29,7 +29,7 @@ class CourseFilter extends Filter
         'goals', 'audiences', 'isDefault', 'maxStudentNum', 'status', 'creator', 'isFree', 'price', 'originPrice',
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
         'taskNum', 'compulsoryTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish',
-        'buyExpiryTime', 'access', 'isAudioOn', 'hasCertificate', 'goodsId', 'specsId', 'spec', 'hitNum', 'classroom', 'assistants', 'assistant', 'liveStatus',
+        'buyExpiryTime', 'access', 'isAudioOn', 'hasCertificate', 'goodsId', 'specsId', 'spec', 'hitNum', 'classroom', 'assistants', 'assistant', 'liveStatus', 'drainage',
     ];
 
     protected function publicFields(&$data)
@@ -38,6 +38,7 @@ class CourseFilter extends Filter
         Converter::timestampToDate($data['buyExpiryTime']);
 
         $data['services'] = AssetHelper::callAppExtensionMethod('transServiceTags', [ServiceToolkit::getServicesByCodes($data['services'])]);
+        $data['drainage'] = empty($data['drainage']) ? ['enabled' => 0, 'image' => '', 'text' => ''] : $data['drainage'];
 
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);

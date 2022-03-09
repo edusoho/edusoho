@@ -85,8 +85,6 @@ interface CourseNoteService
     /**
      * create note or update exist note.
      *
-     * @param array $note
-     *
      * @throws CommonException
      * @throws UserException
      * @throws TaskException
@@ -107,8 +105,6 @@ interface CourseNoteService
 
     /**
      * delete notes.
-     *
-     * @param array $ids
      *
      * @throws CourseNoteException
      */
@@ -165,15 +161,12 @@ interface CourseNoteService
     public function findNoteLikesByNoteId($noteId);
 
     /**
-     * @param array $noteIds
-     *
      * @return array[]
      */
     public function findNoteLikesByNoteIds(array $noteIds);
 
     /**
-     * @param array $noteIds
-     * @param       $userId
+     * @param $userId
      *
      * @return array[]
      */
@@ -193,4 +186,6 @@ interface CourseNoteService
      * @return int
      */
     public function countCourseNoteByCourseSetId($courseSetId);
+
+    public function deleteNotesByUserId($userId);
 }

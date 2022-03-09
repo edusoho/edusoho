@@ -764,6 +764,7 @@ admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: '发送密码重置�
 admin_v2.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮件'
 admin_v2.user.basic.basic_tab.lock_btn: '封禁用户'
 admin_v2.user.basic.basic_tab.unlock_btn: '解禁用户'
+admin_v2.user.basic.basic_tab.delete_btn: '删除用户'
 admin_v2.user.basic.basic_tab.org_update_btn: '修改用户组织机构'
 
 #用户-用户管理-实名认证
@@ -918,7 +919,7 @@ admin_v2.system.user_content_ctrl.thread: 话题问答
 admin_v2.system.user_content_ctrl.private_message: 私信
 admin_v2.system.user_content_audit_menu: 内容审核设置
 admin_v2.system.user_content_audit_tab: 用户内容审核设置
-admin_v2.system.course_purchase_agreement_tab: 用户购买协议设置
+admin_v2.system.course_purchase_agreement_tab: 购买协议设置
 admin_v2_system.course_purchase_agreement.eduit: 协议编辑
 
 # 系统-交易设置-资产设置

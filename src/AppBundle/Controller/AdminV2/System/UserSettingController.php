@@ -227,6 +227,7 @@ class UserSettingController extends BaseController
         $floatCount = $this->getUserFieldService()->countFields(['fieldName' => 'floatField']);
         $dateCount = $this->getUserFieldService()->countFields(['fieldName' => 'dateField']);
         $varcharCount = $this->getUserFieldService()->countFields(['fieldName' => 'varcharField']);
+        $selectCount = $this->getUserFieldService()->countFields(['fieldName' => 'selectField']);
 
         $fields = $this->getUserFieldService()->getFieldsOrderBySeq();
 
@@ -249,6 +250,10 @@ class UserSettingController extends BaseController
 
             if (strstr($fields[$i]['fieldName'], 'dateField')) {
                 $fields[$i]['fieldName'] = '日期';
+            }
+
+            if (strstr($fields[$i]['fieldName'], 'selectField')) {
+                $fields[$i]['fieldName'] = '下拉列表';
             }
         }
 
@@ -301,6 +306,7 @@ class UserSettingController extends BaseController
             'floatCount' => $floatCount,
             'dateCount' => $dateCount,
             'varcharCount' => $varcharCount,
+            'selectCount' => $selectCount,
             'fields' => $fields,
             'courseSetting' => $courseSetting,
             'authSetting' => $auth,
@@ -336,6 +342,10 @@ class UserSettingController extends BaseController
             $field['fieldName'] = '日期';
         }
 
+        if (strstr($field['fieldName'], 'selectField')) {
+            $field['fieldName'] = '下拉列表';
+        }
+
         if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
 
@@ -344,11 +354,18 @@ class UserSettingController extends BaseController
             } else {
                 $fields['enabled'] = 0;
             }
-
+            if (!empty($field['detail'])) {
+                $detail = trim($fields['detail']);
+                $fields['detail'] = array_filter(explode("\r\n", $detail));
+            }
             $field = $this->getUserFieldService()->updateField($id, $fields);
             $this->changeUserInfoFields($field, $type = 'update');
 
             return $this->redirect($this->generateUrl('admin_v2_setting_user_fields'));
+        }
+
+        if ('下拉列表' == $field['fieldName']) {
+            $field['detail'] = implode("\r\n", $field['detail']);
         }
 
         return $this->render('admin-v2/system/user-setting/user-fields.modal.edit.html.twig', [
@@ -384,6 +401,10 @@ class UserSettingController extends BaseController
         if (isset($field['field_title'])
             && in_array($field['field_title'], ['真实姓名', '手机号码', 'QQ', '所在公司', '身份证号码', '性别', '职业', '微博', '微信'])) {
             $this->createNewException(UserFieldException::DUPLICATE_TITLE());
+        }
+        if (!empty($field['detail'])) {
+            $detail = trim($field['detail']);
+            $field['detail'] = array_filter(explode("\r\n", $detail));
         }
 
         $field = $this->getUserFieldService()->addUserField($field);

@@ -40,7 +40,7 @@ class MeClassroom extends AbstractResource
             $classrooms = ArrayToolkit::index($classrooms, 'id');
 
             foreach ($members as $member) {
-                $classrooms[$member['classroomId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
+                $classrooms[$member['classroomId']]['lastLearnTime'] = $member['createdTime'];
             }
 
             array_multisort(ArrayToolkit::column($classrooms, 'lastLearnTime'), SORT_DESC, $classrooms);

@@ -383,6 +383,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->dispatchEvent('group.thread.delete', $thread);
     }
 
+    public function deleteThreadsByUserId($userId)
+    {
+        return $this->getThreadDao()->deleteByUserId($userId);
+    }
+
+    public function deleteThreadPostsByUserId($userId)
+    {
+        return $this->getThreadPostDao()->deleteByUserId($userId);
+    }
+
     public function updatePost($id, $fields)
     {
         if (!empty($fields['content'])) {
