@@ -208,6 +208,7 @@ export default {
         },
       })
         .then(res => {
+          console.log('hongbusi')
           Dialog.alert({
             message: this.$t('toast.oasswordResetSuccessful'),
             confirmButtonText: this.$t('btn.confirm')
