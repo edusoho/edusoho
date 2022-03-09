@@ -965,6 +965,7 @@ course.teacher_setup.exist_teacher: 'Exist teachers'
 course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teacher role.'
 course.teacher_setup.exist_teacher.add_tips_v2: 'Can only add users with teacher privileges, sorted under the first teacher of the other teachers are live teaching assistant status'
 course.members_manage: 'Students'
+course.members_manage.export.field_learn_time: The cumulative learning time of students
 course.members_manage.official_student: Students
 course.members_manage.official_student.search: Search
 course.members_manage.official_student.batch_upload_deadline: Batch modification validity period
