@@ -32,8 +32,8 @@ class MobileAlipayConfig
 
     protected static function initAlipayConfig($name)
     {
-        $payment = ServiceKernel::instance()->createService('System:SettingService')->get('payment', array());
-        $alipay_config = array();
+        $payment = ServiceKernel::instance()->createService('System:SettingService')->get('payment', []);
+        $alipay_config = [];
         $alipay_config['seller_email'] = empty($payment['alipay_account']) ? '' : $payment['alipay_account'];
         $alipay_config['partner'] = empty($payment['alipay_key']) ? '' : $payment['alipay_key'];
         //安全检验码，以数字和字母组成的32位字符

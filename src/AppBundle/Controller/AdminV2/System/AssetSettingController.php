@@ -20,7 +20,6 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\UserFieldService;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use VipPlugin\Biz\Marketing\Service\VipSellModeService;

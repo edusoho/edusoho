@@ -71,7 +71,7 @@ class AlipaySubmit
         //签名结果与签名方式加入请求提交参数组中
         $para_sort['sign'] = $mysign;
 
-        if ($para_sort['service'] != 'alipay.wap.trade.create.direct' && $para_sort['service'] != 'alipay.wap.auth.authAndExecute') {
+        if ('alipay.wap.trade.create.direct' != $para_sort['service'] && 'alipay.wap.auth.authAndExecute' != $para_sort['service']) {
             $para_sort['sign_type'] = strtoupper(trim($this->alipay_config['sign_type']));
         }
 
@@ -194,7 +194,7 @@ class AlipaySubmit
         if (!empty($para_text['res_data'])) {
             //解析加密部分字符串
 
-            if ($this->alipay_config['sign_type'] == 'RSA') {
+            if ('RSA' == $this->alipay_config['sign_type']) {
                 $para_text['res_data'] = rsaDecrypt($para_text['res_data'], $this->alipay_config['private_key_path']);
             }
 

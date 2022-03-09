@@ -41,7 +41,7 @@ class AlipayNotify
         } else {
             //对notify_data解密
             $decrypt_post_para = $_POST;
-            if ($this->alipay_config['sign_type'] == 'RSA') {
+            if ('RSA' == $this->alipay_config['sign_type']) {
                 $decrypt_post_para['notify_data'] = rsaDecrypt($decrypt_post_para['notify_data'], $this->alipay_config['private_key_path']);
             }
 
@@ -179,7 +179,7 @@ class AlipayNotify
     {
         $transport = strtolower(trim($this->alipay_config['transport']));
         $partner = trim($this->alipay_config['partner']);
-        if ($transport == 'https') {
+        if ('https' == $transport) {
             $veryfy_url = $this->https_verify_url;
         } else {
             $veryfy_url = $this->http_verify_url;
