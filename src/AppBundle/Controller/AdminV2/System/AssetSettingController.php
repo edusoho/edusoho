@@ -20,6 +20,7 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\UserFieldService;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use VipPlugin\Biz\Marketing\Service\VipSellModeService;
@@ -64,6 +65,18 @@ class AssetSettingController extends BaseController
                 $payment['alipay_enabled'] = 0;
                 $payment['wxpay_enabled'] = 0;
                 $payment['llpay_enabled'] = 0;
+            }
+            $dir = $this->container->getParameter('kernel.root_dir').'/../web/files/';
+            if ($file = $request->files->get('rsa_private_key')) {
+                $payment['rsa_private_key'] = 'key/rsa_private_key.pem';
+                FileToolkit::remove($dir.$payment['rsa_private_key']);
+                $file->move($dir.'key/', 'rsa_private_key.pem');
+            }
+            if ($payment['alipay_public_key']) {
+                $alipayPublicKey = "-----BEGIN PUBLIC KEY-----\r\n".$payment['alipay_public_key'].'-----END PUBLIC KEY-----';
+                $payment['alipay_public_key_path'] = 'key/alipay_public_key.pem';
+                array_map('unlink', glob($dir.$payment['alipay_public_key_path']));
+                file_put_contents($dir.$payment['alipay_public_key_path'], $alipayPublicKey);
             }
             $payment['disabled_message'] = empty($payment['disabled_message']) ? $default['disabled_message'] : $payment['disabled_message'];
             $formerPayment = $this->getSettingService()->get('payment');

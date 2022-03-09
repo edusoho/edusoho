@@ -49,7 +49,7 @@ class MobileAlipayConfig
             $alipay_config['private_key_path'] = $payment['rsa_private_key'];
             // //支付宝公钥（后缀是.pen）文件相对路径
             // //如果签名方式设置为“RSA”时，请设置该参数
-            $alipay_config['ali_public_key_path'] = $payment['alipay_public_key'];
+            $alipay_config['ali_public_key_path'] = $payment['alipay_public_key_path'];
         }
         //字符编码格式 目前支持 gbk 或 utf-8
         $alipay_config['input_charset'] = 'utf-8';
