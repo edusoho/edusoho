@@ -98,7 +98,6 @@ export default {
   },
   created() {
     this.getEmailServiceState();
-    console.log('hongbusi')
   },
   computed: {
     ...mapState({
