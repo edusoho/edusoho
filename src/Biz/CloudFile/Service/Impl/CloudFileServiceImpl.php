@@ -152,9 +152,16 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         }
 
         $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        $attachmentFile = $this->getAttachmentService()->getAttachmentByGlobalId($globalId);
 
         if (!empty($file)) {
             $this->getUploadFileService()->deleteFile($file['id']);
+
+            return ['success' => true];
+        }
+
+        if (!empty($attachmentFile)) {
+            $this->getAttachmentService()->deleteAttachment($attachmentFile['id']);
 
             return ['success' => true];
         }
@@ -319,5 +326,10 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getAttachmentService()
+    {
+        return $this->createService('ItemBank:Item:AttachmentService');
     }
 }
