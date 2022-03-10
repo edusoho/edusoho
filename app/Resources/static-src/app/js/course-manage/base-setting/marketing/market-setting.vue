@@ -483,21 +483,21 @@
                 courseTaskDisplayRadios: [
                   {
                     value: "1",
-                    label: Translator.trans('course.info.video.convert.audio.start')
+                    label: Translator.trans('open')
                   },
                   {
                     value: "0",
-                    label:  Translator.trans('course.info.video.convert.audio.close')
+                    label:  Translator.trans('close')
                   }
                 ],
                 drainageRadios: [
                   {
                     value: 1,
-                    label: Translator.trans('course.info.video.convert.audio.start')
+                    label: Translator.trans('open')
                   },
                   {
                     value: 0,
-                    label:  Translator.trans('course.info.video.convert.audio.close')
+                    label:  Translator.trans('close')
                   }
                 ],
                 today: Date.now(),

@@ -2115,3 +2115,5 @@ admin.system.purchase_agreement.content_empty: 协议内容不能为空
 admin.system.purchase_agreement.saved_successfully: 保存成功！
 admin.system.purchase_agreement.save_failed: 保存失败！
 user_field.select_type.tip: 一行一个，每个子项最多输入20个字符
+open: 开启
+close: 关闭

@@ -1044,3 +1044,6 @@ admin.wap_setting.find: 'Discovery page settings'
 admin.wap_setting.version_setting: 'Version setting'
 admin.wap_setting.pay_setting: 'Payment setting'
 admin_v2.cloud.question_bank.attachment.basic_tab: Question Attachment
+
+open: Open
+close: Close
