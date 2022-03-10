@@ -37,7 +37,7 @@ export default class DownLoad {
     this.$form.on('click', '.js-video-import', () => this.importLink());
     this.$form.on('click', '.js-add-file-list', () => this.addFile());
     this.$form.on('blur', '#title', (event) => this.changeTitle(event));
-
+    this.$form.on('blur', '.js-summary-value', (event) => this.changeSummary(event));
 
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {valid:this.validator2.form(), data:window.ltc.getFormSerializeObject($('#step2-form'))});
@@ -189,7 +189,7 @@ export default class DownLoad {
           </div>
           <div class="download-item-right pull-left">
             <label>简介：</label>
-            <input placeholder="请输入简介（选填）" value="">
+            <input class="js-summary-value" data-id="${this.media.id}" placeholder="请输入简介（选填）" value="">
           </div>
           <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="cd-icon cd-icon-close"></i></a>
         </li>
@@ -202,7 +202,7 @@ export default class DownLoad {
           </div>
           <div class="download-item-right pull-left">
             <label>简介：</label>
-            <input placeholder="请输入简介（选填）" value="">
+            <input class="js-summary-value" data-id="${this.media.id}" placeholder="请输入简介（选填）" value="">
           </div>
           <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="cd-icon cd-icon-close"></i></a>
         </li>
@@ -226,4 +226,11 @@ export default class DownLoad {
     }, 3000);
   }
 
+  changeSummary(event) {
+    let $this = $(event.currentTarget);
+    const $materials = $('#materials');
+    const materials = isEmpty($materials.val()) ? {} : arrayIndex(JSON.parse($materials.val()), 'fileId');
+    materials[$this.data('id')].summary = $this.val();
+    $materials.val(JSON.stringify(materials));
+  }
 }
