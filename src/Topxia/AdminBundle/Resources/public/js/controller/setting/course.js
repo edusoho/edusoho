@@ -31,6 +31,13 @@ define(function(require, exports, module) {
         $('#show_cover_num_mode').removeAttr('hidden');
       });
 
+      $("[name=doc_water_mark_enabled]").on("click", function() {
+        if ($("[name=doc_water_mark_enabled]:checked").val() == 1) {
+          $("#js-doc-water-mark-info").removeClass('hidden');
+        }else{
+          $("#js-doc-water-mark-info").addClass('hidden');
+        }
+      });
 
       $(".buy-userinfo-list").sortable({
             'distance': 20

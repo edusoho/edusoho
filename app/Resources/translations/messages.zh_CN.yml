@@ -7811,6 +7811,9 @@ admin.setting_course.course_list_page_seq: 课程列表页默认排序
 admin.setting_course.course_list_page.help_block: 课程列表页
 admin.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
 admin.setting_course.Prevent_copying_rich_text_doc: 图文、文档任务防复制
+admin.setting_course.doc_task_water_mark: 文档任务水印
+admin.setting_course.doc_task_water_mark_info: 文档水印信息
+admin.setting_course.doc_task_water_mark_info_tips: 为了用户体验效果更佳,建议最多组合2项信息显示.注意:若用户的真实姓名和手机号没有则显示为-
 admin.setting_course.Prevent_copying_test_paper: 试卷防复制
 admin.setting_course.course_operation_mode: 课程运营模式
 admin.setting_course.course_comments_manage: 课程学习页内容管理
