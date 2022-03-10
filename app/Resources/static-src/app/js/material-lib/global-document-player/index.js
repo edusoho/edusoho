@@ -2,7 +2,7 @@ let $element = $('#global-player');
 new QiQiuYun.Player({
   id: 'global-player',
   playServer: app.cloudPlayServer,
-  // sdkBaseUri: app.cloudSdkBaseUri,
+  sdkBaseUri: app.cloudSdkBaseUri,
   disableDataUpload: app.cloudDisableLogReport,
   disableSentry: app.cloudDisableLogReport,
   resNo: $element.data('resNo'),

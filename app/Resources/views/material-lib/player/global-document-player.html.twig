@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
-  <script src="{{ cloud_sdk_url('resource_player') }}"></script>
+  <script src="{{ cloud_sdk_url('player') }}"></script>
   {% do script(['app/js/material-lib/global-document-player/index.js']) %}
   <div class="iframe-parent-content" id="global-player"
        data-res-no="{{ globalId }}"
