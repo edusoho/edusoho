@@ -6148,10 +6148,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@^1.0.30:
-  version "1.0.30"
-  resolved "https://registry.npmjs.org/item-bank/-/item-bank-1.0.30.tgz#dde66bd60f29e089302d6248f001365d55b03faa"
-  integrity sha512-Ms9J90kVBmg5UpXFoDDdmaFREmFPhneBGZlAse4I3Ojf6O2VZYRzlRXMaozyp5X7NtPWUdEiNlmfTo2xvjQrxQ==
+item-bank@1.0.31:
+  version "1.0.31"
+  resolved "https://registry.npmjs.org/item-bank/-/item-bank-1.0.31.tgz#4b3dedf59f35da92468f7a9efc07b8b0757daf60"
+  integrity sha512-pU8eCs9XScGXM1+Bh8An0j25xRftmKbnUgOObVEi6kWbyKM7J+LIIhgwXcJ2SBtzr0v6keNAwaV9HwWpLQ4I6g==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
