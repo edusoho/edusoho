@@ -38,6 +38,7 @@ class Show {
     this.disableModeSelection = container.data('disableModeSelection');
     this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
     this.subtitles = container.data('subtitles');
+    this.autoplay = container.data('autoplay');
     this.rememberLastPos = container.data('rememberLastPos');
     this.isHlsPlus = container.data('is-hls-plus');
     let $iframe = $(window.parent.document.getElementById('task-content-iframe'));
