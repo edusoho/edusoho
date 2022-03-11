@@ -38,8 +38,8 @@ class Show {
     this.disableModeSelection = container.data('disableModeSelection');
     this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
     this.subtitles = container.data('subtitles');
-    this.autoplay = container.data('autoplay');
     this.rememberLastPos = container.data('rememberLastPos');
+    this.isHlsPlus = container.data('is-hls-plus');
     let $iframe = $(window.parent.document.getElementById('task-content-iframe'));
     if ($iframe.length > 0) {
       //播放到最后一秒视为上次播放到0秒
@@ -84,7 +84,7 @@ class Show {
       timelimit: this.timelimit,
       enablePlaybackRates: this.enablePlaybackRates,
       disableModeSelection: this.disableModeSelection,
-      disableFullscreen: ['mobile', 'tablet'].indexOf(ua.getDevice().type) > -1,
+      disableFullscreen: this.isHlsPlus === '1' && ['mobile', 'tablet'].indexOf(ua.getDevice().type) > -1,
       videoH5: this.videoH5,
       controlBar: {
         disableVolumeButton: this.disableVolumeButton,

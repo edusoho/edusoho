@@ -33,6 +33,7 @@
           data-autoplay="{{ context.autoplay|default(setting('storage.video_auto_play', true)) }}"
           data-micro-messenger="{{ is_micro_messenger() ? 1 : 0 }}"
           data-security-video-player="{{ setting('magic.security_video_player', 0) }}"
+          data-is-hls-plus="{{ setting('storage.enable_hls_encryption_plus', 0) }}"
           {% if not file.convertParams.hasVideoWatermark|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
             data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null) }}"
           {% endif %}
