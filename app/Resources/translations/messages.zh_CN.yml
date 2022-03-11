@@ -2083,7 +2083,7 @@ course.plan_task.activity_manage.download.upload_files: 上传资料
 course.plan_task.activity_manage.download.chooser_from_material: 从资料库中选择
 course.plan_task.activity_manage.download.chooser_from_course: 从课程中选择文件
 course.plan_task.activity_manage.download.import_video: 导入网络视频
-course.plan_task.activity_manage.download.link: 网络连接
+course.plan_task.activity_manage.download.link: 网络链接
 course.plan_task.activity_manage.download.file_name: 资料名称：
 course.plan_task.activity_manage.download.upload_btn: (请上传或选择资料)
 course.plan_task.activity_manage.download.input_placeholder: 填写资料简介（可选）
