@@ -14,6 +14,8 @@ interface ReviewService
 
     public function deleteReview($id);
 
+    public function deleteReviewsByUserId($userId);
+
     public function countReviews($conditions);
 
     public function searchReviews($conditions, $orderBys, $start, $limit, $columns = []);

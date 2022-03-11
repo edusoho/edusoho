@@ -965,6 +965,7 @@ course.teacher_setup.exist_teacher: 'Exist teachers'
 course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teacher role.'
 course.teacher_setup.exist_teacher.add_tips_v2: 'Can only add users with teacher privileges, sorted under the first teacher of the other teachers are live teaching assistant status'
 course.members_manage: 'Students'
+course.members_manage.export.field_learn_time: The cumulative learning time of students
 course.members_manage.official_student: Students
 course.members_manage.official_student.search: Search
 course.members_manage.official_student.batch_upload_deadline: Batch modification validity period
@@ -6545,6 +6546,9 @@ admin.setting_course.course_list_page_seq: 'Default collation of course list'
 admin.setting_course.course_list_page.help_block: 'Course list'
 admin.setting_course.course_list_page_seq.help_block: 'Address: Domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "site settings" - "threeMonths" - "Manage". Course order settings are only supported by ink-only theme and simplicity theme.'
 admin.setting_course.Prevent_copying_rich_text_doc: 'Image-text and document tasks anti copy'
+admin.setting_course.doc_task_water_mark: 'Doc Water Mark'
+admin.setting_course.doc_task_water_mark_info: 'Doc Water Mark Info'
+admin.setting_course.doc_task_water_mark_info_tips: "For better user experience, it is recommended to combine at most 2 items of information to display. Note: If the user's real name and mobile phone number are not available, it will be displayed as -"
 admin.setting_course.Prevent_copying_test_paper: 'Test paper anti copy'
 admin.setting_course.course_operation_mode: 'Course operation mode'
 admin.setting_course.course_comments_manage: 'Course commnets manage'
@@ -8144,6 +8148,7 @@ log.action.user.edit: 'Edit'
 log.action.user.update: 'Edit'
 log.action.user.send_email_verify: 'Email verification'
 log.action.user.nickname_change: 'Change nickname'
+log.action.user.delete_user: 'Delete user'
 log.action.user.password-changed: 'Change password'
 log.action.user.pay-password-changed: 'Change payment password'
 log.action.user.verifiedMobile-changed: 'Change mobile'
@@ -8462,6 +8467,7 @@ log.action.template.user.nickname_change: Updated the nickname of<strong class="
 log.action.template.user.avatar-changed: Updated the avatar of<strong class="color-success"> user </strong> %title%
 log.action.template.user.change_role: Updated the roles of<strong class="color-success"> user </strong> %title%
 log.action.template.user.lock: Locked the<strong class="color-success"> user </strong> %title%
+log.action.template.user.delete_user: Delete the<strong class="color-success"> user </strong> %title%
 log.action.template.user.unlock: Unlocked the<strong class="color-success"> user </strong> %title%
 log.action.template.thread.create: Created a new<strong class="color-success"> topic </strong> 《%title%》
 log.action.template.thread.update: Updated the<strong class="color-success"> topic </strong> 《%title%》
@@ -9286,6 +9292,7 @@ exception.user.not_match_bind_email: Does not match the bound mailbox
 exception.user.login_limit: Login restriction！
 exception.user.datefield_invalid: Date type field is not filled in by date format
 exception.user.file_permission_denied: No file access
+exception.user.delete_user_permission_denied: Can not delete current user
 
 exception.parsed.failed.netease: Failed to get video information of Netease Open Class
 exception.parsed.failed.letv: Failed to get video information of Letv

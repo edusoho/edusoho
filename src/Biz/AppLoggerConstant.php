@@ -288,6 +288,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'update',
                 'send_email_verify',
                 'nickname_change',
+                'delete_user',
                 'password-changed',
                 'pay-password-changed',
                 'password-security-answers',

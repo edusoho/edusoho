@@ -9,4 +9,6 @@ interface GroupDao extends GeneralDaoInterface
     public function findByTitle($title);
 
     public function findByIds($ids);
+
+    public function deleteByUserId($userId);
 }

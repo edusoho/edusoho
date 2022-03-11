@@ -441,9 +441,9 @@ course_set.manage.next_label: 继续了解
 course_set.manage.prev_label: 上一步
 course_set.manage.unlock_success_hint: 解除同步成功！
 course_set.manage.unlock_failure_hint: 解除同步失败：
-course_set.manage.activity_link_hint:  >
+course_set.manage.activity_link_hint: >
   <p class="title">任务环节</p>在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，每个环节都可以通过各种教学手段来实现。
-course_set.manage.upgrade_hint:  >
+course_set.manage.upgrade_hint: >
   <p class="title">功能升级</p>课程管理功能现已全新升级。
 course_set.manage.img: >
   <div class="course-manage-spread"></div>
@@ -455,17 +455,17 @@ course_set.manage.all_plan: >
   <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">若需要创建更多计划，请通过全部计划进行设置。</div>
 course_set.manage.publish_courseset: >
   <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">点击发布课程，即可以将课程发布在前台，允许学员进行购买和学习。</div>
-course_set.manage.all_tutorial:  >
+course_set.manage.all_tutorial: >
   <div class="btn-content"><p><a class='btn btn-success js-reset-intro %introBtnClassName%'>查看引导</a></p><a class='btn btn-info'>完整教程</a><div>
-course_set.manage.hint:  >
+course_set.manage.hint: >
   <p class="title">多个教学计划</p>恭喜你创建了多个教学计划！左侧的功能菜单会有所简化，只会显示课程公共的相关设置。
-course_set.manage.upgrade_step1_hint:  >
+course_set.manage.upgrade_step1_hint: >
   <p class="title">计划任务</p>教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入。
-course_set.manage.upgrade_step2_hint:  >
+course_set.manage.upgrade_step2_hint: >
   <p class="title">营销设置</p>在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习。
-course_set.manage.upgrade_step3_hint:  >
+course_set.manage.upgrade_step3_hint: >
   <p class="title">添加任务</p>您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。
-course_set.manage.upgrade_step5_hint:  >
+course_set.manage.upgrade_step5_hint: >
   <p class="title">任务环节</p>在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，每个环节都可以通过各种教学手段来实现。
 course_set.manage.operation_hint: 操作提醒
 course_set.manage.courseset_summary_operation_hint: 课程简介编辑后保存，将会统一覆盖前台所有计划的简介内容，请确认是否保存修改。
@@ -628,7 +628,7 @@ user.account.cancel_order_success_hint: 订单已取消成功！
 user.fields.idcard_front_placeholder: 请上传身份证正面照
 user.fields.idcard_back_placeholder: 请上传身份证反面照
 
-open_course.lesson.create_error:  课时创建失败
+open_course.lesson.create_error: 课时创建失败
 open_course.lesson.create_success: 课时创建成功
 open_course.converting_hint: 视频文件正在转换中，稍后完成后即可查看
 open_course.load_search_hint: 搜索中...
@@ -758,6 +758,7 @@ validate.limit_size.message: 大小不能超过2M
 validate.next_day.message: 开始时间应晚于当前时间
 validate.chinese_alphanumeric.message: 只支持中文字、英文字母、数字及_ . ·
 validate.alphanumeric.message: 必须是英文字母、数字及下划线组成
+validate.only_alphanumeric.message: 必须是英文字母、数字
 validate.raty_star.message: 请打分
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
 validate.phone.message: 请输入有效手机号码
@@ -1502,7 +1503,7 @@ notify.channel_select: 至少选择一个发放渠道
 
 coupon.fixed_day: 有效期
 coupon.fixed_day.message: 请输入领取后有效天数
-admin.coupon.setting.confirm_message:  关闭优惠券开关将影响到所有正在发放优惠券的营销活动，将导致使用优惠券的营销活动无法正常进行。已经发放的优惠券也将无法继续使用，学员侧将屏蔽「我的优惠券」模块，订单页面也将无法继续选取优惠券下单。是否继续？
+admin.coupon.setting.confirm_message: 关闭优惠券开关将影响到所有正在发放优惠券的营销活动，将导致使用优惠券的营销活动无法正常进行。已经发放的优惠券也将无法继续使用，学员侧将屏蔽「我的优惠券」模块，订单页面也将无法继续选取优惠券下单。是否继续？
 admin.coupon.setting.success_message: 优惠券状态已保存
 coupon.target_type.multi_course: 部分课程
 coupon.target_type.multi_classroom: 部分班级
@@ -1671,7 +1672,7 @@ admin_v2.information_collect.open.failure_hint: 采集开启失败
 admin_v2.information_collect.chooser.tips: 已存在冲突的关联
 admin_v2.information_collect.chooser.success_hint: 选择成功
 admin_v2.information_collect.chooser.limit: 选择数不能超过200
-admin_v2.information_collect.chooser.target_hint:  请选择课程/班级
+admin_v2.information_collect.chooser.target_hint: 请选择课程/班级
 admin_v2.information_collect.chooser.target_course_hint: 请至少选择1个课程
 admin_v2.information_collect.chooser.target_classroom_hint: 请至少选择1个班级
 admin_v2.information_collect.chooser.items.hint: 请选择采集表单
@@ -1926,10 +1927,10 @@ live_statistics.to: 至
 live_statistics.people: 人
 live_statistics.strip: 条
 course.live_replay.share_btn: 共享资源
-course.live_replay.un_share_btn:  取消共享
+course.live_replay.un_share_btn: 取消共享
 course.live_replay.share_tip: 请确认将此直播回放共享到共享直播回放资源库?
-course.live_replay.un_share_tip:  请确认将此直播回放从共享直播回放资源库移除？
-course.live_replay.delete_tip:  请确认将此直播回放移除？
+course.live_replay.un_share_tip: 请确认将此直播回放从共享直播回放资源库移除？
+course.live_replay.delete_tip: 请确认将此直播回放移除？
 course.homework.score.tip1: 请输入合格分数
 course.homework.score.tip2: 请输入不大于试卷总分的数值
 course.scoer.validator: 请检查题目分数设置，存在题目设置错误
@@ -2103,7 +2104,7 @@ testpaper.import.tip: "试卷导入成功，请在当前页面调整试卷分值
 
 admin.system.purchase_agreement_setting: 购买协议设置
 admin.system.purchase_agreement: 用户购买协议
-admin.system.purchase_agreement.title: 名称 
+admin.system.purchase_agreement.title: 名称
 admin.system.purchase_agreement.content: 协议内容
 admin.system.purchase_agreement.style_settings: 样式设置
 admin.system.purchase_agreement.check_to_confirm: 勾选确认

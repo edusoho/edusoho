@@ -1828,6 +1828,12 @@ admin_v2_user_unlock:
         _controller: 'AppBundle:AdminV2/User/UserManage:unlock'
     methods:
         - POST
+admin_v2_user_delete:
+    path: '/user/{id}/delete'
+    defaults:
+        _controller: 'AppBundle:AdminV2/User/UserManage:delete'
+    methods:
+        - POST
 admin_v2_user_roles:
     path: '/user/{id}/roles'
     defaults:
