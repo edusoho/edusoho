@@ -361,6 +361,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'tryLookLength',
                 'watchLimit',
                 'drainage',
+                'taskDisplay',
             ]
         );
 
