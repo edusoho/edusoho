@@ -1100,6 +1100,7 @@ course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用�
 course.teacher_setup.exist_teacher.add_tips_v2: 只能添加有教师权限的用户，排序在第一位老师下的其他老师均为直播间助教身份
 
 course.members_manage: 学员管理
+course.members_manage.export.field_learn_time: 学员累计学习时长
 course.members_manage.official_student: 正式学员
 course.members_manage.official_student.search: 搜索
 course.members_manage.official_student.batch_upload_deadline: 批量修改有效期
@@ -7810,6 +7811,9 @@ admin.setting_course.course_list_page_seq: 课程列表页默认排序
 admin.setting_course.course_list_page.help_block: 课程列表页
 admin.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
 admin.setting_course.Prevent_copying_rich_text_doc: 图文、文档任务防复制
+admin.setting_course.doc_task_water_mark: 文档任务水印
+admin.setting_course.doc_task_water_mark_info: 文档水印信息
+admin.setting_course.doc_task_water_mark_info_tips: 为了用户体验效果更佳,建议最多组合2项信息显示.注意:若用户的真实姓名和手机号没有则显示为-
 admin.setting_course.Prevent_copying_test_paper: 试卷防复制
 admin.setting_course.course_operation_mode: 课程运营模式
 admin.setting_course.course_comments_manage: 课程学习页内容管理
@@ -8464,9 +8468,9 @@ admin.payment_setting.alipay_api_type.mobile: 手机网站支付接口
 admin.payment_setting.alipay_api_type.mobile.hint: >
   开通此接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">阔知学堂</span>支付，需前往支付宝开通，查看
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
-admin.payment_setting.alipay_secret: MD5密钥
+admin.payment_setting.alipay_secret: RSA密钥
 admin.payment_setting.alipay_hint: >
-  登录【蚂蚁金服·开放平台】-【服务市场】-【密钥管理】，可<a href="%alipayUrl%" target="_blank">查看PID和MD5秘钥</a>。
+  登录【蚂蚁金服·开放平台】-【服务市场】-【密钥管理】，可<a href="%alipayUrl%" target="_blank">查看PID和RSA秘钥</a>。
 admin.payment_setting.alipay_account: 支付宝账户
 admin.payment_setting.alipay_mobile_payment_hint: 如需开启移动客户端支付，需填写支付宝账户。
 admin.payment_setting.open_alipay_api: 启用支付宝交易关闭接口
@@ -9367,6 +9371,7 @@ log.action.user.edit: 修改
 log.action.user.update: 修改
 log.action.user.send_email_verify: 邮箱验证
 log.action.user.nickname_change: 修改昵称
+log.action.user.delete_user: 删除用户
 log.action.user.password-changed: 重置密码
 log.action.user.pay-password-changed: 重置支付密码
 log.action.user.password-security-answers: 设置安全问题
@@ -9690,6 +9695,7 @@ log.action.template.user.nickname_change: 更新了<strong class="color-success"
 log.action.template.user.avatar-changed: 更新了<strong class="color-success">用户</strong> %title%的头像
 log.action.template.user.change_role: 更新了<strong class="color-success">用户</strong> %title%的用户组
 log.action.template.user.lock: 封禁了<strong class="color-success">用户</strong> %title%
+log.action.template.user.delete_user: 删除了<strong class="color-success">用户</strong> %title%
 log.action.template.user.unlock: 解禁了<strong class="color-success">用户</strong> %title%
 log.action.template.thread.create: 新建了<strong class="color-success">话题</strong> 《%title%》
 log.action.template.thread.update: 更新了<strong class="color-success">话题</strong> 《%title%》
@@ -10122,7 +10128,7 @@ log.attr.system.update_settings.payment.alipay_enabled: 支付宝支付功能
 log.attr.system.update_settings.payment.alipay_enabled.1: 开启
 log.attr.system.update_settings.payment.alipay_enabled.0: 关闭
 log.attr.system.update_settings.payment.alipay_key: 支付宝PID
-log.attr.system.update_settings.payment.alipay_secret: 支付宝MD5密钥
+log.attr.system.update_settings.payment.alipay_secret: 支付宝RSA密钥
 log.attr.system.update_settings.payment.alipay_account: 支付宝账户
 log.attr.system.update_settings.payment.wxpay_enabled: 微信支付功能
 log.attr.system.update_settings.payment.wxpay_enabled.1: 开启
@@ -10566,6 +10572,7 @@ exception.user.login_limit: 登录限制！
 exception.user.lock_self_denied: 您不能封禁自己
 exception.user.datefield_invalid: 日期类型字段没有按日期格式填写
 exception.user.file_permission_denied: 无文件访问权限
+exception.user.delete_user_permission_denied: 无法删除当前用户
 
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
@@ -12157,7 +12164,7 @@ course.homework.score_title.tips: "多选题和不定项选择分值设置：<br
 review.result.fail: 未通过
 review.result.pass: 通过
 review.result.comment_tips: 修改评语后，将向学员发送评语修改通知
-review.result.amend_comment: 修改评价
+review.result.amend_comment: 修改评语
 testpaper.import.tip: 试卷导入成功，请在当前页面调整试卷分值。（注：多选题和不定项选题新增“每项”设置，填空题新增“每空”设置。）
 course.plan_task.activity_manage.testpaper.comment_tips: 得分区间设置规则：<br>1、得分区间包含区间下限和区间上限。<br>2、当学员得分，大于等于区间下限或小于区间上限，自动显示该区间评语。<br>3、如果存在得分区间重叠情况，优先显示在评语列表中排序靠前的评语。
 user_field.select_type.lab: 下拉列表内容

@@ -763,6 +763,7 @@ admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: 'Send password reset
 admin_v2.user.basic.basic_tab.send_emailverify_email_btn: 'Send verify email'
 admin_v2.user.basic.basic_tab.lock_btn: 'Lock User'
 admin_v2.user.basic.basic_tab.unlock_btn: 'Unlock User'
+admin_v2.user.basic.basic_tab.delete_btn: 'Delete User'
 admin_v2.user.basic.basic_tab.org_update_btn: 'Change Organization'
 
 #用户-用户管理-实名认证

@@ -30,6 +30,11 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         return parent::createQueryBuilder($conditions);
     }
 
+    public function deleteByUserId($userId)
+    {
+        return $this->db()->delete($this->table, ['userId' => $userId]);
+    }
+
     public function declares()
     {
         return [

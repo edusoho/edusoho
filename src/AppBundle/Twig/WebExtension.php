@@ -184,6 +184,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('timestamp', [$this, 'timestamp']),
             new \Twig_SimpleFunction('get_user_vip_level', [$this, 'getUserVipLevel']),
             new \Twig_SimpleFunction('is_without_network', [$this, 'isWithoutNetwork']),
+            new \Twig_SimpleFunction('is_super_admin', [$this, 'isSuperAdmin']),
             new \Twig_SimpleFunction('get_admin_roles', [$this, 'getAdminRoles']),
             new \Twig_SimpleFunction('render_notification', [$this, 'renderNotification']),
             new \Twig_SimpleFunction('route_exsit', [$this, 'routeExists']),
@@ -832,6 +833,17 @@ class WebExtension extends \Twig_Extension
         $network = $this->getSetting('developer.without_network', $default = false);
 
         return (bool) $network;
+    }
+
+    public function isSuperAdmin()
+    {
+        $currentUser = $this->biz['user'];
+
+        if (!$currentUser->isLogin()) {
+            return false;
+        }
+
+        return in_array('ROLE_SUPER_ADMIN', $currentUser['roles']);
     }
 
     public function getUserVipLevel($userId)
