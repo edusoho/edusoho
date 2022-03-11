@@ -33,7 +33,7 @@
                 </div>
                 <div class="download-item-right pull-left">
                   <label>简介：</label>
-                  <input class="js-summary-value" data-id="{{ media.link|default(media.fileId) }}" placeholder="请输入简介（选填）" value="">
+                  <input class="js-summary-value" data-id="{{ media.link|default(media.fileId) }}" placeholder="请输入简介（选填）" value="{{ media.description|default() }}">
                 </div>
                 <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="{{ 'course.plan_task.activity_manage.download.delete_btn'|trans }}"><i class="cd-icon cd-icon-close"></i></a>
               </li>
