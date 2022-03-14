@@ -2161,3 +2161,6 @@ admin.system.purchase_agreement.content_empty: Protocol content cannot be empty
 admin.system.purchase_agreement.saved_successfully: Saved successfully!
 admin.system.purchase_agreement.save_failed: Save failed!
 user_field.select_type.tip: One per line, up to 20 characters per sub-item
+
+activity.summary: summary
+activity.summary.placeholder: Please enter the introduction (optional)

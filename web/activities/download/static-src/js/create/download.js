@@ -113,7 +113,6 @@ export default class DownLoad {
   }
 
   addFile() {
-    console.log('dddddd');
     const $media = $('#media');
     const $materials = $('#materials');
     const $successTipDom = $('.js-success-redmine');
@@ -188,8 +187,8 @@ export default class DownLoad {
             <span class="glyphicon glyphicon-new-window color-gray text-sm"></span>
           </div>
           <div class="download-item-right pull-left">
-            <label>简介：</label>
-            <input class="js-summary-value" data-id="${this.media.id}" placeholder="请输入简介（选填）" value="">
+            <label>${Translator.trans('activity.summary')}：</label>
+            <input class="js-summary-value" data-id="${this.media.id}" placeholder="${Translator.trans('activity.summary.placeholder')}" value="">
           </div>
           <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="cd-icon cd-icon-close"></i></a>
         </li>
@@ -201,8 +200,8 @@ export default class DownLoad {
             <a class="gray-primary" href="/materiallib/${ this.media.id }/download">${ this.media.name }</a>
           </div>
           <div class="download-item-right pull-left">
-            <label>简介：</label>
-            <input class="js-summary-value" data-id="${this.media.id}" placeholder="请输入简介（选填）" value="">
+            <label>${Translator.trans('activity.summary')}：</label>
+            <input class="js-summary-value" data-id="${this.media.id}" placeholder="${Translator.trans('activity.summary.placeholder')}" value="">
           </div>
           <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="cd-icon cd-icon-close"></i></a>
         </li>

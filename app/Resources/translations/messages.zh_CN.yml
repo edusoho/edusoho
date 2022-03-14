@@ -11854,6 +11854,7 @@ exam_bank.analysis.data_large_loading_finish: 数据已刷新完成
 exam_bank.analysis.data_large_info: 数据更新时间为：%date%，由于数据量过大，不建议频繁刷新
 exam_bank.analysis.data_large_loading_btn: 强制刷新
 activity_manage.video.finish_tips: 视频播放时长和页面停留时长完成条件以累加学习时长为准
+activity_manage.download.about: 简介
 
 classroom.manage.sign_statictics: 签到统计
 classroom.manage.sign_statictics.user_th: 用户
