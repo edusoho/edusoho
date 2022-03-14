@@ -26,7 +26,7 @@ define(function(require, exports, module) {
         $('[name=alipay_enabled]').change(function(e) {
             var radio = e.target.value;
             var subItem = $(this).parents('fieldset').children('[data-sub="alipay"]');
-          
+
             if (radio == '1') {
                 $('.submit-error').addClass('hidden');
                 subItem.removeClass('hidden');
@@ -45,6 +45,13 @@ define(function(require, exports, module) {
                 validator.removeItem('[name="alipay_secret"]');
                 validator.removeItem('[name="alipay_key"]');
             }
+        });
+
+        $(".js-confirm-btn").on("click", function(){
+          var val = $(".js-private-key-value").val();
+          $('[name=rsa_private_key]').val(val);
+          $('#js-private-key').html(val.substring(0,12) + '******');
+          $('#privateKeyModal').modal('hide');
         });
 
         // $('[name=wxpay_enabled]').change(function(e) {
@@ -116,7 +123,7 @@ define(function(require, exports, module) {
         // $('[name=quickpay_enabled]').change(function(e) {
         //     var radio = e.target.value;
         //     var subItem = $(this).parents('fieldset').children('[data-sub="quickpay"]');
-            
+
         //     if (radio == '1') {
         //         $('.submit-error').addClass('hidden');
         //         subItem.removeClass('hidden');

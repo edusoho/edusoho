@@ -85,12 +85,12 @@ class LegacyCloseRequest
 
     private function convertParams($params)
     {
-        $converted = array();
+        $converted = [];
 
         $converted['_input_charset'] = 'utf-8';
         $converted['partner'] = $this->options['key'];
         $converted['trade_role'] = 'B';
-        $converted['sign_type'] = 'RSA';
+        $converted['sign_type'] = 'MD5';
         $converted['out_order_no'] = $params['out_trade_no'];
         $converted['service'] = 'close_trade';
 
