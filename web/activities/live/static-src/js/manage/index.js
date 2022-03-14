@@ -209,7 +209,7 @@ export default class Live {
     item_tpl = `
       <li class="live-resource-item" data-id="${ this.media.id }">
         <a class="gray-primary" href="/materiallib/${ this.media.id }/download">${ this.media.name }</a>
-        <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.live_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
+        <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.live_manage.materials_delete_btn')}">x</a>
       </li>
     `;
 
