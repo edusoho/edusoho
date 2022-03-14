@@ -37,6 +37,8 @@ class AssetSettingController extends BaseController
             'alipay_enabled' => 0,
             'alipay_key' => '',
             'alipay_secret' => '',
+            'alipay_public_key' => '', //内容为字符串,存储为文件使用,保存的是文件路径
+            'rsa_private_key' => '', //需要上传文件,保存的是文件路径
             'alipay_account' => '',
             'alipay_type' => 'direct',
             'tenpay_enabled' => 0,
@@ -63,12 +65,27 @@ class AssetSettingController extends BaseController
                 $payment['wxpay_enabled'] = 0;
                 $payment['llpay_enabled'] = 0;
             }
+            $dir = $this->container->getParameter('kernel.root_dir').'/../web/files/';
+            if (!file_exists($dir.'key')) {
+                if (!mkdir($concurrentDirectory = $dir.'key') && !is_dir($concurrentDirectory)) {
+                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+                }
+            }
+            if (!empty($payment['rsa_private_key'])) {
+                $privateKey = "-----BEGIN RSA PRIVATE KEY-----\r\n".$payment['rsa_private_key'].'-----END RSA PRIVATE KEY-----';
+                $path = 'key/rsa_private_key.pem';
+                array_map('unlink', glob($dir.$path));
+                file_put_contents($dir.$path, $privateKey);
+            }
+            if ($payment['alipay_public_key']) {
+                $alipayPublicKey = "-----BEGIN PUBLIC KEY-----\r\n".$payment['alipay_public_key'].'-----END PUBLIC KEY-----';
+                $path = 'key/alipay_public_key.pem';
+                array_map('unlink', glob($dir.$path));
+                file_put_contents($dir.$path, $alipayPublicKey);
+            }
             $payment['disabled_message'] = empty($payment['disabled_message']) ? $default['disabled_message'] : $payment['disabled_message'];
-
             $formerPayment = $this->getSettingService()->get('payment');
-
             $payment = array_merge($formerPayment, $payment);
-
             $this->getSettingService()->set('payment', $payment);
             $this->setFlashMessage('success', 'site.save.success');
         }

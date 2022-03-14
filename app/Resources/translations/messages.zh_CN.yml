@@ -1,6 +1,8 @@
 Bad credentials.: 用户名或密码错误
 # 全站
 # 整站导航
+site.recommend: 推荐
+site.not_recommended: 不推荐
 site.alipay: 支付宝
 site.trade.title: %name%订单
 site.online_school_name: 网校名称
@@ -545,7 +547,7 @@ order.status: 订单状态
 order.deduct: 优惠抵扣
 order.item_type: 订单类型
 order.product_type: 商品类型
-order.source:  渠道
+order.source: 渠道
 order.status.created: 未完成
 order.status.paid: 已付款
 order.status.cancel: 已关闭
@@ -592,7 +594,7 @@ order.export_btn: 导出订单
 order.confirm: 订单确认
 order.confirm.pay_total: 合计
 order.confirm.pay_rmb: 应付
-order.confirm.pay_points:  您有可使用的 %num% 点，使用
+order.confirm.pay_points: 您有可使用的 %num% 点，使用
 order.confirm.point: 点
 order.confirm.cal_formula: %coin_name% ÷ 汇率(%cashRate%) =
 order.confirm.submit_btn: 提交订单
@@ -1294,7 +1296,7 @@ course.homework_check.teacher_say.input_placeholder: 请输入评语
 course.homework_check.need_check_item: >
   待批阅题目 <small class="color-gray">共%itemCount%题</small>
 course.homework_check.create.name: 作业名称
-course.homework_check.homework_delete:  该作业已删除
+course.homework_check.homework_delete: 该作业已删除
 
 course.question_marker_statistics: 弹题统计
 
@@ -2017,7 +2019,7 @@ course.plan_task.activity_manage.choose_teach_way: >
 course.plan_task.activity_manage.setup_content: >
   <span class="number">2</span>
   设置内容
-course.plan_task.activity_manage.setup_finish_condition:  >
+course.plan_task.activity_manage.setup_finish_condition: >
   <span class="number">3</span>
   设置完成条件
 course.plan_task.activity_manage.create: 添加%taskName%
@@ -2135,7 +2137,7 @@ course.plan_task.activity_manage.live.expiry_tips: 提示：本计划的学习�
 course.plan_task.activity_manage.live.join_tips: 进入参加过直播
 course.plan_task.activity_manage.live_resource.choose_file: 选择课件
 course.plan_task.activity_manage.live_resource.file_name: 资料名称：
-course.plan_task.activity_manage.live_resource.upload_btn:  (请上传或选择资料)
+course.plan_task.activity_manage.live_resource.upload_btn: (请上传或选择资料)
 course.plan_task.activity_manage.live_resource.add_btn: 添加资料
 course.plan_task.activity_manage.live_resource.delete_btn: 删除
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 学习到最后一页
@@ -3546,7 +3548,7 @@ homepage.learning_course.learning_progress: 完成%percent%
 homepage.recommend_classroom.content_title: 推荐班级
 homepage.recommend_classroom.more: >
   更多%moreClassrooms%
-site.datagrid.filter.class_more : 更多班级
+site.datagrid.filter.class_more: 更多班级
 homepage.article.content_title: 最新%article_name%
 homepage.student_comment.content_title: 学员评价
 homepage.student_comment.from: >
@@ -5082,7 +5084,7 @@ admin.course_manage.manage.vip_grade: 会员等级
 admin.course_manage.manage.duration: 会员时长
 admin.course_manage.manage.introduction: 会员介绍
 admin.course_manage.manage.member_benefits: 会员特权
-admin.course_manage.manage.newest_member : 最新会员
+admin.course_manage.manage.newest_member: 最新会员
 admin.course_manage.manage.vip_grade_removed: 该会员等级已删除
 admin.course_manage.manage.vip_grade_count: 等%count%个会员等级
 notify.vip.no_course_or_classroom: 暂无会员课程或班级
@@ -5827,7 +5829,7 @@ admin.setting.site.website_status.open: 开放
 admin.setting.site.website_status.closed: 关闭
 admin.setting.site.closed_note: 网站关闭公告
 admin.setting.site.ICP_record: 如何将ICP备案号添加至网站底部？
-admin.setting.site.public_security_record : 如何将公安备案图标和编号添加至网站底部？
+admin.setting.site.public_security_record: 如何将公安备案图标和编号添加至网站底部？
 admin.setting.site.closed_note.help_block: 网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码
 admin.setting.site.recordUrl.help_block: 以"http://"开头，以备案号结尾，请填写完整的公安备案号链接。示例：http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: 名称
@@ -8468,9 +8470,15 @@ admin.payment_setting.alipay_api_type.mobile: 手机网站支付接口
 admin.payment_setting.alipay_api_type.mobile.hint: >
   开通此接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">阔知学堂</span>支付，需前往支付宝开通，查看
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
-admin.payment_setting.alipay_secret: RSA密钥
+admin.payment_setting.alipay_md5_secret: MD5密钥
+admin.payment_setting.alipay_secret: 支付宝公钥
+admin.payment_setting.developer_private_secret: 开发者私钥
+admin.payment_setting.developer_private_secret.add: 添加私钥
+admin.payment_setting.developer_private_secret.edit: 修改私钥
 admin.payment_setting.alipay_hint: >
-  登录【蚂蚁金服·开放平台】-【服务市场】-【密钥管理】，可<a href="%alipayUrl%" target="_blank">查看PID和RSA秘钥</a>。
+  登录【<a href="%openAliPay%" target="_blank">支付宝·开放平台</a>】-【账户中心】-【密钥管理】-【mapi网管产品密钥】-可查看PID、开发者公钥、支付宝公钥    <a href="%alipayPrivateKeyUrl%" target="_blank">查看支付宝密钥说明</a>
+admin.payment_setting.md5.hint: >
+  支付宝针对新签约商户不再支持MD5密钥加签接入，老商户业务原则上不受影响，但建议升级。具体详见 <a href="%downlineTips%" target="_blank">支付宝MD5密钥下线通知</a>
 admin.payment_setting.alipay_account: 支付宝账户
 admin.payment_setting.alipay_mobile_payment_hint: 如需开启移动客户端支付，需填写支付宝账户。
 admin.payment_setting.open_alipay_api: 启用支付宝交易关闭接口
@@ -11566,7 +11574,7 @@ admin_v2.app_center.resource_settlement.filter_placeholder: 请选择状态
 admin_v2.app_center.resource_settlement.order.pay: 待支付
 admin_v2.app_center.resource_settlement.order.paid: 已支付
 admin_v2.app_center.resource_settlement.order.refunded: 已退款
-admin_v2.app_center.resource_settlement.switch_show_debt:  仅看欠款（已欠款%amount%）
+admin_v2.app_center.resource_settlement.switch_show_debt: 仅看欠款（已欠款%amount%）
 
 admin_v2.app_center.resource_settlement.order.title: 采购单名称
 admin_v2.app_center.resource_settlement.order.sn: 采购单号
@@ -11974,7 +11982,7 @@ admin_v2.system.user_content_control.thread_manage: 话题问答内容管理
 admin_v2.system.user_content_control.course_question_manage: 课程问题(问答)模块
 admin_v2.system.user_content_control.classroom_question_manage: 班级问题(问答)模块
 admin_v2.system.user_content_control.course_thread_manage: 课程话题模块
-admin_v2.system.user_content_control.classroom_thread_manage:  班级话题模块
+admin_v2.system.user_content_control.classroom_thread_manage: 班级话题模块
 admin_v2.system.user_content_control.group_thread_manage: 小组话题模块
 admin_v2.system.user_content_control.private_message_manage: 私信内容管理
 admin_v2.system.user_content_control.note_manage: 笔记内容管理
@@ -12079,7 +12087,7 @@ exception.multi_class.multi_class_not_exist: 班课不存在
 exception.multi_class.multi_class_teacher_require: 班课需要设置教师
 exception.multi_class.multi_class_assistant_require: 班课需要设置助教
 exception.multi_class.multi_class_assistant.number_exceed: 班课助教超过最大人数
-exception.multi_class.multi_class_data_fields_missing : 班课参数缺失
+exception.multi_class.multi_class_data_fields_missing: 班课参数缺失
 exception.multi_class.multi_class_course_not_match: 班课与课程不匹配
 exception.multi_class.product_not_found: 产品未找到
 exception.multi_class.cannot_delete_default_product: 系统默认产品不能删除
@@ -12137,7 +12145,7 @@ course.live_replay_manage.live_time_th: 直播时间
 course.live_replay_manage.live_chooser_empty: 没有回放
 course.live_replay.tag_select_default: 回放标签
 course.live_replay.share_btn: 共享资源
-course.live_replay.un_share_btn:  取消共享
+course.live_replay.un_share_btn: 取消共享
 course.live_replay.remove_btn: 移除回放
 course.live_replay.title: 直播名称
 course.live_replay.teacher: 主讲人
