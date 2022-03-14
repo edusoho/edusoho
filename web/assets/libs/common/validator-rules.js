@@ -77,6 +77,11 @@ define(function(require, exports, module) {
       Translator.trans('validate_old.alphanumeric.message', {display: '{{display}}'})
     ],
     [
+      'only_alphanumeric',
+      /^[a-zA-Z0-9]+$/i,
+      Translator.trans('validate.only_alphanumeric.message', {display: '{{display}}'})
+    ],
+    [
       'alphabet_underline',
       /^[a-zA-Z_]+[a-zA-Z0-9_]*/i,
       Translator.trans('validate_old.alphabet_underline.message', {display: '{{display}}'})
