@@ -17,6 +17,6 @@
   </div>
 
   <button class="cd-btn cd-btn-primary">{{'form.btn.search'|trans}}</button>
-  <button class="btn btn-default" id="export-students-transcript" {% if answerRecords|length <= 0 %}disabled{% endif %} data-loading-text="{{'classroom.student_exporting'|trans}}" data-url="{{ path('course_testpaper_transcript_export', {'courseId':activity.fromCourseId, 'testpaperId':assessment.id, 'activityId':activity.id }) }}" data-data-url="{{ path('course_testpaper_transcript_export_data', {'courseId':targetId, 'testpaperId':assessment.id, 'activityId':activity.id }) }}">{{'course.testpaper_export.btn'|trans}}</button>
+  <button class="btn btn-default" id="export-students-transcript" {% if answerRecords|length <= 0 %}disabled{% endif %} data-loading-text="{{'classroom.student_exporting'|trans}}" data-url="{{ path('course_testpaper_transcript_export', {'courseId':activity.fromCourseId, 'testpaperId':assessment.id, 'activityId':activity.id }) }}" data-data-url="{{ path('course_testpaper_transcript_export_data', {'courseId':activity.fromCourseId, 'testpaperId':assessment.id, 'activityId':activity.id }) }}">{{'course.testpaper_export.btn'|trans}}</button>
 
 </form>
