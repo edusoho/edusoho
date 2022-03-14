@@ -50,7 +50,7 @@ class Show {
     this.strictMode = container.data('strict');
     this.url = container.data('url');
     this.fileStorage = container.data('fileStorage');
-    this.microMessenger = container.data('microMessenger');
+    this.allowedBrowse = container.data('allowedBrowse');
     this.securityVideoPlayer = container.data('securityVideoPlayer');
     this.initView();
     this.initEvent();
@@ -113,7 +113,7 @@ class Show {
         token: this.token,
       });
     }
-    if (this.securityVideoPlayer == '1' && this.microMessenger) {
+    if (this.securityVideoPlayer == '1' && this.allowedBrowse) {
       options = Object.assign(options, {
         playerType: 'wasm',
       });
