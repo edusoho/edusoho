@@ -258,6 +258,21 @@
                 <el-input class="hidden" type="hidden" v-model="marketingForm.services"></el-input>
             </el-form-item>
 
+            <el-form-item :label="'course.marketing_setup.services.course_list_display'|trans">
+              <el-col :span="18">
+                <el-radio
+                  v-for="courseTaskDisplayRadio in courseTaskDisplayRadios"
+                  v-model="marketingForm.taskDisplay"
+                  :key="courseTaskDisplayRadio.value"
+                  :value="courseTaskDisplayRadio.value"
+                  :label="courseTaskDisplayRadio.value"
+                  class="cd-radio"
+                >
+                  {{ courseTaskDisplayRadio.label }}
+                </el-radio>
+              </el-col>
+            </el-form-item>
+
           <el-form-item>
             <label slot="label">
               {{ 'drainage.setting' | trans }}
@@ -422,7 +437,8 @@
                 services: this.course.services,
                 drainageEnabled: this.course.drainageEnabled,
                 drainageText: this.course.drainageText,
-                drainageImage: this.course.drainageImage
+                drainageImage: this.course.drainageImage,
+                taskDisplay: this.course.taskDisplay
             };
 
             if (this.vipInstalled && this.vipEnabled) {
@@ -464,14 +480,24 @@
                         label: Translator.trans('site.datagrid.radios.no'),
                     }
                 ],
+                courseTaskDisplayRadios: [
+                  {
+                    value: "1",
+                    label: Translator.trans('open')
+                  },
+                  {
+                    value: "0",
+                    label:  Translator.trans('close')
+                  }
+                ],
                 drainageRadios: [
                   {
                     value: 1,
-                    label: Translator.trans('course.info.video.convert.audio.start')
+                    label: Translator.trans('open')
                   },
                   {
                     value: 0,
-                    label:  Translator.trans('course.info.video.convert.audio.close')
+                    label:  Translator.trans('close')
                   }
                 ],
                 today: Date.now(),

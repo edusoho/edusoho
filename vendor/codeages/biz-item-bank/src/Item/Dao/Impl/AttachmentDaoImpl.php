@@ -52,6 +52,7 @@ class AttachmentDaoImpl extends AdvancedDaoImpl implements AttachmentDao
                 'global_id = :globalId',
                 'global_id IN ( :globalIds )',
                 'global_id <> ( :existGlobalId )',
+                'status NOT IN ( :excludeStatus )',
                 'target_type <> :noTargetType',
                 'target_type NOT IN (:noTargetTypes)',
                 'convert_status = :convertStatus',

@@ -35,6 +35,8 @@ class CourseSettingController extends BaseController
             'coursesPrice' => '0',
             'allowAnonymousPreview' => '1',
             'copy_enabled' => '0',
+            'doc_water_mark_enabled' => '0',
+            'doc_water_mark_info' => '',
             'testpaperCopy_enabled' => '0',
             'custom_chapter_enabled' => '0',
             'show_cover_num_mode' => 'studentNum',

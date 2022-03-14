@@ -16,7 +16,11 @@
       </td>
       <td class="pull-right prl">{{ review.rating }}{{'admin.homepage.latest_review.rating_start'|trans}}</td>
       <td>
+        {% if review.targetType == 'goods' %}
+        <a target="_blank" href="{{ path('goods_show',{id:review.targetId}) }}" class="btn btn-default btn-xs">{{ 'admin.homepage.latest_review.view_btn'|trans }}</a>
+        {% elseif review.targetType == 'course' %}
         <a target="_blank" href="{{ path('course_show',{id:review.targetId, tab: 'reviews'}) }}" class="btn btn-default btn-xs">{{ 'admin.homepage.latest_review.view_btn'|trans }}</a>
+        {% endif %}
       </td>
     </tr>
   {% else %}
