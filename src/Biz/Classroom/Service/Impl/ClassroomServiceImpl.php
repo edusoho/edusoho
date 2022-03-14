@@ -198,11 +198,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     }
 
     /**
-     * @deprecated
-     *
      * @param int $courseId
      *
      * @return array
+     *
+     * @deprecated
      */
     public function findClassroomsByCourseId($courseId)
     {
@@ -413,11 +413,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $arguments = $fields;
 
-        $this->dispatchEvent('classroom.update', new Event([
-            'userId' => $user['id'],
-            'classroom' => $classroom,
-            'fields' => $arguments,
-        ]));
+        $this->dispatchEvent(
+            'classroom.update',
+            new Event([
+                'userId' => $user['id'],
+                'classroom' => $classroom,
+                'fields' => $arguments,
+            ])
+        );
 
         return $classroom;
     }
@@ -537,11 +540,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $member = $this->getClassroomMemberDao()->update($memberId, $deadline);
 
-        $this->dispatchEvent('classroom.member.deadline.update', new Event([
-            'userId' => $member['userId'],
-            'deadline' => $deadline['deadline'],
-            'classroomId' => $member['classroomId'],
-        ]));
+        $this->dispatchEvent(
+            'classroom.member.deadline.update',
+            new Event([
+                'userId' => $member['userId'],
+                'deadline' => $deadline['deadline'],
+                'classroomId' => $member['classroomId'],
+            ])
+        );
 
         return $this->getClassroomMemberDao()->update($memberId, $deadline);
     }
@@ -1434,6 +1440,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         foreach ($classroomCourses as $key => $classroomCourse) {
             $sortedCourses[$key] = $courses[$classroomCourse['courseId']];
+            if (empty($sortedCourses[$key]['drainage'])) {
+                $sortedCourses[$key]['drainage'] = ['enabled' => 0, 'image' => '', 'text' => ''];
+            }
         }
 
         unset($courses);
