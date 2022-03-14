@@ -8,9 +8,9 @@ site.online_school_about: 网校简介
 site.online_school_logo: 网校LOGO
 site.register_link_url: 注册链接的地址
 site.not_support_cloud_video: >
-  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。安卓端允许在微信内置浏览器中观看。
+  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。允许在微信、企业微信、钉钉、飞书中观看。
 site.not_support_cloud_video_upgrade: >
-  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请用微信打开或<a href="%mobileUrl%" target="parent">下载App</a>。
+  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请用微信、企业微信、钉钉、飞书打开或<a href="%mobileUrl%" target="parent">下载App</a>。
 site.currency.CNY: 元
 site.date.year: 年
 site.date.month: 月
