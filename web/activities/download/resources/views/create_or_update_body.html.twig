@@ -32,8 +32,8 @@
                   {% endif %}
                 </div>
                 <div class="download-item-right pull-left">
-                  <label>{{ 'activity_manage.download.about'|trans }}：</label>
-                  <input class="js-summary-value" data-id="{{ media.link|default(media.fileId) }}" placeholder="请输入简介（选填）" value="{{ media.description|default() }}">
+                  <label>{{ 'activity_manage.download.summary'|trans }}：</label>
+                  <input class="js-summary-value" data-id="{{ media.link|default(media.fileId) }}" placeholder="{{ 'activity_manage.download.summary.placeholder'|trans }}" value="{{ media.description|default() }}">
                 </div>
                 <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="{{ 'course.plan_task.activity_manage.download.delete_btn'|trans }}"><i class="cd-icon cd-icon-close"></i></a>
               </li>
