@@ -85,7 +85,7 @@ class Show {
       timelimit: this.timelimit,
       enablePlaybackRates: this.enablePlaybackRates,
       disableModeSelection: this.disableModeSelection,
-      disableFullscreen: this.isHlsPlus === '1' && ['mobile', 'tablet'].indexOf(ua.getDevice().type) > -1,
+      disableFullscreen: this.isHlsPlus == 1 && ['mobile', 'tablet'].indexOf(ua.getDevice().type) > -1,
       videoH5: this.videoH5,
       controlBar: {
         disableVolumeButton: this.disableVolumeButton,
