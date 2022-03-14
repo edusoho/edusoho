@@ -8341,6 +8341,7 @@ log.action.live.delete_live_activity: 'Delete activity'
 log.action.mobile.face_login: Face recognition login
 log.action.question_bank.create: Create Question Bank
 log.action.question_bank.delete: Delete Question Bank
+log.action.question_bank.delete_attachment: Delete Question Attachment
 log.action.question_bank.update_teacher: Update Manager
 log.action.question_bank.create_category: Create Bank Category
 log.action.question_bank.delete_category: Delete Bank Category
