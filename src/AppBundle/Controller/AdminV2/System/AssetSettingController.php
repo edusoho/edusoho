@@ -66,16 +66,22 @@ class AssetSettingController extends BaseController
                 $payment['llpay_enabled'] = 0;
             }
             $dir = $this->container->getParameter('kernel.root_dir').'/../web/files/';
-            if ($file = $request->files->get('rsa_private_key')) {
-                $payment['rsa_private_key'] = 'key/rsa_private_key.pem';
-                FileToolkit::remove($dir.$payment['rsa_private_key']);
-                $file->move($dir.'key/', 'rsa_private_key.pem');
+            if (!file_exists($dir.'key')) {
+                if (!mkdir($concurrentDirectory = $dir.'key') && !is_dir($concurrentDirectory)) {
+                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+                }
+            }
+            if (!empty($payment['rsa_private_key'])) {
+                $privateKey = "-----BEGIN RSA PRIVATE KEY-----\r\n".$payment['rsa_private_key'].'-----END RSA PRIVATE KEY-----';
+                $path = 'key/rsa_private_key.pem';
+                array_map('unlink', glob($dir.$path));
+                file_put_contents($dir.$path, $privateKey);
             }
             if ($payment['alipay_public_key']) {
                 $alipayPublicKey = "-----BEGIN PUBLIC KEY-----\r\n".$payment['alipay_public_key'].'-----END PUBLIC KEY-----';
-                $payment['alipay_public_key_path'] = 'key/alipay_public_key.pem';
-                array_map('unlink', glob($dir.$payment['alipay_public_key_path']));
-                file_put_contents($dir.$payment['alipay_public_key_path'], $alipayPublicKey);
+                $path = 'key/alipay_public_key.pem';
+                array_map('unlink', glob($dir.$path));
+                file_put_contents($dir.$path, $alipayPublicKey);
             }
             $payment['disabled_message'] = empty($payment['disabled_message']) ? $default['disabled_message'] : $payment['disabled_message'];
             $formerPayment = $this->getSettingService()->get('payment');

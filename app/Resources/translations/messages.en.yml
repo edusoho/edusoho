@@ -1,4 +1,6 @@
 Bad credentials.: Bad credentials
+site.recommend: Recommend
+site.not_recommended: Not recommended
 site.alipay: Alipay
 site.trade.title: %name%Order
 site.online_school_name: 'Site Name'
@@ -7107,8 +7109,12 @@ admin.payment_setting.alipay_api_hint: 'You can get the PID and KEY after applyi
 admin.payment_setting.alipay_md5_secret: MD5 KEY
 admin.payment_setting.alipay_secret: 'Alipay Public Key'
 admin.payment_setting.developer_private_secret: Developer Private Key
-admin.payment_setting.developer_private_secret.has_upload: Developer Private Key Has Upload
-admin.payment_setting.alipay_hint: Log in [Alipay·Open Platform]-[Account center]-[Key Management]-[mapi gateway product key], <a href="%alipayUrl%" target="_blank">View PID, MD5 Key and Alipay public Key</a>.
+admin.payment_setting.developer_private_secret.add: Add Key
+admin.payment_setting.developer_private_secret.edit: Edit Key
+admin.payment_setting.alipay_hint: >
+  Log in [<a href="%openAliPay%" target="_blank">Alipay·Open Platform</a>]-[Account center]-[Key Management]-[mapi gateway product key]-View PID, MD5 Key and Alipay public Key <a href="%alipayPrivateKeyUrl%" target="_blank">View Alipay Key Instructions</a>
+admin.payment_setting.md5.down_hint: >
+  Alipay no longer supports MD5 key signature access for newly signed merchants. In principle, the business of old merchants will not be affected, but it is recommended to upgrade. For details, see <a href="%downlineTips%" target="_blank">Alipay MD5 Key Downline Notice</a>
 admin.payment_setting.alipay_account: 'Alipay account'
 admin.payment_setting.alipay_mobile_payment_hint: 'If you need to turn on mobile app payment, please enter your Alipay account.'
 admin.payment_setting.open_alipay_api: 'Enable Alipay transaction closed interface'

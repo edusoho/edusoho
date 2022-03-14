@@ -1,6 +1,8 @@
 Bad credentials.: 用户名或密码错误
 # 全站
 # 整站导航
+site.recommend: 推荐
+site.not_recommended: 不推荐
 site.alipay: 支付宝
 site.trade.title: %name%订单
 site.online_school_name: 网校名称
@@ -8466,9 +8468,12 @@ admin.payment_setting.alipay_api_type.mobile.hint: >
 admin.payment_setting.alipay_md5_secret: MD5密钥
 admin.payment_setting.alipay_secret: 支付宝公钥
 admin.payment_setting.developer_private_secret: 开发者私钥
-admin.payment_setting.developer_private_secret.has_upload: 开发者私钥已上传
+admin.payment_setting.developer_private_secret.add: 添加私钥
+admin.payment_setting.developer_private_secret.edit: 修改私钥
 admin.payment_setting.alipay_hint: >
-  登录【支付宝·开放平台】-【账户中心】-【密钥管理】-【mapi网关产品密钥】，可<a href="%alipayUrl%" target="_blank">查看PID,MD5密钥和支付宝公钥</a>。
+  登录【<a href="%openAliPay%" target="_blank">支付宝·开放平台</a>】-【账户中心】-【密钥管理】-【mapi网管产品密钥】-可查看PID、开发者公钥、支付宝公钥    <a href="%alipayPrivateKeyUrl%" target="_blank">查看支付宝密钥说明</a>
+admin.payment_setting.md5.hint: >
+  支付宝针对新签约商户不再支持MD5密钥加签接入，老商户业务原则上不受影响，但建议升级。具体详见 <a href="%downlineTips%" target="_blank">支付宝MD5密钥下线通知</a>
 admin.payment_setting.alipay_account: 支付宝账户
 admin.payment_setting.alipay_mobile_payment_hint: 如需开启移动客户端支付，需填写支付宝账户。
 admin.payment_setting.open_alipay_api: 启用支付宝交易关闭接口

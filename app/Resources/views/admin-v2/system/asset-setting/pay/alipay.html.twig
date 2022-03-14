@@ -39,32 +39,48 @@
         </div>
         <div class="form-group">
             <div class="col-md-3 control-label">
-                <label for="alipay_secret">{{ 'admin.payment_setting.alipay_md5_secret'|trans }}</label>
-            </div>
-            <div class="controls col-md-8">
-                <input type="text" id="alipay_secret" name="alipay_secret" class="form-control" value="{{ payment.alipay_secret }}">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-3 control-label">
-                <label for="alipay_public_key">{{ 'admin.payment_setting.alipay_secret'|trans }}</label>
+                <label for="alipay_public_key">
+                    {{ 'admin.payment_setting.alipay_secret'|trans }}
+                    (<span class="text-success">{{ 'site.recommend'|trans }}</span>)
+                </label>
             </div>
             <div class="controls col-md-8">
                 <input type="text" id="alipay_public_key" name="alipay_public_key" class="form-control" value="{{ payment.alipay_public_key }}">
                 <div class="help-block">
-                    {{ 'admin.payment_setting.alipay_hint'|trans({'%alipayUrl%': 'https://open.alipay.com/platform/keyManage.htm?keyType=partner'})|raw }}
+                    {{ 'admin.payment_setting.alipay_hint'|trans({'%openAliPay%': 'https://open.alipay.com', '%alipayPrivateKeyUrl%': 'https://opendocs.alipay.com/open/58/103543'})|raw }}
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-3 control-label">
-                <label for="rsa_private_key">{{ 'admin.payment_setting.developer_private_secret'|trans }}</label>
+                <label for="rsa_private_key">
+                    {{ 'admin.payment_setting.developer_private_secret'|trans }}
+                    (<span class="text-success">{{ 'site.recommend'|trans }}</span>)
+                </label>
             </div>
             <div class="controls col-md-8">
-                {% if payment.rsa_private_key %}
-                    <div class="form-control-static mbs">{{ 'admin.payment_setting.developer_private_secret.has_upload'|trans }}</div>
-                {% endif %}
-                <input type="file" name="rsa_private_key" class="btn btn-default">
+                <p class="form-control-static">
+                    {% if payment.rsa_private_key %}
+                        <span id="js-private-key">{{ sub_str(payment.rsa_private_key, 0, 12) ~ '******' }}</span> <a data-toggle="modal" data-target="#privateKeyModal">{{ 'admin.payment_setting.developer_private_secret.edit'|trans }}</a>
+                    {% else %}
+                        <a data-toggle="modal" data-target="#privateKeyModal">{{ 'admin.payment_setting.developer_private_secret.add'|trans }}</a>
+                    {% endif %}
+                </p>
+                <input type="hidden" name="rsa_private_key">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-3 control-label">
+                <label for="alipay_secret">
+                    {{ 'admin.payment_setting.alipay_md5_secret'|trans }}
+                    (<span class="text-danger">{{ 'site.not_recommended'|trans }}</span>)
+                </label>
+            </div>
+            <div class="controls col-md-8">
+                <input type="text" id="alipay_secret" name="alipay_secret" class="form-control" value="{{ payment.alipay_secret }}">
+                <div class="help-block">
+                    {{ 'admin.payment_setting.md5.hint'|trans({'%downlineTips%': 'https://forum.alipay.com/mini-app/post/62101028'})|raw }}
+                </div>
             </div>
         </div>
         <div class="form-group">
@@ -78,3 +94,22 @@
         </div>
     </div>
 </fieldset>
+
+<!-- Modal -->
+<div class="modal fade" id="privateKeyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ 'admin.payment_setting.developer_private_secret'|trans }}</h4>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control js-private-key-value" rows="8"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+                <button type="button" class="btn btn-primary js-confirm-btn">{{ 'form.btn.confirm'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>
