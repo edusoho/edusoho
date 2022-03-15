@@ -502,16 +502,17 @@ class CourseController extends CourseBaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $member = $this->getCourseMember($request, $course);
-
         list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
-
         $pageSize = $paged ? 25 : 10000;  //前台>25个，才会有 显示全部 按钮
         list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], ['limit' => $pageSize]);
-
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $course = $this->getWebExtension()->filterCourseVipRight($course);
+        if ($request->query->get('goodList', '') && empty($course['taskDisplay'])) {
+            $courseItems = [];
+        }
 
         return $this->render("course/task-list/{$type}-task-list.html.twig", [
-            'course' => $this->getWebExtension()->filterCourseVipRight($course),
+            'course' => $course,
             'member' => $member,
             'courseSet' => $courseSet,
             'courseItems' => $courseItems,

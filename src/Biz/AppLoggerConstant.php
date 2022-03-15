@@ -522,6 +522,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'delete_category',
                 'update_category',
                 'delete_question',
+                'delete_attachment',
             ],
             self::DESTROY_ACCOUNT_RECORD => [
                 'create',

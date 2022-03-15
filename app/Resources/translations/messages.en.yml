@@ -1,12 +1,14 @@
 Bad credentials.: Bad credentials
+site.recommend: Recommend
+site.not_recommended: Not recommended
 site.alipay: Alipay
 site.trade.title: %name%Order
 site.online_school_name: 'Site Name'
 site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
 site.register_link_url: 'Register URL'
-site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent"> download the App</a>.Android allows viewing in wechat is built-in browser.'
-site.not_support_cloud_video_upgrade: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please open in wechat or go to<a href="%mobileUrl%" target="parent"> download the App</a>.'
+site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent"> download the App</a>.Allows viewing in wechat,workWechat,dingTalk,feiShu is built-in browser.'
+site.not_support_cloud_video_upgrade: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please open in wechat,workWechat,dingTalk,feiShu or go to<a href="%mobileUrl%" target="parent"> download the App</a>.'
 site.currency.CNY: CNY
 site.date.year: Year
 site.date.month: Month
@@ -453,7 +455,7 @@ order.status: 'Order Status'
 order.deduct: Order deduct
 order.item_type: Order type
 order.product_type: Product type
-order.source:  source
+order.source: source
 order.status.created: Unfishined
 order.status.paid: Piad
 order.status.cancel: Closed
@@ -499,7 +501,7 @@ order.export_btn: 'Export'
 order.confirm: 'Confirm'
 order.confirm.pay_total: Total
 order.confirm.pay_rmb: 'Price'
-order.confirm.pay_points:  'You can use %num% points, use'
+order.confirm.pay_points: 'You can use %num% points, use'
 order.confirm.point: 'points'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
@@ -965,7 +967,7 @@ course.teacher_setup.exist_teacher: 'Exist teachers'
 course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teacher role.'
 course.teacher_setup.exist_teacher.add_tips_v2: 'Can only add users with teacher privileges, sorted under the first teacher of the other teachers are live teaching assistant status'
 course.members_manage: 'Students'
-course.members_manage.export.field_learn_time: The cumulative learning time of students
+course.members_manage.export.field_learn_time: The cumulative learning time
 course.members_manage.official_student: Students
 course.members_manage.official_student.search: Search
 course.members_manage.official_student.batch_upload_deadline: Batch modification validity period
@@ -2127,7 +2129,7 @@ open_course.file_format_conversion_hint: (File format converting)
 open_course.file_format_conversion_failed_hint: (File format conversion failed)
 open_course.unpublish_success_hint: Lesson unpublished!
 open_course.lesson.create_success: Lesson create success
-open_course.lesson.create_error:  Lesson create error
+open_course.lesson.create_error: Lesson create error
 classroom: Class
 column: Column
 classroom.name: Class Name
@@ -3063,7 +3065,7 @@ homepage.learning_course.teacher_name: 'Teacher ：%nickname%'
 homepage.learning_course.learning_progress: '%percent% finished'
 homepage.recommend_classroom.content_title: 'Recommend Classes'
 homepage.recommend_classroom.more: "More %moreClassrooms%\n"
-site.datagrid.filter.class_more : More
+site.datagrid.filter.class_more: More
 homepage.article.content_title: 'Latest %article_name%'
 homepage.student_comment.content_title: 'Student reviews'
 homepage.student_comment.from: "from <a class=\"link-dark\" href=\"%courseUrl%\">《%courseTitle%》</a>\n"
@@ -3105,7 +3107,7 @@ cloud_file.process_status.error: 'Convert failed'
 cloud_file.transcoding_tips: 'Video transcoding is not completed, please wait ...'
 
 cloud_file.transcoding_tips.error_code_40100001.reason: The current file format is abnormal and does not support transcoding.
-cloud_file.transcoding_tips.error_code_40100001.solution:  This file format does not support transcoding. Please use the relevant video format conversion software such as format factory, convert it to FLV or MP4 format, and then re-upload and transcode.
+cloud_file.transcoding_tips.error_code_40100001.solution: This file format does not support transcoding. Please use the relevant video format conversion software such as format factory, convert it to FLV or MP4 format, and then re-upload and transcode.
 cloud_file.transcoding_tips.error_code_40100002.reason: The current file is deleted and transcoding is not supported.
 cloud_file.transcoding_tips.error_code_40100002.solution: The source file has been deleted and cannot be transcoded. Please re-upload and then transcode.
 cloud_file.transcoding_tips.error_code_40100003.reason: The current file format is abnormal and does not support transcoding.
@@ -3777,6 +3779,7 @@ my.teaching.open_course.lesson.header.remind.tips: "<span class=\"member-num\">%
 my.teaching.open_course.lesson.header.content.tips: 'Live has already start, and will end at'
 my.teaching.open_course.lesson.header.content.end.tips: Finished
 my.teaching.open_course.lesson.header.live_course_end: 'Live has ended'
+my.teaching.open_course.lesson.header.cannot_see.tips: Viewing playback is not supported temporarily. Please use another browser to view
 my.teaching.open_course.lesson.header.view_replay_btn: 'Watch Replay'
 my.teaching.open_course.lesson.header.view_replay.tips: 'Please come back later bucause the replay is still in building'
 my.teaching.open_course.lesson.header.view_replay_not_permitted.tips: 'The live replay is set to be unavailable for viewing'
@@ -4303,7 +4306,7 @@ admin.course_manage.manage.vip_grade: 'VIP Level'
 admin.course_manage.manage.duration: 'Duration'
 admin.course_manage.manage.introduction: 'Introduction'
 admin.course_manage.manage.member_benefits: 'Member Benefits'
-admin.course_manage.manage.newest_member : 'Newest Member'
+admin.course_manage.manage.newest_member: 'Newest Member'
 admin.course_manage.manage.vip_grade_removed: 'This VIP level has been removed'
 admin.course_manage.manage.vip_grade_count: '%count% VIP level'
 admin.course_manage.manage.live: Live
@@ -4900,7 +4903,7 @@ admin.setting.site.icp: ICP
 admin.setting.site.icp_url: ICP Link
 admin.setting.site.website_statistics_analysis: 'Website analytics code deployment'
 admin.setting.site.icp_record_information: 'ICP record information'
-admin.setting.site.public_security_record_information:  'Public security record information'
+admin.setting.site.public_security_record_information: 'Public security record information'
 admin.setting.site.analytics: 'Analytics Code'
 admin.setting.site.analytics.help_block: "<p class=\"help-block\">Analytics code is used to import 3rd part analytics tool. You can get the code form 3rd part analytics provider and put it into your site.</p> <p class=\"help-block\">Analysis data include where visitors come from，which site users come from，use what keywords，total visitor numbers，visit number per day, visit IPs per day，visitor average duration in site, etc.</p> <p class=\"help-block\">Analytics tool can analyze PV trends to help improve market promotion and optimize the site resource. Suggest to use <a href=\"http://tongji.baidu.com\" target=\"_blank\">Baidu Analytics</a>、<a target=\"_blank\" href=\"http://www.umeng.com/\">CNZZ</a></p>\n"
 admin.setting.site.website_status: 'Site Status'
@@ -4908,7 +4911,7 @@ admin.setting.site.website_status.open: Enable
 admin.setting.site.website_status.closed: Disable
 admin.setting.site.closed_note: 'Announcement of website shutdown'
 admin.setting.site.ICP_record: ' How to add the ICP record number to the bottom of the website?'
-admin.setting.site.public_security_record : ' How to add the public security record icon and number to the bottom of the website?'
+admin.setting.site.public_security_record: ' How to add the public security record icon and number to the bottom of the website?'
 admin.setting.site.closed_note.help_block: 'Users will see this announcement when the website is shutdown'
 admin.setting.site.recordUrl.help_block: Start with "http://" and end with the record number. Please fill in the complete link to the public security record number. Example:http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: Name
@@ -7109,8 +7112,15 @@ admin.payment_setting.alipay_api_type.mobile.hint: >
 admin.payment_setting.alipay_api_type.escow: 'Secured transaction interface'
 admin.payment_setting.alipay_api_type.dualfun: 'Standard dual-interface'
 admin.payment_setting.alipay_api_hint: 'You can get the PID and KEY after applying the Alipay interface access successfully<a href="%alipayApplication%" target="_blank"> How to apply? </a><br>If you need to use "immediate payment interface" in moblie app, please access the <a href="%mobileAlipayApplication%" target="blank"> Mobile Web payment </a><br>'
-admin.payment_setting.alipay_secret: 'RSA Key'
-admin.payment_setting.alipay_hint: Log in [Ant Financial·Open Platform]-[Service Market]-[Key Management], <a href="%alipayUrl%" target="_blank">View PID and Secret RSA Keys</a>.
+admin.payment_setting.alipay_md5_secret: MD5 KEY
+admin.payment_setting.alipay_secret: 'Alipay Public Key'
+admin.payment_setting.developer_private_secret: Developer Private Key
+admin.payment_setting.developer_private_secret.add: Add Key
+admin.payment_setting.developer_private_secret.edit: Edit Key
+admin.payment_setting.alipay_hint: >
+  Log in [<a href="%openAliPay%" target="_blank">Alipay·Open Platform</a>]-[Account center]-[Key Management]-[mapi gateway product key]-View PID, MD5 Key and Alipay public Key <a href="%alipayPrivateKeyUrl%" target="_blank">View Alipay Key Instructions</a>
+admin.payment_setting.md5.down_hint: >
+  Alipay no longer supports MD5 key signature access for newly signed merchants. In principle, the business of old merchants will not be affected, but it is recommended to upgrade. For details, see <a href="%downlineTips%" target="_blank">Alipay MD5 Key Downline Notice</a>
 admin.payment_setting.alipay_account: 'Alipay account'
 admin.payment_setting.alipay_mobile_payment_hint: 'If you need to turn on mobile app payment, please enter your Alipay account.'
 admin.payment_setting.open_alipay_api: 'Enable Alipay transaction closed interface'
@@ -7943,11 +7953,11 @@ reward_point.reply_discussion_hint_unlimited: >
   Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: unlimited / day
 reward_point.reply_question_hint: >
   Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: %daily_limit% %name% / day
-reward_point.reply_question_hint_unlimited:  >
+reward_point.reply_question_hint_unlimited: >
   Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: unlimited / day
 reward_point.create_question_hint: >
   Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: %daily_limit% %name% / day
-reward_point.create_question_hint_unlimited:  >
+reward_point.create_question_hint_unlimited: >
   Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: unlimited / day
 reward_point.create_discussion_hint: >
   Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: %daily_limit% %name% / day
@@ -8341,6 +8351,7 @@ log.action.live.delete_live_activity: 'Delete activity'
 log.action.mobile.face_login: Face recognition login
 log.action.question_bank.create: Create Question Bank
 log.action.question_bank.delete: Delete Question Bank
+log.action.question_bank.delete_attachment: Delete Question Attachment
 log.action.question_bank.update_teacher: Update Manager
 log.action.question_bank.create_category: Create Bank Category
 log.action.question_bank.delete_category: Delete Bank Category
@@ -9899,7 +9910,7 @@ coupon.target_type.course: Course
 coupon.target_type.all: Full Site
 coupon.target_type.classroom_all: All classerooms
 coupon.target_type.classroom_specific: Designated classroom
-coupon.target_type.vip_all : All vip
+coupon.target_type.vip_all: All vip
 coupon.target_type.vip_specific: Designated vip
 coupon.target_type.course_all: All courses
 coupon.target_type.course_specific: Designated course
@@ -10251,7 +10262,7 @@ admin_v2.app_center.resource_settlement.filter_placeholder: Choose status
 admin_v2.app_center.resource_settlement.order.pay: Paying
 admin_v2.app_center.resource_settlement.order.paid: Paid
 admin_v2.app_center.resource_settlement.order.refunded: Refunded
-admin_v2.app_center.resource_settlement.switch_show_debt:  Only show debt(%amount% owed)
+admin_v2.app_center.resource_settlement.switch_show_debt: Only show debt(%amount% owed)
 
 admin_v2.app_center.resource_settlement.order.title: Title
 admin_v2.app_center.resource_settlement.order.sn: Sn
@@ -10598,6 +10609,8 @@ exam_bank.analysis.data_large_loading_finish: Data loading finish
 exam_bank.analysis.data_large_info: refresh date：%date%，do not fresh because of data to large
 exam_bank.analysis.data_large_loading_btn: Force refresh
 activity_manage.video.finish_tips: The completion conditions of video playback time and page stay time are subject to cumulative learning time
+activity_manage.download.summary: about
+activity_manage.download.summary.placeholder: Please enter the introduction (optional)
 
 classroom.manage.sign_statictics: Sign Statistics
 classroom.manage.sign_statictics.user_th: Username
@@ -10721,7 +10734,7 @@ admin_v2.system.user_content_control.thread_manage: Thread Manage
 admin_v2.system.user_content_control.course_question_manage: Course Question Manage
 admin_v2.system.user_content_control.classroom_question_manage: Classroom Question Manage
 admin_v2.system.user_content_control.course_thread_manage: Course Question Manage
-admin_v2.system.user_content_control.classroom_thread_manage:  Classroom Thread Manage
+admin_v2.system.user_content_control.classroom_thread_manage: Classroom Thread Manage
 admin_v2.system.user_content_control.group_thread_manage: Group Thread Manage
 admin_v2.system.user_content_control.private_message_manage: Private Message Manage
 admin_v2.system.user_content_control.note_manage: Note Manage
@@ -10827,7 +10840,7 @@ exception.multi_class.assistant_not_found: Assistant not found
 exception.multi_class.assistant_student_not_found: Assistant student relationship not found
 exception.multi_class.multi_class_assistant_require: The Multi class assistants need to be set up
 exception.multi_class.multi_class_assistant.number_exceed: The Multi class assistants exceed the maximum number of people
-exception.multi_class.multi_class_data_fields_missing : The Multi class data fields missing
+exception.multi_class.multi_class_data_fields_missing: The Multi class data fields missing
 exception.multi_class.multi_class_course_not_match: The Multi class course not match
 exception.multi_class.product_not_found: The product not found
 exception.multi_class.cannot_delete_default_product: The default product can not delete
@@ -10875,7 +10888,7 @@ course.live_replay_manage.live_anchor_th: Live anchor
 course.live_replay_manage.live_time_th: Live time
 course.live_replay.tag_select_default: Replay tag
 course.live_replay.share_btn: Share
-course.live_replay.un_share_btn:  UnShare
+course.live_replay.un_share_btn: UnShare
 course.live_replay.remove_btn: Remove
 course.live_replay.title: Live Title
 course.live_replay.teacher: Teacher

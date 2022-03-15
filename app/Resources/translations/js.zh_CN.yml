@@ -1606,6 +1606,7 @@ classroom.amount: 相当于
 site.open: 开启
 site.date.day: 天
 course.marketing_setup.services.provide_services: 承诺提供服务
+course.marketing_setup.services.course_list_display: 商品页目录展示
 vip.level.free_learning: 会员免费学
 vip.level.free_learning_new: 会员免费兑换
 site.default.none: 无
@@ -2115,3 +2116,8 @@ admin.system.purchase_agreement.content_empty: 协议内容不能为空
 admin.system.purchase_agreement.saved_successfully: 保存成功！
 admin.system.purchase_agreement.save_failed: 保存失败！
 user_field.select_type.tip: 一行一个，每个子项最多输入20个字符
+
+activity.summary: 简介
+activity.summary.placeholder: 请输入简介（选填）
+open: 开启
+close: 关闭

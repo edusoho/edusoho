@@ -186,7 +186,7 @@ class OverviewController extends BaseController
     public function courseReviewAction(Request $request)
     {
         $reviews = $this->getReviewService()->searchReviews(
-            ['parentId' => 0, 'targetType' => 'course'],
+            ['parentId' => 0, 'targetTypes' => ['course', 'goods']],
             ['createdTime' => 'DESC'],
             0,
             10

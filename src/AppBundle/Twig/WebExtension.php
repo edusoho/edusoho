@@ -189,6 +189,9 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('render_notification', [$this, 'renderNotification']),
             new \Twig_SimpleFunction('route_exsit', [$this, 'routeExists']),
             new \Twig_SimpleFunction('is_micro_messenger', [$this, 'isMicroMessenger']),
+            new \Twig_SimpleFunction('is_uc_browse', [$this, 'isUCBrowse']),
+            new \Twig_SimpleFunction('is_qq_browse', [$this, 'isQQBrowse']),
+            new \Twig_SimpleFunction('is_allowed_browse', [$this, 'isAllowedBrowse']),
             new \Twig_SimpleFunction('is_android_client', [$this, 'isAndroidClient']),
             new \Twig_SimpleFunction('wx_js_sdk_config', [$this, 'weixinConfig']),
             new \Twig_SimpleFunction('plugin_update_notify', [$this, 'pluginUpdateNotify']),
@@ -885,6 +888,31 @@ class WebExtension extends \Twig_Extension
     public function isMicroMessenger()
     {
         return false !== strpos($this->requestStack->getMasterRequest()->headers->get('User-Agent'), 'MicroMessenger');
+    }
+
+    public function isUCBrowse()
+    {
+        return false !== strpos($this->requestStack->getMasterRequest()->headers->get('User-Agent'), 'UCBrowser');
+    }
+
+    public function isQQBrowse()
+    {
+        return false !== strpos($this->requestStack->getMasterRequest()->headers->get('User-Agent'), 'QQBrowser');
+    }
+
+    public function isAllowedBrowse()
+    {
+        $userAgent = $this->requestStack->getMasterRequest()->headers->get('User-Agent');
+        $allowedBrowse = ['MicroMessenger', 'wxwork', 'DingTalk', 'Feishu'];
+        $allow = false;
+        foreach ($allowedBrowse as $browse) {
+            if (strpos($userAgent, $browse) >= 0) {
+                $allow = true;
+                break;
+            }
+        }
+
+        return $allow;
     }
 
     public function isAndroidClient()

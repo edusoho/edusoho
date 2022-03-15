@@ -232,26 +232,26 @@ class QuestionController extends BaseController
         if (empty($questionBank)) {
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
-
         $item = $this->getItemService()->getItem($itemId);
         if (!$item || $item['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
-        $this->getItemService()->deleteItem($itemId);
-        $user = $this->getCurrentUser();
-        $this->getLogService()->info(
-            'question_bank',
-            'delete_question',
-            $this->trans(
-                'admin.question_bank.manage.delete_question',
-                [
-                    '%user%' => $user['nickname'],
-                    '%questionBank%' => $questionBank['name'],
-                    '%num%' => 1,
-                ]
-            ),
-            $item
-        );
+        if ($this->getItemService()->deleteItem($itemId)) {
+            $user = $this->getCurrentUser();
+            $this->getLogService()->info(
+                'question_bank',
+                'delete_question',
+                $this->trans(
+                    'admin.question_bank.manage.delete_question',
+                    [
+                        '%user%' => $user['nickname'],
+                        '%questionBank%' => $questionBank['name'],
+                        '%num%' => 1,
+                    ]
+                ),
+                $item
+            );
+        }
 
         return $this->createJsonResponse(true);
     }
@@ -261,12 +261,27 @@ class QuestionController extends BaseController
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
-
         $ids = $request->request->get('ids', []);
         if (empty($this->getItemService()->findItemsByIds($ids))) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
-        $this->getItemService()->deleteItems($ids);
+        if ($this->getItemService()->deleteItems($ids)) {
+            $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+            $user = $this->getCurrentUser();
+            $this->getLogService()->info(
+                'question_bank',
+                'delete_question',
+                $this->trans(
+                    'admin.question_bank.manage.delete_question',
+                    [
+                        '%user%' => $user['nickname'],
+                        '%questionBank%' => $questionBank['name'],
+                        '%num%' => count($ids),
+                    ]
+                ),
+                $ids
+            );
+        }
 
         return $this->createJsonResponse(true);
     }
