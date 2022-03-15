@@ -106,6 +106,13 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         return $this->db()->fetchAll($sql, []);
     }
 
+    public function findActivitiesByTypeAndCreatedTimeAndUpdatedTimeFinishType($type, $createdTime, $updatedTime, $finishType)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE mediaType = ? AND createdTime <= ? AND finishType = ? AND updatedTime <= ?;";
+
+        return $this->db()->fetchAll($sql, [$type, $createdTime, $finishType, $updatedTime]);
+    }
+
     public function declares()
     {
         $declares['orderbys'] = ['endTime', 'startTime', 'createdTime'];
@@ -125,7 +132,11 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'startTime >= :startTime_GT',
             'startTime <= :startTime_LT',
             'endTime <= :endTime_LT',
+            'createdTime = :createdTime',
+            'updatedTime = :updatedTime',
             'copyId = :copyId',
+            'finishType = :finishType',
+            'finishData = :finishData',
         ];
 
         return $declares;
