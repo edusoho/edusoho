@@ -816,7 +816,7 @@ validate.limit_size.message: Size can not exceed 2M
 validate.next_day.message: The start time should be later than the current time
 validate.chinese_alphanumeric.message: Only supports Chinese characters, English letters, numbers and _ . ·
 validate.alphanumeric.message: Must be English letters, numbers and underscores
-validate.only_alphanumeric.message: Must be English letters and numbers
+validate.only_alphanumeric.message: Please enter numbers or English letters
 validate.raty_star.message: Please score
 validate.reg_invite_code.message: Must consists of five numbers and english characters
 validate.phone.message: Please enter a valid mobile phone number

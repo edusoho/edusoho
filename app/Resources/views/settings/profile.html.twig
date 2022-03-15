@@ -91,7 +91,7 @@
                 <div class="cd-md-11">
                     <div class="form-group cd-form-group">
                         <label for="profile_truename">{{ 'user.fileds.realname'|trans }}</label>
-                        {% if profile.truename and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
+                        {% if profile.truename and app.user.approvalStatus == 'approved' %}
                             <input type="text" id="profile_truename" name="profile[truename]" class="form-control" value="{{ profile.truename }}" readonly>
                         {% else %}
                             <input type="text" id="profile_truename" name="profile[truename]" class="form-control" value="{{ profile.truename|default('') }}">
@@ -184,7 +184,7 @@
                 <div class="cd-md-11">
                     <div class="form-group cd-form-group">
                         <label for="profile_idcard">{{ 'user.fields.idcard_label'|trans }}</label>
-                        {% if profile.idcard and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
+                        {% if profile.idcard and app.user.approvalStatus == 'approved' %}
                             <input type="text" id="profile_idcard" name="profile[idcard]" class="form-control" value="{{ profile.idcard }}" readonly>
                         {% else %}
                             <input type="text" id="profile_idcard" name="profile[idcard]" class="form-control" value="{{ profile.idcard|default('') }}">
