@@ -53,7 +53,7 @@ class MaterialExtension extends \Twig_Extension
 
         return $this->getMaterialService()->searchMaterials(
             $conditions,
-            ['createdTime' => 'DESC', 'id' => 'ASC'],
+            ['createdTime' => 'DESC', 'id' => 'DESC'],
             0,
             PHP_INT_MAX
         );
