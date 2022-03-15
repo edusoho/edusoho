@@ -3779,6 +3779,7 @@ my.teaching.open_course.lesson.header.remind.tips: "<span class=\"member-num\">%
 my.teaching.open_course.lesson.header.content.tips: 'Live has already start, and will end at'
 my.teaching.open_course.lesson.header.content.end.tips: Finished
 my.teaching.open_course.lesson.header.live_course_end: 'Live has ended'
+my.teaching.open_course.lesson.header.cannot_see.tips: Viewing playback is not supported temporarily. Please use another browser to view
 my.teaching.open_course.lesson.header.view_replay_btn: 'Watch Replay'
 my.teaching.open_course.lesson.header.view_replay.tips: 'Please come back later bucause the replay is still in building'
 my.teaching.open_course.lesson.header.view_replay_not_permitted.tips: 'The live replay is set to be unavailable for viewing'
