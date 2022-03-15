@@ -110,7 +110,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $cloudAppLog = $this->getAppLogDao()->getLastLogByCodeAndToVersion('MAIN', '21.4.10');
         if (!empty($cloudAppLog)) {
-            $activities = $this->getActivityDao()->findActivitiesByTypeAndCreatedTimeAndFinishType('video', $cloudAppLog['createdTime'], 'end');
+            $activities = $this->getActivityDao()->findActivitiesByTypeAndCreatedTimeAndUpdatedTimeFinishType('video', $cloudAppLog['createdTime'], $cloudAppLog['createdTime'], 'end');
             $activityIds = ArrayToolkit::column($activities, 'id');
 
             if (!empty($activityIds)) {
