@@ -53,7 +53,7 @@ class CloudController extends BaseController
 
     public function docWatermarkAction(Request $request)
     {
-        $user = $this->getCurrentUser()->toArray();
+        $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             return new Response('');
         }
@@ -61,6 +61,7 @@ class CloudController extends BaseController
         $pattern = $this->setting('magic.doc_watermark');
         if ($pattern) {
             $site = $this->getSettingService()->get('site', []);
+            $user = $user->toArray();
             $user['domain'] = $site['url'];
             $watermark = $this->parsePattern($pattern, $user);
         } else {

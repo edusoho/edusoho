@@ -13,7 +13,7 @@ class CourseMaterialDaoImpl extends AdvancedDaoImpl implements CourseMaterialDao
     {
         return [
             'timestamps' => ['createdTime'],
-            'orderbys' => ['createdTime'],
+            'orderbys' => ['createdTime', 'id'],
             'conditions' => [
                 'id in (:ids)',
                 'id = :id',

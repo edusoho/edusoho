@@ -14,8 +14,8 @@
       data-user-name="{{app.user.username|default('')}}"
       {# data-image-info="{{ pptPlayer.result.images|json_encode() }}" #}
       {# data-token-url="{{ path('activity_ppt_token', {mediaId: activity.mediaId}) }}" #}
-      {% if setting('magic.ppt_watermark') %}
-        data-watermark-url="{{ path('cloud_ppt_watermark') }}"
+      {% if setting('magic.doc_watermark') %}
+        data-watermark-url="{{ path('cloud_doc_watermark') }}"
       {% endif %}>
   </div>
   <button class="hidden cd-btn cd-btn-primary ppt-player-change-btn js-change-ppt-btn" type="button">{{ 'course.plan_task.activity_ppt_animation_btn'|trans }}</button>
