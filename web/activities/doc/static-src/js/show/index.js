@@ -11,12 +11,21 @@ let url = $('.js-cloud-url').data('url');
 })(url);
 
 let $element = $('#document-content');
+let watermarkUrl = $element.data('watermark-url');
+
+if(watermarkUrl) {
+  $.get(watermarkUrl, function(watermark) {
+    console.log('watermark: ', watermark)
+    initDocPlayer(watermark);
+  });
+} else {
+  initDocPlayer('');
+}
 
 initDocPlayer();
 onFullScreen();
 
-function initDocPlayer() {
-  const container = $('#document-content');
+function initDocPlayer(watermark) {
   const playerConfig = {
     id: 'document-content',
     // playServer: app.cloudPlayServer,
@@ -30,13 +39,10 @@ function initDocPlayer() {
       name: $element.data('userName')
     }
   }
-  const fingerprint = container.data('fingerprint');
-  const fingerprintTime = container.data('fingerprintTime');
 
-  if (fingerprint) {
+  if (watermark) {
     playerConfig.fingerprint = {
-      html: fingerprint,
-      duration: fingerprintTime
+      html: watermark
     }
   }
 
