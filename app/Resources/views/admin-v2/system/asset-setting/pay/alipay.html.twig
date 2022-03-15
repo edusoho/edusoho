@@ -63,7 +63,7 @@
                     {% if payment.rsa_private_key %}
                         <span id="js-private-key">{{ sub_str(payment.rsa_private_key, 0, 12) ~ '******' }}</span> <a data-toggle="modal" data-target="#privateKeyModal">{{ 'admin.payment_setting.developer_private_secret.edit'|trans }}</a>
                     {% else %}
-                        <a data-toggle="modal" data-target="#privateKeyModal">{{ 'admin.payment_setting.developer_private_secret.add'|trans }}</a>
+                        <span id="js-private-key"></span> <a data-toggle="modal" data-target="#privateKeyModal">{{ 'admin.payment_setting.developer_private_secret.add'|trans }}</a>
                     {% endif %}
                 </p>
                 <input type="hidden" name="rsa_private_key">

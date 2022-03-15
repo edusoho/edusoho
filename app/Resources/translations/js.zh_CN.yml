@@ -758,7 +758,7 @@ validate.limit_size.message: 大小不能超过2M
 validate.next_day.message: 开始时间应晚于当前时间
 validate.chinese_alphanumeric.message: 只支持中文字、英文字母、数字及_ . ·
 validate.alphanumeric.message: 必须是英文字母、数字及下划线组成
-validate.only_alphanumeric.message: 必须是英文字母、数字
+validate.only_alphanumeric.message: 请输入数字或英文字母
 validate.raty_star.message: 请打分
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
 validate.phone.message: 请输入有效手机号码

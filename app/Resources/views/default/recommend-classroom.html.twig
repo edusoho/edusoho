@@ -19,7 +19,7 @@
             </div>
             <div class="section-more-btn">
                 <a href="{{ path('classroom_explore') }}" class="btn btn-default btn-lg">
-                    {{ 'site.default.more'|trans }}{{ config.title|default() }} <i class="mrs-o es-icon es-icon-chevronright"></i>
+                    {{ 'site.default.more'|trans }}{{ setting('classroom.name', 'site.default.classroom')|trans }} <i class="mrs-o es-icon es-icon-chevronright"></i>
                 </a>
             </div>
         </div>
