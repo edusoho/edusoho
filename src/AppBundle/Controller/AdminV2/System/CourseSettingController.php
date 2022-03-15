@@ -75,15 +75,17 @@ class CourseSettingController extends BaseController
             $default = $this->getSettingService()->get('default', []);
             $defaultSetting = array_merge($default, $userDefaultSetting, $courseDefaultSetting);
             $this->getSettingService()->set('default', $defaultSetting);
+            $magic = $this->getSettingService()->get('magic', []);
             if ($defaultSetting['doc_water_mark_enabled'] && $defaultSetting['doc_water_mark_info']) {
                 $waterMark = '';
                 foreach ($defaultSetting['doc_water_mark_info'] as $item) {
                     $waterMark .= "{{{$item}}}";
                 }
-                $magic = $this->getSettingService()->get('magic', []);
                 $magic['doc_watermark'] = $waterMark;
-                $this->getSettingService()->set('magic', $magic);
+            } else {
+                unset($magic['doc_watermark']);
             }
+            $this->getSettingService()->set('magic', $magic);
 
             $courseUpdateSetting = array_merge($courseDefaultSetting, $request->request->all());
 

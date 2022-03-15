@@ -906,7 +906,7 @@ class WebExtension extends \Twig_Extension
         $allowedBrowse = ['MicroMessenger', 'wxwork', 'DingTalk', 'Feishu'];
         $allow = false;
         foreach ($allowedBrowse as $browse) {
-            if (strpos($userAgent, $browse) >= 0) {
+            if (false !== strpos($userAgent, $browse)) {
                 $allow = true;
                 break;
             }
