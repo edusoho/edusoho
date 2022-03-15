@@ -33,7 +33,7 @@ class CourseItemWithLesson extends AbstractResource
         $courseItems = [];
         $userId = $this->getCurrentUser()->getId();
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
-        if (!empty($course['taskDisplay']) && $member) {
+        if ($course['taskDisplay'] || $member) {
             $courseItems = $this->getCourseService()->findCourseItems($courseId);
         }
 
