@@ -99,7 +99,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("ALTER TABLE `course_v8` ADD COLUMN `taskDisplay` tinyint(1) unsigned NOT NULL DEFAULT 1 COMMENT '目录展示';");
         }
 
-        if(!$this->isFieldExist('user_approval', 'idcard')){
+        if($this->isFieldExist('user_approval', 'idcard')){
             $this->getConnection()->exec("ALTER TABLE `user_approval` MODIFY `idcard` VARCHAR(51);");
         }
 
