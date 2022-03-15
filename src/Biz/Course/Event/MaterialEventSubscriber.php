@@ -108,6 +108,10 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
             $newMaterial['courseId'] = $task['fromCourseId'];
             $newMaterial['description'] = !empty($material['summary']) ? $material['summary'] : $material['description'];
             $newMaterial['lessonId'] = $activity['id'];
+            if (empty($material['fileSize']) && $material['size']) {
+                $file = $this->getUploadFileService()->getFile($material['fileId']);
+                $material['fileSize'] = $file['fileSize'];
+            }
             $newMaterial['fileSize'] = isset($material['fileSize']) ? $material['fileSize'] : $material['size'];
             $newMaterial['source'] = 'coursematerial';
 
