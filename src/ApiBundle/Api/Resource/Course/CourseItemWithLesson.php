@@ -12,6 +12,7 @@ use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -29,8 +30,12 @@ class CourseItemWithLesson extends AbstractResource
         if (!$course) {
             throw CourseException::NOTFOUND_COURSE();
         }
-
-        $courseItems = $this->getCourseService()->findCourseItems($courseId);
+        $courseItems = [];
+        $userId = $this->getCurrentUser()->getId();
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
+        if (!empty($course['taskDisplay']) && $member) {
+            $courseItems = $this->getCourseService()->findCourseItems($courseId);
+        }
 
         $items = $this->convertToLeadingItems(
             $courseItems,
@@ -186,5 +191,13 @@ class CourseItemWithLesson extends AbstractResource
     protected function getActivityService()
     {
         return $this->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
     }
 }

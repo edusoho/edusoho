@@ -1102,7 +1102,7 @@ course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用�
 course.teacher_setup.exist_teacher.add_tips_v2: 只能添加有教师权限的用户，排序在第一位老师下的其他老师均为直播间助教身份
 
 course.members_manage: 学员管理
-course.members_manage.export.field_learn_time: 学员累计学习时长
+course.members_manage.export.field_learn_time: 累加学习时长
 course.members_manage.official_student: 正式学员
 course.members_manage.official_student.search: 搜索
 course.members_manage.official_student.batch_upload_deadline: 批量修改有效期

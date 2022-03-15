@@ -11,7 +11,7 @@ class CourseV8AddTaskDisplay extends Migration
     {
         if (!$this->isFieldExist('course_v8', 'taskDisplay')) {
             $biz = $this->getContainer();
-            $biz['db']->exec("ALTER TABLE `course_v8` ADD COLUMN `taskDisplay` tinyint(1) unsigned  NOT NULL DEFAULT 1 COMMENT '目录展示'");
+            $biz['db']->exec("ALTER TABLE `course_v8` ADD COLUMN `taskDisplay` tinyint(1) unsigned  NOT NULL DEFAULT 1 COMMENT '商品页目录展示'");
         }
     }
 

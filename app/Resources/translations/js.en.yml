@@ -1658,7 +1658,7 @@ classroom.amount: "Equals to "
 site.open: Open
 site.date.day: Day
 course.marketing_setup.services.provide_services: Services
-course.marketing_setup.services.course_list_display: Task List
+course.marketing_setup.services.course_list_display: Task List With Goods
 vip.level.free_learning: Free for Vip
 vip.level.free_learning_new: Free for Vip
 site.default.none: None
@@ -2165,3 +2165,5 @@ user_field.select_type.tip: One per line, up to 20 characters per sub-item
 
 activity.summary: summary
 activity.summary.placeholder: Please enter the introduction (optional)
+open: Open
+close: Close
