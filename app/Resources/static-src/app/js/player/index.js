@@ -117,11 +117,7 @@ class Show {
         token: this.token,
       });
     }
-    if (this.securityVideoPlayer == '1' && this.allowedBrowse) {
-      options = Object.assign(options, {
-        playerType: 'wasm',
-      });
-    }
+
     return window.player = PlayerFactory.create(
       this.jsPlayer, options
     );
