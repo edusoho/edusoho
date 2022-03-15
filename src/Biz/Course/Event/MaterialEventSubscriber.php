@@ -106,7 +106,7 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
 
             $newMaterial['courseSetId'] = $task['fromCourseSetId'];
             $newMaterial['courseId'] = $task['fromCourseId'];
-            $newMaterial['description'] = $material['summary'];
+            $newMaterial['description'] = !empty($material['summary']) ? $material['summary'] : $material['description'];
             $newMaterial['lessonId'] = $activity['id'];
             $newMaterial['fileSize'] = isset($material['fileSize']) ? $material['fileSize'] : $material['size'];
             $newMaterial['source'] = 'coursematerial';
