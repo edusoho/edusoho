@@ -106,11 +106,11 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         return $this->db()->fetchAll($sql, []);
     }
 
-    public function findActivitiesByTypeAndCreatedTimeAndFinishType($type, $time, $finishType)
+    public function findActivitiesByTypeAndCreatedTimeAndUpdatedTimeFinishType($type, $createdTime, $updatedTime, $finishType)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE mediaType = ? AND createdTime <= ? AND finishType = ? AND updatedTime = 0;";
+        $sql = "SELECT * FROM {$this->table} WHERE mediaType = ? AND createdTime <= ? AND finishType = ? AND updatedTime <= ?;";
 
-        return $this->db()->fetchAll($sql, [$type, $time, $finishType]);
+        return $this->db()->fetchAll($sql, [$type, $createdTime, $finishType, $updatedTime]);
     }
 
     public function declares()
