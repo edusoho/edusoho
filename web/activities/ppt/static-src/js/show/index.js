@@ -30,10 +30,10 @@ const iosFullScreen = () => {
   }
 };
 
-const initPptPlayer = (flag) => {
+const initPptPlayer = (watermark) => {
   // 清空内容后切换
   $element.empty();
-  var pptPlayer = newPlayer();
+  var pptPlayer = newPlayer(watermark);
 
   $('.js-change-ppt-btn').on('click', (event) => {
     const $target = $(event.target);
@@ -68,9 +68,8 @@ const endFinishTip = (pageNumber) => {
   }
 };
 
-const newPlayer = (token) => {
-  let finalToken = token ? token : $element.data('token');
-  const container = $('#activity-ppt-content');
+const newPlayer = (watermark) => {
+  let finalToken = $element.data('token');
   const playerConfig = {
     id: 'activity-ppt-content',
     // 环境配置
@@ -85,13 +84,9 @@ const newPlayer = (token) => {
     }
   }
 
-  const fingerprint = container.data('fingerprint');
-  const fingerprintTime = container.data('fingerprintTime');
-
-  if (fingerprint) {
+  if (watermark) {
     playerConfig.fingerprint = {
-      html: fingerprint,
-      duration: fingerprintTime
+      html: watermark
     }
   }
 
@@ -131,4 +126,12 @@ const newPlayer = (token) => {
   return pptPlayer;
 };
 
-initPptPlayer();
+let watermarkUrl = $element.data('watermark-url');
+
+if (watermarkUrl) {
+  $.get(watermarkUrl, function(watermark) {
+    initPptPlayer(watermark);
+  });
+} else {
+  initPptPlayer('');
+}
