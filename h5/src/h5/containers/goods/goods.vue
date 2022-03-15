@@ -242,6 +242,7 @@ export default {
             title: this.goods.title,
             link: window.location.href.split('#')[0] + '#' + this.$route.path,
             imgUrl: this.goods.images.small,
+            desc: this.goods.summary
           };
           console.log(message);
           this.share(message);
@@ -256,7 +257,7 @@ export default {
         title: message.title || '',
         link: message.link,
         imgUrl: message.imgUrl,
-        desc: this.$t('goods.findAGoodContent')
+        desc: message.desc || this.$t('goods.findAGoodContent')
       };
       initShare({ ...shareMessage });
     },
