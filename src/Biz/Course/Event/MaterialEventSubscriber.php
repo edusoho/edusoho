@@ -239,4 +239,9 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
     {
         return $this->getBiz()->service('Course:MaterialService');
     }
+
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
+    }
 }
