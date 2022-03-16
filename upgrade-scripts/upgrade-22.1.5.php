@@ -98,11 +98,12 @@ class EduSohoUpgrade extends AbstractUpdater
         if(!$this->isFieldExist('course_v8', 'taskDisplay')){
             $this->getConnection()->exec("ALTER TABLE `course_v8` ADD COLUMN `taskDisplay` tinyint(1) unsigned NOT NULL DEFAULT 1 COMMENT '目录展示';");
         }
-
         if($this->isFieldExist('user_approval', 'idcard')){
             $this->getConnection()->exec("ALTER TABLE `user_approval` MODIFY `idcard` VARCHAR(51);");
         }
-
+        if($this->isFieldExist('user_profile', 'idcard')){
+            $this->getConnection()->exec("ALTER TABLE `user_profile` MODIFY `idcard` VARCHAR(51);");
+        }
         $this->getConnection()->exec("DELETE from  `setting` where name = 'siteTrace' limit 1;");
         $this->getConnection()->exec("DELETE from  `cache` where name = 'settings' limit 1;");
 
