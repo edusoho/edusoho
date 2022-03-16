@@ -46,8 +46,8 @@
                     <div v-if="goods.product.targetType === 'course'" id="info-left-2"
                          class="content-item js-content-item">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
-                        <course-tasks v-if="currentSku.taskDisplay == 1" :sku="currentSku" :i18n="i18n" :activity-metas="activityMetas"></course-tasks>
-                        <div v-else class="goods-empty-content">
+                        <course-tasks v-show="currentSku.taskDisplay == 1" :sku="currentSku" :i18n="i18n" :activity-metas="activityMetas"></course-tasks>
+                        <div v-show="currentSku.taskDisplay != 1" class="goods-empty-content">
                           <img src="/static-dist/app/img/vue/goods/empty-content.png" alt="">
                           <p>{{ 'goods.show_page.tab.catalogue.empty' | trans }}</p>
                         </div>
