@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class UserApprovalIdcardLengthEdit extends Migration
+class IdcardLengthEdit extends Migration
 {
     /**
      * Do the migration
@@ -12,6 +12,10 @@ class UserApprovalIdcardLengthEdit extends Migration
         if (!$this->isFieldExist('user_approval', 'idcard')) {
             $biz = $this->getContainer();
             $biz['db']->exec('ALTER TABLE `user_approval` MODIFY `idcard` VARCHAR(51);');
+        }
+        if (!$this->isFieldExist('user_profile', 'idcard')) {
+            $biz = $this->getContainer();
+            $biz['db']->exec('ALTER TABLE `user_profile` MODIFY `idcard` VARCHAR(51);');
         }
     }
 
