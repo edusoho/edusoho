@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Good;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Course\Service\CourseService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
@@ -91,6 +92,10 @@ class Good extends AbstractResource
         }
         $goods['isMember'] = false;
         foreach ($goods['specs'] as &$spec) {
+            if ('course' === $goods['type']) {
+                $course = $this->getCourseService()->getCourse($spec['targetId']);
+                $spec['taskDisplay'] = $course['taskDisplay'];
+            }
             $spec = $this->getGoodsService()->convertSpecsPrice($goods, $spec);
             $spec['isMember'] = $goodsEntity->isSpecsMember($goods, $spec, $user['id']);
             if ($spec['isMember']) {
@@ -164,5 +169,13 @@ class Good extends AbstractResource
     private function getFavoriteService()
     {
         return $this->service('Favorite:FavoriteService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }
