@@ -103,6 +103,9 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("ALTER TABLE `user_approval` MODIFY `idcard` VARCHAR(51);");
         }
 
+        $this->getConnection()->exec("DELETE from  `setting` where name = 'siteTrace' limit 1;");
+        $this->getConnection()->exec("DELETE from  `cache` where name = 'settings' limit 1;");
+
         return 1;
     }
 
