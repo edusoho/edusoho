@@ -1821,6 +1821,7 @@ course.info.video.convert.audio.close: 'Close'
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: 'Eg.: The total video duration of the course is 100 minutes. If you set 5 times, then students can watch videos for 500 minutes. 0 means no limits.<br/>It only affect the video upload manually. It won''t affect record live or videos saved on third party live platform.'
 goods.show_page.tab.intro: Goods Intro
 goods.show_page.tab.catalogue: Learn Catalogue
+goods.show_page.tab.catalogue.empty: After purchasing, you can view the course catalog~
 goods.show_page.tab.reviews: Reviews
 goods.show_page.tab.reviews_empty_tips: No Reviews
 goods.show_page.tab.summary_empty_tips: No Summary
