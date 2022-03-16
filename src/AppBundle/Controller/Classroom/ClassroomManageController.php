@@ -121,8 +121,7 @@ class ClassroomManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $courseIds = $this->getClassroomService()->findByClassroomId($id);
-        $this->appendLearningProgress($students, $courseIds);
+        $this->appendLearningProgress($students, $id);
 
         return $this->render(
             'classroom-manage/student.html.twig',
@@ -150,8 +149,10 @@ class ClassroomManageController extends BaseController
         }
     }
 
-    private function appendLearningProgress(&$classroomMembers, $courseIds)
+    private function appendLearningProgress(&$classroomMembers, $classroomId)
     {
+        $courses = $this->getClassroomService()->findByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($courses, 'courseId');
         foreach ($classroomMembers as &$classroomMember) {
             $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress(
                 $classroomMember['classroomId'],
@@ -412,9 +413,8 @@ class ClassroomManageController extends BaseController
         $users = ArrayToolkit::index($users, 'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
-        $courseIds = $this->getClassroomService()->findByClassroomId($id);
-        $this->appendLearningProgress($classroomMembers, $courseIds);
-        $str = '用户名,Email,加入学习时间,学习进度,学习有效期,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔,学员累计学习时长';
+        $this->appendLearningProgress($classroomMembers, $id);
+        $str = '用户名,Email,加入学习时间,学习进度,学习有效期,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔,累加学习时长';
         foreach ($fields as $key => $value) {
             $str .= ','.$value;
         }
@@ -439,7 +439,7 @@ class ClassroomManageController extends BaseController
             $member .= $profiles[$classroomMember['userId']]['company'] ? $profiles[$classroomMember['userId']]['company'].',' : '-'.',';
             $member .= $profiles[$classroomMember['userId']]['job'] ? $profiles[$classroomMember['userId']]['job'].',' : '-'.',';
             $member .= $users[$classroomMember['userId']]['title'] ? $users[$classroomMember['userId']]['title'].',' : '-'.',';
-            $member .= $classroomMember['learningTime'] ?: '-'.',';
+            $member .= $classroomMember['learningTime'] ? $classroomMember['learningTime'].',' : '-'.',';
             foreach ($fields as $key => $value) {
                 $member .= $profiles[$classroomMember['userId']][$key] ? '"'.str_replace(
                         [PHP_EOL, '"'],
