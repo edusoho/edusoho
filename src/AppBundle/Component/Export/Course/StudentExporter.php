@@ -89,9 +89,10 @@ class StudentExporter extends Exporter
             $courseMembers[$key]['learningProgressPercent'] = $progress['percent'];
             $conditions = [
                 'userId' => $member['userId'],
-                'courseId' => $member['courseId'],
+                'courseIds' => [$member['courseId']],
             ];
-            $courseMembers[$key]['learningTime'] = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions($conditions);
+            $learningTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions($conditions);
+            $courseMembers[$key]['learningTime'] = round($learningTime / 60);
         }
 
         $fields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
