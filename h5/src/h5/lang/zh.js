@@ -322,6 +322,7 @@ export default {
     noContent: '暂无评价~',
     guessYouWantToLearn: '猜你想学',
     tableOfContents: '课程目录',
+    tableOfContentsEmpty: '购买完成后即可查看课程目录～',
     findAGoodContent: '发现一个好内容，分享给你~',
     gradeTheCourse: '为课程评分',
     submit: '提交',

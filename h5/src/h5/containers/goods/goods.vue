@@ -88,7 +88,11 @@
         >
           <div class="goods-info__title">{{ $t('goods.tableOfContents') }}</div>
           <!-- 课程详情 -->
-          <afterjoin-directory />
+          <afterjoin-directory v-if="currentSku.taskDisplay == 1" />
+          <div class="goods-empty-content" v-else>
+            <img src="static/images/goods/empty-content.png" alt="">
+            <p>{{ $t('goods.tableOfContentsEmpty') }}</p>
+          </div>
         </section>
 
         <section
