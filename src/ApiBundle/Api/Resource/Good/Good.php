@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
@@ -94,7 +95,8 @@ class Good extends AbstractResource
         foreach ($goods['specs'] as &$spec) {
             if ('course' === $goods['type']) {
                 $course = $this->getCourseService()->getCourse($spec['targetId']);
-                $spec['taskDisplay'] = $course['taskDisplay'];
+                $member = $this->getCourseMemberService()->getCourseMember($spec['targetId'], $user['id']);
+                $spec['taskDisplay'] = $member ? 1 : $course['taskDisplay'];
             }
             $spec = $this->getGoodsService()->convertSpecsPrice($goods, $spec);
             $spec['isMember'] = $goodsEntity->isSpecsMember($goods, $spec, $user['id']);
@@ -177,5 +179,13 @@ class Good extends AbstractResource
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
     }
 }
