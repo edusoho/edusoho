@@ -162,7 +162,8 @@ class ClassroomManageController extends BaseController
                 'userId' => $classroomMember['userId'],
                 'courseIds' => $courseIds,
             ];
-            $classroomMember['learningTime'] = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions($conditions);
+            $learningTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions($conditions);
+            $classroomMember['learningTime'] = round($learningTime / 60);
         }
     }
 
