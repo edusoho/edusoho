@@ -279,10 +279,10 @@ Build upgrade package:
     - git clone -b master --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/upgradescripts.git scripts
     - git clone http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/edusoho-h5.git
     - npm install -g n
-    - n 12.18.1
+    - n 12.22.7
     - node -v
     - yarn config set registry https://registry.npm.taobao.org
-    - rm -rf app/caches
+    - rm -rf app/cache
     - cd edusoho-h5
     - git checkout ${H5VERSION}
     - git pull
@@ -295,7 +295,7 @@ Build upgrade package:
     - rm -rf node_modules
     - cp  -rf ./dist/* ./../web/h5/
     - cd ../
-    - rm -rf app/caches node_modules
+    - rm -rf app/cache node_modules
     - yarn
     - npm run compile
     # copy seajs静态文件到web目录下
