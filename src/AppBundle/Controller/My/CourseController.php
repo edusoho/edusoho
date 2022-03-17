@@ -252,10 +252,7 @@ class CourseController extends CourseBaseController
 
     public function tasksAction($course, $member = [])
     {
-        $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($course['id']);
-
-        $offsetTaskId = !empty($toLearnTasks) ? $toLearnTasks[0]['id'] : 0;
-
+        $course['taskDisplay'] = 1;
         list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], ['limit' => 10000]);
 
         return $this->render(
@@ -270,7 +267,8 @@ class CourseController extends CourseBaseController
                         'courseId' => $course['id'],
                         'status' => 'published',
                         'isOptional' => 1,
-                    ]),
+                    ]
+                ),
             ]
         );
     }
