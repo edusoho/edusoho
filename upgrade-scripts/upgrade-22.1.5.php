@@ -119,15 +119,21 @@ class EduSohoUpgrade extends AbstractUpdater
             return 1;
         }
         $answerReports = $this->getAnswerReportService()->search(['created_time_LE' => $cloudAppLog['createdTime'], 'excludeGrades' => ['passed']], [], ($page - 1) * 5000, 5000, ['id', 'answer_scene_id', 'score']);
+        if (empty($answerReports)) {
+            return 1;
+        }
         $answerSceneIds = ArrayToolkit::column($answerReports, 'answer_scene_id');
         $answerReportGroups = ArrayToolkit::group($answerReports, 'answer_scene_id');
         $answerScenes = $this->getAnswerSceneService()->search(['ids' => $answerSceneIds], [], 0, count($answerSceneIds), ['id', 'pass_score']);
         $update = [];
         foreach ($answerScenes as $answerScene) {
+            if (!isset($answerReportGroups[$answerScene['id']])) {
+                continue;
+            }
             foreach ($answerReportGroups[$answerScene['id']] as $report) {
                 if ($report['score'] >= $answerScene['pass_score']) {
                     $update[$report['id']] = 'passed';
-                } elseif ($report['score'] < $answerScene['pass_score']) {
+                } else {
                     $update[$report['id']] = 'unpassed';
                 }
             }
