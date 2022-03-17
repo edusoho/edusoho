@@ -86,7 +86,7 @@ check env:
   services:
     - name: dockerhub.codeages.work/library-proxy/library/mysql:8.0
       alias: mysql
-      command: ["--default-authentication-plugin=mysql_native_password"]
+      command: [ "--default-authentication-plugin=mysql_native_password" ]
     - name: dockerhub.codeages.work/library-proxy/library/redis:latest
       alias: redis
   script:
@@ -132,7 +132,7 @@ check env:
       alias: redis
   script:
     - sed -i 's/memory_limit.*/memory_limit = 4000M/g' /etc/php/7.1/phpdbg/php.ini
-#    - sed -i "s/sonar.projectKey=.*/sonar.projectKey=$SONAR_PROJECT_KEY/g" sonar-project.properties
+    #    - sed -i "s/sonar.projectKey=.*/sonar.projectKey=$SONAR_PROJECT_KEY/g" sonar-project.properties
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitA2B --coverage-clover reports_tmp/phpunit.coverage.xml_1 --log-junit reports_tmp/phpunit.xml_1
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitC2C --coverage-clover reports_tmp/phpunit.coverage.xml_2 --log-junit reports_tmp/phpunit.xml_2
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitD2D --coverage-clover reports_tmp/phpunit.coverage.xml_3 --log-junit reports_tmp/phpunit.xml_3
@@ -244,8 +244,8 @@ Api Test With 7.1:
     - touch app/data/specialEnv  # 防止 新建uuid 索引报错的问题
     - bin/phpmig migrate
     # 安装codeception(因为版本问题，放到gitlab ci上运行时安装)
-#    - composer config repo.packagist composer https://mirrors.aliyun.com/composer/
-#    - composer require "codeception/codeception:*" --ignore-platform-reqs
+    #    - composer config repo.packagist composer https://mirrors.aliyun.com/composer/
+    #    - composer require "codeception/codeception:*" --ignore-platform-reqs
     # install plugin
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin &&  app/console plugin:register Vip
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin &&  app/console plugin:register ChargeCoin
@@ -302,12 +302,7 @@ Build upgrade package:
     - app/console assets:install
     # 生成js语言包
     - app/console trans:dump-js
-    - git config --global user.email "gitlab@example.com"
-    - git config --global user.name "gitlab"
-    - git add web
     - ls web/h5/static/css
-    # - "git commit -m 'feat: #10000 compile'"
-    - git diff .
     - app/console  build:upgrade-package ${FROM_VERSION} ${VERSION}
   artifacts:
     paths:
