@@ -132,9 +132,9 @@ class EduSohoUpgrade extends AbstractUpdater
             }
             foreach ($answerReportGroups[$answerScene['id']] as $report) {
                 if ($report['score'] >= $answerScene['pass_score']) {
-                    $update[$report['id']] = 'passed';
+                    $update[$report['id']] = ['grade' => 'passed'];
                 } else {
-                    $update[$report['id']] = 'unpassed';
+                    $update[$report['id']] = ['grade' => 'unpassed'];
                 }
             }
         }
