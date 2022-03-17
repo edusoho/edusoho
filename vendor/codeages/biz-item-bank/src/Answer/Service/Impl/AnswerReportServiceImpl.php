@@ -2,14 +2,15 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
-use Codeages\Biz\ItemBank\BaseService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
-use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
-use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
-use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
-use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\ItemBank\Answer\Dao\AnswerReportDao;
+use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
+use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
+use Codeages\Biz\ItemBank\BaseService;
+use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 
 class AnswerReportServiceImpl extends BaseService implements AnswerReportService
@@ -141,7 +142,7 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         $questions = $this->getItemService()->findQuestionsByQuestionIds(
             ArrayToolkit::column($assessmentQuestions, 'question_id')
         );
-        
+
         foreach ($assessmentQuestions as $questionId => $assessmentQuestion) {
             if (!empty($questions[$questionId]) && 'rich_text' == $questions[$questionId]['answer_mode'] && 'reviewing' == $answerRecord['status']) {
                 $status = AnswerQuestionReportService::STATUS_REVIEWING;
@@ -164,7 +165,7 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
                 'comment' => empty($answerQuestionReports[$questionId]) ? '' : $answerQuestionReports[$questionId]['comment'],
                 'created_time' => empty($answerQuestionReports[$questionId]) ? '0' : $answerQuestionReports[$questionId]['created_time'],
                 'updated_time' => empty($answerQuestionReports[$questionId]) ? '0' : $answerQuestionReports[$questionId]['updated_time'],
-                'revise' => empty($answerQuestionReports[$questionId]) ? [] : $answerQuestionReports[$questionId]['revise']
+                'revise' => empty($answerQuestionReports[$questionId]) ? [] : $answerQuestionReports[$questionId]['revise'],
             ];
         }
 
@@ -183,7 +184,7 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
                 }
             }
         );
-    
+
         return $arr;
     }
 
@@ -197,7 +198,7 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         return $this->getAnswerReportDao()->findByAnswerSceneId($answerSceneId);
     }
 
-    public function search($conditions, $orderBys, $start, $limit, $columns = array())
+    public function search($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getAnswerReportDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
@@ -210,6 +211,11 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
     public function findByIds(array $ids)
     {
         return $this->getAnswerReportDao()->findByIds($ids);
+    }
+
+    public function batchUpdate($ids, $updateColumnsList)
+    {
+        return $this->getAnswerReportDao()->batchUpdate($ids, $updateColumnsList);
     }
 
     /**
@@ -244,6 +250,9 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         return $this->biz->service('ItemBank:Answer:AnswerQuestionReportService');
     }
 
+    /**
+     * @return AnswerReportDao
+     */
     protected function getAnswerReportDao()
     {
         return $this->biz->dao('ItemBank:Answer:AnswerReportDao');
