@@ -10,8 +10,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    private $perPageCount = 20;
-
     public function __construct($biz)
     {
         parent::__construct($biz);
@@ -22,9 +20,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->beginTransaction();
         try {
             $result = $this->updateScheme((int)$index);
-
             $this->getConnection()->commit();
-
             if (!empty($result)) {
                 return $result;
             } else {
@@ -35,21 +31,17 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->logger('error', $e->getTraceAsString());
             throw $e;
         }
-
         try {
-            $dir = realpath($this->biz['kernel.root_dir'] . '/../web/install');
+            $dir = realpath($this->biz['kernel.root_dir'].'/../web/install');
             $filesystem = new Filesystem();
-
             if (!empty($dir)) {
                 $filesystem->remove($dir);
             }
         } catch (\Exception $e) {
             $this->logger('error', $e->getTraceAsString());
         }
-
         $developerSetting = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
-
         $this->getSettingService()->set('developer', $developerSetting);
         $this->getSettingService()->set('crontab_next_executed_time', time());
     }
@@ -59,13 +51,12 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'addTaskDisplayAndChangeIdcard',
             'processActivityFinishData',
+            'updateAnswerReport',
         );
-
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
             $funcNames[$key + 1] = $funcName;
         }
-
         if (0 == $index) {
             $this->logger('info', '开始执行升级脚本');
 
@@ -75,15 +66,12 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
-
         list($step, $page) = $this->getStepAndPage($index);
         $method = $funcNames[$step];
         $page = $this->$method($page);
-
         if (1 == $page) {
             ++$step;
         }
-
         if ($step <= count($funcNames)) {
             return array(
                 'index' => $this->generateIndex($step, $page),
@@ -95,13 +83,13 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function addTaskDisplayAndChangeIdcard()
     {
-        if(!$this->isFieldExist('course_v8', 'taskDisplay')){
+        if (!$this->isFieldExist('course_v8', 'taskDisplay')) {
             $this->getConnection()->exec("ALTER TABLE `course_v8` ADD COLUMN `taskDisplay` tinyint(1) unsigned NOT NULL DEFAULT 1 COMMENT '目录展示';");
         }
-        if($this->isFieldExist('user_approval', 'idcard')){
+        if ($this->isFieldExist('user_approval', 'idcard')) {
             $this->getConnection()->exec("ALTER TABLE `user_approval` MODIFY `idcard` VARCHAR(51);");
         }
-        if($this->isFieldExist('user_profile', 'idcard')){
+        if ($this->isFieldExist('user_profile', 'idcard')) {
             $this->getConnection()->exec("ALTER TABLE `user_profile` MODIFY `idcard` VARCHAR(51);");
         }
         $this->getConnection()->exec("DELETE from  `setting` where name = 'siteTrace' limit 1;");
@@ -116,29 +104,47 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!empty($cloudAppLog)) {
             $activities = $this->getActivityDao()->findActivitiesByTypeAndCreatedTimeAndUpdatedTimeFinishType('video', $cloudAppLog['createdTime'], $cloudAppLog['createdTime'], 'end');
             $activityIds = ArrayToolkit::column($activities, 'id');
-
             if (!empty($activityIds)) {
                 $this->getActivityDao()->update($activityIds, ['finishData' => 0, 'updatedTime' => time()]);
             }
         }
-        
+
         return 1;
     }
 
-    /**
-     * @return HomeworkActivityDao
-     */
-    protected function getHomeworkActivityDao()
+    public function updateAnswerReport($page)
     {
-        return $this->createDao('Activity:HomeworkActivityDao');
-    }
+        $cloudAppLog = $this->getAppLogDao()->getLastLogByCodeAndToVersion('MAIN', '22.1.3');
+        if (empty($cloudAppLog)) {
+            return 1;
+        }
+        $answerReports = $this->getAnswerReportService()->search(['created_time_LE' => $cloudAppLog['createdTime'], 'excludeGrades' => ['passed']], [], ($page - 1) * 5000, 5000, ['id', 'answer_scene_id', 'score']);
+        if (empty($answerReports)) {
+            return 1;
+        }
+        $answerSceneIds = ArrayToolkit::column($answerReports, 'answer_scene_id');
+        $answerReportGroups = ArrayToolkit::group($answerReports, 'answer_scene_id');
+        $answerScenes = $this->getAnswerSceneService()->search(['ids' => $answerSceneIds], [], 0, count($answerSceneIds), ['id', 'pass_score']);
+        $update = [];
+        foreach ($answerScenes as $answerScene) {
+            if (!isset($answerReportGroups[$answerScene['id']])) {
+                continue;
+            }
+            foreach ($answerReportGroups[$answerScene['id']] as $report) {
+                if ($report['score'] >= $answerScene['pass_score']) {
+                    $update[$report['id']] = 'passed';
+                } else {
+                    $update[$report['id']] = 'unpassed';
+                }
+            }
+        }
+        if ($update) {
+            $this->getAnswerReportService()->batchUpdate(array_keys($update), $update);
+        }
+        unset($answerReports, $answerSceneIds, $answerReportGroups, $answerScenes, $update);
+        $this->logger('info', '更新答题结果answer_report'.$page);
 
-    /**
-     * @return TaskDao
-     */
-    protected function getTaskDao()
-    {
-        return $this->createDao('Task:TaskDao');
+        return $page + 1;
     }
 
     /**
@@ -150,58 +156,19 @@ class EduSohoUpgrade extends AbstractUpdater
     }
 
     /**
-     * @return QuestionDao
+     * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerReportService
      */
-    protected function getQuestionDao()
+    protected function getAnswerReportService()
     {
-        return $this->createDao('ItemBank:Item:QuestionDao');
+        return $this->createService('ItemBank:Answer:AnswerReportService');
     }
 
     /**
-     * @return ItemDao
+     * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService
      */
-    protected function getItemDao()
+    protected function getAnswerSceneService()
     {
-        return $this->createDao('ItemBank:Item:ItemDao');
-    }
-
-    /**
-     * @return \Codeages\Biz\ItemBank\Assessment\Dao\AssessmentSectionItemDao
-     */
-    protected function getAssessmentSectionItemDao()
-    {
-        return $this->createDao('ItemBank:Assessment:AssessmentSectionItemDao');
-    }
-
-    /**
-     * @return \Biz\System\Service\CacheService
-     */
-    protected function getCacheService()
-    {
-        return $this->createService('System:CacheService');
-    }
-
-    /**
-     * @return \Biz\Role\Service\RoleService
-     */
-    protected function getRoleService()
-    {
-        return $this->createService('Role:RoleService');
-    }
-
-    /**
-     * @return \Codeages\Biz\Framework\Scheduler\Service\SchedulerService
-     */
-    protected function getSchedulerService()
-    {
-        return $this->createService('Scheduler:SchedulerService');
-    }
-
-    protected function getTableCount($table)
-    {
-        $sql = "select count(*) from `{$table}`;";
-
-        return $this->getConnection()->fetchColumn($sql) ?: 0;
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
     }
 
     protected function generateIndex($step, $page)
@@ -223,49 +190,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $result = $this->getConnection()->fetchAssoc($sql);
 
         return empty($result) ? false : true;
-    }
-
-    protected function isTableExist($table)
-    {
-        $sql = "SHOW TABLES LIKE '{$table}'";
-        $result = $this->getConnection()->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
-    }
-
-    protected function isIndexExist($table, $indexName)
-    {
-        $sql = "show index from `{$table}` where key_name='{$indexName}';";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
-    }
-
-    protected function createIndex($table, $index, $column)
-    {
-        if (!$this->isIndexExist($table, $column, $index)) {
-            $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column})");
-        }
-    }
-
-    protected function isJobExist($code)
-    {
-        $sql = "select * from biz_scheduler_job where name='{$code}'";
-        $result = $this->getConnection()->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
-    }
-
-    protected function deleteCache()
-    {
-        $cachePath = $this->biz['cache_directory'];
-        $filesystem = new Filesystem();
-        $filesystem->remove($cachePath);
-
-        clearstatcache(true);
-
-        $this->logger('info', '删除缓存');
-
-        return 1;
     }
 
     protected function getSettingService()
@@ -303,7 +227,7 @@ abstract class AbstractUpdater
     protected function logger($level, $message)
     {
         $version = \AppBundle\System::VERSION;
-        $data = date('Y-m-d H:i:s') . " [{$level}] {$version} " . $message . PHP_EOL;
+        $data = date('Y-m-d H:i:s')." [{$level}] {$version} ".$message.PHP_EOL;
         if (!file_exists($this->getLoggerFile())) {
             touch($this->getLoggerFile());
         }
@@ -312,39 +236,7 @@ abstract class AbstractUpdater
 
     private function getLoggerFile()
     {
-        return $this->biz['kernel.root_dir'] . '/../app/logs/upgrade.log';
-    }
-
-    /**
-     * @return \Biz\DiscoveryColumn\Service\DiscoveryColumnService
-     */
-    protected function getDiscoveryColumnService()
-    {
-        return $this->createService('DiscoveryColumn:DiscoveryColumnService');
-    }
-
-    /**
-     * @return \Biz\Taxonomy\Service\CategoryService
-     */
-    protected function getCategoryService()
-    {
-        return $this->createService('Taxonomy:CategoryService');
-    }
-
-    /**
-     * @return \Biz\System\Service\H5SettingService
-     */
-    protected function getH5SettingService()
-    {
-        return $this->createService('System:H5SettingService');
-    }
-
-    /**
-     * @return \Biz\Course\Service\CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
+        return $this->biz['kernel.root_dir'].'/../app/logs/upgrade.log';
     }
 
     protected function getAppLogDao()
