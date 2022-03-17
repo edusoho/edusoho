@@ -7,7 +7,10 @@
     {% if course.taskDisplay %}
         <div class="js-tasks-show" data-url="{{ path('course_task_list_render', {courseId:course.id, type:course.courseType,paged:paged|default(false),previewAs:app.request.query.get('previewAs')}) }}"></div>
     {% else %}
-        <div>empty</div>
+        <div class="goods-empty-content">
+          <img src="/static-dist/app/img/vue/goods/empty-content.png" alt="">
+          <p>{{ 'task.show_empty_content' | trans }}</p>
+        </div>
     {% endif %}
 </div>
 
