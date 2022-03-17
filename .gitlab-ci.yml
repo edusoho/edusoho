@@ -306,7 +306,7 @@ Build upgrade package:
     - git config --global user.name "gitlab"
     - git add web
     - ls web/h5/static/css
-    - "git commit -m 'feat: #10000 compile'"
+    # - "git commit -m 'feat: #10000 compile'"
     - git diff .
     - app/console  build:upgrade-package ${FROM_VERSION} ${VERSION}
   artifacts:
