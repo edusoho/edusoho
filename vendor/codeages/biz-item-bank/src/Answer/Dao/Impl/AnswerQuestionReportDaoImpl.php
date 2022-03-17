@@ -43,6 +43,10 @@ class AnswerQuestionReportDaoImpl extends AdvancedDaoImpl implements AnswerQuest
                 'status = :status',
                 'status IN (:statues)',
                 'id IN (:ids)',
+                'review_user_id != :exclude_review_user_id',
+                'review_user_id = :review_user_id',
+                'created_time <= :created_time_LE',
+                'grade NOT IN ( :excludeGrades )',
             ],
         ];
     }
