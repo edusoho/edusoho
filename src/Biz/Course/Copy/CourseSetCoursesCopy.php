@@ -157,6 +157,7 @@ class CourseSetCoursesCopy extends AbstractCopy
             'lessonNum',
             'publishLessonNum',
             'subtitle',
+            'taskDisplay',
         ];
     }
 

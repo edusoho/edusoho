@@ -12,8 +12,8 @@ class CloudController extends BaseController
 {
     public function testTikuAction()
     {
-        return $this->render('login/test.html.twig', array(
-        ));
+        return $this->render('login/test.html.twig', [
+        ]);
     }
 
     public function setServerAction(Request $request)
@@ -22,21 +22,21 @@ class CloudController extends BaseController
         $sign = $request->query->get('sign');
 
         if (empty($server)) {
-            return $this->createJsonResponse(array('error' => 'server param is empty.'));
+            return $this->createJsonResponse(['error' => 'server param is empty.']);
         }
 
         if (empty($sign)) {
-            return $this->createJsonResponse(array('error' => 'sign param is empty.'));
+            return $this->createJsonResponse(['error' => 'sign param is empty.']);
         }
 
-        $setting = $this->getSettingService()->get('storage', array());
+        $setting = $this->getSettingService()->get('storage', []);
 
         if (empty($setting['cloud_secret_key'])) {
-            return $this->createJsonResponse(array('error' => 'secret key not set.'));
+            return $this->createJsonResponse(['error' => 'secret key not set.']);
         }
 
         if (!$this->checkSign($server, $sign, $setting['cloud_secret_key'])) {
-            return $this->createJsonResponse(array('error' => 'sign error.'));
+            return $this->createJsonResponse(['error' => 'sign error.']);
         }
 
         $setting['cloud_api_server'] = $server;
@@ -60,7 +60,10 @@ class CloudController extends BaseController
 
         $pattern = $this->setting('magic.doc_watermark');
         if ($pattern) {
-            $watermark = $this->parsePattern($pattern, $user->toArray());
+            $site = $this->getSettingService()->get('site', []);
+            $user = $user->toArray();
+            $user['domain'] = $site['url'];
+            $watermark = $this->parsePattern($pattern, $user);
         } else {
             $watermark = '';
         }

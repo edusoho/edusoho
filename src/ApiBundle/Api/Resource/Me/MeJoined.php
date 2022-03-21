@@ -69,30 +69,25 @@ class MeJoined extends AbstractResource
         $conditions['joinedType'] = 'course';
         $conditions['userId'] = $this->getCurrentUser()->getId();
         $conditions['role'] = 'student';
-
         $members = $this->getCourseMemberService()->searchMembers(
             $conditions,
             ['lastLearnTime' => 'DESC'],
             0,
             PHP_INT_MAX
         );
-
         $courseConditions = [
             'ids' => ArrayToolkit::column($members, 'courseId') ?: [0],
             'excludeTypes' => ['reservation'],
         ];
-
         if (!empty($courseSets)) {
             $courseConditions['excludeCourseSetIds'] = ArrayToolkit::column($courseSets, 'id');
         }
-
         $courses = $this->getCourseService()->searchCourses(
             $courseConditions,
             [],
             0,
             PHP_INT_MAX
         );
-
         $courses = $this->appendAttrAndOrder($courses, $members);
         $courses = $this->getCourseService()->appendSpecsInfo($courses);
         $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
@@ -102,6 +97,7 @@ class MeJoined extends AbstractResource
                 $courses[$member['courseId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
                 $courses[$member['courseId']]['meJoinedType'] = 'course';
                 $courses[$member['courseId']]['courseSet']['cover'] = $this->transformCover($courses[$member['courseId']]['courseSet']['cover'], 'course');
+                $courses[$member['courseId']]['cover'] = is_string($courses[$member['courseId']]['cover']) ? null : $courses[$member['courseId']]['cover'];
             }
         }
 

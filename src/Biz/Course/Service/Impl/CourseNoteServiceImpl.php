@@ -188,6 +188,11 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         }
     }
 
+    public function deleteNotesByUserId($userId)
+    {
+        return $this->getNoteDao()->deleteByUserId($userId);
+    }
+
     public function waveLikeNum($id, $num)
     {
         $this->getNoteDao()->wave([$id], [

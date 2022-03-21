@@ -35,6 +35,8 @@ class CourseSettingController extends BaseController
             'coursesPrice' => '0',
             'allowAnonymousPreview' => '1',
             'copy_enabled' => '0',
+            'doc_water_mark_enabled' => 0,
+            'doc_water_mark_info' => '',
             'testpaperCopy_enabled' => '0',
             'custom_chapter_enabled' => '0',
             'show_cover_num_mode' => 'studentNum',
@@ -73,6 +75,17 @@ class CourseSettingController extends BaseController
             $default = $this->getSettingService()->get('default', []);
             $defaultSetting = array_merge($default, $userDefaultSetting, $courseDefaultSetting);
             $this->getSettingService()->set('default', $defaultSetting);
+            $magic = $this->getSettingService()->get('magic', []);
+            if ($defaultSetting['doc_water_mark_enabled'] && $defaultSetting['doc_water_mark_info']) {
+                $waterMark = '';
+                foreach ($defaultSetting['doc_water_mark_info'] as $item) {
+                    $waterMark .= "{{{$item}}}";
+                }
+                $magic['doc_watermark'] = $waterMark;
+            } else {
+                unset($magic['doc_watermark']);
+            }
+            $this->getSettingService()->set('magic', $magic);
 
             $courseUpdateSetting = array_merge($courseDefaultSetting, $request->request->all());
 

@@ -15,4 +15,6 @@ interface ThreadPostDao extends GeneralDaoInterface
     public function findByThreadIds(array $threadIds);
 
     public function deleteByThreadIds(array $threadIds);
+
+    public function deleteByUserId($userId);
 }

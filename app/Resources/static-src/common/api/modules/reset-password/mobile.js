@@ -6,7 +6,7 @@ const resetMobile = (api) => {
       console.log(options);
       return ajax(Object.assign({
         url: `${api}/user/${options.params.mobile}/password/mobile`,
-        type: 'PATCH',
+        type: 'PUT',
       }, options));
     },
   };

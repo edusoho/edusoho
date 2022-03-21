@@ -81,23 +81,17 @@ class CourseController extends BaseController
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $previewAs = '';
-
         if (empty($classroom)) {
             $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
-
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-
         $currentUser = $this->getCurrentUser();
-        $courseMembers = [];
-        $teachers = [];
-
+        $courseMembers = $teachers = [];
         foreach ($courses as &$course) {
             $courseMembers[$course['id']] = $this->getCourseMemberService()->getCourseMember(
                 $course['id'],
                 $currentUser['id']
             );
-
             $course['teachers'] = empty($course['teacherIds']) ? [] : $this->getUserService()->findUsersByIds(
                 $course['teacherIds']
             );
@@ -106,9 +100,7 @@ class CourseController extends BaseController
                 $course['originPrice'] = '0.00';
             }
         }
-
         $user = $this->getCurrentUser();
-
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
             $classroomName = $this->setting('classroom.name', '班级');
@@ -121,12 +113,10 @@ class CourseController extends BaseController
                 $this->generateUrl('homepage')
             );
         }
-
         $canManageClassroom = $this->getClassroomService()->canManageClassroom($classroomId);
         if ($request->query->get('previewAs') && $canManageClassroom) {
             $previewAs = $request->query->get('previewAs');
         }
-
         $member = $this->previewAsMember($previewAs, $member, $classroom);
         if (!$member || $member['locked']) {
             $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
@@ -137,7 +127,6 @@ class CourseController extends BaseController
         if ($this->isPluginInstalled('Vip')) {
             $member['access'] = $this->getClassroomService()->canLearnClassroom($classroomId);
         }
-
         $layout = 'classroom/layout.html.twig';
         $isCourseMember = false;
         if ($member && !$member['locked']) {

@@ -31,9 +31,10 @@
        data-token="{{ playerContext.token }}"
        data-user-id="{{ app.user.id|default(0) }}"
        data-user-name="{{ app.user.username|default('') }}"
-    {% if setting('magic.doc_watermark') %}
-    data-watermark-url="{{ path('cloud_doc_watermark') }}"
-    {% endif %}>
+       {% if setting('magic.doc_watermark') %}
+         data-watermark-url="{{ path('cloud_doc_watermark') }}"
+       {% endif %}
+    >
   </div>
   <input type="hidden" class="js-cloud-url" data-url="{{ cloud_sdk_url('resource_player') }}">
   {% do script(['libs/base.js','app/js/common.js','app/js/main.js','docactivity/js/show/index.js'], 1000) %}

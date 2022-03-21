@@ -159,6 +159,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return true;
     }
 
+    public function deleteThreadsByUserId($userId)
+    {
+        $this->getThreadDao()->deleteByUserId($userId);
+
+        return $this->getThreadPostDao()->deleteByUserId($userId);
+    }
+
     public function setThreadSticky($threadId)
     {
         $thread = $this->getThread($threadId);

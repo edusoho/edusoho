@@ -68,7 +68,7 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="idcard"]',
-            rule: 'idcard'
+            rule: 'maxlength{max:50} only_alphanumeric'
         });
 
         for(var i=1;i<=5;i++){

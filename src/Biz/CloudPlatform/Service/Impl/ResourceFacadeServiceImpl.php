@@ -53,8 +53,17 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             $payload['encrypt'] = 3;
         }
 
-        //开启云视频防盗增强后，安卓端微信内置浏览器可以观看视频
-        if (strpos($userAgent, 'android') >= 0 && strpos($userAgent, 'MicroMessenger') >= 0) {
+        //开启云视频防盗增强后，微信内置浏览器,企业微信、钉钉、飞书可以观看视频
+        if (false !== strpos($userAgent, 'MicroMessenger')) {
+            $payload['encrypt'] = 0;
+        }
+        if (false !== strpos($userAgent, 'wxwork')) {
+            $payload['encrypt'] = 0;
+        }
+        if (false !== strpos($userAgent, 'DingTalk')) {
+            $payload['encrypt'] = 0;
+        }
+        if (false !== strpos($userAgent, 'Feishu')) {
             $payload['encrypt'] = 0;
         }
 

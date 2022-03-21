@@ -36,14 +36,11 @@ class AlipaySubmit
         //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
         $prestr = createLinkstring($para_sort);
 
-        $mysign = '';
-
         switch (strtoupper(trim($this->alipay_config['sign_type']))) {
             case 'MD5':
                 $mysign = md5Sign($prestr, $this->alipay_config['key']);
                 break;
             case 'RSA':
-            case '0001':
                 $mysign = rsaSign($prestr, $this->alipay_config['private_key_path']);
                 break;
             default:
@@ -74,7 +71,7 @@ class AlipaySubmit
         //签名结果与签名方式加入请求提交参数组中
         $para_sort['sign'] = $mysign;
 
-        if ($para_sort['service'] != 'alipay.wap.trade.create.direct' && $para_sort['service'] != 'alipay.wap.auth.authAndExecute') {
+        if ('alipay.wap.trade.create.direct' != $para_sort['service'] && 'alipay.wap.auth.authAndExecute' != $para_sort['service']) {
             $para_sort['sign_type'] = strtoupper(trim($this->alipay_config['sign_type']));
         }
 
@@ -197,7 +194,7 @@ class AlipaySubmit
         if (!empty($para_text['res_data'])) {
             //解析加密部分字符串
 
-            if ($this->alipay_config['sign_type'] == '0001') {
+            if ('RSA' == $this->alipay_config['sign_type']) {
                 $para_text['res_data'] = rsaDecrypt($para_text['res_data'], $this->alipay_config['private_key_path']);
             }
 
