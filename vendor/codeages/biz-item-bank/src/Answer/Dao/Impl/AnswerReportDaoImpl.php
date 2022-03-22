@@ -44,6 +44,8 @@ class AnswerReportDaoImpl extends AdvancedDaoImpl implements AnswerReportDao
                 'status = :status',
                 'review_user_id != :exclude_review_user_id',
                 'review_user_id = :review_user_id',
+                'created_time <= :created_time_LE',
+                'grade NOT IN ( :excludeGrades )',
             ],
         ];
     }

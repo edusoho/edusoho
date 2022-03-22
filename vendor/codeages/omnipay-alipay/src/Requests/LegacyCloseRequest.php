@@ -85,7 +85,7 @@ class LegacyCloseRequest
 
     private function convertParams($params)
     {
-        $converted = array();
+        $converted = [];
 
         $converted['_input_charset'] = 'utf-8';
         $converted['partner'] = $this->options['key'];

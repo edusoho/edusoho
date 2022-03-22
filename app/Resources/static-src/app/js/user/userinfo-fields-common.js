@@ -74,7 +74,8 @@ export default class UserInfoFieldsItemValidate {
         },
         idcard: {
           required: true,
-          idcardNumber: true,
+          maxlength: 50,
+          only_alphanumeric: true
         },
         gender: {
           required: true,

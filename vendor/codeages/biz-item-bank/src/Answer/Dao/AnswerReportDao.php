@@ -1,7 +1,10 @@
 <?php
+
 namespace Codeages\Biz\ItemBank\Answer\Dao;
 
-interface AnswerReportDao
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
+
+interface AnswerReportDao extends AdvancedDaoInterface
 {
     public function findByIds(array $ids);
 

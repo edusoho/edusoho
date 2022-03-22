@@ -12,6 +12,8 @@ interface ReviewDao extends GeneralDaoInterface
 
     public function deleteByParentId($parentId);
 
+    public function deleteByUserId($userId);
+
     public function deleteByTargetTypeAndTargetId($targetType, $targetId);
 
     public function countCourseReviews($conditions);

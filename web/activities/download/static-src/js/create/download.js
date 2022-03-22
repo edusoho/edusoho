@@ -37,7 +37,8 @@ export default class DownLoad {
     this.$form.on('click', '.js-video-import', () => this.importLink());
     this.$form.on('click', '.js-add-file-list', () => this.addFile());
     this.$form.on('blur', '#title', (event) => this.changeTitle(event));
-    
+    this.$form.on('blur', '.js-summary-value', (event) => this.changeSummary(event));
+
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {valid:this.validator2.form(), data:window.ltc.getFormSerializeObject($('#step2-form'))});
     });
@@ -63,11 +64,17 @@ export default class DownLoad {
   }
 
   initFileChooser() {
+    let self = this;
+    $('#media').on('click', function (){
+      self.addFile();
+    });
     const fileSelect = (file) => {
       $('#media').val(JSON.stringify(file));
+      $('#media').click();
       chooserUiOpen();
       $('#title').val(this.firstName);
       $('.js-current-file').text(file.name);
+
     };
 
     const fileChooser = new FileChooser();
@@ -174,16 +181,29 @@ export default class DownLoad {
     let item_tpl = '';
     if (this.media.link) {
       item_tpl = `
-        <li class="download-item" data-id="${ this.media.link }">
-          <a class="gray-primary" href="${ this.media.link }" target="_blank">${ this.media.summary ? this.media.summary : this.media.name }<span class="glyphicon glyphicon-new-window text-muted text-sm mlm" title="${ Translator.trans('activity.download_manage.materials_delete_btn')}"></span></a>
-          <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
+        <li class="download-item clearfix" data-id="${ this.media.link }">
+          <div class="download-item-left pull-left text-overflow">
+            <a href="${ this.media.link }" target="_blank">${ this.media.summary ? this.media.summary : this.media.name }</a>
+            <span class="glyphicon glyphicon-new-window color-gray text-sm"></span>
+          </div>
+          <div class="download-item-right pull-left">
+            <label>${Translator.trans('activity.summary')}：</label>
+            <input class="js-summary-value" data-id="${this.media.id}" placeholder="${Translator.trans('activity.summary.placeholder')}" value="">
+          </div>
+          <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="cd-icon cd-icon-close"></i></a>
         </li>
       `;
     } else {
       item_tpl = `
-        <li class="download-item" data-id="${ this.media.id }">
-          <a class="gray-primary" href="/materiallib/${ this.media.id }/download">${ this.media.name }</a>
-          <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
+        <li class="download-item clearfix" data-id="${ this.media.id }">
+          <div class="download-item-left pull-left text-overflow">
+            <a class="gray-primary" href="/materiallib/${ this.media.id }/download">${ this.media.name }</a>
+          </div>
+          <div class="download-item-right pull-left">
+            <label>${Translator.trans('activity.summary')}：</label>
+            <input class="js-summary-value" data-id="${this.media.id}" placeholder="${Translator.trans('activity.summary.placeholder')}" value="">
+          </div>
+          <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="cd-icon cd-icon-close"></i></a>
         </li>
       `;
     }
@@ -205,4 +225,11 @@ export default class DownLoad {
     }, 3000);
   }
 
+  changeSummary(event) {
+    let $this = $(event.currentTarget);
+    const $materials = $('#materials');
+    const materials = isEmpty($materials.val()) ? {} : arrayIndex(JSON.parse($materials.val()), 'fileId');
+    materials[$this.data('id')].summary = $this.val();
+    $materials.val(JSON.stringify(materials));
+  }
 }

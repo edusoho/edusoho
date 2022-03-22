@@ -245,6 +245,31 @@ class CloudFileController extends BaseController
         ]);
     }
 
+    public function deleteQuestionFileShowAction(Request $request)
+    {
+        $globalIds = $request->request->get('ids');
+        $files = $this->getUploadFileService()->searchFiles(
+            ['globalIds' => $globalIds],
+            ['createdTime' => 'desc'],
+            0,
+            PHP_INT_MAX
+        );
+
+        $materials = [];
+        if ($files) {
+            $files = ArrayToolkit::index($files, 'id');
+            $fileIds = ArrayToolkit::column($files, 'id');
+            $materials = $this->getCourseMaterialService()->findUsedCourseMaterials($fileIds, $courseId = 0);
+        }
+
+        return $this->render('material-lib/web/delete-question-file-modal.html.twig', [
+            'materials' => $materials,
+            'files' => $files,
+            'ids' => $globalIds,
+            'deleteFormUrl' => $this->generateUrl('admin_v2_cloud_file_batch_delete'),
+        ]);
+    }
+
     public function batchTagShowAction(Request $request)
     {
         $data = $request->request->all();

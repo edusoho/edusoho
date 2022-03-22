@@ -61,7 +61,11 @@
         <h2>{{ 'my.teaching.open_course.lesson.header.live_course_end'|trans }}</h2>
         {% if course.replayEnable|default(0) %}
           {% if lesson.replayStatus == 'videoGenerated' %}
+            {% if setting('storage.enable_hls_encryption_plus', 0) == 1 and (is_uc_browse() or is_qq_browse()) %}
+            <h2>{{ 'my.teaching.open_course.lesson.header.cannot_see.tips'|trans }}</h2>
+            {% else %}
             <button class="btn btn-info btn-lg mask-btn js-live-video-replay-btn hidden" data-referer="{{ refererUrl }}">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</button>
+            {% endif %}
           {% elseif lesson.replayStatus == 'generated' %}
             {% for replay in lesson.replays if replay %}
               {% if lesson.liveProvider == 5 %}

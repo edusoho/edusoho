@@ -1,9 +1,9 @@
 {% extends 'v2/layout.html.twig' %}
 
 {% block title %}
-	{{'user.settings.personal_info_menu'|trans}}
-	-
-	{{ parent() }}
+    {{ 'user.settings.personal_info_menu'|trans }}
+    -
+    {{ parent() }}
 {% endblock %}
 
 {% set side_nav = 'profile' %}
@@ -11,210 +11,221 @@
 {% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js','app/js/settings/profile/index.js']) %}
 
 {% block page_title %}
-	{{'user.settings.personal_info_menu'|trans}}
+    {{ 'user.settings.personal_info_menu'|trans }}
 {% endblock %}
 
 {% block main_body %}
-	{% if fromCourse %}
-		<div class="alert cd-alert cd-alert-info">
-			{{'user.settings.basic_info.alter_description'|trans}}
-		</div>
-	{% endif %}
+    {% if fromCourse %}
+        <div class="alert cd-alert cd-alert-info">
+            {{ 'user.settings.basic_info.alter_description'|trans }}
+        </div>
+    {% endif %}
 
-	{{ web_macro.flash_messages(true) }}
-	<div class="row">
-		<div class="col-md-11 pl0 pr0">
-			<form id="user-profile-form" class="cd-row-flex cd-row-flex-space-between" method="post">
-				<div class="cd-md-24">
-					<div class=" cd-mr24 cd-mb40">
-						{% include 'common/upload-image.html.twig' with {
-          saveUrl: path('settings_profile_avatar_crop_modal'),
-          targetImg: 'profile-avatar',
-          cropWidth: '270',
-          cropHeight: '270',
-          imageClass: 'cd-avatar cd-avatar-square cd-avatar-lg',
-          imageText: 'user.settings.basic_info.shange_avatar'|trans,
-          imageSrc: filepath(user.largeAvatar, 'avatar.png'),
-        } %}
-            {% if 'ROLE_TEACHER_ASSISTANT' in app.user.roles %}
-              <div class="cd-md-11 pull-right">
-                {% include 'settings/upload-qrcode.html.twig' with {
-                  saveUrl: path('settings_assistant_qrcode_crop_modal'),
-                  targetImg: 'assistant-qrcode',
-                  cropWidth: '270',
-                  cropHeight: '270',
-                  imageClass: 'cd-avatar cd-avatar-square cd-avatar-lg',
-                  imageText: 'user.settings.basic_info.shange_qrcode'|trans,
-                  imageSrc: filepath(user.weChatQrCode, 'avatar.png'),
-                } %}
-              </div>
-            {% endif %}
-					</div>
-          <p class="image-upload-tip">
-            {{ 'user.settings.upload.img.tip'|trans }}
-            {% if 'ROLE_TEACHER_ASSISTANT' in app.user.roles %}
-              <span class="pull-right cd-md-11 color-warning" style="padding-left: 0px;">
+    {{ web_macro.flash_messages(true) }}
+    <div class="row">
+        <div class="col-md-11 pl0 pr0">
+            <form id="user-profile-form" class="cd-row-flex cd-row-flex-space-between" method="post">
+                <div class="cd-md-24">
+                    <div class=" cd-mr24 cd-mb40">
+                        {% include 'common/upload-image.html.twig' with {
+                            saveUrl: path('settings_profile_avatar_crop_modal'),
+                            targetImg: 'profile-avatar',
+                            cropWidth: '270',
+                            cropHeight: '270',
+                            imageClass: 'cd-avatar cd-avatar-square cd-avatar-lg',
+                            imageText: 'user.settings.basic_info.shange_avatar'|trans,
+                            imageSrc: filepath(user.largeAvatar, 'avatar.png'),
+                        } %}
+                        {% if 'ROLE_TEACHER_ASSISTANT' in app.user.roles %}
+                            <div class="cd-md-11 pull-right">
+                                {% include 'settings/upload-qrcode.html.twig' with {
+                                    saveUrl: path('settings_assistant_qrcode_crop_modal'),
+                                    targetImg: 'assistant-qrcode',
+                                    cropWidth: '270',
+                                    cropHeight: '270',
+                                    imageClass: 'cd-avatar cd-avatar-square cd-avatar-lg',
+                                    imageText: 'user.settings.basic_info.shange_qrcode'|trans,
+                                    imageSrc: filepath(user.weChatQrCode, 'avatar.png'),
+                                } %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <p class="image-upload-tip">
+                        {{ 'user.settings.upload.img.tip'|trans }}
+                        {% if 'ROLE_TEACHER_ASSISTANT' in app.user.roles %}
+                            <span class="pull-right cd-md-11 color-warning" style="padding-left: 0px;">
               <i class="es-icon es-icon-warning"></i>
               {{ 'user.settings.upload.qrcode.tip'|trans }}
             </span>
-            {% endif %}
-          </p>
-					<div class="form-group cd-form-group cd-form-group-inline cd-form-group-action" id="nickname-form-group">
+                        {% endif %}
+                    </p>
+                    <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action" id="nickname-form-group">
 
-						<label for="nickname">{{'user.fields.username_label'|trans}}</label>
+                        <label for="nickname">{{ 'user.fields.username_label'|trans }}</label>
 
-						<div class="static-text input-edit__static-dom">
-							<span class="input-edit__static-text">{{app.user.nickname}}</span>
-							{% if setting('user_partner.nickname_enabled') %}
-								<a href="javascript:;" class="input-edit__edit-btn cd-link-minor">
-									<i class="cd-icon cd-icon-edit"></i>
-								</a>
-							{% endif %}
-						</div>
+                        <div class="static-text input-edit__static-dom">
+                            <span class="input-edit__static-text">{{ app.user.nickname }}</span>
+                            {% if setting('user_partner.nickname_enabled') %}
+                                <a href="javascript:;" class="input-edit__edit-btn cd-link-minor">
+                                    <i class="cd-icon cd-icon-edit"></i>
+                                </a>
+                            {% endif %}
+                        </div>
 
-						<div class="input-edit__edit-dom" style="display:none">
-							<input data-url="{{path ('update_nickname_check') }}" name="nickname" id="nickname" type="text" class="form-control input-edit__input" value="{{app.user.nickname}}">
+                        <div class="input-edit__edit-dom" style="display:none">
+                            <input data-url="{{ path ('update_nickname_check') }}" name="nickname" id="nickname" type="text" class="form-control input-edit__input" value="{{ app.user.nickname }}">
 
-							<div class="action-button">
-								<button type="button" class="btn cd-btn cd-btn-primary input-edit__save-btn" data-input-name="nickname" data-url="{{ path('setting_nickname') }}" data-loading-text="{{'form.btn.save.submiting'|trans}}">
-									{{'form.btn.save'|trans}}
-								</button>
-								<button type="button" class="btn cd-btn cd-btn-flat-default input-edit__cancel-btn">
-									{{'form.btn.cancel'|trans}}
-								</button>
-							</div>
-						</div>
+                            <div class="action-button">
+                                <button type="button" class="btn cd-btn cd-btn-primary input-edit__save-btn" data-input-name="nickname" data-url="{{ path('setting_nickname') }}" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">
+                                    {{ 'form.btn.save'|trans }}
+                                </button>
+                                <button type="button" class="btn cd-btn cd-btn-flat-default input-edit__cancel-btn">
+                                    {{ 'form.btn.cancel'|trans }}
+                                </button>
+                            </div>
+                        </div>
 
-					</div>
-				</div>
+                    </div>
+                </div>
 
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_truename">{{'user.fileds.realname'|trans}}</label>
-						{% if profile.truename and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
-							<input type="text" id="profile_truename" name="profile[truename]" class="form-control" value="{{ profile.truename }}" readonly>
-						{% else %}
-							<input type="text" id="profile_truename" name="profile[truename]" class="form-control" value="{{ profile.truename|default('') }}">
-						{% endif %}
-					</div>
-				</div>
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label>{{'user.fields.gender_label'|trans}}</label>
-						<div class="cd-radio-group">
-							<label class="cd-radio {% if profile.gender == 'male' %}checked{% endif %}" for="profile_gender_0">
-								<input type="radio" id="profile_gender_0" name="profile[gender]" value="male" {% if profile.gender == 'male' %} checked {% endif %} data-toggle="cd-radio">
-								{{'user.fields.gender.male'|trans}}
-							</label>
+                <div class="cd-md-11">
+                    <div class="form-group cd-form-group">
+                        <label for="profile_truename">{{ 'user.fileds.realname'|trans }}</label>
+                        {% if profile.truename and app.user.approvalStatus == 'approved' %}
+                            <input type="text" id="profile_truename" name="profile[truename]" class="form-control" value="{{ profile.truename }}" readonly>
+                        {% else %}
+                            <input type="text" id="profile_truename" name="profile[truename]" class="form-control" value="{{ profile.truename|default('') }}">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="cd-md-11">
+                    <div class="form-group cd-form-group">
+                        <label>{{ 'user.fields.gender_label'|trans }}</label>
+                        <div class="cd-radio-group">
+                            <label class="cd-radio {% if profile.gender == 'male' %}checked{% endif %}" for="profile_gender_0">
+                                <input type="radio" id="profile_gender_0" name="profile[gender]" value="male" {% if profile.gender == 'male' %} checked {% endif %} data-toggle="cd-radio">
+                                {{ 'user.fields.gender.male'|trans }}
+                            </label>
 
-							<label class="cd-radio {% if profile.gender == 'female' %}checked{% endif %}" for="profile_gender_1">
-								<input type="radio" id="profile_gender_1" name="profile[gender]" value="female" {% if profile.gender == 'female' %} checked {% endif %} data-toggle="cd-radio">
-								{{'user.fields.gender.female'|trans}}
-							</label>
-						</div>
-					</div>
-				</div>
+                            <label class="cd-radio {% if profile.gender == 'female' %}checked{% endif %}" for="profile_gender_1">
+                                <input type="radio" id="profile_gender_1" name="profile[gender]" value="female" {% if profile.gender == 'female' %} checked {% endif %} data-toggle="cd-radio">
+                                {{ 'user.fields.gender.female'|trans }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
 
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_title">{{'user.settings.basic_info.rank'|trans}}</label>
-						<input type="text" id="profile_title" name="profile[title]" class="form-control" value="{{ profile.title|default('') }}">
-					</div>
-				</div>
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_signature">{{'user.settings.basic_info.personal_signature'|trans}}</label>
-						<input type="text" id="profile_signature" name="profile[signature]" class="form-control" value="{{ profile.signature|default('') }}">
-					</div>
-				</div>
+                <div class="cd-md-11">
+                    <div class="form-group cd-form-group">
+                        <label for="profile_title">{{ 'user.settings.basic_info.rank'|trans }}</label>
+                        <input type="text" id="profile_title" name="profile[title]" class="form-control" value="{{ profile.title|default('') }}">
+                    </div>
+                </div>
+                <div class="cd-md-11">
+                    <div class="form-group cd-form-group">
+                        <label for="profile_signature">{{ 'user.settings.basic_info.personal_signature'|trans }}</label>
+                        <input type="text" id="profile_signature" name="profile[signature]" class="form-control" value="{{ profile.signature|default('') }}">
+                    </div>
+                </div>
 
-				<div class="cd-md-24">
-					<div class="form-group cd-form-group">
-						<label for="profile_about">{{'user.settings.basic_info.self_introduction'|trans}}</label>
-						<textarea name="profile[about]" rows="10" id="profile_about" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('user')}) }}">{{ profile.about|default('') }}</textarea>
-					</div>
-				</div>
+                <div class="cd-md-24">
+                    <div class="form-group cd-form-group">
+                        <label for="profile_about">{{ 'user.settings.basic_info.self_introduction'|trans }}</label>
+                        <textarea name="profile[about]" rows="10" id="profile_about" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('user')}) }}">{{ profile.about|default('') }}</textarea>
+                    </div>
+                </div>
 
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_company">{{'user.fields.company_label'|trans}}</label>
-						<input type="text" id="profile_company" name="profile[company]" class="form-control" value="{{ profile.company|default('') }}">
-					</div>
-				</div>
+                <div class="cd-md-11">
+                    <div class="form-group cd-form-group">
+                        <label for="profile_company">{{ 'user.fields.company_label'|trans }}</label>
+                        <input type="text" id="profile_company" name="profile[company]" class="form-control" value="{{ profile.company|default('') }}">
+                    </div>
+                </div>
 
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_job">{{'user.settings.basic_info.occupation'|trans}}</label>
-						<input type="text" id="profile_job" name="profile[job]" class="form-control" value="{{ profile.job|default('') }}">
-					</div>
-				</div>
+                <div class="cd-md-11">
+                    <div class="form-group cd-form-group">
+                        <label for="profile_job">{{ 'user.settings.basic_info.occupation'|trans }}</label>
+                        <input type="text" id="profile_job" name="profile[job]" class="form-control" value="{{ profile.job|default('') }}">
+                    </div>
+                </div>
 
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_site">{{'user.settings.basic_info.personal_space'|trans}}</label>
-						<input type="text" id="profile_site" name="profile[site]" class="form-control" value="{{ profile.site|default('') }}" placeholder="http://">
-					</div>
-				</div>
+                <div class="cd-md-11">
+                    <div class="form-group cd-form-group">
+                        <label for="profile_site">{{ 'user.settings.basic_info.personal_space'|trans }}</label>
+                        <input type="text" id="profile_site" name="profile[site]" class="form-control" value="{{ profile.site|default('') }}" placeholder="http://">
+                    </div>
+                </div>
 
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="weibo">{{'user.fileds.microblog'|trans}}</label>
-						<input type="text" id="weibo" name="profile[weibo]" class="form-control" value="{{ profile.weibo|default('') }}" placeholder="http://">
-						<input class="hidden" type="text" name="profile[isWeiboPublic]" value="1"/>
-						<div class="help-block">{{'user.settings.basic_info.public'|trans}}</div>
-					</div>
-				</div>
+                <div class="cd-md-11">
+                    <div class="form-group cd-form-group">
+                        <label for="weibo">{{ 'user.fileds.microblog'|trans }}</label>
+                        <input type="text" id="weibo" name="profile[weibo]" class="form-control" value="{{ profile.weibo|default('') }}" placeholder="http://">
+                        <input class="hidden" type="text" name="profile[isWeiboPublic]" value="1"/>
+                        <div class="help-block">{{ 'user.settings.basic_info.public'|trans }}</div>
+                    </div>
+                </div>
 
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_weixin">{{'user.fileds.wechat'|trans}}</label>
-						<input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
-						<input class="hidden" type="text" name="profile[isWeixinPublic]" value="1"/>
-					</div>
-				</div>
+                <div class="cd-md-11">
+                    <div class="form-group cd-form-group">
+                        <label for="profile_weixin">{{ 'user.fileds.wechat'|trans }}</label>
+                        <input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
+                        <input class="hidden" type="text" name="profile[isWeixinPublic]" value="1"/>
+                    </div>
+                </div>
 
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_qq">{{'user.fileds.qq'|trans}}</label>
-						<input type="text" id="profile_qq" name="profile[qq]" class="form-control" value="{{ profile.qq|default('') }}">
-						<input class="hidden" type="text" name="profile[isQQPublic]" value="1"/>
-					</div>
-				</div>
+                <div class="cd-md-11">
+                    <div class="form-group cd-form-group">
+                        <label for="profile_qq">{{ 'user.fileds.qq'|trans }}</label>
+                        <input type="text" id="profile_qq" name="profile[qq]" class="form-control" value="{{ profile.qq|default('') }}">
+                        <input class="hidden" type="text" name="profile[isQQPublic]" value="1"/>
+                    </div>
+                </div>
 
-				{% if fields %}
-					{% set textNumber = 0 %}
-					{% for field in fields %}
-						{% if field.type == "text" %}
-							{% set textNumber = textNumber + 1 %}
-						{% endif %}
-						<div class="{% if field.type == "text" %} cd-md-24 {% else %} cd-md-11 {% endif %}">
-							<div class="form-group cd-form-group">
-								<label for="{{field.fieldName}}">{{field.title}}</label>
-								{% if field.type == "text" %}
-									<textarea id="{{field.fieldName}}" rows="4" maxlength="80" name="profile[{{field.fieldName}}]" class="form-control">{{ profile[field.fieldName]|default('') }}</textarea>
-								{% elseif field.type == "int" %}
-									<input type="text" id="{{field.fieldName}}" placeholder="{{'site.validate_rules.max_int'|trans}}" name="profile[{{field.fieldName}}]" class="form-control" value="{{ profile[field.fieldName]|default('') }}">
-								{% elseif field.type == "float" %}
-									<input type="text" id="{{field.fieldName}}" placeholder="{{'site.validate_rules.two_decimal_places'|trans}}" name="profile[{{field.fieldName}}]" class="form-control" value="{{ profile[field.fieldName]|default('') }}">
-								{% elseif field.type == "date" %}
-									<input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="js-{{field.type}} form-control" value="{{ profile[field.fieldName]|default('') }}">
-								{% elseif field.type == "varchar" %}
-									<input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="form-control" value="{{ profile[field.fieldName]|default('') }}">
-                {% elseif field.type == "select" %}
-                  <select class="form-control" id="condition-select" name="profile[{{ field.fieldName }}]">
-                    {{ select_options(user_info_select(field.detail), profile[field.fieldName]|default('')) }}
-                  </select>
-								{% endif %}
-							</div>
-						</div>
-					{% endfor %}
-				{% endif %}
+                <div class="cd-md-11">
+                    <div class="form-group cd-form-group">
+                        <label for="profile_idcard">{{ 'user.fields.idcard_label'|trans }}</label>
+                        {% if profile.idcard and app.user.approvalStatus == 'approved' %}
+                            <input type="text" id="profile_idcard" name="profile[idcard]" class="form-control" value="{{ profile.idcard }}" readonly>
+                        {% else %}
+                            <input type="text" id="profile_idcard" name="profile[idcard]" class="form-control" value="{{ profile.idcard|default('') }}">
+                        {% endif %}
+                    </div>
+                </div>
 
-				<div class="cd-md-24">
-					<button id="profile-save-btn" data-loading-text="{{'form.btn.save.submiting'|trans}}" type="submit" class="btn cd-btn cd-btn-primary cd-btn-lg">{{'form.btn.save'|trans}}</button>
-				</div>
-				<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-			</form>
-		</div>
-	</div>
+                {% if fields %}
+                    {% set textNumber = 0 %}
+                    {% for field in fields %}
+                        {% if field.type == "text" %}
+                            {% set textNumber = textNumber + 1 %}
+                        {% endif %}
+                        <div class="{% if field.type == "text" %} cd-md-24 {% else %} cd-md-11 {% endif %}">
+                            <div class="form-group cd-form-group">
+                                <label for="{{ field.fieldName }}">{{ field.title }}</label>
+                                {% if field.type == "text" %}
+                                    <textarea id="{{ field.fieldName }}" rows="4" maxlength="80" name="profile[{{ field.fieldName }}]" class="form-control">{{ profile[field.fieldName]|default('') }}</textarea>
+                                {% elseif field.type == "int" %}
+                                    <input type="text" id="{{ field.fieldName }}" placeholder="{{ 'site.validate_rules.max_int'|trans }}" name="profile[{{ field.fieldName }}]" class="form-control" value="{{ profile[field.fieldName]|default('') }}">
+                                {% elseif field.type == "float" %}
+                                    <input type="text" id="{{ field.fieldName }}" placeholder="{{ 'site.validate_rules.two_decimal_places'|trans }}" name="profile[{{ field.fieldName }}]" class="form-control" value="{{ profile[field.fieldName]|default('') }}">
+                                {% elseif field.type == "date" %}
+                                    <input type="text" id="{{ field.fieldName }}" name="profile[{{ field.fieldName }}]" class="js-{{ field.type }} form-control" value="{{ profile[field.fieldName]|default('') }}">
+                                {% elseif field.type == "varchar" %}
+                                    <input type="text" id="{{ field.fieldName }}" name="profile[{{ field.fieldName }}]" class="form-control" value="{{ profile[field.fieldName]|default('') }}">
+                                {% elseif field.type == "select" %}
+                                    <select class="form-control" id="condition-select" name="profile[{{ field.fieldName }}]">
+                                        {{ select_options(user_info_select(field.detail), profile[field.fieldName]|default('')) }}
+                                    </select>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="cd-md-24">
+                    <button id="profile-save-btn" data-loading-text="{{ 'form.btn.save.submiting'|trans }}" type="submit" class="btn cd-btn cd-btn-primary cd-btn-lg">{{ 'form.btn.save'|trans }}</button>
+                </div>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+            </form>
+        </div>
+    </div>
 {% endblock %}

@@ -147,14 +147,23 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     public function delete($globalId)
     {
+        $user = $this->getCurrentUser();
         if (empty($globalId)) {
             return false;
         }
 
         $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        $attachmentFile = $this->getAttachmentService()->getAttachmentByGlobalId($globalId);
 
         if (!empty($file)) {
             $this->getUploadFileService()->deleteFile($file['id']);
+
+            return ['success' => true];
+        }
+
+        if (!empty($attachmentFile)) {
+            $this->getAttachmentService()->updateAttachment($attachmentFile['id'], ['status' => 'delete']);
+            $this->getLogService()->info('question_bank', 'delete_attachment', "管理员 {$user['nickname']}删除了附件《{$attachmentFile['file_name']}》");
 
             return ['success' => true];
         }
@@ -319,5 +328,15 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getAttachmentService()
+    {
+        return $this->createService('ItemBank:Item:AttachmentService');
+    }
+
+    protected function getAttachmentDao()
+    {
+        return $this->createDao('ItemBank:Item:AttachmentDao');
     }
 }

@@ -31,6 +31,10 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
     public function declares()
     {
         return array(
+            'orderbys' => [
+                'id',
+                'created_time',
+            ],
             'serializes' => [
                 'score_rule' => 'json',
                 'answer_mode' => 'json',
