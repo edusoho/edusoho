@@ -210,6 +210,20 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     return true;
                 },
             ],
+            'pseudolive' => [
+                'meta' => [
+                    'name' => 'course.activity.live',
+                    'icon' => 'es-icon es-icon-entry-live',
+                ],
+                'typeClass' => '\Biz\Activity\Type\Live',
+                'controller' => 'AppBundle:Activity/Live',
+                'canFree' => false,
+                'visible' => function ($courseSet, $course) use ($biz) {
+                    $storage = $biz->service('System:SettingService')->get('course');
+
+                    return ArrayToolkit::get($storage, 'live_course_enabled', false);
+                },
+            ],
         ];
     }
 }

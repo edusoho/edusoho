@@ -6,7 +6,7 @@ use ESCloud\SDK;
 
 class PlayService extends BaseService
 {
-    protected $host = 'play.qiqiuyun.net';
+    protected $host = 'play.cloud-test.edusoho.cn';
     protected $service = 'play';
 
     /**

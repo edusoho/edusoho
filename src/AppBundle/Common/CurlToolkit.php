@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AccessDeniedException;
 
 class CurlToolkit
 {
-    private static $whiteList = array(
+    private static $whiteList = [
         'formula.edusoho.net', //公式编辑器
         'www.edusoho.com', //官网
         'open.edusoho.com', //open站
@@ -14,9 +14,10 @@ class CurlToolkit
         'dwz.cn', //百度短链
         'qqurl.com', //qq短链
         'api.edusoho.net', //云平台接口
-    );
+        'play.cloud-test.edusoho.cn',
+    ];
 
-    public static function request($method, $url, $params = array(), $conditions = array())
+    public static function request($method, $url, $params = [], $conditions = [])
     {
         $parseUrl = parse_url($url);
         if (!in_array($parseUrl['host'], self::$whiteList)) {
@@ -26,7 +27,7 @@ class CurlToolkit
         $conditions['connectTimeout'] = isset($conditions['connectTimeout']) ? $conditions['connectTimeout'] : 10;
         $conditions['timeout'] = isset($conditions['timeout']) ? $conditions['timeout'] : 10;
         if (isset($_SERVER['TRACE_ID']) && $_SERVER['TRACE_ID']) {
-            $conditions['headers'] = empty($conditions['headers']) ? array('TRACE-ID: '.$_SERVER['TRACE_ID']) : array_merge($conditions['headers'], array('TRACE-ID: '.$_SERVER['TRACE_ID']));
+            $conditions['headers'] = empty($conditions['headers']) ? ['TRACE-ID: '.$_SERVER['TRACE_ID']] : array_merge($conditions['headers'], ['TRACE-ID: '.$_SERVER['TRACE_ID']]);
         }
 
         $curl = curl_init();
@@ -71,7 +72,7 @@ class CurlToolkit
         curl_close($curl);
 
         if (empty($curlinfo['namelookup_time'])) {
-            return array();
+            return [];
         }
 
         if (isset($conditions['contentType']) && 'plain' == $conditions['contentType']) {
