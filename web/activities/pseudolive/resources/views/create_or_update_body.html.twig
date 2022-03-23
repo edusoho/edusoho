@@ -13,7 +13,28 @@
 {% set medias = find_materials_by_activity_id_and_source(activity.id|default(0), 'courseactivity') %}
 
 {% block activity_step %}
+  <style>
+    .tip {
+      padding: 7px 30px;
+      margin-left:45px;
+      font-size: 13px;
+      margin-bottom: 20px;
+      background: rgba(255, 244, 230, 1);
+    }
+    .tip-icon {
+      color: #f59a23 !important;
+      font-size: 18px;
+    }
+    .popover {
+      font-size: 13px;
+    }
+  </style>
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
+    <div class="tip">{{ 'course.activity.pseudolive.tip'|trans }}
+      <span class="tip-icon es-icon es-icon-help ml5"
+      data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom"
+      data-content="{{ 'course.activity.pseudolive.popover'|trans }}">
+    </span></div>
     <form class="form-horizontal" id="step2-form" >
       <div class="form-group">
         <div class="col-sm-2 control-label">
