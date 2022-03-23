@@ -1941,6 +1941,9 @@ live_playback_duration: Playback duration
 live_statistics: Live statistics
 live_statistics.task_name_placeholder: Task name
 live_statistics.live_start_time: Start time
+live_statistics.live_type: Type
+live_type.default: Default Live
+live_type.pseudo: Smart Live
 live_statistics.live_time_long: Duration(min)
 live_statistics.max_participate_count: Max oarticipate count
 live_statistics.live_status: Status
