@@ -235,7 +235,7 @@ export default class Live {
   initFileChooser() {
     const fileSelect = (file) => {
       let $length = file.length/60;
-      let $lengthFix = $length.toFixed(0);
+      let $lengthFix = Number($length.toFixed(0));
       $length = $length > $lengthFix ? $lengthFix+1 : $lengthFix;
       $('#length').val($length);
       if($('#startTime').val() == '' || this.$form.data('validator').form()){
