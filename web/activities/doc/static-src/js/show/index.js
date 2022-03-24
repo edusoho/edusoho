@@ -15,14 +15,12 @@ let watermarkUrl = $element.data('watermark-url');
 
 if(watermarkUrl) {
   $.get(watermarkUrl, function(watermark) {
-    console.log('watermark: ', watermark)
     initDocPlayer(watermark);
   });
 } else {
   initDocPlayer('');
 }
 
-initDocPlayer();
 onFullScreen();
 
 function initDocPlayer(watermark) {
