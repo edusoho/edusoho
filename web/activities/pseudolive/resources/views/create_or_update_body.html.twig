@@ -68,7 +68,7 @@
 
       <div class="form-group {% if liveAccount.provider|default() != 'liveCloud' %} hidden {% endif %}">
         <div class="col-sm-2 control-label">
-          <label for="materials" class="style">{{ 'course.plan_task.activity_manage.live_resource.choose_file'|trans }}</label>
+          <label for="materials" class="style">{{ 'course.plan_task.activity_manage.live_video.choose_file'|trans }}</label>
         </div>
         <div class="col-sm-10" style="margin-top: 5px">
           {% if medias[0]|default() %}
@@ -85,6 +85,7 @@
           </div>
           <input id="materials" class="form-control" type="hidden" name="materials"
             {% if medias|default() %} value="{{ medias|default()|json_encode }}" {% endif %} >
+          <div class="help-block">{{ 'course.plan_task.live_video.help_block'|trans }}</div>
         </div>
       </div>
 

@@ -216,7 +216,8 @@ class LiveExtension extends \Twig_Extension
 
     public function getLiveAccount()
     {
-        $liveAccount = $this->getEdusohoLiveAccount();
+        $liveAccount = $this->getSettingService()->get('developer_live_account', []);
+        $liveAccount = empty($liveAccount) || empty($liveAccount['settingRequestTime']) || time() - $liveAccount['settingRequestTime'] > 300 ? $this->getEdusohoLiveAccount() : $liveAccount;
         $liveAccount['isExpired'] = !empty($liveAccount['expire']) && $liveAccount['expire'] < time() ? 1 : 0;
 
         return $liveAccount;
@@ -226,7 +227,9 @@ class LiveExtension extends \Twig_Extension
     {
         $client = new EdusohoLiveClient();
         try {
-            return $client->getLiveAccount();
+            $liveAccount = $client->getLiveAccount();
+            $liveAccount['settingRequestTime'] = time();
+            $this->getSettingService()->set('developer_live_account', $liveAccount);
         } catch (CloudAPIIOException $cloudAPIIOException) {
             return ['error' => $cloudAPIIOException->getMessage()];
         }

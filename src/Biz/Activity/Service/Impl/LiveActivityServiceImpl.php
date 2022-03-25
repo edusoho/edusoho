@@ -453,11 +453,13 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $this->createNewException(LiveActivityException::CREATE_LIVEROOM_FAILED());
         }
         $playlist = $result['args']['playlist'];
+
         array_multisort(array_column($playlist, 'bandwidth'), SORT_DESC, $playlist);
         $playlist = array_values($playlist);
         $url = str_replace('https:', '', $playlist[0]['url']);
 
         return str_replace('http:', '', $url);
+//        return str_replace('ssl=0', 'ssl=1', $url);
     }
 
     protected function getSchema()
