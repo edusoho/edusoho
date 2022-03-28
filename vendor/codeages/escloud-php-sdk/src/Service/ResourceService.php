@@ -9,7 +9,7 @@ use ESCloud\SDK\Helper\Upload\UploadManager;
 
 class ResourceService extends BaseService
 {
-    protected $host = 'resource-service.cloud-test.edusoho.cn';
+    protected $host = 'resource-service.qiqiuyun.net';
     protected $service = 'resource';
 
     /**
