@@ -458,8 +458,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $playlist = array_values($playlist);
         $url = str_replace('https:', '', $playlist[0]['url']);
 
-        return str_replace('http:', '', $url);
-//        return str_replace('ssl=0', 'ssl=1', $url);
+        $url = str_replace('http:', '', $url);
+
+        return str_replace('ssl=0', 'ssl=1', $url);
     }
 
     protected function getSchema()
