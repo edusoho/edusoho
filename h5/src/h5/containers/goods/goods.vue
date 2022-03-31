@@ -88,7 +88,11 @@
         >
           <div class="goods-info__title">{{ $t('goods.tableOfContents') }}</div>
           <!-- 课程详情 -->
-          <afterjoin-directory />
+          <afterjoin-directory v-if="currentSku.taskDisplay == 1" />
+          <div class="goods-empty-content" v-else>
+            <img src="static/images/goods/empty-content.png" alt="">
+            <p>{{ $t('goods.tableOfContentsEmpty') }}</p>
+          </div>
         </section>
 
         <section
@@ -242,6 +246,7 @@ export default {
             title: this.goods.title,
             link: window.location.href.split('#')[0] + '#' + this.$route.path,
             imgUrl: this.goods.images.small,
+            desc: this.goods.summary
           };
           console.log(message);
           this.share(message);
@@ -256,7 +261,7 @@ export default {
         title: message.title || '',
         link: message.link,
         imgUrl: message.imgUrl,
-        desc: this.$t('goods.findAGoodContent')
+        desc: message.desc || this.$t('goods.findAGoodContent')
       };
       initShare({ ...shareMessage });
     },

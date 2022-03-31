@@ -9530,11 +9530,6 @@ mz@^2.4.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
-n@0.1.2:
-  version "0.1.2"
-  resolved "https://registry.npm.taobao.org/n/download/n-0.1.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fn%2Fdownload%2Fn-0.1.2.tgz#767811ba70818e0e59821379303d7a72e7b1ab98"
-  integrity sha1-dngRunCBjg5ZghN5MD16cuexq5g=
-
 nan@^2.12.1, nan@^2.13.2:
   version "2.14.1"
   resolved "https://registry.npm.taobao.org/nan/download/nan-2.14.1.tgz?cache=0&sync_timestamp=1587497111086&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnan%2Fdownload%2Fnan-2.14.1.tgz#d7be34dfa3105b91494c3147089315eff8874b01"

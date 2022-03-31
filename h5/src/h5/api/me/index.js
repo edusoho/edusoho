@@ -142,7 +142,7 @@ export default [
     // 4030303: 验证码失效
     name: 'resetPasswordByEmail',
     url: '/user/{email}/password/email',
-    method: 'PATCH',
+    method: 'PUT',
     disableLoading: true,
   },
   {
@@ -191,7 +191,7 @@ export default [
     // 4030303: 验证码失效
     name: 'resetPasswordByMobile',
     url: '/user/{mobile}/password/mobile',
-    method: 'PATCH',
+    method: 'PUT',
     disableLoading: true,
   },
   {
