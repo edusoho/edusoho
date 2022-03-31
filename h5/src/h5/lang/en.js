@@ -322,6 +322,7 @@ export default {
     noContent: 'No content~',
     guessYouWantToLearn: 'Guess you want to learn',
     tableOfContents: 'Table of contents',
+    tableOfContentsEmpty: 'After purchasing, you can view the course catalog~',
     findAGoodContent: 'Find a good content and share it with you~',
     gradeTheCourse: 'Grade the course',
     submit: 'Submit',
