@@ -202,8 +202,8 @@ class LiveController extends BaseActivityController implements ActivityActionInt
                 }
                 if ('join' == $activity['finishType']) {
                     $this->getActivityService()->trigger($activityId, 'finish', ['taskId' => $task['id']]);
+                    $this->getTaskService()->finishTaskResult($task['id']);
                 }
-                $this->getTaskService()->finishTaskResult($task['id']);
             }
         }
 
