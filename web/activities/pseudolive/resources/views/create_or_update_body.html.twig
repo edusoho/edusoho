@@ -28,6 +28,9 @@
     .popover {
       font-size: 13px;
     }
+    .video-choose .form-control {
+      border-color: #e1e1e1 !important;
+    }
   </style>
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
     <div class="tip">{{ 'course.activity.pseudolive.tip'|trans }}
@@ -66,7 +69,7 @@
         </div>
       </div>
 
-      <div class="form-group {% if liveAccount.provider|default() != 'liveCloud' %} hidden {% endif %}">
+      <div class="form-group video-choose {% if liveAccount.provider|default() != 'liveCloud' %} hidden {% endif %}">
         <div class="col-sm-2 control-label">
           <label for="materials" class="style">{{ 'course.plan_task.activity_manage.live_video.choose_file'|trans }}</label>
         </div>

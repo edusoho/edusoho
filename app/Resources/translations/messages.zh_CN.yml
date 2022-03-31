@@ -12188,4 +12188,4 @@ purchase.bth: 同意并继续
 course.activity.pseudolive: 智能直播
 course.activity.pseudolive.tip: 适用于以录播视频来承载直播内容的场景，学员在直播间同步观看视频，无需讲师在直播间实时授课。
 course.activity.pseudolive.popover: 1.智能直播产生的视频观看流量合并算入云视频流量费用；<br> 2.直播间不限在线人数，仅与网校最大在线人数有关。
-course.activity.pseudolive.create_tip: 未开通云视频和自研直播的网校，点击智能直播时，提示：需要开通云视频和EduSoho直播方可使用，请联系EduSoho商务
+course.activity.pseudolive.create_tip: 需要开通云视频和EduSoho直播方可使用，请联系EduSoho商务

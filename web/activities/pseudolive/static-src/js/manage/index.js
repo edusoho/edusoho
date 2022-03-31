@@ -53,6 +53,9 @@ export default class Live {
           max: 300,
           min: 1,
         },
+        materials: {
+          required: true,
+        },
         remark: {
           maxlength: 1000
         },
@@ -60,6 +63,9 @@ export default class Live {
       messages: {
         startTime: {
           es_remote: Translator.trans('validate.after_now.message')
+        },
+        materials: {
+          required:  Translator.trans('live.chooser.video')
         }
       }
     });
@@ -238,12 +244,15 @@ export default class Live {
       let $lengthFix = Number($length.toFixed(0));
       $length = $length > $lengthFix ? $lengthFix+1 : $lengthFix;
       $('#length').val($length);
+      this.materials = {};
+      file.fileId = file.id;
+      this.materials[file.id] = file;
+      $('#materials').val(JSON.stringify(this.materials));
       if($('#startTime').val() == '' || this.$form.data('validator').form()){
-        this.materials = {};
-        file.fileId = file.id;
-        this.materials[file.id] = file;
-        $('#materials').val(JSON.stringify(this.materials));
         chooserUiClose();
+      }else{
+        chooserUiOpen();
+        $('#materials').val();
       }
     };
 

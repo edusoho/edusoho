@@ -230,6 +230,8 @@ class LiveExtension extends \Twig_Extension
             $liveAccount = $client->getLiveAccount();
             $liveAccount['settingRequestTime'] = time();
             $this->getSettingService()->set('developer_live_account', $liveAccount);
+
+            return $liveAccount;
         } catch (CloudAPIIOException $cloudAPIIOException) {
             return ['error' => $cloudAPIIOException->getMessage()];
         }
