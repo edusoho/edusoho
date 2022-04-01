@@ -7,6 +7,9 @@
 {% block body %}
   <div class="tab-content" id="iframe-content">
     {% set selectTips = {'time': 'activity_manage.finish_select_tips_time', 'end': 'activity_manage.finish_select_tips_end'} %}
+    {% if activity.mediaType in ['live', 'pseudolive'] %}
+      {% set selectTips = {'time': 'activity_manage.live_finish_select_tips_time', 'end': 'activity_manage.finish_select_tips_end'} %}
+    {% endif  %}
     {% set timeOptions = ['time', 'watchTime'] %}
     {% set defaultCondition = conditions[0] %}
     {% if activity.mediaType == 'video' %}
