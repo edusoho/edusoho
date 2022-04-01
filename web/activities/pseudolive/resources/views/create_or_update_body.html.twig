@@ -77,10 +77,17 @@
           {% if medias[0]|default() %}
           <div class="file-chooser-bar js-live-file-chooser-bar">
             <span data-role="placeholder">{{ medias[0].title }}</span>
-            <button class="btn btn-link btn-sm js-choose-trigger" type="button">
-              <i class="glyphicon glyphicon-edit"></i>
-                {{'attachments.modal.upload.edit_btn'|trans}}
-            </button>
+            {% if date('now').timestamp < activity.startTime|default(0) %}
+              <button class="btn btn-link btn-sm js-choose-trigger" type="button">
+                <i class="glyphicon glyphicon-edit"></i>
+                  {{'attachments.modal.upload.edit_btn'|trans}}
+              </button>
+              {% else %}
+                <button class="btn btn-link btn-sm disabled" type="button">
+                  <i class="glyphicon glyphicon-edit"></i>
+                  {{'attachments.modal.upload.edit_btn'|trans}}
+                </button>
+            {% endif %}
           </div>
           {% endif %}
           <div class="js-live-file-chooser {% if medias[0]|default() %}hidden{% endif %}">
