@@ -1,4 +1,4 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([["vendors~course~more~wrong-question-book"],{"2ef0":function(n,t,r){(function(n,e){var u;
+(window.webpackJsonp=window.webpackJsonp||[]).push([["vendors~course~more~order~wrong-question-book"],{"2ef0":function(n,t,r){(function(n,e){var u;
 /**
  * @license
  * Lodash <https://lodash.com/>

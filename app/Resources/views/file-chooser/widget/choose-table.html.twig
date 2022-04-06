@@ -40,7 +40,14 @@
                 data-size="{{ file.fileSize }}">
               <td class="mlm"> {{ file.filename }}</td>
               <td> {{ file.fileSize|file_size }}</td>
-              <td> {{ file.createdTime|date('Y-m-d') }}</td>
+              {% if mediaType|default() == 'pseudolive' %}
+                <td> {{ file.length|activity_length_format }}</td>
+                <td> <a class="color-primary" target="_blank" href="{{ path('material_lib_file_preview', {fileId: file.id, type: 'blank'}) }}" >{{'material_lib.btn.preview'|trans}}
+                  </a>
+                </td>
+              {% else %}
+                <td> {{ file.createdTime|date('Y-m-d') }}</td>
+              {% endif %}
             </tr>
           {% else %}
 

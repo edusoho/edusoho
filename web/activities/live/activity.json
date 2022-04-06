@@ -22,6 +22,10 @@
     {
       "type": "join",
       "describe": "course.plan_task.activity_manage.live.finished_condition_tips"
+    },
+    {
+      "type": "time",
+      "value": 1
     }
   ]
 }

@@ -30,11 +30,12 @@
       <template slot="customTitle" slot-scope="text, record">
         <a-button type="link" @click="handleClickViewTask(record.id)">{{ text }}</a-button>
       </template>
-
       <template slot="startTime" slot-scope="text">
         {{ $dateFormat(text, 'YYYY-MM-DD HH:mm') }}
       </template>
-
+      <template slot="liveType" slot-scope="text">
+        {{ getLiveType(text) | trans }}
+      </template>
       <template slot="status" slot-scope="text">
         <span :class="`task-status task-status--${text}`">{{ getTaskStatus(text) | trans }}</span>
       </template>
@@ -61,6 +62,11 @@ const columns = [
     title: Translator.trans('live_statistics.live_start_time'),
     dataIndex: 'startTime',
     scopedSlots: { customRender: 'startTime' }
+  },
+  {
+    title: Translator.trans('live_statistics.live_type'),
+    dataIndex: 'liveType',
+    scopedSlots: { customRender: 'liveType' }
   },
   {
     title: Translator.trans('live_statistics.live_time_long'),
@@ -161,6 +167,13 @@ export default {
       };
 
       return taskStatus[status];
+    },
+    getLiveType(type) {
+      const liveType = {
+        default: 'live_type.default',
+        pseudo: 'live_type.pseudo'
+      };
+      return liveType[type];
     },
 
     handleClickExport() {

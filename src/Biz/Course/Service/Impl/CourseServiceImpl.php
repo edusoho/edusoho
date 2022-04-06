@@ -2386,6 +2386,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($userIds) || !in_array($userId, $userIds)) {
                 continue;
             }
+            $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+            if ('pseudo' == $activity['ext']['roomType']) {
+                continue;
+            }
             $course = $this->getCourse($task['courseId']);
             if (!empty($course) && 'published' == $course['status']) {
                 $courseSet = $this->getCourseSetDao()->get($course['courseSetId']);

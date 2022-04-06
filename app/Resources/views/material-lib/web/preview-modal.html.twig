@@ -1,0 +1,33 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['app/js/material-lib/preview/index.js']) %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}
+  <span class="color-gray">{{'material_lib.preview.content_title'|trans}}</span>
+{% endblock %}
+
+{% block body %}
+  {% if file.storage == 'cloud'  and file.type in ['video', 'audio', 'ppt', 'document', 'image', 'flash'] %}
+    {% if file.type in ['video', 'ppt', 'document'] and file.convertStatus != "success" %}
+      <div class="text-center">
+        {{'admin.cloud_file.preview.failed_tips'|trans}}
+      </div>
+    {% else %}
+      <div id="material-preview-player"
+          style="height:500px;overflow:hidden;"
+          data-url="{{path('material_lib_file_player', {fileId: file.id})}}"
+      ></div>
+    {% endif %}
+  {% else %}
+  <div class="text-center">
+    {{'material_lib.preview.not_support_tips'|trans}}
+  </div>
+  {% endif %}
+{% endblock %}
+
+{% block footer %}
+	<button type="button" class="btn btn-primary" data-dismiss="modal">
+    {{'form.btn.close'|trans}}
+  </button>
+{% endblock %}
