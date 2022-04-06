@@ -154,6 +154,7 @@ class MaterialLibController extends BaseController
 
         return $this->render('material-lib/web/preview.html.twig', [
             'file' => $file,
+            'type' => $request->query->get('type', 'modal'),
         ]);
     }
 

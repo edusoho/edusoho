@@ -3,6 +3,7 @@
 namespace Biz\Activity\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\CurlToolkit;
 use Biz\Activity\ActivityException;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Dao\LiveActivityDao;
@@ -12,6 +13,7 @@ use Biz\AppLoggerConstant;
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
+use Biz\File\Service\UploadFileService;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -153,9 +155,17 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
             $this->getEdusohoLiveClient()->updateLive($liveParams);
             if (EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $liveActivity['liveProvider']) {
-                $fileIds = empty($fields['fileIds']) ? [-1] : $fields['fileIds'];
-                $coursewareIds = $this->createLiveroomCoursewares($liveActivity['liveId'], $fileIds);
-                $this->getLiveActivityDao()->update($id, ['coursewareIds' => $coursewareIds]);
+                if (EdusohoLiveClient::LIVE_ROOM_PSEUDO == $fields['roomType']) {
+                    if (!empty(array_diff($fields['fileIds'], $liveActivity['fileIds']))) {
+                        $client = new EdusohoLiveClient();
+                        $result = $client->updatePseudoLiveVideo($liveActivity['liveId'], $this->getPseudoLiveVideoUrl($fields));
+                        $this->getLogService()->info('es_live', 'update', '修改智能直播视屏', $result);
+                    }
+                } else {
+                    $fileIds = empty($fields['fileIds']) ? [-1] : $fields['fileIds'];
+                    $coursewareIds = $this->createLiveroomCoursewares($liveActivity['liveId'], $fileIds);
+                    $this->getLiveActivityDao()->update($id, ['coursewareIds' => $coursewareIds]);
+                }
             }
         }
 
@@ -328,7 +338,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
     protected function isRoomType($liveRoomType)
     {
-        return in_array($liveRoomType, [EdusohoLiveClient::LIVE_ROOM_LARGE, EdusohoLiveClient::LIVE_ROOM_SMALL]);
+        return in_array($liveRoomType, [EdusohoLiveClient::LIVE_ROOM_LARGE, EdusohoLiveClient::LIVE_ROOM_SMALL, EdusohoLiveClient::LIVE_ROOM_PSEUDO]);
     }
 
     /**
@@ -395,7 +405,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
         $remark = empty($activity['remark']) ? '' : strip_tags($activity['remark'], '<img>');
         $remark = html_entity_decode($remark);
-        $live = $this->getEdusohoLiveClient()->createLive([
+        $liveData = [
             'summary' => $remark,
             'title' => $activity['title'],
             'speaker' => $speaker,
@@ -405,8 +415,18 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'jumpUrl' => $baseUrl.'/live/jump?id='.$activity['fromCourseId'],
             'liveLogoUrl' => $liveLogoUrl,
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
-        ]);
+        ];
+        if (EdusohoLiveClient::LIVE_ROOM_PSEUDO == $activity['roomType']) {
+            $liveData['mode'] = 'pseudo';
+            $liveData['roomType'] = EdusohoLiveClient::LIVE_ROOM_LARGE;
+            $liveData['pseudoVideoUrl'] = $this->getPseudoLiveVideoUrl($activity);
+        }
 
+        $live = $this->getEdusohoLiveClient()->createLive($liveData);
+
+        if (EdusohoLiveClient::LIVE_ROOM_PSEUDO == $activity['roomType']) {
+            return $live;
+        }
         // 给直播间（自研）添加课件
         if (isset($live['provider']) && EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $live['provider'] && $activity['fileIds']) {
             $live['coursewareIds'] = $this->createLiveroomCoursewares($live['id'], $activity['fileIds']);
@@ -417,6 +437,43 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
 
         return $live;
+    }
+
+    protected function getPseudoLiveVideoUrl($activity)
+    {
+        if (empty($activity['fileIds'])) {
+            $this->createNewException(LiveActivityException::CREATE_LIVEROOM_FAILED());
+        }
+        $file = $this->getUploadFileService()->getFile($activity['fileIds'][0]);
+
+        $result = $this->biz['ESCloudSdk.play']->makePlayUrl(
+            $file['globalId'],
+            600,
+            ['native' => 1]
+        );
+        $result = CurlToolkit::request('get', $this->getSchema().$result);
+        if (empty($result['type']) || 'video' != $result['type'] || empty($result['args']['playlist'])) {
+            $this->createNewException(LiveActivityException::CREATE_LIVEROOM_FAILED());
+        }
+        $playlist = $result['args']['playlist'];
+
+        array_multisort(array_column($playlist, 'bandwidth'), SORT_DESC, $playlist);
+        $playlist = array_values($playlist);
+        $url = str_replace('https:', '', $playlist[0]['url']);
+
+        $url = str_replace('http:', '', $url);
+
+        return str_replace('ssl=0', 'ssl=1', $url);
+    }
+
+    protected function getSchema()
+    {
+        $https = empty($_SERVER['HTTPS']) ? '' : $_SERVER['HTTPS'];
+        if (!empty($https) && 'off' !== strtolower($https)) {
+            return 'https:';
+        }
+
+        return 'http:';
     }
 
     public function createLiveGroup($live, $courseId)

@@ -42,6 +42,7 @@ class LiveStatistic extends AbstractResource
             if ('closed' == $activity['ext']['progressStatus']) {
                 $liveTask['length'] = round(($activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime']) / 60, 1);
             }
+            $liveTask['liveType'] = 'pseudo' == $activity['ext']['roomType'] ? 'pseudo' : 'default';
         }
 
         return $this->makePagingObject($liveTasks, $this->getTaskService()->countTasks($taskConditions), $offset, $limit);

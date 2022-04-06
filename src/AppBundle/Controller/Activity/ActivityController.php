@@ -87,6 +87,10 @@ class ActivityController extends BaseController
                 'canEdit' => 1,
             ];
         }
+        if (!empty($activity['ext']) && 'pseudo' == $activity['ext']['roomType']) {
+            $activity['mediaType'] = 'pseudolive';
+            $activity['liveFile'] = json_decode(json_decode($activity['content'], true));
+        }
         $container = $this->get('activity_runtime_container');
 
         return $container->content($activity);

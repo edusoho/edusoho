@@ -2007,6 +2007,7 @@ course.plan_task.activity_manage.activity_file_empty: 抱歉，%type%文件不�
 course.plan_task.activity_manage.preview_failed_tips: 当前%taskName%不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
 course.plan_task.activity_manage.help_block: 建议标题字数控制在15字以内，否则会影响手机端浏览
+course.plan_task.live_video.help_block: 智能直播当前仅支持选择已转码成功的云视频
 course.plan_task.activity_ppt_animation_tip: 当前PC端已支持播放PPT中的动画及音视频（App、小程序和新版微网校暂不支持）。
 course.plan_task.activity_ppt_animation_link: 动画支持情况
 course.plan_task.activity_ppt_animation_btn: 切换图片模式
@@ -2053,6 +2054,7 @@ activity_manage.time_last_tips: >
 activity_manage.finished_tips: >
   <span class="color-primary">恭喜！你已完成该任务</span>
 activity_manage.finish_select_tips_time: 页面停留时长
+activity_manage.live_finish_select_tips_time: 页面停留时长(当前仅PC端生效)
 activity_manage.finish_select_tips_watch_time: 视频播放时长
 activity_manage.finish_select_tips_end: 学习到最后
 
@@ -2128,7 +2130,7 @@ course.plan_task.activity_manage.homework.question_total: >
   作业题目 <small class="color-gray">共%itemCount%题</small>
 course.plan_task.activity_manage.homework.confirm_submit: 确认提交
 course.plan_task.activity_manage.homework.confirm_submit_tips: 您真的要提交吗？
-course.plan_task.activity_manage.live.finished_condition_tips: 进入参加过直播。
+course.plan_task.activity_manage.live.finished_condition_tips: 进入参加过直播
 course.plan_task.activity_manage.live.start_time: 直播开始时间
 course.plan_task.activity_manage.live.create_tips: 请选择有效的开始时间以便创建直播教室。
 course.plan_task.activity_manage.live.live_time: 直播时长
@@ -2136,6 +2138,7 @@ course.plan_task.activity_manage.live.info: 直播说明
 course.plan_task.activity_manage.live.expiry_tips: 提示：本计划的学习加入方式为“随到随学”，加入直播%taskName%可能会导致后来的学员无法参加，只能观看回放。
 course.plan_task.activity_manage.live.join_tips: 进入参加过直播
 course.plan_task.activity_manage.live_resource.choose_file: 选择课件
+course.plan_task.activity_manage.live_video.choose_file: 设置直播视频
 course.plan_task.activity_manage.live_resource.file_name: 资料名称：
 course.plan_task.activity_manage.live_resource.upload_btn: (请上传或选择资料)
 course.plan_task.activity_manage.live_resource.add_btn: 添加资料
@@ -12183,4 +12186,8 @@ course.plan_task.activity_manage.testpaper.comment_tips: 得分区间设置规�
 user_field.select_type.lab: 下拉列表内容
 user_field.select_type.tip: 可批量添加子项，一行一个，每个子项最多输入20个字符
 purchase.bth: 同意并继续
-
+course.activity.pseudolive: 智能直播
+course.activity.pseudolive.tip: 适用于以录播视频来承载直播内容的场景，学员在直播间同步观看视频，无需讲师在直播间实时授课。
+course.activity.pseudolive.popover: 1.智能直播产生的视频观看流量合并算入云视频流量费用；<br> 2.直播间不限在线人数，仅与网校最大在线人数有关。
+course.activity.pseudolive.create_tip: 需要开通云视频和EduSoho直播方可使用，请联系EduSoho商务
+course.activity.pseudolive.delete_tip: 直播教室尚未创建！暂无直播

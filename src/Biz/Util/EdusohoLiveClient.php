@@ -16,6 +16,7 @@ class EdusohoLiveClient
     const SELF_ES_LIVE_PROVIDER = 13;
     const LIVE_ROOM_LARGE = 'large';
     const LIVE_ROOM_SMALL = 'small';
+    const LIVE_ROOM_PSEUDO = 'pseudo';
 
     const LIVE_REPLAY_STATUS_UNSTART = 'unstart';
 
@@ -217,6 +218,14 @@ class EdusohoLiveClient
     public function getEsLiveInfo($cloudLiveId)
     {
         return $this->createCloudApi('root')->get("/liveCloud/room/{$cloudLiveId}/info");
+    }
+
+    public function updatePseudoLiveVideo($liveId, $videoUrl)
+    {
+        return $this->createCloudApi('root')->post('/liveCloud/pseudoVideo/set', [
+            'id' => $liveId,
+            'videoUrl' => $videoUrl,
+        ]);
     }
 
     /**

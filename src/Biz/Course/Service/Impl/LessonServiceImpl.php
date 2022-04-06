@@ -400,6 +400,10 @@ class LessonServiceImpl extends BaseService implements LessonService
         if (!empty($fields['endTime'])) {
             $fields['endTime'] = strtotime($fields['endTime']);
         }
+        if ('pseudolive' == $fields['mediaType']) {
+            $fields['roomType'] = 'pseudo';
+            $fields['mediaType'] = 'live';
+        }
 
         return $fields;
     }

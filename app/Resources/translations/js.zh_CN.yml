@@ -1895,6 +1895,9 @@ live_statistics: 直播统计
 live_statistics.task_name_placeholder: 任务名
 live_statistics.live_start_time: 直播开始时间
 live_statistics.live_time_long: 直播时长（分）
+live_statistics.live_type: 直播模式
+live_type.default: 常规直播
+live_type.pseudo: 智能直播
 live_statistics.max_participate_count: 最大参与人数
 live_statistics.live_status: 进行状态
 live_statistics.operation: 操作
@@ -2122,3 +2125,4 @@ activity.summary: 简介
 activity.summary.placeholder: 请输入简介（选填）
 open: 开启
 close: 关闭
+live.chooser.video: 请设置直播视频

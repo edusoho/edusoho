@@ -54,13 +54,13 @@
       {% if task.activity.mediaType is same as('live') %}
         {% set isFinished = is_live_finished(task.activity.id, 'course') %}
         {% if isFinished %}
-          {% if task.activity.ext.replayStatus == 'ungenerated' %}
+          {% if task.activity.ext.replayStatus|default('') == 'ungenerated' %}
             {% if "now"|date("U") >= task.activity.endTime+3*3600 %}
               <span class="cd-text-danger cd-ml8">({{'course.replay_manage.generated_fail'|trans}})</span>
             {% else %}
               <span class="text-warning cd-ml8">({{'course.replay_manage.ungenerated'|trans}})</span>
             {% endif %}
-          {% elseif task.activity.ext.replayStatus in ['generated', 'videoGenerated'] %}
+          {% elseif task.activity.ext.replayStatus|default('') in ['generated', 'videoGenerated'] %}
             <span class="text-warning cd-ml8">({{'course.replay_manage.generated'|trans}})</span>
           {% endif %}
         {% else %}

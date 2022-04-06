@@ -1,0 +1,24 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{'material_lib.preview.content_title'|trans}} - {{ parent() }}{% endblock %}
+
+{% do script(['app/js/material-lib/preview/index.js']) %}
+
+{% block body %}
+  {% if file.storage == 'cloud'  and file.type in ['video', 'audio', 'ppt', 'document', 'image', 'flash'] %}
+    {% if file.type in ['video', 'ppt', 'document'] and file.convertStatus != "success" %}
+      <div class="text-center">
+        {{'admin.cloud_file.preview.failed_tips'|trans}}
+      </div>
+    {% else %}
+      <div id="material-preview-player"
+           style="height:100%;overflow:hidden;"
+           data-url="{{path('material_lib_file_player', {fileId: file.id})}}"
+      ></div>
+    {% endif %}
+  {% else %}
+    <div class="text-center">
+      {{'material_lib.preview.not_support_tips'|trans}}
+    </div>
+  {% endif %}
+{% endblock %}
