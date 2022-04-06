@@ -156,10 +156,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $this->getEdusohoLiveClient()->updateLive($liveParams);
             if (EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $liveActivity['liveProvider']) {
                 if (EdusohoLiveClient::LIVE_ROOM_PSEUDO == $fields['roomType']) {
-                    if(!empty(array_diff($fields['fileIds'], $liveActivity['fileIds']))){
+                    if (!empty(array_diff($fields['fileIds'], $liveActivity['fileIds']))) {
                         $client = new EdusohoLiveClient();
-                        $result =  $client->updatePseudoLiveVideo($liveActivity['liveId'], $this->getPseudoLiveVideoUrl($fields));
-                        $this->getLogService()->info('es_live', 'update', "修改智能直播视屏", $result);
+                        $result = $client->updatePseudoLiveVideo($liveActivity['liveId'], $this->getPseudoLiveVideoUrl($fields));
+                        $this->getLogService()->info('es_live', 'update', '修改智能直播视屏', $result);
                     }
                 } else {
                     $fileIds = empty($fields['fileIds']) ? [-1] : $fields['fileIds'];
