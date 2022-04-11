@@ -11,7 +11,10 @@
   <div class="iframe-parent-content ph20 pv20">
     {% if activity.ext.roomType == 'pseudo' %}
       {% set medias = find_materials_by_activity_id_and_source(activity.id|default(0), 'courseactivity') %}
-      {% if not (medias|default(''))  %}
+      {% else %}
+        {% set medias = {'medias': 'live'} %}
+    {% endif %}
+    {% if not (medias|default('')) %}
         <div class="lesson-content lesson-content-text" style="margin-top: 20%" id="lesson-live-content"  data-role="lesson-content">
           <div class="lesson-content-text-body">
             <div class='live-show-item'>
@@ -20,7 +23,6 @@
             </div>
           </div>
         </div>
-        {% endif %}
     {% else %}
         {% if activity.ext.roomCreated %}
           <div class="lesson-content lesson-content-text" data-role="lesson-content"
