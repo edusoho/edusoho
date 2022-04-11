@@ -291,6 +291,10 @@ class ItemHelper
             $replayActivity['finishData'] = $activity['finishData'];
             $item['activity'] = $replayActivity;
         }
+        $item['showFinishModal'] = 1;
+        if ('live' == $item['type'] and 'time' == $item['activity']['finishType']) {
+            $item['showFinishModal'] = 0;
+        }
 
         return $item;
     }
