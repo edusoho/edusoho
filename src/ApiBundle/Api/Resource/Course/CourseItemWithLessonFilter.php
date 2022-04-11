@@ -27,7 +27,10 @@ class CourseItemWithLessonFilter extends Filter
                     $task['liveId'] = $liveId;
                 }
                 $task['isReplay'] = $isReplay;
-                $task['showFinishModal'] = $showFinishModal;
+                $task['showFinishModal'] = 1;
+                if ('live' == $task['type'] and 'time' == $task['activity']['finishType']) {
+                    $task['showFinishModal'] = 0;
+                }
             }
         } else {
             $taskFilter = new CourseItemFilter();
