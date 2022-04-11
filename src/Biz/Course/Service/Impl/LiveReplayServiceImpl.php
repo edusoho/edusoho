@@ -141,6 +141,29 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         return $this->createLiveClient()->entryReplay($args);
     }
 
+    public function recordReplayVideo($replayId, $liveId)
+    {
+        $replay = $this->getReplay($replayId);
+        $user = $this->getCurrentUser();
+        $args = [
+            'liveId' => $liveId,
+            'replayId' => $replay['replayId'],
+            'provider' => 13,
+            'user' => $user['email'],
+            'nickname' => $user['nickname'],
+            'role' => 'teacher',
+        ];
+        $args['userId'] = $user['id'];
+        $args['protocol'] = 'https';
+
+        $liveActivity = $this->getLiveActivityService()->getBySyncIdGTAndLiveId($liveId);
+        if (!empty($liveActivity)) {
+            return $this->getS2B2CFacadeService()->getS2B2CService()->entryLiveReplay($args);
+        }
+
+        return $this->createLiveClient()->entryReplay($args);
+    }
+
     public function updateReplayShow($showReplayIds, $lessonId)
     {
         $replayLessons = $this->findReplayByLessonId($lessonId);

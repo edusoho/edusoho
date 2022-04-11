@@ -136,6 +136,22 @@ class CourseManageController extends BaseController
         );
     }
 
+    public function recordReplayVideoAction(Request $request, $courseId, $taskId)
+    {
+        $task = $this->getTaskService()->getTask($taskId);
+        $replays = $this->getLiveReplayService()->findReplaysByLessonIds([$task['activityId']]);
+
+        return $this->render(
+            'course-manage/live-replay/record-replay-video-modal.html.twig',
+            [
+                'courseId' => $courseId,
+                'task' => $task,
+                'replayId' => $replays[0]['id'],
+                'activityId' => $task['activityId'],
+            ]
+        );
+    }
+
     public function updateTaskReplayTitleAction(Request $request, $courseId, $taskId, $replayId)
     {
         $title = $request->request->get('title');

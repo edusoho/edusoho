@@ -81,5 +81,8 @@
       {% endif %}
     {% endif %}
 
+    {% if task.status == 'published' and task.isEnd and activity.ext.replayStatus == 'generated' and activity.ext.liveProvider == 13  %}
+      <a href="#modal" class="cd-link-assist cd-mr24" title="{{'course.replay_manage.edit_btn'|trans}}" data-toggle="modal" data-url="{{ path('course_manage_record_replay_setting', {courseId:course.id, taskId: task.id}) }}" ><span class="es-icon es-icon-zhibohuifang" data-toggle="tooltip" title="{{'本地录制'|trans}}"></span></a>
+    {% endif %}
 	</div>
 </li>
