@@ -2054,7 +2054,7 @@ activity_manage.time_last_tips: >
 activity_manage.finished_tips: >
   <span class="color-primary">恭喜！你已完成该任务</span>
 activity_manage.finish_select_tips_time: 页面停留时长
-activity_manage.live_finish_select_tips_time: 页面停留时长(当前仅PC端生效)
+activity_manage.live_finish_select_tips_time: 页面停留时长
 activity_manage.finish_select_tips_watch_time: 视频播放时长
 activity_manage.finish_select_tips_end: 学习到最后
 
