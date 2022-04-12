@@ -2,7 +2,7 @@
 
 {% do script(['app/js/course-manage/live-replay/record-video/index.js']) %}
 
-<div class="modal-dialog {% if modal_class|default('') %} {{ modal_class }}{% endif %}" data-clear="{{ closeClear|default(0) }}">
+<div id="record-replay" class="modal-dialog {% if modal_class|default('') %} {{ modal_class }}{% endif %}" data-clear="{{ closeClear|default(0) }}">
   <div role="document" class="ant-modal" style="width: 640px; transform-origin: 689px -48px;">
     <div tabindex="0" aria-hidden="true" style="width: 0px; height: 0px; overflow: hidden;"></div>
     <div class="ant-modal-content">

@@ -7,6 +7,7 @@ $('.ant-modal-body').on('click','.js-img-radio', function (){
 
 $('.js-submit-button').on('click',function (){
   $.post($(this).data('url'),{type:'recordReplay'}, function(data) {
+    $('#record-replay').modal('hide');
     window.open(data.url+'&recordLayout='+select);
   });
 });
