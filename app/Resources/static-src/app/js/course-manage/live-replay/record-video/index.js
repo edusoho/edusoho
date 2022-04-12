@@ -6,9 +6,8 @@ $('.ant-modal-body').on('click','.js-img-radio', function (){
 });
 
 $('.js-submit-button').on('click',function (){
-  let newWindow = window.open('about:blank','', 'width=1000,height=850,scrollbars=yes,resizable=1');
   $.post($(this).data('url'),{type:'recordReplay'}, function(data) {
     $('#record-replay').parent('.modal').modal('hide');
-    newWindow.location.href = data.url+'&recordLayout='+select;
+    window.open(data.url+'&recordLayout='+select);
   });
 });

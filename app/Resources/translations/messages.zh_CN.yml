@@ -12197,3 +12197,5 @@ live_course.record_replay.select1: 录制课件、头像和聊天区
 live_course.record_replay.select2: 录制课件和头像
 live_course.record_replay.select3: 只录制课件
 live_course.record_replay.btn: 去录制
+live_course.record_replay.show_btn: 本地录制
+live_course.record_replay.safair_tip: Safair 浏览器可能会被拦截，请使用其他浏览器

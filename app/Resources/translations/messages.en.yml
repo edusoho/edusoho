@@ -10933,3 +10933,5 @@ live_course.record_replay.select1: Record courseware, avatars and chat areas
 live_course.record_replay.select2: Record courseware and avatars
 live_course.record_replay.select3: Only record courseware
 live_course.record_replay.btn: To Record
+live_course.record_replay.safair_tip: Safair may be blocked, please use another browser
+live_course.record_replay.show_btn: local recording

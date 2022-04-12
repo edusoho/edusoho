@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DateToolkit;
+use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -132,8 +133,18 @@ class CourseManageController extends BaseController
                 'default' => $default,
                 'lessons' => $lessons,
                 'multiClass' => $multiClass,
+                'browse' => $this->getBrowse(),
             ]
         );
+    }
+
+    protected function getBrowse()
+    {
+        if (false === strpos(DeviceToolkit::getBrowse(), 'Safari')) {
+            return 1;
+        }
+
+        return 0;
     }
 
     public function recordReplayVideoAction(Request $request, $courseId, $taskId)
