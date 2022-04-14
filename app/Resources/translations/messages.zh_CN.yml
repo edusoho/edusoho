@@ -1382,8 +1382,8 @@ course.replay_manage.generated_fail: 回放生成失败，点击录像重新生�
 course.replay_manage.generated: 已生成回放
 course.replay_manage.video_generated.file_exsist: 已上传录像
 course.replay_manage.video_generated.file_not_exsist: 回放视频文件已删除
-course.replay_manage.record: 录制
-course.replay_manage.record_again: 重新录制
+course.replay_manage.record: 生成回放
+course.replay_manage.record_again: 生成回放
 course.replay_manage.replay: 上传回放
 course.replay_manage.preview_btn: 预览
 course.replay_manage.edit_btn: 编辑
@@ -2054,7 +2054,7 @@ activity_manage.time_last_tips: >
 activity_manage.finished_tips: >
   <span class="color-primary">恭喜！你已完成该任务</span>
 activity_manage.finish_select_tips_time: 页面停留时长
-activity_manage.live_finish_select_tips_time: 页面停留时长(当前仅PC端生效)
+activity_manage.live_finish_select_tips_time: 页面停留时长
 activity_manage.finish_select_tips_watch_time: 视频播放时长
 activity_manage.finish_select_tips_end: 学习到最后
 
@@ -12191,3 +12191,11 @@ course.activity.pseudolive.tip: 适用于以录播视频来承载直播内容的
 course.activity.pseudolive.popover: 1.智能直播产生的视频观看流量合并算入云视频流量费用；<br> 2.直播间不限在线人数，仅与网校最大在线人数有关。
 course.activity.pseudolive.create_tip: 需要开通云视频和EduSoho直播方可使用，请联系EduSoho商务
 course.activity.pseudolive.delete_tip: 直播教室尚未创建！暂无直播
+live_course.record_replay: MP4视频录制
+live_course.record_replay.tips: 录制完成后，可将MP4视频保存到电脑。
+live_course.record_replay.select1: 录制课件、头像和聊天区
+live_course.record_replay.select2: 录制课件和头像
+live_course.record_replay.select3: 只录制课件
+live_course.record_replay.btn: 去录制
+live_course.record_replay.show_btn: 本地录制
+live_course.record_replay.safair_tip: Safair 浏览器可能会被拦截，请使用其他浏览器
