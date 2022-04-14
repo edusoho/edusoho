@@ -35,7 +35,7 @@
     "@codeages/styles": "1.0.7",
     "@codeages/utils": "^1.0.2",
     "ant-design-vue": "1.7.4",
-    "axios": "^0.18.0",
+    "axios": "^0.21.2",
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-module-resolver": "^3.1.0",
     "bootstrap": "3.3.7",
