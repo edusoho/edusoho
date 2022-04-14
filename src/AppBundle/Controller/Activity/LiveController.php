@@ -284,8 +284,11 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             $this->createNewException(TaskException::LIVE_REPLAY_NOT_FOUND());
         }
 
-        $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'], $request->isSecure());
-
+        if ('recordReplay' == $request->request->get('type', '')) {
+            $result = $this->getLiveReplayService()->recordReplayVideo($replay['id'], $sourceActivity['ext']['liveId']);
+        } else {
+            $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'], $request->isSecure());
+        }
         if (!empty($result) && !empty($result['resourceNo'])) {
             $result['url'] = $this->generateUrl('es_live_room_replay_show', [
                 'targetType' => LiveroomController::LIVE_COURSE_TYPE,

@@ -11,11 +11,11 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
 
     public function declares()
     {
-        return array(
-            'timestamps' => array(),
-            'serializes' => array(),
-            'orderbys' => array('createdTime', 'startTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq'),
-            'conditions' => array(
+        return [
+            'timestamps' => [],
+            'serializes' => [],
+            'orderbys' => ['createdTime', 'startTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq', 'updatedTime'],
+            'conditions' => [
                 'id = :lessonId',
                 'id NOT IN (:lessonIdNotIn)',
                 'courseId = :courseId',
@@ -35,8 +35,8 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
                 'createdTime <= :endTime',
                 'copyId = :copyId',
                 'courseId IN ( :courseIds )',
-            ),
-        );
+            ],
+        ];
     }
 
     public function findByIds(array $ids)
@@ -48,12 +48,12 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? ORDER BY seq ASC";
 
-        return $this->db()->fetchAll($sql, array($courseId));
+        return $this->db()->fetchAll($sql, [$courseId]);
     }
 
     public function deleteByCourseId($id)
     {
-        return $this->db()->delete($this->table, array('courseId' => $id));
+        return $this->db()->delete($this->table, ['courseId' => $id]);
     }
 
     public function searchLessonsWithOrderBy($conditions, $start, $limit)
@@ -75,7 +75,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
     {
         $addtionalCondition = ';';
 
-        $params = array($courseId, $startTime, $startTime, $startTime, $endTime);
+        $params = [$courseId, $startTime, $startTime, $startTime, $endTime];
 
         if (!empty($excludeLessonId)) {
             $addtionalCondition = 'and id != ? ;';
@@ -91,7 +91,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
     {
         $sql = "SELECT MAX(seq) FROM {$this->table()} WHERE  courseId = ?";
 
-        return $this->db()->fetchColumn($sql, array($courseId));
+        return $this->db()->fetchColumn($sql, [$courseId]);
     }
 
     public function findFinishedLivesWithinTwoHours()
@@ -100,7 +100,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
         $expiredTime = 3600 * 2;
         $sql = "SELECT * FROM {$this->table} WHERE type = 'liveOpen' AND {$currentTime} > endTime AND ({$currentTime} - endTime) < {$expiredTime} AND replayStatus = 'ungenerated' AND progressStatus != 'closed';";
 
-        return $this->db()->fetchAll($sql, array());
+        return $this->db()->fetchAll($sql, []);
     }
 
     protected function createQueryBuilder($conditions)

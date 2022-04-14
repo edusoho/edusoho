@@ -1,6 +1,6 @@
 <?php
 
-namespace  Biz\OpenCourse\Dao\Impl;
+namespace Biz\OpenCourse\Dao\Impl;
 
 use Biz\OpenCourse\Dao\OpenCourseDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -11,11 +11,11 @@ class OpenCourseDaoImpl extends GeneralDaoImpl implements OpenCourseDao
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'serializes' => array('teacherIds' => 'delimiter', 'tags' => 'delimiter'),
-            'orderbys' => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'serializes' => ['teacherIds' => 'delimiter', 'tags' => 'delimiter'],
+            'orderbys' => ['createdTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq', 'updatedTime'],
+            'conditions' => [
                 'updatedTime >= :updatedTime_GE',
                 'status = :status',
                 'type = :type',
@@ -41,8 +41,8 @@ class OpenCourseDaoImpl extends GeneralDaoImpl implements OpenCourseDao
                 'locked = :locked',
                 'orgCode PRE_LIKE :likeOrgCode',
                 'orgCode = :orgCode',
-            ),
-        );
+            ],
+        ];
     }
 
     public function findByIds(array $ids)

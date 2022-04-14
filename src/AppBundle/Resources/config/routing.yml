@@ -2170,6 +2170,10 @@ course_set_manage_course_replay:
     path: '/course_set/{courseSetId}/manage/course/{courseId}/replay'
     defaults:
         _controller: 'AppBundle:Course/CourseManage:replay'
+course_manage_record_replay_setting:
+    path: '/course/{courseId}/task/{taskId}/record_replay_setting'
+    defaults:
+      _controller: 'AppBundle:Course/CourseManage:recordReplayVideo'
 course_set_manage_course_marketing:
     path: '/course_set/{courseSetId}/manage/course/{courseId}/marketing'
     defaults:

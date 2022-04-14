@@ -7,8 +7,8 @@ stages:
 variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-  FROM_VERSION: 22.1.6
-  VERSION: 22.2.1
+  FROM_VERSION: 22.2.1
+  VERSION: 22.2.2
   H5VERSION: release/22.1.5
 
 before_script:
@@ -274,8 +274,12 @@ Build upgrade package:
   stage: build
   image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   script:
+    - git add .
+    - git stash
     - git checkout v${FROM_VERSION}
+    - git pull
     - git checkout release/${VERSION}
+    - git pull
     - git clone -b master --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/upgradescripts.git scripts
     - git clone http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/edusoho-h5.git
     - npm install -g n
