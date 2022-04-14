@@ -70,8 +70,19 @@
                     </el-radio>
                 </el-col>
             </el-form-item>
+          <el-form-item v-if="courseSet.type === 'live'"
+                        :label="'course.plan_setup.member_numbers'|trans"
+                        prop="maxStudentNum">
+            <el-col :span="8">
+              <el-input v-model="marketingForm.maxStudentNum" ref="maxStudentNum"></el-input>
+             <div class="course-mangae-info__tip js-expiry-tip ml0">{{ 'course.plan_setup.member_numbers.tips'|trans }}</div>
+            </el-col>
+            <div v-if="liveCapacity !== null && parseInt(marketingForm.maxStudentNum) > parseInt(liveCapacity)" class="el-form-item__error">
+              {{'course.manage.max_capacity_hint'|trans({capacity: liveCapacity})}}
+            </div>
+          </el-form-item>
 
-            <el-form-item :label="'course.marketing_setup.expiry_date'|trans"
+          <el-form-item :label="'course.marketing_setup.expiry_date'|trans"
                           :prop="marketingForm.enableBuyExpiryTime == 1 ? 'buyExpiryTime': 'enableBuyExpiryTime'">
                 <el-col :span="8">
                     <el-radio v-for="buyExpiryTimeEnabledRadio in buyExpiryTimeEnabledRadios"
@@ -246,6 +257,89 @@
                 </el-col>
                 <el-input class="hidden" type="hidden" v-model="marketingForm.services"></el-input>
             </el-form-item>
+
+            <el-form-item :label="'course.marketing_setup.services.course_list_display'|trans">
+              <el-col :span="18">
+                <el-radio
+                  v-for="courseTaskDisplayRadio in courseTaskDisplayRadios"
+                  v-model="marketingForm.taskDisplay"
+                  :key="courseTaskDisplayRadio.value"
+                  :value="courseTaskDisplayRadio.value"
+                  :label="courseTaskDisplayRadio.value"
+                  class="cd-radio"
+                >
+                  {{ courseTaskDisplayRadio.label }}
+                </el-radio>
+              </el-col>
+            </el-form-item>
+
+          <el-form-item>
+            <label slot="label">
+              {{ 'drainage.setting' | trans }}
+              <el-popover
+                placement="top"
+                :content="'drainage.setting_tips' | trans"
+                trigger="hover"
+              >
+                <i class="es-icon es-icon-help text-normal course-mangae-info__help" slot="reference"></i>
+              </el-popover>
+            </label>
+            <el-col :span="18">
+              <el-radio
+                v-for="drainageRadio in drainageRadios"
+                v-model="marketingForm.drainageEnabled"
+                :key="drainageRadio.value"
+                :value="drainageRadio.value"
+                :label="drainageRadio.value"
+                class="cd-radio"
+              >
+                {{ drainageRadio.label }}
+              </el-radio>
+            </el-col>
+          </el-form-item>
+
+          <template v-if="marketingForm.drainageEnabled">
+            <el-form-item :label="'drainage.qr_setting' | trans" prop="drainageImage">
+              <el-col :span="18">
+                <el-upload
+                  action=""
+                  class="qr-uploader"
+                  :show-file-list="false"
+                  :http-request="customUploadImage"
+                >
+                  <img v-if="marketingForm.drainageImage" :src="marketingForm.drainageImage" class="qr">
+                  <i v-else class="el-icon-plus qr-uploader-icon"></i>
+                  <div slot="tip" class="el-upload__tip">{{ 'drainage.upload_tips' | trans }}</div>
+                </el-upload>
+              </el-col>
+            </el-form-item>
+
+            <el-form-item :label="'drainage.text' | trans">
+              <el-col :span="18">
+                <el-input
+                  type="text"
+                  :placeholder="'drainage.placeholder' | trans"
+                  v-model="marketingForm.drainageText"
+                  maxlength="20"
+                  show-word-limit
+                />
+              </el-col>
+            </el-form-item>
+
+            <el-form-item :label="'drainage.style' | trans">
+              <el-col :span="18">
+                {{ 'drainage.style_tips' | trans }}
+                <el-popover
+                  popper-class="el-popover-drainage-img"
+                  placement="top-start"
+                  trigger="hover"
+                >
+                  <img src="/static-dist/app/img/vue/drainage.png" alt="">
+                  <el-button type="text" slot="reference">{{ 'drainage.view_detail' | trans }}</el-button>
+                </el-popover>
+              </el-col>
+            </el-form-item>
+          </template>
         </el-form>
     </div>
 </template>
@@ -260,6 +354,7 @@
             courseSet: {},
             courseProduct: {},
             notifies: {},
+            liveCapacityUrl: '',
             canModifyCoursePrice: true,
             buyBeforeApproval: false,
             vipInstalled: false,
@@ -304,6 +399,15 @@
             },
             getFormData() {
                 return this.marketingForm;
+            },
+
+            customUploadImage(info) {
+              const formData = new FormData();
+              formData.append('file', info.file);
+              formData.append('group', 'system');
+              this.$axios.post('/api/file', formData).then((res) => {
+                this.marketingForm.drainageImage = res.data.uri;
+              });
             }
         },
         data() {
@@ -318,6 +422,7 @@
             }
 
             let form = {
+                maxStudentNum: this.course.maxStudentNum,
                 originPrice: this.course.originPrice,
                 buyable: this.course.buyable,
                 enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? '1' : '0',
@@ -330,13 +435,21 @@
                 expiryStartDate: this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate,
                 expiryEndDate: this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate,
                 services: this.course.services,
+                drainageEnabled: this.course.drainageEnabled,
+                drainageText: this.course.drainageText,
+                drainageImage: this.course.drainageImage,
+                taskDisplay: this.course.taskDisplay
             };
 
             if (this.vipInstalled && this.vipEnabled) {
                 Object.assign(form, {vipLevelId: this.course.vipLevelId})
             }
-
+            let liveCapacity = null;
+            this.$axios.get(this.liveCapacityUrl).then((response) => {
+              this.liveCapacity = response.data.capacity;
+            });
             return {
+                liveCapacity: liveCapacity,
                 buyableRadios: [
                     {
                         value: '1',
@@ -367,6 +480,26 @@
                         label: Translator.trans('site.datagrid.radios.no'),
                     }
                 ],
+                courseTaskDisplayRadios: [
+                  {
+                    value: "1",
+                    label: Translator.trans('open')
+                  },
+                  {
+                    value: "0",
+                    label:  Translator.trans('close')
+                  }
+                ],
+                drainageRadios: [
+                  {
+                    value: 1,
+                    label: Translator.trans('open')
+                  },
+                  {
+                    value: 0,
+                    label:  Translator.trans('close')
+                  }
+                ],
                 today: Date.now(),
                 dateOptions: {
                     disabledDate(time) {
@@ -393,6 +526,18 @@
                 },
                 marketingForm: form,
                 formRule: {
+                    maxStudentNum: [
+                      {
+                        required: true,
+                        message: Translator.trans('course.manage.max_student_num_error_hint'),
+                        trigger: 'blur'
+                      },
+                      {
+                        validator: validation.digits_0,
+                        message: Translator.trans('validate.unsigned_integer.student_message'),
+                        trigger: 'blur'
+                      },
+                    ],
                     deadline: [
                         {
                             required: true,
@@ -462,6 +607,9 @@
                             message: Translator.trans('course.manage.deadline_end_date_error_hint'),
                             trigger: 'blur'
                         }
+                    ],
+                    drainageImage: [
+                      { required: true,  message: Translator.trans('drainage.qr_no_empty') }
                     ]
                 },
                 deadlineTypeRadio: {

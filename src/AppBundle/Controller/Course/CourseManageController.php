@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DateToolkit;
+use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -96,7 +97,6 @@ class CourseManageController extends BaseController
     public function replayAction(Request $request, $courseSetId, $courseId)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-
         if ($courseSet['locked']) {
             return $this->redirectToRoute(
                 'course_set_manage_sync',
@@ -106,26 +106,20 @@ class CourseManageController extends BaseController
                 ]
             );
         }
-
         $course = $this->getCourseService()->tryManageCourse($courseId);
-
         $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($course['id']);
-
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
-
         $liveTasks = array_filter(
             $tasks,
             function ($task) {
                 return 'live' === $task['type'] && 'published' === $task['status'];
             }
         );
-
         foreach ($liveTasks as $key => $task) {
             $task['isEnd'] = $this->get('web.twig.live_extension')->isLiveFinished($task['activityId'], 'course');
             $task['file'] = $this->_getLiveReplayMedia($task);
             $liveTasks[$key] = $task;
         }
-
         $default = $this->getSettingService()->get('default', []);
         $lessons = $this->getCourseLessonService()->findLessonsByCourseId($courseId);
         $lessons = ArrayToolkit::index($lessons, 'id');
@@ -139,6 +133,32 @@ class CourseManageController extends BaseController
                 'default' => $default,
                 'lessons' => $lessons,
                 'multiClass' => $multiClass,
+                'browse' => $this->getBrowse(),
+            ]
+        );
+    }
+
+    protected function getBrowse()
+    {
+        if (false === strpos(DeviceToolkit::getBrowse(), 'Safari')) {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    public function recordReplayVideoAction(Request $request, $courseId, $taskId)
+    {
+        $task = $this->getTaskService()->getTask($taskId);
+        $replays = $this->getLiveReplayService()->findReplaysByLessonIds([$task['activityId']]);
+
+        return $this->render(
+            'course-manage/live-replay/record-replay-video-modal.html.twig',
+            [
+                'courseId' => $courseId,
+                'task' => $task,
+                'replayId' => $replays[0]['id'],
+                'activityId' => $task['activityId'],
             ]
         );
     }
@@ -197,7 +217,6 @@ class CourseManageController extends BaseController
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $replays = $this->getLiveReplayService()->findReplayByLessonId($activity['id']);
-
         if ('POST' == $request->getMethod()) {
             $ids = $request->request->get('visibleReplays');
             $this->getLiveReplayService()->updateReplayShow($ids, $activity['id']);
@@ -463,7 +482,6 @@ class CourseManageController extends BaseController
             $this->getSyncEventService()->confirmByEvents($product['remoteProductId'], [SyncEventService::EVENT_CLOSE_TASK]);
         }
 
-        $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
         $tasksListJsonData = $this->createCourseStrategy($course)->getTasksListJsonData($courseId);
 
         return $this->render(
@@ -527,7 +545,11 @@ class CourseManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $data['services'] = empty($data['services']) ? [] : $data['services'];
-
+            $data['drainage'] = [
+                'enabled' => empty($data['drainageEnabled']) ? 0 : $data['drainageEnabled'],
+                'image' => empty($data['drainageImage']) ? '' : $data['drainageImage'],
+                'text' => empty($data['drainageText']) ? '' : $data['drainageText'],
+            ];
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
             if (in_array($courseSet['type'], ['live', 'reservation']) || !empty($courseSet['parentId'])) {
                 $this->getCourseSetService()->updateCourseSet($courseSetId, $data);
@@ -589,6 +611,10 @@ class CourseManageController extends BaseController
             $vipLevelIds = ArrayToolkit::column($vipLevels, 'id');
             $course['vipLevelId'] = empty($vipRight) || !in_array($vipRight['vipLevelId'], $vipLevelIds) ? '0' : $vipRight['vipLevelId'];
         }
+        $course['title'] = empty(trim($course['title'])) ? '默认计划' : $course['title'];
+        $course['drainageEnabled'] = empty($course['drainage']['enabled']) ? 0 : 1;
+        $course['drainageImage'] = empty($course['drainage']['image']) ? '' : $course['drainage']['image'];
+        $course['drainageText'] = empty($course['drainage']['text']) ? '' : $course['drainage']['text'];
 
         return $this->render(
             'course-manage/info.html.twig',

@@ -37,21 +37,43 @@
 <div class="form-group">
   <style>.testpaper-question-option-item{margin-left:-12px;margin-bottom:5px;list-style: none;}</style>
   <div class="col-md-1 control-label"><label class="control-label-required">{{'course.testpaper_manage.create.questions_setup'|trans}}</label></div>
-  <ul class="col-md-11 controls" id="testpaper-question-options">
+  <ul class="col-md-11 controls testpaper-question-options" id="testpaper-question-options">
+
     {% for type,config in types %}
-      <li class="testpaper-question-option-item">
+      <li class="testpaper-question-option-item option-item-{{type}}">
         <button type="button" class="btn btn-link question-type-sort-handler"><span class="glyphicon glyphicon-move"></span></button>
         <span style="min-width:85px;display:inline-block;_display:inline;">{{ config.name|trans }}</span>
         <span class="mlm">{{'course.testpaper_manage.create.questions_setup.number'|trans}}:</span>
         <input type="text" class="form-control width-input width-input-mini item-number" name="sections[{{ type }}][count]" data-role="count"  value="0" {% if typesNum[type].itemNum|default(0) == 0  %} disabled {% endif %} />/
         <span class="text-info question-num" role="questionNum" type="{{ type }}" style="display:inline-block;min-width: 45px;">{{ typesNum[type].itemNum|default(0) }}</span>
-        <span class="mlm">{{'course.testpaper_manage.create.questions_setup.score'|trans}}:</span>
-        <input type="text" class="form-control width-input width-input-mini item-score" name="scores[{{ type }}]"  value="2" data-role="score" />
+       {% if type == 'fill' %}
+       <div class="input-group">
+        <div class="input-group-btn">
+          <select class="btn btn-default dropdown-toggle js-score-type" name="scoreType[{{type}}]">
+            <option value="question" selected="selected">{{ 'course.homework.score_set.select.question1'|trans }}</option>
+            <option value="option">{{ 'course.homework.score_set.select.option1'|trans }}</option>
+          </select>
+        </div>
+        <input type="text" class="form-control score-validate" name="choiceScore[{{type}}]"  value="2" aria-label="...">
+      </div>
+       {% else %}
+        <span class="mlm">{{'testpaper.score_set.option'|trans}}:</span>
+        <input type="text" class="form-control width-input width-input-mini item-score" style="width:120px" name="scores[{{ type }}]"  value="2" data-role="score" />
+       {% endif %}
         <input class="hidden" name="sections[{{ type }}][name]" value="{{ config.name|trans }}" {% if typesNum[type].itemNum|default(0) == 0  %} disabled {% endif %}>
-
+  
         {% if config.hasMissScore|default(null) %}
-          <span class="mlm">{{'course.testpaper_manage.create.questions_setup.missing_score'|trans}}:</span>
-          <input type="text" class="form-control width-input width-input-mini item-miss-score" name="missScores[{{ type }}]"  value="0" data-role="missScore" />
+          <div class="input-group ">
+            <div class="input-group-btn">
+              <select class="btn btn-default dropdown-toggle js-score-type" name="scoreType[{{type}}]">
+                <option value="question" selected="selected">{{ 'course.homework.score_set.select.question2'|trans }}</option>
+                <option value="option">{{ 'course.homework.score_set.select.option2'|trans }}</option>
+              </select>
+            </div>
+            <input type="text" class="form-control score-validate js-miss-choice-score" data-role="missScore" name="choiceScore[{{type}}]"  value="0" aria-label="...">
+          </div>
+          {% else %}
+          <span class="empty-tip">\</span>
         {% endif %}
       </li>
     {% endfor %}

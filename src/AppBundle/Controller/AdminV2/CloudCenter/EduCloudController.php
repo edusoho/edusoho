@@ -353,6 +353,7 @@ class EduCloudController extends BaseController
             'video_h5_enable' => 1,
             'enable_playback_rates' => 0,
             'video_quality' => 'high',
+            'doc_quality' => 'normal',
             'video_audio_quality' => 'high',
             'video_watermark' => 0,
             'video_watermark_image' => '',
@@ -1351,6 +1352,7 @@ class EduCloudController extends BaseController
             'sms_classroom_buy_notify' => 'off',
             'sms_vip_buy_notify' => 'off',
             'sms_coin_buy_notify' => 'off',
+            'sms_comment_modify' => 'off',
         ];
 
         $dataUserPosted = ArrayToolkit::filter($dataUserPosted, $defaultSetting);

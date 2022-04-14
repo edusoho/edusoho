@@ -1,6 +1,7 @@
 import PlayerFactory from './player-factory';
 import EsMessenger from '../../common/messenger';
 import DurationStorage from '../../common/duration-storage';
+import UAParser from 'ua-parser-js';
 
 class Show {
 
@@ -39,6 +40,7 @@ class Show {
     this.subtitles = container.data('subtitles');
     this.autoplay = container.data('autoplay');
     this.rememberLastPos = container.data('rememberLastPos');
+    this.isHlsPlus = container.data('is-hls-plus');
     let $iframe = $(window.parent.document.getElementById('task-content-iframe'));
     if ($iframe.length > 0) {
       //播放到最后一秒视为上次播放到0秒
@@ -50,7 +52,7 @@ class Show {
     this.strictMode = container.data('strict');
     this.url = container.data('url');
     this.fileStorage = container.data('fileStorage');
-    this.microMessenger = container.data('microMessenger');
+    this.allowedBrowse = container.data('allowedBrowse');
     this.securityVideoPlayer = container.data('securityVideoPlayer');
     this.initView();
     this.initEvent();
@@ -69,6 +71,7 @@ class Show {
 
   initPlayer() {
     const customPos = parseInt(this.lastLearnTime) ? parseInt(this.lastLearnTime) : 0;
+    const ua = new UAParser();
     let options = {
       element: '#lesson-player',
       content: this.content,
@@ -82,6 +85,7 @@ class Show {
       timelimit: this.timelimit,
       enablePlaybackRates: this.enablePlaybackRates,
       disableModeSelection: this.disableModeSelection,
+      disableFullscreen: this.isHlsPlus == 1 && ['mobile', 'tablet'].indexOf(ua.getDevice().type) > -1,
       videoH5: this.videoH5,
       controlBar: {
         disableVolumeButton: this.disableVolumeButton,
@@ -113,11 +117,7 @@ class Show {
         token: this.token,
       });
     }
-    if (this.securityVideoPlayer == '1' && this.microMessenger) {
-      options = Object.assign(options, {
-        playerType: 'wasm',
-      });
-    }
+
     return window.player = PlayerFactory.create(
       this.jsPlayer, options
     );
@@ -244,6 +244,10 @@ class Show {
       if (!this.isCloudVideoPalyer() && !this.isCloudAudioPlayer()) {
         DurationStorage.del(this.userId, this.fileId);
       }
+    });
+
+    player.on('requestFullscreen', (msg) => {
+      messenger.sendToParent('requestFullscreen', msg);
     });
   }
 

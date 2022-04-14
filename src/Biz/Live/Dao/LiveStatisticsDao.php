@@ -2,7 +2,9 @@
 
 namespace Biz\Live\Dao;
 
-interface LiveStatisticsDao
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
+
+interface LiveStatisticsDao extends AdvancedDaoInterface
 {
     public function getByLiveIdAndType($liveId, $type);
 

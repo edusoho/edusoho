@@ -347,6 +347,8 @@ user:
         modalField: all
     change_role:
         modalField: all
+    delete_user:
+        modalField: all
 system:
     update_settings.site:
         modalField: all

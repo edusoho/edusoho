@@ -79,6 +79,8 @@ interface ThreadService
 
     public function deleteGoods($id);
 
+    public function deleteThreadsByUserId($userId);
+
     public function getTradeByUserIdAndGoodsId($userId, $goodsId);
 
     public function getGoods($attachId);
@@ -98,4 +100,6 @@ interface ThreadService
     public function addPostAttach($files, $threadId, $postId);
 
     public function getTradeByUserIdAndThreadId($userId, $threadId);
+
+    public function deleteThreadsByGroupId($groupId);
 }

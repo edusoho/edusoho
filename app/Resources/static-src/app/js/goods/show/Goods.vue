@@ -13,7 +13,8 @@
                             </li>
                             <li :class="howActive == 2 ? 'active' : ''"><a href="javascript:;" @click="clickType(2)">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
                             </li>
-                            <li :class="howActive == 3 ? 'active' : ''"><a href="javascript:;" @click="clickType(3)">{{ 'goods.show_page.tab.reviews'|trans }}</a>
+                            <li v-if="ugcReviewSetting.enable_review == 1
+                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" :class="howActive == 3 ? 'active' : ''"><a href="javascript:;" @click="clickType(3)">{{ 'goods.show_page.tab.reviews'|trans }}</a>
                             </li>
                         </ul>
                         <div class="buy__btn pull-right">
@@ -29,7 +30,8 @@
                     <li :class="howActive == 2 ? 'active' : ''">
                         <a href="javascript:;" @click="clickType(2)">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
                     </li>
-                    <li :class="howActive == 3 ? 'active' : ''">
+                    <li v-if="ugcReviewSetting.enable_review == 1
+                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" :class="howActive == 3 ? 'active' : ''">
                         <a href="javascript:;" @click="clickType(3)">{{ 'goods.show_page.tab.reviews'|trans }}</a>
                     </li>
                 </ul>
@@ -44,7 +46,11 @@
                     <div v-if="goods.product.targetType === 'course'" id="info-left-2"
                          class="content-item js-content-item">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
-                        <course-tasks :sku="currentSku" :i18n="i18n" :activity-metas="activityMetas"></course-tasks>
+                        <course-tasks v-show="currentSku.taskDisplay == 1" :sku="currentSku" :i18n="i18n" :activity-metas="activityMetas"></course-tasks>
+                        <div v-show="currentSku.taskDisplay != 1" class="goods-empty-content">
+                          <img src="/static-dist/app/img/vue/goods/empty-content.png" alt="">
+                          <p>{{ 'goods.show_page.tab.catalogue.empty' | trans }}</p>
+                        </div>
                     </div>
                     <div v-if="goods.product.targetType === 'classroom'" id="info-left-2"
                          class="content-item js-content-item">
@@ -52,7 +58,8 @@
                         <classroom-courses :classroomCourses="componentsData.classroomCourses"></classroom-courses>
                     </div>
 
-                    <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
+                    <div v-if="ugcReviewSetting.enable_review == 1
+                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.reviews'|trans }}</h3>
                         <reviews :can-create="isUserLogin && goods.isMember" :can-operate="goods.canManage"
                                  :report-type="getReportType"

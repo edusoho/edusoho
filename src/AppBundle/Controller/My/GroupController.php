@@ -9,7 +9,6 @@ use Biz\Favorite\Service\FavoriteService;
 use Biz\Group\Service\GroupService;
 use Biz\Group\Service\ThreadService;
 use Biz\User\Service\UserService;
-use Symfony\Component\HttpFoundation\Request;
 
 class GroupController extends BaseController
 {
@@ -39,58 +38,31 @@ class GroupController extends BaseController
             0,
             10
         );
-        $collectThreads = [];
-
-        foreach ($collectThreadsIds as $collectThreadsId) {
-            $collectThreads[] = $this->getThreadService()->getThread($collectThreadsId['targetId']);
-        }
-
-        $collectCount = $this->getFavoriteService()->countFavorites(['userId' => $user['id'], 'targetType' => 'thread']);
-
-        $groupIdsAsCollectThreads = ArrayToolkit::column($collectThreads, 'groupId');
-        $groupsAsCollectThreads = $this->getGroupService()->getGroupsByIds($groupIdsAsCollectThreads);
-
-        $userIds = ArrayToolkit::column($collectThreads, 'lastPostMemberId');
-        $collectLastPostMembers = $this->getUserService()->findUsersByIds($userIds);
-
-        $userIds = ArrayToolkit::column($ownThreads, 'lastPostMemberId');
-        $lastPostMembers = $this->getUserService()->findUsersByIds($userIds);
+        $collectThreads = $this->getThreadService()->getThreadsByIds(array_column($collectThreadsIds, 'targetId'));
 
         $postThreadsIds = $this->getThreadService()->searchPostsThreadIds(['userId' => $user['id']], ['id' => 'DESC'], 0, 10);
 
-        $threads = [];
-
-        foreach ($postThreadsIds as $postThreadsId) {
-            $threads[] = $this->getThreadService()->getThread($postThreadsId['threadId']);
-        }
-
-        $postsCount = $this->getThreadService()->countPostsThreadIds(['userId' => $user['id']]);
-
-        $groupIdsAsPostThreads = ArrayToolkit::column($threads, 'groupId');
-        $groupsAsPostThreads = $this->getGroupService()->getGroupsByIds($groupIdsAsPostThreads);
-
-        $userIds = ArrayToolkit::column($threads, 'lastPostMemberId');
-        $postLastPostMembers = $this->getUserService()->findUsersByIds($userIds);
+        $threads = $this->getThreadService()->getThreadsByIds(array_column($postThreadsIds, 'threadId'));
 
         return $this->render('my/learning/group/group-member-center.html.twig', [
             'user' => $user,
             'groups' => $groups,
             'threads' => $threads,
             'threadsCount' => $threadsCount,
-            'postsCount' => $postsCount,
-            'collectCount' => $collectCount,
-            'groupsAsCollectThreads' => $groupsAsCollectThreads,
-            'collectLastPostMembers' => $collectLastPostMembers,
+            'postsCount' => $this->getThreadService()->countPostsThreadIds(['userId' => $user['id']]),
+            'collectCount' => $this->getFavoriteService()->countFavorites(['userId' => $user['id'], 'targetType' => 'thread', 'targetIds' => array_column($collectThreads, 'id') ?: [-1]]),
+            'groupsAsCollectThreads' => $this->getGroupService()->getGroupsByIds(array_column($collectThreads, 'groupId')),
+            'collectLastPostMembers' => $this->getUserService()->findUsersByIds(array_column($collectThreads, 'lastPostMemberId')),
             'collectThreads' => $collectThreads,
-            'postLastPostMembers' => $postLastPostMembers,
-            'groupsAsPostThreads' => $groupsAsPostThreads,
-            'lastPostMembers' => $lastPostMembers,
+            'postLastPostMembers' => $this->getUserService()->findUsersByIds(array_column($threads, 'lastPostMemberId')),
+            'groupsAsPostThreads' => $this->getGroupService()->getGroupsByIds(array_column($threads, 'groupId')),
+            'lastPostMembers' => $this->getUserService()->findUsersByIds(array_column($ownThreads, 'lastPostMemberId')),
             'groupsAsOwnThreads' => $groupsAsOwnThreads,
             'ownThreads' => $ownThreads,
             'groupsCount' => $groupsCount, ]);
     }
 
-    public function memberJoinAction(Request $request)
+    public function memberJoinAction()
     {
         $user = $this->getUser();
 

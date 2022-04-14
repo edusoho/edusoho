@@ -6,10 +6,12 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
+use Biz\Group\Dao\ThreadDao;
+use Biz\Group\Dao\ThreadGoodsDao;
+use Biz\Group\Dao\ThreadPostDao;
 use Biz\Group\Service\ThreadService;
 use Biz\Group\ThreadException;
 use Biz\Sensitive\Service\SensitiveService;
-use Biz\Thread\Dao\ThreadDao;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
@@ -381,6 +383,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->dispatchEvent('group.thread.delete', $thread);
     }
 
+    public function deleteThreadsByUserId($userId)
+    {
+        return $this->getThreadDao()->deleteByUserId($userId);
+    }
+
+    public function deleteThreadPostsByUserId($userId)
+    {
+        return $this->getThreadPostDao()->deleteByUserId($userId);
+    }
+
     public function updatePost($id, $fields)
     {
         if (!empty($fields['content'])) {
@@ -438,6 +450,22 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadTradeDao()->getByUserIdAndThreadId($userId, $threadId);
     }
 
+    public function deleteThreadsByGroupId($groupId)
+    {
+        $threads = $this->getThreadDao()->findByGroupId($groupId);
+        $threadIds = array_column($threads, 'id');
+        $posts = $this->getThreadPostDao()->findByThreadIds($threadIds);
+        $this->getThreadPostDao()->deleteByThreadIds($threadIds);
+        $this->getThreadGoodsDao()->deleteByThreadIds($threadIds);
+        $this->getThreadDao()->deleteByGroupId($groupId);
+        foreach ($threads as $thread) {
+            $this->dispatchEvent('group.thread.delete', $thread);
+        }
+        foreach ($posts as $post) {
+            $this->dispatchEvent('group.thread.post.delete', $post);
+        }
+    }
+
     protected function filterSort($sort)
     {
         switch ($sort) {
@@ -487,11 +515,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->createDao('Group:ThreadDao');
     }
 
+    /**
+     * @return ThreadPostDao
+     */
     protected function getThreadPostDao()
     {
         return $this->createDao('Group:ThreadPostDao');
     }
 
+    /**
+     * @return ThreadGoodsDao
+     */
     protected function getThreadGoodsDao()
     {
         return $this->createDao('Group:ThreadGoodsDao');

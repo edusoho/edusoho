@@ -7,10 +7,9 @@ stages:
 variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-  FROM_VERSION: 21.4.2
-  VERSION: 21.4.3
-  H5VERSION: master
-
+  FROM_VERSION: 22.2.1
+  VERSION: 22.2.2
+  H5VERSION: release/22.1.5
 
 before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
@@ -87,7 +86,7 @@ check env:
   services:
     - name: dockerhub.codeages.work/library-proxy/library/mysql:8.0
       alias: mysql
-      command: ["--default-authentication-plugin=mysql_native_password"]
+      command: [ "--default-authentication-plugin=mysql_native_password" ]
     - name: dockerhub.codeages.work/library-proxy/library/redis:latest
       alias: redis
   script:
@@ -133,7 +132,7 @@ check env:
       alias: redis
   script:
     - sed -i 's/memory_limit.*/memory_limit = 4000M/g' /etc/php/7.1/phpdbg/php.ini
-#    - sed -i "s/sonar.projectKey=.*/sonar.projectKey=$SONAR_PROJECT_KEY/g" sonar-project.properties
+    #    - sed -i "s/sonar.projectKey=.*/sonar.projectKey=$SONAR_PROJECT_KEY/g" sonar-project.properties
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitA2B --coverage-clover reports_tmp/phpunit.coverage.xml_1 --log-junit reports_tmp/phpunit.xml_1
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitC2C --coverage-clover reports_tmp/phpunit.coverage.xml_2 --log-junit reports_tmp/phpunit.xml_2
     - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitD2D --coverage-clover reports_tmp/phpunit.coverage.xml_3 --log-junit reports_tmp/phpunit.xml_3
@@ -245,8 +244,8 @@ Api Test With 7.1:
     - touch app/data/specialEnv  # 防止 新建uuid 索引报错的问题
     - bin/phpmig migrate
     # 安装codeception(因为版本问题，放到gitlab ci上运行时安装)
-#    - composer config repo.packagist composer https://mirrors.aliyun.com/composer/
-#    - composer require "codeception/codeception:*" --ignore-platform-reqs
+    #    - composer config repo.packagist composer https://mirrors.aliyun.com/composer/
+    #    - composer require "codeception/codeception:*" --ignore-platform-reqs
     # install plugin
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin &&  app/console plugin:register Vip
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin &&  app/console plugin:register ChargeCoin
@@ -275,35 +274,40 @@ Build upgrade package:
   stage: build
   image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php71
   script:
+    - git add .
+    - git stash
+    - git checkout v${FROM_VERSION}
+    - git pull
     - git checkout release/${VERSION}
     - git pull
     - git clone -b master --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/upgradescripts.git scripts
     - git clone http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/edusoho-h5.git
     - npm install -g n
-    - n 12.8.1
+    - n 12.22.7
+    - node -v
     - yarn config set registry https://registry.npm.taobao.org
+    - rm -rf app/cache
     - cd edusoho-h5
     - git checkout ${H5VERSION}
     - git pull
     - cp build/env.js.example  build/env.js
     - rm -rf node_modules
-    - yarn
+    - rm -rf dist
+    - rm -rf ./../web/h5/*
+    - yarn install
     - npm run build
     - rm -rf node_modules
-    - rm -rf ./../web/h5/*
     - cp  -rf ./dist/* ./../web/h5/
     - cd ../
+    - rm -rf app/cache node_modules
     - yarn
-    - yarn compile
+    - npm run compile
     # copy seajs静态文件到web目录下
     - app/console assets:install
-
     # 生成js语言包
     - app/console trans:dump-js
-
-    - if [[ `git status --porcelain` ]]; then git config user.email "builder@edusoho.com"; git config user.name "builder"; git add .; git commit -m 'compile'; fi;
-
-    - app/console   build:upgrade-package ${FROM_VERSION} ${VERSION}
+    - ls web/h5/static/css
+    - app/console  build:upgrade-package ${FROM_VERSION} ${VERSION}
   artifacts:
     paths:
       - build/

@@ -56,6 +56,9 @@ admin_v2.user.destroy_account_manage_menu: Destroy
 admin_v2.user.destroy_account.basic_tab: Destroy Record
 admin_v2.user.destroy_account.destroyed_tab: Destroyed
 
+#用户管理-销客助手
+admin_v2.user.scrm_menu: Scrm
+
 ##实名认证管理模块
 admin.user.approval.basic_tab: Authentication'
 
@@ -574,6 +577,7 @@ admin_v2.cloud_resource.basic_group: Resources
 # 教学模块-资源管理-云资源
 admin_v2.cloud_resource.basic_tab: Cloud Resources
 admin_v2.cloud.file.basic_tab: Cloud Resources
+admin_v2.live_playback.basic_tab: Live playback
 admin_v2.cloud.attachment.basic_tab: Cloud Attachement
 admin_v2.cloud.attachment_setting.basic_tab: Cloud Attachement Setting
 admin_v2.cloud.file_setting.basic_tab: Cloud File Setting
@@ -733,6 +737,7 @@ admin_v2.information_collect.operate.update_tab: 'Update'
 admin_v2.operation.group_menu: Group Discussions
 admin_v2.operation.group.group_tab: Groups
 admin_v2.operation.group.group_tab.create_group_btn: Add Group
+admin_v2.operation.group.group_recommend_tab: Group Recommend
 admin_v2.operation.group.group_thread_tab: Group Discussions
 
 #运营-内容管理-私信管理
@@ -758,6 +763,7 @@ admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: 'Send password reset
 admin_v2.user.basic.basic_tab.send_emailverify_email_btn: 'Send verify email'
 admin_v2.user.basic.basic_tab.lock_btn: 'Lock User'
 admin_v2.user.basic.basic_tab.unlock_btn: 'Unlock User'
+admin_v2.user.basic.basic_tab.delete_btn: 'Delete User'
 admin_v2.user.basic.basic_tab.org_update_btn: 'Change Organization'
 
 #用户-用户管理-实名认证
@@ -927,7 +933,7 @@ admin_v2.system.course.avatar_tab: Default Avatar
 admin_v2.system.course.classroom_tab: Class
 admin_v2.system.course.open_course_tab: Open Course
 admin_v2.system.course.task_multiple_open_tab: Task Multiple Open Configuration
-admin_v2.system.course.video_task_tab: Video Task Learning Configuration
+admin_v2.system.course.video_task_tab: Video Task Configuration
 
 # 系统-系统管理
 admin_v2.system.basic_group: System Manage
@@ -1038,3 +1044,4 @@ admin_v2.vip_user.operation_record_tab: VIP operation records
 admin.wap_setting.find: 'Discovery page settings'
 admin.wap_setting.version_setting: 'Version setting'
 admin.wap_setting.pay_setting: 'Payment setting'
+admin_v2.cloud.question_bank.attachment.basic_tab: Question Attachment

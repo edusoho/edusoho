@@ -1,25 +1,102 @@
 <tr id="testpaper-item-{{ question.id }}" data-id="{{ question.id }}" data-type="{{ question.type }}" class="is-question is-question--homework">
-  <td><span class="glyphicon glyphicon-resize-vertical sort-handle"></span></td>
   <td>
     <input class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
     <input type="hidden" name="questionIds[]" value="{{ question.id }}">
   </td>
-  <td class="seq"></td>
   <td>
-    {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
-    {{ question.material|fill_question_stem_text|plain_text(40) }}
-
+    <a class="mrm" data-role="preview-btn" href="javascript:" data-url="{{ path('question_bank_manage_question_preview', { id:questionBank.id, questionId:question.id, isNew:true }) }}" >
+      {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
+      {{ question.material|fill_question_stem_text|plain_text(40) }}
+    </a>
     <div>
       {% include 'question-manage/part/belong.html.twig' with {question:question,categories:categories} %}
     </div>
   </td>
   <td>{{ dict_text('questionType', question.type)|default('--') }}</td>
+  {% if question.type == 'material' %}
+    <td>
+    </td>
+  {% else %}
+    {% set itemQuestion = question.questions[0] %}
+    <td class="js-question-item score-tip-par" data-question-type="{{ question.type }}" data-question-answer="{{ itemQuestion.answer|json_encode }}">
+      {% if question.type == 'fill' %}
+        <div class="input-group">
+          <div class="input-group-btn">
+            <select class="btn btn-default dropdown-toggle  js-score-type" name="scoreType[{{ itemQuestion.id }}]" style="width: 60px;height: 34px; padding: 0px !important;">
+              <option value="question" {% if 'question' == itemQuestion.score_rule.scoreType|default('question') %} selected="selected" {% endif %}>{{ 'course.homework.score_set.select.question1'|trans }}</option>
+              <option value="option" {% if 'option' == itemQuestion.score_rule.scoreType|default('question') %} selected="selected" {% endif %}>{{ 'course.homework.score_set.select.option1'|trans }}</option>
+            </select>
+          </div>
+          <input type="text" class="form-control score-validate js-fill-score js-score" name="choiceScore[{{ itemQuestion.id }}]" style="width: 60px;" aria-label="..." value="{{ itemQuestion.score_rule.otherScore|default(0) }}">
+        </div>
+        <span class="score-tip">\</span>
+      {% elseif question.type =='choice' or question.type == 'uncertain_choice' %}
+        <input type="text" class="form-control score-validate js-score" name="score[{{ itemQuestion.id }}]" style="width: 120px;position: absolute;" aria-label="..." value="{{ itemQuestion.score|default(0) }}">
+        <div class="input-group" style="margin-left: 128px;">
+          <div class="input-group-btn">
+            <select class="btn btn-default dropdown-toggle js-score-type" name="scoreType[{{ itemQuestion.id }}]" style="width: 60px;height: 34px; padding: 0px 5px !important;">
+              <option value="question" {% if 'question' == itemQuestion.score_rule.scoreType|default('question') %} selected="selected" {% endif %}>{{ 'course.homework.score_set.select.question2'|trans }}</option>
+              <option value="option" {% if 'option' == itemQuestion.score_rule.scoreType|default('question') %} selected="selected" {% endif %}>{{ 'course.homework.score_set.select.option2'|trans }}</option>
+            </select>
+          </div>
+          <input type="text" class="form-control score-validate js-miss-choice-score" name="choiceScore[{{ itemQuestion.id }}]" style="width: 60px" aria-label="..." value="{{ itemQuestion.score_rule.otherScore|default(0) }}">
+        </div>
+      {% else %}
+        <input type="text" class="form-control score-validate js-score" name="score[{{ itemQuestion.id }}]" style="width: 120px" aria-label="..." value="{{ itemQuestion.score }}">
+        <span class="score-tip">\</span>
+      {% endif %}
+    </td>
+  {% endif %}
   <td>{{ dict_text('difficulty', question.difficulty) }}</td>
-
   <td>
     <div class="btn-group">
-      <a class="mrm" data-role="preview-btn" href="javascript:" data-url="{{ path('question_bank_manage_question_preview', { id:questionBank.id, questionId:question.id, isNew:true }) }}" >{{'course.testpaper_manage.question.operation.preview_btn'|trans}}</a>
-      <a data-role="item-delete-btn" href="javascript:">{{'course.testpaper_manage.question.operation.delete_btn'|trans}}</a>
+      <a data-role="item-delete-btn" href="javascript:">{{'form.btn.remove'|trans}}</a>
     </div>
   </td>
 </tr>
+
+{% if question.type == 'material' %}
+  {% for itemQuestion in question.questions %}
+    <tr data-parent-id="{{ itemQuestion.item_id }}" data-type="{{ itemQuestion.answer_mode }}" class="is-question is-question--homework">
+      <td>
+      </td>
+      <td>
+        <a class="mrm" data-role="preview-btn" href="javascript:" data-url="{{ path('question_bank_manage_question_preview', { id:questionBank.id, questionId:itemQuestion.item_id, isNew:true }) }}" >
+          {{ itemQuestion.stem|fill_question_stem_text|plain_text(40) }}
+        </a>
+      </td>
+      <td>{{ dict_text('itemQuestionType', itemQuestion.answer_mode)|default('--') }}</td>
+      <td class="js-question-item score-tip-par" data-question-type="{{ itemQuestion.answer_mode }}" data-question-answer="{{ itemQuestion.answer|json_encode}}">
+        {% if itemQuestion.answer_mode == 'text' %}
+          <div class="input-group">
+            <div class="input-group-btn">
+              <select class="btn btn-default dropdown-toggle  js-score-type" name="scoreType[{{ itemQuestion.id }}]" style="width: 60px;height: 34px; padding: 0px !important;">
+                <option value="question" {% if 'question' == itemQuestion.score_rule.scoreType|default('question') %} selected="selected" {% endif %}>{{ 'course.homework.score_set.select.question1'|trans }}</option>
+                <option value="option"  {% if 'option' == itemQuestion.score_rule.scoreType|default('question') %} selected="selected" {% endif %}>{{ 'course.homework.score_set.select.option1'|trans }}</option>
+              </select>
+            </div>
+            <input type="text" class="form-control score-validate js-fill-score js-score" name="choiceScore[{{ itemQuestion.id }}]" style="width: 60px;" aria-label="..." value="{{ itemQuestion.score_rule.otherScore|default(0) }}">
+          </div>
+          <span class="score-tip">\</span>
+        {% elseif itemQuestion.answer_mode =='choice' or itemQuestion.answer_mode == 'uncertain_choice' %}
+          <input type="text" class="form-control score-validate js-score" name="score[{{ itemQuestion.id }}]" style="width: 120px;position: absolute;" aria-label="..." value="{{ itemQuestion.score|default(0) }}">
+          <div class="input-group" style="margin-left: 128px;">
+            <div class="input-group-btn">
+              <select class="btn btn-default dropdown-toggle js-score-type"  name="scoreType[{{ itemQuestion.id }}]" style="width: 60px;height: 34px; padding: 0px 5px !important;">
+                <option value="question" {% if 'question' == itemQuestion.score_rule.scoreType|default('question') %} selected="selected" {% endif %}>{{'course.homework.score_set.select.question2'|trans}}</option>
+                <option value="option"  {% if 'option' == itemQuestion.score_rule.scoreType|default('question') %} selected="selected" {% endif %}>{{'course.homework.score_set.select.option2'|trans}}</option>
+              </select>
+            </div>
+            <input type="text" class="form-control score-validate js-miss-choice-score" name="choiceScore[{{ itemQuestion.id }}]" style="width: 60px" aria-label="..." value="{{ itemQuestion.score_rule.otherScore|default(0) }}">
+          </div>
+        {% else %}
+          <input type="text" class="form-control score-validate js-score" name="score[{{ itemQuestion.id }}]" style="width: 120px" aria-label="..." value="{{ itemQuestion.score|default(0) }}">
+          <span class="score-tip">\</span>
+        {% endif %}
+      </td>
+      <td></td>
+      <td>
+      </td>
+    </tr>
+  {% endfor %}
+{% endif %}

@@ -16,9 +16,11 @@ interface AnswerReportService
 
     public function findByAnswerSceneId($answerSceneId);
 
-    public function search($conditions, $orderBys, $start, $limit, $columns = array());
+    public function search($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function count($conditions);
 
     public function wrapperAnswerQuestionReports($answerRecordId, $answerQuestionReports);
+
+    public function batchUpdate($ids, $updateColumnsList);
 }

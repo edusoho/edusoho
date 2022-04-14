@@ -3,10 +3,10 @@
 {% include 'question-bank/widgets/picked-item/base-item-question.html.twig' %}
 
 {% for question in item.questions %}
-  <tr id="testpaper-item-{{ item.id }}" data-id="{{ item.id }}" data-question-id="{{ question.id|default(0) }}" data-type="{{ item.type }}" class="is-sub-question">
+  <tr id="testpaper-item-{{ item.id }}" data-id="{{ item.id }}" data-question-id="{{ question.id|default(0) }}" data-type="{{ item.type }}" data-question-type="{{ question.answer_mode }}" data-question-answer="{{ question.answer|json_encode }}" class="is-sub-question js-question-tr">
   <td></td>
   <td>
-    <input class="notMoveHandle" type="checkbox" value="{{item.id}}" data-role="batch-item" >
+    <input class="notMoveHandle js-material-checkbox-{{ question.answer_mode }}" type="checkbox" value="{{item.id}}" data-role="batch-item" >
   </td>
   <td class="seq"></td>
   <td>
@@ -23,12 +23,31 @@
       {% endif %}
     </span>
   </td>
-  <td class="js-question-score" data-score="{{ question.score|default(0)|score_text }}">
-    {{ question.score|default(0)|score_text }}
+  <td class="js-question-score js-question-item js-material-{{ question.answer_mode }}" data-question-type="{{ question.answer_mode }}" data-score="{{ question.score|default(0)|score_text }}">
+    {% if question.answer_mode == 'text' %}
+      <div class="input-group">
+        <div class="input-group-btn">
+          <select class="btn btn-default dropdown-toggle  js-score-type" name="scoreType[{{ question.id }}]" style="width: 60px;height: 34px; padding: 0px !important;">
+            <option value="question" {% if question.score_rule['scoreType']|default('question') == 'question' %}selected="selected" {% endif %}>{{ 'course.homework.score_set.select.question1'|trans }}</option><option value="option" {% if question.score_rule['scoreType']|default('question') == 'option' %}selected="selected" {% endif %}>{{ 'course.homework.score_set.select.option1'|trans }}</option>
+          </select>
+        </div>
+        <input type="text" class="form-control score-validate js-fill-score js-score" name="choiceScore[{{ question.id }}]" value="{{ question.score_rule['otherScore']|default(0)|score_text }}" style="width: 60px;" aria-label="...">
+      </div>
+      {% else %}
+        <input type="text" class="form-control score-validate js-score" name="score[{{ question.id }}]" style="width: 120px"  value="{{ question.score|default(0)|score_text }}">
+    {% endif %}
   </td>
   {% if question.answer_mode in ['uncertain_choice', 'choice'] %}
-    <td class="js-miss-score" data-miss-score="{{ question.miss_score|default(0)|score_text }}">
-      {{ question.miss_score|default(0)|score_text }}
+    <td class="js-miss-score js-question-item js-material-miss-{{ question.answer_mode }}">
+      <div class="input-group">
+        <div class="input-group-btn">
+          <select class="btn btn-default dropdown-toggle js-score-type" name="scoreType[{{ question.id }}]" style="width: 60px;height: 34px; padding: 0px 5px !important;">
+            <option value="question" {% if question.score_rule['scoreType']|default('question') == 'question' %}selected="selected" {% endif %}>{{ 'course.homework.score_set.select.question2'|trans }}</option>
+            <option value="option" {% if question.score_rule['scoreType']|default('question') == 'option' %}selected="selected" {% endif %}>{{ 'course.homework.score_set.select.option2'|trans }}</option>
+          </select>
+        </div>
+        <input type="text" class="form-control score-validate js-miss-choice-score" name="choiceScore[{{ question.id }}]" value="{{question.score_rule['otherScore']|default(0)|score_text}}" style="width: 60px" aria-label="...">
+      </div>
     </td>
   {% else %}
     <td></td>

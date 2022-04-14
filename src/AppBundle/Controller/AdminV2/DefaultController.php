@@ -35,6 +35,7 @@ class DefaultController extends BaseController
     {
         return $this->render('admin-v2/default/index.html.twig', [
             'isNewcomerTaskAllDone' => $this->isNewcomerTaskAllDone(),
+            'isSetConsult' => $this->validateConsultSetting(),
         ]);
     }
 
@@ -472,6 +473,20 @@ class DefaultController extends BaseController
         }
 
         return true;
+    }
+
+    protected function validateConsultSetting()
+    {
+        $isSetConsult = true;
+        $user = $this->getCurrentUser();
+        if (in_array('ROLE_SUPER_ADMIN', $user->getRoles()) && $consult = $this->getSettingService()->get('consult', [])) {
+            $phoneNumbers = ArrayToolkit::column($consult['phone'], 'number');
+            if ($consult['enabled'] && [''] == array_unique($phoneNumbers)) {
+                $isSetConsult = false;
+            }
+        }
+
+        return $isSetConsult;
     }
 
     /**

@@ -1,4 +1,8 @@
 <li class="live-course-lesson-item cd-mb16 clearfix" id="lesson-{{ task.id }}">
+  {% set roomType =  activity.ext.roomType|default(null) %}
+  {%  if roomType == 'pseudo' %}
+      <img style="position: absolute; width: 28px;" src="{{ asset('assets/img/live/pseudolive_left.png') }}"></img>
+  {% endif %}
 	<div class="item-line"></div>
 	<div class="item-content">
 	  {% set mediaStatus = task.mediaStatus|default(null) %}
@@ -31,7 +35,11 @@
 
 		{% if task.status == 'published' and task.isEnd %}
 			{% if activity.ext.replayStatus == 'ungenerated' %}
-				<span class="text-warning">({{'course.replay_manage.ungenerated'|trans}})</span>
+        {% if "now"|date("U") >= activity.endTime+3*3600 %}
+				  <span class="cd-text-danger">({{'course.replay_manage.generated_fail'|trans}})</span>
+        {% else %}
+          <span class="text-warning">({{'course.replay_manage.ungenerated'|trans}})</span>
+        {% endif %}
 			{% elseif activity.ext.replayStatus == 'generated' %}
 				<span class="text-warning">({{'course.replay_manage.generated'|trans}})</span>
 			{% elseif activity.ext.replayStatus == 'videoGenerated' %}
@@ -72,6 +80,12 @@
         <a class="cd-link-assist cd-mr16 item-actions__btn" href="#modal" title="{{'course.replay_manage.replay'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip" data-toggle="tooltip" title="{{'course.replay_manage.replay'|trans}}" data-container="body"></i></a>
       {% endif %}
     {% endif %}
-
+    {% if task.status == 'published' and task.isEnd and activity.ext.replayStatus == 'generated' and activity.ext.liveProvider == 13 %}
+      {% if browse|default() %}
+        <a href="#modal" class="cd-link-assist cd-mr24" title="{{'course.replay_manage.edit_btn'|trans}}" data-toggle="modal" data-url="{{ path('course_manage_record_replay_setting', {courseId:course.id, taskId: task.id}) }}" ><span class="es-icon es-icon-zhibohuifang" data-toggle="tooltip" title="{{'本地录制'|trans}}"></span></a>
+      {% else %}
+        <span class="cd-link-assist cd-mr24" title="{{'live_course.record_replay.safair_tip'|trans}}" ><span class="es-icon es-icon-zhibohuifang" data-toggle="tooltip" title="{{'live_course.record_replay.safair_tip'|trans}}"></span></span>
+      {% endif %}
+    {% endif %}
 	</div>
 </li>

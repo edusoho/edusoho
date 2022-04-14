@@ -102,27 +102,72 @@
 }
 
 .download-list {
-  list-style: none;
   padding-left: 0;
+  list-style: none;
   .border-radius(4px);
-  background-color: #f8fbfd;
+
   li {
-    padding: 10px 15px 0 ;
+    position: relative;
+    padding: 6px 36px 6px 16px;
+    margin-bottom: 8px;
+    height: 44px;
+    background: #F5F5F5;
+    border-radius: 4px;
+
     &:last-child {
       padding-bottom: 10px;
     }
-    >a {
-      color: @gray-darker;
-      font-weight: bold;
+
+    .download-item-left,
+    .download-item-right {
+      width: 50%;
+      line-height: 32px;
     }
-    .btn-delete {
-      visibility: hidden;
+
+    .download-item-left {
+      padding-right: 16px;
+    }
+
+    .download-item-right {
+      label {
+        margin: 0;
+        font-weight: 400;
+      }
+
+      input {
+        width: calc(100% - 60px);
+        height: 32px;
+        border: none;
+        outline: none;
+        background: #f5f5f5;
+      }
+    }
+
+    > a {
+      max-width: 280px;
+      font-size: 14px;
+      color: #333333;
+      text-align: left;
+      line-height: 20px;
+      font-weight: 500;
+    }
+
+    .js-btn-delete {
+      position: absolute;
+      right: 16px;
+      top: 14px;
       font-size: 16px;
-      color:@gray;
+      color: #999;
     }
+
+    .cd-icon-close {
+      font-size: 20px;
+    }
+
     &:hover {
       >.btn-delete {
         visibility: visible;
+
         &:hover {
           color: @brand-primary;
         }
@@ -195,6 +240,41 @@
       display: inline-block;
       min-width: 85px;
       margin-left: 10px;
+    }
+  }
+}
+
+.default-comment {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 8px;
+
+  &:hover .default-comment-list {
+    display: block !important;
+  }
+
+  &-list {
+    position: absolute;
+    top: 26px;
+    left: 30%;
+    padding: 8px 16px;
+    width: 270px;
+    transform: translateX(-50%);
+    text-align: left;
+    background-color: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    z-index: 9;
+
+    &__item {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+
+      &:hover {
+        color: #46c37b;
+      }
     }
   }
 }

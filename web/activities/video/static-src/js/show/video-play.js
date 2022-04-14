@@ -103,6 +103,16 @@ export default class VideoPlay {
       }
       this.player.currentTime = msg.currentTime;
     });
+
+    const $taskContentIframe = $('#task-content-iframe', window.parent.document);
+
+    messenger.on('requestFullscreen', (msg) => {
+      if (msg.isFullscreen) {
+        $taskContentIframe.addClass('fullscreen');
+      } else {
+        $taskContentIframe.removeClass('fullscreen');
+      }
+    })
   }
 
   _onFinishLearnTask(msg) {

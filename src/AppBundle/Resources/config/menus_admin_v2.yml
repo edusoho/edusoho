@@ -271,7 +271,7 @@ admin_v2:
                                             group: groupButton
                                             router_params:
                                                 id: (classroom.id)
-                                            visible: ( classroom.status=='draft' )
+                                            visible: ( classroom.status=='draft' or classroom.status=='closed' )
                                         admin_v2_sms_prepare:
                                             name: admin_v2.btn.sms_send_btn
                                             router_name: admin_v2_sms_prepare
@@ -528,6 +528,10 @@ admin_v2:
                                     router_name: admin_v2_cloud_file
                                 admin_v2_cloud_attachment:
                                     name: admin_v2.cloud.attachment.basic_tab
+                                admin_v2_question_bank_attachment:
+                                  name: admin_v2.cloud.question_bank.attachment.basic_tab
+                                admin_v2_live_playback:
+                                    name: admin_v2.live_playback.basic_tab
                                 admin_v2_cloud_file_setting:
                                   name: admin_v2.cloud.file_setting.basic_tab
                                 admin_v2_cloud_attachment_setting:
@@ -623,7 +627,6 @@ admin_v2:
                             children:
                                 admin_v2_marketing_coupon_manage:
                                     name: admin_v2.marketing.coupon_menu.basic_tab
-                                    disable: true
                                     router_name: admin_v2_coupon
                                     children:
                                         admin_v2_coupon_generate:
@@ -631,11 +634,9 @@ admin_v2:
                                             group: topBtn
                                 admin_v2_marketing_coupon_query:
                                     name: admin_v2.marketing.query_menu.basic_tab
-                                    disable: true
                                     router_name: admin_v2_coupon_query
                                 admin_v2_coupon_setting:
                                     name: admin_v2.system.marketing.coupon_setting_tab
-                                    disable: true
                         # 微营销
                         admin_v2_micromarketing:
                             name: admin_v2.micromarketing.menu
@@ -973,6 +974,10 @@ admin_v2:
                                             router_name: group_add
                                             group: topBtn
                                             blank: 1
+                                admin_v2_operation_group_recommend_list:
+                                    name: admin_v2.operation.group.group_recommend_tab
+                                    router_name: admin_v2_group_recommend_list
+                                    disable: true
                                 admin_v2_operation_group_thread:
                                     name: admin_v2.operation.group.group_thread_tab
                                     disable: true
@@ -1091,6 +1096,14 @@ admin_v2:
                                             visible: (user.type != 'system' and user.locked == 1)
                                             router_params:
                                                 id: (user.id)
+                                        admin_v2_user_delete:
+                                            name: admin_v2.user.basic.basic_tab.delete_btn
+                                            class: delete-user
+                                            group: groupButton
+                                            mode: none
+                                            visible: (user.type != 'system' and is_super_admin())
+                                            router_params:
+                                                id: (user.id)
                                         admin_v2_user_org_update:
                                             name: admin_v2.user.basic.basic_tab.org_update_btn
                                             parent: admin_user_manage
@@ -1137,37 +1150,6 @@ admin_v2:
                                             class: 'btn cancel-approval'
                                             mode: none
                                             group: groupButton
-                        # admin_v2_teacher:
-                        #     quick_entrance_icon: 'teacher'
-                        #     router_name: admin_v2_teacher
-                        #     name: admin_v2.user.teacher_menu
-                        #     children:
-                        #         admin_v2_teacher_manage:
-                        #             name: admin_v2.user.teacher.basic_tab
-                        #             router_name: admin_v2_teacher
-                        #             disable: true
-                        #             children:
-                        #                 admin_v2_teacher_promote:
-                        #                     name: admin_v2.user.teacher.basic_tab.promote_btn
-                        #                     class: promote-teacher
-                        #                     mode: modal
-                        #                     icon: 'glyphicon glyphicon-hand-up'
-                        #                     group: groupButton
-                        #                     visible: (user.promoted == 0)
-                        #                     router_params:
-                        #                         id: (user.id)
-                        #                         type: teacherList
-                        #                 admin_v2_teacher_promote_cancel:
-                        #                     name: admin_v2.btn.recommend_cancel_btn
-                        #                     class: cancel-promote-teacher
-                        #                     mode: none
-                        #                     group: groupButton
-                        #                     visible: (user.promoted == 1)
-                        #                     router_params:
-                        #                         id: (user.id)
-                        #         admin_v2_teacher_promote_list:
-                        #             name: admin_v2.user.teacher.promote_list_tab
-                        #             disable: true
                         admin_v2_destroy_account:
                             router_name: admin_v2_destroy_account_record
                             name: admin_v2.user.destroy_account_manage_menu
@@ -1180,6 +1162,13 @@ admin_v2:
                                     name: admin_v2.user.destroy_account.destroyed_tab
                                     router_name: admin_v2_destroyed_account
                                     disable: true
+                        admin_v2_scrm:
+                            name: admin_v2.user.scrm_menu
+                            class: js-new-corner-mark
+                            children:
+                                admin_v2_scrm_manage:
+                                    name: admin_v2.user.scrm_menu
+                                    router_name: admin_v2_scrm
         # 交易模块
         admin_v2_trade:
             quick_entrance_icon_class: 'icon-color-yellow'

@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\ThreadService;
+use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 
 class StudentExporter extends Exporter
@@ -52,6 +53,7 @@ class StudentExporter extends Exporter
             'user.fields.company_label',
             'user.fields.career_label',
             'user.fields.title_label',
+            'course.members_manage.export.field_learn_time',
             'student.profile.weibo',
         ];
 
@@ -85,6 +87,12 @@ class StudentExporter extends Exporter
         foreach ($courseMembers as $key => $member) {
             $progress = $this->getLearningDataAnalysisService()->makeProgress($member['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
             $courseMembers[$key]['learningProgressPercent'] = $progress['percent'];
+            $conditions = [
+                'userId' => $member['userId'],
+                'courseIds' => [$member['courseId']],
+            ];
+            $learningTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions($conditions);
+            $courseMembers[$key]['learningTime'] = round($learningTime / 60);
         }
 
         $fields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
@@ -124,6 +132,7 @@ class StudentExporter extends Exporter
             $member[] = $profile['company'] ? $profile['company'] : '-';
             $member[] = $profile['job'] ? $profile['job'] : '-';
             $member[] = $user['title'] ? $user['title'] : '-';
+            $member[] = $courseMember['learningTime'] ?: '-';
             $member[] = $profile['weibo'] ? $profile['weibo'] : '-';
 
             foreach ($fields as $value) {
@@ -248,5 +257,13 @@ class StudentExporter extends Exporter
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return CoursePlanLearnDataDailyStatisticsService
+     */
+    protected function getCoursePlanLearnDataDailyStatisticsService()
+    {
+        return $this->getBiz()->service('Visualization:CoursePlanLearnDataDailyStatisticsService');
     }
 }

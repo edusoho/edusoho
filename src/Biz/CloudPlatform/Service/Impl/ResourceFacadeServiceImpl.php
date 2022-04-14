@@ -53,6 +53,20 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             $payload['encrypt'] = 3;
         }
 
+        //开启云视频防盗增强后，微信内置浏览器,企业微信、钉钉、飞书可以观看视频
+        if (false !== strpos($userAgent, 'MicroMessenger')) {
+            $payload['encrypt'] = 0;
+        }
+        if (false !== strpos($userAgent, 'wxwork')) {
+            $payload['encrypt'] = 0;
+        }
+        if (false !== strpos($userAgent, 'DingTalk')) {
+            $payload['encrypt'] = 0;
+        }
+        if (false !== strpos($userAgent, 'Feishu')) {
+            $payload['encrypt'] = 0;
+        }
+
         $context['token'] = 'cloud' == $file['storage'] ? $this->makePlayToken($file, 600, $payload) : '';
         $context['resNo'] = $file['globalId'];
 
@@ -179,6 +193,13 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
 
         if ('ppt' == $file['type']) {
             $params['directives'] = array_merge($params['directives'], ['convertAll' => true, 'output' => 'ppt', 'imgEncrypt' => false]);
+        }
+
+        if ('document' == $file['type']) {
+            $setting = $this->getSettingService()->get('storage', []);
+            if (!empty($setting['doc_quality']) && 'high' == $setting['doc_quality']) {
+                $params['directives'] = array_merge($params['directives'], ['docQuality' => 'high']);
+            }
         }
 
         return $this->getResourceService()->startUpload($params);

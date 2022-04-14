@@ -290,6 +290,10 @@ userKeyWordTypes:
     nickname: 用户名
     email: 邮件地址
 
+userStatisticsTypes:
+  nickname: 用户名
+  mobile: 手机号
+
 questionType:
     single_choice: 单选题
     choice: 多选题
@@ -298,6 +302,14 @@ questionType:
     determine: 判断题
     essay: 问答题
     material: 材料题
+
+itemQuestionType:
+    single_choice: 单选题
+    choice: 多选题
+    uncertain_choice: 不定项选择题
+    text: 填空题
+    true_false: 判断题
+    rich_text: 问答题
 
 difficulty:
     simple: 简单
@@ -400,7 +412,7 @@ userInfoFields:
     weixin: 微信
 
 passedStatus:
-    none: '-'
+    none: 不合格
     excellent: 优秀
     good: 良好
     passed: 合格
@@ -660,7 +672,12 @@ reportAuditStatus:
     illegal: 违规
 
 multiClassStatus:
-  not_start: 未开始
-  live: 开课中
-  end: 已结束
+    not_start: 未开始
+    live: 开课中
+    end: 已结束
+
+replayKeyWordType:
+    activityTitle: 直播名称
+    anchor: 主讲人
+    courseTitle: 课程名称
 

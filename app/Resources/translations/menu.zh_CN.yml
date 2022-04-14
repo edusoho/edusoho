@@ -574,6 +574,7 @@ admin_v2.cloud_resource.basic_group: 资源管理
 admin_v2.cloud_resource.basic_tab: 云资源
 admin_v2.cloud.file.basic_tab: 云资源
 admin_v2.cloud.attachment.basic_tab: 云附件
+admin_v2.live_playback.basic_tab: 直播回放
 admin_v2.cloud.attachment_setting.basic_tab: 云附件设置
 admin_v2.cloud.file_setting.basic_tab: 云资源设置
 
@@ -734,6 +735,7 @@ admin_v2.information_collect.detail: 用户信息采集 > 详情
 admin_v2.operation.group_menu: 小组管理
 admin_v2.operation.group.group_tab: 小组管理
 admin_v2.operation.group.group_tab.create_group_btn: 创建小组
+admin_v2.operation.group.group_recommend_tab: 小组推荐
 admin_v2.operation.group.group_thread_tab: 小组话题管理
 
 #运营-内容管理-私信管理
@@ -762,6 +764,7 @@ admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: '发送密码重置�
 admin_v2.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮件'
 admin_v2.user.basic.basic_tab.lock_btn: '封禁用户'
 admin_v2.user.basic.basic_tab.unlock_btn: '解禁用户'
+admin_v2.user.basic.basic_tab.delete_btn: '删除用户'
 admin_v2.user.basic.basic_tab.org_update_btn: '修改用户组织机构'
 
 #用户-用户管理-实名认证
@@ -780,6 +783,9 @@ admin_v2.user.teacher.promote_list_tab: 教师推荐
 admin_v2.user.destroy_account_manage_menu: 注销管理
 admin_v2.user.destroy_account.basic_tab: 注销申请
 admin_v2.user.destroy_account.destroyed_tab: 注销记录
+
+#用户管理-销客助手
+admin_v2.user.scrm_menu: 销客助手
 
 #交易-商品订单
 admin_v2.trade.order_manage.basic_group: 订单管理
@@ -913,7 +919,7 @@ admin_v2.system.user_content_ctrl.thread: 话题问答
 admin_v2.system.user_content_ctrl.private_message: 私信
 admin_v2.system.user_content_audit_menu: 内容审核设置
 admin_v2.system.user_content_audit_tab: 用户内容审核设置
-admin_v2.system.course_purchase_agreement_tab: 用户购买协议设置
+admin_v2.system.course_purchase_agreement_tab: 购买协议设置
 admin_v2_system.course_purchase_agreement.eduit: 协议编辑
 
 # 系统-交易设置-资产设置
@@ -940,7 +946,7 @@ admin_v2.system.course.avatar_tab: 默认图片
 admin_v2.system.course.classroom_tab: 班级
 admin_v2.system.course.open_course_tab: 公开课
 admin_v2.system.course.task_multiple_open_tab: 课时多开配置
-admin_v2.system.course.video_task_tab: 视频课时学习配置
+admin_v2.system.course.video_task_tab: 视频课时配置
 
 admin_v2.system.roles_menu: 角色权限
 admin_v2.system.roles.basic_tab: 角色权限
@@ -1053,3 +1059,4 @@ admin_v2.vip_user.operation_record_tab: 会员用户操作记录
 admin.wap_setting.find: 发现页设置
 admin.wap_setting.version_setting: 版本设置
 admin.wap_setting.pay_setting: 支付设置
+admin_v2.cloud.question_bank.attachment.basic_tab: 题库附件

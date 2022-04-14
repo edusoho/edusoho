@@ -47,23 +47,13 @@ class CourseSetController extends CourseBaseController
 
     public function teachingAction(Request $request, $filter = 'normal')
     {
+        $tab = $request->query->get('tab', 'publish');
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
-
-        $conditions = [
-            'type' => $filter,
-            'parentId' => 0,
-        ];
-
-        if ('classroom' == $filter) {
-            $conditions['parentId_GT'] = 0;
-            unset($conditions['type']);
-            unset($conditions['parentId']);
-        }
-
+        $conditions = $this->buildMyTeachingCoursesConditions($filter, $tab);
         $paginator = new Paginator(
             $request,
             $this->getCourseSetService()->countUserTeachingCourseSets($user['id'], $conditions),
@@ -80,7 +70,7 @@ class CourseSetController extends CourseBaseController
         $service = $this->getCourseService();
         $that = $this;
         $courseSets = array_map(
-            function ($set) use ($user, $service, $that) {
+            function ($set) use ($service, $that) {
                 $courseNum = $service->countCourses([
                     'courseSetId' => $set['id'],
                 ]);
@@ -120,6 +110,7 @@ class CourseSetController extends CourseBaseController
                 'classrooms' => $classrooms,
                 'paginator' => $paginator,
                 'filter' => $filter,
+                'tab' => $tab,
             ]
         );
     }
@@ -200,6 +191,40 @@ class CourseSetController extends CourseBaseController
                 'default' => $default,
             ]
         );
+    }
+
+    protected function buildMyTeachingCoursesConditions($filter, $tab = 'publish')
+    {
+        $conditions = [
+            'type' => $filter,
+            'parentId' => 0,
+        ];
+
+        if ('classroom' == $filter) {
+            $conditions['parentId_GT'] = 0;
+            unset($conditions['type']);
+            unset($conditions['parentId']);
+        }
+
+        switch ($tab) {
+            case 'publish':
+                $conditions['status'] = 'published';
+                break;
+            case 'unPublish':
+                $conditions['status'] = 'draft';
+                break;
+            case 'updating':
+                $conditions['serializeMode'] = 'serialized';
+                break;
+            case 'closed':
+                $conditions['status'] = 'closed';
+                break;
+            default:
+                $conditions['serializeMode'] = 'finished';
+                break;
+        }
+
+        return $conditions;
     }
 
     /**

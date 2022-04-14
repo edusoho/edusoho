@@ -9,6 +9,11 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
 {
     protected $table = 'biz_assessment_section_item';
 
+    public function getByAssessmentIdAndItemId($assessmentId, $itemId)
+    {
+        return $this->getByFields(['assessment_id'=>$assessmentId, 'item_id'=>$itemId]);
+    }
+
     public function findByAssessmentId($assessmentId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE assessment_id = ? order by seq ASC";
@@ -27,6 +32,7 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
     {
         return array(
             'orderbys' => [
+                'id',
                 'created_time',
             ],
             'serializes' => [
@@ -34,12 +40,17 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
                 'answer_mode' => 'json',
                 'question_scores' => 'json',
             ],
+            'orderbys' => [
+                'id',
+                'created_time',
+            ],
             'timestamps' => [
                 'created_time',
                 'updated_time',
             ],
             'conditions' => [
                 'id = :id',
+                'assessment_id = :assessment_id',
                 'assessment_id in (:assessmentIds)',
             ],
         );

@@ -14,6 +14,7 @@ use Biz\Course\CourseSetException;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\MaterialService;
+use Biz\Course\Service\MemberService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\File\Service\UploadFileService;
 use Biz\Goods\Service\GoodsService;
@@ -57,7 +58,8 @@ class CourseController extends CourseBaseController
                         'courseId' => $course['id'],
                         'status' => 'published',
                         'isOptional' => 1,
-                    ]),
+                    ]
+                ),
             ]
         );
     }
@@ -83,7 +85,7 @@ class CourseController extends CourseBaseController
             if (!empty($courseMember)) {
                 //周期课程且未开始时，不做跳转
                 if ('date' != $course['expiryMode'] || $course['expiryStartDate'] < time()) {
-                    return $this->redirect(($this->generateUrl('my_course_show', ['id' => $id])));
+                    return $this->redirectToRoute('my_course_show', ['id' => $id]);
                 }
             }
         }
@@ -92,7 +94,7 @@ class CourseController extends CourseBaseController
             $product = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
             $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
 
-            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'targetId' => $course['id'], 'preview' => 'guest' == $request->query->get('previewAs', '') ? 1 : 0]));
+            return $this->redirectToRoute('goods_show', ['id' => $goods['id'], 'targetId' => $course['id'], 'preview' => 'guest' == $preview ? 1 : 0]);
         }
 
         if ($this->isPluginInstalled('Discount')) {
@@ -109,24 +111,20 @@ class CourseController extends CourseBaseController
 
         $isCourseTeacher = $this->getMemberService()->isCourseTeacher($id, $user['id']);
 
-        if (!($this->getMemberService()->isCourseTeacher($id, $user['id']))) {
+        if (!$isCourseTeacher) {
             $this->getCourseService()->hitCourse($id);
         }
-
-        $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
-
-        $member = $this->getCourseMember($request, $course);
 
         return $this->render(
             'course/course-show.html.twig',
             [
                 'tab' => $tab,
-                'tags' => $tags,
+                'tags' => $this->findCourseSetTagsByCourseSetId($course['courseSetId']),
                 'course' => $course,
                 'categoryTag' => $this->calculateCategoryTag($course),
                 'classroom' => $classroom,
                 'isCourseTeacher' => $isCourseTeacher,
-                'navMember' => $member,
+                'navMember' => $this->getCourseMember($request, $course),
             ]
         );
     }
@@ -247,11 +245,13 @@ class CourseController extends CourseBaseController
             $user['id']
         ) : [];
 
-        $isUserFavorite = $user->isLogin() ? !empty($this->getFavoriteService()->getUserFavorite(
+        $isUserFavorite = $user->isLogin() ? !empty(
+        $this->getFavoriteService()->getUserFavorite(
             $user['id'],
             'course',
             $course['courseSetId']
-        )) : false;
+        )
+        ) : false;
 
         $previewAs = $request->query->get('previewAs', null);
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
@@ -506,16 +506,14 @@ class CourseController extends CourseBaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $member = $this->getCourseMember($request, $course);
-
         list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
-
         $pageSize = $paged ? 25 : 10000;  //前台>25个，才会有 显示全部 按钮
         list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], ['limit' => $pageSize]);
-
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $course = $this->getWebExtension()->filterCourseVipRight($course);
 
         return $this->render("course/task-list/{$type}-task-list.html.twig", [
-            'course' => $this->getWebExtension()->filterCourseVipRight($course),
+            'course' => $course,
             'member' => $member,
             'courseSet' => $courseSet,
             'courseItems' => $courseItems,
@@ -556,6 +554,9 @@ class CourseController extends CourseBaseController
 
     public function tasksAction($course, $member = [], $paged = false)
     {
+        $isMember = $this->getCourseMemberService()->getCourseMember($course['id'], $this->getCurrentUser()->getId());
+        $course['taskDisplay'] = $isMember ? 1 : $course['taskDisplay'];
+
         return $this->render(
             'course/tabs/tasks.html.twig',
             [
@@ -566,7 +567,8 @@ class CourseController extends CourseBaseController
                         'courseId' => $course['id'],
                         'status' => 'published',
                         'isOptional' => 1,
-                    ]),
+                    ]
+                ),
             ]
         );
     }
@@ -578,6 +580,7 @@ class CourseController extends CourseBaseController
         $course = $this->getCourseService()->getCourse($courseId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseId);
         $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
+        $course['taskDisplay'] = $member ? 1 : $course['taskDisplay'];
         list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($courseId, ['offsetSeq' => $offsetSeq, 'direction' => $direction]);
 
         return $this->render(
@@ -762,6 +765,16 @@ class CourseController extends CourseBaseController
         $bindUrl = $this->getSCRMService()->getWechatOauthLoginUrl($user, $this->generateUrl('scrm_user_bind_result', ['uuid' => $user['uuid'], 'assistantUuid' => $assistant['uuid']], UrlGeneratorInterface::ABSOLUTE_URL));
 
         return $bindUrl;
+    }
+
+    public function drainageAction($course, $member = [])
+    {
+        return $this->render(
+            'course/widgets/drainage.html.twig',
+            [
+                'course' => $course,
+            ]
+        );
     }
 
     public function newestStudentsAction($course, $member = [])
@@ -1163,5 +1176,13 @@ class CourseController extends CourseBaseController
     protected function getSCRMService()
     {
         return $this->createService('SCRM:SCRMService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

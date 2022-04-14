@@ -143,20 +143,21 @@
         {% else %}
           <a class="btn btn-default btn-sm js-detail-btn " data-url="{{ path('admin_v2_cloud_file_detail', {globalId:cloudFile.globalId}) }}">{{ 'cloud_file.edit_btn'|trans }}</a>
         {% endif %}
-
-        <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu pull-right">
-          <li>
-            {% if pageType  == 'file' %}
-              <a class="js-download-btn" data-url={{ path('admin_v2_cloud_file_download', {globalId:cloudFile.globalId}) }} href="{{ path('admin_v2_cloud_file_download', {globalId:cloudFile.globalId}) }}" target="__blank"><span class="glyphicon glyphicon-download-alt"></span>{{ 'cloud_file.download_btn'|trans }}</a>
-            {% endif %}
-          </li>
-          <li>
-            <a class="js-delete-btn" href="javascript:" data-url="{{ path('admin_v2_cloud_file_delete_modal_show') }}" data-id="{{ cloudFile.globalId }}"><span class="glyphicon glyphicon-trash"></span> {{ 'cloud_file.delete_btn'|trans }}</a>
-          </li>
-        </ul>
+        {% if not cloudFile.useType == 'questionBank' %}
+          <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu pull-right">
+            <li>
+              {% if pageType  == 'file' %}
+                <a class="js-download-btn" data-url={{ path('admin_v2_cloud_file_download', {globalId:cloudFile.globalId}) }} href="{{ path('admin_v2_cloud_file_download', {globalId:cloudFile.globalId}) }}" target="__blank"><span class="glyphicon glyphicon-download-alt"></span>{{ 'cloud_file.download_btn'|trans }}</a>
+              {% endif %}
+            </li>
+            <li>
+              <a class="js-delete-btn" href="javascript:" data-url="{{ path('admin_v2_cloud_file_delete_modal_show') }}" data-id="{{ cloudFile.globalId }}"><span class="glyphicon glyphicon-trash"></span> {{ 'cloud_file.delete_btn'|trans }}</a>
+            </li>
+          </ul>
+        {% endif %}
       </div>
     </td>
   </tr>

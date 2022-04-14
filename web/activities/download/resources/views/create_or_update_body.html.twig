@@ -22,14 +22,20 @@
         <div class="col-sm-10">
           <ul class="download-list" id="material-list">
             {% for media in medias|default() %}
-              <li class="download-item" data-id="{{ media.link|default(media.fileId) }}">
-                {% if media.link|default(null) %}
-                  <a href="{{ media.link }}" target="_blank">{{ media.title }}</a>
-                  <span class="glyphicon glyphicon-new-window color-gray text-sm" title="{{ 'course.plan_task.activity_manage.download.link_file'|trans }}"></span>
-                {% else %}
-                  <a class="gray-primary" href="{{ path('material_download',{ fileId:media.fileId }) }}" target="_blank">{{ media.title }}</a>
-                {% endif %}
-                <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="{{ 'course.plan_task.activity_manage.download.delete_btn'|trans }}"><i class="es-icon es-icon-delete"></i></a>
+              <li class="download-item clearfix" data-id="{{ media.link|default(media.fileId) }}">
+                <div class="download-item-left pull-left text-overflow">
+                  {% if media.link|default(null) %}
+                    <a href="{{ media.link }}" target="_blank">{{ media.title }}</a>
+                    <span class="glyphicon glyphicon-new-window color-gray text-sm" title="{{ 'course.plan_task.activity_manage.download.link_file'|trans }}"></span>
+                  {% else %}
+                    <a class="gray-primary" href="{{ path('material_download',{ fileId:media.fileId }) }}" target="_blank">{{ media.title }}</a>
+                  {% endif %}
+                </div>
+                <div class="download-item-right pull-left">
+                  <label>{{ 'activity_manage.download.summary'|trans }}：</label>
+                  <input class="js-summary-value" data-id="{{ media.link|default(media.fileId) }}" placeholder="{{ 'activity_manage.download.summary.placeholder'|trans }}" value="{{ media.description|default() }}">
+                </div>
+                <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="{{ 'course.plan_task.activity_manage.download.delete_btn'|trans }}"><i class="cd-icon cd-icon-close"></i></a>
               </li>
             {% endfor %}
           </ul>

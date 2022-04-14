@@ -147,6 +147,7 @@ class AttachmentServiceImpl extends BaseService implements AttachmentService
             'convert_status' => [],
             'audio_convert_status' => [],
             'mp4_convert_status' => [],
+            'status' => [],
         ]);
     }
 

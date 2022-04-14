@@ -5,3 +5,7 @@ api.notification.test-paper.perusal: 【Complete】%who% was finished %what%,ple
 api.notification.test-paper.read: 【Review】%who% was reviewed completely %what%.
 api.notification.materialLib.share: %who% has shared the data to you.
 api.notification.homework-submit.perusal: 【Complete】%who% was finished homework,please review in time.
+api.notification.testpaper.comment.create: 【testpaper】%who% Just added a teacher comment of【%what%】, click
+api.notification.testpaper.comment.update: 【testpaper】%who% Just updated a teacher comment of【%what%】, click
+api.notification.homework.comment.create: 【homework】%who% Just added a teacher comment of【%what%】, click
+api.notification.homework.comment.update: 【homework】%who% Just updated a teacher comment of【%what%】, click

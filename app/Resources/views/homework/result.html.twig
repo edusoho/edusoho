@@ -8,6 +8,7 @@
   {% set showHeader = 0 %}
 {% endif %}
 
+{% do script(['app/js/homework/result/index.js']) %}
 
 {% block stylesheets %}
   {{ parent() }}
@@ -18,30 +19,55 @@
   {% endif %}
 {% endblock %}
 
+{% set isModityComment = data('TestpaperReviewRole', {answerRecordId: answerRecord.id | default(null)}) %}
 
 {% block body %}
   {% block header %}
     {% if showHeader %}{{ parent() }}{% endif %}
   {% endblock %}
 
-
   {% if answerRecord.status == 'finished' %}
+    <input type="hidden" class="js-answer-record-id" value='{{ answerRecord.id }}'>
+    <input type="hidden" class="js-testpaper-type" value='{{ type|default('default') }}'>
     <div class="ibs-vue">
       <div class="ant-row">
         <div class="ant-col ant-col-offset-2 ibs-resutl-item">
-          <div class="item-bank-result">
-            <div class="clearfix item-bank-result-content">
-              <div class="item-bank-result-homework">
-                <div class="item-bank-result-info text-left">
-                  <div class="item-bank-result-info__text">
-                    <span class="gray-darker">{{ 'homework.result.tips'|trans }}：</span>
-                    {% if answerReport.grade == 'unpassed' %}
-                    <span class="ibs-color-warning">{{ dict_text('passedStatus', answerReport.grade) }}</span>
-                    {% else %}
-                    <span class="color-success">{{ dict_text('passedStatus', answerReport.grade) }}</span>
-                    {% endif %}
+          <div class="item-bank-result review-result">
+            <div class="review-result__icon">
+              {% if answerReport.grade == 'unpassed' or answerReport.grade == 'none' %}
+                <img class="pull-left" src="{{ asset('static-dist/app/img/item-bank/unpassed.png') }}" srcset="{{ asset('static-dist/app/img/item-bank/unpassed.png') }} 1x, {{ asset('static-dist/app/img/item-bank/unpassed@2x.png') }} 2x">
+              {% else %}
+                <img class="pull-left" src="{{ asset('static-dist/app/img/item-bank/passed.png') }}" srcset="{{ asset('static-dist/app/img/item-bank/passed.png') }} 1x, {{ asset('static-dist/app/img/item-bank/passed@2x.png') }} 2x">
+              {% endif %}
+            </div>
+
+            <div class="review-result__content ">
+              <div class="result-status">
+                {% if answerReport.grade == 'unpassed' or answerReport.grade == 'none' %}
+                  <span class="result-status--unpassed">{{ 'review.result.fail' | trans }}</span>
+                {% else %}
+                  <span class="result-status--passed">{{ 'review.result.pass' | trans }}</span>
+                {% endif %}
+              </div>
+              <div class="teacher-comment">
+                <div class="teacher-comment__label">{{ 'testpaper.result.comment'|trans }}：</div>
+                <div class="teacher-comment__content js-comment-box {% if isModityComment and type|default('default') == 'default' %} teacher-comment__content--pb28 {% endif %}">
+                  <div class="js-comment-content" style="white-space: pre-wrap;">{{ answerReport.comment|default('') }}</div>
+                  {% if isModityComment and type|default('default') == 'default' %}
+                    <span class="modify-comment-btn js-modify-btn">{{ 'review.result.amend_comment' | trans }}</span>
+                  {% endif %}
+                </div>
+
+                <div class="teacher-comment__input hidden js-modify-comment-box">
+                  <textarea maxlength="1500" class="comment-textarea js-comment-textarea" name="comment-textarea" rows="5">{{ answerReport.comment|default('') }}</textarea>
+                  <select name="comment-select" class="comment-select js-comment-select">
+                    {{ 'course.homework_check.review.common_comments' | trans | raw }}
+                  </select>
+                  <div class="comment-btn">
+                    <button class="cd-btn cd-btn-ghost-default cd-btn-sm js-close-btn">{{ 'form.btn.cancel' | trans }}</button>
+                    <button class="cd-btn cd-btn-primary cd-btn-sm js-save-btn">{{ 'form.btn.save' | trans }}</button>
+                    <p style="margin-top: 4px; margin-bottom: 0; font-size: 14px;">{{ 'review.result.comment_tips' | trans }}</p>
                   </div>
-                  <div class="color-gray item-bank-result__comment">{{ 'testpaper.result.comment'|trans }}：{{ answerReport.comment|default('-') }}</div>
                 </div>
               </div>
             </div>

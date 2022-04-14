@@ -19,6 +19,13 @@ class AnswerReportDaoImpl extends AdvancedDaoImpl implements AnswerReportDao
         return $this->findByFields(['answer_scene_id' => $answerSceneId]);
     }
 
+    public function deleteByAssessmentId($assessmentId)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE assessment_id = ?";
+
+        return $this->db()->executeUpdate($sql, [$assessmentId]);
+    }
+
     public function declares()
     {
         return [
@@ -26,16 +33,19 @@ class AnswerReportDaoImpl extends AdvancedDaoImpl implements AnswerReportDao
                 'created_time',
                 'updated_time',
             ],
-            'orderbys' => [],
+            'orderbys' => ['id', 'created_time'],
             'serializes' => [],
             'conditions' => [
                 'user_id = :user_id',
                 'answer_scene_id = :answer_scene_id',
                 'answer_scene_id IN (:answer_scene_ids)',
+                'id != :exclude_id',
                 'assessment_id = :assessment_id',
                 'status = :status',
                 'review_user_id != :exclude_review_user_id',
                 'review_user_id = :review_user_id',
+                'created_time <= :created_time_LE',
+                'grade NOT IN ( :excludeGrades )',
             ],
         ];
     }

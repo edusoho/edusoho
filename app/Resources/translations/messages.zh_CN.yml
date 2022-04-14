@@ -1,6 +1,8 @@
 Bad credentials.: 用户名或密码错误
 # 全站
 # 整站导航
+site.recommend: 推荐
+site.not_recommended: 不推荐
 site.alipay: 支付宝
 site.trade.title: %name%订单
 site.online_school_name: 网校名称
@@ -8,9 +10,9 @@ site.online_school_about: 网校简介
 site.online_school_logo: 网校LOGO
 site.register_link_url: 注册链接的地址
 site.not_support_cloud_video: >
-  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。
+  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。允许在微信、企业微信、钉钉、飞书中观看。
 site.not_support_cloud_video_upgrade: >
-  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请用微信打开或<a href="%mobileUrl%" target="parent">下载App</a>。
+  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请用微信、企业微信、钉钉、飞书打开或<a href="%mobileUrl%" target="parent">下载App</a>。
 site.currency.CNY: 元
 site.date.year: 年
 site.date.month: 月
@@ -143,12 +145,15 @@ site.twig.extension.smarttime.previous_second: %diff%秒前
 site.twig.extension.smarttime.previous_minute: %diff%分钟前
 site.twig.extension.smarttime.previous_hour: %diff%小时前
 site.twig.extension.smarttime.previous_day: %diff%天前
-site.twig.extension.time_interval.minute: %diff%分
+site.twig.extension.time_interval.second: '%diff% 秒'
+site.twig.extension.time_interval.minute: '%diff%分'
 site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%秒'
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
-site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课的视频页面地址导入
+site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课、BiLiBiLi、爱奇艺的视频页面地址导入
 site.btn.detail: 详情
 site.setting.finished: 已设置
+site.setting.goto: 前往设置
+site.setting.cancel: 暂不填写
 site.setting.unfinished: 未设置
 site.verify.finished: 已验证
 site.verify.unfinished: 未验证
@@ -542,7 +547,7 @@ order.status: 订单状态
 order.deduct: 优惠抵扣
 order.item_type: 订单类型
 order.product_type: 商品类型
-order.source:  渠道
+order.source: 渠道
 order.status.created: 未完成
 order.status.paid: 已付款
 order.status.cancel: 已关闭
@@ -589,7 +594,7 @@ order.export_btn: 导出订单
 order.confirm: 订单确认
 order.confirm.pay_total: 合计
 order.confirm.pay_rmb: 应付
-order.confirm.pay_points:  您有可使用的 %num% 点，使用
+order.confirm.pay_points: 您有可使用的 %num% 点，使用
 order.confirm.point: 点
 order.confirm.cal_formula: %coin_name% ÷ 汇率(%cashRate%) =
 order.confirm.submit_btn: 提交订单
@@ -1094,8 +1099,10 @@ course.marketing_setup.course_award: 完成教学计划
 course.teacher_setup: 教师管理
 course.teacher_setup.exist_teacher: 已添加教师
 course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用户
+course.teacher_setup.exist_teacher.add_tips_v2: 只能添加有教师权限的用户，排序在第一位老师下的其他老师均为直播间助教身份
 
 course.members_manage: 学员管理
+course.members_manage.export.field_learn_time: 累加学习时长
 course.members_manage.official_student: 正式学员
 course.members_manage.official_student.search: 搜索
 course.members_manage.official_student.batch_upload_deadline: 批量修改有效期
@@ -1259,6 +1266,9 @@ course.homework_check.review.empty: 暂无数据
 course.homework_check.review.name: 姓名
 course.homework_check.review.score: 成绩
 course.homework_check.review.submit_time: 提交时间
+course.homework_check.review.submit_num: 作业次数
+course.homework_check.review.submit_num_detail: 第%num%次
+course.testpaper_check.review.submit_num: 考试次数
 course.homework_check.review.status: 状态
 course.homework_check.review.reviewer: 批阅人
 course.homework_check.review.operation: 操作
@@ -1286,7 +1296,7 @@ course.homework_check.teacher_say.input_placeholder: 请输入评语
 course.homework_check.need_check_item: >
   待批阅题目 <small class="color-gray">共%itemCount%题</small>
 course.homework_check.create.name: 作业名称
-course.homework_check.homework_delete:  该作业已删除
+course.homework_check.homework_delete: 该作业已删除
 
 course.question_marker_statistics: 弹题统计
 
@@ -1363,16 +1373,17 @@ course.replay_manage: 录播管理
 course.replay_manage.content_title: 录播管理
 course.replay_manage.empty: 暂无直播内容！
 course.replay_manage.tips: >
-  提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
+  提示：对于“回放生成失败”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来重新生成直播回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
   <div class="cd-text-medium"><b>注意，上传视频文件后无法再使用录制文件作为回放。</b></div>
 course.replay_manage.unpublished: 未发布
 course.replay_manage.live_not_stop: 直播未结束
-course.replay_manage.ungenerated: 未生成回放
+course.replay_manage.ungenerated: 生成回放中
+course.replay_manage.generated_fail: 回放生成失败，点击录像重新生成
 course.replay_manage.generated: 已生成回放
 course.replay_manage.video_generated.file_exsist: 已上传录像
 course.replay_manage.video_generated.file_not_exsist: 回放视频文件已删除
-course.replay_manage.record: 录制
-course.replay_manage.record_again: 重新录制
+course.replay_manage.record: 生成回放
+course.replay_manage.record_again: 生成回放
 course.replay_manage.replay: 上传回放
 course.replay_manage.preview_btn: 预览
 course.replay_manage.edit_btn: 编辑
@@ -1501,6 +1512,7 @@ course.teacher: 教师：
 course.reward_point.award: 积分奖励
 course.reward_point.course_award: 完成课程奖励
 course.teacher.content_title: 授课教师
+course.drainage.content_title: 教学服务
 course.advanced.content_title: 上周学霸
 course.characteristic.content_title: 课程特色
 course.newest_students.content_title: 最新学员
@@ -1593,6 +1605,7 @@ course.plan_info: >
   <p>3、支持相同课程内容，但提供不同服务等级的课程：视频班、直播班、答疑班；</p>
   <p>4、支持根据学员的学习能力，开设多个教学班：快班、慢班；</p>
   <p class="cd-mt24">欢迎您使用教学计划管理，新的功能将更好的支持您开展教学工作，您的声音是我们前进的动力！</p>
+course.testpaper_export.btn: 导出成绩单
 
 
 # 课程扩展
@@ -1605,6 +1618,7 @@ course.tab.material: '资料区'
 course.tab.reviews: '评价'
 course.tab.summary: '介绍'
 course.tab.certificate: '课程证书'
+course.activity.replay: '直播回放'
 course.activity.video: '视频'
 course.activity.audio: 音频
 course.activity.live: 直播
@@ -1773,7 +1787,7 @@ course.testpaper_manage.publish_btn: 发布试卷
 course.testpaper_manage.publish_tips: 真的要发布%name%吗？ 试卷发布后无论是否关闭都将无法修改。
 course.testpaper_manage.close_btn: 关闭试卷
 course.testpaper_manage.close_tips: 真的要关闭试卷%name%吗？
-course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被%taskName%引用，真的要关闭吗？
+course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被%taskName%引用，关闭试卷可能会导致学员无法参与考试，请勿关闭试卷
 course.testpaper_manage.edit_btn: 编辑试卷信息
 course.testpaper_manage.manage_btn: 管理题目
 course.testpaper_manage.repead_btn: 重新生成题目
@@ -1873,6 +1887,7 @@ course.testpaper_manage.analysis_card.avg_score: 平均成绩：
 course.testpaper_manage.analysis_card.avg_score_tip: 平均成绩以首次提交的成绩计算
 
 course.course_files: 文件管理
+course.course_resource: 资源管理
 course.course_files.content_title: 文件管理
 course.course_files.create_btn: 添加课程文件
 course.course_files.name: 文件名
@@ -1992,6 +2007,7 @@ course.plan_task.activity_manage.activity_file_empty: 抱歉，%type%文件不�
 course.plan_task.activity_manage.preview_failed_tips: 当前%taskName%不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
 course.plan_task.activity_manage.help_block: 建议标题字数控制在15字以内，否则会影响手机端浏览
+course.plan_task.live_video.help_block: 智能直播当前仅支持选择已转码成功的云视频
 course.plan_task.activity_ppt_animation_tip: 当前PC端已支持播放PPT中的动画及音视频（App、小程序和新版微网校暂不支持）。
 course.plan_task.activity_ppt_animation_link: 动画支持情况
 course.plan_task.activity_ppt_animation_btn: 切换图片模式
@@ -2004,7 +2020,7 @@ course.plan_task.activity_manage.choose_teach_way: >
 course.plan_task.activity_manage.setup_content: >
   <span class="number">2</span>
   设置内容
-course.plan_task.activity_manage.setup_finish_condition:  >
+course.plan_task.activity_manage.setup_finish_condition: >
   <span class="number">3</span>
   设置完成条件
 course.plan_task.activity_manage.create: 添加%taskName%
@@ -2038,6 +2054,7 @@ activity_manage.time_last_tips: >
 activity_manage.finished_tips: >
   <span class="color-primary">恭喜！你已完成该任务</span>
 activity_manage.finish_select_tips_time: 页面停留时长
+activity_manage.live_finish_select_tips_time: 页面停留时长
 activity_manage.finish_select_tips_watch_time: 视频播放时长
 activity_manage.finish_select_tips_end: 学习到最后
 
@@ -2070,7 +2087,7 @@ course.plan_task.activity_manage.download.upload_files: 上传资料
 course.plan_task.activity_manage.download.chooser_from_material: 从资料库中选择
 course.plan_task.activity_manage.download.chooser_from_course: 从课程中选择文件
 course.plan_task.activity_manage.download.import_video: 导入网络视频
-course.plan_task.activity_manage.download.link: 网络连接
+course.plan_task.activity_manage.download.link: 网络链接
 course.plan_task.activity_manage.download.file_name: 资料名称：
 course.plan_task.activity_manage.download.upload_btn: (请上传或选择资料)
 course.plan_task.activity_manage.download.input_placeholder: 填写资料简介（可选）
@@ -2100,10 +2117,11 @@ course.plan_task.activity_manage.exercise.finished_condition: 提交练习
 course.plan_task.activity_manage.flash.play_tips: 注意：Flash在移动端上无法播放!
 course.plan_task.activity_manage.homework.finished_condition: 提交作业
 course.plan_task.activity_manage.homework.info: 作业说明
+course.plan_task.activity_manage.homework.can_not_edit_tips: 该作业已在其他复制课程中引用,题目暂不可编辑
 course.plan_task.activity_manage.homework.total: >
   本次作业<span class="color-primary">%itemCount%题</span>
 course.plan_task.activity_manage.homework.choose_question: 选择题目
-course.plan_task.activity_manage.homework.save_tips: 提示：保存后题目将不能再添加或移除。
+course.plan_task.activity_manage.homework.save_tips: 发布后题目将不能再添加或移除。
 course.plan_task.activity_manage.homework.submit: 提交作业
 course.plan_task.activity_manage.homework.start_btn: 开始做题
 course.plan_task.activity_manage.homework.reviewing_tips: 老师正在批阅作业，批阅完成后会以站内私信通知您批阅结果，请稍等。
@@ -2112,7 +2130,7 @@ course.plan_task.activity_manage.homework.question_total: >
   作业题目 <small class="color-gray">共%itemCount%题</small>
 course.plan_task.activity_manage.homework.confirm_submit: 确认提交
 course.plan_task.activity_manage.homework.confirm_submit_tips: 您真的要提交吗？
-course.plan_task.activity_manage.live.finished_condition_tips: 进入参加过直播。
+course.plan_task.activity_manage.live.finished_condition_tips: 进入参加过直播
 course.plan_task.activity_manage.live.start_time: 直播开始时间
 course.plan_task.activity_manage.live.create_tips: 请选择有效的开始时间以便创建直播教室。
 course.plan_task.activity_manage.live.live_time: 直播时长
@@ -2120,8 +2138,9 @@ course.plan_task.activity_manage.live.info: 直播说明
 course.plan_task.activity_manage.live.expiry_tips: 提示：本计划的学习加入方式为“随到随学”，加入直播%taskName%可能会导致后来的学员无法参加，只能观看回放。
 course.plan_task.activity_manage.live.join_tips: 进入参加过直播
 course.plan_task.activity_manage.live_resource.choose_file: 选择课件
+course.plan_task.activity_manage.live_video.choose_file: 设置直播视频
 course.plan_task.activity_manage.live_resource.file_name: 资料名称：
-course.plan_task.activity_manage.live_resource.upload_btn:  (请上传或选择资料)
+course.plan_task.activity_manage.live_resource.upload_btn: (请上传或选择资料)
 course.plan_task.activity_manage.live_resource.add_btn: 添加资料
 course.plan_task.activity_manage.live_resource.delete_btn: 删除
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 学习到最后一页
@@ -2140,6 +2159,18 @@ course.plan_task.activity_manage.testpaper.create: >
   还没有试卷，请先去<a href="%testpaperUrl%" target="_parent">创建</a>
 course.plan_task.activity_manage.testpaper.empty_tips: 如果找不到试卷，请先确定该试卷已经发布
 course.plan_task.activity_manage.testpaper.qualified_score: 合格分数
+course.plan_task.activity_manage.testpaper.auto_comment: 自动评语
+course.plan_task.activity_manage.testpaper.score: 得分区间
+course.plan_task.activity_manage.testpaper.comment_content: 评语内容
+course.plan_task.activity_manage.testpaper.comment_operation: 操作
+course.plan_task.activity_manage.testpaper.add_comment: 添加评语
+course.plan_task.activity_manage.testpaper.default_comment: 默认评语
+course.plan_task.activity_manage.testpaper.default_comment1: 继续努力，继续进步！
+course.plan_task.activity_manage.testpaper.default_comment2: 不错，有进步，再努力些就会更棒！
+course.plan_task.activity_manage.testpaper.default_comment3: 你真棒！我为你骄傲！
+course.plan_task.activity_manage.testpaper.default_comment4: 有点松懈了吧？继续加油吧！
+course.plan_task.activity_manage.testpaper.default_comment5: 用心、专注、坚持，你能做的更好的！
+course.plan_task.activity_manage.testpaper.comment_remove: 移除
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 course.plan_task.activity_manage.testpaper.times: 考试次数
 course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
@@ -2159,6 +2190,7 @@ course.plan_task.activity_manage.testpaper.mode.require_credit: 限制学分
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 参加此次考试所需的学分，０分则不限制。
 course.plan_task.activity_manage.testpaper.pass: 分数达标
 course.plan_task.activity_manage.testpaper.score_pass: 考试合格
+course.plan_task.activity_manage.homework.score_pass: 作业合格
 course.plan_task.activity_manage.testpaper.finish_tip: 提示：若任务完成条件选择了“考试合格”，则学员的考试分数必须达到上一步中设置的“合格分数”，才能完成此任务。
 course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始，请在%startTime%之后再来
 course.plan_task.activity_manage.testpaper.total_question: >
@@ -2186,6 +2218,11 @@ course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可�
 course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
 course.plan_task.activity_manage.video.time_at_least: 至少停留
 course.plan_task.activity_manage.video.watch_time_at_least: 至少播放
+course.plan_task.activity_manage.video.not_completed_prohibited: 任务未完成时,禁止播放器进度拖拽
+
+course.plan_task.activity_manage.replay: 直播回放
+course.plan_task.activity_manage.replay.time: 直播回放时长
+
 course.plan_task.activity_manage.create_btn: 前往课程讨论区
 course.plan_task.activity_manage.exercise.questionNum: >
   <span class="color-gray text-sm">共<span role="questionNum" type="%questionType%" >%questionNum%</span>题
@@ -3514,7 +3551,7 @@ homepage.learning_course.learning_progress: 完成%percent%
 homepage.recommend_classroom.content_title: 推荐班级
 homepage.recommend_classroom.more: >
   更多%moreClassrooms%
-site.datagrid.filter.class_more : 更多班级
+site.datagrid.filter.class_more: 更多班级
 homepage.article.content_title: 最新%article_name%
 homepage.student_comment.content_title: 学员评价
 homepage.student_comment.from: >
@@ -4385,6 +4422,7 @@ my.teaching.open_course.lesson.header.content.tips: 直播已经开始，直播�
 my.teaching.open_course.lesson.header.content.end.tips: 结束
 my.teaching.open_course.lesson.header.live_course_end: 直播已经结束
 my.teaching.open_course.lesson.header.view_replay_btn: 查看回放
+my.teaching.open_course.lesson.header.cannot_see.tips: 暂不支持查看回放，请使用其他浏览器查看
 my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍后再来：
 my.teaching.open_course.lesson.header.view_replay_not_permitted.tips: 直播回放被设置为不允许观看
 my.teaching.open_course.lesson.header.lesson_finished: 课时学习完成
@@ -5050,7 +5088,7 @@ admin.course_manage.manage.vip_grade: 会员等级
 admin.course_manage.manage.duration: 会员时长
 admin.course_manage.manage.introduction: 会员介绍
 admin.course_manage.manage.member_benefits: 会员特权
-admin.course_manage.manage.newest_member : 最新会员
+admin.course_manage.manage.newest_member: 最新会员
 admin.course_manage.manage.vip_grade_removed: 该会员等级已删除
 admin.course_manage.manage.vip_grade_count: 等%count%个会员等级
 notify.vip.no_course_or_classroom: 暂无会员课程或班级
@@ -5076,6 +5114,7 @@ admin.course_manage.manage.closed_count: >
   已关闭：<strong class="inflow-num">%closedNum%</strong>个
 admin.course_manage.manage.unpublish_count: >
   未发布：<strong class="inflow-num">%unPublishedNum%</strong>个
+admin.course_set_manage.recommend.tips: 优先按推荐序号由小至大排序，未推荐的按创建时间倒序
 admin.course_set_manage.manage.number: 课程编号
 admin.course_manage_modal.manage.number: 计划编号
 admin.course_manage.manage.number: 编号
@@ -5478,6 +5517,7 @@ admin.classroom_manage.manage.name_th: %name%名称
 admin.classroom_manage.manage.course_number_th: 课程数
 admin.classroom_manage.manage.student_number_th: 学员数
 admin.classroom_manage.manage.price_th: 价格
+admin.classroom_manage.manage.creator: 创建者/时间
 admin.classroom_manage.manage.status_th: 状态
 admin.classroom_manage.manage.operate_th: 操作
 admin.classroom_manage.manage.empty: 暂无%name%信息!
@@ -5566,6 +5606,7 @@ admin.question_bank.manage.model: >
 
   <p class="question-bank-model-title question-bank-model__special"><i class="es-icon es-icon-Explain"></i>特别说明</p>
   <p class="question-bank-model-text">老数据处理：原课程中的题目和试卷都搬迁到新版题库中了，原先教师有权限管理的题库，现在依然有权限管理</p>
+admin.question_bank.manage.delete_question: '%user%用户, 在 <<%questionBank%题库>> 中删除了%num%道题目'
 
 
 #　分类管理
@@ -5792,7 +5833,7 @@ admin.setting.site.website_status.open: 开放
 admin.setting.site.website_status.closed: 关闭
 admin.setting.site.closed_note: 网站关闭公告
 admin.setting.site.ICP_record: 如何将ICP备案号添加至网站底部？
-admin.setting.site.public_security_record : 如何将公安备案图标和编号添加至网站底部？
+admin.setting.site.public_security_record: 如何将公安备案图标和编号添加至网站底部？
 admin.setting.site.closed_note.help_block: 网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码
 admin.setting.site.recordUrl.help_block: 以"http://"开头，以备案号结尾，请填写完整的公安备案号链接。示例：http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: 名称
@@ -5959,6 +6000,11 @@ admin.setting.navigation.status.closed: 关闭
 admin.setting.navigation.edit_btn: 编辑
 admin.setting.navigation.add_child_menu_btn: 添加二级导航
 admin.setting.consult.customer_service_function: 客服功能
+admin.setting.consult.check_tips: >
+  为了更好地为用户提供高效优质服务,请您设置客服联系电话
+  <br>
+  提升服务质量
+admin.setting.consult.phone_error: 联系电话设置错误
 admin.setting.consult.floating_bar: 浮动条颜色
 admin.setting.consult.delete_btn: 删除
 admin.setting.consult.add_btn: 新增
@@ -6390,9 +6436,16 @@ admin.operation_group.edit_btn: 编辑
 admin.operation_group.viewGroup_btn: 查看小组
 admin.operation_group.closeGroup_btn: 关闭小组
 admin.operation_group.openGroup_btn: 开启小组
+admin.operation_group.recommendGroup_btn: 推荐小组
+admin.operation_group.deleteGroup_btn: 删除小组
 admin.operation_group.transferGroup_btn: 转移小组
 admin.operation_group.closeGroup_title: 关闭小组(%groupTitle%)
 admin.operation_group.openGroup_title: 开启小组(%groupTitle%)
+admin.operation_group.recommendGroup_title: 推荐小组(%groupTitle%)
+admin.operation_group.cancelRecommendGroup_title: 取消推荐小组(%groupTitle%)
+admin.operation_group.deleteGroup_title: 删除小组(%groupTitle%)
+admin.operation_group.recommend.modal_title: 设置推荐小组
+admin.operation_group.recommend.empty: 暂无推荐小组
 admin.operation_group.modal.enter_user_name: 请输入用户名
 admin.operation_group.modal.transfer_to: 转移给
 admin.operation_group.modal.user_name.data_display: 用户名
@@ -6538,7 +6591,7 @@ admin.operation_certificate.certificate.resource_choose: 选择发放对象
 admin.operation_certificate.certificate.resource_choose_btn: 选择......
 admin.operation_certificate.certificate.template_choose: 选择证书模板
 admin.operation_certificate.certificate.code: 证书编码
-admin.operation_certificate.certificate.code.placeholder: 1至6位数字或英文字母，不区分大小写
+admin.operation_certificate.certificate.code.placeholder: 1至20位数字或英文字母，不区分大小写
 admin.operation_certificate.certificate.expiry_day: 证书有效期
 admin.operation_certificate.certificate.expiry_day.forever: 长期有效
 admin.operation_certificate.certificate.expiry_day.placeholder: 输入证书有效期，空值位长期有效
@@ -6930,8 +6983,10 @@ admin.edu_cloud.edu_video.open_radio: 开启
 admin.edu_cloud.edu_video.close_radio: 关闭
 admin.edu_cloud.edu_video.normal_mode_tips: >
   选择普通模式，<span class="text-success">新上传</span>的视频文件在手机浏览器下默认使用通用格式播放，增强了视频课时对手机浏览器的兼容性；<br/><span class="text-danger">但普通模式的视频在某些情况下有被盗的风险，请谨慎开启。</span>
-admin.edu_cloud.edu_video.encryption_mode_tips: '选择加密模式，能极大的提升视频的安全性，但可能导致视频课时在某些陈旧的手机浏览器上无法正常播放。'
+admin.edu_cloud.edu_video.encryption_mode_tips: 选择加密模式，能极大的提升视频的安全性，但可能导致视频课时在某些陈旧的手机浏览器上无法正常播放。
 admin.edu_cloud.edu_video.transcode_quality: 视频转码画质
+admin.edu_cloud.edu_video.doc_quality: 文档清晰度
+admin.edu_cloud.doc_quality.high: 高清
 admin.edu_cloud.edu_video.transcode_quality_low: >
   流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%
 admin.edu_cloud.edu_video.transcode_quality_normal: >
@@ -6985,7 +7040,7 @@ admin.edu_cloud.edu_video.finger_print_time: 秒
 admin.edu_cloud.edu_video.finger_print_opacity_label: 指纹不透明度：
 admin.edu_cloud.edu_video.finger_print_opacity_tips: 请输入0～1之间的一位小数,数字越小越透明
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 云视频防盗增强
-admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。安卓端仅允许在微信APP内置浏览器中观看
 admin.edu_cloud.edu_video.enable_hls_encryption_plus_upgrade_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在微信外的其他手机浏览器中播放，系统会引导用户使用微信或App观看。
 admin.edu_cloud.edu_video.buy_flow_tips: >
   开通流量年包，视频流量更划算。<a class="" href="%bugUrl%" target="_blank">什么是流量年包？</a>
@@ -7198,6 +7253,8 @@ admin.edu_cloud.edu_sms.homework_checked: 作业完成批阅
 admin.edu_cloud.edu_sms.homework_checked_tips: 您的课程：《课程名称》-《学习任务名称》的作业已被老师批阅，快来看看吧!
 admin.edu_cloud.edu_sms.testpaper_checked: 试卷完成批阅
 admin.edu_cloud.edu_sms.testpaper_checked_tips: 您的课程：《课程名称》-《学习任务名称》的试卷已被老师批阅，快来看看吧!
+admin.edu_cloud.edu_sms.comment_modify: 评语修改通知
+admin.edu_cloud.edu_sms.comment_modify_tips: 课程：《课程名称》-学习任务：[任务名称[考试/评语]任务]的教师评语已修改，点击查看[链接地址]
 admin.edu_cloud.edu_sms.invite_rewards_not_enough: 邀请注册奖励不足
 admin.edu_cloud.edu_sms.coupon_not_enough_tips: 您设置的［邀请注册］活动奖励［优惠券名称］仅剩 50 张，请及时关注剩余优惠券数量。
 admin.edu_cloud.edu_sms.invite_rewards_is_exhausted: 邀请注册奖励消耗完
@@ -7699,6 +7756,7 @@ admin.user_fields.modal.init_fields.disabled.tips: 已满5个
 admin.user_fields.modal.float_fields: 小数
 admin.user_fields.modal.float_fields.tips: 还可以添加%floatCount%个字段,保留到两位小数
 admin.user_fields.modal.date_fields: 日期
+admin.user_fields.modal.select_list_fields: 下拉列表
 admin.user_fields.modal.date_fields.tips: 还可以添加%5-dateCount%个字段
 admin.user_avatar.customer_default_avatar: 自定义默认头像
 admin.user_avatar.customer_default_avatar.help_block: 请上传jpg, gif, png格式的图片
@@ -7721,7 +7779,7 @@ admin.role_manage.operation: 操作
 admin.role_manage.role.empty: 暂无角色
 admin.role_manage.keyword.placeholer: 关键词
 admin.role_manage.help_block: >
-  <p>1、初始化的4个角色，无法编辑和删除</p>
+  <p>1、初始化的6个角色，无法编辑和删除</p>
   <p>2、角色创建成功后编码不可修改</p>
 admin.role_manage.modal.show_modal: 角色详情
 admin.role_manage.modal.edit_modal: 编辑角色
@@ -7759,6 +7817,9 @@ admin.setting_course.course_list_page_seq: 课程列表页默认排序
 admin.setting_course.course_list_page.help_block: 课程列表页
 admin.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
 admin.setting_course.Prevent_copying_rich_text_doc: 图文、文档任务防复制
+admin.setting_course.doc_task_water_mark: 文档任务水印
+admin.setting_course.doc_task_water_mark_info: 文档水印信息
+admin.setting_course.doc_task_water_mark_info_tips: 为了用户体验效果更佳,建议最多组合2项信息显示.注意:若用户的真实姓名和手机号没有则显示为-
 admin.setting_course.Prevent_copying_test_paper: 试卷防复制
 admin.setting_course.course_operation_mode: 课程运营模式
 admin.setting_course.course_comments_manage: 课程学习页内容管理
@@ -7830,10 +7891,14 @@ admin.setting_course.video_play_setting.play_rule.auto_pause.help_block: 当系�
 admin.setting_course.video_play_setting.play_rule.no_action.help_block: 当系统检测到用户处于非专注学习时，PC端将继续维持当前播放
 admin.setting_course.video_play_setting.play_rule.auto_pause: 自动暂停
 admin.setting_course.video_play_setting.play_rule.no_action: 不做干预
+admin.setting_course.video_play_setting.learn_config: 视频课时学习配置
+admin.setting_course.video_play_setting.complate_config: 视频课时完成条件配置
+admin.setting_course.video_play_setting.default: 默认完成条件
 admin.setting_course.effective_learning_time_rule: 在线视频课时有效学习时长统计规则
 admin.setting_course.learning_time_statistical_dimension: 学习时长统计维度
 admin.setting_course.effective_learning_time.playing.help_block: 以实际播放时长作为学习时长统计
 admin.setting_course.effective_learning_time.page.help_block: 以页面停留时长作为学习时长统计
+admin.setting_course.effective_learning_time.end_time: 学习到最后
 admin.setting_course.effective_learning_time.playing_time: 视频播放时长
 admin.setting_course.effective_learning_time.page_time: 页面停留时长
 admin.setting_course.effective_learning_time.reweighted_merge: 各处学习时长去重后再合并
@@ -8409,9 +8474,15 @@ admin.payment_setting.alipay_api_type.mobile: 手机网站支付接口
 admin.payment_setting.alipay_api_type.mobile.hint: >
   开通此接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">阔知学堂</span>支付，需前往支付宝开通，查看
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
-admin.payment_setting.alipay_secret: MD5密钥
+admin.payment_setting.alipay_md5_secret: MD5密钥
+admin.payment_setting.alipay_secret: 支付宝公钥
+admin.payment_setting.developer_private_secret: 开发者私钥
+admin.payment_setting.developer_private_secret.add: 添加私钥
+admin.payment_setting.developer_private_secret.edit: 修改私钥
 admin.payment_setting.alipay_hint: >
-  登录【蚂蚁金服·开放平台】-【服务市场】-【密钥管理】，可<a href="%alipayUrl%" target="_blank">查看PID和MD5秘钥</a>。
+  登录【<a href="%openAliPay%" target="_blank">支付宝·开放平台</a>】-【账户中心】-【密钥管理】-【mapi网管产品密钥】-可查看PID、开发者公钥、支付宝公钥    <a href="%alipayPrivateKeyUrl%" target="_blank">查看支付宝密钥说明</a>
+admin.payment_setting.md5.hint: >
+  支付宝针对新签约商户不再支持MD5密钥加签接入，老商户业务原则上不受影响，但建议升级。具体详见 <a href="%downlineTips%" target="_blank">支付宝MD5密钥下线通知</a>
 admin.payment_setting.alipay_account: 支付宝账户
 admin.payment_setting.alipay_mobile_payment_hint: 如需开启移动客户端支付，需填写支付宝账户。
 admin.payment_setting.open_alipay_api: 启用支付宝交易关闭接口
@@ -9012,8 +9083,7 @@ activity.live.replay_guid_1: >
 activity.live.replay_guid: >
   老师们：直播平台
   <span class='color-info'>下课后</span>且
-  <span class='color-info'>直播时间</span>结束后，在课时管理的
-  <span class='color-info'>录播管理</span>点击生成回放。
+  <span class='color-info'>直播时间</span>结束后，直播回放可自动生成。
 
 activity.live.default_notice: >
   <p>直播将于%startTimeFormat%开始，于%endTimeFormat%结束<p>
@@ -9313,6 +9383,7 @@ log.action.user.edit: 修改
 log.action.user.update: 修改
 log.action.user.send_email_verify: 邮箱验证
 log.action.user.nickname_change: 修改昵称
+log.action.user.delete_user: 删除用户
 log.action.user.password-changed: 重置密码
 log.action.user.pay-password-changed: 重置支付密码
 log.action.user.password-security-answers: 设置安全问题
@@ -9505,10 +9576,12 @@ log.action.live.delete_live_activity: 删除直播活动
 log.action.mobile.face_login: 人脸识别登录
 log.action.question_bank.create: 创建题库
 log.action.question_bank.delete: 删除题库
+log.action.question_bank.delete_attachment: 删除附件
 log.action.question_bank.update_teacher: 修改授权教师
 log.action.question_bank.create_category: 创建题库分类
 log.action.question_bank.delete_category: 删除题库分类
 log.action.question_bank.update_category: 更新题库分类
+log.action.question_bank.delete_question: 删除题库题目
 log.action.destroy_account_record.create: 申请注销帐号
 log.action.destroy_account_record.pass: 通过注销帐号申请
 log.action.destroy_account_record.reject: 拒绝注销帐号申请
@@ -9635,6 +9708,7 @@ log.action.template.user.nickname_change: 更新了<strong class="color-success"
 log.action.template.user.avatar-changed: 更新了<strong class="color-success">用户</strong> %title%的头像
 log.action.template.user.change_role: 更新了<strong class="color-success">用户</strong> %title%的用户组
 log.action.template.user.lock: 封禁了<strong class="color-success">用户</strong> %title%
+log.action.template.user.delete_user: 删除了<strong class="color-success">用户</strong> %title%
 log.action.template.user.unlock: 解禁了<strong class="color-success">用户</strong> %title%
 log.action.template.thread.create: 新建了<strong class="color-success">话题</strong> 《%title%》
 log.action.template.thread.update: 更新了<strong class="color-success">话题</strong> 《%title%》
@@ -10067,7 +10141,7 @@ log.attr.system.update_settings.payment.alipay_enabled: 支付宝支付功能
 log.attr.system.update_settings.payment.alipay_enabled.1: 开启
 log.attr.system.update_settings.payment.alipay_enabled.0: 关闭
 log.attr.system.update_settings.payment.alipay_key: 支付宝PID
-log.attr.system.update_settings.payment.alipay_secret: 支付宝MD5密钥
+log.attr.system.update_settings.payment.alipay_secret: 支付宝RSA密钥
 log.attr.system.update_settings.payment.alipay_account: 支付宝账户
 log.attr.system.update_settings.payment.wxpay_enabled: 微信支付功能
 log.attr.system.update_settings.payment.wxpay_enabled.1: 开启
@@ -10511,11 +10585,16 @@ exception.user.login_limit: 登录限制！
 exception.user.lock_self_denied: 您不能封禁自己
 exception.user.datefield_invalid: 日期类型字段没有按日期格式填写
 exception.user.file_permission_denied: 无文件访问权限
+exception.user.delete_user_permission_denied: 无法删除当前用户
 
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
 exception.parsed.failed.qq: 获取QQ视频信息失败
 exception.parsed.failed.youku: 获取优酷视频信息失败
+exception.parsed.failed.bilibili: 获取哔哩哔哩视频信息失败
+exception.parsed.failed.bilibili_video_id: 解析哔哩哔哩视频ID失败
+exception.parsed.failed.iqiyi: 获取爱奇艺视频信息失败
+exception.parsed.failed.iqiyi_video_id: 解析爱奇艺视频ID失败
 exception.parser.not.support: 不支持该视频类型
 
 exception.announcement.notfound: 公告不存在
@@ -10709,6 +10788,7 @@ exception.group.not_found: 小组不存在
 exception.group.duplicate_join: 已在小组内，不要重复加入
 exception.group.not_found_member: 成员不存在
 exception.group.title_required: 缺少标题
+exception.group.delete_group_require_close: 未关闭的小组不能删除
 exception.comment.not_found: 评论不存在
 exception.comment.forbidden_delete: 无权限删除评论！
 exception.comment.objecttype_invalid: 不存在当前这种评论对象
@@ -10974,6 +11054,7 @@ wechat.notification.fans_list.profile_picture: 微信头像
 wechat.notification.fans_list.nickname: 微信昵称
 wechat.notification.fans_list.username: 网校用户名
 wechat.notification.fans_list.subscribe_time: 关注时间
+wechat.notification.fans_list.new_tips: 根据相关法律法规，为保障用户合法权益，2021年12月27日之后，公众号“用户信息获取接口”不再提供用户昵称、头像信息
 wechat.notification.fans_list.tips: 粉丝列表每30分钟刷新一次数据
 wechat.notification.fans_list.user_num: 用户数量：
 wechat.notification.fans_list.fans_list_empty: 暂无粉丝
@@ -11003,6 +11084,7 @@ wechat.notification.template.vip_expired: '亲爱的学员，您购买的会员�
 wechat.notification.message_subscribe_template.live_start: "订阅课程开课提醒<br><br>课程标题：[任务名]<br>时间：[直播开始时间（精确到分钟）]<br>主讲老师：[老师用户名] [如果有，额外显示老师手机号]<br>备注：[剩N次]通知，请进入课程学习页订阅"
 wechat.notification.message_subscribe_template.homework_result: "作业批改完成通知<br><br>标题：[任务名]<br>作业情况：[作业情况]([剩N次]通知)<br>评语：[评语]"
 wechat.notification.message_subscribe_template.exam_result: "考试成绩通知<br><br>考试名称：[任务名]<br>分数：[考试的分数]<br>温馨提示：[剩N次]通知，请进入课程学习页订阅"
+wechat.notification.message_subscribe_template.comment_modify: "点评完成提醒<br><br>相关课程：[课程名]<br>点评类别：[考试/作业]<br>作业标题：[任务名]<br>点评内容：[评语]<br>点评时间：[点评时间]"
 wechat.notification.message_subscribe_template.lesson_add: "课程上新通知<br><br>课程：[课程名]([课程类别])<br>老师：[教师用户名]<br>时间：[任务发布时间]或[直播开始时间]<br>备注：[剩N次]通知，请进入课程学习页订阅"
 wechat.notification.message_subscribe_template.ask_question: "学生提问提醒<br>课程名称: ([如果是班级，显示班级2字])[课程名称] 或 [班级名称]<br>提问者：[学生用户名]([剩N次]通知)<br>提问问题：[问题标题]<br>提问时间: [问题提交时间]"
 wechat.notification.message_subscribe_template.position.lesson_page_student: '课程学习页<br>（课程学员）'
@@ -11011,6 +11093,7 @@ wechat.notification.message_subscribe_template.position.lesson_page_teacher: '�
 wechat.notification.message_subscribe_sms.template.live_start: "【 在线教育 】 课程：[课程名称]－学习任务：[学习任务名称]将在［开播时间］开播！链接地址<br>"
 wechat.notification.message_subscribe_sms.template.homework_result: "【 在线教育 】 您的课程：[课程名称]-[学习任务名称]的作业已被老师批阅，快来看看吧!<br>"
 wechat.notification.message_subscribe_sms.template.exam_result: "【 在线教育 】 您的课程：[课程名称]-[学习任务名称]的试卷已被老师批阅，快来看看吧!<br>"
+wechat.notification.message_subscribe_sms.template.comment_modify: "【 在线教育 】 课程：《[课程名称]》-学习任务：【[任务名称][作业/考试]任务】的教师评语已修改，点击查看【网校链接】"
 wechat.notification.message_subscribe_sms.template.lesson_add: '普通课程:<br>【 在线教育 】 您的课程：[课程名称]－学习任务：[学习任务名称]已发布！链接地址<br>直播:<br>【 在线教育 】 课程：[课程名称]－学习任务：[学习任务名称]将在［开播时间］开播！链接地址'
 wechat.notification.message_subscribe_sms.template.vip_expired: '【 在线教育 】亲爱的学员，您购买的会员即将到期:<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
 wechat.notification.message_subscribe_sms.template.homework_or_testpaper_need_review: '【 在线教育 】尊敬的老师，您今日仍有作业/试卷未批改:<br>时间：[当日日期，精确到天]<br>数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
@@ -11027,6 +11110,7 @@ wechat.notification.template.homework_or_testpaper_need_review.rule: '针对至�
 wechat.notification.template.live_start.rule: '直播课开始前，会在指定时间发送通知给课程学员。'
 wechat.notification.template.homework_result.rule: '当作业中含有主观题时，老师批阅完成后会将结果发送给学员。'
 wechat.notification.template.exam_result.rule: '当试卷中含有主观题时，老师批阅完成后会将结果发送给学员。'
+wechat.notification.template.comment_modify.rule: '当教师完成教师评语的添加或修改，老师修改完成后会将结果发送给学员。'
 wechat.notification.template.lesson_add.rule: '当课程有新的任务发布时，会发一条通知给课程学员。'
 wechat.notification.template.charge_success.rule: '当学员成功充值虚拟币时，会发送一条通知。'
 wechat.notification.template.buy_success.rule: '当学员成功购买课程、班级或会员时，会发送一条通知。'
@@ -11043,6 +11127,7 @@ wechat.notification.template_name.vip_expired: '会员到期提醒'
 wechat.notification.template_name.live_start: '课程开课通知'
 wechat.notification.template_name.homework_result: '作业结果通知'
 wechat.notification.template_name.exam_result: '考试结果通知'
+wechat.notification.template_name.comment_modify: '评语修改通知'
 wechat.notification.template_name.lesson_add: '课程更新提醒'
 wechat.notification.template_name.charge_success: '充值成功通知'
 wechat.notification.template_name.buy_success: '购买成功通知'
@@ -11308,6 +11393,8 @@ admin_v2.switch_old_version.title: 切换后台
 exception.common_upgrade_v2_error: 已经升级到新版
 exception.switch_old_version.permission_error: 请联系超级管理员或管理员操作
 exception.switch_old_version.error: 已经切回到旧版后台
+exception.fields_format_error: 参数格式错误
+exception.common_upgrade_app_version: 当前版本不支持该功能，请升级至最新版本使用
 admin_v2.default.switch_old_version_btn: 回到旧版后台
 admin_v2.setting.navigation.foot.tips: >
   清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往
@@ -11442,6 +11529,7 @@ exception.live_statistic.not_support: 当前直播供应商暂不支持该功能
 admin.article_setting.article_copy_manage: 资讯防复制
 
 task.show_optional_tips: 显示选修课时
+task.show_empty_content: 购买完成后即可查看课程目录～
 admin_v2.user.manage.change_nickname.heading_title: 修改用户名
 
 course.plan_task.activity_manage.discuss.tips: 讨论任务在PC和APP中使用，暂不支持在微网校和小程序中使用!
@@ -11491,7 +11579,7 @@ admin_v2.app_center.resource_settlement.filter_placeholder: 请选择状态
 admin_v2.app_center.resource_settlement.order.pay: 待支付
 admin_v2.app_center.resource_settlement.order.paid: 已支付
 admin_v2.app_center.resource_settlement.order.refunded: 已退款
-admin_v2.app_center.resource_settlement.switch_show_debt:  仅看欠款（已欠款%amount%）
+admin_v2.app_center.resource_settlement.switch_show_debt: 仅看欠款（已欠款%amount%）
 
 admin_v2.app_center.resource_settlement.order.title: 采购单名称
 admin_v2.app_center.resource_settlement.order.sn: 采购单号
@@ -11783,6 +11871,8 @@ exam_bank.analysis.data_large_loading_finish: 数据已刷新完成
 exam_bank.analysis.data_large_info: 数据更新时间为：%date%，由于数据量过大，不建议频繁刷新
 exam_bank.analysis.data_large_loading_btn: 强制刷新
 activity_manage.video.finish_tips: 视频播放时长和页面停留时长完成条件以累加学习时长为准
+activity_manage.download.summary: 简介
+activity_manage.download.summary.placeholder: 请输入简介（选填）
 
 classroom.manage.sign_statictics: 签到统计
 classroom.manage.sign_statictics.user_th: 用户
@@ -11843,8 +11933,10 @@ admin.classroom_manage.statistics.course.title_tips: >
     2.其他统计数据项均为实时数据。<br/>
   </span>
 admin.classroom_manage.statistics.course.total_learn_time: 课程被累加学习时长（分）：%mins%
+admin.classroom_manage.recommend.tips: 优先按推荐序号由小至大排序，未推荐的按创建时间倒序
 
 classroom.manage.data_statictics: 数据概览
+classroom.manage.live_statictics: 直播统计
 classroom.manage.data_statistics.overview.student_num: 正式学员总数
 classroom.manage.data_statistics.overview.auditor_num: 旁听生
 classroom.manage.data_statistics.overview.finished_num: 完成人数
@@ -11895,7 +11987,7 @@ admin_v2.system.user_content_control.thread_manage: 话题问答内容管理
 admin_v2.system.user_content_control.course_question_manage: 课程问题(问答)模块
 admin_v2.system.user_content_control.classroom_question_manage: 班级问题(问答)模块
 admin_v2.system.user_content_control.course_thread_manage: 课程话题模块
-admin_v2.system.user_content_control.classroom_thread_manage:  班级话题模块
+admin_v2.system.user_content_control.classroom_thread_manage: 班级话题模块
 admin_v2.system.user_content_control.group_thread_manage: 小组话题模块
 admin_v2.system.user_content_control.private_message_manage: 私信内容管理
 admin_v2.system.user_content_control.note_manage: 笔记内容管理
@@ -12000,7 +12092,7 @@ exception.multi_class.multi_class_not_exist: 班课不存在
 exception.multi_class.multi_class_teacher_require: 班课需要设置教师
 exception.multi_class.multi_class_assistant_require: 班课需要设置助教
 exception.multi_class.multi_class_assistant.number_exceed: 班课助教超过最大人数
-exception.multi_class.multi_class_data_fields_missing : 班课参数缺失
+exception.multi_class.multi_class_data_fields_missing: 班课参数缺失
 exception.multi_class.multi_class_course_not_match: 班课与课程不匹配
 exception.multi_class.product_not_found: 产品未找到
 exception.multi_class.cannot_delete_default_product: 系统默认产品不能删除
@@ -12049,3 +12141,61 @@ exception.teacher_qualification_not_enable: 教师资质未开启
 exception.teacher_qualification_not_teacher: 用户不是教师
 homepage.teacher_qualification.code: 教师资格证编号
 homepage.teacher_qualification.more: 更多教师
+
+#回放管理
+course.live_replay_manage.lesson_title_th: 直播课时名
+course.live_replay_manage.live_length_th: 直播时长
+course.live_replay_manage.live_anchor_th: 主讲人
+course.live_replay_manage.live_time_th: 直播时间
+course.live_replay_manage.live_chooser_empty: 没有回放
+course.live_replay.tag_select_default: 回放标签
+course.live_replay.share_btn: 共享资源
+course.live_replay.un_share_btn: 取消共享
+course.live_replay.remove_btn: 移除回放
+course.live_replay.title: 直播名称
+course.live_replay.teacher: 主讲人
+course.live_replay.length: 回放时长
+course.live_replay.start_time: 直播时间
+course.live_replay_manage.live_replay_empty: 直播回放已被删除
+course.live_replay.tips: 当前版本仅支持PC端查看直播回放课时，暂不支持移动端
+
+course.homework.pass_score: 设置合格分数
+course.homework.pass_score.tip1: '作业满分为：'
+course.homework.pass_score.tip2: 分数达到则合格
+course.homework.score_set.select.question1: 每题
+course.homework.score_set.select.option1: 每空
+course.homework.score_set.select.question2: 漏选得分
+course.homework.score_set.select.option2: 每项正确得分
+course.homework.score.tip: 注：有作业合格要求时，需要设置题目分值
+course.homework.score.finish.tip: 注：得分仅作为作业合格的判断依据，不对学员展示
+testpaper.score_set.option: 每题分值
+
+course.lesson.display: '%part_name% %number% : %title%'
+course.task.display: '%taskName%%taskNumber%： %taskTitle%'
+common.cancel_recommend.btn: 取消推荐
+course.homework.score_title.tips.choice: "多选题分值设置：<br>错选和多选不得分。<br>漏选：漏选且无错项时，得固定分值。<br>每项：漏选且无错项时，累加正确选项的分值。"
+course.homework.score_title.tips.uncertain_choice: "不定项选择分值设置：<br>错选和多选不得分。<br>漏选：漏选且无错项时，得固定分值。<br>每项：漏选且无错项时，累加正确选项的分值。"
+course.homework.score_title.tips.material: "多选题和不定项选择分值设置：<br>错选和多选不得分。<br>漏选：漏选且无错项时，得固定分值。<br>每项：漏选且无错项时，累加正确选项的分值。"
+course.homework.score_title.tips: "多选题和不定项选择分值设置：<br>错选和多选不得分。<br>漏选：漏选且无错项时，得固定分值。<br>每项：漏选且无错项时，累加正确选项的分值。"
+review.result.fail: 未通过
+review.result.pass: 通过
+review.result.comment_tips: 修改评语后，将向学员发送评语修改通知
+review.result.amend_comment: 修改评语
+testpaper.import.tip: 试卷导入成功，请在当前页面调整试卷分值。（注：多选题和不定项选题新增“每项”设置，填空题新增“每空”设置。）
+course.plan_task.activity_manage.testpaper.comment_tips: 得分区间设置规则：<br>1、得分区间包含区间下限和区间上限。<br>2、当学员得分，大于等于区间下限或小于区间上限，自动显示该区间评语。<br>3、如果存在得分区间重叠情况，优先显示在评语列表中排序靠前的评语。
+user_field.select_type.lab: 下拉列表内容
+user_field.select_type.tip: 可批量添加子项，一行一个，每个子项最多输入20个字符
+purchase.bth: 同意并继续
+course.activity.pseudolive: 智能直播
+course.activity.pseudolive.tip: 适用于以录播视频来承载直播内容的场景，学员在直播间同步观看视频，无需讲师在直播间实时授课。
+course.activity.pseudolive.popover: 1.智能直播产生的视频观看流量合并算入云视频流量费用；<br> 2.直播间不限在线人数，仅与网校最大在线人数有关。
+course.activity.pseudolive.create_tip: 需要开通云视频和EduSoho直播方可使用，请联系EduSoho商务
+course.activity.pseudolive.delete_tip: 直播教室尚未创建！暂无直播
+live_course.record_replay: MP4视频录制
+live_course.record_replay.tips: 录制完成后，可将MP4视频保存到电脑。
+live_course.record_replay.select1: 录制课件、头像和聊天区
+live_course.record_replay.select2: 录制课件和头像
+live_course.record_replay.select3: 只录制课件
+live_course.record_replay.btn: 去录制
+live_course.record_replay.show_btn: 本地录制
+live_course.record_replay.safair_tip: Safair 浏览器可能会被拦截，请使用其他浏览器

@@ -3,20 +3,20 @@
 namespace AppBundle\Controller\Testpaper;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ExportHelp;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\Testpaper\BaseTestpaperController as BaseController;
+use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Question\Service\CategoryService;
-use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Biz\User\Service\TokenService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -185,7 +185,7 @@ class ManageController extends BaseController
             'assessment' => $assessment,
             'activity' => $activity,
             'status' => $status,
-            'answerRecords' => $answerRecords,
+            'answerRecords' => $this->filterAnswerRecordsSubmitNum($answerRecords, $answerScene['id']),
             'answerReports' => $answerReports,
             'answerScene' => $answerScene,
             'paginator' => $paginator,
@@ -195,6 +195,16 @@ class ManageController extends BaseController
             'isTeacher' => true,
             'keyword' => $keyword,
         ]);
+    }
+
+    protected function filterAnswerRecordsSubmitNum($answerRecords, $answerSceneId)
+    {
+        $orderedSubmitRecords = $this->getActivityService()->orderAssessmentSubmitNumber(ArrayToolkit::column($answerRecords, 'user_id'), $answerSceneId);
+        foreach ($answerRecords as &$answerRecord) {
+            $answerRecord['submit_num'] = $orderedSubmitRecords[$answerRecord['id']]['submit_num'];
+        }
+
+        return $answerRecords;
     }
 
     protected function getAnswerSceneByActivityId($activityId)
@@ -211,6 +221,175 @@ class ManageController extends BaseController
 
             return $this->getAnswerSceneService()->get($homeworkActivity['answerSceneId']);
         }
+    }
+
+    public function transcriptDataAction(Request $request, $courseId, $testpaperId, $activityId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+
+        $testpaper = $this->getAssessmentService()->getAssessment($testpaperId);
+        if (!$testpaper) {
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
+        }
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+        if (!$activity) {
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
+        }
+
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
+
+        list($title, $records, $memberCount) = $this->getExportData(
+            $activity,
+            $start,
+            $limit,
+            $exportAllowCount
+        );
+
+        $file = '';
+        if (0 == $start) {
+            $file = ExportHelp::addFileTitle($request, $activity['mediaType'].'_students_transcript', $title);
+        }
+
+        $content = implode("\r\n", $records);
+        $file = ExportHelp::saveToTempFile($request, $content, $file);
+        $status = ExportHelp::getNextMethod($start + $limit, $memberCount);
+
+        return $this->createJsonResponse(
+            [
+                'status' => $status,
+                'fileName' => $file,
+                'start' => $start + $limit,
+            ]
+        );
+    }
+
+    protected function getExportData($activity, $start, $limit, $exportAllowCount)
+    {
+        $answerScene = $this->getAnswerSceneByActivityId($activity['id']);
+        $conditions = ['answer_scene_id' => $answerScene['id']];
+        $recordCount = $this->getAnswerRecordService()->count($conditions);
+
+        $recordCount = ($recordCount > $exportAllowCount) ? $exportAllowCount : $recordCount;
+        if ($recordCount < ($start + $limit + 1)) {
+            $limit = $recordCount - $start;
+        }
+        $answerRecords = $this->getAnswerRecordService()->search($conditions, ['end_time' => 'ASC'], $start, $limit);
+
+        $answerReports = ArrayToolkit::index($this->getAnswerReportService()->findByIds(ArrayToolkit::column($answerRecords, 'answer_report_id')), 'id');
+        $studentIds = ArrayToolkit::column($answerRecords, 'user_id');
+        $teacherIds = ArrayToolkit::column($answerReports, 'review_user_id');
+        $userIds = array_values(array_unique(array_merge($studentIds, $teacherIds)));
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+        $profiles = ArrayToolkit::index($profiles, 'id');
+
+        $str = $this->getExportFieldTitle($activity['mediaType']);
+
+        $records = [];
+        $answerRecords = ArrayToolkit::group($answerRecords, 'user_id');
+        foreach ($answerRecords as $userAnswerRecord) {
+            foreach ($userAnswerRecord as $index => $answerRecord) {
+                $answerReport = $answerReports[$answerRecord['answer_report_id']];
+                $member = '';
+                $member .= is_numeric($users[$answerRecord['user_id']]['nickname']) ? $users[$answerRecord['user_id']]['nickname']."\t".',' : $users[$answerRecord['user_id']]['nickname'].',';
+                $member .= $profiles[$answerRecord['user_id']]['truename'] ? $profiles[$answerRecord['user_id']]['truename'].',' : '-'.',';
+                $member .= $users[$answerRecord['user_id']]['verifiedMobile'] ? $users[$answerRecord['user_id']]['verifiedMobile'].',' : '-'.',';
+                $member .= $users[$answerRecord['user_id']]['emailVerified'] ? $users[$answerRecord['user_id']]['email'].',' : '-'.',';
+                $member .= date('Y-m-d H:i:s', $answerRecord['begin_time'])."\t".',';
+                $member .= $this->timeFormatterFilter($answerRecord['used_time']).',';
+                $member .= $this->trans('course.homework_check.review.submit_num_detail', ['%num%' => $index + 1]).',';
+                $member .= $this->getReviewStatus($answerRecord['status']).',';
+                $member .= $answerReport['score'].',';
+                $member .= $answerScene['pass_score'].',';
+                $member .= $this->getPassStatus($answerReport['grade']).',';
+                $reviewer = $this->getReviewer($users[$answerReport['review_user_id']], $answerRecord);
+                $member .= is_numeric($reviewer) ? $reviewer."\t".',' : $reviewer.','; //批阅人
+                $member .= $answerReport['comment'] ? $answerReport['comment'].',' : '-'.','; //教师评语
+
+                $records[] = $member;
+            }
+        }
+
+        return [$str, $records, $recordCount];
+    }
+
+    protected function getExportFieldTitle($type)
+    {
+        $str = [
+            'homework' => '用户名,姓名,手机号,邮箱,作业时间（年-月-日-时-分-秒）,作业用时（时-分-秒）,作业次数,状态,作业成绩,合格成绩,通过状态,批阅人,教师评语',
+            'testpaper' => '用户名,姓名,手机号,邮箱,开考时间（年-月-日-时-分-秒）,考试用时（时-分-秒）,考试次数,状态,本次成绩,通过成绩,通过状态,批阅人,教师评语',
+        ];
+
+        return $str[$type];
+    }
+
+    public function timeFormatterFilter($time)
+    {
+        if ($time <= 60) {
+            return $this->trans('site.twig.extension.time_interval.second', ['%diff%' => $time]);
+        }
+
+        if ($time <= 3600) {
+            return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => round($time / 60)]);
+        }
+
+        return $this->trans('site.twig.extension.time_interval.hour_minute', ['%diff_hour%' => floor($time / 3600), '%diff_minute%' => round($time % 3600 / 60)]);
+    }
+
+    protected function getReviewStatus($status)
+    {
+        if ('doing' == $status) {
+            return $this->trans('site.default.doing');
+        } elseif ('reviewing' == $status) {
+            return $this->trans('site.default.unreviewing');
+        } else {
+            return $this->trans('site.default.reviewing');
+        }
+    }
+
+    protected function getPassStatus($status)
+    {
+        switch ($status) {
+            case 'excellent':
+                $passStatus = $this->trans('优秀');
+                break;
+            case 'good':
+                $passStatus = $this->trans('良好');
+                break;
+            case 'passed':
+                $passStatus = $this->trans('通过');
+                break;
+            case 'unpassed':
+                $passStatus = $this->trans('不通过');
+                break;
+            default:
+                $passStatus = '-';
+                break;
+        }
+
+        return $passStatus;
+    }
+
+    protected function getReviewer($user, $answerRecord)
+    {
+        $reviewer = '-';
+        if ('finished' == $answerRecord['status']) {
+            $reviewer = $user ? $user['nickname'] : $this->trans('course.homework_check.review.system_review');
+        }
+
+        return $reviewer;
+    }
+
+    public function transcriptExportAction(Request $request, $courseId, $testpaperId, $activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId);
+        if (!$activity) {
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
+        }
+        $fileName = sprintf('%s_%s结果_%s.csv', $activity['title'], 'testpaper' == $activity['mediaType'] ? $this->trans('testpaper.check.homework') : $this->trans('testpaper.check.testpaper'), date('Y-n-d'));
+
+        return ExportHelp::exportCsv($request, $fileName);
     }
 
     public function buildCheckAction(Request $request, $courseSetId, $type)
@@ -493,9 +672,9 @@ class ManageController extends BaseController
             'displayable' => 1,
             'sections' => $this->assembleSections($items),
         ];
-        $this->getAssessmentService()->importAssessment($assessment);
+        $assessment = $this->getAssessmentService()->importAssessment($assessment);
 
-        return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_testpaper_list', ['id' => $questionBank['id']])]);
+        return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_testpaper_edit', ['id' => $questionBank['id'], 'assessmentId' => $assessment['id'], 'isImport' => 1])]);
     }
 
     protected function assembleSections($items)

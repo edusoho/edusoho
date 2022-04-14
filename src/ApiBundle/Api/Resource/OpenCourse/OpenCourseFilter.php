@@ -8,12 +8,12 @@ use ApiBundle\Api\Util\AssetHelper;
 
 class OpenCourseFilter extends Filter
 {
-    protected $publicFields = array(
+    protected $publicFields = [
         'id', 'title', 'subtitle', 'status', 'type', 'lessonNum', 'categoryId', 'tags',
         'smallPicture', 'middlePicture', 'largePicture', 'about', 'teachers', 'studentNum',
         'hitNum', 'likeNum', 'postNum', 'user', 'parentId', 'locked', 'recommended',
-        'recommendedSeq', 'recommendedTime', 'createdTime', 'updatedTime', 'orgId', 'orgCode', 'lesson',
-    );
+        'recommendedSeq', 'recommendedTime', 'createdTime', 'updatedTime', 'orgId', 'orgCode', 'liveStatus', 'lesson',
+    ];
 
     protected function publicFields(&$data)
     {

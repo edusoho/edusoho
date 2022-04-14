@@ -10,7 +10,6 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
-use Biz\Task\TaskException;
 use Biz\Visualization\Service\DataCollectService;
 use Biz\Visualization\Service\LearnControlService;
 
@@ -195,7 +194,10 @@ class CourseTaskEventV2 extends AbstractResource
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $course = $this->getCourseService()->getCourse($courseId);
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        if ('live' == $task['type'] && 'time' == $activity['finishType']) {
+            return $this->doing($request, $courseId, $taskId, $data);
+        }
         list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 0));
         $flow = $this->getDataCollectService()->getFlowBySign($user['id'], $data['sign']);
         $currentTime = time();
@@ -303,10 +305,6 @@ class CourseTaskEventV2 extends AbstractResource
         if (('start' !== $eventName) && empty($request->request->get('sign'))) {
             throw CommonException::ERROR_PARAMETER();
         }
-
-//        if ((self::EVENT_START === $eventName) && $this->getTaskService()->canStartTask($taskId)) {
-//            throw TaskException::LOCKED_TASK();
-//        }
     }
 
     protected function getMyLearnedTime(array $activity)

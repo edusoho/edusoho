@@ -6,11 +6,13 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -28,8 +30,12 @@ class CourseItemWithLesson extends AbstractResource
         if (!$course) {
             throw CourseException::NOTFOUND_COURSE();
         }
-
-        $courseItems = $this->getCourseService()->findCourseItems($courseId);
+        $courseItems = [];
+        $userId = $this->getCurrentUser()->getId();
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
+        if ($course['taskDisplay'] || $member) {
+            $courseItems = $this->getCourseService()->findCourseItems($courseId);
+        }
 
         $items = $this->convertToLeadingItems(
             $courseItems,
@@ -94,9 +100,14 @@ class CourseItemWithLesson extends AbstractResource
                     if ('live' === $courseItemTask['type'] && !empty($courseItemTask['activity']['ext'])) {
                         $liveIds[] = $courseItemTask['activity']['ext']['liveId'];
                     }
+                    if ('replay' === $courseItemTask['type'] && !empty($courseItemTask['activity']['ext'])) {
+                        $activity = $this->getActivityService()->getActivity($courseItemTask['activity']['ext']['origin_lesson_id'], true);
+                        $liveIds[] = $activity['ext']['liveId'];
+                    }
                 }
             }
         }
+
         $client = new EdusohoLiveClient();
         $replayInfos = $client->batchGetReplayInfosForSelfLive($liveIds);
 
@@ -172,5 +183,21 @@ class CourseItemWithLesson extends AbstractResource
     protected function getAnswerService()
     {
         return $this->service('ItemBank:Answer:AnswerService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
     }
 }

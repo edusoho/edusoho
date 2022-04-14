@@ -272,6 +272,10 @@ userKeyWordTypes:
     nickname: Nickname
     email: Email
 
+userStatisticsTypes:
+    nickname: Nickname
+    mobile: Mobile
+
 questionType:
     single_choice: Single choice
     choice: Multiple choice
@@ -280,6 +284,14 @@ questionType:
     determine: True or False
     essay: Q&A
     material: Material
+
+itemQuestionType:
+    single_choice: Single choice
+    choice: Multiple choice
+    uncertain_choice: Indefinite choice
+    text: Gap filling
+    true_false: True or False
+    rich_text: Q&A
 
 difficulty:
     simple: Simple
@@ -382,7 +394,7 @@ userInfoFields:
     weixin: Wechat
 
 passedStatus:
-    none: '-'
+    none: Unqualified
     excellent: Excellent
     good: Good
     passed: Passed
@@ -597,6 +609,11 @@ reportAuditStatus:
     illegal: Illegal
 
 multiClassStatus:
-  not_start: Not Start
-  live: live
-  end: End
+    not_start: Not Start
+    live: live
+    end: End
+
+replayKeyWordType:
+    activityTitle: live Title
+    anchor: teacher
+    courseTitle: course Title

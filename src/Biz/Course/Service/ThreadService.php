@@ -53,6 +53,8 @@ interface ThreadService
      */
     public function deleteThread($threadId);
 
+    public function deleteThreadsByUserId($userId);
+
     public function stickThread($courseId, $threadId);
 
     public function unstickThread($courseId, $threadId);

@@ -86,6 +86,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, null);
     }
 
+    public function findCoursesByCategoryIds($categoryIds)
+    {
+        return $this->getCourseDao()->findCoursesByCategoryIds($categoryIds);
+    }
+
     public function findCoursesByParentIdAndLocked($parentId, $locked)
     {
         return $this->getCourseDao()->findCoursesByParentIdAndLocked($parentId, $locked);
@@ -240,6 +245,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course['title'] = $this->purifyHtml($course['title'], true);
         $course['status'] = 'draft';
         $course['creator'] = $this->getCurrentUser()->getId();
+        $course['drainage'] = ['enabled' => 0, 'image' => '', 'text' => ''];
         try {
             $this->beginTransaction();
 
@@ -354,6 +360,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'services',
                 'tryLookLength',
                 'watchLimit',
+                'drainage',
+                'taskDisplay',
             ]
         );
 
@@ -1194,7 +1202,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapterIds = [];
         $chapterType = '';
         $courseChapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-        array_walk($ids, function ($k) use (&$chapterIds,&$chapterType) {
+        array_walk($ids, function ($k) use (&$chapterIds, &$chapterType) {
             list($type, $chapterId) = explode('-', $k);
             $chapterIds[] = $chapterId;
             $chapterType = $type;
@@ -1779,7 +1787,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $activities = ArrayToolkit::index($activities, 'id');
 
         foreach ($tasks as $task) {
-            if ($this->isUselessTask($task, $course['type'])) {
+            if ('replay' != $task['type'] && $this->isUselessTask($task, $course['type'])) {
                 continue;
             }
             $task = array_merge($task, $defaultTask);
@@ -1792,6 +1800,11 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $task[$value] = $task[$key];
             }
             $activity = $activities[$task['activityId']];
+            $task['content'] = $activity['content'];
+            if ('replay' == $task['type']) {
+                $activity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+                $task['type'] = 'live';
+            }
             $task = $this->filledTaskByActivity($task, $activity);
             $task['learnedNum'] = $this->getTaskResultService()->countTaskResults(
                 [
@@ -1805,7 +1818,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 ]
             );
 
-            $task['content'] = $activity['content'];
             $lessons[] = $this->filterTask($task);
         }
 
@@ -1860,6 +1872,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'ppt',
             'doc',
             'live',
+            'replay',
         ];
 
         if ('live' == $courseType) {
@@ -2321,7 +2334,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
-        return $this->getCourseSetDao()->wave([$course['courseSetId']], ['hitNum' => 1]);
+        return $this->getCourseDao()->wave([$courseId], ['hitNum' => 1]);
     }
 
     public function recountLearningData($courseId, $userId)
@@ -2371,6 +2384,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             $members = $this->getMemberDao()->search(['courseId' => $task['courseId'], 'role' => $role], [], 0, PHP_INT_MAX);
             $userIds = ArrayToolkit::column($members, 'userId');
             if (empty($userIds) || !in_array($userId, $userIds)) {
+                continue;
+            }
+            $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+            if ('pseudo' == $activity['ext']['roomType']) {
                 continue;
             }
             $course = $this->getCourse($task['courseId']);

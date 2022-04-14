@@ -40,10 +40,12 @@ class CourseController extends CourseBaseController
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
         $courses = ArrayToolkit::group($courses, 'courseSetId');
-
         list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
+        foreach ($members as &$member) {
+            $member['lastLearnTime'] = !empty($member['lastLearnTime']) ? $member['lastLearnTime'] : $member['createdTime'];
+        }
+        array_multisort(ArrayToolkit::column($members, 'lastLearnTime'), SORT_DESC, $members);
 
         $conditions = [
             'types' => [CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE],
@@ -250,10 +252,7 @@ class CourseController extends CourseBaseController
 
     public function tasksAction($course, $member = [])
     {
-        $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($course['id']);
-
-        $offsetTaskId = !empty($toLearnTasks) ? $toLearnTasks[0]['id'] : 0;
-
+        $course['taskDisplay'] = 1;
         list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], ['limit' => 10000]);
 
         return $this->render(
@@ -268,7 +267,8 @@ class CourseController extends CourseBaseController
                         'courseId' => $course['id'],
                         'status' => 'published',
                         'isOptional' => 1,
-                    ]),
+                    ]
+                ),
             ]
         );
     }

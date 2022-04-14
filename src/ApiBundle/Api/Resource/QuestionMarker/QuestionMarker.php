@@ -20,7 +20,7 @@ class QuestionMarker extends AbstractResource
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $user = $this->getCurrentUser();
-        $markers = $this->getMarkerService()->findMarkersMetaByMediaId($activity['ext']['mediaId']);
+        $markers = $this->getMarkerService()->findMarkersMetaByActivityId($activity['id']);
         $results = $this->getQuestionMarkerResultService()->findByUserIdAndMarkerIds($user['id'], ArrayToolkit::column($markers, 'id'));
 
         return $this->warpperMarkers($markers, $results);
@@ -37,14 +37,14 @@ class QuestionMarker extends AbstractResource
             foreach ($marker['questionMarkers'] as &$questionMarker) {
                 if (!empty($results[$marker['id']][$questionMarker['id']])) {
                     $questionResult = end($results[$marker['id']][$questionMarker['id']]);
-                    $questionMarker['item_report'] = array(
+                    $questionMarker['item_report'] = [
                         'item_id' => $questionMarker['item']['id'],
-                        'question_reports' => array(
-                            array('question_id' => $questionMarker['item']['questions'][0]['id'], 'status' => $questionResult['status'], 'response' => $questionResult['answer']),
-                        ),
-                    );
+                        'question_reports' => [
+                            ['question_id' => $questionMarker['item']['questions'][0]['id'], 'status' => $questionResult['status'], 'response' => $questionResult['answer']],
+                        ],
+                    ];
                 } else {
-                    $questionMarker['item_report'] = (object) array();
+                    $questionMarker['item_report'] = (object) [];
                 }
             }
         }

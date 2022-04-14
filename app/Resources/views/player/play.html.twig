@@ -1,9 +1,9 @@
 <meta content="yes" name="apple-mobile-web-app-capable" />
 <meta content="black" name="apple-mobile-web-app-status-bar-style" />
 <meta content="telephone=no" name="format-detection" />
-{% if context.isEncryptionPlus|default(false) and setting('magic.security_video_player', 0) == 1 and is_mobile_client() and not is_micro_messenger() %}
+{% if context.isEncryptionPlus|default(false) and setting('magic.security_video_player', 0) == 1 and is_mobile_client() and not is_allowed_browse() %}
   <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'site.not_support_cloud_video_upgrade'|trans({'%mobileUrl%':path('mobile')})|raw}}</div>
-{% elseif context.isEncryptionPlus|default(false) and setting('magic.security_video_player', 0) == 0 and is_mobile_client() %}
+{% elseif context.isEncryptionPlus|default(false) and setting('magic.security_video_player', 0) == 0 and is_mobile_client() and not is_allowed_browse() %}
   <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'site.not_support_cloud_video'|trans({'%mobileUrl%':path('mobile')})|raw}}</div>
 {% else %}
   {% if file|default(null) %}
@@ -31,8 +31,9 @@
           data-strict="{{setting('storage.support_mobile', 0)}}"
           data-js-player="{{ context.jsPlayer|default('balloon-cloud-video-player') }}"
           data-autoplay="{{ context.autoplay|default(setting('storage.video_auto_play', true)) }}"
-          data-micro-messenger="{{ is_micro_messenger() ? 1 : 0 }}"
+          data-allowed-browse="{{ is_allowed_browse() ? 1 : 0 }}"
           data-security-video-player="{{ setting('magic.security_video_player', 0) }}"
+          data-is-hls-plus="{{ setting('storage.enable_hls_encryption_plus', 0) }}"
           {% if not file.convertParams.hasVideoWatermark|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
             data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null) }}"
           {% endif %}
@@ -45,8 +46,10 @@
             data-fingerprint-time="{{ setting('storage.video_fingerprint_time')|default(0.5) * 1000 }}"
           {% endif %}
           class="ballon-video-player"
-          {% if context.hideQuestion|default(0) == 0 %}
-            data-markerurl="{{ path('course_task_question_markers_show', {mediaId: file.id}) }}"
+             data-context="{{ context|json_encode()}}"
+          {% if context.hideQuestion|default(0) == 0 and context.activityId|default(0) > 0 %}
+            data-activity-id="{{ context.activityId|default(0) }}"
+            data-markerurl="{{ path('course_task_question_markers_show', {activityId: context.activityId}) }}"
             data-finish-question-marker-url="{{ path('course_task_question_marker_finish') }}"
           {% endif %}
           {% if context.subtitles is defined and context.hideSubtitle|default(0) == 0%}

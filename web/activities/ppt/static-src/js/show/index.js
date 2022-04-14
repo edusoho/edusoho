@@ -30,10 +30,10 @@ const iosFullScreen = () => {
   }
 };
 
-const initPptPlayer = (flag) => {
+const initPptPlayer = (watermark) => {
   // 清空内容后切换
   $element.empty();
-  var pptPlayer = newPlayer();
+  var pptPlayer = newPlayer(watermark);
 
   $('.js-change-ppt-btn').on('click', (event) => {
     const $target = $(event.target);
@@ -68,9 +68,9 @@ const endFinishTip = (pageNumber) => {
   }
 };
 
-const newPlayer = (token) => {
-  let finalToken = token ? token : $element.data('token');
-  const pptPlayer = new QiQiuYun.Player({
+const newPlayer = (watermark) => {
+  let finalToken = $element.data('token');
+  const playerConfig = {
     id: 'activity-ppt-content',
     // 环境配置
     sdkBaseUri: app.cloudSdkBaseUri,
@@ -82,7 +82,15 @@ const newPlayer = (token) => {
       id: $element.data('userId'),
       name: $element.data('userName')
     }
-  });
+  }
+
+  if (watermark) {
+    playerConfig.fingerprint = {
+      html: watermark
+    }
+  }
+
+  const pptPlayer = new QiQiuYun.Player(playerConfig);
 
   pptPlayer.on('ready', (data) => {
     toggleText(currentType);
@@ -118,4 +126,12 @@ const newPlayer = (token) => {
   return pptPlayer;
 };
 
-initPptPlayer();
+let watermarkUrl = $element.data('watermark-url');
+
+if (watermarkUrl) {
+  $.get(watermarkUrl, function(watermark) {
+    initPptPlayer(watermark);
+  });
+} else {
+  initPptPlayer('');
+}

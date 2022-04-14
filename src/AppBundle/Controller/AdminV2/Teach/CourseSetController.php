@@ -124,7 +124,7 @@ class CourseSetController extends BaseController
 
         $isCheckPasswordLifeTime = $request->getSession()->get('checkPassword');
         if (!$isCheckPasswordLifeTime || $isCheckPasswordLifeTime < time()) {
-            return $this->render('admin-v2/teach/course/delete.html.twig', ['courseSet' => $courseSet]);
+            return $this->render('admin-v2/teach/course/delete.html.twig', ['deleteUrl' => $this->generateUrl('admin_v2_course_set_delete', ['id' => $courseSet['id']])]);
         }
 
         $this->getCourseSetService()->deleteCourseSet($id);
@@ -164,7 +164,7 @@ class CourseSetController extends BaseController
         if ('live' == $courseSet['type']) {
             $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
-            if (empty($course['maxStudentNum'])) {
+            if ($course['maxStudentNum'] < 0) {
                 return $this->createJsonResponse([
                     'success' => false,
                     'message' => '直播课程发布前需要在计划设置中设置课程人数',

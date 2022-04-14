@@ -7,7 +7,7 @@
   {% if not latestAnswerRecord %}
     {% include('@activity/homework/resources/views/show/index.html.twig') %}
   {% elseif latestAnswerRecord and  (latestAnswerRecord.status == 'finished' or latestAnswerRecord.status == 'reviewing') %}
-    {{ render(controller('AppBundle:Homework:showResult', {answerRecordId: latestAnswerRecord.id})) }}
+    {{ render(controller('AppBundle:Homework:showResult', {answerRecordId: latestAnswerRecord.id, type: 'activity'})) }}
   {% else %}
     {% include('@activity/homework/resources/views/show/do-homework.html.twig') %}
   {% endif %}

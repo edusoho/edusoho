@@ -13,7 +13,19 @@ class ThreadGoodsDaoImpl extends GeneralDaoImpl implements ThreadGoodsDao
     {
         $sql = "DELETE FROM {$this->table} WHERE threadId = ? AND type = ? ";
 
-        return $this->db()->executeUpdate($sql, array($id, $type));
+        return $this->db()->executeUpdate($sql, [$id, $type]);
+    }
+
+    public function deleteByThreadIds(array $threadIds)
+    {
+        if (empty($threadIds)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($threadIds) - 1).'?';
+        $sql = "DELETE FROM {$this->table} WHERE `threadId` IN ({$marks});";
+
+        return $this->db()->executeUpdate($sql, $threadIds);
     }
 
     public function sumGoodsCoins($conditions)
@@ -26,17 +38,17 @@ class ThreadGoodsDaoImpl extends GeneralDaoImpl implements ThreadGoodsDao
 
     public function declares()
     {
-        return array(
-            'serializes' => array(
+        return [
+            'serializes' => [
                 'tagIds' => 'json',
-            ),
-            'orderbys' => array('name', 'createdTime', 'id'),
-            'conditions' => array(
+            ],
+            'orderbys' => ['name', 'createdTime', 'id'],
+            'conditions' => [
                 'threadId = :threadId',
                 'fileId = :fileId',
                 'postId = :postId',
                 'type = :type',
-            ),
-        );
+            ],
+        ];
     }
 }

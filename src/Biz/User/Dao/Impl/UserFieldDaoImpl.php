@@ -11,21 +11,21 @@ class UserFieldDaoImpl extends GeneralDaoImpl implements UserFieldDao
 
     public function getByFieldName($fieldName)
     {
-        return $this->getByFields(array('fieldName' => $fieldName));
+        return $this->getByFields(['fieldName' => $fieldName]);
     }
 
     public function getFieldsOrderBySeq()
     {
         $sql = "SELECT * FROM {$this->table} ORDER BY seq";
 
-        return $this->db()->fetchAll($sql) ?: array();
+        return $this->db()->fetchAll($sql) ?: [];
     }
 
     public function getEnabledFieldsOrderBySeq()
     {
         $sql = "SELECT * FROM {$this->table} where enabled=1 ORDER BY seq";
 
-        return $this->db()->fetchAll($sql) ?: array();
+        return $this->db()->fetchAll($sql) ?: [];
     }
 
     protected function createQueryBuilder($conditions)
@@ -39,12 +39,15 @@ class UserFieldDaoImpl extends GeneralDaoImpl implements UserFieldDao
 
     public function declares()
     {
-        return array(
-            'orderbys' => array('seq'),
-            'conditions' => array(
+        return [
+            'orderbys' => ['seq'],
+            'serializes' => [
+                'detail' => 'json',
+            ],
+            'conditions' => [
                 'enabled = :enabled',
                 'fieldName like :fieldName',
-            ),
-        );
+            ],
+        ];
     }
 }

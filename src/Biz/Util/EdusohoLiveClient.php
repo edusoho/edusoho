@@ -16,6 +16,7 @@ class EdusohoLiveClient
     const SELF_ES_LIVE_PROVIDER = 13;
     const LIVE_ROOM_LARGE = 'large';
     const LIVE_ROOM_SMALL = 'small';
+    const LIVE_ROOM_PSEUDO = 'pseudo';
 
     const LIVE_REPLAY_STATUS_UNSTART = 'unstart';
 
@@ -87,6 +88,11 @@ class EdusohoLiveClient
         ];
 
         return $this->createCloudApi('root')->delete('/lives/'.$liveId, $args);
+    }
+
+    public function getLiveRoomsInfo($liveId)
+    {
+        return $this->createCloudApi('root')->get('/liverooms/'.$liveId.'/info');
     }
 
     public function getMaxOnline($liveId)
@@ -162,6 +168,16 @@ class EdusohoLiveClient
         return $this->createCloudApi('root')->get('/lives/account');
     }
 
+    public function getLiveStatistics($cloudLiveId)
+    {
+        return $this->createCloudApi('root')->get("/lives/room/{$cloudLiveId}/statistics");
+    }
+
+    public function getLiveStudentStatistics($cloudLiveId, $args)
+    {
+        return $this->createCloudApi('root')->get("/lives/room/{$cloudLiveId}/student/statistics", $args);
+    }
+
     public function getLiveOverview()
     {
         return $this->createCloudApi('root')->get('/me/live/overview');
@@ -190,6 +206,63 @@ class EdusohoLiveClient
     public function uploadCallbackUrl($url)
     {
         return $this->createCloudApi('root')->post('/liveCloud/callbackUrl/update', ['callbackUrl' => $url]);
+    }
+
+    /**
+     * 获取直播间实时信息（仅自研直播）
+     *
+     * @param $cloudLiveId
+     *
+     * @return mixed|string[]
+     */
+    public function getEsLiveInfo($cloudLiveId)
+    {
+        return $this->createCloudApi('root')->get("/liveCloud/room/{$cloudLiveId}/info");
+    }
+
+    public function updatePseudoLiveVideo($liveId, $videoUrl)
+    {
+        return $this->createCloudApi('root')->post('/liveCloud/pseudoVideo/set', [
+            'id' => $liveId,
+            'videoUrl' => $videoUrl,
+        ]);
+    }
+
+    /**
+     * 批量获取直播间监控信息（仅自研直播）
+     *
+     * @param $args //[ids]
+     *
+     * @return mixed|string[]
+     */
+    public function getEsLiveMonitors($args)
+    {
+        return $this->createCloudApi('root')->get('/liveCloud/room/monitors');
+    }
+
+    /**
+     * 分页获取直播间实时成员信息（仅自研直播）
+     *
+     * @param $args //[ids]
+     *
+     * @return mixed|string[]
+     */
+    public function getEsLiveMembers($cloudLiveId, $args)
+    {
+        return $this->createCloudApi('root')->get("/liveCloud/room/{$cloudLiveId}/members", $args);
+    }
+
+    /**
+     * 自研直播接口
+     *
+     * @param $liveId
+     * @param $args // start limit
+     *
+     * @return mixed
+     */
+    public function getLiveCheckBatchData($liveId, $args)
+    {
+        return $this->createCloudApi('root')->get("/liveCloud/room/{$liveId}/checkinBatches", $args);
     }
 
     /**

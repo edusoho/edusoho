@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\AppBundle\Component\MediaParser\ItemParser;
 
-use Biz\BaseTestCase;
-use AppBundle\Component\MediaParser\ItemParser\YoukuVideoItemParser;
 use AppBundle\Common\ReflectionUtils;
+use AppBundle\Component\MediaParser\ItemParser\YoukuVideoItemParser;
+use Biz\BaseTestCase;
 
 class YoukuVideoItemParserTest extends BaseTestCase
 {
@@ -16,16 +16,16 @@ class YoukuVideoItemParserTest extends BaseTestCase
                 '/../tests/Unit/AppBundle/Component/MediaParser/ItemParser/YoukuResponse.md');
         $mockedSender = $this->mockBiz(
             'Mocked:MockedYoukuSender',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'fetchUrl',
-                    'withParams' => array('http://v.youku.com/v_show/id_XNTgxOTA5ODg0.html'),
-                    'returnValue' => array(
+                    'withParams' => ['http://v.youku.com/v_show/id_XNTgxOTA5ODg0.html'],
+                    'returnValue' => [
                         'code' => 200,
                         'content' => $youkuResponse,
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
 
         $parser = ReflectionUtils::setProperty($parser, 'mockedSender', $mockedSender);
@@ -39,9 +39,9 @@ class YoukuVideoItemParserTest extends BaseTestCase
         $this->assertArrayHasKey('pictures', $video);
         $this->assertArrayHasKey('files', $video);
 
-        $file = empty($video['files']) ? array() : $video['files'][0];
-        $this->assertEquals('swf', $file['type']);
-        $this->assertStringStartsWith('//', $file['url']);
+        $file = empty($video['files']) ? [] : $video['files'][0];
+        $this->assertEquals('mp4', $file['type']);
+        $this->assertStringStartsWith('https://', $file['url']);
 
         $mockedSender->shouldHaveReceived('fetchUrl');
     }

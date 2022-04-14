@@ -17,7 +17,7 @@ class GoodSpecsFilter extends Filter
         'usageEndTime', 'showable', 'buyable', 'buyableStartTime',
         'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services',
         'isMember', 'learnUrl', 'vipLevelInfo', 'vipUser', 'teachers',
-        'access', 'canVipJoin', 'hasCertificate',
+        'access', 'canVipJoin', 'hasCertificate', 'taskDisplay',
     ];
 
     protected $publicFields = [
@@ -26,7 +26,7 @@ class GoodSpecsFilter extends Filter
         'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'showable',
         'buyable', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum',
         'services', 'isMember', 'learnUrl', 'vipLevelInfo', 'vipUser', 'teachers',
-        'access', 'canVipJoin', 'hasCertificate',
+        'access', 'canVipJoin', 'hasCertificate', 'taskDisplay',
     ];
 
     protected function simpleFields(&$data)

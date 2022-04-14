@@ -27,12 +27,12 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
     public function declares()
     {
         return [
-            'timestamps' => [
+            'orderbys' => [
+                'id',
                 'created_time',
                 'updated_time',
             ],
-            'orderbys' => [
-                'id',
+            'timestamps' => [
                 'created_time',
                 'updated_time',
             ],
@@ -44,6 +44,7 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
             'serializes' => [
                 'answer' => 'json',
                 'response_points' => 'json',
+                'score_rule' => 'json',
             ],
         ];
     }

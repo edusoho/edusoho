@@ -1,64 +1,74 @@
 {% import 'admin-v2/macro.html.twig' as admin_macro %}
 <tr id="group-table-tr-{{ group.id }}">
-    <td>{{ group.id}}</td>
+  <td>{{ group.id }}</td>
 
-    <td>
-    <strong>  
-      <a target="_blank" href="{{ path('group_show', {id:group.id}) }}">{{ group.title}}</a>
+  <td>
+    <strong>
+      <a target="_blank" href="{{ path('group_show', {id:group.id}) }}">{{ group.title }}</a>
     </strong>
     {% if group.status=='close' %}
-          <label class="label label-danger">{{'admin.operation_group.group_status.close'|trans}}</label>
+      <label class="label label-danger">{{ 'admin.operation_group.group_status.close'|trans }}</label>
     {% endif %}
-    </td>
+    <br>
+    {% if group.recommended %}
+      <span class="label label-default">{{ 'admin.course_manage.manage.recommend'|trans({'%recommendedTime%': group.recommendedTime|date('Y-m-d'), '%recommendedSeq%': group.recommendedSeq}) }}</span>
+    {% endif %}
+  </td>
 
-    <td>
+  <td>
     <a target="_blank" href="{{ path('user_show', {id:owners[group.ownerId].id}) }}">
-   {{owners[group.ownerId].nickname}}</a>
-    </td>
+      {{ owners[group.ownerId].nickname }}</a>
+  </td>
 
-    <td>
+  <td>
     {{ group.memberNum }}
-    </td>
+  </td>
 
-    <td>
+  <td>
     {{ group.threadNum }}
-    </td>
+  </td>
 
-    <td>
+  <td>
     {{ group.postNum }}
-    </td>
+  </td>
 
-    <td>
+  <td>
     {% if group.status=='open' %}
-    {{'admin.operation_group.group_status.open'|trans}}
+      {{ 'admin.operation_group.group_status.open'|trans }}
     {% else %}
-    {{'admin.operation_group.group_status.close'|trans}}
+      {{ 'admin.operation_group.group_status.close'|trans }}
     {% endif %}
-    </td>
+  </td>
 
-    <td>
+  <td>
 
-  <div class="btn-group">
+    <div class="btn-group">
 
-    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-      {{'admin.operation_group.edit_btn'|trans}}
-      <span class="caret"></span>
-    </button>
+      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        {{ 'admin.operation_group.edit_btn'|trans }}
+        <span class="caret"></span>
+      </button>
 
-    <ul class="dropdown-menu">
-       <li><a href="{{path('group_show',{id:group.id})}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> {{'admin.operation_group.viewGroup_btn'|trans}}</a></li>
+      <ul class="dropdown-menu">
+        <li><a href="{{ path('group_show',{id:group.id}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> {{ 'admin.operation_group.viewGroup_btn'|trans }}</a></li>
 
-       {% if group.status=='open'%}
-       <li><a href="javascript:" class="close-group" title="{{ 'admin.operation_group.closeGroup_title'|trans({'%groupTitle%':group.title}) }}" data-url="{{path('admin_v2_group_close',{id:group.id})}}"><span class="glyphicon glyphicon-off"></span> {{'admin.operation_group.closeGroup_btn'|trans }}</a></li>
+        {% if group.status=='open' %}
+          <li><a href="javascript:" class="close-group" title="{{ 'admin.operation_group.closeGroup_title'|trans({'%groupTitle%':group.title}) }}" data-url="{{ path('admin_v2_group_close',{id:group.id}) }}"><span class="glyphicon glyphicon-off"></span> {{ 'admin.operation_group.closeGroup_btn'|trans }}</a></li>
+          {% if group.recommended %}
+            <li><a href="javascript:" class="cancel-recommend-group" title="{{ 'admin.operation_group.cancelRecommendGroup_title'|trans({'%groupTitle%': group.title}) }}" data-url="{{ path('admin_v2_group_cancel_recommend', {id: group.id}) }}"><span class="glyphicon glyphicon-hand-right"></span> {{ 'common.cancel_recommend.btn'|trans }}</a></li>
+          {% else %}
+            <li><a href="javascript:" class="recommend-group" title="{{ 'admin.operation_group.recommendGroup_title'|trans({'%groupTitle%': group.title}) }}" data-url="{{ path('admin_v2_group_recommend', {id: group.id}) }}" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-hand-up"></span> {{ 'admin.operation_group.recommendGroup_btn'|trans }}</a></li>
+          {% endif %}
 
-       {% else %}
-       <li><a href="javascript:" class="open-group" title="{{ 'admin.operation_group.openGroup_title'|trans({'%groupTitle%':group.title}) }}" data-url="{{path('admin_v2_group_open',{id:group.id})}}"><span class="glyphicon glyphicon-ok"></span>{{'admin.operation_group.openGroup_btn'|trans}}</a></li>
+        {% else %}
+          <li><a href="javascript:" class="open-group" title="{{ 'admin.operation_group.openGroup_title'|trans({'%groupTitle%':group.title}) }}" data-url="{{ path('admin_v2_group_open',{id:group.id}) }}"><span class="glyphicon glyphicon-ok"></span> {{ 'admin.operation_group.openGroup_btn'|trans }}</a></li>
+          <li><a href="javascript:" class="delete-group" title="{{ 'admin.operation_group.deleteGroup_title'|trans({'%groupTitle%': group.title}) }}" data-url="{{ path('admin_v2_group_delete', {id: group.id}) }}"><span class="glyphicon glyphicon-trash"></span> {{ 'admin.operation_group.deleteGroup_btn'|trans }}</a></li>
 
-       {% endif %}
+        {% endif %}
 
-       <li  ><a href="javascript:" class="transfer-group" data-url="{{path('admin_v2_group_transfer',{groupId:group.id})}}"><span class="glyphicon glyphicon-refresh"></span> {{'admin.operation_group.transferGroup_btn'|trans}}</a></li>
-       
-    </ul>
-  </div>
- </td>
+        <li><a href="javascript:" class="transfer-group" data-url="{{ path('admin_v2_group_transfer',{groupId:group.id}) }}"><span class="glyphicon glyphicon-refresh"></span> {{ 'admin.operation_group.transferGroup_btn'|trans }}</a></li>
+
+      </ul>
+    </div>
+  </td>
 </tr>

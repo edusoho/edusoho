@@ -346,6 +346,13 @@ activity.testpaper_manage.difficulty_percentage: Difficulty %difficultyPercentag
 activity.testpaper_manage.required_error_hint: Please enter the score
 activity.testpaper_manage.question_options: Option
 activity.testpaper_manage.questions_length_hint: The maximum number of questions is 2,000
+activity.testpaper_manage.default_comment: Default Comment
+activity.testpaper_manage.default_comment1: Keep working hard and keep improving!
+activity.testpaper_manage.default_comment2: Yes, if there is progress, it will be even better if you work harder!
+activity.testpaper_manage.default_comment3: You are awesome! I am proud of you!
+activity.testpaper_manage.default_comment4: A little slack, right? Keep going!
+activity.testpaper_manage.default_comment5: With heart, focus and persistence, you can do better!
+activity.testpaper_manage.comment_remove: Remove
 
 activity.text_manage.save_draft_hint: (Draft saved at %createdTime%)
 activity.text_manage.finish_detail_required_error_hint: Please enter the minimum watch time
@@ -543,8 +550,8 @@ course.manage.task_batch_delete_hint: After deleting the selected lesson, the co
 course.manage.chapter_delete_hint: Are you sure you want to delete this %name%?
 course.manage.chapter_batch_delete_hint: %length% chapters have been selected, are you sure to delete?
 course.manage.task_publish_success_hint: Published successfully
-course.manage.task_publish_fail_hint:  Publish failed
-course.manage.task_unpublish_success_hint:  Publish cancelled successful
+course.manage.task_publish_fail_hint: Publish failed
+course.manage.task_unpublish_success_hint: Publish cancelled successful
 course.manage.task_unpublish_fail_hint: Cancel publish failed
 course.manage.lesson_copy_ing: Lesson is copying
 course.manage.live_replay_generate_success: Generated playback succeed
@@ -597,8 +604,8 @@ course.question.create.belong_required_error_hint: Please select subordinate
 course.question.create.right_answer_required_error_hint: Please choose the correct answer
 course.question.create.fill_hint: Please enter the correct answer, if today is a [[sunny | groomy | rany]] day
 course.question.create.choose_min_answer_num_hint: Select at least %minuteCheckedNum% answer!
-course.question.create.choose_max_num_hint:  Maximum %maxNum% options
-course.question.create.choose_min_num_hint:  Maximum %minNum% options
+course.question.create.choose_max_num_hint: Maximum %maxNum% options
+course.question.create.choose_min_num_hint: Maximum %minNum% options
 course.question.create_hint: Added options
 course.question.right_answer_hint: Correct answer
 course.question.right_answer_content_hint: Please enter the option content
@@ -663,6 +670,7 @@ group.post.reply_hint: Reply
 group.post.reply_fail_hint: Posted reply failed, please try again
 
 cny: CNY
+fold: Fold
 pay.security.password.save_fail_hint: The payment password setting failed
 
 user.account.refund_cancel_title: Cancel refund application
@@ -676,7 +684,7 @@ user.account.cancel_order_success_hint: Order cancelled!
 user.fields.idcard_front_placeholder: Please upload Id crad front
 user.fields.idcard_back_placeholder: Please upload Id crad back
 
-open_course.lesson.create_error:  Lesson create error
+open_course.lesson.create_error: Lesson create error
 open_course.lesson.create_success: Lesson create success
 open_course.converting_hint: Video converting. Check later
 open_course.load_search_hint: Search ...
@@ -744,8 +752,8 @@ task_manage.delete_failed_hint: Delete failed
 
 testpaper.widget.save_success_hint: Saved
 
-testpaper_manage.save_error_hint:  Operation failed
-testpaper_manage.save_success_hint:  Operation succeeded
+testpaper_manage.save_error_hint: Operation failed
+testpaper_manage.save_success_hint: Operation succeeded
 testpaper_manage.result_graph.score_distribution: Score Distribution
 testpaper_manage.result_graph.person_num: Number
 testpaper_manage.result_graph.first_score_num: Number of first score
@@ -782,6 +790,7 @@ validate.trim.message: Please input %display%
 validate.idcard_number_input.message: Please enter your ID number correctly
 validate.visible_character_input.message: Please input a visible character
 validate.positive_integer.message: Please enter a positive integer
+validate.unsigned_integer.student_message: Please enter an integer not less than 0
 validate.unsigned_integer.message: Please enter a non negative integer, where seconds can only be between 0-59
 validate.second_range.message: Please enter a non negative integer, where seconds can only be between 0-59
 validate.course_title.message: Do not support typing <,> characters
@@ -807,6 +816,7 @@ validate.limit_size.message: Size can not exceed 2M
 validate.next_day.message: The start time should be later than the current time
 validate.chinese_alphanumeric.message: Only supports Chinese characters, English letters, numbers and _ . ·
 validate.alphanumeric.message: Must be English letters, numbers and underscores
+validate.only_alphanumeric.message: Please enter numbers or English letters
 validate.raty_star.message: Please score
 validate.reg_invite_code.message: Must consists of five numbers and english characters
 validate.phone.message: Please enter a valid mobile phone number
@@ -1113,7 +1123,7 @@ admin.classroom.choose_success_hint: Choose classroom success
 admin.classroom.operation_success_hint: successfully！
 admin.classroom.operation_fail_hint: failure
 admin.classroom.operation_hint: ？
-admin.classroom.delete_hint: Really want to delete the classroom?
+admin.classroom.delete_hint: Deleting a class will delete the chapters, class hours, students and other information of all courses in the class. Are you sure you want to delete this class?
 admin.classroom.delete_success_hint: successfully deleted!
 admin.classroom.cancel_recommend_hint: "%title% ?"
 admin.classroom.cancel_recommend_success_hint: "%title% successfully!"
@@ -1180,6 +1190,9 @@ admin.file.delete_hint: Are you sure you want to delete this file?
 admin.group.operating_hint: %trigger% ？
 admin.group.operating_success_hint: %trigger% successfully！
 admin.group.operating_fail_hint: %trigger% failed
+admin.group.recommend_success_hint: Recommend group successfully!
+admin.group.recommend_fail_hint: Recommend group failed!
+admin.group.delete_hint: Deleting a group will delete the group’s topics, members, and replies. Do you really want to delete this group?
 admin.group.thread_delete_hint: Are you sure you want to delete the thread?
 admin.keyword.delete_hint: Are you sure you want to delete this keyword?
 admin.material_lib.video: Video
@@ -1275,6 +1288,9 @@ admin.setting.cloud.validate_old.video_fingerprint_time.display: Cloud video fin
 admin.setting.cloud.validate_old.video_fingerprint_opacity.display: Cloud video fingerprint display opacity
 admin.setting.consult_setting.upload_qrcode_success_hint: Upload WeChat QR code successfully!
 admin.setting.consult_setting.setting_max_num_hint: Set up to 10..
+admin.setting.consult_setting.setting_consult_phone.empty_hint: Not Empty
+admin.setting.consult_setting.setting_consult_name.empty_hint: Not People
+admin.setting.consult_setting.setting_consult_phone.error_hint: Not Set
 admin.setting.consult_setting.delete_hint: Are you sure you want to delete?
 admin.setting.course_avatar.select_default_pic.message: Please select the default course image file to upload
 admin.setting.course.upload_live_course_logo_success_hint: Upload the live course LOGO success!
@@ -1642,10 +1658,22 @@ classroom.amount: "Equals to "
 site.open: Open
 site.date.day: Day
 course.marketing_setup.services.provide_services: Services
+course.marketing_setup.services.course_list_display: Task List With Goods
 vip.level.free_learning: Free for Vip
 vip.level.free_learning_new: Free for Vip
 site.default.none: None
 form.btn.save: Save
+
+drainage.setting: Drainage settings
+drainage.qr_setting: QR code settings
+drainage.upload_tips: Please upload pictures in jpg, gif, png format
+drainage.text: Drainage copy
+drainage.placeholder: Please enter content
+drainage.style: Drain page style
+drainage.style_tips: Join/Payment Completion Page
+drainage.view_detail: see details
+drainage.qr_no_empty: QR code cannot be empty
+drainage.setting_tips: Drain purchased users to the private domain traffic pool
 
 site.twig.extension.smarttime.future: Feature
 site.twig.extension.smarttime.hardly: A moment ago
@@ -1664,7 +1692,7 @@ exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
 
 admin_v2.certificate.template.delete_hint: When a template is deleted, the certificates that use the templates Are templates deleted?
 admin_v2.certificate.code.exist: This certificate code already exists
-admin_v2.certificate.code.check: 1 to 6 digits or letters of the alphabet, not case sensitive
+admin_v2.certificate.code.check: 1 to 20 digits or letters of the alphabet, not case sensitive
 admin_v2.certificate.expiry_day.check: Please enter a non-negative integer from 1 to 6000
 admin_v2.certificate.target_id.check: Please select the target group
 admin_v2.certificate.template_id.check: Please select a certificate template
@@ -1771,7 +1799,8 @@ course.plan_setup.finish_rule: '%taskName% rules'
 course.plan_setup.finish_rule.nothing: 'No limitation'
 course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by %taskName% finish conditions'
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the %taskName%'
-course.plan_setup.member_numbers: Students
+course.plan_setup.member_numbers: Limit the number of participants
+course.plan_setup.member_numbers.tips: There is a limit on the number of people who can join the live course, 0 means no limit on the number of people
 site.data.people: Person
 course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
 course.marketing_setup.preview.set_task: 'Free %taskName%'
@@ -1792,6 +1821,7 @@ course.info.video.convert.audio.close: 'Close'
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: 'Eg.: The total video duration of the course is 100 minutes. If you set 5 times, then students can watch videos for 500 minutes. 0 means no limits.<br/>It only affect the video upload manually. It won''t affect record live or videos saved on third party live platform.'
 goods.show_page.tab.intro: Goods Intro
 goods.show_page.tab.catalogue: Learn Catalogue
+goods.show_page.tab.catalogue.empty: After purchasing, you can view the course catalog~
 goods.show_page.tab.reviews: Reviews
 goods.show_page.tab.reviews_empty_tips: No Reviews
 goods.show_page.tab.summary_empty_tips: No Summary
@@ -1849,3 +1879,296 @@ admin_v2.operation.audit_center.batch_operate_success_tips: Success
 homepage: Home
 
 admin_v2.teacher_qualification.setting_required: After the Teacher Qualification Announcement function is closed, the [Teacher Qualification Announcement] page will be hidden on the home page,users will not be able to see the Teacher Qualification Announcement module.
+
+activity.replay_manage.replay_error_hint: Please select live replay
+
+# vue
+site.btn.export: Export
+site.btn.detail: More
+site.btn.remove_playback: Remove playback
+site.btn.view_playback: View playback
+site.btn.confirm: Confirm
+site.btn.edit: Edit
+site.btn.see_more: See more
+site.btn.enter_live: Enter live
+site.btn.save: Save
+site.btn.exit_editing: Exit editinng
+site.btn.preview: Preview
+site.btn.exit_preview: Exit preview
+
+admin.mobile_setting.discovery_tips: Notice：Using the discovery page configuration function, the app version needs to be upgraded to 4.5.39 and above
+
+modal.title.edit: Edit
+modal.content.remove_playback_resources: Are you sure to remove playback resources?
+
+form.label.tag: Tag
+form.label.share: Share
+
+placeholder.playback_label: Playback labe
+placeholder.enter_keyword: Please enter keyword
+placeholder.course_category: Course category
+
+radio.share_to_live_playback: Share to live playback (other teachers can view, preview and reference this playback)
+radio.visible_only_to_yourself: Visible only to yourself
+
+message.removal_succeeded: Removal succeeded
+message.edit_succeeded: Edit succeeded
+message.file_too_large: The file is too large, please upload a file smaller than 2M!
+message.saved_successfully: Saved successfully!
+message.save_failed: Save failed!
+message.coupon_module_information: Please complete the coupon module information!
+message.gn_module_information: Please complete the graphic navigation module information!
+message.advertising_module_information: Please complete the advertising module information!
+message.qusetion_bank_module_information: Please complete the question bank module information!
+message.open_class_module_information: Please complete the open class module information!
+message.classroom_module_information: Please complete the class module information!
+message.course_module_information: Please complete the course module information!
+message.carousel_module_information: Please complete the carousel picture module information!
+message.go_to_open: Go to open
+message.coupon_function_is_not_activated: Coupon function is not activated
+message.membership_function_is_not_activated: Membership function is not activated
+message.add_up_to: Add up to 5 components of the same type
+
+live.playback.tip.remove_association: Live playback will remove the association from the course
+live.playback.tip.cannot_be_used_normally: If the live playback is referenced, removing it will cause the referenced task to be unable to work normally
+live.playback.tip.delete_related_live_playback: At the same time, delete relevant live playback in my teaching materials
+
+course.name: Course title
+course.task: Task title
+
+live_name: Name
+live_playback_duration: Playback duration
+live_statistics: Live statistics
+live_statistics.task_name_placeholder: Task name
+live_statistics.live_start_time: Start time
+live_statistics.live_type: Type
+live_type.default: Default Live
+live_type.pseudo: Smart Live
+live_statistics.live_time_long: Duration(min)
+live_statistics.max_participate_count: Max oarticipate count
+live_statistics.live_status: Status
+live_statistics.operation: Operation
+live_statistics.live_coming: Comming soon
+live_statistics.live_playing: Playing
+live_statistics.live_finished: Finished
+live_statistics.detail_notice: The data comes from the live room, which is automatically synchronized one day after the live
+live_statistics.detail.checkin: Checkin Statistics
+live_statistics.detail.total_learn_time: Learning Duration Statistics
+live_statistics.checkin_status: Checkin status
+live_statistics.checkin_status.checked: Checked
+live_statistics.checkin_status.not_checked: Not checked
+live_statistics.checkin_status.all: All
+live_statistics.mobile: Mobile
+live_statistics.email: Email
+live_statistics.user_name: User name
+live_statistics.true_name: Name
+live_statistics.user_name_or_mobile_number: User name or mobile number
+live_statistics.presenter: Presenter
+live_statistics.live_time: Live time
+live_statistics.actual_live_time: Actual live time
+live_statistics.all_chat_number: Chat number
+live_statistics.online_number: Online number
+live_statistics.number_of_visitors: Number of visitors
+live_statistics.per_capita_viewing_time: Per capita viewing time
+live_statistics.enter_theLlive_room_time: Enter the live room time
+live_statistics.watching_time: Watching time (minutes)
+live_statistics.check_in_number: Check in number
+live_statistics.chat_number: Number of chat
+live_statistics.answers_number: Number of answers
+live_statistics.to: to
+live_statistics.people: people
+live_statistics.strip: strip
+course.live_replay.share_btn: Share
+course.live_replay.un_share_btn: UnShare
+course.live_replay.share_tip: Please confirm to share this live playback to the shared live playback resource library?
+course.live_replay.un_share_tip: Please confirm to remove this live playback from the shared live playback library？
+course.live_replay.delete_tip: Please confirm to remove this live playback？
+course.homework.score.tip1: Please enter the passing score
+course.homework.score.tip2: Please enter a value not greater than the total score of the test paper
+course.scoer.validator: Please check the question score setting, there is a question setting error
+course.miss_score.validator: The missed points shall not exceed the question points
+course.option_score.validator: The total number of choices must not exceed the question mark
+testpaper.scoer.validator: Please check the score setting of each question type, there are questions setting errors
+testpaper.option_score.validator: The value of each item shall not exceed the value of each item
+
+all: All
+coupon: Coupon
+collar_roll: Collar roll
+available_range: Available range
+upload_image: Upload image
+picture_cropping: Picture cropping
+classroom_course_num: Total <span>%courseNum%</span> courses
+all_products: All products
+designated_goods: Designated goods
+designated_member: Designated member
+all_courses: All courses
+all_classes: All classes
+all_members: All members
+some_products: Some products
+ad_pictures: Ad pictures
+carousel: Carousel
+members_only: Members Only
+free_classroom_course_num: %courseNum% courses， %classroomNum% classes
+app.footer.find: Find
+app.footer.learn: Learn
+app.footer.dynamic: Dynamic
+app.footer.mine: Mine
+app.header.school_name: School name
+app.header.search: Search
+classification_class: Classification class
+free_lesson: Free lesson
+popular_class: Popular class
+
+decorate.class_list_settings: Class list settings
+decorate.list_name: List name
+decorate.please_enter_the_name_of_the_list: Please enter the name of the list
+decorate.arrangement: Arrangement
+decorate.row_by_column: Row by column
+decorate.one_row_and_two_columns: One row and two columns
+decorate.class_source: Class source
+decorate.class_classification: Class classification
+decorate.customize: Customize
+decorate.select_class: Select class
+decorate.order: Order
+decorate.order2: Order：
+decorate.join_the_most: Join the most
+decorate.recently_created: Recently created
+decorate.highest_rated: Highest rated
+decorate.recommended_class: Recommended class
+decorate.last_7_days: Last 7 days
+decorate.last_30_days: Last 30 days
+decorate.last_90_days: Last 90 days
+decorate.history: History
+decorate.display_number: Display number
+decorate.show_only_published_classes: Show only published classes
+decorate.remove: Remove
+decorate.class_name: Class name
+decorate.commodity_price: Commodity price
+decorate.amount_of_goods: Amount of goods
+decorate.creation_time: Creation time
+decorate.operate: Operate
+decorate.search_class: Search class
+decorate.coupon: Coupon
+decorate.only_show_coupons_no_expired: Only show coupons that have not expired
+decorate.title: Title
+decorate.show: Show
+decorate.do_not_show: Do not show
+decorate.coupon_selection: Coupon selection
+decorate.add_coupon: Add coupon
+decorate.choose_a_coupon: Choose a coupon
+decorate.search_for_coupons: Search for coupons
+decorate.coupon_name: Coupon name
+decorate.prefix: Prefix
+decorate.offer_content: Offer content
+decorate.discount: Discount
+decorate.trade_in: Trade in
+decorate.valid_until: Valid until
+decorate.remaining_total: Remaining/Total
+decorate.valid_within_fixed_day_of_receipt: Valid within %fixedDay% day of receipt
+decorate.nknown_date: Unknown date
+decorate.course_list_setting: Course list setting
+decorate.course_source: Course source
+decorate.course_sorts: Course sorts
+decorate.choose_a_course: Choose a course
+decorate.recommended_courses: Recommended courses
+decorate.show_only_published_courses: Show only published courses
+decorate.course_title: Course Title
+decorate.search_course: Search course
+decorate.graphic_navigation_settings: Graphic navigation settings
+decorate.add_graphic_navigation: Add graphic navigation
+decorate.not_less_than: Not less than 1
+decorate.change_picture: Change picture
+decorate.please_enter_a_title: Please enter a title
+decorate.link_source: Link source
+decorate.please_choose: Please choose
+decorate.members_only: Members Only
+decorate.open_class_classification: Open class classification
+decorate.select_image: Select Image
+decorate.title2: Title
+decorate.question_bank_list_settings: Question bank list settings
+decorate.question_bank_classification: Question bank classification
+decorate.basic: Basic
+decorate.carousel: Carousel
+decorate.graphic_navigation: Graphic Navigation
+decorate.image_ad: Image ad
+decorate.curriculum_schedule: Curriculum schedule
+decorate.class_list: Class list
+decorate.question_bank_list: Question bank list
+decorate.open_class_list: Open class list
+decorate.marketing: Marketing
+decorate.all: All
+decorate.open_class_list_settings: Open class list settings
+decorate.choose_an_open_class: Choose an open class
+decorate.only_show_published_public_classes: Only show published public classes
+decorate.search_for_public_classes: Search for public classes
+decorate.image_ad_settings: Image ad settings
+decorate.add_pictures: Add pictures
+decorate.select_link: Select link
+decorate.select_member: Select member
+decorate.custom_link: Custom link
+decorate.mobile_phone_screen: Adaptive mobile phone screen
+decorate.turn_on: Turn on
+decorate.closure: Closure
+decorate.revise: Revise
+decorate.add_content: Add content
+decorate.carousel_tip1: The recommended image size is 750x300px, supports jpg/png/gif format, and the size does not exceed 2MB
+decorate.carousel_tip2: Add up to 5 pictures, drag the selected pictures to sort them
+decorate.site_link: Site link
+decorate.low_to_hign: Low to high
+decorate.hign_to_low: High to low
+decorate.choose: Choose
+decorate.link_address: Link address
+decorate.please_enter_the_link_address: Please enter the link address
+decorate.link_wrong: The link is wrong, please start with http:// or https://
+decorate.are_you_sure_exiting_editing: Are you sure to exit editing?
+decorate.exiting_editing_not_save: Exiting editing will not save the changes.
+decorate.gn_tip1: The recommended image size is 80x80px, supports jpg/png/gif format, and the size does not exceed 2 MB
+decorate.gn_tip2: Add up to 8 graphic navigation
+decorate.poster_tip1: The recommended image size is 750px, supports jpg/png/gif format, and the size does not exceed 2 MB
+decorate.open_course_tip1: Contains only the content of the live broadcast public class, does not include the recorded public class
+
+scrm.title: Scrm
+scrm.edusoho_title: EduSoho Scrm
+scrm.desc: EduSoho Scrm is a private domain traffic operation tool for education and training institutions, providing functions such as attracting customers, customer operations, community operations, and corporate risk control. EduSoho Scrm and EduSoho Online School provide institutions with a total solution for enrollment, educational administration, teaching and service.
+scrm.go_to_scrm: Go to Scrm
+scrm.open_now: Open now
+scrm.product_features: Product features
+scrm.open_edusoho_scrm: Open EduSoho Scrm
+scrm.hava_a_dedicated_business_manager: Have a dedicated business manager or customer service for Kuozhi
+scrm.contact_your_business_manager: Please contact your business manager or customer service to activate
+scrm.no_knowledgeable_business_manager: No knowledgeable business manager or customer service
+scrm.please_scan_the_qr_code: Please scan the QR code below to add a dedicated business manager to serve you
+scrm.note: Note, Before opening EduSoho, you must first activate corporate WeChat
+scrm.to_open_corporate_wechat: To open corporate WeChat
+scrm.attract_customers: Attract customers and build a customer pool efficiently
+scrm.based_on_the_friend: Based on the friend and community characteristics of enterprise WeChat, it provides flexible customer acquisition tools for education and training institutions, and helps training institutions to efficiently build customer pools.
+scrm.online_transaction_truly seamless: Online transaction, truly seamless
+scrm.refined_marketing_management_improves_conversion_efficiency: Refined marketing management improves conversion efficiency; after customers pass online transactions, they can automatically open teaching platform accounts for training, truly seamless connection.
+scrm.fast_customer_follow_up_improve_efficiency: Fast customer follow-up, improve efficiency
+scrm.functions_of_sending_information: The functions of sending information and labeling attributes improve the customer's understanding of the product and employees' understanding of the customer, and quick reply, group messaging, standard speech library, etc. improve the efficiency of customer follow-up.
+scrm.customer_management: Customer management, realizing the enterpriseization of customer resources
+scrm.view_the_overall_information: View the overall information of corporate customers through the background, including basic customer information, friend relationships, group chat information, customer follow-up status, etc., to realize the corporateization of customer resources.
+scrm.sales_analysis_performance_status_at_a_glance: Sales analysis, performance status at a glance
+scrm.analyze_the_overall_situation_of_the_company_is_marketing: Analyze the overall situation of the company's marketing; when the sales are completed and the customer follows up, the administrator can also analyze the sales effects of the sales.
+scrm.live_open_class: Live open class
+scrm.set_up_live_open_classes: Institutions quickly set up live open classes, and students can purchase regular classes in the live room; students can invite friends to study in the live room to achieve fission.
+testpaper.import.tip: "The test paper is imported successfully, please adjust the test paper score on the current page. (Note: 'Each item' setting is added for multiple-choice and variable-choice questions, and 'Each blank' setting is added for fill-in-the-blank questions.)"
+admin.system.purchase_agreement_setting: Purchase Agreement Settings
+admin.system.purchase_agreement: Purchase agreement
+admin.system.purchase_agreement.title: Title
+admin.system.purchase_agreement.content: Content
+admin.system.purchase_agreement.style_settings: Style settings
+admin.system.purchase_agreement.check_to_confirm: Check to confirm
+admin.system.purchase_agreement.popup_confirmation: Popup confirmation
+admin.system.purchase_agreement.see_details: See details
+admin.system.purchase_agreement.submit: Submit
+admin.system.purchase_agreement.content_empty: Protocol content cannot be empty
+admin.system.purchase_agreement.saved_successfully: Saved successfully!
+admin.system.purchase_agreement.save_failed: Save failed!
+user_field.select_type.tip: One per line, up to 20 characters per sub-item
+
+activity.summary: summary
+activity.summary.placeholder: Please enter the introduction (optional)
+open: Open
+close: Close
+live.chooser.video: Please set up live video

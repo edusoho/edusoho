@@ -13,6 +13,12 @@ class AnswerQuestionReportDaoImpl extends AdvancedDaoImpl implements AnswerQuest
         return $this->findInField('id', $ids);
     }
 
+    public function deleteByAssessmentId($assessmentId)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE assessment_id = ?";
+
+        return $this->db()->executeUpdate($sql, [$assessmentId]);
+    }
 
     public function findByAnswerRecordId($answerRecordId)
     {
@@ -28,7 +34,8 @@ class AnswerQuestionReportDaoImpl extends AdvancedDaoImpl implements AnswerQuest
             ],
             'orderbys' => [],
             'serializes' => [
-                'response' => 'json'
+                'response' => 'json',
+                'revise' => 'json'
             ],
             'conditions' => [
                 'answer_record_id = :answer_record_id',

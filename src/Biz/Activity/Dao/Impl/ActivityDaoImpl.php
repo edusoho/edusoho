@@ -106,22 +106,37 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         return $this->db()->fetchAll($sql, []);
     }
 
+    public function findActivitiesByTypeAndCreatedTimeAndUpdatedTimeFinishType($type, $createdTime, $updatedTime, $finishType)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE mediaType = ? AND createdTime <= ? AND finishType = ? AND updatedTime <= ?;";
+
+        return $this->db()->fetchAll($sql, [$type, $createdTime, $finishType, $updatedTime]);
+    }
+
     public function declares()
     {
-        $declares['orderbys'] = ['endTime', 'startTime'];
+        $declares['orderbys'] = ['endTime', 'startTime', 'createdTime'];
         $declares['conditions'] = [
+            'id IN (:ids)',
             'fromCourseId = :fromCourseId',
             'mediaType = :mediaType',
             'fromCourseId IN (:courseIds)',
+            'title like :title',
+            'mediaType <> :excludeMediaType',
             'fromCourseId NOT IN (:excludeCourseIds)',
             'mediaType IN (:mediaTypes)',
+            'mediaId IN (:mediaIds)',
             'mediaId = :mediaId',
             'fromCourseSetId = :fromCourseSetId',
             'fromCourseSetId IN (:courseSetIds)',
             'startTime >= :startTime_GT',
+            'startTime <= :startTime_LT',
             'endTime <= :endTime_LT',
-            'endTime >= :endTime_GE',
+            'createdTime = :createdTime',
+            'updatedTime = :updatedTime',
             'copyId = :copyId',
+            'finishType = :finishType',
+            'finishData = :finishData',
         ];
 
         return $declares;
@@ -142,6 +157,11 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
     public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId)
     {
         return $this->getByFields(['mediaId' => $mediaId, 'mediaType' => $mediaType, 'copyId' => $copyId]);
+    }
+
+    public function getByMediaIdAndMediaTypeAndCourseId($mediaId, $mediaType, $courseId)
+    {
+        return $this->getByFields(['mediaId' => $mediaId, 'mediaType' => $mediaType, 'fromCourseId' => $courseId]);
     }
 
     public function getByMediaIdAndMediaType($mediaId, $mediaType)

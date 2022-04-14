@@ -63,12 +63,11 @@ class UserLessonStatisticsExporter extends Exporter
         $statisticsContent = [];
         foreach ($users as $user) {
             $nickname = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
-            $mobile = $user['verifiedMobile'];
             $userData = empty($memberTaskData[$user['id']]) ? [] : $memberTaskData[$user['id']];
             foreach ($userData as $data) {
                 $member = [];
                 $member[] = $nickname;
-                $member[] = $mobile;
+                $member[] = empty($user['verifiedMobile']) ? '--' : $user['verifiedMobile']."\t";
                 $member[] = $data['classroomName'];
                 $member[] = $data['courseSetName'];
                 $member[] = $data['courseName'];
@@ -79,7 +78,7 @@ class UserLessonStatisticsExporter extends Exporter
                 $member[] = $data['sumTime'];
                 $member[] = $data['pureTime'];
                 $member[] = $data['finishStatus'];
-                $nickname = $mobile = ' ';
+                $nickname = ' ';
                 $statisticsContent[] = $member;
             }
         }
@@ -160,18 +159,23 @@ class UserLessonStatisticsExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        if (!empty($conditions['nickname'])) {
+        $conditions['userIds'] = [];
+        if (!empty($conditions['keyword'])) {
+            $userConditions = ['nickname' => $conditions['keyword']];
+            if ('mobile' == $conditions['keywordType']) {
+                unset($userConditions['nickname']);
+                $userConditions['verifiedMobile'] = $conditions['keyword'];
+            }
             $users = $this->getUserService()->searchUsers(
-                ['nickname' => $conditions['nickname']],
+                $userConditions,
                 [],
                 0,
-                PHP_INT_MAX
+                PHP_INT_MAX,
+                ['id']
             );
-
             $conditions['userIds'] = ArrayToolkit::column($users, 'id');
-            unset($conditions['nickname']);
-        } else {
-            $conditions['userIds'] = [];
+            unset($conditions['keywordType']);
+            unset($conditions['keyword']);
         }
 
         $conditions['destroyed'] = 0;

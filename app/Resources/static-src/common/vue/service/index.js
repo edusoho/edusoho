@@ -17,3 +17,18 @@ export * from './MultiClassInspection/index.js';
 // 接口规范
 export * from './WrongBook';
 export * from './TeacherQualification';
+export * from './Classroom';
+export * from './Plugins';
+export * from './Coupon';
+export * from './Category';
+export * from './Categories';
+export * from './ItemBankExercises';
+export * from './ItemBankCategory';
+export * from './OpenCourse';
+export * from './Pages';
+export * from './LiveReplay';
+export * from './LiveStatistic';
+export * from './Classroom';
+export * from './CourseCategory';
+export * from './CourseTag';
+export * from './PurchaseAgreement';

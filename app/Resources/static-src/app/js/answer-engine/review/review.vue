@@ -2,6 +2,7 @@
   <div id="app" class="ibs-vue">
     <item-review
       :role="role"
+      :activity="activity"
       :assessment="assessment"
       :answerReport="answerReport"
       :answerRecord="answerRecord"
@@ -11,10 +12,15 @@
       :cdnHost="cdnHost"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
+      :media-type="mediaType"
+      :finish-type="finishType"
+      :submit-list="submitList"
+      @cancel="handleCancel"
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
       @getReviewData="getReviewData"
       @getReviewDataAagin="getReviewDataAagin"
+      @view-historical-result="handleViewHistoricalResult"
     ></item-review>
   </div>
 </template>
@@ -34,6 +40,10 @@
         showAttachment: $('[name=show_attachment]').val(),
         cdnHost: $('[name=cdn_host]').val(),
         fileId: 0,
+        mediaType: $('[name=media_type]').val(),
+        finishType: $('[name=finishType]').val(),
+        activity: {},
+        submitList: []
       };
     },
     created() {
@@ -50,6 +60,7 @@
             request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
           }
         }).done(function (res) {
+          that.activity = res.activity;
           that.answerRecord = res.answer_record;
           if ('finished' == that.answerRecord.status) {
             location.href = $('[name=success_goto_url]').val();
@@ -59,6 +70,7 @@
           that.answerReport = res.answer_report;
           that.answerScene = res.answer_scene;
         })
+        this.getAnswerRecord();
     },
     methods: {
       getReviewData(reviewReport) {
@@ -150,6 +162,32 @@
             self.fileId = 0;
           })
         });
+      },
+
+      getAnswerRecord() {
+        const that = this;
+        const answerRecordId = $("[name='answer_record_id']").val();
+        $.ajax({
+          url: `/api/answerRecord/${answerRecordId}/submitList`,
+          type: 'GET',
+          headers:{
+            'Accept':'application/vnd.edusoho.v2+json'
+          },
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+          }
+        }).done(function (res) {
+          that.submitList = res;
+        });
+      },
+
+      handleViewHistoricalResult(params) {
+        window.open(`/homework/result/${params.answer_record_id}/show?action=check`);
+      },
+
+      handleCancel() {
+        location.href = $('[name=goto_back_url]').val();
       }
     }
   }

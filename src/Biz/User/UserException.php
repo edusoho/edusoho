@@ -94,6 +94,8 @@ class UserException extends AbstractException
 
     const FILE_PERMISSION_DENIED = 4030145;
 
+    const DELETE_USER_PERMISSION_DENIED = 4030146;
+
     const DATEFIELD_INVALID = 5000143;
 
     const WEIXIN_INVALID = 5000144;
@@ -150,6 +152,7 @@ class UserException extends AbstractException
         5000143 => 'exception.user.datefield_invalid',
         5000144 => 'exception.user.weixin_invalid',
         4030145 => 'exception.user.file_permission_denied',
+        4030146 => 'exception.user.delete_user_permission_denied',
         4040119 => 'exception.user.mobile_not_found',
         4040120 => 'exception.user.user_is_destroyed',
         4040121 => 'exception.user.email_password_error',

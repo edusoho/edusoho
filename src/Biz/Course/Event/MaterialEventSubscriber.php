@@ -2,14 +2,14 @@
 
 namespace Biz\Course\Event;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMaterialDao;
-use Biz\Course\Service\MaterialService;
-use Biz\Task\Dao\TaskDao;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MaterialService;
+use Biz\Task\Dao\TaskDao;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -18,13 +18,13 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'course.material.create' => 'onCourseMaterialCreate',
             'course.material.update' => 'onCourseMaterialUpdate',
             'course.material.delete' => 'onCourseMaterialDelete',
             'course.lesson.materials.delete' => 'onCourseLessonMaterialsDelete',
             'course.task.material.update' => 'onCourseTaskMaterialUpdate',
-        );
+        ];
     }
 
     public function onCourseTaskMaterialUpdate(Event $event)
@@ -38,6 +38,8 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
             return;
         }
 
+        $this->updateMaterial($task);
+
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
         if (empty($copiedCourses)) {
             return;
@@ -48,14 +50,14 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
         foreach ($copiedTasks as $copiedTask) {
             $activity = $this->getActivityService()->getActivity($copiedTask['activityId']);
             $sourceActivity = $this->getActivityService()->getActivity($activity['copyId']);
-            $materials = $this->getMaterialService()->searchMaterials(array('lessonId' => $sourceActivity['id'], 'courseId' => $sourceActivity['fromCourseId']), array(), 0, PHP_INT_MAX);
+            $materials = $this->getMaterialService()->searchMaterials(['lessonId' => $sourceActivity['id'], 'courseId' => $sourceActivity['fromCourseId']], [], 0, PHP_INT_MAX);
             if (empty($materials)) {
                 return;
             }
 
             $this->getMaterialDao()->deleteByLessonId($activity['id'], 'course');
             foreach ($materials as $material) {
-                $newMaterial = $this->copyFields($material, array(), array(
+                $newMaterial = $this->copyFields($material, [], [
                     'title',
                     'description',
                     'link',
@@ -67,7 +69,7 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
                     'userId',
                     'type',
                     'createdTime',
-                ));
+                ]);
                 $newMaterial['copyId'] = $material['id'];
                 $newMaterial['courseSetId'] = $copiedTask['fromCourseSetId'];
                 $newMaterial['courseId'] = $copiedTask['courseId'];
@@ -79,6 +81,54 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
                 $this->getMaterialDao()->create($newMaterial);
             }
         }
+    }
+
+    private function updateMaterial($task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $this->getMaterialDao()->deleteByLessonId($activity['id'], 'course');
+        $materials = $this->object_to_array(json_decode($task['materials']));
+
+        foreach ($materials as $material) {
+            $newMaterial = $this->copyFields($material, [], [
+                'title',
+                'description',
+                'link',
+                'fileId',
+                'fileUri',
+                'fileMime',
+                'fileSize',
+                'source',
+                'userId',
+                'type',
+                'createdTime',
+            ]);
+
+            $newMaterial['courseSetId'] = $task['fromCourseSetId'];
+            $newMaterial['courseId'] = $task['fromCourseId'];
+            $newMaterial['description'] = !empty($material['summary']) ? $material['summary'] : $material['description'];
+            $newMaterial['lessonId'] = $activity['id'];
+            if (empty($material['fileSize']) && empty($material['size'])) {
+                $file = $this->getUploadFileService()->getFile($material['fileId']);
+                $material['fileSize'] = $file['fileSize'];
+            }
+            $newMaterial['fileSize'] = isset($material['fileSize']) ? $material['fileSize'] : $material['size'];
+            $newMaterial['source'] = 'coursematerial';
+
+            $this->getMaterialDao()->create($newMaterial);
+        }
+    }
+
+    private function object_to_array($obj)
+    {
+        $_arr = is_object($obj) ? get_object_vars($obj) : $obj;
+        $arr = null;
+        foreach ($_arr as $key => $val) {
+            $val = (is_array($val)) || is_object($val) ? $this->object_to_array($val) : $val;
+            $arr[$key] = $val;
+        }
+
+        return $arr;
     }
 
     private function copyFields($source, $target, $fields)
@@ -113,9 +163,9 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
     protected function updateMaterialNum($event)
     {
         $material = $event->getSubject();
-        $this->getCourseService()->updateCourseStatistics($material['courseId'], array('materialNum'));
+        $this->getCourseService()->updateCourseStatistics($material['courseId'], ['materialNum']);
         if (!empty($material['courseSetId'])) {
-            $this->getCourseSetService()->updateCourseSetStatistics($material['courseSetId'], array('materialNum'));
+            $this->getCourseSetService()->updateCourseSetStatistics($material['courseSetId'], ['materialNum']);
         }
     }
 
@@ -123,9 +173,9 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
     {
         $lesson = $event->getSubject();
         $activity = $this->getActivityService()->getActivity($lesson['lessonId']);
-        $this->getCourseService()->updateCourseStatistics($activity['fromCourseId'], array('materialNum'));
+        $this->getCourseService()->updateCourseStatistics($activity['fromCourseId'], ['materialNum']);
         if (!empty($activity['fromCourseSetId'])) {
-            $this->getCourseSetService()->updateCourseSetStatistics($activity['fromCourseSetId'], array('materialNum'));
+            $this->getCourseSetService()->updateCourseSetStatistics($activity['fromCourseSetId'], ['materialNum']);
         }
     }
 
@@ -188,5 +238,10 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
     protected function getMaterialService()
     {
         return $this->getBiz()->service('Course:MaterialService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
     }
 }

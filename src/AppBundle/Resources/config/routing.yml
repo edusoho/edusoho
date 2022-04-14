@@ -640,9 +640,10 @@ my_teaching_threads:
     defaults:
         _controller: 'AppBundle:My/Thread:teaching'
 my_teaching_classrooms:
-    path: /my/teaching/classrooms
+    path: '/my/teaching/classrooms/{tab}'
     defaults:
         _controller: 'AppBundle:My/Classroom:teaching'
+        tab: publish
 my_teaching_multi_class:
     path: /my/teaching/multi_class
     defaults:
@@ -1942,6 +1943,11 @@ custom_live_activity_replay_entry:
     path: '/course/{courseId}/activity/{activityId}/replay/{replayId}/custom_entry'
     defaults:
         _controller: 'AppBundle:Activity/Live:customReplayEntry'
+#课程回放课程id和activityId改动
+course_live_activity_replay_entry:
+    path: '/course/{courseId}/activity/{activityId}/replay/{replayId}/course_entry'
+    defaults:
+        _controller: 'AppBundle:Activity/Live:customReplayEntry'
 live_activity_replay_entry:
     path: '/course/{courseId}/activity/{activityId}/replay/{replayId}/entry'
     defaults:
@@ -2164,6 +2170,10 @@ course_set_manage_course_replay:
     path: '/course_set/{courseSetId}/manage/course/{courseId}/replay'
     defaults:
         _controller: 'AppBundle:Course/CourseManage:replay'
+course_manage_record_replay_setting:
+    path: '/course/{courseId}/task/{taskId}/record_replay_setting'
+    defaults:
+      _controller: 'AppBundle:Course/CourseManage:recordReplayVideo'
 course_set_manage_course_marketing:
     path: '/course_set/{courseSetId}/manage/course/{courseId}/marketing'
     defaults:
@@ -2463,6 +2473,10 @@ course_set_manage_files:
     path: '/course_set/{id}/manage/files'
     defaults:
         _controller: 'AppBundle:Course/CourseSetFileManage:index'
+course_set_manage_files_live_playback:
+    path: '/course_set/{id}/manage/files/live_playback'
+    defaults:
+        _controller: 'AppBundle:Course/CourseSetFileManage:livePlayback'
 course_set_manage_file_show:
     path: '/course_set/{id}/manage/file/{fileId}'
     defaults:
@@ -2521,6 +2535,10 @@ course_material_delete:
         _controller: 'AppBundle:Course/Material:delete'
     methods:
         - POST
+replay_choose:
+    path: /replay/choose
+    defaults:
+        _controller: 'AppBundle:Replay/Replay:list'
 media_materiallib_choose:
     path: /media/materiallib/choose
     defaults:
@@ -2605,6 +2623,14 @@ course_manage_testpaper_result_list:
     path: '/course/{id}/manage/testpaper/{testpaperId}/{activityId}/result'
     defaults:
         _controller: 'AppBundle:Course/TestpaperManage:resultList'
+course_testpaper_transcript_export_data:
+    path: 'course/{courseId}/testpaper/{testpaperId}/{activityId}/transcript_export_data'
+    defaults:
+        _controller: 'AppBundle:Testpaper/Manage:transcriptData'
+course_testpaper_transcript_export:
+    path: 'course/{courseId}/testpaper/{testpaperId}/{activityId}/transcript_export'
+    defaults:
+        _controller: 'AppBundle:Testpaper/Manage:transcriptExport'
 course_manage_exam_result_anlysis:
     path: '/course/{id}/manage/exam/activity/{activityId}/analysis'
     defaults:
@@ -2921,6 +2947,10 @@ classroom_data_statistics_course_detail_modal:
     path: '/classroom/{id}/manage/statistics/course/{courseId}/detail/modal'
     defaults:
         _controller: 'AppBundle:Classroom/ClassroomManage:courseDetailModal'
+classroom_live_statistics:
+    path: '/classroom/{id}/manage/live/statistics'
+    defaults:
+        _controller: 'AppBundle:Classroom/ClassroomManage:liveStatistics'
 classroom_manage_students_defined_show:
     path: '/classroom/{classroomId}/manage/students/{userId}/defined_show'
     defaults:
@@ -3152,6 +3182,30 @@ material_reconvert:
     path: '/material/lib/{globalId}/reconvert'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:reconvert'
+material_lib_live_replay:
+    path: '/material/lib/live_replay'
+    defaults:
+        _controller: 'AppBundle:MaterialLib/LiveReplay:index'
+material_lib_live_replay_share_list:
+    path: '/material/lib/live_replay/share'
+    defaults:
+        _controller: 'AppBundle:MaterialLib/LiveReplay:shareList'
+material_lib_live_replay_share:
+    path: '/material/lib/live_replay/{liveActivityId}/share'
+    defaults:
+        _controller: 'AppBundle:MaterialLib/LiveReplay:share'
+    methods:
+      - POST
+material_lib_live_replay_remove:
+    path: '/material/lib/live_replay/{liveActivityId}/remove'
+    defaults:
+        _controller: 'AppBundle:MaterialLib/LiveReplay:remove'
+    methods:
+      - POST
+material_lib_live_replay_edit:
+    path: '/material/lib/live_replay/{liveActivityId}/edit'
+    defaults:
+      _controller: 'AppBundle:MaterialLib/LiveReplay:edit'
 app_download:
     path: /app/download
     defaults:
@@ -3303,7 +3357,7 @@ course_task_marker_show:
     defaults:
         _controller: 'AppBundle:Marker:showMarkers'
 course_task_marker_metas:
-    path: '/course/task/{mediaId}/marker/metas'
+    path: '/course/task/{activityId}/marker/metas'
     defaults:
         _controller: 'AppBundle:Marker:markerMetas'
 course_task_marker_merge:
@@ -3323,7 +3377,7 @@ course_question_marker_preview:
     defaults:
         _controller: 'AppBundle:QuestionMarker:questionMakerPreview'
 course_task_question_markers_show:
-    path: '/course/task/media/{mediaId}/question_markers/show'
+    path: '/course/task/media/{activityId}/question_markers/show'
     defaults:
         _controller: 'AppBundle:QuestionMarker:showQuestionMakers'
 course_task_question_marker_finish:
@@ -4019,3 +4073,19 @@ disclaimers:
     path: /disclaimers
     defaults:
         _controller: 'AppBundle:Agreement:disclaimers'
+course_live_member_statistic_export:
+    path: /task/{taskId}/live_statistic/export
+    defaults:
+        _controller: 'AppBundle:LiveStatisticExport:taskLiveStatisticExport'
+course_live_task_statistic_export:
+    path: /course/{courseId}/live_statistic/export
+    defaults:
+        _controller: 'AppBundle:LiveStatisticExport:courseLiveStatisticExport'
+course_live_task_roll_call_export:
+    path: /task/{taskId}/live_statistic/roll_call/export
+    defaults:
+        _controller: 'AppBundle:LiveStatisticExport:rollCallExport'
+classroom_live_task_statistic_export:
+    path: /classroom/{classroomId}/live_statistic/export
+    defaults:
+        _controller: 'AppBundle:LiveStatisticExport:classroomLiveStatisticExport'

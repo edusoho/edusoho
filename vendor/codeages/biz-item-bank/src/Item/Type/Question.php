@@ -33,6 +33,7 @@ class Question
             'answer_mode' => ['required'],
             'attachments' => ['array'],
             'case_sensitive' => ['integer'],
+            'score_rule' => ['array'],
         ]);
 
         $this->getAnswerMode($question['answer_mode'])->validate($question['response_points'], $question['answer']);
@@ -77,6 +78,7 @@ class Question
         );
 
         return [
+            'answer_mode' => $question['answer_mode'],
             'question_id' => $questionId,
             'result' => $reviewResult['result'],
             'response_points_result' => $reviewResult['response_points_result'],

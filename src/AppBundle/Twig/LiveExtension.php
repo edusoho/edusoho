@@ -2,7 +2,9 @@
 
 namespace AppBundle\Twig;
 
+use Biz\Activity\Service\ActivityService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\File\Service\UploadFileService;
 use Biz\MultiClass\Service\MultiClassService;
@@ -39,6 +41,7 @@ class LiveExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_live_room_type', [$this, 'getLiveRoomType']),
             new \Twig_SimpleFunction('get_live_account', [$this, 'getLiveAccount']),
             new \Twig_SimpleFunction('get_live_replays', [$this, 'getLiveReplays']),
+            new \Twig_SimpleFunction('get_live_activity_replays', [$this, 'getLiveActivityReplays']),
             new \Twig_SimpleFunction('fresh_task_learn_stat', [$this, 'freshTaskLearnStat']),
         ];
     }
@@ -67,6 +70,40 @@ class LiveExtension extends \Twig_Extension
         }
     }
 
+    public function getLiveActivityReplays($activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+        $liveActivity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+
+        return $this->_getLiveActivityReplays($activity, $liveActivity);
+    }
+
+    protected function _getLiveActivityReplays($activity, $liveActivity)
+    {
+        $originActivity = $this->getOriginActivity($liveActivity);
+        $copyId = empty($originActivity['copyId']) ? $originActivity['id'] : $originActivity['copyId'];
+
+        $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
+
+        $replays = array_filter($replays, function ($replay) {
+            // 过滤掉被隐藏的录播回放
+            return !empty($replay) && !(bool) $replay['hidden'];
+        });
+
+        $self = $this;
+        $replays = array_map(function ($replay) use ($activity, $self) {
+            $replay['url'] = $self->generateUrl('course_live_activity_replay_entry', [
+                'courseId' => $activity['fromCourseId'],
+                'activityId' => $activity['id'],
+                'replayId' => $replay['id'],
+            ]);
+
+            return $replay;
+        }, $replays);
+
+        return $replays;
+    }
+
     protected function _getLiveVideoReplay($activity, $ssl = false)
     {
         if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $activity['ext']['replayStatus']) {
@@ -88,9 +125,15 @@ class LiveExtension extends \Twig_Extension
     {
         if (LiveReplayService::REPLAY_GENERATE_STATUS === $activity['ext']['replayStatus']) {
             $originActivity = $this->getOriginActivity($activity);
-            $copyId = empty($originActivity['copyId']) ? $originActivity['id'] : $originActivity['copyId'];
+            $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+            $lessonId = empty($originActivity['copyId']) ? $originActivity['id'] : $originActivity['copyId'];
+            if (!empty($course['parentId']) && empty($originActivity['copyId'])) {
+                $parentActivity = $this->getActivityService()->getByMediaIdAndMediaTypeAndCourseId($originActivity['mediaId'], 'live', $course['parentId']);
+                $lessonId = empty($parentActivity) ? $lessonId : $parentActivity['id'];
+            }
+            $lessonId = empty($lessonId) && !empty($activity['copyId']) ? $activity['copyId'] : $lessonId;
 
-            $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
+            $replays = $this->getLiveReplayService()->findReplayByLessonId($lessonId);
 
             $replays = array_filter($replays, function ($replay) {
                 // 过滤掉被隐藏的录播回放
@@ -173,7 +216,8 @@ class LiveExtension extends \Twig_Extension
 
     public function getLiveAccount()
     {
-        $liveAccount = $this->getEdusohoLiveAccount();
+        $liveAccount = $this->getSettingService()->get('developer_live_account', []);
+        $liveAccount = empty($liveAccount) || empty($liveAccount['settingRequestTime']) || time() - $liveAccount['settingRequestTime'] > 300 ? $this->getEdusohoLiveAccount() : $liveAccount;
         $liveAccount['isExpired'] = !empty($liveAccount['expire']) && $liveAccount['expire'] < time() ? 1 : 0;
 
         return $liveAccount;
@@ -183,7 +227,11 @@ class LiveExtension extends \Twig_Extension
     {
         $client = new EdusohoLiveClient();
         try {
-            return $client->getLiveAccount();
+            $liveAccount = $client->getLiveAccount();
+            $liveAccount['settingRequestTime'] = time();
+            $this->getSettingService()->set('developer_live_account', $liveAccount);
+
+            return $liveAccount;
         } catch (CloudAPIIOException $cloudAPIIOException) {
             return ['error' => $cloudAPIIOException->getMessage()];
         }
@@ -202,6 +250,9 @@ class LiveExtension extends \Twig_Extension
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
@@ -244,5 +295,13 @@ class LiveExtension extends \Twig_Extension
     protected function getMultiClassService()
     {
         return $this->biz->service('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 }

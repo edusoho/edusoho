@@ -5,6 +5,8 @@ namespace ApiBundle\Api\Resource\Good;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
@@ -43,6 +45,11 @@ class Good extends AbstractResource
         }
 
         $this->getGoodsService()->hitGoods($goods['id']);
+
+        if ($request->query->get('targetId')) {
+            $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $request->query->get('targetId'));
+            $this->getGoodsService()->hitGoodsSpecs($goodsSpecs['id']);
+        }
 
         return $goods;
     }
@@ -86,6 +93,11 @@ class Good extends AbstractResource
         }
         $goods['isMember'] = false;
         foreach ($goods['specs'] as &$spec) {
+            if ('course' === $goods['type']) {
+                $course = $this->getCourseService()->getCourse($spec['targetId']);
+                $member = $this->getCourseMemberService()->getCourseMember($spec['targetId'], $user['id']);
+                $spec['taskDisplay'] = $member ? 1 : $course['taskDisplay'];
+            }
             $spec = $this->getGoodsService()->convertSpecsPrice($goods, $spec);
             $spec['isMember'] = $goodsEntity->isSpecsMember($goods, $spec, $user['id']);
             if ($spec['isMember']) {
@@ -106,6 +118,7 @@ class Good extends AbstractResource
                 $spec['canVipJoin'] = 'ok' == $this->getVipService()->checkUserVipRight($user['id'], $goods['type'], $spec['targetId']);
             }
             $spec['teacherIds'] = $goodsEntity->getSpecsTeacherIds($goods, $spec);
+            $spec['services'] = $spec['services'] ?: [];
         }
         $this->getOCUtil()->multiple($goods['specs'], ['teacherIds']);
     }
@@ -158,5 +171,21 @@ class Good extends AbstractResource
     private function getFavoriteService()
     {
         return $this->service('Favorite:FavoriteService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
     }
 }

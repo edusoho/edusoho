@@ -23,6 +23,7 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Item\Dao\AttachmentDao;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Topxia\Service\Common\ServiceKernel;
@@ -662,7 +663,15 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         $conditions = $this->_prepareSearchConditions($conditions);
 
-        $files = $this->getUploadFileDao()->search($conditions, $orderBy, $start, $limit);
+        if (!empty($conditions['questionBank'])) {
+            unset($conditions['questionBank']);
+            unset($conditions['targetType']);
+            $conditions['excludeStatus'] = ['delete'];
+            $files = $this->getAttachmentDao()->search($conditions, $orderBy, $start, $limit);
+            $files = $this->convertQuestionFiles($files);
+        } else {
+            $files = $this->getUploadFileDao()->search($conditions, $orderBy, $start, $limit);
+        }
         if (empty($files)) {
             return [];
         }
@@ -683,8 +692,43 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function countCloudFilesFromLocal($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
+        if (!empty($conditions['questionBank'])) {
+            unset($conditions['questionBank']);
+            unset($conditions['targetType']);
+            $conditions['excludeStatus'] = ['delete'];
+
+            return $this->getAttachmentDao()->count($conditions);
+        }
 
         return $this->getUploadFileDao()->count($conditions);
+    }
+
+    protected function convertQuestionFiles($files)
+    {
+        $questionsFiles = [];
+        foreach ($files as $file) {
+            $questionsFiles[] = [
+                'id' => 0,
+                'globalId' => $file['global_id'],
+                'hashId' => $file['hash_id'],
+                'targetId' => $file['target_id'],
+                'targetType' => $file['target_type'],
+                'filename' => $file['file_name'],
+                'ext' => $file['ext'],
+                'fileSize' => $file['size'],
+                'status' => $file['status'],
+                'convertStatus' => $file['convert_status'],
+                'type' => $file['file_type'],
+                'createdUserId' => $file['created_user_id'],
+                'createdTime' => $file['created_time'],
+                'audioConvertStatus' => $file['audio_convert_status'],
+                'mp4ConvertStatus' => $file['mp4_convert_status'],
+                'usedCount' => 1,
+                'useType' => 'questionBank',
+            ];
+        }
+
+        return $questionsFiles;
     }
 
     public function searchFiles($conditions, $orderBy, $start, $limit)
@@ -1702,6 +1746,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function getUploadFileDao()
     {
         return $this->createDao('File:UploadFileDao');
+    }
+
+    /**
+     * @return AttachmentDao
+     */
+    protected function getAttachmentDao()
+    {
+        return $this->createDao('ItemBank:Item:AttachmentDao');
     }
 
     /**
