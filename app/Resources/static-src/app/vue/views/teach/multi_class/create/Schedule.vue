@@ -101,6 +101,10 @@ export default {
     });
   },
 
+  destroyed() {
+    $('#modal').off('hide.bs.modal');
+  },
+
   methods: {
     fetchCourseLesson() {
       if (!this.courseId) return;
