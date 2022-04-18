@@ -206,6 +206,10 @@ export default {
     })
   },
 
+  destroyed() {
+    $('#modal').off('hide.bs.modal');
+  },
+
   filters: {
     timeTransfer(totalSecond) {
       const minute = _.floor(totalSecond / 60)
