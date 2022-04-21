@@ -59,9 +59,10 @@ class MarketingMallController extends BaseController
         if (empty($token) || empty($code)) {
             throw new RuntimeException('lack of Authorization');
         }
-        $settings = $this->getSettingService()->get('storages', []);
+
+        $settings = $this->getSettingService()->get('storage', []);
         try {
-            $result = JWT::decode($token, $settings['cloud_secret_key'], ['HS256']);
+            $result = JWT::decode($token, md5($settings['cloud_secret_key']), ['HS256']);
         } catch (\Exception $e) {
             throw new RuntimeException('Authorization verify error.');
         }
