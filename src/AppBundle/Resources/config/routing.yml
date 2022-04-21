@@ -4089,3 +4089,13 @@ classroom_live_task_statistic_export:
     path: /classroom/{classroomId}/live_statistic/export
     defaults:
         _controller: 'AppBundle:LiveStatisticExport:classroomLiveStatisticExport'
+#marketing_mall
+marketing_mall_token:
+    path: /marketing_mall/token
+    defaults:
+        _controller: 'AppBundle:MarketingMall\MarketingMall:token'
+
+marketing_mall_user_info:
+    path: /marketing_mall/userinfo
+    defaults:
+        _controller: 'AppBundle:MarketingMall\MarketingMall:userinfo'
