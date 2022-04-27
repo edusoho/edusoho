@@ -16,7 +16,7 @@ interface ExerciseService
 
     public function findByIds($ids);
 
-    public function search($conditions, $orderBy, $start, $limit);
+    public function search($conditions, $orderBy, $start, $limit, $columns = []);
 
     public function canLearnExercise($exerciseId);
 
