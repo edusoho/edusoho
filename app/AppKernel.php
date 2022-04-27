@@ -104,6 +104,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new CustomBundle\CustomBundle(),
             new ApiBundle\ApiBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
+            new MarketingMallBundle\MarketingMallBundle(),
         ];
 
         if (is_file($this->getRootDir().'/config/sentry.yml')) {

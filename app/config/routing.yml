@@ -1,3 +1,8 @@
+marketing_mall:
+    resource: "@MarketingMallBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 EndroidQrCodeBundle:
     resource: "@EndroidQrCodeBundle/Controller/"
     type:     annotation
