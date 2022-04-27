@@ -3,7 +3,6 @@
 namespace MarketingMallBundle;
 
 use AppBundle\Common\ExtensionalBundle;
-use CorporateTrainingBundle\DependencyInjection\Compiler\ExtensionPass;
 
 class MarketingMallBundle extends ExtensionalBundle
 {
@@ -14,14 +13,14 @@ class MarketingMallBundle extends ExtensionalBundle
         if (is_dir($directory)) {
             $biz['autoload.aliases'][$this->getName()] = "{$this->getNamespace()}\\Biz";
         }
-        $biz['autoload.object_maker.service'] = function ($biz) {
+        $biz['autoload.marketing_mall.service'] = function ($biz) {
             return function ($namespace, $name) use ($biz) {
                 $class = "{$namespace}\\Service\\Impl\\{$name}Impl";
                 if ('Biz\\' === substr($namespace, 0, strlen('Biz\\'))) {
-                    $ctNamespace = "{$this->getNamespace()}\\{$namespace}";
-                    $ctClass = "{$ctNamespace}\\Service\\Impl\\{$name}Impl";
-                    if (class_exists($ctClass)) {
-                        $class = $ctClass;
+                    $marketNamespace = "{$this->getNamespace()}\\{$namespace}";
+                    $marketClass = "{$marketNamespace}\\Service\\Impl\\{$name}Impl";
+                    if (class_exists($marketClass)) {
+                        $class = $marketClass;
                     }
                 }
 
@@ -30,10 +29,5 @@ class MarketingMallBundle extends ExtensionalBundle
         };
 
         $this->container->get('api.resource.manager')->registerApi('MarketingMallBundle\Api');
-    }
-
-    public function getParent()
-    {
-        return 'AppBundle';
     }
 }
