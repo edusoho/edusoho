@@ -35,7 +35,7 @@ class XAuthTokenAuthenticationListener extends BaseListener
             if (empty($result->user_id)) {
                 throw new NotFoundException('user_id 不存在！');
             }
-            $token = $this->createTokenFromRequest($request, 2);
+            $token = $this->createTokenFromRequest($request, $result->user_id);
             $this->getTokenStorage()->setToken($token);
         } else {
             parent::handle($request);
