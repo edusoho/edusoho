@@ -1,6 +1,6 @@
 <?php
 
-namespace MarketingMallBundle\Api\Resource\QuestionBank;
+namespace MarketingMallBundle\Api\Resource\QuestionBankExercise;
 
 use ApiBundle\Api\ApiRequest;
 use Biz\ItemBankExercise\Service\ExerciseService;

@@ -21,7 +21,8 @@ class Access
             if (!method_exists($this, $method)) {
                 throw CommonException::NOTFOUND_METHOD();
             }
-            $this->$method($value);
+            $this->$method($value)
+            ;
         }
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace MarketingMallBundle\Api\Resource\QuestionBank;
+namespace MarketingMallBundle\Api\Resource\QuestionBankCategory;
 
 use ApiBundle\Api\Resource\Filter;
 

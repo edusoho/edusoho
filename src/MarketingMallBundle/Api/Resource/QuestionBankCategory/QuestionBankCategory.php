@@ -1,6 +1,6 @@
 <?php
 
-namespace MarketingMallBundle\Api\Resource\QuestionBank;
+namespace MarketingMallBundle\Api\Resource\QuestionBankCategory;
 
 use ApiBundle\Api\ApiRequest;
 use Biz\QuestionBank\Service\CategoryService;
@@ -9,9 +9,6 @@ use ApiBundle\Api\Annotation\ApiConf;
 
 class QuestionBankCategory extends BaseResource
 {
-    /**
-     * @ApiConf(isRequiredAuth=false)
-     */
     public function search(ApiRequest $request)
     {
         return $this->getQuestionBankCategoryService()->getCategoryStructureTree();
