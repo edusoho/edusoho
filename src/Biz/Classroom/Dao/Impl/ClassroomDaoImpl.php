@@ -163,6 +163,7 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
             'conditions' => [
                 'title = :title',
                 'status = :status',
+                'status != :excludeStatus',
                 'title like :titleLike',
                 'price > :price_GT',
                 'price >= :price_GE',

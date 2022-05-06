@@ -1675,7 +1675,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $conditions = $this->_prepareCourseConditions($conditions);
         $orderBy = $this->_prepareCourseOrderBy($sort);
 
-        return $this->getCourseDao()->searchWithJoinCourseSet($conditions, $orderBy, $start, $limit, $columns);
+        return $this->getCourseDao()->searchWithJoinCourseSet($conditions, $orderBy, $start, $limit);
     }
 
     public function searchBySort($conditions, $sort, $start, $limit)
