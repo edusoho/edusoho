@@ -11,7 +11,11 @@ class QuestionBankExercise extends BaseResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
-        $orderBys = $this->getSortByStr($conditions['sort'] ?? '');
+        if (isset($conditions['titleLike'])) {
+            $conditions['title'] = $conditions['titleLike'];
+            unset($conditions['titleLike']);
+        }
+        $orderBys = ['createdTime' => 'DESC'];
         $start = $conditions['offset'] ?? static::DEFAULT_PAGING_OFFSET;
         $limit = $conditions['limit'] ?? static::DEFAULT_PAGING_LIMIT;
         $columns = [
