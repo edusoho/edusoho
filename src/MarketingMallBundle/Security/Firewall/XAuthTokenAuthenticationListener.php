@@ -31,10 +31,14 @@ class XAuthTokenAuthenticationListener extends BaseListener
             if ($result->access_key !== $access_key) {
                 throw new NotFoundException('token auth error！');
             }
-            if (empty($result->user_id)) {
-                throw new NotFoundException('user_id not found！');
+            if (empty($result->nickname)) {
+                throw new NotFoundException('nickname not found！');
             }
-            $token = $this->createTokenFromRequest($request, $result->user_id);
+            $user = $this->getUserService()->getUserByNickname($result->nickname);
+            if (empty($user)) {
+                throw new NotFoundException('user not found！');
+            }
+            $token = $this->createTokenFromRequest($request, $user['id']);
             $this->getTokenStorage()->setToken($token);
         } else {
             parent::handle($request);
