@@ -17,12 +17,11 @@ class Access
     public function __construct(array $data)
     {
         foreach ($data as $key => $value) {
-            $method = 'set'.str_replace('_', '', $key);
+            $method = 'set' . str_replace('_', '', $key);
             if (!method_exists($this, $method)) {
                 throw CommonException::NOTFOUND_METHOD();
             }
-            $this->$method($value)
-            ;
+            $this->$method($value);
         }
     }
 

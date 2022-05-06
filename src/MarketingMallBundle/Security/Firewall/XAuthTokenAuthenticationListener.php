@@ -14,7 +14,7 @@ class XAuthTokenAuthenticationListener extends BaseListener
 
     public function handle(Request $request)
     {
-        if (null != $tokenInHeader = $request->headers->get(self::MALL_TOKEN_HEADER)) {
+        if (null !== $tokenInHeader = $request->headers->get(self::MALL_TOKEN_HEADER)) {
             $mallSettings = $this->getSettingService()->get('marketing_mall', []);
             $storages = $this->getSettingService()->get('storages', []);
             try {
@@ -26,14 +26,13 @@ class XAuthTokenAuthenticationListener extends BaseListener
                     $access_key = $mallSettings['access_key'];
                 }
             } catch (\RuntimeException $e) {
-                throw new NotFoundException('token 鉴权失败！');
+                throw new NotFoundException('token error！');
             }
-
-            if ($result->access_key != $access_key) {
-                throw new NotFoundException('token 鉴权失败！');
+            if ($result->access_key !== $access_key) {
+                throw new NotFoundException('token auth error！');
             }
             if (empty($result->user_id)) {
-                throw new NotFoundException('user_id 不存在！');
+                throw new NotFoundException('user_id not found！');
             }
             $token = $this->createTokenFromRequest($request, $result->user_id);
             $this->getTokenStorage()->setToken($token);
