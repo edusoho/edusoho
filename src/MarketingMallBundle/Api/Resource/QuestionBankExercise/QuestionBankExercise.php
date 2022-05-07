@@ -16,7 +16,7 @@ class QuestionBankExercise extends BaseResource
             unset($conditions['titleLike']);
         }
         $orderBys = ['createdTime' => 'DESC'];
-        $start = $conditions['offset'] ?? static::DEFAULT_PAGING_OFFSET;
+        $offset = $conditions['offset'] ?? static::DEFAULT_PAGING_OFFSET;
         $limit = $conditions['limit'] ?? static::DEFAULT_PAGING_LIMIT;
         $columns = [
             'id',
@@ -25,8 +25,10 @@ class QuestionBankExercise extends BaseResource
             'cover',
             'originPrice',
         ];
-
-        return $this->getExerciseService()->search($conditions, $orderBys, $start, $limit, $columns);
+        $exercise = $this->getExerciseService()->search($conditions, $orderBys, $offset, $limit, $columns);
+        $total = $this->getExerciseService()->count($conditions);
+        
+        return $this->makePagingObject($exercise, $total, $offset, $limit);
     }
 
     /**
