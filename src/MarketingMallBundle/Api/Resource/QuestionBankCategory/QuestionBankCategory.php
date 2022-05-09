@@ -5,7 +5,6 @@ namespace MarketingMallBundle\Api\Resource\QuestionBankCategory;
 use ApiBundle\Api\ApiRequest;
 use Biz\QuestionBank\Service\CategoryService;
 use MarketingMallBundle\Api\Resource\BaseResource;
-use ApiBundle\Api\Annotation\ApiConf;
 
 class QuestionBankCategory extends BaseResource
 {

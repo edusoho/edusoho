@@ -3,10 +3,10 @@
 namespace MarketingMallBundle\Api\Resource\MallClassroom;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\Service\ClassroomService;
+use MarketingMallBundle\Api\Resource\BaseResource;
 
-class MallClassroom extends AbstractResource
+class MallClassroom extends BaseResource
 {
     public function search(ApiRequest $request)
     {

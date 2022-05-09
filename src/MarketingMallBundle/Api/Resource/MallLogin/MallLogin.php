@@ -3,12 +3,12 @@
 namespace MarketingMallBundle\Api\Resource\MallLogin;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Resource\AbstractResource;
 use Firebase\JWT\JWT;
+use MarketingMallBundle\Api\Resource\BaseResource;
 use MarketingMallBundle\Client\MarketingMallApi;
 use Topxia\Service\Common\ServiceKernel;
 
-class MallLogin extends AbstractResource
+class MallLogin extends BaseResource
 {
     private $storages = [];
 

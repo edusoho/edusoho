@@ -3,12 +3,10 @@
 namespace MarketingMallBundle\Api\Resource\MallCourse;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\TimeMachine;
 use Biz\Course\Service\CourseService;
+use MarketingMallBundle\Api\Resource\BaseResource;
 
-class MallCourse extends AbstractResource
+class MallCourse extends BaseResource
 {
     public function search(ApiRequest $request)
     {
