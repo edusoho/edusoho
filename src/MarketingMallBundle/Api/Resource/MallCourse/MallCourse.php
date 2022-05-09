@@ -20,7 +20,7 @@ class MallCourse extends AbstractResource
         $sort = [
             'createdTime' => 'DESC'
         ];
-        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        list($offset, $limit) = $this->preparePageCondition($conditions);
         $courses = $this->getCourseService()->searchCourses($conditions, $sort, $offset, $limit, ['id', 'courseSetId', 'title', 'price', 'cover']);
         $total = $this->getCourseService()->countWithJoinCourseSet($conditions);
         $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');

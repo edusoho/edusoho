@@ -13,7 +13,7 @@ class MallClassroom extends AbstractResource
         $conditions = $request->query->all();
         $conditions['excludeStatus'] = 'draft';
         $conditions['showable'] = 1;
-        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        list($offset, $limit) = $this->preparePageCondition($conditions);
         $sort = [
             'createdTime' => 'DESC'
         ];
