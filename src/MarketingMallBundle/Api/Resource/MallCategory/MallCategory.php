@@ -3,12 +3,12 @@
 namespace MarketingMallBundle\Api\Resource\MallCategory;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\Taxonomy\CategoryException;
 use Biz\Taxonomy\Service\CategoryService;
+use MarketingMallBundle\Api\Resource\BaseResource;
 
-class MallCategory extends AbstractResource
+class MallCategory extends BaseResource
 {
     public function search(ApiRequest $request)
     {
