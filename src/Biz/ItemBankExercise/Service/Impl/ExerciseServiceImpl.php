@@ -102,12 +102,12 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return ArrayToolkit::index($itemBankExercises, 'id');
     }
 
-    public function search($conditions, $orderBy, $start, $limit)
+    public function search($conditions, $orderBy, $start, $limit, $columns = [])
     {
         $orderBy = $this->getOrderBys($orderBy);
         $conditions = $this->_prepareCourseConditions($conditions);
 
-        return $this->getExerciseDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getExerciseDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     protected function getOrderBys($order)

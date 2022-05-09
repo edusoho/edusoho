@@ -27,7 +27,6 @@ class MarketingMallBundle extends ExtensionalBundle
                 return new $class($biz);
             };
         };
-
         $this->container->get('api.resource.manager')->registerApi('MarketingMallBundle\Api');
     }
 }
