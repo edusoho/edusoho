@@ -16,8 +16,7 @@ class QuestionBankExercise extends BaseResource
             unset($conditions['titleLike']);
         }
         $orderBys = ['createdTime' => 'DESC'];
-        $offset = $conditions['offset'] ?? static::DEFAULT_PAGING_OFFSET;
-        $limit = $conditions['limit'] ?? static::DEFAULT_PAGING_LIMIT;
+        list($offset, $limit) = $this->preparePageCondition($conditions);
         $columns = [
             'id',
             'questionBankId',
