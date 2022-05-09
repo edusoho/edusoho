@@ -86,7 +86,7 @@ class MarketingMallApi
 
     private function makeToken()
     {
-        return self::$accessKey.':'.JWT::encode(['exp' => +1000 * 3600 * 24, 'access_key' => self::$accessKey], self::$secretKey);
+        return self::$accessKey.':'.JWT::encode(['exp' => time() +1000 * 3600 * 24, 'access_key' => self::$accessKey], self::$secretKey);
     }
 
     /**
