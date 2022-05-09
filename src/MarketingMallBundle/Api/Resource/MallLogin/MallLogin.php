@@ -14,18 +14,19 @@ class MallLogin extends AbstractResource
 
     public function add(ApiRequest $request)
     {
+        $this->storages = $this->getSettingService()->get('storage', []);
         $mallSettings = $this->getSettingService()->get('marketing_mall', []);
         if (empty($mallSettings)) {
             $mallSettings = $this->initSchool();
         }
-        $this->storages = $this->getSettingService()->get('storage', []);
+
         $authorization = JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'userInfo' => $this->getUserInfo(), 'access_key' => $mallSettings['access_key'], 'header' => 'MARKETING_MALL'], $mallSettings['secret_key']);
 
         return [
-            'token' => $authorization,
-            'url' => $this->getSchema() . $_SERVER['HTTP_HOST'],
-            'code' => $this->storages['cloud_access_key'],
-        ];
+                'token' => $authorization,
+                'url' => $this->getSchema().$_SERVER['HTTP_HOST'],
+                'code' => $mallSettings['access_key'],
+            ];
     }
 
     private function getUserInfo()

@@ -54,7 +54,7 @@ class MarketingMallApi
 
             return $result;
         } catch (\RuntimeException $e) {
-            $this->getLogger()->error('market-mall-init', '商城初始化错误' . $e->getMessage());
+            $this->getLogger()->error('market-mall-init', ['商城初始化错误'.$e->getMessage()]);
             throw new \InvalidArgumentException('接口请求错误!');
         }
     }
@@ -69,17 +69,34 @@ class MarketingMallApi
 //            throw new \InvalidArgumentException('接口请求错误!');
 //        }
 //    }
+//
+    private function get($uri, array $params = [])
+    {
+        $params['code'] = self::$accessKey;
+
+        return self::$client->get($uri, $params, self::$headers);
+    }
 
     private function post($uri, array $params = [])
     {
-        $params['code'] = self::$accessKeyKey;
+        $params['code'] = self::$accessKey;
 
         return self::$client->post($uri, $params, self::$headers);
     }
 
     private function makeToken()
     {
-        return self::$accessKeyKey . ':' . JWT::encode(['exp' => +1000 * 3600 * 24, 'access_key' => self::$accessKey], self::$secretKey);
+        return self::$accessKey.':'.JWT::encode(['exp' => +1000 * 3600 * 24, 'access_key' => self::$accessKey], self::$secretKey);
+    }
+
+    /**
+     * 仅供单元测试使用，正常业务严禁使用
+     *
+     * @param $client
+     */
+    public function setCloudApi($client)
+    {
+        self::$client = $client;
     }
 
     private function getLogger()
@@ -88,7 +105,8 @@ class MarketingMallApi
             return self::$logger;
         }
         $logger = new Logger('marketing-mall');
-        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir') . '/micro-course.log', Logger::DEBUG));
+        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/marketing-mall.log', Logger::DEBUG));
+
         self::$logger = $logger;
 
         return $logger;
