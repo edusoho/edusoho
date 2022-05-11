@@ -27,13 +27,13 @@ class MarketingMallApi
     public function __construct($storage)
     {
         $headers[] = 'Content-type: application/json';
-        $headers[] = 'Mall-Auth-Token: Bearer ' . $this->makeToken();
+        $headers[] = 'Mall-Auth-Token: Bearer '.$this->makeToken();
         self::$headers = $headers;
         self::$timestamp = time();
         $config = [
             'access_key' => $storage['cloud_access_key'] ?? '',
             'secret_key' => $storage['cloud_secret_key'] ?? '',
-            'endpoint' => empty($storage['mall_private_server']) ? 'http://localhost:8080' : rtrim($storage['mall_private_server'], '/'),
+            'endpoint' => empty($storage['mall_private_server']) ? 'http://mall.edusoho.cn' : rtrim($storage['mall_private_server'], '/'),
         ];
         $setting = $this->getSettingService()->get('marketing_mall', []);
         self::$accessKey = $setting['access_key'] ?? '';
@@ -77,16 +77,16 @@ class MarketingMallApi
         return self::$client->get($uri, $params, self::$headers);
     }
 
-    private function post($uri, array $params = [])
+    private function post($uri, array $params = [], $headers = [])
     {
-        $params['code'] = self::$accessKey;
+        // $params['code'] = self::$accessKey;
 
-        return self::$client->post($uri, $params, self::$headers);
+        return self::$client->post($uri, $params);
     }
 
     private function makeToken()
     {
-        return self::$accessKey.':'.JWT::encode(['exp' => time() +1000 * 3600 * 24, 'access_key' => self::$accessKey], self::$secretKey);
+        return self::$accessKey.':'.JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'access_key' => self::$accessKey], self::$secretKey);
     }
 
     /**
