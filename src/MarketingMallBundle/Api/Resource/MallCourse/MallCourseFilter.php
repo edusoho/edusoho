@@ -12,12 +12,14 @@ class MallCourseFilter extends Filter
 
     public function simpleFields(&$data)
     {
-        $courseSet = $data['courseSet'];
-        $data['courseSetTitle'] = $courseSet['title'];
-        $data['cover'] = [
-            'smallPicture' => $courseSet['cover']['small'] ?? '',
-            'middlePicture' => $courseSet['cover']['middle'] ?? '',
-        ];
-        unset($data['courseSet']);
+        foreach ($data as &$course) {
+            $courseSet = $course['courseSet'];
+            $course['courseSetTitle'] = $courseSet['title'];
+            $course['cover'] = [
+                'smallPicture' => $courseSet['cover']['small'] ?? '',
+                'middlePicture' => $courseSet['cover']['middle'] ?? '',
+            ];
+            unset($course['courseSet']);
+        }
     }
 }
