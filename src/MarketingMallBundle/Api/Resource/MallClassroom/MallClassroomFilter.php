@@ -12,10 +12,12 @@ class MallClassroomFilter extends Filter
 
     public function simpleFields(&$data)
     {
-        $data['cover'] = [
-            'smallPicture' => $data['smallPicture'],
-            'middlePicture' => $data['middlePicture'],
-        ];
-        unset($data['smallPicture'], $data['middlePicture']);
+        foreach ($data as &$classroom) {
+            $classroom['cover'] = [
+                'smallPicture' => $classroom['smallPicture'],
+                'middlePicture' => $classroom['middlePicture'],
+            ];
+            unset($classroom['smallPicture'], $classroom['middlePicture']);
+        }
     }
 }

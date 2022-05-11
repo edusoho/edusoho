@@ -12,9 +12,11 @@ class QuestionBankExerciseFilter extends Filter
 
     public function simpleFields(&$data)
     {
-        $data['cover'] = [
-            'smallPicture' => $data['cover']['small'] ?? '',
-            'middlePicture' => $data['cover']['middle'] ?? '',
-        ];
+        foreach ($data as &$bank) {
+            $bank['cover'] = [
+                'smallPicture' => $bank['cover']['small'] ?? '',
+                'middlePicture' => $bank['cover']['middle'] ?? '',
+            ];
+        }
     }
 }
