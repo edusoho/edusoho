@@ -17,7 +17,7 @@ class LoginController extends BaseController
             $mallSettings = $this->initSchool();
         }
 
-        $authorization = JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'userInfo' => $this->getUserInfo(), 'access_key' => $mallSettings['accessKey'], 'header' => 'MARKETING_MALL'], $mallSettings['secret_key']);
+        $authorization = JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'userInfo' => $this->getUserInfo(), 'access_key' => $mallSettings['accessKey'], 'header' => 'MARKETING_MALL'], $mallSettings['secretKey']);
 
         return $this->redirect('http://mall.edusoho.cn?token='.$authorization.'&code='.$mallSettings['accessKey']);
     }
