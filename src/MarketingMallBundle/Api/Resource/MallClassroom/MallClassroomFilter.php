@@ -2,9 +2,9 @@
 
 namespace MarketingMallBundle\Api\Resource\MallClassroom;
 
-use ApiBundle\Api\Resource\Filter;
+use MarketingMallBundle\Api\Resource\BaseFilter;
 
-class MallClassroomFilter extends Filter
+class MallClassroomFilter extends BaseFilter
 {
     protected $simpleFields = [
         'id', 'title', 'cover', 'price', 'courseNum', 'smallPicture', 'middlePicture'
@@ -12,12 +12,10 @@ class MallClassroomFilter extends Filter
 
     public function simpleFields(&$data)
     {
-        foreach ($data as &$classroom) {
-            $classroom['cover'] = [
-                'smallPicture' => $classroom['smallPicture'],
-                'middlePicture' => $classroom['middlePicture'],
-            ];
-            unset($classroom['smallPicture'], $classroom['middlePicture']);
-        }
+        $data['cover'] = [
+            'smallPicture' => $data['smallPicture'],
+            'middlePicture' => $data['middlePicture'],
+        ];
+        unset($data['smallPicture'], $data['middlePicture']);
     }
 }
