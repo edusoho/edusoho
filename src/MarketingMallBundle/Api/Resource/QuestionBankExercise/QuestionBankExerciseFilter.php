@@ -2,21 +2,19 @@
 
 namespace MarketingMallBundle\Api\Resource\QuestionBankExercise;
 
-use ApiBundle\Api\Resource\Filter;
+use MarketingMallBundle\Api\Resource\BaseFilter;
 
-class QuestionBankExerciseFilter extends Filter
+class QuestionBankExerciseFilter extends BaseFilter
 {
     protected $simpleFields = [
         'id', 'questionBankId', 'title', 'cover', 'originPrice',
     ];
 
-    public function simpleFields(&$data)
+    public function simpleFields(&$bank)
     {
-        foreach ($data as &$bank) {
-            $bank['cover'] = [
-                'smallPicture' => $bank['cover']['small'] ?? '',
-                'middlePicture' => $bank['cover']['middle'] ?? '',
-            ];
-        }
+        $bank['cover'] = [
+            'smallPicture' => $bank['cover']['small'] ?? '',
+            'middlePicture' => $bank['cover']['middle'] ?? '',
+        ];
     }
 }
