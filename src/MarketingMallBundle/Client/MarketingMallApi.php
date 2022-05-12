@@ -59,6 +59,17 @@ class MarketingMallApi
         }
     }
 
+    public function updateGoodsContent($params)
+    {
+        try {
+            $params = ArrayToolkit::parts($params, ['type', 'body']);
+            $this->post('/api-admin/goods/update_goods_content', $params);
+        } catch (\RuntimeException $e) {
+            $this->getLogger()->error('更新商品详情错误'.$e->getMessage(), ['params' => $params]);
+            throw new \InvalidArgumentException('接口请求错误!');
+        }
+    }
+
 //    例子  token头直接设置了参数code也直接加了
 //    public function demo($params){
 //        try {

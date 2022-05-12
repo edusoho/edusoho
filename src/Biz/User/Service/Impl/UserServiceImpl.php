@@ -415,7 +415,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $updatedUser = $this->getUserDao()->update($userId, ['nickname' => $nickname]);
-        $this->dispatchEvent('user.change_nickname', new Event($updatedUser));
+        $this->dispatchEvent('user.change_nickname', new Event($updatedUser, ['oldNickname' => $user['nickname']]));
     }
 
     public function changeUserOrg($userId, $orgCode)
@@ -1156,9 +1156,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!empty($fields['about'])) {
-            $currentUser = $this->biz['user'];
-            $trusted = $currentUser->isAdmin();
-            $fields['about'] = $this->purifyHtml($fields['about'], $trusted);
+            $fields['about'] = $this->purifyHtml($fields['about'], $this->biz['user']->isAdmin());
         }
 
         if (!empty($fields['site']) && !SimpleValidator::site($fields['site'])) {
@@ -1172,31 +1170,13 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $fields = $this->filterCustomField($fields);
-        if (empty($fields['isWeiboPublic'])) {
-            $fields['isWeiboPublic'] = 0;
-        } else {
-            $fields['isWeiboPublic'] = 1;
-        }
-
-        if (empty($fields['isWeixinPublic'])) {
-            $fields['isWeixinPublic'] = 0;
-        } else {
-            $fields['isWeixinPublic'] = 1;
-        }
-
-        if (empty($fields['isQQPublic'])) {
-            $fields['isQQPublic'] = 0;
-        } else {
-            $fields['isQQPublic'] = 1;
-        }
+        $fields['isWeiboPublic'] = empty($fields['isWeiboPublic']) ? 0 : 1;
+        $fields['isWeixinPublic'] = empty($fields['isWeixinPublic']) ? 0 : 1;
+        $fields['isQQPublic'] = empty($fields['isQQPublic']) ? 0 : 1;
 
         if ($strict) {
             $fields = array_filter($fields, function ($value) {
-                if (0 === $value) {
-                    return true;
-                }
-
-                return !empty($value);
+                return 0 === $value || !empty($value);
             });
         }
 

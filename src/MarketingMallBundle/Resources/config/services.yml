@@ -3,3 +3,9 @@ services:
     class: MarketingMallBundle\Security\Firewall\XAuthTokenAuthenticationListener
     arguments:
       - '@service_container'
+
+  marketing_mall_user_event_subscriber:
+    class: MarketingMallBundle\Event\UserEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
