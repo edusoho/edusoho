@@ -26,6 +26,7 @@ class MarketingMallApi
 
     public function __construct($storage)
     {
+        $mallUrl = ServiceKernel::instance()->getParameter('marketing_mall_url');
         $headers[] = 'Content-type: application/json';
         $headers[] = 'Mall-Auth-Token: Bearer '.$this->makeToken();
         self::$headers = $headers;
@@ -33,7 +34,7 @@ class MarketingMallApi
         $config = [
             'access_key' => $storage['cloud_access_key'] ?? '',
             'secret_key' => $storage['cloud_secret_key'] ?? '',
-            'endpoint' => empty($storage['mall_private_server']) ? 'http://mall.edusoho.cn' : rtrim($storage['mall_private_server'], '/'),
+            'endpoint' => empty($storage['mall_private_server']) ? $mallUrl : rtrim($storage['mall_private_server'], '/'),
         ];
         $setting = $this->getSettingService()->get('marketing_mall', []);
         self::$accessKey = $setting['access_key'] ?? '';

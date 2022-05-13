@@ -18,8 +18,9 @@ class LoginController extends BaseController
         }
 
         $authorization = JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'userInfo' => $this->getUserInfo(), 'access_key' => $mallSettings['access_key'], 'header' => 'MARKETING_MALL'], $mallSettings['secret_key']);
+        $mallUrl = $this->getSchema().$this->container->getParameter('marketing_mall_url');
 
-        return $this->redirect('http://mall.edusoho.cn?token='.$authorization.'&code='.$mallSettings['accessKey']);
+        return $this->redirect($mallUrl.'?token='.$authorization.'&code='.$mallSettings['accessKey'].'&url='.$this->getSchema().$_SERVER['HTTP_HOST']);
     }
 
     protected function initSchool()
@@ -56,7 +57,7 @@ class LoginController extends BaseController
     protected function getSchema()
     {
         $https = empty($_SERVER['HTTPS']) ? '' : $_SERVER['HTTPS'];
-        if ('off' !== strtolower($https)) {
+        if ('' !== strtolower($https)) {
             return 'https://';
         }
 
