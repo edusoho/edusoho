@@ -511,7 +511,7 @@ class CourseController extends CourseBaseController
         list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], ['limit' => $pageSize]);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $course = $this->getWebExtension()->filterCourseVipRight($course);
-
+        file_put_contents('/tmp/logs','111111' . var_export($courseItems, true), 8);
         return $this->render("course/task-list/{$type}-task-list.html.twig", [
             'course' => $course,
             'member' => $member,
