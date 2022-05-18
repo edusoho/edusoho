@@ -146,14 +146,12 @@ class CourseProduct extends BaseGoodsProduct
     public function onOrderRefundRefunded($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
+        $info = $this->updateMemberRecordByRefundItem($orderItem);
         $course = $this->getCourseByGoodsSpecsId($orderItem['target_id']);
-
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $orderItem['user_id']);
         if (!empty($member)) {
-            $this->getCourseMemberService()->removeStudent($course['id'], $orderItem['user_id']);
+            $this->getCourseMemberService()->removeStudent($course['id'], $orderItem['user_id'], $info);
         }
-
-        $this->updateMemberRecordByRefundItem($orderItem);
     }
 
     public function onOrderRefundRefused($orderRefundItem)
