@@ -917,7 +917,7 @@ admin_v2:
                                         admin_v2_batch_notification_create:
                                             name: admin_v2.operation.notification.basic_tab.create_btn
                                             group: topBtn
-#                        # 网站公告管理
+                        # 网站公告管理
                         admin_v2_operation_announcement:
                             name: admin_v2.operation.announcement_menu
                             group: 2
@@ -1318,10 +1318,6 @@ admin_v2:
                                     name: admin_v2.system.course.basic_tab
                                     disable: true
                                     router_name: admin_v2_setting_course_setting
-                                #                                admin_v2_setting_live_course:
-                                #                                   name: 直播
-                                #                                   disable: true
-                                #                                   router_name: admin_v2_setting_live_course_setting
                                 admin_v2_setting_questions_setting:
                                     name: admin_v2.system.course.questions_tab
                                     disable: true
@@ -1357,10 +1353,6 @@ admin_v2:
                                     name: admin_v2.system.operation.invite_tab
                                 admin_v2_teacher_qualification_set:
                                     name: admin_v2.system.teacher_qualification_tab
-#                                admin_v2_message_send_set:
-#                                    name: admin_v2.system.operation.message_send_tab
-#                                admin_v2_message_open_set:
-#                                    name: admin_v2.system.operation.message_open_tab
                 # 合规经营与信息安全设置
                 admin_v2_operation_safety_group:
                     name: admin_v2.operation.basic_group
@@ -1871,3 +1863,23 @@ admin_v2:
                             children:
                                 admin_v2_api_swagger_ui_api:
                                     name: API 列表
+
+        # 营销商城
+        admin_v2_marketing_mall:
+            name: 营销商城
+            before: admin_v2_education
+            router_name: admin_v2_marketing_mall
+            children:
+                admin_v2_basic_content_resource_group2:
+                    name: 营销商城
+                    router_name: admin_v2_marketing_mall
+                    is_group: true
+                    children:
+                        admin_v2_purchase_market_menu1:
+                            name: 营销商城
+                            router_name: admin_v2_marketing_mall
+                            children:
+                                admin_v2_purchase_market_tab1:
+                                    name: 营销商城
+                                    router_name: admin_v2_marketing_mall
+                                    disable: true

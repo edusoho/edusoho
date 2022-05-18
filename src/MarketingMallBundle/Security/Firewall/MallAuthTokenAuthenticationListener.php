@@ -8,7 +8,7 @@ use Http\Discovery\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
-class XAuthTokenAuthenticationListener extends BaseListener
+class MallAuthTokenAuthenticationListener extends BaseListener
 {
     const MALL_TOKEN_HEADER = 'Mall-Auth-Token';
 
