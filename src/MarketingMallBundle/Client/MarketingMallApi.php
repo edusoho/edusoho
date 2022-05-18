@@ -78,10 +78,8 @@ class MarketingMallApi
         return self::$client->get($uri, $params, self::$headers);
     }
 
-    private function post($uri, array $params = [], $headers = [])
+    private function post($uri, array $params = [])
     {
-        // $params['code'] = self::$accessKey;
-
         return self::$client->post($uri, $params);
     }
 

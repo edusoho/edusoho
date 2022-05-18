@@ -57,7 +57,7 @@ class LoginController extends BaseController
     protected function getSchema()
     {
         $https = empty($_SERVER['HTTPS']) ? '' : $_SERVER['HTTPS'];
-        if ('' !== strtolower($https)) {
+        if (!empty($https) && 'off' !== strtolower($https)) {
             return 'https://';
         }
 
