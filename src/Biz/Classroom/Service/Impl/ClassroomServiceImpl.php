@@ -350,7 +350,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             }
             $this->dispatchEvent(
                 'classroom.course.create',
-                new Event($classroom, ['courseIds' => $courseIds])
+                new Event($classroom, ['courseIds' => $courseIds, 'newCourseIds' => $newCourseIds ?? []])
             );
 
             $this->commit();
@@ -1391,7 +1391,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->dispatchEvent(
                 'classroom.course.update',
-                new Event($classroom, ['courseIds' => $activeCourseIds])
+                new Event($classroom, ['courseIds' => $activeCourseIds, 'existCourseIds' => $existCourseIds])
             );
         } catch (\Exception $e) {
             $this->rollback();

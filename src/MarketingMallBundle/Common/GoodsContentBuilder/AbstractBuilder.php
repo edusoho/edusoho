@@ -12,17 +12,22 @@ abstract class AbstractBuilder
      */
     protected $biz;
 
-    public function __construct(Biz $biz)
+    public function __construct(Biz $biz = null)
+    {
+        $this->biz = $biz;
+    }
+
+    public function setBiz(Biz $biz)
     {
         $this->biz = $biz;
     }
 
     abstract public function build($id);
 
-    protected function createNewException($e)
+    protected function createNewException($exception)
     {
-        if ($e instanceof AbstractException) {
-            throw $e;
+        if ($exception instanceof AbstractException) {
+            throw $exception;
         }
 
         throw new \Exception();
