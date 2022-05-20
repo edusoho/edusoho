@@ -1,5 +1,5 @@
 {% extends 'oauth2/layout.html.twig' %}
-{% do script(['libs/jquery-validation.js','app/js/oauth2/login/index.js']) %}
+{% do script(['libs/jquery-validation.js', 'app/js/oauth2/login/index.js']) %}
 
 {% block page_title %}
   {{ 'user.oauth.bind_account'|trans }}
@@ -39,7 +39,7 @@
       </div>
     {% endif %}
 
-    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block js-submit-btn" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}" type="button">{{ 'form.btn.next'|trans }}</button>
+    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block js-submit-btn" data-try-bind-url="{{ path('oauth2_login_try_bind_account') }}" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}" type="button">{{ 'form.btn.next'|trans }}</button>
 
     <input class="form-control" id="accountType" type="hidden" name="accountType">
 

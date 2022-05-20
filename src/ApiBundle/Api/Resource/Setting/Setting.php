@@ -431,14 +431,13 @@ class Setting extends AbstractResource
         ];
     }
 
-    public function getRegister($request = null)
+    public function getRegister()
     {
         $registerSetting = $this->getSettingService()->get('auth', ['register_enabled' => 'closed', 'register_mode' => 'mobile', 'email_enabled' => 'closed']);
         $registerMode = 'closed' === $registerSetting['register_enabled'] ? 'closed' : $registerSetting['register_mode'];
         $isEmailVerifyEnable = isset($registerSetting['email_enabled']) && 'opened' == $registerSetting['email_enabled'];
-        $registerSetting = $this->getSettingService()->get('auth');
         $level = empty($registerSetting['register_protective']) ? 'none' : $registerSetting['register_protective'];
-        $captchaEnabled = 'none' === $level ? false : true;
+        $captchaEnabled = 'none' !== $level;
 
         return [
             'mode' => $registerMode,
