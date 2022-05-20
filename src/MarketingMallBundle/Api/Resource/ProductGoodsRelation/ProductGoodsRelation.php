@@ -18,10 +18,11 @@ class ProductGoodsRelation extends BaseResource
     public function remove(ApiRequest $request, $code)
     {
         $relation = $this->getProductGoodsRelationService()->getProductGoodsRelationByGoodsCode($code);
-        var_dump($relation);
-        exit;
+        if (empty($relation)) {
+            return ['success' => true];
+        }
 
-        return $this->getProductGoodsRelationService()->deleteProductGoodsRelation($relation['id']);
+        return $this->getProductGoodsRelationService()->deleteProductGoodsRelation($relation['id']) ? ['success' => true] : ['success' => false];
     }
 
     /**
