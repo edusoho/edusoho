@@ -11,8 +11,9 @@ class ProductGoodsRelation extends BaseResource
     public function add(ApiRequest $request)
     {
         $relation = $request->request->all();
+        $result = $this->getProductGoodsRelationService()->createProductGoodsRelation($relation);
 
-        return $this->getProductGoodsRelationService()->createProductGoodsRelation($relation);
+        return !empty($result) ? ['success' => true] : ['success' => false];
     }
 
     public function remove(ApiRequest $request, $code)
