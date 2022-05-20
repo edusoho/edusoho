@@ -1,6 +1,5 @@
 <?php
 
-
 namespace MarketingMallBundle\Common\GoodsContentBuilder;
 
 use AppBundle\Common\ArrayToolkit;
@@ -13,9 +12,9 @@ use Biz\Task\Strategy\CourseStrategy;
 
 class CourseInfoBuilder extends AbstractBuilder
 {
-    const COURSE_ALLOWED_KEY = ['course_ids', 'title', 'sub_title', 'cover', 'summary', 'course_catalogue', 'teacher_list'];
+    const COURSE_ALLOWED_KEY = ['courseIds', 'title', 'subtitle', 'cover', 'summary', 'courseCatalogue', 'teacherList'];
 
-    const TASKS_ALLOWED_KEY = ['title', 'type', 'number', 'counts', 'children', 'is_publish', 'activity_type'];
+    const TASKS_ALLOWED_KEY = ['title', 'type', 'number', 'counts', 'children', 'isPublish', 'activityType'];
 
     public function build($id)
     {
@@ -24,6 +23,7 @@ class CourseInfoBuilder extends AbstractBuilder
         if (empty($course)) {
             $this->createNewException(CourseException::NOTFOUND_COURSE);
         }
+
         return $this->buildCourseData($course);
     }
 
@@ -32,23 +32,23 @@ class CourseInfoBuilder extends AbstractBuilder
         $childrenCourseIds = [];
         $teachers = [];
         $courseSet = $this->getCourseSetService()->findCourseSetsByCourseIds([$course['id']])[1];
-        if ($course['parentId'] == 0) {
+        if (0 == $course['parentId']) {
             $childrenCourseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
-
         }
         $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($course['id']), 'id');
         foreach ($teacherIds as $teacherId) {
             $teachers[] = $this->getTeacherInfoBuilder()->build($teacherId);
         }
         $courseCatalogue = $this->buildCourseCatalogue($this->getCourseService()->findCourseItems($course['id']));
+
         return [
-            'course_ids' => array_merge([$course['id']], $childrenCourseIds),
+            'courseIds' => array_merge([$course['id']], $childrenCourseIds),
             'title' => $course['courseSetTitle'],
-            'sub_title' => $courseSet['sub_title'],
-            'cover' => $courseSet['cover'],
+            'subtitle' => $courseSet['subtitle'],
+            'cover' => $this->transformCover($courseSet['cover']),
             'summary' => $courseSet['summary'],
-            'course_catalogue' => $courseCatalogue,
-            'teacher_list' => $teachers
+            'courseCatalogue' => $courseCatalogue,
+            'teacherList' => $teachers,
         ];
     }
 
@@ -60,26 +60,26 @@ class CourseInfoBuilder extends AbstractBuilder
         $chapterIndex = -1;
         $unitIndex = -1;
         foreach ($courseItems as &$courseItem) {
-            if ($courseItem['type'] == 'chapter') {
+            if ('chapter' == $courseItem['type']) {
                 ++$chapterIndex;
                 $unitIndex = -1;
-                $courseItem['is_publish'] = $courseItem['status'] == 'published' ? 1 : 0;
+                $courseItem['isPublish'] = 'published' == $courseItem['status'] ? 1 : 0;
                 $courseItem = ArrayToolkit::parts($courseItem, self::TASKS_ALLOWED_KEY);
                 $chapterItems[] = [$chapterIndex => $courseItem];
             }
-            if ($courseItem['type'] == 'unit') {
+            if ('unit' == $courseItem['type']) {
                 ++$unitIndex;
-                $courseItem['is_publish'] = $courseItem['status'] == 'published' ? 1 : 0;
+                $courseItem['isPublish'] = 'published' == $courseItem['status'] ? 1 : 0;
                 $courseItem = ArrayToolkit::parts($courseItem, self::TASKS_ALLOWED_KEY);
                 $unitItems[$chapterIndex][] = [$unitIndex => $courseItem];
             }
             if (!empty($courseItem['tasks'])) {
                 foreach ($courseItem['tasks'] as $key => &$tasks) {
-                    $tasks['type'] = $key == 0 ? 'lesson' : 'tasks';
-                    $tasks['activity_type'] = $tasks['activity']['mediaType'];
-                    $tasks['is_publish'] = $tasks['status'] == 'published' ? 1 : 0;
+                    $tasks['type'] = 0 == $key ? 'lesson' : 'tasks';
+                    $tasks['activityType'] = $tasks['activity']['mediaType'];
+                    $tasks['isPublish'] = 'published' == $tasks['status'] ? 1 : 0;
                     $tasks = ArrayToolkit::parts($tasks, self::TASKS_ALLOWED_KEY);
-                    if ($unitIndex == -1) {
+                    if (-1 == $unitIndex) {
                         $courseCatalogue[] = $tasks;
                     } else {
                         $unitItems[$chapterIndex][$unitIndex]['children'][] = $tasks;
@@ -100,11 +100,12 @@ class CourseInfoBuilder extends AbstractBuilder
                     }
                 }
             }
-            $chapter['counts']['unit_num'] = count($chapter['children']);
-            $chapter['counts']['tasks_num'] = $tasksNum;
-            $chapter['counts']['lesson_num'] = $lessonNum;
+            $chapter['counts']['unitNum'] = count($chapter['children']);
+            $chapter['counts']['tasksNum'] = $tasksNum;
+            $chapter['counts']['lessonNum'] = $lessonNum;
             $chapter = ArrayToolkit::parts($chapter, self::TASKS_ALLOWED_KEY);
         }
+
         return array_merge($courseCatalogue, $chapterItems);
     }
 
