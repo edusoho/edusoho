@@ -11,7 +11,7 @@ class TeacherInfoBuilder extends AbstractBuilder
         $user = $this->getUserService()->getUserAndProfile($id);
 
         return [
-            'user_id' => $id,
+            'userId' => $id,
             'name' => $user['nickname'],
             'title' => $user['title'],
             'cover' => $user['smallAvatar'],

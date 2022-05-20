@@ -21,8 +21,10 @@ class QuestionBankBuilder extends AbstractBuilder
         }
 
         return [
-            'bank_id' => $id,
-            'question_bank_catalogue' => array_merge([$this->buildChapterExercise($exercise)], $this->buildAssessmentList($exercise)),
+            'bankId' => $id,
+            'title' => $exercise['title'],
+            'cover' => $this->transformCover($exercise['cover'], 'item_bank_exercise.png'),
+            'questionBankCatalogue' => array_merge([$this->buildChapterExercise($exercise)], $this->buildAssessmentList($exercise)),
         ];
     }
 
@@ -43,7 +45,7 @@ class QuestionBankBuilder extends AbstractBuilder
         foreach ($list as &$chapter) {
             $chapter = [
                 'title' => $chapter['name'],
-                'question_count' => $chapter['item_num'],
+                'questionCount' => $chapter['item_num'],
                 'children' => $this->buildChapterList($chapter['children']),
             ];
             if (empty($chapter['children'])) {
@@ -68,8 +70,8 @@ class QuestionBankBuilder extends AbstractBuilder
                 $assessment = $assessments[$assessmentExercise['assessmentId']];
                 $assessmentList[] = [
                     'title' => $assessment['name'],
-                    'question_count' => $assessment['item_count'],
-                    'total_score' => $assessment['total_score'],
+                    'questionCount' => $assessment['item_count'],
+                    'totalScore' => $assessment['total_score'],
                 ];
             }
             $assessmentModuleList[] = [
