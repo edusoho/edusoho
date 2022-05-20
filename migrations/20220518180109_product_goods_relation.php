@@ -14,7 +14,7 @@ class ProductGoodsRelation extends Migration
                               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                               `productType` VARCHAR(32) DEFAULT 'course',
                               `productId` int(11) DEFAULT 0 COMMENT '对应产品id',
-                              `goodsCode` int(11) DEFAULT 0 COMMENT '营销商城商品编码',
+                              `goodsCode` VARCHAR(32) DEFAULT 0 COMMENT '营销商城商品编码',
                               `createdTime` int(11) DEFAULT NULL,
                               `updatedTime` int(11) DEFAULT NULL,
                               UNIQUE KEY `productType_productId` (`productType`,`productId`),
