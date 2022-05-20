@@ -9,7 +9,7 @@ class CustomBundle extends PluginBase
 {
     public function getParent()
     {
-        return 'MarketingMallBundle';
+        return 'AppBundle';
     }
 
     public function boot()

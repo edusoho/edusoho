@@ -33,9 +33,4 @@ class MarketingMallBundle extends ExtensionalBundle
         $biz->register(new MarketingMallServiceProvider());
         $this->container->get('api.resource.manager')->registerApi('MarketingMallBundle\Api');
     }
-
-    public function getParent()
-    {
-        return 'AppBundle';
-    }
 }
