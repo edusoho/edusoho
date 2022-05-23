@@ -4,11 +4,9 @@ namespace MarketingMallBundle\Event;
 
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Event\EventSubscriber;
-use MarketingMallBundle\Client\MarketingMallClient;
 use MarketingMallBundle\Common\GoodsContentBuilder\TeacherInfoBuilder;
 
-class UserEventSubscriber extends EventSubscriber
+class UserEventSubscriber extends BaseEventSubscriber
 {
     public static function getSubscribedEvents()
     {
@@ -47,12 +45,7 @@ class UserEventSubscriber extends EventSubscriber
         if (!in_array('ROLE_TEACHER', $user['roles'])) {
             return;
         }
-        $builder = new TeacherInfoBuilder($this->getBiz());
-        $client = new MarketingMallClient($this->getBiz());
-        $client->updateGoodsContent([
-            'type' => 'teacher',
-            'body' => $builder->build($userId),
-        ]);
+        $this->updateGoodsContent('teacher', new TeacherInfoBuilder(), $userId);
     }
 
     /**

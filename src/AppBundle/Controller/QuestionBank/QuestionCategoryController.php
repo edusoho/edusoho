@@ -39,7 +39,6 @@ class QuestionCategoryController extends BaseController
             $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
 
             $this->getItemCategoryService()->createItemCategories($questionBank['itemBankId'], $parentId, $categoryNames);
-            // 题目分类新增
 
             return $this->createJsonResponse(['success' => true, 'parentId' => $parentId]);
         }
@@ -56,7 +55,6 @@ class QuestionCategoryController extends BaseController
             $name = $request->request->get('name', '');
 
             $this->getItemCategoryService()->updateItemCategory($id, ['name' => $name]);
-            // 题目分类修改
 
             return $this->createJsonResponse(['success' => true]);
         }
@@ -79,7 +77,6 @@ class QuestionCategoryController extends BaseController
     public function deleteAction(Request $request, $id)
     {
         $this->getItemCategoryService()->deleteItemCategory($id);
-        // 题目分类删除
 
         return $this->createJsonResponse(['success' => true]);
     }
@@ -108,14 +105,6 @@ class QuestionCategoryController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
-    }
-
-    /**
-     * @return CategoryService
-     */
-    protected function getQuestionCategoryService()
-    {
-        return $this->createService('Question:CategoryService');
     }
 
     /**

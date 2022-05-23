@@ -168,7 +168,7 @@ class Editor {
       .then((response) => {
         notify('success', Translator.trans('task_manage.delete_success_hint'));
         this.$element.modal('hide');
-
+        $('#sortable-list').trigger('removeItem');
 
         document.location.reload();
       })

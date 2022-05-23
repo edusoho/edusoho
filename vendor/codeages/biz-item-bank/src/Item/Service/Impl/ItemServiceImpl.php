@@ -292,6 +292,7 @@ class ItemServiceImpl extends BaseService implements ItemService
 
             $this->getItemCategoryService()->buildItemNumAndQuestionNumBybankId($item['bank_id']);
 
+            $this->dispatch('item.update_category', $ids, ['categoryId' => $categoryId]);
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();

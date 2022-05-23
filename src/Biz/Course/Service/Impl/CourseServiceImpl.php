@@ -1186,6 +1186,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         try {
             $this->beginTransaction();
             $this->createCourseStrategy($course)->accept(new CourseItemSortingVisitor($this->biz, $courseId, $ids));
+            $this->dispatchEvent('course.items.sort', $ids, ['courseId' => $courseId]);
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -1234,6 +1235,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $this->tryManageCourse($courseId);
         $chapter = $this->getChapterDao()->get($chapterId);
+        $oldChapter = $chapter;
 
         if (empty($chapter) || $chapter['courseId'] != $courseId) {
             $this->createNewException(CourseException::NOTFOUND_CHAPTER());
@@ -1242,7 +1244,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = ArrayToolkit::parts($fields, ['title', 'number', 'seq', 'parentId']);
 
         $chapter = $this->getChapterDao()->update($chapterId, $fields);
-        $this->dispatchEvent('course.chapter.update', new Event($chapter));
+        $this->dispatchEvent('course.chapter.update', new Event($chapter), ['oldChapter' => $oldChapter]);
 
         return $chapter;
     }
