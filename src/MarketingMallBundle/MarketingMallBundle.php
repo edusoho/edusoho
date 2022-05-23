@@ -3,16 +3,18 @@
 namespace MarketingMallBundle;
 
 use AppBundle\Common\ExtensionalBundle;
+use MarketingMallBundle\Biz\MarketingMallServiceProvider;
 
 class MarketingMallBundle extends ExtensionalBundle
 {
     public function boot()
     {
         $biz = $this->container->get('biz');
-        $directory = $this->getPath() . DIRECTORY_SEPARATOR . 'Biz';
+        $directory = $this->getPath().DIRECTORY_SEPARATOR.'Biz';
         if (is_dir($directory)) {
             $biz['autoload.aliases'][$this->getName()] = "{$this->getNamespace()}\\Biz";
         }
+
         $biz['autoload.marketing_mall.service'] = function ($biz) {
             return function ($namespace, $name) use ($biz) {
                 $class = "{$namespace}\\Service\\Impl\\{$name}Impl";
@@ -27,6 +29,8 @@ class MarketingMallBundle extends ExtensionalBundle
                 return new $class($biz);
             };
         };
+
+        $biz->register(new MarketingMallServiceProvider());
         $this->container->get('api.resource.manager')->registerApi('MarketingMallBundle\Api');
     }
 }
