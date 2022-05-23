@@ -1,13 +1,13 @@
 <?php
 
-namespace MarketingMallBundle\Biz\ProductGoodsRelation\Dao\Impl;
+namespace MarketingMallBundle\Biz\ProductMallGoodsRelation\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use MarketingMallBundle\Biz\ProductGoodsRelation\Dao\ProductGoodsRelationDao;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Dao\ProductMallGoodsRelationDao;
 
-class ProductGoodsRelationDaoImpl extends GeneralDaoImpl implements ProductGoodsRelationDao
+class ProductMallGoodsRelationDaoImpl extends GeneralDaoImpl implements ProductMallGoodsRelationDao
 {
-    protected $table = 'product_goods_relation';
+    protected $table = 'product_mall_goods_relation';
 
     public function declares()
     {

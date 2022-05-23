@@ -34,14 +34,14 @@ class MarketingMallServiceProvider implements ServiceProviderInterface
     private function getRewriteServiceAlias()
     {
         return [
-            'ProductGoodsRelation:ProductGoodsRelationService',
+            'ProductMallGoodsRelation:ProductMallGoodsRelationService',
         ];
     }
 
     private function getRewriteDaoAlias()
     {
         return [
-            'ProductGoodsRelation:ProductGoodsRelationDao',
+            'ProductMallGoodsRelation:ProductMallGoodsRelationDao',
         ];
     }
 }

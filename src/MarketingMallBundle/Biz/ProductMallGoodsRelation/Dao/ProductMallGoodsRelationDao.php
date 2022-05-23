@@ -1,10 +1,10 @@
 <?php
 
-namespace MarketingMallBundle\Biz\ProductGoodsRelation\Dao;
+namespace MarketingMallBundle\Biz\ProductMallGoodsRelation\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
-interface ProductGoodsRelationDao extends GeneralDaoInterface
+interface ProductMallGoodsRelationDao extends GeneralDaoInterface
 {
     public function getByProductTypeAndProductId($productType, $productId);
 

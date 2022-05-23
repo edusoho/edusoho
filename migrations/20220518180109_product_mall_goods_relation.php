@@ -10,7 +10,7 @@ class ProductGoodsRelation extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("CREATE TABLE IF NOT EXISTS `product_goods_relation` (
+        $biz['db']->exec("CREATE TABLE IF NOT EXISTS `product_mall_goods_relation` (
                               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                               `productType` VARCHAR(32) DEFAULT 'course',
                               `productId` int(11) DEFAULT 0 COMMENT '对应产品id',
