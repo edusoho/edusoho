@@ -44,6 +44,24 @@ class LoginController extends LoginBindController
         return $this->redirect($this->generateUrl('oauth2_login_index'));
     }
 
+    public function tryBindAccountAction(Request $request)
+    {
+        $type = $request->request->get('accountType');
+        $account = $request->request->get('account');
+
+        $user = $this->getUserByTypeAndAccount($type, $account);
+        if (empty($user)) {
+            return $this->createJsonResponse(['success' => true]);
+        }
+        $oauthUser = $this->getOauthUser($request);
+        $userBind = $this->getUserService()->getUserBindByTypeAndUserId($oauthUser->type, $user['id']);
+        if ($userBind) {
+            return $this->createJsonResponse(['success' => false, 'message' => $this->trans('user.oauth.bind_error.bind_by_other')]);
+        }
+
+        return $this->createJsonResponse(['success' => true]);
+    }
+
     public function bindAccountAction(Request $request)
     {
         $oauthUser = $this->getOauthUser($request);
@@ -110,7 +128,7 @@ class LoginController extends LoginBindController
     protected function authenticatedOauthUser()
     {
         $request = $this->get('request');
-        $oauthUser = $this->getOauthUser($this->get('request'));
+        $oauthUser = $this->getOauthUser($request);
         $oauthUser->authenticated = true;
         $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
     }
@@ -389,7 +407,6 @@ class LoginController extends LoginBindController
 
     protected function getUserByTypeAndAccount($type, $account)
     {
-        $user = null;
         switch ($type) {
             case OAuthUser::EMAIL_TYPE:
                 $user = $this->getUserService()->getUserByEmail($account);
