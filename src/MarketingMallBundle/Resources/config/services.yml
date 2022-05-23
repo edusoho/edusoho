@@ -1,6 +1,6 @@
 services:
   api_token_header_listener:
-    class: MarketingMallBundle\Security\Firewall\XAuthTokenAuthenticationListener
+    class: MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener
     arguments:
       - '@service_container'
 

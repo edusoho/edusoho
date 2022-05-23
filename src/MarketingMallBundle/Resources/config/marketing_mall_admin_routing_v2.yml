@@ -1,0 +1,6 @@
+admin_v2_marketing_mall:
+    path: /marketing/mall/login
+    defaults:
+        _controller: 'MarketingMallBundle:AdminV2/MarketingMall/Login:index'
+    permissions:
+        - admin_v2
