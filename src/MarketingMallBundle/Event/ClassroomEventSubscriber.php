@@ -3,7 +3,7 @@
 namespace MarketingMallBundle\Event;
 
 use Codeages\Biz\Framework\Event\Event;
-use MarketingMallBundle\Common\GoodsContentBuilder\ClassroomBuilder;
+use MarketingMallBundle\Common\GoodsContentBuilder\ClassroomInfoBuilder;
 
 class ClassroomEventSubscriber extends BaseEventSubscriber
 {
@@ -44,6 +44,6 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
     protected function syncClassroomToMarketingMall($classroomId)
     {
         // TODO: 判断是否是商城中的商品.
-        $this->updateGoodsContent('classroom', new ClassroomBuilder(), $classroomId);
+        $this->updateGoodsContent('classroom', new ClassroomInfoBuilder(), $classroomId);
     }
 }

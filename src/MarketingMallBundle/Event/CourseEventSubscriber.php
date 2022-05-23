@@ -6,7 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Event\Event;
-use MarketingMallBundle\Common\GoodsContentBuilder\CourseBuilder;
+use MarketingMallBundle\Common\GoodsContentBuilder\CourseInfoBuilder;
 
 class CourseEventSubscriber extends BaseEventSubscriber
 {
@@ -115,7 +115,7 @@ class CourseEventSubscriber extends BaseEventSubscriber
     protected function syncCourseToMarketingMall($courseId)
     {
         // TODO: 判断是否是商城中的商品.
-        $this->updateGoodsContent('course', new CourseBuilder(), $courseId);
+        $this->updateGoodsContent('course', new CourseInfoBuilder(), $courseId);
     }
 
     /**
