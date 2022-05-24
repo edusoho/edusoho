@@ -12,7 +12,7 @@ abstract class BaseEventSubscriber extends EventSubscriber
     protected function updateGoodsContent($type, AbstractBuilder $builder, $id)
     {
         $relation = $tihs->getProductMallGoodsRelationService() > getProductMallGoodsRelationByProductTypeAndProductId($type, $id);
-        if (empty($relation)) {
+        if (empty($relation) && 'teacher' != $tpye) {
             return;
         }
 
