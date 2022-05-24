@@ -75,9 +75,9 @@ class SchoolLink extends BaseResource
 
     protected function isShowEdusoho()
     {
-        $copyright = $this->getSettingService()->get('copyright.owned', false);
+        $copyright = $this->getSettingService()->get('copyright', []);
 
-        return !$copyright;
+        return !$copyright['owned'] || (2 == !$copyright['thirdCopyright']);
     }
 
     protected function getSettingService()
