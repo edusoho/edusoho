@@ -54,6 +54,7 @@ class CourseInfoBuilder extends AbstractBuilder
 
     protected function buildCourseCatalogue($courseItems)
     {
+        return $this->convertToTree($courseItems);
         $courseCatalogue = [];
         $chapterItems = [];
         $unitItems = [];
@@ -107,6 +108,12 @@ class CourseInfoBuilder extends AbstractBuilder
         }
 
         return array_merge($courseCatalogue, $chapterItems);
+    }
+
+    protected function convertToTree($items)
+    {
+        global $kernel;
+        return $kernel->getContainer()->get('api.util.item_helper')->convertToTree($items);
     }
 
     /**
