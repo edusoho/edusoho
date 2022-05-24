@@ -21,4 +21,13 @@ class BaseFilter extends Filter
             }
         }
     }
+
+    public function transformCover($cover, $default = 'course.png')
+    {
+        $cover['small'] = AssetHelper::getFurl(empty($cover['small']) ? '' : $cover['small'], $default);
+        $cover['middle'] = AssetHelper::getFurl(empty($cover['middle']) ? '' : $cover['middle'], $default);
+        $cover['large'] = AssetHelper::getFurl(empty($cover['large']) ? '' : $cover['large'], $default);
+
+        return $cover;
+    }
 }
