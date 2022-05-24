@@ -33,7 +33,12 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
 
     public function getProductMallGoodsRelationByProductTypeAndProductId($productType, $productId)
     {
-        return $this->getProductMallGoodsRelationDao()->getByTargetIdAndType($productType, $productId);
+        return $this->getProductMallGoodsRelationDao()->getByProductTypeAndProductId($productType, $productId);
+    }
+
+    public function findProductMallGoodsRelationsByProductType($productType)
+    {
+        return $this->getProductMallGoodsRelationDao()->findByProductType($productType);
     }
 
     /**
