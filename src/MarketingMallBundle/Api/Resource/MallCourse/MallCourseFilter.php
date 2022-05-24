@@ -7,7 +7,7 @@ use MarketingMallBundle\Api\Resource\BaseFilter;
 class MallCourseFilter extends BaseFilter
 {
     protected $simpleFields = [
-        'id', 'title', 'courseSetTitle', 'cover', 'price', 'courseSet'
+        'id', 'title', 'courseSetTitle', 'cover', 'price', 'courseSet',
     ];
 
     public function simpleFields(&$course)
@@ -15,9 +15,11 @@ class MallCourseFilter extends BaseFilter
         $courseSet = $course['courseSet'] ?? [];
         $course['courseSetTitle'] = $courseSet['title'] ?? '';
         $course['cover'] = [
-            'smallPicture' => $courseSet['cover']['small'] ?? '',
-            'middlePicture' => $courseSet['cover']['middle'] ?? '',
+            'small' => $courseSet['cover']['small'] ?? '',
+            'middle' => $courseSet['cover']['middle'] ?? '',
         ];
         unset($course['courseSet']);
+
+        $course['cover'] = $this->transformCover($course['cover']);
     }
 }
