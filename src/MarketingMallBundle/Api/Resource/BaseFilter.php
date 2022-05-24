@@ -3,6 +3,7 @@
 namespace MarketingMallBundle\Api\Resource;
 
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Util\AssetHelper;
 
 class BaseFilter extends Filter
 {
