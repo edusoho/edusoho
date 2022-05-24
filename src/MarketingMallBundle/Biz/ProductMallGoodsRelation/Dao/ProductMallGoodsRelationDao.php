@@ -9,4 +9,6 @@ interface ProductMallGoodsRelationDao extends GeneralDaoInterface
     public function getByProductTypeAndProductId($productType, $productId);
 
     public function getByGoodsCode($code);
+
+    public function findByProductType($productType);
 }

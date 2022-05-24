@@ -11,4 +11,6 @@ interface ProductMallGoodsRelationService
     public function deleteProductMallGoodsRelation($id);
 
     public function getProductMallGoodsRelationByProductTypeAndProductId($ProductType, $ProductId);
+
+    public function findProductMallGoodsRelationsByProductType($productType);
 }

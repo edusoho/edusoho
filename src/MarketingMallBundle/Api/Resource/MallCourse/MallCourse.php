@@ -3,8 +3,10 @@
 namespace MarketingMallBundle\Api\Resource\MallCourse;
 
 use ApiBundle\Api\ApiRequest;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use MarketingMallBundle\Api\Resource\BaseResource;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 
 class MallCourse extends BaseResource
 {
@@ -16,8 +18,11 @@ class MallCourse extends BaseResource
         //过滤约排课
         $conditions['excludeTypes'] = ['reservation'];
         $sort = [
-            'createdTime' => 'DESC'
+            'createdTime' => 'DESC',
         ];
+        $relations = $this->getProductMallGoodsRelationService()->findProductMallGoodsRelationsByProductType('course');
+        $conditions['excludeIds'] = ArrayToolkit::column($relations, 'productId');
+
         list($offset, $limit) = $this->preparePageCondition($conditions);
         $courses = $this->getCourseService()->searchCourses($conditions, $sort, $offset, $limit, ['id', 'courseSetId', 'title', 'price', 'cover']);
         $total = $this->getCourseService()->countWithJoinCourseSet($conditions);
@@ -32,5 +37,13 @@ class MallCourse extends BaseResource
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    protected function getProductMallGoodsRelationService()
+    {
+        return $this->service('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

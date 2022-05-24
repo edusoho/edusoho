@@ -33,4 +33,9 @@ class ProductMallGoodsRelationDaoImpl extends GeneralDaoImpl implements ProductM
     {
         return $this->getByFields(['goodsCode' => $code]);
     }
+
+    public function findByProductType($productType)
+    {
+        return $this->findByFields(['productType' => $productType]);
+    }
 }
