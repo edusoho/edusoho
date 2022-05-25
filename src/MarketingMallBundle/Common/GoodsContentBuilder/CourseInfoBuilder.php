@@ -57,59 +57,6 @@ class CourseInfoBuilder extends AbstractBuilder
     protected function buildCourseCatalogue($courseItems)
     {
         return $this->convertToTree($courseItems);
-        $courseCatalogue = [];
-        $chapterItems = [];
-        $unitItems = [];
-        $chapterIndex = -1;
-        $unitIndex = -1;
-        foreach ($courseItems as &$courseItem) {
-            if ('chapter' == $courseItem['type']) {
-                ++$chapterIndex;
-                $unitIndex = -1;
-                $courseItem['isPublish'] = 'published' == $courseItem['status'] ? 1 : 0;
-                $courseItem = ArrayToolkit::parts($courseItem, self::TASKS_ALLOWED_KEY);
-                $chapterItems[] = [$chapterIndex => $courseItem];
-            }
-            if ('unit' == $courseItem['type']) {
-                ++$unitIndex;
-                $courseItem['isPublish'] = 'published' == $courseItem['status'] ? 1 : 0;
-                $courseItem = ArrayToolkit::parts($courseItem, self::TASKS_ALLOWED_KEY);
-                $unitItems[$chapterIndex][] = [$unitIndex => $courseItem];
-            }
-            if (!empty($courseItem['tasks'])) {
-                foreach ($courseItem['tasks'] as $key => &$tasks) {
-                    $tasks['type'] = 0 == $key ? 'lesson' : 'tasks';
-                    $tasks['activityType'] = $tasks['activity']['mediaType'];
-                    $tasks['isPublish'] = 'published' == $tasks['status'] ? 1 : 0;
-                    $tasks = ArrayToolkit::parts($tasks, self::TASKS_ALLOWED_KEY);
-                    if (-1 == $unitIndex) {
-                        $courseCatalogue[] = $tasks;
-                    } else {
-                        $unitItems[$chapterIndex][$unitIndex]['children'][] = $tasks;
-                    }
-                }
-            }
-        }
-        foreach ($chapterItems as $key => &$chapter) {
-            $tasksNum = 0;
-            $lessonNum = 0;
-            if (!empty($unitItems[$key])) {
-                $chapter['children'] = $unitItems[$key];
-                foreach ($chapter['children'] as $unit) {
-                    if (!empty($unit['children'])) {
-                        $groupedTasks = ArrayToolkit::group($unit['children'], 'type');
-                        $tasksNum = empty($groupedTasks['tasks']) ? $tasksNum + 0 : $tasksNum + count($groupedTasks['tasks']);
-                        $lessonNum = empty($groupedTasks['lesson']) ? $lessonNum + 0 : $lessonNum + count($groupedTasks['lesson']);
-                    }
-                }
-            }
-            $chapter['counts']['unitNum'] = count($chapter['children']);
-            $chapter['counts']['tasksNum'] = $tasksNum;
-            $chapter['counts']['lessonNum'] = $lessonNum;
-            $chapter = ArrayToolkit::parts($chapter, self::TASKS_ALLOWED_KEY);
-        }
-
-        return array_merge($courseCatalogue, $chapterItems);
     }
 
     /**
