@@ -2,6 +2,7 @@
 
 namespace MarketingMallBundle\Controller\AdminV2\MarketingMall;
 
+use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Controller\AdminV2\BaseController;
 use Firebase\JWT\JWT;
 use MarketingMallBundle\Client\MarketingMallApi;
@@ -48,7 +49,7 @@ class LoginController extends BaseController
         return [
             'nickname' => $user['nickname'],
             'truename' => $user['truename'],
-            'avatar' => $user['mediumAvatar'],
+            'avatar' => AssetHelper::getFurl($user['smallAvatar'], 'user_avatar.png'),
             'mobile' => $user['verifiedMobile'],
             'email' => $user['email'],
         ];
