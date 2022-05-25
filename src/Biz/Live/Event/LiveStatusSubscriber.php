@@ -93,10 +93,10 @@ class LiveStatusSubscriber extends EventSubscriber implements EventSubscriberInt
 
     private function createLiveStatusJobs($liveId, $activity)
     {
-        $startExecuteTime = intval($activity['startTime']);
-        $closeExecuteTime = intval($activity['startTime'] + $activity['length'] * 60); //预定结束时间询问更新状态
-        $closeExecuteAgainTime = intval($activity['startTime'] + $activity['length'] * 60 + 3600); //预定结束时间一个小时后询问更新状态
-        $closeExecuteSecondTime = intval($activity['startTime'] + $activity['length'] * 60 + 7200); //预定结束时间两个小时 强制结束直播
+        $startExecuteTime = (int)$activity['startTime'];
+        $closeExecuteTime = (int)($activity['startTime'] + $activity['length'] * 60); //预定结束时间询问更新状态
+        $closeExecuteAgainTime = (int)($activity['startTime'] + $activity['length'] * 60 + 3600); //预定结束时间一个小时后询问更新状态
+        $closeExecuteSecondTime = (int)($activity['startTime'] + $activity['length'] * 60 + 7200); //预定结束时间两个小时 强制结束直播
         $this->registerLiveStatusJob($liveId, 'startJob', $startExecuteTime);
         $this->registerLiveStatusJob($liveId, 'closeJob', $closeExecuteTime);
         $this->registerLiveStatusJob($liveId, 'closeAgainJob', $closeExecuteAgainTime);
