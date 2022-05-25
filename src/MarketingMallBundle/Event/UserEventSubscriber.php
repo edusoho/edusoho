@@ -45,6 +45,7 @@ class UserEventSubscriber extends BaseEventSubscriber
         if (!in_array('ROLE_TEACHER', $user['roles'])) {
             return;
         }
+
         $this->updateGoodsContent('teacher', new TeacherInfoBuilder(), $userId);
     }
 

@@ -38,6 +38,7 @@ class CourseEventSubscriber extends BaseEventSubscriber
                 foreach ($courses as $course) {
                     $this->syncCourseToMarketingMall($course['id']);
                 }
+
                 return;
             }
         }
@@ -45,6 +46,7 @@ class CourseEventSubscriber extends BaseEventSubscriber
         foreach ($syncFields as $syncField) {
             if ($courseSet[$syncField] !== $oldCourseSet[$syncField]) {
                 $this->syncCourseToMarketingMall($courseSet['defaultCourseId']);
+
                 return;
             }
         }
@@ -74,6 +76,7 @@ class CourseEventSubscriber extends BaseEventSubscriber
         foreach ($syncFields as $syncField) {
             if ($course[$syncField] !== $oldCourse[$syncField]) {
                 $this->syncCourseToMarketingMall($course['id']);
+
                 return;
             }
         }
@@ -114,8 +117,19 @@ class CourseEventSubscriber extends BaseEventSubscriber
 
     protected function syncCourseToMarketingMall($courseId)
     {
-        // TODO: 判断是否是商城中的商品.
+        $relation = $tihs->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('course', $id);
+        if (empty($relation)) {
+            return;
+        }
         $this->updateGoodsContent('course', new CourseInfoBuilder(), $courseId);
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    protected function getProductMallGoodsRelationService()
+    {
+        return $this->getBiz()->service('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 
     /**

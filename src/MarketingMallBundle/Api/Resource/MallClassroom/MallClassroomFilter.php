@@ -2,6 +2,7 @@
 
 namespace MarketingMallBundle\Api\Resource\MallClassroom;
 
+use ApiBundle\Api\Util\AssetHelper;
 use MarketingMallBundle\Api\Resource\BaseFilter;
 
 class MallClassroomFilter extends BaseFilter
@@ -13,11 +14,9 @@ class MallClassroomFilter extends BaseFilter
     public function simpleFields(&$data)
     {
         $data['cover'] = [
-            'small' => $data['smallPicture'],
-            'middle' => $data['middlePicture'],
+            'small' => AssetHelper::getFurl($data['smallPicture'], 'classroom.png'),
+            'middle' => AssetHelper::getFurl($data['middlePicture'], 'classroom.png'),
         ];
         unset($data['smallPicture'], $data['middlePicture']);
-
-        $date['cover'] = $this->transformCover($date['cover'], 'classroom.png');
     }
 }
