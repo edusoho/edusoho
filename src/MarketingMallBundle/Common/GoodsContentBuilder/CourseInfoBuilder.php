@@ -157,12 +157,12 @@ class CourseInfoBuilder extends AbstractBuilder
 
                 case 'lesson':
                     $lessons = $this->lessonSplit($item);
-                    // 在对应章下面加入课程
-                    if ('chapter' == $lastItem) {
-                        $treeItems[$nowChapterIndex]['children'] = array_merge($treeItems[$nowChapterIndex]['children'],$lessons);
-                    }else {
+                    if ('unit' == $lastItem || $nowUnitIndex != -1) {
                         // 在对应节下面加入课程
                         $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array_merge($treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'], $lessons);
+                    } else if ('chapter' == $lastItem || $nowUnitIndex == -1) {
+                        // 在对应章下面加入课程
+                        $treeItems[$nowChapterIndex]['children'] = array_merge($treeItems[$nowChapterIndex]['children'],$lessons);
                     }
                     break;
 
