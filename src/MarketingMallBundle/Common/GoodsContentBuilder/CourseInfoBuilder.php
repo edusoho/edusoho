@@ -16,7 +16,7 @@ class CourseInfoBuilder extends AbstractBuilder
 
     const TASKS_ALLOWED_KEY = ['title', 'type', 'number', 'counts', 'children', 'isPublish', 'activityType'];
 
-    private $blankChapter = ['title' => '未分类章', 'type' => 'chapter', 'number' => 0, 'counts' =>['unitNum' => 0, 'lessonNum' => 0, 'taskNum' => 0]];
+    private $blankChapter = ['title' => '未分类章', 'type' => 'chapter', 'isPublish' => 1, 'number' => 0, 'counts' =>['unitNum' => 0, 'lessonNum' => 0, 'taskNum' => 0]];
 
     public function build($id)
     {
@@ -141,24 +141,27 @@ class CourseInfoBuilder extends AbstractBuilder
                 case 'chapter':
                     ++$nowChapterIndex;
                     $nowUnitIndex = -1; //新章创建后，应重置当前节
+                    $item['isPublish'] = 1;
+                    $item = ArrayToolkit::parts($item, self::TASKS_ALLOWED_KEY);
                     $treeItems[$nowChapterIndex] = $item;
                     $treeItems[$nowChapterIndex]['children'] = [];
                     break;
 
                 case 'unit':
                     ++$nowUnitIndex;
+                    $item['isPublish'] = 1;
                     $treeItems[$nowChapterIndex]['children'][] = $item;
                     $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = [];
                     break;
 
                 case 'lesson':
-                case 'tasks':
+                    $lessons = $this->lessonSplit($item);
                     // 在对应章下面加入课程
                     if ('chapter' == $lastItem) {
-                        $treeItems[$nowChapterIndex]['children'][] = $item;
+                        $treeItems[$nowChapterIndex]['children'] = array_merge($treeItems[$nowChapterIndex]['children'],$lessons);
                     }else {
                         // 在对应节下面加入课程
-                        $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $item;
+                        $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array_merge($treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'], $lessons);
                     }
                     break;
 
@@ -169,7 +172,50 @@ class CourseInfoBuilder extends AbstractBuilder
             $lastItem = $item['type'];
         }
 
-        return $treeItems;
+        return $this->countChapterChildren($treeItems);
+    }
+
+    private function lessonSplit($item)
+    {
+        if(!isset($item['tasks'])) {
+            return [];
+        }
+
+        $lessons = [];
+        foreach ($item['tasks'] as $task) {
+            $lessons[] = [
+                'title' => $task['title'],
+                'type' => $task['isLesson'] == 1 ? 'lesson' : 'task',
+                'number' => $task['number'],
+                'isPublish' => 'published' == $task['status'] ? 1 : 0,
+                'activityType' => $task['type']
+            ];
+        }
+        return $lessons;
+    }
+
+    private function countChapterChildren($trees)
+    {
+        foreach ($trees as $index => &$chapter) {
+            $chapter['counts']['unitNum'] = $this->countByType($chapter['children'], 'unit');
+            $chapter['counts']['lessonNum'] = $this->countByType($chapter['children'], 'lesson');
+            $chapter['counts']['taskNum'] = $this->countByType($chapter['children'], 'task');
+        }
+        return $trees;
+    }
+
+    private function countByType($trees, $type)
+    {
+        $numbers = 0;
+        foreach ($trees as $tree) {
+            if($tree['type'] == $type) {
+                $numbers ++;
+            }
+            if (isset($tree['children'])) {
+                $numbers = $numbers + $this->countByType($tree['children'], $type);
+            }
+        }
+        return $numbers;
     }
 
     /**
