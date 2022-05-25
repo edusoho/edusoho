@@ -16,6 +16,8 @@ class CourseInfoBuilder extends AbstractBuilder
 
     const TASKS_ALLOWED_KEY = ['title', 'type', 'number', 'counts', 'children', 'isPublish', 'activityType'];
 
+    private $blankChapter = ['title' => '未分类章', 'type' => 'chapter', 'number' => 0, 'counts' =>['unitNum' => 0, 'lessonNum' => 0, 'taskNum' => 0]];
+
     public function build($id)
     {
         $course = $this->getCourseService()->getCourse($id);
@@ -110,10 +112,64 @@ class CourseInfoBuilder extends AbstractBuilder
         return array_merge($courseCatalogue, $chapterItems);
     }
 
+    /**
+     * 章->节->课时 结构
+     * 向上补全结构，向下补全至节
+     */
     protected function convertToTree($items)
     {
-        global $kernel;
-        return $kernel->getContainer()->get('api.util.item_helper')->convertToTree($items);
+        $treeItems = [];
+
+        if (empty($items)) {
+            return $treeItems;
+        }
+
+        $nowChapterIndex = $nowUnitIndex = -1;
+
+        // 如果第一章上方还有内容，则归入未分类章
+        if ('chapter' != $items[0]['type']) {
+            $treeItems[] = $this->blankChapter;
+            $lastItem = 'chapter';
+            ++$nowChapterIndex;
+        } else {
+            $lastItem = 'default';
+        }
+
+        foreach ($items as $index => $item) {
+
+            switch ($item['type']) {
+                case 'chapter':
+                    ++$nowChapterIndex;
+                    $nowUnitIndex = -1; //新章创建后，应重置当前节
+                    $treeItems[$nowChapterIndex] = $item;
+                    $treeItems[$nowChapterIndex]['children'] = [];
+                    break;
+
+                case 'unit':
+                    ++$nowUnitIndex;
+                    $treeItems[$nowChapterIndex]['children'][] = $item;
+                    $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = [];
+                    break;
+
+                case 'lesson':
+                case 'tasks':
+                    // 在对应章下面加入课程
+                    if ('chapter' == $lastItem) {
+                        $treeItems[$nowChapterIndex]['children'][] = $item;
+                    }else {
+                        // 在对应节下面加入课程
+                        $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $item;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
+            $lastItem = $item['type'];
+        }
+
+        return $treeItems;
     }
 
     /**
