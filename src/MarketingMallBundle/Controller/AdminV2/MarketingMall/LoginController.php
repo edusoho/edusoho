@@ -48,7 +48,7 @@ class LoginController extends BaseController
         return [
             'nickname' => $user['nickname'],
             'truename' => $user['truename'],
-            'avatar' => $user['mediumAvatar'],
+            'avatar' => $this->getWebExtension()->getFurl($user['smallAvatar'], 'avatar.png'),
             'mobile' => $user['verifiedMobile'],
             'email' => $user['email'],
         ];
