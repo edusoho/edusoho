@@ -17,6 +17,8 @@ class MallCourse extends BaseResource
         $conditions['parentId'] = 0;
         //过滤约排课
         $conditions['excludeTypes'] = ['reservation'];
+        $conditions['courseSetTitleLike'] = $conditions['titleLike'];
+        unset($conditions['titleLike']);
         $sort = [
             'createdTime' => 'DESC',
         ];
