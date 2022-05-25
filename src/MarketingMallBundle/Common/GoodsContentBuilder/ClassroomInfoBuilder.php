@@ -8,7 +8,7 @@ use Biz\Classroom\Service\ClassroomService;
 
 class ClassroomInfoBuilder extends AbstractBuilder
 {
-    const CLASSROOM_ALLOWED_KEY = ['classroomId', 'classroomCatalogue', 'cover', 'title', 'subtitle'];
+    const CLASSROOM_ALLOWED_KEY = ['classroomId', 'classroomCatalogue', 'cover', 'title', 'subtitle', 'price'];
 
     public function build($id)
     {

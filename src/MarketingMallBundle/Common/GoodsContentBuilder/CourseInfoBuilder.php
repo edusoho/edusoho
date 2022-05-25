@@ -48,6 +48,7 @@ class CourseInfoBuilder extends AbstractBuilder
             'title' => $course['courseSetTitle'],
             'subtitle' => $courseSet['subtitle'],
             'cover' => $this->transformCover($courseSet['cover']),
+            'price' => $course['price'],
             'summary' => $courseSet['summary'],
             'courseCatalogue' => $courseCatalogue,
             'teacherList' => $teachers,

@@ -24,6 +24,7 @@ class QuestionBankBuilder extends AbstractBuilder
             'bankId' => $id,
             'title' => $exercise['title'],
             'cover' => $this->transformCover($exercise['cover'], 'item_bank_exercise.png'),
+            'price' => $exercise['price'],
             'questionBankCatalogue' => array_merge([$this->buildChapterExercise($exercise)], $this->buildAssessmentList($exercise)),
         ];
     }
