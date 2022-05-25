@@ -22,9 +22,33 @@ define(function (require, exports, module) {
 
     // 确认后,弹出密码确认框;确认后删除
     $table.on('click', '.delete-classroom', function () {
-      if (!confirm(Translator.trans('admin.classroom.delete_hint'))) {
+      let msg = 'admin.classroom.delete_hint';
+      let code = 0;
+      $.ajax({
+        type: 'post',
+        url: $(this).parents('tr').data('url'),
+        async: false,
+        success: function (data) {
+          code = data.code;
+          if (code === 1) {
+            msg = 'admin.classroom.mall_goods_exist.delete_hint';
+          }
+        },
+        error: function (e) {
+          code = 2;
+          let res = e.responseJSON.error.message;
+          Notify.danger(res);
+        }
+      });
+
+      if (code === 2) {
         return;
       }
+
+      if (!confirm(Translator.trans(msg))) {
+        return;
+      }
+
       let $tr = $(this).parents('tr');
       $.post($(this).data('url'), function (data) {
         if (data.code == 0) {

@@ -13,6 +13,7 @@ use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Taxonomy\CategoryException;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 
 class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 {
@@ -166,7 +167,11 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
         try {
             $this->beginTransaction();
-
+            $this->getProductMallGoodsRelationService()->checkMallGoods($id, 'classroom');
+            $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('classroom',$id);
+            if ($relation){
+                $this->getProductMallGoodsRelationService()->deleteMallGoodsByCode($relation['code']);
+            }
             $this->getQuestionBankDao()->delete($id);
             $this->getItemBankService()->deleteItemBank($questionBank['itemBankId']);
 
@@ -301,5 +306,13 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     protected function getItemBankService()
     {
         return $this->createService('ItemBank:ItemBank:ItemBankService');
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    private function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

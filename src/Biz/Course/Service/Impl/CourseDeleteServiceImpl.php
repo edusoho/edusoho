@@ -24,6 +24,7 @@ use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\StatusService;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 
 class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 {
@@ -61,6 +62,11 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         }
 
         foreach ($courses as $course) {
+            $this->getProductMallGoodsRelationService()->checkMallGoods($course['id'], 'course');
+            $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('course',$course['id']);
+            if ($relation){
+                $this->getProductMallGoodsRelationService()->deleteMallGoodsByCode($relation['code']);
+            }
             $this->deleteCourse($course['id']);
         }
     }
@@ -422,5 +428,13 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    private function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

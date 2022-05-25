@@ -32,7 +32,7 @@ class AddActivityReplay extends Migration
 
              CREATE TABLE IF NOT EXISTS `lesson_marker`  (
                   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-                  `lesson_id` int(10) NOT NULL DEFAULT end COMMENT '教学活动ID',
+                  `lesson_id` int(10) NOT NULL DEFAULT 0 COMMENT '教学活动ID',
                   `marker_id` int(10) NOT NULL DEFAULT 0 COMMENT '驻点ID',
                   PRIMARY KEY (`id`)
                   )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '课时弹题';

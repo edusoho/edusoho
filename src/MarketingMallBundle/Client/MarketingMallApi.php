@@ -27,18 +27,18 @@ class MarketingMallApi
     public function __construct($storage)
     {
         $mallUrl = ServiceKernel::instance()->getParameter('marketing_mall_url');
-        $headers[] = 'Content-type: application/json';
-        $headers[] = 'Mall-Auth-Token: Bearer '.$this->makeToken();
-        self::$headers = $headers;
-        self::$timestamp = time();
-        $config = [
-            'access_key' => $storage['cloud_access_key'] ?? '',
-            'secret_key' => $storage['cloud_secret_key'] ?? '',
-            'endpoint' => empty($storage['mall_private_server']) ? $mallUrl : rtrim($storage['mall_private_server'], '/'),
-        ];
         $setting = $this->getSettingService()->get('marketing_mall', []);
         self::$accessKey = $setting['access_key'] ?? '';
         self::$secretKey = $setting['secret_key'] ?? '';
+        $headers[] = 'Content-type: application/json';
+        $headers[] = 'Mall-Auth-Token: Bearer ' . $this->makeToken();
+        self::$headers = $headers;
+        self::$timestamp = time();
+        $config = [
+            'access_key' => '6uVG1xmibb3EX7XhUV3g6jflPidNhNon',
+            'secret_key' => 'hj4iRrB2DEGAMDRHzVYFed14weSN1gbi',
+            'endpoint' => empty($storage['mall_private_server']) ? $mallUrl : rtrim($storage['mall_private_server'], '/'),
+        ];
         $logger = self::getLogger();
         $spec = new JsonHmacSpecification('sha1');
         self::$client = new RestApiClient($config, $spec, null, $logger);
@@ -55,7 +55,7 @@ class MarketingMallApi
 
             return $result;
         } catch (\RuntimeException $e) {
-            $this->getLogger()->error('market-mall-init', ['商城初始化错误'.$e->getMessage()]);
+            $this->getLogger()->error('market-mall-init', ['商城初始化错误' . $e->getMessage()]);
             throw new \InvalidArgumentException('接口请求错误!');
         }
     }
@@ -66,9 +66,24 @@ class MarketingMallApi
             $params = ArrayToolkit::parts($params, ['type', 'body']);
             $this->post('/api-admin/goods/update_goods_content', $params);
         } catch (\RuntimeException $e) {
-            $this->getLogger()->error('更新商品详情错误'.$e->getMessage(), ['params' => $params]);
+            $this->getLogger()->error('更新商品详情错误' . $e->getMessage(), ['params' => $params]);
             throw new \InvalidArgumentException('接口请求错误!');
         }
+    }
+
+    public function getGoodsByCode($code)
+    {
+        return $this->get('/api-admin/goods/get', ['code' => $code]);
+    }
+
+    public function checkGoodsIsPublishByCode($params)
+    {
+        return $this->get('/api-school/goods/getGoodsPublishStatus?goodsCode=' . $params[0]);
+    }
+
+    public function deleteGoodsByCode($params)
+    {
+        return $this->post('/api-school/goods/esDeleteGoods', ['goodsCode' => $params[0]]);
     }
 
 //    例子  token头直接设置了参数code也直接加了
@@ -91,12 +106,12 @@ class MarketingMallApi
 
     private function post($uri, array $params = [])
     {
-        return self::$client->post($uri, $params);
+        return self::$client->post($uri, $params, self::$headers);
     }
 
     private function makeToken()
     {
-        return self::$accessKey.':'.JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'access_key' => self::$accessKey], self::$secretKey);
+        return self::$accessKey . ':' . JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'access_key' => self::$accessKey], self::$secretKey);
     }
 
     /**
@@ -115,7 +130,7 @@ class MarketingMallApi
             return self::$logger;
         }
         $logger = new Logger('marketing-mall');
-        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/marketing-mall.log', Logger::DEBUG));
+        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir') . '/marketing-mall.log', Logger::DEBUG));
 
         self::$logger = $logger;
 

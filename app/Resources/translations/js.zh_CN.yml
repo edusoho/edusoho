@@ -1066,6 +1066,7 @@ admin.classroom.operation_success_hint: 成功！
 admin.classroom.operation_fail_hint: 失败
 admin.classroom.operation_hint: 吗？
 admin.classroom.delete_hint: 删除班级，将删除班级中所有课程的章节、课时、学员等信息。确认要删除该班级吗？
+admin.classroom.mall_goods_exist.delete_hint: 删除班级，将删除班级中所有课程的章节、课时、学员等信息。并且该产品已在营销商城中有对应商品，将同时删除已在营销商城中的对应商品，确认要删除该班级吗？
 admin.classroom.delete_success_hint: 删除成功！
 admin.classroom.cancel_recommend_hint: "%title%吗？"
 admin.classroom.cancel_recommend_success_hint: "%title%成功！"
@@ -1109,6 +1110,7 @@ admin.course.publish_hint: 您确认要发布此课程吗？
 admin.course.publish_success_hint: 课程发布成功！
 admin.course.unknow_error_hint: 未知错误
 admin.course.delete_hint: 删除课程，将删除课程的章节、课时、学员等信息。真的要删除该课程吗？
+admin.course.mall_goods_exist.delete_hint: 删除课程，将删除课程的章节、课时、学员等信息。并且该产品已在营销商城中有对应的商品，将同时删除已在营销商城中的对应商品，真的要删除该课程吗？
 admin.course.remove_hint: 移除课程将删除所有的学员信息以及学员数据，移除后无法恢复！ 确定移除该课程吗？
 admin.course.remind_teacher_success_hint: 提醒教师的通知，发送成功！
 admin.course.cancel_recommend_hint: 真的要取消该课程推荐吗？
@@ -1524,6 +1526,7 @@ admin.question_bank.choose_category: 请选择所属分类
 admin.question_bank.save_success: 保存题库成功
 admin.question_bank.save_fail: 保存题库失败
 admin.question_bank.delete_hint: 确定要删除此题库吗
+admin.question_bank.mall_goods_exist.delete_hint: 该产品已在营销商城中有对应商品，将同时删除已在营销商城中的对应商品，确定要删除此题库吗
 admin.question_bank.fail_not_delete: 此题库内含有%testpaperNum%份试卷，%questionNum%道题目，无法删除
 admin.question_bank.no_category: 无题库分类
 

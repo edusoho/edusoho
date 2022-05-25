@@ -4,7 +4,7 @@
 {% set target = ''~filter~'_index' %}
 {% set courseSetProduct = courseSet.platform|default('self') == 'self' ? null : data('S2b2cProduct', { id:courseSet.id, type:'course_set' }) %}
 
-<tr id="course-tr-{{ courseSet.id }}">
+<tr id="course-tr-{{ courseSet.id }}" data-url="{{ path('admin_v2_course_set_check_mall_goods',{id:courseSet.id}) }}">
   {% include 'org/parts/table-body-checkbox.html.twig' %}
   <td>{{ courseSet.id }}</td>
   <td>
