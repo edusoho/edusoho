@@ -12,6 +12,6 @@ class QuestionBankExerciseFilter extends BaseFilter
 
     public function simpleFields(&$bank)
     {
-        $bank['cover'] = $this->transformCover($course['cover'], 'item_bank_exercise.png');
+        $bank['cover'] = $this->transformCover($bank['cover'], 'item_bank_exercise.png');
     }
 }
