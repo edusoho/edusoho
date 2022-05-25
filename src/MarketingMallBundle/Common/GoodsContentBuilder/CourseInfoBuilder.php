@@ -150,6 +150,7 @@ class CourseInfoBuilder extends AbstractBuilder
                 case 'unit':
                     ++$nowUnitIndex;
                     $item['isPublish'] = 1;
+                    $item = ArrayToolkit::parts($item, self::TASKS_ALLOWED_KEY);
                     $treeItems[$nowChapterIndex]['children'][] = $item;
                     $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = [];
                     break;
