@@ -38,21 +38,6 @@ define(function (require, exports, module) {
       if (code === 2) {
         return;
       }
-      let msg = 'admin.question_bank.delete_hint';
-      $.ajax({
-        type: 'post',
-        url: $(this).data('check-url'),
-        async: false,
-        success: function (data) {
-          if (data.code === 1) {
-            msg = 'admin.question_bank.mall_goods_exist.delete_hint';
-          }
-        },
-        error:function (e){
-          let res = e.responseJSON.error.message;
-          Notify.danger(res);
-        }
-      });
 
       if (!confirm(Translator.trans(msg))) {
         return;

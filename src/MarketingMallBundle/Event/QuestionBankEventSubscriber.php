@@ -6,6 +6,7 @@ use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use MarketingMallBundle\Common\GoodsContentBuilder\QuestionBankBuilder;
 
 class QuestionBankEventSubscriber extends BaseEventSubscriber
@@ -27,6 +28,7 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
             'item.delete' => 'onItemDelete',
             'item.batchDelete' => 'onItemBatchDelete',
             'item.import' => 'onItemImport',
+            'question_bank.delete' =>'onQuestionBankProductDelete'
         ];
     }
 
@@ -149,14 +151,36 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
         }
     }
 
+    public function onQuestionBankProductDelete(Event $event){
+        $questionBank = $event->getSubject();
+        try {
+            $this->deleteQuestionBankProductToMarketingMall($questionBank['id']);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
     protected function syncQuestionBankToMarketingMall($questionBankId)
     {
-        $relation = $tihs->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('questionBank', $id);
+        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('questionBank', $questionBankId);
         if (empty($relation)) {
             return;
         }
 
         $this->updateGoodsContent('question_bank', new QuestionBankBuilder(), $questionBankId);
+    }
+
+    protected function deleteQuestionBankProductToMarketingMall($questionBankId)
+    {
+        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('question_bank', $questionBankId);
+        if ($relation) {
+            $this->getProductMallGoodsRelationService()->deleteProductMallGoodsRelation($relation['id']);
+            try {
+                $this->deleteMallGoods($relation['goodsCode']);
+            } catch (\Exception $e) {
+                throw $e;
+            }
+        }
     }
 
     /**

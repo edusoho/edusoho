@@ -16,5 +16,5 @@ interface ProductMallGoodsRelationService
 
     public function checkMallGoods($productId, $type);
 
-    public function deleteMallGoodsByCode($code);
+//    public function deleteMallGoodsByCode($code);
 }

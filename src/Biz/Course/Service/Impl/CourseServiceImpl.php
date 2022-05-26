@@ -47,6 +47,7 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -774,7 +775,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $result = $this->getCourseDeleteService()->deleteCourse($id);
             $this->getCourseSpecsMediator()->onDelete($course);
 
-            $this->dispatchEvent('course.delete', new Event($course));
             $this->commit();
 
             return $result;
@@ -3082,5 +3082,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         $biz = $this->biz;
 
         return $biz['goods.entity.factory'];
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    private function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

@@ -31,7 +31,7 @@ class MarketingMallApi
         self::$accessKey = $setting['access_key'] ?? '';
         self::$secretKey = $setting['secret_key'] ?? '';
         $headers[] = 'Content-type: application/json';
-        $headers[] = 'Mall-Auth-Token: Bearer ' . $this->makeToken();
+        $headers[] = 'Mall-Auth-Token: ' . $this->makeToken();
         self::$headers = $headers;
         self::$timestamp = time();
         $config = [
@@ -71,11 +71,6 @@ class MarketingMallApi
         }
     }
 
-    public function getGoodsByCode($code)
-    {
-        return $this->get('/api-admin/goods/get', ['code' => $code]);
-    }
-
     public function checkGoodsIsPublishByCode($params)
     {
         return $this->get('/api-school/goods/getGoodsPublishStatus?goodsCode=' . $params[0]);
@@ -83,7 +78,7 @@ class MarketingMallApi
 
     public function deleteGoodsByCode($params)
     {
-        return $this->post('/api-school/goods/esDeleteGoods', ['goodsCode' => $params[0]]);
+        return $this->post('/api-school/goods/esDeleteGoods', ['code' => $params[0]]);
     }
 
 //    例子  token头直接设置了参数code也直接加了

@@ -80,7 +80,6 @@ class RestApiClient
         $body = $this->http->request($method, $url, $body, $headers, $requestId);
 
         $context = array('headers' => $headers, 'body' => $body);
-        file_put_contents('/tmp/test','123'.\GuzzleHttp\json_encode($body));
         return $this->spec->unserialize($body);
     }
 

@@ -24,9 +24,10 @@ define(function (require, exports, module) {
     $table.on('click', '.delete-classroom', function () {
       let msg = 'admin.classroom.delete_hint';
       let code = 0;
+      let $tr = $(this).parents('tr');
       $.ajax({
         type: 'post',
-        url: $(this).parents('tr').data('url'),
+        url: $tr.data('url'),
         async: false,
         success: function (data) {
           code = data.code;
@@ -49,7 +50,6 @@ define(function (require, exports, module) {
         return;
       }
 
-      let $tr = $(this).parents('tr');
       $.post($(this).data('url'), function (data) {
         if (data.code == 0) {
           $tr.remove();

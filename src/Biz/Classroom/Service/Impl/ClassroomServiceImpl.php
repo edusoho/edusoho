@@ -729,13 +729,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             }
             $this->tryManageClassroom($id, 'admin_classroom_delete');
             $this->getProductMallGoodsRelationService()->checkMallGoods($id, 'classroom');
-            $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('classroom',$id);
             $this->deleteAllCoursesInClass($id);
             $this->getClassroomDao()->delete($id);
             $this->getClassroomGoodsMediator()->onDelete($classroom);
-            if ($relation){
-                $this->getProductMallGoodsRelationService()->deleteMallGoodsByCode($relation['code']);
-            }
 
             $this->deleteAllCoursesInClass($id);
             $this->getClassroomDao()->delete($id);

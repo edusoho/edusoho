@@ -3,6 +3,7 @@
 namespace MarketingMallBundle\Event;
 
 use Codeages\Biz\Framework\Event\Event;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use MarketingMallBundle\Common\GoodsContentBuilder\ClassroomInfoBuilder;
 
 class ClassroomEventSubscriber extends BaseEventSubscriber
@@ -13,6 +14,7 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
             'classroom.course.create' => 'onClassroomCourseCreate',
             'classroom.course.delete' => 'onClassroomCourseDelete',
             'classroom.course.update' => 'onClassroomCourseUpdate',
+            'classroom.delete' => 'onClassroomProductDelete'
         ];
     }
 
@@ -41,13 +43,36 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
         }
     }
 
+    public function onClassroomProductDelete(Event $event)
+    {
+        $classroom = $event->getSubject();
+        try {
+            $this->deleteClassroomProductToMarketingMall($classroom['id']);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
     protected function syncClassroomToMarketingMall($classroomId)
     {
-        $relation = $tihs->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('classroom', $id);
+        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('classroom', $classroomId);
         if (empty($relation)) {
             return;
         }
         $this->updateGoodsContent('classroom', new ClassroomInfoBuilder(), $classroomId);
+    }
+
+    protected function deleteClassroomProductToMarketingMall($classroomId)
+    {
+        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('classroom', $classroomId);
+        if ($relation) {
+            $this->getProductMallGoodsRelationService()->deleteProductMallGoodsRelation($relation['id']);
+            try {
+                $this->deleteMallGoods($relation['goodsCode']);
+            } catch (\Exception $e) {
+                throw $e;
+            }
+        }
     }
 
     /**
