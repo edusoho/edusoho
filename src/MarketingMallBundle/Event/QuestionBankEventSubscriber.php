@@ -151,20 +151,7 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
 
     protected function syncQuestionBankToMarketingMall($questionBankId)
     {
-        $relation = $tihs->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('questionBank', $id);
-        if (empty($relation)) {
-            return;
-        }
-
         $this->updateGoodsContent('question_bank', new QuestionBankBuilder(), $questionBankId);
-    }
-
-    /**
-     * @return ProductMallGoodsRelationService
-     */
-    protected function getProductMallGoodsRelationService()
-    {
-        return $this->getBiz()->service('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 
     /**

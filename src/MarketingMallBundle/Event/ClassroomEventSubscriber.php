@@ -43,18 +43,6 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
 
     protected function syncClassroomToMarketingMall($classroomId)
     {
-        $relation = $tihs->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('classroom', $id);
-        if (empty($relation)) {
-            return;
-        }
         $this->updateGoodsContent('classroom', new ClassroomInfoBuilder(), $classroomId);
-    }
-
-    /**
-     * @return ProductMallGoodsRelationService
-     */
-    protected function getProductMallGoodsRelationService()
-    {
-        return $this->getBiz()->service('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

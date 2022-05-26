@@ -117,19 +117,7 @@ class CourseEventSubscriber extends BaseEventSubscriber
 
     protected function syncCourseToMarketingMall($courseId)
     {
-        $relation = $tihs->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('course', $id);
-        if (empty($relation)) {
-            return;
-        }
         $this->updateGoodsContent('course', new CourseInfoBuilder(), $courseId);
-    }
-
-    /**
-     * @return ProductMallGoodsRelationService
-     */
-    protected function getProductMallGoodsRelationService()
-    {
-        return $this->getBiz()->service('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 
     /**
