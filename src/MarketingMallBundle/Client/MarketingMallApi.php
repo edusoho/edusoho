@@ -35,8 +35,8 @@ class MarketingMallApi
         self::$headers = $headers;
         self::$timestamp = time();
         $config = [
-            'access_key' => '6uVG1xmibb3EX7XhUV3g6jflPidNhNon',
-            'secret_key' => 'hj4iRrB2DEGAMDRHzVYFed14weSN1gbi',
+            'access_key' => $storage['cloud_access_key'] ?? '',
+            'secret_key' => $storage['cloud_secret_key'] ?? '',
             'endpoint' => empty($storage['mall_private_server']) ? $mallUrl : rtrim($storage['mall_private_server'], '/'),
         ];
         $logger = self::getLogger();
