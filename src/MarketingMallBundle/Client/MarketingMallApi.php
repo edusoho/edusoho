@@ -63,8 +63,14 @@ class MarketingMallApi
     public function updateGoodsContent($params)
     {
         try {
-            $params = ArrayToolkit::parts($params, ['type', 'body']);
-            $this->post('/api-admin/goods/update_goods_content', $params);
+            $params = ArrayToolkit::parts($params[0], [
+                'goodsCode',
+                'targetType',
+                'targetId',
+                'goodsContent'
+            ]);
+            file_put_contents('/tmp/test',\GuzzleHttp\json_encode($params));
+            $this->post('/api-school/goods/updateGoodsContent', $params);
         } catch (\RuntimeException $e) {
             $this->getLogger()->error('更新商品详情错误' . $e->getMessage(), ['params' => $params]);
             throw new \InvalidArgumentException('接口请求错误!');

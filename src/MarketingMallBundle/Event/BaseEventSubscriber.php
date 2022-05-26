@@ -9,14 +9,17 @@ use MarketingMallBundle\Common\GoodsContentBuilder\AbstractBuilder;
 
 abstract class BaseEventSubscriber extends EventSubscriber
 {
-    protected function updateGoodsContent($type, AbstractBuilder $builder, $id)
+    protected function updateGoodsContent($type, AbstractBuilder $builder, $id, $goodsCode)
     {
         $builder->setBiz($this->getBiz());
         $client = new MarketingMallClient($this->getBiz());
         $client->updateGoodsContent([
-            'type' => $type,
-            'body' => $builder->build($id),
+            'goodsCode' => $goodsCode,
+            'targetType' => $type,
+            'targetId' => 54,
+            'goodsContent' => json_encode($builder->build($id)),
         ]);
+
     }
 
     protected function deleteMallGoods($code)

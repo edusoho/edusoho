@@ -162,12 +162,12 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
 
     protected function syncQuestionBankToMarketingMall($questionBankId)
     {
-        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('questionBank', $questionBankId);
+        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('question_bank', $questionBankId);
         if (empty($relation)) {
             return;
         }
 
-        $this->updateGoodsContent('question_bank', new QuestionBankBuilder(), $questionBankId);
+        $this->updateGoodsContent('question_bank', new QuestionBankBuilder(), $questionBankId,$relation['goodsCode']);
     }
 
     protected function deleteQuestionBankProductToMarketingMall($questionBankId)
