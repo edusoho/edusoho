@@ -55,25 +55,6 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
         return 0;
     }
 
-//    public function deleteMallGoodsByCode($code)
-//    {
-//        try {
-//            $relation = $this->getProductMallGoodsRelationByGoodsCode($code);
-//            if ($relation) {
-//                $this->deleteProductMallGoodsRelation($relation['id']);
-//                $client = new MarketingMallClient($this->biz);
-//                file_put_contents('/tmp/test', \GuzzleHttp\json_encode($client->deleteGoodsBycode($relation['goodsCode'])));
-//                $result = $client->deleteGoodsBycode('eq110');
-//                if (!$result['success']) {
-//                    throw $this->createServiceException('删除营销商城商品失败，请重试！');
-//                }
-//            }
-//        } catch (\Exception $exception) {
-//            throw $exception;
-//        }
-//        return true;
-//    }
-
     /**
      * @return ProductMallGoodsRelationDao
      */
