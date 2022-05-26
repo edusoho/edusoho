@@ -248,11 +248,11 @@ interface UserService
     public function unlockUser($id);
 
     /**
-     * @param $userId
+     * @param $id
      * @param $nickname
      *
      * @return mixed
-     * @Log(module="user",action="delete_user",funcName="getUser",param="userId")
+     * @Log(module="user",action="delete_user",funcName="getUser",param="id")
      */
     public function deleteUser($id);
 

@@ -1244,7 +1244,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = ArrayToolkit::parts($fields, ['title', 'number', 'seq', 'parentId']);
 
         $chapter = $this->getChapterDao()->update($chapterId, $fields);
-        $this->dispatchEvent('course.chapter.update', new Event($chapter), ['oldChapter' => $oldChapter]);
+        $this->dispatchEvent('course.chapter.update', new Event($chapter, ['oldChapter' => $oldChapter]));
 
         return $chapter;
     }
