@@ -162,7 +162,7 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
 
     protected function syncQuestionBankToMarketingMall($questionBankId)
     {
-        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('question_bank', $questionBankId);
+        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('questionBank', $questionBankId);
         if (empty($relation)) {
             return;
         }
@@ -172,7 +172,7 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
 
     protected function deleteQuestionBankProductToMarketingMall($questionBankId)
     {
-        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('question_bank', $questionBankId);
+        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('questionBank', $questionBankId);
         if ($relation) {
             $this->getProductMallGoodsRelationService()->deleteProductMallGoodsRelation($relation['id']);
             try {
@@ -181,14 +181,7 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
                 throw $e;
             }
         }
-    }
-
-    /**
-     * @return ProductMallGoodsRelationService
-     */
-    protected function getProductMallGoodsRelationService()
-    {
-        return $this->getBiz()->service('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
+        $this->updateGoodsContent('question_bank', new QuestionBankBuilder(), $questionBankId,$relation['goodsCode']);
     }
 
     /**

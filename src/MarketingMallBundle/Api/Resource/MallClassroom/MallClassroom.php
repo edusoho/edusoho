@@ -13,7 +13,7 @@ class MallClassroom extends BaseResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
-        $conditions['excludeStatus'] = 'unpublished';
+        $conditions['excludeStatus'] = 'draft';
         $conditions['showable'] = 1;
         list($offset, $limit) = $this->preparePageCondition($conditions);
         $sort = [

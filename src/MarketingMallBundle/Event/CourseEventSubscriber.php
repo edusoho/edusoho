@@ -150,14 +150,6 @@ class CourseEventSubscriber extends BaseEventSubscriber
     }
 
     /**
-     * @return ProductMallGoodsRelationService
-     */
-    protected function getProductMallGoodsRelationService()
-    {
-        return $this->getBiz()->service('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
-    }
-
-    /**
      * @return CourseService
      */
     protected function getCourseService()

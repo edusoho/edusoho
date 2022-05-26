@@ -11,12 +11,16 @@ abstract class BaseEventSubscriber extends EventSubscriber
 {
     protected function updateGoodsContent($type, AbstractBuilder $builder, $id, $goodsCode)
     {
+        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId($type, $id);
+        if (empty($relation) && 'teacher' != $type) {
+            return;
+        }
         $builder->setBiz($this->getBiz());
         $client = new MarketingMallClient($this->getBiz());
         $client->updateGoodsContent([
             'goodsCode' => $goodsCode,
             'targetType' => $type,
-            'targetId' => 54,
+            'targetId' => $id,
             'goodsContent' => json_encode($builder->build($id)),
         ]);
 
@@ -33,5 +37,10 @@ abstract class BaseEventSubscriber extends EventSubscriber
         } catch (\Exception $exception) {
             throw $exception;
         }
+    }
+
+    protected function getProductMallGoodsRelationService()
+    {
+        return $this->getBiz()->service('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }
