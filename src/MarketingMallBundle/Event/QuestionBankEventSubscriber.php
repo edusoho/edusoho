@@ -6,7 +6,6 @@ use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
-use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use MarketingMallBundle\Common\GoodsContentBuilder\QuestionBankBuilder;
 
 class QuestionBankEventSubscriber extends BaseEventSubscriber
@@ -167,7 +166,7 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
             return;
         }
 
-        $this->updateGoodsContent('question_bank', new QuestionBankBuilder(), $questionBankId,$relation['goodsCode']);
+        $this->updateGoodsContent('questionBank', new QuestionBankBuilder(), $questionBankId,$relation['goodsCode']);
     }
 
     protected function deleteQuestionBankProductToMarketingMall($questionBankId)
@@ -181,7 +180,7 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
                 throw $e;
             }
         }
-        $this->updateGoodsContent('question_bank', new QuestionBankBuilder(), $questionBankId,$relation['goodsCode']);
+        $this->updateGoodsContent('questionBank', new QuestionBankBuilder(), $questionBankId,$relation['goodsCode']);
     }
 
     /**

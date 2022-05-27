@@ -18,7 +18,7 @@ class LoginController extends BaseController
         }
 
         $authorization = JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'userInfo' => $this->getUserInfo(), 'access_key' => $mallSettings['access_key'], 'header' => 'MARKETING_MALL'], $mallSettings['secret_key']);
-        $mallUrl = $this->getSchema().$this->container->getParameter('marketing_mall_url');
+        $mallUrl = $this->getSchema().$this->container->getParameter('marketing_mall_url').'/console-pc/';
 
         return $this->redirect($mallUrl.'?token='.$authorization.'&code='.$mallSettings['access_key'].'&url='.$this->getSchema().$_SERVER['HTTP_HOST']);
     }
