@@ -14,6 +14,7 @@ use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\FaceInspection\Service\FaceInspectionService;
 use Biz\File\Service\UploadFileService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
@@ -43,7 +44,7 @@ class TaskController extends BaseController
         }
 
         try {
-            $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
+            $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
             if (!empty($activity['ext']) && !empty($activity['ext']['file'])) {
@@ -101,7 +102,16 @@ class TaskController extends BaseController
         if (empty($taskResult)) {
             $taskResult = ['status' => 'none'];
         }
-
+        $videoHeaderLength = 0;
+        $storageSetting = $this->getSettingService()->get('storage');
+        if (!empty($storageSetting['video_header'])) {
+            try {
+                $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            } catch (\RuntimeException $e) {
+                $headLeader = [];
+            }
+            $videoHeaderLength = $headLeader ? $headLeader['length'] : 0;
+        }
         if ('finish' == $taskResult['status']) {
             $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $user['id']);
             $finishedRate = $progress['percent'];
@@ -114,7 +124,7 @@ class TaskController extends BaseController
             //需要8.3.8重构
             $number = explode('-', $task['number']);
             if (array_key_exists(1, $number)) {
-                $task['number'] = $chapter['published_number'].'-'.$number[1];
+                $task['number'] = $chapter['published_number'] . '-' . $number[1];
             }
         }
 
@@ -144,6 +154,7 @@ class TaskController extends BaseController
                 'allowEventAutoTrigger' => $activityConfig->allowEventAutoTrigger(),
                 'media' => $media,
                 'learnControlSetting' => $learnControlSetting,
+                'videoHeaderLength' => $videoHeaderLength,
             ]
         );
     }
@@ -479,7 +490,7 @@ class TaskController extends BaseController
         }
 
         $config = $this->getActivityConfig();
-        $action = $config[$task['type']]['controller'].':finishCondition';
+        $action = $config[$task['type']]['controller'] . ':finishCondition';
 
         return $this->forward($action, ['activity' => $activity]);
     }
@@ -528,9 +539,9 @@ class TaskController extends BaseController
      *
      * @param  $taskId
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function handleAccessDeniedException(\Exception $exception, Request $request, $taskId)
     {
@@ -585,7 +596,7 @@ class TaskController extends BaseController
 
     private function freshTaskLearnStat(Request $request, $taskId)
     {
-        $key = 'task.'.$taskId;
+        $key = 'task.' . $taskId;
         $session = $request->getSession();
         $taskStore = $session->get($key, []);
         $taskStore['start'] = time();
@@ -596,7 +607,7 @@ class TaskController extends BaseController
 
     private function validTaskLearnStat(Request $request, $taskId)
     {
-        $key = 'task.'.$taskId;
+        $key = 'task.' . $taskId;
         $session = $request->getSession();
         $taskStore = $session->get($key);
 
@@ -738,5 +749,13 @@ class TaskController extends BaseController
     protected function getLearnControlService()
     {
         return $this->createService('Visualization:LearnControlService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
