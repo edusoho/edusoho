@@ -152,20 +152,11 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
 
     public function onQuestionBankProductDelete(Event $event){
         $questionBank = $event->getSubject();
-        try {
-            $this->deleteQuestionBankProductToMarketingMall($questionBank['id']);
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        $this->deleteQuestionBankProductToMarketingMall($questionBank['id']);
     }
 
     protected function syncQuestionBankToMarketingMall($questionBankId)
     {
-        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('questionBank', $questionBankId);
-        if (empty($relation)) {
-            return;
-        }
-
         $this->updateGoodsContent('questionBank', new QuestionBankBuilder(), $questionBankId);
     }
 
@@ -174,11 +165,7 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
         $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('questionBank', $questionBankId);
         if ($relation) {
             $this->getProductMallGoodsRelationService()->deleteProductMallGoodsRelation($relation['id']);
-            try {
-                $this->deleteMallGoods($relation['goodsCode']);
-            } catch (\Exception $e) {
-                throw $e;
-            }
+            $this->deleteMallGoods($relation['goodsCode']);
         }
     }
 

@@ -53,19 +53,12 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
     public function onClassroomProductDelete(Event $event)
     {
         $classroom = $event->getSubject();
-        try {
-            $this->deleteClassroomProductToMarketingMall($classroom['id']);
-        } catch (\Exception $e) {
-            throw $e;
-        }
+
+        $this->deleteClassroomProductToMarketingMall($classroom['id']);
     }
 
     protected function syncClassroomToMarketingMall($classroomId)
     {
-        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('classroom', $classroomId);
-        if (empty($relation)) {
-            return;
-        }
         $this->updateGoodsContent('classroom', new ClassroomInfoBuilder(), $classroomId);
     }
 
@@ -74,11 +67,8 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
         $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('classroom', $classroomId);
         if ($relation) {
             $this->getProductMallGoodsRelationService()->deleteProductMallGoodsRelation($relation['id']);
-            try {
-                $this->deleteMallGoods($relation['goodsCode']);
-            } catch (\Exception $e) {
-                throw $e;
-            }
+
+            $this->deleteMallGoods($relation['goodsCode']);
         }
     }
 

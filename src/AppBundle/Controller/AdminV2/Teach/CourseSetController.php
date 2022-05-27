@@ -137,6 +137,7 @@ class CourseSetController extends BaseController
     {
         $ids = ArrayToolkit::column($this->getCourseService()->findCoursesByCourseSetId($id), 'id');
         $statusList = [];
+        //todo 改成批量检查
         foreach ($ids as $courseId) {
             $status = $this->getProductMallGoodsRelationService()->checkMallGoods($courseId, 'course');
             $statusList[] = $status;

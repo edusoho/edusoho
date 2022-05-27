@@ -33,7 +33,7 @@ class CourseEventSubscriber extends BaseEventSubscriber
             return;
         }
         $oldCourseSet = $event->getArgument('oldCourseSet');
-        
+
         $syncFields = ['summary', 'cover'];
         foreach ($syncFields as $syncField) {
             if ($courseSet[$syncField] !== $oldCourseSet[$syncField]) {
@@ -121,20 +121,11 @@ class CourseEventSubscriber extends BaseEventSubscriber
     public function onCourseProductDelete(Event $event)
     {
         $course = $event->getSubject();
-        try {
-            $this->deleteCourseProductToMarketingMall($course['id']);
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        $this->deleteCourseProductToMarketingMall($course['id']);
     }
 
     protected function syncCourseToMarketingMall($courseId)
     {
-        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('course', $courseId);
-        if (empty($relation)) {
-            return;
-        }
-
         $this->updateGoodsContent('course', new CourseInfoBuilder(), $courseId);
     }
 
@@ -143,11 +134,7 @@ class CourseEventSubscriber extends BaseEventSubscriber
         $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('course', $courseId);
         if ($relation) {
             $this->getProductMallGoodsRelationService()->deleteProductMallGoodsRelation($relation['id']);
-            try {
-                $this->deleteMallGoods($relation['goodsCode']);
-            } catch (\Exception $e) {
-                throw $e;
-            }
+            $this->deleteMallGoods($relation['goodsCode']);
         }
     }
 

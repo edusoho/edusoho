@@ -907,12 +907,10 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(['success' => true]);
     }
 
-    public function checkMallGoodsAction(Request $request, $courseSetId, $courseId)
+    public function checkMallGoodsAction(Request $request,$courseId)
     {
         $status = $this->getProductMallGoodsRelationService()->checkMallGoods($courseId, 'course');
-        if (!$this->getCourseSetService()->hasCourseSetManageRole($courseSetId)) {
-            return $this->createJsonResponse(['success' => true, 'redirect' => $this->generateUrl('homepage')]);
-        }
+
         return $this->createJsonResponse(['status' => $status]);
     }
 

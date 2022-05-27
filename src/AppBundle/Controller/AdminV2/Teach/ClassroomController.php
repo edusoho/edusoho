@@ -198,7 +198,7 @@ class ClassroomController extends BaseController
     public function checkMallGoodsAction(Request $request, $id)
     {
         $status = $this->getProductMallGoodsRelationService()->checkMallGoods($id, 'classroom');
-        return $this->createJsonResponse(['code' => $status]);
+        return $this->createJsonResponse(['status' => $status]);
     }
 
     public function recommendAction(Request $request, $id)

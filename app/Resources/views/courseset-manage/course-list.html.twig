@@ -74,7 +74,7 @@
                 <li>
                   <a href="javascript:;"
                      data-url="{{ path('course_set_manage_course_delete', {courseSetId: courseSet.id, courseId: course.id}) }}"
-                     data-check-url="{{ path('course_set_manage_course_check_mall_goods', {courseSetId: courseSet.id, courseId: course.id}) }}"
+                     data-check-url="{{ path('course_set_manage_course_check_mall_goods', {courseId: course.id}) }}"
                      class="js-delete-course">{{ 'course.teaching_plan.delete_btn'|trans }}</a>
                 </li>
               {% endif %}
