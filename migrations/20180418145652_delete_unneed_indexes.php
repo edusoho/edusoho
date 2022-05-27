@@ -30,6 +30,7 @@ class DeleteUnneedIndexes extends Migration
 
         $connection->exec('
             DROP INDEX `navigation_type_isOpen_orgId_index` ON `navigation`;
+            DROP INDEX `userid_type` ON `navigation`;
         ');
 
         $connection->exec('
