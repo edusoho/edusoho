@@ -9,7 +9,7 @@ use MarketingMallBundle\Common\GoodsContentBuilder\AbstractBuilder;
 
 abstract class BaseEventSubscriber extends EventSubscriber
 {
-    protected function updateGoodsContent($type, AbstractBuilder $builder, $id, $goodsCode)
+    protected function updateGoodsContent($type, AbstractBuilder $builder, $id)
     {
         $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId($type, $id);
         if (empty($relation) && 'teacher' != $type) {
@@ -18,7 +18,7 @@ abstract class BaseEventSubscriber extends EventSubscriber
         $builder->setBiz($this->getBiz());
         $client = new MarketingMallClient($this->getBiz());
         $client->updateGoodsContent([
-            'goodsCode' => $goodsCode,
+            'goodsCode' => $relation['goodsCode'],
             'targetType' => $type,
             'targetId' => $id,
             'goodsContent' => json_encode($builder->build($id)),

@@ -66,7 +66,7 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
         if (empty($relation)) {
             return;
         }
-        $this->updateGoodsContent('classroom', new ClassroomInfoBuilder(), $classroomId, $relation['goodsCode']);
+        $this->updateGoodsContent('classroom', new ClassroomInfoBuilder(), $classroomId);
     }
 
     protected function deleteClassroomProductToMarketingMall($classroomId)

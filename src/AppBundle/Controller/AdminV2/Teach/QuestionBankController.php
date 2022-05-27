@@ -89,8 +89,8 @@ class QuestionBankController extends BaseController
 
     public function checkMallGoodsAction(Request $request, $id)
     {
-        $code = $this->getProductMallGoodsRelationService()->checkMallGoods($id, 'question_bank');
-        return $this->createJsonResponse(['code' => $code]);
+        $status = $this->getProductMallGoodsRelationService()->checkMallGoods($id, 'questionBank');
+        return $this->createJsonResponse(['status' => $status]);
     }
 
     /**

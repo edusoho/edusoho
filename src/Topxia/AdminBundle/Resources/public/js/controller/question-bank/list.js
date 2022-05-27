@@ -17,25 +17,24 @@ define(function (require, exports, module) {
         return;
       }
       let msg = 'admin.question_bank.delete_hint';
-      let code = 0;
+      let status = false;
       $.ajax({
         type: 'post',
         url: $(this).data('check-url'),
         async: false,
         success: function (data) {
-          code = data.code;
-          if (code === 1) {
+          if (data.status) {
             msg = 'admin.question_bank.mall_goods_exist.delete_hint';
           }
         },
         error: function (e) {
-          code = 2;
+          status = 'error';
           let res = e.responseJSON.error.message;
           Notify.danger(res);
         }
       });
 
-      if (code === 2) {
+      if (status === 'error') {
         return;
       }
 

@@ -489,6 +489,7 @@ course.manage.close_fail_hint: 关闭失败
 course.manage.copy_title: 复制计划
 course.manage.max_course_number_tip: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.manage.delete_hint: 是否确定删除该教学计划？
+course.manage.mall_goods_exist.delete_hint: 该产品已在营销商城中有对应的商品，将同时删除已在营销商城中的对应商品，是否确定删除该教学计划？
 course.manage.task_delete_hint: 是否确定删除该%taskName%吗？
 course.manage.task_batch_delete_hint: 删除所选课时后，课时下对应任务将一并被删除。未发布状态下的课时将会被删除，已发布状态下的课时需取消发布后再删除。此次删除%length%课时，是否继续？
 course.manage.chapter_delete_hint: 是否确定删除该%name%吗？

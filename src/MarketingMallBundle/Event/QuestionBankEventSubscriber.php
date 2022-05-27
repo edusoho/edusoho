@@ -166,7 +166,7 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
             return;
         }
 
-        $this->updateGoodsContent('questionBank', new QuestionBankBuilder(), $questionBankId,$relation['goodsCode']);
+        $this->updateGoodsContent('questionBank', new QuestionBankBuilder(), $questionBankId);
     }
 
     protected function deleteQuestionBankProductToMarketingMall($questionBankId)
@@ -180,7 +180,6 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
                 throw $e;
             }
         }
-        $this->updateGoodsContent('questionBank', new QuestionBankBuilder(), $questionBankId,$relation['goodsCode']);
     }
 
     /**

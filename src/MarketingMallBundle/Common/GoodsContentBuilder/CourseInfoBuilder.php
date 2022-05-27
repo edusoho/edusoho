@@ -33,7 +33,8 @@ class CourseInfoBuilder extends AbstractBuilder
     {
         $childrenCourseIds = [];
         $teachers = [];
-        $courseSet = $this->getCourseSetService()->getCourseSet([$course['courseSetId']]);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $count = $this->getCourseService()->countCoursesByCourseSetId($course['courseSetId']);
         if (0 == $course['parentId']) {
             $childrenCourseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
         }
@@ -42,14 +43,13 @@ class CourseInfoBuilder extends AbstractBuilder
             $teachers[] = $this->getTeacherInfoBuilder()->build($teacherId);
         }
         $courseCatalogue = $this->buildCourseCatalogue($this->getCourseService()->findCourseItems($course['id']));
-
         return [
             'courseIds' => array_merge([$course['id']], $childrenCourseIds),
-            'title' => $course['title'] ? $course['courseSetTitle'] . '(' . $course['title'] . ')' : $course['courseSetTitle'],
-            'subtitle' => $course['subtitle'] ? $course['subtitle'] : $courseSet['subtitle'],
+            'title' => $count == 1 ? $course['courseSetTitle'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
+            'subtitle' => $course['subtitle'],
             'cover' => $this->transformCover($courseSet['cover']),
             'price' => $course['price'],
-            'summary' => $course['summary'],
+            'summary' => $courseSet['summary'],
             'courseCatalogue' => $courseCatalogue,
             'teacherList' => $teachers,
         ];

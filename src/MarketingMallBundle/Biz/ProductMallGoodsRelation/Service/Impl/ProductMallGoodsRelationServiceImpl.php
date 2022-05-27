@@ -50,9 +50,9 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
             if ($client->checkGoodsIsPublishByCode($relation['goodsCode'])['success']) {
                 throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
             }
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
     }
 
     /**

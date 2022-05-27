@@ -69,7 +69,6 @@ class MarketingMallApi
                 'targetId',
                 'goodsContent'
             ]);
-            file_put_contents('/tmp/test',\GuzzleHttp\json_encode($params));
             $this->post('/api-school/goods/updateGoodsContent', $params);
         } catch (\RuntimeException $e) {
             $this->getLogger()->error('更新商品详情错误' . $e->getMessage(), ['params' => $params]);
@@ -79,7 +78,7 @@ class MarketingMallApi
 
     public function checkGoodsIsPublishByCode($params)
     {
-        return $this->get('/api-school/goods/getGoodsPublishStatus?goodsCode=' . $params[0]);
+        return $this->get('/api-school/goods/getGoodsPublishStatus', ['goodsCode' => $params[0]]);
     }
 
     public function deleteGoodsByCode($params)

@@ -33,6 +33,7 @@ class CourseEventSubscriber extends BaseEventSubscriber
             return;
         }
         $oldCourseSet = $event->getArgument('oldCourseSet');
+        
         $syncFields = ['summary', 'cover'];
         foreach ($syncFields as $syncField) {
             if ($courseSet[$syncField] !== $oldCourseSet[$syncField]) {
@@ -133,6 +134,7 @@ class CourseEventSubscriber extends BaseEventSubscriber
         if (empty($relation)) {
             return;
         }
+
         $this->updateGoodsContent('course', new CourseInfoBuilder(), $courseId);
     }
 

@@ -23,26 +23,25 @@ define(function (require, exports, module) {
     // 确认后,弹出密码确认框;确认后删除
     $table.on('click', '.delete-classroom', function () {
       let msg = 'admin.classroom.delete_hint';
-      let code = 0;
+      let status = false;
       let $tr = $(this).parents('tr');
       $.ajax({
         type: 'post',
         url: $tr.data('url'),
         async: false,
         success: function (data) {
-          code = data.code;
-          if (code === 1) {
+          if (data.status) {
             msg = 'admin.classroom.mall_goods_exist.delete_hint';
           }
         },
         error: function (e) {
-          code = 2;
+          status = 'error';
           let res = e.responseJSON.error.message;
           Notify.danger(res);
         }
       });
 
-      if (code === 2) {
+      if (status === 'error') {
         return;
       }
 

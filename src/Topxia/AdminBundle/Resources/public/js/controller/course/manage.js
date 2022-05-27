@@ -63,24 +63,23 @@ define(function (require, exports, module) {
       var $this = $(this);
       var $tr = $this.parents('tr');
       let msg = 'admin.course.delete_hint';
-      let code = 0;
+      let status = false;
       $.ajax({
         type: 'post',
         url: $tr.data('url'),
         async: false,
         success: function (data) {
-          code = data.code;
-          if (code === 1) {
+          if (data.status) {
             msg = 'admin.course.mall_goods_exist.delete_hint';
           }
         },
         error: function (e) {
-          code = 2;
+          status = 'error';
           let res = e.responseJSON.error.message;
           Notify.danger(res);
         }
       });
-      if (code ===2 ){
+      if (status === 'error') {
         return;
       }
       if (!confirm(Translator.trans(msg)))
