@@ -1,5 +1,4 @@
 import { publish } from 'app/common/widget/publish';
-
 export const closeCourse = () => {
   $('body').on('click', '.js-close-course', (evt) => {
     let $target = $(evt.currentTarget);
@@ -40,9 +39,30 @@ const closeCourseAction = ($target) => {
 
 export const deleteCourse = () => {
   $('body').on('click', '.js-delete-course', (evt) =>  {
+    let msg = 'course.manage.delete_hint';
+    let status = false;
+    $.ajax({
+      type: 'post',
+      url: $(evt.currentTarget).data('check-url'),
+      async: false,
+      success: function (data) {
+        if (data.status) {
+          msg = 'admin.course.mall_goods_exist.delete_hint';
+          if (data.redirect) {
+            window.location.href = data.redirect;
+          }
+        }
+      },
+      error: function (e) {
+        status = 'error';
+      }
+    });
+    if (status === 'error') {
+      return;
+    }
     cd.confirm({
       title: Translator.trans('site.delete'),
-      content: Translator.trans('course.manage.delete_hint'),
+      content: Translator.trans(msg),
       okText: Translator.trans('site.confirm'),
       cancelText: Translator.trans('site.cancel')
     }).on('ok', () => {

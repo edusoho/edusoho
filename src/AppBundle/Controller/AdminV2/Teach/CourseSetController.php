@@ -27,6 +27,7 @@ use Biz\User\UserException;
 use Biz\Visualization\Service\ActivityLearnDataService;
 use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -130,6 +131,21 @@ class CourseSetController extends BaseController
         $this->getCourseSetService()->deleteCourseSet($id);
 
         return $this->createJsonResponse(['code' => 0, 'message' => '删除课程成功']);
+    }
+
+    public function checkMallGoodsAction(Request $request, $id)
+    {
+        $ids = ArrayToolkit::column($this->getCourseService()->findCoursesByCourseSetId($id), 'id');
+        $statusList = [];
+        //todo 改成批量检查
+        foreach ($ids as $courseId) {
+            $status = $this->getProductMallGoodsRelationService()->checkMallGoods($courseId, 'course');
+            $statusList[] = $status;
+        }
+        if (in_array(true, $statusList)) {
+            return $this->createJsonResponse(['status' => true]);
+        }
+        return $this->createJsonResponse(['status' => false]);
     }
 
     //todo 和CourseController 有一样的
@@ -396,7 +412,7 @@ class CourseSetController extends BaseController
 
     public function cloneByCrontabAction(Request $request, $courseSetId)
     {
-        $jobName = 'clone_course_set_'.$courseSetId;
+        $jobName = 'clone_course_set_' . $courseSetId;
         $jobs = $this->getSchedulerService()->countJobs(['name' => $jobName, 'deleted' => 0]);
         $title = $request->request->get('title');
         $user = $this->getCurrentUser();
@@ -552,20 +568,20 @@ class CourseSetController extends BaseController
         ];
 
         if ($result > 0) {
-            $message = $dataDictionary[$type].'数据删除';
+            $message = $dataDictionary[$type] . '数据删除';
 
             return ['success' => true, 'message' => $message];
         } else {
             if ('homeworks' == $type || 'exercises' == $type) {
-                $message = $dataDictionary[$type].'数据删除失败或插件未安装或插件未升级';
+                $message = $dataDictionary[$type] . '数据删除失败或插件未安装或插件未升级';
 
                 return ['success' => false, 'message' => $message];
             } elseif ('course' == $type) {
-                $message = $dataDictionary[$type].'数据删除';
+                $message = $dataDictionary[$type] . '数据删除';
 
                 return ['success' => false, 'message' => $message];
             } else {
-                $message = $dataDictionary[$type].'数据删除失败';
+                $message = $dataDictionary[$type] . '数据删除失败';
 
                 return ['success' => false, 'message' => $message];
             }
@@ -744,7 +760,7 @@ class CourseSetController extends BaseController
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        $courseTitle = 1 == $course['isDefault'] ? $courseSet['title'] : $courseSet['title'].'-'.$course['title'];
+        $courseTitle = 1 == $course['isDefault'] ? $courseSet['title'] : $courseSet['title'] . '-' . $course['title'];
         $fileName = sprintf('%s-(%s).csv', $courseTitle, date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);
@@ -775,9 +791,9 @@ class CourseSetController extends BaseController
         foreach ($students as $key => $student) {
             $exportMember = [];
             $user = $this->getUserService()->getUser($student['userId']);
-            $exportMember['nickname'] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
-            $exportMember['mobile'] = empty($userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile']) ? '--' : $userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile']."\t";
-            $exportMember['idcard'] = empty($userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard']) ? '--' : $userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard']."\t";
+            $exportMember['nickname'] = is_numeric($user['nickname']) ? $user['nickname'] . "\t" : $user['nickname'];
+            $exportMember['mobile'] = empty($userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile']) ? '--' : $userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile'] . "\t";
+            $exportMember['idcard'] = empty($userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard']) ? '--' : $userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard'] . "\t";
             $exportMember['joinTime'] = date('Y-m-d H:i:s', $student['createdTime']);
 
             if ($student['finishedTime'] > 0) {
@@ -991,7 +1007,7 @@ class CourseSetController extends BaseController
 
         foreach ($tagIds as $tagId) {
             if (!empty($tags[$tagId])) {
-                $tagsNames = $tagsNames.$delimiter.$tags[$tagId]['name'];
+                $tagsNames = $tagsNames . $delimiter . $tags[$tagId]['name'];
             }
         }
 
@@ -1180,5 +1196,13 @@ class CourseSetController extends BaseController
     protected function getCoursePlanLearnDataDailyStatisticsService()
     {
         return $this->createService('Visualization:CoursePlanLearnDataDailyStatisticsService');
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    private function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

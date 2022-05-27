@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Event\Event;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use MarketingMallBundle\Common\GoodsContentBuilder\CourseInfoBuilder;
 
 class CourseEventSubscriber extends BaseEventSubscriber
@@ -21,6 +22,7 @@ class CourseEventSubscriber extends BaseEventSubscriber
             'course.lesson.batch_delete' => 'onCourseLessonBatchDelete',
             'course.items.sort' => 'onCourseItemsSort',
             'course.chapter.update' => 'onCourseChapterUpdate',
+            'course.delete' => 'onCourseProductDelete'
         ];
     }
 
@@ -31,6 +33,7 @@ class CourseEventSubscriber extends BaseEventSubscriber
             return;
         }
         $oldCourseSet = $event->getArgument('oldCourseSet');
+
         $syncFields = ['summary', 'cover'];
         foreach ($syncFields as $syncField) {
             if ($courseSet[$syncField] !== $oldCourseSet[$syncField]) {
@@ -115,9 +118,24 @@ class CourseEventSubscriber extends BaseEventSubscriber
         }
     }
 
+    public function onCourseProductDelete(Event $event)
+    {
+        $course = $event->getSubject();
+        $this->deleteCourseProductToMarketingMall($course['id']);
+    }
+
     protected function syncCourseToMarketingMall($courseId)
     {
         $this->updateGoodsContent('course', new CourseInfoBuilder(), $courseId);
+    }
+
+    protected function deleteCourseProductToMarketingMall($courseId)
+    {
+        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('course', $courseId);
+        if ($relation) {
+            $this->getProductMallGoodsRelationService()->deleteProductMallGoodsRelation($relation['id']);
+            $this->deleteMallGoods($relation['goodsCode']);
+        }
     }
 
     /**

@@ -24,6 +24,8 @@ use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\StatusService;
+use Codeages\Biz\Framework\Event\Event;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 
 class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 {
@@ -88,6 +90,10 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $this->beginTransaction();
         try {
+            $this->getProductMallGoodsRelationService()->checkMallGoods($courseId, 'course');
+
+            $this->dispatchEvent('course.delete', new Event(['id'=>$courseId]));
+
             $this->deleteCourseMaterial($courseId);
 
             $this->deleteTask($courseId);
@@ -422,5 +428,13 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    private function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

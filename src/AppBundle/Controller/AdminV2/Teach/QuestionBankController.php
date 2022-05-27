@@ -8,6 +8,7 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionBankController extends BaseController
@@ -86,6 +87,12 @@ class QuestionBankController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function checkMallGoodsAction(Request $request, $id)
+    {
+        $status = $this->getProductMallGoodsRelationService()->checkMallGoods($id, 'questionBank');
+        return $this->createJsonResponse(['status' => $status]);
+    }
+
     /**
      * @return QuestionBankService
      */
@@ -109,4 +116,13 @@ class QuestionBankController extends BaseController
     {
         return $this->createService('QuestionBank:MemberService');
     }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    private function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
+    }
+
 }

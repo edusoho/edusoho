@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Dao\ProductMallGoodsRelationDao;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
+use MarketingMallBundle\Client\MarketingMallClient;
 
 class ProductMallGoodsRelationServiceImpl extends BaseService implements ProductMallGoodsRelationService
 {
@@ -39,6 +40,19 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
     public function findProductMallGoodsRelationsByProductType($productType)
     {
         return $this->getProductMallGoodsRelationDao()->findByProductType($productType);
+    }
+
+    public function checkMallGoods($productId, $type)
+    {
+        $relation = $this->getProductMallGoodsRelationByProductTypeAndProductId($type, $productId);
+        if ($relation) {
+            $client = new MarketingMallClient($this->biz);
+            if ($client->checkGoodsIsPublishByCode($relation['goodsCode'])['success']) {
+                throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
+            }
+            return true;
+        }
+        return false;
     }
 
     /**

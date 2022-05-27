@@ -138,7 +138,7 @@ class LessonServiceImpl extends BaseService implements LessonService
                 }
             }
         }
-        $this->dispatchEvent('course.lesson.batch_update_status', new Event($lessons), ['courseId' => $courseId, 'status' => $updateStatus]);
+        $this->dispatchEvent('course.lesson.batch_update_status', new Event($lessons, ['courseId' => $courseId, 'status' => $updateStatus]));
 
         return $lessons;
     }
@@ -154,7 +154,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         foreach ($chapters as $chapter) {
             $this->publishLesson($courseId, $chapter['id'], false, true);
         }
-        $this->dispatchEvent('course.lesson.batch_update_status', new Event($chapters), ['courseId' => $courseId, 'status' => 'published']);
+        $this->dispatchEvent('course.lesson.batch_update_status', new Event($chapters, ['courseId' => $courseId, 'status' => 'published']));
 
         $this->updateLessonNumbers($courseId);
     }
@@ -241,7 +241,7 @@ class LessonServiceImpl extends BaseService implements LessonService
                 $this->createNewException(CommonException::ERROR_PARAMETER());
             }
         }
-        $this->dispatchEvent('course.lesson.batch_delete', new Event($lessons), ['courseId' => $courseId]);
+        $this->dispatchEvent('course.lesson.batch_delete', new Event($lessons, ['courseId' => $courseId]));
 
         return $lessons;
     }

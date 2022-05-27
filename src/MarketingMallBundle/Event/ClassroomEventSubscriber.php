@@ -3,6 +3,7 @@
 namespace MarketingMallBundle\Event;
 
 use Codeages\Biz\Framework\Event\Event;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use MarketingMallBundle\Common\GoodsContentBuilder\ClassroomInfoBuilder;
 
 class ClassroomEventSubscriber extends BaseEventSubscriber
@@ -13,6 +14,8 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
             'classroom.course.create' => 'onClassroomCourseCreate',
             'classroom.course.delete' => 'onClassroomCourseDelete',
             'classroom.course.update' => 'onClassroomCourseUpdate',
+            'classroom.update' => 'onClassroomUpdate',
+            'classroom.delete' => 'onClassroomProductDelete'
         ];
     }
 
@@ -41,8 +44,39 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
         }
     }
 
+    public function onClassroomUpdate(Event $event)
+    {
+        $classroom = $event->getSubject();
+        $this->syncClassroomToMarketingMall($classroom['id']);
+    }
+
+    public function onClassroomProductDelete(Event $event)
+    {
+        $classroom = $event->getSubject();
+
+        $this->deleteClassroomProductToMarketingMall($classroom['id']);
+    }
+
     protected function syncClassroomToMarketingMall($classroomId)
     {
         $this->updateGoodsContent('classroom', new ClassroomInfoBuilder(), $classroomId);
+    }
+
+    protected function deleteClassroomProductToMarketingMall($classroomId)
+    {
+        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('classroom', $classroomId);
+        if ($relation) {
+            $this->getProductMallGoodsRelationService()->deleteProductMallGoodsRelation($relation['id']);
+
+            $this->deleteMallGoods($relation['goodsCode']);
+        }
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    protected function getProductMallGoodsRelationService()
+    {
+        return $this->getBiz()->service('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

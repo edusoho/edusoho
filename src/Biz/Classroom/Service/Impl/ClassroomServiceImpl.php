@@ -37,6 +37,7 @@ use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Order\Service\OrderService;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -711,9 +712,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     /**
      * @param $id
-     *
      * @return bool|mixed
-     *
      * @throws \Exception
      */
     public function deleteClassroom($id)
@@ -728,14 +727,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             if ('published' === $classroom['status']) {
                 $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
             }
-
             $this->tryManageClassroom($id, 'admin_classroom_delete');
-
+            $this->getProductMallGoodsRelationService()->checkMallGoods($id, 'classroom');
             $this->deleteAllCoursesInClass($id);
             $this->getClassroomDao()->delete($id);
             $this->getClassroomGoodsMediator()->onDelete($classroom);
-
             $this->dispatchEvent('classroom.delete', $classroom);
+
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
@@ -844,9 +842,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fileIds = ArrayToolkit::index($data, 'type');
         $version = ClassroomService::COVER_SIZE_VERSION;
         $fields = [
-            'smallPicture' => $files[$fileIds['small']['id']]['uri']."?version={$version}",
-            'middlePicture' => $files[$fileIds['middle']['id']]['uri']."?version={$version}",
-            'largePicture' => $files[$fileIds['large']['id']]['uri']."?version={$version}",
+            'smallPicture' => $files[$fileIds['small']['id']]['uri'] . "?version={$version}",
+            'middlePicture' => $files[$fileIds['middle']['id']]['uri'] . "?version={$version}",
+            'largePicture' => $files[$fileIds['large']['id']]['uri'] . "?version={$version}",
         ];
 
         $this->deleteNotUsedPictures($classroom);
@@ -972,7 +970,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->createNewException(ClassroomException::NOTFOUND_MEMBER());
         }
 
-        $fields = ['remark' => empty($remark) ? '' : (string) $remark];
+        $fields = ['remark' => empty($remark) ? '' : (string)$remark];
 
         return $this->getClassroomMemberDao()->update($member['id'], $fields);
     }
@@ -1724,7 +1722,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $intList = ['buyable', 'showable'];
         foreach ($intList as $key) {
             if (isset($conditions[$key])) {
-                $conditions[$key] = (int) $conditions[$key];
+                $conditions[$key] = (int)$conditions[$key];
             }
         }
 
@@ -2096,7 +2094,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $id,
             [
                 'recommended' => 1,
-                'recommendedSeq' => (int) $number,
+                'recommendedSeq' => (int)$number,
                 'recommendedTime' => time(),
             ]
         );
@@ -2848,5 +2846,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+
+    protected function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

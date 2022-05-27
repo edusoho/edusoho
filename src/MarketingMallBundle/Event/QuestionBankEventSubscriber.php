@@ -27,6 +27,7 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
             'item.delete' => 'onItemDelete',
             'item.batchDelete' => 'onItemBatchDelete',
             'item.import' => 'onItemImport',
+            'question_bank.delete' =>'onQuestionBankProductDelete'
         ];
     }
 
@@ -149,9 +150,23 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
         }
     }
 
+    public function onQuestionBankProductDelete(Event $event){
+        $questionBank = $event->getSubject();
+        $this->deleteQuestionBankProductToMarketingMall($questionBank['id']);
+    }
+
     protected function syncQuestionBankToMarketingMall($questionBankId)
     {
-        $this->updateGoodsContent('question_bank', new QuestionBankBuilder(), $questionBankId);
+        $this->updateGoodsContent('questionBank', new QuestionBankBuilder(), $questionBankId);
+    }
+
+    protected function deleteQuestionBankProductToMarketingMall($questionBankId)
+    {
+        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('questionBank', $questionBankId);
+        if ($relation) {
+            $this->getProductMallGoodsRelationService()->deleteProductMallGoodsRelation($relation['id']);
+            $this->deleteMallGoods($relation['goodsCode']);
+        }
     }
 
     /**

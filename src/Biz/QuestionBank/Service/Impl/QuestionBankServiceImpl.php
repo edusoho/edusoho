@@ -12,7 +12,9 @@ use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Taxonomy\CategoryException;
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 
 class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 {
@@ -166,13 +168,14 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
         try {
             $this->beginTransaction();
-
+            $this->getProductMallGoodsRelationService()->checkMallGoods($id, 'question_bank');
             $this->getQuestionBankDao()->delete($id);
             $this->getItemBankService()->deleteItemBank($questionBank['itemBankId']);
 
             $this->getCategoryService()->waveCategoryBankNum($questionBank['categoryId'], -1);
 
             $this->getMemberService()->batchDeleteByBankId($questionBank['id']);
+            $this->dispatchEvent('question_bank.delete', new Event($questionBank));
 
             $this->commit();
         } catch (\Exception $e) {
@@ -301,5 +304,13 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     protected function getItemBankService()
     {
         return $this->createService('ItemBank:ItemBank:ItemBankService');
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    private function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

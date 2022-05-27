@@ -15,13 +15,13 @@ class QuestionBankBuilder extends AbstractBuilder
 {
     public function build($id)
     {
-        $exercise = $this->getExerciseService()->getByQuestionBankId($id);
+        $exercise = $this->getExerciseService()->get($id);
         if (empty($exercise)) {
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
 
         return [
-            'bankId' => $id,
+            'bankId' => $exercise['questionBankId'],
             'title' => $exercise['title'],
             'cover' => $this->transformCover($exercise['cover'], 'item_bank_exercise.png'),
             'price' => $exercise['price'],
