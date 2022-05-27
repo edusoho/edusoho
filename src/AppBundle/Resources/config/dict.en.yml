@@ -121,6 +121,7 @@ source:
     self: Self
     outside: Outside
     marketing: Marketing
+    scrm: SCRM
 
 moneyRecordType:
     income: Income

@@ -140,6 +140,7 @@ source:
     self: 本站
     outside: 站外
     marketing: 微营销
+    scrm: 销客助手
 
 moneyRecordType:
     income: 充值
