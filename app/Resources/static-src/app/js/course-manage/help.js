@@ -58,7 +58,6 @@ export const deleteCourse = () => {
       }
     });
     if (status === 'error') {
-      cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') + ':该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作！' });
       return;
     }
     cd.confirm({
