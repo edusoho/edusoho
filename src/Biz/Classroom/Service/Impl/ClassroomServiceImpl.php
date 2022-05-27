@@ -891,7 +891,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
-    public function deleteClassroomCourses($classroomId, array $courseIds)
+    public function deleteClassroomCourses($classroomId, array $courseIds, $real = true)
     {
         $classroom = $this->getClassroom($classroomId);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
@@ -906,7 +906,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 if (0 != $classroomRef['parentCourseId']) {
                     $this->getCourseSetService()->unlockCourseSet($course['courseSetId'], true);
                 }
-                $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
+                if ($real) {
+                    $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
+                }
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
                 $infoData = [
                     'classroomId' => $classroom['id'],
