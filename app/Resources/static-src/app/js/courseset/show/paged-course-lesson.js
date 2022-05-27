@@ -211,15 +211,15 @@ class PagedCourseLesson {
         },
 
         'isLiveNotStarted': function(data, context) {
-          return context.isLive(data, context) && !data.isLiving;
+          return context.isLive(data, context) && 'created' === data.liveStatus;
         },
 
         'isLiveStarting': function(data, context) {
-          return context.isLive(data, context) && data.isLiving;
+          return context.isLive(data, context) && 'live' === data.liveStatus;
         },
 
         'isLiveFinished': function(data, context) {
-          return context.isLive(data, context) && !data.isLiving && context.currentTimeStamp > context.toInt(data.activityEndTime);
+          return context.isLive(data, context) && 'live' !== data.liveStatus && context.currentTimeStamp > context.toInt(data.activityEndTime);
         },
 
         'toInt': function(timestampStr) {
