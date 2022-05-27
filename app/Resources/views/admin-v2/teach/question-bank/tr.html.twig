@@ -24,7 +24,6 @@
         </li>
         <li>
           <a href="javascript:" class="delete-btn" data-role="delete-item"
-             data-check-url="{{ path('admin_v2_question_bank_manage_check_mall_goods',{id:questionBank.id}) }}"
              data-url="{{ path('admin_v2_question_bank_manage_delete', {id:questionBank.id}) }}"
              data-testpaper-num="{{ questionBank.itemBank.assessment_num|default(0) }}"
              data-question-num="{{ questionBank.itemBank.item_num|default(0) }}">{{ 'site.btn.delete'|trans }}</a>

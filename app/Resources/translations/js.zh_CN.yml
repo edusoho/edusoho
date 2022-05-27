@@ -1409,6 +1409,7 @@ admin.item_bank_exercise.exercise.cancel_recommend_success_hint: 题库练习推
 admin.item_bank_exercise.exercise.publish_hint: 确定要发布当前题库练习吗？
 admin.item_bank_exercise.exercise.publish_success_hint: 题库练习发布成功!
 admin.item_bank_exercise.exercise.delete_hint: 删除题库练习，将删除模块设置、学员等信息。真的要删除该题库练习吗？
+admin.item_bank_exercise.exercise.mall_goods_exist.delete_hint: 删除题库练习，将删除模块设置、学员等信息。并且该产品已在营销商城中有对应商品，将同时删除已在营销商城中的对应商品，真的要删除该题库练习吗？
 
 exercise.manage.student_delete_hint: 是否确定移除该学员
 

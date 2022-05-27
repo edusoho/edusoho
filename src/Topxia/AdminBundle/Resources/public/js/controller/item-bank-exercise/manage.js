@@ -36,7 +36,29 @@ define(function(require, exports, module) {
 
     $table.on('click', '.delete-exercise', function() {
       var $this = $(this);
-      if (!confirm(Translator.trans('admin.item_bank_exercise.exercise.delete_hint')))
+      let msg = 'admin.item_bank_exercise.exercise.delete_hint';
+      let status = false;
+      let $tr = $this.parents('tr');
+      $.ajax({
+        type: 'post',
+        url: $tr.data('url'),
+        async: false,
+        success: function (data) {
+          if (data.status) {
+            msg = 'admin.item_bank_exercise.exercise.mall_goods_exist.delete_hint';
+          }
+        },
+        error: function (e) {
+          status = 'error';
+          let res = e.responseJSON.error.message;
+          Notify.danger(res);
+        }
+      });
+
+      if (status === 'error') {
+        return;
+      }
+      if (!confirm(Translator.trans(msg)))
         return;
       $.post($this.data('url'), function(data) {
         Notify.success(Translator.trans('site.delete_success_hint'));

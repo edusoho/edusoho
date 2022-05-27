@@ -69,7 +69,8 @@ class MarketingMallApi
                 'targetId',
                 'goodsContent'
             ]);
-            $this->post('/api-school/goods/updateGoodsContent', $params);
+            file_put_contents('/tmp/test',\GuzzleHttp\json_encode($this->post('/api-school/goods/updateGoodsContent', $params)).PHP_EOL,8);
+//            $this->post('/api-school/goods/updateGoodsContent', $params);
         } catch (\RuntimeException $e) {
             $this->getLogger()->error('更新商品详情错误' . $e->getMessage(), ['params' => $params]);
             throw new \InvalidArgumentException('接口请求错误!');

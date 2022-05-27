@@ -16,29 +16,8 @@ define(function (require, exports, module) {
         }));
         return;
       }
-      let msg = 'admin.question_bank.delete_hint';
-      let status = false;
-      $.ajax({
-        type: 'post',
-        url: $(this).data('check-url'),
-        async: false,
-        success: function (data) {
-          if (data.status) {
-            msg = 'admin.question_bank.mall_goods_exist.delete_hint';
-          }
-        },
-        error: function (e) {
-          status = 'error';
-          let res = e.responseJSON.error.message;
-          Notify.danger(res);
-        }
-      });
 
-      if (status === 'error') {
-        return;
-      }
-
-      if (!confirm(Translator.trans(msg))) {
+      if (!confirm(Translator.trans('admin.question_bank.delete_hint'))) {
         return;
       }
 

@@ -24,7 +24,9 @@ use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\System\Service\LogService;
 use Biz\User\UserException;
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 
 class ExerciseServiceImpl extends BaseService implements ExerciseService
 {
@@ -296,6 +298,10 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             $this->getChapterExerciseRecordDao()->deleteByExerciseId($exerciseId);
 
             $this->getExerciseQuestionRecordDao()->deleteByExerciseId($exerciseId);
+
+            $this->getProductMallGoodsRelationService()->checkMallGoods($exerciseId,'questionBank');
+
+            $this->dispatchEvent('questionBank.delete',new Event(['id'=>$exerciseId]));
 
             $user = $this->getCurrentUser();
             $this->getLogService()->info('item_bank_exercise', 'delete_exercise', "删除练习{$user['nickname']}(#{$user['id']})");
@@ -608,5 +614,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    private function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

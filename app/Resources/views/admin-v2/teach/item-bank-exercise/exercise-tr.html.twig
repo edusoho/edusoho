@@ -1,7 +1,7 @@
 {% import "admin-v2/macro.html.twig" as admin_macro %}
 {% import "common/data-dict-macro.html.twig" as dict_macro %}
 
-<tr id="course-tr-{{ exercise.id }}">
+<tr id="course-tr-{{ exercise.id }}" data-url="{{ path('admin_v2_item_bank_exercise_check_mall_goods',{ id : exercise.id }) }}">
   <td>{{ exercise.id }}</td>
   <td>
     <a href="{{ path('item_bank_exercise_show', {id: exercise.id}) }}" target="_blank"><strong>{{ exercise.title }}</strong></a>
