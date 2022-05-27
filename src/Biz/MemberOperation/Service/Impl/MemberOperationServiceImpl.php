@@ -33,7 +33,7 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
 
     public function updateRefundInfoByOrderId($orderId, $info)
     {
-        $record = $this->getRecordByOrderIdAndType($orderId, 'join');
+        $record = $this->getRecordByOrderIdAndType($orderId, 'exit');
 
         $field = ArrayToolkit::parts($info, array('refund_id', 'reason', 'reason_type'));
         if (!empty($record['reason'])) {

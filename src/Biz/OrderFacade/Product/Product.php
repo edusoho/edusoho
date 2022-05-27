@@ -227,8 +227,6 @@ abstract class Product extends BizAware implements OrderStatusCallback
             'reason_type' => 'refund',
         ];
         $this->getMemberOperationService()->updateRefundInfoByOrderId($orderRefund['order_id'], $record);
-
-        return $record;
     }
 
     public function getCreateExtra()
