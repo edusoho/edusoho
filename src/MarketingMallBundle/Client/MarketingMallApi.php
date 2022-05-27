@@ -48,7 +48,7 @@ class MarketingMallApi
     {
         try {
             $params = ArrayToolkit::parts($params, ['token', 'url', 'code']);
-            $result = $this->post('/api-admin/es-data/init', $params);
+            $result = $this->post('/api-admin/esData/init', $params);
             if (empty($result['accessKey'])) {
                 throw new \InvalidArgumentException('接口请求错误!');
             }
