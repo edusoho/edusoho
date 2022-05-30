@@ -704,7 +704,7 @@ class ClassroomManageController extends BaseController
     public function removeCourseAction($id, $courseId)
     {
         $this->getClassroomService()->tryManageClassroom($id);
-        $this->getClassroomService()->deleteClassroomCourses($id, [$courseId]);
+        $this->getClassroomService()->deleteClassroomCourses($id, [$courseId], false);
 
         return $this->createJsonResponse(['success' => true]);
     }
@@ -726,7 +726,6 @@ class ClassroomManageController extends BaseController
             return $this->render('check-password/check-password-modal.twig', ['jsonp' => $request->query->get('jsonp')]);
         }
         $this->getClassroomService()->deleteClassroomCourses($classroomId, [$courseId]);
-        $this->getCourseSetService()->deleteCourseSet($courseSetId);
 
         return $this->createJsonResponse(['code' => 0, 'message' => '删除课程成功']);
     }

@@ -35,58 +35,45 @@ class TaskController extends BaseController
         if ($blank) {
             return new Response();
         }
-
         $preview = $request->query->get('preview');
-
         $user = $this->getUser();
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '请先登录', '', 3, $this->generateUrl('login'));
         }
-
         try {
             $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-
             if (!empty($activity['ext']) && !empty($activity['ext']['file'])) {
                 $media = $activity['ext']['file'];
             }
-
             $media = !empty($media) ? $media : [];
         } catch (AccessDeniedException $accessDeniedException) {
             return $this->handleAccessDeniedException($accessDeniedException, $request, $id);
         } catch (CourseException $deniedException) {
             return $this->handleAccessDeniedException($deniedException, $request, $id);
         }
-
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
-
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
-
+        if ('classroom' === $member['joinedType'] && !empty($member['classroomId'])) {
+            $classroomMember = $this->getClassroomService()->getClassroomMember($member['classroomId'], $member['userId']);
+            $member['locked'] = $classroomMember['locked'];
+        }
         if ($member['locked']) {
             return $this->redirectToRoute('my_course_show', ['id' => $courseId]);
         }
-
 //        if ($this->isCourseExpired($course) && !$this->getCourseService()->hasCourseManagerRole($course['id'])) {
 //            return $this->redirectToRoute('course_show', ['id' => $courseId]);
 //        }
-
-        if (null !== $member && 'teacher' !== $member['role'] && !$this->getCourseMemberService()->isMemberNonExpired(
-                $course,
-                $member
-            )
-        ) {
+        if (null !== $member && 'teacher' !== $member['role'] && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('my_course_show', ['id' => $courseId]));
         }
-
         $activityConfig = $this->getActivityConfigByTask($task);
-
         if (null !== $member && 'student' === $member['role']) {
             $wrappedTasks = ArrayToolkit::index($this->getTaskService()->wrapTaskResultToTasks($courseId, $this->getTaskService()->findTasksByCourseId($courseId)), 'id');
             if (!empty($wrappedTasks[$task['id']]) && $wrappedTasks[$task['id']]['lock']) {
                 return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
             }
-
             if ($activityConfig->allowTaskAutoStart($task)) {
                 $this->getTaskService()->trigger(
                     $task['id'],
@@ -97,7 +84,6 @@ class TaskController extends BaseController
                 );
             }
         }
-
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
         if (empty($taskResult)) {
             $taskResult = ['status' => 'none'];
@@ -118,7 +104,6 @@ class TaskController extends BaseController
         }
         list($previousTask, $nextTask) = $this->getPreviousTaskAndTaskResult($task);
         $this->freshTaskLearnStat($request, $task['id']);
-
         if ($course['isHideUnpublish']) {
             $chapter = $this->getCourseService()->getChapter($courseId, $task['categoryId']);
             //需要8.3.8重构
@@ -127,7 +112,6 @@ class TaskController extends BaseController
                 $task['number'] = $chapter['published_number'] . '-' . $number[1];
             }
         }
-
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         if ('testpaper' == $activity['mediaType'] && !empty($activity['ext']['answerScene']['enable_facein'])) {
             $face = $this->getFaceInspectionService()->getUserFaceByUserId($user->getId());
@@ -138,7 +122,6 @@ class TaskController extends BaseController
                 );
             }
         }
-
         $learnControlSetting = $this->getLearnControlService()->getMultipleLearnSetting();
 
         return $this->render(

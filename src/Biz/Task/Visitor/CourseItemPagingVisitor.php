@@ -131,7 +131,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
 
             $tasks = $this->getTaskDao()->search(
                 $conditions,
-                array(),
+                ['seq' => 'ASC'],
                 0,
                 $this->paging['limit']
             );

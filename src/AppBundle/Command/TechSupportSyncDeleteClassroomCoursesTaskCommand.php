@@ -34,12 +34,16 @@ class TechSupportSyncDeleteClassroomCoursesTaskCommand extends BaseCommand
         $real = $input->getOption('real');
         $courseId = $input->getArgument('courseId');
         $course = $this->getCourseService()->getCourse($courseId);
-        if (1 == $course['locked']) {
+        if (1 != $course['locked']) {
             $output->writeln('<info>输入的课程不是班级课程，执行结束</info>');
+
+            return;
         }
         $sql = "SELECT copytask.* FROM course_task copytask LEFT JOIN course_task oritask ON oritask.id=copytask.copyId WHERE copytask.copyId != 0 AND oritask.id IS NULL AND copytask.courseId={$courseId};";
         $results = $biz['db']->fetchAll($sql);
-        if (empty($results)) {
+        $sql = "SELECT copychapter.* FROM course_chapter copychapter LEFT JOIN course_chapter orichapter ON orichapter.id=copychapter.copyId WHERE copychapter.copyId != 0 AND orichapter.id IS NULL AND copychapter.courseId={$courseId};";
+        $copyChapters = $biz['db']->fetchAll($sql);
+        if (empty($results) && empty($copyChapters)) {
             $output->writeln('<info>不存在问题数据,无需处理</info>');
             $output->writeln('<info>结束</info>');
 
@@ -51,6 +55,13 @@ class TechSupportSyncDeleteClassroomCoursesTaskCommand extends BaseCommand
             if ($real) {
                 $this->createCourseStrategy($course)->deleteTask($task);
                 $output->writeln("<info>删除多余的任务:{$task['id']}成功</info>");
+            }
+        }
+        foreach ($copyChapters as $chapter) {
+            $output->writeln("<info>待删除的多余的章节:{$chapter['id']},《{$chapter['title']}》</info>");
+            if ($real) {
+                $this->getCourseService()->deleteChapter($chapter['courseId'], $chapter['id']);
+                $output->writeln("<info>删除多余的章节:{$chapter['id']}成功</info>");
             }
         }
         $output->writeln('<info>结束</info>');
