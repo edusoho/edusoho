@@ -71,24 +71,19 @@ class OrderRefundController extends BaseController
     {
         $refund = $this->getOrderRefundService()->getOrderRefundById($refundId);
         $order = $this->getOrderService()->getOrder($refund['order_id']);
-
         $trade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
-
         $user = $this->getUserService()->getUser($refund['user_id']);
-
         if ('POST' == $request->getMethod()) {
-            $pass = $request->request->get('result');
             $fields = $request->request->all();
-
-            if ('pass' === $pass) {
+            if ('pass' === $fields['result']) {
                 $refundData = array(
-                    'deal_reason' => $request->request->get('note'),
-                    'refund_coin_amount' => intval($request->request->get('refund_coin_amount', 0) * 100),
-                    'refund_cash_amount' => intval($request->request->get('refund_cash_amount', 0) * 100),
+                    'deal_reason' => $fields['note'],
+                    'refund_coin_amount' => $fields['refund_coin_amount'] * 100,
+                    'refund_cash_amount' => $fields['refund_cash_amount'] * 100,
                 );
                 $product = $this->getOrderRefundService()->adoptRefund($refund['order_id'], $refundData);
             } else {
-                $refundData = array('deal_reason' => $request->request->get('note'));
+                $refundData = array('deal_reason' => $fields['note']);
                 $product = $this->getOrderRefundService()->refuseRefund($refund['order_id'], $refundData);
             }
             $this->sendAuditRefundNotification($product, $order, $fields);
@@ -135,7 +130,9 @@ class OrderRefundController extends BaseController
 
     protected function sendAuditRefundNotification($product, $order, $data)
     {
-        if (isset($data['result']) && 'pass' == $data['result']) {
+        $amount = MathToolkit::simple($order['pay_amount'], 0.01);
+        if (isset($data['result']) && 'pass' === $data['result']) {
+            $amount = $data['refund_coin_amount'] + $data['refund_cash_amount'];
             $message = $this->setting('refund.successNotification');
         } else {
             $message = $this->setting('refund.failedNotification');
@@ -143,12 +140,11 @@ class OrderRefundController extends BaseController
         if (empty($message)) {
             return false;
         }
-
         $backUrl = $product->backUrl;
         $targetUrl = $this->generateUrl($backUrl['routing'], $backUrl['params']);
         $variables = array(
-            'item' => "<a href='{$targetUrl}'>".$product->title.'</a>',
-            'amount' => MathToolkit::simple($order['pay_amount'], 0.01),
+            'item' => "<a href='{$targetUrl}'>" . $product->title . '</a>',
+            'amount' => $amount,
             'note' => $data['note'],
         );
 
