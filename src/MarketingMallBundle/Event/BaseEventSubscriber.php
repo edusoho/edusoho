@@ -9,10 +9,6 @@ use MarketingMallBundle\Common\GoodsContentBuilder\AbstractBuilder;
 
 abstract class BaseEventSubscriber extends EventSubscriber
 {
-    const NORMAL_TYPE = ['course', 'classroom', 'questionBank'];
-
-    const ALONE_MAINTAIN_TYPE = ['teacherInfo', 'classroomCourse'];
-
     protected function updateGoodsContent($type, AbstractBuilder $builder, $id)
     {
         $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId($type, $id);
