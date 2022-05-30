@@ -205,6 +205,7 @@ class CourseExtension extends \Twig_Extension
                     'isTaskTryLookable' => $item['tryLookable'],
                     'isTaskShowModal' => $item['tryLookable'] || $item['isFree'],
                     'isSingleTaskLesson' => empty($item['isSingleTaskLesson']) ? false : $item['isSingleTaskLesson'],
+                    'liveStatus' => 'live' === $item['type'] ? $item['activity']['ext']['progressStatus'] : ''
                 ];
             }
         }

@@ -8,7 +8,7 @@ use ApiBundle\Api\Resource\Filter;
 class CourseTaskFilter extends Filter
 {
     protected $publicFields = array(
-        'activity', 'id', 'title', 'isFree', 'isOptional', 'startTime', 'endTime', 'status', 'length', 'mode', 'type', 'mediaSource', 'lock', 'number', 'seq', 'result', 'subtitlesUrls', 'categoryId', 'enable_facein', 'courseUrl',
+        'activity', 'id', 'title', 'isFree', 'isOptional', 'startTime', 'endTime', 'status', 'length', 'mode', 'type', 'mediaSource', 'lock', 'number', 'seq', 'result', 'subtitlesUrls', 'categoryId', 'enable_facein', 'courseUrl', 'liveStatus'
     );
 
     protected function publicFields(&$data)
