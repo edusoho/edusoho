@@ -117,7 +117,7 @@ class ItemBankExerciseController extends BaseController
 
     public function checkMallGoodsAction(Request $request, $id)
     {
-        $status = $this->getProductMallGoodsRelationService()->checkMallGoods($id, 'questionBank');
+        $status = $this->getProductMallGoodsRelationService()->checkMallGoods([$id], 'questionBank');
         return $this->createJsonResponse(['status' => $status]);
     }
 

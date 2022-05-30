@@ -9,10 +9,14 @@ use MarketingMallBundle\Common\GoodsContentBuilder\AbstractBuilder;
 
 abstract class BaseEventSubscriber extends EventSubscriber
 {
+    const NORMAL_TYPE = ['course', 'classroom', 'questionBank'];
+
+    const ALONE_MAINTAIN_TYPE = ['teacherInfo', 'classroomCourse'];
+
     protected function updateGoodsContent($type, AbstractBuilder $builder, $id)
     {
         $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId($type, $id);
-        if (empty($relation) && 'teacher' != $type) {
+        if (empty($relation)) {
             return;
         }
         $builder->setBiz($this->getBiz());
@@ -23,7 +27,16 @@ abstract class BaseEventSubscriber extends EventSubscriber
             'targetId' => $id,
             'goodsContent' => json_encode($builder->build($id)),
         ]);
+    }
 
+    public function updateTeacherOrClassCourse($type, AbstractBuilder $builder, $id){
+        $builder->setBiz($this->getBiz());
+        $client = new MarketingMallClient($this->getBiz());
+        $client->updateTeacherOrClassCourse([
+            'targetType' => $type,
+            'targetId' => $id,
+            'goodsContent' => json_encode($builder->build($id)),
+        ]);
     }
 
     protected function deleteMallGoods($code)

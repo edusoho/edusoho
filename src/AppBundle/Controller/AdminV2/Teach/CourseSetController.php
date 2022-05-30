@@ -136,15 +136,8 @@ class CourseSetController extends BaseController
     public function checkMallGoodsAction(Request $request, $id)
     {
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByCourseSetId($id), 'id');
-        $productIds = ArrayToolkit::column($this->getProductMallGoodsRelationService()->findProductMallGoodsRelationsByProductType('course'), 'productId');
-        $ids = array_intersect($courseIds, $productIds);
-        if (empty($ids)) {
-            return $this->createJsonResponse(['status' => false]);
-        }
-        foreach ($ids as $courseId) {
-            $this->getProductMallGoodsRelationService()->checkMallGoods($courseId, 'course');
-        }
-        return $this->createJsonResponse(['status' => true]);
+        $status = $this->getProductMallGoodsRelationService()->checkMallGoods($courseIds, 'course');
+        return $this->createJsonResponse(['status' => $status]);
 
 
     }

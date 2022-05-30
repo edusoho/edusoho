@@ -90,7 +90,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $this->beginTransaction();
         try {
-            $this->getProductMallGoodsRelationService()->checkMallGoods($courseId, 'course');
+            $this->getProductMallGoodsRelationService()->checkMallGoods([$courseId], 'course');
 
             $this->dispatchEvent('course.delete', new Event(['id'=>$courseId]));
 

@@ -76,9 +76,25 @@ class MarketingMallApi
         }
     }
 
-    public function checkGoodsIsPublishByCode($params)
+    public function updateTeacherOrClassCourse($params)
     {
-        return $this->get('/api-school/goods/getGoodsPublishStatus', ['goodsCode' => $params[0]]);
+        try {
+            $params = ArrayToolkit::parts($params[0], [
+                'goodsCode',
+                'targetType',
+                'targetId',
+                'goodsContent'
+            ]);
+            $this->post('/api-school/goods/updateTeacherOrClassCourse', $params);
+        } catch (\RuntimeException $e) {
+            $this->getLogger()->error('更新商品详情错误' . $e->getMessage(), ['params' => $params]);
+            throw new \InvalidArgumentException('接口请求错误!');
+        }
+    }
+
+    public function checkGoodsIsPublishByCodes($params)
+    {
+        return $this->get('/api-school/goods/getGoodsPublishStatus', ['goodsCodes' => implode(',', $params[0])]);
     }
 
     public function deleteGoodsByCode($params)

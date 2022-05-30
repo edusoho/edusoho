@@ -728,7 +728,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
             }
             $this->tryManageClassroom($id, 'admin_classroom_delete');
-            $this->getProductMallGoodsRelationService()->checkMallGoods($id, 'classroom');
+            $this->getProductMallGoodsRelationService()->checkMallGoods([$id], 'classroom');
             $this->deleteAllCoursesInClass($id);
             $this->getClassroomDao()->delete($id);
             $this->getClassroomGoodsMediator()->onDelete($classroom);

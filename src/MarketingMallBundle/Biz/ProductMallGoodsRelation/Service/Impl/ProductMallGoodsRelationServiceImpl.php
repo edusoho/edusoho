@@ -42,12 +42,18 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
         return $this->getProductMallGoodsRelationDao()->findByProductType($productType);
     }
 
-    public function checkMallGoods($productId, $type)
+    public function findProductMallGoodsRelationsByProductIdsProductType($productIds, $productType)
     {
-        $relation = $this->getProductMallGoodsRelationByProductTypeAndProductId($type, $productId);
-        if ($relation) {
+        return $this->getProductMallGoodsRelationDao()->search(['productIds' => $productIds, 'type' => $productType], [], 0, PHP_INT_MAX);
+    }
+
+    public function checkMallGoods(array $productIds, $type)
+    {
+        $relations = $this->findProductMallGoodsRelationsByProductIdsProductType($productIds, $type);
+        if ($relations) {
             $client = new MarketingMallClient($this->biz);
-            if ($client->checkGoodsIsPublishByCode($relation['goodsCode'])['success']) {
+            $result = $client->checkGoodsIsPublishByCodes(ArrayToolkit::column($relations,'goodsCode'));
+            if (in_array(true, $result)) {
                 throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
             }
             return true;

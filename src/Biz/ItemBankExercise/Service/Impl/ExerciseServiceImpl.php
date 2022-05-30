@@ -299,7 +299,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
             $this->getExerciseQuestionRecordDao()->deleteByExerciseId($exerciseId);
 
-            $this->getProductMallGoodsRelationService()->checkMallGoods($exerciseId,'questionBank');
+            $this->getProductMallGoodsRelationService()->checkMallGoods([$exerciseId],'questionBank');
 
             $this->dispatchEvent('questionBank.delete',new Event(['id'=>$exerciseId]));
 
