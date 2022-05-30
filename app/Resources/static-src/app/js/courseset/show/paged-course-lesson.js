@@ -219,7 +219,7 @@ class PagedCourseLesson {
         },
 
         'isLiveFinished': function(data, context) {
-          return context.isLive(data, context) && 'live' !== data.liveStatus && context.currentTimeStamp > context.toInt(data.activityEndTime);
+          return context.isLive(data, context) && ('closed' === data.liveStatus || ('live' !== data.liveStatus && context.currentTimeStamp > context.toInt(data.activityEndTime)));
         },
 
         'toInt': function(timestampStr) {
