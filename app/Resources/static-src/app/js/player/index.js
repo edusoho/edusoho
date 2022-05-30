@@ -44,7 +44,8 @@ class Show {
     let $iframe = $(window.parent.document.getElementById('task-content-iframe'));
     if ($iframe.length > 0) {
       //播放到最后一秒视为上次播放到0秒
-      let lastLearnTime = (parseInt(this.fileLength) === parseInt($iframe.data('lastLearnTime'))) ? 0 : $iframe.data('lastLearnTime');
+      let lastLearnTime = parseInt($iframe.data('lastLearnTime'));
+      lastLearnTime = (parseInt(this.fileLength) + parseInt($iframe.data('videoHeaderLength')) <= lastLearnTime) ? 0 : lastLearnTime;
       DurationStorage.del(this.userId, this.fileId);
       DurationStorage.set(this.userId, this.fileId, lastLearnTime);
     }

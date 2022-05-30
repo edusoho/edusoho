@@ -14,6 +14,7 @@ use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\FaceInspection\Service\FaceInspectionService;
 use Biz\File\Service\UploadFileService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
@@ -87,6 +88,16 @@ class TaskController extends BaseController
         if (empty($taskResult)) {
             $taskResult = ['status' => 'none'];
         }
+        $videoHeaderLength = 0;
+        $storageSetting = $this->getSettingService()->get('storage');
+        if (!empty($storageSetting['video_header'])) {
+            try {
+                $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            } catch (\RuntimeException $e) {
+                $headLeader = [];
+            }
+            $videoHeaderLength = $headLeader ? $headLeader['length'] : 0;
+        }
         if ('finish' == $taskResult['status']) {
             $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $user['id']);
             $finishedRate = $progress['percent'];
@@ -126,6 +137,7 @@ class TaskController extends BaseController
                 'allowEventAutoTrigger' => $activityConfig->allowEventAutoTrigger(),
                 'media' => $media,
                 'learnControlSetting' => $learnControlSetting,
+                'videoHeaderLength' => $videoHeaderLength,
             ]
         );
     }
@@ -720,5 +732,13 @@ class TaskController extends BaseController
     protected function getLearnControlService()
     {
         return $this->createService('Visualization:LearnControlService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
