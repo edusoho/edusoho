@@ -17,11 +17,6 @@ class LiveStatusJob extends AbstractJob
         if (!$canExecute) {
             return;
         }
-        if ('closeSecondJob' === $jobType) {
-            $this->getLiveActivityService()->closeLive($liveId, time());
-
-            return;
-        }
         $confirmStatus = $this->getLiveService()->confirmLiveStatus($liveId);
         $status = $confirmStatus['status'] ?: 'unknown';
         if ('living' === $status) {

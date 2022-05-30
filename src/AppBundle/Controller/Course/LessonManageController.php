@@ -18,17 +18,13 @@ class LessonManageController extends BaseController
     public function createAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-
         $this->getCourseLessonService()->isLessonCountEnough($course['id']);
-
         if ($request->isMethod('POST')) {
             $formData = $request->request->all();
-
             $formData['_base_url'] = $request->getSchemeAndHttpHost();
             $formData['fromUserId'] = $this->getUser()->getId();
             $formData['fromCourseSetId'] = $course['courseSetId'];
             $formData['redoInterval'] = empty($formData['redoInterval']) ? 0 : $formData['redoInterval'] * 60;
-
             $formData = array_merge($this->getDefaultFinishCondition($formData['mediaType']), $formData);
             list($lesson, $task) = $this->getCourseLessonService()->createLesson($formData);
 
