@@ -16,12 +16,6 @@ class LiveStatusJob extends AbstractJob
         $liveActivity = $this->getLiveActivityService()->getByLiveId($liveId);
         $canExecute = $this->getLiveService()->canExecuteLiveStatusJob($liveActivity['progressStatus'], $jobType);
         if (!$canExecute) {
-            $this->getLogService()->error(AppLoggerConstant::LIVE, 'update_live_status', "不能执行更新 {$liveId} 从 {$liveActivity['progressStatus']} 至 {$jobType}");
-            return;
-        }
-        if ('closeSecondJob' === $jobType) {
-            $this->getLiveActivityService()->closeLive($liveId, time());
-
             return;
         }
         $confirmStatus = $this->getLiveService()->confirmLiveStatus($liveId);
