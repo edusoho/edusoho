@@ -106,13 +106,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!$user->isLogin()) {
             $this->createNewException(UserException::UN_LOGIN());
         }
-
         $courseSet = $this->getCourseSetDao()->get($id);
-
         if (empty($courseSet)) {
             $this->createNewException(CourseSetException::NOTFOUND_COURSESET());
         }
-
         if ($courseSet['parentId'] > 0) {
             $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($id);
             if (!empty($classroomCourse)) {
@@ -123,7 +120,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 }
             }
         }
-
         if (!$this->hasCourseSetManageRole($id)) {
             $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
