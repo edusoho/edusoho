@@ -46,7 +46,7 @@ class CourseInfoBuilder extends AbstractBuilder
         return [
             'courseIds' => array_merge([$course['id']], $childrenCourseIds),
             'title' => $count == 1 ? $course['courseSetTitle'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
-            'subtitle' => $course['subtitle'],
+            'subtitle' => $count == 1 ? $courseSet['subtitle'] : $course['subtitle'],
             'cover' => $this->transformCover($courseSet['cover']),
             'price' => $course['price'],
             'summary' => $courseSet['summary'],
