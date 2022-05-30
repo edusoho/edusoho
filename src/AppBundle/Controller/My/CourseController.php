@@ -130,11 +130,13 @@ class CourseController extends CourseBaseController
 
     public function headerForMemberAction($course, $member)
     {
+        if ('classroom' === $member['joinedType'] && !empty($member['classroomId'])) {
+            $classroomMember = $this->getClassroomService()->getClassroomMember($member['classroomId'], $member['userId']);
+            $member['locked'] = $classroomMember['locked'];
+        }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
-
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($courseSet['categoryId']);
-
         if (empty($member['previewAs'])) {
             $learnProgress = $this->getLearningDataAnalysisService()->getUserLearningSchedule($course['id'], $member['userId']);
         } else {
@@ -148,13 +150,11 @@ class CourseController extends CourseBaseController
                 'planProgressProgress' => 0,
             ];
         }
-
         $isUserFavorite = false;
         $user = $this->getUser();
         if ($user->isLogin()) {
             $isUserFavorite = !empty($this->getFavoriteService()->getUserFavorite($user['id'], 'course', $course['courseSetId']));
         }
-
         $vipSetting = $this->getSettingService()->get('vip', []);
         $vipDeadline = false;
         if ($this->isPluginInstalled('Vip') && !empty($vipSetting['enabled']) && 'student' === $member['role'] && 'vip_join' == $member['joinedChannel']) {
@@ -164,7 +164,6 @@ class CourseController extends CourseBaseController
             if (!empty($classroom)) {
                 $classroomVipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroom['id']);
             }
-
             if (!empty($vipMember) && (!empty($courseVipRight) || !empty($classroomVipRight))) {
                 $vipDeadline = true;
                 $member['deadline'] = ($vipMember['deadline'] < $member['deadline']) || empty($member['deadline']) ? $vipMember['deadline'] : $member['deadline'];
@@ -210,7 +209,7 @@ class CourseController extends CourseBaseController
             }
         }
         // 非班级课程，点击介绍跳转到概览商品页
-        if (empty($member) || (0 === (int) $course['parentId'] && 'summary' === $tab)) {
+        if (empty($member) || (0 === (int)$course['parentId'] && 'summary' === $tab)) {
             return $this->redirect($this->generateUrl('course_show', ['id' => $id, 'tab' => $tab]));
         }
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
