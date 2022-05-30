@@ -257,11 +257,15 @@ export default {
       this.getGoodsCourseComponents();
     },
     share(message) {
+      let desc = ''
+      if (message.desc) {
+        desc = message.desc.replace(/<\/?.+?>/g, '')
+      }
       const shareMessage = {
         title: message.title || '',
         link: message.link,
         imgUrl: message.imgUrl,
-        desc: message.desc || this.$t('goods.findAGoodContent')
+        desc: desc || this.$t('goods.findAGoodContent')
       };
       initShare({ ...shareMessage });
     },
