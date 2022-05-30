@@ -29,9 +29,9 @@ abstract class BaseEventSubscriber extends EventSubscriber
         $builder->setBiz($this->getBiz());
         $client = new MarketingMallClient($this->getBiz());
         $client->updateTeacherOrClassCourse([
-            'targetType' => $type,
+            'type' => $type,
             'targetId' => $id,
-            'goodsContent' => json_encode($builder->build($id)),
+            'content' => json_encode($builder->build($id)),
         ]);
     }
 

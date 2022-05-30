@@ -80,10 +80,9 @@ class MarketingMallApi
     {
         try {
             $params = ArrayToolkit::parts($params[0], [
-                'goodsCode',
-                'targetType',
+                'type',
                 'targetId',
-                'goodsContent'
+                'content'
             ]);
             $this->post('/api-school/goods/updateTeacherOrClassCourse', $params);
         } catch (\RuntimeException $e) {
