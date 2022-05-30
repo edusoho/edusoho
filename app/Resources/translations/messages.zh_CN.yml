@@ -9253,8 +9253,8 @@ my.reward_point.mall.search: 共找到
 my.reward_point.mall.search_product: 相关商品
 my.reward_point.mall.search_hint: 输入标题关键字
 my.reward_points: 我的积分
-my.reward_points_message: ￥%num%现金，积分使用后，申请退款时不退还积分
-my.reward_points_instructions: 积分说明
+my.reward_points_message: ￥%num%现金，%reward%使用后，申请退款时不退还%reward%
+my.reward_points_instructions: %reward%说明
 
 task.learn_data_detail.nickname: 用户名
 task.learn_data_detail.createdTime: 任务开始时间
