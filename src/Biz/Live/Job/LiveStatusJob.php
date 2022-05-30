@@ -3,7 +3,6 @@
 namespace Biz\Live\Job;
 
 use Biz\Activity\Service\LiveActivityService;
-use Biz\AppLoggerConstant;
 use Biz\Live\Service\LiveService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 

@@ -231,7 +231,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     public function closeLive($liveId, $closeTime)
     {
         $liveActivity = $this->getLiveActivityDao()->getByLiveId($liveId);
-        if (empty($liveActivity) || (!empty($liveActivity['startTime']) && time() < $liveActivity['startTime']) || EdusohoLiveClient::LIVE_STATUS_LIVING != $liveActivity['progressStatus']) {
+        if (empty($liveActivity) || (!empty($liveActivity['startTime']) && time() < $liveActivity['startTime'])) {
             return;
         }
         $activities = $this->getActivityDao()->findActivitiesByMediaIdsAndMediaType([$liveActivity['id']], 'live');
