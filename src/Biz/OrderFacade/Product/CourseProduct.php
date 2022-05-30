@@ -149,7 +149,11 @@ class CourseProduct extends BaseGoodsProduct
         $course = $this->getCourseByGoodsSpecsId($orderItem['target_id']);
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $orderItem['user_id']);
         if (!empty($member)) {
-            $this->getCourseMemberService()->removeStudent($course['id'], $orderItem['user_id']);
+            $info = [
+                'reason' => $orderRefundItem['order_refund']['reason'],
+                'reason_type' => 'refund',
+            ];
+            $this->getCourseMemberService()->removeStudent($course['id'], $orderItem['user_id'], $info);
         }
         $this->updateMemberRecordByRefundItem($orderItem);
     }
