@@ -209,11 +209,11 @@ class CourseExtension extends \Twig_Extension
                 ];
                 if ('live' === $item['type']) {
                     $currentTime = time();
-                    $result['liveStatus'] = $item['activity']['ext']['progressStatus'];
-                    if ('created' === $result['liveStatus'] && $currentTime > $result['activityStartTime']) {
+                    $result['liveStatus'] = $liveStatus = $item['activity']['ext']['progressStatus'];
+                    if ('created' === $liveStatus && $currentTime > $result['activityStartTime']) {
                         $result['liveStatus'] = EdusohoLiveClient::LIVE_STATUS_LIVING;
                     }
-                    if ('created' === $result['liveStatus'] && $currentTime > $result['activityEndTime']) {
+                    if ('created' === $liveStatus && $currentTime > $result['activityEndTime']) {
                         $result['liveStatus'] = EdusohoLiveClient::LIVE_STATUS_CLOSED;
                     }
                 }
