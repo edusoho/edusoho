@@ -60,6 +60,13 @@ class CourseItemWithLesson extends AbstractResource
                             $task['replayDownloadStatus'] = !empty($liveReplays[$activityLive['liveId']]) ? ('finished' === $liveReplays[$activityLive['liveId']]['status'] ? 'finished' : 'un_finished') : 'none';
                         }
                         $task['liveStatus'] = $activityLive['progressStatus'];
+                        $currentTime = time();
+                        if ('created' === $task['liveStatus'] && $currentTime > $task['activity']['startTime']) {
+                            $task['liveStatus'] = EdusohoLiveClient::LIVE_STATUS_LIVING;
+                        }
+                        if ('created' === $task['liveStatus'] && $currentTime > $task['activity']['endTime']) {
+                            $task['liveStatus'] = EdusohoLiveClient::LIVE_STATUS_CLOSED;
+                        }
                     }
                     if ('homework' === $task['type'] && !empty($task['activity'])) {
                         $homeworkActivity = $this->getHomeworkActivityService()->get($task['activity']['mediaId']);
