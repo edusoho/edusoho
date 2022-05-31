@@ -60,6 +60,13 @@ class CourseItemWithLesson extends AbstractResource
                             $task['replayDownloadStatus'] = !empty($liveReplays[$activityLive['liveId']]) ? ('finished' === $liveReplays[$activityLive['liveId']]['status'] ? 'finished' : 'un_finished') : 'none';
                         }
                         $task['liveStatus'] = $activityLive['progressStatus'];
+                        $currentTime = time();
+                        if ('created' === $task['liveStatus'] && $currentTime > $task['activity']['startTime']) {
+                            $task['liveStatus'] = 'live';
+                        }
+                        if ('created' === $task['liveStatus'] && $currentTime > $task['activity']['endTime']) {
+                            $task['liveStatus'] = 'closed';
+                        }
                     }
                     if ('homework' === $task['type'] && !empty($task['activity'])) {
                         $homeworkActivity = $this->getHomeworkActivityService()->get($task['activity']['mediaId']);

@@ -182,7 +182,7 @@ class CourseExtension extends \Twig_Extension
                 ];
                 $item = array_merge($default, $item);
                 $mediaType = empty($item['activity']['mediaType']) ? 'video' : $item['activity']['mediaType'];
-                $results[] = [
+                $result = [
                     'itemType' => $item['itemType'],
                     'number' => $item['number'],
                     'published_number' => empty($item['published_number']) ? 0 : $item['published_number'],
@@ -205,8 +205,18 @@ class CourseExtension extends \Twig_Extension
                     'isTaskTryLookable' => $item['tryLookable'],
                     'isTaskShowModal' => $item['tryLookable'] || $item['isFree'],
                     'isSingleTaskLesson' => empty($item['isSingleTaskLesson']) ? false : $item['isSingleTaskLesson'],
-                    'liveStatus' => 'live' === $item['type'] ? $item['activity']['ext']['progressStatus'] : ''
                 ];
+                if ('live' === $item['type']) {
+                    $currentTime = time();
+                    $result['liveStatus'] = $item['activity']['ext']['progressStatus'];
+                    if ('created' === $result['liveStatus'] && $currentTime > $result['activityStartTime']) {
+                        $result['liveStatus'] = 'live';
+                    }
+                    if ('created' === $result['liveStatus'] && $currentTime > $result['activityEndTime']) {
+                        $result['liveStatus'] = 'closed';
+                    }
+                }
+                $results[] = $result;
             }
         }
 
