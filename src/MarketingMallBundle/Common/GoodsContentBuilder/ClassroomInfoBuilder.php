@@ -24,7 +24,7 @@ class ClassroomInfoBuilder extends AbstractBuilder
     {
         $courseIds = ArrayToolkit::column($this->getClassroomService()->findCoursesByClassroomId($classroom['id']), 'id');
         $classroom['classroomId'] = $classroom['id'];
-        $classroom['cover'] = $this->transformCover($classroom['cover'], 'classroom.png');
+        $classroom['cover'] = $this->transformCover(['small' => $classroom['smallPicture'], 'middle' => $classroom['middlePicture']], 'classroom.png');
         $classroom['classroomCatalogue'] = [];
         foreach ($courseIds as $courseId) {
             $course = $this->getCourseDetailBuilder()->build($courseId);

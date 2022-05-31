@@ -12,8 +12,6 @@ use Biz\Task\Strategy\CourseStrategy;
 
 class CourseInfoBuilder extends AbstractBuilder
 {
-    const COURSE_ALLOWED_KEY = ['courseIds', 'title', 'subtitle', 'cover', 'summary', 'courseCatalogue', 'teacherList'];
-
     const TASKS_ALLOWED_KEY = ['title', 'type', 'number', 'counts', 'children', 'isPublish', 'activityType'];
 
     private $blankChapter = ['title' => '未分类章', 'type' => 'chapter', 'isPublish' => 1, 'number' => 0, 'counts' => ['unitNum' => 0, 'lessonNum' => 0, 'taskNum' => 0], 'children' => []];
