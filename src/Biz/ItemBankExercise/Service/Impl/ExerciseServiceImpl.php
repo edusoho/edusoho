@@ -299,7 +299,9 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
             $this->getExerciseQuestionRecordDao()->deleteByExerciseId($exerciseId);
 
-            $this->getProductMallGoodsRelationService()->checkMallGoods([$exerciseId],'questionBank');
+            if ($this->getProductMallGoodsRelationService()->checkMallGoods([$exerciseId],'questionBank') == 'error') {
+                throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
+            }
 
             $this->dispatchEvent('questionBank.delete',new Event(['id'=>$exerciseId]));
 

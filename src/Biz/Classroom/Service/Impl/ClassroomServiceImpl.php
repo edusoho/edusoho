@@ -578,7 +578,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $this->tryManageClassroom($classroomId);
 
-        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
+        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date . ' 23:59:59');
         if ($this->checkDeadlineForUpdateDeadline($classroomId, $userIds, $date)) {
             $members = $this->findMembersByClassroomIdAndUserIds($classroomId, $userIds);
             $updateDeadlines = [];
@@ -728,7 +728,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
             }
             $this->tryManageClassroom($id, 'admin_classroom_delete');
-            $this->getProductMallGoodsRelationService()->checkMallGoods([$id], 'classroom');
+            if ($this->getProductMallGoodsRelationService()->checkMallGoods([$id], 'classroom') == 'error') {
+                throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
+            }
             $this->deleteAllCoursesInClass($id);
             $this->getClassroomDao()->delete($id);
             $this->getClassroomGoodsMediator()->onDelete($classroom);

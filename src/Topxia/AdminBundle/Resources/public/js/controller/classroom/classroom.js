@@ -30,14 +30,14 @@ define(function (require, exports, module) {
         url: $tr.data('url'),
         async: false,
         success: function (data) {
-          if (data.status) {
+          status = data.status;
+          if (status === true) {
             msg = 'admin.classroom.mall_goods_exist.delete_hint';
           }
-        },
-        error: function (e) {
-          status = 'error';
-          let res = e.responseJSON.error.message;
-          Notify.danger(res);
+          if (status==='error'){
+            let res = Translator.trans('mall.goods.exist.delete_fail_hint');
+            Notify.danger(res);
+          }
         }
       });
 

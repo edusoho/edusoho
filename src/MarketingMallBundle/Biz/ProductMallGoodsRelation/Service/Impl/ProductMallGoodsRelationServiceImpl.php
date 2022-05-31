@@ -52,9 +52,9 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
         $relations = $this->findProductMallGoodsRelationsByProductIdsProductType($productIds, $type);
         if ($relations) {
             $client = new MarketingMallClient($this->biz);
-            $result = $client->checkGoodsIsPublishByCodes(ArrayToolkit::column($relations,'goodsCode'));
+            $result = $client->checkGoodsIsPublishByCodes(ArrayToolkit::column($relations, 'goodsCode'));
             if (in_array(true, $result)) {
-                throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
+                return 'error';
             }
             return true;
         }
