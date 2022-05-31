@@ -15,6 +15,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
+use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
@@ -210,10 +211,10 @@ class CourseExtension extends \Twig_Extension
                     $currentTime = time();
                     $result['liveStatus'] = $item['activity']['ext']['progressStatus'];
                     if ('created' === $result['liveStatus'] && $currentTime > $result['activityStartTime']) {
-                        $result['liveStatus'] = 'live';
+                        $result['liveStatus'] = EdusohoLiveClient::LIVE_STATUS_LIVING;
                     }
                     if ('created' === $result['liveStatus'] && $currentTime > $result['activityEndTime']) {
-                        $result['liveStatus'] = 'closed';
+                        $result['liveStatus'] = EdusohoLiveClient::LIVE_STATUS_CLOSED;
                     }
                 }
                 $results[] = $result;

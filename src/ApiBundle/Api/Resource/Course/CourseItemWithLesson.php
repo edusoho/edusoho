@@ -62,10 +62,10 @@ class CourseItemWithLesson extends AbstractResource
                         $task['liveStatus'] = $activityLive['progressStatus'];
                         $currentTime = time();
                         if ('created' === $task['liveStatus'] && $currentTime > $task['activity']['startTime']) {
-                            $task['liveStatus'] = 'live';
+                            $task['liveStatus'] = EdusohoLiveClient::LIVE_STATUS_LIVING;
                         }
                         if ('created' === $task['liveStatus'] && $currentTime > $task['activity']['endTime']) {
-                            $task['liveStatus'] = 'closed';
+                            $task['liveStatus'] = EdusohoLiveClient::LIVE_STATUS_CLOSED;
                         }
                     }
                     if ('homework' === $task['type'] && !empty($task['activity'])) {
