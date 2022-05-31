@@ -12,8 +12,6 @@ use Biz\Task\Strategy\CourseStrategy;
 
 class CourseInfoBuilder extends AbstractBuilder
 {
-    const COURSE_ALLOWED_KEY = ['courseIds', 'title', 'subtitle', 'cover', 'summary', 'courseCatalogue', 'teacherList'];
-
     const TASKS_ALLOWED_KEY = ['title', 'type', 'number', 'counts', 'children', 'isPublish', 'activityType'];
 
     private $blankChapter = ['title' => '未分类章', 'type' => 'chapter', 'isPublish' => 1, 'number' => 0, 'counts' => ['unitNum' => 0, 'lessonNum' => 0, 'taskNum' => 0], 'children' => []];
@@ -46,10 +44,10 @@ class CourseInfoBuilder extends AbstractBuilder
         return [
             'courseIds' => array_merge([$course['id']], $childrenCourseIds),
             'title' => $count == 1 ? $course['courseSetTitle'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
-            'subtitle' => $course['subtitle'],
+            'subtitle' => $count == 1 ? $courseSet['subtitle'] : $course['subtitle'],
             'cover' => $this->transformCover($courseSet['cover']),
             'price' => $course['price'],
-            'summary' => $courseSet['summary'],
+            'summary' => $this->transformSummary($courseSet['summary']),
             'courseCatalogue' => $courseCatalogue,
             'teacherList' => $teachers,
         ];

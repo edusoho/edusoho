@@ -135,17 +135,11 @@ class CourseSetController extends BaseController
 
     public function checkMallGoodsAction(Request $request, $id)
     {
-        $ids = ArrayToolkit::column($this->getCourseService()->findCoursesByCourseSetId($id), 'id');
-        $statusList = [];
-        //todo 改成批量检查
-        foreach ($ids as $courseId) {
-            $status = $this->getProductMallGoodsRelationService()->checkMallGoods($courseId, 'course');
-            $statusList[] = $status;
-        }
-        if (in_array(true, $statusList)) {
-            return $this->createJsonResponse(['status' => true]);
-        }
-        return $this->createJsonResponse(['status' => false]);
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByCourseSetId($id), 'id');
+        $status = $this->getProductMallGoodsRelationService()->checkMallGoods($courseIds, 'course');
+        return $this->createJsonResponse(['status' => $status]);
+
+
     }
 
     //todo 和CourseController 有一样的

@@ -909,7 +909,7 @@ class CourseManageController extends BaseController
 
     public function checkMallGoodsAction(Request $request,$courseId)
     {
-        $status = $this->getProductMallGoodsRelationService()->checkMallGoods($courseId, 'course');
+        $status = $this->getProductMallGoodsRelationService()->checkMallGoods([$courseId], 'course');
 
         return $this->createJsonResponse(['status' => $status]);
     }

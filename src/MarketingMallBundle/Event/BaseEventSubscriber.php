@@ -12,7 +12,7 @@ abstract class BaseEventSubscriber extends EventSubscriber
     protected function updateGoodsContent($type, AbstractBuilder $builder, $id)
     {
         $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId($type, $id);
-        if (empty($relation) && 'teacher' != $type) {
+        if (empty($relation)) {
             return;
         }
         $builder->setBiz($this->getBiz());
@@ -23,7 +23,16 @@ abstract class BaseEventSubscriber extends EventSubscriber
             'targetId' => $id,
             'goodsContent' => json_encode($builder->build($id)),
         ]);
+    }
 
+    public function updateTeacherOrClassCourse($type, AbstractBuilder $builder, $id){
+        $builder->setBiz($this->getBiz());
+        $client = new MarketingMallClient($this->getBiz());
+        $client->updateTeacherOrClassCourse([
+            'type' => $type,
+            'targetId' => $id,
+            'content' => json_encode($builder->build($id)),
+        ]);
     }
 
     protected function deleteMallGoods($code)
