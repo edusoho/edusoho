@@ -49,7 +49,7 @@ class CourseInfoBuilder extends AbstractBuilder
             'subtitle' => $count == 1 ? $courseSet['subtitle'] : $course['subtitle'],
             'cover' => $this->transformCover($courseSet['cover']),
             'price' => $course['price'],
-            'summary' => $courseSet['summary'],
+            'summary' => $this->transformSummary($courseSet['summary']),
             'courseCatalogue' => $courseCatalogue,
             'teacherList' => $teachers,
         ];

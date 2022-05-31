@@ -42,4 +42,17 @@ abstract class AbstractBuilder
 
         return $cover;
     }
+
+    public function transformSummary($summary)
+    {
+        preg_match_all('/<img.*?src=[\"|\']?(.*?)[\"|\']*?\/?\s*>/i', $summary, $matches);
+        if (empty($matches)) {
+            return $summary;
+        }
+        $imgList = [];
+        foreach ($matches[1] as $key => $imgUrl) {
+            $imgList[] = AssetHelper::uriForPath($imgUrl);
+        }
+        return str_replace($matches[1], $imgList, $summary);
+    }
 }
