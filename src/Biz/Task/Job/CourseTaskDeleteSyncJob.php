@@ -4,6 +4,7 @@ namespace Biz\Task\Job;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\AppLoggerConstant;
+use Biz\Course\Service\MemberService;
 use Biz\Task\Strategy\CourseStrategy;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -15,7 +16,6 @@ class CourseTaskDeleteSyncJob extends AbstractSyncJob
             $taskId = $this->args['taskId'];
             $courseId = $this->args['courseId'];
             $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($courseId, 1);
-
             $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
             $copiedCourseMap = ArrayToolkit::index($copiedCourses, 'id');
             $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($taskId, $copiedCourseIds);
@@ -23,10 +23,10 @@ class CourseTaskDeleteSyncJob extends AbstractSyncJob
                 $this->deleteTask($ct['id'], $copiedCourseMap[$ct['courseId']]);
                 $this->getCourseMemberService()->recountLearningDataByCourseId($ct['courseId']);
             }
-
             $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.success_tips', ['taskId' => $taskId]);
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.fail_tips', ['error' => $e->getMessage()]);
+            throw $e;
         }
     }
 
@@ -39,6 +39,9 @@ class CourseTaskDeleteSyncJob extends AbstractSyncJob
         return $res;
     }
 
+    /**
+     * @return MemberService
+     */
     private function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');
