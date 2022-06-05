@@ -4,6 +4,7 @@ namespace MarketingMallBundle\Event;
 
 use Codeages\Biz\Framework\Event\EventSubscriber;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use MarketingMallBundle\Client\MarketingMallClient;
 use MarketingMallBundle\Common\GoodsContentBuilder\AbstractBuilder;
 
@@ -12,25 +13,28 @@ abstract class BaseEventSubscriber extends EventSubscriber
     protected function updateGoodsContent($type, AbstractBuilder $builder, $id)
     {
         $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId($type, $id);
+
         if (empty($relation)) {
-            return;
+            if ($type == 'course' && !$this->getProductMallGoodsRelationService()->checkMallClassroomCourseExist($id)) {
+                return;
+            }
+            if ($type != 'course') {
+                return;
+            }
         }
         $builder->setBiz($this->getBiz());
         $client = new MarketingMallClient($this->getBiz());
         $client->updateGoodsContent([
-            'goodsCode' => $relation['goodsCode'],
             'targetType' => $type,
-            'targetId' => $id,
             'goodsContent' => json_encode($builder->build($id)),
         ]);
     }
 
-    public function updateTeacherOrClassCourse($type, AbstractBuilder $builder, $id){
+    public function updateTeacherInfo(AbstractBuilder $builder, $id)
+    {
         $builder->setBiz($this->getBiz());
         $client = new MarketingMallClient($this->getBiz());
-        $client->updateTeacherOrClassCourse([
-            'type' => $type,
-            'targetId' => $id,
+        $client->updateTeacherOrClassroomCourse([
             'content' => json_encode($builder->build($id)),
         ]);
     }
@@ -48,6 +52,9 @@ abstract class BaseEventSubscriber extends EventSubscriber
         }
     }
 
+    /**
+     * @return ProductMallGoodsRelationService
+     */
     protected function getProductMallGoodsRelationService()
     {
         return $this->getBiz()->service('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');

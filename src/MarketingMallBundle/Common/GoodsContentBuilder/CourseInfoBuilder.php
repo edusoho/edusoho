@@ -43,7 +43,7 @@ class CourseInfoBuilder extends AbstractBuilder
         $courseCatalogue = $this->buildCourseCatalogue($this->getCourseService()->findCourseItems($course['id']));
         return [
             'courseIds' => array_merge([$course['id']], $childrenCourseIds),
-            'title' => $count == 1 ? $course['courseSetTitle'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
+            'title' => $count == 1 ? $courseSet['title'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
             'subtitle' => $count == 1 ? $courseSet['subtitle'] : $course['subtitle'],
             'cover' => $this->transformCover($courseSet['cover']),
             'price' => $course['price'],

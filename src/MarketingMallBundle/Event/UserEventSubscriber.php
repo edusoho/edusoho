@@ -46,7 +46,7 @@ class UserEventSubscriber extends BaseEventSubscriber
             return;
         }
 
-        $this->updateTeacherOrClassCourse('teacherInfo', new TeacherInfoBuilder(), $userId);
+        $this->updateTeacherInfo(new TeacherInfoBuilder(), $userId);
     }
 
     /**

@@ -14,7 +14,9 @@ interface ProductMallGoodsRelationService
 
     public function findProductMallGoodsRelationsByProductType($productType);
 
-    public function findProductMallGoodsRelationsByProductIdsProductType($productIds, $productType);
+    public function findProductMallGoodsRelationsByProductIdsAndProductType($productIds, $productType);
+
+    public function checkMallClassroomCourseExist($courseId);
 
     public function checkMallGoods(array $productIds, $type);
 

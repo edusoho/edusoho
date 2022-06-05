@@ -4,7 +4,9 @@ namespace MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
+use Biz\Course\Service\CourseService;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Dao\ProductMallGoodsRelationDao;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use MarketingMallBundle\Client\MarketingMallClient;
@@ -42,14 +44,26 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
         return $this->getProductMallGoodsRelationDao()->findByProductType($productType);
     }
 
-    public function findProductMallGoodsRelationsByProductIdsProductType($productIds, $productType)
+    public function findProductMallGoodsRelationsByProductIdsAndProductType($productIds, $productType)
     {
         return $this->getProductMallGoodsRelationDao()->search(['productIds' => $productIds, 'type' => $productType], [], 0, PHP_INT_MAX);
     }
 
+    public function checkMallClassroomCourseExist($courseId)
+    {
+
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
+        $classroomIds = ArrayToolkit::column($this->getClassroomService()->findClassroomsByCoursesIds($courseIds), 'classroomId');
+        $relations = $this->findProductMallGoodsRelationsByProductIdsAndProductType($classroomIds, 'classroom');
+        if (!empty($relations)) {
+            return true;
+        }
+        return false;
+    }
+
     public function checkMallGoods(array $productIds, $type)
     {
-        $relations = $this->findProductMallGoodsRelationsByProductIdsProductType($productIds, $type);
+        $relations = $this->findProductMallGoodsRelationsByProductIdsAndProductType($productIds, $type);
         if ($relations) {
             $client = new MarketingMallClient($this->biz);
             $result = $client->checkGoodsIsPublishByCodes(ArrayToolkit::column($relations, 'goodsCode'));
@@ -59,6 +73,22 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    private function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 
     /**
