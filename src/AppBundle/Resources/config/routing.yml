@@ -88,6 +88,12 @@ oauth2_login_app:
     path: /oauth2/login/app
     defaults:
         _controller: 'AppBundle:OAuth2/Login:app'
+oauth2_login_try_bind_account:
+    path: /oauth2/login/try/bind_account
+    defaults:
+        _controller: 'AppBundle:OAuth2/Login:tryBindAccount'
+    methods:
+        - POST
 oauth2_login_bind_account:
     path: /oauth2/login/bind_account
     defaults:

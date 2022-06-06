@@ -891,14 +891,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
-    public function deleteClassroomCourses($classroomId, array $courseIds)
+    public function deleteClassroomCourses($classroomId, array $courseIds, $real = true)
     {
         $classroom = $this->getClassroom($classroomId);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
         try {
             $this->beginTransaction();
-
             foreach ($courses as $course) {
                 $classroomRef = $this->getClassroomCourse($classroomId, $course['id']);
                 if (empty($classroomRef)) {
@@ -908,31 +906,27 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 if (0 != $classroomRef['parentCourseId']) {
                     $this->getCourseSetService()->unlockCourseSet($course['courseSetId'], true);
                 }
-
-                $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
-
+                if ($real) {
+                    $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
+                }
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
-
                 $infoData = [
                     'classroomId' => $classroom['id'],
                     'title' => $classroom['title'],
                     'courseSetId' => $course['id'],
                     'courseSetTitle' => $course['courseSetTitle'],
                 ];
-
                 $this->getLogService()->info(
                     'classroom',
                     'delete_course',
                     "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})",
                     $infoData
                 );
-
                 $this->dispatchEvent(
                     'classroom.course.delete',
                     new Event($classroom, ['deleteCourseId' => $course['id']])
                 );
             }
-
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();

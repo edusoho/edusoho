@@ -15,6 +15,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
+use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
@@ -182,7 +183,7 @@ class CourseExtension extends \Twig_Extension
                 ];
                 $item = array_merge($default, $item);
                 $mediaType = empty($item['activity']['mediaType']) ? 'video' : $item['activity']['mediaType'];
-                $results[] = [
+                $result = [
                     'itemType' => $item['itemType'],
                     'number' => $item['number'],
                     'published_number' => empty($item['published_number']) ? 0 : $item['published_number'],
@@ -206,6 +207,17 @@ class CourseExtension extends \Twig_Extension
                     'isTaskShowModal' => $item['tryLookable'] || $item['isFree'],
                     'isSingleTaskLesson' => empty($item['isSingleTaskLesson']) ? false : $item['isSingleTaskLesson'],
                 ];
+                if ('live' === $item['type']) {
+                    $currentTime = time();
+                    $result['liveStatus'] = $liveStatus = $item['activity']['ext']['progressStatus'];
+                    if ('created' === $liveStatus && $currentTime > $result['activityStartTime']) {
+                        $result['liveStatus'] = EdusohoLiveClient::LIVE_STATUS_LIVING;
+                    }
+                    if ('created' === $liveStatus && $currentTime > $result['activityEndTime']) {
+                        $result['liveStatus'] = EdusohoLiveClient::LIVE_STATUS_CLOSED;
+                    }
+                }
+                $results[] = $result;
             }
         }
 

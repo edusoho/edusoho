@@ -30,7 +30,7 @@
           {{ user.email }}
         </td>
         <td class="vertical-middle">
-            {{ record.created_time|date('Y-n-d H:i') }}
+            {{ record.operate_time|date('Y-n-d H:i') }}
         </td>
         <td class="vertical-middle">
           {{ dict_text('exit_reason', record.reason_type) }}

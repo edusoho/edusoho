@@ -7,6 +7,7 @@ use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderRefundService;
 use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\WorkflowService;
 
 class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 {
@@ -78,7 +79,6 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
     {
         $this->tryManageOrderRefund();
         $order = $this->getOrderService()->getOrder($orderId);
-
         list($product, $orderItem) = $this->getProductAndOrderItem($order);
         try {
             $this->beginTransaction();
@@ -129,7 +129,6 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
             $this->createNewException(OrderException::NOTFOUND_ORDER_ITEMS());
         }
         $orderItem = reset($orderItems);
-
         $params = ['targetId' => $orderItem['target_id'], 'orderId' => $order['id'], 'orderItemId' => $orderItem['id']];
         $product = $this->getOrderFacadeService()->getOrderProduct($orderItem['target_type'], $params);
 
@@ -202,6 +201,9 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         return $this->createService('OrderFacade:OrderFacadeService');
     }
 
+    /**
+     * @return WorkflowService
+     */
     protected function getWorkflowService()
     {
         return $this->biz->service('Order:WorkflowService');

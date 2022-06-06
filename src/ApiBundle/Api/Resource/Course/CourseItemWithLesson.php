@@ -54,13 +54,18 @@ class CourseItemWithLesson extends AbstractResource
         foreach ($items as &$item) {
             if (!empty($item['tasks'])) {
                 foreach ($item['tasks'] as &$task) {
-                    if ($needReplayStatus && 'live' === $task['type'] && !empty($task['activity']['ext'])) {
-                        $replayInfo = empty($liveReplays[$task['activity']['ext']['liveId']]) ? [] : $liveReplays[$task['activity']['ext']['liveId']];
-                        $task['liveId'] = $task['activity']['ext']['liveId'];
-                        if (!empty($replayInfo)) {
-                            $task['replayDownloadStatus'] = 'finished' === $replayInfo['status'] ? 'finished' : 'un_finished';
-                        } else {
-                            $task['replayDownloadStatus'] = 'none';
+                    if ('live' === $task['type'] && !empty($activityLive = $task['activity']['ext'])) {
+                        if ($needReplayStatus) {
+                            $task['liveId'] = $activityLive['liveId'];
+                            $task['replayDownloadStatus'] = !empty($liveReplays[$activityLive['liveId']]) ? ('finished' === $liveReplays[$activityLive['liveId']]['status'] ? 'finished' : 'un_finished') : 'none';
+                        }
+                        $task['liveStatus'] = $liveStatus = $activityLive['progressStatus'];
+                        $currentTime = time();
+                        if ('created' === $liveStatus && $currentTime > $task['activity']['startTime']) {
+                            $task['liveStatus'] = EdusohoLiveClient::LIVE_STATUS_LIVING;
+                        }
+                        if ('created' === $liveStatus && $currentTime > $task['activity']['endTime']) {
+                            $task['liveStatus'] = EdusohoLiveClient::LIVE_STATUS_CLOSED;
                         }
                     }
                     if ('homework' === $task['type'] && !empty($task['activity'])) {

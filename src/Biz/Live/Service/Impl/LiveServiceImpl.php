@@ -25,21 +25,7 @@ class LiveServiceImpl extends BaseService implements LiveService
 
     public function canExecuteLiveStatusJob($liveStatus, $jobType)
     {
-        $can = false;
-        switch ($jobType) {
-            case 'startJob':
-                $can = 'created' === $liveStatus;
-                break;
-            case 'closeJob':
-            case 'closeAgainJob':
-            case 'closeSecondJob':
-            $can = 'start' === $liveStatus;
-                break;
-            default:
-                break;
-        }
-
-        return $can;
+        return 'startJob' === $jobType ? 'created' === $liveStatus : 'closed' !== $liveStatus;
     }
 
     protected function handleLiveStatus($liveStatus, $confirmStatus)
@@ -155,7 +141,7 @@ class LiveServiceImpl extends BaseService implements LiveService
 
         $baseUrl = $this->getBaseUrl();
         if (!empty($liveLogo) && !empty($liveLogo['live_logo'])) {
-            $liveLogoUrl = $baseUrl.'/'.$liveLogo['live_logo'];
+            $liveLogoUrl = $baseUrl . '/' . $liveLogo['live_logo'];
         }
 
         return $liveLogoUrl;
