@@ -39,9 +39,7 @@ class ClassroomReport extends AbstractResource
             throw ClassroomException::NOTFOUND_CLASSROOM();
         }
 
-        if (!$this->getClassroomService()->canManageClassroom($classroomId)) {
-            throw ClassroomException::FORBIDDEN_MANAGE_CLASSROOM();
-        }
+        $this->getClassroomService()->tryHandleClassroom($classroomId);
 
         return $classroom;
     }

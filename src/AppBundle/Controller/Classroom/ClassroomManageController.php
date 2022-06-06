@@ -761,7 +761,7 @@ class ClassroomManageController extends BaseController
 
     public function statisticsAction(Request $request, $id)
     {
-        $this->getClassroomService()->tryManageClassroom($id);
+        $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
         $overview['studentCount'] = $this->getClassroomService()->searchMemberCount([
             'classroomId' => $classroom['id'],
@@ -801,7 +801,7 @@ class ClassroomManageController extends BaseController
 
     public function studentDetailListAction(Request $request, $id)
     {
-        $this->getClassroomService()->tryManageClassroom($id);
+        $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
         $conditions = $request->query->all();
         $studentDetailCount = $this->getReportService()->getStudentDetailCount($id, $conditions);
