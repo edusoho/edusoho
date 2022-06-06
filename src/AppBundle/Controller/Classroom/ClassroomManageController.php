@@ -132,6 +132,7 @@ class ClassroomManageController extends BaseController
                 'paginator' => $paginator,
                 'role' => $role,
                 'disableDeleteSearchResult' => empty($fields['keyword']) && empty($fields['expired']),
+                'offset' => $paginator->getOffsetCount(),
             ]
         );
     }
