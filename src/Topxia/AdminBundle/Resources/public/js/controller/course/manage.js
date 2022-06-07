@@ -63,14 +63,14 @@ define(function (require, exports, module) {
       var $this = $(this);
       var $tr = $this.parents('tr');
       let msg = 'admin.course.delete_hint';
-      let status = false;
+      let status = null;
       $.ajax({
         type: 'post',
         url: $tr.data('url'),
         async: false,
         success: function (data) {
           status = data.status;
-          if (status === true) {
+          if (status === 'existent') {
             msg = 'admin.course.mall_goods_exist.delete_hint';
           }
           if (status === 'error') {

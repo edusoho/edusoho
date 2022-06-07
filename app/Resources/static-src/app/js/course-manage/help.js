@@ -41,14 +41,14 @@ const closeCourseAction = ($target) => {
 export const deleteCourse = () => {
   $('body').on('click', '.js-delete-course', (evt) => {
     let msg = 'course.manage.delete_hint';
-    let status = false;
+    let status = null;
     $.ajax({
       type: 'post',
       url: $(evt.currentTarget).data('check-url'),
       async: false,
       success: function (data) {
         status = data.status;
-        if (status === true) {
+        if (status === 'existent') {
           msg = 'course.manage.mall_goods_exist.delete_hint';
           if (data.redirect) {
             window.location.href = data.redirect;

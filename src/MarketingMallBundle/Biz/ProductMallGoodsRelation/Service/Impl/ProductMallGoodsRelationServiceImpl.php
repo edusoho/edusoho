@@ -51,7 +51,6 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
 
     public function checkMallClassroomCourseExist($courseId)
     {
-
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
         $classroomIds = ArrayToolkit::column($this->getClassroomService()->findClassroomsByCoursesIds($courseIds), 'classroomId');
         $relations = $this->findProductMallGoodsRelationsByProductIdsAndProductType($classroomIds, 'classroom');
@@ -67,12 +66,13 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
         if ($relations) {
             $client = new MarketingMallClient($this->biz);
             $result = $client->checkGoodsIsPublishByCodes(ArrayToolkit::column($relations, 'goodsCode'));
+            file_put_contents('/tmp/test',\GuzzleHttp\json_encode($result));
             if (in_array(true, $result)) {
                 return 'error';
             }
-            return true;
+            return 'existent';
         }
-        return false;
+        return 'nonexistent';
     }
 
     /**
