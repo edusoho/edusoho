@@ -66,7 +66,6 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
         if ($relations) {
             $client = new MarketingMallClient($this->biz);
             $result = $client->checkGoodsIsPublishByCodes(ArrayToolkit::column($relations, 'goodsCode'));
-            file_put_contents('/tmp/test',\GuzzleHttp\json_encode($result));
             if (in_array(true, $result)) {
                 return 'error';
             }
