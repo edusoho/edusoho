@@ -117,6 +117,7 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
                 'id = :id',
                 'id in (:ids)',
                 'copyId = :copyId',
+                'copyId in (:copyIds)',
                 'courseId = :courseId',
                 'courseId in (:courseIds)',
                 'seq >= :seq_GTE',
