@@ -5,6 +5,32 @@
 <form class="form-horizontal" id="audit-modal" method="post" action="{{ path('admin_v2_destroy_account_record_audit', {id: record.id}) }}">
   <div class="form-group">
     <div class="col-md-3 control-label">
+      <label>{{ 'user.fields.mobile_simple_label'|trans }}</label>
+    </div>
+    <div class="col-md-8 controls pts">
+      {% if destroyUser.verifiedMobile %}
+        {{ destroyUser.verifiedMobile }}
+      {% elseif destroyUser.mobile %}
+        {{ destroyUser.mobile }}
+      {% else %}
+        --
+      {% endif %}
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'user.fields.email_label'|trans }}</label>
+    </div>
+    <div class="col-md-8 controls pts">
+      {% if not is_system_generated_email(destroyUser.email) %}
+        {{ destroyUser.email }}
+      {% else %}
+        --
+      {% endif %}
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
       <label for="status">{{ 'admin_v2.destroy_account.destroyed_account.audit_reason'|trans }}</label>
     </div>
     <div class="col-md-8 controls radios">

@@ -6,11 +6,7 @@ class UserToolkit
 {
     public static function isEmailGeneratedBySystem($email)
     {
-        if ('@edusoho.net' == strstr($email, '@')) {
-            return true;
-        }
-
-        return false;
+        return (bool) preg_match('/^user_[a-z0-9]{9}@edusoho\.net$/', $email);
     }
 
     public static function isGenderDefault($gender)
