@@ -60,18 +60,18 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
         return false;
     }
 
-    public function checkMallGoods(array $productIds, $type)
+    public function checkEsProductCanDelete(array $productIds, $type)
     {
         $relations = $this->findProductMallGoodsRelationsByProductIdsAndProductType($productIds, $type);
         if ($relations) {
             $client = new MarketingMallClient($this->biz);
             $result = $client->checkGoodsIsPublishByCodes(ArrayToolkit::column($relations, 'goodsCode'));
             if (in_array(true, $result)) {
-                return 'error';
+                return 'cannot_delete';//商城有商品且已上架则不能删除
             }
-            return 'existent';
+            return 'should_delete_mall_goods';//商城有商品且未上架则需要询问是否删除
         }
-        return 'nonexistent';
+        return 'can_delete';//在商城没有商品则可以直接删除es产品
     }
 
     /**

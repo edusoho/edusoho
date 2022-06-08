@@ -48,18 +48,18 @@ export const deleteCourse = () => {
       async: false,
       success: function (data) {
         status = data.status;
-        if (status === 'existent') {
+        if (status === 'should_delete_mall_goods') {
           msg = 'course.manage.mall_goods_exist.delete_hint';
           if (data.redirect) {
             window.location.href = data.redirect;
           }
         }
-        if (status === 'error') {
+        if (status === 'cannot_delete') {
           cd.message({type: 'danger', message: Translator.trans('mall.goods.exist.delete_fail_hint')});
         }
       }
     });
-    if (status === 'error') {
+    if (status === 'cannot_delete') {
       return;
     }
     cd.confirm({

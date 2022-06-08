@@ -45,17 +45,17 @@ define(function(require, exports, module) {
         async: false,
         success: function (data) {
           status = data.status;
-          if (status === 'existent') {
+          if (status === 'should_delete_mall_goods') {
             msg = 'admin.item_bank_exercise.exercise.mall_goods_exist.delete_hint';
           }
-          if (status === 'error') {
+          if (status === 'cannot_delete') {
             let res = Translator.trans('mall.goods.exist.delete_fail_hint');
             Notify.danger(res);
           }
         }
       });
 
-      if (status === 'error') {
+      if (status === 'cannot_delete') {
         return;
       }
 

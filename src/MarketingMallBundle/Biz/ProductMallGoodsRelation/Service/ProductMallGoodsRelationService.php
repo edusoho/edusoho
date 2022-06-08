@@ -18,6 +18,6 @@ interface ProductMallGoodsRelationService
 
     public function checkMallClassroomCourseExist($courseId);
 
-    public function checkMallGoods(array $productIds, $type);
+    public function checkEsProductCanDelete(array $productIds, $type);
 
 }

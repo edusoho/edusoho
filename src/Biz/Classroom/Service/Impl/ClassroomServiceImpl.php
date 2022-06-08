@@ -728,7 +728,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
             }
             $this->tryManageClassroom($id, 'admin_classroom_delete');
-            if ($this->getProductMallGoodsRelationService()->checkMallGoods([$id], 'classroom') === 'error') {
+            if ($this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'classroom') === 'error') {
                 throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
             }
             $this->deleteAllCoursesInClass($id);

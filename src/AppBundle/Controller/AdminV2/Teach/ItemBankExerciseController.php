@@ -115,9 +115,9 @@ class ItemBankExerciseController extends BaseController
         return $conditions;
     }
 
-    public function checkMallGoodsAction(Request $request, $id)
+    public function checkEsProductCanDeleteAction(Request $request, $id)
     {
-        $status = $this->getProductMallGoodsRelationService()->checkMallGoods([$id], 'questionBank');
+        $status = $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'questionBank');
         return $this->createJsonResponse(['status' => $status]);
     }
 

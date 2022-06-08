@@ -133,10 +133,10 @@ class CourseSetController extends BaseController
         return $this->createJsonResponse(['code' => 0, 'message' => '删除课程成功']);
     }
 
-    public function checkMallGoodsAction(Request $request, $id)
+    public function checkEsProductCanDeleteAction(Request $request, $id)
     {
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByCourseSetId($id), 'id');
-        $status = $this->getProductMallGoodsRelationService()->checkMallGoods($courseIds, 'course');
+        $status = $this->getProductMallGoodsRelationService()->checkEsProductCanDelete($courseIds, 'course');
         return $this->createJsonResponse(['status' => $status]);
 
 
