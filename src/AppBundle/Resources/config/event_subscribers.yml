@@ -531,3 +531,11 @@ services:
       public: true
       tags:
         - name: codeages_plugin.event.subscriber
+
+    activity_live_event_subscriber:
+      class: Biz\Activity\Event\LiveEventSubscriber
+      arguments:
+        - '@biz'
+      public: true
+      tags:
+        - name: codeages_plugin.event.subscriber

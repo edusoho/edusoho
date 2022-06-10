@@ -132,6 +132,7 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'startTime >= :startTime_GT',
             'startTime <= :startTime_LT',
             'endTime <= :endTime_LT',
+            'endTime > :endTime_GT',
             'createdTime = :createdTime',
             'updatedTime = :updatedTime',
             'copyId = :copyId',

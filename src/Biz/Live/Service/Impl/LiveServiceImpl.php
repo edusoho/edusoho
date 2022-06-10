@@ -5,6 +5,7 @@ namespace Biz\Live\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Live\Dao\LiveProviderTeacherDao;
 use Biz\Live\Service\LiveService;
 use Biz\System\Service\SettingService;
 use Biz\User\UserException;
@@ -159,6 +160,52 @@ class LiveServiceImpl extends BaseService implements LiveService
         return 1;
     }
 
+    public function isLiveProviderTeacherRequired($provider)
+    {
+        return EdusohoLiveClient::LIVE_PROVIDER_QUANSHI == $provider;
+    }
+
+    public function getLiveProviderTeacherId($userId, $provider)
+    {
+        if (!$this->isLiveProviderTeacherRequired($provider)) {
+            return 0;
+        }
+        $liveProviderTeacher = $this->getLiveProviderTeacherDao()->getByUserIdAndProvider($userId, $provider);
+        if ($liveProviderTeacher) {
+            return $liveProviderTeacher['providerTeacherId'];
+        }
+        $user = $this->getUserService()->getUser($userId);
+        $liveProviderTeacher = [
+            'nickname' => $user['nickname'],
+            'type' => 'email',
+            'email' => $user['email'],
+        ];
+        if ($user['verifiedMobile']) {
+            $liveProviderTeacher['type'] = 'mobile';
+            $liveProviderTeacher['mobile'] = $user['verifiedMobile'];
+        }
+        $providerTeacher = $this->getLiveClient()->createLiveTeacher($liveProviderTeacher);
+        if (!empty($providerTeacher['memberUserId'])) {
+            $this->createLiveProviderTeacher([
+                'userId' => $userId,
+                'provider' => $provider,
+                'providerTeacherId' => $providerTeacher['memberUserId'],
+            ]);
+        }
+
+        return $providerTeacher['memberUserId'] ?? 0;
+    }
+
+    protected function createLiveProviderTeacher($liveProviderTeacher)
+    {
+        if (!ArrayToolkit::requireds($liveProviderTeacher, ['userId', 'provider', 'providerTeacherId'])) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+        $liveProviderTeacher = ArrayToolkit::parts($liveProviderTeacher, ['userId', 'provider', 'providerTeacherId']);
+
+        return $this->getLiveProviderTeacherDao()->create($liveProviderTeacher);
+    }
+
     protected function isRoomType($liveRoomType)
     {
         return in_array($liveRoomType, [EdusohoLiveClient::LIVE_ROOM_LARGE, EdusohoLiveClient::LIVE_ROOM_SMALL]);
@@ -180,6 +227,9 @@ class LiveServiceImpl extends BaseService implements LiveService
         return $this->biz['env']['base_url'];
     }
 
+    /**
+     * @return EdusohoLiveClient
+     */
     protected function getLiveClient()
     {
         return $this->biz['educloud.live_client'];
@@ -201,5 +251,13 @@ class LiveServiceImpl extends BaseService implements LiveService
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return LiveProviderTeacherDao
+     */
+    protected function getLiveProviderTeacherDao()
+    {
+        return $this->createDao('Live:LiveProviderTeacherDao');
     }
 }
