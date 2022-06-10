@@ -14,6 +14,7 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
             'classroom.course.create' => 'onClassroomCourseCreate',
             'classroom.course.delete' => 'onClassroomCourseDelete',
             'classroom.course.update' => 'onClassroomCourseUpdate',
+            'classroom.info.update' => 'onClassroomInfoUpdate',
             'classroom.delete' => 'onClassroomProductDelete'
         ];
     }
@@ -41,6 +42,12 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
         if ($courseIds != $existCourseIds) {
             $this->syncClassroomToMarketingMall($classroom['id']);
         }
+    }
+
+    public function onClassroomInfoUpdate(Event $event)
+    {
+        $id = $event->getSubject()['id'];
+        $this->syncClassroomToMarketingMall($id);
     }
 
     public function onClassroomProductDelete(Event $event)

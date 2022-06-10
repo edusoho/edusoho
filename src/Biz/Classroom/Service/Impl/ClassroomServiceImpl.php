@@ -435,6 +435,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $tagIds = empty($fields['tagIds']) ? [] : $fields['tagIds'];
         $this->updateClassroomTags($id, $tagIds);
+        $this->dispatchEvent('classroom.info.update', ['id' => $id]);
 
         return $this->updateClassroom($id, $fields);
     }

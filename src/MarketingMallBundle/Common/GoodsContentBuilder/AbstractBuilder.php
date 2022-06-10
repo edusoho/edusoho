@@ -43,7 +43,7 @@ abstract class AbstractBuilder
         return $cover;
     }
 
-    public function transformSummary($summary)
+    public function transformImages($summary)
     {
         preg_match_all('/<img.*?src=[\"|\']?(.*?)[\"|\']*?\/?\s*>/i', $summary, $matches);
         if (empty($matches)) {

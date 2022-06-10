@@ -27,7 +27,8 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
             'item.delete' => 'onItemDelete',
             'item.batchDelete' => 'onItemBatchDelete',
             'item.import' => 'onItemImport',
-            'questionBank.delete' => 'onQuestionBankProductDelete'
+            'questionBankProduct.update' => 'onQuestionBankUpdate',
+            'questionBankProduct.delete' => 'onQuestionBankProductDelete'
         ];
     }
 
@@ -174,6 +175,15 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
                 $this->syncQuestionBankToMarketingMall($exercise['id']);
             }
             break;
+        }
+    }
+
+    public function onQuestionBankUpdate(Event $event)
+    {
+        $questionBankId = $event->getSubject()['questionBankId'];
+        $exercise = $this->getExerciseService()->getByQuestionBankId($questionBankId);
+        if ($exercise) {
+            $this->syncQuestionBankToMarketingMall($exercise['id']);
         }
     }
 
