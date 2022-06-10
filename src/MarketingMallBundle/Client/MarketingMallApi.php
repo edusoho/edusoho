@@ -31,7 +31,7 @@ class MarketingMallApi
         self::$accessKey = $setting['access_key'] ?? '';
         self::$secretKey = $setting['secret_key'] ?? '';
         $headers[] = 'Content-type: application/json';
-        $headers[] = 'Mall-Auth-Token: ' . $this->makeToken();
+        $headers[] = 'Authorization: ' . $this->makeToken();
         self::$headers = $headers;
         self::$timestamp = time();
         $config = [
@@ -64,9 +64,7 @@ class MarketingMallApi
     {
         try {
             $params = ArrayToolkit::parts($params[0], [
-                'goodsCode',
                 'targetType',
-                'targetId',
                 'goodsContent'
             ]);
             $this->post('/api-school/goods/updateGoodsContent', $params);
@@ -76,15 +74,13 @@ class MarketingMallApi
         }
     }
 
-    public function updateTeacherOrClassCourse($params)
+    public function updateTeacherInfo($params)
     {
         try {
             $params = ArrayToolkit::parts($params[0], [
-                'type',
-                'targetId',
                 'content'
             ]);
-            $this->post('/api-school/goods/updateTeacherOrClassCourse', $params);
+            $this->post('/api-school/goods/updateTeacherInfo', $params);
         } catch (\RuntimeException $e) {
             $this->getLogger()->error('更新商品详情错误' . $e->getMessage(), ['params' => $params]);
             throw new \InvalidArgumentException('接口请求错误!');

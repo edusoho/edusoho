@@ -195,9 +195,9 @@ class ClassroomController extends BaseController
         return $this->createJsonResponse(['code' => 0, 'message' => $this->trans('site.delete_success_hint')]);
     }
 
-    public function checkMallGoodsAction(Request $request, $id)
+    public function checkEsProductCanDeleteAction(Request $request, $id)
     {
-        $status = $this->getProductMallGoodsRelationService()->checkMallGoods([$id], 'classroom');
+        $status = $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'classroom');
         return $this->createJsonResponse(['status' => $status]);
     }
 

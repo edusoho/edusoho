@@ -6,7 +6,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Event\Event;
-use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use MarketingMallBundle\Common\GoodsContentBuilder\CourseInfoBuilder;
 
 class CourseEventSubscriber extends BaseEventSubscriber
@@ -16,7 +15,6 @@ class CourseEventSubscriber extends BaseEventSubscriber
         return [
             'course-set.update' => 'onCourseSetUpdate',
             'course.teachers.update' => 'onCourseTeacherUpdate',
-            'course.marketing.update' => 'onCourseMarketingUpdate',
             'course.lesson.update_status' => 'onCourseLessonUpdateStatus',
             'course.lesson.batch_update_status' => 'onCourseLessonBatchUpdateStatus',
             'course.lesson.batch_delete' => 'onCourseLessonBatchDelete',

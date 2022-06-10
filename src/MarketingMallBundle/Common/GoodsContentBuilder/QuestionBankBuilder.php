@@ -10,6 +10,7 @@ use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class QuestionBankBuilder extends AbstractBuilder
 {
@@ -21,7 +22,7 @@ class QuestionBankBuilder extends AbstractBuilder
         }
 
         return [
-            'bankId' => $exercise['questionBankId'],
+            'bankId' => $id,
             'title' => $exercise['title'],
             'cover' => $this->transformCover($exercise['cover'], 'item_bank_exercise.png'),
             'price' => $exercise['price'],
@@ -33,11 +34,17 @@ class QuestionBankBuilder extends AbstractBuilder
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
         $list = $exercise['chapterEnable'] ? $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']) : [];
+        $list = $this->buildChapterList($list);
+        $num = $this->getItemService()->countItems(['bank_id' => $exercise['id'], 'category_id' => 0]);
+        if ($num > 0) {
+            $list[] = ['title' => '未分类',
+                'questionCount' => $num];
+        }
 
         return [
             'title' => '章节练习',
             'type' => 'chapter',
-            'list' => $this->buildChapterList($list),
+            'list' => $list,
         ];
     }
 
@@ -107,6 +114,14 @@ class QuestionBankBuilder extends AbstractBuilder
     protected function getItemCategoryService()
     {
         return $this->biz->service('ItemBank:Item:ItemCategoryService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->biz->service('ItemBank:Item:ItemService');
     }
 
     /**

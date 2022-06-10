@@ -2275,7 +2275,7 @@ course_set_manage_course_delete:
 course_set_manage_course_check_mall_goods:
   path: '/course_set/course/{courseId}/check_mall_goods'
   defaults:
-    _controller: 'AppBundle:Course/CourseManage:checkMallGoods'
+    _controller: 'AppBundle:Course/CourseManage:checkEsProductCanDelete'
   methods:
     - POST
 course_set_manage_course_publish:

@@ -23,7 +23,7 @@ define(function (require, exports, module) {
     // 确认后,弹出密码确认框;确认后删除
     $table.on('click', '.delete-classroom', function () {
       let msg = 'admin.classroom.delete_hint';
-      let status = false;
+      let status = null;
       let $tr = $(this).parents('tr');
       $.ajax({
         type: 'post',
@@ -31,17 +31,17 @@ define(function (require, exports, module) {
         async: false,
         success: function (data) {
           status = data.status;
-          if (status === true) {
+          if (status === 'should_delete_mall_goods') {
             msg = 'admin.classroom.mall_goods_exist.delete_hint';
           }
-          if (status==='error'){
+          if (status==='cannot_delete'){
             let res = Translator.trans('mall.goods.exist.delete_fail_hint');
             Notify.danger(res);
           }
         }
       });
 
-      if (status === 'error') {
+      if (status === 'cannot_delete') {
         return;
       }
 

@@ -4,7 +4,9 @@ namespace MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
+use Biz\Course\Service\CourseService;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Dao\ProductMallGoodsRelationDao;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use MarketingMallBundle\Client\MarketingMallClient;
@@ -42,23 +44,50 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
         return $this->getProductMallGoodsRelationDao()->findByProductType($productType);
     }
 
-    public function findProductMallGoodsRelationsByProductIdsProductType($productIds, $productType)
+    public function findProductMallGoodsRelationsByProductIdsAndProductType($productIds, $productType)
     {
         return $this->getProductMallGoodsRelationDao()->search(['productIds' => $productIds, 'type' => $productType], [], 0, PHP_INT_MAX);
     }
 
-    public function checkMallGoods(array $productIds, $type)
+    public function checkMallClassroomCourseExist($courseId)
     {
-        $relations = $this->findProductMallGoodsRelationsByProductIdsProductType($productIds, $type);
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
+        $classroomIds = ArrayToolkit::column($this->getClassroomService()->findClassroomsByCoursesIds($courseIds), 'classroomId');
+        $relations = $this->findProductMallGoodsRelationsByProductIdsAndProductType($classroomIds, 'classroom');
+        if (!empty($relations)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function checkEsProductCanDelete(array $productIds, $type)
+    {
+        $relations = $this->findProductMallGoodsRelationsByProductIdsAndProductType($productIds, $type);
         if ($relations) {
             $client = new MarketingMallClient($this->biz);
             $result = $client->checkGoodsIsPublishByCodes(ArrayToolkit::column($relations, 'goodsCode'));
             if (in_array(true, $result)) {
-                return 'error';
+                return 'cannot_delete';//商城有商品且已上架则不能删除
             }
-            return true;
+            return 'should_delete_mall_goods';//商城有商品且未上架则需要询问是否删除
         }
-        return false;
+        return 'can_delete';//在商城没有商品则可以直接删除es产品
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    private function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 
     /**
