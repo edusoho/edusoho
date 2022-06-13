@@ -316,8 +316,11 @@ class Setting extends AbstractResource
         if (empty($loginSetting)) {
             SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG();
         }
+        if (empty($authSetting['register_enabled'])) {
+            $authSetting['register_enabled'] = 'closed' == $authSetting['register_mode'] ? 'closed' : 'opened';
+        }
 
-        $result = [
+        return [
             'auth' => [
                 'register_mode' => 'closed' === $authSetting['register_enabled'] ? 'closed' : $authSetting['register_mode'],
                 'user_terms_enabled' => 'opened' == $authSetting['user_terms'] ? true : false,
@@ -332,8 +335,6 @@ class Setting extends AbstractResource
                 'weixinmob_enabled' => (int) $loginSetting['weixinmob_enabled'] ? true : false,
             ],
         ];
-
-        return $result;
     }
 
     public function getCloud($request = null)
