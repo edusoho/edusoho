@@ -110,6 +110,36 @@
   {% endspaceless %}
 {% endmacro %}
 
+{% macro jump_paginator(paginator, class) %}
+  {% set perpages = [50, 100, 150] %}
+  {% if paginator|default() and paginator.lastPage >= 1 %}
+    <nav class=" {{ class|default('text-center') }}">
+      <ul class="pagination cd-pagination" data-url="{{ paginator.getUrlPath() }}">
+        {% if paginator.currentPage != paginator.firstPage %}
+          <li><a href="javascript:;" data-page="{{ paginator.firstPage }}"><i class="cd-icon cd-icon-first-page"></i></a></li>
+          <li><a href="javascript:;" data-page="{{ paginator.previousPage }}"><i class="cd-icon cd-icon-arrow-left"></i></a></li>
+        {% endif %}
+        {% for page in paginator.pages %}
+          <li {% if page == paginator.currentPage %}class="active"{% endif %}><a href="javascript:;" data-page="{{ page }}">{{ page }}</a></li>
+        {% endfor %}
+
+        {% if paginator.currentPage != paginator.lastPage %}
+          <li><a href="javascript:;" data-page="{{ paginator.nextPage }}"><i class="cd-icon cd-icon-arrow-right"></i></a></li>
+          <li><a href="javascript:;" data-page="{{ paginator.getLastPage() }}"><i class="cd-icon cd-icon-last-page"></i></a></li>
+        {% endif %}
+        <li>
+          <select id="currentPerPageCount">
+            {% for perpage in perpages %}
+              <option {% if paginator.getPerPageCount() == perpage %}selected{% endif %}>{{ perpage }}</option>
+            {% endfor %}
+          </select>
+        </li>
+        <li>{{ 'paginator.jump'|trans }} <input type="text" class="form-control" id="jumpPage"> {{ 'paginator.page'|trans }}</li>
+      </ul>
+    </nav>
+  {% endif %}
+{% endmacro %}
+
 {% macro paginator(paginator, class) %}
   {% if paginator|default() and paginator.lastPage > 1 %}
     <nav class=" {{ class|default('text-center') }}">
