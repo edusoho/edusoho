@@ -68,7 +68,7 @@
         </li>
       {% endif %}
 
-      {% if canManage %}
+      {% if canHandle %}
         <li class="cd-sidebar__heading">
           <hr class="mt0 mb0 mh10 bg-border-color">
         </li>
@@ -78,6 +78,9 @@
             {{ 'classroom.manage.data_statictics'|trans }}
           </a>
         </li>
+      {% endif %}
+
+      {% if canManage %}
         <li class="cd-sidebar__item {% if side_nav == 'live-statistics' %}active{% endif %}">
           <a href="{{ path('classroom_live_statistics', { id: classroom.id }) }}">
             {{ 'classroom.manage.live_statictics'|trans }}
@@ -89,5 +92,6 @@
           </a>
         </li>
       {% endif %}
-    </ul>
-  </div>
+    </div>
+  </ul>
+</div>

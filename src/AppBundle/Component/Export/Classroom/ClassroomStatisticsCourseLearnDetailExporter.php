@@ -51,13 +51,7 @@ class ClassroomStatisticsCourseLearnDetailExporter extends Exporter
 
     public function canExport()
     {
-        try {
-            $this->getClassroomService()->tryManageClassroom($this->conditions['classroomId']);
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        return true;
+        return $this->getClassroomService()->canHandleClassroom($this->conditions['classroomId']);
     }
 
     public function getCount()
