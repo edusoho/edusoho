@@ -5,6 +5,7 @@ namespace Biz\Task\Job;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\AppLoggerConstant;
+use Biz\Crontab\SystemCrontabInitializer;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -12,8 +13,8 @@ class CourseTaskUpdateSyncJob extends AbstractSyncJob
 {
     public function execute()
     {
+        $task = $this->getTaskService()->getTask($this->args['taskId']);
         try {
-            $task = $this->getTaskService()->getTask($this->args['taskId']);
             $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
             $copiedCourseIds = array_column($copiedCourses, 'id');
             $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
@@ -41,6 +42,16 @@ class CourseTaskUpdateSyncJob extends AbstractSyncJob
             $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_update', 'course.log.task.update.sync.success_tips', array('taskId' => $task['id']));
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_update', 'course.log.task.update.sync.fail_tips', array('error' => $e->getMessage()));
+            if (!isset($this->args['repeat'])) {
+                $this->getSchedulerService()->register(array(
+                    'name' => 'course_task_update_sync_job_' . $task['id'],
+                    'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                    'expression' => time(),
+                    'misfire_policy' => 'executing',
+                    'class' => 'Biz\Task\Job\CourseTaskUpdateSyncJob',
+                    'args' => array('taskId' => $task['id'], 'repeat' => 1),
+                ));
+            }
             throw $e;
         }
     }

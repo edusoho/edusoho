@@ -7,6 +7,7 @@ use Biz\Activity\Dao\ActivityDao;
 use Biz\AppLoggerConstant;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseMaterialDao;
+use Biz\Crontab\SystemCrontabInitializer;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -61,6 +62,16 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_create', 'course.log.task.create.sync.fail_tips', ['error' => $e->getMessage()]);
             $this->getLock()->release("sync_course_{$task['courseId']}");
+            if (!isset($this->args['repeat'])) {
+                $this->getSchedulerService()->register(array(
+                    'name' => 'course_task_create_sync_job_' . $task['id'],
+                    'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                    'expression' => time() + 60,
+                    'misfire_policy' => 'executing',
+                    'class' => 'Biz\Task\Job\CourseTaskCreateSyncJob',
+                    'args' => array('taskId' => $task['id'], 'repeat' => 1),
+                ));
+            }
             throw $e;
         }
     }

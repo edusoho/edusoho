@@ -5,6 +5,7 @@ namespace Biz\Task\Job;
 use AppBundle\Common\ArrayToolkit;
 use Biz\AppLoggerConstant;
 use Biz\Course\Service\MemberService;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Strategy\CourseStrategy;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -12,9 +13,9 @@ class CourseTaskDeleteSyncJob extends AbstractSyncJob
 {
     public function execute()
     {
+        $taskId = $this->args['taskId'];
+        $courseId = $this->args['courseId'];
         try {
-            $taskId = $this->args['taskId'];
-            $courseId = $this->args['courseId'];
             $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($courseId, 1);
             $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
             $copiedCourseMap = ArrayToolkit::index($copiedCourses, 'id');
@@ -26,6 +27,16 @@ class CourseTaskDeleteSyncJob extends AbstractSyncJob
             $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.success_tips', ['taskId' => $taskId]);
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.fail_tips', ['error' => $e->getMessage()]);
+            if (!isset($this->args['repeat'])) {
+                $this->getSchedulerService()->register(array(
+                    'name' => "course_task_delete_sync_job_{$taskId}",
+                    'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                    'expression' => time() + 60,
+                    'misfire_policy' => 'executing',
+                    'class' => 'Biz\Task\Job\CourseTaskDeleteSyncJob',
+                    'args' => array('taskId' => $taskId, 'courseId' => $courseId, 'repeat' => 1),
+                ));
+            }
             throw $e;
         }
     }
