@@ -14,6 +14,7 @@ use Biz\BaseService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\File\Service\UploadFileService;
+use Biz\Live\Service\LiveService;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -385,7 +386,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
      */
     public function createLiveroom($activity)
     {
-        $speaker = $this->getUserService()->getUser($activity['fromUserId']);
+        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+        $speakerId = empty($course['teacherIds']) ? $activity['fromUserId'] : $course['teacherIds'][0];
+        $speaker = $this->getUserService()->getUser($speakerId);
         if (empty($speaker)) {
             $this->createNewException(UserException::NOTFOUND_USER());
         }
@@ -393,8 +396,6 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (!empty($activity['roomType']) && !$this->isRoomType($activity['roomType'])) {
             $this->createNewException(LiveActivityException::ROOMTYPE_INVALID());
         }
-
-        $speaker = $speaker['nickname'];
 
         $liveLogo = $this->getSettingService()->get('course');
         $liveLogoUrl = '';
@@ -408,7 +409,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $liveData = [
             'summary' => $remark,
             'title' => $activity['title'],
-            'speaker' => $speaker,
+            'speaker' => $speaker['nickname'],
             'startTime' => $activity['startTime'].'',
             'endTime' => ($activity['startTime'] + $activity['length'] * 60).'',
             'authUrl' => $baseUrl.'/live/auth',
@@ -421,6 +422,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveData['roomType'] = EdusohoLiveClient::LIVE_ROOM_LARGE;
             $liveData['pseudoVideoUrl'] = $this->getPseudoLiveVideoUrl($activity);
         }
+        $liveAccount = $this->getEdusohoLiveClient()->getLiveAccount();
+        $liveData['teacherId'] = $this->getLiveService()->getLiveProviderTeacherId($speakerId, $liveAccount['provider']);
 
         $live = $this->getEdusohoLiveClient()->createLive($liveData);
 
@@ -573,11 +576,6 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->createService('File:UploadFileService');
     }
 
-    protected function getTokenService()
-    {
-        return $this->createService('User:TokenService');
-    }
-
     /**
      * @return LogService
      */
@@ -602,17 +600,20 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->createService('MultiClass:MultiClassGroupService');
     }
 
-    protected function getSchedulerService()
-    {
-        return $this->createService('Scheduler:SchedulerService');
-    }
-
     /**
      * @return LiveReplayService
      */
     protected function getLiveReplayService()
     {
         return $this->createService('Course:LiveReplayService');
+    }
+
+    /**
+     * @return LiveService
+     */
+    protected function getLiveService()
+    {
+        return $this->createService('Live:LiveService');
     }
 
     /**
