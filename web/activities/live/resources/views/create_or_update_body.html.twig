@@ -67,9 +67,11 @@
         <div class="col-sm-10">
           <ul class="live-resource-list" id="material-list">
             {% for media in medias|default() %}
-              <li class="live-resource-item" data-id="{{ media.fileId }}">
-                <a class="gray-primary" href="{{ path('material_download',{ fileId:media.fileId }) }}" target="_blank">{{ media.title }}</a>
-                <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="{{ 'course.plan_task.activity_manage.live_resource.delete_btn'|trans }}"><i class="es-icon es-icon-delete"></i></a>
+              <li class="live-resource-item clearfix" data-id="{{ media.fileId }}">
+                <div class="live-resource-item-left pull-left text-overflow">
+                  <a class="gray-primary" href="{{ path('material_download', {fileId: media.fileId}) }}" target="_blank">{{ media.title }}</a>
+                </div>
+                <a class="js-btn-delete" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.plan_task.activity_manage.live_resource.delete_btn'|trans }}"><i class="cd-icon cd-icon-close"></i></a>
               </li>
             {% endfor %}
           </ul>

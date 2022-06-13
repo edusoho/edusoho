@@ -21,7 +21,7 @@ export default class Live {
 
   initStep2Form() {
     jQuery.validator.addMethod('show_overlap_time_error', function(value, element) {
-      return this.optional( element ) || !$(element).data('showError');
+      return this.optional(element) || !$(element).data('showError');
     }, '所选时间已经有直播了，请换个时间');
     let $step2_form = $('#step2-form');
     this.validator2 = $step2_form.validate({
@@ -115,21 +115,23 @@ export default class Live {
 
   _timePickerHide() {
     let $starttime = this.$startTime;
-    parent.$('#modal', window.parent.document).on('afterNext',function(){
+    parent.$('#modal', window.parent.document).on('afterNext', function() {
       $starttime.datetimepicker('hide');
     });
   }
 
   initEvent() {
     this.$form.on('click', '.js-btn-delete', (event) => this.deleteItem(event));
-    this.$form.on('click', '.js-add-file-list', () => this.addFile());
-    
+
     window.ltc.on('getActivity', (msg) => {
-      window.ltc.emit('returnActivity', {valid:this.validator2.form(), data:window.ltc.getFormSerializeObject($('#step2-form'))});
+      window.ltc.emit('returnActivity', {
+        valid: this.validator2.form(),
+        data: window.ltc.getFormSerializeObject($('#step2-form'))
+      });
     });
-      
+
     window.ltc.on('getValidate', (msg) => {
-      window.ltc.emit('returnValidate', { valid: this.validator2.form() });
+      window.ltc.emit('returnValidate', {valid: this.validator2.form()});
     });
   }
 
@@ -137,7 +139,7 @@ export default class Live {
     let $parent = $(event.currentTarget).closest('li');
     let mediaId = $parent.data('id');
     const $materials = $('#materials');
-    this.materials = isEmpty($materials.val()) ? {} :  arrayIndex(JSON.parse($materials.val()), 'fileId');
+    this.materials = isEmpty($materials.val()) ? {} : arrayIndex(JSON.parse($materials.val()), 'fileId');
     if (this.materials && this.materials[mediaId]) {
       delete this.materials[mediaId];
       $materials.val(JSON.stringify(this.materials));
@@ -158,7 +160,7 @@ export default class Live {
     const successTip = 'activity.download_manage.materials_add_success_hint';
     const existTip = 'activity.download_manage.materials_exist_error_hint';
 
-    let media = {};  
+    let media = {};
     if (!isEmpty($media.val())) {
       media = JSON.parse($media.val());
       media.fileId = media.id;
@@ -207,9 +209,11 @@ export default class Live {
   showFile() {
     let item_tpl = '';
     item_tpl = `
-      <li class="live-resource-item" data-id="${ this.media.id }">
-        <a class="gray-primary" href="/materiallib/${ this.media.id }/download">${ this.media.name }</a>
-        <a class="js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.live_manage.materials_delete_btn')}">x</a>
+      <li class="live-resource-item clearfix" data-id="${this.media.id}">
+        <div class="live-resource-item-left pull-left text-overflow">
+          <a class="gray-primary" href="/materiallib/${this.media.id}/download">${this.media.name}</a>
+        </div>
+        <a class="js-btn-delete" href="javascript:;" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="cd-icon cd-icon-close"></i></a>
       </li>
     `;
 
@@ -231,6 +235,7 @@ export default class Live {
   initFileChooser() {
     const fileSelect = (file) => {
       $('#media').val(JSON.stringify(file));
+      this.addFile();
       chooserUiOpen();
       $('.js-current-file').text(file.name);
     };
