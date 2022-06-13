@@ -19,7 +19,7 @@ class Paginator
     public function __construct($request, $total, $perPage = 20)
     {
         $this->setItemCount($total);
-        $this->setPerPageCount($perPage);
+        $perPage = $this->setPerPageCount((int) $request->query->get('perpage', $perPage));
 
         $page = (int) $request->query->get('page');
 
@@ -85,6 +85,13 @@ class Paginator
     public function getPageUrl($page)
     {
         return str_replace('..page..', $page, $this->baseUrl);
+    }
+
+    public function getUrlPath()
+    {
+        $url = explode('?', $this->baseUrl);
+
+        return reset($url);
     }
 
     public function getPageRange()
