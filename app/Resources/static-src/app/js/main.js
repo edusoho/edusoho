@@ -108,22 +108,22 @@ if ($('.js-hidden-exception').length > 0) {
 
 $.ajax('/online/sample');
 
-let pageBaseUrl = $('.cd-pagination').data('url');
+let pageQueryUrl = $('.cd-pagination').data('url');
 let currentPerPageCount = $('#currentPerPageCount').children('option:selected').val();
 // 每页显示数量
 $('#currentPerPageCount').on('change', function () {
   currentPerPageCount = $(this).val();
-  window.location.href = pageBaseUrl + '?page=1&perpage=' + currentPerPageCount;
+  window.location.href = pageQueryUrl + 'page=1&perpage=' + currentPerPageCount;
 })
 
 // 分页
 $('.cd-pagination a').on('click', function () {
   let page = $(this).data('page');
-  window.location.href = pageBaseUrl + '?page=' + page + '&perpage=' + currentPerPageCount;
+  window.location.href = pageQueryUrl + 'page=' + page + '&perpage=' + currentPerPageCount;
 })
 
 // 跳页
 $('#jumpPage').on('blur', function () {
   let page = $(this).val();
-  window.location.href = pageBaseUrl + '?page=' + page + '&perpage=' + currentPerPageCount;
+  window.location.href = pageQueryUrl + 'page=' + page + '&perpage=' + currentPerPageCount;
 })
