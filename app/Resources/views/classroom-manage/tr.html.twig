@@ -12,7 +12,7 @@
     {% if student.remark %}
       <span class="color-gray text-sm" title="{{ student.remark|trans }}">({{ student.remark|trans|plain_text(16) }})</span>
     {% endif %}
-    <div class="color-gray text-sm">{{ 'classroom.join_course_time'|trans }}：{{ student.createdTime|date('Y-n-d H:i') }}</div>
+    <div class="color-gray text-sm">{{ 'classroom.join_course_time'|trans }}：{{ student.createdTime|date('Y-m-d H:i') }}</div>
   </td>
   <td class="vertical-middle">
     {{ user.verifiedMobile }}
@@ -22,13 +22,13 @@
       {{ student.learningProgressPercent }}%
     {% endif %}
   </td>
-  <td style="vertical-align: middle;">{% if student.deadline|default(0) %}{{ student.deadline|date('Y-n-d H:i') }}{% else %}{{ 'course.expiry_date.forever_mode'|trans }}{% endif %}</td>
+  <td style="vertical-align: middle;">{% if student.deadline|default(0) %}{{ student.deadline|date('Y-m-d H:i') }}{% else %}{{ 'course.expiry_date.forever_mode'|trans }}{% endif %}</td>
   <td style="vertical-align: middle;">
     <div class="btn-group">
       {% if app.user.isAdmin() %}
         <a class="mr10 link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_course_students_show', {courseSetId: 0, courseId:classroom.id, userId:user.id}) }}">{{ 'classroom.watch_data'|trans }}</a>
       {% endif %}
-      <a class=" dropdown-toggle link-primary" href="javascript:;" type="button" data-toggle="dropdown">{{ 'classroom.manage_btn'|trans }}
+      <a class=" dropdown-toggle link-primary" href="javascript:;" type="button" data-toggle="dropdown">{{ 'site.default.more'|trans }}
         <span class="caret ml5"></span>
       </a>
       <ul class="dropdown-menu pull-right">
