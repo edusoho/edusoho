@@ -136,6 +136,7 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'createdTime = :createdTime',
             'updatedTime = :updatedTime',
             'copyId = :copyId',
+            'copyId IN (:copyIds)',
             'finishType = :finishType',
             'finishData = :finishData',
         ];

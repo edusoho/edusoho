@@ -12,6 +12,11 @@ use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Event\CourseSyncSubscriber;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
+/**
+ * 任务执行超时
+ * 任务执行错误(异常)
+ * 任务执行结果不正确?
+ */
 class TaskSyncSubscriber extends CourseSyncSubscriber
 {
     public static function getSubscribedEvents()
@@ -36,12 +41,11 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if (empty($copiedCourses)) {
             return;
         }
-
         //task 创建同步任务，永久有效
         $this->getSchedulerService()->register(array(
             'name' => 'course_task_create_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-            'expression' => intval(time()),
+            'expression' => time(),
             'misfire_policy' => 'executing',
             'class' => 'Biz\Task\Job\CourseTaskCreateSyncJob',
             'args' => array('taskId' => $task['id']),
@@ -54,17 +58,15 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if ($task['copyId'] > 0) {
             return;
         }
-
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
         if (empty($copiedCourses)) {
             return;
         }
-
         //task 更新同步任务，永久有效
         $this->getSchedulerService()->register(array(
             'name' => 'course_task_update_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-            'expression' => intval(time()),
+            'expression' => time(),
             'misfire_policy' => 'executing',
             'class' => 'Biz\Task\Job\CourseTaskUpdateSyncJob',
             'args' => array('taskId' => $task['id']),
@@ -90,16 +92,12 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if ($task['copyId'] > 0) {
             return;
         }
-
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
         if (empty($copiedCourses)) {
             return;
         }
-
         $course = $this->getCourseService()->getCourse($task['courseId']);
-
         $status = $published ? 'published' : 'unpublished';
-
         if (CourseService::DEFAULT_COURSE_TYPE === $course['courseType']) {
             $sameCategoryTasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
             $this->getTaskDao()->update(array('courseIds' => array_column($copiedCourses, 'id'), 'copyIds' => array_column($sameCategoryTasks, 'id')), array('status' => $status));
@@ -114,16 +112,14 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if ($task['copyId'] > 0) {
             return;
         }
-
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
         if (empty($copiedCourses)) {
             return;
         }
-
         $this->getSchedulerService()->register(array(
             'name' => 'course_task_delete_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-            'expression' => intval(time()),
+            'expression' => time(),
             'misfire_policy' => 'executing',
             'class' => 'Biz\Task\Job\CourseTaskDeleteSyncJob',
             'args' => array('taskId' => $task['id'], 'courseId' => $task['courseId']),
@@ -181,7 +177,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         } else {
             $event = new Event($subject, $arguments);
         }
-
         $biz = $this->getBiz();
 
         return $biz['dispatcher']->dispatch($eventName, $event);

@@ -33,7 +33,6 @@ class TechSupportSyncCreateClassroomCoursesTaskCommand extends BaseCommand
     {
         $output->writeln('<info>开始</info>');
         $this->initServiceKernel();
-        $biz = $this->getBiz();
         $real = $input->getOption('real');
         $courseId = $input->getArgument('courseId');
         $course = $this->getCourseService()->getCourse($courseId);

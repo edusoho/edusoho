@@ -40,7 +40,6 @@ class LessonServiceImpl extends BaseService implements LessonService
         if (!ArrayToolkit::requireds($fields, ['title', 'fromCourseId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
-
         $this->beginTransaction();
         try {
             $lesson = [
@@ -50,14 +49,11 @@ class LessonServiceImpl extends BaseService implements LessonService
                 'status' => 'created',
             ];
             $lesson = $this->getCourseChapterDao()->create($lesson);
-
             $taskFields = $this->parseTaskFields($fields);
             $taskFields['categoryId'] = $lesson['id'];
             $taskFields['isLesson'] = true;
             $this->dispatchEvent('course.lesson.create', new Event($lesson));
-
             $task = $this->getTaskService()->createTask($taskFields);
-
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();

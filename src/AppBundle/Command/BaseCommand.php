@@ -20,7 +20,6 @@ abstract class BaseCommand extends ContainerAwareCommand
         $serviceKernel = ServiceKernel::create('dev', false);
         $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
         $serviceKernel->setBiz($this->getBiz());
-
         $currentUser = new CurrentUser();
         $systemUser = $this->getUserService()->getUserByType('system');
         $systemUser['currentIp'] = '127.0.0.1';
