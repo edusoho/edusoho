@@ -110,7 +110,7 @@
   {% endspaceless %}
 {% endmacro %}
 
-{% macro jump_paginator(paginator, class) %}
+{% macro advanced_paginator(paginator, class) %}
   {% set perpages = [50, 100, 150] %}
   {% if paginator|default() and paginator.lastPage >= 1 %}
     <nav class=" {{ class|default('text-center') }}">
