@@ -217,6 +217,8 @@ paginator.firstPage: 'First'
 paginator.endPage: 'End'
 paginator.nextPage: 'Next'
 paginator.lastPage: 'Last'
+paginator.jump: Jump
+paginator.page: Page
 user: User
 user.not_exist: 'User is not exist'
 user.fields.login_password: 'Login password'

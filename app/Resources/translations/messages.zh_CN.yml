@@ -285,6 +285,8 @@ paginator.firstPage: 首页
 paginator.endPage: 尾页
 paginator.nextPage: 下一页
 paginator.lastPage: 上一页
+paginator.jump: 跳至
+paginator.page: 页
 
 
 # 用户通用
