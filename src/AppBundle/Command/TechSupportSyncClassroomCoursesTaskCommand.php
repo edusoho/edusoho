@@ -109,12 +109,6 @@ class TechSupportSyncClassroomCoursesTaskCommand extends BaseCommand
             // 创建任务
             $originCourseActivities = $originActivities[$copyCourse['parentId']] ?? [];
             $copyCourseActivities = $copyActivities[$copyCourse['id']] ?? [];
-
-            if ($copyCourse['id'] == 45) {
-                $test = json_encode($copyCourseActivities);
-                $output->writeln("<info>测试********** {$test} **********</info>");
-            }
-
             $newActivityIds = array_diff(array_keys($originCourseActivities), array_keys($copyCourseActivities));
             $newActivities = [];
             foreach ($newActivityIds as $newActivityId) {
