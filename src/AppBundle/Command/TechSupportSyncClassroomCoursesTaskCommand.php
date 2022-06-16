@@ -54,19 +54,20 @@ class TechSupportSyncClassroomCoursesTaskCommand extends BaseCommand
         $originChapters = $this->getCourseChapterDao()->search(['courseIds' => $originCourseIds], [], 0, PHP_INT_MAX);
         $originChapters = ArrayToolkit::groupIndex($originChapters, 'courseId', 'id');
         // 原课程下的任务
-        $originActivities = $this->getActivityDao()->search(['ids' => array_column($originTasks, 'activityId')], [], 0, $countOriginTasks);
+        $originActivities = $this->getActivityDao()->search(['ids' => array_column($originTasks, 'activityId')], [], 0, PHP_INT_MAX);
         $originActivities = ArrayToolkit::groupIndex($originActivities, 'fromCourseId', 'id');
         // 复制课程下的课时
         $copyCourseIds = array_column($copyCourses, 'id');
-        $copyTasks = $this->getTaskService()->searchTasks(['courseIds' => $copyCourseIds], [], 0, PHP_INT_MAX, ['id', 'copyId', 'courseId', 'activityId', 'title']);
+        $copyTasks = $this->getTaskService()->searchTasks(['courseIds' => $copyCourseIds], [], 0, PHP_INT_MAX);
         $copyTasks = ArrayToolkit::groupIndex($copyTasks, 'courseId', 'copyId');
         // 复制课程下的章节
         $copyChapters = $this->getCourseChapterDao()->search(['courseIds' => $copyCourseIds], [], 0, PHP_INT_MAX);
         $copyChapters = ArrayToolkit::groupIndex($copyChapters, 'courseId', 'copyId');
         // 复制课程下的任务
-        $copyActivities = $this->getActivityDao()->search(['copyIds' => array_column($originTasks, 'activityId'), 'courseIds' => $copyCourseIds], [], 0, $countOriginTasks, ['id', 'fromCourseId', 'copyId']);
+        $copyActivities = $this->getActivityDao()->search(['copyIds' => array_column($originTasks, 'activityId'), 'courseIds' => $copyCourseIds], [], 0, PHP_INT_MAX, ['id', 'fromCourseId', 'copyId']);
         $copyActivities = ArrayToolkit::groupIndex($copyActivities, 'fromCourseId', 'copyId');
         foreach ($copyCourses as $copyCourse) {
+            $output->writeln("<info>********** {$copyCourse['id']} **********</info>");
             $originTaskIds = isset($originTasks[$copyCourse['parentId']]) ? array_keys($originTasks[$copyCourse['parentId']]) : [];
             $copyTaskIds = isset($copyTasks[$copyCourse['id']]) ? array_keys($copyTasks[$copyCourse['id']]) : [];
             // 删除多余课时
@@ -74,21 +75,20 @@ class TechSupportSyncClassroomCoursesTaskCommand extends BaseCommand
             foreach ($toDeleteTaskIds as $toDeleteTaskId) {
                 if ($real) {
                     $this->createCourseStrategy($copyCourse)->deleteTask($copyTasks[$copyCourse['id']][$toDeleteTaskId]);
-                    $output->writeln("<info>执行删除多余的课时:{$toDeleteTaskId}成功</info>");
+                    $output->writeln("<info>执行删除多余的课时: {$toDeleteTaskId}成功</info>");
                 }
-                $output->writeln("<info>待删除多余的课时:{$toDeleteTaskId} {$copyTasks[$copyCourse['id']][$toDeleteTaskId]['title']}</info>");
+                $output->writeln("<info>待删除多余的课时: {$toDeleteTaskId} {$copyTasks[$copyCourse['id']][$toDeleteTaskId]['title']}</info>");
             }
             // 删除多余章节
             $originChapterIds = isset($originChapters[$copyCourse['parentId']]) ? array_keys($originChapters[$copyCourse['parentId']]) : [];
             $copyChapterIds = isset($copyChapters[$copyCourse['id']]) ? array_keys($copyChapters[$copyCourse['id']]) : [];
             $toDeleteChapterIds = array_diff($copyChapterIds, $originChapterIds);
-            $delete = [];
             foreach ($toDeleteChapterIds as $toDeleteChapterId) {
-                $delete[] = ['id' => $toDeleteChapterId];
-                $output->writeln("<info>待删除多余的章节:{$toDeleteChapterId}</info>");
+                $output->writeln("<info>待删除多余的章节: {$toDeleteChapterId}</info>");
             }
-            if ($delete && $real) {
-                $this->getCourseChapterDao()->batchDelete($delete);
+            if ($toDeleteChapterIds && $real) {
+                $this->getCourseChapterDao()->batchDelete(['copyIds' => $toDeleteChapterIds]);
+                $output->writeln("<info>删除多余的章节成功</info>");
             }
             // 创建章节
             $newChapters = [];
@@ -99,7 +99,7 @@ class TechSupportSyncClassroomCoursesTaskCommand extends BaseCommand
                 unset($originChapter['id']);
                 $originChapter['courseId'] = $copyCourse['id'];
                 $newChapters[] = $originChapter;
-                $output->writeln("<info>待创建的章节:{$toCreateChapterId}</info>");
+                $output->writeln("<info>待创建的章节: {$toCreateChapterId}</info>");
             }
             if ($newChapters && $real) {
                 $this->getCourseChapterDao()->batchCreate($newChapters);
@@ -108,16 +108,23 @@ class TechSupportSyncClassroomCoursesTaskCommand extends BaseCommand
             }
             // 创建任务
             $originCourseActivities = $originActivities[$copyCourse['parentId']] ?? [];
-            $copyCourseActivities = $copyActivities[$copyCourse['parentId']] ?? [];
+            $copyCourseActivities = $copyActivities[$copyCourse['id']] ?? [];
+
+            if ($copyCourse['id'] == 45) {
+                $test = json_encode($copyCourseActivities);
+                $output->writeln("<info>测试********** {$test} **********</info>");
+            }
+
             $newActivityIds = array_diff(array_keys($originCourseActivities), array_keys($copyCourseActivities));
             $newActivities = [];
             foreach ($newActivityIds as $newActivityId) {
                 $newActivity = $originCourseActivities[$newActivityId];
                 $newActivity['copyId'] = $newActivity['id'];
                 unset($newActivity['id']);
-                $newActivity['fromCourseId'] = $copyCourse['$copyCourse'];
+                $newActivity['fromCourseId'] = $copyCourse['id'];
                 $newActivity['fromCourseSetId'] = $copyCourse['courseSetId'];
                 $newActivities[] = $newActivity;
+                $output->writeln("<info>待创建的任务activity: {$newActivityId}</info>");
             }
             if ($newActivities && $real) {
                 $this->getActivityDao()->batchCreate($newActivities);
@@ -128,7 +135,7 @@ class TechSupportSyncClassroomCoursesTaskCommand extends BaseCommand
             $toCopyTaskIds = array_diff($originTaskIds, $copyTaskIds);
             if ($toCopyTaskIds) {
                 $toCopyTaskIds = implode(',', $toCopyTaskIds);
-                $output->writeln("<info>待创建的课时:{$toCopyTaskIds}</info>");
+                $output->writeln("<info>待创建的课时: {$toCopyTaskIds}</info>");
             }
             $newTasks = [];
             foreach ($toCopyTaskIds as $toCopyTaskId) {
@@ -165,7 +172,7 @@ class TechSupportSyncClassroomCoursesTaskCommand extends BaseCommand
                 $task['fromCourseSetId'] = $copyCourse['courseSetId'];
                 $task['createdUserId'] = $copyCourse['creator'];
                 $newTasks[] = $task;
-                $output->writeln("<info>待创建未同步的任务:{$task['title']}</info>");
+                $output->writeln("<info>待创建未同步的任务: {$task['title']}</info>");
             }
             if ($newTasks && $real) {
                 $this->getTaskDao()->batchCreate($newTasks);
