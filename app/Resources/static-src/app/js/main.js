@@ -124,6 +124,12 @@ $('.cd-pagination a').on('click', function () {
 
 // 跳页
 $('#jumpPage').on('blur', function () {
-  let page = $(this).val();
-  window.location.href = pageQueryUrl + 'page=' + page + '&perpage=' + currentPerPageCount;
+  let currentPage = $(this).data('currentPage');
+  let lastPage = $(this).data('lastPage');
+  let jumpPage = $(this).val();
+  if (currentPage == jumpPage || jumpPage > lastPage) {
+    $(this).val(currentPage);
+  } else {
+    window.location.href = pageQueryUrl + 'page=' + jumpPage + '&perpage=' + currentPerPageCount;
+  }
 })
