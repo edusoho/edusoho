@@ -113,7 +113,7 @@ class ClassroomManageController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getClassroomService()->countMembersByClassroomId($id, $condition),
-            20
+            50
         );
         $students = $this->getClassroomService()->searchMembersByClassroomId(
             $id,
