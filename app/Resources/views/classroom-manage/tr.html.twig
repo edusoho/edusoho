@@ -17,8 +17,10 @@
   <td class="vertical-middle">
     {% if user.verifiedMobile %}
       {{ user.verifiedMobile }}
-    {% else %}
+    {% elseif userProfile.mobile %}
       {{ userProfile.mobile }}
+    {% else %}
+      --
     {% endif %}
   </td>
   <td class="color-gray vertical-middle">

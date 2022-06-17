@@ -1110,6 +1110,7 @@ course.members_manage.official_student.search: 搜索
 course.members_manage.official_student.batch_upload_deadline: 批量修改有效期
 course.members_manage.official_student.batch_remove: 批量移除
 course.members_manage.official_student.input_placeholder: 请输入用户名/邮箱/手机号
+course.members_manage.official_student.seq: 序号
 course.members_manage.official_student.progress: 学习进度
 course.members_manage.official_student.stutatus: 学习状态
 course.members_manage.official_student.operation: 操作
