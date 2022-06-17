@@ -975,6 +975,7 @@ course.members_manage.official_student.search: Search
 course.members_manage.official_student.batch_upload_deadline: Batch modification validity period
 course.members_manage.official_student.batch_remove: Batch remove
 course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
+course.members_manage.official_student.seq: Seq
 course.members_manage.official_student.progress: 'Learn progress'
 course.members_manage.official_student.status: 'Learn status'
 course.members_manage.official_student.operation: Action
