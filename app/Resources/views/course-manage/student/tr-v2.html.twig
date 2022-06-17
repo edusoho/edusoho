@@ -23,8 +23,8 @@
   <td style="vertical-align: middle;">
     {{ student.learningProgressPercent }}%<a class="" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId}) }}">{{ 'course.members_manage.official_student.detail'|trans }}</a>
   </td>
-  <td style="vertical-align: middle;">{{ student.createdTime|date('Y-n-d H:i') }}</td>
-  <td style="vertical-align: middle;">{% if student.deadline|default(0) %}{{ student.deadline|date('Y-n-d H:i') }}{% else %}{{ 'course.expiry_date.forever_mode'|trans }}{% endif %}</td>
+  <td style="vertical-align: middle;">{{ student.createdTime|date('Y-m-d H:i') }}</td>
+  <td style="vertical-align: middle;">{% if student.deadline|default(0) %}{{ student.deadline|date('Y-m-d H:i') }}{% else %}{{ 'course.expiry_date.forever_mode'|trans }}{% endif %}</td>
   <td style="vertical-align: middle;">
 
     {% if app.user.isAdmin() %}
