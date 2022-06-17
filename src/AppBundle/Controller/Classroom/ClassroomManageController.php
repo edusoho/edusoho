@@ -129,6 +129,7 @@ class ClassroomManageController extends BaseController
                 'classroom' => $this->getClassroomService()->getClassroom($id),
                 'students' => $students,
                 'users' => $this->getUserService()->findUsersByIds(array_column($students, 'userId')),
+                'userProfiles' => $this->getUserService()->findUserProfilesByIds(array_column($students, 'userId')),
                 'paginator' => $paginator,
                 'role' => $role,
                 'disableDeleteSearchResult' => empty($fields['keyword']) && empty($fields['expired']),

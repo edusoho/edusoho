@@ -42,6 +42,7 @@
     <tbody>
     {% for student in students %}
       {% set user = users[student.userId] %}
+      {% set userProfile = userProfiles[student.userId] %}
       {% include ('classroom-manage/tr.html.twig') %}
     {% else %}
       <tr class="empty">

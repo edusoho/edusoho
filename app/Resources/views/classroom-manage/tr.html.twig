@@ -15,7 +15,11 @@
     <div class="color-gray text-sm">{{ 'classroom.join_course_time'|trans }}：{{ student.createdTime|date('Y-m-d H:i') }}</div>
   </td>
   <td class="vertical-middle">
-    {{ user.verifiedMobile }}
+    {% if user.verifiedMobile %}
+      {{ user.verifiedMobile }}
+    {% else %}
+      {{ userProfile.mobile }}
+    {% endif %}
   </td>
   <td class="color-gray vertical-middle">
     {% if role == 'student' %}
