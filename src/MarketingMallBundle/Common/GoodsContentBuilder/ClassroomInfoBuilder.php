@@ -8,7 +8,7 @@ use Biz\Classroom\Service\ClassroomService;
 
 class ClassroomInfoBuilder extends AbstractBuilder
 {
-    const CLASSROOM_ALLOWED_KEY = ['classroomId', 'classroomCatalogue', 'cover', 'title', 'subtitle', 'price'];
+    const CLASSROOM_ALLOWED_KEY = ['classroomId', 'classroomCatalogue', 'cover', 'title', 'subtitle', 'about', 'price'];
 
     public function build($id)
     {
@@ -34,6 +34,7 @@ class ClassroomInfoBuilder extends AbstractBuilder
         }
 
         $classroom = ArrayToolkit::parts($classroom, self::CLASSROOM_ALLOWED_KEY);
+        $classroom['about'] = $this->transformImages($classroom['about']);
 
         return $classroom;
     }
