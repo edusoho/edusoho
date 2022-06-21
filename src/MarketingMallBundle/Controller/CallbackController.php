@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\MarketingMall;
+namespace MarketingMallBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DeviceToolkit;
