@@ -32,9 +32,10 @@ class MallAuthTokenAuthenticationListener extends BaseListener
                 throw new NotFoundException('token auth error！');
             }
             if (empty($result->nickname)) {
-                throw new NotFoundException('nickname not found！');
+                $user = $this->getUserService()->getUserByType('system');
+            }else {
+                $user = $this->getUserService()->getUserByNickname($result->nickname);
             }
-            $user = $this->getUserService()->getUserByNickname($result->nickname);
             if (empty($user)) {
                 throw new NotFoundException('user not found！');
             }
