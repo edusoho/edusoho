@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
-use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -12,6 +11,7 @@ use Biz\Course\CourseException;
 use Biz\Course\LessonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LessonService;
+use Biz\Util\EdusohoLiveClient;
 
 class CourseLiveTask extends AbstractResource
 {
@@ -34,6 +34,10 @@ class CourseLiveTask extends AbstractResource
 
         if (time() > strtotime($data['startDate']) || $data['length'] <= 0) {
             throw LiveActivityException::LIVE_TIME_INVALID();
+        }
+        $liveAccount = (new EdusohoLiveClient())->getLiveAccount();
+        if (EdusohoLiveClient::LIVE_PROVIDER_QUANSHI == $liveAccount['provider']) {
+            $data['roomType'] = EdusohoLiveClient::LIVE_ROOM_SMALL;
         }
 
         $start = $request->request->get('start', 0);
@@ -61,7 +65,7 @@ class CourseLiveTask extends AbstractResource
             throw LessonException::LESSON_NUM_LIMIT();
         }
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        list($course) = $this->getCourseService()->tryTakeCourse($courseId);
 
         $lesson = [
             'fromUserId' => $this->getCurrentUser()->getId(),
@@ -73,6 +77,7 @@ class CourseLiveTask extends AbstractResource
             'length' => $data['length'],
             'finishType' => 'join',
             'finishData' => '',
+            'roomType' => $data['roomType'] ?? '',
         ];
 
         list($lesson, $task) = $this->getLessonService()->createLesson($lesson);
@@ -129,6 +134,7 @@ class CourseLiveTask extends AbstractResource
                 'length' => $data['length'],
                 'finishType' => 'join',
                 'finishData' => '',
+                'roomType' => $data['roomType'] ?? '',
             ];
             try {
                 $this->biz['db']->beginTransaction();
@@ -181,6 +187,7 @@ class CourseLiveTask extends AbstractResource
                 'length' => $data['length'],
                 'finishType' => 'join',
                 'finishData' => '',
+                'roomType' => $data['roomType'] ?? '',
             ];
 
             try {

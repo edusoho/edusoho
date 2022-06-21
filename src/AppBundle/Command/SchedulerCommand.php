@@ -2,6 +2,8 @@
 
 namespace AppBundle\Command;
 
+use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -16,13 +18,10 @@ class SchedulerCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $logger = $this->getContainer()->get('biz')->offsetGet('logger');
-
         $logger->info('Crontab:开始执行定时任务');
-
         $this->setDisableWebCrontab();
         $this->initServiceKernel();
         $this->getSchedulerService()->execute();
-
         $logger->info('Crontab:定时任务执行完毕');
     }
 
@@ -35,11 +34,17 @@ class SchedulerCommand extends BaseCommand
         }
     }
 
+    /**
+     * @return SchedulerService
+     */
     protected function getSchedulerService()
     {
         return $this->getServiceKernel()->createService('Scheduler:SchedulerService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System:SettingService');

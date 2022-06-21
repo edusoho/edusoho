@@ -217,6 +217,8 @@ paginator.firstPage: 'First'
 paginator.endPage: 'End'
 paginator.nextPage: 'Next'
 paginator.lastPage: 'Last'
+paginator.jump: Jump
+paginator.page: Page
 user: User
 user.not_exist: 'User is not exist'
 user.fields.login_password: 'Login password'
@@ -973,6 +975,7 @@ course.members_manage.official_student.search: Search
 course.members_manage.official_student.batch_upload_deadline: Batch modification validity period
 course.members_manage.official_student.batch_remove: Batch remove
 course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
+course.members_manage.official_student.seq: Seq
 course.members_manage.official_student.progress: 'Learn progress'
 course.members_manage.official_student.status: 'Learn status'
 course.members_manage.official_student.operation: Action
@@ -10164,6 +10167,8 @@ admin_v2.user.destroy_account_record.show: Show
 admin_v2.user.destroy_account_record.empty: Empty
 admin_v2.user.destroy_account_record.detail: Detail
 admin_v2.user.destroy_account_record.rejectedReson: RejectedReson
+admin_v2.user.destroy_account_record.origin_mobile: Original Mobile
+admin_v2.user.destroy_account_record.origin_email: Original Email
 admin_v2.destroy_account.destroyed_account.number: Cancellation ID
 admin_v2.destroy_account.destroyed_account.nickname: Nickname
 admin_v2.destroy_account.destroyed_account.destroy_time: Destroy Time

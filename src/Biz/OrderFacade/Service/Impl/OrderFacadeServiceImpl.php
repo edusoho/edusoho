@@ -133,7 +133,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     public function createSpecialOrder(Product $product, $userId, $params = [], $type = 'OrderFacade')
     {
         $sepcialOrderService = $this->createService($type.':SpecialOrderService');
-
         $orderFields = [
             'title' => $product->title,
             'user_id' => $userId,
@@ -143,39 +142,31 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'create_extra' => empty($params['create_extra']) ? '' : $params['create_extra'],
             'deducts' => empty($params['deducts']) ? [] : $params['deducts'],
         ];
-
+        $joinType = $orderFields['create_extra']['joinType'] ?? '';
+        if ('SCRM' === $joinType) {
+            $orderFields['source'] = 'scrm';
+        }
         $orderFields = $sepcialOrderService->beforeCreateOrder($orderFields, $params);
-
         $orderItems = $this->makeOrderItems($product);
-
         $order = $this->getWorkflowService()->start($orderFields, $orderItems);
-
         $price = empty($orderFields['create_extra']['price']) ? 0 : $orderFields['create_extra']['price'];
         //修复来自SCRM订单价格不能大于原价
-        $joinType = isset($orderFields['create_extra']['joinType']) ? $orderFields['create_extra']['joinType'] : '';
-
         if ($price > 0 && !MathToolkit::isEqual($order['pay_amount'], MathToolkit::simple($price, 100)) && 'SCRM' != $joinType) {
             $this->getWorkflowService()->adjustPrice($order['id'], MathToolkit::simple($price, 100));
         }
-
         if ('SCRM' == $joinType && $order['pay_amount'] > MathToolkit::simple($price, 100)) {
             $this->getWorkflowService()->adjustPrice($order['id'], MathToolkit::simple($price, 100));
         }
-
         if ('SCRM' == $joinType && 0 == (int) $order['pay_amount']) {
             return $order;
         }
-
         $this->getWorkflowService()->paying($order['id'], []);
-
         $data = [
             'trade_sn' => '',
             'pay_time' => 0,
             'order_sn' => $order['sn'],
         ];
-
         $data = $sepcialOrderService->beforePayOrder($data, $params);
-
         $order = $this->getWorkflowService()->paid($data);
 
         return $order;

@@ -15,4 +15,8 @@ interface LiveService
     public function deleteLiveRoom($liveId);
 
     public function canUpdateRoomType($liveStartTime);
+
+    public function isLiveProviderTeacherRequired($provider);
+
+    public function getLiveProviderTeacherId($userId, $provider);
 }

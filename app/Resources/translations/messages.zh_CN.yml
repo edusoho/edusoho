@@ -285,6 +285,8 @@ paginator.firstPage: 首页
 paginator.endPage: 尾页
 paginator.nextPage: 下一页
 paginator.lastPage: 上一页
+paginator.jump: 跳至
+paginator.page: 页
 
 
 # 用户通用
@@ -1108,6 +1110,7 @@ course.members_manage.official_student.search: 搜索
 course.members_manage.official_student.batch_upload_deadline: 批量修改有效期
 course.members_manage.official_student.batch_remove: 批量移除
 course.members_manage.official_student.input_placeholder: 请输入用户名/邮箱/手机号
+course.members_manage.official_student.seq: 序号
 course.members_manage.official_student.progress: 学习进度
 course.members_manage.official_student.stutatus: 学习状态
 course.members_manage.official_student.operation: 操作
@@ -11460,6 +11463,8 @@ admin_v2.user.destroy_account_record.show: 查看
 admin_v2.user.destroy_account_record.empty: 暂无注销申请
 admin_v2.user.destroy_account_record.detail: 详情
 admin_v2.user.destroy_account_record.rejectedReson: 拒绝理由
+admin_v2.user.destroy_account_record.origin_mobile: 原手机号
+admin_v2.user.destroy_account_record.origin_email: 原邮箱
 admin_v2.destroy_account.destroyed_account.number: 注销ID
 admin_v2.destroy_account.destroyed_account.nickname: 注销前用户名
 admin_v2.destroy_account.destroyed_account.destroy_time: 注销时间

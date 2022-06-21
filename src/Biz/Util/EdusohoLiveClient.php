@@ -28,6 +28,8 @@ class EdusohoLiveClient
 
     const LIVE_REPLAY_STATUS_ERROR = 'error';
 
+    const LIVE_PROVIDER_QUANSHI = 'quanshi';
+
     private $cloudApi;
 
     /**
@@ -286,6 +288,16 @@ class EdusohoLiveClient
     public function downloadReplayForSelfLive($liveId, $userId)
     {
         return $this->createCloudApi('root')->get("/liveCloud/room/{$liveId}/replay/download", ['userId' => $userId]);
+    }
+
+    /**
+     * @param array $args
+     *
+     * @return mixed|string[]
+     */
+    public function createLiveTeacher(array $args)
+    {
+        return $this->createCloudApi('root')->post('/lives/teachers', $args);
     }
 
     protected function createCloudApi($server)

@@ -31,11 +31,6 @@ define(function(require, exports, module) {
                 $('.submit-error').addClass('hidden');
                 subItem.removeClass('hidden');
                 validator.addItem({
-                    element: '[name="alipay_secret"]',
-                    required: true,
-                    errormessageRequired: Translator.trans('admin.system.payment.alipay_secret_input.message')
-                });
-                validator.addItem({
                     element: '[name=alipay_key]',
                     required: true,
                     errormessageRequired: Translator.trans('admin.system.payment.alipay_key_input.message')

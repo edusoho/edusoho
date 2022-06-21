@@ -9,6 +9,7 @@ use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
 class AbstractSyncJob extends AbstractJob
 {
@@ -68,5 +69,13 @@ class AbstractSyncJob extends AbstractJob
     protected function getCourseDao()
     {
         return $this->biz->dao('Course:CourseDao');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->biz->service('Scheduler:SchedulerService');
     }
 }

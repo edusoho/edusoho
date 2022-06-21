@@ -71,23 +71,18 @@ class TaskServiceImpl extends BaseService implements TaskService
                 return !empty($value);
             }
         );
-
         if ($this->invalidTask($fields)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
-
         if (!$this->getCourseService()->tryManageCourse($fields['fromCourseId'])) {
             $this->createNewException(TaskException::FORBIDDEN_CREATE_TASK());
         }
-
         $this->preCreateTaskCheck($fields);
-
         $this->beginTransaction();
         try {
             if (isset($fields['content'])) {
                 $fields['content'] = $this->purifyHtml($fields['content'], true);
             }
-
             $fields = $this->createActivity($fields);
             $strategy = $this->createCourseStrategy($fields['courseId']);
             $task = $strategy->createTask($fields);
@@ -171,17 +166,14 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function createActivity($fields)
     {
         $activity = $this->getActivityService()->createActivity($fields);
-
         $fields['activityId'] = $activity['id'];
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId'] = $activity['fromCourseId'];
         $fields['type'] = $fields['mediaType'];
         $fields['endTime'] = $activity['endTime'];
-
         if (in_array($activity['mediaType'], self::$mediaList)) {
             $media = json_decode($fields['media'], true);
             $fields['mediaSource'] = $media['source'];
-
             if ('video' === $activity['mediaType'] && 'self' == $fields['mediaSource']) {
                 $this->getCourseService()->convertAudioByCourseIdAndMediaId($activity['fromCourseId'], $media['id']);
             }
@@ -368,16 +360,12 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             $this->createNewException(TaskException::FORBIDDEN_DELETE_TASK());
         }
-
         $this->dispatchEvent('course.task.delete.before', new Event($task));
-
         $this->beginTransaction();
         try {
             $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
             $this->updateTaskName($task);
-
             $this->dispatchEvent('course.task.delete', new Event($task, ['user' => $this->getCurrentUser()]));
-
             $this->commit();
 
             return $result;

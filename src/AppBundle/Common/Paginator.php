@@ -16,12 +16,14 @@ class Paginator
 
     protected $pageKey = 'page';
 
+    protected $queryUrl;
+
     public function __construct($request, $total, $perPage = 20)
     {
         $this->setItemCount($total);
-        $this->setPerPageCount($perPage);
+        $perPage = $this->setPerPageCount((int)$request->query->get('perpage', $perPage));
 
-        $page = (int) $request->query->get('page');
+        $page = (int)$request->query->get('page');
 
         $maxPage = ceil($total / $perPage) ?: 1;
         $this->setCurrentPage($page <= 0 ? 1 : ($page > $maxPage ? $maxPage : $page));
@@ -65,26 +67,37 @@ class Paginator
     public function setBaseUrl($url)
     {
         $template = '';
-
         $urls = parse_url($url);
-        $template .= empty($urls['scheme']) ? '' : $urls['scheme'].'://';
+        $template .= empty($urls['scheme']) ? '' : $urls['scheme'] . '://';
         $template .= empty($urls['host']) ? '' : $urls['host'];
         $template .= empty($urls['path']) ? '' : $urls['path'];
-
+        $this->queryUrl = $template;
         if (isset($urls['query'])) {
             parse_str($urls['query'], $queries);
             $queries['page'] = '..page..';
+            $hasQuery = true;
         } else {
+            $hasQuery = false;
             $queries = array('page' => '..page..');
         }
-        $template .= '?'.http_build_query($queries);
-
+        $template .= '?' . http_build_query($queries);
         $this->baseUrl = $template;
+        if ($hasQuery) {
+            unset($queries['page'], $queries['perpage']);
+            $this->queryUrl .= '?' . http_build_query($queries) . '&';
+        } else {
+            $this->queryUrl .= '?';
+        }
     }
 
     public function getPageUrl($page)
     {
         return str_replace('..page..', $page, $this->baseUrl);
+    }
+
+    public function getQueryUrl()
+    {
+        return $this->queryUrl;
     }
 
     public function getPageRange()
@@ -159,7 +172,9 @@ class Paginator
             'firstPageUrl' => $paginator->getPageUrl($paginator->getFirstPage()),
             'previousPageUrl' => $paginator->getPageUrl($paginator->getPreviousPage()),
             'pages' => $paginator->getPages(),
-            'pageUrls' => array_map(function ($page) use ($paginator) { return $paginator->getPageUrl($page); }, $paginator->getPages()),
+            'pageUrls' => array_map(function ($page) use ($paginator) {
+                return $paginator->getPageUrl($page);
+            }, $paginator->getPages()),
             'lastPageUrl' => $paginator->getPageUrl($paginator->getLastPage()),
             'lastPage' => $paginator->getLastPage(),
             'nextPageUrl' => $paginator->getPageUrl($paginator->getNextPage()),

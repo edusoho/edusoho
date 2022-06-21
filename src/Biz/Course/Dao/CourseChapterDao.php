@@ -26,7 +26,7 @@ interface CourseChapterDao extends AdvancedDaoInterface
 
     public function findChaptersByCourseIdAndLessonIds($courseId, $lessonIds);
 
-    public function findChaptersByCopyIdAndLockedCourseIds($pId, $courseIds);
+    public function findChaptersByCopyIdAndLockedCourseIds($copyId, $courseIds);
 
     public function findByCopyIdsAndLockedCourseIds($copyIds, $courseIds);
 }

@@ -757,7 +757,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
 
-        $fields = ['remark' => empty($remark) ? '' : (string) $remark];
+        $fields = ['remark' => empty($remark) ? '' : (string)$remark];
 
         return $this->getMemberDao()->update($member['id'], $fields);
     }
@@ -869,7 +869,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         //按照教学计划有效期模式计算学员有效期
         $deadline = 0;
         if ('days' == $course['expiryMode'] && $course['expiryDays'] > 0) {
-            $endTime = strtotime(date('Y-m-d', time()).' 23:59:59'); //系统当前时间
+            $endTime = strtotime(date('Y-m-d', time()) . ' 23:59:59'); //系统当前时间
             $deadline = $course['expiryDays'] * 24 * 60 * 60 + $endTime;
         } elseif ('date' == $course['expiryMode'] || 'end_date' == $course['expiryMode']) {
             $deadline = $course['expiryEndDate'];
@@ -1156,7 +1156,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $deadline = $info['deadline'];
         } elseif ('days' == $course['expiryMode']) {
             if (!empty($course['expiryDays'])) {
-                $deadline = strtotime('+'.$course['expiryDays'].' days');
+                $deadline = strtotime('+' . $course['expiryDays'] . ' days');
             }
         } elseif (!empty($course['expiryEndDate'])) {
             $deadline = $course['expiryEndDate'];
@@ -1355,7 +1355,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getMemberDao()->update(
             $member['id'],
             [
-                'noteNum' => (int) $number,
+                'noteNum' => (int)$number,
                 'noteLastUpdateTime' => time(),
             ]
         );
@@ -1470,7 +1470,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function batchUpdateMemberDeadlinesByDate($courseId, $userIds, $date)
     {
         $this->getCourseService()->tryManageCourse($courseId);
-        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
+        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date . ' 23:59:59');
         if ($this->checkDeadlineForUpdateDeadline($date)) {
             foreach ($userIds as $userId) {
                 $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
@@ -1518,7 +1518,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         ];
         if (!empty($timeRange)) {
             $conditions['startTimeGreaterThan'] = strtotime($timeRange['startDate']);
-            $conditions['startTimeLessThan'] = empty($timeRange['endDate']) ? time() : strtotime($timeRange['endDate'].'+1 day');
+            $conditions['startTimeLessThan'] = empty($timeRange['endDate']) ? time() : strtotime($timeRange['endDate'] . '+1 day');
         }
 
         return $this->getMemberDao()->searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format);
@@ -1551,7 +1551,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if (empty($course['compulsoryTaskNum'])) {
             $isFinished = true;
         } else {
-            $isFinished = (int) ($member['learnedCompulsoryTaskNum'] / $course['compulsoryTaskNum']) >= 1;
+            $isFinished = (int)($member['learnedCompulsoryTaskNum'] / $course['compulsoryTaskNum']) >= 1;
         }
         $finishTime = $isFinished ? time() : 0;
         $this->updateMembers(
@@ -1576,10 +1576,14 @@ class MemberServiceImpl extends BaseService implements MemberService
         if (empty($members)) {
             return;
         }
-
         $updateMembers = [];
         $finishedTaskNums = $this->getTaskResultService()->countTaskNumGroupByUserId(['status' => 'finish', 'courseId' => $courseId]);
         $finishedCompulsoryTaskNums = $this->getTaskResultService()->countFinishedCompulsoryTaskNumGroupByUserId($courseId);
+        // learnedElectiveTaskNum是通过定时任务添加的所以需要做判断
+        $isFieldExist = false;
+        if ($this->getMemberDao()->isFieldExist('learnedElectiveTaskNum')) {
+            $isFieldExist = true;
+        }
         foreach ($members as $member) {
             $learnedNum = empty($finishedTaskNums[$member['userId']]) ? 0 : $finishedTaskNums[$member['userId']]['count'];
             $learnedCompulsoryTaskNum = empty($finishedCompulsoryTaskNums[$member['userId']]) ? 0 : $finishedCompulsoryTaskNums[$member['userId']]['count'];
@@ -1591,14 +1595,12 @@ class MemberServiceImpl extends BaseService implements MemberService
                 'finishedTime' => $course['compulsoryTaskNum'] > 0 && $course['compulsoryTaskNum'] <= $learnedCompulsoryTaskNum ? $member['lastLearnTime'] : 0,
             ];
             // learnedElectiveTaskNum是通过定时任务添加的所以需要做判断
-            if ($this->getMemberDao()->isFieldExist('learnedElectiveTaskNum')) {
+            if ($isFieldExist) {
                 $updateMember['learnedElectiveTaskNum'] = $learnedNum - $learnedCompulsoryTaskNum;
             }
             $updateMembers[] = $updateMember;
         }
-
         $this->getMemberDao()->batchUpdate(ArrayToolkit::column($updateMembers, 'id'), $updateMembers);
-
         $this->dispatchEvent('course.members.finish_data_refresh', new Event($course, ['updatedMembers' => $updateMembers]));
     }
 

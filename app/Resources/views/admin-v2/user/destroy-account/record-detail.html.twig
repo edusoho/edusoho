@@ -6,6 +6,18 @@
 <form class="form-horizontal">
   <div class="form-group">
     <div class="col-md-3 control-label">
+      <label>{{ 'admin_v2.user.destroy_account_record.origin_mobile'|trans }}</label>
+    </div>
+    <div class="col-md-8 controls pts">{{ record.mobile|default('--') }}</div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin_v2.user.destroy_account_record.origin_email'|trans }}</label>
+    </div>
+    <div class="col-md-8 controls pts">{% if not is_system_generated_email(record.email) %}{{ record.email }}{% else %}--{% endif %}</div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
       <label for="status">{{'admin_v2.user.destroy_account_record.reason'|trans}}</label>
     </div>
     <div class="col-md-8 controls pts">{{ record.reason|default('') }}</div>
@@ -26,6 +38,14 @@
       {% endif %}
     </div>
   </div>
+  {% if record.status == 'passed' %}
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin_v2.destroy_account.destroyed_account.number'|trans }}</label>
+      </div>
+      <div class="col-md-8 controls pts">{{ destroyedUser.nickname }}</div>
+    </div>
+  {% endif %}
   {% if record.rejectedReason|default('') %}
   <div class="form-group">
     <div class="col-md-3 control-label">
