@@ -2,6 +2,7 @@
 
 namespace MarketingMallBundle\Api\Resource\MallUser;
 
+use ApiBundle\Api\Annotation\AuthClass;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use AppBundle\Common\ArrayToolkit;
@@ -15,6 +16,7 @@ class MallUser extends BaseResource
     /**
      * @param ApiRequest $request
      * @return array
+     * @AuthClass(ClassName="MarketingMallBundle\\Security\\Firewall\\MallAuthTokenAuthenticationListener")
      * @ResponseFilter(class="ApiBundle\Api\Resource\User\UserFilter")
      */
     public function add(ApiRequest $request)
