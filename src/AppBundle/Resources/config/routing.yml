@@ -4059,6 +4059,10 @@ scrm_buy_goods_callback:
     path: /scrm/buy/goods/callback
     defaults:
         _controller: 'AppBundle:SCRM/Callback:goods'
+marketing_mall_callback:
+  path: /marketing/mall/callback
+  defaults:
+    _controller: 'AppBundle:MarketingMall/Callback:index'
 feedback:
     path: /feedback
     defaults:
