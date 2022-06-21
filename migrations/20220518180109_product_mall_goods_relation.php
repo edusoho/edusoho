@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class ProductGoodsRelation extends Migration
+class ProductMallGoodsRelation extends Migration
 {
     /**
      * Do the migration

@@ -9,12 +9,14 @@ class ApiToken extends AbstractToken
 {
     private $credentials;
     private $providerKey;
+    private $authClass;
 
-    public function __construct(CurrentUser $user, array $roles = array())
+    public function __construct(CurrentUser $user, array $roles, $authClass)
     {
         parent::__construct($roles);
         $this->setUser($user);
         parent::setAuthenticated($user->isLogin());
+        $this->authClass = $authClass;
     }
 
     /**
@@ -35,6 +37,11 @@ class ApiToken extends AbstractToken
     public function getCredentials()
     {
         return $this->credentials;
+    }
+
+    public function getAuthClass()
+    {
+        return $this->authClass;
     }
 
     /**
