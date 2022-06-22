@@ -242,7 +242,7 @@ class LessonServiceImpl extends BaseService implements LessonService
                 $this->createNewException(CommonException::ERROR_PARAMETER());
             }
         }
-        $this->dispatchEvent('course.lesson.batch_delete', new Event($lessons), ['courseId' => $courseId]);
+        $this->dispatchEvent('course.lesson.batch_delete', new Event($lessons, ['courseId' => $courseId]));
 
         return $lessons;
     }

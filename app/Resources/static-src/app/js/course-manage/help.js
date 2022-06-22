@@ -1,4 +1,4 @@
-import { publish } from 'app/common/widget/publish';
+import {publish} from 'app/common/widget/publish';
 
 export const closeCourse = () => {
   $('body').on('click', '.js-close-course', (evt) => {
@@ -30,32 +30,54 @@ export const closeCourse = () => {
 const closeCourseAction = ($target) => {
   $.post($target.data('url'), (data) => {
     if (data.success) {
-      cd.message({ type: 'success', message: Translator.trans('course.manage.close_success_hint') });
+      cd.message({type: 'success', message: Translator.trans('course.manage.close_success_hint')});
       location.reload();
     } else {
-      cd.message({ type: 'danger', message: Translator.trans('course.manage.close_fail_hint') + ':' + data.message });
+      cd.message({type: 'danger', message: Translator.trans('course.manage.close_fail_hint') + ':' + data.message});
     }
   });
 };
 
 export const deleteCourse = () => {
-  $('body').on('click', '.js-delete-course', (evt) =>  {
+  $('body').on('click', '.js-delete-course', (evt) => {
+    let msg = 'course.manage.delete_hint';
+    let status = null;
+    $.ajax({
+      type: 'post',
+      url: $(evt.currentTarget).data('check-url'),
+      async: false,
+      success: function (data) {
+        status = data.status;
+        if (status === 'should_delete_mall_goods') {
+          msg = 'course.manage.mall_goods_exist.delete_hint';
+          if (data.redirect) {
+            window.location.href = data.redirect;
+          }
+        }
+        if (status === 'cannot_delete') {
+          cd.message({type: 'danger', message: Translator.trans('mall.goods.exist.delete_fail_hint')});
+        }
+      }
+    });
+    if (status === 'cannot_delete') {
+      return;
+    }
     cd.confirm({
       title: Translator.trans('site.delete'),
-      content: Translator.trans('course.manage.delete_hint'),
+      content: Translator.trans(msg),
       okText: Translator.trans('site.confirm'),
       cancelText: Translator.trans('site.cancel')
     }).on('ok', () => {
       $.post($(evt.currentTarget).data('url'), (data) => {
         if (data.success) {
-          cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
+          cd.message({type: 'success', message: Translator.trans('site.delete_success_hint')});
           if (data.redirect) {
             window.location.href = data.redirect;
           } else {
             location.reload();
           }
         } else {
-          cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') + ':' + data.message });
+          cd.message({type: 'danger', message: Translator.trans('site.delete_fail_hint') + ':' + data.message});
         }
       });
     });
@@ -80,8 +102,7 @@ export const showSettings = () => {
     let $li = $this.closest('.js-task-manage-item');
     if ($li.hasClass('active')) {
       $li.removeClass('active').find('.js-settings-list').stop().slideUp(500);
-    }
-    else {
+    } else {
       $li.addClass('active').find('.js-settings-list').stop().slideDown(500);
       $li.siblings('.js-task-manage-item.active').removeClass('active').find('.js-settings-list').hide();
     }
@@ -98,18 +119,18 @@ export const TabChange = () => {
 
 export const TaskListHeaderFixed = () => {
   let $header = $('.js-task-list-header');
-  const $headerSlot = $('.js-task-list-header__slot')
-  if(!$header.length){
+  const $headerSlot = $('.js-task-list-header__slot');
+  if (!$header.length) {
     return;
   }
   let headerTop = $header.offset().top;
-  $(window).scroll(function(event) {
+  $(window).scroll(function (event) {
     if ($(window).scrollTop() >= headerTop) {
       $header.addClass('fixed');
-      $headerSlot.removeClass('hidden')
+      $headerSlot.removeClass('hidden');
     } else {
       $header.removeClass('fixed');
-      $headerSlot.addClass('hidden')
+      $headerSlot.addClass('hidden');
     }
   });
 };

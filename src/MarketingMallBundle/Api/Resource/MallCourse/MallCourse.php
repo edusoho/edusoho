@@ -13,7 +13,7 @@ class MallCourse extends BaseResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
-        $conditions['excludeStatus'] = 'unpublished';
+        $conditions['excludeStatus'] = 'draft';
         $conditions['parentId'] = 0;
         //过滤约排课
         $conditions['excludeTypes'] = ['reservation'];

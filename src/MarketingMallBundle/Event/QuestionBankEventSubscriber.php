@@ -27,49 +27,57 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
             'item.delete' => 'onItemDelete',
             'item.batchDelete' => 'onItemBatchDelete',
             'item.import' => 'onItemImport',
+            'questionBankProduct.update' => 'onQuestionBankUpdate',
+            'questionBankProduct.delete' => 'onQuestionBankProductDelete'
         ];
     }
 
     public function onItemCategoryCreate(Event $event)
     {
-        $bankId = $event->getArgument('bankId');
-        $this->syncQuestionBankToMarketingMall($bankId);
+        $exercise = $this->getExerciseService()->getByQuestionBankId($event->getArgument('bankId'));
+        if ($exercise) {
+            $this->syncQuestionBankToMarketingMall($exercise['id']);
+        }
+
     }
 
     public function onItemCategoryUpdate(Event $event)
     {
         $category = $event->getSubject();
         $fields = $event->getArgument('fields');
-        if ($category['name'] != $fields['name']) {
-            $this->syncQuestionBankToMarketingMall($category['bank_id']);
+
+        if ($category['name'] == $fields['name']) {
+            return;
+        }
+        $exercise = $this->getExerciseService()->getByQuestionBankId($category['bank_id']);
+        if ($exercise) {
+            $this->syncQuestionBankToMarketingMall($exercise['id']);
         }
     }
 
     public function onItemCategoryDelete(Event $event)
     {
         $category = $event->getSubject();
-        $this->syncQuestionBankToMarketingMall($category['bank_id']);
+        $exercise = $this->getExerciseService()->getByQuestionBankId($category['bank_id']);
+        if ($exercise) {
+            $this->syncQuestionBankToMarketingMall($exercise['id']);
+        }
     }
 
     public function onAssessmentExerciseCreate(Event $event)
     {
-        $exerciseId = $event->getArgument('exerciseId');
-        $exercise = $this->getExerciseService()->get($exerciseId);
-        $this->syncQuestionBankToMarketingMall($exercise['questionBankId']);
+        $this->syncQuestionBankToMarketingMall($event->getArgument('exerciseId'));
     }
 
     public function onAssessmentExerciseDelete(Event $event)
     {
         $assessmentExercise = $event->getSubject();
-        $exercise = $this->getExerciseService()->get($assessmentExercise['exerciseId']);
-        $this->syncQuestionBankToMarketingMall($exercise['questionBankId']);
+        $this->syncQuestionBankToMarketingMall($assessmentExercise['exerciseId']);
     }
 
     public function onExerciseAssessmentModuleCreate(Event $event)
     {
-        $exerciseId = $event->getArgument('exerciseId');
-        $exercise = $this->getExerciseService()->get($exerciseId);
-        $this->syncQuestionBankToMarketingMall($exercise['questionBankId']);
+        $this->syncQuestionBankToMarketingMall($event->getArgument('exerciseId'));
     }
 
     public function onExerciseAssessmentModuleUpdate(Event $event)
@@ -77,16 +85,14 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
         $module = $event->getSubject();
         $fields = $event->getArgument('fields');
         if ($module['title'] != $fields['title']) {
-            $exercise = $this->getExerciseService()->get($module['exerciseId']);
-            $this->syncQuestionBankToMarketingMall($exercise['questionBankId']);
+            $this->syncQuestionBankToMarketingMall($module['exerciseId']);
         }
     }
 
     public function onExerciseAssessmentModuleDelete(Event $event)
     {
         $module = $event->getSubject();
-        $exercise = $this->getExerciseService()->get($module['exerciseId']);
-        $this->syncQuestionBankToMarketingMall($exercise['questionBankId']);
+        $this->syncQuestionBankToMarketingMall($module['exerciseId']);
     }
 
     public function onItemUpdateCategory(Event $event)
@@ -94,15 +100,22 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
         $categoryId = $event->getArgument('categoryId');
         $category = $this->getItemCategoryService()->getItemCategory($categoryId);
         $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($category['bank_id']);
-        $this->syncQuestionBankToMarketingMall($questionBank['id']);
+        $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
+        if ($exercise) {
+            $this->syncQuestionBankToMarketingMall($exercise['id']);
+        }
     }
 
     public function onItemCreate(Event $event)
     {
         $item = $event->getSubject();
-        if (!empty($item['category_id'])) {
-            $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($item['bank_id']);
-            $this->syncQuestionBankToMarketingMall($questionBank['id']);
+        if (empty($item['category_id'])) {
+            return;
+        }
+        $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($item['bank_id']);
+        $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
+        if ($exercise) {
+            $this->syncQuestionBankToMarketingMall($exercise['id']);
         }
     }
 
@@ -110,18 +123,26 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
     {
         $item = $event->getSubject();
         $originItem = $event->getArgument('originItem');
-        if ($originItem['category_id'] != $item['category_id']) {
-            $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($item['bank_id']);
-            $this->syncQuestionBankToMarketingMall($questionBank['id']);
+        if ($originItem['category_id'] == $item['category_id']) {
+            return;
+        }
+        $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($item['bank_id']);
+        $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
+        if ($exercise) {
+            $this->syncQuestionBankToMarketingMall($exercise['id']);
         }
     }
 
     public function onItemDelete(Event $event)
     {
         $item = $event->getSubject();
-        if (!empty($item['category_id'])) {
-            $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($item['bank_id']);
-            $this->syncQuestionBankToMarketingMall($questionBank['id']);
+        if (empty($item['category_id'])) {
+            return;
+        }
+        $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($item['bank_id']);
+        $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
+        if ($exercise) {
+            $this->syncQuestionBankToMarketingMall($exercise['id']);
         }
     }
 
@@ -129,11 +150,15 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
     {
         $deleteItems = $event->getSubject();
         foreach ($deleteItems as $item) {
-            if (!empty($item['category_id'])) {
-                $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($item['bank_id']);
-                $this->syncQuestionBankToMarketingMall($questionBank['id']);
-                break;
+            if (empty($item['category_id'])) {
+                continue;
             }
+            $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($item['bank_id']);
+            $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
+            if ($exercise) {
+                $this->syncQuestionBankToMarketingMall($exercise['id']);
+            }
+            break;
         }
     }
 
@@ -141,17 +166,45 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
     {
         $items = $event->getSubject();
         foreach ($items as $item) {
-            if (!empty($item['category_id'])) {
-                $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($item['bank_id']);
-                $this->syncQuestionBankToMarketingMall($questionBank['id']);
-                break;
+            if (empty($item['category_id'])) {
+                continue;
             }
+            $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($item['bank_id']);
+            $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
+            if ($exercise) {
+                $this->syncQuestionBankToMarketingMall($exercise['id']);
+            }
+            break;
         }
     }
 
-    protected function syncQuestionBankToMarketingMall($questionBankId)
+    public function onQuestionBankUpdate(Event $event)
     {
-        $this->updateGoodsContent('question_bank', new QuestionBankBuilder(), $questionBankId);
+        $questionBankId = $event->getSubject()['questionBankId'];
+        $exercise = $this->getExerciseService()->getByQuestionBankId($questionBankId);
+        if ($exercise) {
+            $this->syncQuestionBankToMarketingMall($exercise['id']);
+        }
+    }
+
+    public function onQuestionBankProductDelete(Event $event)
+    {
+        $exercise = $event->getSubject();
+        $this->deleteQuestionBankProductToMarketingMall($exercise['id']);
+    }
+
+    protected function syncQuestionBankToMarketingMall($exerciseId)
+    {
+        $this->updateGoodsContent('questionBank', new QuestionBankBuilder(), $exerciseId);
+    }
+
+    protected function deleteQuestionBankProductToMarketingMall($questionBankId)
+    {
+        $relation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId('questionBank', $questionBankId);
+        if ($relation) {
+            $this->getProductMallGoodsRelationService()->deleteProductMallGoodsRelation($relation['id']);
+            $this->deleteMallGoods($relation['goodsCode']);
+        }
     }
 
     /**

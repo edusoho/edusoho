@@ -17,6 +17,7 @@ class QuestionBankExercise extends BaseResource
             $conditions['title'] = $conditions['titleLike'];
             unset($conditions['titleLike']);
         }
+        $conditions['excludeStatus'] = 'draft';
         $orderBys = ['createdTime' => 'DESC'];
         list($offset, $limit) = $this->preparePageCondition($conditions);
         $columns = [

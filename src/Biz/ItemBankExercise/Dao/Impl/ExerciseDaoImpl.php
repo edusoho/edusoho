@@ -137,6 +137,7 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
                 'creator = :creator',
                 'title like :title',
                 'status = :status',
+                'status != :excludeStatus',
                 'price = :price',
                 'studentNum = :studentNum',
                 'categoryId = :categoryId',

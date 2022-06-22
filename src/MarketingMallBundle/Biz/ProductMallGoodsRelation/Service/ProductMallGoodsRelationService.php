@@ -13,4 +13,11 @@ interface ProductMallGoodsRelationService
     public function getProductMallGoodsRelationByProductTypeAndProductId($ProductType, $ProductId);
 
     public function findProductMallGoodsRelationsByProductType($productType);
+
+    public function findProductMallGoodsRelationsByProductIdsAndProductType($productIds, $productType);
+
+    public function checkMallClassroomCourseExist($courseId);
+
+    public function checkEsProductCanDelete(array $productIds, $type);
+
 }

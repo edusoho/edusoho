@@ -17,6 +17,7 @@ class ProductMallGoodsRelationDaoImpl extends GeneralDaoImpl implements ProductM
             'conditions' => [
                 'id = :id',
                 'productId = :productId',
+                'productId IN (:productIds)',
                 'productType = :productType',
                 'goodsCode = :goodsCode',
             ],

@@ -12,11 +12,9 @@ use Biz\Task\Strategy\CourseStrategy;
 
 class CourseInfoBuilder extends AbstractBuilder
 {
-    const COURSE_ALLOWED_KEY = ['courseIds', 'title', 'subtitle', 'cover', 'summary', 'courseCatalogue', 'teacherList'];
-
     const TASKS_ALLOWED_KEY = ['title', 'type', 'number', 'counts', 'children', 'isPublish', 'activityType'];
 
-    private $blankChapter = ['title' => '未分类章', 'type' => 'chapter', 'isPublish' => 1, 'number' => 0, 'counts' =>['unitNum' => 0, 'lessonNum' => 0, 'taskNum' => 0], 'children' => []];
+    private $blankChapter = ['title' => '未分类章', 'type' => 'chapter', 'isPublish' => 1, 'number' => 0, 'counts' => ['unitNum' => 0, 'lessonNum' => 0, 'taskNum' => 0], 'children' => []];
 
     public function build($id)
     {
@@ -33,7 +31,8 @@ class CourseInfoBuilder extends AbstractBuilder
     {
         $childrenCourseIds = [];
         $teachers = [];
-        $courseSet = $this->getCourseSetService()->findCourseSetsByCourseIds([$course['id']])[1];
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $count = $this->getCourseService()->countCoursesByCourseSetId($course['courseSetId']);
         if (0 == $course['parentId']) {
             $childrenCourseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
         }
@@ -42,14 +41,13 @@ class CourseInfoBuilder extends AbstractBuilder
             $teachers[] = $this->getTeacherInfoBuilder()->build($teacherId);
         }
         $courseCatalogue = $this->buildCourseCatalogue($this->getCourseService()->findCourseItems($course['id']));
-
         return [
             'courseIds' => array_merge([$course['id']], $childrenCourseIds),
-            'title' => $course['courseSetTitle'],
-            'subtitle' => $courseSet['subtitle'],
+            'title' => $count == 1 ? $courseSet['title'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
+            'subtitle' => $count == 1 ? $courseSet['subtitle'] : $course['subtitle'],
             'cover' => $this->transformCover($courseSet['cover']),
             'price' => $course['price'],
-            'summary' => $courseSet['summary'],
+            'summary' => $this->transformImages($courseSet['summary']),
             'courseCatalogue' => $courseCatalogue,
             'teacherList' => $teachers,
         ];
@@ -110,7 +108,7 @@ class CourseInfoBuilder extends AbstractBuilder
                         $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array_merge($treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'], $lessons);
                     } else if ('chapter' == $lastItem || $nowUnitIndex == -1) {
                         // 在对应章下面加入课程
-                        $treeItems[$nowChapterIndex]['children'] = array_merge($treeItems[$nowChapterIndex]['children'],$lessons);
+                        $treeItems[$nowChapterIndex]['children'] = array_merge($treeItems[$nowChapterIndex]['children'], $lessons);
                     }
                     break;
 
@@ -126,7 +124,7 @@ class CourseInfoBuilder extends AbstractBuilder
 
     private function lessonSplit($item)
     {
-        if(!isset($item['tasks'])) {
+        if (!isset($item['tasks'])) {
             return [];
         }
 
@@ -157,8 +155,8 @@ class CourseInfoBuilder extends AbstractBuilder
     {
         $numbers = 0;
         foreach ($trees as $tree) {
-            if($tree['type'] == $type) {
-                $numbers ++;
+            if ($tree['type'] == $type) {
+                $numbers++;
             }
             if (isset($tree['children'])) {
                 $numbers = $numbers + $this->countByType($tree['children'], $type);
