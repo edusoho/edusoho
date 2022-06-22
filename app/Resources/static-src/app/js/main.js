@@ -108,7 +108,7 @@ if ($('.js-hidden-exception').length > 0) {
 
 $.ajax('/online/sample');
 
-let pageQueryUrl = $('.cd-pagination').data('url');
+let pageQueryUrl = $('.js-advanced-paginator').data('url');
 let currentPerPageCount = $('#currentPerPageCount').children('option:selected').val();
 // 每页显示数量
 $('#currentPerPageCount').on('change', function () {
@@ -117,7 +117,7 @@ $('#currentPerPageCount').on('change', function () {
 })
 
 // 分页
-$('.cd-pagination a').on('click', function () {
+$('.js-advanced-paginator a').on('click', function () {
   let page = $(this).data('page');
   window.location.href = pageQueryUrl + 'page=' + page + '&perpage=' + currentPerPageCount;
 })

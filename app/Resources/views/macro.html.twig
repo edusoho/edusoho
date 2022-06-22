@@ -114,7 +114,7 @@
   {% set perpages = [50, 100, 150] %}
   {% if paginator|default() and paginator.lastPage >= 1 %}
     <nav class=" {{ class|default('text-center') }}">
-      <ul class="pagination cd-pagination" data-url="{{ paginator.getQueryUrl() }}">
+      <ul class="pagination cd-pagination js-advanced-paginator" data-url="{{ paginator.getQueryUrl() }}">
         {% if paginator.currentPage != paginator.firstPage %}
           <li><a href="javascript:;" data-page="{{ paginator.firstPage }}"><i class="cd-icon cd-icon-first-page"></i></a></li>
           <li><a href="javascript:;" data-page="{{ paginator.previousPage }}"><i class="cd-icon cd-icon-arrow-left"></i></a></li>
