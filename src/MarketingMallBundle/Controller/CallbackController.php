@@ -75,7 +75,7 @@ class CallbackController extends BaseController
             'item_bank_exercise' => 'my_item_bank_exercise_show',
         ];
         $route = $routes[$query['targetType']] ?? 'homepage';
-        $param = ['id' => $query['targetId']];
+        $param = 'classroom' === $query['targetType'] ? ['classroomId' => $query['targetId']] : ['id' => $query['targetId']];
         if (2 == $this->setting('wap.version') && DeviceToolkit::isMobileClient()) {
             $token = $this->getUserService()->makeToken('mobile_login', $query['userId'], time() + 3600 * 24 * 30, []);
             $param['loginToken'] = $token;
