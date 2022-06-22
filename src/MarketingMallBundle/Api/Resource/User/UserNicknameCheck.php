@@ -13,7 +13,7 @@ use Biz\User\UserException;
 class UserNicknameCheck extends AbstractResource
 {
     /**
-     * @AuthClass(ClassName="MarketingMallBundle\\Security\\Firewall\\MallAuthTokenAuthenticationListener")
+     * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
      */
     public function search(ApiRequest $request, $nickname)
     {
