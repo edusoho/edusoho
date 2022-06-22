@@ -154,7 +154,6 @@ class LessonServiceImpl extends BaseService implements LessonService
         foreach ($chapters as $chapter) {
             $this->publishLesson($courseId, $chapter['id'], false, true);
         }
-
         $this->dispatchEvent('course.lesson.batch_update_status', new Event($chapters, ['courseId' => $courseId, 'status' => 'published']));
 
         $this->updateLessonNumbers($courseId);
