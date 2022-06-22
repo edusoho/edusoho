@@ -10,7 +10,7 @@ use MarketingMallBundle\Api\Resource\BaseResource;
 class WxPay extends BaseResource
 {
     /**
-     * @AuthClass(className="MarketingMallBundle\\Security\\Firewall\\MallAuthTokenAuthenticationListener")
+     * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
      */
     public function get(ApiRequest $apiRequest)
     {

@@ -16,7 +16,7 @@ class MallUser extends BaseResource
     /**
      * @param ApiRequest $request
      * @return array
-     * @AuthClass(ClassName="MarketingMallBundle\\Security\\Firewall\\MallAuthTokenAuthenticationListener")
+     * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
      * @ResponseFilter(class="ApiBundle\Api\Resource\User\UserFilter")
      */
     public function add(ApiRequest $request)

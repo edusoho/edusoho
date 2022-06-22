@@ -15,7 +15,7 @@ class MallProductMember extends BaseResource
     private $info = ['remark' => '营销商城下单加入'];
 
     /**
-     * @AuthClass(ClassName="MarketingMallBundle\\Security\\Firewall\\MallAuthTokenAuthenticationListener")
+     * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
      */
     public function add(ApiRequest $request, $targetType)
     {
