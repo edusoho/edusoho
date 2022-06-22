@@ -47,24 +47,24 @@ class CallbackController extends BaseController
 
     private function filterRequest($request)
     {
-        $tokenInHeader = $request->headers->get('Mall-Auth-Token');
         $query = $request->query->all();
         $requiredFields = [
             'targetId',
             'targetType',
-            'userId'
+            'userId',
+            'token',
         ];
-        if (empty($tokenInHeader) || !ArrayToolkit::parts($query, $requiredFields)) {
+        if (!ArrayToolkit::parts($query, $requiredFields)) {
             throw new InvalidArgumentException('参数不正确！');
         }
         $mallSettings = $this->getSettingService()->get('marketing_mall', []);
         $storages = $this->getSettingService()->get('storages', []);
         try {
             if (empty($mallSettings['secret_key'])) {
-                $result = JWT::decode($tokenInHeader, $storages['cloud_secret_key'], ['HS256']);
+                $result = JWT::decode($query['token'], $storages['cloud_secret_key'], ['HS256']);
                 $access_key = $storages['cloud_access_key'];
             } else {
-                $result = JWT::decode($tokenInHeader, $mallSettings['secret_key'], ['HS256']);
+                $result = JWT::decode($query['token'], $mallSettings['secret_key'], ['HS256']);
                 $access_key = $mallSettings['access_key'];
             }
         } catch (\RuntimeException $e) {
