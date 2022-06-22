@@ -18,8 +18,7 @@ class CallbackController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $this->filterRequest($request);
-        $query = $request->query->all();
+        $query = $this->filterRequest($request);
         $user = $this->getUserService()->getUser($query['userId']);
         if (empty($user)) {
             throw new NotFoundException('user not found！');
@@ -51,28 +50,24 @@ class CallbackController extends BaseController
         $requiredFields = [
             'targetId',
             'targetType',
-            'userId',
             'token',
         ];
         if (!ArrayToolkit::parts($query, $requiredFields)) {
             throw new InvalidArgumentException('参数不正确！');
         }
         $mallSettings = $this->getSettingService()->get('marketing_mall', []);
-        $storages = $this->getSettingService()->get('storages', []);
         try {
-            if (empty($mallSettings['secret_key'])) {
-                $result = JWT::decode($query['token'], $storages['cloud_secret_key'], ['HS256']);
-                $access_key = $storages['cloud_access_key'];
-            } else {
-                $result = JWT::decode($query['token'], $mallSettings['secret_key'], ['HS256']);
-                $access_key = $mallSettings['access_key'];
-            }
+            $result = JWT::decode($query['token'], $mallSettings['secret_key'], ['HS256']);
+            $access_key = $mallSettings['access_key'];
+            $query['userId'] = $result->userId;
         } catch (\RuntimeException $e) {
             throw new NotFoundException('token error！');
         }
         if ($result->access_key !== $access_key) {
             throw new NotFoundException('token auth error！');
         }
+
+        return $query;
     }
 
     protected function getUrlWithTarget($query)
