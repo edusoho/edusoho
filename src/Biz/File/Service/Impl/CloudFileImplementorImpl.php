@@ -427,7 +427,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     private function mergeCloudFile($localFile, $cloudFile)
     {
-        file_put_contents('/tmp/test',\GuzzleHttp\json_encode($cloudFile));
         if (empty($localFile)) {
             $localFile = [
                 'id' => 0,

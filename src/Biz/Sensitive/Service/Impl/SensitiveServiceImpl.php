@@ -194,7 +194,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $this->getBanlogDao()->create($banlog);
 
         $this->getSensitiveDao()->wave([$bannedKeyword['id']], ['bannedNum' => 1]);
-        file_put_contents('/tmp/test',\GuzzleHttp\json_encode($match[1]));
+
         return $match[1];
     }
 
