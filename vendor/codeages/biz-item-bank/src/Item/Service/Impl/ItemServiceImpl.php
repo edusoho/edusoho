@@ -430,7 +430,9 @@ class ItemServiceImpl extends BaseService implements ItemService
         $questions = $this->getQuestionDao()->search($conditions, [], 0, $questionCount);
 
         $result = $this->getQuestionDao()->batchDelete($conditions);
-        $this->getAttachmentService()->batchDeleteAttachment(['target_ids' => ArrayToolkit::column($questions, 'id'), 'target_type' => 'question']);
+        if (!empty($questions)){
+            $this->getAttachmentService()->batchDeleteAttachment(['target_ids' => ArrayToolkit::column($questions, 'id'), 'target_type' => 'question']);
+        }
 
         return $result;
     }
