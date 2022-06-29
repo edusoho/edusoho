@@ -80,6 +80,8 @@ class MarketingMallApi
             $params = ArrayToolkit::parts($params[0], [
                 'content'
             ]);
+            $params['type'] = "teacherInfo";
+            $params['targetId'] = json_decode($params['content'], true)['userId'];
             $this->post('/api-school/goods/updateTeacherInfo', $params);
         } catch (\RuntimeException $e) {
             $this->getLogger()->error('更新商品详情错误' . $e->getMessage(), ['params' => $params]);
