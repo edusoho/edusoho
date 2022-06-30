@@ -36,7 +36,7 @@ class CourseInfoBuilder extends AbstractBuilder
         if (0 == $course['parentId']) {
             $childrenCourseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
         }
-        $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseIds([$course['id']]), 'userId');
+        $teacherIds = array_column($this->getCourseService()->findTeachersByCourseId($course['id']),'userId');
         foreach ($teacherIds as $teacherId) {
             $teachers[] = $this->getTeacherInfoBuilder()->build($teacherId);
         }
