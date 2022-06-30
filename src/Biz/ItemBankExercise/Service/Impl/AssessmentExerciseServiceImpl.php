@@ -171,7 +171,12 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
 
     public function deleteByAssessmentId($assessmentId)
     {
-        return $this->getItemBankAssessmentExerciseDao()->deleteByAssessmentId($assessmentId);
+        $assessment = $this->getItemBankAssessmentExerciseDao()->getByAssessmentId($assessmentId);
+        $result = $this->getItemBankAssessmentExerciseDao()->deleteByAssessmentId($assessmentId);
+
+        $this->dispatch('assessmentExercise.delete', $assessment);
+
+        return $result;
     }
 
     /**
