@@ -531,7 +531,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['cover' => $covers]);
 
-        $this->dispatchEvent('course-set.update', new Event($courseSet), ['oldCourseSet' => $oldCourseSet]);
+        $this->dispatchEvent('course-set.update', new Event($courseSet, ['oldCourseSet' => $oldCourseSet]));
         $this->getCourseSetGoodsMediator()->onUpdateNormalData($courseSet);
 
         return $courseSet;
