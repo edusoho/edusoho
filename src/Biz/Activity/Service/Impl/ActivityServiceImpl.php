@@ -213,35 +213,26 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if ($this->invalidActivity($fields)) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
-
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
         $activityConfig = $this->getActivityConfig($fields['mediaType']);
-
         if (empty($fields['mediaId'])) {
             $media = $activityConfig->create($fields);
         }
-
         if (!empty($media)) {
             $fields['mediaId'] = $media['id'];
         }
-
         // 使用content来存储media内容
         if (!empty($fields['media']) && empty($fields['content'])) {
             $fields['content'] = json_encode($fields['media']);
         }
-
         $materials = $this->getMaterialsFromActivity($fields);
-
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
         $fields = $this->filterFields($fields);
         $fields['createdTime'] = time();
-
         $activity = $this->getActivityDao()->create($fields);
-
         if (!empty($materials)) {
             $this->syncActivityMaterials($activity, $materials, 'create');
         }
-
         $listener = $activityConfig->getListener('activity.created');
         if (!empty($listener)) {
             $listener->handle($activity, []);

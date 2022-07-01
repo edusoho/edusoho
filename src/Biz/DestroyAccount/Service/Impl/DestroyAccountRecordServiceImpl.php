@@ -2,8 +2,8 @@
 
 namespace Biz\DestroyAccount\Service\Impl;
 
-use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\DestroyAccount\Dao\DestroyAccountRecordDao;
 use Biz\DestroyAccount\DestroyAccountException;
@@ -23,18 +23,18 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
 
     public function updateDestroyAccountRecord($id, $fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('status'))) {
+        if (!ArrayToolkit::requireds($fields, ['status'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $fields = ArrayToolkit::parts($fields, array('status', 'rejectedReason', 'auditUserId', 'auditTime'));
+        $fields = ArrayToolkit::parts($fields, ['status', 'rejectedReason', 'auditUserId', 'auditTime']);
 
         return $this->getDestroyAccountRecordDao()->update($id, $fields);
     }
 
     public function createDestroyAccountRecord($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('userId', 'nickname', 'reason', 'ip'))) {
+        if (!ArrayToolkit::requireds($fields, ['userId', 'nickname', 'reason', 'ip'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -48,7 +48,7 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
             $this->createNewException(DestroyAccountException::REASON_TOO_LONG());
         }
 
-        $fields = ArrayToolkit::parts($fields, array('userId', 'nickname', 'reason', 'ip'));
+        $fields = ArrayToolkit::parts($fields, ['userId', 'nickname', 'mobile', 'email', 'reason', 'ip']);
         $fields['status'] = 'audit';
 
         return $this->getDestroyAccountRecordDao()->create($fields);
@@ -67,7 +67,7 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
             $this->createNewException(DestroyAccountException::NOT_FOUND_RECORD());
         }
 
-        return $this->updateDestroyAccountRecord($lastAuditRecord['id'], array('status' => 'cancel'));
+        return $this->updateDestroyAccountRecord($lastAuditRecord['id'], ['status' => 'cancel']);
     }
 
     public function getLastAuditDestroyAccountRecordByUserId($userId)
@@ -92,20 +92,20 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
         $record = $this->getDestroyAccountRecord($id);
         $user = $this->getUserService()->getUser($record['userId']);
         $auditUser = $this->getCurrentUser();
-        $fields = array(
+        $fields = [
             'auditUserId' => $auditUser['id'],
             'status' => 'passed',
             'auditTime' => time(),
-        );
+        ];
 
         try {
             $this->beginTransaction();
             $record = $this->updateDestroyAccountRecord($id, $fields);
-            $destroyedAccount = $this->getDestroyedAccountService()->createDestroyedAccount(array('recordId' => $record['id'], 'userId' => $record['userId'], 'nickname' => $record['nickname']));
+            $destroyedAccount = $this->getDestroyedAccountService()->createDestroyedAccount(['recordId' => $record['id'], 'userId' => $record['userId'], 'nickname' => $record['nickname']]);
 
             //更新用户相关信息
             $this->updateUserInfoForDestroyAccount($record['userId'], $destroyedAccount);
-            $this->getLogService()->info('destroy_account_record', 'pass', '通过注销帐号申请', array('destroyedAccountId' => $destroyedAccount['id'], 'nickname' => $record['nickname'], 'reason' => $record['reason'], 'auditUserNickname' => $auditUser['nickname'], 'mobile' => $user['verifiedMobile'], 'email' => $user['email']));
+            $this->getLogService()->info('destroy_account_record', 'pass', '通过注销帐号申请', ['destroyedAccountId' => $destroyedAccount['id'], 'nickname' => $record['nickname'], 'reason' => $record['reason'], 'auditUserNickname' => $auditUser['nickname'], 'mobile' => $user['verifiedMobile'], 'email' => $user['email']]);
             $this->commit();
         } catch (\Exception $e) {
             $this->getLogger()->error($e->getMessage());
@@ -121,17 +121,17 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
     {
         $record = $this->getDestroyAccountRecord($id);
         $auditUser = $this->getCurrentUser();
-        $fields = array(
+        $fields = [
             'auditUserId' => $auditUser['id'],
             'status' => 'rejected',
             'rejectedReason' => $reason,
             'auditTime' => time(),
-        );
+        ];
         $user = $this->getUserService()->getUser($record['userId']);
         $record = $this->updateDestroyAccountRecord($id, $fields);
 
-        $this->dispatchEvent('user.reject.destroy', new Event($user, array('reason' => $reason)));
-        $this->getLogService()->info('destroy_account_record', 'reject', '拒绝注销帐号申请', array('auditUserNickname' => $auditUser['nickname'], 'nickname' => $record['nickname'], 'reason' => $record['reason'], 'rejectedReason' => $reason));
+        $this->dispatchEvent('user.reject.destroy', new Event($user, ['reason' => $reason]));
+        $this->getLogService()->info('destroy_account_record', 'reject', '拒绝注销帐号申请', ['auditUserNickname' => $auditUser['nickname'], 'nickname' => $record['nickname'], 'reason' => $record['reason'], 'rejectedReason' => $reason]);
 
         return $record;
     }

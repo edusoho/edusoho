@@ -39,14 +39,11 @@ class TaskManageController extends BaseController
     public function createAction(Request $request, $courseId)
     {
         $course = $this->tryManageCourse($courseId);
-
         $categoryId = $request->query->get('categoryId', 0);
-
         $taskCount = $this->getTaskService()->countTasks(['courseId' => $course['id'], 'categoryId' => $categoryId]);
         if ($taskCount >= 6) {
             return $this->createNewException(TaskException::TASK_NUM_LIMIT());
         }
-
         //categoryId  所属课时
         $taskMode = $request->query->get('type');
         if ($request->isMethod('POST')) {
@@ -55,7 +52,6 @@ class TaskManageController extends BaseController
             return $this->createTask($request, $task, $course);
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-
         $html = $this->renderView(
             'task-manage/modal.html.twig',
             [

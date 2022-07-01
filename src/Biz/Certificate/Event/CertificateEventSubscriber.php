@@ -152,7 +152,7 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
                 'name' => 'issue_certificate_job'.$certificate['id'],
                 'pool' => 'dedicated',
                 'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-                'expression' => (int) time(),
+                'expression' => time() + 60,
                 'misfire_policy' => 'executing',
                 'class' => 'Biz\Certificate\Job\IssueCertificateJob',
                 'args' => ['certificateId' => $certificate['id']],

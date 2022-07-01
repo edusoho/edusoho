@@ -29,7 +29,6 @@ class ClassroomMemberEventSubscriber extends EventSubscriber implements EventSub
     public function onCourseMembersFinishedRefresh(Event $event)
     {
         $course = $event->getSubject();
-        $updatedMembers = $event->getArgument('updatedMembers');
         if (!empty($course['parentId'])) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             if (empty($classroom)) {

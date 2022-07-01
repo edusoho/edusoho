@@ -32,7 +32,7 @@ class MeCourseMember extends AbstractResource
 
             if (!empty($classroomMember['expire'])) {
                 $courseMember['expire']['status'] = $classroomMember['expire']['status'];
-                $courseMember['expire']['deadline'] = strtotime($classroomMember['expire']['deadline']);
+                $courseMember['expire']['deadline'] = empty($classroomMember['expire']['deadline']) ? 0 : strtotime($classroomMember['expire']['deadline']);
             }
         }
 

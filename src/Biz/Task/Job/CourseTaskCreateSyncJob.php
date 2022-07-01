@@ -7,6 +7,7 @@ use Biz\Activity\Dao\ActivityDao;
 use Biz\AppLoggerConstant;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseMaterialDao;
+use Biz\Crontab\SystemCrontabInitializer;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -17,11 +18,8 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
         $task = $this->getTaskService()->getTask($this->args['taskId']);
         try {
             $this->getLock()->get("sync_course_{$task['courseId']}", 10);
-
             $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
-
             $activity = $this->getActivityDao()->get($task['activityId']);
-
             $taskHelper = new BatchCreateHelper($this->getTaskDao());
             foreach ($copiedCourses as $cc) {
                 $copiedTask = $this->getTaskService()->getCourseTaskByCourseIdAndCopyId($cc['id'], $task['id']);
@@ -29,7 +27,6 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
                     continue;
                 }
                 $newActivity = $this->createActivity($activity, $cc);
-
                 $newTask = [
                     'courseId' => $cc['id'],
                     'fromCourseSetId' => $cc['courseSetId'],
@@ -52,24 +49,30 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
                     'status' => $task['status'],
                     'length' => $task['length'],
                 ];
-
                 //if (!empty($task['mode'])) {
                 $newChapter = $this->getChapterDao()->getByCopyIdAndLockedCourseId($task['categoryId'], $cc['id']);
                 $newTask['categoryId'] = $newChapter['id'];
                 //}
-
                 $taskHelper->add($newTask);
             }
-
             $taskHelper->flush();
-
             $this->dispatchEvent('course.task.create.sync', new Event($task));
-
             $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_create', 'course.log.task.create.sync.success_tips', ['taskId' => $task['id']]);
-            $this->getLock()->get("sync_course_{$task['courseId']}", 10);
+            $this->getLock()->release("sync_course_{$task['courseId']}");
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_create', 'course.log.task.create.sync.fail_tips', ['error' => $e->getMessage()]);
-            $this->getLock()->get("sync_course_{$task['courseId']}", 10);
+            $this->getLock()->release("sync_course_{$task['courseId']}");
+            if (!isset($this->args['repeat'])) {
+                $this->getSchedulerService()->register(array(
+                    'name' => 'course_task_create_sync_job_' . $task['id'],
+                    'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                    'expression' => time() + 60,
+                    'misfire_policy' => 'executing',
+                    'class' => 'Biz\Task\Job\CourseTaskCreateSyncJob',
+                    'args' => array('taskId' => $task['id'], 'repeat' => 1),
+                ));
+            }
+            throw $e;
         }
     }
 
@@ -90,17 +93,13 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
             'finishType' => $activity['finishType'],
             'finishData' => $activity['finishData'],
         ];
-
         $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, [
             'refLiveroom' => 1, 'newActivity' => $newActivity, 'isCopy' => 1, 'isSync' => 1,
         ]);
-
         if (!empty($ext)) {
             $newActivity['mediaId'] = $ext['id'];
         }
-
         $newActivity = $this->getActivityDao()->create($newActivity);
-
         //create materials if exists
         $this->createMaterials($newActivity, $activity, $copiedCourse);
 
@@ -110,7 +109,6 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
     private function createMaterials($activity, $sourceActivity, $copiedCourse)
     {
         $materials = $this->getMaterialDao()->search(['lessonId' => $sourceActivity['id'], 'courseId' => $sourceActivity['fromCourseId']], [], 0, PHP_INT_MAX);
-
         if (empty($materials)) {
             return;
         }
@@ -130,7 +128,6 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
             $newMaterial['copyId'] = $material['id'];
             $newMaterial['courseSetId'] = $copiedCourse['courseSetId'];
             $newMaterial['courseId'] = $copiedCourse['id'];
-
             if ($material['lessonId'] > 0) {
                 $newMaterial['lessonId'] = $activity['id'];
             }

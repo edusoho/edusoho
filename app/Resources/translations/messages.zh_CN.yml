@@ -285,6 +285,8 @@ paginator.firstPage: 首页
 paginator.endPage: 尾页
 paginator.nextPage: 下一页
 paginator.lastPage: 上一页
+paginator.jump: 跳至
+paginator.page: 页
 
 
 # 用户通用
@@ -1108,6 +1110,7 @@ course.members_manage.official_student.search: 搜索
 course.members_manage.official_student.batch_upload_deadline: 批量修改有效期
 course.members_manage.official_student.batch_remove: 批量移除
 course.members_manage.official_student.input_placeholder: 请输入用户名/邮箱/手机号
+course.members_manage.official_student.seq: 序号
 course.members_manage.official_student.progress: 学习进度
 course.members_manage.official_student.stutatus: 学习状态
 course.members_manage.official_student.operation: 操作
@@ -3048,6 +3051,7 @@ user.oauth.binding_web_user: 正在绑定网校用户
 user.oauth.bind_account_and_go_continue: 绑定并继续
 user.oauth.bind_other_account: 绑定其他帐号？
 user.oauth.bind_existed_account: 绑定已有帐号？
+user.oauth.bind_error.bind_by_other: 该帐号已被绑定
 user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
 user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
 user.oauth.register_account_by_ways: 使用%accountType%创建帐号
@@ -7040,7 +7044,7 @@ admin.edu_cloud.edu_video.finger_print_time: 秒
 admin.edu_cloud.edu_video.finger_print_opacity_label: 指纹不透明度：
 admin.edu_cloud.edu_video.finger_print_opacity_tips: 请输入0～1之间的一位小数,数字越小越透明
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 云视频防盗增强
-admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。安卓端仅允许在微信APP内置浏览器中观看
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗进一步增强，移动端网页版仅允许在钉钉/飞书/微信/企业微信的内置浏览器中播放，其他手机浏览器无法播放，系统会引导用户使用APP观看。
 admin.edu_cloud.edu_video.enable_hls_encryption_plus_upgrade_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在微信外的其他手机浏览器中播放，系统会引导用户使用微信或App观看。
 admin.edu_cloud.edu_video.buy_flow_tips: >
   开通流量年包，视频流量更划算。<a class="" href="%bugUrl%" target="_blank">什么是流量年包？</a>
@@ -9252,8 +9256,8 @@ my.reward_point.mall.search: 共找到
 my.reward_point.mall.search_product: 相关商品
 my.reward_point.mall.search_hint: 输入标题关键字
 my.reward_points: 我的积分
-my.reward_points_message: ￥%num%现金，积分使用后，申请退款时不退还积分
-my.reward_points_instructions: 积分说明
+my.reward_points_message: ￥%num%现金，%reward%使用后，申请退款时不退还%reward%
+my.reward_points_instructions: %reward%说明
 
 task.learn_data_detail.nickname: 用户名
 task.learn_data_detail.createdTime: 任务开始时间
@@ -11459,6 +11463,8 @@ admin_v2.user.destroy_account_record.show: 查看
 admin_v2.user.destroy_account_record.empty: 暂无注销申请
 admin_v2.user.destroy_account_record.detail: 详情
 admin_v2.user.destroy_account_record.rejectedReson: 拒绝理由
+admin_v2.user.destroy_account_record.origin_mobile: 原手机号
+admin_v2.user.destroy_account_record.origin_email: 原邮箱
 admin_v2.destroy_account.destroyed_account.number: 注销ID
 admin_v2.destroy_account.destroyed_account.nickname: 注销前用户名
 admin_v2.destroy_account.destroyed_account.destroy_time: 注销时间

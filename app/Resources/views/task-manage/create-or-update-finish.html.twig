@@ -86,6 +86,7 @@
           {% endfor %}
         </div>
         <input type="hidden" id="finish-data" name="finishData" value="{{ activity['finishData']|default(defaultCondition['value']|default()) }}">
+        {% if activity.mediaType == 'video' or activity.mediaType == 'audio'%}
         <div id="endConditions" class="{% if finishType != 'end' %}hidden{% endif %} form-group">
           <div class="col-sm-offset-2 col-sm-10">
             <div class="checkbox">
@@ -95,6 +96,7 @@
             </div>
           </div>
         </div>
+        {% endif %}
       </form>
     </div>
   </div>

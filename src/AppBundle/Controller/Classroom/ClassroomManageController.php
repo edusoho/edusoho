@@ -113,7 +113,7 @@ class ClassroomManageController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getClassroomService()->countMembersByClassroomId($id, $condition),
-            20
+            50
         );
         $students = $this->getClassroomService()->searchMembersByClassroomId(
             $id,
@@ -129,9 +129,11 @@ class ClassroomManageController extends BaseController
                 'classroom' => $this->getClassroomService()->getClassroom($id),
                 'students' => $students,
                 'users' => $this->getUserService()->findUsersByIds(array_column($students, 'userId')),
+                'userProfiles' => $this->getUserService()->findUserProfilesByIds(array_column($students, 'userId')),
                 'paginator' => $paginator,
                 'role' => $role,
                 'disableDeleteSearchResult' => empty($fields['keyword']) && empty($fields['expired']),
+                'offset' => $paginator->getOffsetCount(),
             ]
         );
     }
@@ -704,7 +706,7 @@ class ClassroomManageController extends BaseController
     public function removeCourseAction($id, $courseId)
     {
         $this->getClassroomService()->tryManageClassroom($id);
-        $this->getClassroomService()->deleteClassroomCourses($id, [$courseId]);
+        $this->getClassroomService()->deleteClassroomCourses($id, [$courseId], false);
 
         return $this->createJsonResponse(['success' => true]);
     }
@@ -726,7 +728,6 @@ class ClassroomManageController extends BaseController
             return $this->render('check-password/check-password-modal.twig', ['jsonp' => $request->query->get('jsonp')]);
         }
         $this->getClassroomService()->deleteClassroomCourses($classroomId, [$courseId]);
-        $this->getCourseSetService()->deleteCourseSet($courseSetId);
 
         return $this->createJsonResponse(['code' => 0, 'message' => '删除课程成功']);
     }
@@ -762,7 +763,7 @@ class ClassroomManageController extends BaseController
 
     public function statisticsAction(Request $request, $id)
     {
-        $this->getClassroomService()->tryManageClassroom($id);
+        $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
         $overview['studentCount'] = $this->getClassroomService()->searchMemberCount([
             'classroomId' => $classroom['id'],
@@ -802,7 +803,7 @@ class ClassroomManageController extends BaseController
 
     public function studentDetailListAction(Request $request, $id)
     {
-        $this->getClassroomService()->tryManageClassroom($id);
+        $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
         $conditions = $request->query->all();
         $studentDetailCount = $this->getReportService()->getStudentDetailCount($id, $conditions);

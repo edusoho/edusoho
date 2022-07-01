@@ -316,8 +316,11 @@ class Setting extends AbstractResource
         if (empty($loginSetting)) {
             SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG();
         }
+        if (empty($authSetting['register_enabled'])) {
+            $authSetting['register_enabled'] = 'closed' == $authSetting['register_mode'] ? 'closed' : 'opened';
+        }
 
-        $result = [
+        return [
             'auth' => [
                 'register_mode' => 'closed' === $authSetting['register_enabled'] ? 'closed' : $authSetting['register_mode'],
                 'user_terms_enabled' => 'opened' == $authSetting['user_terms'] ? true : false,
@@ -332,8 +335,6 @@ class Setting extends AbstractResource
                 'weixinmob_enabled' => (int) $loginSetting['weixinmob_enabled'] ? true : false,
             ],
         ];
-
-        return $result;
     }
 
     public function getCloud($request = null)
@@ -431,14 +432,13 @@ class Setting extends AbstractResource
         ];
     }
 
-    public function getRegister($request = null)
+    public function getRegister()
     {
         $registerSetting = $this->getSettingService()->get('auth', ['register_enabled' => 'closed', 'register_mode' => 'mobile', 'email_enabled' => 'closed']);
         $registerMode = 'closed' === $registerSetting['register_enabled'] ? 'closed' : $registerSetting['register_mode'];
         $isEmailVerifyEnable = isset($registerSetting['email_enabled']) && 'opened' == $registerSetting['email_enabled'];
-        $registerSetting = $this->getSettingService()->get('auth');
         $level = empty($registerSetting['register_protective']) ? 'none' : $registerSetting['register_protective'];
-        $captchaEnabled = 'none' === $level ? false : true;
+        $captchaEnabled = 'none' !== $level;
 
         return [
             'mode' => $registerMode,

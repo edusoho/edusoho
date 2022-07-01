@@ -16,15 +16,12 @@ class OrderController extends BaseController
     public function showAction(Request $request)
     {
         $product = $this->getProduct($request->query->get('targetType'), $request->query->all());
-
         $product->setAvailableDeduct();
         $product->setPickedDeduct([]);
-
         $location = [
             'targetType' => $product->targetType,
             'targetId' => $product->targetId,
         ];
-
         if ('course' === $location['targetType'] && '0' != $location['targetId']) {
             $course = $this->getCourseService()->getCourse($location['targetId']);
             $location['targetId'] = $course['courseSetId'];

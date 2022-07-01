@@ -14,6 +14,7 @@ use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\FaceInspection\Service\FaceInspectionService;
 use Biz\File\Service\UploadFileService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
@@ -34,58 +35,45 @@ class TaskController extends BaseController
         if ($blank) {
             return new Response();
         }
-
         $preview = $request->query->get('preview');
-
         $user = $this->getUser();
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '请先登录', '', 3, $this->generateUrl('login'));
         }
-
         try {
-            $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
+            $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-
             if (!empty($activity['ext']) && !empty($activity['ext']['file'])) {
                 $media = $activity['ext']['file'];
             }
-
             $media = !empty($media) ? $media : [];
         } catch (AccessDeniedException $accessDeniedException) {
             return $this->handleAccessDeniedException($accessDeniedException, $request, $id);
         } catch (CourseException $deniedException) {
             return $this->handleAccessDeniedException($deniedException, $request, $id);
         }
-
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
-
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
-
+        if ('classroom' === $member['joinedType'] && !empty($member['classroomId'])) {
+            $classroomMember = $this->getClassroomService()->getClassroomMember($member['classroomId'], $member['userId']);
+            $member['locked'] = $classroomMember['locked'];
+        }
         if ($member['locked']) {
             return $this->redirectToRoute('my_course_show', ['id' => $courseId]);
         }
-
 //        if ($this->isCourseExpired($course) && !$this->getCourseService()->hasCourseManagerRole($course['id'])) {
 //            return $this->redirectToRoute('course_show', ['id' => $courseId]);
 //        }
-
-        if (null !== $member && 'teacher' !== $member['role'] && !$this->getCourseMemberService()->isMemberNonExpired(
-                $course,
-                $member
-            )
-        ) {
+        if (null !== $member && 'teacher' !== $member['role'] && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('my_course_show', ['id' => $courseId]));
         }
-
         $activityConfig = $this->getActivityConfigByTask($task);
-
         if (null !== $member && 'student' === $member['role']) {
             $wrappedTasks = ArrayToolkit::index($this->getTaskService()->wrapTaskResultToTasks($courseId, $this->getTaskService()->findTasksByCourseId($courseId)), 'id');
             if (!empty($wrappedTasks[$task['id']]) && $wrappedTasks[$task['id']]['lock']) {
                 return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
             }
-
             if ($activityConfig->allowTaskAutoStart($task)) {
                 $this->getTaskService()->trigger(
                     $task['id'],
@@ -96,28 +84,34 @@ class TaskController extends BaseController
                 );
             }
         }
-
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
         if (empty($taskResult)) {
             $taskResult = ['status' => 'none'];
         }
-
+        $videoHeaderLength = 0;
+        $storageSetting = $this->getSettingService()->get('storage');
+        if (!empty($storageSetting['video_header'])) {
+            try {
+                $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            } catch (\RuntimeException $e) {
+                $headLeader = [];
+            }
+            $videoHeaderLength = $headLeader ? $headLeader['length'] : 0;
+        }
         if ('finish' == $taskResult['status']) {
             $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $user['id']);
             $finishedRate = $progress['percent'];
         }
         list($previousTask, $nextTask) = $this->getPreviousTaskAndTaskResult($task);
         $this->freshTaskLearnStat($request, $task['id']);
-
         if ($course['isHideUnpublish']) {
             $chapter = $this->getCourseService()->getChapter($courseId, $task['categoryId']);
             //需要8.3.8重构
             $number = explode('-', $task['number']);
             if (array_key_exists(1, $number)) {
-                $task['number'] = $chapter['published_number'].'-'.$number[1];
+                $task['number'] = $chapter['published_number'] . '-' . $number[1];
             }
         }
-
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         if ('testpaper' == $activity['mediaType'] && !empty($activity['ext']['answerScene']['enable_facein'])) {
             $face = $this->getFaceInspectionService()->getUserFaceByUserId($user->getId());
@@ -128,7 +122,6 @@ class TaskController extends BaseController
                 );
             }
         }
-
         $learnControlSetting = $this->getLearnControlService()->getMultipleLearnSetting();
 
         return $this->render(
@@ -144,6 +137,7 @@ class TaskController extends BaseController
                 'allowEventAutoTrigger' => $activityConfig->allowEventAutoTrigger(),
                 'media' => $media,
                 'learnControlSetting' => $learnControlSetting,
+                'videoHeaderLength' => $videoHeaderLength,
             ]
         );
     }
@@ -479,7 +473,7 @@ class TaskController extends BaseController
         }
 
         $config = $this->getActivityConfig();
-        $action = $config[$task['type']]['controller'].':finishCondition';
+        $action = $config[$task['type']]['controller'] . ':finishCondition';
 
         return $this->forward($action, ['activity' => $activity]);
     }
@@ -528,9 +522,9 @@ class TaskController extends BaseController
      *
      * @param  $taskId
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function handleAccessDeniedException(\Exception $exception, Request $request, $taskId)
     {
@@ -585,7 +579,7 @@ class TaskController extends BaseController
 
     private function freshTaskLearnStat(Request $request, $taskId)
     {
-        $key = 'task.'.$taskId;
+        $key = 'task.' . $taskId;
         $session = $request->getSession();
         $taskStore = $session->get($key, []);
         $taskStore['start'] = time();
@@ -596,7 +590,7 @@ class TaskController extends BaseController
 
     private function validTaskLearnStat(Request $request, $taskId)
     {
-        $key = 'task.'.$taskId;
+        $key = 'task.' . $taskId;
         $session = $request->getSession();
         $taskStore = $session->get($key);
 
@@ -738,5 +732,13 @@ class TaskController extends BaseController
     protected function getLearnControlService()
     {
         return $this->createService('Visualization:LearnControlService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

@@ -65,7 +65,9 @@ class StudentManageController extends BaseController
             'students' => $members,
             'followings' => $this->findCurrentUserFollowings(),
             'users' => $this->getUserService()->findUsersByIds(array_column($members, 'userId')),
+            'userProfiles' => $this->getUserService()->findUserProfilesByIds(array_column($members, 'userId')),
             'paginator' => $paginator,
+            'offset' => $paginator->getOffsetCount(),
         ]);
     }
 

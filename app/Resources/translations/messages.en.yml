@@ -217,6 +217,8 @@ paginator.firstPage: 'First'
 paginator.endPage: 'End'
 paginator.nextPage: 'Next'
 paginator.lastPage: 'Last'
+paginator.jump: Jump
+paginator.page: Page
 user: User
 user.not_exist: 'User is not exist'
 user.fields.login_password: 'Login password'
@@ -973,6 +975,7 @@ course.members_manage.official_student.search: Search
 course.members_manage.official_student.batch_upload_deadline: Batch modification validity period
 course.members_manage.official_student.batch_remove: Batch remove
 course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
+course.members_manage.official_student.seq: Seq
 course.members_manage.official_student.progress: 'Learn progress'
 course.members_manage.official_student.status: 'Learn status'
 course.members_manage.official_student.operation: Action
@@ -2651,6 +2654,7 @@ user.oauth.binding_web_user: 'in binding'
 user.oauth.bind_account_and_go_continue: 'bind and continue'
 user.oauth.bind_other_account: 'bind other account?'
 user.oauth.bind_existed_account: 'bind existing account?'
+user.oauth.bind_error.bind_by_other: 'The account has been bound'
 user.oauth.register.nickname_placeholder: 'not more than 18 english words or 9 chinese words'
 user.oauth.register.password__placeholder: '5-20 words, number or symbol'
 user.oauth.register_account_by_ways: 'Use %accountType% to register'
@@ -5950,7 +5954,7 @@ admin.edu_cloud.edu_video.finger_print_time: Second
 admin.edu_cloud.edu_video.finger_print_opacity_label: 'Cloud video fingerprint opacity'
 admin.edu_cloud.edu_video.finger_print_opacity_tips: 'The recommended opacity is between 0 and 1 seconds,The smaller the number, the more transparent'
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 'Cloud video security enhancements'
-admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the H5 browser, the system will guide the user to use App view. Android is only allowed to view in the built-in browser of wechat app'
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the mobile browser except the built-in browsers of Dingtalk/Feishu/Wechat/WorkWechat, the system will guide the user to use App view.'
 admin.edu_cloud.edu_video.enable_hls_encryption_plus_upgrade_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the H5 browser except Wechat, the system will guide the user to use Wechat or App view.'
 admin.edu_cloud.edu_video.buy_flow_tips: 'Open traffic annual package, video traffic more cost-effective. <a class="" href="%bugUrl%" target="_blank"> What is a traffic package? </a>'
 admin.edu_cloud.edu_video.start_buy: "Contact official immediately opened: <span class = \"text-primary\"> 4008041114 </ span> \n"
@@ -10163,6 +10167,8 @@ admin_v2.user.destroy_account_record.show: Show
 admin_v2.user.destroy_account_record.empty: Empty
 admin_v2.user.destroy_account_record.detail: Detail
 admin_v2.user.destroy_account_record.rejectedReson: RejectedReson
+admin_v2.user.destroy_account_record.origin_mobile: Original Mobile
+admin_v2.user.destroy_account_record.origin_email: Original Email
 admin_v2.destroy_account.destroyed_account.number: Cancellation ID
 admin_v2.destroy_account.destroyed_account.nickname: Nickname
 admin_v2.destroy_account.destroyed_account.destroy_time: Destroy Time

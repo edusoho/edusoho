@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\DestroyAccount\Service\DestroyAccountRecordService;
+use Biz\User\Service\UserService;
 
 class AccountApplyDestroy extends AbstractResource
 {
@@ -17,15 +18,17 @@ class AccountApplyDestroy extends AbstractResource
             throw CommonException::ERROR_PARAMETER();
         }
 
-        $user = $this->getCurrentUser();
-        $fiedlds = array(
+        $user = $this->getUserService()->getUserAndProfile($this->getCurrentUser()->getId());
+        $fields = [
             'userId' => $user['id'],
             'nickname' => $user['nickname'],
+            'mobile' => $user['verifiedMobile'] ?: $user['mobile'],
+            'email' => $user['email'],
             'reason' => $reason,
             'ip' => $request->getHttpRequest()->getClientIp(),
-        );
+        ];
 
-        return $this->getDestroyAccountRecordService()->createDestroyAccountRecord($fiedlds);
+        return $this->getDestroyAccountRecordService()->createDestroyAccountRecord($fields);
     }
 
     /**
@@ -34,5 +37,13 @@ class AccountApplyDestroy extends AbstractResource
     private function getDestroyAccountRecordService()
     {
         return $this->service('DestroyAccount:DestroyAccountRecordService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }

@@ -40,7 +40,6 @@ class LessonServiceImpl extends BaseService implements LessonService
         if (!ArrayToolkit::requireds($fields, ['title', 'fromCourseId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
-
         $this->beginTransaction();
         try {
             $lesson = [
@@ -50,14 +49,11 @@ class LessonServiceImpl extends BaseService implements LessonService
                 'status' => 'created',
             ];
             $lesson = $this->getCourseChapterDao()->create($lesson);
-
             $taskFields = $this->parseTaskFields($fields);
             $taskFields['categoryId'] = $lesson['id'];
             $taskFields['isLesson'] = true;
             $this->dispatchEvent('course.lesson.create', new Event($lesson));
-
             $task = $this->getTaskService()->createTask($taskFields);
-
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
@@ -88,19 +84,15 @@ class LessonServiceImpl extends BaseService implements LessonService
     {
         try {
             $this->beginTransaction();
-
             $this->getCourseService()->tryManageCourse($courseId);
             $chapter = $this->getCourseChapterDao()->get($lessonId);
             if (empty($chapter) || $chapter['courseId'] != $courseId || 'lesson' != $chapter['type']) {
                 $this->createNewException(CommonException::ERROR_PARAMETER());
             }
-
             $lesson = $this->getCourseChapterDao()->update($lessonId, ['status' => 'published']);
             $this->publishTasks([$lessonId]);
-
             $this->dispatchEvent('course.lesson.publish', new Event($lesson));
             $this->getLogService()->info('course', 'publish_lesson', '发布课时', $lesson);
-
             if ($updateLessonNum) {
                 $this->updateLessonNumbers($courseId);
             }
