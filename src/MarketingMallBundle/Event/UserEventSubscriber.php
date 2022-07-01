@@ -42,7 +42,7 @@ class UserEventSubscriber extends BaseEventSubscriber
     protected function syncTeacherInfoToMarketingMall($userId)
     {
         $user = $this->getUserService()->getUser($userId);
-        if (!in_array('ROLE_TEACHER', $user['roles'])) {
+        if (!in_array('ROLE_TEACHER', $user['roles']) && !in_array('ROLE_ADMIN', $user['roles']) && !in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
             return;
         }
 
