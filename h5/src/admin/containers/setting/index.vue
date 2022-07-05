@@ -55,7 +55,7 @@
             v-for="(item, index) in baseModules"
             :key="`base-${index}`"
           >
-            {{ item.name }}
+            {{ $t(item.name) }}
           </el-button>
         </div>
         <template>
