@@ -74,12 +74,17 @@ class CallbackController extends BaseController
             'classroom' => 'classroom_courses',
             'item_bank_exercise' => 'my_item_bank_exercise_show',
         ];
-        $route = $routes[$query['targetType']] ?? 'homepage';
         $param = 'classroom' === $query['targetType'] ? ['classroomId' => $query['targetId']] : ['id' => $query['targetId']];
-        if (2 == $this->setting('wap.version') && DeviceToolkit::isMobileClient()) {
+        if ('2' === $this->setting('wap.version') && DeviceToolkit::isMobileClient()) {
+            $routes['classroom'] = 'classroom_show';
+            $routes['item_bank_exercise'] = 'item_bank_exercise_show';
             $token = $this->getUserService()->makeToken('mobile_login', $query['userId'], time() + 3600 * 24 * 30, []);
-            $param['loginToken'] = $token;
+            $param = [
+                'id' => $query['targetId'],
+                'loginToken' => $token,
+            ];
         }
+        $route = $routes[$query['targetType']] ?? 'homepage';
 
         return $this->generateUrl($route, $param);
     }
