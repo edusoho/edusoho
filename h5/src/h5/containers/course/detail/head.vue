@@ -454,6 +454,7 @@ export default {
         pluck: {
           timelimit: timelimit,
         },
+        playbackRates: [0.75, 1, 1.25, 1.5, 2, 3],
         resNo: media.resNo,
         disableDataUpload: true,
         watermark: {
