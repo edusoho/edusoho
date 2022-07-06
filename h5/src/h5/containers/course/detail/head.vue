@@ -361,7 +361,7 @@ export default {
             this.formateAudioData(res);
             return;
           }
-          if (mediaType === 'video') {
+          if (mediaType === 'video' || mediaType === 'live') {
             this.formateVedioData(res);
             return;
           }
