@@ -330,7 +330,7 @@ export default {
           const nowDate = new Date();
           const endDate = new Date(task.endTime * 1000);
           let replay = false;
-          if (nowDate > endDate) {
+          if (nowDate > endDate && task.liveStatus === 'closed') {
             if (task.activity.replayStatus == 'videoGenerated') {
               // 本站文件
               this.setSourceType({
@@ -345,6 +345,7 @@ export default {
               replay = true;
             }
           }
+
           this.$router.push({
             name: 'live',
             query: {
