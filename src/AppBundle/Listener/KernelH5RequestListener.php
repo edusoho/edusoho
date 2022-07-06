@@ -66,11 +66,11 @@ class KernelH5RequestListener
     {
         $params = $request->query->all();
         $query = http_build_query($params);
-        if (in_array($route['_route'], ['my_course_show', 'course_show', 'classroom_show', 'item_bank_exercise_show'])) {
+        if (in_array($route['_route'], ['my_course_show', 'course_show'])) {
             $pathInfo = $this->container->get('router')->generate('course_show', ['id' => $route['id']], UrlGeneratorInterface::ABSOLUTE_PATH);
-            if (isset($params['loginToken'])) {
-                $pathInfo = $pathInfo.'/loginToken/'.$params['loginToken'];
-            }
+        }
+        if (isset($params['loginToken']) && in_array($route['_route'], ['my_course_show', 'course_show', 'classroom_show', 'item_bank_exercise_show'])) {
+            $pathInfo .= '/loginToken/' . $params['loginToken'];
         }
 
         if (in_array($route['_route'], ['classroom_reviews', 'classroom_introductions'])) {
