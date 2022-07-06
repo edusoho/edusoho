@@ -281,7 +281,7 @@ export default {
             redirect: this.redirect,
           },
         });
-      // this.joinStatus ? this.showTypeDetail(task) : '';
+
       if (this.joinStatus) {
         this.showTypeDetail(task);
       }
@@ -291,6 +291,7 @@ export default {
         Toast(this.$t('courseLearning.stayTuned'));
         return;
       }
+
       switch (task.type) {
         case 'video':
           if (task.mediaSource === 'self') {
@@ -332,14 +333,10 @@ export default {
           if (nowDate > endDate) {
             if (task.activity.replayStatus == 'videoGenerated') {
               // 本站文件
-              if (task.mediaSource === 'self') {
-                this.setSourceType({
-                  sourceType: 'video',
-                  taskId: task.id,
-                });
-              } else {
-                Toast(this.$t('courseLearning.doesNotSupportThisType'));
-              }
+              this.setSourceType({
+                sourceType: 'video',
+                taskId: task.id,
+              });
               return;
             } else if (task.activity.replayStatus == 'ungenerated') {
               Toast(this.$t('courseLearning.noReplay'));
