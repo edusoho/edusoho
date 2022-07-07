@@ -48,7 +48,7 @@ class KernelControllerListener
                 return;
             }
 
-            $url = $this->generateUrl('settings_mobile_bind');
+            $url = $this->generateUrl('settings_mobile_bind', ['goto' => $this->getTargetPath($request)]);
             $event->setController(function () use ($url) {
                 return new RedirectResponse($url);
             });
@@ -77,6 +77,19 @@ class KernelControllerListener
             '/edu_cloud/sms_send_check_captcha', '/settings/mobile_bind', '/switch/language',
             '/scrm/buy/goods/callback', '/file/upload', '/file/img/crop', '/online/sample',
         ];
+    }
+
+    protected function getTargetPath($request)
+    {
+        if ($request->query->get('goto')) {
+            $targetPath = $request->query->get('goto');
+        } elseif ($request->getSession()->has('_target_path')) {
+            $targetPath = $request->getSession()->get('_target_path');
+        } else {
+            $targetPath = $request->headers->get('Referer');
+        }
+
+        return $targetPath;
     }
 
     protected function generateUrl($router, $params = [], $withHost = UrlGeneratorInterface::ABSOLUTE_PATH)

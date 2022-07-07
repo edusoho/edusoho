@@ -749,9 +749,10 @@ class SettingsController extends BaseController
             );
         }
 
+        $targetUrl = $this->getTargetPath($request) ?: $this->generateUrl('homepage');
         $mobileBindMode = $this->getSettingService()->node('login_bind.mobile_bind_mode', 'constraint');
         if ('option' === $mobileBindMode && (isset($_COOKIE['is_skip_mobile_bind']) && 1 == $_COOKIE['is_skip_mobile_bind'])) {
-            return $this->redirect($this->generateUrl('homepage'));
+            return $this->redirect($targetUrl);
         }
 
         if ('POST' === $request->getMethod()) {
@@ -767,7 +768,7 @@ class SettingsController extends BaseController
             }
         }
 
-        return $this->render('settings/mobile-bind.html.twig');
+        return $this->render('settings/mobile-bind.html.twig', ['targetUrl' => $targetUrl]);
     }
 
     /**
