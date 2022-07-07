@@ -7814,6 +7814,7 @@ admin.setting_course.authority_and_copyright: 权限与版权
 admin.setting_course.allow_teacher_manage_course_marketing: 允许教师管理基础设置
 admin.setting_course.allow_teacher_search_course_order: 允许教师查询课程订单
 admin.setting_course.allow_teacher_add_or_remove: 允许教师添加/移除
+admin.setting_course.allow_teacher_course_material_download: 允许教师下载课程资料
 admin.setting_course.allow_teacher_export_material: 允许教师导出学员资料
 admin.setting_course.allow_user_download_audio: 允许学员下载任务的音视频
 admin.setting_course.allow_user_download_audio.help_block: 开启此项设置后，学员可在任务学习界面侧栏的"资料"面板中下载。
