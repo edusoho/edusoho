@@ -5,6 +5,7 @@ namespace Biz\OpenCourse\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\LiveActivityException;
 use Biz\BaseService;
+use Biz\Live\Service\LiveService;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\LiveCourseService;
 use Biz\System\Service\SettingService;
@@ -21,7 +22,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 
     public function createLiveRoom($course, $lesson, $routes)
     {
-        $liveParams = $this->_filterParams($course['teacherIds'], $lesson, $routes, 'add');
+        $liveParams = $this->_filterParams($course, $lesson, $routes, 'add');
 
         $live = $this->createLiveClient()->createLive($liveParams);
 
@@ -38,7 +39,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 
     public function editLiveRoom($course, $lesson, $routes)
     {
-        $liveParams = $this->_filterParams($course['teacherIds'], $lesson, $routes, 'update');
+        $liveParams = $this->_filterParams($course, $lesson, $routes, 'update');
 
         return $this->createLiveClient()->updateLive($liveParams);
     }
@@ -162,8 +163,9 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         return $speaker ? $speaker['nickname'] : '老师';
     }
 
-    private function _filterParams($courseTeacherIds, $lesson, $routes, $actionType = 'add')
+    private function _filterParams($course, $lesson, $routes, $actionType = 'add')
     {
+        $courseTeacherIds = $course['teacherIds'];
         $params = [
             'summary' => isset($lesson['summary']) ? $lesson['summary'] : '',
             'title' => $lesson['title'],
@@ -189,6 +191,9 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
                 }
             }
         }
+        $speakerId = current($courseTeacherIds) ?: $course['userId'];
+        $liveAccount = $this->createLiveClient()->getLiveAccount();
+        $params['teacherId'] = $this->getLiveService()->getLiveProviderTeacherId($speakerId, $liveAccount['provider']);
 
         return $params;
     }
@@ -223,8 +228,11 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         return $this->createService('System:SettingService');
     }
 
-    protected function getTokenService()
+    /**
+     * @return LiveService
+     */
+    protected function getLiveService()
     {
-        return $this->createService('User:TokenService');
+        return $this->createService('Live:LiveService');
     }
 }
