@@ -385,7 +385,7 @@ class TestpaperController extends BaseController
         }
 
         $headers = [
-            'Content-Type' => 'application/msword',
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'Content-Disposition' => 'attachment; filename='.$fileName,
         ];
 
