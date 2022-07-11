@@ -60,6 +60,7 @@ t.add("site.yes", "Yes", "js", "en");
 t.add("site.no", "No", "js", "en");
 t.add("site.close", "Close", "js", "en");
 t.add("site.delete", "Delete", "js", "en");
+t.add("site.deleting", "Deleting...", "js", "en");
 t.add("site.time", "Time", "js", "en");
 t.add("site.capacity", "capacity(G)", "js", "en");
 t.add("site.step_two", "Step 2", "js", "en");

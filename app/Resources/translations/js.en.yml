@@ -61,6 +61,7 @@ site.yes: Yes
 site.no: No
 site.close: Close
 site.delete: Delete
+site.deleting: Deleting...
 site.time: Time
 site.capacity: capacity(G)
 site.step_two: Step 2
