@@ -621,21 +621,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function checkDeadlineForUpdateDeadline($classroomId, $userIds, $date)
     {
-        $members = $this->searchMembers(
-            ['userIds' => $userIds, 'classroomId' => $classroomId],
-            ['deadline' => 'ASC'],
-            0,
-            1
-        );
-        if (empty($members)) {
-            return false;
-        }
-        $member = array_shift($members);
-        if ($date < $member['deadline'] || time() > $date) {
-            return false;
-        }
-
-        return true;
+        return $date > time();
     }
 
     public function findWillOverdueClassrooms()

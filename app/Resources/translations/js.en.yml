@@ -467,7 +467,7 @@ course_manage.course_overview.try_view_increase_num: Number of try view increase
 course_manage.student_expiryday_extend_success_hint: Modify %name% expiration time successful!
 course_manage.student_expiryday_extend_failed_hint: Modify %name% expiration time failed!
 course_manage.student_expiryday_extend_error_hint_day: Reduce the number of days is out of range
-course_manage.student_expiryday_extend_error_hint_date: The date cannot be earlier than the current time or the expiration date of any student
+course_manage.student_expiryday_extend_error_hint_date: The date cannot be earlier than the current time
 
 
 
