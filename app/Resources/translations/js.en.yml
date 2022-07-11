@@ -376,6 +376,7 @@ activity.video_manage.other_finish_detail: Learn till the last (do not support w
 activity.video_manage.length_required_error_hint: Please enter a non negative integer, where seconds can only be between 0-59
 activity.video_manage.media_error_hint: Please upload or select a video file
 activity.video.try_watch_finish_hint: Free trial end, purchase and watch the complete video
+activity.video.file_limit_size_2g: File size cannot exceed 2g
 
 activity.manage.choose_teacher_hint: Please choose a teacher
 activity.manage.finished_tips: >

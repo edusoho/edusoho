@@ -322,6 +322,7 @@ activity.video_manage.other_finish_detail: 学习到最后(不支持网络视频
 activity.video_manage.length_required_error_hint: 请输入非负整数，其中秒数只能在0-59之间
 activity.video_manage.media_error_hint: 请上传或选择视频文件
 activity.video.try_watch_finish_hint: 免费试看结束，购买后可完整观看
+activity.video.file_limit_size_2g: 文件大小不能超过2g
 
 activity.manage.choose_teacher_hint: 请选择老师
 activity.manage.finished_tips: >

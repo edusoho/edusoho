@@ -112,7 +112,7 @@ export default class Video {
 
     fileChooser.on('start', file => {
       if ((file.size / 1000000000) > 2) {
-        alert('文件大小不能超过2g');
+        alert(Translator.trans('activity.video.file_limit_size_2g'));
         fileChooser.resetFileChooser();
       }
     });
