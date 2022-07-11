@@ -1784,7 +1784,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return false;
     }
 
-    public function tryManageClassroom($id, $actionPermission = 'admin_classroom_content_manage')
+    public function tryManageClassroom($id, $actionPermission = 'admin_v2_classroom_content_manage')
     {
         if (!$this->canManageClassroom($id, $actionPermission)) {
             $this->createNewException(ClassroomException::FORBIDDEN_MANAGE_CLASSROOM());
