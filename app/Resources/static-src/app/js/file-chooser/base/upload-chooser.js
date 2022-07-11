@@ -52,6 +52,8 @@ export default class UploaderChooser extends Chooser {
       notify('danger', error.message);
     });
 
+    this._sdk.on('start', file => this.emit('start', file));
+
     return this;
   }
 
