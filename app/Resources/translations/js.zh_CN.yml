@@ -49,6 +49,7 @@ site.yes: 是
 site.no: 否
 site.close: 关闭
 site.delete: 删除
+site.deleting: 删除中...
 site.time: 时间
 site.capacity: 容量(G)
 site.step_two: 步骤2

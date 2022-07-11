@@ -53,6 +53,7 @@ t.add("site.yes", "\u662f", "js", "zh_CN");
 t.add("site.no", "\u5426", "js", "zh_CN");
 t.add("site.close", "\u5173\u95ed", "js", "zh_CN");
 t.add("site.delete", "\u5220\u9664", "js", "zh_CN");
+t.add("site.deleting", "\u5220\u9664\u4e2d...", "js", "zh_CN");
 t.add("site.time", "\u65f6\u95f4", "js", "zh_CN");
 t.add("site.capacity", "\u5bb9\u91cf(G)", "js", "zh_CN");
 t.add("site.step_two", "\u6b65\u9aa42", "js", "zh_CN");
