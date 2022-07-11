@@ -109,5 +109,12 @@ export default class Video {
     };
 
     fileChooser.on('select', onSelectFile);
+
+    fileChooser.on('start', file => {
+      if ((file.size / 1000000000) > 2) {
+        alert('文件大小不能超过2g');
+        fileChooser.resetFileChooser();
+      }
+    });
   }
 }
