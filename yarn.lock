@@ -4033,10 +4033,10 @@ es-ckeditor@4.7.2-patch13:
   version "4.7.2-patch13"
   resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
 
-es-ckeditor@4.7.2-patch19:
-  version "4.7.2-patch19"
-  resolved "https://registry.nlark.com/es-ckeditor/download/es-ckeditor-4.7.2-patch19.tgz#d18242d5723beb8b62cd065531018f1f85a51d37"
-  integrity sha1-0YJC1XI764tizQZVMQGPH4WlHTc=
+es-ckeditor@^4.7.2-patch20:
+  version "4.7.2-patch20"
+  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch20.tgz#e9cd9791f3021f579c1cef598681d60b6ae7e199"
+  integrity sha512-gRMsd2SpSFbr15VNIs+pokEUTM4T10wmiTsVfMeVtXrqTLnTEwqWvoghbQJMFBO77mcOS9YhGhmF9kZ7DrdM/g==
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
