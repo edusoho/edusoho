@@ -1,13 +1,19 @@
 {% if app.user %}
-	<form class="es-commet" id="thread-post-form" method="POST" action="{{path('article_post', {id:article.id})}}">
+
+	<form class="es-commet js-drag-from" id="thread-post-form" method="POST" action="{{path('article_post', {id:article.id})}}">
 	  <div class="es-commet-header">
 			{{ 'article.detail.post_num'|trans({'%postNum%':article.postNum})|raw }}
 	  </div>
 	  <textarea class="form-control form-control-o" rows="6" placeholder="{{'article.detail.input_placeholder'|trans}}" name="content" data-display="{{'article.detail.input_placeholder'|trans}}"></textarea>
+	  
 	  <div class="form-group clearfix">
 	    <button type="submit" class="btn btn-default pull-right {% if not app.user %}disabled{% endif %}" data-loading-text="{{'form.btn.comment.submiting'|trans}}">{{'form.btn.comment'|trans}}</button>
+
+	    {# <a href="javascript:;" class="btn btn-default pull-right {% if not app.user %}disabled{% endif %} js-drag-submit" data-loading-text="{{'form.btn.comment.submiting'|trans}}">{{'form.btn.comment'|trans}}</a> #}
+
 	  </div>
 	  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	  <input type="hidden" name="_dragCaptchaToken" value="">
 	</form>
 {% else %}
 	<div class="empty">

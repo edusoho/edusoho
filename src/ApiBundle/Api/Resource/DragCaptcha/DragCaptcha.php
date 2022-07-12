@@ -62,8 +62,16 @@ class DragCaptcha extends AbstractResource
      */
     public function get(ApiRequest $request, $token)
     {
+        $flag = $this->getBizDragCaptcha()->check($token);
+        if($flag){
+            $dragTokens = empty($_SESSION["dragTokens"]) ? array() : $_SESSION["dragTokens"];
+            $dragTokens[] = $token;
+            $session = $request->getHttpRequest()->getSession();
+            $session->set("dragTokens", $dragTokens);
+        }
+
         return [
-            'status' => $this->getBizDragCaptcha()->check($token),
+            'status' => $flag,
         ];
     }
 }
