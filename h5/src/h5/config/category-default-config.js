@@ -73,11 +73,6 @@ const CATEGORY_DEFAULT = {
   ],
   new_course_list: [
     {
-      type: 'categoryId',
-      value: '0',
-      options: [],
-    },
-    {
       type: 'type',
       value: 'all',
       options: [

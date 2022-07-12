@@ -991,6 +991,11 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
+"@popperjs/core@^2.9.2":
+  version "2.11.5"
+  resolved "https://registry.npmmirror.com/@popperjs/core/-/core-2.11.5.tgz#db5a11bf66bdab39569719555b0f76e138d7bd64"
+  integrity sha512-9X2obfABZuDVLCgPK9aX0a/x4jaOEweTTWE2+9sr0Qqqevj2Uv5XorvusThmc9XGYpS9yI+fhh8RTafBtGposw==
+
 "@soda/friendly-errors-webpack-plugin@^1.7.1":
   version "1.7.1"
   resolved "https://registry.npm.taobao.org/@soda/friendly-errors-webpack-plugin/download/@soda/friendly-errors-webpack-plugin-1.7.1.tgz#706f64bcb4a8b9642b48ae3ace444c70334d615d"
@@ -1109,10 +1114,17 @@
   resolved "https://registry.npm.taobao.org/@vant/icons/download/@vant/icons-1.2.3.tgz#c46b7ddd32363f790944c3af974b73bda80df7a1"
   integrity sha1-xGt93TI2P3kJRMOvl0tzvagN96E=
 
-"@vant/icons@1.3.0":
-  version "1.3.0"
-  resolved "https://registry.npm.taobao.org/@vant/icons/download/@vant/icons-1.3.0.tgz#94f4c93122fd7331e0e00df55804779aead8c9c2"
-  integrity sha1-lPTJMSL9czHg4A31WAR3murYycI=
+"@vant/icons@^1.7.1":
+  version "1.8.0"
+  resolved "https://registry.npmmirror.com/@vant/icons/-/icons-1.8.0.tgz#36b13f2e628b533f6523a93a168cf02f07056674"
+  integrity sha512-sKfEUo2/CkQFuERxvkuF6mGQZDKu3IQdj5rV9Fm0weJXtchDSSQ+zt8qPCNUEhh9Y8shy5PzxbvAfOOkCwlCXg==
+
+"@vant/popperjs@^1.1.0":
+  version "1.2.1"
+  resolved "https://registry.npmmirror.com/@vant/popperjs/-/popperjs-1.2.1.tgz#1300c7c98573df577c21d3000712435edb8a877e"
+  integrity sha512-qzQlrPE4aOsBzfrktDVwzQy/QICCTKifmjrruhY58+Q2fobUYp/T9QINluIafzsD3VJwgP8+HFVLBsyDmy3VZQ==
+  dependencies:
+    "@popperjs/core" "^2.9.2"
 
 "@vue/babel-helper-vue-jsx-merge-props@^1.0.0":
   version "1.0.0"
@@ -14306,13 +14318,14 @@ value-or-function@^3.0.0:
   resolved "https://registry.npm.taobao.org/value-or-function/download/value-or-function-3.0.0.tgz#1c243a50b595c1be54a754bfece8563b9ff8d813"
   integrity sha1-HCQ6ULWVwb5Up1S/7OhWO5/42BM=
 
-vant@^2.10.7:
-  version "2.10.9"
-  resolved "https://registry.npm.taobao.org/vant/download/vant-2.10.9.tgz?cache=0&sync_timestamp=1601711582177&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvant%2Fdownload%2Fvant-2.10.9.tgz#311e7f53541067f45de07c23020ac23339272615"
-  integrity sha1-MR5/U1QQZ/Rd4HwjAgrCMzknJhU=
+vant@^2.12.48:
+  version "2.12.48"
+  resolved "https://registry.npmmirror.com/vant/-/vant-2.12.48.tgz#856cfb36741f331fc9087d97f00e88f7d62c412c"
+  integrity sha512-cTv5V8pYboLrryMAThTu9Nrjroc6z246ktvvRbQ6v+G/yUH2tJia4S/L8RaTCH6btiuoeKZbtFAjkeQUPYeOtQ==
   dependencies:
     "@babel/runtime" "7.x"
-    "@vant/icons" "1.3.0"
+    "@vant/icons" "^1.7.1"
+    "@vant/popperjs" "^1.1.0"
     "@vue/babel-helper-vue-jsx-merge-props" "^1.0.0"
     vue-lazyload "1.2.3"
 
