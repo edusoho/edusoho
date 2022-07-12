@@ -1,16 +1,37 @@
 <template>
   <div :class="{ more__still: selecting }" class="more">
-    <van-dropdown-menu active-color="#1989fa">
-      <template v-for="(item, index) in dropdownData" @change="change">
-        <van-dropdown-item
-          v-if="item.type === 'vipLevelId' ? vipSwitch : true"
-          :key="index"
-          v-model="item.value"
-          :options="item.options"
-          @change="change"
-        />
-      </template>
-    </van-dropdown-menu>
+    <div style="display: flex;background-color: #fff;box-shadow: 0 2px 12px rgb(100 101 102 / 12%);">
+      <div
+        v-if="dropdownData && dropdownData.length > 0" 
+        class="course-category text-overflow" 
+        @click="showCourseCategoryPopup = true"
+      >
+        <span class="course-category__title">{{ currentCourseCategoryText }}</span>
+      </div>
+      <div style="flex: 3;">
+        <van-dropdown-menu active-color="#1989fa">
+          <template v-for="(item, index) in dropdownData" @change="change">
+            <van-dropdown-item
+              v-if="item.type === 'vipLevelId' ? vipSwitch : true"
+              :key="index"
+              v-model="item.value"
+              :options="item.options"
+              @change="change"
+            />
+          </template>
+        </van-dropdown-menu>
+      </div>
+    </div>
+    
+    <van-popup v-model="showCourseCategoryPopup" position="bottom">
+      <van-cascader
+        v-model="currentCourseCategoryId"
+        title="请选择课程分类"
+        :options="courseCategories"
+        @close="showCourseCategoryPopup = false"
+        @finish="onFinish"
+      />
+    </van-popup>
 
     <lazyLoading
       :course-list="courseList"
@@ -22,6 +43,7 @@
       @needRequest="sendRequest"
       :showNumberData="showNumberData"
     />
+
     <emptyCourse
       v-if="isEmptyCourse && isRequestCompile"
       :has-button="false"
@@ -58,6 +80,10 @@ export default {
       showNumberData: '',
       dataDefault: CATEGORY_DEFAULT.new_course_list,
       dropdownData: [],
+      courseCategories: [],
+      showCourseCategoryPopup: false,
+      currentCourseCategoryText: '全部',
+      currentCourseCategoryId: ''
     };
   },
   computed: {
@@ -100,6 +126,9 @@ export default {
 
     this.initI18n();
 
+    // 初始化课程愤怒类
+    this.initCourseCategories();
+
     // 初始化下拉筛选数据
     this.initDropdownData();
 
@@ -118,14 +147,17 @@ export default {
       });
     },
 
-    async initDropdownData() {
+    async initCourseCategories() {
       // 获取班级分类数据
       const res = await Api.getCourseCategories();
-      this.dataDefault[0].options = this.initOptions({
+      this.courseCategories = this.initOptions({
         text: this.$t('more.all'),
-        data: res,
+        data: res
       });
-      this.dataDefault[2].options = this.initOptions({
+    },
+
+    async initDropdownData() {
+      this.dataDefault[1].options = this.initOptions({
         text: this.$t('more.membersCourse'),
         data: this.vipLevels,
       });
@@ -143,20 +175,36 @@ export default {
     },
 
     initOptions({ text, data }) {
-      const options = [{ text: text, value: '0' }];
+      const options = text ? [{ text: text, value: '0' }] : []
 
       data.forEach(item => {
-        options.push({
+        const optionItem = {
           text: item.name,
           value: item.id,
-        });
+        }
+
+        if (item.children && item.children.length > 0) {
+          optionItem.children = this.initOptions({ 
+            data: item.children
+          })
+        }
+
+        options.push(optionItem);
       });
+
       return options;
     },
 
     change() {
       this.selectedData = this.getSelectedData();
+      this.selectedData.categoryId = this.currentCourseCategoryId
       this.setQuery(this.selectedData);
+    },
+
+    onFinish({ selectedOptions }) {
+      this.showCourseCategoryPopup = false;
+      this.currentCourseCategoryText = selectedOptions[selectedOptions.length - 1].text;
+      this.change()
     },
 
     transform(obj = {}) {
@@ -262,3 +310,40 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+  .course-category {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .course-category__title {
+    position: relative;
+    max-width: 100%;
+    padding: 0 8px;
+    color: #323233;
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .course-category__title::after {
+    position: absolute;
+    top: 50%;
+    right: -4px;
+    margin-top: -5px;
+    border: 3px solid;
+    border-color: transparent transparent #dcdee0 #dcdee0;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    opacity: .8;
+    content: '';
+  }
+
+  .more >>> .van-dropdown-menu__bar {
+    box-shadow: none !important;
+  }
+
+</style>
