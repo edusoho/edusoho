@@ -90,24 +90,34 @@
     created() {
       this.emitter = new ActivityEmitter();
       this.emitter.emit('doing', {data: ''});
+        
+      let assessmentResponse = window.localStorage.getItem('assessmentResponse');
 
-      const that = this;
       $.ajax({
         url: '/api/continue_answer',
         type: 'POST',
-        async:false,
-        headers:{
+        async: false,
+        headers: {
           'Accept':'application/vnd.edusoho.v2+json'
         },
         data: {answer_record_id: $("[name='answer_record_id']").val()},
         beforeSend(request) {
           request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
         },
-      }).done(function (res) {
-        that.assessment = res.assessment;
-        that.answerRecord = res.answer_record;
-        that.answerScene = res.answer_scene;
-        that.assessmentResponse = res.assessment_response;
+      }).done((res) => {
+        this.assessment = res.assessment;
+        this.answerRecord = res.answer_record;
+        this.answerScene = res.answer_scene;
+        this.assessmentResponse = res.assessment_response;
+
+        if (assessmentResponse) {
+          assessmentResponse = JSON.parse(assessmentResponse)
+
+          if (assessmentResponse.updated_time > this.answerRecord.updated_time) {
+            delete assessmentResponse.updated_time
+            this.assessmentResponse = assessmentResponse
+          }
+        }
       })
     },
     methods: {
@@ -158,34 +168,29 @@
         })
       },
       timeSaveAnswerData(assessmentResponse) {
-        $.ajax({
-          url: '/api/save_answer',
-          contentType: 'application/json;charset=utf-8',
-          headers:{
-            'Accept':'application/vnd.edusoho.v2+json'
-          },
-          type: 'POST',
-          data: JSON.stringify(assessmentResponse),
-          beforeSend(request) {
-            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
-          },
-        }).done(function (resp) {
-        })
+        this.postAnswerData(assessmentResponse)
       },
       saveAnswerData(assessmentResponse){
-        $.ajax({
+        this.postAnswerData(assessmentResponse).done(function () {
+          parent.location.href = $('[name=save_goto_url]').val();
+        })
+      },
+      postAnswerData(assessmentResponse) {
+        assessmentResponse.updated_time = Math.floor(Date.now() / 1000);
+        window.localStorage.setItem('assessmentResponse', JSON.stringify(assessmentResponse));
+        delete assessmentResponse.updated_time;
+
+        return $.ajax({
           url: '/api/save_answer',
           contentType: 'application/json;charset=utf-8',
           type: 'POST',
-          headers:{
+          headers: {
             'Accept':'application/vnd.edusoho.v2+json'
           },
           data: JSON.stringify(assessmentResponse),
           beforeSend(request) {
             request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
           },
-        }).done(function (resp) {
-          parent.location.href = $('[name=save_goto_url]').val();
         })
       },
       deleteAttachment(fileId, flag) {
