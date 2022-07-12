@@ -2906,9 +2906,10 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codeages-design@0.1.12:
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/codeages-design/-/codeages-design-0.1.12.tgz#56d32d8b34f1061ef34460614353340049973981"
+codeages-design@^0.1.14:
+  version "0.1.14"
+  resolved "https://registry.yarnpkg.com/codeages-design/-/codeages-design-0.1.14.tgz#ee9307f83565dd0b0df1ea700b1e25707581e3c0"
+  integrity sha512-LfAjH+eXlyHqFAV1873REHElxPY/SeGRGqy9lV4HikCiKXVcqbLxI/Qz/0NPIoYH2VaI3wu+sJ5Dqte/vNDGIg==
   dependencies:
     jquery "^3.2.1"
 
@@ -4032,10 +4033,10 @@ es-ckeditor@4.7.2-patch13:
   version "4.7.2-patch13"
   resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
 
-es-ckeditor@4.7.2-patch19:
-  version "4.7.2-patch19"
-  resolved "https://registry.nlark.com/es-ckeditor/download/es-ckeditor-4.7.2-patch19.tgz#d18242d5723beb8b62cd065531018f1f85a51d37"
-  integrity sha1-0YJC1XI764tizQZVMQGPH4WlHTc=
+es-ckeditor@^4.7.2-patch20:
+  version "4.7.2-patch20"
+  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch20.tgz#e9cd9791f3021f579c1cef598681d60b6ae7e199"
+  integrity sha512-gRMsd2SpSFbr15VNIs+pokEUTM4T10wmiTsVfMeVtXrqTLnTEwqWvoghbQJMFBO77mcOS9YhGhmF9kZ7DrdM/g==
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"

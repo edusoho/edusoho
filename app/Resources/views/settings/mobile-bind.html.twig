@@ -40,7 +40,7 @@
         </div>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-        <button id="submit-btn" type="button" class="btn cd-btn cd-btn-lg mobile-bind-form__btn cd-btn-primary" data-toggle="form-submit"  data-target="#mobile-bind-form" data-loading-text="{{'form.btn.save.submiting'|trans}}" data-target-url="{{ path('homepage') }}">
+        <button id="submit-btn" type="button" class="btn cd-btn cd-btn-lg mobile-bind-form__btn cd-btn-primary" data-toggle="form-submit"  data-target="#mobile-bind-form" data-loading-text="{{'form.btn.save.submiting'|trans}}" data-target-url="{{ targetUrl }}">
           {{'user.bind.confirm_bind_btn'|trans}}
         </button>
         {% if setting('login_bind.mobile_bind_mode', 'constraint') != 'constraint' %}

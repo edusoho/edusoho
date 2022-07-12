@@ -271,6 +271,7 @@ class ThreadController extends CourseBaseController
             // $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
             $course = $this->getCourseService()->tryManageCourse($courseId);
         }
+        $course = $this->buildCourseTitle($course);
 
         $form = $this->createThreadForm($thread);
 
@@ -568,6 +569,7 @@ class ThreadController extends CourseBaseController
         } else {
             $course = $this->getCourseService()->tryManageCourse($courseId);
         }
+        $course = $this->buildCourseTitle($course);
 
         $thread = $this->getThreadService()->getThread($courseId, $threadId);
 

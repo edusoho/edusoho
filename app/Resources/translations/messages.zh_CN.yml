@@ -34,6 +34,7 @@ site.data.score: 分
 site.data.count: 数
 site.data.num: 个
 site.delete: 删除
+site.deleting: 删除中...
 site.copy: 复制
 site.datagrid.empty: 暂无记录
 site.datagrid.filter.all_records: 全部记录
