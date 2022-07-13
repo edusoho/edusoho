@@ -59,6 +59,14 @@ class StudentManageController extends BaseController
         );
         $members = $this->getLearningDataAnalysisService()->fillCourseProgress($members);
 
+        $isEnableBatchRemove = 1;
+        if (!$this->getCurrentUser()->isAdmin() && in_array("ROLE_TEACHER", $this->getCurrentUser()['roles'])) {
+            $courseSetting = $this->getSettingService()->get('course');
+            if(empty($courseSetting) || !$courseSetting['teacher_manage_student']){
+                $isEnableBatchRemove = 0;
+            }
+        }
+
         return $this->render('course-manage/student/index.html.twig', [
             'courseSet' => $this->getCourseSetService()->getCourseSet($courseSetId),
             'course' => $course,
@@ -68,6 +76,7 @@ class StudentManageController extends BaseController
             'userProfiles' => $this->getUserService()->findUserProfilesByIds(array_column($members, 'userId')),
             'paginator' => $paginator,
             'offset' => $paginator->getOffsetCount(),
+            'isEnableBatchRemove' => $isEnableBatchRemove,
         ]);
     }
 
