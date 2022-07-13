@@ -176,7 +176,7 @@ class WrongBookQuestionShow extends AbstractResource
 
     protected function prepareOrderBys($orderBys)
     {
-        $prepareOrderBys = ['last_submit_time' => 'DESC'];
+        $prepareOrderBys = ['has_answer' => 'DESC', 'last_submit_time' => 'DESC'];
 
         if (!empty($orderBys['wrongTimesSort'])) {
             $prepareOrderBys = 'ASC' == $orderBys['wrongTimesSort'] ? ['wrong_times' => 'ASC'] : ['wrong_times' => 'DESC'];
