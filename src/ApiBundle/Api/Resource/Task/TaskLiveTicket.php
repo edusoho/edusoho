@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\DeviceToolkit;
+use AppBundle\Common\LiveWatermarkToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\MemberException;
 use Biz\Course\Service\MemberService;
@@ -40,9 +41,8 @@ class TaskLiveTicket extends AbstractResource
         } else {
             $liveTicket = CloudAPIFactory::create('leaf')->post("/liverooms/{$activity['ext']['liveId']}/tickets", $params);
         }
-        $liveTicket = $this->addLiveCloudParams($liveTicket);
 
-        return $liveTicket;
+        return $this->addLiveCloudParams($liveTicket);
     }
 
     /**
@@ -57,15 +57,16 @@ class TaskLiveTicket extends AbstractResource
         } else {
             $liveTicket = CloudAPIFactory::create('leaf')->get("/liverooms/{$activity['ext']['liveId']}/tickets/{$liveTicket}");
         }
-        $liveTicket = $this->addLiveCloudParams($liveTicket);
 
-        return $liveTicket;
+        return $this->addLiveCloudParams($liveTicket);
     }
 
     protected function addLiveCloudParams($liveTicket)
     {
         if (!empty($liveTicket['liveCloudSdk']['enable'])) {
-            $liveTicket['liveCloudSdk'] = array_merge($liveTicket['liveCloudSdk'], ['watermark' => 'testwatermark']);
+            $liveTicket['liveCloudSdk'] = array_merge($liveTicket['liveCloudSdk'], [
+                'watermark' => LiveWatermarkToolkit::build(),
+            ]);
         }
 
         return $liveTicket;
