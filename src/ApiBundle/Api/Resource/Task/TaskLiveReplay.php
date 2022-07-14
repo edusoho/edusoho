@@ -75,15 +75,15 @@ class TaskLiveReplay extends AbstractResource
         return $this->addLiveCloudParams($response);
     }
 
-    protected function addLiveCloudParams($liveTicket)
+    protected function addLiveCloudParams($replay)
     {
-        if (!empty($liveTicket['liveCloudSdk']['enable'])) {
-            $liveTicket['liveCloudSdk'] = array_merge($liveTicket['liveCloudSdk'], [
+        if (!empty($replay['liveCloudSdk']['enable'])) {
+            $replay['liveCloudSdk'] = array_merge($replay['liveCloudSdk'], [
                 'watermark' => LiveWatermarkToolkit::build(),
             ]);
         }
 
-        return $liveTicket;
+        return $replay;
     }
 
     protected function isSetEncryption()

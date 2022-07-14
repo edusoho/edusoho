@@ -19,4 +19,10 @@ interface LiveService
     public function isLiveProviderTeacherRequired($provider);
 
     public function getLiveProviderTeacherId($userId, $provider);
+
+    public function createLiveTicket($roomId, $user);
+
+    public function getLiveTicket($roomId, $ticketNo);
+
+    public function isESLive($provider);
 }

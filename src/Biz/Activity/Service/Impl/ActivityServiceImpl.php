@@ -779,18 +779,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
     }
 
-    protected function checkLiveFinished($activity)
-    {
-        $isEsLive = EdusohoLiveClient::isEsLive($activity['ext']['liveProvider']);
-        $endLeftSeconds = time() - $activity['endTime'];
-
-        //ES直播结束时间2小时后就自动结束，第三方直播以直播结束时间为准
-        $thirdLiveFinished = $endLeftSeconds > 0 && !$isEsLive;
-        $esLiveFinished = $isEsLive && $endLeftSeconds > self::LIVE_ENDTIME_DIFF_SECONDS;
-
-        return $thirdLiveFinished || $esLiveFinished;
-    }
-
     public function orderAssessmentSubmitNumber($userIds, $answerSceneId)
     {
         $records = $this->getAnswerRecordService()->search(['user_ids' => $userIds, 'answer_scene_id' => $answerSceneId], ['end_time' => 'ASC'], 0, PHP_INT_MAX);

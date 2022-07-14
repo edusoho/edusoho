@@ -26,7 +26,7 @@ class LiveWatermarkToolkit
 
     protected static function parsePattern($pattern, $user)
     {
-        $profile = self::getServiceKernel()->getBiz()->service('User:UserService')->getUserProfile($user['id']);
+        $profile = empty($user['id']) ? [] : self::getServiceKernel()->getBiz()->service('User:UserService')->getUserProfile($user['id']);
 
         $values = array_merge($user, $profile);
         $values = array_filter($values, function ($value) {
