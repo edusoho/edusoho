@@ -10051,6 +10051,9 @@ admin_v2.homepage.today_register_user: Number of users registered today
 admin_v2.homepage.today_new_paid_order: Orders paid today
 admin_v2.homepage.today_new_order: Number of orders added today
 
+admin_v2.homepage.welcome_desc: Welcome to EduSoho Educational Products
+admin_v2.homepage.wechat_code: Join the open source product use learning exchange group
+
 # 新后台首页通知
 admin_v2.domain_error_hint: Current domain name does not match with the authorized domain name.to avoid affecting the normal use of cloud sms,please come【System】-【General Manage】-【Online School Information】-【Site Domain】
 admin_v2.homepage.setting_domain_btn: Set Up Now
