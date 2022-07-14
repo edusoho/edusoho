@@ -40,6 +40,7 @@ class TaskLiveTicket extends AbstractResource
         } else {
             $liveTicket = CloudAPIFactory::create('leaf')->post("/liverooms/{$activity['ext']['liveId']}/tickets", $params);
         }
+        $liveTicket = $this->addLiveCloudParams($liveTicket);
 
         return $liveTicket;
     }
@@ -55,6 +56,16 @@ class TaskLiveTicket extends AbstractResource
             $liveTicket = $this->getS2B2CFacadeService()->getS2B2CService()->consumeLiveEntryTicket($activity['ext']['liveId'], $liveTicket);
         } else {
             $liveTicket = CloudAPIFactory::create('leaf')->get("/liverooms/{$activity['ext']['liveId']}/tickets/{$liveTicket}");
+        }
+        $liveTicket = $this->addLiveCloudParams($liveTicket);
+
+        return $liveTicket;
+    }
+
+    protected function addLiveCloudParams($liveTicket)
+    {
+        if (!empty($liveTicket['liveCloudSdk']['enable'])) {
+            $liveTicket['liveCloudSdk'] = array_merge($liveTicket['liveCloudSdk'], ['watermark' => 'testwatermark']);
         }
 
         return $liveTicket;
