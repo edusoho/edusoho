@@ -7139,6 +7139,11 @@ admin.edu_cloud.edu_live.renew_btn: 续费
 admin.edu_cloud.edu_live.expiry_date: 有效期至：
 admin.edu_cloud.edu_live.overdue_tips: 您的云直播服务已到期，请尽快续费，以免影响正常使用
 admin.edu_cloud.edu_live.renew_tips: 您的云直播服务将于%remaining%天后到期，请尽快续费
+admin.edu_cloud.edu_live.security_setting: 安全设置
+admin.edu_cloud.edu_live.watermark: 直播水印
+admin.edu_cloud.edu_live.watermark_tips: 开启后将在直播间的固定位置显示水印信息，支持PC/APP/H5
+admin.edu_cloud.edu_live.watermark_config: 水印信息
+admin.edu_cloud.edu_live.watermark_config_tips: 为了用户体验效果最佳，建议最多组合2项信息显示。注意：若用户的真实手机号没有则显示-
 
 # 云短信
 admin,edu_cloud.edu_sms.sms_balance_count: <span class="h3 text-primary plm prs">%sms_balance_count%</span>条
