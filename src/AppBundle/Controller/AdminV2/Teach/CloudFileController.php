@@ -135,6 +135,10 @@ class CloudFileController extends BaseController
         $file = $this->getCloudFileService()->getByGlobalId($globalId);
         if (empty($file)){
             $file = $this->getAttachmentDao()->getByGlobalId($globalId);
+            return $this->render('admin-v2/teach/cloud-file/preview-modal.html.twig', [
+                'file' => $file,
+                'type' => 'item_attachement'
+            ]);
         }
         return $this->render('admin-v2/teach/cloud-file/preview-modal.html.twig', [
             'file' => $file,
