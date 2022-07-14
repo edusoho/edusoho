@@ -59,11 +59,11 @@ class StudentManageController extends BaseController
         );
         $members = $this->getLearningDataAnalysisService()->fillCourseProgress($members);
 
-        $isEnableBatchRemove = 1;
-        if (!$this->getCurrentUser()->isAdmin() && in_array("ROLE_TEACHER", $this->getCurrentUser()['roles'])) {
-            $courseSetting = $this->getSettingService()->get('course');
-            if(empty($courseSetting) || !$courseSetting['teacher_manage_student']){
-                $isEnableBatchRemove = 0;
+        $isEnableAddAndRemove = 1;
+        if (!$this->getCurrentUser()->hasPermission("admin_v2_course_content_manage") && !$this->getCurrentUser()->isSuperAdmin() && in_array("ROLE_TEACHER", $this->getCurrentUser()['roles'])) {
+            $teacherManageStudent = $this->getSettingService()->node('course.teacher_manage_student');
+            if(empty($teacherManageStudent)){
+                $isEnableAddAndRemove = 0;
             }
         }
 
@@ -76,7 +76,7 @@ class StudentManageController extends BaseController
             'userProfiles' => $this->getUserService()->findUserProfilesByIds(array_column($members, 'userId')),
             'paginator' => $paginator,
             'offset' => $paginator->getOffsetCount(),
-            'isEnableBatchRemove' => $isEnableBatchRemove,
+            'isEnableAddAndRemove' => $isEnableAddAndRemove,
         ]);
     }
 
