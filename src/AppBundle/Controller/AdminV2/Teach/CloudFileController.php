@@ -133,7 +133,9 @@ class CloudFileController extends BaseController
     public function previewAction(Request $reqeust, $globalId)
     {
         $file = $this->getCloudFileService()->getByGlobalId($globalId);
-
+        if (empty($file)){
+            $file = $this->getAttachmentDao()->getByGlobalId($globalId);
+        }
         return $this->render('admin-v2/teach/cloud-file/preview-modal.html.twig', [
             'file' => $file,
         ]);
@@ -326,5 +328,10 @@ class CloudFileController extends BaseController
     protected function getCourseMaterialService()
     {
         return $this->createService('Course:MaterialService');
+    }
+
+    protected function getAttachmentDao()
+    {
+        return $this->createDao('ItemBank:Item:AttachmentDao');
     }
 }
