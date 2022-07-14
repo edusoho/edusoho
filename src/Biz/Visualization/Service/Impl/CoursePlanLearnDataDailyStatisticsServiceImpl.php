@@ -4,7 +4,7 @@ namespace Biz\Visualization\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\LiveStatistics\Service\Impl\LiveCloudStatisticsServiceImpl;
+use Biz\LiveStatistics\Service\LiveCloudStatisticsService;
 use Biz\Visualization\Dao\CoursePlanLearnDailyDao;
 use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 
@@ -21,7 +21,7 @@ class CoursePlanLearnDataDailyStatisticsServiceImpl extends BaseService implemen
         foreach ($userIds as $userId) {
             $sumLearnedTimes[$userId]['learnedTime'] = (empty($liveWatchDurations[$userId]) ? 0 : $liveWatchDurations[$userId]) + (empty($learnedTimes[$userId]) ? 0 : $learnedTimes[$userId]['learnedTime']);
         }
-        
+
         return $sumLearnedTimes;
     }
 
@@ -68,7 +68,7 @@ class CoursePlanLearnDataDailyStatisticsServiceImpl extends BaseService implemen
     }
 
     /**
-     * @return LiveCloudStatisticsServiceImpl
+     * @return LiveCloudStatisticsService
      */
     protected function getLiveStatisticsService()
     {
