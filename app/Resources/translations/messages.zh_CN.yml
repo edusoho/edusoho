@@ -11342,6 +11342,9 @@ admin_v2.homepage.today_register_user: 今日注册用户
 admin_v2.homepage.today_new_paid_order: 今日付费订单
 admin_v2.homepage.today_new_order: 今日新增订单
 
+admin_v2.homepage.welcome_desc: 欢迎使用EduSoho教培产品
+admin_v2.homepage.wechat_code: 加入开源产品使用学习交流群
+
 # 新后台首页通知
 admin_v2.domain_error_hint: 当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【通用管理】-【网校信息】-【网站域名】
 admin_v2.homepage.setting_domain_btn: 立即设置
