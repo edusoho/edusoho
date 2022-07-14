@@ -3184,6 +3184,10 @@ material_lib_file_player:
     path: '/material/lib/{fileId}/player'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:player'
+material_lib_item_attachment_player:
+  path: '/material/lib/{fileId}/player'
+  defaults:
+    _controller: 'AppBundle:MaterialLib/MaterialLib:playerItemAttachment'
 material_reconvert:
     path: '/material/lib/{globalId}/reconvert'
     defaults:
