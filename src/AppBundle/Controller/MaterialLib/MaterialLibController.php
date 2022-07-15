@@ -162,16 +162,6 @@ class MaterialLibController extends BaseController
     {
         $file = $this->getUploadFileService()->tryAccessFile($fileId);
 
-        return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', [
-            'request' => $request,
-            'globalId' => $file['globalId'],
-        ]);
-    }
-
-    public function playerItemAttachmentAction(Request $request, $fileId)
-    {
-        $file = $this->getUploadFileService()->tryAccessItemAttachmentFile($fileId);
-
         if ('cloud' == $file['storage']) {
             return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', [
                 'request' => $request,
@@ -180,6 +170,16 @@ class MaterialLibController extends BaseController
         }
 
         return $this->render('material-lib/web/local-player.html.twig', []);
+    }
+
+    public function playerItemAttachmentAction(Request $request, $fileId)
+    {
+        $file = $this->getUploadFileService()->tryAccessItemAttachmentFile($fileId);
+
+        return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', [
+            'request' => $request,
+            'globalId' => $file['globalId'],
+        ]);
     }
 
     public function reconvertAction($globalId)
@@ -671,9 +671,5 @@ class MaterialLibController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
-    }
-    protected function getAttachmentDao()
-    {
-        return $this->createDao('ItemBank:Item:AttachmentDao');
     }
 }
