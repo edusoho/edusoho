@@ -3,7 +3,9 @@
 namespace Topxia\Api\Resource;
 
 use AppBundle\Common\SettingToolkit;
+use AppBundle\Util\H5LiveEntryToken;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Live\Service\LiveService;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -90,6 +92,10 @@ class LessonReplay extends BaseResource
 
                 $response = $replays[0];
                 $response['replays'] = $replays;
+                if ($this->getLiveService()->isESLive($activity['ext']['liveProvider'])) {
+                    $maker = new H5LiveEntryToken();
+                    $response['url'] = $this->generateUrl('es_live_replay_h5_entry', ['token' => $maker->make($task['courseId'], $task['activityId'], $visibleReplays[0]['replayId'])]);
+                }
             }
         } catch (\Exception $e) {
             return $this->error('503', '获取回放失败！');
@@ -160,9 +166,12 @@ class LessonReplay extends BaseResource
         return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
-    protected function getMediaService()
+    /**
+     * @return LiveService
+     */
+    protected function getLiveService()
     {
-        return $this->getServiceKernel()->createService('Media:MediaService');
+        return $this->getServiceKernel()->createService('Live:LiveService');
     }
 
     protected function getTaskService()

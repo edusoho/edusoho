@@ -1945,10 +1945,18 @@ task_live_entry:
     defaults:
         _controller: 'AppBundle:Activity/Live:liveEntry'
     h5: true
+es_live_h5_entry:
+    path: '/es_live/h5_entry/{token}'
+    defaults:
+        _controller: 'AppBundle:Activity/Live:esLiveH5Entry'
 custom_live_activity_replay_entry:
     path: '/course/{courseId}/activity/{activityId}/replay/{replayId}/custom_entry'
     defaults:
         _controller: 'AppBundle:Activity/Live:customReplayEntry'
+es_live_replay_h5_entry:
+    path: '/es_live/replay/h5_entry/{token}'
+    defaults:
+        _controller: 'AppBundle:Activity/Live:esLiveReplayH5Entry'
 #课程回放课程id和activityId改动
 course_live_activity_replay_entry:
     path: '/course/{courseId}/activity/{activityId}/replay/{replayId}/course_entry'

@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Activity;
 
 use AppBundle\Common\LiveWatermarkToolkit;
 use AppBundle\Controller\LiveroomController;
+use AppBundle\Util\H5LiveEntryToken;
 use Biz\Activity\Dao\ReplayActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
@@ -15,6 +16,7 @@ use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseActivityController implements ActivityActionInterface
@@ -132,6 +134,16 @@ class LiveController extends BaseActivityController implements ActivityActionInt
                 'endTime' => $activity['endTime'],
             ],
         ], $params);
+    }
+
+    public function esLiveH5EntryAction(Request $request, $token)
+    {
+        $params = $this->getH5LiveEntryTokenParser()->parse($token);
+        if (empty($params['userId'])) {
+            $this->createNewException(UserException::UN_LOGIN());
+        }
+        list($userId, $courseId, $activityId) = $params;
+
     }
 
     /**
@@ -263,6 +275,15 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             'replayUrl' => $replayUrl ?? '',
             'watermark' => $watermark ?? '',
         ]);
+    }
+
+    public function esLiveReplayH5EntryAction(Request $request, $token)
+    {
+        $params = $this->getH5LiveEntryTokenParser()->parse($token);
+        if (empty($params['userId'])) {
+            $this->createNewException(UserException::UN_LOGIN());
+        }
+        list($userId, $courseId, $activityId, $replayId) = $params;
     }
 
     public function replayEntryAction(Request $request, $courseId, $activityId, $replayId)
@@ -399,6 +420,11 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         }
 
         return $replays;
+    }
+
+    protected function getH5LiveEntryTokenParser()
+    {
+        return new H5LiveEntryToken();
     }
 
     /**
