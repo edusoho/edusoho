@@ -332,9 +332,4 @@ class CloudFileController extends BaseController
     {
         return $this->createService('Course:MaterialService');
     }
-
-    protected function getItemBankItemAttachmentDao()
-    {
-        return $this->createDao('ItemBank:Item:AttachmentDao');
-    }
 }
