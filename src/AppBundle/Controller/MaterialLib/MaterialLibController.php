@@ -172,7 +172,7 @@ class MaterialLibController extends BaseController
         return $this->render('material-lib/web/local-player.html.twig', []);
     }
 
-    public function playerItemAttachmentAction(Request $request, $fileId)
+    public function itemAttachmentPlayerAction(Request $request, $fileId)
     {
         $file = $this->getUploadFileService()->tryAccessItemAttachmentFile($fileId);
 
