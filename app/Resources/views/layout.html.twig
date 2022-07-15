@@ -62,7 +62,7 @@
 
   {% block head_scripts %}{% endblock %}
 </head>
-<body class="{% block bodyClass %}{{ 'es-main-' ~ maincolor }} {{ 'es-nav-' ~ navigationcolor }} {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}{% endblock %}">
+<body class="{% block bodyClass %}{{ 'es-main-' ~ maincolor }} {{ 'es-nav-' ~ navigationcolor }} {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}{% endblock %}" {% block bodyStyle %}{% endblock %}>
 <!--[if lt IE 9]>
 <script src="{{ asset('static-dist/libs/fix-ie.js') }}"></script>
 {% include 'default/ie8-alert.html.twig' %}

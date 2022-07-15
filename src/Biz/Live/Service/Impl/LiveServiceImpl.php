@@ -3,6 +3,7 @@
 namespace Biz\Live\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\LiveWatermarkToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Live\Dao\LiveProviderTeacherDao;
@@ -196,6 +197,30 @@ class LiveServiceImpl extends BaseService implements LiveService
         return $providerTeacher['memberUserId'] ?? 0;
     }
 
+    public function createLiveTicket($roomId, $user)
+    {
+        $liveTicket = $this->getLiveClient()->createLiveTicket($roomId, $user);
+
+        return $this->addLiveCloudParams($liveTicket);
+    }
+
+    public function getLiveTicket($roomId, $ticketNo)
+    {
+        $liveTicket = $this->getLiveClient()->getLiveTicket($roomId, $ticketNo);
+
+        return $this->addLiveCloudParams($liveTicket);
+    }
+
+    public function isESLive($provider)
+    {
+        if ($provider) {
+            return EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $provider;
+        }
+        $liveAccount = $this->getLiveClient()->getLiveAccount();
+
+        return 'liveCloud' == $liveAccount['provider'];
+    }
+
     protected function createLiveProviderTeacher($liveProviderTeacher)
     {
         if (!ArrayToolkit::requireds($liveProviderTeacher, ['userId', 'provider', 'providerTeacherId'])) {
@@ -222,6 +247,17 @@ class LiveServiceImpl extends BaseService implements LiveService
         return $user['nickname'];
     }
 
+    protected function addLiveCloudParams($liveTicket)
+    {
+        if (!empty($liveTicket['liveCloudSdk']['enable'])) {
+            $liveTicket['liveCloudSdk'] = array_merge($liveTicket['liveCloudSdk'], [
+                'watermark' => LiveWatermarkToolkit::build(),
+            ]);
+        }
+
+        return $liveTicket;
+    }
+
     protected function getBaseUrl()
     {
         return $this->biz['env']['base_url'];
@@ -241,11 +277,6 @@ class LiveServiceImpl extends BaseService implements LiveService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
-    }
-
-    protected function getTokenService()
-    {
-        return $this->createService('User:TokenService');
     }
 
     protected function getUserService()

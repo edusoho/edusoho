@@ -2,13 +2,13 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\LiveWatermarkToolkit;
 use Biz\Accessor\AccessorInterface;
-use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\LiveActivityService;
-use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\LiveReplayException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
+use Biz\Live\Service\LiveService;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\Task\Service\TaskService;
@@ -46,10 +46,14 @@ class LiveroomController extends BaseController
         if (!empty($liveActivity)) {
             $ticket = $this->getS2B2CFacadeService()->getS2B2CService()->getLiveEntryTicket($roomId, $user);
         } else {
-            $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$roomId}/tickets", $user);
+            $ticket = $this->getLiveService()->createLiveTicket($roomId, $user);
+        }
+        $isEsLive = $this->getLiveService()->isESLive($params['provider'] ?? 0);
+        if ($isEsLive) {
+            $params['watermark'] = LiveWatermarkToolkit::build();
         }
 
-        return $this->render('liveroom/entry.html.twig', [
+        return $this->render($isEsLive ? 'liveroom/eslive-entry.html.twig' : 'liveroom/entry.html.twig', [
             'roomId' => $roomId,
             'params' => $params,
             'ticket' => $ticket,
@@ -104,7 +108,7 @@ class LiveroomController extends BaseController
         if (!empty($liveActivity)) {
             $ticket = $this->getS2B2CFacadeService()->getS2B2CService()->consumeLiveEntryTicket($roomId, $ticketNo);
         } else {
-            $ticket = CloudAPIFactory::create('leaf')->get("/liverooms/{$roomId}/tickets/{$ticketNo}");
+            $ticket = $this->getLiveService()->getLiveTicket($roomId, $ticketNo);
         }
 
         return $this->createJsonResponse($ticket);
@@ -150,6 +154,14 @@ class LiveroomController extends BaseController
     }
 
     /**
+     * @return LiveService
+     */
+    protected function getLiveService()
+    {
+        return $this->createService('Live:LiveService');
+    }
+
+    /**
      * @return OpenCourseService
      */
     protected function getOpenCourseService()
@@ -179,19 +191,6 @@ class LiveroomController extends BaseController
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
-    }
-
-    protected function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
-    }
-
-    /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->createService('Activity:ActivityService');
     }
 
     /**
