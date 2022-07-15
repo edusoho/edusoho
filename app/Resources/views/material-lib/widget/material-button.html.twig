@@ -4,7 +4,10 @@
       <button class="cd-btn cd-btn-primary js-upload-file-btn material-btn-group__btn" data-toggle="modal" data-backdrop="static"  data-target="#modal"
         data-url="{{ path('uploader_batch_upload', {token:uploaderToken }) }}" title="{{'material_lib.btn.upload_files'|trans}}"  type="button" data-placement="bottom" >{{'material_lib.btn.upload_files'|trans}}
       </button>
-      <button class="cd-btn cd-btn-primary material-btn-group__btn js-batch-download" disabled type="button">{{ 'course.activity.download'|trans }}</button>
+      {% if teacherIsDownload %}
+        <button class="cd-btn cd-btn-primary material-btn-group__btn js-batch-download" disabled type="button">{{ 'course.activity.download'|trans }}</button>
+      {% endif %}
+
       {% if type|default('') != 'courseFile' %}
         <button class="cd-btn cd-btn-primary material-btn-group__btn js-batch-share-btn" disabled type="button" data-role="batch-share" data-url="{{ path('material_batch_share') }}">{{ 'material_lib.btn.share'|trans }}
         </button>
