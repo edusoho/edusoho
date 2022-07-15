@@ -245,6 +245,9 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $activity = $this->getActivityService()->getActivity($activityId, true);
         $isEsLive = $this->getLiveService()->isESLive($activity['ext']['liveProvider']);
         if ($isEsLive) {
+            if ('replay' == $activity['mediaType']) {
+                $activity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+            }
             $result = $this->getLiveReplayService()->entryReplay($replayId, $activity['ext']['liveId'], $activity['ext']['liveProvider'], $request->isSecure());
             $replayUrl = $result['url'] ?? '';
             $watermark = LiveWatermarkToolkit::build();

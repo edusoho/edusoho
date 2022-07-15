@@ -70,9 +70,19 @@ class TaskLiveReplay extends AbstractResource
         }
 
         $response = $replays[0];
+        if (!empty($response['liveCloudSdk']['enable'])) {
+            $watermark = LiveWatermarkToolkit::build();
+            $response['liveCloudSdk']['watermark'] = $watermark;
+        }
+        if (!empty($watermark)) {
+            foreach ($replays as &$replay) {
+                $replay['liveCloudSdk']['watermark'] = $watermark;
+            }
+        }
+
         $response['replays'] = $replays;
 
-        return $this->addLiveCloudParams($response);
+        return $response;
     }
 
     protected function addLiveCloudParams($replay)
