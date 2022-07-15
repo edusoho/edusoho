@@ -53,6 +53,7 @@ t.add("site.yes", "\u662f", "js", "zh_CN");
 t.add("site.no", "\u5426", "js", "zh_CN");
 t.add("site.close", "\u5173\u95ed", "js", "zh_CN");
 t.add("site.delete", "\u5220\u9664", "js", "zh_CN");
+t.add("site.deleting", "\u5220\u9664\u4e2d...", "js", "zh_CN");
 t.add("site.time", "\u65f6\u95f4", "js", "zh_CN");
 t.add("site.capacity", "\u5bb9\u91cf(G)", "js", "zh_CN");
 t.add("site.step_two", "\u6b65\u9aa42", "js", "zh_CN");
@@ -270,6 +271,7 @@ t.add("activity.video_manage.other_finish_detail", "\u5b66\u4e60\u5230\u6700\u54
 t.add("activity.video_manage.length_required_error_hint", "\u8bf7\u8f93\u5165\u975e\u8d1f\u6574\u6570\uff0c\u5176\u4e2d\u79d2\u6570\u53ea\u80fd\u57280-59\u4e4b\u95f4", "js", "zh_CN");
 t.add("activity.video_manage.media_error_hint", "\u8bf7\u4e0a\u4f20\u6216\u9009\u62e9\u89c6\u9891\u6587\u4ef6", "js", "zh_CN");
 t.add("activity.video.try_watch_finish_hint", "\u514d\u8d39\u8bd5\u770b\u7ed3\u675f\uff0c\u8d2d\u4e70\u540e\u53ef\u5b8c\u6574\u89c2\u770b", "js", "zh_CN");
+t.add("activity.video.file_limit_size_2g", "\u6587\u4ef6\u5927\u5c0f\u4e0d\u80fd\u8d85\u8fc72g", "js", "zh_CN");
 t.add("activity.manage.choose_teacher_hint", "\u8bf7\u9009\u62e9\u8001\u5e08", "js", "zh_CN");
 t.add("activity.manage.finished_tips", "<span class=\"color-primary\">\u606d\u559c\uff01\u4f60\u5df2\u5b8c\u6210\u8be5\u4efb\u52a1<\/span>\n", "js", "zh_CN");
 t.add("announcement.create_datetime.error.hint", "\u516c\u544a\u53d1\u5e03\u65f6\u95f4\u4e0d\u80fd\u665a\u4e8e\u7ed3\u675f\u65f6\u95f4", "js", "zh_CN");
@@ -339,7 +341,7 @@ t.add("course_manage.course_overview.try_view_increase_num", "\u514d\u8d39\u8bd5
 t.add("course_manage.student_expiryday_extend_success_hint", "\u4fee\u6539%name%\u6709\u6548\u671f\u64cd\u4f5c\u6210\u529f!", "js", "zh_CN");
 t.add("course_manage.student_expiryday_extend_failed_hint", "\u4fee\u6539%name%\u6709\u6548\u671f\u64cd\u4f5c\u5931\u8d25!", "js", "zh_CN");
 t.add("course_manage.student_expiryday_extend_error_hint_day", "\u51cf\u5c11\u5929\u6570\u8d85\u51fa\u6700\u5927\u53ef\u51cf\u5c11\u6570", "js", "zh_CN");
-t.add("course_manage.student_expiryday_extend_error_hint_date", "\u65e5\u671f\u4e0d\u5f97\u65e9\u4e8e\u5f53\u524d\u65f6\u95f4\u6216\u4efb\u4f55\u4e00\u4e2a\u5b66\u5458\u7684\u6709\u6548\u671f\u622a\u6b62\u65e5", "js", "zh_CN");
+t.add("course_manage.student_expiryday_extend_error_hint_date", "\u65e5\u671f\u4e0d\u5f97\u65e9\u4e8e\u5f53\u524d\u65f6\u95f4", "js", "zh_CN");
 t.add("course_manage.student_remark_validate_error_hint", "\u5907\u6ce8\u5b57\u6570\u4e0d\u8d85\u8fc780", "js", "zh_CN");
 t.add("course_manage.student_remark_success_hint", "\u5907\u6ce8%username%\u6210\u529f", "js", "zh_CN");
 t.add("course_manage.student_remark_failed_hint", "\u5907\u6ce8%username%\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5\uff01", "js", "zh_CN");

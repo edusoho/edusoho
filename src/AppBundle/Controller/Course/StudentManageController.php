@@ -59,6 +59,14 @@ class StudentManageController extends BaseController
         );
         $members = $this->getLearningDataAnalysisService()->fillCourseProgress($members);
 
+        $isEnableAddAndRemove = 1;
+        if (!$this->getCurrentUser()->hasPermission("admin_v2_course_content_manage") && !$this->getCurrentUser()->isSuperAdmin() && in_array("ROLE_TEACHER", $this->getCurrentUser()['roles'])) {
+            $teacherManageStudent = $this->getSettingService()->node('course.teacher_manage_student');
+            if(empty($teacherManageStudent)){
+                $isEnableAddAndRemove = 0;
+            }
+        }
+
         return $this->render('course-manage/student/index.html.twig', [
             'courseSet' => $this->getCourseSetService()->getCourseSet($courseSetId),
             'course' => $course,
@@ -68,6 +76,7 @@ class StudentManageController extends BaseController
             'userProfiles' => $this->getUserService()->findUserProfilesByIds(array_column($members, 'userId')),
             'paginator' => $paginator,
             'offset' => $paginator->getOffsetCount(),
+            'isEnableAddAndRemove' => $isEnableAddAndRemove,
         ]);
     }
 

@@ -109,5 +109,12 @@ export default class Video {
     };
 
     fileChooser.on('select', onSelectFile);
+
+    fileChooser.on('start', file => {
+      if ((file.size / 1000000000) > 2) {
+        alert(Translator.trans('activity.video.file_limit_size_2g'));
+        fileChooser.resetFileChooser();
+      }
+    });
   }
 }

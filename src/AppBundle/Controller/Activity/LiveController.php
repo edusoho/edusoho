@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Activity;
 
+use AppBundle\Common\LiveWatermarkToolkit;
 use AppBundle\Controller\LiveroomController;
 use Biz\Activity\Dao\ReplayActivityDao;
 use Biz\Activity\Service\ActivityService;
@@ -9,6 +10,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
+use Biz\Live\Service\LiveService;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -240,14 +242,23 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         } else {
             return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
         }
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+        $isEsLive = $this->getLiveService()->isESLive($activity['ext']['liveProvider']);
+        if ($isEsLive) {
+            $result = $this->getLiveReplayService()->entryReplay($replayId, $activity['ext']['liveId'], $activity['ext']['liveProvider'], $request->isSecure());
+            $replayUrl = $result['url'] ?? '';
+            $watermark = LiveWatermarkToolkit::build();
+        }
 
-        return $this->render('live-course/entry.html.twig', [
+        return $this->render($isEsLive ? 'live-course/eslive-entry.html.twig' : 'live-course/entry.html.twig', [
             'courseId' => $courseId,
             'replayId' => $replayId,
             'activityId' => $activityId,
             'task' => $task,
             'isTeacher' => $isTeacher,
             'role' => $role,
+            'replayUrl' => $replayUrl ?? '',
+            'watermark' => $watermark ?? '',
         ]);
     }
 
@@ -471,6 +482,14 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     protected function getMultiClassGroupService()
     {
         return $this->createService('MultiClass:MultiClassGroupService');
+    }
+
+    /**
+     * @return LiveService
+     */
+    protected function getLiveService()
+    {
+        return $this->createService('Live:LiveService');
     }
 
     /**

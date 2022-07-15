@@ -31,11 +31,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseDao()->findByIds($ids);
     }
 
-    public function searchCourses($conditions, $orderBy, $start, $limit)
+    public function searchCourses($conditions, $orderBy, $start, $limit, $columns = [])
     {
         $conditions = $this->_prepareCourseConditions($conditions);
 
-        return $this->getOpenCourseDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getOpenCourseDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function countCourses($conditions)
@@ -786,9 +786,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseMemberDao()->count($conditions);
     }
 
-    public function searchMembers($conditions, $orderBy, $start, $limit)
+    public function searchMembers($conditions, $orderBy, $start, $limit, $columns = [])
     {
-        return $this->getOpenCourseMemberDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getOpenCourseMemberDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function setCourseTeachers($courseId, $teachers)

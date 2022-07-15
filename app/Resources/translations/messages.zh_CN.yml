@@ -34,6 +34,7 @@ site.data.score: 分
 site.data.count: 数
 site.data.num: 个
 site.delete: 删除
+site.deleting: 删除中...
 site.copy: 复制
 site.datagrid.empty: 暂无记录
 site.datagrid.filter.all_records: 全部记录
@@ -7138,6 +7139,11 @@ admin.edu_cloud.edu_live.renew_btn: 续费
 admin.edu_cloud.edu_live.expiry_date: 有效期至：
 admin.edu_cloud.edu_live.overdue_tips: 您的云直播服务已到期，请尽快续费，以免影响正常使用
 admin.edu_cloud.edu_live.renew_tips: 您的云直播服务将于%remaining%天后到期，请尽快续费
+admin.edu_cloud.edu_live.security_setting: 安全设置
+admin.edu_cloud.edu_live.watermark: 直播水印
+admin.edu_cloud.edu_live.watermark_tips: 开启后将在直播间的固定位置显示水印信息，支持PC/APP/H5
+admin.edu_cloud.edu_live.watermark_config: 水印信息
+admin.edu_cloud.edu_live.watermark_config_tips: 为了用户体验效果最佳，建议最多组合2项信息显示。注意：若用户的真实手机号没有则显示-
 
 # 云短信
 admin,edu_cloud.edu_sms.sms_balance_count: <span class="h3 text-primary plm prs">%sms_balance_count%</span>条
@@ -11340,6 +11346,9 @@ admin_v2.homepage.today_login_user: 今日登录用户
 admin_v2.homepage.today_register_user: 今日注册用户
 admin_v2.homepage.today_new_paid_order: 今日付费订单
 admin_v2.homepage.today_new_order: 今日新增订单
+
+admin_v2.homepage.welcome_desc: 欢迎使用EduSoho教培产品
+admin_v2.homepage.wechat_code: 加入开源产品使用学习交流群
 
 # 新后台首页通知
 admin_v2.domain_error_hint: 当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【通用管理】-【网校信息】-【网站域名】

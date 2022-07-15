@@ -30,6 +30,7 @@ site.data.score: Score
 site.data.count: Count
 site.copy: Copy
 site.delete: Delete
+site.deleting: Deleting
 site.datagrid.empty: 'No data'
 site.datagrid.filter.all_records: 'All'
 site.datagrid.filter.last_one_week: 'Last 7 days'
@@ -6034,6 +6035,11 @@ admin.edu_cloud.edu_live.renew_btn: Renew
 admin.edu_cloud.edu_live.expiry_date: 'Expiry Date'
 admin.edu_cloud.edu_live.overdue_tips: 'Your cloud live service has expired, please renew as soon as possible, so as not to affect the normal use'
 admin.edu_cloud.edu_live.renew_tips: 'Your cloud live service will expire in %remaining% days, please renew as soon as possible'
+admin.edu_cloud.edu_live.security_setting: 'Security Settings'
+admin.edu_cloud.edu_live.watermark: 'Live Watermark'
+admin.edu_cloud.edu_live.watermark_tips: 'After opening, the watermark information will be displayed in a fixed position in the live broadcast room, supporting PC/APP/H5'
+admin.edu_cloud.edu_live.watermark_config: 'Watermark Information'
+admin.edu_cloud.edu_live.watermark_config_tips: 'For the best user experience, it is recommended to combine at most 2 item of information to display. Note: If the mobile phone number of user is not available, it will display -'
 'admin,edu_cloud.edu_sms.sms_balance_count': 'Number of SMS <span class="h3 text-primary plm prs">%sms_balance_count%</span>'
 admin.edu_cloud.edu_sms.sms_rest_tips: 'Your message balance remaining %sms_rest%, please renew as soon as possible, so as not to affect the normal use.'
 admin.edu_cloud.edu_sms.identity_check: Authentication
@@ -10049,6 +10055,9 @@ admin_v2.homepage.today_login_user: Number of users logged in today
 admin_v2.homepage.today_register_user: Number of users registered today
 admin_v2.homepage.today_new_paid_order: Orders paid today
 admin_v2.homepage.today_new_order: Number of orders added today
+
+admin_v2.homepage.welcome_desc: Welcome to EduSoho Educational Products
+admin_v2.homepage.wechat_code: Join the open source product use learning exchange group
 
 # 新后台首页通知
 admin_v2.domain_error_hint: Current domain name does not match with the authorized domain name.to avoid affecting the normal use of cloud sms,please come【System】-【General Manage】-【Online School Information】-【Site Domain】

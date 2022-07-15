@@ -621,21 +621,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function checkDeadlineForUpdateDeadline($classroomId, $userIds, $date)
     {
-        $members = $this->searchMembers(
-            ['userIds' => $userIds, 'classroomId' => $classroomId],
-            ['deadline' => 'ASC'],
-            0,
-            1
-        );
-        if (empty($members)) {
-            return false;
-        }
-        $member = array_shift($members);
-        if ($date < $member['deadline'] || time() > $date) {
-            return false;
-        }
-
-        return true;
+        return $date > time();
     }
 
     public function findWillOverdueClassrooms()
@@ -1798,7 +1784,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return false;
     }
 
-    public function tryManageClassroom($id, $actionPermission = 'admin_classroom_content_manage')
+    public function tryManageClassroom($id, $actionPermission = 'admin_v2_classroom_content_manage')
     {
         if (!$this->canManageClassroom($id, $actionPermission)) {
             $this->createNewException(ClassroomException::FORBIDDEN_MANAGE_CLASSROOM());
