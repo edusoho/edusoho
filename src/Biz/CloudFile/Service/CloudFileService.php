@@ -8,6 +8,8 @@ interface CloudFileService extends FilePlayerInterface
 
     public function getByGlobalId($globalId);
 
+    public function getByGlobalIdFromItemAttachment($globalId);
+
     public function player($globalId, $ssl = false);
 
     public function edit($globalId, $fields);
