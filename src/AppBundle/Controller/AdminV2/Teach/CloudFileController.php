@@ -134,7 +134,7 @@ class CloudFileController extends BaseController
     {
         $file = $this->getCloudFileService()->getByGlobalId($globalId);
         if (empty($file)) {
-            $file = $this->getItemBankItemAttachmentDao()->getByGlobalId($globalId);
+            $file = $this->getCloudFileService()->getByGlobalIdFromItemAttachment($globalId);
             $type = 'item_attachement';
         }
 

@@ -189,6 +189,11 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->getCloudFileImplementor()->getFileByGlobalId($globalId);
     }
 
+    public function getByGlobalIdFromItemAttachment($globalId)
+    {
+        return $this->getItemBankItemAttachmentDao()->getByGlobalId($globalId);
+    }
+
     public function player($globalId, $ssl = false)
     {
         $result = $this->getCloudFileImplementor()->player($globalId, $ssl);

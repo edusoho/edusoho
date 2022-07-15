@@ -1916,4 +1916,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         return $this->createService('Course:MaterialService');
     }
+
+    protected function getItemBankItemAttachmentDao()
+    {
+        return $this->createDao('ItemBank:Item:AttachmentDao');
+    }
 }
