@@ -1182,7 +1182,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function tryAccessItemAttachmentFile($fileId)
     {
-        $file = $this->getAttachmentDao()->get($fileId);
+        $file = $this->getItemBankItemAttachmentDao()->get($fileId);
 
         if (empty($file)) {
             $this->createNewException(UploadFileException::NOTFOUND_FILE());
