@@ -69,7 +69,7 @@ class CourseSetFileManageController extends BaseController
 
         $teacherIsDownload = 1;
         $currentUser = $this->getCurrentUser();
-        if($currentUser->isTeacher() && !$currentUser->isAdmin()){
+        if($currentUser->isTeacher() && !$currentUser->isSuperAdmin()){
             $teacherIsDownload = $this->getSettingService()->node("course.teacher_course_material_download", 1);
         }
 
