@@ -1264,10 +1264,10 @@
     dayjs "^1.10.4"
     lodash "^4.17.21"
 
-"@edusoho-live/eslive-web-sdk@^1.2.1":
-  version "1.2.2"
-  resolved "https://registry.npmmirror.com/@edusoho-live/eslive-web-sdk/-/eslive-web-sdk-1.2.2.tgz#da1a0c187295b5730dca2b16a76c0f5d6a369eb0"
-  integrity sha512-i9DwUp8svuvDb+bUKN/SUr06OkAyVLMqHt2CAxAJ913Z//jQu1bH3mLNiKPuoyHYDt7jHZWvZu1NjlaLNWNlrg==
+"@edusoho-live/eslive-web-sdk@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.npmmirror.com/@edusoho-live/eslive-web-sdk/-/eslive-web-sdk-1.2.3.tgz#ec3c7bbc9913ff10e34875adb381e4801c4e5c79"
+  integrity sha512-DyNVsgrmj6RYD491yxeCU4TBbv2dctNMQhMWlyZhYFXEncSrMJTwgJrt9H4VAsyiFhjNZqcT8hGiRDyJcUQqUA==
   dependencies:
     "@babel/runtime" "^7.16.3"
     postmate "^1.5.2"
