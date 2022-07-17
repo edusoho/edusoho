@@ -171,7 +171,7 @@ class LessonReplay extends BaseResource
      */
     protected function getLiveService()
     {
-        return $this->getServiceKernel()->createService('Live:LiveService');
+        return $this->createService('Live:LiveService');
     }
 
     protected function getTaskService()

@@ -13,6 +13,7 @@ use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
 use Biz\Live\Service\LiveService;
 use Biz\MultiClass\Service\MultiClassGroupService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
@@ -143,7 +144,42 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             $this->createNewException(UserException::UN_LOGIN());
         }
         list($userId, $courseId, $activityId) = $params;
+        $user = $this->getUserService()->getUser($userId);
+        $this->authenticateUser($user);
+        $params = [];
+        if ($this->getCourseMemberService()->isCourseMember($courseId, $user['id']) || $this->getUser()->isAdmin()) {
+            $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($courseId, $user['id']);
+        }
+        $params['id'] = $user['id'];
+        $params['displayName'] = $user['nickname'];
+        $params['nickname'] = $user['nickname'].'_'.$user['id'];
 
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+        $roomId = $activity['ext']['liveId'];
+        $liveGroup = $this->getMultiClassGroupService()->getLiveGroupByUserIdAndCourseId($user['id'], $courseId, $roomId);
+        if ($liveGroup) {
+            $params['groupCode'] = $liveGroup['live_code'];
+        }
+        $params['device'] = $this->isMobileClient() ? 'mobile' : 'desktop';
+        if ($request->isSecure()) {
+            $params['protocol'] = 'https';
+        }
+        $params['avatar'] = $this->getWebExtension()->getFurl($user['smallAvatar'] ?? '', 'avatar.png');
+
+        $biz = $this->getBiz();
+        $params['hostname'] = $biz['env']['base_url'];
+
+        $liveActivity = $this->getLiveActivityService()->getBySyncIdGTAndLiveId($roomId);
+        if ($liveActivity) {
+            $ticket = $this->getS2B2CFacadeService()->getS2B2CService()->getLiveEntryTicket($roomId, $params);
+        } else {
+            $ticket = $this->getLiveService()->createLiveTicket($roomId, $params);
+        }
+
+        return $this->render('live-course/eslive-h5-entry.html.twig', [
+            'url' => $ticket['roomUrl'] ?? '',
+            'watermark' => LiveWatermarkToolkit::build(),
+        ]);
     }
 
     /**
@@ -284,6 +320,18 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             $this->createNewException(UserException::UN_LOGIN());
         }
         list($userId, $courseId, $activityId, $replayId) = $params;
+        $user = $this->getUserService()->getUser($userId);
+        $this->authenticateUser($user);
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+        if ('replay' == $activity['mediaType']) {
+            $activity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+        }
+        $result = $this->getLiveReplayService()->entryReplay($replayId, $activity['ext']['liveId'], $activity['ext']['liveProvider'], $request->isSecure());
+
+        return $this->render('live-course/eslive-h5-entry.html.twig', [
+            'url' => $result['url'] ?? '',
+            'watermark' => LiveWatermarkToolkit::build(),
+        ]);
     }
 
     public function replayEntryAction(Request $request, $courseId, $activityId, $replayId)
@@ -519,6 +567,14 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     protected function getLiveService()
     {
         return $this->createService('Live:LiveService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 
     /**
