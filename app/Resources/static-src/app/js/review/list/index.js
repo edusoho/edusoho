@@ -36,6 +36,7 @@ captcha.on('success',function(data){
 })
 
 function reviewPost(){
+  let self = $form.find('.js-btn-save');
   $.ajax({
     type: "POST",
     beforeSend: function (request) {
@@ -52,7 +53,7 @@ function reviewPost(){
         window.location.reload();
       });
     },
-    error: function () {
+    error: function (response) {
       self.button('reset');
       isShowCaptcha = 1;
       captcha.hideDrag();

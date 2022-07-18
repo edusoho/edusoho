@@ -7,7 +7,8 @@ var captchaProp = null;
 if($("input[name=enable_anti_brush_captcha]").val() == 1){
   captchaProp = {
     captchaClass: captcha,
-    isShowCaptcha: $(captcha.params.maskClass).length ? 1 : 0,
+    // isShowCaptcha: $(captcha.params.maskClass).length ? 1 : 0,
+    isShowCaptcha: 0,
   };
 }
 let $btn = $form.find(".js-btn-thread-save");
@@ -25,11 +26,11 @@ let validator = $form.validate({
     }
   },
   submitSuccess: function (response) {
-    validator.settings.captcha.isShowCaptcha = 1;
+    // validator.settings.captcha.isShowCaptcha = 1;
     captcha.hideDrag();
   },
   submitError: function (data) {
-    validator.settings.captcha.isShowCaptcha = 1;
+    // validator.settings.captcha.isShowCaptcha = 1;
     captcha.hideDrag();
     $btn.button('reset');
   }

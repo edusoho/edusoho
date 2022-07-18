@@ -220,9 +220,9 @@ class ThreadController extends CourseBaseController
 
         if ('POST' == $request->getMethod()) {
 
-            if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
-                return $this->createMessageResponse('error', $this->trans("exception.form..drag.expire"));
-            }
+            // if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
+            //     return $this->createMessageResponse('error', $this->trans("exception.form..drag.expire"));
+            // }
 
             $form->handleRequest($request);
             if ($form->isValid()) {
@@ -282,9 +282,9 @@ class ThreadController extends CourseBaseController
 
         if ('POST' == $request->getMethod()) {
 
-            if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
-                return $this->createMessageResponse('error', $this->trans("exception.form..drag.expire"));
-            }
+            // if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
+            //     return $this->createMessageResponse('error', $this->trans("exception.form..drag.expire"));
+            // }
 
             try {
                 $form->handleRequest($request);
@@ -464,9 +464,9 @@ class ThreadController extends CourseBaseController
 
         if ('POST' == $request->getMethod()) {
 
-            if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
-                return $this->createJsonResponse(['error' => ['code'=> 403, 'message' => $this->trans("exception.form..drag.expire")]], 403);
-            }
+            // if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
+            //     return $this->createJsonResponse(['error' => ['code'=> 403, 'message' => $this->trans("exception.form..drag.expire")]], 403);
+            // }
 
             $form->handleRequest($request);
             $userId = $currentUser->id;
@@ -591,9 +591,9 @@ class ThreadController extends CourseBaseController
         $form = $this->createPostForm($post);
 
         if ('POST' == $request->getMethod()) {
-            if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
-                return $this->createMessageResponse('error', $this->trans("exception.form..drag.expire"));
-            }
+            // if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
+            //     return $this->createMessageResponse('error', $this->trans("exception.form..drag.expire"));
+            // }
             
             $form->handleRequest($request);
 
