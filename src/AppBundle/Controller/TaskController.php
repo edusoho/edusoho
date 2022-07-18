@@ -331,7 +331,7 @@ class TaskController extends BaseController
     {
         $preview = $request->query->get('preview', false);
 
-        $this->tryLearnTask($courseId, $taskId);
+        $this->tryLearnTask($courseId, $taskId, $preview);
         $toolbars = [];
         foreach ($this->get('extension.manager')->getTaskToolbars() as $toolbar) {
             $toolbar['url'] = $this->generateUrl($toolbar['action'], [
