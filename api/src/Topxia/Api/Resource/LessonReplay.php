@@ -94,7 +94,8 @@ class LessonReplay extends BaseResource
                 $response['replays'] = $replays;
                 if ($this->getLiveService()->isESLive($activity['ext']['liveProvider'])) {
                     $maker = new H5LiveEntryToken();
-                    $response['url'] = $this->generateUrl('es_live_replay_h5_entry', ['token' => $maker->make($task['courseId'], $task['activityId'], $visibleReplays[0]['replayId'])]);
+                    $token = $maker->make($task['courseId'], $task['activityId'], $visibleReplays[0]['id']);
+                    $response['url'] = "/es_live/replay/h5_entry/{$token}";
                 }
             }
         } catch (\Exception $e) {

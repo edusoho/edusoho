@@ -51,7 +51,8 @@ class LessonLiveTickets extends BaseResource
         }
         if ($this->getLiveService()->isESLive($activity['ext']['liveProvider'])) {
             $maker = new H5LiveEntryToken();
-            $ticket['roomUrl'] = $this->generateUrl('es_live_h5_entry', ['token' => $maker->make($task['courseId'], $task['activityId'])]);
+            $token = $maker->make($task['courseId'], $task['activityId']);
+            $ticket['roomUrl'] = "/es_live/h5_entry/{$token}";
         }
 
         return $ticket;
