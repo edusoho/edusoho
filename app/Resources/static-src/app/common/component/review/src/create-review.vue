@@ -61,9 +61,6 @@
         return error;
     });
 
-   const captcha = new Captcha({ drag: { limitType: "course", bar:'#drag-btn', target: '.js-jigsaw' } });
-	 captcha.isShowCaptcha = $(captcha.params.maskClass).length ? 1 : 0
-
     export default {
         created() {
             this.getUserReview();
@@ -71,6 +68,14 @@
             if (this.form.rating) {
                 this.rating(this.form.rating - 1);
             }
+
+            this.captcha.on('success', (data) => {
+                if (data.type === 'create-review') {
+                    this.captcha.isShowCaptcha = 0;
+                    this._dragCaptchaToken = data.token;
+                    this.onConfirm()
+                }
+            })
         },
         data() {
             return {
@@ -100,7 +105,7 @@
                 starHover: 0,
                 content: "",
                 showForm: false,
-								_dragCaptchaToken: ''
+                _dragCaptchaToken: ''
             }
         },
         filters: {
@@ -125,14 +130,11 @@
             currentUserId: {
                 type: Number,
                 default: null
+            },
+            captcha: {
+                type: Object,
+                required: true
             }
-        },
-        created() {
-            captcha.on('success', (data) => {
-                captcha.isShowCaptcha = 0;
-								this._dragCaptchaToken = data.token;
-                this.onConfirm()
-            })
         },
         methods: {
             getUserReview() {
@@ -273,11 +275,12 @@
                     $('.review-form-rating').find('p').empty();
                 }
 
-								if ($("input[name=enable_anti_brush_captcha]").val() == 1 && captcha.isShowCaptcha == 1){
-									captcha.showDrag();
+                if ($("input[name=enable_anti_brush_captcha]").val() == 1 && this.captcha.isShowCaptcha == 1){
+                    this.captcha.setType('create-review')
+                    this.captcha.showDrag();
 
-									return false;
-								}
+                    return false;
+                }
 
                 return true;
             },
@@ -294,8 +297,7 @@
                     },
                 }).then(res => {
                     if (res.error) {
-											captcha.isShowCaptcha = 1;
-											return;
+						return;
                     }
 
                     cd.message({
@@ -304,10 +306,9 @@
                     });
 										
                     window.location.reload();
-                }).catch(() => {
-									captcha.isShowCaptcha = 1;
-								}).finally(() => {
-									captcha.hideDrag();
+                }).finally(() => {
+                    this.captcha.isShowCaptcha = 1;
+                    this.captcha.hideDrag();
                 })
             },
             removeHtml(input) {

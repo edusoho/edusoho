@@ -4,7 +4,8 @@
              style="padding-left: 14px; padding-top: 10px;"></div>
         <div class="reviews">
             <create-review :target-id="targetId" :target-type="targetType" :can-create="canCreate"
-                           :current-user-id="currentUserId"></create-review>
+                           :current-user-id="currentUserId"
+                           :captcha="captcha"></create-review>
             <div class="reviews-item" v-for="review in reviews" :key="review.id" :class="'reviews-item-'+ review.id">
                 <a  target="_blank" :class="'card-'+review.user.id">
                     <img class="js-user-card reviews-item__img"
@@ -38,7 +39,7 @@
                         <form>
                             <textarea class="post-content" @blur="validatePostContent"></textarea>
                             <p></p>
-                            <a href="javascript:;" class="btn btn-sm btn-default plm prm pull-right"
+                            <a ref="saveBtn" href="javascript:;" class="btn btn-sm btn-default plm prm pull-right"
                                @click="onSave($event, review.id)">{{ 'form.btn.save'|trans }}</a>
                         </form>
                     </div>
@@ -99,7 +100,7 @@
                         <form class="hidden" :class="'reviews-text__reply-content-form-'+review.id">
                             <textarea class="post-content" @blur="validatePostContent"></textarea>
                             <p></p>
-                            <a href="javascript:;" class="btn btn-sm btn-default plm prm pull-right"
+                            <a ref="saveBtn" href="javascript:;" class="btn btn-sm btn-default plm prm pull-right"
                                @click="onSave($event, review.id)">{{ 'form.btn.save'|trans }}</a>
                         </form>
                     </div>
@@ -120,6 +121,7 @@
     import axios from 'axios';
     import createReview from './src/create-review';
     import Api from 'common/api';
+    import Captcha from 'app/common/captcha';
 
     axios.interceptors.request.use((config) => {
         config.headers = {
@@ -148,6 +150,9 @@
         return error;
     });
 
+    const captcha = new Captcha({ drag: { limitType: "course", bar:'#drag-btn', target: '.js-jigsaw' } });
+    captcha.isShowCaptcha = $(captcha.params.maskClass).length ? 1 : 0
+
     export default {
         name: 'reviews',
         components: {
@@ -163,6 +168,8 @@
                     offset: 0,
                     total: 0
                 },
+                _dragCaptchaToken: '',
+                captcha
             }
         },
         computed: {
@@ -210,6 +217,16 @@
                 type: Number,
                 default: null
             }
+        },
+        created() {
+            const _this = this;
+            captcha.on('success', (data) => {
+                if (data.type === 'review') {
+                    captcha.isShowCaptcha = 0;
+                    _this._dragCaptchaToken = data.token;
+                    _this.$refs.saveBtn[0].click();
+                }
+            })
         },
         methods: {
             searchReviews(offset = 0, limit = 5) {
@@ -265,6 +282,13 @@
                 $form.find('p').removeClass('form-error-message');
                 $form.find('p').empty();
 
+                if ($("input[name=enable_anti_brush_captcha]").val() == 1 && captcha.isShowCaptcha == 1){
+                    captcha.setType('review')
+                    captcha.showDrag();
+
+                    return false;
+                }
+
                 return true;
             },
             generateReviewPostLi(post) {
@@ -319,7 +343,8 @@
                 }
                 Api.review.reviewPost({
                     params: {
-                        reviewId: reviewId
+                        reviewId: reviewId,
+                        _dragCaptchaToken: this._dragCaptchaToken
                     },
                     data: {
                         'content': $targetForm.find('.post-content').val().trim()
@@ -339,7 +364,10 @@
                         type: 'success',
                         message: Translator.trans('site.save_success_hint')
                     });
-                });
+                }).finally(() => {
+                    captcha.isShowCaptcha = 1;
+                    captcha.hideDrag();
+                })
 
                 // axios({
                 //     url: "/api/review/" + reviewId + "/post",
