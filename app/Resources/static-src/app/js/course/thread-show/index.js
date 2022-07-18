@@ -16,10 +16,10 @@ if ($('#post_content').length != 0) {
   });
 }
 
-let isShowCaptcha = null;
-if($("input[name=enable_anti_brush_captcha]").val() == 1){
-    isShowCaptcha= $(captcha.params.maskClass).length ? 1 : 0;
-}
+let isShowCaptcha = 0;
+// if($("input[name=enable_anti_brush_captcha]").val() == 1){
+//     isShowCaptcha= $(captcha.params.maskClass).length ? 1 : 0;
+// }
 let $form = $('#thread-post-form');
 
 let validator = $form.validate({
@@ -73,11 +73,12 @@ $('.js-btn-thread-post-form-save').click(() => {
   if (validator.form()) {
     $('.js-btn-thread-post-form-save').button('loading');
     $('.thread-post-list').find('li.empty').remove();
-    captcha.setType("reply");
-    if(isShowCaptcha == 1){
-      captcha.showDrag();
-      return false;
-    }
+    threadPostForm();
+    // captcha.setType("reply");
+    // if(isShowCaptcha == 1){
+    //   captcha.showDrag();
+    //   return false;
+    // }
   }
 });
 
