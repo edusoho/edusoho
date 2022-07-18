@@ -21,48 +21,19 @@ class Live {
   init() {
     this.isLiveRoomOpened = false;
     let role = $('#entry').data('role');
-    let intervalId = 0;
-    let tryCount = 1;
     let directUrl = $('#entry').data('directUrl');
+    let url = $('#entry').data('url');
     if (directUrl) {
       this.entryRoom(directUrl);
-    } else {
-      intervalId = setInterval(() => {
-        if (tryCount > 10) {
-          clearInterval(intervalId);
-          $('#entry').html(Translator.trans('course_set.live_room.entry_error_hint'));
-          return;
-        }
-        $.ajax({
-          url: $('#entry').data('url'),
-          success: (data) => {
-            if (data.error) {
-              clearInterval(intervalId);
-              $('#entry').html(Translator.trans('course_set.live_room.entry_error_with_message', {message: data.error}));
-              return;
-            }
-
-            if (data.roomUrl) {
-              this.entryRoom(data.roomUrl);
-              clearInterval(intervalId);
-            }
-            tryCount++;
-          },
-          error: function() {
-            $('#entry').html(Translator.trans('course_set.live_room.entry_error_hint'));
-          }
-        });
-      }, 3000);
+    } else if (url) {
+      this.pollingTryEntryRoom(url);
     }
     if (role === 'student' && this.taskId != 0) {
       this.triggerLiveEvent();
     }
-
   }
 
   entryRoom(roomUrl) {
-    let self = this;
-
     let provider = $('#entry').data('provider');
     let role = $('#entry').data('role');
     let $uapraser = new UAParser(navigator.userAgent);
@@ -73,17 +44,43 @@ class Live {
       window.location.href = roomUrl;
     }
 
-    self.isLiveRoomOpened = true;
+    this.isLiveRoomOpened = true;
     let html = '<iframe name="classroom" src="' + roomUrl + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no" allowfullscreen="true" allow="microphone; camera; screen-wake-lock; display-capture"></iframe>';
     $('body').html(html);
   }
 
-  triggerLiveEvent() {
-    let self = this;
+  pollingTryEntryRoom(url) {
+    let intervalId = 0;
+    let tryCount = 1;
+    intervalId = setInterval(() => {
+      if (tryCount > 10) {
+        clearInterval(intervalId);
+        $('#entry').html(Translator.trans('course_set.live_room.entry_error_hint'));
+        return;
+      }
+      $.ajax({
+        url: url,
+        success: (data) => {
+          if (data.error) {
+            clearInterval(intervalId);
+            $('#entry').html(Translator.trans('course_set.live_room.entry_error_with_message', {message: data.error}));
+            return;
+          }
 
-    let eventName = null;
-    let timestamp = Date.parse( new Date() ).toString();
-    timestamp = timestamp.substr(0,10);
+          if (data.roomUrl) {
+            this.entryRoom(data.roomUrl);
+            clearInterval(intervalId);
+          }
+          tryCount++;
+        },
+        error: function() {
+          $('#entry').html(Translator.trans('course_set.live_room.entry_error_hint'));
+        }
+      });
+    }, 3000);
+  }
+
+  triggerLiveEvent() {
     this._initInterval();
 
     if (Browser.safari && !isMobileDevice()) {

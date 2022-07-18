@@ -1180,6 +1180,33 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $this->createNewException(UploadFileException::PERMISSION_DENIED());
     }
 
+    public function tryAccessItemAttachmentFile($fileId)
+    {
+        $file = $this->getItemBankItemAttachmentDao()->get($fileId);
+
+        if (empty($file)) {
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
+        }
+
+        $user = $this->getCurrentUser();
+
+        if ($user->isAdmin()) {
+            return $file;
+        }
+
+        if ($file['createdUserId'] == $user['id']) {
+            return $file;
+        }
+
+        $shares = $this->findShareHistory($file['createdUserId']);
+
+        $targetUserIds = ArrayToolkit::column($shares, 'targetUserId');
+        if (in_array($user['id'], $targetUserIds)) {
+            return $file;
+        }
+        $this->createNewException(UploadFileException::PERMISSION_DENIED());
+    }
+
     public function canDownloadFile($fileId)
     {
         $cloudFileSetting = $this->getSettingService()->get('cloud_file_setting', []);
@@ -1888,5 +1915,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function getCourseMaterialService()
     {
         return $this->createService('Course:MaterialService');
+    }
+
+    protected function getItemBankItemAttachmentDao()
+    {
+        return $this->createDao('ItemBank:Item:AttachmentDao');
     }
 }

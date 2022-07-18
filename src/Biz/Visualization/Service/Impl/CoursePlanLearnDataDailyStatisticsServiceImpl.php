@@ -4,6 +4,7 @@ namespace Biz\Visualization\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\LiveStatistics\Service\LiveCloudStatisticsService;
 use Biz\Visualization\Dao\CoursePlanLearnDailyDao;
 use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 
@@ -14,8 +15,14 @@ class CoursePlanLearnDataDailyStatisticsServiceImpl extends BaseService implemen
         if (empty($userIds)) {
             return [];
         }
+        $liveWatchDurations = $this->getLiveStatisticsService()->sumWatchDurationByCourseIdGroupByUserId($courseId);
+        $learnedTimes = ArrayToolkit::index($this->getCoursePlanLearnDailyDao()->sumLearnedTimeByCourseIdGroupByUserId($courseId, $userIds), 'userId');
+        $sumLearnedTimes = [];
+        foreach ($userIds as $userId) {
+            $sumLearnedTimes[$userId]['learnedTime'] = (empty($liveWatchDurations[$userId]) ? 0 : $liveWatchDurations[$userId]) + (empty($learnedTimes[$userId]) ? 0 : $learnedTimes[$userId]['learnedTime']);
+        }
 
-        return ArrayToolkit::index($this->getCoursePlanLearnDailyDao()->sumLearnedTimeByCourseIdGroupByUserId($courseId, $userIds), 'userId');
+        return $sumLearnedTimes;
     }
 
     public function sumPureLearnedTimeByCourseIdGroupByUserId($courseId, array $userIds)
@@ -58,5 +65,13 @@ class CoursePlanLearnDataDailyStatisticsServiceImpl extends BaseService implemen
     protected function getCoursePlanLearnDailyDao()
     {
         return $this->createDao('Visualization:CoursePlanLearnDailyDao');
+    }
+
+    /**
+     * @return LiveCloudStatisticsService
+     */
+    protected function getLiveStatisticsService()
+    {
+        return $this->createService('LiveStatistics:LiveCloudStatisticsService');
     }
 }

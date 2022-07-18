@@ -7139,6 +7139,11 @@ admin.edu_cloud.edu_live.renew_btn: 续费
 admin.edu_cloud.edu_live.expiry_date: 有效期至：
 admin.edu_cloud.edu_live.overdue_tips: 您的云直播服务已到期，请尽快续费，以免影响正常使用
 admin.edu_cloud.edu_live.renew_tips: 您的云直播服务将于%remaining%天后到期，请尽快续费
+admin.edu_cloud.edu_live.security_setting: 安全设置
+admin.edu_cloud.edu_live.watermark: 直播水印
+admin.edu_cloud.edu_live.watermark_tips: 开启后将在直播间的固定位置显示水印信息，支持PC/APP/H5
+admin.edu_cloud.edu_live.watermark_config: 水印信息
+admin.edu_cloud.edu_live.watermark_config_tips: 为了用户体验效果最佳，建议最多组合2项信息显示。注意：若用户的真实手机号没有则显示-
 
 # 云短信
 admin,edu_cloud.edu_sms.sms_balance_count: <span class="h3 text-primary plm prs">%sms_balance_count%</span>条
@@ -7815,6 +7820,7 @@ admin.setting_course.authority_and_copyright: 权限与版权
 admin.setting_course.allow_teacher_manage_course_marketing: 允许教师管理基础设置
 admin.setting_course.allow_teacher_search_course_order: 允许教师查询课程订单
 admin.setting_course.allow_teacher_add_or_remove: 允许教师添加/移除
+admin.setting_course.allow_teacher_course_material_download: 允许教师下载课程资料
 admin.setting_course.allow_teacher_export_material: 允许教师导出学员资料
 admin.setting_course.allow_user_download_audio: 允许学员下载任务的音视频
 admin.setting_course.allow_user_download_audio.help_block: 开启此项设置后，学员可在任务学习界面侧栏的"资料"面板中下载。
@@ -11341,6 +11347,9 @@ admin_v2.homepage.today_login_user: 今日登录用户
 admin_v2.homepage.today_register_user: 今日注册用户
 admin_v2.homepage.today_new_paid_order: 今日付费订单
 admin_v2.homepage.today_new_order: 今日新增订单
+
+admin_v2.homepage.welcome_desc: 欢迎使用EduSoho教培产品
+admin_v2.homepage.wechat_code: 加入开源产品使用学习交流群
 
 # 新后台首页通知
 admin_v2.domain_error_hint: 当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【通用管理】-【网校信息】-【网站域名】

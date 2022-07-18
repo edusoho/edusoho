@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Task;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\LiveWatermarkToolkit;
 use AppBundle\Common\SettingToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\MemberException;
@@ -46,14 +47,6 @@ class TaskLiveReplay extends AbstractResource
         $visibleReplays = array_values($visibleReplays);
 
         $user = $this->getCurrentUser();
-        $response = [
-            'url' => '',
-            'extra' => [
-                'provider' => '',
-                'lessonId' => $activity['id'],
-            ],
-            'device' => $device,
-        ];
 
         $protocol = $this->container->get('request')->getScheme();
         $replays = [];
@@ -77,9 +70,30 @@ class TaskLiveReplay extends AbstractResource
         }
 
         $response = $replays[0];
+        if (!empty($response['liveCloudSdk']['enable'])) {
+            $watermark = LiveWatermarkToolkit::build();
+            $response['liveCloudSdk']['watermark'] = $watermark;
+        }
+        if (!empty($watermark)) {
+            foreach ($replays as &$replay) {
+                $replay['liveCloudSdk']['watermark'] = $watermark;
+            }
+        }
+
         $response['replays'] = $replays;
 
         return $response;
+    }
+
+    protected function addLiveCloudParams($replay)
+    {
+        if (!empty($replay['liveCloudSdk']['enable'])) {
+            $replay['liveCloudSdk'] = array_merge($replay['liveCloudSdk'], [
+                'watermark' => LiveWatermarkToolkit::build(),
+            ]);
+        }
+
+        return $replay;
     }
 
     protected function isSetEncryption()

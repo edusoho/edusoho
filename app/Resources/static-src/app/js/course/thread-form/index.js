@@ -8,7 +8,7 @@ let validator = $form.validate({
     },
     'thread[content]': {
       required: true,
-      maxlength: 1000,
+      maxlength: 10000,
     }
   }
 });

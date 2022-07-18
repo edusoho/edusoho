@@ -45,7 +45,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'created_reason' => 'site.join_by_purchase',
             'price_type' => 'CNY',
             'currency_exchange_rate' => $currency->exchangeRate,
-            'expired_refund_days' => $this->getRefundDays(),
+            'expired_refund_days' => $this->hasRefundDays($product) ? $this->getRefundDays() : 0,
         ];
 
         $orderItems = $this->makeOrderItems($product);
@@ -306,6 +306,17 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         foreach ($orderIds as $orderId) {
             $this->getWorkflowService()->close($orderId);
         }
+    }
+
+    private function hasRefundDays(Product $product)
+    {
+        $deductTypes = array_column($product->pickedDeducts, 'deduct_type');
+        foreach ($deductTypes as $type) {
+            if (in_array($type, ['coupon', 'point'])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private function getTotalDeductExcludeAdjust($deducts)
