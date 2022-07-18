@@ -340,8 +340,11 @@
                         type: 'danger',
                         message: Translator.trans('course.manage.post_limit_hint')
                     });
+                    captcha.isShowCaptcha = 1;
+                    captcha.hideDrag();
                     return;
                 }
+
                 Api.review.reviewPost({
                     params: {
                         reviewId: reviewId,
