@@ -42,6 +42,12 @@ export default [
     method: 'POST',
   },
   {
+    // 考试交卷
+    name: 'saveAnswerdo',
+    url: '/exercise/{resultId}/save_result',
+    method: 'POST',
+  },
+  {
     // 获得作业说明信息
     name: 'getHomeworkIntro',
     url: '/courses/{courseId}/task_medias/{taskId}',

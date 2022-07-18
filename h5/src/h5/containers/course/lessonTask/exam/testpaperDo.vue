@@ -167,6 +167,7 @@ export default {
   mounted() {
     this.initReport();
     this.getData();
+    this.saveAnswerInterval();
   },
   beforeRouteEnter(to, from, next) {
     if (from.fullPath === '/') {
@@ -213,7 +214,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('course', ['handExamdo']),
+    ...mapActions('course', ['handExamdo', 'saveAnswerdo']),
     // 初始化上报数据
     initReport() {
       this.initReportData(
@@ -491,6 +492,14 @@ export default {
     // 实时存储答案
     saveAnswer(val) {
       localStorage.setItem(this.localanswerName, JSON.stringify(val));
+    },
+    saveAnswerInterval() {
+      setInterval(() => {
+        this.saveAnswerdo({
+          answer: JSON.parse(JSON.stringify(this.answer)),
+          resultId: this.testpaperResult.id,
+        })
+      }, 30 * 1000)
     },
     // 实时存储时间
     saveTime() {
