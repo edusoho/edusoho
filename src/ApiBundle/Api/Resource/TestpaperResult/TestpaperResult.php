@@ -228,14 +228,6 @@ class TestpaperResult extends AbstractResource
     }
 
     /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
-    /**
      * @return QuestionService
      */
     protected function getQuestionService()

@@ -75,12 +75,4 @@ class Me extends AbstractResource
     {
         return $this->service('Pay:AccountService');
     }
-
-    /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

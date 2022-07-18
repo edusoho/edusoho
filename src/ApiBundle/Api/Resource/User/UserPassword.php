@@ -117,11 +117,6 @@ class UserPassword extends AbstractResource
         return $this->service('User:UserService');
     }
 
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
     private function getLogService()
     {
         return $this->service('System:LogService');

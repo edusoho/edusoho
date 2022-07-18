@@ -12,6 +12,7 @@ use Biz\Goods\Service\GoodsService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Review\Service\ReviewService;
 use Biz\User\Service\UserService;
+use Biz\Common\CommonException;
 
 class Review extends AbstractResource
 {
@@ -42,6 +43,10 @@ class Review extends AbstractResource
 
     public function add(ApiRequest $request)
     {
+        if(!$this->checkDragCaptchaToken($request->getHttpRequest(), $request->request->get('_dragCaptchaToken'))){
+            throw CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR();
+        }
+
         $review = [
             'targetType' => $request->request->get('targetType'),
             'targetId' => $request->request->get('targetId'),

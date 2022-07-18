@@ -307,6 +307,11 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         $fields = $request->request->all();
+        if(!$this->checkDragCaptchaToken($request, $fields['_dragCaptchaToken'])){
+            return $this->createJsonResponse(['error' => ['code'=> 403, 'message' => $this->trans("exception.form..drag.expire")]], 403);
+        }
+        unset($fields['_dragCaptchaToken']);
+            
         $fields['content'] = $this->autoParagraph($fields['content']);
         $fields['targetId'] = $id;
         $fields['parentId'] = $postId;

@@ -3,5 +3,5 @@
 {% set hideRereview = (selectedCourseId == 0) or (not userReview) %}
 
 {{ render(controller('AppBundle:Course/Course:renderCourseChoice')) }}
-
+  
 {% include 'review/widget/list.html.twig' with {targetType: 'course', targetId: selectedCourseId > 0 ? selectedCourseId : course.id, reportType: 'course_review', replyReportType: 'course_review_reply'} %}

@@ -122,12 +122,4 @@ class TeacherQualification extends AbstractResource
     {
         return $this->service('User:UserService');
     }
-
-    /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

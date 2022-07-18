@@ -129,14 +129,6 @@ class TimeoutReview extends AbstractResource
     }
 
     /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
-    /**
      * @return AssessmentService
      */
     protected function getAssessmentService()

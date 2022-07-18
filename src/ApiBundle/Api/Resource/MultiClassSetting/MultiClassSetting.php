@@ -71,12 +71,4 @@ class MultiClassSetting extends AbstractResource
             'review_time_limit' => '0',
         ];
     }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

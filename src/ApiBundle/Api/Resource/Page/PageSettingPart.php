@@ -47,11 +47,6 @@ class PageSettingPart extends PageSetting
         return $this->getDiscovery($portal, $mode);
     }
 
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
     protected function getH5SettingService()
     {
         return $this->service('System:H5SettingService');

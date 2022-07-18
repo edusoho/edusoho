@@ -70,12 +70,4 @@ class AppSuggestion extends AbstractResource
 
         return $response;
     }
-
-    /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

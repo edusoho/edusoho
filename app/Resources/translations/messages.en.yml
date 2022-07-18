@@ -9209,6 +9209,7 @@ exception.user.message_forbidden: 'Does''t support sending message to this user.
 exception.user.discuz_user_reset_password: Please retrieve your password through the forum！
 exception.user.not_found: 'Cannot find this user!'
 exception.form.expire: 'Timeout, please commit again!'
+exception.form..drag.expire: 'The verification code has expired, please refresh the page and resubmit！'
 exception.user.register_error: 'User data is wrong, and failed to register!'
 exception.user.mobile_registered: 'This number has been used.'
 exception.user.register_limit: The number of registrations has reached the maximum limit!
@@ -10780,6 +10781,11 @@ admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: Tha
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: Content that misses sensitive words is approved by the system by default
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: Allowed
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: Not Allowed
+admin_v2.system.user_content_control.content_anti_brush_setting.enable_anti_brush_captcha.label: Content anti-swipe verification settings
+admin_v2.system.user_content_control.content_anti_brush_setting.enable_anti_brush_captcha.open: Open
+admin_v2.system.user_content_control.content_anti_brush_setting.enable_anti_brush_captcha.close: Close
+admin_v2.system.user_content_control.content_anti_brush_setting.enable_anti_brush_captcha.open.tips: After opening, information comment/reply, course evaluation/reply, class evaluation/reply, question evaluation/reply, group topic posting/reply will require a verification code
+admin_v2.system.user_content_control.content_anti_brush_setting.enable_anti_brush_captcha.close.tips: No Captcha required after closing
 
 admin_v2.operation.user_content_audit_form.sensitive_keywords.placeholder: Sensitive Keywords
 admin_v2.operation.user_content_audit_form.author.placeholder: Author
