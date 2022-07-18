@@ -39,7 +39,7 @@
                         <form>
                             <textarea class="post-content" @blur="validatePostContent"></textarea>
                             <p></p>
-                            <a ref="saveBtn" href="javascript:;" class="btn btn-sm btn-default plm prm pull-right"
+                            <a :ref="`saveBtn-${review.id}`" href="javascript:;" class="btn btn-sm btn-default plm prm pull-right"
                                @click="onSave($event, review.id)">{{ 'form.btn.save'|trans }}</a>
                         </form>
                     </div>
@@ -100,7 +100,7 @@
                         <form class="hidden" :class="'reviews-text__reply-content-form-'+review.id">
                             <textarea class="post-content" @blur="validatePostContent"></textarea>
                             <p></p>
-                            <a ref="saveBtn" href="javascript:;" class="btn btn-sm btn-default plm prm pull-right"
+                            <a :ref="`saveBtn-${review.id}`" href="javascript:;" class="btn btn-sm btn-default plm prm pull-right"
                                @click="onSave($event, review.id)">{{ 'form.btn.save'|trans }}</a>
                         </form>
                     </div>
@@ -224,7 +224,7 @@
                 if (data.type === 'review') {
                     captcha.isShowCaptcha = 0;
                     _this._dragCaptchaToken = data.token;
-                    _this.$refs.saveBtn[0].click();
+                    _this.$refs[`saveBtn-${captcha.reviewId}`][0].click();
                 }
             })
         },
@@ -268,7 +268,7 @@
 
                 this.switchDisplay(event);
             },
-            validatePostContent(event) {
+            validatePostContent(event, reviewId) {
                 let $form = $(event.currentTarget).parent('form');
                 if (!$form.find('.post-content').val().trim()) {
                     $form.find('.post-content').addClass('form-control-error');
@@ -282,8 +282,9 @@
                 $form.find('p').removeClass('form-error-message');
                 $form.find('p').empty();
 
-                if ($("input[name=enable_anti_brush_captcha]").val() == 1 && captcha.isShowCaptcha == 1){
+                if (reviewId && $("input[name=enable_anti_brush_captcha]").val() == 1 && captcha.isShowCaptcha == 1){
                     captcha.setType('review')
+                    captcha.reviewId = reviewId
                     captcha.showDrag();
 
                     return false;
@@ -329,7 +330,7 @@
 
             },
             onSave(event, reviewId) {
-                if (!this.validatePostContent(event)) {
+                if (!this.validatePostContent(event, reviewId)) {
                     return;
                 }
                 let $targetForm = $(event.currentTarget).parent('form');
