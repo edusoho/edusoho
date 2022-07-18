@@ -193,15 +193,7 @@ class ImSync extends AbstractResource
     {
         return $this->service('IM:ConversationService');
     }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
+    
     /**
      * @return ClassroomService
      */

@@ -44,14 +44,6 @@ class UploaderFinish extends AbstractResource
     }
 
     /**
-     * @return \Biz\System\Service\Impl\SettingServiceImpl
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
-    /**
      * @return \Biz\Course\Service\Impl\CourseServiceImpl
      */
     protected function getCourseService()

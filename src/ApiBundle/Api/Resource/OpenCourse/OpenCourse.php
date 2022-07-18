@@ -191,12 +191,4 @@ class OpenCourse extends AbstractResource
     {
         return $this->service('User:TokenService');
     }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

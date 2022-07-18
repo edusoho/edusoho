@@ -129,12 +129,7 @@ class PageClassroom extends AbstractResource
     {
         return $this->service('User:UserService');
     }
-
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
+    
     /**
      * @return VipService
      */

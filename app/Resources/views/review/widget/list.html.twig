@@ -73,6 +73,7 @@
               </div>
               <div class="form-group">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+                <input type="hidden" name="_dragCaptchaToken" value="">
                 <a href="javascript:;" class="btn btn-primary btn-sm pull-right js-btn-save-post" data-target-id="{{ review.id }}" data-loading-text="{{'form.btn.reply.submiting'|trans}}">{{'form.btn.save'|trans}}</a>
               </div>
             </form>

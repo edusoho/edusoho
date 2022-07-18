@@ -22,12 +22,4 @@ class PurchaseAgreement extends AbstractResource
 
         return true;
     }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }
