@@ -30,10 +30,11 @@ class LiveMemberStatisticsDaoImpl extends AdvancedDaoImpl implements LiveMemberS
     }
 
     public function findMembersByLiveIds($liveIds){
-        $marks = str_repeat('?,', count($liveIds) - 1) . '?';
-        $sql = "SELECT DISTINCT live.id, live.* FROM `live_statistics_member_data` live LEFT JOIN `course_member` member ON live.userId = member.userId WHERE live.liveId IN ({$marks})";
+        if (empty($liveIds)){
+            return [];
+        }
 
-        return $this->db()->fetchAll($sql, $liveIds);
+        return $this->findInField('liveId',$liveIds);
     }
 
     public function sumWatchDurationByLiveId($liveId, $userIds = [])
