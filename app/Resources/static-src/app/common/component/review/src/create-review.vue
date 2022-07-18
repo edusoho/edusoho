@@ -290,7 +290,7 @@
                         'targetId': this.targetId,
                         'content': this.form.content,
                         'rating': this.form.rating,
-												_dragCaptchaToken: this.dragCaptchaToken
+												'_dragCaptchaToken': this._dragCaptchaToken
                     },
                 }).then(res => {
                     if (res.error) {
