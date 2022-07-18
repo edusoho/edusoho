@@ -39,14 +39,6 @@ class MeCurrentLiveTask extends AbstractResource
     }
 
     /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
-    /**
      * @return ActivityService
      */
     private function getActivityService()

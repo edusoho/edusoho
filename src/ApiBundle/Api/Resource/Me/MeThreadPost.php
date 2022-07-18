@@ -80,9 +80,4 @@ class MeThreadPost extends AbstractResource
     {
         return $this->service('Course:MemberService');
     }
-
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

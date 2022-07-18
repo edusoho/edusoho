@@ -247,11 +247,6 @@ class PageCourse extends AbstractResource
         return $this->service('Course:MemberService');
     }
 
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
     private function getLearningDataAnalysisService()
     {
         return $this->service('Course:LearningDataAnalysisService');

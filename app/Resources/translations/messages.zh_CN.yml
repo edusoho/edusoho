@@ -10490,6 +10490,7 @@ exception.user.message_forbidden: 不支持向该用户发送私信!
 exception.user.discuz_user_reset_password: 请通过论坛找回密码！
 exception.user.not_found: 找不到该用户！
 exception.form.expire: 页面已过期，请重新提交数据！
+exception.form..drag.expire: 验证码已过期，请刷新页面重新提交！
 exception.user.register_error: 用户数据异常，注册失败！
 exception.user.mobile_registered: 该手机号码已被注册！
 exception.user.register_limit: 注册次数已达最大限制!
@@ -12030,6 +12031,11 @@ admin_v2.system.user_content_control.content_audit_setting.audit_after.tips: 即
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.label: 未命中敏感词的内容默认系统审核通过
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.allow: 允许
 admin_v2.system.user_content_control.content_audit_setting.auto_audit.not_allow: 不允许
+admin_v2.system.user_content_control.content_anti_brush_setting.enable_anti_brush_captcha.label: 内容防刷验证设置
+admin_v2.system.user_content_control.content_anti_brush_setting.enable_anti_brush_captcha.open: 开启
+admin_v2.system.user_content_control.content_anti_brush_setting.enable_anti_brush_captcha.close: 关闭
+admin_v2.system.user_content_control.content_anti_brush_setting.enable_anti_brush_captcha.open.tips: 开启后,资讯评论/回复、课程评价/回复、班级评价/回复、题库评价/回复、小组话题发布/回复将需要验证码
+admin_v2.system.user_content_control.content_anti_brush_setting.enable_anti_brush_captcha.close.tips: 关闭后不需要验证码
 
 admin_v2.operation.user_content_audit_form.sensitive_keywords.placeholder: 敏感词关键字
 admin_v2.operation.user_content_audit_form.author.placeholder: 发布者

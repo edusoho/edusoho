@@ -388,6 +388,26 @@ class BaseController extends Controller
         return strip_tags($url);
     }
 
+    /**
+     * 验证验证码token
+     * @return [type] [description]
+     */
+    protected function checkDragCaptchaToken(Request $request, $token)
+    {
+        $enableAntiBrushCaptcha = $this->getSettingService()->node("ugc_content_audit.enable_anti_brush_captcha");
+        if(empty($enableAntiBrushCaptcha)){
+            return true;
+        }
+        $session = $request->getSession();
+        $dragTokens = empty($session->get('dragTokens')) ? array() : $session->get('dragTokens');
+        if(in_array($token, $dragTokens)){
+            array_splice($dragTokens, array_search($token, $dragTokens), 1);
+            $session->set("dragTokens", $dragTokens);
+            return true;
+        }
+        return false;
+    }
+
     protected function createSuccessJsonResponse($data = [])
     {
         $data = array_merge(['success' => 1], $data);

@@ -9,6 +9,7 @@ $.validator.setDefaults({
   ignore: '',
   ajax: false,
   currentDom: null,
+  captcha: null,
   highlight: function (element, errorClass, validClass) {
     let $row = $(element).addClass('form-control-error').closest('.form-group').addClass('has-error');
     $row.find('.help-block').hide();
@@ -43,11 +44,18 @@ $.validator.setDefaults({
     console.log('submitSuccess');
   },
   submitHandler: function (form) {
-    console.log('submitHandler');
-    //规定不要用模态框 submit按钮（<input type=’submit’>）提交表单；
-    let $form = $(form);
     let settings = this.settings;
+    let $form = $(form);
     let $btn = $(settings.currentDom);
+    $form.triggerHandler("submitHandler");
+    
+    if(settings.captcha != null && Object.keys(settings.captcha).length > 0 && settings.captcha.isShowCaptcha == 1){
+      settings.captcha.captchaClass.showDrag();
+      return false;
+    }
+
+    //规定不要用模态框 submit按钮（<input type=’submit’>）提交表单；
+    
     if (!$btn.length) {
       $btn = $(form).find('[type="submit"]');
     }

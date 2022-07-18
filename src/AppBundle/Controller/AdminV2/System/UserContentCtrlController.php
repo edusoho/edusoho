@@ -149,6 +149,7 @@ class UserContentCtrlController extends BaseController
         $defaultSetting = [
             'mode' => 'audit_after',
             'enable_auto_audit' => '1',
+            "enable_anti_brush_captcha" => 1,
         ];
 
         $contentAuditSetting = array_merge($defaultSetting, $this->getSettingService()->get(SettingNames::UGC_USER_CONTENT_CONTROL_CONTENT_AUDIT, []));
@@ -234,6 +235,7 @@ class UserContentCtrlController extends BaseController
         $submitSetting = ArrayToolkit::parts($submitSetting, [
             'mode',
             'enable_auto_audit',
+            'enable_anti_brush_captcha',
         ]);
 
         return $submitSetting;

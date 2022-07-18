@@ -466,14 +466,6 @@ class CourseTaskMedia extends AbstractResource
     }
 
     /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->getBiz()->service('System:SettingService');
-    }
-
-    /**
      * @return MemberService
      */
     protected function getCourseMemberService()
