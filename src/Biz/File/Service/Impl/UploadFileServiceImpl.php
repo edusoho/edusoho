@@ -666,7 +666,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (!empty($conditions['questionBank'])) {
             unset($conditions['questionBank']);
             unset($conditions['targetType']);
-            $conditions['excludeStatus'] = ['delete'];
+            $conditions['excludeStatus'] = ['delete', 'uploading'];
             $files = $this->getAttachmentDao()->search($conditions, $orderBy, $start, $limit);
             $files = $this->convertQuestionFiles($files);
         } else {
@@ -695,7 +695,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (!empty($conditions['questionBank'])) {
             unset($conditions['questionBank']);
             unset($conditions['targetType']);
-            $conditions['excludeStatus'] = ['delete'];
+            $conditions['excludeStatus'] = ['delete', 'uploading'];
 
             return $this->getAttachmentDao()->count($conditions);
         }
