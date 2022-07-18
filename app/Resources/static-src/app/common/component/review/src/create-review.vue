@@ -9,7 +9,7 @@
                 </span>
                 <p></p>
             </div>
-            <div class="review-form-content">
+            <div class="review-form-content t222">
                 <textarea class="form-control" rows="5" v-model="form.content"></textarea>
                 <p></p>
             </div>
@@ -27,6 +27,7 @@
 
 <script>
     import reviewModule from "../../../../../common/api/modules/review";
+    import Captcha from 'app/common/captcha';
 
     let starOnImg = '/assets/img/raty/star-on.png';
     let starOffImg = '/assets/img/raty/star-off.png';
@@ -59,6 +60,9 @@
         }
         return error;
     });
+
+   const captcha = new Captcha({ drag: { limitType: "course", bar:'#drag-btn', target: '.js-jigsaw' } });
+	 captcha.isShowCaptcha = $(captcha.params.maskClass).length ? 1 : 0
 
     export default {
         created() {
@@ -95,7 +99,8 @@
                 },
                 starHover: 0,
                 content: "",
-                showForm: false
+                showForm: false,
+								_dragCaptchaToken: ''
             }
         },
         filters: {
@@ -110,7 +115,7 @@
                 default: null,
             },
             targetId: {
-                type: Number,
+                type: [Number, String],
                 default: null,
             },
             canCreate: {
@@ -121,6 +126,13 @@
                 type: Number,
                 default: null
             }
+        },
+        created() {
+            captcha.on('success', (data) => {
+                captcha.isShowCaptcha = 0;
+								this._dragCaptchaToken = data.token;
+                this.onConfirm()
+            })
         },
         methods: {
             getUserReview() {
@@ -261,28 +273,42 @@
                     $('.review-form-rating').find('p').empty();
                 }
 
+								if ($("input[name=enable_anti_brush_captcha]").val() == 1 && captcha.isShowCaptcha == 1){
+									captcha.showDrag();
+
+									return false;
+								}
+
                 return true;
             },
             onConfirm() {
                 if (!this.validateFormItems()) return;
+
                 Api.review.review({
                     data: {
                         'targetType': this.targetType,
                         'targetId': this.targetId,
                         'content': this.form.content,
-                        'rating': this.form.rating
+                        'rating': this.form.rating,
+												_dragCaptchaToken: this.dragCaptchaToken
                     },
                 }).then(res => {
                     if (res.error) {
-                        return;
+											captcha.isShowCaptcha = 1;
+											return;
                     }
 
                     cd.message({
                         'type': 'success',
                         'message': Translator.trans('site.save_success_hint')
                     });
+										
                     window.location.reload();
-                });
+                }).catch(() => {
+									captcha.isShowCaptcha = 1;
+								}).finally(() => {
+									captcha.hideDrag();
+                })
             },
             removeHtml(input) {
                 return input && input.replace(/<(?:.|\n)*?>/gm, '')
