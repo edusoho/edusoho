@@ -178,7 +178,7 @@ class MaterialLibController extends BaseController
 
         return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', [
             'request' => $request,
-            'globalId' => $file['globalId'],
+            'globalId' => $file['global_id'],
         ]);
     }
 
