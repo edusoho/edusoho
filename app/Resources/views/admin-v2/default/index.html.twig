@@ -119,7 +119,7 @@
           </div>
         </div>
 
-        {% if showChatGroupQrCode %}
+        {% if showChatGroupQrCode|default(false) %}
           <div class="admin-info-section text-center cd-mt24">
             <div class="text-bold" style="font-size: 18px; color: #333;margin-bottom: 8px;">{{ 'admin_v2.homepage.welcome_desc'|trans }}</div>
             <div class="gray-dark">{{ 'admin_v2.homepage.wechat_code'|trans }}</div>
