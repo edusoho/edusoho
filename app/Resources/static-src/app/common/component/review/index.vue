@@ -330,9 +330,6 @@
 
             },
             onSave(event, reviewId) {
-                if (!this.validatePostContent(event, reviewId)) {
-                    return;
-                }
                 let $targetForm = $(event.currentTarget).parent('form');
 
                 if ($targetForm.siblings('ul').find('.thread-post').length >= 5) {
@@ -340,8 +337,10 @@
                         type: 'danger',
                         message: Translator.trans('course.manage.post_limit_hint')
                     });
-                    captcha.isShowCaptcha = 1;
-                    captcha.hideDrag();
+                    return;
+                }
+
+                if (!this.validatePostContent(event, reviewId)) {
                     return;
                 }
 
