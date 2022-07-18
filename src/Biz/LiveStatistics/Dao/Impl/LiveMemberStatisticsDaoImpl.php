@@ -30,7 +30,7 @@ class LiveMemberStatisticsDaoImpl extends AdvancedDaoImpl implements LiveMemberS
     }
 
     public function findMembersByLiveIds($liveIds){
-        return empty($liveIds) ? [] : $this->findInField('liveId', $liveIds);
+        return $this->findInField('liveId', $liveIds);
     }
 
     public function sumWatchDurationByLiveId($liveId, $userIds = [])
