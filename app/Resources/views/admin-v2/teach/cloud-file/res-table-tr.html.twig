@@ -105,7 +105,6 @@
           {% endfor %}
         {% else %}
           {% if cloudFile.convertStatus == 'error' %}
-            {% set canDownload = 'false' %}
             <a class="color-danger js-cd-modal" href="" data-toggle="modal" data-target="#error-modal" data-title="{{cloudFile.filename}}" data-reason="{{ (get_transcode_error_message_key(cloudFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key(cloudFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ cloudFile.errorType|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ cloudFile.errorType|default('server'))|trans }}&nbsp;></a>
           {% elseif cloudFile.convertStatus == 'doing' %}
             <span class="color-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
@@ -119,7 +118,6 @@
         {% endif %}
       {% elseif cloudFile.type in ['ppt', 'document'] %}
         {% if cloudFile.convertStatus == 'error' %}
-          {% set canDownload = 'false' %}
           <a class="color-danger js-cd-modal" href="" data-toggle="modal" data-target="#error-modal" data-title="{{cloudFile.filename}}"  data-reason="{{ (get_transcode_error_message_key(cloudFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key(cloudFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ cloudFile.errorType|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ cloudFile.errorType|default('server'))|trans }}&nbsp;></a>
         {% elseif cloudFile.convertStatus == 'doing' %}
           <span class="color-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
@@ -134,7 +132,6 @@
         {{ 'material.common_table.no_need_transcode'|trans }}
       {% endif %}
     {% else %}
-      {% set canDownload = 'false' %}
       --
     {% endif %}
 
@@ -142,7 +139,7 @@
     <td class="es-materillib-table vertical-middle">
       <div class="btn-group ">
         {% if pageType  == 'attachment' %}
-          <a class="btn btn-default btn-sm" {% if canDownload|default('true') == 'false' %}disabled{% endif %} href="{{ path('admin_v2_cloud_file_download', {globalId:cloudFile.globalId}) }}"  target="__blank">{{ 'cloud_file.download_btn'|trans }}</a>
+          <a class="btn btn-default btn-sm" href="{{ path('admin_v2_cloud_file_download', {globalId:cloudFile.globalId}) }}"  target="__blank">{{ 'cloud_file.download_btn'|trans }}</a>
         {% else %}
           <a class="btn btn-default btn-sm js-detail-btn " data-url="{{ path('admin_v2_cloud_file_detail', {globalId:cloudFile.globalId}) }}">{{ 'cloud_file.edit_btn'|trans }}</a>
         {% endif %}
