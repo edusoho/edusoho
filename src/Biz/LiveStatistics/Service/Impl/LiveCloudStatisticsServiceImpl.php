@@ -47,8 +47,8 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
 
     public function sumWatchDurationByCourseIdGroupByUserId($courseId)
     {
-        $conditions = ['courseId' => $courseId];
-        $members = ArrayToolkit::group($this->getLiveMemberStatisticsDao()->searchLiveMembersJoinCourseMember($conditions, 0, PHP_INT_MAX), 'userId');
+        $liveIds = array_column($this->getLiveActivityDao()->findByIds(array_column($this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'live'), 'mediaId')), 'liveId');
+        $members = ArrayToolkit::group($this->getLiveMemberStatisticsDao()->findMembersByLiveIds($liveIds), 'userId');
         if (empty($members)) {
             return [];
         }
@@ -56,6 +56,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         foreach ($members as $userId => $member) {
             $sumWatchDurations[$userId] = array_sum(array_column($member, 'watchDuration'));
         }
+
         return $sumWatchDurations;
     }
 
