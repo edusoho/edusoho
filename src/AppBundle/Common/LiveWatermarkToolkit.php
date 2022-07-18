@@ -14,11 +14,14 @@ class LiveWatermarkToolkit
         }
         $waterMark = '';
         foreach ($liveCloudSetting['live_watermark_info'] as $item) {
-            $waterMark .= "{{{$item}}}";
+            $waterMark .= "{{{$item}}}\n";
         }
         $user = self::getServiceKernel()->getCurrentUser();
         $user = $user->toArray();
         $site = SettingToolkit::getSetting('site', []);
+        if (false !== strpos($site['url'], '//')) {
+            list($_, $site['url']) = explode('//', $site['url']);
+        }
         $user['domain'] = $site['url'];
 
         return self::parsePattern($waterMark, $user);

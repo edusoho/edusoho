@@ -143,7 +143,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         if (empty($params['userId'])) {
             $this->createNewException(UserException::UN_LOGIN());
         }
-        list($userId, $courseId, $activityId) = $params;
+        list($userId, $courseId, $activityId) = array_values($params);
         $user = $this->getUserService()->getUser($userId);
         $this->authenticateUser($user);
         $params = [];
@@ -319,7 +319,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         if (empty($params['userId'])) {
             $this->createNewException(UserException::UN_LOGIN());
         }
-        list($userId, $courseId, $activityId, $replayId) = $params;
+        list($userId, $courseId, $activityId, $replayId) = array_values($params);
         $user = $this->getUserService()->getUser($userId);
         $this->authenticateUser($user);
         $activity = $this->getActivityService()->getActivity($activityId, true);
