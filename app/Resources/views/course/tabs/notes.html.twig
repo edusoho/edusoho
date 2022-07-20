@@ -109,10 +109,10 @@
             {% else %}
               {{ 'course.note.mission_delete_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
             {% endif %}
-            {% if app.user.isLogin() and app.user.id != note.userId and is_reported('course_note', note.id) %}<span style="color: red;">({{ ('已举报')|trans }})</span>{% endif %}
+            {% if app.user.isLogin()|default(false) and app.user.id != note.userId and is_reported('course_note', note.id) %}<span style="color: red;">({{ ('已举报')|trans }})</span>{% endif %}
             <span id="{{ 'js-course-note-after-' ~ note.id }}"></span>
             <span class="metas-sns">
-              {% if app.user.isLogin() and app.user.id != note.userId and not is_reported('course_note', note.id) %}
+              {% if app.user.isLogin()|default(false) and app.user.id != note.userId and not is_reported('course_note', note.id) %}
                 <a class="color-primary item-hover"
                    id="js-course-note-modal-{{ note.id }}"
                    href="#modal"

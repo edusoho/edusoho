@@ -12,7 +12,7 @@
   {% else %}
     {% set reportType = '' %}
   {% endif %}
-    {% if app.user.isLogin() and app.user.id != thread.userId and not is_reported(reportType, thread.id) %}
+    {% if app.user.isLogin()|default(false) and app.user.id != thread.userId and not is_reported(reportType, thread.id) %}
       <a class="color-primary item-hover"
          id="js-thread-modal-{{ thread.id }}"
          href="#modal"

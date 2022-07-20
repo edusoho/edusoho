@@ -36,7 +36,7 @@
         <a class="js-call-username" href="#thread-post-form" >{{'thread.reply'|trans}}</a>
       </span>
     {% endif %}
-    {% if app.user.isLogin() and app.user.id != author.id and not is_reported(reportType, post.id) %}
+    {% if app.user.isLogin()|default(false) and app.user.id != author.id and not is_reported(reportType, post.id) %}
       <a id="js-course-thread-reply-modal-{{ thread.id }}" 
           class="thread-tip-off pull-right item-hover"
           href="#modal"
