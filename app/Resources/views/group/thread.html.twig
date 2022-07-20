@@ -5,14 +5,7 @@
 {% block description %}{{threadMainContent|plain_text(100)}}{% endblock %}
 
 {% block group_main %}
-  {% set enable_anti_brush_captcha = setting('ugc_content_audit.enable_anti_brush_captcha')|default(1) %}
-  <input type="hidden" name="enable_anti_brush_captcha" value="{{enable_anti_brush_captcha}}">
-  {% if enable_anti_brush_captcha == 1 and app.user.isLogin()|default(false) %}
-    <div class="js-mask" style="position:fixed; left:0px; top:0px; background:rgba(0, 0, 0, 0.4); width:100%; height:100%; filter:alpha(opacity=60); opacity:0.6;display:none; z-index:100;"></div>
-    <div class="form-group cd-mb32 js-drag-jigsaw" style="width: 338px; height: 219px; position:fixed; z-index:101; display: none; background: white;">
-      {% include 'common/drag.html.twig' with { auth: true, showLabel: 0 } %}
-    </div>
-  {% endif %}
+  {% include 'common/anti-brush-captcha.html.twig' %}
   
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -51,7 +44,7 @@
         {{'group.thread.created_time'|trans({'%createdTime%':threadMain.createdTime|smart_time})}}
         <span class="mll"> {{'group.thread.hit_num'|trans({'%hitNum%':threadMain.hitNum})}}</span>
         <span style="color: red;" id="{{ 'js-group-thread-after-' ~ threadMain.id }}"></span>
-        {% if app.user.isLogin() and app.user.id != threadMain.userId and is_reported('group_thread', threadMain.id)  %}
+        {% if app.user.isLogin()|default(false) and app.user.id != threadMain.userId and is_reported('group_thread', threadMain.id)  %}
           <span style="color: red;">({{ '已举报'|trans }})</span>
         {% endif %}
       </div>
@@ -62,7 +55,7 @@
       {% include 'attachment/widget/list.html.twig' with {targetType:'group.thread', targetId:threadMain.id} %}
 
       <div class="mtl text-right">
-        {% if app.user.isLogin() and app.user.id != threadMain.userId and not is_reported('group_thread', threadMain.id) %}
+        {% if app.user.isLogin()|default(false) and app.user.id != threadMain.userId and not is_reported('group_thread', threadMain.id) %}
           <a class="btn btn-default btn-sm mrm" id="{{ 'js-group-thread-modal-'~ threadMain.id }}" href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{ path('common_report_tags_modal', {targetType: 'group_thread', targetId: threadMain.id, modalTarget: 'js-group-thread-modal-'~ threadMain.id, contentTarget: 'js-group-thread-after-' ~ threadMain.id }) }}">{{'举报'|trans}}</a>
         {% endif %}
         {% if is_feature_enabled('group_reward') and threadMain.count == 1 %}
@@ -138,7 +131,7 @@
                 <span class="divider mhm">•</span>
                 <span >{{post.createdTime|smart_time}} </span>
                 <span id="{{ 'js-group-thread-reply-after-' ~ post.id }}" style="color: red;"></span>
-                {% if app.user.isLogin() and app.user.id != post.userId and is_reported('group_thread_reply', post.id)  %}
+                {% if app.user.isLogin()|default(false) and app.user.id != post.userId and is_reported('group_thread_reply', post.id)  %}
                   <span style="color: red;">({{ '已举报'|trans }})</span>
                 {% endif %}
               </div>
@@ -149,7 +142,7 @@
               </div>
 
               <div class="actions">
-                {% if app.user.isLogin() and app.user.id != post.userId and not is_reported('group_thread_reply', post.id) %}
+                {% if app.user.isLogin()|default(false) and app.user.id != post.userId and not is_reported('group_thread_reply', post.id) %}
                   <a class="item-hover" id="{{ 'js-group-thread-reply-modal-'~ post.id }}" href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{ path('common_report_tags_modal', {targetType: 'group_thread_reply', targetId: post.id, modalTarget: 'js-group-thread-reply-modal-'~ post.id, contentTarget: 'js-group-thread-reply-after-' ~ post.id }) }}">{{'举报'|trans}}</a>
                 {% endif %}
                 {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}

@@ -8,14 +8,7 @@
   {% include 'review/widget/review-form.html.twig' with { userReview:userReview, targetType:targetType|default('course'), targetId:targetId|default() } %}
 {% endif %}
 
-{% set enable_anti_brush_captcha = setting('ugc_content_audit.enable_anti_brush_captcha')|default(1) %}
-<input type="hidden" name="enable_anti_brush_captcha" value="{{enable_anti_brush_captcha}}">
-{% if enable_anti_brush_captcha == 1  and app.user.isLogin()|default(false) %}
-  <div class="js-mask" style="position:fixed; left:0px; top:0px; background:rgba(0, 0, 0, 0.4); width:100%; height:100%; filter:alpha(opacity=60); opacity:0.6;display:none; z-index:100;"></div>
-  <div class="form-group cd-mb32 js-drag-jigsaw" style="width: 338px; height: 219px; position:fixed; z-index:101; display: none; background: white;">
-    {% include 'common/drag.html.twig' with { auth: true, showLabel: 0 } %}
-  </div>
-{% endif %}
+{% include 'common/anti-brush-captcha.html.twig' %}
 
 {% set canAccess = canAccess|default(false) %}
 {% set reportType = reportType|default('') %}
@@ -39,10 +32,10 @@
           {{ web_macro.star(review.rating) }}
         </div>
         <div class="content">
-          <div class="short-content" style="white-space: pre-wrap;">{{ review.content|raw|wrap_text(100) }}{% if app.user.isLogin() and app.user.id != review.userId and is_reported(reportType, review.id) %}<span style="color: red;">({{ ('已举报')|trans }})</span>{% endif %}<span id="{{ 'js-review-after-' ~ review.id }}"></span>
+          <div class="short-content" style="white-space: pre-wrap;">{{ review.content|raw|wrap_text(100) }}{% if app.user.isLogin()|default(false) and app.user.id != review.userId and is_reported(reportType, review.id) %}<span style="color: red;">({{ ('已举报')|trans }})</span>{% endif %}<span id="{{ 'js-review-after-' ~ review.id }}"></span>
 {#            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'course.reviews.additional_reviews_btn'|trans}}</span>{% endif %}#}
           </div>
-          <div class="full-content" style="white-space: pre-wrap; display:none;">{{ review.content|raw|nl2br }}{% if app.user.isLogin() and app.user.id != review.userId and is_reported(reportType, review.id) %}<span style="color: red;">({{ ('已举报')|trans }})</span>{% endif %}<span id="{{ 'js-review-after-' ~ review.id }}"></span>
+          <div class="full-content" style="white-space: pre-wrap; display:none;">{{ review.content|raw|nl2br }}{% if app.user.isLogin()|default(false) and app.user.id != review.userId and is_reported(reportType, review.id) %}<span style="color: red;">({{ ('已举报')|trans }})</span>{% endif %}<span id="{{ 'js-review-after-' ~ review.id }}"></span>
 {#            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'course.reviews.additional_reviews_btn'|trans}}</span>{% endif %}#}
           </div>
 
@@ -53,7 +46,7 @@
           {% if canAccess %}
             <a href="javascript:;" class="js-reply pull-right">{% if posts is empty %}{{'course.reviews.reply_btn'|trans}}{% else %}{{'course.reviews.cancel_reply_btn'|trans}}{% endif %}</a>
           {% endif %}
-          {% if app.user.isLogin() and app.user.id != review.userId and not is_reported(reportType, review.id) %}
+          {% if app.user.isLogin()|default(false) and app.user.id != review.userId and not is_reported(reportType, review.id) %}
             <span class="pull-right" style="position: relative;right: 10px;">
               <a class="color-primary item-hover" id="js-review-modal-{{ review.id }}" href="#modal" data-toggle="modal" data-url="{{ path('common_report_tags_modal', {targetType: reportType, targetId: review.id, modalTarget: 'js-review-modal-'~ review.id, contentTarget: 'js-review-after-' ~ review.id }) }}">举报</a>
             </span>

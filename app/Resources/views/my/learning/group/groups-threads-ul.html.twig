@@ -42,7 +42,7 @@
             <span class="divider">•</span>
             {{ thread.lastPostTime|smart_time}}
           {% endif %}
-          {% if app.user.isLogin()|default('') and app.user.id != thread.userId and is_reported('group_thread', thread.id)  %}
+          {% if app.user.isLogin()|default(false) and app.user.id != thread.userId and is_reported('group_thread', thread.id)  %}
             <span style="color: red;">({{ '已举报'|trans }})</span>
           {% endif %}
           {% if thread.auditStatus == 'illegal' %}
