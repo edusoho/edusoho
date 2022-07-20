@@ -69,7 +69,8 @@ class TaskController extends BaseController
             return $this->redirect($this->generateUrl('my_course_show', ['id' => $courseId]));
         }
         $activityConfig = $this->getActivityConfigByTask($task);
-        if (null !== $member && 'student' === $member['role']) {
+        $preview = $preview && $this->getCourseService()->hasCourseManagerRole();
+        if ($member && 'student' === $member['role'] && !$preview) {
             $wrappedTasks = ArrayToolkit::index($this->getTaskService()->wrapTaskResultToTasks($courseId, $this->getTaskService()->findTasksByCourseId($courseId)), 'id');
             if (!empty($wrappedTasks[$task['id']]) && $wrappedTasks[$task['id']]['lock']) {
                 return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
@@ -330,7 +331,7 @@ class TaskController extends BaseController
     {
         $preview = $request->query->get('preview', false);
 
-        $this->tryLearnTask($courseId, $taskId);
+        $this->tryLearnTask($courseId, $taskId, $preview);
         $toolbars = [];
         foreach ($this->get('extension.manager')->getTaskToolbars() as $toolbar) {
             $toolbar['url'] = $this->generateUrl($toolbar['action'], [

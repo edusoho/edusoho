@@ -114,7 +114,10 @@ class CourseItemWithLesson extends AbstractResource
         }
 
         $client = new EdusohoLiveClient();
-        $replayInfos = $client->batchGetReplayInfosForSelfLive($liveIds);
+        $replayInfos = [];
+        foreach (array_chunk($liveIds, 100) as $liveIdsChunk) {
+            $replayInfos = array_merge($replayInfos, $client->batchGetReplayInfosForSelfLive($liveIdsChunk));
+        }
 
         return ArrayToolkit::index($replayInfos, 'liveRoomId');
     }

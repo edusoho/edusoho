@@ -49,6 +49,7 @@ site.yes: 是
 site.no: 否
 site.close: 关闭
 site.delete: 删除
+site.deleting: 删除中...
 site.time: 时间
 site.capacity: 容量(G)
 site.step_two: 步骤2
@@ -321,6 +322,7 @@ activity.video_manage.other_finish_detail: 学习到最后(不支持网络视频
 activity.video_manage.length_required_error_hint: 请输入非负整数，其中秒数只能在0-59之间
 activity.video_manage.media_error_hint: 请上传或选择视频文件
 activity.video.try_watch_finish_hint: 免费试看结束，购买后可完整观看
+activity.video.file_limit_size_2g: 文件大小不能超过2g
 
 activity.manage.choose_teacher_hint: 请选择老师
 activity.manage.finished_tips: >
@@ -414,7 +416,7 @@ course_manage.course_overview.try_view_increase_num: 免费试看数
 course_manage.student_expiryday_extend_success_hint: 修改%name%有效期操作成功!
 course_manage.student_expiryday_extend_failed_hint: 修改%name%有效期操作失败!
 course_manage.student_expiryday_extend_error_hint_day: 减少天数超出最大可减少数
-course_manage.student_expiryday_extend_error_hint_date: 日期不得早于当前时间或任何一个学员的有效期截止日
+course_manage.student_expiryday_extend_error_hint_date: 日期不得早于当前时间
 
 course_manage.student_remark_validate_error_hint: 备注字数不超过80
 course_manage.student_remark_success_hint: 备注%username%成功

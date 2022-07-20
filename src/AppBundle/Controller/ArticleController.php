@@ -242,7 +242,11 @@ class ArticleController extends BaseController
     {
         if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
-
+            if(!$this->checkDragCaptchaToken($request, $fields['_dragCaptchaToken'])){
+                return $this->createJsonResponse(['error' => ['code'=> 403, 'message' => $this->trans("exception.form..drag.expire")]], 403);
+            }
+            unset($fields['_dragCaptchaToken']);
+            $post = array();
             $post['content'] = $fields['content'];
             $post['targetType'] = 'article';
             $post['targetId'] = $id;
@@ -273,6 +277,11 @@ class ArticleController extends BaseController
     public function postReplyAction(Request $request, $articleId, $postId)
     {
         $fields = $request->request->all();
+        if(!$this->checkDragCaptchaToken($request, $fields['_dragCaptchaToken'])){
+            return $this->createJsonResponse(['error' => ['code'=> 403, 'message' => $this->trans("exception.form..drag.expire")]], 403);
+        }
+        unset($fields['_dragCaptchaToken']);
+
         $fields['content'] = $this->autoParagraph($fields['content']);
         $fields['targetId'] = $articleId;
         $fields['targetType'] = 'article';

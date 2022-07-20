@@ -36,7 +36,6 @@ class CourseController extends CourseBaseController
         $currentUser = $this->getUser();
 
         $members = $this->getCourseMemberService()->searchMembers(['userId' => $currentUser['id'], 'role' => 'student'], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
-        $members = ArrayToolkit::index($members, 'courseId');
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
@@ -46,6 +45,7 @@ class CourseController extends CourseBaseController
             $member['lastLearnTime'] = !empty($member['lastLearnTime']) ? $member['lastLearnTime'] : $member['createdTime'];
         }
         array_multisort(ArrayToolkit::column($members, 'lastLearnTime'), SORT_DESC, $members);
+        $members = ArrayToolkit::index($members, 'courseId');
 
         $conditions = [
             'types' => [CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE],

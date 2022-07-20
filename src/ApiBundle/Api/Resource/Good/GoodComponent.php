@@ -191,14 +191,6 @@ class GoodComponent extends AbstractResource
     }
 
     /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
-    /**
      * @return ClassroomService
      */
     private function getClassroomService()

@@ -34,12 +34,4 @@ class Crontab extends AbstractResource
 
         return $crontabStatus;
     }
-
-    /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        $this->service('System:SettingService');
-    }
 }

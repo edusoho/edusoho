@@ -158,14 +158,6 @@ class Good extends AbstractResource
     }
 
     /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
-    /**
      * @return FavoriteService
      */
     private function getFavoriteService()

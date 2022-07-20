@@ -281,14 +281,6 @@ class GoodCheck extends AbstractResource
     }
 
     /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
-    /**
      * @return ClassroomService
      */
     private function getClassroomService()

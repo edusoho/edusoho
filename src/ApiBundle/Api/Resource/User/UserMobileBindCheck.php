@@ -38,12 +38,4 @@ class UserMobileBindCheck extends AbstractResource
     {
         return $this->service('User:UserService');
     }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

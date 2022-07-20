@@ -393,18 +393,17 @@ class CourseTaskMedia extends AbstractResource
         $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $live = $config->get($activity['mediaId']);
         if ($live['roomCreated']) {
+            $playerContext = [];
             if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $live['replayStatus']) {
                 $file = $this->getUploadFileService()->getFullFile($live['mediaId']);
                 $playerContext = $this->getResourceFacadeService()->getPlayerContext($file);
             }
 
-            return [
+            return array_merge([
                 'entryUrl' => $this->generateUrl('task_live_entry', ['courseId' => $course['id'], 'activityId' => $activity['id']], UrlGeneratorInterface::ABSOLUTE_URL),
                 'startTime' => date('c', $activity['startTime']),
                 'endTime' => date('c', $activity['endTime']),
-                'token' => empty($playerContext['token']) ? '' : $playerContext['token'],
-                'resNo' => empty($playerContext['resNo']) ? '' : $playerContext['resNo'],
-            ];
+            ], $playerContext);
         }
     }
 
@@ -464,14 +463,6 @@ class CourseTaskMedia extends AbstractResource
     protected function getUploadFileService()
     {
         return $this->getBiz()->service('File:UploadFileService');
-    }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->getBiz()->service('System:SettingService');
     }
 
     /**

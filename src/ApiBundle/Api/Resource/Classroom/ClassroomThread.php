@@ -87,12 +87,4 @@ class ClassroomThread extends AbstractResource
     {
         return $this->service('Classroom:ClassroomService');
     }
-
-    /**
-     * @return \Biz\System\Service\SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

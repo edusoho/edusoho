@@ -180,6 +180,10 @@ class SearchController extends BaseController
 
     public function cloudSearchAction(Request $request)
     {
+        $setting = $this->getSettingService()->get('cloud_search');
+        if (empty($setting['search_enabled'])) {
+            return $this->redirectToRoute('search');
+        }
         $pageSize = 10;
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord(trim($keywords));

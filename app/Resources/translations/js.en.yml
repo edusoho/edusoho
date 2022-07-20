@@ -61,6 +61,7 @@ site.yes: Yes
 site.no: No
 site.close: Close
 site.delete: Delete
+site.deleting: Deleting...
 site.time: Time
 site.capacity: capacity(G)
 site.step_two: Step 2
@@ -375,6 +376,7 @@ activity.video_manage.other_finish_detail: Learn till the last (do not support w
 activity.video_manage.length_required_error_hint: Please enter a non negative integer, where seconds can only be between 0-59
 activity.video_manage.media_error_hint: Please upload or select a video file
 activity.video.try_watch_finish_hint: Free trial end, purchase and watch the complete video
+activity.video.file_limit_size_2g: File size cannot exceed 2g
 
 activity.manage.choose_teacher_hint: Please choose a teacher
 activity.manage.finished_tips: >
@@ -467,7 +469,7 @@ course_manage.course_overview.try_view_increase_num: Number of try view increase
 course_manage.student_expiryday_extend_success_hint: Modify %name% expiration time successful!
 course_manage.student_expiryday_extend_failed_hint: Modify %name% expiration time failed!
 course_manage.student_expiryday_extend_error_hint_day: Reduce the number of days is out of range
-course_manage.student_expiryday_extend_error_hint_date: The date cannot be earlier than the current time or the expiration date of any student
+course_manage.student_expiryday_extend_error_hint_date: The date cannot be earlier than the current time
 
 
 

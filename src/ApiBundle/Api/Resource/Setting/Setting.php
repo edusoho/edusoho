@@ -724,14 +724,6 @@ class Setting extends AbstractResource
         return $default;
     }
 
-    /**
-     * @return \Biz\System\Service\SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
     protected function getH5SettingService()
     {
         return $this->service('System:H5SettingService');

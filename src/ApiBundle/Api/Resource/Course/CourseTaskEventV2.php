@@ -116,7 +116,7 @@ class CourseTaskEventV2 extends AbstractResource
         if (in_array($task['type'], ['live', 'testpaper', 'homework'])) {
             list($canDoing, $denyReason) = [true, ''];
         } else {
-            list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 0));
+            list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 1));
         }
         if (!empty($data['watchData'])) {
             $watchData = $data['watchData'];

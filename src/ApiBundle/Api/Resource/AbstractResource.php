@@ -11,6 +11,7 @@ use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @OA\Info(title="EduSoho接口", version="default", description="EduSoho接口，随版本动态变化")
@@ -183,6 +184,27 @@ abstract class AbstractResource
         return $this->container->get('api_resource_kernel')->handleApiRequest($apiRequest);
     }
 
+    /**
+     * 验证验证码token
+     * @return [type] [description]
+     */
+    protected function checkDragCaptchaToken(Request $request, $token)
+    {
+        $enableAntiBrushCaptcha = $this->getSettingService()->node("ugc_content_audit.enable_anti_brush_captcha");
+        if(empty($enableAntiBrushCaptcha)){
+            return true;
+        }
+        $session = $request->getSession();
+        $dragTokens = empty($session->get('dragTokens')) ? array() : $session->get('dragTokens');
+        if(in_array($token, $dragTokens)){
+            array_splice($dragTokens, array_search($token, $dragTokens), 1);
+            $session->set("dragTokens", $dragTokens);
+            return true;
+        }
+        return false;
+    }
+
+
     protected function trans($message, $arguments = [], $domain = null, $locale = null)
     {
         return ServiceKernel::instance()->trans($message, $arguments, $domain, $locale);
@@ -216,5 +238,10 @@ abstract class AbstractResource
     protected function getS2B2CFacadeService()
     {
         return $this->getBiz()->service('S2B2C:S2B2CFacadeService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service("System:SettingService");
     }
 }

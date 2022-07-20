@@ -1173,6 +1173,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.16.3":
+  version "7.18.6"
+  resolved "https://registry.npmmirror.com/@babel/runtime/-/runtime-7.18.6.tgz#6a1ef59f838debd670421f8c7f2cbb8da9751580"
+  integrity sha512-t9wi7/AW6XtKahAe20Yw0/mMljKq0B1r2fPdvaAdV/KPDZewFXdaaa6K7lxmZBZ8FBNpCiAT6iHPmd6QO9bKfQ==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@^7.10.4":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.10.4.tgz#3251996c4200ebc71d1a8fc405fba940f36ba278"
@@ -1256,6 +1263,16 @@
   dependencies:
     dayjs "^1.10.4"
     lodash "^4.17.21"
+
+"@edusoho-live/eslive-web-sdk@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.npmmirror.com/@edusoho-live/eslive-web-sdk/-/eslive-web-sdk-1.2.3.tgz#ec3c7bbc9913ff10e34875adb381e4801c4e5c79"
+  integrity sha512-DyNVsgrmj6RYD491yxeCU4TBbv2dctNMQhMWlyZhYFXEncSrMJTwgJrt9H4VAsyiFhjNZqcT8hGiRDyJcUQqUA==
+  dependencies:
+    "@babel/runtime" "^7.16.3"
+    postmate "^1.5.2"
+    tiny-emitter "^2.1.0"
+    tslib "^2.3.1"
 
 "@npmcli/move-file@^1.0.1":
   version "1.1.2"
@@ -2906,9 +2923,10 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codeages-design@0.1.12:
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/codeages-design/-/codeages-design-0.1.12.tgz#56d32d8b34f1061ef34460614353340049973981"
+codeages-design@^0.1.14:
+  version "0.1.14"
+  resolved "https://registry.yarnpkg.com/codeages-design/-/codeages-design-0.1.14.tgz#ee9307f83565dd0b0df1ea700b1e25707581e3c0"
+  integrity sha512-LfAjH+eXlyHqFAV1873REHElxPY/SeGRGqy9lV4HikCiKXVcqbLxI/Qz/0NPIoYH2VaI3wu+sJ5Dqte/vNDGIg==
   dependencies:
     jquery "^3.2.1"
 
@@ -4032,10 +4050,10 @@ es-ckeditor@4.7.2-patch13:
   version "4.7.2-patch13"
   resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
 
-es-ckeditor@4.7.2-patch19:
-  version "4.7.2-patch19"
-  resolved "https://registry.nlark.com/es-ckeditor/download/es-ckeditor-4.7.2-patch19.tgz#d18242d5723beb8b62cd065531018f1f85a51d37"
-  integrity sha1-0YJC1XI764tizQZVMQGPH4WlHTc=
+es-ckeditor@^4.7.2-patch20:
+  version "4.7.2-patch20"
+  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch20.tgz#e9cd9791f3021f579c1cef598681d60b6ae7e199"
+  integrity sha512-gRMsd2SpSFbr15VNIs+pokEUTM4T10wmiTsVfMeVtXrqTLnTEwqWvoghbQJMFBO77mcOS9YhGhmF9kZ7DrdM/g==
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
@@ -8376,6 +8394,11 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.17, postcss@^7.0.2
     source-map "^0.6.1"
     supports-color "^6.1.0"
 
+postmate@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.npmmirror.com/postmate/-/postmate-1.5.2.tgz#d59a78b3780023c5d32225fd40633b364958bdb3"
+  integrity sha512-EHLlEmrUA/hALls49oBrtE7BzDXXjB9EiO4MZpsoO3R/jRuBmD+2WKQuYAbeuVEpTzrPpUTT79z2cz4qaFgPRg==
+
 prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
@@ -8873,8 +8896,9 @@ regenerator-runtime@^0.11.0:
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
 
 regenerator-runtime@^0.13.4:
-  version "0.13.7"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.7.tgz#cac2dacc8a1ea675feaabaeb8ae833898ae46f55"
+  version "0.13.9"
+  resolved "https://registry.npmmirror.com/regenerator-runtime/-/regenerator-runtime-0.13.9.tgz#8925742a98ffd90814988d7566ad30ca3b263b52"
+  integrity sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==
 
 regenerator-transform@^0.14.2:
   version "0.14.5"
@@ -10147,7 +10171,7 @@ timsort@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
 
-tiny-emitter@^2.0.0:
+tiny-emitter@^2.0.0, tiny-emitter@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz#1d1a56edfc51c43e863cbb5382a72330e3555423"
 
@@ -10272,6 +10296,11 @@ tslib@^2.3.0:
   version "2.3.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
+
+tslib@^2.3.1:
+  version "2.4.0"
+  resolved "https://registry.npmmirror.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
+  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
 
 tty-browserify@0.0.0:
   version "0.0.0"

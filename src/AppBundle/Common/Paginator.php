@@ -21,7 +21,8 @@ class Paginator
     public function __construct($request, $total, $perPage = 20)
     {
         $this->setItemCount($total);
-        $perPage = $this->setPerPageCount((int)$request->query->get('perpage', $perPage));
+        $perPage = (int)$request->query->get('perpage', $perPage);
+        $this->setPerPageCount($perPage);
 
         $page = (int)$request->query->get('page');
 
