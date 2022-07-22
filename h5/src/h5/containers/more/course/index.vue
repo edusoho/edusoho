@@ -26,7 +26,6 @@
     <van-popup v-model="showCourseCategoryPopup" position="bottom">
       <van-cascader
         v-model="currentCourseCategoryId"
-        title="请选择课程分类"
         :options="courseCategories"
         @close="showCourseCategoryPopup = false"
         @finish="onFinish"
@@ -82,7 +81,7 @@ export default {
       dropdownData: [],
       courseCategories: [],
       showCourseCategoryPopup: false,
-      currentCourseCategoryText: '全部',
+      currentCourseCategoryText: this.$t('more.all'),
       currentCourseCategoryId: ''
     };
   },
@@ -126,7 +125,7 @@ export default {
 
     this.initI18n();
 
-    // 初始化课程愤怒类
+    // 初始化课程分类
     this.initCourseCategories();
 
     // 初始化下拉筛选数据
@@ -218,9 +217,11 @@ export default {
       const selectedData = {};
       this.dropdownData.forEach(item => {
         const { type, value } = item;
+
         if (type === 'vipLevelId' && (!this.vipSwitch || value == '0')) {
           return;
         }
+
         selectedData[type] = value;
       });
       return selectedData;
