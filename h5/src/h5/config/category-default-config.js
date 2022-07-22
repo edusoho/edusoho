@@ -98,11 +98,6 @@ const CATEGORY_DEFAULT = {
   ],
   new_classroom_list: [
     {
-      type: 'categoryId',
-      value: '0',
-      options: [],
-    },
-    {
       type: 'vipLevelId',
       value: '0',
       options: [],
