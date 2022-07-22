@@ -152,6 +152,7 @@ export default {
       const res = await Api.getCourseCategories();
       this.courseCategories = this.initOptions({
         text: this.$t('more.all'),
+        value: '0',
         data: res
       });
     },
@@ -174,8 +175,8 @@ export default {
       this.selectedData = this.transform(this.$route.query);
     },
 
-    initOptions({ text, data }) {
-      const options = text ? [{ text: text, value: '0' }] : []
+    initOptions({ text, value = '0', data }) {
+      const options = text ? [{ text, value }] : []
 
       data.forEach(item => {
         const optionItem = {
@@ -185,6 +186,8 @@ export default {
 
         if (item.children && item.children.length > 0) {
           optionItem.children = this.initOptions({ 
+            text: this.$t('more.all'),
+            value: item.id,
             data: item.children
           })
         }
