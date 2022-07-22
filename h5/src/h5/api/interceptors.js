@@ -26,7 +26,10 @@ axios.interceptors.request.use(
     if (config.disableLoading) {
       return config;
     }
-    store.commit('UPDATE_LOADING_STATUS', true);
+    
+    if (!config.hideLoading) {
+      store.commit('UPDATE_LOADING_STATUS', true);
+    }
 
     return config;
   },

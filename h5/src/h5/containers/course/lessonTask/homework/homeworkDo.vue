@@ -125,6 +125,7 @@ export default {
   mounted() {
     this.initReport();
     this.getData();
+    this.saveAnswerInterval();
   },
   beforeRouteEnter(to, from, next) {
     // 通过链接进来
@@ -406,6 +407,15 @@ export default {
             }
           });
       });
+    },
+    saveAnswerInterval() {
+      setInterval(() => {
+        console.log('save exam')
+        this.saveAnswerdo({
+          answer: JSON.parse(JSON.stringify(this.answer)),
+          resultId: this.homework.id,
+        })
+      }, 30 * 1000)
     },
     // 跳转到结果页
     showResult() {

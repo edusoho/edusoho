@@ -125,6 +125,7 @@ export default {
   mounted() {
     this.getData();
     this.initReport();
+    this.saveAnswerInterval();
   },
   beforeRouteEnter(to, from, next) {
     // 通过链接进来
@@ -160,7 +161,7 @@ export default {
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE,
     }),
-    ...mapActions('course', ['handExercisedo']),
+    ...mapActions('course', ['handExercisedo', 'saveAnswerdo']),
     // 请求接口获取数据
     getData() {
       const exerciseId = this.$route.query.exerciseId;
@@ -404,6 +405,15 @@ export default {
             }
           });
       });
+    },
+    saveAnswerInterval() {
+      setInterval(() => {
+        console.log('save exam')
+        this.saveAnswerdo({
+          answer: JSON.parse(JSON.stringify(this.answer)),
+          resultId: this.exercise.id,
+        })
+      }, 30 * 1000)
     },
     // 跳转到结果页
     showResult() {

@@ -165,6 +165,22 @@ const actions = {
         });
     });
   },
+ // eslint-disable-next-line no-unused-vars
+ saveAnswerdo({ commit }, data) {
+  return new Promise((resolve, reject) => {
+    Api.saveAnswerdo({
+      query: {
+        resultId: data.resultId
+      },
+      hideLoading: true,
+      data
+    }).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+},
   // eslint-disable-next-line no-unused-vars
   handHomeworkdo({ commit }, datas) {
     // eslint-disable-next-line prefer-const
