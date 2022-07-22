@@ -35,14 +35,28 @@
         />
       </div>
     </van-form>
+
+    <van-popup v-model="showDrag" style="width: 95%;">
+      <e-drag
+        ref="dragComponent"
+        @success="handleSmsSuccess"
+        style="width: auto;"
+      />
+    </van-popup>
+    
   </div>
 </template>
 
 <script>
 import Api from '@/api';
+import EDrag from '&/components/e-drag';
 
 export default {
   name: 'ReviewCreate',
+
+  components: {
+    EDrag
+  },
 
   props: {
     userReview: {
@@ -60,7 +74,8 @@ export default {
     return {
       rating: this.userReview.rating * 1 || 0,
       content: this.userReview.content || '',
-      rateHasError: false
+      rateHasError: false,
+      showDrag: false,
     }
   },
 
@@ -74,17 +89,23 @@ export default {
       this.$refs.form.validate().then(async () => {
         if (this.rateHasError) return;
 
-        const result = await Api.createReview({
-          data: {
-            ...this.targetInfo,
-            content: this.content,
-            rating: this.rating
-          }
-        });
-
-        this.$emit('change-current-component', { component: 'List', data: result });
+        this.showDrag = true
       });
-    }
+    },
+
+    handleSmsSuccess(_dragCaptchaToken) {
+      this.showDrag = false;
+      Api.createReview({
+        data: {
+          ...this.targetInfo,
+          content: this.content,
+          rating: this.rating,
+          _dragCaptchaToken
+        }
+      }).then(result => {
+        this.$emit('change-current-component', { component: 'List', data: result });
+      })
+    },
   }
 }
 </script>
