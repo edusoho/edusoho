@@ -112,12 +112,20 @@ export default class Video {
     fileChooser.on('select', onSelectFile);
 
     fileChooser.on('start', file => {
-      const maxFileSizeDesc = $('#maxFileSize').val() || '';
-      const maxFileSize = maxFileSizeDesc.replace('MB', '');
       const ua = new UAParser();
       const FILE_UNIT = ua.getOS().name === 'Mac OS' ? 1000 : 1024;
+      const maxFileSizeDesc = $('#maxFileSize').val() || '';
+      let maxFileSize = parseInt(maxFileSizeDesc);
 
-      if (file.size > maxFileSize * FILE_UNIT * FILE_UNIT) {
+      if (maxFileSizeDesc.indexOf('GB') > -1) {
+        maxFileSize *= FILE_UNIT * FILE_UNIT * FILE_UNIT;
+      } else if (maxFileSizeDesc.indexOf('MB') > -1) {
+        maxFileSize *= FILE_UNIT * FILE_UNIT;
+      } else {
+        return;
+      }
+
+      if (file.size > maxFileSize) {
         alert(Translator.trans('activity.video.file_limit_size', { size: maxFileSizeDesc }));
         fileChooser.resetFileChooser();
       }
