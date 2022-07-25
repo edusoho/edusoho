@@ -186,7 +186,22 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     public function getByGlobalId($globalId)
     {
-        return $this->getCloudFileImplementor()->getFileByGlobalId($globalId);
+        $file = $this->getCloudFileImplementor()->getFileByGlobalId($globalId);
+        $questionFile = empty($file['id']) ? $this->getByGlobalIdFromItemAttachment($globalId) : [];
+        if(!empty($questionFile)){
+            $file['type'] = $questionFile['file_type'];
+            $file['convertStatus'] = "success";
+            $file['globalId'] = $file['no'] = $questionFile['global_id'];
+            $file['id'] = $questionFile['id'];
+            $file['itemAttachement'] = 1;
+        }
+
+        return $file;
+    }
+
+    public function getByGlobalIdFromItemAttachment($globalId)
+    {
+        return $this->getAttachmentDao()->getByGlobalId($globalId);
     }
 
     public function player($globalId, $ssl = false)

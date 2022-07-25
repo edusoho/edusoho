@@ -87,6 +87,15 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
+        <label >{{ 'admin.setting_course.allow_teacher_course_material_download'|trans }}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('teacher_course_material_download', {1:'admin.setting_course.yes'|trans, 0:'admin.setting_course.no'|trans}, courseSetting.teacher_course_material_download) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
         <label >{{ 'admin.setting_course.allow_teacher_export_material'|trans }}</label>
       </div>
       <div class="controls col-md-8 radios">

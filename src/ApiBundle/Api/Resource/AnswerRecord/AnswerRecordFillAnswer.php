@@ -63,11 +63,6 @@ class AnswerRecordFillAnswer extends AbstractResource
         return $this->service('ItemBank:Assessment:AssessmentService');
     }
 
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
     /**
      * @return TestpaperActivityService
      */

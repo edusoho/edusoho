@@ -30,12 +30,4 @@ class SecuritySign extends AbstractResource
 
         return md5($accessKey.$secretKey.$beginMonth);
     }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->biz->service('System:SettingService');
-    }
 }

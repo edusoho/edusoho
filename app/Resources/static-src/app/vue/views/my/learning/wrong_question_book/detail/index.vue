@@ -1,5 +1,5 @@
 <template>
-  <div class="wrong-question-detail">
+  <div id="app" class="wrong-question-detail">
     <div class="clearfix mb12">
       <h3 class="wrong-question-detail-title pull-left text-overflow mb0">
         {{ title | formatHtml }}

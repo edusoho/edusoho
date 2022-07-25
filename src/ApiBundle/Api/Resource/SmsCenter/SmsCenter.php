@@ -81,9 +81,4 @@ class SmsCenter extends AbstractResource
     {
         return $this->biz->service('User:UserService');
     }
-
-    private function getSettingService()
-    {
-        return $this->biz->service('System:SettingService');
-    }
 }

@@ -7,6 +7,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\DeviceToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Live\Service\LiveService;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\LiveCourseService;
 use Biz\OpenCourse\Service\OpenCourseService;
@@ -53,9 +54,7 @@ class OpenCourseLiveTicket extends AbstractResource
 
         $params['device'] = $request->request->get('device', DeviceToolkit::isMobileClient() ? 'mobile' : 'desktop');
 
-        $liveTicket = CloudAPIFactory::create('leaf')->post("/liverooms/{$lesson['mediaId']}/tickets", $params);
-
-        return $liveTicket;
+        return $this->getLiveService()->createLiveTicket($lesson['mediaId'], $params);
     }
 
     protected function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
@@ -75,6 +74,14 @@ class OpenCourseLiveTicket extends AbstractResource
         list($t1, $t2) = explode(' ', microtime());
 
         return (float) sprintf('%.0f', ((float) ($t1) + (float) ($t2)) * 1000);
+    }
+
+    /**
+     * @return LiveService
+     */
+    protected function getLiveService()
+    {
+        return $this->service('Live:LiveService');
     }
 
     /**

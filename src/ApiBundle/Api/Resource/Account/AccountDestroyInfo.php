@@ -44,12 +44,4 @@ class AccountDestroyInfo extends AbstractResource
     {
         return $this->service('DestroyAccount:DestroyAccountRecordService');
     }
-
-    /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

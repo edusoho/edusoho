@@ -34,14 +34,6 @@ class UploaderInit extends AbstractResource
         return $result;
     }
 
-    /**
-     * @return \Biz\System\Service\Impl\SettingServiceImpl
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
     protected function getUploadFileService()
     {
         return $this->service('File:UploadFileService');

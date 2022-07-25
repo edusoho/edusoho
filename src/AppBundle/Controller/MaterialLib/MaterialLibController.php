@@ -172,6 +172,16 @@ class MaterialLibController extends BaseController
         return $this->render('material-lib/web/local-player.html.twig', []);
     }
 
+    public function itemAttachmentPlayerAction(Request $request, $fileId)
+    {
+        $file = $this->getUploadFileService()->tryAccessItemAttachmentFile($fileId);
+
+        return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', [
+            'request' => $request,
+            'globalId' => $file['global_id'],
+        ]);
+    }
+
     public function reconvertAction($globalId)
     {
         $this->getUploadFileService()->tryManageGlobalFile($globalId);

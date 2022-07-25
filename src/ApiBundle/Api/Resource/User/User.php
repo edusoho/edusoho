@@ -162,11 +162,6 @@ class User extends AbstractResource
         return $this->service('System:LogService');
     }
 
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
     protected function getAuthService()
     {
         return $this->service('User:AuthService');

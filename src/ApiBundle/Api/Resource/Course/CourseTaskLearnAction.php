@@ -61,14 +61,6 @@ class CourseTaskLearnAction extends AbstractResource
     }
 
     /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('Setting:SettingService');
-    }
-
-    /**
      * @return LearnControlService
      */
     protected function getLearnControlService()

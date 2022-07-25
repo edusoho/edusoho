@@ -7,6 +7,7 @@ use Biz\Course\CourseSetException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Util\CourseTitleUtils;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
@@ -62,8 +63,20 @@ abstract class CourseBaseController extends BaseController
                 $this->generateUrl('course_show', array('id' => $courseId))
             );
         }
+        $course = $this->buildCourseTitle($course);
 
         return array($course, $member, $response);
+    }
+
+    protected function buildCourseTitle($course)
+    {
+        if ($this->getCourseService()->hasMulCourses($course['courseSetId'])) {
+            $course['title'] = CourseTitleUtils::getDisplayedTitle($course);
+        } elseif (!empty($course['courseSetTitle'])) {
+            $course['title'] = $course['courseSetTitle'];
+        }
+
+        return $course;
     }
 
     protected function getCourseMember(Request $request, $course)

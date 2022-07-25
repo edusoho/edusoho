@@ -1,7 +1,14 @@
 import notify from 'common/notify';
-import ThreadShowWidget from 'app/js/thread/thread-show';
+import Captcha from 'app/common/captcha';
+
+let captcha = new Captcha({drag:{limitType:"review", bar:'#drag-btn', target: '.js-jigsaw'}});
 
 let $form = $('#review-form');
+
+var isShowCaptcha = null;
+if($("input[name=enable_anti_brush_captcha]").val() == 1){
+  isShowCaptcha = $(captcha.params.maskClass).length ? 1 : 0;
+}
 
 let validator = $form.validate({
   rules: {
@@ -20,6 +27,40 @@ let validator = $form.validate({
   }
 });
 
+captcha.on('success',function(data){
+  if(data.type == 'comment'){
+    isShowCaptcha = 0;
+    $form.find("input[name=_dragCaptchaToken]").val(data.token);
+    reviewPost();
+  }
+})
+
+function reviewPost(){
+  let self = $form.find('.js-btn-save');
+  $.ajax({
+    type: "POST",
+    beforeSend: function (request) {
+      request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
+      request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+    },
+    url: '/api/review',
+    data: $form.serialize()
+      + '&targetType=' + $('.js-btn-save').data('targetType')
+      + '&targetId=' + $('.js-btn-save').data('targetId'),
+    success: function () {
+      isShowCaptcha = 1;
+      $form.find('.js-review-remind').fadeIn('fast', function () {
+        window.location.reload();
+      });
+    },
+    error: function (response) {
+      self.button('reset');
+      isShowCaptcha = 1;
+      captcha.hideDrag();
+    }
+  });
+}
+
 if ($form.length > 0) {
   $form.find('.rating-btn').raty({
     path: $form.find('.rating-btn').data('imgPath'),
@@ -36,29 +77,13 @@ if ($form.length > 0) {
     let self = $(this);
     if (validator.form()) {
       self.button('loading');
+      captcha.setType("comment");
 
-      $.ajax({
-        type: "POST",
-        beforeSend: function (request) {
-          request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
-          request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
-        },
-        url: '/api/review',
-        data: $form.serialize()
-          + '&targetType=' + $('.js-btn-save').data('targetType')
-          + '&targetId=' + $('.js-btn-save').data('targetId'),
-        success: function () {
-          $form.find('.js-review-remind').fadeIn('fast', function () {
-            window.location.reload();
-          });
-        },
-        error: function () {
-          self.button('reset');
-        }
-      });
+      if(isShowCaptcha == 1){
+        captcha.showDrag();
+      }
     }
   });
-
 
   $('.js-hide-review-form').on('click', function () {
     $(this).hide();
@@ -71,7 +96,6 @@ if ($form.length > 0) {
     $('.js-hide-review-form').show();
     $form.show();
   });
-
 }
 
 let $reviews = $('.js-reviews');
@@ -105,14 +129,6 @@ $reviews.on('click', '.show-short-btn', function () {
 });
 
 if ($('.js-reviews').length > 0) {
-  let threadShowWidget = new ThreadShowWidget({
-    element: '.js-reviews',
-  });
-
-  threadShowWidget.undelegateEvents('.js-toggle-subpost-form', 'click');
-  threadShowWidget.undelegateEvents('.js-reply', 'click');
-  threadShowWidget.undelegateEvents('.js-post-delete', 'click');
-
   $('.js-toggle-subpost-form').click(function (e) {
     e.stopPropagation();
     let postNum = $(this).closest('.thread-subpost-container').find('.thread-subpost-content .thread-subpost-list .thread-subpost').length;
@@ -123,9 +139,7 @@ if ($('.js-reviews').length > 0) {
     }
     let $form = $(this).parents('.thread-subpost-container').find('.thread-subpost-form');
     $form.toggleClass('hide');
-    threadShowWidget.initSubpostForm($form);
-
-    submitPostForm($form);
+    initSubpostForm($form);
   });
 
   $('.js-reply').on('click', function (e) {
@@ -148,9 +162,7 @@ if ($('.js-reviews').length > 0) {
       $btn.html(Translator.trans('thread.post.reply'));
     }
 
-    threadShowWidget.initSubpostForm($form);
-
-    submitPostForm($form);
+    initSubpostForm($form);
   });
 
   $('.js-reviews').on('click', '.js-delete-post', function (e) {
@@ -186,7 +198,17 @@ if ($('.js-reviews').length > 0) {
   });
 }
 
-function submitPostForm($form) {
+function initSubpostForm($form) {
+  captcha.off("success");
+  const $btn = $form.find('[type=submit]');
+  let formValidateReply = $form.validate({
+    ajax: true,
+    currentDom: $btn,
+    rules: {
+      content: 'required'
+    }
+  });
+
   $('.js-btn-save-post').off('click').on('click', function (e) {
     e.stopPropagation();
 
@@ -194,30 +216,50 @@ function submitPostForm($form) {
       let self = $(this);
       self.button('loading');
 
-      $.ajax({
-        type: "POST",
-        beforeSend: function (request) {
-          request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
-          request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
-        },
-        url: '/api/review/' + self.data('targetId') + '/post',
-        data: $form.serialize(),
-        success: function (res) {
-          self.button('reset');
-          $form.parents('.thread-subpost-container').find('.thread-subpost-list').append(res.template);
-          $form.find('textarea').val('');
+      captcha.setType("reply");
+      if(isShowCaptcha == 1){
+        captcha.showDrag();
+      }
+    }
+  });
+  
+  captcha.on('success', function(data){
+    if(data.type == 'reply'){
+      isShowCaptcha = 0;
+      $form.find("input[name=_dragCaptchaToken]").val(data.token);
+      submitPostForm($form);
+    }
+  })
+}
 
-          let $subpostsNum = $form.parents('.thread-post').find('.subposts-num');
-          $subpostsNum.text(parseInt($subpostsNum.text()) + 1);
-          $subpostsNum.parent().removeClass('hide');
-        },
-        error: function () {
-          self.button('reset');
-        }
-      });
+function submitPostForm($form){
+  let self = $form.find(".js-btn-save-post");
+  $.ajax({
+    type: "POST",
+    beforeSend: function (request) {
+      request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
+      request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+    },
+    url: '/api/review/' + self.data('targetId') + '/post',
+    data: $form.serialize(),
+    success: function (res) {
+      self.button('reset');
+      $form.parents('.thread-subpost-container').find('.thread-subpost-list').append(res.template);
+      $form.find('textarea').val('');
+
+      let $subpostsNum = $form.parents('.thread-post').find('.subposts-num');
+      $subpostsNum.text(parseInt($subpostsNum.text()) + 1);
+      $subpostsNum.parent().removeClass('hide');
+
+      isShowCaptcha = 1;
+      captcha.hideDrag();
+    },
+    error: function () {
+      self.button('reset');
+      isShowCaptcha = 1;
+      captcha.hideDrag();
     }
   });
 }
-
 
 

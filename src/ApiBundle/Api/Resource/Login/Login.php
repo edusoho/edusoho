@@ -295,14 +295,6 @@ class Login extends AbstractResource
     }
 
     /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
-    /**
      * @return LevelService
      */
     private function getLevelService()

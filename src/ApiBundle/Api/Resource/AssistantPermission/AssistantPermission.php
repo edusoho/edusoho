@@ -73,14 +73,6 @@ class AssistantPermission extends AbstractResource
     }
 
     /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
-    /**
      * @return MemberService
      */
     protected function getMemberService()

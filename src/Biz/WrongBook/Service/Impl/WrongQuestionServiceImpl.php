@@ -10,6 +10,7 @@ use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 
 class WrongQuestionServiceImpl extends BaseService implements WrongQuestionService
 {
@@ -363,6 +364,7 @@ class WrongQuestionServiceImpl extends BaseService implements WrongQuestionServi
                 'submit_time' => time(),
                 'source_type' => $source['source_type'],
                 'source_id' => $source['source_id'],
+                'has_answer' => AnswerQuestionReportService::STATUS_NOANSWER != $wrongAnswerQuestionReport['status'] ? 1 : 0,
             ];
         }
         if (!empty($wrongQuestions)) {

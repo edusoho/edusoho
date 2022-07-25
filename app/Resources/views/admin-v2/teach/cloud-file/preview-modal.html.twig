@@ -13,9 +13,14 @@
         {{'admin.cloud_file.preview.failed_tips'|trans}}
       </div>
     {% else %}
+
       <div id="material-preview-player"
-          style="height:500px;overflow:hidden;"
+           style="height:500px;overflow:hidden;"
+        {% if file.itemAttachement|default() %}
+          data-url="{{path('material_lib_item_attachment_player', {fileId: file.id})}}"
+        {% else %}
           data-url="{{path('material_lib_file_player', {fileId: file.id})}}"
+        {% endif %}
       ></div>
     {% endif %}
   {% else %}

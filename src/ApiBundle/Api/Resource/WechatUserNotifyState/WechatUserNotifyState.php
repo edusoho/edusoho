@@ -43,14 +43,6 @@ class WechatUserNotifyState extends AbstractResource
     }
 
     /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
-    /**
      * @return WeChatService
      */
     protected function getWeChatService()

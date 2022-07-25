@@ -2,8 +2,10 @@
 
 namespace Topxia\Api\Resource;
 
+use AppBundle\Util\H5LiveEntryToken;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\MemberService;
+use Biz\Live\Service\LiveService;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -47,6 +49,11 @@ class LessonLiveTickets extends BaseResource
         } catch (\Exception $e) {
             return $this->error('5003', '进入直播教室失败！');
         }
+        if ($this->getLiveService()->isESLive($activity['ext']['liveProvider'])) {
+            $maker = new H5LiveEntryToken();
+            $token = $maker->make($task['courseId'], $task['activityId']);
+            $ticket['roomUrl'] = "/es_live/h5_entry/{$token}";
+        }
 
         return $ticket;
     }
@@ -83,6 +90,14 @@ class LessonLiveTickets extends BaseResource
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return LiveService
+     */
+    protected function getLiveService()
+    {
+        return $this->createService('Live:LiveService');
     }
 
     public function filter($res)

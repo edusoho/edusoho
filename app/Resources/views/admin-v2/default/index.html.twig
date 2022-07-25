@@ -119,6 +119,16 @@
           </div>
         </div>
 
+        {% if showChatGroupQrCode|default(false) %}
+          <div class="admin-info-section text-center cd-mt24">
+            <div class="text-bold" style="font-size: 18px; color: #333;margin-bottom: 8px;">{{ 'admin_v2.homepage.welcome_desc'|trans }}</div>
+            <div class="gray-dark">{{ 'admin_v2.homepage.wechat_code'|trans }}</div>
+            <div class="text-center">
+              <img class="img-full" src="{{ asset('static-dist/app/img/admin-v2/qrcode.jpeg') }}">
+            </div>
+          </div>
+        {% endif %}
+
         {# 网校公告（高级去版权不显示） #}
         {% if not setting('copyright.thirdCopyright', false) == 1 %}
           <div class="admin-sidebar-section cd-pb16">

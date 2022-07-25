@@ -169,11 +169,7 @@ class PagedCourseLesson {
         },
 
         'isTaskLocked': function(data, context) {
-          if (context.course.isMember) {
-            return context.course.learnMode == 'lockMode' && data.lock;
-          } else {
-            return context.course.learnMode == 'lockMode';
-          }
+          return context.course.learnMode == 'lockMode' && data.lock;
         },
 
         'isPublished': function(data, context) {

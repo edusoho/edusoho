@@ -163,11 +163,12 @@ class CourseExtension extends \Twig_Extension
         return $this->getCourseService()->getCourse($id);
     }
 
-    public function taskListJsonData($courseItems, $showOptional = false)
+    public function taskListJsonData($courseItems, $showOptional = false, $preview = false)
     {
         if (empty($courseItems)) {
             return json_encode([]);
         }
+        $preview = $preview && $this->getCourseService()->hasCourseManagerRole();
 
         $results = [];
         foreach ($courseItems as $item) {
@@ -190,7 +191,7 @@ class CourseExtension extends \Twig_Extension
                     'title' => $item['title'],
                     'result' => empty($item['result']['id']) ? '' : $item['result']['id'],
                     'resultStatus' => empty($item['result']['status']) ? '' : $item['result']['status'],
-                    'lock' => $item['lock'],
+                    'lock' => $preview ? false : $item['lock'],
                     'status' => $item['status'],
                     'taskId' => $item['id'],
                     'isOptional' => $item['isOptional'],

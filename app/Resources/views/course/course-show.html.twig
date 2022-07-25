@@ -61,7 +61,7 @@
               <i class="es-icon es-icon-weixin"></i>{{ 'course.student.add.assistant.tip'|trans }}
             </div>
           {% endif %}
-
+          
           {% block detail_content %}
             {{ render(controller(metas.tabs[tab].content, {request: app.request, course: course, member: member|default(null), type: tab|default(null)})) }}
           {% endblock %}
