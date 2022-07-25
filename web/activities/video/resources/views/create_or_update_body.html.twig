@@ -2,6 +2,9 @@
 {% do script(['libs/ltc-sdk-client.js', cloud_sdk_url('uploader'), 'libs/perfect-scrollbar.js', 'videoactivity/js/create/index.js']) %}
 {% set length = activity.length|default(0)|convert_minute_and_second %}
 {% block activity_step %}
+
+  <input value="{{ upload_max_filesize() }}" type="hidden" id="maxFileSize" />
+  
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
     <form class="form-horizontal" id="step2-form" data-media-id="{{ activity.mediaId|default(null) }}">
       <div class="form-group">
