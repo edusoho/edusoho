@@ -119,6 +119,8 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
                     'seller_email' => $paymentSetting['alipay_account'],
                     'partner' => $paymentSetting['alipay_key'],
                     'key' => $paymentSetting['alipay_secret'],
+                    'private_key' => $paymentSetting['rsa_private_key'],
+                    'alipay_public_key' => $paymentSetting['alipay_public_key'],
                 ];
             }
 

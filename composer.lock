@@ -558,12 +558,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "245b0ecf14b8788b325ee0a33e830748f3ff88dc"
+                "reference": "513a34825a4ed9986a382516025f0535af397d9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/245b0ecf14b8788b325ee0a33e830748f3ff88dc",
-                "reference": "245b0ecf14b8788b325ee0a33e830748f3ff88dc",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/513a34825a4ed9986a382516025f0535af397d9b",
+                "reference": "513a34825a4ed9986a382516025f0535af397d9b",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -585,8 +585,8 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Codeages\\Biz\\Order\\": "src/Order/",
                     "Codeages\\Biz\\Pay\\": "src/Pay/",
+                    "Codeages\\Biz\\Order\\": "src/Order/",
                     "Codeages\\Biz\\Invoice\\": "src/Invoice/"
                 }
             },
@@ -599,7 +599,7 @@
                 "issues": "https://github.com/codeages/biz-order-pay/issues",
                 "source": "https://github.com/codeages/biz-order-pay/tree/master"
             },
-            "time": "2021-06-05T08:23:07+00:00"
+            "time": "2022-07-26T09:34:26+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -10277,5 +10277,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
