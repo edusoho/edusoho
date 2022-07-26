@@ -127,7 +127,10 @@ export default class Video {
 
       if (file.size > maxFileSize) {
         alert(Translator.trans('activity.video.file_limit_size', { size: maxFileSizeDesc }));
-        fileChooser.resetFileChooser();
+        fileChooser.uploader._sdk.uploader.engine.cancelFile(file);
+        fileChooser.uploader._sdk.uploaderUi.resetUI();
+
+        return false;
       }
     });
   }
