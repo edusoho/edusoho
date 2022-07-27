@@ -91,7 +91,6 @@
       this.emitter = new ActivityEmitter();
       this.emitter.emit('doing', {data: ''});
         
-      let assessmentResponse = window.localStorage.getItem('assessmentResponse');
 
       $.ajax({
         url: '/api/continue_answer',
@@ -108,16 +107,11 @@
         this.assessment = res.assessment;
         this.answerRecord = res.answer_record;
         this.answerScene = res.answer_scene;
-        this.assessmentResponse = res.assessment_response;
 
-        if (assessmentResponse) {
-          assessmentResponse = JSON.parse(assessmentResponse)
+        const { answer_record_id, assessment_id } = res.assessment_response;
+        const assessmentResponse = window.localStorage.getItem(`assessmentResponse-${answer_record_id}-${assessment_id}`);
 
-          if (assessmentResponse.updated_time > this.answerRecord.updated_time) {
-            delete assessmentResponse.updated_time
-            this.assessmentResponse = assessmentResponse
-          }
-        }
+        this.assessmentResponse = assessmentResponse ? JSON.parse(assessmentResponse) : res.assessment_response; // 以本地缓存数据优先（本地数据非空时）
       })
     },
     methods: {
@@ -176,9 +170,9 @@
         })
       },
       postAnswerData(assessmentResponse) {
-        assessmentResponse.updated_time = Math.floor(Date.now() / 1000);
-        window.localStorage.setItem('assessmentResponse', JSON.stringify(assessmentResponse));
-        delete assessmentResponse.updated_time;
+        const { answer_record_id, assessment_id } = assessmentResponse;
+
+        window.localStorage.setItem(`assessmentResponse-${answer_record_id}-${assessment_id}`, JSON.stringify(assessmentResponse));
 
         return $.ajax({
           url: '/api/save_answer',
