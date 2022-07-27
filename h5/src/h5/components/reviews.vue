@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <van-popup v-model="showDrag" style="width: 95%;">
+    <van-popup v-if="showDrag" :value="true" style="width: 95%;">
       <e-drag
         ref="dragComponent"
         @success="handleSmsSuccess"
@@ -119,12 +119,14 @@ export default {
 
       this.showDrag = false;
       Api.createReview({
-        targetType,
-        targetId,
-        content: this.message,
-        rating: this.value,
-        userId: this.user.id,
-        _dragCaptchaToken
+        data: {
+          targetType,
+          targetId,
+          content: this.message,
+          rating: this.value,
+          userId: this.user.id,
+          _dragCaptchaToken
+        }
       }).then(res => {
         this.reviews = res;
       })
@@ -134,6 +136,7 @@ export default {
         this.$toast(this.$t('courseLearning.scoreCannotBeBlank'));
         return;
       }
+
       if (!this.message.trim()) {
         this.$toast(this.$t('courseLearning.evaluationContentCannotBeEmpty'));
         return;
