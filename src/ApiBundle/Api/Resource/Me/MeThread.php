@@ -58,9 +58,4 @@ class MeThread extends AbstractResource
     {
         return $this->service('Course:ThreadService');
     }
-
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

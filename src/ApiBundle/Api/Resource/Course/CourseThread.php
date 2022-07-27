@@ -241,12 +241,4 @@ class CourseThread extends AbstractResource
     {
         return $this->service('User:UserService');
     }
-
-    /**
-     * @return \Biz\System\Service\SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

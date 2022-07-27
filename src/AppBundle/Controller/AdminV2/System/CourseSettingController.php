@@ -28,6 +28,7 @@ class CourseSettingController extends BaseController
             'teacher_manage_marketing' => '0',
             'teacher_search_order' => '0',
             'teacher_manage_student' => '0',
+            'teacher_course_material_download' => '1',
             'teacher_export_student' => '0',
             'explore_default_orderBy' => 'latest',
             'free_course_nologin_view' => '1',

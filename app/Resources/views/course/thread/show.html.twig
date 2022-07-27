@@ -12,6 +12,8 @@
 
 {% block detail_content %}
 
+  {% include 'common/anti-brush-captcha.html.twig' %}
+  
   <div class="thread main_hover_item">
     <div class="thread-header">
       {{ web_macro.user_avatar(author, 'pull-right') }}
@@ -42,7 +44,7 @@
           <span class="bullet mhs">•</span>
           <a class="link-primary" href="{{ path('course_task_show', {courseId: thread.courseId, id:thread.taskId}) }}" title="{{task.title}}">{{'course.thread.mission_number'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number})}}</a>
         {% endif %}
-        {% if app.user.isLogin() and app.user.id != thread.userId and is_reported(reportType, thread.id) %}
+        {% if app.user.isLogin()|default(false) and app.user.id != thread.userId and is_reported(reportType, thread.id) %}
           <span style="color: red;">({{ ('已举报')|trans }})</span>
         {% endif %}
         <span id="{{ 'js-course-thread-after-' ~ thread.id }}" style="color: red;"></span>
@@ -50,7 +52,7 @@
     </div>
     <div class="thread-body">{{ thread.content|cdn|raw }}
     </div>
-    {% if app.user.isLogin() and app.user.id != thread.userId and not is_reported(reportType, thread.id) %}
+    {% if app.user.isLogin()|default(false) and app.user.id != thread.userId and not is_reported(reportType, thread.id) %}
       <a class="color-primary pull-right item-hover"
          id="js-course-thread-modal-{{ thread.id }}"
          href="#modal"

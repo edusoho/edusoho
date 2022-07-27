@@ -65,11 +65,6 @@ class MeNickname extends AbstractResource
         return $this->service('Sensitive:SensitiveService');
     }
 
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
-
     protected function getAuthService()
     {
         return $this->service('User:AuthService');

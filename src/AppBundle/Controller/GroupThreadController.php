@@ -39,6 +39,11 @@ class GroupThreadController extends BaseController
             try {
                 $threadData = $request->request->all();
 
+                if(!$this->checkDragCaptchaToken($request, $threadData['_dragCaptchaToken'])){
+                    return $this->createMessageResponse('error', $this->trans("exception.form..drag.expire"));
+                }
+                unset($threadData['_dragCaptchaToken']);
+
                 $info = [
                     'title' => $threadData['thread']['title'],
                     'content' => $threadData['thread']['content'],
@@ -324,6 +329,11 @@ class GroupThreadController extends BaseController
         $thread = $this->getThreadService()->getThread($threadId);
 
         $postContent = $request->request->all();
+
+        if(!$this->checkDragCaptchaToken($request, $postContent['_dragCaptchaToken'])){
+            return $this->createJsonResponse(['error' => ['code'=> 403, 'message' => $this->trans("exception.form..drag.expire")]], 403);
+        }
+        unset($postContent['_dragCaptchaToken']);
 
         $fromUserId = empty($postContent['fromUserId']) ? 0 : $postContent['fromUserId'];
         $content = [

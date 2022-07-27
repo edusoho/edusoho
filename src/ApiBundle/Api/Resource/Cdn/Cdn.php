@@ -26,12 +26,4 @@ class Cdn extends AbstractResource
 
         return array('code' => 'success', 'msg' => "设置cdn, enabled:{$cdn['enabled']}, defaultUrl:{$cdn['defaultUrl']},userUrl:{$cdn['userUrl']}, contentUrl:{$cdn['contentUrl']}");
     }
-
-    /**
-     * @return \Biz\System\Service\SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

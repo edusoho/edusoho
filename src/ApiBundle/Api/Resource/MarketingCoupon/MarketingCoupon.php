@@ -93,12 +93,4 @@ class MarketingCoupon extends AbstractResource
     {
         return $this->service('Coupon:CouponBatchService');
     }
-
-    /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->biz->service('System:SettingService');
-    }
 }

@@ -4,6 +4,9 @@
 
 {% block title %}{{ goods.title|raw }} - {{ parent() }}{% endblock %}
 {% block full_content %}
+  
+  {% include 'common/anti-brush-captcha.html.twig' %}
+
   <div id="show-product-page" class="" style=""
        data-goods="{{ goods|json_encode }}"
        data-components-data="{{ goodsComponents|json_encode }}"

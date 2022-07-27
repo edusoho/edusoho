@@ -10,6 +10,8 @@
 
 {% block detail_content %}
 
+{% include 'common/anti-brush-captcha.html.twig' %}
+
 <form id="thread-post-form" method="post"
   {% if post %}
     action="{{ path('course_thread_post_edit', {courseId:course.id, threadId:post.threadId, postId:post.id}) }}"
@@ -54,6 +56,7 @@
   </div>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input type="hidden" name="_dragCaptchaToken">
 </form>
 
 {% endblock %}

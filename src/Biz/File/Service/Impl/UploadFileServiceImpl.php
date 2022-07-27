@@ -666,7 +666,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (!empty($conditions['questionBank'])) {
             unset($conditions['questionBank']);
             unset($conditions['targetType']);
-            $conditions['excludeStatus'] = ['delete'];
+            $conditions['excludeStatus'] = ['delete', 'uploading'];
             $files = $this->getAttachmentDao()->search($conditions, $orderBy, $start, $limit);
             $files = $this->convertQuestionFiles($files);
         } else {
@@ -695,7 +695,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (!empty($conditions['questionBank'])) {
             unset($conditions['questionBank']);
             unset($conditions['targetType']);
-            $conditions['excludeStatus'] = ['delete'];
+            $conditions['excludeStatus'] = ['delete', 'uploading'];
 
             return $this->getAttachmentDao()->count($conditions);
         }
@@ -1164,6 +1164,33 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         if (1 == $file['isPublic']) {
+            return $file;
+        }
+
+        if ($file['createdUserId'] == $user['id']) {
+            return $file;
+        }
+
+        $shares = $this->findShareHistory($file['createdUserId']);
+
+        $targetUserIds = ArrayToolkit::column($shares, 'targetUserId');
+        if (in_array($user['id'], $targetUserIds)) {
+            return $file;
+        }
+        $this->createNewException(UploadFileException::PERMISSION_DENIED());
+    }
+
+    public function tryAccessItemAttachmentFile($fileId)
+    {
+        $file = $this->getItemBankItemAttachmentDao()->get($fileId);
+
+        if (empty($file)) {
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
+        }
+
+        $user = $this->getCurrentUser();
+
+        if ($user->isAdmin()) {
             return $file;
         }
 
@@ -1888,5 +1915,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function getCourseMaterialService()
     {
         return $this->createService('Course:MaterialService');
+    }
+
+    protected function getItemBankItemAttachmentDao()
+    {
+        return $this->createDao('ItemBank:Item:AttachmentDao');
     }
 }

@@ -115,14 +115,6 @@ class OpenCourseLessonMedia extends AbstractResource
         return $this->getBiz()->service('File:UploadFileService');
     }
 
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->getBiz()->service('System:SettingService');
-    }
-
     protected function getResourceFacadeService()
     {
         return $this->getBiz()->service('CloudPlatform:ResourceFacadeService');

@@ -305,12 +305,4 @@ class MultiClass extends AbstractResource
     {
         return $this->service('Course:MemberService');
     }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

@@ -23,7 +23,7 @@ class LiveStatusJob extends AbstractJob
             $startTime = $confirmStatus['liveStartTime'] ?: time();
             $this->getLiveActivityService()->startLive($liveId, $startTime);
         }
-        if ('finished' === $status) {
+        if ('finished' === $status || (false !== strpos($jobType, 'close') && 'living' !== $status)) {
             $closeTime = $confirmStatus['liveEndTime'] ?: time();
             $this->getLiveActivityService()->closeLive($liveId, $closeTime);
         }

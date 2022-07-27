@@ -126,7 +126,7 @@ class Good extends AbstractResource
     private function getPeopleShowNum($goods)
     {
         $goodSetting = $this->getSettingService()->get('goods_setting', []);
-        if ('visitor' === $goodSetting['show_number_data']) {
+        if (!empty($goodSetting['show_number_data']) && 'visitor' === $goodSetting['show_number_data']) {
             return $goods['hitNum'];
         }
 
@@ -155,14 +155,6 @@ class Good extends AbstractResource
     private function getProductService()
     {
         return $this->service('Product:ProductService');
-    }
-
-    /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
     }
 
     /**

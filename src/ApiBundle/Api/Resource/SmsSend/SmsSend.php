@@ -107,12 +107,4 @@ class SmsSend extends AbstractResource
     {
         return $this->biz->service('User:UserService');
     }
-
-    /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->biz->service('System:SettingService');
-    }
 }

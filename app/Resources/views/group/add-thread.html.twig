@@ -1,7 +1,9 @@
 {% extends 'group/layout.html.twig' %}
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/group/thread-add/index.js']) %}
 {% block group_body %}
-
+  
+  {% include 'common/anti-brush-captcha.html.twig' %}
+  
   {% if thread|default(null) and attachs %}
     <div id="hasAttach"></div>
   {% endif %}
@@ -54,6 +56,7 @@
         </div>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <input type="hidden" name="_dragCaptchaToken" value="">
         <input type="hidden" name="files">
       </form>
 

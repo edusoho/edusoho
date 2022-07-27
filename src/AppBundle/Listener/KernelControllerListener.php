@@ -43,6 +43,7 @@ class KernelControllerListener
                 || strstr($request->getPathInfo(), '/api')
                 || strstr($request->getPathInfo(), '/drag_captcha')
                 || strstr($request->getPathInfo(), '/admin')
+                || strstr($request->getPathInfo(), '/h5_entry')
                 || ('option' === $mobileBindMode && (isset($_COOKIE['is_skip_mobile_bind']) && 1 == $_COOKIE['is_skip_mobile_bind']))
             ) {
                 return;
@@ -53,7 +54,6 @@ class KernelControllerListener
                 return new RedirectResponse($url);
             });
 
-            return;
         }
     }
 

@@ -1,0 +1,8 @@
+{% set enable_anti_brush_captcha = setting('ugc_content_audit.enable_anti_brush_captcha')|default(1) %}
+<input type="hidden" name="enable_anti_brush_captcha" value="{{enable_anti_brush_captcha}}">
+{% if enable_anti_brush_captcha == 1 and app.user.isLogin()|default(false) %}
+  <div class="js-mask" style="position:fixed; left:0px; top:0px; background:rgba(0, 0, 0, 0.4); width:100%; height:100%; filter:alpha(opacity=60); opacity:0.6;display:none; z-index:100;"></div>
+  <div class="form-group cd-mb32 js-drag-jigsaw" style="width: 338px; height: 219px; position:fixed; z-index:101; display: none; background: white;">
+    {% include 'common/drag.html.twig' with { auth: true, showLabel: 0 } %}
+  </div>
+{% endif %}

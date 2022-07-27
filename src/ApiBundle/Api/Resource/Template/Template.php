@@ -32,12 +32,4 @@ class Template extends AbstractResource
 
         return implode(',', $templateCodes);
     }
-
-    /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

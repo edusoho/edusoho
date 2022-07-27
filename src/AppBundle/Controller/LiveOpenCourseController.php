@@ -2,8 +2,9 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Course\Service\CourseService;
+use AppBundle\Common\LiveWatermarkToolkit;
 use Biz\File\Service\UploadFileService;
+use Biz\Live\Service\LiveService;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\System\Service\SettingService;
 use Biz\Util\EdusohoLiveClient;
@@ -37,6 +38,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         return $this->forward('AppBundle:Liveroom:_entry',
         [
             'roomId' => $lesson['mediaId'],
+            'params' => ['provider' => $lesson['liveProvider']],
         ], $params);
     }
 
@@ -211,6 +213,15 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
         $this->createRefererLog($request, $course);
 
+        if ($this->getLiveService()->isESLive($lesson['liveProvider'])) {
+            $result = $this->getLiveReplayService()->entryReplay($replayId, $lesson['mediaId'], $lesson['liveProvider'], $request->isSecure());
+
+            return $this->render('live-course/eslive-entry.html.twig', [
+                'replayUrl' => $result['url'] ?? '',
+                'watermark' => LiveWatermarkToolkit::build(),
+            ]);
+        }
+
         return $this->render('live-course/classroom.html.twig', [
             'lesson' => $lesson,
             'url' => $this->generateUrl('live_open_course_live_replay_url', [
@@ -314,14 +325,6 @@ class LiveOpenCourseController extends BaseOpenCourseController
         return $this->getBiz()->service('OpenCourse:OpenCourseService');
     }
 
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->getBiz()->service('Course:CourseService');
-    }
-
     protected function getLiveCourseService()
     {
         return $this->getBiz()->service('OpenCourse:LiveCourseService');
@@ -346,5 +349,13 @@ class LiveOpenCourseController extends BaseOpenCourseController
     protected function getLiveReplayService()
     {
         return $this->getBiz()->service('Course:LiveReplayService');
+    }
+
+    /**
+     * @return LiveService
+     */
+    protected function getLiveService()
+    {
+        return $this->createService('Live:LiveService');
     }
 }

@@ -6,6 +6,8 @@ interface LiveCloudStatisticsService
 {
     public function searchCourseMemberLiveData($conditions, $start, $limit);
 
+    public function sumWatchDurationByCourseIdGroupByUserId($courseId);
+
     public function countLiveMembersByLiveId($liveId);
 
     public function countLiveMembers($conditions);

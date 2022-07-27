@@ -52,7 +52,7 @@
       {% set goto = path('course_set_manage_files', {id:courseSet.id}) %}
     {% endif %}
 
-     {% include 'material-lib/widget/material-button.html.twig' with { uploaderToken: uploaderToken, path: path, type: 'courseFile' } %}
+     {% include 'material-lib/widget/material-button.html.twig' with { uploaderToken: uploaderToken, path: path, type: 'courseFile', teacherIsDownload:teacherIsDownload } %}
       
      {% include 'material-lib/widget/material-table.html.twig' with { path: path, subtitlePath: goto, type: 'courseFile' } %}
 

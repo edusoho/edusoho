@@ -75,7 +75,7 @@
       {% endif %}
 
       • <span>{{ thread.lastPostTime|smart_time }}</span>
-      {% if app.user.isLogin() and app.user.id != thread.userId and is_reported(reportType, thread.id) %}
+      {% if app.user.isLogin()|default(false) and app.user.id != thread.userId and is_reported(reportType, thread.id) %}
         <span style="color: red;">({{ ('已举报')|trans }})</span>
       {% endif %}
     </div>

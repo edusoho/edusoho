@@ -14,9 +14,12 @@ class SCRMServiceImpl extends BaseService implements \Biz\SCRM\Service\SCRMServi
     {
         $isScrmBind = $this->getCacheService()->get('scrm_bind');
         if (!isset($isScrmBind)) {
+            $isScrmBind = 0;
             try {
-                $scrmBind = $this->getSCRMSdk()->isScrmBind();
-                $isScrmBind = empty($scrmBind['ok']) ? 0 : 1;
+                if($this->getSCRMSdk() != null){
+                    $scrmBind = $this->getSCRMSdk()->isScrmBind();
+                    $isScrmBind = empty($scrmBind['ok']) ? 0 : 1;
+                }
             } catch (\Exception $e) {
                 $isScrmBind = 0;
             }

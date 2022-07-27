@@ -14,7 +14,7 @@
   {% include 'es-bar/left-list.html.twig' %}
 
   <!-- 列表内容 -->
-  {% if app.user and app.user.isLogin() %}
+  {% if app.user.isLogin()|default(false) and app.user %}
     <!-- 通知 -->
     <div class="es-bar-main" id="bar-message">
       {% include 'es-bar/list-content/notification.html.twig' %}

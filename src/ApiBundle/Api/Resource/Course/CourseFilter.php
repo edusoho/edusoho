@@ -121,12 +121,4 @@ class CourseFilter extends Filter
     {
         return ServiceKernel::instance()->createService('VipPlugin:Marketing:VipRightService');
     }
-
-    /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System:SettingService');
-    }
 }
