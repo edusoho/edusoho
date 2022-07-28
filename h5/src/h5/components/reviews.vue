@@ -9,6 +9,7 @@
         >{{ $t('courseLearning.reEvaluation') }}</span
       >
     </div>
+
     <div class="course-reviews__body">
       <div class="text-center" v-if="reviews === null">
         <van-rate
@@ -61,19 +62,32 @@
         </div>
       </div>
     </div>
+
+    <van-popup v-if="showDrag" :value="true" style="width: 95%;">
+      <e-drag
+        ref="dragComponent"
+        @success="handleSmsSuccess"
+        style="width: auto;"
+      />
+    </van-popup>
   </div>
 </template>
 <script>
 import Api from '@/api';
 import { mapState } from 'vuex';
+import EDrag from '&/components/e-drag';
 
 export default {
   name: 'Reviews',
+  components: {
+    EDrag
+  },
   data() {
     return {
       value: 0,
       message: '',
       reviews: null,
+      showDrag: false
     };
   },
   props: {
@@ -92,16 +106,9 @@ export default {
     },
   },
   methods: {
-    onSubmit() {
-      if (this.value == 0) {
-        this.$toast(this.$t('courseLearning.scoreCannotBeBlank'));
-        return;
-      }
-      if (!this.message.trim()) {
-        this.$toast(this.$t('courseLearning.evaluationContentCannotBeEmpty'));
-        return;
-      }
+    handleSmsSuccess(_dragCaptchaToken) {
       let targetId, targetType;
+
       if (Number(this.details.parentId)) {
         targetType = 'course';
         targetId = this.details.id;
@@ -109,16 +116,33 @@ export default {
         targetType = 'goods';
         targetId = this.details.goodsId;
       }
-      const data = {
-        targetType,
-        targetId,
-        content: this.message,
-        rating: this.value,
-        userId: this.user.id,
-      };
-      Api.createReview({ data }).then(res => {
+
+      this.showDrag = false;
+      Api.createReview({
+        data: {
+          targetType,
+          targetId,
+          content: this.message,
+          rating: this.value,
+          userId: this.user.id,
+          _dragCaptchaToken
+        }
+      }).then(res => {
         this.reviews = res;
-      });
+      })
+    },
+    onSubmit() {
+      if (this.value == 0) {
+        this.$toast(this.$t('courseLearning.scoreCannotBeBlank'));
+        return;
+      }
+
+      if (!this.message.trim()) {
+        this.$toast(this.$t('courseLearning.evaluationContentCannotBeEmpty'));
+        return;
+      }
+
+      this.showDrag = true
     },
     onResetReviews() {
       this.message = this.reviews.content;

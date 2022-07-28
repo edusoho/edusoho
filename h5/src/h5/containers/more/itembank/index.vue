@@ -1,11 +1,35 @@
 <template>
   <div :class="{ more__still: selecting }" class="more">
-    <treeSelect
-      :select-items="selectItems"
-      v-model="selectedData"
-      @selectedChange="setQuery"
-      @selectToggled="toggleHandler"
-    />
+    <div style="display: flex;background-color: #fff;box-shadow: 0 2px 12px rgb(100 101 102 / 12%);">
+      <div
+        v-if="dropdownData && dropdownData.length > 0" 
+        class="itembank-category text-overflow" 
+        @click="showItembankCategoryPopup = true"
+      >
+        <span class="itembank-category__title">{{ currentItembankCategoryText }}</span>
+      </div>
+      <div style="flex: 2;">
+        <van-dropdown-menu active-color="#1989fa">
+          <van-dropdown-item
+            v-for="(item, index) in dropdownData"
+            :key="index"
+            v-model="item.value"
+            :options="item.options"
+            @change="setQuery"
+          />
+        </van-dropdown-menu>
+      </div>
+    </div>
+
+    <van-popup v-model="showItembankCategoryPopup" position="bottom">
+      <van-cascader
+        v-model="categoryId"
+        :options="itembankCategories"
+        @close="showItembankCategoryPopup = false"
+        @finish="onFinish"
+      />
+    </van-popup>
+    
     <lazyLoading
       :course-list="courseList"
       :is-all-data="isAllCourse"
@@ -26,22 +50,40 @@
 
 <script>
 import Api from '@/api';
-import treeSelect from '&/components/e-tree-select/e-tree-select.vue';
 import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
 import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue';
 import { mapState, mapActions } from 'vuex';
-// import * as types from '@/store/mutation-types';
-import CATEGORY_DEFAULT from '@/config/category-default-config.js';
+
+const dataDefault = [
+  {
+    type: 'type',
+    value: 'all',
+    options: [
+      { text: '全部', value: 'all' },
+      { text: '课程', value: 'normal' },
+      { text: '直播', value: 'live' },
+    ],
+  },
+  {
+    value: '',
+    type: 'sort',
+    options: [
+      { text: '全部', value: '' },
+      { text: '推荐', value: 'recommendedSeq' },
+      { text: '热门', value: '-studentNum' },
+      { text: '最新', value: '-createdTime' },
+    ],
+  },
+]
 
 export default {
   components: {
-    treeSelect,
     lazyLoading,
     emptyCourse,
   },
   data() {
     return {
-      selectItems: [],
+      dropdownData: [],
       selectedData: {},
       courseItemType: 'price',
       isRequestCompile: false,
@@ -59,7 +101,10 @@ export default {
         category: 'categoryId',
         sort: 'sort',
       },
-      dataDefault: CATEGORY_DEFAULT.course_list,
+      dataDefault,
+      itembankCategories: [],
+      currentItembankCategoryText: '',
+      showItembankCategoryPopup: false
     };
   },
   computed: {
@@ -86,27 +131,80 @@ export default {
       this.requestCourses(setting);
     },
   },
+
   created() {
     window.scroll(0, 0);
+    this.dropdownData = this.dataDefault;
     this.selectedData = this.transform(this.$route.query);
 
-    // 获取题库分类数据
-    Api.getItemBankCategoriesNew().then(data => {
-      data.unshift({
-        name: '全部',
-        id: '0',
-      });
-      this.dataDefault[0].data = data;
-      this.selectItems = this.dataDefault;
-    });
+    this.initItembankCategories();
   },
+
   methods: {
     ...mapActions('ItemBank', ['setItemBankList']),
-    setQuery(value) {
+
+    setQuery() {
+      this.selectedData = this.getSelectedData();
+      this.selectedData.categoryId = this.categoryId;
+
       this.$router.replace({
         name: 'more_itembank',
-        query: value,
+        query: this.selectedData,
       });
+    },
+
+    initOptions({ text, value = '0', data }) {
+      const options = text ? [{ text, value }] : []
+
+      data.forEach(item => {
+        const optionItem = {
+          text: item.name,
+          value: item.id,
+        }
+
+        if (item.children && item.children.length > 0) {
+          optionItem.children = this.initOptions({ 
+            text: this.$t('more.all'),
+            value: item.id,
+            data: item.children
+          })
+        }
+
+        options.push(optionItem);
+      });
+
+      return options;
+    },
+
+    async initItembankCategories() {
+      const data = await Api.getItemBankCategoriesNew()
+
+      this.itembankCategories = this.initOptions({
+        text: this.$t('more.all'),
+        value: '0',
+        data
+      });
+      this.currentItembankCategoryText = this.getCategoryDescById(this.itembankCategories, this.$route.query.categoryId || '0');
+    },
+
+    onFinish({ selectedOptions }) {
+      this.showItembankCategoryPopup = false;
+      this.currentItembankCategoryText = this.getCategoryDescById(this.itembankCategories, selectedOptions[selectedOptions.length - 1].value);
+      this.setQuery()
+    },
+
+    getSelectedData() {
+      const selectedData = {};
+      this.dropdownData.forEach(item => {
+        const { type, value } = item;
+
+        if (type === 'vipLevelId' && (!this.vipSwitch || value == '0')) {
+          return;
+        }
+
+        selectedData[type] = value;
+      });
+      return selectedData;
     },
 
     initCourseList() {
@@ -182,6 +280,61 @@ export default {
 
       return true;
     },
+    getCategoryDescById(categories, categoryId) {
+      if (!categories || categories.length === 0) return null
+
+      for (let i = 0; i < categories.length; i++) {
+        const currentCategory = categories[i]
+
+        if (currentCategory.value === categoryId) {
+          return currentCategory.text
+        }
+
+        const categoryText = this.getCategoryDescById(currentCategory.children, categoryId)
+
+        if (categoryText) return categoryText
+      }
+
+      return null
+    }
   },
 };
 </script>
+
+<style scoped>
+
+  .itembank-category {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .itembank-category__title {
+    position: relative;
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: 0 8px;
+    color: #323233;
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .itembank-category__title::after {
+    position: absolute;
+    top: 50%;
+    right: -4px;
+    margin-top: -5px;
+    border: 3px solid;
+    border-color: transparent transparent #dcdee0 #dcdee0;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    opacity: .8;
+    content: '';
+  }
+
+  .more >>> .van-dropdown-menu__bar {
+    box-shadow: none !important;
+  }
+
+</style>

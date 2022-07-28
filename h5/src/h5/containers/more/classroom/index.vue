@@ -1,16 +1,36 @@
 <template>
   <div :class="{ more__still: selecting }" class="more">
-    <van-dropdown-menu active-color="#1989fa">
-      <template v-for="(item, index) in dropdownData" @change="change">
-        <van-dropdown-item
-          v-if="item.type === 'vipLevelId' ? vipSwitch : true"
-          :key="index"
-          v-model="item.value"
-          :options="item.options"
-          @change="change"
-        />
-      </template>
-    </van-dropdown-menu>
+  <div style="display: flex;background-color: #fff;box-shadow: 0 2px 12px rgb(100 101 102 / 12%);">
+      <div
+        v-if="dropdownData && dropdownData.length > 0" 
+        class="class-category text-overflow" 
+        @click="showClassCategoryPopup = true"
+      >
+        <span class="class-category__title">{{ currentClassCategoryText }}</span>
+      </div>
+      <div style="flex: 2;">
+        <van-dropdown-menu active-color="#1989fa">
+          <template v-for="(item, index) in dropdownData" @change="change">
+            <van-dropdown-item
+              v-if="item.type === 'vipLevelId' ? vipSwitch : true"
+              :key="index"
+              v-model="item.value"
+              :options="item.options"
+              @change="change"
+            />
+          </template>
+        </van-dropdown-menu>
+      </div>
+    </div>
+
+    <van-popup v-model="showClassCategoryPopup" position="bottom">
+      <van-cascader
+        v-model="currentClassCategoryId"
+        :options="classCategories"
+        @close="showClassCategoryPopup = false"
+        @finish="onFinish"
+      />
+    </van-popup>
 
     <lazyLoading
       :course-list="courseList"
@@ -59,6 +79,10 @@ export default {
       dataDefault: CATEGORY_DEFAULT.new_classroom_list,
       dropdownData: [],
       showNumberData: '',
+      classCategories: [],
+      showClassCategoryPopup: false,
+      currentClassCategoryText: '',
+      currentClassCategoryId: 0,
     };
   },
   computed: {
@@ -103,6 +127,9 @@ export default {
 
     this.initI18n();
 
+    // 获取班级分类数据
+    this.initClassCategories();
+
     // 初始化下拉筛选数据
     this.initDropdownData();
 
@@ -121,14 +148,18 @@ export default {
       });
     },
 
-    async initDropdownData() {
-      // 获取班级分类数据
+    async initClassCategories() {
       const res = await Api.getClassCategories();
-      this.dataDefault[0].options = this.initOptions({
+
+      this.classCategories = this.initOptions({
         text: this.$t('more.all'),
         data: res,
       });
-      this.dataDefault[1].options = this.initOptions({
+      this.currentClassCategoryText = this.getCategoryDescById(this.classCategories, this.$route.query.categoryId || '0')
+    },
+
+    async initDropdownData() {
+      this.dataDefault[0].options = this.initOptions({
         text: this.$t('more.membersClass'),
         data: this.vipLevels,
       });
@@ -145,21 +176,39 @@ export default {
       this.selectedData = this.transform(this.$route.query);
     },
 
-    initOptions({ text, data }) {
-      const options = [{ text: text, value: '0' }];
+    initOptions({ text, value = '0', data }) {
+      const options = text ? [{ text, value }] : []
 
       data.forEach(item => {
-        options.push({
+        const optionItem = {
           text: item.name,
           value: item.id,
-        });
+        }
+
+        if (item.children && item.children.length > 0) {
+          optionItem.children = this.initOptions({ 
+            text: this.$t('more.all'),
+            value: item.id,
+            data: item.children
+          })
+        }
+
+        options.push(optionItem);
       });
+
       return options;
     },
 
     change() {
       this.selectedData = this.getSelectedData();
+      this.selectedData.categoryId = this.currentClassCategoryId
       this.setQuery(this.selectedData);
+    },
+
+    onFinish({ selectedOptions }) {
+      this.showClassCategoryPopup = false;
+      this.currentClassCategoryText = this.getCategoryDescById(this.classCategories, selectedOptions[selectedOptions.length - 1].value)
+      this.change()
     },
 
     transform(obj = {}) {
@@ -263,6 +312,58 @@ export default {
         this.showNumberData = res.show_number_data;
       });
     },
+    getCategoryDescById(categories, categoryId) {
+      if (!categories || categories.length === 0) return null
+
+      for (let i = 0; i < categories.length; i++) {
+        const currentCategory = categories[i]
+
+        if (currentCategory.value === categoryId) {
+          return currentCategory.text
+        }
+
+        const categoryText = this.getCategoryDescById(currentCategory.children, categoryId)
+
+        if (categoryText) return categoryText
+      }
+
+      return null
+    }
   },
 };
 </script>
+
+<style scoped>
+  .class-category {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .class-category__title {
+    position: relative;
+    max-width: 100%;
+    padding: 0 8px;
+    color: #323233;
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .class-category__title::after {
+    position: absolute;
+    top: 50%;
+    right: -4px;
+    margin-top: -5px;
+    border: 3px solid;
+    border-color: transparent transparent #dcdee0 #dcdee0;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    opacity: .8;
+    content: '';
+  }
+
+  .more >>> .van-dropdown-menu__bar {
+    box-shadow: none !important;
+  }
+</style>

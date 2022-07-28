@@ -26,7 +26,6 @@
     <van-popup v-model="showCourseCategoryPopup" position="bottom">
       <van-cascader
         v-model="currentCourseCategoryId"
-        title="请选择课程分类"
         :options="courseCategories"
         @close="showCourseCategoryPopup = false"
         @finish="onFinish"
@@ -82,8 +81,8 @@ export default {
       dropdownData: [],
       courseCategories: [],
       showCourseCategoryPopup: false,
-      currentCourseCategoryText: '全部',
-      currentCourseCategoryId: ''
+      currentCourseCategoryText: '',
+      currentCourseCategoryId: '0'
     };
   },
   computed: {
@@ -126,7 +125,7 @@ export default {
 
     this.initI18n();
 
-    // 初始化课程愤怒类
+    // 初始化课程分类
     this.initCourseCategories();
 
     // 初始化下拉筛选数据
@@ -155,6 +154,13 @@ export default {
         value: '0',
         data: res
       });
+      this.currentCourseCategoryText = this.getCategoryDescById(this.courseCategories, this.$route.query.categoryId || '0')
+    },
+
+    onFinish({ selectedOptions }) {
+      this.showCourseCategoryPopup = false;
+      this.currentCourseCategoryText = this.getCategoryDescById(this.courseCategories, selectedOptions[selectedOptions.length - 1].value)
+      this.change()
     },
 
     async initDropdownData() {
@@ -204,12 +210,6 @@ export default {
       this.setQuery(this.selectedData);
     },
 
-    onFinish({ selectedOptions }) {
-      this.showCourseCategoryPopup = false;
-      this.currentCourseCategoryText = selectedOptions[selectedOptions.length - 1].text;
-      this.change()
-    },
-
     transform(obj = {}) {
       return Object.assign(this.getSelectedData(), obj);
     },
@@ -218,9 +218,11 @@ export default {
       const selectedData = {};
       this.dropdownData.forEach(item => {
         const { type, value } = item;
+
         if (type === 'vipLevelId' && (!this.vipSwitch || value == '0')) {
           return;
         }
+
         selectedData[type] = value;
       });
       return selectedData;
@@ -310,6 +312,23 @@ export default {
         this.showNumberData = res.show_number_data;
       });
     },
+    getCategoryDescById(categories, categoryId) {
+      if (!categories || categories.length === 0) return null
+
+      for (let i = 0; i < categories.length; i++) {
+        const currentCategory = categories[i]
+
+        if (currentCategory.value === categoryId) {
+          return currentCategory.text
+        }
+
+        const categoryText = this.getCategoryDescById(currentCategory.children, categoryId)
+
+        if (categoryText) return categoryText
+      }
+
+      return null
+    }
   },
 };
 </script>
