@@ -81,7 +81,7 @@ export default {
       showNumberData: '',
       classCategories: [],
       showClassCategoryPopup: false,
-      currentClassCategoryText: this.$t('more.all'),
+      currentClassCategoryText: '',
       currentClassCategoryId: 0,
     };
   },
@@ -155,6 +155,7 @@ export default {
         text: this.$t('more.all'),
         data: res,
       });
+      this.currentClassCategoryText = this.getCategoryDescById(this.classCategories, this.$route.query.categoryId || '0')
     },
 
     async initDropdownData() {
@@ -206,7 +207,7 @@ export default {
 
     onFinish({ selectedOptions }) {
       this.showClassCategoryPopup = false;
-      this.currentClassCategoryText = selectedOptions[selectedOptions.length - 1].text;
+      this.currentClassCategoryText = this.getCategoryDescById(this.classCategories, selectedOptions[selectedOptions.length - 1].value)
       this.change()
     },
 
@@ -311,6 +312,23 @@ export default {
         this.showNumberData = res.show_number_data;
       });
     },
+    getCategoryDescById(categories, categoryId) {
+      if (!categories || categories.length === 0) return null
+
+      for (let i = 0; i < categories.length; i++) {
+        const currentCategory = categories[i]
+
+        if (currentCategory.value === categoryId) {
+          return currentCategory.text
+        }
+
+        const categoryText = this.getCategoryDescById(currentCategory.children, categoryId)
+
+        if (categoryText) return categoryText
+      }
+
+      return null
+    }
   },
 };
 </script>

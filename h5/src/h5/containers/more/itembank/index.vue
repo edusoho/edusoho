@@ -103,7 +103,7 @@ export default {
       },
       dataDefault,
       itembankCategories: [],
-      currentItembankCategoryText: this.$t('more.all'),
+      currentItembankCategoryText: '',
       showItembankCategoryPopup: false
     };
   },
@@ -184,11 +184,12 @@ export default {
         value: '0',
         data
       });
+      this.currentItembankCategoryText = this.getCategoryDescById(this.itembankCategories, this.$route.query.categoryId || '0');
     },
 
     onFinish({ selectedOptions }) {
       this.showItembankCategoryPopup = false;
-      this.currentItembankCategoryText = selectedOptions[selectedOptions.length - 1].text;
+      this.currentItembankCategoryText = this.getCategoryDescById(this.itembankCategories, selectedOptions[selectedOptions.length - 1].value);
       this.setQuery()
     },
 
@@ -279,6 +280,23 @@ export default {
 
       return true;
     },
+    getCategoryDescById(categories, categoryId) {
+      if (!categories || categories.length === 0) return null
+
+      for (let i = 0; i < categories.length; i++) {
+        const currentCategory = categories[i]
+
+        if (currentCategory.value === categoryId) {
+          return currentCategory.text
+        }
+
+        const categoryText = this.getCategoryDescById(currentCategory.children, categoryId)
+
+        if (categoryText) return categoryText
+      }
+
+      return null
+    }
   },
 };
 </script>
