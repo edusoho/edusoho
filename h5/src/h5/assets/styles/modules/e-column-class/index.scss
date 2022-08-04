@@ -1,7 +1,7 @@
 .e-column-class {
 	display: flex;
 	flex-direction: column;
-	padding: 0 vw(16) vw(24);
+	padding: 0 16px 20px;
 
 	&:nth-of-type(2n) {
 		padding: 0 vw(12) vw(16) 0;
@@ -40,14 +40,17 @@
 
 		&__member {
 			position: absolute;
-			top: vw(4);
-			height: vw(16);
-			padding: vw(2) vw(4);
+			top: 0;
+			right: 0;
+			width: vw(56);
+			height: vw(20);
 			color: #fff;
-			font-size: vw(10);
+			font-weight: 500;
+			font-size: vw(12);
+			line-height: vw(20);
 			text-align: center;
-			background: rgba(246, 201, 63, 1);
-			border-radius: 0 vw(100) vw(100) 0;
+			background: #162923;
+			border-radius: 0 vw(4);
 		}
 
 		&__live {
@@ -77,42 +80,39 @@
 		justify-content: space-around;
 		box-sizing: border-box;
 		width: vw(164);
-		padding: vw(8);
-		border-radius: vw(4);
+		padding: 12px 0;
+		border-radius: 0 0 6px 6px;
 		box-shadow: 0 vw(2) vw(8) 0 rgba(0, 0, 0, 0.05);
 
 		&__top {
-			height: vw(20);
-			color: #333;
+			display: flex;
+			height: 22px;
+			margin-bottom: 4px;
+			padding: 0 12px;
+			color: #1d2129;
 			font-weight: 500;
-			font-size: vw(14);
-
-			.certificate-icon {
-				margin-right: vw(4);
-				padding: vw(2) vw(4);
-				color: #fff;
-				font-size: vw(12);
-				line-height: vw(16);
-				vertical-align: vw(1);
-				background-color: #43bc60;
-				border-radius: vw(4);
-			}
+			font-size: 14px;
+			line-height: 22px;
 		}
 
 		&__center {
 			display: flex;
 			align-items: center;
-			height: vw(20);
-			color: #999;
-			font-size: vw(12);
+			height: 20px;
+			margin-bottom: 4px;
+			padding: 0 12px;
+			color: #86909c;
+			font-size: 12px;
+			line-height: 20px;
 		}
 
 		&__bottom {
-			// margin-top: vw(4);
-			height: vw(20);
-			color: #fe3b13;
+			display: flex;
+			justify-content: space-between;
+			height: 20px;
 			font-weight: 500;
 			font-size: vw(14);
+			line-height: 20px;
 		}
 	}
 }

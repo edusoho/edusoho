@@ -146,7 +146,8 @@ export default {
     mistakesCollection: 'Mistakes collection',
     myOrder: 'My order',
     activities: 'Activities',
-    more: 'More'
+    more: 'More',
+    all: 'All',
   },
   tips: {
     iHaveReadAndAgreeToThe: 'I have read and agree to the',

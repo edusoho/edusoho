@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <van-nav-bar
+      class="nav-bar--white"
       :class="[
         { hide: isQrcode || hideNavbar },
-        color === 'white' ? 'nav-bar--white' : 'nav-bar--default',
       ]"
       :title="title"
       :left-arrow="showLeftArrow"
@@ -24,7 +24,6 @@ export default {
       isQrcode: false,
       hideNavbar: true,
       isShare: false,
-      color: '',
       isRouterAlive: true,
     };
   },
@@ -77,8 +76,6 @@ export default {
         this.isQrcode = !!to.query.loginToken;
 
         this.hideNavbar = to.meta.hideTitle ? to.meta.hideTitle : false;
-
-        this.color = to.meta.color === 'white' ? 'white' : '';
 
         this.showLeftArrow = ![
           'my',

@@ -22,7 +22,7 @@
     <div
       v-if="uiStyle !== 'old'"
       class="e-course-list__header"
-      style="padding: 16px;"
+      style="padding: 0 16px 8px;"
     >
       <div class="clearfix">
         <span
@@ -35,7 +35,7 @@
             class="more-text pull-left"
             style="font-size: 12px;"
             @click="jumpTo(courseList.source)"
-            >{{ $t('enter.more') }}</span
+            >{{ $t('enter.all') }}</span
           >
         </span>
       </div>

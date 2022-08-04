@@ -7,9 +7,8 @@
     <div slot="preview">
       <van-search
         shape="round"
-        background="#ffffff"
         :placeholder="$t('search.placeholder')"
-        style="padding: 16px;"
+        style="padding: 16px;background-color: #f7f9fa;"
       />
     </div>
 
@@ -82,3 +81,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  /deep/ .van-search__content {
+    background-color: #fff;
+  }
+
+</style>

@@ -16,9 +16,9 @@
         :vip-tag-show="true"
         :index="index"
         uiStyle="new"
-        class="gray-border-bottom"
         @fetchCourse="fetchCourse"
         :showNumberData="showNumberData"
+        style="background-color: transparent;"
       />
       <e-poster
         v-if="part.type === 'poster'"
@@ -70,9 +70,9 @@
       <van-search
         v-if="part.type === 'search'"
         shape="round"
-        background="#ffffff"
         :placeholder="$t('search.placeholder')"
         @focus="goSearch"
+        style="margin: 16px;padding: 0;border-radius: 999px;"
       />
     </div>
     <e-switch-loading v-if="wechatSwitch && showFlag" :close-date="closeDate" />
@@ -199,3 +199,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  /deep/ .van-search__content {
+    background-color: #fff;
+  }
+
+</style>

@@ -14,10 +14,6 @@ const getDisplayStyle = (data, listObj) => {
   } else {
     showStudentStr = '';
   }
-  // const price =
-  //   data.price === '0.00'
-  //     ? '<p style="color: #408FFB">免费</p>'
-  //     : `<p style="color: #ff5353">¥ ${data.price}</p>`;
 
   const price = getPriceDisplay(data, 'h5');
 
@@ -124,6 +120,13 @@ const getClassRoomDisplay = (data, listObj, price) => {
 };
 
 const getCourseDisplay = (data, listObj, price) => {
+  if (data.originPrice !== data.price) {
+    price = `
+      <div style="margin-left: -5px;color: #ff5353;transform: scale(0.83);">¥ ${data.price}</div>
+      <s style="margin: 1px 0 0 -11px;color: #86909C;transform: scale(0.66);">¥ ${data.originPrice}</s>
+    `
+  }
+
   return {
     id: data.id,
     goodsId: data.courseSet.goodsId,
@@ -141,7 +144,7 @@ const getCourseDisplay = (data, listObj, price) => {
     },
     bottom: {
       value: data.price,
-      html: `<span>${price}</span>`,
+      html: `<div style="display: flex">${price}</div>`,
     },
   };
 };
