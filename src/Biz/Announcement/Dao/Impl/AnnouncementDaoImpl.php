@@ -22,6 +22,7 @@ class AnnouncementDaoImpl extends GeneralDaoImpl implements AnnouncementDao
             ),
             'orderbys' => array(
                 'createdTime',
+                'startTime'
             ),
             'conditions' => array(
                 'targetType = :targetType',

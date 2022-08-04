@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Page;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Announcement\Service\AnnouncementService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Course\Service\CourseService;
@@ -68,9 +69,22 @@ class PageDiscovery extends AbstractResource
             if ('open_course_list' == $discoverySetting['type']) {
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['userId', 'teacherIds']);
             }
+
+            if ('announcement' == $discoverySetting['type']) {
+                $announcement = $this->getAnnouncementService()->searchAnnouncements(['startTime' => time(), 'endTime' => time(), 'targetType' => 'global'], ['startTime' => 'DESC'], 0, 1);
+                $discoverySetting['data'] = empty($announcement) ? '' : $announcement[0]['content'];
+            }
         }
 
         return !empty($params['format']) && 'list' == $params['format'] ? array_values($discoverySettings) : $discoverySettings;
+    }
+
+    /**
+     * @return AnnouncementService
+     */
+    protected function getAnnouncementService()
+    {
+        return $this->service('Announcement:AnnouncementService');
     }
 
     /**
