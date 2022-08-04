@@ -35,14 +35,15 @@
 
 		&__member {
 			position: absolute;
-			top: vw(4);
-			height: vw(16);
-			padding: vw(2) vw(4);
+			top: 0;
+			right: 0;
+			width: 56px;
+			height: 20px;
 			color: #fff;
-			font-size: vw(10);
+			font-size: 12px;
 			text-align: center;
-			background: rgba(246, 201, 63, 1);
-			border-radius: vw(0) vw(100) vw(100) vw(0);
+			background-color: #162923;
+			border-radius: 0 4px;
 		}
 
 		&__live {
@@ -73,42 +74,36 @@
 		margin-left: vw(12);
 
 		&__top {
-			height: vw(20);
-			margin-top: vw(2);
-			color: #333;
+			display: flex;
+			height: 22px;
+			margin-top: 2px;
+			color: #1d2129;
 			font-weight: 500;
-			font-size: vw(14);
-
-			.certificate-icon {
-				margin-right: vw(4);
-				padding: vw(2) vw(4);
-				color: #fff;
-				font-size: vw(12);
-				line-height: vw(16);
-				vertical-align: vw(1);
-				background-color: #43bc60;
-				border-radius: vw(4);
-			}
+			font-size: 14px;
+			line-height: 22px;
 		}
 
 		&__center {
-			height: vw(16);
-			margin-top: vw(4);
-			color: #999;
-			font-size: vw(12);
+			height: 20px;
+			margin-top: 4px;
+			color: #86909c;
+			font-size: 12px;
+			line-height: 20px;
 		}
 
 		&__bottom {
-			height: vw(20);
-			margin-top: vw(8);
+			display: flex;
+			justify-content: space-between;
+			height: 20px;
+			margin-top: 4px;
 			color: #fe3b13;
 			font-weight: 500;
-			font-size: vw(14);
 		}
+
 		.completionRate,
-    .masteryRate{
-      color:$primary-color;
-      font-size:12px;
-    }
+		.masteryRate {
+			color: $primary-color;
+			font-size: 12px;
+		}
 	}
 }

@@ -17,9 +17,6 @@
       >
         {{ $t('carousel.carousel') }}
       </div>
-      <div v-if="pathName !== 'appSetting'" class="carousel-title ellipsis">
-        {{ carouselTitle }}
-      </div>
     </div>
 
     <div slot="setting" class="carousel-allocate">
