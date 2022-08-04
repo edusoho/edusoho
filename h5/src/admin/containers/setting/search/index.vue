@@ -9,7 +9,6 @@
         shape="round"
         background="#ffffff"
         :placeholder="$t('search.placeholder')"
-        style="padding: 16px;"
       />
     </div>
 
