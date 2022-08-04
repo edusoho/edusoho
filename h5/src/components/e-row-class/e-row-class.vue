@@ -3,9 +3,7 @@
     <div class="row-class-left">
       <img v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
       
-      <div v-if="Number(isVip)" class="row-class-left__member">
-        <div style="transform: scale(0.83);">{{ $t('e.freeForMembers') }}</div>
-      </div>
+      <div v-if="Number(isVip)" class="row-class-left__member">{{ $t('e.freeForMembers') }}</div>
     </div>
 
     <div class="row-class-right">
@@ -25,7 +23,7 @@
 
       <div class="row-class-right__bottom text-overflow">
         <div v-html="course.bottom.html"></div>
-        <div style="margin-top: 2px; color: #86909c; font-size: 12px; transform: scale(0.83);">
+        <div style="margin-top: 3px; color: #86909c; font-size: 12px; transform: scale(0.83);">
           <template v-if="showNumberData === 'join'">{{ course.studentNum }}人在学</template>
           <template v-else-if="showNumberData === 'visitor'">{{ hitNum }}人浏览</template>
         </div>

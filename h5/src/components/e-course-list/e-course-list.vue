@@ -93,6 +93,7 @@
         <div
           v-if="uiStyle !== 'old' && displayStyle === 'distichous'"
           class="clearfix"
+          style="display: flex; padding: 0 6px;"
         >
           <e-column-class
             v-for="item in courseList.items"

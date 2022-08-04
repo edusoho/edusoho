@@ -1,49 +1,33 @@
 .e-row-class {
 	display: flex;
-	padding: 0 vw(16) vw(24);
+	margin: 12px 16px;
+	background-color: #fff;
+	border-radius: 6px;
 
 	.row-class-left {
 		position: relative;
-		width: vw(128);
-		height: vw(72);
+		height: 96px;
 		overflow: hidden;
-		font-size: vw(0);
-		border-radius: vw(2);
+		border-radius: 6px 0 0 6px;
 
 		img {
-			width: 100%;
-			border-radius: vw(2);
-		}
-
-		&__discount {
-			position: absolute;
-			top: vw(4);
-			right: vw(-17);
-			width: vw(64);
-			height: vw(20);
-			color: #fff;
-			font-size: vw(12);
-			line-height: vw(20);
-			text-align: center;
-			background: #ef6b50;
-			-ms-transform: rotate(45deg);
-			-moz-transform: rotate(45deg);
-			-webkit-transform: rotate(45deg);
-			-o-transform: rotate(45deg);
-			transform: rotate(45deg);
+			height: 100%;
+			border-radius: 6px 0 0 6px;
 		}
 
 		&__member {
 			position: absolute;
-			top: 0;
-			right: 0;
+			top: -1px;
+			right: -4px;
 			width: 56px;
 			height: 20px;
 			color: #fff;
+			font-weight: 500;
 			font-size: 12px;
 			text-align: center;
 			background-color: #162923;
-			border-radius: 0 4px;
+			border-radius: 0 0 0 6px;
+			transform: scale(0.83);
 		}
 
 		&__live {
@@ -69,14 +53,15 @@
 
 	.row-class-right {
 		display: flex;
+		flex: 1;
 		flex-direction: column;
-		width: vw(197);
-		margin-left: vw(12);
+		justify-content: space-around;
+		padding: 8px 12px;
+		border-radius: 0 6px 6px 0;
 
 		&__top {
 			display: flex;
 			height: 22px;
-			margin-top: 2px;
 			color: #1d2129;
 			font-weight: 500;
 			font-size: 14px;
@@ -85,7 +70,7 @@
 
 		&__center {
 			height: 20px;
-			margin-top: 4px;
+			margin-top: -4px;
 			color: #86909c;
 			font-size: 12px;
 			line-height: 20px;
@@ -95,8 +80,7 @@
 			display: flex;
 			justify-content: space-between;
 			height: 20px;
-			margin-top: 4px;
-			color: #fe3b13;
+			color: #ff7a34;
 			font-weight: 500;
 		}
 

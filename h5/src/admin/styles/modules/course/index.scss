@@ -114,32 +114,34 @@
 
 .e-row-class {
 	display: flex;
-	padding: 0 16px 16px;
+	margin: 12px 16px;
+	background-color: #fff;
+	border-radius: 6px;
 
 	.row-class-left {
 		position: relative;
-		width: 128px;
-		height: 72px;
+		width: 168px;
 		overflow: hidden;
 		font-size: 0;
-		border-radius: 2px;
+		border-radius: 6px 0 0 6px;
 
 		img {
 			width: 100%;
-			border-radius: 2px;
+			border-radius: 6px 0 0 6px;
 		}
 
 		&__member {
 			position: absolute;
-			top: 0;
-			right: 0;
+			top: -1px;
+			right: -4px;
 			width: 56px;
 			height: 20px;
 			color: #fff;
 			font-size: 12px;
 			text-align: center;
 			background-color: #162923;
-			border-radius: 0 4px;
+			border-radius: 0 0 0 6px;
+			transform: scale(0.83);
 		}
 
 		&__live {
@@ -166,13 +168,15 @@
 	.row-class-right {
 		display: flex;
 		flex-direction: column;
-		width: 197px;
-		margin-left: 12px;
+		justify-content: space-around;
+		box-sizing: border-box;
+		width: 171px;
+		padding: 8px 12px;
+		border-radius: 0 6px 6px 0;
 
 		&__top {
 			display: flex;
 			height: 20px;
-			margin-top: 2px;
 			color: #333;
 			font-weight: 500;
 			font-size: 14px;
@@ -180,7 +184,7 @@
 
 		&__center {
 			height: 16px;
-			margin-top: 4px;
+			margin-top: -4px;
 			color: #86909c;
 			font-size: 12px;
 		}
@@ -189,10 +193,9 @@
 			display: flex;
 			justify-content: space-between;
 			height: 20px;
-			margin-top: 4px;
 			color: #ff7a34;
 			font-weight: 500;
-			font-size: 14px;
+			line-height: 20px;
 		}
 	}
 }
@@ -252,25 +255,31 @@
 	.column-class-right {
 		display: flex;
 		flex-direction: column;
+		justify-content: space-around;
 		box-sizing: border-box;
 		width: 164px;
-		padding: 12px 0;
+		height: 86px;
+		padding: 8px 0;
+		background-color: #fff;
 		border-radius: 4px;
 		box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.05);
 
 		&__top {
 			display: flex;
 			height: 20px;
-			margin-bottom: 4px;
 			padding: 0 12px;
 			color: #1d2129;
 			font-weight: 500;
 			font-size: 14px;
+
+			.course-title {
+				width: vw(105);
+			}
 		}
 
 		&__center {
 			height: 14px;
-			margin-bottom: 4px;
+			margin-top: -2px;
 			padding: 0 12px;
 			color: #86909c;
 			font-size: 12px;
@@ -280,6 +289,7 @@
 			display: flex;
 			justify-content: space-between;
 			height: 20px;
+			margin-top: 4px;
 			color: #ff7a34;
 			font-weight: 500;
 			font-size: 14px;
@@ -343,6 +353,7 @@
 		box-sizing: border-box;
 		width: 188px;
 		padding: 12px 0;
+		background-color: #fff;
 		border-radius: 4px;
 		box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.05);
 
@@ -352,6 +363,10 @@
 			color: #1d2129;
 			font-weight: 500;
 			font-size: 14px;
+
+			.course-title {
+				width: vw(105);
+			}
 		}
 
 		&__center {

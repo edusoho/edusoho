@@ -1,6 +1,6 @@
 <template>
   <div
-    class="e-column-class pull-left"
+    class="e-column-class"
     @click="onClick(course.hasCertificate, $event)"
   >
     <div class="column-class-left">
@@ -20,14 +20,14 @@
         <div v-if="course.hasCertificate" style="width: 14px;height:14px;margin:3px 4px 0 0;text-align: center;line-height: 14px;border: 1px solid #3DCD7F;border-radius: 2px;">
           <div style="font-size: 12px; transform: scale(0.75); color: #3DCD7F;">{{ $t('e.certificate') }}</div>
         </div>
-        <div class="text-overflow">{{ course.header }}</div>
+        <div class="text-overflow course-title">{{ course.header }}</div>
       </div>
       <div class="column-class-right__center  text-overflow">
         <div v-if="course.middle.value" v-html="course.middle.html" />
       </div>
       <div class="column-class-right__bottom text-overflow">
         <div style="position: relative; left: 12px;" v-html="course.bottom.html"></div>
-        <div style="margin-top: 1px; color: #86909c; font-size: 12px; transform: scale(0.83);">
+        <div style="margin: 1px 5px 0 0; color: #86909c; font-size: 12px; transform: scale(0.83);">
           <template v-if="showNumberData === 'join'">{{ course.studentNum }}人在学</template>
           <template v-else-if="showNumberData === 'visitor'">{{ hitNum }}人浏览</template>
         </div>
