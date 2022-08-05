@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Announcement\Service\AnnouncementService;
+use Biz\Article\Service\ArticleService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Course\Service\CourseService;
@@ -73,6 +74,11 @@ class PageDiscovery extends AbstractResource
             if ('announcement' == $discoverySetting['type']) {
                 $announcement = $this->getAnnouncementService()->searchAnnouncements(['startTime' => time(), 'endTime' => time(), 'targetType' => 'global'], ['startTime' => 'DESC'], 0, 1);
                 $discoverySetting['data'] = empty($announcement) ? '' : $announcement[0]['content'];
+            }
+
+            if('real_time_info' == $discoverySetting['type']){
+                $real_time_info = $this ->getArticleService() -> searchArticles(['status' => 'published'], ['sticky' => 'DESC' ,'publishedTime' => 'DESC'], 0, 3);
+                $discoverySetting['data'] = empty($real_time_info) ? '' : $real_time_info;
             }
         }
 
@@ -143,5 +149,13 @@ class PageDiscovery extends AbstractResource
     protected function getProductService()
     {
         return $this->service('Product:ProductService');
+    }
+
+    /**
+     * @return ArticleService
+     */
+    protected function getArticleService()
+    {
+        return $this->getServiceKernel()->createService('Article:ArticleService');
     }
 }
