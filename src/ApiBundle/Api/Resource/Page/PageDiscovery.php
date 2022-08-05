@@ -156,6 +156,6 @@ class PageDiscovery extends AbstractResource
      */
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article:ArticleService');
+        return $this->service('Article:ArticleService');
     }
 }
