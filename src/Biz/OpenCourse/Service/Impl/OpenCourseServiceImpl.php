@@ -973,7 +973,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         if (empty($conditions)) {
             return [];
         }
-        file_put_contents('/tmp/test', json_encode($conditions));
+
         if (!empty($conditions['title']) || !empty($conditions['categoryId'])) {
             $courseConditions = [
                 'type' => 'liveOpen',
