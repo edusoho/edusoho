@@ -14,7 +14,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
         return [
             'timestamps' => [],
             'serializes' => [],
-            'orderbys' => ['createdTime', 'startTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq', 'updatedTime'],
+            'orderbys' => ['createdTime', 'startTime', 'endTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq', 'updatedTime'],
             'conditions' => [
                 'id = :lessonId',
                 'id NOT IN (:lessonIdNotIn)',
@@ -35,6 +35,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
                 'createdTime <= :endTime',
                 'copyId = :copyId',
                 'courseId IN ( :courseIds )',
+                'replayStatus IN (:replayStatusList)',
             ],
         ];
     }

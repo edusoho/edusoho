@@ -115,7 +115,6 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         if ('condition' == $discoverySetting['data']['sourceType']) {
             $conditions = [
                 'categoryId' => isset($discoverySetting['data']['categoryId']) ? $discoverySetting['data']['categoryId'] : 0,
-                'limitDays' => isset($discoverySetting['data']['limitDays']) ? $discoverySetting['data']['limitDays'] : 0,
             ];
 
             $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
