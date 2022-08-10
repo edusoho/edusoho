@@ -9,6 +9,7 @@ import plugins from '@/plugins';
 import EdusohoUI from '@/components';
 import whiteList from '@/router/config/white-list';
 import '@/assets/styles/main.scss';
+import '@/assets/styles/tailwind.css';
 import App from '@/App';
 import Api from '@/api';
 import VueClipboard from 'vue-clipboard2';

@@ -141,7 +141,7 @@ export default {
     siteLink: '站内链接',
     addLink: '添加链接',
     replacePicture: '更换图片',
-    tips: '建议图片尺寸为750px，支持 jpg/png/gif 格式，大小不超过2MB',
+    tips: '建议图片尺寸为686*240，支持 jpg/png/gif 格式，大小不超过2MB',
     customLink: '自定义链接',
     adaptiveMobilePhoneScreen: '自适应手机屏幕：',
     chooseCourse: '选择课程',
@@ -181,7 +181,7 @@ export default {
     last90Days: '最近 90 天',
     allHistory: '历史所有',
     questionBank: '题库',
-    classification: ' 分类：'
+    classification: '分类：'
   },
   coupon: {
     couponSetting: '优惠券设置（仅显示未过期的优惠券）',

@@ -40,6 +40,7 @@ import { Swipe, SwipeItem, Lazyload, Search } from 'vant';
 import router from './router';
 import store from './store';
 import './styles/main.scss';
+import '@/assets/styles/tailwind.css';
 import App from './App';
 
 // 按需引入组件

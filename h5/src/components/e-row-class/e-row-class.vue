@@ -1,7 +1,16 @@
 <template>
-  <div class="e-row-class" @click="onClick(course.hasCertificate, $event)">
-    <div class="row-class-left">
-      <img v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
+  <div class="e-row-class" 
+    @click="onClick(course.hasCertificate, $event)" 
+    :style="{ marginLeft: typeList === 'classroom_list' ? '30px' : '16px' }">
+    <div class="relative row-class-left">
+      <img 
+        v-if="typeList === 'classroom_list'"
+        style="height: 90%;left: -17px;top: 50%;transform: translateY(-50%);"
+        class="absolute"
+        src="/static/images/classroom/classroom-icon.png" 
+        srcset="/static/images/classroom/classroom-icon@2x.png" />
+
+      <img class="cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
       
       <div v-if="Number(isVip)" class="row-class-left__member">{{ $t('e.freeForMembers') }}</div>
     </div>

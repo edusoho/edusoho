@@ -3,66 +3,106 @@
     <div v-if="showTitle === 'show'" class="e-coupon__title">
       {{ activityTitle }}
     </div>
-    <div
-      :class="{ 'e-groupon__image-empty': !activity.cover }"
-      class="e-groupon__image-container"
-    >
-      <img
-        v-lazy="activity.cover"
-        v-if="activity.cover"
-        class="e-groupon__image"
-        alt=""
-      />
+    <div :class="{ 'e-groupon__image-empty': !activity.cover }" class="e-groupon__image-container">
+      <img v-if="activity.cover" v-lazy="activity.cover" class="e-groupon__image" />
+      
       <div v-if="tag.length" class="e-groupon__tag">{{ tag }}</div>
+
+      <div 
+        v-if="type === 'cut'"
+        class="absolute bottom-0 left-0 right-0 flex items-end p-8 text-12 text-text-1" 
+        style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);"
+      >
+        <span>砍价享</span>
+        <span class="ml-4">￥</span>
+        <span class="font-bold text-16" style="line-height: 20px;">{{ activityPrice }}</span>
+        <s v-if="activity.originPrice" class="ml4" style="transform: scale(0.83)">
+          原价￥{{ activity.originPrice }}
+        </s>
+      </div>
+
+      <div 
+        v-else-if="type === 'groupon'"
+        class="absolute bottom-0 left-0 right-0 p-8 text-text-1" 
+        style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);"
+      >
+        <div class="flex items-center justify-between mb-4 text-12" style="line-height: 16px;">
+          <div>
+            {{ type === 'groupon' ? '拼团价' : '秒杀价' }}
+          </div>
+          <div>
+            已团2次 | 5人团
+          </div>
+        </div>
+        
+        <div class="flex items-end justify-between">
+          <div class="flex items-end">
+            <div class="font-bold">
+              <span class="text-12">￥</span>
+              <span class="text-16">{{ activityPrice }}</span>
+            </div>
+            <s v-if="activity.originPrice" class="ml4 text-12" style="transform: scale(0.83)">
+              原价￥{{ activity.originPrice }}
+            </s>
+          </div>
+          <div class="text-12">1人正在拼团</div>
+        </div>
+      </div>
+
+      <div 
+        v-else-if="type === 'seckill'"
+        class="absolute bottom-0 left-0 right-0 p-8 text-text-1" 
+        style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);"
+      >
+        <div class="flex justify-between mb-4 items-enter text-12">
+          <div>秒杀价</div>
+          <div>距离结束还有</div>
+        </div>
+        
+        <div class="flex items-end justify-between">
+          <div class="flex items-end">
+            <div class="font-bold">
+              <span class="text-12">￥</span>
+              <span class="text-16">{{ activityPrice }}</span>
+            </div>
+            <s v-if="activity.originPrice" class="ml4 text-12" style="transform: scale(0.83)">
+              原价￥{{ activity.originPrice }}
+            </s>
+          </div>
+          <div class="flex text-12" v-if="activityData && counting && !isEmpty && activity.status === 'ongoing'"> 
+            <div class="time-block">{{ endTimeDown.day }}</div> 天
+            <div class="time-block">{{ endTimeDown.hour }}</div> 时
+            <div class="time-block">{{ endTimeDown.minute }}</div> 分
+            <div class="time-block">{{ endTimeDown.second }}</div> 秒
+          </div>
+        </div>
+      </div>
     </div>
-    <countDown
-      v-if="
-        activityData &&
-          type === 'seckill' &&
-          counting &&
-          !isEmpty &&
-          activity.status === 'ongoing'
-      "
-      :activity="activity"
-      @timesUp="expire"
-      @sellOut="sellOut"
-    />
-    <div class="e-groupon__context">
-      <div class="context-title text-overflow">
+
+    <div class="flex items-center justify-between e-groupon__context">
+      <div class="font-bold text-overflow text-14 text-text-5">
         {{ activity.name || '活动名称' }}
       </div>
-      <div class="context-sale clearfix">
-        <div v-if="type !== 'groupon'" class="type-tag">
-          {{ type === 'cut' ? '砍价享' : '秒杀价' }}
-        </div>
-        <div class="context-sale__sale-price">￥{{ activityPrice }}</div>
-        <div v-if="activity.originPrice" class="context-sale__origin-price">
-          原价￥{{ activity.originPrice }}
-        </div>
-        <a
-          :class="[activity.status, { 'bg-grey': isEmpty || bgGrey }]"
-          class="context-sale__shopping"
-          href="javascript:;"
-        >
-          {{ grouponStatus }}
-        </a>
-      </div>
+      <a
+        :class="[activity.status, { 'bg-grey': isEmpty || bgGrey }]"
+        class="context-sale__shopping"
+        href="javascript:;"
+      >
+        {{ grouponStatus }}
+      </a>
     </div>
   </div>
 </template>
 
 <script>
-import countDown from '../e-count-down/index';
+import { getTimeData } from '@/utils/date-toolkit';
 
 export default {
   name: 'EGroupon',
-  components: {
-    countDown,
-  },
   props: {
     activity: {
       type: Object,
-      default: {},
+      default: () => {},
     },
     tag: {
       type: String,
@@ -86,6 +126,8 @@ export default {
       counting: true,
       isEmpty: false,
       bgGrey: false,
+      endTimeDown: { day: 0, hour: 0, minute: 0, second: 0 },
+      buyTimeDown: { day: 0, hour: 0, minute: 0, second: 0 },
     };
   },
   computed: {
@@ -101,10 +143,13 @@ export default {
       return '拼团';
     },
     activityPrice() {
-      if (!Object.values(this.activity).length) return '00.00';
-      if (this.type === 'seckill') return this.activity.rule.seckillPrice;
       if (this.type === 'cut') return this.activity.rule.lowestPrice;
+
       if (this.type === 'groupon') return this.activity.rule.ownerPrice;
+
+      if (this.type === 'seckill') return this.activity.rule.seckillPrice;
+      
+      return '00.00'
     },
     grouponStatus() {
       const status = this.activity.status;
@@ -113,6 +158,7 @@ export default {
         cut: '砍价',
         groupon: '拼团',
       };
+      
       if (status === 'ongoing' && !this.counting) {
         this.activity.status = 'closed';
         return `${typeText[this.type]}已结束`;
@@ -144,7 +190,12 @@ export default {
           if (status === 'closed') return '砍价已结束';
           break;
       }
+
+      return '';
     },
+  },
+  created() {
+    this.countDownTime();
   },
   methods: {
     getMarketUrl(status) {
@@ -157,6 +208,32 @@ export default {
     sellOut() {
       this.isEmpty = true;
     },
+    countDownTime() {
+      this.timer = setInterval(() => {
+        this.endTimeDown = getTimeData(new Date(this.activity.endTime).getTime());
+        this.buyTimeDown = getTimeData(new Date(this.activity.startTime).getTime());
+        
+        if (this.endTimeDown === '已到期') {
+          this.seckillClass = 'seckill-closed';
+          clearInterval(this.timer);
+          this.expire();
+        }
+      }, 1000);
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  .time-block {
+    min-width: 20px;
+    height: 16px;
+    margin: 0 2px;
+    padding: 0 2px;
+    color: #34c562;
+    text-align: center;
+    line-height: 16px;
+    background: #fff;
+    border-radius: 2px;
+  }
+</style>
