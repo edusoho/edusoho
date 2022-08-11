@@ -38,7 +38,7 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   res => {
-    if (res.data.hash) {
+    if (!res.data || res.data.hash) {
       return res;
     }
     // 自定义配置显示 loading 动画
