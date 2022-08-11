@@ -1,11 +1,6 @@
 .e-coupon {
-	padding: vw(25) 0 vw(30) vw(20);
+	padding: 20px 16px;
 	overflow: hidden;
-
-	&__container {
-		height: vw(96);
-		overflow: hidden;
-	}
 
 	&__title {
 		margin-bottom: vw(20);
@@ -16,34 +11,8 @@
 
 	&__body {
 		position: relative;
-		float: left;
 		box-sizing: border-box;
 		width: 100%;
-		height: vw(96);
-		padding-right: vw(20);
-		line-height: 1;
-
-		&::before {
-			position: absolute;
-			top: vw(52);
-			left: vw(-6);
-			width: vw(12);
-			height: vw(12);
-			background-color: #fff;
-			border-radius: 50%;
-			content: '';
-		}
-
-		&::after {
-			position: absolute;
-			top: vw(52);
-			right: vw(14);
-			width: vw(12);
-			height: vw(12);
-			background-color: #fff;
-			border-radius: 50%;
-			content: '';
-		}
 	}
 
 	&__name {
@@ -54,26 +23,25 @@
 		line-height: 1.3;
 	}
 
-	&__header {
+	.coupon-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		box-sizing: border-box;
-		padding: vw(20) vw(15) vw(18);
-		background-color: #ff6969;
-		border-top-left-radius: vw(2);
-		border-top-right-radius: vw(2);
+		width: vw(48);
+		height: vw(22);
+		font-size: vw(12);
+		border-radius: vw(28);
 
-		.coupon-button {
-			position: absolute;
-			top: vw(26);
-			right: vw(15);
-			box-sizing: border-box;
-			width: vw(56);
-			height: vw(24);
-			color: #ff5353;
-			font-size: vw(12);
-			line-height: vw(24);
-			text-align: center;
-			background-color: #fff;
-			border-radius: vw(4);
+		&.unreceive {
+			color: #fff;
+			background-color: #ff900e;
+		}
+
+		&.receive {
+			color: #ff900e;
+			background-color: transparent;
+			border: 1px solid #ff900e;
 		}
 	}
 
@@ -167,26 +135,6 @@
 
 		.select-icon {
 			font-size: 20px;
-		}
-	}
-
-	// 已领完
-	.coupon-received-all,
-	.coupon-used {
-		.e-coupon__header {
-			background-color: #b0bdc9;
-		}
-
-		.e-coupon__middle {
-			background-image: url($baseUrl+'static/images/dot_grey@2x.png');
-		}
-
-		.e-coupon__bottom {
-			background-color: #a5b2be;
-		}
-
-		.coupon-button {
-			display: none;
 		}
 	}
 

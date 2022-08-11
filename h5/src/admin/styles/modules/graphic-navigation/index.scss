@@ -21,6 +21,9 @@
 
 		.add-img {
 			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			float: left;
 			width: 80px;
 			height: 80px;
@@ -35,8 +38,8 @@
 			}
 
 			.graphic-navigation-img {
+				display: inline-block;
 				width: 60px;
-				margin-top: 10px;
 				border-radius: 1000px;
 			}
 
@@ -130,7 +133,7 @@
 }
 
 .e-graphic-navigation {
-	padding: 16px 0;
+	padding: 24px 0 20px;
 
 	.graphicNavigation__warp {
 		display: flex;

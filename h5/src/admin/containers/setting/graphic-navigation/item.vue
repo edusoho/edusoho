@@ -1,10 +1,10 @@
 <template>
   <div
     :class="{ active: active === index }"
-    class="graphic-navigation-item clearfix"
+    class="clearfix graphic-navigation-item"
     @click="selected(index)"
   >
-    <div class="graphic-navigation-item-left clearfix">
+    <div class="clearfix graphic-navigation-item-left">
       <div class="add-img" @click="chooseImg">
         <img
           v-if="!item.image.uri"
@@ -15,7 +15,7 @@
         <div class="graphic-navigation-img-mask">{{ $t('navigation.replacePicture') }}</div>
       </div>
     </div>
-    <div class="graphic-navigation-item-right clearfix">
+    <div class="clearfix graphic-navigation-item-right">
       <div class="add-title">
         {{ $t('navigation.title') }}<el-input
           v-model="item.title"
@@ -181,6 +181,10 @@ export default {
           value: 'course',
           label: '课程分类',
         },
+        {
+          value: 'vip',
+          label: '会员专区'
+        }
       ],
       typeText: {
         openCourse: this.$t('navigation.openClassSorts'),

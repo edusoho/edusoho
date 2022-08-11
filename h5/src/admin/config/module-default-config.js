@@ -80,7 +80,19 @@ const MODULE_DEFAULT = {
     moduleType: 'navigation-1',
     data: [
       {
-        title: '公开课',
+        title: '班级',
+        image: {
+          url: '',
+          uri: `${baseUri}static/images/hotclass.png`,
+        },
+        link: {
+          type: 'classroom',
+          target: '跳转班级“全部”列表',
+          url: '',
+        },
+      },
+      {
+        title: '课程',
         image: {
           url: '',
           uri: `${baseUri}static/images/openCourse.png`,
@@ -92,26 +104,14 @@ const MODULE_DEFAULT = {
         },
       },
       {
-        title: '热门课',
+        title: '会员专区',
         image: {
           url: '',
-          uri: `${baseUri}static/images/hotcourse.png`,
+          uri: `${baseUri}static/images/openCourse.png`,
         },
         link: {
-          type: 'course',
-          target: '跳转课程“全部”列表',
-          url: '',
-        },
-      },
-      {
-        title: '热销班',
-        image: {
-          url: '',
-          uri: `${baseUri}static/images/hotclass.png`,
-        },
-        link: {
-          type: 'classroom',
-          target: '跳转班级“全部”列表',
+          type: 'openCourse',
+          target: '跳转会员页面',
           url: '',
         },
       },
@@ -122,31 +122,7 @@ const MODULE_DEFAULT = {
     moduleType: 'navigation-1',
     data: [
       {
-        title: '免费课',
-        image: {
-          url: '',
-          uri: `${baseUri}static/images/openCourse.png`,
-        },
-        link: {
-          type: 'course',
-          target: '跳转课程“全部”列表',
-          url: '',
-        },
-      },
-      {
-        title: '热门课',
-        image: {
-          url: '',
-          uri: `${baseUri}static/images/hotcourse.png`,
-        },
-        link: {
-          type: 'course',
-          target: '跳转课程“全部”列表',
-          url: '',
-        },
-      },
-      {
-        title: '热销班',
+        title: '班级',
         image: {
           url: '',
           uri: `${baseUri}static/images/hotclass.png`,
@@ -154,6 +130,30 @@ const MODULE_DEFAULT = {
         link: {
           type: 'classroom',
           target: '跳转班级“全部”列表',
+          url: '',
+        },
+      },
+      {
+        title: '课程',
+        image: {
+          url: '',
+          uri: `${baseUri}static/images/openCourse.png`,
+        },
+        link: {
+          type: 'course',
+          target: '跳转公课程“全部”列表',
+          url: '',
+        },
+      },
+      {
+        title: '会员专区',
+        image: {
+          url: '',
+          uri: `${baseUri}static/images/vip.png`,
+        },
+        link: {
+          type: 'vip',
+          target: '跳转会员页面',
           url: '',
         },
       },
@@ -348,11 +348,11 @@ const H5_MARKETING_MODULE = [
     default: MODULE_DEFAULT.coupon,
     icon: 'icon-youhuiquan',
   },
-  {
-    name: 'sidebar.memberArea',
-    default: MODULE_DEFAULT.vip,
-    icon: 'icon-huiyuanzhuanqu',
-  },
+  // {
+  //   name: 'sidebar.memberArea',
+  //   default: MODULE_DEFAULT.vip,
+  //   icon: 'icon-huiyuanzhuanqu',
+  // },
   {
     name: 'sidebar.groupPurchase',
     default: MODULE_DEFAULT.groupon,

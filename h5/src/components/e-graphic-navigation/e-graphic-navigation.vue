@@ -85,6 +85,11 @@ export default {
           query: { ...link.conditions },
         });
       }
+      if (link.type === 'vip') {
+        this.$router.push({
+          name: 'vip',
+        });
+      }
     },
   },
 };
