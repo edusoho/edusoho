@@ -114,6 +114,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
             $conditions = [
+                'isHomepage' => 1,
                 'categoryId' => isset($discoverySetting['data']['categoryId']) ? $discoverySetting['data']['categoryId'] : 0,
             ];
 
