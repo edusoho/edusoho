@@ -1,5 +1,5 @@
 <template>
-  <div class="e-coupon__body">
+  <div class="relative e-coupon__body">
     <img v-if="couponStatus === 'unused'" src="/static/images/coupon/receive.png" class="img-full" />
     <img v-else-if="couponStatus === 'receive'" src="/static/images/coupon/receive.png" class="img-full" />
     <img v-else-if="couponStatus === 'finished'" src="/static/images/coupon/finished.png" class="img-full" />
