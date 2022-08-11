@@ -990,6 +990,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $courses = ArrayToolkit::index($courses, 'id');
 
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
+        } else if (isset($conditions['categoryId'])){
+            return $this->getLatestCourse($conditions);
         }
 
         $lessons = $this->getOpenCourseLessonDao()->searchLessonsWithOrderBy($this->_prepareLiveCourseLessonConditions($conditions), $start, $limit);
@@ -1016,6 +1018,82 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $results;
     }
 
+    protected function getLatestCourse($conditions = [])
+    {
+        if (empty($conditions)) {
+            return [];
+        }
+
+        $publishedCourses = $this->searchCourses([
+            'status' => 'published',
+            'type' => 'liveOpen',
+            'parentId' => 0,
+            'categoryId' => empty($conditions['categoryId']) ? '' : $conditions['categoryId'],
+        ], [], 0, PHP_INT_MAX);
+
+        $conditions['courseIds'] = empty($publishedCourses) ? [-1] : array_column($publishedCourses, 'id');
+
+        $lesson = $this->getLatestLesson($conditions);
+
+        $course = !empty($courses[$lesson['courseId']]) ? $courses[$lesson['courseId']] : $this->getCourse($lesson['courseId']);
+        if (empty($course)) {
+            return [];
+        }
+
+        $course['lesson'] = $lesson;
+
+        $course['liveStatus'] = $this->filterLessonStatus($lesson['startTime'], $lesson['endTime']);
+        $course['liveStatus'] = ('end' == $course['liveStatus'] && $this->hasReplay($lesson['replayStatus'])) ? 'hasReplay' : $course['liveStatus'];
+
+        return [$course];
+    }
+
+
+    protected function getLatestLesson($conditions)
+    {
+        /**
+         * 根据公开课的状态进行分组
+         * 判断是否有直播中的公开课，有则取最近开始的一个并返回，没有则进行下一步判断
+         * 判断是否有未开始的公开课，有则取最近开始的一个并返回，没有则进行下一步判断
+         * 判断是否有有回放的公开课，有则取最近结束的一个并返回，没有则进行下一步判断
+         * 上述情况都没有则返回最近结束的一个公开课
+         */
+        $conditions = $this->_prepareLiveCourseLessonConditions($conditions);
+        $latestLivingLesson = $this->searchLessons(
+            array_merge($conditions, [
+                'startTimeLessThan' => time(),
+                'endTimeGreaterThan' => time()
+            ]),
+            ['startTime' => 'DESC'], 0, 1)[0];
+        if (!empty($latestLivingLesson)) {
+            return $latestLivingLesson;
+        }
+
+        $latestAheadLesson = $this->searchLessons(
+            array_merge($conditions, [
+                'startTimeGreaterThan' => time()
+            ]),
+            ['startTime' => 'ASC'], 0, 1)[0];
+        if (!empty($latestAheadLesson)) {
+            return $latestAheadLesson;
+        }
+
+        $latestReplayLesson = $this->searchLessons(
+            array_merge($conditions, [
+                'replayStatusList' => ['generated', 'videoGenerated'],
+                'endTimeLessThan' => time()
+            ]),
+            ['endTime' => 'DESC'], 0, 1)[0];
+        if (!empty($latestReplayLesson)) {
+            return $latestReplayLesson;
+        }
+        return $this->searchLessons(
+            array_merge($conditions, [
+                'endTimeLessThan' => time()
+            ]),
+            ['endTime' => 'DESC'], 0, 1)[0];
+    }
+
     protected function hasReplay($replayStatus)
     {
         return ('generated' == $replayStatus || 'videoGenerated' == $replayStatus) ? true : false;
@@ -1038,7 +1116,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     protected function _prepareLiveCourseLessonConditions($conditions)
     {
-        $defaultConditions = ['categoryId' => '', 'isReplay' => 0, 'limitDays' => 0, 'courseIds' => []];
+        $defaultConditions = ['categoryId' => '', 'isReplay' => 0, 'courseIds' => []];
         $conditions = ArrayToolkit::filter($conditions, $defaultConditions);
         $conditions = array_merge(['type' => 'liveOpen', 'status' => 'published', 'parentId' => 0], $conditions);
 
@@ -1048,13 +1126,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $conditions['endTimeGreaterThan'] = time();
         }
 
-        if (!empty($conditions['limitDays']) && is_numeric($conditions['limitDays'])) {
-            $conditions['startTimeGreaterThan'] = strtotime(date('Y-m-d', time() - $conditions['limitDays'] * 24 * 60 * 60));
-            $conditions['startTimeLessThan'] = strtotime(date('Y-m-d', time() + $conditions['limitDays'] * 24 * 60 * 60));
-        }
-
         unset($conditions['isReplay']);
-        unset($conditions['limitDays']);
 
         return $conditions;
     }
