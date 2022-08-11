@@ -52,6 +52,12 @@ export default [
     method: 'GET',
   },
   {
+    // 拼团数据
+    name: 'groupon',
+    url: '/page/h5/groupon/{activityId}',
+    method: 'GET',
+  },
+  {
     // 上传文件
     name: 'updateFile',
     url: '/files',

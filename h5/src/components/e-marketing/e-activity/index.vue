@@ -31,7 +31,7 @@
             {{ type === 'groupon' ? '拼团价' : '秒杀价' }}
           </div>
           <div>
-            已团2次 | 5人团
+            已团{{ this.groupon.groupTime || 0 }}次 | {{ activity.rule.memberNum }}人团
           </div>
         </div>
         
@@ -45,7 +45,7 @@
               原价￥{{ activity.originPrice }}
             </s>
           </div>
-          <div class="text-12">1人正在拼团</div>
+          <div class="text-12">{{ this.groupon.grouponNum }}人正在拼团</div>
         </div>
       </div>
 
@@ -96,6 +96,7 @@
 
 <script>
 import { getTimeData } from '@/utils/date-toolkit';
+import Api from '@/api';
 
 export default {
   name: 'EGroupon',
@@ -128,7 +129,19 @@ export default {
       bgGrey: false,
       endTimeDown: { day: 0, hour: 0, minute: 0, second: 0 },
       buyTimeDown: { day: 0, hour: 0, minute: 0, second: 0 },
+      groupon: {}
     };
+  },
+  created() {
+    this.countDownTime();
+    
+    if (this.type === 'groupon') {
+      Api.groupon({
+        query: { activityId: this.activity.id }
+      }).then(res => {
+        this.groupon = res;
+      })
+    }
   },
   computed: {
     activityData() {
@@ -193,9 +206,6 @@ export default {
 
       return '';
     },
-  },
-  created() {
-    this.countDownTime();
   },
   methods: {
     getMarketUrl(status) {
