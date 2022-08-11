@@ -368,6 +368,10 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
+    public function announcementFilter($discoverySetting, $portal, $usage = 'show'){
+        return $discoverySetting;
+    }
+
     public function vipFilter($discoverySetting, $portal, $usage = 'show')
     {
         if ($this->isPluginInstalled('Vip')) {
