@@ -1,52 +1,76 @@
 <template>
-  <div>
+  <div class="fixed bottom-0 left-0 right-0" style="top: 46px; background-color: #F2F5F7;">
     <e-loading v-if="isLoading" />
+    
     <user />
-    <router-link :to="{ name: 'couponCovert' }">
-      <div v-if="hasBusinessDrainage" class="coupon-code-entrance">
-        {{ $t('enter.coupon') }}
-        <i class="van-icon van-icon-arrow pull-right" />
-      </div>
-    </router-link>
-    <a
-      v-if="isShowDistributorEntrance"
-      :href="drpSetting.distributor_login_url"
-    >
-      <div class="coupon-code-entrance">
-        {{ $t('enter.distribution') }}
-        <i class="van-icon van-icon-arrow pull-right" />
-      </div>
-    </a>
-    <router-link :to="{ name: 'my_certificate' }">
-      <div class="coupon-code-entrance">
-        {{ $t('enter.myCertificate') }}
-        <i class="van-icon van-icon-arrow pull-right" />
-      </div>
-    </router-link>
 
-    <template v-for="(entry, index) in entryData">
-      <router-link :to="{ name: entry.link }" :key="index">
-        <div class="coupon-code-entrance">
-          {{ $t(entry.name) }}
-          <i class="van-icon van-icon-arrow pull-right" />
+    <div class="px-16 py-24 mx-16 bg-fill-1" style="border-radius: 6px;">
+      <div class="flex items-center justify-between mb-24">
+        <div class="flex items-center">
+          <img class="mr-12" :src="icon.orderIcon" :srcset="icon.orderIcon2" style="height: 22px;" />
+          <div class="text-text-5 text-14" style="line-height: 22px;">我的订单</div>
         </div>
-      </router-link>
-    </template>
+        <i class="van-icon van-icon-arrow" />
+      </div>
 
-    <van-tabs v-model="activeIndex" class="after-tabs e-learn">
+      <div class="flex items-center justify-between mb-24">
+        <div class="flex items-center">
+          <img class="mr-12" :src="icon.activityIcon" :srcset="icon.activityIcon2" style="height: 22px;" />
+          <div class="text-text-5 text-14" style="line-height: 22px;">我的活动</div>
+        </div>
+        <i class="van-icon van-icon-arrow" />
+      </div>
+
+      <div class="flex items-center justify-between mb-24" @click="$router.push({ name: 'couponCovert' })">
+        <!-- <div v-if="hasBusinessDrainage"> -->
+        <div class="flex items-center">
+          <img class="mr-12" :src="icon.couponIcon" :srcset="icon.couponIcon2" style="height: 22px;" />
+          <div class="text-text-5 text-14" style="line-height: 22px;">{{ $t('enter.coupon') }}</div>
+        </div>
+        <i class="van-icon van-icon-arrow" />
+      </div>
+
+      <!-- <a v-if="isShowDistributorEntrance" :href="drpSetting.distributor_login_url"> -->
+      <a class="flex items-center justify-between block mb-24" :href="drpSetting.distributor_login_url">
+        <div class="flex items-center">
+          <img class="mr-12" :src="icon.activityIcon" :srcset="icon.activityIcon2" style="height: 22px;" />
+          <div class="text-text-5 text-14" style="line-height: 22px;">{{ $t('enter.distribution') }}</div>
+        </div>
+        <i class="van-icon van-icon-arrow" />
+      </a>
+
+      <div class="flex items-center justify-between mb-24" @click="$router.push({ name: 'my_certificate' })">
+        <div class="flex items-center">
+          <img class="mr-12" :src="icon.certificateIcon" :srcset="icon.certificateIcon2" style="height: 22px;" />
+          <div class="text-text-5 text-14" style="line-height: 22px;">{{ $t('enter.myCertificate') }}</div>
+        </div>
+        <i class="van-icon van-icon-arrow" />
+      </div>
+
+      <div class="flex items-center justify-between" @click="$router.push({ name: 'myWrongQuestionBook' })">
+        <div class="flex items-center">
+          <img class="mr-12" :src="icon.mistakesCollectionIcon" :srcset="icon.mistakesCollectionIcon2" style="height: 22px;" />
+          <div class="text-text-5 text-14" style="line-height: 22px;">{{ $t('enter.mistakesCollection') }}</div>
+        </div>
+        <i class="van-icon van-icon-arrow" />
+      </div>
+    </div>
+
+    <!-- <van-tabs v-model="activeIndex" class="after-tabs e-learn">
       <van-tab v-for="(item, index) in tabs" :title="$t(item)" :key="index" />
     </van-tabs>
     <orders v-show="activeIndex === 0" />
-    <activity v-show="activeIndex === 1" />
+    <activity v-show="activeIndex === 1" /> -->
   </div>
 </template>
 <script>
-import Orders from '../order/orders.vue';
-import activity from './activity';
+// import Orders from '../order/orders.vue';
+// import activity from './activity';
 import User from './user.vue';
 import { mapState } from 'vuex';
 import preloginMixin from '@/mixins/preLogin';
 import Api from '@/api';
+import icon from './icon'
 
 const entryData = [
   {
@@ -57,8 +81,8 @@ const entryData = [
 
 export default {
   components: {
-    Orders,
-    activity,
+    // Orders,
+    // activity,
     User,
   },
   mixins: [preloginMixin],
@@ -70,6 +94,7 @@ export default {
       isShowDistributorEntrance: false, // 是否展示分销中心入口
       drpSetting: {},
       entryData,
+      icon,
     };
   },
   computed: {
