@@ -27,7 +27,7 @@
       <span class="subposts-num-wrap {% if not post.subposts %}hide{% endif %}">(<span class="subposts-num">{{ post.subposts }}</span>)</span>
     {% endif %}
   </a>
-  {% if app.user.isLogin() and app.user.id != post.userId and not is_reported(reportType, post.id)  %}
+  {% if app.user.isLogin()|default(false) and app.user.id != post.userId and not is_reported(reportType, post.id)  %}
   <a class="color-gray pull-right item-hover"
      id="js-thread-modal-{{ post.id }}"
      href="#modal"
