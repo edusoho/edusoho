@@ -54,28 +54,6 @@ import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
 import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue';
 import { mapState, mapActions } from 'vuex';
 
-const dataDefault = [
-  {
-    type: 'type',
-    value: 'all',
-    options: [
-      { text: '全部', value: 'all' },
-      { text: '课程', value: 'normal' },
-      { text: '直播', value: 'live' },
-    ],
-  },
-  {
-    value: '',
-    type: 'sort',
-    options: [
-      { text: '全部', value: '' },
-      { text: '推荐', value: 'recommendedSeq' },
-      { text: '热门', value: '-studentNum' },
-      { text: '最新', value: '-createdTime' },
-    ],
-  },
-]
-
 export default {
   components: {
     lazyLoading,
@@ -101,9 +79,20 @@ export default {
         category: 'categoryId',
         sort: 'sort',
       },
-      dataDefault,
+      dataDefault: [
+        {
+          type: 'sort',
+          value: '',
+          options: [
+            { text: '排序', value: '' },
+            { text: '推荐', value: 'recommendedSeq' },
+            { text: '热门', value: '-studentNum' },
+            { text: '最新', value: '-createdTime' },
+          ],
+        },
+      ],
       itembankCategories: [],
-      currentItembankCategoryText: '',
+      currentItembankCategoryText: this.$t('more.Classification'),
       showItembankCategoryPopup: false
     };
   },
@@ -184,7 +173,11 @@ export default {
         value: '0',
         data
       });
-      this.currentItembankCategoryText = this.getCategoryDescById(this.itembankCategories, this.$route.query.categoryId || '0');
+
+      const categoryId = this.$route.query.categoryId
+      if (categoryId && categoryId !== '0') {
+        this.currentItembankCategoryText = this.getCategoryDescById(this.itembankCategories, categoryId);
+      }
     },
 
     onFinish({ selectedOptions }) {
