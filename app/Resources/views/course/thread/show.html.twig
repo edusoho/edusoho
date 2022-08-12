@@ -12,14 +12,7 @@
 
 {% block detail_content %}
 
-  {% set enable_anti_brush_captcha = setting('ugc_content_audit.enable_anti_brush_captcha')|default(1) %}
-  <input type="hidden" name="enable_anti_brush_captcha" value="{{enable_anti_brush_captcha}}">
-  {% if enable_anti_brush_captcha == 1 and app.user.isLogin()|default(false) %}
-    <div class="js-mask" style="position:fixed; left:0px; top:0px; background:rgba(0, 0, 0, 0.4); width:100%; height:100%; filter:alpha(opacity=60); opacity:0.6;display:none; z-index:100;"></div>
-    <div class="form-group cd-mb32 js-drag-jigsaw" style="width: 338px; height: 219px; position:fixed; z-index:101; display: none; background: white;">
-      {% include 'common/drag.html.twig' with { auth: true, showLabel: 0 } %}
-    </div>
-  {% endif %}
+  {% include 'common/anti-brush-captcha.html.twig' %}
   
   <div class="thread main_hover_item">
     <div class="thread-header">
@@ -51,7 +44,7 @@
           <span class="bullet mhs">•</span>
           <a class="link-primary" href="{{ path('course_task_show', {courseId: thread.courseId, id:thread.taskId}) }}" title="{{task.title}}">{{'course.thread.mission_number'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number})}}</a>
         {% endif %}
-        {% if app.user.isLogin() and app.user.id != thread.userId and is_reported(reportType, thread.id) %}
+        {% if app.user.isLogin()|default(false) and app.user.id != thread.userId and is_reported(reportType, thread.id) %}
           <span style="color: red;">({{ ('已举报')|trans }})</span>
         {% endif %}
         <span id="{{ 'js-course-thread-after-' ~ thread.id }}" style="color: red;"></span>
@@ -59,7 +52,7 @@
     </div>
     <div class="thread-body">{{ thread.content|cdn|raw }}
     </div>
-    {% if app.user.isLogin() and app.user.id != thread.userId and not is_reported(reportType, thread.id) %}
+    {% if app.user.isLogin()|default(false) and app.user.id != thread.userId and not is_reported(reportType, thread.id) %}
       <a class="color-primary pull-right item-hover"
          id="js-course-thread-modal-{{ thread.id }}"
          href="#modal"

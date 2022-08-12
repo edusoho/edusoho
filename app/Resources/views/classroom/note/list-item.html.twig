@@ -16,11 +16,11 @@
     <div class="metas clearfix">
       {{ web_macro.user_link(user, 'name', false) }} · <span>{{ note.updatedTime|smart_time }}</span>
       {% include 'classroom/note/note-mates.html.twig' %}
-      {% if app.user.isLogin() and app.user.id != note.userId and is_reported('course_note', note.id) %}<span style="color: red;">({{ ('已举报')|trans }})</span>{% endif %}
+      {% if app.user.isLogin()|default(false) and app.user.id != note.userId and is_reported('course_note', note.id) %}<span style="color: red;">({{ ('已举报')|trans }})</span>{% endif %}
       <span id="{{ 'js-course-note-after-' ~ note.id }}"></span>
       <span class="metas-sns">
         <span class="icon-favour">
-          {% if app.user.isLogin() and app.user.id != note.userId and not is_reported('course_note', note.id) %}
+          {% if app.user.isLogin()|default(false) and app.user.id != note.userId and not is_reported('course_note', note.id) %}
             <a class="color-primary item-hover" id="js-course-note-modal-{{ note.id }}" href="#modal" data-toggle="modal" data-url="{{ path('common_report_tags_modal', {targetType: 'course_note', targetId: note.id, modalTarget: 'js-course-note-modal-'~ note.id, contentTarget: 'js-course-note-after-' ~ note.id }) }}">举报</a>&nbsp;&nbsp;&nbsp;&nbsp;
           {% endif %}
           <a href="javascript:;" class="js-like {% if userLike %}color-primary{% endif %}" data-like-url="{{ path('note_like', {id:note.id}) }}" data-cancel-like-url="{{ path('note_cancel_like', {id:note.id}) }}">
