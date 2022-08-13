@@ -26,6 +26,8 @@ class Token extends AbstractResource
         $this->appendUser($user);
         $this->getUserService()->markLoginInfo($type);
 
+        $userToken = $this->getUserService()->getUserToken($token);
+
         if ('app' == $client) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
 
@@ -40,7 +42,25 @@ class Token extends AbstractResource
 
         return [
             'token' => $token,
+            'tokenExpire' => $userToken['expiredTime'],
+            'refreshToken' => $userToken['refresh_token'],
             'user' => $user,
+        ];
+    }
+
+    public function refresh(ApiRequest $request, $refreshToken)
+    {
+        $user = $this->getCurrentUser()->toArray();
+        $client = $request->request->get('client', '');
+        //根据refreshtoken查询用户token//更新token
+        $userToken = $this -> getUserService() -> updateToken($refreshToken, time() + 3600 * 24 * 30);
+        if (empty($userToken)){
+            return [];
+        }
+        //返回token和过期时间
+        return[
+            'token' => $userToken['token'],
+            'tokenExpire' => $userToken['expiredTime'],
         ];
     }
 

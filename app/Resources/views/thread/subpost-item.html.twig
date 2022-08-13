@@ -34,7 +34,7 @@
       <span class="bullet">•</span>
       <span class="color-gray">{{post.createdTime|smart_time}} </span>
     </div>
-    <div class="editor-text">{{ post.content|at(post.ats)|cdn|raw }}{% if app.user.isLogin() and app.user.id != post.userId and is_reported(reportType, post.id) %}<span style="color:red;">({{ '已举报'|trans }})</span>{% endif %}<span id="{{ 'js-thread-after-' ~ post.id }}" style="color:red;"></span></div>
+    <div class="editor-text">{{ post.content|at(post.ats)|cdn|raw }}{% if app.user.isLogin()|default(false) and app.user.id != post.userId and is_reported(reportType, post.id) %}<span style="color:red;">({{ '已举报'|trans }})</span>{% endif %}<span id="{{ 'js-thread-after-' ~ post.id }}" style="color:red;"></span></div>
     {% include 'thread/post-interaction.html.twig' %}
   </div>
 </li>

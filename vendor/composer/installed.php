@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'f868b47c4e8e43b89765cd4761e63237a5e181a3',
+        'reference' => '05970db27e141ff7b138a35968dbb15a06b458a1',
         'name' => 'topxia/edusoho',
         'dev' => true,
     ),
@@ -110,7 +110,7 @@
             'aliases' => array(
                 0 => '9999999-dev',
             ),
-            'reference' => '245b0ecf14b8788b325ee0a33e830748f3ff88dc',
+            'reference' => '513a34825a4ed9986a382516025f0535af397d9b',
             'dev_requirement' => false,
         ),
         'codeages/biz-rate-limiter' => array(
@@ -1705,7 +1705,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'f868b47c4e8e43b89765cd4761e63237a5e181a3',
+            'reference' => '05970db27e141ff7b138a35968dbb15a06b458a1',
             'dev_requirement' => false,
         ),
         'twig/twig' => array(

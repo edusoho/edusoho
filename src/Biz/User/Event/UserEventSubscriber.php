@@ -19,6 +19,7 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
             'user.bind' => 'onUserBind',
             'user.unbind' => 'onUserUnbind',
             'user.change_password' => 'onUserChangePassword',
+            'user.lock' => 'onUserLock',
         ];
     }
 
@@ -99,6 +100,17 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
         if (1 == $user['passwordInit']) {
             $this->getUserService()->updatePasswordChanged($user['id'], 1);
         }
+    }
+
+    public function onUserLock(Event $event)
+    {
+        $user = $event->getSubject();
+        $fields = [
+            "loginSessionId" => ""
+        ];
+        
+        $this->getUserService()->updateUser($user['id'], $fields);
+        $this->getSessionService()->deleteSessionBySessId($user['loginSessionId']);
     }
 
     private function sendRegisterMessage($user)
@@ -183,6 +195,11 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getNotificationService()
     {
         return $this->getBiz()->service('User:NotificationService');
+    }
+
+    protected function getSessionService()
+    {
+        return $this->getBiz()->service("Session:SessionService");
     }
 
     /**
