@@ -340,6 +340,10 @@ export default {
 
 <style scoped>
 
+  .more {
+    background-color: #f7f9fa;
+  }
+
   .course-category {
     display: flex;
     flex: 1;

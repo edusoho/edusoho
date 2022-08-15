@@ -1,41 +1,30 @@
 <template>
-  <div class="e-course">
-    <div class="clearfix" @click="onClick(course.hasCertificate, $event)">
-      <div class="e-course__left pull-left">
-        <img v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
-        <div v-if="normalTagShow">
-          <span v-if="courseType === 'live'" class="tag tag-live">{{ $t('e.live') }}</span>
-          <span v-if="discountNum" class="tag tag-discount">{{
-            discountNum
-          }}</span>
+  <div class="flex mx-16 mb-12 bg-text-1 text-12" style="height: 94px;border-radius: 6px;" @click="onClick(course.hasCertificate, $event)">
+    <div class="relative" style="width: 170px;height: 100%;border-radius: 6px 0 0 6px;">
+      <img class="h-full" v-lazy="course.imgSrc.url" style="border-radius: 6px 0 0 6px;" />
+      <span v-if="normalTagShow && courseType === 'live'" class="tag-live">{{ $t('e.live') }}</span>
+      <span v-if="vipTagShow && vipSwitch && Number(isVip)" class="tag-vip">{{ $t('e.freeForMembers') }}</span>
+    </div>
+    <div class="flex flex-col justify-between flex-1 p-12" style="width: calc(100% - 170px);border-radius: 0 6px 6px 0;">
+
+      <div class="flex font-bold text-text-5">
+        <div v-if="discountNum" style="width: 14px;height:14px;margin:3px 4px 0 0;text-align: center;line-height: 14px;border: 1px solid #ff900e;border-radius: 2px;">
+          <div style="font-size: 12px; transform: scale(0.75); color: #FF900E;">{{ $t('e.discount') }}</div>
         </div>
-        <span
-          v-if="vipTagShow && vipSwitch && Number(isVip)"
-          class="tag tag-vip"
-          >{{ $t('e.freeForMembers') }}</span
-        >
+        <div v-if="course.hasCertificate" style="width: 14px;height:14px;margin:3px 4px 0 0;text-align: center;line-height: 14px;border: 1px solid #3DCD7F;border-radius: 2px;">
+          <div style="font-size: 12px; transform: scale(0.75); color: #3DCD7F;">{{ $t('e.certificate') }}</div>
+        </div>
+        <div class="text-14 text-overflow ">{{ course.header }}</div>
       </div>
-      <div class="e-course__right pull-left">
-        <!-- header -->
-        <div class="e-course__header text-overflow">
-          <span class="certificate-icon" v-if="course.hasCertificate">{{ $t('e.certificate') }}</span
-          >{{ course.header }}
-        </div>
-        <!-- middle -->
-        <div class="e-course__middle">
-          <div
-            v-if="course.middle.value && !vipCenter"
-            v-html="course.middle.html"
-          />
-        </div>
-        <!-- bottom -->
-        <div
-          class="e-course__bottom"
-          v-if="!vipCenter"
-          v-html="course.bottom.html"
-        />
-        <div class="e-course__bottom" v-else v-html="course.middle.vipHtml" />
-      </div>
+
+      <div v-if="course.middle.value && !vipCenter" class="text-text-3 text-12">{{ course.middle.value }}</div>
+
+      <div
+        class="e-course__bottom"
+        v-if="!vipCenter"
+        v-html="course.bottom.html"
+      />
+      <div class="e-course__bottom" v-else v-html="course.middle.vipHtml" />
     </div>
   </div>
 </template>
@@ -183,3 +172,34 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+  .tag-live {
+    position: absolute;
+    left: -3px;
+    top: -1px;
+    padding: 2px 8px;
+    color: #fff;
+    font-weight: 500;
+    line-height: 14px;
+    font-size: 12px;
+    background-color: #FF900E;
+    border-radius: 6px 0;
+    transform: scale(0.83);
+  }
+
+  .tag-vip {
+    position: absolute;
+    right: -4px;
+    top: -1px;
+    padding: 2px 8px;
+    color: #fff;
+    font-weight: 500;
+    line-height: 14px;
+    font-size: 12px;
+    background-color: #162923;
+    border-radius: 0 0 0 6px;
+    transform: scale(0.83);
+  }
+</style>

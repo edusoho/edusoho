@@ -52,6 +52,8 @@ export default {
   },
   title: {
     me: '我的',
+    myOrder: '我的订单',
+    myActivity: '我的活动',
     setting: '设置',
     nicknameSetting: '昵称设置',
     switchLanguage: '切换语言',

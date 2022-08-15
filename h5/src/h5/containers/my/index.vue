@@ -5,7 +5,7 @@
     <user />
 
     <div class="px-16 py-24 mx-16 bg-fill-1" style="border-radius: 6px;">
-      <div class="flex items-center justify-between mb-24">
+      <div class="flex items-center justify-between mb-24" @click="$router.push({ name: 'myOrder' })">
         <div class="flex items-center">
           <img class="mr-12" :src="icon.orderIcon" :srcset="icon.orderIcon2" style="height: 22px;" />
           <div class="text-text-5 text-14" style="line-height: 22px;">我的订单</div>
@@ -13,7 +13,7 @@
         <i class="van-icon van-icon-arrow" />
       </div>
 
-      <div class="flex items-center justify-between mb-24">
+      <div class="flex items-center justify-between mb-24" @click="$router.push({ name: 'myActivity' })">
         <div class="flex items-center">
           <img class="mr-12" :src="icon.activityIcon" :srcset="icon.activityIcon2" style="height: 22px;" />
           <div class="text-text-5 text-14" style="line-height: 22px;">我的活动</div>

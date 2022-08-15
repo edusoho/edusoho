@@ -8,7 +8,7 @@
       >
         <span class="itembank-category__title">{{ currentItembankCategoryText }}</span>
       </div>
-      <div style="flex: 2;">
+      <div style="flex: 1;">
         <van-dropdown-menu active-color="#1989fa">
           <van-dropdown-item
             v-for="(item, index) in dropdownData"
@@ -295,7 +295,10 @@ export default {
 </script>
 
 <style scoped>
-
+  .more {
+    background-color: #f7f9fa;
+  }
+  
   .itembank-category {
     display: flex;
     flex: 1;

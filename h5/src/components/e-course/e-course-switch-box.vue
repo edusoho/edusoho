@@ -2,24 +2,24 @@
   <div class="e-course-switch-box">
     <!-- price -->
     <div v-if="type === 'price'" class="switch-box">
-      <span class="switch-box__price">
+      <span class="text-12">
         <p v-if="isFree" class="free">{{ $t('e.free') }}</p>
         <p v-if="!isFree" class="price">¥ {{ course.price }}</p>
       </span>
-      <span class="switch-box__state">
+      <span class="text-12">
         <p v-if="showStudent">{{ $t('e.personStudying', { number: course.studentNum }) }}</p>
       </span>
     </div>
 
     <!-- order -->
     <div v-if="type === 'order'" class="switch-box">
-      <span class="switch-box__price">
+      <span class="text-12">
         <p v-if="isFree" class="free">{{ $t('e.free') }}</p>
         <p v-if="!isFree" class="price">
           {{ displayPrice(order.priceConvert) }}
         </p>
       </span>
-      <span class="switch-box__state">
+      <span class="text-12">
         <p
           v-if="order.status !== 'created' && order.status !== 'paying'"
           :class="order.status"
@@ -37,7 +37,7 @@
 
     <!-- confirm order -->
     <div v-if="type === 'confirmOrder'" class="switch-box">
-      <span class="switch-box__price">
+      <span class="text-12">
         <p class="price">{{ displayPrice(order) }}</p>
       </span>
     </div>

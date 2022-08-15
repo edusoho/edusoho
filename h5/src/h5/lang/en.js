@@ -52,6 +52,8 @@ export default {
   },
   title: {
     me: 'Me',
+    myOrder: 'My Order',
+    myActivity: 'My Activity',
     setting: 'Setting',
     nicknameSetting: 'Nickname Setting',
     switchLanguage: 'Switch language',

@@ -338,6 +338,11 @@ export default {
 </script>
 
 <style scoped>
+
+  .more {
+    background-color: #f7f9fa;
+  }
+  
   .class-category {
     display: flex;
     flex: 1;
