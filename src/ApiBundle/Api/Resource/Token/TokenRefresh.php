@@ -13,7 +13,7 @@ class TokenRefresh extends AbstractResource
     public function add(ApiRequest $request, $refreshToken)
     {
         $token = $request->headers->get("X-Auth-Token","");
-        $userToken = $this -> getUserService() -> updateToken($token, $refreshToken, time() + 3600 * 24 * 30);
+        $userToken = $this -> getUserService() -> refreshToken($token, $refreshToken, time() + 3600 * 24 * 30);
         if (empty($userToken)) {
             return [];
         }
