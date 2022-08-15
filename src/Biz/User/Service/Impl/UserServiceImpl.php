@@ -1277,6 +1277,10 @@ class UserServiceImpl extends BaseService implements UserService
         }
         $userToken['token'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $userToken['expiredTime'] = $expiredTime ? (int) $expiredTime : 0;
+        $this->getUserTokenDao()->update($userToken['id'], [
+            'token' => $userToken['token'],
+            'expiredTime' => $userToken['expiredTime'],
+        ]);
 
         return $userToken;
     }
