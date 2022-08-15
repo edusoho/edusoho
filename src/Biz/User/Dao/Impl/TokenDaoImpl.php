@@ -24,12 +24,6 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
         return $this->db()->fetchAssoc($sql, array($token)) ?: null;
     }
 
-    public function getByRefreshToken($refreshToken)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE refresh_token = ? LIMIT 1";
-        return $this->db()->fetchAssoc($sql, array($refreshToken)) ?: null;
-    }
-
     public function findByUserIdAndType($userId, $type)
     {
         return $this->findByFields(array('userId' => $userId, 'type' => $type));

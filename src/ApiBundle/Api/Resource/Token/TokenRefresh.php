@@ -14,8 +14,9 @@ class TokenRefresh extends AbstractResource
     {
         $user = $this->getCurrentUser()->toArray();
         $client = $request->request->get('client', '');
+        $token = $request->headers->get("X-Auth-Token","");
         //根据refreshtoken查询用户token//更新token
-        $userToken = $this -> getUserService() -> updateToken($refreshToken, time() + 3600 * 24 * 30);
+        $userToken = $this -> getUserService() -> updateToken($token, $user['id'], $refreshToken, time() + 3600 * 24 * 30);
         if (empty($userToken)) {
             return [];
         }

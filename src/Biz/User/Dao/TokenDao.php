@@ -10,8 +10,6 @@ interface TokenDao extends GeneralDaoInterface
 
     public function getByToken($token);
 
-    public function getByRefreshToken($refreshToken);
-
     public function create($token);
 
     public function findByUserIdAndType($userId, $type);

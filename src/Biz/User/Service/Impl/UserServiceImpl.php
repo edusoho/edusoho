@@ -1256,8 +1256,6 @@ class UserServiceImpl extends BaseService implements UserService
         $token['times'] = empty($args['times']) ? 0 : (int) ($args['times']);
         $token['expiredTime'] = $expiredTime ? (int) $expiredTime : 0;
         $token['createdTime'] = time();
-        $token['refresh_token'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $token['refresh_expire_time'] = time() + 180 * 24 * 3600;
         $token = $this->getUserTokenDao()->create($token);
 
         return $token['token'];
@@ -1268,15 +1266,18 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserTokenDao()->getByToken($token);
     }
 
-    public function updateToken($refreshToken, $expiredTime = null)
+    public function updateToken($token, $userId, $refreshToken, $expiredTime = null)
     {
-        $userToken = $this->getUserTokenDao()->getByRefreshToken($refreshToken);
-        if ($userToken['refresh_expire_time'] < time() || $userToken['expiredTime'] < time())
+        $userToken = $this->getUserTokenDao()->getByToken($refreshToken);
+
+        if ($userToken['expiredTime'] < time())
         {
             return [];
         }
+        $userToken = $this->getUserTokenDao()->getByToken($token);
         $userToken['token'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $userToken['expiredTime'] = $expiredTime ? (int) $expiredTime : 0;
+
         $this->getUserTokenDao()->update($userToken['id'], [
             'token' => $userToken['token'],
             'expiredTime' => $userToken['expiredTime'],

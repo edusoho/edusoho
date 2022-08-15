@@ -22,19 +22,21 @@ class Token extends AbstractResource
         $user = $this->getCurrentUser()->toArray();
 
         $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], time() + 3600 * 24 * 30, ['client' => $client]);
+        $refreshToken = $this->getUserService()->makeToken("refreshToken", $user['id'], time() + 3600 * 24 * 180, ['client' => $client]);
 
         $this->appendUser($user);
         $this->getUserService()->markLoginInfo($type);
 
-        $userToken = $this->getUserService()->getUserToken($token);
+        $userToken = $this->getUserService()->getUserToken($refreshToken);
 
         if ('app' == $client) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
 
             $delTokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], self::TOKEN_TYPE);
-
+            $delRefreshTokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], "refreshToken");
+            $delTokens = array_merge($delTokens, $delRefreshTokens);
             foreach ($delTokens as $delToken) {
-                if ($delToken['token'] != $token) {
+                if ($delToken['token'] != $token && $delToken['token'] != $refreshToken) {
                     $this->getTokenService()->destoryToken($delToken['token']);
                 }
             }
@@ -43,7 +45,7 @@ class Token extends AbstractResource
         return [
             'token' => $token,
             'tokenExpire' => $userToken['expiredTime'],
-            'refreshToken' => $userToken['refresh_token'],
+            'refreshToken' => $userToken['token'],
             'user' => $user,
         ];
     }

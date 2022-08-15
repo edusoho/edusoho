@@ -218,7 +218,7 @@ interface UserService
 
     public function getUserToken($token);
 
-    public function updateToken($refreshToken, $expiredTime = null);
+    public function updateToken($token, $userId, $refreshToken, $expiredTime = null);
 
     /**
      * @deprecated move to TokenService
