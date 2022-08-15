@@ -21,31 +21,22 @@ class Token extends AbstractResource
         $client = $request->request->get('client', '');
         $user = $this->getCurrentUser()->toArray();
 
-        $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], time() + 3600 * 24 * 30, ['client' => $client]);
+        $expiredTime = time() + 3600 * 24 * 30;
+        $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'],$expiredTime , ['client' => $client]);
         $refreshToken = $this->getUserService()->makeToken("refreshToken", $user['id'], time() + 3600 * 24 * 180, ['client' => $client]);
 
         $this->appendUser($user);
         $this->getUserService()->markLoginInfo($type);
 
-        $userToken = $this->getUserService()->getUserToken($refreshToken);
-
         if ('app' == $client) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
-
-            $delTokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], self::TOKEN_TYPE);
-            $delRefreshTokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], "refreshToken");
-            $delTokens = array_merge($delTokens, $delRefreshTokens);
-            foreach ($delTokens as $delToken) {
-                if ($delToken['token'] != $token && $delToken['token'] != $refreshToken) {
-                    $this->getTokenService()->destoryToken($delToken['token']);
-                }
-            }
+            $this->deleteInvalidToken($user['id'], $token, $refreshToken);
         }
 
         return [
             'token' => $token,
-            'tokenExpire' => $userToken['expiredTime'],
-            'refreshToken' => $userToken['token'],
+            'tokenExpire' => $expiredTime,
+            'refreshToken' => $refreshToken,
             'user' => $user,
         ];
     }
@@ -96,6 +87,18 @@ class Token extends AbstractResource
         $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
 
         return $user;
+    }
+
+    protected function deleteInvalidToken($userId, $token, $refreshToken)
+    {
+        $delTokens = $this->getTokenService()->findTokensByUserIdAndType($userId, self::TOKEN_TYPE);
+        $delRefreshTokens = $this->getTokenService()->findTokensByUserIdAndType($userId, "refreshToken");
+        $delTokens = array_merge($delTokens, $delRefreshTokens);
+        foreach ($delTokens as $delToken) {
+            if ($delToken['token'] != $token && $delToken['token'] != $refreshToken) {
+                $this->getTokenService()->destoryToken($delToken['token']);
+            }
+        }
     }
 
     protected function getBatchNotificationService()
