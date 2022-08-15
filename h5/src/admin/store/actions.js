@@ -211,5 +211,6 @@ export const getLanguage = () => Api.getSettings({
   query: { type: 'locale' }
 }).then(res => {
   const language = res.locale.toLowerCase().replace('_', '-');
-  i18n.locale = language;
+  // i18n.locale = language;
+  i18n.locale = 'en';
 });

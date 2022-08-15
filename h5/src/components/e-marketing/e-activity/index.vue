@@ -17,7 +17,7 @@
         <span class="ml-4">￥</span>
         <span class="font-bold text-16" style="line-height: 20px;">{{ activityPrice }}</span>
         <s v-if="activity.originPrice" class="ml4" style="transform: scale(0.83)">
-          原价￥{{ activity.originPrice }}
+          ￥{{ activity.originPrice }}
         </s>
       </div>
 
@@ -81,7 +81,7 @@
 
     <div class="flex items-center justify-between e-groupon__context">
       <div class="font-bold text-overflow text-14 text-text-5">
-        {{ activity.name || '活动名称' }}
+        {{ activity.name || '' }}
       </div>
       <a
         :class="[activity.status, { 'bg-grey': isEmpty || bgGrey }]"

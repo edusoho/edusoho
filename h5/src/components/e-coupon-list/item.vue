@@ -6,7 +6,7 @@
     <img v-else src="/static/images/coupon/unreceive.png" class="img-full" />
 
     <div class="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-between pl-16 pr-16">
-      <div v-show="num == 1" class="e-coupon__name">
+      <div v-if="num == 1" class="e-coupon__name">
         <div class="text-overflow text-14 coupon-name">{{ item.name }}</div>
         
         <!-- 兼容老版本优惠券无有效期功能或者非有效期模式 -->
@@ -29,9 +29,9 @@
         >
       </div>
 
-      <div class="text-text-1">
-        <div class="text-24" v-html="priceHtml(item)" />
-        <div class="mt-4 text-10">{{ $t('e.availableRange') }}: {{ scopeFilter(item) }}</div>
+      <div class="text-text-1" style="height: 100%;">
+        <div class="pt-4 text-24" v-html="priceHtml(item)" />
+        <div class="text-10">{{ scopeFilter(item) }}</div>
       </div>
 
       <div v-if="feedback && couponStatus !== 'finished'" :class="['coupon-button', couponStatus]" @click="handleClick(item)">

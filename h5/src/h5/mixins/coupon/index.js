@@ -53,16 +53,16 @@ export default {
         // 全部
         switch (productType) {
           case 'course':
-            text = '全部课程';
+            text = this.$t('coupon.allCourse');
             break;
           case 'classroom':
-            text = '全部班级';
+            text = this.$t('coupon.allClass');
             break;
           case 'all':
-            text = '全部商品';
+            text = this.$t('coupon.allGoods');
             break;
           case 'vip':
-            text = '全部会员';
+            text = this.$t('coupon.allMember');
             break;
           default:
             text = '';

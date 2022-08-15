@@ -57,7 +57,7 @@ export default {
     all: 'All'
   },
   search: {
-    placeholder: 'Search course/class/Question bank',
+    placeholder: 'Search course/class/question bank',
     searchSettings: 'Search settings',
     atPresent: 'The search function currently only supports searching classes and courses'
   },

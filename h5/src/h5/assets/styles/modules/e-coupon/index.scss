@@ -28,8 +28,9 @@
 		align-items: center;
 		justify-content: center;
 		box-sizing: border-box;
-		width: vw(48);
+		min-width: vw(48);
 		height: vw(22);
+		padding: 0 vw(4);
 		font-size: vw(12);
 		border-radius: vw(28);
 

@@ -2,7 +2,7 @@
   <div class="p-16">
     <div class="flex justify-between">
       <div class="font-bold text-text-5 text-16">
-        题库
+        {{ itembank.title }}
       </div>
       <div class="flex items-center text-text-3 text-12" @click="jumpToAll">
         <div>{{ $t('enter.all') }}</div>
@@ -15,8 +15,8 @@
         <div class="flex flex-col justify-between p-8" style="height: 62px;">
           <div class="font-bold text-14 text-overflow" style="width: 124px;">{{ currentItem.title }}</div>
           <div class="flex justify-between text-12">
-            <div style="color: #ff7a34;">￥{{ currentItem.price }}</div>
-            <div class="text-text-3">{{currentItem.studentNum }}在学</div>
+            <div class="font-bold" style="color: #FF7A34;">￥{{ currentItem.price }}</div>
+            <div class="text-text-3">{{currentItem.studentNum }}{{ $t('e.learn') }}</div>
           </div>
         </div>
       </div>

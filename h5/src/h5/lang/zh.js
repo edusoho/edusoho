@@ -1,3 +1,4 @@
+
 export default {
   lang: {
     language: '简体中文',
@@ -49,6 +50,8 @@ export default {
     moreCourse: '更多好课等您加入',
     moreClass: '更多班级等您加入',
     moreQuestionBanks: '更多题库等您加入',
+    learn: '人在学',
+    browse: '人浏览'
   },
   title: {
     me: '我的',
@@ -613,5 +616,11 @@ export default {
     available: '张可用',
     longTermEffective: '长期有效',
     noOrderRecord: '暂无订单记录'
+  },
+  coupon: {
+    allCourse: '全部课程适用',
+    allClass: '全部班级适用',
+    allGoods: '全部商品适用',
+    allMember: '全部会员适用'
   }
 };

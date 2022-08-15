@@ -246,6 +246,7 @@ if (!Cookies.get('language')) {
   }).then(res => {
     const language = res.locale.toLowerCase().replace('_', '-');
     store.state.language = language;
-    i18n.locale = language;
+    // i18n.locale = language;
+    i18n.locale = 'en';
   });
 }
