@@ -1,5 +1,5 @@
 <?php
-php_info();die;
+
 if (!file_exists(__DIR__.'/../app/data/install.lock')) {
     header('Location: install/install.php');
     exit();
