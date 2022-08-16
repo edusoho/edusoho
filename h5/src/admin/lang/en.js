@@ -189,7 +189,11 @@ export default {
     display: 'Display',
     noDisplay: 'No display',
     selectCoupons: 'Select coupons',
-    addCoupons: 'Add coupons'
+    addCoupons: 'Add coupons',
+    allCourse: 'Applicable to all course',
+    allClass: 'Applicable to all class',
+    allGoods: 'Applicable to all goods',
+    allMember: 'Applicable to all member'
   },
   member: {
     memberSettings: 'Member settings',
@@ -211,5 +215,5 @@ export default {
     selectActivity: 'Select activity',
     activityLabel: 'Activity label:',
     placeholder: 'Please enter the event name'
-  }
+  },
 };

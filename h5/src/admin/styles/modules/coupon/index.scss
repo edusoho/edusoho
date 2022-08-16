@@ -1,5 +1,5 @@
 .coupon-preview__container {
-	padding: 25px 0 30px 20px;
+	padding: 16px;
 	overflow: hidden;
 
 	.e-coupon {
@@ -11,6 +11,7 @@
 			width: 48px;
 			height: 22px;
 			color: #fff;
+			font-weight: 500;
 			font-size: 12px;
 			background-color: #ff900e;
 			border-radius: 28px;
@@ -20,7 +21,7 @@
 				background-color: #ff900e;
 			}
 
-			&.receive {
+			&.unused {
 				color: #ff900e;
 				background-color: transparent;
 				border: 1px solid #ff900e;
@@ -36,22 +37,6 @@
 		}
 
 		&-single {
-			height: 112px;
-
-			.e-coupon__body {
-				height: 112px;
-				padding-right: 20px;
-
-				&::after {
-					top: 70px;
-					right: 14px;
-				}
-
-				&::before {
-					top: 70px;
-				}
-			}
-
 			.van-swipe-item {
 				width: 100% !important;
 			}

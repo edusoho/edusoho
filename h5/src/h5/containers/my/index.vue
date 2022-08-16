@@ -8,7 +8,7 @@
       <div class="flex items-center justify-between mb-24" @click="$router.push({ name: 'myOrder' })">
         <div class="flex items-center">
           <img class="mr-12" :src="icon.orderIcon" :srcset="icon.orderIcon2" style="height: 22px;" />
-          <div class="text-text-5 text-14" style="line-height: 22px;">我的订单</div>
+          <div class="text-text-5 text-14" style="line-height: 22px;">{{ $t('title.myOrder') }}</div>
         </div>
         <i class="van-icon van-icon-arrow" />
       </div>
@@ -16,7 +16,7 @@
       <div class="flex items-center justify-between mb-24" @click="$router.push({ name: 'myActivity' })">
         <div class="flex items-center">
           <img class="mr-12" :src="icon.activityIcon" :srcset="icon.activityIcon2" style="height: 22px;" />
-          <div class="text-text-5 text-14" style="line-height: 22px;">我的活动</div>
+          <div class="text-text-5 text-14" style="line-height: 22px;">{{ $t('title.myActivity') }}</div>
         </div>
         <i class="van-icon van-icon-arrow" />
       </div>

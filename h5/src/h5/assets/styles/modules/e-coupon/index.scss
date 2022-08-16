@@ -31,6 +31,7 @@
 		min-width: vw(48);
 		height: vw(22);
 		padding: 0 vw(4);
+		font-weight: 500;
 		font-size: vw(12);
 		border-radius: vw(28);
 
@@ -39,7 +40,7 @@
 			background-color: #ff900e;
 		}
 
-		&.receive {
+		&.unused {
 			color: #ff900e;
 			background-color: transparent;
 			border: 1px solid #ff900e;
@@ -74,20 +75,6 @@
 
 	&-single {
 		height: vw(112);
-
-		.e-coupon__body {
-			height: vw(112);
-			padding-right: vw(20);
-
-			&::after {
-				top: vw(70);
-				right: vw(14);
-			}
-
-			&::before {
-				top: vw(70);
-			}
-		}
 
 		.e-coupon__price {
 			margin-top: vw(1);

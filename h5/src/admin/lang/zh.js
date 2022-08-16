@@ -189,7 +189,11 @@ export default {
     display: '显示',
     noDisplay: '不显示',
     selectCoupons: '优惠券选择：',
-    addCoupons: '添加优惠券'
+    addCoupons: '添加优惠券',
+    allCourse: '全部课程适用',
+    allClass: '全部班级适用',
+    allGoods: '全部商品适用',
+    allMember: '全部会员适用'
   },
   member: {
     memberSettings: '会员设置',
