@@ -990,7 +990,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $courses = ArrayToolkit::index($courses, 'id');
 
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
-        } else if ($conditions['isHomepage']) {
+        } else if ($conditions['isHomePage']) {
             return $this->getLatestCourse($conditions);
         }
 
