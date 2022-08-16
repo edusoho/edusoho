@@ -3,7 +3,9 @@
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
 use Biz\System\Service\LogService;
+use Biz\Testpaper\Job\AssessmentAutoSubmitJob;
 use Biz\WrongBook\Dao\WrongQuestionDao;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
@@ -32,6 +34,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         ]);
 
         $this->dispatch('answer.started', $answerRecord);
+
+        $this->registerAutoSubmitJob($answerRecord);
 
         return $answerRecord;
     }
@@ -661,7 +665,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         if (AnswerService::ANSWER_RECORD_STATUS_DOING != $answerRecord['status']) {
-            throw new AnswerException('Answer not doing.', ErrorCode::ANSWER_NODOING);
+            throw new AnswerException('Answer has been submitted.', ErrorCode::ANSWER_SUBMITTED);
         }
 
         if ($answerRecord['assessment_id'] != $assessmentResponse['assessment_id']) {
@@ -679,6 +683,22 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         return $assessmentResponse;
+    }
+
+    protected function registerAutoSubmitJob($answerRecord){
+        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+
+        if (empty($answerScene['limited_time'])){
+            return;
+        }
+        $autoSubmitJob = [
+            'name' => 'AssessmentAutoSubmitJob_' . $answerRecord['id'] . '_' . time(),
+            'expression' => time() + $answerScene['limited_time'] * 60 + 120,
+            'class' => AssessmentAutoSubmitJob::class,
+            'args' => ['answerRecordId' => $answerRecord['id']]
+        ];
+
+        $this->getSchedulerService()->register($autoSubmitJob);
     }
 
     /**
@@ -764,6 +784,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getWrongQuestionDao()
     {
         return $this->biz->dao('WrongBook:WrongQuestionDao');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->biz->service('Scheduler:SchedulerService');
     }
 
 }
