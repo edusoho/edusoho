@@ -69,7 +69,7 @@ export default {
 
   methods: {
     async fetchOpenCourse() {
-      const { sort, limit, limitDays, categoryId, sourceType, items } = this.moduleData;
+      const { categoryId, sourceType, items } = this.moduleData;
       if (sourceType === 'custom') {
         this.list = items;
         this.reInitSwiper();
@@ -77,10 +77,8 @@ export default {
       }
       const params = {
         params: {
-          sort,
-          limit,
-          limitDays,
-          categoryId
+          categoryId,
+          isHomePage: 1
         }
       };
       const { data } = await OpenCourse.search(params);
