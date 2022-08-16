@@ -694,7 +694,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $autoSubmitJob = [
             'name' => 'AssessmentAutoSubmitJob_' . $answerRecord['id'] . '_' . time(),
             'expression' => time() + $answerScene['limited_time'] * 60 + 120,
-            'class' => AssessmentAutoSubmitJob::class,
+            'class' => 'Biz\Testpaper\Job\AssessmentAutoSubmitJob',
             'args' => ['answerRecordId' => $answerRecord['id']]
         ];
 
