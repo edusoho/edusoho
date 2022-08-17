@@ -95,6 +95,10 @@ import open_course_list from '../components/OpenCourseList/index.vue';
 import open_course_list_edit from './components/OpenCourseListEdit/index.vue';
 import item_bank_exercise from '../components/ItemBankExercise/index.vue';
 import item_bank_exercise_edit from './components/ItemBankExerciseEdit/index.vue';
+import announcement from '../components/Announcement/index.vue';
+import announcement_edit from './components/AnnouncementEdit/index.vue';
+import information from '../components/Information/index.vue';
+import information_edit from './components/InformationEdit/index.vue';
 
 export default {
   components: {
@@ -120,7 +124,11 @@ export default {
     open_course_list,
     open_course_list_edit,
     item_bank_exercise,
-    item_bank_exercise_edit
+    item_bank_exercise_edit,
+    announcement,
+    announcement_edit,
+    information,
+    information_edit,
   },
 
   data() {
@@ -234,6 +242,7 @@ export default {
       }
 
       const info = _.cloneDeep(DefaultData[type]);
+
       if (type === 'vip') {
         this.getVipLevels();
         const tempLevels = [...this.vipLevels];

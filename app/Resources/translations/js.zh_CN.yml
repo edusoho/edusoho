@@ -1975,6 +1975,12 @@ free_lesson: 免费课
 popular_class: 热门课
 
 decorate.class_list_settings: 班级列表设置
+decorate.announcement: 公告
+decorate.announcement_settings: 公告设置
+decorate.announcement_tips: 默认显示【网站公告管理】中创建且状态在显示中的最近一条系统公告
+decorate.information: 资讯
+decorate.information_settings: 资讯设置
+decorate.information_tips: 系统自动显示置顶和最近创建的三条资讯
 decorate.list_name: 列表名称
 decorate.please_enter_the_name_of_the_list: 请输入列表名称
 decorate.arrangement: 排列方式
