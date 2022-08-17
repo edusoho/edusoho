@@ -18,9 +18,7 @@ class AssessmentAutoSubmitJob extends AbstractJob
             if (empty($record) || $record['status'] != 'doing') {
                 return;
             }
-            $assessmentResponses = $this->getAnswerService()->buildAssessmentResponse($record['id']);
-            $assessmentResponses['isAuto'] = 1;
-            $this->getAnswerService()->submitAnswer($assessmentResponses);
+            $this->getAnswerService()->submitAnswer($this->getAnswerService()->buildAssessmentResponse($record['id']));
             $this->getLogService()->info('assessment', 'auto_submit_answers', "{$user['nickname']}({$user['id']})的答题(记录id:{$record['id']})自动提交", ['recordId' => $record['id']]);
         } catch (\Exception $e) {
             $this->getLogService()->error('assessment', 'auto_submit_answers_error', "{$user['nickname']}({$user['id']})的答题(记录id:{$record['id']})自动提交失败", $e->getMessage());
