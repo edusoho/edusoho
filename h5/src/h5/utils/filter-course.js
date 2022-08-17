@@ -3,6 +3,7 @@ import i18n from '@/lang';
 const getDisplayStyle = (data, listObj) => {
   let showStudentStr = '';
   const status = listObj.showNumberData;
+
   if (status === 'join') {
     showStudentStr = `<span class="text-12 text-text-3">
                         ${data.studentNum}人在学
@@ -32,7 +33,6 @@ const getDisplayStyle = (data, listObj) => {
       middle: {
         value: data.courseNum,
         html: `<div class="e-course__count">${i18n.t('filters.totalOfTwoCourses', { number: data.courseNum })}</div>`,
-        vipHtml: `<span class="e-course__count">${i18n.t('filters.totalOfTwoCourses', { number: data.courseNum })}</span><span class="e-course__count" style="color: #e8Ab2b;">${i18n.t('filters.vipJoinForfree')}</span>`,
       },
       bottom: {
         value: data.price || data.studentNum,
@@ -40,6 +40,7 @@ const getDisplayStyle = (data, listObj) => {
       },
     };
   }
+
   return {
     id: data.id,
     goodsId: data.courseSet.goodsId,
@@ -55,7 +56,6 @@ const getDisplayStyle = (data, listObj) => {
       html: `<div class="e-course__project text-overflow">
                   <span>${data.title}</span>
                 </div>`,
-      vipHtml: `<span class="e-course__count">${data.title}</span><span class="e-course__count" style="color: #e8Ab2b;">${i18n.t('filters.vipJoinForfree')}</span>`,
     },
     bottom: {
       value: data.price || data.studentNum,

@@ -17,14 +17,12 @@
         <div class="text-14 text-overflow ">{{ course.header }}</div>
       </div>
 
-      <div v-if="course.middle.value && !vipCenter" class="text-text-3 text-12">{{ course.middle.value }}</div>
+      <div v-if="course.middle.value" class="text-text-3 text-12">{{ course.middle.value }}</div>
 
       <div
         class="e-course__bottom"
-        v-if="!vipCenter"
         v-html="course.bottom.html"
       />
-      <div class="e-course__bottom" v-else v-html="course.middle.vipHtml" />
     </div>
   </div>
 </template>

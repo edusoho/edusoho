@@ -490,8 +490,16 @@ const routes = [
       i18n: true,
       title: 'vip.title',
     },
-    component: () =>
-      import(/* webpackChunkName: "vip" */ '@/containers/vip/index.vue'),
+    component: () => import(/* webpackChunkName: "vip" */ '@/containers/vip/index.vue'),
+  },
+  {
+    path: '/vip/:id/desc',
+    name: 'vipDesc',
+    meta: {
+      i18n: true,
+      title: 'vip.exclusiveIntroduction',
+    },
+    component: () => import(/* webpackChunkName: "vipDesc" */ '@/containers/vip/desc/index.vue'),
   },
   {
     path: '/setting/password/reset',
