@@ -2,44 +2,27 @@
 
 namespace Biz\Testpaper\Job;
 
-use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
-use Codeages\Biz\Framework\Queue\AbstractJob;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Biz\System\Service\LogService;
+use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
-use PhpOffice\PhpWord\Exception\Exception;
 
 class AssessmentAutoSubmitJob extends AbstractJob
 {
     public function execute()
     {
+        $record = $this->getAnswerRecordService()->get($this->args['answerRecordId']);
+        $user = $this->getUserService()->getUser($record['user_id']);
         try {
-            file_put_contents('/tmp/test','1');
-            $record = $this->getAnswerRecordService()->get($this->args['answerRecordId']);
-            if (empty($record) || $record['status'] == 'finished') {
+            if (empty($record) || $record['status'] != 'doing') {
                 return;
             }
-            $assessment = $this->getAttachmentService()->getAttachment($record['assessment_id']);
-            $answerScene = $this->getAnswerSceneService()->get($record['answer_scene_id']);
-            $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($record['id']);
-            $wrapper = new AssessmentResponseWrapper();
-            $response = $wrapper->wrap(['data' => $questionReports], $assessment, $record);
-            $response['used_time'] = $answerScene['limited_time'];
-            $this->getAnswerService()->submitAnswer($response);
-        } catch (Exception $e) {
-            file_put_contents('/tmp/test', json_encode($e->getMessage()));
+            $this->getAnswerService()->autoSubmitAnswer($record);
+            $this->getLogService()->info('assessment', 'auto_submit_answers', "{$user['nickname']}({$user['id']})的答题(记录id:{$record['id']})自动提交", ['recordId' => $record['id']]);
+        } catch (\Exception $e) {
+            $this->getLogService()->error('assessment', 'auto_submit_answers_error', "{$user['nickname']}({$user['id']})的答题(记录id:{$record['id']})自动提交失败", $e->getMessage());
         }
-    }
-
-    /**
-     * @return AnswerSceneService
-     */
-    protected function getAnswerSceneService()
-    {
-        return $this->biz->service('ItemBank:Answer:AnswerSceneService');
     }
 
     /**
@@ -59,26 +42,18 @@ class AssessmentAutoSubmitJob extends AbstractJob
     }
 
     /**
-     * @return AnswerReportService
+     * @return LogService
      */
-    protected function getAnswerReportService()
+    protected function getLogService()
     {
-        return $this->biz->service('ItemBank:Answer:AnswerReportService');
+        return $this->biz->service('System:LogService');
     }
 
     /**
-     * @return AnswerQuestionReportService
+     * @return UserService
      */
-    protected function getAnswerQuestionReportService()
+    protected function getUserService()
     {
-        return $this->biz->service('ItemBank:Answer:AnswerQuestionReportService');
-    }
-
-    /**
-     * @return AttachmentService
-     */
-    protected function getAttachmentService()
-    {
-        return $this->biz->service('ItemBank:Item:AttachmentService');
+        return $this->biz->service('User:UserService');
     }
 }

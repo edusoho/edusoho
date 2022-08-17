@@ -111,6 +111,84 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $answerRecord;
     }
 
+    public function autoSubmitAnswer($answerRecord){
+        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+        $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
+        $sectionResponses = $this->buildSectionResponses($answerQuestionReports);
+        $assessmentReport = $this->getAssessmentService()->review(
+            $answerRecord['assessment_id'],
+            $sectionResponses
+        );
+        $assessmentReport['answer_record_id'] = $answerRecord['id'];
+        $answerQuestionReports = $this->getAnswerQuestionReportsByAssessmentReport($assessmentReport);
+
+        $canFinished = $this->canFinished($answerQuestionReports, $answerScene);
+        try {
+            $this->beginTransaction();
+            $this->getAnswerQuestionReportService()->batchUpdate($answerQuestionReports);
+            $subjectiveScore = $this->sumSubjectiveScore($answerQuestionReports);
+            $score = $this->sumScore($answerQuestionReports);
+
+            $answerReport = $this->getAnswerReportService()->create([
+                'user_id' => $answerRecord['user_id'],
+                'assessment_id' => $answerRecord['assessment_id'],
+                'answer_record_id' => $answerRecord['id'],
+                'total_score' => $this->sumTotalScore($answerQuestionReports),
+                'score' => $score,
+                'subjective_score' => $subjectiveScore,
+                'objective_score' => $score - $subjectiveScore,
+                'right_rate' => $this->sumRightRate($answerQuestionReports),
+                'right_question_count' => $this->getRightQuestionCount($answerQuestionReports),
+                'review_time' => $canFinished ? time() : 0,
+            ]);
+            $answerRecord = $this->getAnswerRecordService()->update(
+                $answerRecord['id'],
+                [
+                    'answer_report_id' => $answerReport['id'],
+                    'status' => $canFinished ? AnswerService::ANSWER_RECORD_STATUS_FINISHED : AnswerService::ANSWER_RECORD_STATUS_REVIEWING,
+                    'end_time' => time(),
+                    'used_time' => $answerScene['limited_time']
+                ]
+            );
+            if ($canFinished) {
+                $this->getAnswerSceneService()->update(
+                    $answerScene['id'],
+                    ['name' => $answerScene['name'], 'last_review_time' => time()]
+                );
+            }
+            $this->commit();
+        }catch (\Exception $e){
+            $this->rollback();
+            throw $e;
+        }
+
+        $this->dispatch('answer.submitted', $answerRecord);
+
+        return $answerRecord;
+    }
+
+    protected function buildSectionResponses($answerQuestionReports)
+    {
+        $sectionResponses = ArrayToolkit::group($answerQuestionReports, 'section_id');
+        foreach ($sectionResponses as $sectionId => &$sectionResponse) {
+            $itemResponses = ArrayToolkit::group($sectionResponse, 'item_id');
+            foreach ($itemResponses as $itemId => &$itemResponse) {
+                foreach ($itemResponse as &$questionResponses){
+                    $questionResponses = ArrayToolkit::parts($questionResponses, ['question_id', 'response']);
+                }
+                $itemResponse = ['question_responses' => $itemResponse];
+                $itemResponse['item_id'] = $itemId;
+
+            }
+            $itemResponses = array_values($itemResponses);
+            $sectionResponse = ['item_responses' => $itemResponses];
+            $sectionResponse['section_id'] = $sectionId;
+        }
+        $sectionResponses = array_values($sectionResponses);
+
+        return $sectionResponses;
+    }
+
     protected function sumTotalScore(array $answerQuestionReports)
     {
         return array_sum(ArrayToolkit::column($answerQuestionReports, 'total_score'));
