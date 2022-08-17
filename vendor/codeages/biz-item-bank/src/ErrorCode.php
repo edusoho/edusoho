@@ -27,9 +27,9 @@ class ErrorCode
     const ANSWER_RECORD_NOTFOUND = 40495203;
 
     /**
-     * 答题已提交
+     * 答题未在进行中
      */
-    const ANSWER_SUBMITTED = 50095204;
+    const ANSWER_NODOING = 50095204;
 
     /**
      * 答题未在暂停状态
