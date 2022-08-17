@@ -739,11 +739,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
 
         if (empty($this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']))) {
-            throw new AnswerException('Answer record not found.', ErrorCode::ANSWER_RECORD_NOTFOUND);
+            throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
         }
 
-        if (AnswerService::ANSWER_RECORD_STATUS_DOING != $answerRecord['status']) {
-            throw new AnswerException('Answer has been submitted.', ErrorCode::ANSWER_SUBMITTED);
+        if (!in_array($answerRecord['status'],[AnswerService::ANSWER_RECORD_STATUS_DOING,AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
+            throw new AnswerException('试卷已提交.', ErrorCode::ANSWER_NODOING);
         }
 
         if ($answerRecord['assessment_id'] != $assessmentResponse['assessment_id']) {
