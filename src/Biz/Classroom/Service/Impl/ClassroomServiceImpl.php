@@ -986,7 +986,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $classroom = $this->updateStudentNumAndAuditorNum($classroomId);
-
+//        var_dump($info);die;
         $this->createOperateRecord($member, 'exit', $info);
 
         $currentUser = $this->getCurrentUser();

@@ -42,7 +42,6 @@
         <a href="{{ path('classroom_manage_record', {id:classroom.id, type: 'join'}) }}">{{ 'course.members_manage.join_records'|trans }}
         </a>
       </li>
-
       <li class="{% if submenu == 'exit_record' %}active{% endif %}">
         <a href="{{ path('classroom_manage_record', {id:classroom.id, type: 'exit'}) }}">{{ 'classroom.exit_record'|trans }}
         </a>
