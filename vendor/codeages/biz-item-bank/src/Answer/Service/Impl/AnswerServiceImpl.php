@@ -3,7 +3,9 @@
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
 use Biz\System\Service\LogService;
+use Biz\Testpaper\Job\AssessmentAutoSubmitJob;
 use Biz\WrongBook\Dao\WrongQuestionDao;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
@@ -32,6 +34,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         ]);
 
         $this->dispatch('answer.started', $answerRecord);
+
+        $this->registerAutoSubmitJob($answerRecord);
 
         return $answerRecord;
     }
@@ -105,6 +109,32 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $this->dispatch('answer.submitted', $answerRecord);
 
         return $answerRecord;
+    }
+
+    public function buildAssessmentResponse($answerRecordId)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+        $assessmentResponse = ['answer_record_id' => $answerRecordId, 'assessment_id' => $answerRecord['assessment_id']];
+        $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
+        $sectionResponses = ArrayToolkit::group($answerQuestionReports, 'section_id');
+        foreach ($sectionResponses as $sectionId => &$sectionResponse) {
+            $itemResponses = ArrayToolkit::group($sectionResponse, 'item_id');
+            foreach ($itemResponses as $itemId => &$itemResponse) {
+                foreach ($itemResponse as &$questionResponses) {
+                    $questionResponses = ArrayToolkit::parts($questionResponses, ['question_id', 'response']);
+                }
+                $itemResponse = ['question_responses' => $itemResponse];
+                $itemResponse['item_id'] = $itemId;
+
+            }
+            $itemResponses = array_values($itemResponses);
+            $sectionResponse = ['item_responses' => $itemResponses];
+            $sectionResponse['section_id'] = $sectionId;
+        }
+        $assessmentResponse['section_responses'] = array_values($sectionResponses);
+        $assessmentResponse['used_time'] = $answerScene['limited_time'] * 60;
+        return $assessmentResponse;
     }
 
     protected function sumTotalScore(array $answerQuestionReports)
@@ -681,6 +711,22 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $assessmentResponse;
     }
 
+    protected function registerAutoSubmitJob($answerRecord){
+        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+
+        if (empty($answerScene['limited_time'])){
+            return;
+        }
+        $autoSubmitJob = [
+            'name' => 'AssessmentAutoSubmitJob_' . $answerRecord['id'] . '_' . time(),
+            'expression' => time() + $answerScene['limited_time'] * 60 + 120,
+            'class' => 'Biz\Testpaper\Job\AssessmentAutoSubmitJob',
+            'args' => ['answerRecordId' => $answerRecord['id']]
+        ];
+
+        $this->getSchedulerService()->register($autoSubmitJob);
+    }
+
     /**
      * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService
      */
@@ -764,6 +810,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getWrongQuestionDao()
     {
         return $this->biz->dao('WrongBook:WrongQuestionDao');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->biz->service('Scheduler:SchedulerService');
     }
 
 }
