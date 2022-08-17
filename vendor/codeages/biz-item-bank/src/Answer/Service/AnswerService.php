@@ -32,14 +32,6 @@ interface AnswerService
     public function submitAnswer(array $assessmentResponse);
 
     /**
-     * 自动提交答题
-     *
-     * @param $answerRecord
-     * @return AnswerRecord
-     */
-    public function autoSubmitAnswer($answerRecord);
-
-    /**
      * 暂停答题
      *
      * @param int $answerRecordId
@@ -88,4 +80,6 @@ interface AnswerService
      * @return mixed
      */
     public function reviseFillAnswer($answerRecordId, $fillData);
+
+    public function buildAssessmentResponse($answerRecordId);
 }
