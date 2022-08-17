@@ -115,13 +115,13 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     {
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
-        $assessmentResponse = ['answer_record_id'=>$answerRecordId,'assessment_id'=>$answerRecord['assessment_id']];
+        $assessmentResponse = ['answer_record_id' => $answerRecordId, 'assessment_id' => $answerRecord['assessment_id']];
         $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
         $sectionResponses = ArrayToolkit::group($answerQuestionReports, 'section_id');
         foreach ($sectionResponses as $sectionId => &$sectionResponse) {
             $itemResponses = ArrayToolkit::group($sectionResponse, 'item_id');
             foreach ($itemResponses as $itemId => &$itemResponse) {
-                foreach ($itemResponse as &$questionResponses){
+                foreach ($itemResponse as &$questionResponses) {
                     $questionResponses = ArrayToolkit::parts($questionResponses, ['question_id', 'response']);
                 }
                 $itemResponse = ['question_responses' => $itemResponse];
@@ -133,7 +133,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $sectionResponse['section_id'] = $sectionId;
         }
         $assessmentResponse['section_responses'] = array_values($sectionResponses);
-        $assessmentResponse['used_time'] = $answerScene['limited_time'];
+        $assessmentResponse['used_time'] = $answerScene['limited_time'] * 60;
         return $assessmentResponse;
     }
 
