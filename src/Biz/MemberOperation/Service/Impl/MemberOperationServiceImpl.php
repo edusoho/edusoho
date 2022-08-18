@@ -44,7 +44,7 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
             }
             $record = array_merge($record, $field);
         }
-        file_put_contents('/tmp/record3.txt', var_export($records, true), FILE_APPEND);
+
         return $this->getRecordDao()->batchUpdate(ArrayToolkit::column($records, "id"), $records, 'id');
     }
 
