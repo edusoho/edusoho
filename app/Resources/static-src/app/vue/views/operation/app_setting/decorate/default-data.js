@@ -116,6 +116,16 @@ const DefaultData = {
       title: '',
       titleShow: 'show'
     }
+  },
+  announcement: {
+    type: 'announcement',
+    moduleType: '',
+    data: {}
+  },
+  information: {
+    type: 'information',
+    moduleType: '',
+    data: []
   }
 };
 

@@ -2022,6 +2022,12 @@ free_lesson: Free lesson
 popular_class: Popular class
 
 decorate.class_list_settings: Class list settings
+decorate.announcement: announcement
+decorate.announcement_settings: announcement settings
+decorate.announcement_tips: By default, the latest system announcement created in [Website Announcement Management] and its status is displayed is displayed.
+decorate.information: information
+decorate.information_settings: information settings
+decorate.information_tips: The system automatically displays the top and the three most recently created posts
 decorate.list_name: List name
 decorate.please_enter_the_name_of_the_list: Please enter the name of the list
 decorate.arrangement: Arrangement
