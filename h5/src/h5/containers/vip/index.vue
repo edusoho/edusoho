@@ -249,19 +249,6 @@ export default {
         this.userLevelStatus == 'upgrade' && this.upgradeMode == 'remain_period'
       );
     },
-
-    listObj() {
-      return {
-        type: 'price',
-        typeList: this.typeList,
-        showStudent: this.courseSettings
-          ? Number(this.courseSettings.show_student_num_enabled)
-          : true,
-        classRoomShowStudent: this.classroomSettings
-          ? this.classroomSettings.show_student_num_enabled
-          : true,
-      };
-    },
   },
   async created() {
     this.isLoading = true;
