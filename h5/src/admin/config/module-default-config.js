@@ -125,7 +125,7 @@ const MODULE_DEFAULT = {
         title: '班级',
         image: {
           url: '',
-          uri: `${baseUri}static/images/hotclass.png`,
+          uri: `static/images/hotclass.png`,
         },
         link: {
           type: 'classroom',
@@ -137,7 +137,7 @@ const MODULE_DEFAULT = {
         title: '课程',
         image: {
           url: '',
-          uri: `${baseUri}static/images/openCourse.png`,
+          uri: `static/images/openCourse.png`,
         },
         link: {
           type: 'course',
@@ -149,7 +149,7 @@ const MODULE_DEFAULT = {
         title: '会员专区',
         image: {
           url: '',
-          uri: `${baseUri}static/images/vip.png`,
+          uri: `static/images/vip.png`,
         },
         link: {
           type: 'vip',

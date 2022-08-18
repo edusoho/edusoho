@@ -9,19 +9,18 @@
 .e-course-list__list-title {
 	flex: 1;
 	color: #1d2129;
-	font-size: vw(18);
 	font-family: PingFangSC-Medium;
 }
 
 .e-course-list__more {
-	font-size: vw(14);
+	font-size: 14px;
 
 	.more-text {
 		display: block;
 		height: 100%;
 		margin-right: 3px;
 		color: #86909c;
-		line-height: vw(25);
+		line-height: 26px;
 	}
 
 	&::after {
