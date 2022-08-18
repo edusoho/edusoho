@@ -41,10 +41,7 @@ axios.interceptors.response.use(
     if (!res.data || res.data.hash) {
       return res;
     }
-    // 自定义配置显示 loading 动画
-    if (res.config.disableLoading) {
-      return res.data;
-    }
+
     store.commit('UPDATE_LOADING_STATUS', false);
     return res.data;
   },
