@@ -605,6 +605,7 @@ class Setting extends AbstractResource
 
         return [
             'show_student_num_enabled' => isset($classroomSetting['show_student_num_enabled']) ? (bool) $classroomSetting['show_student_num_enabled'] : true,
+            'show_hit_num_enabled' => isset($classroomSetting['show_hit_num_enabled']) ? (bool) $classroomSetting['show_hit_num_enabled'] : false,
             'show_review' => isset($classroomSetting['show_review']) ? (bool) $classroomSetting['show_review'] : true,
             'show_thread' => isset($classroomSetting['show_thread']) ? (bool) $classroomSetting['show_thread'] : true,
             'show_note' => isset($classroomSetting['show_note']) ? (bool) $classroomSetting['show_note'] : true,
