@@ -76,7 +76,7 @@ const CATEGORY_DEFAULT = {
       type: 'type',
       value: 'all',
       options: [
-        { text: 'more.all', value: 'all', i18n: true },
+        { text: 'more.courseType', value: 'all', i18n: true },
         { text: 'more.course', value: 'normal', i18n: true },
         { text: 'more.live', value: 'live', i18n: true },
       ],

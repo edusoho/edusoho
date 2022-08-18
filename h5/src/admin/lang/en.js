@@ -57,7 +57,7 @@ export default {
     all: 'All'
   },
   search: {
-    placeholder: 'Search course/class/Question bank',
+    placeholder: 'Search course/class/question bank',
     searchSettings: 'Search settings',
     atPresent: 'The search function currently only supports searching classes and courses'
   },
@@ -91,7 +91,7 @@ export default {
   carousel: {
     carousel: 'Carousel',
     carouselSettings: 'Carousel settings',
-    tips: 'The recommended image size is 750x400px, supports jpg/png/gif format, and the size does not exceed 2MB',
+    tips: 'The recommended image size is 686x272px, supports jpg/png/gif format, and the size does not exceed 2MB',
     tips2: 'The recommended image size is 750x300px, supports jpg/png/gif format, and the size does not exceed 2MB',
     addPictures: 'Add pictures',
     title: 'Title',
@@ -140,7 +140,7 @@ export default {
     links: 'Links:',
     siteLink: 'Site link',
     addLink: 'Add link',
-    tips: 'The recommended image size is 750px, supports jpg/png/gif format, and the size does not exceed 2MB',
+    tips: 'The recommended image size is 686px, supports jpg/png/gif format, and the size does not exceed 2MB',
     customLink: 'Custom link',
     replacePicture: 'Replace picture',
     adaptiveMobilePhoneScreen: 'Adaptive mobile phone screen:',
@@ -189,7 +189,11 @@ export default {
     display: 'Display',
     noDisplay: 'No display',
     selectCoupons: 'Select coupons',
-    addCoupons: 'Add coupons'
+    addCoupons: 'Add coupons',
+    allCourse: 'Applicable to all course',
+    allClass: 'Applicable to all class',
+    allGoods: 'Applicable to all goods',
+    allMember: 'Applicable to all member'
   },
   member: {
     memberSettings: 'Member settings',
@@ -211,5 +215,5 @@ export default {
     selectActivity: 'Select activity',
     activityLabel: 'Activity label:',
     placeholder: 'Please enter the event name'
-  }
+  },
 };

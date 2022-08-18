@@ -91,7 +91,7 @@ export default {
   carousel: {
     carousel: '轮播图',
     carouselSettings: '轮播图设置',
-    tips: '建议图片尺寸为750x400px，支持 jpg/png/gif 格式，大小不超过2MB',
+    tips: '建议图片尺寸为686x272px，支持 jpg/png/gif 格式，大小不超过2MB',
     tips2: '建议图片尺寸为750x300px，支持 jpg/png/gif 格式，大小不超过2MB',
     addPictures: '添加图片',
     title: '标题',
@@ -141,7 +141,7 @@ export default {
     siteLink: '站内链接',
     addLink: '添加链接',
     replacePicture: '更换图片',
-    tips: '建议图片尺寸为750px，支持 jpg/png/gif 格式，大小不超过2MB',
+    tips: '建议图片尺寸为686px，支持 jpg/png/gif 格式，大小不超过2MB',
     customLink: '自定义链接',
     adaptiveMobilePhoneScreen: '自适应手机屏幕：',
     chooseCourse: '选择课程',
@@ -181,7 +181,7 @@ export default {
     last90Days: '最近 90 天',
     allHistory: '历史所有',
     questionBank: '题库',
-    classification: ' 分类：'
+    classification: '分类：'
   },
   coupon: {
     couponSetting: '优惠券设置（仅显示未过期的优惠券）',
@@ -189,7 +189,11 @@ export default {
     display: '显示',
     noDisplay: '不显示',
     selectCoupons: '优惠券选择：',
-    addCoupons: '添加优惠券'
+    addCoupons: '添加优惠券',
+    allCourse: '全部课程适用',
+    allClass: '全部班级适用',
+    allGoods: '全部商品适用',
+    allMember: '全部会员适用'
   },
   member: {
     memberSettings: '会员设置',

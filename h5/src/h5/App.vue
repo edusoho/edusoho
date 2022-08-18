@@ -8,6 +8,7 @@
       :title="title"
       :left-arrow="showLeftArrow"
       style="z-index: 1001;"
+      :style="{ backgroundColor: $route.meta.bgColor || '#fff'}"
       @click-left="backFn()"
     />
     <router-view v-if="isRouterAlive" />

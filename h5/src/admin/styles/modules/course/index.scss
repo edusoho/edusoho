@@ -121,11 +121,10 @@
 	.row-class-left {
 		position: relative;
 		width: 168px;
-		overflow: hidden;
 		font-size: 0;
 		border-radius: 6px 0 0 6px;
 
-		img {
+		img.cover {
 			width: 100%;
 			border-radius: 6px 0 0 6px;
 		}
@@ -191,6 +190,7 @@
 
 		&__bottom {
 			display: flex;
+			align-items: center;
 			justify-content: space-between;
 			height: 20px;
 			color: #ff7a34;
@@ -208,11 +208,10 @@
 	.column-class-left {
 		position: relative;
 		width: 164px;
-		overflow: hidden;
 		font-size: 0;
 		border-radius: 4px 4px 0 0;
 
-		img {
+		img.cover {
 			width: 164px;
 			height: 92.25px;
 			border-radius: 4px 4px 0 0;

@@ -1,17 +1,9 @@
 .user {
-	border-top: 1px solid #eee;
-	border-bottom: vw(10) solid #f9f9f9;
-
-	&-section {
-		position: relative;
-		padding: vw(25) vw(16) vw(10);
-	}
-
 	&-img {
 		position: relative;
 		float: left;
-		width: vw(86);
-		height: vw(86);
+		width: vw(68);
+		height: vw(68);
 
 		img {
 			width: 100%;

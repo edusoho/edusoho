@@ -5,7 +5,6 @@
 	.column-class-left {
 		position: relative;
 		width: 100%;
-		overflow: hidden;
 		font-size: 0;
 		border-radius: 6px 6px 0 0;
 
@@ -105,6 +104,7 @@
 
 		&__bottom {
 			display: flex;
+			align-items: end;
 			justify-content: space-between;
 			height: 20px;
 			font-weight: 500;

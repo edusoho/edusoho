@@ -1,11 +1,6 @@
 .e-coupon {
-	padding: vw(25) 0 vw(30) vw(20);
+	padding: 20px 16px;
 	overflow: hidden;
-
-	&__container {
-		height: vw(96);
-		overflow: hidden;
-	}
 
 	&__title {
 		margin-bottom: vw(20);
@@ -16,34 +11,8 @@
 
 	&__body {
 		position: relative;
-		float: left;
 		box-sizing: border-box;
 		width: 100%;
-		height: vw(96);
-		padding-right: vw(20);
-		line-height: 1;
-
-		&::before {
-			position: absolute;
-			top: vw(52);
-			left: vw(-6);
-			width: vw(12);
-			height: vw(12);
-			background-color: #fff;
-			border-radius: 50%;
-			content: '';
-		}
-
-		&::after {
-			position: absolute;
-			top: vw(52);
-			right: vw(14);
-			width: vw(12);
-			height: vw(12);
-			background-color: #fff;
-			border-radius: 50%;
-			content: '';
-		}
 	}
 
 	&__name {
@@ -54,26 +23,27 @@
 		line-height: 1.3;
 	}
 
-	&__header {
+	.coupon-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		box-sizing: border-box;
-		padding: vw(20) vw(15) vw(18);
-		background-color: #ff6969;
-		border-top-left-radius: vw(2);
-		border-top-right-radius: vw(2);
+		min-width: vw(48);
+		height: vw(22);
+		padding: 0 vw(4);
+		font-weight: 500;
+		font-size: vw(12);
+		border-radius: vw(28);
 
-		.coupon-button {
-			position: absolute;
-			top: vw(26);
-			right: vw(15);
-			box-sizing: border-box;
-			width: vw(56);
-			height: vw(24);
-			color: #ff5353;
-			font-size: vw(12);
-			line-height: vw(24);
-			text-align: center;
-			background-color: #fff;
-			border-radius: vw(4);
+		&.unreceive {
+			color: #fff;
+			background-color: #ff900e;
+		}
+
+		&.unused {
+			color: #ff900e;
+			background-color: transparent;
+			border: 1px solid #ff900e;
 		}
 	}
 
@@ -106,53 +76,12 @@
 	&-single {
 		height: vw(112);
 
-		.e-coupon__body {
-			height: vw(112);
-			padding-right: vw(20);
-
-			&::after {
-				top: vw(70);
-				right: vw(14);
-			}
-
-			&::before {
-				top: vw(70);
-			}
-		}
-
-		.van-swipe-item {
-			width: 100% !important;
-		}
-
-		.e-coupon__header {
-			height: vw(82);
-
-			.coupon-name {
-				width: vw(150);
-			}
-
-			.e-coupon__name {
-				right: vw(100);
-			}
-
-			.coupon-button {
-				right: vw(35);
-			}
-		}
-
 		.e-coupon__price {
 			margin-top: vw(1);
 		}
 
 		.stamp {
 			right: vw(20) !important;
-		}
-	}
-
-	&-multi {
-		.coupon-button {
-			top: vw(19);
-			right: vw(35);
 		}
 	}
 
@@ -168,54 +97,6 @@
 		.select-icon {
 			font-size: 20px;
 		}
-	}
-
-	// 已领完
-	.coupon-received-all,
-	.coupon-used {
-		.e-coupon__header {
-			background-color: #b0bdc9;
-		}
-
-		.e-coupon__middle {
-			background-image: url($baseUrl+'static/images/dot_grey@2x.png');
-		}
-
-		.e-coupon__bottom {
-			background-color: #a5b2be;
-		}
-
-		.coupon-button {
-			display: none;
-		}
-	}
-
-	.coupon-received-all {
-		.stamp {
-			right: vw(20);
-			background-image: url($baseUrl+'static/images/received_all.png') !important;
-		}
-	}
-	// 已使用
-	.coupon-used {
-		.coupon-button {
-			display: none;
-		}
-
-		.stamp {
-			right: vw(20);
-			background-image: url($baseUrl+'static/images/used_coupon.png') !important;
-		}
-	}
-	// 已领取
-	.stamp {
-		position: absolute;
-		top: 0;
-		right: vw(20);
-		width: vw(50);
-		height: vw(50);
-		background-image: url($baseUrl+'static/images/received.png');
-		background-size: 100%;
 	}
 }
 
@@ -270,47 +151,6 @@
 			text-align: center;
 		}
 	}
-
-	.coupon-receive-success {
-		background-color: #feba37;
-		background-image: url($baseUrl+'static/images/card_bg.png');
-	}
-
-	.e-coupon__body {
-		padding-right: 0;
-
-		.e-coupon__header {
-			height: vw(80);
-
-			.e-coupon__price {
-				margin-top: vw(4);
-			}
-
-			.e-coupon__name {
-				top: vw(30);
-			}
-
-			.coupon-button {
-				top: vw(29);
-			}
-		}
-
-		&::before {
-			top: vw(70);
-			left: vw(-1);
-			width: vw(7);
-			background-color: #feba37;
-			border-radius: 0 vw(20) vw(20) 0;
-		}
-
-		&::after {
-			top: vw(70);
-			right: vw(-1);
-			width: vw(7);
-			background-color: #feba37;
-			border-radius: vw(20) 0 0 vw(20);
-		}
-	}
 }
 
 html,
@@ -321,6 +161,10 @@ body,
 }
 
 #app {
+	background-color: #fff;
+}
+
+.find-page {
 	background-color: #f7f9fa;
 }
 

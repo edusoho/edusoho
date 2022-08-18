@@ -3,13 +3,14 @@ import i18n from '@/lang';
 const getDisplayStyle = (data, listObj) => {
   let showStudentStr = '';
   const status = listObj.showNumberData;
+
   if (status === 'join') {
-    showStudentStr = `<span class="switch-box__state">
-                        <p class="iconfont icon-people">${data.studentNum}</p>
+    showStudentStr = `<span class="text-12 text-text-3">
+                        ${data.studentNum}人在学
                       </span>`;
   } else if (status === 'visitor') {
-    showStudentStr = `<span class="switch-box__state">
-                        <p class="iconfont icon-visibility">${data.hitNum}</p>
+    showStudentStr = `<span class="text-12 text-text-3">
+                        ${data.hitNum}人浏览
                       </span>`;
   } else {
     showStudentStr = '';
@@ -32,14 +33,14 @@ const getDisplayStyle = (data, listObj) => {
       middle: {
         value: data.courseNum,
         html: `<div class="e-course__count">${i18n.t('filters.totalOfTwoCourses', { number: data.courseNum })}</div>`,
-        vipHtml: `<span class="e-course__count">${i18n.t('filters.totalOfTwoCourses', { number: data.courseNum })}</span><span class="e-course__count" style="color: #e8Ab2b;">${i18n.t('filters.vipJoinForfree')}</span>`,
       },
       bottom: {
         value: data.price || data.studentNum,
-        html: `<span class="switch-box__price">${price}</span>${showStudentStr}`,
+        html: `<span class="text-12">${price}</span>${showStudentStr}`,
       },
     };
   }
+
   return {
     id: data.id,
     goodsId: data.courseSet.goodsId,
@@ -55,11 +56,10 @@ const getDisplayStyle = (data, listObj) => {
       html: `<div class="e-course__project text-overflow">
                   <span>${data.title}</span>
                 </div>`,
-      vipHtml: `<span class="e-course__count">${data.title}</span><span class="e-course__count" style="color: #e8Ab2b;">${i18n.t('filters.vipJoinForfree')}</span>`,
     },
     bottom: {
       value: data.price || data.studentNum,
-      html: `<span class="switch-box__price">${price}</span>${showStudentStr}`,
+      html: `<span class="text-12">${price}</span>${showStudentStr}`,
     },
   };
 };
@@ -86,11 +86,11 @@ const getPriceDisplay = (data, platform) => {
   };
   let price;
   if (dataPrice > 0 && currency === 'coin') {
-    price = `<span style="color: #ff5353">${coinAmount} ${coinName}</span>`;
+    price = `<span class="font-bold" style="color: #FF7A34">${coinAmount} ${coinName}</span>`;
   } else if (dataPrice > 0 && currency === 'RMB') {
-    price = `<span style="color: #ff5353">¥ ${amount}</span>`;
+    price = `<span class="text-12 font-bold" style="color: #FF7A34">¥ ${amount}</span>`;
   } else {
-    price = `<span style="color:${primaryColor[platform]}">${i18n.t('filters.free')}</span>`;
+    price = `<span class="font-bold" style="color:${primaryColor[platform]}">${i18n.t('filters.free')}</span>`;
   }
   return price;
 };
@@ -209,7 +209,7 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
         middle: '',
         bottom: {
           value: data.coinPayAmount,
-          html: `<span class="switch-box__price">
+          html: `<span class="text-12">
                   <p style="color: #ff5353">¥ ${data.coinPayAmount}</p>
                 </span>`,
         },

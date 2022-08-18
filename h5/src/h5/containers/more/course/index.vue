@@ -1,6 +1,6 @@
 <template>
   <div :class="{ more__still: selecting }" class="more">
-    <div style="display: flex;background-color: #fff;box-shadow: 0 2px 12px rgb(100 101 102 / 12%);">
+    <div class="flex bg-text-1" style="box-shadow: 0 2px 12px rgb(100 101 102 / 12%);">
       <div
         v-if="dropdownData && dropdownData.length > 0" 
         class="course-category text-overflow" 
@@ -81,7 +81,7 @@ export default {
       dropdownData: [],
       courseCategories: [],
       showCourseCategoryPopup: false,
-      currentCourseCategoryText: '',
+      currentCourseCategoryText: this.$t('more.Classification'),
       currentCourseCategoryId: '0'
     };
   },
@@ -147,14 +147,18 @@ export default {
     },
 
     async initCourseCategories() {
-      // 获取班级分类数据
+      // 获取课程分类数据
       const res = await Api.getCourseCategories();
       this.courseCategories = this.initOptions({
         text: this.$t('more.all'),
         value: '0',
         data: res
       });
-      this.currentCourseCategoryText = this.getCategoryDescById(this.courseCategories, this.$route.query.categoryId || '0')
+      
+      const categoryId = this.$route.query.categoryId
+      if (categoryId && categoryId !== '0') {
+        this.currentCourseCategoryText = this.getCategoryDescById(this.courseCategories, categoryId)
+      }
     },
 
     onFinish({ selectedOptions }) {
@@ -289,6 +293,7 @@ export default {
     toggleHandler(value) {
       this.selecting = value;
     },
+    
     isSelectedDataSame(selectedData) {
       const oldLength = Object.keys(selectedData).length;
       const newLength = Object.keys(this.selectedData).length;
@@ -334,6 +339,10 @@ export default {
 </script>
 
 <style scoped>
+
+  .more {
+    background-color: #f7f9fa;
+  }
 
   .course-category {
     display: flex;

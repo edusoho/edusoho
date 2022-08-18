@@ -1,68 +1,51 @@
 <template>
   <div class="user">
-    <div class="user-section clearfix">
-      <router-link to="/settings">
-        <div class="user-img">
-          <img v-if="user.avatar" :src="user.avatar.large" />
-          <img
-            class="user-vip-icon"
-            v-if="user.vip && !vipDated && vipSwitch"
-            :src="user.vip.icon"
-            alt=""
-          />
-        </div>
-      </router-link>
-      <div class="user-middle">
-        <div class="user-name">{{ user.nickname }}</div>
+    <div class="flex items-center px-16 py-24">
+      <div class="user-img" @click="$router.push('/setting')">
+        <img v-if="user.avatar" :src="user.avatar.large" />
+        <img
+          class="user-vip-icon"
+          v-if="user.vip && !vipDated && vipSwitch"
+          :src="user.vip.icon"
+          alt=""
+        />
       </div>
-      <router-link to="/settings" class="user-setting">
-        <img src="static/images/setting.png" />
-      </router-link>
+      <div class="ml-20">
+        <div class="font-bold text-text-5 text-20">{{ user.nickname }}</div>
+        <div class="mt-4 font-bold text-text-3 text-14" v-html="user.about || ''"></div>
+      </div>
     </div>
-    <div class="user-member" v-if="vipSwitch">
-      <div class="user-member-style">
-        <div class="user-member-text">
-          <img src="static/images/vip_enter.png" />
-          <div
-            v-if="user.vip"
-            class="user-vip"
-            :class="{ 'user-vip-open': vipDated }"
-          >
-            <router-link
-              :to="{ path: '/vip', query: { id: user.vip.levelId } }"
-              class="clearfix"
-            >
-              <template v-if="!vipDated">
-                <span class="pull-left">
-                  <p>{{ user.vip.vipName }}</p>
-                  <p style="font-size: 12px; margin-top: 2px;">
-                    {{ $t('vip.memberExpirationTime') }}：
-                    {{ $moment(user.vip.deadline).format('YYYY-MM-DD') }}
-                  </p>
-                </span>
-                <span class="pull-right" style="margin-top: 10px;">
-                  {{ $t('vip.renewalUpgrade') }}
-                  <van-icon name="arrow" />
-                </span>
-              </template>
-              <template v-else>
-                <span>{{ $t('vip.yourMembershipHasExpired') }}</span>
-                <span class="pull-right">
-                  {{ $t('vip.immediatelyRenewals') }}
-                  <van-icon name="arrow" />
-                </span>
-              </template>
-            </router-link>
+
+    <div v-if="vipSwitch" class="mx-16 mb-16" style="background-color: #202212; border-radius: 6px;">
+      <div v-if="user.vip" class="px-12 py-8">
+        <router-link
+          :to="{ path: '/vip', query: { id: user.vip.levelId } }"
+          class="flex items-center justify-between"
+        >
+          <div class="text-12" style="color: #ffb977;">
+            <div class="flex items-center font-bold">
+              <img class="mr-8" :src="icon.vipIcon" :srcset="icon.vipIcon2" style="height: 20px;" />
+              <span style="line-height: 20px;">{{ user.vip.vipName }}</span>
+            </div>
+            <div style="color: #ba9875; margin-top: 2px;">
+              {{ $t('vip.memberExpirationTime') }}
+              {{ $moment(user.vip.deadline).format('YYYY-MM-DD') }}
+            </div>
           </div>
-          <div v-else class="user-vip user-vip-open">
-            <router-link to="/vip" style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="max-width: 72%;">{{ $t('vip.youAreNotAVipYet') }}</span>
-              <span>
-                {{ $t('vip.joinNow') }}
-                <van-icon name="arrow" />
-              </span>
-            </router-link>
+          <div class="px-8 py-4 ml-0 text-10" style="margin-right: -8px; border: solid 1px #FECFA0; color: #FECFA0; border-radius: 28px;">
+            {{ $t('vip.renewalUpgrade') }}
           </div>
+        </router-link>
+      </div>
+
+      <div v-if="!user.vip" class="p-12" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="flex font-bold text-14" style="color: #ffb977;">
+          <img class="mr-8" :src="icon.vipIcon" :srcset="icon.vipIcon2" style="height: 20px;" /> {{ $t('vip.youAreNotAVipYet') }}
+        </div>
+        <div class="flex items-center justify-center font-bold text-12"
+          @click="$router.push({ name: 'vip' })"
+          style="width: 44px; height: 22px;color: #162923;background: linear-gradient(101.25deg, #FFD8AF -3.41%, #FFB36C 100%);border-radius: 29px;">
+          {{ $t('vip.join') }}
         </div>
       </div>
     </div>
@@ -70,8 +53,14 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
+import icon from './icon';
 
 export default {
+  data() {
+    return {
+      icon,
+    }
+  },
   computed: {
     ...mapState(['user', 'vipSwitch']),
 

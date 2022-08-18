@@ -1,12 +1,13 @@
 <template>
   <div class="find-page">
     <e-loading v-if="isLoading" />
+    <div style="height: 16px;"></div>
     <div v-for="(part, index) in parts" :key="index" class="find-page__part">
       <!-- 尝试下jsx重构代码 -->
       <e-swipe v-if="part.type === 'slide_show'" :slides="part.data" />
       <e-course-list
         v-if="
-          ['classroom_list', 'course_list', 'item_bank_exercise'].includes(
+          ['classroom_list', 'course_list'].includes(
             part.type,
           ) && part.data.items.length
         "
@@ -19,6 +20,10 @@
         @fetchCourse="fetchCourse"
         :showNumberData="showNumberData"
         style="background-color: transparent;"
+      />
+      <e-item-bank
+        v-if="part.type === 'item_bank_exercise' && part.data.items.length"
+        :itembank="part.data"
       />
       <e-poster
         v-if="part.type === 'poster'"
@@ -36,7 +41,6 @@
         :coupons="part.data.items"
         :show-title="part.data.titleShow"
         :feedback="feedback"
-        class="gray-border-bottom"
         @couponHandle="couponHandle($event)"
       />
       <e-vip-list
@@ -59,7 +63,6 @@
         :type="part.type"
         :tag="part.data.tag"
         :feedback="feedback"
-        class="gray-border-bottom"
         @activityHandle="activityHandle"
       />
       <e-graphic-navigation
@@ -72,7 +75,7 @@
         shape="round"
         :placeholder="$t('search.placeholder')"
         @focus="goSearch"
-        style="margin: 16px;padding: 0;border-radius: 999px;"
+        style="margin: 0 16px 16px 16px;padding: 0;border-radius: 999px;"
       />
     </div>
     <e-switch-loading v-if="wechatSwitch && showFlag" :close-date="closeDate" />
@@ -88,6 +91,7 @@ import couponList from '&/components/e-coupon-list/e-coupon-list.vue';
 import swithLoading from '&/components/e-switch-loading/index.vue';
 import vipList from '&/components/e-vip-list/e-vip-list.vue';
 import GraphicNavigation from '&/components/e-graphic-navigation/e-graphic-navigation.vue';
+import itemBank from '&/components/e-item-bank/e-item-bank';
 // eslint-disable-next-line no-unused-vars
 import * as types from '@/store/mutation-types';
 import getCouponMixin from '@/mixins/coupon/getCouponHandler';
@@ -106,6 +110,7 @@ export default {
     'e-market-part': marketPart,
     'e-switch-loading': swithLoading,
     'e-graphic-navigation': GraphicNavigation,
+    'e-item-bank': itemBank,
   },
   mixins: [getCouponMixin, activityMixin],
   props: {

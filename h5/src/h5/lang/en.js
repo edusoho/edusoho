@@ -12,7 +12,7 @@ export default {
   e: {
     freeForMembers: 'Free for members',
     live: 'Live',
-    certificate: 'Certificate',
+    certificate: 'Cert.',
     keepStuding: 'Keep studing',
     notCurrentlySupported: 'Not currently supported',
     watchReplay: 'Watch replay',
@@ -23,7 +23,7 @@ export default {
     noReplay: 'No replay',
     reduction: 'Reduction',
     limitedExemption: 'Limited exemption',
-    discount: 'Discount',
+    discount: 'Dis.',
     availableRange: 'Available range',
     getCoupons: 'Get coupons',
     validWithinDayAfterReceiving: 'Valid within {number} day after receiving',
@@ -49,9 +49,13 @@ export default {
     moreCourse: 'More courses are waiting for you to join',
     moreClass: 'More classes are waiting for you to join',
     moreQuestionBanks: 'More question banks are waiting for you to join',
+    learn: ' people learn',
+    browse: ' people browse'
   },
   title: {
     me: 'Me',
+    myOrder: 'My Order',
+    myActivity: 'My Activity',
     setting: 'Setting',
     nicknameSetting: 'Nickname Setting',
     switchLanguage: 'Switch language',
@@ -165,12 +169,12 @@ export default {
   },
   vip: {
     title: 'Vip center',
-    memberExpirationTime: 'Member expiration time',
+    memberExpirationTime: 'Valid until',
     renewalUpgrade: 'Renewal/Upgrade',
     yourMembershipHasExpired: 'Your membership has expired',
     immediatelyRenewals: 'Immediately renewals',
-    joinNow: 'Join now',
-    youAreNotAVipYet: 'You are not a VIP yet，you can enioy the privileges',
+    join: 'Join',
+    youAreNotAVipYet: 'Open a member',
     memberUpgrade: 'Member upgrade',
     chooseTheActivationTime: 'Choose the activation time',
     memberUpgradePeriodTo: 'Member upgrade period to',
@@ -277,7 +281,7 @@ export default {
   },
   search: {
     title: 'Search',
-    placeholder: 'Search course/class/Question bank',
+    placeholder: 'Search course/class/question bank',
     course: 'Course',
     classroom: 'Classroom',
     questionBank: 'Question bank',
@@ -611,5 +615,11 @@ export default {
     available: 'available',
     longTermEffective: 'Permanent',
     noOrderRecord: 'No order record'
+  },
+  coupon: {
+    allCourse: 'Applicable to all course',
+    allClass: 'Applicable to all class',
+    allGoods: 'Applicable to all goods',
+    allMember: 'Applicable to all member'
   }
 };

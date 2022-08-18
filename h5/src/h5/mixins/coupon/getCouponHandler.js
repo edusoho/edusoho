@@ -26,6 +26,7 @@ export default {
       if (!coupon.currentUserCoupon && !isReceive) {
         const token = coupon.token;
         Api.receiveCoupon({
+          disableLoading: true,
           data: { token },
         })
           .then(res => {
@@ -108,7 +109,8 @@ export default {
           if (res.length && res[0]) {
             return { id: res[0].id };
           }
-          return Promise.reject({ message: '当前课程不存在了' });
+
+          return { message: '当前课程不存在了' };
         })
         .catch(err => {
           Toast.fail(err.message);

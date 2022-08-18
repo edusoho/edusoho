@@ -1,10 +1,16 @@
 <template>
   <div
-    class="e-column-class"
+    class="relative e-column-class"
     @click="onClick(course.hasCertificate, $event)"
   >
-    <div class="column-class-left">
-      <img v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
+    <div class="column-class-left" :style="{ marginTop: typeList === 'classroom_list' ? '24px' : 0 }">
+      <img 
+        v-if="typeList === 'classroom_list'"
+        style="width: 90%;top: -17px;left: 50%;transform: translateX(-50%);"
+        class="absolute"
+        src="/static/images/classroom/classroom-icon2.png" 
+        srcset="/static/images/classroom/classroom-icon2@2x.png" />
+      <img class="cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
       <div v-if="Number(isVip)" class="column-class-left__member">
         <div style="transform: scale(0.83);">{{ $t('e.freeForMembers') }}</div>
       </div>
@@ -22,14 +28,14 @@
         </div>
         <div class="text-overflow course-title">{{ course.header }}</div>
       </div>
-      <div class="column-class-right__center  text-overflow">
+      <div class="column-class-right__center text-overflow">
         <div v-if="course.middle.value" v-html="course.middle.html" />
       </div>
       <div class="column-class-right__bottom text-overflow">
         <div style="position: relative; left: 12px;" v-html="course.bottom.html"></div>
         <div style="margin: 1px 5px 0 0; color: #86909c; font-size: 12px; transform: scale(0.83);">
-          <template v-if="showNumberData === 'join'">{{ course.studentNum }}人在学</template>
-          <template v-else-if="showNumberData === 'visitor'">{{ hitNum }}人浏览</template>
+          <template v-if="showNumberData === 'join'">{{ course.studentNum }}{{ $t('e.learn') }}</template>
+          <template v-else-if="showNumberData === 'visitor'">{{ hitNum }}{{ $t('e.browse') }}</template>
         </div>
       </div>
     </div>

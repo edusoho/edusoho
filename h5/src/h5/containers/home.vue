@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" style="min-height: 100%;">
     <van-tabbar
       v-model="active"
       :class="{ 'van-tabbar--iphonex': firstVisit }"
