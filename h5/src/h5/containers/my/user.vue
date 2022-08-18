@@ -17,7 +17,7 @@
     </div>
 
     <div v-if="vipSwitch" class="mx-16 mb-16" style="background-color: #202212; border-radius: 6px;">
-      <div v-show="true" class="px-12 py-8">
+      <div v-if="user.vip" class="px-12 py-8">
         <router-link
           :to="{ path: '/vip', query: { id: user.vip.levelId } }"
           class="flex items-center justify-between"
@@ -38,11 +38,12 @@
         </router-link>
       </div>
 
-      <div v-show="false" class="p-12" style="display: flex; justify-content: space-between; align-items: center;">
+      <div v-if="!user.vip" class="p-12" style="display: flex; justify-content: space-between; align-items: center;">
         <div class="flex font-bold text-14" style="color: #ffb977;">
           <img class="mr-8" :src="icon.vipIcon" :srcset="icon.vipIcon2" style="height: 20px;" /> {{ $t('vip.youAreNotAVipYet') }}
         </div>
         <div class="flex items-center justify-center font-bold text-12"
+          @click="$router.push({ name: 'vip' })"
           style="width: 44px; height: 22px;color: #162923;background: linear-gradient(101.25deg, #FFD8AF -3.41%, #FFB36C 100%);border-radius: 29px;">
           {{ $t('vip.join') }}
         </div>

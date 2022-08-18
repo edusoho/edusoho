@@ -3,9 +3,9 @@
     <e-loading v-if="isLoading" />
 
     <!-- 轮播图 -->
-    <div class="vip-swiper">
+    <div class="pt-20 vip-swiper">
       <swiper class="swiper" ref="mySwiper" :options="swiperOption">
-        <swiper-slide v-for="(item, index) in levels" :key="index" 
+        <swiper-slide v-for="(item, index) in levels" :key="index"
           style="border-radius: 8px;background-image: url('/static/images/vip_bg.png');background-size: 100%;background-repeat: no-repeat;">
           <div class="flex px-16 pt-12" v-if="user">
             <img v-if="user.avatar" :src="user.avatar.large" style="width: 40px;height: 40px;border-radius: 50%;" />
@@ -16,7 +16,7 @@
           </div>
           <div class="flex items-center justify-between px-16" style="margin-top: 42px;">
             <div class="font-bold text-14" style="color: #eab86a;">{{ item.name }}</div>
-            <div class="flex items-center justify-center font-normal text-12" 
+            <div class="flex items-center justify-center font-normal text-12"
               @click="$router.push(`/vip/${item.id}/desc`)"
               style="width: 74px;height: 24px;color: #EAB86A;border: 1px solid #B6A07D;border-radius: 16px;">
               {{ $t('vip.exclusiveIntroduction') }} >
@@ -30,11 +30,7 @@
     <swiper style="padding: 20px 0 20px 16px;" v-if="!vipUpgradeMode" :options="vipOpenSwiperOption">
       <swiper-slide v-for="item in currentLevel.sellModes" :key="item.id">
         <div class="flex">
-          <price-item
-            :item="item"
-            :activePriceId="activePrice.id"
-            @clickPriceItem="clickPriceItem"
-          />
+          <price-item :item="item" :activePriceId="activePrice.id" @clickPriceItem="clickPriceItem" />
           <div style="width: 16px; height: 80px;background-color: transparent;"></div>
         </div>
       </swiper-slide>
@@ -62,38 +58,21 @@
     </div>
 
     <div class="fixed bottom-0 left-0 right-0 px-16 py-8 bg-text-1">
-      <div
-        class="flex items-center justify-center w-full font-bold text-text-1"
-        style="height: 40px; border-radius: 20px; background-color: #E7B15C;"
-        :class="{ disabled: !vipBuyStatu.status }"
-        @click="clickVipBuy"
-      >
+      <div class="flex items-center justify-center w-full font-bold text-text-1"
+        style="height: 40px; border-radius: 20px; background-color: #E7B15C;" :class="{ disabled: !vipBuyStatu.status }"
+        @click="clickVipBuy">
         {{ vipBuyStatu.text }}
       </div>
     </div>
 
-    <e-row-class
-      v-show="typeList === 'course_list'"
-      v-for="item in courseData.items"
-      :key="item.id"
+    <e-row-class v-show="typeList === 'course_list'" v-for="item in courseData.items" :key="item.id"
       :course="item | courseListData({ ...config, typeList: 'course_list' }, 'new')"
-      :discountType="item.courseSet.discountType"
-      :discount="item.courseSet.discount"
-      :course-type="item.courseSet.type"
-      type-list="course_list"
-      type="price"
-      :showNumberData="showNumberData"
-    />
+      :discountType="item.courseSet.discountType" :discount="item.courseSet.discount" :course-type="item.courseSet.type"
+      type-list="course_list" type="price" :showNumberData="showNumberData" />
 
-    <e-row-class
-      v-show="typeList === 'classroom_list'"
-      v-for="item in classroomData.items"
-      :key="item.id"
-      :course="item | courseListData({ ...config, typeList: 'classroom_list' }, 'new')"
-      type-list="classroom_list"
-      type="price"
-      :showNumberData="showNumberData"
-    />
+    <e-row-class v-show="typeList === 'classroom_list'" v-for="item in classroomData.items" :key="item.id"
+      :course="item | courseListData({ ...config, typeList: 'classroom_list' }, 'new')" type-list="classroom_list"
+      type="price" :showNumberData="showNumberData" />
   </div>
 </template>
 
@@ -441,25 +420,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .nav-item {
-    position: relative;
+.nav-item {
+  position: relative;
 
-    &.active {
-      font-weight: bold;
-      color: #1D2129;
+  &.active {
+    font-weight: bold;
+    color: #1D2129;
 
-      &:after {
-        content: '';
-        position: absolute;
-        z-index: 1;
-        width: 36px;
-        height: 12px;
-        left: -2px;
-        bottom: -1px;
+    &:after {
+      content: '';
+      position: absolute;
+      z-index: 1;
+      width: 36px;
+      height: 12px;
+      left: -2px;
+      bottom: -1px;
 
-        background: linear-gradient(90deg, #F3CA98 2.04%, rgba(242, 202, 151, 0) 100%);
-        border-radius: 21px;
-      }
+      background: linear-gradient(90deg, #F3CA98 2.04%, rgba(242, 202, 151, 0) 100%);
+      border-radius: 21px;
     }
   }
+}
 </style>

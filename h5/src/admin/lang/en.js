@@ -91,7 +91,7 @@ export default {
   carousel: {
     carousel: 'Carousel',
     carouselSettings: 'Carousel settings',
-    tips: 'The recommended image size is 750x400px, supports jpg/png/gif format, and the size does not exceed 2MB',
+    tips: 'The recommended image size is 686x272px, supports jpg/png/gif format, and the size does not exceed 2MB',
     tips2: 'The recommended image size is 750x300px, supports jpg/png/gif format, and the size does not exceed 2MB',
     addPictures: 'Add pictures',
     title: 'Title',
@@ -140,7 +140,7 @@ export default {
     links: 'Links:',
     siteLink: 'Site link',
     addLink: 'Add link',
-    tips: 'The recommended image size is 750px, supports jpg/png/gif format, and the size does not exceed 2MB',
+    tips: 'The recommended image size is 686px, supports jpg/png/gif format, and the size does not exceed 2MB',
     customLink: 'Custom link',
     replacePicture: 'Replace picture',
     adaptiveMobilePhoneScreen: 'Adaptive mobile phone screen:',

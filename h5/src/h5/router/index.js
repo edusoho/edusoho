@@ -488,6 +488,7 @@ const routes = [
     name: 'vip',
     meta: {
       i18n: true,
+      bgColor: '#FFE9CC',
       title: 'vip.title',
     },
     component: () => import(/* webpackChunkName: "vip" */ '@/containers/vip/index.vue'),

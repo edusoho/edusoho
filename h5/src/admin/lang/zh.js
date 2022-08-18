@@ -91,7 +91,7 @@ export default {
   carousel: {
     carousel: '轮播图',
     carouselSettings: '轮播图设置',
-    tips: '建议图片尺寸为750x400px，支持 jpg/png/gif 格式，大小不超过2MB',
+    tips: '建议图片尺寸为686x272px，支持 jpg/png/gif 格式，大小不超过2MB',
     tips2: '建议图片尺寸为750x300px，支持 jpg/png/gif 格式，大小不超过2MB',
     addPictures: '添加图片',
     title: '标题',
@@ -141,7 +141,7 @@ export default {
     siteLink: '站内链接',
     addLink: '添加链接',
     replacePicture: '更换图片',
-    tips: '建议图片尺寸为686*240，支持 jpg/png/gif 格式，大小不超过2MB',
+    tips: '建议图片尺寸为686px，支持 jpg/png/gif 格式，大小不超过2MB',
     customLink: '自定义链接',
     adaptiveMobilePhoneScreen: '自适应手机屏幕：',
     chooseCourse: '选择课程',
