@@ -144,7 +144,7 @@ class ClassroomProduct extends BaseGoodsProduct implements OrderStatusCallback
 
         $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $orderItem['user_id']);
         if (!empty($member)) {
-            $this->getClassroomService()->removeStudent($classroom['id'], $orderItem['user_id']);
+            $this->getClassroomService()->removeStudent($classroom['id'], $orderItem['user_id'], ['reason'=>'同意退款','reason_type'=>'exit']);
         }
 
         $this->updateMemberRecordByRefundItem($orderItem);
