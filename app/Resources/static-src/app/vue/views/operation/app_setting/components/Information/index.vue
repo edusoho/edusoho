@@ -8,17 +8,17 @@
     @event-actions="handleClickAction"
   >
     <div class="information">
-      <div class="information__item clearfix">
+      <div class="information__item clearfix" v-if="currentData[0]">
         <div class="number" style="background-color: #F53F3F;">1</div>
-        <div class="content text-overflow">资讯内容一</div>
+        <div class="content text-overflow">{{ currentData[0].body | filterHtml }}</div>
       </div>
-      <div class="information__item clearfix">
+      <div class="information__item clearfix" v-if="currentData[1]">
         <div class="number" style="background-color: #FF900E;">2</div>
-        <div class="content text-overflow">资讯内容二</div>
+        <div class="content text-overflow">{{ currentData[1].body | filterHtml }}</div>
       </div>
-      <div class="information__item clearfix">
+      <div class="information__item clearfix" v-if="currentData[2]">
         <div class="number" style="background-color: #F9CC45;">3</div>
-        <div class="content text-overflow">资讯内容三</div>
+        <div class="content text-overflow">{{ currentData[2].body | filterHtml }}</div>
       </div>
     </div>
   </layout>
@@ -26,12 +26,39 @@
 
 <script>
 import _ from 'lodash';
+import { Information } from 'common/vue/service/index.js';
 import moduleMixin from '../moduleMixin';
 
 export default {
   name: 'Information',
 
   mixins: [moduleMixin],
+
+  filters: {
+    filterHtml(body) {
+      return body.replace(/<\/?.+?>/g, "")
+    }
+  },
+
+  data() {
+    return {
+      currentData: {}
+    }
+  },
+
+  created() {
+    this.fetchData();
+  },
+
+  methods: {
+    async fetchData() {
+      const result = await Information.search()
+
+      if (Array.isArray(result) && result.length > 0) {
+        this.currentData = result
+      }
+    }
+  }
 }
 </script>
 
