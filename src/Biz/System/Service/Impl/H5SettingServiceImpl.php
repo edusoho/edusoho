@@ -372,7 +372,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function realTimeInfoFilter($discoverySetting, $portal, $usage = 'show')
+    public function informationFilter($discoverySetting, $portal, $usage = 'show')
     {
         return $discoverySetting;
     }
