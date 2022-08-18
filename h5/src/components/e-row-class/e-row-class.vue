@@ -7,8 +7,8 @@
         v-if="typeList === 'classroom_list'"
         style="height: 90%;left: -17px;top: 50%;transform: translateY(-50%);"
         class="absolute"
-        src="/static/images/classroom/classroom-icon.png" 
-        srcset="/static/images/classroom/classroom-icon@2x.png" />
+        src="static/images/classroom/classroom-icon.png" 
+        srcset="static/images/classroom/classroom-icon@2x.png" />
 
       <img class="cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
       

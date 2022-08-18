@@ -69,7 +69,7 @@ export default {
       return 'unreceive'
     },
     currentBackgroundImg() {
-      const baseUrl = '/static/images/coupon';
+      const baseUrl = 'static/images/coupon';
       const imgName = this.num === 1 ? `s-${this.couponStatus}` : this.couponStatus
 
       return [`${baseUrl}/${imgName}.png`, `${baseUrl}/${imgName}@2x.png`];

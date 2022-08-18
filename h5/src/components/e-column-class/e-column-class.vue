@@ -8,8 +8,8 @@
         v-if="typeList === 'classroom_list'"
         style="width: 90%;top: -17px;left: 50%;transform: translateX(-50%);"
         class="absolute"
-        src="/static/images/classroom/classroom-icon2.png" 
-        srcset="/static/images/classroom/classroom-icon2@2x.png" />
+        src="static/images/classroom/classroom-icon2.png" 
+        srcset="static/images/classroom/classroom-icon2@2x.png" />
       <img class="cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
       <div v-if="Number(isVip)" class="column-class-left__member">
         <div style="transform: scale(0.83);">{{ $t('e.freeForMembers') }}</div>

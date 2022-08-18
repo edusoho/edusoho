@@ -6,7 +6,7 @@
     <div class="pt-20 vip-swiper">
       <swiper class="swiper" ref="mySwiper" :options="swiperOption">
         <swiper-slide v-for="(item, index) in levels" :key="index"
-          style="border-radius: 8px;background-image: url('/static/images/vip_bg.png');background-size: 100%;background-repeat: no-repeat;">
+          style="border-radius: 8px;background-image: url('static/images/vip_bg.png');background-size: 100%;background-repeat: no-repeat;">
           <div class="flex px-16 pt-12" v-if="user">
             <img v-if="user.avatar" :src="user.avatar.large" style="width: 40px;height: 40px;border-radius: 50%;" />
             <div class="ml-8 text-text-1">

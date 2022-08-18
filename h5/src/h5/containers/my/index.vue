@@ -1,6 +1,6 @@
 <template>
   <div class="fixed top-0 bottom-0 left-0 right-0 bg-no-repeat bg-contain"
-    style="background-color: #F2F5F7;background-image: url('/static/images/home-bg.png');">
+    style="background-color: #F2F5F7;background-image: url('static/images/home-bg.png');">
     <e-loading v-if="isLoading" />
     
     <user />
