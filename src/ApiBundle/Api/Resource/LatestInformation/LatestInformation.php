@@ -1,13 +1,13 @@
 <?php
 
 
-namespace ApiBundle\Api\Resource\LatestRealTimeInfo;
+namespace ApiBundle\Api\Resource\LatestInformation;
 
 
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Article\Service\ArticleService;
 
-class LatestRealTimeInfo extends AbstractResource
+class LatestInformation extends AbstractResource
 {
     public function search()
     {

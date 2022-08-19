@@ -76,9 +76,9 @@ class PageDiscovery extends AbstractResource
                 $discoverySetting['data'] = empty($announcement) ? '' : $announcement[0]['content'];
             }
 
-            if('real_time_info' == $discoverySetting['type']){
-                $real_time_info = $this ->getArticleService() -> searchArticles(['status' => 'published'], ['sticky' => 'DESC' ,'publishedTime' => 'DESC'], 0, 3);
-                $discoverySetting['data'] = empty($real_time_info) ? '' : $real_time_info;
+            if('information' == $discoverySetting['type']){
+                $information = $this ->getArticleService() -> searchArticles(['status' => 'published'], ['sticky' => 'DESC' ,'publishedTime' => 'DESC'], 0, 3);
+                $discoverySetting['data'] = empty($information) ? '' : $information;
             }
         }
 
