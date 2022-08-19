@@ -19,7 +19,7 @@ class SaveAnswer extends AbstractResource
         }
 
         if(empty($assessmentResponse['admission_ticket'])) {
-            throw new AnswerException("答题保存已升级，请更新客户端版本",ErrorCode::ANSWER_OLD_VERSION);
+            throw new AnswerException("答题保存功能已升级，请更新客户端版本",ErrorCode::ANSWER_OLD_VERSION);
         }
 
         if($answerRecord['admission_ticket'] != $assessmentResponse['admission_ticket']) {

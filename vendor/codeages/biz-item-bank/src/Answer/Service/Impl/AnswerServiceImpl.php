@@ -613,7 +613,12 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         if (AnswerService::ANSWER_RECORD_STATUS_DOING == $answerRecord['status']) {
-            return $answerRecord;
+            return $this->getAnswerRecordService()->update(
+                $answerRecordId,
+                [
+                    'admission_ticket' => $this->generateAdmissionTicket(),
+                ]
+            );
         }
 
         if (AnswerService::ANSWER_RECORD_STATUS_PAUSED != $answerRecord['status']) {
