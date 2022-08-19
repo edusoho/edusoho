@@ -17,7 +17,10 @@ axios.interceptors.request.use(
     if (config.name.indexOf('Live') === -1) {
       config.headers.Accept = 'application/vnd.edusoho.v2+json';
     }
-    config.headers.SessionIgnore = 1;
+    
+    if (["/api/pages/h5/settings"].includes(config.url) === false) {
+      config.headers.SessionIgnore = 1;
+    }
 
     if (store.state.token) {
       config.headers['X-Auth-Token'] = store.state.token;
