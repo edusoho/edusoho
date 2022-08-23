@@ -29,7 +29,7 @@
           使用班级配置功能，小程序版本需要升级到1.3.1及以上
         </div>
       </header>
-      <div class="default-allocate__content clearfix">
+      <div class="clearfix default-allocate__content">
         <!-- 列表名称 -->
         <setting-cell :title="$t('courseList.listName')" left-class="required-option">
           <el-input
@@ -428,10 +428,11 @@ export default {
     },
     fetchCourse({ params, index }) {
       if (this.sourceType === 'custom') return;
+
       if (this.type === 'course_list') {
         this.getCourseList(params)
           .then(res => {
-            this.moduleData.data.items = res.data;
+            this.moduleData.data.items = res || [];
           })
           .catch(err => {
             this.$message({
@@ -441,9 +442,10 @@ export default {
           });
         return;
       }
+
       this.getClassList(params)
         .then(res => {
-          this.moduleData.data.items = res.data;
+          this.moduleData.data.items = res.data || [];
         })
         .catch(err => {
           this.$message({

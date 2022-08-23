@@ -23,6 +23,7 @@ axios.interceptors.request.use(
     }
 
     if (store.state.token) {
+      // config.headers['X-CSRF-Token'] = store.state.token;
       config.headers['X-Auth-Token'] = store.state.token;
     }
     // 自定义配置显示 loading 动画

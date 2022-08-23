@@ -106,10 +106,6 @@
 			margin-right: 2px;
 		}
 	}
-
-	.e-column-class:nth-of-type(2n) {
-		padding: 0 0 16px 12px;
-	}
 }
 
 .e-row-class {
@@ -203,7 +199,9 @@
 .e-column-class {
 	display: flex;
 	flex-direction: column;
-	padding: 0 0 16px 16px;
+	width: 50%;
+	margin-bottom: 12px;
+	padding: 0 6px;
 
 	.column-class-left {
 		position: relative;

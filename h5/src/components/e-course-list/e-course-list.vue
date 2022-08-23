@@ -22,7 +22,6 @@
     <div
       v-if="uiStyle !== 'old'"
       class="e-course-list__header"
-      style="padding: 0 16px 8px;"
     >
       <div class="clearfix">
         <span
@@ -93,7 +92,7 @@
         <div
           v-if="uiStyle !== 'old' && displayStyle === 'distichous'"
           class="clearfix"
-          style="display: flex; padding: 0 6px;"
+          style="display: flex; flex-flow: wrap; padding: 0 10px;"
         >
           <e-column-class
             v-for="item in courseList.items"
