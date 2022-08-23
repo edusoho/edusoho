@@ -38,7 +38,6 @@ const Classifys = [
     icon: 'icon-marketing',
     components: [
       { title: Translator.trans('decorate.coupon'), icon: 'icon-youhuiquan', type: 'coupon' },
-      { title: Translator.trans('decorate.members_only'), icon: 'icon-huiyuanzhuanqu', type: 'vip' }
     ]
   }
 ];
