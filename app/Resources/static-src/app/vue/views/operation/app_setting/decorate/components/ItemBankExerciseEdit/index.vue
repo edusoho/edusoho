@@ -15,18 +15,6 @@
       </div>
 
       <div class="design-editor__item">
-        <span class="design-editor__label">{{ 'decorate.arrangement' | trans }}：</span>
-        <a-select
-          style="width: 240px;"
-          :default-value="moduleData.displayStyle"
-          @change="(value) => handleChange({ key: 'displayStyle', value })"
-        >
-          <a-select-option key="row">{{ 'decorate.row_by_column' | trans }}</a-select-option>
-          <a-select-option key="distichous">{{ 'decorate.one_row_and_two_columns' | trans }}</a-select-option>
-        </a-select>
-      </div>
-
-      <div class="design-editor__item">
         <span class="design-editor__label">{{ 'decorate.question_bank_classification' | trans }}：</span>
         <a-cascader
           style="width: 240px;"
@@ -64,13 +52,7 @@
 
       <div class="design-editor__item">
         <span class="design-editor__label">{{ 'decorate.display_number' | trans }}：</span>
-        <a-select
-          style="width: 240px;"
-          :default-value="moduleData.limit"
-          @change="(value) => handleChange({ key: 'limit', value })"
-        >
-          <a-select-option v-for="item in 8" :key="item">{{ item  }}</a-select-option>
-        </a-select>
+        <span style="font-size: 14px; line-height: 22px; color: #999;">{{ 'decorate.itemBankMax' | trans }}</span>
       </div>
     </div>
   </edit-layout>

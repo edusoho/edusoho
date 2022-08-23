@@ -1,22 +1,22 @@
 <template>
-  <div class="coupon-item">
-    <div class="coupon-item__top clearfix">
-      <div class="coupon-item__value pull-left">
-        {{ faceValue }}
+  <div class="coupon-item clearfix" :class="{ 'single': single }">
+    <img v-if="single" class="coupon-item__bg" src="/static-dist/app/img/vue/decorate/single-coupon_bg.png">
+    <img v-else class="coupon-item__bg" src="/static-dist/app/img/vue/decorate/coupon_bg.png" alt="">
+    
+    <div class="clearfix" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
+      <div class="pull-left y-center ml16">
+        <div class="coupon-item__value">{{ faceValue }}</div>
+        <div class="coupon-item__range">{{ 'available_range' | trans }}：{{ availableRange }}</div>
       </div>
-      <div class="coupon-item__info pull-left" v-if="!isMore">
+      
+      <div class="coupon-item__info y-center pull-left" v-if="!isMore">
         <p>{{ coupon.name }}</p>
         <p class="time">{{ validPeriod  }}</p>
       </div>
-      <div class="coupon-item__btn pull-left">
-        <a-button size="small">
-          {{ 'collar_roll' | trans }}
-        </a-button>
+
+      <div class="coupon-item__btn y-center pull-right">
+        {{ 'collar_roll' | trans }}
       </div>
-    </div>
-    <div class="coupon-item__middle" />
-    <div class="coupon-item__bottom">
-      {{ 'available_range' | trans }}：{{ availableRange }}
     </div>
   </div>
 </template>
@@ -32,6 +32,11 @@ export default {
     },
 
     isMore: {
+      type: Boolean,
+      default: false
+    },
+
+    single: {
       type: Boolean,
       default: false
     }
@@ -117,47 +122,42 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
+.y-center {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .coupon-item {
   position: relative;
-  width: 100%;
-  height: 100%;
+  display: inline-block;
+  width: 224px;
+  height: 80px;
   color: #fff;
 
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    top: 70px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: #fff;
-  }
-
-  &::before {
-    left: -6px;
-  }
-
-  &::after {
-    right: -6px;
-  }
-
-  &__top {
-    padding-left: 16px;
-    height: 80px;
-    background-color: #ff6969;
-    border-top-right-radius: 2px;
-    border-top-left-radius: 2px;
+  &.single {
+    width: 343px;
   }
 
   &__value {
-    font-size: 18px;
-    line-height: 78px;
+    font-size: 24px;
+    line-height: 24px;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  &__range {
+    margin-top: 2px;
+    margin-left: -10px;
+    font-size: 12px;
+    line-height: 20px;
+    color: #fff;
+    font-weight: 400;
+    transform: scale(0.83);
   }
 
   &__info {
-    margin-top: 20px;
-    margin-left: 8px;
     font-size: 14px;
 
     .time {
@@ -171,31 +171,16 @@ export default {
   }
 
   &__btn {
-    margin-top: 30px;
-    margin-left: 16px;
-
-    /deep/ .ant-btn {
-      color: #ff6969;
-    }
-  }
-
-  &__middle {
-    margin-top: -6px;
-    margin-bottom: -1px;
-    height: 6px;
-    background-image: url('/static-dist/app/img/vue/a.png');
-    background-size: 16px 6px;
-    background-position-x: 6px;
-  }
-
-  &__bottom {
-    padding-left: 16px;
-    height: 32px;
-    line-height: 32px;
-    font-size: 10px;
-    background-color: #ff5353;
-    border-bottom-right-radius: 2px;
-    border-bottom-left-radius: 2px;
+    width: 48px;
+    height: 22px;
+    margin-right: 20px;
+    text-align: center;
+    line-height: 22px;
+    font-size: 12px;
+    color: #fff;
+    font-weight: 500;
+    background: #FF900E;
+    border-radius: 28px;
   }
 }
 </style>

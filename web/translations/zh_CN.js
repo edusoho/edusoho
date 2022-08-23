@@ -1754,7 +1754,7 @@ t.add("decorate.arrangement", "\u6392\u5217\u65b9\u5f0f", "js", "zh_CN");
 t.add("decorate.row_by_column", "\u4e00\u884c\u4e00\u5217", "js", "zh_CN");
 t.add("decorate.one_row_and_two_columns", "\u4e00\u884c\u4e24\u5217", "js", "zh_CN");
 t.add("decorate.class_source", "\u73ed\u7ea7\u6765\u6e90", "js", "zh_CN");
-t.add("decorate.class_classification", "\u73ed\u7ea7\u5206\u7c7b", "js", "zh_CN");
+t.add("decorate.class_classification", "\u73ed\u7ea7", "js", "zh_CN");
 t.add("decorate.customize", "\u81ea\u5b9a\u4e49", "js", "zh_CN");
 t.add("decorate.select_class", "\u9009\u62e9\u73ed\u7ea7", "js", "zh_CN");
 t.add("decorate.order", "\u6392\u5217\u987a\u5e8f", "js", "zh_CN");
@@ -1796,7 +1796,7 @@ t.add("decorate.valid_within_fixed_day_of_receipt", "\u9886\u53d6%fixedDay%\u592
 t.add("decorate.unknown_date", "\u672a\u77e5\u65e5\u671f", "js", "zh_CN");
 t.add("decorate.course_list_setting", "\u8bfe\u7a0b\u5217\u8868\u8bbe\u7f6e", "js", "zh_CN");
 t.add("decorate.course_source", "\u8bfe\u7a0b\u6765\u6e90", "js", "zh_CN");
-t.add("decorate.course_sorts", "\u8bfe\u7a0b\u5206\u7c7b", "js", "zh_CN");
+t.add("decorate.course_sorts", "\u8bfe\u7a0b", "js", "zh_CN");
 t.add("decorate.choose_a_course", "\u9009\u62e9\u8bfe\u7a0b", "js", "zh_CN");
 t.add("decorate.recommended_courses", "\u63a8\u8350\u8bfe\u7a0b", "js", "zh_CN");
 t.add("decorate.show_only_published_courses", "\u4ec5\u663e\u793a\u5df2\u53d1\u5e03\u8bfe\u7a0b", "js", "zh_CN");
@@ -1810,7 +1810,7 @@ t.add("decorate.please_enter_a_title", "\u8bf7\u8f93\u5165\u6807\u9898", "js", "
 t.add("decorate.link_source", "\u94fe\u63a5\u6765\u6e90", "js", "zh_CN");
 t.add("decorate.please_choose", "\u8bf7\u9009\u62e9", "js", "zh_CN");
 t.add("decorate.members_only", "\u4f1a\u5458\u4e13\u533a", "js", "zh_CN");
-t.add("decorate.open_class_classification", "\u516c\u5f00\u8bfe\u5206\u7c7b", "js", "zh_CN");
+t.add("decorate.open_class_classification", "\u516c\u5f00\u8bfe", "js", "zh_CN");
 t.add("decorate.select_image", "\u9009\u62e9\u56fe\u7247", "js", "zh_CN");
 t.add("decorate.title2", "\u6807\u9898", "js", "zh_CN");
 t.add("decorate.question_bank_list_settings", "\u9898\u5e93\u5217\u8868\u8bbe\u7f6e", "js", "zh_CN");
