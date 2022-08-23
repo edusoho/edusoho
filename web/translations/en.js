@@ -1901,12 +1901,13 @@ t.add("decorate.are_you_sure_exiting_editing", "Are you sure to exit editing?", 
 t.add("decorate.exiting_editing_not_save", "Exiting editing will not save the changes.", "js", "en");
 t.add("decorate.gn_tip1", "The recommended image size is 80x80px, supports jpg\/png\/gif format, and the size does not exceed 2 MB", "js", "en");
 t.add("decorate.gn_tip2", "Add up to 8 graphic navigation", "js", "en");
-t.add("decorate.poster_tip1", "The recommended image size is 750px, supports jpg\/png\/gif format, and the size does not exceed 2 MB", "js", "en");
+t.add("decorate.poster_tip1", "The recommended image size is 686px, supports jpg\/png\/gif format, and the size does not exceed 2 MB", "js", "en");
 t.add("decorate.open_course_tip1", "Contains only the content of the live broadcast public class, does not include the recorded public class", "js", "en");
 t.add("decorate.living", "Live streaming", "js", "en");
 t.add("decorate.replay", "Live Playback", "js", "en");
 t.add("decorate.islearning", "Persons in learning", "js", "en");
 t.add("decorate.itemBankMax", "Display up to 3 question banks", "js", "en");
+t.add("decorate.persons", "Persons", "js", "en");
 t.add("scrm.title", "Scrm", "js", "en");
 t.add("scrm.edusoho_title", "EduSoho Scrm", "js", "en");
 t.add("scrm.desc", "EduSoho Scrm is a private domain traffic operation tool for education and training institutions, providing functions such as attracting customers, customer operations, community operations, and corporate risk control. EduSoho Scrm and EduSoho Online School provide institutions with a total solution for enrollment, educational administration, teaching and service.", "js", "en");
