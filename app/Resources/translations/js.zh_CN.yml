@@ -2085,12 +2085,13 @@ decorate.are_you_sure_exiting_editing: 确定退出编辑？
 decorate.exiting_editing_not_save: 退出编辑将不会保存修改。
 decorate.gn_tip1: 建议图片尺寸为 80x80px，支持 jpg/png/gif 格式，大小不超过 2 MB
 decorate.gn_tip2: 最多添加 8 个图文导航
-decorate.poster_tip1: 建议图片尺寸为 750px，支持 jpg/png/gif 格式，大小不超过 2 MB
+decorate.poster_tip1: 建议图片尺寸为 686px，支持 jpg/png/gif 格式，大小不超过 2 MB
 decorate.open_course_tip1: 仅含直播公开课内容，不包含录播公开课
 decorate.living: 直播
 decorate.replay: 回放
 decorate.islearning: 人在学
 decorate.itemBankMax: 最多显示3个题库
+decorate.persons: 人
 
 scrm.title: 销客助手
 scrm.edusoho_title: EduSoho销客助手
