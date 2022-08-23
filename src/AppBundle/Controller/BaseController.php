@@ -378,6 +378,11 @@ class BaseController extends Controller
         $safeHosts = [$host];
 
         $parsedUrl = parse_url($url);
+
+        if (!empty($parsedUrl['scheme'])) {
+            $url = $parsedUrl['scheme'] . '://' . $host . $parsedUrl['path'] . (empty($parsedUrl['query']) ? '' : '?' . $parsedUrl['query']);
+        }
+
         $isUnsafeHost = isset($parsedUrl['host']) && !in_array($parsedUrl['host'], $safeHosts);
         $isInvalidUrl = isset($parsedUrl['scheme']) && !in_array($parsedUrl['scheme'], ['http', 'https']);
 
