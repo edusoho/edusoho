@@ -35,7 +35,6 @@ class Article extends AbstractResource
     public function get(ApiRequest $request, $id)
     {
         $article = $this->getArticleService()->getArticle($id);
-        var_dump($article);
 
         return $article;
     }
