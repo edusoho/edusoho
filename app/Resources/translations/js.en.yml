@@ -2132,12 +2132,13 @@ decorate.are_you_sure_exiting_editing: Are you sure to exit editing?
 decorate.exiting_editing_not_save: Exiting editing will not save the changes.
 decorate.gn_tip1: The recommended image size is 80x80px, supports jpg/png/gif format, and the size does not exceed 2 MB
 decorate.gn_tip2: Add up to 8 graphic navigation
-decorate.poster_tip1: The recommended image size is 750px, supports jpg/png/gif format, and the size does not exceed 2 MB
+decorate.poster_tip1: The recommended image size is 686px, supports jpg/png/gif format, and the size does not exceed 2 MB
 decorate.open_course_tip1: Contains only the content of the live broadcast public class, does not include the recorded public class
 decorate.living: Live streaming
 decorate.replay: Live Playback
 decorate.islearning: Persons in learning
 decorate.itemBankMax: Display up to 3 question banks
+decorate.persons: Persons
 
 scrm.title: Scrm
 scrm.edusoho_title: EduSoho Scrm

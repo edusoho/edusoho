@@ -15,26 +15,32 @@
       <div class="clearfix mt8">
         <div class="open-course-item pull-left">
           <img class="open-course-bg" src="/static-dist/app/img/vue/decorate/openCourse_bg.png" srcset="/static-dist/app/img/vue/decorate/openCourse_bg@2x.png" />
-          <div class="open-course-info">
-            <div class="title">1111</div>
+          <div class="open-course-info" v-if="currentItem">
+            <div class="title">{{ currentItem.title }}</div>
             <div class="time">
               <img :src="timeIcon" style="position: relative;top: -2px;width: 12px;height: 12px;" />
-              <span>2022-05-29 17:00</span>
+              <span v-html="formateTime(currentItem.lesson.startTime * 1000)"></span>
             </div>
             <div class="student-num">
               <img :src="numIcon" style="position: relative;top: -2px;width: 12px;height: 12px;" />
-              <span>2345人</span>
+              <span>{{ currentItem.studentNum  + ' '}}{{ 'decorate.persons' | trans }}</span>
             </div>
           </div>
         </div>
         <div class="pull-left">
           <div class="course-living">
             <img class="course-living-bg" src="/static-dist/app/img/vue/decorate/living_bg.png" srcset="/static-dist/app/img/vue/decorate/living_bg@2x.png" />
-            <div class="course-living__title">{{ 'decorate.living' | trans }}</div>
+            <div class="y-center" style="left: 12px;">
+              <div class="course-living__title">{{ 'decorate.living' | trans }}</div>
+              <div class="course-living__desc">Live streaming</div>
+            </div>
           </div>
           <div class="course-replay">
             <img class="course-replay-bg" src="/static-dist/app/img/vue/decorate/replay_bg.png" srcset="/static-dist/app/img/vue/decorate/replay_bg@2x.png" />
-            <div class="course-replay__title">{{ 'decorate.replay' | trans }}</div>
+            <div class="y-center" style="left: 12px;">
+             <div class="course-replay__title">{{ 'decorate.replay' | trans }}</div>
+              <div class="course-living__desc">Live Playback</div>
+            </div>
           </div>
         </div>
       </div>
@@ -83,12 +89,17 @@ export default {
     }
   },
 
+  computed: {
+    currentItem() {
+      return this.list[0]
+    }
+  },
+
   methods: {
     async fetchOpenCourse() {
       const { categoryId, sourceType, items } = this.moduleData;
       if (sourceType === 'custom') {
         this.list = items;
-        this.reInitSwiper();
         return;
       }
       
@@ -101,6 +112,16 @@ export default {
       const { data } = await OpenCourse.search(params);
       this.list = data;
     },
+    formateTime(value) {
+      const date = new Date(value)
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
+      const day = date.getDate()
+      const hour = date.getHours()
+      const minutes = date.getMinutes()
+
+      return `<span>${year}-${month}-${day}</span> <br /> <span style="margin-left: 12px;">${hour}:${minutes}</span>`
+    }
   }
 }
 </script>
@@ -191,6 +212,12 @@ export default {
   }
 }
 
+.y-center {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .course-living {
   position: relative;
   width: 165px;
@@ -205,13 +232,17 @@ export default {
   }
 
   &__title {
-    position: absolute;
-    top: 26px;
-    left: 16px;
-    color: #184F98;
     font-size: 14px;
     line-height: 22px;
-    font-weight: bold;
+    font-weight: 500;
+    color: #184F98;
+  }
+
+  &__desc {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 20px;
+    color: #83BCDC;
   }
 }
 
@@ -228,13 +259,17 @@ export default {
   }
 
    &__title {
-    position: absolute;
-    top: 26px;
-    left: 16px;
     color: #060083;
     font-size: 14px;
     line-height: 22px;
-    font-weight: bold;
+    font-weight: 500;
+  }
+
+  &__desc {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 20px;
+    color: #A19FD9;
   }
 }
 </style>
