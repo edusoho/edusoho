@@ -84,7 +84,7 @@ export default {
 .swiper-container {
   position: relative;
   width: 100%;
-  height: 150px;
+  height: 136px;
 
   .swiper-slide {
     box-sizing: border-box;

@@ -1844,7 +1844,7 @@ site.btn.remove_playback: 移除回放
 site.btn.view_playback: 查看回放
 site.btn.confirm: 确认
 site.btn.edit: 编辑
-site.btn.see_more: 查看更多
+site.btn.see_more: 全部
 site.btn.enter_live: 进入直播
 site.btn.save: 保存
 site.btn.exit_editing: 退出编辑
@@ -2072,7 +2072,7 @@ decorate.turn_on: 开启
 decorate.closure: 关闭
 decorate.revise: 修改
 decorate.add_content: 添加内容
-decorate.carousel_tip1: 建议图片尺寸为 750x300px，支持 jpg/png/gif 格式，大小不超过 2 MB
+decorate.carousel_tip1: 建议图片尺寸为 686x272px，支持 jpg/png/gif 格式，大小不超过 2 MB
 decorate.carousel_tip2: 最多添加 5 个轮播图，拖动选中的图片可对其排序
 decorate.site_link: 站内链接
 decorate.low_to_hign: 从低到高

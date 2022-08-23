@@ -1891,7 +1891,7 @@ site.btn.remove_playback: Remove playback
 site.btn.view_playback: View playback
 site.btn.confirm: Confirm
 site.btn.edit: Edit
-site.btn.see_more: See more
+site.btn.see_more: All
 site.btn.enter_live: Enter live
 site.btn.save: Save
 site.btn.exit_editing: Exit editinng
@@ -2119,7 +2119,7 @@ decorate.turn_on: Turn on
 decorate.closure: Closure
 decorate.revise: Revise
 decorate.add_content: Add content
-decorate.carousel_tip1: The recommended image size is 750x300px, supports jpg/png/gif format, and the size does not exceed 2MB
+decorate.carousel_tip1: The recommended image size is 686x272px, supports jpg/png/gif format, and the size does not exceed 2MB
 decorate.carousel_tip2: Add up to 5 pictures, drag the selected pictures to sort them
 decorate.site_link: Site link
 decorate.low_to_hign: Low to high
