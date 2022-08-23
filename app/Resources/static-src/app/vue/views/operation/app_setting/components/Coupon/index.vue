@@ -11,20 +11,14 @@
 
     <div :class="['coupon-container', moduleType]">
       <div v-if="moduleData.items.length > 1" class="swiper-wrapper clearfix">
-        <div
-          v-for="item in moduleData.items"
-          :key="item.id"
-          class="swiper-slide"
-        >
-          <div class="swiper-slide-container">
-            <coupon-item :is-more="true" :coupon="item" />
+        <div v-for="item in moduleData.items" :key="item.id" class="swiper-slide">
+          <div class="swiper-slide-container clearfix">
+            <coupon-item class="pull-left" :is-more="true" :coupon="item" />
           </div>
         </div>
       </div>
 
-      <template v-else-if="moduleData.items.length > 0">
-        <coupon-item v-for="item in moduleData.items" :key="item.id" :coupon="item" />
-      </template>
+      <coupon-item v-else-if="moduleData.items.length === 1" :coupon="moduleData.items[0]" :single="true" />
 
       <div v-else class="empty">{{ 'coupon' | trans }}</div>
     </div>
@@ -86,6 +80,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.swiper-wrapper {
+  height: 80px !important;
+  overflow-y: hidden !important;
+}
+
 .coupon-title {
   padding-right: 16px;
   padding-left: 16px;
@@ -101,7 +100,6 @@ export default {
   padding-right: 16px;
   padding-left: 16px;
   width: 100%;
-  height: 112px;
 
   .empty {
     width: 100%;
@@ -114,7 +112,7 @@ export default {
 
   .swiper-slide-container {
     position: relative;
-    margin-right: 24px;
+    margin-right: 12px;
     height: 100%;
   }
 }

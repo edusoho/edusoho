@@ -10,7 +10,7 @@
       <img :src="item.image.uri" />
 
       <div class="re-upload">
-        <upload-image :aspect-ratio="5 / 2" @success="handleUploadSuccess">
+        <upload-image :aspect-ratio="343 / 136" @success="handleUploadSuccess">
           <template #content>
             <div class="re-upload-mask" />
             <div class="re-upload-text">
