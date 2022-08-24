@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="flex mt-16">
-      <div class="flex-1" style="background-color: #fff; border-radius: 6px;" @click="jumpToCurrentItem">
+      <div v-if="currentItem" class="flex-1" style="background-color: #fff; border-radius: 6px;" @click="jumpToCurrentItem">
         <img :src="currentItem.cover.middle" style="width: 100%; border-radius: 6px 6px 0 0; ">
         <div class="flex flex-col justify-between p-8" style="height: 62px;">
           <div class="font-bold text-14 text-overflow" style="width: 124px;">{{ currentItem.title }}</div>

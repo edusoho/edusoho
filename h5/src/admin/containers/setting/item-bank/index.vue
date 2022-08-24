@@ -10,15 +10,12 @@
         :itembank="copyModuleData.data"
         :feedback="false"
         show-mode="admin"
-        @fetchCourse="fetchItemBankList"
       />
     </div>
 
     <div slot="setting">
       <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips"></e-suggest>
-      <header class="title">
-        {{ $t('questionBankList.questionBankSettingList') }}
-      </header>
+      <header class="title">{{ $t('questionBankList.questionBankSettingList') }}</header>
       <div class="clearfix default-allocate__content">
         <!-- 列表名称 -->
         <setting-cell :title="$t('questionBankList.listName')" left-class="required-option">
@@ -250,6 +247,7 @@ export default {
       },
       set(value) {
         this.copyModuleData.data.sort = value;
+        this.fetchItemBankList();
       },
     },
     lastDays: {
@@ -258,14 +256,7 @@ export default {
       },
       set(value) {
         this.copyModuleData.data.lastDays = value;
-      },
-    },
-    categoryId: {
-      get() {
-        return this.copyModuleData.data.categoryId;
-      },
-      set(value) {
-        this.copyModuleData.data.categoryId = value;
+        this.fetchItemBankList();
       },
     },
     portal() {
@@ -288,6 +279,7 @@ export default {
         // 多级分类需要拿到最后等级的id
         this.moduleData.data.categoryIdArray = value;
         this.moduleData.data.categoryId = value[endIndex];
+        this.fetchItemBankList();
       },
     },
     courseCategories: {
@@ -320,7 +312,6 @@ export default {
         this.categoryDiggered = true;
 
         if (categoryExist) return true;
-        // this.categoryTempId = ['0'];
       },
       immediate: true,
     },
@@ -342,9 +333,9 @@ export default {
       },
       immediate: true,
     },
-    sourceType(value) {
-      this.limit = value === 'condition' ? 4 : 8;
-    },
+  },
+  created() {
+    this.fetchItemBankList();
   },
   methods: {
     ...mapActions(['getItemBankList']),
@@ -361,11 +352,17 @@ export default {
     deleteCourse(index) {
       this.copyModuleData.data.items.splice(index, 1);
     },
-    fetchItemBankList({ params, index }) {
+    fetchItemBankList() {
       if (this.sourceType === 'custom') return;
-      this.getItemBankList(params)
+      
+      this.getItemBankList({
+        limit: 3,
+        sort: this.sort,
+        lastDays: this.lastDays,
+        categoryId: this.categoryTempId.at(-1)
+      })
         .then(res => {
-          this.moduleData.data.items = res.data;
+          this.moduleData.data.items = res || [];
         })
         .catch(err => {
           this.$message({
