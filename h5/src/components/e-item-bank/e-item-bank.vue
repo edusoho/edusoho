@@ -16,7 +16,7 @@
           <div class="font-bold text-14 text-overflow" style="width: 124px;">{{ currentItem.title }}</div>
           <div class="flex justify-between text-12">
             <div class="font-bold" style="color: #FF7A34;">￥{{ currentItem.price }}</div>
-            <div class="text-text-3">{{currentItem.studentNum }}{{ $t('e.learn') }}</div>
+            <div class="text-text-3">{{ $t('e.personStudying', { number: currentItem.studentNum }) }}</div>
           </div>
         </div>
       </div>

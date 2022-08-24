@@ -50,7 +50,6 @@ export default {
     moreCourse: '更多好课等您加入',
     moreClass: '更多班级等您加入',
     moreQuestionBanks: '更多题库等您加入',
-    learn: '人在学',
     browse: '人浏览'
   },
   title: {
