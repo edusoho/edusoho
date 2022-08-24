@@ -4,7 +4,7 @@ namespace Biz\BehaviorVerification\Service\Impl;
 
 use Biz\BaseService;
 use Biz\BehaviorVerification\Service\BehaviorVerificationBlackIpService;
-use Biz\BehaviorVerification\Dao\BehaviorVerificationIpDao;
+use Biz\BehaviorVerification\Dao\BehaviorVerificationBlackIpDao;
 
 class BehaviorVerificationBlackIpServiceImpl extends BaseService implements BehaviorVerificationBlackIpService
 {
@@ -30,10 +30,10 @@ class BehaviorVerificationBlackIpServiceImpl extends BaseService implements Beha
     }
 
     /**
-     * @return BehaviorVerificationIpDao
+     * @return BehaviorVerificationBlackIpDao
      */
     protected function getBehaviorVerificationIpDao()
     {
-        return $this->createDao("BehaviorVerification:BehaviorVerificationIpDao");
+        return $this->createDao("BehaviorVerification:BehaviorVerificationBlackIpDao");
     }
 }

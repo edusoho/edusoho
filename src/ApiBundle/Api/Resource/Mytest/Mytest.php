@@ -12,9 +12,9 @@ class Mytest extends AbstractResource
     public function search(ApiRequest $request)
     {
         var_dump("hello");
-        return $this->getSmsBlackCoordinate()->isRobot("12,24");
-//        $this->getSmsBlackIp()->addBlackIpList("122.34.5.23");
-//        return $this->getSmsBlackIp()->isInBlackIpList("122.34.5.23");
+//        return $this->getSmsBlackCoordinate()->isRobot("12,24");
+        $this->getSmsBlackIp()->addBlackIpList("122.34.5.24");
+        return $this->getSmsBlackIp()->isInBlackIpList("122.34.5.25");
     }
 
     /**
