@@ -100,7 +100,6 @@ export default {
       color: #919191;
       font-weight: bold;
       text-align: center;
-      line-height: 140px;
       transform: scale(0.96);
       transition: all 0.3s ease;
 
