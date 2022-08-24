@@ -178,7 +178,7 @@ export default {
       if (typeList === 'classroom_list') {
         Api.getClassList({ params }).then(res => {
           if (this.sourceType === 'custom') return;
-
+          console.log('classroom_list: ', res)
           this.parts[index].data.items = res.data;
         });
         return;

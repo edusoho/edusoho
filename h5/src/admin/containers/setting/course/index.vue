@@ -445,7 +445,7 @@ export default {
 
       this.getClassList(params)
         .then(res => {
-          this.moduleData.data.items = res.data || [];
+          this.moduleData.data.items = res || [];
         })
         .catch(err => {
           this.$message({

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import store from 'admin/store';
+import proxyMap from '../../../build/env';
 
 // 状态码
 // const statusCode = {
@@ -13,7 +14,7 @@ axios.interceptors.request.use(
     const env = process.env.NODE_ENV;
 
     if (env !== 'production') {
-      config.headers['X-CSRF-Token'] = store.state.token;
+      config.headers['X-CSRF-Token'] = proxyMap.token;
     } else {
       config.headers['X-Requested-With'] = 'XMLHttpRequest';
       config.headers['X-CSRF-Token'] = store.state.csrfToken;

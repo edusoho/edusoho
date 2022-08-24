@@ -1,5 +1,5 @@
 <template>
-  <div class="p-16">
+  <div style="padding: 10px 16px;">
     <div class="flex justify-between">
       <div class="font-bold text-text-5 text-16">
         {{ itembank.title }}
@@ -9,7 +9,7 @@
         <div class="ml-4 all-icon"></div>
       </div>
     </div>
-    <div class="flex px-6 py-16">
+    <div class="flex mt-16">
       <div class="flex-1" style="background-color: #fff; border-radius: 6px;" @click="jumpToCurrentItem">
         <img :src="currentItem.cover.middle" style="width: 100%; border-radius: 6px 6px 0 0; ">
         <div class="flex flex-col justify-between p-8" style="height: 62px;">

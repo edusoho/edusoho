@@ -87,4 +87,8 @@ export default {
     background-color: #fff;
   }
 
+  /deep/ .van-search {
+    background-color: transparent;
+  }
+
 </style>

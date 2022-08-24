@@ -19,7 +19,7 @@ axios.interceptors.request.use(
     }
     
     if (["/api/pages/h5/settings"].includes(config.url) === false) {
-      config.headers.SessionIgnore = 1;
+      // config.headers.SessionIgnore = 1;
     }
 
     if (store.state.token) {
