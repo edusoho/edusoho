@@ -9,7 +9,7 @@
         <div class="ml-4 all-icon"></div>
       </div>
     </div>
-    <div class="flex mt-16">
+    <div class="flex mt-8">
       <div v-if="currentItem" class="flex-1" style="background-color: #fff; border-radius: 6px;" @click="jumpToCurrentItem">
         <img :src="currentItem.cover.middle" style="width: 100%; border-radius: 6px 6px 0 0; ">
         <div class="flex flex-col justify-between p-8" style="height: 62px;">
@@ -22,7 +22,7 @@
       </div>
       <div class="flex flex-col justify-between flex-1 ml-8" style="height: 162px;">
         <div
-          v-for="(item, index) in itembank.items" 
+          v-for="(item, index) in itembank.items.slice(0, 3)" 
           :key="item.id"
           class="p-12 text-center text-overflow text-14"
           style="height: 46px;border-radius: 6px;"

@@ -67,7 +67,7 @@
 <script>
 import marketingMixins from 'admin/mixins/marketing';
 import courseTable from './course-table';
-import { mapMutations, mapState, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 import {
   VALUE_DEFAULT,
   TYPE_TEXT_DEFAULT,
@@ -252,7 +252,7 @@ export default {
       this.hideLoading = false;
       this[apiConfigObj[this.type].apiName](apiConfigObj[this.type].params)
         .then(res => {
-          cb(res.data);
+          cb(res);
         })
         .catch(err => {
           this.hideLoading = true;
