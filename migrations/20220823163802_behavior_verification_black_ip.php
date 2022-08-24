@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class BehaviorVerificationIp extends Migration
+class BehaviorVerificationBlackIp extends Migration
 {
     /**
      * Do the migration
@@ -11,7 +11,7 @@ class BehaviorVerificationIp extends Migration
     {
         $biz = $this->getContainer();
         $biz['db']->exec("
-            CREATE TABLE `behavior_verification_ip` (
+            CREATE TABLE `behavior_verification_black_ip` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
             `ip` varchar(32) NOT NULL COMMENT 'ip',
             `expire_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
