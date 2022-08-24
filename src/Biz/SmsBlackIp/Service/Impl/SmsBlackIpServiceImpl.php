@@ -15,6 +15,9 @@ class SmsBlackIpServiceImpl extends BaseService implements SmsBlackIpService
         if (empty($smsBlackIp)){
             return false;
         }
+        if($smsBlackIp['expire_time'] < time()){
+            return false;
+        }
         return true;
     }
 
