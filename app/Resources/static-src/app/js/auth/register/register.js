@@ -101,10 +101,10 @@ export default class Register {
   }
 
   initMobileMsgVeriCodeSendBtn() {
+    alert('hello');
     let $smsSendBtn =  $('.js-sms-send-btn');
     let self = this;
     $smsSendBtn.click(function() {
-      alert('hello');
       self._smsBtnDisable();
       let fieldName = $('[name=\'verifiedMobile\']').length ? 'verifiedMobile' : 'emailOrMobile';
       new SmsSender({
