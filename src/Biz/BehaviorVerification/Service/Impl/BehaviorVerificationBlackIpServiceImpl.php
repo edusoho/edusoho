@@ -3,10 +3,10 @@
 namespace Biz\BehaviorVerification\Service\Impl;
 
 use Biz\BaseService;
-use Biz\BehaviorVerification\Service\BehaviorVerificationIpService;
+use Biz\BehaviorVerification\Service\BehaviorVerificationBlackIpService;
 use Biz\BehaviorVerification\Dao\BehaviorVerificationIpDao;
 
-class BehaviorVerificationIpServiceImpl extends BaseService implements BehaviorVerificationIpService
+class BehaviorVerificationBlackIpServiceImpl extends BaseService implements BehaviorVerificationBlackIpService
 {
 
     public function isInBlackIpList($ip)

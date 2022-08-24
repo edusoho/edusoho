@@ -2,7 +2,7 @@
 
 namespace Biz\BehaviorVerification\Service;
 
-interface BehaviorVerificationIpService
+interface BehaviorVerificationBlackIpService
 {
     public function isInBlackIpList($ip);
 

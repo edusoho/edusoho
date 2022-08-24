@@ -30,6 +30,6 @@ class Mytest extends AbstractResource
      */
     protected function getSmsBlackIp()
     {
-        return $this->service("BehaviorVerification:BehaviorVerificationIpService");
+        return $this->service("BehaviorVerification:BehaviorVerificationBlackIpService");
     }
 }
