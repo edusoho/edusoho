@@ -18,6 +18,7 @@ use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
+use Ramsey\Uuid\Uuid;
 
 class AnswerServiceImpl extends BaseService implements AnswerService
 {
@@ -31,6 +32,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'answer_scene_id' => $answerSceneId,
             'assessment_id' => $assessmentId,
             'user_id' => $userId,
+            'admission_ticket' => $this->generateAdmissionTicket(),
         ]);
 
         $this->dispatch('answer.started', $answerRecord);
@@ -38,6 +40,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $this->registerAutoSubmitJob($answerRecord);
 
         return $answerRecord;
+    }
+
+    protected function generateAdmissionTicket()
+    {
+        return Uuid::uuid1()->getHex();
     }
 
     public function submitAnswer(array $assessmentResponse)
@@ -606,7 +613,12 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         if (AnswerService::ANSWER_RECORD_STATUS_DOING == $answerRecord['status']) {
-            return $answerRecord;
+            return $this->getAnswerRecordService()->update(
+                $answerRecordId,
+                [
+                    'admission_ticket' => $this->generateAdmissionTicket(),
+                ]
+            );
         }
 
         if (AnswerService::ANSWER_RECORD_STATUS_PAUSED != $answerRecord['status']) {
@@ -617,7 +629,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         return $this->getAnswerRecordService()->update(
             $answerRecordId,
-            ['status' => AnswerService::ANSWER_RECORD_STATUS_DOING]
+            [
+                'status' => AnswerService::ANSWER_RECORD_STATUS_DOING,
+                'admission_ticket' => $this->generateAdmissionTicket(),
+            ]
         );
     }
 
