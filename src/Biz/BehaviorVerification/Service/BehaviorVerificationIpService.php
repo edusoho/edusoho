@@ -1,8 +1,8 @@
 <?php
 
-namespace Biz\SmsBlackIp\Service;
+namespace Biz\BehaviorVerification\Service;
 
-interface SmsBlackIpService
+interface BehaviorVerificationIpService
 {
     public function isInBlackIpList($ip);
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Biz\SmsBlackCoordinate\Dao;
+namespace Biz\BehaviorVerification\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
-interface SmsBlackCoordinateDao extends GeneralDaoInterface
+interface BehaviorVerificationCoordinateDao extends GeneralDaoInterface
 {
     public function getByCoordinate($coordinate);
 

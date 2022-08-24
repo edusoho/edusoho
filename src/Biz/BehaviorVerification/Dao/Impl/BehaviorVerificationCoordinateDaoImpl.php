@@ -1,13 +1,13 @@
 <?php
 
-namespace Biz\SmsBlackCoordinate\Dao\Impl;
+namespace Biz\BehaviorVerification\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Biz\SmsBlackCoordinate\Dao\SmsBlackCoordinateDao;
+use Biz\BehaviorVerification\Dao\BehaviorVerificationCoordinateDao;
 
-class SmsBlackCoordinateDaoImpl extends GeneralDaoImpl implements SmsBlackCoordinateDao
+class BehaviorVerificationCoordinateDaoImpl extends GeneralDaoImpl implements BehaviorVerificationCoordinateDao
 {
-    protected $table = 'sms_black_coordinate';
+    protected $table = 'behavior_verification_coordinate';
 
     public function getByCoordinate($coordinate)
     {
@@ -26,8 +26,8 @@ class SmsBlackCoordinateDaoImpl extends GeneralDaoImpl implements SmsBlackCoordi
     public function declares()
     {
         return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys' => array('id', 'hit_counts', 'createdTime', 'updatedTime'),
+            'timestamps' => array('created_time', 'updated_time'),
+            'orderbys' => array('id', 'hit_counts', 'created_time', 'updated_time'),
             'conditions' => array(
 
             ),
