@@ -78,6 +78,11 @@ class PageDiscovery extends AbstractResource
 
             if('information' == $discoverySetting['type']){
                 $information = $this ->getArticleService() -> searchArticles(['status' => 'published'], ['sticky' => 'DESC' ,'publishedTime' => 'DESC'], 0, 3);
+                foreach ($information as &$info) {
+                    $info['createdTime'] = date('c', $info['createdTime']);
+                    $info['updatedTime'] = date('c', $info['updatedTime']);
+                    $info['publishedTime'] = date('c', $info['publishedTime']);
+                }
                 $discoverySetting['data'] = empty($information) ? '' : $information;
             }
         }
