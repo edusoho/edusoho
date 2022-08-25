@@ -81,9 +81,8 @@ export default {
 
 <style lang="scss" scoped>
   .all-icon {
-    width: 7px;
-    height: 7px;
-    margin-top: -1px;
+    width: 6px;
+    height: 6px;
     border-top: 1px solid #86909c;
     border-right: 1px solid #86909c;
     transform: rotate(45deg);

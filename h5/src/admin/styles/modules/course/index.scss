@@ -98,13 +98,6 @@
 			margin-right: 3px;
 			line-height: 25px;
 		}
-
-		&::after {
-			width: 7px;
-			height: 7px;
-			margin-top: 7.5px;
-			margin-right: 2px;
-		}
 	}
 }
 
@@ -127,16 +120,15 @@
 
 		&__member {
 			position: absolute;
-			top: -1px;
-			right: -4px;
-			width: 56px;
+			top: 0;
+			right: 0;
+			width: 50px;
 			height: 20px;
 			color: #fff;
 			font-size: 12px;
 			text-align: center;
 			background-color: #162923;
 			border-radius: 0 0 0 6px;
-			transform: scale(0.83);
 		}
 
 		&__live {

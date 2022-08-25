@@ -123,7 +123,7 @@ const getCourseDisplay = (data, listObj, price) => {
   if (data.originPrice !== data.price) {
     price = `
       <div style="margin-left: -5px;color: #FF7A34;transform: scale(0.83);">¥ ${data.price}</div>
-      <s style="margin: 1px 0 0 -8px;color: #86909C;transform: scale(0.66);">¥ ${data.originPrice}</s>
+      <s style="margin: 1px 0 0 -12px;color: #86909C;transform: scale(0.66);">¥ ${data.originPrice}</s>
     `
   }
 
