@@ -12,11 +12,9 @@ class BehaviorVerificationCoordinateServiceImpl extends BaseService implements B
 
     public function isRobot($coordinate)
     {
-//        var_dump($coordinate);die;
         global $kernel;
         $csrfToken = $kernel->getContainer()->get('security.csrf.token_manager')->getToken('site');
-        $abc = EncryptionToolkit::XXTEADecrypt(base64_decode(mb_substr($coordinate, 2)), $csrfToken);
-        var_dump($abc);die;
+        $coordinate = EncryptionToolkit::XXTEADecrypt(base64_decode(mb_substr($coordinate, 2)), $csrfToken);
         $existBlackList = $this->getBehaviorVerificationCoordinateDao()->getByCoordinate($coordinate);
         if (empty($existBlackList)){
             $this->getBehaviorVerificationCoordinateDao()->create(["hit_counts"=>1,"expire_time"=> time() + 24 * 3600, "coordinate" => $coordinate]);
