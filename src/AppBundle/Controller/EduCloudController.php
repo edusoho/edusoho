@@ -6,6 +6,7 @@ use AppBundle\Common\EncryptionToolkit;
 use AppBundle\Common\SmsToolkit;
 use Biz\BehaviorVerification\Service\BehaviorVerificationBlackIpService;
 use Biz\BehaviorVerification\Service\BehaviorVerificationCoordinateService;
+use Biz\BehaviorVerification\Service\BehaviorVerificationService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Sms\SmsException;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
@@ -32,7 +33,9 @@ class EduCloudController extends BaseController
     {
         $smsType = 'sms_registration';
 
-        $this->behaviorVerification($request);
+        if ($this->getBehaviorVerificationService()->behaviorVerification($request)){
+            return $this->createJsonResponse(['ACK' => 'ok', "allowance" => 0]);
+        }
         $status = $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp());
         if ('captchaRequired' == $status) {
             $captchaNum = $request->request->get('captcha_num');
@@ -485,29 +488,12 @@ class EduCloudController extends BaseController
 
         return !empty($captchaNum) && $request->getSession()->get('captcha_code') == $captchaNum;
     }
-    protected function behaviorVerification($request)
-    {
-        $encryptedPoint = $request->request->get('encryptedPoint');
-        if ($this->getBehaviorVerificationBlackIpService()->isInBlackIpList($request->getClientIp())){
-            return $this->createJsonResponse(['ACK' => 'ok', "allowance" => 0]);
-        }
-        if($this->getBehaviorVerificationCoordinateService()->isRobot($encryptedPoint)){
-            return $this->createJsonResponse(['ACK' => 'ok', "allowance" => 0]);
-        }
-    }
-    /**
-     * @return BehaviorVerificationCoordinateService
-     */
-    protected function getBehaviorVerificationCoordinateService()
-    {
-        return $this->createService('BehaviorVerification:BehaviorVerificationCoordinateService');
-    }
 
     /**
-     * @return BehaviorVerificationBlackIpService
+     * @return BehaviorVerificationService
      */
-    protected function getBehaviorVerificationBlackIpService()
+    protected function getBehaviorVerificationService()
     {
-        return $this->createService('BehaviorVerification:BehaviorVerificationBlackIpService');
+        return $this->createService('BehaviorVerification:BehaviorVerificationService');
     }
 }
