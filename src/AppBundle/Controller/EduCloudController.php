@@ -71,6 +71,10 @@ class EduCloudController extends BaseController
             }
         }
 
+        if ($this->getBehaviorVerificationService()->behaviorVerification($request)){
+            return $this->createJsonResponse(['ACK' => 'ok', "allowance" => 0]);
+        }
+
         $result = $this->sendSms($request, $smsType);
 
         if (!empty($result['ACK']) && 'ok' == $result['ACK']) {
