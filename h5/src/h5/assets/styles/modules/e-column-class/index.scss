@@ -1,5 +1,6 @@
 .e-column-class {
 	flex: 1;
+	margin-bottom: 8px;
 	padding: 0 6px;
 
 	.column-class-left {
@@ -43,7 +44,7 @@
 			line-height: vw(20);
 			text-align: center;
 			background: #162923;
-			border-radius: 0 vw(4);
+			border-radius: 0 6px;
 		}
 
 		&__live {

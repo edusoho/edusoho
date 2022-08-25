@@ -4,8 +4,9 @@
 
 	&__title {
 		margin-bottom: 8px;
-		color: #2b333b;
-		font-size: vw(18);
+		color: #1d2129;
+		font-size: 16px;
+		font-weight: bold;
 		line-height: 1;
 	}
 
@@ -165,6 +166,7 @@ body,
 }
 
 .find-page {
+	height: 100%;
 	background-color: #f7f9fa;
 }
 

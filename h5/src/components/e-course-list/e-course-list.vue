@@ -32,7 +32,7 @@
         <span class="e-course-list__more">
           <span
             class="more-text pull-left"
-            style="font-size: 12px;"
+            style="font-size: 14px;"
             @click="jumpTo(courseList.source)"
             >{{ $t('enter.all') }}</span
           >

@@ -26,18 +26,10 @@
         class="absolute bottom-0 left-0 right-0 p-8 text-text-1" 
         style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);"
       >
-        <div class="flex items-center justify-between mb-4 text-12" style="line-height: 16px;">
-          <div>
-            {{ type === 'groupon' ? '拼团价' : '秒杀价' }}
-          </div>
-          <div>
-            已团{{ this.groupon.groupTime || 0 }}次 | {{ activity.rule.memberNum }}人团
-          </div>
-        </div>
-        
         <div class="flex items-end justify-between">
           <div class="flex items-end">
             <div class="font-bold">
+              <span class="mr-4 text-12">拼团价</span>
               <span class="text-12">￥</span>
               <span class="text-16">{{ activityPrice }}</span>
             </div>
@@ -45,7 +37,10 @@
               原价￥{{ activity.originPrice }}
             </s>
           </div>
-          <div class="text-12">{{ this.groupon.grouponNum }}人正在拼团</div>
+          <div class="text-12">
+            <span class="text-16">{{ this.groupon.grouponNum }}</span>
+            人正在拼 / 已团{{ this.groupon.groupTime || 0 }}次
+          </div>
         </div>
       </div>
 
@@ -53,23 +48,20 @@
         v-else-if="type === 'seckill'"
         class="absolute bottom-0 left-0 right-0 p-8 text-text-1" 
         style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);"
-      >
-        <div class="flex justify-between mb-4 items-enter text-12">
-          <div>秒杀价</div>
-          <div>距离结束还有</div>
-        </div>
-        
-        <div class="flex items-end justify-between">
+      > 
+        <div class="flex items-center justify-between">
           <div class="flex items-end">
             <div class="font-bold">
+              <span class="mr-4 text-12">秒杀价</span>
               <span class="text-12">￥</span>
               <span class="text-16">{{ activityPrice }}</span>
             </div>
             <s v-if="activity.originPrice" class="ml4 text-12" style="transform: scale(0.83)">
-              原价￥{{ activity.originPrice }}
+              ￥{{ activity.originPrice }}
             </s>
           </div>
           <div class="flex text-12" v-if="activityData && counting && !isEmpty && activity.status === 'ongoing'"> 
+            <div class="mr-4">倒计时</div>
             <div class="time-block">{{ endTimeDown.day }}</div> 天
             <div class="time-block">{{ endTimeDown.hour }}</div> 时
             <div class="time-block">{{ endTimeDown.minute }}</div> 分

@@ -4,7 +4,7 @@
       <div class="font-bold text-text-5 text-16">
         {{ itembank.title }}
       </div>
-      <div class="flex items-center text-text-3 text-12" @click="jumpToAll">
+      <div class="flex items-center text-text-3 text-14" @click="jumpToAll">
         <div>{{ $t('enter.all') }}</div>
         <div class="ml-4 all-icon"></div>
       </div>

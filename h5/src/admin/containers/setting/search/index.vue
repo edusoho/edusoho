@@ -8,7 +8,7 @@
       <van-search
         shape="round"
         :placeholder="$t('search.placeholder')"
-        style="padding: 16px;background-color: #f7f9fa;"
+        style="padding: 10px 16px;background-color: #f7f9fa;"
       />
     </div>
 
