@@ -6,9 +6,13 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\BehaviorVerification\Service\BehaviorVerificationBlackIpService;
+use Biz\BehaviorVerification\Service\BehaviorVerificationCoordinateService;
+use Biz\BehaviorVerification\Service\BehaviorVerificationService;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\User\UserException;
+use function Clue\StreamFilter\register;
 
 class UserSmsResetPassword extends AbstractResource
 {
@@ -23,6 +27,11 @@ class UserSmsResetPassword extends AbstractResource
 
         $token = $request->request->get('dragCaptchaToken', '');
         $this->getDragCaptcha()->check($token);
+        if ($this->getBehaviorVerificationService()->behaviorVerification($request->getHttpRequest())) {
+            return [
+                'smsToken' => 'fakeToken',
+            ];
+        }
         $smsToken = $this->getBizSms()->send(BizSms::SMS_FORGET_PASSWORD, $mobile);
 
         return [
@@ -61,5 +70,13 @@ class UserSmsResetPassword extends AbstractResource
     private function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    /**
+     * @return BehaviorVerificationService
+     */
+    protected function getBehaviorVerificationService()
+    {
+        return $this->biz->service('BehaviorVerification:BehaviorVerificationService');
     }
 }
