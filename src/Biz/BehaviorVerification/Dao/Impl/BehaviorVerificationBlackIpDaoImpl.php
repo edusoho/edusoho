@@ -21,9 +21,7 @@ class BehaviorVerificationBlackIpDaoImpl extends GeneralDaoImpl implements Behav
         return array(
             'timestamps' => array('created_time', 'updated_time'),
             'orderbys' => array('id', 'created_time', 'updated_time'),
-            'conditions' => array(
-
-            ),
+            'conditions' => array(),
         );
     }
 }

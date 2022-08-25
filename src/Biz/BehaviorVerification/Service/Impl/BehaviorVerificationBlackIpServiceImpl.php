@@ -12,10 +12,10 @@ class BehaviorVerificationBlackIpServiceImpl extends BaseService implements Beha
     public function isInBlackIpList($ip)
     {
         $smsBlackIp = $this->getBehaviorVerificationIpDao()->getByIp($ip);
-        if (empty($smsBlackIp)){
+        if (empty($smsBlackIp)) {
             return false;
         }
-        if($smsBlackIp['expire_time'] < time()){
+        if ($smsBlackIp['expire_time'] < time()) {
             return false;
         }
         return true;
@@ -24,8 +24,8 @@ class BehaviorVerificationBlackIpServiceImpl extends BaseService implements Beha
     public function addBlackIpList($ip)
     {
         $smsBlackIp = $this->getBehaviorVerificationIpDao()->getByIp($ip);
-        if (empty($smsBlackIp)){
-            $this->getBehaviorVerificationIpDao()->create(['ip'=>$ip, 'expire_time'=>time() + 3 * 30 * 24 * 3600]);
+        if (empty($smsBlackIp)) {
+            $this->getBehaviorVerificationIpDao()->create(['ip' => $ip, 'expire_time' => time() + 3 * 30 * 24 * 3600]);
         }
     }
 

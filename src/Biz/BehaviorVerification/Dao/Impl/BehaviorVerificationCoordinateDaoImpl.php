@@ -28,9 +28,7 @@ class BehaviorVerificationCoordinateDaoImpl extends GeneralDaoImpl implements Be
         return array(
             'timestamps' => array('created_time', 'updated_time'),
             'orderbys' => array('id', 'hit_counts', 'created_time', 'updated_time'),
-            'conditions' => array(
-
-            ),
+            'conditions' => array(),
         );
     }
 }
