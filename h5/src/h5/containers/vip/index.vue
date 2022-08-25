@@ -5,21 +5,23 @@
     <!-- 轮播图 -->
     <div class="pt-20 vip-swiper">
       <swiper class="swiper" ref="mySwiper" :options="swiperOption">
-        <swiper-slide v-for="(item, index) in levels" :key="index"
-          style="border-radius: 8px;background-image: url('static/images/vip_bg.png');background-size: 100%;background-repeat: no-repeat;">
-          <div class="flex px-16 pt-12" v-if="user">
-            <img v-if="user.avatar" :src="user.avatar.large" style="width: 40px;height: 40px;border-radius: 50%;" />
-            <div class="ml-8 text-text-1">
-              <div class="font-bold text-14">{{ user.nickname }}</div>
-              <div class="font-normal text-12 opacity-80">{{ vipStatus(item) }}</div>
+        <swiper-slide v-for="(item, index) in levels" :key="index" style="border-radius: 8px;">
+          <img :src="item.background || 'static/images/vip_bg.png'" style="width: 100%" />
+          <div class="absolute top-0 bottom-0 left-0 right-0">
+            <div class="flex px-16 pt-12" v-if="user">
+              <img v-if="user.avatar" :src="user.avatar.large" style="width: 40px;height: 40px;border-radius: 50%;" />
+              <div class="ml-8 text-text-1">
+                <div class="font-bold text-14">{{ user.nickname }}</div>
+                <div class="font-normal text-12 opacity-80">{{ vipStatus(item) }}</div>
+              </div>
             </div>
-          </div>
-          <div class="flex items-center justify-between px-16" style="margin-top: 42px;">
-            <div class="font-bold text-14" style="color: #eab86a;">{{ item.name }}</div>
-            <div class="flex items-center justify-center font-normal text-12"
-              @click="$router.push(`/vip/${item.id}/desc`)"
-              style="width: 74px;height: 24px;color: #EAB86A;border: 1px solid #B6A07D;border-radius: 16px;">
-              {{ $t('vip.exclusiveIntroduction') }} >
+            <div class="flex items-center justify-between px-16" style="margin-top: 42px;">
+              <div class="font-bold text-14" style="color: #eab86a;">{{ item.name }}</div>
+              <div class="flex items-center justify-center font-normal text-12"
+                @click="$router.push(`/vip/${item.id}/desc`)"
+                style="width: 74px;height: 24px;color: #EAB86A;border: 1px solid #B6A07D;border-radius: 16px;">
+                {{ $t('vip.exclusiveIntroduction') }} >
+              </div>
             </div>
           </div>
         </swiper-slide>
@@ -104,7 +106,7 @@ export default {
         observer: true,
         observeParents: true,
         on: {
-          slideChange: () => {
+          slideChange: (val) => {
             this.activeIndex = this.swiper.activeIndex;
             this.getActivePrice();
           },

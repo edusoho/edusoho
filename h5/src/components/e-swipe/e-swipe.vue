@@ -73,7 +73,7 @@ export default {
 
 <style lang="scss" scoped>
   .e-swipe {
-    margin: 0 16px;
+    margin: 10px 16px;
     border-radius: 6px;
     overflow: hidden;
   }
