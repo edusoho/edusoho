@@ -23,7 +23,7 @@ class SmsCenter extends AbstractResource
      */
     public function add(ApiRequest $request)
     {
-        if (!$request->getHttpRequest()->isXmlHttpRequest()) {
+        if (!($request->getHttpRequest()->isXmlHttpRequest())) {
             $mobile = $this->getSettingService()->get('mobile',array());
             $wap = $this->getSettingService()->get('wap',array());
             if ($mobile['enabled'] == 0 && $wap['template'] != 'sail'){
