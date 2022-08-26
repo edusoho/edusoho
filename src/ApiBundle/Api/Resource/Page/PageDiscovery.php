@@ -83,26 +83,13 @@ class PageDiscovery extends AbstractResource
                     $info['createdTime'] = date('c', $info['createdTime']);
                     $info['updatedTime'] = date('c', $info['updatedTime']);
                     $info['publishedTime'] = date('c', $info['publishedTime']);
-                    $info['body'] = $this->transformImages($info['body']);
+                    $info['body'] = AssetHelper::transformImages($info['body']);
                 }
                 $discoverySetting['data'] = empty($information) ? '' : $information;
             }
         }
 
         return !empty($params['format']) && 'list' == $params['format'] ? array_values($discoverySettings) : $discoverySettings;
-    }
-
-    protected function transformImages($content)
-    {
-        preg_match_all('/<img.*?src=[\"|\']?(.*?)[\"|\']*?\/?\s*>/i', $content, $matches);
-        if (empty($matches)) {
-            return $content;
-        }
-        $imgList = [];
-        foreach ($matches[1] as $imgUrl) {
-            $imgList[] = AssetHelper::uriForPath($imgUrl);
-        }
-        return str_replace($matches[1], $imgList, $content);
     }
 
     /**
