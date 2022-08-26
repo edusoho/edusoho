@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Page;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
 use Biz\Announcement\Service\AnnouncementService;
 use Biz\Article\Service\ArticleService;
 use Biz\Classroom\Service\ClassroomService;
@@ -82,6 +83,7 @@ class PageDiscovery extends AbstractResource
                     $info['createdTime'] = date('c', $info['createdTime']);
                     $info['updatedTime'] = date('c', $info['updatedTime']);
                     $info['publishedTime'] = date('c', $info['publishedTime']);
+                    $info['body'] = AssetHelper::transformImages($info['body']);
                 }
                 $discoverySetting['data'] = empty($information) ? '' : $information;
             }

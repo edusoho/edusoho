@@ -43,4 +43,17 @@ class AssetHelper
     {
         self::$container = $container;
     }
+
+    public static function transformImages($content)
+    {
+        preg_match_all('/<img.*?src=[\"|\']?(.*?)[\"|\']*?\/?\s*>/i', $content, $matches);
+        if (empty($matches)) {
+            return $content;
+        }
+        $imgList = [];
+        foreach ($matches[1] as $imgUrl) {
+            $imgList[] = AssetHelper::uriForPath($imgUrl);
+        }
+        return str_replace($matches[1], $imgList, $content);
+    }
 }
