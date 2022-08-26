@@ -31,6 +31,11 @@ class MeClassroom extends AbstractResource
             $classrooms = $this->getClassrooms($conditions, [], $offset, $limit);
             $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
 
+            foreach ($classrooms as &$classroom) {
+                $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
+                $classroom['learningProgressPercent'] = $progress['percent'];
+            }
+
             return $this->makePagingObject($classrooms, $total, $offset, $limit);
         } else {
             $members = $this->getClassroomService()->searchMembers($conditions, [], 0, $total);
