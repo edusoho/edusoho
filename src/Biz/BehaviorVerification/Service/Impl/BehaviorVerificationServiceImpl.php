@@ -12,13 +12,15 @@ class BehaviorVerificationServiceImpl extends BaseService implements BehaviorVer
 
     public function behaviorVerification($request)
     {
-        $encryptedPoint = $request->request->get('encryptedPoint');
-        if ($this->getBehaviorVerificationBlackIpService()->isInBlackIpList($request->getClientIp())) {
-            return true;
-        }
-        if ($this->getBehaviorVerificationCoordinateService()->isRobot($encryptedPoint)) {
-            $this->getBehaviorVerificationBlackIpService()->addBlackIpList($request->getClientIp());
-            return true;
+        if ($request->isXmlHttpRequest()){
+            $encryptedPoint = $request->request->get('encryptedPoint');
+            if ($this->getBehaviorVerificationBlackIpService()->isInBlackIpList($request->getClientIp())) {
+                return true;
+            }
+            if ($this->getBehaviorVerificationCoordinateService()->isRobot($encryptedPoint)) {
+                $this->getBehaviorVerificationBlackIpService()->addBlackIpList($request->getClientIp());
+                return true;
+            }
         }
         return false;
     }
