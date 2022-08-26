@@ -3,6 +3,7 @@ import notify from 'common/notify';
 import { countDown } from './count-down';
 import Api from 'common/api';
 import Drag from 'app/common/drag';
+import Coordinate from 'app/common/coordinate';
 
 export default class Create {
   constructor() {
@@ -161,7 +162,8 @@ export default class Create {
         $.ajaxSetup({global: false});
         self.smsSended = true;
       }
-      
+      let coordinate = new Coordinate();
+      const encryptedPoint = coordinate.getCoordinate(event, $('meta[name=csrf-token]').attr('content'));
       self.$sendBtn.attr('disabled', true);
       let type = $(event.currentTarget).data('type');
       let data = {
@@ -169,6 +171,7 @@ export default class Create {
         unique: type === "register" ? 1 : 0,
         mobile: type === "register" ? $('.js-account').text() : $('#originalMobileAccount').val(),
         dragCaptchaToken: this.dragCaptchaToken,
+        encryptedPoint: encryptedPoint,
         phrase: $captchaCode.val()
       };
 
