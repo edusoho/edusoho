@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Page;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
 use Biz\Announcement\Service\AnnouncementService;
 use Biz\Article\Service\ArticleService;
 use Biz\Classroom\Service\ClassroomService;
@@ -82,12 +83,26 @@ class PageDiscovery extends AbstractResource
                     $info['createdTime'] = date('c', $info['createdTime']);
                     $info['updatedTime'] = date('c', $info['updatedTime']);
                     $info['publishedTime'] = date('c', $info['publishedTime']);
+                    $info['body'] = $this->transformImages($info['body']);
                 }
                 $discoverySetting['data'] = empty($information) ? '' : $information;
             }
         }
 
         return !empty($params['format']) && 'list' == $params['format'] ? array_values($discoverySettings) : $discoverySettings;
+    }
+
+    protected function transformImages($content)
+    {
+        preg_match_all('/<img.*?src=[\"|\']?(.*?)[\"|\']*?\/?\s*>/i', $content, $matches);
+        if (empty($matches)) {
+            return $content;
+        }
+        $imgList = [];
+        foreach ($matches[1] as $imgUrl) {
+            $imgList[] = AssetHelper::uriForPath($imgUrl);
+        }
+        return str_replace($matches[1], $imgList, $content);
     }
 
     /**
