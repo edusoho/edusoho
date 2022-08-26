@@ -127,7 +127,7 @@ class MeJoined extends AbstractResource
             $classrooms[$member['classroomId']]['smallPicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
             $classrooms[$member['classroomId']]['middlePicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
             $classrooms[$member['classroomId']]['largePicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
-            $progress = $this->getLearningDataAnalysisService()->getClassroomLearningDataAnalysisService($member['classroomId'], $this->getCurrentUser()->getId());
+            $progress = $this->getClassroomLearningDataAnalysisService()->getUserLearningProgress($member['classroomId'], $this->getCurrentUser()->getId());
             $classrooms[$member['classroomId']]['learningProgressPercent'] = $progress['percent'];
         }
 
