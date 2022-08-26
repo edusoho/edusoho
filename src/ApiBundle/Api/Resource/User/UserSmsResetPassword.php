@@ -11,6 +11,7 @@ use Biz\BehaviorVerification\Service\BehaviorVerificationCoordinateService;
 use Biz\BehaviorVerification\Service\BehaviorVerificationService;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
+use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use function Clue\StreamFilter\register;
 
@@ -21,7 +22,7 @@ class UserSmsResetPassword extends AbstractResource
      */
     public function add(ApiRequest $request, $mobile)
     {
-        if (!$request->getHttpRequest()->isXmlHttpRequest()) {
+        if (!($request->getHttpRequest()->isXmlHttpRequest())) {
             $mobile = $this->getSettingService()->get('mobile',array());
             $wap = $this->getSettingService()->get('wap',array());
             if ($mobile['enabled'] == 0 && $wap['template'] != 'sail'){
@@ -75,6 +76,9 @@ class UserSmsResetPassword extends AbstractResource
         return $this->biz['biz_drag_captcha'];
     }
 
+    /**
+     * @return UserService
+     */
     private function getUserService()
     {
         return $this->biz->service('User:UserService');
