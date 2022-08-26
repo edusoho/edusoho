@@ -7,6 +7,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Classroom\Service\LearningDataAnalysisService;
 
 class MeClassroom extends AbstractResource
 {
@@ -41,6 +42,8 @@ class MeClassroom extends AbstractResource
 
             foreach ($members as $member) {
                 $classrooms[$member['classroomId']]['lastLearnTime'] = $member['createdTime'];
+                $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($member['classroomId'], $this->getCurrentUser()->getId());
+                $classrooms[$member['classroomId']]['learningProgressPercent'] = $progress['percent'];
             }
 
             array_multisort(ArrayToolkit::column($classrooms, 'lastLearnTime'), SORT_DESC, $classrooms);
@@ -65,5 +68,13 @@ class MeClassroom extends AbstractResource
     private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    protected function getLearningDataAnalysisService()
+    {
+        return $this->service('Classroom:LearningDataAnalysisService');
     }
 }
