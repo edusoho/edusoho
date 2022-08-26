@@ -26,9 +26,9 @@ class SmsSend extends AbstractResource
     public function add(ApiRequest $request)
     {
         if (!($request->getHttpRequest()->isXmlHttpRequest())) {
-            $mobile = $this->getSettingService()->get('mobile',array());
+            $mobileSetting = $this->getSettingService()->get('mobile',array());
             $wap = $this->getSettingService()->get('wap',array());
-            if ($mobile['enabled'] == 0 && $wap['template'] != 'sail'){
+            if ($mobileSetting['enabled'] == 0 && $wap['template'] != 'sail'){
                 return null;
             }
         }

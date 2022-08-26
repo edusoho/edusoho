@@ -289,7 +289,7 @@ class UserServiceImpl extends BaseService implements UserService
             return null;
         }
         $user = $this->getUserDao()->getByVerifiedMobile($mobile);
-
+        var_dump($user);die;
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
