@@ -7,6 +7,11 @@
     :validator-result="validatorResult"
     @event-actions="handleClickAction"
   >
+    <div class="clearfix" style="margin: 0 16px 8px;">
+      <div class="information__title pull-left text-overflow">{{ 'decorate.information' | trans }}</div>
+      <div class="information__more pull-right">{{ 'site.btn.see_more' | trans }}<a-icon type="right" /></div>
+    </div>
+
     <div class="information">
       <div class="information__item clearfix" v-if="currentData[0]">
         <div class="number" style="background-color: #F53F3F;">1</div>
@@ -98,5 +103,22 @@ export default {
         font-size: 14px;
       }
     }
+  }
+
+  .information__title {
+    position: relative;
+    max-width: 60%;
+    height: 24px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    line-height: 24px;
+  }
+
+  .information__more {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #999;
+    line-height: 16px;
   }
 </style>
