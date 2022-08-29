@@ -1744,7 +1744,7 @@ t.add("popular_class", "\u70ed\u95e8\u8bfe", "js", "zh_CN");
 t.add("decorate.class_list_settings", "\u73ed\u7ea7\u5217\u8868\u8bbe\u7f6e", "js", "zh_CN");
 t.add("decorate.announcement", "\u516c\u544a", "js", "zh_CN");
 t.add("decorate.announcement_settings", "\u516c\u544a\u8bbe\u7f6e", "js", "zh_CN");
-t.add("decorate.announcement_tips", "\u9ed8\u8ba4\u663e\u793a\u3010\u7f51\u7ad9\u516c\u544a\u7ba1\u7406\u3011\u4e2d\u521b\u5efa\u4e14\u72b6\u6001\u5728\u663e\u793a\u4e2d\u7684\u6700\u8fd1\u4e00\u6761\u7cfb\u7edf\u516c\u544a", "js", "zh_CN");
+t.add("decorate.announcement_tips", "\u9ed8\u8ba4\u663e\u793a\u3010\u7f51\u7ad9\u516c\u544a\u7ba1\u7406\u3011\u4e2d\u72b6\u6001\u5728\u663e\u793a\u4e2d\u7684\u6700\u8fd1\u4e00\u6761\u7cfb\u7edf\u516c\u544a", "js", "zh_CN");
 t.add("decorate.information", "\u8d44\u8baf", "js", "zh_CN");
 t.add("decorate.information_settings", "\u8d44\u8baf\u8bbe\u7f6e", "js", "zh_CN");
 t.add("decorate.information_tips", "\u7cfb\u7edf\u81ea\u52a8\u663e\u793a\u7f6e\u9876\u548c\u6700\u8fd1\u521b\u5efa\u7684\u4e09\u6761\u8d44\u8baf", "js", "zh_CN");
