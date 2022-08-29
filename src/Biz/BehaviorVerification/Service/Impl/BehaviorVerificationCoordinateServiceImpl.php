@@ -12,19 +12,16 @@ class BehaviorVerificationCoordinateServiceImpl extends BaseService implements B
 
     public function isRobot($coordinate)
     {
-        global $kernel;
-        $csrfToken = $kernel->getContainer()->get('security.csrf.token_manager')->getToken('site');
-        $coordinate = EncryptionToolkit::XXTEADecrypt(base64_decode(mb_substr($coordinate, 2)), $csrfToken);
-        $existBlackList = $this->getBehaviorVerificationCoordinateDao()->getByCoordinate($coordinate);
-        if (empty($existBlackList)) {
+        $existCoordinate = $this->getBehaviorVerificationCoordinateDao()->getByCoordinate($coordinate);
+        if (empty($existCoordinate)) {
             $this->getBehaviorVerificationCoordinateDao()->create(["hit_counts" => 1, "expire_time" => time() + 24 * 3600, "coordinate" => $coordinate]);
             return false;
         }
-        if ($existBlackList['expire_time'] < time()) {
-            $this->getBehaviorVerificationCoordinateDao()->update($existBlackList['id'], ["hit_counts" => 1, "expire_time" => time() + 24 * 3600]);
+        if ($existCoordinate['expire_time'] < time()) {
+            $this->getBehaviorVerificationCoordinateDao()->update($existCoordinate['id'], ["hit_counts" => 1, "expire_time" => time() + 24 * 3600]);
             return false;
         }
-        $this->getBehaviorVerificationCoordinateDao()->wave([$existBlackList['id']], ['hit_counts' => +1,]);
+        $this->getBehaviorVerificationCoordinateDao()->wave([$existCoordinate['id']], ['hit_counts' => +1,]);
         if ($this->isInTop10AndTimeFilled($coordinate)) {
             return true;
         }
@@ -41,6 +38,13 @@ class BehaviorVerificationCoordinateServiceImpl extends BaseService implements B
             }
         }
         return false;
+    }
+
+    public function decryptCoordinate($coordinate)
+    {
+        global $kernel;
+        $csrfToken = $kernel->getContainer()->get('security.csrf.token_manager')->getToken('site');
+        return EncryptionToolkit::XXTEADecrypt(base64_decode(mb_substr($coordinate, 2)), $csrfToken);
     }
 
     /**
