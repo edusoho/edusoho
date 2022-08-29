@@ -11,7 +11,7 @@
       <div 
         v-if="type === 'cut'"
         class="absolute bottom-0 left-0 right-0 flex items-end p-8 text-12 text-text-1" 
-        style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);"
+        style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);border-radius: 6px 6px 0px 0px;height: 32px;"
       >
         <span>砍价享</span>
         <span class="ml-4">￥</span>
@@ -23,10 +23,10 @@
 
       <div 
         v-else-if="type === 'groupon'"
-        class="absolute bottom-0 left-0 right-0 p-8 text-text-1" 
-        style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);"
+        class="absolute bottom-0 left-0 right-0 text-text-1" 
+        style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);border-radius: 6px 6px 0px 0px;height: 32px;"
       >
-        <div class="flex items-end justify-between">
+        <div class="flex items-center justify-between h-full px-8">
           <div class="flex items-end">
             <div class="font-bold">
               <span class="mr-4 text-12">拼团价</span>
@@ -46,10 +46,10 @@
 
       <div 
         v-else-if="type === 'seckill'"
-        class="absolute bottom-0 left-0 right-0 p-8 text-text-1" 
-        style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);"
-      > 
-        <div class="flex items-center justify-between">
+        class="absolute bottom-0 left-0 right-0 text-text-1" 
+        style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);border-radius: 6px 6px 0px 0px;height: 32px;"
+      >
+        <div class="flex items-center justify-between h-full px-8">
           <div class="flex items-end">
             <div class="font-bold">
               <span class="mr-4 text-12">秒杀价</span>

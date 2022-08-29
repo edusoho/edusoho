@@ -11,10 +11,12 @@
 	.carousel-image-container {
 		padding: 10px 16px;
 		font-size: 0;
+		border-radius: 6px;
 
 		.carousel-image {
 			box-sizing: border-box;
 			width: 100%;
+			border-radius: 6px;
 		}
 
 		.carousel-title {

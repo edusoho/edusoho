@@ -31,9 +31,9 @@
       <div class="column-class-right__center text-overflow">
         <div v-if="course.middle.value" v-html="course.middle.html" />
       </div>
-      <div class="column-class-right__bottom text-overflow">
-        <div style="position: relative; left: 12px;" v-html="course.bottom.html"></div>
-        <div style="margin: 1px 5px 0 0; color: #86909c; font-size: 12px; transform: scale(0.83);">
+      <div class="px-12 column-class-right__bottom text-overflow">
+        <div v-html="course.bottom.html"></div>
+        <div style="color: #86909c; font-size: 12px;">
           <template v-if="showNumberData === 'join'">{{ $t('e.personStudying', { number: course.studentNum }) }}</template>
           <template v-else-if="showNumberData === 'visitor'">{{ hitNum }}{{ $t('e.browse') }}</template>
         </div>

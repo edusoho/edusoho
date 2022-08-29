@@ -88,9 +88,9 @@ const getPriceDisplay = (data, platform) => {
   if (dataPrice > 0 && currency === 'coin') {
     price = `<span class="font-bold" style="color: #FF7A34">${coinAmount} ${coinName}</span>`;
   } else if (dataPrice > 0 && currency === 'RMB') {
-    price = `<span class="text-12 font-bold" style="color: #FF7A34">¥ ${amount}</span>`;
+    price = `<span class="text-14 font-bold" style="color: #FF7A34">¥ ${amount}</span>`;
   } else {
-    price = `<span class="font-bold" style="color:${primaryColor[platform]}">${i18n.t('filters.free')}</span>`;
+    price = `<span class="font-bold text-14" style="color:${primaryColor[platform]}">${i18n.t('filters.free')}</span>`;
   }
   return price;
 };
@@ -122,8 +122,8 @@ const getClassRoomDisplay = (data, listObj, price) => {
 const getCourseDisplay = (data, listObj, price) => {
   if (data.originPrice !== data.price) {
     price = `
-      <div style="margin-left: -5px;color: #FF7A34;transform: scale(0.83);">¥ ${data.price}</div>
-      <s style="margin: 1px 0 0 -12px;color: #86909C;transform: scale(0.66);">¥ ${data.originPrice}</s>
+      <div class="text-14" style="color: #FF7A34;">¥ ${data.price}</div>
+      <s style="font-size: 12px;margin: 3px 0 0 -2px;color: #86909C;transform: scale(0.83);">¥ ${data.originPrice}</s>
     `
   }
 

@@ -59,7 +59,7 @@ export default {
   search: {
     placeholder: '搜索课程、班级、题库',
     searchSettings: '搜索设置',
-    atPresent: '搜索功能目前只支持搜索班级和课程'
+    atPresent: '搜索功能目前只支持搜索班级、课程、题库'
   },
   sidebar: {
     basicComponents: '基础组件',

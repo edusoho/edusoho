@@ -59,7 +59,7 @@ export default {
   search: {
     placeholder: 'Search course/class/question bank',
     searchSettings: 'Search settings',
-    atPresent: 'The search function currently only supports searching classes and courses'
+    atPresent: 'The search function currently only supports searching classes and courses and question bank'
   },
   sidebar: {
     basicComponents: 'Basic components',

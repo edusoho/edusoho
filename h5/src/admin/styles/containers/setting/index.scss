@@ -8,13 +8,11 @@
 
 	.find-navbar {
 		position: relative;
-		margin-right: -1px;
-		margin-left: -1px;
-		color: #fff;
-		font-size: 18px;
+		color: #323233;
+		font-size: 16px;
 		line-height: 56px;
 		text-align: center;
-		background-color: #212121;
+		background-color: #fff;
 
 		i {
 			position: absolute;
@@ -114,10 +112,6 @@
 		.find-body {
 			padding-bottom: 333px;
 		}
-	}
-
-	.e-poster {
-		padding: 10px 16px;
 	}
 }
 

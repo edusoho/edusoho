@@ -78,7 +78,7 @@
 
 		&__bottom {
 			display: flex;
-			align-items: center;
+			align-items: end;
 			justify-content: space-between;
 			height: 20px;
 			color: #ff7a34;
@@ -87,7 +87,7 @@
 
 		.completionRate,
 		.masteryRate {
-			color: $primary-color;
+			color: #86909C;
 			font-size: 12px;
 		}
 	}

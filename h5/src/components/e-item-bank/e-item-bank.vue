@@ -14,9 +14,9 @@
         <img :src="currentItem.cover.middle" style="width: 100%; border-radius: 6px 6px 0 0; ">
         <div class="flex flex-col justify-between p-8" style="height: 62px;">
           <div class="font-bold text-14 text-overflow" style="width: 124px;">{{ currentItem.title }}</div>
-          <div class="flex justify-between text-12">
-            <div class="font-bold" style="color: #FF7A34;">￥{{ currentItem.price }}</div>
-            <div class="text-text-3">{{ $t('e.personStudying', { number: currentItem.studentNum }) }}</div>
+          <div class="flex items-end justify-between">
+            <div class="font-bold text-14" style="color: #FF7A34;">￥{{ currentItem.price }}</div>
+            <div class="text-text-3 text-12">{{ $t('e.personStudying', { number: currentItem.studentNum }) }}</div>
           </div>
         </div>
       </div>
@@ -24,7 +24,7 @@
         <div
           v-for="(item, index) in itembank.items.slice(0, 3)" 
           :key="item.id"
-          class="p-12 text-center text-overflow text-14"
+          class="p-12 text-overflow text-14"
           style="height: 46px;border-radius: 6px;"
           :style="{ backgroundColor: currentIndex === index ? '#3dcd7f' : '#e7f7ee', color: currentIndex === index ? '#fff' : '#1d2129' }"
           @click="switchCurrentItem(index)"

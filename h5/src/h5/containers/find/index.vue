@@ -73,6 +73,7 @@
       <van-search
         v-if="part.type === 'search'"
         shape="round"
+        left-icon="static/images/search-icon.jpg"
         :placeholder="$t('search.placeholder')"
         @focus="goSearch"
         style="margin: 0 16px 16px 16px;padding: 0;border-radius: 999px;"
@@ -208,6 +209,10 @@ export default {
 <style lang="scss" scoped>
   /deep/ .van-search__content {
     background-color: #fff;
+  }
+
+  /deep/ .van-icon__image {
+    margin-top: 5px;
   }
 
 </style>
