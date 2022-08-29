@@ -62,8 +62,8 @@ class BehaviorVerificationServiceImpl extends BaseService implements BehaviorVer
 
     protected function getLogger()
     {
-        $logger = new Logger('APIError');
-        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/behavior-verification.log', Logger::INFO));
+        $logger = new Logger('BehaviorVerification.INFO');
+        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/c.log', Logger::INFO));
         return $logger;
     }
 }
