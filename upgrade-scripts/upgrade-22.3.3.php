@@ -79,7 +79,7 @@ class EduSohoUpgrade extends AbstractUpdater
     public function createTableBehaviorVerificationCoordinate()
     {
         $this->getConnection()->exec("
-            CREATE TABLE `behavior_verification_coordinate` (
+            CREATE TABLE if not exists `behavior_verification_coordinate` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
             `coordinate` varchar(16) NOT NULL COMMENT '坐标',
             `hit_counts` bigint NOT NULL default 0 COMMENT '命中次数',
