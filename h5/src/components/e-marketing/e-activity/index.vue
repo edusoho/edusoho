@@ -16,7 +16,7 @@
         <span>砍价享</span>
         <span class="ml-4">￥</span>
         <span class="font-bold text-16" style="line-height: 20px;">{{ activityPrice }}</span>
-        <s v-if="activity.originPrice" class="ml4" style="transform: scale(0.83)">
+        <s v-if="activity.originPrice" class="ml4" style="transform: scale(0.83);margin-bottom: -1px;">
           ￥{{ activity.originPrice }}
         </s>
       </div>
@@ -33,7 +33,7 @@
               <span class="text-12">￥</span>
               <span class="text-16">{{ activityPrice }}</span>
             </div>
-            <s v-if="activity.originPrice" class="ml4 text-12" style="transform: scale(0.83)">
+            <s v-if="activity.originPrice" class="ml4 text-12" style="transform: scale(0.83);margin-bottom: 1px;">
               ￥{{ activity.originPrice }}
             </s>
           </div>
@@ -52,11 +52,11 @@
         <div class="flex items-center justify-between h-full px-8">
           <div class="flex items-end">
             <div class="font-bold">
-              <span class="mr-4 text-12">秒杀价</span>
-              <span class="text-12">￥</span>
-              <span class="text-16">{{ activityPrice }}</span>
+              <span class="mr-4" style="font-size: 12px;line-height: 16px;">秒杀价</span>
+              <span style="font-size: 12px;line-height: 16px;">￥</span>
+              <span style="font-size: 16px;line-height: 16px;">{{ activityPrice }}</span>
             </div>
-            <s v-if="activity.originPrice" class="ml4 text-12" style="transform: scale(0.83)">
+            <s v-if="activity.originPrice" class="ml4 text-12" style="transform: scale(0.83);margin-bottom: 1px;">
               ￥{{ activity.originPrice }}
             </s>
           </div>

@@ -28,10 +28,11 @@
         </span>
       </div>
 
-      <div v-if="feedback && couponStatus !== 'finished'" :class="['coupon-button', couponStatus]" @click="handleClick(item)">
+      <div v-if="!feedback" class="coupon-button">{{ $t('e.getCoupons') }}</div>
+      <div v-else-if="['unreceive', 'unused'].includes(couponStatus)" :class="['coupon-button', couponStatus]" @click="handleClick(item)">
         {{ item.currentUserCoupon ? $t('e.toUse') : $t('e.getCoupons') }}
       </div>
-      <div v-else class="coupon-button">{{ $t('e.getCoupons') }}</div>
+      <div v-else style="color: transparent;">{{ $t('e.getCoupons') }}</div>
     </div>
   </div>
 </template>

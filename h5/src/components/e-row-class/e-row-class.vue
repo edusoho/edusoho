@@ -5,7 +5,7 @@
     <div class="relative row-class-left">
       <img 
         v-if="typeList === 'classroom_list'"
-        style="height: 90%;left: -17px;top: 50%;transform: translateY(-50%);"
+        style="height: 90%;left: -16px;top: 50%;transform: translateY(-50%);"
         class="absolute"
         src="static/images/classroom/classroom-icon.png" 
         srcset="static/images/classroom/classroom-icon@2x.png" />

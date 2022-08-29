@@ -42,11 +42,12 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   res => {
+    store.commit('UPDATE_LOADING_STATUS', false);
+
     if (!res.data || res.data.hash) {
       return res;
     }
 
-    store.commit('UPDATE_LOADING_STATUS', false);
     return res.data;
   },
   error => {

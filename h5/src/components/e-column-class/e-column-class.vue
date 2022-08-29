@@ -14,9 +14,7 @@
       <div v-if="Number(isVip)" class="column-class-left__member">
         <div style="transform: scale(0.83);">{{ $t('e.freeForMembers') }}</div>
       </div>
-      <div class="column-class-left__live">
-        <span v-show="courseType === 'live'">{{ $t('e.live') }}</span>
-      </div>
+      <div v-show="courseType === 'live'" class="column-class-left__live">{{ $t('e.live') }}</div>
     </div>
     <div class="column-class-right">
       <div class="column-class-right__top">

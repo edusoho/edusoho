@@ -13,9 +13,9 @@
     <!-- 轮播图 -->
     <div class="mt-20 vip-swiper">
       <swiper class="swiper" ref="mySwiper" :options="swiperOption">
-        <swiper-slide v-for="(item, index) in levels" :key="index" style="border-radius: 8px;">
-          <div v-if="vipInfo.levelId === item.id" class="current-level-tag">当前等级</div>
-          <img :src="item.background || 'static/images/vip_bg.png'" style="width: 100%;height: 100%;border-radius: 8px;" />
+        <swiper-slide v-for="(item, index) in levels" :key="index" style="border-radius: 8px;overflow-y: hidden;">
+          <div v-if="vipInfo && vipInfo.levelId === item.id" class="current-level-tag">当前等级</div>
+          <img :src="item.background || 'static/images/vip_bg.png'" style="width: 100%;border-radius: 8px;" />
           <div class="absolute font-bold text-center text-14" style="top: 36px;left: 20px;">
             <div class="text-text-1">{{ item.name }}</div>
             <img class="inline-block mt-16" style="width: 50px;" :src="item.icon" />

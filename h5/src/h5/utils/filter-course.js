@@ -90,7 +90,7 @@ const getPriceDisplay = (data, platform) => {
   } else if (dataPrice > 0 && currency === 'RMB') {
     price = `<span class="text-14 font-bold" style="color: #FF7A34">¥ ${amount}</span>`;
   } else {
-    price = `<span class="font-bold text-14" style="color:${primaryColor[platform]}">${i18n.t('filters.free')}</span>`;
+    price = `<span class="font-bold text-14" style="color: #FF7A34">${i18n.t('filters.free')}</span>`;
   }
   return price;
 };

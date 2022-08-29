@@ -10,4 +10,8 @@
   svg {
     vertical-align: initial;
   }
+
+  img {
+    display: inline;
+  }
 }

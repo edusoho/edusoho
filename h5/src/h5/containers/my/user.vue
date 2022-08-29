@@ -1,7 +1,7 @@
 <template>
   <div class="user">
     <div class="flex items-center px-16 py-24">
-      <div class="user-img" @click="$router.push('/setting')">
+      <div class="user-img" @click="$router.push('/settings')">
         <img v-if="user.avatar" :src="user.avatar.large" />
         <img
           class="user-vip-icon"
