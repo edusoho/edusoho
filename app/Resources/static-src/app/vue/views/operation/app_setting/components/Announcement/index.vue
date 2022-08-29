@@ -11,7 +11,7 @@
       <div class="announcement__tips">
         <img style="height: 20px;" src="/static-dist/app/img/admin-v2/icon_announcement.png" srcset="/static-dist/app/img/admin-v2/icon_announcement.png" />
       </div>
-      <div class="text-overflow">{{ currentData.content || '' }}</div>
+      <div class="text-overflow announcement__content">{{ currentData.content || '暂无公告' }}</div>
     </div>
   </layout>
 </template>
@@ -62,7 +62,7 @@ export default {
 
     &__tips {
       position: relative;
-      padding-right: 6px;
+      padding-right: 13px;
 
       .word {
         font-family: 'YouSheBiaoTiHei';
@@ -74,10 +74,19 @@ export default {
       &::after {
         content: '';
         position: absolute;
-        top: 3px;
+        top: 14px;
+        right: 5px;
         width: 1px;
         height: 14px;
         background-color: #f2f3f5;
+      }
+    }
+
+    &__content {
+      position: relative;
+
+      &::after {
+        
       }
     }
   }
