@@ -230,7 +230,12 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
           middle: '',
           bottom: {
             value: data.courseNum,
-            html: `<div class="e-course__count">${i18n.t('filters.totalOfTwoCourses', { number: data.courseNum })}</div>`,
+            data,
+            html: `<div class="e-course__count">
+              ${i18n.t('filters.totalOfTwoCourses', { number: data.courseNum })}
+              <span style="color: #E5E6EB;">|</span>
+              <span>已学${data.learningProgressPercent}%</span>
+            </div>`,
           },
         };
       }
@@ -255,13 +260,11 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
         },
         bottom: {
           value: data.progress.percent,
-          html: `<div class="rank-box">
-                  <div class="progress round-conner">
-                    <div class="curRate round-conner"
-                      style="width:${parseInt(data.progress.percent)}%">
-                    </div>
-                  </div>
-                  <span>${parseInt(data.progress.percent)}%</span>
+          data,
+          html: `<div class="text-text-3 text-12">
+                  <span>共${data.learnedCompulsoryTaskNum}课时</span>
+                  <span style="color: #E5E6EB;">|</span>
+                  <span>已学${data.learnedCompulsoryTaskNum}课时</span>
                 </div>`,
         },
       };

@@ -34,7 +34,7 @@
               <span class="text-16">{{ activityPrice }}</span>
             </div>
             <s v-if="activity.originPrice" class="ml4 text-12" style="transform: scale(0.83)">
-              原价￥{{ activity.originPrice }}
+              ￥{{ activity.originPrice }}
             </s>
           </div>
           <div class="text-12">

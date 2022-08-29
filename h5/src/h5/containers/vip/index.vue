@@ -14,14 +14,15 @@
     <div class="mt-20 vip-swiper">
       <swiper class="swiper" ref="mySwiper" :options="swiperOption">
         <swiper-slide v-for="(item, index) in levels" :key="index" style="border-radius: 8px;">
-          <img src="static/images/vip_bg.png" style="width: 100%;height: 100%;border-radius: 8px;" />
-          <div class="absolute font-bold text-center text-14" style="color: #EAB86A;top: 36px;left: 20px;">
-            <div>{{ item.name }}</div>
+          <div v-if="vipInfo.levelId === item.id" class="current-level-tag">当前等级</div>
+          <img :src="item.background || 'static/images/vip_bg.png'" style="width: 100%;height: 100%;border-radius: 8px;" />
+          <div class="absolute font-bold text-center text-14" style="top: 36px;left: 20px;">
+            <div class="text-text-1">{{ item.name }}</div>
             <img class="inline-block mt-16" style="width: 50px;" :src="item.icon" />
           </div>
           <div class="absolute flex items-center justify-center font-normal text-12"
             @click="$router.push(`/vip/${item.id}/desc`)"
-            style="width: 74px;height: 24px;color: #EAB86A;border: 1px solid #B6A07D;border-radius: 16px;right: 16px;bottom: 30px;">
+            style="width: 74px;height: 24px;color: #fff;border: 1px solid #fff;border-radius: 16px;right: 16px;bottom: 30px;">
             {{ $t('vip.exclusiveIntroduction') }} >
           </div>
         </swiper-slide>
@@ -116,7 +117,7 @@ export default {
         slidesPerView: 3.1,
       },
       user: {},
-      vipInfo: null,
+      vipInfo: {},
       levels: [
         {
           courses: {
@@ -429,5 +430,20 @@ export default {
       border-radius: 21px;
     }
   }
+}
+
+.current-level-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 56px;
+  height: 18px;
+  color: #494444;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  text-align: center;
+  background: linear-gradient(98.69deg, #EAB86A 16.63%, rgba(234, 184, 106, 0.63) 109.86%);
+  border-radius: 6px 0px;
 }
 </style>
