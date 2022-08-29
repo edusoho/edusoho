@@ -1793,7 +1793,7 @@ t.add("popular_class", "Popular class", "js", "en");
 t.add("decorate.class_list_settings", "Class list settings", "js", "en");
 t.add("decorate.announcement", "announcement", "js", "en");
 t.add("decorate.announcement_settings", "announcement settings", "js", "en");
-t.add("decorate.announcement_tips", "By default, the latest system announcement created in [Website Announcement Management] and its status is displayed is displayed.", "js", "en");
+t.add("decorate.announcement_tips", "By default, the latest system announcement in the state of being displayed in [Website Announcement Management] is displayed.", "js", "en");
 t.add("decorate.information", "information", "js", "en");
 t.add("decorate.information_settings", "information settings", "js", "en");
 t.add("decorate.information_tips", "The system automatically displays the top and the three most recently created posts", "js", "en");
