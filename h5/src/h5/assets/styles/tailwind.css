@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  ol, ul, dl {
+    @apply mb-0 !important;
+  }
+
+  svg {
+    vertical-align: initial;
+  }
+
+  img {
+    display: inline;
+  }
+}

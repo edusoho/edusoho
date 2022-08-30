@@ -4,22 +4,19 @@
     :is-incomplete="isIncomplete"
     container-class="setting-course"
   >
+    
     <div slot="preview" class="find-page__part">
-      <e-course-list
-        :course-list="copyModuleData.data"
+      <e-item-bank
+        :itembank="copyModuleData.data"
         :feedback="false"
-        type-list="item_bank_exercise"
         show-mode="admin"
-        uiStyle="new"
-        @fetchCourse="fetchItemBankList"
       />
     </div>
+
     <div slot="setting">
       <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips"></e-suggest>
-      <header class="title">
-        {{ $t('questionBankList.questionBankSettingList') }}
-      </header>
-      <div class="default-allocate__content clearfix">
+      <header class="title">{{ $t('questionBankList.questionBankSettingList') }}</header>
+      <div class="clearfix default-allocate__content">
         <!-- 列表名称 -->
         <setting-cell :title="$t('questionBankList.listName')" left-class="required-option">
           <el-input
@@ -30,28 +27,8 @@
             clearable
           />
         </setting-cell>
-
-        <!-- 排列方式： -->
-        <setting-cell v-if="portal !== 'miniprogram'" :title="$t('questionBankList.sortOrder3')">
-          <el-select v-model="displayStyle" :placeholder="$t('questionBankList.sortOrder')" size="mini">
-            <el-option
-              v-for="item in layoutOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </setting-cell>
-        <!-- 课程来源 -->
-        <!-- <setting-cell :title="typeLabel + '来源：'">
-          <el-radio v-model="sourceType" label="condition"
-            >{{ typeLabel }}分类</el-radio
-          >
-          <el-radio v-model="sourceType" label="custom">自定义</el-radio>
-        </setting-cell> -->
-
-        <!-- 课程分类 -->
-        <setting-cell :title="typeLabel + $t('questionBankList.classification')">
+        <!-- 题库分类 -->
+        <setting-cell :title="$t('questionBankList.questionBank') + $t('questionBankList.classification')">
           <el-cascader
             v-show="sourceType === 'condition'"
             :options="itemBankCategories"
@@ -64,7 +41,7 @@
           />
           <div v-show="sourceType === 'custom'" class="required-option">
             <el-button size="mini" @click="openModal"
-              >{{ $t('questionBankList.choose') }}{{ typeLabel }}</el-button
+              >{{ $t('questionBankList.choose') }}{{ $t('questionBankList.questionBank') }}</el-button
             >
           </div>
         </setting-cell>
@@ -82,8 +59,7 @@
             <div class="default-draggable__title text-overflow">
               {{ courseItem.displayedTitle || courseItem.title }}
             </div>
-            <i
-              class="h5-icon h5-icon-cuowu1 default-draggable__icon-delete"
+            <i class="h5-icon h5-icon-cuowu1 default-draggable__icon-delete"
               @click="deleteCourse(index)"
             />
           </div>
@@ -114,33 +90,14 @@
         </setting-cell>
 
         <!-- 显示个数 -->
-        <setting-cell v-show="sourceType === 'condition'" :title="$t('questionBankList.theNumberOfDisplay')">
-          <el-select v-model="limit" placeholder="请选择个数" size="mini">
-            <el-option
-              v-for="item in limitOptions"
-              :key="item"
-              :label="item"
-              :value="item"
-            />
-          </el-select>
-        </setting-cell>
+        <div style="margin-top: 12px; color: #86909C; font-size: 14px;">最多显示3个题库</div>
       </div>
     </div>
-    <!-- <course-modal
-      slot="modal"
-      :visible="modalVisible"
-      :limit="limit"
-      :type="type"
-      :course-list="copyModuleData.data.items"
-      @visibleChange="modalVisibleHandler"
-      @updateCourses="getUpdatedCourses"
-    /> -->
   </module-frame>
 </template>
 <script>
 import draggable from 'vuedraggable';
-import courseList from '&/components/e-course-list/e-course-list';
-// import courseModal from '../course/modal/course-modal';
+import itemBank from '&/components/e-item-bank/e-item-bank';
 import moduleFrame from '../module-frame';
 import settingCell from '../module-frame/setting-cell';
 import { mapState, mapActions } from 'vuex';
@@ -150,9 +107,8 @@ import suggest from '&/components/e-suggest/e-suggest.vue';
 
 export default {
   components: {
-    'e-course-list': courseList,
+    'e-item-bank': itemBank,
     draggable,
-    // courseModal,
     moduleFrame,
     settingCell,
     'e-suggest': suggest,
@@ -174,7 +130,6 @@ export default {
   data() {
     return {
       modalVisible: false,
-      limitOptions: [1, 2, 3, 4, 5, 6, 7, 8],
       type: this.moduleData.type,
       layoutOptions: [
         {
@@ -233,9 +188,6 @@ export default {
   },
   computed: {
     ...mapState(['courseCategories', 'classCategories', 'itemBankCategories']),
-    typeLabel() {
-      return this.$t('questionBankList.questionBank');
-    },
     isActive: {
       get() {
         return this.active;
@@ -295,14 +247,7 @@ export default {
       },
       set(value) {
         this.copyModuleData.data.sort = value;
-      },
-    },
-    displayStyle: {
-      get() {
-        return this.copyModuleData.data.displayStyle;
-      },
-      set(value) {
-        this.copyModuleData.data.displayStyle = value;
+        this.fetchItemBankList();
       },
     },
     lastDays: {
@@ -311,22 +256,7 @@ export default {
       },
       set(value) {
         this.copyModuleData.data.lastDays = value;
-      },
-    },
-    limit: {
-      get() {
-        return this.copyModuleData.data.limit;
-      },
-      set(value) {
-        this.copyModuleData.data.limit = value;
-      },
-    },
-    categoryId: {
-      get() {
-        return this.copyModuleData.data.categoryId;
-      },
-      set(value) {
-        this.copyModuleData.data.categoryId = value;
+        this.fetchItemBankList();
       },
     },
     portal() {
@@ -349,6 +279,7 @@ export default {
         // 多级分类需要拿到最后等级的id
         this.moduleData.data.categoryIdArray = value;
         this.moduleData.data.categoryId = value[endIndex];
+        this.fetchItemBankList();
       },
     },
     courseCategories: {
@@ -381,7 +312,6 @@ export default {
         this.categoryDiggered = true;
 
         if (categoryExist) return true;
-        // this.categoryTempId = ['0'];
       },
       immediate: true,
     },
@@ -403,9 +333,9 @@ export default {
       },
       immediate: true,
     },
-    sourceType(value) {
-      this.limit = value === 'condition' ? 4 : 8;
-    },
+  },
+  created() {
+    this.fetchItemBankList();
   },
   methods: {
     ...mapActions(['getItemBankList']),
@@ -422,11 +352,17 @@ export default {
     deleteCourse(index) {
       this.copyModuleData.data.items.splice(index, 1);
     },
-    fetchItemBankList({ params, index }) {
+    fetchItemBankList() {
       if (this.sourceType === 'custom') return;
-      this.getItemBankList(params)
+      
+      this.getItemBankList({
+        limit: 3,
+        sort: this.sort,
+        lastDays: this.lastDays,
+        categoryId: this.categoryTempId.at(-1)
+      })
         .then(res => {
-          this.moduleData.data.items = res.data;
+          this.moduleData.data.items = res || [];
         })
         .catch(err => {
           this.$message({

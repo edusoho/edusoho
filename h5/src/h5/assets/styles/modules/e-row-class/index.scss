@@ -1,48 +1,32 @@
 .e-row-class {
 	display: flex;
-	padding: 0 vw(16) vw(24);
+	margin: 0 16px 12px;
+	background-color: #fff;
+	border-radius: 6px;
 
 	.row-class-left {
 		position: relative;
-		width: vw(128);
-		height: vw(72);
-		overflow: hidden;
-		font-size: vw(0);
-		border-radius: vw(2);
+		width: 170px;
+		height: 96px;
+		border-radius: 6px 0 0 6px;
 
 		img {
-			width: 100%;
-			border-radius: vw(2);
-		}
-
-		&__discount {
-			position: absolute;
-			top: vw(4);
-			right: vw(-17);
-			width: vw(64);
-			height: vw(20);
-			color: #fff;
-			font-size: vw(12);
-			line-height: vw(20);
-			text-align: center;
-			background: #ef6b50;
-			-ms-transform: rotate(45deg);
-			-moz-transform: rotate(45deg);
-			-webkit-transform: rotate(45deg);
-			-o-transform: rotate(45deg);
-			transform: rotate(45deg);
+			height: 100%;
+			border-radius: 6px 0 0 6px;
 		}
 
 		&__member {
 			position: absolute;
-			top: vw(4);
-			height: vw(16);
-			padding: vw(2) vw(4);
+			top: 0;
+			right: 0;
+			width: 50px;
+			height: 20px;
 			color: #fff;
-			font-size: vw(10);
+			font-weight: 500;
+			font-size: 12px;
 			text-align: center;
-			background: rgba(246, 201, 63, 1);
-			border-radius: vw(0) vw(100) vw(100) vw(0);
+			background-color: #162923;
+			border-radius: 0 0 0 6px;
 		}
 
 		&__live {
@@ -68,47 +52,43 @@
 
 	.row-class-right {
 		display: flex;
+		flex: 1;
 		flex-direction: column;
-		width: vw(197);
-		margin-left: vw(12);
+		justify-content: space-around;
+		width: calc(100% - 170px);
+		padding: 8px 12px;
+		border-radius: 0 6px 6px 0;
 
 		&__top {
-			height: vw(20);
-			margin-top: vw(2);
-			color: #333;
+			display: flex;
+			height: 22px;
+			color: #1d2129;
 			font-weight: 500;
-			font-size: vw(14);
-
-			.certificate-icon {
-				margin-right: vw(4);
-				padding: vw(2) vw(4);
-				color: #fff;
-				font-size: vw(12);
-				line-height: vw(16);
-				vertical-align: vw(1);
-				background-color: #43bc60;
-				border-radius: vw(4);
-			}
+			font-size: 14px;
+			line-height: 22px;
 		}
 
 		&__center {
-			height: vw(16);
-			margin-top: vw(4);
-			color: #999;
-			font-size: vw(12);
+			height: 20px;
+			margin-top: -4px;
+			color: #86909c;
+			font-size: 12px;
+			line-height: 20px;
 		}
 
 		&__bottom {
-			height: vw(20);
-			margin-top: vw(8);
-			color: #fe3b13;
+			display: flex;
+			align-items: end;
+			justify-content: space-between;
+			height: 20px;
+			color: #ff7a34;
 			font-weight: 500;
-			font-size: vw(14);
 		}
+
 		.completionRate,
-    .masteryRate{
-      color:$primary-color;
-      font-size:12px;
-    }
+		.masteryRate {
+			color: #86909C;
+			font-size: 12px;
+		}
 	}
 }

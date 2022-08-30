@@ -75,3 +75,26 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  .e-swipe {
+    margin: 10px 16px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  
+  /deep/ .van-swipe__indicators {
+    left: 12px;
+    bottom: 8px;
+    transform: none;
+
+    .van-swipe__indicator {
+      width: 12px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.6);
+      &.active {
+        background-color: #fff;
+      }
+    }
+  }
+</style>

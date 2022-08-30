@@ -13,15 +13,16 @@
         :feedback="feedback"
       />
       <e-course-list
-        v-if="
-          ['classroom_list', 'course_list', 'item_bank_exercise'].includes(
-            part.type,
-          )
-        "
+        v-if="['classroom_list', 'course_list'].includes(part.type)"
         :course-list="part.data"
         :feedback="feedback"
         :type-list="part.type"
         :uiStyle="uiStyle"
+      />
+      <e-item-bank
+        v-if="part.type === 'item_bank_exercise'"
+        :itembank="part.data"
+        show-mode="admin"
       />
       <e-openCourse-list
         v-if="['open_course_list'].includes(part.type)"
@@ -69,6 +70,7 @@
 <script>
 import pathName2Portal from 'admin/config/api-portal-config';
 import courseList from '&/components/e-course-list/e-course-list.vue';
+import itemBank from '&/components/e-item-bank/e-item-bank.vue';
 import poster from '&/components/e-poster/e-poster.vue';
 import swipe from '&/components/e-swipe/e-swipe.vue';
 import marketPart from '&/components/e-marketing/e-activity';
@@ -81,6 +83,7 @@ import { mapActions } from 'vuex';
 export default {
   components: {
     'e-course-list': courseList,
+    'e-item-bank': itemBank,
     'e-swipe': swipe,
     'e-poster': poster,
     'e-market-part': marketPart,

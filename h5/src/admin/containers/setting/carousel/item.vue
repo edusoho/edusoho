@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{ active: active === index }"
-    class="carousel-item clearfix"
+    class="clearfix carousel-item"
     @click="selected(index)"
   >
     <el-upload
@@ -124,14 +124,14 @@ export default {
       option: {
         img: '',
         autoCrop: true,
-        autoCropWidth: 375,
-        autoCropHeight: 200,
-        fixedNumber: [375, 200],
+        autoCropWidth: 343,
+        autoCropHeight: 136,
+        fixedNumber: [343, 136],
         fixed: true,
         high: false,
         enlarge: 2,
       },
-      appFixedNumber: [375, 150],
+      appFixedNumber: [343, 136],
       linkOptions: [
         {
           key: 0,

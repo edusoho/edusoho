@@ -1,14 +1,13 @@
 .vip-detail {
-	padding-bottom: vw(16);
+	min-height: 100%;
+	padding-bottom: 60px;
+	// background-color: #f7f9fa;
+	background: linear-gradient(180.02deg, #ffe9cc 16.39%, #f7f9fa 40.58%);
 
 	.vip-swiper {
 		box-sizing: border-box;
 		width: 100%;
-		height: vw(180);
-		padding-top: vw(16);
-		background-image: url($baseUrl+'static/images/vip/vip_bg.png');
-		background-repeat: no-repeat;
-		background-size: 100% vw(146);
+		height: 152px;
 
 		.swiper {
 			width: 100%;
@@ -33,9 +32,6 @@
 	}
 
 	.vip-user {
-		position: absolute;
-		top: vw(32);
-		left: vw(16);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -60,18 +56,12 @@
 	}
 
 	.vip-info {
-		position: absolute;
-		bottom: vw(26);
-		left: vw(16);
-
 		.vip-info__detail {
 			display: flex;
 			align-items: center;
 
 			.vip-info__icon {
 				width: vw(20);
-				height: vw(20);
-				margin-right: vw(8);
 			}
 
 			.vip-info__name {

@@ -1,3 +1,4 @@
+
 export default {
   lang: {
     language: '简体中文',
@@ -49,9 +50,12 @@ export default {
     moreCourse: '更多好课等您加入',
     moreClass: '更多班级等您加入',
     moreQuestionBanks: '更多题库等您加入',
+    browse: '人浏览'
   },
   title: {
     me: '我的',
+    myOrder: '我的订单',
+    myActivity: '我的活动',
     setting: '设置',
     nicknameSetting: '昵称设置',
     switchLanguage: '切换语言',
@@ -146,7 +150,8 @@ export default {
     mistakesCollection: '我的错题本',
     myOrder: '我的订单',
     activities: '我的活动',
-    more: '更多'
+    more: '更多',
+    all: '全部',
   },
   tips: {
     iHaveReadAndAgreeToThe: '我已阅读并同意',
@@ -164,12 +169,12 @@ export default {
   },
   vip: {
     title: '会员中心',
-    memberExpirationTime: '会员到期时间',
-    renewalUpgrade: '续费/升级',
+    memberExpirationTime: '有效期至',
+    renewalUpgrade: '升级/续费',
     yourMembershipHasExpired: '您的会员已过期',
     immediatelyRenewals: '立即续费',
-    joinNow: '去开通',
-    youAreNotAVipYet: '您还不是会员，开通会员享特权',
+    join: '开通',
+    youAreNotAVipYet: '开通会员',
     memberUpgrade: '会员升级',
     chooseTheActivationTime: '选择开通时长',
     memberUpgradePeriodTo: '会员升级期限至',
@@ -610,5 +615,11 @@ export default {
     available: '张可用',
     longTermEffective: '长期有效',
     noOrderRecord: '暂无订单记录'
+  },
+  coupon: {
+    allCourse: '全部课程适用',
+    allClass: '全部班级适用',
+    allGoods: '全部商品适用',
+    allMember: '全部会员适用'
   }
 };

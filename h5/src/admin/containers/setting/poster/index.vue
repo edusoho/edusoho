@@ -29,7 +29,7 @@
         </div>
       </header>
 
-      <div class="default-allocate__content clearfix">
+      <div class="clearfix default-allocate__content">
         <setting-cell
           :title="$t('imageAds.adPictures')"
           customClass="poster-item-setting__section"

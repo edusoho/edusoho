@@ -1,38 +1,44 @@
 <template>
-  <div class="e-row-class" @click="onClick(course.hasCertificate, $event)">
-    <div class="row-class-left">
-      <img v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
-      <div v-if="discountNum" class="row-class-left__discount">
-        {{ discountNum }}
-      </div>
-      <div v-if="Number(isVip)" class="row-class-left__member">{{ $t('e.freeForMembers') }}</div>
-      <div class="row-class-left__live">
-        <div>
-          <span v-show="courseType === 'live'">{{ $t('e.live') }}</span>
-        </div>
-        <div v-if="showNumberData === 'join'">
-          <i class="iconfont icon-people" />
-          {{ course.studentNum }}
-        </div>
-        <div v-if="showNumberData === 'visitor'">
-          <i class="iconfont icon-visibility" />
-          {{ hitNum }}
-        </div>
+  <div class="e-row-class" 
+    @click="onClick(course.hasCertificate, $event)" 
+    :style="{ marginLeft: typeList === 'classroom_list' ? '30px' : '16px' }">
+    <div class="relative row-class-left">
+      <img 
+        v-if="typeList === 'classroom_list'"
+        style="height: 90%;left: -16px;top: 50%;transform: translateY(-50%);"
+        class="absolute"
+        src="static/images/classroom/classroom-icon.png" 
+        srcset="static/images/classroom/classroom-icon@2x.png" />
+
+      <img class="cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
+      
+      <div v-if="Number(isVip)" class="row-class-left__member">
+        <div style="transform: scale(0.83);">{{ $t('e.freeForMembers') }}</div>
       </div>
     </div>
 
     <div class="row-class-right">
-      <div class="row-class-right__top text-overflow">
-        <span class="certificate-icon" v-if="course.hasCertificate">{{ $t('e.certificate') }}</span
-        >{{ course.header }}
+      <div class="row-class-right__top">
+        <div v-if="discountNum" style="height:14px;margin: 3px 4px 0 0;text-align: center;line-height: 14px;border: 1px solid #ff900e;border-radius: 2px;">
+          <div style="font-size: 12px; transform: scale(0.75); color: #FF900E;">{{ $t('e.discount') }}</div>
+        </div>
+        <div v-if="course.hasCertificate" style="height:14px;margin: 3px 4px 0 0;text-align: center;line-height: 14px;border: 1px solid #3DCD7F;border-radius: 2px;">
+          <div style="font-size: 12px; transform: scale(0.75); color: #3DCD7F;">{{ $t('e.certificate') }}</div>
+        </div>
+        <div class="text-overflow">{{ course.header }}</div>
       </div>
+
       <div class="row-class-right__center text-overflow">
         <div v-if="course.middle.value" v-html="course.middle.html" />
       </div>
-      <div
-        class="row-class-right__bottom text-overflow"
-        v-html="course.bottom.html"
-      />
+
+      <div class="row-class-right__bottom text-overflow">
+        <div v-html="course.bottom.html"></div>
+        <div style="color: #86909c; font-size: 12px;">
+          <template v-if="showNumberData === 'join'">{{ $t('e.personStudying', { number: course.studentNum }) }}</template>
+          <template v-else-if="showNumberData === 'visitor'">{{ hitNum }}{{ $t('e.browse') }}</template>
+        </div>
+      </div>
     </div>
   </div>
 </template>

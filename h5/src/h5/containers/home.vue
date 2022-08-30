@@ -1,12 +1,12 @@
 <template>
-  <div class="home">
+  <div class="home" style="min-height: 100%;">
     <van-tabbar
       v-model="active"
       :class="{ 'van-tabbar--iphonex': firstVisit }"
       @change="onChange"
     >
-      <van-tabbar-item v-for="item in items" :key="item.type">
-        <span>{{ $t(item.type) }}</span>
+      <van-tabbar-item v-for="(item, index) in items" :key="item.type">
+        <span :style="{ color: active === index ? '#3DCD7F' : '' }">{{ $t(item.type) }}</span>
         <template slot="icon" slot-scope="props">
           <img :src="props.active ? item.active : item.normal" />
         </template>

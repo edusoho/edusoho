@@ -22,7 +22,6 @@
     <div
       v-if="uiStyle !== 'old'"
       class="e-course-list__header"
-      style="padding: 16px;"
     >
       <div class="clearfix">
         <span
@@ -33,9 +32,9 @@
         <span class="e-course-list__more">
           <span
             class="more-text pull-left"
-            style="font-size: 12px;"
+            style="font-size: 14px;"
             @click="jumpTo(courseList.source)"
-            >{{ $t('enter.more') }}</span
+            >{{ $t('enter.all') }}</span
           >
         </span>
       </div>
@@ -93,6 +92,7 @@
         <div
           v-if="uiStyle !== 'old' && displayStyle === 'distichous'"
           class="clearfix"
+          style="display: flex; flex-flow: wrap; padding: 0 10px;"
         >
           <e-column-class
             v-for="item in courseList.items"

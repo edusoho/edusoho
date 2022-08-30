@@ -37,6 +37,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.10.1",
     "@babel/plugin-transform-arrow-functions": "^7.7.4",
     "@babel/preset-env": "^7.6.3",
+    "@tailwindcss/postcss7-compat": "^2.2.17",
     "@vue/cli-plugin-babel": "^3.12.0",
     "@vue/cli-plugin-eslint": "^3.12.0",
     "@vue/cli-plugin-unit-jest": "^3.12.0",
@@ -95,6 +96,7 @@
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
     "swiper": "^5.4.5",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
     "vant": "^2.12.48",
@@ -114,6 +116,7 @@
     "weixin-js-sdk": "^1.6.0"
   },
   "devDependencies": {
+    "@tailwindcss/line-clamp": "^0.4.0",
     "@vue/eslint-config-prettier": "^5.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-jest": "^23.6.0",

@@ -17,9 +17,13 @@ axios.interceptors.request.use(
     if (config.name.indexOf('Live') === -1) {
       config.headers.Accept = 'application/vnd.edusoho.v2+json';
     }
-    config.headers.SessionIgnore = 1;
+    
+    if (["/api/pages/h5/settings"].includes(config.url) === false) {
+      // config.headers.SessionIgnore = 1;
+    }
 
     if (store.state.token) {
+      // config.headers['X-CSRF-Token'] = store.state.token;
       config.headers['X-Auth-Token'] = store.state.token;
     }
     // 自定义配置显示 loading 动画
@@ -38,14 +42,12 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   res => {
-    if (res.data.hash) {
+    store.commit('UPDATE_LOADING_STATUS', false);
+
+    if (!res.data || res.data.hash) {
       return res;
     }
-    // 自定义配置显示 loading 动画
-    if (res.config.disableLoading) {
-      return res.data;
-    }
-    store.commit('UPDATE_LOADING_STATUS', false);
+
     return res.data;
   },
   error => {

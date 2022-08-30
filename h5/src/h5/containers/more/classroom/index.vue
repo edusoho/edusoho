@@ -81,7 +81,7 @@ export default {
       showNumberData: '',
       classCategories: [],
       showClassCategoryPopup: false,
-      currentClassCategoryText: '',
+      currentClassCategoryText: this.$t('more.Classification'),
       currentClassCategoryId: 0,
     };
   },
@@ -155,7 +155,11 @@ export default {
         text: this.$t('more.all'),
         data: res,
       });
-      this.currentClassCategoryText = this.getCategoryDescById(this.classCategories, this.$route.query.categoryId || '0')
+
+      const categoryId = this.$route.query.categoryId
+      if (categoryId && categoryId !== '0') {
+        this.currentClassCategoryText = this.getCategoryDescById(this.classCategories, categoryId)
+      }
     },
 
     async initDropdownData() {
@@ -334,6 +338,11 @@ export default {
 </script>
 
 <style scoped>
+
+  .more {
+    background-color: #f7f9fa;
+  }
+  
   .class-category {
     display: flex;
     flex: 1;

@@ -1,139 +1,81 @@
 <template>
   <div class="vip-detail">
     <e-loading v-if="isLoading" />
+    
+    <div class="flex px-16 pt-12" v-if="user">
+      <img v-if="user.avatar" :src="user.avatar.large" style="width: 40px;height: 40px;border-radius: 50%;" />
+      <div class="ml-8 text-text-1" style="color: #464244;">
+        <div class="font-bold text-14">{{ user.nickname }}</div>
+        <div class="font-normal text-12 opacity-80">{{ vipStatus(currentLevel) }}</div>
+      </div>
+    </div>
 
     <!-- 轮播图 -->
-    <div class="vip-swiper">
+    <div class="mt-20 vip-swiper">
       <swiper class="swiper" ref="mySwiper" :options="swiperOption">
-        <swiper-slide v-for="(item, index) in levels" :key="index">
-          <img class="vip-swiper__img" :src="item.background" />
-          <div class="vip-user" v-if="user">
-            <div class="vip-user__img" v-if="user.avatar">
-              <img :src="user.avatar.large" />
-            </div>
-            <span class="vip-user__name">{{ user.nickname }}</span>
+        <swiper-slide v-for="(item, index) in levels" :key="index" style="border-radius: 8px;overflow-y: hidden;">
+          <div v-if="vipInfo && vipInfo.levelId === item.id" class="current-level-tag">当前等级</div>
+          <img :src="item.background || 'static/images/vip_bg.png'" style="width: 100%;border-radius: 8px;" />
+          <div class="absolute font-bold text-center text-14" style="top: 36px;left: 20px;">
+            <div class="text-text-1">{{ item.name }}</div>
+            <img class="inline-block mt-16" style="width: 50px;" :src="item.icon" />
           </div>
-          <div class="vip-info">
-            <div class="vip-info__detail">
-              <img class="vip-info__icon" :src="item.icon" />
-              <span class="vip-info__name">{{ item.name }}</span>
-            </div>
-            <div class="vip-info__status">{{ vipStatus(item) }}</div>
+          <div class="absolute flex items-center justify-center font-normal text-12"
+            @click="$router.push(`/vip/${item.id}/desc`)"
+            style="width: 74px;height: 24px;color: #fff;border: 1px solid #fff;border-radius: 16px;right: 16px;bottom: 30px;">
+            {{ $t('vip.exclusiveIntroduction') }} >
           </div>
         </swiper-slide>
       </swiper>
     </div>
 
     <!-- 开通会员 -->
-    <div class="vip-sec">
-      <module-title
-        :title="userLevelStatus == 'upgrade' ? $t('vip.memberUpgrade') : $t('vip.chooseTheActivationTime')"
-      />
-      <div class="vip-open">
-        <swiper v-if="!vipUpgradeMode" :options="vipOpenSwiperOption">
-          <template v-for="item in currentLevel.sellModes">
-            <swiper-slide :key="item.id">
-              <price-item
-                :item="item"
-                :activePriceId="activePrice.id"
-                @clickPriceItem="clickPriceItem"
-              />
-            </swiper-slide>
-          </template>
-        </swiper>
-
-        <div class="vip-upgrade" v-else>
-          <span class="vip-upgrade__deadline">
-            {{ $t('vip.memberUpgradePeriodTo') }}：{{ $moment(vipInfo.deadline).format('YYYY/MM/DD') }}
-          </span>
+    <swiper style="padding: 20px 0 20px 16px;" v-if="!vipUpgradeMode" :options="vipOpenSwiperOption">
+      <swiper-slide v-for="item in currentLevel.sellModes" :key="item.id">
+        <div class="flex">
+          <price-item :item="item" :activePriceId="activePrice.id" @clickPriceItem="clickPriceItem" />
+          <div style="width: 16px; height: 80px;background-color: transparent;"></div>
         </div>
+      </swiper-slide>
+    </swiper>
 
-        <div
-          class="vip-open__buy"
-          :class="{ disabled: !vipBuyStatu.status }"
-          @click="clickVipBuy"
-        >
-          {{ vipBuyStatu.text }}
-        </div>
-      </div>
+    <div class="mx-16 my-20 vip-upgrade" v-else>
+      <span class="vip-upgrade__deadline">
+        {{ $t('vip.memberUpgradePeriodTo') }}：{{ $moment(vipInfo.deadline).format('YYYY/MM/DD') }}
+      </span>
     </div>
 
-    <!-- 专属权益 -->
-    <div class="vip-sec">
-      <module-title :title="$t('vip.exclusiveRights')" />
-      <div class="vip-interest">
-        <div class="vip-interest__item" v-if="currentLevel.courses.data.length">
-          <div class="vip-interest__item__img">
-            <img src="static/images/vip/vip_course.png" />
-          </div>
-          <div class="vip-interest__item__title">{{ $t('vip.membersCourse') }}</div>
-          <div class="vip-interest__item__total">
-            {{ currentLevel.courses.paging.total }}
-            <span class="company">{{ $t('vip.piece') }}</span>
-          </div>
-        </div>
-        <div
-          class="vip-interest__item"
-          v-if="currentLevel.classrooms.data.length"
-        >
-          <div class="vip-interest__item__img">
-            <img src="static/images/vip/vip_classroom.png" />
-          </div>
-          <div class="vip-interest__item__title">{{ $t('vip.membersClass') }}</div>
-          <div class="vip-interest__item__total">
-            {{ currentLevel.classrooms.paging.total }}
-            <span class="company">{{ $t('vip.piece') }}</span>
-          </div>
-        </div>
-        <div
-          class="vip-interest__empty"
-          v-if="
-            !currentLevel.courses.data.length &&
-              !currentLevel.classrooms.data.length
-          "
-        >
-          <img src="static/images/vip/empty.png" alt="" />
-          <p>{{ $t('vip.noExclusiveRightsAndInterests') }}</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 专属介绍 -->
-    <div class="vip-sec">
-      <module-title :title="$t('vip.exclusiveIntroduction')" />
+    <!-- <div class="vip-sec">
       <div
         class="vip-introduce"
         v-html="currentLevel.description || $t('vip.noIntroduction')"
       />
-    </div>
-
-    <!-- 专属特权 -->
-    <div class="vip-sec">
-      <module-title :title="$t('vip.exclusivePrivileges')" />
-      <div class="vip-privilege">
-        <!-- 会员免费课程 -->
-        <e-course-list
-          v-if="courseData"
-          :course-list="courseData"
-          :vip-name="currentLevel.name"
-          :more-type="'vip'"
-          :level-id="Number(currentLevel.id)"
-          :type-list="'course_list'"
-          class="vip-course-list"
-        />
-
-        <!-- 会员免费班级 -->
-        <e-course-list
-          v-if="classroomData"
-          :more-type="'vip'"
-          :level-id="Number(currentLevel.id)"
-          :course-list="classroomData"
-          :vip-name="currentLevel.name"
-          :type-list="'classroom_list'"
-          class="vip-course-list"
-        />
+    </div> -->
+    <div class="flex px-16 mb-16 text-14" style="color: #4E5969;">
+      <div class="mr-24 nav-item" :class="{ 'active': typeList === 'course_list' }" @click="typeList = 'course_list'">
+        <div class="relative" style="z-index: 2;">{{ $t('vip.membersCourse') }}</div>
+      </div>
+      <div class="nav-item" :class="{ 'active': typeList === 'classroom_list' }" @click="typeList = 'classroom_list'">
+        <div class="relative" style="z-index: 2;">{{ $t('vip.membersClass') }}</div>
       </div>
     </div>
+
+    <div class="fixed bottom-0 left-0 right-0 z-10 px-16 py-8 bg-text-1">
+      <div class="flex items-center justify-center w-full font-bold text-text-1"
+        style="height: 40px; border-radius: 20px; background-color: #E7B15C;" :class="{ disabled: !vipBuyStatu.status }"
+        @click="clickVipBuy">
+        {{ vipBuyStatu.text }}
+      </div>
+    </div>
+
+    <e-row-class v-show="typeList === 'course_list'" v-for="item in courseData.items" :key="item.id"
+      :course="item | courseListData({ ...config, typeList: 'course_list' }, 'new')"
+      :discountType="item.courseSet.discountType" :discount="item.courseSet.discount" :course-type="item.courseSet.type"
+      type-list="course_list" type="price" :showNumberData="showNumberData" />
+
+    <e-row-class v-show="typeList === 'classroom_list'" v-for="item in classroomData.items" :key="item.id"
+      :course="item | courseListData({ ...config, typeList: 'classroom_list' }, 'new')" type-list="classroom_list"
+      type="price" :showNumberData="showNumberData" />
   </div>
 </template>
 
@@ -145,17 +87,16 @@ import * as types from '@/store/mutation-types';
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import 'swiper/css/swiper.css';
 
-import ModuleTitle from './module-title';
 import PriceItem from './price-item';
-import ECourseList from '&/components/e-course-list/e-course-list';
+import courseListData from '@/utils/filter-course.js';
+import eRowClass from '&/components/e-row-class/e-row-class';
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
-    ModuleTitle,
     PriceItem,
-    ECourseList,
+    eRowClass,
   },
   data() {
     return {
@@ -166,7 +107,7 @@ export default {
         observer: true,
         observeParents: true,
         on: {
-          slideChange: () => {
+          slideChange: (val) => {
             this.activeIndex = this.swiper.activeIndex;
             this.getActivePrice();
           },
@@ -176,7 +117,7 @@ export default {
         slidesPerView: 3.1,
       },
       user: {},
-      vipInfo: null,
+      vipInfo: {},
       levels: [
         {
           courses: {
@@ -190,15 +131,32 @@ export default {
       activeIndex: 0,
       activePrice: null,
       isLoading: false,
+      showNumberData: '',
+      typeList: 'course_list'
     };
   },
+  filters: {
+    courseListData,
+  },
   computed: {
-    ...mapState(['vipSwitch']),
+    ...mapState(['vipSwitch', 'courseSettings', 'classroomSettings']),
     ...mapState({
       userInfo: state => state.user,
       vipOpenStatus: state => state.vip.vipOpenStatus,
       upgradeMode: state => state.vip.upgradeMode,
     }),
+
+    config() {
+      return {
+        type: 'price',
+        showStudent: this.courseSettings
+          ? Number(this.courseSettings.show_student_num_enabled)
+          : true,
+        classRoomShowStudent: this.classroomSettings
+          ? this.classroomSettings.show_student_num_enabled
+          : true,
+      };
+    },
 
     vipDated() {
       if (!this.vipInfo) {
@@ -323,6 +281,7 @@ export default {
       return;
     }
     this.getVipDetail();
+    this.getGoodSettings();
   },
   methods: {
     ...mapActions('vip', ['getVipOpenStatus']),
@@ -436,6 +395,55 @@ export default {
         },
       });
     },
+
+    getGoodSettings() {
+      Api.getSettings({
+        query: {
+          type: 'goods',
+        },
+      }).then(res => {
+        this.showNumberData = res.show_number_data;
+      });
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.nav-item {
+  position: relative;
+
+  &.active {
+    font-weight: bold;
+    color: #1D2129;
+
+    &:after {
+      content: '';
+      position: absolute;
+      z-index: 1;
+      width: 36px;
+      height: 12px;
+      left: -2px;
+      bottom: -1px;
+
+      background: linear-gradient(90deg, #F3CA98 2.04%, rgba(242, 202, 151, 0) 100%);
+      border-radius: 21px;
+    }
+  }
+}
+
+.current-level-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 56px;
+  height: 18px;
+  color: #494444;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  text-align: center;
+  background: linear-gradient(98.69deg, #EAB86A 16.63%, rgba(234, 184, 106, 0.63) 109.86%);
+  border-radius: 6px 0px;
+}
+</style>

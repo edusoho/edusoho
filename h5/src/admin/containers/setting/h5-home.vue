@@ -1,91 +1,88 @@
 <template>
   <div class="h5-home" :style="{ minHeight: windowHeight + 'px' }">
-    <el-row>
-      <el-col :span="8">
-        <div class="h5-home-left" :style="menuStyle">
-          <el-menu
-            default-active="1-0"
-            class="el-menu-vertical-demo"
-            :collapse="false"
-          >
-            <el-submenu index="1">
-              <template slot="title">
-                <span>{{ $t('sidebar.basicComponents') }}</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item
-                  :index="`1-${index}`"
-                  v-for="(item, index) in baseModules"
-                  :key="`base-${index}`"
-                  @click="addModule(item, index)"
-                >
-                  <i :class="['iconfont', item.icon]"></i>
-                  {{ $t(item.name) }}
-                </el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
+    <div class="h5-home-left" :style="menuStyle">
+      <el-menu
+        default-active="1-0"
+        class="el-menu-vertical-demo"
+        :collapse="false"
+      >
+        <el-submenu index="1">
+          <template slot="title">
+            <span>{{ $t('sidebar.basicComponents') }}</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item
+              :index="`1-${index}`"
+              v-for="(item, index) in baseModules"
+              :key="`base-${index}`"
+              @click="addModule(item, index)"
+            >
+              <i :class="['iconfont', item.icon]"></i>
+              {{ $t(item.name) }}
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
 
-            <el-submenu index="2">
-              <template slot="title">
-                <span>{{ $t('sidebar.marketingComponents') }}</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item
-                  :index="`2-${index}`"
-                  v-for="(item, index) in marketingModules"
-                  :key="`marketing-${index}`"
-                  @click="addModule(item, index)"
-                >
-                  <i :class="['iconfont', item.icon]"></i>
-                  {{ $t(item.name) }}
-                </el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-          </el-menu>
-        </div>
-      </el-col>
-      <el-col :span="16" class="el-full">
-        <div class="h5-home-center">
-          <div
-            class="setting-page setting-page-h5"
-            :class="{ 'setting-page-miniprogram': portal === 'miniprogram' }"
-          >
-            <find-header :portal="portal"></find-header>
+        <el-submenu index="2">
+          <template slot="title">
+            <span>{{ $t('sidebar.marketingComponents') }}</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item
+              :index="`2-${index}`"
+              v-for="(item, index) in marketingModules"
+              :key="`marketing-${index}`"
+              @click="addModule(item, index)"
+            >
+              <i :class="['iconfont', item.icon]"></i>
+              {{ $t(item.name) }}
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+      </el-menu>
+    </div>
+    <div class="el-full">
+      <div class="h5-home-center">
+        <div
+          class="setting-page setting-page-h5"
+          :class="{ 'setting-page-miniprogram': portal === 'miniprogram' }"
+        >
+          <find-header :portal="portal"></find-header>
 
-            <!-- 操作预览区域 -->
-            <div class="find-body">
-              <draggable
-                v-model="modules"
-                :options="{
-                  filter: stopDraggleClasses,
-                  preventOnFilter: false,
-                  forceFallback: true,
-                }"
-                @start="startDrag"
-                @end="endDrag"
+          <!-- 操作预览区域 -->
+          <div class="find-body">
+            <draggable
+              v-model="modules"
+              :options="{
+                filter: stopDraggleClasses,
+                preventOnFilter: false,
+                forceFallback: true,
+              }"
+              @start="startDrag"
+              @end="endDrag"
+            >
+              <module-template
+                v-for="(module, index) in modules"
+                :key="index"
+                :saveFlag="saveFlag"
+                :startValidate="startValidate"
+                :index="index"
+                :module="module"
+                :active="isActive(index)"
+                :moduleKey="`${module.type}-${index}`"
+                @activeModule="activeModule"
+                @updateModule="updateModule($event, index)"
+                @removeModule="removeModule($event, index)"
               >
-                <module-template
-                  v-for="(module, index) in modules"
-                  :key="index"
-                  :saveFlag="saveFlag"
-                  :startValidate="startValidate"
-                  :index="index"
-                  :module="module"
-                  :active="isActive(index)"
-                  :moduleKey="`${module.type}-${index}`"
-                  @activeModule="activeModule"
-                  @updateModule="updateModule($event, index)"
-                  @removeModule="removeModule($event, index)"
-                >
-                </module-template>
-              </draggable>
-            </div>
-
-            <find-footer :portal="portal"></find-footer>
+              </module-template>
+            </draggable>
           </div>
+
+          <find-footer :portal="portal"></find-footer>
         </div>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
+    
     <!-- 发布预览按钮 -->
     <div class="setting-button-group">
       <el-button
@@ -111,6 +108,7 @@
         >{{ $t('btn.savaAndPublish') }}</el-button
       >
     </div>
+
     <el-dialog title="提示" :visible.sync="quitDialogVisible" width="30%">
       <div class="mtl">退出后编辑的内容不会保存，是否退出？</div>
       <div slot="footer">

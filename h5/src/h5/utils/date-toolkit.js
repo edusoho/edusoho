@@ -145,6 +145,22 @@ const dateTimeDown = date => {
   return time;
 };
 
+const getTimeData = date => {
+  const now = new Date().getTime();
+  if (now > date) {
+    return '已到期';
+  }
+  const diff = parseInt((date - now) / 1000, 10);
+  const day = parseInt(diff / 24 / 60 / 60, 10);
+  let hour = parseInt((diff / 60 / 60) % 24, 10);
+  let minute = parseInt((diff / 60) % 60, 10);
+  let second = parseInt(diff % 60, 10);
+  hour = day || hour ? `${hour || '0'}` : '';
+  minute = day || hour || minute ? `${minute || '0'}` : '';
+  second = `${second || '0'}`;
+  return { day, hour, minute, second };
+};
+
 // days（传时间戳）
 const getOffsetDays = (time1, time2) => {
   const offsetTime = Math.abs(time1 - time2);
@@ -227,5 +243,6 @@ export {
   getOffsetDays,
   getCountDown,
   getdateTimeDown,
+  getTimeData,
   compareDate,
 };
