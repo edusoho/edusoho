@@ -56,4 +56,14 @@ class AssetHelper
         }
         return str_replace($matches[1], $imgList, $content);
     }
+
+    public static function transformImagesAddUrl($content, $type)
+    {
+        if ($type == 'picture'){
+            preg_match_all('/\/files/i', $content, $matches);
+        }else{
+            preg_match_all("/public:\//i", $content, $matches);
+        }
+        return str_replace($matches[0], AssetHelper::uriForPath($matches[1]), $content);
+    }
 }

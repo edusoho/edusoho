@@ -84,6 +84,9 @@ class PageDiscovery extends AbstractResource
                     $info['updatedTime'] = date('c', $info['updatedTime']);
                     $info['publishedTime'] = date('c', $info['publishedTime']);
                     $info['body'] = AssetHelper::transformImages($info['body']);
+                    $info['thumb'] = AssetHelper::transformImagesAddUrl($info['thumb'], '');
+                    $info['originalThumb'] = AssetHelper::transformImagesAddUrl($info['originalThumb'], '');
+                    $info['picture'] = AssetHelper::transformImagesAddUrl($info['picture'], 'picture');
                 }
                 $discoverySetting['data'] = empty($information) ? '' : $information;
             }
