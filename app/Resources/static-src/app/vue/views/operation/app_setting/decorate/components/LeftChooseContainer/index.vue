@@ -28,7 +28,9 @@ const Classifys = [
       { title: Translator.trans('decorate.curriculum_schedule'), icon: 'icon-kechengliebiao', type: 'course_list' },
       { title: Translator.trans('decorate.class_list'), icon: 'icon-banjiliebiao', type: 'classroom_list' },
       { title: Translator.trans('decorate.question_bank_list'), icon: 'icon-item-bank', type: 'item_bank_exercise' },
-      { title: Translator.trans('decorate.open_class_list'), icon: 'icon-open-course', type: 'open_course_list' }
+      { title: Translator.trans('decorate.open_class_list'), icon: 'icon-open-course', type: 'open_course_list' },
+      { title: Translator.trans('decorate.announcement'), icon: 'icon-announcement', type: 'announcement' },
+      { title: Translator.trans('decorate.information'), icon: 'icon-information', type: 'information' }
     ]
   },
   {
@@ -36,7 +38,6 @@ const Classifys = [
     icon: 'icon-marketing',
     components: [
       { title: Translator.trans('decorate.coupon'), icon: 'icon-youhuiquan', type: 'coupon' },
-      { title: Translator.trans('decorate.members_only'), icon: 'icon-huiyuanzhuanqu', type: 'vip' }
     ]
   }
 ];

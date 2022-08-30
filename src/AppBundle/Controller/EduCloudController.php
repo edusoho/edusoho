@@ -2,7 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\EncryptionToolkit;
 use AppBundle\Common\SmsToolkit;
+use Biz\BehaviorVerification\Service\BehaviorVerificationBlackIpService;
+use Biz\BehaviorVerification\Service\BehaviorVerificationCoordinateService;
+use Biz\BehaviorVerification\Service\BehaviorVerificationService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Sms\SmsException;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
@@ -29,6 +33,9 @@ class EduCloudController extends BaseController
     {
         $smsType = 'sms_registration';
 
+        if ($this->getBehaviorVerificationService()->behaviorVerification($request)){
+            return $this->createJsonResponse(['ACK' => 'ok', "allowance" => 0]);
+        }
         $status = $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp());
         if ('captchaRequired' == $status) {
             $captchaNum = $request->request->get('captcha_num');
@@ -62,6 +69,10 @@ class EduCloudController extends BaseController
             } elseif (!$this->validateDragCaptcha($request)) {
                 return $this->createJsonResponse(['error' => '验证码错误']);
             }
+        }
+
+        if ($this->getBehaviorVerificationService()->behaviorVerification($request)){
+            return $this->createJsonResponse(['ACK' => 'ok', "allowance" => 0]);
         }
 
         $result = $this->sendSms($request, $smsType);
@@ -480,5 +491,13 @@ class EduCloudController extends BaseController
         $captchaNum = strtolower($request->request->get('captcha_num'));
 
         return !empty($captchaNum) && $request->getSession()->get('captcha_code') == $captchaNum;
+    }
+
+    /**
+     * @return BehaviorVerificationService
+     */
+    protected function getBehaviorVerificationService()
+    {
+        return $this->createService('BehaviorVerification:BehaviorVerificationService');
     }
 }

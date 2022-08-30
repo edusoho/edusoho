@@ -1,5 +1,6 @@
 import SmsSender from 'app/common/widget/sms-sender';
 import Drag from 'app/common/drag';
+import Coordinate from 'app/common/coordinate';
 
 export default class Register {
   constructor() {
@@ -103,7 +104,9 @@ export default class Register {
   initMobileMsgVeriCodeSendBtn() {
     let $smsSendBtn =  $('.js-sms-send-btn');
     let self = this;
-    $smsSendBtn.click(function() {
+    $smsSendBtn.click(function(event) {
+      let coordinate = new Coordinate();
+      const encryptedPoint = coordinate.getCoordinate(event, $('meta[name=csrf-token]').attr('content'));
       self._smsBtnDisable();
       let fieldName = $('[name=\'verifiedMobile\']').length ? 'verifiedMobile' : 'emailOrMobile';
       new SmsSender({
@@ -114,6 +117,7 @@ export default class Register {
         captcha: true,
         captchaValidated: true,
         captchaNum: 'dragCaptchaToken',
+        encryptedPoint: encryptedPoint,
         preSmsSend: function() {
           return true;
         },

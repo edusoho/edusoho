@@ -1844,7 +1844,7 @@ site.btn.remove_playback: 移除回放
 site.btn.view_playback: 查看回放
 site.btn.confirm: 确认
 site.btn.edit: 编辑
-site.btn.see_more: 查看更多
+site.btn.see_more: 全部
 site.btn.enter_live: 进入直播
 site.btn.save: 保存
 site.btn.exit_editing: 退出编辑
@@ -1975,13 +1975,19 @@ free_lesson: 免费课
 popular_class: 热门课
 
 decorate.class_list_settings: 班级列表设置
+decorate.announcement: 公告
+decorate.announcement_settings: 公告设置
+decorate.announcement_tips: 默认显示【网站公告管理】中状态在显示中的最近一条系统公告
+decorate.information: 资讯
+decorate.information_settings: 资讯设置
+decorate.information_tips: 系统自动显示置顶和最近创建的三条资讯
 decorate.list_name: 列表名称
 decorate.please_enter_the_name_of_the_list: 请输入列表名称
 decorate.arrangement: 排列方式
 decorate.row_by_column: 一行一列
 decorate.one_row_and_two_columns: 一行两列
 decorate.class_source: 班级来源
-decorate.class_classification: 班级分类
+decorate.class_classification: 班级
 decorate.customize: 自定义
 decorate.select_class: 选择班级
 decorate.order: 排列顺序
@@ -2023,7 +2029,7 @@ decorate.valid_within_fixed_day_of_receipt: 领取%fixedDay%天内有效
 decorate.unknown_date: 未知日期
 decorate.course_list_setting: 课程列表设置
 decorate.course_source: 课程来源
-decorate.course_sorts: 课程分类
+decorate.course_sorts: 课程
 decorate.choose_a_course: 选择课程
 decorate.recommended_courses: 推荐课程
 decorate.show_only_published_courses: 仅显示已发布课程
@@ -2037,7 +2043,7 @@ decorate.please_enter_a_title: 请输入标题
 decorate.link_source: 链接来源
 decorate.please_choose: 请选择
 decorate.members_only: 会员专区
-decorate.open_class_classification: 公开课分类
+decorate.open_class_classification: 公开课
 decorate.select_image: 选择图片
 decorate.title2: 标题
 decorate.question_bank_list_settings: 题库列表设置
@@ -2066,7 +2072,7 @@ decorate.turn_on: 开启
 decorate.closure: 关闭
 decorate.revise: 修改
 decorate.add_content: 添加内容
-decorate.carousel_tip1: 建议图片尺寸为 750x300px，支持 jpg/png/gif 格式，大小不超过 2 MB
+decorate.carousel_tip1: 建议图片尺寸为 686x272px，支持 jpg/png/gif 格式，大小不超过 2 MB
 decorate.carousel_tip2: 最多添加 5 个轮播图，拖动选中的图片可对其排序
 decorate.site_link: 站内链接
 decorate.low_to_hign: 从低到高
@@ -2079,8 +2085,13 @@ decorate.are_you_sure_exiting_editing: 确定退出编辑？
 decorate.exiting_editing_not_save: 退出编辑将不会保存修改。
 decorate.gn_tip1: 建议图片尺寸为 80x80px，支持 jpg/png/gif 格式，大小不超过 2 MB
 decorate.gn_tip2: 最多添加 8 个图文导航
-decorate.poster_tip1: 建议图片尺寸为 750px，支持 jpg/png/gif 格式，大小不超过 2 MB
+decorate.poster_tip1: 建议图片尺寸为 686px，支持 jpg/png/gif 格式，大小不超过 2 MB
 decorate.open_course_tip1: 仅含直播公开课内容，不包含录播公开课
+decorate.living: 直播
+decorate.replay: 回放
+decorate.islearning: 人在学
+decorate.itemBankMax: 最多显示3个题库
+decorate.persons: 人
 
 scrm.title: 销客助手
 scrm.edusoho_title: EduSoho销客助手

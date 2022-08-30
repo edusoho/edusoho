@@ -32,3 +32,5 @@ export * from './Classroom';
 export * from './CourseCategory';
 export * from './CourseTag';
 export * from './PurchaseAgreement';
+export * from './Announcement';
+export * from './Information';

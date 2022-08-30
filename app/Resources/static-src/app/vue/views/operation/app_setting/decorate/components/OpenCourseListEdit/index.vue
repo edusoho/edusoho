@@ -15,42 +15,6 @@
       </div>
 
       <div class="design-editor__item">
-        <span class="design-editor__label">{{ 'decorate.course_source' | trans }}：</span>
-        <a-radio-group
-          :default-value="moduleData.sourceType"
-          @change="(e) => handleChange({ key: 'sourceType', value: e.target.value })"
-        >
-          <a-radio value="condition">
-            {{ 'decorate.course_sorts' | trans }}
-          </a-radio>
-          <a-radio value="custom">
-            {{ 'decorate.customize' | trans }}
-          </a-radio>
-        </a-radio-group>
-      </div>
-
-      <div v-show="moduleData.sourceType === 'custom'" class="design-editor__item">
-        <span class="design-editor__label design-editor__required">{{ 'decorate.course_sorts' | trans }}：</span>
-        <a-button @click="handleSelect">{{ 'decorate.choose_a_course' | trans }}</a-button>
-      </div>
-
-      <div v-show="moduleData.sourceType === 'custom'" class="design-editor__item">
-        <draggable
-          class="course-list"
-          v-model="moduleData.items"
-          v-bind="dragOptions"
-          @start="drag = true"
-          @end="drag = false"
-        >
-          <transition-group type="transition" :name="!drag ? 'flip-list' : null">
-            <div class="course-list__item" v-for="item in moduleData.items" :key="item.id">
-              <a-icon type="drag" style="color: #999;" /> {{ item.title || item.courseSetTitle }}
-            </div>
-          </transition-group>
-        </draggable>
-      </div>
-
-      <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
         <span class="design-editor__label">{{ 'decorate.course_sorts' | trans }}：</span>
         <a-cascader
           style="width: 240px;"
@@ -60,31 +24,6 @@
           :field-names="{ label: 'name', value: 'id', children: 'children' }"
           @change="(value) => handleChange({ key: 'categoryId', value })"
         />
-      </div>
-
-      <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
-        <span class="design-editor__label">{{ 'decorate.order' | trans }}：</span>
-        <a-select
-          style="width: 240px;"
-          :default-value="moduleData.limitDays"
-          @change="(value) => handleChange({ key: 'limitDays', value })"
-        >
-          <a-select-option key="7">{{ 'decorate.last_7_days' | trans }}</a-select-option>
-          <a-select-option key="30">{{ 'decorate.last_30_days' | trans }}</a-select-option>
-          <a-select-option key="90">{{ 'decorate.last_90_days' | trans }}</a-select-option>
-          <a-select-option key="0">{{ 'decorate.all' | trans }}</a-select-option>
-        </a-select>
-      </div>
-
-      <div class="design-editor__item" v-show="moduleData.sourceType === 'condition'">
-        <span class="design-editor__label">{{ 'decorate.display_number' | trans }}：</span>
-        <a-select
-          style="width: 240px;"
-          :default-value="moduleData.limit"
-          @change="(value) => handleChange({ key: 'limit', value })"
-        >
-          <a-select-option v-for="item in 8" :key="item">{{ item  }}</a-select-option>
-        </a-select>
       </div>
 
       <div class="design-editor__tips">
