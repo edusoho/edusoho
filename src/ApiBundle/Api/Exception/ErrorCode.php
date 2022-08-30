@@ -27,4 +27,6 @@ class ErrorCode
     const UNAUTHORIZED = 11;
 
     const METHOD_NOT_ALLOWED = 12;
+
+    const CSRF_TOKEN_INVALID = 13;
 }
