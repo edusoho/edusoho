@@ -2,8 +2,10 @@
 
 namespace ApiBundle\Security\Firewall;
 
+use ApiBundle\Api\Exception\ErrorCode;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -29,6 +31,10 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
         }
 
         if (!$this->isCrsfTokenValid($request)) {
+            if(0 === stripos($request->getPathInfo(), '/api/save_answer')
+            || 0 === stripos($request->getPathInfo(), '/api/submit_answer')) {
+                throw new HttpException(500, "页面停留时间过长，请刷新页面", null, [], ErrorCode::CSRF_TOKEN_INVALID);
+            }
             return;
         }
 
