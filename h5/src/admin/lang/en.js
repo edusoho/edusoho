@@ -53,8 +53,7 @@ export default {
     mistakesCollection: 'Mistakes collection',
     myOrder: 'My order',
     activities: 'Activities',
-    more: 'More',
-    all: 'All'
+    more: 'More'
   },
   search: {
     placeholder: 'Search course/class/question bank',

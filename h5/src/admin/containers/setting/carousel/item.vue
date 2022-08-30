@@ -1,31 +1,4 @@
 <template>
-<div>
-  <el-dialog
-    :visible.sync="dialogVisible"
-    :append-to-body="true"
-    title="提示:通过鼠标滚轮缩放图片"
-    width="80%"
-  >
-    <div class="setting-carousel-cropper-container">
-      <vueCropper
-        v-show="option.img"
-        ref="cropper"
-        :img="option.img"
-        :fixed="option.fixed"
-        :enlarge="option.enlarge"
-        :auto-crop="option.autoCrop"
-        :fixed-number="
-          pathName === 'appSetting' ? appFixedNumber : option.fixedNumber
-        "
-        :auto-crop-width="option.autoCropWidth"
-        :auto-crop-height="option.autoCropHeight"
-      />
-    </div>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">{{ $t('btn.cancel') }}</el-button>
-      <el-button type="primary" @click="stopCrop">{{ $t('btn.confirm') }}</el-button>
-    </span>
-  </el-dialog>
   <div
     :class="{ active: active === index }"
     class="clearfix carousel-item"
@@ -44,58 +17,92 @@
       <span v-show="!item.image.uri"><i class="text-18">+</i>{{ $t('carousel.addPictures') }}</span>
     </el-upload>
 
+    <el-dialog
+      :visible.sync="dialogVisible"
+      :append-to-body="true"
+      title="提示:通过鼠标滚轮缩放图片"
+      width="80%"
+    >
+      <div class="setting-carousel-cropper-container">
+        <vueCropper
+          v-show="option.img"
+          ref="cropper"
+          :img="option.img"
+          :fixed="option.fixed"
+          :enlarge="option.enlarge"
+          :auto-crop="option.autoCrop"
+          :fixed-number="
+            pathName === 'appSetting' ? appFixedNumber : option.fixedNumber
+          "
+          :auto-crop-width="option.autoCropWidth"
+          :auto-crop-height="option.autoCropHeight"
+        />
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">{{ $t('btn.cancel') }}</el-button>
+        <el-button type="primary" @click="stopCrop">{{ $t('btn.confirm') }}</el-button>
+      </span>
+    </el-dialog>
+
     <img
       v-show="active === index"
       class="icon-delete"
       src="static/images/delete.png"
       @click="handleRemove($event, index, itemNum)"
     />
-
-    <div style="flex: 1; display: flex; justify-content: space-between; flex-direction: column;">
-      <div class="add-choose">
-        <el-radio v-model="radio" label="insideLink">{{ $t('carousel.siteLink') }}</el-radio>
-        <el-radio v-model="radio" label="url">{{ $t('carousel.customLink') }}</el-radio>
-      </div>
-
-      <div v-if="radio === 'insideLink'" class="add-inner">
-        <el-dropdown v-show="!linkTextShow">
-          <el-button size="mini" class="el-dropdown-link">
-            {{ $t('carousel.addLink') }}
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item
-              v-for="item in linkOptions"
-              :key="item.key"
-              @click.native="insideLinkHandle(item.type)"
-              >{{ item.label }}</el-dropdown-item
-            >
-          </el-dropdown-menu>
-        </el-dropdown>
-        <el-tag
-          v-show="linkTextShow"
-          :disable-transitions="true"
-          class="courseLink"
-          closable
-          @close="handleClose"
-        >
-          <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
-            <span slot="content">{{ linkTextShow }}</span>
-            <span>{{ linkTextShow }}</span>
-          </el-tooltip>
-        </el-tag>
-      </div>
-
-      <div v-if="radio === 'url'" class="add-outter">
-        <div style="width: 35px; margin-right: 12px; font-size: 14px;">链接</div>
-        <el-input
-          v-model="item.link.url"
-          size="mini"
-          placeholder="请输入网址"
-          clearable
-          @change="changeLinkUrl"
-        />
-      </div>
-      </div>
+    <div v-if="pathName !== 'appSetting'" class="add-title">
+      {{ $t('carousel.title') }}：<el-input
+        v-model="item.title"
+        size="mini"
+        :placeholder="$t('carousel.pleaseEnterATitle')"
+        max-length="15"
+        clearable
+      />
+    </div>
+    <!-- <div v-if="pathName !== 'appSetting'" class="add-choose">
+      {{ $t('carousel.links') }}：<el-radio v-model="radio" label="insideLink">{{ $t('carousel.siteLink') }}</el-radio>
+    </div> -->
+    <div class="add-choose">
+      <el-radio v-model="radio" class="mt16" label="insideLink">{{ $t('carousel.siteLink') }}</el-radio>
+      <el-radio v-model="radio" class="mt16" label="url">{{ $t('carousel.customLink') }}</el-radio>
+    </div>
+    <div v-if="radio === 'insideLink'" class="add-inner">
+      <el-dropdown v-show="!linkTextShow">
+        <el-button size="mini" class="el-dropdown-link">
+          {{ $t('carousel.addLink') }}
+        </el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item
+            v-for="item in linkOptions"
+            :key="item.key"
+            @click.native="insideLinkHandle(item.type)"
+            >{{ item.label }}</el-dropdown-item
+          >
+        </el-dropdown-menu>
+      </el-dropdown>
+      <el-tag
+        v-show="linkTextShow"
+        :disable-transitions="true"
+        class="courseLink"
+        closable
+        @close="handleClose"
+      >
+        <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
+          <span slot="content">{{ linkTextShow }}</span>
+          <span>{{ linkTextShow }}</span>
+        </el-tooltip>
+      </el-tag>
+    </div>
+    <div v-if="radio === 'url'" class="add-outter">
+      <div class="pull-left add-outter-title">输入网址：</div>
+      <el-input
+        v-model="item.link.url"
+        class="pull-right"
+        size="mini"
+        placeholder="例如 http://www.eduosho.com"
+        clearable
+        @change="changeLinkUrl"
+      />
     </div>
   </div>
 </template>

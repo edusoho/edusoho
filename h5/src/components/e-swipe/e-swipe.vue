@@ -11,6 +11,9 @@
           <a v-else :href="slide.link.url || 'javascript:;'">
             <img v-lazy="slide.image.uri" />
           </a>
+          <div class="text-overflow item-container__title">
+            {{ slide.title }}
+          </div>
         </div>
       </van-swipe-item>
     </van-swipe>
@@ -34,12 +37,13 @@ export default {
   methods: {
     jumpTo(slide, index) {
       if (!this.feedback) return;
-
       if (!slide) return;
 
       const itemLinkData = slide.link;
-
       if (itemLinkData.type === 'classroom' && itemLinkData.target) {
+        // this.$router.push({
+        //   path: `/classroom/${itemLinkData.target.id}`,
+        // });
         this.$router.push({
           path: `/goods/${itemLinkData.target.goodsId}/show`,
           query: {
@@ -49,15 +53,16 @@ export default {
         });
         return;
       }
-
       if (itemLinkData.type === 'vip') {
         this.$router.push({
           path: `/vip`,
         });
         return;
       }
-
       if (itemLinkData.type === 'course' && itemLinkData.target) {
+        // this.$router.push({
+        //   path: `/course/${itemLinkData.target.id}`,
+        // });
         this.$router.push({
           path: `/goods/${itemLinkData.target.goodsId}/show`,
           query: {
@@ -77,6 +82,7 @@ export default {
     border-radius: 6px;
     overflow: hidden;
   }
+  
   /deep/ .van-swipe__indicators {
     left: 12px;
     bottom: 8px;
