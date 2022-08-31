@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\LatestInformation;
 
 
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Util\AssetHelper;
 use Biz\Article\Service\ArticleService;
 
 class LatestInformation extends AbstractResource
