@@ -12,14 +12,7 @@ class LatestInformation extends AbstractResource
 {
     public function search()
     {
-        $information = $this ->getArticleService() -> searchArticles(['status' => 'published'], ['sticky' => 'DESC' ,'publishedTime' => 'DESC'], 0, 3);
-        foreach ($information as &$info) {
-            $info['body'] = AssetHelper::transformImages($info['body']);
-            $info['thumb'] = AssetHelper::transformImagesAddUrl($info['thumb'], '');
-            $info['originalThumb'] = AssetHelper::transformImagesAddUrl($info['originalThumb'], '');
-            $info['picture'] = AssetHelper::transformImagesAddUrl($info['picture'], 'picture');
-        }
-        return $information;
+        return $this ->getArticleService() -> searchArticles(['status' => 'published'], ['sticky' => 'DESC' ,'publishedTime' => 'DESC'], 0, 3);
     }
 
     /**
