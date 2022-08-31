@@ -377,8 +377,9 @@ class BaseController extends Controller
         $host = $this->get('request_stack')->getCurrentRequest()->getHost();
         $safeHosts = [$host];
 
+        $parsedUrl = parse_url($url);
         if ($parsedUrl == false){
-            return;
+            return $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         $isUnsafeHost = isset($parsedUrl['host']) && !in_array($parsedUrl['host'], $safeHosts);
