@@ -19,6 +19,7 @@ class AssessmentResponseWrapper
             'assessment_id' => $assessment['id'],
             'answer_record_id' => $answerRecord['id'],
             'used_time' => empty($data['usedTime']) ? 0 : $data['usedTime'],
+            'admission_ticket' => empty($data['admission_ticket']) ? '' : $data['admission_ticket'],
             'section_responses' => [],
         ];
 
