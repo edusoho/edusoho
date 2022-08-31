@@ -6,9 +6,11 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Testpaper\ExerciseException;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
+use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\ErrorCode;
 
 class ExerciseSaveResult extends AbstractResource
 {
@@ -27,6 +29,14 @@ class ExerciseSaveResult extends AbstractResource
         $wrapper = new AssessmentResponseWrapper();
         $assessment = $this->getAssessmentService()->showAssessment($exerciseRecord['assessment_id']);
         $assessmentResponse = $wrapper->wrap($request->request->all(), $assessment, $exerciseRecord);
+
+        if(empty($assessmentResponse['admission_ticket'])) {
+            throw new AnswerException("答题保存功能已升级，请更新客户端版本",ErrorCode::ANSWER_OLD_VERSION);
+        }
+
+        if($exerciseRecord['admission_ticket'] != $assessmentResponse['admission_ticket']) {
+            throw new AnswerException("不能同时多端答题",ErrorCode::ANSWER_NO_BOTH_DOING);
+        }
 
         return $this->getAnswerService()->saveAnswer($assessmentResponse);
     }
