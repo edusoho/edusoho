@@ -377,7 +377,10 @@ class BaseController extends Controller
         $host = $this->get('request_stack')->getCurrentRequest()->getHost();
         $safeHosts = [$host];
 
-        $parsedUrl = parse_url($url);
+        if ($parsedUrl == false){
+            return;
+        }
+
         $isUnsafeHost = isset($parsedUrl['host']) && !in_array($parsedUrl['host'], $safeHosts);
         $isInvalidUrl = isset($parsedUrl['scheme']) && !in_array($parsedUrl['scheme'], ['http', 'https']);
 
