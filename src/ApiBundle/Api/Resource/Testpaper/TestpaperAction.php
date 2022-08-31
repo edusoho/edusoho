@@ -180,6 +180,7 @@ class TestpaperAction extends AbstractResource
             'testpaper' => $testpaper,
             'items' => $items,
             'isShowTestResult' => 0,
+            'courseId' => $course['id']
         ];
     }
 
