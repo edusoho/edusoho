@@ -103,6 +103,7 @@ class TestpaperWrapper
             'beginTime' => $record['begin_time'],
             'endTime' => $record['end_time'],
             'updateTime' => $record['updated_time'],
+            'admission_ticket' => $record['admission_ticket'],
             'metas' => [],
             'status' => $record['status'],
             'checkTeacherId' => empty($report['review_user_id']) ? '0' : $report['review_user_id'],

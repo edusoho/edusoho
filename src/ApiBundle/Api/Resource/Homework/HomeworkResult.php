@@ -65,6 +65,8 @@ class HomeworkResult extends AbstractResource
             $homeworkRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $homework['id'], $user['id']);
         } elseif ('reviewing' == $homeworkRecord['status']) {
             throw HomeworkException::REVIEWING_HOMEWORK();
+        } else {
+            $homeworkRecord = $this->getAnswerService()->continueAnswer($homeworkRecord['id']);
         }
 
         $testpaperWrapper = new TestpaperWrapper();
