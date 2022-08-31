@@ -30,14 +30,6 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
             return;
         }
 
-        if (!$this->isCrsfTokenValid($request)) {
-            if(0 === stripos($request->getPathInfo(), '/api/save_answer')
-            || 0 === stripos($request->getPathInfo(), '/api/submit_answer')) {
-                throw new HttpException(500, "页面停留时间过长，请刷新页面", null, [], ErrorCode::CSRF_TOKEN_INVALID);
-            }
-            return;
-        }
-
         $token = unserialize($token);
 
         if ($token instanceof TokenInterface) {
@@ -47,17 +39,6 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
         }
 
         $this->getTokenStorage()->setToken($token);
-    }
-
-    private function isCrsfTokenValid(Request $request)
-    {
-        if ($request->isXmlHttpRequest()) {
-            $token = $request->headers->get('X-CSRF-Token');
-        } else {
-            $token = $request->request->get('_csrf_token', '');
-        }
-
-        return $this->container->get('security.csrf.token_manager')->isTokenValid(new CsrfToken('site', $token));
     }
 
     /**
