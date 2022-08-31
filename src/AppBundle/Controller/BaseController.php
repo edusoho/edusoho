@@ -378,6 +378,10 @@ class BaseController extends Controller
         $safeHosts = [$host];
 
         $parsedUrl = parse_url($url);
+        if ($parsedUrl == false){
+            return $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        }
+
         $isUnsafeHost = isset($parsedUrl['host']) && !in_array($parsedUrl['host'], $safeHosts);
         $isInvalidUrl = isset($parsedUrl['scheme']) && !in_array($parsedUrl['scheme'], ['http', 'https']);
 
