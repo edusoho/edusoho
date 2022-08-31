@@ -74,6 +74,7 @@ class ExerciseResult extends AbstractResource
         $items = $testpaperWrapper->wrapTestpaperItems($assessment, $questionReports);
         $exerciseResult = $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $answerScene, $answerReport);
         $exerciseResult['items'] = array_values($items);
+        $exerciseResult['courseId'] = $course['id'];
 
         return $exerciseResult;
     }
