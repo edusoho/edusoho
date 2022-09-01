@@ -23,7 +23,7 @@ class SaveAnswer extends AbstractResource
         }
 
         if($answerRecord['admission_ticket'] != $assessmentResponse['admission_ticket']) {
-            throw new AnswerException("不能同时多端答题",ErrorCode::ANSWER_NO_BOTH_DOING);
+            throw new AnswerException("有新答题页面，请在新页面中继续答题",ErrorCode::ANSWER_NO_BOTH_DOING);
         }
 
         return $this->getAnswerService()->saveAnswer($assessmentResponse);
