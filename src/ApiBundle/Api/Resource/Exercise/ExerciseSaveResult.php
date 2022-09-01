@@ -18,10 +18,6 @@ class ExerciseSaveResult extends AbstractResource
     {
         $exerciseRecord = $this->getAnswerRecordService()->get($exerciseResultId);
 
-        if (!empty($exerciseRecord) && !in_array($exerciseRecord['status'], ['doing', 'paused'])) {
-            throw ExerciseException::FORBIDDEN_DUPLICATE_COMMIT();
-        }
-
         if ($exerciseRecord['user_id'] != $this->getCurrentUser()->getId()) {
             throw ExerciseException::FORBIDDEN_ACCESS_EXERCISE();
         }

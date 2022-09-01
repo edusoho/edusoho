@@ -86,10 +86,6 @@ class HomeworkResult extends AbstractResource
         $data = $request->request->all();
         $homeworkRecord = $this->getAnswerRecordService()->get($homeworkResultId);
 
-        if (!empty($homeworkRecord) && !in_array($homeworkRecord['status'], ['doing', 'paused'])) {
-            throw HomeworkException::FORBIDDEN_DUPLICATE_COMMIT();
-        }
-
         $wrapper = new AssessmentResponseWrapper();
         $assessment = $this->getAssessmentService()->showAssessment($homeworkRecord['assessment_id']);
         $assessmentResponse = $wrapper->wrap($data, $assessment, $homeworkRecord);
