@@ -1,6 +1,5 @@
 import Answer from './answer';
 import { isMobileDevice } from 'common/utils';
-import { Modal } from 'ant-design-vue';
 
 jQuery.support.cors = true;
 
@@ -13,8 +12,6 @@ if (app.lang == 'en') {
   const locale = local.default;
   itemBank.default.install(Vue, {locale});
 }
-
-Vue.use(Modal);
 
 new Vue({
   render: createElement => createElement(Answer)

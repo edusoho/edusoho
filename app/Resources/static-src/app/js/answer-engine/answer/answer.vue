@@ -35,6 +35,7 @@
   import ActivityEmitter from '../../activity/activity-emitter';
   import dataURLToBlob from "dataurl-to-blob";
   import {checkBrowserCompatibility} from '../../face-inspection/util';
+  import { Modal } from 'ant-design-vue';
 
   export default {
     data() {
@@ -185,7 +186,7 @@
 
           if (errorCode == '50095204') {
             // 试卷已提交 -- 退出答题
-            this.$error({
+            Modal.error({
               ...commonConfig,
               title: '你已提交过答题，当前页面无法重复提交',
               okText: '退出答题',
@@ -196,7 +197,7 @@
 
           if (errorCode == '50095209') {
             // 不能同时多端答题
-            this.$error({
+            Modal.error({
               ...commonConfig,
               title: '有新答题页面，请在新页面中继续答题',
               okText: '确定',
@@ -206,7 +207,7 @@
           }
 
           if (traceId) {
-            this.$error({
+            Modal.error({
               ...commonConfig,
               title: '答题保存失败，请保存截图后，联系技术支持处理',
               content: `【${message}】【${traceId}】`,
@@ -217,7 +218,7 @@
             return
           }
 
-          this.$error({
+          Modal.error({
             ...commonConfig,
             title: '网络连接不可用，自动保存失败',
             okText: '重新保存',
