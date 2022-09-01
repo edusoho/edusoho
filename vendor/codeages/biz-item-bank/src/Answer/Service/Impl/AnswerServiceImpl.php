@@ -706,7 +706,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         if (!in_array($answerRecord['status'],[AnswerService::ANSWER_RECORD_STATUS_DOING,AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
-            throw new AnswerException('试卷已提交.', ErrorCode::ANSWER_NODOING);
+            throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
         }
 
         if ($answerRecord['assessment_id'] != $assessmentResponse['assessment_id']) {
