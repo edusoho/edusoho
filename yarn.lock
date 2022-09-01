@@ -6174,10 +6174,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@^1.0.35:
-  version "1.0.35"
-  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.35.tgz#498ccb938326c1245d08a8533448846edde40f15"
-  integrity sha512-RWIOL7yJ2DO7EwIvg8RLK9Zf6fHKNPXrWv7cW96UmbIokKak3S9/810eLFOVM5amCWdAwECUsZ8bSydb22EDXw==
+item-bank@^1.0.37:
+  version "1.0.37"
+  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.37.tgz#7fa594f8b4a71c9b9b84394b34e460fcb70bce23"
+  integrity sha512-eW8B/XLCiF/rQlQ82nDD4RYWHAzLCjVFDqpR2pVOxfd9aqpSVAHVksMjfWICUb7ser86ZWk+olNMUbNQUc7UzQ==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
