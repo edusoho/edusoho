@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\StringToolkit;
+use AppBundle\Common\TimeMachine;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\BaseService;
 use Biz\Card\Service\CardService;
@@ -1248,6 +1249,9 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function makeToken($type, $userId = null, $expiredTime = null, $data = '', $args = [])
     {
+        if($type == 'mobile_login') {
+            $expiredTime = time() + TimeMachine::ONE_MONTH * 6;
+        }
         $token = [];
         $token['type'] = $type;
         $token['userId'] = $userId ? (int) $userId : 0;
