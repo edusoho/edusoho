@@ -2209,6 +2209,8 @@ course.plan_task.activity_manage.testpaper.answer: >
   请在<span class="color-primary">%limitedTime%分钟</span>内作答。
 course.plan_task.activity_manage.testpaper.once_trance: >
   仅有<span class="color-danger">一次</span>考试机会。
+course.plan_task.activity_manage.testpaper.limit_tips: 
+  <span class="color-warning">温馨提示：考试一旦开始，倒计时结束后将自动交卷。</span>
 course.plan_task.activity_manage.testpaper.start_exam: 开始考试
 course.plan_task.activity_manage.testpaper.close_tips: 该考试已关闭，请联系教师！
 course.plan_task.activity_manage.video: 视频
