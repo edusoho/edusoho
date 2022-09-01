@@ -1947,8 +1947,8 @@ testpaper.scoer.validator: 分值设置有误，请检查各题型题目分值�
 testpaper.option_score.validator: 每项分值不得超过每题分值
 
 all: 全部
-coupon: 优惠卷
-collar_roll: 领卷
+coupon: 优惠劵
+collar_roll: 领劵
 available_range: 可用范围
 upload_image: 上传图片
 picture_cropping: 图片裁剪
