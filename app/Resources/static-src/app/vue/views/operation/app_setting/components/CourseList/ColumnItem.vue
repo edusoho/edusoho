@@ -63,7 +63,7 @@ export default {
 
   &__price {
     position: absolute;
-    right: 8px;
+    left: 8px;
     bottom: 8px;
     font-size: 12px;
     font-weight: 500;
