@@ -1715,8 +1715,8 @@ t.add("course.option_score.validator", "\u9009\u9879\u603b\u5206\u4e0d\u5f97\u8d
 t.add("testpaper.scoer.validator", "\u5206\u503c\u8bbe\u7f6e\u6709\u8bef\uff0c\u8bf7\u68c0\u67e5\u5404\u9898\u578b\u9898\u76ee\u5206\u503c\u8bbe\u7f6e", "js", "zh_CN");
 t.add("testpaper.option_score.validator", "\u6bcf\u9879\u5206\u503c\u4e0d\u5f97\u8d85\u8fc7\u6bcf\u9898\u5206\u503c", "js", "zh_CN");
 t.add("all", "\u5168\u90e8", "js", "zh_CN");
-t.add("coupon", "\u4f18\u60e0\u5377", "js", "zh_CN");
-t.add("collar_roll", "\u9886\u5377", "js", "zh_CN");
+t.add("coupon", "\u4f18\u60e0\u52b5", "js", "zh_CN");
+t.add("collar_roll", "\u9886\u52b5", "js", "zh_CN");
 t.add("available_range", "\u53ef\u7528\u8303\u56f4", "js", "zh_CN");
 t.add("upload_image", "\u4e0a\u4f20\u56fe\u7247", "js", "zh_CN");
 t.add("picture_cropping", "\u56fe\u7247\u88c1\u526a", "js", "zh_CN");
