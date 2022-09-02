@@ -36,6 +36,8 @@
   import dataURLToBlob from "dataurl-to-blob";
   import {checkBrowserCompatibility} from '../../face-inspection/util';
   import { Modal } from 'ant-design-vue';
+  
+  const commonConfig = { keyboard: false, centered: true, footer: false, class: 'error-modal' }
 
   export default {
     data() {
@@ -85,7 +87,8 @@
             }
           });
           return time;
-        }
+        },
+        ajaxTimeOut: null
       };
     },
     created() {
@@ -125,6 +128,19 @@
           beforeSend(request) {
             request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
           },
+        }).fail((result) => {
+          const { code: errorCode } = result.responseJSON.error;
+
+          if (errorCode == '50095204') {
+            // 试卷已提交 -- 退出答题
+            Modal.error({
+              ...commonConfig,
+              title: '你已提交过答题，当前页面无法重复提交',
+              okText: '退出答题',
+              onOk: () => this.returnToCourseDetail()
+            })
+            return
+          }
         }).done(function (resp) {
           that.emitter.emit('finish', {data: ''});
           location.replace($('[name=submit_goto_url]').val());
@@ -167,7 +183,20 @@
         })
       },
       postAnswerData(assessmentResponse) {
-        const commonConfig = { keyboard: false, centered: true, footer: false, class: 'error-modal' }
+        if (!this.ajaxTimeOut) {
+          this.ajaxTimeOut = setTimeout(() => {
+            Modal.error({
+              ...commonConfig,
+              title: '网络连接不可用，自动保存失败',
+              okText: '重新保存',
+              onOk: () => {
+                Modal.destroyAll();
+                this.postAnswerData(assessmentResponse)
+              }
+            })
+            this.ajaxTimeOut = null
+          }, 10 * 1000)
+        }
 
         assessmentResponse.admission_ticket = this.answerRecord.admission_ticket;
         return $.ajax({
@@ -222,8 +251,13 @@
             ...commonConfig,
             title: '网络连接不可用，自动保存失败',
             okText: '重新保存',
-            onOk: () => this.postAnswerData(assessmentResponse)
+            onOk: () => {
+              Modal.destroyAll();
+              this.postAnswerData(assessmentResponse)
+            }
           })
+        }).done(() => {
+          this.ajaxTimeOut && clearTimeout(this.ajaxTimeOut)
         })
       },
       returnToCourseDetail() {
