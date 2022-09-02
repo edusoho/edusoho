@@ -88,7 +88,8 @@
           });
           return time;
         },
-        ajaxTimeOut: null
+        ajaxTimeOut: null,
+        isReachTime: false,
       };
     },
     created() {
@@ -148,6 +149,7 @@
       },
       reachTimeSubmitAnswerData(assessmentResponse) {
         const that = this;
+        this.isReachTime = true;
         $.ajax({
           url: '/api/submit_answer',
           contentType: 'application/json;charset=utf-8',
@@ -183,6 +185,8 @@
         })
       },
       postAnswerData(assessmentResponse) {
+        if (this.isReachTime) return
+        
         if (!this.ajaxTimeOut) {
           this.ajaxTimeOut = setTimeout(() => {
             Modal.error({
