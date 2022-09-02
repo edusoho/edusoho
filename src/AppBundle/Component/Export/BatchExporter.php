@@ -170,7 +170,7 @@ class BatchExporter
 
     protected function writeCsv($fileName, $csvName)
     {
-        if (!empty($fileName)) {
+        if (empty($fileName)) {
             throw new UnexpectedValueException('exporter filename could not be found');
         }
         $filePath = $this->exportFileRootPath().$fileName;
