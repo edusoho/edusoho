@@ -84,7 +84,7 @@ class ExerciseQuestionRecordServiceImpl extends BaseService implements ExerciseQ
         foreach ($answerReport['section_reports'] as $sectionReport) {
             foreach ($sectionReport['item_reports'] as $itemReport) {
                 foreach ($itemReport['question_reports'] as $questionReport) {
-                    if (in_array($questionReport['status'], [AnswerQuestionReportService::STATUS_RIGHT, AnswerQuestionReportService::STATUS_WRONG])) {
+                    if (!in_array($questionReport['status'], [AnswerQuestionReportService::STATUS_NOANSWER])) {
                         $answerQuestionReports[] = [
                             'itemId' => $itemReport['item_id'],
                             'questionId' => $questionReport['question_id'],
