@@ -194,23 +194,6 @@ class ThreadController extends CourseBaseController
             return $this->redirect($this->generateUrl('my_course_show', ['id' => $courseId, 'tab' => 'threads']));
         }
 
-        if ($member && 'vip_join' == $member['joinedChannel'] && $this->isVipPluginEnabled()) {
-            if (empty($this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']))) {
-                return $this->redirect($this->generateUrl('course_show', ['id' => $course['id']]));
-            } elseif (empty($course['parentId'])
-                && 'ok' != $this->getVipService()->checkUserVipRight($member['userId'], CourseVipRightSupplier::CODE, $course['id'])
-            ) {
-                return $this->redirect($this->generateUrl('course_show', ['id' => $course['id']]));
-            } elseif (!empty($course['parentId'])) {
-                $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
-                if (!empty($classroom)
-                    && 'ok' != $this->getVipService()->checkUserVipRight($member['userId'], ClassroomVipRightSupplier::CODE, $classroom['id'])
-                ) {
-                    return $this->redirect($this->generateUrl('course_show', ['id' => $course['id']]));
-                }
-            }
-        }
-
         $type = $request->query->get('type') ?: 'discussion';
         $form = $this->createThreadForm([
             'type' => $type,

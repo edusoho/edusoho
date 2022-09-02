@@ -51,6 +51,13 @@ class ErrorCode
      */
     const ANSWER_RECORD_CANNOT_REVIEW = 50095208;
 
+    /**
+     * 不能同时多端答题
+     */
+    const ANSWER_NO_BOTH_DOING = 50095209;
+
+    const ANSWER_OLD_VERSION = 50095210;
+
     const ITEM_NOT_FOUND = 40495001;
 
     const ITEM_ARGUMENT_INVALID = 50095002;

@@ -2,6 +2,7 @@
 
 namespace Biz\User\Service\Impl;
 
+use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
 use Biz\User\Service\TokenService;
 use Ramsey\Uuid\Uuid;
@@ -10,6 +11,9 @@ class TokenServiceImpl extends BaseService implements TokenService
 {
     public function makeToken($type, array $args = array())
     {
+        if($type == 'mobile_login') {
+            $args['duration'] = TimeMachine::ONE_MONTH * 6;
+        }
         $token = array();
         $token['type'] = $type;
         $token['token'] = $this->_makeTokenValue();

@@ -378,8 +378,13 @@ class BaseController extends Controller
         $safeHosts = [$host];
 
         $parsedUrl = parse_url($url);
+
         if ($parsedUrl == false){
             return $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        }
+
+        if (!empty($parsedUrl['host'])){
+            $url = $this->unParseUrl($parsedUrl);
         }
 
         $isUnsafeHost = isset($parsedUrl['host']) && !in_array($parsedUrl['host'], $safeHosts);
@@ -390,6 +395,17 @@ class BaseController extends Controller
         }
 
         return strip_tags($url);
+    }
+
+    protected function unParseUrl($parsedUrl)
+    {
+        $scheme   = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '//';
+        $host     = $parsedUrl['host'] ?? '';
+        $port     = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
+        $path     = $parsedUrl['path'] ?? '';
+        $query    = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
+        $fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
+        return "$scheme$host$port$path$query$fragment";
     }
 
     /**

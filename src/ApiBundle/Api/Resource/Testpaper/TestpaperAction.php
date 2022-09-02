@@ -86,6 +86,8 @@ class TestpaperAction extends AbstractResource
             }
 
             $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $assessment['id'], $user['id']);
+        }else if('reviewing' != $answerRecord['status']){
+            $answerRecord = $this->getAnswerService()->continueAnswer($answerRecord['id']);
         }
 
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
@@ -102,6 +104,7 @@ class TestpaperAction extends AbstractResource
             'testpaper' => $testpaper,
             'items' => $items,
             'isShowTestResult' => 1,
+            'courseId' => $course['id']
         ];
     }
 
@@ -162,6 +165,8 @@ class TestpaperAction extends AbstractResource
         if (!$answerRecord || ($answerRecord && 'finished' == $answerRecord['status'])) {
             $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $assessment['id'], $user['id']);
             $answerReport = [];
+        }else if('reviewing' != $answerRecord['status']){
+            $answerRecord = $this->getAnswerService()->continueAnswer($answerRecord['id']);
         }
 
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
@@ -176,6 +181,7 @@ class TestpaperAction extends AbstractResource
             'testpaper' => $testpaper,
             'items' => $items,
             'isShowTestResult' => 0,
+            'courseId' => $course['id']
         ];
     }
 

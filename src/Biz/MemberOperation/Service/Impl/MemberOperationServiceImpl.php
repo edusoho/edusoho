@@ -33,15 +33,19 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
 
     public function updateRefundInfoByOrderId($orderId, $info)
     {
-        $record = $this->getRecordByOrderIdAndType($orderId, 'exit');
+        $records = $this->getRecordByOrderIdAndType($orderId, 'exit');
 
-        $field = ArrayToolkit::parts($info, array('refund_id', 'reason', 'reason_type'));
-        if (!empty($record['reason'])) {
-            unset($field['reason']);
-            unset($field['reason_type']);
+        foreach ($records as &$record)
+        {
+            $field = ArrayToolkit::parts($info, array('refund_id', 'reason', 'reason_type'));
+            if (!empty($record['reason'])) {
+                unset($field['reason']);
+                unset($field['reason_type']);
+            }
+            $record = array_merge($record, $field);
         }
 
-        return $this->getRecordDao()->update($record['id'], $field);
+        return $this->getRecordDao()->batchUpdate(ArrayToolkit::column($records, "id"), $records, 'id');
     }
 
     public function getJoinReasonByOrderId($orderId = 0)

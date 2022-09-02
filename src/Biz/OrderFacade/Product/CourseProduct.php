@@ -153,7 +153,7 @@ class CourseProduct extends BaseGoodsProduct
                 'reason' => $orderRefundItem['order_refund']['reason'],
                 'reason_type' => 'refund',
             ];
-            $this->getCourseMemberService()->removeStudent($course['id'], $orderItem['user_id'], $info);
+            $this->getCourseMemberService()->removeStudent($course['id'], $orderItem['user_id'], ['reason'=>'同意退款','reason_type'=>'exit']);
         }
         $this->updateMemberRecordByRefundItem($orderItem);
     }

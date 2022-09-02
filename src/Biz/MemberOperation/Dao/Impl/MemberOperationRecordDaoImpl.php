@@ -3,9 +3,10 @@
 namespace Biz\MemberOperation\Dao\Impl;
 
 use Biz\MemberOperation\Dao\MemberOperationRecordDao;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOperationRecordDao
+class MemberOperationRecordDaoImpl extends AdvancedDaoImpl implements MemberOperationRecordDao
 {
     protected $table = 'member_operation_record';
 
@@ -44,7 +45,7 @@ class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOpera
 
     public function getRecordByOrderIdAndType($orderId, $type)
     {
-        return $this->getByFields(array('order_id' => $orderId, 'operate_type' => $type));
+        return $this->findByFields(array('order_id' => $orderId, 'operate_type' => $type));
     }
 
     public function countUserIdsByConditions($conditions)

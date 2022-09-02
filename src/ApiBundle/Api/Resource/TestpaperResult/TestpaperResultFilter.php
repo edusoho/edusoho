@@ -23,7 +23,7 @@ class TestpaperResultFilter extends Filter
                 $rightItem += $questionType['right'];
                 $itemCount += $questionType['right'] + $questionType['partRight'] + $questionType['wrong'] + $questionType['noAnswer'];
             }
-            $data['testpaperResult']['rightRate'] = intval($rightItem / $itemCount * 100 + 0.5);
+            $data['testpaperResult']['rightRate'] = $itemCount === 0 ? 0 : intval($rightItem / $itemCount * 100 + 0.5);
         }
 
         if (!empty($data['items'])) {
