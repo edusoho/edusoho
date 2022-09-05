@@ -180,8 +180,8 @@
         this.postAnswerData(assessmentResponse)
       },
       saveAnswerData(assessmentResponse){
-        this.postAnswerData(assessmentResponse).done(function () {
-          parent.location.href = $('[name=save_goto_url]').val();
+        this.postAnswerData(assessmentResponse).done(() => {
+          this.returnToCourseDetail()
         })
       },
       postAnswerData(assessmentResponse) {
@@ -266,9 +266,7 @@
         })
       },
       returnToCourseDetail() {
-        const $backBtnDom = $('.js-back-link', window.parent.document);
-
-        window.parent.location.href = $backBtnDom.attr('href')
+        parent.location.href = $('[name=save_goto_url]').val();
       },
       deleteAttachment(fileId, flag) {
         if (flag) {
