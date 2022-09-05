@@ -621,8 +621,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             );
         }
 
-        if (AnswerService::ANSWER_RECORD_STATUS_PAUSED != $answerRecord['status']) {
-            throw new AnswerException('Answer not paused.', ErrorCode::ANSWER_NOTPAUSED);
+        if (in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED])) {
+            throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
         }
 
         $this->dispatch('answer.continued', $answerRecord);

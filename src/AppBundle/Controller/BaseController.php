@@ -379,6 +379,10 @@ class BaseController extends Controller
 
         $parsedUrl = parse_url($url);
 
+        if ($parsedUrl == false){
+            return $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        }
+
         if (!empty($parsedUrl['host'])){
             $url = $this->unParseUrl($parsedUrl);
         }
