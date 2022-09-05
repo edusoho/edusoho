@@ -189,15 +189,7 @@
         
         if (!this.ajaxTimeOut) {
           this.ajaxTimeOut = setTimeout(() => {
-            Modal.error({
-              ...commonConfig,
-              title: '网络连接不可用，自动保存失败',
-              okText: '重新保存',
-              onOk: () => {
-                Modal.destroyAll();
-                this.postAnswerData(assessmentResponse)
-              }
-            })
+            this.networkError(assessmentResponse);
             this.ajaxTimeOut = null
           }, 10 * 1000)
         }
@@ -214,6 +206,10 @@
           beforeSend(request) {
             request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
           },
+        }).then(result => {
+          if (!result.assessment_id) {
+            this.networkError(assessmentResponse);
+          }
         }).fail((result) => {
           const { code: errorCode, message, traceId } = result.responseJSON.error;
 
@@ -251,17 +247,20 @@
             return
           }
 
-          Modal.error({
-            ...commonConfig,
-            title: '网络连接不可用，自动保存失败',
-            okText: '重新保存',
-            onOk: () => {
-              Modal.destroyAll();
-              this.postAnswerData(assessmentResponse)
-            }
-          })
+          this.networkError(assessmentResponse);
         }).done(() => {
           this.ajaxTimeOut && clearTimeout(this.ajaxTimeOut)
+        })
+      },
+      networkError(assessmentResponse) {
+        Modal.error({
+          ...commonConfig,
+          title: '网络连接不可用，自动保存失败',
+          okText: '重新保存',
+          onOk: () => {
+            Modal.destroyAll();
+            this.postAnswerData(assessmentResponse)
+          }
         })
       },
       returnToCourseDetail() {
