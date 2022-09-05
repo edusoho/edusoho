@@ -207,10 +207,14 @@
             request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
           },
         }).then(result => {
+          this.ajaxTimeOut && clearTimeout(this.ajaxTimeOut)
+
           if (!result.assessment_id) {
             this.networkError(assessmentResponse);
           }
         }).fail((result) => {
+          this.ajaxTimeOut && clearTimeout(this.ajaxTimeOut)
+
           const { code: errorCode, message, traceId } = result.responseJSON.error;
 
           if (errorCode == '50095204') {
@@ -248,8 +252,6 @@
           }
 
           this.networkError(assessmentResponse);
-        }).done(() => {
-          this.ajaxTimeOut && clearTimeout(this.ajaxTimeOut)
         })
       },
       networkError(assessmentResponse) {
