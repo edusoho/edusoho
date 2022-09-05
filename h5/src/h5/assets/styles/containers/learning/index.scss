@@ -2,21 +2,23 @@
 @import './historyLearn/index.scss';
 
 .e-learn {
-  .van-tabs__line {
-    background-color: $primary-color;
-  }
-  .van-tab--active {
-    color: $primary-color;
-  }
-  .van-hairline--top-bottom::after {
-    border-top: none;
-  }
+	.van-tabs__line {
+		background-color: $primary-color;
+	}
+
+	.van-tab--active {
+		color: $primary-color;
+	}
+
+	.van-hairline--top-bottom::after {
+		border-top: none;
+	}
 }
 
 .e-learn.e-learn-padding {
-  padding-bottom: vw(60);
+	padding-bottom: vw(60);
 }
 
 .van-list {
-  margin-top: vw(20);
+	margin-top: 12px;
 }

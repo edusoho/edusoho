@@ -465,6 +465,7 @@ export default {
     nextLesson: 'Next lesson',
     openingTime: 'Opening time',
     examinationDuration: 'Test duration',
+    tips: 'Once the test starts, the test will be handed in automatically after the countdown is over',
     minutes: 'Minutes',
     testName: 'Name',
     noRestrictions: 'Without limiting',

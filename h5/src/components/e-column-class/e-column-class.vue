@@ -6,14 +6,12 @@
     <div class="column-class-left" :style="{ marginTop: typeList === 'classroom_list' ? '24px' : 0 }">
       <img 
         v-if="typeList === 'classroom_list'"
-        style="width: 90%;top: -17px;left: 50%;transform: translateX(-50%);"
-        class="absolute"
+        style="width: 90%;top: -15px;left: 50%;transform: translateX(-50%);"
+        class="absolute z-1"
         src="static/images/classroom/classroom-icon2.png" 
         srcset="static/images/classroom/classroom-icon2@2x.png" />
-      <img class="cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
-      <div v-if="Number(isVip)" class="column-class-left__member">
-        <div style="transform: scale(0.83);">{{ $t('e.freeForMembers') }}</div>
-      </div>
+      <img class="relative z-10 cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
+      <div v-if="Number(isVip)" class="column-class-left__member">{{ $t('e.freeForMembers') }}</div>
       <div v-show="courseType === 'live'" class="column-class-left__live">{{ $t('e.live') }}</div>
     </div>
     <div class="column-class-right">

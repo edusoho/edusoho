@@ -31,7 +31,9 @@
             result || !disabled ? '' : 'intro-tip',
           ]"
         >
-          {{ limitTime }}{{ $t('courseLearning.minutes') }}
+          {{ limitTime }}
+          {{ $t('courseLearning.minutes') }}
+          {{ '    (' + $t('courseLearning.tips') + ')' }}
         </div>
         <div v-else class="intro-panel__content">{{ $t('courseLearning.noRestrictions') }}</div>
       </van-panel>

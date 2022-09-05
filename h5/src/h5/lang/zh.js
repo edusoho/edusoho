@@ -466,6 +466,7 @@ export default {
     nextLesson: '下一课',
     openingTime: '开考时间',
     examinationDuration: '考试时长',
+    tips: '考试一旦开始，倒计时结束后将自动交卷',
     minutes: '分钟',
     testName: '考试名称',
     noRestrictions: '不限制',

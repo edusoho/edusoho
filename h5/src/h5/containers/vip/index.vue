@@ -172,7 +172,7 @@ export default {
     },
 
     currentLevel() {
-      return this.levels[this.activeIndex];
+      return this.levels[this.activeIndex] || {};
     },
 
     userLevelStatus() {
@@ -220,6 +220,8 @@ export default {
     },
 
     courseData() {
+      if (!this.currentLevel.courses) return {}
+      
       const { data, paging } = this.currentLevel.courses;
       if (data.length == 0) return false;
       const dataFormat = {
@@ -234,6 +236,8 @@ export default {
     },
 
     classroomData() {
+      if (!this.currentLevel.classrooms) return {}
+      
       const { data, paging } = this.currentLevel.classrooms;
       if (data.length == 0) return false;
       const dataFormat = {

@@ -5,16 +5,14 @@
     <div class="relative row-class-left">
       <img 
         v-if="typeList === 'classroom_list'"
-        style="height: 90%;left: -16px;top: 50%;transform: translateY(-50%);"
-        class="absolute"
+        style="height: 90%;left: -15px;top: 50%;transform: translateY(-50%);"
+        class="absolute z-1"
         src="static/images/classroom/classroom-icon.png" 
         srcset="static/images/classroom/classroom-icon@2x.png" />
 
-      <img class="cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
+      <img class="relative z-10 cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
       
-      <div v-if="Number(isVip)" class="row-class-left__member">
-        <div style="transform: scale(0.83);">{{ $t('e.freeForMembers') }}</div>
-      </div>
+      <div v-if="Number(isVip)" class="row-class-left__member">{{ $t('e.freeForMembers') }}</div>
     </div>
 
     <div class="row-class-right">

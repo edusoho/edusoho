@@ -120,15 +120,16 @@
 
 		&__member {
 			position: absolute;
-			top: 0;
-			right: 0;
-			width: 50px;
-			height: 20px;
+			top: -1px;
+			right: -4px;
+			z-index: 11;
+			padding: 2px 8px;
 			color: #fff;
 			font-size: 12px;
 			text-align: center;
 			background-color: #162923;
 			border-radius: 0 0 0 6px;
+			transform: scale(0.83);
 		}
 
 		&__live {
@@ -209,31 +210,33 @@
 
 		&__member {
 			position: absolute;
-			top: 0;
-			right: 0;
-			width: 56px;
-			height: 18px;
+			top: -1px;
+			right: -4px;
+			z-index: 11;
+			padding: 2px 8px;
 			color: #fff;
 			font-size: 12px;
 			line-height: 18px;
 			text-align: center;
 			background-color: #162923;
 			border-radius: 0 6px;
+			transform: scale(0.83);
 		}
 
 		&__live {
 			position: absolute;
 			top: 0;
 			left: 0;
+			z-index: 11;
 			width: 44px;
 			height: 18px;
-			text-align: center;
-			line-height: 18px;
-			font-weight: 500;
 			color: #fff;
+			font-weight: 500;
 			font-size: 12px;
-			border-radius: 6px 0px;
-			background: #FF900E;
+			line-height: 18px;
+			text-align: center;
+			background: #ff900e;
+			border-radius: 6px 0;
 
 			.icon-renqi {
 				margin-right: 2px;

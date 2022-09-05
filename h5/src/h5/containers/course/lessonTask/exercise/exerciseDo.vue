@@ -26,13 +26,13 @@
     <div class="paper-footer">
       <div>
         <span @click="cardShow = true">
-          <i class="iconfont icon-Questioncard" />
+          <i class="mb-8 iconfont icon-Questioncard" />
           {{ $t('courseLearning.questionCard') }}
         </span>
       </div>
       <div>
         <span @click="submitpaper">
-          <i class="iconfont icon-submit" />
+          <i class="mb-8 iconfont icon-submit" />
           {{ $t('courseLearning.submit2') }}
         </span>
       </div>
@@ -108,6 +108,8 @@ export default {
       usedTime: null, // 使用时间，本地实时计时
       isHandExercise: false, // 是否已经交完练习
       slideIndex: 0, // 题库组件当前所在的划片位置
+      forceLeave: false,
+      interval: null
     };
   },
   computed: {
@@ -115,12 +117,6 @@ export default {
       isLoading: state => state.isLoading,
       user: state => state.user,
     }),
-  },
-  watch: {
-    answer: {
-      handler: 'saveAnswer',
-      deep: true,
-    },
   },
   mounted() {
     this.getData();
@@ -137,10 +133,12 @@ export default {
     next();
   },
   beforeRouteLeave(to, from, next) {
+    this.interval && clearInterval(this.interval)
     // 可捕捉离开提醒
     if (
       this.info.length == 0 ||
       this.isHandExercise ||
+      this.forceLeave ||
       this.exercise.status != 'doing'
     ) {
       next();
@@ -304,10 +302,6 @@ export default {
       this.localuseTime = `exercise-${this.user.id}-${this.exercise.id}-usedTime`;
       this.lastAnswer = JSON.parse(localStorage.getItem(this.localanswerName));
     },
-    // 实时存储答案
-    saveAnswer(val) {
-      localStorage.setItem(this.localanswerName, JSON.stringify(val));
-    },
     // 实时存储时间
     saveTime() {
       let time = localStorage.getItem(this.localuseTime) || 0;
@@ -392,28 +386,83 @@ export default {
             /**
              * 4036705：已经提交过此次练习，直接去结果页
              */
-            const toast = Toast.fail(err.message);
             if (err.code == '4036705') {
+              const toast = Toast.fail(err.message);
               setTimeout(() => {
                 this.isHandExercise = true;
                 toast.clear();
                 resolve();
                 this.showResult();
               }, 2000);
-            } else {
-              reject(err);
+              return
             }
+
+            if (err.code == '50095204') {
+              // 试卷已提交 -- 退出答题
+              Dialog.confirm({
+                title: '你已提交过答题，当前页面无法重复提交',
+                showCancelButton: false,
+                confirmButtonText: '退出答题'
+              }).then(() => this.exitPage())
+              return
+            }
+
+            reject(err);
           });
       });
     },
     saveAnswerInterval() {
-      setInterval(() => {
-        console.log('save exam')
-        this.saveAnswerdo({
-          answer: JSON.parse(JSON.stringify(this.answer)),
-          resultId: this.exercise.id,
-        })
+      this.interval = setInterval(() => {
+        this.saveAnswerAjax()
       }, 30 * 1000)
+    },
+    saveAnswerAjax() {
+      this.saveAnswerdo({
+        admission_ticket: this.exercise.admission_ticket,
+        answer: JSON.parse(JSON.stringify(this.answer)),
+        resultId: this.exercise.id,
+      }).catch((error) => {
+        const { code: errorCode, message, traceId } = error;
+
+        if (errorCode === 50095204) {
+          // 试卷已提交 -- 退出答题
+          Dialog.confirm({
+            title: '你已提交过答题，当前页面无法重复提交',
+            showCancelButton: false,
+            confirmButtonText: '退出答题'
+          }).then(() => this.exitPage())
+          return
+        }
+
+        if (errorCode === 50095209) {
+          // 不能同时多端答题
+          Dialog.confirm({
+            title: '有新答题页面，请在新页面中继续答题',
+            showCancelButton: false,
+            confirmButtonText: '确定'
+          }).then(() => this.exitPage())
+          return
+        }
+
+        if (traceId) {
+          Dialog.confirm({
+            title: '答题保存失败，请保存截图后，联系技术支持处理',
+            message: `【${message}】【${traceId}】`,
+            confirmButtonText: '退出答题'
+          }).then(() => this.exitPage())
+          return
+        }
+
+        Dialog.confirm({
+          title: '网络连接不可用，自动保存失败',
+          showCancelButton: false,
+          confirmButtonText: '重新保存'
+        }).then(() => this.saveAnswerAjax())
+      })
+    },
+    exitPage() {
+      this.forceLeave = true
+      this.$router.push(`/course/${this.exercise.courseId}`)
     },
     // 跳转到结果页
     showResult() {
@@ -442,5 +491,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

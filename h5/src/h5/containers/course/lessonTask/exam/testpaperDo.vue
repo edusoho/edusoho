@@ -24,13 +24,13 @@
     <div class="paper-footer">
       <div>
         <span @click="cardShow = true">
-          <i class="iconfont icon-Questioncard" />
+          <i class="mb-8 iconfont icon-Questioncard" />
          {{ $t('courseLearning.questionCard') }}
         </span>
       </div>
       <div>
         <span @click="submitPaper()">
-          <i class="iconfont icon-submit" />
+          <i class="mb-8 iconfont icon-submit" />
           {{ $t('courseLearning.handInThePaper') }}
         </span>
       </div>
@@ -162,6 +162,8 @@ export default {
       startTime: null,
       backUrl: '',
       slideIndex: 0, // 题库组件当前所在的划片位置
+      forceLeave: false, // 强制离开考试
+      interval: null
     };
   },
   mounted() {
@@ -178,10 +180,12 @@ export default {
     next();
   },
   beforeRouteLeave(to, from, next) {
+    this.interval && clearInterval(this.interval)
     // 可捕捉离开提醒
     if (
       this.info.length == 0 ||
       this.isHandExam ||
+      this.forceLeave || 
       this.testpaperResult.status != 'doing'
     ) {
       next();
@@ -206,12 +210,6 @@ export default {
       user: state => state.user,
       selectedPlanId: state => state.course.selectedPlanId,
     }),
-  },
-  watch: {
-    answer: {
-      handler: 'saveAnswer',
-      deep: true,
-    },
   },
   methods: {
     ...mapActions('course', ['handExamdo', 'saveAnswerdo']),
@@ -262,6 +260,7 @@ export default {
       // 赋值数据
       this.items = res.items;
       this.testpaper = res.testpaper;
+      this.testpaper.courseId = res.courseId;
       res.testpaperResult.limitedTime = Number(res.testpaperResult.limitedTime);
       this.testpaperResult = res.testpaperResult;
 
@@ -482,6 +481,16 @@ export default {
             this.showResult();
           })
           .catch(err => {
+
+            if (err.code == 50095204) {
+              Dialog.confirm({
+                title: '你已提交过答题，当前页面无法重复提交',
+                showCancelButton: false,
+                confirmButtonText: '退出答题'
+              }).then(() => this.exitPage())
+              return
+            }
+
             reject(err);
             Toast.fail(err.message);
             this.isHandExam = true;
@@ -489,17 +498,59 @@ export default {
           });
       });
     },
-    // 实时存储答案
-    saveAnswer(val) {
-      localStorage.setItem(this.localanswerName, JSON.stringify(val));
-    },
     saveAnswerInterval() {
-      setInterval(() => {
-        this.saveAnswerdo({
-          answer: JSON.parse(JSON.stringify(this.answer)),
-          resultId: this.testpaperResult.id,
-        })
+      this.interval = setInterval(() => {
+        this.saveAnswerAjax()
       }, 30 * 1000)
+    },
+    saveAnswerAjax() {
+      this.saveAnswerdo({
+        admission_ticket: this.testpaperResult.admission_ticket,
+        answer: JSON.parse(JSON.stringify(this.answer)),
+        resultId: this.testpaperResult.id,
+      })
+      .catch((error) => {
+        const { code: errorCode, message, traceId } = error;
+
+        if (errorCode === 50095204) {
+          // 试卷已提交 -- 退出答题
+          Dialog.confirm({
+            title: '你已提交过答题，当前页面无法重复提交',
+            showCancelButton: false,
+            confirmButtonText: '退出答题'
+          }).then(() => this.exitPage())
+          return
+        }
+
+        if (errorCode === 50095209) {
+          // 不能同时多端答题
+          Dialog.confirm({
+            title: '有新答题页面，请在新页面中继续答题',
+            showCancelButton: false,
+            confirmButtonText: '确定'
+          }).then(() => this.exitPage())
+          return
+        }
+
+        if (traceId) {
+          Dialog.confirm({
+            title: '答题保存失败，请保存截图后，联系技术支持处理',
+            message: `【${message}】【${traceId}】`,
+            confirmButtonText: '退出答题'
+          }).then(() => this.exitPage())
+          return
+        }
+
+        Dialog.confirm({
+          title: '网络连接不可用，自动保存失败',
+          showCancelButton: false,
+          confirmButtonText: '重新保存'
+        }).then(() => this.saveAnswerAjax())
+      })
+    },
+    exitPage() {
+      this.forceLeave = true
+      this.$router.push(`/course/${this.testpaper.courseId}`)
     },
     // 实时存储时间
     saveTime() {
@@ -536,4 +587,4 @@ export default {
     },
   },
 };
-</script>
+</script> 

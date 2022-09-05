@@ -17,21 +17,23 @@
 
 		&__member {
 			position: absolute;
-			top: 0;
-			right: 0;
-			width: 50px;
-			height: 20px;
+			top: -1px;
+			right: -4px;
+			z-index: 11;
+			padding: 2px 8px;
 			color: #fff;
 			font-weight: 500;
 			font-size: 12px;
 			text-align: center;
 			background-color: #162923;
 			border-radius: 0 0 0 6px;
+			transform: scale(0.83);
 		}
 
 		&__live {
 			position: absolute;
 			bottom: vw(0);
+			z-index: 11;
 			display: flex;
 			align-items: flex-end;
 			justify-content: space-between;
@@ -87,7 +89,7 @@
 
 		.completionRate,
 		.masteryRate {
-			color: #86909C;
+			color: #86909c;
 			font-size: 12px;
 		}
 	}

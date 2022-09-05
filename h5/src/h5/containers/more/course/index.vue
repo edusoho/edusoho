@@ -338,7 +338,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
   .more {
     background-color: #f7f9fa;

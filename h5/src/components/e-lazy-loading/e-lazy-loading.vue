@@ -16,21 +16,25 @@
         :course="course | courseListData(listObj, 'new', 'h5')"
       />
     </template>
-    <courseItem
-      v-else
-      v-for="(course, index) in courseList"
-      :key="index"
-      :type="courseItemType"
-      :normal-tag-show="normalTagShow"
-      :vip-tag-show="vipTagShow"
-      :type-list="typeList"
-      :is-vip="course.vipLevelId"
-      :discountType="discountType(course)"
-      :discount="discount(course)"
-      :course-type="courseType(course)"
-      :course="course | courseListData(listObj)"
-      :showNumberData="showNumberData"
-    />
+
+    <template v-else>
+      <div v-for="(course) in courseList" :key="course.id">
+        <courseItem
+          :type="courseItemType"
+          :normal-tag-show="normalTagShow"
+          :vip-tag-show="vipTagShow"
+          :type-list="typeList"
+          :is-vip="course.vipLevelId"
+          :discountType="discountType(course)"
+          :discount="discount(course)"
+          :course-type="courseType(course)"
+          :course="course | courseListData(listObj)"
+          :showNumberData="showNumberData"
+        />
+        <div v-if="splitLine" class="p-16 pt-4" style="width: 100%;"><div style="height: 1px;background-color: #F2F3F5;"></div></div>
+      </div>
+    </template>
+    
   </van-list>
 </template>
 
@@ -55,6 +59,7 @@ export default {
     isRequestCompile: Boolean,
     isAllData: Boolean,
     courseItemType: String,
+    splitLine: Boolean,
     typeList: {
       type: String,
       default: 'course_list',
