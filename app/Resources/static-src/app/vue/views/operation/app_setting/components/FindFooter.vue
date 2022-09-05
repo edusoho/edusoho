@@ -9,10 +9,6 @@
       <div>{{ 'app.footer.learn' | trans }}</div>
     </div>
     <div class="app-footer__item pull-left">
-      <img style="width: 27px;" src="/static-dist/app/img/vue/decorate/navbar/group.png" />
-      <div>{{ 'app.footer.dynamic' | trans }}</div>
-    </div>
-    <div class="app-footer__item pull-left">
       <img style="width: 27px;" src="/static-dist/app/img/vue/decorate/navbar/my.png" />
       <div>{{ 'app.footer.mine' | trans }}</div>
     </div>
@@ -31,7 +27,7 @@
   border-top: 1px solid #e1e1e1;
 
   &__item {
-    width: 25%;
+    width: 33.33%;
     text-align: center;
 
     .svg-icon {
