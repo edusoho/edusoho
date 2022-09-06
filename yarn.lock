@@ -2633,6 +2633,11 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001093, caniuse-lite@^1.0.30001097:
   version "1.0.30001107"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001107.tgz#809360df7a5b3458f627aa46b0f6ed6d5239da9a"
 
+caniuse-lite@^1.0.30001390:
+  version "1.0.30001390"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001390.tgz#158a43011e7068ef7fc73590e9fd91a7cece5e7f"
+  integrity sha512-sS4CaUM+/+vqQUlCvCJ2WtDlV81aWtHhqeEVkLokVJJa3ViN4zDxAGfq9R8i1m90uGHxo99cy10Od+lvn3hf0g==
+
 capture-stack-trace@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/capture-stack-trace/-/capture-stack-trace-1.0.1.tgz#a6c0bbe1f38f3aa0b92238ecb6ff42c344d4135d"
@@ -6174,14 +6179,15 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@^1.0.38:
-  version "1.0.38"
-  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.38.tgz#16a85c270b590ecf6e9a9b338375c997b3880e56"
-  integrity sha512-vzTqmaNy1yBfS8M3748vvRXvzdy5nm/d8p7mTsFC9aWgYqKAldUZKtu2kZ4ugpt69SFCETlrxcK65msQPDYtGw==
+item-bank@^1.0.39:
+  version "1.0.39"
+  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.39.tgz#ef3cabfb28ac6fa3726f757a686ed7e3022f9f0a"
+  integrity sha512-pNLztp05QFIbasgfY6FI9WeDM9fvOAONAQTwgNqtd+eXVT8XAAjLzedAKz/+4yRUiXd/eOiwaJF6hoBg8Fa/AQ==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
     babel-plugin-import "^1.13.0"
+    caniuse-lite "^1.0.30001390"
     ckeditor4 "^4.14.0"
     core-js "^3.6.4"
     es-ckeditor "4.7.2-patch13"
