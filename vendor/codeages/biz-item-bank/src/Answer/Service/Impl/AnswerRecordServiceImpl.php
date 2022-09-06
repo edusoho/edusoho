@@ -29,6 +29,7 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
             'answer_scene_id' => ['required', 'integer'],
             'assessment_id' => ['integer', ['min', 0]],
             'user_id' => ['integer', ['min', 0]],
+            'admission_ticket' => ['required'],
         ]);
 
         if ($answerRecord['user_id'] <= 0) {
@@ -85,6 +86,7 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
             'used_time' => ['integer'],
             'answer_report_id' => ['integer'],
             'end_time' => ['integer'],
+            'admission_ticket' => [],
         ]);
 
         return $this->getAnswerRecordDao()->update($id, $answerRecord);

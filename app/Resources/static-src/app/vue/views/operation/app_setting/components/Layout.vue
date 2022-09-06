@@ -67,7 +67,7 @@ export default {
 <style lang="less" scoped>
 .component-layout {
   position: relative;
-  padding: 12px 0;
+  padding: 16px 0;
   width: 100%;
   background-color: transparent;
 

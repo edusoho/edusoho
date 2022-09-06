@@ -2,6 +2,7 @@ import SmsSender from 'app/common/widget/sms-sender';
 import Cookies from 'js-cookie';
 import notify from 'common/notify';
 import Drag from 'app/common/drag';
+import Coordinate from 'app/common/coordinate';
 
 export default class MobileBind {
   constructor() {
@@ -91,6 +92,8 @@ export default class MobileBind {
 
     this.$smsCode.on('click', function () {
       self.$smsCode.attr('disabled', true);
+      let coordinate = new Coordinate();
+      const encryptedPoint = coordinate.getCoordinate(event, $('meta[name=csrf-token]').attr('content'));
       new SmsSender({
         element: '.js-sms-send',
         url: self.$smsCode.data('url'),
@@ -98,6 +101,7 @@ export default class MobileBind {
         captcha: true,
         captchaValidated: true,
         captchaNum: 'dragCaptchaToken',
+        encryptedPoint: encryptedPoint,
         preSmsSend: function() {
           return true;
         },

@@ -49,8 +49,22 @@ class PaidOrderStatus extends AbstractOrderStatus
             'paid_coin_amount',
         ));
         $data['status'] = PaidOrderStatus::NAME;
-        $data['refund_deadline'] = empty($order['expired_refund_days']) ? 0 : $data['pay_time'] + $order['expired_refund_days']*86400;
+        $data['refund_deadline'] = $this->hasNoRefundDeadLine($order, $data) ? 0 : $data['pay_time'] + $order['expired_refund_days'] * 86400;
         return $this->getOrderDao()->update($order['id'], $data);
+    }
+
+    protected function hasNoRefundDeadLine($order, $data)
+    {
+        $orderItem = $this->getOrderItemDao()->findByOrderId($order['id'])[0];
+        if ($orderItem['target_type'] == 'vip') {
+            return true;
+        }
+        if (empty($order['expired_refund_days'])) {
+            return true;
+        }
+        if (empty($data['paid_cash_amount']) && empty($data['paid_coin_amount'])) {
+            return true;
+        }
     }
 
     protected function payOrderItems($order)

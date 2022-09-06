@@ -37,6 +37,8 @@ import course_list from './components/CourseList/index.vue';
 import classroom_list from './components/ClassroomList/index.vue';
 import open_course_list from './components/OpenCourseList/index.vue';
 import item_bank_exercise from './components/ItemBankExercise/index.vue';
+import announcement from './components/Announcement/index.vue';
+import information from './components/Information/index.vue';
 
 export default {
   components: {
@@ -50,7 +52,9 @@ export default {
     course_list,
     classroom_list,
     open_course_list,
-    item_bank_exercise
+    item_bank_exercise,
+    announcement,
+    information
   },
 
   data() {

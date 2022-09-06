@@ -2,9 +2,9 @@
 
 namespace Biz\MemberOperation\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface MemberOperationRecordDao extends GeneralDaoInterface
+interface MemberOperationRecordDao extends AdvancedDaoInterface
 {
     public function countGroupByDate($conditions, $sort, $dateColumn = 'operate_time');
 

@@ -35,6 +35,9 @@
   import ActivityEmitter from '../../activity/activity-emitter';
   import dataURLToBlob from "dataurl-to-blob";
   import {checkBrowserCompatibility} from '../../face-inspection/util';
+  import { Modal } from 'ant-design-vue';
+  
+  const commonConfig = { keyboard: false, centered: true, footer: false, class: 'error-modal' }
 
   export default {
     data() {
@@ -84,7 +87,9 @@
             }
           });
           return time;
-        }
+        },
+        ajaxTimeOut: null,
+        isReachTime: false,
       };
     },
     created() {
@@ -107,11 +112,7 @@
         this.assessment = res.assessment;
         this.answerRecord = res.answer_record;
         this.answerScene = res.answer_scene;
-
-        const { answer_record_id, assessment_id } = res.assessment_response;
-        const assessmentResponse = window.localStorage.getItem(`assessmentResponse-${answer_record_id}-${assessment_id}`);
-
-        this.assessmentResponse = assessmentResponse ? JSON.parse(assessmentResponse) : res.assessment_response; // 以本地缓存数据优先（本地数据非空时）
+        this.assessmentResponse = res.assessment_response;
       })
     },
     methods: {
@@ -128,6 +129,25 @@
           beforeSend(request) {
             request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
           },
+        }).fail((result) => {
+          if (!result.responseJSON) {
+            this.networkError(assessmentResponse);
+
+            return
+          }
+
+          const { code: errorCode } = result.responseJSON.error;
+
+          if (errorCode == '50095204') {
+            // 试卷已提交 -- 退出答题
+            Modal.error({
+              ...commonConfig,
+              title: '你已提交过答题，当前页面无法重复提交',
+              okText: '退出答题',
+              onOk: () => this.returnToCourseDetail()
+            })
+            return
+          }
         }).done(function (resp) {
           that.emitter.emit('finish', {data: ''});
           location.replace($('[name=submit_goto_url]').val());
@@ -135,6 +155,7 @@
       },
       reachTimeSubmitAnswerData(assessmentResponse) {
         const that = this;
+        this.isReachTime = true;
         $.ajax({
           url: '/api/submit_answer',
           contentType: 'application/json;charset=utf-8',
@@ -165,15 +186,21 @@
         this.postAnswerData(assessmentResponse)
       },
       saveAnswerData(assessmentResponse){
-        this.postAnswerData(assessmentResponse).done(function () {
-          parent.location.href = $('[name=save_goto_url]').val();
+        this.postAnswerData(assessmentResponse).done(() => {
+          this.returnToCourseDetail()
         })
       },
       postAnswerData(assessmentResponse) {
-        const { answer_record_id, assessment_id } = assessmentResponse;
+        if (this.isReachTime) return
+        
+        if (!this.ajaxTimeOut) {
+          this.ajaxTimeOut = setTimeout(() => {
+            this.networkError(assessmentResponse);
+            this.ajaxTimeOut = null
+          }, 10 * 1000)
+        }
 
-        window.localStorage.setItem(`assessmentResponse-${answer_record_id}-${assessment_id}`, JSON.stringify(assessmentResponse));
-
+        assessmentResponse.admission_ticket = this.answerRecord.admission_ticket;
         return $.ajax({
           url: '/api/save_answer',
           contentType: 'application/json;charset=utf-8',
@@ -185,7 +212,71 @@
           beforeSend(request) {
             request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
           },
+        }).then(result => {
+          this.ajaxTimeOut && clearTimeout(this.ajaxTimeOut)
+
+          if (!result.assessment_id) {
+            this.networkError(assessmentResponse);
+          }
+        }).fail((result) => {
+          if (!result.responseJSON) {
+            this.networkError(assessmentResponse);
+            this.ajaxTimeOut && clearTimeout(this.ajaxTimeOut)
+
+            return
+          }
+
+          const { code: errorCode, message, traceId } = result.responseJSON.error;
+
+          if (errorCode == '50095204') {
+            // 试卷已提交 -- 退出答题
+            Modal.error({
+              ...commonConfig,
+              title: '你已提交过答题，当前页面无法重复提交',
+              okText: '退出答题',
+              onOk: () => this.returnToCourseDetail()
+            })
+            return
+          }
+
+          if (errorCode == '50095209') {
+            // 不能同时多端答题
+            Modal.error({
+              ...commonConfig,
+              title: '有新答题页面，请在新页面中继续答题',
+              okText: '确定',
+              onOk: () => this.returnToCourseDetail()
+            })
+            return
+          }
+
+          if (traceId) {
+            Modal.error({
+              ...commonConfig,
+              title: '答题保存失败，请保存截图后，联系技术支持处理',
+              content: `【${message}】【${traceId}】`,
+              cancelText: '取消',
+              okText: '退出答题',
+              onOk: () => this.returnToCourseDetail()
+            })
+            return
+          }
+
         })
+      },
+      networkError(assessmentResponse) {
+        Modal.error({
+          ...commonConfig,
+          title: '网络连接不可用，自动保存失败',
+          okText: '重新保存',
+          onOk: () => {
+            Modal.destroyAll();
+            this.postAnswerData(assessmentResponse)
+          }
+        })
+      },
+      returnToCourseDetail() {
+        parent.location.href = $('[name=save_goto_url]').val();
       },
       deleteAttachment(fileId, flag) {
         if (flag) {

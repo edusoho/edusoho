@@ -46,7 +46,8 @@ class GoodsSettingController extends BaseController
         $classroomSetting = $this->getSettingService()->get('classroom', []);
         $classroomSetting['show_review'] = $setting['show_review'];
         //是否显示班级人数，只要商品设置为显示任何一种，班级都将是否显示班级人数设置为1
-        $classroomSetting['show_student_num_enabled'] = !empty($setting['show_number_data']) && 'none' === $setting['show_number_data'] ? 0 : 1;
+        $classroomSetting['show_student_num_enabled'] = !empty($setting['show_number_data']) && 'join' === $setting['show_number_data'] ? 1 : 0;
+        $classroomSetting['show_hit_num_enabled'] = !empty($setting['show_number_data']) && 'visitor' === $setting['show_number_data'] ? 1 : 0;
         $this->getSettingService()->set('classroom', $classroomSetting);
     }
 

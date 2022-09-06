@@ -80,4 +80,6 @@ interface AnswerService
      * @return mixed
      */
     public function reviseFillAnswer($answerRecordId, $fillData);
+
+    public function buildAssessmentResponse($answerRecordId);
 }

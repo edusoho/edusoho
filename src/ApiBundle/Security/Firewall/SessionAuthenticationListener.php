@@ -2,8 +2,10 @@
 
 namespace ApiBundle\Security\Firewall;
 
+use ApiBundle\Api\Exception\ErrorCode;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -28,10 +30,6 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
             return;
         }
 
-        if (!$this->isCrsfTokenValid($request)) {
-            return;
-        }
-
         $token = unserialize($token);
 
         if ($token instanceof TokenInterface) {
@@ -41,17 +39,6 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
         }
 
         $this->getTokenStorage()->setToken($token);
-    }
-
-    private function isCrsfTokenValid(Request $request)
-    {
-        if ($request->isXmlHttpRequest()) {
-            $token = $request->headers->get('X-CSRF-Token');
-        } else {
-            $token = $request->request->get('_csrf_token', '');
-        }
-
-        return $this->container->get('security.csrf.token_manager')->isTokenValid(new CsrfToken('site', $token));
     }
 
     /**

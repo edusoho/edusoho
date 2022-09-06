@@ -7,6 +7,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Classroom\Service\LearningDataAnalysisService;
 
 class MeClassroom extends AbstractResource
 {
@@ -30,6 +31,11 @@ class MeClassroom extends AbstractResource
             $classrooms = $this->getClassrooms($conditions, [], $offset, $limit);
             $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
 
+            foreach ($classrooms as &$classroom) {
+                $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
+                $classroom['learningProgressPercent'] = $progress['percent'];
+            }
+
             return $this->makePagingObject($classrooms, $total, $offset, $limit);
         } else {
             $members = $this->getClassroomService()->searchMembers($conditions, [], 0, $total);
@@ -41,6 +47,8 @@ class MeClassroom extends AbstractResource
 
             foreach ($members as $member) {
                 $classrooms[$member['classroomId']]['lastLearnTime'] = $member['createdTime'];
+                $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($member['classroomId'], $this->getCurrentUser()->getId());
+                $classrooms[$member['classroomId']]['learningProgressPercent'] = $progress['percent'];
             }
 
             array_multisort(ArrayToolkit::column($classrooms, 'lastLearnTime'), SORT_DESC, $classrooms);
@@ -65,5 +73,13 @@ class MeClassroom extends AbstractResource
     private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    protected function getLearningDataAnalysisService()
+    {
+        return $this->service('Classroom:LearningDataAnalysisService');
     }
 }

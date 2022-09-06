@@ -22,8 +22,6 @@ export default {
 
 <style lang="less" scoped>
 .gn-item {
-  padding-top: 16px;
-  padding-bottom: 16px;
   text-align: center;
 
   &__img {
@@ -40,11 +38,12 @@ export default {
   }
 
   &__title {
-    margin-top: 8px;
-    height: 16px;
+    margin-top: 4px;
+    height: 20px;
     font-size: 12px;
-    color: #464646;
-    line-height: 16px;
+    color: #1D2129;
+    font-weight: 400;
+    line-height: 20px;
   }
 }
 </style>

@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Classroom\Service\LearningDataAnalysisService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
@@ -126,6 +127,8 @@ class MeJoined extends AbstractResource
             $classrooms[$member['classroomId']]['smallPicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
             $classrooms[$member['classroomId']]['middlePicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
             $classrooms[$member['classroomId']]['largePicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
+            $progress = $this->getClassroomLearningDataAnalysisService()->getUserLearningProgress($member['classroomId'], $this->getCurrentUser()->getId());
+            $classrooms[$member['classroomId']]['learningProgressPercent'] = $progress['percent'];
         }
 
         return $classrooms;
@@ -264,5 +267,13 @@ class MeJoined extends AbstractResource
     private function getLearningDataAnalysisService()
     {
         return $this->service('Course:LearningDataAnalysisService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    protected function getClassroomLearningDataAnalysisService()
+    {
+        return $this->service('Classroom:LearningDataAnalysisService');
     }
 }

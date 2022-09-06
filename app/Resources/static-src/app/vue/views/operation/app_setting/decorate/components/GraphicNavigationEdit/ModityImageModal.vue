@@ -23,13 +23,14 @@ import _ from 'lodash';
 import UploadImage from 'app/vue/components/UploadFile/Image.vue';
 
 const images = [
-  'gn_classification.png',
-  'gn_free.png',
+  'gn_classroom.png',
+  'gn_opencourse.png',
+  'gn_class.png',
+  'gn_vip.png',
   'gn_collection.png',
   'gn_hot.png',
   'gn_live.png',
   'gn_question.png',
-  'gn_vip.png',
   'gn_wrong.png'
 ];
 
@@ -79,7 +80,7 @@ export default {
 
   img {
     overflow: hidden;
-    margin-right: 16px;
+    margin-right: 8px;
     width: 40px;
     height: 40px;
     border-radius: 16px;

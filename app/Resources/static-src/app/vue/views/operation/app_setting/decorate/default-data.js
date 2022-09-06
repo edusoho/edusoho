@@ -54,19 +54,24 @@ const DefaultData = {
     moduleType: '',
     data: [
       {
-        title: Translator.trans('classification_class'),
-        image: { uri: `${origin}/static-dist/app/img/vue/decorate/gn_classification.png` },
+        title: Translator.trans('decorate.class_classification'),
+        image: { uri: `${origin}/static-dist/app/img/vue/decorate/gn_classroom.png` },
+        link: { type: 'classroom' }
+      },
+      {
+        title: Translator.trans('decorate.open_class_classification'),
+        image: { uri: `${origin}/static-dist/app/img/vue/decorate/gn_opencourse.png` },
         link: { type: 'openCourse' }
       },
       {
-        title: Translator.trans('free_lesson'),
-        image: { uri: `${origin}/static-dist/app/img/vue/decorate/gn_free.png` },
+        title: Translator.trans('decorate.course_sorts'),
+        image: { uri: `${origin}/static-dist/app/img/vue/decorate/gn_class.png` },
         link: { type: 'course' }
       },
       {
-        title: Translator.trans('popular_class'),
-        image: { uri: `${origin}/static-dist/app/img/vue/decorate/gn_hot.png` },
-        link: { type: 'classroom' }
+        title: Translator.trans('decorate.members_only'),
+        image: { uri: `${origin}/static-dist/app/img/vue/decorate/gn_vip.png` },
+        link: { type: 'vip' }
       }
     ]
   },
@@ -116,6 +121,16 @@ const DefaultData = {
       title: '',
       titleShow: 'show'
     }
+  },
+  announcement: {
+    type: 'announcement',
+    moduleType: '',
+    data: {}
+  },
+  information: {
+    type: 'information',
+    moduleType: '',
+    data: []
   }
 };
 

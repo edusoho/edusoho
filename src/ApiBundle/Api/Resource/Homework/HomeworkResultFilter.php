@@ -10,6 +10,7 @@ class HomeworkResultFilter extends Filter
     protected $publicFields = array(
         'id', 'paperName', 'testId', 'userId', 'score', 'objectiveScore', 'subjectiveScore', 'teacherSay', 'rightItemCount', 'passedStatus',
         'limitedTime', 'beginTime', 'endTime', 'status', 'checkTeacherId', 'checkedTime', 'usedTime', 'migrateResultId', 'items', 'rightRate',
+        'admission_ticket', 'courseId'
     );
 
     protected $simpleFields = array(

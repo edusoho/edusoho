@@ -56,10 +56,10 @@
 
 <script>
 const categorys = [
-  { text: 'decorate.members_only', key: 'vip' },
-  { text: 'decorate.open_class_classification', key: 'openCourse' },
   { text: 'decorate.class_classification', key: 'classroom' },
-  { text: 'decorate.course_sorts', key: 'course' }
+  { text: 'decorate.open_class_classification', key: 'openCourse' },
+  { text: 'decorate.course_sorts', key: 'course' },
+  { text: 'decorate.members_only', key: 'vip' },
 ];
 
 import _ from 'lodash';

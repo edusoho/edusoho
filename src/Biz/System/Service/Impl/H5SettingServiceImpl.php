@@ -77,9 +77,6 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $sort = $this->getSortByStr($discoverySetting['data']['sort']);
             $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
             $courses = $this->getCourseService()->searchBySort($conditions, $sort, 0, $limit);
-            foreach ($courses as $key => &$course) {
-                $course['liveStatus'] = $this->getCourseTaskService()->getRecentLiveTaskStatus($course['id']);
-            }
 
             $discoverySetting['data']['items'] = $courses;
         }
@@ -104,18 +101,27 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 }
             }
         }
+        $discoverySetting['data']['items'] = $this->appendLiveStatus($discoverySetting['data']['items']);
+
         $discoverySetting['data']['items'] = array_values($discoverySetting['data']['items']);
         $discoverySetting['data']['items'] = $this->getCourseService()->appendHasCertificate($discoverySetting['data']['items']);
 
         return $discoverySetting;
     }
 
+    protected function appendLiveStatus($courses) {
+        foreach ($courses as $key => &$course) {
+            $course['liveStatus'] = $this->getCourseTaskService()->getRecentLiveTaskStatus($course['id']);
+        }
+        return $courses;
+    }
+
     public function openCourseListFilter($discoverySetting, $portal, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
             $conditions = [
+                'isHomePage' => 1,
                 'categoryId' => isset($discoverySetting['data']['categoryId']) ? $discoverySetting['data']['categoryId'] : 0,
-                'limitDays' => isset($discoverySetting['data']['limitDays']) ? $discoverySetting['data']['limitDays'] : 0,
             ];
 
             $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
@@ -365,6 +371,15 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         }
         $discoverySetting['data']['items'] = array_values($batches);
 
+        return $discoverySetting;
+    }
+
+    public function announcementFilter($discoverySetting, $portal, $usage = 'show'){
+        return $discoverySetting;
+    }
+
+    public function informationFilter($discoverySetting, $portal, $usage = 'show')
+    {
         return $discoverySetting;
     }
 
