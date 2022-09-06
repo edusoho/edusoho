@@ -213,7 +213,12 @@
             this.networkError(assessmentResponse);
           }
         }).fail((result) => {
-          this.ajaxTimeOut && clearTimeout(this.ajaxTimeOut)
+          if (!result.responseJSON) {
+            this.networkError(assessmentResponse);
+            this.ajaxTimeOut && clearTimeout(this.ajaxTimeOut)
+
+            return
+          }
 
           const { code: errorCode, message, traceId } = result.responseJSON.error;
 
@@ -251,7 +256,6 @@
             return
           }
 
-          this.networkError(assessmentResponse);
         })
       },
       networkError(assessmentResponse) {
