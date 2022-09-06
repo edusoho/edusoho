@@ -130,6 +130,12 @@
             request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
           },
         }).fail((result) => {
+          if (!result.responseJSON) {
+            this.networkError(assessmentResponse);
+
+            return
+          }
+
           const { code: errorCode } = result.responseJSON.error;
 
           if (errorCode == '50095204') {
