@@ -91,6 +91,8 @@ class KernelRequestListener
                     $event->setResponse($response);
                 }
             }
+        }else {
+            $request->request->remove('_csrf_token');
         }
     }
 
