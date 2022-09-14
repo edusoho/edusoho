@@ -57,6 +57,6 @@ const $loginModal = $('#login-modal');
 $('#sms-login').click((event) => {
   $.get($(event.currentTarget).data('url'), function (html) {
     $loginModal.html(html);
-  });html
+  });
 });
 
