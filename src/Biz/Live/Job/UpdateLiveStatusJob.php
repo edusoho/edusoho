@@ -96,7 +96,7 @@ class UpdateLiveStatusJob extends AbstractJob
                 $status = 'closed';
             }
         }
-        return array_combine($liveIds, $status);
+        return array_combine($liveIds, $statuses);
     }
 
     private function formatLives($lives)
