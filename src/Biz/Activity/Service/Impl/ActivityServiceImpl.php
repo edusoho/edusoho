@@ -733,9 +733,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return false;
     }
 
-    public function findFinishedLivesWithinTwoHours()
+    public function findFinishedLivesWithinOneDay()
     {
-        return $this->getActivityDao()->findFinishedLivesWithinTwoHours();
+        return $this->getActivityDao()->findFinishedLivesWithinOneDay();
     }
 
     public function findActivitiesByMediaIdsAndMediaType($mediaIds, $mediaType)

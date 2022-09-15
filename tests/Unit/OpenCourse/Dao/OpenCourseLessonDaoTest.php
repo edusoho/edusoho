@@ -152,13 +152,13 @@ class OpenCourseLessonDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($expected[1], $res[1], $testFields);
     }
 
-    public function testFindFinishedLivesWithinTwoHours()
+    public function testfindFinishedLivesWithinOneDay()
     {
         $expected = array();
-        $expected[1] = $this->mockDataObject(array('startTime' => time() - 3600 * 4, 'endTime' => time() - 3600 * 3));
+        $expected[1] = $this->mockDataObject(array('startTime' => time() - 3600 * 28, 'endTime' => time() - 3600 * 27));
         $expected[2] = $this->mockDataObject(array('startTime' => time() - 3600, 'endTime' => time() - 1800));
 
-        $res = $this->getDao()->findFinishedLivesWithinTwoHours();
+        $res = $this->getDao()->findFinishedLivesWithinOneDay();
         $testFields = $this->getCompareKeys();
 
         $this->assertArrayEquals($expected[2], $res[0], $testFields);

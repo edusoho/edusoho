@@ -731,9 +731,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return ['success', ''];
     }
 
-    public function findFinishedLivesWithinTwoHours()
+    public function findFinishedLivesWithinOneDay()
     {
-        return $this->getOpenCourseLessonDao()->findFinishedLivesWithinTwoHours();
+        return $this->getOpenCourseLessonDao()->findFinishedLivesWithinOneDay();
     }
 
     public function updateLiveStatus($id, $status)

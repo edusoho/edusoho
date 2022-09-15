@@ -75,7 +75,7 @@ interface ActivityService
 
     public function checkLiveStatus($courseId, $activityId);
 
-    public function findFinishedLivesWithinTwoHours();
+    public function findFinishedLivesWithinOneDay();
 
     public function getActivityFinishCondition($activity);
 
