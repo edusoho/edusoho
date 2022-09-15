@@ -18,5 +18,5 @@ interface OpenCourseLessonDao extends GeneralDaoInterface
 
     public function findTimeSlotOccupiedLessonsByCourseId($courseId, $startTime, $endTime, $excludeLessonId);
 
-    public function findFinishedLivesWithinTwoHours();
+    public function findFinishedLivesWithinOneDay();
 }

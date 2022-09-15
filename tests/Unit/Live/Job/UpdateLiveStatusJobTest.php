@@ -14,7 +14,7 @@ class UpdateLiveStatusJobTest extends BaseTestCase
     {
         $activityService = $this->mockBiz('Activity:ActivityService', array(
             array(
-                'functionName' => 'findFinishedLivesWithinTwoHours',
+                'functionName' => 'findFinishedLivesWithinOneDay',
                 'returnValue' => array(array('id' => 1, 'mediaId' => 1), array('id' => 2, 'mediaId' => 2)),
                 'times' => 1,
             ),
@@ -35,7 +35,7 @@ class UpdateLiveStatusJobTest extends BaseTestCase
 
         $openCourseService = $this->mockBiz('OpenCourse:OpenCourseService', array(
             array(
-                'functionName' => 'findFinishedLivesWithinTwoHours',
+                'functionName' => 'findFinishedLivesWithinOneDay',
                 'returnValue' => array(array('id' => 1, 'mediaId' => 22, 'liveProvider' => 9), array('id' => 2, 'mediaId' => 23, 'liveProvider' => 9)),
                 'times' => 1,
             ),
@@ -56,10 +56,10 @@ class UpdateLiveStatusJobTest extends BaseTestCase
         $result = $job->execute();
         $this->assertNull($result);
 
-        $activityService->shouldHaveReceived('findFinishedLivesWithinTwoHours')->times(1);
+        $activityService->shouldHaveReceived('findFinishedLivesWithinOneDay')->times(1);
         $liveActivityService->shouldHaveReceived('search')->times(1);
         $liveActivityService->shouldHaveReceived('updateLiveStatus')->times(2);
-        $openCourseService->shouldHaveReceived('findFinishedLivesWithinTwoHours')->times(1);
+        $openCourseService->shouldHaveReceived('findFinishedLivesWithinOneDay')->times(1);
         $openCourseService->shouldHaveReceived('updateLiveStatus')->times(2);
     }
 
@@ -71,7 +71,7 @@ class UpdateLiveStatusJobTest extends BaseTestCase
 
         $activityService = $this->mockBiz('Activity:ActivityService', array(
             array(
-                'functionName' => 'findFinishedLivesWithinTwoHours',
+                'functionName' => 'findFinishedLivesWithinOneDay',
                 'returnValue' => array(array('id' => 1, 'mediaId' => 1), array('id' => 2, 'mediaId' => 2)),
                 'times' => 1,
             ),
@@ -115,7 +115,7 @@ class UpdateLiveStatusJobTest extends BaseTestCase
 
         $openCourseService = $this->mockBiz('OpenCourse:OpenCourseService', array(
             array(
-                'functionName' => 'findFinishedLivesWithinTwoHours',
+                'functionName' => 'findFinishedLivesWithinOneDay',
                 'returnValue' => array(array('id' => 1, 'mediaId' => 22, 'liveProvider' => 9), array('id' => 2, 'mediaId' => 23, 'liveProvider' => 9)),
                 'times' => 1,
             ),

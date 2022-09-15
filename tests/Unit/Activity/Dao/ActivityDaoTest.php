@@ -90,13 +90,13 @@ class ActivityDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($activity4, $activities[1], $this->getCompareKeys());
     }
 
-    public function findFinishedLivesWithinTwoHours()
+    public function findFinishedLivesWithinOneDay()
     {
         $expected = [];
-        $expected[1] = $this->mockDataObject(['startTime' => time() - 3600 * 4, 'endTime' => time() - 3600 * 3, 'mediaType' => 'live']);
+        $expected[1] = $this->mockDataObject(['startTime' => time() - 3600 * 28, 'endTime' => time() - 3600 * 27, 'mediaType' => 'live']);
         $expected[2] = $this->mockDataObject(['startTime' => time() - 3600, 'endTime' => time() - 1800, 'mediaType' => 'live']);
 
-        $res = $this->getDao()->findFinishedLivesWithinTwoHours();
+        $res = $this->getDao()->findFinishedLivesWithinOneDay();
         $testFields = $this->getCompareKeys();
 
         $this->assertArrayEquals($expected[2], $res[0], $testFields);

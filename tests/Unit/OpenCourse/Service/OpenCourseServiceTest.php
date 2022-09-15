@@ -988,16 +988,16 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->getOpenCourseService()->liveLessonTimeCheck(1, '', strtotime('+1 day') + 10, 540);
     }
 
-    public function testFindFinishedLivesWithinTwoHours()
+    public function testfindFinishedLivesWithinOneDay()
     {
         $this->mockBiz('OpenCourse:OpenCourseLessonDao', [
             [
-                'functionName' => 'findFinishedLivesWithinTwoHours',
+                'functionName' => 'findFinishedLivesWithinOneDay',
                 'returnValue' => [['id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => time() - 3600, 'endTime' => time() - 1800]],
             ],
         ]);
 
-        $results = $this->getOpenCourseService()->findFinishedLivesWithinTwoHours();
+        $results = $this->getOpenCourseService()->findFinishedLivesWithinOneDay();
 
         $this->assertEquals(1, count($results));
         $this->assertEquals('liveOpen', $results[0]['type']);

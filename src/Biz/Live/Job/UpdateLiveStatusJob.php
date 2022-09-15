@@ -24,7 +24,7 @@ class UpdateLiveStatusJob extends AbstractJob
 
     private function findLivesByActivity()
     {
-        $activities = $this->getActivityService()->findFinishedLivesWithinTwoHours();
+        $activities = $this->getActivityService()->findFinishedLivesWithinOneDay();
         if (empty($activities)) {
             return array();
         }
@@ -33,7 +33,6 @@ class UpdateLiveStatusJob extends AbstractJob
 
         $conditions = array(
             'ids' => $mediaIds,
-            'replayStatus' => 'ungenerated',
             'progressStatusNotEqual' => EdusohoLiveClient::LIVE_STATUS_CLOSED,
         );
         $liveActivities = $this->getLiveActivityService()->search($conditions, null, 0, PHP_INT_MAX);
@@ -52,7 +51,7 @@ class UpdateLiveStatusJob extends AbstractJob
 
     private function findLivesByOpenCourseLesson()
     {
-        $lessons = $this->getOpenCourseService()->findFinishedLivesWithinTwoHours();
+        $lessons = $this->getOpenCourseService()->findFinishedLivesWithinOneDay();
 
         if (empty($lessons)) {
             return array();
