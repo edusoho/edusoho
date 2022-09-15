@@ -66,6 +66,7 @@ class TaskRolCallExporter extends BaseSheetAddStyleExporter
         }
         $userIds = ArrayToolkit::column($statistics, 'userId');
         $users = $this->getUserService()->searchUsers(['userIds' => empty($userIds) ? [-1] : $userIds], [], 0, count($userIds), ['id', 'nickname', 'verifiedMobile', 'email', 'emailVerified']);
+        $users = ArrayToolkit::index($users, 'id');
         $data = [];
         foreach ($statistics as $statistic) {
             $data[] = [
