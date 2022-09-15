@@ -33,7 +33,6 @@ class UpdateLiveStatusJob extends AbstractJob
 
         $conditions = array(
             'ids' => $mediaIds,
-            'replayStatus' => 'ungenerated',
             'progressStatusNotEqual' => EdusohoLiveClient::LIVE_STATUS_CLOSED,
         );
         $liveActivities = $this->getLiveActivityService()->search($conditions, null, 0, PHP_INT_MAX);
