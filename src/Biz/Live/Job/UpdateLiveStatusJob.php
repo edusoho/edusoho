@@ -89,8 +89,9 @@ class UpdateLiveStatusJob extends AbstractJob
 
         $client = $this->createLiveApi();
         $results = $client->getEsLiveInfos($liveIds);
-
-        return $results;
+        $liveIds = ArrayToolkit::column($results,'id');
+        $status = ArrayToolkit::column($results, 'status');
+        return array_combine($liveIds, $status);
     }
 
     private function formatLives($lives)
