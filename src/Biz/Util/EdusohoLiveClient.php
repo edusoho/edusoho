@@ -222,6 +222,11 @@ class EdusohoLiveClient
         return $this->createCloudApi('root')->get("/liveCloud/room/{$cloudLiveId}/info");
     }
 
+    public function getEsLiveInfos($liveIds)
+    {
+        return $this->createCloudApi('root')->get("/liveCloud/room/infos?ids=".implode(",", $liveIds));
+    }
+
     public function updatePseudoLiveVideo($liveId, $videoUrl)
     {
         return $this->createCloudApi('root')->post('/liveCloud/pseudoVideo/set', [

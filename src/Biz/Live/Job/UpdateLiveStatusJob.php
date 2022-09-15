@@ -74,8 +74,29 @@ class UpdateLiveStatusJob extends AbstractJob
 
         $client = $this->createLiveApi();
         $results = $client->checkLiveStatus($formatLives);
-
+        if(!empty($results['error'])) {
+            return $this->checkEsLiveStatusFromCloud($lives);
+        }
         return $results;
+    }
+
+    private function checkEsLiveStatusFromCloud($lives)
+    {
+        $liveIds = ArrayToolkit::column($lives, 'liveId');
+        if (empty($liveIds)) {
+            return array();
+        }
+
+        $client = $this->createLiveApi();
+        $results = $client->getEsLiveInfos($liveIds);
+        $liveIds = ArrayToolkit::column($results,'id');
+        $statuses = ArrayToolkit::column($results, 'status');
+        foreach ($statuses as &$status) {
+            if(in_array($status,['finished', 'generating'])) {
+                $status = 'closed';
+            }
+        }
+        return array_combine($liveIds, $statuses);
     }
 
     private function formatLives($lives)
