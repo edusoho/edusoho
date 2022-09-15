@@ -211,6 +211,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($liveActivity)) {
             return;
         }
+        if(empty($startTime)) {
+            $startTime = $liveActivity['liveStartTime'];
+        }
         $activities = $this->getActivityDao()->findActivitiesByMediaIdsAndMediaType([$liveActivity['id']], 'live');
         $update = ['progressStatus' => EdusohoLiveClient::LIVE_STATUS_LIVING, 'liveStartTime' => $startTime];
         foreach ($activities as $activity) {
@@ -234,6 +237,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $liveActivity = $this->getLiveActivityDao()->getByLiveId($liveId);
         if (empty($liveActivity) || (!empty($liveActivity['liveStartTime']) && time() < $liveActivity['liveStartTime']) || EdusohoLiveClient::LIVE_STATUS_CLOSED == $liveActivity['progressStatus']) {
             return;
+        }
+        if(empty($closeTime)) {
+            $closeTime = $liveActivity['liveEndTime'];
         }
         $activities = $this->getActivityDao()->findActivitiesByMediaIdsAndMediaType([$liveActivity['id']], 'live');
         $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => EdusohoLiveClient::LIVE_STATUS_CLOSED, 'liveEndTime' => $closeTime]);
