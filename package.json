@@ -38,7 +38,7 @@
     "axios": "^0.18.0",
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-module-resolver": "^3.1.0",
-    "bootstrap": "3.3.7",
+    "bootstrap": "3.4.1",
     "bootstrap-daterangepicker": "2.1.24",
     "bootstrap-datetime-picker": "2.4.4",
     "bootstrap-notify": "3.1.3",
