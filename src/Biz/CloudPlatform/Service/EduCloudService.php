@@ -7,4 +7,6 @@ interface EduCloudService
     public function isVisibleCloud();
 
     public function getOldSmsUserStatus();
+
+    public function uploadCallbackUrl();
 }

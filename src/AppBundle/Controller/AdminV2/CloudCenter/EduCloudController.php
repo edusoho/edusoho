@@ -226,6 +226,8 @@ class EduCloudController extends BaseController
 
             $this->saveLiveCloudSetting($live);
 
+            $this->getEduCloudService()->uploadCallbackUrl();
+
             $redirectUrl = in_array($capacity['provider'], ['talkFun', 'liveCloud']) ? 'admin_v2_edu_cloud_edulive_setting' : 'admin_v2_edu_cloud_edulive_overview';
 
             return $this->redirectToRoute($redirectUrl);
