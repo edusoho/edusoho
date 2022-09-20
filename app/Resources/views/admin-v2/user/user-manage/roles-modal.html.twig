@@ -17,9 +17,6 @@
         {% set systemRoles = systemRoles|merge([role]) %}
       {% else %}
         {% set CustomRoles = CustomRoles|merge([role]) %}
-{#        <label>#}
-{#          <input type="checkbox" name="roles[]" value="{{role.code}}" {% if role.code in user.roles %}checked="checked"{% endif %}>{{role.name}}#}
-{#        </label>#}
       {% endif %}
     {% endfor %}
     <p>系统角色：</p>
@@ -28,7 +25,6 @@
         <input type="checkbox" name="roles[]" value="{{system.code}}" {% if system in user.roles %}checked="checked"{% endif %}>{{system.name}}
       </label>
     {% endfor %}
-
     <p>自定义角色：</p>
     {% for custom in CustomRoles %}
       <label>

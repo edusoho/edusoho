@@ -21,10 +21,8 @@ class LoginRecordController extends BaseController
         ];
         $userConditions = $this->fillOrgCode($userConditions);
 
-//        if ($userConditions['keyword'] || (isset($userConditions['likeOrgCode']) && '1.' != $userConditions['likeOrgCode'])) {
-            $users = $this->getUserService()->searchUsers($userConditions, ['createdTime' => 'DESC'], 0, PHP_INT_MAX, ['id']);
-            $userIds = empty($users) ? [-1] : ArrayToolkit::column($users, 'id');
-//        }
+        $users = $this->getUserService()->searchUsers($userConditions, ['createdTime' => 'DESC'], 0, PHP_INT_MAX, ['id']);
+        $userIds = empty($users) ? [-1] : ArrayToolkit::column($users, 'id');
 
         $conditions = [
             'action' => 'login_success',

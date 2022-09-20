@@ -103,11 +103,9 @@ class UserManageController extends BaseController
         $userIds = ArrayToolkit::column($users, 'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
-//        $allRoles = $this->getAllRoles();
 
         return $this->render('admin-v2/user/user-manage/index.html.twig', [
             'users' => $users,
-//            'allRoles' => $allRoles,
             'userCount' => $userCount,
             'paginator' => $paginator,
             'profiles' => $profiles,
