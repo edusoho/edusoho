@@ -30,7 +30,7 @@ class UserManageController extends BaseController
         $fields = $request->query->all();
 
         $conditions = [
-            'roles' => '',
+            'roles' => 'ROLE_USER',
             'keywordType' => '',
             'keyword' => '',
             'keywordUserType' => '',
@@ -64,6 +64,7 @@ class UserManageController extends BaseController
                 0,
                 $profilesCount
             );
+
             $userIds = ArrayToolkit::column($userProfiles, 'id');
 
             if (!empty($userIds)) {
@@ -102,11 +103,11 @@ class UserManageController extends BaseController
         $userIds = ArrayToolkit::column($users, 'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
-        $allRoles = $this->getAllRoles();
+//        $allRoles = $this->getAllRoles();
 
         return $this->render('admin-v2/user/user-manage/index.html.twig', [
             'users' => $users,
-            'allRoles' => $allRoles,
+//            'allRoles' => $allRoles,
             'userCount' => $userCount,
             'paginator' => $paginator,
             'profiles' => $profiles,
@@ -315,7 +316,7 @@ class UserManageController extends BaseController
 
         if ('POST' === $request->getMethod()) {
             $roles = $request->request->get('roles');
-
+            var_dump($roles);
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
             if (!empty($roles)) {

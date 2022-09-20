@@ -17,12 +17,14 @@ class LoginRecordController extends BaseController
             'keywordType' => $request->query->get('keywordType'),
             'keyword' => $request->query->get('keyword'),
             'orgCode' => $request->query->get('orgCode'),
+            'role' => 'ROLE_USER'
         ];
         $userConditions = $this->fillOrgCode($userConditions);
-        if ($userConditions['keyword'] || (isset($userConditions['likeOrgCode']) && '1.' != $userConditions['likeOrgCode'])) {
+
+//        if ($userConditions['keyword'] || (isset($userConditions['likeOrgCode']) && '1.' != $userConditions['likeOrgCode'])) {
             $users = $this->getUserService()->searchUsers($userConditions, ['createdTime' => 'DESC'], 0, PHP_INT_MAX, ['id']);
             $userIds = empty($users) ? [-1] : ArrayToolkit::column($users, 'id');
-        }
+//        }
 
         $conditions = [
             'action' => 'login_success',
@@ -45,6 +47,7 @@ class LoginRecordController extends BaseController
         );
 
         $logRecords = ConvertIpToolkit::ConvertIps($logRecords);
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logRecords, 'userId'));
 
         return $this->render('admin-v2/user/login-record/index.html.twig', [

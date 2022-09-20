@@ -1,7 +1,9 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% set modalSize = 'large' %}
-
+{% set systemRoles = [] %}
+{% set CustomRoles = [] %}
+{% set notUpdateRoles = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER', 'ROLE_TEACHER_ASSISTANT', 'ROLE_EDUCATIONAL_ADMIN'] %}
 {% block title %}{{'admin.user.manage.user_role.fields.heading_title'|trans}}{% endblock %}
 {% block body %}
 
@@ -9,8 +11,28 @@
   <div class="checkboxs" id="old-checkboxs">
     {% set admin_roles = get_admin_roles() %}
     {% for role in admin_roles if (role.code in app.user.roles or role.createdUserId == app.user.id) or 'ROLE_SUPER_ADMIN' in app.user.roles %}
+      {% if role.code == 'ROLE_USER' %}
+        <input type="checkbox" style="display: none" name="roles[]" value="{{role.code}}" checked="checked">
+      {% elseif role.code in  notUpdateRoles %}
+        {% set systemRoles = systemRoles|merge([role]) %}
+      {% else %}
+        {% set CustomRoles = CustomRoles|merge([role]) %}
+{#        <label>#}
+{#          <input type="checkbox" name="roles[]" value="{{role.code}}" {% if role.code in user.roles %}checked="checked"{% endif %}>{{role.name}}#}
+{#        </label>#}
+      {% endif %}
+    {% endfor %}
+    <p>系统角色：</p>
+    {% for system in systemRoles %}
       <label>
-        <input type="checkbox" name="roles[]" value="{{role.code}}" {% if role.code in user.roles %}checked="checked"{% endif %}>{{role.name}}
+        <input type="checkbox" name="roles[]" value="{{system.code}}" {% if system in user.roles %}checked="checked"{% endif %}>{{system.name}}
+      </label>
+    {% endfor %}
+
+    <p>自定义角色：</p>
+    {% for custom in CustomRoles %}
+      <label>
+        <input type="checkbox" name="roles[]" value="{{custom.code}}" {% if custom in user.roles %}checked="checked"{% endif %}>{{custom.name}}
       </label>
     {% endfor %}
   </div>
@@ -20,6 +42,7 @@
 {% endblock %}
 
 {% block footer %}
+  <span style="display: inline-block;margin-right: 200px;color: red">设置为员工后，对应得员工操作请到【员工管理】中</span>
   <button id="change-user-roles-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-roles-form"  data-user="{{default.user_name|default('role.student'|trans)}}" >{{'form.btn.save'|trans}}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
   

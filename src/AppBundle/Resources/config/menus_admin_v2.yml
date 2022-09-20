@@ -1011,7 +1011,7 @@ admin_v2:
                         admin_v2_user_show:
                             quick_entrance_icon: 'user'
                             router_name: admin_v2_user
-                            name: admin_v2.user.basic_menu
+                            name: admin_v2.user.student_menu
                             children:
                                 admin_v2_user_manage:
                                     name: admin_v2.user.basic.basic_tab
@@ -1113,11 +1113,11 @@ admin_v2:
                                             router_params:
                                                 id: (user.id)
                                             disable: true
-                                admin_v2_fans:
-                                    name: admin_v2.user.basic.fans_tab
-                                    router_name: admin_v2_fans_list
-                                admin_v2_online:
-                                    name: admin.user.basic.online
+#                                admin_v2_fans:
+#                                    name: admin_v2.user.basic.fans_tab
+#                                    router_name: admin_v2_fans_list
+#                                admin_v2_online:
+#                                    name: admin.user.basic.online
                                 admin_v2_learn_statistics:
                                     name: admin_v2.user.basic.statistics_tab
                                     router_name: admin_v2_user_learn_statistics
