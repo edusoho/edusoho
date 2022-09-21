@@ -10,7 +10,7 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 
-class Token extends AbstractResource
+class UserToken extends AbstractResource
 {
     /**
      * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
