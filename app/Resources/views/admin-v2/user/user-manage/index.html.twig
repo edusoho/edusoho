@@ -62,7 +62,7 @@
         {% if setting('magic.enable_org','0') %}
           <th><input type="checkbox"  data-role="batch-select"></th>
         {% endif %}
-      <th>{{ 'user.fields.username_label'|trans }}</th>
+      <th>{{ 'user.fields.username_student_label'|trans }}</th>
         {% include 'org/parts/table-thead-tr.html.twig' %}
       <th>{{ 'admin.user.manage.fields.mobile_label'|trans }}</th>
       <th>Email</th>
@@ -73,7 +73,7 @@
     </thead>
     <tbody>
     <p class="text-muted">
-      <span class="mrl">{{ 'admin.user.manage.fields.user_total_num_label'|trans }}<strong class="inflow-num">{{ userCount }}</strong></span>
+      <span class="mrl">{{ 'admin.user.manage.fields.student_total_num_label'|trans }}<strong class="inflow-num">{{ userCount }}</strong></span>
     </p>
     {% for user in users %}
         {% include 'admin-v2/user/user-manage/user-table-tr.html.twig' with {user:user,profile:profiles[user.id]} %}

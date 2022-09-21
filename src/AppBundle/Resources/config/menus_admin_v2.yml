@@ -1118,6 +1118,7 @@ admin_v2:
                                     router_name: admin_v2_user_learn_statistics
                                 admin_v2_login_record:
                                     name: admin.user.basic.login_record_tab
+                        
                         admin_v2_approval_manage:
                             quick_entrance_icon: 'approve'
                             name: admin_v2.user.approval_menu
