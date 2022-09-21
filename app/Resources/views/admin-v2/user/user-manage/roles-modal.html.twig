@@ -4,7 +4,7 @@
 {% set systemRoles = [] %}
 {% set CustomRoles = [] %}
 {% set notUpdateRoles = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER', 'ROLE_TEACHER_ASSISTANT', 'ROLE_EDUCATIONAL_ADMIN'] %}
-{% block title %}{{'admin.user.manage.user_role.fields.heading_title'|trans}}{% endblock %}
+{% block title %}{{'admin.user.manage.staff_role.fields.heading_title'|trans}}{% endblock %}
 {% block body %}
 
 <form id="user-roles-form" class="form-horizontal" method="post" action="{{ url('admin_v2_user_roles', {id:user.id}) }}" data-currentuser="{{ app.user.id }}" data-edituser="{{ user.id }}">

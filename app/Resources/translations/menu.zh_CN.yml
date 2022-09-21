@@ -755,10 +755,10 @@ admin_v2.user.basic.login_record_tab: 登录日志
 
 admin_v2.user.basic.basic_tab.create_btn: '添加学员'
 admin_v2.user.basic.basic_tab.edit_btn: '编辑学员信息'
-admin_v2.user.basic.basic_tab.setting_roles_btn: '设置员工角色'
+admin_v2.user.basic.basic_tab.setting_roles_btn: '设置员工'
 admin_v2.user.basic.basic_tab.update_avatar_btn: '修改学员头像'
 admin_v2.user.basic.basic_tab.update_assistant_qrcode_btn: '修改助教二维码'
-admin_v2.user.basic.basic_tab.change_nickname_btn: '修改用户名'
+admin_v2.user.basic.basic_tab.change_nickname_btn: '修改学员名'
 admin_v2.user.basic.basic_tab.change_password_btn: '修改密码'
 admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: '发送密码重置邮件'
 admin_v2.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮件'

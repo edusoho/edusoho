@@ -231,7 +231,7 @@ boughtType:
     edit: 编辑会员
 
 userKeyWordType:
-    nickname: 用户名
+    nickname: 学员名
     verifiedMobile: 手机号
     email: 邮件地址
     loginIp: 登录IP
@@ -288,11 +288,11 @@ userType:
     distributor: 分销
 
 userKeyWordTypes:
-    nickname: 用户名
+    nickname: 学员名
     email: 邮件地址
 
 userStatisticsTypes:
-  nickname: 用户名
+  nickname: 学员名
   mobile: 手机号
 
 questionType:
