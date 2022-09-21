@@ -744,7 +744,6 @@ admin_v2.operation.message.basic_tab: 私信管理
 
 # 用户-用户管理-用户管理
 admin_v2.user.user_group: 用户管理
-#admin_v2.user.basic_menu: 用户管理
 admin_v2.user.student_menu: 学员管理
 
 # 用户-用户管理-用户管理-tab
