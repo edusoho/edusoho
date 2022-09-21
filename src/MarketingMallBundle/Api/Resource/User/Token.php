@@ -23,7 +23,7 @@ class Token extends AbstractResource
 
             $this->getUserService()->markLoginInfo('h5');
             return [
-                'token' => empty($user) ? false : $token,
+                'token' => $token,
             ];
         }
 
