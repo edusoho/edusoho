@@ -314,7 +314,6 @@ class UserManageController extends BaseController
 
         if ('POST' === $request->getMethod()) {
             $roles = $request->request->get('roles');
-            var_dump($roles);
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
             if (!empty($roles)) {
