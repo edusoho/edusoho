@@ -67,6 +67,12 @@ class CourseSetFileManageController extends BaseController
             $subtitles = ArrayToolkit::index($subtitles, 'mediaId');
         }
 
+        $teacherIsDownload = 1;
+        $currentUser = $this->getCurrentUser();
+        if($currentUser->isTeacher() && !$currentUser->isSuperAdmin()){
+            $teacherIsDownload = $this->getSettingService()->node("course.teacher_course_material_download", 1);
+        }
+
         return $this->render('courseset-manage/file/index.html.twig', [
             'courseSet' => $courseSet,
             'files' => $files,
@@ -75,6 +81,7 @@ class CourseSetFileManageController extends BaseController
             'now' => time(),
             'filesQuote' => $filesQuote,
             'subtitles' => $subtitles,
+            'teacherIsDownload' => $teacherIsDownload,
         ]);
     }
 

@@ -21,10 +21,6 @@ class WrongBookSubmitAnswer extends AbstractResource
         $assessmentResponse = $request->request->all();
         $exerciseRecord = $this->getAnswerRecordService()->get($exerciseRecordId);
 
-        if (!empty($exerciseRecord) && !in_array($exerciseRecord['status'], ['doing', 'paused'])) {
-            throw ExerciseException::FORBIDDEN_DUPLICATE_COMMIT();
-        }
-
         if ($exerciseRecord['user_id'] != $user['id']) {
             throw ExerciseException::FORBIDDEN_ACCESS_EXERCISE();
         }

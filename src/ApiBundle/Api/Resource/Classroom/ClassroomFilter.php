@@ -17,7 +17,7 @@ use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 class ClassroomFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'courseNum', 'about', 'productId', 'goodsId', 'specsId', 'spec',
+        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'courseNum', 'about', 'productId', 'goodsId', 'specsId', 'spec', 'learningProgressPercent'
     ];
 
     protected $publicFields = [
@@ -94,13 +94,5 @@ class ClassroomFilter extends Filter
     private function getVipRightService()
     {
         return ServiceKernel::instance()->createService('VipPlugin:Marketing:VipRightService');
-    }
-
-    /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

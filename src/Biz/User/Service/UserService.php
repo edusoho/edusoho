@@ -216,6 +216,10 @@ interface UserService
      */
     public function makeToken($type, $userId = null, $expiredTime = null, $data = null);
 
+    public function getUserToken($token);
+
+    public function refreshToken($token, $refreshToken, $expiredTime = null);
+
     /**
      * @deprecated move to TokenService
      */

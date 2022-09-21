@@ -28,6 +28,9 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         }
 
         $currentUser = $this->getServiceKernel()->getCurrentUser();
+        if(!$currentUser->isAccountNonLocked()) {
+            throw new AuthenticationException("账号已被禁用");
+        }
 
         if (!$currentUser['passwordInit']) {
             $url = $this->httpUtils->generateUri($request, 'password_init');

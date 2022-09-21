@@ -31,6 +31,11 @@
                     {% endif %}
                   </div>
                 {% endif %}
+                {% if activity.ext.limitedTime > 0 %} 
+                  <div class="text-center">
+                    {{ 'course.plan_task.activity_manage.testpaper.limit_tips'|trans|raw }}
+                  </div>
+                {% endif %}
               </div>
               <div class="text-right mtl">
                 {#

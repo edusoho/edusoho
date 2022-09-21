@@ -16,7 +16,7 @@ interface OpenCourseService
 
     public function findCoursesByIds(array $ids);
 
-    public function searchCourses($conditions, $orderBy, $start, $limit);
+    public function searchCourses($conditions, $orderBy, $start, $limit, $columns = []);
 
     /**
      * @param $conditions
@@ -147,7 +147,7 @@ interface OpenCourseService
 
     public function generateLessonVideoReplay($courseId, $lessonId, $fileId);
 
-    public function findFinishedLivesWithinTwoHours();
+    public function findFinishedLivesWithinOneDay();
 
     public function updateLiveStatus($id, $status);
 
@@ -172,7 +172,7 @@ interface OpenCourseService
      */
     public function countMembers($conditions);
 
-    public function searchMembers($conditions, $orderBy, $start, $limit);
+    public function searchMembers($conditions, $orderBy, $start, $limit, $columns = []);
 
     public function createMember($member);
 

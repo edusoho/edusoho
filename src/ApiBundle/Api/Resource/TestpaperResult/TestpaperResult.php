@@ -36,10 +36,6 @@ class TestpaperResult extends AbstractResource
         $data = $request->request->all();
         $testpaperRecord = $this->getAnswerRecordService()->get($data['resultId']);
 
-        if (!empty($testpaperRecord) && !in_array($testpaperRecord['status'], ['doing', 'paused'])) {
-            throw TestpaperException::FORBIDDEN_DUPLICATE_COMMIT();
-        }
-
         $wrapper = new AssessmentResponseWrapper();
         $assessment = $this->getAssessmentService()->showAssessment($testpaperRecord['assessment_id']);
         $assessmentResponse = $wrapper->wrap($data, $assessment, $testpaperRecord);
@@ -225,14 +221,6 @@ class TestpaperResult extends AbstractResource
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
-    }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
     }
 
     /**

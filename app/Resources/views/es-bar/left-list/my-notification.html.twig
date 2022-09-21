@@ -1,4 +1,4 @@
-{% if app.user and app.user.isLogin() %}
+{% if app.user.isLogin()|default(false) and app.user %}
   <li data-id="#bar-message" data-toggle="tooltip" data-placement="left" title="{{'es_bar.notification'|trans}}" data-trigger="hover" data-container=".es-bar">
     <a href="javascript:;" data-url="{{ path('esbar_my_notify') }}">
       {% if app.user.newNotificationNum > 0 %}

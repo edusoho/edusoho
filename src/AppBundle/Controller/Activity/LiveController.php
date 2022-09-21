@@ -2,17 +2,22 @@
 
 namespace AppBundle\Controller\Activity;
 
+use AppBundle\Common\LiveWatermarkToolkit;
 use AppBundle\Controller\LiveroomController;
+use AppBundle\Util\H5LiveEntryToken;
 use Biz\Activity\Dao\ReplayActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
+use Biz\Live\Service\LiveService;
 use Biz\MultiClass\Service\MultiClassGroupService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseActivityController implements ActivityActionInterface
@@ -132,6 +137,51 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         ], $params);
     }
 
+    public function esLiveH5EntryAction(Request $request, $token)
+    {
+        $params = $this->getH5LiveEntryTokenParser()->parse($token);
+        if (empty($params['userId'])) {
+            $this->createNewException(UserException::UN_LOGIN());
+        }
+        list($userId, $courseId, $activityId) = array_values($params);
+        $user = $this->getUserService()->getUser($userId);
+        $this->authenticateUser($user);
+        $params = [];
+        if ($this->getCourseMemberService()->isCourseMember($courseId, $user['id']) || $this->getUser()->isAdmin()) {
+            $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($courseId, $user['id']);
+        }
+        $params['id'] = $user['id'];
+        $params['displayName'] = $user['nickname'];
+        $params['nickname'] = $user['nickname'].'_'.$user['id'];
+
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+        $roomId = $activity['ext']['liveId'];
+        $liveGroup = $this->getMultiClassGroupService()->getLiveGroupByUserIdAndCourseId($user['id'], $courseId, $roomId);
+        if ($liveGroup) {
+            $params['groupCode'] = $liveGroup['live_code'];
+        }
+        $params['device'] = $this->isMobileClient() ? 'mobile' : 'desktop';
+        if ($request->isSecure()) {
+            $params['protocol'] = 'https';
+        }
+        $params['avatar'] = $this->getWebExtension()->getFurl($user['smallAvatar'] ?? '', 'avatar.png');
+
+        $biz = $this->getBiz();
+        $params['hostname'] = $biz['env']['base_url'];
+
+        $liveActivity = $this->getLiveActivityService()->getBySyncIdGTAndLiveId($roomId);
+        if ($liveActivity) {
+            $ticket = $this->getS2B2CFacadeService()->getS2B2CService()->getLiveEntryTicket($roomId, $params);
+        } else {
+            $ticket = $this->getLiveService()->createLiveTicket($roomId, $params);
+        }
+
+        return $this->render('live-course/eslive-h5-entry.html.twig', [
+            'url' => $ticket['roomUrl'] ?? '',
+            'watermark' => LiveWatermarkToolkit::build(),
+        ]);
+    }
+
     /**
      * @param $courseId
      * @param $activityId
@@ -240,14 +290,47 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         } else {
             return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
         }
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+        $isEsLive = $this->getLiveService()->isESLive($activity['ext']['liveProvider']);
+        if ($isEsLive) {
+            if ('replay' == $activity['mediaType']) {
+                $activity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+            }
+            $result = $this->getLiveReplayService()->entryReplay($replayId, $activity['ext']['liveId'], $activity['ext']['liveProvider'], $request->isSecure());
+            $replayUrl = $result['url'] ?? '';
+            $watermark = LiveWatermarkToolkit::build();
+        }
 
-        return $this->render('live-course/entry.html.twig', [
+        return $this->render($isEsLive ? 'live-course/eslive-entry.html.twig' : 'live-course/entry.html.twig', [
             'courseId' => $courseId,
             'replayId' => $replayId,
             'activityId' => $activityId,
             'task' => $task,
             'isTeacher' => $isTeacher,
             'role' => $role,
+            'replayUrl' => $replayUrl ?? '',
+            'watermark' => $watermark ?? '',
+        ]);
+    }
+
+    public function esLiveReplayH5EntryAction(Request $request, $token)
+    {
+        $params = $this->getH5LiveEntryTokenParser()->parse($token);
+        if (empty($params['userId'])) {
+            $this->createNewException(UserException::UN_LOGIN());
+        }
+        list($userId, $courseId, $activityId, $replayId) = array_values($params);
+        $user = $this->getUserService()->getUser($userId);
+        $this->authenticateUser($user);
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+        if ('replay' == $activity['mediaType']) {
+            $activity = $this->getActivityService()->getActivity($activity['ext']['origin_lesson_id'], true);
+        }
+        $result = $this->getLiveReplayService()->entryReplay($replayId, $activity['ext']['liveId'], $activity['ext']['liveProvider'], $request->isSecure());
+
+        return $this->render('live-course/eslive-h5-entry.html.twig', [
+            'url' => $result['url'] ?? '',
+            'watermark' => LiveWatermarkToolkit::build(),
         ]);
     }
 
@@ -387,6 +470,11 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         return $replays;
     }
 
+    protected function getH5LiveEntryTokenParser()
+    {
+        return new H5LiveEntryToken();
+    }
+
     /**
      * @return TaskService
      */
@@ -471,6 +559,22 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     protected function getMultiClassGroupService()
     {
         return $this->createService('MultiClass:MultiClassGroupService');
+    }
+
+    /**
+     * @return LiveService
+     */
+    protected function getLiveService()
+    {
+        return $this->createService('Live:LiveService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 
     /**

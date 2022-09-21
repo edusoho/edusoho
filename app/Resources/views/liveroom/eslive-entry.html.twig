@@ -1,0 +1,20 @@
+{% extends 'liveroom/base-entry.html.twig' %}
+
+{% do script(['app/js/liveroom/eslive-entry/index.js']) %}
+
+{% block bodyStyle %}style="width: 100%;height: 100%;overflow: hidden;"{% endblock %}
+
+{% block body %}
+  <div id="eslive-container" style="position: absolute;left: 0;right: 0;top: 0;bottom: 0;"></div>
+  <div id="entry"
+       class="well well-lg text-center color-success"
+       data-role="{{ liveRole }}"
+       data-provider="{{ params.provider|default(0) }}"
+       data-course-id="{{ params.courseId|default(0) }}"
+       data-task-id="{{ params.taskId|default(0) }}"
+  >{{ 'course.liveroom.open_liveroom_tips'|trans }}</div>
+  <div id="eslive-params"
+       data-url="{{ ticket.roomUrl|default() }}"
+       data-watermark="{{ params.watermark|default() }}"
+  ></div>
+{% endblock %}

@@ -3,6 +3,7 @@ import Drag from 'app/common/drag';
 import Api from 'common/api';
 import notify from 'common/notify';
 import { countDown } from 'app/common/new-count-down.js';
+import Coordinate from 'app/common/coordinate';
 require('app/common/xxtea.js');
 
 class Reset {
@@ -48,7 +49,9 @@ class Reset {
   smsEvent() {
     let $smsCode = $('.js-sms-send');
     let self = this;
-    $smsCode.click(() => {
+    $smsCode.click((event) => {
+      let coordinate = new Coordinate();
+      const encryptedPoint = coordinate.getCoordinate(event, $('meta[name=csrf-token]').attr('content'));
       if(this.mobileValidator.element($('[name="dragCaptchaToken"]')) && this.mobileValidator.element($('[name="mobile"]'))) {
         if($smsCode.hasClass('disabled')) {
           return ;
@@ -60,7 +63,8 @@ class Reset {
             mobile: $('#mobile').val(),
           },
           data: {
-            dragCaptchaToken: $('[name="dragCaptchaToken"]').val()
+            dragCaptchaToken: $('[name="dragCaptchaToken"]').val(),
+            encryptedPoint: encryptedPoint
           }
         }).then((res) => {
           notify('success', Translator.trans('notify.sms_send_success.message'));

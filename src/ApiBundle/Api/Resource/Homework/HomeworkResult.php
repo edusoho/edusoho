@@ -65,6 +65,8 @@ class HomeworkResult extends AbstractResource
             $homeworkRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $homework['id'], $user['id']);
         } elseif ('reviewing' == $homeworkRecord['status']) {
             throw HomeworkException::REVIEWING_HOMEWORK();
+        } else {
+            $homeworkRecord = $this->getAnswerService()->continueAnswer($homeworkRecord['id']);
         }
 
         $testpaperWrapper = new TestpaperWrapper();
@@ -73,7 +75,7 @@ class HomeworkResult extends AbstractResource
         $answerReport = $this->getAnswerReportService()->get($homeworkRecord['answer_report_id']);
         $homeworkResult = $testpaperWrapper->wrapTestpaperResult($homeworkRecord, $homework, $scene, $answerReport);
         $homeworkResult['items'] = array_values($testpaperWrapper->wrapTestpaperItems($homework, $questionReports));
-
+        $homeworkResult['courseId'] = $course['id'];
         return $homeworkResult;
     }
 
@@ -83,10 +85,6 @@ class HomeworkResult extends AbstractResource
 
         $data = $request->request->all();
         $homeworkRecord = $this->getAnswerRecordService()->get($homeworkResultId);
-
-        if (!empty($homeworkRecord) && !in_array($homeworkRecord['status'], ['doing', 'paused'])) {
-            throw HomeworkException::FORBIDDEN_DUPLICATE_COMMIT();
-        }
 
         $wrapper = new AssessmentResponseWrapper();
         $assessment = $this->getAssessmentService()->showAssessment($homeworkRecord['assessment_id']);

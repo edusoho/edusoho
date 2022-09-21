@@ -378,6 +378,15 @@ class BaseController extends Controller
         $safeHosts = [$host];
 
         $parsedUrl = parse_url($url);
+
+        if ($parsedUrl == false){
+            return $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        }
+
+        if (!empty($parsedUrl['host'])){
+            $url = $this->unParseUrl($parsedUrl);
+        }
+
         $isUnsafeHost = isset($parsedUrl['host']) && !in_array($parsedUrl['host'], $safeHosts);
         $isInvalidUrl = isset($parsedUrl['scheme']) && !in_array($parsedUrl['scheme'], ['http', 'https']);
 
@@ -386,6 +395,37 @@ class BaseController extends Controller
         }
 
         return strip_tags($url);
+    }
+
+    protected function unParseUrl($parsedUrl)
+    {
+        $scheme   = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '//';
+        $host     = $parsedUrl['host'] ?? '';
+        $port     = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
+        $path     = $parsedUrl['path'] ?? '';
+        $query    = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
+        $fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
+        return "$scheme$host$port$path$query$fragment";
+    }
+
+    /**
+     * 验证验证码token
+     * @return [type] [description]
+     */
+    protected function checkDragCaptchaToken(Request $request, $token)
+    {
+        $enableAntiBrushCaptcha = $this->getSettingService()->node("ugc_content_audit.enable_anti_brush_captcha");
+        if(empty($enableAntiBrushCaptcha)){
+            return true;
+        }
+        $session = $request->getSession();
+        $dragTokens = empty($session->get('dragTokens')) ? array() : $session->get('dragTokens');
+        if(in_array($token, $dragTokens)){
+            array_splice($dragTokens, array_search($token, $dragTokens), 1);
+            $session->set("dragTokens", $dragTokens);
+            return true;
+        }
+        return false;
     }
 
     protected function createSuccessJsonResponse($data = [])

@@ -1,5 +1,6 @@
 import FileChooser from 'app/js/file-chooser/file-choose';
 import SubtitleDialog from 'app/js/activity-manage/video/subtitle/dialog';
+import UAParser from 'ua-parser-js';
 
 export default class Video {
   constructor() {
@@ -109,5 +110,28 @@ export default class Video {
     };
 
     fileChooser.on('select', onSelectFile);
+
+    fileChooser.on('start', file => {
+      const ua = new UAParser();
+      const FILE_UNIT = ua.getOS().name === 'Mac OS' ? 1000 : 1024;
+      const maxFileSizeDesc = $('#maxFileSize').val() || '';
+      let maxFileSize = parseInt(maxFileSizeDesc);
+
+      if (maxFileSizeDesc.indexOf('GB') > -1) {
+        maxFileSize *= FILE_UNIT * FILE_UNIT * FILE_UNIT;
+      } else if (maxFileSizeDesc.indexOf('MB') > -1) {
+        maxFileSize *= FILE_UNIT * FILE_UNIT;
+      } else {
+        return;
+      }
+
+      if (file.size > maxFileSize) {
+        alert(Translator.trans('activity.video.file_limit_size', { size: maxFileSizeDesc }));
+        fileChooser.uploader._sdk.uploader.engine.cancelFile(file);
+        fileChooser.uploader._sdk.uploaderUi.resetUI();
+
+        return false;
+      }
+    });
   }
 }

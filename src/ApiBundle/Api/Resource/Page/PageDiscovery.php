@@ -5,6 +5,9 @@ namespace ApiBundle\Api\Resource\Page;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
+use Biz\Announcement\Service\AnnouncementService;
+use Biz\Article\Service\ArticleService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Course\Service\CourseService;
@@ -68,9 +71,36 @@ class PageDiscovery extends AbstractResource
             if ('open_course_list' == $discoverySetting['type']) {
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['userId', 'teacherIds']);
             }
+
+            if ('announcement' == $discoverySetting['type']) {
+                $announcement = $this->getAnnouncementService()->searchAnnouncements(['startTime' => time(), 'endTime' => time(), 'targetType' => 'global'], ['startTime' => 'DESC'], 0, 1);
+                $discoverySetting['data'] = empty($announcement) ? '' : $announcement[0]['content'];
+            }
+
+            if('information' == $discoverySetting['type']){
+                $information = $this ->getArticleService() -> searchArticles(['status' => 'published'], ['sticky' => 'DESC' ,'publishedTime' => 'DESC'], 0, 3);
+                foreach ($information as &$info) {
+                    $info['createdTime'] = date('c', $info['createdTime']);
+                    $info['updatedTime'] = date('c', $info['updatedTime']);
+                    $info['publishedTime'] = date('c', $info['publishedTime']);
+                    $info['body'] = AssetHelper::transformImages($info['body']);
+                    $info['thumb'] = AssetHelper::transformImagesAddUrl($info['thumb'], '');
+                    $info['originalThumb'] = AssetHelper::transformImagesAddUrl($info['originalThumb'], '');
+                    $info['picture'] = AssetHelper::transformImagesAddUrl($info['picture'], 'picture');
+                }
+                $discoverySetting['data'] = empty($information) ? '' : $information;
+            }
         }
 
         return !empty($params['format']) && 'list' == $params['format'] ? array_values($discoverySettings) : $discoverySettings;
+    }
+
+    /**
+     * @return AnnouncementService
+     */
+    protected function getAnnouncementService()
+    {
+        return $this->service('Announcement:AnnouncementService');
     }
 
     /**
@@ -129,5 +159,13 @@ class PageDiscovery extends AbstractResource
     protected function getProductService()
     {
         return $this->service('Product:ProductService');
+    }
+
+    /**
+     * @return ArticleService
+     */
+    protected function getArticleService()
+    {
+        return $this->service('Article:ArticleService');
     }
 }

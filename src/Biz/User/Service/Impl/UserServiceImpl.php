@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\StringToolkit;
+use AppBundle\Common\TimeMachine;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\BaseService;
 use Biz\Card\Service\CardService;
@@ -1228,6 +1229,9 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function makeToken($type, $userId = null, $expiredTime = null, $data = '', $args = [])
     {
+        if($type == 'mobile_login') {
+            $expiredTime = time() + TimeMachine::ONE_MONTH * 6;
+        }
         $token = [];
         $token['type'] = $type;
         $token['userId'] = $userId ? (int) $userId : 0;
@@ -1239,6 +1243,31 @@ class UserServiceImpl extends BaseService implements UserService
         $token = $this->getUserTokenDao()->create($token);
 
         return $token['token'];
+    }
+
+    public function getUserToken($token)
+    {
+        return $this->getUserTokenDao()->getByToken($token);
+    }
+
+    public function refreshToken($token, $refreshToken, $expiredTime = null)
+    {
+        $userToken = $this->getUserTokenDao()->getByToken($refreshToken);
+
+        if ($userToken['expiredTime'] < time())
+        {
+            return [];
+        }
+        $userToken = $this->getUserTokenDao()->getByToken($token);
+        $userToken['token'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $userToken['expiredTime'] = $expiredTime ? (int) $expiredTime : 0;
+
+        $this->getUserTokenDao()->update($userToken['id'], [
+            'token' => $userToken['token'],
+            'expiredTime' => $userToken['expiredTime'],
+        ]);
+
+        return $userToken;
     }
 
     public function getToken($type, $token)

@@ -227,6 +227,9 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
 
     public function handleReplayGenerateEvent($liveId, $replayDatas)
     {
+        if (empty($replayDatas)) {
+            return $replayDatas;
+        }
         $liveActivity = $this->getLiveActivityService()->getByLiveId($liveId);
         $activity = $this->getActivityService()->getByMediaIdAndMediaType($liveActivity['id'], 'live');
         $replayCount = $this->getLessonReplayDao()->count([

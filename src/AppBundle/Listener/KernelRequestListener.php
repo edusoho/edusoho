@@ -46,7 +46,7 @@ class KernelRequestListener
             }
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ($request->getMethod() === 'POST' && !$request->isXmlHttpRequest()) {
             if (stripos($request->getPathInfo(), ApiBundle::API_PREFIX) === 0) {
                 return;
             }
@@ -68,11 +68,7 @@ class KernelRequestListener
                 return;
             }
 
-            if ($request->isXmlHttpRequest()) {
-                $token = $request->headers->get('X-CSRF-Token');
-            } else {
-                $token = $request->request->get('_csrf_token', '');
-            }
+            $token = $request->request->get('_csrf_token', '');
 
             $request->request->remove('_csrf_token');
 
@@ -95,6 +91,8 @@ class KernelRequestListener
                     $event->setResponse($response);
                 }
             }
+        }else {
+            $request->request->remove('_csrf_token');
         }
     }
 

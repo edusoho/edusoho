@@ -7,6 +7,7 @@
 {% set nav = type %}
 
 {% block detail_content %}
+  {% include 'common/anti-brush-captcha.html.twig' %}
 
   <form id="thread-form" class="form-vertical" method="post"
     {% if thread %}
@@ -63,5 +64,6 @@
     </div>
     <input type="hidden" name="courseSetId" value="{{ course.courseSetId }}">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <input type="hidden" name="_dragCaptchaToken">
   </form>
 {% endblock %}

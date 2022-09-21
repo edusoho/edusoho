@@ -364,26 +364,28 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         $maxDisplayPrice = $goods['maxPrice'];
         if ($goods['discountId'] && $this->isPluginInstalled('Discount')) {
             $discount = $this->getDiscountService()->getDiscount($goods['discountId']);
-            if ('discount' === $discount['type']) {
-                $discountItem = $this->getDiscountService()->getItemByDiscountIdAndGoodsId($goods['discountId'], $goods['id']);
-                if (!empty($discountItem)) {
-                    if ('discount' === $discount['discountType']) {
-                        $minDisplayPrice = $goods['minPrice'] * $discountItem['discount'] / 10;
-                        $maxDisplayPrice = $goods['maxPrice'] * $discountItem['discount'] / 10;
-                    } else {
-                        $minDisplayPrice = $goods['minPrice'] - $discountItem['reduce'];
-                        $maxDisplayPrice = $goods['maxPrice'] - $discountItem['reduce'];
+            if($discount['endTime'] > time()) {
+                if ('discount' === $discount['type']) {
+                    $discountItem = $this->getDiscountService()->getItemByDiscountIdAndGoodsId($goods['discountId'], $goods['id']);
+                    if (!empty($discountItem)) {
+                        if ('discount' === $discount['discountType']) {
+                            $minDisplayPrice = $goods['minPrice'] * $discountItem['discount'] / 10;
+                            $maxDisplayPrice = $goods['maxPrice'] * $discountItem['discount'] / 10;
+                        } else {
+                            $minDisplayPrice = $goods['minPrice'] - $discountItem['reduce'];
+                            $maxDisplayPrice = $goods['maxPrice'] - $discountItem['reduce'];
+                        }
+                        $goods['discount'] = $discount;
                     }
+                } elseif ('free' === $discount['type']) {
+                    $minDisplayPrice = '0.00';
+                    $maxDisplayPrice = '0.00';
+                    $goods['discount'] = $discount;
+                } elseif ('global' === $discount['type']) {
+                    $maxDisplayPrice = $goods['maxPrice'] * $discount['globalDiscount'] / 10;
+                    $minDisplayPrice = $goods['minPrice'] * $discount['globalDiscount'] / 10;
                     $goods['discount'] = $discount;
                 }
-            } elseif ('free' === $discount['type']) {
-                $minDisplayPrice = '0.00';
-                $maxDisplayPrice = '0.00';
-                $goods['discount'] = $discount;
-            } elseif ('global' === $discount['type']) {
-                $maxDisplayPrice = $goods['maxPrice'] * $discount['globalDiscount'] / 10;
-                $minDisplayPrice = $goods['minPrice'] * $discount['globalDiscount'] / 10;
-                $goods['discount'] = $discount;
             }
         }
         $goods['maxPriceObj'] = Money::convert($goods['maxPrice']);
@@ -401,19 +403,21 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         $displayPrice = $specs['price'];
         if ($goods['discountId'] && $this->isPluginInstalled('Discount')) {
             $discount = $this->getDiscountService()->getDiscount($goods['discountId']);
-            if ('discount' === $discount['type']) {
-                $discountItem = $this->getDiscountService()->getItemByDiscountIdAndGoodsId($goods['discountId'], $goods['id']);
-                if (!empty($discount)) {
-                    if ('discount' === $discount['discountType']) {
-                        $displayPrice = $specs['price'] * $discountItem['discount'] / 10;
-                    } else {
-                        $displayPrice = $specs['price'] - $discountItem['reduce'];
+            if($discount['endTime'] > time()) {
+                if ('discount' === $discount['type']) {
+                    $discountItem = $this->getDiscountService()->getItemByDiscountIdAndGoodsId($goods['discountId'], $goods['id']);
+                    if (!empty($discount)) {
+                        if ('discount' === $discount['discountType']) {
+                            $displayPrice = $specs['price'] * $discountItem['discount'] / 10;
+                        } else {
+                            $displayPrice = $specs['price'] - $discountItem['reduce'];
+                        }
                     }
+                } elseif ('free' === $discount['type']) {
+                    $displayPrice = '0.00';
+                } elseif ('global' === $discount['type']) {
+                    $displayPrice = $specs['price'] * $discount['globalDiscount'] / 10;
                 }
-            } elseif ('free' === $discount['type']) {
-                $displayPrice = '0.00';
-            } elseif ('global' === $discount['type']) {
-                $displayPrice = $specs['price'] * $discount['globalDiscount'] / 10;
             }
         }
         $specs['priceObj'] = Money::convert($specs['price']);

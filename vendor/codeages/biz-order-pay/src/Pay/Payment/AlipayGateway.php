@@ -161,6 +161,9 @@ class AlipayGateway extends AbstractGateway
         $gateway->setSellerId($config['partner']);
         $gateway->setPartner($config['partner']);
         $gateway->setKey($config['key']);
+        $gateway->setPrivateKey($config['private_key']);
+        $gateway->setAlipayPublicKey($config['alipay_public_key']);
+        $gateway->setSignType(empty($config['private_key']) ? 'MD5' : 'RSA');
 
         return $gateway;
     }
@@ -173,6 +176,8 @@ class AlipayGateway extends AbstractGateway
             'seller_email' => $config['seller_email'],
             'partner' => $config['partner'],
             'key' => $config['key'],
+            'alipay_public_key' => $config['alipay_public_key'],
+            'private_key' => $config['private_key'],
         );
     }
 

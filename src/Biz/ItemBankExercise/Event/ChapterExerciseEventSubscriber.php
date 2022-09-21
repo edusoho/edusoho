@@ -193,7 +193,7 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
         foreach ($answerReport['section_reports'] as $sectionReport) {
             foreach ($sectionReport['item_reports'] as $itemReport) {
                 foreach ($itemReport['question_reports'] as $questionReport) {
-                    if (in_array($questionReport['status'], [AnswerQuestionReportService::STATUS_RIGHT, AnswerQuestionReportService::STATUS_WRONG])) {
+                    if (!in_array($questionReport['status'], [AnswerQuestionReportService::STATUS_NOANSWER])) {
                         ++$doneQuestionNum;
                     }
                 }

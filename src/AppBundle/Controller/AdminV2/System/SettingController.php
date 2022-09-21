@@ -6,7 +6,9 @@ use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\JsonToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
+use AppBundle\Util\CdnUrl;
 use Biz\Content\Service\FileService;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
 use Symfony\Component\Filesystem\Filesystem;
@@ -28,6 +30,12 @@ class SettingController extends BaseController
             $security['safe_iframe_domains'] = trim(str_replace(["\r\n", "\n", "\r"], ' ', $security['safe_iframe_domains']));
             $security['safe_iframe_domains'] = array_filter(explode(' ', $security['safe_iframe_domains']));
 
+            $safeIframeDomains = $security['safe_iframe_domains'];
+            $cdnUrl = (new CdnUrl())->get();
+            if ($cdnUrl) {
+                $safeIframeDomains[] = $cdnUrl;
+            }
+            $this->getCacheService()->set('safe_iframe_domains', array_unique($safeIframeDomains));
             $this->getSettingService()->set('security', $security);
             $this->setFlashMessage('success', 'site.save.success');
         }
@@ -350,5 +358,13 @@ class SettingController extends BaseController
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }

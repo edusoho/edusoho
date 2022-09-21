@@ -130,4 +130,13 @@ abstract class Filter
 
         return $pluginManager->isPluginInstalled($pluginName);
     }
+
+    /**
+     * @return SettingService
+    */
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System:SettingService');
+    }
+
 }

@@ -5,6 +5,7 @@ export default class SmsSender {
     this.$element = $(option.element);
     this.validator = 0;
     this.url = option.url ? option.url : '';
+    this.encryptedPoint = option.encryptedPoint;
 
     // 发送请求结束后，会先进行此操作, 接受参数为 发送短信返回结果中的 ACK 属性
     if (option.additionalAction) {
@@ -87,6 +88,7 @@ export default class SmsSender {
     var data = {};
     data.to = $('[name="' + this.dataTo + '"]').val();
     data.sms_type = this.smsType;
+    data.encryptedPoint = this.encryptedPoint;
     if (this.captcha) {
       data.captcha_num = $('[name="' + this.captchaNum + '"]').val();
       if (!this.captchaValidated) {

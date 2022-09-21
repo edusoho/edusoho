@@ -194,23 +194,6 @@ class ThreadController extends CourseBaseController
             return $this->redirect($this->generateUrl('my_course_show', ['id' => $courseId, 'tab' => 'threads']));
         }
 
-        if ($member && 'vip_join' == $member['joinedChannel'] && $this->isVipPluginEnabled()) {
-            if (empty($this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']))) {
-                return $this->redirect($this->generateUrl('course_show', ['id' => $course['id']]));
-            } elseif (empty($course['parentId'])
-                && 'ok' != $this->getVipService()->checkUserVipRight($member['userId'], CourseVipRightSupplier::CODE, $course['id'])
-            ) {
-                return $this->redirect($this->generateUrl('course_show', ['id' => $course['id']]));
-            } elseif (!empty($course['parentId'])) {
-                $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
-                if (!empty($classroom)
-                    && 'ok' != $this->getVipService()->checkUserVipRight($member['userId'], ClassroomVipRightSupplier::CODE, $classroom['id'])
-                ) {
-                    return $this->redirect($this->generateUrl('course_show', ['id' => $course['id']]));
-                }
-            }
-        }
-
         $type = $request->query->get('type') ?: 'discussion';
         $form = $this->createThreadForm([
             'type' => $type,
@@ -219,6 +202,11 @@ class ThreadController extends CourseBaseController
         ]);
 
         if ('POST' == $request->getMethod()) {
+
+            // if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
+            //     return $this->createMessageResponse('error', $this->trans("exception.form..drag.expire"));
+            // }
+
             $form->handleRequest($request);
             if ($form->isValid()) {
                 try {
@@ -271,10 +259,16 @@ class ThreadController extends CourseBaseController
             // $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
             $course = $this->getCourseService()->tryManageCourse($courseId);
         }
+        $course = $this->buildCourseTitle($course);
 
         $form = $this->createThreadForm($thread);
 
         if ('POST' == $request->getMethod()) {
+
+            // if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
+            //     return $this->createMessageResponse('error', $this->trans("exception.form..drag.expire"));
+            // }
+
             try {
                 $form->handleRequest($request);
 
@@ -452,6 +446,11 @@ class ThreadController extends CourseBaseController
         $currentUser = $this->getCurrentUser();
 
         if ('POST' == $request->getMethod()) {
+
+            // if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
+            //     return $this->createJsonResponse(['error' => ['code'=> 403, 'message' => $this->trans("exception.form..drag.expire")]], 403);
+            // }
+
             $form->handleRequest($request);
             $userId = $currentUser->id;
 
@@ -568,12 +567,17 @@ class ThreadController extends CourseBaseController
         } else {
             $course = $this->getCourseService()->tryManageCourse($courseId);
         }
+        $course = $this->buildCourseTitle($course);
 
         $thread = $this->getThreadService()->getThread($courseId, $threadId);
 
         $form = $this->createPostForm($post);
 
         if ('POST' == $request->getMethod()) {
+            // if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
+            //     return $this->createMessageResponse('error', $this->trans("exception.form..drag.expire"));
+            // }
+            
             $form->handleRequest($request);
 
             if ($form->isValid()) {

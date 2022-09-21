@@ -46,13 +46,5 @@ export default {
 .gn-list {
   margin-right: 16px;
   margin-left: 16px;
-  background: linear-gradient(
-    to left,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.8) 25%,
-    rgba(255, 255, 255, 1) 50%,
-    rgba(255, 255, 255, 0.8) 75%,
-    rgba(255, 255, 255, 0.1) 100%
-  );
 }
 </style>

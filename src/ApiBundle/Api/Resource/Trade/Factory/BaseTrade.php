@@ -119,14 +119,6 @@ abstract class BaseTrade
     }
 
     /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->biz->service('System:SettingService');
-    }
-
-    /**
      * @return CurrentUser
      */
     protected function getUser()

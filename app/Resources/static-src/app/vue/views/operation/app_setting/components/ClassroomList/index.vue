@@ -89,24 +89,12 @@ export default {
 
   .classroom-list__title {
     position: relative;
-    padding-left: 10px;
     max-width: 60%;
     height: 24px;
     font-size: 16px;
     font-weight: 500;
     color: #333;
     line-height: 24px;
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: 6px;
-      left: 0;
-      width: 4px;
-      height: 12px;
-      background: #03c777;
-      border-radius: 1px;
-    }
   }
 
   &__more {

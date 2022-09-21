@@ -5,7 +5,6 @@
   {{ 'user.oauth.register_account'|trans }}
 {% endblock %}
 
-
 {% set registerClass = 'third-party-register-panel' %}
 
 {% block panel_body %}
@@ -116,7 +115,7 @@
       {% if setting('auth.user_terms') == 'opened' and setting('auth.privacy_policy') == 'opened' %}
         <div class="form-group mbl">
           <div class="controls">
-            <input type="checkbox" name="agree_policy" checked="checked"> {{ 'user.register.read_agree'|trans }}
+            <input type="checkbox" name="agree_policy"> {{ 'user.register.read_agree'|trans }}
             <a href="{{ path('user_terms') }}" target="_blank">《{{'user.register.user_service_protocol'|trans}}》</a>
             {{ 'site.default.and'|trans }}
             <a href="{{ path('privacy_policy') }}" target="_blank">《{{'user.register.privacy_policy'|trans}}》</a>
@@ -129,7 +128,7 @@
       {% elseif setting('auth.user_terms') == 'opened' %}
         <div class="form-group mbl">
           <div class="controls">
-            <input type="checkbox" name="agree_policy" checked="checked"> {{ 'user.register.read_agree'|trans }}
+            <input type="checkbox" name="agree_policy"> {{ 'user.register.read_agree'|trans }}
             <a href="{{ path('user_terms') }}" target="_blank">《{{'user.register.user_service_protocol'|trans}}》</a>
             <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_existed_account'|trans }}</a>
           </div>
@@ -137,7 +136,7 @@
       {% elseif setting('auth.privacy_policy') == 'opened' %}
         <div class="form-group mbl">
           <div class="controls">
-            <input type="checkbox" name="agree_policy" checked="checked"> {{ 'user.register.read_agree'|trans }}
+            <input type="checkbox" name="agree_policy"> {{ 'user.register.read_agree'|trans }}
             <a href="{{ path('privacy_policy') }}" target="_blank">《{{'user.register.privacy_policy'|trans}}》</a>
             <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_existed_account'|trans }}</a>
           </div>

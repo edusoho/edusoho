@@ -1,6 +1,9 @@
 import notify from 'common/notify';
+import Captcha from 'app/common/captcha';
 
-class ThreadShowWidget {
+let captcha = new Captcha({drag:{limitType:"article", bar:'#drag-btn', target: '.js-jigsaw'}});
+
+class ThreadShowWidget{
   constructor(prop) {
     this.ele = $(prop.element);
     this.init();
@@ -143,7 +146,7 @@ class ThreadShowWidget {
     if ($form.length == 0) {
       return;
     }
-
+    
     let editor = null;
     const $textarea = $form.find('textarea[name=content]');
     if ($textarea.data('imageUploadUrl')) {
@@ -156,13 +159,22 @@ class ThreadShowWidget {
         $textarea.val(editor.getData());
       });
     }
+    
+    var captchaProp = null;
+    if($("input[name=enable_anti_brush_captcha]").val() == 1){
+      captchaProp = {
+        captchaClass: captcha,
+        isShowCaptcha: $(captcha.params.maskClass).length ? 1 : 0,
+      };
+    }
     const $btn = $form.find('[type=submit]');
-    $form.validate({
+    let formValidate = $form.validate({
       ajax: true,
       currentDom: $btn,
       rules: {
         content: 'required'
       },
+      captcha: captchaProp,
       submitSuccess: function (response) {
         $btn.button('reset');
         if ($textarea.data('imageUploadUrl')) {
@@ -183,21 +195,49 @@ class ThreadShowWidget {
         $('.js-attachment-list').empty();
         $('.js-attachment-ids').val('');
         $('.js-upload-file').show();
+        formValidate.settings.captcha.isShowCaptcha = 1;
+        captcha.hideDrag();
       },
       submitError: function (data) {
+        formValidate.settings.captcha.isShowCaptcha = 1;
+        captcha.hideDrag();
         $btn.button('reset');
       }
     });
+
+    $form.on("submitHandler", function(){
+      captcha.setType("comment");
+    })
+
+    captcha.on('success',function(data){
+      if(data.type == 'comment'){
+        formValidate.settings.captcha.isShowCaptcha = 0;
+        $form.find("input[name=_dragCaptchaToken]").val(data.token);
+        $form.submit();
+      }
+    })
   }
 
   initSubpostForm($form) {
+    var captchaProp = null;
+    if($("input[name=enable_anti_brush_captcha]").val() == 1){
+      captchaProp = {
+        captchaClass: captcha,
+        isShowCaptcha: $(captcha.params.maskClass).length ? 1 : 0,
+      };
+    }
+
+    $form.off("submitHandler");
+    captcha.off("success");
+
     const $btn = $form.find('[type=submit]');
-    $form.validate({
+    let formValidateReply = $form.validate({
       ajax: true,
       currentDom: $btn,
       rules: {
         content: 'required'
       },
+      captcha: captchaProp,
       submitSuccess: function (data) {
         if (data.error) {
           notify('danger', data.error);
@@ -209,18 +249,29 @@ class ThreadShowWidget {
         const $subpostsNum = $form.parents('.thread-post').find('.subposts-num');
         $subpostsNum.text(parseInt($subpostsNum.text()) + 1);
         $subpostsNum.parent().removeClass('hide');
+        formValidateReply.settings.captcha.isShowCaptcha = 1;
+        captcha.hideDrag();
       },
       submitError: function (data) {
+        formValidateReply.settings.captcha.isShowCaptcha = 1;
+        captcha.hideDrag();
         $btn.button('reset');
-        data = $.parseJSON(data.responseText);
-        if (data.error) {
-          // notify('danger', data.error.message);
-          return ;
-        } else {
-          notify('danger', Translator.trans('thread.post.reply_error_hint'));
-        }
       }
     });
+
+    $form.on("submitHandler", function(){
+      captcha.setType("reply");
+    })
+    
+    
+    captcha.on('success', function(data){
+      if(data.type == 'reply'){
+        formValidateReply.settings.captcha.isShowCaptcha = 0;
+        $form.find("input[name=_dragCaptchaToken]").val(data.token);
+        $form.submit();
+      }
+    })
+
   }
 
   undelegateEvents(element, eventName) {

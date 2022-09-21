@@ -11,7 +11,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
 
     protected $collectTable = 'biz_wrong_question_collect';
 
-    const WRONG_QUESTION_ORDER_BY = ['submit_time'];
+    const WRONG_QUESTION_ORDER_BY = ['submit_time', 'has_answer'];
 
     const WRONG_QUESTION_COLLECT_ORDER_BY = ['wrong_times', 'last_submit_time'];
 
@@ -176,7 +176,7 @@ class WrongQuestionDaoImpl extends AdvancedDaoImpl implements WrongQuestionDao
                 'testpaper_id IN (:testpaper_ids)',
                 'created_time = :created_time',
             ],
-            'orderbys' => ['id', 'created_time', 'submit_time'],
+            'orderbys' => ['id', 'created_time', 'submit_time', 'has_answer'],
         ];
     }
 }

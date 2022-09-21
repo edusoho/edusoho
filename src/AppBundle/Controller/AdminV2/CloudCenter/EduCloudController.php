@@ -224,9 +224,13 @@ class EduCloudController extends BaseController
 
             $this->setCloudLiveLogo($capacity['provider'], $client);
 
-            $redirectUrl = 'talkFun' == $capacity['provider'] ? 'admin_v2_edu_cloud_edulive_setting' : 'admin_v2_edu_cloud_edulive_overview';
+            $this->saveLiveCloudSetting($live);
 
-            return $this->redirect($this->generateUrl($redirectUrl));
+            $this->getEduCloudService()->uploadCallbackUrl();
+
+            $redirectUrl = in_array($capacity['provider'], ['talkFun', 'liveCloud']) ? 'admin_v2_edu_cloud_edulive_setting' : 'admin_v2_edu_cloud_edulive_overview';
+
+            return $this->redirectToRoute($redirectUrl);
         }
 
         if (empty($liveCourseSetting['live_course_enabled'])) {
@@ -248,6 +252,7 @@ class EduCloudController extends BaseController
             'account' => $overview['account'],
             'liveCourseSetting' => $liveCourseSetting,
             'capacity' => $capacity,
+            'liveCloudSetting' => $this->getSettingService()->get('live_cloud'),
         ]);
     }
 
@@ -1200,6 +1205,16 @@ class EduCloudController extends BaseController
         }
 
         return false;
+    }
+
+    protected function saveLiveCloudSetting($setting)
+    {
+        $liveCloudSetting = $this->getSettingService()->get('live_cloud', []);
+        $liveCloudSetting = array_merge($liveCloudSetting, ArrayToolkit::parts($setting, ['live_watermark_enable', 'live_watermark_info']));
+        if (empty($setting['live_watermark_info'])) {
+            unset($liveCloudSetting['live_watermark_info']);
+        }
+        $this->getSettingService()->set('live_cloud', $liveCloudSetting);
     }
 
     private function renderConsultWithoutEnable($cloudConsult)

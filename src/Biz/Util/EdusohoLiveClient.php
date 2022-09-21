@@ -222,6 +222,11 @@ class EdusohoLiveClient
         return $this->createCloudApi('root')->get("/liveCloud/room/{$cloudLiveId}/info");
     }
 
+    public function getEsLiveInfos($liveIds)
+    {
+        return $this->createCloudApi('root')->get("/liveCloud/room/infos?ids=".implode(",", $liveIds));
+    }
+
     public function updatePseudoLiveVideo($liveId, $videoUrl)
     {
         return $this->createCloudApi('root')->post('/liveCloud/pseudoVideo/set', [
@@ -298,6 +303,16 @@ class EdusohoLiveClient
     public function createLiveTeacher(array $args)
     {
         return $this->createCloudApi('root')->post('/lives/teachers', $args);
+    }
+
+    public function createLiveTicket($roomId, array $args)
+    {
+        return $this->createCloudApi('leaf')->post("/liverooms/{$roomId}/tickets", $args);
+    }
+
+    public function getLiveTicket($roomId, $ticketNo)
+    {
+        return $this->createCloudApi('leaf')->get("/liverooms/{$roomId}/tickets/{$ticketNo}");
     }
 
     protected function createCloudApi($server)

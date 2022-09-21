@@ -14,7 +14,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
         return [
             'timestamps' => [],
             'serializes' => [],
-            'orderbys' => ['createdTime', 'startTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq', 'updatedTime'],
+            'orderbys' => ['createdTime', 'startTime', 'endTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq', 'updatedTime'],
             'conditions' => [
                 'id = :lessonId',
                 'id NOT IN (:lessonIdNotIn)',
@@ -35,6 +35,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
                 'createdTime <= :endTime',
                 'copyId = :copyId',
                 'courseId IN ( :courseIds )',
+                'replayStatus IN (:replayStatusList)',
             ],
         ];
     }
@@ -94,10 +95,10 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
         return $this->db()->fetchColumn($sql, [$courseId]);
     }
 
-    public function findFinishedLivesWithinTwoHours()
+    public function findFinishedLivesWithinOneDay()
     {
         $currentTime = time();
-        $expiredTime = 3600 * 2;
+        $expiredTime = 3600 * 24;
         $sql = "SELECT * FROM {$this->table} WHERE type = 'liveOpen' AND {$currentTime} > endTime AND ({$currentTime} - endTime) < {$expiredTime} AND replayStatus = 'ungenerated' AND progressStatus != 'closed';";
 
         return $this->db()->fetchAll($sql, []);

@@ -36,6 +36,7 @@ class DefaultController extends BaseController
         return $this->render('admin-v2/default/index.html.twig', [
             'isNewcomerTaskAllDone' => $this->isNewcomerTaskAllDone(),
             'isSetConsult' => $this->validateConsultSetting(),
+//            'showChatGroupQrCode' => 'none' == $this->getSchoolLevelKey(),
         ]);
     }
 

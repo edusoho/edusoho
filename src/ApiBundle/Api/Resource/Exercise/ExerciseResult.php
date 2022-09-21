@@ -65,6 +65,8 @@ class ExerciseResult extends AbstractResource
             }
 
             $answerRecord = $this->getAnswerService()->startAnswer($answerScene['id'], $assessment['id'], $user['id']);
+        }else if('reviewing' != $answerRecord['status']){
+            $answerRecord = $this->getAnswerService()->continueAnswer($answerRecord['id']);
         }
 
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
@@ -72,6 +74,7 @@ class ExerciseResult extends AbstractResource
         $items = $testpaperWrapper->wrapTestpaperItems($assessment, $questionReports);
         $exerciseResult = $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $answerScene, $answerReport);
         $exerciseResult['items'] = array_values($items);
+        $exerciseResult['courseId'] = $course['id'];
 
         return $exerciseResult;
     }
@@ -82,10 +85,6 @@ class ExerciseResult extends AbstractResource
 
         $data = $request->request->all();
         $exerciseRecord = $this->getAnswerRecordService()->get($exerciseResultId);
-
-        if (!empty($exerciseRecord) && !in_array($exerciseRecord['status'], ['doing', 'paused'])) {
-            throw ExerciseException::FORBIDDEN_DUPLICATE_COMMIT();
-        }
 
         if ($exerciseRecord['user_id'] != $user['id']) {
             throw ExerciseException::FORBIDDEN_ACCESS_EXERCISE();

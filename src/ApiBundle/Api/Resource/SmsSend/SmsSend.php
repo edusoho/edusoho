@@ -5,12 +5,14 @@ namespace ApiBundle\Api\Resource\SmsSend;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\BehaviorVerification\Service\BehaviorVerificationService;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SmsSend extends AbstractResource
 {
@@ -23,6 +25,16 @@ class SmsSend extends AbstractResource
      */
     public function add(ApiRequest $request)
     {
+        if (!($request->getHttpRequest()->isXmlHttpRequest())) {
+            $mobileSetting = $this->getSettingService()->get('mobile',array());
+            $wap = $this->getSettingService()->get('wap',array());
+            if ($mobileSetting['enabled'] == 0 && $wap['template'] != 'sail'){
+                return null;
+            }
+        }
+        if ($this->getBehaviorVerificationService()->behaviorVerification($request->getHttpRequest())){
+            return new JsonResponse(['ACK' => 'ok', "allowance" => 0]);
+        }
         $smsType = $request->request->get('type', '');
         $mobile = $request->request->get('mobile', '');
         $allowNotExistMobile = $request->request->get('allowNotExistMobile', 1);
@@ -109,10 +121,10 @@ class SmsSend extends AbstractResource
     }
 
     /**
-     * @return SettingService
+     * @return BehaviorVerificationService
      */
-    private function getSettingService()
+    protected function getBehaviorVerificationService()
     {
-        return $this->biz->service('System:SettingService');
+        return $this->biz->service('BehaviorVerification:BehaviorVerificationService');
     }
 }

@@ -94,12 +94,12 @@ export default {
 
   &__price {
     position: absolute;
-    right: 8px;
+    left: 8px;
     bottom: 8px;
     font-size: 12px;
     font-weight: 500;
     line-height: 16px;
-    color: #ff5c3b;
+    color: #FF7A34;
   }
 }
 </style>

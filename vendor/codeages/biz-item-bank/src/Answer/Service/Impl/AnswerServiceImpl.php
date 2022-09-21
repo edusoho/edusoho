@@ -3,7 +3,9 @@
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
 use Biz\System\Service\LogService;
+use Biz\Testpaper\Job\AssessmentAutoSubmitJob;
 use Biz\WrongBook\Dao\WrongQuestionDao;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
@@ -16,6 +18,7 @@ use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
+use Ramsey\Uuid\Uuid;
 
 class AnswerServiceImpl extends BaseService implements AnswerService
 {
@@ -29,11 +32,19 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'answer_scene_id' => $answerSceneId,
             'assessment_id' => $assessmentId,
             'user_id' => $userId,
+            'admission_ticket' => $this->generateAdmissionTicket(),
         ]);
 
         $this->dispatch('answer.started', $answerRecord);
 
+        $this->registerAutoSubmitJob($answerRecord);
+
         return $answerRecord;
+    }
+
+    protected function generateAdmissionTicket()
+    {
+        return Uuid::uuid1()->getHex();
     }
 
     public function submitAnswer(array $assessmentResponse)
@@ -105,6 +116,32 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $this->dispatch('answer.submitted', $answerRecord);
 
         return $answerRecord;
+    }
+
+    public function buildAssessmentResponse($answerRecordId)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+        $assessmentResponse = ['answer_record_id' => $answerRecordId, 'assessment_id' => $answerRecord['assessment_id']];
+        $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
+        $sectionResponses = ArrayToolkit::group($answerQuestionReports, 'section_id');
+        foreach ($sectionResponses as $sectionId => &$sectionResponse) {
+            $itemResponses = ArrayToolkit::group($sectionResponse, 'item_id');
+            foreach ($itemResponses as $itemId => &$itemResponse) {
+                foreach ($itemResponse as &$questionResponses) {
+                    $questionResponses = ArrayToolkit::parts($questionResponses, ['question_id', 'response']);
+                }
+                $itemResponse = ['question_responses' => $itemResponse];
+                $itemResponse['item_id'] = $itemId;
+
+            }
+            $itemResponses = array_values($itemResponses);
+            $sectionResponse = ['item_responses' => $itemResponses];
+            $sectionResponse['section_id'] = $sectionId;
+        }
+        $assessmentResponse['section_responses'] = array_values($sectionResponses);
+        $assessmentResponse['used_time'] = $answerScene['limited_time'] * 60;
+        return $assessmentResponse;
     }
 
     protected function sumTotalScore(array $answerQuestionReports)
@@ -576,18 +613,26 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         if (AnswerService::ANSWER_RECORD_STATUS_DOING == $answerRecord['status']) {
-            return $answerRecord;
+            return $this->getAnswerRecordService()->update(
+                $answerRecordId,
+                [
+                    'admission_ticket' => $this->generateAdmissionTicket(),
+                ]
+            );
         }
 
-        if (AnswerService::ANSWER_RECORD_STATUS_PAUSED != $answerRecord['status']) {
-            throw new AnswerException('Answer not paused.', ErrorCode::ANSWER_NOTPAUSED);
+        if (in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED])) {
+            throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
         }
 
         $this->dispatch('answer.continued', $answerRecord);
 
         return $this->getAnswerRecordService()->update(
             $answerRecordId,
-            ['status' => AnswerService::ANSWER_RECORD_STATUS_DOING]
+            [
+                'status' => AnswerService::ANSWER_RECORD_STATUS_DOING,
+                'admission_ticket' => $this->generateAdmissionTicket(),
+            ]
         );
     }
 
@@ -657,11 +702,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
 
         if (empty($this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']))) {
-            throw new AnswerException('Answer record not found.', ErrorCode::ANSWER_RECORD_NOTFOUND);
+            throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
         }
 
-        if (AnswerService::ANSWER_RECORD_STATUS_DOING != $answerRecord['status']) {
-            throw new AnswerException('Answer not doing.', ErrorCode::ANSWER_NODOING);
+        if (!in_array($answerRecord['status'],[AnswerService::ANSWER_RECORD_STATUS_DOING,AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
+            throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
         }
 
         if ($answerRecord['assessment_id'] != $assessmentResponse['assessment_id']) {
@@ -679,6 +724,22 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         return $assessmentResponse;
+    }
+
+    protected function registerAutoSubmitJob($answerRecord){
+        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+
+        if (empty($answerScene['limited_time'])){
+            return;
+        }
+        $autoSubmitJob = [
+            'name' => 'AssessmentAutoSubmitJob_' . $answerRecord['id'] . '_' . time(),
+            'expression' => time() + $answerScene['limited_time'] * 60 + 120,
+            'class' => 'Biz\Testpaper\Job\AssessmentAutoSubmitJob',
+            'args' => ['answerRecordId' => $answerRecord['id']]
+        ];
+
+        $this->getSchedulerService()->register($autoSubmitJob);
     }
 
     /**
@@ -764,6 +825,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getWrongQuestionDao()
     {
         return $this->biz->dao('WrongBook:WrongQuestionDao');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->biz->service('Scheduler:SchedulerService');
     }
 
 }

@@ -733,9 +733,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return false;
     }
 
-    public function findFinishedLivesWithinTwoHours()
+    public function findFinishedLivesWithinOneDay()
     {
-        return $this->getActivityDao()->findFinishedLivesWithinTwoHours();
+        return $this->getActivityDao()->findFinishedLivesWithinOneDay();
     }
 
     public function findActivitiesByMediaIdsAndMediaType($mediaIds, $mediaType)
@@ -777,18 +777,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 return $activity;
             }
         }
-    }
-
-    protected function checkLiveFinished($activity)
-    {
-        $isEsLive = EdusohoLiveClient::isEsLive($activity['ext']['liveProvider']);
-        $endLeftSeconds = time() - $activity['endTime'];
-
-        //ES直播结束时间2小时后就自动结束，第三方直播以直播结束时间为准
-        $thirdLiveFinished = $endLeftSeconds > 0 && !$isEsLive;
-        $esLiveFinished = $isEsLive && $endLeftSeconds > self::LIVE_ENDTIME_DIFF_SECONDS;
-
-        return $thirdLiveFinished || $esLiveFinished;
     }
 
     public function orderAssessmentSubmitNumber($userIds, $answerSceneId)

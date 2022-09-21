@@ -8,9 +8,10 @@
     <form class="es-commet" id="thread-post-form" method="POST" action="{{ path('open_course_post',{id:course.id}) }}" onsubmit="return false">
       <textarea class="form-control form-control-o" rows="6" placeholder="{{'my.teaching.open_course.comment.content.placeholder'|trans}}" {% if not app.user %}disabled{% endif %} name="content" data-display="{{'my.teaching.open_course.comment.content.placeholder'|trans}}"></textarea>
       <div class="form-group clearfix">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <input type="hidden" name="_dragCaptchaToken" value="">
         <button type="submit" class="btn btn-primary pull-right {% if not app.user or app.request.get('as')|default('') == 'preview' %}disabled{% endif %}" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.comment'|trans}}</button>
       </div>
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
   {% else %}
     <div class="empty">

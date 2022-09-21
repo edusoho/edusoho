@@ -2,6 +2,7 @@
 
 namespace AppBundle\Common;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -65,6 +66,9 @@ class ExportHelp
 
     public static function exportCsv($request, $fileName)
     {
+        if(empty($fileName)) {
+            return new JsonResponse('empty fileName', 200);
+        }
         $filePath = self::getFilePath($request->query->get('fileName'));
         if (empty($filePath) || !file_exists($filePath)) {
             return new JsonResponse('empty file', 200);
@@ -91,7 +95,10 @@ class ExportHelp
     public static function getFilePath($fileName)
     {
         $rootPath = ServiceKernel::instance()->getParameter('topxia.upload.private_directory');
-
+        $filesystem = new Filesystem();
+        if (!$filesystem->exists($rootPath)) {
+            $filesystem->mkdir($rootPath);
+        }
         return $rootPath.'/'.basename($fileName);
     }
 }

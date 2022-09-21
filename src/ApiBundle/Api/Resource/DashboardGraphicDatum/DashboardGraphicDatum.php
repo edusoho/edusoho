@@ -168,12 +168,4 @@ class DashboardGraphicDatum extends AbstractResource
     {
         return $this->service('ItemBank:Answer:AnswerRecordService');
     }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 }

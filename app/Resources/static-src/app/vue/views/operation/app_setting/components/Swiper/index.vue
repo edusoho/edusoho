@@ -84,7 +84,7 @@ export default {
 .swiper-container {
   position: relative;
   width: 100%;
-  height: 150px;
+  height: 136px;
 
   .swiper-slide {
     box-sizing: border-box;
@@ -100,7 +100,6 @@ export default {
       color: #919191;
       font-weight: bold;
       text-align: center;
-      line-height: 140px;
       transform: scale(0.96);
       transition: all 0.3s ease;
 
@@ -119,25 +118,22 @@ export default {
 
   .pagination {
     position: absolute;
+    left: 34px;
+    bottom: 8px;
     z-index: 20;
     margin: 0;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
 
     /deep/ .swiper-pagination-switch {
       display: inline-block;
-      width: 6px;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.4);
-      border-radius: 50%;
-      margin: 0 4px;
+      width: 12px;
+      height: 2px;
+      margin-right: 4px;
+      background: rgba(255, 255, 255, 0.6);
+      transform: matrix(-1, 0, 0, 1, 0, 0);
     }
 
     /deep/ .swiper-active-switch {
-      width: 15px;
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: 8px;
+      background: #fff;
     }
   }
 }

@@ -24,7 +24,7 @@ class UpdateLiveStatusJob extends AbstractJob
 
     private function findLivesByActivity()
     {
-        $activities = $this->getActivityService()->findFinishedLivesWithinTwoHours();
+        $activities = $this->getActivityService()->findFinishedLivesWithinOneDay();
         if (empty($activities)) {
             return array();
         }
@@ -33,7 +33,6 @@ class UpdateLiveStatusJob extends AbstractJob
 
         $conditions = array(
             'ids' => $mediaIds,
-            'replayStatus' => 'ungenerated',
             'progressStatusNotEqual' => EdusohoLiveClient::LIVE_STATUS_CLOSED,
         );
         $liveActivities = $this->getLiveActivityService()->search($conditions, null, 0, PHP_INT_MAX);
@@ -52,7 +51,7 @@ class UpdateLiveStatusJob extends AbstractJob
 
     private function findLivesByOpenCourseLesson()
     {
-        $lessons = $this->getOpenCourseService()->findFinishedLivesWithinTwoHours();
+        $lessons = $this->getOpenCourseService()->findFinishedLivesWithinOneDay();
 
         if (empty($lessons)) {
             return array();
@@ -75,8 +74,29 @@ class UpdateLiveStatusJob extends AbstractJob
 
         $client = $this->createLiveApi();
         $results = $client->checkLiveStatus($formatLives);
-
+        if(!empty($results['error'])) {
+            return $this->checkEsLiveStatusFromCloud($lives);
+        }
         return $results;
+    }
+
+    private function checkEsLiveStatusFromCloud($lives)
+    {
+        $liveIds = ArrayToolkit::column($lives, 'liveId');
+        if (empty($liveIds)) {
+            return array();
+        }
+
+        $client = $this->createLiveApi();
+        $results = $client->getEsLiveInfos($liveIds);
+        $liveIds = ArrayToolkit::column($results,'id');
+        $statuses = ArrayToolkit::column($results, 'status');
+        foreach ($statuses as &$status) {
+            if(in_array($status,['finished', 'generating'])) {
+                $status = 'closed';
+            }
+        }
+        return array_combine($liveIds, $statuses);
     }
 
     private function formatLives($lives)

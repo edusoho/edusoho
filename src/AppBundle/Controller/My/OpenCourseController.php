@@ -53,21 +53,19 @@ class OpenCourseController extends BaseController
 
         if ($user->isAdmin()) {
             $conditions['userId'] = $user['id'];
-        } else {
-            $conditions['courseIds'] = [-1];
-            $members = $this->getOpenCourseService()->searchMembers(
-                ['userId' => $user['id'], 'role' => 'teacher'],
-                ['createdTime' => 'ASC'],
-                0,
-                999
-            );
-
-            if ($members) {
-                foreach ($members as $key => $member) {
-                    $conditions['courseIds'][] = $member['courseId'];
-                }
-            }
+            $openCourses = $this->getOpenCourseService()->searchCourses($conditions, [], 0, PHP_INT_MAX, ['id']);
+            $conditions['courseIds'] = array_column($openCourses, 'id');
+            unset($conditions['userId']);
         }
+        $members = $this->getOpenCourseService()->searchMembers(
+            ['userId' => $user['id'], 'role' => 'teacher'],
+            [],
+            0,
+            PHP_INT_MAX,
+            ['courseId']
+        );
+        $conditions['courseIds'] = $conditions['courseIds'] ?? [];
+        $conditions['courseIds'] = array_merge($conditions['courseIds'], array_column($members, 'courseId')) ?: [-1];
 
         return $conditions;
     }
