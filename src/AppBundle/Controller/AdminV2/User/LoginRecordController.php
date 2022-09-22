@@ -17,7 +17,7 @@ class LoginRecordController extends BaseController
             'keywordType' => $request->query->get('keywordType'),
             'keyword' => $request->query->get('keyword'),
             'orgCode' => $request->query->get('orgCode'),
-            'role' => 'ROLE_USER'
+            'isStudent' => 1
         ];
         $userConditions = $this->fillOrgCode($userConditions);
 
