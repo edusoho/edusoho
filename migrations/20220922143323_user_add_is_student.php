@@ -11,7 +11,7 @@ class UserAddIsStudent extends Migration
     {
         if (!$this->isFieldExist('user', 'isStudent')) {
             $biz = $this->getContainer();
-            $biz['db']->exec("ALTER TABLE `user` ADD COLUMN `isStudent` tinyint(1)  NOT NULL DEFAULT 1 COMMENT '是否学员管理添加'");
+            $biz['db']->exec("ALTER TABLE `user` ADD COLUMN `isStudent` tinyint(1)  NOT NULL DEFAULT 1 COMMENT '是否为学员'");
         }
     }
 
