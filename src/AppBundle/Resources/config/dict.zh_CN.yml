@@ -237,6 +237,12 @@ userKeyWordType:
     loginIp: 登录IP
     idcard: 身份证号
 
+staffKeyWordType:
+  verifiedMobile: 手机号
+  email: 邮件地址
+  loginIp: 登录IP
+  idcard: 身份证号
+
 jobCycle:
     once: 一次
     everyhour: 每小时
@@ -290,6 +296,10 @@ userType:
 userKeyWordTypes:
     nickname: 学员名
     email: 邮件地址
+
+staffKeyWordTypes:
+  nickname: 员工名
+  email: 邮件地址
 
 userStatisticsTypes:
   nickname: 学员名

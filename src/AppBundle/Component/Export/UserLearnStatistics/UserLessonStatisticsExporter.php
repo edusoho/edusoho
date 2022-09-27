@@ -35,7 +35,7 @@ class UserLessonStatisticsExporter extends Exporter
     public function getContent($start, $limit)
     {
         $users = $this->getUserService()->searchUsers(
-            [ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']),'isStudent' => 1],
+            [ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']),'isStudent' => 0],
             ['id' => 'DESC'],
             $start,
             $limit,

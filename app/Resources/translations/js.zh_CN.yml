@@ -1362,9 +1362,12 @@ admin.user.upload_avatar_success_hint: 上传成功！
 admin.user.upload_assistant_qrcode_success_hint: 上传成功！
 admin.user.password_modify_success_hint: 密码修改成功
 admin.user.password_modify_error_hint: 操作失败
-admin.user.create_new_user_success_hint: 新用户添加成功
-admin.user.create_new_user_fail_hint: 新用户添加失败
-admin.user.edit_user_profile_success_hint: 用户信息保存成功
+admin.user.create_new_user_success_hint: 学员添加成功
+admin.user.create_new_staff_success_hint: 员工添加成功
+admin.user.create_new_user_fail_hint: 学员添加失败
+admin.user.create_new_staff_fail_hint: 员工添加失败
+admin.user.edit_user_profile_success_hint: 学员信息保存成功
+admin.user.edit_staff_profile_success_hint: 员工信息保存成功
 admin.user.edit_user_profile_error_hint: 操作失败
 admin.user.valid_weibo_address_input.message: 网站地址不正确，须以http://weibo.com开头。
 admin.user.valid_site_address_input.message: 网站地址不正确，须以http://或https://开头。
@@ -1384,7 +1387,7 @@ admin.user.email_verify_email_send_success_hint: Email验证邮件，发送成�
 admin.user.email_verify_email_send_fail_hint: Email验证邮件，发送失败
 admin.user.change_user_role_fail_hint: 用户必须拥有%user%角色
 admin.user.cancel_user_teacher_role_hint: 取消该用户的教师角色，同时将收回该用户所有教授的课程的教师权限。您真的要这么做吗？
-admin.user.change_roles_success_hint: 用户组保存成功
+admin.user.change_roles_success_hint: 角色保存成功
 admin.user.change_roles_fail_hint: 操作失败
 admin.user.update_org_success_hint: 修改用户所属机构成功
 admin.user.update_org_fail_hint: 操作失败
@@ -1561,8 +1564,10 @@ course_manage.live_statistics.live_not_end: 直播数据未生成
 course_manage.live_statistics.checkin_not_support: 当前直播课暂不支持点名功能
 course_manage.live_statistics.data_not_valid: 数据异常，直播间数据返回错误
 
-admin_v2.user.nickname_modify_success_hint: 用户名修改成功
+admin_v2.user.nickname_modify_success_hint: 学员名修改成功
 admin_v2.user.nickname_modify_error_hint: 操作失败
+
+admin_v2.staff.nickname_modify_success_hint: 员工名修改成功
 
 admin_v2.developer.plumber_operate_hint: 正在操作中，可能需要一段时间，请稍后……
 admin_v2.developer.plumber_operate_error_hint: 操作失败

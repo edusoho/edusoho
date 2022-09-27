@@ -1943,6 +1943,128 @@ admin_v2_login_record_details:
         _controller: 'AppBundle:AdminV2/User/LoginRecord:showUserLoginRecord'
     permissions:
         - admin_v2_login_record
+
+admin_v2_staff:
+  path: /staff
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:index'
+  permissions:
+    - admin_v2_staff_manage
+admin_v2_staff_create:
+  path: /staff/create
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:create'
+admin_v2_staff_create_email_or_mobile_check:
+  path: /staff/create/email_or_mobile/check
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:emailOrMobileCheck'
+  permissions:
+    - admin_v2_staff_manage
+admin_v2_staff_create_nickname_check:
+  path: /staff/create/nickname/check
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:nicknameCheck'
+  permissions:
+    - admin_v2_staff_manage
+#admin_v2_staff_show:
+#  path: '/staff/{id}'
+#  defaults:
+#    _controller: 'AppBundle:AdminV2/User/StaffManage:show'
+#  permissions:
+#    - admin_v2
+admin_v2_staff_edit:
+  path: '/staff/{id}/edit'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:edit'
+  permissions:
+    - admin_v2_staff_manage
+    - admin_v2_assistant
+admin_v2_staff_roles:
+  path: '/staff/{id}/roles'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:roles'
+admin_v2_staff_avatar:
+  path: '/staff/{id}/avatar'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:avatar'
+  permissions:
+    - admin_v2_staff_avatar
+    - admin_v2_assistant
+admin_v2_staff_assistant_qrcode:
+  path: '/staff/{id}/assistant/qrcode'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:qrCode'
+  permissions:
+    - admin_v2_staff_assistant_qrcode
+    - admin_v2_assistant
+admin_v2_staff_avatar_crop:
+  path: '/staff/{id}/avatar/crop'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:avatarCrop'
+  permissions:
+    - admin_v2_staff_avatar
+    - admin_v2_assistant
+admin_v2_staff_assistant_qrcode_crop:
+  path: '/staff/{id}/assistant_qrcode/crop'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:assistantQrCodeCrop'
+  permissions:
+    - admin_v2_staff_assistant_qrcode
+    - admin_v2_assistant
+admin_v2_staff_lock:
+  path: '/staff/{id}/lock'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:lock'
+  methods:
+    - POST
+admin_v2_staff_unlock:
+  path: '/staff/{id}/unlock'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:unlock'
+  methods:
+    - POST
+admin_v2_staff_delete:
+  path: '/staff/{id}/delete'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:delete'
+  methods:
+    - POST
+admin_v2_staff_change_nickname:
+  path: '/staff/{userId}/change/nickname'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:changeNickname'
+admin_v2_staff_change_password:
+  path: '/staff/{userId}/change/password'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:changePassword'
+admin_v2_staff_send_passwordreset_email:
+  path: '/staff/{id}/send_passwordreset_email'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:sendPasswordResetEmail'
+  methods:
+    - POST
+admin_v2_staff_send_emailverify_email:
+  path: '/staff/{id}/send_emailverify_email'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:sendEmailVerifyEmail'
+  methods:
+    - POST
+admin_v2_staff_turn_into_student:
+  path: '/staff/{id}/turn_into_student'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:turnIntoStudent'
+  methods:
+    - POST
+admin_v2_staff_login_record:
+  path: /staff/login_record
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffLoginRecord:index'
+admin_v2_staff_login_record_details:
+  path: '/staff/login_record/{id}/details'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffLoginRecord:showUserLoginRecord'
+  permissions:
+    - admin_v2_staff_login_record
 admin_v2_approval_approvals:
     path: 'approvals/{approvalStatus}'
     defaults:

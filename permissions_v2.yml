@@ -260,6 +260,8 @@ admin_v2_operation_wechat_notification_manage:
     - admin_operation_wechat_notification_manage
 admin_v2_user_show:
     - admin_user_show
+#admin_v2_user_staff_show:
+#    - admin_user_staff_show
 admin_v2_user_manage:
     - admin_user_manage
 admin_v2_user_create:
