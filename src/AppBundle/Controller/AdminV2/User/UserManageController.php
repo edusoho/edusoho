@@ -170,7 +170,6 @@ class UserManageController extends UserCommonController
 
     protected function kickUserLogout($userId)
     {
-
         $tokens = $this->getTokenService()->findTokensByUserIdAndType($userId, 'mobile_login');
         if (!empty($tokens)) {
             foreach ($tokens as $token) {
