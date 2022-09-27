@@ -1966,12 +1966,6 @@ admin_v2_staff_create_nickname_check:
     _controller: 'AppBundle:AdminV2/User/StaffManage:nicknameCheck'
   permissions:
     - admin_v2_staff_manage
-#admin_v2_staff_show:
-#  path: '/staff/{id}'
-#  defaults:
-#    _controller: 'AppBundle:AdminV2/User/StaffManage:show'
-#  permissions:
-#    - admin_v2
 admin_v2_staff_edit:
   path: '/staff/{id}/edit'
   defaults:
