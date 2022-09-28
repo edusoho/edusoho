@@ -23,7 +23,7 @@ abstract class AbstractBuilder
         $this->biz = $biz;
     }
 
-    abstract public function build($id);
+    abstract public function build($ids);
 
     protected function createNewException($exception)
     {
