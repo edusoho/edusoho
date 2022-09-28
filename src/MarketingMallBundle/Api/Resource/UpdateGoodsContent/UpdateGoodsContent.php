@@ -20,27 +20,26 @@ class UpdateGoodsContent extends AbstractResource
     {
         $type = $request->query->get('type');
         $ids = explode(',',$request->query->get('ids'));
-//        $ids = $request->query->get('ids');
 
         switch ($type) {
             case 'course':
-                return $this->updateGoodsContent(new CourseInfoBuilder(),$type,$ids);
+                return $this->updateGoodsContent(new CourseInfoBuilder(), $ids);
                 break;
             case 'classroom':
-                return $this->updateGoodsContent(new ClassroomInfoBuilder(),$type,$ids);
+                return $this->updateGoodsContent(new ClassroomInfoBuilder(), $ids);
                 break;
             case 'questionBank':
-                return $this->updateGoodsContent(new QuestionBankBuilder(),$type,$ids);
+                return $this->updateGoodsContent(new QuestionBankBuilder(), $ids);
                 break;
             default:
                 break;
         }
     }
 
-    protected  function updateGoodsContent(AbstractBuilder $builder, $type, $ids)
+    protected  function updateGoodsContent(AbstractBuilder $builder, $ids)
     {
         $builder->setBiz($this->getBiz());
-        return $builder->build($ids);
+        return $builder->builds($ids);
 
     }
 

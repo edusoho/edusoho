@@ -10,33 +10,24 @@ class ClassroomInfoBuilder extends AbstractBuilder
 {
     const CLASSROOM_ALLOWED_KEY = ['classroomId', 'classroomCatalogue', 'cover', 'title', 'subtitle', 'about', 'price'];
 
-//    public function build($id)
-//    {
-//        $classroom = $this->getClassroomService()->getClassroom($id);
-//        if (empty($classroom)) {
-//            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM);
-//        }
-//
-//        return $this->buildClassroomData($classroom);
-//    }
-
-    public function build($ids)
+    public function build($id)
     {
-        $classroom = $this->getClassroomService()->findClassroomsByIds($ids);
-        return $classroom;
-//        if (empty($classroom)) {
-//            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM);
-//        }
-//
-//        return $this->buildClassroomData($classroom);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        if (empty($classroom)) {
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM);
+        }
+
+        return $this->buildClassroomData($classroom);
     }
 
     protected function buildClassroomData($classroom)
     {
         $courseIds = ArrayToolkit::column($this->getClassroomService()->findCoursesByClassroomId($classroom['id']), 'id');
+
         $classroom['classroomId'] = $classroom['id'];
         $classroom['cover'] = $this->transformCover(['small' => $classroom['smallPicture'], 'middle' => $classroom['middlePicture']], 'classroom.png');
         $classroom['classroomCatalogue'] = [];
+
         foreach ($courseIds as $courseId) {
             $course = $this->getCourseDetailBuilder()->build($courseId);
             unset($course['courseIds']);
@@ -48,6 +39,31 @@ class ClassroomInfoBuilder extends AbstractBuilder
         $classroom['about'] = $this->transformImages($classroom['about']);
 
         return $classroom;
+    }
+
+
+    public function builds($ids)
+    {
+        $classrooms = $this->getClassroomService()->findClassroomsByIds($ids);
+
+        if (empty($classrooms)) {
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM);
+        }
+
+        return $this->buildClassroomDatas($classrooms);
+    }
+
+    protected function buildClassroomDatas($classrooms)
+    {
+        $goodsContent = [];
+
+        foreach ($classrooms as $classroom) {
+            $classroom = $this->buildClassroomData($classroom);
+
+            array_push($goodsContent,$classroom);
+        }
+
+        return $goodsContent;
     }
 
     /**
