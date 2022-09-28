@@ -21,7 +21,7 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification', 'openStudentInfo', 'course_purchase_agreement',
+        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification', 'openStudentInfo', 'course_purchase_agreement','auth'
     ];
 
     public static function convertUnderline($str)
@@ -52,7 +52,7 @@ class Setting extends AbstractResource
     {
         $result = [];
         $types = $request->query->get('types', '');
-
+//        var_dump($types);die;
         foreach ($types as $type) {
             $this->checkType($type);
         }
@@ -62,6 +62,15 @@ class Setting extends AbstractResource
         }
 
         return $result;
+    }
+
+    public function getAuth()
+    {
+        $authSetting = $this->getSettingService()->get('auth', []);
+
+        return [
+            'register_mode' => empty($authSetting['register_mode']) ? 'mobile' : $authSetting['register_mode'],
+        ];
     }
 
     public function getSignSecurity()

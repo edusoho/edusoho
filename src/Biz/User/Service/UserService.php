@@ -52,6 +52,8 @@ interface UserService
 
     public function findUserProfilesByIds(array $ids);
 
+    public function findUpdateUserProfilesByIds(array $ids);
+
     public function searchUsers(array $conditions, array $orderBy, $start, $limit, $columns = []);
 
     public function countUsers(array $conditions);

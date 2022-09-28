@@ -18,7 +18,7 @@ class SyncListDaoImpl extends GeneralDaoImpl implements SyncListDao
 
     public function getSyncListByCursor($cursorAddress, $cursorType)
     {
-        $sql = "SELECT data FROM {$this->table} where status = 'new' AND id > ? AND type = 'updateUser'";
+        $sql = "SELECT id,data FROM {$this->table} where status = 'new' AND id > ? AND type = 'updateUser'";
 
         return $this->db()->fetchAll($sql, array($cursorAddress)) ?: array();
     }
