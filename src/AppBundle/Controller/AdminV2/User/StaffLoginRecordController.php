@@ -9,12 +9,12 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\System\Service\LogService;
 use Symfony\Component\HttpFoundation\Request;
 
-class LoginRecordController extends LoginRecordCommonController
+class StaffLoginRecordController extends LoginRecordCommonController
 {
     public function indexAction(Request $request)
     {
-        $indexTwigUrl = 'admin-v2/user/login-record/index.html.twig';
-        $isStudent = 0;
+        $indexTwigUrl = 'admin-v2/user/login-record/staff-login-record/index.html.twig';
+        $isStudent = 1;
 
         return $this->index($request, $isStudent, $indexTwigUrl);
     }

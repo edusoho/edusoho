@@ -745,9 +745,11 @@ admin_v2.operation.message.basic_tab: 私信管理
 # 用户-用户管理-用户管理
 admin_v2.user.user_group: 用户管理
 admin_v2.user.student_menu: 学员管理
+admin_v2.user.staff_menu: 员工管理
 
 # 用户-用户管理-用户管理-tab
 admin_v2.user.basic.basic_tab: 学员管理
+admin_v2.user.staff.basic_tab: 员工管理
 admin_v2.user.basic.fans_tab: 服务号粉丝
 admin_v2.user.basic.online_tab: 在线用户
 admin_v2.user.basic.statistics_tab: 学习数据统计
@@ -763,10 +765,24 @@ admin_v2.user.basic.basic_tab.change_password_btn: '修改密码'
 admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: '发送密码重置邮件'
 admin_v2.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮件'
 admin_v2.user.basic.basic_tab.lock_btn: '封禁学员'
-admin_v2.user.basic.basic_tab.unlock_btn: '解禁用户'
+admin_v2.user.basic.basic_tab.unlock_btn: '解禁学员'
 admin_v2.user.basic.basic_tab.delete_btn: '删除学员'
 admin_v2.user.basic.basic_tab.org_update_btn: '修改用户组织机构'
 
+admin_v2.user.staff.basic_tab.create_btn: '添加员工'
+admin_v2.user.staff.basic_tab.edit_btn: '编辑员工信息'
+admin_v2.user.staff.basic_tab.setting_roles_btn: '设置角色'
+admin_v2.user.staff.basic_tab.update_avatar_btn: '修改员工头像'
+admin_v2.user.staff.basic_tab.update_assistant_qrcode_btn: '修改助教二维码'
+admin_v2.user.staff.basic_tab.change_nickname_btn: '修改员工名'
+admin_v2.user.staff.basic_tab.change_password_btn: '修改密码'
+admin_v2.user.staff.basic_tab.send_passwordreset_email_btn: '发送密码重置邮件'
+admin_v2.user.staff.basic_tab.send_emailverify_email_btn: '发送Email验证邮件'
+admin_v2.user.staff.basic_tab.lock_btn: '封禁员工'
+admin_v2.user.staff.basic_tab.unlock_btn: '解禁员工'
+admin_v2.user.staff.basic_tab.delete_btn: '删除员工'
+admin_v2.user.staff.basic_tab.turn_into_student_btn: '转为学员'
+admin_v2.user.staff.basic_tab.org_update_btn: '修改用户组织机构'
 #用户-用户管理-实名认证
 admin_v2.user.approval_menu: 实名认证
 admin_v2.user.approval.basic_tab.cancel_btn: 撤销
