@@ -21,20 +21,19 @@ use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class UserManageController extends UserCommonController
+class StaffManageController extends UserCommonController
 {
-
-    private $route = 'admin_v2_user';
+    private $route='admin_v2_staff';
 
     public function indexAction(Request $request)
     {
-        $indexTwigUrl = 'admin-v2/user/user-manage/index.html.twig';
+        $indexTwigUrl = 'admin-v2/user/user-manage/staff-manage/index.html.twig';
         $fields = $request->query->all();
-        $isStudent = 0;
+        $isStudent = 1;
 
         return $this->index($fields, $isStudent, $indexTwigUrl);
-
     }
+
 
     public function emailCheckAction(Request $request)
     {
@@ -58,38 +57,40 @@ class UserManageController extends UserCommonController
 
     public function createAction(Request $request)
     {
-        return $this->create($request,$this->route);
+        $isStaff = true;
+
+        return $this->create($request,$this->route,$isStaff);
     }
 
     public function editAction(Request $request, $id)
     {
-        $editTwigUrl = 'admin-v2/user/user-manage/edit-modal.html.twig';
+        $editTwigUrl = 'admin-v2/user/user-manage/staff-manage/edit-modal.html.twig';
 
         return $this->edit($request, $id, $this->route, $editTwigUrl);
     }
 
     public function orgUpdateAction(Request $request, $id)
     {
-        $orgUpdateTwigUrl = 'admin-v2/user/user-manage/update-org-modal.html.twig';
+        $orgUpdateTwigUrl = 'admin-v2/user/user-manage/staff-manage/update-org-modal.html.twig';
 
         return $this->orgUpdate($request, $id, $orgUpdateTwigUrl);
     }
 
     public function showAction(Request $request, $id)
     {
-        $showTwigUrlOne = 'admin-v2/user/user-manage/show-destroyed-modal.html.twig';
-        $showTwigUrlTwo = 'admin-v2/user/user-manage/show-modal.html.twig';
+        $showTwigUrlOne = 'admin-v2/user/user-manage/staff-manage/show-destroyed-modal.html.twig';
+        $showTwigUrlTwo = 'admin-v2/user/user-manage/staff-manage/show-modal.html.twig';
 
         return $this->show($request, $id, $showTwigUrlOne, $showTwigUrlTwo);
+
     }
 
     public function rolesAction(Request $request, $id)
     {
-        $rolesTwigUrlOne = 'admin-v2/user/user-manage/user-table-tr.html.twig';
-        $rolesTwigUrlTwo = 'admin-v2/user/user-manage/roles-modal.html.twig';
-        $studentToStaff = true;
+        $rolesTwigUrlOne = 'admin-v2/user/user-manage/staff-manage/user-table-tr.html.twig';
+        $rolesTwigUrlTwo = 'admin-v2/user/user-manage/staff-manage/roles-modal.html.twig';
 
-        return $this->roles($request, $id, $rolesTwigUrlOne, $rolesTwigUrlTwo, $studentToStaff);
+        return $this->roles($request, $id, $rolesTwigUrlOne, $rolesTwigUrlTwo);
     }
 
     public function updateNicknameCheckAction(Request $request, $userId)
@@ -97,44 +98,46 @@ class UserManageController extends UserCommonController
         return $this->updateNicknameCheck($request, $userId);
     }
 
+
     public function avatarAction(Request $request, $id)
     {
-        $avatarTwigUrl = 'admin-v2/user/user-manage/user-avatar-modal.html.twig';
+        $avatarTwigUrl = 'admin-v2/user/user-manage/staff-manage/user-avatar-modal.html.twig';
 
         return $this->avatar($request, $id, $avatarTwigUrl);
     }
 
     public function qrCodeAction(Request $request, $id)
     {
-        $qrCodeTwigUrl = 'admin-v2/user/user-manage/assistant-qrcode-modal.html.twig';
+        $qrCodeTwigUrl = 'admin-v2/user/user-manage/staff-manage/assistant-qrcode-modal.html.twig';
 
         return $this->qrCode($request, $id, $qrCodeTwigUrl);
+
     }
 
     public function avatarCropAction(Request $request, $id)
     {
-        $avatarCropTwigUrl = 'admin-v2/user/user-manage/user-avatar-crop-modal.html.twig';
+        $avatarCropTwigUrl = 'admin-v2/user/user-manage/staff-manage/user-avatar-crop-modal.html.twig';
 
         return $this->avatarCrop($request, $id, $avatarCropTwigUrl);
     }
 
     public function assistantQrCodeCropAction(Request $request, $id)
     {
-        $assistantQrCodeCropTwigUrl = 'admin-v2/user/user-manage/assistant-qrcode-crop-modal.html.twig';
+        $assistantQrCodeCropTwigUrl = 'admin-v2/user/user-manage/staff-manage/assistant-qrcode-crop-modal.html.twig';
 
         return $this->assistantQrCodeCrop($request, $id, $assistantQrCodeCropTwigUrl);
     }
 
     public function lockAction($id)
     {
-        $unlockTwigUrl = 'admin-v2/user/user-manage/user-table-tr.html.twig';
+        $lockTwigUrl = 'admin-v2/user/user-manage/staff-manage/user-table-tr.html.twig';
 
-        return $this->lock($id, $unlockTwigUrl);
+        return $this->lock($id, $lockTwigUrl);
     }
 
     public function unlockAction($id)
     {
-        $unlockTwigUrl = 'admin-v2/user/user-manage/user-table-tr.html.twig';
+        $unlockTwigUrl = 'admin-v2/user/user-manage/staff-manage/user-table-tr.html.twig';
 
         return $this->unlock($id, $unlockTwigUrl);
     }
@@ -146,7 +149,8 @@ class UserManageController extends UserCommonController
 
     public function sendPasswordResetEmailAction(Request $request, $id)
     {
-        return $this->sendPasswordResetEmail($request, $id);
+       return $this->sendPasswordResetEmail($request, $id);
+
     }
 
     public function sendEmailVerifyEmailAction(Request $request, $id)
@@ -156,16 +160,28 @@ class UserManageController extends UserCommonController
 
     public function changeNicknameAction(Request $request, $userId)
     {
-        $changeNicknameTwigUrl = 'admin-v2/user/user-manage/change-nickname-modal.html.twig';
+        $changeNicknameTwigUrl = 'admin-v2/user/user-manage/staff-manage/change-nickname-modal.html.twig';
 
         return $this->changeNickname($request, $userId, $changeNicknameTwigUrl);
     }
 
     public function changePasswordAction(Request $request, $userId)
     {
-        $changePasswordTwigUrl = 'admin-v2/user/user-manage/change-password-modal.html.twig';
+        $changePasswordTwigUrl = 'admin-v2/user/user-manage/staff-manage/change-password-modal.html.twig';
 
         return $this->changePassword($request, $userId, $changePasswordTwigUrl);
+
+    }
+
+    public function turnIntoStudentAction($id)
+    {
+        $user = $this->getUserService()->getUser($id);
+
+        $this->getUserService()->changeUserRoles($user['id'], ['roles' =>'ROLE_USER']);
+        $this->getUserService()->updateUser($user['id'],['isStudent' => 1]);
+
+        return $this->createJsonResponse(['success' => true]);
+
     }
 
     protected function kickUserLogout($userId)
@@ -177,4 +193,5 @@ class UserManageController extends UserCommonController
             }
         }
     }
+
 }

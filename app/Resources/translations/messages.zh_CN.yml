@@ -298,6 +298,7 @@ user.fields.pay_password: 支付密码
 user.fileds.microblog: 微博
 user.fields.username_label: 用户名
 user.fields.username_student_label: 学员名
+user.fields.username_staff_label: 员工名
 user.fields.email_label: 邮箱
 user.fields.truename_label: 姓名
 user.fields.gender_label: 性别
@@ -6707,6 +6708,7 @@ admin.user.fields.about_label: 自我介绍
 admin.user.fields.personal_menu_label: 个人主页
 admin.user.fields.user_email: 用户邮箱
 admin.user.fields.student_email: 学员邮箱
+admin.user.fields.staff_email: 员工邮箱
 admin.user.fields.password_hint: 5-20位英文、数字、符号，区分大小写
 admin.user.fields.password_hint.low: 5-20位英文、数字、符号，区分大小写
 admin.user.fields.password_hint.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
@@ -6715,6 +6717,7 @@ admin.user.fields.confirm_password_label: 确认密码
 admin.user.fields.confirm_password_hint: 再输入一次密码
 admin.user.fields.password_label: 密码
 admin.user.fields.role_label: 用户权限
+admin.user.fields.staff_roles: 设置角色
 admin.user.fields.email: 邮箱
 admin.user.fields.idcard: 身份证号码
 
@@ -6733,6 +6736,7 @@ admin.user.manage.fields.mobile_label: 手机号
 admin.user.manage.fields.recent_login_label: 最近登录
 admin.user.manage.fields.user_total_num_label: 用户总数：
 admin.user.manage.fields.student_total_num_label: 学员总数：
+admin.user.manage.fields.staff_total_num_label: 员工总数：
 admin.user.manage.fields.forbid_label: 禁
 admin.user.manage.fields.verified_label: 已验证
 admin.user.manage.label.email_verified_hint: 该Email地址已验证
@@ -6746,10 +6750,12 @@ admin.user.manage.user_show.fields.gender_secret_label: 秘密
 admin.user.manage.user_show.fields.personal_website_label: 个人网站
 admin.user.manage.user_edit.fields.heading_title: 编辑用户信息
 admin.user.manage.student_edit.fields.heading_title: 编辑学员信息
+admin.user.manage.staff_edit.fields.heading_title: 编辑员工信息
 admin.user.manage.user_role.fields.heading_title: 设置用户组
 admin.user.manage.staff_role.fields.heading_title: 设置员工角色
 admin.user.manage.user_avatar.fields.heading_title: 设置用户头像
 admin.user.manage.student_avatar.fields.heading_title: 设置学员头像
+admin.user.manage.staff_avatar.fields.heading_title: 设置员工头像
 admin.user.manage.assistant_qrcode.fields.heading_title: 设置助教二维码
 admin.user.manage.user_avatar.fields.current_avatar: 当前头像
 admin.user.manage.assistant_qrcode.fields.current_qrcode: 当前二维码
@@ -6760,6 +6766,7 @@ admin.user.manage.user_avatar.fields.partner_avatar: 论坛头像
 admin.user.manage.user_avatar.using_current_avatar_btn: 使用该头像
 admin.user.manage.change_password.heading_title: 重置用户%nickname%的密码
 admin.user.manage.change_student_password.heading_title: 重置学员%nickname%的密码
+admin.user.manage.change_staff_password.heading_title: 重置员工%nickname%的密码
 admin.user.manage.change_password.new_password_label: 新密码
 admin.user.manage.change_password.input_data_explain.confirm_password: 再输入一次密码
 admin.user.manage.create.heading_title: 添加新用户
@@ -6773,7 +6780,8 @@ admin.user.manage.create_by_mobile.heading_title: 添加新用户
 admin.user.manage.create_by_mobile.mobile.input_placeholder: 手机号码
 admin.user.manage.create_by_mobile.nickname.input_placeholder: 不填将自动生成
 admin.user.manage.create_by_mobile_or_email.heading_title: 添加新用户
-admin.user.manage.create_student_by_mobile_or_email.heading_title: 添加新学员
+admin.user.manage.create_student_by_mobile_or_email.heading_title: 添加学员
+admin.user.manage.create_staff_by_mobile_or_email.heading_title: 添加新员工
 admin.user.manage.create_by_mobile_or_email.email_or_mobile_label: 邮箱/手机
 admin.user.manage.create_by_mobile_or_email.email_or_mobile.input_placeholder: 邮箱地址/手机号码
 admin.user.manage.create_by_mobile_or_email.nickname.input_placeholder: 不填将自动生成
@@ -11568,6 +11576,7 @@ task.show_optional_tips: 显示选修课时
 task.show_empty_content: 购买完成后即可查看课程目录～
 admin_v2.user.manage.change_nickname.heading_title: 修改用户名
 admin_v2.user.manage.change_student_nickname.heading_title: 修改学员名
+admin_v2.user.manage.change_staff_nickname.heading_title: 修改员工名
 
 course.plan_task.activity_manage.discuss.tips: 讨论任务在PC和APP中使用，暂不支持在微网校和小程序中使用!
 

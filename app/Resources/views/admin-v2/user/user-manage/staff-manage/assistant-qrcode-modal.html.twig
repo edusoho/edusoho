@@ -1,0 +1,46 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}{{'admin.user.manage.assistant_qrcode.fields.heading_title'|trans}}{% endblock %}
+{% block body %}
+
+  <form id="assistant-qrcode-form" class="form-horizontal" enctype="multipart/form-data">
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"><b>{{'admin.user.manage.assistant_qrcode.fields.current_qrcode'|trans}}</b></div>
+      <div class="controls col-md-8 controls">
+      	<img src="{{ filepath(user.weChatQrCode, 'avatar.png') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+      </div>
+      <div class="controls col-md-8 controls">
+        <p class="help-block">{{'admin.user.manage.user_avatar.upload_hint'|trans|raw}}</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8 controls">
+        <a id="upload-picture-btn" 
+        class="btn btn-primary upload-picture-btn"
+        data-upload-token="{{ upload_token('tmp', 'image') }}"
+        data-goto-url="{{ path('admin_v2_assistant_qrcode_crop', {id:user.id}) }}"
+        >{{'admin.user.manage.assistant_qrcode.upload_btn'|trans}}</a>
+        
+      </div>
+    </div>
+
+  </form>
+
+{% endblock %}
+
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+  
+  <script>app.load('user/assistant-qrcode-modal');</script>
+{% endblock %}
