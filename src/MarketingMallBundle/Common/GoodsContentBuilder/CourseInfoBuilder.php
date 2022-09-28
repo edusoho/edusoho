@@ -16,41 +16,59 @@ class CourseInfoBuilder extends AbstractBuilder
 
     private $blankChapter = ['title' => '未分类章', 'type' => 'chapter', 'isPublish' => 1, 'number' => 0, 'counts' => ['unitNum' => 0, 'lessonNum' => 0, 'taskNum' => 0], 'children' => []];
 
-    public function build($id)
-    {
-        $course = $this->getCourseService()->getCourse($id);
+//    public function build($ids)
+//    {
+//        $course = $this->getCourseService()->getCourse($ids);
+//
+//        if (empty($course)) {
+//            $this->createNewException(CourseException::NOTFOUND_COURSE);
+//        }
+//
+//        return $this->buildCourseData($course);
+//    }
 
-        if (empty($course)) {
+    public function build($ids)
+    {
+        $courses = $this->getCourseService()->findCoursesByIds($ids);
+
+        if (empty($courses)) {
             $this->createNewException(CourseException::NOTFOUND_COURSE);
         }
 
-        return $this->buildCourseData($course);
+        return $this->buildCourseData($courses);
     }
 
-    protected function buildCourseData($course)
+    protected function buildCourseData($courses)
     {
         $childrenCourseIds = [];
         $teachers = [];
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $count = $this->getCourseService()->countCoursesByCourseSetId($course['courseSetId']);
-        if (0 == $course['parentId']) {
-            $childrenCourseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+        $goodsContent = [];
+        foreach ($courses as $course){
+            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+            $count = $this->getCourseService()->countCoursesByCourseSetId($course['courseSetId']);
+            if (0 == $course['parentId']) {
+                $childrenCourseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+            }
+            $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($course['id']),'userId');
+            foreach ($teacherIds as $teacherId) {
+                $teachers[] = $this->getTeacherInfoBuilder()->build($teacherId);
+            }
+            $courseCatalogue = $this->buildCourseCatalogue($this->getCourseService()->findCourseItems($course['id']));
+
+
+            array_push($goodsContent,[
+                'courseIds' => array_merge([$course['id']], $childrenCourseIds),
+                'title' => $count == 1 ? $courseSet['title'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
+                'subtitle' => $count == 1 ? $courseSet['subtitle'] : $course['subtitle'],
+                'cover' => $this->transformCover($courseSet['cover']),
+                'price' => $course['price'],
+                'summary' => $this->transformImages($courseSet['summary']),
+                'courseCatalogue' => $courseCatalogue,
+                'teacherList' => $teachers,
+            ]);
         }
-        $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($course['id']),'userId');
-        foreach ($teacherIds as $teacherId) {
-            $teachers[] = $this->getTeacherInfoBuilder()->build($teacherId);
-        }
-        $courseCatalogue = $this->buildCourseCatalogue($this->getCourseService()->findCourseItems($course['id']));
-        return [
-            'courseIds' => array_merge([$course['id']], $childrenCourseIds),
-            'title' => $count == 1 ? $courseSet['title'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
-            'subtitle' => $count == 1 ? $courseSet['subtitle'] : $course['subtitle'],
-            'cover' => $this->transformCover($courseSet['cover']),
-            'price' => $course['price'],
-            'summary' => $this->transformImages($courseSet['summary']),
-            'courseCatalogue' => $courseCatalogue,
-            'teacherList' => $teachers,
-        ];
+
+        return $goodsContent;
     }
 
     protected function buildCourseCatalogue($courseItems)

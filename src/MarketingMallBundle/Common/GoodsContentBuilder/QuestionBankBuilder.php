@@ -14,20 +14,38 @@ use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class QuestionBankBuilder extends AbstractBuilder
 {
-    public function build($id)
-    {
-        $exercise = $this->getExerciseService()->get($id);
-        if (empty($exercise)) {
-            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
-        }
+//    public function build($id)
+//    {
+//        $exercise = $this->getExerciseService()->get($id);
+//        if (empty($exercise)) {
+//            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+//        }
+//
+//        return [
+//            'bankId' => $id,
+//            'title' => $exercise['title'],
+//            'cover' => $this->transformCover($exercise['cover'], 'item_bank_exercise.png'),
+//            'price' => $exercise['price'],
+//            'questionBankCatalogue' => array_merge([$this->buildChapterExercise($exercise)], $this->buildAssessmentList($exercise)),
+//        ];
+//    }
 
-        return [
-            'bankId' => $id,
-            'title' => $exercise['title'],
-            'cover' => $this->transformCover($exercise['cover'], 'item_bank_exercise.png'),
-            'price' => $exercise['price'],
-            'questionBankCatalogue' => array_merge([$this->buildChapterExercise($exercise)], $this->buildAssessmentList($exercise)),
-        ];
+    public function build($ids)
+    {
+        $exercise = $this->getExerciseService()->findByIds($ids);
+        return $exercise;
+
+//        if (empty($exercise)) {
+//            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+//        }
+//
+//        return [
+//            'bankId' => $id,
+//            'title' => $exercise['title'],
+//            'cover' => $this->transformCover($exercise['cover'], 'item_bank_exercise.png'),
+//            'price' => $exercise['price'],
+//            'questionBankCatalogue' => array_merge([$this->buildChapterExercise($exercise)], $this->buildAssessmentList($exercise)),
+//        ];
     }
 
     protected function buildChapterExercise($exercise)

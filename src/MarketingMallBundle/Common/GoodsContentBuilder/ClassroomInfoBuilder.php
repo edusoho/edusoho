@@ -10,14 +10,25 @@ class ClassroomInfoBuilder extends AbstractBuilder
 {
     const CLASSROOM_ALLOWED_KEY = ['classroomId', 'classroomCatalogue', 'cover', 'title', 'subtitle', 'about', 'price'];
 
-    public function build($id)
-    {
-        $classroom = $this->getClassroomService()->getClassroom($id);
-        if (empty($classroom)) {
-            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM);
-        }
+//    public function build($id)
+//    {
+//        $classroom = $this->getClassroomService()->getClassroom($id);
+//        if (empty($classroom)) {
+//            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM);
+//        }
+//
+//        return $this->buildClassroomData($classroom);
+//    }
 
-        return $this->buildClassroomData($classroom);
+    public function build($ids)
+    {
+        $classroom = $this->getClassroomService()->findClassroomsByIds($ids);
+        return $classroom;
+//        if (empty($classroom)) {
+//            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM);
+//        }
+//
+//        return $this->buildClassroomData($classroom);
     }
 
     protected function buildClassroomData($classroom)
