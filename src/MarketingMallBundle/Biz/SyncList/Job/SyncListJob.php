@@ -19,7 +19,9 @@ class SyncListJob extends AbstractJob
         $result = $client->syncNotify('classroom');
 
         if($result == true) {
-            $this->getSyncListService()->updateSyncType();
+            $ids = implode(',',array_column($this->getSyncListService()->getSyncIds(),'id'));
+
+            $this->getSyncListService()->syncStatusUpdate($ids);
         }
 
         file_put_contents("/tmp/aa/jc.txt", var_export($result, true));

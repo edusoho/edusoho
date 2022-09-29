@@ -3,6 +3,7 @@
 namespace MarketingMallBundle\Biz\SyncList\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use http\Env\Request;
 use MarketingMallBundle\Biz\SyncList\Dao\SyncListDao;
 
 class SyncListDaoImpl extends GeneralDaoImpl implements SyncListDao
@@ -16,12 +17,20 @@ class SyncListDaoImpl extends GeneralDaoImpl implements SyncListDao
         return $this->db()->fetchAll($sql);
     }
 
-//    public function updateSyncType()
-//    {
-//        $sql = "SELECT type FROM {$this->table} where status = 'new' group by type";
-//
-//        return $this->db()->fetchAll($sql);
-//    }
+    public function getSyncIds()
+    {
+        $sql = "SELECT id FROM {$this->table} where status = 'new' ";
+
+        return $this->db()->fetchAll($sql);
+    }
+
+    public function SyncStatusUpdate($ids)
+    {
+
+        $sql = "UPDATE {$this->table} set status = 'notify' where id in ({$ids})";
+
+        return $this->db()->executeUpdate($sql);
+    }
 
     public function getSyncListByCursor($cursorAddress, $cursorType)
     {

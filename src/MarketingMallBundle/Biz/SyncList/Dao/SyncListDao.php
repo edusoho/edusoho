@@ -8,7 +8,9 @@ interface SyncListDao extends GeneralDaoInterface
 {
     public function getSyncType();
 
-    public function updateSyncType();
+    public function syncStatusUpdate($ids);
+
+    public function getSyncIds();
 
     public function getSyncListByCursor($cursorAddress, $cursorType);
 }
