@@ -21,9 +21,8 @@ class ClassroomInfoBuilder extends AbstractBuilder
         return $this->buildClassroomData($classroom);
     }
 
-    protected function buildClassroomData($classroom)
+    protected function buildClassroomData($classroom, $multiple = false)
     {
-        $teacherIds = [];
         $courseIds = ArrayToolkit::column($this->getClassroomService()->findCoursesByClassroomId($classroom['id']), 'id');
 
         $classroom['classroomId'] = $classroom['id'];
@@ -32,16 +31,16 @@ class ClassroomInfoBuilder extends AbstractBuilder
 
         foreach ($courseIds as $courseId) {
             $course = $this->getCourseDetailBuilder()->build($courseId);
-            $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($courseId),'userId');
+            if($multiple == true) {
+                unset($course['teacherList']);
+                $course['teacherIds'] = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($courseId),'userId');
+            }
+
             unset($course['courseIds']);
             $course['courseId'] = $courseId;
             $classroom['classroomCatalogue'][] = $course;
-            $classroom['classroomCatalogue'][]['teacherIds'] = $teacherIds;
         }
-//        var_dump($classroom);
-//        die();
-//        $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseIds($courseIds),'userId');
-//        $classroom['classroomCatalogue'][] = $teacherIds;
+
         $classroom = ArrayToolkit::parts($classroom, self::CLASSROOM_ALLOWED_KEY);
         $classroom['about'] = $this->transformImages($classroom['about']);
 
@@ -65,7 +64,7 @@ class ClassroomInfoBuilder extends AbstractBuilder
         $goodsContent = [];
 
         foreach ($classrooms as $classroom) {
-            $classroom = $this->buildClassroomData($classroom);
+            $classroom = $this->buildClassroomData($classroom, $multiple = true);
 
             array_push($goodsContent,$classroom);
         }
