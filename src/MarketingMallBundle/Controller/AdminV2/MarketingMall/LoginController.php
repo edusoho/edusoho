@@ -35,6 +35,7 @@ class LoginController extends BaseController
         $setting = [
             'access_key' => $result['accessKey'],
             'secret_key' => $result['secretKey'],
+            'code' => $result['code'],
         ];
         $this->getSettingService()->set('marketing_mall', $setting);
 
