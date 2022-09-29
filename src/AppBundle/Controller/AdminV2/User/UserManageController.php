@@ -30,14 +30,13 @@ class UserManageController extends UserCommonController
     {
         $indexTwigUrl = 'admin-v2/user/user-manage/index.html.twig';
         $fields = $request->query->all();
-        $isStudent = 0;
         $conditions = [
             'roles' => 'ROLE_USER',
             'keywordType' => '',
             'keyword' => '',
             'keywordUserType' => '',
             'destroyed' => 0,
-            'isStudent' => $isStudent,
+            'isStudent' => 0,
         ];
         return $this->index($fields, $conditions, $indexTwigUrl);
 

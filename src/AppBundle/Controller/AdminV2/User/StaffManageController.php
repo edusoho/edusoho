@@ -35,6 +35,7 @@ class StaffManageController extends UserCommonController
             'keyword' => '',
             'keywordUserType' => '',
             'destroyed' => 0,
+            'isStudent' => 1
         ];
         return $this->index($fields, $conditions, $indexTwigUrl);
     }
