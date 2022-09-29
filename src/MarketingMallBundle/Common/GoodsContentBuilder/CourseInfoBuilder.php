@@ -29,7 +29,12 @@ class CourseInfoBuilder extends AbstractBuilder
 
     protected function buildCourseData($course){
         $childrenCourseIds = [];
+        $teachers = [];
         $result = $this->publicCourseData($course);
+        $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($course['id']),'userId');
+        foreach ($teacherIds as $teacherId) {
+            $teachers[] = $this->getTeacherInfoBuilder()->build($teacherId);
+        }
 
         return [
             'courseIds' => array_merge([$course['id']], $childrenCourseIds),
@@ -39,6 +44,7 @@ class CourseInfoBuilder extends AbstractBuilder
             'price' => $course['price'],
             'summary' => $this->transformImages($result['courseSet']['summary']),
             'courseCatalogue' => $result['courseCatalogue'],
+            'teacherList' => $teachers,
         ];
     }
 
@@ -56,12 +62,11 @@ class CourseInfoBuilder extends AbstractBuilder
 
     protected function buildCourseDatas($courses)
     {
-        $childrenCourseIds = [];
         $goodsContent = [];
 
         foreach ($courses as $course) {
            $result = $this->publicCourseData($course);
-
+           $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($course['id']),'userId');
             array_push($goodsContent, [
                 'courseId' => $course['id'],
                 'title' => $result['count'] == 1 ? $result['courseSet']['title'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
@@ -70,7 +75,7 @@ class CourseInfoBuilder extends AbstractBuilder
                 'price' => $course['price'],
                 'summary' => $this->transformImages($result['courseSet']['summary']),
                 'courseCatalogue' => $result['courseCatalogue'],
-                'teacherIds' => $result['teacherIds']
+                'teacherIds' => $teacherIds
             ]);
         }
 
@@ -87,15 +92,12 @@ class CourseInfoBuilder extends AbstractBuilder
             $childrenCourseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
         }
 
-        $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($course['id']),'userId');
-
         $courseCatalogue = $this->buildCourseCatalogue($this->getCourseService()->findCourseItems($course['id']));
 
         return [
             'courseSet'=>$courseSet,
             'childrenCourseIds'=>$childrenCourseIds,
-            'courseCatalogue'=>$courseCatalogue,
-            'teacherIds' =>$teacherIds
+            'courseCatalogue'=>$courseCatalogue
         ];
     }
 

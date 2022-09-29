@@ -5,6 +5,7 @@ namespace MarketingMallBundle\Common\GoodsContentBuilder;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
 
 class ClassroomInfoBuilder extends AbstractBuilder
 {
@@ -22,6 +23,7 @@ class ClassroomInfoBuilder extends AbstractBuilder
 
     protected function buildClassroomData($classroom)
     {
+        $teacherIds = [];
         $courseIds = ArrayToolkit::column($this->getClassroomService()->findCoursesByClassroomId($classroom['id']), 'id');
 
         $classroom['classroomId'] = $classroom['id'];
@@ -30,11 +32,16 @@ class ClassroomInfoBuilder extends AbstractBuilder
 
         foreach ($courseIds as $courseId) {
             $course = $this->getCourseDetailBuilder()->build($courseId);
+            $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($courseId),'userId');
             unset($course['courseIds']);
             $course['courseId'] = $courseId;
             $classroom['classroomCatalogue'][] = $course;
+            $classroom['classroomCatalogue'][]['teacherIds'] = $teacherIds;
         }
-
+//        var_dump($classroom);
+//        die();
+//        $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseIds($courseIds),'userId');
+//        $classroom['classroomCatalogue'][] = $teacherIds;
         $classroom = ArrayToolkit::parts($classroom, self::CLASSROOM_ALLOWED_KEY);
         $classroom['about'] = $this->transformImages($classroom['about']);
 
@@ -80,5 +87,13 @@ class ClassroomInfoBuilder extends AbstractBuilder
     private function getClassroomService()
     {
         return $this->biz->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 }
