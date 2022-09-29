@@ -17,6 +17,11 @@ class SyncListJob extends AbstractJob
         }
         $client = new MarketingMallClient($this->biz);
         $result = $client->syncNotify('classroom');
+
+        if($result == true) {
+            $this->getSyncListService()->updateSyncType();
+        }
+
         file_put_contents("/tmp/aa/jc.txt", var_export($result, true));
     }
 

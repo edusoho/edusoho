@@ -11,7 +11,7 @@ class User extends AbstractResource
     public function search(ApiRequest $request)
     {
         $request = $request->query;
-        $ids = $request->get("userIds");
+        $ids = explode(',',$request->get("userIds"));
         return $this->getUserService()->findUpdateUserProfilesByIds($ids);
     }
 

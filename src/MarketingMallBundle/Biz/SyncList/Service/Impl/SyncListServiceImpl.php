@@ -27,6 +27,11 @@ class SyncListServiceImpl extends BaseService implements SyncListService
         return $this->getSyncListDao()->getSyncType();
     }
 
+    public function updateSyncType()
+    {
+        return $this->getSyncListDao()->updateSyncType();
+    }
+
     public function getSyncList($cursorAddress, $cursorType)
     {
         return $this->getSyncListDao()->getSyncListByCursor($cursorAddress, $cursorType);

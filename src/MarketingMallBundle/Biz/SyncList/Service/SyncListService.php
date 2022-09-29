@@ -8,6 +8,8 @@ interface SyncListService
 
     public function getSyncType();
 
+    public function updateSyncType();
+
     public function getSyncList($cursorAddress, $cursorType);
 }
 

@@ -70,6 +70,7 @@ class CourseInfoBuilder extends AbstractBuilder
                 'price' => $course['price'],
                 'summary' => $this->transformImages($result['courseSet']['summary']),
                 'courseCatalogue' => $result['courseCatalogue'],
+                'teacherIds' => $result['teacherIds']
             ]);
         }
 
@@ -80,17 +81,21 @@ class CourseInfoBuilder extends AbstractBuilder
     {
         $childrenCourseIds = [];
 
-            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-            $count = $this->getCourseService()->countCoursesByCourseSetId($course['courseSetId']);
-            if (0 == $course['parentId']) {
-                $childrenCourseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
-            }
-            $courseCatalogue = $this->buildCourseCatalogue($this->getCourseService()->findCourseItems($course['id']));
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $count = $this->getCourseService()->countCoursesByCourseSetId($course['courseSetId']);
+        if (0 == $course['parentId']) {
+            $childrenCourseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+        }
+
+        $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($course['id']),'userId');
+
+        $courseCatalogue = $this->buildCourseCatalogue($this->getCourseService()->findCourseItems($course['id']));
 
         return [
             'courseSet'=>$courseSet,
             'childrenCourseIds'=>$childrenCourseIds,
-            'courseCatalogue'=>$courseCatalogue
+            'courseCatalogue'=>$courseCatalogue,
+            'teacherIds' =>$teacherIds
         ];
     }
 
