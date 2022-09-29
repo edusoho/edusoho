@@ -16,18 +16,18 @@ class SyncListDaoImpl extends GeneralDaoImpl implements SyncListDao
         return $this->db()->fetchAll($sql);
     }
 
-    public function updateSyncType()
-    {
-        $sql = "SELECT type FROM {$this->table} where status = 'new' group by type";
-
-        return $this->db()->fetchAll($sql);
-    }
+//    public function updateSyncType()
+//    {
+//        $sql = "SELECT type FROM {$this->table} where status = 'new' group by type";
+//
+//        return $this->db()->fetchAll($sql);
+//    }
 
     public function getSyncListByCursor($cursorAddress, $cursorType)
     {
-        $sql = "SELECT id,data FROM {$this->table} where status = 'new' AND id > ? AND type = 'updateUser'";
+        $sql = "SELECT id,data FROM {$this->table} where status = 'new' AND id > ? AND type = ?";
 
-        return $this->db()->fetchAll($sql, array($cursorAddress)) ?: array();
+        return $this->db()->fetchAll($sql, array($cursorAddress, $cursorType)) ?: array();
     }
 
     public function declares()

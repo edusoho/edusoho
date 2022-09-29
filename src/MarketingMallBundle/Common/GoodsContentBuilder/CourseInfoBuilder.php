@@ -63,7 +63,7 @@ class CourseInfoBuilder extends AbstractBuilder
            $result = $this->publicCourseData($course);
 
             array_push($goodsContent, [
-                'courseIds' => array_merge([$course['id']], $childrenCourseIds),
+                'courseId' => $course['id'],
                 'title' => $result['count'] == 1 ? $result['courseSet']['title'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
                 'subtitle' => $result['count'] == 1 ? $result['courseSet']['subtitle'] : $course['subtitle'],
                 'cover' => $this->transformCover($result['courseSet']['cover']),
