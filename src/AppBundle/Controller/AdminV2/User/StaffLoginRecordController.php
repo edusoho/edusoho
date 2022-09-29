@@ -18,7 +18,7 @@ class StaffLoginRecordController extends LoginRecordCommonController
             'keywordType' => $request->query->get('keywordType'),
             'keyword' => $request->query->get('keyword'),
             'orgCode' => $request->query->get('orgCode'),
-            'rolesNot' => 'ROLE_USER'
+            'rolesNot' => '|ROLE_USER|'
         ];
 
         return $this->index($request, $userConditions, $indexTwigUrl);

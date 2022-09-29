@@ -30,7 +30,7 @@ class StaffManageController extends UserCommonController
         $indexTwigUrl = 'admin-v2/user/user-manage/staff-manage/index.html.twig';
         $fields = $request->query->all();
         $conditions = [
-            'rolesNot' => 'ROLE_USER',
+            'rolesNot' => '|ROLE_USER|',
             'keywordType' => '',
             'keyword' => '',
             'keywordUserType' => '',
