@@ -29,9 +29,14 @@ class StaffManageController extends UserCommonController
     {
         $indexTwigUrl = 'admin-v2/user/user-manage/staff-manage/index.html.twig';
         $fields = $request->query->all();
-        $isStudent = 1;
-
-        return $this->index($fields, $isStudent, $indexTwigUrl);
+        $conditions = [
+            'rolesNot' => '|ROLE_USER|',
+            'keywordType' => '',
+            'keyword' => '',
+            'keywordUserType' => '',
+            'destroyed' => 0,
+        ];
+        return $this->index($fields, $conditions, $indexTwigUrl);
     }
 
 

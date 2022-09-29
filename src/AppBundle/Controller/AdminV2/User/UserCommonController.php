@@ -26,17 +26,8 @@ class UserCommonController extends BaseController
 {
     private $keywordType = ['verifiedMobile', 'idcard'];
 
-    public function index($fields ,$isStudent, $indexTwigUrl)
+    public function index($fields ,$conditions, $indexTwigUrl)
     {
-        $conditions = [
-            'roles' => 'ROLE_USER',
-            'keywordType' => '',
-            'keyword' => '',
-            'keywordUserType' => '',
-            'destroyed' => 0,
-            'isStudent' => $isStudent,
-        ];
-
         $conditions = array_merge($conditions, $fields);
         $conditions = $this->fillOrgCode($conditions);
 
