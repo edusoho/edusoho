@@ -22,13 +22,13 @@
     <p>系统角色：</p>
     {% for system in systemRoles %}
       <label>
-        <input type="checkbox" name="roles[]" value="{{system.code}}" {% if system in user.roles %}checked="checked"{% endif %}>{{system.name}}
+        <input type="checkbox" name="roles[]" value="{{system.code}}" {% if system.code in user.roles %}checked="checked"{% endif %}>{{system.name}}
       </label>
     {% endfor %}
     <p style="margin-top: 15px">自定义角色：</p>
     {% for custom in CustomRoles %}
       <label>
-        <input type="checkbox" name="roles[]" value="{{custom.code}}" {% if custom in user.roles %}checked="checked"{% endif %}>{{custom.name}}
+        <input type="checkbox" name="roles[]" value="{{custom.code}}" {% if custom.code in user.roles %}checked="checked"{% endif %}>{{custom.name}}
       </label>
     {% endfor %}
   </div>
