@@ -14,9 +14,14 @@ class StaffLoginRecordController extends LoginRecordCommonController
     public function indexAction(Request $request)
     {
         $indexTwigUrl = 'admin-v2/user/login-record/staff-login-record/index.html.twig';
-        $isStudent = 1;
+        $userConditions = [
+            'keywordType' => $request->query->get('keywordType'),
+            'keyword' => $request->query->get('keyword'),
+            'orgCode' => $request->query->get('orgCode'),
+            'rolesNot' => 'ROLE_USER'
+        ];
 
-        return $this->index($request, $isStudent, $indexTwigUrl);
+        return $this->index($request, $userConditions, $indexTwigUrl);
     }
 
     public function showUserLoginRecordAction(Request $request, $id)
