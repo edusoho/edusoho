@@ -16,6 +16,7 @@ class TeacherInfoBuilder extends AbstractBuilder
             'userId' => $id,
             'name' => $user['nickname'],
             'title' => $user['title'],
+            'verifiedMobile' => $user['verifiedMobile'],
             'cover' => AssetHelper::getFurl($user['largeAvatar'], 'user_avatar.png'),
             'about' => $this->transformImages($user['about']),
         ];
