@@ -531,8 +531,8 @@ order.adjust_price_modal.hint: 'Please fill the discount in inputbox'
 
 order.confirm.account_cash: 'Account balance:'
 order.confirm.safety_tips: 'To ensure the safty of your account, please'
-order.confirm.setup_pay_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your payment password</a>'
-order.confirm.setup_login_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your login password</a>'
+order.confirm.setup_pay_password_tips: 'To ensure the safty of your account, please <a class="underline color-warning" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your payment password</a>'
+order.confirm.setup_login_password_tips: 'To ensure the safty of your account, please <a class="underline color-warning" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your login password</a>'
 order.confirm.forget_password_btn: 'Forget pay password？'
 order.confirm.forget_password_tips: 'Payment password '
 order.confirm.input_pay_password_tips: 'Please input your payment password'
@@ -1817,7 +1817,7 @@ course.plan_task.activity_manage.exercise.question_type_range: 'Question scope'
 course.plan_task.activity_manage.exercise.question_type_range_tips: 'Tips: practice for the random questions, just fill in the number of questions and select the type of questions can be.'
 course.plan_task.activity_manage.exercise.submit_btn: Submit
 course.plan_task.activity_manage.exercise.questionNum: >
-  <span class="color-gray text-sm"><span role="questionNum" type="%questionType%" >%questionNum%</span></span>
+  <span class="text-sm color-gray"><span role="questionNum" type="%questionType%" >%questionNum%</span></span>
 course.plan_task.activity_manage.exercise.start_btn: Start
 course.plan_task.activity_manage.exercise.info: Introduction
 course.plan_task.activity_manage.exercise.info_tips: 'This assignment is random generate <span class="color-success">%itemCount% questions</span>'
@@ -4817,7 +4817,7 @@ admin.homepage.status_bar.mobile_app_status.open: Enabled
 admin.homepage.status_bar.mobile_app_status.not_open: 'Not Enabled'
 admin.homepage.todays_data_title: 'Today''s Data Statistics'
 admin.homepage.todays_data.tooltips: >
-  <div class="popover-content hidden">
+  <div class="hidden popover-content">
     <div class="popover-item">
       <div class="title">Login User</div>
       <div class="content">Users who have login and been active in last 15 mins.</div>
@@ -6222,7 +6222,7 @@ admin.edu_cloud.edu_email.edit_btn: Edit
 admin.edu_cloud.edu_email.open_tips: 'Enjoy quality cloud email services'
 admin.edu_cloud.edu_email.sign_tips: '3-8 Word signature'
 admin.edu_cloud.edu_email.sms_tips: 'Provide quality email channels to ensure stable and reliable email delivery; no complex configuration,no amount limit.'
-admin.edu_cloud.edu_email.connect_tips: '<span class="text-danger text-sm" > Sorry, you have not access to education yet, and cannot use the mail service! </span><p><a href="http://open.edusoho.com/educloud" target="_blank"> Immediate access </a></p>'
+admin.edu_cloud.edu_email.connect_tips: '<span class="text-sm text-danger" > Sorry, you have not access to education yet, and cannot use the mail service! </span><p><a href="http://open.edusoho.com/educloud" target="_blank"> Immediate access </a></p>'
 admin.edu_cloud.edu_search.search_rank: 'Search ranking'
 admin.edu_cloud.edu_search.hot_words_rank: 'Hot words list'
 admin.edu_cloud.edu_search.hot_courses_rank: 'Search courses rankings'
@@ -10102,6 +10102,21 @@ admin_v2.homepage.school_info.level.none: Open source
 admin_v2.homepage.school_info.level.saas: SaaS
 admin_v2.homepage.school_info.level.license: License
 admin_v2.homepage.school_info.level.custom: Custom
+
+admin_v2.homepage.school_info.enter.label: PC online school
+admin_v2.homepage.school_info.enter.content: Enter PC online school
+admin_v2.homepage.school_info.enter.marketing: Online school mall
+admin_v2.homepage.school_info.enter.start_marketing: Open the mall
+admin_v2.homepage.school_info.enter.start_marketing_tooltip: After opening, you can share the mall
+admin_v2.homepage.school_info.enter.copy_link_tips: Support copy link and download QR code sharing mall
+admin_v2.homepage.school_info.enter.link_share: link sharing
+admin_v2.homepage.school_info.enter.copy_btn: copy Link
+admin_v2.homepage.school_info.enter.link_tips1: link support open in
+admin_v2.homepage.school_info.enter.link_tips2: ''
+admin_v2.homepage.school_info.enter.qrcode_share: QR code sharing
+admin_v2.homepage.school_info.enter.download_qrcode: Download QR code
+admin_v2.homepage.school_info.enter.qrcode_share_tips: QR code support sharing to
+admin_v2.homepage.school_info.enter.copy_success: Link copied successfully
 
 # 新后台
 admin_v2.edu_cloud_not_access: Edu cloud not accessable
