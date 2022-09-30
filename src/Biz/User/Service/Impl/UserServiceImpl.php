@@ -555,7 +555,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $user = $this->getUserDao()->update($userId, $fields);
-//        $this->dispatchEvent('user.change_avatar', new Event($user));
+        $this->dispatchEvent('user.change_avatar', new Event($user));
 
         return UserSerialize::unserialize($user);
     }
@@ -750,12 +750,11 @@ class UserServiceImpl extends BaseService implements UserService
             'password' => $this->getPasswordEncoder()->encodePassword($password, $salt),
         ];
 
-        $this->getUserDao()->update($id, $fields);
+        $updatePass = $this->getUserDao()->update($id, $fields);
 
         $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
-        $this->dispatch('user.change_password', $user);
-
+        $this->dispatchEvent('user.change_password', new Event($updatePass));
         return true;
     }
 

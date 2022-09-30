@@ -11,14 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LoginRecordCommonController extends BaseController
 {
-    public function index($request, $isStudent, $indexTwigUrl)
+    public function index($request, $userConditions, $indexTwigUrl)
     {
-        $userConditions = [
-            'keywordType' => $request->query->get('keywordType'),
-            'keyword' => $request->query->get('keyword'),
-            'orgCode' => $request->query->get('orgCode'),
-            'isStudent' => $isStudent
-        ];
         $userConditions = $this->fillOrgCode($userConditions);
 
         $users = $this->getUserService()->searchUsers($userConditions, ['createdTime' => 'DESC'], 0, PHP_INT_MAX, ['id']);

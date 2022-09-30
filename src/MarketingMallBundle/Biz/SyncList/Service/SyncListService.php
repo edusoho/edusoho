@@ -12,6 +12,8 @@ interface SyncListService
 
     public function getSyncIds();
 
+    public function getSyncDataId($id);
+
     public function getSyncList($cursorAddress, $cursorType);
 }
 
