@@ -84,8 +84,68 @@
             </li>
           </ul>
         </div>
-        <div class="pull-right change-version-btn">
-          <a href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-site icon-home"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}</a>
+        <div class="js-sass pull-right change-version-btn">
+          <a href="{{ path('homepage') }}" target="_blank">
+            <i class="es-icon es-icon-site icon-home"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}
+          </a>
+        </div>
+        <div class="pull-right change-version-btn cd-dropdown js-sass hidden" data-toggle="cd-dropdown">
+          <a href="javascript:;">
+            <i class="es-icon es-icon-site icon-home"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}
+          </a>
+          <div class="dropdown-menu" style="width: 392px;left: -144px;">
+            <div class="school-share-container">
+              <div class="clearfix cd-mb16">
+                <div class="pull-left share-label">PC网校</div>
+                <a class="pull-left" href="{{ path('homepage') }}" target="_blank">
+                  <div class="es-btn">进入PC网校</div>
+                </a>
+              </div>
+              <div class="clearfix" style="margin-bottom: 12px;">
+                <div class="pull-left share-label">网校商城</div>
+                <a class="pull-left js-tooltip-twig-widget js-marketing hidden" data-placement="bottom" href="#" target="_blank">
+                  <div class="es-btn open-btn js-twig-widget-tips">开启商城</div>
+                  <div class="js-twig-widget-html" style="display:none;">
+                    <span style="color: #333;">开启后即可分享商城</span>
+                  </div>
+                </a>
+                <div class="pull-left text-14 js-marketing" style="color: #86909C;line-height:32px;margin-left:12px;">支持复制链接和下载二维码分享商城</div>
+              </div>
+              {# info-disable #}
+              <div class="js-share-container" style="padding: 16px;background-color: #F7F8FA;border-radius: 2px;">
+                <div class="disabled-mask"></div>  
+                <div style="margin-bottom:16px;font-size: 14px;line-height: 22px;color: #272E3B;font-weight:400;">链接分享</div>
+                <div class="clearfix" style="border: 1px solid #E5E6EB;border-radius: 2px;line-height:32px;font-weight:400;">
+                  <div class="pull-left text-overflow js-marketing-url" 
+                    style="width: 225px;height: 32px;padding:0 12px;border-right: 1px solid #E5E6EB;color: #1D2129;text-align:center;">
+                  </div>
+                  <div class="pull-left"
+                    style="width: 85px;height:32px;text-align:center;line-height: 32px;color: #272E3B;cursor:pointer;">复制链接</div>
+                </div>
+                <div style="margin-top: 4px;font-size:14px;line-height:22px;">
+                  链接支持在
+                  <img style="width:16px;margin:0 4px;" src="{{ asset('static-dist/app/img/icon/icon-qq.png') }}" />
+                  <img style="width:16px;margin-right:4px;" src="{{ asset('static-dist/app/img/icon/icon-weixin.png') }}" />
+                  <img style="width:16px;margin-right:4px;" src="{{ asset('static-dist/app/img/icon/icon-chrome.png') }}" />
+                  中打开
+                </div>
+                <div style="margin-top: 24px;color: #272E3B;font-size:14px;line-height:22px;margin-bottom:16px;">二维码分享</div>
+                <div class="clearfix">
+                  <div class="pull-left" style="margin-right: 12px;">
+                    <img class="js-marketing-qrcode" style="width:80px;height:80px;" /> 
+                  </div>
+                  <div class="pull-left">
+                    <div class="download-btn">下载二维码</div>
+                    <div class="text-14" style="color: #86909C;">
+                      二维码支持分享至
+                      <img style="width:16px;margin:0 4px;" src="{{ asset('static-dist/app/img/icon/icon-qq.png') }}" />
+                      <img style="width:16px;" src="{{ asset('static-dist/app/img/icon/icon-weixin.png') }}" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="cd-layout-main">

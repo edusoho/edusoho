@@ -1,4 +1,5 @@
 import 'codeages-design';
+import Qrcode from 'qrcode'
 import './menu-mark-new';
 import { Browser } from 'common/utils';
 
@@ -20,3 +21,25 @@ let csrfToken = document.getElementsByTagName('meta')['csrf-token'];
 if (csrfToken) {
   localStorage.setItem('csrf-token', csrfToken.content);
 }
+
+$.ajax({
+  url: '/api/mall_info',
+  headers: {
+    Accept: 'application/vnd.edusoho.v2+json'
+  }
+}).then(res => {
+  if (res.isShow) {
+    $('.js-sass').toggleClass('hidden')
+  }
+
+  if (!res.isInit) {
+    $('.js-marketing').toggleClass('hidden')
+    $('.js-share-container').addClass('info-disable')
+  }
+
+  $('.js-marketing-url').text(res.url)
+
+  Qrcode.toDataURL(url).then(imgUrl => {
+    $('.js-marketing-qrcode').attr('src', imgUrl)
+  })
+})
