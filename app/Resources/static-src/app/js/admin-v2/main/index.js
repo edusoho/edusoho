@@ -38,8 +38,14 @@ $.ajax({
   }
 
   $('.js-marketing-url').text(res.url)
+  
+  Qrcode.toCanvas($('.js-marketing-qrcode')[0], res.url, { width: 80, quality: 1, margin: 1 })
 
-  Qrcode.toDataURL(url).then(imgUrl => {
-    $('.js-marketing-qrcode').attr('src', imgUrl)
+  $('.js-download-btn').on('click', () => {
+    const link = document.createElement('a')
+    const canvas = $('.js-marketing-qrcode')[0]
+    link.setAttribute('download', '商城二维码')
+    link.href = canvas?.toDataURL('image/png', 1)
+    link.click()
   })
 })
