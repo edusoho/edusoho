@@ -66,7 +66,11 @@ class CourseInfoBuilder extends AbstractBuilder
 
         foreach ($courses as $course) {
            $result = $this->publicCourseData($course);
+           $teachers = [];
            $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($course['id']),'userId');
+            foreach ($teacherIds as $teacherId) {
+                $teachers[] = $this->getTeacherInfoBuilder()->build($teacherId);
+            }
             array_push($goodsContent, [
                 'courseId' => $course['id'],
                 'title' => $result['count'] == 1 ? $result['courseSet']['title'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
@@ -75,7 +79,7 @@ class CourseInfoBuilder extends AbstractBuilder
                 'price' => $course['price'],
                 'summary' => $this->transformImages($result['courseSet']['summary']),
                 'courseCatalogue' => $result['courseCatalogue'],
-                'teacherIds' => $teacherIds
+                'teacherList' => $teachers,
             ]);
         }
 

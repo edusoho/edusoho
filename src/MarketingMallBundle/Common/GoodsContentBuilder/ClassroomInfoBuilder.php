@@ -32,7 +32,7 @@ class ClassroomInfoBuilder extends AbstractBuilder
         foreach ($courseIds as $courseId) {
             $course = $this->getCourseDetailBuilder()->build($courseId);
             if($multiple == true) {
-                unset($course['teacherList']);
+//                unset($course['teacherList']);
                 $course['teacherIds'] = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($courseId),'userId');
             }
 
