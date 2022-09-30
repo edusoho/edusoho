@@ -16,7 +16,7 @@ class MallInfo extends BaseResource
         if($result['isShow']) {
             $result['isInit'] = !empty($this->getSetting('marketing_mall.access_key', false));
             if($result['isInit']) {
-                $result['url'] = $request->getHttpRequest()->getScheme().$this->container->getParameter('marketing_mall_url')."/custom-h5/?tab=home&schoolCode=".$this->getSetting('marketing_mall.code', null);
+                $result['url'] = $request->getHttpRequest()->getScheme()."://".$this->container->getParameter('marketing_mall_url')."/custom-h5/?tab=home&schoolCode=".$this->getSetting('marketing_mall.code', null);
                 $result['isPageSaved'] = $this->isHomePageSaved();
             }
         }
