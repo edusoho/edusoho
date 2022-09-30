@@ -10,7 +10,7 @@ use MarketingMallBundle\Client\MarketingMallClient;
 
 class MallInfo extends BaseResource
 {
-    public function get(ApiRequest $request)
+    public function search(ApiRequest $request)
     {
         $result['isShow'] = $this->getSetting('cloud_status.accessCloud', false) && !$this->getSetting('developer.without_network', $default = false);
         if($result['isShow']) {
