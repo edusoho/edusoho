@@ -42,7 +42,7 @@ $.ajax({
   }
 
   $('.js-marketing-url').text(res.url)
-  $('.js-copy-link').prop('data-clipboard-text', res.url)
+  $('.js-copy-link').attr('data-clipboard-text', res.url)
 
   let clipboard = new Clipboard('.js-copy-link');
   clipboard.on('success', function(e) {
