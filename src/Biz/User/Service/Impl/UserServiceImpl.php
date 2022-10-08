@@ -2361,6 +2361,33 @@ class UserServiceImpl extends BaseService implements UserService
         return intval($enable);
     }
 
+
+    public function syncBindUser($data) {
+
+        $userBind = $this->getUserBindDao()->getByFromId($data['fromId']);
+
+        if($userBind) {
+            return $this->getUserDao()->get($userBind['toId']);
+        }
+
+        $user = $this->getUserDao()->create($data['user']);
+
+        if (!$this->typeInOAuthClient($data['type'])) {
+            $this->createNewException(UserException::CLIENT_TYPE_INVALID());
+        }
+
+        $convertedType = $this->convertOAuthType($data['type']);
+
+        $this->getUserBindDao()->create([
+            'type' => $convertedType,
+            'fromId' => $data['fromId'],
+            'toId' => $user['id'],
+            'token' => empty($data['token']['token']) ? '' : $data['token']['token'],
+            'createdTime' => time(),
+            'expiredTime' => empty($data['token']['expiredTime']) ? 0 : $data['token']['expiredTime'],
+        ]);
+    }
+
     protected function decideUserJustStudentRole($userId)
     {
         $user = $this->getUserDao()->get($userId);
