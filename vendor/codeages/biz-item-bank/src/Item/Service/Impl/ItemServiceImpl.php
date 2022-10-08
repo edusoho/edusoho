@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Item\Service\Impl;
 
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\ErrorCode;
@@ -47,7 +48,8 @@ class ItemServiceImpl extends BaseService implements ItemService
 
             if (!$isBatch) {
                 $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id']);
-                $this->dispatch('item.create', $item, ['argument' => $arguments]);
+//                $this->dispatch('item.create', $item, ['argument' => $arguments]);
+                $this->dispatchEvent('item.create', new Event($item, ['argument' => $arguments]));
             }
 
             $this->commit();
@@ -73,8 +75,8 @@ class ItemServiceImpl extends BaseService implements ItemService
 
             $this->getItemBankService()->updateItemNumAndQuestionNum($bankId);
             $this->getItemCategoryService()->buildItemNumAndQuestionNumBybankId($bankId);
-            $this->dispatch('item.import', $savedItems);
-
+//            $this->dispatch('item.import', $savedItems);
+            $this->dispatchEvent('item.import', new Event($savedItems));
             $this->commit();
 
             return $savedItems;
@@ -138,8 +140,8 @@ class ItemServiceImpl extends BaseService implements ItemService
                     $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id']);
                 }
             }
-
-            $this->dispatch('item.update', $item, ['argument' => $arguments, 'originItem' => $originItem]);
+            $this->dispatchEvent('item.update', new Event($item, ['argument' => $arguments, 'originItem' => $originItem]));
+//            $this->dispatch('item.update', $item, ['argument' => $arguments, 'originItem' => $originItem]);
 
             $this->commit();
 
@@ -244,7 +246,8 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
 
             if (!$isBatch) {
-                $this->dispatch('item.delete', $item);
+//                $this->dispatch('item.delete', $item);
+                $this->dispatchEvent('item.delete', new Event($item));
             }
 
             $this->commit();
@@ -267,7 +270,8 @@ class ItemServiceImpl extends BaseService implements ItemService
             $this->deleteItem($id, true);
         }
 
-        $this->dispatch('item.batchDelete', $deleteItems);
+//        $this->dispatch('item.batchDelete', $deleteItems);
+        $this->dispatchEvent('item.batchDelete', new Event($deleteItems));
 
         return true;
     }
@@ -292,7 +296,8 @@ class ItemServiceImpl extends BaseService implements ItemService
 
             $this->getItemCategoryService()->buildItemNumAndQuestionNumBybankId($item['bank_id']);
 
-            $this->dispatch('item.update_category', $ids, ['categoryId' => $categoryId]);
+//            $this->dispatch('item.update_category', $ids, ['categoryId' => $categoryId]);
+            $this->dispatchEvent('item.update_category', new Event($ids, ['categoryId' => $categoryId]));
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();

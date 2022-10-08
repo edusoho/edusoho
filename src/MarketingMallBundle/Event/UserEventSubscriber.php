@@ -75,8 +75,10 @@ class UserEventSubscriber extends BaseEventSubscriber
     protected function syncUserInfoToMarketingMall($userId)
     {
         $data = $this->getSyncListService()->getSyncDataId($userId);
-        if($data) {
-            return;
+        foreach ($data as $value) {
+            if($value['id'] && $value['type'] == 'userUpdate') {
+                return;
+            }
         }
         $this->getSyncListService()->addSyncList(['type' => 'userUpdate', 'data' => $userId]);
     }

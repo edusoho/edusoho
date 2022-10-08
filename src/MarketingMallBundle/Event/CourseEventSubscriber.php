@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Event\Event;
+use MarketingMallBundle\Biz\SyncList\Service\SyncListService;
 use MarketingMallBundle\Common\GoodsContentBuilder\CourseInfoBuilder;
 
 class CourseEventSubscriber extends BaseEventSubscriber
@@ -124,6 +125,14 @@ class CourseEventSubscriber extends BaseEventSubscriber
 
     protected function syncCourseToMarketingMall($courseId)
     {
+        $data = $this->getSyncListService()->getSyncDataId($courseId);
+        foreach ($data as $value) {
+            if($value['id'] && $value['type'] == 'course') {
+                return;
+            }
+        }
+        $this->getSyncListService()->addSyncList(['type' => 'course', 'data' => $courseId]);
+
         $this->updateGoodsContent('course', new CourseInfoBuilder(), $courseId);
     }
 
@@ -150,5 +159,13 @@ class CourseEventSubscriber extends BaseEventSubscriber
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return SyncListService
+     */
+    protected function getSyncListService()
+    {
+        return $this->getBiz()->service('MarketingMallBundle:SyncList:SyncListService');
     }
 }

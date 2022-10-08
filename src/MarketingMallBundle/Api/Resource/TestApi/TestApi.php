@@ -17,7 +17,7 @@ class TestApi extends BaseResource
         $this->getSchedulerService()->register(array(
             'name' => 'course_task_create_sync_job_'.$fields['type'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-            'expression' => time()+5,
+            'expression' => '* * * * *',
             'misfire_policy' => 'executing',
             'class' => 'MarketingMallBundle\Biz\SyncList\Job\SyncListJob'
         ));
