@@ -48,6 +48,7 @@
   <![endif]-->
     <script src="{{ asset('assets/libs/jquery/1.11.2/jquery-admin-v2.js') }}"></script>
     <script src="{{ asset('assets/libs/gallery2/bootstrap/bootstrap.js') }}"></script>
+    {% do load_script('widget/tooltip-widget') %}
 </head>
 {% block body %}
   <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
@@ -103,10 +104,10 @@
               </div>
               <div class="clearfix" style="margin-bottom: 12px;">
                 <div class="pull-left share-label">{{ 'admin_v2.homepage.school_info.enter.marketing'|trans }}</div>
-                <a class="hidden pull-left js-tooltip-twig-widget js-marketing" data-placement="bottom" href="#" target="_blank">
-                  <div class="es-btn open-btn js-twig-widget-tips">{{ 'admin_v2.homepage.school_info.enter.start_marketing'|trans }}</div>
+                <a class="hidden pull-left js-tooltip-twig-widget js-marketing"  href="#" target="_blank">
+                  <div class="es-btn open-btn js-twig-widget-tips" data-placement="bottom">{{ 'admin_v2.homepage.school_info.enter.start_marketing'|trans }}</div>
                   <div class="js-twig-widget-html" style="display:none;">
-                    <span style="color: #333;">{{ 'admin_v2.homepage.school_info.enter.start_marketing_tooltip'|trans }}</span>
+                    <div style="color: #333;">{{ 'admin_v2.homepage.school_info.enter.start_marketing_tooltip'|trans }}</div>
                   </div>
                 </a>
                 <div class="pull-left text-14 js-marketing" style="color: #86909C;line-height:32px;margin-left:12px;">
