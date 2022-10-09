@@ -11,20 +11,25 @@ class SyncListJob extends AbstractJob
 
     public function execute()
     {
-        $task = $this->getSyncListService()->getSyncType();
-        if (empty($task)){
+        $tasks = $this->getSyncListService()->getSyncType();
+        if (empty($tasks)) {
             return;
         }
         $client = new MarketingMallClient($this->biz);
-        $result = $client->syncNotify('classroom');
 
-        if($result == true) {
-            $ids = implode(',',array_column($this->getSyncListService()->getSyncIds(),'id'));
-
-            $this->getSyncListService()->syncStatusUpdate($ids);
+        foreach ($tasks as $task) {
+            file_put_contents("/tmp/ab/1.txt", var_export($task, true),FILE_APPEND);
+//            $result = $client->syncNotify($task);
         }
 
-        file_put_contents("/tmp/aa/jc.txt", var_export($result, true));
+
+//        if($result == true) {
+//            $ids = implode(',',array_column($this->getSyncListService()->getSyncIds(),'id'));
+//
+//            $this->getSyncListService()->syncStatusUpdate($ids);
+//        }
+
+//        file_put_contents("/tmp/aa/jc.txt", var_export($result, true));
     }
 
     /**
