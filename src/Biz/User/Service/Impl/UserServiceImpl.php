@@ -2369,13 +2369,13 @@ class UserServiceImpl extends BaseService implements UserService
         if($userBind) {
             $user = $this->getUserDao()->get($userBind['toId']);
             return [
-                'isExit' => '1',
+                'isExist' => '1',
                 'user' => $user
             ];
         }
 
         return [
-            'isExit' => '0',
+            'isExist' => '0',
             'user' => ''
         ];
     }
