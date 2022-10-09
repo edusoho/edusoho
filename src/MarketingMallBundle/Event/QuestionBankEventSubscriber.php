@@ -199,7 +199,7 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
     {
         $data = $this->getSyncListService()->getSyncDataId($exerciseId);
         foreach ($data as $value) {
-            if($value['id'] && $value['type'] == 'questionBank') {
+            if($value['id'] && $value['type'] == 'questionBank' && $value['status'] == 'new') {
                 return;
             }
         }

@@ -62,7 +62,7 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
     {
         $data = $this->getSyncListService()->getSyncDataId($classroomId);
         foreach ($data as $value) {
-            if($value['id'] && $value['type'] == 'classroom') {
+            if($value['id'] && $value['type'] == 'classroom' && $value['status'] == 'new') {
                 return;
             }
         }

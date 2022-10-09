@@ -26,7 +26,7 @@ class SyncListDaoImpl extends GeneralDaoImpl implements SyncListDao
 
     public function getSyncDataId($id)
     {
-        $sql = "SELECT id,type FROM {$this->table} where data =  {$id} ";
+        $sql = "SELECT id,type,status FROM {$this->table} where data =  {$id} ";
 
         return $this->db()->fetchAll($sql);
     }

@@ -127,7 +127,7 @@ class CourseEventSubscriber extends BaseEventSubscriber
     {
         $data = $this->getSyncListService()->getSyncDataId($courseId);
         foreach ($data as $value) {
-            if($value['id'] && $value['type'] == 'course') {
+            if($value['id'] && $value['type'] == 'course' && $value['status'] == 'new') {
                 return;
             }
         }
