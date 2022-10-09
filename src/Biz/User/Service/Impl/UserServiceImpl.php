@@ -2374,10 +2374,17 @@ class UserServiceImpl extends BaseService implements UserService
             ];
         }
 
-        return [
-            'isExist' => '0',
-            'user' => ''
-        ];
+        $this->getUserBindDao()->create([
+            'type' => 'weixin',
+            'fromId' => $fromId,
+            'toId' => "0",
+            'createdTime' => time(),
+        ]);
+    }
+
+    public function UserBindUpdate($openId, $userId) {
+
+        $this->getUserBindDao()->UserBindUpdate($openId, $userId);
     }
 
     protected function decideUserJustStudentRole($userId)

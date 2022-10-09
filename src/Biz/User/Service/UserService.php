@@ -11,6 +11,8 @@ interface UserService
 
     public function updateUser($id, array $fields);
 
+    public function UserBindUpdate($openId, $userId);
+
     public function getUserAndProfile($id);
 
     public function initSystemUsers();
