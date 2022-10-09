@@ -18,18 +18,14 @@ class SyncListJob extends AbstractJob
         $client = new MarketingMallClient($this->biz);
 
         foreach ($tasks as $task) {
-            file_put_contents("/tmp/ab/1.txt", var_export($task, true),FILE_APPEND);
-//            $result = $client->syncNotify($task);
+            $result = $client->syncNotify($task);
+
+            if($result == true) {
+                $ids = implode(',',array_column($this->getSyncListService()->getSyncIds(),'id'));
+
+                $this->getSyncListService()->syncStatusUpdate($ids);
+            }
         }
-
-
-//        if($result == true) {
-//            $ids = implode(',',array_column($this->getSyncListService()->getSyncIds(),'id'));
-//
-//            $this->getSyncListService()->syncStatusUpdate($ids);
-//        }
-
-//        file_put_contents("/tmp/aa/jc.txt", var_export($result, true));
     }
 
     /**
