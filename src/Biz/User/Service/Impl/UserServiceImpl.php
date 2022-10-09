@@ -2362,30 +2362,22 @@ class UserServiceImpl extends BaseService implements UserService
     }
 
 
-    public function syncBindUser($data) {
+    public function syncBindUser($fromId) {
 
-        $userBind = $this->getUserBindDao()->getByFromId($data['fromId']);
+        $userBind = $this->getUserBindDao()->getByFromId($fromId);
 
         if($userBind) {
-            return $this->getUserDao()->get($userBind['toId']);
+            $user = $this->getUserDao()->get($userBind['toId']);
+            return [
+                'isExit' => '1',
+                'user' => $user
+            ];
         }
 
-        $user = $this->getUserDao()->create($data['user']);
-
-        if (!$this->typeInOAuthClient($data['type'])) {
-            $this->createNewException(UserException::CLIENT_TYPE_INVALID());
-        }
-
-        $convertedType = $this->convertOAuthType($data['type']);
-
-        $this->getUserBindDao()->create([
-            'type' => $convertedType,
-            'fromId' => $data['fromId'],
-            'toId' => $user['id'],
-            'token' => empty($data['token']['token']) ? '' : $data['token']['token'],
-            'createdTime' => time(),
-            'expiredTime' => empty($data['token']['expiredTime']) ? 0 : $data['token']['expiredTime'],
-        ]);
+        return [
+            'isExit' => '0',
+            'user' => ''
+        ];
     }
 
     protected function decideUserJustStudentRole($userId)

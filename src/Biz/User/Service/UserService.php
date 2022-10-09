@@ -290,7 +290,7 @@ interface UserService
      */
     public function bindUser($type, $fromId, $toId, $token);
 
-    public function syncBindUser($data);
+    public function syncBindUser($fromId);
 
     public function getUserBindByTypeAndFromId($type, $fromId);
 

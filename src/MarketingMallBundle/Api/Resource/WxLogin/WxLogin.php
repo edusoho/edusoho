@@ -14,9 +14,8 @@ class WxLogin extends BaseResource
     public function add(ApiRequest $request)
     {
 
-        $request = $request->request->all();
-        unset($request['user']['id']);
-        return $this->getUserService()->syncBindUser($request);
+        $fromId = $request->request->all();
+        return $this->getUserService()->syncBindUser($fromId['fromId']);
 
     }
 
