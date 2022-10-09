@@ -101,7 +101,7 @@ class MarketingMallApi
 
     public function syncNotify($params)
     {
-        return $this->post('/api-admin/queueCommon', $params);
+        return $this->post('/api-admin/syncClient', $params);
     }
 
 //    例子  token头直接设置了参数code也直接加了
