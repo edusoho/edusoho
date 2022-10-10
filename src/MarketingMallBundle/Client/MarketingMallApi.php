@@ -49,15 +49,19 @@ class MarketingMallApi
         try {
             $params = ArrayToolkit::parts($params, ['token', 'url', 'code']);
             $result = $this->post('/api-admin/esData/init', $params);
-            if (empty($result['accessKey'])) {
+            if (empty($result)) {
                 throw new \InvalidArgumentException('接口请求错误!');
             }
-
-            return $result;
+            if (empty($result['accessKey'])) {
+                $this->getLogger()->error('market-mall-init', ['result' => $result]);
+                throw new \InvalidArgumentException('接口请求失败!');
+            }
         } catch (\RuntimeException $e) {
             $this->getLogger()->error('market-mall-init', ['商城初始化错误' . $e->getMessage()]);
             throw new \InvalidArgumentException('接口请求错误!');
         }
+
+        return $result;
     }
 
     public function isHomePageSaved()
