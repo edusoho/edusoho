@@ -68,13 +68,13 @@ class MarketingMallApi
     {
         try {
             $result = $this->get('/api-school/info/isHomePageSaved', []);
-            if (empty($result['ok'])) {
+            if (!isset($result['ok'])) {
                 throw new \InvalidArgumentException('接口请求错误!');
             }
 
             return $result['ok'];
         } catch (\RuntimeException $e) {
-            $this->getLogger()->error('获取商城装修状态失败'.$e->getMessage(), ['商城初始化错误' . $e->getTrace()]);
+            $this->getLogger()->error('获取商城装修状态失败'.$e->getMessage(), ['商城初始化错误' . $e->getTraceAsString()]);
             throw new \InvalidArgumentException('接口请求错误!');
         }
     }
