@@ -6777,6 +6777,8 @@ admin.user.manage.avatar_crop.crop_hint: 提示：请选择图片裁剪区域。
 admin.user.manage.assistant_qrcode_crop.crop_hint: 提示：请选择图片裁剪区域。
 admin.user.manage.avatar_crop.select_again_btn: 重新选择图片
 admin.user.manage.create_by_mobile.heading_title: 添加新用户
+admin.user.manage.create_by_mobile.heading_student_title: 添加学员
+admin.user.manage.create_by_mobile.heading_staff_title: 添加员工
 admin.user.manage.create_by_mobile.mobile.input_placeholder: 手机号码
 admin.user.manage.create_by_mobile.nickname.input_placeholder: 不填将自动生成
 admin.user.manage.create_by_mobile_or_email.heading_title: 添加新用户

@@ -1,11 +1,14 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% set modalSize = 'large' %}
+{% set systemRoles = [] %}
+{% set CustomRoles = [] %}
+{% set notUpdateRoles = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER', 'ROLE_TEACHER_ASSISTANT', 'ROLE_EDUCATIONAL_ADMIN'] %}
 
-{% block title %}{{'admin.user.manage.create_by_mobile.heading_title'|trans}}{% endblock %}
+{% block title %}{{'admin.user.manage.create_by_mobile.heading_staff_title'|trans}}{% endblock %}
 {% block body %}
 
-  <form id="user-create-form" class="form-horizontal" method="post" action="{{ path('admin_v2_user_create') }}">
+  <form id="user-create-form" class="form-horizontal" method="post" action="{{ path('admin_v2_staff_create') }}">
 
     <div class="row form-group">
       <div class="col-md-2 control-label ">
@@ -19,10 +22,10 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="nickname">{{'user.fields.username_label'|trans}}</label>
+        <label for="nickname">{{'user.fields.username_staff_label'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="nickname" name="nickname" data-url="{{ path('admin_v2_user_create_nickname_check') }}"
+        <input type="text" id="nickname" name="nickname" data-url="{{ path('admin_v2_staff_create_nickname_check') }}"
                class="form-control" placeholder='{{'admin.user.manage.create_by_mobile.nickname.input_placeholder'|trans}}'>
       </div>
     </div>
@@ -55,9 +58,30 @@
           <label for="roles">{{'admin.user.fields.role_label'|trans}}</label>
         </div>
         <div class="col-md-7 controls">
-          <input type="checkbox" value="ROLE_TEACHER" name="roles[]"> {{'role.teacher'|trans}}
-          <input type="checkbox" value="ROLE_TEACHER_ASSISTANT" name="roles[]"> {{'role.assistant'|trans}}
-          <input type="checkbox" value="ROLE_EDUCATIONAL_ADMIN" name="roles[]"> {{'role.academic_staf'|trans}}
+          <div class="checkboxs" id="old-checkboxs">
+            {% set admin_roles = get_admin_roles() %}
+            {% for role in admin_roles  %}
+              {% if role.code == 'ROLE_USER' %}
+                <input type="checkbox" style="display: none" name="roles[]" value="{{role.code}}" checked="checked">
+              {% elseif role.code in  notUpdateRoles %}
+                {% set systemRoles = systemRoles|merge([role]) %}
+              {% else %}
+                {% set CustomRoles = CustomRoles|merge([role]) %}
+              {% endif %}
+            {% endfor %}
+            <p>系统角色：</p>
+            {% for system in systemRoles %}
+              <label>
+                <input type="checkbox" name="roles[]" value="{{system.code}}" >{{system.name}}
+              </label>
+            {% endfor %}
+            <p style="margin-top: 15px">自定义角色：</p>
+            {% for custom in CustomRoles %}
+              <label>
+                <input type="checkbox" name="roles[]" value="{{custom.code}}" >{{custom.name}}
+              </label>
+            {% endfor %}
+          </div>
         </div>
       </div>
     {% endif %}
