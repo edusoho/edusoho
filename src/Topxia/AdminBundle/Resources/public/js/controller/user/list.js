@@ -28,26 +28,6 @@ define(function(require, exports, module) {
             });
         });
 
-        $table.on('click', '.turn-into-student', function() {
-          var $trigger = $(this);
-
-          if (!confirm("恢复学员身份？\n\n恢复后员工身份将取消")) {
-            return;
-          }
-
-          $.post($(this).data('url'), function(result) {
-            Notify.success('学员身份恢复成功');
-            window.location.reload();
-          }).error(function(e, textStatus, errorThrown) {
-            var $json = jQuery.parseJSON(e.responseText);
-            if($json.error.message){
-              Notify.danger(Translator.trans($json.error.message));
-            }else{
-              Notify.danger('学员身份恢复失败');
-            }
-          });
-        });
-
         $table.on('click', '.delete-user', function() {
             var $trigger = $(this);
 
