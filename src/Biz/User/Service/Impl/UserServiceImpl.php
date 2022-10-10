@@ -1222,8 +1222,6 @@ class UserServiceImpl extends BaseService implements UserService
 
         $user = $this->getUserDao()->update($id, ['roles' => $roles]);
 
-        $this->dispatchEvent('user.role.change', new Event(UserSerialize::unserialize($user)));
-
         return UserSerialize::unserialize($user);
     }
 

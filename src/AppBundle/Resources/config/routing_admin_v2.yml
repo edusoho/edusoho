@@ -2059,6 +2059,12 @@ admin_v2_staff_login_record_details:
     _controller: 'AppBundle:AdminV2/User/StaffLoginRecord:showUserLoginRecord'
   permissions:
     - admin_v2_staff_login_record
+admin_v2_staff_show:
+  path: '/staff/{id}'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:show'
+  permissions:
+    - admin_v2
 admin_v2_approval_approvals:
     path: 'approvals/{approvalStatus}'
     defaults:
