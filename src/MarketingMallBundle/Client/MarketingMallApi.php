@@ -133,12 +133,26 @@ class MarketingMallApi
     {
         $params['code'] = self::$accessKey;
 
-        return self::$client->get($uri, $params, self::$headers);
+        $response = self::$client->get($uri, $params, self::$headers);
+        if (empty($response)) {
+            $this->getLogger()->warn('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
+        } else {
+            $this->getLogger()->debug('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
+        }
+
+        return $response;
     }
 
     private function post($uri, array $params = [])
     {
-        return self::$client->post($uri, $params, self::$headers);
+        $response = self::$client->post($uri, $params, self::$headers);
+        if (empty($response)) {
+            $this->getLogger()->warn('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
+        } else {
+            $this->getLogger()->debug('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
+        }
+
+        return $response;
     }
 
     private function makeToken()
