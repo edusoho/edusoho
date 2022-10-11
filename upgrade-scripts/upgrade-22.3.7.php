@@ -98,7 +98,7 @@ class EduSohoUpgrade extends AbstractUpdater
     public function registerSyncTask($page)
     {
         if($page > 1) {
-            $logPage = $page / 1000;
+            $logPage = (int)($page / 1000);
             $coursePage = $page % 1000;
         }else {
             $logPage = 1;
