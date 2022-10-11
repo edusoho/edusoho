@@ -54,7 +54,11 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
 
     protected function getUrlPrefixes()
     {
-        return ['v.163.com/movie/', 'open.163.com/movie/', 'open.163.com/newview/movie'];
+        return [
+            'https://v.163.com/movie/',
+            'https://open.163.com/movie/',
+            'https://open.163.com/newview/movie'
+        ];
     }
 
     protected function convertMediaUri($video)
