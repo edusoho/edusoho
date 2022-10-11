@@ -237,6 +237,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_reported', [$this, 'isReported']),
             new \Twig_SimpleFunction('is_assistant', [$this, 'isAssistant']),
             new \Twig_SimpleFunction('is_saas', [$this, 'isSaas']),
+            new \Twig_SimpleFunction('is_show_mall', [$this, 'isShowMall']),
             new \Twig_SimpleFunction('is_teacher_role', [$this, 'isTeacherRole']),
             new \Twig_SimpleFunction('user_info_select', [$this, 'userInfoSelect']),
         ];
@@ -275,6 +276,11 @@ class WebExtension extends \Twig_Extension
         }
 
         return in_array($this->getCacheService()->get('site_level'), $this->getSaasLevels());
+    }
+
+    public function isShowMall()
+    {
+        return $this->getMallSettingService()->isShowMall();
     }
 
     public function getSaasLevels()
@@ -2645,5 +2651,10 @@ class WebExtension extends \Twig_Extension
     protected function getReportAuditService()
     {
         return $this->createService('AuditCenter:ReportAuditService');
+    }
+
+    protected function getMallSettingService()
+    {
+        return $this->createService('MallSetting:MallSettingService');
     }
 }

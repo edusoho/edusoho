@@ -238,6 +238,7 @@ userKeyWordType:
     idcard: 身份证号
 
 staffKeyWordType:
+  nickname: 员工名
   verifiedMobile: 手机号
   email: 邮件地址
   loginIp: 登录IP

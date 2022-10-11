@@ -628,9 +628,9 @@ order.adjust_price_modal.hint: 请在折扣和金额框任意输入您想优惠�
 order.confirm.account_cash: 账户余额：
 order.confirm.safety_tips: 为了保障账户资金安全，请先
 order.confirm.setup_pay_password_tips: >
-  为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置支付密码</a>
+  为了保障账户资金安全，请先<a class="underline color-warning" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置支付密码</a>
 order.confirm.setup_login_password_tips: >
-  为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置登录密码</a>
+  为了保障账户资金安全，请先<a class="underline color-warning" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置登录密码</a>
 order.confirm.forget_password_btn: 忘记支付密码？
 order.confirm.forget_password_tips: 支付密码
 order.confirm.input_pay_password_tips: 请输入支付密码
@@ -2238,7 +2238,7 @@ course.plan_task.activity_manage.replay.time: 直播回放时长
 
 course.plan_task.activity_manage.create_btn: 前往课程讨论区
 course.plan_task.activity_manage.exercise.questionNum: >
-  <span class="color-gray text-sm">共<span role="questionNum" type="%questionType%" >%questionNum%</span>题
+  <span class="text-sm color-gray">共<span role="questionNum" type="%questionType%" >%questionNum%</span>题
 
 course.plan_task.exercise.question_numbers: 题目个数
 course.plan_task.exercise.question_sourse: 题目来源
@@ -5728,7 +5728,7 @@ admin.homepage.status_bar.mobile_app_status.open: 已开启
 admin.homepage.status_bar.mobile_app_status.not_open: 未开启
 admin.homepage.todays_data_title: 今日数据
 admin.homepage.todays_data.tooltips: >
-  <div class="popover-content hidden">
+  <div class="hidden popover-content">
     <div class="popover-item">
       <div class="title">登录用户</div>
       <div class="content">15分钟内活动的登录用户</div>
@@ -5774,7 +5774,7 @@ admin.homepage.todays_data.new_vip_members: 新增会员
 admin.homepage.todays_data.thread_un_answer: 未回复回答
 admin.homepage.order_statistic_title: 订单统计
 admin.homepage.order_statistic.tips: >
-  <div class="popover-content hidden">
+  <div class="hidden popover-content">
     <div class="popover-item">
       <div class="title">订单</div>
       <div class="content">用户购买标价不为0的商品（教学计划、班级、会员等）会产生订单</div>
@@ -6777,6 +6777,8 @@ admin.user.manage.avatar_crop.crop_hint: 提示：请选择图片裁剪区域。
 admin.user.manage.assistant_qrcode_crop.crop_hint: 提示：请选择图片裁剪区域。
 admin.user.manage.avatar_crop.select_again_btn: 重新选择图片
 admin.user.manage.create_by_mobile.heading_title: 添加新用户
+admin.user.manage.create_by_mobile.heading_student_title: 添加学员
+admin.user.manage.create_by_mobile.heading_staff_title: 添加员工
 admin.user.manage.create_by_mobile.mobile.input_placeholder: 手机号码
 admin.user.manage.create_by_mobile.nickname.input_placeholder: 不填将自动生成
 admin.user.manage.create_by_mobile_or_email.heading_title: 添加新用户
@@ -7380,7 +7382,7 @@ admin.edu_cloud.edu_email.open_tips: 云邮件，享受优质的邮件发送服�
 admin.edu_cloud.edu_email.sign_tips: 签名3-8字，建议使用汉字
 admin.edu_cloud.edu_email.sms_tips: 提供优质的邮件发送通道，保证邮件发送的稳定可靠；无复杂配置；无每日发送数量限制。
 admin.edu_cloud.edu_email.connect_tips: >
-  <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
+  <span class="text-sm text-danger" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
   <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
 
 # 云搜索
@@ -11419,6 +11421,21 @@ admin_v2.homepage.school_info.level.none: 开源版
 admin_v2.homepage.school_info.level.saas: SaaS版
 admin_v2.homepage.school_info.level.license: 商业授权
 admin_v2.homepage.school_info.level.custom: 定制版
+
+admin_v2.homepage.school_info.enter.label: PC网校
+admin_v2.homepage.school_info.enter.content: 进入PC网校
+admin_v2.homepage.school_info.enter.marketing: 网校商城
+admin_v2.homepage.school_info.enter.start_marketing: 开启商城
+admin_v2.homepage.school_info.enter.start_marketing_tooltip: 开启后即可分享商城
+admin_v2.homepage.school_info.enter.copy_link_tips: 支持复制链接和下载二维码分享商城
+admin_v2.homepage.school_info.enter.link_share: 链接分享
+admin_v2.homepage.school_info.enter.copy_btn: 复制链接
+admin_v2.homepage.school_info.enter.link_tips1: 链接支持在
+admin_v2.homepage.school_info.enter.link_tips2: 中打开
+admin_v2.homepage.school_info.enter.qrcode_share: 二维码分享
+admin_v2.homepage.school_info.enter.download_qrcode: 下载二维码
+admin_v2.homepage.school_info.enter.qrcode_share_tips: 二维码支持分享至
+admin_v2.homepage.school_info.enter.copy_success: 链接复制成功
 
 # 新后台
 admin_v2.edu_cloud_not_access: 未接入教育云
