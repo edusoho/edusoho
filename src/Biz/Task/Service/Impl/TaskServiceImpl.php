@@ -3,10 +3,12 @@
 namespace Biz\Task\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
@@ -1314,6 +1316,82 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->findByCopyIdAndLockedCourseIds($copyId, $courseIds);
     }
 
+    public function syncClassroomCourseTasks($courseId, $real)
+    {
+        $output = [];
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (1 != $course['locked']) {
+            $output[] = '<info>输入的课程不是班级课程，执行结束</info>';
+
+            return $output;
+        }
+        $copiedTaskIds = array_column($this->searchTasks(['courseId' => $courseId], [], 0, PHP_INT_MAX, ['copyId']), 'copyId');
+        $originTaskIds = array_column($this->searchTasks(['courseId' => $course['parentId']], [], 0, PHP_INT_MAX, ['id']), 'id');
+        $toCopyTaskIds = array_diff($originTaskIds, $copiedTaskIds);
+        if (empty($toCopyTaskIds)) {
+            $output[] = '<info>不存在问题数据,无需处理</info>';
+            $output[] = '<info>结束</info>';
+
+            return $output;
+        }
+        foreach ($toCopyTaskIds as $toCopyTaskId) {
+            $originTask = $this->getTask($toCopyTaskId);
+            $output[] = "<info>未同步创建的任务:{$originTask['id']},《{$originTask['title']}》</info>";
+            if (!$real) {
+                continue;
+            }
+            $copiedChapter = $this->getCourseChapterDao()->getByCopyIdAndLockedCourseId($originTask['categoryId'], $courseId);
+            if (empty($copiedChapter)) {
+                $originChapter = $this->getCourseChapterDao()->get($originTask['categoryId']);
+                $originChapter['copyId'] = $originChapter['id'];
+                unset($originChapter['id']);
+                $originChapter['courseId'] = $courseId;
+                $copiedChapter = $this->getCourseChapterDao()->create($originChapter);
+            }
+            $copiedActivity = $this->getActivityDao()->getByCopyIdAndCourseSetId($originTask['activityId'], $course['courseSetId']);
+            if (empty($copiedActivity)) {
+                $originActivity = $this->getActivityDao()->get($originTask['activityId']);
+                $originActivity['copyId'] = $originActivity['id'];
+                unset($originActivity['id']);
+                $originActivity['fromCourseId'] = $courseId;
+                $originActivity['fromCourseSetId'] = $course['courseSetId'];
+                $originActivity['createdTime'] = $copiedChapter['createdTime'];
+                $originActivity['updatedTime'] = $copiedChapter['updatedTime'];
+                $copiedActivity = $this->getActivityDao()->create($originActivity);
+            }
+            $task = ArrayToolkit::parts($originTask, [
+                'seq',
+                'title',
+                'isFree',
+                'isOptional',
+                'startTime',
+                'endTime',
+                'mode',
+                'isLesson',
+                'status',
+                'number',
+                'type',
+                'mediaSource',
+                'maxOnlineNum',
+                'length',
+                'syncId',
+            ]);
+            $task['courseId'] = $courseId;
+            $task['categoryId'] = $copiedChapter['id'];
+            $task['activityId'] = $copiedActivity['id'];
+            $task['copyId'] = $toCopyTaskId;
+            $task['fromCourseSetId'] = $course['courseSetId'];
+            $task['createdUserId'] = $copiedActivity['fromUserId'];
+            $task['createdTime'] = $copiedChapter['createdTime'];
+            $task['updatedTime'] = $copiedChapter['updatedTime'];
+            $task = $this->getTaskDao()->create($task);
+            $output[] = "<info>创建未同步的任务:{$task['id']}成功</info>";
+        }
+
+        $output[] = '<info>结束</info>';
+        return $output;
+    }
+
     /**
      * @return TaskDao
      */
@@ -1546,5 +1624,21 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return CourseChapterDao
+     */
+    protected function getCourseChapterDao()
+    {
+        return $this->biz->dao('Course:CourseChapterDao');
+    }
+
+    /**
+     * @return ActivityDao
+     */
+    protected function getActivityDao()
+    {
+        return $this->biz->dao('Activity:ActivityDao');
     }
 }
