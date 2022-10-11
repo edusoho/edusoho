@@ -27,10 +27,7 @@ export default class TurnIntoStudent {
           }
         });
       }).on('cancel', () => {
-        cd.message({
-          type: 'danger',
-          message: '学员身份恢复失败'
-        });
+
       });
     })
 
