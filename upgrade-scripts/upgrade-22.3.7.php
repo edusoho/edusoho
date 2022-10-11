@@ -97,7 +97,14 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function registerSyncTask($page)
     {
-        $jobLogs = $this->getJobLogDao()->search(['name'=>'course_task_create_sync_job_', 'status'=>'error'],['id'=>'asc'], ($page-1) * 5, 5);
+        if($page > 1) {
+            $logPage = $page / 1000;
+            $coursePage = $page % 1000;
+        }else {
+            $logPage = 1;
+            $coursePage = 1;
+        }
+        $jobLogs = $this->getJobLogDao()->search(['name'=>'course_task_create_sync_job_', 'status'=>'error'],['id'=>'asc'], ($logPage-1) * 1, 1);
         $taskIds = ArrayToolkit::column(ArrayToolkit::column($jobLogs,'args'), 'taskId');
         $tasks = $this->getTaskService()->findTasksByIds($taskIds);
         $courseIds = ArrayToolkit::column($tasks, 'courseId');
@@ -107,13 +114,19 @@ class EduSohoUpgrade extends AbstractUpdater
         }
         foreach ($courseIds as $courseId) {
             $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($courseId, 1);
-            foreach ($copiedCourses as $copiedCourse) {
-                $result = $this->getTaskService()->syncClassroomCourseTasks($copiedCourse['id'], true);
-                $this->logger('info', json_encode($result));
+            foreach ($copiedCourses as $index=>$copiedCourse) {
+                if($coursePage - 1 == $index) {
+                    $result = $this->getTaskService()->syncClassroomCourseTasks($copiedCourse['id'], true);
+                    $this->logger('info', json_encode($result));
+                }
+            }
+            if(!empty($copiedCourses) && $coursePage == $index) {
+                $coursePage = 1;
+                $logPage++;
             }
         }
 
-        return $page + 1;
+        return (int)($logPage.$coursePage);
     }
 
 
