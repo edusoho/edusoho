@@ -54,7 +54,7 @@
 
       <div class="row form-group">
         <div class="col-md-2 control-label">
-          <label for="roles">{{'admin.user.fields.role_label'|trans}}</label>
+          <label for="roles">{{'admin.user.fields.staff_roles'|trans}}</label>
         </div>
         <div class="col-md-7 controls">
           <div class="checkboxs" id="old-checkboxs">
@@ -71,13 +71,13 @@
             <p>系统角色：</p>
             {% for system in systemRoles %}
               <label>
-                <input type="checkbox" name="roles[]" value="{{system.code}}" >{{system.name}}
+                <span style="vertical-align: middle"><input type="checkbox" name="roles[]" value="{{system.code}}" ></span>{{system.name}}
               </label>
             {% endfor %}
             <p style="margin-top: 15px">自定义角色：</p>
             {% for custom in CustomRoles %}
               <label>
-                <input type="checkbox" name="roles[]" value="{{custom.code}}" >{{custom.name}}
+                <span style="vertical-align: middle"><input type="checkbox" name="roles[]" value="{{custom.code}}" ></span>{{custom.name}}
               </label>
             {% endfor %}
           </div>
