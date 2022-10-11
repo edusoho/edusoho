@@ -126,7 +126,7 @@ class EduSohoUpgrade extends AbstractUpdater
             }
         }
 
-        return (int)($logPage.$coursePage);
+        return (int)($logPage*1000+$coursePage);
     }
 
 
