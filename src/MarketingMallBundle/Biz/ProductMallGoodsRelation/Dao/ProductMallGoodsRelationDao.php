@@ -12,4 +12,5 @@ interface ProductMallGoodsRelationDao extends GeneralDaoInterface
 
     public function findByProductType($productType);
 
+    public function getClassroomIds($ids);
 }

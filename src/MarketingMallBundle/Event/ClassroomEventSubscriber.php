@@ -67,8 +67,6 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
             }
         }
         $this->getSyncListService()->addSyncList(['type' => 'classroom', 'data' => $classroomId]);
-
-        $this->updateGoodsContent('classroom', new ClassroomInfoBuilder(), $classroomId);
     }
 
     protected function deleteClassroomProductToMarketingMall($classroomId)

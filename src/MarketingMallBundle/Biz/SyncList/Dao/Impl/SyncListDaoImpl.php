@@ -35,7 +35,6 @@ class SyncListDaoImpl extends GeneralDaoImpl implements SyncListDao
     {
 
         $sql = "UPDATE {$this->table} set status = 'notified' where id in ({$ids})";
-
         return $this->db()->executeUpdate($sql);
     }
 
@@ -45,6 +44,14 @@ class SyncListDaoImpl extends GeneralDaoImpl implements SyncListDao
 
         return $this->db()->fetchAll($sql, array($cursorAddress, $cursorType)) ?: array();
     }
+
+    public function findSyncListByCursor($cursorAddress, $cursorType)
+    {
+        $sql = "SELECT id,data FROM {$this->table} where id > ? AND type = ?";
+
+        return $this->db()->fetchAll($sql, array($cursorAddress, $cursorType)) ?: array();
+    }
+
 
     public function declares()
     {

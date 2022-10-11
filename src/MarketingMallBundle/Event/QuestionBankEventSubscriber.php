@@ -205,8 +205,6 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
         }
 
         $this->getSyncListService()->addSyncList(['type' => 'questionBank', 'data' => $exerciseId]);
-
-        $this->updateGoodsContent('questionBank', new QuestionBankBuilder(), $exerciseId);
     }
 
     protected function deleteQuestionBankProductToMarketingMall($questionBankId)

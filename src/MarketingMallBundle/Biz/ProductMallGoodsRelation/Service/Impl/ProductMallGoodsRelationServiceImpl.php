@@ -74,6 +74,12 @@ class ProductMallGoodsRelationServiceImpl extends BaseService implements Product
         return 'can_delete';//在商城没有商品则可以直接删除es产品
     }
 
+    public function getExistClassroomIds(array $classroomIds)
+    {
+        $classroomIds = implode(',',$classroomIds);
+        return $this->getProductMallGoodsRelationDao()->getClassroomIds($classroomIds);
+    }
+
     /**
      * @return CourseService
      */

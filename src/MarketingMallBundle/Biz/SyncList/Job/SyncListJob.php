@@ -16,15 +16,19 @@ class SyncListJob extends AbstractJob
             return;
         }
         $client = new MarketingMallClient($this->biz);
-
-        foreach ($tasks as $task) {
-            $result = $client->syncNotify($task);
-
-            if($result == true) {
-                $ids = implode(',',array_column($this->getSyncListService()->getSyncIds(),'id'));
-
-                $this->getSyncListService()->syncStatusUpdate($ids);
+        $flag = false;
+        foreach ($tasks as $task)
+        {
+            $result = $client->syncNotify($task['type']);
+            if ($result['ok'])
+            {
+                $flag = true;
             }
+        }
+        if ($flag)
+        {
+            $ids = implode(',',array_column($this->getSyncListService()->getSyncIds(),'id'));
+            $this->getSyncListService()->syncStatusUpdate($ids);
         }
     }
 
