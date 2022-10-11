@@ -30,6 +30,7 @@ class UserManageController extends UserCommonController
     {
         $indexTwigUrl = 'admin-v2/user/user-manage/index.html.twig';
         $fields = $request->query->all();
+
         $conditions = [
             'roles' => 'ROLE_USER',
             'keywordType' => '',
@@ -38,6 +39,7 @@ class UserManageController extends UserCommonController
             'destroyed' => 0,
             'isStudent' => 0,
         ];
+
         return $this->index($fields, $conditions, $indexTwigUrl);
 
     }

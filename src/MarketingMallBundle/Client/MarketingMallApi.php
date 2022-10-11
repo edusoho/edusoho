@@ -114,6 +114,11 @@ class MarketingMallApi
         return $this->post('/api-school/goods/esDeleteGoods', ['code' => $params[0]]);
     }
 
+    public function syncNotify($param)
+    {
+        return $this->post('/api-school/goods/syncNotify', ['type' => implode($param)]);
+    }
+
 //    例子  token头直接设置了参数code也直接加了
 //    public function demo($params){
 //        try {

@@ -25,6 +25,13 @@ class ProductMallGoodsRelationDaoImpl extends GeneralDaoImpl implements ProductM
         ];
     }
 
+    public function getClassroomIds($ids)
+    {
+        $sql = "SELECT productId FROM {$this->table} where productId in ({$ids}) AND productType = 'classroom'";
+
+        return $this->db()->fetchAll($sql) ?: array();
+    }
+
     public function getByProductTypeAndProductId($productType, $productId)
     {
         return $this->getByFields(['productType' => $productType, 'productId' => $productId]);

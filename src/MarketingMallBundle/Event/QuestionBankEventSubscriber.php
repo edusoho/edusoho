@@ -6,6 +6,7 @@ use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use MarketingMallBundle\Biz\SyncList\Service\SyncListService;
 use MarketingMallBundle\Common\GoodsContentBuilder\QuestionBankBuilder;
 
 class QuestionBankEventSubscriber extends BaseEventSubscriber
@@ -109,9 +110,10 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
     public function onItemCreate(Event $event)
     {
         $item = $event->getSubject();
-        if (empty($item['category_id'])) {
-            return;
-        }
+
+//        if (empty($item['category_id'])) {
+//            return;
+//        }
         $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($item['bank_id']);
         $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
         if ($exercise) {
@@ -195,7 +197,14 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
 
     protected function syncQuestionBankToMarketingMall($exerciseId)
     {
-        $this->updateGoodsContent('questionBank', new QuestionBankBuilder(), $exerciseId);
+        $data = $this->getSyncListService()->getSyncDataId($exerciseId);
+        foreach ($data as $value) {
+            if($value['id'] && $value['type'] == 'questionBank' && $value['status'] == 'new') {
+                return;
+            }
+        }
+
+        $this->getSyncListService()->addSyncList(['type' => 'questionBank', 'data' => $exerciseId]);
     }
 
     protected function deleteQuestionBankProductToMarketingMall($questionBankId)
@@ -229,5 +238,13 @@ class QuestionBankEventSubscriber extends BaseEventSubscriber
     protected function getItemCategoryService()
     {
         return $this->getBiz()->service('ItemBank:Item:ItemCategoryService');
+    }
+
+    /**
+     * @return SyncListService
+     */
+    protected function getSyncListService()
+    {
+        return $this->getBiz()->service('MarketingMallBundle:SyncList:SyncListService');
     }
 }

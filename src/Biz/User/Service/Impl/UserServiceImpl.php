@@ -375,6 +375,11 @@ class UserServiceImpl extends BaseService implements UserService
         return ArrayToolkit::index($userProfiles, 'id');
     }
 
+    public function findUpdateUserProfilesByIds(array $ids)
+    {
+        return $this->getProfileDao()->findByIds($ids);
+    }
+
     public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit, $columns = [])
     {
         $profiles = $this->getProfileDao()->search($conditions, $orderBy, $start, $limit, $columns);
@@ -550,7 +555,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $user = $this->getUserDao()->update($userId, $fields);
-//        $this->dispatchEvent('user.change_avatar', new Event($user));
+        $this->dispatchEvent('user.change_avatar', new Event($user));
 
         return UserSerialize::unserialize($user);
     }
@@ -745,12 +750,11 @@ class UserServiceImpl extends BaseService implements UserService
             'password' => $this->getPasswordEncoder()->encodePassword($password, $salt),
         ];
 
-        $this->getUserDao()->update($id, $fields);
+        $updatePass = $this->getUserDao()->update($id, $fields);
 
         $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
-        $this->dispatch('user.change_password', $user);
-
+        $this->dispatchEvent('user.change_password', new Event($updatePass));
         return true;
     }
 
@@ -2353,6 +2357,32 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         return intval($enable);
+    }
+
+
+    public function syncBindUser($fromId) {
+
+        $userBind = $this->getUserBindDao()->getByFromId($fromId);
+
+        if($userBind) {
+            $user = $this->getUserDao()->get($userBind['toId']);
+            return [
+                'isExist' => '1',
+                'user' => $user
+            ];
+        }
+
+        $this->getUserBindDao()->create([
+            'type' => 'weixin',
+            'fromId' => $fromId,
+            'toId' => "0",
+            'createdTime' => time(),
+        ]);
+    }
+
+    public function UserBindUpdate($openId, $userId) {
+
+        $this->getUserBindDao()->UserBindUpdate($openId, $userId);
     }
 
     protected function decideUserJustStudentRole($userId)

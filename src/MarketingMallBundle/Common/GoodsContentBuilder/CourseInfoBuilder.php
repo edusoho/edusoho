@@ -27,31 +27,84 @@ class CourseInfoBuilder extends AbstractBuilder
         return $this->buildCourseData($course);
     }
 
-    protected function buildCourseData($course)
-    {
+    protected function buildCourseData($course){
         $childrenCourseIds = [];
         $teachers = [];
+        $result = $this->publicCourseData($course);
+        $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($course['id']),'userId');
+        foreach ($teacherIds as $teacherId) {
+            $teachers[] = $this->getTeacherInfoBuilder()->build($teacherId);
+        }
+
+        return [
+            'courseIds' => array_merge([$course['id']], $childrenCourseIds),
+            'title' => $result['count'] == 1 ? $result['courseSet']['title'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
+            'subtitle' => $result['count'] == 1 ? $result['courseSet']['subtitle'] : $course['subtitle'],
+            'cover' => $this->transformCover($result['courseSet']['cover']),
+            'price' => $course['price'],
+            'summary' => $this->transformImages($result['courseSet']['summary']),
+            'courseCatalogue' => $result['courseCatalogue'],
+            'teacherList' => $teachers,
+        ];
+    }
+
+    public function builds($ids)
+    {
+        $courses = $this->getCourseService()->findCoursesByIds($ids);
+
+        if (empty($courses)) {
+            $this->createNewException(CourseException::NOTFOUND_COURSE);
+        }
+
+        return $this->buildCourseDatas($courses);
+    }
+
+
+    protected function buildCourseDatas($courses)
+    {
+        $goodsContent = [];
+
+        foreach ($courses as $course) {
+           $result = $this->publicCourseData($course);
+           $teachers = [];
+           $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($course['id']),'userId');
+            foreach ($teacherIds as $teacherId) {
+                $teachers[] = $this->getTeacherInfoBuilder()->build($teacherId);
+            }
+            array_push($goodsContent, [
+                'courseId' => $course['id'],
+                'title' => $result['count'] == 1 ? $result['courseSet']['title'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
+                'subtitle' => $result['count'] == 1 ? $result['courseSet']['subtitle'] : $course['subtitle'],
+                'cover' => $this->transformCover($result['courseSet']['cover']),
+                'price' => $course['price'],
+                'summary' => $this->transformImages($result['courseSet']['summary']),
+                'courseCatalogue' => $result['courseCatalogue'],
+                'teacherList' => $teachers,
+            ]);
+        }
+
+        return $goodsContent;
+    }
+
+    protected function publicCourseData($course)
+    {
+        $childrenCourseIds = [];
+
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $count = $this->getCourseService()->countCoursesByCourseSetId($course['courseSetId']);
         if (0 == $course['parentId']) {
             $childrenCourseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
         }
-        $teacherIds = ArrayToolkit::column($this->getCourseService()->findTeachersByCourseId($course['id']),'userId');
-        foreach ($teacherIds as $teacherId) {
-            $teachers[] = $this->getTeacherInfoBuilder()->build($teacherId);
-        }
+
         $courseCatalogue = $this->buildCourseCatalogue($this->getCourseService()->findCourseItems($course['id']));
+
         return [
-            'courseIds' => array_merge([$course['id']], $childrenCourseIds),
-            'title' => $count == 1 ? $courseSet['title'] : $course['courseSetTitle'] . '(' . $course['title'] . ')',
-            'subtitle' => $count == 1 ? $courseSet['subtitle'] : $course['subtitle'],
-            'cover' => $this->transformCover($courseSet['cover']),
-            'price' => $course['price'],
-            'summary' => $this->transformImages($courseSet['summary']),
-            'courseCatalogue' => $courseCatalogue,
-            'teacherList' => $teachers,
+            'courseSet'=>$courseSet,
+            'childrenCourseIds'=>$childrenCourseIds,
+            'courseCatalogue'=>$courseCatalogue
         ];
     }
+
 
     protected function buildCourseCatalogue($courseItems)
     {
