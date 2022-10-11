@@ -6783,7 +6783,7 @@ admin.user.manage.create_by_mobile.mobile.input_placeholder: 手机号码
 admin.user.manage.create_by_mobile.nickname.input_placeholder: 不填将自动生成
 admin.user.manage.create_by_mobile_or_email.heading_title: 添加新用户
 admin.user.manage.create_student_by_mobile_or_email.heading_title: 添加学员
-admin.user.manage.create_staff_by_mobile_or_email.heading_title: 添加新员工
+admin.user.manage.create_staff_by_mobile_or_email.heading_title: 添加员工
 admin.user.manage.create_by_mobile_or_email.email_or_mobile_label: 邮箱/手机
 admin.user.manage.create_by_mobile_or_email.email_or_mobile.input_placeholder: 邮箱地址/手机号码
 admin.user.manage.create_by_mobile_or_email.nickname.input_placeholder: 不填将自动生成
