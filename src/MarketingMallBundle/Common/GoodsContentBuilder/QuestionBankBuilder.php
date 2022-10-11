@@ -14,20 +14,44 @@ use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class QuestionBankBuilder extends AbstractBuilder
 {
+
     public function build($id)
     {
         $exercise = $this->getExerciseService()->get($id);
+
         if (empty($exercise)) {
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
-
         return [
-            'bankId' => $id,
-            'title' => $exercise['title'],
-            'cover' => $this->transformCover($exercise['cover'], 'item_bank_exercise.png'),
-            'price' => $exercise['price'],
-            'questionBankCatalogue' => array_merge([$this->buildChapterExercise($exercise)], $this->buildAssessmentList($exercise)),
-        ];
+                'bankId' => $id,
+                'title' => $exercise['title'],
+                'cover' => $this->transformCover($exercise['cover'], 'item_bank_exercise.png'),
+                'price' => $exercise['price'],
+                'questionBankCatalogue' => array_merge([$this->buildChapterExercise($exercise)], $this->buildAssessmentList($exercise)),
+            ];
+    }
+
+    public function builds($ids)
+    {
+        $goodsContent = [];
+        $exercises = $this->getExerciseService()->findByIds($ids);
+
+        if (empty($exercises)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+        }
+
+        foreach ($exercises as $exercise) {
+            array_push($goodsContent, [
+                'bankId' => $exercise['id'],
+                'title' => $exercise['title'],
+                'cover' => $this->transformCover($exercise['cover'], 'item_bank_exercise.png'),
+                'price' => $exercise['price'],
+                'questionBankCatalogue' => array_merge([$this->buildChapterExercise($exercise)], $this->buildAssessmentList($exercise)),
+            ]);
+        }
+
+         return $goodsContent;
+
     }
 
     protected function buildChapterExercise($exercise)

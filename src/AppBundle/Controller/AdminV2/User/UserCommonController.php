@@ -19,6 +19,7 @@ use Biz\User\Service\NotificationService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
+use MarketingMallBundle\Biz\SyncList\Service\SyncListService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -562,7 +563,6 @@ class UserCommonController extends BaseController
             $this->getLogService()->error('user', 'password-reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：" . $e->getMessage());
             throw $e;
         }
-
         return $this->createJsonResponse(true);
     }
 
@@ -599,7 +599,6 @@ class UserCommonController extends BaseController
             $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 {$user['nickname']}({$user['id']}) 发送Email验证邮件失败：" . $e->getMessage());
             throw $e;
         }
-
         return $this->createJsonResponse(true);
     }
 
@@ -753,4 +752,6 @@ class UserCommonController extends BaseController
     {
         return $this->createService('Org:OrgService');
     }
+
+
 }

@@ -1193,7 +1193,7 @@ admin_v2:
                                         admin_v2_staff_turn_into_student:
                                             name: admin_v2.user.staff.basic_tab.turn_into_student_btn
                                             group: groupButton
-                                            class: turn-into-student
+                                            class: turn-into-student js-turn-into-student
                                             mode: none
                                             visible: (user.type != 'system' and user.locked == 0)
                                             router_params:
@@ -1966,7 +1966,7 @@ admin_v2:
             name: 商城
             before: admin_v2_education
             router_name: admin_v2_marketing_mall
-            visible: ((setting('cloud_status.accessCloud', false) == true) and not is_without_network()) #没接入教育云和无网情况下不显示营销商城
+            visible: (is_show_mall()) #没接入教育云和无网情况下不显示营销商城
             children:
                 admin_v2_basic_content_resource_group2:
                     name: 商城

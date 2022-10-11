@@ -3,9 +3,11 @@
 namespace MarketingMallBundle\Event;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Event\Event;
+use MarketingMallBundle\Biz\SyncList\Service\SyncListService;
 use MarketingMallBundle\Common\GoodsContentBuilder\CourseInfoBuilder;
 
 class CourseEventSubscriber extends BaseEventSubscriber
@@ -124,7 +126,35 @@ class CourseEventSubscriber extends BaseEventSubscriber
 
     protected function syncCourseToMarketingMall($courseId)
     {
-        $this->updateGoodsContent('course', new CourseInfoBuilder(), $courseId);
+        $data = $this->getSyncListService()->getSyncDataId($courseId);
+        foreach ($data as $value) {
+            if($value['id'] && $value['type'] == 'course' && $value['status'] == 'new') {
+                return;
+            }
+        }
+
+        //查询课程关联关系
+        $courseRelation = $this->getProductMallGoodsRelationService()->getProductMallGoodsRelationByProductTypeAndProductId("course", $courseId);
+        if (!empty($courseRelation)){
+            $this->getSyncListService()->addSyncList(['type' => 'course', 'data' => $courseId]);
+        }
+
+        //查询班级关联关系
+        // 1. 查询是否属于班级
+        $classroomIds = $this->getClassroomService()->findClassroomIdsByParentCourseId($courseId);
+        $classroomIds = array_column($classroomIds, 'classroomId');
+        // 2. 查询是否有班级关联关系
+        if (!empty($classroomIds))
+        {
+            $classroomRelations = $this->getProductMallGoodsRelationService()->getExistClassroomIds( $classroomIds);
+            if (!empty($classroomRelations))
+            {
+                foreach ($classroomRelations as $classroomRelation){
+                    $this->getSyncListService()->addSyncList(['type' => 'classroom', 'data' => intval($classroomRelation['productId'])]);
+                }
+            }
+        }
+
     }
 
     protected function deleteCourseProductToMarketingMall($courseId)
@@ -150,5 +180,21 @@ class CourseEventSubscriber extends BaseEventSubscriber
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return SyncListService
+     */
+    protected function getSyncListService()
+    {
+        return $this->getBiz()->service('MarketingMallBundle:SyncList:SyncListService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 }

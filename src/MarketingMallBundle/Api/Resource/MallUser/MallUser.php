@@ -25,13 +25,18 @@ class MallUser extends BaseResource
         if (!ArrayToolkit::requireds($fields, ['mobile', 'nickname'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-        $fields = ArrayToolkit::parts($fields, ['mobile', 'nickname']);
+        $fields = ArrayToolkit::parts($fields, ['mobile', 'nickname', 'openId']);
         $user = $this->getUserService()->getUserByVerifiedMobile($fields['mobile']);
         if ($user) {
             return $user;
         }
         $fields['verifiedMobile'] = $fields['mobile'];
         $user = $this->getUserService()->register($fields, ['mobile']);
+
+        if($fields['openId']) {
+            $this->getUserService()->UserBindUpdate($fields['openId'], $user['id']);
+        }
+
         $this->getLogService()->info('marketing_mall', 'register', "营销商城用户{$user['nickname']}通过手机注册成功", ['userId' => $user['id']]);
 
         return $user;

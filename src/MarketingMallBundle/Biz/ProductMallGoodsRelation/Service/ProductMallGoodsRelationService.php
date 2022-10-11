@@ -20,4 +20,5 @@ interface ProductMallGoodsRelationService
 
     public function checkEsProductCanDelete(array $productIds, $type);
 
+    public function getExistClassroomIds(array $classroomIds);
 }
