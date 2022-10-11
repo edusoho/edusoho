@@ -42,14 +42,15 @@ class CourseTaskUpdateSyncJob extends AbstractSyncJob
             $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_update', 'course.log.task.update.sync.success_tips', array('taskId' => $task['id']));
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_update', 'course.log.task.update.sync.fail_tips', array('error' => $e->getMessage()));
-            if (!isset($this->args['repeat'])) {
+            $this->innodbTrxLog($e);
+            if (!isset($this->args['repeat']) || $this->args['repeat'] < 5) {
                 $this->getSchedulerService()->register(array(
                     'name' => 'course_task_update_sync_job_' . $task['id'],
                     'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-                    'expression' => time(),
+                    'expression' => time() + 120,
                     'misfire_policy' => 'executing',
                     'class' => 'Biz\Task\Job\CourseTaskUpdateSyncJob',
-                    'args' => array('taskId' => $task['id'], 'repeat' => 1),
+                    'args' => array('taskId' => $task['id'], 'repeat' => (isset($this->args['repeat'])?$this->args['repeat']:0) + 1),
                 ));
             }
             throw $e;

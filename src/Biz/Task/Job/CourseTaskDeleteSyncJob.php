@@ -27,14 +27,15 @@ class CourseTaskDeleteSyncJob extends AbstractSyncJob
             $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.success_tips', ['taskId' => $taskId]);
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.fail_tips', ['error' => $e->getMessage()]);
-            if (!isset($this->args['repeat'])) {
+            $this->innodbTrxLog($e);
+            if (!isset($this->args['repeat']) || $this->args['repeat'] < 5) {
                 $this->getSchedulerService()->register(array(
                     'name' => "course_task_delete_sync_job_{$taskId}",
                     'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-                    'expression' => time() + 60,
+                    'expression' => time() + 120,
                     'misfire_policy' => 'executing',
                     'class' => 'Biz\Task\Job\CourseTaskDeleteSyncJob',
-                    'args' => array('taskId' => $taskId, 'courseId' => $courseId, 'repeat' => 1),
+                    'args' => array('taskId' => $taskId, 'courseId' => $courseId, 'repeat' => (isset($this->args['repeat'])?$this->args['repeat']:0) + 1),
                 ));
             }
             throw $e;

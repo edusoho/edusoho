@@ -10,6 +10,9 @@ use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Topxia\Service\Common\ServiceKernel;
 
 class AbstractSyncJob extends AbstractJob
 {
@@ -17,6 +20,13 @@ class AbstractSyncJob extends AbstractJob
 
     public function execute()
     {
+    }
+
+    protected function innodbTrxLog(\Exception $error)
+    {
+        $trx = $this->biz['db']->fetchAll('select * from information_schema.innodb_trx where TIME_TO_SEC(timediff(now(),trx_started))>30');
+        $processlist = $this->biz['db']->fetchAll('show processlist');
+        $this->getLogger()->error($error->getMessage(),['trace'=>$error->getTrace(),'trx'=> $trx, 'process' => $processlist]);
     }
 
     protected function dispatchEvent($eventName, $subject, $arguments = [])
@@ -37,6 +47,13 @@ class AbstractSyncJob extends AbstractJob
         }
 
         return $this->lock;
+    }
+
+    protected function getLogger()
+    {
+        $logger = new Logger('SyncTaskError');
+        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/sync-task-error.log', Logger::DEBUG));
+        return $logger;
     }
 
     /**
