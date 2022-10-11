@@ -35,6 +35,7 @@ class MarketingMallServiceProvider implements ServiceProviderInterface
     {
         return [
             'ProductMallGoodsRelation:ProductMallGoodsRelationService',
+            'MallSetting:MallSettingService',
         ];
     }
 
