@@ -2,6 +2,8 @@
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\ActivityDao;
+use Biz\Course\Dao\CourseDao;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\Filesystem\Filesystem;
 use Biz\Util\EdusohoLiveClient;
 
@@ -47,6 +49,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'registerCallbackUrl',
+            'registerSyncTask',
         );
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -92,6 +95,27 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    public function registerSyncTask($page)
+    {
+        $jobLogs = $this->getJobLogDao()->search(['name'=>'course_task_create_sync_job_', 'status'=>'error'],['id'=>'asc'], ($page-1) * 5, 5);
+        $taskIds = ArrayToolkit::column(ArrayToolkit::column($jobLogs,'args'), 'taskId');
+        $tasks = $this->getTaskService()->findTasksByIds($taskIds);
+        $courseIds = ArrayToolkit::column($tasks, 'courseId');
+
+        if(empty($courseIds)) {
+            return 1;
+        }
+        foreach ($courseIds as $courseId) {
+            $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($courseId, 1);
+            foreach ($copiedCourses as $copiedCourse) {
+                $result = $this->getTaskService()->syncClassroomCourseTasks($copiedCourse['id'], true);
+                $this->logger('info', json_encode($result));
+            }
+        }
+
+        return $page + 1;
+    }
+
 
     protected function generateIndex($step, $page)
     {
@@ -117,6 +141,27 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    public function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    protected function getJobLogDao()
+    {
+        return $this->createDao('Scheduler:JobLogDao');
+    }
+
+    /**
+     * @return CourseDao
+     */
+    protected function getCourseDao()
+    {
+        return $this->createDao('Course:CourseDao');
     }
 }
 
