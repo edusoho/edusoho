@@ -121,7 +121,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 }
             }
         }
-        if (!isset($copiedCourses) || empty($copiedCourses) || $coursePage == $index) {
+        if (!isset($copiedCourses) || empty($copiedCourses) || $coursePage - 1 == $index) {
             $coursePage = 1;
             $logPage++;
         } else {
