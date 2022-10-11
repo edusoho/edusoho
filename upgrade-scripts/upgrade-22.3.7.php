@@ -105,27 +105,27 @@ class EduSohoUpgrade extends AbstractUpdater
             $coursePage = 1;
         }
         $jobLogs = $this->getJobLogDao()->search(['name'=>'course_task_create_sync_job_', 'status'=>'error'],['id'=>'asc'], ($logPage-1) * 1, 1);
-        $taskIds = ArrayToolkit::column(ArrayToolkit::column($jobLogs,'args'), 'taskId');
-        $tasks = $this->getTaskService()->findTasksByIds($taskIds);
-        $courseIds = ArrayToolkit::column($tasks, 'courseId');
-
-        if(empty($courseIds)) {
+        if(empty($jobLogs)) {
             return 1;
         }
-        foreach ($courseIds as $courseId) {
+        $taskId = $jobLogs[0]['args']['taskId'];
+        $task = $this->getTaskService()->getTask($taskId);
+
+        if(!empty($task)) {
+            $courseId = $task['courseId'];
             $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($courseId, 1);
-            foreach ($copiedCourses as $index=>$copiedCourse) {
-                if($coursePage - 1 == $index) {
+            foreach ($copiedCourses as $index => $copiedCourse) {
+                if ($coursePage - 1 == $index) {
                     $result = $this->getTaskService()->syncClassroomCourseTasks($copiedCourse['id'], true);
                     $this->logger('info', json_encode($result));
                 }
             }
-            if(empty($copiedCourses) || $coursePage == $index) {
-                $coursePage = 1;
-                $logPage++;
-            }else{
-                $coursePage++;
-            }
+        }
+        if (!isset($copiedCourses) || empty($copiedCourses) || $coursePage == $index) {
+            $coursePage = 1;
+            $logPage++;
+        } else {
+            $coursePage++;
         }
 
         return (int)($logPage*1000+$coursePage);
