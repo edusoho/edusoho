@@ -120,9 +120,11 @@ class EduSohoUpgrade extends AbstractUpdater
                     $this->logger('info', json_encode($result));
                 }
             }
-            if(!empty($copiedCourses) && $coursePage == $index) {
+            if(empty($copiedCourses) || $coursePage == $index) {
                 $coursePage = 1;
                 $logPage++;
+            }else{
+                $coursePage++;
             }
         }
 
