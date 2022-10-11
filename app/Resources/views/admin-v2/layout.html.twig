@@ -91,10 +91,17 @@
           </a>
         </div>
         <div class="hidden pull-right change-version-btn cd-dropdown js-sass" data-toggle="cd-dropdown" data-trigger="hover">
-          <a href="javascript:;">
+          <a href="{{ path('homepage') }}" target="_blank">
             <i class="es-icon es-icon-site icon-home"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}
           </a>
           <div class="dropdown-menu" style="width: 392px;left: -212px;">
+            <div class="js-mall-card" style="position: absolute;top:0;left:0;z-index:1;padding: 24px;background-color: #fff;border-radius: 4px;">
+              <div style="display: flex;margin-bottom:20px;align-items:center;">
+                <img src="{{ asset(setting('site.logo')) }}" style="width: 58px;height:58px;margin-right:16px;">
+                <div style="width: 180px;overflow: hidden; display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;font-size: 16px;font-weight: bold;">{{ setting('site.name') }}的商城</div>
+              </div>
+              <canvas class="js-marketing-qrcode1"></canvas>
+            </div>
             <div class="school-share-container">
               <div class="clearfix cd-mb16">
                 <div class="pull-left share-label">{{ 'admin_v2.homepage.school_info.enter.label'|trans }}</div>
@@ -142,7 +149,7 @@
                 </div>
                 <div class="clearfix">
                   <div class="pull-left" style="margin-right: 12px;width:80px;height:80px;">
-                    <canvas class="js-marketing-qrcode"></canvas>
+                    <canvas class="js-marketing-qrcode2"></canvas>
                   </div>
                   <div class="pull-left">
                     <div class="download-btn js-download-btn">{{ 'admin_v2.homepage.school_info.enter.download_qrcode'|trans }}</div>
