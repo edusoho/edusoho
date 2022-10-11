@@ -12,7 +12,7 @@ class MallInfo extends BaseResource
 {
     public function search(ApiRequest $request)
     {
-        $result['isShow'] = $this->getSetting('cloud_status.accessCloud', false) && !$this->getSetting('developer.without_network', $default = false);
+        $result['isShow'] = $this->getMallSettingService()->isShowMall();
         if($result['isShow']) {
             $result['isInit'] = !empty($this->getSetting('marketing_mall.access_key', false));
             if($result['isInit']) {
@@ -31,5 +31,10 @@ class MallInfo extends BaseResource
     protected function getSetting($name, $default = null)
     {
         return $this->biz->service('System:SettingService')->node($name, $default);
+    }
+
+    protected function getMallSettingService()
+    {
+        return $this->biz->service('MallSetting:MallSettingService');
     }
 }
