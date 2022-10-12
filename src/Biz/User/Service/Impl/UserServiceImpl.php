@@ -2378,6 +2378,10 @@ class UserServiceImpl extends BaseService implements UserService
             'toId' => "0",
             'createdTime' => time(),
         ]);
+        return [
+            'isExist' => '0',
+            'user' => ''
+        ];
     }
 
     public function UserBindUpdate($openId, $userId) {
