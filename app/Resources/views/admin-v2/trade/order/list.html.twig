@@ -1,8 +1,16 @@
 {% extends 'admin-v2/layout.html.twig' %}
 
 {% set menu = 'admin_v2_goods_order_list' %}
+{% set currentMenu = permission(menu) %}
 
 {% set script_controller = 'manage/list' %}
+
+{% block page_title %}
+  {{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}
+  <span class="js-is-sass text-14 hidden" style="color: #86909C;">
+    暂不支持显示【商城】中购买商品产生的订单，具体请到<a class="js-mall-order" href="#" target="_blank">【商城订单】</a>中查看
+  </span>
+{% endblock %}
 
 {% block main %}
 

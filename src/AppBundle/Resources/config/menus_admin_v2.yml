@@ -1961,23 +1961,23 @@ admin_v2:
                                 admin_v2_api_swagger_ui_api:
                                     name: API 列表
 
-        # 营销商城
+        # 商城
         admin_v2_marketing_mall:
-            name: 营销商城
+            name: 商城
             before: admin_v2_education
             router_name: admin_v2_marketing_mall
             visible: (is_show_mall()) #没接入教育云和无网情况下不显示营销商城
             children:
                 admin_v2_basic_content_resource_group2:
-                    name: 营销商城
+                    name: 商城
                     router_name: admin_v2_marketing_mall
                     is_group: true
                     children:
                         admin_v2_purchase_market_menu1:
-                            name: 营销商城
+                            name: 商城
                             router_name: admin_v2_marketing_mall
                             children:
                                 admin_v2_purchase_market_tab1:
-                                    name: 营销商城
+                                    name: 商城
                                     router_name: admin_v2_marketing_mall
                                     disable: true

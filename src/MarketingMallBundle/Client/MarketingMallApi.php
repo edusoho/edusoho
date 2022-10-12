@@ -49,28 +49,32 @@ class MarketingMallApi
         try {
             $params = ArrayToolkit::parts($params, ['token', 'url', 'code']);
             $result = $this->post('/api-admin/esData/init', $params);
-            if (empty($result['accessKey'])) {
+            if (empty($result)) {
                 throw new \InvalidArgumentException('接口请求错误!');
             }
-
-            return $result;
+            if (empty($result['accessKey'])) {
+                $this->getLogger()->error('market-mall-init', ['result' => $result]);
+                throw new \InvalidArgumentException('接口请求失败!');
+            }
         } catch (\RuntimeException $e) {
             $this->getLogger()->error('market-mall-init', ['商城初始化错误' . $e->getMessage()]);
             throw new \InvalidArgumentException('接口请求错误!');
         }
+
+        return $result;
     }
 
     public function isHomePageSaved()
     {
         try {
             $result = $this->get('/api-school/info/isHomePageSaved', []);
-            if (empty($result['ok'])) {
+            if (!isset($result['ok'])) {
                 throw new \InvalidArgumentException('接口请求错误!');
             }
 
             return $result['ok'];
         } catch (\RuntimeException $e) {
-            $this->getLogger()->error('获取商城装修状态失败'.$e->getMessage(), ['商城初始化错误' . $e->getTrace()]);
+            $this->getLogger()->error('获取商城装修状态失败'.$e->getMessage(), ['商城初始化错误' . $e->getTraceAsString()]);
             throw new \InvalidArgumentException('接口请求错误!');
         }
     }
@@ -134,12 +138,26 @@ class MarketingMallApi
     {
         $params['code'] = self::$accessKey;
 
-        return self::$client->get($uri, $params, self::$headers);
+        $response = self::$client->get($uri, $params, self::$headers);
+        if (empty($response)) {
+            $this->getLogger()->warn('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
+        } else {
+            $this->getLogger()->debug('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
+        }
+
+        return $response;
     }
 
     private function post($uri, array $params = [])
     {
-        return self::$client->post($uri, $params, self::$headers);
+        $response = self::$client->post($uri, $params, self::$headers);
+        if (empty($response)) {
+            $this->getLogger()->warn('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
+        } else {
+            $this->getLogger()->debug('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
+        }
+
+        return $response;
     }
 
     private function makeToken()

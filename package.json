@@ -65,6 +65,7 @@
     "es6-promise": "4.0.5",
     "font-awesome": "4.6.3",
     "handlebars": "4.0.11",
+    "html2canvas": "^1.4.1",
     "html5shiv": "3.7.3",
     "iframe-resizer": "3.5.5",
     "intro.js": "2.4.0",

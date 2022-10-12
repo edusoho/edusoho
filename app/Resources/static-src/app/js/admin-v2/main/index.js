@@ -4,6 +4,7 @@ import './menu-mark-new';
 import { Browser } from 'common/utils';
 import notify from 'common/notify';
 import Clipboard from 'clipboard';
+import html2canvas from 'html2canvas'
 
 if (Browser.ie || Browser.ie11 || Browser.edge) {
   $('body').addClass('admin-ie-body');
@@ -49,13 +50,15 @@ $.ajax({
     notify('success', Translator.trans('admin_v2.homepage.school_info.enter.copy_success'));
   });
   
-  Qrcode.toCanvas($('.js-marketing-qrcode')[0], res.url, { width: 80, quality: 1, margin: 1 })
+  Qrcode.toCanvas($('.js-marketing-qrcode1')[0], res.url, { width: 256, quality: 1, margin: 0 })
+  Qrcode.toCanvas($('.js-marketing-qrcode2')[0], res.url, { width: 80, quality: 1, margin: 1 })
 
   $('.js-download-btn').on('click', () => {
-    const link = document.createElement('a')
-    const canvas = $('.js-marketing-qrcode')[0]
-    link.setAttribute('download', 'qrcode')
-    link.href = canvas?.toDataURL('image/png', 1)
-    link.click()
+    html2canvas($('.js-mall-card')[0]).then(function(canvas) {
+      const link = document.createElement('a')
+      link.setAttribute('download', '商城二维码')
+      link.href = canvas?.toDataURL('image/png', 1)
+      link.click()
+    })
   })
 })
