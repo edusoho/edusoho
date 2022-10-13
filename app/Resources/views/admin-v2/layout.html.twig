@@ -135,7 +135,7 @@
                   </div>
                   <div class="pull-left js-copy-link"
                     data-clipboard-text=""
-                    style="width: 85px;height:32px;text-align:center;line-height: 32px;color: #272E3B;cursor:pointer;">
+                    style="width: 85px;height:32px;font-size:14px;font-weight:400;text-align:center;line-height: 32px;color: #272E3B;cursor:pointer;">
                       {{ 'admin_v2.homepage.school_info.enter.copy_btn'|trans }}
                     </div>
                 </div>
@@ -151,7 +151,8 @@
                 </div>
                 <div class="clearfix">
                   <div class="pull-left" style="margin-right: 12px;width:80px;height:80px;">
-                    <canvas class="js-marketing-qrcode2"></canvas>
+                    <img src="{{ asset('/static-dist/app/img/admin-v2/default-code.png') }}" style="margin-left: 4px" />
+                    <canvas class="js-marketing-qrcode2 hidden"></canvas>
                   </div>
                   <div class="pull-left">
                     <div class="download-btn js-download-btn">{{ 'admin_v2.homepage.school_info.enter.download_qrcode'|trans }}</div>
