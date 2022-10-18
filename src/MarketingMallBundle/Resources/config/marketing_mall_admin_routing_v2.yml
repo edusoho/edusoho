@@ -1,4 +1,4 @@
-admin_v2_mall:
+admin_v2_marketing_mall:
   path: /mall
   defaults:
     _controller: 'MarketingMallBundle:AdminV2/Mall:index'
