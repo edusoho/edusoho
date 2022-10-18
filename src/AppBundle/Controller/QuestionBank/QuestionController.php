@@ -85,16 +85,15 @@ class QuestionController extends BaseController
         }
         $categoryId = $request->query->get('categoryId', 0);
 
+        $goto = $request->query->get('goto', $this->generateUrl('question_bank_manage_question_list', ['id' => $id]));
+        $goto = $this->filterRedirectUrl($goto);
+
         if ($request->isMethod('POST')) {
             $fields = json_decode($request->getContent(), true);
             $fields['bank_id'] = $questionBank['itemBankId'];
             $fields['category_id'] = empty($fields['category_id']) ? $categoryId : $fields['category_id'];
             $item = $this->getItemService()->createItem($fields);
-
-            $goto = $request->query->get(
-                'goto',
-                $this->generateUrl('question_bank_manage_question_list', ['id' => $id])
-            );
+            
             if ('continue' === $fields['submission']) {
                 $urlParams = ArrayToolkit::parts($item, ['difficulty']);
                 $urlParams['id'] = $id;
@@ -112,6 +111,7 @@ class QuestionController extends BaseController
         }
 
         return $this->render('question-manage/question-form-layout.html.twig', [
+            'goto' => $goto,
             'mode' => 'create',
             'questionBank' => $questionBank,
             'type' => $type,
@@ -141,6 +141,8 @@ class QuestionController extends BaseController
             'goto',
             $this->generateUrl('question_bank_manage_question_list', ['id' => $id])
         );
+        $goto = $this->filterRedirectUrl($goto);
+
         if ($request->isMethod('POST')) {
             $this->getItemService()->updateItem($item['id'], json_decode($request->getContent(), true));
 
