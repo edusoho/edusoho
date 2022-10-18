@@ -1,0 +1,21 @@
+{
+  "name": "edusoho-live/eslive-api-php-sdk",
+  "description": "EduSoho Live PHP SDK",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "lilei",
+      "email": "lilei@edusoho.com"
+    }
+  ],
+  "autoload" : {
+    "psr-4": {
+      "ESLive\\SDK\\" : "src"
+    }
+  },
+  "require": {
+    "symfony/http-client": "^4 | ^5 | ^6",
+    "firebase/php-jwt": "^5 | ^6 | ^7"
+  }
+}

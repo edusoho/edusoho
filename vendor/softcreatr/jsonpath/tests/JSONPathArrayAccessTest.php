@@ -6,11 +6,17 @@
  * @license https://github.com/SoftCreatR/JSONPath/blob/main/LICENSE  MIT License
  */
 
+declare(strict_types=1);
+
 namespace Flow\JSONPath\Test;
 
+use ArrayObject;
 use Exception;
 use Flow\JSONPath\JSONPath;
 use Flow\JSONPath\Test\Traits\TestDataTrait;
+use PHPUnit\Framework\TestCase;
+
+use function is_array;
 
 class JSONPathArrayAccessTest extends TestCase
 {
@@ -19,9 +25,10 @@ class JSONPathArrayAccessTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testChaining()
+    public function testChaining(): void
     {
-        $jsonPath = (new JSONPath($this->getData('conferences')));
+        $container = new ArrayObject($this->getData('conferences'));
+        $jsonPath = new JSONPath($container);
 
         $teams = $jsonPath
             ->find('.conferences.*')
@@ -47,11 +54,11 @@ class JSONPathArrayAccessTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testIterating()
+    public function testIterating(): void
     {
-        $data = $this->getData('conferences');
+        $container = new ArrayObject($this->getData('conferences'));
 
-        $conferences = (new JSONPath($data))
+        $conferences = (new JSONPath($container))
             ->find('.conferences.*');
 
         $names = [];
@@ -69,11 +76,14 @@ class JSONPathArrayAccessTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @param bool $asArray
+     * @testWith [false]
+     *           [true]
      */
-    public function testDifferentStylesOfAccess()
+    public function testDifferentStylesOfAccess(bool $asArray): void
     {
-        $data = (new JSONPath($this->getData('conferences', mt_rand(0, 1))));
+        $container = new ArrayObject($this->getData('conferences', $asArray));
+        $data = new JSONPath($container);
 
         self::assertArrayHasKey('conferences', $data);
 
@@ -84,5 +94,14 @@ class JSONPathArrayAccessTest extends TestCase
         } else {
             self::assertEquals('Western Conference', $conferences[0]->name);
         }
+    }
+
+    public function testUpdate(): void
+    {
+        $container = new ArrayObject($this->getData('conferences'));
+        $data = new JSONPath($container);
+
+        $data->offsetSet('name', 'Major League Football');
+        self::assertEquals('Major League Football', $data->name);
     }
 }

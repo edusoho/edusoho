@@ -6,16 +6,20 @@
  * @license https://github.com/SoftCreatR/JSONPath/blob/main/LICENSE  MIT License
  */
 
+declare(strict_types=1);
+
 namespace Flow\JSONPath\Filters;
 
 use Flow\JSONPath\AccessHelper;
+
+use function count;
 
 class SliceFilter extends AbstractFilter
 {
     /**
      * @inheritDoc
      */
-    public function filter($collection)
+    public function filter($collection): array
     {
         $length = count($collection);
         $start = $this->token->value['start'];

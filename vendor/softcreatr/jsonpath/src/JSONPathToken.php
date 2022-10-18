@@ -6,37 +6,37 @@
  * @license https://github.com/SoftCreatR/JSONPath/blob/main/LICENSE  MIT License
  */
 
+declare(strict_types=1);
+
 namespace Flow\JSONPath;
+
+use function class_exists;
+use function in_array;
+use function ucfirst;
 
 class JSONPathToken
 {
     /*
      * Tokens
      */
-    const T_INDEX = 'index';
-    const T_RECURSIVE = 'recursive';
-    const T_QUERY_RESULT = 'queryResult';
-    const T_QUERY_MATCH = 'queryMatch';
-    const T_SLICE = 'slice';
-    const T_INDEXES = 'indexes';
+    public const T_INDEX = 'index';
+    public const T_RECURSIVE = 'recursive';
+    public const T_QUERY_RESULT = 'queryResult';
+    public const T_QUERY_MATCH = 'queryMatch';
+    public const T_SLICE = 'slice';
+    public const T_INDEXES = 'indexes';
 
     /**
      * @var string
      */
     public $type;
 
-    /**
-     * @var mixed
-     */
     public $value;
 
     /**
-     * @param string $type
-     * @param mixed $value
-     *
      * @throws JSONPathException
      */
-    public function __construct($type, $value)
+    public function __construct(string $type, $value)
     {
         $this->validateType($type);
 
@@ -45,18 +45,16 @@ class JSONPathToken
     }
 
     /**
-     * @param string $type
-     *
      * @throws JSONPathException
      */
-    public function validateType($type)
+    public function validateType(string $type): void
     {
         if (!in_array($type, static::getTypes(), true)) {
             throw new JSONPathException('Invalid token: ' . $type);
         }
     }
 
-    public static function getTypes()
+    public static function getTypes(): array
     {
         return [
             static::T_INDEX,
@@ -69,13 +67,9 @@ class JSONPathToken
     }
 
     /**
-     * @param bool $options
-     *
      * @throws JSONPathException
-     *
-     * @return mixed
      */
-    public function buildFilter($options)
+    public function buildFilter(bool $options)
     {
         $filterClass = 'Flow\\JSONPath\\Filters\\' . ucfirst($this->type) . 'Filter';
 
