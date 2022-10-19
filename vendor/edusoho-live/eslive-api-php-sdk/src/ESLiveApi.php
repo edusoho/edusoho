@@ -63,7 +63,7 @@ class ESLiveApi
     }
 
     public function deleteMemberGroup(string $groupNo): void {
-        $this->request('POST', '/api-v2/memberGroup/updateName', [
+        $this->request('POST', '/api-v2/memberGroup/delete', [
             'json' => [
                 'no' => $groupNo,
             ]

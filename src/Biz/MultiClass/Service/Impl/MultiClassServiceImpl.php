@@ -324,6 +324,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         }
     }
 
+    public function updateMultiClassBundleNo($id, $bundleNo)
+    {
+        return $this->getMultiClassDao()->update($id, ['bundle_no' => $bundleNo]);
+    }
+
     private function filterConditions($conditions)
     {
         if (isset($conditions['ids']) && empty($conditions['ids'])) {

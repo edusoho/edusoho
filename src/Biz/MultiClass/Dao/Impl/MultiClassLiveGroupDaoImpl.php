@@ -14,6 +14,16 @@ class MultiClassLiveGroupDaoImpl extends AdvancedDaoImpl implements MultiClassLi
         return $this->getByFields(['live_id' => $liveId, 'group_id' => $groupId]);
     }
 
+    public function findByGroupIds($groupIds)
+    {
+        return $this->findInField('group_id', $groupIds);
+    }
+
+    public function getByGroupId($groupId)
+    {
+        return $this->getByFields(['group_id' => $groupId]);
+    }
+
     public function declares()
     {
         return [
@@ -21,6 +31,7 @@ class MultiClassLiveGroupDaoImpl extends AdvancedDaoImpl implements MultiClassLi
             'orderbys' => ['id', 'created_time'],
             'conditions' => [
                 'id = :id',
+                'id IN (:ids)',
             ],
         ];
     }

@@ -3074,24 +3074,24 @@
         },
         {
             "name": "edusoho-live/eslive-api-php-sdk",
-            "version": "v1.0.4",
-            "version_normalized": "1.0.4.0",
+            "version": "v1.0.5",
+            "version_normalized": "1.0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/edusoho-live/eslive-api-php-sdk.git",
-                "reference": "e24754652e033b99643fef36fb3fcb31b0216156"
+                "reference": "91a771a55c945287baa1deb3a4cdd8d24efda516"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/edusoho-live/eslive-api-php-sdk/zipball/e24754652e033b99643fef36fb3fcb31b0216156",
-                "reference": "e24754652e033b99643fef36fb3fcb31b0216156",
+                "url": "https://api.github.com/repos/edusoho-live/eslive-api-php-sdk/zipball/91a771a55c945287baa1deb3a4cdd8d24efda516",
+                "reference": "91a771a55c945287baa1deb3a4cdd8d24efda516",
                 "shasum": ""
             },
             "require": {
                 "firebase/php-jwt": "^5 | ^6 | ^7",
                 "symfony/http-client": "^4 | ^5 | ^6"
             },
-            "time": "2022-10-18T06:44:26+00:00",
+            "time": "2022-10-19T05:50:12+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -3112,7 +3112,7 @@
             "description": "EduSoho Live PHP SDK",
             "support": {
                 "issues": "https://github.com/edusoho-live/eslive-api-php-sdk/issues",
-                "source": "https://github.com/edusoho-live/eslive-api-php-sdk/tree/v1.0.4"
+                "source": "https://github.com/edusoho-live/eslive-api-php-sdk/tree/v1.0.5"
             },
             "install-path": "../edusoho-live/eslive-api-php-sdk"
         },

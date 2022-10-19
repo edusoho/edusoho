@@ -230,6 +230,15 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.es_live_api_server'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="es_live_api_server" value="{{ developerSetting.es_live_api_server|default('') }}">
+    </div>
+  </div>
+
   <fieldset>
     <legend>云平台播放器配置</legend>
     <div class="form-group">

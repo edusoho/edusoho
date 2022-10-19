@@ -6670,6 +6670,7 @@ admin.developer_setting.s2b2c_supplier_api: S2B2C Supplier API
 admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
+admin.developer_setting.es_live_api_server: ES Live API
 admin.developer_xapi_address: XAPI address
 admin.developer_face_address: AI Face API address
 admin.developer_push_address: Push API address
@@ -10879,6 +10880,7 @@ exception.multi_class.multi_teacher_cannot_be_assistant: The Multi class teacher
 exception.multi_class.forbidden_delete_course: The course can not delete
 exception.multi_class.forbidden_close_course: The course can not close
 exception.multi_class.group_not_found: The group not found
+exception.multi_class.create_group_failed: Create group failed
 
 site.login.change_to_pwd: Change to account login
 site.login.change_to_sms: Change to sms login
