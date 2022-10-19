@@ -8480,7 +8480,7 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.17, postcss@^7.0.2
 
 postmate@^1.5.2:
   version "1.5.2"
-  resolved "https://registry.npmmirror.com/postmate/-/postmate-1.5.2.tgz#d59a78b3780023c5d32225fd40633b364958bdb3"
+  resolved "https://registry.yarnpkg.com/postmate/-/postmate-1.5.2.tgz#d59a78b3780023c5d32225fd40633b364958bdb3"
   integrity sha512-EHLlEmrUA/hALls49oBrtE7BzDXXjB9EiO4MZpsoO3R/jRuBmD+2WKQuYAbeuVEpTzrPpUTT79z2cz4qaFgPRg==
 
 prelude-ls@~1.1.2:
