@@ -150,7 +150,7 @@ site.twig.extension.time_interval.second: '%diff% 秒'
 site.twig.extension.time_interval.minute: '%diff%分'
 site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%秒'
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
-site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课、BiLiBiLi、爱奇艺的视频页面地址导入
+site.media.import.input_placeholder: 支持优酷、网易公开课的视频页面地址导入
 site.btn.detail: 详情
 site.setting.finished: 已设置
 site.setting.goto: 前往设置
@@ -2330,8 +2330,8 @@ file_chooser.import_link.import_btn: 导入
 file_chooser.import_link.import_btn_submiting: 正在导入，请稍等
 file_chooser.import_video.mediaUri: 原地址：
 file_chooser.import_video.input_placeholder: 支持优酷、腾讯、网易公开课的视频页面地址导入
-file_chooser.import_video.not_support_tips: 腾讯和网易的视频不支持手机端播放
-file_chooser.import_video.not_support_tips2: 优酷和腾讯视频额外支持“复制通用代码”导入（鼠标移到视频页面的“分享”上出现）
+file_chooser.import_video.not_support_tips: 网易公开课不支持手机端播放
+file_chooser.import_video.not_support_tips2: 优酷支持“复制通用代码”导入（鼠标移到视频页面的“分享”上出现）
 file_chooser.materiallib_choose.from_upload: 来自上传
 file_chooser.materiallib_choose.from_share: 来自分享
 file_chooser.materiallib_choose.from_public: 公共资料
