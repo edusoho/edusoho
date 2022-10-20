@@ -31,7 +31,7 @@ class ExceptionListener
             $traceId = Uuid::uuid1()->getHex();
             $error['traceId'] = $traceId;
             $this->getLogger()->error("traceId:".$traceId.">>>".$error['message'], [$exception->getMessage(),$exception->getTraceAsString()]);
-            if ($httpCode === Response::HTTP_INTERNAL_SERVER_ERROR) {
+            if ($httpCode == Response::HTTP_INTERNAL_SERVER_ERROR) {
                 $error['message'] .= "#" . $error['traceId'];
             }
             $response = $this->container->get('api_response_viewer')->view(array('error' => $error), $httpCode);

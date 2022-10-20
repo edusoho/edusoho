@@ -5,6 +5,7 @@ namespace AppBundle\Common\Exception;
 class AbstractException extends \Symfony\Component\HttpKernel\Exception\HttpException
 {
     public $statusCodes = array(
+        400,
         404,
         403,
         500,
