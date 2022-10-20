@@ -12,7 +12,7 @@ class ActivityException extends AbstractException
 
     const NOTFOUND_ACTIVITY = 4042402;
 
-    const LIVE_OVERLAP_TIME = 5002403;
+    const LIVE_OVERLAP_TIME = 4002403;
 
     const ACTIVITY_NOT_IN_COURSE = 5002404;
 
@@ -21,7 +21,7 @@ class ActivityException extends AbstractException
     public $messages = [
         4032401 => 'exception.activity.watch_video_limit',
         4042402 => 'exception.activity.not_found',
-        5002403 => 'activity.live.overlap_time_notice',
+        4002403 => 'activity.live.overlap_time_notice',
         5002404 => 'exception.activity.not_in_course',
         5002405 => 'exception.activity.not_match_media',
     ];
