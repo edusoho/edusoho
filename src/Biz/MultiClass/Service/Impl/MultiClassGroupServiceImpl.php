@@ -36,12 +36,16 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
 
     public function getLiveGroupByUserIdAndCourseId($userId, $courseId, $liveId)
     {
-        $assistantRef = $this->getAssistantStudentService()->getByStudentIdAndCourseId($userId, $courseId);
+        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($courseId);
+        if (empty($multiClass)) {
+            return [];
+        }
+        $assistantRef = $this->getAssistantStudentService()->getByStudentIdAndMultiClassId($userId, $multiClass['id']);
         if (empty($assistantRef) || empty($assistantRef['group_id'])) {
             return [];
         }
 
-        $liveGroup = $this->getMultiClassLiveGroupDao()->getByGroupIdAndLiveId($assistantRef['group_id'], $liveId);
+        $liveGroup = $this->getMultiClassLiveGroupDao()->getByGroupId($assistantRef['group_id']);
         if (empty($liveGroup) || empty($liveGroup['live_code'])) {
             return [];
         }

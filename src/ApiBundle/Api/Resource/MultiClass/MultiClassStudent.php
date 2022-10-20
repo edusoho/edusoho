@@ -134,12 +134,8 @@ class MultiClassStudent extends AbstractResource
             }
 
             $assistantStudentRef = $assistantStudentRefs[$member['userId']];
-            if (empty($assistantInfos[$assistantStudentRef['assistantId']])) {
-                $member['assistant'] = [];
-                continue;
-            }
 
-            $member['assistant'] = $assistantInfos[$assistantStudentRef['assistantId']];
+            $member['assistant'] = $assistantInfos[$assistantStudentRef['assistantId']] ?? [];
             $member['group'] = $groups[$assistantStudentRef['group_id']] ?? [];
         }
 

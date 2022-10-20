@@ -371,6 +371,13 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         return $this->getAssistantStudentDao()->findAssistantStudentsByGroupIds($groupIds);
     }
 
+    public function deleteByMultiClassId($multiClassId)
+    {
+        if ($multiClassId) {
+            $this->getAssistantStudentDao()->batchDelete(['multiClassId' => $multiClassId]);
+        }
+    }
+
     /**
      * @return MultiClassGroupDao
      */

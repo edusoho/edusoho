@@ -307,12 +307,12 @@ class EdusohoLiveClient
 
     public function createLiveTicket($roomId, array $args)
     {
-        return $this->createCloudApi('leaf')->post("/liverooms/{$roomId}/tickets", $args);
+        return $this->createCloudApi('root')->post("/liverooms/{$roomId}/tickets", $args);
     }
 
     public function getLiveTicket($roomId, $ticketNo)
     {
-        return $this->createCloudApi('leaf')->get("/liverooms/{$roomId}/tickets/{$ticketNo}");
+        return $this->createCloudApi('root')->get("/liverooms/{$roomId}/tickets/{$ticketNo}");
     }
 
     protected function createCloudApi($server)

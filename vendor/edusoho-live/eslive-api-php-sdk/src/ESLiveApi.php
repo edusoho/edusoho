@@ -78,6 +78,15 @@ class ESLiveApi
         ]);
     }
 
+    public function batchUpdateRoomMemberGroupBundle(array $roomIds, $bundleNo): void {
+        $this->request('POST', '/api-v2/room/batchUpdateMemberGroupBundle', [
+            'json' => [
+                'ids' => $roomIds,
+                'memberGroupBundleNo' => $bundleNo,
+            ]
+        ]);
+    }
+
     public function createRtmpPushUrl(int $roomId, int $expireTime): array {
         return $this->request('POST', '/api-v2/stream/createRtmpPushUrl', [
             'json' => [

@@ -2326,16 +2326,16 @@
         },
         {
             "name": "edusoho-live/eslive-api-php-sdk",
-            "version": "v1.0.5",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/edusoho-live/eslive-api-php-sdk.git",
-                "reference": "91a771a55c945287baa1deb3a4cdd8d24efda516"
+                "reference": "c86bed0f551d356a038216057643ce694fc5e57b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/edusoho-live/eslive-api-php-sdk/zipball/91a771a55c945287baa1deb3a4cdd8d24efda516",
-                "reference": "91a771a55c945287baa1deb3a4cdd8d24efda516",
+                "url": "https://api.github.com/repos/edusoho-live/eslive-api-php-sdk/zipball/c86bed0f551d356a038216057643ce694fc5e57b",
+                "reference": "c86bed0f551d356a038216057643ce694fc5e57b",
                 "shasum": ""
             },
             "require": {
@@ -2361,9 +2361,9 @@
             "description": "EduSoho Live PHP SDK",
             "support": {
                 "issues": "https://github.com/edusoho-live/eslive-api-php-sdk/issues",
-                "source": "https://github.com/edusoho-live/eslive-api-php-sdk/tree/v1.0.5"
+                "source": "https://github.com/edusoho-live/eslive-api-php-sdk/tree/v1.0.7"
             },
-            "time": "2022-10-19T05:50:12+00:00"
+            "time": "2022-10-20T08:40:19+00:00"
         },
         {
             "name": "endroid/qrcode",
