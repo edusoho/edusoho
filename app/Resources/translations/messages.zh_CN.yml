@@ -7973,6 +7973,7 @@ admin.developer_setting.s2b2c_supplier_api: S2B2C 内容供应商 API
 admin.developer_setting.content_title: 开发者设置
 admin.developer_setting.debug_label: 调试
 admin.developer_setting.app_center_api_address: 应用中心API地址
+admin.developer_setting.es_live_api_server: 自研直播API地址
 admin.developer_xapi_address: XAPI 推送地址
 admin.developer_face_address: 人脸识别API地址
 admin.developer_push_address: 消息推送API地址
@@ -12134,6 +12135,7 @@ exception.multi_class.forbidden_close_course: 无法关闭班课课程
 exception.multi_class.assistant_require: 班课需要设置助教
 exception.multi_class.assistant_student_not_found: 助教学员关系未找到
 exception.multi_class.group_not_found: 分组未找到
+exception.multi_class.create_group_failed: 创建分组失败
 exception.multi_class.assistant_not_found: 助教未找到
 
 admin_v2.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符

@@ -43,4 +43,6 @@ interface MultiClassService
     public function getMultiClassByCourseId($courseId);
 
     public function generateMultiClassTimeRange($courseId);
+
+    public function updateMultiClassBundleNo($id, $bundleNo);
 }

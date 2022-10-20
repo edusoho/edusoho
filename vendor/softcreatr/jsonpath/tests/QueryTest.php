@@ -6,11 +6,19 @@
  * @license https://github.com/SoftCreatR/JSONPath/blob/main/LICENSE  MIT License
  */
 
+declare(strict_types=1);
+
 namespace Flow\JSONPath\Test;
 
-use Flow\JSONPath\JSONPath;
-use Flow\JSONPath\JSONPathException;
-use PHPUnit\Framework\ExpectationFailedException;
+use Flow\JSONPath\{JSONPath, JSONPathException};
+use PHPUnit\Framework\{ExpectationFailedException, TestCase};
+use RuntimeException;
+
+use function fwrite;
+use function json_decode;
+use function json_encode;
+
+use const STDERR;
 
 class QueryTest extends TestCase
 {
@@ -23,20 +31,14 @@ class QueryTest extends TestCase
      *
      * @see https://cburgmer.github.io/json-path-comparison
      * @dataProvider queryDataProvider
-     *
-     * @param string $id
-     * @param string $selector
-     * @param string $data
-     * @param string $consensus
-     * @param false|bool $skip
      */
     public function testQueries(
-        $id,
-        $selector,
-        $data,
-        $consensus,
-        $skip = false
-    ) {
+        string $id,
+        string $selector,
+        string $data,
+        string $consensus,
+        bool $skip = false
+    ): void {
         $results = null;
         $query = ucwords(str_replace('_', ' ', $id));
         $url = sprintf('https://cburgmer.github.io/json-path-comparison/results/%s', $id);
@@ -82,6 +84,8 @@ class QueryTest extends TestCase
             fwrite(STDERR, "==========================\n");
             fwrite(STDERR, "Query: {$query}\n\n{$e->getMessage()}\n");
             fwrite(STDERR, "==========================\n\n");
+        } catch (RuntimeException $e) {
+            // ignore
         }
     }
 
@@ -105,7 +109,7 @@ class QueryTest extends TestCase
      *
      * @return string[]
      */
-    public function queryDataProvider()
+    public function queryDataProvider(): array
     {
         return [
             [ // data set #0
@@ -145,24 +149,24 @@ class QueryTest extends TestCase
                 '["third","forth","fifth"]',
                 true, // skip
             ],
-            [ // data set #6
+            [ // data set #6 - unknown consensus, fallback to Proposal A
                 'array_slice_with_large_number_for_end_and_negative_step',
                 '$[2:-113667776004:-1]',
                 '["first","second","third","forth","fifth"]',
-                '' // unknown consensus
+                '["third","second","first"]'
             ],
             [ // data set #7
                 'array_slice_with_large_number_for_start',
                 '$[-113667776004:2]',
                 '["first","second","third","forth","fifth"]',
-                '', // unknown consensus,
+                '["first","second"]',
                 true, // skip
             ],
-            [ // data set #8
+            [ // data set #8 - unknown consensus, fallback to Proposal A
                 'array_slice_with_large_number_for_start_end_negative_step',
                 '$[113667776004:2:-1]',
                 '["first","second","third","forth","fifth"]',
-                '' // unknown consensus
+                '["fifth","forth"]'
             ],
             [ // data set #9
                 'array_slice_with_negative_start_and_end_and_range_of_-1',
@@ -200,30 +204,30 @@ class QueryTest extends TestCase
                 '[2,"a",4,5,100,"nice"]',
                 '[4]'
             ],
-            [ // data set #15
+            [ // data set #15 - unknown consensus, fallback to Proposal A
                 'array_slice_with_negative_step',
                 '$[3:0:-2]',
                 '["first","second","third","forth","fifth"]',
-                '' // unknown consensus
+                '["forth","second"]'
             ],
-            [ // data set #16
+            [ // data set #16 - unknown consensus, fallback to Proposal A
                 'array_slice_with_negative_step_and_start_greater_than_end',
                 '$[0:3:-2]',
                 '["first","second","third","forth","fifth"]',
-                '', // unknown consensus,
+                '[]',
                 true, // skip
             ],
-            [ // data set #17
+            [ // data set #17 - unknown consensus, fallback to Proposal A
                 'array_slice_with_negative_step_on_partially_overlapping_array',
                 '$[7:3:-1]',
                 '["first","second","third","forth","fifth"]',
-                '' // unknown consensus
+                '["fifth"]'
             ],
-            [ // data set #18
+            [ // data set #18 - unknown consensus, fallback to Proposal A
                 'array_slice_with_negative_step_only',
                 '$[::-2]',
                 '["first","second","third","forth","fifth"]',
-                '', // unknown consensus,
+                '["fifth","third","first"]',
                 true, // skip
             ],
             [ // data set #19
@@ -232,11 +236,11 @@ class QueryTest extends TestCase
                 '["first","second","third","forth","fifth"]',
                 '["second","third","forth","fifth"]'
             ],
-            [ // data set #20
+            [ // data set #20 - unknown consensus, fallback to Proposal A
                 'array_slice_with_open_end_and_negative_step',
                 '$[3::-1]',
                 '["first","second","third","forth","fifth"]',
-                '', // unknown consensus,
+                '["forth","third","second","first"]',
                 true, // skip
             ],
             [ // data set #21
@@ -257,17 +261,17 @@ class QueryTest extends TestCase
                 '["first","second"]',
                 '["first","second"]'
             ],
-            [ // data set #24
+            [ // data set #24 - unknown consensus, fallback to Proposal A
                 'array_slice_with_open_start_and_end_on_object',
                 '$[:]',
                 '{":":42,"more":"string"}',
-                '' // unknown consensus
+                '[]'
             ],
-            [ // data set #25
+            [ // data set #25 - unknown consensus, fallback to Proposal A
                 'array_slice_with_open_start_and_negative_step',
                 '$[:2:-1]',
                 '["first","second","third","forth","fifth"]',
-                '', // unknown consensus,
+                '["fifth","forth"]',
                 true, // skip
             ],
             [ // data set #26
@@ -330,11 +334,11 @@ class QueryTest extends TestCase
                 '["first","second","third","forth","fifth"]',
                 '["first","third"]'
             ],
-            [ // data set #36
+            [ // data set #36 - unknown consensus
                 'array_slice_with_step_0',
                 '$[0:3:0]',
                 '["first","second","third","forth","fifth"]',
-                '' // unknown consensus
+                ''
             ],
             [ // data set #37
                 'array_slice_with_step_1',
@@ -402,11 +406,11 @@ class QueryTest extends TestCase
                 '{"key":"value"}',
                 '["value"]'
             ],
-            [ // data set #48
+            [ // data set #48 - unknown consensus
                 'bracket_notation_with_empty_path',
                 '$[]',
                 '{"":42,"\'\'":123,"\\"\\"":222}',
-                '' // unknown consensus
+                ''
             ],
             [ // data set #49
                 'bracket_notation_with_empty_string',
@@ -456,11 +460,11 @@ class QueryTest extends TestCase
                 '[[1],[2,3]]',
                 '[3]'
             ],
-            [ // data set #57
+            [ // data set #57 - unknown consensus, fallback to Proposal A
                 'bracket_notation_with_number_on_object',
                 '$[0]',
                 '{"0":"value"}',
-                '' // unknown consensus
+                '[]'
             ],
             [ // data set #58
                 'bracket_notation_with_number_on_short_array',
@@ -468,11 +472,11 @@ class QueryTest extends TestCase
                 '["one element"]',
                 '[]'
             ],
-            [ // data set #59
+            [ // data set #59 - unknown consensus, fallback to Proposal A
                 'bracket_notation_with_number_on_string',
                 '$[0]',
                 '"Hello World"',
-                '' // unknown consensus
+                '[]'
             ],
             [ // data set #60
                 'bracket_notation_with_quoted_array_slice_literal',
@@ -510,17 +514,17 @@ class QueryTest extends TestCase
                 '{"\\"":"value","another":"entry"}',
                 '["value"]'
             ],
-            [ // data set #66
+            [ // data set #66 - unknown consensus, fallback to Proposal A
                 'bracket_notation_with_quoted_escaped_backslash',
                 '$[\'\\\\\']',
                 '{"\\\\":"value"}',
-                '' // unknown consensus
+                '["value"]'
             ],
-            [ // data set #67
+            [ // data set #67 - unknown consensus, fallback to Proposal A
                 'bracket_notation_with_quoted_escaped_single_quote',
                 '$[\'\\\'\']',
                 '{"\'":"value"}',
-                '' // unknown consensus
+                '["value"]'
             ],
             [ // data set #68
                 'bracket_notation_with_quoted_number_on_object',
@@ -534,17 +538,17 @@ class QueryTest extends TestCase
                 '{"$":"value","another":"entry"}',
                 '["value"]'
             ],
-            [ // data set #70
+            [ // data set #70 - unknown consensus, fallback to Proposal A
                 'bracket_notation_with_quoted_special_characters_combined',
                 '$[\':@."$,*\\\'\\\\\']',
                 '{":@.\\"$,*\'\\\\":42}',
-                '' // unknown consensus
+                '[42]'
             ],
-            [ // data set #71
+            [ // data set #71 - unknown consensus
                 'bracket_notation_with_quoted_string_and_unescaped_single_quote',
                 '$[\'single\'quote\']',
                 '{"single\'quote":"value"}',
-                '' // unknown consensus
+                ''
             ],
             [ // data set #72
                 'bracket_notation_with_quoted_union_literal',
@@ -558,11 +562,11 @@ class QueryTest extends TestCase
                 '{"*":"value","another":"entry"}',
                 '["value"]'
             ],
-            [ // data set #74
+            [ // data set #74 - unknown consensus, fallback to Proposal A
                 'bracket_notation_with_quoted_wildcard_literal_on_object_without_key',
                 '$[\'*\']',
                 '{"another":"entry"}',
-                '' // unknown consensus
+                '[]'
             ],
             [ // data set #75
                 'bracket_notation_with_string_including_dot_wildcard',
@@ -570,18 +574,18 @@ class QueryTest extends TestCase
                 '{"nice":42,"ni.*":1,"mice":100}',
                 '[1]'
             ],
-            [ // data set #76
+            [ // data set #76 - unknown consensus
                 'bracket_notation_with_two_literals_separated_by_dot',
                 '$[\'two\'.\'some\']',
                 '{"one":{"key":"value"},"two":{"some":"more","key":"other value"},"two.some":"42","two\'.\'some":"43' .
                 '"}',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #77
+            [ // data set #77 - unknown consensus
                 'bracket_notation_with_two_literals_separated_by_dot_without_quotes',
                 '$[two.some]',
                 '{"one":{"key":"value"},"two":{"some":"more","key":"other value"},"two.some":"42"}',
-                '' // unknown consensus
+                ''
             ],
             [ // data set #78
                 'bracket_notation_with_wildcard_after_array_slice',
@@ -631,29 +635,29 @@ class QueryTest extends TestCase
                 '{"some":"string","int":42,"object":{"key":"value"},"array":[0,1]}',
                 '["string",42,[0,1],{"key":"value"}]'
             ],
-            [ // data set #86
+            [ // data set #86 - unknown consensus
                 'bracket_notation_without_quotes',
                 '$[key]',
                 '{"key":"value"}',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #87
+            [ // data set #87 - unknown consensus
                 'dot_bracket_notation',
                 '$.[\'key\']',
                 '{"key":"value","other":{"key":[{"key":42}]}}',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #88
+            [ // data set #88 - unknown consensus
                 'dot_bracket_notation_with_double_quotes',
                 '$.["key"]',
                 '{"key":"value","other":{"key":[{"key":42}]}}',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #89
+            [ // data set #89 - unknown consensus
                 'dot_bracket_notation_without_quotes',
                 '$.[key]',
                 '{"key":"value","other":{"key":[{"key":42}]}}',
-                '' // unknown consensus
+                ''
             ],
             [ // data set #90
                 'dot_notation',
@@ -769,24 +773,24 @@ class QueryTest extends TestCase
                 '{"key-dash":"value"}',
                 '["value"]'
             ],
-            [ // data set #108
+            [ // data set #108 - unknown consensus
                 'dot_notation_with_double_quotes',
                 '$."key"',
                 '{"key":"value","\\"key\\"":42}',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #109
+            [ // data set #109 - unknown consensus
                 'dot_notation_with_double_quotes_after_recursive_descent',
                 '$.."key"',
                 '{"object":{"key":"value","\\"key\\"":100,"array":[{"key":"something","\\"key\\"":0},{"key":{"key":"' .
                 'russian dolls"},"\\"key\\"":{"\\"key\\"":99}}]},"key":"top","\\"key\\"":42}',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #110
+            [ // data set #110 - unknown consensus
                 'dot_notation_with_empty_path',
                 '$.',
                 '{"key":42,"":9001,"\'\'":"nice"}',
-                '' // unknown consensus
+                ''
             ],
             [ // data set #111
                 'dot_notation_with_key_named_in',
@@ -804,7 +808,7 @@ class QueryTest extends TestCase
                 'dot_notation_with_key_named_length_on_array',
                 '$.length',
                 '[4,5,6]',
-                '[]'
+                '[3]'
             ],
             [ // data set #114
                 'dot_notation_with_key_named_null',
@@ -818,11 +822,11 @@ class QueryTest extends TestCase
                 '{"true":"value"}',
                 '["value"]'
             ],
-            [ // data set #116
+            [ // data set #116 - unknown consensus, fallback to Proposal A
                 'dot_notation_with_key_root_literal',
                 '$.$',
                 '{"$":"value"}',
-                '' // unknown consensus
+                '["value"]'
             ],
             [ // data set #117
                 'dot_notation_with_non_ASCII_key',
@@ -830,17 +834,17 @@ class QueryTest extends TestCase
                 '{"\\u5c6c\\u6027":"value"}',
                 '["value"]'
             ],
-            [ // data set #118
+            [ // data set #118 - unknown consensus, fallback to Proposal A
                 'dot_notation_with_number',
                 '$.2',
                 '["first","second","third","forth","fifth"]',
-                '' // unknown consensus
+                '[]'
             ],
-            [ // data set #119
+            [ // data set #119 - unknown consensus, fallback to Proposal A
                 'dot_notation_with_number_-1',
                 '$.-1',
                 '["first","second","third","forth","fifth"]',
-                '' // unknown consensus
+                '[]'
             ],
             [ // data set #120
                 'dot_notation_with_number_on_object',
@@ -848,24 +852,24 @@ class QueryTest extends TestCase
                 '{"a":"first","2":"second","b":"third"}',
                 '["second"]'
             ],
-            [ // data set #121
+            [ // data set #121 - unknown consensus
                 'dot_notation_with_single_quotes',
                 '$.\'key\'',
                 '{"key":"value","\'key\'":42}',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #122
+            [ // data set #122 - unknown consensus
                 'dot_notation_with_single_quotes_after_recursive_descent',
                 '$..\'key\'',
                 '{"object":{"key":"value","\'key\'":100,"array":[{"key":"something","\'key\'":0},{"key":{"key":"russ' .
                 'ian dolls"},"\'key\'":{"\'key\'":99}}]},"key":"top","\'key\'":42}',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #123
+            [ // data set #123 - unknown consensus
                 'dot_notation_with_single_quotes_and_dot',
                 '$.\'some.key\'',
                 '{"some.key":42,"some":{"key":"value"},"\'some.key\'":43}',
-                '' // unknown consensus
+                ''
             ],
             [ // data set #124
                 'dot_notation_with_wildcard_after_dot_notation_after_dot_notation_with_wildcard',
@@ -921,76 +925,76 @@ class QueryTest extends TestCase
                 '{"some":"string","int":42,"object":{"key":"value"},"array":[0,1]}',
                 '["string",42,[0,1],{"key":"value"}]'
             ],
-            [ // data set #133
+            [ // data set #133 - unknown consensus
                 'dot_notation_without_root',
                 'key',
                 '{"key":"value"}',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #134
+            [ // data set #134 - unknown consensus, fallback to Proposal A
                 'filter_expression_after_dot_notation_with_wildcard_after_recursive_descent',
                 '$..*[?(@.id>2)]',
                 '[{"complext":{"one":[{"name":"first","id":1},{"name":"next","id":2},{"name":"another","id":3},{"nam' .
                 'e":"more","id":4}],"more":{"name":"next to last","id":5}}},{"name":"last","id":6}]',
-                '' // unknown consensus
+                '[{"id":3,"name":"another"},{"id":4,"name":"more"},{"id":5,"name":"next to last"}]'
             ],
-            [ // data set #135
+            [ // data set #135 - unknown consensus, fallback to Proposal A
                 'filter_expression_after_recursive_descent',
                 '$..[?(@.id==2)]',
                 '{"id":2,"more":[{"id":2},{"more":{"id":2}},{"id":{"id":2}},[{"id":2}]]}',
-                '' // unknown consensus
+                '[{"id":2},{"id":2},{"id":2},{"id":2}]'
             ],
-            [ // data set #136
+            [ // data set #136 - unknown consensus, fallback to Proposal A
                 'filter_expression_on_object',
                 '$[?(@.key)]',
                 '{"key":42,"another":{"key":1}}',
-                '' // unknown consensus
+                '[{"key":1}]'
             ],
-            [ // data set #137
+            [ // data set #137 - unknown consensus
                 'filter_expression_with_addition',
                 '$[?(@.key+50==100)]',
                 '[{"key":60},{"key":50},{"key":10},{"key":-50},{"key+50":100}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #138
+            [ // data set #138 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_boolean_and_operator',
                 '$[?(@.key>42 && @.key<44)]',
                 '[{"key":42},{"key":43},{"key":44}]',
-                '' // unknown consensus
+                '[{"key":43}]'
             ],
-            [ // data set #139
+            [ // data set #139 - unknown consensus
                 'filter_expression_with_boolean_and_operator_and_value_false',
                 '$[?(@.key>0 && false)]',
                 '[{"key":1},{"key":3},{"key":"nice"},{"key":true},{"key":null},{"key":false},{"key":{}},{"key":[]},{' .
                 '"key":-1},{"key":0},{"key":""}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #140
+            [ // data set #140 - unknown consensus
                 'filter_expression_with_boolean_and_operator_and_value_true',
                 '$[?(@.key>0 && true)]',
                 '[{"key":1},{"key":3},{"key":"nice"},{"key":true},{"key":null},{"key":false},{"key":{}},{"key":[]},{' .
                 '"key":-1},{"key":0},{"key":""}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #141
+            [ // data set #141 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_boolean_or_operator',
                 '$[?(@.key>43 || @.key<43)]',
                 '[{"key":42},{"key":43},{"key":44}]',
-                '' // unknown consensus
+                '[{"key":42},{"key":44}]'
             ],
-            [ // data set #142
+            [ // data set #142 - unknown consensus
                 'filter_expression_with_boolean_or_operator_and_value_false',
                 '$[?(@.key>0 || false)]',
                 '[{"key":1},{"key":3},{"key":"nice"},{"key":true},{"key":null},{"key":false},{"key":{}},{"key":[]},{' .
                 '"key":-1},{"key":0},{"key":""}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #143
+            [ // data set #143 - unknown consensus
                 'filter_expression_with_boolean_or_operator_and_value_true',
                 '$[?(@.key>0 || true)]',
                 '[{"key":1},{"key":3},{"key":"nice"},{"key":true},{"key":null},{"key":false},{"key":{}},{"key":[]},{' .
                 '"key":-1},{"key":0},{"key":""}]',
-                '' // unknown consensus
+                ''
             ],
             [ // data set #144
                 'filter_expression_with_bracket_notation',
@@ -1005,11 +1009,11 @@ class QueryTest extends TestCase
                 '[{"@key":0},{"@key":42},{"key":42},{"@key":43},{"some":"value"}]',
                 '[{"@key":42}]'
             ],
-            [ // data set #146
+            [ // data set #146 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_bracket_notation_with_-1',
                 '$[?(@[-1]==2)]',
                 '[[2,3],["a"],[0,2],[2]]',
-                '' // unknown consensus
+                '[[0,2],[2]]'
             ],
             [ // data set #147
                 'filter_expression_with_bracket_notation_with_number',
@@ -1017,142 +1021,142 @@ class QueryTest extends TestCase
                 '[["a","b"],["x","y"]]',
                 '[["a","b"]]'
             ],
-            [ // data set #148
+            [ // data set #148 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_bracket_notation_with_number_on_object',
                 '$[?(@[1]==\'b\')]',
                 '{"1":["a","b"],"2":["x","y"]}',
-                '' // unknown consensus
+                '[["a","b"]]'
             ],
-            [ // data set #149
+            [ // data set #149 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_current_object',
                 '$[?(@)]',
                 '["some value",null,"value",0,1,-1,"",[],{},false,true]',
-                '' // unknown consensus
+                '["some value",null,"value",0,1,-1,"",[],{},false,true]'
             ],
-            [ // data set #150
+            [ // data set #150 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_different_grouped_operators',
                 '$[?(@.a && (@.b || @.c))]',
                 '[{"a":true},{"a":true,"b":true},{"a":true,"b":true,"c":true},{"b":true,"c":true},{"a":true,"c":true' .
                 '},{"c":true},{"b":true}]',
-                '' // unknown consensus
+                '[{"a":true,"b":true},{"a":true,"b":true,"c":true},{"a":true,"c":true}]'
             ],
-            [ // data set #151
+            [ // data set #151 - unknown consensus
                 'filter_expression_with_different_ungrouped_operators',
                 '$[?(@.a && @.b || @.c)]',
                 '[{"a":true,"b":true},{"a":true,"b":true,"c":true},{"b":true,"c":true},{"a":true,"c":true},{"a":true' .
                 '},{"b":true},{"c":true},{"d":true},{}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #152
+            [ // data set #152 - unknown consensus
                 'filter_expression_with_division',
                 '$[?(@.key/10==5)]',
                 '[{"key":60},{"key":50},{"key":10},{"key":-50},{"key\\/10":5}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #153
+            [ // data set #153 - unknown consensus
                 'filter_expression_with_empty_expression',
                 '$[?()]',
                 '[1,{"key":42},"value",null]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #154
+            [ // data set #154 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_equals',
                 '$[?(@.key==42)]',
                 '[{"key":0},{"key":42},{"key":-1},{"key":1},{"key":41},{"key":43},{"key":42.0001},{"key":41.9999},{"' .
                 'key":100},{"key":"some"},{"key":"42"},{"key":null},{"key":420},{"key":""},{"key":{}},{"key":[]},{"k' .
                 'ey":[42]},{"key":{"key":42}},{"key":{"some":42}},{"some":"value"}]',
-                '' // unknown consensus
+                '[{"key":42}]'
             ],
-            [ // data set #155
+            [ // data set #155 - unknown consensus
                 'filter_expression_with_equals_array',
                 '$[?(@.d==["v1","v2"])]',
                 '[{"d":["v1","v2"]},{"d":["a","b"]},{"d":"v1"},{"d":"v2"},{"d":{}},{"d":[]},{"d":null},{"d":-1},{"d"' .
                 ':0},{"d":1},{"d":"[\'v1\',\'v2\']"},{"d":"[\'v1\', \'v2\']"},{"d":"v1,v2"},{"d":"[\\"v1\\", \\"v2\\' .
                 '"]"},{"d":"[\\"v1\\",\\"v2\\"]"}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #156
+            [ // data set #156 - unknown consensus
                 'filter_expression_with_equals_array_for_array_slice_with_range_1',
                 '$[?(@[0:1]==[1])]',
                 '[[1,2,3],[1],[2,3],1,2]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #157
+            [ // data set #157 - unknown consensus
                 'filter_expression_with_equals_array_for_dot_notation_with_star',
                 '$[?(@.*==[1,2])]',
                 '[[1,2],[2,3],[1],[2],[1,2,3],1,2,3]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #158
+            [ // data set #158 - unknown consensus
                 'filter_expression_with_equals_array_with_single_quotes',
                 '$[?(@.d==[\'v1\',\'v2\'])]',
                 '[{"d":["v1","v2"]},{"d":["a","b"]},{"d":"v1"},{"d":"v2"},{"d":{}},{"d":[]},{"d":null},{"d":-1},{"d"' .
                 ':0},{"d":1},{"d":"[\'v1\',\'v2\']"},{"d":"[\'v1\', \'v2\']"},{"d":"v1,v2"},{"d":"[\\"v1\\", \\"v2\\' .
                 '"]"},{"d":"[\\"v1\\",\\"v2\\"]"}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #159
+            [ // data set #159 - unknown consensus
                 'filter_expression_with_equals_boolean_expression_value',
                 '$[?((@.key<44)==false)]',
                 '[{"key":42},{"key":43},{"key":44}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #160
+            [ // data set #160 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_equals_false',
                 '$[?(@.key==false)]',
                 '[{"some":"some value"},{"key":true},{"key":false},{"key":null},{"key":"value"},{"key":""},{"key":0}' .
                 ',{"key":1},{"key":-1},{"key":42},{"key":{}},{"key":[]}]',
-                '' // unknown consensus
+                '[{"key":false}]'
             ],
-            [ // data set #161
+            [ // data set #161 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_equals_null',
                 '$[?(@.key==null)]',
                 '[{"some":"some value"},{"key":true},{"key":false},{"key":null},{"key":"value"},{"key":""},{"key":0}' .
                 ',{"key":1},{"key":-1},{"key":42},{"key":{}},{"key":[]}]',
-                '' // unknown consensus
+                '[{"key":null}]'
             ],
-            [ // data set #162
+            [ // data set #162 - unknown consensus
                 'filter_expression_with_equals_number_for_array_slice_with_range_1',
                 '$[?(@[0:1]==1)]',
                 '[[1,2,3],[1],[2,3],1,2]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #163
+            [ // data set #163 - unknown consensus
                 'filter_expression_with_equals_number_for_bracket_notation_with_star',
                 '$[?(@[*]==2)]',
                 '[[1,2],[2,3],[1],[2],[1,2,3],1,2,3]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #164
+            [ // data set #164 - unknown consensus
                 'filter_expression_with_equals_number_for_dot_notation_with_star',
                 '$[?(@.*==2)]',
                 '[[1,2],[2,3],[1],[2],[1,2,3],1,2,3]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #165
+            [ // data set #165 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_equals_number_with_fraction',
                 '$[?(@.key==-0.123e2)]',
                 '[{"key":-12.3},{"key":-0.123},{"key":-12},{"key":12.3},{"key":2},{"key":"-0.123e2"}]',
-                '' // unknown consensus
+                '[{"key":-12.3}]'
             ],
-            [ // data set #166
+            [ // data set #166 - unknown consensus
                 'filter_expression_with_equals_number_with_leading_zeros',
                 '$[?(@.key==010)]',
                 '[{"key":"010"},{"key":"10"},{"key":10},{"key":0},{"key":8}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #167
+            [ // data set #167 - unknown consensus
                 'filter_expression_with_equals_object',
                 '$[?(@.d=={"k":"v"})]',
                 '[{"d":{"k":"v"}},{"d":{"a":"b"}},{"d":"k"},{"d":"v"},{"d":{}},{"d":[]},{"d":null},{"d":-1},{"d":0},' .
                 '{"d":1},{"d":"[object Object]"},{"d":"{\\"k\\": \\"v\\"}"},{"d":"{\\"k\\":\\"v\\"}"},"v"]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #168
+            [ // data set #168 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_equals_on_array_of_numbers',
                 '$[?(@==42)]',
                 '[0,42,-1,41,43,42.0001,41.9999,null,100]',
-                '' // unknown consensus
+                '[42]'
             ],
             [ // data set #169
                 'filter_expression_with_equals_on_array_without_match',
@@ -1160,26 +1164,26 @@ class QueryTest extends TestCase
                 '[{"key":42}]',
                 '[]'
             ],
-            [ // data set #170
+            [ // data set #170 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_equals_on_object',
                 '$[?(@.key==42)]',
                 '{"a":{"key":0},"b":{"key":42},"c":{"key":-1},"d":{"key":41},"e":{"key":43},"f":{"key":42.0001},"g":' .
                 '{"key":41.9999},"h":{"key":100},"i":{"some":"value"}}',
-                '' // unknown consensus
+                '[{"key":42}]'
             ],
-            [ // data set #171
+            [ // data set #171 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_equals_on_object_with_key_matching_query',
                 '$[?(@.id==2)]',
                 '{"id":2}',
-                '' // unknown consensus
+                '[]'
             ],
-            [ // data set #172
+            [ // data set #172 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_equals_string',
                 '$[?(@.key=="value")]',
                 '[{"key":"some"},{"key":"value"},{"key":null},{"key":0},{"key":1},{"key":-1},{"key":""},{"key":{}},{' .
                 '"key":[]},{"key":"valuemore"},{"key":"morevalue"},{"key":["value"]},{"key":{"some":"value"}},{"key"' .
                 ':{"key":"value"}},{"some":"value"}]',
-                '' // unknown consensus
+                '[{"key":"value"}]'
             ],
             [ // data set #173
                 'filter_expression_with_equals_string_with_current_object_literal',
@@ -1199,120 +1203,124 @@ class QueryTest extends TestCase
                 '[{"key":"some"},{"key":"value"}]',
                 '[{"key":"value"}]'
             ],
-            [ // data set #176
+            [ // data set #176 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_equals_true',
                 '$[?(@.key==true)]',
                 '[{"some":"some value"},{"key":true},{"key":false},{"key":null},{"key":"value"},{"key":""},{"key":0}' .
                 ',{"key":1},{"key":-1},{"key":42},{"key":{}},{"key":[]}]',
-                '' // unknown consensus
+                '[{"key":true}]'
             ],
-            [ // data set #177
+            [ // data set #177 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_equals_with_root_reference',
                 '$.items[?(@.key==$.value)]',
                 '{"value":42,"items":[{"key":10},{"key":42},{"key":50}]}',
-                '' // unknown consensus
+                '[{"key":42}]'
             ],
-            [ // data set #178
+            [ // data set #178 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_greater_than',
                 '$[?(@.key>42)]',
                 '[{"key":0},{"key":42},{"key":-1},{"key":41},{"key":43},{"key":42.0001},{"key":41.9999},{"key":100},' .
                 '{"key":"43"},{"key":"42"},{"key":"41"},{"key":"value"},{"some":"value"}]',
-                '' // unknown consensus
+                '[{"key":43},{"key":42.0001},{"key":100}]'
             ],
-            [ // data set #179
+            [ // data set #179 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_greater_than_or_equal',
                 '$[?(@.key>=42)]',
                 '[{"key":0},{"key":42},{"key":-1},{"key":41},{"key":43},{"key":42.0001},{"key":41.9999},{"key":100},' .
                 '{"key":"43"},{"key":"42"},{"key":"41"},{"key":"value"},{"some":"value"}]',
-                '' // unknown consensus
+                '[{"key":42},{"key":43},{"key":42.0001},{"key":100}]'
             ],
-            [ // data set #180
+            [ // data set #180 - unknown consensus
                 'filter_expression_with_in_array_of_values',
                 '$[?(@.d in [2, 3])]',
                 '[{"d":1},{"d":2},{"d":1},{"d":3},{"d":4}]',
-                '' // unknown consensus
+                '[{"d":2},{"d":3}]'
             ],
-            [ // data set #181
+            [ // data set #181 - unknown consensus
                 'filter_expression_with_in_current_object',
                 '$[?(2 in @.d)]',
                 '[{"d":[1,2,3]},{"d":[2]},{"d":[1]},{"d":[3,4]},{"d":[4,2]}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #182
+            [ // data set #182 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_less_than',
                 '$[?(@.key<42)]',
                 '[{"key":0},{"key":42},{"key":-1},{"key":41},{"key":43},{"key":42.0001},{"key":41.9999},{"key":100},' .
                 '{"key":"43"},{"key":"42"},{"key":"41"},{"key":"value"},{"some":"value"}]',
-                '' // unknown consensus
+                '[{"key":0},{"key":-1},{"key":41},{"key":41.9999}]'
             ],
-            [ // data set #183
+            [ // data set #183 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_less_than_or_equal',
                 '$[?(@.key<=42)]',
                 '[{"key":0},{"key":42},{"key":-1},{"key":41},{"key":43},{"key":42.0001},{"key":41.9999},{"key":100},' .
                 '{"key":"43"},{"key":"42"},{"key":"41"},{"key":"value"},{"some":"value"}]',
-                '' // unknown consensus
+                '[{"key":0},{"key":42},{"key":-1},{"key":41},{"key":41.9999}]'
             ],
-            [ // data set #184
+            [ // data set #184 - unknown consensus
                 'filter_expression_with_multiplication',
                 '$[?(@.key*2==100)]',
                 '[{"key":60},{"key":50},{"key":10},{"key":-50},{"key*2":100}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #185
+            [ // data set #185 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_negation_and_equals',
                 '$[?(!(@.key==42))]',
                 '[{"key":0},{"key":42},{"key":-1},{"key":41},{"key":43},{"key":42.0001},{"key":41.9999},{"key":100},' .
                 '{"key":"43"},{"key":"42"},{"key":"41"},{"key":"value"},{"some":"value"}]',
-                '' // unknown consensus
+                '[{"key":0},{"key":-1},{"key":41},{"key":43},{"key":42.0001},{"key":41.9999},{"key":100},{"key":"43"' .
+                '},{"key":"42"},{"key":"41"},{"key":"value"},{"some":"value"}]'
             ],
-            [ // data set #186
+            [ // data set #186 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_negation_and_less_than',
                 '$[?(!(@.key<42))]',
                 '[{"key":0},{"key":42},{"key":-1},{"key":41},{"key":43},{"key":42.0001},{"key":41.9999},{"key":100},' .
                 '{"key":"43"},{"key":"42"},{"key":"41"},{"key":"value"},{"some":"value"}]',
-                '' // unknown consensus
+                '[{"key":42},{"key":43},{"key":42.0001},{"key":100},{"key":"43"},{"key":"42"},{"key":"41"},{"key":"v' .
+                'alue"},{"some":"value"}]'
             ],
-            [ // data set #187
+            [ // data set #187 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_not_equals',
                 '$[?(@.key!=42)]',
                 '[{"key":0},{"key":42},{"key":-1},{"key":1},{"key":41},{"key":43},{"key":42.0001},{"key":41.9999},{"' .
                 'key":100},{"key":"some"},{"key":"42"},{"key":null},{"key":420},{"key":""},{"key":{}},{"key":[]},{"k' .
                 'ey":[42]},{"key":{"key":42}},{"key":{"some":42}},{"some":"value"}]',
-                '' // unknown consensus
+                '[{"key":0},{"key":-1},{"key":1},{"key":41},{"key":43},{"key":42.0001},{"key":41.9999},{"key":100},{' .
+                '"key":"some"},{"key":"42"},{"key":null},{"key":420},{"key":""},{"key":{}},{"key":[]},{"key":[42]},{' .
+                '"key":{"key":42}},{"key":{"some":42}},{"some":"value"}]'
             ],
-            [ // data set #188
+            [ // data set #188 - unknown consensus
                 'filter_expression_with_regular_expression',
                 '$[?(@.name=~/hello.*/)]',
                 '[{"name":"hullo world"},{"name":"hello world"},{"name":"yes hello world"},{"name":"HELLO WORLD"},{"' .
                 'name":"good bye"}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #189
+            [ // data set #189 - unknown consensus
                 'filter_expression_with_set_wise_comparison_to_scalar',
                 '$[?(@[*]>=4)]',
                 '[[1,2],[3,4],[5,6]]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #190
+            [ // data set #190 - unknown consensus
                 'filter_expression_with_set_wise_comparison_to_set',
                 '$.x[?(@[*]>=$.y[*])]',
                 '{"x":[[1,2],[3,4],[5,6]],"y":[3,4,5]}',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #191
+            [ // data set #191 - unknown consensus
                 'filter_expression_with_single_equal',
                 '$[?(@.key=42)]',
                 '[{"key":0},{"key":42},{"key":-1},{"key":1},{"key":41},{"key":43},{"key":42.0001},{"key":41.9999},{"' .
                 'key":100},{"key":"some"},{"key":"42"},{"key":null},{"key":420},{"key":""},{"key":{}},{"key":[]},{"k' .
                 'ey":[42]},{"key":{"key":42}},{"key":{"some":42}},{"some":"value"}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #192
+            [ // data set #192 - unknown consensus
                 'filter_expression_with_subfilter',
                 '$[?(@.a[?(@.price>10)])]',
                 '[{"a":[{"price":1},{"price":3}]},{"a":[{"price":11}]},{"a":[{"price":8},{"price":12},{"price":3}]},' .
                 '{"a":[]}]',
-                '' // unknown consensus
+                ''
             ],
             [ // data set #193
                 'filter_expression_with_subpaths',
@@ -1320,102 +1328,103 @@ class QueryTest extends TestCase
                 '[{"address":{"city":"Berlin"}},{"address":{"city":"London"}}]',
                 '[{"address":{"city":"Berlin"}}]'
             ],
-            [ // data set #194
+            [ // data set #194 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_subtraction',
                 '$[?(@.key-50==-100)]',
                 '[{"key":60},{"key":50},{"key":10},{"key":-50},{"key-50":-100}]',
-                '' // unknown consensus
+                '[{"key-50":-100}]'
             ],
-            [ // data set #195
+            [ // data set #195 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_tautological_comparison',
                 '$[?(1==1)]',
                 '[1,3,"nice",true,null,false,{},[],-1,0,""]',
-                '' // unknown consensus
+                '[1,3,"nice",true,null,false,{},[],-1,0,""]'
             ],
-            [ // data set #196
+            [ // data set #196 - unknown consensus
                 'filter_expression_with_triple_equal',
                 '$[?(@.key===42)]',
                 '[{"key":0},{"key":42},{"key":-1},{"key":1},{"key":41},{"key":43},{"key":42.0001},{"key":41.9999},{"' .
                 'key":100},{"key":"some"},{"key":"42"},{"key":null},{"key":420},{"key":""},{"key":{}},{"key":[]},{"k' .
                 'ey":[42]},{"key":{"key":42}},{"key":{"some":42}},{"some":"value"}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #197
+            [ // data set #197 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_value',
                 '$[?(@.key)]',
                 '[{"some":"some value"},{"key":true},{"key":false},{"key":null},{"key":"value"},{"key":""},{"key":0}' .
                 ',{"key":1},{"key":-1},{"key":42},{"key":{}},{"key":[]}]',
-                '' // unknown consensus
+                '[{"key":true},{"key":false},{"key":null},{"key":"value"},{"key":""},{"key":0},{"key":1},{"key":-1},' .
+                '{"key":42},{"key":{}},{"key":[]}]'
             ],
-            [ // data set #198
+            [ // data set #198 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_value_after_dot_notation_with_wildcard_on_array_of_objects',
                 '$.*[?(@.key)]',
                 '[{"some":"some value"},{"key":"value"}]',
-                '' // unknown consensus
+                '[]'
             ],
-            [ // data set #199
+            [ // data set #199 - unknown consensus, fallback to Proposal A
                 'filter_expression_with_value_after_recursive_descent',
                 '$..[?(@.id)]',
                 '{"id":2,"more":[{"id":2},{"more":{"id":2}},{"id":{"id":2}},[{"id":2}]]}',
-                '' // unknown consensus
+                '[{"id":2},{"id":2},{"id":2},{"id":2},{"id":{"id":2}}]'
             ],
-            [ // data set #200
+            [ // data set #200 - unknown consensus
                 'filter_expression_with_value_false',
                 '$[?(false)]',
                 '[1,3,"nice",true,null,false,{},[],-1,0,""]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #201
+            [ // data set #201 - unknown consensus
                 'filter_expression_with_value_from_recursive_descent',
                 '$[?(@..child)]',
                 '[{"key":[{"child":1},{"child":2}]},{"key":[{"child":2}]},{"key":[{}]},{"key":[{"something":42}]},{}' .
                 ']',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #202
+            [ // data set #202 - unknown consensus
                 'filter_expression_with_value_null',
                 '$[?(null)]',
                 '[1,3,"nice",true,null,false,{},[],-1,0,""]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #203
+            [ // data set #203 - unknown consensus
                 'filter_expression_with_value_true',
                 '$[?(true)]',
                 '[1,3,"nice",true,null,false,{},[],-1,0,""]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #204
+            [ // data set #204 - unknown consensus
                 'filter_expression_without_parens',
                 '$[?@.key==42]',
                 '[{"key":0},{"key":42},{"key":-1},{"key":1},{"key":41},{"key":43},{"key":42.0001},{"key":41.9999},{"' .
                 'key":100},{"key":"some"},{"key":"42"},{"key":null},{"key":420},{"key":""},{"key":{}},{"key":[]},{"k' .
                 'ey":[42]},{"key":{"key":42}},{"key":{"some":42}},{"some":"value"}]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #205
+            [ // data set #205 - unknown consensus, fallback to Proposal A
                 'filter_expression_without_value',
                 '$[?(!@.key)]',
                 '[{"some":"some value"},{"key":true},{"key":false},{"key":null},{"key":"value"},{"key":""},{"key":0}' .
                 ',{"key":1},{"key":-1},{"key":42},{"key":{}},{"key":[]}]',
-                '' // unknown consensus
+                '[{"some":"some value"}]'
             ],
-            [ // data set #206
+            [ // data set #206 - unknown consensus
                 'parens_notation',
                 '$(key,more)',
                 '{"key":1,"some":2,"more":3}',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #207
+            [ // data set #207 - unknown consensus
                 'recursive_descent',
                 '$..',
                 '[{"a":{"b":"c"}},[0,1]]',
-                '' // unknown consensus
+                ''
             ],
-            [ // data set #208
+            [ // data set #208 - unknown consensus
                 'recursive_descent_after_dot_notation',
                 '$.key..',
                 '{"some key":"value","key":{"complex":"string","primitives":[0,1]}}',
-                '' // unknown consensus
+                ''
             ],
             [ // data set #209
                 'root',
@@ -1441,11 +1450,11 @@ class QueryTest extends TestCase
                 'true',
                 '[true]'
             ],
-            [ // data set #213
+            [ // data set #213 - unknown consensus
                 'script_expression',
                 '$[(@.length-1)]',
                 '["first","second","third","forth","fifth"]',
-                '' // unknown consensus
+                'fifth'
             ],
             [ // data set #214
                 'union',
@@ -1453,11 +1462,11 @@ class QueryTest extends TestCase
                 '["first","second","third"]',
                 '["first","second"]'
             ],
-            [ // data set #215
+            [ // data set #215 - unknown consensus, fallback to Proposal A
                 'union_with_filter',
                 '$[?(@.key<3),?(@.key>6)]',
                 '[{"key":1},{"key":8},{"key":3},{"key":10},{"key":7},{"key":2},{"key":6},{"key":4}]',
-                '' // unknown consensus
+                '[{"key":1},{"key":2},{"key":8},{"key":10},{"key":7}]'
             ],
             [ // data set #216
                 'union_with_keys',
@@ -1477,18 +1486,18 @@ class QueryTest extends TestCase
                 '[{"c":"cc1","d":"dd1","e":"ee1"},{"c":"cc2","d":"dd2","e":"ee2"}]',
                 '["cc1","dd1"]'
             ],
-            [ // data set #219
+            [ // data set #219 - unknown consensus, fallback to Proposal A
                 'union_with_keys_after_dot_notation_with_wildcard',
                 '$.*[\'c\',\'d\']',
                 '[{"c":"cc1","d":"dd1","e":"ee1"},{"c":"cc2","d":"dd2","e":"ee2"}]',
-                '' // unknown consensus
+                '["cc1","dd1","cc2","dd2"]'
             ],
-            [ // data set #220
+            [ // data set #220 - unknown consensus, fallback to Proposal A
                 'union_with_keys_after_recursive_descent',
                 '$..[\'c\',\'d\']',
                 '[{"c":"cc1","d":"dd1","e":"ee1"},{"c":"cc2","child":{"d":"dd2"}},{"c":"cc3"},{"d":"dd4"},{"child":{' .
                 '"c":"cc5"}}]',
-                '' // unknown consensus
+                '["cc1","cc2","cc3","cc5","dd1","dd2","dd4"]'
             ],
             [ // data set #221
                 'union_with_keys_on_object_without_key',
@@ -1502,17 +1511,17 @@ class QueryTest extends TestCase
                 '[1,2,3,4,5]',
                 '[5,2]'
             ],
-            [ // data set #223
+            [ // data set #223 - unknown consensus, fallback to Proposal A
                 'union_with_repeated_matches_after_dot_notation_with_wildcard',
                 '$.*[0,:5]',
                 '{"a":["string",null,true],"b":[false,"string",5.4]}',
-                '' // unknown consensus
+                '["string","string",null,true,false,false,"string",5.4]'
             ],
-            [ // data set #224
+            [ // data set #224 - unknown consensus, fallback to Proposal A
                 'union_with_slice_and_number',
                 '$[1:3,4]',
                 '[1,2,3,4,5]',
-                '' // unknown consensus
+                '[2,3,5]'
             ],
             [ // data set #225
                 'union_with_spaces',
@@ -1520,12 +1529,12 @@ class QueryTest extends TestCase
                 '["first","second","third"]',
                 '["first","second"]'
             ],
-            [ // data set #226
+            [ // data set #226 - unknown consensus, fallback to Proposal A
                 'union_with_wildcard_and_number',
                 '$[*,1]',
                 '["first","second","third","forth","fifth"]',
-                '' // unknown consensus
-            ]
+                '["first","second","third","forth","fifth","second"]'
+            ],
         ];
     }
 }

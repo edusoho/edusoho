@@ -1,0 +1,19 @@
+---
+name: Update Contributors
+
+on: [ push, workflow_dispatch]
+
+jobs:
+  Update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Update Contributors
+        uses: BobAnkh/add-contributors@v0.0.8
+        with:
+          REPO_NAME: 'SoftCreatR/JSONPath'
+          CONTRIBUTOR: '## Contributors ✨'
+          ACCESS_TOKEN: ${{secrets.GITHUB_TOKEN}}
