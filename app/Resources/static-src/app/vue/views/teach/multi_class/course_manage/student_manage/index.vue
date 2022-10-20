@@ -111,7 +111,7 @@
     </a-modal>
   <div>
     <a-row>
-      <a-col :span="3" v-if="multiClass.type === 'group'">
+      <a-col :span="3" v-if="false">
        <div class="student-group">学员分布</div>
         <a-menu mode="inline" @select="onGroupClick">
           <a-menu-item key="">
@@ -134,7 +134,7 @@
           </a-menu-item>
         </a-menu>
       </a-col>
-      <a-col :span="multiClass.type === 'group' ? 21 : 24">
+      <a-col :span="24">
         <a-table
           :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
           :columns="columns"
@@ -149,7 +149,7 @@
 
           <a slot="learningProgressPercent" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/students/${record.user.id}/process`" slot-scope="value, record">{{ value }}%</a>
 
-          <template slot="assistant" slot-scope="assistant">{{ assistant.nickname }}</template>
+          <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
 
           <template slot="threadCount" slot-scope="threadCount">{{ threadCount }}</template>
 
@@ -182,7 +182,7 @@
     <add-student-modal :visible="addStudentVisible" :multi-class="multiClass" @handle-cancel="addStudentVisible = false;" />
     <change-group-modal :visible="changeGroupVisible" :groupList="groupList" :multi-class-id="id" :multi-class="multiClass" :selected-student-ids="selectedStudentIds" @handle-cancel="updateStudentList"></change-group-modal>
     <edit-assistant-modal :visible="editAssistantVisible" :multi-class-id="id" :multi-class="multiClass" :groupId="groupId" @handle-cancel="updateStudentList"></edit-assistant-modal>
-    
+
     <form id="course-students-export" class="hide">
       <input type="hidden" name="courseSetId" :value="multiClass.course.courseSetId">
       <input type="hidden" name="courseId" :value="multiClass.course.id">
@@ -283,6 +283,7 @@ import userInfoTable from "app/vue/views/components/userInfoTable";
 import { MultiClassStudent, MultiClass, UserProfiles, MultiClassStudentExam } from 'common/vue/service';
 import ChangeGroupModal from './ChangeGroupModal.vue';
 import EditAssistantModal from './EditAssistantModal.vue';
+import Assistant from '../components/Assistant';
 
 const columns = [
   {
@@ -410,6 +411,7 @@ export default {
     userInfoTable,
     ChangeGroupModal,
     EditAssistantModal,
+    Assistant,
   },
   data() {
     return {
@@ -728,7 +730,7 @@ export default {
 
     },
     onGroupClick(res) {
-      const groupId = res.key; 
+      const groupId = res.key;
       this.groupId = groupId;
       this.getMultiClassStudents({ groupId });
     },
