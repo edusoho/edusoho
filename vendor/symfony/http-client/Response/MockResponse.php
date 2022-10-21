@@ -23,17 +23,14 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class MockResponse implements ResponseInterface, StreamableInterface
+class MockResponse implements ResponseInterface
 {
-    use CommonResponseTrait;
-    use TransportResponseTrait {
+    use ResponseTrait {
         doDestruct as public __destruct;
     }
 
     private $body;
     private $requestOptions = [];
-    private $requestUrl;
-    private $requestMethod;
 
     private static $mainMulti;
     private static $idSequence = 0;
@@ -75,22 +72,6 @@ class MockResponse implements ResponseInterface, StreamableInterface
     }
 
     /**
-     * Returns the URL used when doing the request.
-     */
-    public function getRequestUrl(): string
-    {
-        return $this->requestUrl;
-    }
-
-    /**
-     * Returns the method used when doing the request.
-     */
-    public function getRequestMethod(): string
-    {
-        return $this->requestMethod;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getInfo(string $type = null)
@@ -105,11 +86,7 @@ class MockResponse implements ResponseInterface, StreamableInterface
     {
         $this->info['canceled'] = true;
         $this->info['error'] = 'Response has been canceled.';
-        try {
-            $this->body = null;
-        } catch (TransportException $e) {
-            // ignore errors when canceling
-        }
+        $this->body = null;
     }
 
     /**
@@ -140,13 +117,10 @@ class MockResponse implements ResponseInterface, StreamableInterface
         $response->info['http_method'] = $method;
         $response->info['http_code'] = 0;
         $response->info['user_data'] = $options['user_data'] ?? null;
-        $response->info['max_duration'] = $options['max_duration'] ?? null;
         $response->info['url'] = $url;
 
         if ($mock instanceof self) {
             $mock->requestOptions = $response->requestOptions;
-            $mock->requestMethod = $method;
-            $mock->requestUrl = $url;
         }
 
         self::writeRequest($response, $options, $mock);
@@ -257,7 +231,7 @@ class MockResponse implements ResponseInterface, StreamableInterface
         } elseif ($body instanceof \Closure) {
             while ('' !== $data = $body(16372)) {
                 if (!\is_string($data)) {
-                    throw new TransportException(sprintf('Return value of the "body" option callback must be string, "%s" returned.', get_debug_type($data)));
+                    throw new TransportException(sprintf('Return value of the "body" option callback must be string, "%s" returned.', \gettype($data)));
                 }
 
                 // "notify" upload progress
@@ -286,7 +260,6 @@ class MockResponse implements ResponseInterface, StreamableInterface
         $response->info = [
             'start_time' => $response->info['start_time'],
             'user_data' => $response->info['user_data'],
-            'max_duration' => $response->info['max_duration'],
             'http_code' => $response->info['http_code'],
         ] + $info + $response->info;
 

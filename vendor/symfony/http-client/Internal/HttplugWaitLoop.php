@@ -12,12 +12,10 @@
 namespace Symfony\Component\HttpClient\Internal;
 
 use Http\Client\Exception\NetworkException;
-use Http\Promise\Promise;
-use Psr\Http\Message\RequestInterface as Psr7RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Symfony\Component\HttpClient\Response\StreamableInterface;
+use Symfony\Component\HttpClient\Response\ResponseTrait;
 use Symfony\Component\HttpClient\Response\StreamWrapper;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -35,9 +33,6 @@ final class HttplugWaitLoop
     private $responseFactory;
     private $streamFactory;
 
-    /**
-     * @param \SplObjectStorage<ResponseInterface, array{Psr7RequestInterface, Promise}>|null $promisePool
-     */
     public function __construct(HttpClientInterface $client, ?\SplObjectStorage $promisePool, ResponseFactoryInterface $responseFactory, StreamFactoryInterface $streamFactory)
     {
         $this->client = $client;
@@ -77,7 +72,7 @@ final class HttplugWaitLoop
                         goto check_duration;
                     }
 
-                    if ([, $promise] = $this->promisePool[$response] ?? null) {
+                    if ([$request, $promise] = $this->promisePool[$response] ?? null) {
                         unset($this->promisePool[$response]);
                         $promise->resolve($this->createPsr7Response($response, true));
                     }
@@ -124,7 +119,7 @@ final class HttplugWaitLoop
             }
         }
 
-        if ($response instanceof StreamableInterface) {
+        if (isset(class_uses($response)[ResponseTrait::class])) {
             $body = $this->streamFactory->createStreamFromResource($response->toStream(false));
         } elseif (!$buffer) {
             $body = $this->streamFactory->createStreamFromResource(StreamWrapper::createResource($response, $this->client));

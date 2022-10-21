@@ -31,9 +31,6 @@ final class CurlClientState extends ClientState
     public $pushedResponses = [];
     /** @var DnsCache */
     public $dnsCache;
-    /** @var float[] */
-    public $pauseExpiries = [];
-    public $execCounter = \PHP_INT_MIN;
     /** @var LoggerInterface|null */
     public $logger;
 
