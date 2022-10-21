@@ -3,7 +3,7 @@
         'name' => 'topxia/edusoho',
         'pretty_version' => 'dev-develop',
         'version' => 'dev-develop',
-        'reference' => 'b57ebf533a65b66ab369bdeae9486a57bd9a6f2e',
+        'reference' => '20c75be18a36433f46eba2b821a00e534e2cf73c',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1275,6 +1275,12 @@
                 0 => 'v3.4.49',
             ),
         ),
+        'symfony/cache-contracts' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => 'v1.1.13',
+            ),
+        ),
         'symfony/class-loader' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -1292,6 +1298,15 @@
             'replaced' => array(
                 0 => 'v3.4.49',
             ),
+        ),
+        'symfony/contracts' => array(
+            'pretty_version' => 'v1.1.13',
+            'version' => '1.1.13.0',
+            'reference' => '9e27f5c175ecbd6fff554d839ff4a432da797168',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/contracts',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'symfony/css-selector' => array(
             'dev_requirement' => false,
@@ -1317,15 +1332,6 @@
                 0 => 'v3.4.49',
             ),
         ),
-        'symfony/deprecation-contracts' => array(
-            'pretty_version' => 'v2.5.2',
-            'version' => '2.5.2.0',
-            'reference' => 'e8b495ea28c1d97b5e0c121748d6f9b53d075c66',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/deprecation-contracts',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
         'symfony/doctrine-bridge' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -1348,6 +1354,12 @@
             'dev_requirement' => false,
             'replaced' => array(
                 0 => 'v3.4.49',
+            ),
+        ),
+        'symfony/event-dispatcher-contracts' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => 'v1.1.13',
             ),
         ),
         'symfony/expression-language' => array(
@@ -1381,27 +1393,24 @@
             ),
         ),
         'symfony/http-client' => array(
-            'pretty_version' => 'v5.4.13',
-            'version' => '5.4.13.0',
-            'reference' => '596fd752f00e0205d895cd6b184d135c27bb5d6a',
+            'pretty_version' => 'v4.4.46',
+            'version' => '4.4.46.0',
+            'reference' => '095274039721d26d23225d7b7ba441423b1b2413',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/http-client',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
         'symfony/http-client-contracts' => array(
-            'pretty_version' => 'v2.5.2',
-            'version' => '2.5.2.0',
-            'reference' => 'ba6a9f0e8f3edd190520ee3b9a958596b6ca2e70',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/http-client-contracts',
-            'aliases' => array(),
             'dev_requirement' => false,
+            'replaced' => array(
+                0 => 'v1.1.13',
+            ),
         ),
         'symfony/http-client-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '2.4',
+                0 => '1.1|2.0',
             ),
         ),
         'symfony/http-foundation' => array(
@@ -1669,13 +1678,10 @@
             ),
         ),
         'symfony/service-contracts' => array(
-            'pretty_version' => 'v2.2.0',
-            'version' => '2.2.0.0',
-            'reference' => 'd15da7ba4957ffb8f1747218be9e1a121fd298a1',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/service-contracts',
-            'aliases' => array(),
             'dev_requirement' => false,
+            'replaced' => array(
+                0 => 'v1.1.13',
+            ),
         ),
         'symfony/stopwatch' => array(
             'dev_requirement' => false,
@@ -1711,6 +1717,12 @@
             'dev_requirement' => false,
             'replaced' => array(
                 0 => 'v3.4.49',
+            ),
+        ),
+        'symfony/translation-contracts' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => 'v1.1.13',
             ),
         ),
         'symfony/twig-bridge' => array(
@@ -1779,7 +1791,7 @@
         'topxia/edusoho' => array(
             'pretty_version' => 'dev-develop',
             'version' => 'dev-develop',
-            'reference' => 'b57ebf533a65b66ab369bdeae9486a57bd9a6f2e',
+            'reference' => '20c75be18a36433f46eba2b821a00e534e2cf73c',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

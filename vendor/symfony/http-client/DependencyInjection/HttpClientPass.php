@@ -13,7 +13,6 @@ namespace Symfony\Component\HttpClient\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpClient\TraceableHttpClient;
 
@@ -23,10 +22,6 @@ final class HttpClientPass implements CompilerPassInterface
 
     public function __construct(string $clientTag = 'http_client.client')
     {
-        if (0 < \func_num_args()) {
-            trigger_deprecation('symfony/http-client', '5.3', 'Configuring "%s" is deprecated.', __CLASS__);
-        }
-
         $this->clientTag = $clientTag;
     }
 
@@ -41,7 +36,7 @@ final class HttpClientPass implements CompilerPassInterface
 
         foreach ($container->findTaggedServiceIds($this->clientTag) as $id => $tags) {
             $container->register('.debug.'.$id, TraceableHttpClient::class)
-                ->setArguments([new Reference('.debug.'.$id.'.inner'), new Reference('debug.stopwatch', ContainerInterface::IGNORE_ON_INVALID_REFERENCE)])
+                ->setArguments([new Reference('.debug.'.$id.'.inner')])
                 ->addTag('kernel.reset', ['method' => 'reset'])
                 ->setDecoratedService($id);
             $container->getDefinition('data_collector.http_client')

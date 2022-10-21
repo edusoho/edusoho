@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\HttpClient\Chunk;
 
-use Symfony\Component\HttpClient\Exception\TimeoutException;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Contracts\HttpClient\ChunkInterface;
 
@@ -62,7 +61,7 @@ class ErrorChunk implements ChunkInterface
     public function isFirst(): bool
     {
         $this->didThrow = true;
-        throw null !== $this->error ? new TransportException($this->errorMessage, 0, $this->error) : new TimeoutException($this->errorMessage);
+        throw new TransportException($this->errorMessage, 0, $this->error);
     }
 
     /**
@@ -71,7 +70,7 @@ class ErrorChunk implements ChunkInterface
     public function isLast(): bool
     {
         $this->didThrow = true;
-        throw null !== $this->error ? new TransportException($this->errorMessage, 0, $this->error) : new TimeoutException($this->errorMessage);
+        throw new TransportException($this->errorMessage, 0, $this->error);
     }
 
     /**
@@ -80,7 +79,7 @@ class ErrorChunk implements ChunkInterface
     public function getInformationalStatus(): ?array
     {
         $this->didThrow = true;
-        throw null !== $this->error ? new TransportException($this->errorMessage, 0, $this->error) : new TimeoutException($this->errorMessage);
+        throw new TransportException($this->errorMessage, 0, $this->error);
     }
 
     /**
@@ -89,7 +88,7 @@ class ErrorChunk implements ChunkInterface
     public function getContent(): string
     {
         $this->didThrow = true;
-        throw null !== $this->error ? new TransportException($this->errorMessage, 0, $this->error) : new TimeoutException($this->errorMessage);
+        throw new TransportException($this->errorMessage, 0, $this->error);
     }
 
     /**
@@ -111,16 +110,15 @@ class ErrorChunk implements ChunkInterface
     /**
      * @return bool Whether the wrapped error has been thrown or not
      */
-    public function didThrow(bool $didThrow = null): bool
+    public function didThrow(): bool
     {
-        if (null !== $didThrow && $this->didThrow !== $didThrow) {
-            return !$this->didThrow = $didThrow;
-        }
-
         return $this->didThrow;
     }
 
-    public function __sleep(): array
+    /**
+     * @return array
+     */
+    public function __sleep()
     {
         throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
     }
@@ -134,7 +132,7 @@ class ErrorChunk implements ChunkInterface
     {
         if (!$this->didThrow) {
             $this->didThrow = true;
-            throw null !== $this->error ? new TransportException($this->errorMessage, 0, $this->error) : new TimeoutException($this->errorMessage);
+            throw new TransportException($this->errorMessage, 0, $this->error);
         }
     }
 }

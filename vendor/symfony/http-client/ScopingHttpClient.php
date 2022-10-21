@@ -11,8 +11,6 @@
 
 namespace Symfony\Component\HttpClient;
 
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -24,7 +22,7 @@ use Symfony\Contracts\Service\ResetInterface;
  *
  * @author Anthony Martin <anthony.martin@sensiolabs.com>
  */
-class ScopingHttpClient implements HttpClientInterface, ResetInterface, LoggerAwareInterface
+class ScopingHttpClient implements HttpClientInterface, ResetInterface
 {
     use HttpClientTrait;
 
@@ -43,7 +41,7 @@ class ScopingHttpClient implements HttpClientInterface, ResetInterface, LoggerAw
         }
     }
 
-    public static function forBaseUri(HttpClientInterface $client, string $baseUri, array $defaultOptions = [], string $regexp = null): self
+    public static function forBaseUri(HttpClientInterface $client, string $baseUri, array $defaultOptions = [], $regexp = null): self
     {
         if (null === $regexp) {
             $regexp = preg_quote(implode('', self::resolveUrl(self::parseUrl('.'), self::parseUrl($baseUri))));
@@ -106,26 +104,5 @@ class ScopingHttpClient implements HttpClientInterface, ResetInterface, LoggerAw
         if ($this->client instanceof ResetInterface) {
             $this->client->reset();
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setLogger(LoggerInterface $logger): void
-    {
-        if ($this->client instanceof LoggerAwareInterface) {
-            $this->client->setLogger($logger);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withOptions(array $options): self
-    {
-        $clone = clone $this;
-        $clone->client = $this->client->withOptions($options);
-
-        return $clone;
     }
 }

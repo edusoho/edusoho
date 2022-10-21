@@ -23,7 +23,6 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'edc6464955a37aa4d5fbf39d40fb6ee7' => __DIR__ . '/..' . '/symfony/polyfill-php55/bootstrap.php',
         '3a6ac12a64116221776bf6b30b9b866b' => __DIR__ . '/..' . '/codeages/biz-framework/src/functions.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
-        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '299dfe369c68155fbe2a6dcdb576d58e' => __DIR__ . '/..' . '/codeages/omnipay-alipay/src/Common/helpers.php',
@@ -81,8 +80,7 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
             'Symfony\\Polyfill\\Intl\\Idn\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Polyfill\\Apcu\\' => 22,
-            'Symfony\\Contracts\\Service\\' => 26,
-            'Symfony\\Contracts\\HttpClient\\' => 29,
+            'Symfony\\Contracts\\' => 18,
             'Symfony\\Component\\Security\\Acl\\' => 31,
             'Symfony\\Component\\Lock\\' => 23,
             'Symfony\\Component\\HttpClient\\' => 29,
@@ -300,13 +298,9 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-apcu',
         ),
-        'Symfony\\Contracts\\Service\\' => 
+        'Symfony\\Contracts\\' => 
         array (
-            0 => __DIR__ . '/..' . '/symfony/service-contracts',
-        ),
-        'Symfony\\Contracts\\HttpClient\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/http-client-contracts',
+            0 => __DIR__ . '/..' . '/symfony/contracts',
         ),
         'Symfony\\Component\\Security\\Acl\\' => 
         array (
