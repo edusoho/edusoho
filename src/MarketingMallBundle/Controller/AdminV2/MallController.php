@@ -21,9 +21,29 @@ class MallController extends BaseController
         $mallUrl = $this->getSchema() . $this->container->getParameter('marketing_mall_url') . '/console-pc/';
 
         $url = $mallUrl . '?token=' . $authorization . '&code=' . $mallSettings['access_key'] . '&url=' . $this->getSchema() . $_SERVER['HTTP_HOST'];
+
         return $this->render('MarketingMallBundle:admin-v2/mall:index.html.twig', [
-            'url' => $url
+            'url' => $url,
+            'options' => [
+                'overview' => [
+                    'isSmsConfigured' => $this->isSmsConfigured(),
+                    'isWechatMobileConfigured' => $this->isWechatMobileConfigured(),
+                ],
+                'dealSetting' => [
+
+                ],
+            ],
         ]);
+    }
+
+    private function isSmsConfigured()
+    {
+        return true;
+    }
+
+    private function isWechatMobileConfigured()
+    {
+        return true;
     }
 
     public function mobileBindAction(Request $request)
