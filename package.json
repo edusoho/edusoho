@@ -90,6 +90,7 @@
     "postal": "2.0.5",
     "postal.federation": "0.5.3",
     "postal.xframe": "0.5.0",
+    "postmate": "^1.5.2",
     "qrcode": "^1.5.1",
     "react": "15.6.1",
     "react-dom": "15.6.1",
