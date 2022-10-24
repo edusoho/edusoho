@@ -105,7 +105,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $activities = $this->getActivityDao()->findActivitiesByTypeAndCreatedTimeAndUpdatedTimeFinishType('video', $cloudAppLog['createdTime'], $cloudAppLog['createdTime'], 'end');
             $activityIds = ArrayToolkit::column($activities, 'id');
             if (!empty($activityIds)) {
-                $this->getActivityDao()->update($activityIds, ['finishData' => 0, 'updatedTime' => time()]);
+                $this->getActivityDao()->update(['ids' => $activityIds], ['finishData' => 0, 'updatedTime' => time()]);
             }
         }
 
