@@ -5,6 +5,7 @@
       :form="form"
       :label-col="{ span: 4 }"
       :wrapper-col="{ span: 20 }"
+      autoComplete="off"
       style="max-width: 1000px;"
     >
       <a-form-item label="班课名称">
