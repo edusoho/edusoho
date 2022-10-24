@@ -49,14 +49,6 @@ class StreamWrapper
      */
     public static function createResource(ResponseInterface $response, HttpClientInterface $client = null)
     {
-        if ($response instanceof StreamableInterface) {
-            $stack = debug_backtrace(\DEBUG_BACKTRACE_PROVIDE_OBJECT | \DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-
-            if ($response !== ($stack[1]['object'] ?? null)) {
-                return $response->toStream(false);
-            }
-        }
-
         if (null === $client && !method_exists($response, 'stream')) {
             throw new \InvalidArgumentException(sprintf('Providing a client to "%s()" is required when the response doesn\'t have any "stream()" method.', __CLASS__));
         }
@@ -81,9 +73,9 @@ class StreamWrapper
     }
 
     /**
-     * @param resource|callable|null $handle  The resource handle that should be monitored when
-     *                                        stream_select() is used on the created stream
-     * @param resource|null          $content The seekable resource where the response body is buffered
+     * @param resource|null $handle  The resource handle that should be monitored when
+     *                               stream_select() is used on the created stream
+     * @param resource|null $content The seekable resource where the response body is buffered
      */
     public function bindHandles(&$handle, &$content): void
     {
@@ -264,7 +256,7 @@ class StreamWrapper
         if (\STREAM_CAST_FOR_SELECT === $castAs) {
             $this->response->getHeaders(false);
 
-            return (\is_callable($this->handle) ? ($this->handle)() : $this->handle) ?? false;
+            return $this->handle ?? false;
         }
 
         return false;
