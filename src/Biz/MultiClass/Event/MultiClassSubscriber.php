@@ -97,6 +97,9 @@ class MultiClassSubscriber extends EventSubscriber
         if ($roomIds) {
             $this->getEsLiveClient()->batchUpdateRoomMemberGroupBundle($roomIds, $multiClass['bundle_no']);
         }
+        if (empty($groups)) {
+            return;
+        }
         $liveGroups = $this->getEsLiveClient()->batchCreateMemberGroup($multiClass['bundle_no'], array_column($groups, 'name'));
         if (empty($liveGroups)) {
             throw MultiClassException::CREATE_GROUP_FAILED();
