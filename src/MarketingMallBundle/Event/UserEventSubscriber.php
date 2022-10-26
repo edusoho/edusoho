@@ -5,7 +5,6 @@ namespace MarketingMallBundle\Event;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
 use MarketingMallBundle\Biz\SyncList\Service\SyncListService;
-use MarketingMallBundle\Common\GoodsContentBuilder\TeacherInfoBuilder;
 
 class UserEventSubscriber extends BaseEventSubscriber
 {
