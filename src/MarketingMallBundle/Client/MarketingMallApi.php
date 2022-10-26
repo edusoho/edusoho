@@ -3,9 +3,12 @@
 namespace MarketingMallBundle\Client;
 
 use AppBundle\Common\ArrayToolkit;
+use Codeages\RestApiClient\Exceptions\ResponseException;
+use Codeages\RestApiClient\Exceptions\ServerException;
 use Codeages\RestApiClient\RestApiClient;
 use Codeages\RestApiClient\Specification\JsonHmacSpecification;
 use Firebase\JWT\JWT;
+use MarketingMallBundle\Exception\MarketingMallApiException;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Topxia\Service\Common\ServiceKernel;
@@ -46,19 +49,14 @@ class MarketingMallApi
 
     public function init($params)
     {
-        try {
-            $params = ArrayToolkit::parts($params, ['token', 'url', 'code']);
-            $result = $this->post('/api-admin/esData/init', $params);
-            if (empty($result)) {
-                throw new \InvalidArgumentException('接口请求错误!');
-            }
-            if (empty($result['accessKey'])) {
-                $this->getLogger()->error('market-mall-init', ['result' => $result]);
-                throw new \InvalidArgumentException('接口请求失败!');
-            }
-        } catch (\RuntimeException $e) {
-            $this->getLogger()->error('market-mall-init', ['商城初始化错误' . $e->getMessage()]);
+        $params = ArrayToolkit::parts($params, ['token', 'url', 'code']);
+        $result = $this->post('/api-admin/esData/init', $params);
+        if (empty($result)) {
             throw new \InvalidArgumentException('接口请求错误!');
+        }
+        if (empty($result['accessKey'])) {
+            $this->getLogger()->error('market-mall-init', ['result' => $result]);
+            throw new \InvalidArgumentException('接口请求失败!');
         }
 
         return $result;
@@ -66,46 +64,32 @@ class MarketingMallApi
 
     public function isHomePageSaved()
     {
-        try {
-            $result = $this->get('/api-school/info/isHomePageSaved', []);
-            if (!isset($result['ok'])) {
-                throw new \InvalidArgumentException('接口请求错误!');
-            }
-
-            return $result['ok'];
-        } catch (\RuntimeException $e) {
-            $this->getLogger()->error('获取商城装修状态失败'.$e->getMessage(), ['商城初始化错误' . $e->getTraceAsString()]);
+        $result = $this->get('/api-school/info/isHomePageSaved', []);
+        if (!isset($result['ok'])) {
             throw new \InvalidArgumentException('接口请求错误!');
         }
+
+        return $result['ok'];
     }
 
     public function updateGoodsContent($params)
     {
-        try {
-            $params = ArrayToolkit::parts($params[0], [
-                'targetType',
-                'goodsContent'
-            ]);
-            $this->post('/api-school/goods/updateGoodsContent', $params);
-        } catch (\RuntimeException $e) {
-            $this->getLogger()->error('更新商品详情错误' . $e->getMessage(), ['params' => $params]);
-            throw new \InvalidArgumentException('接口请求错误!');
-        }
+        $params = ArrayToolkit::parts($params[0], [
+            'targetType',
+            'goodsContent'
+        ]);
+        $this->post('/api-school/goods/updateGoodsContent', $params);
     }
 
     public function updateTeacherInfo($params)
     {
-        try {
-            $params = ArrayToolkit::parts($params[0], [
-                'content'
-            ]);
-            $params['type'] = "teacherInfo";
-            $params['targetId'] = json_decode($params['content'], true)['userId'];
-            $this->post('/api-school/goods/updateTeacherInfo', $params);
-        } catch (\RuntimeException $e) {
-            $this->getLogger()->error('更新商品详情错误' . $e->getMessage(), ['params' => $params]);
-            throw new \InvalidArgumentException('接口请求错误!');
-        }
+        $params = ArrayToolkit::parts($params[0], [
+            'content'
+        ]);
+        $params['type'] = "teacherInfo";
+        $params['targetId'] = json_decode($params['content'], true)['userId'];
+        $this->post('/api-school/goods/updateTeacherInfo', $params);
+
     }
 
     public function checkGoodsIsPublishByCodes($params)
@@ -138,9 +122,14 @@ class MarketingMallApi
     {
         $params['code'] = self::$accessKey;
 
-        $response = self::$client->get($uri, $params, self::$headers);
+        try {
+            $response = self::$client->get($uri, $params, self::$headers);
+        } catch (\RuntimeException $e) {
+            $this->getLogger()->error('market-mall-post', ['uri' => $uri, 'params' => $params, 'message' => $e->getMessage()]);
+            throw new MarketingMallApiException('营销商城服务异常，请联系管理员(' . $uri . ')');
+        }
         if (empty($response)) {
-            $this->getLogger()->warn('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
+            $this->getLogger()->warn('market-mall-post', ['uri' => $uri, 'params' => $params]);
         } else {
             $this->getLogger()->debug('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
         }
@@ -150,9 +139,15 @@ class MarketingMallApi
 
     private function post($uri, array $params = [])
     {
-        $response = self::$client->post($uri, $params, self::$headers);
+        try {
+            $response = self::$client->post($uri, $params, self::$headers);
+        } catch (\RuntimeException $e) {
+            $this->getLogger()->error('market-mall-post', ['uri' => $uri, 'params' => $params, 'message' => $e->getMessage()]);
+            throw new MarketingMallApiException('营销商城服务异常，请联系管理员(' . $uri . ')');
+        }
+
         if (empty($response)) {
-            $this->getLogger()->warn('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
+            $this->getLogger()->warn('market-mall-post', ['uri' => $uri, 'params' => $params]);
         } else {
             $this->getLogger()->debug('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
         }

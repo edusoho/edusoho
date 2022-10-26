@@ -10,7 +10,9 @@ class MallSettingServiceImpl extends BaseService implements MallSettingService
 {
     public function isShowMall()
     {
-        return $this->getSetting('cloud_status.accessCloud', false) && !$this->getSetting('developer.without_network', false) && $this->getEduCloudService()->isSaaS();
+        return $this->getSetting('cloud_status.accessCloud', false)
+            && !$this->getSetting('developer.without_network', false)
+            && $this->getEduCloudService()->isSaaS();
     }
 
     protected function getSetting($name, $default = null)
