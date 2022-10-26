@@ -3,7 +3,6 @@
 {% set modalSize = 'large' %}
 {% set systemRoles = [] %}
 {% set CustomRoles = [] %}
-{% set notUpdateRoles = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER', 'ROLE_TEACHER_ASSISTANT', 'ROLE_EDUCATIONAL_ADMIN'] %}
 
 {% block title %}{{'admin.user.manage.create_by_mobile.heading_staff_title'|trans}}{% endblock %}
 {% block body %}
@@ -62,7 +61,7 @@
             {% for role in admin_roles  %}
               {% if role.code == 'ROLE_USER' %}
                 <input type="checkbox" style="display: none" name="roles[]" value="{{role.code}}" checked="checked">
-              {% elseif role.code in  notUpdateRoles %}
+              {% elseif role.code in not_update_roles() %}
                 {% set systemRoles = systemRoles|merge([role]) %}
               {% else %}
                 {% set CustomRoles = CustomRoles|merge([role]) %}

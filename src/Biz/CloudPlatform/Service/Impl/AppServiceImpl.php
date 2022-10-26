@@ -64,7 +64,7 @@ class AppServiceImpl extends BaseService implements AppService
         $apps = $this->createAppClient()->getApps();
 
         foreach ($apps as &$app) {
-            if (null !== $app['description']) {
+            if (!empty($app['description'])) {
                 $app['description'] = $this->purifyHtml($app['description']);
             }
         }
