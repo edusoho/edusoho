@@ -83,11 +83,7 @@ class MultiClassStudent extends AbstractResource
 
         $members = $this->getLearningDataAnalysisService()->fillCourseProgress($members);
 
-        $assistantMembers = $this->getCourseMemberService()->searchMembers(['courseId' => $multiClass['courseId'], 'role' => 'assistant'], [], 0, self::MAX_ASSISTANT_NUM);
-        $assistantIds = ArrayToolkit::column($assistantMembers, 'userId');
-
-        $assistants = $this->getUserService()->findUsersByIds($assistantIds);
-        $assistantInfos = ArrayToolkit::thin(array_values($assistants), ['id', 'nickname']);
+        $assistants = $this->getCourseMemberService()->getMultiClassMembers($multiClass['courseId'], $multiClass['id'], 'assistant');
 
         $members = $this->getThreadService()->fillThreadCounts(['courseId' => $multiClass['courseId'], 'type' => 'question'], $members);
 
@@ -115,14 +111,13 @@ class MultiClassStudent extends AbstractResource
         }
 
         $members = $this->filterFields($members);
-        $members = $this->appendStudentAssistant($multiClass, $members, $assistantInfos);
+        $members = $this->appendStudentAssistant($multiClass, $members, $assistants);
 
         return $this->makePagingObject($members, $total, $offset, $limit);
     }
 
-    protected function appendStudentAssistant($multiClass, $members, $assistantInfos)
+    protected function appendStudentAssistant($multiClass, $members, $assistants)
     {
-        $assistantInfos = ArrayToolkit::index($assistantInfos, 'id');
         $assistantStudentRefs = $this->getAssistantStudentService()->findRelationsByMultiClassIdAndStudentIds($multiClass['id'], ArrayToolkit::column($members, 'userId'));
         $assistantStudentRefs = ArrayToolkit::index($assistantStudentRefs, 'studentId');
         $groups = $this->getMultiClassGroupService()->findGroupsByIds(ArrayToolkit::column($assistantStudentRefs, 'group_id'));
@@ -134,15 +129,9 @@ class MultiClassStudent extends AbstractResource
             }
 
             $assistantStudentRef = $assistantStudentRefs[$member['userId']];
-            if (empty($assistantInfos[$assistantStudentRef['assistantId']])) {
-                $member['assistant'] = [];
-                continue;
-            }
 
-            $member['assistant'] = $assistantInfos[$assistantStudentRef['assistantId']];
-            $member['group'] = isset($groups[$assistantStudentRef['group_id']]) ? $groups[$assistantStudentRef['group_id']] : [];
-            $groupName = empty($member['group']) ? MultiClassGroupService::MULTI_CLASS_GROUP_NAME.'0' : MultiClassGroupService::MULTI_CLASS_GROUP_NAME.$member['group']['seq'];
-            $member['group']['name'] = $groupName;
+            $member['assistant'] = $assistants;
+            $member['group'] = $groups[$assistantStudentRef['group_id']] ?? [];
         }
 
         return $members;

@@ -64,7 +64,11 @@
     "vlucas/valitron": "^1.4",
     "firebase/php-jwt": "^5.1",
     "codeages/biz-item-bank": "dev-master",
-    "omnipay/paypal": "^3.0"
+    "omnipay/paypal": "^3.0",
+    "edusoho-live/eslive-api-php-sdk": "^1.0",
+    "symfony/http-client": "^4",
+    "symfony/service-contracts": "^1",
+    "symfony/http-client-contracts": "^1.1.10"
   },
   "require-dev": {
     "phpunit/phpunit": "5.7.27",

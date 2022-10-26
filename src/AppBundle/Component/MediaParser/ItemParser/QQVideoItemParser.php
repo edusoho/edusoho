@@ -92,7 +92,7 @@ class QQVideoItemParser extends AbstractItemParser
     protected function getUrlPrefixes()
     {
         return array(
-            'v.qq.com',
+            'https://v.qq.com',
         );
     }
 

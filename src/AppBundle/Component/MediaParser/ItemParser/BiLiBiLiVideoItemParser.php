@@ -45,7 +45,7 @@ class BiLiBiLiVideoItemParser extends AbstractItemParser
     protected function getUrlPrefixes()
     {
         return [
-            'www.bilibili.com',
+            'https://www.bilibili.com'
         ];
     }
 

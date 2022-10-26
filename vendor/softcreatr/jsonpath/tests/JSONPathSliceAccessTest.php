@@ -6,14 +6,16 @@
  * @license https://github.com/SoftCreatR/JSONPath/blob/main/LICENSE  MIT License
  */
 
+declare(strict_types=1);
+
 namespace Flow\JSONPath\Test;
 
-use Flow\JSONPath\JSONPath;
-use Flow\JSONPath\JSONPathException;
+use Flow\JSONPath\{JSONPath, JSONPathException};
+use PHPUnit\Framework\TestCase;
 
 class JSONPathSliceAccessTest extends TestCase
 {
-    public function sliceDataProvider()
+    public function sliceDataProvider(): array
     {
         return [
             [
@@ -77,13 +79,9 @@ class JSONPathSliceAccessTest extends TestCase
     /**
      * @dataProvider sliceDataProvider
      *
-     * @param string $path
-     * @param array $data
-     * @param array $expected
-     *
      * @throws JSONPathException
      */
-    public function testSlice($path, array $data, array $expected)
+    public function testSlice(string $path, array $data, array $expected): void
     {
         $result = (new JSONPath($data))
             ->find($path);

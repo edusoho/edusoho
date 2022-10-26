@@ -49,7 +49,7 @@ abstract class AbstractParser
     public function detect($url)
     {
         foreach ($this->getUrlPrefixes() as $urlPrefix) {
-            if (false !== strpos($url, $urlPrefix)) {
+            if (0 === strpos($url, $urlPrefix)) {
                 return true;
             }
         }
@@ -100,9 +100,9 @@ abstract class AbstractParser
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_ENCODING, 'gzip');
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        // 安全问题：禁止跟随重定向
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
         curl_setopt($curl, CURLOPT_AUTOREFERER, true);
-        curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
 

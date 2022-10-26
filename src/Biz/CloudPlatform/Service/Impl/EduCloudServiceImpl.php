@@ -10,6 +10,7 @@ use Biz\System\Service\CacheService;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Util\EdusohoLiveClient;
 
 class EduCloudServiceImpl extends BaseService implements EduCloudService
 {
@@ -55,6 +56,21 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
         }
 
         return false;
+    }
+
+    public function uploadCallbackUrl()
+    {
+        try {
+            $site = $this->getSettingService()->get('site', []);
+            if (empty($site['url'])) {
+                return 1;
+            }
+            $client = new EdusohoLiveClient();
+            $client->uploadCallbackUrl(rtrim($site['url'], '/').'/callback/live/handle');
+        } catch (\RuntimeException $e) {
+        }
+
+        return 1;
     }
 
     protected function writeErrorLog($e)

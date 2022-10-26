@@ -321,14 +321,16 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
         $groupStudentNum = ArrayToolkit::index($groupStudentNum, 'groupId');
 
         $updateRecords = [];
+        $deleteGroupIds = [];
         foreach ($groupIds as $key => $groupId) {
             if (empty($groupStudentNum[$groupId]['studentNum'])) {
-                $this->getMultiClassGroupDao()->delete($groupId);
+                $deleteGroupIds[] = $groupId;
                 unset($groupIds[$key]);
                 continue;
             }
             $updateRecords[] = ['student_num' => $groupStudentNum[$groupId]['studentNum']];
         }
+        $this->getMultiClassGroupService()->batchDeleteMultiClassGroups($deleteGroupIds);
 
         return $this->getMultiClassGroupDao()->batchUpdate($groupIds, $updateRecords);
     }
@@ -367,6 +369,13 @@ class AssistantStudentServiceImpl extends BaseService implements AssistantStuden
     public function findAssistantStudentsByGroupIds($groupIds)
     {
         return $this->getAssistantStudentDao()->findAssistantStudentsByGroupIds($groupIds);
+    }
+
+    public function deleteByMultiClassId($multiClassId)
+    {
+        if ($multiClassId) {
+            $this->getAssistantStudentDao()->batchDelete(['multiClassId' => $multiClassId]);
+        }
     }
 
     /**

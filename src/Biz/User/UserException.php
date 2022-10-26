@@ -40,6 +40,7 @@ class UserException extends AbstractException
 
     const PASSWORD_FAILED = 5000117;
 
+    // 抛这个错误app会重新登陆
     const NOTFOUND_TOKEN = 4040117;
 
     const NO_USER_PROVIDER = 4040118;

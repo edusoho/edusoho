@@ -12,11 +12,13 @@ class YoukuVideoItemParser extends AbstractItemParser
         'p3' => '/http[s]{0,1}:\/\/player\.youku\.com\/embed\/(.*)/s',
     ];
 
+    protected $userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36';
+
     protected function parseForWebUrl($item, $url)
     {
         $matched = preg_match($this->patterns['p1'], $url, $matches) || preg_match($this->patterns['p3'], $url, $matches);
         if ($matched) {
-            $url = "http://v.youku.com/v_show/id_{$matches[1]}.html";
+            $url = "https://v.youku.com/v_show/id_{$matches[1]}.html";
         }
         $matched = preg_match('/\/id_(.+?).html/s', $url, $matches);
         if (empty($matched)) {
@@ -42,7 +44,7 @@ class YoukuVideoItemParser extends AbstractItemParser
         $item['summary'] = $summary[1] ?? '';
         $item['pictures'] = $pictures[1] ?? '';
         $item['uuid'] = 'youku:'.$videoId;
-        $item['page'] = "http://v.youku.com/v_show/id_{$videoId}.html";
+        $item['page'] = "https://v.youku.com/v_show/id_{$videoId}.html";
         $item['files'] = [
             ['url' => "https://player.youku.com/embed/{$videoId}", 'type' => 'mp4'],
         ];
@@ -53,7 +55,10 @@ class YoukuVideoItemParser extends AbstractItemParser
 
     protected function getUrlPrefixes()
     {
-        return ['v.youku.com', 'player.youku.com'];
+        return [
+            'https://v.youku.com',
+            'https://player.youku.com'
+        ];
     }
 
     protected function convertMediaUri($video)

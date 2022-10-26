@@ -54,7 +54,7 @@ class DefaultResourceAuthenticationProvider implements ResourceAuthenticationInt
         $token = $this->tokenStorage->getToken();
 
         if (!$token instanceof TokenInterface || $token instanceof AnonymousToken) {
-            throw new UnauthorizedHttpException('Basic', 'Requires authentication', null, ErrorCode::UNAUTHORIZED);
+            throw UserException::NOTFOUND_TOKEN();
         }
     }
 }

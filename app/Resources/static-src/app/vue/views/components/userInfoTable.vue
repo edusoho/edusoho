@@ -69,7 +69,7 @@
 
       <tr>
         <th>自我介绍</th>
-        <td v-html="user.profile.about || '暂无'"></td>
+        <td class="editor-text" v-html="user.profile.about || '暂无'"></td>
       </tr>
 
       <tr>
