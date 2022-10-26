@@ -107,6 +107,11 @@ class MarketingMallApi
         return $this->post('/api-school/goods/syncNotify', ['type' => implode($param)]);
     }
 
+    public function setWechatMobileSetting($params)
+    {
+        return $this->post('/api-school/wechatSetting/setWechatMobileSetting', $params);
+    }
+
 //    例子  token头直接设置了参数code也直接加了
 //    public function demo($params){
 //        try {
@@ -125,7 +130,6 @@ class MarketingMallApi
         try {
             $response = self::$client->get($uri, $params, self::$headers);
         } catch (\RuntimeException $e) {
-            $this->getLogger()->error('market-mall-post', ['uri' => $uri, 'params' => $params, 'message' => $e->getMessage()]);
             throw new MarketingMallApiException('营销商城服务异常，请联系管理员(' . $uri . ')');
         }
         if (empty($response)) {
@@ -142,7 +146,6 @@ class MarketingMallApi
         try {
             $response = self::$client->post($uri, $params, self::$headers);
         } catch (\RuntimeException $e) {
-            $this->getLogger()->error('market-mall-post', ['uri' => $uri, 'params' => $params, 'message' => $e->getMessage()]);
             throw new MarketingMallApiException('营销商城服务异常，请联系管理员(' . $uri . ')');
         }
 
