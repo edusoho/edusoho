@@ -110,7 +110,7 @@ class MarketingMallApi
 
     public function checkGoodsIsPublishByCodes($params)
     {
-        return $this->get('/api-school/goods/getGoodsPublishStatus', ['goodsCodes' => implode(',', $params)]);
+        return $this->get('/api-school/goods/getGoodsPublishStatus', ['goodsCodes' => implode(',', $params[0])]);
     }
 
     public function deleteGoodsByCode($params)
