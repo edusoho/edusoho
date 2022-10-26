@@ -2,6 +2,7 @@
 
 namespace MarketingMallBundle\Controller\AdminV2;
 
+use AppBundle\Common\SmsToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Firebase\JWT\JWT;
@@ -12,6 +13,10 @@ class MallController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        $user = $this->getUser();
+        if (empty($user['verifiedMobile'])) {
+            return $this->redirectToRoute('admin_v2_mall_mobile_bind');
+        }
         $mallSettings = $this->getSettingService()->get('marketing_mall', []);
         if (empty($mallSettings)) {
             $mallSettings = $this->initSchool();
@@ -75,9 +80,24 @@ class MallController extends BaseController
 
     public function mobileBindAction(Request $request)
     {
+        $scenario = 'sms_bind';
 
-        $targetUrl = $this->getTargetPath($request) ?: $this->generateUrl('homepage');
-        return $this->render('MarketingMallBundle:admin-v2/mall:mobile.html.twig', ['targetUrl' => $targetUrl]);
+        if ('1' != $this->setting('cloud_sms.sms_enabled') || 'on' != $this->setting("cloud_sms.{$scenario}")) {
+            return $this->render('settings/edu-cloud-error.html.twig', []);
+        }
+        if ($request->isMethod('POST')) {
+            list($result, $sessionField) = SmsToolkit::smsCheck($request, $scenario);
+
+            if ($result) {
+                $this->getUserService()->changeMobile($this->getCurrentUser()->getId(), $sessionField['to']);
+
+                return $this->createJsonResponse(['message' => 'user.settings.security.mobile_bind.success']);
+            } else {
+                return $this->createJsonResponse(['message' => 'user.settings.security.mobile_bind.fail'], 403);
+            }
+        }
+
+        return $this->render('MarketingMallBundle:admin-v2/mall:mobile.html.twig', ['targetUrl' => $this->generateUrl('admin_v2_marketing_mall')]);
     }
 
     public function introduceAction(Request $request)
