@@ -13,7 +13,7 @@ class MarketingMallAdminProfile extends Migration
           CREATE TABLE IF NOT EXISTS `marketing_mall_admin_profile` (
           `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
           `userId` int(11) unsigned NOT NULL COMMENT '用户id',
-          `field` VARCHAR(32) NOT NULL COMMENT '配制项',
+          `field` VARCHAR(32) NOT NULL COMMENT '配置项',
           `val` VARCHAR(64) NOT NULL DEFAULT '0',
           `createdTime` int(11) unsigned NOT NULL DEFAULT 0,
           `updatedTime` int(11) unsigned NOT NULL DEFAULT 0,
