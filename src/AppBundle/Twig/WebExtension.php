@@ -270,7 +270,7 @@ class WebExtension extends \Twig_Extension
 
     public function isShowMall()
     {
-        return $this->getMallSettingService()->isShowMall();
+        return $this->getMallService()->isShow();
     }
 
     public function isGroupMember($groupId)
@@ -2622,8 +2622,8 @@ class WebExtension extends \Twig_Extension
         return $this->createService('CloudPlatform:EduCloudService');
     }
 
-    protected function getMallSettingService()
+    protected function getMallService()
     {
-        return $this->createService('MallSetting:MallSettingService');
+        return $this->createService('Mall:MallService');
     }
 }

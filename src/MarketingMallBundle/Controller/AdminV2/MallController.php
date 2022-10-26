@@ -6,8 +6,8 @@ use AppBundle\Common\SmsToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Firebase\JWT\JWT;
+use MarketingMallBundle\Biz\Mall\Service\MallService;
 use MarketingMallBundle\Biz\MallAdminProfile\Service\MallAdminProfileService;
-use MarketingMallBundle\Client\MarketingMallApi;
 use Symfony\Component\HttpFoundation\Request;
 
 class MallController extends BaseController
@@ -24,13 +24,13 @@ class MallController extends BaseController
         }
         $mallSettings = $this->getSettingService()->get('marketing_mall', []);
         if (empty($mallSettings)) {
-            $mallSettings = $this->initSchool();
+            $mallSettings = $this->getMallService()->init($this->getUserInfo(), $request->getSchemeAndHttpHost());
         }
 
         $authorization = JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'userInfo' => $this->getUserInfo(), 'access_key' => $mallSettings['access_key'], 'header' => 'MARKETING_MALL'], $mallSettings['secret_key']);
         $mallUrl = $this->getSchema() . $this->container->getParameter('marketing_mall_url') . '/console-pc/';
 
-        $url = $mallUrl . '?token=' . $authorization . '&code=' . $mallSettings['access_key'] . '&url=' . $this->getSchema() . $_SERVER['HTTP_HOST'];
+        $url = "{$mallUrl}?token={$authorization}&code={$mallSettings['access_key']}&url={$request->getSchemeAndHttpHost()}";
 
         $options = [
             'overview' => [
@@ -116,28 +116,6 @@ class MallController extends BaseController
         return $this->render('MarketingMallBundle:admin-v2/mall:introduce.html.twig', []);
     }
 
-    protected function initSchool()
-    {
-        $storages = $this->getSettingService()->get('storage', []);
-
-        $client = new MarketingMallApi($storages);
-        $authorization = JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'userInfo' => $this->getUserInfo(), 'access_key' => $storages['cloud_access_key'], 'header' => 'MARKETING_MALL'], $storages['cloud_secret_key']);
-        $result = $client->init([
-            'token' => $authorization,
-            'url' => $this->getSchema() . $_SERVER['HTTP_HOST'],
-            'code' => $storages['cloud_access_key'],
-        ]);
-        $setting = [
-            'access_key' => $result['accessKey'],
-            'secret_key' => $result['secretKey'],
-            'code' => $result['code'],
-        ];
-        $this->getSettingService()->set('marketing_mall', $setting);
-        $this->dispatchEvent('marketing_mall.init', []);
-
-        return $setting;
-    }
-
     private function getUserInfo()
     {
         $user = $this->getUserService()->getUserAndProfile($this->getCurrentUser()->getId());
@@ -163,7 +141,15 @@ class MallController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return MallService
+     */
+    protected function getMallService()
+    {
+        return $this->createService('Mall:MallService');
     }
 
     /**
