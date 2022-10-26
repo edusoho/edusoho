@@ -29,7 +29,7 @@ services:
       - { name: codeages_plugin.event.subscriber }
 
   marketing_mall_role_event_subscriber:
-    class: MarketingMallBundle\Event\RoleEventSubscriber
+    class: MarketingMallBundle\Biz\Role\Event\RoleEventSubscriber
     arguments: [ '@biz' ]
     tags:
       - { name: codeages_plugin.event.subscriber }

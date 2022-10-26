@@ -1,6 +1,6 @@
 <?php
 
-namespace MarketingMallBundle\Event;
+namespace MarketingMallBundle\Biz\Role\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;

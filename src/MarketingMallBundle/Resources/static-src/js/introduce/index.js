@@ -11,4 +11,13 @@ $pageContainer.on('scroll', () => {
     $('.js-custom-btn').removeClass('disabled')
     $pageContainer.off('scroll')
   }
-})
+});
+
+$('.js-custom-btn').on('click', (event) => {
+  const $btn = $(event.currentTarget);
+  $.post($btn.data('url'), resp => {
+    if (resp.success) {
+      window.location.href = $btn.data('targetUrl');
+    }
+  });
+});

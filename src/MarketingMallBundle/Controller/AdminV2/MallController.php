@@ -6,6 +6,7 @@ use AppBundle\Common\SmsToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Firebase\JWT\JWT;
+use MarketingMallBundle\Biz\MallAdminProfile\Service\MallAdminProfileService;
 use MarketingMallBundle\Client\MarketingMallApi;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,6 +17,10 @@ class MallController extends BaseController
         $user = $this->getUser();
         if (empty($user['verifiedMobile'])) {
             return $this->redirectToRoute('admin_v2_mall_mobile_bind');
+        }
+        $profile = $this->getMallAdminProfileService()->getMallAdminProfileByUserIdAndFieldName($user['id'], 'introduce_read');
+        if (empty($profile)) {
+            return $this->redirectToRoute('admin_v2_mall_introduce');
         }
         $mallSettings = $this->getSettingService()->get('marketing_mall', []);
         if (empty($mallSettings)) {
@@ -102,6 +107,12 @@ class MallController extends BaseController
 
     public function introduceAction(Request $request)
     {
+        if ($request->isMethod('POST')) {
+            $this->getMallAdminProfileService()->setMallAdminProfile($this->getUser()->getId(), 'introduce_read', 1);
+
+            return $this->createJsonResponse(['success' => true]);
+        }
+
         return $this->render('MarketingMallBundle:admin-v2/mall:introduce.html.twig', []);
     }
 
@@ -153,5 +164,13 @@ class MallController extends BaseController
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return MallAdminProfileService
+     */
+    protected function getMallAdminProfileService()
+    {
+        return $this->createService('MallAdminProfile:MallAdminProfileService');
     }
 }

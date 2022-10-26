@@ -37,6 +37,7 @@ class MarketingMallServiceProvider implements ServiceProviderInterface
             'ProductMallGoodsRelation:ProductMallGoodsRelationService',
             'MallSetting:MallSettingService',
             'Role:RoleService',
+            'MallAdminProfile:MallAdminProfileService',
         ];
     }
 
@@ -44,6 +45,7 @@ class MarketingMallServiceProvider implements ServiceProviderInterface
     {
         return [
             'ProductMallGoodsRelation:ProductMallGoodsRelationDao',
+            'MallAdminProfile:MallAdminProfileDao',
         ];
     }
 }
