@@ -8,7 +8,16 @@ $pageContainer.on('scroll', () => {
   const documentHeight = $document.height()
 
   if ((documentHeight - offsetTop) > 110) {
-    $('.js-custom-btn').removeClass('disabled')
+    $('.js-custom-btn').removeClass('disabled').removeAttr('disabled');
     $pageContainer.off('scroll')
   }
-})
+});
+
+$('.js-custom-btn').on('click', (event) => {
+  const $btn = $(event.currentTarget);
+  $.post($btn.data('url'), resp => {
+    if (resp.success) {
+      window.location.href = $btn.data('targetUrl');
+    }
+  });
+});
