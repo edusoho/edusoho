@@ -3,7 +3,6 @@
 {% set modalSize = 'large' %}
 {% set systemRoles = [] %}
 {% set CustomRoles = [] %}
-{% set notUpdateRoles = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER', 'ROLE_TEACHER_ASSISTANT', 'ROLE_EDUCATIONAL_ADMIN'] %}
 {% block title %}{{'admin.user.manage.staff_role.fields.heading_title'|trans}}<span style="color: gray;font-size: 13px;display: inline-block;margin-left: 15px">设置为员工后，对应得员工操作请到【员工管理】中</span>{% endblock %}
 {% block body %}
 
@@ -13,7 +12,7 @@
     {% for role in admin_roles if (role.code in app.user.roles or role.createdUserId == app.user.id) or 'ROLE_SUPER_ADMIN' in app.user.roles %}
       {% if role.code == 'ROLE_USER' %}
         <input type="checkbox" style="display: none" name="roles[]" value="{{role.code}}" checked="checked">
-      {% elseif role.code in  notUpdateRoles %}
+      {% elseif role.code in not_update_roles() %}
         {% set systemRoles = systemRoles|merge([role]) %}
       {% else %}
         {% set CustomRoles = CustomRoles|merge([role]) %}

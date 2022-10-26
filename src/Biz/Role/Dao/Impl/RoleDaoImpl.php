@@ -26,6 +26,7 @@ class RoleDaoImpl extends GeneralDaoImpl implements RoleDao
 
     public function declares()
     {
+        $declares['timestamps'] = ['createdTime', 'updatedTime'];
         $declares['conditions'] = array(
             'name = :name',
             'code = :code',

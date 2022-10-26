@@ -2,14 +2,11 @@
 
 namespace MarketingMallBundle\Controller\AdminV2;
 
-use AppBundle\Common\SmsToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Firebase\JWT\JWT;
 use MarketingMallBundle\Client\MarketingMallApi;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Topxia\Service\Common\ServiceKernel;
 
 class MallController extends BaseController
 {
@@ -105,6 +102,7 @@ class MallController extends BaseController
             'code' => $result['code'],
         ];
         $this->getSettingService()->set('marketing_mall', $setting);
+        $this->dispatchEvent('marketing_mall.init', []);
 
         return $setting;
     }
