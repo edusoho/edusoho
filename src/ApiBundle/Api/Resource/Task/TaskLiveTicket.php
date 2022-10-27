@@ -9,6 +9,7 @@ use AppBundle\Common\DeviceToolkit;
 use Biz\Course\MemberException;
 use Biz\Course\Service\MemberService;
 use Biz\Live\Service\LiveService;
+use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\Task\TaskException;
 
 class TaskLiveTicket extends AbstractResource
@@ -34,7 +35,10 @@ class TaskLiveTicket extends AbstractResource
         $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']);
         // android, iphone, mobile
         $params['device'] = $request->request->get('device', DeviceToolkit::isMobileClient() ? 'mobile' : 'desktop');
-
+        $liveGroup = $this->getMultiClassGroupService()->getLiveGroupByUserIdAndCourseId($user['id'], $task['courseId'], $activity['ext']['liveId']);
+        if (!empty($liveGroup)) {
+            $params['groupCode'] = $liveGroup['live_code'];
+        }
         if (!empty($activity['syncId'])) {
             $liveTicket = $this->getS2B2CFacadeService()->getS2B2CService()->getLiveEntryTicket($activity['ext']['liveId'], $params);
         } else {
@@ -98,5 +102,13 @@ class TaskLiveTicket extends AbstractResource
     protected function getCourseMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return MultiClassGroupService
+     */
+    protected function getMultiClassGroupService()
+    {
+        return $this->service('MultiClass:MultiClassGroupService');
     }
 }
