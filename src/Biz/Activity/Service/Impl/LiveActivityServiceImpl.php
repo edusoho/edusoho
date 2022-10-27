@@ -104,7 +104,6 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
         $liveActivity = [
             'liveId' => $live['id'],
-            'roomId' => $live['roomId'] ?? 0,
             'liveProvider' => $live['provider'],
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
             'roomCreated' => $live['id'] > 0 ? 1 : 0,
@@ -114,6 +113,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'anchorId' => $this->getCurrentUser()->getId(),
             'coursewareIds' => empty($live['coursewareIds']) ? [] : $live['coursewareIds'],
         ];
+        if (EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $live['provider']) {
+            $liveActivity['roomId'] = $live['roomId'] ?? 0;
+        }
 
         return $this->getLiveActivityDao()->create($liveActivity);
     }
