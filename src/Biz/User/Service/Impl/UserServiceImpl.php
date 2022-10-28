@@ -978,6 +978,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function register($registration, $registerTypes = ['email'])
     {
         $register = $this->biz['user.register']->createRegister($registerTypes);
+
         list($user, $inviteUser) = $register->register($registration);
 
         if (!empty($inviteUser)) {
