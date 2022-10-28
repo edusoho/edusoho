@@ -45,7 +45,6 @@ use Biz\User\Register\Common\RegisterTypeToolkit;
 use Biz\User\Register\Impl\BinderRegistDecoderImpl;
 use Biz\User\Register\Impl\DistributorRegistDecoderImpl;
 use Biz\User\Register\Impl\EmailRegistDecoderImpl;
-use Biz\User\Register\Impl\MarketingMallRegistDecoderImpl;
 use Biz\User\Register\Impl\MobileRegistDecoderImpl;
 use Biz\User\Register\RegisterFactory;
 use Biz\Util\EdusohoLiveClient;
