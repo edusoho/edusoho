@@ -12,7 +12,7 @@ use MarketingMallBundle\Api\Resource\BaseResource;
 
 class MallProductMember extends BaseResource
 {
-    private $info = ['remark' => '营销商城下单加入'];
+    private $info = ['remark' => '商城下单'];
 
     /**
      * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
