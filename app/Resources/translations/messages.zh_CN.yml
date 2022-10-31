@@ -677,7 +677,7 @@ pay_center.pay.password_input_placeholder: 请输入支付密码
 pay_center.pay.submit_tips: 订单已提交，请在 48 小时内完成支付！逾期订单将被取消。
 pay_center.pay.unable_pay.tips: 您已成功购买该商品，请勿重复支付！该订单将在48小时内关闭。
 pay_center.pay.mode: 支付方式
-pay_center.pay.mode.tips: 选择合适的现金支付方式
+pay_center.pay.mode.tips: 选择合适的支付方式
 pay_center.pay.cash_card: 储蓄卡
 pay_center.pay.credit_card: 信用卡
 pay_center.pay.use_new_card: 使用新的银行卡
