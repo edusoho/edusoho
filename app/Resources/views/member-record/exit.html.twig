@@ -37,8 +37,9 @@
         </td>
         <td class="vertical-middle">
           {% set operator = users[record['operator_id']]|default() %}
-              ({{ operator.nickname }})
-              {{ record.reason|trans }}
+          {% if operator %}
+            ({{ operator.nickname }})
+          {% endif %}{{ record.reason|trans }}
         </td>
         <td class="vertical-middle">
            {% if record.refund_id > 0 %}
