@@ -64,6 +64,11 @@ class StudentMember extends Member
     {
         $currentUser = $this->biz['user'];
         $exercise = $this->getExerciseService()->get($member['exerciseId']);
+
+        if (empty($info['reason']) || empty($info['reasonType'])) {
+           throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
         $record = [
             'userId' => $member['userId'],
             'memberId' => $member['id'],

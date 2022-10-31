@@ -1148,13 +1148,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $refundSetting = $this->getSettingService()->get('refund', []);
         $reason = $this->buildJoinReason($info, $order);
+        $note = empty($info['note']) ? '' : $info['note'];
         $fields = [
             'classroomId' => $classroomId,
             'userId' => $userId,
             'orderId' => empty($order) ? 0 : $order['id'],
             'joinedChannel' => $reason['reason_type'],
             'role' => ['student'],
-            'remark' => empty($info['note']) ? '' : $info['note'],
+            'remark' => empty($info['remark']) ? $note : $info['remark'],
             'deadline' => $deadline,
             'refundDeadline' => empty($refundSetting['maxRefundDays']) ? 0 : strtotime("+ {$refundSetting['maxRefundDays']}days"),
         ];
