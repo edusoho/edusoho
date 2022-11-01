@@ -174,14 +174,15 @@ class UserCommonController extends BaseController
             $formData['type'] = 'import';
             $registration = $this->getRegisterData($formData, $request->getClientIp());
 
-            $user = $this->getAuthService()->register($registration);
-
-            $this->get('session')->set('registed_email', $user['email']);
-
             if ($isStaff == true) {
                 if(count($formData['roles']) == 1){
                     throw UserException::MUST_SELECT_A_STAFFROLE();
                 }
+
+                $user = $this->getAuthService()->register($registration);
+
+                $this->get('session')->set('registed_email', $user['email']);
+
                 $this->getUserService()->changeUserRoles($user['id'], $formData['roles']);
                 $this->getUserService()->updateUser($user['id'], ['isStudent' => 0]);
 
@@ -190,10 +191,14 @@ class UserCommonController extends BaseController
                 return $this->redirect($this->generateUrl($route));
             }
 
+            $user = $this->getAuthService()->register($registration);
+
+            $this->get('session')->set('registed_email', $user['email']);
+
             if (isset($formData['roles'])) {
                 $roles = $formData['roles'];
                 array_push($roles, 'ROLE_USER');
-                $this->getUserService()->changeUserRoles($user['id'], $roles);
+                $this->getUserService()->changeUserRoles($user['id'], $formData['roles']);
             }
 
             $this->getLogService()->info('user', 'add', "管理员添加新学员 {$user['nickname']} ({$user['id']})");
