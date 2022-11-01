@@ -6720,6 +6720,8 @@ admin.user.fields.role_label: 用户权限
 admin.user.fields.staff_roles: 设置角色
 admin.user.fields.email: 邮箱
 admin.user.fields.idcard: 身份证号码
+admin.user.roles.system_roles: 系统角色：
+admin.user.roles.custom_roles: 自定义角色：
 
 ##用户模块通用按钮
 admin.user.form.btn.search_submit_btn: 搜索
@@ -6769,7 +6771,8 @@ admin.user.manage.change_student_password.heading_title: 重置学员%nickname%�
 admin.user.manage.change_staff_password.heading_title: 重置员工%nickname%的密码
 admin.user.manage.change_password.new_password_label: 新密码
 admin.user.manage.change_password.input_data_explain.confirm_password: 再输入一次密码
-admin.user.manage.create.heading_title: 添加新用户
+admin.user.manage.create.heading_student_title: 添加学员
+admin.user.manage.create.heading_staff_title: 添加员工
 admin.user.manage.create.email_label: 邮箱地址
 admin.user.manage.avatar_crop.heading_title: 头像设置
 admin.user.manage.assistant_qrcode_crop.heading_title: 助教二维码设置
@@ -10619,6 +10622,7 @@ exception.user.idcard_invalid: 身份证号错误
 exception.user.truename_invalid: 真实姓名错误
 exception.user.lock_denied: 没有封禁该角色的权限
 exception.user.not_match_bind_email: 与绑定邮箱不符
+exception.user.must_select_a_staff_role: 必须选择一个员工角色
 exception.user_lock: 账户被封禁，请联系管理员
 exception.user.password_error: 用户名密码错误
 exception.user.password_failed: 登录密码不正确

@@ -179,6 +179,9 @@ class UserCommonController extends BaseController
             $this->get('session')->set('registed_email', $user['email']);
 
             if ($isStaff == true) {
+                if(count($formData['roles']) == 1){
+                    throw UserException::MUST_SELECT_A_STAFFROLE();
+                }
                 $this->getUserService()->changeUserRoles($user['id'], $formData['roles']);
                 $this->getUserService()->updateUser($user['id'], ['isStudent' => 0]);
 

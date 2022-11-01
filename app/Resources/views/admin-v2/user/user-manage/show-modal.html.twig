@@ -38,20 +38,6 @@
   {% endif  %}
 
   <tr>
-    <th>{{'admin.user.manage.user_show.fields.user_role_label'|trans}}</th>
-    <td>
-      {% for role in user.roles %}
-        {% set userRole = data('Role', {code: role}) %}
-        {% if userRole|default(false) %}
-          {{userRole.name|default('')}}
-        {% else %}
-          {{ dict_text('userRole', role) }}
-        {% endif %}
-      {% endfor %}
-    </td>
-  </tr>
-
-  <tr>
     <th>{{'admin.user.fields.register_date_label'|trans}}/IP</th>
     <td>
       {{ user.createdTime|date('Y-n-d H:i:s') }}

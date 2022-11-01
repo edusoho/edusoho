@@ -1,25 +1,11 @@
 {% import 'admin-v2/macro.html.twig' as admin_macro %}
 <tr id="user-table-tr-{{ user.id }}">
   {% include 'org/parts/table-body-checkbox.html.twig' %}
-  <td>
+  <td style="vertical-align:middle;">
     <strong>{{ admin_macro.user_link(user) }}</strong>
     {% if user.locked %}
       <label class="label label-danger">{{'admin.user.manage.fields.forbid_label'|trans}}</label>
     {% endif %}
-
-    <br>
-    <span class="text-muted text-sm">
-      {% for role in user.roles %}
-        {% set userRole = data('Role', {code: role}) %}
-        {% if userRole.name=='学员' %}
-        {% elseif userRole|default(false) %}
-          {{userRole.name|default('')}}
-        {% else %}
-          {{ dict_text('userRole', role) }}
-        {% endif %}
-        {% if not loop.last %} &nbsp {% endif %}
-      {% endfor %}
-    </span>
   </td>
  {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
