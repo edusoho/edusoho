@@ -6720,6 +6720,8 @@ admin.user.fields.role_label: 用户权限
 admin.user.fields.staff_roles: 设置角色
 admin.user.fields.email: 邮箱
 admin.user.fields.idcard: 身份证号码
+admin.user.roles.system_roles: 系统角色：
+admin.user.roles.custom_roles: 自定义角色：
 
 ##用户模块通用按钮
 admin.user.form.btn.search_submit_btn: 搜索

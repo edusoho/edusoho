@@ -63,13 +63,13 @@
             {% set CustomRoles = CustomRoles|merge([role]) %}
           {% endif %}
         {% endfor %}
-        <p>系统角色：</p>
+        <p>{{'admin.user.roles.system_roles'|trans}}</p>
         {% for system in systemRoles %}
           <label>
             <span class="checkboxs"><input type="checkbox" name="roles[]" value="{{system.code}}" ></span>{{system.name}}
           </label>
         {% endfor %}
-        <p style="margin-top: 15px">自定义角色：</p>
+        <p style="margin-top: 15px">{{'admin.user.roles.custom_roles'|trans}}</p>
         {% for custom in CustomRoles %}
           <label>
             <span class="checkboxs"><input type="checkbox" name="roles[]" value="{{custom.code}}" ></span>{{custom.name}}
