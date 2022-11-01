@@ -198,7 +198,7 @@ class UserCommonController extends BaseController
             if (isset($formData['roles'])) {
                 $roles = $formData['roles'];
                 array_push($roles, 'ROLE_USER');
-                $this->getUserService()->changeUserRoles($user['id'], $formData['roles']);
+                $this->getUserService()->changeUserRoles($user['id'], $roles);
             }
 
             $this->getLogService()->info('user', 'add', "管理员添加新学员 {$user['nickname']} ({$user['id']})");
