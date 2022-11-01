@@ -148,7 +148,7 @@ class UserException extends AbstractException
         5000137 => 'exception.user.not_match_auth',
         5000138 => 'exception.user.idcard_invalid',
         5000139 => 'exception.user.truename_invalid',
-        4000139 => 'exception.user.must_select_a_role',
+        4000139 => 'exception.user.must_select_a_staff_role',
         4030140 => 'exception.user.lock_denied',
         5000141 => 'exception.user.not_match_bind_email',
         4030142 => 'exception.user.lock_self_denied',

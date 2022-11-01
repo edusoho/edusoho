@@ -10620,7 +10620,7 @@ exception.user.idcard_invalid: 身份证号错误
 exception.user.truename_invalid: 真实姓名错误
 exception.user.lock_denied: 没有封禁该角色的权限
 exception.user.not_match_bind_email: 与绑定邮箱不符
-exception.user.must_select_a_role: 必须选择一个员工角色
+exception.user.must_select_a_staff_role: 必须选择一个员工角色
 exception.user_lock: 账户被封禁，请联系管理员
 exception.user.password_error: 用户名密码错误
 exception.user.password_failed: 登录密码不正确
