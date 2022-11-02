@@ -1,7 +1,7 @@
 import Postmate from 'postmate'
 
 let search = window.location.search.replace('?path=', '')
-search = search ? decodeURIComponent(search) : '/'
+search = search ? decodeURIComponent(search) : '/?'
 
 let baseUrl = ''
 if (process.env.NODE_ENV === 'development') {
@@ -35,6 +35,8 @@ handshake.then(child => {
 
     window.location.href = data.newUrl
   })
+
+  child.call('setOptions', JSON.parse($('#options').val()))
 
   window.addEventListener('popstate', function(event) {
     const search = event.target.location.search.replace('?path=', '')
