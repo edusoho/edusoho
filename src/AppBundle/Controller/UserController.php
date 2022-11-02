@@ -15,6 +15,7 @@ use Biz\Favorite\Service\FavoriteService;
 use Biz\Group\Service\GroupService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\System\Service\themeSettingService;
 use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\AuthService;
@@ -57,7 +58,8 @@ class UserController extends BaseController
 
     public function showAction(Request $request, $id)
     {
-        $user = $this->tryGetUser($id);
+        $user = $this->tryGetUserByUUID($id);
+
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -83,7 +85,8 @@ class UserController extends BaseController
 
     public function learnAction(Request $request, $id)
     {
-        $user = $this->tryGetUser($id);
+//        $user = $this->tryGetUser($id);
+        $user = $this->tryGetUserByUUID($id);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -94,7 +97,8 @@ class UserController extends BaseController
 
     public function aboutAction(Request $request, $id)
     {
-        $user = $this->tryGetUser($id);
+        //$user = $this->tryGetUser($id);
+        $user = $this->tryGetUserByUUID($id);
 
         return $this->_aboutAction($user);
     }
@@ -711,6 +715,30 @@ class UserController extends BaseController
         return $userInfo;
     }
 
+
+    protected function tryGetUserByUUID($id)
+    {
+        $user = $this->getUserService()->getUserByUUID($id);
+
+        if (empty($user)) {
+            if(!$this->getThemeSettingService()->isSupportUUIDUser()) {
+                return $this->tryGetUser($id);
+            }
+
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
+        if ($user['locked']) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
+        if ($user['destroyed']) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
+        return $user;
+    }
+
     protected function tryGetUser($id)
     {
         $user = $this->getUserService()->getUser($id);
@@ -882,6 +910,14 @@ class UserController extends BaseController
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return ThemeSettingService
+     */
+    protected function getThemeSettingService()
+    {
+        return $this->getBiz()->service('System:ThemeSettingService');
     }
 
     /**

@@ -20,7 +20,7 @@
             </h4>
             <div class="fsn color-gray">
               {% if teacher %}
-                {{'course.teacher'|trans}} <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                {{'course.teacher'|trans}} <a class="teacher-nickname mrl" href="{{ user_show_path({id:teacher.id}) }}">{{ teacher.nickname }}</a>
               {% endif %}
               {% if tags %}
                 <span class="color-gray">{{'archive.course.tags'|trans}}</span>

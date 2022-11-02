@@ -69,7 +69,7 @@
                     {% if teacher %}
                     {% for user in teacher%}
                     {% if loop.index <= 3%}
-                      <a class="teacher-nickname mrl" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>
+                      <a class="teacher-nickname mrl" href="{{ user_show_path({id:user.id}) }}" target="_blank">{{ user.nickname }}</a>
                     {% endif %}
                     {% endfor %}
                     {% endif %}

@@ -12,7 +12,7 @@
       <td>{{ loop.index }}</td>
       <td>
         <a class="link-primary"
-           target="_blank" href="{{ path('user_show', {id:amount.userId}) }}">{{users[amount.userId].nickname}}</a>
+           target="_blank" href="{{ user_show_path({id:amount.userId}) }}">{{users[amount.userId].nickname}}</a>
       </td>
       <td class="text-right prl">{{amount.count}}</td>
     </tr>

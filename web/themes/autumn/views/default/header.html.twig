@@ -49,7 +49,7 @@
           <li class="dropdown">
             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> {{'我的主页'|trans}}</a></li>
+              <li><a href="{{ user_show_path({id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> {{'我的主页'|trans}}</a></li>
               <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> {{'个人设置'|trans}}</a></li>
               <li class="hidden-lg"><a href="{{ path('my') }}"><i class="glyphicon glyphicon-book"></i> {% if 'ROLE_TEACHER' in app.user.roles %}{{'我的教学'|trans}}{% else %}{{'我的学习'|trans}}{% endif %} </a></li>
               <li class="divider"></li>

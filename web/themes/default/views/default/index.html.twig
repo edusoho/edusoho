@@ -58,7 +58,7 @@
                               {% for teacher in teachers %}
                                 {% if loop.index <= 5 %}
                                   {# {{ web_macro.user_link(teacher,'teacher-nickname mrl') }} #}
-                                  <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                                  <a class="teacher-nickname mrl" href="{{ user_show_path({id:teacher.id}) }}">{{ teacher.nickname }}</a>
                                 {% endif %}
                               {% endfor %}
                             {% endif %}
@@ -347,7 +347,7 @@
             {% set teacher = courseSet.teachers|first|default(null) %}
             {% if teacher %}
               <div class="teacher">{{ web_macro.user_avatar(teacher,'pull-left','teacher-avatar') }}
-                <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">
+                <a class="teacher-nickname ellipsis" href="{{ user_show_path({id:teacher.id}) }}">
                   {{ teacher.nickname }}
                 </a>
                 <span class="teacher-title ellipsis">{{ teacher.title }}</span>
@@ -420,7 +420,7 @@
               <div class="teacher">
                 {{ web_macro.user_avatar(teacher,'pull-left','teacher-avatar') }}
                 <a class="teacher-nickname ellipsis"
-                  href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                  href="{{ user_show_path({id:teacher.id}) }}">{{ teacher.nickname }}</a>
                 <span class="teacher-title ellipsis">{{ teacher.title }}</span>
               </div>
             {% endif %}

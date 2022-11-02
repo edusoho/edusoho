@@ -49,7 +49,7 @@
         </td>
       {% else %}
         <td>
-          <span><a target="_blank" href="{{ path('user_show', {id: buyer.id}) }}">{{ buyer.nickname|default('--') }}</a></span>
+          <span><a target="_blank" href="{{ user_show_path({id: buyer.id}) }}">{{ buyer.nickname|default('--') }}</a></span>
         </td>
       {% endif %}
       <td>{{ dict_text('payment',order.payment) }}</td>

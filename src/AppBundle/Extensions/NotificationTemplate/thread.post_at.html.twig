@@ -7,7 +7,7 @@
     <div class="notification-body">
       {% set data = notification.content %}
       {% if data.thread %}
-        {% set who = macro.link(data.user.nickname, path('user_show', {id:data.user.id})) %}
+        {% set who = macro.link(data.user.nickname, user_show_path({id:data.user.id})) %}
         {% set thread = macro.link(data.thread.title, path('thread_post_jump', {threadId:data.thread.id, postId:data.id})) %}
         {{ 'notification.thread.post_at'|trans({'%who%':who, '%thread%':thread})|raw }}
         <blockquote>

@@ -239,6 +239,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_saas', [$this, 'isSaas']),
             new \Twig_SimpleFunction('is_teacher_role', [$this, 'isTeacherRole']),
             new \Twig_SimpleFunction('user_info_select', [$this, 'userInfoSelect']),
+            new \Twig_SimpleFunction('user_show_path', [$this, 'userPath']),
         ];
     }
 
@@ -355,6 +356,14 @@ class WebExtension extends \Twig_Extension
                 return false;
             }
         }
+    }
+
+    public function userPath($params)
+    {
+        $id = $params['id']??0;
+        $user = $this->getUserService()->getUser($id);
+
+        return $this->container->get('router')->generate('user_show', ['id' => $user['uuid']??$id]);
     }
 
     /**

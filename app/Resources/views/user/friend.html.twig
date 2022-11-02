@@ -18,12 +18,12 @@
     <div class="col-md-3">
       <div class="teacher-item">
         <div class="teacher-top">
-          <a class="teacher-img" href="{{ path('user_show', {id:friend.id}) }}">
+          <a class="teacher-img" href="{{ user_show_path({id:friend.id}) }}">
             <img class="avatar-lg" src="{{ filepath(friend.largeAvatar, 'avatar.png') }}" alt="">
           </a>
           <h3 class="title">
             {% if not friend.destroyed|default(0) %}
-              <a class="link-dark" href="{{ path('user_show', {id:friend.id}) }}">{{ friend.nickname }}</a>
+              <a class="link-dark" href="{{ user_show_path({id:friend.id}) }}">{{ friend.nickname }}</a>
             {% else %}
               <a class="link-dark">{{ 'user.user_had_destroyed'|trans }}</a>
             {% endif %}
