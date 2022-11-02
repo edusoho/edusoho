@@ -1,6 +1,6 @@
 parameters:
     session.service_id: session.handler.pdo
-    marketing_mall_url: mall.edusoho.com
+    marketing_mall_url: mall.edusoho.cn
     cookie_domain: ~
     role_hierarchy:
         ROLE_TEACHER:     ROLE_USER

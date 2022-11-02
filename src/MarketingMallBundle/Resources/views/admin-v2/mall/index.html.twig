@@ -20,5 +20,8 @@
   </style>
 
   <input type="hidden" value="{{ url }}" id="iframe-url" />
+  {# 是否有微信公众号页面访问权限 #}
+  <input type="hidden" id="options" value="{{ options|json_encode }}"  /> 
+
   <div id="some-div"></div>
 {% endblock %}
