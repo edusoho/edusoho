@@ -58,6 +58,9 @@ class AddTableIndexV2 extends Migration
         ['type' => 'del', 'table' => 'user_activity_learn_flow', 'key' => 'userId'],
         ['type' => 'add', 'table' => 'biz_order_log', 'key' => 'order_id', 'value' => '`order_id`'],
         ['type' => 'add', 'table' => 'status', 'key' => 'courseId', 'value' => '`courseId`'],
+        ['type' => 'add', 'table' => 'biz_answer_report', 'key' => 'assessment_id', 'value' => '`assessment_id`'],
+        ['type' => 'add', 'table' => 'biz_answer_record', 'key' => 'assessment_id', 'value' => '`assessment_id`'],
+        ['type' => 'add', 'table' => 'biz_answer_question_report', 'key' => 'assessment_id', 'value' => '`assessment_id`'],
     ];
 
         foreach ($indexArr as $index) {
