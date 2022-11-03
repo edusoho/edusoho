@@ -32,7 +32,17 @@ class AddBizAnswerReportIndex extends Migration
      */
     public function down()
     {
+        if ($this->isIndexExist('biz_answer_record', 'assessment_id', 'assessment_id')) {
+            $this->biz['db']->exec('ALTER TABLE `biz_answer_record` DROP INDEX `assessment_id`;');
+        }
 
+        if ($this->isIndexExist('biz_answer_report', 'assessment_id', 'assessment_id')) {
+            $this->biz['db']->exec('ALTER TABLE `biz_answer_report` DROP INDEX `assessment_id`;');
+        }
+
+        if ($this->isIndexExist('biz_answer_question_report', 'assessment_id', 'assessment_id')) {
+            $this->biz['db']->exec('ALTER TABLE `biz_answer_question_report` DROP INDEX `assessment_id`;');
+        }
     }
 
     protected function isIndexExist($table, $filedName, $indexName)
