@@ -293,6 +293,7 @@ userType:
     apple: Apple登录
     marketing: 微营销
     distributor: 分销
+    marketing_mall: 网校商城注册
 
 userKeyWordTypes:
     nickname: 学员名
