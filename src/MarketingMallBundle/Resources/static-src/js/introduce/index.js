@@ -7,7 +7,7 @@ $pageContainer.on('scroll', () => {
   const offsetTop = $flag.offset().top
   const documentHeight = $document.height()
 
-  if ((documentHeight - offsetTop) > 110) {
+  if ((documentHeight - offsetTop) > 50) {
     $('.js-start-mall').removeClass('disabled').removeAttr('disabled');
     $pageContainer.off('scroll')
   }
