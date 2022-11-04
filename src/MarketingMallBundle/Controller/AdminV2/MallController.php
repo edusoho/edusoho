@@ -7,7 +7,6 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Firebase\JWT\JWT;
 use MarketingMallBundle\Biz\Mall\Service\MallService;
-use MarketingMallBundle\Biz\MallAdminProfile\Service\MallAdminProfileService;
 use Symfony\Component\HttpFoundation\Request;
 
 class MallController extends BaseController
@@ -18,8 +17,7 @@ class MallController extends BaseController
         if (empty($user['verifiedMobile'])) {
             return $this->redirectToRoute('admin_v2_mall_mobile_bind');
         }
-        $profile = $this->getMallAdminProfileService()->getMallAdminProfileByUserIdAndFieldName($user['id'], 'introduce_read');
-        if (empty($profile)) {
+        if (!$this->getMallService()->isIntroduceRead()) {
             return $this->redirectToRoute('admin_v2_mall_introduce');
         }
         $mallSettings = $this->getSettingService()->get('marketing_mall', []);
@@ -101,6 +99,10 @@ class MallController extends BaseController
                 return $this->createJsonResponse(['message' => 'user.settings.security.mobile_bind.fail'], 403);
             }
         }
+        $user = $this->getUser();
+        if (!empty($user['verifiedMobile'])) {
+            return $this->redirectToRoute('admin_v2_marketing_mall');
+        }
 
         return $this->render('MarketingMallBundle:admin-v2/mall:mobile.html.twig', ['targetUrl' => $this->generateUrl('admin_v2_marketing_mall')]);
     }
@@ -108,9 +110,12 @@ class MallController extends BaseController
     public function introduceAction(Request $request)
     {
         if ($request->isMethod('POST')) {
-            $this->getMallAdminProfileService()->setMallAdminProfile($this->getUser()->getId(), 'introduce_read', 1);
+            $this->getMallService()->readIntroduce();
 
             return $this->createJsonResponse(['success' => true]);
+        }
+        if ($this->getMallService()->isIntroduceRead()) {
+            return $this->redirectToRoute('admin_v2_marketing_mall');
         }
 
         return $this->render('MarketingMallBundle:admin-v2/mall:introduce.html.twig', []);
@@ -150,13 +155,5 @@ class MallController extends BaseController
     protected function getMallService()
     {
         return $this->createService('Mall:MallService');
-    }
-
-    /**
-     * @return MallAdminProfileService
-     */
-    protected function getMallAdminProfileService()
-    {
-        return $this->createService('MallAdminProfile:MallAdminProfileService');
     }
 }
