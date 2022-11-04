@@ -13,7 +13,9 @@ class MallServiceImpl extends BaseService implements MallService
 {
     public function isShow()
     {
-        return $this->getSetting('cloud_status.accessCloud', false) && !$this->getSetting('developer.without_network', false) && $this->getEduCloudService()->isSaaS();
+        $canSchoolShowMall = $this->getSetting('cloud_status.accessCloud', false) && !$this->getSetting('developer.without_network', false) && $this->getEduCloudService()->isSaaS();
+
+        return $canSchoolShowMall && $this->getCurrentUser()->hasPermission('admin_v2_marketing_mall');
     }
 
     public function isInit()
