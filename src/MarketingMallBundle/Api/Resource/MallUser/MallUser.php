@@ -31,6 +31,7 @@ class MallUser extends BaseResource
             return $user;
         }
         $fields['verifiedMobile'] = $fields['mobile'];
+        $fields['type'] = 'marketing_mall';
         $user = $this->getUserService()->register($fields, ['mobile']);
 
         if($fields['openId']) {
