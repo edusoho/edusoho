@@ -39,3 +39,9 @@ services:
     arguments: [ '@biz' ]
     tags:
       - { name: codeages_plugin.event.subscriber }
+
+  marketing_mall_mall_event_subscriber:
+    class: MarketingMallBundle\Biz\Mall\Event\MallEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+    - { name: codeages_plugin.event.subscriber }

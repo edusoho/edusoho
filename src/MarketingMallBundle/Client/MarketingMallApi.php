@@ -109,7 +109,7 @@ class MarketingMallApi
 
     public function setWechatMobileSetting($params)
     {
-        return $this->post('/api-school/wechatSetting/setWechatMobileSetting', $params);
+        return $this->post('/api-school/wechatSetting/setWechatMobileSetting', ...$params);
     }
 
 //    例子  token头直接设置了参数code也直接加了
