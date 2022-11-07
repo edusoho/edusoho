@@ -7,13 +7,16 @@ use Biz\CloudPlatform\Service\EduCloudService;
 use Biz\System\Service\SettingService;
 use Firebase\JWT\JWT;
 use MarketingMallBundle\Biz\Mall\Service\MallService;
+use MarketingMallBundle\Biz\MallAdminProfile\Service\MallAdminProfileService;
 use MarketingMallBundle\Client\MarketingMallApi;
 
 class MallServiceImpl extends BaseService implements MallService
 {
     public function isShow()
     {
-        return $this->getSetting('cloud_status.accessCloud', false) && !$this->getSetting('developer.without_network', false) && $this->getEduCloudService()->isSaaS();
+        $canSchoolShowMall = $this->getSetting('cloud_status.accessCloud', false) && !$this->getSetting('developer.without_network', false) && $this->getEduCloudService()->isSaaS();
+
+        return $canSchoolShowMall && $this->getCurrentUser()->hasPermission('admin_v2_marketing_mall');
     }
 
     public function isInit()
@@ -45,6 +48,18 @@ class MallServiceImpl extends BaseService implements MallService
         return $setting;
     }
 
+    public function readIntroduce()
+    {
+        $this->getMallAdminProfileService()->setMallAdminProfile($this->getCurrentUser()->getId(), 'introduce_read', 1);
+    }
+
+    public function isIntroduceRead()
+    {
+        $profile = $this->getMallAdminProfileService()->getMallAdminProfileByUserIdAndFieldName($this->getCurrentUser()->getId(), 'introduce_read');
+
+        return !empty($profile);
+    }
+
     protected function getSetting($name, $default = null)
     {
         return $this->createService('System:SettingService')->node($name, $default);
@@ -64,5 +79,13 @@ class MallServiceImpl extends BaseService implements MallService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return MallAdminProfileService
+     */
+    protected function getMallAdminProfileService()
+    {
+        return $this->createService('MallAdminProfile:MallAdminProfileService');
     }
 }
