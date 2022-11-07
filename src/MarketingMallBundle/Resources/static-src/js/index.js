@@ -1,7 +1,7 @@
 import Postmate from 'postmate'
 
 let search = window.location.search.replace('?path=', '')
-search = search ? decodeURIComponent(search) : '/?'
+search = search ? decodeURIComponent(search) : '/'
 
 let baseUrl = ''
 if (process.env.NODE_ENV === 'development') {
@@ -9,6 +9,7 @@ if (process.env.NODE_ENV === 'development') {
 } else if (process.env.NODE_ENV === 'production') {
   baseUrl = $('#iframe-url').val()
   baseUrl = baseUrl.split('/?')[0] + search + '?' + baseUrl.split('/?')[1]
+  
 }
 
 const handshake = new Postmate({
