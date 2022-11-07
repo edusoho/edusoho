@@ -9,7 +9,6 @@ if (process.env.NODE_ENV === 'development') {
 } else if (process.env.NODE_ENV === 'production') {
   baseUrl = $('#iframe-url').val()
   baseUrl = baseUrl.split('/?')[0] + search + '?' + baseUrl.split('/?')[1]
-  
 }
 
 const handshake = new Postmate({
