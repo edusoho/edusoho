@@ -12,7 +12,10 @@ use MarketingMallBundle\Api\Resource\BaseResource;
 
 class MallProductMember extends BaseResource
 {
-    private $info = ['remark' => '商城下单'];
+    private $info = [
+        'join' => ['remark' => '商城下单'],
+        'exit' => ['reason' => '商城退款', 'reason_type' => 'exit', 'reasonType' => 'exit'],
+    ];
 
     /**
      * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
@@ -28,19 +31,55 @@ class MallProductMember extends BaseResource
         return $this->$method($targetId, $userId);
     }
 
+    /**
+     * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
+     */
+    public function remove(ApiRequest $request, $targetType)
+    {
+        $userId = $request->request->get('userId');
+        $targetId = $request->request->get('targetId');
+        $method = "exit{$targetType}";
+        if (!method_exists($this, $method)) {
+            throw CommonException::NOTFOUND_METHOD();
+        }
+
+        return $this->$method($targetId, $userId);
+    }
+
     private function joinClassroom($targetId, $userId)
     {
-        return $this->getClassroomService()->becomeStudent($targetId, $userId, $this->info);
+        return $this->getClassroomService()->becomeStudent($targetId, $userId, $this->info['join']);
     }
 
     private function joinCourse($targetId, $userId)
     {
-        return $this->getCourseMemberService()->becomeStudent($targetId, $userId, $this->info);
+        return $this->getCourseMemberService()->becomeStudent($targetId, $userId, $this->info['join']);
     }
 
     private function joinQuestionBank($targetId, $userId)
     {
-        return $this->getExerciseMemberService()->becomeStudent($targetId, $userId, $this->info);
+        return $this->getExerciseMemberService()->becomeStudent($targetId, $userId, $this->info['join']);
+    }
+
+    private function exitClassroom($targetId, $userId)
+    {
+        $this->getClassroomService()->removeStudent($targetId, $userId, $this->info['exit']);
+
+        return true;
+    }
+
+    private function exitCourse($targetId, $userId)
+    {
+        $this->getCourseMemberService()->removeStudent($targetId, $userId, $this->info['exit']);
+
+        return true;
+    }
+
+    private function exitQuestionBank($targetId, $userId)
+    {
+        $this->getExerciseMemberService()->removeStudent($targetId, $userId, $this->info['exit']);
+
+        return true;
     }
 
     /**
