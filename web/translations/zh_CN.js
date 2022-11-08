@@ -1244,6 +1244,7 @@ t.add("admin.user.change_roles_success_hint", "\u89d2\u8272\u4fdd\u5b58\u6210\u5
 t.add("admin.user.change_roles_fail_hint", "\u64cd\u4f5c\u5931\u8d25", "js", "zh_CN");
 t.add("admin.user.update_org_success_hint", "\u4fee\u6539\u7528\u6237\u6240\u5c5e\u673a\u6784\u6210\u529f", "js", "zh_CN");
 t.add("admin.user.update_org_fail_hint", "\u64cd\u4f5c\u5931\u8d25", "js", "zh_CN");
+t.add("admin.user.staff.at_least_one_role", "\u81f3\u5c11\u4fdd\u7559\u4e00\u4e2a\u89d2\u8272", "js", "zh_CN");
 t.add("admin.wechat_app.mp_name_input.message", "\u8bf7\u586b\u519910\u4e2a\u5b57\u4ee5\u5185\u7684\u5c0f\u7a0b\u5e8f\u6807\u9898", "js", "zh_CN");
 t.add("admin.wechat_app.mp_description_input.message", "\u8bf7\u586b\u5199\u5c0f\u7a0b\u5e8f\u4ecb\u7ecd", "js", "zh_CN");
 t.add("admin.wechat_app.contact_name_input.message", "\u8bf7\u586b\u5199\u8054\u7cfb\u4eba\u59d3\u540d", "js", "zh_CN");

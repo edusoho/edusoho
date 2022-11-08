@@ -1393,6 +1393,7 @@ admin.user.change_roles_success_hint: 角色保存成功
 admin.user.change_roles_fail_hint: 操作失败
 admin.user.update_org_success_hint: 修改用户所属机构成功
 admin.user.update_org_fail_hint: 操作失败
+admin.user.staff.at_least_one_role: 至少保留一个角色
 admin.wechat_app.mp_name_input.message: 请填写10个字以内的小程序标题
 admin.wechat_app.mp_description_input.message: 请填写小程序介绍
 admin.wechat_app.contact_name_input.message: 请填写联系人姓名
