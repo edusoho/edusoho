@@ -1291,6 +1291,7 @@ t.add("admin.user.change_roles_success_hint", "User group saved successfully", "
 t.add("admin.user.change_roles_fail_hint", "operation failed", "js", "en");
 t.add("admin.user.update_org_success_hint", "Modify the user's organization success", "js", "en");
 t.add("admin.user.update_org_fail_hint", "operation failed", "js", "en");
+t.add("admin.user.staff.at_least_one_role", "Keep at least one role", "js", "en");
 t.add("admin.wechat_app.mp_name_input.message", "Please fill in the weapp title within 10 words", "js", "en");
 t.add("admin.wechat_app.mp_description_input.message", "Please fill out the weapp introduction", "js", "en");
 t.add("admin.wechat_app.contact_name_input.message", "Please fill in the contact name", "js", "en");
