@@ -30,7 +30,7 @@ define(function (require, exports, module) {
       });
       var $type = $form.find('input[name="type"]');
       if ($type.length > 0 && $type.val() === 'staff') {
-        if (roles.length === 1) {
+        if (roles.length <= 1) {
           Notify.danger(Translator.trans('admin.user.staff.at_least_one_role'));
           return false;
         }
