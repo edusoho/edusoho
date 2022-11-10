@@ -25,7 +25,7 @@
             <p class="help-block"> </p>
           </div>
           <div class="col-xs-6">
-            <button type="button" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send sms-send-btn" disabled  data-url="{{ path('edu_cloud_sms_send_check_captcha') }}" data-cloud-sms-url="{{ path('admin_v2_edu_cloud_sms_overview') }}">
+            <button type="button" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send sms-send-btn" disabled data-url="{{ path('edu_cloud_sms_send') }}" data-cloud-sms-url="{{ path('admin_v2_edu_cloud_sms_overview') }}">
               <span id="js-time-left"></span>
               <span id="js-fetch-btn-text">{{'user.settings.security.get_sms_code_btn'|trans}}</span>
             </button>
