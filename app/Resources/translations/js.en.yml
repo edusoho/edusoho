@@ -2186,3 +2186,5 @@ activity.summary.placeholder: Please enter the introduction (optional)
 open: Open
 close: Close
 live.chooser.video: Please set up live video
+
+cloud.sms_enable_hint: Cloud SMS is not enabled. Please go to <a href="%cloudSmsSettingUrl%" target="_blank">[Cloud SMS Settings]</a> to enable it
