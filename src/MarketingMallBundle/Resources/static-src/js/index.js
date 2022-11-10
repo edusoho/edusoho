@@ -7,8 +7,11 @@ let baseUrl = ''
 if (process.env.NODE_ENV === 'development') {
   baseUrl = 'http://localhost:8080/console-pc' + search
 } else if (process.env.NODE_ENV === 'production') {
-  baseUrl = $('#iframe-url').val()
-  baseUrl = baseUrl.split('/?')[0] + search + '?' + baseUrl.split('/?')[1]
+  const iframeUrl = $('#iframe-url').val()
+
+  baseUrl += iframeUrl.split('/?')[0] + search
+  baseUrl += search.indexOf('?') > -1 ? '&' : '?'
+  baseUrl += baseUrl.split('/?')[1]
 }
 
 const handshake = new Postmate({
