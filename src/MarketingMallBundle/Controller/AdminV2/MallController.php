@@ -85,9 +85,6 @@ class MallController extends BaseController
     {
         $scenario = 'sms_bind';
 
-        if ('1' != $this->setting('cloud_sms.sms_enabled') || 'on' != $this->setting("cloud_sms.{$scenario}")) {
-            return $this->render('settings/edu-cloud-error.html.twig', []);
-        }
         if ($request->isMethod('POST')) {
             list($result, $sessionField) = SmsToolkit::smsCheck($request, $scenario);
 

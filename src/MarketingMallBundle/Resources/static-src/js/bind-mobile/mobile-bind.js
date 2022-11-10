@@ -1,6 +1,7 @@
 import SmsSender from 'app/common/widget/sms-sender';
 import Cookies from 'js-cookie';
 import notify from 'common/notify';
+import ajax from 'common/api/ajax';
 import Drag from 'app/common/drag';
 import Coordinate from 'app/common/coordinate';
 
@@ -91,6 +92,11 @@ export default class MobileBind {
     let self = this;
 
     this.$smsCode.on('click', function () {
+      if (!self.isCloudSmsEnabled()) {
+        notify('warning', Translator.trans('cloud.sms_enable_hint', {cloudSmsSettingUrl: $(this).data('cloudSmsUrl')}));
+        return;
+      }
+
       self.$smsCode.attr('disabled', true);
       let coordinate = new Coordinate();
       const encryptedPoint = coordinate.getCoordinate(event, $('meta[name=csrf-token]').attr('content'));
@@ -121,6 +127,19 @@ export default class MobileBind {
         }
       });
     });
+  }
+
+  isCloudSmsEnabled() {
+    let enabled = false;
+    ajax({
+      async: false,
+      promise: false,
+      url: `/api/settings/cloud`,
+    }).success((res) => {
+      enabled = res.sms_enabled;
+    });
+
+    return enabled;
   }
 
   bindMobile() {
