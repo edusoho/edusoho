@@ -6,11 +6,11 @@ search = search ? decodeURIComponent(search) : '/'
 let baseUrl = ''
 if (process.env.NODE_ENV === 'development') {
   baseUrl = 'http://localhost:8080/console-pc' + search
-} else if (process.env.NODE_ENV === 'production') {
+} else {
   const iframeUrl = $('#iframe-url').val()
 
   baseUrl += iframeUrl.split('/?')[0]
-  baseUrl += search.indexOf('?') > -1 ? '&' : '?'
+  baseUrl += search + search.indexOf('?') > -1 ? '&' : '?'
   baseUrl += iframeUrl.split('/?')[1]
 }
 
