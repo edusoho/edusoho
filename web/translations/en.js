@@ -1954,4 +1954,5 @@ t.add("open", "Open", "js", "en");
 t.add("close", "Close", "js", "en");
 t.add("live.chooser.video", "Please set up live video", "js", "en");
 t.add("cloud.sms_enable_hint", "Cloud SMS is not enabled. Please go to <a href=\"%cloudSmsSettingUrl%\" target=\"_blank\">[Cloud SMS Settings]<\/a> to enable it", "js", "en");
+t.add("admin_v2.homepage.school_info.enter.copy_success", "Link copied successfully", "js", "en");
 })(Translator);
