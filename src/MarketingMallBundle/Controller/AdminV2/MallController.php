@@ -62,7 +62,7 @@ class MallController extends BaseController
         try {
             $smsInfo = CloudAPIFactory::create('root')->get('/me/sms_account');
 
-            return $smsInfo['usedSmsSign']['name'] && 'success' == $smsInfo['usedSmsSign']['status'];
+            return isset($smsInfo['usedSmsSign']['status']) && 'using' == $smsInfo['usedSmsSign']['status'];
         } catch (\Exception $e) {
             return false;
         }
