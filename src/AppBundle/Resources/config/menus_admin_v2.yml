@@ -2,6 +2,10 @@ admin_v2:
     name: admin_v2.basic_menu
     parent: null
     children:
+        # 商城模块
+        admin_v2_marketing_mall:
+            name: admin_v2.nav.mall
+            disable: true
         # 教务模块
         admin_v2_education:
             quick_entrance_icon_class: 'icon-color-green'
