@@ -105,7 +105,8 @@ class UserController extends BaseController
 
     public function teachAction(Request $request, $id)
     {
-        $user = $this->tryGetUser($id);
+//        $user = $this->tryGetUser($id);
+        $user = $this->tryGetUserByUUID($id);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -239,7 +240,8 @@ class UserController extends BaseController
 
     public function favoritedAction(Request $request, $id)
     {
-        $user = $this->tryGetUser($id);
+        //$user = $this->tryGetUser($id);
+        $user = $this->tryGetUserByUUID($id);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -281,7 +283,8 @@ class UserController extends BaseController
 
     public function groupAction(Request $request, $id)
     {
-        $user = $this->tryGetUser($id);
+//        $user = $this->tryGetUser($id);
+        $user = $this->tryGetUserByUUID($id);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -329,7 +332,8 @@ class UserController extends BaseController
 
     public function followingAction(Request $request, $id)
     {
-        $user = $this->tryGetUser($id);
+//        $user = $this->tryGetUser($id);
+        $user = $this->tryGetUserByUUID($id);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -453,23 +457,24 @@ class UserController extends BaseController
 
     public function cardShowAction(Request $request, $userId)
     {
-        $studentInfoEnable = $this->getUserService()->getStudentOpenInfo($userId);
+        $user = $this->tryGetUserByUUID($userId);
+
+        $studentInfoEnable = $this->getUserService()->getStudentOpenInfo($user['id']);
         if (0 === $studentInfoEnable) {
             return $this->createJsonResponse(false);
         }
 
-        $user = $this->tryGetUser($userId);
         $currentUser = $this->getCurrentUser();
-        $profile = $this->getUserService()->getUserProfile($userId);
+        $profile = $this->getUserService()->getUserProfile($user['id']);
         $isFollowed = false;
 
         if ($currentUser->isLogin()) {
-            $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $userId);
+            $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $user['id']);
         }
 
-        $user['learningNum'] = $this->getCourseService()->countUserLearningCourses($userId);
-        $user['followingNum'] = $this->getUserService()->findUserFollowingCount($userId);
-        $user['followerNum'] = $this->getUserService()->findUserFollowerCount($userId);
+        $user['learningNum'] = $this->getCourseService()->countUserLearningCourses($user['id']);
+        $user['followingNum'] = $this->getUserService()->findUserFollowingCount($user['id']);
+        $user['followerNum'] = $this->getUserService()->findUserFollowerCount($user['id']);
         $levels = [];
 
         if ($this->isPluginInstalled('Vip')) {
@@ -628,7 +633,7 @@ class UserController extends BaseController
 
     public function itemBankTeachAction(Request $request, $id)
     {
-        $user = $this->tryGetUser($id);
+        $user = $this->tryGetUserByUUID($id);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);

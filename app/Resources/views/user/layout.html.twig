@@ -19,23 +19,23 @@
 {% block content %}
   {% if not user.destroyed|default(0) %}
   <ul class="nav nav-tabs clearfix" {% if 'ROLE_TEACHER' in user.roles %} style="width: 1260px" {% endif %}>
-    <li {% if pageNav == 'about' %}class="active"{% endif %}><a href="{{ path('user_about', {id: user.id}) }}">{{'user.homepage.introductions'|trans}}</a></li>
+    <li {% if pageNav == 'about' %}class="active"{% endif %}><a href="{{ path('user_about', {id: user.uuid}) }}">{{'user.homepage.introductions'|trans}}</a></li>
   	{% if 'ROLE_TEACHER' in user.roles or 'ROLE_TEACHER_ASSISTANT' in user.roles %}
-	    <li {% if pageNav == 'teach' %}class="active"{% endif %}><a href="{{ path('user_teach', {id: user.id}) }}">{{'user.homepage.teaching'|trans}}</a></li>
+	    <li {% if pageNav == 'teach' %}class="active"{% endif %}><a href="{{ path('user_teach', {id: user.uuid}) }}">{{'user.homepage.teaching'|trans}}</a></li>
     {% endif %}
 
     {% if 'ROLE_TEACHER' in user.roles %}
-{#      <li {% if pageNav == 'teaching' %}class="active"{% endif %}><a href="{{ path('user_teaching_classrooms', {id:user.id}) }}">{{'user.homepage.teaching_classrooms'|trans({'%classroomName%':setting('classroom.name')|default('classroom'|trans)})}}</a></li>#}
-{#      <li {% if pageNav == 'question_bank_teaching' %}class="active"{% endif %}><a href="{{ path('user_question_bank_teach', {id:user.id}) }}">{{'user.homepage.teaching_question_bank'|trans }}</a></li>#}
+{#      <li {% if pageNav == 'teaching' %}class="active"{% endif %}><a href="{{ path('user_teaching_classrooms', {id:user.uuid}) }}">{{'user.homepage.teaching_classrooms'|trans({'%classroomName%':setting('classroom.name')|default('classroom'|trans)})}}</a></li>#}
+{#      <li {% if pageNav == 'question_bank_teaching' %}class="active"{% endif %}><a href="{{ path('user_question_bank_teach', {id:user.uuid}) }}">{{'user.homepage.teaching_question_bank'|trans }}</a></li>#}
     {% endif %}
 
-    <li {% if pageNav == 'learn' %}class="active"{% endif %}><a href="{{ path('user_learn', {id:user.id}) }}">{{'user.homepage.learning'|trans}}</a></li>
-{#    <li {% if pageNav == 'learning' %}class="active"{% endif %}><a href="{{ path('user_learning_classrooms', {id:user.id}) }}">{{'user.homepage.learning_classrooms'|trans({'%classroomName%':setting('classroom.name')|default('classroom'|trans)})}}</a></li>#}
-{#    <li {% if pageNav == 'question_bank_learning' %}class="active"{% endif %}><a href="{{ path('user_question_bank_learn', {id:user.id}) }}">{{'user.homepage.learning_question_bank'|trans}}</a></li>#}
+    <li {% if pageNav == 'learn' %}class="active"{% endif %}><a href="{{ path('user_learn', {id:user.uuid}) }}">{{'user.homepage.learning'|trans}}</a></li>
+{#    <li {% if pageNav == 'learning' %}class="active"{% endif %}><a href="{{ path('user_learning_classrooms', {id:user.uuid}) }}">{{'user.homepage.learning_classrooms'|trans({'%classroomName%':setting('classroom.name')|default('classroom'|trans)})}}</a></li>#}
+{#    <li {% if pageNav == 'question_bank_learning' %}class="active"{% endif %}><a href="{{ path('user_question_bank_learn', {id:user.uuid}) }}">{{'user.homepage.learning_question_bank'|trans}}</a></li>#}
 
-    <li {% if pageNav == 'favorited' %}class="active"{% endif %}><a href="{{ path('user_favorited', {id:user.id}) }}">{{'user.homepage.favorite_goods'|trans}}</a></li>
-    <li {% if pageNav == 'group' %}class="active"{% endif %}><a href="{{path('user_group',{id:user.id})}}">{{'user.homepage.joined_group'|trans}}</a></li>
-    <li {% if pageNav == 'friend' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.id}) }}">{{'user.homepage.following_fan'|trans}}</a></li>
+    <li {% if pageNav == 'favorited' %}class="active"{% endif %}><a href="{{ path('user_favorited', {id:user.uuid}) }}">{{'user.homepage.favorite_goods'|trans}}</a></li>
+    <li {% if pageNav == 'group' %}class="active"{% endif %}><a href="{{path('user_group',{id:user.uuid})}}">{{'user.homepage.joined_group'|trans}}</a></li>
+    <li {% if pageNav == 'friend' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.uuid}) }}">{{'user.homepage.following_fan'|trans}}</a></li>
   </ul>
   {% block main %}{% endblock %}
   {% endif %}

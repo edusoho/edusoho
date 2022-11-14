@@ -289,7 +289,10 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $learnCourseIds = $this->getCourseService()->findUserLearnCourseIds($userId);

@@ -117,7 +117,10 @@ class ResultServiceImpl extends BaseService implements ResultService
 
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $itemsGroup = ArrayToolkit::group($this->getInformationCollectEventService()->findItemsByEventId($eventId), 'required');

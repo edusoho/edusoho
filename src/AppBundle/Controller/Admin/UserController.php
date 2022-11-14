@@ -281,7 +281,10 @@ class UserController extends BaseController
 
     public function showAction(Request $request, $id)
     {
-        $user = $this->getUserService()->getUser($id);
+        $user = $this->getUserService()->getUserByUUID($id);
+        if(empty($user)) {
+            $user = $this->getUserService()->getUser($id);
+        }
         $profile = $this->getUserService()->getUserProfile($id);
         $profile['title'] = $user['title'];
 
@@ -448,7 +451,10 @@ class UserController extends BaseController
         $user = $this->getUserService()->getUser($id);
 
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($id);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
@@ -481,7 +487,10 @@ class UserController extends BaseController
         $user = $this->getUserService()->getUser($id);
 
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($id);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));

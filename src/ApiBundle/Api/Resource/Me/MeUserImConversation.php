@@ -17,7 +17,10 @@ class MeUserImConversation extends AbstractResource
     {
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
-            throw UserException::NOTFOUND_USER();
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                throw UserException::NOTFOUND_USER();
+            }
         }
 
         $currentUser = $this->getCurrentUser();

@@ -11,7 +11,7 @@
                     <img class="js-user-card reviews-item__img"
                          :src="review.user.avatar.large"
                          :data-user-id="review.user.id"
-                         :data-card-url="`/user/${review.user.id}/card/show`"
+                         :data-card-url="`/user/${review.user.uuid}/card/show`"
                          alt=""
                     >
                 </a>
@@ -53,7 +53,7 @@
                                         <img class="avatar-sm js-user-card"
                                              :src="post.user.avatar.large"
                                              :data-user-id="post.user.id"
-                                             :data-card-url="`/user/${post.user.id}/card/show`"
+                                             :data-card-url="`/user/${post.user.uuid}/card/show`"
                                              alt=""
                                         >
                                     </a>
@@ -295,11 +295,11 @@
             generateReviewPostLi(post) {
                 let html = '<li class="thread-post thread-subpost-' + post.id + ' media">\n' +
                     '  <div class="media-left">\n' +
-                    `<a href="/user/${post.user.id}" target="_blank">
+                    `<a href="/user/${post.user.uuid}" target="_blank">
                         <img class="avatar-sm js-user-card"
                              src="${post.user.avatar.large}"
                              data-user-id="${post.user.id}"
-                             data-card-url="/user/${post.user.id}/card/show"
+                             data-card-url="/user/${post.user.uuid}/card/show"
                              alt=""
                         >
                     </a>` +
