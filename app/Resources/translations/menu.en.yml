@@ -460,6 +460,7 @@ admin.operation.query_menu.basic_tab: Use Query
 admin_v2.basic_menu: Admin
 
 # 新版后台顶部导航
+admin_v2.nav.mall: Mall
 admin_v2.nav.education: Education
 admin_v2.nav.teach: Teach
 admin_v2.nav.marketing: Marketing
