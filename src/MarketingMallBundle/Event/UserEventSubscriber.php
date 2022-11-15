@@ -47,32 +47,32 @@ class UserEventSubscriber extends BaseEventSubscriber
     {
         $user = $event->getSubject();
         $this->syncUserInfoToMarketingMall($user['id']);
-
     }
 
     public function onUserLock(Event $event)
     {
         $user = $event->getSubject();
         $this->syncUserInfoToMarketingMall($user['id']);
-
     }
 
     public function onUserUnLock(Event $event)
     {
         $user = $event->getSubject();
         $this->syncUserInfoToMarketingMall($user['id']);
-
     }
 
     public function onUserRoleChange(Event $event)
     {
         $user = $event->getSubject();
         $this->syncUserInfoToMarketingMall($user['id']);
-
     }
 
     protected function syncUserInfoToMarketingMall($userId)
     {
+        $user = $this->getUserService()->getUser($userId);
+        if ('marketing_mall' != $user['type']) {
+            return;
+        }
         $data = $this->getSyncListService()->getSyncDataId($userId);
 
         foreach ($data as $value) {
