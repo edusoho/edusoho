@@ -9,9 +9,7 @@ if (process.env.NODE_ENV === 'development') {
 } else {
   const iframeUrl = $('#iframe-url').val()
 
-  baseUrl += iframeUrl.split('/?')[0]
-  baseUrl += search + search.indexOf('?') > -1 ? '&' : '?'
-  baseUrl += iframeUrl.split('/?')[1]
+  baseUrl = iframeUrl.split('/?')[0] + search + (search.indexOf('?') > -1 ? '&' : '?') + iframeUrl.split('/?')[1]
 }
 
 const handshake = new Postmate({
