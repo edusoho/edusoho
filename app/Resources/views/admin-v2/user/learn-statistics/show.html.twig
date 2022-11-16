@@ -104,7 +104,7 @@
               <tr>
               <td>
                 {% if has_permission('admin_v2_user_manage') %}
-                  <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ user_show_path({id:user.id}) }}">{{ user.nickname|default('--') }}</a>
+                  <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_user_show', {id:user.uuid})  }}">{{ user.nickname|default('--') }}</a>
                 {% else %}
                   <span><a target="_blank" href="{{ user_show_path({id: user.id}) }}">
                   {{ user.nickname }}</a></span>

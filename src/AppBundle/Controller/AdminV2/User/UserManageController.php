@@ -295,7 +295,7 @@ class UserManageController extends BaseController
         $user = $this->getUserService()->getUserByUUID($id);
         if(empty($user)) {
             $this->createNewException(UserException::NOTFOUND_USER());
-            $this->getUserService()->getUser($id);
+//            $this->getUserService()->getUser($id);
         }
         if (1 == $user['destroyed']) {
             return $this->render('admin-v2/user/user-manage/show-destroyed-modal.html.twig', []);
