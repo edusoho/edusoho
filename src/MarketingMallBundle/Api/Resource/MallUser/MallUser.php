@@ -44,6 +44,51 @@ class MallUser extends BaseResource
     }
 
     /**
+     * @param ApiRequest $request
+     * @param $identify
+     * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
+     * @return null | array
+     */
+    public function get(ApiRequest $request, $identify)
+    {
+        $identifyType = $request->query->get('identifyType', 'id');
+
+        $methods = [
+            'id' => 'getUser',
+            'email' => 'getUserByEmail',
+            'mobile' => 'getUserByVerifiedMobile',
+            'nickname' => 'getUserByNickname',
+            'uuid' => 'getUserByUUID',
+        ];
+        if ('nickname' == $identifyType) {
+            $identify = urldecode($identify);
+        }
+        if (empty($methods[$identifyType])) {
+            return null;
+        }
+        $method = $methods[$identifyType];
+
+        return $this->getUserService()->$method($identify);
+    }
+
+    /**
+     * @param ApiRequest $request
+     * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
+     * @return array
+     */
+    public function search(ApiRequest $request)
+    {
+        $ids = explode(',', $request->query->get('userIds'));
+        $users = $this->getUserService()->findUsersByIds($ids);
+        $userProfiles = $this->getUserService()->findUserProfilesByIds($ids);
+        foreach ($userProfiles as $userProfile) {
+            $users[$userProfile['id']]['about'] = $userProfile['about'];
+        }
+
+        return array_values($users);
+    }
+
+    /**
      * @return UserService
      */
     protected function getUserService()
