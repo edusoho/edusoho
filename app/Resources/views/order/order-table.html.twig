@@ -43,9 +43,9 @@
             <td>
               {#添加admin_v2#}
               {% if setting('backstage.is_v2',0)  == 0 %}
-                {% set dataUrl = path('admin_user_show', {id:buyer.id}) %}
+                {% set dataUrl = user_show_path({id:buyer.id}) %}
               {% else %}
-                {% set dataUrl=  path('admin_v2_user_show', {id:buyer.id}) %}
+                {% set dataUrl=  user_show_path({id:buyer.id}) %}
               {% endif %}
               <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ dataUrl }}">{{ buyer.nickname|default('--') }}</a>
             </td>

@@ -283,9 +283,9 @@ class UserController extends BaseController
     {
         $user = $this->getUserService()->getUserByUUID($id);
         if(empty($user)) {
-            $user = $this->getUserService()->getUser($id);
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
-        $profile = $this->getUserService()->getUserProfile($id);
+        $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
 
         $fields = $this->getFields();

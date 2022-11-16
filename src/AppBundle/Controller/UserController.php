@@ -58,7 +58,11 @@ class UserController extends BaseController
 
     public function showAction(Request $request, $id)
     {
-        $user = $this->tryGetUserByUUID($id);
+//        $user = $this->tryGetUserByUUID($id);
+        $user = $this->getUserService()->getUserByUUID($id);
+        if(empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
 
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
@@ -86,7 +90,10 @@ class UserController extends BaseController
     public function learnAction(Request $request, $id)
     {
 //        $user = $this->tryGetUser($id);
-        $user = $this->tryGetUserByUUID($id);
+        $user = $this->getUserService()->getUserByUUID($id);
+        if(empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -98,7 +105,10 @@ class UserController extends BaseController
     public function aboutAction(Request $request, $id)
     {
         //$user = $this->tryGetUser($id);
-        $user = $this->tryGetUserByUUID($id);
+        $user = $this->getUserService()->getUserByUUID($id);
+        if(empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
 
         return $this->_aboutAction($user);
     }
@@ -106,7 +116,10 @@ class UserController extends BaseController
     public function teachAction(Request $request, $id)
     {
 //        $user = $this->tryGetUser($id);
-        $user = $this->tryGetUserByUUID($id);
+        $user = $this->getUserService()->getUserByUUID($id);
+        if(empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -241,7 +254,10 @@ class UserController extends BaseController
     public function favoritedAction(Request $request, $id)
     {
         //$user = $this->tryGetUser($id);
-        $user = $this->tryGetUserByUUID($id);
+        $user = $this->getUserService()->getUserByUUID($id);
+        if(empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -284,7 +300,10 @@ class UserController extends BaseController
     public function groupAction(Request $request, $id)
     {
 //        $user = $this->tryGetUser($id);
-        $user = $this->tryGetUserByUUID($id);
+        $user = $this->getUserService()->getUserByUUID($id);
+        if(empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -333,7 +352,10 @@ class UserController extends BaseController
     public function followingAction(Request $request, $id)
     {
 //        $user = $this->tryGetUser($id);
-        $user = $this->tryGetUserByUUID($id);
+        $user = $this->getUserService()->getUserByUUID($id);
+        if(empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -367,7 +389,11 @@ class UserController extends BaseController
 
     public function followerAction(Request $request, $id)
     {
-        $user = $this->tryGetUser($id);
+//        $user = $this->tryGetUser($id);
+        $user = $this->getUserService()->getUserByUUID($id);
+        if(empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);

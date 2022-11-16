@@ -292,11 +292,14 @@ class UserManageController extends BaseController
 
     public function showAction(Request $request, $id)
     {
-        $user = $this->getUserService()->getUser($id);
+        $user = $this->getUserService()->getUserByUUID($id);
+        if(empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
         if (1 == $user['destroyed']) {
             return $this->render('admin-v2/user/user-manage/show-destroyed-modal.html.twig', []);
         }
-        $profile = $this->getUserService()->getUserProfile($id);
+        $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
 
         $fields = $this->getFields();

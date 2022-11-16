@@ -69,7 +69,7 @@
   </td>
   <td>
     <div class="btn-group">
-      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">{{ 'admin.user.btn.show_btn'|trans }}</a>
+      <a href="#modal" data-toggle="modal" data-url="{{ user_show_path({id:user.id}) }}" data-url="" class="btn btn-default btn-sm">{{ 'admin.user.btn.show_btn'|trans }}</a>
       {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_user_manage', group:'groupButton', user: user} %}
     </div>
   </td>
