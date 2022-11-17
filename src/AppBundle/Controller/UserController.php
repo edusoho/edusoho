@@ -196,7 +196,11 @@ class UserController extends BaseController
 
     public function teachingAction(Request $request, $id)
     {
-        $user = $this->tryGetUserByUUID($id);
+//        $user = $this->tryGetUserByUUID($id);
+        $user = $this->getUserService()->getUserByUUID($id);
+        if(empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -666,7 +670,11 @@ class UserController extends BaseController
 
     public function itemBankTeachAction(Request $request, $id)
     {
-        $user = $this->tryGetUserByUUID($id);
+//        $user = $this->tryGetUserByUUID($id);
+        $user = $this->getUserService()->getUserByUUID($id);
+        if(empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
