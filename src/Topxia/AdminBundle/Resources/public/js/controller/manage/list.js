@@ -41,7 +41,7 @@ define(function(require, exports, module) {
         }).done(function(resp) {
             if (resp.isShow && resp.isInit) {
                 $(".js-is-sass").removeClass('hidden')
-                $('.js-mall-order').attr('href', resp.url.split('/custom-h5')[0] + '/console-pc/deal/order/manage')
+                $('.js-mall-order').attr('href', $('.js-mall-order').data('url'))
             }
         })
     };
