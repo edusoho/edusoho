@@ -7,17 +7,17 @@
                            :current-user-id="currentUserId"
                            :captcha="captcha"></create-review>
             <div class="reviews-item" v-for="review in reviews" :key="review.id" :class="'reviews-item-'+ review.id">
-                <a  target="_blank" :class="'card-'+review.user.id">
+                <a  target="_blank" :class="'card-'+review.user.uuid">
                     <img class="js-user-card reviews-item__img"
                          :src="review.user.avatar.large"
-                         :data-user-id="review.user.id"
+                         :data-user-id="review.user.uuid"
                          :data-card-url="`/user/${review.user.uuid}/card/show`"
                          alt=""
                     >
                 </a>
                 <div class="reviews-item__text reviews-text">
                     <div class="reviews-text__nickname">
-                        <a class="link-dark js-user-url" :class="'user-url-'+review.user.uuid" :data-userid ="review.user.id" target="_blank">{{ review.user.nickname }}</a>
+                        <a class="link-dark js-user-url" :class="'user-url-'+review.user.uuid" :data-userid ="review.user.uuid" target="_blank">{{ review.user.nickname }}</a>
                         <!--                    <span>{{ review.target.title }}</span>-->
                         {{ review.createdTime | createdTime }}
                     </div>
