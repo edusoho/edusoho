@@ -13,7 +13,7 @@ use MarketingMallBundle\Api\Resource\BaseResource;
 class MallProductMember extends BaseResource
 {
     private $info = [
-        'join' => ['remark' => '商城下单'],
+        'join' => ['remark' => '商城下单', 'reason' => '商城下单', 'reasonType' => 'mall_join'],
         'exit' => ['reason' => '商城退款', 'reason_type' => 'exit', 'reasonType' => 'exit'],
     ];
 
