@@ -31,7 +31,7 @@
       <div class="piece-body clearfix">
         <div class="grouplist">
           {% if not owner_info.destroyed|default(0) %}
-          <a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}"  >
+          <a href="{{user_show_path({id:owner_info.id})}}" title="{{owner_info.nickname}}"  >
             <img src="{{ filepath(owner_info.largeAvatar, 'avatar.png') }}" alt="{{owner_info.nickname}}" class="avatar-md">
           </a>
           {% else %}
@@ -167,7 +167,7 @@
         </div>
         <div class="media-body">
           {% if not groupOwner.destroyed|default(0) %}
-            <div><a class="gray-darker" href="{{path('user_show',{id:groupOwner.id})}}" title="{{groupOwner.nickname}}">{{groupOwner.nickname}}</a></div>
+            <div><a class="gray-darker" href="{{user_show_path({id:groupOwner.id})}}" title="{{groupOwner.nickname}}">{{groupOwner.nickname}}</a></div>
           {% else %}
             <div><a class="gray-darker">{{ 'user.user_had_destroyed'|trans }}</a></div>
           {% endif %}
