@@ -217,6 +217,7 @@ class ReadDocx
         $docXml->encoding = mb_detect_encoding($xml);
         $docXml->preserveWhiteSpace = false; //default true
         $docXml->formatOutput = true; //default true
+        $xml = str_replace('&nbsp;', '&#160;', $xml);
         $docXml->loadXML($xml);
 
         return $docXml;
