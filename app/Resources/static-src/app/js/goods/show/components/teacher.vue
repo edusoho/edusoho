@@ -4,7 +4,7 @@
     <div class="teacher-info clearfix" v-for="item in teachers" :key="item.id">
       <a :href="`/user/${item.uuid}`" target="_blank">
           <img class="js-user-card teacher-info__img pull-left"
-               :data-user-id="item.uuid"
+               :data-user-id="item.id"
                :data-card-url="`/user/${item.uuid}/card/show`"
                :src="item.avatar.large"
                alt=""

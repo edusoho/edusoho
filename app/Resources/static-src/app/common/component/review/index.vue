@@ -17,7 +17,7 @@
                 </a>
                 <div class="reviews-item__text reviews-text">
                     <div class="reviews-text__nickname">
-                        <a class="link-dark js-user-url" :class="'user-url-'+review.user.id" :data-userid ="review.user.id" target="_blank">{{ review.user.nickname }}</a>
+                        <a class="link-dark js-user-url" :class="'user-url-'+review.user.uuid" :data-userid ="review.user.id" target="_blank">{{ review.user.nickname }}</a>
                         <!--                    <span>{{ review.target.title }}</span>-->
                         {{ review.createdTime | createdTime }}
                     </div>
@@ -316,7 +316,7 @@
                         Translator.trans('site.delete') + '</a></li></ul></div>';
                 }
 
-                html = html + `      <a class="link-dark" href="/user/${post.user.id}" target="_blank">\n` + post.user.nickname +
+                html = html + `      <a class="link-dark" href="/user/${post.user.uuid}" target="_blank">\n` + post.user.nickname +
                     '      </a>\n' +
                     '      <span class="bullet">•</span>\n' +
                     '      <span class="color-gray">' + Translator.trans('site.twig.extension.smarttime.hardly') + '</span>\n' +
