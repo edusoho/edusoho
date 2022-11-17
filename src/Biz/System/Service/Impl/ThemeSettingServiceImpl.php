@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\System\Service\Impl;
-
 
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
@@ -10,13 +8,15 @@ use Biz\System\Service\ThemeSettingService;
 
 class ThemeSettingServiceImpl extends BaseService implements ThemeSettingService
 {
-    public function isSupportUUIDUser()
+    public function isSupportGetUserById()
     {
         $theme = $this->getSettingService()->get('theme');
 
-        if(!in_array($theme['code']??'jianmo',['jianmo','qiuya'])){
-            return true;
+        if(in_array($theme['code']??'jianmo', ['jianmo', 'default', 'defaultb', 'graceful', 'autumn', 'certificate'])){
+            return false;
         }
+
+        return true;
     }
 
     /**

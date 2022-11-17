@@ -58,12 +58,7 @@ class UserController extends BaseController
 
     public function showAction(Request $request, $id)
     {
-//        $user = $this->tryGetUserByUUID($id);
-        $user = $this->getUserService()->getUserByUUID($id);
-        if(empty($user)) {
-//            $this->createNewException(UserException::NOTFOUND_USER());
-            $user = $this->getUserService()->getUser($id);
-        }
+        $user = $this->tryGetUserByUUID($id);
 
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
@@ -196,11 +191,8 @@ class UserController extends BaseController
 
     public function teachingAction(Request $request, $id)
     {
-//        $user = $this->tryGetUserByUUID($id);
-        $user = $this->getUserService()->getUserByUUID($id);
-        if(empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
-        }
+        $user = $this->tryGetUserByUUID($id);
+
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -397,11 +389,8 @@ class UserController extends BaseController
 
     public function followerAction(Request $request, $id)
     {
-//        $user = $this->tryGetUser($id);
-        $user = $this->getUserService()->getUserByUUID($id);
-        if(empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
-        }
+        $user = $this->tryGetUserByUUID($id);
+
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -656,10 +645,8 @@ class UserController extends BaseController
 
     public function itemBankLearnAction(Request $request, $id)
     {
-        $user = $this->getUserService()->getUserByUUID($id);
-        if(empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
-        }
+        $user = $this->tryGetUserByUUID($id);
+
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -670,11 +657,8 @@ class UserController extends BaseController
 
     public function itemBankTeachAction(Request $request, $id)
     {
-//        $user = $this->tryGetUserByUUID($id);
-        $user = $this->getUserService()->getUserByUUID($id);
-        if(empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
-        }
+        $user = $this->tryGetUserByUUID($id);
+
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
@@ -766,11 +750,11 @@ class UserController extends BaseController
     {
         $user = $this->getUserService()->getUserByUUID($id);
 
-        if (empty($user)) {
-            if(!$this->getThemeSettingService()->isSupportUUIDUser()) {
-                return $this->tryGetUser($id);
-            }
+        if (empty($user) && $this->getThemeSettingService()->isSupportGetUserById()) {
+            $user = $this->tryGetUser($id);
+        }
 
+        if (empty($user)) {
             $this->createNewException(UserException::NOTFOUND_USER());
         }
 
