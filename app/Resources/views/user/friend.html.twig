@@ -8,8 +8,8 @@
 
 
 <ul class="nav nav-pills mbl">
-  <li {% if friendNav == 'following' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.id}) }}">{{'user.fields.following'|trans}}</a></li>
-  <li {% if friendNav == 'follower' %}class="active"{% endif %}><a href="{{ path('user_follower', {id:user.id}) }}">{{'user.fields.fan'|trans}}</a></li>
+  <li {% if friendNav == 'following' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.uuid}) }}">{{'user.fields.following'|trans}}</a></li>
+  <li {% if friendNav == 'follower' %}class="active"{% endif %}><a href="{{ path('user_follower', {id:user.uuid}) }}">{{'user.fields.fan'|trans}}</a></li>
 </ul>
 
 <div class="row">
