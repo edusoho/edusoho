@@ -8,7 +8,7 @@
       {% set data = notification.content %}
       {% set group = macro.link(data.title, path('group_show',{id:data.id})) %}
        {% if data.type == 'chownout'%}
-         {% set who = macro.link(data.userName, path('user_show',{id:data.userId})) %}
+         {% set who = macro.link(data.userName, user_show_path({id:data.userId})) %}
           {{ 'notification.group-profile.chownout'|trans({'%group%':group, '%who%':who})|raw }}
 
        {% elseif data.type =='chownin'%}

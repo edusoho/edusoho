@@ -6,7 +6,7 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-      {% set who = macro.link(data.userName, path('user_show',{id:data.userId})) %}
+      {% set who = macro.link(data.userName, user_show_path({id:data.userId})) %}
       {{ 'notification.role'|trans({'%role%':data.role, '%who%':who})|raw }}
     </div>
     <div class="notification-footer">
