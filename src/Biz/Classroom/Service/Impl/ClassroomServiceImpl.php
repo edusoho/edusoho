@@ -1104,7 +1104,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
@@ -1271,7 +1274,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $isStudent = $this->isClassroomStudent($classroom['id'], $user['id']);
@@ -1574,7 +1580,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
@@ -1619,7 +1628,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $fields = [
@@ -1658,7 +1670,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $user = $this->getUserService()->getUser($userId);
 
             if (empty($user)) {
-                $this->createNewException(UserException::NOTFOUND_USER());
+                $user = $this->getUserService()->getUserByUUID($userId);
+                if(empty($user)) {
+                    $this->createNewException(UserException::NOTFOUND_USER());
+                }
             }
         } else {
             $user = $this->getCurrentUser();

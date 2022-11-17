@@ -4,9 +4,9 @@
 {% block main %}
 
   <ul class="nav nav-pills mbl">
-    <li><a href="{{ path('user_learn', {id:user.id}) }}">{{'site.default.course'|trans}}</a></li>
-    <li class="active"><a href="{{ path('user_learning_classrooms', {id:user.id}) }}">{{'site.default.classroom.notempty'|trans}}</a></li>
-    <li><a href="{{ path('user_question_bank_learn', {id:user.id}) }}">{{'site.default.question.bank'|trans}}</a></li>
+    <li><a href="{{ path('user_learn', {id:user.uuid}) }}">{{'site.default.course'|trans}}</a></li>
+    <li class="active"><a href="{{ path('user_learning_classrooms', {id:user.uuid}) }}">{{'site.default.classroom.notempty'|trans}}</a></li>
+    <li><a href="{{ path('user_question_bank_learn', {id:user.uuid}) }}">{{'site.default.question.bank'|trans}}</a></li>
   </ul>
 
   {% if classrooms %}

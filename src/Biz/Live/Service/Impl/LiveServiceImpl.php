@@ -241,7 +241,10 @@ class LiveServiceImpl extends BaseService implements LiveService
         $user = $this->getUserService()->getUser($speakerId);
 
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($speakerId);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         return $user['nickname'];

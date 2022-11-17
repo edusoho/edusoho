@@ -45,7 +45,7 @@
             <p>
               {% if user %}
                 <i class="text-muted glyphicon glyphicon-user"></i>
-                <a href="{{ path('user_show', {userId:user.id}) }}">{{ user.nickname }}</a>
+                <a href="{{ user_show_path({userId:user.id}) }}">{{ user.nickname }}</a>
               {% else %}
                 <span class="label label-danger">{{'admin.file_manage.student_empty_tips'|trans}}</span>
               {% endif %}

@@ -34,9 +34,9 @@
               <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn|default('--') }}</span>
             </td>
             {% if has_permission('admin_user_manage') %}
-              <td><a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:user.id}) }}">{{ user.nickname|default('--') }}</a></td>
+              <td><a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ user_show_path({id:user.id}) }}">{{ user.nickname|default('--') }}</a></td>
             {% else %}
-              <td><a target="_blank" href="{{ path('user_show', { id:user.id }) }}">
+              <td><a target="_blank" href="{{ user_show_path({ id:user.id }) }}">
               {{ user.nickname }}</a></td>
             {% endif %}
             <td>{{ cash.created_time|date('Y-m-d H:i') }}</td>

@@ -24,7 +24,10 @@ class UserProfile extends AbstractResource
 
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
-            throw UserException::NOTFOUND_USER();
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                throw UserException::NOTFOUND_USER();
+            }
         }
 
         if (1 == $user['destroyed']) {

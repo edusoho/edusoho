@@ -51,12 +51,12 @@
       <td><span class="color-warning">{{order.pay_amount|to_cash(0) }}</span></td>
       {% if has_permission('admin_v2_user_manage') %}
         <td>
-          <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_user_show', {id:buyer.id|default(0)}) }}">{{ buyer.nickname|default('--') }}</a>
+          <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_user_show', {id:buyer.uuid|default(0)}) }}">{{ buyer.nickname|default('--') }}</a>
           <p class="color-gray">{{ buyer.verifiedMobile|default('--') }}</p>
         </td>
       {% else %}
         <td>
-          <span><a target="_blank" href="{{ path('user_show', {id: buyer.id}) }}">{{ buyer.nickname|default('--') }}</a></span>
+          <span><a target="_blank" href="{{ user_show_path({id: buyer.id}) }}">{{ buyer.nickname|default('--') }}</a></span>
         </td>
       {% endif %}
       <td>{{ dict_text('payment',order.payment) }}</td>

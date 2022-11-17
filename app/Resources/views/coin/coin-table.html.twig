@@ -33,7 +33,7 @@
       </td>
       <td>
         {% if not users[order.userId].destroyed|default(0) %}
-        <a target="_blank" href="{{ path('user_show', {id:order.userId}) }}">
+        <a target="_blank" href="{{ user_show_path({id:order.userId}) }}">
         {{users[order.userId].nickname}}</a>
         {% else %}
           {{ 'user.user_had_destroyed'|trans }}

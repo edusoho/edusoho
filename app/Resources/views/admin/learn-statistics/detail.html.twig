@@ -12,7 +12,7 @@
   </div>
 {% endblock %}
 {% block page_buttons %}
-  <a class="btn btn-success btn-sm" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ 'admin.user.fields.personal_menu_label'|trans }}</a>
+  <a class="btn btn-success btn-sm" href="{{ user_show_path({id:user.id}) }}" target="_blank">{{ 'admin.user.fields.personal_menu_label'|trans }}</a>
 {% endblock %}
 
 {% block main %}

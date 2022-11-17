@@ -6,7 +6,7 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-      {% set who = macro.link(data.user.nickname, path('user_show', {id:data.user.id})) %}
+      {% set who = macro.link(data.user.nickname, user_show_path({id:data.user.id})) %}
       {% set thread = macro.link(data.thread.title, path('course_thread_show', {courseId: data.courseId, threadId: data.thread.id})) %}
       {{ 'notification.question.post_ask'|trans({'%who%':who, '%thread%':thread})|raw }}
     </div>

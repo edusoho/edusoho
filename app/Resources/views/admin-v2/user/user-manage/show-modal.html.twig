@@ -8,7 +8,7 @@
   <tr>
     <th width="25%">{{'user.fields.username_label'|trans}}</th>
     <td width="75%">
-      <a class="pull-right" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{'admin.user.fields.personal_menu_label'|trans}}</a>
+      <a class="pull-right" href="{{ user_show_path({id:user.id}) }}" target="_blank">{{'admin.user.fields.personal_menu_label'|trans}}</a>
       {{ user.nickname }}
     </td>
   </tr>

@@ -6,7 +6,7 @@
     <a href="{{ path('group_show', {id: group.id}) }}" target="_blank"><strong>{{ group.title }}</strong></a>
   </td>
   <td>
-    <a target="_blank" href="{{ path('user_show', {id: owners[group.ownerId].id}) }}">{{ owners[group.ownerId].nickname }}</a>
+    <a target="_blank" href="{{ user_show_path({id: owners[group.ownerId].id}) }}">{{ owners[group.ownerId].nickname }}</a>
   </td>
   <td>
     {{ group.recommendedTime|date('Y-m-d') }}

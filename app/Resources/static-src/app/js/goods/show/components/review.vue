@@ -1,10 +1,10 @@
 <template>
   <div class="reviews-item">
-    <a :href="`/user/${review.user.id}`" target="_blank">
+    <a :href="`/user/${review.user.uuid}`" target="_blank">
         <img class="reviews-item__img js-user-card "
              :src="review.user.largeAvatar"
              :data-user-id="review.user.id"
-             :data-card-url="`/user/${review.user.id}/card/show`"
+             :data-card-url="`/user/${review.user.uuid}/card/show`"
              alt=""
         >
     </a>

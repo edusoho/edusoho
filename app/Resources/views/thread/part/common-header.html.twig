@@ -15,7 +15,7 @@
     <div class="metas">
         {% if not author.destroyed|default(0) %}
           {% set isOpenInfo = data('StudentOpenInfo', {'userId': author.id}) %}
-          <a {% if isOpenInfo == 1 %}href="{{ path('user_show', {id:author.id}) }}"{% endif %}>{{ author.nickname }}</a>
+          <a {% if isOpenInfo == 1 %}href="{{ user_show_path({id:author.id}) }}"{% endif %}>{{ author.nickname }}</a>
         {% else %}
           <a>{{ 'user.user_had_destroyed'|trans }}</a>
         {% endif %}

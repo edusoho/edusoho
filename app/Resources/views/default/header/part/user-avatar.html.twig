@@ -5,7 +5,7 @@
   {{ slot('header.deadline.tip', {user: app.user}) }}
   <div class="dropdown-menu user-dropdown hidden-sm hidden-xs hidden-md js-user-nav-dropdown">
     <div class="user-dropdown-info cd-mb24">
-      <a class="user-dropdown-info__avatar cd-mr24" href="{{ path('user_show', {id:app.user.id}) }}">
+      <a class="user-dropdown-info__avatar cd-mr24" href="{{ user_show_path({id:app.user.id}) }}">
         <img class="cd-avatar" src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
         {{ slot('header.user.logo', {user: app.user, isShow: 1}) }}
       </a>
@@ -23,7 +23,7 @@
     <div class="user-dropdown__logout"><a class="cd-link-minor" href="{{ path('logout') }}">{{ 'homepage.header.logout'|trans }}</a></div>
   </div>
   <ul class="dropdown-menu hidden-lg" role="menu">
-    <div class="dropdown-header"><a class="cd-link-minor" href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></div>
+    <div class="dropdown-header"><a class="cd-link-minor" href="{{ user_show_path({id:app.user.id}) }}">{{ app.user.nickname }}</a></div>
     <li><a href="{{path('my_orders')}}"><i class="es-icon es-icon-accountwallet"></i>{{'homepage.header.account_menu'|trans}}</a></li>
     <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'homepage.header.settings_menu'|trans}}</a></li>
 

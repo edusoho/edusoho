@@ -34,7 +34,7 @@
       <tr id="student-{{ user.id }}-tr">
         <td class="media" style="vertical-align: middle;">
           {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
-          <a class="link-primary" target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+          <a class="link-primary" target="_blank" href="{{ user_show_path({id:user.id}) }}">{{ user.nickname }}</a>
           <div class="color-gray text-sm">{{'my.teaching.open_course.student_setting.join_time'|trans}}{{ student.createdTime|date('Y-n-d H:i') }}</div>
         </td>
 
