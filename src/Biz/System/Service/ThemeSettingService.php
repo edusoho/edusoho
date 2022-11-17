@@ -10,5 +10,5 @@ interface ThemeSettingService
      * @return mixed
      */
 
-    public function isSupportUUIDUser();
+    public function isSupportGetUserById();
 }
