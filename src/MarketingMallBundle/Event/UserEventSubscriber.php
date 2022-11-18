@@ -18,7 +18,8 @@ class UserEventSubscriber extends BaseEventSubscriber
             'user.change_password' => 'onUserPasswordChange',
             'user.lock' => 'onUserLock',
             'user.unlock' => 'onUserUnLock',
-            'user.role.change' => 'onUserRoleChange'
+            'user.role.change' => 'onUserRoleChange',
+            'profile.update' => 'onUserProfileUpdate',
         ];
     }
 
