@@ -5,6 +5,7 @@ namespace MarketingMallBundle\Event;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
 use MarketingMallBundle\Biz\SyncList\Service\SyncListService;
+use MarketingMallBundle\Common\GoodsContentBuilder\TeacherInfoBuilder;
 
 class UserEventSubscriber extends BaseEventSubscriber
 {
@@ -76,8 +77,14 @@ class UserEventSubscriber extends BaseEventSubscriber
                 return;
             }
         }
-
         $this->getSyncListService()->addSyncList(['type' => 'userUpdate', 'data' => $userId]);
+
+        $user = $this->getUserService()->getUser($userId);
+        if (!in_array('ROLE_TEACHER', $user['roles']) && !in_array('ROLE_ADMIN', $user['roles']) && !in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
+            return;
+        }
+
+        $this->updateTeacherInfo(new TeacherInfoBuilder(), $userId);
     }
 
     /**

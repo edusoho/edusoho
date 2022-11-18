@@ -89,7 +89,6 @@ class MarketingMallApi
         $params['type'] = "teacherInfo";
         $params['targetId'] = json_decode($params['content'], true)['userId'];
         $this->post('/api-school/goods/updateTeacherInfo', $params);
-
     }
 
     public function checkGoodsIsPublishByCodes($params)
