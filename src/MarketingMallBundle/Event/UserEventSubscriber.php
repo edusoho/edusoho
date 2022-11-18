@@ -70,6 +70,11 @@ class UserEventSubscriber extends BaseEventSubscriber
 
     protected function syncUserInfoToMarketingMall($userId)
     {
+        $this->userUpdate($userId);
+        $this->userContentUpdate($userId);
+    }
+
+    protected function userUpdate($userId){
         $data = $this->getSyncListService()->getSyncDataId($userId);
 
         foreach ($data as $value) {
@@ -78,7 +83,9 @@ class UserEventSubscriber extends BaseEventSubscriber
             }
         }
         $this->getSyncListService()->addSyncList(['type' => 'userUpdate', 'data' => $userId]);
+    }
 
+    protected function userContentUpdate($userId){
         $user = $this->getUserService()->getUser($userId);
         if (!in_array('ROLE_TEACHER', $user['roles']) && !in_array('ROLE_ADMIN', $user['roles']) && !in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
             return;
