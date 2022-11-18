@@ -8,7 +8,7 @@
         <div class="media media-default">
           <div class="media-left">
             <a class="{% if not teacher.destroyed|default(0) %}js-user-card{% endif %}" href="{{ user_show_path({'id': teacher.id}) }}"
-               data-card-url="{{ path('user_card_show', {'userId': teacher.id}) }}"
+               data-card-url="{{ path('user_card_show', {'userId': teacher.uuid}) }}"
                data-user-id="{{ teacher.id }}"
                data-original-title="" title="">
               <img class="avatar-md" src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}"></a>

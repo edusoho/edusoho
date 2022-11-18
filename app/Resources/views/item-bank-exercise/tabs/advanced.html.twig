@@ -20,7 +20,7 @@
           </div>
           <div class="advanced-avatar">
             <a class="{% if not user.destroyed|default(0) %}js-user-card{% endif %}" href="{{ user_show_path({'id': user.id}) }}"
-               data-card-url="{{ path('user_card_show', {'userId': user.id}) }}"
+               data-card-url="{{ path('user_card_show', {'userId': user.uuid}) }}"
                data-user-id="{{ user.id }}"
                data-original-title="" title="">
               <img class="avatar-sm" src="{{ filepath(user.mediumAvatar, 'avatar.png') }}"></a>
