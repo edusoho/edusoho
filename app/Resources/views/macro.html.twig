@@ -7,7 +7,7 @@
         {% set avatarType = 'medium' %}
       {% elseif imgClass == 'avatar-lg' %}
         {% set avatarType = 'large' %}
-      {% else %}uu
+      {% else %}
         {% set avatarType = 'small' %}
       {% endif %}
     <img class="{{ imgClass|default('avatar-sm') }}" src="{{ avatar_path(user, avatarType) }}">
