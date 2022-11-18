@@ -47,28 +47,24 @@ class UserEventSubscriber extends BaseEventSubscriber
     {
         $user = $event->getSubject();
         $this->syncUserInfoToMarketingMall($user['id']);
-
     }
 
     public function onUserLock(Event $event)
     {
         $user = $event->getSubject();
         $this->syncUserInfoToMarketingMall($user['id']);
-
     }
 
     public function onUserUnLock(Event $event)
     {
         $user = $event->getSubject();
         $this->syncUserInfoToMarketingMall($user['id']);
-
     }
 
     public function onUserRoleChange(Event $event)
     {
         $user = $event->getSubject();
         $this->syncUserInfoToMarketingMall($user['id']);
-
     }
 
     protected function syncUserInfoToMarketingMall($userId)

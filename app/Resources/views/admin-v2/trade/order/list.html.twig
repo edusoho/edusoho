@@ -8,7 +8,7 @@
 {% block page_title %}
   {{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}
   <span class="js-is-sass text-14 hidden" style="color: #86909C;font-weight:400;">
-    暂不支持显示【商城】中购买商品产生的订单，具体请到<a class="js-mall-order" href="#" target="_blank">【商城订单】</a>中查看
+    暂不支持显示【商城】中购买商品产生的订单，具体请到<a class="js-mall-order" href="#" data-url="{{ path('admin_v2_marketing_mall', {path: '/deal/order-manage'}) }}" target="_blank">【商城订单】</a>中查看
   </span>
 {% endblock %}
 
