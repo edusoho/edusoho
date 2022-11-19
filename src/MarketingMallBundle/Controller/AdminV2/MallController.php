@@ -123,6 +123,7 @@ class MallController extends BaseController
         $user = $this->getUserService()->getUserAndProfile($this->getCurrentUser()->getId());
 
         return [
+            'id' => $user['id'],
             'nickname' => $user['nickname'],
             'truename' => $user['truename'],
             'avatar' => $this->getWebExtension()->getFurl($user['smallAvatar'], 'avatar.png'),
