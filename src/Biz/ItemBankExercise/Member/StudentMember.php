@@ -25,6 +25,8 @@ class StudentMember extends Member
 
             return $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $userId);
         }
+        $exercise['expiryMode'] = $info['expiryMode'] ?? $exercise['expiryMode'];
+        $exercise['expiryDays'] = $info['expiryDays'] ?? $exercise['expiryDays'];
 
         $member = [
             'exerciseId' => $exercise['id'],
