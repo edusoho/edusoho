@@ -25,7 +25,7 @@ class MallUser extends BaseResource
         if (!ArrayToolkit::requireds($fields, ['mobile', 'nickname'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-        $fields = ArrayToolkit::parts($fields, ['mobile', 'nickname', 'openId']);
+        $fields = ArrayToolkit::parts($fields, ['mobile', 'nickname', 'openId', 'avatar']);
         $user = $this->getUserService()->getUserByVerifiedMobile($fields['mobile']);
         if ($user) {
             return $user;
