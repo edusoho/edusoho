@@ -35,6 +35,7 @@ class MallUser extends BaseResource
         $user = $this->getUserService()->register($fields, ['mobile']);
 
         if (!empty($fields['avatar'])) {
+            $fields['avatar'] = str_replace('\/', '/', $fields['avatar']);
             $this->getUserService()->changeAvatarFromImgUrl($user['id'], $fields['avatar']);
         }
 
