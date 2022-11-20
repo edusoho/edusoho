@@ -91,6 +91,21 @@ class MarketingMallApi
         $this->post('/api-school/goods/updateTeacherInfo', $params);
     }
 
+    public function deleteUser($params)
+    {
+        $this->post('/api-school/user/delete', ...$params);
+    }
+
+    public function lockUser($params)
+    {
+        $this->post('/api-school/user/lock', ...$params);
+    }
+
+    public function unlockUser($params)
+    {
+        $this->post('/api-school/user/unlock', ...$params);
+    }
+
     public function checkGoodsIsPublishByCodes($params)
     {
         return $this->get('/api-school/goods/getGoodsPublishStatus', ['goodsCodes' => implode(',', $params[0])]);

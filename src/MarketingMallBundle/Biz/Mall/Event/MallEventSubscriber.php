@@ -13,6 +13,10 @@ class MallEventSubscriber extends EventSubscriber
     {
         return [
             'setting.login_bind.set' => 'onLoginBindSettingSet',
+            'user.delete' => 'onUserDelete',
+            //TODO @see MarketingMallBundle\Event\UserEventSubscriber::onUserLock 存在异步事件，看是否移除
+            'user.lock' => 'onUserLock',
+            'user.unlock' => 'onUserUnLock',
         ];
     }
 
@@ -20,17 +24,47 @@ class MallEventSubscriber extends EventSubscriber
     {
         $loginConnect = $this->getLoginBindSettingService()->get();
         //todo 判断是否初始化商城
-        $this->syncWechatMobileSetting([
+        $this->getMallClient()->setWechatMobileSetting([
             'appId' => $loginConnect['weixinmob_key'] ?? '',
             'appSecret' => $loginConnect['weixinmob_secret'] ?? '',
             'mpFileCode' => $loginConnect['weixinmob_mp_secret'] ?? '',
         ]);
     }
 
-    protected function syncWechatMobileSetting($setting)
+    public function onUserDelete(Event $event)
     {
-        $client = new MarketingMallClient($this->getBiz());
-        $client->setWechatMobileSetting($setting);
+        $user = $event->getSubject();
+        //todo 判断是否初始化商城
+        $this->getMallClient()->deleteUser([
+            'id' => $user['id'],
+            'username' => $user['nickname'],
+        ]);
+    }
+
+    public function onUserLock(Event $event)
+    {
+        $user = $event->getSubject();
+        //todo 判断是否初始化商城
+        $this->getMallClient()->lockUser([
+            'id' => $user['id'],
+        ]);
+    }
+
+    public function onUserUnLock(Event $event)
+    {
+        $user = $event->getSubject();
+        //todo 判断是否初始化商城
+        $this->getMallClient()->unlockUser([
+            'id' => $user['id'],
+        ]);
+    }
+
+    /**
+     * @return MarketingMallClient
+     */
+    public function getMallClient()
+    {
+        return new MarketingMallClient($this->getBiz());
     }
 
     /**
