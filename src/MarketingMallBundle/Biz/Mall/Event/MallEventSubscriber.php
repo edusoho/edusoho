@@ -12,12 +12,19 @@ class MallEventSubscriber extends EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
+            'setting.school.logo.update' => 'notifySchoolLogo',
             'setting.login_bind.set' => 'onLoginBindSettingSet',
             'user.delete' => 'onUserDelete',
             //TODO @see MarketingMallBundle\Event\UserEventSubscriber::onUserLock 存在异步事件，看是否移除
             'user.lock' => 'onUserLock',
             'user.unlock' => 'onUserUnLock',
         ];
+    }
+
+    public function notifySchoolLogo(Event $event)
+    {
+        $client = new MarketingMallClient($this->getBiz());
+        $client->notifyUpdateLogo();
     }
 
     public function onLoginBindSettingSet(Event $event)
