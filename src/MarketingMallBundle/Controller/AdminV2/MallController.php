@@ -71,9 +71,6 @@ class MallController extends BaseController
     private function isWechatMobileConfigured(): bool
     {
         $wechatSetting = $this->setting('payment', []);
-        if (empty($wechatSetting['wxpay_enabled'])) {
-            return false;
-        }
         if (empty($wechatSetting['wxpay_appid']) || empty($wechatSetting['wxpay_secret']) || empty($wechatSetting['wxpay_mp_secret'])) {
             return false;
         }
