@@ -12,8 +12,15 @@ class MallEventSubscriber extends EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
+            'setting.school.logo.update' => 'notifySchoolLogo',
             'setting.login_bind.set' => 'onLoginBindSettingSet',
         ];
+    }
+
+    public function notifySchoolLogo(Event $event)
+    {
+        $client = new MarketingMallClient($this->getBiz());
+        $client->setWechatMobileSetting($setting);
     }
 
     public function onLoginBindSettingSet(Event $event)

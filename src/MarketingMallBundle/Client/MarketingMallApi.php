@@ -111,6 +111,11 @@ class MarketingMallApi
         return $this->post('/api-school/wechatSetting/setWechatMobileSetting', ...$params);
     }
 
+    public function notifyUpdateLogo()
+    {
+        return $this->post('/api-school/setting/removeSiteSettingCache');
+    }
+
 //    例子  token头直接设置了参数code也直接加了
 //    public function demo($params){
 //        try {
