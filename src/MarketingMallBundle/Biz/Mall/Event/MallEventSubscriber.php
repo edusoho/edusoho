@@ -20,7 +20,7 @@ class MallEventSubscriber extends EventSubscriber
     public function notifySchoolLogo(Event $event)
     {
         $client = new MarketingMallClient($this->getBiz());
-        $client->setWechatMobileSetting($setting);
+        $client->notifyUpdateLogo();
     }
 
     public function onLoginBindSettingSet(Event $event)
