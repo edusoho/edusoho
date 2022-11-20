@@ -29,7 +29,7 @@ class MallProductMember extends BaseResource
         if (!method_exists($this, $method)) {
             throw CommonException::NOTFOUND_METHOD();
         }
-        $this->info['join']['reason_type'] = $this->info['join']['reasonType'] = $params['isPaid'] ? 'buy_join' : 'free_join';
+        $this->info['join']['reason_type'] = $this->info['join']['reasonType'] = 'true' == $params['isPaid'] ? 'buy_join' : 'free_join';
 
         return $this->$method($targetId, $userId);
     }
