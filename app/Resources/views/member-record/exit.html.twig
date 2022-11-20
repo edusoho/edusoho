@@ -42,7 +42,7 @@
             {% endif %}{{ record.reason|trans }}
         </td>
         <td class="vertical-middle">
-           {% if record.refund_id > 0 %}
+           {% if record.refund_id > 0 or 'refund' == record.reason_type %}
               {{ 'site_yes'|trans }}
            {% elseif order['pay_amount']|default() > 0 %}
               {{ 'site_no'|trans }}
