@@ -71,9 +71,6 @@ class MallController extends BaseController
     private function isWechatMobileConfigured(): bool
     {
         $wechatSetting = $this->setting('payment', []);
-        if (empty($wechatSetting['wxpay_enabled'])) {
-            return false;
-        }
         if (empty($wechatSetting['wxpay_appid']) || empty($wechatSetting['wxpay_secret']) || empty($wechatSetting['wxpay_mp_secret'])) {
             return false;
         }
@@ -123,6 +120,7 @@ class MallController extends BaseController
         $user = $this->getUserService()->getUserAndProfile($this->getCurrentUser()->getId());
 
         return [
+            'id' => $user['id'],
             'nickname' => $user['nickname'],
             'truename' => $user['truename'],
             'avatar' => $this->getWebExtension()->getFurl($user['smallAvatar'], 'avatar.png'),

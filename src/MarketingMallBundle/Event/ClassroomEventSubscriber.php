@@ -60,13 +60,16 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
 
     protected function syncClassroomToMarketingMall($classroomId)
     {
-        $data = $this->getSyncListService()->getSyncDataId($classroomId);
-        foreach ($data as $value) {
-            if($value['id'] && $value['type'] == 'classroom' && $value['status'] == 'new') {
-                return;
-            }
-        }
-        $this->getSyncListService()->addSyncList(['type' => 'classroom', 'data' => $classroomId]);
+//        $this->updateGoodsContent('classroom', new ClassroomInfoBuilder(), $classroomId);
+//        $data = $this->getSyncListService()->getSyncDataId($classroomId);
+//        foreach ($data as $value) {
+//            if($value['id'] && $value['type'] == 'classroom' && $value['status'] == 'new') {
+//                return;
+//            }
+//        }
+//        $this->getSyncListService()->addSyncList(['type' => 'classroom', 'data' => $classroomId]);
+
+        $this->updateGoodsContent('classroom', new ClassroomInfoBuilder(), $classroomId);
     }
 
     protected function deleteClassroomProductToMarketingMall($classroomId)

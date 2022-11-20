@@ -1142,8 +1142,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $deadline = ClassroomToolkit::buildMemberDeadline([
-            'expiryMode' => $classroom['expiryMode'],
-            'expiryValue' => $classroom['expiryValue'],
+            'expiryMode' => $info['expiryMode'] ?? $classroom['expiryMode'],
+            'expiryValue' => $info['expiryDays'] ?? $classroom['expiryValue'],
         ]);
 
         $refundSetting = $this->getSettingService()->get('refund', []);

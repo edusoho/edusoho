@@ -13,8 +13,8 @@ use MarketingMallBundle\Api\Resource\BaseResource;
 class MallProductMember extends BaseResource
 {
     private $info = [
-        'join' => ['remark' => '商城下单', 'reason' => '商城下单', 'reasonType' => 'mall_join'],
-        'exit' => ['reason' => '商城退款', 'reason_type' => 'exit', 'reasonType' => 'exit'],
+        'join' => ['remark' => '商城下单', 'reason' => '商城下单', 'reasonType' => '', 'reason_type' => ''],
+        'exit' => ['reason' => '商城退款', 'reason_type' => 'refund', 'reasonType' => 'refund'],
     ];
 
     /**
@@ -22,12 +22,17 @@ class MallProductMember extends BaseResource
      */
     public function add(ApiRequest $request, $targetType)
     {
-        $userId = $request->request->get("userId");
-        $targetId = $request->request->get("targetId");
+        $params = $request->request->all();
+        $userId = $params['userId'] ?? '';
+        $targetId = $params['targetId'] ?? '';
         $method = "join".$targetType;
         if (!method_exists($this, $method)) {
             throw CommonException::NOTFOUND_METHOD();
         }
+        $this->info['join']['reason_type'] = $this->info['join']['reasonType'] = 'true' == $params['isPaid'] ? 'buy_join' : 'free_join';
+        $this->info['join']['expiryMode'] = $params['expiryMode'];
+        $this->info['join']['expiryDays'] = $params['expiryDays'];
+
         return $this->$method($targetId, $userId);
     }
 

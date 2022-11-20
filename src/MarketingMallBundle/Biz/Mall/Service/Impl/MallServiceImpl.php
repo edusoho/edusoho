@@ -4,7 +4,9 @@ namespace MarketingMallBundle\Biz\Mall\Service\Impl;
 
 use Biz\BaseService;
 use Biz\CloudPlatform\Service\EduCloudService;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Firebase\JWT\JWT;
 use MarketingMallBundle\Biz\Mall\Service\MallService;
 use MarketingMallBundle\Biz\MallAdminProfile\Service\MallAdminProfileService;
@@ -43,6 +45,15 @@ class MallServiceImpl extends BaseService implements MallService
             'code' => $result['code'],
         ];
         $this->getSettingService()->set('marketing_mall', $setting);
+
+        $this->getSchedulerService()->register(array(
+            'name' => 'MarketingMallSyncListJob',
+            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+            'expression' => '* * * * *',
+            'misfire_policy' => 'executing',
+            'class' => 'MarketingMallBundle\Biz\SyncList\Job\SyncListJob'
+        ));
+
         $this->dispatchEvent('marketing_mall.init', []);
 
         return $setting;
@@ -87,5 +98,13 @@ class MallServiceImpl extends BaseService implements MallService
     protected function getMallAdminProfileService()
     {
         return $this->createService('MallAdminProfile:MallAdminProfileService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    private function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }
