@@ -1639,6 +1639,8 @@ class UserServiceImpl extends BaseService implements UserService
             //清除用户课程/班级评价数据
             $this->getReviewService()->deleteReviewsByUserId($id);
 
+            $this->dispatchEvent('user.delete', $user);
+
             $this->commit();
         } catch (\Exception $e) {
             $this->getLogger()->error($e->getMessage());
