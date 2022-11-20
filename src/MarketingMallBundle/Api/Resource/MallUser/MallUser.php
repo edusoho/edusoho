@@ -34,7 +34,11 @@ class MallUser extends BaseResource
         $fields['type'] = 'marketing_mall';
         $user = $this->getUserService()->register($fields, ['mobile']);
 
-        if($fields['openId']) {
+        if (!empty($fields['avatar'])) {
+            $this->getUserService()->changeAvatarFromImgUrl($user['id'], $fields['avatar']);
+        }
+
+        if ($fields['openId']) {
             $this->getUserService()->UserBindUpdate($fields['openId'], $user['id']);
         }
 
