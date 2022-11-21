@@ -5,6 +5,7 @@ namespace MarketingMallBundle\Biz\Mall\Event;
 use Biz\System\Service\LoginBindSettingService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
+use MarketingMallBundle\Biz\Mall\Service\MallService;
 use MarketingMallBundle\Client\MarketingMallClient;
 
 class MallEventSubscriber extends EventSubscriber
@@ -30,7 +31,9 @@ class MallEventSubscriber extends EventSubscriber
     public function onLoginBindSettingSet(Event $event)
     {
         $loginConnect = $this->getLoginBindSettingService()->get();
-        //todo 判断是否初始化商城
+        if (!$this->getMallService()->isInit()) {
+            return;
+        }
         $this->getMallClient()->setWechatMobileSetting([
             'appId' => $loginConnect['weixinmob_key'] ?? '',
             'appSecret' => $loginConnect['weixinmob_secret'] ?? '',
@@ -41,7 +44,9 @@ class MallEventSubscriber extends EventSubscriber
     public function onUserDelete(Event $event)
     {
         $user = $event->getSubject();
-        //todo 判断是否初始化商城
+        if (!$this->getMallService()->isInit()) {
+            return;
+        }
         $this->getMallClient()->deleteUser([
             'id' => $user['id'],
             'username' => $user['nickname'],
@@ -51,7 +56,9 @@ class MallEventSubscriber extends EventSubscriber
     public function onUserLock(Event $event)
     {
         $user = $event->getSubject();
-        //todo 判断是否初始化商城
+        if (!$this->getMallService()->isInit()) {
+            return;
+        }
         $this->getMallClient()->lockUser([
             'id' => $user['id'],
         ]);
@@ -60,7 +67,9 @@ class MallEventSubscriber extends EventSubscriber
     public function onUserUnLock(Event $event)
     {
         $user = $event->getSubject();
-        //todo 判断是否初始化商城
+        if (!$this->getMallService()->isInit()) {
+            return;
+        }
         $this->getMallClient()->unlockUser([
             'id' => $user['id'],
         ]);
@@ -72,6 +81,14 @@ class MallEventSubscriber extends EventSubscriber
     public function getMallClient()
     {
         return new MarketingMallClient($this->getBiz());
+    }
+
+    /**
+     * @return MallService
+     */
+    protected function getMallService()
+    {
+        return $this->getBiz()->service('Mall:MallService');
     }
 
     /**
