@@ -1614,7 +1614,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getProfileDao()->update($id, $userProfile);
             $this->changeUserRoles($id, ['ROLE_USER']);
 
-            $this->getUserDao()->update($id, $userFields);
+            $user = $this->getUserDao()->update($id, $userFields);
 
             //清除用户绑定信息
             $this->deleteUserBindByUserId($id);
