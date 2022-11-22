@@ -38,6 +38,7 @@ class MallController extends BaseController
                 'isWechatMobileConfigured' => $this->isWechatMobileConfigured(),
                 'hasWechatMobilePermission' => $this->getCurrentUser()->hasPermission('admin_v2_setting_wechat_auth'),
                 'wechatMobileUrl' => $this->generateUrl('admin_v2_setting_wechat_auth'),
+                'isNewMiniSchool' => $this->isNewMiniSchool(),
             ],
             'dealSetting' => [
                 'isWechatMobileConfigured' => $this->isWechatMobileConfigured(),
@@ -76,6 +77,13 @@ class MallController extends BaseController
         }
 
         return true;
+    }
+
+    private function isNewMiniSchool()
+    {
+        $wapSetting = $this->setting('wap', []);
+
+        return isset($wapSetting['version']) && 2 == $wapSetting['version'];
     }
 
     public function mobileBindAction(Request $request)
