@@ -98,11 +98,11 @@
             </a>
             <div class="dropdown-menu" style="width: 392px;left: -212px;">
               <div class="js-mall-card" style="position: absolute;top:0;left:0;z-index:1;padding: 24px;background-color: #fff;border-radius: 4px;">
-                <div style="display: flex;margin-bottom:20px;align-items:center;">
+                <div style="display: flex;width: 256px;margin-bottom:20px;align-items:center;">
                   <img 
                     src="{{ asset(setting('site.logo')|default('/static-dist/app/img/admin-v2/default-logo@2x.png')) }}" 
-                    style="width: auto;height:58px;margin-right:16px;border-radius: 2px;">
-                  <div style="width: 180px;line-height: initial;overflow: hidden; display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;font-size: 16px;font-weight: bold;">{{ setting('site.name') }}的商城</div>
+                    style="width: auto;max-width:calc(100% - 180px);height:58px;margin-right:16px;border-radius: 2px;">
+                  <div style="flex: 1;line-height: initial;overflow: hidden; display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;font-size: 16px;font-weight: bold;">{{ setting('site.name') }}的商城</div>
                 </div>
                 <canvas class="js-marketing-qrcode1"></canvas>
               </div>
