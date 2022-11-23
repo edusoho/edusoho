@@ -131,6 +131,11 @@ class MarketingMallApi
         return $this->post('/api-school/setting/removeSiteSettingCache');
     }
 
+    public function notifyWapUpdate()
+    {
+        return $this->post('/api-school/setting/removeWapSettingCache');
+    }
+
 //    例子  token头直接设置了参数code也直接加了
 //    public function demo($params){
 //        try {

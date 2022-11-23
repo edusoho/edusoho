@@ -9,7 +9,7 @@ use AppBundle\Controller\AdminV2\BaseController;
 use AppBundle\Util\CdnUrl;
 use Biz\Content\Service\FileService;
 use Biz\System\Service\CacheService;
-use Biz\System\Service\LogoUpdateNotifyService;
+use Biz\System\Service\SettingUpdateNotifyService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
 use Symfony\Component\Filesystem\Filesystem;
@@ -166,7 +166,7 @@ class SettingController extends BaseController
             'url' => $this->container->get('assets.default_package_util')->getUrl($site['logo']),
         ];
 
-        $this->getlogoUpdateNotifyService()->notify();
+        $this->getSettingUpdateNotifyService()->notifyLogoUpdate();
 
         return $this->createJsonResponse($response);
     }
@@ -372,10 +372,10 @@ class SettingController extends BaseController
     }
 
     /**
-     * @return LogoUpdateNotifyService
+     * @return SettingUpdateNotifyService
      */
-    protected function getlogoUpdateNotifyService()
+    protected function getSettingUpdateNotifyService()
     {
-        return $this->createService('System:LogoUpdateNotifyService');
+        return $this->createService('System:SettingUpdateNotifyService');
     }
 }
