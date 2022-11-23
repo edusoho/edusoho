@@ -15,6 +15,7 @@ class MallEventSubscriber extends EventSubscriber
         return [
             'setting.school.logo.update' => 'notifySchoolLogo',
             'setting.login_bind.set' => 'onLoginBindSettingSet',
+            'setting.wap.update' => 'onWapSettingUpdate',
             'user.delete' => 'onUserDelete',
             //TODO @see MarketingMallBundle\Event\UserEventSubscriber::onUserLock 存在异步事件，看是否移除
             'user.lock' => 'onUserLock',
@@ -26,6 +27,12 @@ class MallEventSubscriber extends EventSubscriber
     {
         $client = new MarketingMallClient($this->getBiz());
         $client->notifyUpdateLogo();
+    }
+
+    public function onWapSettingUpdate(Event $event)
+    {
+        $client = new MarketingMallClient($this->getBiz());
+        $client->notifyWapUpdate();
     }
 
     public function onLoginBindSettingSet(Event $event)

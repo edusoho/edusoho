@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\System\Service\SettingService;
+use Biz\System\Service\SettingUpdateNotifyService;
 use Biz\WeChat\Service\WeChatAppService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -32,6 +33,7 @@ class SettingController extends BaseController
             if (empty($result['error'])) {
                 $this->getSettingService()->set('meCount', $result);
             }
+            $this->getSettingUpdateNotifyService()->notifyWapUpdate();
         }
 
         $wapSetting = $this->setting('wap', []);
@@ -66,5 +68,13 @@ class SettingController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return SettingUpdateNotifyService
+     */
+    protected function getSettingUpdateNotifyService()
+    {
+        return $this->createService('System:SettingUpdateNotifyService');
     }
 }
