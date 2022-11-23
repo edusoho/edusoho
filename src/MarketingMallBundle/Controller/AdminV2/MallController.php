@@ -39,7 +39,7 @@ class MallController extends BaseController
                 'hasWechatMobilePermission' => $this->getCurrentUser()->hasPermission('admin_v2_setting_wechat_auth'),
                 'wechatMobileUrl' => $this->generateUrl('admin_v2_setting_wechat_auth'),
                 'isNewMiniSchool' => $this->isNewMiniSchool(),
-                'MiniSchoolSettingUrl' => $this->generateUrl('admin_v2_wap_set'),
+                'miniSchoolSettingUrl' => $this->generateUrl('admin_v2_wap_set'),
             ],
             'dealSetting' => [
                 'isWechatMobileConfigured' => $this->isWechatMobileConfigured(),
