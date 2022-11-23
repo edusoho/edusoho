@@ -14,16 +14,16 @@ class MallController extends BaseController
     public function indexAction(Request $request)
     {
         $user = $this->getUser();
-        // if (empty($user['verifiedMobile'])) {
-        //     return $this->redirectToRoute('admin_v2_mall_mobile_bind');
-        // }
-        // if (!$this->getMallService()->isIntroduceRead()) {
-        //     return $this->redirectToRoute('admin_v2_mall_introduce');
-        // }
-        // $mallSettings = $this->getSettingService()->get('marketing_mall', []);
-        // if (empty($mallSettings)) {
-        //     $mallSettings = $this->getMallService()->init($this->getUserInfo(), $request->getSchemeAndHttpHost());
-        // }
+         if (empty($user['verifiedMobile'])) {
+             return $this->redirectToRoute('admin_v2_mall_mobile_bind');
+         }
+         if (!$this->getMallService()->isIntroduceRead()) {
+             return $this->redirectToRoute('admin_v2_mall_introduce');
+         }
+         $mallSettings = $this->getSettingService()->get('marketing_mall', []);
+         if (empty($mallSettings)) {
+             $mallSettings = $this->getMallService()->init($this->getUserInfo(), $request->getSchemeAndHttpHost());
+         }
 
         $authorization = JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'userInfo' => $this->getUserInfo(), 'access_key' => $mallSettings['access_key'], 'header' => 'MARKETING_MALL'], $mallSettings['secret_key']);
         $mallUrl = $this->getSchema() . $this->container->getParameter('marketing_mall_url') . '/console-pc/';
