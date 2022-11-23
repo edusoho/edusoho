@@ -3,6 +3,7 @@
 namespace MarketingMallBundle\Biz\System\Event;
 
 use Biz\System\Service\LoginBindSettingService;
+use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
@@ -26,6 +27,14 @@ class SettingEventSubscriber extends EventSubscriber
             'appSecret' => $loginConnect['weixinmob_secret'] ?? '',
             'mpFileCode' => $loginConnect['weixinmob_mp_secret'] ?? '',
         ]);
+
+        $wap = $this->getSettingService()->get('wap');
+        if (empty($wap['version'])) {
+            $this->getSettingService()->set('wap', [
+                'version' => 2,
+                'template' => 'sail',
+            ]);
+        }
     }
 
     protected function syncWechatMobileSetting($setting)
@@ -44,5 +53,13 @@ class SettingEventSubscriber extends EventSubscriber
     protected function getLoginBindSettingService()
     {
         return $this->getBiz()->service('System:LoginBindSettingService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
     }
 }
