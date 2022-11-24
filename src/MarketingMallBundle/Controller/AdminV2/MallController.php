@@ -14,6 +14,11 @@ class MallController extends BaseController
     public function indexAction(Request $request)
     {
         $user = $this->getUser();
+
+        if (!$this->getMallService()->isShow()){
+            throw $this->createAccessDeniedException();
+        }
+
         if (empty($user['verifiedMobile'])) {
             return $this->redirectToRoute('admin_v2_mall_mobile_bind');
         }
