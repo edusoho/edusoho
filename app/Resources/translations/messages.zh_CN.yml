@@ -2362,7 +2362,7 @@ file_chooser.upload_file.upload_ppt_tips: >
 # 答卷
 testpaper.edit: 编辑试卷信息
 testpaper.edit.content_title: 编辑试卷信息
-testpaper.answer.count_donw_timer: 倒计时
+答题卡: 倒计时
 testpaper.answer.answer_card: 答题卡
 testpaper.answer.answer_card.do_agagin_tips: 再做%itemCount%题
 testpaper.answer.answer_card.one_chance_tips: 本次考试仅一次机会
