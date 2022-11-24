@@ -3,7 +3,7 @@
     <ul class="media-list">
       {% for post in postReply %}
         <li class="media li-reply-{{postMain.id}}">
-          <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left">
+          <a href="{{ user_show_path({id:post.userId}) }}" class="pull-left">
             <img src="{{ filepath(postReplyMembers[post.userId].smallAvatar, 'avatar.png') }}" class="avatar-md">
           </a>
           <div class="media-body">

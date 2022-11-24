@@ -803,7 +803,10 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $user = $this->getUserService()->getUser($teacher['id']);
 
             if (empty($user)) {
-                $this->createNewException(UserException::NOTFOUND_USER());
+                $user = $this->getUserService()->getUserByUUID($teacher['id']);
+                if(empty($user)) {
+                    $this->createNewException(UserException::NOTFOUND_USER());
+                }
             }
 
             $teacherMembers[] = [

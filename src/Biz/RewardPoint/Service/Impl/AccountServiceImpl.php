@@ -213,7 +213,10 @@ class AccountServiceImpl extends BaseService implements AccountService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
     }
 

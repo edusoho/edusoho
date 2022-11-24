@@ -28,7 +28,7 @@
         </div>
       {% endif %}
 
-      <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>
+      <a href="{{ user_show_path({id:author.id}) }}">{{ author.nickname }}</a>
       <span class="bullet">•</span>
       <span class="color-gray">{{post.createdTime|smart_time}} </span>
     </div>

@@ -16,7 +16,10 @@ class UserMobileBindCheck extends AbstractResource
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)){
-            throw UserException::NOTFOUND_USER();
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                throw UserException::NOTFOUND_USER();
+            }
         }
 
         $bindMode = $this->getSettingService()->node('login_bind.mobile_bind_mode', 'constraint');

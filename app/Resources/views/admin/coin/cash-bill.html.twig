@@ -46,7 +46,7 @@
             <td><span class="text-sm">{{cash.sn}}</span></td>
             <td><span class="text-sm">{{cash.title}}</span><br>
                 <span class="text-muted text-sm">{{'order.id'|trans}}：{{cash.order_sn}}</span></td>
-            <td><span class="text-sm"><a href="{{ path('user_show', {id:cash.user_id}) }}">
+            <td><span class="text-sm"><a href="{{ user_show_path({id:cash.user_id}) }}">
             {{users[cash.user_id].nickname}}</a></span></td>
             <td><span class="text-sm">{{cash.created_time|date('Y-m-d H:i:s')}}</span></td>
 

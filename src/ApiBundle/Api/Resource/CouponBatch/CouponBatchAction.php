@@ -47,7 +47,10 @@ class CouponBatchAction extends AbstractResource
         }
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
-            throw UserException::NOTFOUND_USER();
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                throw UserException::NOTFOUND_USER();
+            }
         }
         $batch = $this->getCouponBatchService()->getBatchByToken($token);
         if (empty($batch)) {

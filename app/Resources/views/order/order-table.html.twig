@@ -43,16 +43,16 @@
             <td>
               {#添加admin_v2#}
               {% if setting('backstage.is_v2',0)  == 0 %}
-                {% set dataUrl = path('admin_user_show', {id:buyer.id}) %}
+                {% set dataUrl = path('admin_user_show', {id:buyer.uuid})  %}
               {% else %}
-                {% set dataUrl=  path('admin_v2_user_show', {id:buyer.id}) %}
+                {% set dataUrl=  path('admin_v2_user_show', {id:buyer.uuid}) %}
               {% endif %}
               <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ dataUrl }}">{{ buyer.nickname|default('--') }}</a>
             </td>
           {% else %}
             <td>
               {% if not buyer.destroyed|default(0) %}
-                <span><a target="_blank" href="{{ path('user_show', {id: buyer.id}) }}">{{ buyer.nickname|default('--') }}</a></span>
+                <span><a target="_blank" href="{{ user_show_path({id: buyer.id}) }}">{{ buyer.nickname|default('--') }}</a></span>
               {% else %}
                 <span>{{ 'user.user_had_destroyed'|trans }}</span>
               {% endif %}

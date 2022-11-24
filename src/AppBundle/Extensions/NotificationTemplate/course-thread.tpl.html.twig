@@ -9,7 +9,7 @@
         {% set data = notification.content %}
 
         {% if data.userId|default(false) %}
-          {% set who = macro.link(data.userName, path('user_show', {id:data.userId})) %}
+          {% set who = macro.link(data.userName, user_show_path({id:data.userId})) %}
         {% endif %}
 
         {% if data.type == 'at' %}

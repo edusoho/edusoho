@@ -43,7 +43,10 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
 
         $blackUser = $this->getUserService()->getUser($blacklist['blackId']);
         if (empty($blackUser)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($blacklist['blackId']);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $black = $this->getBlacklistDao()->getByUserIdAndBlackId($blacklist['userId'], $blackUser['id']);
@@ -73,7 +76,10 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
     {
         $owner = $this->getUserService()->getUser($userId);
         if (empty($owner['id'])) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $owner = $this->getUserService()->getUserByUUID($userId);
+            if(empty($owner['id'])) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
         $user = $this->getCurrentUser();
 

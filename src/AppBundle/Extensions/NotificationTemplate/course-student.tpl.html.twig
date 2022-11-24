@@ -5,7 +5,7 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-      {% set who = '<a href="' ~ path('user_show', {id:data.userId}) ~  '" target="_blank"><strong>' ~ data.userName ~ '</strong></a>' %}
+      {% set who = '<a href="' ~ user_show_path({id:data.userId}) ~  '" target="_blank"><strong>' ~ data.userName ~ '</strong></a>' %}
       {% set course = '<a href="' ~ path('course_show', {id:data.courseId}) ~ '" target="_blank"><strong> ' ~ data.courseTitle ~ '</strong></a>' %}
       {% if data.type == 'create' %}
         {{ 'notification.course-student.add'|trans({'%who%':who, '%course%':course})|raw }}

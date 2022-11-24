@@ -61,7 +61,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $course = $this->getCourseService()->getCourse($courseId);
@@ -152,7 +155,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getCourseService()->tryManageCourse($courseId);
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
         if (empty($member)) {
@@ -853,7 +859,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);

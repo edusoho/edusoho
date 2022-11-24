@@ -33,7 +33,7 @@
     {% endif %}
   </td>
 
-  <td><a target="_blank" href="{{ path('user_show', {id:owners[thread.userId].id}) }}">
+  <td><a target="_blank" href="{{ user_show_path({id:owners[thread.userId].id}) }}">
     {{ owners[thread.userId].nickname}}</a>
   </td>
 

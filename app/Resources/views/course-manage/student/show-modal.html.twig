@@ -8,7 +8,7 @@
 	<tr>
 		<th width="25%">{{'student.user_name'|trans}}</th>
 		<td width="75%">
-			<a class="pull-right link-primary" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{'student.user_show'|trans}}</a>
+			<a class="pull-right link-primary" href="{{ user_show_path({id:user.id}) }}" target="_blank">{{'student.user_show'|trans}}</a>
 			{{ user.nickname }}
 		</td>
 	</tr>

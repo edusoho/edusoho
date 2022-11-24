@@ -3,7 +3,7 @@
 <tr id="student-{{ user.id }}-tr">
     <td class="media" style="vertical-align: middle;">
         {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
-        <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+        <a target="_blank" href="{{ user_show_path({id:user.id}) }}">{{ user.nickname }}</a>
         {% if student.remark %}
             <span class="color-gray text-sm" title="{{ student.remark|trans }}">({{ student.remark|trans|plain_text(16) }})</span>
         {% endif %}

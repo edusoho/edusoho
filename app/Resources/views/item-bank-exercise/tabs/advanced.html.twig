@@ -19,15 +19,15 @@
             {% endif %}
           </div>
           <div class="advanced-avatar">
-            <a class="{% if not user.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {'id': user.id}) }}"
-               data-card-url="{{ path('user_card_show', {'userId': user.id}) }}"
+            <a class="{% if not user.destroyed|default(0) %}js-user-card{% endif %}" href="{{ user_show_path({'id': user.id}) }}"
+               data-card-url="{{ path('user_card_show', {'userId': user.uuid}) }}"
                data-user-id="{{ user.id }}"
                data-original-title="" title="">
               <img class="avatar-sm" src="{{ filepath(user.mediumAvatar, 'avatar.png') }}"></a>
           </div>
           <div class="advanced-nickname">
             {% if not user.destroyed|default(0) %}
-              <a class="link-dark link-dark advanced-nickname-align" href="{{ path('user_show', {'id': user.id}) }}">{% if user.nickname|length > 5 %}{{ user.nickname|slice(0,4) ~ '...' }}{% else %}{{ user.nickname }}{% endif %}</a>
+              <a class="link-dark link-dark advanced-nickname-align" href="{{ user_show_path({'id': user.id}) }}">{% if user.nickname|length > 5 %}{{ user.nickname|slice(0,4) ~ '...' }}{% else %}{{ user.nickname }}{% endif %}</a>
             {% else %}
               <a class="link-dark link-dark advanced-nickname-align">{{ 'user.user_had_destroyed'|trans }}</a>
             {% endif %}

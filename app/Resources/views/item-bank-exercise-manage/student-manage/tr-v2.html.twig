@@ -5,10 +5,10 @@
     <input value="{{user.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" >
   </td>
   <td class="media media-middle" >
-    <a class="pull-left js-user-card" href="/user/{{student.userId}}" data-card-url="/user/{{student.userId}}/card/show" data-user-id="{{student.userId}}">
+    <a class="pull-left js-user-card" href="{{ user_show_path({id:student.userId}) }}" data-card-url="/user/{{student.userId}}/card/show" data-user-id="{{student.userId}}">
       {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
     </a>
-    <a target="_blank" href="/user/{{student.userId}}">{{ user.nickname }}</a>
+    <a target="_blank" href="{{ user_show_path({id:student.userId}) }}">{{ user.nickname }}</a>
     {% if student.remark %}
       <span class="color-gray text-sm js-remark" title="{{ student.remark|trans }}">({{ student.remark|trans|plain_text(16) }})</span>
     {% endif %}

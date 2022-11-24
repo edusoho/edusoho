@@ -30,11 +30,11 @@
           <div class="col-md-3 col-xs-6">
             <div class="teacher-item">
               <div class="teacher-top">
-                <a class="teacher-img" href="{{ path('user_show', {id:teacher.id}) }}">
+                <a class="teacher-img" href="{{ user_show_path({id:teacher.id}) }}">
                   <img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
                 </a>
                 <h3 class="title">
-                  <a class="link-dark" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                  <a class="link-dark" href="{{ user_show_path({id:teacher.id}) }}">{{ teacher.nickname }}</a>
                 </h3>
                 <div class="position">
                   {% if teacher.title %}

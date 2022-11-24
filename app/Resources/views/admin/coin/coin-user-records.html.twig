@@ -36,9 +36,9 @@
         {% for balance in balances %}
           <tr>
             {% if has_permission('admin_user_manage') %}
-              <td><a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:balance.user_id}) }}">{{ users[balance['user_id']].nickname|default('--') }}</a></td>
+              <td><a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ user_show_path({id:balance.user_id}) }}">{{ users[balance['user_id']].nickname|default('--') }}</a></td>
             {% else %}
-              <td><span><a target="_blank" href="{{ path('user_show', {id: balance.user_id}) }}">{{ users[balance['user_id']].nickname|default('--') }}</a></span></td>
+              <td><span><a target="_blank" href="{{ user_show_path({id: balance.user_id}) }}">{{ users[balance['user_id']].nickname|default('--') }}</a></span></td>
             {% endif %}
             <td class="color-success"> {{ balance.recharge_amount|to_coin(0) }}</td>
             <td class="color-warning"> {{ balance.purchase_amount|default(0)|to_coin(0) }}</td>
