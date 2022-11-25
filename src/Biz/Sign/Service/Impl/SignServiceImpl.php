@@ -18,7 +18,10 @@ class SignServiceImpl extends BaseService implements SignService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $isSignedToday = $this->isSignedToday($userId, $targetType, $targetId);

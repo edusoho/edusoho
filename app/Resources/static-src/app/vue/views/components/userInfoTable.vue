@@ -4,7 +4,7 @@
       <tr>
         <th width="30%">用户名</th>
         <td width="70%">
-          <a class="pull-right" href="javascript:;" @click="toPersonalHomepage(user.user.id)">个人主页</a>
+          <a class="pull-right" href="javascript:;" @click="toPersonalHomepage(user.user.uuid)">个人主页</a>
           {{ user.user.nickname }}
         </td>
       </tr>
@@ -69,7 +69,7 @@
 
       <tr>
         <th>自我介绍</th>
-        <td v-html="user.profile.about || '暂无'"></td>
+        <td class="editor-text" v-html="user.profile.about || '暂无'"></td>
       </tr>
 
       <tr>
@@ -112,8 +112,8 @@ export default {
   },
 
   methods: {
-    toPersonalHomepage(id) {
-      window.open('/user/' + id + '/about', '_blank');
+    toPersonalHomepage(uuid) {
+      window.open('/user/' + uuid + '/about', '_blank');
     },
 
     formatTimeIp(time, ip) {

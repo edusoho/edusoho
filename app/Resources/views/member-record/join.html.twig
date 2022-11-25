@@ -17,7 +17,7 @@
       <tr>
         <td class="media vertical-middle">
           {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
-          <a class="link-primary" target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+          <a class="link-primary" target="_blank" href="{{ user_show_path({id:user.id}) }}">{{ user.nickname }}</a>
         </td>
         <td class="vertical-middle">
             {{ record.created_time|date('Y-n-d H:i') }}

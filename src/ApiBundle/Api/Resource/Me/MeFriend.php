@@ -32,7 +32,10 @@ class MeFriend extends AbstractResource
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw UserException::NOTFOUND_USER();
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                throw UserException::NOTFOUND_USER();
+            }
         }
 
         $friend = $this->getUserService()->follow($this->getCurrentUser()->id, $userId);
@@ -47,7 +50,10 @@ class MeFriend extends AbstractResource
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw UserException::NOTFOUND_USER();
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                throw UserException::NOTFOUND_USER();
+            }
         }
 
         $friend = $this->getUserService()->unFollow($this->getCurrentUser()->id, $userId);

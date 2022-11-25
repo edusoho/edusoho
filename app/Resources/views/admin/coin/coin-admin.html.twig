@@ -37,7 +37,7 @@
             {% if cashes %}
                 {% for cash in cashes %}
                 <tr>
-                    <td><a target="_blank" href="{{ path('user_show', {id:cash.userId}) }}">
+                    <td><a target="_blank" href="{{ user_show_path({id:cash.userId}) }}">
                     {{users[cash.userId].nickname}}</a></td>
                     <td>{{cash.cash|score_text}}</td>
                     <td><a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_admin_edit',{id:cash.id})}}">{{'admin.coin.edit_btn'|trans}}</a></td>

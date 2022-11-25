@@ -6,6 +6,8 @@
  * @license https://github.com/SoftCreatR/JSONPath/blob/main/LICENSE  MIT License
  */
 
+declare(strict_types=1);
+
 namespace Flow\JSONPath\Filters;
 
 use Flow\JSONPath\AccessHelper;
@@ -15,7 +17,7 @@ class IndexesFilter extends AbstractFilter
     /**
      * @inheritDoc
      */
-    public function filter($collection)
+    public function filter($collection): array
     {
         $return = [];
 

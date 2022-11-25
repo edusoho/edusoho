@@ -9,6 +9,7 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\MemberService;
 use Biz\MultiClass\Dao\MultiClassGroupDao;
+use Biz\MultiClass\Dao\MultiClassLiveGroupDao;
 use Biz\MultiClass\Dao\MultiClassRecordDao;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassRecordService;
@@ -35,12 +36,16 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
 
     public function getLiveGroupByUserIdAndCourseId($userId, $courseId, $liveId)
     {
-        $assistantRef = $this->getAssistantStudentService()->getByStudentIdAndCourseId($userId, $courseId);
+        $multiClass = $this->getMultiClassService()->getMultiClassByCourseId($courseId);
+        if (empty($multiClass)) {
+            return [];
+        }
+        $assistantRef = $this->getAssistantStudentService()->getByStudentIdAndMultiClassId($userId, $multiClass['id']);
         if (empty($assistantRef) || empty($assistantRef['group_id'])) {
             return [];
         }
 
-        $liveGroup = $this->getMultiClassLiveGroupDao()->getByGroupIdAndLiveId($assistantRef['group_id'], $liveId);
+        $liveGroup = $this->getMultiClassLiveGroupDao()->getByGroupId($assistantRef['group_id']);
         if (empty($liveGroup) || empty($liveGroup['live_code'])) {
             return [];
         }
@@ -75,7 +80,12 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
 
     public function deleteMultiClassGroup($id)
     {
-        return $this->getMultiClassGroupDao()->delete($id);
+        $result = $this->getMultiClassGroupDao()->delete($id);
+        $liveGroup = $this->getMultiClassLiveGroupDao()->getByGroupId($id);
+        $this->getMultiClassLiveGroupDao()->delete($liveGroup['id']);
+        $this->dispatchEvent('multi_class.group_delete', $liveGroup);
+
+        return $result;
     }
 
     public function sortMultiClassGroup($multiClassId)
@@ -137,6 +147,18 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         }
 
         return true;
+    }
+
+    public function batchDeleteMultiClassGroups($ids)
+    {
+        if (empty($ids)) {
+            return;
+        }
+        $this->getMultiClassGroupDao()->batchDelete(['ids' => $ids]);
+        $liveGroups = $this->getMultiClassLiveGroupDao()->findByGroupIds($ids);
+        $this->getMultiClassLiveGroupDao()->batchDelete(['ids' => array_column($liveGroups, 'id')]);
+
+        $this->dispatchEvent('multi_class.group_batch_delete', $liveGroups);
     }
 
     private function batchCreateRecords($multiClassId, $groups, $assistantId, $assistantStudents)
@@ -300,6 +322,9 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         return $this->createDao('Assistant:AssistantStudentDao');
     }
 
+    /**
+     * @return MultiClassLiveGroupDao
+     */
     protected function getMultiClassLiveGroupDao()
     {
         return $this->createDao('MultiClass:MultiClassLiveGroupDao');

@@ -6,7 +6,16 @@
  * @license https://github.com/SoftCreatR/JSONPath/blob/main/LICENSE  MIT License
  */
 
+declare(strict_types=1);
+
 namespace Flow\JSONPath;
+
+use function explode;
+use function in_array;
+use function preg_match;
+use function strlen;
+use function substr;
+use function trim;
 
 class JSONPathLexer
 {
@@ -14,13 +23,13 @@ class JSONPathLexer
      * Match within bracket groups
      * Matches are whitespace insensitive
      */
-    const MATCH_INDEX = '(?!\-)[\-\w]+ | \*'; // Eg. foo or 40f35757-2563-4790-b0b1-caa904be455f
-    const MATCH_INDEXES = '\s* -?\d+ [-?\d,\s]+'; // Eg. 0,1,2
-    const MATCH_SLICE = '[-\d:]+ | :'; // Eg. [0:2:1]
-    const MATCH_QUERY_RESULT = '\s* \( .+? \) \s*'; // Eg. ?(@.length - 1)
-    const MATCH_QUERY_MATCH = '\s* \?\(.+?\) \s*'; // Eg. ?(@.foo = "bar")
-    const MATCH_INDEX_IN_SINGLE_QUOTES = '\s* \' (.+?)? \' \s*'; // Eg. 'bar'
-    const MATCH_INDEX_IN_DOUBLE_QUOTES = '\s* " (.+?)? " \s*'; // Eg. "bar"
+    public const MATCH_INDEX = '(?!\-)[\-\w]+ | \*'; // Eg. foo or 40f35757-2563-4790-b0b1-caa904be455f
+    public const MATCH_INDEXES = '\s* -?\d+ [-?\d,\s]+'; // Eg. 0,1,2
+    public const MATCH_SLICE = '[-\d:]+ | :'; // Eg. [0:2:1]
+    public const MATCH_QUERY_RESULT = '\s* \( .+? \) \s*'; // Eg. ?(@.length - 1)
+    public const MATCH_QUERY_MATCH = '\s* \?\(.+?\) \s*'; // Eg. ?(@.foo = "bar")
+    public const MATCH_INDEX_IN_SINGLE_QUOTES = '\s* \' (.+?)? \' \s*'; // Eg. 'bar'
+    public const MATCH_INDEX_IN_DOUBLE_QUOTES = '\s* " (.+?)? " \s*'; // Eg. "bar"
 
     /**
      * The expression being lexed.
@@ -36,10 +45,7 @@ class JSONPathLexer
      */
     protected $expressionLength = 0;
 
-    /**
-     * @param string $expression
-     */
-    public function __construct($expression)
+    public function __construct(string $expression)
     {
         $expression = trim($expression);
         $len = strlen($expression);
@@ -62,10 +68,8 @@ class JSONPathLexer
 
     /**
      * @throws JSONPathException
-     *
-     * @return array
      */
-    public function parseExpressionTokens()
+    public function parseExpressionTokens(): array
     {
         $dotIndexDepth = 0;
         $squareBracketDepth = 0;
@@ -139,45 +143,28 @@ class JSONPathLexer
         return $tokens;
     }
 
-    /**
-     * @param int $pos
-     * @param int $forward
-     *
-     * @return string|null
-     */
-    protected function lookAhead($pos, $forward = 1)
+    protected function lookAhead(int $pos, int $forward = 1): ?string
     {
-        return isset($this->expression[$pos + $forward]) ? $this->expression[$pos + $forward] : null;
+        return $this->expression[$pos + $forward] ?? null;
     }
 
-    /**
-     * @param int $pos
-     *
-     * @return bool
-     */
-    protected function atEnd($pos)
+    protected function atEnd(int $pos): bool
     {
         return $pos === $this->expressionLength;
     }
 
     /**
      * @throws JSONPathException
-     *
-     * @return array
      */
-    public function parseExpression()
+    public function parseExpression(): array
     {
         return $this->parseExpressionTokens();
     }
 
     /**
-     * @param string $value
-     *
      * @throws JSONPathException
-     *
-     * @return JSONPathToken
      */
-    protected function createToken($value)
+    protected function createToken(string $value): JSONPathToken
     {
         // The IDE doesn't like, what we do with $value, so let's
         // move it to a separate variable, to get rid of any IDE warnings

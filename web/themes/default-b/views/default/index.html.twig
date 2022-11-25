@@ -66,7 +66,7 @@
                               <i class="es-icon es-icon-people"></i>
                               {% for teacher in teachers %}
                                 {% if loop.index <= 1 %}
-                                  <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                                  <a class="teacher-nickname mrl" href="{{ user_show_path({id:teacher.id}) }}">{{ teacher.nickname }}</a>
                                 {% endif %}
                               {% endfor %}
                             {% endif %}
@@ -219,7 +219,7 @@
                   {% if teacher %}
                     <li class="col-xs-6  col-sm-6 col-md-4">
                       <div class="teachers-item">
-                        <a href="{{ path('user_show', {id:teacher.id}) }}">
+                        <a href="{{ user_show_path({id:teacher.id}) }}">
                           <img class="img-circle" src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}">
                         </a>
                         <span>{{ web_macro.user_link(teacher) }}</span>

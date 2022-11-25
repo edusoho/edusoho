@@ -99,7 +99,10 @@ class MockController extends BaseController
             if (!empty($apiUserId)) {
                 $user = $this->getUserService()->getUser($apiUserId);
                 if (empty($user)) {
-                    $this->createNewException(UserException::NOTFOUND_USER());
+                    $user = $this->getUserService()->getUserByUUID($apiUserId);
+                    if(empty($user)) {
+                        $this->createNewException(UserException::NOTFOUND_USER());
+                    }
                 }
                 $token = $this->getUserService()->makeToken(
                     MobileBaseController::TOKEN_TYPE,
@@ -212,7 +215,10 @@ class MockController extends BaseController
         if (!empty($apiUserId)) {
             $user = $this->getUserService()->getUser($apiUserId);
             if (empty($user)) {
-                $this->createNewException(UserException::NOTFOUND_USER());
+                $user = $this->getUserService()->getUserByUUID($apiUserId);
+                if(empty($user)) {
+                    $this->createNewException(UserException::NOTFOUND_USER());
+                }
             }
             $token = $this->getUserService()->makeToken(
                 MobileBaseController::TOKEN_TYPE,

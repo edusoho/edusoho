@@ -8,7 +8,7 @@
       {% for student in students %}
         <li>
           {% set isOpenInfo = data('StudentOpenInfo', {'userId': student.id}) %}
-          <a class="user-dropdown-info__avatar {% if not student.destroyed|default(0) %}js-user-card{% endif %}" {% if isOpenInfo == 1 %}href="{{ path('user_show', {'id': student.id}) }}"{% endif %} data-card-url="{{ path('user_card_show', {userId: student.id}) }}"
+          <a class="user-dropdown-info__avatar {% if not student.destroyed|default(0) %}js-user-card{% endif %}" {% if isOpenInfo == 1 %}href="{{ user_show_path({'id': student.id}) }}"{% endif %} data-card-url="{{ path('user_card_show', {userId: student.uuid}) }}"
             data-user-id="{{ student.id }}" data-original-title="" title="">
             <img class="avatar-sm" src="{{ filepath(student.smallAvatar, 'avatar.png') }}">
             {{ slot('header.user.logo', {user: student}) }}

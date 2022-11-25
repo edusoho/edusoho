@@ -6,6 +6,8 @@
  * @license https://github.com/SoftCreatR/JSONPath/blob/main/LICENSE  MIT License
  */
 
+declare(strict_types=1);
+
 namespace Flow\JSONPath\Test\Traits;
 
 use ArrayAccess;
@@ -16,14 +18,13 @@ trait TestDataTrait
     /**
      * Returns decoded JSON from a given file either as array or object.
      *
-     * @param string $type
      * @param bool|int $asArray
      *
      * @return array|ArrayAccess|null
      */
-    private function getData($type, $asArray = true)
+    protected function getData(string $type, $asArray = true)
     {
-        $filePath = sprintf('%s/data/%s.json', dirname(__DIR__), $type);
+        $filePath = sprintf('%s/data/%s.json', dirname(__DIR__, 1), $type);
 
         if (!file_exists($filePath)) {
             throw new RuntimeException("File {$filePath} does not exist.");

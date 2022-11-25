@@ -1904,7 +1904,7 @@ course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not s
 course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points</span>.'
 course.plan_task.activity_manage.testpaper.pass_score: "pass score is <span class=\"color-primary\">%finishScore% points</span>.\n"
 course.plan_task.activity_manage.testpaper.answer: 'Please answer within <span class = "color-primary">%limitedTime% minutes</span>.'
-course.plan_task.activity_manage.testpaper.limit_tips: <span class="color-warning">Reminder: Once the test starts, the test will be handed in automatically after the countdown is over.</span>
+course.plan_task.activity_manage.testpaper.limit_tips: '<span class="color-warning">Reminder: Once the test starts, the test will be handed in automatically after the countdown is over.</span>'
 course.plan_task.activity_manage.testpaper.once_trance: 'Only <span class = "color-danger"> once </ span> test opportunities.'
 course.plan_task.activity_manage.testpaper.start_exam: 'Start'
 course.plan_task.activity_manage.testpaper.close_tips: 'The test is closed, please contact the teacher!'
@@ -6670,6 +6670,7 @@ admin.developer_setting.s2b2c_supplier_api: S2B2C Supplier API
 admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
+admin.developer_setting.es_live_api_server: ES Live API
 admin.developer_xapi_address: XAPI address
 admin.developer_face_address: AI Face API address
 admin.developer_push_address: Push API address
@@ -10894,6 +10895,7 @@ exception.multi_class.multi_teacher_cannot_be_assistant: The Multi class teacher
 exception.multi_class.forbidden_delete_course: The course can not delete
 exception.multi_class.forbidden_close_course: The course can not close
 exception.multi_class.group_not_found: The group not found
+exception.multi_class.create_group_failed: Create group failed
 
 site.login.change_to_pwd: Change to account login
 site.login.change_to_sms: Change to sms login

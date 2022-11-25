@@ -39,6 +39,7 @@
       {% include 'admin-v2/system/asset-setting/pay/alipay.html.twig'%}
       {% include 'admin-v2/system/asset-setting/pay/wxpay.html.twig'%}
       {% include 'admin-v2/system/asset-setting/pay/llpay.html.twig'%}
+      {{ slot('asset-setting.pay', {'payment': payment}) }}
     </div>
 
   <div class="form-group">

@@ -140,6 +140,11 @@ class EditorController extends BaseController
         if (!preg_match('/^https?\:\/\/formula\.edusoho\.net/', $url)) {
             $this->createNewException(FileException::FILE_AUTH_URL_INVALID());
         }
+
+        if (substr_count($url, '@') > 1) {
+            $this->createNewException(FileException::FILE_AUTH_URL_INVALID());
+        }
+
         $maker = new UploadToken();
         $token = $maker->parse($token);
 

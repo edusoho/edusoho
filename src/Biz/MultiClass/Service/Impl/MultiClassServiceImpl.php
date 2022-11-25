@@ -167,6 +167,9 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         try {
             $this->getCourseMemberService()->releaseMultiClassMember($multiClassExisted['courseId'], $multiClassExisted['id']);
             $this->getMultiClassDao()->delete($id);
+            $this->getAssistantStudentService()->deleteByMultiClassId($id);
+            $multiClassGroups = $this->getMultiClassGroupService()->findGroupsByMultiClassId($id);
+            $this->getMultiClassGroupService()->batchDeleteMultiClassGroups(array_column($multiClassGroups, 'id'));
 
             $this->getLogService()->info(
                 'multi_class',
@@ -322,6 +325,11 @@ class MultiClassServiceImpl extends BaseService implements MultiClassService
         } else {
             return $this->getMultiClassDao()->update($multiClass['id'], ['start_time' => 0, 'end_time' => 0]);
         }
+    }
+
+    public function updateMultiClassBundleNo($id, $bundleNo)
+    {
+        return $this->getMultiClassDao()->update($id, ['bundle_no' => $bundleNo]);
     }
 
     private function filterConditions($conditions)

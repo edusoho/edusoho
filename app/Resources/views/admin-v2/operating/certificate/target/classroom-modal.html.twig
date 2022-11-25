@@ -36,7 +36,7 @@
         {% set teacher = users[classroom.creator]|default(null) %}
         {% if teacher %}
           <div class="teacher">
-            <a class="teacher-nickname ellipsis link-primary" target="_blank"  href="{{ path('user_show', {id:teacher.uuid}) }}">{{ teacher.nickname }}</a>
+            <a class="teacher-nickname ellipsis link-primary" target="_blank"  href="{{ user_show_path({id:teacher.id}) }}">{{ teacher.nickname }}</a>
           </div>
         {% endif %}
       </td>

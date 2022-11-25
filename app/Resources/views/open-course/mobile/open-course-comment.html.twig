@@ -8,7 +8,7 @@
       {% if app.user %}
         <div class="open-course-user clearfix">
           <div class="open-course-img">
-            <a href="{{ path('user_show', {id:app.user.id}) }}"><img class="avatar-sm" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}"></a>
+            <a href="{{ user_show_path({id:app.user.id}) }}"><img class="avatar-sm" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}"></a>
           </div>
           <form class="es-commet open-course-comment" id="thread-post-form" method="POST" action="{{ path('open_course_post',{id:course.id}) }}" onsubmit="return false">
             <textarea class="form-control form-control-o" rows="2" placeholder="{{'my.teaching.open_course.comment.placeholder'|trans}}" {% if not app.user %}disabled{% endif %} name="content"></textarea>

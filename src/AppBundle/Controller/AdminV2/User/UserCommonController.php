@@ -27,7 +27,7 @@ class UserCommonController extends BaseController
 {
     private $keywordType = ['verifiedMobile', 'idcard'];
 
-    public function index($fields ,$conditions, $indexTwigUrl)
+    public function index($fields, $conditions, $indexTwigUrl)
     {
         $conditions = array_merge($conditions, $fields);
         $conditions = $this->fillOrgCode($conditions);
@@ -175,7 +175,7 @@ class UserCommonController extends BaseController
             $registration = $this->getRegisterData($formData, $request->getClientIp());
 
             if ($isStaff == true) {
-                if(count($formData['roles']) == 1){
+                if (count($formData['roles']) == 1) {
                     throw UserException::MUST_SELECT_A_STAFFROLE();
                 }
 
@@ -318,11 +318,15 @@ class UserCommonController extends BaseController
 
     public function show($request, $id, $showTwigUrlOne, $showTwigUrlTwo)
     {
-        $user = $this->getUserService()->getUser($id);
+        $user = $this->getUserService()->getUserByUUID($id);
+        if (empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
         if (1 == $user['destroyed']) {
             return $this->render($showTwigUrlOne, []);
         }
-        $profile = $this->getUserService()->getUserProfile($id);
+        $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
 
         $fields = $this->getFields();
@@ -344,7 +348,7 @@ class UserCommonController extends BaseController
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
             if ($studentToStaff) {
-                $this->getUserService()->updateUser($user['id'], ['isStudent'=>2]);
+                $this->getUserService()->updateUser($user['id'], ['isStudent' => 2]);
             }
 
             if (!empty($roles)) {
@@ -547,7 +551,10 @@ class UserCommonController extends BaseController
         $user = $this->getUserService()->getUser($id);
 
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($id);
+            if (empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
@@ -571,6 +578,7 @@ class UserCommonController extends BaseController
             $this->getLogService()->error('user', 'password-reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：" . $e->getMessage());
             throw $e;
         }
+
         return $this->createJsonResponse(true);
     }
 
@@ -579,7 +587,10 @@ class UserCommonController extends BaseController
         $user = $this->getUserService()->getUser($id);
 
         if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($id);
+            if (empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
@@ -643,8 +654,6 @@ class UserCommonController extends BaseController
             'user' => $user,
         ]);
     }
-
-
 
     protected function kickUserLogout($userId)
     {
@@ -760,6 +769,4 @@ class UserCommonController extends BaseController
     {
         return $this->createService('Org:OrgService');
     }
-
-
 }

@@ -6,8 +6,8 @@
 
 {% block main %}
   <ul class="nav nav-pills mbl">
-    <li {% if app.request.get('goodsType')|default('course') == 'course' %}class="active"{% endif %}><a href="{{ path('user_favorited', {id:user.id, goodsType: 'course'}) }}">{{'site.default.course'|trans}}</a></li>
-    <li {% if app.request.get('goodsType')|default('course') == 'classroom' %}class="active"{% endif %}><a href="{{ path('user_favorited', {id:user.id, goodsType: 'classroom'}) }}">{{'site.default.classroom'|trans}}</a></li>
+    <li {% if app.request.get('goodsType')|default('course') == 'course' %}class="active"{% endif %}><a href="{{ path('user_favorited', {id:user.uuid, goodsType: 'course'}) }}">{{'site.default.course'|trans}}</a></li>
+    <li {% if app.request.get('goodsType')|default('course') == 'classroom' %}class="active"{% endif %}><a href="{{ path('user_favorited', {id:user.uuid, goodsType: 'classroom'}) }}">{{'site.default.classroom'|trans}}</a></li>
   </ul>
   <div class="course-list course-list-new">
     <div class="row">

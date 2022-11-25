@@ -1,4 +1,10 @@
-# JSONPath for PHP 5.4 - 7.0 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+# JSONPath for PHP 7.1 - 7.4
+
+[![Build Status](https://img.shields.io/github/workflow/status/SoftCreatR/JSONPath/Test/main?label=Build%20Status)](https://github.com/SoftCreatR/JSONPath/actions?query=workflow%3ATest)
+[![Latest Release](https://img.shields.io/packagist/v/SoftCreatR/JSONPath?color=blue&label=Latest%20Release)](https://packagist.org/packages/softcreatr/jsonpath)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE) [![Plant Tree](https://img.shields.io/badge/dynamic/json?color=brightgreen&label=Plant%20Tree&query=%24.total&url=https%3A%2F%2Fpublic.offset.earth%2Fusers%2Fsoftcreatr%2Ftrees)](https://ecologi.com/softcreatr?r=61212ab3fc69b8eb8a2014f4)
+[![Codecov branch](https://img.shields.io/codecov/c/github/SoftCreatR/JSONPath)](https://codecov.io/gh/SoftCreatR/JSONPath)
+[![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability-percentage/SoftCreatR/JSONPath)](https://codeclimate.com/github/SoftCreatR/JSONPath)
 
 This is a [JSONPath](http://goessner.net/articles/JsonPath/) implementation for PHP based on Stefan Goessner's JSONPath script.
 
@@ -10,20 +16,12 @@ This project aims to be a clean and simple implementation with the following goa
  - Expressions are parsed into tokens using code inspired by the Doctrine Lexer. The tokens are cached internally to avoid re-parsing the expressions.
  - There is no `eval()` in use
  - Any combination of objects/arrays/ArrayAccess-objects can be used as the data input which is great if you're de-serializing JSON in to objects or if you want to process your own data structures.
- 
-🔻 **Please note, that this branch (based on JSONPath 0.7.2) is protected. There are no intentions to make any updates here. Please consider upgrading to PHP 7.1 or newer.**
 
 ## Installation
 
-**PHP >= 7.1+**
 ```bash
-composer require softcreatr/jsonpath
+composer require softcreatr/jsonpath:"^0.5 || ^0.7 || ^0.8"
 ```
-
-**PHP < 7.1**
-
-1. Add to the `require`-section of your composer.json: `"softcreatr/jsonpath": "dev-oldphp"`
-2. Execute `composer install`
 
 ## JSONPath Examples
 
@@ -41,6 +39,7 @@ JSONPath                  | Result
 `$..books[1:6:3]`         | every third book starting from 1 till 6
 `$..books[?(@.isbn)]`     | filter all books with isbn number
 `$..books[?(@.price<10)]` | filter all books cheaper than 10
+`$..books.length`         | the amount of books
 `$..*`                    | all elements in the data (recursively extracted)
 
 
@@ -61,8 +60,11 @@ Symbol                | Description
 
 ## PHP Usage
 
+#### Using arrays
+
 ```php
-use Flow\JSONPath\JSONPath;
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
 
 $data = ['people' => [
     ['name' => 'Sascha'],
@@ -71,11 +73,38 @@ $data = ['people' => [
     ['name' => 'Maximilian'],
 ]];
 
-print_r((new JSONPath($data))->find('$.people.*.name'), true);
-// $result[0] === 'Sascha'
-// $result[1] === 'Bianca'
-// $result[2] === 'Alexander'
-// $result[3] === 'Maximilian'
+print_r((new \Flow\JSONPath\JSONPath($data))->find('$.people.*.name')->getData());
+
+/*
+Array
+(
+    [0] => Sascha
+    [1] => Bianca
+    [2] => Alexander
+    [3] => Maximilian
+)
+*/
+```
+
+#### Using objects
+
+```php
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+
+$data = json_decode('{"name":"Sascha Greuel","birthdate":"1987-12-16","city":"Gladbeck","country":"Germany"}', false);
+
+print_r((new \Flow\JSONPath\JSONPath($data))->find('$')->getData()[0]);
+
+/*
+stdClass Object
+(
+    [name] => Sascha Greuel
+    [birthdate] => 1987-12-16
+    [city] => Gladbeck
+    [country] => Germany
+)
+*/
 ```
 
 More examples can be found in the [Wiki](https://github.com/SoftCreatR/JSONPath/wiki/Queries)
@@ -94,7 +123,7 @@ not very predictable as:
 ```php
 use Flow\JSONPath\JSONPath;
 
-$myObject = json_decode('{"name":"Sascha Greuel","birthdate":"1987-12-16","city":"Gladbeck","country":"Germany"}', false);
+$myObject = (new Foo())->get('bar');
 $jsonPath = new JSONPath($myObject, JSONPath::ALLOW_MAGIC);
 ```
 
@@ -129,6 +158,54 @@ So here are the types of query expressions that are supported:
 
 Other / Similar implementations can be found in the [Wiki](https://github.com/SoftCreatR/JSONPath/wiki/Other-Implementations).
 
-## License
+## Changelog
 
-[MIT](LICENSE)
+A list of changes can be found in the [CHANGELOG.md](CHANGELOG.md) file. 
+
+## License 🌳
+
+[MIT](LICENSE.md) © [1-2.dev](https://1-2.dev)
+
+This package is Treeware. If you use it in production, then we ask that you [**buy the world a tree**](https://ecologi.com/softcreatr?r=61212ab3fc69b8eb8a2014f4) to thank us for our work. By contributing to the ecologi project, you’ll be creating employment for local families and restoring wildlife habitats.
+
+## Contributors ✨
+
+<table>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/SoftCreatR>
+            <img src=https://avatars.githubusercontent.com/u/81188?v=4 width="100;"  alt=Sascha Greuel/>
+            <br />
+            <sub style="font-size:14px"><b>Sascha Greuel</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/warlof>
+            <img src=https://avatars.githubusercontent.com/u/648753?v=4 width="100;"  alt=Loïc Leuilliot/>
+            <br />
+            <sub style="font-size:14px"><b>Loïc Leuilliot</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/SG5>
+            <img src=https://avatars.githubusercontent.com/u/3931761?v=4 width="100;"  alt=Sergey/>
+            <br />
+            <sub style="font-size:14px"><b>Sergey</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/drealecs>
+            <img src=https://avatars.githubusercontent.com/u/209984?v=4 width="100;"  alt=Alexandru Pătrănescu/>
+            <br />
+            <sub style="font-size:14px"><b>Alexandru Pătrănescu</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/oleg-andreyev>
+            <img src=https://avatars.githubusercontent.com/u/1244112?v=4 width="100;"  alt=Oleg Andreyev/>
+            <br />
+            <sub style="font-size:14px"><b>Oleg Andreyev</b></sub>
+        </a>
+    </td>
+</tr>
+</table>

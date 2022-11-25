@@ -32,7 +32,7 @@ class IQiYiVideoItemParser extends AbstractItemParser
     protected function getUrlPrefixes()
     {
         return [
-            'www.iqiyi.com',
+            'https://www.iqiyi.com',
         ];
     }
 

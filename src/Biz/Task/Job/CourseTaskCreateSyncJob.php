@@ -61,15 +61,16 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
             $this->getLock()->release("sync_course_{$task['courseId']}");
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_create', 'course.log.task.create.sync.fail_tips', ['error' => $e->getMessage()]);
+            $this->innodbTrxLog($e);
             $this->getLock()->release("sync_course_{$task['courseId']}");
-            if (!isset($this->args['repeat'])) {
+            if (!isset($this->args['repeat']) || $this->args['repeat'] < 5) {
                 $this->getSchedulerService()->register(array(
                     'name' => 'course_task_create_sync_job_' . $task['id'],
                     'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-                    'expression' => time() + 60,
+                    'expression' => time() + 120,
                     'misfire_policy' => 'executing',
                     'class' => 'Biz\Task\Job\CourseTaskCreateSyncJob',
-                    'args' => array('taskId' => $task['id'], 'repeat' => 1),
+                    'args' => array('taskId' => $task['id'], 'repeat' => (isset($this->args['repeat'])?$this->args['repeat']:0) + 1),
                 ));
             }
             throw $e;

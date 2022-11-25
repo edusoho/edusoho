@@ -3,8 +3,9 @@
     <!-- Tip: Form表单使用组件FormModel更合适，请大家使用FormModel来做表单开发 -->
     <a-form
       :form="form"
-      :label-col="{ span: 3 }"
-      :wrapper-col="{ span: 21 }"
+      :label-col="{ span: 4 }"
+      :wrapper-col="{ span: 20 }"
+      autoComplete="off"
       style="max-width: 1000px;"
     >
       <a-form-item label="班课名称">
@@ -121,48 +122,23 @@
           用户中心设置助教
           <a href="/admin/v2/user" target="_blank">去设置</a>
         </div>
-        <div class="pull-right color-warning" v-if="multiClassId">
-          <a-icon type="exclamation-circle" style="color: #ff8a0c;" />
-          删除助教，将导致该助教下已分配的学员平均分配给其他助教！
-        </div>
       </a-form-item>
-      <a-form-item label="助教及分组设置">
-         <div class="tip-color">（将学员分成若干组，并将组分配给助教管理）</div>
-         <a-form-item class="mt12 assistant-max-number" label="分组容纳学员上限" :label-col="{ span: 4 }" :wrapper-col="{ span: 3 }">
-           <a-input v-decorator="['group_limit_num', {
+      <a-form-item class="assistant-max-number" label="分组容纳学员上限" :wrapper-col="{ span: 3 }">
+        <a-input v-decorator="['group_limit_num', {
               rules: [
                 { required: true, message: '请输入分组容纳学员人数' },
                 { validator: validateGroupNum }
                ]
              }]">
-              <span slot="suffix">人</span>
-            </a-input>
-            <a-popover placement="right">
-               <template slot="content">
-                第1组学员达到上限后，将自动生成第2组添加学员，依次类推
-               </template>
-              <svg-icon class="icon-tip" icon="icon-tip" />
-            </a-popover>
-            <span class="tip-color setup-tip">可去【参数设置】中设置默认值</span>
-         </a-form-item>
-         <a-form-item class="mt12 assistant-max-number" label="助教服务组数上限" :label-col="{ span: 4 }" :wrapper-col="{ span: 3 }">
-           <a-input v-decorator="['service_group_num', {
-              rules: [
-                { required: true, message: '请输入助教服务组数' },
-                { validator: validateAssistantNum }
-               ]
-             }]">
-              <span slot="suffix">组</span>
-            </a-input>
-            <a-popover placement="right">
-              <template slot="content">
-               <div>第1位助教达到组数上限后，新增组将自动分配给第2个助教，依次类推</div>
-               <div>如所有助教皆达到组数上限，新增组将平均分配至每位助教</div>
-              </template>
-              <svg-icon class="icon-tip" icon="icon-tip" />
-            </a-popover>
-          </a-form-item>
-          <div class="total-number-tip">助教上限学员数：每组上限学员数*助教上限组数=<span v-if="form.getFieldValue('service_group_num') && form.getFieldValue('group_limit_num')">{{form.getFieldValue('service_group_num')*form.getFieldValue('group_limit_num')}}</span>人</div>
+          <span slot="suffix">人</span>
+        </a-input>
+        <a-popover placement="right">
+          <template slot="content">
+            第1组学员达到上限后，将自动生成第2组添加学员，依次类推
+          </template>
+          <svg-icon class="icon-tip" icon="icon-tip" />
+        </a-popover>
+        <span class="tip-color setup-tip">可去【参数设置】中设置默认值</span>
       </a-form-item>
       <a-form-item label="排课">
         <Schedule
@@ -803,14 +779,14 @@ export default {
 .icon-tip{
   position: absolute;
   top: 0;
-  left: 120px;
+  left: 140px;
   width:16px;
   height:16px;
   color: #31A1FF;
 }
 .setup-tip{
   position: absolute;
-  left: 150px;
+  left: 170px;
   width: 200px;
 }
 .total-number-tip{

@@ -22,7 +22,7 @@
         {% set creator = users[template.createdUserId]|default(null) %}
         {% if creator %}
           <div class="teacher">
-            <a class="teacher-nickname ellipsis link-primary" target="_blank"  href="{{ path('user_show', {id:creator.uuid}) }}">{{ creator.nickname }}</a>
+            <a class="teacher-nickname ellipsis link-primary" target="_blank"  href="{{ user_show_path({id:creator.uuid}) }}">{{ creator.nickname }}</a>
           </div>
         {% endif %}
       </td>

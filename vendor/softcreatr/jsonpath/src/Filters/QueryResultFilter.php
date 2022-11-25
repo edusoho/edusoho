@@ -6,10 +6,14 @@
  * @license https://github.com/SoftCreatR/JSONPath/blob/main/LICENSE  MIT License
  */
 
+declare(strict_types=1);
+
 namespace Flow\JSONPath\Filters;
 
-use Flow\JSONPath\AccessHelper;
-use Flow\JSONPath\JSONPathException;
+use Flow\JSONPath\{AccessHelper, JSONPathException};
+
+use function count;
+use function preg_match;
 
 class QueryResultFilter extends AbstractFilter
 {
@@ -18,7 +22,7 @@ class QueryResultFilter extends AbstractFilter
      *
      * @throws JSONPathException
      */
-    public function filter($collection)
+    public function filter($collection): array
     {
         preg_match('/@\.(?<key>\w+)\s*(?<operator>[-+*\/])\s*(?<numeric>\d+)/', $this->token->value, $matches);
 

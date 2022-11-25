@@ -115,7 +115,10 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         }
 
         if (empty($account) && empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+            $user = $this->getUserService()->getUserByUUID($userId);
+            if(empty($user)) {
+                $this->createNewException(UserException::NOTFOUND_USER());
+            }
         }
     }
 

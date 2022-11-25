@@ -24,7 +24,10 @@ class TeacherPromotion extends AbstractResource
         $teacher = $this->getUserService()->getUser($id);
 
         if (empty($teacher) || !in_array('ROLE_TEACHER', $teacher['roles'])) {
-            throw UserException::NOTFOUND_USER();
+            $teacher = $this->getUserService()->getUserByUUID($id);
+            if (empty($teacher) || !in_array('ROLE_TEACHER', $teacher['roles'])) {
+                throw UserException::NOTFOUND_USER();
+            }
         }
 
         $number = $request->request->get('number', 0);
@@ -48,7 +51,10 @@ class TeacherPromotion extends AbstractResource
         $teacher = $this->getUserService()->getUser($id);
 
         if (empty($teacher) || !in_array('ROLE_TEACHER', $teacher['roles'])) {
-            throw UserException::NOTFOUND_USER();
+            $teacher = $this->getUserService()->getUserByUUID($id);
+            if (empty($teacher) || !in_array('ROLE_TEACHER', $teacher['roles'])) {
+                throw UserException::NOTFOUND_USER();
+            }
         }
 
         $this->getUserService()->cancelPromoteUser($id);
