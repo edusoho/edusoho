@@ -41,6 +41,14 @@ custom_admin_v2:
     resource: "@CustomBundle/Resources/config/custom_admin_routing_v2.yml"
     prefix:   /admin/v2
 
+marketing_mall_admin_v2:
+    resource: "@MarketingMallBundle/Resources/config/marketing_mall_admin_routing_v2.yml"
+    prefix:   /admin/v2
+
+marketing_mall:
+  resource: "@MarketingMallBundle/Resources/config/marketing_mall_routing.yml"
+  prefix:   /
+
 # Internal routing configuration to handle ESI
 # _internal:
 #    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"

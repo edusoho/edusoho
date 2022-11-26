@@ -32,6 +32,18 @@ define(function(require, exports, module) {
                 return html;
             }
         });
+
+        $.ajax({
+            url: '/api/mall_info',
+            headers: {
+                Accept: 'application/vnd.edusoho.v2+json'
+            }
+        }).done(function(resp) {
+            if (resp.isShow && resp.isInit) {
+                $(".js-is-sass").removeClass('hidden')
+                $('.js-mall-order').attr('href', $('.js-mall-order').data('url'))
+            }
+        })
     };
 
 });

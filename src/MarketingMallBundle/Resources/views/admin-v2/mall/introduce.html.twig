@@ -1,0 +1,49 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_purchase_market_tab1' %}
+
+{% do script(['marketingmallbundle/js/introduce/index.js']) %}
+
+{% block content %}
+  <style>
+    .w-full {
+      width: 100%;
+    }
+    .custom-btn {
+      width: 96px;
+      height: 36px;
+      margin-right: 24px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #fff;
+      text-align: center;
+      line-height: 36px;
+      background: #165DFF;
+      border-radius: 2px;
+      cursor: pointer;
+      outline: 0;
+      border: none;
+    }
+    .custom-btn.disabled {
+      background-color: #94BFFF;
+      cursor: not-allowed;
+    }
+  </style>
+
+  <div class="js-page-container" style="position:fixed;top:80px;right:20px;bottom:20px;left:20px;overflow-y:scroll;">
+    <div style="position:relative;background-color:#fff;">
+      <div style="padding: 24px;">
+        <img class="w-full" src="{{ asset('/static-dist/marketingmallbundle/img/introduce-1.png') }}" />
+        <img class="w-full" src="{{ asset('/static-dist/marketingmallbundle/img/introduce-2.png') }}" />
+        <img class="w-full" src="{{ asset('/static-dist/marketingmallbundle/img/introduce-3.png') }}" />
+        <div class="js-bottom-flag"></div>
+      </div>
+      <div style="position: sticky;left:0;right:0;bottom: 0;height: 52px;background-color:#fff">
+        <div style="display:flex;height:52px;justify-content:flex-end;align-items:center;border-top:solid 1px #F2F3F5;">
+          <div style="margin-right:32px;font-size:14px;color:#272E3B;">鼠标滚轮滚动浏览商城介绍</div>
+          <button class="custom-btn js-start-mall disabled" data-url="{{ path('admin_v2_mall_introduce') }}" data-target-url="{{ path('admin_v2_marketing_mall') }}">开始使用</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

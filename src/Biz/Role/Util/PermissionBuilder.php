@@ -454,6 +454,7 @@ class PermissionBuilder
             $rootDir.'/../src/AppBundle/Resources/config/menus_admin_v2.yml',
             $rootDir.'/../src/CustomBundle/Resources/config/menus_admin.yml',
             $rootDir.'/../src/CustomBundle/Resources/config/menus_admin_v2.yml',
+            $rootDir.'/../src/MarketingMallBundle/Resources/config/menus_admin_v2.yml',
         ];
 
         foreach ($files as $filepath) {

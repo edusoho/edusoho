@@ -1,0 +1,47 @@
+services:
+  api_token_header_listener:
+    class: MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener
+    arguments:
+      - '@service_container'
+
+  marketing_mall_user_event_subscriber:
+    class: MarketingMallBundle\Event\UserEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+
+  marketing_mall_question_bank_event_subscriber:
+    class: MarketingMallBundle\Event\QuestionBankEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+
+  marketing_mall_course_event_subscriber:
+    class: MarketingMallBundle\Event\CourseEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+
+  marketing_mall_classroom_event_subscriber:
+    class: MarketingMallBundle\Event\ClassroomEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+
+  marketing_mall_role_event_subscriber:
+    class: MarketingMallBundle\Biz\Role\Event\RoleEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+
+  marketing_mall_setting_event_subscriber:
+    class: MarketingMallBundle\Biz\System\Event\SettingEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+
+  marketing_mall_mall_event_subscriber:
+    class: MarketingMallBundle\Biz\Mall\Event\MallEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+    - { name: codeages_plugin.event.subscriber }

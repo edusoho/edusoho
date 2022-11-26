@@ -13,6 +13,10 @@ class MemberManage
         $this->biz = $biz;
     }
 
+    /**
+     * @param $role
+     * @return Member
+     */
     public function getMemberClass($role)
     {
         $class = __NAMESPACE__.'\\'.ucfirst($role.'Member');

@@ -2,7 +2,7 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}{{'admin.user.manage.create_by_mobile_or_email.heading_title'|trans}}{% endblock %}
+{% block title %}{{'admin.user.manage.create_student_by_mobile_or_email.heading_title'|trans}}{% endblock %}
 {% block body %}
 
   <form id="user-create-form" class="form-horizontal" method="post" action="{{ path('admin_v2_user_create') }}">
@@ -19,7 +19,7 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="nickname">{{'user.fields.username_label'|trans}}</label>
+        <label for="nickname">{{'user.fields.username_student_label'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="nickname" name="nickname" data-url="{{ path('admin_v2_user_create_nickname_check') }}"
@@ -48,19 +48,6 @@
     </div>
 
     {% include 'org/org-tree-select.html.twig' with {colmd:7,modal: 'modal'} %}
-
-    {% if 'ROLE_TEACHER' in app.user.roles|default(null) %}
-      <div class="row form-group">
-        <div class="col-md-2 control-label">
-          <label for="roles">{{'admin.user.fields.role_label'|trans}}</label>
-        </div>
-        <div class="col-md-7 controls">
-          <input type="checkbox" value="ROLE_TEACHER" name="roles[]"> {{'role.teacher'|trans}}
-          <input type="checkbox" value="ROLE_TEACHER_ASSISTANT" name="roles[]"> {{'role.assistant'|trans}}
-          <input type="checkbox" value="ROLE_EDUCATIONAL_ADMIN" name="roles[]"> {{'role.academic_staf'|trans}}
-        </div>
-      </div>
-    {% endif %}
 
     <input type="hidden" id="password_level" value="{{ setting('auth.password_level')|default('low') }}">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

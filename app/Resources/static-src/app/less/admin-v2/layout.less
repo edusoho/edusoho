@@ -190,6 +190,12 @@ body {
   .change-version-btn {
     height: 60px;
     line-height: 60px;
+
+    .icon-home {
+      margin-right: 2px;
+      vertical-align: text-bottom;
+    }
+
     a {
       font-size: 14px;
       color: #bebebe;
@@ -202,6 +208,19 @@ body {
         text-decoration: none;
       }
     }
+    
+    .school-share-container {
+      padding: 24px;
+      background-color: #fff;
+
+      .shc-label {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        color: #272E3B;
+      }
+    }
+
     @media (max-width: @screen-md-max) {
       display: none;
     }
@@ -349,6 +368,73 @@ body {
       }
     }
   }
+
+  .school-share-container {
+    position: relative;
+    z-index: 10;
+    
+    .share-label {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 32px;
+      color: #272E3B;
+    }
+
+    .es-btn {
+      height: 32px;
+      padding: 0 16px;
+      margin-left: 22px;
+      color: #165DFF;
+      font-size: 14px;
+      line-height: 32px;
+      text-align: center;
+      border: solid 1px #165DFF;
+      border-radius: 2px;
+    }
+
+    .open-btn {
+      margin-left: 12px;
+      color: #fff;
+      background: #165DFF;
+    }
+
+    .disabled-mask {
+      display: none;
+    }
+
+    .info-disable {
+      position: relative;
+      
+      * {
+        color: #C9CDD4 !important;
+      }
+
+      .disabled-mask {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+        cursor: not-allowed;
+      }
+    }
+
+    .download-btn {
+      height: 32px;
+      padding: 0 20px;
+      margin-bottom: 8px;
+      line-height: 32px;
+      text-align: center;
+      color: #272E3B;
+      font-weight: 400;
+      font-size: 14px;
+      border: 1px solid #E5E6EB;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+  }
 }
 
 .modal-switch-dialog {
@@ -444,38 +530,6 @@ body {
   }
 }
 
-
-.change-version-btn {
-  .icon-home {
-    margin-right: 2px;
-    vertical-align: text-bottom;
-  }
-  .dropdown-menu {
-    width: 136px;
-    left: -20px;
-    text-align: center;
-    li {
-      a {
-        .es-transition;
-        &:hover,
-        &:focus {
-          background-color: transparent !important;
-          .es-transition;
-          color: #428bca;
-          i {
-            .es-transition;
-            color: #428bca;
-          }
-        }
-      }
-      &:last-child {
-        a {
-          padding-top: 0;
-        }
-      }
-    }
-  }
-}
 .image-upload-mask {
   .image-delete-tip {
     position: absolute;
@@ -501,19 +555,5 @@ body {
   }
 }
 
-.register-recommend-tag {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  font-size: 8px;
-  right: -7px;
-  top: -9px;
-  border: 1px solid #ED3E3E;
-  border-radius: 50%;
-  background: #ED3E3E;
-  text-align: center;
-  z-index: 100;
-  color: #fff;
-}
 
 

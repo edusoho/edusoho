@@ -80,7 +80,6 @@ class RestApiClient
         $body = $this->http->request($method, $url, $body, $headers, $requestId);
 
         $context = array('headers' => $headers, 'body' => $body);
-
         return $this->spec->unserialize($body);
     }
 

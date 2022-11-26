@@ -460,6 +460,7 @@ admin.operation.query_menu.basic_tab: Use Query
 admin_v2.basic_menu: Admin
 
 # 新版后台顶部导航
+admin_v2.nav.mall: Mall
 admin_v2.nav.education: Education
 admin_v2.nav.teach: Teach
 admin_v2.nav.marketing: Marketing
@@ -745,8 +746,8 @@ admin_v2.operation.message_menu: Message Manage
 admin_v2.operation.message.basic_tab: Message Manage
 
 # 用户-用户管理-用户管理-tab
-admin_v2.user.basic_menu: User management
-admin_v2.user.basic.basic_tab: User Manage
+admin_v2.user.student_menu: Student management
+admin_v2.user.basic.basic_tab: Student Manage
 admin_v2.user.basic.fans_tab: Wechat Fans
 admin_v2.user.basic.online_tab: Online User
 admin_v2.user.basic.statistics_tab: User Statistics

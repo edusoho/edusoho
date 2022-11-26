@@ -48,6 +48,7 @@
   <![endif]-->
     <script src="{{ asset('assets/libs/jquery/1.11.2/jquery-admin-v2.js') }}"></script>
     <script src="{{ asset('assets/libs/gallery2/bootstrap/bootstrap.js') }}"></script>
+    {% do load_script('widget/tooltip-widget') %}
 </head>
 {% block body %}
   <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
@@ -84,9 +85,93 @@
             </li>
           </ul>
         </div>
-        <div class="pull-right change-version-btn">
-          <a href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-site icon-home"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}</a>
-        </div>
+        {% if not is_show_mall() %}
+          <div class="js-sass pull-right change-version-btn">
+            <a href="{{ path('homepage') }}" target="_blank">
+              <i class="es-icon es-icon-site icon-home"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}
+            </a>
+          </div>
+        {% else %}
+          <div class="hidden pull-right change-version-btn cd-dropdown js-sass" data-toggle="cd-dropdown" data-trigger="hover">
+            <a href="{{ path('homepage') }}" target="_blank">
+              <i class="es-icon es-icon-site icon-home"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}
+            </a>
+            <div class="dropdown-menu" style="width: 392px;left: -212px;">
+              <div class="js-mall-card" style="position: absolute;top:0;left:0;z-index:1;padding: 24px;background-color: #fff;border-radius: 4px;">
+                <div style="display: flex;width: 256px;margin-bottom:20px;align-items:center;">
+                  <img 
+                    src="{{ asset(setting('site.logo')|default('/static-dist/app/img/admin-v2/default-logo@2x.png')) }}" 
+                    style="width: auto;max-width:calc(100% - 180px);height:58px;margin-right:16px;border-radius: 2px;">
+                  <div style="flex: 1;line-height: initial;overflow: hidden; display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;font-size: 16px;font-weight: bold;">{{ setting('site.name') }}的商城</div>
+                </div>
+                <canvas class="js-marketing-qrcode1"></canvas>
+              </div>
+              <div class="school-share-container">
+                <div class="clearfix cd-mb16">
+                  <div class="pull-left share-label">{{ 'admin_v2.homepage.school_info.enter.label'|trans }}</div>
+                  <a class="pull-left" href="{{ path('homepage') }}" target="_blank">
+                    <div class="es-btn">{{ 'admin_v2.homepage.school_info.enter.content'|trans }}</div>
+                  </a>
+                </div>
+                <div class="clearfix" style="margin-bottom: 12px;">
+                  <div class="pull-left share-label">{{ 'admin_v2.homepage.school_info.enter.marketing'|trans }}</div>
+                  <a class="hidden pull-left js-tooltip-twig-widget js-marketing"  href="{{ path('admin_v2_marketing_mall') }}" target="_blank">
+                    <div class="es-btn open-btn js-twig-widget-tips" data-placement="bottom">{{ 'admin_v2.homepage.school_info.enter.start_marketing'|trans }}</div>
+                    <div class="js-twig-widget-html" style="display:none;">
+                      <div style="color: #333;">{{ 'admin_v2.homepage.school_info.enter.start_marketing_tooltip'|trans }}</div>
+                    </div>
+                  </a>
+                  <div class="pull-left text-14 js-marketing" style="color: #86909C;line-height:32px;margin-left:12px;">
+                    {{ 'admin_v2.homepage.school_info.enter.copy_link_tips'|trans }}
+                  </div>
+                </div>
+                {# info-disable #}
+                <div class="js-share-container" style="padding: 16px;background-color: #F7F8FA;border-radius: 2px;">
+                  <div class="disabled-mask"></div>  
+                  <div style="margin-bottom:16px;font-size: 14px;line-height: 22px;color: #272E3B;font-weight:400;">
+                    {{ 'admin_v2.homepage.school_info.enter.link_share'|trans }}
+                  </div>
+                  <div class="clearfix" style="border: 1px solid #E5E6EB;border-radius: 2px;line-height:32px;font-weight:400;">
+                    <div class="pull-left text-overflow js-marketing-url" 
+                      style="width: 225px;height: 32px;padding:0 12px;border-right: 1px solid #E5E6EB;color: #1D2129;text-align:center;">
+                    </div>
+                    <div class="pull-left js-copy-link"
+                      data-clipboard-text=""
+                      style="width: 85px;height:32px;font-size:14px;font-weight:400;text-align:center;line-height: 32px;color: #272E3B;cursor:pointer;">
+                        {{ 'admin_v2.homepage.school_info.enter.copy_btn'|trans }}
+                      </div>
+                  </div>
+                  <div style="margin-top: 4px;font-size:14px;line-height:22px;">
+                    {{ 'admin_v2.homepage.school_info.enter.link_tips1'|trans }}
+                    <img style="width:16px;margin:0 4px;" src="{{ asset('static-dist/app/img/icon/icon-qq.png') }}" />
+                    <img style="width:16px;margin-right:4px;" src="{{ asset('static-dist/app/img/icon/icon-weixin.png') }}" />
+                    <img style="width:16px;margin-right:4px;" src="{{ asset('static-dist/app/img/icon/icon-chrome.png') }}" />
+                    {{ 'admin_v2.homepage.school_info.enter.link_tips2'|trans }}
+                  </div>
+                  <div style="margin-top: 24px;color: #272E3B;font-size:14px;line-height:22px;margin-bottom:16px;">
+                    {{ 'admin_v2.homepage.school_info.enter.qrcode_share'|trans }}
+                  </div>
+                  <div class="clearfix">
+                    <div class="pull-left" style="margin-right: 12px;width:80px;height:80px;">
+                      <img class="js-marketing-default-qrcode" 
+                        src="{{ asset('/static-dist/app/img/admin-v2/default-code.png') }}" 
+                        style="width: 80px;margin-left: 4px;" />
+                      <canvas class="js-marketing-qrcode2 hidden"></canvas>
+                    </div>
+                    <div class="pull-left">
+                      <div class="download-btn js-download-btn">{{ 'admin_v2.homepage.school_info.enter.download_qrcode'|trans }}</div>
+                      <div class="text-14" style="color: #86909C;">
+                        {{ 'admin_v2.homepage.school_info.enter.qrcode_share_tips'|trans }}
+                        <img style="width:16px;margin:0 4px;" src="{{ asset('static-dist/app/img/icon/icon-qq.png') }}" />
+                        <img style="width:16px;" src="{{ asset('static-dist/app/img/icon/icon-weixin.png') }}" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
       </div>
       <div class="cd-layout-main">
         {% if isSafari %}
@@ -98,7 +183,7 @@
             <div class="cd-layout-aside">
               <div class="cd-layout-aside_bread"></div>
               <div class="cd-layout-adside_content">
-                <div class="page-header clearfix pvm">
+                <div class="clearfix page-header pvm">
                   {% block page_flash_message %}{% endblock %}
                   <h1 class="pull-left">
                       {% block page_title %}
@@ -150,7 +235,7 @@
 
     <div id="modal" class="modal" ></div>
     <div id="attachment-modal" class="modal" ></div>
-    {% if setting('copyright.thirdCopyright') != 1 and is_saas() %}
+    {% if setting('copyright.thirdCopyright') != 1 and is_show_feedback() %}
       <div class="fixed-bar">
         <a href="{{path('feedback')}}"  target='_blank' class="icon-question-text feedback">
           <span>{{ 'admin.fixed_bar.product_feedback'|trans|raw }}</span>

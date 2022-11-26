@@ -9,6 +9,7 @@ use AppBundle\Controller\AdminV2\BaseController;
 use AppBundle\Util\CdnUrl;
 use Biz\Content\Service\FileService;
 use Biz\System\Service\CacheService;
+use Biz\System\Service\SettingUpdateNotifyService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
 use Symfony\Component\Filesystem\Filesystem;
@@ -164,6 +165,8 @@ class SettingController extends BaseController
             'path' => $site['logo'],
             'url' => $this->container->get('assets.default_package_util')->getUrl($site['logo']),
         ];
+
+        $this->getSettingUpdateNotifyService()->notifyLogoUpdate();
 
         return $this->createJsonResponse($response);
     }
@@ -366,5 +369,13 @@ class SettingController extends BaseController
     protected function getCacheService()
     {
         return $this->createService('System:CacheService');
+    }
+
+    /**
+     * @return SettingUpdateNotifyService
+     */
+    protected function getSettingUpdateNotifyService()
+    {
+        return $this->createService('System:SettingUpdateNotifyService');
     }
 }

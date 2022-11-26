@@ -2,8 +2,8 @@ define(function (require, exports, module) {
   var Notify = require('common/bootstrap-notify');
   // require('../widget/category-select').run('course');
   var CourseSetClone = require('../course-set/clone');
-    require('jquery.select2-css');
-    require('jquery.select2');
+  require('jquery.select2-css');
+  require('jquery.select2');
   exports.run = function (options) {
 
     var csl = new CourseSetClone();
@@ -23,7 +23,7 @@ define(function (require, exports, module) {
       $.ajax({
         type: 'get',
         url: $this.data('url'),
-        success: function(resp) {
+        success: function (resp) {
           $('#modal').html(resp).modal();
         }
       });
@@ -39,10 +39,10 @@ define(function (require, exports, module) {
       });
     });
 
-    $table.on('click', '.publish-course', function() {
+    $table.on('click', '.publish-course', function () {
       var studentNum = $(this).closest('tr').next().val();
       if (!confirm(Translator.trans('admin.course.publish_hint'))) return false;
-      $.post($(this).data('url'), function(response) {
+      $.post($(this).data('url'), function (response) {
         if (!response['success'] && response['message']) {
           Notify.danger(response['message']);
         } else {
@@ -50,21 +50,42 @@ define(function (require, exports, module) {
           $table.find('#' + $tr.attr('id')).replaceWith($tr);
           Notify.success(Translator.trans('admin.course.publish_success_hint'));
         }
-      }).error(function(e) {
+      }).error(function (e) {
         var res = e.responseJSON.error.message || Translator.trans('admin.course.unknow_error_hint');
         Notify.danger(res);
       });
     });
 
-    $table.on('click', '.delete-course', function() {
+    $table.on('click', '.delete-course', function () {
       var chapter_name = $(this).data('chapter');
       var part_name = $(this).data('part');
       var user_name = $(this).data('user');
       var $this = $(this);
-      if (!confirm(Translator.trans('admin.course.delete_hint')))
-        return;
       var $tr = $this.parents('tr');
-      $.post($this.data('url'), function(data) {
+      let msg = 'admin.course.delete_hint';
+      let status = null;
+      $.ajax({
+        type: 'post',
+        url: $tr.data('url'),
+        async: false,
+        success: function (data) {
+          status = data.status;
+          if (status === 'should_delete_mall_goods') {
+            msg = 'admin.course.mall_goods_exist.delete_hint';
+          }
+          if (status === 'cannot_delete') {
+            let res = Translator.trans('mall.goods.exist.delete_fail_hint');
+            Notify.danger(res);
+          }
+        }
+      });
+      if (status === 'cannot_delete') {
+        return;
+      }
+      if (!confirm(Translator.trans(msg)))
+        return;
+
+      $.post($this.data('url'), function (data) {
         if (data.code > 0) {
           Notify.danger(data.message);
         } else if (data.code == 0) {
@@ -73,18 +94,18 @@ define(function (require, exports, module) {
         } else {
           $('#modal').modal('show').html(data);
         }
-      }).error(function(e) {
+      }).error(function (e) {
         var res = e.responseJSON.error.message;
         Notify.danger(res);
       });
     });
 
-    $table.on('click', '.remove-course', function() {
+    $table.on('click', '.remove-course', function () {
       var $this = $(this);
       if (!confirm(Translator.trans('admin.course.remove_hint')))
         return;
       var $tr = $this.parents('tr');
-      $.post($this.data('url'), function(data) {
+      $.post($this.data('url'), function (data) {
         if (data.code > 0) {
           Notify.danger(data.message);
         } else if (data.code == 0) {
@@ -101,56 +122,56 @@ define(function (require, exports, module) {
     $table.on('click', '.copy-course[data-type="live"]', function (e) {
       e.stopPropagation();
     });
-      $('[data-toggle="tooltip"]').tooltip();
-      $('[data-toggle="popover"]').popover({
-          html: true,
-          trigger: 'hover'
-      });
-      var $tagContainer = $('#tag');
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover({
+      html: true,
+      trigger: 'hover'
+    });
+    var $tagContainer = $('#tag');
 
-      $tagContainer.select2({
-          ajax: {
-              url: $tagContainer.data('url'),
-              dataType: 'json',
-              quietMillis: 100,
-              data: function (term, page) {
-                  return {
-                      q: term,
-                      page_limit: 10
-                  };
-              },
-              results: function (data) {
-                  var results = [];
-                  $.each(data, function (index, item) {
-                      results.push({
-                          id: item.id,
-                          name: item.name,
-                      });
-                  });
+    $tagContainer.select2({
+      ajax: {
+        url: $tagContainer.data('url'),
+        dataType: 'json',
+        quietMillis: 100,
+        data: function (term, page) {
+          return {
+            q: term,
+            page_limit: 10
+          };
+        },
+        results: function (data) {
+          var results = [];
+          $.each(data, function (index, item) {
+            results.push({
+              id: item.id,
+              name: item.name,
+            });
+          });
 
-                  return {
-                      results: results
-                  };
+          return {
+            results: results
+          };
 
-              }
-          },
-          initSelection: function (element, callback) {
-              $item = element.data('tagValue');
-              callback($item);
-          },
-          formatSelection: function (item) {
-              $('[name=tagId]').val(item.id);
-              return item.name;
-          },
-          formatResult: function (item) {
-              return item.name;
-          },
-          allowClear: true,
-          placeholder: Translator.trans('admin.course_manage.manage.tags_select.placeholder')
-      });
-      $tagContainer.on("change",function(e){
-          $('[name=tagId]').val($tagContainer.val());
-      });
+        }
+      },
+      initSelection: function (element, callback) {
+        let $item = element.data('tagValue');
+        callback($item);
+      },
+      formatSelection: function (item) {
+        $('[name=tagId]').val(item.id);
+        return item.name;
+      },
+      formatResult: function (item) {
+        return item.name;
+      },
+      allowClear: true,
+      placeholder: Translator.trans('admin.course_manage.manage.tags_select.placeholder')
+    });
+    $tagContainer.on('change', function (e) {
+      $('[name=tagId]').val($tagContainer.val());
+    });
   };
 
 });

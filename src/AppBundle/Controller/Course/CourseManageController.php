@@ -33,6 +33,7 @@ use Biz\Task\Strategy\CourseStrategy;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Pay\Service\PayService;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -646,7 +647,7 @@ class CourseManageController extends BaseController
                 'vipLevelId' => $data['vipLevelId'],
                 'supplierCode' => 'course',
                 'uniqueCode' => $course['id'],
-                'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['courseSetTitle'].'-'.$course['title'],
+                'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['courseSetTitle'] . '-' . $course['title'],
             ]);
         }
     }
@@ -904,6 +905,13 @@ class CourseManageController extends BaseController
         }
 
         return $this->createJsonResponse(['success' => true]);
+    }
+
+    public function checkEsProductCanDeleteAction(Request $request,$courseId)
+    {
+        $status = $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$courseId], 'course');
+
+        return $this->createJsonResponse(['status' => $status]);
     }
 
     public function publishAction($courseSetId, $courseId)
@@ -1387,6 +1395,14 @@ class CourseManageController extends BaseController
     protected function getMultiClassService()
     {
         return $this->createService('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    private function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 
     protected function getVipRightService()

@@ -452,6 +452,7 @@ admin.operation.query_menu.basic_tab: 使用查询
 admin_v2.basic_menu: 后台管理员
 
 # 新版后台顶部导航
+admin_v2.nav.mall: 商城
 admin_v2.nav.education: 教务
 admin_v2.nav.teach: 教学
 admin_v2.nav.marketing: 营销
@@ -744,29 +745,45 @@ admin_v2.operation.message.basic_tab: 私信管理
 
 # 用户-用户管理-用户管理
 admin_v2.user.user_group: 用户管理
-admin_v2.user.basic_menu: 用户管理
+admin_v2.user.student_menu: 学员管理
+admin_v2.user.staff_menu: 员工管理
 
 # 用户-用户管理-用户管理-tab
-admin_v2.user.basic.basic_tab: 用户管理
+admin_v2.user.basic.basic_tab: 学员管理
+admin_v2.user.staff.basic_tab: 员工管理
 admin_v2.user.basic.fans_tab: 服务号粉丝
 admin_v2.user.basic.online_tab: 在线用户
-admin_v2.user.basic.statistics_tab: 用户数据统计
+admin_v2.user.basic.statistics_tab: 学习数据统计
 admin_v2.user.basic.login_record_tab: 登录日志
 
-admin_v2.user.basic.basic_tab.create_btn: '添加新用户'
-admin_v2.user.basic.basic_tab.edit_btn: '编辑用户信息'
-admin_v2.user.basic.basic_tab.setting_roles_btn: '设置用户组'
-admin_v2.user.basic.basic_tab.update_avatar_btn: '修改用户头像'
+admin_v2.user.basic.basic_tab.create_btn: '添加学员'
+admin_v2.user.basic.basic_tab.edit_btn: '编辑学员信息'
+admin_v2.user.basic.basic_tab.setting_roles_btn: '设置员工'
+admin_v2.user.basic.basic_tab.update_avatar_btn: '修改学员头像'
 admin_v2.user.basic.basic_tab.update_assistant_qrcode_btn: '修改助教二维码'
-admin_v2.user.basic.basic_tab.change_nickname_btn: '修改用户名'
+admin_v2.user.basic.basic_tab.change_nickname_btn: '修改学员名'
 admin_v2.user.basic.basic_tab.change_password_btn: '修改密码'
 admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: '发送密码重置邮件'
 admin_v2.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮件'
-admin_v2.user.basic.basic_tab.lock_btn: '封禁用户'
-admin_v2.user.basic.basic_tab.unlock_btn: '解禁用户'
-admin_v2.user.basic.basic_tab.delete_btn: '删除用户'
+admin_v2.user.basic.basic_tab.lock_btn: '封禁学员'
+admin_v2.user.basic.basic_tab.unlock_btn: '解禁学员'
+admin_v2.user.basic.basic_tab.delete_btn: '删除学员'
 admin_v2.user.basic.basic_tab.org_update_btn: '修改用户组织机构'
 
+admin_v2.user.staff.basic_tab.create_btn: '添加员工'
+admin_v2.user.staff.basic_tab.edit_btn: '编辑员工信息'
+admin_v2.user.staff.basic_tab.setting_roles_btn: '设置角色'
+admin_v2.user.staff.basic_tab.update_avatar_btn: '修改员工头像'
+admin_v2.user.staff.basic_tab.update_assistant_qrcode_btn: '修改助教二维码'
+admin_v2.user.staff.basic_tab.change_nickname_btn: '修改员工名'
+admin_v2.user.staff.basic_tab.change_password_btn: '修改密码'
+admin_v2.user.staff.basic_tab.send_passwordreset_email_btn: '发送密码重置邮件'
+admin_v2.user.staff.basic_tab.send_emailverify_email_btn: '发送Email验证邮件'
+admin_v2.user.staff.basic_tab.lock_btn: '封禁员工'
+admin_v2.user.staff.basic_tab.unlock_btn: '解禁员工'
+admin_v2.user.staff.basic_tab.delete_btn: '删除员工'
+admin_v2.user.staff.basic_tab.turn_into_student_btn: '转为学员'
+admin_v2.user.staff.basic_tab.org_update_btn: '修改用户组织机构'
 #用户-用户管理-实名认证
 admin_v2.user.approval_menu: 实名认证
 admin_v2.user.approval.basic_tab.cancel_btn: 撤销

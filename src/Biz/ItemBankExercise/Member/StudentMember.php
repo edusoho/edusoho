@@ -25,6 +25,8 @@ class StudentMember extends Member
 
             return $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $userId);
         }
+        $exercise['expiryMode'] = $info['expiryMode'] ?? $exercise['expiryMode'];
+        $exercise['expiryDays'] = $info['expiryDays'] ?? $exercise['expiryDays'];
 
         $member = [
             'exerciseId' => $exercise['id'],
@@ -64,6 +66,11 @@ class StudentMember extends Member
     {
         $currentUser = $this->biz['user'];
         $exercise = $this->getExerciseService()->get($member['exerciseId']);
+
+        if (empty($info['reason']) || empty($info['reasonType'])) {
+           throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
         $record = [
             'userId' => $member['userId'],
             'memberId' => $member['id'],

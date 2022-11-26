@@ -128,6 +128,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
             $this->getMemberService()->resetBankMembers($newQuestionBank['id'], $members);
 
             $this->dispatch('questionBank.update', $newQuestionBank, ['members' => $members, 'userId' => $this->getCurrentUser()->getId()]);
+            $this->dispatch('questionBankProduct.update', ['questionBankId' => $newQuestionBank['id']]);
 
             $this->commit();
         } catch (\Exception $e) {
@@ -166,7 +167,6 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
         try {
             $this->beginTransaction();
-
             $this->getQuestionBankDao()->delete($id);
             $this->getItemBankService()->deleteItemBank($questionBank['itemBankId']);
 
@@ -302,4 +302,5 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     {
         return $this->createService('ItemBank:ItemBank:ItemBankService');
     }
+
 }
