@@ -52,12 +52,16 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
             ];
         }
 
-        return $this->getItemCategoryDao()->batchCreate($categories);
+        $categories = $this->getItemCategoryDao()->batchCreate($categories);
+        $this->dispatch('itemCategory.create', $categories, ['bankId' => $bankId]);
+
+        return $categories;
     }
 
     public function updateItemCategory($id, $category)
     {
-        if (empty($this->getItemCategory($id))) {
+        $originCategory = $this->getItemCategory($id);
+        if (empty($originCategory)) {
             throw new ItemCategoryException('The item bank is not exist.', ErrorCode::ITEM_CATEGORY_NOT_FOUND);
         }
 
@@ -67,7 +71,10 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
 
         $category['updated_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
 
-        return $this->getItemCategoryDao()->update($id, $category);
+        $updateCategory = $this->getItemCategoryDao()->update($id, $category);
+        $this->dispatch('itemCategory.update', $originCategory, ['fields' => $category]);
+
+        return $updateCategory;
     }
 
     public function getItemCategory($id)
@@ -77,7 +84,8 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
 
     public function deleteItemCategory($id)
     {
-        if (empty($this->getItemCategory($id))) {
+        $category = $this->getItemCategory($id);
+        if (empty($category)) {
             throw new ItemCategoryException('The item category is not exist.', ErrorCode::ITEM_CATEGORY_NOT_FOUND);
         }
 
@@ -91,6 +99,7 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
             if (!empty($items)) {
                 $this->getItemService()->updateItemsCategoryId(array_column($items, 'id'), 0);
             }
+            $this->dispatch('itemCategory.delete', $category);
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();

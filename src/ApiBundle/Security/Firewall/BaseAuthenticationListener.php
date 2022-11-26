@@ -6,6 +6,7 @@ use ApiBundle\Security\Authentication\Token\ApiToken;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
+use Doctrine\Common\Annotations\CachedReader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\User\CurrentUser;
@@ -41,7 +42,7 @@ abstract class BaseAuthenticationListener implements ListenerInterface
         $currentUser->fromArray($user);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
 
-        return new ApiToken($currentUser, $currentUser->getRoles());
+        return new ApiToken($currentUser, $currentUser->getRoles(), get_class($this));
     }
 
     protected function getTokenStorage()

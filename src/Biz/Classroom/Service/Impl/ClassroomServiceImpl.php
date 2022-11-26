@@ -37,6 +37,7 @@ use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Order\Service\OrderService;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -190,6 +191,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function findClassroomIdsByCourseId($courseId)
     {
         return $this->getClassroomCourseDao()->findClassroomIdsByCourseId($courseId);
+    }
+
+    public function findClassroomIdsByParentCourseId($parentCourseId)
+    {
+        return $this->getClassroomCourseDao()->findClassroomIdsByParentCourseId($parentCourseId);
     }
 
     public function findByClassroomId($classroomId)
@@ -350,7 +356,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             }
             $this->dispatchEvent(
                 'classroom.course.create',
-                new Event($classroom, ['courseIds' => $courseIds])
+                new Event($classroom, ['courseIds' => $courseIds, 'newCourseIds' => $newCourseIds ?? []])
             );
 
             $this->commit();
@@ -434,6 +440,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $tagIds = empty($fields['tagIds']) ? [] : $fields['tagIds'];
         $this->updateClassroomTags($id, $tagIds);
+        $this->dispatchEvent('classroom.info.update', ['id' => $id]);
 
         return $this->updateClassroom($id, $fields);
     }
@@ -577,7 +584,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $this->tryManageClassroom($classroomId);
 
-        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
+        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date . ' 23:59:59');
         if ($this->checkDeadlineForUpdateDeadline($classroomId, $userIds, $date)) {
             $members = $this->findMembersByClassroomIdAndUserIds($classroomId, $userIds);
             $updateDeadlines = [];
@@ -697,9 +704,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     /**
      * @param $id
-     *
      * @return bool|mixed
-     *
      * @throws \Exception
      */
     public function deleteClassroom($id)
@@ -714,14 +719,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             if ('published' === $classroom['status']) {
                 $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
             }
-
             $this->tryManageClassroom($id, 'admin_classroom_delete');
-
+            if ($this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'classroom') === 'error') {
+                throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
+            }
             $this->deleteAllCoursesInClass($id);
             $this->getClassroomDao()->delete($id);
             $this->getClassroomGoodsMediator()->onDelete($classroom);
-
             $this->dispatchEvent('classroom.delete', $classroom);
+
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
@@ -830,9 +836,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fileIds = ArrayToolkit::index($data, 'type');
         $version = ClassroomService::COVER_SIZE_VERSION;
         $fields = [
-            'smallPicture' => $files[$fileIds['small']['id']]['uri']."?version={$version}",
-            'middlePicture' => $files[$fileIds['middle']['id']]['uri']."?version={$version}",
-            'largePicture' => $files[$fileIds['large']['id']]['uri']."?version={$version}",
+            'smallPicture' => $files[$fileIds['small']['id']]['uri'] . "?version={$version}",
+            'middlePicture' => $files[$fileIds['middle']['id']]['uri'] . "?version={$version}",
+            'largePicture' => $files[$fileIds['large']['id']]['uri'] . "?version={$version}",
         ];
 
         $this->deleteNotUsedPictures($classroom);
@@ -952,7 +958,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->createNewException(ClassroomException::NOTFOUND_MEMBER());
         }
 
-        $fields = ['remark' => empty($remark) ? '' : (string) $remark];
+        $fields = ['remark' => empty($remark) ? '' : (string)$remark];
 
         return $this->getClassroomMemberDao()->update($member['id'], $fields);
     }
@@ -1139,19 +1145,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $deadline = ClassroomToolkit::buildMemberDeadline([
-            'expiryMode' => $classroom['expiryMode'],
-            'expiryValue' => $classroom['expiryValue'],
+            'expiryMode' => $info['expiryMode'] ?? $classroom['expiryMode'],
+            'expiryValue' => $info['expiryDays'] ?? $classroom['expiryValue'],
         ]);
 
         $refundSetting = $this->getSettingService()->get('refund', []);
         $reason = $this->buildJoinReason($info, $order);
+        $note = empty($info['note']) ? '' : $info['note'];
         $fields = [
             'classroomId' => $classroomId,
             'userId' => $userId,
             'orderId' => empty($order) ? 0 : $order['id'],
             'joinedChannel' => $reason['reason_type'],
             'role' => ['student'],
-            'remark' => empty($info['note']) ? '' : $info['note'],
+            'remark' => empty($info['remark']) ? $note : $info['remark'],
             'deadline' => $deadline,
             'refundDeadline' => empty($refundSetting['maxRefundDays']) ? 0 : strtotime("+ {$refundSetting['maxRefundDays']}days"),
         ];
@@ -1377,7 +1384,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->dispatchEvent(
                 'classroom.course.update',
-                new Event($classroom, ['courseIds' => $activeCourseIds])
+                new Event($classroom, ['courseIds' => $activeCourseIds, 'existCourseIds' => $existCourseIds])
             );
         } catch (\Exception $e) {
             $this->rollback();
@@ -1719,7 +1726,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $intList = ['buyable', 'showable'];
         foreach ($intList as $key) {
             if (isset($conditions[$key])) {
-                $conditions[$key] = (int) $conditions[$key];
+                $conditions[$key] = (int)$conditions[$key];
             }
         }
 
@@ -2091,7 +2098,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $id,
             [
                 'recommended' => 1,
-                'recommendedSeq' => (int) $number,
+                'recommendedSeq' => (int)$number,
                 'recommendedTime' => time(),
             ]
         );
@@ -2843,5 +2850,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+
+    protected function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

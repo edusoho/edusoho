@@ -17,6 +17,10 @@ export default class Manage {
       self.sortList();
     });
 
+    this.$element.on('removeItem', e => {
+      this.sortList();
+    });
+
     $('body').on('click', '[data-position]', function(e) {
       let $this = $(this);
 

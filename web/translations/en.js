@@ -1291,6 +1291,7 @@ t.add("admin.user.change_roles_success_hint", "User group saved successfully", "
 t.add("admin.user.change_roles_fail_hint", "operation failed", "js", "en");
 t.add("admin.user.update_org_success_hint", "Modify the user's organization success", "js", "en");
 t.add("admin.user.update_org_fail_hint", "operation failed", "js", "en");
+t.add("admin.user.staff.at_least_one_role", "Keep at least one role", "js", "en");
 t.add("admin.wechat_app.mp_name_input.message", "Please fill in the weapp title within 10 words", "js", "en");
 t.add("admin.wechat_app.mp_description_input.message", "Please fill out the weapp introduction", "js", "en");
 t.add("admin.wechat_app.contact_name_input.message", "Please fill in the contact name", "js", "en");
@@ -1952,4 +1953,6 @@ t.add("activity.summary.placeholder", "Please enter the introduction (optional)"
 t.add("open", "Open", "js", "en");
 t.add("close", "Close", "js", "en");
 t.add("live.chooser.video", "Please set up live video", "js", "en");
+t.add("cloud.sms_enable_hint", "Cloud SMS is not enabled. Please go to <a href=\"%cloudSmsSettingUrl%\" target=\"_blank\">[Cloud SMS Settings]<\/a> to enable it", "js", "en");
+t.add("admin_v2.homepage.school_info.enter.copy_success", "Link copied successfully", "js", "en");
 })(Translator);

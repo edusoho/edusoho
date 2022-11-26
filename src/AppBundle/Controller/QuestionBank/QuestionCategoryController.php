@@ -108,14 +108,6 @@ class QuestionCategoryController extends BaseController
     }
 
     /**
-     * @return CategoryService
-     */
-    protected function getQuestionCategoryService()
-    {
-        return $this->createService('Question:CategoryService');
-    }
-
-    /**
      * @return ItemCategoryService
      */
     protected function getItemCategoryService()

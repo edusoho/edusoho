@@ -15,6 +15,7 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\Visualization\Service\ActivityLearnDataService;
 use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ClassroomController extends BaseController
@@ -88,7 +89,7 @@ class ClassroomController extends BaseController
             'explore_default_orderBy' => 'createdTime',
             'show_review' => '1',
             'show_thread' => $threadEnabled &&
-                ($this->getSettingService()->node('ugc_thread.enable_classroom_thread', '1') || $this->getSettingService()->node('ugc_thread.enable_classroom_question', '1'))
+            ($this->getSettingService()->node('ugc_thread.enable_classroom_thread', '1') || $this->getSettingService()->node('ugc_thread.enable_classroom_question', '1'))
                 ? '1' : '0',
             'show_note' => $noteEnabled ? $this->getSettingService()->node('ugc_note.enable_classroom_note', '1') : 0,
         ];
@@ -192,6 +193,12 @@ class ClassroomController extends BaseController
         $this->getClassroomService()->deleteClassroom($id);
 
         return $this->createJsonResponse(['code' => 0, 'message' => $this->trans('site.delete_success_hint')]);
+    }
+
+    public function checkEsProductCanDeleteAction(Request $request, $id)
+    {
+        $status = $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'classroom');
+        return $this->createJsonResponse(['status' => $status]);
     }
 
     public function recommendAction(Request $request, $id)
@@ -358,7 +365,7 @@ class ClassroomController extends BaseController
         $usersProfile = empty($members) ? [] : $this->getUserService()->findUserProfilesByIds($userIds);
         $usersApproval = $this->getUserService()->searchApprovals([
             'userIds' => $userIds,
-            'status' => 'approved', ], [], 0, count($userIds));
+            'status' => 'approved',], [], 0, count($userIds));
         $usersApproval = ArrayToolkit::index($usersApproval, 'userId');
 
         foreach ($users as $key => &$user) {
@@ -534,5 +541,13 @@ class ClassroomController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    private function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

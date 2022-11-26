@@ -65,6 +65,11 @@ class UserBindDaoImpl extends GeneralDaoImpl implements UserBindDao
         return $this->db()->fetchAll($sql, array($toId, $type));
     }
 
+    public function UserBindUpdate($openId, $userId) {
+        $sql = "UPDATE {$this->table} SET toId = ? WHERE fromId = ?";
+        return $this->db()->executeUpdate($sql,array($userId,$openId));
+    }
+
     public function deleteByTypeAndToId($type, $toId)
     {
         return $this->db()->delete($this->table, array('type' => $type, 'toId' => $toId));

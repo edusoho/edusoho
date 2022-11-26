@@ -491,6 +491,7 @@ course.manage.close_fail_hint: 关闭失败
 course.manage.copy_title: 复制计划
 course.manage.max_course_number_tip: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.manage.delete_hint: 是否确定删除该教学计划？
+course.manage.mall_goods_exist.delete_hint: 该产品已在营销商城中有对应的商品，将同时删除已在营销商城中的对应商品，是否确定删除该教学计划？
 course.manage.task_delete_hint: 是否确定删除该%taskName%吗？
 course.manage.task_batch_delete_hint: 删除所选课时后，课时下对应任务将一并被删除。未发布状态下的课时将会被删除，已发布状态下的课时需取消发布后再删除。此次删除%length%课时，是否继续？
 course.manage.chapter_delete_hint: 是否确定删除该%name%吗？
@@ -1068,6 +1069,7 @@ admin.classroom.operation_success_hint: 成功！
 admin.classroom.operation_fail_hint: 失败
 admin.classroom.operation_hint: 吗？
 admin.classroom.delete_hint: 删除班级，将删除班级中所有课程的章节、课时、学员等信息。确认要删除该班级吗？
+admin.classroom.mall_goods_exist.delete_hint: 删除班级，将删除班级中所有课程的章节、课时、学员等信息。并且该产品已在营销商城中有对应商品，将同时删除已在营销商城中的对应商品，确认要删除该班级吗？
 admin.classroom.delete_success_hint: 删除成功！
 admin.classroom.cancel_recommend_hint: "%title%吗？"
 admin.classroom.cancel_recommend_success_hint: "%title%成功！"
@@ -1111,6 +1113,7 @@ admin.course.publish_hint: 您确认要发布此课程吗？
 admin.course.publish_success_hint: 课程发布成功！
 admin.course.unknow_error_hint: 未知错误
 admin.course.delete_hint: 删除课程，将删除课程的章节、课时、学员等信息。真的要删除该课程吗？
+admin.course.mall_goods_exist.delete_hint: 删除课程，将删除课程的章节、课时、学员等信息。并且该产品已在营销商城中有对应的商品，将同时删除已在营销商城中的对应商品，真的要删除该课程吗？
 admin.course.remove_hint: 移除课程将删除所有的学员信息以及学员数据，移除后无法恢复！ 确定移除该课程吗？
 admin.course.remind_teacher_success_hint: 提醒教师的通知，发送成功！
 admin.course.cancel_recommend_hint: 真的要取消该课程推荐吗？
@@ -1361,9 +1364,12 @@ admin.user.upload_avatar_success_hint: 上传成功！
 admin.user.upload_assistant_qrcode_success_hint: 上传成功！
 admin.user.password_modify_success_hint: 密码修改成功
 admin.user.password_modify_error_hint: 操作失败
-admin.user.create_new_user_success_hint: 新用户添加成功
-admin.user.create_new_user_fail_hint: 新用户添加失败
-admin.user.edit_user_profile_success_hint: 用户信息保存成功
+admin.user.create_new_user_success_hint: 学员添加成功
+admin.user.create_new_staff_success_hint: 员工添加成功
+admin.user.create_new_user_fail_hint: 学员添加失败
+admin.user.create_new_staff_fail_hint: 员工添加失败
+admin.user.edit_user_profile_success_hint: 学员信息保存成功
+admin.user.edit_staff_profile_success_hint: 员工信息保存成功
 admin.user.edit_user_profile_error_hint: 操作失败
 admin.user.valid_weibo_address_input.message: 网站地址不正确，须以http://weibo.com开头。
 admin.user.valid_site_address_input.message: 网站地址不正确，须以http://或https://开头。
@@ -1383,10 +1389,11 @@ admin.user.email_verify_email_send_success_hint: Email验证邮件，发送成�
 admin.user.email_verify_email_send_fail_hint: Email验证邮件，发送失败
 admin.user.change_user_role_fail_hint: 用户必须拥有%user%角色
 admin.user.cancel_user_teacher_role_hint: 取消该用户的教师角色，同时将收回该用户所有教授的课程的教师权限。您真的要这么做吗？
-admin.user.change_roles_success_hint: 用户组保存成功
+admin.user.change_roles_success_hint: 角色保存成功
 admin.user.change_roles_fail_hint: 操作失败
 admin.user.update_org_success_hint: 修改用户所属机构成功
 admin.user.update_org_fail_hint: 操作失败
+admin.user.staff.at_least_one_role: 至少保留一个角色
 admin.wechat_app.mp_name_input.message: 请填写10个字以内的小程序标题
 admin.wechat_app.mp_description_input.message: 请填写小程序介绍
 admin.wechat_app.contact_name_input.message: 请填写联系人姓名
@@ -1408,6 +1415,7 @@ admin.item_bank_exercise.exercise.cancel_recommend_success_hint: 题库练习推
 admin.item_bank_exercise.exercise.publish_hint: 确定要发布当前题库练习吗？
 admin.item_bank_exercise.exercise.publish_success_hint: 题库练习发布成功!
 admin.item_bank_exercise.exercise.delete_hint: 删除题库练习，将删除模块设置、学员等信息。真的要删除该题库练习吗？
+admin.item_bank_exercise.exercise.mall_goods_exist.delete_hint: 删除题库练习，将删除模块设置、学员等信息。并且该产品已在营销商城中有对应商品，将同时删除已在营销商城中的对应商品，真的要删除该题库练习吗？
 
 exercise.manage.student_delete_hint: 是否确定移除该学员
 
@@ -1526,6 +1534,7 @@ admin.question_bank.choose_category: 请选择所属分类
 admin.question_bank.save_success: 保存题库成功
 admin.question_bank.save_fail: 保存题库失败
 admin.question_bank.delete_hint: 确定要删除此题库吗
+admin.question_bank.mall_goods_exist.delete_hint: 该产品已在营销商城中有对应商品，将同时删除已在营销商城中的对应商品，确定要删除此题库吗
 admin.question_bank.fail_not_delete: 此题库内含有%testpaperNum%份试卷，%questionNum%道题目，无法删除
 admin.question_bank.no_category: 无题库分类
 
@@ -1558,8 +1567,10 @@ course_manage.live_statistics.live_not_end: 直播数据未生成
 course_manage.live_statistics.checkin_not_support: 当前直播课暂不支持点名功能
 course_manage.live_statistics.data_not_valid: 数据异常，直播间数据返回错误
 
-admin_v2.user.nickname_modify_success_hint: 用户名修改成功
+admin_v2.user.nickname_modify_success_hint: 学员名修改成功
 admin_v2.user.nickname_modify_error_hint: 操作失败
+
+admin_v2.staff.nickname_modify_success_hint: 员工名修改成功
 
 admin_v2.developer.plumber_operate_hint: 正在操作中，可能需要一段时间，请稍后……
 admin_v2.developer.plumber_operate_error_hint: 操作失败
@@ -2139,3 +2150,7 @@ activity.summary.placeholder: 请输入简介（选填）
 open: 开启
 close: 关闭
 live.chooser.video: 请设置直播视频
+
+mall.goods.exist.delete_fail_hint: 该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作
+cloud.sms_enable_hint: 云短信未启用，请前往<a href="%cloudSmsSettingUrl%" target="_blank">【云短信设置】</a>启用
+admin_v2.homepage.school_info.enter.copy_success: 链接复制成功

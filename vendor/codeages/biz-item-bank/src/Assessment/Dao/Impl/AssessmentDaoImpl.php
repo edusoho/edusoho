@@ -27,6 +27,7 @@ class AssessmentDaoImpl extends AdvancedDaoImpl implements AssessmentDao
             ],
             'conditions' => [
                 'id = :id',
+                'id IN (:ids)',
                 'id NOT IN (:notInIds)',
                 'bank_id = :bank_id',
                 'name like :nameLike',

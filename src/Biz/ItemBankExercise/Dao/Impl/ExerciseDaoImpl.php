@@ -131,16 +131,19 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
             'conditions' => [
                 'id = :id',
                 'id IN (:ids)',
+                'id NOT IN (:excludeIds)',
                 'questionBankId = :questionBankId',
                 'categoryId in (:categoryIds)',
                 'creator = :creator',
                 'title like :title',
                 'status = :status',
+                'status != :excludeStatus',
                 'price = :price',
                 'studentNum = :studentNum',
                 'categoryId = :categoryId',
                 'recommended = :recommended',
                 'price > :price_GT',
+                'questionBankId NOT IN (:excludeQuestionBankIds)',
             ],
         ];
     }

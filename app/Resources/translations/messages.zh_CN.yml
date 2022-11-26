@@ -297,6 +297,8 @@ user.fields.login_password: 登录密码
 user.fields.pay_password: 支付密码
 user.fileds.microblog: 微博
 user.fields.username_label: 用户名
+user.fields.username_student_label: 学员名
+user.fields.username_staff_label: 员工名
 user.fields.email_label: 邮箱
 user.fields.truename_label: 姓名
 user.fields.gender_label: 性别
@@ -626,9 +628,9 @@ order.adjust_price_modal.hint: 请在折扣和金额框任意输入您想优惠�
 order.confirm.account_cash: 账户余额：
 order.confirm.safety_tips: 为了保障账户资金安全，请先
 order.confirm.setup_pay_password_tips: >
-  为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置支付密码</a>
+  为了保障账户资金安全，请先<a class="underline color-warning" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置支付密码</a>
 order.confirm.setup_login_password_tips: >
-  为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置登录密码</a>
+  为了保障账户资金安全，请先<a class="underline color-warning" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置登录密码</a>
 order.confirm.forget_password_btn: 忘记支付密码？
 order.confirm.forget_password_tips: 支付密码
 order.confirm.input_pay_password_tips: 请输入支付密码
@@ -757,6 +759,7 @@ import.finish: 完成导入
 import.finish_loading: 正在完成导入, 请稍等...
 import.import_warning_tips: 正在导入, 请勿关闭当前窗口...
 import.user_import: 批量添加新用户
+import.student_import: 批量添加新学员
 import.user_import.content_title: 批量添加学员
 import.user_import.choose_file: 选择文件
 import.user_import.browser_btn: 选择
@@ -2235,7 +2238,7 @@ course.plan_task.activity_manage.replay.time: 直播回放时长
 
 course.plan_task.activity_manage.create_btn: 前往课程讨论区
 course.plan_task.activity_manage.exercise.questionNum: >
-  <span class="color-gray text-sm">共<span role="questionNum" type="%questionType%" >%questionNum%</span>题
+  <span class="text-sm color-gray">共<span role="questionNum" type="%questionType%" >%questionNum%</span>题
 
 course.plan_task.exercise.question_numbers: 题目个数
 course.plan_task.exercise.question_sourse: 题目来源
@@ -5725,7 +5728,7 @@ admin.homepage.status_bar.mobile_app_status.open: 已开启
 admin.homepage.status_bar.mobile_app_status.not_open: 未开启
 admin.homepage.todays_data_title: 今日数据
 admin.homepage.todays_data.tooltips: >
-  <div class="popover-content hidden">
+  <div class="hidden popover-content">
     <div class="popover-item">
       <div class="title">登录用户</div>
       <div class="content">15分钟内活动的登录用户</div>
@@ -5771,7 +5774,7 @@ admin.homepage.todays_data.new_vip_members: 新增会员
 admin.homepage.todays_data.thread_un_answer: 未回复回答
 admin.homepage.order_statistic_title: 订单统计
 admin.homepage.order_statistic.tips: >
-  <div class="popover-content hidden">
+  <div class="hidden popover-content">
     <div class="popover-item">
       <div class="title">订单</div>
       <div class="content">用户购买标价不为0的商品（教学计划、班级、会员等）会产生订单</div>
@@ -6704,6 +6707,8 @@ admin.user.fields.signature_label: 个人签名
 admin.user.fields.about_label: 自我介绍
 admin.user.fields.personal_menu_label: 个人主页
 admin.user.fields.user_email: 用户邮箱
+admin.user.fields.student_email: 学员邮箱
+admin.user.fields.staff_email: 员工邮箱
 admin.user.fields.password_hint: 5-20位英文、数字、符号，区分大小写
 admin.user.fields.password_hint.low: 5-20位英文、数字、符号，区分大小写
 admin.user.fields.password_hint.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
@@ -6712,8 +6717,11 @@ admin.user.fields.confirm_password_label: 确认密码
 admin.user.fields.confirm_password_hint: 再输入一次密码
 admin.user.fields.password_label: 密码
 admin.user.fields.role_label: 用户权限
+admin.user.fields.staff_roles: 设置角色
 admin.user.fields.email: 邮箱
 admin.user.fields.idcard: 身份证号码
+admin.user.roles.system_roles: 系统角色：
+admin.user.roles.custom_roles: 自定义角色：
 
 ##用户模块通用按钮
 admin.user.form.btn.search_submit_btn: 搜索
@@ -6729,6 +6737,8 @@ plugin.admin.user.manage.form.user_export_btn: 导出搜索结果
 admin.user.manage.fields.mobile_label: 手机号
 admin.user.manage.fields.recent_login_label: 最近登录
 admin.user.manage.fields.user_total_num_label: 用户总数：
+admin.user.manage.fields.student_total_num_label: 学员总数：
+admin.user.manage.fields.staff_total_num_label: 员工总数：
 admin.user.manage.fields.forbid_label: 禁
 admin.user.manage.fields.verified_label: 已验证
 admin.user.manage.label.email_verified_hint: 该Email地址已验证
@@ -6741,8 +6751,13 @@ admin.user.manage.user_show.fields.gender_female_label: 女性
 admin.user.manage.user_show.fields.gender_secret_label: 秘密
 admin.user.manage.user_show.fields.personal_website_label: 个人网站
 admin.user.manage.user_edit.fields.heading_title: 编辑用户信息
+admin.user.manage.student_edit.fields.heading_title: 编辑学员信息
+admin.user.manage.staff_edit.fields.heading_title: 编辑员工信息
 admin.user.manage.user_role.fields.heading_title: 设置用户组
+admin.user.manage.staff_role.fields.heading_title: 设置员工角色
 admin.user.manage.user_avatar.fields.heading_title: 设置用户头像
+admin.user.manage.student_avatar.fields.heading_title: 设置学员头像
+admin.user.manage.staff_avatar.fields.heading_title: 设置员工头像
 admin.user.manage.assistant_qrcode.fields.heading_title: 设置助教二维码
 admin.user.manage.user_avatar.fields.current_avatar: 当前头像
 admin.user.manage.assistant_qrcode.fields.current_qrcode: 当前二维码
@@ -6752,9 +6767,12 @@ admin.user.manage.assistant_qrcode.upload_btn: 上传新二维码
 admin.user.manage.user_avatar.fields.partner_avatar: 论坛头像
 admin.user.manage.user_avatar.using_current_avatar_btn: 使用该头像
 admin.user.manage.change_password.heading_title: 重置用户%nickname%的密码
+admin.user.manage.change_student_password.heading_title: 重置学员%nickname%的密码
+admin.user.manage.change_staff_password.heading_title: 重置员工%nickname%的密码
 admin.user.manage.change_password.new_password_label: 新密码
 admin.user.manage.change_password.input_data_explain.confirm_password: 再输入一次密码
-admin.user.manage.create.heading_title: 添加新用户
+admin.user.manage.create.heading_student_title: 添加学员
+admin.user.manage.create.heading_staff_title: 添加员工
 admin.user.manage.create.email_label: 邮箱地址
 admin.user.manage.avatar_crop.heading_title: 头像设置
 admin.user.manage.assistant_qrcode_crop.heading_title: 助教二维码设置
@@ -6762,9 +6780,13 @@ admin.user.manage.avatar_crop.crop_hint: 提示：请选择图片裁剪区域。
 admin.user.manage.assistant_qrcode_crop.crop_hint: 提示：请选择图片裁剪区域。
 admin.user.manage.avatar_crop.select_again_btn: 重新选择图片
 admin.user.manage.create_by_mobile.heading_title: 添加新用户
+admin.user.manage.create_by_mobile.heading_student_title: 添加学员
+admin.user.manage.create_by_mobile.heading_staff_title: 添加员工
 admin.user.manage.create_by_mobile.mobile.input_placeholder: 手机号码
 admin.user.manage.create_by_mobile.nickname.input_placeholder: 不填将自动生成
 admin.user.manage.create_by_mobile_or_email.heading_title: 添加新用户
+admin.user.manage.create_student_by_mobile_or_email.heading_title: 添加学员
+admin.user.manage.create_staff_by_mobile_or_email.heading_title: 添加员工
 admin.user.manage.create_by_mobile_or_email.email_or_mobile_label: 邮箱/手机
 admin.user.manage.create_by_mobile_or_email.email_or_mobile.input_placeholder: 邮箱地址/手机号码
 admin.user.manage.create_by_mobile_or_email.nickname.input_placeholder: 不填将自动生成
@@ -7363,7 +7385,7 @@ admin.edu_cloud.edu_email.open_tips: 云邮件，享受优质的邮件发送服�
 admin.edu_cloud.edu_email.sign_tips: 签名3-8字，建议使用汉字
 admin.edu_cloud.edu_email.sms_tips: 提供优质的邮件发送通道，保证邮件发送的稳定可靠；无复杂配置；无每日发送数量限制。
 admin.edu_cloud.edu_email.connect_tips: >
-  <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
+  <span class="text-sm text-danger" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
   <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
 
 # 云搜索
@@ -10396,9 +10418,13 @@ user.learn.statistics.search: 搜索
 user.learn.statistics.learn_statistics.export: 用户数据统计导出
 user.learn.statistics.course_statistics.export: 用户课程学习数据统计导出
 user.learn.statistics.lesson_statistics.export: 用户课时学习数据统计导出
+user.learn.statistics.student_learn_statistics.export: 学员数据统计导出
+user.learn.statistics.student_course_statistics.export: 学员课程学习数据统计导出
+user.learn.statistics.student_lesson_statistics.export: 学员课时学习数据统计导出
 user.learn.statistics.all.export: 全部文件导出
 user.learn.statistics.export.tips: 数据量较大时，下载较慢，请耐心等待
 user.learn.statistics.nickname: 用户名
+user.learn.statistics.student_nickname: 学员名
 user.learn.statistics.mobile: 手机号
 user.learn.statistics.course: 计划
 user.learn.statistics.course_name: 计划名称
@@ -10430,9 +10456,9 @@ user.learn.statistics.lesson.compulsory: 必修
 user.learn.statistics.lesson.optional: 选修
 user.learn.statistics.lesson.finish: 完成
 user.learn.statistics.lesson.un_finish: 未完成
-user.learn.statistics.user_learn_statistics: 用户数据统计
-user.learn.statistics.user_course_statistics: 用户课程学习数据统计
-user.learn.statistics.user_lesson_statistics: 用户课时学习数据统计
+user.learn.statistics.user_learn_statistics: 学员数据统计
+user.learn.statistics.user_course_statistics: 学员课程学习数据统计
+user.learn.statistics.user_lesson_statistics: 学员课时学习数据统计
 user.learn.statistics.join.classroom.num: 加入班级数
 user.learn.statistics.exit.classroom.num: 退出班级数
 user.learn.statistics.join.course.num: 加入计划数
@@ -10597,6 +10623,7 @@ exception.user.idcard_invalid: 身份证号错误
 exception.user.truename_invalid: 真实姓名错误
 exception.user.lock_denied: 没有封禁该角色的权限
 exception.user.not_match_bind_email: 与绑定邮箱不符
+exception.user.must_select_a_staff_role: 必须选择一个员工角色
 exception.user_lock: 账户被封禁，请联系管理员
 exception.user.password_error: 用户名密码错误
 exception.user.password_failed: 登录密码不正确
@@ -11400,6 +11427,21 @@ admin_v2.homepage.school_info.level.saas: SaaS版
 admin_v2.homepage.school_info.level.license: 商业授权
 admin_v2.homepage.school_info.level.custom: 定制版
 
+admin_v2.homepage.school_info.enter.label: PC网校
+admin_v2.homepage.school_info.enter.content: 进入PC网校
+admin_v2.homepage.school_info.enter.marketing: 网校商城
+admin_v2.homepage.school_info.enter.start_marketing: 开启商城
+admin_v2.homepage.school_info.enter.start_marketing_tooltip: 开启后即可分享商城
+admin_v2.homepage.school_info.enter.copy_link_tips: 支持复制链接和下载二维码分享商城
+admin_v2.homepage.school_info.enter.link_share: 链接分享
+admin_v2.homepage.school_info.enter.copy_btn: 复制链接
+admin_v2.homepage.school_info.enter.link_tips1: 链接支持在
+admin_v2.homepage.school_info.enter.link_tips2: 中打开
+admin_v2.homepage.school_info.enter.qrcode_share: 二维码分享
+admin_v2.homepage.school_info.enter.download_qrcode: 下载二维码
+admin_v2.homepage.school_info.enter.qrcode_share_tips: 二维码支持分享至
+admin_v2.homepage.school_info.enter.copy_success: 链接复制成功
+
 # 新后台
 admin_v2.edu_cloud_not_access: 未接入教育云
 admin_v2.mobile_manage.open_tips: >
@@ -11555,6 +11597,8 @@ admin.article_setting.article_copy_manage: 资讯防复制
 task.show_optional_tips: 显示选修课时
 task.show_empty_content: 购买完成后即可查看课程目录～
 admin_v2.user.manage.change_nickname.heading_title: 修改用户名
+admin_v2.user.manage.change_student_nickname.heading_title: 修改学员名
+admin_v2.user.manage.change_staff_nickname.heading_title: 修改员工名
 
 course.plan_task.activity_manage.discuss.tips: 讨论任务在PC和APP中使用，暂不支持在微网校和小程序中使用!
 

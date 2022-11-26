@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\System\Service\LoginBindSettingService;
 use Biz\System\Service\SettingService;
 use Biz\WeChat\Service\WeChatService;
 use QiQiuYun\SDK\Constants\WeChatPlatformTypes;
@@ -19,7 +20,7 @@ class WeChatSettingController extends BaseController
         $isCallback = $request->query->get('isCallback', false);
         $clients = OAuthClientFactory::clients();
         $loginDefault = $this->getDefaultLoginConnect($clients);
-        $loginConnect = $this->getSettingService()->get('login_bind', []);
+        $loginConnect = $this->getLoginBindSettingService()->get([]);
         $loginConnect = array_merge($loginDefault, $loginConnect);
 
         $paymentDefault = $this->getDefaultPaymentSetting();
@@ -65,7 +66,7 @@ class WeChatSettingController extends BaseController
             $payment['wxpay_secret'] = $loginConnect['weixinmob_secret'];
 
             $this->getSettingService()->set('payment', $payment);
-            $this->getSettingService()->set('login_bind', $loginConnect);
+            $this->getLoginBindSettingService()->set($loginConnect);
             $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
 
             if (!$this->getWeChatService()->handleCloudNotification($wechatSetting, $newWeChatSetting, $loginConnect)) {
@@ -270,6 +271,14 @@ class WeChatSettingController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return LoginBindSettingService
+     */
+    protected function getLoginBindSettingService()
+    {
+        return $this->createService('System:LoginBindSettingService');
     }
 
     /**

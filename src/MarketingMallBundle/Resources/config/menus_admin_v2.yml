@@ -1,0 +1,22 @@
+# 商城
+admin_v2_marketing_mall:
+  name: admin_v2.nav.mall
+  parent: admin_v2
+  router_name: admin_v2_marketing_mall
+  visible: (is_show_mall()) #没接入教育云和无网情况下不显示营销商城
+  disable: false
+  children:
+    admin_v2_basic_content_resource_group2:
+      name: 商城管理
+      router_name: admin_v2_marketing_mall
+      is_group: true
+      children:
+        admin_v2_purchase_market_menu1:
+          name: 商城
+          router_name: admin_v2_marketing_mall
+          disable: true
+          children:
+            admin_v2_purchase_market_tab1:
+              name: 商城
+              router_name: admin_v2_marketing_mall
+              disable: true

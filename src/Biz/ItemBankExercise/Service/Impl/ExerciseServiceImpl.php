@@ -24,7 +24,9 @@ use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\System\Service\LogService;
 use Biz\User\UserException;
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 
 class ExerciseServiceImpl extends BaseService implements ExerciseService
 {
@@ -102,12 +104,12 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return ArrayToolkit::index($itemBankExercises, 'id');
     }
 
-    public function search($conditions, $orderBy, $start, $limit)
+    public function search($conditions, $orderBy, $start, $limit, $columns = [])
     {
         $orderBy = $this->getOrderBys($orderBy);
         $conditions = $this->_prepareCourseConditions($conditions);
 
-        return $this->getExerciseDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getExerciseDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     protected function getOrderBys($order)
@@ -296,6 +298,12 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             $this->getChapterExerciseRecordDao()->deleteByExerciseId($exerciseId);
 
             $this->getExerciseQuestionRecordDao()->deleteByExerciseId($exerciseId);
+
+            if ($this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$exerciseId],'questionBank') === 'error') {
+                throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
+            }
+
+            $this->dispatchEvent('questionBankProduct.delete',new Event(['id'=>$exerciseId]));
 
             $user = $this->getCurrentUser();
             $this->getLogService()->info('item_bank_exercise', 'delete_exercise', "删除练习{$user['nickname']}(#{$user['id']})");
@@ -608,5 +616,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    private function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

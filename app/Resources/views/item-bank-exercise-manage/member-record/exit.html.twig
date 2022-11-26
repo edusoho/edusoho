@@ -27,12 +27,12 @@
         </td>
         <td class="vertical-middle">
           {% set operator = users[record['operatorId']]|default() %}
-            {% if record.userId != record.operatorId  and operator %}
+            {% if record.userId != record.operatorId and operator and operator.type != 'system' %}
                 ({{ operator.nickname }})
             {% endif %}{{ record.reason|trans }}
         </td>
         <td class="vertical-middle">
-           {% if record.refundId > 0 %}
+           {% if record.refundId > 0 or 'refund' == record.reasonType %}
               {{ 'site_yes'|trans }}
            {% elseif order['pay_amount']|default() > 0 %}
               {{ 'site_no'|trans }}
