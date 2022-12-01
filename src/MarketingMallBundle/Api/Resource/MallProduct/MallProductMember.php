@@ -21,7 +21,7 @@ class MallProductMember extends BaseResource
     {
         $userId = $request->query->get('userId');
         $targetId = $request->query->get('targetId');
-        $method = "search{$targetType}";
+        $method = "checkIsExist{$targetType}";
         if (!method_exists($this, $method)){
             throw CommonException::NOTFOUND_METHOD();
         }
@@ -99,28 +99,19 @@ class MallProductMember extends BaseResource
         return true;
     }
 
-    private function checkClassroom($targetId, $userId)
+    private function checkIsExistClassroom($targetId, $userId)
     {
-        if (empty($this->getClassroomService()->getClassroomMember($targetId, $userId))){
-            return false;
-        }
-        return true;
+        return !empty($this->getClassroomService()->getClassroomMember($targetId, $userId));
     }
 
-    private function checkCourse($targetId, $userId)
+    private function checkIsExistCourse($targetId, $userId)
     {
-        if (empty($this->getCourseMemberService()->getCourseMember($targetId, $userId))){
-            return false;
-        }
-        return true;
+        return !empty($this->getCourseMemberService()->getCourseMember($targetId, $userId));
     }
 
-    private function checkQuestionBank($targetId, $userId)
+    private function checkIsExistQuestionBank($targetId, $userId)
     {
-        if (empty($this->getExerciseMemberService()->getExerciseMember($targetId, $userId))){
-            return false;
-        }
-        return true;
+        return !empty($this->getExerciseMemberService()->getExerciseMember($targetId, $userId));
     }
 
     /**
