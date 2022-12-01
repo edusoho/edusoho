@@ -52,7 +52,7 @@ $.ajax({
   
   $('.js-marketing-default-qrcode').addClass('hidden')
   $('.js-marketing-qrcode2').removeClass('hidden')
-  Qrcode.toCanvas($('.js-marketing-qrcode1')[0], res.url, { width: 256, quality: 1, margin: 0 })
+  Qrcode.toCanvas($('.js-marketing-qrcode1')[0], res.url, { width: 300, quality: 1, margin: 0 })
   Qrcode.toCanvas($('.js-marketing-qrcode2')[0], res.url, { width: 80, quality: 1, margin: 1 })
 
   $('.js-download-btn').on('click', () => {
