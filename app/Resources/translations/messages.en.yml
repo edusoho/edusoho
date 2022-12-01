@@ -4513,6 +4513,7 @@ admin.user.online.visitor: Visitor
 admin.user.online.registed_user: Registered user
 admin.user.online.all_visitors: All visitors
 admin.user.online.online_user_count: A total of %count% eligible online users (within 15 minutes)
+admin.user.online.statistical_range: The scope of statistics includes trainees and employees
 
 admin.comment_manage.title: 'Comments'
 admin.comment_manage.monitor: 'Comment monitor'
