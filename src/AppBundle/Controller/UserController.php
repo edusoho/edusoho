@@ -79,7 +79,7 @@ class UserController extends BaseController
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
         } else {
-            return $this->redirect($this->generateUrl('user_show', ['id' => $user['id']]));
+            return $this->redirect($this->generateUrl('user_show', ['id' => $user['uuid']]));
         }
     }
 
