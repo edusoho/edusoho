@@ -33,7 +33,7 @@ class MallController extends BaseController
         $authorization = JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'userInfo' => $this->getUserInfo(), 'access_key' => $mallSettings['access_key'], 'header' => 'MARKETING_MALL'], $mallSettings['secret_key']);
         $mallUrl = $this->getSchema() . $this->container->getParameter('marketing_mall_url') . '/console-pc/';
 
-        $url = "{$mallUrl}?token={$authorization}&code={$mallSettings['access_key']}&url={$request->getSchemeAndHttpHost()}";
+        $url = "{$mallUrl}?token={$authorization}&code={$mallSettings['access_key']}&url={$request->getSchemeAndHttpHost()}&schoolCode={$mallSettings['code']}";
 
         $options = [
             'overview' => [
