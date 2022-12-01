@@ -99,7 +99,7 @@ class MallProductMember extends BaseResource
         return true;
     }
 
-    private function searchClassroom($targetId, $userId)
+    private function checkClassroom($targetId, $userId)
     {
         if (empty($this->getClassroomService()->getClassroomMember($targetId, $userId))){
             return false;
@@ -107,17 +107,15 @@ class MallProductMember extends BaseResource
         return true;
     }
 
-    private function searchCourse($targetId, $userId)
+    private function checkCourse($targetId, $userId)
     {
-        var_dump($targetId);
-        var_dump($userId);
         if (empty($this->getCourseMemberService()->getCourseMember($targetId, $userId))){
             return false;
         }
         return true;
     }
 
-    private function searchQuestionBank($targetId, $userId)
+    private function checkQuestionBank($targetId, $userId)
     {
         if (empty($this->getExerciseMemberService()->getExerciseMember($targetId, $userId))){
             return false;
