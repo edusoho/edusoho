@@ -29,14 +29,16 @@
         </div>
         <div class="controls col-md-8">
           <div class="btn-group">
-            <button type="button" class="btn btn-default {% if auth.register_mode =="email" %}btn-primary{% endif %} model" data-modle="email">{{'admin.user_auth.email'|trans}}</button>
-            <button type="button" class="btn btn-default {% if auth.register_mode =="mobile" %}btn-primary{% endif %} model" data-modle="mobile">{{'admin.user_auth.phone'|trans}}
-            <span class="register-recommend-tag">荐</span>
+            <button type="button" class="btn btn-default {% if auth.register_mode =="mobile" %}btn-primary{% endif %} model" data-modle="mobile">
+              {{'admin.user_auth.phone'|trans}}（推荐）
             </button>
+            <button type="button" class="btn btn-default {% if auth.register_mode =="email" %}btn-primary{% endif %} model" data-modle="email">{{'admin.user_auth.email'|trans}}</button>
             <button type="button" class="btn btn-default {% if auth.register_mode =="email_or_mobile" %}btn-primary{% endif %} model" data-modle="email_or_mobile">{{'admin.user_auth.email_or_mobile'|trans}}</button>
           </div>
           <input type="hidden" value="{{ auth.register_mode|default('none') }}" name="register_mode" />
-          <div class="help-block" >{{'admin.user_auth.User_sign_up_type.help_block'|trans}}</div>
+          <div class="help-block">
+            {{'admin.user_auth.User_sign_up_type.help_block'|trans}}
+          </div>
 
         </div>
         <div class="controls col-md-8 col-md-offset-3">

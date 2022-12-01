@@ -1,0 +1,38 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}{{'admin.user.manage.avatar_crop.heading_title'|trans}}{% endblock %}
+{% block body %}
+
+      <form id="avatar-crop-form" method="post" action="{{ path('admin_v2_user_avatar_crop', {id:user.id}) }}" >
+       
+        <div class="form-group clearfix">
+          <div class="col-md-offset-2 col-md-8 controls">
+            <img class="img-responsive" src="{{ filepath(pictureUrl) }}" id="avatar-crop" width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
+            <div class="help-block">{{'admin.user.manage.avatar_crop.crop_hint'|trans}}</div>
+          </div>
+        </div>
+
+        <div class="form-group clearfix">
+          <div class="col-md-offset-2 col-md-8 controls">
+            <a class="btn btn-fat btn-primary" 
+            id="upload-avatar-btn" 
+            data-url="{{path('admin_v2_user_avatar_crop', {id: user.id})}}"
+            data-goto-url="{{path('admin_v2_user_avatar', {id: user.id})}}"
+            >{{'form.btn.save'|trans}}</a>
+          </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        
+      </form>
+
+{% endblock %}
+
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+  
+  <script>app.load('user/avatar-crop-modal');</script>
+{% endblock %}

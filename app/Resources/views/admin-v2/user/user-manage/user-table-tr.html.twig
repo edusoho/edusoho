@@ -6,19 +6,6 @@
     {% if user.locked %}
       <label class="label label-danger">{{'admin.user.manage.fields.forbid_label'|trans}}</label>
     {% endif %}
-
-    <br>
-    <span class="text-muted text-sm">
-      {% for role in user.roles %}
-        {% set userRole = data('Role', {code: role}) %}
-        {% if userRole|default(false) %}
-          {{userRole.name|default('')}}
-        {% else %}
-          {{ dict_text('userRole', role) }}
-        {% endif %}
-        {% if not loop.last %} &nbsp {% endif %}
-      {% endfor %}
-    </span>
   </td>
  {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>

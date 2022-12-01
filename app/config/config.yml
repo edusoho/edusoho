@@ -26,6 +26,7 @@ imports:
         resource: theme_jianmo_parameters.yml
     -
         resource: '@CustomBundle/Resources/config/services.yml'
+    - { resource: "@MarketingMallBundle/Resources/config/services.yml" }
 framework:
     translator:
         fallback: '%locale%'

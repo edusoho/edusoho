@@ -392,6 +392,14 @@ services:
         tags:
             -
                 name: twig.extension
+    web.twig.role_extension:
+        class: AppBundle\Twig\RoleExtension
+        arguments:
+          - '@service_container'
+          - '@biz'
+        public: true
+        tags:
+          - name: twig.extension
     topxia.timemachine:
         class: AppBundle\Common\TimeMachine
         arguments:

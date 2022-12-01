@@ -1,0 +1,112 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_purchase_market_tab1' %}
+
+{% do script(['libs/jquery-validation.js', 'marketingmallbundle/js/bind-mobile/index.js']) %}
+
+{% block content %}
+  <div class="mobile-bind-container">
+    <div class="mobile-bind__title">{{ 'site.mobile_bind.title'|trans }}</div>
+    <div class="mobile-bind__desc">使用商城需绑定手机号</div>
+
+    <form id="mobile-bind-form" class="mobile-bind-form" method="post" action="" data-user-id="" data-url="{{ path('admin_v2_mall_mobile_bind') }}" style="margin-top: 46px;">
+      <div class="form-group cd-form-group">
+        <label class="control-label" for="mobile">{{'site.mobile_bind.phone_number'|trans}}</label>
+        <div class="controls">
+          <input class="form-control" type="text" id="mobile" name="mobile" data-url="{{path('register_email_or_mobile_check')}}"/>
+        </div>
+      </div>
+
+      <div class="form-group cd-form-group">
+        <label class="control-label" for="sms_code">{{'form.sms_code'|trans}}</label>
+        <div class="controls cd-row">
+          <div class="col-xs-6">
+            <input type="text" maxlength="6" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="{{'user.settings.security.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_bind'})}}">
+            <p class="help-block"> </p>
+          </div>
+          <div class="col-xs-6">
+            <button type="button" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send sms-send-btn" disabled data-url="{{ path('edu_cloud_sms_send') }}" data-cloud-sms-url="{{ path('admin_v2_edu_cloud_sms_overview') }}">
+              <span id="js-time-left"></span>
+              <span id="js-fetch-btn-text">{{'user.settings.security.get_sms_code_btn'|trans}}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+      <button id="submit-btn" type="button" class="btn cd-btn cd-btn-lg mobile-bind-form__btn cd-btn-primary" data-toggle="form-submit"  data-target="#mobile-bind-form" data-loading-text="{{'form.btn.save.submiting'|trans}}" data-target-url="{{ targetUrl }}">
+        {{'user.bind.confirm_bind_btn'|trans}}
+      </button>
+    </form>
+  </div>
+
+  <style>
+    .mobile-bind-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 24px 40px;
+      background-color: #fff;
+      border-radius: 2px;
+    }
+
+    .mobile-bind__title {
+      margin-bottom: 4px;
+      font-size: 16px;
+      line-height: 22px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .mobile_bind__desc {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      color: #666;
+    }
+
+    .cd-form-group .form-control {
+      display: block;
+      width: 100%;
+      font-size: 14px;
+      background-color: #fff;
+      background-image: none;
+      border: none;
+      border-bottom: 1px solid rgba(0,0,0,.16);
+      border-radius: 0;
+      padding: 5px 0 4px;
+      line-height: 20px;
+      height: 30px;
+      color: rgba(0,0,0,.88);
+      -webkit-appearance: none;
+      appearance: none;
+      box-shadow: none;
+    }
+
+    .mobile-bind-container .mobile-bind-form {
+      float: left;
+      width: 360px;
+      height: auto;
+    }
+
+    .mobile-bind-container .mobile-bind-form .close {
+      width: 360px;
+      padding-top: 16px;
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: 400;
+      opacity: 1;
+      color: #333;
+    }
+
+    .mobile-bind-form .close:hover {
+      opacity: 0.8;
+    }
+
+    .mobile-bind-container .mobile-bind-form__btn {
+      width: 360px;
+      margin-top: -4px;
+    }
+  </style>
+{% endblock %}

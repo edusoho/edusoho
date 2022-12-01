@@ -22,7 +22,7 @@
 
       {% block main_mobile %}{% endblock %}
     </div>
-    {% if setting('copyright.thirdCopyright') != 1 and is_saas() %}
+    {% if setting('copyright.thirdCopyright') != 1 and is_show_feedback() %}
       <div class="fixed-bar">
         <a href="{{path('feedback')}}"  target='_blank' class="icon-question-text feedback">
           <span>{{ 'admin.fixed_bar.product_feedback'|trans|raw }}</span>

@@ -56,5 +56,14 @@ class DefaultResourceAuthenticationProvider implements ResourceAuthenticationInt
         if (!$token instanceof TokenInterface || $token instanceof AnonymousToken) {
             throw new UnauthorizedHttpException('Basic', 'Requires authentication', null, ErrorCode::UNAUTHORIZED);
         }
+
+        $annotation = $this->annotationReader->getMethodAnnotation(
+            new \ReflectionMethod(get_class($resourceProxy->getResource()), $method),
+            'ApiBundle\Api\Annotation\AuthClass'
+        );
+
+        if ($annotation && $annotation->getClassName() != $token->getAuthClass()) {
+            throw UserException::PERMISSION_DENIED();
+        }
     }
 }

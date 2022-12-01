@@ -231,11 +231,18 @@ boughtType:
     edit: 编辑会员
 
 userKeyWordType:
-    nickname: 用户名
+    nickname: 学员名
     verifiedMobile: 手机号
     email: 邮件地址
     loginIp: 登录IP
     idcard: 身份证号
+
+staffKeyWordType:
+  nickname: 员工名
+  verifiedMobile: 手机号
+  email: 邮件地址
+  loginIp: 登录IP
+  idcard: 身份证号
 
 jobCycle:
     once: 一次
@@ -286,13 +293,18 @@ userType:
     apple: Apple登录
     marketing: 微营销
     distributor: 分销
+    marketing_mall: 网校商城注册
 
 userKeyWordTypes:
-    nickname: 用户名
+    nickname: 学员名
     email: 邮件地址
 
+staffKeyWordTypes:
+  nickname: 员工名
+  email: 邮件地址
+
 userStatisticsTypes:
-  nickname: 用户名
+  nickname: 学员名
   mobile: 手机号
 
 questionType:

@@ -154,5 +154,16 @@ define(function(require, exports, module) {
         $('#sign-up-setting').removeClass('hidden');
       }
     });
+
+    $.ajax({
+      url: '/api/mall_info',
+      headers: {
+        Accept: 'application/vnd.edusoho.v2+json'
+      }
+    }).done(function(resp) {
+      if (resp.isShow) {
+        $('.js-is-sass').removeClass('hidden')
+      }
+    })
   };
 });

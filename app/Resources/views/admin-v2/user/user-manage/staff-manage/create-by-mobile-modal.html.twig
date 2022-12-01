@@ -1,0 +1,99 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+{% set systemRoles = [] %}
+{% set CustomRoles = [] %}
+
+{% block title %}{{'admin.user.manage.create_by_mobile.heading_staff_title'|trans}}{% endblock %}
+{% block body %}
+
+  <form id="user-create-form" class="form-horizontal" method="post" action="{{ path('admin_v2_staff_create') }}">
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label ">
+        <label for="mobile">{{'user.fields.mobile_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="mobile" data-url="{{ path('admin_v2_user_create_mobile_check') }}" name="mobile"
+               class="form-control" placeholder='{{'admin.user.manage.create_by_mobile.mobile.input_placeholder'|trans}}'>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="nickname">{{'user.fields.username_staff_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="nickname" name="nickname" data-url="{{ path('admin_v2_staff_create_nickname_check') }}"
+               class="form-control" placeholder='{{'admin.user.manage.create_by_mobile.nickname.input_placeholder'|trans}}'>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="password">{{'admin.user.fields.password_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="password" id="password" name="password" class="form-control">
+        <p class="help-block">{{('admin.user.fields.password_hint.'~setting('auth.password_level')|default('low'))|trans}}</p>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="confirmPassword">{{'admin.user.fields.confirm_password_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control">
+        <p class="help-block">{{'admin.user.fields.confirm_password_hint'|trans}}</p>
+      </div>
+    </div>
+
+    {% include 'org/org-tree-select.html.twig' with {colmd:7,modal: 'modal'} %}
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="roles">{{'admin.user.fields.staff_roles'|trans}}</label>
+        </div>
+        <div class="col-md-7 controls">
+          <div class="checkboxs" id="old-checkboxs">
+            {% set admin_roles = get_admin_roles() %}
+            {% for role in admin_roles  %}
+              {% if role.code == 'ROLE_USER' %}
+                <input type="checkbox" style="display: none" name="roles[]" value="{{role.code}}" checked="checked">
+              {% elseif role.code in not_update_roles() %}
+                {% set systemRoles = systemRoles|merge([role]) %}
+              {% else %}
+                {% set CustomRoles = CustomRoles|merge([role]) %}
+              {% endif %}
+            {% endfor %}
+            <p>{{'admin.user.roles.system_roles'|trans}}</p>
+            {% for system in systemRoles %}
+              <label>
+                <span class="checkboxs"><input type="checkbox" name="roles[]" value="{{system.code}}" ></span>{{system.name}}
+              </label>
+            {% endfor %}
+            <p style="margin-top: 15px">{{'admin.user.roles.custom_roles'|trans}}</p>
+            {% for custom in CustomRoles %}
+              <label>
+                <span class="checkboxs"><input type="checkbox" name="roles[]" value="{{custom.code}}" ></span>{{custom.name}}
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+    <input type="hidden" id="password_level" value="{{ setting('auth.password_level')|default('low') }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button id="user-create-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary pull-right"
+          data-toggle="form-submit" data-target="#user-create-form">{{'form.btn.submit'|trans}}
+  </button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  
+  <script>app.load('user/staff/create-modal-onlymobile');</script>
+{% endblock %}

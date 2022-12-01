@@ -8,6 +8,7 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;
+use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ItemBankExerciseController extends BaseController
@@ -68,6 +69,8 @@ class ItemBankExerciseController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+
+
     public function recommendAction(Request $request, $id)
     {
         $exercise = $this->getExerciseService()->get($id);
@@ -110,6 +113,12 @@ class ItemBankExerciseController extends BaseController
         }
 
         return $conditions;
+    }
+
+    public function checkEsProductCanDeleteAction(Request $request, $id)
+    {
+        $status = $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'questionBank');
+        return $this->createJsonResponse(['status' => $status]);
     }
 
     protected function getDifferentStatusExercisesNum($conditions)
@@ -182,5 +191,13 @@ class ItemBankExerciseController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return ProductMallGoodsRelationService
+     */
+    private function getProductMallGoodsRelationService()
+    {
+        return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
     }
 }

@@ -97,6 +97,7 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
                     ]
                 );
             }
+            $this->dispatchEvent('assessmentExercise.create', $assessments, ['exerciseId' => $exerciseId, 'moduleId' => $moduleId]);
 
             $this->commit();
         } catch (\Exception $e) {
@@ -148,7 +149,10 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
 
-        return $this->getItemBankAssessmentExerciseDao()->delete($id);
+        $result = $this->getItemBankAssessmentExerciseDao()->delete($id);
+        $this->dispatchEvent('assessmentExercise.delete', $assessmentExercise);
+
+        return $result;
     }
 
     public function batchDeleteAssessmentExercise($ids)
@@ -167,7 +171,12 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
 
     public function deleteByAssessmentId($assessmentId)
     {
-        return $this->getItemBankAssessmentExerciseDao()->deleteByAssessmentId($assessmentId);
+        $assessment = $this->getItemBankAssessmentExerciseDao()->getByAssessmentId($assessmentId);
+        $result = $this->getItemBankAssessmentExerciseDao()->deleteByAssessmentId($assessmentId);
+
+        $this->dispatch('assessmentExercise.delete', $assessment);
+
+        return $result;
     }
 
     /**

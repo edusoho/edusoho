@@ -378,6 +378,11 @@ class UserServiceImpl extends BaseService implements UserService
         return ArrayToolkit::index($userProfiles, 'id');
     }
 
+    public function findUpdateUserProfilesByIds(array $ids)
+    {
+        return $this->getProfileDao()->findByIds($ids);
+    }
+
     public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit, $columns = [])
     {
         $profiles = $this->getProfileDao()->search($conditions, $orderBy, $start, $limit, $columns);
@@ -422,7 +427,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $updatedUser = $this->getUserDao()->update($userId, ['nickname' => $nickname]);
-        $this->dispatchEvent('user.change_nickname', new Event($updatedUser));
+        $this->dispatchEvent('user.change_nickname', new Event($updatedUser, ['oldNickname' => $user['nickname']]));
     }
 
     public function changeUserOrg($userId, $orgCode)
@@ -562,7 +567,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $user = $this->getUserDao()->update($userId, $fields);
-//        $this->dispatchEvent('user.change_avatar', new Event($user));
+        $this->dispatchEvent('user.change_avatar', new Event($user));
 
         return UserSerialize::unserialize($user);
     }
@@ -760,12 +765,11 @@ class UserServiceImpl extends BaseService implements UserService
             'password' => $this->getPasswordEncoder()->encodePassword($password, $salt),
         ];
 
-        $this->getUserDao()->update($id, $fields);
+        $updatePass = $this->getUserDao()->update($id, $fields);
 
         $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
-        $this->dispatch('user.change_password', $user);
-
+        $this->dispatchEvent('user.change_password', new Event($updatePass));
         return true;
     }
 
@@ -1187,9 +1191,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!empty($fields['about'])) {
-            $currentUser = $this->biz['user'];
-            $trusted = $currentUser->isAdmin();
-            $fields['about'] = $this->purifyHtml($fields['about'], $trusted);
+            $fields['about'] = $this->purifyHtml($fields['about'], $this->biz['user']->isAdmin());
         }
 
         if (!empty($fields['site']) && !SimpleValidator::site($fields['site'])) {
@@ -1203,31 +1205,13 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $fields = $this->filterCustomField($fields);
-        if (empty($fields['isWeiboPublic'])) {
-            $fields['isWeiboPublic'] = 0;
-        } else {
-            $fields['isWeiboPublic'] = 1;
-        }
-
-        if (empty($fields['isWeixinPublic'])) {
-            $fields['isWeixinPublic'] = 0;
-        } else {
-            $fields['isWeixinPublic'] = 1;
-        }
-
-        if (empty($fields['isQQPublic'])) {
-            $fields['isQQPublic'] = 0;
-        } else {
-            $fields['isQQPublic'] = 1;
-        }
+        $fields['isWeiboPublic'] = empty($fields['isWeiboPublic']) ? 0 : 1;
+        $fields['isWeixinPublic'] = empty($fields['isWeixinPublic']) ? 0 : 1;
+        $fields['isQQPublic'] = empty($fields['isQQPublic']) ? 0 : 1;
 
         if ($strict) {
             $fields = array_filter($fields, function ($value) {
-                if (0 === $value) {
-                    return true;
-                }
-
-                return !empty($value);
+                return 0 === $value || !empty($value);
             });
         }
 
@@ -1274,8 +1258,6 @@ class UserServiceImpl extends BaseService implements UserService
         $roles = array_merge($roles, $hiddenRoles);
 
         $user = $this->getUserDao()->update($id, ['roles' => $roles]);
-
-        $this->dispatchEvent('user.role.change', new Event(UserSerialize::unserialize($user)));
 
         return UserSerialize::unserialize($user);
     }
@@ -1689,7 +1671,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getProfileDao()->update($id, $userProfile);
             $this->changeUserRoles($id, ['ROLE_USER']);
 
-            $this->getUserDao()->update($id, $userFields);
+            $user = $this->getUserDao()->update($id, $userFields);
 
             //清除用户绑定信息
             $this->deleteUserBindByUserId($id);
@@ -1713,6 +1695,8 @@ class UserServiceImpl extends BaseService implements UserService
 
             //清除用户课程/班级评价数据
             $this->getReviewService()->deleteReviewsByUserId($id);
+
+            $this->dispatchEvent('user.delete', $user);
 
             $this->commit();
         } catch (\Exception $e) {
@@ -2471,6 +2455,36 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         return intval($enable);
+    }
+
+
+    public function syncBindUser($fromId) {
+
+        $userBind = $this->getUserBindDao()->getByFromId($fromId);
+
+        if($userBind) {
+            $user = $this->getUserDao()->get($userBind['toId']);
+            return [
+                'isExist' => '1',
+                'user' => $user
+            ];
+        }
+
+        $this->getUserBindDao()->create([
+            'type' => 'weixin',
+            'fromId' => $fromId,
+            'toId' => "0",
+            'createdTime' => time(),
+        ]);
+        return [
+            'isExist' => '0',
+            'user' => ''
+        ];
+    }
+
+    public function UserBindUpdate($openId, $userId) {
+
+        $this->getUserBindDao()->UserBindUpdate($openId, $userId);
     }
 
     protected function decideUserJustStudentRole($userId)

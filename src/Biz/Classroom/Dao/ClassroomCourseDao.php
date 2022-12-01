@@ -16,6 +16,8 @@ interface ClassroomCourseDao extends GeneralDaoInterface
 
     public function findClassroomIdsByCourseId($courseId);
 
+    public function findClassroomIdsByParentCourseId($parentCourseId);
+
     public function findByClassroomIdAndCourseIds($classroomId, $courseIds);
 
     public function findByClassroomId($classroomId);

@@ -15,7 +15,7 @@ class UserCourseStatisticsExporter extends Exporter
     public function getTitles()
     {
         return [
-            'user.learn.statistics.nickname',
+            'user.learn.statistics.student_nickname',
             'user.learn.statistics.mobile',
             'classroom.name',
             'course.name',
@@ -30,7 +30,7 @@ class UserCourseStatisticsExporter extends Exporter
     public function getContent($start, $limit)
     {
         $users = $this->getUserService()->searchUsers(
-            ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']),
+            [ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']),'isStudent' => 0],
             ['id' => 'DESC'],
             $start,
             $limit,

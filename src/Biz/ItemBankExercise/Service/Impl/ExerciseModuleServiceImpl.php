@@ -61,6 +61,7 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
                 'type' => 'assessment',
                 'answerSceneId' => $scene['id'],
             ]);
+            $this->dispatchEvent('exercise.assessmentModule.create', $module, ['exerciseId' => $exerciseId]);
 
             $this->commit();
         } catch (\Exception $e) {
@@ -97,7 +98,11 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
 
         $fields = ArrayToolkit::parts($fields, ['title']);
 
-        return $this->getItemBankExerciseModuleDao()->update($moduleId, $fields);
+        $module = $this->get($moduleId);
+        $updateModule = $this->getItemBankExerciseModuleDao()->update($moduleId, $fields);
+        $this->dispatchEvent('exercise.assessmentModule.update', $module, ['fields' => $fields]);
+
+        return $updateModule;
     }
 
     public function deleteAssessmentModule($moduleId)
@@ -105,11 +110,13 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
         try {
             $this->beginTransaction();
 
+            $module = $this->getItemBankExerciseModuleDao()->get($moduleId);
             $this->getItemBankExerciseModuleDao()->delete($moduleId);
 
             $assessmentExercises = $this->getAssessmentExerciseService()->findByModuleId($moduleId);
             $this->getAssessmentExerciseService()->batchDeleteAssessmentExercise(ArrayToolkit::column($assessmentExercises, 'id'));
 
+            $this->dispatchEvent('exercise.assessmentModule.delete', $module);
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
