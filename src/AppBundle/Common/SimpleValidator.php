@@ -18,7 +18,7 @@ class SimpleValidator
     public static function nickname($value, array $option = [])
     {
         $option = array_merge(
-            ['minLength' => 4, 'maxLength' => 18],
+            ['minLength' => 4, 'maxLength' => 36],
             $option
         );
 
@@ -59,7 +59,7 @@ class SimpleValidator
     public static function truename($value, array $option = [])
     {
         $option = array_merge(
-            ['minLength' => 4, 'maxLength' => 18],
+            ['minLength' => 4, 'maxLength' => 36],
             $option
         );
 
