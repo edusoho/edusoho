@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class ActivityFilter extends Filter
 {
     protected $publicFields = [
-        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title', 'finishData', 'finishType', 'finishCondition',
+        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title', 'finishData', 'finishType', 'finishCondition', 'exam_mode'
     ];
 
     protected function publicFields(&$data)
@@ -45,6 +45,7 @@ class ActivityFilter extends Filter
                 $data['testpaperInfo']['redoInterval'] = $data['ext']['redoInterval']; //分钟
                 $data['testpaperInfo']['doTimes'] = $data['ext']['doTimes'];
                 $data['testpaperInfo']['startTime'] = !empty($data['startTime']) ? $data['startTime'] : null;
+                $data['testpaperInfo']['exam_mode'] = !empty($data['ext']['answerScene']['exam_mode']) ? $data['ext']['answerScene']['exam_mode'] : "0";
             }
         }
 
