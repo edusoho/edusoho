@@ -5336,6 +5336,7 @@ admin.user.online.visitor: 游客
 admin.user.online.registed_user: 注册用户
 admin.user.online.all_visitors: 全部访客
 admin.user.online.online_user_count: 共查询到 %count% 位符合条件的在线用户（15分钟以内有活动）
+admin.user.online.statistical_range: 统计范围包括学员和员工
 
 ## 评论管理
 admin.comment_manage.title: 评论管理
