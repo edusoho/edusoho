@@ -567,8 +567,8 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 }
             }
 
-            if ('messageSubscribe' == $notificationType && !empty($wechatSetting['templates'][$key]['id'])) {
-                $data = $this->getSDKWeChatService()->deleteNotificationTemplate($wechatSetting['templates'][$key]['id'], ['templateType' => 'subscribe']);
+            if ('messageSubscribe' == $notificationType) {
+                $data = $this->getSDKWeChatService()->deleteNotificationTemplate($wechatSetting['templates'][$key]['templateId'], ['templateType' => 'subscribe']);
             }
 
             if (empty($data)) {

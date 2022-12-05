@@ -51,7 +51,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         $apply['ids'] = explode(',', $apply['ids']);
 
         $apply['money'] *= 100;
-        $apply['money'] = (int)$apply['money'];
+        $apply['money'] = intval(strval($apply['money']));
 
         $apply['sn'] = $this->generateSn();
 
