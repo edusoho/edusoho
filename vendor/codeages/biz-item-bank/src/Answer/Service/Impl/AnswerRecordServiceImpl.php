@@ -30,6 +30,8 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
             'assessment_id' => ['integer', ['min', 0]],
             'user_id' => ['integer', ['min', 0]],
             'admission_ticket' => ['required'],
+            'exam_mode' => ['integer'],
+            'limited_time' => ['integer'],
         ]);
 
         if ($answerRecord['user_id'] <= 0) {
