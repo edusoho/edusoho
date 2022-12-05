@@ -5,7 +5,7 @@ search = search ? decodeURIComponent(search) : '/'
 
 let baseUrl = ''
 if (process.env.NODE_ENV === 'development') {
-  baseUrl = 'http://localhost:8080/console-pc' + search
+  baseUrl = 'http://localhost:8080/console-pc' + search + (search.indexOf('?') > -1 ? '&' : '?') + `schoolCode=SAIahN`
 } else {
   const iframeUrl = $('#iframe-url').val()
 
@@ -47,5 +47,3 @@ handshake.then(child => {
     child.call('routerBack')
   })
 }); 
-
-
