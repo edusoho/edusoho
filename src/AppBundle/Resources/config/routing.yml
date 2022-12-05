@@ -3838,10 +3838,7 @@ get_current_user:
     path: /current/user
     defaults:
         _controller: 'AppBundle:Vue/Common:currentUser'
-get_data_tag:
-    path: '/data/tag/{name}'
-    defaults:
-        _controller: 'AppBundle:Vue/Common:getDataTag'
+
 render_org:
     path: /render/org
     defaults:
