@@ -1107,13 +1107,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->createNewException(ClassroomException::UNPUBLISHED_CLASSROOM());
         }
 
-        $user = $this->getUserService()->getUser($userId);
+        $user = $this->getUserService()->getUser($userId) ?: $this->getUserService()->getUserByUUID($userId);
 
         if (empty($user)) {
-            $user = $this->getUserService()->getUserByUUID($userId);
-            if(empty($user)) {
-                $this->createNewException(UserException::NOTFOUND_USER());
-            }
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
@@ -1122,16 +1119,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->createNewException(ClassroomException::FORBIDDEN_BECOME_STUDENT());
         }
 
-        $userMember = [];
-
         if (!empty($info['becomeUseMember']) && $this->isPluginInstalled('Vip')) {
             $levelChecked = $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']);
 
             if ('ok' != $levelChecked) {
                 $this->createNewException(ClassroomException::MEMBER_LEVEL_LIMIT());
             }
-
-            $userMember = $this->getVipService()->getMemberByUserId($user['id']);
         }
 
         if (!empty($info['orderId'])) {
@@ -1166,12 +1159,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (!empty($member)) {
             $member['orderId'] = $fields['orderId'];
             $member['refundDeadline'] = $fields['refundDeadline'];
+            $member['remark'] = $fields['remark'];
             if ('auditor' != $member['role'][0]) {
                 $member['role'][] = 'student';
-                $member['remark'] = $fields['remark'];
             } else {
                 $member['role'] = ['student'];
                 $member['deadline'] = $deadline;
+                $member['createdTime'] = time();
             }
             $member = $this->getClassroomMemberDao()->update($member['id'], array_merge($member, $this->getMemberHistoryData($member['userId'], $member['classroomId'])));
         } else {
