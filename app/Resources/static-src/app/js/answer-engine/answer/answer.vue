@@ -36,7 +36,7 @@
   import dataURLToBlob from "dataurl-to-blob";
   import {checkBrowserCompatibility} from '../../face-inspection/util';
   import { Modal } from 'ant-design-vue';
-  
+
   const commonConfig = { keyboard: false, centered: true, footer: false, class: 'error-modal' }
 
   export default {
@@ -95,7 +95,7 @@
     created() {
       this.emitter = new ActivityEmitter();
       this.emitter.emit('doing', {data: ''});
-        
+
 
       $.ajax({
         url: '/api/continue_answer',
@@ -154,6 +154,9 @@
         })
       },
       reachTimeSubmitAnswerData(assessmentResponse) {
+        if (this.answerRecord.exam_mode == '1') {
+          return;
+        }
         const that = this;
         this.isReachTime = true;
         $.ajax({
@@ -192,7 +195,7 @@
       },
       postAnswerData(assessmentResponse) {
         if (this.isReachTime) return
-        
+
         if (!this.ajaxTimeOut) {
           this.ajaxTimeOut = setTimeout(() => {
             this.networkError(assessmentResponse);
