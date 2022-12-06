@@ -34,6 +34,9 @@ class AnswerRecord extends AbstractResource
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
 
+        $accuracyRate = round(($answerReport['right_question_count']/$assessment['question_count'])*100);
+        $answerReport['accuracyRate'] = $accuracyRate."%";
+
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerScene['id']);
 
