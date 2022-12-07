@@ -47,7 +47,7 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
             unset($conditions['endTime']);
         }
 
-        if (!empty($conditions['keyword']) && !empty($conditions['keywordType'])) {
+        if (isset($conditions['keyword']) && !empty($conditions['keywordType'])) {
             $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
