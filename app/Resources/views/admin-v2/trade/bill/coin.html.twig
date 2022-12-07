@@ -12,14 +12,13 @@
       </span>
     </p>
     <div class="table-responsive">
-      <table class="table table-striped text-sm">
+      <table class="table table-striped text-sm audit-table">
         <tr class="text-sm">
           <th width="150">{{ 'order.sn'|trans }}</th>
-          <th>{{ 'name'|trans }}</th>
-          <th width="200">{{ 'cashflow.trade_sn'|trans }}/{{ 'cashflow.order_sn'|trans }}</th>
+          <th width="300">{{ 'name'|trans }}</th>
           <th width="100">{{ 'user.fields.username_label'|trans }}</th>
-          <th width="115">{{ 'cashflow.created_time'|trans }}</th>
           <th width="120" class="text-right prl"><span>{{ 'cashflow.inflow'|trans }}</th>
+          <th width="120">{{ 'cashflow.created_time'|trans }}</th>
         </tr>
         {% for cash in cashes %}
         {% set user = users[cash['buyer_id']]|default() %}
@@ -27,19 +26,19 @@
           <tr>
             <td>{{ cash.sn }}</td>
             <td>
-              <span>{{ cash.title }}</span>
+              <span>{{ cash.title }}</span><br/>
+              <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn|default('--') }}</span><br/>
+              <span class="text-muted">{{ 'cashflow.trade_sn'|trans }}：{{ cash.trade_sn|default('--') }}</span>
             </td>
             <td>
-              <span class="text-muted">{{ 'cashflow.trade_sn'|trans }}：{{ cash.trade_sn|default('--') }}</span><br/>
-              <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn|default('--') }}</span>
+              {% if has_permission('admin_v2_user_manage') %}
+                <a href="javascript:" class="cdv2-text-sm link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_user_show', {id: user.uuid}) }}">{{ user.nickname|default('--') }}</a>
+              {% else %}
+                <a class="cdv2-text-sm link-primary" target="_blank" href="{{ user_show_path({ id:user.id }) }}">
+                {{ user.nickname }}</a>
+              {% endif %}
+              <br/>{% if user.verifiedMobile %}{{ user.verifiedMobile }}{% else %}{{ userProfiles[user.id].mobile }}{% endif %}
             </td>
-            {% if has_permission('admin_v2_user_manage') %}
-              <td><a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{path('admin_v2_user_show', {id:user.uuid})  }}">{{ user.nickname|default('--') }}</a></td>
-            {% else %}
-              <td><a target="_blank" href="{{ user_show_path({ id:user.id }) }}">
-              {{ user.nickname }}</a></td>
-            {% endif %}
-            <td>{{ cash.created_time|date('Y-m-d H:i') }}</td>
             <td class="text-right prl">
             {% if cash.type =="inflow" %}
               <span class="text-success">
@@ -51,6 +50,7 @@
               </span>
             {% endif %}
             </td>
+            <td>{{ cash.created_time|date('Y-m-d H:i') }}</td>
           </tr>
         {% endfor %}
       </table>

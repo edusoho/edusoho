@@ -15,10 +15,11 @@
   {% endif %}
   <div class="form-group">
     <select class="form-control" name="keywordType">
-      {% set options = {'': 'admin.cashflow.keyword_default'|trans, 'buyerNickname': 'cashflow.user_name'|trans,'sn': 'cashflow.sn'|trans,'order_sn': 'cashflow.order_sn'|trans,'title_like': 'cashflow.title'|trans, 'trade_sn': 'cashflow.trade_sn'|trans} %}
+      {% set options = {'': 'admin.cashflow.keyword_default'|trans, 'buyerNickname': 'cashflow.user_name'|trans, 'sn': 'cashflow.sn'|trans, 'order_sn': 'cashflow.order_sn'|trans, 'trade_sn': 'cashflow.trade_sn'|trans, 'title_like': 'cashflow.title'|trans} %}
       {% if  menu == 'admin_v2_bill_cash' %}
         {% set options = options|merge({ 'platform_sn': 'cashflow.platform_sn'|trans}) %}
       {% endif %}
+      {% set options = options|merge({ mobile: 'cashflow.user_mobile'|trans}) %}
       {{ select_options(options, app.request.query.get('keywordType')) }}
     </select>
   </div>

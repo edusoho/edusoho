@@ -10361,7 +10361,7 @@ cashflow.platform: 支付方式
 cashflow.platform_sn: 支付平台流水号
 cashflow.user_truename: 姓名
 cashflow.user_email: 邮箱
-cashflow.user_mobile: 联系电话
+cashflow.user_mobile: 手机号
 cashflow.refund: 线下退款
 
 admin.cashflow.keyword: 关键字
