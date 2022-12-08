@@ -116,7 +116,11 @@ abstract class Filter
         $cdn = new CdnUrl();
         $cdnUrl = $cdn->get('content');
         if (!empty($cdnUrl)) {
-            $url = AssetHelper::getScheme().':'.rtrim($cdnUrl, '/').'/'.ltrim($filePath, '/');
+            if (0 === strpos($filePath, '/')) {
+                $url = AssetHelper::getScheme().':'.rtrim($cdnUrl, '/').'/'.ltrim($filePath, '/');
+            } else {
+                $url = preg_replace('/(https|http):\/\/(.*?)(\/.*)/', '${1}:'.$cdnUrl.'${3}', $filePath);
+            }
         } else {
             $url = AssetHelper::uriForPath('/'.ltrim($filePath, '/'));
         }
