@@ -1,4 +1,5 @@
 import Postmate from 'postmate'
+import { uniq } from 'lodash'
 
 let search = window.location.search.replace('?path=', '')
 search = search ? decodeURIComponent(search) : '/'
@@ -21,9 +22,12 @@ const handshake = new Postmate({
 
 handshake.then(child => {
   child.on('route:update', data => {
+    const pathArray = uniq(data.path.split('?')[1].split('&'))
+    data.path = data.path.split('?')[0] + '?' + pathArray.join('&')
+
     const { origin, pathname } = window.location
     const path = encodeURIComponent(data.path)
-
+    
     window.history.pushState('', '', `${origin}${pathname}?path=${path}`)
   });
 
