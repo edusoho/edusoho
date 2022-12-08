@@ -13,13 +13,13 @@ class IQiYiVideoItemParser extends AbstractItemParser
             throw ParserException::PARSED_FAILED_IQIYI();
         }
 
-        preg_match('/page-info=\'(.*?)\'  :video-info=/', $response['content'], $matches);
+        preg_match('/window\.Q\.PageInfo\.playPageInfo=(.*?);/', $response['content'], $matches);
         if (empty($matches)) {
             throw ParserException::PARSED_FAILED_IQIYI_VIDEO_ID();
         }
         $data = json_decode($matches[1], true);
 
-        $parsedInfo = $this->getItem($data['vid'], $data['tvName'], $url, $this->getPlayUrl($data));
+        $parsedInfo = $this->getItem($data['vid'], $data['name'], $url, $this->getPlayUrl($data));
 
         return array_merge($item, $parsedInfo);
     }

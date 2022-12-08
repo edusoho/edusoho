@@ -24,27 +24,24 @@ class QQVideoItemParser extends AbstractItemParser
         $matched = preg_match('/vid=(\w+)/s', $url, $matches);
         $response = array();
 
-        if (!empty($matched)) {
-            $vid = $matches[1];
-        } else {
+        if (empty($matched)) {
             $response = $this->fetchUrl($url);
             if (200 != $response['code']) {
                 throw ParserException::PARSED_FAILED_QQ();
             }
             $matched = preg_match('/VIDEO_INFO.*?[\"]?vid[\"]?\s*:\s*"(\w+?)"/s', $response['content'], $matches);
-
+            $matched = $matched ?: preg_match('/"currentVid":"(.*?)","currentCid"/s', $response['content'], $matches);
             if (empty($matched)) {
                 throw ParserException::PARSED_FAILED_QQ();
             }
-
-            $vid = $matches[1];
         }
+        $vid = $matches[1];
 
         $matched = $this->getUrlMatched($url);
 
         if ($matched) {
-            $responseInfo = $response ? $response : array();
-            $videoUrl = 'http://sns.video.qq.com/tvideo/fcgi-bin/video?otype=json&vid='.$vid;
+            $responseInfo = $response ?: [];
+            $videoUrl = 'https://sns.video.qq.com/tvideo/fcgi-bin/video?otype=json&vid='.$vid;
 
             $response = $this->fetchUrl($videoUrl);
             if (200 != $response['code']) {
@@ -63,19 +60,8 @@ class QQVideoItemParser extends AbstractItemParser
                 $video = $video['video'];
                 $title = $video['title'];
             } else {
-                $video = array();
-                $title = $url;
-
-                if ($responseInfo) {
-                    $title = $this->getVideoTitle($responseInfo);
-                }
+                $title = $responseInfo ? $this->getVideoTitle($responseInfo) : $url;
             }
-
-            $summary = $video ? $video['desc'] : '';
-            $duration = $video ? $video['duration'] : '';
-            $pageUrl = $video ? 'http://v.qq.com/cover/'.substr($video['cover'], 0, 1)."/{$video['cover']}.html?vid={$vid}" : $url;
-
-            $parsedInfo = $this->getItem($vid, $title, $summary, $duration, $pageUrl);
         } else {
             $title = $this->getVideoTitle($response);
 
@@ -87,6 +73,19 @@ class QQVideoItemParser extends AbstractItemParser
         $parsedInfo = $this->getItem($vid, $title, '', '', $url);
 
         return array_merge($item, $parsedInfo);
+    }
+
+    public function detect($url)
+    {
+        if (parent::detect($url)) {
+            return true;
+        }
+        $matched = preg_match('/^<iframe (.*?) src="(.*?)"/s', $url, $matches);
+        if ($matched) {
+            return parent::detect($matches[2]);
+        }
+
+        return false;
     }
 
     protected function getUrlPrefixes()
@@ -141,21 +140,18 @@ class QQVideoItemParser extends AbstractItemParser
 
     private function getItem($vid, $title, $summary, $duration, $pageUrl)
     {
-        $item = array(
+        return [
             'uuid' => 'qqvideo:'.$vid,
             'name' => $title,
             'summary' => $summary,
             'duration' => $duration,
             'page' => $pageUrl,
-            'pictures' => array(
-                array('url' => "http://shp.qpic.cn/qqvideo/0/{$vid}/400"),
-            ),
-            'files' => array(
-                array('type' => 'swf', 'url' => "//imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?vid={$vid}&auto=1"),
-                array('type' => 'mp4', 'url' => "//video.store.qq.com/{$vid}.mp4"),
-            ),
-        );
-
-        return $item;
+            'pictures' => [
+                ['url' => "http://shp.qpic.cn/qqvideo/0/{$vid}/400"],
+            ],
+            'files' => [
+                ['type' => 'mp4', 'url' => "https://v.qq.com/txp/iframe/player.html?vid={$vid}"],
+            ],
+        ];
     }
 }
