@@ -122,7 +122,12 @@ abstract class Filter
                 $url = preg_replace('/(https|http):\/\/(.*?)(\/.*)/', '${1}:'.$cdnUrl.'${3}', $filePath);
             }
         } else {
-            $url = AssetHelper::uriForPath('/'.ltrim($filePath, '/'));
+            if (0 === strpos($filePath, '/')) {
+                $url = AssetHelper::uriForPath('/'.ltrim($filePath, '/'));
+            } else {
+                $url = $filePath;
+            }
+
         }
 
         return $url;
