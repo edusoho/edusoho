@@ -43,6 +43,7 @@ class TestpaperWrapper
             'description' => $assessment['description'],
             'bankId' => $assessment['bank_id'],
             'limitedTime' => empty($scene['limited_time']) ? '0' : $scene['limited_time'],
+            'examMode' => empty($scene['exam_mode']) ? '0' : $scene['exam_mode'],
             'score' => $assessment['total_score'],
             'itemCount' => $assessment['item_count'],
             'createdUserId' => $assessment['created_user_id'],
