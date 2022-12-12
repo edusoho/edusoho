@@ -2,6 +2,9 @@
 
 namespace AppBundle\Common;
 
+use Biz\User\UserException;
+use PhpOffice\PhpWord\Exception\Exception;
+
 class ImgConverToData
 {
     public $imgSrc;
@@ -30,7 +33,12 @@ class ImgConverToData
     public function _imgMime($imgSrc)
     {
         $info = getimagesize($imgSrc);
+        if($info == false) {
+            exit;
+//            throw new \Exception("图片信息有误");
+        } else {
+            return $this->imgMime = $info['mime'];
+        }
 
-        return $this->imgMime = $info['mime'];
     }
 }
