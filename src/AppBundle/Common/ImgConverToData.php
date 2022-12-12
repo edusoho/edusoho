@@ -35,7 +35,6 @@ class ImgConverToData
         $info = getimagesize($imgSrc);
         if($info == false) {
             exit;
-//            throw new \Exception("图片信息有误");
         } else {
             return $this->imgMime = $info['mime'];
         }
