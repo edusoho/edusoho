@@ -67,7 +67,8 @@ class SettingsController extends BaseController
             $backImg = $request->files->get('backImg');
 
             if (abs(filesize($faceImg)) > 2 * 1024 * 1024 || abs(filesize($backImg)) > 2 * 1024 * 1024
-                || !FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
+                || !FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)
+                || getimagesize($faceImg) == false || getimagesize($backImg) == false) {
                 $this->setFlashMessage('danger', 'user.settings.verification.photo_require_tips');
 
                 return $this->render('settings/approval.html.twig', [

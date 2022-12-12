@@ -2,6 +2,8 @@
 
 namespace AppBundle\Common;
 
+use http\Exception\InvalidArgumentException;
+
 class ImgConverToData
 {
     public $imgSrc;
@@ -31,10 +33,9 @@ class ImgConverToData
     {
         $info = getimagesize($imgSrc);
         if($info == false) {
-            exit;
-        } else {
-            return $this->imgMime = $info['mime'];
+            throw new \InvalidArgumentException("图片信息有误");
         }
 
+        return $this->imgMime = $info['mime'];
     }
 }
