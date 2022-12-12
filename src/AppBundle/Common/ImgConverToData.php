@@ -2,9 +2,6 @@
 
 namespace AppBundle\Common;
 
-use Biz\User\UserException;
-use PhpOffice\PhpWord\Exception\Exception;
-
 class ImgConverToData
 {
     public $imgSrc;
