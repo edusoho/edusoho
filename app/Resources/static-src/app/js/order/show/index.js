@@ -14,7 +14,7 @@ if($('.js-agreement-check').length) {
     var scrollHeight = $purchaseContent[0].scrollHeight;
     var clientHeight = $purchaseContent[0].clientHeight;
 
-    return scrollTop + clientHeight >= scrollHeight;
+    return scrollTop + clientHeight + 1 >= scrollHeight;
   };
 
   $('#check-modal').on('shown.bs.modal', () => {
