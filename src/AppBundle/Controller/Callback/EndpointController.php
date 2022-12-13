@@ -13,6 +13,9 @@ class EndpointController extends BaseController
 
     public function publishAction(Request $request, $type)
     {
+        if(!$this->getCurrentUser()->isAdmin()) {
+            throw new \InvalidArgumentException('暂无权限访问');
+        }
         //为了兼容老的云搜索
         if ($type == 'cloud_search') {
             $callbacks = $this->get('extension.manager')->getCallbacks();
