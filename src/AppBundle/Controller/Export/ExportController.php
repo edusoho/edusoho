@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Export;
 
 use AppBundle\Common\FileToolkit;
 use AppBundle\Controller\BaseController;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -65,6 +66,9 @@ class ExportController extends BaseController
 
     public function exportAction(Request $request, $name, $type)
     {
+        if (!$this->getCurrentUser()->isAdmin() && !$this->getCurrentUser()->isTeacher()) {
+            $this->createNewException(UserException::PERMISSION_DENIED());
+        }
         $fileNames = $request->query->get('fileNames');
         $customFileName = $request->query->get('customFileName');
 
