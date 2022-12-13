@@ -106,7 +106,8 @@ export default {
         goodsId,
         specsId,
         hitNum,
-        vipDeadline
+        vipDeadline,
+        status
       } = res;
       const cover = res.cover.large;
       const classId = res.id;
@@ -141,6 +142,7 @@ export default {
         member,
         goodsId,
         specsId,
+        status,
       };
     },
     getComponent(status) {

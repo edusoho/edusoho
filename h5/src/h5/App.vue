@@ -44,10 +44,11 @@ export default {
         return;
       }
       // 从空白页进来，无回退页，直接回退到首页
-      if (this.isShare) {
+      if (this.isShare && !this.isFromMall) {
         this.$router.push({ path: '/' });
         return;
       }
+      
       this.$router.go(-1);
     },
     reload() {
@@ -60,6 +61,7 @@ export default {
   computed: {
     ...mapState({
       title: 'title',
+      isFromMall: state => state.isFromMall,
       settingsName: state => state.settings.name,
     }),
     routerKeepAlive() {

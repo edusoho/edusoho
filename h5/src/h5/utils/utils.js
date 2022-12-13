@@ -27,4 +27,21 @@ const throttle = (func, delay) => {
     }
   };
 };
-export { debounce, throttle };
+const GetUrlParam = paraName => {
+  const url = document.location.toString();
+  const arrObj = url.split('?');
+  if (arrObj.length > 1) {
+    const arrPara = arrObj[1].split('&');
+    let arr;
+    for (let i = 0; i < arrPara.length; i += 1) {
+      arr = arrPara[i].split('=');
+      if (arr != null && arr[0] === paraName) {
+        return arr[1];
+      }
+    }
+    return '';
+  }
+  return '';
+};
+
+export { debounce, throttle, GetUrlParam };

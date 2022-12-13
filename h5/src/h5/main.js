@@ -2,6 +2,7 @@ import Vue from 'vue';
 import router from '@/router';
 import filters from '@/filters';
 import utils from '@/utils';
+import { GetUrlParam } from '@/utils/utils';
 import store from '@/store';
 import i18n from '@/lang';
 import Cookies from 'js-cookie';
@@ -139,24 +140,6 @@ Api.getSettings({
       const hasQuery = hash.indexOf('?');
       if (hasQuery === -1) return hash.slice(1);
       return hash.match(/#.*\?/g)[0].slice(1, -1);
-    };
-
-    // 获取指定参数
-    const GetUrlParam = paraName => {
-      const url = document.location.toString();
-      const arrObj = url.split('?');
-      if (arrObj.length > 1) {
-        const arrPara = arrObj[1].split('&');
-        let arr;
-        for (let i = 0; i < arrPara.length; i += 1) {
-          arr = arrPara[i].split('=');
-          if (arr != null && arr[0] === paraName) {
-            return arr[1];
-          }
-        }
-        return '';
-      }
-      return '';
     };
 
     const isWhiteList = whiteList.includes(getPathNameByHash(hashStr));

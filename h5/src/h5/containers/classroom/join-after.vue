@@ -79,7 +79,7 @@
     </van-action-sheet>
     <e-footer
       @click.native="gotoGoodsPage"
-      v-if="active == 0 && this.details.goodsId"
+      v-if="active == 0 && this.details.goodsId && this.details.status !== 'closed'"
     >
       {{ $t('classLearning.viewDetails') }}
     </e-footer>
