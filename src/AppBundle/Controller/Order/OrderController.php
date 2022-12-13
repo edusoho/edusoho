@@ -6,6 +6,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Coupon\Service\CouponService;
 use Biz\Distributor\Util\DistributorCookieToolkit;
 use Biz\Goods\GoodsEntityFactory;
+use Biz\Order\OrderException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Pay\Service\PayService;
@@ -146,7 +147,7 @@ class OrderController extends BaseController
 
     public function detailAction(Request $request, $id)
     {
-        $order = $this->getOrderService()->getOrder($id);
+        $order = $this->tryManageOrder($id);
 
         preg_match('/管理员添加/', $order['title'], $order['edit']);
         $user = $this->getUserService()->getUser($order['user_id']);
@@ -170,6 +171,18 @@ class OrderController extends BaseController
             'orderDeducts' => $orderDeducts,
             'users' => $users,
         ]);
+    }
+
+    protected function tryManageOrder($id)
+    {
+        $currentUser = $this->getCurrentUser();
+        $order = $this->getOrderService()->getOrder($id);
+
+        if ($currentUser['id'] != $order['user_id']) {
+            $this->createNewException(OrderException::BEYOND_AUTHORITY());
+        }
+
+        return $order;
     }
 
     protected function getRateLimiter($id, $maxAllowance, $period)
