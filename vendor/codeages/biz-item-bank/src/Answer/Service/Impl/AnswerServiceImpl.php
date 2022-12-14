@@ -312,8 +312,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
 
-        $courseSetMember = $this->getCourseMemberService()->findCourseSetTeachersAndAssistant($activity['fromCourseSetId']);
-        $courseSetMember = array_column($courseSetMember, 'userId');
+        $courseSetMember = array_column($this->getCourseMemberService()->findCourseSetTeachersAndAssistant($activity['fromCourseSetId']), 'userId');
         if(!in_array($userId, $courseSetMember)) {
             throw UserException::PERMISSION_DENIED();
         }
