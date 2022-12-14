@@ -87,9 +87,4 @@ class ContinueAnswer extends AbstractResource
     {
         return $this->service('Activity:ActivityService');
     }
-
-    protected function getTestpaperActivityService()
-    {
-        return $this->service('Activity:TestpaperActivityService');
-    }
 }
