@@ -17,6 +17,18 @@ class MallProductMember extends BaseResource
         'exit' => ['reason' => '商城退款', 'reason_type' => 'refund', 'reasonType' => 'refund'],
     ];
 
+    public function search(ApiRequest $request, $targetType)
+    {
+        $userId = $request->query->get('userId');
+        $targetId = $request->query->get('targetId');
+        $method = "checkIsExist{$targetType}";
+        if (!method_exists($this, $method)){
+            throw CommonException::NOTFOUND_METHOD();
+        }
+
+        return $this->$method($targetId, $userId);
+    }
+
     /**
      * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
      */
@@ -85,6 +97,21 @@ class MallProductMember extends BaseResource
         $this->getExerciseMemberService()->removeStudent($targetId, $userId, $this->info['exit']);
 
         return true;
+    }
+
+    private function checkIsExistClassroom($targetId, $userId)
+    {
+        return !empty($this->getClassroomService()->getClassroomMember($targetId, $userId));
+    }
+
+    private function checkIsExistCourse($targetId, $userId)
+    {
+        return !empty($this->getCourseMemberService()->getCourseMember($targetId, $userId));
+    }
+
+    private function checkIsExistQuestionBank($targetId, $userId)
+    {
+        return !empty($this->getExerciseMemberService()->getExerciseMember($targetId, $userId));
     }
 
     /**
