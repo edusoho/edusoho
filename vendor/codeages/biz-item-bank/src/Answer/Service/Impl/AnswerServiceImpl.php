@@ -27,12 +27,16 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         if (!$this->getAnswerSceneService()->canStart($answerSceneId, $userId)) {
             throw new AnswerSceneException('AnswerScene did not start.', ErrorCode::ANSWER_SCENE_NOTSTART);
         }
+        $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
 
         $answerRecord = $this->getAnswerRecordService()->create([
             'answer_scene_id' => $answerSceneId,
             'assessment_id' => $assessmentId,
             'user_id' => $userId,
             'admission_ticket' => $this->generateAdmissionTicket(),
+            'exam_mode' => $answerScene['exam_mode'],
+            'limited_time' => $answerScene['limited_time'],
+
         ]);
 
         $this->dispatch('answer.started', $answerRecord);

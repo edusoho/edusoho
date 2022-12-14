@@ -19,6 +19,10 @@ class Testpaper extends Activity
     // 考试及格后显示答案
     const ANSWER_MODE_PASSED = 1;
 
+    const EXAM_MODE_SIMULATION = 0;
+
+    const EXAM_MODE_PRACTICE = 1;
+
     protected function registerListeners()
     {
         return [
@@ -60,6 +64,7 @@ class Testpaper extends Activity
                 'start_time' => $fields['startTime'],
                 'pass_score' => empty($fields['passScore']) ? 0 : $fields['passScore'],
                 'enable_facein' => empty($fields['enable_facein']) ? 0 : $fields['enable_facein'],
+                'exam_mode' => empty($fields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $fields['exam_mode'],
             ]);
 
             $testpaperActivity = $this->getTestpaperActivityService()->createActivity([
@@ -151,6 +156,7 @@ class Testpaper extends Activity
                 'start_time' => $filterFields['startTime'],
                 'pass_score' => empty($filterFields['passScore']) ? 0 : $filterFields['passScore'],
                 'enable_facein' => empty($filterFields['enable_facein']) ? 0 : $filterFields['enable_facein'],
+                'exam_mode' => empty($filterFields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $filterFields['exam_mode'],
             ]);
 
             $testpaperActivity = $this->getTestpaperActivityService()->updateActivity($activity['id'], [
