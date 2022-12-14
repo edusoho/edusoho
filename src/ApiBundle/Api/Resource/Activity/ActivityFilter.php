@@ -50,6 +50,5 @@ class ActivityFilter extends Filter
         }
 
         unset($data['ext']);
-        unset($data['mediaType']);
     }
 }
