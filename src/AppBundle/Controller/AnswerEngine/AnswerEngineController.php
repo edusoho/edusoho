@@ -46,9 +46,9 @@ class AnswerEngineController extends BaseController
     public function reviewSaveAction(Request $request)
     {
         $userId = $this->getCurrentUser()->getId();
-        if(!$this->getCurrentUser()->isTeacher() || !$this->getCurrentUser()->isSuperAdmin() || !$this->getCurrentUser()->isAdmin()) {
-            $this->createNewException(UserException::PERMISSION_DENIED());
-        }
+//        if(!$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isSuperAdmin() && !$this->getCurrentUser()->isAdmin()) {
+//            $this->createNewException(UserException::PERMISSION_DENIED());
+//        }
 
         $reviewReport = json_decode($request->getContent(), true);
         $reviewReport = $this->getAnswerService()->review($reviewReport, $userId);
