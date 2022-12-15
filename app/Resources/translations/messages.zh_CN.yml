@@ -8587,7 +8587,7 @@ admin.finance_refund.failed_notification: 退款审核未通过通知
 admin.finance_refund.failed_notification_hint: 管理员审核退款未通过时，发送给用户的站内通知。
 admin.finance_refund.notification_variable_description: 通知变量说明
 admin.finance_refund.refund_amount: 退款金额
-admin.finance_refund.refund_course_or_classroom: 需退款的课程或班级
+admin.finance_refund.refund_course_or_classroom: 需退款的题库、课程或班级
 
 admin.mobile_setting.discovery_tips: 注：使用发现页配置功能，app版本需要升级到4.5.39及以上
 admin.mobile_setting.client_open_or_close: 是否开启客户端
