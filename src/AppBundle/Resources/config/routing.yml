@@ -3834,10 +3834,6 @@ category_choices:
     defaults:
         _controller: 'AppBundle:Vue/Common:getCategoryChoices'
         type: course
-get_current_user:
-    path: /current/user
-    defaults:
-        _controller: 'AppBundle:Vue/Common:currentUser'
 
 render_org:
     path: /render/org
