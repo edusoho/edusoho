@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\File;
 
 use AppBundle\Controller\BaseController;
+use Biz\File\Service\UploadFileService;
 use Biz\File\UploadFileException;
 use Biz\User\UserException;
 use Topxia\Service\Common\ServiceKernel;
@@ -138,7 +139,7 @@ class AttachmentController extends BaseController
     public function fileShowAction(Request $request, $fileId)
     {
         $module = $request->query->get('module', '');
-        $file = $this->getUploadFileService()->getFile($fileId);
+        $file = $this->getUploadFileService()->getFileByGlobalId($fileId);
         $attachment = array('file' => $file);
 
         $template = 'attachment/file-item.html.twig';
@@ -167,6 +168,9 @@ class AttachmentController extends BaseController
         return $this->createJsonResponse(array('msg' => 'ok'));
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
