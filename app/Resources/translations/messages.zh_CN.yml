@@ -2184,6 +2184,7 @@ course.plan_task.activity_manage.testpaper.default_comment5: 用心、专注、�
 course.plan_task.activity_manage.testpaper.comment_remove: 移除
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 course.plan_task.activity_manage.testpaper.times: 考试次数
+course.plan_task.activity_manage.testpaper.mode: 考试模式
 course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
 course.plan_task.activity_manage.testpaper.times.once: 单次
 course.plan_task.activity_manage.testpaper.times.always: 不限
@@ -2203,7 +2204,9 @@ course.plan_task.activity_manage.testpaper.pass: 分数达标
 course.plan_task.activity_manage.testpaper.score_pass: 考试合格
 course.plan_task.activity_manage.homework.score_pass: 作业合格
 course.plan_task.activity_manage.testpaper.finish_tip: 提示：若任务完成条件选择了“考试合格”，则学员的考试分数必须达到上一步中设置的“合格分数”，才能完成此任务。
-course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始，请在%startTime%之后再来
+course.plan_task.activity_manage.testpaper.not_start_tips: 考试未开始
+course.plan_task.activity_manage.testpaper.start_time_tips: 开考时间
+course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始\n 请在%startTime%之后再来
 course.plan_task.activity_manage.testpaper.total_question: >
   本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>
 course.plan_task.activity_manage.testpaper.pass_score: >
@@ -2213,7 +2216,9 @@ course.plan_task.activity_manage.testpaper.answer: >
 course.plan_task.activity_manage.testpaper.once_trance: >
   仅有<span class="color-danger">一次</span>考试机会。
 course.plan_task.activity_manage.testpaper.limit_tips: 
-  <span class="color-warning">温馨提示：考试一旦开始，倒计时结束后将自动交卷。</span>
+  <span class="color-gray">温馨提示：考试一旦开始，倒计时结束后将自动交卷。</span>
+course.plan_task.activity_manage.testpaper.one_limit_tips: 
+  <span class="color-gray">温馨提示：仅有一次考试机会，考试一旦开始，倒计时结束后将自动交卷。</span>
 course.plan_task.activity_manage.testpaper.start_exam: 开始考试
 course.plan_task.activity_manage.testpaper.close_tips: 该考试已关闭，请联系教师！
 course.plan_task.activity_manage.video: 视频

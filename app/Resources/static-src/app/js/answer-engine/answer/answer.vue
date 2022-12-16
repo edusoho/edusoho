@@ -17,6 +17,7 @@
       :getCurrentTime="getCurrentTime"
       @getAnswerData="getAnswerData"
       @saveAnswerData="saveAnswerData"
+      @exitAnswer="returnToCourseDetail"
       @timeSaveAnswerData="timeSaveAnswerData"
       @reachTimeSubmitAnswerData="reachTimeSubmitAnswerData"
       @deleteAttachment="deleteAttachment"

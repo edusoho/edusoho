@@ -41,6 +41,14 @@ class Testpaper {
     $.validator.addMethod('arithmeticFloat', function (value, element) {
       return this.optional(element) || /^[0-9]+(\.[0-9]?)?$/.test(value);
     }, $.validator.format(Translator.trans('activity.testpaper_manage.arithmetic_float_error_hint')));
+
+    $.validator.addMethod('examLength', function (value, element) {
+      if ($('[name="examMode"]').val() == 0 && value <= 0) {
+        return false;
+      }
+
+      return true;
+    }, '时长必须>0');
   }
 
   initEvent() {
@@ -48,6 +56,7 @@ class Testpaper {
     this.$element.find('#testpaper-media').on('change', event => this.changeTestPaper(event));
     this.$element.find('input[name=doTimes]').on('change', event => this.showRedoInterval(event));
     this.$element.find('input[name="testMode"]').on('change', event => this.startTimeCheck(event));
+    this.$element.find('.js-testpaper-mode').on('click', event => this.switchExamMode(event));
   }
 
   initAddComment() {
@@ -110,7 +119,8 @@ class Testpaper {
         },
         length: {
           required: true,
-          digits: true
+          digits: true,
+          examLength: true
         },
         startTime: {
           required: function () {
@@ -398,6 +408,15 @@ class Testpaper {
     $('.noUi-tooltip').text(`${(passScore / score * 100).toFixed(0)}%`);
     $('.js-score-tooltip').css('left', `${(passScore / score * 100).toFixed(0)}%`);
     $('#js-test-and-comment').show();
+  }
+
+  switchExamMode(event) {
+    const $this = $(event.currentTarget);
+    const examModeValue = $this.data('value');
+
+    this.$element.find('#examMode').val(examModeValue);
+    this.$element.find('.js-testpaper-mode').removeClass('active');
+    $this.addClass('active');
   }
 }
 

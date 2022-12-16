@@ -4,7 +4,7 @@
     <div  class="modal show iframe-modal">
       <div class="modal-dialog ">
         <div class="modal-content">
-          <div class="modal-body task-state-modal">
+          <div class="modal-body task-state-modal 4">
             <div class="title font-blod">
               <i class="es-icon es-icon-xinxi color-info"></i>{{'course.plan_task.activity_manage.testpaper.info'|trans}}
             </div>
@@ -12,28 +12,54 @@
             {% if testpaper and testpaper.status == 'open' %}
               <div class="content">
                 {% if testMode == 'realTime' and activity.startTime and activity.startTime > "now"|date("U") %}
-                  <div class="text-16 ">
-                    {{'course.plan_task.activity_manage.testpaper.will_begin_tips'|trans({'%startTime%':activity.startTime|date('Y-m-d H:i:s')})}}
-                  </div>
+                  <div class="text-16 gray-darker">{{'course.plan_task.activity_manage.testpaper.not_start_tips'|trans}}</div>
+                  <div class="mt16 text-14 gray-dark">{{'course.plan_task.activity_manage.testpaper.start_time_tips'|trans}}</div>
+                  <div class="mt4 text-24 color-primary">{{ activity.startTime|date('Y-m-d H:i:s') }}</div>
                 {% else %}
                   <div class="text-16 ">
-                    {{'course.plan_task.activity_manage.testpaper.total_question'|trans({'%itemCount%':testpaper.item_count, '%score%':testpaper.total_score})|raw}}
-                    {% if activity.finishType|default('') == 'score' %}
-                      {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%': activity.ext.finishCondition.finishScore })|raw}}
-                    {% endif %}
-                    {% if activity.ext.answerScene.limited_time %}
-                      <div class="mt5">
-                        {{'course.plan_task.activity_manage.testpaper.answer'|trans({'%limitedTime%': activity.ext.answerScene.limited_time})|raw}}
+                    <div class="inline-block">
+                      <div class="pull-left">
+                        <div class="text-14 gray-dark">题目数</div>
+                        <div>
+                          <span class="text-24 color-primary">{{ testpaper.item_count }}</span>
+                          <span class="text-12 color-primary">题</span>
+                        </div>
                       </div>
-                    {% endif %}
-                    {% if activity.ext.answerScene.do_times %}
-                      {{'course.plan_task.activity_manage.testpaper.once_trance'|trans|raw}}
-                    {% endif %}
+
+                      <div class="pull-left ml24">
+                        <div class="text-14 gray-dark">总分</div>
+                        <div>
+                          <span class="text-24 color-primary">{{ testpaper.total_score }}</span>
+                          <span class="text-12 color-primary">分</span>
+                        </div>
+                      </div>
+                      {% if activity.ext.answerScene.limited_time %}
+                        <div class="pull-left ml24">
+                          <div class="text-14 gray-dark">时长</div>
+                          <div>
+                            <span class="text-24 color-primary">{{ activity.ext.answerScene.limited_time }}</span>
+                            <span class="text-12 color-primary">分钟</span>
+                          </div>
+                        </div>
+                      {% endif %}
+                    </div>
+
+{#                    {{'course.plan_task.activity_manage.testpaper.total_question'|trans({'%itemCount%':testpaper.item_count, '%score%':testpaper.total_score})|raw}}#}
+{#                    {% if activity.finishType|default('') == 'score' %}#}
+{#                      {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%': activity.ext.finishCondition.finishScore })|raw}}#}
+{#                    {% endif %}#}
+{#                    {{'course.plan_task.activity_manage.testpaper.answer'|trans({'%limitedTime%': activity.ext.answerScene.limited_time})|raw}} #}
                   </div>
                 {% endif %}
-                {% if activity.ext.limitedTime > 0 %} 
-                  <div class="text-center">
-                    {{ 'course.plan_task.activity_manage.testpaper.limit_tips'|trans|raw }}
+
+                {% if testMode == 'normal' or (testMode == 'realTime' and activity.startTime <= "now"|date("U")) %}
+                  <div class="text-center mt16">
+                    {% if activity.ext.doTimes == '0' %}
+                      {{ 'course.plan_task.activity_manage.testpaper.limit_tips'|trans|raw }}
+                    {% endif %}
+                    {% if activity.ext.doTimes == '1' %}
+                      {{ 'course.plan_task.activity_manage.testpaper.one_limit_tips'|trans|raw }}
+                    {% endif %}
                   </div>
                 {% endif %}
               </div>
