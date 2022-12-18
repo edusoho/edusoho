@@ -229,6 +229,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
             'reason_type' => 'refund',
         ];
         if ($orderItem['target_type'] == 'item_bank_exercise'){
+            $record['refundId'] = $orderRefund['id'];
             $this->getItemBankExerciseMemberOperationRecord()->updateRefundInfoByOrderId($orderRefund['order_id'], $record);
         }else{
             $this->getMemberOperationService()->updateRefundInfoByOrderId($orderRefund['order_id'], $record);
