@@ -10,7 +10,7 @@
       {% set questionBankTree = data('QuestionBankTree', {selectId: testpaper.bankId|default(0)}) %}
       {% set features = get_features() %}
       {% set testMode = activity.ext.answerScene.start_time|default(0) > 0 ? 'realTime' : 'normal' %}
-      {% set examMode = activity.ext.answerScene.exam_mode|default(0) }} %}
+      {% set examMode = activity.ext.answerScene.exam_mode|default(0) %}
       <div class="form-group">
         <div class="col-sm-2 control-label">
           <label for="examMode">{{ 'course.plan_task.activity_manage.testpaper.mode'|trans }}</label>
