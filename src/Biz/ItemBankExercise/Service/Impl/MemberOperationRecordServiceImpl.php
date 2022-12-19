@@ -32,7 +32,7 @@ class MemberOperationRecordServiceImpl extends BaseService implements MemberOper
 
     public function updateRefundInfoByOrderId($orderId, $info)
     {
-        $records = $this->getRecordByOrderIdAndType($orderId, 'exit');
+        $records = $this->getMemberOperationRecordDao()->findRecordsByOrderIdAndType($orderId, 'exit');
         foreach ($records as &$record)
         {
             $field = ArrayToolkit::parts($info, array('refundId', 'reason', 'reasonType'));
@@ -44,11 +44,6 @@ class MemberOperationRecordServiceImpl extends BaseService implements MemberOper
         }
 
         return $this->getMemberOperationRecordDao()->batchUpdate(ArrayToolkit::column($records, "id"), $records, 'id');
-    }
-
-    protected function getRecordByOrderIdAndType($orderId, $type)
-    {
-        return $this->getMemberOperationRecordDao()->getRecordByOrderIdAndType($orderId, $type);
     }
 
     /**

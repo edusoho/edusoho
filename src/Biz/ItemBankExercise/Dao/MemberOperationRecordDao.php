@@ -8,5 +8,5 @@ interface MemberOperationRecordDao extends AdvancedDaoInterface
 {
     public function deleteByExerciseId($exerciseId);
 
-    public function getRecordByOrderIdAndType($orderId, $type);
+    public function findRecordsByOrderIdAndType($orderId, $type);
 }
