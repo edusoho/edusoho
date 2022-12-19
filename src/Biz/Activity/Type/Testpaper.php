@@ -103,6 +103,7 @@ class Testpaper extends Activity
             'redoInterval' => $testpaperActivity['answerScene']['redo_interval'],
             'limitedTime' => $testpaperActivity['answerScene']['limited_time'],
             'enable_facein' => $testpaperActivity['answerScene']['enable_facein'],
+            'exam_mode' => $testpaperActivity['answerScene']['exam_mode'],
             'checkType' => $testpaperActivity['checkType'],
             'requireCredit' => $testpaperActivity['requireCredit'],
             'testMode' => $testpaperActivity['testMode'],
@@ -126,6 +127,7 @@ class Testpaper extends Activity
         $ext['redoInterval'] = $sourceExt['answerScene']['redo_interval'];
         $ext['limitedTime'] = $sourceExt['answerScene']['limited_time'];
         $ext['enable_facein'] = $sourceExt['answerScene']['enable_facein'];
+        $ext['exam_mode'] = $sourceExt['answerScene']['exam_mode'];
         $ext['checkType'] = $sourceExt['checkType'];
         $ext['requireCredit'] = $sourceExt['requireCredit'];
         $ext['testMode'] = $sourceExt['testMode'];
@@ -264,6 +266,7 @@ class Testpaper extends Activity
                 'enable_facein',
                 'answerMode',
                 'customComments',
+                'exam_mode'
             ]
         );
 

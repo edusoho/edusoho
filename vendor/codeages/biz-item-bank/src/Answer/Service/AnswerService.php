@@ -81,5 +81,5 @@ interface AnswerService
      */
     public function reviseFillAnswer($answerRecordId, $fillData);
 
-    public function buildAssessmentResponse($answerRecordId);
+    public function buildAutoSubmitAssessmentResponse($answerRecordId);
 }

@@ -213,6 +213,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if ($this->invalidActivity($fields)) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
+
+
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
         $activityConfig = $this->getActivityConfig($fields['mediaType']);
         if (empty($fields['mediaId'])) {
@@ -230,6 +232,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $fields = $this->filterFields($fields);
         $fields['createdTime'] = time();
         $activity = $this->getActivityDao()->create($fields);
+
         if (!empty($materials)) {
             $this->syncActivityMaterials($activity, $materials, 'create');
         }
