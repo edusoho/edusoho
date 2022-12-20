@@ -43,12 +43,12 @@ class Testpaper {
     }, $.validator.format(Translator.trans('activity.testpaper_manage.arithmetic_float_error_hint')));
 
     $.validator.addMethod('examLength', function (value, element) {
-      if ($('[name="examMode"]').val() == 0 && value <= 0) {
+      if ($('input[name="exam_mode"]').val() == 0 && value <= 0) {
         return false;
       }
 
       return true;
-    }, '时长必须>0');
+    }, $.validator.format(Translator.trans('course.plan_task.activity_manage.testpaper.mock_tips4')));
   }
 
   initEvent() {
@@ -417,6 +417,7 @@ class Testpaper {
     this.$element.find('#examMode').val(examModeValue);
     this.$element.find('.js-testpaper-mode').removeClass('active');
     $this.addClass('active');
+    $('.js-mode-helpblock').toggleClass('hidden')
   }
 }
 

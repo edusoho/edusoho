@@ -1914,6 +1914,16 @@ course.plan_task.activity_manage.testpaper.one_limit_tips:
 course.plan_task.activity_manage.testpaper.once_trance: 'Only <span class = "color-danger"> once </ span> test opportunities.'
 course.plan_task.activity_manage.testpaper.start_exam: 'Start'
 course.plan_task.activity_manage.testpaper.close_tips: 'The test is closed, please contact the teacher!'
+course.plan_task.activity_manage.testpaper.mock_type: 'mock exam'
+course.plan_task.activity_manage.testpaper.mock_tips1: 'Automatic submission of papers at the end of the countdown'
+course.plan_task.activity_manage.testpaper.mock_tips2: 'If you leave during the exam, the countdown will not stop'
+course.plan_task.activity_manage.testpaper.mock_tips3: 'The mock exam duration must be greater than 0'
+course.plan_task.activity_manage.testpaper.mock_tips4: 'Duration must be greater than 0'
+course.plan_task.activity_manage.testpaper.practise_type: 'practice exam'
+course.plan_task.activity_manage.testpaper.practise_tips1: 'Unlimited test time, no automatic hand-in'
+course.plan_task.activity_manage.testpaper.practise_tips2: 'Leaving during the test does not count the test time'
+course.plan_task.activity_manage.testpaper.practise_tips3: 'The length of the test does not affect the student's answering time'
+
 course.plan_task.activity_manage.video: Video
 course.plan_task.activity_manage.video.time: 'Duration'
 course.plan_task.activity_manage.video.subtitle: 'Subtitles'

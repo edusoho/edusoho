@@ -2221,6 +2221,16 @@ course.plan_task.activity_manage.testpaper.one_limit_tips:
   <span class="color-gray">温馨提示：仅有一次考试机会，考试一旦开始，倒计时结束后将自动交卷。</span>
 course.plan_task.activity_manage.testpaper.start_exam: 开始考试
 course.plan_task.activity_manage.testpaper.close_tips: 该考试已关闭，请联系教师！
+course.plan_task.activity_manage.testpaper.mock_type: 模拟考试
+course.plan_task.activity_manage.testpaper.mock_tips1: 倒计时结束自动交卷
+course.plan_task.activity_manage.testpaper.mock_tips2: 考试中离开，倒计时不会停止
+course.plan_task.activity_manage.testpaper.mock_tips3: 模拟考试时长必须 >0
+course.plan_task.activity_manage.testpaper.mock_tips4: 时长必须>0
+course.plan_task.activity_manage.testpaper.practise_type: 练习考试
+course.plan_task.activity_manage.testpaper.practise_tips1: 不限制考试用时，不自动交卷
+course.plan_task.activity_manage.testpaper.practise_tips2: 考试中离开不计考试用时
+course.plan_task.activity_manage.testpaper.practise_tips3: 考试时长不影响学员答卷时间
+
 course.plan_task.activity_manage.video: 视频
 course.plan_task.activity_manage.video.time: 视频时长
 course.plan_task.activity_manage.video.subtitle: 视频字幕

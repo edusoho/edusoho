@@ -18,14 +18,14 @@
         <div class="col-sm-10 clearfix">
           <input id="examMode" class="form-control" type="hidden" name="exam_mode" value="{{ examMode }}">
           <div class="testpaper-mode  js-testpaper-mode {% if examMode == 0 %}active{% endif %}" data-value="0" style="margin-right: 16px;">
-            <div class="testpaper-mode__title">模拟考试</div>
-            <div class="testpaper-mode__rule">倒计时结束自动交卷</div>
-            <div class="testpaper-mode__rule">考试中离开，倒计时不会停止</div>
+            <div class="testpaper-mode__title">{{ 'course.plan_task.activity_manage.testpaper.mock_type'|trans }}</div>
+            <div class="testpaper-mode__rule">{{ 'course.plan_task.activity_manage.testpaper.mock_tips1'|trans }}</div>
+            <div class="testpaper-mode__rule">{{ 'course.plan_task.activity_manage.testpaper.mock_tips2'|trans }}</div>
           </div>
           <div class="testpaper-mode js-testpaper-mode  {% if examMode == 1 %}active{% endif %}" data-value="1">
-            <div class="testpaper-mode__title">练习考试</div>
-            <div class="testpaper-mode__rule">不限制考试用时，不自动交卷</div>
-            <div class="testpaper-mode__rule">考试中离开不计考试用时</div>
+            <div class="testpaper-mode__title">{{ 'course.plan_task.activity_manage.testpaper.practise_type'|trans }}</div>
+            <div class="testpaper-mode__rule">{{ 'course.plan_task.activity_manage.testpaper.practise_tips1'|trans }}</div>
+            <div class="testpaper-mode__rule">{{ 'course.plan_task.activity_manage.testpaper.practise_tips2'|trans }}</div>
           </div>
         </div>
       </div>
@@ -98,9 +98,8 @@
                 <th>
                   {{ 'course.plan_task.activity_manage.testpaper.score'|trans }}
                   <span class="link-medium es-icon es-icon-help ml5"
-                        data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
-                        data-content="{{ 'course.plan_task.activity_manage.testpaper.comment_tips'|trans()|raw}}">
-      </span>
+                      data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+                      data-content="{{ 'course.plan_task.activity_manage.testpaper.comment_tips'|trans()|raw}}"></span>
                 </th>
                 <th>{{ 'course.plan_task.activity_manage.testpaper.comment_content'|trans }}</th>
                 <th>{{ 'course.plan_task.activity_manage.testpaper.comment_operation'|trans }}</th>
@@ -143,11 +142,12 @@
           <label for="length" class="control-label-required">{{ 'course.plan_task.activity_manage.testpaper.time_limit'|trans }}</label></div>
         <div class="col-sm-10 controls radios">
           <input id="length" class="form-control inline-block width-150" type="text" name="length" value="{{ activity.length|default(0) }}"> {{ 'site.date.minute'|trans }}
-          {# exmaMode == 0 #}
-          <div class="help-block">模拟考试时长必须>0</div>
-          <div class="help-block">{{ 'course.plan_task.activity_manage.testpaper.time_length_tips'|trans }}</div>
-          {# exmaMode == 1 #}
-          <div class="help-block">考试时长不影响学员答卷时间</div>
+          <div class="help-block js-mode-helpblock {% if examMode == '1' %}hidden{%endif%}">
+            {{ 'course.plan_task.activity_manage.testpaper.mock_tips3'|trans }}
+          </div>
+          <div class="help-block js-mode-helpblock  {% if examMode == '0' %}hidden{%endif%}">
+            {{ 'course.plan_task.activity_manage.testpaper.practise_tips3'|trans }}
+          </div>
         </div>
       </div>
 
@@ -161,7 +161,6 @@
         <div class="col-sm-offset-2 col-sm-10 controls {% if setting('questions.testpaper_answers_show_mode', 'submitted') == 'submitted' %} js-show-answer-mode {% else %} hidden {% endif %}" {% if activity.ext.answerScene.do_times|default('0') == 1 %} style="display:none;" {% endif %}>
           <label class="checkbox-inline help-block">
             <input name="answerMode" type="checkbox" value="1" {% if activity.ext.answerMode|default(0) == 1 %} checked=checked {% endif %}>{{ 'course.plan_task.activity_manage.testpaper.show_answer'|trans }}
-{#            <span class="text-sm">（{{ 'course.plan_task.activity_manage.testpaper.show_answer_tips'|trans }}）</span>#}
           </label>
         </div>
 
