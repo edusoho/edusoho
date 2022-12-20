@@ -472,6 +472,6 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
      */
     protected function getAssessmentService()
     {
-        return $this->service('ItemBank:Assessment:AssessmentService');
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }
