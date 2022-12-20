@@ -412,7 +412,14 @@ export default {
       }
 
       if (this.testpaper.examMode == '1') {
-        let time = this.testpaperResult.usedTime * 60 * 1000;
+        const usedTime = this.testpaperResult.usedTime;
+        const localUsedTime = localStorage.getItem(this.localuseTime);
+        let time = Math.max(usedTime, localUsedTime) * 1000;
+
+        if (usedTime > localUsedTime) {
+          localStorage.setItem(this.localuseTime, usedTime)
+        }
+
         const { hours, minutes, seconds } = getCountDown(time, 0);
 
         this.time = `${hours}:${minutes}:${seconds}`;
@@ -434,8 +441,6 @@ export default {
             })
           }
         }, 1000);
-
-        
       }
     },
     // 清空定时器
@@ -448,6 +453,7 @@ export default {
     },
     // 提交试卷
     submitPaper() {
+      console.log('submitPaper')
       let index = 0;
       let message = this.$t('courseLearning.sureSubmit');
       const answer = JSON.parse(JSON.stringify(this.answer));
@@ -516,7 +522,6 @@ export default {
             this.showResult();
           })
           .catch(err => {
-
             if (err.code == 50095204) {
               Dialog.confirm({
                 title: '你已提交过答题，当前页面无法重复提交',
@@ -530,7 +535,9 @@ export default {
             Toast.fail(err.message);
             this.isHandExam = true;
             this.showResult();
-          });
+          }).finally(() => {
+            localStorage.removeItem(this.localuseTime)
+          })
       });
     },
     saveAnswerInterval() {
@@ -539,10 +546,12 @@ export default {
       }, 30 * 1000)
     },
     saveAnswerAjax() {
+      const used_time = localStorage.getItem(this.localuseTime) || 0;
       this.saveAnswerdo({
         admission_ticket: this.testpaperResult.admission_ticket,
         answer: JSON.parse(JSON.stringify(this.answer)),
         resultId: this.testpaperResult.id,
+        used_time,
       })
       .catch((error) => {
         const { code: errorCode, message, traceId } = error;
@@ -590,15 +599,13 @@ export default {
     // 实时存储时间
     saveTime() {
       this.localuseTime = `${this.user.id}-${this.testpaperResult.id}-usedTime`;
-      let time = localStorage.getItem(this.localuseTime) || 0;
       this.localtime = setInterval(() => {
-        if (!this.testpaperResult.limitedTime || this.testpaperResult.examMode == '0') {
-          localStorage.setItem(this.localuseTime, ++time);
-        }
+        const time = localStorage.getItem(this.localuseTime) || 0;
+
+        localStorage.setItem(this.localuseTime, time + 1);
         localStorage.setItem(this.localtimeName, new Date().getTime());
       }, 1000);
     },
-    // 跳转到结果页
     showResult() {
       this.$router.replace({
         name: 'testpaperResult',
@@ -610,7 +617,6 @@ export default {
         },
       });
     },
-    // 跳转到说明页
     toIntro() {
       this.$router.replace({
         name: 'testpaperIntro',

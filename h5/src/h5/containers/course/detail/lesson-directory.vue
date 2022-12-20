@@ -359,14 +359,28 @@ export default {
           break;
         }
         case 'testpaper': {
-          const testId = task.activity.testpaperInfo.testpaperId;
-          this.$router.push({
-            name: 'testpaperIntro',
-            query: {
-              testId: testId,
-              targetId: task.id,
-            },
-          });
+          const { testpaperId: testId, answerRecordId: resultId } = task.activity.testpaperInfo;
+          const { status } = task.result || {}
+
+          if (status === 'finish') {
+            this.$router.push({
+              name: 'testpaperResult',
+              query: {
+                testId,
+                targetId: task.id,
+                resultId
+              },
+            });
+          } else {
+            this.$router.push({
+              name: 'testpaperIntro',
+              query: {
+                testId,
+                targetId: task.id,
+              },
+            });
+          }
+          
           break;
         }
         case 'homework':
