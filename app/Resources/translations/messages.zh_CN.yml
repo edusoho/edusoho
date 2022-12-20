@@ -2217,8 +2217,12 @@ course.plan_task.activity_manage.testpaper.once_trance: >
   仅有<span class="color-danger">一次</span>考试机会。
 course.plan_task.activity_manage.testpaper.limit_tips: 
   <span class="color-gray">温馨提示：考试一旦开始，倒计时结束后将自动交卷。</span>
+course.plan_task.activity_manage.testpaper.limit_tips1: 
+  <span class="color-gray">温馨提示：本次考试不自动交卷，实时显示考试用时，中途离开不计时。</span>
 course.plan_task.activity_manage.testpaper.one_limit_tips: 
   <span class="color-gray">温馨提示：仅有一次考试机会，考试一旦开始，倒计时结束后将自动交卷。</span>
+course.plan_task.activity_manage.testpaper.one_limit_tips1: 
+  <span class="color-gray">温馨提示：仅有一次考试机会，本次考试不自动交卷，实时显示考试用时，中途离开不计时。</span>
 course.plan_task.activity_manage.testpaper.start_exam: 开始考试
 course.plan_task.activity_manage.testpaper.close_tips: 该考试已关闭，请联系教师！
 course.plan_task.activity_manage.testpaper.mock_type: 模拟考试

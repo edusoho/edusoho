@@ -54,11 +54,19 @@
 
                 {% if testMode == 'normal' or (testMode == 'realTime' and activity.startTime <= "now"|date("U")) %}
                   <div class="text-center mt16">
-                    {% if activity.ext.doTimes == '0' %}
+                    {% set exam_mode = activity.ext.answerScene.exam_mode %}
+                    {% if exam_mode == '0' and activity.ext.doTimes == '0' %}
                       {{ 'course.plan_task.activity_manage.testpaper.limit_tips'|trans|raw }}
                     {% endif %}
-                    {% if activity.ext.doTimes == '1' %}
+                    {% if exam_mode == '0' and activity.ext.doTimes == '1' %}
                       {{ 'course.plan_task.activity_manage.testpaper.one_limit_tips'|trans|raw }}
+                    {% endif %}
+
+                    {% if exam_mode == '1' and activity.ext.doTimes == '0' %}
+                      {{ 'course.plan_task.activity_manage.testpaper.limit_tips1'|trans|raw }}
+                    {% endif %}
+                    {% if exam_mode == '1' and activity.ext.doTimes == '1' %}
+                      {{ 'course.plan_task.activity_manage.testpaper.one_limit_tips1'|trans|raw }}
                     {% endif %}
                   </div>
                 {% endif %}
