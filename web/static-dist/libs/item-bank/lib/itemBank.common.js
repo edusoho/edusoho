@@ -43231,8 +43231,8 @@ src_item.install = function (Vue) {
 };
 
 /* harmony default export */ var item_manage = (src_item);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/item.vue?vue&type=template&id=8dfd3a1c&
-var itemvue_type_template_id_8dfd3a1c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (this.section_responses.length > 0)?_c('div',{staticClass:"ibs-background-color",attrs:{"id":"item-bank-sdk-message"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.mobileShow),expression:"!mobileShow"}]},[_c('a-row',[_c('a-col',{attrs:{"sm":{ span: _vm.widthCol, offset: _vm.offsetCol },"xs":{ span: 24 }}},[_c('div',{staticClass:"ibs-item-list ibs-assessment-info ibs-mb8"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode === 'do'),expression:"mode === 'do'"}],staticClass:"ibs-assessment-heading"},[_c('div',{staticClass:"ibs-assessment-title ibs-clearfix"},[_c('div',{staticClass:"ibs-assessment-title__name ibs-left ibs-text-overflow"},[_vm._v(" "+_vm._s(_vm.assessment.name)+" ")]),_c('div',{staticClass:"ibs-right ibs-assessment-title__tag"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.status.do"))+" ")])]),_c('div',{staticClass:"ibs-assessment-description ibs-mt8 ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.assessment.description)}})]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode === 'analysis'),expression:"mode === 'analysis'"}],staticClass:"ibs-assessment-heading"},[_c('div',{staticClass:"ibs-assessment-title ibs-clearfix"},[_c('div',{staticClass:"ibs-assessment-title__name ibs-left ibs-text-overflow"},[_vm._v(" "+_vm._s(_vm.assessment.name)+" ")]),_c('div',{staticClass:"ibs-right ibs-assessment-title__tag"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.status.analysis"))+" ")])]),_c('div',{staticClass:"ibs-assessment-description ibs-mt8 ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.assessment.description)}})]),(_vm.mode === 'report' || _vm.mode === 'review')?_c('result',_vm._b({attrs:{"answerReport":_vm.answerReport,"mode":_vm.mode,"needMarking":_vm.needMarking,"needScore":_vm.needScore,"assessment":_vm.assessment,"answerRecord":_vm.answerRecord,"media-type":_vm.mediaType,"finish-type":_vm.finishType,"submit-list":_vm.submitList},on:{"view-historical-result":_vm.handleViewHistoricalResult}},'result',_vm.$attrs,false)):_vm._e()],1),_vm._l((_vm.sections),function(section,sectionsIndex){return _c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.getTitle(sectionsIndex) && _vm.answerShow == 'show'),expression:"getTitle(sectionsIndex) && answerShow == 'show'"}],key:'sections' + sectionsIndex,staticClass:"ibs-pb16 ibs-item-list"},[_c('section-title',{attrs:{"name":section.name,"count":section.question_count,"needScore":_vm.needScore,"score":section.total_score}}),_vm._l((section.items),function(item,itemIndex){return _c('div',{key:'item' + itemIndex,class:_vm.getLastClass(itemIndex, section.items.length - 1)},[_c('material-title',{directives:[{name:"show",rawName:"v-show",value:(
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/item.vue?vue&type=template&id=e10381cc&
+var itemvue_type_template_id_e10381cc_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (this.section_responses.length > 0)?_c('div',{staticClass:"ibs-background-color",attrs:{"id":"item-bank-sdk-message"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.mobileShow),expression:"!mobileShow"}]},[_c('a-row',[_c('a-col',{attrs:{"sm":{ span: _vm.widthCol, offset: _vm.offsetCol },"xs":{ span: 24 }}},[_c('div',{staticClass:"ibs-item-list ibs-assessment-info ibs-mb8"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode === 'do'),expression:"mode === 'do'"}],staticClass:"ibs-assessment-heading"},[_c('div',{staticClass:"ibs-assessment-title ibs-clearfix"},[_c('div',{staticClass:"ibs-assessment-title__name ibs-left ibs-text-overflow"},[_vm._v(" "+_vm._s(_vm.assessment.name)+" ")]),_c('div',{staticClass:"ibs-right ibs-assessment-title__tag"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.status.do"))+" ")])]),_c('div',{staticClass:"ibs-assessment-description ibs-mt8 ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.assessment.description)}})]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode === 'analysis'),expression:"mode === 'analysis'"}],staticClass:"ibs-assessment-heading"},[_c('div',{staticClass:"ibs-assessment-title ibs-clearfix"},[_c('div',{staticClass:"ibs-assessment-title__name ibs-left ibs-text-overflow"},[_vm._v(" "+_vm._s(_vm.assessment.name)+" ")]),_c('div',{staticClass:"ibs-right ibs-assessment-title__tag"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.status.analysis"))+" ")])]),_c('div',{staticClass:"ibs-assessment-description ibs-mt8 ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.assessment.description)}})]),(_vm.mode === 'report' || _vm.mode === 'review')?_c('result',_vm._b({attrs:{"answerReport":_vm.answerReport,"mode":_vm.mode,"needMarking":_vm.needMarking,"needScore":_vm.needScore,"assessment":_vm.assessment,"answerRecord":_vm.answerRecord,"media-type":_vm.mediaType,"finish-type":_vm.finishType,"submit-list":_vm.submitList},on:{"view-historical-result":_vm.handleViewHistoricalResult}},'result',_vm.$attrs,false)):_vm._e()],1),_vm._l((_vm.sections),function(section,sectionsIndex){return _c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.getTitle(sectionsIndex) && _vm.answerShow == 'show'),expression:"getTitle(sectionsIndex) && answerShow == 'show'"}],key:'sections' + sectionsIndex,staticClass:"ibs-pb16 ibs-item-list"},[_c('section-title',{attrs:{"name":section.name,"count":section.question_count,"needScore":_vm.needScore,"score":section.total_score}}),_vm._l((section.items),function(item,itemIndex){return _c('div',{key:'item' + itemIndex,class:_vm.getLastClass(itemIndex, section.items.length - 1)},[_c('material-title',{directives:[{name:"show",rawName:"v-show",value:(
                 item.type === 'material' &&
                   _vm.getMaterial(sectionsIndex, itemIndex)
               ),expression:"\n                item.type === 'material' &&\n                  getMaterial(sectionsIndex, itemIndex)\n              "}],attrs:{"material":item.material,"attachments":item.attachments},on:{"previewAttachment":_vm.previewAttachment,"downloadAttachment":_vm.downloadAttachment}}),_c('div',{staticClass:"ibs-question-wrap"},_vm._l((item.questions),function(question,questionIndex){return _c('div',{key:questionIndex,staticClass:"ibs-pl16 ibs-pr16 ibs-question-wrap__item",attrs:{"id":("ibs-" + (question.seq))}},[(
@@ -43308,14 +43308,15 @@ var itemvue_type_template_id_8dfd3a1c_render = function () {var _vm=this;var _h=
                       _vm.mode !== 'review' &&
                       _vm.getErrorData(sectionsIndex, itemIndex, questionIndex)
                   )?_c('answer-model',{attrs:{"question":question,"mode":_vm.mode,"needScore":_vm.needScore,"assessmentStatus":_vm.assessmentStatus,"recordStatus":_vm.recordStatus,"itemType":item.type}}):_vm._e()],1)}),0),_c('material-analysis',{directives:[{name:"show",rawName:"v-show",value:(_vm.showMaterialAnalysis(item, sectionsIndex, itemIndex)),expression:"showMaterialAnalysis(item, sectionsIndex, itemIndex)"}],attrs:{"attachments":item.attachments,"analysis":("" + (item.analysis || _vm.t('itemReport.no_analysis')))},on:{"previewAttachment":_vm.previewAttachment,"downloadAttachment":_vm.downloadAttachment}})],1)})],2)}),_vm._t("review-footer")],2),_vm._t("pendant",[_c('a-col',{staticClass:"ibs-ml24",attrs:{"sm":5,"xs":24}},[_c('a-affix',{attrs:{"offset-top":0}},[(
-                Number(_vm.answerScene.limited_time) &&
+                _vm.answerRecord.exam_mode == '0' &&
+                  Number(_vm.answerScene.limited_time) &&
                   _vm.assessmentStatus !== 'preview' &&
                   _vm.mode === 'do'
               )?_c('count-down',{attrs:{"mode":_vm.mode,"limitedTime":Number(_vm.answerScene.limited_time),"beginTime":Number(_vm.answerRecord.begin_time),"assessmentStatus":_vm.assessmentStatus,"getCurrentTime":_vm.getCurrentTime},on:{"reachTimeSubmitAnswerData":_vm.reachTimeSubmitAnswerData}}):_vm._e(),(_vm.answerRecord.exam_mode == '1')?_c('div',{staticClass:"ibs-assessment-timer"},[_c('img',{staticClass:"clock-icon",attrs:{"src":_vm.clockIcon}}),_c('span',[_vm._v(_vm._s(_vm.used_time))])]):_vm._e(),_c('card',{attrs:{"mode":_vm.mode,"assessmentStatus":_vm.assessmentStatus,"sections":_vm.sections,"activity":_vm.activity,"section_responses":_vm.section_responses,"answerRecord":_vm.answerRecord,"answerScene":_vm.answerScene,"section_reports":_vm.section_reports,"answerShow":_vm.answerShow,"doTimes":_vm.doTimes,"showSaveProgressBtn":_vm.showSaveProgressBtn,"showDoAgainBtn":_vm.showDoAgainBtn,"cardIsShow":_vm.enableFacein},on:{"showError":_vm.getVal,"answerData":_vm.answerData,"saveAnswerData":_vm.saveAnswerData,"exitAnswer":_vm.exitAnswer},scopedSlots:_vm._u([{key:"returnBtn",fn:function(){return [_vm._t("returnBtn")]},proxy:true}],null,true)}),_vm._t("inspection")],2)],1)])],2),_c('a-modal',{attrs:{"closable":_vm.closable,"visible":_vm.visible,"title":_vm.t('itemEngine.testpaperIntro'),"footer":null,"getContainer":_vm.getContainer}},[_c('div',{staticClass:"ibs-tip-content"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.unstartedTip"))+" "+_vm._s(_vm._f("date")(Number(_vm.answerScene.start_time)))+" "+_vm._s(_vm.t("itemEngine.unstartedNextTip"))+" ")])])],1),_c('a-modal',{attrs:{"closable":_vm.closable,"maskClosable":false,"visible":_vm.mobileShow,"getContainer":_vm.getContainer}},[_c('div',[_vm._v(" "+_vm._s(_vm.t("itemEngine.InspectionMobileTip"))+" ")]),_c('template',{slot:"footer"},[_c('a-button',{attrs:{"type":"primary"},on:{"click":_vm.goBack}},[_vm._v(" "+_vm._s(_vm.t("Back"))+" ")])],1)],2)],1):_vm._e()}
-var itemvue_type_template_id_8dfd3a1c_staticRenderFns = []
+var itemvue_type_template_id_e10381cc_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-engine/src/item.vue?vue&type=template&id=8dfd3a1c&
+// CONCATENATED MODULE: ./src/components/item-engine/src/item.vue?vue&type=template&id=e10381cc&
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/extends.js
 var helpers_extends = __webpack_require__("41b2");
@@ -49919,6 +49920,7 @@ function src_itemvue_type_script_lang_js_extends() { src_itemvue_type_script_lan
 //
 //
 //
+//
 
 
 
@@ -50163,7 +50165,7 @@ var itemvue_type_script_lang_js_clockIcon = "data:image/png;base64,iVBORw0KGgoAA
     doingLookAnalysis: function doingLookAnalysis() {
       return !!Number(this.answerScene.doing_look_analysis) && this.mode === "do";
     },
-    localusedTime: function localusedTime() {
+    localUsedTime: function localUsedTime() {
       return "".concat(this.answerRecord.id, "-usedTime");
     }
   },
@@ -50293,7 +50295,6 @@ var itemvue_type_script_lang_js_clockIcon = "data:image/png;base64,iVBORw0KGgoAA
     answerData: function answerData() {
       var finalData = this.getResponse();
       finalData.used_time = localStorage.getItem(this.localUsedTime);
-      localStorage.removeItem(this.localUsedTime);
       this.$emit("getAnswerData", finalData); // 立即提交的时候清空计时器;
 
       clearInterval(this.saveDataIntervalId);
@@ -50305,10 +50306,10 @@ var itemvue_type_script_lang_js_clockIcon = "data:image/png;base64,iVBORw0KGgoAA
     reachTimeSubmitAnswerData: function reachTimeSubmitAnswerData() {
       var finalData = this.getResponse();
       finalData.used_time = localStorage.getItem(this.localUsedTime);
-      localStorage.removeItem(this.localUsedTime);
       this.$emit("reachTimeSubmitAnswerData", finalData);
     },
     saveAnswerData: function saveAnswerData() {
+      console.log("saveAnswer", this.localUsedTime, localStorage.getItem(this.localUsedTime));
       var finalData = this.getResponse();
       finalData.used_time = localStorage.getItem(this.localUsedTime);
       this.$emit("saveAnswerData", finalData);
@@ -50322,17 +50323,17 @@ var itemvue_type_script_lang_js_clockIcon = "data:image/png;base64,iVBORw0KGgoAA
         return;
       }
 
-      var usedTime = Number(this.answerRecord.used_time) * 60;
-      var localUsedTime = localStorage.getItem(this.localusedTime) || 0;
+      var usedTime = Number(this.answerRecord.used_time);
+      var localUsedTime = localStorage.getItem(this.localUsedTime) || 0;
       var time = Math.max(usedTime, localUsedTime);
 
       if (usedTime > localUsedTime) {
-        localStorage.setItem(this.localusedTime, usedTime);
+        localStorage.setItem(this.localUsedTime, usedTime);
       }
 
       var self = this;
       this.intervalId = setInterval(function () {
-        localStorage.setItem(_this4.localusedTime, ++time);
+        localStorage.setItem(_this4.localUsedTime, ++time);
 
         var _getCountDown = getCountDown(time * 1000, 0),
             hours = _getCountDown.hours,
@@ -50614,8 +50615,8 @@ var itemvue_type_script_lang_js_clockIcon = "data:image/png;base64,iVBORw0KGgoAA
 
 var src_item_component = normalizeComponent(
   components_item_engine_src_itemvue_type_script_lang_js_,
-  itemvue_type_template_id_8dfd3a1c_render,
-  itemvue_type_template_id_8dfd3a1c_staticRenderFns,
+  itemvue_type_template_id_e10381cc_render,
+  itemvue_type_template_id_e10381cc_staticRenderFns,
   false,
   null,
   null,

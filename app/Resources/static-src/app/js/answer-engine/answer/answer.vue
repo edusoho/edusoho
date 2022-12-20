@@ -192,9 +192,7 @@
         this.postAnswerData(assessmentResponse)
       },
       saveAnswerData(assessmentResponse){
-        this.postAnswerData(assessmentResponse).done(() => {
-          this.returnToCourseDetail()
-        })
+        this.postAnswerData(assessmentResponse)
       },
       postAnswerData(assessmentResponse) {
         if (this.isReachTime) return
