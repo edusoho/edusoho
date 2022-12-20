@@ -7,66 +7,77 @@
       @outFocusMask="outFocusMask"
     ></out-focus-mask>
     <e-loading v-if="isLoading" />
+    <div v-if="info.doTimes == '1' && startTime > Date.now()" class="test-start-count-down">
+      <div class="tips">距离考试：</div>
+      <div class="number">{{ countDown.hours }}</div>
+      <div class="unit">时</div>
+      <div class="number">{{ countDown.minutes }}</div>
+      <div class="unit">分</div>
+      <div class="number">{{ countDown.seconds }}</div>
+      <div class="unit">秒</div>
+    </div>
     <div class="intro-body">
-      <van-panel class="panel intro-panel" :title="$t('courseLearning.testName')">
-        <div class="intro-panel__content intro-panel__content--title">
-          {{ testpaperTitle }}
-        </div>
+      <van-panel class="panel intro-panel" :title="$t('courseLearning.testTips')">
+        <van-cell class="intro-cell test-name" :border="false" :title="$t('courseLearning.testName')" :value="testpaperTitle" />
+
+        <van-cell v-if="info.doTimes == '1' && startTime" :class="['intro-panel__content', result || !disabled ? '' : 'intro-tip']"
+          class="intro-cell" :border="false" :title="$t('courseLearning.openingTime')" :value="formateStartTime(startTime)" />
+
+        <van-cell :class="['intro-panel__content', result || !disabled ? '' : 'intro-tip']"
+          class="intro-cell" :border="false" :title="$t('courseLearning.examinationDuration')" 
+          :value="limitTime ? `${limitTime} ${$t('courseLearning.minutes')}` : $t('courseLearning.noRestrictions')" />
+
+        <van-cell class="intro-cell" :border="false" :title="$t('courseLearning.fullScoreOfTestPaper')" :value="score + ' ' + $t('courseLearning.branch')" />
+
+        <template #footer>
+          <div v-if="info.examMode == '0'" class="testpaper-tips">
+            {{ info.doTimes == '0' ? $t('courseLearning.noLimitTips') : $t('courseLearning.oneTips') }}
+          </div>
+          <div v-if="info.examMode == '1'" class="testpaper-tips">
+            {{ info.doTimes == '0' ? $t('courseLearning.noLimitTips1') : $t('courseLearning.oneTips1') }}
+          </div>
+        </template>
       </van-panel>
-      <van-panel v-if="startTime" class="panel intro-panel" :title="$t('courseLearning.openingTime')">
-        <div
-          :class="[
-            'intro-panel__content',
-            result || !disabled ? '' : 'intro-tip',
-          ]"
-        >
-          {{ formateStartTime(startTime) }}
-        </div>
-      </van-panel>
-      <van-panel class="panel intro-panel" :title="$t('courseLearning.examinationDuration')">
-        <div
-          v-if="limitTime"
-          :class="[
-            'intro-panel__content',
-            result || !disabled ? '' : 'intro-tip',
-          ]"
-        >
-          {{ limitTime }}
-          {{ $t('courseLearning.minutes') }}
-          {{ '    (' + $t('courseLearning.tips') + ')' }}
-        </div>
-        <div v-else class="intro-panel__content">{{ $t('courseLearning.noRestrictions') }}</div>
-      </van-panel>
-      <van-panel class="panel intro-panel" :title="$t('courseLearning.fullScoreOfTestPaper')">
-        <div class="intro-panel__content">{{ $t('courseLearning.fullMark', { number: score }) }}</div>
-      </van-panel>
-      <van-panel class="panel intro-panel" :title="$t('courseLearning.numberOfTopics')">
+
+      <van-panel class="panel intro-panel" title="123">
+        <template #header>
+          <div class="van-cell van-panel__header">
+            <span style="font-size:16px;font-weight:500;color:rgba(0,0,0,0.85)">{{ $t('courseLearning.numberOfTopics') }}</span>
+            <span style="margin-left:12px;font-size:14px;font-weight:400;color:rgba(0,0,0,0.35)">{{ sum + ' ' + $t('courseLearning.topic') }}</span>
+          </div>
+        </template>
         <div class="intro-panel__content">
-          <van-cell
-            :border="false"
-            :value="`${sum}${$t('courseLearning.topic')}`"
-            class="intro-cell intro-cell--total"
-            :title="$t('courseLearning.total')"
-          />
           <van-cell
             v-for="item in question_type_seq"
             :border="false"
             :key="item"
             :title="$t(obj[item])"
-            :value="`${counts[item]}${$t('courseLearning.topic')}`"
+            :value="`${counts[item]} ${$t('courseLearning.topic')}`"
             class="intro-cell"
           />
         </div>
       </van-panel>
     </div>
     <div class="intro-footer">
-      <van-button
-        v-if="result"
-        class="intro-footer__btn"
-        type="primary"
-        @click="showResult"
-        >{{ $t('courseLearning.viewResult') }}</van-button
-      >
+      <template v-if="result">
+        <van-button
+          v-if="result.status === 'doing'"
+          class="intro-footer__btn"
+          type="primary"
+          @click="startTestpaper"
+          >
+          {{ $t('courseLearning.continueExam') }}
+        </van-button>
+        <van-button
+          v-else
+          class="intro-footer__btn"
+          type="primary"
+          @click="showResult"
+          >
+          {{ $t('courseLearning.viewResult') }}
+        </van-button>
+      </template>
+      
       <van-button
         v-else
         :disabled="disabled"
@@ -83,10 +94,11 @@
 import Api from '@/api';
 import { mapState, mapActions } from 'vuex';
 import { Dialog, Toast } from 'vant';
-import { formatTime } from '@/utils/date-toolkit.js';
+import { formatTime, getCountDown } from '@/utils/date-toolkit.js';
 import examMixin from '@/mixins/lessonTask/exam.js';
 import report from '@/mixins/course/report';
 import OutFocusMask from '@/components/out-focus-mask.vue';
+import { clearInterval } from 'timers';
 
 export default {
   name: 'TestpaperIntro',
@@ -113,6 +125,12 @@ export default {
       timeName: null,
       answer: null,
       time: null,
+      interval: null,
+      countDown: {
+        hours: '00',
+        minutes: '00',
+        seconds: '00'
+      },
       obj: {
         single_choice: 'courseLearning.singleChoice',
         choice: 'courseLearning.choice',
@@ -133,6 +151,8 @@ export default {
       return sum;
     },
     disabled() {
+      if (this.info.doTimes == '0') return false;
+
       const nowTime = new Date().getTime();
       return this.startTime > nowTime;
     },
@@ -151,6 +171,7 @@ export default {
     next();
   },
   beforeRouteLeave(to, from, next) {
+    this.interval && clearInterval(this.interval);
     document.getElementById('app').style.background = '';
     next();
   },
@@ -189,13 +210,9 @@ export default {
           this.limitTime = parseInt(this.info.limitTime);
           this.question_type_seq = this.testpaper.metas.question_type_seq;
 
-          this.canDoing(this.result, this.user.id)
-            .then(() => {
-              this.startTestpaper();
-            })
-            .catch(({ answer, endTime }) => {
-              this.submitExam(answer, endTime);
-            });
+          if (this.info.doTimes == '1' && this.startTime > Date.now()) {
+            this.startCountDown()
+          }
         })
         .catch(err => {
           Toast.fail(err.message);
@@ -255,7 +272,11 @@ export default {
         },
       });
     },
-    // 开考时间
+    startCountDown() {
+      this.interval = setInterval(() => {
+        this.countDown = getCountDown(this.startTime - Date.now(), 0)
+      }, 1000)
+    },
     formateStartTime(startTime) {
       startTime = formatTime(new Date(startTime));
       return startTime;
@@ -263,3 +284,52 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.test-name {
+  .van-cell__title {
+    max-width: 64px;
+    margin-right: 12px;
+  }
+  .van-cell__value {
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.test-start-count-down {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 16px 8px;
+  padding: 8px 12px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 8px;
+  .tips {
+    width: 80px;
+  }
+  .number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    padding: 0 4px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #FF7D00;
+    background: rgba(255, 125, 0, 0.04);
+    border-radius: 2px;
+  }
+  .unit {
+    padding: 0 6px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666666;
+  }
+}
+</style>

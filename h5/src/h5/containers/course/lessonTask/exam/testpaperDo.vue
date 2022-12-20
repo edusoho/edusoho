@@ -372,36 +372,71 @@ export default {
     },
     // 考试倒计时
     timer(timeStr) {
-      let i = 0;
-      let time = this.testpaperResult.limitedTime * 60 * 1000;
-      if (time <= 0) {
+      if (this.testpaper.examMode == '0') {
+        let time = this.testpaperResult.limitedTime * 60 * 1000;
+
+        if (time <= 0) {
+          return;
+        }
+
+        // 如果考试过程中中断，剩余时间=考试限制时间-中断时间
+        if (this.lastTime) {
+          const gotime = Math.ceil(
+            new Date().getTime() - this.testpaperResult.beginTime * 1000,
+          );
+          time = time - gotime;
+        }
+
+        let i = 0;
+        this.timeMeter = setInterval(() => {
+          const { hours, minutes, seconds } = getCountDown(time, i++);
+
+          this.time = `${hours}:${minutes}:${seconds}`;
+
+          if (hours == 0 && minutes == 0 && seconds < 60) {
+            this.timeWarn = true;
+          }
+
+          if (
+            (Number(hours) == 0 &&
+              Number(minutes) == 0 &&
+              Number(seconds) == 0) ||
+            Number(seconds) < 0
+          ) {
+            this.clearTime();
+            this.submitExam();
+          }
+        }, 1000);
+
         return;
       }
-      // 如果考试过程中中断，剩余时间=考试限制时间-中断时间
-      if (this.lastTime) {
-        const gotime = Math.ceil(
-          new Date().getTime() - this.testpaperResult.beginTime * 1000,
-        );
-        time = time - gotime;
-      }
 
-      this.timeMeter = setInterval(() => {
-        const { hours, minutes, seconds } = getCountDown(time, i++);
+      if (this.testpaper.examMode == '1') {
+        let time = this.testpaperResult.usedTime * 60 * 1000;
+        const { hours, minutes, seconds } = getCountDown(time, 0);
+
         this.time = `${hours}:${minutes}:${seconds}`;
-        if (hours == 0 && minutes == 0 && seconds < 60) {
-          this.timeWarn = true;
-        }
-        if (
-          (Number(hours) == 0 &&
-            Number(minutes) == 0 &&
-            Number(seconds) == 0) ||
-          Number(seconds) < 0
-        ) {
-          this.clearTime();
-          // 直接交卷
-          this.submitExam();
-        }
-      }, 1000);
+
+        this.timeMeter = setInterval(() => {
+          time += 1000
+
+          const { hours, minutes, seconds } = getCountDown(time, 0);
+
+          this.time = `${hours}:${minutes}:${seconds}`;
+
+          if (time === this.testpaper.limitedTime * 60 * 1000) {
+            Dialog.confirm({
+              cancelButtonText: this.$t('courseLearning.handInThePaper'),
+              confirmButtonText: this.$t('courseLearning.continueAnswer'),
+              message: this.$t('courseLearning.examTotalTime', { number: parseInt(minutes) }),
+            }).catch(() => {
+              this.submitExam();
+            })
+          }
+        }, 1000);
+
+        
+      }
     },
     // 清空定时器
     clearTime() {
@@ -557,7 +592,7 @@ export default {
       this.localuseTime = `${this.user.id}-${this.testpaperResult.id}-usedTime`;
       let time = localStorage.getItem(this.localuseTime) || 0;
       this.localtime = setInterval(() => {
-        if (!this.testpaperResult.limitedTime) {
+        if (!this.testpaperResult.limitedTime || this.testpaperResult.examMode == '0') {
           localStorage.setItem(this.localuseTime, ++time);
         }
         localStorage.setItem(this.localtimeName, new Date().getTime());
