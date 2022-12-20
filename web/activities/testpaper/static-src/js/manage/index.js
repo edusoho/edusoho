@@ -418,6 +418,12 @@ class Testpaper {
     this.$element.find('.js-testpaper-mode').removeClass('active');
     $this.addClass('active');
     $('.js-mode-helpblock').toggleClass('hidden')
+
+    if (examModeValue == '0') {
+      $('.js-enable_facein').removeClass('hidden')
+    } else if (examModeValue == '1') {
+      $('.js-enable_facein').addClass('hidden')
+    }
   }
 }
 
