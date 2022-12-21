@@ -21,7 +21,7 @@ class MeWrongBookCertainType extends AbstractResource
         $conditions['user_id'] = $this->getCurrentUser()->getId();
         $conditions['target_type'] = $type;
         $conditions['item_num_GT'] = 0;
-        $conditions['target_ids'] = ArrayToolkit::column($this->getExerciseMemberService()->findByUserIdAndRole($this->getCurrentUser()->getId(), 'student'), 'exerciseId');
+        $conditions['target_ids'] = ArrayToolkit::column($this->getExerciseMemberService()->findByUserIdAndRole($this->getCurrentUser()->getId(), 'student'), 'questionBankId');
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
