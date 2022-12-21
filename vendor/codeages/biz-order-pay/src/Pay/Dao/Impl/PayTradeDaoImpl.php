@@ -79,6 +79,7 @@ class PayTradeDaoImpl extends GeneralDaoImpl implements PayTradeDao
                 'order_sn NOT IN (:except_order_sns)',
                 'title LIKE :like_title',
                 'status = :status',
+                'status IN (:statuses)',
                 'type IN (:types)',
                 'cash_amount > :cash_amount_GE',
                 'user_id = :user_id',
