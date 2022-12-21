@@ -180,6 +180,7 @@ export default {
     next();
   },
   beforeRouteLeave(to, from, next) {
+    this.clearTime();
     this.interval && clearInterval(this.interval)
     // 可捕捉离开提醒
     if (
@@ -601,8 +602,7 @@ export default {
       this.localuseTime = `${this.user.id}-${this.testpaperResult.id}-usedTime`;
       this.localtime = setInterval(() => {
         const time = localStorage.getItem(this.localuseTime) || 0;
-
-        localStorage.setItem(this.localuseTime, time + 1);
+        localStorage.setItem(this.localuseTime, Number(time) + 1);
         localStorage.setItem(this.localtimeName, new Date().getTime());
       }, 1000);
     },
