@@ -85,6 +85,7 @@ class PayTradeDaoImpl extends GeneralDaoImpl implements PayTradeDao
                 'user_id = :user_id',
                 'invoice_sn = :invoice_sn',
                 'invoice_sn IN (:invoice_sns)',
+                'trade_sn IN (:trade_sns)',
                 'created_time >= :created_time_GTE',
                 'created_time <= :created_time_LTE',
             ),
