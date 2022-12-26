@@ -50,7 +50,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         $refundedTrades = array_filter($trades,function ($trade){
             return $trade['status'] == 'refunded';
         });
-        $orders = $this->getOrderService()->findOrdersBySns(\AppBundle\Common\ArrayToolkit::column($refundedTrades,'order_sn'));
+        $orders = $this->getOrderService()->findOrdersBySns(ArrayToolkit::column($refundedTrades,'order_sn'));
         $orders = ArrayToolkit::index($orders,'id');
         if(ArrayToolkit::column($orders,'id')){
             $orderRefunds = $this->getOrderRefundService()->searchRefunds(['user_id' => $user['id'], 'order_ids' => ArrayToolkit::column($orders,'id'), 'status' => 'refunded'], array(), 0, PHP_INT_MAX);
