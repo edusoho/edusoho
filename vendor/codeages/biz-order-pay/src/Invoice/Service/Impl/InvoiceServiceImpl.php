@@ -7,7 +7,6 @@ use Codeages\Biz\Framework\Service\BaseService;
 use Codeages\Biz\Invoice\Dao\InvoiceDao;
 use Codeages\Biz\Invoice\Service\InvoiceService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use function Clue\StreamFilter\fun;
 
 class InvoiceServiceImpl extends BaseService implements InvoiceService
 {
@@ -45,7 +44,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         return $apply;
     }
 
-    public function getRefundActualAmount($trades)
+    protected function getRefundActualAmount($trades)
     {
         $user = $this->biz['user'];
         $refundedTrades = array_filter($trades,function ($trade){
