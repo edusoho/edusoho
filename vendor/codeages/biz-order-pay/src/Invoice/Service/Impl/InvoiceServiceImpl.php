@@ -157,7 +157,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
             'receiver' => '',
             'status' => 'unchecked',
             'review_user_id' => 0,
-            'trade_sns' => '',
+            'trade_sns' => array(),
             'number' => '',
             'post_number' => '',
             'post_name' => '',
