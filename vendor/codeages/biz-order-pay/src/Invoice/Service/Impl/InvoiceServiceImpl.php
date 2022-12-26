@@ -44,7 +44,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         return $apply;
     }
 
-    protected function getRefundActualAmount($trades)
+    public function getRefundActualAmount($trades)
     {
         $user = $this->biz['user'];
         $refundedTrades = array_filter($trades,function ($trade){

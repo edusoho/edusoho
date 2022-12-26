@@ -22,6 +22,7 @@ class InvoiceDaoImpl extends GeneralDaoImpl implements InvoiceDao
                 'created_time',
             ),
             'serializes' => array(
+                'trade_sns' => 'json'
             ),
             'timestamps' => array(
                 'created_time',
