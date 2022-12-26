@@ -77,7 +77,7 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
             );
         }
 
-        if ($order['pay_amount'] > 0) {
+        if ($order['price_amount'] > 0) {
             return array(
                 'reason' => 'site.join_by_purchase',
                 'reason_type' => 'buy_join',
