@@ -19,8 +19,8 @@ class SaveAnswer extends AbstractResource
         if (empty($answerRecord) || $this->getCurrentUser()['id'] != $answerRecord['user_id']) {
             throw CommonException::ERROR_PARAMETER();
         }
-        if ($this->getExerciseMemberService()->isExerciseMemberByAssessmentId($assessmentResponse['assessment_id'], $this->getCurrentUser()->getId())){
-            throw new AnswerException("您已退出题库，无法继续学习");
+        if (!$this->getExerciseMemberService()->isExerciseMemberByAssessmentId($assessmentResponse['assessment_id'], $this->getCurrentUser()->getId())){
+            throw new AnswerException("您已退出题库，无法继续学习", ErrorCode::NOT_ITEM_BANK_MEMBER);
         }
 
         if(empty($assessmentResponse['admission_ticket'])) {
