@@ -99,7 +99,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
         $exercise = $this->getExerciseService()->getByQuestionBankId($assessment['bank_id']);
 
-        return !$this->isExerciseMember($exercise['id'], $userId);
+        return $this->isExerciseMember($exercise['id'], $userId);
     }
 
     public function getByExerciseIdAndUserId($exerciseId, $userId)
