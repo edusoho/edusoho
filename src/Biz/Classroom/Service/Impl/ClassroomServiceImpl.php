@@ -1004,7 +1004,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'type' => 'remove',
         ];
         $user = $this->getUserService()->getUser($member['userId']);
-        $this->getNotificationService()->notify($user['id'], 'classroom-student', $message);
+        if (isset($info['reason_type']) && 'remove' == $info['reason_type']) {
+            $this->getNotificationService()->notify($user['id'], 'classroom-student', $message);
+        }
 
         $infoData = [
             'classroomId' => $classroom['id'],
