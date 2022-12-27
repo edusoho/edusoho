@@ -2287,12 +2287,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $parentCourseIds = ArrayToolkit::column($courses, 'parentId');
 
-        $coursesMember = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($userId, $parentCourseIds);
+        $coursesMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($userId, $parentCourseIds);
+        $coursesMembers = array_filter($coursesMembers, function ($courseMember) {
+            return 0 == $courseMember['deadline'] || $courseMember['deadline'] > time();
+        });
 
-        $paidCourseIds = ArrayToolkit::column($coursesMember, 'courseId');
+        $paidCourseIds = ArrayToolkit::column($coursesMembers, 'courseId');
         $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
 
-        $orderIds = ArrayToolkit::column($coursesMember, 'orderId');
+        $orderIds = ArrayToolkit::column($coursesMembers, 'orderId');
 
         if (!$orderIds) {
             return [[], []];
