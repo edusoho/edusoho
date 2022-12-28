@@ -79,6 +79,7 @@ class PageDiscovery extends AbstractResource
                 } else {
                     $discoverySetting['data'] = $announcement[0]['content'];
                 }
+                continue;
             }
 
             if('information' == $discoverySetting['type']){
