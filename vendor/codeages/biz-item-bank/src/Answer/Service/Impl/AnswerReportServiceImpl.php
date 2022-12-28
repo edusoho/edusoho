@@ -295,7 +295,7 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
      */
     protected function getTestpaperActivityService()
     {
-        return $this->createService('Activity:TestpaperActivityService');
+        return $this->biz->service('Activity:TestpaperActivityService');
     }
 
     /**
@@ -303,6 +303,6 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
      */
     protected function getHomeworkActivityService()
     {
-        return $this->createService('Activity:HomeworkActivityService');
+        return $this->biz->service('Activity:HomeworkActivityService');
     }
 }
