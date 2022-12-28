@@ -35,7 +35,7 @@ class AnswerRecord extends AbstractResource
         $assessmentFilter->filter($assessment);
 
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
-        $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerScene['id']);
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerScene['id']);
 
 
         return [
@@ -43,8 +43,8 @@ class AnswerRecord extends AbstractResource
             'answer_record' => $this->wrapperAnswerRecord($answerRecord),
             'assessment' => $assessment,
             'answer_scene' => $this->wrapperAnswerScene($answerScene),
-            'resultShow' => empty($testpaperActivity) ? true : $this->getResultShow($answerRecord, $answerScene, $answerReport),
-            'activity' => empty($testpaperActivity) ? (object)[] : $testpaperActivity,
+            'resultShow' => empty($activity) ? true : $this->getResultShow($answerRecord, $answerScene, $answerReport),
+            'activity' => empty($activity) ? (object)[] : $activity,
         ];
     }
 
