@@ -5,6 +5,7 @@ namespace AppBundle\Controller\AnswerEngine;
 use AppBundle\Controller\BaseController;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -46,11 +47,11 @@ class AnswerEngineController extends BaseController
     public function reviewSaveAction(Request $request)
     {
         $userId = $this->getCurrentUser()->getId();
-        if(!$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isSuperAdmin() && !$this->getCurrentUser()->isAdmin()) {
+        $reviewReport = json_decode($request->getContent(), true);
+        if(!$this->getAnswerReportService()->isQuestionBankExerciseOrTestPaperExercise($reviewReport['report_id']) && !$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isSuperAdmin() && !$this->getCurrentUser()->isAdmin()) {
             $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
-        $reviewReport = json_decode($request->getContent(), true);
         $reviewReport = $this->getAnswerService()->review($reviewReport, $userId);
         return $this->createJsonResponse($reviewReport);
     }
@@ -118,5 +119,13 @@ class AnswerEngineController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerReportService');
     }
 }

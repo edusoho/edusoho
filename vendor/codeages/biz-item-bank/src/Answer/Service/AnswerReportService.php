@@ -23,4 +23,6 @@ interface AnswerReportService
     public function wrapperAnswerQuestionReports($answerRecordId, $answerQuestionReports);
 
     public function batchUpdate($ids, $updateColumnsList);
+
+    public function isQuestionBankExerciseOrTestPaperExercise($reportId);
 }

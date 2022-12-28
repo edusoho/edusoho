@@ -2,6 +2,8 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use Biz\Activity\Service\HomeworkActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerReportDao;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
@@ -218,6 +220,20 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         return $this->getAnswerReportDao()->batchUpdate($ids, $updateColumnsList);
     }
 
+    public function isQuestionBankExerciseOrTestPaperExercise($reportId)
+    {
+        //判断当前批阅是不是题库练习或考试练习
+        $answerReport = $this->getAnswerReportDao()->get($reportId);
+        if (!empty($answerReport)){
+            // 查询场次是否在activity_homework
+            $activityHomework = $this->getHomeworkActivityService()->getByAnswerSceneId($answerReport['answer_scene_id']);
+            // 查询场次是否在activity_testpaper
+            $activityTestpaper = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
+
+            return empty($activityHomework) && empty($activityTestpaper);
+        }
+        return false;
+    }
     /**
      * @return \Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService
      */
@@ -272,5 +288,21 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
     protected function getItemService()
     {
         return $this->biz->service('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->createService('Activity:HomeworkActivityService');
     }
 }
