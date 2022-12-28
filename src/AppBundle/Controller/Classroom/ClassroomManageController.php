@@ -447,7 +447,7 @@ class ClassroomManageController extends BaseController
                         [PHP_EOL, '"'],
                         '',
                         $profiles[$classroomMember['userId']][$key]
-                    ).'",' : '-'.',';
+                    )."\t".'",' : '-'.',';
             }
             $students[] = $member;
         }
