@@ -425,6 +425,7 @@ t.add("course.manage.reward_point_required_hint", "\u8bf7\u8f93\u5165\u6559\u5b6
 t.add("course.manage.task_reward_point_required_hint", "\u8bf7\u8f93\u5165\u8ba1\u5212\u4efb\u52a1\u5956\u52b1\u79ef\u5206", "js", "zh_CN");
 t.add("course.manage.max_point_error_hint", "\u8bf7\u8f93\u51650-100000\u7684\u6574\u6570", "js", "zh_CN");
 t.add("course.manage.student_expiry_day_hint", "\u53ea\u6709\u6309\u5929\u6570\u8bbe\u7f6e\u7684\u5b66\u4e60\u6709\u6548\u671f\uff0c\u624d\u53ef\u624b\u52a8\u589e\u52a0\u6709\u6548\u671f\u3002", "js", "zh_CN");
+t.add("course.plan_task.activity_manage.testpaper.mock_tips4", "\u65f6\u957f\u5fc5\u987b>0", "js", "zh_CN");
 t.add("member.delete_success_hint", "\u79fb\u9664\u6210\u529f", "js", "zh_CN");
 t.add("member.delete_fail_hint", "\u79fb\u9664\u5931\u8d25", "js", "zh_CN");
 t.add("material_lib.content_title", "\u6559\u5b66\u8d44\u6599\u5e93", "js", "zh_CN");

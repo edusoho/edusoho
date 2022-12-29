@@ -2229,7 +2229,6 @@ course.plan_task.activity_manage.testpaper.mock_type: 模拟考试
 course.plan_task.activity_manage.testpaper.mock_tips1: 倒计时结束自动交卷
 course.plan_task.activity_manage.testpaper.mock_tips2: 考试中离开，倒计时不会停止
 course.plan_task.activity_manage.testpaper.mock_tips3: 模拟考试时长必须 >0
-course.plan_task.activity_manage.testpaper.mock_tips4: 时长必须>0 
 course.plan_task.activity_manage.testpaper.practise_type: 练习考试
 course.plan_task.activity_manage.testpaper.practise_tips1: 不限制考试用时，不自动交卷
 course.plan_task.activity_manage.testpaper.practise_tips2: 考试中离开不计考试用时

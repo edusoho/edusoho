@@ -418,6 +418,7 @@ class Testpaper {
     this.$element.find('.js-testpaper-mode').removeClass('active');
     $this.addClass('active');
     $('.js-mode-helpblock').toggleClass('hidden')
+    $('label[for="length"]').toggleClass('control-label-required')
 
     if (examModeValue == '0') {
       $('.js-enable_facein').removeClass('hidden')

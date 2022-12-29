@@ -572,6 +572,7 @@ course.manage.reward_point_required_hint: please input the reward point
 course.manage.task_reward_point_required_hint: please input the task reward point
 course.manage.max_point_error_hint: Please input an integer from 0-10000000
 course.manage.student_expiry_day_hint: The validity period can be manually increased only by the learning expiration date set by the number of days.
+course.plan_task.activity_manage.testpaper.mock_tips4: 'Duration must be greater than 0 '
 member.delete_success_hint: Remove successful
 member.delete_fail_hint: Remove failed
 
