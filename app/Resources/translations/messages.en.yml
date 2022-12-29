@@ -872,7 +872,7 @@ course.teaching_plan.sort.save: Save sort
 course.teaching_plan.sort.cancel: Cancel sort
 course.teaching_plan.create.max_plan_number: Support to create 10 plans, if you need to add more, please add after the original plan is deleted.
 course.teaching_plan.create.new_plan_name: 'Program name'
-course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the program being created.'
+course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the program being published.'
 course.teaching_plan.create.name: Name
 course.teaching_plan.create.mode: 'Learn mode'
 course.teaching_plan.create.mode.free: "<li class='mb10'><b>free: </b>Learn freely.</li>\n"
