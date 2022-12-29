@@ -220,18 +220,24 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         return $this->getAnswerReportDao()->batchUpdate($ids, $updateColumnsList);
     }
 
-    public function isQuestionBankExerciseOrTestPaperExercise($reportId)
+    public function canReviewBySelf($reportId)
     {
         //判断当前批阅是不是题库练习或考试练习
         $answerReport = $this->getAnswerReportDao()->get($reportId);
-        if (!empty($answerReport)){
-            // 查询场次是否在activity_homework
-            $activityHomework = $this->getHomeworkActivityService()->getByAnswerSceneId($answerReport['answer_scene_id']);
-            // 查询场次是否在activity_testpaper
-            $activityTestpaper = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
-
-            return empty($activityHomework) && empty($activityTestpaper);
+        if (empty($answerReport)){
+            return false;
         }
+        // 查询场次是否在activity_homework
+        $activityHomework = $this->getHomeworkActivityService()->getByAnswerSceneId($answerReport['answer_scene_id']);
+        if (!empty($activityHomework)){
+            return true;
+        }
+        // 查询场次是否在activity_testpaper
+        $activityTestpaper = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
+        if (!empty($activityTestpaper)){
+            return true;
+        }
+
         return false;
     }
     /**

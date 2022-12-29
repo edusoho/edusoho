@@ -24,5 +24,5 @@ interface AnswerReportService
 
     public function batchUpdate($ids, $updateColumnsList);
 
-    public function isQuestionBankExerciseOrTestPaperExercise($reportId);
+    public function canReviewBySelf($reportId);
 }

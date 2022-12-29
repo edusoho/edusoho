@@ -312,8 +312,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
 
+        // 属于题库练习批阅或试卷练习批阅
+        if ($this->getAnswerReportService()->canReviewBySelf($reviewReport['report_id']) && $userId != $reviewReport['user_id']){
+            throw UserException::PERMISSION_DENIED();
+        }
+
         $courseSetMember = array_column($this->getCourseMemberService()->findCourseSetTeachersAndAssistant($activity['fromCourseSetId']), 'userId');
-        if(!$this->getAnswerReportService()->isQuestionBankExerciseOrTestPaperExercise($reviewReport['report_id']) && !in_array($userId, $courseSetMember)) {
+        // 属于课程作业批阅或试卷批阅
+        if(!$this->getAnswerReportService()->canReviewBySelf($reviewReport['report_id']) && !in_array($userId, $courseSetMember)) {
             throw UserException::PERMISSION_DENIED();
         }
 

@@ -48,7 +48,7 @@ class AnswerEngineController extends BaseController
     {
         $userId = $this->getCurrentUser()->getId();
         $reviewReport = json_decode($request->getContent(), true);
-        if(!$this->getAnswerReportService()->isQuestionBankExerciseOrTestPaperExercise($reviewReport['report_id']) && !$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isSuperAdmin() && !$this->getCurrentUser()->isAdmin()) {
+        if(!$this->getAnswerReportService()->canReviewBySelf($reviewReport['report_id']) && !$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isSuperAdmin() && !$this->getCurrentUser()->isAdmin()) {
             $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
