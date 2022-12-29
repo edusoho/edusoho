@@ -53,7 +53,7 @@ class AnswerEngineController extends BaseController
     {
         $userId = $this->getCurrentUser()->getId();
         $reviewReport = json_decode($request->getContent(), true);
-        if(!$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isSuperAdmin() && !$this->getCurrentUser()->isAdmin()) {
+        if(!$this->getReviewService()->canReviewBySelf($reviewReport['report_id'], $userId) && !$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isSuperAdmin() && !$this->getCurrentUser()->isAdmin()) {
             $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
@@ -70,7 +70,7 @@ class AnswerEngineController extends BaseController
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
 
         $courseSetMember = array_column($this->getCourseMemberService()->findCourseSetTeachersAndAssistant($activity['fromCourseSetId']), 'userId');
-        if(!in_array($userId, $courseSetMember)) {
+        if(!$this->getReviewService()->canReviewBySelf($reviewReport['report_id'], $userId) && !in_array($userId, $courseSetMember)) {
             throw UserException::PERMISSION_DENIED();
         }
 
