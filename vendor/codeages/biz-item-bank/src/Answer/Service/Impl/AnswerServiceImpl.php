@@ -303,7 +303,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         $answerReport = $this->getAnswerReportService()->getSimple($reviewReport['report_id']);
         if (empty($answerReport)) {
-            throw new AnswerReportException('Answer report not found.', ErrorCode::ANSWER_RECORD_NOTFOUND);
+            throw new AnswerReportException('Answer report not found.', ErrorCode::ANSWER_REPORT_NOTFOUND);
         }
 
         $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
