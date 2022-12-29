@@ -230,15 +230,15 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         // 查询场次是否在activity_homework
         $activityHomework = $this->getHomeworkActivityService()->getByAnswerSceneId($answerReport['answer_scene_id']);
         if (!empty($activityHomework)){
-            return true;
+            return false;
         }
         // 查询场次是否在activity_testpaper
         $activityTestpaper = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
         if (!empty($activityTestpaper)){
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
     /**
      * @return \Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService

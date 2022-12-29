@@ -313,7 +313,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
 
         // 属于题库练习批阅或试卷练习批阅
-        if ($this->getAnswerReportService()->canReviewBySelf($reviewReport['report_id']) && $userId != $reviewReport['user_id']){
+        if ($this->getAnswerReportService()->canReviewBySelf($reviewReport['report_id']) && $userId != $answerRecord['user_id']){
             throw UserException::PERMISSION_DENIED();
         }
 
