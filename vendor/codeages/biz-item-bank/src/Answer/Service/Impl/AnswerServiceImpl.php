@@ -6,6 +6,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\Review\Service\ReviewService;
 use Biz\System\Service\LogService;
 use Biz\Testpaper\Job\AssessmentAutoSubmitJob;
 use Biz\User\UserException;
@@ -313,13 +314,13 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
 
         // 属于题库练习批阅或试卷练习批阅
-        if ($this->getAnswerReportService()->canReviewBySelf($reviewReport['report_id']) && $userId != $answerRecord['user_id']){
+        if ($this->getReviewService()->canReviewBySelf($reviewReport['report_id'], $userId)){
             throw UserException::PERMISSION_DENIED();
         }
 
         $courseSetMember = array_column($this->getCourseMemberService()->findCourseSetTeachersAndAssistant($activity['fromCourseSetId']), 'userId');
         // 属于课程作业批阅或试卷批阅
-        if(!$this->getAnswerReportService()->canReviewBySelf($reviewReport['report_id']) && !in_array($userId, $courseSetMember)) {
+        if(!$this->getReviewService()->canReviewBySelf($reviewReport['report_id'], $userId) && !in_array($userId, $courseSetMember)) {
             throw UserException::PERMISSION_DENIED();
         }
 
@@ -867,5 +868,13 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     private function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return ReviewService
+     */
+    protected function getReviewService()
+    {
+        return $this->biz->service('Review:ReviewService');
     }
 }

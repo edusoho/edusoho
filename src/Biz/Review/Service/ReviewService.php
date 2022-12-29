@@ -33,4 +33,6 @@ interface ReviewService
     public function countClassroomReviews($conditions);
 
     public function searchClassroomReviews($conditions, $orderBys, $start, $limit);
+
+    public function canReviewBySelf($reportId, $userId);
 }

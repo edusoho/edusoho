@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\AnswerEngine;
 
 use AppBundle\Controller\BaseController;
+use Biz\Review\Service\ReviewService;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
@@ -48,7 +49,7 @@ class AnswerEngineController extends BaseController
     {
         $userId = $this->getCurrentUser()->getId();
         $reviewReport = json_decode($request->getContent(), true);
-        if(!$this->getAnswerReportService()->canReviewBySelf($reviewReport['report_id']) && !$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isSuperAdmin() && !$this->getCurrentUser()->isAdmin()) {
+        if(!$this->getReviewService()->canReviewBySelf($reviewReport['report_id'], $userId) && !$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isSuperAdmin() && !$this->getCurrentUser()->isAdmin()) {
             $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
@@ -122,10 +123,10 @@ class AnswerEngineController extends BaseController
     }
 
     /**
-     * @return AnswerReportService
+     * @return ReviewService
      */
-    protected function getAnswerReportService()
+    protected function getReviewService()
     {
-        return $this->createService('ItemBank:Answer:AnswerReportService');
+        return $this->createService('Review:ReviewService');
     }
 }
