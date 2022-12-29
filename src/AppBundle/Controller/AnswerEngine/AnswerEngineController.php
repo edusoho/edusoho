@@ -62,12 +62,7 @@ class AnswerEngineController extends BaseController
             throw new AnswerReportException('Answer report not found.', ErrorCode::ANSWER_RECORD_NOTFOUND);
         }
 
-        $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
-        if (AnswerService::ANSWER_RECORD_STATUS_REVIEWING != $answerRecord['status']) {
-            throw new AnswerException('Answer report cannot review.', ErrorCode::ANSWER_RECORD_CANNOT_REVIEW);
-        }
-
-        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
 
         $courseSetMember = array_column($this->getCourseMemberService()->findCourseSetTeachersAndAssistant($activity['fromCourseSetId']), 'userId');
         if(!$this->getReviewService()->canReviewBySelf($reviewReport['report_id'], $userId) && !in_array($userId, $courseSetMember)) {
