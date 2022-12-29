@@ -20,7 +20,7 @@ class ItemBankExerciseReviewReport extends AbstractResource
 
         $reviewReport = $request->request->all();
 
-        return $this->getAnswerService()->review($reviewReport, $user['id']);
+        return $this->getAnswerService()->review($reviewReport);
     }
 
     /**

@@ -3,13 +3,17 @@
 namespace AppBundle\Controller\AnswerEngine;
 
 use AppBundle\Controller\BaseController;
+use Biz\Course\Service\MemberService;
 use Biz\Review\Service\ReviewService;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
+use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\ErrorCode;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -49,11 +53,28 @@ class AnswerEngineController extends BaseController
     {
         $userId = $this->getCurrentUser()->getId();
         $reviewReport = json_decode($request->getContent(), true);
-        if(!$this->getReviewService()->canReviewBySelf($reviewReport['report_id'], $userId) && !$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isSuperAdmin() && !$this->getCurrentUser()->isAdmin()) {
+        if(!$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isSuperAdmin() && !$this->getCurrentUser()->isAdmin()) {
             $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
-        $reviewReport = $this->getAnswerService()->review($reviewReport, $userId);
+        $answerReport = $this->getAnswerReportService()->getSimple($reviewReport['report_id']);
+        if (empty($answerReport)) {
+            throw new AnswerReportException('Answer report not found.', ErrorCode::ANSWER_RECORD_NOTFOUND);
+        }
+
+        $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
+        if (AnswerService::ANSWER_RECORD_STATUS_REVIEWING != $answerRecord['status']) {
+            throw new AnswerException('Answer report cannot review.', ErrorCode::ANSWER_RECORD_CANNOT_REVIEW);
+        }
+
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
+
+        $courseSetMember = array_column($this->getCourseMemberService()->findCourseSetTeachersAndAssistant($activity['fromCourseSetId']), 'userId');
+        if(!in_array($userId, $courseSetMember)) {
+            throw UserException::PERMISSION_DENIED();
+        }
+
+        $reviewReport = $this->getAnswerService()->review($reviewReport);
         return $this->createJsonResponse($reviewReport);
     }
 
@@ -128,5 +149,21 @@ class AnswerEngineController extends BaseController
     protected function getReviewService()
     {
         return $this->createService('Review:ReviewService');
+    }
+
+    /**
+     * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }
