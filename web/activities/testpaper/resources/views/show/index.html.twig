@@ -19,26 +19,26 @@
                   <div class="text-16 ">
                     <div class="inline-block">
                       <div class="pull-left">
-                        <div class="text-14 gray-dark">题目数</div>
+                        <div class="text-14 gray-dark">{{ 'course.plan_task.activity_manage.testpaper.questionNum'|trans }}</div>
                         <div>
                           <span class="text-24 color-primary">{{ testpaper.item_count }}</span>
-                          <span class="text-12 color-primary">题</span>
+                          <span class="text-12 color-primary">{{ 'course.plan_task.activity_manage.testpaper.questionCount'|trans }}</span>
                         </div>
                       </div>
 
                       <div class="pull-left ml24">
-                        <div class="text-14 gray-dark">总分</div>
+                        <div class="text-14 gray-dark">{{ 'item_bank_exercise.assessment.total_score'|trans }}</div>
                         <div>
                           <span class="text-24 color-primary">{{ testpaper.total_score }}</span>
-                          <span class="text-12 color-primary">分</span>
+                          <span class="text-12 color-primary">{{ 'course.plan_task.activity_manage.testpaper.questionScore'|trans  }}</span>
                         </div>
                       </div>
                       {% if activity.ext.answerScene.limited_time %}
                         <div class="pull-left ml24">
-                          <div class="text-14 gray-dark">时长</div>
+                          <div class="text-14 gray-dark">{{ 'course.live_lesson_manage.live_length.input_placeholder'|trans }}</div>
                           <div>
                             <span class="text-24 color-primary">{{ activity.ext.answerScene.limited_time }}</span>
-                            <span class="text-12 color-primary">分钟</span>
+                            <span class="text-12 color-primary">{{ 'course.live_lesson_manage.live_length.minutes'|trans  }}</span>
                           </div>
                         </div>
                       {% endif %}

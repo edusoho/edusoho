@@ -1915,6 +1915,9 @@ course.plan_task.activity_manage.testpaper.one_limit_tips:
   '<span class="color-gray">Reminder: There is only one chance to test. Once the test starts, the test will be handed in automatically after the countdown is over.</span>'
 course.plan_task.activity_manage.testpaper.one_limit_tips1: 
   '<span class="color-gray">Reminder: There is only one chance to take the test, and the test will not be handed in automatically, and the test time will be displayed in real time, and the time will not be counted if you leave halfway.</span>'
+course.plan_task.activity_manage.testpaper.questionNum: 'Number of questions'
+course.plan_task.activity_manage.testpaper.questionCount: 'questions'
+course.plan_task.activity_manage.testpaper.questionScore: 'score'
 course.plan_task.activity_manage.testpaper.once_trance: 'Only <span class = "color-danger"> once </ span> test opportunities.'
 course.plan_task.activity_manage.testpaper.start_exam: 'Start'
 course.plan_task.activity_manage.testpaper.close_tips: 'The test is closed, please contact the teacher!'
