@@ -1588,6 +1588,7 @@ t.add("course.plan_setup.mode.locked", "Lock", "js", "en");
 t.add("course.plan_setup.mode.tips", "Free:Learn freely<br>Lock:Unlock lessons step by step", "js", "en");
 t.add("course.marketing_setup.rule.watch_time_limit", "Video watch time limit", "js", "en");
 t.add("course.marketing_setup.rule.watch_time_limit.watch_limit", "Times of total video duration", "js", "en");
+t.add("course.plan_setup.learn_mode_hint", "The learn mode cannot be modified after plan is published", "js", "en");
 t.add("course.plan_setup.finish_rule", "%taskName% rules", "js", "en");
 t.add("course.plan_setup.finish_rule.nothing", "No limitation", "js", "en");
 t.add("course.plan_setup.finish_rule.depend_on_finish_condition", "Determined by %taskName% finish conditions", "js", "en");
