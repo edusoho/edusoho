@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Vue;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,11 +15,6 @@ class CommonController extends BaseController
         $categoryTree = $this->getCategoryService()->getCategoryStructureTree($group['id']);
 
         return $this->createJsonResponse($categoryTree);
-    }
-
-    public function currentUserAction(Request $request)
-    {
-        return $this->createJsonResponse($this->getCurrentUser()->toArray());
     }
 
     public function renderOrgAction(Request $request)

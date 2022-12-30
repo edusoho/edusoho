@@ -2,6 +2,7 @@
 
 namespace AppBundle\Component\MediaParser;
 
+use AppBundle\Component\MediaParser\ItemParser\AbstractItemParser;
 use Topxia\Service\Common\ServiceKernel;
 
 class ParserProxy
@@ -44,6 +45,7 @@ class ParserProxy
         }
 
         foreach ($this->getParsers() as $parserName) {
+            /** @var AbstractItemParser $parser */
             $parser = $this->createParser("{$parserName}ItemParser");
 
             if (!$parser->detect($url)) {

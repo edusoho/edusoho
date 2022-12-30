@@ -46,6 +46,7 @@ class BillController extends BaseController
         }
         $buyerIds = ArrayToolkit::column($cashes, 'buyer_id');
         $users = $this->getUserService()->findUsersByIds($buyerIds);
+        $userProfiles = $this->getUserService()->findUserProfilesByIds($buyerIds);
 
         list($inflow, $outflow) = $this->getInflowAndOutflow($conditions);
 
@@ -53,6 +54,7 @@ class BillController extends BaseController
             'cashes' => $cashes,
             'paginator' => $paginator,
             'users' => $users,
+            'userProfiles' => $userProfiles,
             'account' => $account,
             'outflow' => $outflow,
             'inflow' => $inflow,

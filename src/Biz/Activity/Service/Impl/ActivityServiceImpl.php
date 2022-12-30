@@ -264,6 +264,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 $fields['mediaId'] = $media['id'];
             }
         }
+        if (!empty($fields['media']) && empty($fields['content'])) {
+            $fields['content'] = $fields['media'];
+        }
 
         $fields = $this->filterFields($fields);
 

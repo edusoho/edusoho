@@ -98,11 +98,12 @@
             </a>
             <div class="dropdown-menu" style="width: 392px;left: -212px;">
               <div class="js-mall-card" style="position: absolute;top:0;left:0;z-index:1;padding: 24px;background-color: #fff;border-radius: 4px;">
-                <div style="display: flex;width: 256px;margin-bottom:20px;align-items:center;">
-                  <img 
-                    src="{{ asset(setting('site.logo')|default('/static-dist/app/img/admin-v2/default-logo@2x.png')) }}" 
-                    style="width: auto;max-width:calc(100% - 180px);height:58px;margin-right:16px;border-radius: 2px;">
-                  <div style="flex: 1;line-height: initial;overflow: hidden; display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;font-size: 16px;font-weight: bold;">{{ setting('site.name') }}的商城</div>
+                <div style="display: flex;width: 300px;margin-bottom:20px;align-items:center;">
+                  <div style="width: 124px;height:58px;text-align: center;">
+                    <img src="{{ asset(setting('site.logo')|default('/static-dist/app/img/admin-v2/default-logo@2x.png')) }}" 
+                      style="max-width: 100%;max-height: 100%;margin-right:16px;border-radius: 2px;">
+                  </div>
+                  <div style="flex: 1;line-height: initial;font-size: 16px;font-weight: bold;">{{ setting('site.name') }}的商城</div>
                 </div>
                 <canvas class="js-marketing-qrcode1"></canvas>
               </div>
@@ -131,11 +132,11 @@
                   <div style="margin-bottom:16px;font-size: 14px;line-height: 22px;color: #272E3B;font-weight:400;">
                     {{ 'admin_v2.homepage.school_info.enter.link_share'|trans }}
                   </div>
-                  <div class="clearfix" style="border: 1px solid #E5E6EB;border-radius: 2px;line-height:32px;font-weight:400;">
-                    <div class="pull-left text-overflow js-marketing-url" 
+                  <div style="display: flex;border: 1px solid #E5E6EB;border-radius: 2px;line-height:32px;font-weight:400;">
+                    <div class="text-overflow js-marketing-url" 
                       style="width: 225px;height: 32px;padding:0 12px;border-right: 1px solid #E5E6EB;color: #1D2129;text-align:center;">
                     </div>
-                    <div class="pull-left js-copy-link"
+                    <div class="js-copy-link"
                       data-clipboard-text=""
                       style="width: 85px;height:32px;font-size:14px;font-weight:400;text-align:center;line-height: 32px;color: #272E3B;cursor:pointer;">
                         {{ 'admin_v2.homepage.school_info.enter.copy_btn'|trans }}
@@ -145,7 +146,6 @@
                     {{ 'admin_v2.homepage.school_info.enter.link_tips1'|trans }}
                     <img style="width:16px;margin:0 4px;" src="{{ asset('static-dist/app/img/icon/icon-qq.png') }}" />
                     <img style="width:16px;margin-right:4px;" src="{{ asset('static-dist/app/img/icon/icon-weixin.png') }}" />
-                    <img style="width:16px;margin-right:4px;" src="{{ asset('static-dist/app/img/icon/icon-chrome.png') }}" />
                     {{ 'admin_v2.homepage.school_info.enter.link_tips2'|trans }}
                   </div>
                   <div style="margin-top: 24px;color: #272E3B;font-size:14px;line-height:22px;margin-bottom:16px;">
@@ -156,7 +156,7 @@
                       <img class="js-marketing-default-qrcode" 
                         src="{{ asset('/static-dist/app/img/admin-v2/default-code.png') }}" 
                         style="width: 80px;margin-left: 4px;" />
-                      <canvas class="js-marketing-qrcode2 hidden"></canvas>
+                      <canvas class="hidden js-marketing-qrcode2"></canvas>
                     </div>
                     <div class="pull-left">
                       <div class="download-btn js-download-btn">{{ 'admin_v2.homepage.school_info.enter.download_qrcode'|trans }}</div>

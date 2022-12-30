@@ -2,8 +2,13 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\System\Service\LogService;
 use Biz\Testpaper\Job\AssessmentAutoSubmitJob;
+use Biz\User\UserException;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
@@ -294,7 +299,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $attachments;
     }
 
-    public function review(array $reviewReport)
+    public function review(array $reviewReport, $userId)
     {
         $reviewReport = $this->getValidator()->validate($reviewReport, [
             'report_id' => ['required', 'integer'],
@@ -311,6 +316,13 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
         if (AnswerService::ANSWER_RECORD_STATUS_REVIEWING != $answerRecord['status']) {
             throw new AnswerException('Answer report cannot review.', ErrorCode::ANSWER_RECORD_CANNOT_REVIEW);
+        }
+
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
+
+        $courseSetMember = array_column($this->getCourseMemberService()->findCourseSetTeachersAndAssistant($activity['fromCourseSetId']), 'userId');
+        if(!in_array($userId, $courseSetMember)) {
+            throw UserException::PERMISSION_DENIED();
         }
 
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
@@ -853,4 +865,19 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $this->biz->service('Scheduler:SchedulerService');
     }
 
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    private function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
+    }
 }

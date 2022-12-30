@@ -14,6 +14,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\File\UploadFileException;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
@@ -23,6 +24,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use http\Exception\InvalidArgumentException;
+use PhpOffice\PhpWord\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class ManageController extends BaseController
@@ -575,6 +577,11 @@ class ManageController extends BaseController
         $data = $request->request->all();
         $fromType = $data['fromType'];
         $toType = $data['toType'];
+
+        if (preg_match('/\/|\\\\/i', $toType, $matches)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+
         if (empty($data['question'])) {
             throw new InvalidArgumentException('缺少必要参数');
         }
