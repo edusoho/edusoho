@@ -396,6 +396,15 @@ export default {
     buy: 'Buy now'
   },
   courseLearning: {
+    leftTime: 'Remaining time: ',
+    hourUnit: 'hr',
+    minuteUnit: 'min.',
+    secondUnit: 'sec.',
+    unpassedTips: 'Unfortunately, you failed this exam!',
+    passedTips: 'Congratulations on passing this exam!',
+    corretAnswer: 'Correct answer',
+    qustionType: 'Question type',
+    teacherSay: 'Teacher comments',
     teachingService: 'Teaching service',
     title: 'Details',
     intro: 'Intro',

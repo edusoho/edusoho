@@ -8,13 +8,13 @@
     ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <div v-if="info.doTimes == '1' && startTime > Date.now()" class="test-start-count-down">
-      <div class="tips">距离考试：</div>
+      <div class="tips">{{ $t('courseLearning.leftTime') }}</div>
       <div class="number">{{ countDown.hours }}</div>
-      <div class="unit">时</div>
+      <div class="unit">{{ $t('courseLearning.hourUnit') }}</div>
       <div class="number">{{ countDown.minutes }}</div>
-      <div class="unit">分</div>
+      <div class="unit">{{ $t('courseLearning.minuteUnit') }}</div>
       <div class="number">{{ countDown.seconds }}</div>
-      <div class="unit">秒</div>
+      <div class="unit">{{ $t('courseLearning.secondUnit') }}</div>
     </div>
     <div class="intro-body">
       <van-panel class="panel intro-panel" :title="$t('courseLearning.testTips')">
@@ -309,9 +309,6 @@ export default {
   height: 40px;
   background-color: #fff;
   border-radius: 8px;
-  .tips {
-    width: 80px;
-  }
   .number {
     display: flex;
     align-items: center;

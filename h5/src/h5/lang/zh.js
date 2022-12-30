@@ -397,6 +397,15 @@ export default {
     buy: '立即购买'
   },
   courseLearning: {
+    leftTime: '距离考试：',
+    hourUnit: '时',
+    minuteUnit: '分',
+    secondUnit: '秒',
+    unpassedTips: '很遗憾，您未通过本次考试！',
+    passedTips: '恭喜您已通过本次考试！',
+    corretAnswer: '答对题',
+    qustionType: '题型',
+    teacherSay: '教师评语',
     teachingService: '教学服务',
     title: '课程详情',
     intro: '课程介绍',

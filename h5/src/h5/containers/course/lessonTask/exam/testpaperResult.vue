@@ -7,20 +7,25 @@
       @outFocusMask="outFocusMask"
     ></out-focus-mask>
     <e-loading v-if="isLoading" />
-    <div class="testpaper-result-status" :class="{'is-passed': result.passedStatus === 'passed'}">
-      <template v-if="isReadOver">
-        <div class="result-score">
-          <span class="data-number">{{ result.score }}</span>
-          <span class="data-unit">{{ $t('courseLearning.branch') }}</span>
+    <div class="testpaper-result-status">
+      <img v-if="result.passedStatus === 'passed'" src="static/images/testpaper/passed-bg.png" />
+      <img v-else src="static/images/testpaper/unpassed-bg.png" />
+      <div class="trs-content">
+        <template v-if="isReadOver">
+          <div class="result-score">
+            <span class="data-number">{{ result.score }}</span>
+            <span class="data-unit">{{ $t('courseLearning.branch') }}</span>
+          </div>
+          <div class="result-score-tips">
+            {{ result.passedStatus === 'passed' ? $t('courseLearning.passedTips') : $t('courseLearning.unpassedTips') }}
+          </div>
+        </template>
+        <div v-else class="text-center">
+          <img src="/static/images/testpaper/reviewing-icon.png" style="width: 44px;" />
+          <div style="margin-top: 4px;">{{ $t('courseLearning.reviewing') }}</div>
         </div>
-        <div class="result-score-tips">
-          {{ result.passedStatus === 'passed' ? '恭喜您已通过本次考试！' : '很遗憾，您未通过本次考试！' }}
-        </div>
-      </template>
-      <div v-else class="text-center">
-        <img src="/static/images/testpaper/reviewing-icon.png" style="width: 44px;" />
-        <div style="margin-top: 4px;">{{ $t('courseLearning.reviewing') }}</div>
       </div>
+      
     </div>
 
     <div v-if="result" ref="data" class="testpaper-result-data">
@@ -45,21 +50,21 @@
         <div>
           <span class="data-number">{{ usedTime.minutes }}</span>
           <span class="data-unit">{{ $t('courseLearning.branch') }}</span>
-          <span class="data-number ml-4">{{ usedTime.second }}</span>
+          <span class="ml-4 data-number">{{ usedTime.second }}</span>
           <span class="data-unit">{{ $t('courseLearning.second') }}</span>
         </div>
       </div>
     </div>
     
     <div v-if="result.teacherSay" class="teacher-say">
-      教师评语：{{ result.teacherSay }}
+      {{ $t('courseLearning.teacherSay') }}：{{ result.teacherSay }}
     </div>
 
     <div class="testpaper-result">
       <div class="testpaper-result__header">
-        <div>题型</div>
-        <div>答对题</div>
-        <div>总分</div>
+        <div>{{ $t('courseLearning.qustionType') }}</div>
+        <div>{{ $t('courseLearning.corretAnswer') }}</div>
+        <div>{{ $t('courseLearning.fullScoreOfTestPaper') }}</div>
       </div>
       <div class="testpaper-result__content">
         <div class="trc-item" v-for="keyItem in question_type_seq" :key="keyItem">
@@ -468,6 +473,7 @@ export default {
 }
 
 .testpaper-result-status {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -475,14 +481,25 @@ export default {
   height: 121px;
   margin: 16px 16px 0;
   color: #fff;
-  background-image: url(/static/images/testpaper/unpassed-bg.png);
-  background-size: 100% 100%;
+  border-radius: 8px 8px 0px 0px;
 
-  &.is-passed {
-    background-image: url(/static/images/testpaper/passed-bg.png);
+  > img {
+    width: 100%;
+    height: 100%;
   }
 
-  border-radius: 8px 8px 0px 0px;
+  .trs-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
 
   .result-score {
     display: flex;
