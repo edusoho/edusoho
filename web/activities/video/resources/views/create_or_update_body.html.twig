@@ -19,7 +19,7 @@
         </div>
         <div class="col-sm-10">
           {% if activity.ext.mediaSource|default(null) and activity.ext.mediaSource != 'self' %}
-            {% set selectedFile = {'status': 'none', 'source': activity.ext.mediaSource, 'uri': activity.ext.mediaUri } %}
+            {% set selectedFile = {'status': 'none', 'source': activity.ext.mediaSource, 'uri': activity.ext.mediaUri, name: (activity.content|json_decode).name|default() } %}
           {% endif %}
           {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video','courseId': activity.fromCourseId, fileType:'video', file: activity.ext.file|default(null), link: activity.ext.mediaSource|default(null), selectedFile: selectedFile|default(null) } %}
         </div>

@@ -69,9 +69,7 @@ class PageDiscoveryFilter extends Filter
 
         if ('slide_show' == $data['type']) {
             foreach ($data['data'] as &$slide) {
-                if (false === strpos($slide['image']['uri'], 'http://') && false === strpos($slide['image']['uri'], 'https://')) {
-                    $slide['image']['uri'] = AssetHelper::uriForPath($slide['image']['uri']);
-                }
+                $slide['image']['uri'] = $this->convertFilePath($slide['image']['uri']);
                 if(empty($slide['link'])) {
                     $slide['link'] = null;
                 }

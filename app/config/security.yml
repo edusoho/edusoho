@@ -96,6 +96,9 @@ security:
             path: ^/classroom/\d+/manage/
             role: ROLE_USER
         -
+            path: ^/open/course/\d+/manage/
+            role: ROLE_USER
+        -
             path: ^/admin/course
             role: ROLE_BACKEND
         -

@@ -3,6 +3,7 @@
 namespace Biz\Account\Service\Impl;
 
 use Biz\Account\Service\AccountProxyService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Pay\Service\Impl\AccountServiceImpl;
 
 class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxyService
@@ -46,7 +47,7 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
             unset($conditions['endTime']);
         }
 
-        if (!empty($conditions['keyword']) && !empty($conditions['keywordType'])) {
+        if (isset($conditions['keyword']) && !empty($conditions['keywordType'])) {
             $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
@@ -76,10 +77,20 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
             $conditions['action'] = 'refund';
             unset($conditions['platform']);
         }
+        if (isset($conditions['mobile']) && '' != $conditions['mobile']) {
+            $verifiedMobileUsers = $this->getUserService()->searchUsers(['verifiedMobile' =>  $conditions['mobile']], [], 0, PHP_INT_MAX, ['id']);
+            $mobileUsers = $this->getUserService()->searchUserProfiles(['mobile' =>  $conditions['mobile']], [], 0, PHP_INT_MAX, ['id']);
+            $mobileUsers = $mobileUsers ? $this->getUserService()->searchUsers(['noVerifiedMobile' => 1, 'userIds' => array_column($mobileUsers, 'id')], [], 0, count($mobileUsers), ['id']) : [];
+            $conditions['buyer_ids'] = array_values(array_unique(array_merge(array_column($verifiedMobileUsers, 'id'), array_column($mobileUsers, 'id')))) ?: [-1];
+            unset($conditions['mobile']);
+        }
 
         return $conditions;
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');

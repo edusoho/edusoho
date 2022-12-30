@@ -146,7 +146,7 @@ site.twig.extension.time_interval.second: '%diff% second'
 site.twig.extension.time_interval.minute: '%diff% minute'
 site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
 site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
-site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease, Bilibili, Iqiyi is now suported
+site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease, Bilibili is now suported
 site.user_password.error_tips: Bad credentials
 
 site.mobile_bind.ignore: skip

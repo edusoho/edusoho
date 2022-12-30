@@ -1,11 +1,13 @@
-{% if file is not empty %}
+{% if selectedFile|default() %}
+  {% set selectedFile = selectedFile %}
+{% elseif file is not empty %}
   {% set selectedFile = {'id': file.id, 'name': file.filename, 'status': file.convertStatus, 'source': 'self', 'length': file.length, 'size': file.fileSize} %}
 {% endif %}
 {% set courseType = courseType|default('course') %}
 
-<input type="hidden" name="media" id="media" value="{% if file|default(null) %}{{ selectedFile|default()|json_encode }}{% endif %}">
-<div class="file-chooser-bar {% if not file|default(null) %}hidden {% endif %}">
-  <span data-role="placeholder">{{ file.filename|default(null) }}</span>
+<input type="hidden" name="media" id="media" value="{% if selectedFile|default(null) %}{{ selectedFile|default()|json_encode }}{% endif %}">
+<div class="file-chooser-bar {% if not selectedFile|default(null) %}hidden{% endif %}">
+  <span data-role="placeholder">{{ selectedFile.name|default(null) }}</span>
   <button class="btn btn-link btn-sm js-choose-trigger" type="button">
     <i class="glyphicon glyphicon-edit"></i>
     {{ 'course.plan_task.activity_manage.download.edit'|trans }}
@@ -15,7 +17,7 @@
        style="display:none;">{{'course.plan_task.activity_manage.download.converting_tips'|trans|raw}}
   </div>
 </div>
-<div class="file-chooser-main {% if file|default(null) %}hidden {% endif %}">
+<div class="file-chooser-main {% if selectedFile|default(null) %}hidden{% endif %}">
   <div class="file-chooser-nav">
     <ul class="nav nav-pills nav-pills-sm  nav-pills-gray mb0" id="material">
       {%  if mediaType == 'pseudolive' %}

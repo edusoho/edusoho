@@ -485,6 +485,7 @@ class OpenCourseManageController extends BaseController
 
     public function studentsExportAction(Request $request, $id)
     {
+        $this->getOpenCourseService()->tryManageOpenCourse($id);
         $fileName = sprintf('open-course-%s-students-(%s).csv', $id, date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);

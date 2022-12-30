@@ -191,7 +191,8 @@ export default class TaskShow extends Emitter {
           'displayItem': {
             'key': 'taskId',
             'value': $('.js-hidden-current-task-id').html()
-          }
+          },
+          displayAllImmediately: true
         });
       });
   }

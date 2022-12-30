@@ -12,7 +12,8 @@
   data-accept="{{ uploader_accept(targetType, fileType|default(''))|json_encode }}"
   data-process="{{ uploader_process(targetType) }}"
   data-upload-type="{{ fileType|default('') }}"
-  data-num-limit="{{ enableLessonCount|default(null) }}">
+  data-num-limit="{{ enableLessonCount|default(null) }}"
+  {% if setting('storage.upload_mode', 'local') == 'local' %} data-multitask-num="1" {% endif %}>
   </div>
   {% if (mediaType|default(null) == 'video' or showVideoQuality|default(0)) and setting('storage.upload_mode', 'local') != 'local' %}
     <div class="uploader-bottom">

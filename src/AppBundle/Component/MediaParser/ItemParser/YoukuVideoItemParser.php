@@ -48,9 +48,22 @@ class YoukuVideoItemParser extends AbstractItemParser
         $item['files'] = [
             ['url' => "https://player.youku.com/embed/{$videoId}", 'type' => 'mp4'],
         ];
-        $item['content'] = $response['content'];
+        $item['content'] = mb_substr($response['content'], 0, 1000);
 
         return $item;
+    }
+
+    public function detect($url)
+    {
+        if (parent::detect($url)) {
+            return true;
+        }
+        $matched = preg_match("/^<iframe (.*?) src='(.*?)'/s", $url, $matches);
+        if ($matched) {
+            return parent::detect($matches[2]);
+        }
+
+        return false;
     }
 
     protected function getUrlPrefixes()

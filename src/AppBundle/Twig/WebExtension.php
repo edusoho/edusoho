@@ -120,6 +120,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('url_decode', [$this, 'urlDecode']),
             new \Twig_SimpleFilter('s2b2c_file_convert', [$this, 's2b2cFileConvert']),
             new \Twig_SimpleFilter('html_special_chars_decode', [$this, 'getHtmlSpecialCharsDecode']),
+            new \Twig_SimpleFilter('json_decode', [$this, 'jsonDecode']),
         ];
     }
 
@@ -520,6 +521,13 @@ class WebExtension extends \Twig_Extension
     public function getHtmlSpecialCharsDecode($str)
     {
         return htmlspecialchars_decode($str);
+    }
+
+    public function jsonDecode($str)
+    {
+        $json = json_decode($str, true);
+
+        return is_array($json) ? $json : json_decode($json, true);
     }
 
     public function getDays($days)
