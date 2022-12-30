@@ -417,13 +417,16 @@ class Testpaper {
     this.$element.find('#examMode').val(examModeValue);
     this.$element.find('.js-testpaper-mode').removeClass('active');
     $this.addClass('active');
-    $('.js-mode-helpblock').toggleClass('hidden')
-    $('label[for="length"]').toggleClass('control-label-required')
+    $('.js-mode-helpblock').removeClass('hidden')
 
     if (examModeValue == '0') {
       $('.js-enable_facein').removeClass('hidden')
+      $('label[for="length"]').addClass('control-label-required')
+      $('.js-mode-helpblock.js-mode-helpblock-1').addClass('hidden')
     } else if (examModeValue == '1') {
       $('.js-enable_facein').addClass('hidden')
+      $('label[for="length"]').removeClass('control-label-required')
+      $('.js-mode-helpblock.js-mode-helpblock-0').addClass('hidden')
     }
   }
 }
