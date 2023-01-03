@@ -28,6 +28,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
 
     public function create($answerScene = array())
     {
+        $answerScene['limited_time'] = $this->validateLimitedTime($answerScene['limited_time']);
         $answerScene = $this->validateAnswerScene($answerScene);
         $answerScene['created_user_id'] = $answerScene['updated_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
 
@@ -39,11 +40,21 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         if (empty($this->get($id))) {
             throw new AnswerSceneException('AnswerScene not found.', ErrorCode::ANSWER_SCENE_NOTFOUD);
         }
-
+        $answerScene['limited_time'] = $this->validateLimitedTime($answerScene['limited_time']);
         $answerScene = $this->validateAnswerScene($answerScene);
         $answerScene['updated_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
 
         return $this->getAnswerSceneDao()->update($id, $answerScene);
+    }
+
+    protected function validateLimitedTime($limitedTime = 0)
+    {
+        $limitedTime = ltrim($limitedTime, 0);
+        if(empty($limitedTime)) {
+            return 0;
+        }
+
+        return $limitedTime;
     }
 
     protected function validateAnswerScene($answerScene = array())
