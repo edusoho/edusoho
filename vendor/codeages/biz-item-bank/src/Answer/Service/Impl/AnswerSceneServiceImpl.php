@@ -51,7 +51,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
     {
         if(strlen($limitedTime) > 1 && preg_match_all('/^0*/', $limitedTime)) {
             $limitedTime = preg_replace('/^0*/', '', $limitedTime);
-            if($limitedTime == '') {
+            if(empty($limitedTime)) {
                 $limitedTime = 0;
             }
             return $limitedTime;
