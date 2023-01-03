@@ -49,7 +49,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
 
     protected function validateLimitedTime($limitedTime = 0)
     {
-        if(strlen($limitedTime) > 1 && preg_match_all('/^(0*).*$/', $limitedTime)) {
+        if(strlen($limitedTime) > 1 && preg_match_all('/^0*/', $limitedTime)) {
             return preg_replace('/^0*/', '', $limitedTime);
         }
 
