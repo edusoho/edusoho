@@ -52,6 +52,8 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         if(strlen($limitedTime) > 1 && preg_match_all('/^(0*).*$/', $limitedTime)) {
             return preg_replace('/^0*/', '', $limitedTime);
         }
+
+        return $limitedTime;
     }
 
     protected function validateAnswerScene($answerScene = array())
