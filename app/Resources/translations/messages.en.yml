@@ -9943,6 +9943,7 @@ coupon.status.receive: Received
 coupon.status.used: Used
 
 coupon.generate_num: Number of generation
+coupon.deduction_amount_rang: The deduction amount must be between 0.01 and 1,000,000
 coupon.generate_num_hint: The number of generation must be between 1 and 10,000.
 coupon.generate_num_unit: pcs
 coupon.prefix: Coupon prefix
