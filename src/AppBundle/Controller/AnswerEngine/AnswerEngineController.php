@@ -62,13 +62,6 @@ class AnswerEngineController extends BaseController
             throw new AnswerReportException('Answer report not found.', ErrorCode::ANSWER_REPORT_NOTFOUND);
         }
 
-        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
-
-        $courseSetMember = array_column($this->getCourseMemberService()->findCourseSetTeachersAndAssistant($activity['fromCourseSetId']), 'userId');
-        if(!$this->getReviewService()->canReviewBySelf($reviewReport['report_id'], $userId) && !in_array($userId, $courseSetMember)) {
-            throw UserException::PERMISSION_DENIED();
-        }
-
         $reviewReport = $this->getAnswerService()->review($reviewReport);
         return $this->createJsonResponse($reviewReport);
     }
