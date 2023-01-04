@@ -157,6 +157,7 @@ class TaskManageController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $task = $request->request->all();
+            $task['length'] = $this->prepareLimitedTime($task['length']);
             $task['redoInterval'] = empty($task['redoInterval']) ? 0 : $task['redoInterval'] * 60;
             if (!isset($task['fromCourseSetId'])) {
                 $task['fromCourseSetId'] = $course['courseSetId'];

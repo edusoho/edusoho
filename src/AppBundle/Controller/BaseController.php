@@ -67,6 +67,17 @@ class BaseController extends Controller
         return $user;
     }
 
+
+    protected function prepareLimitedTime($limitedTime = 0)
+    {
+        $limitedTime = ltrim($limitedTime, 0);
+        if(empty($limitedTime)) {
+            return 0;
+        }
+
+        return $limitedTime;
+    }
+
     protected function authenticateUser(array $user)
     {
         $user['currentIp'] = $this->container->get('request_stack')->getCurrentRequest()->getClientIp();
