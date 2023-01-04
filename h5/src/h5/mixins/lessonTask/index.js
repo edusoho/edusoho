@@ -5,11 +5,16 @@ export default {
     sixType(type, item, lastAnswer) {
       if (type !== 'essay' && type !== 'fill') {
         // 刷新页面或意外中断回来数据会丢失，因此要判断本地是否有缓存数据，如果有要把数据塞回
-        const answer = lastAnswer ? lastAnswer[item.id] : [];
+        let answer = lastAnswer ? lastAnswer[item.id] : [];
+        answer = (item.testResult && item.testResult.answer) ? item.testResult.answer.map(item => Number(item)) : answer;
+
         return { item, answer };
       }
+
       if (type === 'essay') {
-        const answer = lastAnswer ? lastAnswer[item.id] : [''];
+        let answer = lastAnswer ? lastAnswer[item.id] : [''];
+        answer = (item.testResult && item.testResult.answer) ? item.testResult.answer : answer;
+        
         return { item, answer };
       }
 
@@ -19,12 +24,14 @@ export default {
         item.stem = stem;
         item.fillnum = index;
 
-        const answer = lastAnswer
+        let answer = lastAnswer
           ? lastAnswer[item.id]
           : new Array(index).fill('');
+        answer = item.testResult ? item.testResult.answer : answer;
 
         return { item, answer };
       }
+      
       return '';
     },
     // 处理六大题型数据

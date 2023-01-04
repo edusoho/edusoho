@@ -166,6 +166,14 @@ export default {
       interval: null
     };
   },
+  watch: {
+    answer: {
+      handler() {
+        window.localStorage.setItem(this.localanswerName, JSON.stringify(this.answer))
+      },
+      deep: true
+    }
+  },
   mounted() {
     this.initReport();
     this.getData();
