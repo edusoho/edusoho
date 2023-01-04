@@ -2,7 +2,7 @@
   <div id="app" class="ibs-vue">
     <div id="cd-modal"></div>
     <item-engine
-      :activity="activity"
+      :metaActivity="metaActivity"
       :assessment="assessment"
       :answerRecord="answerRecord"
       :answerScene="answerScene"
@@ -111,7 +111,7 @@
           request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
         },
       }).done((res) => {
-        this.activity = res.activity;
+        this.metaActivity = res.metaActivity;
         this.assessment = res.assessment;
         this.answerRecord = res.answer_record;
         this.answerScene = res.answer_scene;
