@@ -24,9 +24,6 @@ class ContinueAnswer extends AbstractResource
         $answerRecord = $this->getAnswerService()->continueAnswer($request->request->get('answer_record_id'));
 
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
-        if (empty($activity)) {
-            throw ActivityException::NOTFOUND_ACTIVITY();
-        }
         $activityFilter = new ActivityFilter();
         $activityFilter->filter($activity);
 
