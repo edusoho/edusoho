@@ -11270,6 +11270,7 @@ coupon.status.receive: 已领取
 coupon.status.used: 已使用
 
 coupon.generate_num: 生成数量
+coupon.deduction_amount_range: 折价金额必须在0.01~1000000之间
 coupon.generate_num_hint: 生成数量必须在1～100之间
 coupon.generate_num_unit: 个
 coupon.prefix: 优惠券前缀
