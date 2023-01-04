@@ -115,6 +115,7 @@ export default {
         message: '保存中...',
         forbidClick: true,
       });
+      data.admission_ticket = this.answerRecord.admission_ticket;
       Api.saveAnswer({ data })
         .then(res => {
           Toast.clear();
