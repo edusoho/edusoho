@@ -139,13 +139,13 @@
 
       <div class="form-group">
         <div class="col-sm-2 control-label">
-          <label for="length" class="control-label-required">{{ 'course.plan_task.activity_manage.testpaper.time_limit'|trans }}</label></div>
+          <label for="length" {% if examMode == '0' %}class="control-label-required"{% endif %}>{{ 'course.plan_task.activity_manage.testpaper.time_limit'|trans }}</label></div>
         <div class="col-sm-10 controls radios">
           <input id="length" class="form-control inline-block width-150" type="text" name="length" value="{{ activity.length|default(0) }}"> {{ 'site.date.minute'|trans }}
-          <div class="help-block js-mode-helpblock js-mode-helpblock-0 {% if examMode == '1' %}hidden{%endif%}">
+          <div class="help-block js-mode-helpblock js-mode-helpblock-0 {% if examMode == '1' %}hidden{% endif %}">
             {{ 'course.plan_task.activity_manage.testpaper.mock_tips3'|trans }}
           </div>
-          <div class="help-block js-mode-helpblock js-mode-helpblock-1  {% if examMode == '0' %}hidden{%endif%}">
+          <div class="help-block js-mode-helpblock js-mode-helpblock-1  {% if examMode == '0' %}hidden{% endif %}">
             {{ 'course.plan_task.activity_manage.testpaper.practise_tips3'|trans }}
           </div>
         </div>
