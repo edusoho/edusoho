@@ -636,6 +636,7 @@ t.add("validate.valid_image_input.message", "\u53ea\u80fd\u4e0a\u4f20\u56fe\u724
 t.add("validate.limit_size.message", "\u5927\u5c0f\u4e0d\u80fd\u8d85\u8fc72M", "js", "zh_CN");
 t.add("validate.next_day.message", "\u5f00\u59cb\u65f6\u95f4\u5e94\u665a\u4e8e\u5f53\u524d\u65f6\u95f4", "js", "zh_CN");
 t.add("validate.chinese_alphanumeric.message", "\u53ea\u652f\u6301\u4e2d\u6587\u5b57\u3001\u82f1\u6587\u5b57\u6bcd\u3001\u6570\u5b57\u53ca_ . \u00b7", "js", "zh_CN");
+t.add("validate.truename_chinese_alphanumeric.message", "\u59d3\u540d\u4e0d\u652f\u6301\u7279\u6b8a\u7b26\u53f7", "js", "zh_CN");
 t.add("validate.alphanumeric.message", "\u5fc5\u987b\u662f\u82f1\u6587\u5b57\u6bcd\u3001\u6570\u5b57\u53ca\u4e0b\u5212\u7ebf\u7ec4\u6210", "js", "zh_CN");
 t.add("validate.only_alphanumeric.message", "\u8bf7\u8f93\u5165\u6570\u5b57\u6216\u82f1\u6587\u5b57\u6bcd", "js", "zh_CN");
 t.add("validate.raty_star.message", "\u8bf7\u6253\u5206", "js", "zh_CN");
