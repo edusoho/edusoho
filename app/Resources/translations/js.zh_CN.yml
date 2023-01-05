@@ -759,8 +759,8 @@ validate.chinese_limit.message: 长度必须小于等于 {0} 字符,一个中文
 validate.valid_image_input.message: 只能上传图片
 validate.limit_size.message: 大小不能超过2M
 validate.next_day.message: 开始时间应晚于当前时间
-#validate.chinese_alphanumeric.message: 只支持中文字、英文字母、数字及_ . ·
-validate.chinese_alphanumeric.message: 姓名不支持特殊符号
+validate.chinese_alphanumeric.message: 只支持中文字、英文字母、数字及_ . ·
+validate.nickname_chinese_alphanumeric.message: 姓名不支持特殊符号
 validate.alphanumeric.message: 必须是英文字母、数字及下划线组成
 validate.only_alphanumeric.message: 请输入数字或英文字母
 validate.raty_star.message: 请打分
