@@ -79,9 +79,6 @@ export default class UserInfoFieldsItemValidate extends ParentUserInfo {
         }
       }
     });
-    // $.validator.addMethod('truename_chinese_alphanumeric', function (value, element) {
-    //   return this.optional(element) || /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(value);
-    // }, $.validator.format(Translator.trans('validate.nickname_chinese_alphanumeric.message')));
     this.getCustomFields();
   }
 }
