@@ -817,7 +817,7 @@ validate.valid_image_input.message: Can only upload pictures
 validate.limit_size.message: Size can not exceed 2M
 validate.next_day.message: The start time should be later than the current time
 validate.chinese_alphanumeric.message: Only supports Chinese characters, English letters, numbers and _ . ·
-validate.nickname_chinese_alphanumeric.message: Names do not support special symbols
+validate.truename_chinese_alphanumeric.message: Names do not support special symbols
 validate.alphanumeric.message: Must be English letters, numbers and underscores
 validate.only_alphanumeric.message: Please enter numbers or English letters
 validate.raty_star.message: Please score
