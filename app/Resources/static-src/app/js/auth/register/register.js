@@ -149,7 +149,7 @@ export default class Register {
           byte_minlength: 4,
           byte_maxlength: 18,
           nickname: true,
-          // chinese_alphanumeric: true,
+          chinese_alphanumeric: true,
           es_remote: {
             type: 'get',
           }
@@ -207,7 +207,6 @@ export default class Register {
       messages: {
         nickname: {
           required: Translator.trans('auth.register.nickname_required_error_hit'),
-          nickname_chinese_alphanumeric: Translator.trans('validate.nickname_chinese_alphanumeric.message'),
         },
         verifiedMobile: {
           required: Translator.trans('validate.phone.message'),

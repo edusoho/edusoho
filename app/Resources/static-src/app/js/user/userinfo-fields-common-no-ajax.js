@@ -37,7 +37,8 @@ export default class UserInfoFieldsItemValidate extends ParentUserInfo {
         },
         truename: {
           required: true,
-          chinese_alphanumeric: true,
+          // chinese_alphanumeric: true,
+          truename_chinese_alphanumeric: true,
           minlength: 2,
           maxlength: 36,
         },
@@ -73,6 +74,9 @@ export default class UserInfoFieldsItemValidate extends ParentUserInfo {
         },
         mobile: {
           phone: Translator.trans('validate.phone.message'),
+        },
+        truename: {
+          truename_chinese_alphanumeric: Translator.trans('validate.nickname_chinese_alphanumeric.message'),
         }
       }
     });
