@@ -37,8 +37,7 @@ export default class UserInfoFieldsItemValidate extends ParentUserInfo {
         },
         truename: {
           required: true,
-          // chinese_alphanumeric: true,
-          truename_chinese_alphanumeric: true,
+          chinese_alphanumeric: true,
           minlength: 2,
           maxlength: 36,
         },
@@ -76,10 +75,13 @@ export default class UserInfoFieldsItemValidate extends ParentUserInfo {
           phone: Translator.trans('validate.phone.message'),
         },
         truename: {
-          truename_chinese_alphanumeric: Translator.trans('validate.nickname_chinese_alphanumeric.message'),
+          chinese_alphanumeric: Translator.trans('validate.nickname_chinese_alphanumeric.message'),
         }
       }
     });
+    // $.validator.addMethod('truename_chinese_alphanumeric', function (value, element) {
+    //   return this.optional(element) || /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(value);
+    // }, $.validator.format(Translator.trans('validate.nickname_chinese_alphanumeric.message')));
     this.getCustomFields();
   }
 }
