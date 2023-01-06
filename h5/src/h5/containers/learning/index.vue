@@ -1,6 +1,6 @@
 <template>
   <div class="e-learn e-learn-padding">
-    <van-tabs v-model="active" class="after-tabs">
+    <van-tabs :active="active" @click="updateActive" class="after-tabs">
       <van-tab v-for="item in tabs" :title="$t(item)" :key="item" />
     </van-tabs>
     <emptyCourse
@@ -90,7 +90,7 @@ export default {
       limit_course: 10,
       limit_class: 10,
       limit_bank: 10,
-      active: 0,
+      active: Number(this.$route.query.active) || 0,
       isCourseFirstRequestCompile: false,
       isClassFirstRequestCompile: false,
       isBankFirstRequestCompile: false,
@@ -150,6 +150,9 @@ export default {
     });
   },
   methods: {
+    updateActive(key, title) {
+      this.active = key;
+    },
     judgeIsAllCourse(courseInfomation) {
       return this.courseList.length == courseInfomation.paging.total;
     },

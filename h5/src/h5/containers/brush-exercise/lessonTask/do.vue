@@ -19,8 +19,9 @@
 <script>
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
-import { Toast } from 'vant';
+import { Dialog, Toast } from 'vant';
 import isAuthorized from '@/mixins/isAuthorized';
+
 const config = {
   assessment: {
     api: 'getAssessmentExerciseRecord',
@@ -127,6 +128,16 @@ export default {
         })
         .catch(err => {
           Toast.clear();
+
+          if (err.code == 50095211) {
+            Dialog.confirm({
+              title: '您已退出题库，无法继续学习',
+              showCancelButton: false,
+              confirmButtonText: '点击刷新'
+            }).then(() => this.exitPage())
+            return
+          }
+
           this.$toast(err.message);
         });
     },
@@ -143,6 +154,16 @@ export default {
         })
         .catch(err => {
           Toast.clear();
+
+          if (err.code == 50095211) {
+            Dialog.confirm({
+              title: '您已退出题库，无法继续学习',
+              showCancelButton: false,
+              confirmButtonText: '点击刷新'
+            }).then(() => this.exitPage())
+            return
+          }
+          
           this.$toast(err.message);
         });
     },
@@ -153,6 +174,15 @@ export default {
           console.log(res);
         })
         .catch(err => {
+          if (err.code == 50095211) {
+            Dialog.confirm({
+              title: '您已退出题库，无法继续学习',
+              showCancelButton: false,
+              confirmButtonText: '点击刷新'
+            }).then(() => this.exitPage())
+            return
+          }
+          
           this.$toast(err.message);
         });
     },
@@ -171,6 +201,10 @@ export default {
         query,
       });
     },
+    exitPage() {
+      this.canLeave = true
+      this.$router.replace(`/my/courses/learning?active=2`)
+    }
   },
 };
 </script>
