@@ -2,6 +2,7 @@
   <div id="app" class="ibs-vue">
     <div id="cd-modal"></div>
     <item-engine
+      :metaActivity="metaActivity"
       :assessment="assessment"
       :answerRecord="answerRecord"
       :answerScene="answerScene"
@@ -17,6 +18,7 @@
       :getCurrentTime="getCurrentTime"
       @getAnswerData="getAnswerData"
       @saveAnswerData="saveAnswerData"
+      @exitAnswer="returnToCourseDetail"
       @timeSaveAnswerData="timeSaveAnswerData"
       @reachTimeSubmitAnswerData="reachTimeSubmitAnswerData"
       @deleteAttachment="deleteAttachment"
@@ -36,7 +38,7 @@
   import dataURLToBlob from "dataurl-to-blob";
   import {checkBrowserCompatibility} from '../../face-inspection/util';
   import { Modal } from 'ant-design-vue';
-  
+
   const commonConfig = { keyboard: false, centered: true, footer: false, class: 'error-modal' }
 
   export default {
@@ -95,7 +97,7 @@
     created() {
       this.emitter = new ActivityEmitter();
       this.emitter.emit('doing', {data: ''});
-        
+
 
       $.ajax({
         url: '/api/continue_answer',
@@ -109,6 +111,7 @@
           request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
         },
       }).done((res) => {
+        this.metaActivity = res.metaActivity;
         this.assessment = res.assessment;
         this.answerRecord = res.answer_record;
         this.answerScene = res.answer_scene;
@@ -154,6 +157,9 @@
         })
       },
       reachTimeSubmitAnswerData(assessmentResponse) {
+        if (this.answerRecord.exam_mode == '1') {
+          return;
+        }
         const that = this;
         this.isReachTime = true;
         $.ajax({
@@ -186,13 +192,11 @@
         this.postAnswerData(assessmentResponse)
       },
       saveAnswerData(assessmentResponse){
-        this.postAnswerData(assessmentResponse).done(() => {
-          this.returnToCourseDetail()
-        })
+        this.postAnswerData(assessmentResponse)
       },
       postAnswerData(assessmentResponse) {
         if (this.isReachTime) return
-        
+
         if (!this.ajaxTimeOut) {
           this.ajaxTimeOut = setTimeout(() => {
             this.networkError(assessmentResponse);
