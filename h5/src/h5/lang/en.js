@@ -481,7 +481,7 @@ export default {
     minutes: 'Minutes',
     second: 'Second',
     testTips: 'Test Notes',
-    testName: 'Name',
+    testName: 'Class Name',
     noRestrictions: 'Without limiting',
     fullMark: 'Full score  {number}',
     numberOfTopics: 'Number of topics',

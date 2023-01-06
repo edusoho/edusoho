@@ -21,7 +21,7 @@
           </div>
         </template>
         <div v-else class="text-center">
-          <img src="/static/images/testpaper/reviewing-icon.png" style="width: 44px;" />
+          <img src="static/images/testpaper/reviewing-icon.png" style="width: 44px;" />
           <div style="margin-top: 4px;">{{ $t('courseLearning.reviewing') }}</div>
         </div>
       </div>

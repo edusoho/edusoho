@@ -27,7 +27,7 @@ export default {
         let answer = lastAnswer
           ? lastAnswer[item.id]
           : new Array(index).fill('');
-        answer = item.testResult ? item.testResult.answer : answer;
+        answer = (item.testResult && item.testResult.answer) ? item.testResult.answer : answer;
 
         return { item, answer };
       }

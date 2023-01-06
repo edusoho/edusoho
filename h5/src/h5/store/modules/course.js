@@ -139,12 +139,12 @@ const actions = {
     // eslint-disable-next-line prefer-const
     let { answer, resultId, beginTime, endTime, userId } = { ...datas };
     beginTime *= 1000;
-    let usedTime = Math.ceil((endTime - beginTime) / 1000);
+    let used_time = Math.ceil((endTime - beginTime) / 1000);
 
     // 如果是不限时间限制，使用时间在本地有记录，如果有时间限制，使用时间在本地无记录
     const localuseTime = `${userId}-${resultId}-usedTime`;
     if (localStorage.getItem(localuseTime)) {
-      usedTime = localStorage.getItem(localuseTime);
+      used_time = localStorage.getItem(localuseTime);
     }
 
     return new Promise((resolve, reject) => {
@@ -152,7 +152,7 @@ const actions = {
         data: {
           data: answer,
           resultId,
-          usedTime,
+          used_time,
         },
       })
         .then(res => {

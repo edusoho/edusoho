@@ -39,7 +39,7 @@
         </template>
       </van-panel>
 
-      <van-panel class="panel intro-panel" title="123">
+      <van-panel class="panel intro-panel">
         <template #header>
           <div class="van-cell van-panel__header">
             <span style="font-size:16px;font-weight:500;color:rgba(0,0,0,0.85)">{{ $t('courseLearning.numberOfTopics') }}</span>
@@ -80,7 +80,7 @@
       
       <van-button
         v-else
-        :disabled="disabled"
+        :disabled="startTime > Date.now()"
         class="intro-footer__btn"
         type="primary"
         @click="startTestpaper()"
@@ -153,8 +153,7 @@ export default {
     disabled() {
       if (this.info.doTimes == '0') return false;
 
-      const nowTime = new Date().getTime();
-      return this.startTime > nowTime;
+      return this.startTime > Date.now();
     },
     ...mapState({
       isLoading: state => state.isLoading,
@@ -171,7 +170,10 @@ export default {
     next();
   },
   beforeRouteLeave(to, from, next) {
-    this.interval && clearInterval(this.interval);
+    try {
+      this.interval && clearInterval(this.interval);
+    } catch(e) {}
+    
     document.getElementById('app').style.background = '';
     next();
   },
@@ -288,9 +290,10 @@ export default {
 <style lang="scss">
 .test-name {
   .van-cell__title {
-    max-width: 64px;
+    max-width: 70px;
     margin-right: 12px;
   }
+
   .van-cell__value {
     overflow: hidden;
     -webkit-line-clamp: 1;

@@ -440,7 +440,7 @@ export default {
 
           this.time = `${hours}:${minutes}:${seconds}`;
 
-          if (time === this.testpaper.limitedTime * 60 * 1000) {
+          if (this.testpaper.limitedTime > 0 && (time === this.testpaper.limitedTime * 60 * 1000)) {
             Dialog.confirm({
               cancelButtonText: this.$t('courseLearning.handInThePaper'),
               confirmButtonText: this.$t('courseLearning.continueAnswer'),

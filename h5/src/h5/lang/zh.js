@@ -482,7 +482,7 @@ export default {
     minutes: '分钟',
     second: '秒',
     testTips: '考试须知',
-    testName: '试卷名称',
+    testName: '课时名称',
     noRestrictions: '不限制',
     fullMark: '满分 {number} 分',
     numberOfTopics: '题目数量',

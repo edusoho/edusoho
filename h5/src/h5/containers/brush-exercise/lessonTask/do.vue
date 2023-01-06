@@ -147,6 +147,7 @@ export default {
         });
     },
     timeSaveAnswerData(data) {
+      data.admission_ticket = this.answerRecord.admission_ticket;
       Api.saveAnswer({ data })
         .then(res => {
           console.log(res);
