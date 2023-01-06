@@ -596,7 +596,7 @@ t.add("validate.valid_url_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\
 t.add("validate.valid_date_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u65e5\u671f", "js", "zh_CN");
 t.add("validate.valid_date_iso_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u65e5\u671f (YYYY-MM-DD)", "js", "zh_CN");
 t.add("validate.valid_number_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u6570\u5b57", "js", "zh_CN");
-t.add("validate.valid_digits_input.message", "\u53ea\u80fd\u8f93\u5165\u6574\u6570", "js", "zh_CN");
+t.add("validate.valid_digits_input.message", "\u53ea\u80fd\u8f93\u5165\u6b63\u6574\u6570", "js", "zh_CN");
 t.add("validate.valid_creditcard_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u4fe1\u7528\u5361\u53f7\u7801", "js", "zh_CN");
 t.add("validate.valid_equal_to_input.message", "\u4f60\u7684\u8f93\u5165\u4e0d\u76f8\u540c", "js", "zh_CN");
 t.add("validate.valid_extension_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u540e\u7f00", "js", "zh_CN");

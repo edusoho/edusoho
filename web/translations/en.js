@@ -652,7 +652,7 @@ t.add("validate.valid_url_input.message", "Please enter a valid URL.", "js", "en
 t.add("validate.valid_date_input.message", "Please enter a valid date.", "js", "en");
 t.add("validate.valid_date_iso_input.message", "Please enter a valid date  (ISO)", "js", "en");
 t.add("validate.valid_number_input.message", "Please enter a valid number", "js", "en");
-t.add("validate.valid_digits_input.message", "Please enter only digits", "js", "en");
+t.add("validate.valid_digits_input.message", "Please enter a positive integer", "js", "en");
 t.add("validate.valid_creditcard_input.message", "Please enter a valid credit card number.", "js", "en");
 t.add("validate.valid_equal_to_input.message", "Please enter the same value again", "js", "en");
 t.add("validate.valid_extension_input.message", "Please enter a valid suffix", "js", "en");

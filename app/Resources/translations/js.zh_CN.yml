@@ -720,7 +720,7 @@ validate.valid_url_input.message: 请输入有效的网址
 validate.valid_date_input.message: 请输入有效的日期
 validate.valid_date_iso_input.message: 请输入有效的日期 (YYYY-MM-DD)
 validate.valid_number_input.message: 请输入有效的数字
-validate.valid_digits_input.message: 只能输入整数
+validate.valid_digits_input.message: 只能输入正整数
 validate.valid_creditcard_input.message: 请输入有效的信用卡号码
 validate.valid_equal_to_input.message: 你的输入不相同
 validate.valid_extension_input.message: 请输入有效的后缀
