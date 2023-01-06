@@ -48,7 +48,7 @@ class ContinueAnswer extends AbstractResource
             'assessment_response' => $assessmentResponse,
             'answer_scene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'answer_record' => $answerRecord,
-            'metaActivity'=> $activity,
+            'metaActivity'=> empty($activity) ? (object)[] : $activity,
         ];
     }
 
