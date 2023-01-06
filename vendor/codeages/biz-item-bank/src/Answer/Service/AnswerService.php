@@ -71,7 +71,7 @@ interface AnswerService
      * @param array $reviewReport
      * @return AnswerReport
      */
-    public function review(array $reviewReport, $userId);
+    public function review(array $reviewReport);
 
     /**
      * 纠错
@@ -81,5 +81,5 @@ interface AnswerService
      */
     public function reviseFillAnswer($answerRecordId, $fillData);
 
-    public function buildAssessmentResponse($answerRecordId);
+    public function buildAutoSubmitAssessmentResponse($answerRecordId);
 }

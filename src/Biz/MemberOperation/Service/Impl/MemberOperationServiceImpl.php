@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\MemberOperation\Dao\MemberOperationRecordDao;
 use Biz\MemberOperation\Service\MemberOperationService;
+use Biz\Theme\Dao\Impl\ThemeConfigDaoImpl;
 
 class MemberOperationServiceImpl extends BaseService implements MemberOperationService
 {

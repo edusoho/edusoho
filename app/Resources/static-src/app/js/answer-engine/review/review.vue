@@ -3,6 +3,7 @@
     <item-review
       :role="role"
       :activity="activity"
+      :metaActivity="metaActivity"
       :assessment="assessment"
       :answerReport="answerReport"
       :answerRecord="answerRecord"
@@ -61,6 +62,7 @@
           }
         }).done(function (res) {
           that.activity = res.activity;
+          that.metaActivity = res.metaActivity;
           that.answerRecord = res.answer_record;
           if ('finished' == that.answerRecord.status) {
             location.href = $('[name=success_goto_url]').val();
