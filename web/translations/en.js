@@ -692,6 +692,7 @@ t.add("validate.valid_image_input.message", "Can only upload pictures", "js", "e
 t.add("validate.limit_size.message", "Size can not exceed 2M", "js", "en");
 t.add("validate.next_day.message", "The start time should be later than the current time", "js", "en");
 t.add("validate.chinese_alphanumeric.message", "Only supports Chinese characters, English letters, numbers and _ . \u00b7", "js", "en");
+t.add("validate.truename_chinese_alphanumeric.message", "Names do not support special symbols", "js", "en");
 t.add("validate.alphanumeric.message", "Must be English letters, numbers and underscores", "js", "en");
 t.add("validate.only_alphanumeric.message", "Please enter numbers or English letters", "js", "en");
 t.add("validate.raty_star.message", "Please score", "js", "en");
