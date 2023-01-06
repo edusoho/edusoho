@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller\Callback;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EndpointController extends BaseController
 {
@@ -17,43 +19,43 @@ class EndpointController extends BaseController
         if ($type == 'cloud_search') {
             $callbacks = $this->get('extension.manager')->getCallbacks();
             $biz = $this->getBiz();
-            $processerInstance = $biz[$callbacks[$type]];
+            $processorInstance = $biz[$callbacks[$type]];
 
-            return $processerInstance->execute($request);
-        } else {
-            $ac = $request->query->get('ac');
-            if (strpos($ac, '.') === false) {
-                throw new \InvalidArgumentException('找不到合法的请求');
-            }
-            list($processer, $action) = explode('.', $ac);
-            $instance = $this->getProcessInstance($type, $processer);
-
-            $data = $instance->$action($request);
-
-            return  new JsonResponse($data);
-        }
-    }
-
-    private function getProcessInstanceClass($module, $processer)
-    {
-        $module = ucfirst($module);
-        $className = ucfirst($processer);
-
-        $class = __NAMESPACE__."\\{$module}\\{$className}";
-        if (!class_exists($class)) {
-            throw new \Exception("{$module}-{$className} is not exist!");
+            return $processorInstance->execute($request);
         }
 
-        return $class;
+        $ac = $request->query->get('ac');
+        if (strpos($ac, '.') === false) {
+            throw new BadRequestHttpException('Invalid ac');
+        }
+        list($processor, $action) = explode('.', $ac);
+
+        $instance = $this->getProcessInstance($type, $processor);
+
+        if (!method_exists($instance, $action)) {
+            throw new NotFoundHttpException(sprintf('Action %s not found', $action));
+        }
+        $data = $instance->$action($request);
+
+        return new JsonResponse($data);
     }
 
-    public function getProcessInstance($module, $processer)
+    public function getProcessInstance($module, $processor)
     {
-        $key = $module.'_'.$processer;
+        $key = ucfirst($module) . '_' . ucfirst($processor);
+        $processors = [
+            'Marketing_Login' => \AppBundle\Controller\Callback\Marketing\Login::class,
+            'Marketing_Orders' => \AppBundle\Controller\Callback\Marketing\Orders::class,
+            'Marketing_Courses' => \AppBundle\Controller\Callback\Marketing\Courses::class,
+            'ESLive_Callback' => \AppBundle\Controller\Callback\ESLive\Callback::class,
+            'CloudFile_Files' => \AppBundle\Controller\Callback\CloudFile\Files::class,
+        ];
+
+        if (!isset($processors[$key])) {
+            throw new NotFoundHttpException(sprintf('Processor %s not found', $key));
+        }
         if (empty($this->pool[$key])) {
-            $class = $this->getProcessInstanceClass($module, $processer);
-            $instance = new $class($this);
-
+            $instance = new $processors[$key]();
             if ($instance instanceof ContainerAwareInterface) {
                 $instance->setContainer($this->container);
             }

@@ -6,6 +6,9 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\User\TokenException;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @deprecated
+ */
 class Files extends AthenaLiveBase
 {
     public function fetch(Request $request)

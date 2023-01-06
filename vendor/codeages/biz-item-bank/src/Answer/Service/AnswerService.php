@@ -71,7 +71,7 @@ interface AnswerService
      * @param array $reviewReport
      * @return AnswerReport
      */
-    public function review(array $reviewReport);
+    public function review(array $reviewReport, $userId);
 
     /**
      * 纠错

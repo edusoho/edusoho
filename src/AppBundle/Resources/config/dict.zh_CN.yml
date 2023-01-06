@@ -71,6 +71,7 @@ orderItemType:
 refundItemType:
     course: 教学计划
     classroom: 班级
+    item_bank_exercise: 题库
 
 orderDisplayStatus:
     notPaid: 未付款

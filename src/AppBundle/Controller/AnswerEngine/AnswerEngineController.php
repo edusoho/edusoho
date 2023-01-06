@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\AnswerEngine;
 
 use AppBundle\Controller\BaseController;
+use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
@@ -44,9 +45,13 @@ class AnswerEngineController extends BaseController
 
     public function reviewSaveAction(Request $request)
     {
-        $reviewReport = json_decode($request->getContent(), true);
-        $reviewReport = $this->getAnswerService()->review($reviewReport);
+        $userId = $this->getCurrentUser()->getId();
+        if(!$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isSuperAdmin() && !$this->getCurrentUser()->isAdmin()) {
+            $this->createNewException(UserException::PERMISSION_DENIED());
+        }
 
+        $reviewReport = json_decode($request->getContent(), true);
+        $reviewReport = $this->getAnswerService()->review($reviewReport, $userId);
         return $this->createJsonResponse($reviewReport);
     }
 

@@ -3,6 +3,7 @@
 namespace AppBundle\Listener;
 
 use Biz\System\Service\SettingService;
+use Biz\User\AnonymousUser;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class UserLoginTokenListener
@@ -29,6 +31,14 @@ class UserLoginTokenListener
         }
 
         $request = $event->getRequest();
+        $token = $this->container->get('security.token_storage')->getToken();
+        if ($token instanceof AnonymousToken) {
+            $biz = $this->getBiz();
+            $biz['user'] = new AnonymousUser([
+                'currentIp' => $request->getClientIp(),
+                'isSecure' => $request->isSecure(),
+            ]);
+        }
         $session = $request->getSession();
         if (empty($session)) {
             return;

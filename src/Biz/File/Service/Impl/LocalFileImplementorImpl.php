@@ -140,13 +140,6 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
     public function moveFile($targetType, $targetId, UploadedFile $originalFile = null, $data = [])
     {
-        $errors = FileToolkit::validateFileExtension($originalFile);
-
-        if ($errors) {
-            @unlink($originalFile->getRealPath());
-            $this->createNewException(UploadFileException::EXTENSION_NOT_ALLOWED());
-        }
-
         $targetPath = $this->getFilePath($targetType, $targetId);
 
         $filename = str_replace("{$targetType}/{$targetId}/", '', $data['hashId']);

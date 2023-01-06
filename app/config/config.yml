@@ -47,7 +47,8 @@ framework:
     session:
         handler_id: '%session.service_id%'
         cookie_domain: '%cookie_domain%'
-    fragments: null
+    fragments:
+        enabled: false
     http_method_override: true
     assets:
         version: '%app_version%'
