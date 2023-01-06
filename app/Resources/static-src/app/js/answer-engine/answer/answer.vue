@@ -2,6 +2,7 @@
   <div id="app" class="ibs-vue">
     <div id="cd-modal"></div>
     <item-engine
+      :metaActivity="metaActivity"
       :assessment="assessment"
       :answerRecord="answerRecord"
       :answerScene="answerScene"
@@ -17,6 +18,7 @@
       :getCurrentTime="getCurrentTime"
       @getAnswerData="getAnswerData"
       @saveAnswerData="saveAnswerData"
+      @exitAnswer="returnToCourseDetail"
       @timeSaveAnswerData="timeSaveAnswerData"
       @reachTimeSubmitAnswerData="reachTimeSubmitAnswerData"
       @deleteAttachment="deleteAttachment"
@@ -109,6 +111,7 @@
           request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
         },
       }).done((res) => {
+        this.metaActivity = res.metaActivity;
         this.assessment = res.assessment;
         this.answerRecord = res.answer_record;
         this.answerScene = res.answer_scene;
@@ -189,9 +192,7 @@
         this.postAnswerData(assessmentResponse)
       },
       saveAnswerData(assessmentResponse){
-        this.postAnswerData(assessmentResponse).done(() => {
-          this.returnToCourseDetail()
-        })
+        this.postAnswerData(assessmentResponse)
       },
       postAnswerData(assessmentResponse) {
         if (this.isReachTime) return

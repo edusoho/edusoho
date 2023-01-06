@@ -46,10 +46,13 @@ class ActivityFilter extends Filter
                 $data['testpaperInfo']['doTimes'] = $data['ext']['doTimes'];
                 $data['testpaperInfo']['startTime'] = !empty($data['startTime']) ? $data['startTime'] : null;
                 $data['testpaperInfo']['examMode'] = !empty($data['ext']['answerScene']['exam_mode']) ? $data['ext']['answerScene']['exam_mode'] : "0";
+                /**
+                 * @see \ApiBundle\Api\Resource\Course\CourseItemWithLesson::search()
+                 */
+                $data['testpaperInfo']['answerRecordId'] = !empty($data['ext']['answerRecordId']) ? $data['ext']['answerRecordId'] : "0";
             }
         }
 
         unset($data['ext']);
-        unset($data['mediaType']);
     }
 }
