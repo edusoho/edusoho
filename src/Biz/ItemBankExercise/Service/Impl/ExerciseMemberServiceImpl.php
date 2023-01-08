@@ -19,7 +19,6 @@ use Biz\QuestionBank\Service\MemberService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberService
 {
@@ -92,14 +91,6 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
 
         return empty($member) ? false : true;
-    }
-
-    public function isExerciseMemberByAssessmentId($assessmentId, $userId)
-    {
-        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
-        $exercise = $this->getExerciseService()->getByQuestionBankId($assessment['bank_id']);
-
-        return $this->isExerciseMember($exercise['id'], $userId);
     }
 
     public function getByExerciseIdAndUserId($exerciseId, $userId)
@@ -465,13 +456,5 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     protected function getItemBankExerciseQuestionRecordService()
     {
         return $this->createService('ItemBankExercise:ExerciseQuestionRecordService');
-    }
-
-    /**
-     * @return AssessmentService
-     */
-    protected function getAssessmentService()
-    {
-        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }

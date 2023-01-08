@@ -6,8 +6,10 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\ErrorCode;
 
 class SaveAnswer extends AbstractResource
@@ -16,12 +18,11 @@ class SaveAnswer extends AbstractResource
     {
         $assessmentResponse = $request->request->all();
         $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
-        if (empty($answerRecord) || $this->getCurrentUser()['id'] != $answerRecord['user_id']) {
+        $userId = $this->getCurrentUser()->getId();
+        if (empty($answerRecord) || $userId != $answerRecord['user_id']) {
             throw CommonException::ERROR_PARAMETER();
         }
-        if (!$this->getExerciseMemberService()->isExerciseMemberByAssessmentId($assessmentResponse['assessment_id'], $this->getCurrentUser()->getId())){
-            throw new AnswerException("您已退出题库，无法继续学习", ErrorCode::NOT_ITEM_BANK_MEMBER);
-        }
+        $this->checkAssessmentMember($assessmentResponse['assessment_id'],$userId);
 
         if(empty($assessmentResponse['admission_ticket'])) {
             throw new AnswerException("答题保存功能已升级，请更新客户端版本",ErrorCode::ANSWER_OLD_VERSION);
@@ -33,6 +34,25 @@ class SaveAnswer extends AbstractResource
 
 
         return $this->getAnswerService()->saveAnswer($assessmentResponse);
+    }
+
+    /**
+     * @param $assessmentId
+     * @param $userId
+     * @return void
+     * @throws AnswerException
+     */
+    public function checkAssessmentMember($assessmentId,$userId)
+    {
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+
+        //如果是题库练习，检查是否是题库练习成员
+        $exercise = $this->getExerciseService()->getByQuestionBankId($assessment['bank_id']);
+        if ($exercise) {
+            if (!$this->getExerciseMemberService()->isExerciseMember($exercise['id'], $userId)) {
+                throw new AnswerException("您已退出题库，无法继续学习", ErrorCode::NOT_ITEM_BANK_MEMBER);
+            }
+        }
     }
 
     /**
@@ -49,10 +69,26 @@ class SaveAnswer extends AbstractResource
     }
 
     /**
+     * @return ExerciseService
+     */
+    protected function getExerciseService()
+    {
+        return $this->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
      * @return ExerciseMemberService
      */
     protected function getExerciseMemberService()
     {
         return $this->service('ItemBankExercise:ExerciseMemberService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->service('ItemBank:Assessment:AssessmentService');
     }
 }
