@@ -54,6 +54,9 @@ class EduSohoUpgrade extends AbstractUpdater
             'bizAnswerRecordAddField',
             'limitedTimeAmountZero',
             'limitedTimeGreaterThanZero',
+            'downloadPlugin',
+            'updatePlugin',
+            'executePluginScript'
         );
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -161,6 +164,143 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('info', '执行成功');
 
         return 1;
+    }
+
+    private function getUpdatePluginInfo($page)
+    {
+        $pluginList = array(
+            [
+                'Invoice',
+                199
+            ],
+        );
+
+        if (empty($pluginList[$page - 1])) {
+            return;
+        }
+
+        return $pluginList[$page - 1];
+    }
+
+
+    protected function downloadPlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[1];
+
+        $this->logger('warning', '检测是否安装'.$pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装'.$pluginCode);
+
+            return $page + 1;
+        }
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if (isset($package['error'])) {
+                $this->logger('warning', $package['error']);
+                return $page + 1;
+            }
+            $error1 = $this->getAppService()->checkDownloadPackageForUpdate($pluginPackageId);
+            $error2 = $this->getAppService()->downloadPackageForUpdate($pluginPackageId);
+            $errors = array_merge($error1, $error2);
+            if (!empty($errors)) {
+                foreach ($errors as $error) {
+                    $this->logger('warning', $error);
+                }
+            };
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger('info', '检测完毕');
+        return $page + 1;
+    }
+
+    protected function updatePlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[1];
+
+        $this->logger('warning', '升级' . $pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装' . $pluginCode);
+
+            return $page + 1;
+        }
+
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if (isset($package['error'])) {
+                $this->logger('warning', $package['error']);
+                return $page + 1;
+            }
+            $errors = $this->getAppService()->beginPackageUpdate($pluginPackageId, 'install');
+            if (!empty($errors)) {
+                foreach ($errors as $error) {
+                    $this->logger('warning', $error);
+                }
+            }
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger('info', '升级完毕');
+        return $page + 1;
+    }
+
+    protected function executePluginScript()
+    {
+        $installedPlugins = array();
+        if (!empty($this->getAppService()->getAppByCode('Vip'))) {
+            $installedPlugins[] = 'Invoice';
+        }
+        if (!empty($this->getAppService()->getAppByCode('Crm'))) {
+            $installedPlugins[] = 'Coupon';
+        }
+
+        if (!empty($installedPlugins)) {
+            $this->installPluginAssets($installedPlugins);
+            $this->deleteCache();
+        }
+
+        return 1;
+    }
+
+    protected function installPluginAssets($plugins)
+    {
+        $rootDir = realpath($this->biz['kernel.root_dir'].'/../');
+        foreach ($plugins as $plugin) {
+            $pluginApp = $this->getAppService()->getAppByCode($plugin);
+            if (empty($pluginApp)) {
+                continue;
+            }
+            $originDir = "{$rootDir}/plugins/{$plugin}Plugin/Resources/public";
+            $targetDir = "{$rootDir}/web/bundles/".strtolower($plugin).'plugin';
+            $filesystem = new Filesystem();
+            if ($filesystem->exists($targetDir)) {
+                $filesystem->remove($targetDir);
+            }
+            if ($filesystem->exists($originDir)) {
+                $filesystem->mirror($originDir, $targetDir, null, ['override' => true, 'delete' => true]);
+            }
+            $originDir = "{$rootDir}/plugins/{$plugin}Plugin/Resources/static-dist/".strtolower($plugin).'plugin/';
+            if (!is_dir($originDir)) {
+                return false;
+            }
+            $targetDir = "{$rootDir}/web/static-dist/".strtolower($plugin).'plugin/';
+            $filesystem = new Filesystem();
+            $filesystem->mirror($originDir, $targetDir, null, ['override' => true, 'delete' => true]);
+        }
     }
 
     protected function deleteCache()
