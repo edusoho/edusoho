@@ -21,6 +21,8 @@ class AnswerSceneDaoImpl extends AdvancedDaoImpl implements AnswerSceneDao
             'serializes' => [],
             'conditions' => [
                 'id IN (:ids)',
+                'limited_time = (:limited_time)',
+                'limited_time > (:limited_times)',
             ],
         ];
     }

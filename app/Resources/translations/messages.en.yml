@@ -1883,6 +1883,7 @@ course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Hour, No limitation.'
 course.plan_task.activity_manage.testpaper.time_length_tips: 0 Minute, No limitation.
 course.plan_task.activity_manage.testpaper.times: 'Number of test'
+course.plan_task.activity_manage.testpaper.mode: 'Mode of test'
 course.plan_task.activity_manage.testpaper.start_time: 'Test start time'
 course.plan_task.activity_manage.testpaper.times.once: Single
 course.plan_task.activity_manage.testpaper.times.always: 'No limitation'
@@ -1900,14 +1901,35 @@ course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credit
 course.plan_task.activity_manage.testpaper.pass: 'Pass mark'
 course.plan_task.activity_manage.testpaper.score_pass: 'Pass Score'
 course.plan_task.activity_manage.homework.score_pass: 'Pass Score'
+course.plan_task.activity_manage.testpaper.not_start_tips: 'The exam does not start'
+course.plan_task.activity_manage.testpaper.start_time_tips: 'Test start time'
 course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not start, please come back at %startTime%.'
 course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points</span>.'
 course.plan_task.activity_manage.testpaper.pass_score: "pass score is <span class=\"color-primary\">%finishScore% points</span>.\n"
 course.plan_task.activity_manage.testpaper.answer: 'Please answer within <span class = "color-primary">%limitedTime% minutes</span>.'
-course.plan_task.activity_manage.testpaper.limit_tips: '<span class="color-warning">Reminder: Once the test starts, the test will be handed in automatically after the countdown is over.</span>'
+course.plan_task.activity_manage.testpaper.limit_tips: 
+  '<span class="color-gray">Reminder: Once the test starts, the test will be handed in automatically after the countdown is over.</span>'
+course.plan_task.activity_manage.testpaper.limit_tips1: 
+  '<span class="color-gray">Reminder: This test will not be handed in automatically, and the time spent on the exam will be displayed in real time, and the time will not be counted if you leave halfway.</span>'
+course.plan_task.activity_manage.testpaper.one_limit_tips: 
+  '<span class="color-gray">Reminder: There is only one chance to test. Once the test starts, the test will be handed in automatically after the countdown is over.</span>'
+course.plan_task.activity_manage.testpaper.one_limit_tips1: 
+  '<span class="color-gray">Reminder: There is only one chance to take the test, and the test will not be handed in automatically, and the test time will be displayed in real time, and the time will not be counted if you leave halfway.</span>'
+course.plan_task.activity_manage.testpaper.questionNum: 'Number of questions'
+course.plan_task.activity_manage.testpaper.questionCount: 'questions'
+course.plan_task.activity_manage.testpaper.questionScore: 'score'
 course.plan_task.activity_manage.testpaper.once_trance: 'Only <span class = "color-danger"> once </ span> test opportunities.'
 course.plan_task.activity_manage.testpaper.start_exam: 'Start'
 course.plan_task.activity_manage.testpaper.close_tips: 'The test is closed, please contact the teacher!'
+course.plan_task.activity_manage.testpaper.mock_type: 'mock exam'
+course.plan_task.activity_manage.testpaper.mock_tips1: 'Automatic submission of papers at the end of the countdown'
+course.plan_task.activity_manage.testpaper.mock_tips2: 'If you leave during the exam, the countdown will not stop'
+course.plan_task.activity_manage.testpaper.mock_tips3: 'The mock exam duration must be greater than 0'
+course.plan_task.activity_manage.testpaper.practise_type: 'practice exam'
+course.plan_task.activity_manage.testpaper.practise_tips1: 'Unlimited test time, no automatic hand-in'
+course.plan_task.activity_manage.testpaper.practise_tips2: 'Leaving during the test does not count the test time'
+course.plan_task.activity_manage.testpaper.practise_tips3: 'The length of the test does not affect the student's answering time'
+
 course.plan_task.activity_manage.video: Video
 course.plan_task.activity_manage.video.time: 'Duration'
 course.plan_task.activity_manage.video.subtitle: 'Subtitles'

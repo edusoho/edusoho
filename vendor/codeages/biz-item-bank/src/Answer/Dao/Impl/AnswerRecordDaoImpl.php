@@ -3,9 +3,9 @@
 namespace Codeages\Biz\ItemBank\Answer\Dao\Impl;
 
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerRecordDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class AnswerRecordDaoImpl extends GeneralDaoImpl implements AnswerRecordDao
+class AnswerRecordDaoImpl extends AdvancedDaoImpl implements AnswerRecordDao
 {
     protected $table = 'biz_answer_record';
 

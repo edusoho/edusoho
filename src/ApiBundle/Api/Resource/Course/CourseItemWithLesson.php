@@ -50,7 +50,7 @@ class CourseItemWithLesson extends AbstractResource
         if ($needReplayStatus) {
             $liveReplays = $this->getLiveReplays($courseItems);
         }
-
+        //TODO 循环中调用查询，性能问题
         foreach ($items as &$item) {
             if (!empty($item['tasks'])) {
                 foreach ($item['tasks'] as &$task) {
@@ -79,6 +79,8 @@ class CourseItemWithLesson extends AbstractResource
                             $task['activity']['ext']['doTimes'] = $scene['do_times'];
                             $task['activity']['ext']['redoInterval'] = $scene['redo_interval'];
                             $task['activity']['ext']['limitedTime'] = $scene['limited_time'];
+                            $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $userId);
+                            $task['activity']['ext']['answerRecordId'] = empty($answerRecord) ? 0 : $answerRecord['id'];
                         }
                     }
                 }

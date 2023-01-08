@@ -14,6 +14,7 @@ use Biz\Review\ReviewException;
 use Biz\Review\Service\ReviewService;
 use Biz\Sensitive\Service\SensitiveService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 
 class ReviewServiceImpl extends BaseService implements ReviewService
 {
@@ -176,6 +177,31 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         ];
     }
 
+    public function canReviewBySelf($reportId, $userId)
+    {
+        //判断当前批阅是不是题库练习或考试练习
+        $answerReport = $this->getAnswerReportService()->get($reportId);
+        if (empty($answerReport)){
+            return false;
+        }
+        // 查询场次是否在activity_homework
+        $activityHomework = $this->getHomeworkActivityService()->getByAnswerSceneId($answerReport['answer_scene_id']);
+        if (!empty($activityHomework)){
+            return false;
+        }
+        // 查询场次是否在activity_testpaper
+        $activityTestpaper = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
+        if (!empty($activityTestpaper)){
+            return false;
+        }
+        // 只能批阅自己
+        if ($answerReport['user_id'] != $userId){
+            return false;
+        }
+
+        return true;
+    }
+
     protected function tryOperateReview($review)
     {
         if ($review['userId'] != $this->getCurrentUser()->getId() && !$this->getCurrentUser()->isAdmin()) {
@@ -259,5 +285,30 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     protected function getItemBankExerciseService()
     {
         return $this->createService('ItemBankExercise:ExerciseService');
+    }
+
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->createService('Activity:HomeworkActivityService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerReportService');
     }
 }

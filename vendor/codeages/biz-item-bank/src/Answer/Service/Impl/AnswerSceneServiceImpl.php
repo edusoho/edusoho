@@ -62,6 +62,8 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             'question_report_job_name' => [['lengthMax', 128]],
             'last_review_time' => ['integer'],
             'question_report_update_time' => ['integer'],
+            'exam_mode' => ['integer'],
+            'id' => ['integer'],
         ]);
 
         if (isset($answerScene['do_times']) && 1 == $answerScene['do_times']) {
