@@ -14,4 +14,6 @@ interface InvoiceService
     public function applyInvoice($apply);
 
     public function finishInvoice($id, $fields);
+
+    public function getRefundActualAmount($trades);
 }
