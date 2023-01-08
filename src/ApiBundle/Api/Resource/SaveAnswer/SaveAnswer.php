@@ -22,7 +22,6 @@ class SaveAnswer extends AbstractResource
         if (empty($answerRecord) || $userId != $answerRecord['user_id']) {
             throw CommonException::ERROR_PARAMETER();
         }
-        $this->checkAssessmentMember($assessmentResponse['assessment_id'],$userId);
 
         if(empty($assessmentResponse['admission_ticket'])) {
             throw new AnswerException("答题保存功能已升级，请更新客户端版本",ErrorCode::ANSWER_OLD_VERSION);
