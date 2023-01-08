@@ -14,8 +14,6 @@ interface ExerciseMemberService
 
     public function isExerciseMember($exerciseId, $userId);
 
-    public function isExerciseMemberByAssessmentId($assessmentId, $userId);
-
     public function becomeStudent($exerciseId, $userId, $info);
 
     public function addTeacher($exerciseId);
