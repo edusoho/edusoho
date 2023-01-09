@@ -163,7 +163,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $answerScenes = $this->getAnswerSceneService()->search(['limited_times' => 0, 'ids'=>array_column($activityTestpapers, 'answerSceneId')], [], 0, PHP_INT_MAX, ['id', 'exam_mode', 'enable_facein', 'name', 'limited_time']);
         foreach ($answerScenes as $answerScene) {
-            $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['exam_mode'=> 0, 'name' => $answerScene['name']]);
+            if($answerScene['exam_mode'] == 0) {
+                $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['exam_mode'=> 0, 'name' => $answerScene['name']]);
+            }
             $answerRecords = $this->getAnswerRecordService()->search(['answer_scene_id' => $answerScene['id']], [], 0, PHP_INT_MAX, ['id', 'exam_mode', 'limited_time']);
             foreach ($answerRecords as $answerRecord) {
                 $answerRecordData[$answerRecord['id']] = [
