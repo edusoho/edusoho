@@ -274,11 +274,8 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function executePluginScript()
     {
         $installedPlugins = array();
-        if (!empty($this->getAppService()->getAppByCode('Vip'))) {
+        if (!empty($this->getAppService()->getAppByCode('Invoice'))) {
             $installedPlugins[] = 'Invoice';
-        }
-        if (!empty($this->getAppService()->getAppByCode('Crm'))) {
-            $installedPlugins[] = 'Coupon';
         }
 
         if (!empty($installedPlugins)) {
@@ -395,7 +392,7 @@ class EduSohoUpgrade extends AbstractUpdater
     }
 
     /**
-     * @return AnswerRecordService
+     * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService
      */
     protected function getAnswerRecordService()
     {
