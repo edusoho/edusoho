@@ -184,7 +184,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $pluginList = array(
             [
                 'Invoice',
-                199
+                2499
             ],
         );
 
