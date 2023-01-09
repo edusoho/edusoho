@@ -43337,15 +43337,18 @@ var itemvue_type_template_id_69544134_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/components/item-engine/src/item.vue?vue&type=template&id=69544134&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/result.vue?vue&type=template&id=496b6ab8&
-var resultvue_type_template_id_496b6ab8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-result"},[_c('div',{staticClass:"ibs-mb16 ibs-clearfix"},[_c('div',{class:("ibs-left ibs-result-header " + _vm.extralClass)},[_c('div',{staticClass:"ibs-result-header__title ibs-text-overflow"},[_vm._v(" "+_vm._s(_vm.assessment.name)+" "),(_vm.needMarking)?_c('div',[(_vm.mode === 'review' || _vm.answerRecord.status == 'reviewing')?_c('span',{staticClass:"ibs-result-header__tag"},[_vm._v(_vm._s(_vm.t("itemEngine.answerStatus.reviewing")))]):_c('span',{staticClass:"ibs-result-header__tag ibs-result-header__tag--success"},[_vm._v(_vm._s(_vm.t("itemEngine.answerStatus.finished")))])]):_vm._e()]),_c('div',{staticClass:"ibs-result-header__info"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.answerUser"))+_vm._s(_vm.username)+" "),(_vm.metaActivity.mediaType === 'testpaper')?_c('span',{staticClass:"ibs-ml24"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.testpaperMode"))+" "+_vm._s(_vm.answerRecord.exam_mode === "1" ? _vm.t("testpaper.mode1") : _vm.t("testpaper.mode0"))+" ")]):_vm._e(),(
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/result.vue?vue&type=template&id=0d1e3b7a&
+var resultvue_type_template_id_0d1e3b7a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-result"},[_c('div',{staticClass:"ibs-mb16 ibs-clearfix"},[_c('div',{class:("ibs-left ibs-result-header " + _vm.extralClass)},[_c('div',{staticClass:"ibs-result-header__title ibs-text-overflow"},[_vm._v(" "+_vm._s(_vm.assessment.name)+" "),(_vm.needMarking)?_c('div',[(_vm.mode === 'review' || _vm.answerRecord.status == 'reviewing')?_c('span',{staticClass:"ibs-result-header__tag"},[_vm._v(_vm._s(_vm.t("itemEngine.answerStatus.reviewing")))]):_c('span',{staticClass:"ibs-result-header__tag ibs-result-header__tag--success"},[_vm._v(_vm._s(_vm.t("itemEngine.answerStatus.finished")))])]):_vm._e()]),_c('div',{staticClass:"ibs-result-header__info"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.answerUser"))+_vm._s(_vm.username)+" "),(
+            _vm.metaActivity.mediaType === 'testpaper' &&
+              _vm.metaActivity.role !== 'student'
+          )?_c('span',{staticClass:"ibs-ml24"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.testpaperMode"))+" "+_vm._s(_vm.answerRecord.exam_mode === "1" ? _vm.t("testpaper.mode1") : _vm.t("testpaper.mode0"))+" ")]):_vm._e(),(
             _vm.metaActivity.mediaType === 'testpaper' &&
               _vm.answerScene.limited_time > 0
           )?_c('span',{staticClass:"ibs-ml24"},[_vm._v(" "+_vm._s(_vm.t("testpaper.timeTips"))+" "+_vm._s(_vm.answerScene.limited_time)+" "+_vm._s(_vm.t("testpaper.minutesUnit"))+" ")]):_vm._e(),_c('span',{staticClass:"ibs-ml24"},[_vm._v(_vm._s(_vm.t("itemEngine.submitTime"))+_vm._s(_vm._f("date")(_vm.answerRecord.end_time)))]),_c('span',{staticClass:"ibs-ml24"},[_vm._v(_vm._s(_vm.t("itemEngine.usedTime"))+_vm._s(_vm.getTime(Number(_vm.answerRecord.used_time)))+" ")]),(_vm.mediaType === 'homework')?[_c('span',{staticClass:"ibs-ml24"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.numbeOfOperations"))+" "+_vm._s(_vm.t("itemEngine.theFirst"))+" "+_vm._s(_vm.submitList.length + 1)+" "+_vm._s(_vm.t("itemEngine.order"))+" ")]),(_vm.submitList.length)?_c('a-dropdown',{staticClass:"ibs-ml24"},[_c('a-button',{attrs:{"type":"link"}},[_vm._v(_vm._s(_vm.t("itemEngine.jobHistory")))]),_c('a-menu',{attrs:{"slot":"overlay"},on:{"click":_vm.handleMenuClick},slot:"overlay"},_vm._l((_vm.submitList),function(item,index){return _c('a-menu-item',{key:index},[_vm._v(" "+_vm._s(_vm.t("itemEngine.theFirst"))+" "+_vm._s(index + 1)+" "+_vm._s(_vm.t("itemEngine.order"))+" "),(_vm.finishType === 'submit')?[_vm._v(" "+_vm._s(_vm.t("itemEngine.right"))+" "+_vm._s(item.right_question_count)+" "+_vm._s(_vm.t("itemEngine.question"))+" ")]:[_vm._v(" "+_vm._s(item.score)+" "+_vm._s(_vm.t("Minute"))+" "),(item.grade === 'passed')?_c('span',{staticStyle:{"color":"green"}},[_vm._v(" "+_vm._s(_vm.t("itemReview.pass"))+" ")]):_c('span',{staticStyle:{"color":"red"}},[_vm._v(" "+_vm._s(_vm.t("itemReview.fail"))+" ")])]],2)}),1)],1):_vm._e()]:_vm._e()],2)]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.needScore),expression:"needScore"}],staticClass:"ibs-right"},[_c('div',{staticClass:"ibs-result-header__score"},[(_vm.answerRecord.status == 'reviewing')?_c('p',{staticClass:"ibs-mb4"},[_vm._v("?")]):_c('p',{staticClass:"ibs-mb4"},[_vm._v(_vm._s(_vm.answerReport.score))]),_c('p',{staticClass:"ibs-mb4"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.totalScore"))),_c('span',[_vm._v(_vm._s(_vm.answerReport.total_score))])])])])]),_c('a-table',{attrs:{"columns":_vm.columns,"dataSource":_vm.answerReport.section_reports,"pagination":false},scopedSlots:_vm._u([{key:"score",fn:function(text, record){return [(Number(record.reviewing_question_num))?_c('span',{staticClass:"ibs-warning-color ibs-text-folder"},[_vm._v(" ？")]):_c('span',{staticClass:"ibs-warning-color ibs-text-folder"},[_vm._v(_vm._s(text))])]}},{key:"question_count",fn:function(text, record){return [(record.section_name === _vm.t('material'))?_c('span',[_vm._v(_vm._s(text)+_vm._s(_vm.t("subCountNumber")))]):_c('span',[_vm._v(_vm._s(text)+_vm._s(_vm.t("countNumber")))])]}},{key:"right_question_num",fn:function(text, record){return [(Number(record.reviewing_question_num))?_c('span',{staticClass:"ibs-success-color"},[_vm._v(" ？")]):_c('span',{staticClass:"ibs-success-color"},[_vm._v(_vm._s(text)+_vm._s(_vm.t("countNumber")))])]}},{key:"wrong_question_num",fn:function(text, record){return [(Number(record.reviewing_question_num))?_c('span',{staticClass:"ibs-danger-color"},[_vm._v(" ？")]):_c('span',{staticClass:"ibs-danger-color"},[_vm._v(_vm._s(text + Number(record.part_right_question_num))+_vm._s(_vm.t("countNumber")))])]}},{key:"no_answer_question_num",fn:function(text, record){return [(Number(record.reviewing_question_num))?_c('span',[_vm._v(" ？")]):_c('span',[_vm._v(_vm._s(text)+_vm._s(_vm.t("countNumber")))])]}}])}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode === 'review'),expression:"mode === 'review'"}],staticClass:"ibs-result-tip"},[_c('i',{staticClass:"ib-icon ib-icon-info ibs-mr8"}),_vm._v(_vm._s(_vm.reviewText)+" ")]),(_vm.mode === 'report' && _vm.answerRecord.status === 'reviewing')?_c('div',{staticClass:"ibs-result-tip"},[_c('i',{staticClass:"ib-icon ib-icon-info ibs-mr8"}),_vm._v(_vm._s(_vm.t("itemEngine.waitingReview_tip"))+" ")]):_vm._e()],1)}
-var resultvue_type_template_id_496b6ab8_staticRenderFns = []
+var resultvue_type_template_id_0d1e3b7a_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/result.vue?vue&type=template&id=496b6ab8&
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/result.vue?vue&type=template&id=0d1e3b7a&
 
 // CONCATENATED MODULE: ./src/utils/date-toolkit.js
 /* eslint-disable no-mixed-operators */
@@ -43498,6 +43501,12 @@ var date_toolkit_isMobileDevice = function isMobileDevice() {
 
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/result.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -43865,8 +43874,8 @@ var date_toolkit_isMobileDevice = function isMobileDevice() {
 
 var result_component = normalizeComponent(
   component_resultvue_type_script_lang_js_,
-  resultvue_type_template_id_496b6ab8_render,
-  resultvue_type_template_id_496b6ab8_staticRenderFns,
+  resultvue_type_template_id_0d1e3b7a_render,
+  resultvue_type_template_id_0d1e3b7a_staticRenderFns,
   false,
   null,
   null,

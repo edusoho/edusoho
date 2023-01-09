@@ -34,6 +34,11 @@
 </template>
 
 <script>
+  const search = window.location.search ? window.location.search.replace('?', '') : '';
+  const searchArray = search.split('&')
+  const actionIndex = searchArray.findIndex(item => item.indexOf('action') > -1)
+  const action = actionIndex > -1 ? searchArray[actionIndex].split('=')[1] : ''
+
   export default {
     data() {
       return {
@@ -72,6 +77,8 @@
           that.answerReport = res.answer_report;
           that.answerRecord = res.answer_record;
           that.answerScene = res.answer_scene;
+
+          that.metaActivity.role = action === 'my' ? 'student' : 'teacher';
         })
 
         $.ajax({
