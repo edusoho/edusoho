@@ -20,7 +20,6 @@ class ContinueAnswer extends AbstractResource
         if (empty($answerRecord) || $this->getCurrentUser()['id'] != $answerRecord['user_id']) {
             throw CommonException::ERROR_PARAMETER();
         }
-        $isOnlyStudent = false;
 
         $answerRecord = $this->getAnswerService()->continueAnswer($request->request->get('answer_record_id'));
 
@@ -29,10 +28,7 @@ class ContinueAnswer extends AbstractResource
         $activityFilter->filter($activity);
 
         $user = $this->getUserService()->getUser($answerRecord['user_id']);
-        if($user['roles'] == ["ROLE_USER"]) {
-            $isOnlyStudent = true;
-        }
-        $activity['isOnlyStudent'] = $isOnlyStudent;
+        $activity['isOnlyStudent'] = $user['roles'] == ["ROLE_USER"];
 
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         if (empty($assessment)) {

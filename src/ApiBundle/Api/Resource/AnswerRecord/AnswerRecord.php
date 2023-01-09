@@ -19,8 +19,6 @@ class AnswerRecord extends AbstractResource
             return (object) [];
         }
 
-        $isOnlyStudent = false;
-
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
         $answerReportFilter = new AnswerReportFilter();
         $answerReportFilter->filter($answerReport);
@@ -41,11 +39,11 @@ class AnswerRecord extends AbstractResource
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerScene['id']);
 
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerScene['id']);
+
         $user = $this->getUserService()->getUser($answerRecord['user_id']);
-        if($user['roles'] == ["ROLE_USER"]) {
-            $isOnlyStudent = true;
-        }
-        $activity['isOnlyStudent'] = $isOnlyStudent;
+
+        $activity['isOnlyStudent'] = $user['roles'] == ["ROLE_USER"];
+
 
         return [
             'answer_report' => $answerReport,
