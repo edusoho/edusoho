@@ -43237,8 +43237,8 @@ src_item.install = function (Vue) {
 };
 
 /* harmony default export */ var item_manage = (src_item);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/item.vue?vue&type=template&id=02cff689&
-var itemvue_type_template_id_02cff689_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (this.section_responses.length > 0)?_c('div',{staticClass:"ibs-background-color",attrs:{"id":"item-bank-sdk-message"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.mobileShow),expression:"!mobileShow"}]},[_c('a-row',[_c('a-col',{attrs:{"sm":{ span: _vm.widthCol, offset: _vm.offsetCol },"xs":{ span: 24 }}},[_c('div',{staticClass:"ibs-item-list ibs-assessment-info ibs-mb8"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode === 'do'),expression:"mode === 'do'"}],staticClass:"ibs-assessment-heading"},[_c('div',{staticClass:"ibs-assessment-title ibs-clearfix"},[_c('div',{staticClass:"ibs-assessment-title__name ibs-left ibs-text-overflow"},[_vm._v(" "+_vm._s(_vm.assessment.name)+" ")]),_c('div',{staticClass:"ibs-right ibs-assessment-title__tag"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.status.do"))+" ")])]),_c('div',{staticClass:"ibs-assessment-description ibs-mt8 ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.assessment.description)}})]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode === 'analysis'),expression:"mode === 'analysis'"}],staticClass:"ibs-assessment-heading"},[_c('div',{staticClass:"ibs-assessment-title ibs-clearfix"},[_c('div',{staticClass:"ibs-assessment-title__name ibs-left ibs-text-overflow"},[_vm._v(" "+_vm._s(_vm.assessment.name)+" ")]),_c('div',{staticClass:"ibs-right ibs-assessment-title__tag"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.status.analysis"))+" ")])]),_c('div',{staticClass:"ibs-assessment-description ibs-mt8 ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.assessment.description)}})]),(_vm.mode === 'report' || _vm.mode === 'review')?_c('result',_vm._b({attrs:{"answerReport":_vm.answerReport,"mode":_vm.mode,"needMarking":_vm.needMarking,"answerScene":_vm.answerScene,"needScore":_vm.needScore,"assessment":_vm.assessment,"answerRecord":_vm.answerRecord,"metaActivity":_vm.metaActivity,"media-type":_vm.mediaType,"finish-type":_vm.finishType,"submit-list":_vm.submitList},on:{"view-historical-result":_vm.handleViewHistoricalResult}},'result',_vm.$attrs,false)):_vm._e()],1),_vm._l((_vm.sections),function(section,sectionsIndex){return _c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.getTitle(sectionsIndex) && _vm.answerShow == 'show'),expression:"getTitle(sectionsIndex) && answerShow == 'show'"}],key:'sections' + sectionsIndex,staticClass:"ibs-pb16 ibs-item-list"},[_c('section-title',{attrs:{"name":section.name,"count":section.question_count,"needScore":_vm.needScore,"score":section.total_score}}),_vm._l((section.items),function(item,itemIndex){return _c('div',{key:'item' + itemIndex,class:_vm.getLastClass(itemIndex, section.items.length - 1)},[_c('material-title',{directives:[{name:"show",rawName:"v-show",value:(
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/item.vue?vue&type=template&id=774a27fc&
+var itemvue_type_template_id_774a27fc_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (this.section_responses.length > 0)?_c('div',{staticClass:"ibs-background-color",attrs:{"id":"item-bank-sdk-message"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.mobileShow),expression:"!mobileShow"}]},[_c('a-row',[_c('a-col',{attrs:{"sm":{ span: _vm.widthCol, offset: _vm.offsetCol },"xs":{ span: 24 }}},[_c('div',{staticClass:"ibs-item-list ibs-assessment-info ibs-mb8"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode === 'do'),expression:"mode === 'do'"}],staticClass:"ibs-assessment-heading"},[_c('div',{staticClass:"ibs-assessment-title ibs-clearfix"},[_c('div',{staticClass:"ibs-assessment-title__name ibs-left ibs-text-overflow"},[_vm._v(" "+_vm._s(_vm.assessment.name)+" ")]),_c('div',{staticClass:"ibs-right ibs-assessment-title__tag"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.status.do"))+" ")])]),_c('div',{staticClass:"ibs-assessment-description ibs-mt8 ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.assessment.description)}})]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode === 'analysis'),expression:"mode === 'analysis'"}],staticClass:"ibs-assessment-heading"},[_c('div',{staticClass:"ibs-assessment-title ibs-clearfix"},[_c('div',{staticClass:"ibs-assessment-title__name ibs-left ibs-text-overflow"},[_vm._v(" "+_vm._s(_vm.assessment.name)+" ")]),_c('div',{staticClass:"ibs-right ibs-assessment-title__tag"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.status.analysis"))+" ")])]),_c('div',{staticClass:"ibs-assessment-description ibs-mt8 ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.assessment.description)}})]),(_vm.mode === 'report' || _vm.mode === 'review')?_c('result',_vm._b({attrs:{"answerReport":_vm.answerReport,"mode":_vm.mode,"needMarking":_vm.needMarking,"answerScene":_vm.answerScene,"needScore":_vm.needScore,"assessment":_vm.assessment,"answerRecord":_vm.answerRecord,"metaActivity":_vm.metaActivity,"media-type":_vm.mediaType,"finish-type":_vm.finishType,"submit-list":_vm.submitList},on:{"view-historical-result":_vm.handleViewHistoricalResult}},'result',_vm.$attrs,false)):_vm._e()],1),_vm._l((_vm.sections),function(section,sectionsIndex){return _c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.getTitle(sectionsIndex) && _vm.answerShow == 'show'),expression:"getTitle(sectionsIndex) && answerShow == 'show'"}],key:'sections' + sectionsIndex,staticClass:"ibs-pb16 ibs-item-list"},[_c('section-title',{attrs:{"name":section.name,"count":section.question_count,"needScore":_vm.needScore,"score":section.total_score}}),_vm._l((section.items),function(item,itemIndex){return _c('div',{key:'item' + itemIndex,class:_vm.getLastClass(itemIndex, section.items.length - 1)},[_c('material-title',{directives:[{name:"show",rawName:"v-show",value:(
                 item.type === 'material' &&
                   _vm.getMaterial(sectionsIndex, itemIndex)
               ),expression:"\n                item.type === 'material' &&\n                  getMaterial(sectionsIndex, itemIndex)\n              "}],attrs:{"material":item.material,"attachments":item.attachments},on:{"previewAttachment":_vm.previewAttachment,"downloadAttachment":_vm.downloadAttachment}}),_c('div',{staticClass:"ibs-question-wrap"},_vm._l((item.questions),function(question,questionIndex){return _c('div',{key:questionIndex,staticClass:"ibs-pl16 ibs-pr16 ibs-question-wrap__item",attrs:{"id":("ibs-" + (question.seq))}},[(
@@ -43323,10 +43323,2843 @@ var itemvue_type_template_id_02cff689_render = function () {var _vm=this;var _h=
                   _vm.assessmentStatus !== 'preview' &&
                   _vm.mode === 'do'
               )?_c('div',{staticClass:"ibs-assessment-timer"},[_c('img',{staticClass:"clock-icon",attrs:{"src":_vm.clockIcon}}),_c('span',[_vm._v(_vm._s(_vm.used_time))])]):_vm._e(),_c('card',{attrs:{"mode":_vm.mode,"assessmentStatus":_vm.assessmentStatus,"sections":_vm.sections,"metaActivity":_vm.metaActivity,"section_responses":_vm.section_responses,"answerRecord":_vm.answerRecord,"answerScene":_vm.answerScene,"section_reports":_vm.section_reports,"answerShow":_vm.answerShow,"doTimes":_vm.doTimes,"showSaveProgressBtn":_vm.showSaveProgressBtn,"showDoAgainBtn":_vm.showDoAgainBtn,"cardIsShow":_vm.enableFacein},on:{"showError":_vm.getVal,"answerData":_vm.answerData,"saveAnswerData":_vm.saveAnswerData,"exitAnswer":_vm.exitAnswer},scopedSlots:_vm._u([{key:"returnBtn",fn:function(){return [_vm._t("returnBtn")]},proxy:true}],null,true)}),_vm._t("inspection")],2)],1)])],2),_c('a-modal',{attrs:{"closable":_vm.closable,"visible":_vm.visible,"title":_vm.t('itemEngine.testpaperIntro'),"footer":null,"getContainer":_vm.getContainer}},[_c('div',{staticClass:"ibs-tip-content"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.unstartedTip"))+" "+_vm._s(_vm._f("date")(Number(_vm.answerScene.start_time)))+" "+_vm._s(_vm.t("itemEngine.unstartedNextTip"))+" ")])])],1),_c('a-modal',{attrs:{"closable":_vm.closable,"maskClosable":false,"visible":_vm.mobileShow,"getContainer":_vm.getContainer}},[_c('div',[_vm._v(" "+_vm._s(_vm.t("itemEngine.InspectionMobileTip"))+" ")]),_c('template',{slot:"footer"},[_c('a-button',{attrs:{"type":"primary"},on:{"click":_vm.goBack}},[_vm._v(" "+_vm._s(_vm.t("Back"))+" ")])],1)],2)],1):_vm._e()}
-var itemvue_type_template_id_02cff689_staticRenderFns = []
+var itemvue_type_template_id_774a27fc_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-engine/src/item.vue?vue&type=template&id=02cff689&
+// CONCATENATED MODULE: ./src/components/item-engine/src/item.vue?vue&type=template&id=774a27fc&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/result.vue?vue&type=template&id=496b6ab8&
+var resultvue_type_template_id_496b6ab8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-result"},[_c('div',{staticClass:"ibs-mb16 ibs-clearfix"},[_c('div',{class:("ibs-left ibs-result-header " + _vm.extralClass)},[_c('div',{staticClass:"ibs-result-header__title ibs-text-overflow"},[_vm._v(" "+_vm._s(_vm.assessment.name)+" "),(_vm.needMarking)?_c('div',[(_vm.mode === 'review' || _vm.answerRecord.status == 'reviewing')?_c('span',{staticClass:"ibs-result-header__tag"},[_vm._v(_vm._s(_vm.t("itemEngine.answerStatus.reviewing")))]):_c('span',{staticClass:"ibs-result-header__tag ibs-result-header__tag--success"},[_vm._v(_vm._s(_vm.t("itemEngine.answerStatus.finished")))])]):_vm._e()]),_c('div',{staticClass:"ibs-result-header__info"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.answerUser"))+_vm._s(_vm.username)+" "),(_vm.metaActivity.mediaType === 'testpaper')?_c('span',{staticClass:"ibs-ml24"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.testpaperMode"))+" "+_vm._s(_vm.answerRecord.exam_mode === "1" ? _vm.t("testpaper.mode1") : _vm.t("testpaper.mode0"))+" ")]):_vm._e(),(
+            _vm.metaActivity.mediaType === 'testpaper' &&
+              _vm.answerScene.limited_time > 0
+          )?_c('span',{staticClass:"ibs-ml24"},[_vm._v(" "+_vm._s(_vm.t("testpaper.timeTips"))+" "+_vm._s(_vm.answerScene.limited_time)+" "+_vm._s(_vm.t("testpaper.minutesUnit"))+" ")]):_vm._e(),_c('span',{staticClass:"ibs-ml24"},[_vm._v(_vm._s(_vm.t("itemEngine.submitTime"))+_vm._s(_vm._f("date")(_vm.answerRecord.end_time)))]),_c('span',{staticClass:"ibs-ml24"},[_vm._v(_vm._s(_vm.t("itemEngine.usedTime"))+_vm._s(_vm.getTime(Number(_vm.answerRecord.used_time)))+" ")]),(_vm.mediaType === 'homework')?[_c('span',{staticClass:"ibs-ml24"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.numbeOfOperations"))+" "+_vm._s(_vm.t("itemEngine.theFirst"))+" "+_vm._s(_vm.submitList.length + 1)+" "+_vm._s(_vm.t("itemEngine.order"))+" ")]),(_vm.submitList.length)?_c('a-dropdown',{staticClass:"ibs-ml24"},[_c('a-button',{attrs:{"type":"link"}},[_vm._v(_vm._s(_vm.t("itemEngine.jobHistory")))]),_c('a-menu',{attrs:{"slot":"overlay"},on:{"click":_vm.handleMenuClick},slot:"overlay"},_vm._l((_vm.submitList),function(item,index){return _c('a-menu-item',{key:index},[_vm._v(" "+_vm._s(_vm.t("itemEngine.theFirst"))+" "+_vm._s(index + 1)+" "+_vm._s(_vm.t("itemEngine.order"))+" "),(_vm.finishType === 'submit')?[_vm._v(" "+_vm._s(_vm.t("itemEngine.right"))+" "+_vm._s(item.right_question_count)+" "+_vm._s(_vm.t("itemEngine.question"))+" ")]:[_vm._v(" "+_vm._s(item.score)+" "+_vm._s(_vm.t("Minute"))+" "),(item.grade === 'passed')?_c('span',{staticStyle:{"color":"green"}},[_vm._v(" "+_vm._s(_vm.t("itemReview.pass"))+" ")]):_c('span',{staticStyle:{"color":"red"}},[_vm._v(" "+_vm._s(_vm.t("itemReview.fail"))+" ")])]],2)}),1)],1):_vm._e()]:_vm._e()],2)]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.needScore),expression:"needScore"}],staticClass:"ibs-right"},[_c('div',{staticClass:"ibs-result-header__score"},[(_vm.answerRecord.status == 'reviewing')?_c('p',{staticClass:"ibs-mb4"},[_vm._v("?")]):_c('p',{staticClass:"ibs-mb4"},[_vm._v(_vm._s(_vm.answerReport.score))]),_c('p',{staticClass:"ibs-mb4"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.totalScore"))),_c('span',[_vm._v(_vm._s(_vm.answerReport.total_score))])])])])]),_c('a-table',{attrs:{"columns":_vm.columns,"dataSource":_vm.answerReport.section_reports,"pagination":false},scopedSlots:_vm._u([{key:"score",fn:function(text, record){return [(Number(record.reviewing_question_num))?_c('span',{staticClass:"ibs-warning-color ibs-text-folder"},[_vm._v(" ？")]):_c('span',{staticClass:"ibs-warning-color ibs-text-folder"},[_vm._v(_vm._s(text))])]}},{key:"question_count",fn:function(text, record){return [(record.section_name === _vm.t('material'))?_c('span',[_vm._v(_vm._s(text)+_vm._s(_vm.t("subCountNumber")))]):_c('span',[_vm._v(_vm._s(text)+_vm._s(_vm.t("countNumber")))])]}},{key:"right_question_num",fn:function(text, record){return [(Number(record.reviewing_question_num))?_c('span',{staticClass:"ibs-success-color"},[_vm._v(" ？")]):_c('span',{staticClass:"ibs-success-color"},[_vm._v(_vm._s(text)+_vm._s(_vm.t("countNumber")))])]}},{key:"wrong_question_num",fn:function(text, record){return [(Number(record.reviewing_question_num))?_c('span',{staticClass:"ibs-danger-color"},[_vm._v(" ？")]):_c('span',{staticClass:"ibs-danger-color"},[_vm._v(_vm._s(text + Number(record.part_right_question_num))+_vm._s(_vm.t("countNumber")))])]}},{key:"no_answer_question_num",fn:function(text, record){return [(Number(record.reviewing_question_num))?_c('span',[_vm._v(" ？")]):_c('span',[_vm._v(_vm._s(text)+_vm._s(_vm.t("countNumber")))])]}}])}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode === 'review'),expression:"mode === 'review'"}],staticClass:"ibs-result-tip"},[_c('i',{staticClass:"ib-icon ib-icon-info ibs-mr8"}),_vm._v(_vm._s(_vm.reviewText)+" ")]),(_vm.mode === 'report' && _vm.answerRecord.status === 'reviewing')?_c('div',{staticClass:"ibs-result-tip"},[_c('i',{staticClass:"ib-icon ib-icon-info ibs-mr8"}),_vm._v(_vm._s(_vm.t("itemEngine.waitingReview_tip"))+" ")]):_vm._e()],1)}
+var resultvue_type_template_id_496b6ab8_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/result.vue?vue&type=template&id=496b6ab8&
+
+// CONCATENATED MODULE: ./src/utils/date-toolkit.js
+/* eslint-disable no-mixed-operators */
+// 秒转化为时间
+var sec2Time = function sec2Time(sec, locale) {
+  var time = "";
+  var h = parseInt(sec % 86400 / 3600);
+  var s = parseInt(sec % 3600 / 60);
+  var m = sec % 60;
+
+  if (h > 0) {
+    time += h + locale.hour;
+  }
+
+  if (s.toString().length < 2) {
+    time += "0" + s + locale.minute;
+  } else {
+    time += s + locale.minute;
+  }
+
+  if (m.toString().length < 2) {
+    time += "0" + m + locale.second;
+  } else {
+    time += m + locale.second;
+  }
+
+  return time;
+};
+
+var timeStampFormatTime = function timeStampFormatTime(timeStamp) {
+  var date = new Date(timeStamp * 1000);
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+  var hour = date.getHours();
+  var minute = date.getMinutes();
+  var second = date.getSeconds();
+  return "".concat([year, month, day].map(function (n) {
+    n = n.toString();
+    return n[1] ? n : "0".concat(n);
+  }).join("-"), " ").concat([hour, minute, second].map(function (n) {
+    n = n.toString();
+    return n[1] ? n : "0".concat(n);
+  }).join(":"));
+}; // 2018/12/06 12:03
+
+
+var formatTime = function formatTime(date) {
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+  var hour = date.getHours();
+  var minute = date.getMinutes();
+  var second = date.getSeconds();
+  return "".concat([year, month, day].map(function (n) {
+    n = n.toString();
+    return n[1] ? n : "0".concat(n);
+  }).join("/"), " ").concat([hour, minute, second].map(function (n) {
+    n = n.toString();
+    return n[1] ? n : "0".concat(n);
+  }).join(":"));
+}; // 2018-12-06 12:03
+
+
+var formatCompleteTime = function formatCompleteTime(date) {
+  var reg = new RegExp("/", "g");
+  var time = formatTime(date).replace(reg, "-");
+  return time.slice(0, -3);
+};
+
+var dateTimeDown = function dateTimeDown(date) {
+  var now = new Date().getTime();
+
+  if (now > date) {
+    return "已到期";
+  }
+
+  var diff = parseInt((date - now) / 1000, 10);
+  var day = parseInt(diff / 24 / 60 / 60, 10);
+  var hour = parseInt(diff / 60 / 60 % 24, 10);
+  var minute = parseInt(diff / 60 % 60, 10);
+  var second = parseInt(diff % 60, 10);
+  day = day ? "".concat(day, "\u5929") : "";
+  hour = day || hour ? "".concat(hour || "0", "\u5C0F\u65F6") : "";
+  minute = day || hour || minute ? "".concat(minute || "0", "\u5206") : "";
+  second = "".concat(second || "0", "\u79D2");
+  var time = day + hour + minute + second;
+  return time;
+}; // days（传时间戳）
+
+
+var getOffsetDays = function getOffsetDays(time1, time2) {
+  var offsetTime = Math.abs(time1 - time2);
+  return Math.floor(offsetTime / (3600 * 24 * 1e3));
+}; // 将0-9的数字前面加上0，例1变为01
+
+
+var checkTime = function checkTime(i) {
+  if (i < 10 && i >= 0) {
+    i = "0".concat(i);
+  }
+
+  return i;
+}; // 倒计时 01:01:01 传入时间戳
+
+
+var getCountDown = function getCountDown(time, i) {
+  var nowTime = Number(time) - i * 1000;
+  var minutes = parseInt(nowTime / 1000 / 60 % 60, 10); // 计算剩余的分钟
+
+  var seconds = parseInt(nowTime / 1000 % 60, 10); // 计算剩余的秒数
+
+  var hours = parseInt(nowTime / (1000 * 60 * 60), 10); // 计算剩余的小时
+
+  minutes = checkTime(minutes);
+  seconds = checkTime(seconds);
+  hours = checkTime(hours);
+  return {
+    hours: hours,
+    minutes: minutes,
+    seconds: seconds
+  };
+}; // 剩余时间 1天1小时1分钟  秒只是在最后60秒显示
+
+
+var getdateTimeDown = function getdateTimeDown(date, i) {
+  date = Number(date) - i * 1000;
+  var now = new Date().getTime();
+
+  if (now >= date) {
+    return "";
+  }
+
+  var diff = parseInt((date - now) / 1000, 10);
+  var day = parseInt(diff / 24 / 60 / 60, 10);
+  var hour = parseInt(diff / 60 / 60 % 24, 10);
+  var minute = parseInt(diff / 60 % 60, 10);
+  var second = parseInt(diff % 60, 10);
+  day = day ? "".concat(day, "\u5929") : "";
+  hour = day || hour ? "".concat(hour || "0", "\u5C0F\u65F6") : "";
+  minute = day || hour || minute ? "".concat(minute || "0", "\u5206\u949F") : "";
+  second = !day && !hour && !minute ? "".concat(second || "0", "\u79D2") : "";
+  var time = day + hour + minute + second;
+  return time;
+};
+
+var date_toolkit_isMobileDevice = function isMobileDevice() {
+  return navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i);
+};
+
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/result.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ var resultvue_type_script_lang_js_ = ({
+  name: "result",
+  mixins: [mixins_locale],
+  data: function data() {
+    return {
+      scoreColumns: [{
+        title: this.t("itemEngine.itemType"),
+        dataIndex: "section_name",
+        key: "section_name",
+        align: "center"
+      }, {
+        title: this.t("itemEngine.itemScore"),
+        dataIndex: "score",
+        key: "score",
+        scopedSlots: {
+          customRender: "score"
+        },
+        align: "center"
+      }, {
+        title: this.t("itemEngine.itemTotal"),
+        dataIndex: "question_count",
+        key: "question_count",
+        scopedSlots: {
+          customRender: "question_count"
+        },
+        align: "center"
+      }, {
+        title: this.t("itemEngine.itemRight"),
+        dataIndex: "right_question_num",
+        key: "right_question_num",
+        scopedSlots: {
+          customRender: "right_question_num"
+        },
+        align: "center"
+      }, {
+        title: this.t("itemEngine.itemWrong"),
+        dataIndex: "wrong_question_num",
+        key: "wrong_question_num",
+        scopedSlots: {
+          customRender: "wrong_question_num"
+        },
+        align: "center"
+      }, {
+        title: this.t("itemEngine.itemUndo"),
+        dataIndex: "no_answer_question_num",
+        key: "no_answer_question_num",
+        scopedSlots: {
+          customRender: "no_answer_question_num"
+        },
+        align: "center"
+      }],
+      noScoreColumns: [{
+        title: this.t("itemEngine.itemType"),
+        dataIndex: "section_name",
+        key: "section_name",
+        align: "center"
+      }, {
+        title: this.t("itemEngine.itemTotal"),
+        dataIndex: "question_count",
+        key: "question_count",
+        scopedSlots: {
+          customRender: "question_count"
+        },
+        align: "center"
+      }, {
+        title: this.t("itemEngine.itemRight"),
+        dataIndex: "right_question_num",
+        key: "right_question_num",
+        scopedSlots: {
+          customRender: "right_question_num"
+        },
+        align: "center"
+      }, {
+        title: this.t("itemEngine.itemWrong"),
+        dataIndex: "wrong_question_num",
+        key: "wrong_question_num",
+        scopedSlots: {
+          customRender: "wrong_question_num"
+        },
+        align: "center"
+      }, {
+        title: this.t("itemEngine.itemUndo"),
+        dataIndex: "no_answer_question_num",
+        key: "no_answer_question_num",
+        scopedSlots: {
+          customRender: "no_answer_question_num"
+        },
+        align: "center"
+      }]
+    };
+  },
+  computed: {
+    extralClass: function extralClass() {
+      return this.needScore ? "" : "ibs-result-header--width";
+    },
+    columns: function columns() {
+      return this.needScore ? this.scoreColumns : this.noScoreColumns;
+    },
+    username: function username() {
+      return this.answerRecord.username || "-";
+    },
+    reviewText: function reviewText() {
+      if (this.role === "student") {
+        return this.t("itemEngine.student_FinishReview_tip");
+      }
+
+      return this.t("itemEngine.FinishReview_tip");
+    }
+  },
+  props: {
+    mode: {
+      type: String,
+      default: "report"
+    },
+    answerReport: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    assessment: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    answerScene: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    answerRecord: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    needScore: {
+      type: Number,
+      default: function _default() {
+        return 1;
+      }
+    },
+    needMarking: {
+      type: Number,
+      default: function _default() {
+        return 1;
+      }
+    },
+    role: {
+      type: String,
+      default: ""
+    },
+    mediaType: {
+      type: String,
+      default: ""
+    },
+    finishType: {
+      type: String,
+      default: ""
+    },
+    submitList: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    },
+    metaActivity: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    }
+  },
+  filters: {
+    date: function date(timeStamp) {
+      return timeStampFormatTime(timeStamp);
+    }
+  },
+  methods: {
+    getTime: function getTime(second) {
+      var timeLocal = {
+        hour: this.t("Hour"),
+        minute: this.t("Minute"),
+        second: this.t("Second")
+      };
+      return sec2Time(second, timeLocal);
+    },
+    handleMenuClick: function handleMenuClick(e) {
+      this.$emit("view-historical-result", this.submitList[e.key]);
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/result.vue?vue&type=script&lang=js&
+ /* harmony default export */ var component_resultvue_type_script_lang_js_ = (resultvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/result.vue
+
+
+
+
+
+/* normalize component */
+
+var result_component = normalizeComponent(
+  component_resultvue_type_script_lang_js_,
+  resultvue_type_template_id_496b6ab8_render,
+  resultvue_type_template_id_496b6ab8_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var component_result = (result_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/card.vue?vue&type=template&id=13a8eb05&
+var cardvue_type_template_id_13a8eb05_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.cardClass,attrs:{"id":"item-bank-sdk-card"}},[_c('div',{staticClass:"ibs-card-head ibs-clearfix ibs-text-left"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.card"))+" "),_c('span',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode == 'do' && _vm.assessmentStatus !== 'preview'),expression:"mode == 'do' && assessmentStatus !== 'preview'"}],staticClass:"ibs-card-head__toggle",on:{"click":_vm.toggleCard}},[_vm._v(_vm._s(_vm.t("itemEngine.toggleCard")))])]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.isShow),expression:"isShow"}],staticClass:"ibs-card-body ibs-card-body--scroll ibs-text-left"},[_vm._l((_vm.sections),function(section,sectionsIndex){return _c('div',{key:'cardSection' + sectionsIndex},[_c('p',{directives:[{name:"show",rawName:"v-show",value:(_vm.getReviewTitle(sectionsIndex)),expression:"getReviewTitle(sectionsIndex)"}],staticClass:"ibs-card-body__type"},[_vm._v(" "+_vm._s(section.name)+" ")]),_c('a-anchor',{staticClass:"ibs-card-anchor",attrs:{"affix":false},on:{"click":_vm.handleClick}},[_vm._l((section.items),function(item,itemIndex){return _vm._l((item.questions),function(question,questionIndex){return _c('a-anchor-link',{directives:[{name:"show",rawName:"v-show",value:(_vm.getModeType(sectionsIndex, itemIndex, questionIndex)),expression:"getModeType(sectionsIndex, itemIndex, questionIndex)"}],key:("cardQuestion" + (question.id)),class:_vm.statusClass(sectionsIndex, itemIndex, questionIndex),attrs:{"href":("#ibs-" + (question.seq)),"title":question.seq}})})})],2)],1)}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode == 'report'),expression:"mode == 'report'"}],staticClass:"ibs-card-body__explain"},[_c('span',{staticClass:"ibs-success-bg"}),_c('small',[_vm._v(_vm._s(_vm.t("Right")))]),_c('span',{staticClass:"ibs-danger-bg"}),_c('small',[_vm._v(_vm._s(_vm.t("Wrong")))]),_c('span',{staticClass:"ibs-warning-bg"}),_c('small',[_vm._v(_vm._s(_vm.t("itemEngine.remainReview")))]),_c('span',{staticClass:"ibs-tip-bg"}),_c('small',[_vm._v(_vm._s(_vm.t("itemEngine.undo")))])])],2),_c('div',{staticClass:"ibs-card-footer"},[(_vm.mode == 'report')?_c('div',{staticClass:"ibs-text-left"},[(!_vm.setting)?_c('a-checkbox',{staticClass:"ibs-dark-major text-left",on:{"change":_vm.onChange}},[_vm._v(_vm._s(_vm.t("itemEngine.showError")))]):_vm._e(),(
+          _vm.answerRecord.status == 'finished' &&
+            _vm.assessmentStatus !== 'finished' &&
+            _vm.showDoAgainBtn
+        )?_c('div',{staticClass:"ibs-text-center ibs-mt16"},[(!_vm.doTimes)?_c('a-button',{attrs:{"type":"primary","shape":"round"},on:{"click":_vm.doAgain}},[_vm._v(_vm._s(_vm.t("itemEngine.doAagin")))]):_c('a-button',{directives:[{name:"show",rawName:"v-show",value:(!_vm.setting),expression:"!setting"}],attrs:{"disabled":"","shape":"round"}},[_vm._v(_vm._s(_vm.t("itemEngine.doCountUsed")))])],1):_vm._e()],1):_vm._e(),_vm._t("returnBtn"),(_vm.mode == 'do')?_c('div',{staticClass:"ibs-text-center"},[(_vm.showSaveProgressBtn)?_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","shape":"round","disabled":_vm.disabled},on:{"click":_vm.saveAnswer}},[_vm._v(_vm._s(_vm.t("itemEngine.saveProgress")))]):_vm._e(),_c('a-button',{attrs:{"type":"primary","shape":"round","disabled":_vm.disabled},on:{"click":_vm.submitAnswer}},[_vm._v(" "+_vm._s(_vm.t( _vm.metaActivity.mediaType === "testpaper" ? "testpaper.submit" : "itemEngine.submit" ))+" ")])],1):_vm._e()],2)])}
+var cardvue_type_template_id_13a8eb05_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/card.vue?vue&type=template&id=13a8eb05&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/card.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ var cardvue_type_script_lang_js_ = ({
+  name: "card",
+  mixins: [emitter, mixins_locale],
+  data: function data() {
+    return {
+      isShow: this.showCard(),
+      cardTop: 0,
+      affix: false
+    };
+  },
+  props: {
+    mode: {
+      type: String,
+      default: "report"
+    },
+    sections: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    },
+    answerRecord: {
+      type: Object,
+      default: function _default() {}
+    },
+    answerScene: {
+      type: Object,
+      default: function _default() {}
+    },
+    section_responses: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    },
+    section_reports: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    },
+    assessmentStatus: {
+      type: String,
+      default: ""
+    },
+    answerShow: {
+      type: String,
+      // 默认显示, 不显示值为 none
+      default: "show"
+    },
+    doTimes: {
+      type: Number,
+      default: 0
+    },
+    cardIsShow: {
+      type: Number,
+      default: 0
+    },
+    showSaveProgressBtn: {
+      type: Number,
+      default: 1
+    },
+    showDoAgainBtn: {
+      type: Number,
+      default: 1
+    },
+    metaActivity: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    }
+  },
+  watch: {
+    section_responses: {
+      handler: function handler(val) {
+        console.log(val);
+      },
+      deep: true
+    }
+  },
+  computed: {
+    disabled: function disabled() {
+      return this.assessmentStatus == "preview";
+    },
+    cardClass: function cardClass() {
+      var className = "ibs-card";
+
+      if (this.isShow) {
+        className += " ibs-card-inspection-show";
+      }
+
+      return className;
+    },
+    setting: function setting() {
+      return this.answerShow === "none" ? true : false;
+    }
+  },
+  mounted: function mounted() {},
+  methods: {
+    onChange: function onChange(e) {
+      console.log("checked = ".concat(e.target.checked));
+      this.$emit("showError", e.target.checked);
+    },
+    toggleCard: function toggleCard() {
+      this.isShow = !this.isShow;
+    },
+    getContainer: function getContainer() {
+      return document.getElementById("item-bank-sdk-card");
+    },
+    saveAnswer: function saveAnswer() {
+      var h = this.$createElement;
+      this.$emit("saveAnswerData"); // 考试：取消按钮是离开考试，确定按钮是及选题
+
+      var self = this;
+      var content = "";
+
+      if (this.metaActivity.mediaType === "testpaper") {
+        if (this.answerRecord.exam_mode == "0") {
+          content = this.t("testpaper.exitTips");
+        }
+
+        if (this.answerRecord.exam_mode == "1") {
+          content = this.t("testpaper.exitTips1");
+        }
+      }
+
+      this.$confirm({
+        title: this.t("testpaper.saveTips"),
+        icon: function icon() {
+          return h("a-icon", {
+            "attrs": {
+              "type": "check-circle"
+            },
+            "style": "font-size: 22px;"
+          });
+        },
+        content: content,
+        okText: this.t("itemEngine.goThenDo"),
+        cancelText: this.metaActivity.mediaType === "testpaper" ? this.t("testpaper.exit") : this.t("itemEngine.exit"),
+        class: "ibs-card-confirm-modal",
+        getContainer: this.getContainer,
+        onOk: function onOk() {
+          self.forceRemoveModalDom();
+        },
+        onCancel: function onCancel() {
+          self.$emit("exitAnswer");
+          self.forceRemoveModalDom();
+        }
+      });
+    },
+    submitAnswer: function submitAnswer() {
+      var self = this;
+      this.$confirm({
+        title: this.t("itemEngine.confirmSubmit_title"),
+        okText: this.t("itemEngine.confirm"),
+        cancelText: this.t("itemEngine.goThenDo"),
+        class: "ibs-card-confirm-modal",
+        getContainer: this.getContainer,
+        onOk: function onOk() {
+          self.$emit("answerData");
+          self.forceRemoveModalDom();
+        },
+        onCancel: function onCancel() {
+          self.forceRemoveModalDom();
+        }
+      });
+    },
+    showConfirm: function showConfirm(flag) {
+      var text = flag ? "" : this.t("itemEngine.confirmSave_tip");
+      var self = this;
+      this.$confirm({
+        title: flag ? this.t("itemEngine.confirmSubmit_title") : this.t("itemEngine.confirmSave_title"),
+        content: this.answerScene.limited_time > 0 ? text : "",
+        okText: flag ? this.t("itemEngine.confirm") : this.t("itemEngine.exit"),
+        cancelText: this.t("itemEngine.goThenDo"),
+        class: "ibs-card-confirm-modal",
+        getContainer: this.getContainer,
+        onOk: function onOk() {
+          if (flag) {
+            self.$emit("answerData");
+          } else {
+            self.$emit("saveAnswerData");
+          }
+
+          self.forceRemoveModalDom();
+        },
+        onCancel: function onCancel() {
+          self.forceRemoveModalDom();
+        }
+      });
+    },
+    forceRemoveModalDom: function forceRemoveModalDom() {
+      var modal = document.querySelector(".ant-modal-root");
+
+      if (modal) {
+        modal.remove();
+      }
+    },
+    getModeType: function getModeType(s, i, q) {
+      if (this.mode !== "review") return true;
+
+      if (this.section_reports[s].item_reports[i].question_reports[q].status === "reviewing") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    statusClass: function statusClass(s, i, q) {
+      if (this.mode === "do") {
+        if (Number(this.sections[s].items[i].questions[q].isDelete)) {
+          return "ibs-card-body__tag";
+        }
+
+        var data = this.section_responses[s].item_responses[i].question_responses[q].response;
+        var doItem = data.some(function (item) {
+          return item != "";
+        });
+        var isTag = this.section_responses[s].item_responses[i].question_responses[q].isTag;
+
+        if (doItem) {
+          if (isTag) {
+            // 答题且收藏
+            return "ibs-card-body__tag ibs-card-body__tag--success ibs-card-body__tag--collectWhite";
+          } else {
+            // 答题未收藏
+            return "ibs-card-body__tag ibs-card-body__tag--success";
+          }
+        } else {
+          if (isTag) {
+            // 收藏未答题
+            return "ibs-card-body__tag ibs-card-body__tag--collect";
+          } else {
+            // 未收藏未答题
+            return "ibs-card-body__tag";
+          }
+        }
+      } else if (this.mode === "review") {
+        return "ibs-card-body__tag";
+      } else if (this.mode === "anaysis") {
+        return "ibs-card-body__tag";
+      } else {
+        if (Number(this.sections[s].items[i].questions[q].isDelete)) {
+          return "ibs-card-body__tag";
+        }
+
+        var status = {
+          right: "ibs-card-body__tag--success",
+          wrong: "ibs-card-body__tag--danger",
+          part_right: "ibs-card-body__tag--danger",
+          no_answer: "",
+          reviewing: "ibs-card-body__tag--warning"
+        };
+        var _data = this.section_reports[s].item_reports[i].question_reports[q];
+
+        if (this.setting) {
+          return "ibs-card-body__tag ".concat(status[_data.status], " ibs-none-pointer");
+        } else {
+          return "ibs-card-body__tag ".concat(status[_data.status]);
+        }
+      }
+    },
+    handleClick: function handleClick(e, link) {
+      console.log(link);
+    },
+    doAgain: function doAgain() {
+      this.dispatch("item-report", "doAgain");
+    },
+    submitReview: function submitReview() {
+      this.dispatch("item-review", "handleSubmit");
+    },
+    getReviewTitle: function getReviewTitle(s) {
+      if (this.mode !== "review") {
+        return true;
+      }
+
+      var essayData = this.sections[s].items.map(function (item) {
+        var status = item.questions.map(function (question) {
+          return question.answer_mode === "rich_text";
+        });
+        var result = status.join(" ");
+        return result;
+      });
+      return essayData.join(" ").indexOf(true) > -1 ? true : false;
+    },
+    showCard: function showCard() {
+      if (this.mode == "do" && this.assessmentStatus !== "preview" && this.assessmentStatus !== "finished") {
+        return !this.cardIsShow;
+      } else {
+        return true;
+      }
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/card.vue?vue&type=script&lang=js&
+ /* harmony default export */ var component_cardvue_type_script_lang_js_ = (cardvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/card.vue
+
+
+
+
+
+/* normalize component */
+
+var card_component = normalizeComponent(
+  component_cardvue_type_script_lang_js_,
+  cardvue_type_template_id_13a8eb05_render,
+  cardvue_type_template_id_13a8eb05_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var card = (card_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/section-title.vue?vue&type=template&id=48d29e6b&
+var section_titlevue_type_template_id_48d29e6b_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-pl16 ibs-pr16 ibs-engin-section"},[_c('a-row',[_c('a-col',{staticClass:"ibs-engin-section__title ibs-pl16",attrs:{"span":24}},[_vm._v(" "+_vm._s(_vm.name)+" "),_c('span',{staticClass:"ibs-engin-section__span ibs-ml16"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.Number_of_topics")(_vm.count)))]),_c('span',{directives:[{name:"show",rawName:"v-show",value:(_vm.needScore),expression:"needScore"}],staticClass:"ibs-engin-section__span"},[_vm._v(_vm._s(_vm.t("itemEngine.allScore")(_vm.score)))])])],1)],1)}
+var section_titlevue_type_template_id_48d29e6b_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/section-title.vue?vue&type=template&id=48d29e6b&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/section-title.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ var section_titlevue_type_script_lang_js_ = ({
+  name: "section-title",
+  mixins: [mixins_locale],
+  props: {
+    name: {
+      type: String,
+      default: ""
+    },
+    count: {
+      type: String,
+      default: ""
+    },
+    score: {
+      type: String,
+      default: ""
+    },
+    needScore: {
+      type: Number,
+      default: 1
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/section-title.vue?vue&type=script&lang=js&
+ /* harmony default export */ var component_section_titlevue_type_script_lang_js_ = (section_titlevue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/section-title.vue
+
+
+
+
+
+/* normalize component */
+
+var section_title_component = normalizeComponent(
+  component_section_titlevue_type_script_lang_js_,
+  section_titlevue_type_template_id_48d29e6b_render,
+  section_titlevue_type_template_id_48d29e6b_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var section_title = (section_title_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/material-title.vue?vue&type=template&id=49892e72&
+var material_titlevue_type_template_id_49892e72_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('a-row',[_c('a-col',{staticClass:"ibs-pr16 ibs-pl16"},[_c('div',[(_vm.item.errors && _vm.item.errors.stem)?_c('div',{staticClass:"ibs-engine-material ibs-danger-color"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.stemErrorMessage"))+" ")]):_c('div',{staticClass:"ibs-engine-material"},[_c('div',{staticClass:" ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.material)}}),(_vm.getAttachmentTypeData('material'))?_c('div',{staticClass:"ibs-mt16 ibs-engine-material__attachment"},[_c('attachment-preview',{attrs:{"cdnHost":_vm.cdnHost,"fileData":_vm.getAttachmentTypeData('material'),"downloadAttachmentCallback":_vm.downloadAttachmentCallback,"previewAttachmentCallback":_vm.previewAttachmentCallback},on:{"previewAttachment":_vm.previewAttachment,"downloadAttachment":_vm.downloadAttachment}})],1):_vm._e()])])])],1)],1)}
+var material_titlevue_type_template_id_49892e72_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/material-title.vue?vue&type=template&id=49892e72&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/material-title.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ var material_titlevue_type_script_lang_js_ = ({
+  name: "material-title",
+  mixins: [mixins_locale],
+  inject: ["cdnHost", "previewAttachmentCallback", "downloadAttachmentCallback"],
+  components: {
+    attachmentPreview: attachment
+  },
+  props: {
+    material: {
+      type: String,
+      default: ""
+    },
+    item: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    attachments: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    }
+  },
+  methods: {
+    getAttachmentTypeData: function getAttachmentTypeData(type) {
+      var result = this.attachments.filter(function (item) {
+        return item.module == type;
+      });
+      return result[result.length - 1];
+    },
+    previewAttachment: function previewAttachment(fileId) {
+      this.$emit("previewAttachment", fileId);
+    },
+    downloadAttachment: function downloadAttachment(fileId) {
+      this.$emit("downloadAttachment", fileId);
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/material-title.vue?vue&type=script&lang=js&
+ /* harmony default export */ var component_material_titlevue_type_script_lang_js_ = (material_titlevue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/material-title.vue
+
+
+
+
+
+/* normalize component */
+
+var material_title_component = normalizeComponent(
+  component_material_titlevue_type_script_lang_js_,
+  material_titlevue_type_template_id_49892e72_render,
+  material_titlevue_type_template_id_49892e72_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var material_title = (material_title_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/material-analysis.vue?vue&type=template&id=3f3c97e1&
+var material_analysisvue_type_template_id_3f3c97e1_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('a-row',[_c('a-col',{staticClass:"ibs-pr16 ibs-pl16"},[_c('div',{staticClass:"ibs-engine-material ibs-engine-material--analysis ibs-no-bottom-border"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.itemAnalysis")))]),_c('div',{staticClass:"ibs-content ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.analysis)}}),_c('div',{staticClass:"ibs-mt16"},[(_vm.getAttachmentTypeData('analysis'))?_c('attachment-preview',{attrs:{"cdnHost":_vm.cdnHost,"fileData":_vm.getAttachmentTypeData('analysis'),"previewAttachmentCallback":_vm.previewAttachmentCallback,"downloadAttachmentCallback":_vm.downloadAttachmentCallback},on:{"previewAttachment":_vm.previewAttachment,"downloadAttachment":_vm.downloadAttachment}}):_vm._e()],1)])])],1)],1)}
+var material_analysisvue_type_template_id_3f3c97e1_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/material-analysis.vue?vue&type=template&id=3f3c97e1&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/material-analysis.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ var material_analysisvue_type_script_lang_js_ = ({
+  name: "material-analysis",
+  inject: ["cdnHost", "previewAttachmentCallback", "downloadAttachmentCallback"],
+  components: {
+    attachmentPreview: attachment
+  },
+  mixins: [mixins_locale],
+  props: {
+    analysis: {
+      type: String,
+      default: ""
+    },
+    attachments: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    }
+  },
+  methods: {
+    getAttachmentTypeData: function getAttachmentTypeData(type) {
+      var result = this.attachments.filter(function (item) {
+        return item.module == type;
+      });
+      return result[result.length - 1];
+    },
+    previewAttachment: function previewAttachment(fileId) {
+      this.$emit("previewAttachment", fileId);
+    },
+    downloadAttachment: function downloadAttachment(fileId) {
+      this.$emit("downloadAttachment", fileId);
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/material-analysis.vue?vue&type=script&lang=js&
+ /* harmony default export */ var component_material_analysisvue_type_script_lang_js_ = (material_analysisvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/material-analysis.vue
+
+
+
+
+
+/* normalize component */
+
+var material_analysis_component = normalizeComponent(
+  component_material_analysisvue_type_script_lang_js_,
+  material_analysisvue_type_template_id_3f3c97e1_render,
+  material_analysisvue_type_template_id_3f3c97e1_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var material_analysis = (material_analysis_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/review.vue?vue&type=template&id=174b4a71&
+var reviewvue_type_template_id_174b4a71_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('a-form-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.reviewType === 'score'),expression:"reviewType === 'score'"}],staticClass:"ibs-review-form-item",attrs:{"label":_vm.t('itemEngine.getScore'),"label-col":{ span: 2 },"wrapper-col":{ sm: { span: 20 }, xs: { span: 18 } }}},[_c('a-input',{directives:[{name:"decorator",rawName:"v-decorator",value:([
+        ("score" + _vm.id),
+        {
+          rules: [{ validator: _vm.checkScore }],
+          initialValue: 0
+        }
+      ]),expression:"[\n        `score${id}`,\n        {\n          rules: [{ validator: checkScore }],\n          initialValue: 0\n        }\n      ]"}],staticStyle:{"width":"200px"},attrs:{"type":"number"}})],1),_c('a-form-item',{staticClass:"ibs-review-form-item",staticStyle:{"display":"none"}},[_c('a-input',{directives:[{name:"decorator",rawName:"v-decorator",value:([
+        ("mode" + _vm.id),
+        {
+          initialValue: _vm.question.answer_mode
+        }
+      ]),expression:"[\n        `mode${id}`,\n        {\n          initialValue: question.answer_mode\n        }\n      ]"}],attrs:{"type":"text"}})],1),_c('a-form-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.reviewType !== 'score'),expression:"reviewType !== 'score'"}],staticClass:"ibs-review-form-item",attrs:{"label":_vm.t('itemReview.review_results'),"label-col":{ span: 2 },"wrapper-col":{ sm: { span: 20 }, xs: { span: 18 } }}},[_c('a-radio-group',{directives:[{name:"decorator",rawName:"v-decorator",value:([
+        ("status" + _vm.id),
+        {
+          initialValue: 'right'
+        }
+      ]),expression:"[\n        `status${id}`,\n        {\n          initialValue: 'right'\n        }\n      ]"}],attrs:{"name":"radioGroup"}},[_c('a-radio',{attrs:{"value":"right"}},[_vm._v(" "+_vm._s(_vm.judgeRightText)+" ")]),_c('a-radio',{attrs:{"value":"wrong"}},[_vm._v(" "+_vm._s(_vm.judgeErrorText)+" ")])],1)],1),(_vm.role !== 'student')?_c('a-form-item',{staticClass:"ibs-pb24 ibs-mt16 ibs-review-form-item",attrs:{"label":_vm.t('itemEngine.comment2'),"label-col":{ span: 2 },"wrapper-col":{ sm: { span: 20 }, xs: { span: 18 } }}},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
+        ("comment" + _vm.id),
+        {
+          initialValue: ''
+        }
+      ]),expression:"[\n        `comment${id}`,\n        {\n          initialValue: ''\n        }\n      ]"}],attrs:{"rows":0,"data-image-download-url":_vm.showCKEditorData.filebrowserImageDownloadUrl}})],1):_vm._e()],1)}
+var reviewvue_type_template_id_174b4a71_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/review.vue?vue&type=template&id=174b4a71&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/review.vue?vue&type=script&lang=js&
+function reviewvue_type_script_lang_js_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ var reviewvue_type_script_lang_js_ = ({
+  name: "review",
+  mixins: [mixins_locale],
+  data: function data() {
+    return {
+      comment: ""
+    };
+  },
+  props: {
+    id: {
+      type: String,
+      default: ""
+    },
+    keys: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    },
+    form: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    question: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    needScore: {
+      type: Number,
+      default: function _default() {
+        return 1;
+      }
+    },
+    role: {
+      type: String,
+      default: ""
+    },
+    reviewType: {
+      type: String,
+      default: "score"
+    }
+  },
+  inject: ["showCKEditorData"],
+  mounted: function mounted() {
+    var _this = this;
+
+    if (this.role === "student") {
+      return;
+    }
+
+    this.$nextTick(function () {
+      console.log(_this.id);
+      load_script_default()(_this.showCKEditorData.jqueryPath, function (err) {
+        if (err) {
+          console.log(err);
+        }
+
+        load_script_default()(_this.showCKEditorData.publicPath, function (err) {
+          if (err) {
+            console.log(err);
+          } // 批阅组件的评语输入
+
+
+          _this.initComment();
+        });
+      });
+    });
+  },
+  computed: {
+    judgeRightText: function judgeRightText() {
+      return this.role === "student" ? this.t("itemReview.mastered") : this.t("itemReview.right");
+    },
+    judgeErrorText: function judgeErrorText() {
+      return this.role === "student" ? this.t("itemReview.not_mastered") : this.t("itemReview.wrong");
+    }
+  },
+  methods: {
+    // 验证规则，不超过当前分数值，
+    checkScore: function checkScore(rule, value, callback) {
+      // 获取当前题目分数
+      var fractionRule = /^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/;
+
+      if (value < 0) {
+        callback(this.t("itemEngine.ScoreRule.one"));
+      } else if (value > Number(this.question.score)) {
+        callback(this.t("itemEngine.ScoreRule.two"));
+      } else if (!fractionRule.test(value)) {
+        callback(this.t("itemEngine.ScoreRule.three"));
+      } else {
+        callback();
+      }
+    },
+    initComment: function initComment() {
+      var _this2 = this;
+
+      this.comment = window.CKEDITOR.replace("essay-comment-form_comment".concat(this.id), {
+        toolbar: "Minimal",
+        fileSingleSizeLimit: this.showCKEditorData.fileSingleSizeLimit,
+        filebrowserImageUploadUrl: this.showCKEditorData.filebrowserImageUploadUrl,
+        filebrowserImageDownloadUrl: this.showCKEditorData.filebrowserImageDownloadUrl,
+        language: this.showCKEditorData.language
+      });
+      this.comment.on("change", function () {
+        var data = _this2.comment.getData();
+
+        _this2.form.setFieldsValue(reviewvue_type_script_lang_js_defineProperty({}, "comment".concat(_this2.id), data));
+      });
+      this.comment.on("blur", function () {
+        var data = _this2.comment.getData();
+
+        _this2.form.setFieldsValue(reviewvue_type_script_lang_js_defineProperty({}, "comment".concat(_this2.id), data));
+      });
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/review.vue?vue&type=script&lang=js&
+ /* harmony default export */ var component_reviewvue_type_script_lang_js_ = (reviewvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/review.vue
+
+
+
+
+
+/* normalize component */
+
+var review_component = normalizeComponent(
+  component_reviewvue_type_script_lang_js_,
+  reviewvue_type_template_id_174b4a71_render,
+  reviewvue_type_template_id_174b4a71_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var review = (review_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/count-down.vue?vue&type=template&id=5083d410&
+var count_downvue_type_template_id_5083d410_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isShow)?_c('div',{class:_vm.className},[_c('img',{staticClass:"clock-icon",attrs:{"src":_vm.clockIcon}}),(_vm.time)?_c('span',[_vm._v(_vm._s(_vm.time))]):_c('span',[_vm._v("00:00:00")])]):_vm._e()}
+var count_downvue_type_template_id_5083d410_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/count-down.vue?vue&type=template&id=5083d410&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/count-down.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+var clockIcon = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGgAAABoCAMAAAAqwkWTAAAAP1BMVEX///9mZmafn5/s7OxwcHB5eXmMjIz19fXGxsaysrK8vLyDg4PZ2dnj4+OoqKizs7OpqamWlpbPz8/Y2Nji4uLjiUH7AAAE6klEQVRo3u1Z2baiMBCULJ2FEBb9/2+dKyKVINkcnTMPt54EIUV3qjud9OUX/wjqatgPzKIu3wT3onuC8cvXYEUXQNjLl2C6A8zlK7DdC75iE9/81rMf9Jv3vjFPbB1auo1Wrpf+8nGoB4/ar1cm8XmVLytR4Cq33lgN/Lzk+vBOD+F9fIrY651fov+NiDtt7+nbG6PpW0SnmNVLwJmZDH87XK3sEiAdjTqINbCHt2iu1GUxLyHPCvEGk+67IqRG5t2YllYaeRiS2B0zyRMqHt7ULTQDdUDvD9Ox+D6k4huPEK2rlZowDNnTRM014RmxTc8g2lZg3u8jjCrz2BR70cGFdTZpAZqGidRYF+uWK3NKwxdt/D0zWHcLnx53qUcrsKvPBMQRTobieossyPjzBRYulLqWR1hkFnkaQJ4fqz4WBK6r5JG8lBtQskICbA9cWclDahsBNFkqNT+vJb6zQgfseSk6QMiZ/YB6cVazTnFA1ZWkI6Jpg2Bhahg0k0FaiNRX5kFinBBND9DJzC4MJX/g9TohyDAeTGmXwtnBfVSbUw1KUvAQz3iAIiaFD82Ch9W7qdsJWSRRuH6ocpwFT1mliCATiIkK6fEpbKivV/WJXgfTpCsM4nABeLJQDyYRvCnLBo3gBE8dUw+fZ02S+BSD+aljkpgmJUB6CuR2qK8E7j3f1IY3TCFkZxjEKtfiQTwGh9pgEuVjaMJPquHBVpYedsAklZUCh0G8hgdEPDAp5RB8EeEVVseDmWSwgzIeUZDCVGXQcFx3OIRnM767YnQJg2p4dtCuJpXR3bSL/7Y+tTTyxGcCffrAg/a/bC6FXC3z1kU8gNh9N6UnSexmZHaNi9xS+gsP5EC7hEVaC8NOqVPuBWIeDA9h8KQWMEVDM088fFINep+Ya8pqneeJ/S9TbjG7e20q98qt6pplshDF8ITccEI0gzLlXKZ+5pOlHDPvsmPrr5T/WfwLgOoV0rNNVNM+ebKCP3KPTJvN6Wdw/30i3IeL/PtEZdcJhYW77DqfEgOLZRHDVYiBdgnMKTFYZI+sdjs5s/Q+q18tBWU2YJdUwC5dBJ1KmA4RlU5ByCOlFDQd/0X2yqYgDF9OquBJJtVbeokVcfZg2bMLuaR3vwT/FxY+g4de4axn1uVKXYuFL7OUv31KD7UMhaXcwasSn9MEtiuXp741LvoMhNECjnJS50pVOhSa7L2jZJ4vIOOij5pNQn2LnzrbIzKYr6ZZwteVS11Ceqb2Jp4N/C3zRwAOJmFbVQsuYIUulbo9TMLBRiWPPO5/ZXGzbEDaulmWFZtlfIr42+0/OAsmUVgu9ryOB+JhZYNitY2tRzQj1Fc85hzCzeLYdug0xuorYArVNtYeo4FHQX1ldyMpjJUHgxh6huPqAo/BLRvVkmthCQ2HVAU61GYw0Rsk07ew0bJWXbE0TX33A/6acAmIntZGlRThzTE+MB8bW5SzwjykAako6lrXMbQMylTkXloGQHsThPvzJsioTpogzUyxrAd7bOuMLoymVh5IAOoDmbOPRpVeeNROFoimVliBzmcKoEE0tYPLoB1VpkE0tWNMtcTBYgnPTKqdAkYBvV9u0Z86avhSvknQ3sKe2R0nLWzgbaoietD8DZY5yYDc0I5CSxxAE/2jUM6TiDkEeQeWD7Npc88MzFjt+OW/xB9y8yiXTVs2xQAAAABJRU5ErkJggg==";
+/* harmony default export */ var count_downvue_type_script_lang_js_ = ({
+  name: "count-down",
+  mixins: [emitter, mixins_locale],
+  data: function data() {
+    return {
+      time: null,
+      clockIcon: clockIcon,
+      timeMeter: null //计时器
+
+    };
+  },
+  props: {
+    getCurrentTime: {},
+    limitedTime: {
+      type: Number,
+      default: 0
+    },
+    assessmentStatus: {
+      type: String,
+      default: ""
+    },
+    mode: {
+      type: String,
+      default: "do"
+    },
+    beginTime: {
+      type: Number,
+      default: 0
+    }
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.$nextTick(function () {
+      if (_this.assessmentStatus === "preview" || _this.mode !== "do") {
+        return;
+      }
+
+      _this.timer();
+    });
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.clearTime();
+  },
+  computed: {
+    className: function className() {
+      return this.limitedTime && this.assessmentStatus !== "preview" && this.mode === "do" ? "ibs-assessment-timer ibs-assessment-timer--top" : "ibs-assessment-timer";
+    },
+    isShow: function isShow() {
+      return (this.beginTime + this.limitedTime * 60) * 1000 - Date.now() > 0;
+    }
+  },
+  methods: {
+    getContainer: function getContainer() {
+      return document.getElementById("item-bank-sdk-card");
+    },
+    reachTimerSubmit: function reachTimerSubmit() {
+      this.$emit("reachTimeSubmitAnswerData");
+    },
+    timer: function timer() {
+      var _this2 = this;
+
+      var time = (this.beginTime + this.limitedTime * 60) * 1000 - Date.now();
+
+      if (time <= 0) {
+        this.arrivalTime();
+        return;
+      } // 考试倒计时
+
+
+      var i = 0;
+      this.timeMeter = setInterval(function () {
+        var _getCountDown = getCountDown(time, i++),
+            hours = _getCountDown.hours,
+            minutes = _getCountDown.minutes,
+            seconds = _getCountDown.seconds;
+
+        _this2.time = "".concat(hours, ":").concat(minutes, ":").concat(seconds);
+
+        if (Number(hours) == 0 && Number(minutes) == 0 && Number(seconds) == 0 || Number(seconds) < 0) {
+          _this2.arrivalTime();
+        }
+      }, 1000);
+    },
+    arrivalTime: function arrivalTime() {
+      this.clearTime(); //直接交卷
+
+      this.reachTimerSubmit();
+    },
+    clearTime: function clearTime() {
+      clearInterval(this.timeMeter);
+      this.timeMeter = null;
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/count-down.vue?vue&type=script&lang=js&
+ /* harmony default export */ var component_count_downvue_type_script_lang_js_ = (count_downvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/count-down.vue
+
+
+
+
+
+/* normalize component */
+
+var count_down_component = normalizeComponent(
+  component_count_downvue_type_script_lang_js_,
+  count_downvue_type_template_id_5083d410_render,
+  count_downvue_type_template_id_5083d410_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var count_down = (count_down_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/item.vue?vue&type=script&lang=js&
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function src_itemvue_type_script_lang_js_extends() { src_itemvue_type_script_lang_js_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return src_itemvue_type_script_lang_js_extends.apply(this, arguments); }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var orderNum = 1;
+var itemvue_type_script_lang_js_baseCKEditorData = {
+  publicPath: "".concat("", "/es-ckeditor/ckeditor.js"),
+  fileSingleSizeLimit: 10,
+  filebrowserImageUploadUrl: "",
+  filebrowserImageDownloadUrl: "",
+  language: "zh-cn",
+  jqueryPath: "https://cdn.bootcss.com/jquery/3.4.1/jquery.js"
+};
+var itemvue_type_script_lang_js_clockIcon = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGgAAABoCAMAAAAqwkWTAAAAP1BMVEX///9mZmafn5/s7OxwcHB5eXmMjIz19fXGxsaysrK8vLyDg4PZ2dnj4+OoqKizs7OpqamWlpbPz8/Y2Nji4uLjiUH7AAAE6klEQVRo3u1Z2baiMBCULJ2FEBb9/2+dKyKVINkcnTMPt54EIUV3qjud9OUX/wjqatgPzKIu3wT3onuC8cvXYEUXQNjLl2C6A8zlK7DdC75iE9/81rMf9Jv3vjFPbB1auo1Wrpf+8nGoB4/ar1cm8XmVLytR4Cq33lgN/Lzk+vBOD+F9fIrY651fov+NiDtt7+nbG6PpW0SnmNVLwJmZDH87XK3sEiAdjTqINbCHt2iu1GUxLyHPCvEGk+67IqRG5t2YllYaeRiS2B0zyRMqHt7ULTQDdUDvD9Ox+D6k4huPEK2rlZowDNnTRM014RmxTc8g2lZg3u8jjCrz2BR70cGFdTZpAZqGidRYF+uWK3NKwxdt/D0zWHcLnx53qUcrsKvPBMQRTobieossyPjzBRYulLqWR1hkFnkaQJ4fqz4WBK6r5JG8lBtQskICbA9cWclDahsBNFkqNT+vJb6zQgfseSk6QMiZ/YB6cVazTnFA1ZWkI6Jpg2Bhahg0k0FaiNRX5kFinBBND9DJzC4MJX/g9TohyDAeTGmXwtnBfVSbUw1KUvAQz3iAIiaFD82Ch9W7qdsJWSRRuH6ocpwFT1mliCATiIkK6fEpbKivV/WJXgfTpCsM4nABeLJQDyYRvCnLBo3gBE8dUw+fZ02S+BSD+aljkpgmJUB6CuR2qK8E7j3f1IY3TCFkZxjEKtfiQTwGh9pgEuVjaMJPquHBVpYedsAklZUCh0G8hgdEPDAp5RB8EeEVVseDmWSwgzIeUZDCVGXQcFx3OIRnM767YnQJg2p4dtCuJpXR3bSL/7Y+tTTyxGcCffrAg/a/bC6FXC3z1kU8gNh9N6UnSexmZHaNi9xS+gsP5EC7hEVaC8NOqVPuBWIeDA9h8KQWMEVDM088fFINep+Ya8pqneeJ/S9TbjG7e20q98qt6pplshDF8ITccEI0gzLlXKZ+5pOlHDPvsmPrr5T/WfwLgOoV0rNNVNM+ebKCP3KPTJvN6Wdw/30i3IeL/PtEZdcJhYW77DqfEgOLZRHDVYiBdgnMKTFYZI+sdjs5s/Q+q18tBWU2YJdUwC5dBJ1KmA4RlU5ByCOlFDQd/0X2yqYgDF9OquBJJtVbeokVcfZg2bMLuaR3vwT/FxY+g4de4axn1uVKXYuFL7OUv31KD7UMhaXcwasSn9MEtiuXp741LvoMhNECjnJS50pVOhSa7L2jZJ4vIOOij5pNQn2LnzrbIzKYr6ZZwteVS11Ceqb2Jp4N/C3zRwAOJmFbVQsuYIUulbo9TMLBRiWPPO5/ZXGzbEDaulmWFZtlfIr42+0/OAsmUVgu9ryOB+JhZYNitY2tRzQj1Fc85hzCzeLYdug0xuorYArVNtYeo4FHQX1ldyMpjJUHgxh6huPqAo/BLRvVkmthCQ2HVAU61GYw0Rsk07ew0bJWXbE0TX33A/6acAmIntZGlRThzTE+MB8bW5SzwjykAako6lrXMbQMylTkXloGQHsThPvzJsioTpogzUyxrAd7bOuMLoymVh5IAOoDmbOPRpVeeNROFoimVliBzmcKoEE0tYPLoB1VpkE0tWNMtcTBYgnPTKqdAkYBvV9u0Z86avhSvknQ3sKe2R0nLWzgbaoietD8DZY5yYDc0I5CSxxAE/2jUM6TiDkEeQeWD7Npc88MzFjt+OW/xB9y8yiXTVs2xQAAAABJRU5ErkJggg==";
+/* harmony default export */ var item_engine_src_itemvue_type_script_lang_js_ = ({
+  name: "item-engine",
+  mixins: [mixins_locale],
+  inheritAttrs: false,
+  components: {
+    judgeType: component_judge,
+    card: card,
+    singleChoice: component_single_choice,
+    choice: component_choice,
+    essay: component_essay,
+    fill: component_fill,
+    sectionTitle: section_title,
+    materialTitle: material_title,
+    materialAnalysis: material_analysis,
+    review: review,
+    result: component_result,
+    countDown: count_down,
+    answerModel: component_answer_model
+  },
+  data: function data() {
+    return {
+      sections: this.assessment.sections,
+      responses: this.assessmentResponse.section_responses || [],
+      analysis_reports: this.answerSceneReport.question_reports || [],
+      section_responses: [],
+      section_reports: this.answerReport.section_reports,
+      isError: false,
+      enableFacein: Number(this.answerScene.enable_facein),
+      count: 0,
+      intervalId: null,
+      saveDataIntervalId: null,
+      visible: false,
+      closable: false,
+      needMarking: Number(this.answerScene.manual_marking),
+      needScore: Number(this.answerScene.need_score),
+      doTimes: Number(this.answerScene.do_times),
+      recordStatus: this.answerRecord.status,
+      collectList: [],
+      mobileShow: false,
+      reviewType: this.answerScene.reviewType,
+      used_time: "00:00:00",
+      clockIcon: itemvue_type_script_lang_js_clockIcon
+    };
+  },
+  props: {
+    getCurrentTime: {},
+    // 模式 preview:预览模式 report:答题结果模式 do:做题模式 review:批阅模式
+    mode: {
+      type: String,
+      default: "do"
+    },
+    showCKEditorData: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    answerReport: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    answerSceneReport: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    //暂存数据
+    assessmentResponse: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    //试卷
+    assessment: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    //任务信息
+    metaActivity: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    //答题记录
+    answerRecord: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    //答题场次
+    answerScene: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    //是否显示答案
+    answerShow: {
+      type: String,
+      default: function _default() {
+        return "show";
+      }
+    },
+    //试卷预览
+    assessmentStatus: {
+      type: String,
+      default: function _default() {
+        return "";
+      }
+    },
+    showAttachment: {
+      type: String,
+      default: function _default() {
+        return "0";
+      }
+    },
+    uploadSDKInitData: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    cdnHost: {
+      type: String,
+      default: function _default() {
+        return "service-cdn.qiqiuyun.net";
+      }
+    },
+    questionFavorites: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    },
+    deleteAttachmentCallback: {
+      type: Function,
+      default: function _default() {
+        return new Promise(function (resolve) {
+          resolve();
+        });
+      }
+    },
+    previewAttachmentCallback: {
+      type: Function,
+      default: function _default() {
+        return new Promise(function (resolve) {
+          resolve();
+        });
+      }
+    },
+    downloadAttachmentCallback: {
+      type: Function,
+      default: function _default() {
+        return new Promise(function (resolve) {
+          resolve();
+        });
+      }
+    },
+    inpectConstrolCallback: {
+      type: Function,
+      default: function _default() {
+        return new Promise(function (resolve) {
+          resolve();
+        });
+      }
+    },
+    showSaveProgressBtn: {
+      type: Number,
+      default: 1
+    },
+    showDoAgainBtn: {
+      type: Number,
+      default: 1
+    },
+    isErrorCorrection: {
+      type: String,
+      default: "0"
+    },
+    mediaType: {
+      type: String,
+      default: ""
+    },
+    finishType: {
+      type: String,
+      default: ""
+    },
+    submitList: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    }
+  },
+  computed: {
+    CKEditorData: function CKEditorData() {
+      if (Object.keys(this.showCKEditorData).length) {
+        return src_itemvue_type_script_lang_js_extends(itemvue_type_script_lang_js_baseCKEditorData, this.showCKEditorData);
+      }
+
+      return itemvue_type_script_lang_js_baseCKEditorData;
+    },
+    widthCol: function widthCol() {
+      return this.mode !== "analysis" ? 14 : "";
+    },
+    offsetCol: function offsetCol() {
+      return this.mode !== "analysis" ? 2 : 0;
+    },
+    //是否允许做题时查看解析
+    doingLookAnalysis: function doingLookAnalysis() {
+      return !!Number(this.answerScene.doing_look_analysis) && this.mode === "do";
+    },
+    localUsedTime: function localUsedTime() {
+      return "".concat(this.answerRecord.id, "-usedTime");
+    }
+  },
+  watch: {
+    section_responses: {
+      handler: function handler(val) {
+        console.log(val);
+      },
+      deep: true
+    }
+  },
+  filters: {
+    date: function date(timeStamp) {
+      return timeStampFormatTime(timeStamp);
+    }
+  },
+  provide: function provide() {
+    return {
+      showCKEditorData: this.CKEditorData,
+      showAttachment: Number(this.showAttachment),
+      cdnHost: this.cdnHost,
+      deleteAttachmentCallback: this.deleteAttachmentCallback,
+      previewAttachmentCallback: this.previewAttachmentCallback,
+      downloadAttachmentCallback: this.downloadAttachmentCallback
+    };
+  },
+  mounted: function mounted() {
+    //如果有暂存数据
+    if (this.questionFavorites.length > 0) {
+      this.collectList = this.questionFavorites;
+    }
+
+    if (this.responses.length > 0) {
+      this.section_responses = this.responses;
+    } else {
+      this.formateSections();
+    }
+
+    if (this.mode === "do" && this.assessmentStatus !== "preview" && !this.visible) {
+      this.countTime();
+      this.trigger();
+    }
+
+    if (this.enableFacein && date_toolkit_isMobileDevice() && this.mode === "do" && this.assessmentStatus !== "preview") {
+      this.mobileShow = true;
+    } // 是否提示考试时间未到
+
+
+    this.getStartTime();
+  },
+  created: function created() {
+    this.$on("previewFile", this.previewAttachment);
+    this.$on("downloadFile", this.downloadAttachment);
+  },
+  beforeDestroy: function beforeDestroy() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+
+    if (this.saveDataIntervalId) {
+      clearInterval(this.saveDataIntervalId);
+    }
+  },
+  methods: {
+    //遍历获取答案体结构
+    formateSections: function formateSections() {
+      var _this = this;
+
+      this.sections.forEach(function (item) {
+        _this.section_responses.push({
+          section_id: item.id,
+          item_responses: _this.formateItems(item.items)
+        });
+      });
+    },
+    formateItems: function formateItems(items) {
+      var _this2 = this;
+
+      var item_responses = [];
+      items.forEach(function (item) {
+        item_responses.push({
+          item_id: item.id,
+          question_responses: _this2.formateQuestions(item.questions)
+        });
+      });
+      return item_responses;
+    },
+    formateQuestions: function formateQuestions(questions) {
+      var _this3 = this;
+
+      var question_responses = [];
+      questions.forEach(function (item) {
+        item.orderNum = orderNum++;
+
+        if (Number(item.isDelete) == 1) {
+          item.response_points = [];
+        }
+
+        var length = item.response_points.length ? item.response_points.length : 0;
+        question_responses.push({
+          question_id: item.id,
+          response: _this3.initResponse(item.answer_mode, length),
+          attachments: [],
+          isTag: false
+        });
+      });
+      return question_responses;
+    },
+    //初始化答案数据
+    initResponse: function initResponse(mode, lengths) {
+      var response = [];
+
+      if (mode === "text") {
+        response = Array(lengths).fill("");
+      } else if (mode === "single_choice" || mode === "rich_text" || mode === "true_false") {
+        response = [""];
+      }
+
+      return response;
+    },
+    getVal: function getVal(msg) {
+      this.isError = msg;
+    },
+    exitAnswer: function exitAnswer() {
+      this.$emit("exitAnswer");
+    },
+    answerData: function answerData() {
+      var finalData = this.getResponse();
+      finalData.used_time = localStorage.getItem(this.localUsedTime);
+      this.$emit("getAnswerData", finalData); // 立即提交的时候清空计时器;
+
+      clearInterval(this.saveDataIntervalId);
+      this.saveDataIntervalId = null;
+      clearInterval(this.intervalId); //清除计时器
+
+      this.intervalId = null; //设置为null
+    },
+    reachTimeSubmitAnswerData: function reachTimeSubmitAnswerData() {
+      var finalData = this.getResponse();
+      finalData.used_time = localStorage.getItem(this.localUsedTime);
+      this.$emit("reachTimeSubmitAnswerData", finalData);
+    },
+    saveAnswerData: function saveAnswerData() {
+      var finalData = this.getResponse();
+      finalData.used_time = localStorage.getItem(this.localUsedTime);
+      this.$emit("saveAnswerData", finalData);
+    },
+    countTime: function countTime() {
+      var _this4 = this;
+
+      var h = this.$createElement;
+
+      if (this.intervalId != null) {
+        return;
+      }
+
+      var usedTime = Number(this.answerRecord.used_time);
+      var localUsedTime = localStorage.getItem(this.localUsedTime) || 0;
+      var time = Math.max(usedTime, localUsedTime);
+
+      if (usedTime > localUsedTime) {
+        localStorage.setItem(this.localUsedTime, usedTime);
+      }
+
+      var self = this;
+      this.intervalId = setInterval(function () {
+        localStorage.setItem(_this4.localUsedTime, ++time);
+
+        var _getCountDown = getCountDown(time * 1000, 0),
+            hours = _getCountDown.hours,
+            minutes = _getCountDown.minutes,
+            seconds = _getCountDown.seconds;
+
+        _this4.used_time = "".concat(hours, ":").concat(minutes, ":").concat(seconds);
+
+        if (_this4.answerRecord.exam_mode == "1" && _this4.answerScene.limited_time > 0 && time / 60 == _this4.answerScene.limited_time) {
+          var timeReach = _this4.t("itemEngine.timeReach")(Math.floor(time / 60));
+
+          _this4.$confirm({
+            content: function content() {
+              return h("strong", [timeReach]);
+            },
+            icon: "",
+            okText: _this4.t("itemEngine.goThenDo"),
+            cancelText: _this4.t("testpaper.submit"),
+            class: "ibs-card-confirm-modal",
+            onOk: function onOk() {
+              self.forceRemoveModalDom();
+            },
+            onCancel: function onCancel() {
+              self.answerData();
+              self.forceRemoveModalDom();
+            }
+          });
+        }
+      }, 1000);
+    },
+    forceRemoveModalDom: function forceRemoveModalDom() {
+      var modal = document.querySelector(".ant-modal-root");
+
+      if (modal) {
+        modal.remove();
+      }
+    },
+    trigger: function trigger() {
+      var _this5 = this;
+
+      var data = this.getResponse();
+      var self = this;
+      this.saveDataIntervalId = setInterval(function () {
+        data.used_time = localStorage.getItem(_this5.localUsedTime);
+        self.$emit("timeSaveAnswerData", data);
+      }, 30 * 1000);
+    },
+    getStartTime: function getStartTime() {
+      if (this.mode === "do" && this.assessmentStatus !== "preview" && Number(this.answerScene.start_time)) {
+        var now = this.getCurrentTime ? this.getCurrentTime() : Date.parse(new Date());
+        var startTime = Number(this.answerScene.start_time) * 1000;
+        var timeSpace = now < startTime;
+
+        if (timeSpace) {
+          this.visible = true;
+        } else {
+          this.visible = false;
+        }
+      }
+    },
+    getResponse: function getResponse() {
+      var finalData = {};
+      finalData.assessment_id = this.assessment.id;
+      finalData.answer_record_id = this.answerRecord.id;
+      finalData.section_responses = this.section_responses;
+      return finalData;
+    },
+    changeDetermine: function changeDetermine(value, keys) {
+      this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].response = [value];
+    },
+    changeChoice: function changeChoice(value, keys) {
+      this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].response = value;
+    },
+    changeEssay: function changeEssay(value, keys) {
+      this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].response = [value];
+    },
+    changeFill: function changeFill(value, keys) {
+      this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].response = value;
+    },
+    changeTag: function changeTag(value, keys) {
+      this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].isTag = value;
+    },
+    changeCollect: function changeCollect(value, collectStatus) {
+      var collectItem = src_itemvue_type_script_lang_js_extends(value, {
+        target_id: this.assessment.id
+      });
+
+      if (collectStatus) {
+        this.collectList.push(collectItem);
+        this.$emit("collectUpdateEvent", collectItem);
+      } else {
+        this.collectList = this.collectList.filter(function (collectItem) {
+          return collectItem.question_id !== value.question_id;
+        });
+        this.$emit("cancelCollectEvent", collectItem);
+      }
+
+      console.log(this.collectList);
+    },
+    getUserAnwer: function getUserAnwer(s, i, q) {
+      return this.section_responses[s].item_responses[i].question_responses[q].response;
+    },
+    getUserAttachment: function getUserAttachment(s, i, q) {
+      return this.section_responses[s].item_responses[i].question_responses[q].attachments;
+    },
+    getReportAnswer: function getReportAnswer(s, i, q) {
+      if (this.mode == "report" || this.mode == "review") {
+        try {
+          return this.section_reports[s].item_reports[i].question_reports[q];
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        return {};
+      }
+    },
+    getReportAnswerId: function getReportAnswerId(s, i, q) {
+      if (this.mode == "report" || this.mode == "review") {
+        return this.section_reports[s].item_reports[i].question_reports[q].id;
+      } else {
+        return "";
+      }
+    },
+    getErrorData: function getErrorData(s, i, q) {
+      if (this.mode !== "report") {
+        return true;
+      } else {
+        if (!this.isError) {
+          return true;
+        } else {
+          var status = this.getReportAnswer(s, i, q).status;
+
+          if (status === "wrong" || status === "part_right") {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }
+    },
+    getReviewMaterial: function getReviewMaterial(s, i) {
+      var essayData = this.section_reports[s].item_reports[i].question_reports.map(function (item) {
+        return item.status === "reviewing";
+      });
+      return essayData.indexOf(true) > -1 ? true : false;
+    },
+    getMaterial: function getMaterial(s, i) {
+      if (this.mode == "report") {
+        return this.getErrorMaterial(s, i);
+      } else if (this.mode == "review") {
+        return this.getReviewMaterial(s, i);
+      } else {
+        return true;
+      }
+    },
+    getErrorMaterial: function getErrorMaterial(s, i) {
+      if (!this.isError) {
+        return true;
+      }
+
+      var errorData = this.section_reports[s].item_reports[i].question_reports.map(function (question) {
+        return question.status === "wrong" || question.status === "part_right";
+      });
+      return errorData.indexOf(true) > -1 ? true : false;
+    },
+    getTitle: function getTitle(s) {
+      if (this.mode == "report") {
+        return this.getErrorTitle(s);
+      } else if (this.mode == "review") {
+        return this.getReviewTitle(s);
+      } else {
+        return true;
+      }
+    },
+    getErrorTitle: function getErrorTitle(s) {
+      if (!this.isError) {
+        return true;
+      }
+
+      var errorData = this.section_reports[s].item_reports.map(function (item) {
+        var status = item.question_reports.map(function (question) {
+          return question.status === "wrong" || question.status === "part_right";
+        });
+        var result = status.join(" ");
+        return result;
+      });
+      return errorData.join(" ").indexOf(true) > -1 ? true : false;
+    },
+    getReviewTitle: function getReviewTitle(s) {
+      var essayData = this.section_reports[s].item_reports.map(function (item) {
+        var status = item.question_reports.map(function (question) {
+          return question.status === "reviewing";
+        });
+        var result = status.join(" ");
+        return result;
+      });
+      return essayData.join(" ").indexOf(true) > -1 ? true : false;
+    },
+    getContainer: function getContainer() {
+      return document.getElementById("item-bank-sdk-message");
+    },
+    getEssayAttachment: function getEssayAttachment(file, keys) {
+      this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].attachments = [file];
+    },
+    deleteEssayAttachment: function deleteEssayAttachment(fileId, flag, keys) {
+      if (!flag) {
+        this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].attachments = [];
+      }
+
+      this.$emit("deleteAttachment", fileId, flag);
+    },
+    previewAttachment: function previewAttachment(fileId) {
+      this.$emit("previewAttachment", fileId);
+    },
+    downloadAttachment: function downloadAttachment(fileId) {
+      this.$emit("downloadAttachment", fileId);
+    },
+    getFavoritesQuestion: function getFavoritesQuestion(s, i, q) {
+      var _this6 = this;
+
+      var _this$questionFavorit = this.questionFavorites.filter(function (question) {
+        return question.question_id == _this6.sections[s].items[i].questions[q].id;
+      }),
+          _this$questionFavorit2 = _slicedToArray(_this$questionFavorit, 1),
+          item = _this$questionFavorit2[0];
+
+      return item;
+    },
+    getAnalysisQuestion: function getAnalysisQuestion(s, i, q) {
+      var _this7 = this;
+
+      if (this.mode !== "analysis") return {};
+
+      var _this$analysis_report = this.analysis_reports.filter(function (question) {
+        return question.question_id == _this7.sections[s].items[i].questions[q].id;
+      }),
+          _this$analysis_report2 = _slicedToArray(_this$analysis_report, 1),
+          item = _this$analysis_report2[0];
+
+      return item;
+    },
+    getLastClass: function getLastClass(q, length) {
+      if (q === length) {
+        return "ibs-item-last";
+      } else {
+        return "ibs-item-not-last";
+      }
+    },
+    getEssayItem: function getEssayItem(question, s, i, q) {
+      if (this.mode !== "review") {
+        return question.answer_mode === "rich_text" && this.getErrorData(s, i, q);
+      } else {
+        return this.section_reports[s].item_reports[i].question_reports[q].status === "reviewing";
+      }
+    },
+    goBack: function goBack() {
+      window.history.go(-1);
+    },
+    setMaterialAnalysis: function setMaterialAnalysis(canShowAnalysis, keys) {
+      this.$set(this.assessment.sections[keys[0]].items[keys[1]], "showMaterialAnalysis", canShowAnalysis);
+    },
+    showMaterialAnalysis: function showMaterialAnalysis(item, sectionsIndex, itemIndex) {
+      if (item.type !== "material") {
+        return;
+      }
+
+      var analysis = item.showMaterialAnalysis;
+
+      if (this.doingLookAnalysis) {
+        return analysis;
+      }
+
+      return this.mode !== "do" && this.mode !== "review" && this.getMaterial(sectionsIndex, itemIndex);
+    },
+    errorCorrection: function errorCorrection(params) {
+      this.$emit("error-correction", params);
+    },
+    handleViewHistoricalResult: function handleViewHistoricalResult(params) {
+      this.$emit("view-historical-result", params);
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/item-engine/src/item.vue?vue&type=script&lang=js&
+ /* harmony default export */ var components_item_engine_src_itemvue_type_script_lang_js_ = (item_engine_src_itemvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/item-engine/src/item.vue
+
+
+
+
+
+/* normalize component */
+
+var src_item_component = normalizeComponent(
+  components_item_engine_src_itemvue_type_script_lang_js_,
+  itemvue_type_template_id_774a27fc_render,
+  itemvue_type_template_id_774a27fc_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var item_engine_src_item = (src_item_component.exports);
+// CONCATENATED MODULE: ./src/components/item-engine/index.js
+
+
+item_engine_src_item.install = function (Vue) {
+  Vue.component(item_engine_src_item.name, item_engine_src_item);
+};
+
+/* harmony default export */ var item_engine = (item_engine_src_item);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-review/src/item.vue?vue&type=template&id=9173dd66&
+var itemvue_type_template_id_9173dd66_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('a-form',{attrs:{"form":_vm.reviewForm}},[_c('item-bank',{attrs:{"mode":"review","answerReport":_vm.answerReport,"assessment":_vm.assessment,"metaActivity":_vm.metaActivity,"form":_vm.reviewForm,"role":_vm.role,"answerScene":_vm.answerScene,"answerRecord":_vm.answerRecord,"showCKEditorData":_vm.showCKEditorData,"previewAttachmentCallback":_vm.previewAttachmentCallback,"downloadAttachmentCallback":_vm.downloadAttachmentCallback,"cdnHost":_vm.cdnHost,"media-type":_vm.mediaType,"finish-type":_vm.finishType,"submit-list":_vm.submitList},on:{"previewAttachment":_vm.previewAttachment,"downloadAttachment":_vm.downloadAttachment,"view-historical-result":_vm.handleViewHistoricalResult},scopedSlots:_vm._u([{key:"review-footer",fn:function(){return [(['testpaper', 'homework'].includes(_vm.mediaType))?_c('div',{staticClass:"ibs-item-list"},[_c('div',{staticClass:"ibs-pl16 ibs-pr16 ibs-comment"},[_c('a-row',[_c('a-col',{staticClass:"ibs-comment__title ibs-pl16",attrs:{"span":3}},[_vm._v(" "+_vm._s(_vm.t("itemReview.job_comments"))+" ")]),_c('a-col',{staticClass:"ibs-comment__content",attrs:{"span":21}},[_c('a-form',{attrs:{"form":_vm.form}},[_c('a-form-item',[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:(["comment", { initialValue: '' }]),expression:"[`comment`, { initialValue: '' }]"}],attrs:{"placeholder":_vm.t('itemReview.InputComment_tip'),"rows":5}})],1),_c('a-form-item',[_c('a-select',{attrs:{"defaultValue":_vm.comments[0]},on:{"change":_vm.handleChange}},_vm._l((_vm.comments),function(comment,index){return _c('a-select-option',{key:index,attrs:{"value":comment}},[_vm._v(" "+_vm._s(comment)+" ")])}),1)],1)],1)],1)],1)],1)]):_vm._e(),_c('div',{staticClass:"ibs-item-list ibs-footer ibs-clearfix",class:{
+            'ibs-footer--right':
+              _vm.mediaType === 'homework' && _vm.finishType === 'submit'
+          }},[(_vm.mediaType === 'homework' && _vm.finishType === 'submit')?_c('span',{staticClass:"ibs-mr24"},[_vm._v(" "+_vm._s(_vm.t("itemReview.rightQuestionCount"))+" "+_vm._s(_vm.answerReport.right_question_count)+" ")]):[_c('div',{staticClass:"ibs-mr24 ibs-left"},[_vm._v(" "+_vm._s(_vm.t("itemReview.subjective_question"))+" "+_vm._s(_vm.getSubjectiveScore)+" "+_vm._s(_vm.t("itemEngine.score"))+" ")]),_c('div',{staticClass:"ibs-mr24 ibs-left"},[_vm._v(" "+_vm._s(_vm.t("itemReview.objective_question"))+" "+_vm._s(_vm.getObjectiveScore)+" "+_vm._s(_vm.t("itemEngine.score"))+" ")]),_c('div',{staticClass:"ibs-mr24 ibs-left"},[_vm._v(" "+_vm._s(_vm.t("itemReview.Student_score"))+"： "+_vm._s(_vm.getCommentScore)+" ")]),_c('div',{staticClass:"ibs-mr24 ibs-left"},[_vm._v(" "+_vm._s(_vm.t("itemReview.Pass_score"))+_vm._s(_vm.answerScene.pass_score)+" ")]),_c('div',{staticClass:"ibs-mr24 ibs-left"},[_vm._v(" "+_vm._s(_vm.t("itemReview.result"))+" "),(_vm.isPassed)?_c('span',{staticStyle:{"font-weight":"500","color":"green"}},[_vm._v(" "+_vm._s(_vm.t("itemReview.pass"))+" ")]):_c('span',{staticStyle:{"font-weight":"500","color":"red"}},[_vm._v(" "+_vm._s(_vm.t("itemReview.fail"))+" ")])])],_c('a-button',{staticClass:"ibs-mr24",on:{"click":_vm.handleCancel}},[_vm._v(" "+_vm._s(_vm.t("itemReview.Cancel"))+" ")]),_c('a-button',{staticClass:"ibs-mr24",attrs:{"type":"primary"},on:{"click":function($event){return _vm.showConfirm('', $event)}}},[_vm._v(" "+_vm._s(_vm.t("itemReview.FinishReview"))+" ")]),_c('a-button',{on:{"click":function($event){return _vm.showConfirm('again', $event)}}},[_vm._v(" "+_vm._s(_vm.t("itemReview.FinishThenGo"))+" ")])],2)]},proxy:true}])})],1)],1)}
+var itemvue_type_template_id_9173dd66_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/item-review/src/item.vue?vue&type=template&id=9173dd66&
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/extends.js
 var helpers_extends = __webpack_require__("41b2");
@@ -47890,2839 +50723,6 @@ Modal.install = function (Vue) {
 };
 
 /* harmony default export */ var modal = (Modal);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/result.vue?vue&type=template&id=496b6ab8&
-var resultvue_type_template_id_496b6ab8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-result"},[_c('div',{staticClass:"ibs-mb16 ibs-clearfix"},[_c('div',{class:("ibs-left ibs-result-header " + _vm.extralClass)},[_c('div',{staticClass:"ibs-result-header__title ibs-text-overflow"},[_vm._v(" "+_vm._s(_vm.assessment.name)+" "),(_vm.needMarking)?_c('div',[(_vm.mode === 'review' || _vm.answerRecord.status == 'reviewing')?_c('span',{staticClass:"ibs-result-header__tag"},[_vm._v(_vm._s(_vm.t("itemEngine.answerStatus.reviewing")))]):_c('span',{staticClass:"ibs-result-header__tag ibs-result-header__tag--success"},[_vm._v(_vm._s(_vm.t("itemEngine.answerStatus.finished")))])]):_vm._e()]),_c('div',{staticClass:"ibs-result-header__info"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.answerUser"))+_vm._s(_vm.username)+" "),(_vm.metaActivity.mediaType === 'testpaper')?_c('span',{staticClass:"ibs-ml24"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.testpaperMode"))+" "+_vm._s(_vm.answerRecord.exam_mode === "1" ? _vm.t("testpaper.mode1") : _vm.t("testpaper.mode0"))+" ")]):_vm._e(),(
-            _vm.metaActivity.mediaType === 'testpaper' &&
-              _vm.answerScene.limited_time > 0
-          )?_c('span',{staticClass:"ibs-ml24"},[_vm._v(" "+_vm._s(_vm.t("testpaper.timeTips"))+" "+_vm._s(_vm.answerScene.limited_time)+" "+_vm._s(_vm.t("testpaper.minutesUnit"))+" ")]):_vm._e(),_c('span',{staticClass:"ibs-ml24"},[_vm._v(_vm._s(_vm.t("itemEngine.submitTime"))+_vm._s(_vm._f("date")(_vm.answerRecord.end_time)))]),_c('span',{staticClass:"ibs-ml24"},[_vm._v(_vm._s(_vm.t("itemEngine.usedTime"))+_vm._s(_vm.getTime(Number(_vm.answerRecord.used_time)))+" ")]),(_vm.mediaType === 'homework')?[_c('span',{staticClass:"ibs-ml24"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.numbeOfOperations"))+" "+_vm._s(_vm.t("itemEngine.theFirst"))+" "+_vm._s(_vm.submitList.length + 1)+" "+_vm._s(_vm.t("itemEngine.order"))+" ")]),(_vm.submitList.length)?_c('a-dropdown',{staticClass:"ibs-ml24"},[_c('a-button',{attrs:{"type":"link"}},[_vm._v(_vm._s(_vm.t("itemEngine.jobHistory")))]),_c('a-menu',{attrs:{"slot":"overlay"},on:{"click":_vm.handleMenuClick},slot:"overlay"},_vm._l((_vm.submitList),function(item,index){return _c('a-menu-item',{key:index},[_vm._v(" "+_vm._s(_vm.t("itemEngine.theFirst"))+" "+_vm._s(index + 1)+" "+_vm._s(_vm.t("itemEngine.order"))+" "),(_vm.finishType === 'submit')?[_vm._v(" "+_vm._s(_vm.t("itemEngine.right"))+" "+_vm._s(item.right_question_count)+" "+_vm._s(_vm.t("itemEngine.question"))+" ")]:[_vm._v(" "+_vm._s(item.score)+" "+_vm._s(_vm.t("Minute"))+" "),(item.grade === 'passed')?_c('span',{staticStyle:{"color":"green"}},[_vm._v(" "+_vm._s(_vm.t("itemReview.pass"))+" ")]):_c('span',{staticStyle:{"color":"red"}},[_vm._v(" "+_vm._s(_vm.t("itemReview.fail"))+" ")])]],2)}),1)],1):_vm._e()]:_vm._e()],2)]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.needScore),expression:"needScore"}],staticClass:"ibs-right"},[_c('div',{staticClass:"ibs-result-header__score"},[(_vm.answerRecord.status == 'reviewing')?_c('p',{staticClass:"ibs-mb4"},[_vm._v("?")]):_c('p',{staticClass:"ibs-mb4"},[_vm._v(_vm._s(_vm.answerReport.score))]),_c('p',{staticClass:"ibs-mb4"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.totalScore"))),_c('span',[_vm._v(_vm._s(_vm.answerReport.total_score))])])])])]),_c('a-table',{attrs:{"columns":_vm.columns,"dataSource":_vm.answerReport.section_reports,"pagination":false},scopedSlots:_vm._u([{key:"score",fn:function(text, record){return [(Number(record.reviewing_question_num))?_c('span',{staticClass:"ibs-warning-color ibs-text-folder"},[_vm._v(" ？")]):_c('span',{staticClass:"ibs-warning-color ibs-text-folder"},[_vm._v(_vm._s(text))])]}},{key:"question_count",fn:function(text, record){return [(record.section_name === _vm.t('material'))?_c('span',[_vm._v(_vm._s(text)+_vm._s(_vm.t("subCountNumber")))]):_c('span',[_vm._v(_vm._s(text)+_vm._s(_vm.t("countNumber")))])]}},{key:"right_question_num",fn:function(text, record){return [(Number(record.reviewing_question_num))?_c('span',{staticClass:"ibs-success-color"},[_vm._v(" ？")]):_c('span',{staticClass:"ibs-success-color"},[_vm._v(_vm._s(text)+_vm._s(_vm.t("countNumber")))])]}},{key:"wrong_question_num",fn:function(text, record){return [(Number(record.reviewing_question_num))?_c('span',{staticClass:"ibs-danger-color"},[_vm._v(" ？")]):_c('span',{staticClass:"ibs-danger-color"},[_vm._v(_vm._s(text + Number(record.part_right_question_num))+_vm._s(_vm.t("countNumber")))])]}},{key:"no_answer_question_num",fn:function(text, record){return [(Number(record.reviewing_question_num))?_c('span',[_vm._v(" ？")]):_c('span',[_vm._v(_vm._s(text)+_vm._s(_vm.t("countNumber")))])]}}])}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode === 'review'),expression:"mode === 'review'"}],staticClass:"ibs-result-tip"},[_c('i',{staticClass:"ib-icon ib-icon-info ibs-mr8"}),_vm._v(_vm._s(_vm.reviewText)+" ")]),(_vm.mode === 'report' && _vm.answerRecord.status === 'reviewing')?_c('div',{staticClass:"ibs-result-tip"},[_c('i',{staticClass:"ib-icon ib-icon-info ibs-mr8"}),_vm._v(_vm._s(_vm.t("itemEngine.waitingReview_tip"))+" ")]):_vm._e()],1)}
-var resultvue_type_template_id_496b6ab8_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/result.vue?vue&type=template&id=496b6ab8&
-
-// CONCATENATED MODULE: ./src/utils/date-toolkit.js
-/* eslint-disable no-mixed-operators */
-// 秒转化为时间
-var sec2Time = function sec2Time(sec, locale) {
-  var time = "";
-  var h = parseInt(sec % 86400 / 3600);
-  var s = parseInt(sec % 3600 / 60);
-  var m = sec % 60;
-
-  if (h > 0) {
-    time += h + locale.hour;
-  }
-
-  if (s.toString().length < 2) {
-    time += "0" + s + locale.minute;
-  } else {
-    time += s + locale.minute;
-  }
-
-  if (m.toString().length < 2) {
-    time += "0" + m + locale.second;
-  } else {
-    time += m + locale.second;
-  }
-
-  return time;
-};
-
-var timeStampFormatTime = function timeStampFormatTime(timeStamp) {
-  var date = new Date(timeStamp * 1000);
-  var year = date.getFullYear();
-  var month = date.getMonth() + 1;
-  var day = date.getDate();
-  var hour = date.getHours();
-  var minute = date.getMinutes();
-  var second = date.getSeconds();
-  return "".concat([year, month, day].map(function (n) {
-    n = n.toString();
-    return n[1] ? n : "0".concat(n);
-  }).join("-"), " ").concat([hour, minute, second].map(function (n) {
-    n = n.toString();
-    return n[1] ? n : "0".concat(n);
-  }).join(":"));
-}; // 2018/12/06 12:03
-
-
-var formatTime = function formatTime(date) {
-  var year = date.getFullYear();
-  var month = date.getMonth() + 1;
-  var day = date.getDate();
-  var hour = date.getHours();
-  var minute = date.getMinutes();
-  var second = date.getSeconds();
-  return "".concat([year, month, day].map(function (n) {
-    n = n.toString();
-    return n[1] ? n : "0".concat(n);
-  }).join("/"), " ").concat([hour, minute, second].map(function (n) {
-    n = n.toString();
-    return n[1] ? n : "0".concat(n);
-  }).join(":"));
-}; // 2018-12-06 12:03
-
-
-var formatCompleteTime = function formatCompleteTime(date) {
-  var reg = new RegExp("/", "g");
-  var time = formatTime(date).replace(reg, "-");
-  return time.slice(0, -3);
-};
-
-var dateTimeDown = function dateTimeDown(date) {
-  var now = new Date().getTime();
-
-  if (now > date) {
-    return "已到期";
-  }
-
-  var diff = parseInt((date - now) / 1000, 10);
-  var day = parseInt(diff / 24 / 60 / 60, 10);
-  var hour = parseInt(diff / 60 / 60 % 24, 10);
-  var minute = parseInt(diff / 60 % 60, 10);
-  var second = parseInt(diff % 60, 10);
-  day = day ? "".concat(day, "\u5929") : "";
-  hour = day || hour ? "".concat(hour || "0", "\u5C0F\u65F6") : "";
-  minute = day || hour || minute ? "".concat(minute || "0", "\u5206") : "";
-  second = "".concat(second || "0", "\u79D2");
-  var time = day + hour + minute + second;
-  return time;
-}; // days（传时间戳）
-
-
-var getOffsetDays = function getOffsetDays(time1, time2) {
-  var offsetTime = Math.abs(time1 - time2);
-  return Math.floor(offsetTime / (3600 * 24 * 1e3));
-}; // 将0-9的数字前面加上0，例1变为01
-
-
-var checkTime = function checkTime(i) {
-  if (i < 10 && i >= 0) {
-    i = "0".concat(i);
-  }
-
-  return i;
-}; // 倒计时 01:01:01 传入时间戳
-
-
-var getCountDown = function getCountDown(time, i) {
-  var nowTime = Number(time) - i * 1000;
-  var minutes = parseInt(nowTime / 1000 / 60 % 60, 10); // 计算剩余的分钟
-
-  var seconds = parseInt(nowTime / 1000 % 60, 10); // 计算剩余的秒数
-
-  var hours = parseInt(nowTime / (1000 * 60 * 60), 10); // 计算剩余的小时
-
-  minutes = checkTime(minutes);
-  seconds = checkTime(seconds);
-  hours = checkTime(hours);
-  return {
-    hours: hours,
-    minutes: minutes,
-    seconds: seconds
-  };
-}; // 剩余时间 1天1小时1分钟  秒只是在最后60秒显示
-
-
-var getdateTimeDown = function getdateTimeDown(date, i) {
-  date = Number(date) - i * 1000;
-  var now = new Date().getTime();
-
-  if (now >= date) {
-    return "";
-  }
-
-  var diff = parseInt((date - now) / 1000, 10);
-  var day = parseInt(diff / 24 / 60 / 60, 10);
-  var hour = parseInt(diff / 60 / 60 % 24, 10);
-  var minute = parseInt(diff / 60 % 60, 10);
-  var second = parseInt(diff % 60, 10);
-  day = day ? "".concat(day, "\u5929") : "";
-  hour = day || hour ? "".concat(hour || "0", "\u5C0F\u65F6") : "";
-  minute = day || hour || minute ? "".concat(minute || "0", "\u5206\u949F") : "";
-  second = !day && !hour && !minute ? "".concat(second || "0", "\u79D2") : "";
-  var time = day + hour + minute + second;
-  return time;
-};
-
-var date_toolkit_isMobileDevice = function isMobileDevice() {
-  return navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i);
-};
-
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/result.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ var resultvue_type_script_lang_js_ = ({
-  name: "result",
-  mixins: [mixins_locale],
-  data: function data() {
-    return {
-      scoreColumns: [{
-        title: this.t("itemEngine.itemType"),
-        dataIndex: "section_name",
-        key: "section_name",
-        align: "center"
-      }, {
-        title: this.t("itemEngine.itemScore"),
-        dataIndex: "score",
-        key: "score",
-        scopedSlots: {
-          customRender: "score"
-        },
-        align: "center"
-      }, {
-        title: this.t("itemEngine.itemTotal"),
-        dataIndex: "question_count",
-        key: "question_count",
-        scopedSlots: {
-          customRender: "question_count"
-        },
-        align: "center"
-      }, {
-        title: this.t("itemEngine.itemRight"),
-        dataIndex: "right_question_num",
-        key: "right_question_num",
-        scopedSlots: {
-          customRender: "right_question_num"
-        },
-        align: "center"
-      }, {
-        title: this.t("itemEngine.itemWrong"),
-        dataIndex: "wrong_question_num",
-        key: "wrong_question_num",
-        scopedSlots: {
-          customRender: "wrong_question_num"
-        },
-        align: "center"
-      }, {
-        title: this.t("itemEngine.itemUndo"),
-        dataIndex: "no_answer_question_num",
-        key: "no_answer_question_num",
-        scopedSlots: {
-          customRender: "no_answer_question_num"
-        },
-        align: "center"
-      }],
-      noScoreColumns: [{
-        title: this.t("itemEngine.itemType"),
-        dataIndex: "section_name",
-        key: "section_name",
-        align: "center"
-      }, {
-        title: this.t("itemEngine.itemTotal"),
-        dataIndex: "question_count",
-        key: "question_count",
-        scopedSlots: {
-          customRender: "question_count"
-        },
-        align: "center"
-      }, {
-        title: this.t("itemEngine.itemRight"),
-        dataIndex: "right_question_num",
-        key: "right_question_num",
-        scopedSlots: {
-          customRender: "right_question_num"
-        },
-        align: "center"
-      }, {
-        title: this.t("itemEngine.itemWrong"),
-        dataIndex: "wrong_question_num",
-        key: "wrong_question_num",
-        scopedSlots: {
-          customRender: "wrong_question_num"
-        },
-        align: "center"
-      }, {
-        title: this.t("itemEngine.itemUndo"),
-        dataIndex: "no_answer_question_num",
-        key: "no_answer_question_num",
-        scopedSlots: {
-          customRender: "no_answer_question_num"
-        },
-        align: "center"
-      }]
-    };
-  },
-  computed: {
-    extralClass: function extralClass() {
-      return this.needScore ? "" : "ibs-result-header--width";
-    },
-    columns: function columns() {
-      return this.needScore ? this.scoreColumns : this.noScoreColumns;
-    },
-    username: function username() {
-      return this.answerRecord.username || "-";
-    },
-    reviewText: function reviewText() {
-      if (this.role === "student") {
-        return this.t("itemEngine.student_FinishReview_tip");
-      }
-
-      return this.t("itemEngine.FinishReview_tip");
-    }
-  },
-  props: {
-    mode: {
-      type: String,
-      default: "report"
-    },
-    answerReport: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    assessment: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    answerScene: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    answerRecord: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    needScore: {
-      type: Number,
-      default: function _default() {
-        return 1;
-      }
-    },
-    needMarking: {
-      type: Number,
-      default: function _default() {
-        return 1;
-      }
-    },
-    role: {
-      type: String,
-      default: ""
-    },
-    mediaType: {
-      type: String,
-      default: ""
-    },
-    finishType: {
-      type: String,
-      default: ""
-    },
-    submitList: {
-      type: Array,
-      default: function _default() {
-        return [];
-      }
-    },
-    metaActivity: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    }
-  },
-  filters: {
-    date: function date(timeStamp) {
-      return timeStampFormatTime(timeStamp);
-    }
-  },
-  methods: {
-    getTime: function getTime(second) {
-      var timeLocal = {
-        hour: this.t("Hour"),
-        minute: this.t("Minute"),
-        second: this.t("Second")
-      };
-      return sec2Time(second, timeLocal);
-    },
-    handleMenuClick: function handleMenuClick(e) {
-      this.$emit("view-historical-result", this.submitList[e.key]);
-    }
-  }
-});
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/result.vue?vue&type=script&lang=js&
- /* harmony default export */ var component_resultvue_type_script_lang_js_ = (resultvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/result.vue
-
-
-
-
-
-/* normalize component */
-
-var result_component = normalizeComponent(
-  component_resultvue_type_script_lang_js_,
-  resultvue_type_template_id_496b6ab8_render,
-  resultvue_type_template_id_496b6ab8_staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var component_result = (result_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/card.vue?vue&type=template&id=069a3328&
-var cardvue_type_template_id_069a3328_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.cardClass,attrs:{"id":"item-bank-sdk-card"}},[_c('div',{staticClass:"ibs-card-head ibs-clearfix ibs-text-left"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.card"))+" "),_c('span',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode == 'do' && _vm.assessmentStatus !== 'preview'),expression:"mode == 'do' && assessmentStatus !== 'preview'"}],staticClass:"ibs-card-head__toggle",on:{"click":_vm.toggleCard}},[_vm._v(_vm._s(_vm.t("itemEngine.toggleCard")))])]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.isShow),expression:"isShow"}],staticClass:"ibs-card-body ibs-card-body--scroll ibs-text-left"},[_vm._l((_vm.sections),function(section,sectionsIndex){return _c('div',{key:'cardSection' + sectionsIndex},[_c('p',{directives:[{name:"show",rawName:"v-show",value:(_vm.getReviewTitle(sectionsIndex)),expression:"getReviewTitle(sectionsIndex)"}],staticClass:"ibs-card-body__type"},[_vm._v(" "+_vm._s(section.name)+" ")]),_c('a-anchor',{staticClass:"ibs-card-anchor",attrs:{"affix":false},on:{"click":_vm.handleClick}},[_vm._l((section.items),function(item,itemIndex){return _vm._l((item.questions),function(question,questionIndex){return _c('a-anchor-link',{directives:[{name:"show",rawName:"v-show",value:(_vm.getModeType(sectionsIndex, itemIndex, questionIndex)),expression:"getModeType(sectionsIndex, itemIndex, questionIndex)"}],key:("cardQuestion" + (question.id)),class:_vm.statusClass(sectionsIndex, itemIndex, questionIndex),attrs:{"href":("#ibs-" + (question.seq)),"title":question.seq}})})})],2)],1)}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.mode == 'report'),expression:"mode == 'report'"}],staticClass:"ibs-card-body__explain"},[_c('span',{staticClass:"ibs-success-bg"}),_c('small',[_vm._v(_vm._s(_vm.t("Right")))]),_c('span',{staticClass:"ibs-danger-bg"}),_c('small',[_vm._v(_vm._s(_vm.t("Wrong")))]),_c('span',{staticClass:"ibs-warning-bg"}),_c('small',[_vm._v(_vm._s(_vm.t("itemEngine.remainReview")))]),_c('span',{staticClass:"ibs-tip-bg"}),_c('small',[_vm._v(_vm._s(_vm.t("itemEngine.undo")))])])],2),_c('div',{staticClass:"ibs-card-footer"},[(_vm.mode == 'report')?_c('div',{staticClass:"ibs-text-left"},[(!_vm.setting)?_c('a-checkbox',{staticClass:"ibs-dark-major text-left",on:{"change":_vm.onChange}},[_vm._v(_vm._s(_vm.t("itemEngine.showError")))]):_vm._e(),(
-          _vm.answerRecord.status == 'finished' &&
-            _vm.assessmentStatus !== 'finished' &&
-            _vm.showDoAgainBtn
-        )?_c('div',{staticClass:"ibs-text-center ibs-mt16"},[(!_vm.doTimes)?_c('a-button',{attrs:{"type":"primary","shape":"round"},on:{"click":_vm.doAgain}},[_vm._v(_vm._s(_vm.t("itemEngine.doAagin")))]):_c('a-button',{directives:[{name:"show",rawName:"v-show",value:(!_vm.setting),expression:"!setting"}],attrs:{"disabled":"","shape":"round"}},[_vm._v(_vm._s(_vm.t("itemEngine.doCountUsed")))])],1):_vm._e()],1):_vm._e(),_vm._t("returnBtn"),(_vm.mode == 'do')?_c('div',{staticClass:"ibs-text-center"},[(_vm.showSaveProgressBtn)?_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","shape":"round","disabled":_vm.disabled},on:{"click":_vm.saveAnswer}},[_vm._v(_vm._s(_vm.t("itemEngine.saveProgress")))]):_vm._e(),_c('a-button',{attrs:{"type":"primary","shape":"round","disabled":_vm.disabled},on:{"click":_vm.submitAnswer}},[_vm._v(" "+_vm._s(_vm.t( _vm.metaActivity.mediaType === "testpaper" ? "testpaper.submit" : "itemEngine.submit" ))+" ")])],1):_vm._e()],2)])}
-var cardvue_type_template_id_069a3328_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/card.vue?vue&type=template&id=069a3328&
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/card.vue?vue&type=script&lang=js&
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ var cardvue_type_script_lang_js_ = ({
-  name: "card",
-  mixins: [emitter, mixins_locale],
-  data: function data() {
-    return {
-      isShow: this.showCard(),
-      cardTop: 0,
-      affix: false
-    };
-  },
-  props: {
-    mode: {
-      type: String,
-      default: "report"
-    },
-    sections: {
-      type: Array,
-      default: function _default() {
-        return [];
-      }
-    },
-    answerRecord: {
-      type: Object,
-      default: function _default() {}
-    },
-    answerScene: {
-      type: Object,
-      default: function _default() {}
-    },
-    section_responses: {
-      type: Array,
-      default: function _default() {
-        return [];
-      }
-    },
-    section_reports: {
-      type: Array,
-      default: function _default() {
-        return [];
-      }
-    },
-    assessmentStatus: {
-      type: String,
-      default: ""
-    },
-    answerShow: {
-      type: String,
-      // 默认显示, 不显示值为 none
-      default: "show"
-    },
-    doTimes: {
-      type: Number,
-      default: 0
-    },
-    cardIsShow: {
-      type: Number,
-      default: 0
-    },
-    showSaveProgressBtn: {
-      type: Number,
-      default: 1
-    },
-    showDoAgainBtn: {
-      type: Number,
-      default: 1
-    },
-    metaActivity: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    }
-  },
-  watch: {
-    section_responses: {
-      handler: function handler(val) {
-        console.log(val);
-      },
-      deep: true
-    }
-  },
-  computed: {
-    disabled: function disabled() {
-      return this.assessmentStatus == "preview";
-    },
-    cardClass: function cardClass() {
-      var className = "ibs-card";
-
-      if (this.isShow) {
-        className += " ibs-card-inspection-show";
-      }
-
-      return className;
-    },
-    setting: function setting() {
-      return this.answerShow === "none" ? true : false;
-    }
-  },
-  mounted: function mounted() {},
-  methods: {
-    onChange: function onChange(e) {
-      console.log("checked = ".concat(e.target.checked));
-      this.$emit("showError", e.target.checked);
-    },
-    toggleCard: function toggleCard() {
-      this.isShow = !this.isShow;
-    },
-    getContainer: function getContainer() {
-      return document.getElementById("item-bank-sdk-card");
-    },
-    saveAnswer: function saveAnswer() {
-      var h = this.$createElement;
-      this.$emit("saveAnswerData"); // 考试：取消按钮是离开考试，确定按钮是及选题
-
-      var self = this;
-      var content = "";
-
-      if (this.metaActivity.mediaType === "testpaper") {
-        if (this.answerRecord.exam_mode == "0") {
-          content = this.t("testpaper.exitTips");
-        }
-
-        if (this.answerRecord.exam_mode == "1") {
-          content = this.t("testpaper.exitTips1");
-        }
-      }
-
-      this.$confirm({
-        title: this.t("testpaper.saveTips"),
-        icon: function icon() {
-          return h("a-icon", {
-            "attrs": {
-              "type": "check-circle"
-            },
-            "style": "font-size: 22px;"
-          });
-        },
-        content: content,
-        okText: this.t("itemEngine.goThenDo"),
-        cancelText: this.metaActivity.mediaType === "testpaper" ? this.t("testpaper.exit") : this.t("itemEngine.exit"),
-        class: "ibs-card-confirm-modal",
-        getContainer: this.getContainer,
-        onOk: function onOk() {
-          self.$emit("blank");
-
-          modal.destroyAll();
-        },
-        onCancel: function onCancel() {
-          self.$emit("exitAnswer");
-
-          modal.destroyAll();
-        }
-      });
-    },
-    submitAnswer: function submitAnswer() {
-      var self = this;
-      this.$confirm({
-        title: this.t("itemEngine.confirmSubmit_title"),
-        okText: this.t("itemEngine.confirm"),
-        cancelText: this.t("itemEngine.goThenDo"),
-        class: "ibs-card-confirm-modal",
-        getContainer: this.getContainer,
-        onOk: function onOk() {
-          self.$emit("answerData");
-
-          modal.destroyAll();
-        },
-        onCancel: function onCancel() {
-          self.$emit("blank");
-
-          modal.destroyAll();
-        }
-      });
-    },
-    showConfirm: function showConfirm(flag) {
-      var text = flag ? "" : this.t("itemEngine.confirmSave_tip");
-      var self = this;
-      this.$confirm({
-        title: flag ? this.t("itemEngine.confirmSubmit_title") : this.t("itemEngine.confirmSave_title"),
-        content: this.answerScene.limited_time > 0 ? text : "",
-        okText: flag ? this.t("itemEngine.confirm") : this.t("itemEngine.exit"),
-        cancelText: this.t("itemEngine.goThenDo"),
-        class: "ibs-card-confirm-modal",
-        getContainer: this.getContainer,
-        onOk: function onOk() {
-          if (flag) {
-            self.$emit("answerData");
-          } else {
-            self.$emit("saveAnswerData");
-          }
-
-          modal.destroyAll();
-        },
-        onCancel: function onCancel() {
-          self.$emit("blank");
-
-          modal.destroyAll();
-        }
-      });
-    },
-    getModeType: function getModeType(s, i, q) {
-      if (this.mode !== "review") return true;
-
-      if (this.section_reports[s].item_reports[i].question_reports[q].status === "reviewing") {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    statusClass: function statusClass(s, i, q) {
-      if (this.mode === "do") {
-        if (Number(this.sections[s].items[i].questions[q].isDelete)) {
-          return "ibs-card-body__tag";
-        }
-
-        var data = this.section_responses[s].item_responses[i].question_responses[q].response;
-        var doItem = data.some(function (item) {
-          return item != "";
-        });
-        var isTag = this.section_responses[s].item_responses[i].question_responses[q].isTag;
-
-        if (doItem) {
-          if (isTag) {
-            // 答题且收藏
-            return "ibs-card-body__tag ibs-card-body__tag--success ibs-card-body__tag--collectWhite";
-          } else {
-            // 答题未收藏
-            return "ibs-card-body__tag ibs-card-body__tag--success";
-          }
-        } else {
-          if (isTag) {
-            // 收藏未答题
-            return "ibs-card-body__tag ibs-card-body__tag--collect";
-          } else {
-            // 未收藏未答题
-            return "ibs-card-body__tag";
-          }
-        }
-      } else if (this.mode === "review") {
-        return "ibs-card-body__tag";
-      } else if (this.mode === "anaysis") {
-        return "ibs-card-body__tag";
-      } else {
-        if (Number(this.sections[s].items[i].questions[q].isDelete)) {
-          return "ibs-card-body__tag";
-        }
-
-        var status = {
-          right: "ibs-card-body__tag--success",
-          wrong: "ibs-card-body__tag--danger",
-          part_right: "ibs-card-body__tag--danger",
-          no_answer: "",
-          reviewing: "ibs-card-body__tag--warning"
-        };
-        var _data = this.section_reports[s].item_reports[i].question_reports[q];
-
-        if (this.setting) {
-          return "ibs-card-body__tag ".concat(status[_data.status], " ibs-none-pointer");
-        } else {
-          return "ibs-card-body__tag ".concat(status[_data.status]);
-        }
-      }
-    },
-    handleClick: function handleClick(e, link) {
-      console.log(link);
-    },
-    doAgain: function doAgain() {
-      this.dispatch("item-report", "doAgain");
-    },
-    submitReview: function submitReview() {
-      this.dispatch("item-review", "handleSubmit");
-    },
-    getReviewTitle: function getReviewTitle(s) {
-      if (this.mode !== "review") {
-        return true;
-      }
-
-      var essayData = this.sections[s].items.map(function (item) {
-        var status = item.questions.map(function (question) {
-          return question.answer_mode === "rich_text";
-        });
-        var result = status.join(" ");
-        return result;
-      });
-      return essayData.join(" ").indexOf(true) > -1 ? true : false;
-    },
-    showCard: function showCard() {
-      if (this.mode == "do" && this.assessmentStatus !== "preview" && this.assessmentStatus !== "finished") {
-        return !this.cardIsShow;
-      } else {
-        return true;
-      }
-    }
-  }
-});
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/card.vue?vue&type=script&lang=js&
- /* harmony default export */ var component_cardvue_type_script_lang_js_ = (cardvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/card.vue
-
-
-
-
-
-/* normalize component */
-
-var card_component = normalizeComponent(
-  component_cardvue_type_script_lang_js_,
-  cardvue_type_template_id_069a3328_render,
-  cardvue_type_template_id_069a3328_staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var card = (card_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/section-title.vue?vue&type=template&id=48d29e6b&
-var section_titlevue_type_template_id_48d29e6b_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-pl16 ibs-pr16 ibs-engin-section"},[_c('a-row',[_c('a-col',{staticClass:"ibs-engin-section__title ibs-pl16",attrs:{"span":24}},[_vm._v(" "+_vm._s(_vm.name)+" "),_c('span',{staticClass:"ibs-engin-section__span ibs-ml16"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.Number_of_topics")(_vm.count)))]),_c('span',{directives:[{name:"show",rawName:"v-show",value:(_vm.needScore),expression:"needScore"}],staticClass:"ibs-engin-section__span"},[_vm._v(_vm._s(_vm.t("itemEngine.allScore")(_vm.score)))])])],1)],1)}
-var section_titlevue_type_template_id_48d29e6b_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/section-title.vue?vue&type=template&id=48d29e6b&
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/section-title.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ var section_titlevue_type_script_lang_js_ = ({
-  name: "section-title",
-  mixins: [mixins_locale],
-  props: {
-    name: {
-      type: String,
-      default: ""
-    },
-    count: {
-      type: String,
-      default: ""
-    },
-    score: {
-      type: String,
-      default: ""
-    },
-    needScore: {
-      type: Number,
-      default: 1
-    }
-  }
-});
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/section-title.vue?vue&type=script&lang=js&
- /* harmony default export */ var component_section_titlevue_type_script_lang_js_ = (section_titlevue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/section-title.vue
-
-
-
-
-
-/* normalize component */
-
-var section_title_component = normalizeComponent(
-  component_section_titlevue_type_script_lang_js_,
-  section_titlevue_type_template_id_48d29e6b_render,
-  section_titlevue_type_template_id_48d29e6b_staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var section_title = (section_title_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/material-title.vue?vue&type=template&id=49892e72&
-var material_titlevue_type_template_id_49892e72_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('a-row',[_c('a-col',{staticClass:"ibs-pr16 ibs-pl16"},[_c('div',[(_vm.item.errors && _vm.item.errors.stem)?_c('div',{staticClass:"ibs-engine-material ibs-danger-color"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.stemErrorMessage"))+" ")]):_c('div',{staticClass:"ibs-engine-material"},[_c('div',{staticClass:" ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.material)}}),(_vm.getAttachmentTypeData('material'))?_c('div',{staticClass:"ibs-mt16 ibs-engine-material__attachment"},[_c('attachment-preview',{attrs:{"cdnHost":_vm.cdnHost,"fileData":_vm.getAttachmentTypeData('material'),"downloadAttachmentCallback":_vm.downloadAttachmentCallback,"previewAttachmentCallback":_vm.previewAttachmentCallback},on:{"previewAttachment":_vm.previewAttachment,"downloadAttachment":_vm.downloadAttachment}})],1):_vm._e()])])])],1)],1)}
-var material_titlevue_type_template_id_49892e72_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/material-title.vue?vue&type=template&id=49892e72&
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/material-title.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ var material_titlevue_type_script_lang_js_ = ({
-  name: "material-title",
-  mixins: [mixins_locale],
-  inject: ["cdnHost", "previewAttachmentCallback", "downloadAttachmentCallback"],
-  components: {
-    attachmentPreview: attachment
-  },
-  props: {
-    material: {
-      type: String,
-      default: ""
-    },
-    item: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    attachments: {
-      type: Array,
-      default: function _default() {
-        return [];
-      }
-    }
-  },
-  methods: {
-    getAttachmentTypeData: function getAttachmentTypeData(type) {
-      var result = this.attachments.filter(function (item) {
-        return item.module == type;
-      });
-      return result[result.length - 1];
-    },
-    previewAttachment: function previewAttachment(fileId) {
-      this.$emit("previewAttachment", fileId);
-    },
-    downloadAttachment: function downloadAttachment(fileId) {
-      this.$emit("downloadAttachment", fileId);
-    }
-  }
-});
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/material-title.vue?vue&type=script&lang=js&
- /* harmony default export */ var component_material_titlevue_type_script_lang_js_ = (material_titlevue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/material-title.vue
-
-
-
-
-
-/* normalize component */
-
-var material_title_component = normalizeComponent(
-  component_material_titlevue_type_script_lang_js_,
-  material_titlevue_type_template_id_49892e72_render,
-  material_titlevue_type_template_id_49892e72_staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var material_title = (material_title_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/material-analysis.vue?vue&type=template&id=3f3c97e1&
-var material_analysisvue_type_template_id_3f3c97e1_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('a-row',[_c('a-col',{staticClass:"ibs-pr16 ibs-pl16"},[_c('div',{staticClass:"ibs-engine-material ibs-engine-material--analysis ibs-no-bottom-border"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.itemAnalysis")))]),_c('div',{staticClass:"ibs-content ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.analysis)}}),_c('div',{staticClass:"ibs-mt16"},[(_vm.getAttachmentTypeData('analysis'))?_c('attachment-preview',{attrs:{"cdnHost":_vm.cdnHost,"fileData":_vm.getAttachmentTypeData('analysis'),"previewAttachmentCallback":_vm.previewAttachmentCallback,"downloadAttachmentCallback":_vm.downloadAttachmentCallback},on:{"previewAttachment":_vm.previewAttachment,"downloadAttachment":_vm.downloadAttachment}}):_vm._e()],1)])])],1)],1)}
-var material_analysisvue_type_template_id_3f3c97e1_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/material-analysis.vue?vue&type=template&id=3f3c97e1&
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/material-analysis.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ var material_analysisvue_type_script_lang_js_ = ({
-  name: "material-analysis",
-  inject: ["cdnHost", "previewAttachmentCallback", "downloadAttachmentCallback"],
-  components: {
-    attachmentPreview: attachment
-  },
-  mixins: [mixins_locale],
-  props: {
-    analysis: {
-      type: String,
-      default: ""
-    },
-    attachments: {
-      type: Array,
-      default: function _default() {
-        return [];
-      }
-    }
-  },
-  methods: {
-    getAttachmentTypeData: function getAttachmentTypeData(type) {
-      var result = this.attachments.filter(function (item) {
-        return item.module == type;
-      });
-      return result[result.length - 1];
-    },
-    previewAttachment: function previewAttachment(fileId) {
-      this.$emit("previewAttachment", fileId);
-    },
-    downloadAttachment: function downloadAttachment(fileId) {
-      this.$emit("downloadAttachment", fileId);
-    }
-  }
-});
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/material-analysis.vue?vue&type=script&lang=js&
- /* harmony default export */ var component_material_analysisvue_type_script_lang_js_ = (material_analysisvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/material-analysis.vue
-
-
-
-
-
-/* normalize component */
-
-var material_analysis_component = normalizeComponent(
-  component_material_analysisvue_type_script_lang_js_,
-  material_analysisvue_type_template_id_3f3c97e1_render,
-  material_analysisvue_type_template_id_3f3c97e1_staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var material_analysis = (material_analysis_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/review.vue?vue&type=template&id=174b4a71&
-var reviewvue_type_template_id_174b4a71_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('a-form-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.reviewType === 'score'),expression:"reviewType === 'score'"}],staticClass:"ibs-review-form-item",attrs:{"label":_vm.t('itemEngine.getScore'),"label-col":{ span: 2 },"wrapper-col":{ sm: { span: 20 }, xs: { span: 18 } }}},[_c('a-input',{directives:[{name:"decorator",rawName:"v-decorator",value:([
-        ("score" + _vm.id),
-        {
-          rules: [{ validator: _vm.checkScore }],
-          initialValue: 0
-        }
-      ]),expression:"[\n        `score${id}`,\n        {\n          rules: [{ validator: checkScore }],\n          initialValue: 0\n        }\n      ]"}],staticStyle:{"width":"200px"},attrs:{"type":"number"}})],1),_c('a-form-item',{staticClass:"ibs-review-form-item",staticStyle:{"display":"none"}},[_c('a-input',{directives:[{name:"decorator",rawName:"v-decorator",value:([
-        ("mode" + _vm.id),
-        {
-          initialValue: _vm.question.answer_mode
-        }
-      ]),expression:"[\n        `mode${id}`,\n        {\n          initialValue: question.answer_mode\n        }\n      ]"}],attrs:{"type":"text"}})],1),_c('a-form-item',{directives:[{name:"show",rawName:"v-show",value:(_vm.reviewType !== 'score'),expression:"reviewType !== 'score'"}],staticClass:"ibs-review-form-item",attrs:{"label":_vm.t('itemReview.review_results'),"label-col":{ span: 2 },"wrapper-col":{ sm: { span: 20 }, xs: { span: 18 } }}},[_c('a-radio-group',{directives:[{name:"decorator",rawName:"v-decorator",value:([
-        ("status" + _vm.id),
-        {
-          initialValue: 'right'
-        }
-      ]),expression:"[\n        `status${id}`,\n        {\n          initialValue: 'right'\n        }\n      ]"}],attrs:{"name":"radioGroup"}},[_c('a-radio',{attrs:{"value":"right"}},[_vm._v(" "+_vm._s(_vm.judgeRightText)+" ")]),_c('a-radio',{attrs:{"value":"wrong"}},[_vm._v(" "+_vm._s(_vm.judgeErrorText)+" ")])],1)],1),(_vm.role !== 'student')?_c('a-form-item',{staticClass:"ibs-pb24 ibs-mt16 ibs-review-form-item",attrs:{"label":_vm.t('itemEngine.comment2'),"label-col":{ span: 2 },"wrapper-col":{ sm: { span: 20 }, xs: { span: 18 } }}},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
-        ("comment" + _vm.id),
-        {
-          initialValue: ''
-        }
-      ]),expression:"[\n        `comment${id}`,\n        {\n          initialValue: ''\n        }\n      ]"}],attrs:{"rows":0,"data-image-download-url":_vm.showCKEditorData.filebrowserImageDownloadUrl}})],1):_vm._e()],1)}
-var reviewvue_type_template_id_174b4a71_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/review.vue?vue&type=template&id=174b4a71&
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/review.vue?vue&type=script&lang=js&
-function reviewvue_type_script_lang_js_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ var reviewvue_type_script_lang_js_ = ({
-  name: "review",
-  mixins: [mixins_locale],
-  data: function data() {
-    return {
-      comment: ""
-    };
-  },
-  props: {
-    id: {
-      type: String,
-      default: ""
-    },
-    keys: {
-      type: Array,
-      default: function _default() {
-        return [];
-      }
-    },
-    form: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    question: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    needScore: {
-      type: Number,
-      default: function _default() {
-        return 1;
-      }
-    },
-    role: {
-      type: String,
-      default: ""
-    },
-    reviewType: {
-      type: String,
-      default: "score"
-    }
-  },
-  inject: ["showCKEditorData"],
-  mounted: function mounted() {
-    var _this = this;
-
-    if (this.role === "student") {
-      return;
-    }
-
-    this.$nextTick(function () {
-      console.log(_this.id);
-      load_script_default()(_this.showCKEditorData.jqueryPath, function (err) {
-        if (err) {
-          console.log(err);
-        }
-
-        load_script_default()(_this.showCKEditorData.publicPath, function (err) {
-          if (err) {
-            console.log(err);
-          } // 批阅组件的评语输入
-
-
-          _this.initComment();
-        });
-      });
-    });
-  },
-  computed: {
-    judgeRightText: function judgeRightText() {
-      return this.role === "student" ? this.t("itemReview.mastered") : this.t("itemReview.right");
-    },
-    judgeErrorText: function judgeErrorText() {
-      return this.role === "student" ? this.t("itemReview.not_mastered") : this.t("itemReview.wrong");
-    }
-  },
-  methods: {
-    // 验证规则，不超过当前分数值，
-    checkScore: function checkScore(rule, value, callback) {
-      // 获取当前题目分数
-      var fractionRule = /^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/;
-
-      if (value < 0) {
-        callback(this.t("itemEngine.ScoreRule.one"));
-      } else if (value > Number(this.question.score)) {
-        callback(this.t("itemEngine.ScoreRule.two"));
-      } else if (!fractionRule.test(value)) {
-        callback(this.t("itemEngine.ScoreRule.three"));
-      } else {
-        callback();
-      }
-    },
-    initComment: function initComment() {
-      var _this2 = this;
-
-      this.comment = window.CKEDITOR.replace("essay-comment-form_comment".concat(this.id), {
-        toolbar: "Minimal",
-        fileSingleSizeLimit: this.showCKEditorData.fileSingleSizeLimit,
-        filebrowserImageUploadUrl: this.showCKEditorData.filebrowserImageUploadUrl,
-        filebrowserImageDownloadUrl: this.showCKEditorData.filebrowserImageDownloadUrl,
-        language: this.showCKEditorData.language
-      });
-      this.comment.on("change", function () {
-        var data = _this2.comment.getData();
-
-        _this2.form.setFieldsValue(reviewvue_type_script_lang_js_defineProperty({}, "comment".concat(_this2.id), data));
-      });
-      this.comment.on("blur", function () {
-        var data = _this2.comment.getData();
-
-        _this2.form.setFieldsValue(reviewvue_type_script_lang_js_defineProperty({}, "comment".concat(_this2.id), data));
-      });
-    }
-  }
-});
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/review.vue?vue&type=script&lang=js&
- /* harmony default export */ var component_reviewvue_type_script_lang_js_ = (reviewvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/review.vue
-
-
-
-
-
-/* normalize component */
-
-var review_component = normalizeComponent(
-  component_reviewvue_type_script_lang_js_,
-  reviewvue_type_template_id_174b4a71_render,
-  reviewvue_type_template_id_174b4a71_staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var review = (review_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/count-down.vue?vue&type=template&id=5083d410&
-var count_downvue_type_template_id_5083d410_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isShow)?_c('div',{class:_vm.className},[_c('img',{staticClass:"clock-icon",attrs:{"src":_vm.clockIcon}}),(_vm.time)?_c('span',[_vm._v(_vm._s(_vm.time))]):_c('span',[_vm._v("00:00:00")])]):_vm._e()}
-var count_downvue_type_template_id_5083d410_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/count-down.vue?vue&type=template&id=5083d410&
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/count-down.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-var clockIcon = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGgAAABoCAMAAAAqwkWTAAAAP1BMVEX///9mZmafn5/s7OxwcHB5eXmMjIz19fXGxsaysrK8vLyDg4PZ2dnj4+OoqKizs7OpqamWlpbPz8/Y2Nji4uLjiUH7AAAE6klEQVRo3u1Z2baiMBCULJ2FEBb9/2+dKyKVINkcnTMPt54EIUV3qjud9OUX/wjqatgPzKIu3wT3onuC8cvXYEUXQNjLl2C6A8zlK7DdC75iE9/81rMf9Jv3vjFPbB1auo1Wrpf+8nGoB4/ar1cm8XmVLytR4Cq33lgN/Lzk+vBOD+F9fIrY651fov+NiDtt7+nbG6PpW0SnmNVLwJmZDH87XK3sEiAdjTqINbCHt2iu1GUxLyHPCvEGk+67IqRG5t2YllYaeRiS2B0zyRMqHt7ULTQDdUDvD9Ox+D6k4huPEK2rlZowDNnTRM014RmxTc8g2lZg3u8jjCrz2BR70cGFdTZpAZqGidRYF+uWK3NKwxdt/D0zWHcLnx53qUcrsKvPBMQRTobieossyPjzBRYulLqWR1hkFnkaQJ4fqz4WBK6r5JG8lBtQskICbA9cWclDahsBNFkqNT+vJb6zQgfseSk6QMiZ/YB6cVazTnFA1ZWkI6Jpg2Bhahg0k0FaiNRX5kFinBBND9DJzC4MJX/g9TohyDAeTGmXwtnBfVSbUw1KUvAQz3iAIiaFD82Ch9W7qdsJWSRRuH6ocpwFT1mliCATiIkK6fEpbKivV/WJXgfTpCsM4nABeLJQDyYRvCnLBo3gBE8dUw+fZ02S+BSD+aljkpgmJUB6CuR2qK8E7j3f1IY3TCFkZxjEKtfiQTwGh9pgEuVjaMJPquHBVpYedsAklZUCh0G8hgdEPDAp5RB8EeEVVseDmWSwgzIeUZDCVGXQcFx3OIRnM767YnQJg2p4dtCuJpXR3bSL/7Y+tTTyxGcCffrAg/a/bC6FXC3z1kU8gNh9N6UnSexmZHaNi9xS+gsP5EC7hEVaC8NOqVPuBWIeDA9h8KQWMEVDM088fFINep+Ya8pqneeJ/S9TbjG7e20q98qt6pplshDF8ITccEI0gzLlXKZ+5pOlHDPvsmPrr5T/WfwLgOoV0rNNVNM+ebKCP3KPTJvN6Wdw/30i3IeL/PtEZdcJhYW77DqfEgOLZRHDVYiBdgnMKTFYZI+sdjs5s/Q+q18tBWU2YJdUwC5dBJ1KmA4RlU5ByCOlFDQd/0X2yqYgDF9OquBJJtVbeokVcfZg2bMLuaR3vwT/FxY+g4de4axn1uVKXYuFL7OUv31KD7UMhaXcwasSn9MEtiuXp741LvoMhNECjnJS50pVOhSa7L2jZJ4vIOOij5pNQn2LnzrbIzKYr6ZZwteVS11Ceqb2Jp4N/C3zRwAOJmFbVQsuYIUulbo9TMLBRiWPPO5/ZXGzbEDaulmWFZtlfIr42+0/OAsmUVgu9ryOB+JhZYNitY2tRzQj1Fc85hzCzeLYdug0xuorYArVNtYeo4FHQX1ldyMpjJUHgxh6huPqAo/BLRvVkmthCQ2HVAU61GYw0Rsk07ew0bJWXbE0TX33A/6acAmIntZGlRThzTE+MB8bW5SzwjykAako6lrXMbQMylTkXloGQHsThPvzJsioTpogzUyxrAd7bOuMLoymVh5IAOoDmbOPRpVeeNROFoimVliBzmcKoEE0tYPLoB1VpkE0tWNMtcTBYgnPTKqdAkYBvV9u0Z86avhSvknQ3sKe2R0nLWzgbaoietD8DZY5yYDc0I5CSxxAE/2jUM6TiDkEeQeWD7Npc88MzFjt+OW/xB9y8yiXTVs2xQAAAABJRU5ErkJggg==";
-/* harmony default export */ var count_downvue_type_script_lang_js_ = ({
-  name: "count-down",
-  mixins: [emitter, mixins_locale],
-  data: function data() {
-    return {
-      time: null,
-      clockIcon: clockIcon,
-      timeMeter: null //计时器
-
-    };
-  },
-  props: {
-    getCurrentTime: {},
-    limitedTime: {
-      type: Number,
-      default: 0
-    },
-    assessmentStatus: {
-      type: String,
-      default: ""
-    },
-    mode: {
-      type: String,
-      default: "do"
-    },
-    beginTime: {
-      type: Number,
-      default: 0
-    }
-  },
-  mounted: function mounted() {
-    var _this = this;
-
-    this.$nextTick(function () {
-      if (_this.assessmentStatus === "preview" || _this.mode !== "do") {
-        return;
-      }
-
-      _this.timer();
-    });
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.clearTime();
-  },
-  computed: {
-    className: function className() {
-      return this.limitedTime && this.assessmentStatus !== "preview" && this.mode === "do" ? "ibs-assessment-timer ibs-assessment-timer--top" : "ibs-assessment-timer";
-    },
-    isShow: function isShow() {
-      return (this.beginTime + this.limitedTime * 60) * 1000 - Date.now() > 0;
-    }
-  },
-  methods: {
-    getContainer: function getContainer() {
-      return document.getElementById("item-bank-sdk-card");
-    },
-    reachTimerSubmit: function reachTimerSubmit() {
-      this.$emit("reachTimeSubmitAnswerData");
-    },
-    timer: function timer() {
-      var _this2 = this;
-
-      var time = (this.beginTime + this.limitedTime * 60) * 1000 - Date.now();
-
-      if (time <= 0) {
-        this.arrivalTime();
-        return;
-      } // 考试倒计时
-
-
-      var i = 0;
-      this.timeMeter = setInterval(function () {
-        var _getCountDown = getCountDown(time, i++),
-            hours = _getCountDown.hours,
-            minutes = _getCountDown.minutes,
-            seconds = _getCountDown.seconds;
-
-        _this2.time = "".concat(hours, ":").concat(minutes, ":").concat(seconds);
-
-        if (Number(hours) == 0 && Number(minutes) == 0 && Number(seconds) == 0 || Number(seconds) < 0) {
-          _this2.arrivalTime();
-        }
-      }, 1000);
-    },
-    arrivalTime: function arrivalTime() {
-      this.clearTime(); //直接交卷
-
-      this.reachTimerSubmit();
-    },
-    clearTime: function clearTime() {
-      clearInterval(this.timeMeter);
-      this.timeMeter = null;
-    }
-  }
-});
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/count-down.vue?vue&type=script&lang=js&
- /* harmony default export */ var component_count_downvue_type_script_lang_js_ = (count_downvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/count-down.vue
-
-
-
-
-
-/* normalize component */
-
-var count_down_component = normalizeComponent(
-  component_count_downvue_type_script_lang_js_,
-  count_downvue_type_template_id_5083d410_render,
-  count_downvue_type_template_id_5083d410_staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var count_down = (count_down_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/item.vue?vue&type=script&lang=js&
-
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function src_itemvue_type_script_lang_js_extends() { src_itemvue_type_script_lang_js_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return src_itemvue_type_script_lang_js_extends.apply(this, arguments); }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var orderNum = 1;
-var itemvue_type_script_lang_js_baseCKEditorData = {
-  publicPath: "".concat("", "/es-ckeditor/ckeditor.js"),
-  fileSingleSizeLimit: 10,
-  filebrowserImageUploadUrl: "",
-  filebrowserImageDownloadUrl: "",
-  language: "zh-cn",
-  jqueryPath: "https://cdn.bootcss.com/jquery/3.4.1/jquery.js"
-};
-var itemvue_type_script_lang_js_clockIcon = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGgAAABoCAMAAAAqwkWTAAAAP1BMVEX///9mZmafn5/s7OxwcHB5eXmMjIz19fXGxsaysrK8vLyDg4PZ2dnj4+OoqKizs7OpqamWlpbPz8/Y2Nji4uLjiUH7AAAE6klEQVRo3u1Z2baiMBCULJ2FEBb9/2+dKyKVINkcnTMPt54EIUV3qjud9OUX/wjqatgPzKIu3wT3onuC8cvXYEUXQNjLl2C6A8zlK7DdC75iE9/81rMf9Jv3vjFPbB1auo1Wrpf+8nGoB4/ar1cm8XmVLytR4Cq33lgN/Lzk+vBOD+F9fIrY651fov+NiDtt7+nbG6PpW0SnmNVLwJmZDH87XK3sEiAdjTqINbCHt2iu1GUxLyHPCvEGk+67IqRG5t2YllYaeRiS2B0zyRMqHt7ULTQDdUDvD9Ox+D6k4huPEK2rlZowDNnTRM014RmxTc8g2lZg3u8jjCrz2BR70cGFdTZpAZqGidRYF+uWK3NKwxdt/D0zWHcLnx53qUcrsKvPBMQRTobieossyPjzBRYulLqWR1hkFnkaQJ4fqz4WBK6r5JG8lBtQskICbA9cWclDahsBNFkqNT+vJb6zQgfseSk6QMiZ/YB6cVazTnFA1ZWkI6Jpg2Bhahg0k0FaiNRX5kFinBBND9DJzC4MJX/g9TohyDAeTGmXwtnBfVSbUw1KUvAQz3iAIiaFD82Ch9W7qdsJWSRRuH6ocpwFT1mliCATiIkK6fEpbKivV/WJXgfTpCsM4nABeLJQDyYRvCnLBo3gBE8dUw+fZ02S+BSD+aljkpgmJUB6CuR2qK8E7j3f1IY3TCFkZxjEKtfiQTwGh9pgEuVjaMJPquHBVpYedsAklZUCh0G8hgdEPDAp5RB8EeEVVseDmWSwgzIeUZDCVGXQcFx3OIRnM767YnQJg2p4dtCuJpXR3bSL/7Y+tTTyxGcCffrAg/a/bC6FXC3z1kU8gNh9N6UnSexmZHaNi9xS+gsP5EC7hEVaC8NOqVPuBWIeDA9h8KQWMEVDM088fFINep+Ya8pqneeJ/S9TbjG7e20q98qt6pplshDF8ITccEI0gzLlXKZ+5pOlHDPvsmPrr5T/WfwLgOoV0rNNVNM+ebKCP3KPTJvN6Wdw/30i3IeL/PtEZdcJhYW77DqfEgOLZRHDVYiBdgnMKTFYZI+sdjs5s/Q+q18tBWU2YJdUwC5dBJ1KmA4RlU5ByCOlFDQd/0X2yqYgDF9OquBJJtVbeokVcfZg2bMLuaR3vwT/FxY+g4de4axn1uVKXYuFL7OUv31KD7UMhaXcwasSn9MEtiuXp741LvoMhNECjnJS50pVOhSa7L2jZJ4vIOOij5pNQn2LnzrbIzKYr6ZZwteVS11Ceqb2Jp4N/C3zRwAOJmFbVQsuYIUulbo9TMLBRiWPPO5/ZXGzbEDaulmWFZtlfIr42+0/OAsmUVgu9ryOB+JhZYNitY2tRzQj1Fc85hzCzeLYdug0xuorYArVNtYeo4FHQX1ldyMpjJUHgxh6huPqAo/BLRvVkmthCQ2HVAU61GYw0Rsk07ew0bJWXbE0TX33A/6acAmIntZGlRThzTE+MB8bW5SzwjykAako6lrXMbQMylTkXloGQHsThPvzJsioTpogzUyxrAd7bOuMLoymVh5IAOoDmbOPRpVeeNROFoimVliBzmcKoEE0tYPLoB1VpkE0tWNMtcTBYgnPTKqdAkYBvV9u0Z86avhSvknQ3sKe2R0nLWzgbaoietD8DZY5yYDc0I5CSxxAE/2jUM6TiDkEeQeWD7Npc88MzFjt+OW/xB9y8yiXTVs2xQAAAABJRU5ErkJggg==";
-/* harmony default export */ var item_engine_src_itemvue_type_script_lang_js_ = ({
-  name: "item-engine",
-  mixins: [mixins_locale],
-  inheritAttrs: false,
-  components: {
-    judgeType: component_judge,
-    card: card,
-    singleChoice: component_single_choice,
-    choice: component_choice,
-    essay: component_essay,
-    fill: component_fill,
-    sectionTitle: section_title,
-    materialTitle: material_title,
-    materialAnalysis: material_analysis,
-    review: review,
-    result: component_result,
-    countDown: count_down,
-    answerModel: component_answer_model
-  },
-  data: function data() {
-    return {
-      sections: this.assessment.sections,
-      responses: this.assessmentResponse.section_responses || [],
-      analysis_reports: this.answerSceneReport.question_reports || [],
-      section_responses: [],
-      section_reports: this.answerReport.section_reports,
-      isError: false,
-      enableFacein: Number(this.answerScene.enable_facein),
-      count: 0,
-      intervalId: null,
-      saveDataIntervalId: null,
-      visible: false,
-      closable: false,
-      needMarking: Number(this.answerScene.manual_marking),
-      needScore: Number(this.answerScene.need_score),
-      doTimes: Number(this.answerScene.do_times),
-      recordStatus: this.answerRecord.status,
-      collectList: [],
-      mobileShow: false,
-      reviewType: this.answerScene.reviewType,
-      used_time: "00:00:00",
-      clockIcon: itemvue_type_script_lang_js_clockIcon
-    };
-  },
-  props: {
-    getCurrentTime: {},
-    // 模式 preview:预览模式 report:答题结果模式 do:做题模式 review:批阅模式
-    mode: {
-      type: String,
-      default: "do"
-    },
-    showCKEditorData: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    answerReport: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    answerSceneReport: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    //暂存数据
-    assessmentResponse: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    //试卷
-    assessment: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    //任务信息
-    metaActivity: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    //答题记录
-    answerRecord: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    //答题场次
-    answerScene: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    //是否显示答案
-    answerShow: {
-      type: String,
-      default: function _default() {
-        return "show";
-      }
-    },
-    //试卷预览
-    assessmentStatus: {
-      type: String,
-      default: function _default() {
-        return "";
-      }
-    },
-    showAttachment: {
-      type: String,
-      default: function _default() {
-        return "0";
-      }
-    },
-    uploadSDKInitData: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    cdnHost: {
-      type: String,
-      default: function _default() {
-        return "service-cdn.qiqiuyun.net";
-      }
-    },
-    questionFavorites: {
-      type: Array,
-      default: function _default() {
-        return [];
-      }
-    },
-    deleteAttachmentCallback: {
-      type: Function,
-      default: function _default() {
-        return new Promise(function (resolve) {
-          resolve();
-        });
-      }
-    },
-    previewAttachmentCallback: {
-      type: Function,
-      default: function _default() {
-        return new Promise(function (resolve) {
-          resolve();
-        });
-      }
-    },
-    downloadAttachmentCallback: {
-      type: Function,
-      default: function _default() {
-        return new Promise(function (resolve) {
-          resolve();
-        });
-      }
-    },
-    inpectConstrolCallback: {
-      type: Function,
-      default: function _default() {
-        return new Promise(function (resolve) {
-          resolve();
-        });
-      }
-    },
-    showSaveProgressBtn: {
-      type: Number,
-      default: 1
-    },
-    showDoAgainBtn: {
-      type: Number,
-      default: 1
-    },
-    isErrorCorrection: {
-      type: String,
-      default: "0"
-    },
-    mediaType: {
-      type: String,
-      default: ""
-    },
-    finishType: {
-      type: String,
-      default: ""
-    },
-    submitList: {
-      type: Array,
-      default: function _default() {
-        return [];
-      }
-    }
-  },
-  computed: {
-    CKEditorData: function CKEditorData() {
-      if (Object.keys(this.showCKEditorData).length) {
-        return src_itemvue_type_script_lang_js_extends(itemvue_type_script_lang_js_baseCKEditorData, this.showCKEditorData);
-      }
-
-      return itemvue_type_script_lang_js_baseCKEditorData;
-    },
-    widthCol: function widthCol() {
-      return this.mode !== "analysis" ? 14 : "";
-    },
-    offsetCol: function offsetCol() {
-      return this.mode !== "analysis" ? 2 : 0;
-    },
-    //是否允许做题时查看解析
-    doingLookAnalysis: function doingLookAnalysis() {
-      return !!Number(this.answerScene.doing_look_analysis) && this.mode === "do";
-    },
-    localUsedTime: function localUsedTime() {
-      return "".concat(this.answerRecord.id, "-usedTime");
-    }
-  },
-  watch: {
-    section_responses: {
-      handler: function handler(val) {
-        console.log(val);
-      },
-      deep: true
-    }
-  },
-  filters: {
-    date: function date(timeStamp) {
-      return timeStampFormatTime(timeStamp);
-    }
-  },
-  provide: function provide() {
-    return {
-      showCKEditorData: this.CKEditorData,
-      showAttachment: Number(this.showAttachment),
-      cdnHost: this.cdnHost,
-      deleteAttachmentCallback: this.deleteAttachmentCallback,
-      previewAttachmentCallback: this.previewAttachmentCallback,
-      downloadAttachmentCallback: this.downloadAttachmentCallback
-    };
-  },
-  mounted: function mounted() {
-    //如果有暂存数据
-    if (this.questionFavorites.length > 0) {
-      this.collectList = this.questionFavorites;
-    }
-
-    if (this.responses.length > 0) {
-      this.section_responses = this.responses;
-    } else {
-      this.formateSections();
-    }
-
-    if (this.mode === "do" && this.assessmentStatus !== "preview" && !this.visible) {
-      this.countTime();
-      this.trigger();
-    }
-
-    if (this.enableFacein && date_toolkit_isMobileDevice() && this.mode === "do" && this.assessmentStatus !== "preview") {
-      this.mobileShow = true;
-    } // 是否提示考试时间未到
-
-
-    this.getStartTime();
-  },
-  created: function created() {
-    this.$on("previewFile", this.previewAttachment);
-    this.$on("downloadFile", this.downloadAttachment);
-  },
-  beforeDestroy: function beforeDestroy() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-
-    if (this.saveDataIntervalId) {
-      clearInterval(this.saveDataIntervalId);
-    }
-  },
-  methods: {
-    //遍历获取答案体结构
-    formateSections: function formateSections() {
-      var _this = this;
-
-      this.sections.forEach(function (item) {
-        _this.section_responses.push({
-          section_id: item.id,
-          item_responses: _this.formateItems(item.items)
-        });
-      });
-    },
-    formateItems: function formateItems(items) {
-      var _this2 = this;
-
-      var item_responses = [];
-      items.forEach(function (item) {
-        item_responses.push({
-          item_id: item.id,
-          question_responses: _this2.formateQuestions(item.questions)
-        });
-      });
-      return item_responses;
-    },
-    formateQuestions: function formateQuestions(questions) {
-      var _this3 = this;
-
-      var question_responses = [];
-      questions.forEach(function (item) {
-        item.orderNum = orderNum++;
-
-        if (Number(item.isDelete) == 1) {
-          item.response_points = [];
-        }
-
-        var length = item.response_points.length ? item.response_points.length : 0;
-        question_responses.push({
-          question_id: item.id,
-          response: _this3.initResponse(item.answer_mode, length),
-          attachments: [],
-          isTag: false
-        });
-      });
-      return question_responses;
-    },
-    //初始化答案数据
-    initResponse: function initResponse(mode, lengths) {
-      var response = [];
-
-      if (mode === "text") {
-        response = Array(lengths).fill("");
-      } else if (mode === "single_choice" || mode === "rich_text" || mode === "true_false") {
-        response = [""];
-      }
-
-      return response;
-    },
-    getVal: function getVal(msg) {
-      this.isError = msg;
-    },
-    exitAnswer: function exitAnswer() {
-      this.$emit("exitAnswer");
-    },
-    answerData: function answerData() {
-      var finalData = this.getResponse();
-      finalData.used_time = localStorage.getItem(this.localUsedTime);
-      this.$emit("getAnswerData", finalData); // 立即提交的时候清空计时器;
-
-      clearInterval(this.saveDataIntervalId);
-      this.saveDataIntervalId = null;
-      clearInterval(this.intervalId); //清除计时器
-
-      this.intervalId = null; //设置为null
-    },
-    reachTimeSubmitAnswerData: function reachTimeSubmitAnswerData() {
-      var finalData = this.getResponse();
-      finalData.used_time = localStorage.getItem(this.localUsedTime);
-      this.$emit("reachTimeSubmitAnswerData", finalData);
-    },
-    saveAnswerData: function saveAnswerData() {
-      var finalData = this.getResponse();
-      finalData.used_time = localStorage.getItem(this.localUsedTime);
-      this.$emit("saveAnswerData", finalData);
-    },
-    countTime: function countTime() {
-      var _this4 = this;
-
-      var h = this.$createElement;
-
-      if (this.intervalId != null) {
-        return;
-      }
-
-      var usedTime = Number(this.answerRecord.used_time);
-      var localUsedTime = localStorage.getItem(this.localUsedTime) || 0;
-      var time = Math.max(usedTime, localUsedTime);
-
-      if (usedTime > localUsedTime) {
-        localStorage.setItem(this.localUsedTime, usedTime);
-      }
-
-      var self = this;
-      this.intervalId = setInterval(function () {
-        localStorage.setItem(_this4.localUsedTime, ++time);
-
-        var _getCountDown = getCountDown(time * 1000, 0),
-            hours = _getCountDown.hours,
-            minutes = _getCountDown.minutes,
-            seconds = _getCountDown.seconds;
-
-        _this4.used_time = "".concat(hours, ":").concat(minutes, ":").concat(seconds);
-
-        if (_this4.answerRecord.exam_mode == "1" && _this4.answerScene.limited_time > 0 && time / 60 == _this4.answerScene.limited_time) {
-          var timeReach = _this4.t("itemEngine.timeReach")(Math.floor(time / 60));
-
-          _this4.$confirm({
-            content: function content() {
-              return h("strong", [timeReach]);
-            },
-            icon: "",
-            okText: _this4.t("itemEngine.goThenDo"),
-            cancelText: _this4.t("testpaper.submit"),
-            class: "ibs-card-confirm-modal",
-            onOk: function onOk() {
-              self.$emit("blank");
-
-              modal.destroyAll();
-            },
-            onCancel: function onCancel() {
-              self.answerData();
-
-              modal.destroyAll();
-            }
-          });
-        }
-      }, 1000);
-    },
-    trigger: function trigger() {
-      var _this5 = this;
-
-      var data = this.getResponse();
-      var self = this;
-      this.saveDataIntervalId = setInterval(function () {
-        data.used_time = localStorage.getItem(_this5.localUsedTime);
-        self.$emit("timeSaveAnswerData", data);
-      }, 30 * 1000);
-    },
-    getStartTime: function getStartTime() {
-      if (this.mode === "do" && this.assessmentStatus !== "preview" && Number(this.answerScene.start_time)) {
-        var now = this.getCurrentTime ? this.getCurrentTime() : Date.parse(new Date());
-        var startTime = Number(this.answerScene.start_time) * 1000;
-        var timeSpace = now < startTime;
-
-        if (timeSpace) {
-          this.visible = true;
-        } else {
-          this.visible = false;
-        }
-      }
-    },
-    getResponse: function getResponse() {
-      var finalData = {};
-      finalData.assessment_id = this.assessment.id;
-      finalData.answer_record_id = this.answerRecord.id;
-      finalData.section_responses = this.section_responses;
-      return finalData;
-    },
-    changeDetermine: function changeDetermine(value, keys) {
-      this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].response = [value];
-    },
-    changeChoice: function changeChoice(value, keys) {
-      this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].response = value;
-    },
-    changeEssay: function changeEssay(value, keys) {
-      this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].response = [value];
-    },
-    changeFill: function changeFill(value, keys) {
-      this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].response = value;
-    },
-    changeTag: function changeTag(value, keys) {
-      this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].isTag = value;
-    },
-    changeCollect: function changeCollect(value, collectStatus) {
-      var collectItem = src_itemvue_type_script_lang_js_extends(value, {
-        target_id: this.assessment.id
-      });
-
-      if (collectStatus) {
-        this.collectList.push(collectItem);
-        this.$emit("collectUpdateEvent", collectItem);
-      } else {
-        this.collectList = this.collectList.filter(function (collectItem) {
-          return collectItem.question_id !== value.question_id;
-        });
-        this.$emit("cancelCollectEvent", collectItem);
-      }
-
-      console.log(this.collectList);
-    },
-    getUserAnwer: function getUserAnwer(s, i, q) {
-      return this.section_responses[s].item_responses[i].question_responses[q].response;
-    },
-    getUserAttachment: function getUserAttachment(s, i, q) {
-      return this.section_responses[s].item_responses[i].question_responses[q].attachments;
-    },
-    getReportAnswer: function getReportAnswer(s, i, q) {
-      if (this.mode == "report" || this.mode == "review") {
-        try {
-          return this.section_reports[s].item_reports[i].question_reports[q];
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        return {};
-      }
-    },
-    getReportAnswerId: function getReportAnswerId(s, i, q) {
-      if (this.mode == "report" || this.mode == "review") {
-        return this.section_reports[s].item_reports[i].question_reports[q].id;
-      } else {
-        return "";
-      }
-    },
-    getErrorData: function getErrorData(s, i, q) {
-      if (this.mode !== "report") {
-        return true;
-      } else {
-        if (!this.isError) {
-          return true;
-        } else {
-          var status = this.getReportAnswer(s, i, q).status;
-
-          if (status === "wrong" || status === "part_right") {
-            return true;
-          } else {
-            return false;
-          }
-        }
-      }
-    },
-    getReviewMaterial: function getReviewMaterial(s, i) {
-      var essayData = this.section_reports[s].item_reports[i].question_reports.map(function (item) {
-        return item.status === "reviewing";
-      });
-      return essayData.indexOf(true) > -1 ? true : false;
-    },
-    getMaterial: function getMaterial(s, i) {
-      if (this.mode == "report") {
-        return this.getErrorMaterial(s, i);
-      } else if (this.mode == "review") {
-        return this.getReviewMaterial(s, i);
-      } else {
-        return true;
-      }
-    },
-    getErrorMaterial: function getErrorMaterial(s, i) {
-      if (!this.isError) {
-        return true;
-      }
-
-      var errorData = this.section_reports[s].item_reports[i].question_reports.map(function (question) {
-        return question.status === "wrong" || question.status === "part_right";
-      });
-      return errorData.indexOf(true) > -1 ? true : false;
-    },
-    getTitle: function getTitle(s) {
-      if (this.mode == "report") {
-        return this.getErrorTitle(s);
-      } else if (this.mode == "review") {
-        return this.getReviewTitle(s);
-      } else {
-        return true;
-      }
-    },
-    getErrorTitle: function getErrorTitle(s) {
-      if (!this.isError) {
-        return true;
-      }
-
-      var errorData = this.section_reports[s].item_reports.map(function (item) {
-        var status = item.question_reports.map(function (question) {
-          return question.status === "wrong" || question.status === "part_right";
-        });
-        var result = status.join(" ");
-        return result;
-      });
-      return errorData.join(" ").indexOf(true) > -1 ? true : false;
-    },
-    getReviewTitle: function getReviewTitle(s) {
-      var essayData = this.section_reports[s].item_reports.map(function (item) {
-        var status = item.question_reports.map(function (question) {
-          return question.status === "reviewing";
-        });
-        var result = status.join(" ");
-        return result;
-      });
-      return essayData.join(" ").indexOf(true) > -1 ? true : false;
-    },
-    getContainer: function getContainer() {
-      return document.getElementById("item-bank-sdk-message");
-    },
-    getEssayAttachment: function getEssayAttachment(file, keys) {
-      this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].attachments = [file];
-    },
-    deleteEssayAttachment: function deleteEssayAttachment(fileId, flag, keys) {
-      if (!flag) {
-        this.section_responses[keys[0]].item_responses[keys[1]].question_responses[keys[2]].attachments = [];
-      }
-
-      this.$emit("deleteAttachment", fileId, flag);
-    },
-    previewAttachment: function previewAttachment(fileId) {
-      this.$emit("previewAttachment", fileId);
-    },
-    downloadAttachment: function downloadAttachment(fileId) {
-      this.$emit("downloadAttachment", fileId);
-    },
-    getFavoritesQuestion: function getFavoritesQuestion(s, i, q) {
-      var _this6 = this;
-
-      var _this$questionFavorit = this.questionFavorites.filter(function (question) {
-        return question.question_id == _this6.sections[s].items[i].questions[q].id;
-      }),
-          _this$questionFavorit2 = _slicedToArray(_this$questionFavorit, 1),
-          item = _this$questionFavorit2[0];
-
-      return item;
-    },
-    getAnalysisQuestion: function getAnalysisQuestion(s, i, q) {
-      var _this7 = this;
-
-      if (this.mode !== "analysis") return {};
-
-      var _this$analysis_report = this.analysis_reports.filter(function (question) {
-        return question.question_id == _this7.sections[s].items[i].questions[q].id;
-      }),
-          _this$analysis_report2 = _slicedToArray(_this$analysis_report, 1),
-          item = _this$analysis_report2[0];
-
-      return item;
-    },
-    getLastClass: function getLastClass(q, length) {
-      if (q === length) {
-        return "ibs-item-last";
-      } else {
-        return "ibs-item-not-last";
-      }
-    },
-    getEssayItem: function getEssayItem(question, s, i, q) {
-      if (this.mode !== "review") {
-        return question.answer_mode === "rich_text" && this.getErrorData(s, i, q);
-      } else {
-        return this.section_reports[s].item_reports[i].question_reports[q].status === "reviewing";
-      }
-    },
-    goBack: function goBack() {
-      window.history.go(-1);
-    },
-    setMaterialAnalysis: function setMaterialAnalysis(canShowAnalysis, keys) {
-      this.$set(this.assessment.sections[keys[0]].items[keys[1]], "showMaterialAnalysis", canShowAnalysis);
-    },
-    showMaterialAnalysis: function showMaterialAnalysis(item, sectionsIndex, itemIndex) {
-      if (item.type !== "material") {
-        return;
-      }
-
-      var analysis = item.showMaterialAnalysis;
-
-      if (this.doingLookAnalysis) {
-        return analysis;
-      }
-
-      return this.mode !== "do" && this.mode !== "review" && this.getMaterial(sectionsIndex, itemIndex);
-    },
-    errorCorrection: function errorCorrection(params) {
-      this.$emit("error-correction", params);
-    },
-    handleViewHistoricalResult: function handleViewHistoricalResult(params) {
-      this.$emit("view-historical-result", params);
-    }
-  }
-});
-// CONCATENATED MODULE: ./src/components/item-engine/src/item.vue?vue&type=script&lang=js&
- /* harmony default export */ var components_item_engine_src_itemvue_type_script_lang_js_ = (item_engine_src_itemvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/item-engine/src/item.vue
-
-
-
-
-
-/* normalize component */
-
-var src_item_component = normalizeComponent(
-  components_item_engine_src_itemvue_type_script_lang_js_,
-  itemvue_type_template_id_02cff689_render,
-  itemvue_type_template_id_02cff689_staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var item_engine_src_item = (src_item_component.exports);
-// CONCATENATED MODULE: ./src/components/item-engine/index.js
-
-
-item_engine_src_item.install = function (Vue) {
-  Vue.component(item_engine_src_item.name, item_engine_src_item);
-};
-
-/* harmony default export */ var item_engine = (item_engine_src_item);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-review/src/item.vue?vue&type=template&id=9173dd66&
-var itemvue_type_template_id_9173dd66_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('a-form',{attrs:{"form":_vm.reviewForm}},[_c('item-bank',{attrs:{"mode":"review","answerReport":_vm.answerReport,"assessment":_vm.assessment,"metaActivity":_vm.metaActivity,"form":_vm.reviewForm,"role":_vm.role,"answerScene":_vm.answerScene,"answerRecord":_vm.answerRecord,"showCKEditorData":_vm.showCKEditorData,"previewAttachmentCallback":_vm.previewAttachmentCallback,"downloadAttachmentCallback":_vm.downloadAttachmentCallback,"cdnHost":_vm.cdnHost,"media-type":_vm.mediaType,"finish-type":_vm.finishType,"submit-list":_vm.submitList},on:{"previewAttachment":_vm.previewAttachment,"downloadAttachment":_vm.downloadAttachment,"view-historical-result":_vm.handleViewHistoricalResult},scopedSlots:_vm._u([{key:"review-footer",fn:function(){return [(['testpaper', 'homework'].includes(_vm.mediaType))?_c('div',{staticClass:"ibs-item-list"},[_c('div',{staticClass:"ibs-pl16 ibs-pr16 ibs-comment"},[_c('a-row',[_c('a-col',{staticClass:"ibs-comment__title ibs-pl16",attrs:{"span":3}},[_vm._v(" "+_vm._s(_vm.t("itemReview.job_comments"))+" ")]),_c('a-col',{staticClass:"ibs-comment__content",attrs:{"span":21}},[_c('a-form',{attrs:{"form":_vm.form}},[_c('a-form-item',[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:(["comment", { initialValue: '' }]),expression:"[`comment`, { initialValue: '' }]"}],attrs:{"placeholder":_vm.t('itemReview.InputComment_tip'),"rows":5}})],1),_c('a-form-item',[_c('a-select',{attrs:{"defaultValue":_vm.comments[0]},on:{"change":_vm.handleChange}},_vm._l((_vm.comments),function(comment,index){return _c('a-select-option',{key:index,attrs:{"value":comment}},[_vm._v(" "+_vm._s(comment)+" ")])}),1)],1)],1)],1)],1)],1)]):_vm._e(),_c('div',{staticClass:"ibs-item-list ibs-footer ibs-clearfix",class:{
-            'ibs-footer--right':
-              _vm.mediaType === 'homework' && _vm.finishType === 'submit'
-          }},[(_vm.mediaType === 'homework' && _vm.finishType === 'submit')?_c('span',{staticClass:"ibs-mr24"},[_vm._v(" "+_vm._s(_vm.t("itemReview.rightQuestionCount"))+" "+_vm._s(_vm.answerReport.right_question_count)+" ")]):[_c('div',{staticClass:"ibs-mr24 ibs-left"},[_vm._v(" "+_vm._s(_vm.t("itemReview.subjective_question"))+" "+_vm._s(_vm.getSubjectiveScore)+" "+_vm._s(_vm.t("itemEngine.score"))+" ")]),_c('div',{staticClass:"ibs-mr24 ibs-left"},[_vm._v(" "+_vm._s(_vm.t("itemReview.objective_question"))+" "+_vm._s(_vm.getObjectiveScore)+" "+_vm._s(_vm.t("itemEngine.score"))+" ")]),_c('div',{staticClass:"ibs-mr24 ibs-left"},[_vm._v(" "+_vm._s(_vm.t("itemReview.Student_score"))+"： "+_vm._s(_vm.getCommentScore)+" ")]),_c('div',{staticClass:"ibs-mr24 ibs-left"},[_vm._v(" "+_vm._s(_vm.t("itemReview.Pass_score"))+_vm._s(_vm.answerScene.pass_score)+" ")]),_c('div',{staticClass:"ibs-mr24 ibs-left"},[_vm._v(" "+_vm._s(_vm.t("itemReview.result"))+" "),(_vm.isPassed)?_c('span',{staticStyle:{"font-weight":"500","color":"green"}},[_vm._v(" "+_vm._s(_vm.t("itemReview.pass"))+" ")]):_c('span',{staticStyle:{"font-weight":"500","color":"red"}},[_vm._v(" "+_vm._s(_vm.t("itemReview.fail"))+" ")])])],_c('a-button',{staticClass:"ibs-mr24",on:{"click":_vm.handleCancel}},[_vm._v(" "+_vm._s(_vm.t("itemReview.Cancel"))+" ")]),_c('a-button',{staticClass:"ibs-mr24",attrs:{"type":"primary"},on:{"click":function($event){return _vm.showConfirm('', $event)}}},[_vm._v(" "+_vm._s(_vm.t("itemReview.FinishReview"))+" ")]),_c('a-button',{on:{"click":function($event){return _vm.showConfirm('again', $event)}}},[_vm._v(" "+_vm._s(_vm.t("itemReview.FinishThenGo"))+" ")])],2)]},proxy:true}])})],1)],1)}
-var itemvue_type_template_id_9173dd66_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/item-review/src/item.vue?vue&type=template&id=9173dd66&
-
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-review/src/item.vue?vue&type=script&lang=js&
 
 
@@ -51787,15 +51787,15 @@ item_preview_src_item.install = function (Vue) {
 };
 
 /* harmony default export */ var item_preview = (item_preview_src_item);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-import/src/item.vue?vue&type=template&id=59d1668e&
-var itemvue_type_template_id_59d1668e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-item-import",attrs:{"id":"item-bank-sdk-import"}},[_c('a-row',{staticClass:"ibs-item-import-content"},[_c('a-col',{staticClass:"ibs-import-left",attrs:{"span":6}},[_c('import-data',{attrs:{"totalItem":_vm.items.length,"totalTypes":_vm.allTypes,"allScore":_vm.allScore,"importType":_vm.importType}}),_c('import-list',{attrs:{"items":_vm.items,"totalTypes":_vm.allTypes,"typeIndex":_vm.typeIndex,"category":_vm.category,"errorList":_vm.errorList},on:{"setCategory":_vm.setCategory,"setDifficult":_vm.setDifficult,"setScore":_vm.setScore}})],1),(_vm.items.length > 0)?_c('a-col',{staticClass:"ibs-import-right",attrs:{"span":17,"offset":1}},[(_vm.importType === 'testpaper')?_c('div',{staticClass:"ibs-item-import-testpapername"},[_c('a-input',{attrs:{"placeholder":_vm.t('itemImport.SetTitle_tip')},model:{value:(_vm.fileName),callback:function ($$v) {_vm.fileName=$$v},expression:"fileName"}})],1):_vm._e(),_vm._l((_vm.items),function(item,itemIndex){return _c('div',{key:itemIndex,attrs:{"id":("ibs-import-" + itemIndex)}},[_c('div',{staticClass:"ibs-import-item"},[_c('a-row',[_c('a-col',{staticClass:"ibs-text-right ibs-mt16",attrs:{"span":2}},[_c('span',[_vm._v(_vm._s(itemIndex + 1)+"、")])]),_c('a-col',{attrs:{"span":22}},[_c('material-title',{directives:[{name:"show",rawName:"v-show",value:(item.type === 'material'),expression:"item.type === 'material'"}],attrs:{"material":item.material,"item":item}}),_vm._l((item.questions),function(question,questionIndex){return _c('div',{key:questionIndex + question.answer,staticClass:"ibs-pl16 ibs-pr16"},[_c('a-row',[_c('a-col',{directives:[{name:"show",rawName:"v-show",value:(item.type === 'material'),expression:"item.type === 'material'"}],staticClass:"ibs-text-right ibs-mt16",attrs:{"span":2}},[_c('span',[_vm._v("（"+_vm._s(questionIndex + 1)+"） ")])]),_c('a-col',{attrs:{"span":item.type === 'material' ? 22 : 24}},[(question.answer_mode === 'true_false')?_c('judge-type',{attrs:{"question":question,"item":item,"mode":_vm.mode,"showScoreAndSeq":false}}):_vm._e(),(question.answer_mode === 'single_choice')?_c('single-choice',{attrs:{"question":question,"item":item,"mode":_vm.mode,"showScoreAndSeq":false}}):_vm._e(),(
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-import/src/item.vue?vue&type=template&id=04ebc0c1&
+var itemvue_type_template_id_04ebc0c1_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-item-import",attrs:{"id":"item-bank-sdk-import"}},[_c('a-row',{staticClass:"ibs-item-import-content"},[_c('a-col',{staticClass:"ibs-import-left",attrs:{"span":6}},[_c('import-data',{attrs:{"totalItem":_vm.items.length,"totalTypes":_vm.allTypes,"allScore":_vm.allScore,"importType":_vm.importType}}),_c('import-list',{attrs:{"items":_vm.items,"totalTypes":_vm.allTypes,"typeIndex":_vm.typeIndex,"category":_vm.category,"errorList":_vm.errorList},on:{"setCategory":_vm.setCategory,"setDifficult":_vm.setDifficult,"setScore":_vm.setScore}})],1),(_vm.items.length > 0)?_c('a-col',{staticClass:"ibs-import-right",attrs:{"span":17,"offset":1}},[(_vm.importType === 'testpaper')?_c('div',{staticClass:"ibs-item-import-testpapername"},[_c('a-input',{attrs:{"placeholder":_vm.t('itemImport.SetTitle_tip')},model:{value:(_vm.fileName),callback:function ($$v) {_vm.fileName=$$v},expression:"fileName"}})],1):_vm._e(),_vm._l((_vm.items),function(item,itemIndex){return _c('div',{key:itemIndex,attrs:{"id":("ibs-import-" + itemIndex)}},[_c('div',{staticClass:"ibs-import-item"},[_c('a-row',[_c('a-col',{staticClass:"ibs-text-right ibs-mt16",attrs:{"span":2}},[_c('span',[_vm._v(_vm._s(itemIndex + 1)+"、")])]),_c('a-col',{attrs:{"span":22}},[_c('material-title',{directives:[{name:"show",rawName:"v-show",value:(item.type === 'material'),expression:"item.type === 'material'"}],attrs:{"material":item.material,"item":item}}),_vm._l((item.questions),function(question,questionIndex){return _c('div',{key:questionIndex + question.answer,staticClass:"ibs-pl16 ibs-pr16"},[_c('a-row',[_c('a-col',{directives:[{name:"show",rawName:"v-show",value:(item.type === 'material'),expression:"item.type === 'material'"}],staticClass:"ibs-text-right ibs-mt16",attrs:{"span":2}},[_c('span',[_vm._v("（"+_vm._s(questionIndex + 1)+"） ")])]),_c('a-col',{attrs:{"span":item.type === 'material' ? 22 : 24}},[(question.answer_mode === 'true_false')?_c('judge-type',{attrs:{"question":question,"item":item,"mode":_vm.mode,"showScoreAndSeq":false}}):_vm._e(),(question.answer_mode === 'single_choice')?_c('single-choice',{attrs:{"question":question,"item":item,"mode":_vm.mode,"showScoreAndSeq":false}}):_vm._e(),(
                         question.answer_mode === 'choice' ||
                           question.answer_mode === 'uncertain_choice'
                       )?_c('choice',{attrs:{"question":question,"item":item,"mode":_vm.mode,"showScoreAndSeq":false}}):_vm._e(),(question.answer_mode === 'rich_text')?_c('essay',{attrs:{"question":question,"item":item,"mode":_vm.mode,"showScoreAndSeq":false}}):_vm._e(),(question.answer_mode === 'text')?_c('fill',{attrs:{"question":question,"item":item,"mode":_vm.mode,"showScoreAndSeq":false}}):_vm._e()],1)],1)],1)}),_c('div',{staticClass:"ibs-import-material-analysis"},[_c('material-analysis',{directives:[{name:"show",rawName:"v-show",value:(item.type === 'material' && item.analysis),expression:"item.type === 'material' && item.analysis"}],attrs:{"analysis":item.analysis,"attachments":item.attachments},on:{"previewAttachment":_vm.previewAttachment}})],1),_c('a-row',{staticClass:"ibs-mt16"},[_c('a-col',{attrs:{"span":24}},[_c('item-footer',{attrs:{"categoryName":item.category_name,"difficulty":item.difficulty,"score":_vm.getScore(item)}}),_c('div',{staticClass:"ibs-sub-operation ibs-import-edit"},[_c('a-button',{staticClass:"ibs-mr8 ibs-pl0",attrs:{"type":"link"},on:{"click":function($event){return _vm.showEditModal(item, itemIndex)}}},[_c('i',{staticClass:"ib-icon ib-icon-setting"}),_vm._v(_vm._s(_vm.t("Edit")))]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"link"},on:{"click":function($event){return _vm.deleteItem(itemIndex)}}},[_c('i',{staticClass:"ib-icon ib-icon-delete"}),_vm._v(_vm._s(_vm.t("Delete"))+" ")]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"link"},on:{"click":function($event){return _vm.createItem(item, itemIndex)}}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("itemImport.AfterAddItem"))+" ")])],1)],1)],1)],2)],1)],1)])}),_c('div',{ref:"ibsImportBtn",staticClass:"ibs-item-import__footer ibs-mb16"},[_c('a-button',{staticClass:"ibs-item-import-btn",attrs:{"type":"primary","loading":_vm.loading},on:{"click":_vm.finishImport}},[_vm._v(_vm._s(_vm.t("itemImport.FinishImport")))])],1)],2):_vm._e()],1),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showFixBtn),expression:"showFixBtn"}],staticClass:"ibs-item-import__footer--fix"},[_c('a-button',{staticClass:"ibs-item-import-btn",attrs:{"type":"primary","loading":_vm.loading},on:{"click":_vm.finishImport}},[_vm._v(_vm._s(_vm.t("itemImport.FinishImport")))])],1),_c('a-modal',{attrs:{"title":_vm.modelData.title,"width":"800px","cancelText":_vm.t('cancel'),"bodyStyle":{ textAlign: 'left' },"destroyOnClose":true,"footer":null,"getContainer":_vm.getContainer},on:{"ok":_vm.handleOk},model:{value:(_vm.visible),callback:function ($$v) {_vm.visible=$$v},expression:"visible"}},[(_vm.modelData.mode === 'edit')?_c('item-manage',{attrs:{"showAttachment":_vm.showAttachment,"showCKEditorData":_vm.showCKEditorData,"deleteAttachmentCallback":_vm.deleteAttachmentCallback,"previewAttachmentCallback":_vm.previewAttachmentCallback,"mode":_vm.modelData.mode,"cdnHost":"service-cdn.qiqiuyun.net","uploadSDKInitData":_vm.uploadSDKInitData,"category":_vm.modelData.category,"subject":_vm.modelData.subject,"type":_vm.modelData.type,"showModelBtn":true},on:{"deleteAttachment":_vm.deleteAttachment,"previewAttachment":_vm.previewAttachment,"getData":_vm.getEditData}}):_vm._e(),(_vm.modelData.mode === 'create')?_c('item-manage',{attrs:{"showAttachment":_vm.showAttachment,"showCKEditorData":_vm.showCKEditorData,"cdnHost":"service-cdn.qiqiuyun.net","uploadSDKInitData":_vm.uploadSDKInitData,"deleteAttachmentCallback":_vm.deleteAttachmentCallback,"previewAttachmentCallback":_vm.previewAttachmentCallback,"mode":_vm.modelData.mode,"category":_vm.modelData.category,"type":_vm.modelData.type,"showModelBtn":true},on:{"deleteAttachment":_vm.deleteAttachment,"previewAttachment":_vm.previewAttachment,"getData":_vm.getCreateData}}):_vm._e()],1),_c('a-modal',{attrs:{"title":_vm.t('itemImport.Add_new_item'),"destroyOnClose":true,"footer":null,"getContainer":_vm.getContainer},model:{value:(_vm.modelTypeVisible),callback:function ($$v) {_vm.modelTypeVisible=$$v},expression:"modelTypeVisible"}},[_c('a-row',[_c('a-col',{staticClass:"model-type-text",attrs:{"span":4}},[_vm._v(_vm._s(_vm.t("itemImport.Choose_type")))]),_c('a-col',{attrs:{"span":20}},[_c('a-row',[_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('single_choice')}}},[_vm._v(_vm._s(_vm.t("single_choice")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('choice')}}},[_vm._v(_vm._s(_vm.t("choice")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('uncertain_choice')}}},[_vm._v(_vm._s(_vm.t("uncertain_choice_1")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('determine')}}},[_vm._v(_vm._s(_vm.t("determine")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('fill')}}},[_vm._v(_vm._s(_vm.t("fill")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('essay')}}},[_vm._v(_vm._s(_vm.t("essay")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('material')}}},[_vm._v(_vm._s(_vm.t("material")))])],1)],1)],1)],1)],1)],1)}
-var itemvue_type_template_id_59d1668e_staticRenderFns = []
+var itemvue_type_template_id_04ebc0c1_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-import/src/item.vue?vue&type=template&id=59d1668e&
+// CONCATENATED MODULE: ./src/components/item-import/src/item.vue?vue&type=template&id=04ebc0c1&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"602d5b39-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-import/src/components/import-data.vue?vue&type=template&id=381b4c22&
 var import_datavue_type_template_id_381b4c22_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-import-list"},[_c('div',{staticClass:"ibs-clearfix ibs-subject-rect__title"},[_c('span',{staticClass:"ibs-left"},[_vm._v(_vm._s(_vm.t("itemImport.Topic_statistics")))]),_c('span',{directives:[{name:"show",rawName:"v-show",value:(_vm.importType === 'item'),expression:"importType === 'item'"}],staticClass:"ibs-right ibs-subject-data__num"},[_vm._v(_vm._s(_vm.t("itemImport.Number_of_topics")(_vm.totalItem))+" ")])]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.importType === 'testpaper'),expression:"importType === 'testpaper'"}],staticClass:"ibs-clearfix ibs-subject-data__item"},[_c('span',{staticClass:"ibs-left ibs-subject-data__num"},[_vm._v(_vm._s(_vm.t("itemImport.Number_of_topics")(_vm.totalItem)))]),_c('span',{staticClass:"ibs-right ibs-subject-data__num"},[_vm._v(_vm._s(_vm.t("itemImport.allScore")(_vm.allScore)))])]),_vm._l((_vm.totalTypes),function(value,key,index){return _c('div',{key:index,staticClass:"ibs-clearfix ibs-subject-data__item"},[_c('span',{staticClass:"ibs-left"},[_vm._v(_vm._s(_vm.getTypeName(key)))]),_c('span',{staticClass:"ibs-right ibs-subject-data__num"},[_vm._v(_vm._s(_vm.t("itemImport.Number_of_topics")(value)))])])})],2)}
@@ -52643,7 +52643,6 @@ var item_footer_component = normalizeComponent(
 
 /* harmony default export */ var item_footer = (item_footer_component.exports);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-import/src/item.vue?vue&type=script&lang=js&
-
 //
 //
 //
@@ -53726,15 +53725,19 @@ var item_import_src_itemvue_type_script_lang_js_baseCKEditorData = {
         class: "ibs-text-left",
         onOk: function onOk() {
           that.items.splice(itemIndex, 1);
-
-          modal.destroyAll();
+          that.forceRemoveModalDom();
         },
         onCancel: function onCancel() {
-          that.$emit("blank");
-
-          modal.destroyAll();
+          that.forceRemoveModalDom();
         }
       });
+    },
+    forceRemoveModalDom: function forceRemoveModalDom() {
+      var modal = document.querySelector(".ant-modal-root");
+
+      if (modal) {
+        modal.remove();
+      }
     },
     //设置分数
     setScore: function setScore(list, score) {
@@ -53815,8 +53818,8 @@ var item_import_src_itemvue_type_script_lang_js_baseCKEditorData = {
 
 var item_import_src_item_component = normalizeComponent(
   components_item_import_src_itemvue_type_script_lang_js_,
-  itemvue_type_template_id_59d1668e_render,
-  itemvue_type_template_id_59d1668e_staticRenderFns,
+  itemvue_type_template_id_04ebc0c1_render,
+  itemvue_type_template_id_04ebc0c1_staticRenderFns,
   false,
   null,
   null,
