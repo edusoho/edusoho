@@ -27,8 +27,10 @@ class ContinueAnswer extends AbstractResource
         $activityFilter = new ActivityFilter();
         $activityFilter->filter($activity);
 
-        $user = $this->getUserService()->getUser($answerRecord['user_id']);
+        $user = $this->getCurrentUser();
         $activity['isOnlyStudent'] = $user['roles'] == ["ROLE_USER"];
+
+
 
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         if (empty($assessment)) {
