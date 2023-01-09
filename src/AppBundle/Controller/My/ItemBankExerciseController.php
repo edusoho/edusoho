@@ -108,7 +108,7 @@ class ItemBankExerciseController extends BaseController
         $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
 
         if (empty($member) || ('date' == $exercise['expiryMode'] && $exercise['expiryStartDate'] >= time())) {
-            return $this->redirectToRoute('course_show', ['id' => $id]);
+            return $this->redirectToRoute('item_bank_exercise_show', ['id' => $id]);
         }
 
         $tabs = $this->getTabs($exercise);
