@@ -40,6 +40,11 @@ class AnswerRecord extends AbstractResource
 
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerScene['id']);
 
+        $user = $this->getUserService()->getUser($answerRecord['user_id']);
+
+        $activity['isOnlyStudent'] = $user['roles'] == ["ROLE_USER"];
+
+
         return [
             'answer_report' => $answerReport,
             'answer_record' => $this->wrapperAnswerRecord($answerRecord),
