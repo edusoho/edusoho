@@ -50,6 +50,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'bizInvoiceAddTradeSns',
             'bizAnswerSceneAddExamMode',
             'bizAnswerRecordAddField',
             'limitedTimeAmountZero',
@@ -84,6 +85,18 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+    public function bizInvoiceAddTradeSns()
+    {
+        $connection = $this->getConnection();
+        if (!$this->isFieldExist('biz_invoice', 'trade_sns')) {
+            $connection->exec("ALTER TABLE `biz_invoice` ADD COLUMN `trade_sns` text default null COMMENT '对应的交易SN(拒绝开票时记录)' AFTER `refuse_comment`;");
+        }
+
+        $this->logger('info', 'biz_invoice新增字段trade_sns完成');
+
+        return 1;
     }
 
     //添加字段
