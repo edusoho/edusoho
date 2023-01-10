@@ -58,6 +58,11 @@ class ErrorCode
 
     const ANSWER_OLD_VERSION = 50095210;
 
+    /**
+     * APP会返回上一页
+     */
+    const NOT_ITEM_BANK_MEMBER = 50095211;
+
     const ITEM_NOT_FOUND = 40495001;
 
     const ITEM_ARGUMENT_INVALID = 50095002;

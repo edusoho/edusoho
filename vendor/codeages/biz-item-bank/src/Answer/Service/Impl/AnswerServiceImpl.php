@@ -28,17 +28,22 @@ use Ramsey\Uuid\Uuid;
 
 class AnswerServiceImpl extends BaseService implements AnswerService
 {
+    const EXAM_MODE_SIMULATION = 0;
     public function startAnswer($answerSceneId, $assessmentId, $userId)
     {
         if (!$this->getAnswerSceneService()->canStart($answerSceneId, $userId)) {
             throw new AnswerSceneException('AnswerScene did not start.', ErrorCode::ANSWER_SCENE_NOTSTART);
         }
+        $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
 
         $answerRecord = $this->getAnswerRecordService()->create([
             'answer_scene_id' => $answerSceneId,
             'assessment_id' => $assessmentId,
             'user_id' => $userId,
             'admission_ticket' => $this->generateAdmissionTicket(),
+            'exam_mode' => $answerScene['exam_mode'],
+            'limited_time' => $answerScene['limited_time'],
+
         ]);
 
         $this->dispatch('answer.started', $answerRecord);
@@ -124,7 +129,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $answerRecord;
     }
 
-    public function buildAssessmentResponse($answerRecordId)
+    public function buildAutoSubmitAssessmentResponse($answerRecordId)
     {
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
@@ -146,7 +151,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $sectionResponse['section_id'] = $sectionId;
         }
         $assessmentResponse['section_responses'] = array_values($sectionResponses);
+        // 自动交卷时认为用时即考试限制时间
         $assessmentResponse['used_time'] = $answerScene['limited_time'] * 60;
+
+
         return $assessmentResponse;
     }
 
@@ -662,6 +670,12 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             $this->updateAttachmentsTarget($assessmentResponse['answer_record_id'], $attachments);
 
+            //判断模拟考试应该取当前时间减去开始时间
+            $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
+            if($answerRecord['exam_mode'] == self::EXAM_MODE_SIMULATION) {
+                $assessmentResponse['used_time'] = time() - $answerRecord['created_time'];
+            }
+
             $this->getAnswerRecordService()->update($assessmentResponse['answer_record_id'], [
                 'used_time' => $assessmentResponse['used_time'],
             ]);
@@ -706,18 +720,18 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         ]);
 
         $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
-
         if (empty($this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']))) {
             throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
+        }
+
+        if ($answerRecord['assessment_id'] != $assessmentResponse['assessment_id']) {
+            throw $this->createInvalidArgumentException('assessment_id invalid.');
         }
 
         if (!in_array($answerRecord['status'],[AnswerService::ANSWER_RECORD_STATUS_DOING,AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
             throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
         }
 
-        if ($answerRecord['assessment_id'] != $assessmentResponse['assessment_id']) {
-            throw $this->createInvalidArgumentException('assessment_id invalid.');
-        }
 
         foreach ($assessmentResponse['section_responses'] as &$sectionResponse) {
             foreach ($sectionResponse['item_responses'] as &$itemResponse) {
@@ -736,6 +750,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
 
         if (empty($answerScene['limited_time'])){
+            return;
+        }
+
+        if($answerRecord['exam_mode'] != self::EXAM_MODE_SIMULATION) {
             return;
         }
         $autoSubmitJob = [

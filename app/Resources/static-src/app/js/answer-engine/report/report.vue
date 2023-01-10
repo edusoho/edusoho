@@ -2,6 +2,7 @@
   <div id="app" class="ibs-vue">
     <item-report
       :answerShow="answerShow"
+      :metaActivity="metaActivity"
       :answerReport="answerReport"
       :assessment="assessment"
       :answerRecord="answerRecord"
@@ -66,6 +67,7 @@
             request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
           }
         }).done(function (res) {
+          that.metaActivity = res.metaActivity;
           that.assessment = res.assessment;
           that.answerReport = res.answer_report;
           that.answerRecord = res.answer_record;

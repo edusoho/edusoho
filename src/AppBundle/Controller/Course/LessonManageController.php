@@ -21,6 +21,7 @@ class LessonManageController extends BaseController
         $this->getCourseLessonService()->isLessonCountEnough($course['id']);
         if ($request->isMethod('POST')) {
             $formData = $request->request->all();
+            $formData['length'] = $this->prepareLimitedTime($formData['length']);
             $formData['_base_url'] = $request->getSchemeAndHttpHost();
             $formData['fromUserId'] = $this->getUser()->getId();
             $formData['fromCourseSetId'] = $course['courseSetId'];
