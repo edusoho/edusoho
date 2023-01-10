@@ -147,8 +147,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 ];
             }
         }
-
-        $this->getAnswerRecordDao()->batchUpdate(array_keys($answerRecordData),array_values($answerRecordData));
+        if(!empty($answerRecordData)) {
+            $this->getAnswerRecordDao()->batchUpdate(array_keys($answerRecordData), array_values($answerRecordData));
+        }
 
         $this->logger('info', '执行成功');
 
@@ -174,8 +175,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 ];
             }
         }
-
-        $this->getAnswerRecordDao()->batchUpdate(array_keys($answerRecordData),array_values($answerRecordData));
+        if(!empty($answerRecordData)) {
+            $this->getAnswerRecordDao()->batchUpdate(array_keys($answerRecordData),array_values($answerRecordData));
+        }
         $this->logger('info', '执行成功');
 
         return 1;
