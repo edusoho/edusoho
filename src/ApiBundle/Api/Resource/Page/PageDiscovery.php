@@ -74,7 +74,12 @@ class PageDiscovery extends AbstractResource
 
             if ('announcement' == $discoverySetting['type']) {
                 $announcement = $this->getAnnouncementService()->searchAnnouncements(['startTime' => time(), 'endTime' => time(), 'targetType' => 'global'], ['startTime' => 'DESC'], 0, 1);
-                $discoverySetting['data'] = empty($announcement) ? '' : $announcement[0]['content'];
+                if (empty($announcement)) {
+                    unset($discoverySetting);
+                } else {
+                    $discoverySetting['data'] = $announcement[0]['content'];
+                }
+                continue;
             }
 
             if('information' == $discoverySetting['type']){

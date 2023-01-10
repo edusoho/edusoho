@@ -42,8 +42,10 @@ class CouponFilter extends Filter
         $filters = array(
             'course' => new CourseSetFilter(),
             'classroom' => new ClassroomFilter(),
-            'vip' => new VipLevelFilter(),
         );
+        if ($this->isPluginInstalled('Vip')) {
+            $filters['vip'] = new VipLevelFilter();
+        }
 
         return $filters[$type];
     }

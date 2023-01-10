@@ -78,7 +78,7 @@ class MeJoined extends AbstractResource
         );
         $courseConditions = [
             'ids' => ArrayToolkit::column($members, 'courseId') ?: [0],
-            'excludeTypes' => ['reservation'],
+            'excludeTypes' => ['reservation', 'live'],
         ];
         if (!empty($courseSets)) {
             $courseConditions['excludeCourseSetIds'] = ArrayToolkit::column($courseSets, 'id');
