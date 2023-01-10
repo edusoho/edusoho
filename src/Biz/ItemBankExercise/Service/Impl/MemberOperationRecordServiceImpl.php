@@ -30,6 +30,22 @@ class MemberOperationRecordServiceImpl extends BaseService implements MemberOper
         return $this->getMemberOperationRecordDao()->create($record);
     }
 
+    public function updateRefundInfoByOrderId($orderId, $info)
+    {
+        $records = $this->getMemberOperationRecordDao()->findRecordsByOrderIdAndType($orderId, 'exit');
+        foreach ($records as &$record)
+        {
+            $field = ArrayToolkit::parts($info, array('refundId', 'reason', 'reasonType'));
+            if (!empty($record['reason'])) {
+                unset($field['reason']);
+                unset($field['reasonType']);
+            }
+            $record = array_merge($record, $field);
+        }
+
+        return $this->getMemberOperationRecordDao()->batchUpdate(ArrayToolkit::column($records, "id"), $records, 'id');
+    }
+
     /**
      * @return MemberOperationRecordDao
      */

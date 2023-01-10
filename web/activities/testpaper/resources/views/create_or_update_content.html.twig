@@ -10,6 +10,25 @@
       {% set questionBankTree = data('QuestionBankTree', {selectId: testpaper.bankId|default(0)}) %}
       {% set features = get_features() %}
       {% set testMode = activity.ext.answerScene.start_time|default(0) > 0 ? 'realTime' : 'normal' %}
+      {% set examMode = activity.ext.answerScene.exam_mode|default(0) %}
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label for="examMode">{{ 'course.plan_task.activity_manage.testpaper.mode'|trans }}</label>
+        </div>
+        <div class="col-sm-10 clearfix">
+          <input id="examMode" class="form-control" type="hidden" name="exam_mode" value="{{ examMode }}">
+          <div class="testpaper-mode  js-testpaper-mode {% if examMode == 0 %}active{% endif %}" data-value="0" style="margin-right: 16px;">
+            <div class="testpaper-mode__title">{{ 'course.plan_task.activity_manage.testpaper.mock_type'|trans }}</div>
+            <div class="testpaper-mode__rule">{{ 'course.plan_task.activity_manage.testpaper.mock_tips1'|trans }}</div>
+            <div class="testpaper-mode__rule">{{ 'course.plan_task.activity_manage.testpaper.mock_tips2'|trans }}</div>
+          </div>
+          <div class="testpaper-mode js-testpaper-mode  {% if examMode == 1 %}active{% endif %}" data-value="1">
+            <div class="testpaper-mode__title">{{ 'course.plan_task.activity_manage.testpaper.practise_type'|trans }}</div>
+            <div class="testpaper-mode__rule">{{ 'course.plan_task.activity_manage.testpaper.practise_tips1'|trans }}</div>
+            <div class="testpaper-mode__rule">{{ 'course.plan_task.activity_manage.testpaper.practise_tips2'|trans }}</div>
+          </div>
+        </div>
+      </div>
       <div class="form-group">
         <div class="col-sm-2 control-label">
           <label for="title" class="control-testpaper-medialabel-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
@@ -52,7 +71,7 @@
         <div class="col-sm-2 control-label"></div>
         <div class="col-sm-10 controls" id="questionItemShowTable"></div>
       </div>
-      
+
       <div id="js-test-and-comment" class="js-score-form-group" {% if activity.finishData is not defined %}style="display:none;"{% endif %}>
         <div class="form-group" id="score-condition" data-pass="{{ activity.finishData|default('0.6') }}" data-score="{{ testpaper.total_score|default(0) }}">
           <div class="col-sm-2 control-label">
@@ -79,9 +98,8 @@
                 <th>
                   {{ 'course.plan_task.activity_manage.testpaper.score'|trans }}
                   <span class="link-medium es-icon es-icon-help ml5"
-                        data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
-                        data-content="{{ 'course.plan_task.activity_manage.testpaper.comment_tips'|trans()|raw}}">
-      </span>
+                      data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+                      data-content="{{ 'course.plan_task.activity_manage.testpaper.comment_tips'|trans()|raw}}"></span>
                 </th>
                 <th>{{ 'course.plan_task.activity_manage.testpaper.comment_content'|trans }}</th>
                 <th>{{ 'course.plan_task.activity_manage.testpaper.comment_operation'|trans }}</th>
@@ -121,10 +139,15 @@
 
       <div class="form-group">
         <div class="col-sm-2 control-label">
-          <label for="length">{{ 'course.plan_task.activity_manage.testpaper.time_limit'|trans }}</label></div>
+          <label for="length" {% if examMode == '0' %}class="control-label-required"{% endif %}>{{ 'course.plan_task.activity_manage.testpaper.time_limit'|trans }}</label></div>
         <div class="col-sm-10 controls radios">
-          <input id="length" class="form-control inline-block width-150" type="text" name="length" value="{{ activity.length|default(0) }}"> {{ 'site.date.minute'|trans }}
-          <div class="help-block">{{ 'course.plan_task.activity_manage.testpaper.time_length_tips'|trans }}</div>
+          <input id="length" class="form-control inline-block width-150" type="text" name="length" value="{{ activity.length|default() }}"> {{ 'site.date.minute'|trans }}
+          <div class="help-block js-mode-helpblock js-mode-helpblock-0 {% if examMode == '1' %}hidden{% endif %}">
+            {{ 'course.plan_task.activity_manage.testpaper.mock_tips3'|trans }}
+          </div>
+          <div class="help-block js-mode-helpblock js-mode-helpblock-1  {% if examMode == '0' %}hidden{% endif %}">
+            {{ 'course.plan_task.activity_manage.testpaper.practise_tips3'|trans }}
+          </div>
         </div>
       </div>
 
@@ -138,7 +161,6 @@
         <div class="col-sm-offset-2 col-sm-10 controls {% if setting('questions.testpaper_answers_show_mode', 'submitted') == 'submitted' %} js-show-answer-mode {% else %} hidden {% endif %}" {% if activity.ext.answerScene.do_times|default('0') == 1 %} style="display:none;" {% endif %}>
           <label class="checkbox-inline help-block">
             <input name="answerMode" type="checkbox" value="1" {% if activity.ext.answerMode|default(0) == 1 %} checked=checked {% endif %}>{{ 'course.plan_task.activity_manage.testpaper.show_answer'|trans }}
-            <span class="text-sm">（{{ 'course.plan_task.activity_manage.testpaper.show_answer_tips'|trans }}）</span>
           </label>
         </div>
 
@@ -168,7 +190,7 @@
       </div>
       {{ slot('course.task.facein.settings', {'activity': activity|default([])}) }}
       {% if is_facein_open() %}
-        <div class="form-group">
+        <div class="form-group js-enable_facein {% if examMode == '1' %}hidden{% endif %}">
           <div class="col-sm-2 control-label"><label>{{ 'course.task.enable_facein'|trans }}</label></div>
           <div class="col-sm-10 controls radios">
             {{ radios('enable_facein', {'1':'form.radio_btn.open'|trans, '0':'form.radio_btn.close'|trans}, activity.ext.answerScene.enable_facein|default(0)) }}

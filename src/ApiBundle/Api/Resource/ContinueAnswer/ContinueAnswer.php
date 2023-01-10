@@ -4,8 +4,11 @@ namespace ApiBundle\Api\Resource\ContinueAnswer;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Resource\Activity\ActivityFilter;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use ApiBundle\Api\Resource\Assessment\AssessmentResponseFilter;
+use Biz\Activity\ActivityException;
+use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
@@ -19,6 +22,15 @@ class ContinueAnswer extends AbstractResource
         }
 
         $answerRecord = $this->getAnswerService()->continueAnswer($request->request->get('answer_record_id'));
+
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
+        $activityFilter = new ActivityFilter();
+        $activityFilter->filter($activity);
+
+        $user = $this->getCurrentUser();
+        $activity['isOnlyStudent'] = $user['roles'] == ["ROLE_USER"];
+
+
 
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         if (empty($assessment)) {
@@ -40,6 +52,7 @@ class ContinueAnswer extends AbstractResource
             'assessment_response' => $assessmentResponse,
             'answer_scene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'answer_record' => $answerRecord,
+            'metaActivity'=> empty($activity) ? (object)[] : $activity,
         ];
     }
 
@@ -66,5 +79,18 @@ class ContinueAnswer extends AbstractResource
     protected function getAnswerRecordService()
     {
         return $this->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->service('Activity:ActivityService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }

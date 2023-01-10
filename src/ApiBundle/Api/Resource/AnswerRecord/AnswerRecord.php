@@ -35,8 +35,14 @@ class AnswerRecord extends AbstractResource
         $assessmentFilter->filter($assessment);
 
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+        // 之前业务中只有考试需要做特殊处理，应该用到customComments字段
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerScene['id']);
 
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerScene['id']);
+
+        $user = $this->getCurrentUser();
+
+        $activity['isOnlyStudent'] = $user['roles'] == ["ROLE_USER"];
 
         return [
             'answer_report' => $answerReport,
@@ -45,6 +51,7 @@ class AnswerRecord extends AbstractResource
             'answer_scene' => $this->wrapperAnswerScene($answerScene),
             'resultShow' => empty($testpaperActivity) ? true : $this->getResultShow($answerRecord, $answerScene, $answerReport),
             'activity' => empty($testpaperActivity) ? (object)[] : $testpaperActivity,
+            'metaActivity' => empty($activity) ? (object)[] : $activity,
         ];
     }
 

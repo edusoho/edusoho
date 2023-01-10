@@ -19,6 +19,10 @@ class Testpaper extends Activity
     // 考试及格后显示答案
     const ANSWER_MODE_PASSED = 1;
 
+    const EXAM_MODE_SIMULATION = 0;
+
+    const EXAM_MODE_PRACTICE = 1;
+
     protected function registerListeners()
     {
         return [
@@ -60,6 +64,7 @@ class Testpaper extends Activity
                 'start_time' => $fields['startTime'],
                 'pass_score' => empty($fields['passScore']) ? 0 : $fields['passScore'],
                 'enable_facein' => empty($fields['enable_facein']) ? 0 : $fields['enable_facein'],
+                'exam_mode' => empty($fields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $fields['exam_mode'],
             ]);
 
             $testpaperActivity = $this->getTestpaperActivityService()->createActivity([
@@ -98,6 +103,7 @@ class Testpaper extends Activity
             'redoInterval' => $testpaperActivity['answerScene']['redo_interval'],
             'limitedTime' => $testpaperActivity['answerScene']['limited_time'],
             'enable_facein' => $testpaperActivity['answerScene']['enable_facein'],
+            'exam_mode' => $testpaperActivity['answerScene']['exam_mode'],
             'checkType' => $testpaperActivity['checkType'],
             'requireCredit' => $testpaperActivity['requireCredit'],
             'testMode' => $testpaperActivity['testMode'],
@@ -121,6 +127,7 @@ class Testpaper extends Activity
         $ext['redoInterval'] = $sourceExt['answerScene']['redo_interval'];
         $ext['limitedTime'] = $sourceExt['answerScene']['limited_time'];
         $ext['enable_facein'] = $sourceExt['answerScene']['enable_facein'];
+        $ext['exam_mode'] = $sourceExt['answerScene']['exam_mode'];
         $ext['checkType'] = $sourceExt['checkType'];
         $ext['requireCredit'] = $sourceExt['requireCredit'];
         $ext['testMode'] = $sourceExt['testMode'];
@@ -151,6 +158,7 @@ class Testpaper extends Activity
                 'start_time' => $filterFields['startTime'],
                 'pass_score' => empty($filterFields['passScore']) ? 0 : $filterFields['passScore'],
                 'enable_facein' => empty($filterFields['enable_facein']) ? 0 : $filterFields['enable_facein'],
+                'exam_mode' => empty($filterFields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $filterFields['exam_mode'],
             ]);
 
             $testpaperActivity = $this->getTestpaperActivityService()->updateActivity($activity['id'], [
@@ -258,6 +266,7 @@ class Testpaper extends Activity
                 'enable_facein',
                 'answerMode',
                 'customComments',
+                'exam_mode'
             ]
         );
 

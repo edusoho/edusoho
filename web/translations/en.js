@@ -482,6 +482,7 @@ t.add("course.manage.reward_point_required_hint", "please input the reward point
 t.add("course.manage.task_reward_point_required_hint", "please input the task reward point", "js", "en");
 t.add("course.manage.max_point_error_hint", "Please input an integer from 0-10000000", "js", "en");
 t.add("course.manage.student_expiry_day_hint", "The validity period can be manually increased only by the learning expiration date set by the number of days.", "js", "en");
+t.add("course.plan_task.activity_manage.testpaper.mock_tips4", "Duration must be greater than 0 ", "js", "en");
 t.add("member.delete_success_hint", "Remove successful", "js", "en");
 t.add("member.delete_fail_hint", "Remove failed", "js", "en");
 t.add("material_lib.content_title", "Teaching Lib", "js", "en");
@@ -651,7 +652,7 @@ t.add("validate.valid_url_input.message", "Please enter a valid URL.", "js", "en
 t.add("validate.valid_date_input.message", "Please enter a valid date.", "js", "en");
 t.add("validate.valid_date_iso_input.message", "Please enter a valid date  (ISO)", "js", "en");
 t.add("validate.valid_number_input.message", "Please enter a valid number", "js", "en");
-t.add("validate.valid_digits_input.message", "Please enter only digits", "js", "en");
+t.add("validate.valid_digits_input.message", "Please enter a positive integer", "js", "en");
 t.add("validate.valid_creditcard_input.message", "Please enter a valid credit card number.", "js", "en");
 t.add("validate.valid_equal_to_input.message", "Please enter the same value again", "js", "en");
 t.add("validate.valid_extension_input.message", "Please enter a valid suffix", "js", "en");

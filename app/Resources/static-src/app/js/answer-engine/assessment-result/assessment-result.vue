@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="ibs-vue">
     <assessment-result
+      :metaActivity="metaActivity"
       :answerReport="answerReport"
       :assessment="assessment"
       :answerRecord="answerRecord"
@@ -34,6 +35,7 @@
         cdnHost: $('[name=cdn_host]').val(),
         isErrorCorrection: $('[name=is_error_correction]').val(),
         fileId: 0,
+        metaActivity: {}
       };
     },
     created() {
@@ -50,6 +52,7 @@
             request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
           }
         }).done(function (res) {
+          that.metaActivity = res.metaActivity;
           that.assessment = res.assessment;
           that.answerReport = res.answer_report;
           that.answerRecord = res.answer_record;
