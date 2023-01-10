@@ -27,6 +27,10 @@ class ContinueAnswer extends AbstractResource
         $activityFilter = new ActivityFilter();
         $activityFilter->filter($activity);
 
+        $user = $this->getCurrentUser();
+        $activity['isOnlyStudent'] = $user['roles'] == ["ROLE_USER"];
+
+
 
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         if (empty($assessment)) {
@@ -83,5 +87,10 @@ class ContinueAnswer extends AbstractResource
     protected function getActivityService()
     {
         return $this->service('Activity:ActivityService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }
