@@ -30,8 +30,6 @@ class ContinueAnswer extends AbstractResource
         $user = $this->getCurrentUser();
         $activity['isOnlyStudent'] = $user['roles'] == ["ROLE_USER"];
 
-
-
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         if (empty($assessment)) {
             throw AssessmentException::ASSESSMENT_NOTEXIST();

@@ -61,6 +61,7 @@ class AnswerEngineController extends BaseController
         if (empty($answerReport)) {
             throw new AnswerReportException('Answer report not found.', ErrorCode::ANSWER_REPORT_NOTFOUND);
         }
+
         $reviewReport = $this->getAnswerService()->review($reviewReport);
         return $this->createJsonResponse($reviewReport);
     }
