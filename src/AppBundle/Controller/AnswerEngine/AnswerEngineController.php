@@ -70,6 +70,7 @@ class AnswerEngineController extends BaseController
     {
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
+
         $goBackUrl = $saveGotoUrl;
 
         if(!empty($activity)) {
@@ -78,12 +79,12 @@ class AnswerEngineController extends BaseController
 
         return $this->render('answer-engine/review.html.twig', [
             'assessment' => $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']),
-            'successGotoUrl' => $successGotoUrl,
-            'successContinueGotoUrl' => $successContinueGotoUrl,
+            'successGotoUrl' => $this->filterRedirectUrl($successGotoUrl),
+            'successContinueGotoUrl' => $this->filterRedirectUrl($successContinueGotoUrl),
             'answerRecordId' => $answerRecordId,
             'role' => $role,
             'activity' => $activity,
-            'goBackUrl' => $goBackUrl,
+            'goBackUrl' => $this->filterRedirectUrl($goBackUrl),
         ]);
     }
 
