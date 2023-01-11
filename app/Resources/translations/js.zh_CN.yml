@@ -133,6 +133,7 @@ uploader.error.bad_file.hint: 你的源文件可能已损坏，请检查后重�
 uploader.num_limit_hint: 添加的文件数量过多！
 uploader.size_limit_hint: 文件过大，请上传较小的文件！
 uploader.size_2m_limit_hint: 文件过大，请上传小于2M的文件！
+uploader.size_5m_limit_hint: 图片大小上限为5M
 uploader.type_denied_limit_hint: 文件类型错误！
 uploader.btn.batch_paused: 全部暂停
 uploader.btn.batch_continue: 全部继续
