@@ -1002,7 +1002,7 @@ course.teaching_plan.sort.save: 保存排序
 course.teaching_plan.sort.cancel: 取消排序
 course.teaching_plan.create.max_plan_number: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.teaching_plan.create.new_plan_name: 新计划名称
-course.teaching_plan.create.create_tips: 教学计划发布后“学习模式”无法修改。
+course.teaching_plan.create.create_tips: 计划发布后“学习模式”无法修改。
 course.teaching_plan.create.name: 名称
 course.teaching_plan.create.mode: 学习模式
 course.teaching_plan.create.mode.free: >
@@ -1016,7 +1016,7 @@ course.teaching_plan.create.status: 状态
 course.teaching_plan.create.operation: 操作
 course.teaching_plan.edit.copy: 复制%title%为一个新的教学计划
 course.teaching_plan.expiry_date: 学习有效期
-course.teaching_plan.expiry_date.not_change_tips: 教学计划首次发布后“学习有效期”不能再更改模式。
+course.teaching_plan.expiry_date.not_change_tips: 计划首次发布后“学习有效期”不能再更改模式。
 course.teaching_plan.expiry_date.anytime: >
   <b>随到随学：</b>有效期从学员加入的当天开始算起，截至到期当天晚上的23:59
 course.teaching_plan.expiry_date.real_time: >
