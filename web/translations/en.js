@@ -99,6 +99,7 @@ t.add("uploader.error_hint", "Upload failed, please try again!", "js", "en");
 t.add("uploader.num_limit_hint", "Add too many files!", "js", "en");
 t.add("uploader.size_limit_hint", "File is too large, please upload a smaller file!", "js", "en");
 t.add("uploader.size_2m_limit_hint", "File too large, please upload files under 2M.", "js", "en");
+t.add("uploader.size_5m_limit_hint", "The maximum image size is 5M.", "js", "en");
 t.add("uploader.type_denied_limit_hint", "File type is wrong!", "js", "en");
 t.add("uploader.error.bad_file.hint", "Your source file may be damaged, please check and re-upload", "js", "en");
 t.add("uploader.btn.batch_paused", "Paused All", "js", "en");

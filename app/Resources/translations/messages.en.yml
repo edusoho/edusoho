@@ -2709,6 +2709,7 @@ user.settings.teachers_qualification_menu: 'Teaching certifition application'
 user.settings.oauth_menu: 'Third party log in'
 user.settings.avatar: "<strong>No avatar yet</strong>.Own an avatar to get more attention <a href=\"%setAvatar%\" class=\"alert-link\" target=\"_blank\">Click to set Avatar</a>\n"
 user.settings.upload.img.tip: 'Please upload file with png, gif, jpg format, Image size should not exceed 2MB'
+user.settings.upload.img.tips: 'Please upload an image in JPG/GIF/PNG format, the size should not exceed 5MB, and the recommended size is 400X400'
 user.settings.upload.qrcode.tip: Teaching assistants please make sure to upload the QR code
 user.settings.scrm: SCRM Bind
 user.settings.scrm.tips: Synchronize teaching assistant information to enterprise WeChat, so that teaching assistants can manage students in WeChat groups and provide community services.
