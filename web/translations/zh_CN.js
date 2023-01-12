@@ -113,7 +113,7 @@ t.add("uploader.error.bad_file.hint", "\u4f60\u7684\u6e90\u6587\u4ef6\u53ef\u80f
 t.add("uploader.num_limit_hint", "\u6dfb\u52a0\u7684\u6587\u4ef6\u6570\u91cf\u8fc7\u591a\uff01", "js", "zh_CN");
 t.add("uploader.size_limit_hint", "\u6587\u4ef6\u8fc7\u5927\uff0c\u8bf7\u4e0a\u4f20\u8f83\u5c0f\u7684\u6587\u4ef6\uff01", "js", "zh_CN");
 t.add("uploader.size_2m_limit_hint", "\u6587\u4ef6\u8fc7\u5927\uff0c\u8bf7\u4e0a\u4f20\u5c0f\u4e8e2M\u7684\u6587\u4ef6\uff01", "js", "zh_CN");
-t.add("uploader.size_5m_limit_hint", "\u56fe\u7247\u5927\u5c0f\u4e0a\u9650\u4e3a5M", "js", "zh_CN");
+t.add("uploader.size_5m_limit_hint", "\u6587\u4ef6\u8fc7\u5927\uff0c\u8bf7\u4e0a\u4f20\u5c0f\u4e8e5M\u7684\u6587\u4ef6\uff01", "js", "zh_CN");
 t.add("uploader.type_denied_limit_hint", "\u6587\u4ef6\u7c7b\u578b\u9519\u8bef\uff01", "js", "zh_CN");
 t.add("uploader.btn.batch_paused", "\u5168\u90e8\u6682\u505c", "js", "zh_CN");
 t.add("uploader.btn.batch_continue", "\u5168\u90e8\u7ee7\u7eed", "js", "zh_CN");
