@@ -87,7 +87,7 @@ class StudentExporter extends Exporter
 
         $startTime = strtotime('today');
         $conditions = [
-            'courseIds' => [$course['id']],
+            'courseId' => $course['id'],
             'userIds' => $studentUserIds,
         ];
         $this->getActivityDataDailyStatisticsService()->statisticsCoursePlanStayDailyData($startTime, strtotime('tomorrow'), $conditions);

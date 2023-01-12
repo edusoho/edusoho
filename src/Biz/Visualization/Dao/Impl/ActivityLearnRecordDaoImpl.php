@@ -22,6 +22,7 @@ class ActivityLearnRecordDaoImpl extends AdvancedDaoImpl implements ActivityLear
                 'endTime < :endTime_LT',
                 'courseId in (:courseIds)',
                 'userId in (:userIds)',
+                'courseId = :courseId',
             ],
             'orderbys' => ['id', 'createdTime'],
         ];
