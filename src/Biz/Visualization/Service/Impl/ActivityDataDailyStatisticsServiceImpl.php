@@ -161,7 +161,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
         $conditions = ['dayTime' => $dayTime];
         $columns = ['userId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
-        if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
+        if (empty($statisticsSetting) || 'page' != $statisticsSetting['statistical_dimension']) {
             $totalRecords = $this->findMixedRecords($dayTime, $recordConditions);
             $data = [];
             foreach ($totalRecords as $userId => $userRecords) {
