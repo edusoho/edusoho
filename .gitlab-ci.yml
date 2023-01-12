@@ -57,11 +57,11 @@ check env:
       - $REPOSITORY == "custom"
 
 
-7.1 For main:
+7.1 For main with MySQL5.5:
   stage: test
   image: codeages/ci-php71
   services:
-    - name: mysql:8.0
+    - name: mysql:5.5
       alias: mysql
     - name: redis:latest
       alias: redis
@@ -71,16 +71,14 @@ check env:
   interruptible: true
   only:
     refs:
-      - master
-      - develop
       - /^release/.*$/
-      - trigger
-      - merge_requests
+      - /^project/.*$/
+      - develop
+      - master
     variables:
       - $REPOSITORY == "main"
-      - $REPOSITORY == "custom"
 
-7.1 For main with MySQL80:
+7.1 For main:
   stage: test
   image: codeages/ci-php71
   services:
@@ -94,12 +92,14 @@ check env:
   interruptible: true
   only:
     refs:
-      - /^release/.*$/
-      - /^project/.*$/
-      - develop
       - master
+      - develop
+      - /^release/.*$/
+      - trigger
+      - merge_requests
     variables:
       - $REPOSITORY == "main"
+      - $REPOSITORY == "custom"
 
 #7.4 For main with MySQL80:
 #  stage: test
