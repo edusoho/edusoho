@@ -1920,4 +1920,6 @@ t.add("live.chooser.video", "\u8bf7\u8bbe\u7f6e\u76f4\u64ad\u89c6\u9891", "js", 
 t.add("mall.goods.exist.delete_fail_hint", "\u8be5\u4ea7\u54c1\u5df2\u5728\u8425\u9500\u5546\u57ce\u4e2d\u4e0a\u67b6\u552e\u5356\uff0c\u8bf7\u5c06\u5bf9\u5e94\u5546\u54c1\u4e0b\u67b6\u540e\u518d\u8fdb\u884c\u5220\u9664\u64cd\u4f5c", "js", "zh_CN");
 t.add("cloud.sms_enable_hint", "\u4e91\u77ed\u4fe1\u672a\u542f\u7528\uff0c\u8bf7\u524d\u5f80<a href=\"%cloudSmsSettingUrl%\" target=\"_blank\">\u3010\u4e91\u77ed\u4fe1\u8bbe\u7f6e\u3011<\/a>\u542f\u7528", "js", "zh_CN");
 t.add("admin_v2.homepage.school_info.enter.copy_success", "\u94fe\u63a5\u590d\u5236\u6210\u529f", "js", "zh_CN");
+t.add("admin_v2.homepage.wechat_come", "\u6b22\u8fce\u4f7f\u7528EduSoho\u6559\u57f9\u4ea7\u54c1", "js", "zh_CN");
+t.add("admin_v2.homepage.wechat_code.m", "\u52a0\u5165\u5f00\u6e90\u4ea7\u54c1\u4f7f\u7528\u5b66\u4e60\u4ea4\u6d41\u7fa4\uff0c\u5c0f\u4f19\u4f34\u5728\u7b49\u4f60", "js", "zh_CN");
 })(Translator);
