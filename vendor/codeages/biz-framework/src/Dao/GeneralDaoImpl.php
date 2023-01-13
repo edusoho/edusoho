@@ -287,11 +287,11 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     protected function isConditionsInValid(DynamicQueryBuilder $builder, array $conditions)
     {
-        $where = $builder->getQueryPart('where');
-        $whereCount = empty($where) ? 0 : $where->count();
-        if (!empty($conditions) && empty($whereCount)) {
-            return true;
-        }
+//        $where = $builder->getQueryPart('where');
+//        $whereCount = empty($where) ? 0 : $where->count();
+//        if (!empty($conditions) && empty($whereCount)) {
+//            return true;
+//        }
 
         return false;
     }
