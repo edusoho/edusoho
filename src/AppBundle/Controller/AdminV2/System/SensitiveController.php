@@ -99,6 +99,7 @@ class SensitiveController extends BaseController
     public function banlogsAction(Request $request)
     {
         $fields = $request->query->all();
+        unset($fields['page']);
         $conditions = [
             'keyword' => '',
             'searchBanlog' => '',
@@ -110,6 +111,7 @@ class SensitiveController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
+        $conditions = array_filter($conditions);
 
         if (empty($banlogs)) {
             $banlogs = [];
