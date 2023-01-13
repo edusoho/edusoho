@@ -20,6 +20,7 @@ use Codeages\Biz\ItemBank\Item\Wrapper\ExportItemsWrapper;
 use Codeages\Biz\ItemBank\ItemBank\Exception\ItemBankException;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 use ExamParser\Writer\WriteDocx;
+use phpDocumentor\Reflection\File;
 
 class AssessmentServiceImpl extends BaseService implements AssessmentService
 {
@@ -380,8 +381,16 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
                 continue;
             }
 
-            $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($sectionItems[$section['id']], 'item_id'));
-            $exportItems = array_merge($exportItems, $items);
+            $itemIds = ArrayToolkit::column($sectionItems[$section['id']], 'item_id');
+
+            $items = $this->getItemService()->findItemsByIds($itemIds);
+            $items = ArrayToolkit::index($items,'id');
+            foreach ($itemIds as $id) {
+                if (!isset($items[$id])) {
+                    continue;
+                }
+                $exportItems[] = $items[$id];
+            }
         }
 
         return $exportItems;
