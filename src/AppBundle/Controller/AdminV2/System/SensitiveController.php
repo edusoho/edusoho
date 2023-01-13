@@ -13,6 +13,7 @@ class SensitiveController extends BaseController
     public function indexAction(Request $request)
     {
         $fields = $request->query->all();
+        unset($fields['page']);
         $conditions = [
             'keyword' => '',
             'searchKeyWord' => '',

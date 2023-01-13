@@ -11,6 +11,7 @@ class CourseNoteController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);

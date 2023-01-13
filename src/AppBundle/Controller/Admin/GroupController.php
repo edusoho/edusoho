@@ -13,6 +13,7 @@ class GroupController extends BaseController
     public function indexAction(Request $request)
     {
         $fields = $request->query->all();
+        unset($fields['page']);
 
         $conditions = array(
             'status' => '',
@@ -358,6 +359,7 @@ class GroupController extends BaseController
         if (empty($conditions['status'])) {
             unset($conditions['status']);
         }
+        unset($conditions['page']);
 
         return $conditions;
     }
