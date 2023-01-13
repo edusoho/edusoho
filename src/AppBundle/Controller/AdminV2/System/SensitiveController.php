@@ -110,6 +110,7 @@ class SensitiveController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
+        $conditions = array_filter($conditions);
 
         if (empty($banlogs)) {
             $banlogs = [];
