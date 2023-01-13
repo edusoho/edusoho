@@ -36,6 +36,7 @@ class UserController extends BaseController
         ];
 
         $conditions = array_merge($conditions, $fields);
+        $conditions = array_filter($conditions);
         $conditions = $this->fillOrgCode($conditions);
 
         $userCount = $this->getUserService()->countUsers($conditions);

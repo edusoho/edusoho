@@ -23,6 +23,7 @@ class UserApprovalController extends BaseController
             'approvalStatus' => $approvalStatus,
         );
         $conditions = array_merge($conditions, $fields);
+        $conditions = array_filter($conditions);
         $conditions = $this->fillOrgCode($conditions);
 
         $conditions['startApprovalTime'] = !empty($fields['startDateTime']) ? strtotime($fields['startDateTime']) : '';

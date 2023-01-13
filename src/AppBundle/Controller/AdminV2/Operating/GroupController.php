@@ -29,6 +29,7 @@ class GroupController extends BaseController
         if (!empty($fields)) {
             $conditions = $fields;
         }
+        $conditions = array_filter($conditions);
 
         $paginator = new Paginator(
             $this->get('request'),

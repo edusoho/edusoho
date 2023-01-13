@@ -23,6 +23,7 @@ class SensitiveController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
+        $conditions = array_filter($conditions);
         $paginator = new Paginator($this->get('request'), $this->getSensitiveService()->searchkeywordsCount($conditions), 20);
         $keywords = $this->getSensitiveService()->searchKeywords($conditions, array('id' => 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
