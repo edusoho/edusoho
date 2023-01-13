@@ -5718,6 +5718,7 @@ admin.user.manage.form.time_option.register: 'Register Time'
 admin.user.manage.form.time_option.default: '-- Date Type --'
 admin.user.manage.form.role_option.default: '-- All Roles --'
 admin.user.manage.form.user_type_option.default: '--Register Source --'
+plugin.admin.user.manage.form.user_export_btn: 'Export'
 plugin.admin.user.manage.form.user_student_export_btn: 'Export'
 plugin.admin.user.manage.form.user_staff_export_btn: 'ExportStaffData'
 admin.user.manage.fields.mobile_label: Mobile

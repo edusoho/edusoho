@@ -6756,6 +6756,7 @@ admin.user.manage.form.time_option.register: 注册时间
 admin.user.manage.form.time_option.default: --时间类型--
 admin.user.manage.form.role_option.default: --所有角色--
 admin.user.manage.form.user_type_option.default: --注册来源--
+plugin.admin.user.manage.form.user_export_btn: 导出搜索结果
 plugin.admin.user.manage.form.user_student_export_btn: 导出搜索结果
 plugin.admin.user.manage.form.user_staff_export_btn: 导出员工数据
 admin.user.manage.fields.mobile_label: 手机号
