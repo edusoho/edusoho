@@ -374,13 +374,18 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
     protected function findExportItems($sections, $sectionItems)
     {
         $exportItems = [];
+        $items =[];
         $sectionItems = ArrayToolkit::group($sectionItems, 'section_id');
         foreach ($sections as $section) {
             if (empty($sectionItems[$section['id']])) {
                 continue;
             }
 
-            $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($sectionItems[$section['id']], 'item_id'));
+            $itemIds = ArrayToolkit::column($sectionItems[$section['id']], 'item_id');
+            foreach ($itemIds as $itemId) {
+                $items[] = $this->getItemService()->getItem($itemId);
+            }
+
             $exportItems = array_merge($exportItems, $items);
         }
 
