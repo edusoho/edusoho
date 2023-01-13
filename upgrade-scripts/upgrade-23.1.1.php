@@ -134,9 +134,18 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $answerRecordData= [];
         $activitys = $this->getActivityService()->search(['mediaType'=>'testpaper'], [], 0, PHP_INT_MAX, ['id', 'mediaId']);
+        if(empty($activitys)) {
+            return 1;
+        }
         $activityTestpapers = $this->getTestpaperActivityService()->findActivitiesByIds(array_column($activitys,'mediaId'));
+        if(empty($activityTestpapers)) {
+            return 1;
+        }
 
         $answerScenes = $this->getAnswerSceneService()->search(['limited_time' => 0, 'ids'=>array_column($activityTestpapers, 'answerSceneId')], [], 0, PHP_INT_MAX, ['id', 'exam_mode', 'enable_facein', 'name', 'limited_time']);
+        if(empty($answerScenes)) {
+            return 1;
+        }
         foreach ($answerScenes as $answerScene) {
             $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['exam_mode'=> 1, 'enable_facein'=> 0, 'name' => $answerScene['name']]);
             $answerRecords = $this->getAnswerRecordService()->search(['answer_scene_id' => $answerScene['id']], [], 0, PHP_INT_MAX, ['id', 'exam_mode', 'limited_time']);
@@ -147,9 +156,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 ];
             }
         }
-        if(!empty($answerRecordData)) {
-            $this->getAnswerRecordDao()->batchUpdate(array_keys($answerRecordData), array_values($answerRecordData));
+        if(empty($answerRecordData)) {
+            return 1;
         }
+
+        $this->getAnswerRecordDao()->batchUpdate(array_keys($answerRecordData), array_values($answerRecordData));
 
         $this->logger('info', '执行成功');
 
@@ -160,9 +171,18 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $answerRecordData= [];
         $activitys = $this->getActivityService()->search(['mediaType'=>'testpaper'], [], 0, PHP_INT_MAX, ['id', 'mediaId']);
+        if(empty($activitys)) {
+            return 1;
+        }
         $activityTestpapers = $this->getTestpaperActivityService()->findActivitiesByIds(array_column($activitys,'mediaId'));
+        if(empty($activityTestpapers)) {
+            return 1;
+        }
 
         $answerScenes = $this->getAnswerSceneService()->search(['limited_times' => 0, 'ids'=>array_column($activityTestpapers, 'answerSceneId')], [], 0, PHP_INT_MAX, ['id', 'exam_mode', 'enable_facein', 'name', 'limited_time']);
+        if(empty($answerScenes)) {
+            return 1;
+        }
         foreach ($answerScenes as $answerScene) {
             if($answerScene['exam_mode'] == 0) {
                 $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['exam_mode'=> 0, 'name' => $answerScene['name']]);
@@ -175,9 +195,12 @@ class EduSohoUpgrade extends AbstractUpdater
                 ];
             }
         }
-        if(!empty($answerRecordData)) {
-            $this->getAnswerRecordDao()->batchUpdate(array_keys($answerRecordData),array_values($answerRecordData));
+        if(empty($answerRecordData)) {
+            return 1;
         }
+
+        $this->getAnswerRecordDao()->batchUpdate(array_keys($answerRecordData),array_values($answerRecordData));
+
         $this->logger('info', '执行成功');
 
         return 1;
