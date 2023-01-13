@@ -26,6 +26,7 @@ class UserController extends BaseController
     public function indexAction(Request $request)
     {
         $fields = $request->query->all();
+        unset($fields['page']);
 
         $conditions = [
             'roles' => '',

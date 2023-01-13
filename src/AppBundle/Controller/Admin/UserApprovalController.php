@@ -13,6 +13,7 @@ class UserApprovalController extends BaseController
     public function approvalsAction(Request $request, $approvalStatus)
     {
         $fields = $request->query->all();
+        unset($fields['page']);
 
         $conditions = array(
             'roles' => '',

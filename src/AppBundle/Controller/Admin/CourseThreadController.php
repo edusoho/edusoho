@@ -12,6 +12,7 @@ class CourseThreadController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         if (isset($conditions['keywordType']) && 'courseTitle' == $conditions['keywordType']) {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);

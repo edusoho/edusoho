@@ -24,6 +24,7 @@ class LearnStatisticsController extends BaseController
             'isDefault' => 'false',
         ];
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $conditions = array_merge($defaultCondition, $conditions);
         $userConditions = ['destroyed' => 0, 'nickname' => $conditions['keyword'], 'isStudent' => 0];
         if ('mobile' == $conditions['keywordType']) {

@@ -228,6 +228,9 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
     protected function wrapQuestionBanks($questionBanks)
     {
+        if (empty($questionBanks)) {
+            return [];
+        }
         $itemBanks = $this->getItemBankService()->searchItemBanks(['ids' => array_column($questionBanks, 'itemBankId')], [], 0, PHP_INT_MAX);
         $itemBanks = ArrayToolkit::index($itemBanks, 'id');
 

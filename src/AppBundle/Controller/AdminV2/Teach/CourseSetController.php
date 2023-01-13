@@ -277,6 +277,7 @@ class CourseSetController extends BaseController
     public function dataListAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         if ('normal' == $filter) {
             $conditions['parentId'] = 0;
