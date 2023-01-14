@@ -29,9 +29,6 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
 
         $builder = $this->createQueryBuilder($conditions)
             ->delete($this->table);
-        if ($this->isConditionsInValid($builder, $conditions)) {
-            return 0;
-        }
 
         return $builder->execute();
     }
