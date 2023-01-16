@@ -78,9 +78,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         $builder = $this->createQueryBuilder($conditions)
             ->setFirstResult($start)
             ->setMaxResults($limit);
-        if ($this->isConditionsInValid($builder, $conditions)) {
-            return array();
-        }
+
         $this->addSelect($builder, $columns);
 
         $declares = $this->declares();
@@ -113,9 +111,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select('COUNT(*)');
-        if ($this->isConditionsInValid($builder, $conditions)) {
-            return 0;
-        }
 
         return (int) $builder->execute()->fetchColumn(0);
     }
@@ -137,9 +132,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
     {
         $builder = $this->createQueryBuilder($conditions)
             ->update($this->table, $this->table);
-        if ($this->isConditionsInValid($builder, $conditions)) {
-            return 0;
-        }
 
         foreach ($fields as $key => $value) {
             $builder
@@ -283,17 +275,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
     protected function getQueryBuilder($conditions)
     {
         return new DynamicQueryBuilder($this->db(), $conditions);
-    }
-
-    protected function isConditionsInValid(DynamicQueryBuilder $builder, array $conditions)
-    {
-//        $where = $builder->getQueryPart('where');
-//        $whereCount = empty($where) ? 0 : $where->count();
-//        if (!empty($conditions) && empty($whereCount)) {
-//            return true;
-//        }
-
-        return false;
     }
 
     protected function filterStartLimit(&$start, &$limit)
