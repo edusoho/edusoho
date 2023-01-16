@@ -106,6 +106,7 @@ class MultiClassProduct extends AbstractResource
         $conditions = [
             'keywords' => $request->query->get('keywords', ''),
         ];
+        $conditions = array_filter($conditions);
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 

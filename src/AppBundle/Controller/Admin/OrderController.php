@@ -88,6 +88,7 @@ class OrderController extends BaseController
         if (!empty($conditions['displayStatus'])) {
             $conditions['statuses'] = $this->container->get('web.twig.order_extension')->getOrderStatusFromDisplayStatus($conditions['displayStatus'], 1);
         }
+        unset($conditions['page']);
 
         return $conditions;
     }

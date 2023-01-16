@@ -65,6 +65,7 @@ class LogController extends BaseController
     public function oldAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         $paginator = new Paginator(
             $request,
