@@ -13,6 +13,7 @@ class SensitiveController extends BaseController
     public function indexAction(Request $request)
     {
         $fields = $request->query->all();
+        unset($fields['page']);
         $conditions = [
             'keyword' => '',
             'searchKeyWord' => '',
@@ -24,6 +25,7 @@ class SensitiveController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
+        $conditions = array_filter($conditions);
         $paginator = new Paginator($this->get('request'), $this->getSensitiveService()->searchkeywordsCount($conditions), 20);
         $keywords = $this->getSensitiveService()->searchKeywords($conditions, ['id' => 'DESC'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
         foreach ($keywords as &$keyword) {
@@ -97,6 +99,7 @@ class SensitiveController extends BaseController
     public function banlogsAction(Request $request)
     {
         $fields = $request->query->all();
+        unset($fields['page']);
         $conditions = [
             'keyword' => '',
             'searchBanlog' => '',
@@ -108,6 +111,7 @@ class SensitiveController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
+        $conditions = array_filter($conditions);
 
         if (empty($banlogs)) {
             $banlogs = [];

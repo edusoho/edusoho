@@ -136,7 +136,7 @@ class StudentExporter extends Exporter
             $member[] = $profile['weibo'] ? $profile['weibo'] : '-';
 
             foreach ($fields as $value) {
-                $member[] = $profile[$value] ? str_replace([PHP_EOL, '"'], '', $profile[$value]) : '-';
+                $member[] = $profile[$value] ? str_replace([PHP_EOL, '"'], '', $profile[$value])."\t" : '-';
             }
 
             $datas[] = $member;

@@ -14,6 +14,7 @@ class Lessons extends BaseResource
         $conditions = $request->query->all();
         $start      = $request->query->get('start', 0);
         $limit      = $request->query->get('limit', 20);
+        unset($conditions['start'], $conditions['limit']);
 
         if (isset($conditions['cursor'])) {
             $conditions['status']         = 'published';

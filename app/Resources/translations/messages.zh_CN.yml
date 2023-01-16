@@ -1002,7 +1002,7 @@ course.teaching_plan.sort.save: 保存排序
 course.teaching_plan.sort.cancel: 取消排序
 course.teaching_plan.create.max_plan_number: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.teaching_plan.create.new_plan_name: 新计划名称
-course.teaching_plan.create.create_tips: 教学计划创建后“学习模式”将不能修改。
+course.teaching_plan.create.create_tips: 计划发布后“学习模式”无法修改。
 course.teaching_plan.create.name: 名称
 course.teaching_plan.create.mode: 学习模式
 course.teaching_plan.create.mode.free: >
@@ -1016,7 +1016,7 @@ course.teaching_plan.create.status: 状态
 course.teaching_plan.create.operation: 操作
 course.teaching_plan.edit.copy: 复制%title%为一个新的教学计划
 course.teaching_plan.expiry_date: 学习有效期
-course.teaching_plan.expiry_date.not_change_tips: 教学计划首次发布后“学习有效期”不能再更改模式。
+course.teaching_plan.expiry_date.not_change_tips: 计划首次发布后“学习有效期”不能再更改模式。
 course.teaching_plan.expiry_date.anytime: >
   <b>随到随学：</b>有效期从学员加入的当天开始算起，截至到期当天晚上的23:59
 course.teaching_plan.expiry_date.real_time: >
@@ -3115,6 +3115,7 @@ user.settings.oauth_menu: 第三方登录
 user.settings.avatar: >
   <strong>您还没有头像</strong>。拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%setAvatar%" class="alert-link" target="_blank">点击设置</a>
 user.settings.upload.img.tip: 请上传jpg, gif, png格式的图片, 建议图片大小不超过2MB
+user.settings.upload.img.tips: 请上传JPG/GIF/PNG格式的图片，大小不超过5MB，建议尺寸为400X400
 user.settings.upload.qrcode.tip: 助教请务必上传二维码
 user.settings.scrm: 销客助手绑定
 user.settings.scrm.tips: 可同步助教信息到企业微信，方便助教在微信群管理学员并进行社群服务
@@ -6756,6 +6757,8 @@ admin.user.manage.form.time_option.default: --时间类型--
 admin.user.manage.form.role_option.default: --所有角色--
 admin.user.manage.form.user_type_option.default: --注册来源--
 plugin.admin.user.manage.form.user_export_btn: 导出搜索结果
+plugin.admin.user.manage.form.user_student_export_btn: 导出搜索结果
+plugin.admin.user.manage.form.user_staff_export_btn: 导出员工数据
 admin.user.manage.fields.mobile_label: 手机号
 admin.user.manage.fields.recent_login_label: 最近登录
 admin.user.manage.fields.user_total_num_label: 用户总数：
@@ -11291,6 +11294,7 @@ coupon.status.receive: 已领取
 coupon.status.used: 已使用
 
 coupon.generate_num: 生成数量
+coupon.deduction_amount_range: 折价金额必须在0.01~1000000之间
 coupon.generate_num_hint: 生成数量必须在1～100之间
 coupon.generate_num_unit: 个
 coupon.prefix: 优惠券前缀

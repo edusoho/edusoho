@@ -17,13 +17,11 @@ class LogController extends BaseController
     {
         $conditions = $request->query->all();
 
-        $systemUser = $this->getUserService()->getUserByType('system');
-        $conditions['exceptedUserId'] = $systemUser['id'];
-
-        $hasSystemOperation = 0;
-        if (isset($conditions['hasSystemOperation']) && 1 == $conditions['hasSystemOperation']) {
-            unset($conditions['exceptedUserId']);
-            $hasSystemOperation = 1;
+        $hasSystemOperation = 1;
+        if (isset($conditions['hasSystemOperation']) && 0 == $conditions['hasSystemOperation']) {
+            $systemUser = $this->getUserService()->getUserByType('system');
+            $conditions['exceptedUserId'] = $systemUser['id'];
+            $hasSystemOperation = 0;
         }
 
         $conditions['excludeActions'] = LogDataUtils::getUnDisplayModuleAction();
@@ -67,6 +65,7 @@ class LogController extends BaseController
     public function oldAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         $paginator = new Paginator(
             $request,

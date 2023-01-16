@@ -133,6 +133,7 @@ uploader.error.bad_file.hint: 你的源文件可能已损坏，请检查后重�
 uploader.num_limit_hint: 添加的文件数量过多！
 uploader.size_limit_hint: 文件过大，请上传较小的文件！
 uploader.size_2m_limit_hint: 文件过大，请上传小于2M的文件！
+uploader.size_5m_limit_hint: 文件过大，请上传小于5M的文件！
 uploader.type_denied_limit_hint: 文件类型错误！
 uploader.btn.batch_paused: 全部暂停
 uploader.btn.batch_continue: 全部继续
@@ -761,6 +762,7 @@ validate.valid_image_input.message: 只能上传图片
 validate.limit_size.message: 大小不能超过2M
 validate.next_day.message: 开始时间应晚于当前时间
 validate.chinese_alphanumeric.message: 只支持中文字、英文字母、数字及_ . ·
+validate.truename_chinese_alphanumeric.message: 姓名不支持特殊符号
 validate.alphanumeric.message: 必须是英文字母、数字及下划线组成
 validate.only_alphanumeric.message: 请输入数字或英文字母
 validate.raty_star.message: 请打分
@@ -1760,6 +1762,7 @@ course.plan_setup.mode.locked: 解锁式
 course.plan_setup.mode.tips: <b>自由式：</b>学习过程自由安排<br><b>解锁式</b>：根据既定顺序逐个解锁学习
 course.marketing_setup.rule.watch_time_limit: 视频观看时长限制
 course.marketing_setup.rule.watch_time_limit.watch_limit: 倍总时长
+course.plan_setup.learn_mode_hint: 计划发布后学习模式无法修改
 course.plan_setup.finish_rule: %taskName%完成规则
 course.plan_setup.finish_rule.nothing: 无限制
 course.plan_setup.finish_rule.depend_on_finish_condition: 由%taskName%完成条件决定
@@ -2155,3 +2158,5 @@ live.chooser.video: 请设置直播视频
 mall.goods.exist.delete_fail_hint: 该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作
 cloud.sms_enable_hint: 云短信未启用，请前往<a href="%cloudSmsSettingUrl%" target="_blank">【云短信设置】</a>启用
 admin_v2.homepage.school_info.enter.copy_success: 链接复制成功
+admin_v2.homepage.wechat_come: 欢迎使用EduSoho教培产品
+admin_v2.homepage.wechat_code.m: 加入开源产品使用学习交流群，小伙伴在等你

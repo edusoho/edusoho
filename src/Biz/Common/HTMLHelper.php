@@ -43,6 +43,7 @@ class HTMLHelper
         $html = $purifier->purify($html);
         $html = str_replace('http-equiv', '', $html);
         $html = $this->handleOuterLink($html, $safeDomains);
+        $html = $this->filterInvalidImgSrc($html);
 
         if (!$trusted) {
             return $html;
@@ -120,6 +121,27 @@ class HTMLHelper
 
             //存在于白名单内就不进行替换移除
             if ($needReplaceFlag) {
+                $html = str_replace($matches[0][$key], '', $html);
+            }
+        }
+
+        return $html;
+    }
+
+    protected function filterInvalidImgSrc($html)
+    {
+        $siteSettings = $this->getSettingService()->get('site', []);
+        $siteUrl = isset($siteSettings['url']) ? $this->getTrimUrl($siteSettings['url']) : '';
+        preg_match_all('/\<img[^\>]*?src\s*=\s*[\'\"](?:http:\/\/|https:\/\/)?(.*?)[\'\"].*?\>/i', $html, $matches);
+        $webDir = $this->biz['kernel.root_dir'] . '/../web';
+        foreach ($matches[1] as $key => $match) {
+            if (0 === strpos($match, '/')) {
+                $imgPath = $webDir.$match;
+            }
+            if (!empty($siteUrl) && 0 === strpos($match, $siteUrl)) {
+                $imgPath = $webDir.str_replace($siteUrl, '', $match);
+            }
+            if (!empty($imgPath) && !file_exists($imgPath)) {
                 $html = str_replace($matches[0][$key], '', $html);
             }
         }

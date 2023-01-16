@@ -13,6 +13,7 @@ class JobController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $count = $this->getSchedulerService()->countJobs($conditions);
 
         $paginator = new Paginator(

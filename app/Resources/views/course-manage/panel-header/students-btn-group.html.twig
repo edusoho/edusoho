@@ -12,7 +12,7 @@
       <a class="cd-btn cd-btn-info cd-btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="{{ 'course.members_manage.import_failed_tips'|trans({'%type%':type|default('site.default.plan'|trans) }) }}"><i class="glyphicon glyphicon-import"></i> {{ 'course.members_manage.batch_import_btn'|trans }}</a>
     {% endif %}
   {% endif %}
-  {% if app.user.isSuperAdmin() or (setting('course.teacher_export_student', false) and 'ROLE_TEACHER' in app.user.roles) %}
+  {% if has_permission('admin_v2_course_manage') or (setting('course.teacher_export_student', false) and 'ROLE_TEACHER' in app.user.roles) %}
     {% include 'export/export-btn.html.twig' with
       {
         'exportFileName': 'course-students',

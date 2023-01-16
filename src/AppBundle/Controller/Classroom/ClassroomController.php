@@ -627,12 +627,8 @@ class ClassroomController extends BaseController
             return false;
         }
 
-        $courseIds = ArrayToolkit::column($courses, 'parentId');
-        //        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courseMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user['id'], $courseIds);
+        list($courses) = $this->getClassroomService()->findUserPaidCoursesInClassroom($user['id'], $classroom['id']);
 
-        $isJoinedCourseIds = ArrayToolkit::column($courseMembers, 'courseId');
-        $courses = $this->getCourseService()->findCoursesByIds($isJoinedCourseIds);
         $priceType = 'RMB';
 
         $coinSetting = $this->getSettingService()->get('coin');

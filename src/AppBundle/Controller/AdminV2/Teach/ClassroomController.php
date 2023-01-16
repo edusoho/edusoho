@@ -23,6 +23,7 @@ class ClassroomController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         $conditions = $this->fillOrgCode($conditions);
         $paginator = new Paginator(
@@ -315,6 +316,7 @@ class ClassroomController extends BaseController
     public function statisticsAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $conditions = $this->fillOrgCode($conditions);
 
         $paginator = new Paginator(
