@@ -22,7 +22,11 @@ class LocalImageCrop {
   }
 
   initImage($sourceImg) {
-    let imageAttr = JSON.parse(localStorage.getItem('crop_image_attr'));
+    let imageAttrJson = localStorage.getItem('crop_image_attr');
+    if (imageAttrJson === 'get_from_dom') {
+      imageAttrJson = $('[name=crop_image_attr]').val();
+    }
+    let imageAttr = JSON.parse(imageAttrJson);
 
     $(this.cropImg).attr({
       'src': imageAttr.src,

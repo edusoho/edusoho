@@ -69,6 +69,7 @@ class AnswerController extends BaseController
                 'answerRecordId' => $latestAnswerRecord['answerRecordId'],
                 'successGotoUrl' => $this->generateUrl('item_bank_exercise_category_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'categoryId' => $categoryId]),
                 'role' => 'student',
+                'saveGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
             ]);
         } elseif (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
             return $this->render(

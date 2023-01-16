@@ -872,7 +872,7 @@ course.teaching_plan.sort.save: Save sort
 course.teaching_plan.sort.cancel: Cancel sort
 course.teaching_plan.create.max_plan_number: Support to create 10 plans, if you need to add more, please add after the original plan is deleted.
 course.teaching_plan.create.new_plan_name: 'Program name'
-course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the program being created.'
+course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the plan being published.'
 course.teaching_plan.create.name: Name
 course.teaching_plan.create.mode: 'Learn mode'
 course.teaching_plan.create.mode.free: "<li class='mb10'><b>free: </b>Learn freely.</li>\n"
@@ -2709,6 +2709,7 @@ user.settings.teachers_qualification_menu: 'Teaching certifition application'
 user.settings.oauth_menu: 'Third party log in'
 user.settings.avatar: "<strong>No avatar yet</strong>.Own an avatar to get more attention <a href=\"%setAvatar%\" class=\"alert-link\" target=\"_blank\">Click to set Avatar</a>\n"
 user.settings.upload.img.tip: 'Please upload file with png, gif, jpg format, Image size should not exceed 2MB'
+user.settings.upload.img.tips: 'Please upload an image in JPG/GIF/PNG format, the size should not exceed 5MB, and the recommended size is 400X400'
 user.settings.upload.qrcode.tip: Teaching assistants please make sure to upload the QR code
 user.settings.scrm: SCRM Bind
 user.settings.scrm.tips: Synchronize teaching assistant information to enterprise WeChat, so that teaching assistants can manage students in WeChat groups and provide community services.
@@ -5717,7 +5718,8 @@ admin.user.manage.form.time_option.register: 'Register Time'
 admin.user.manage.form.time_option.default: '-- Date Type --'
 admin.user.manage.form.role_option.default: '-- All Roles --'
 admin.user.manage.form.user_type_option.default: '--Register Source --'
-plugin.admin.user.manage.form.user_export_btn: 'Export'
+plugin.admin.user.manage.form.user_student_export_btn: 'Export'
+plugin.admin.user.manage.form.user_staff_export_btn: 'ExportStaffData'
 admin.user.manage.fields.mobile_label: Mobile
 admin.user.manage.fields.recent_login_label: 'Recently Logged In'
 admin.user.manage.fields.user_total_num_label: 'User Total: '
@@ -9965,6 +9967,7 @@ coupon.status.receive: Received
 coupon.status.used: Used
 
 coupon.generate_num: Number of generation
+coupon.deduction_amount_rang: The deduction amount must be between 0.01 and 1,000,000
 coupon.generate_num_hint: The number of generation must be between 1 and 10,000.
 coupon.generate_num_unit: pcs
 coupon.prefix: Coupon prefix

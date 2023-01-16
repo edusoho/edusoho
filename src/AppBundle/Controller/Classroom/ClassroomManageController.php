@@ -31,6 +31,7 @@ use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
+use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -155,6 +156,13 @@ class ClassroomManageController extends BaseController
     {
         $courses = $this->getClassroomService()->findByClassroomId($classroomId);
         $courseIds = ArrayToolkit::column($courses, 'courseId');
+        $startTime = strtotime('today');
+        $conditions = [
+            'courseIds' => $courseIds,
+            'userIds' => array_column($classroomMembers, 'userId'),
+        ];
+        $this->getActivityDataDailyStatisticsService()->statisticsCoursePlanStayDailyData($startTime, strtotime('tomorrow'), $conditions);
+        $this->getActivityDataDailyStatisticsService()->statisticsCoursePlanLearnDailyData($startTime, $conditions);
         foreach ($classroomMembers as &$classroomMember) {
             $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress(
                 $classroomMember['classroomId'],
@@ -447,7 +455,7 @@ class ClassroomManageController extends BaseController
                         [PHP_EOL, '"'],
                         '',
                         $profiles[$classroomMember['userId']][$key]
-                    ).'",' : '-'.',';
+                    )."\t".'",' : '-'.',';
             }
             $students[] = $member;
         }
@@ -1478,6 +1486,14 @@ class ClassroomManageController extends BaseController
     protected function getCoursePlanLearnDataDailyStatisticsService()
     {
         return $this->getBiz()->service('Visualization:CoursePlanLearnDataDailyStatisticsService');
+    }
+
+    /**
+     * @return ActivityDataDailyStatisticsService
+     */
+    protected function getActivityDataDailyStatisticsService()
+    {
+        return $this->createService('Visualization:ActivityDataDailyStatisticsService');
     }
 
     /**
