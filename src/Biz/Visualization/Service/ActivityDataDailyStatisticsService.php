@@ -12,13 +12,13 @@ interface ActivityDataDailyStatisticsService
 
     public function statisticsUserLearnDailyData($dayTime);
 
-    public function statisticsCoursePlanLearnDailyData($dayTime, array $recordConditions = []);
+    public function statisticsCoursePlanLearnDailyData($dayTime);
 
     public function statisticsUserStayDailyData($startTime, $endTime);
 
     public function statisticsUserVideoDailyData($startTime, $endTime);
 
-    public function statisticsCoursePlanStayDailyData($startTime, $endTime, array $recordConditions = []);
+    public function statisticsCoursePlanStayDailyData($startTime, $endTime);
 
     public function statisticsCoursePlanVideoDailyData($startTime, $endTime);
 

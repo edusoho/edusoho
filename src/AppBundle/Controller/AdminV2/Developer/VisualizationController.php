@@ -16,6 +16,7 @@ class VisualizationController extends BaseController
     public function activityLearnRecordAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $paginator = new Paginator(
             $request,
             $this->getActivityLearnRecordDao()->count($conditions),
@@ -37,6 +38,7 @@ class VisualizationController extends BaseController
     public function activityVideoWatchRecordAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $paginator = new Paginator(
             $request,
             $this->getActivityVideoWatchRecordDao()->count($conditions),
@@ -58,6 +60,7 @@ class VisualizationController extends BaseController
     public function activityLearnFlowAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $paginator = new Paginator(
             $request,
             $this->getActivityLearnFlowDao()->count($conditions),
@@ -79,6 +82,7 @@ class VisualizationController extends BaseController
     public function activityStayDailyAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $paginator = new Paginator(
             $request,
             $this->getActivityStayDailyDao()->count($conditions),

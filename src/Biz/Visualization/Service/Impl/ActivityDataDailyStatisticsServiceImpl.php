@@ -156,13 +156,13 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         return $this->getUserLearnDailyDao()->batchCreate($data);
     }
 
-    public function statisticsCoursePlanLearnDailyData($dayTime, array $recordConditions = [])
+    public function statisticsCoursePlanLearnDailyData($dayTime)
     {
         $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
         $conditions = ['dayTime' => $dayTime];
         $columns = ['userId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
-        if (empty($statisticsSetting) || 'page' != $statisticsSetting['statistical_dimension']) {
-            $totalRecords = $this->findMixedRecords($dayTime, $recordConditions);
+        if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
+            $totalRecords = $this->findMixedRecords($dayTime);
             $data = [];
             foreach ($totalRecords as $userId => $userRecords) {
                 $userRecords = ArrayToolkit::group($userRecords, 'courseId');
@@ -187,18 +187,17 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         return $this->getCoursePlanLearnDailyDao()->batchCreate($data);
     }
 
-    protected function findMixedRecords($dayTime, array $recordConditions = [])
+    protected function findMixedRecords($dayTime)
     {
-        $recordConditions = array_merge($recordConditions, ['startTime_GE' => $dayTime, 'endTime_LT' => $dayTime + 86400]);
         $watchRecords = $this->getActivityVideoWatchRecordDao()->search(
-            $recordConditions,
+            ['startTime_GE' => $dayTime, 'endTime_LT' => $dayTime + 86400],
             [],
             0,
             PHP_INT_MAX,
             ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'startTime', 'endTime', 'duration']
         );
         $learnRecords = $this->getActivityLearnRecordDao()->search(
-            $recordConditions,
+            ['startTime_GE' => $dayTime, 'endTime_LT' => $dayTime + 86400],
             [],
             0,
             PHP_INT_MAX,
@@ -215,11 +214,10 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         return ArrayToolkit::group($totalRecords, 'userId');
     }
 
-    public function statisticsCoursePlanStayDailyData($startTime, $endTime, array $recordConditions = [])
+    public function statisticsCoursePlanStayDailyData($startTime, $endTime)
     {
-        $recordConditions = array_merge($recordConditions, ['startTime_GE' => $startTime, 'endTime_LT' => $endTime]);
         $learnRecords = $this->getActivityLearnRecordDao()->search(
-            $recordConditions,
+            ['startTime_GE' => $startTime, 'endTime_LT' => $endTime],
             [],
             0,
             PHP_INT_MAX,

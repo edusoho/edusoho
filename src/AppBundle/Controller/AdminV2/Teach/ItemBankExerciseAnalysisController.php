@@ -60,6 +60,7 @@ class ItemBankExerciseAnalysisController extends BaseController
             $conditions['categoryIds'] = $categoryIds;
             unset($conditions['categoryId']);
         }
+        unset($conditions['page']);
 
         return $conditions;
     }

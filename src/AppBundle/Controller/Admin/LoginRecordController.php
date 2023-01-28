@@ -16,6 +16,7 @@ class LoginRecordController extends BaseController
 
         unset($userConditions['startDateTime']);
         unset($userConditions['endDateTime']);
+        unset($userConditions['page']);
 
         $userConditions = $this->fillOrgCode($userConditions);
 
