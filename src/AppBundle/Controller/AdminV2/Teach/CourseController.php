@@ -125,6 +125,7 @@ class CourseController extends BaseController
     public function noteListAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         if (isset($conditions['keywordType']) && 'courseTitle' == $conditions['keywordType']) {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);

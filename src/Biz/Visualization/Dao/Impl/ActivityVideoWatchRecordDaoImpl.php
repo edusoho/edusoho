@@ -24,8 +24,6 @@ class ActivityVideoWatchRecordDaoImpl extends AdvancedDaoImpl implements Activit
                 'taskId = :taskId',
                 'courseId = :courseId',
                 'activityId = :activityId',
-                'courseId in (:courseIds)',
-                'userId in (:userIds)',
             ],
             'orderbys' => ['id', 'createdTime'],
         ];

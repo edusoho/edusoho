@@ -6,7 +6,6 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\ThreadService;
-use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 
@@ -85,13 +84,6 @@ class StudentExporter extends Exporter
 
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
 
-        $startTime = strtotime('today');
-        $conditions = [
-            'courseId' => $course['id'],
-            'userIds' => $studentUserIds,
-        ];
-        $this->getActivityDataDailyStatisticsService()->statisticsCoursePlanStayDailyData($startTime, strtotime('tomorrow'), $conditions);
-        $this->getActivityDataDailyStatisticsService()->statisticsCoursePlanLearnDailyData($startTime, $conditions);
         foreach ($courseMembers as $key => $member) {
             $progress = $this->getLearningDataAnalysisService()->makeProgress($member['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
             $courseMembers[$key]['learningProgressPercent'] = $progress['percent'];
@@ -273,13 +265,5 @@ class StudentExporter extends Exporter
     protected function getCoursePlanLearnDataDailyStatisticsService()
     {
         return $this->getBiz()->service('Visualization:CoursePlanLearnDataDailyStatisticsService');
-    }
-
-    /**
-     * @return ActivityDataDailyStatisticsService
-     */
-    protected function getActivityDataDailyStatisticsService()
-    {
-        return $this->getBiz()->service('Visualization:ActivityDataDailyStatisticsService');
     }
 }
