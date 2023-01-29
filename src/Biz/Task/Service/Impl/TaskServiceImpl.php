@@ -4,6 +4,7 @@ namespace Biz\Task\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\ActivityDao;
+use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
@@ -19,6 +20,7 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\TaskException;
+use Biz\Util\EdusohoLiveClient;
 use Biz\Visualization\Service\ActivityLearnDataService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -226,6 +228,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             }
 
             $fields['endTime'] = $activity['endTime'];
+            $this->getLiveActivityDao()->update($activity['mediaId'], ['liveStartTime'=>$fields['startTime'], 'liveEndTime' => $fields['endTime']]);
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
             $task = array_merge($fields, $task);
@@ -1424,6 +1427,14 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return LiveActivityDao
+     */
+    protected function getLiveActivityDao()
+    {
+        return $this->createDao('Activity:LiveActivityDao');
     }
 
     /**
