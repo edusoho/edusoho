@@ -41,6 +41,9 @@ class FileToolkit
         $tpe = $blob['type'];
         $bases = explode('/', $tpe); //分割出图片格式image/png
         $suffix = '.'.$bases[1];
+        if(!in_array($suffix, ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'gif', 'GIF', 'png', 'PNG'])) {
+            return false;
+        }
         $fileName = self::getImgName($type, $suffix);
         $fp = fopen($image, 'r');
         $file = fread($fp, $blob['size']); //二进制数据流
