@@ -385,6 +385,8 @@ class ManageController extends BaseController
 
     public function transcriptExportAction(Request $request, $courseId, $testpaperId, $activityId)
     {
+        $this->getCourseService()->tryManageCourse($courseId);
+
         $activity = $this->getActivityService()->getActivity($activityId);
         if (!$activity) {
             $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
