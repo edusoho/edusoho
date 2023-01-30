@@ -66,6 +66,10 @@ class CaptureController extends BaseController
             return $this->createJsonResponse(false);
         }
         $user = $this->getCurrentUser();
+        if(!$user->isLogin()) {
+            return $this->createJsonResponse(false);
+        }
+
         $userFace = $this->getFaceInspectionService()->getUserFaceByUserId($user->getId());
         if (!empty($_FILES['picture'])) {
             $path = FileToolkit::saveBlobImage($_FILES['picture']);
