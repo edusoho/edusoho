@@ -986,6 +986,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 if ('student' == $value) {
                     unset($member['role'][$key]);
                 }
+                elseif ('assistant' == $value) {
+                    unset($member['role'][$key]);
+                }
             }
 
             $this->getClassroomMemberDao()->update($member['id'], $member);
