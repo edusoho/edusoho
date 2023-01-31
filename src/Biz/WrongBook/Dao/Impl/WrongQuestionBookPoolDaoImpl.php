@@ -48,17 +48,6 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        if($conditions['targetType'] == 'exercise') {
-            $builder = $this->createQueryBuilder($conditions)
-                ->leftJoin('biz_wrong_question_book_pool', $table, 't', "t.{$field} = biz_wrong_question_book_pool.target_id")
-                ->select('biz_wrong_question_book_pool.*')
-                ->andWhere('title like :keyWord')
-                ->andWhere('target_id in (:target_ids)')
-                ->orderBy('biz_wrong_question_book_pool.updated_time', 'DESC')
-                ->setFirstResult($start)
-                ->setMaxResults($limit);
-        }
-
         return $builder->execute()->fetchAll() ?: [];
     }
 
