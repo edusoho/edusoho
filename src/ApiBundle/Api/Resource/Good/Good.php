@@ -86,11 +86,7 @@ class Good extends AbstractResource
     private function fetchSpecs(&$goods, $goodsEntity, $request)
     {
         $user = $this->getCurrentUser();
-        if (1 == $request->query->get('preview')) {
-            $goods['specs'] = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
-        } else {
-            $goods['specs'] = $this->getGoodsService()->findPublishedGoodsSpecsByGoodsId($goods['id']);
-        }
+        $goods['specs'] = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
         $goods['isMember'] = false;
         foreach ($goods['specs'] as &$spec) {
             if ('course' === $goods['type']) {
