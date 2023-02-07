@@ -212,6 +212,8 @@ class Homework extends Activity
             'name' => $fields['title'],
             'description' => $fields['description'],
         ];
+
+        $sortItems = [];
         if (!empty($fields['questionIds'])) {
             $items = $this->getItemService()->findItemsByIds($fields['questionIds'], true);
 
