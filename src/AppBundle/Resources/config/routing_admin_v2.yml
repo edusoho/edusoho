@@ -2023,6 +2023,10 @@ admin_v2_staff_delete:
     _controller: 'AppBundle:AdminV2/User/StaffManage:delete'
   methods:
     - POST
+admin_v2_staff_org_update:
+  path: '/staff/{id}/org/update'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:orgUpdate'
 admin_v2_staff_change_nickname:
   path: '/staff/{userId}/change/nickname'
   defaults:
