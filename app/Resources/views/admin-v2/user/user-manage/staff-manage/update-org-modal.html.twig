@@ -5,7 +5,7 @@
 {% block title %}{{'admin.user.org.edit'|trans}}{% endblock %}
 {% block body %}
 
-<form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_v2_user_org_update', {id:user.id}) }}">
+<form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_v2_staff_org_update', {id:user.id}) }}">
     {% include 'org/org-tree-select.html.twig' with {orgCode: org.orgCode|default(null), modal: 'modal'} %}
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
