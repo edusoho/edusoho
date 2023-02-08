@@ -20,7 +20,7 @@
     <div class="pull-right mhs"><a href="{{ path('course_set_archive') }}">{{ '课程存档'|trans }}</a></div>
     <div class="text-gray" data-role="default-foot-bar" id="license-footer">
       {% if setting('site.recordCode') |default('') %}
-        <div class="mlm">
+        <div>
           <a class="license-picture">
             <img src="{% if setting('site.recordPicture') %}{{ asset(setting('site.recordPicture')) }}
                     {% else %}{{ filepath('','gongan.png' ) }}{% endif %}" style="width: 20px;height: 20px;">
@@ -52,10 +52,10 @@
         <div>
           {% if permit.name and permit.record_number %}
             {% if permit.picture %}
-              <a class="mlm" href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.name }}</a>
+              <a href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.name }}</a>
               <a class="mlm" href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.record_number }}</a>
             {% else %}
-              <a class="mlm">{{ permit.name }}</a>
+              <a>{{ permit.name }}</a>
               <a class="mlm">{{ permit.record_number }}</a>
             {% endif %}
           {% endif %}
