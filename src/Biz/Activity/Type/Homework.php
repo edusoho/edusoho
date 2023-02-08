@@ -95,8 +95,18 @@ class Homework extends Activity
 
     protected function createAssessment($name, $fields)
     {
+        $sortItems = [];
         $items = $this->getItemService()->findItemsByIds($fields['questionIds'], true);
-        $items = $this->processItemQuestions($items, $fields);
+
+        $items = ArrayToolkit::index($items,'id');
+        foreach ($fields['questionIds'] as $id) {
+            if (!isset($items[$id])) {
+                continue;
+            }
+            $sortItems[] = $items[$id];
+        }
+
+        $items = $this->processItemQuestions($sortItems, $fields);
         $bankIds = array_column($items, 'bank_id');
         $assessment = [
             'bank_id' => array_shift($bankIds),
@@ -202,9 +212,20 @@ class Homework extends Activity
             'name' => $fields['title'],
             'description' => $fields['description'],
         ];
+
+        $sortItems = [];
         if (!empty($fields['questionIds'])) {
             $items = $this->getItemService()->findItemsByIds($fields['questionIds'], true);
-            $items = $this->processItemQuestions($items, $fields);
+
+            $items = ArrayToolkit::index($items,'id');
+            foreach ($fields['questionIds'] as $id) {
+                if (!isset($items[$id])) {
+                    continue;
+                }
+                $sortItems[] = $items[$id];
+            }
+
+            $items = $this->processItemQuestions($sortItems, $fields);
             $bankIds = array_column($items, 'bank_id');
             $accessment['bank_id'] = array_shift($bankIds);
             $accessment['sections'] = [

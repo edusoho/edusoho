@@ -17,9 +17,6 @@ class GoodsController extends BaseController
         $targetId = $request->query->get('targetId', 0);
         $goodsApiRequest = new ApiRequest("/api/goods/{$id}", 'GET', ['preview' => $preview, 'targetId' => $targetId]);
         $goods = $this->container->get('api_resource_kernel')->handleApiRequest($goodsApiRequest);
-        if (1 != $preview && 'published' !== $goods['status']) {
-            return $this->createMessageResponse('info', '你访问的课程不存在', null, 3000, $this->generateUrl('homepage'));
-        }
         $goodsComponentsApiRequest = new ApiRequest("/api/goods/{$id}/components", 'GET');
         $goodsComponents = $this->container->get('api_resource_kernel')->handleApiRequest($goodsComponentsApiRequest);
         $goods['showPlan'] = 1 == count($goods['specs']) || empty($goods['specs'][0]['title']) ? 0 : 1;

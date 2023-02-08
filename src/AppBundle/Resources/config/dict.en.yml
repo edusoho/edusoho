@@ -67,6 +67,7 @@ orderItemType:
     course: course
     classroom: classroom
     vip: VIP
+    item_bank_exercise: item_bank_exercise
 
 refundItemType:
     course: course
