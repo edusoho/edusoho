@@ -28,6 +28,7 @@ class CutFileCommand extends BaseCommand
         $filesystem = new Filesystem();
         if (!$filesystem->exists($filepath)) {
             $output->writeln('<info>文件不存在</info>');
+            return;
         }
 
         $command = "rm -rf {$rootPath}web/install/edusoho_init_*.sql";

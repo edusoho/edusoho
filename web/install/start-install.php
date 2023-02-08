@@ -225,6 +225,8 @@ function install_step5($init_data = 0)
     try {
         $filesystem = new Filesystem();
         $filesystem->remove(__DIR__);
+        $filesystem->remove(__DIR__.'/../../app/cache/prod');
+        $filesystem->remove(__DIR__.'/../../app/cache/dev');
     } catch (\Exception $e) {
     }
 
@@ -515,6 +517,23 @@ EOD;
             'is_v2' => 1,
             'allow_show_switch_btn' => 0,
         ],
+        'contact' => [
+            'enabled' => 0,
+            'worktime' => '9:00 - 17:00',
+            'qq' => [
+                ['name' => '', 'number' => ''],
+            ],
+            'qqgroup' => [
+                ['name' => '', 'number' => ''],
+            ],
+            'phone' => [
+                ['name' => '', 'number' => ''],
+            ],
+            'webchatURI' => '',
+            'email' => '',
+            'color' => 'default',
+        ],
+        'theme' => ['uri' => 'jianmo'],
     ];
 
     $service = ServiceKernel::instance()->createService('System:SettingService');
