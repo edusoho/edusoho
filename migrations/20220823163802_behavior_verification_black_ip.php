@@ -18,7 +18,7 @@ class BehaviorVerificationBlackIp extends Migration
             `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
             `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;);
+        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
         ");
     }
 
@@ -27,5 +27,9 @@ class BehaviorVerificationBlackIp extends Migration
      */
     public function down()
     {
+        $biz = $this->getContainer();
+        $biz['db']->exec("
+            DROP TABLE `behavior_verification_black_ip`;
+        ");
     }
 }

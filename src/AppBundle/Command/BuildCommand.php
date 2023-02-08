@@ -203,6 +203,7 @@ class BuildCommand extends BaseCommand
         $this->filesystem->remove("{$this->distDirectory}/app/config/plugin.php");
         $this->filesystem->touch("{$this->distDirectory}/app/config/plugin.php");
         $this->filesystem->dumpFile("{$this->distDirectory}/app/config/plugin.php", "<?php\nreturn array();");
+        $this->filesystem->chmod("{$this->distDirectory}/app/config/plugin.php", 0777);
 
         $this->filesystem->copy("{$this->distDirectory}/app/config/parameters.yml.dist", "{$this->distDirectory}/app/config/parameters.yml");
         $this->filesystem->chmod("{$this->distDirectory}/app/config/parameters.yml", 0777);
@@ -308,12 +309,7 @@ class BuildCommand extends BaseCommand
         $this->filesystem->mirror("{$this->rootDirectory}/web/h5", "{$this->distDirectory}/web/h5");
         $this->filesystem->mirror("{$this->rootDirectory}/web/translations", "{$this->distDirectory}/web/translations");
 
-        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/app", "{$this->distDirectory}/web/static-dist/app");
-        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/autumntheme", "{$this->distDirectory}/web/static-dist/autumntheme");
-        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/defaultbtheme", "{$this->distDirectory}/web/static-dist/defaultbtheme");
-        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/defaulttheme", "{$this->distDirectory}/web/static-dist/defaulttheme");
-        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/jianmotheme", "{$this->distDirectory}/web/static-dist/jianmotheme");
-        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/libs", "{$this->distDirectory}/web/static-dist/libs");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist", "{$this->distDirectory}/web/static-dist");
 
         $this->filesystem->copy("{$this->rootDirectory}/web/themes/block.json", "{$this->distDirectory}/web/themes/block.json");
         $this->filesystem->copy("{$this->rootDirectory}/web/.htaccess", "{$this->distDirectory}/web/.htaccess");
@@ -323,6 +319,7 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/web/robots.txt", "{$this->distDirectory}/web/robots.txt");
         $this->filesystem->copy("{$this->rootDirectory}/web/crossdomain.xml", "{$this->distDirectory}/web/crossdomain.xml");
 
+        $this->filesystem->chmod("{$this->distDirectory}/web/install", 0777);
         $this->filesystem->chmod("{$this->distDirectory}/web/files", 0777);
         $finder = new Finder();
         $finder->files()->in("{$this->distDirectory}/web/assets/libs");

@@ -768,7 +768,7 @@ admin_v2.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮�
 admin_v2.user.basic.basic_tab.lock_btn: '封禁学员'
 admin_v2.user.basic.basic_tab.unlock_btn: '解禁学员'
 admin_v2.user.basic.basic_tab.delete_btn: '删除学员'
-admin_v2.user.basic.basic_tab.org_update_btn: '修改用户组织机构'
+admin_v2.user.basic.basic_tab.org_update_btn: '修改学员组织机构'
 
 admin_v2.user.staff.basic_tab.create_btn: '添加员工'
 admin_v2.user.staff.basic_tab.edit_btn: '编辑员工信息'
@@ -783,7 +783,7 @@ admin_v2.user.staff.basic_tab.lock_btn: '封禁员工'
 admin_v2.user.staff.basic_tab.unlock_btn: '解禁员工'
 admin_v2.user.staff.basic_tab.delete_btn: '删除员工'
 admin_v2.user.staff.basic_tab.turn_into_student_btn: '转为学员'
-admin_v2.user.staff.basic_tab.org_update_btn: '修改用户组织机构'
+admin_v2.user.staff.basic_tab.org_update_btn: '修改员工组织机构'
 #用户-用户管理-实名认证
 admin_v2.user.approval_menu: 实名认证
 admin_v2.user.approval.basic_tab.cancel_btn: 撤销
