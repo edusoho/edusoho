@@ -8,6 +8,7 @@
     {% if setting('siteTrace.enabled')|default(false) %}
       {{ setting('siteTrace.script')|raw }}
     {% endif %}
+    <div><a href="{{ path('course_set_archive') }}">{{ '课程存档'|trans }}</a></div>
     <div>
       {% if setting('site.copyright') %}{{ '课程内容版权均归'|trans }}
       <a href="/">{{ setting('site.copyright') }}</a>{{ '所有'|trans }}
@@ -17,7 +18,6 @@
       {% endif %}
     </div>
 
-    <div><a href="{{ path('course_set_archive') }}">{{ '课程存档'|trans }}</a></div>
     <div class="text-gray" data-role="default-foot-bar" >
       {% if setting('site.recordCode') |default('') %}
         <div>
