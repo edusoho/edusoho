@@ -358,6 +358,10 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $this->getItemDao()->countItemQuestionNumByCategoryId($categoryId);
     }
 
+    public function countItemQuestionNotRichTextNumByCategoryId($categoryId, $answerMode) {
+        return $this->getItemDao()->countItemQuestionNotRichTextNumByCategoryId($categoryId, $answerMode);
+    }
+
     protected function createQuestions($itemId, $questions)
     {
         if (empty($questions)) {

@@ -21,6 +21,7 @@ use Biz\User\Service\TokenService;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Endroid\QrCode\QrCode;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -285,6 +286,14 @@ class ExerciseController extends BaseController
             $records = ArrayToolkit::index($records, 'itemCategoryId');
         }
 
+        $questionCounts = [];
+        $categoryIds = array_column($categoryTree, 'id');
+        foreach ($categoryTree as $category) {
+            $questionCounts[$category['id']]['doneNum'] = $this->getItemService()->countItemQuestionNotRichTextNumByCategoryId($category['id'], 'rich_text');
+        }
+
+//file_put_contents('/tmp/log',json_encode($questionCount), 8);
+
         return $this->render('item-bank-exercise/tabs/list/chapter-list.html.twig', [
             'exercise' => $exercise,
             'moduleId' => $moduleId,
@@ -292,6 +301,7 @@ class ExerciseController extends BaseController
             'records' => $records,
             'categoryTree' => $categoryTree,
             'previewAs' => $previewAs,
+            'questionCounts'=> $questionCounts,
         ]);
     }
 
@@ -535,5 +545,13 @@ class ExerciseController extends BaseController
     protected function getAssessmentExerciseRecordService()
     {
         return $this->createService('ItemBankExercise:AssessmentExerciseRecordService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
     }
 }
