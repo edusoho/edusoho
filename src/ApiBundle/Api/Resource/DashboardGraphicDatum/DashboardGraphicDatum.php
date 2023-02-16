@@ -18,23 +18,20 @@ class DashboardGraphicDatum extends AbstractResource
     public function search(ApiRequest $request)
     {
         $allMultiClasses = $this->getMultiClassService()->findAllMultiClass();
-        $multiClassData = $this->getMultiClassData();
-        $studyStudentData = $this->getStudyStudentData();
-
-        if(empty($allMultiClasses)) {
-            return compact(0, 0, ['totalLiveNum' => 0, 'overLiveNum' => 0], 0, 'multiClassData', 'studyStudentData');
-        }
-
         $totalNewStudentNum = $this->getTotalNewStudentNum($allMultiClasses);
         $totalFinishedStudentNum = $this->getTotalFinishedStudentNum($allMultiClasses);
         $todayLiveData = $this->getTodayLiveData($allMultiClasses);
         $timeoutReviewNum = $this->getTimeoutReviewNum($allMultiClasses);
-
+        $multiClassData = $this->getMultiClassData();
+        $studyStudentData = $this->getStudyStudentData();
         return compact('totalNewStudentNum', 'totalFinishedStudentNum', 'todayLiveData', 'timeoutReviewNum', 'multiClassData', 'studyStudentData');
     }
 
     protected function getTotalNewStudentNum($allMultiClasses)
     {
+        if(empty($allMultiClasses)) {
+            return 0;
+        }
         return $this->getCourseMemberService()->countMembers([
             'role' => 'student',
             'courseIds' => ArrayToolkit::column($allMultiClasses, 'courseId'),
@@ -45,6 +42,9 @@ class DashboardGraphicDatum extends AbstractResource
 
     protected function getTotalFinishedStudentNum($allMultiClasses)
     {
+        if(empty($allMultiClasses)) {
+            return 0;
+        }
         return $this->getCourseMemberService()->countMembers([
             'courseIds' => ArrayToolkit::column($allMultiClasses, 'courseId'),
             'finishedTime_GE' => strtotime('yesterday'),
@@ -54,6 +54,9 @@ class DashboardGraphicDatum extends AbstractResource
 
     protected function getTodayLiveData($allMultiClasses)
     {
+        if(empty($allMultiClasses)) {
+            return ['totalLiveNum' => 0, 'overLiveNum' => 0];
+        }
         $courses = $this->getCourseService()->searchWithJoinCourseSet(['ids' => ArrayToolkit::column($allMultiClasses, 'courseId'), 'courseSetStatus' => 'published'], [], 0, PHP_INT_MAX);
         $conditions = [
             'type' => 'live',
@@ -79,6 +82,9 @@ class DashboardGraphicDatum extends AbstractResource
 
     protected function getTimeoutReviewNum($allMultiClasses)
     {
+        if(empty($allMultiClasses)) {
+            return 0;
+        }
         $courseIds = ArrayToolkit::column($allMultiClasses, 'courseId');
         $activities = $this->getActivityService()->findActivitiesByCourseIdsAndTypes($courseIds, ['homework', 'testpaper'], true);
         $answerSceneIds = [];
