@@ -18,12 +18,17 @@ class DashboardGraphicDatum extends AbstractResource
     public function search(ApiRequest $request)
     {
         $allMultiClasses = $this->getMultiClassService()->findAllMultiClass();
+        $multiClassData = $this->getMultiClassData();
+        $studyStudentData = $this->getStudyStudentData();
+
+        if(empty($allMultiClasses)) {
+            return compact(0, 0, ['totalLiveNum' => 0, 'overLiveNum' => 0], 0, 'multiClassData', 'studyStudentData');
+        }
+
         $totalNewStudentNum = $this->getTotalNewStudentNum($allMultiClasses);
         $totalFinishedStudentNum = $this->getTotalFinishedStudentNum($allMultiClasses);
         $todayLiveData = $this->getTodayLiveData($allMultiClasses);
         $timeoutReviewNum = $this->getTimeoutReviewNum($allMultiClasses);
-        $multiClassData = $this->getMultiClassData();
-        $studyStudentData = $this->getStudyStudentData();
 
         return compact('totalNewStudentNum', 'totalFinishedStudentNum', 'todayLiveData', 'timeoutReviewNum', 'multiClassData', 'studyStudentData');
     }
