@@ -7621,6 +7621,10 @@ admin.edu_cloud.key_update.ask_apply_key: 还没有授权码?
 admin.edu_cloud.key_update.key_apply_btn: 申请授权码
 admin.edu_cloud.key_update.key_apply.submiting: 正在申请授权码，请稍等...
 
+#题库附件设置
+admin.question_bank.file.download.setting.enable.tips: APP/新版微网校暂不支持下载附件
+admin.question_bank.file.download.setting.disable.tips: 附件仅支持在线查看
+
 # 用户设置
 admin.user_auth.sign_up_settings: 注册设置
 admin.user_auth.user_sign_up_setting: 用户注册设置

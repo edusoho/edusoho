@@ -11002,3 +11002,6 @@ live_course.record_replay.select3: Only record courseware
 live_course.record_replay.btn: To Record
 live_course.record_replay.safair_tip: Safair may be blocked, please use another browser
 live_course.record_replay.show_btn: local recording
+
+admin.question_bank.file.download.setting.enable.tips: APP/New Micronet School does not support downloading attachments at the moment
+admin.question_bank.file.download.setting.disable.tips: Attachments can only be viewed online
