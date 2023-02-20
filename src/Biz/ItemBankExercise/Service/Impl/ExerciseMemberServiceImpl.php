@@ -174,7 +174,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                 $this->getLogService()->info(
                     'item_bank_exercise',
                     'exit_item_bank_exercise',
-                    "学员{$user['nickname']}(#{$user['id']})退出了班级《{$exercise['title']}》(#{$exercise['id']})"
+                    "学员{$user['nickname']}(#{$user['id']})退出了教学计划《{$exercise['title']}》(#{$exercise['id']})"
                 );
             } else {
                 $this->getLogService()->info(
