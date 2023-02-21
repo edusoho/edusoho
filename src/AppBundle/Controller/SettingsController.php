@@ -884,11 +884,6 @@ class SettingsController extends BaseController
                     'params' => [
                         'sitename' => $site['name'],
                         'siteurl' => $site['url'],
-//                        'verifyurl' => $this->generateUrl(
-//                            'auth_email_confirm',
-//                            ['token' => $token],
-//                            UrlGeneratorInterface::ABSOLUTE_URL
-//                        ),
                         'verifyurl' => $this->getHttpHost().'/auth/email/confirm?token='.$token,
                         'nickname' => $user['nickname'],
                     ],
@@ -926,11 +921,6 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
-//        $verifyurl = $this->generateUrl(
-//            'register_email_verify',
-//            ['token' => $token],
-//            UrlGeneratorInterface::ABSOLUTE_URL
-//        );
         $verifyurl = $this->getHttpHost().'/register/email/verify/token='.$token;
 
         $site = $this->setting('site', []);
