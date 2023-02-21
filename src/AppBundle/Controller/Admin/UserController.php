@@ -467,7 +467,7 @@ class UserController extends BaseController
                 'template' => 'email_reset_password',
                 'params' => [
                     'nickname' => $user['nickname'],
-                    'verifyurl' => $this->generateUrl('password_reset_update', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL),
+                    'verifyurl' => $this->getHttpHost().'/password/reset/update?token='.$token,
                     'sitename' => $site['name'],
                     'siteurl' => $site['url'],
                 ],
@@ -498,8 +498,8 @@ class UserController extends BaseController
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
 
         $site = $this->getSettingService()->get('site', []);
-        $verifyurl = $this->generateUrl('register_email_verify', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-
+//        $verifyurl = $this->generateUrl('register_email_verify', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+        $verifyurl = $this->getHttpHost().'/register/email/verify/token='.$token;
         try {
             $mailOptions = [
                 'to' => $user['email'],
