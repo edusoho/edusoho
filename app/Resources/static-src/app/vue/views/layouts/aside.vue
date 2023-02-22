@@ -23,7 +23,8 @@
           <a-icon theme="filled" type="question-circle" /><span class="icon-circle">{{headerTitle}}</span>
         </span>
       </a-popover>
-      <span class="aside-header-title-icon">{{titleTip}}</span>
+
+      <span class="aside-header-title-icon" v-if="titleTip">{{titleTip}}</span>
     </div>
 
     <div class="aside-layout-main">
