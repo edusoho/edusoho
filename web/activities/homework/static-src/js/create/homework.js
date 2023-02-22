@@ -51,6 +51,7 @@ export default class Homework {
       $('#homework-about-field').val(editor.getData());
     });
     editor.on('blur', () => {
+      $('#homework-about-field').val(editor.getData());
       validator.form();
     });
   }
