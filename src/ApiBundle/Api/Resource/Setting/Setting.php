@@ -21,7 +21,8 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification', 'openStudentInfo', 'course_purchase_agreement','auth'
+        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification', 'openStudentInfo', 'course_purchase_agreement','auth',
+        'question_bank_attachment_setting', 'cloud_attachment',
     ];
 
     public static function convertUnderline($str)
@@ -52,7 +53,6 @@ class Setting extends AbstractResource
     {
         $result = [];
         $types = $request->query->get('types', '');
-//        var_dump($types);die;
         foreach ($types as $type) {
             $this->checkType($type);
         }
@@ -64,12 +64,27 @@ class Setting extends AbstractResource
         return $result;
     }
 
+    public function getQuestionBankAttachmentSetting()
+    {
+        $questionBankAttachmentSetting = $this->getSettingService()->get('question_bank_attachment_setting', []);
+        return $questionBankAttachmentSetting;
+    }
+
+    public function getCloudAttachment()
+    {
+        $cloudAttachmentSetting = $this->getSettingService()->get('cloud_attachment', []);
+        return $cloudAttachmentSetting;
+    }
+
     public function getAuth()
     {
         $authSetting = $this->getSettingService()->get('auth', []);
 
         return [
             'register_mode' => empty($authSetting['register_mode']) ? 'mobile' : $authSetting['register_mode'],
+            'fill_userinfo_after_login' => empty($authSetting['fill_userinfo_after_login']) ? 0 : $authSetting['fill_userinfo_after_login'],
+            'registerSort' => empty($authSetting['registerSort']) ? [] : $authSetting['registerSort'],
+            'mobileSmsValidate' => empty($authSetting['mobileSmsValidate']) ? 0 : $authSetting['mobileSmsValidate'],
         ];
     }
 
