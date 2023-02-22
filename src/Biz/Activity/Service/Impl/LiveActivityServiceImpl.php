@@ -190,6 +190,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return [$liveActivity, $fields];
     }
 
+    public function updateLiveActivityLiveTime($id, $fields)
+    {
+        $this->getLiveActivityDao()->update($id, $fields);
+    }
+
     public function updateLiveStatus($id, $status)
     {
         $liveActivity = $this->getLiveActivityDao()->get($id);
