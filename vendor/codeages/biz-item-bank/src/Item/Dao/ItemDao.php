@@ -16,5 +16,5 @@ interface ItemDao extends AdvancedDaoInterface
 
     public function countItemQuestionNumByCategoryId($categoryId);
 
-    public function countItemQuestionNotRichTextNumByCategoryId($categoryId, $answerMode);
+    public function countItemQuestionNumByCategoryIdAndAnswerMode($categoryId, $answerMode);
 }

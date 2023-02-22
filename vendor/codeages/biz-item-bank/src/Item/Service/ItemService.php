@@ -46,5 +46,5 @@ interface ItemService
 
     public function countQuestionsByCategoryId($categoryId);
 
-    public function countItemQuestionNotRichTextNumByCategoryId($categoryId, $answerMode);
+    public function countItemQuestionNumByCategoryIdAndAnswerMode($categoryId, $answerMode);
 }
