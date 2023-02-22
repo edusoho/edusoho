@@ -228,7 +228,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             }
 
             $fields['endTime'] = $activity['endTime'];
-            $this->getLiveActivityDao()->update($activity['mediaId'], ['liveStartTime'=>$fields['startTime'], 'liveEndTime' => $fields['endTime']]);
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
             $task = array_merge($fields, $task);
