@@ -47,13 +47,14 @@ class LiveEventSubscriber extends EventSubscriber
     public function onCourseTaskUpdate(Event $event)
     {
         $task = $event->getSubject();
-        if($task['type'] == 'live') {
-            $activity = $this->getActivityService()->getActivity($task['activityId']);
-            if(empty($activity) || empty($activity['mediaId'])) {
-                return;
-            }
-            $this->getLiveActivityService()->updateLiveActivityLiveTime($activity['mediaId'], ['liveStartTime'=> $activity['startTime'], 'liveEndTime' => $activity['endTime']]);
+        if($task['type'] != 'live') {
+           return;
         }
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        if(empty($activity) || empty($activity['mediaId'])) {
+            return;
+        }
+        $this->getLiveActivityService()->updateLiveActivityLiveTime($activity['mediaId'], ['liveStartTime'=> $activity['startTime'], 'liveEndTime' => $activity['endTime']]);
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace Biz\Task\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
@@ -20,7 +19,6 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\TaskException;
-use Biz\Util\EdusohoLiveClient;
 use Biz\Visualization\Service\ActivityLearnDataService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -1642,13 +1640,5 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getCourseChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');
-    }
-
-    /**
-     * @return ActivityDao
-     */
-    protected function getActivityDao()
-    {
-        return $this->biz->dao('Activity:ActivityDao');
     }
 }
