@@ -921,7 +921,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
-        $verifyurl = $this->getHttpHost().'/register/email/verify/token='.$token;
+        $verifyurl = $this->getHttpHost().'/register/email/verify/'.$token;
 
         $site = $this->setting('site', []);
         try {
