@@ -1427,14 +1427,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     }
 
     /**
-     * @return LiveActivityDao
-     */
-    protected function getLiveActivityDao()
-    {
-        return $this->createDao('Activity:LiveActivityDao');
-    }
-
-    /**
      * @return CourseService
      */
     protected function getCourseService()
@@ -1640,5 +1632,13 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getCourseChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');
+    }
+
+    /**
+     * @return ActivityDao
+     */
+    protected function getActivityDao()
+    {
+        return $this->biz->dao('Activity:ActivityDao');
     }
 }
