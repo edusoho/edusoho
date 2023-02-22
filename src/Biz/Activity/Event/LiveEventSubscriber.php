@@ -2,7 +2,6 @@
 
 namespace Biz\Activity\Event;
 
-use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\Live\Service\LiveService;
@@ -47,14 +46,14 @@ class LiveEventSubscriber extends EventSubscriber
     public function onCourseTaskUpdate(Event $event)
     {
         $task = $event->getSubject();
-        if($task['type'] != 'live') {
-           return;
-        }
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
-        if(empty($activity) || empty($activity['mediaId'])) {
+        if ('live' != $task['type']) {
             return;
         }
-        $this->getLiveActivityService()->updateLiveActivityLiveTime($activity['mediaId'], ['liveStartTime'=> $activity['startTime'], 'liveEndTime' => $activity['endTime']]);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        if (empty($activity) || empty($activity['mediaId'])) {
+            return;
+        }
+        $this->getLiveActivityService()->updateLiveActivityLiveTime($activity['mediaId'], ['liveStartTime' => $activity['startTime'], 'liveEndTime' => $activity['endTime']]);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Biz\Task\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
@@ -1388,6 +1389,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         $output[] = '<info>结束</info>';
+
         return $output;
     }
 
