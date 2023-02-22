@@ -3,7 +3,6 @@
 namespace Biz\Task\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
