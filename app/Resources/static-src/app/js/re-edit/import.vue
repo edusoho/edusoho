@@ -103,7 +103,6 @@
         this.fileId = fileId;
       },
       downloadAttachment(fileId) {
-        console.log('111')
         this.fileId = fileId;
       },
       previewAttachmentCallback() {
@@ -130,7 +129,6 @@
       downloadAttachmentCallback() {
         let self = this;
         return new Promise(resolve => {
-          console.log('222', this.fileId)
           $.ajax({
             url: $('[name=download-attachment-url]').val(),
             type: 'post',
