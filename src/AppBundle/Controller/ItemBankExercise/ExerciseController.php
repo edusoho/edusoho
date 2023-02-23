@@ -286,11 +286,6 @@ class ExerciseController extends BaseController
             $records = ArrayToolkit::index($records, 'itemCategoryId');
         }
 
-        $questionCounts = [];
-        foreach ($categoryTree as $category) {
-            $questionCounts[$category['id']]['doneNum'] = $this->getItemService()->countItemQuestionNumByCategoryIdAndAnswerMode($category['id'], 'rich_text');
-        }
-
         return $this->render('item-bank-exercise/tabs/list/chapter-list.html.twig', [
             'exercise' => $exercise,
             'moduleId' => $moduleId,
@@ -298,7 +293,6 @@ class ExerciseController extends BaseController
             'records' => $records,
             'categoryTree' => $categoryTree,
             'previewAs' => $previewAs,
-            'questionCounts'=> $questionCounts,
         ]);
     }
 

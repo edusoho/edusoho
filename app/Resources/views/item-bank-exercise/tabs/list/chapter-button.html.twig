@@ -1,11 +1,7 @@
 {% if member|default(null) and previewAs|default(null) == 'member' %}
     {% if record %}
       <div class="col-xs-4 col-md-2 content-right" style="color:#999">
-        {% if record.status == 'reviewing' %}
-        <span>{{ questionCount.doneNum }}/{{ 'course.testpaper_manage.count'|trans({'%itemCount%': record.questionNum}) }}</span>
-        {% else %}
           <span>{{ record.doneQuestionNum }}/{{ 'course.testpaper_manage.count'|trans({'%itemCount%': record.questionNum}) }}</span>
-        {% endif %}
       </div>
       <div class="col-xs-2 content-left hidden-xs" style="color:#999">
         <span>{{ 'item_bank_exercise.accuracy'|trans }}{{ record.rightRate }}%</span>
