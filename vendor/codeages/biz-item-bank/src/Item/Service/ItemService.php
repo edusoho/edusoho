@@ -45,6 +45,4 @@ interface ItemService
     public function countQuestionsByBankId($bankId);
 
     public function countQuestionsByCategoryId($categoryId);
-
-    public function countItemQuestionNumByCategoryIdAndAnswerMode($categoryId, $answerMode);
 }
