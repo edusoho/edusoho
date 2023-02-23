@@ -1,6 +1,7 @@
 <template>
-    <div id="app" class="ibs-vue">
+    <div id="app" class="ibs-vue question-import">
         <item-import
+            :isDownload="false"
             :subject="subject"
             :showCKEditorData="showCKEditorData"
             :bank_id="bank_id"
