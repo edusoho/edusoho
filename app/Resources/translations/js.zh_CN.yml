@@ -744,6 +744,7 @@ validate.course_title.message: 不支持输入<、>字符
 validate.float_input.message: 请输入正确的小数,只保留到两位小数
 validate.open_live_course_title.message: 不支持输入<、>、\"、&、‘、’、”、“字符
 validate.currency.message: 请输入有效天数，最多两位小数，整数位不超过8位！
+validate.max_effective_time.message: 最多支持8位正整数！
 validate.positive_currency.message: 请输入大于0的有效价格，最多两位小数，整数位不超过8位！
 validate.max_year.message: 有效期最大值不能超过99,999天
 validate.before_date.message: 开始日期应早于结束日期
