@@ -132,9 +132,6 @@ export default class Homework {
           trim: true,
           course_title: true,
         },
-        description: {
-          required: true
-        },
         content: 'required',
         'questionLength': {
           required: true
