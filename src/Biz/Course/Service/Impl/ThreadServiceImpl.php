@@ -446,6 +446,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
         $post['content'] = $this->filter_Emoji($post['content']);
+
+        //if user can manage course, we trusted rich editor content
+        $hasCourseManagerRole = $this->getCourseService()->hasCourseManagerRole($post['courseId']);
+        $trusted = empty($hasCourseManagerRole) ? false : true;
+        //创建post过滤html
+        $post['content'] = $this->biz['html_helper']->purify($post['content'], $trusted);
+
         $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($post['content'], 'course-thread-post-create');
         $post['content'] = $sensitiveResult['content'];
 
@@ -454,12 +461,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post['userId'] = $this->getCurrentUser()->id;
         $post['isElite'] = $this->getMemberService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;
         $post['createdTime'] = time();
-
-        //if user can manage course, we trusted rich editor content
-        $hasCourseManagerRole = $this->getCourseService()->hasCourseManagerRole($post['courseId']);
-        $trusted = empty($hasCourseManagerRole) ? false : true;
-        //创建post过滤html
-        $post['content'] = $this->biz['html_helper']->purify($post['content'], $trusted);
 
         $post = $this->getThreadPostDao()->create($post);
 

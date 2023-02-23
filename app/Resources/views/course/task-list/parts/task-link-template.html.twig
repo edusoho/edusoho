@@ -19,7 +19,7 @@
          data-notify-message="{{ 'course.task.notify_message.join_and_buy'|trans }}"
          style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
     {% else %}
-      <a hide-if="{isTaskShowModal}"  class="title" href="#modal" data-toggle="modal"
+      <a hide-if="{isTaskShowModal}" class="title" href="#login-modal" data-toggle="modal"
          data-url="{{ path('login_ajax') }}"
          style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
     {% endif %}
