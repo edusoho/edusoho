@@ -42,7 +42,7 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
 
     public function countItemQuestionNumByCategoryIdAndAnswerMode($categoryId, $answerMode)
     {
-        $sql = "SELECT count(*) FROM {$this->table} i INNER JOIN `biz_question` q ON i.id = q.item_id WHERE i.category_id = ? and q.answer_mode != ?;";
+        $sql = "SELECT count(*) FROM {$this->table} i INNER JOIN `biz_question` q ON i.id = q.item_id INNER JOIN `biz_answer_question_report` r ON i.id = r.item_id WHERE i.category_id = ? and q.answer_mode != ? and r.status != 'no_answer' ;";
         return $this->db()->fetchColumn($sql, [$categoryId,$answerMode]);
     }
 
