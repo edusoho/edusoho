@@ -9,12 +9,14 @@
                 <div v-if="isFixed" class="fixed">
                     <div class="cd-container clearfix">
                         <ul class="info-left__nav pull-left">
-                            <li :class="howActive == 1 ? 'active' : ''"><a href="javascript:;" @click="clickType(1)">{{ 'goods.show_page.tab.intro'|trans }}</a>
+                            <li :class="howActive == 1 ? 'active' : ''"><a href="#info-left-1">{{ 'goods.show_page.tab.intro'|trans }}</a>
                             </li>
-                            <li :class="howActive == 2 ? 'active' : ''"><a href="javascript:;" @click="clickType(2)">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
+                            <li :class="howActive == 2 ? 'active' : ''"><a href="#info-left-2">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
                             </li>
                             <li v-if="ugcReviewSetting.enable_review == 1
-                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" :class="howActive == 3 ? 'active' : ''"><a href="javascript:;" @click="clickType(3)">{{ 'goods.show_page.tab.reviews'|trans }}</a>
+                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" 
+                                 :class="howActive == 3 ? 'active' : ''">
+                                <a href="#info-left-3">{{ 'goods.show_page.tab.reviews'|trans }}</a>
                             </li>
                         </ul>
                         <div class="buy__btn pull-right">
@@ -25,14 +27,14 @@
 
                 <ul class="info-left__nav" ref="infoLeftNav">
                     <li :class="howActive == 1 ? 'active' : ''">
-                        <a href="javascript:;" @click="clickType(1)">{{ 'goods.show_page.tab.intro'|trans }}</a>
+                        <a href="#info-left-1">{{ 'goods.show_page.tab.intro'|trans }}</a>
                     </li>
                     <li :class="howActive == 2 ? 'active' : ''">
-                        <a href="javascript:;" @click="clickType(2)">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
+                        <a href="#info-left-2">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
                     </li>
                     <li v-if="ugcReviewSetting.enable_review == 1
                                  && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" :class="howActive == 3 ? 'active' : ''">
-                        <a href="javascript:;" @click="clickType(3)">{{ 'goods.show_page.tab.reviews'|trans }}</a>
+                        <a href="#info-left-3">{{ 'goods.show_page.tab.reviews'|trans }}</a>
                     </li>
                 </ul>
 
