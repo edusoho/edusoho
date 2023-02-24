@@ -147,6 +147,7 @@ class TestpaperWrapper
                 'analysis' => $item['analysis'],
                 'parentId' => '0',
                 'subs' => [],
+                'attachments' => $item['attachments'],
             ];
             foreach ($item['questions'] as $itemQuestion) {
                 if (1 != $itemQuestion['isDelete']) {
@@ -177,6 +178,7 @@ class TestpaperWrapper
             'analysis' => $itemQuestion['analysis'],
             'parentId' => '0',
             'testResult' => [],
+            'attachments' => $itemQuestion['attachments'],
         ];
 
         $question['answer'] = $this->convertAnswer($itemQuestion['answer'], $question);
