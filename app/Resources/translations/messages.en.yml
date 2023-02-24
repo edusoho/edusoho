@@ -11003,5 +11003,5 @@ live_course.record_replay.btn: To Record
 live_course.record_replay.safair_tip: Safair may be blocked, please use another browser
 live_course.record_replay.show_btn: local recording
 
-admin.question_bank.file.download.setting.enable.tips: APP/New Micronet School does not support downloading attachments at the moment
-admin.question_bank.file.download.setting.disable.tips: Attachments can only be viewed online
+admin.question_bank.file.download.setting.enable.tips: The mobile terminal does not provide the function of downloading question bank attachments, which is not affected by settings
+admin.question_bank.file.download.setting.disable.tips: Compressed files can only be viewed after downloading, and when closed, learners will not be able to view compressed attachments
