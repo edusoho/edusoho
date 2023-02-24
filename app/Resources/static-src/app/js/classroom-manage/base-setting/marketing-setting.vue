@@ -251,7 +251,7 @@
                             trigger: 'blur'
                         },
                         {
-                            validator: validation.positive_price,
+                            validator: validation.currency,
                             trigger: 'blur'
                         },
                     ],
