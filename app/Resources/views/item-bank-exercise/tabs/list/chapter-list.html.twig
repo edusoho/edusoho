@@ -7,7 +7,7 @@
       {% if questionCounts|default(null) %}{% set questionCount = questionCounts[item.id]|default(null)  %}{% endif %}
       <div class="row">
         {% if item.depth == 3 %}
-          {% include 'item-bank-exercise/tabs/list/chapter-lesson.html.twig' with {previewAs:previewAs,exercise: exercise, lesson: item, record: record, questionCount: questionCount} %}
+          {% include 'item-bank-exercise/tabs/list/chapter-lesson.html.twig' with {previewAs:previewAs,exercise: exercise, lesson: item, record: record} %}
         {% else %}
           {% include 'item-bank-exercise/tabs/list/chapter-item.html.twig' with {previewAs:previewAs,chapter:item, exercise:exercise, record: record} %}
         {% endif %}
