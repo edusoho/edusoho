@@ -1158,17 +1158,31 @@ class UserServiceImpl extends BaseService implements UserService
             'selectField4' => '',
             'selectField5' => '',
         ]);
-
         if (empty($fields)) {
             return $this->getProfileDao()->get($id);
         }
-
         if (isset($fields['title'])) {
+            $fields['title'] = $this->pregReplace($fields['title']);
             $this->getUserDao()->update($id, ['title' => $fields['title']]);
             $this->dispatchEvent('user.update', new Event(['user' => $user, 'fields' => $fields]));
         }
 
         unset($fields['title']);
+        if (!empty($fields['truename'])) {
+            $fields['truename'] = $this->pregReplace($fields['truename']);
+        }
+
+        if (!empty($fields['company'])) {
+            $fields['company'] = $this->pregReplace($fields['company']);
+        }
+
+        if (!empty($fields['signature'])) {
+            $fields['signature'] =$this->pregReplace($fields['signature']);
+        }
+
+        if (!empty($fields['job'])) {
+            $fields['job'] = $this->pregReplace($fields['job']);
+        }
 
         if (!empty($fields['gender']) && !in_array($fields['gender'], ['male', 'female', 'secret'])) {
             $this->createNewException(UserException::GENDER_INVALID());
@@ -1203,8 +1217,8 @@ class UserServiceImpl extends BaseService implements UserService
         if (!empty($fields['blog']) && !SimpleValidator::site($fields['blog'])) {
             $this->createNewException(UserException::BLOG_INVALID());
         }
-
         $fields = $this->filterCustomField($fields);
+        $fields = $this->filterField($fields);
         $fields['isWeiboPublic'] = empty($fields['isWeiboPublic']) ? 0 : 1;
         $fields['isWeixinPublic'] = empty($fields['isWeixinPublic']) ? 0 : 1;
         $fields['isQQPublic'] = empty($fields['isQQPublic']) ? 0 : 1;
@@ -2526,6 +2540,25 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         return $fields;
+    }
+
+    protected function filterField($fields)
+    {
+        $textAndVarcharFields = ['textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10',
+            'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9', 'varcharField10'];
+        foreach ($textAndVarcharFields as $field) {
+            if (!empty($fields[$field])) {
+                $fields[$field] = $this->pregReplace($fields[$field]);
+
+            }
+        }
+
+        return $fields;
+    }
+
+    protected function pregReplace($field)
+    {
+        return preg_replace("/[@=+-?]+/","", $field);
     }
 
     protected function _prepareApprovalConditions($conditions)
