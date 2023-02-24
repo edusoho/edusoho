@@ -8,9 +8,11 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Favorite\Service\FavoriteService;
+use Biz\Goods\GoodsException;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
 use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -28,6 +30,9 @@ class Good extends AbstractResource
     public function get(ApiRequest $request, $id)
     {
         $goods = $this->getGoodsService()->getGoods($id);
+        if (empty($goods)){
+            throw GoodsException::GOODS_NOT_FOUND();
+        }
         $this->getOCUtil()->single($goods, ['creator']);
 
         $goods['product'] = $this->getProduct($goods);
