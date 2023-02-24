@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Favorite\Service\FavoriteService;
+use Biz\Goods\GoodsException;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
 use Biz\System\Service\SettingService;
@@ -30,7 +31,7 @@ class Good extends AbstractResource
     {
         $goods = $this->getGoodsService()->getGoods($id);
         if (empty($goods)){
-            throw new NotFoundException('goods not found!');
+            throw GoodsException::GOODS_NOT_FOUND();
         }
         $this->getOCUtil()->single($goods, ['creator']);
 
