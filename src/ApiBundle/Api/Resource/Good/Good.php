@@ -11,6 +11,7 @@ use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
 use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -28,6 +29,10 @@ class Good extends AbstractResource
     public function get(ApiRequest $request, $id)
     {
         $goods = $this->getGoodsService()->getGoods($id);
+        file_put_contents('/tmp/log',$goods,8);
+        if (empty($goods)){
+            throw new NotFoundException('goods not found!');
+        }
         $this->getOCUtil()->single($goods, ['creator']);
 
         $goods['product'] = $this->getProduct($goods);
