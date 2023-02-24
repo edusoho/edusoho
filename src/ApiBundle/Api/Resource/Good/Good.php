@@ -29,7 +29,6 @@ class Good extends AbstractResource
     public function get(ApiRequest $request, $id)
     {
         $goods = $this->getGoodsService()->getGoods($id);
-        file_put_contents('/tmp/log',$goods,8);
         if (empty($goods)){
             throw new NotFoundException('goods not found!');
         }
