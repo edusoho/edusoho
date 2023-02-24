@@ -676,6 +676,7 @@ t.add("validate.course_title.message", "Do not support typing <,> characters", "
 t.add("validate.float_input.message", "Please enter the correct decimals, leaving only TWO decimal places.", "js", "en");
 t.add("validate.open_live_course_title.message", "Do not support typing <,>, \\ \", &, ',',\", \"characters", "js", "en");
 t.add("validate.currency.message", "Please enter a valid price, up to two decimal places, no more than 8 digits!", "js", "en");
+t.add("validate.max_effective_time.message", "Supports up to 8 bits integers\uff01", "js", "en");
 t.add("validate.positive_currency.message", "Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!", "js", "en");
 t.add("validate.max_year.message", "The maximum validity period can not exceed 99,999 days", "js", "en");
 t.add("validate.before_date.message", "The start date should be earlier than the end date", "js", "en");
