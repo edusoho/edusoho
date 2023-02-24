@@ -100,7 +100,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($id);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -411,7 +411,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -488,7 +488,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -535,7 +535,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -753,7 +753,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($id);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -770,6 +770,7 @@ class UserServiceImpl extends BaseService implements UserService
         $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
         $this->dispatchEvent('user.change_password', new Event($updatePass));
+
         return true;
     }
 
@@ -783,7 +784,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -821,7 +822,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -856,7 +857,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($id);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -870,7 +871,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($id);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1090,7 +1091,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($id);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1177,7 +1178,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!empty($fields['signature'])) {
-            $fields['signature'] =$this->pregReplace($fields['signature']);
+            $fields['signature'] = $this->pregReplace($fields['signature']);
         }
 
         if (!empty($fields['job'])) {
@@ -1245,7 +1246,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($id);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1278,7 +1279,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function makeToken($type, $userId = null, $expiredTime = null, $data = '', $args = [])
     {
-        if($type == 'mobile_login') {
+        if ('mobile_login' == $type) {
             $expiredTime = time() + TimeMachine::ONE_MONTH * 6;
         }
         $token = [];
@@ -1303,8 +1304,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $userToken = $this->getUserTokenDao()->getByToken($refreshToken);
 
-        if ($userToken['expiredTime'] < time())
-        {
+        if ($userToken['expiredTime'] < time()) {
             return [];
         }
         $userToken = $this->getUserTokenDao()->getByToken($token);
@@ -1358,7 +1358,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserDao()->getByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1380,7 +1380,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserDao()->getByUUID($toId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1433,7 +1433,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserDao()->getByUUID($toId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1453,7 +1453,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserDao()->getByUUID($toId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1469,7 +1469,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserDao()->getByUUID($toId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1618,7 +1618,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($id);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1641,7 +1641,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($id);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1659,7 +1659,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($id);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1726,7 +1726,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($id);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1743,7 +1743,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($id);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1852,14 +1852,14 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($fromUser)) {
             $fromUser = $this->getUserByUUID($fromId);
-            if(empty($fromUser)) {
+            if (empty($fromUser)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
 
         if (empty($toUser)) {
             $toUser = $this->getUserByUUID($toId);
-            if(empty($toUser)) {
+            if (empty($toUser)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1906,14 +1906,14 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($fromUser)) {
             $fromUser = $this->getUserByUUID($fromId);
-            if(empty($fromUser)) {
+            if (empty($fromUser)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
 
         if (empty($toUser)) {
             $toUser = $this->getUserByUUID($toId);
-            if(empty($toUser)) {
+            if (empty($toUser)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1962,14 +1962,14 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($fromUser)) {
             $fromUser = $this->getUserByUUID($fromId);
-            if(empty($fromUser)) {
+            if (empty($fromUser)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
 
         if (empty($toUser)) {
             $toUser = $this->getUserByUUID($toId);
-            if(empty($toUser)) {
+            if (empty($toUser)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1999,7 +1999,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -2031,7 +2031,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -2079,7 +2079,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserDao()->getByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -2122,7 +2122,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserByUUID($id);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -2453,7 +2453,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserDao()->getByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -2471,33 +2471,34 @@ class UserServiceImpl extends BaseService implements UserService
         return intval($enable);
     }
 
-
-    public function syncBindUser($fromId) {
-
+    public function syncBindUser($fromId)
+    {
         $userBind = $this->getUserBindDao()->getByFromId($fromId);
 
-        if($userBind) {
+        if ($userBind) {
             $user = $this->getUserDao()->get($userBind['toId']);
+
             return [
                 'isExist' => '1',
-                'user' => $user
+                'user' => $user,
             ];
         }
 
         $this->getUserBindDao()->create([
             'type' => 'weixin',
             'fromId' => $fromId,
-            'toId' => "0",
+            'toId' => '0',
             'createdTime' => time(),
         ]);
+
         return [
             'isExist' => '0',
-            'user' => ''
+            'user' => '',
         ];
     }
 
-    public function UserBindUpdate($openId, $userId) {
-
+    public function UserBindUpdate($openId, $userId)
+    {
         $this->getUserBindDao()->UserBindUpdate($openId, $userId);
     }
 
@@ -2507,7 +2508,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($user)) {
             $user = $this->getUserDao()->getByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -2545,11 +2546,10 @@ class UserServiceImpl extends BaseService implements UserService
     protected function filterField($fields)
     {
         $textAndVarcharFields = ['textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10',
-            'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9', 'varcharField10'];
+            'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9', 'varcharField10', ];
         foreach ($textAndVarcharFields as $field) {
             if (!empty($fields[$field])) {
                 $fields[$field] = $this->pregReplace($fields[$field]);
-
             }
         }
 
@@ -2558,7 +2558,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     protected function pregReplace($field)
     {
-        return preg_replace("/[@=+-?]+/","", $field);
+        return preg_replace('/[@=+-?]+/', '', $field);
     }
 
     protected function _prepareApprovalConditions($conditions)
