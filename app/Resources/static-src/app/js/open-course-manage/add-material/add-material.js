@@ -94,6 +94,7 @@ export default class AddMaterial {
     }
 
     $('.js-current-file').text($verifyLink.val());
+    $materials.submit();
   }
 
   initFileChooser() {
