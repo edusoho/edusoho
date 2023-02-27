@@ -255,7 +255,13 @@
                             trigger: 'blur'
                         },
                     ],
-                    expiryValue: []
+                    expiryValue: [
+                      {
+                        required: true,
+                        message: Translator.trans('classroom.manage.expiry_mode_days_error_hint'),
+                        trigger: 'blur',
+                      }
+                    ]
                 },
                 today: Date.now(),
                 dateOptions: {
