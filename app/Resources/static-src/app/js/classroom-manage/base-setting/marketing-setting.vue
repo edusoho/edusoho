@@ -123,6 +123,7 @@
 
 <script>
     import * as validation from 'common/element-validation';
+    import {positive_price} from '../../../../common/element-validation';
 
     export default {
         name: "marketing-info",
@@ -254,13 +255,7 @@
                             trigger: 'blur'
                         },
                     ],
-                    expiryValue: [
-                      {
-                        required: true,
-                        message: Translator.trans('classroom.manage.expiry_mode_days_error_hint'),
-                        trigger: 'blur',
-                      }
-                    ]
+                    expiryValue: []
                 },
                 today: Date.now(),
                 dateOptions: {
