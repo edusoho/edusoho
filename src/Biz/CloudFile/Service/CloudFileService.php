@@ -6,6 +6,8 @@ interface CloudFileService extends FilePlayerInterface
 {
     public function search($conditions, $start, $limit);
 
+    public function count($conditions);
+
     public function getByGlobalId($globalId);
 
     public function getByGlobalIdFromItemAttachment($globalId);
