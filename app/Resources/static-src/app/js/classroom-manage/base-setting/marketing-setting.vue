@@ -260,6 +260,11 @@
                         required: true,
                         message: Translator.trans('classroom.manage.expiry_mode_days_error_hint'),
                         trigger: 'blur',
+                      },
+                      {
+                        pattern: /(^[1-9][0-9]{0,7}$)/,
+                        message: Translator.trans('validate.max_effective_time.message'),
+                        trigger: 'blur',
                       }
                     ]
                 },
