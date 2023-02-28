@@ -189,7 +189,7 @@ export default {
 
   .tag-vip {
     position: absolute;
-    right: -1px;
+    left: -1px;
     top: -1px;
     padding: 2px 8px;
     color: #fff;
