@@ -2558,7 +2558,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     protected function pregReplace($field)
     {
-        return preg_replace('/^=/', '', $field);
+        return preg_replace('/^=*/', '', $field);
     }
 
     protected function _prepareApprovalConditions($conditions)
