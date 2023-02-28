@@ -84,7 +84,11 @@ class Trade extends AbstractResource
                 $trade = $this->getPayService()->notifyPaid('coin', ['trade_sn' => $trade['trade_sn']]);
             }
         } catch (PayGatewayException $e) {
-            throw new BadRequestHttpException($e->getMessage(), $e, ErrorCode::BAD_REQUEST);
+            $message = $e->getMessage();
+            if($message == '此商家的收款功能已被限制，暂无法支付。商家可以登录微信商户平台/微信支付商家助手小程序查看原因和解决方案。') {
+                $message = '机构支付功能被限制，请联系机构处理';
+            }
+            throw new BadRequestHttpException($message, $e, ErrorCode::BAD_REQUEST);
         } catch (OrderPayCheckException $payCheckException) {
             throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
         }

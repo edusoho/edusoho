@@ -1389,6 +1389,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         $output[] = '<info>结束</info>';
+
         return $output;
     }
 

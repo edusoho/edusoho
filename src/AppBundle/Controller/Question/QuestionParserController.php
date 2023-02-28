@@ -116,8 +116,6 @@ class QuestionParserController extends BaseController
             },
             $text
         );
-        $pattern = "/】[!@#$%^&*:：,`~<>?]+/";
-        $text = preg_replace($pattern,"】",$text);
 
         return $this->getItemService()->parseItems($text);
     }

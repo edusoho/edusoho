@@ -21,6 +21,7 @@ use Biz\User\Service\TokenService;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Endroid\QrCode\QrCode;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -535,5 +536,13 @@ class ExerciseController extends BaseController
     protected function getAssessmentExerciseRecordService()
     {
         return $this->createService('ItemBankExercise:AssessmentExerciseRecordService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
     }
 }
