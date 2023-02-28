@@ -820,7 +820,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user)) {
-            $user = $this->getUserByUUID($userId);
+            $user = $this->getUserByUUID($id);
             if(empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
