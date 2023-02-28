@@ -1,8 +1,6 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\FillUserInfo;
-
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -14,23 +12,62 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class FillUserInfo extends AbstractResource
 {
+    const USER_INFO_FIELDS = [
+        'truename',
+        'mobile',
+        'qq',
+        'company',
+        'weixin',
+        'weibo',
+        'idcard',
+        'gender',
+        'job',
+        'intField1', 'intField2', 'intField3', 'intField4', 'intField5',
+        'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5',
+        'dateField1', 'dateField2', 'dateField3', 'dateField4', 'dateField5',
+        'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField10', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9',
+        'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10',
+        'selectField1', 'selectField2', 'selectField3', 'selectField4', 'selectField5',
+    ];
+
     public function search(ApiRequest $request)
     {
         $auth = $this->getSettingService()->get('auth');
         $user = $this->getCurrentUser();
 
-        if ($auth['fill_userinfo_after_login'] && !isset($auth['registerSort'])) {
+        if ($auth['fill_userinfo_after_login'] && empty($auth['registerSort'])) {
             return ['result' => true, 'message' => ''];
         }
 
-        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-        $userFields = ArrayToolkit::index($userFields, 'fieldName');
         $userInfo = $this->getUserService()->getUserProfile($user['id']);
 
+        $extUserFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
+        $extUserFields = ArrayToolkit::index($extUserFields, 'fieldName');
+
+        $userFields = [];
+        foreach ($auth['registerSort'] ?? [] as $fieldName) {
+            if (!in_array($fieldName, self::USER_INFO_FIELDS)) {
+                $checkedField = [
+                'fieldName' => $fieldName,
+                // todo 敏感信息过滤
+                'value' => empty($userInfo[$fieldName]) ? '' : $userInfo[$fieldName],
+                'type' => $extUserFields[$fieldName]['type'] ?? $fieldName,
+            ];
+            }
+
+            if ('select' == $checkedField['type']) {
+                $checkedField['detail'] = json_decode($extUserFields[$fieldName]['detail'] ?? '');
+            }
+            if ('mobile' == $checkedField['type']) {
+                $checkedField['value'] = $userFields['verifiedMobile'] ?: '';
+                $checkedField['mobileSmsValidate'] = !empty($auth['mobileSmsValidate']);
+            }
+
+            $userFields[] = $checkedField;
+        }
+
         return [
-            'userFields' => $userFields,
-            'user' => $userInfo,
-            'showNavTip' => 0,
+            'userFields' => $userFields ?: (object) [],
         ];
     }
 
@@ -44,35 +81,19 @@ class FillUserInfo extends AbstractResource
             list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, 'sms_bind');
 
             if (!$result) {
-                return ['result' => true, 'message' => ''];
+                return ['result' => false, 'message' => $this->trans('register.userinfo_fill_tips')];
             }
         }
 
-        $userInfo = $this->saveUserInfo($request, $user);
+        $this->saveUserInfo($formData, $user);
 
         return ['result' => true, 'message' => ''];
     }
 
-    protected function saveUserInfo($request, $user)
+    protected function saveUserInfo($formData, $user)
     {
-        $formData = $request->request->all();
-        $userInfo = ArrayToolkit::parts($formData, [
-            'truename',
-            'mobile',
-            'qq',
-            'company',
-            'weixin',
-            'weibo',
-            'idcard',
-            'gender',
-            'job',
-            'intField1', 'intField2', 'intField3', 'intField4', 'intField5',
-            'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5',
-            'dateField1', 'dateField2', 'dateField3', 'dateField4', 'dateField5',
-            'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField10', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9',
-            'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10',
-            'selectField1', 'selectField2', 'selectField3', 'selectField4', 'selectField5',
-        ]);
+        // todo 仅更新必要字段
+        $userInfo = ArrayToolkit::parts($formData, self::USER_INFO_FIELDS);
 
         if (isset($formData['email']) && !empty($formData['email'])) {
             $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
@@ -84,15 +105,10 @@ class FillUserInfo extends AbstractResource
             $this->getUserService()->changeMobile($user['id'], $verifiedMobile);
         }
 
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($this->getUserService()->getUser($user['id']));
-        $this->switchUser($request, $currentUser);
-
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         return $userInfo;
     }
-
 
     /**
      * switch current user.
@@ -127,7 +143,6 @@ class FillUserInfo extends AbstractResource
     {
         return $this->service('User:UserService');
     }
-
 
     protected function getAuthService()
     {
