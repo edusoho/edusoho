@@ -962,7 +962,6 @@ if (token) {
 }
 
 const router = new Router({
-  mode: 'history',
   routes,
 });
 
