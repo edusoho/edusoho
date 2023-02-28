@@ -71,8 +71,10 @@
 				.carousel-img-mask {
 					position: absolute;
 					top: 0;
+					bottom: 0;
 					width: 100%;
 					color: transparent;
+					line-height: 120px;
 
 					@include transition();
 
