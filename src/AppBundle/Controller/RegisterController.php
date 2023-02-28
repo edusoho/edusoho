@@ -557,7 +557,7 @@ class RegisterController extends BaseController
     {
         try {
             $site = $this->getSettingService()->get('site', []);
-            $verifyurl = $this->generateUrl('register_email_verify', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+            $verifyurl = $this->getHttpHost().'/register/email/verify/'.$token;
             $mailOptions = [
                 'to' => $user['email'],
                 'template' => 'email_registration',

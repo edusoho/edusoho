@@ -620,6 +620,7 @@ t.add("validate.course_title.message", "\u4e0d\u652f\u6301\u8f93\u5165<\u3001>\u
 t.add("validate.float_input.message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u5c0f\u6570,\u53ea\u4fdd\u7559\u5230\u4e24\u4f4d\u5c0f\u6570", "js", "zh_CN");
 t.add("validate.open_live_course_title.message", "\u4e0d\u652f\u6301\u8f93\u5165<\u3001>\u3001\\\"\u3001&\u3001\u2018\u3001\u2019\u3001\u201d\u3001\u201c\u5b57\u7b26", "js", "zh_CN");
 t.add("validate.currency.message", "\u8bf7\u8f93\u5165\u6709\u6548\u4ef7\u683c\uff0c\u6700\u591a\u4e24\u4f4d\u5c0f\u6570\uff0c\u6574\u6570\u4f4d\u4e0d\u8d85\u8fc78\u4f4d\uff01", "js", "zh_CN");
+t.add("validate.max_effective_time.message", "\u6700\u591a\u652f\u63018\u4f4d\u6b63\u6574\u6570\uff01", "js", "zh_CN");
 t.add("validate.positive_currency.message", "\u8bf7\u8f93\u5165\u5927\u4e8e0\u7684\u6709\u6548\u4ef7\u683c\uff0c\u6700\u591a\u4e24\u4f4d\u5c0f\u6570\uff0c\u6574\u6570\u4f4d\u4e0d\u8d85\u8fc78\u4f4d\uff01", "js", "zh_CN");
 t.add("validate.max_year.message", "\u6709\u6548\u671f\u6700\u5927\u503c\u4e0d\u80fd\u8d85\u8fc799,999\u5929", "js", "zh_CN");
 t.add("validate.before_date.message", "\u5f00\u59cb\u65e5\u671f\u5e94\u65e9\u4e8e\u7ed3\u675f\u65e5\u671f", "js", "zh_CN");

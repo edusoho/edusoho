@@ -801,6 +801,7 @@ validate.course_title.message: Do not support typing <,> characters
 validate.float_input.message: Please enter the correct decimals, leaving only TWO decimal places.
 validate.open_live_course_title.message: Do not support typing <,>, \ ", &, ',',", "characters
 validate.currency.message: Please enter a valid price, up to two decimal places, no more than 8 digits!
+validate.max_effective_time.message: Supports up to 8 bits integers！
 validate.positive_currency.message: Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!
 validate.max_year.message: The maximum validity period can not exceed 99,999 days
 validate.before_date.message: The start date should be earlier than the end date
