@@ -6,9 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\SmsToolkit;
-use Biz\User\CurrentUser;
 use Biz\User\Service\UserFieldService;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class FillUserInfo extends AbstractResource
 {
@@ -34,6 +32,9 @@ class FillUserInfo extends AbstractResource
     {
         $auth = $this->getSettingService()->get('auth');
         $user = $this->getCurrentUser();
+        if ($user['roles'] != ['ROLE_USER']) {
+            return ['result' => true, 'message' => ''];
+        }
 
         if ($auth['fill_userinfo_after_login'] && empty($auth['registerSort'])) {
             return ['result' => true, 'message' => ''];
@@ -43,27 +44,37 @@ class FillUserInfo extends AbstractResource
 
         $extUserFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
         $extUserFields = ArrayToolkit::index($extUserFields, 'fieldName');
-
+        $isFullFill = true;
         $userFields = [];
         foreach ($auth['registerSort'] ?? [] as $fieldName) {
             if (!in_array($fieldName, self::USER_INFO_FIELDS)) {
-                $checkedField = [
+                continue;
+            }
+
+            $checkedField = [
                 'fieldName' => $fieldName,
                 // todo 敏感信息过滤
                 'value' => empty($userInfo[$fieldName]) ? '' : $userInfo[$fieldName],
                 'type' => $extUserFields[$fieldName]['type'] ?? $fieldName,
             ];
-            }
 
             if ('select' == $checkedField['type']) {
-                $checkedField['detail'] = json_decode($extUserFields[$fieldName]['detail'] ?? '');
+                $checkedField['detail'] = json_decode($extUserFields[$fieldName]['detail'] ?? '[]');
             }
             if ('mobile' == $checkedField['type']) {
                 $checkedField['value'] = $userFields['verifiedMobile'] ?: '';
-                $checkedField['mobileSmsValidate'] = !empty($auth['mobileSmsValidate']);
+                $checkedField['mobileSmsValidate'] = !empty($auth['mobileSmsValidate']) ? '1' : '0';
+            }
+
+            if (empty($checkedField['value'])) {
+                $isFullFill = false;
             }
 
             $userFields[] = $checkedField;
+        }
+
+        if ($isFullFill) {
+            return ['result' => true, 'message' => ''];
         }
 
         return [
@@ -108,24 +119,6 @@ class FillUserInfo extends AbstractResource
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         return $userInfo;
-    }
-
-    /**
-     * switch current user.
-     *
-     * @return CurrentUser
-     */
-    protected function switchUser($request, CurrentUser $user)
-    {
-        $user['currentIp'] = $request->getHttpRequest()->getClientIp();
-
-        $token = new UsernamePasswordToken($user, null, 'main', $user['roles']);
-        $this->container->get('security.token_storage')->setToken($token);
-
-        $biz = $this->getBiz();
-        $biz['user'] = $user;
-
-        return $user;
     }
 
     /**
