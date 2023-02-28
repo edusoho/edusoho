@@ -15,6 +15,18 @@ use Biz\User\Service\UserService;
 
 class CloudFileServiceImpl extends BaseService implements CloudFileService
 {
+    public function count($conditions)
+    {
+        if (empty($conditions['resType'])) {
+            $conditions['noTargetType'] = 'attachment';
+            $conditions = $this->filterConditions($conditions);
+        } else {
+            $conditions['targetType'] = $conditions['resType'];
+        }
+
+        return $this->getUploadFileService()->countCloudFilesFromLocal($conditions);
+    }
+
     public function search($conditions, $start, $limit)
     {
         if (empty($conditions['resType'])) {
@@ -188,9 +200,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     {
         $file = $this->getCloudFileImplementor()->getFileByGlobalId($globalId);
         $questionFile = empty($file['id']) ? $this->getByGlobalIdFromItemAttachment($globalId) : [];
-        if(!empty($questionFile)){
+        if (!empty($questionFile)) {
             $file['type'] = $questionFile['file_type'];
-            $file['convertStatus'] = "success";
+            $file['convertStatus'] = 'success';
             $file['globalId'] = $file['no'] = $questionFile['global_id'];
             $file['id'] = $questionFile['id'];
             $file['itemAttachement'] = 1;

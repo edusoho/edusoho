@@ -108,17 +108,18 @@ class CloudFileController extends BaseController
             unset($conditions['type']);
         }
 
-        $results = $this->getCloudFileService()->search(
-            $conditions,
-            ($request->query->get('page', 1) - 1) * 20,
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCloudFileService()->count($conditions),
             20
         );
 
-        $paginator = new Paginator(
-            $this->get('request'),
-            $results['count'],
-            20
+        $results = $this->getCloudFileService()->search(
+            $conditions,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
         );
+
         $pageType = (isset($conditions['resType']) && 'attachment' == $conditions['resType']) ? 'attachment' : 'file';
 
         return $this->render('admin-v2/teach/cloud-file/tbody.html.twig', [

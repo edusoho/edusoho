@@ -7,6 +7,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Common\CommonException;
 use Biz\Goods\Service\GoodsService;
 use Biz\User\Service\UserFieldService;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 
 class GoodsController extends BaseController

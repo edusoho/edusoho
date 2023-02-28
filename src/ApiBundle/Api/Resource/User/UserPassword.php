@@ -86,7 +86,7 @@ class UserPassword extends AbstractResource
                 'format' => 'html',
                 'params' => array(
                     'nickname' => $user['nickname'],
-                    'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL),
+                    'verifyurl' => $this->getHttpHost().'/password/reset/update?token='.$token,
                     'sitename' => $site['name'],
                     'siteurl' => $site['url'],
                 ),
@@ -102,6 +102,21 @@ class UserPassword extends AbstractResource
         $this->getLogService()->info('user', 'password-reset', "{$user['email']}向发送了找回密码邮件。");
 
         return $user;
+    }
+
+    protected function getHttpHost()
+    {
+        return $this->getSchema()."://{$_SERVER['HTTP_HOST']}";
+    }
+
+    protected function getSchema()
+    {
+        $https = empty($_SERVER['HTTPS']) ? '' : $_SERVER['HTTPS'];
+        if (!empty($https) && 'off' !== strtolower($https)) {
+            return 'https';
+        }
+
+        return 'http';
     }
 
     private function getBizSms()
