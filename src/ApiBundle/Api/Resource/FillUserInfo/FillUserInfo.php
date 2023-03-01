@@ -60,16 +60,20 @@ class FillUserInfo extends AbstractResource
                 'type' => $extUserFields[$fieldName]['type'] ?? $fieldName,
             ];
 
-            if(isset($extUserFields[$fieldName]['title'])) {
+            if (isset($extUserFields[$fieldName]['title'])) {
                 $checkedField['fieldName'] = $extUserFields[$fieldName]['title'] ?? $fieldName;
             }
 
-            if($extUserFields[$fieldName] == $fieldsType[$fieldName]) {
+            if ('idcard' == $checkedField['fieldName']) {
+                $checkedField['value'] = $this->blur_idcard_number($checkedField['value']);
+            }
+
+            if ($extUserFields[$fieldName] == $fieldsType[$fieldName]) {
                 $checkedField['type'] = 'varchar';
                 $checkedField['validate'] = $fieldName;
             }
 
-            if('gender' == $checkedField['fieldName']) {
+            if ('gender' == $checkedField['fieldName']) {
                 $checkedField['type'] = 'radio';
                 $checkedField['validate'] = 'gender';
             }
