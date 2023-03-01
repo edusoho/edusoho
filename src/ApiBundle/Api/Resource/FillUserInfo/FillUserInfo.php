@@ -64,10 +64,6 @@ class FillUserInfo extends AbstractResource
                 $checkedField['fieldName'] = $extUserFields[$fieldName]['title'] ?? $fieldName;
             }
 
-            if ('idcard' == $checkedField['fieldName']) {
-                $checkedField['value'] = $this->blur_idcard_number($checkedField['value']);
-            }
-
             if ($extUserFields[$fieldName] == $fieldsType[$fieldName]) {
                 $checkedField['type'] = 'varchar';
                 $checkedField['validate'] = $fieldName;
@@ -85,6 +81,10 @@ class FillUserInfo extends AbstractResource
             if ('mobile' == $checkedField['fieldName']) {
                 $checkedField['value'] = $this->blur_phone_number($userFields['verifiedMobile']) ?: '';
                 $checkedField['mobileSmsValidate'] = !empty($auth['mobileSmsValidate']) ? '1' : '0';
+            }
+
+            if ('idcard' == $checkedField['fieldName']) {
+                $checkedField['value'] = $this->blur_idcard_number($checkedField['value']);
             }
 
             if (empty($checkedField['value'])) {
