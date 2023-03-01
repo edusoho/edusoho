@@ -44,8 +44,10 @@ class FillUserInfo extends AbstractResource
 
         $extUserFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
         $extUserFields = ArrayToolkit::index($extUserFields, 'fieldName');
+
         $isFullFill = true;
         $userFields = [];
+        $fieldsType = ['truename', 'mobile', 'qq', 'company', 'weixin', 'weibo', 'idcard', 'job'];
         foreach ($auth['registerSort'] ?? [] as $fieldName) {
             if (!in_array($fieldName, self::USER_INFO_FIELDS)) {
                 continue;
@@ -58,12 +60,31 @@ class FillUserInfo extends AbstractResource
                 'type' => $extUserFields[$fieldName]['type'] ?? $fieldName,
             ];
 
+            if (isset($extUserFields[$fieldName]['title'])) {
+                $checkedField['fieldName'] = $extUserFields[$fieldName]['title'] ?? $fieldName;
+            }
+
+            if ($extUserFields[$fieldName] == $fieldsType[$fieldName]) {
+                $checkedField['type'] = 'varchar';
+                $checkedField['validate'] = $fieldName;
+            }
+
+            if ('gender' == $checkedField['fieldName']) {
+                $checkedField['type'] = 'radio';
+                $checkedField['validate'] = 'gender';
+            }
+
             if ('select' == $checkedField['type']) {
                 $checkedField['detail'] = json_decode($extUserFields[$fieldName]['detail'] ?? '[]');
             }
-            if ('mobile' == $checkedField['type']) {
-                $checkedField['value'] = $userFields['verifiedMobile'] ?: '';
+
+            if ('mobile' == $checkedField['fieldName']) {
+                $checkedField['value'] = $this->blur_phone_number($userFields['verifiedMobile']) ?: '';
                 $checkedField['mobileSmsValidate'] = !empty($auth['mobileSmsValidate']) ? '1' : '0';
+            }
+
+            if ('idcard' == $checkedField['fieldName']) {
+                $checkedField['value'] = $this->blur_idcard_number($checkedField['value']);
             }
 
             if (empty($checkedField['value'])) {
@@ -119,6 +140,22 @@ class FillUserInfo extends AbstractResource
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         return $userInfo;
+    }
+
+    public function blur_idcard_number($idcardNum)
+    {
+        $head = substr($idcardNum, 0, 4);
+        $tail = substr($idcardNum, -2, 2);
+
+        return $head.'************'.$tail;
+    }
+
+    public function blur_phone_number($phoneNum)
+    {
+        $head = substr($phoneNum, 0, 3);
+        $tail = substr($phoneNum, -4, 4);
+
+        return $head.'****'.$tail;
     }
 
     /**
