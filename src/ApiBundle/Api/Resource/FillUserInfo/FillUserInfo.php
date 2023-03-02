@@ -61,13 +61,14 @@ class FillUserInfo extends AbstractResource
                 'validate' => $extUserFields[$fieldName]['type'] ?? $fieldName,
             ];
 
+
             if ('select' == $checkedField['type']) {
                 $checkedField['detail'] = json_decode($extUserFields[$fieldName]['detail'] ?? '[]');
             }
 
             if ('gender' == $fieldName) {
                 $checkedField['type'] = 'select';
-                $checkedField['detail'] = ['男', '女', '保密'];
+                $checkedField['detail'] = ['male', 'female', 'secret'];
             }
 
             if ('mobile' == $fieldName) {
