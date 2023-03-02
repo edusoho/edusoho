@@ -47,7 +47,6 @@ class FillUserInfo extends AbstractResource
 
         $isFullFill = true;
         $userFields = [];
-        $fieldsType = ['truename', 'mobile', 'qq', 'company', 'weixin', 'weibo', 'idcard', 'job'];
         $ZhFields = ['truename' => '真实姓名', 'mobile' => '手机号码', 'qq' => 'QQ', 'company' => '公司', 'weixin' => '微信', 'weibo' => '微博', 'idcard' => '身份证号', 'gender' => '性别', 'job' => '职业'];
         foreach ($auth['registerSort'] ?? [] as $fieldName) {
             if (!in_array($fieldName, self::USER_INFO_FIELDS)) {
@@ -55,38 +54,28 @@ class FillUserInfo extends AbstractResource
             }
 
             $checkedField = [
-                'fieldName' => $ZhFields[$fieldName],
+                'fieldName' => $extUserFields[$fieldName]['title'] ?? ($ZhFields[$fieldName] ?? $fieldName),
                 'value' => empty($userInfo[$fieldName]) ? '' : $userInfo[$fieldName],
-                'type' => $extUserFields[$fieldName]['type'] ?? $fieldName,
-                'theValueType' => $fieldName,
+                'type' => $extUserFields[$fieldName]['type'] ?? 'varchar',
+                'key' => $fieldName,
+                'validate' => $extUserFields[$fieldName]['type'] ?? $fieldName,
             ];
 
-            if (isset($extUserFields[$fieldName]['title'])) {
-                $checkedField['fieldName'] = $extUserFields[$fieldName]['title'] ?? $fieldName;
-                $checkedField['validate'] = $extUserFields[$fieldName]['type'] ?? $fieldName;
-            }
-
-            if ($extUserFields[$fieldName] == $fieldsType[$fieldName]) {
-                $checkedField['type'] = 'varchar';
-                $checkedField['validate'] = $fieldName;
-            }
-
-            if ('gender' == $checkedField['theValueType']) {
+            if ('gender' == $fieldName) {
                 $checkedField['type'] = 'radio';
-                $checkedField['validate'] = 'gender';
             }
 
             if ('select' == $checkedField['type']) {
                 $checkedField['detail'] = json_decode($extUserFields[$fieldName]['detail'] ?? '[]');
             }
 
-            if ('mobile' == $checkedField['theValueType']) {
-                $checkedField['value'] = $this->blur_phone_number($userFields['verifiedMobile']) ?: '';
+            if ('mobile' == $fieldName) {
+                $checkedField['value'] = $this->blurPhoneNumber($userFields['verifiedMobile']) ?: '';
                 $checkedField['mobileSmsValidate'] = !empty($auth['mobileSmsValidate']) ? '1' : '0';
             }
 
-            if ('idcard' == $checkedField['theValueType']) {
-                $checkedField['value'] = $this->blur_idcard_number($checkedField['value']);
+            if ('idcard' == $fieldName) {
+                $checkedField['value'] = $this->blurIdcardNumber($checkedField['value']);
             }
 
             if (empty($checkedField['value'])) {
@@ -144,7 +133,7 @@ class FillUserInfo extends AbstractResource
         return $userInfo;
     }
 
-    public function blur_idcard_number($idcardNum)
+    public function blurIdcardNumber($idcardNum)
     {
         $head = substr($idcardNum, 0, 4);
         $tail = substr($idcardNum, -2, 2);
@@ -152,7 +141,7 @@ class FillUserInfo extends AbstractResource
         return $head.'************'.$tail;
     }
 
-    public function blur_phone_number($phoneNum)
+    public function blurPhoneNumber($phoneNum)
     {
         $head = substr($phoneNum, 0, 3);
         $tail = substr($phoneNum, -4, 4);
