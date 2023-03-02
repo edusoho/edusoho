@@ -65,7 +65,8 @@
                     type="date"
                     value-format="timestamp"
                     :default-value="today"
-                    :picker-options="dateOptions">
+                    :picker-options="dateOptions"
+                    @blur="validateForm('expiryValue','blur')">
                 </el-date-picker>
                 <el-col class="help-block" v-if="form.expiryMode =='date'">
                     {{ 'classroom.expiry_mode_end_date_tips'|trans }}
@@ -76,7 +77,7 @@
                                                                    maxLength: 8,
                                                                    negative: false,
                                                                    decimal: false,}"
-                        @blur="validateForm('expiryMode','blur')"></el-input>
+                        @blur="validateForm('expiryValue','blur')"></el-input>
                     </el-col>
                     <el-col span="1" class="plm">{{ 'site.date.day'|trans }}</el-col>
                     <el-col class="help-block" v-if="form.expiryMode =='days'">
