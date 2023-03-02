@@ -109,7 +109,7 @@ class SmsServiceImpl extends BaseService implements SmsService
             $to = $currentUser['verifiedMobile'];
         }
 
-        if ('sms_login' == $smsType) {
+        if (in_array($smsType, ['sms_login', 'sms_fill_user_info'])) {
             // FIXME 先兼容教育云，待教育云添加新的类型
             $smsType = 'sms_bind';
         }
@@ -172,7 +172,7 @@ class SmsServiceImpl extends BaseService implements SmsService
 
     protected function checkSmsType($smsType, $user)
     {
-        if (!in_array($smsType, ['sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind', 'sms_login'])) {
+        if (!in_array($smsType, ['sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind', 'sms_login', 'sms_fill_user_info'])) {
             $this->createNewException(SmsException::ERROR_SMS_TYPE());
         }
 
