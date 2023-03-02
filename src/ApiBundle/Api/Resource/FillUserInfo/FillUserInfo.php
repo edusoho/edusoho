@@ -63,6 +63,7 @@ class FillUserInfo extends AbstractResource
 
             if (isset($extUserFields[$fieldName]['title'])) {
                 $checkedField['fieldName'] = $extUserFields[$fieldName]['title'] ?? $fieldName;
+                $checkedField['validate'] = $extUserFields[$fieldName]['type'] ?? $fieldName;
             }
 
             if ($extUserFields[$fieldName] == $fieldsType[$fieldName]) {
