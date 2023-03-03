@@ -110,7 +110,7 @@ class FillUserInfo extends AbstractResource
             $smsToken = $formData['smsToken'] ?? null;
             $mobile = $formData['mobile'];
             $smsCode = $formData['smsCode'] ?? null;
-            $status = $this->getBizSms()->check(BizSms::SMS_FILL_USER_INFO, $mobile, $smsToken, $smsCode);
+            $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $mobile, $smsToken, $smsCode);
             if (BizSms::STATUS_SUCCESS !== $status) {
                 throw SmsException::FORBIDDEN_SMS_CODE_INVALID();
             }

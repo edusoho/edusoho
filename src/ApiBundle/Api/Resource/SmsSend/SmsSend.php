@@ -17,7 +17,7 @@ class SmsSend extends AbstractResource
 {
     private $supportSmsTypes = [
         'sms_login' => BizSms::SMS_LOGIN,
-         'sms_fill_user_info' => BizSms::SMS_FILL_USER_INFO,
+        'sms_bind' => BizSms::SMS_BIND_TYPE,
     ];
 
     /**
