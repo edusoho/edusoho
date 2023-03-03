@@ -22,8 +22,6 @@ class BizSms extends BizAware
 
     const SMS_LOGIN = 'sms_login';
 
-    const SMS_FILL_USER_INFO = 'sms_fill_user_info';
-
     public function send($smsType, $mobile, $options = [], $unique = 1)
     {
         $options = array_merge(['duration' => TimeMachine::HALF_HOUR, 'times' => 10, 'userId' => 0], $options);
