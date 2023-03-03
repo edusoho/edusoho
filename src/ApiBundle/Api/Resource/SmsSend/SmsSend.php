@@ -8,7 +8,6 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\BehaviorVerification\Service\BehaviorVerificationService;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
-use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
@@ -18,6 +17,7 @@ class SmsSend extends AbstractResource
 {
     private $supportSmsTypes = [
         'sms_login' => BizSms::SMS_LOGIN,
+         'sms_fill_user_info' => BizSms::SMS_FILL_USER_INFO,
     ];
 
     /**
@@ -26,18 +26,22 @@ class SmsSend extends AbstractResource
     public function add(ApiRequest $request)
     {
         if (!($request->getHttpRequest()->isXmlHttpRequest())) {
-            $mobileSetting = $this->getSettingService()->get('mobile',array());
-            $wap = $this->getSettingService()->get('wap',array());
-            if ($mobileSetting['enabled'] == 0 && $wap['template'] != 'sail'){
+            $mobileSetting = $this->getSettingService()->get('mobile', []);
+            $wap = $this->getSettingService()->get('wap', []);
+            if (0 == $mobileSetting['enabled'] && 'sail' != $wap['template']) {
                 return null;
             }
         }
-        if ($this->getBehaviorVerificationService()->behaviorVerification($request->getHttpRequest())){
-            return new JsonResponse(['ACK' => 'ok', "allowance" => 0]);
+        if ($this->getBehaviorVerificationService()->behaviorVerification($request->getHttpRequest())) {
+            return new JsonResponse(['ACK' => 'ok', 'allowance' => 0]);
         }
         $smsType = $request->request->get('type', '');
         $mobile = $request->request->get('mobile', '');
         $allowNotExistMobile = $request->request->get('allowNotExistMobile', 1);
+
+        if (!in_array($smsType, $this->supportSmsTypes)) {
+            throw CommonException::ERROR_PARAMETER();
+        }
 
         if (!$allowNotExistMobile && !$this->getUserService()->getUserByVerifiedMobile($mobile)) {
             throw UserException::MOBILE_NOT_FOUND();
@@ -66,26 +70,20 @@ class SmsSend extends AbstractResource
 
     private function checkSettingsEnable($smsType)
     {
-        if ('sms_login' == $smsType) {
-            $cloudSms = $this->getSettingService()->get('cloud_sms');
-            if (!$cloudSms['sms_enabled']) {
-                throw SettingException::FORBIDDEN_SMS_SEND();
-            }
+        $cloudSms = $this->getSettingService()->get('cloud_sms');
+        if (!$cloudSms['sms_enabled']) {
+            throw SettingException::FORBIDDEN_SMS_SEND();
         }
     }
 
     private function checkRateLimit($request, $smsType)
     {
-        if ('sms_login' == $smsType) {
-            $this->handleRateLimiter($request, 'sms_login_rate_limiter');
-        }
+        $this->handleRateLimiter($request, 'sms_login_rate_limiter');
     }
 
     private function updateSmsStatus($clientIp, $smsType)
     {
-        if ('sms_login' == $smsType) {
-            $this->getUserService()->getSmsCommonCaptchaStatus($clientIp, true);
-        }
+        $this->getUserService()->getSmsCommonCaptchaStatus($clientIp, true);
     }
 
     private function convertType($smsType)

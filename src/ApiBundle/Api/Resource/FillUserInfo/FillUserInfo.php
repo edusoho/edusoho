@@ -5,12 +5,14 @@ namespace ApiBundle\Api\Resource\FillUserInfo;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\SmsToolkit;
+use Biz\Common\BizSms;
+use Biz\Sms\SmsException;
 use Biz\User\Service\UserFieldService;
 
 class FillUserInfo extends AbstractResource
 {
     const USER_INFO_FIELDS = [
+        'email',
         'truename',
         'mobile',
         'qq',
@@ -40,14 +42,17 @@ class FillUserInfo extends AbstractResource
             return ['result' => true, 'message' => ''];
         }
 
-        $userInfo = $this->getUserService()->getUserProfile($user['id']);
+        $userInfo = array_merge(
+            $this->getUserService()->getUser($user['id']),
+            $this->getUserService()->getUserProfile($user['id'])
+        );
 
         $extUserFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
         $extUserFields = ArrayToolkit::index($extUserFields, 'fieldName');
 
         $isFullFill = true;
         $userFields = [];
-        $ZhFields = ['truename' => '真实姓名', 'mobile' => '手机号码', 'qq' => 'QQ', 'company' => '公司', 'weixin' => '微信', 'weibo' => '微博', 'idcard' => '身份证号', 'gender' => '性别', 'job' => '职业'];
+        $ZhFields = ['email' => '邮箱', 'truename' => '真实姓名', 'mobile' => '手机号码', 'qq' => 'QQ', 'company' => '公司', 'weixin' => '微信', 'weibo' => '微博', 'idcard' => '身份证号', 'gender' => '性别', 'job' => '职业'];
         foreach ($auth['registerSort'] ?? [] as $fieldName) {
             if (!in_array($fieldName, self::USER_INFO_FIELDS)) {
                 continue;
@@ -61,7 +66,6 @@ class FillUserInfo extends AbstractResource
                 'validate' => $extUserFields[$fieldName]['type'] ?? $fieldName,
             ];
 
-
             if ('select' == $checkedField['type']) {
                 $checkedField['detail'] = json_decode($extUserFields[$fieldName]['detail'] ?? '[]');
             }
@@ -72,7 +76,7 @@ class FillUserInfo extends AbstractResource
             }
 
             if ('mobile' == $fieldName) {
-                $checkedField['value'] = $this->blurPhoneNumber($userFields['verifiedMobile']) ?: '';
+                $checkedField['value'] = $this->blurPhoneNumber($userInfo['verifiedMobile']);
                 $checkedField['mobileSmsValidate'] = !empty($auth['mobileSmsValidate']) ? '1' : '0';
             }
 
@@ -103,10 +107,12 @@ class FillUserInfo extends AbstractResource
         $user = $this->getCurrentUser();
 
         if (!empty($formData['mobile']) && !empty($authSetting['mobileSmsValidate'])) {
-            list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, 'sms_bind');
-
-            if (!$result) {
-                return ['result' => false, 'message' => $this->trans('register.userinfo_fill_tips')];
+            $smsToken = $formData['smsToken'] ?? null;
+            $mobile = $formData['mobile'];
+            $smsCode = $formData['smsCode'] ?? null;
+            $status = $this->getBizSms()->check(BizSms::SMS_FILL_USER_INFO, $mobile, $smsToken, $smsCode);
+            if (BizSms::STATUS_SUCCESS !== $status) {
+                throw SmsException::FORBIDDEN_SMS_CODE_INVALID();
             }
         }
 
@@ -119,12 +125,12 @@ class FillUserInfo extends AbstractResource
     {
         // todo 仅更新必要字段
         $userInfo = ArrayToolkit::parts($formData, self::USER_INFO_FIELDS);
+        $authSetting = $this->getSettingService()->get('auth', []);
 
         if (isset($formData['email']) && !empty($formData['email'])) {
             $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
         }
 
-        $authSetting = $this->getSettingService()->get('auth', []);
         if (!empty($formData['mobile']) && !empty($authSetting['fill_userinfo_after_login']) && !empty($authSetting['mobileSmsValidate'])) {
             $verifiedMobile = $formData['mobile'];
             $this->getUserService()->changeMobile($user['id'], $verifiedMobile);
@@ -137,6 +143,9 @@ class FillUserInfo extends AbstractResource
 
     public function blurIdcardNumber($idcardNum)
     {
+        if (empty($idcardNum)) {
+            return '';
+        }
         $head = substr($idcardNum, 0, 4);
         $tail = substr($idcardNum, -2, 2);
 
@@ -145,6 +154,9 @@ class FillUserInfo extends AbstractResource
 
     public function blurPhoneNumber($phoneNum)
     {
+        if (empty($phoneNum)) {
+            return '';
+        }
         $head = substr($phoneNum, 0, 3);
         $tail = substr($phoneNum, -4, 4);
 
@@ -170,5 +182,13 @@ class FillUserInfo extends AbstractResource
     protected function getAuthService()
     {
         return $this->service('User:AuthService');
+    }
+
+    /**
+     * @return BizSms
+     */
+    private function getBizSms()
+    {
+        return $this->biz['biz_sms'];
     }
 }
