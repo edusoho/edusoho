@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Item\Wrapper;
 
+use Biz\CloudFile\Service\CloudFileService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
@@ -33,6 +34,13 @@ class AttachmentWrapper
         $attachments = ArrayToolkit::group($attachments, 'target_id');
         foreach ($item['questions'] as &$question) {
             $question['attachments'] = empty($attachments[$question['id']]) ? [] : $attachments[$question['id']];
+            foreach ($question['attachments'] as &$attachment) {
+                if($attachment['file_type'] == 'video') {
+                    $attachment['cloudFile'] = $this->getCloudFileService()->reconvert($attachment['golbal_id'], [
+                        'directives' => [],
+                    ]);
+                }
+            }
         }
 
         return $item;
@@ -44,5 +52,13 @@ class AttachmentWrapper
     protected function getAttachmentService()
     {
         return $this->biz->service('ItemBank:Item:AttachmentService');
+    }
+
+    /**
+     * @return CloudFileService
+     */
+    protected function getCloudFileService()
+    {
+        return $this->biz->service('CloudFile:CloudFileService');
     }
 }
