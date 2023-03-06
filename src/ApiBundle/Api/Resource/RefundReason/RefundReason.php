@@ -13,7 +13,7 @@ class RefundReason extends AbstractResource
     {
         $refundReason = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('refund_reason');
         return [
-            'refundReason' => $refundReason
+            'refundReasonList' => $refundReason
         ];
     }
 }
