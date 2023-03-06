@@ -1,11 +1,11 @@
 {% extends 'admin-v2/layout.html.twig' %}
 	 {% set menu = 'admin_v2_question_bank_attachment_setting' %}
-{%  do script(['app/js/admin-v2/edu-cloud/file-setting/index.js'])  %}
+{%  do script(['app/js/admin-v2/question-bank-attachment/file-setting/index.js'])  %}
 	 {% block main %}
      <div class="edu-service">
        <div class="edu-balance">
          {{ web_macro.flash_messages() }}
-         <form id="cloud-attachment" class="form-horizontal" method="post" data-widget-cid="widget-0">
+         <form id="question-bank-attachment" class="form-horizontal" method="post" data-widget-cid="widget-0">
            <div class="form-group">
              <div class="col-md-3 control-label">
                <label>{{ 'admin.edu_cloud.edu_attachment.function'|trans }}</label>
@@ -13,16 +13,16 @@
              <div class="controls col-md-8 radios">
                <label>
                  <input type="radio" name="enable"
-                        value="1" {% if questionBankAttachment.enable %} checked {% endif %}> {{ 'admin.edu_cloud.edu_attachment.open_radio'|trans }}
+                        value="1" {% if questionBankAttachment.enable %} checked {% endif %}> {{ 'admin.question_bank.question_bank_attachment.open_radio'|trans }}
                </label>
                <label>
                  <input type="radio" name="enable"
-                        value="0" {% if not questionBankAttachment.enable %} checked {% endif %}>{{ 'admin.edu_cloud.edu_attachment.close_radio'|trans }}
+                        value="0" {% if not questionBankAttachment.enable %} checked {% endif %}>{{ 'admin.question_bank.question_bank_attachment.close_radio'|trans }}
                </label>
              </div>
              <div class="help-block col-md-8 col-md-offset-3">
-               <span id="enableTips" {% if not questionBankAttachment.enable %} hidden {% endif %}>{{ 'admin.question_bank.file.download.setting.enable.tips'|trans }}</span>
-               <span id="disableTips" {% if not questionBankAttachment.enable %} hidden {% endif %}>{{ 'admin.question_bank.file.download.setting.disable.tips'|trans }}</span>
+               <span id="enableTips" {% if not questionBankAttachment.enable %} class="hidden" {% endif %}>{{ 'admin.question_bank.file.download.setting.enable.tips'|trans }}</span>
+               <span id="disableTips" {% if questionBankAttachment.enable %} class="hidden" {% endif %}>{{ 'admin.question_bank.file.download.setting.disable.tips'|trans }}</span>
              </div>
            </div>
            <div class="row form-group">
