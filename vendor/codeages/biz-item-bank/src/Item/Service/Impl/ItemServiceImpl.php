@@ -363,11 +363,21 @@ class ItemServiceImpl extends BaseService implements ItemService
         if (empty($questions)) {
             return;
         }
+        $questionAttachments = [];
         foreach ($questions as $question) {
             $question['item_id'] = $itemId;
             $question['created_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
             $question['updated_user_id'] = $question['created_user_id'];
-            $attachments = $question['attachments'];
+            $attachments = [];
+            $attachmentGroups = ArrayToolkit::group($question['attachments'], 'module');
+            foreach ($attachmentGroups as $module => $attachmentGroup){
+                $seq = 1;
+                foreach ($attachmentGroup as $sortAttachment) {
+                    $sortAttachment['seq'] = $seq;
+                    $attachments[] = $sortAttachment;
+                    $seq ++;
+                }
+            }
             unset($question['attachments']);
             $itemQuestion = $this->getQuestionDao()->create($question);
             if (!empty($attachments)) {
@@ -390,8 +400,17 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
             if (in_array($question['id'], $originQuestionIds)) {
                 $question['updated_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
-
-                $questionAttachments[] = ['id' => $question['id'], 'attachments' => $question['attachments']];
+                $attachments = [];
+                $attachmentGroups = ArrayToolkit::group($question['attachments'], 'module');
+                foreach ($attachmentGroups as $module => $attachmentGroup){
+                    $seq = 1;
+                    foreach ($attachmentGroup as $sortAttachment) {
+                        $sortAttachment['seq'] = $seq;
+                        $attachments[] = $sortAttachment;
+                        $seq ++;
+                    }
+                }
+                $questionAttachments[] = ['id' => $question['id'], 'attachments' => $attachments];
                 unset($question['attachments']);
 
                 $updateQuestions[] = $question;
@@ -426,6 +445,7 @@ class ItemServiceImpl extends BaseService implements ItemService
                 'target_id' => $targetId,
                 'target_type' => $targetType,
                 'module' => $attachment['module'],
+                'seq' => $attachment['seq'],
             ]);
         }
     }
