@@ -368,22 +368,23 @@ class ItemServiceImpl extends BaseService implements ItemService
             $question['item_id'] = $itemId;
             $question['created_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
             $question['updated_user_id'] = $question['created_user_id'];
+            $attachments = [];
 //            $attachments = $question['attachments'];
-            $attachments = \AppBundle\Common\ArrayToolkit::index($question['attachments'],'id');
-            foreach (array_column($question['attachments'],'id') as $id) {
-                if (!isset($attachments[$id])) {
-                    continue;
+            $attachments = [];
+            $attachmentGroups = ArrayToolkit::group($question['attachments'], 'module');
+            foreach ($attachmentGroups as $module => $attachmentGroup){
+                $seq=1;
+                foreach ($attachmentGroup as $sortAttachment) {
+                    $sortAttachment['seq'] = $seq;
+                    $attachments[]= $sortAttachment;
+                    $seq ++;
                 }
-                $questionAttachments[] = $attachments[$id];
             }
             unset($question['attachments']);
             $itemQuestion = $this->getQuestionDao()->create($question);
-            if (!empty($questionAttachments)) {
-                $this->updateAttachments($questionAttachments, $itemQuestion['id'], AttachmentService::QUESTION_TYPE);
+            if (!empty($attachments)) {
+                $this->updateAttachments($attachments, $itemQuestion['id'], AttachmentService::QUESTION_TYPE);
             }
-//            if (!empty($attachments)) {
-//                $this->updateAttachments($attachments, $itemQuestion['id'], AttachmentService::QUESTION_TYPE);
-//            }
         }
     }
 
@@ -401,21 +402,23 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
             if (in_array($question['id'], $originQuestionIds)) {
                 $question['updated_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
-                $attachments = \AppBundle\Common\ArrayToolkit::index($question['attachments'],'id');
-//                $questionAttachments[] = ['id' => $question['id'], 'attachments' => $question['attachments']];
-                foreach (array_column($question['attachments'],'id') as $id) {
-                    if (!isset($attachments[$id])) {
-                        continue;
+                $attachments = [];
+                $attachmentGroups = ArrayToolkit::group($question['attachments'], 'module');
+                foreach ($attachmentGroups as $module => $attachmentGroup){
+                    $seq=1;
+                    foreach ($attachmentGroup as $sortAttachment) {
+                        $sortAttachment['seq'] = $seq;
+                        $attachments[]= $sortAttachment;
+                        $seq ++;
                     }
-                    $questionAttachments[] = ['id' => $question['id'], 'attachments' => $attachments[$id]];
                 }
+                $questionAttachments[] = ['id' => $question['id'], 'attachments' => $attachments];
                 unset($question['attachments']);
 
                 $updateQuestions[] = $question;
                 unset($questions[$key]);
             }
         }
-        file_put_contents('/tmp/log',json_encode($questionAttachments), 8);
         $this->createQuestions($itemId, $questions);
         $updateQuestionIds = array_column($updateQuestions, 'id');
         if (!empty($updateQuestionIds)) {

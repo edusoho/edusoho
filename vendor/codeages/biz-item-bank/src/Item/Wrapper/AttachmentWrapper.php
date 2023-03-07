@@ -31,6 +31,10 @@ class AttachmentWrapper
             ArrayToolkit::column($item['questions'], 'id'),
             'question'
         );
+        $sortAttachments = ArrayToolkit::group($attachments, 'module');
+        foreach ($sortAttachments as $sortAttachment) {
+            $attachments = ArrayToolkit::sort($attachments, 'seq', SORT_ASC);
+        }
         $attachments = ArrayToolkit::group($attachments, 'target_id');
         foreach ($item['questions'] as &$question) {
             $question['attachments'] = empty($attachments[$question['id']]) ? [] : $attachments[$question['id']];
