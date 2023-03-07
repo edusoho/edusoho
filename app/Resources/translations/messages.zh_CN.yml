@@ -7622,6 +7622,12 @@ admin.edu_cloud.key_update.ask_apply_key: 还没有授权码?
 admin.edu_cloud.key_update.key_apply_btn: 申请授权码
 admin.edu_cloud.key_update.key_apply.submiting: 正在申请授权码，请稍等...
 
+#题库附件设置
+admin.question_bank.file.download.setting.enable.tips: 移动端暂不提供下载题库附件功能，不受设置影响
+admin.question_bank.file.download.setting.disable.tips: 压缩文件只能下载后查看，关闭后，学员将无法查看压缩类附件
+admin.question_bank.question_bank_attachment.open_radio: 开启
+admin.question_bank.question_bank_attachment.close_radio: 关闭
+
 # 用户设置
 admin.user_auth.sign_up_settings: 注册设置
 admin.user_auth.user_sign_up_setting: 用户注册设置
