@@ -170,6 +170,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->dispatchEvent('exercise.quit', $exercise, ['member' => $member]);
 
             $user = $this->getUserService()->getUser($userId);
+
             if (isset($reason['reasonType']) && 'exit' === $reason['reasonType']) {
                 $this->getLogService()->info(
                     'item_bank_exercise',
