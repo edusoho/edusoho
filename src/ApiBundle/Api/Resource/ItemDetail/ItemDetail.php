@@ -23,9 +23,6 @@ class ItemDetail extends AbstractResource
     {
         $req = $request->query->all();
         $user = $this->getCurrentUser();
-        if(!$user->isLogin()) {
-            return ['result' => false, 'msg' => '请登录', 'data' => []];
-        }
 
         switch ($req['type']) {
             case 'course':
