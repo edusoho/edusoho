@@ -10,6 +10,12 @@
       <div class="rich-text" v-html="itemdata.stem" />
     </div>
 
+    <attachement-preview 
+      v-for="item in itemdata.attachments"
+      :canLoadPlayer="isCurrent"
+      :attachment="item"
+      :key="item.id" />
+
     <van-radio-group v-model="radio" class="answer-paper" @change="choose()">
       <van-radio
         :name="1"
@@ -19,7 +25,6 @@
         <div class="subject-option__content">对</div>
         <i
           slot="icon"
-          slot-scope="props"
           :class="[
             'iconfont',
             'icon-yes',
@@ -36,7 +41,6 @@
         <div class="subject-option__content">错</div>
         <i
           slot="icon"
-          slot-scope="props"
           :class="[
             'iconfont',
             'icon-no',
@@ -51,18 +55,20 @@
 
 <script>
 import checkAnswer from '../../../../mixins/lessonTask/itemBank';
+import attachementPreview from './attachement-preview.vue';
+
 export default {
   name: 'DetermineType',
   mixins: [checkAnswer],
+  components: {
+    attachementPreview
+  },
   props: {
     itemdata: {
       type: Object,
       default: () => {},
     },
-    number: {
-      type: Number,
-      default: 1,
-    },
+    isCurrent: Boolean,
     answer: {
       type: Array,
       default: () => [],

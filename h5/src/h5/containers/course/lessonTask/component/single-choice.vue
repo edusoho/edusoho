@@ -10,6 +10,12 @@
       <div class="rich-text" v-html="itemdata.stem" />
     </div>
 
+    <attachement-preview 
+      v-for="item in itemdata.attachments"
+      :canLoadPlayer="isCurrent"
+      :attachment="item"
+      :key="item.id" />
+
     <van-radio-group v-model="radio" class="answer-paper" @change="choose()">
       <van-radio
         v-for="(item, index) in itemdata.metas.choices"
@@ -21,7 +27,6 @@
         <div class="subject-option__content" v-html="item" />
         <span
           slot="icon"
-          slot-scope="props"
           :class="[
             'subject-option__order',
             !canDo ? checkAnswer(index, itemdata) : '',
@@ -35,6 +40,8 @@
 
 <script>
 import checkAnswer from '../../../../mixins/lessonTask/itemBank';
+import attachementPreview from './attachement-preview.vue';
+
 export default {
   name: 'SingleChoice',
   filters: {
@@ -44,6 +51,9 @@ export default {
     },
   },
   mixins: [checkAnswer],
+  components: {
+    attachementPreview
+  },
   props: {
     itemdata: {
       type: Object,
@@ -53,14 +63,11 @@ export default {
       type: Array,
       default: () => [],
     },
-    number: {
-      type: Number,
-      default: 1,
-    },
     canDo: {
       type: Boolean,
       default: true,
     },
+    isCurrent: Boolean
   },
   data() {
     return {
@@ -83,6 +90,9 @@ export default {
     choose() {
       this.$emit('singleChoose', this.radio, this.itemdata.id);
     },
+    initPlayer() {
+      
+    }
   },
 };
 </script>

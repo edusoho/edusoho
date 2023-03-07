@@ -50,15 +50,6 @@ export default {
     mode === 'start' ? this.getStart() : this.getContinue();
   },
   mounted() {},
-  // beforeRouteEnter(to, from, next) {
-  //   // 通过链接进来
-  //   if (from.fullPath === '/') {
-  //     backUrl = '/'
-  //   } else {
-  //     backUrl = ''
-  //   }
-  //   next()
-  // },
   beforeRouteLeave(to, from, next) {
     // 可捕捉离开提醒
     if (this.canLeave) {

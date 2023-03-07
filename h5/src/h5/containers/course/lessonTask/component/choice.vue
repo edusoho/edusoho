@@ -10,6 +10,12 @@
       <div class="rich-text" v-html="itemdata.stem" />
     </div>
 
+    <attachement-preview 
+      v-for="item in itemdata.attachments"
+      :canLoadPlayer="isCurrent"
+      :attachment="item"
+      :key="item.id" />
+
     <van-checkbox-group
       v-model="result"
       class="answer-paper"
@@ -25,7 +31,6 @@
         <div class="subject-option__content" v-html="item" />
         <span
           slot="icon"
-          slot-scope="props"
           :class="[
             'subject-option__order',
             'subject-option__order--square',
@@ -40,6 +45,8 @@
 
 <script>
 import checkAnswer from '../../../../mixins/lessonTask/itemBank';
+import attachementPreview from './attachement-preview.vue';
+
 export default {
   name: 'ChoiceType',
   filters: {
@@ -49,15 +56,15 @@ export default {
     },
   },
   mixins: [checkAnswer],
+  components: {
+    attachementPreview
+  },
   props: {
     itemdata: {
       type: Object,
       default: () => {},
     },
-    number: {
-      type: Number,
-      default: 1,
-    },
+    isCurrent: Boolean,
     answer: {
       type: Array,
       default: () => [],

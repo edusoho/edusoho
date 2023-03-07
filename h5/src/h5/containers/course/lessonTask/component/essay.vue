@@ -10,6 +10,12 @@
       <div class="rich-text" v-html="itemdata.stem" />
     </div>
 
+    <attachement-preview 
+      v-for="item in itemdata.attachments"
+      :canLoadPlayer="isCurrent"
+      :attachment="item"
+      :key="item.id" />
+
     <div class="answer-paper">
       <van-field
         v-model="answer[0]"
@@ -26,8 +32,13 @@
 </template>
 
 <script>
+import attachementPreview from './attachement-preview.vue';
+
 export default {
   name: 'EssayType',
+  components: {
+    attachementPreview
+  },
   props: {
     itemdata: {
       type: Object,
@@ -37,10 +48,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    number: {
-      type: Number,
-      default: 1,
-    },
+    isCurrent: Boolean,
     canDo: {
       type: Boolean,
       default: true,

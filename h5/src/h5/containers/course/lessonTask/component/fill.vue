@@ -10,6 +10,12 @@
       <div class="rich-text" v-html="itemdata.stem" />
     </div>
 
+    <attachement-preview 
+      v-for="item in itemdata.attachments"
+      :canLoadPlayer="isCurrent"
+      :attachment="item"
+      :key="item.id" />
+
     <div class="answer-paper">
       <div v-for="(i, index) in itemdata.fillnum" :key="index">
         <div class="fill-subject">填空题（{{ index + 1 }}）</div>
@@ -29,15 +35,18 @@
 </template>
 
 <script>
+import attachementPreview from './attachement-preview.vue';
+
 export default {
   name: 'FillType',
+  components: {
+    attachementPreview
+  },
   props: {
     filldata: {
       type: Object,
       default: () => {},
     },
-  },
-  props: {
     itemdata: {
       type: Object,
       default: () => {},
@@ -46,10 +55,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    number: {
-      type: Number,
-      default: 1,
-    },
+    isCurrent: Boolean,
     canDo: {
       type: Boolean,
       default: true,

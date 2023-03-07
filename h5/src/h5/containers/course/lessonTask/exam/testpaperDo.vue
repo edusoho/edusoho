@@ -174,7 +174,7 @@ export default {
       deep: true
     }
   },
-  mounted() {
+  async mounted() {
     this.initReport();
     this.getData();
     this.saveAnswerInterval();
@@ -221,6 +221,7 @@ export default {
     }),
   },
   methods: {
+    ...mapActions(['setCloudAddress']),
     ...mapActions('course', ['handExamdo', 'saveAnswerdo']),
     // 初始化上报数据
     initReport() {
