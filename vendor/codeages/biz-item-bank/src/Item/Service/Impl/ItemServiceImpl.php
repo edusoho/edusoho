@@ -371,10 +371,10 @@ class ItemServiceImpl extends BaseService implements ItemService
             $attachments = [];
             $attachmentGroups = ArrayToolkit::group($question['attachments'], 'module');
             foreach ($attachmentGroups as $module => $attachmentGroup){
-                $seq=1;
+                $seq = 1;
                 foreach ($attachmentGroup as $sortAttachment) {
                     $sortAttachment['seq'] = $seq;
-                    $attachments[]= $sortAttachment;
+                    $attachments[] = $sortAttachment;
                     $seq ++;
                 }
             }
@@ -406,7 +406,7 @@ class ItemServiceImpl extends BaseService implements ItemService
                     $seq = 1;
                     foreach ($attachmentGroup as $sortAttachment) {
                         $sortAttachment['seq'] = $seq;
-                        $attachments[]= $sortAttachment;
+                        $attachments[] = $sortAttachment;
                         $seq ++;
                     }
                 }
