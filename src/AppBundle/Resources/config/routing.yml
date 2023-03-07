@@ -3989,8 +3989,9 @@ item_bank_exercise_show:
         tab: ''
         moduleId: 0
     h5: true
+#适配item_bank_exercise_show路由
 item_bank_exercise_exit:
-  path: '/item_bank_exercise/{exerciseId}/exit'
+  path: '/item_bank/exercise/{exerciseId}/exit'
   defaults:
     _controller: 'AppBundle:ItemBankExercise/Exercise:exit'
   methods:
