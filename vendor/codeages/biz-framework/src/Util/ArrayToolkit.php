@@ -95,6 +95,15 @@ class ArrayToolkit
         return $grouped;
     }
 
+    public static function sort($array, $keys, $sort = SORT_DESC) {
+        $keysValue = [];
+        foreach ($array as $k => $v) {
+            $keysValue[$k] = $v[$keys];
+        }
+        array_multisort($keysValue, $sort, $array);
+        return $array;
+    }
+
     public static function index(array $array, $name)
     {
         $indexedArray = array();

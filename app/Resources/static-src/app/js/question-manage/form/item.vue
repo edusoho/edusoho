@@ -68,6 +68,10 @@
         showAttachment: $('[name=show_attachment]').val(),
         cdnHost: $('[name=cdn_host]').val(),
         uploadSDKInitData: {
+          ui: 'batch',
+          multiple: true,
+          multitaskNum: 3,
+          fileNumLimit: 3,
           sdkBaseUri: app.cloudSdkBaseUri,
           disableDataUpload: app.cloudDisableLogReport,
           disableSentry: app.cloudDisableLogReport,
