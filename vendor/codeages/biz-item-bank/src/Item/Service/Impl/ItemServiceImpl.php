@@ -369,7 +369,6 @@ class ItemServiceImpl extends BaseService implements ItemService
             $question['created_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
             $question['updated_user_id'] = $question['created_user_id'];
             $attachments = [];
-            $attachments = [];
             $attachmentGroups = ArrayToolkit::group($question['attachments'], 'module');
             foreach ($attachmentGroups as $module => $attachmentGroup){
                 $seq=1;
