@@ -11002,3 +11002,8 @@ live_course.record_replay.select3: Only record courseware
 live_course.record_replay.btn: To Record
 live_course.record_replay.safair_tip: Safair may be blocked, please use another browser
 live_course.record_replay.show_btn: local recording
+
+admin.question_bank.file.download.setting.enable.tips: The mobile terminal does not provide the function of downloading question bank attachments, which is not affected by settings
+admin.question_bank.file.download.setting.disable.tips: Compressed files can only be viewed after downloading, and when closed, learners will not be able to view compressed attachments
+admin.question_bank.question_bank_attachment.open_radio: Active
+admin.question_bank.question_bank_attachment.close_radio: Disabled
