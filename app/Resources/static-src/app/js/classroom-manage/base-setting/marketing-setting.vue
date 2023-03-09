@@ -65,7 +65,8 @@
                     type="date"
                     value-format="timestamp"
                     :default-value="today"
-                    :picker-options="dateOptions">
+                    :picker-options="dateOptions"
+                    @blur="validateForm('expiryValue','blur')">
                 </el-date-picker>
                 <el-col class="help-block" v-if="form.expiryMode =='date'">
                     {{ 'classroom.expiry_mode_end_date_tips'|trans }}
@@ -75,7 +76,8 @@
                         <el-input v-model="form.expiryValue" :number-format="{
                                                                    maxLength: 8,
                                                                    negative: false,
-                                                                   decimal: false,}"></el-input>
+                                                                   decimal: false,}"
+                        @blur="validateForm('expiryValue','blur')"></el-input>
                     </el-col>
                     <el-col span="1" class="plm">{{ 'site.date.day'|trans }}</el-col>
                     <el-col class="help-block" v-if="form.expiryMode =='days'">
@@ -212,6 +214,32 @@
                 }
             }
         },
+        created() {
+            if (this.form.expiryMode == 'date') {
+              this.formRule.expiryValue = [
+                {
+                  required: true,
+                  message: Translator.trans('classroom.manage.expiry_mode_date_error_hint'),
+                  trigger: 'blur',
+                }
+              ];
+            } else if (this.form.expiryMode == 'days') {
+            this.formRule.expiryValue = [
+              {
+                required: true,
+                message: Translator.trans('classroom.manage.expiry_mode_days_error_hint'),
+                trigger: 'blur',
+              },
+              {
+                pattern: /(^[1-9][0-9]{0,7}$)/,
+                message: Translator.trans('validate.max_effective_time.message'),
+                trigger: 'blur',
+              }
+            ];
+          } else {
+            this.formRule.expiryValue = [];
+          }
+        },
         data() {
 
             let form = {
@@ -255,18 +283,7 @@
                             trigger: 'blur'
                         },
                     ],
-                    expiryValue: [
-                      {
-                        required: true,
-                        message: Translator.trans('classroom.manage.expiry_mode_days_error_hint'),
-                        trigger: 'blur',
-                      },
-                      {
-                        pattern: /(^[1-9][0-9]{0,7}$)/,
-                        message: Translator.trans('validate.max_effective_time.message'),
-                        trigger: 'blur',
-                      }
-                    ]
+                    expiryValue: []
                 },
                 today: Date.now(),
                 dateOptions: {
