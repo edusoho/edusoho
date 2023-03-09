@@ -75,13 +75,19 @@ class FillUserInfo extends AbstractResource
                 $checkedField['detail'] = ['male', 'female', 'secret'];
             }
 
-            if ('mobile' == $fieldName) {
-                $checkedField['value'] = $this->blurPhoneNumber($userInfo['verifiedMobile']);
-                $checkedField['mobileSmsValidate'] = !empty($auth['mobileSmsValidate']) ? '1' : '0';
+            if ('email' == $fieldName && !empty($userInfo[$fieldName]) && '1' == $userInfo['emailVerified']) {
+                continue;
             }
 
-            if ('idcard' == $fieldName) {
-                $checkedField['value'] = $this->blurIdcardNumber($checkedField['value']);
+            if ('mobile' == $fieldName) {
+                $checkedField['mobileSmsValidate'] = !empty($auth['mobileSmsValidate']) ? '1' : '0';
+                if ('1' == $checkedField['mobileSmsValidate'] && !empty($userInfo['verifiedMobile'])) {
+                    continue;
+                }
+            }
+
+            if ('idcard' == $fieldName && !empty($userInfo[$fieldName]) && ('approved' == $userInfo['approvalStatus'] || 'approving' == $userInfo['approvalStatus'])) {
+                continue;
             }
 
             if (empty($checkedField['value'])) {
@@ -139,28 +145,6 @@ class FillUserInfo extends AbstractResource
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         return $userInfo;
-    }
-
-    public function blurIdcardNumber($idcardNum)
-    {
-        if (empty($idcardNum)) {
-            return '';
-        }
-        $head = substr($idcardNum, 0, 4);
-        $tail = substr($idcardNum, -2, 2);
-
-        return $head.'************'.$tail;
-    }
-
-    public function blurPhoneNumber($phoneNum)
-    {
-        if (empty($phoneNum)) {
-            return '';
-        }
-        $head = substr($phoneNum, 0, 3);
-        $tail = substr($phoneNum, -4, 4);
-
-        return $head.'****'.$tail;
     }
 
     /**
