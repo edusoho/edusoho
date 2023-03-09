@@ -204,7 +204,13 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     public function canManageBankCategory($categoryId)
     {
         $itemBank = $this->getItemCategoryService()->getItemCategory($categoryId);
+        if (empty($itemBank)) {
+            return false;
+        }
         $bank = $this->getQuestionBankByItemBankId($itemBank['bank_id']);
+        if (empty($bank)) {
+            return false;
+        }
 
         return $this->canManageBank($bank['id']);
     }
