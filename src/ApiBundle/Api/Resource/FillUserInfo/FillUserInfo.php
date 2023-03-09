@@ -86,7 +86,7 @@ class FillUserInfo extends AbstractResource
                 }
             }
 
-            if ('idcard' == $fieldName && !empty($userInfo[$fieldName]) && ('approved' == $userInfo['approvalStatus'] || 'approving' == $userInfo['approvalStatus'])) {
+            if (('idcard' == $fieldName || 'truename' == $fieldName) && !empty($userInfo[$fieldName]) && ('approved' == $userInfo['approvalStatus'] || 'approving' == $userInfo['approvalStatus'])) {
                 continue;
             }
 
