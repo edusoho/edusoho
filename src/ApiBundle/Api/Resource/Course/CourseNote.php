@@ -8,16 +8,21 @@ use Biz\Course\CourseException;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\User\UserException;
 
 class CourseNote extends AbstractResource
 {
     public function get(ApiRequest $request, $courseId, $noteId)
     {
+        $userId = $this->getCurrentUser()->getId();
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         if ('published' !== $course['status']) {
             throw CourseException::UNPUBLISHED_COURSE();
         }
         $note = $this->getCourseNoteService()->getNote($noteId);
+        if ($note['userId'] != $userId) {
+            throw UserException::PERMISSION_DENIED();
+        }
         $this->getOCUtil()->single($note, ['userId']);
         $this->getOCUtil()->single($note, ['taskId'], 'task');
         $user = $this->getCurrentUser();
