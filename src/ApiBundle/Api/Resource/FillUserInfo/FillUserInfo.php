@@ -76,25 +76,25 @@ class FillUserInfo extends AbstractResource
             }
 
             if ('email' == $fieldName && !empty($userInfo[$fieldName]) && '1' == $userInfo['emailVerified']) {
-                unset($checkedField);
+                continue;
             }
 
             if ('mobile' == $fieldName) {
                 $checkedField['mobileSmsValidate'] = !empty($auth['mobileSmsValidate']) ? '1' : '0';
                 if ('1' == $checkedField['mobileSmsValidate'] && !empty($userInfo['verifiedMobile'])) {
-                    unset($checkedField);
+                    continue;
                 }
             }
 
             if ('idcard' == $fieldName && !empty($userInfo[$fieldName]) && ('approved' == $userInfo['approvalStatus'] || 'approving' == $userInfo['approvalStatus'])) {
-                unset($checkedField);
+                continue;
             }
 
             if (empty($checkedField['value'])) {
                 $isFullFill = false;
             }
 
-            $userFields[] = $checkedField ?: (object) [];
+            $userFields[] = $checkedField;
         }
 
         if ($isFullFill) {
