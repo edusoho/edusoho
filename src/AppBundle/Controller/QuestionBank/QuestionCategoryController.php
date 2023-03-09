@@ -4,7 +4,6 @@ namespace AppBundle\Controller\QuestionBank;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
-use Biz\Question\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
@@ -55,7 +54,7 @@ class QuestionCategoryController extends BaseController
 
     public function editAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->canManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBankCategory($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
@@ -84,7 +83,7 @@ class QuestionCategoryController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->canManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBankCategory($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
