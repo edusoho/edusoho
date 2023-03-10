@@ -7600,6 +7600,7 @@ course.homework_check.review_btn: Review
 course.homework_check.review.empty: 'No data found'
 course.homework_check.review.name: Name
 course.homework_check.review.score: Score
+course.homework_check.review.begin_time: 'Begin time'
 course.homework_check.review.submit_time: 'Submit time'
 course.homework_check.review.submit_num: Submit Num
 course.testpaper_check.review.submit_num: Submit Num

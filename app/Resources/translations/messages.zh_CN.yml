@@ -1276,6 +1276,7 @@ course.homework_check.review_btn: 批阅
 course.homework_check.review.empty: 暂无数据
 course.homework_check.review.name: 姓名
 course.homework_check.review.score: 成绩
+course.homework_check.review.begin_time: 开考时间
 course.homework_check.review.submit_time: 提交时间
 course.homework_check.review.submit_num: 作业次数
 course.homework_check.review.submit_num_detail: 第%num%次
