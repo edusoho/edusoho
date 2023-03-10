@@ -8228,6 +8228,7 @@ admin.reports_status.no_install_mysql_pdo: 尚未安装MySQL_PDO
 admin.reports_status.upload_file_size: 文件上传大小
 admin.reports_status.upload_file_size_tips: 该值决定可以上传视频的最大大小
 admin.reports_status.upload_file_size_greater_than_200m: 大于200M
+admin.reports_status.upload_file_size_greater_than_2048m: 大于2048M
 admin.reports_status.form_data_size: 表单数据大小
 admin.reports_status.form_data_size_tips: 该值不能小于文件上传大小的值
 admin.reports_status.php_max_run_time: PHP脚本最大执行时间
@@ -8235,6 +8236,7 @@ admin.reports_status.php_max_run_time_tips: 该值决定上传视频时，最长
 admin.reports_status.php_max_execution_time: >
   %maxExecutionTime%秒'
 admin.reports_status.upload_file_size_greater_than_300m: 大于300M
+admin.reports_status.upload_file_size_greater_than_30s: 大于30s
 admin.reports_status.upload_file_execution_time_30s: 30秒
 admin.reports_status.php_extend: PHP扩展
 admin.reports_status.php__mbstring_extend_tips: 该扩展用于处理中文字符
