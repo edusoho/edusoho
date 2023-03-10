@@ -38,7 +38,6 @@ use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Theme\Service\ThemeService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
@@ -240,6 +239,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_teacher_role', [$this, 'isTeacherRole']),
             new \Twig_SimpleFunction('user_info_select', [$this, 'userInfoSelect']),
             new \Twig_SimpleFunction('user_show_path', [$this, 'userPath']),
+            new \Twig_SimpleFunction('is_time_start', [$this, 'isTimeStart']),
         ];
     }
 
@@ -252,6 +252,20 @@ class WebExtension extends \Twig_Extension
         }
 
         return $options;
+    }
+
+    public function isTimeStart($values)
+    {
+        $announcements = [];
+        foreach ($values as $value) {
+            if ($value['startTime'] > time()) {
+                $announcements = [];
+            } else {
+                $announcements[] = $value;
+            }
+        }
+
+        return $announcements;
     }
 
     public function isTeacherRole($userId)
@@ -344,10 +358,10 @@ class WebExtension extends \Twig_Extension
 
     public function userPath($params)
     {
-        $id = $params['id']??0;
+        $id = $params['id'] ?? 0;
         $user = $this->getUserService()->getUser($id);
 
-        return $this->container->get('router')->generate('user_show', ['id' => $user['uuid']??$id]);
+        return $this->container->get('router')->generate('user_show', ['id' => $user['uuid'] ?? $id]);
     }
 
     /**
