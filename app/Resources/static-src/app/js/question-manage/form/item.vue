@@ -9,6 +9,7 @@
       :showCKEditorData="showCKEditorData"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
+      :isDownload="isDownload"
       :uploadSDKInitData="uploadSDKInitData"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
@@ -29,6 +30,7 @@
       :showCKEditorData="showCKEditorData"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
+      :isDownload="isDownload"
       :uploadSDKInitData="uploadSDKInitData"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
@@ -82,6 +84,7 @@
           locale: document.documentElement.lang
         },
         fileId: 0,
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
       };
     },
     methods: {

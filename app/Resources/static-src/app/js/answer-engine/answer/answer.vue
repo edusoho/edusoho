@@ -11,6 +11,7 @@
       :assessmentResponse="assessmentResponse"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
+      :isDownload="isDownload"
       :uploadSDKInitData="uploadSDKInitData"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
@@ -92,6 +93,7 @@
         },
         ajaxTimeOut: null,
         isReachTime: false,
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
       };
     },
     created() {
