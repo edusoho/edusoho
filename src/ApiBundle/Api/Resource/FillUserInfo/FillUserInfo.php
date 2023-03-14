@@ -75,7 +75,7 @@ class FillUserInfo extends AbstractResource
                 $checkedField['detail'] = ['male', 'female', 'secret'];
             }
 
-            if ('email' == $fieldName && !empty($userInfo[$fieldName]) && '1' == $userInfo['emailVerified']) {
+            if ('email' == $fieldName && !empty($userInfo[$fieldName]) && $this->isEmailGeneratedBySystem($userInfo[$fieldName])) {
                 continue;
             }
 
@@ -145,6 +145,11 @@ class FillUserInfo extends AbstractResource
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         return $userInfo;
+    }
+
+    protected function isEmailGeneratedBySystem($email)
+    {
+        return (bool) preg_match('/^user_[a-z0-9]{9}@edusoho\.net$/', $email);
     }
 
     /**
