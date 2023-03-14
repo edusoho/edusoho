@@ -61,9 +61,6 @@ class FillUserInfo extends AbstractResource
 
             if ('email' == $fieldName && UserToolkit::isEmailGeneratedBySystem($userInfo[$fieldName])) {
                 $userInfo[$fieldName] = '';
-                if (!empty($userInfo[$fieldName])) {
-                    continue;
-                }
             }
 
             $checkedField = [
@@ -81,6 +78,10 @@ class FillUserInfo extends AbstractResource
             if ('gender' == $fieldName) {
                 $checkedField['type'] = 'select';
                 $checkedField['detail'] = ['male', 'female', 'secret'];
+            }
+
+            if ('email' == $fieldName && !empty($userInfo[$fieldName])) {
+                continue;
             }
 
             if ('mobile' == $fieldName) {
