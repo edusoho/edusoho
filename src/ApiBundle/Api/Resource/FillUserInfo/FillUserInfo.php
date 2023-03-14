@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\FillUserInfo;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\UserToolkit;
 use Biz\Common\BizSms;
 use Biz\Sms\SmsException;
 use Biz\User\Service\UserFieldService;
@@ -58,7 +59,7 @@ class FillUserInfo extends AbstractResource
                 continue;
             }
 
-            if ('email' == $fieldName && $this->isEmailGeneratedBySystem($userInfo[$fieldName])) {
+            if ('email' == $fieldName && UserToolkit::isEmailGeneratedBySystem($userInfo[$fieldName])) {
                 $userInfo[$fieldName] = '';
                 if (!empty($userInfo[$fieldName])) {
                     continue;
@@ -148,11 +149,6 @@ class FillUserInfo extends AbstractResource
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         return $userInfo;
-    }
-
-    protected function isEmailGeneratedBySystem($email)
-    {
-        return (bool) preg_match('/^user_[a-z0-9]{9}@edusoho\.net$/', $email);
     }
 
     /**
