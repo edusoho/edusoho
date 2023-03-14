@@ -6269,7 +6269,8 @@ admin.mobile_manage.discovery_upgrade.transfer_btn: '去使用'
 
 # 微信通知管理
 admin.wechat_notification.switch: 微信通知设置
-admin.wechat_notification.template: 微信通知模板
+admin.wechat_notification.template: 服务号通知模板
+admin.wechat_notification.message_subscribe.template: 订阅通知模板
 admin.wechat_notification.template_name: 模板名称
 admin.wechat_notification.template_content_sample: 模板内容示例
 admin.wechat_notification.send_object: 发送对象
@@ -6289,7 +6290,7 @@ admin.wechat.notification.un_authorized_before_open_tip: 开启微信通知前�
 admin.wechat.notification.un_authorized_after_open_tip: 为防止网校服务器IP或消息服务器IP变更造成的通知功能异常，建议您进行扫码授权。
 admin.wechat.notification.authorized_wholeless: 检测到您在扫码授权时，未将群发与通知权限”授予ES第三方平台，将无法启用“微信服务号通知”，请进行重新授权。
 admin.wechat.notification.go_authorizer: 立即授权
-admin.wechat_notification.message_subscribe.template_content_sample: 微信模板内容示例
+admin.wechat_notification.message_subscribe.template_content_sample: 订阅通知模板内容示例
 admin.wechat_notification.message_subscribe.template_subscribe_position: 订阅位置
 admin.wechat_notification.message_subscribe.sms_template_content_sample: 短信模板内容示例
 admin.wechat_notification.message_subscribe.disable_tip: 注意：第一次使用需要授权网站生成微信通知模板
