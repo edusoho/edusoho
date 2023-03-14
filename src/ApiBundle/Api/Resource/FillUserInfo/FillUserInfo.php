@@ -58,6 +58,13 @@ class FillUserInfo extends AbstractResource
                 continue;
             }
 
+            if ('email' == $fieldName && $this->isEmailGeneratedBySystem($userInfo[$fieldName])) {
+                $userInfo[$fieldName] = '';
+                if (!empty($userInfo[$fieldName])) {
+                    continue;
+                }
+            }
+
             $checkedField = [
                 'fieldName' => $extUserFields[$fieldName]['title'] ?? ($ZhFields[$fieldName] ?? $fieldName),
                 'value' => empty($userInfo[$fieldName]) ? '' : $userInfo[$fieldName],
@@ -73,10 +80,6 @@ class FillUserInfo extends AbstractResource
             if ('gender' == $fieldName) {
                 $checkedField['type'] = 'select';
                 $checkedField['detail'] = ['male', 'female', 'secret'];
-            }
-
-            if ('email' == $fieldName && !empty($userInfo[$fieldName]) && $this->isEmailGeneratedBySystem($userInfo[$fieldName])) {
-                continue;
             }
 
             if ('mobile' == $fieldName) {
