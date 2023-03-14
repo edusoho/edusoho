@@ -51,3 +51,16 @@ services:
     arguments: [ '@biz' ]
     tags:
       - { name: codeages_plugin.event.subscriber }
+
+  mall_wechat_template.extension:
+    class: MarketingMallBundle\Extension\WeChatTemplateExtension
+    public: true
+    calls:
+      -
+        - setBiz
+        -
+          - '@biz'
+    tags:
+      -
+        name: extension
+        priority: 11

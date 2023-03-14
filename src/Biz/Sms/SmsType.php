@@ -90,4 +90,29 @@ class SmsType
      * 评语修改通知短信模板id  课程：《{$course}》-学习任务：[{$task}{$type}任务]的教师评语已修改，点击查看[{$url}]
      */
     const COMMENT_MODIFY_NOTIFY = 2312;
+
+    /**
+     * 开团成功通知短信模板id 你参与的$grouponTitle已开团成功，拼团价为$grouponPrice元，需$grouponMemberNum人成团，拼团结束时间为$grouponEndAt，快复制链接邀请微信好友一起参与吧$url
+     */
+    const GROUPON_CREATE = 2464;
+
+    /**
+     * 参团成功通知短信模板id 你已参与$grouponTitle团成功，拼团价为$grouponPrice元，还剩$grouponRemain人成团，拼团结束时间为$grouponEndAt，快复制链接邀请微信好友一起参与吧$url
+     */
+    const GROUPON_JOIN = 2465;
+
+    /**
+     * 拼团成功通知短信模板id 你参与的$grouponTitle已成团，拼团价为$grouponPrice元，快复制链接到微信中去学习吧$url
+     */
+    const GROUPON_SUCCESS = 2466;
+
+    /**
+     * 拼团失败通知短信模板id 你参与的$grouponTitle拼团失败，可复制链接到微信内重新参与拼团$url
+     */
+    const GROUPON_FAIL = 2467;
+
+    /**
+     * 退款通知短信模板id 你参与的$grouponTitle拼团失败，发起退款，退款金额为$refundAmount元，复制链接至微信查看退款详情$url
+     */
+    const GROUPON_ORDER_REFUND = 2468;
 }
