@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\FillUserInfo;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\UserToolkit;
 use Biz\Common\BizSms;
 use Biz\Sms\SmsException;
 use Biz\User\Service\UserFieldService;
@@ -58,6 +59,10 @@ class FillUserInfo extends AbstractResource
                 continue;
             }
 
+            if ('email' == $fieldName && UserToolkit::isEmailGeneratedBySystem($userInfo[$fieldName])) {
+                $userInfo[$fieldName] = '';
+            }
+
             $checkedField = [
                 'fieldName' => $extUserFields[$fieldName]['title'] ?? ($ZhFields[$fieldName] ?? $fieldName),
                 'value' => empty($userInfo[$fieldName]) ? '' : $userInfo[$fieldName],
@@ -75,7 +80,7 @@ class FillUserInfo extends AbstractResource
                 $checkedField['detail'] = ['male', 'female', 'secret'];
             }
 
-            if ('email' == $fieldName && !empty($userInfo[$fieldName]) && '1' == $userInfo['emailVerified']) {
+            if ('email' == $fieldName && !empty($userInfo[$fieldName])) {
                 continue;
             }
 
