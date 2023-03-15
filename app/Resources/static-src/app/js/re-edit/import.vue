@@ -49,10 +49,14 @@
           finishUrl: $('[name=upload_finish_url]').val(),
           accept: JSON.parse($('[name=upload_accept]').val()),
           fileSingleSizeLimit: $('[name=upload_size_limit]').val(),
+          ui: 'batch',
+          multiple: true,
+          multitaskNum: 3,
+          fileNumLimit: 3,
           locale: document.documentElement.lang
         },
         fileId: 0,
-        redirect:true
+        redirect: true
       }
     },
     created() {
