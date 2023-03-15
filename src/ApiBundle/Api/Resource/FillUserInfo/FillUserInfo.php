@@ -54,7 +54,8 @@ class FillUserInfo extends AbstractResource
         $isFullFill = true;
         $userFields = [];
         $ZhFields = ['email' => '邮箱', 'truename' => '真实姓名', 'mobile' => '手机号码', 'qq' => 'QQ', 'company' => '公司', 'weixin' => '微信', 'weibo' => '微博', 'idcard' => '身份证号', 'gender' => '性别', 'job' => '职业'];
-        foreach ($auth['registerFieldNameArray'] ?? [] as $fieldName) {
+        $fieldNames = array_intersect($auth['registerSort'] ?? [], $auth['registerFieldNameArray'] ?? []);
+        foreach ($fieldNames as $fieldName) {
             if (!in_array($fieldName, self::USER_INFO_FIELDS)) {
                 continue;
             }
