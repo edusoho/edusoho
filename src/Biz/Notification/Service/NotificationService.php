@@ -26,5 +26,5 @@ interface NotificationService
 
     public function createWeChatNotificationRecord($sn, $key, $data, $source, $batchId = 0);
 
-    public function createSmsNotificationRecord($data, $smsParams, $source);
+    public function createSmsNotificationRecord($data, $smsParams, $source, $batchId = 0);
 }
