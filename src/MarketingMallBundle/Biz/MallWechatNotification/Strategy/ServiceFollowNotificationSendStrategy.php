@@ -5,7 +5,6 @@ namespace MarketingMallBundle\Biz\MallWechatNotification\Strategy;
 use Biz\AppLoggerConstant;
 use Biz\Notification\Service\NotificationService;
 use Biz\System\Service\LogService;
-use Biz\User\Service\UserService;
 use MarketingMallBundle\Biz\MallWechatNotification\Event\NotificationEvent;
 use MarketingMallBundle\Common\WechatNotification\MessageTemplateUtil;
 
