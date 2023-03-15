@@ -49,10 +49,10 @@ class GrouponCreateNotificationEvent extends AbstractNotificationEvent implement
     public function buildSmsTemplateArgs($data)
     {
         return [
-            'grouponTitle' => $data['grouponTitle'],
+            'grouponTitle' => "【{$data['grouponMemberNum']}人团】".$data['grouponTitle'],
             'grouponPrice' => $data['grouponPrice'] / 100,
             'grouponMemberNum' => $data['grouponMemberNum'],
-            'grouponEndAt' => $data['grouponEndAt'],
+            'grouponEndAt' => date('Y年m月d日 H:i:s', $data['grouponEndAt']),
             'url' => $data['url'],
         ];
     }
