@@ -35,11 +35,13 @@ class FillUserInfo extends AbstractResource
     {
         $auth = $this->getSettingService()->get('auth');
         $user = $this->getCurrentUser();
+        $fieldNames = array_intersect($auth['registerSort'] ?? [], $auth['registerFieldNameArray'] ?? []);
+
         if ($user['roles'] != ['ROLE_USER']) {
             return ['result' => true, 'message' => ''];
         }
 
-        if ($auth['fill_userinfo_after_login'] && empty($auth['registerSort'])) {
+        if ($auth['fill_userinfo_after_login'] && empty($fieldNames)) {
             return ['result' => true, 'message' => ''];
         }
 
@@ -54,7 +56,6 @@ class FillUserInfo extends AbstractResource
         $isFullFill = true;
         $userFields = [];
         $ZhFields = ['email' => '邮箱', 'truename' => '真实姓名', 'mobile' => '手机号码', 'qq' => 'QQ', 'company' => '公司', 'weixin' => '微信', 'weibo' => '微博', 'idcard' => '身份证号', 'gender' => '性别', 'job' => '职业'];
-        $fieldNames = array_intersect($auth['registerSort'] ?? [], $auth['registerFieldNameArray'] ?? []);
         foreach ($fieldNames as $fieldName) {
             if (!in_array($fieldName, self::USER_INFO_FIELDS)) {
                 continue;
@@ -87,12 +88,12 @@ class FillUserInfo extends AbstractResource
 
             if ('mobile' == $fieldName) {
                 $checkedField['mobileSmsValidate'] = !empty($auth['mobileSmsValidate']) ? '1' : '0';
-                if (!empty($userInfo['verifiedMobile'])) {
+                if (!empty($userInfo['verifiedMobile']) || !empty($userInfo[$fieldName])) {
                     continue;
                 }
             }
 
-            if (('idcard' == $fieldName || 'truename' == $fieldName) && !empty($userInfo[$fieldName]) && ('approved' == $userInfo['approvalStatus'] || 'approving' == $userInfo['approvalStatus'])) {
+            if (in_array($fieldName, ['idcard', 'truename']) && !empty($userInfo[$fieldName]) && in_array($userInfo['approvalStatus'], ['approved', 'approving'])) {
                 continue;
             }
 
