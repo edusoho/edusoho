@@ -15,6 +15,7 @@ class NotificationEventFactory
             'grouponCreate' => GrouponCreateNotificationEvent::class,
             'grouponJoin' => GrouponJoinNotificationEvent::class,
             'grouponSuccess' => GrouponSuccessNotificationEvent::class,
+            'grouponFail' => GrouponFailNotificationEvent::class,
         ];
 
         return new $events[$eventName](ServiceKernel::instance()->getBiz());
