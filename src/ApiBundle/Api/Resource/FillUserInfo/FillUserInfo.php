@@ -88,7 +88,7 @@ class FillUserInfo extends AbstractResource
 
             if ('mobile' == $fieldName) {
                 $checkedField['mobileSmsValidate'] = !empty($auth['mobileSmsValidate']) ? '1' : '0';
-                if (!empty($userInfo['verifiedMobile']) || !empty($userInfo[$fieldName])) {
+                if (!empty($userInfo['verifiedMobile'])) {
                     continue;
                 }
             }
