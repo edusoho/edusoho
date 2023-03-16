@@ -129,7 +129,10 @@ class FillUserInfo extends AbstractResource
             }
         }
 
-        $this->saveUserInfo($formData, $user);
+        $userInfo = $this->saveUserInfo($formData, $user);
+        if (!$userInfo) {
+            return ['result' => false, 'message' => '字段不能为空'];
+        }
 
         return ['result' => true, 'message' => ''];
     }
@@ -138,6 +141,11 @@ class FillUserInfo extends AbstractResource
     {
         // todo 仅更新必要字段
         $userInfo = ArrayToolkit::parts($formData, self::USER_INFO_FIELDS);
+        foreach ($userInfo as $value) {
+            if (empty($value)) {
+                return false;
+            }
+        }
         $authSetting = $this->getSettingService()->get('auth', []);
 
         if (isset($formData['email']) && !empty($formData['email'])) {
