@@ -65,9 +65,10 @@ class GrouponFailNotificationEvent extends AbstractNotificationEvent implements 
     private function transFailReason($failReason)
     {
         $failReasons = [
-            'timeUp' => '超出成团时限',
-            'grouponFinished' => '拼团活动结束',
-            'grouponInvalid' => '拼团活动失效',
+            'timeOver' => '超出成团时限',
+            'grouponBatchFinished' => '拼团活动结束',
+            'grouponBatchInvalid' => '拼团活动失效',
+            'grouponCancel' => '拼团被取消',
         ];
 
         return $failReasons[$failReason];
