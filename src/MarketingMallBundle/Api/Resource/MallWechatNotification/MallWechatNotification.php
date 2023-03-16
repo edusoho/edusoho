@@ -30,6 +30,6 @@ class MallWechatNotification extends BaseResource
      */
     private function getMallWechatNotificationService()
     {
-        return $this->service('MallWechatNotification:MallWechatNotificationService');
+        return $this->service('MarketingMallBundle:MallWechatNotification:MallWechatNotificationService');
     }
 }
