@@ -20,7 +20,7 @@ class MallWechatNotification extends BaseResource
         if (!ArrayToolkit::requireds($body, ['event', 'data'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-        $this->getMallWechatNotificationService()->notify($body['event'], $body['data']);
+        $this->getMallWechatNotificationService()->notify($body['event'], json_decode($body['data'], true));
 
         return ['success' => true];
     }
