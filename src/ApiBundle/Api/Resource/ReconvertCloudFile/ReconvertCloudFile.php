@@ -6,13 +6,16 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\CloudFile\Service\CloudFileService;
 use Biz\File\Service\UploadFileService;
+use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 
 class ReconvertCloudFile extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
-        $globalId = $request->request->get('globalId');
-        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        $globalId = $request->query->get('globalId');
+        $file =  $this->getAttachmentService()->getAttachmentByGlobalId($globalId);
+//        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        var_dump($file);
         if ('video' == $file['type']) {
             return $this->reconvert($file);
         }
@@ -48,5 +51,13 @@ class ReconvertCloudFile extends AbstractResource
     protected function getCloudFileService()
     {
         return $this->biz->service('CloudFile:CloudFileService');
+    }
+
+    /**
+     * @return AttachmentService
+     */
+    protected function getAttachmentService()
+    {
+        return $this->biz->service('ItemBank:Item:AttachmentService');
     }
 }
