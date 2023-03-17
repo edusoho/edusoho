@@ -9,8 +9,8 @@ use AppBundle\Controller\AdminV2\BaseController;
 use AppBundle\Util\CdnUrl;
 use Biz\Content\Service\FileService;
 use Biz\System\Service\CacheService;
-use Biz\System\Service\SettingUpdateNotifyService;
 use Biz\System\Service\SettingService;
+use Biz\System\Service\SettingUpdateNotifyService;
 use Biz\User\Service\AuthService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
@@ -115,6 +115,25 @@ class SettingController extends BaseController
         $setting = JsonToolkit::prettyPrint(json_encode($setting));
 
         return $this->render('admin-v2/system/security/post-num-rules.html.twig', [
+            'setting' => $setting,
+        ]);
+    }
+
+    public function antiFraudReminderAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get('anti_fraud_reminder', []);
+        if (empty($setting)) {
+            $setting = array_merge(['enable' => '1', 'reminder_frequency' => '1', 'visible' => '1'], $setting);
+            $this->getSettingService()->set('anti_fraud_reminder', $setting);
+        }
+
+        if ('POST' == $request->getMethod()) {
+            $setting = $request->request->all();
+            $this->getSettingService()->set('anti_fraud_reminder', $setting);
+            $this->setFlashMessage('success', 'site.save.success');
+        }
+
+        return $this->render('admin-v2/system/security/anti-fraud-reminder.html.twig', [
             'setting' => $setting,
         ]);
     }

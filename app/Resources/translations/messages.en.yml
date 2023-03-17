@@ -6848,6 +6848,23 @@ admin.post_num_rules.same_ip_rule: 'Maximum posts(including replies) per Ip in 5
 admin.post_num_rules.post_num: 'Post count'
 admin.post_num_rules.post_num_tips: 'Post count must be integer greater than or equal to 0. 0 means no limit'
 admin.post_num_rules.same_user_rule: 'Maximum posts(including replies) per user in 5 minutes'
+admin.anti_fraud_reminder.setting: APP anti-fraud pop-up window settings
+admin.anti_fraud_reminder.open_radio: Open
+admin.anti_fraud_reminder.close_radio: Closed
+admin.anti_fraud_reminder.setting.enable.tips: After opening, the user will give an anti-fraud pop-up window reminder when entering the APP
+admin.anti_fraud_reminder.setting.disable.tips: The APP does not display the anti-fraud pop-up window
+admin.anti_fraud_reminder.reminder_frequency: Reminder frequency
+admin.anti_fraud_reminder.alert_the_object: Alert the object
+admin.anti_fraud_reminder.visible_to_all_users: Visible to all users
+admin.anti_fraud_reminder.visible_only_to_legacy_users: Visible only to legacy users
+admin.anti_fraud_reminder.to_legacy_users_tips: Repeat users are users who have successfully paid within the institution
+admin.anti_fraud_reminder.view_reminder_example: See examples of reminders
+admin.anti_fraud_reminder.tips:
+  <p>【Anti-fraud reminder】</p>
+  <p>Recently, we have discovered that illegal individuals posing as staff members of Kochi or online schools have committed fraud in the name of "Kochi School/Online School Refund"! If you receive relevant text messages and phone calls, please do not believe!!!
+  <p>We have prepared an anti-fraud and anti-harassment tutorial for you. Click the button below to learn more.</p>
+  <a class="block mt8" href="javascript:;">view anti-harassment setting tutorial &gt;</a>
+  
 admin.reports_status.environmental_detection: 'Environment test'
 admin.reports_status.recommend_config: 'Recommended configuration'
 admin.reports_status.current_status: 'Current status'
