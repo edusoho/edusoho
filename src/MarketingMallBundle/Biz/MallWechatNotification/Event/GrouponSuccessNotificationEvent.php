@@ -2,6 +2,7 @@
 
 namespace MarketingMallBundle\Biz\MallWechatNotification\Event;
 
+use AppBundle\Common\SmsToolkit;
 use Biz\Sms\SmsType;
 use MarketingMallBundle\Common\WechatNotification\MessageSubscriberTemplateUtil;
 use MarketingMallBundle\Common\WechatNotification\MessageTemplateUtil;
@@ -49,7 +50,7 @@ class GrouponSuccessNotificationEvent extends AbstractNotificationEvent implemen
         return [
             'grouponTitle' => "【{$data['grouponMemberNum']}人团】".$data['grouponTitle'],
             'grouponPrice' => $data['grouponPrice'] / 100,
-            'url' => $data['url'],
+            'url' => SmsToolkit::getShortLink($data['url']),
         ];
     }
 
