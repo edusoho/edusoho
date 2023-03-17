@@ -12,14 +12,24 @@ class ReconvertCloudFile extends AbstractResource
     public function search(ApiRequest $request)
     {
         $globalId = $request->request->get('globalId');
-        $this->reconvertAction($globalId);
+        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        if ('video' == $file['type']) {
+            return $this->reconvert($file);
+        }
+
+        if (in_array($file['type'], ['video', 'audio'])) {
+            return [
+                'globalId' => $file['globalId'],
+                'length' => $file['length'],
+            ];
+        }
+
+        return (object) [];
     }
 
-    public function reconvertAction($globalId)
+    public function reconvert($file)
     {
-        $this->getUploadFileService()->tryManageGlobalFile($globalId);
-
-        $uploadFile = $this->getCloudFileService()->reconvert($globalId);
+        $uploadFile = $this->getCloudFileService()->reconvert($file['globalId']);
 
         return $uploadFile;
     }

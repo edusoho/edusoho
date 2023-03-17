@@ -3,9 +3,11 @@
 namespace Codeages\Biz\ItemBank\Item\Wrapper;
 
 use Biz\CloudFile\Service\CloudFileService;
+use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
+use Topxia\Service\Common\ServiceKernel;
 
 class AttachmentWrapper
 {
