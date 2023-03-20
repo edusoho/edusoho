@@ -7,7 +7,6 @@ use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
-use Topxia\Service\Common\ServiceKernel;
 
 class AttachmentWrapper
 {
@@ -37,23 +36,24 @@ class AttachmentWrapper
         foreach ($sortAttachments as $sortAttachment) {
             $attachments = ArrayToolkit::sort($attachments, 'seq', SORT_ASC);
         }
-        $globalIds = ArrayToolkit::column($attachments,'global_id');
+        $globalIds = ArrayToolkit::column($attachments, 'global_id');
         $attachments = ArrayToolkit::group($attachments, 'target_id');
-        $files = $this->getUploadFileService()->searchCloudFilesFromLocal([
-            'globalIds'=>$globalIds,
-            'questionBank'=>1,
-            'resType'=>'attachment'
-        ],[],0,1);
-        $files = ArrayToolkit::index($files,'globalId');
+        $files = $globalIds ? $this->getUploadFileService()->searchCloudFilesFromLocal([
+            'globalIds' => $globalIds,
+            'questionBank' => 1,
+            'resType' => 'attachment',
+        ], [], 0, PHP_INT_MAX) : [];
+        $files = ArrayToolkit::index($files, 'globalId');
         foreach ($item['questions'] as &$question) {
             $question['attachments'] = empty($attachments[$question['id']]) ? [] : $attachments[$question['id']];
             foreach ($question['attachments'] as &$attachment) {
-                $attachment['length'] = $files[$attachment['global_id']]['length']??0;
-                if($attachment['file_type'] == 'video') {
-                    $attachment['thumbnail'] = $files[$attachment['global_id']]['thumbnail']??null;
+                $attachment['length'] = $files[$attachment['global_id']]['length'] ?? 0;
+                if ('video' == $attachment['file_type']) {
+                    $attachment['thumbnail'] = $files[$attachment['global_id']]['thumbnail'] ?? null;
                 }
             }
         }
+
         return $item;
     }
 
@@ -72,6 +72,7 @@ class AttachmentWrapper
     {
         return $this->biz->service('CloudFile:CloudFileService');
     }
+
     /**
      * @return UploadFileService
      */
