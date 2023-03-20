@@ -44,8 +44,9 @@ class ServiceFollowNotificationSendStrategy extends AbstractNotificationSendStra
             ['lastRefreshTime' => 'ASC'],
             0,
             count($toUserIds),
-            ['openId']
+            ['id', 'openId', 'unionId', 'userId']
         );
+        $this->getWeChatService()->batchFreshOfficialWeChatUsers($weChatUsers);
 
         return array_column($weChatUsers, 'openId');
     }
