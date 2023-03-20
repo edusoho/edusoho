@@ -41,7 +41,7 @@ class GrouponOrderRefundNotificationEvent extends AbstractNotificationEvent impl
             'thing11' => ['value' => $data['grouponTitle']],
             'amount3' => ['value' => ($data['grouponPrice'] / 100) . '元'],
             'amount12' => ['value' => ($data['refundAmount'] / 100) . '元'],
-            'thing5' => ['value' => "很遗憾，你的{$data['grouponMemberNum']}人拼团未成功，已支付费用将在1-3天后原支付渠道退还，点击详情查看退款详情。"],
+            'thing5' => ['value' => '拼团失败，费用将在3天内原渠道退还。'],
         ];
     }
 

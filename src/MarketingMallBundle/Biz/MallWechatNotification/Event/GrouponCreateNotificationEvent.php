@@ -43,7 +43,7 @@ class GrouponCreateNotificationEvent extends AbstractNotificationEvent implement
             'amount2' => ['value' => ($data['grouponPrice'] / 100) . '元'],
             'number3' => ['value' => $data['grouponMemberNum']],
             'time4' => ['value' => date('Y年m月d日 H:i:s', $data['grouponEndAt'])],
-            'thing10' => ['value' => '截止至拼团结束时间，拉满成团人数拼团成功，人数不足拼团失败自动退款。点击详情可邀请好友参团。'],
+            'thing10' => ['value' => '拉满人数则拼团成功，拼团失败自动退款。'],
         ];
     }
 
