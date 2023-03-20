@@ -16,6 +16,7 @@ class MessageSubscribeNotificationSendStrategy extends AbstractNotificationSendS
         $templateKey = $event->getMessageSubscribeTemplateKey();
         $templateId = $this->getWeChatService()->getSubscribeTemplateId($templateKey);
         if ($templateId) {
+            $this->getWeChatService()->synchronizeSubscriptionRecords();
             $subscribeRecords = $this->getWeChatService()->findOnceSubscribeRecordsByTemplateCodeUserIds($templateId, $toUserIds);
             $templates = MessageSubscriberTemplateUtil::templates();
             $notification = [
