@@ -64,12 +64,12 @@ class AntiFraudRemind extends AbstractResource
      */
     private function checkRegularCustomer($userId): bool
     {
-        $orders = $this->getOrderService()->searchOrders(['user_id' => $userId], [], 0, PHP_INT_MAX, ['price_amount']);
+        $orders = $this->getOrderService()->searchOrders(['user_id' => $userId], [], 0, PHP_INT_MAX, ['pay_amount']);
         if (empty($orders)) {
             return false;
         }
 
-        return array_sum(array_column($orders, 'price_amount')) >= 0.01;
+        return array_sum(array_column($orders, 'pay_amount')) >= 0.01;
     }
 
     /**
