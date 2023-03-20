@@ -38,17 +38,28 @@ class AttachmentWrapper
             $attachments = ArrayToolkit::sort($attachments, 'seq', SORT_ASC);
         }
         $attachments = ArrayToolkit::group($attachments, 'target_id');
+
+        $attachmentgroups =  ArrayToolkit::group($attachments, 'file_type');
+        $golbalIds= ArrayToolkit::column($attachmentgroups,'golbal_id');
+
+        $files = $this->getUploadFileService()->searchCloudFilesFromLocal([
+            'globalIds'=>$golbalIds,
+            'questionBank'=>1,
+            'resType'=>'attachment'
+        ],[],0,1);
+
+        $files= ArrayToolkit::index($files,'golbalId');
+
         foreach ($item['questions'] as &$question) {
             $question['attachments'] = empty($attachments[$question['id']]) ? [] : $attachments[$question['id']];
             foreach ($question['attachments'] as &$attachment) {
+                $attachment['length'] = $files[$attachment['golbal_id']['length']]??0;
                 if($attachment['file_type'] == 'video') {
-                    $attachment['cloudFile'] = $this->getCloudFileService()->reconvert($attachment['golbal_id'], [
-                        'directives' => [],
-                    ]);
+                    $attachment['cloudFile'] = $files[$attachment['golbal_id']]??null;
                 }
             }
         }
-
+file_put_contents('/tmp/log',json_encode($item), 8);
         return $item;
     }
 
