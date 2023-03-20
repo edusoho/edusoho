@@ -13,12 +13,12 @@ class AntiFraudRemindServiceImpl extends BaseService implements AntiFraudRemindS
         return $this->getAntiFraudRemindDao()->getByUserId($userId);
     }
 
-    public function create($antiFraudRemind)
+    public function creatAntiFraudRemind($antiFraudRemind)
     {
         return $this->getAntiFraudRemindDao()->create($antiFraudRemind);
     }
 
-    public function update($fileId, $fields)
+    public function updateLastRemindTime($fileId, $fields)
     {
         return $this->getAntiFraudRemindDao()->update($fileId, $fields);
     }

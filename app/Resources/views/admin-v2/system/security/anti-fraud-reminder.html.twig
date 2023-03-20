@@ -48,12 +48,12 @@
       </div>
       <div class="controls col-md-8 radios">
         <label class="block">
-          <input type="radio" name="visible" value="1" {% if setting.visible %} checked {% endif %}>
+          <input type="radio" name="all_users_visible" value="1" {% if setting.all_users_visible %} checked {% endif %}>
           <span class="ml4">{{ 'admin.anti_fraud_reminder.visible_to_all_users'|trans }}</span>
         </label>
         <label class="block mt16">
-          <input type="radio" name="visible"
-                 value="0" {% if not setting.visible %} checked {% endif %}>
+          <input type="radio" name="all_users_visible"
+                 value="0" {% if not setting.all_users_visible %} checked {% endif %}>
           <span class="ml4">{{ 'admin.anti_fraud_reminder.visible_only_to_legacy_users'|trans }}</span>
           <span style="color: #999">{{ 'admin.anti_fraud_reminder.to_legacy_users_tips'|trans }}</span>
         </label>

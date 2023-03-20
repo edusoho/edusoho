@@ -123,7 +123,7 @@ class SettingController extends BaseController
     {
         $setting = $this->getSettingService()->get('anti_fraud_reminder', []);
         if (empty($setting)) {
-            $setting = array_merge(['enable' => '1', 'reminder_frequency' => '1', 'visible' => '1'], $setting);
+            $setting = array_merge(['enable' => '1', 'reminder_frequency' => '1', 'all_users_visible' => '1'], $setting);
             $this->getSettingService()->set('anti_fraud_reminder', $setting);
         }
 
