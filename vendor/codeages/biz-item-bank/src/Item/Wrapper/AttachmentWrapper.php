@@ -37,29 +37,23 @@ class AttachmentWrapper
         foreach ($sortAttachments as $sortAttachment) {
             $attachments = ArrayToolkit::sort($attachments, 'seq', SORT_ASC);
         }
+        $globalIds = ArrayToolkit::column($attachments,'global_id');
         $attachments = ArrayToolkit::group($attachments, 'target_id');
-
-        $attachmentgroups =  ArrayToolkit::group($attachments, 'file_type');
-        $golbalIds= ArrayToolkit::column($attachmentgroups,'golbal_id');
-
         $files = $this->getUploadFileService()->searchCloudFilesFromLocal([
-            'globalIds'=>$golbalIds,
+            'globalIds'=>$globalIds,
             'questionBank'=>1,
             'resType'=>'attachment'
         ],[],0,1);
-
-        $files= ArrayToolkit::index($files,'golbalId');
-
+        $files = ArrayToolkit::index($files,'globalId');
         foreach ($item['questions'] as &$question) {
             $question['attachments'] = empty($attachments[$question['id']]) ? [] : $attachments[$question['id']];
             foreach ($question['attachments'] as &$attachment) {
-                $attachment['length'] = $files[$attachment['golbal_id']['length']]??0;
+                $attachment['length'] = $files[$attachment['global_id']]['length']??0;
                 if($attachment['file_type'] == 'video') {
-                    $attachment['cloudFile'] = $files[$attachment['golbal_id']]??null;
+                    $attachment['thumbnail'] = $files[$attachment['global_id']]['thumbnail']??null;
                 }
             }
         }
-file_put_contents('/tmp/log',json_encode($item), 8);
         return $item;
     }
 
@@ -77,5 +71,12 @@ file_put_contents('/tmp/log',json_encode($item), 8);
     protected function getCloudFileService()
     {
         return $this->biz->service('CloudFile:CloudFileService');
+    }
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->biz->service('File:UploadFileService');
     }
 }
