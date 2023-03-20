@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\BehaviorVerification\Service\BehaviorVerificationBlackIpService;
 use Biz\BehaviorVerification\Service\BehaviorVerificationCoordinateService;
 use Biz\BehaviorVerification\Service\BehaviorVerificationService;
+use Biz\BehaviorVerification\Service\SmsRequestLogService;
 use Biz\System\Service\LogService;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -16,23 +17,22 @@ class BehaviorVerificationServiceImpl extends BaseService implements BehaviorVer
 
     public function behaviorVerification($request)
     {
-        if ($request->isXmlHttpRequest()){
-            $encryptedPoint = $request->request->get('encryptedPoint');
-            $coordinate = $this->getBehaviorVerificationCoordinateService()->decryptCoordinate($encryptedPoint);
-            $clientIp = $request->getClientIp();
-            if ($this->getBehaviorVerificationBlackIpService()->isInBlackIpList($clientIp)) {
-                $this->getLogger()->info("坐标：$coordinate ，IP: $clientIp 在IP黑名单中，请求被拦截。");
-                $this->getBehaviorVerificationCoordinateService()->isRobot($coordinate);
+        if ($request->isXmlHttpRequest()) {
+            $conditions['fingerprint'] = $request->request->get('encryptedPoint');
+            $conditions['userAgent'] = $request->headers->get('user-agent');
+            $conditions['ip'] = $request->getClientIp();
+            $conditions['mobile'] = $request->get('mobile');
+            if ($this->getBehaviorVerificationBlackIpService()->isInBlackIpList($conditions['ip'])) {
+                $this->getSmsRequestLogService()->isRobot($conditions);
                 return true;
             }
 
-            if ($this->getBehaviorVerificationCoordinateService()->isRobot($coordinate)) {
-                $this->getBehaviorVerificationBlackIpService()->addBlackIpList($clientIp);
-                $this->getLogService()->info('behavior_verification', 'add_black_list', "$coordinate 坐标异常, $clientIp 被加入黑名单。");
+            if ($this->getSmsRequestLogService()->isRobot($conditions)) {
+                $this->getBehaviorVerificationBlackIpService()->addBlackIpList($conditions['ip']);
                 return true;
             }
         }
-        $this->getLogger()->info("坐标：$coordinate ，IP: $clientIp 正在执行请求。");
+
         return false;
     }
 
@@ -60,10 +60,11 @@ class BehaviorVerificationServiceImpl extends BaseService implements BehaviorVer
         return $this->createService('System:LogService');
     }
 
-    protected function getLogger()
+    /**
+     * @return SmsRequestLogService
+     */
+    protected function getSmsRequestLogService()
     {
-        $logger = new Logger('BehaviorVerification.INFO');
-        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/c.log', Logger::INFO));
-        return $logger;
+        return $this->createService('BehaviorVerification:SmsRequestLogService');
     }
 }

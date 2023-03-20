@@ -1527,6 +1527,7 @@ class WebExtension extends \Twig_Extension
     private function parseUri($uri, $absolute = false, $package = 'content')
     {
         if (false !== strpos($uri, 'http://') || false !== strpos($uri, 'https://')) {
+            file_put_contents("/tmp/url12", json_encode($uri).PHP_EOL, 8);
             return $uri;
         }
 
@@ -1627,6 +1628,7 @@ class WebExtension extends \Twig_Extension
 
     public function getFpath($path, $defaultKey = false, $package = 'content')
     {
+        file_put_contents("/tmp/path", json_encode($path).PHP_EOL, 8);
         return $this->getPublicFilePath($path, $defaultKey, false, $package);
     }
 
@@ -1672,7 +1674,7 @@ class WebExtension extends \Twig_Extension
             $request = $this->requestStack->getMasterRequest();
             $path = $request->getSchemeAndHttpHost().$path;
         }
-
+file_put_contents("/tmp/abc12", json_encode($path).PHP_EOL, 8);
         return $path;
     }
 

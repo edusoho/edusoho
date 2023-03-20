@@ -3,6 +3,7 @@
 namespace Codeages\Biz\ItemBank\Item\Service\Impl;
 
 use Codeages\Biz\ItemBank\BaseService;
+use Codeages\Biz\ItemBank\Item\Dao\QuestionFavoriteDao;
 use Codeages\Biz\ItemBank\Item\Service\QuestionFavoriteService;
 use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Exception\QuestionException;
@@ -70,6 +71,9 @@ class QuestionFavoriteServiceImpl extends BaseService implements QuestionFavorit
         return $this->biz->dao('ItemBank:Item:QuestionDao');
     }
 
+    /**
+     * @return QuestionFavoriteDao
+     */
     protected function getQuestionFavoriteDao()
     {
         return $this->biz->dao('ItemBank:Item:QuestionFavoriteDao');

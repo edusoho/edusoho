@@ -96,7 +96,7 @@ class QuestionController extends BaseController
             'user_id' => $user['id'],
             'target_type' => 'assessment',
         ];
-
+        file_put_contents("/tmp/favoriteItemsCount", json_encode($this->getQuestionFavoriteService()->count($conditions)), 8);
         $favoriteItems = $this->getQuestionFavoriteService()->search(
             $conditions,
             ['created_time' => 'DESC'],
@@ -104,7 +104,7 @@ class QuestionController extends BaseController
             $this->getQuestionFavoriteService()->count($conditions)
         );
         $favoriteItems = ArrayToolkit::index($favoriteItems, 'item_id');
-
+file_put_contents("/tmp/favoriteItems", json_encode($favoriteItems), 8);
         if (empty($favoriteItems[$id])) {
             $this->createNewException(QuestionException::FORBIDDEN_PREVIEW_QUESTION());
         }
