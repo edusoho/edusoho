@@ -5,6 +5,7 @@ namespace Biz\BehaviorVerification\Service\Impl;
 use AppBundle\Common\EncryptionToolkit;
 use Biz\BaseService;
 use Biz\BehaviorVerification\Dao\SmsRequestLogDao;
+use Biz\BehaviorVerification\AppException;
 use Biz\BehaviorVerification\Service\SmsRequestLogService;
 
 class SmsRequestLogServiceImpl extends BaseService implements SmsRequestLogService
@@ -17,7 +18,7 @@ class SmsRequestLogServiceImpl extends BaseService implements SmsRequestLogServi
         $conditions['coordinate'] = $this->decryptCoordinate($conditions['fingerprint']);
         $smsRequestLogg = $this->getSmsRequestLogDao()->create($conditions);
         if (empty($conditions['coordinate'])) {
-            return true;
+            $this->createNewException(AppException::GET_COORDINATE_FAILED);
         }
         // 需要查询，一分钟是不是有十次记录
         $requestTimesInOneMinute = $this->getSmsRequestLogDao()->count(['ip' => $conditions['ip'], 'startTime' => time() - 60, 'endTime' => time()]);
