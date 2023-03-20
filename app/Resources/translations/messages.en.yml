@@ -6859,11 +6859,9 @@ admin.anti_fraud_reminder.visible_to_all_users: Visible to all users
 admin.anti_fraud_reminder.visible_only_to_legacy_users: Visible only to legacy users
 admin.anti_fraud_reminder.to_legacy_users_tips: Repeat users are users who have successfully paid within the institution
 admin.anti_fraud_reminder.view_reminder_example: See examples of reminders
-admin.anti_fraud_reminder.tips:
-  <p>【Anti-fraud reminder】</p>
-  <p>Recently, we have discovered that illegal individuals posing as staff members of Kochi or online schools have committed fraud in the name of "Kochi School/Online School Refund"! If you receive relevant text messages and phone calls, please do not believe!!!
-  <p>We have prepared an anti-fraud and anti-harassment tutorial for you. Click the button below to learn more.</p>
-  <a class="block mt8" href="javascript:;">view anti-harassment setting tutorial &gt;</a>
+admin.anti_fraud_reminder.tips.title: 【Anti-fraud reminder】
+admin.anti_fraud_reminder.tips.content: Recently, we have discovered that illegal individuals posing as staff members of Kuozhi College have committed fraud in the name of "Kuozhi College/Online School Refund"! If you receive relevant text messages and phone calls, please do not believe!!!We have prepared an anti-fraud and anti-harassment tutorial for you. Click the button below to learn more.
+admin.anti_fraud_reminder.tips.detail: view anti-harassment setting tutorial >
   
 admin.reports_status.environmental_detection: 'Environment test'
 admin.reports_status.recommend_config: 'Recommended configuration'

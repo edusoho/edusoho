@@ -8227,10 +8227,9 @@ admin.anti_fraud_reminder.visible_to_all_users: 全部用户可见
 admin.anti_fraud_reminder.visible_only_to_legacy_users: 仅老用户可见
 admin.anti_fraud_reminder.to_legacy_users_tips: 老用户指在机构内成功付费的用户
 admin.anti_fraud_reminder.view_reminder_example: 查看提醒示例
-admin.anti_fraud_reminder.tips:
-  <p>【反诈提醒】</p>
-  <p class="mt8">近期，我们发现有不法分子冒充阔知或网校工作人员，以“阔知学堂/网校退费”的名义实施诈骗！如您收到相关的短信和电话，请勿相信！！！我们为您准备了一份防诈骗防骚扰教程，点击下方按钮了解详情。</p>
-  <a class="block mt8" href="javascript:;">查看防骚扰设置教程 &gt;</a>
+admin.anti_fraud_reminder.tips.title: 【反诈提醒】
+admin.anti_fraud_reminder.tips.content: 近期，我们发现有不法分子冒充阔知或网校工作人员，以“阔知学堂/网校退费”的名义实施诈骗！如您收到相关的短信和电话，请勿相信！！！我们为您准备了一份防诈骗防骚扰教程，点击下方按钮了解详情。
+admin.anti_fraud_reminder.tips.detail: 查看防骚扰设置教程 >
 
 # 系统自检
 admin.reports_status.environmental_detection: 环境检测

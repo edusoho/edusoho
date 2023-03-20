@@ -60,7 +60,9 @@
         <div class="mt8 ml4 js-tooltip-twig-widget">
           <a class="js-twig-widget-tips" data-placement="right" href="javascript:;">{{ 'admin.anti_fraud_reminder.view_reminder_example'|trans }}</a>
           <div class="js-twig-widget-html" style="display:none;">
-            {{ 'admin.anti_fraud_reminder.tips'|trans|raw }}
+            <p>{{ 'admin.anti_fraud_reminder.tips.title'|trans }}</p>
+            <p class="mt8">{{ 'admin.anti_fraud_reminder.tips.content'|trans }}</p>
+            <a class="block mt8" href="javascript:;">{{ 'admin.anti_fraud_reminder.tips.detail'|trans }}</a>
           </div>
         </div>
       </div>

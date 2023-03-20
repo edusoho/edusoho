@@ -11,18 +11,16 @@ class AntiFraudRemind extends AbstractResource
     public function search(ApiRequest $request)
     {
         $user = $this->getCurrentUser();
-        $setting = $this->getSettingService()->get('anti_fraud_reminder', []);
+        $setting = $this->getSettingService()->get('anti_fraud_reminder', [
+            'enable' => 1,
+            'all_users_visible' => 1,
+            'reminder_frequency' => 1,
+        ]);
 
         if (empty($setting['enable'])) {
             return ['result' => true, 'message' => 'success'];
         }
-        /**
-         * 是否是所有用户可见  是=》                上次提醒时间=0    是=》  弹框
-         *                                                      否=》  进入App时间-上次提醒时间 >=提醒频率  是=》弹框
-         *                                                                                            否=》不弹框
-         *                  否=》是否为老用户  是=》上次提醒时间=0
-         *                                  否=》不弹框
-         */
+
         $isOrderUser = false;
         if (empty($setting['all_users_visible'])) {
             $orders = $this->getOrderService()->searchOrders(['user_id' => $user['id']], [], 0, PHP_INT_MAX, ['price_amount']);
@@ -35,7 +33,6 @@ class AntiFraudRemind extends AbstractResource
             }
         }
 
-        //非全体用户 非老用户
         if ('1' != $setting['all_users_visible'] && !$isOrderUser) {
             return ['result' => true, 'message' => 'success'];
         }
@@ -47,19 +44,21 @@ class AntiFraudRemind extends AbstractResource
                 'lastRemindTime' => '0',
             ]);
         }
-        //上次提醒时间!=0 且 进入App时间-上次提醒时间 < 提醒频率
-        if (!empty($antiFraudRemind['lastRemindTime']) && (time() - $antiFraudRemind['lastRemindTime'] < $setting['reminder_frequency'] * 86400)) {
+
+        if (!empty($antiFraudRemind['lastRemindTime']) &&
+            (time() - $antiFraudRemind['lastRemindTime'] < $setting['reminder_frequency'] * 86400)) {
             return ['result' => true, 'message' => 'success'];
         }
 
         $this->getAntiFraudRemindService()->updateLastRemindTime(['id' => $antiFraudRemind['id']], ['lastRemindTime' => time()]);
 
-        $message = [
-            'content' => $this->trans('admin.anti_fraud_reminder.tips'),
+        return [
+            'result' => false,
+            'title' => trim($this->trans('admin.anti_fraud_reminder.tips.title'), '【】'),
+            'content' => $this->trans('admin.anti_fraud_reminder.tips.content'),
+            'button' => $this->trans('admin.anti_fraud_reminder.tips.detail'),
             'url' => '',
         ];
-
-        return ['result' => false, 'message' => $message];
     }
 
     protected function getOrderService()
