@@ -13,7 +13,7 @@ class CreateTableSmsRequestLog extends Migration
         $biz['db']->exec("
              CREATE TABLE `sms_request_log` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-            `fingerprint` varchar(16) NOT NULL COMMENT '行为指纹',
+            `fingerprint` varchar(32) NOT NULL COMMENT '行为指纹',
             `coordinate` varchar(16) NOT NULL COMMENT '坐标',
             `ip` varchar(32) NOT NULL COMMENT 'ip',
             `mobile` varchar(11)  NOT NULL COMMENT '手机号',

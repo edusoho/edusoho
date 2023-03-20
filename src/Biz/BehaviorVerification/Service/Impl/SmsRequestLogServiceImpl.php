@@ -12,10 +12,11 @@ class SmsRequestLogServiceImpl extends BaseService implements SmsRequestLogServi
 
     public function isRobot($conditions)
     {
-        // 请求记录
-        $smsRequestLogg = $this->getSmsRequestLogDao()->create($conditions);
+        $conditions['module'] = 'send_sms';
+        $conditions['is_illegal'] = '1';
         $conditions['coordinate'] = $this->decryptCoordinate($conditions['fingerprint']);
-        if (isEmpty($conditions['coordinate'])) {
+        $smsRequestLogg = $this->getSmsRequestLogDao()->create($conditions);
+        if (empty($conditions['coordinate'])) {
             return true;
         }
         // 需要查询，一分钟是不是有十次记录
@@ -24,13 +25,13 @@ class SmsRequestLogServiceImpl extends BaseService implements SmsRequestLogServi
         if ($requestTimesInOneMinute > 10) {
             return true;
         }
+
         // 查询最近10分钟的三条相同
-        $existRequestLogs = $this->getSmsRequestLogDao()->search(['coordinate' => $conditions['coordinate'], 'startTime' => time() - 60 * 10, 'endTime' => time()], ['desc' => 'id'], 0, PHP_INT_MAX);
-        $existRequestLogsCount = array_count_values(array_column($existRequestLogs, 'coordinate'));
-        if (!empty($existRequestLogsCount) && $existRequestLogsCount[$conditions['coordinate']] > 3) {
+        $existRequestLogCount = $this->getSmsRequestLogDao()->count(['coordinate' => $conditions['coordinate'], 'startTime' => time() - 60 * 10, 'endTime' => time()]);
+        if ($existRequestLogCount > 3) {
             return true;
         }
-        $this->getSmsRequestLogDao()->update($smsRequestLogg['id'], ['coordinate' => $conditions['coordinate']]);
+        $this->getSmsRequestLogDao()->update($smsRequestLogg['id'], ['is_illegal' => '0']);
         return false;
     }
 

@@ -17,10 +17,11 @@ class SmsRequestLogDaoImpl extends GeneralDaoImpl implements SmsRequestLogDao
             'conditions' => [
                 'mobile = :mobile',
                 'mobile IN (:mobiles)',
-                'ip => :ip',
-                'ip => IN (:ips)',
-                'createdTime >= :startTime',
-                'createdTime <= :endTime',
+                'ip = :ip',
+                'ip = IN (:ips)',
+                'coordinate = (:coordinate)',
+                'created_time >= :startTime',
+                'updated_time <= :endTime',
             ],
         );
     }

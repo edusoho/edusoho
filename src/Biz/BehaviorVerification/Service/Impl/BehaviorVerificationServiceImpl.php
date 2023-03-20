@@ -19,7 +19,7 @@ class BehaviorVerificationServiceImpl extends BaseService implements BehaviorVer
     {
         if ($request->isXmlHttpRequest()) {
             $conditions['fingerprint'] = $request->request->get('encryptedPoint');
-            $conditions['userAgent'] = $request->headers->get('user-agent');
+            $conditions['user_agent'] = $request->headers->get('user-agent');
             $conditions['ip'] = $request->getClientIp();
             $conditions['mobile'] = $request->get('mobile');
             if ($this->getBehaviorVerificationBlackIpService()->isInBlackIpList($conditions['ip'])) {
