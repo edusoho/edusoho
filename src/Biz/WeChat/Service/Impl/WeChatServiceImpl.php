@@ -664,7 +664,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             ['userIds' => $userIds],
             ['lastRefreshTime' => 'ASC'],
             0,
-            count($userIds),
+            PHP_INT_MAX,
             ['id', 'openId', 'unionId', 'userId']
         );
 
