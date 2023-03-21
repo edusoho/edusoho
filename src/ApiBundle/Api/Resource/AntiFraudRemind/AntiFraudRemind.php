@@ -34,9 +34,14 @@ class AntiFraudRemind extends AbstractResource
         return [
             'result' => false,
             'title' => trim($this->trans('admin.anti_fraud_reminder.tips.title'), '【】'),
-            'content' => $this->trans('admin.anti_fraud_reminder.tips.content'),
-            'button' => $this->trans('admin.anti_fraud_reminder.tips.detail'),
-            'url' => '',
+            'content_one' => $this->trans('admin.anti_fraud_reminder.tips.content_one'),
+            'content_two' => $this->trans('admin.anti_fraud_reminder.tips.content_two'),
+            'button' => $this->trans('admin.anti_fraud_reminder.tips.button'),
+            'title_en' => 'Fraud Alert',
+            'content_one_en' => 'Recently, we have discovered that some criminals are impersonating online school staff and committing fraud under the guise of "refunds"! If you receive any related text messages or phone calls, please do not believe them!!!',
+            'content_two_en' => 'We have prepared an anti-fraud and anti-harassment tutorial for you. Click on the link below to learn more.',
+            'button_en' => 'View Tutorial >',
+            'url' => 'https://www.edusoho.com/policy/privacy_policy_fraud',
         ];
     }
 
