@@ -36,7 +36,7 @@ class AntiFraudRemind extends AbstractResource
             'title' => trim($this->trans('admin.anti_fraud_reminder.tips.title'), '【】'),
             'content_one' => $this->trans('admin.anti_fraud_reminder.tips.content_one'),
             'content_two' => $this->trans('admin.anti_fraud_reminder.tips.content_two'),
-            'button' => $this->trans('admin.anti_fraud_reminder.tips.button'),
+            'button' => $this->trans('admin.anti_fraud_reminder.tips.app.button'),
             'title_en' => 'Fraud Alert',
             'content_one_en' => 'Recently, we have discovered that some criminals are impersonating online school staff and committing fraud under the guise of "refunds"! If you receive any related text messages or phone calls, please do not believe them!!!',
             'content_two_en' => 'We have prepared an anti-fraud and anti-harassment tutorial for you. Click on the link below to learn more.',
