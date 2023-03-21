@@ -112,6 +112,7 @@ class ItemServiceImpl extends BaseService implements ItemService
             throw new ItemException('Item not found', ErrorCode::ITEM_NOT_FOUND);
         }
         $arguments = $item;
+        $attachments = $this->sortAttachments($arguments['attachments']);
         $item = $this->getItemProcessor($originItem['type'])->process($item);
         $item['updated_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
         $questions = $item['questions'];
@@ -124,7 +125,7 @@ class ItemServiceImpl extends BaseService implements ItemService
             $item['question_num'] = $this->getQuestionDao()->count(['item_id' => $id]);
             $item = $this->getItemDao()->update($id, $item);
             if (!empty($arguments['attachments'])) {
-                $this->updateAttachments($arguments['attachments'], $id, AttachmentService::ITEM_TYPE);
+                $this->updateAttachments($attachments, $id, AttachmentService::ITEM_TYPE);
             }
 
             $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id']);
