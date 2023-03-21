@@ -27,6 +27,16 @@ class ItemServiceImpl extends BaseService implements ItemService
             throw new ItemException('Item without type', ErrorCode::ITEM_ARGUMENT_INVALID);
         }
         $arguments = $item;
+        $attachments = [];
+        $attachmentGroups = ArrayToolkit::group($arguments['attachments'], 'module');
+        foreach ($attachmentGroups as $module => $attachmentGroup){
+            $seq = 1;
+            foreach ($attachmentGroup as $sortAttachment) {
+                $sortAttachment['seq'] = $seq;
+                $attachments[] = $sortAttachment;
+                $seq ++;
+            }
+        }
         $item = $this->getItemProcessor($item['type'])->process($item);
         $item['created_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
         $item['updated_user_id'] = $item['created_user_id'];
@@ -37,7 +47,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         try {
             $item = $this->getItemDao()->create($item);
             if (!empty($arguments['attachments'])) {
-                $this->updateAttachments($arguments['attachments'], $item['id'], AttachmentService::ITEM_TYPE);
+                $this->updateAttachments($attachments, $item['id'], AttachmentService::ITEM_TYPE);
             }
 
             $this->createQuestions($item['id'], $questions);
