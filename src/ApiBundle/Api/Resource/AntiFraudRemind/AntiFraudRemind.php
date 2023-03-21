@@ -21,44 +21,95 @@ class AntiFraudRemind extends AbstractResource
             return ['result' => true, 'message' => 'success'];
         }
 
-        $isOrderUser = false;
-        if (empty($setting['all_users_visible'])) {
-            $orders = $this->getOrderService()->searchOrders(['user_id' => $user['id']], [], 0, PHP_INT_MAX, ['price_amount']);
-            if (empty($orders)) {
-                $isOrderUser = false;
-            }
-            $priceAmount = array_sum(array_column($orders, 'price_amount'));
-            if ($priceAmount >= 0.01) {
-                $isOrderUser = true;
-            }
-        }
-
-        if ('1' != $setting['all_users_visible'] && !$isOrderUser) {
+        if (!$this->checkUserNeedReminding($setting, $user['id'])) {
             return ['result' => true, 'message' => 'success'];
         }
 
-        $antiFraudRemind = $this->getAntiFraudRemindService()->getByUserId($user['id']);
-        if (empty($antiFraudRemind)) {
-            $antiFraudRemind = $this->getAntiFraudRemindService()->creatAntiFraudRemind([
-                'userId' => $user['id'],
-                'lastRemindTime' => '0',
-            ]);
-        }
-
-        if (!empty($antiFraudRemind['lastRemindTime']) &&
-            (time() - $antiFraudRemind['lastRemindTime'] < $setting['reminder_frequency'] * 86400)) {
+        if (!$this->checkReminderFrequency($setting, $user['id'])) {
             return ['result' => true, 'message' => 'success'];
         }
 
-        $this->getAntiFraudRemindService()->updateLastRemindTime(['id' => $antiFraudRemind['id']], ['lastRemindTime' => time()]);
+        $this->markReminded($user['id']);
 
         return [
             'result' => false,
             'title' => trim($this->trans('admin.anti_fraud_reminder.tips.title'), '【】'),
-            'content' => $this->trans('admin.anti_fraud_reminder.tips.content'),
-            'button' => $this->trans('admin.anti_fraud_reminder.tips.detail'),
-            'url' => '',
+            'content_one' => $this->trans('admin.anti_fraud_reminder.tips.content_one'),
+            'content_two' => $this->trans('admin.anti_fraud_reminder.tips.content_two'),
+            'button' => $this->trans('admin.anti_fraud_reminder.tips.button'),
+            'title_en' => 'Fraud Alert',
+            'content_one_en' => 'Recently, we have discovered that some criminals are impersonating online school staff and committing fraud under the guise of "refunds"! If you receive any related text messages or phone calls, please do not believe them!!!',
+            'content_two_en' => 'We have prepared an anti-fraud and anti-harassment tutorial for you. Click on the link below to learn more.',
+            'button_en' => 'View Tutorial >',
+            'url' => 'https://www.edusoho.com/policy/privacy_policy_fraud',
         ];
+    }
+
+    /**
+     * @param $setting
+     * @param $userId
+     */
+    private function checkUserNeedReminding($setting, $userId): bool
+    {
+        if (!empty($setting['all_users_visible'])) {
+            return true;
+        }
+
+        if ($this->checkRegularCustomer($userId)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 判断是否是老用户，有过消费则为老用户
+     *
+     * @param $userId
+     */
+    private function checkRegularCustomer($userId): bool
+    {
+        $orders = $this->getOrderService()->searchOrders(['user_id' => $userId], [], 0, PHP_INT_MAX, ['pay_amount']);
+        if (empty($orders)) {
+            return false;
+        }
+
+        return array_sum(array_column($orders, 'pay_amount')) >= 0.01;
+    }
+
+    /**
+     * @param $setting
+     * @param $userId
+     *
+     * @return bool 需要提醒
+     */
+    private function checkReminderFrequency($setting, $userId): bool
+    {
+        $antiFraudRemind = $this->getAntiFraudRemindService()->getByUserId($userId);
+        if (empty($antiFraudRemind['lastRemindTime'])) {
+            return true;
+        }
+
+        return time() - $antiFraudRemind['lastRemindTime'] >= $setting['reminder_frequency'] * 86400;
+    }
+
+    /**
+     * @param $userId
+     *
+     * @return void
+     */
+    private function markReminded($userId)
+    {
+        $antiFraudRemind = $this->getAntiFraudRemindService()->getByUserId($userId);
+        if (!empty($antiFraudRemind)) {
+            $this->getAntiFraudRemindService()->updateLastRemindTime(['id' => $antiFraudRemind['id']], ['lastRemindTime' => time()]);
+
+            return;
+        }
+        $this->getAntiFraudRemindService()->creatAntiFraudRemind([
+            'userId' => $userId,
+            'lastRemindTime' => '0',
+        ]);
     }
 
     protected function getOrderService()
