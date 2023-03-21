@@ -27,16 +27,7 @@ class ItemServiceImpl extends BaseService implements ItemService
             throw new ItemException('Item without type', ErrorCode::ITEM_ARGUMENT_INVALID);
         }
         $arguments = $item;
-        $attachments = [];
-        $attachmentGroups = ArrayToolkit::group($arguments['attachments'], 'module');
-        foreach ($attachmentGroups as $module => $attachmentGroup){
-            $seq = 1;
-            foreach ($attachmentGroup as $sortAttachment) {
-                $sortAttachment['seq'] = $seq;
-                $attachments[] = $sortAttachment;
-                $seq ++;
-            }
-        }
+        $attachments = $this->sortAttachments($arguments['attachments']);
         $item = $this->getItemProcessor($item['type'])->process($item);
         $item['created_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
         $item['updated_user_id'] = $item['created_user_id'];
@@ -378,16 +369,7 @@ class ItemServiceImpl extends BaseService implements ItemService
             $question['item_id'] = $itemId;
             $question['created_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
             $question['updated_user_id'] = $question['created_user_id'];
-            $attachments = [];
-            $attachmentGroups = ArrayToolkit::group($question['attachments'], 'module');
-            foreach ($attachmentGroups as $module => $attachmentGroup){
-                $seq = 1;
-                foreach ($attachmentGroup as $sortAttachment) {
-                    $sortAttachment['seq'] = $seq;
-                    $attachments[] = $sortAttachment;
-                    $seq ++;
-                }
-            }
+            $attachments = $this->sortAttachments($question['attachments']);
             unset($question['attachments']);
             $itemQuestion = $this->getQuestionDao()->create($question);
             if (!empty($attachments)) {
@@ -410,16 +392,7 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
             if (in_array($question['id'], $originQuestionIds)) {
                 $question['updated_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
-                $attachments = [];
-                $attachmentGroups = ArrayToolkit::group($question['attachments'], 'module');
-                foreach ($attachmentGroups as $module => $attachmentGroup){
-                    $seq = 1;
-                    foreach ($attachmentGroup as $sortAttachment) {
-                        $sortAttachment['seq'] = $seq;
-                        $attachments[] = $sortAttachment;
-                        $seq ++;
-                    }
-                }
+                $attachments = $this->sortAttachments($question['attachments']);
                 $questionAttachments[] = ['id' => $question['id'], 'attachments' => $attachments];
                 unset($question['attachments']);
 
@@ -448,6 +421,22 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
     }
 
+    protected function sortAttachments($attachments)
+    {
+        $attachments = [];
+        $attachmentGroups = ArrayToolkit::group($attachments, 'module');
+        foreach ($attachmentGroups as $module => $attachmentGroup) {
+            $seq = 1;
+            foreach ($attachmentGroup as $sortAttachment) {
+                $sortAttachment['seq'] = $seq;
+                $attachments[] = $sortAttachment;
+                ++$seq;
+            }
+        }
+
+        return $attachments;
+    }
+
     protected function updateAttachments($attachments, $targetId, $targetType)
     {
         foreach ($attachments as $attachment) {
@@ -466,7 +455,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         $questions = $this->getQuestionDao()->search($conditions, [], 0, $questionCount);
 
         $result = $this->getQuestionDao()->batchDelete($conditions);
-        if (!empty($questions)){
+        if (!empty($questions)) {
             $this->getAttachmentService()->batchDeleteAttachment(['target_ids' => ArrayToolkit::column($questions, 'id'), 'target_type' => 'question']);
         }
 
