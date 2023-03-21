@@ -53,6 +53,11 @@
         showReturnBtn: $('[name=submit_return_url]').val() === undefined ? 0 : $('[name=submit_return_url]').val().length
       };
     },
+    provide() {
+      return {
+        modeOrigin: 'do'
+      }
+    },
     created() {
         const that = this;
         $.ajax({

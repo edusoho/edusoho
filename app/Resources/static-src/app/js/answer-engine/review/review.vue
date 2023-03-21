@@ -74,6 +74,11 @@
         })
         this.getAnswerRecord();
     },
+    provide() {
+      return {
+        modeOrigin: 'do'
+      }
+    },
     methods: {
       getReviewData(reviewReport) {
         $.ajax({
