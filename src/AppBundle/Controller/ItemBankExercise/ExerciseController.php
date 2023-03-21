@@ -5,9 +5,7 @@ namespace AppBundle\Controller\ItemBankExercise;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
-use Biz\Course\MemberException;
 use Biz\Favorite\Service\FavoriteService;
-use Biz\ItemBankExercise\Dao\MemberOperationRecordDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\AssessmentExerciseRecordService;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
@@ -15,7 +13,6 @@ use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
-use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Review\Service\ReviewService;
@@ -119,7 +116,8 @@ class ExerciseController extends BaseController
         );
     }
 
-    public function exitAction(Request $request, $exerciseId) {
+    public function exitAction(Request $request, $exerciseId)
+    {
         $exercise = $this->getExerciseService()->get($exerciseId);
         $user = $this->getCurrentUser();
         $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
@@ -130,7 +128,7 @@ class ExerciseController extends BaseController
 
         $this->getExerciseMemberService()->removeStudent($exercise['id'], $user['id'], [
             'reason' => $req['reason']['note'],
-            'reason_type' => 'exit',
+            'reasonType' => 'exit',
         ]);
 
         return $this->redirect($this->generateUrl('item_bank_exercise_show', ['id' => $exerciseId]));

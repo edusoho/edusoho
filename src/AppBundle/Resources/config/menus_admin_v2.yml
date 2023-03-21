@@ -1634,6 +1634,8 @@ admin_v2:
                                     name: admin_v2.system.security_tab
                                 admin_v2_post_num_rules_setting:
                                     name: admin_v2.system.post_num_tab
+                                admin_v2_anti_fraud_reminder_setting:
+                                    name: admin_v2.system.anti_fraud_reminder_tab
 
         # 云市场模块
         admin_v2_cloud_center:
