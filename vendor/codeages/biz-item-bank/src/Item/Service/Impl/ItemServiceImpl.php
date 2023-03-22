@@ -426,10 +426,10 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
     }
 
-    protected function sortAttachments($attachments)
+    protected function sortAttachments($sortAttachments)
     {
         $attachments = [];
-        $attachmentGroups = ArrayToolkit::group($attachments, 'module');
+        $attachmentGroups = ArrayToolkit::group($sortAttachments, 'module');
         foreach ($attachmentGroups as $module => $attachmentGroup) {
             $seq = 1;
             foreach ($attachmentGroup as $sortAttachment) {
