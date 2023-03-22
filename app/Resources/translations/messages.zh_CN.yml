@@ -8231,7 +8231,9 @@ admin.anti_fraud_reminder.tips.title: 【反诈提醒】
 admin.anti_fraud_reminder.tips.content_one: 近期，我们发现有不法分子冒充阔知或网校工作人员，以“阔知学堂/网校退费”的名义实施诈骗！如您收到相关的短信和电话，请勿相信！！！
 admin.anti_fraud_reminder.tips.content_two: 我们为您准备了一份防诈骗防骚扰教程，点击下方按钮了解详情。
 admin.anti_fraud_reminder.tips.detail: 查看防骚扰设置教程 >
-admin.anti_fraud_reminder.tips.button: 查看防骚扰设置教程 >
+admin.anti_fraud_reminder.tips.app.button: 查看防骚扰设置教程 >
+admin.anti_fraud_reminder.every: 每
+admin.anti_fraud_reminder.every_day_reminder: 天提醒一次
 
 # 系统自检
 admin.reports_status.environmental_detection: 环境检测

@@ -6863,7 +6863,9 @@ admin.anti_fraud_reminder.tips.title: 【Fraud Alert】
 admin.anti_fraud_reminder.tips.content_one: Recently, we have discovered that some criminals are impersonating online school staff and committing fraud under the guise of "refunds"! If you receive any related text messages or phone calls, please do not believe them!!!
 admin.anti_fraud_reminder.tips.content_two: We have prepared an anti-fraud and anti-harassment tutorial for you. Click on the link below to learn more.
 admin.anti_fraud_reminder.tips.detail: Click here to view the anti-harassment settings tutorial >
-admin.anti_fraud_reminder.tips.button: View Tutorial >
+admin.anti_fraud_reminder.tips.app.button: View Tutorial >
+admin.anti_fraud_reminder.every: Every
+admin.anti_fraud_reminder.every_day_reminder: Day remind once
 
 admin.reports_status.environmental_detection: 'Environment test'
 admin.reports_status.recommend_config: 'Recommended configuration'

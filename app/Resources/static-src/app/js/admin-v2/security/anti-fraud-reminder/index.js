@@ -3,10 +3,12 @@ $('input[type=radio][name=enable]').change(function() {
   if (enable === '1') {
     $('#enableTips').removeClass('hidden');
     $('#disableTips').addClass('hidden');
+    $('.remind_setting').removeClass('hidden');
   }
   if (enable === '0') {
     $('#enableTips').addClass('hidden');
     $('#disableTips').removeClass('hidden');
+    $('.remind_setting').addClass('hidden');
   }
 });
 
