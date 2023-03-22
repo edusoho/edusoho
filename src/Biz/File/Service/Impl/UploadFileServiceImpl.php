@@ -708,7 +708,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $questionsFiles = [];
         foreach ($files as $file) {
             $questionsFiles[] = [
-                'id' => 0,
+                'id' => $file['id'],
                 'globalId' => $file['global_id'],
                 'hashId' => $file['hash_id'],
                 'targetId' => $file['target_id'],
