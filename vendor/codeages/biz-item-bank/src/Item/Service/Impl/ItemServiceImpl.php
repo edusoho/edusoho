@@ -27,7 +27,6 @@ class ItemServiceImpl extends BaseService implements ItemService
             throw new ItemException('Item without type', ErrorCode::ITEM_ARGUMENT_INVALID);
         }
         $arguments = $item;
-        $attachments = $this->sortAttachments($arguments['attachments']);
         $item = $this->getItemProcessor($item['type'])->process($item);
         $item['created_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
         $item['updated_user_id'] = $item['created_user_id'];
@@ -38,6 +37,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         try {
             $item = $this->getItemDao()->create($item);
             if (!empty($arguments['attachments'])) {
+                $attachments = $this->sortAttachments($arguments['attachments']);
                 $this->updateAttachments($attachments, $item['id'], AttachmentService::ITEM_TYPE);
             }
 
@@ -112,7 +112,6 @@ class ItemServiceImpl extends BaseService implements ItemService
             throw new ItemException('Item not found', ErrorCode::ITEM_NOT_FOUND);
         }
         $arguments = $item;
-        $attachments = $this->sortAttachments($arguments['attachments']);
         $item = $this->getItemProcessor($originItem['type'])->process($item);
         $item['updated_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
         $questions = $item['questions'];
@@ -125,6 +124,7 @@ class ItemServiceImpl extends BaseService implements ItemService
             $item['question_num'] = $this->getQuestionDao()->count(['item_id' => $id]);
             $item = $this->getItemDao()->update($id, $item);
             if (!empty($arguments['attachments'])) {
+                $attachments = $this->sortAttachments($arguments['attachments']);
                 $this->updateAttachments($attachments, $id, AttachmentService::ITEM_TYPE);
             }
 
@@ -370,7 +370,9 @@ class ItemServiceImpl extends BaseService implements ItemService
             $question['item_id'] = $itemId;
             $question['created_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
             $question['updated_user_id'] = $question['created_user_id'];
-            $attachments = $this->sortAttachments($question['attachments']);
+            if(!empty($question['attachments'])) {
+                $attachments = $this->sortAttachments($question['attachments']);
+            }
             unset($question['attachments']);
             $itemQuestion = $this->getQuestionDao()->create($question);
             if (!empty($attachments)) {
@@ -393,8 +395,10 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
             if (in_array($question['id'], $originQuestionIds)) {
                 $question['updated_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
-                $attachments = $this->sortAttachments($question['attachments']);
-                $questionAttachments[] = ['id' => $question['id'], 'attachments' => $attachments];
+                if(!empty($question['attachments'])) {
+                    $attachments = $this->sortAttachments($question['attachments']);
+                    $questionAttachments[] = ['id' => $question['id'], 'attachments' => $attachments];
+                }
                 unset($question['attachments']);
 
                 $updateQuestions[] = $question;
