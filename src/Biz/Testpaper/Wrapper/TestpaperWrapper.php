@@ -120,16 +120,9 @@ class TestpaperWrapper
     {
         $items = [];
         $this->questionReports = ArrayToolkit::index($questionReports, 'question_id');
-        $attachments = $this->getAttachmentService()->findAttachmentsByTargetIdsAndTargetType(
-            ArrayToolkit::column($questionReports, 'id'),
-            AttachmentService::ANSWER_TYPE
-        );
-        $attachments = ArrayToolkit::group($attachments, 'target_id');
         foreach ($assessment['sections'] as $section) {
             foreach ($section['items'] as $item) {
                 if (1 != $item['isDelete']) {
-                    $items[$item['id']]['question']['attachment'] = $attachments[$item['id']];
-                    file_put_contents('/tmp/log', json_encode($items), 8);
                     $items[$item['id']] = $this->wrapItem($item);
                 }
             }
@@ -210,6 +203,10 @@ class TestpaperWrapper
                 'score' => $questionReport['score'],
                 'answer' => $this->convertAnswer($questionReport['response'], $question),
                 'teacherSay' => $questionReport['comment'],
+                'attachments' => $this->getAttachmentService()->findAttachmentsByTargetIdAndTargetType(
+                    $questionReport['id'],
+                    AttachmentService::ANSWER_TYPE
+                ),
             ];
         }
 
