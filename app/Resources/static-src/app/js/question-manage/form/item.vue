@@ -84,7 +84,7 @@
           locale: document.documentElement.lang
         },
         fileId: 0,
-        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
+        isDownload: false
       };
     },
     provide() {
