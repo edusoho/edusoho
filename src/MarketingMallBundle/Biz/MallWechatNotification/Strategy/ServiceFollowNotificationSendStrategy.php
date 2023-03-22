@@ -43,7 +43,7 @@ class ServiceFollowNotificationSendStrategy extends AbstractNotificationSendStra
             ['userIds' => $toUserIds],
             ['lastRefreshTime' => 'ASC'],
             0,
-            count($toUserIds),
+            PHP_INT_MAX,
             ['id', 'openId', 'unionId', 'userId']
         );
         $this->getWeChatService()->batchFreshOfficialWeChatUsers($weChatUsers);
