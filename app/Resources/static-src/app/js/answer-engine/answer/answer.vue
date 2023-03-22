@@ -96,6 +96,11 @@
         isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
       };
     },
+    provide() {
+      return {
+        modeOrigin: 'do'
+      }
+    },
     created() {
       this.emitter = new ActivityEmitter();
       this.emitter.emit('doing', {data: ''});

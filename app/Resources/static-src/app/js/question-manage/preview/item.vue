@@ -22,6 +22,11 @@
         fileId: 0,
       }
     },
+    provide() {
+      return {
+        modeOrigin: 'create'
+      }
+    },
     methods: {
       previewAttachment(fileId) {
         this.fileId = fileId;

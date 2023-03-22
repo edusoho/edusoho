@@ -1,18 +1,28 @@
 let $form = $('#refund-form');
 let $modal = $form.parents('.modal');
 let $reasonNote = $form.find('#reasonNote');
+const $reasonNoteContainer = $form.find('#reasonNote-container');
 let $warnning = $form.find('.warnning');
+const $reasonNoteNumber = $form.find('.js-textarea-number')
 const $submitBtn = $('button[type="submit"]')
+
+function changeReasonNote(text = '') {
+  $reasonNote.val(text)
+  $reasonNoteNumber.text(text.length)
+}
 
 $form.find('[name="reason[type]"]').on('change', function () {
   let $this = $(this),
   $selected = $this.find('option:selected');
 
   if ($selected.val() == 'other') {
-    $reasonNote.val('').removeClass('hide');
+    changeReasonNote('')
+    $reasonNoteContainer.removeClass('hide');
     $submitBtn.attr('disabled', true)
   } else {
-    $reasonNote.addClass('hide').val($selected.text());
+    $reasonNoteContainer.addClass('hide')
+    changeReasonNote($selected.text())
+    
     if ($selected.val() !== 'reason') {
       $submitBtn.removeAttr('disabled')
     } else {
@@ -22,21 +32,13 @@ $form.find('[name="reason[type]"]').on('change', function () {
   $warnning.text('');
 })
 
-$reasonNote.on('change', function () {
-  let $this = $(this);
+$reasonNote.on('input', function () {
+  $reasonNoteNumber.text($reasonNote.val().length)
 
-  if ($this.val().length == 0) {
-    $warnning.text(Translator.trans('order.refund.reason_required_hint'));
+  if ($reasonNote.val().length == 0) {
+    $submitBtn.attr('disabled', true)
   } else {
-    $warnning.text('');
-  }
-
-  if ($form.find('[name="reason[type]"] option:selected').val() === 'other') {
-    if ($this.val().length == 0) {
-      $submitBtn.attr('disabled', true)
-    } else {
-      $submitBtn.removeAttr('disabled')
-    }
+    $submitBtn.removeAttr('disabled')
   }
 })
 

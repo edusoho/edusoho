@@ -87,6 +87,11 @@
         isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
       };
     },
+    provide() {
+      return {
+        modeOrigin: 'create'
+      }
+    },
     methods: {
       getData(data) {
         let submission = data.isAgain ? 'continue' : '';
