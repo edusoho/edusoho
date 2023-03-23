@@ -2,6 +2,7 @@
 
 namespace Biz\SmsRequestLog\service\impl;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\EncryptionToolkit;
 use Biz\BaseService;
 use Biz\SmsRequestLog\SmsRequestException;
@@ -10,43 +11,21 @@ use Biz\SmsRequestLog\service\SmsRequestLogService;
 
 class SmsRequestLogServiceImpl extends BaseService implements SmsRequestLogService
 {
-
-    public function isIllegalSmsRequest($conditions)
+    public function createSmsRequestLog($smsRequestLog, $isIllegal)
     {
-        $this->validateConditions($conditions);
-        $conditions['is_illegal'] = '1';
-        $conditions['coordinate'] = $this->decryptCoordinate($conditions['fingerprint']);
-        $smsRequestLog = $this->getSmsRequestLogDao()->create($conditions);
-        if (empty($conditions['coordinate'])) {
+        if (!ArrayToolkit::requireds($smsRequestLog, ['fingerprint', 'ip', 'mobile', 'userAgent'])) {
+            throw $this->createServiceException('smsRequestLog 参数不能为空');
+        }
+        if (empty($isIllegal)) {
+            throw $this->createServiceException('isIllegal 不能为空');
+        }
+        $smsRequestLog['coordinate'] = $this->decryptCoordinate($smsRequestLog['fingerprint']);
+        if (empty($smsRequestLog['coordinate'])) {
             $this->createNewException(SmsRequestException::GET_COORDINATE_FAILED);
         }
-
-        if ($this->isIllegalIp($conditions) || $this->isIllegalCoordinate($conditions))
-        {
-            return true;
-        }
-
-        $this->getSmsRequestLogDao()->update($smsRequestLog['id'], ['is_illegal' => '0']);
-        return false;
+        $smsRequestLog['$is_illegal'] = $isIllegal;
+        return $this->getSmsRequestLogDao()->create($smsRequestLog);
     }
-
-    protected function isIllegalIp($conditions)
-    {
-        $requestTimesInOneMinute = $this->getSmsRequestLogDao()->count(['ip' => $conditions['ip'], 'startTime' => time() - 60, 'endTime' => time()]);
-        // todo 10 读取对应的配置文件
-        if ($requestTimesInOneMinute > 10) {
-            return true;
-        }
-    }
-
-    protected function isIllegalCoordinate($conditions)
-    {
-        $existRequestLogs = $this->getSmsRequestLogDao()->search(['coordinate' => $conditions['coordinate'], 'startTime' => time() - 60 * 10], ['id' => 'DESC'], 0, 10);
-        if (count($existRequestLogs) > 3) {
-            return true;
-        }
-    }
-
 
     protected function decryptCoordinate($fingerprint)
     {
@@ -55,23 +34,34 @@ class SmsRequestLogServiceImpl extends BaseService implements SmsRequestLogServi
         return EncryptionToolkit::XXTEADecrypt(base64_decode(mb_substr($fingerprint, 2)), $csrfToken);
     }
 
-    protected function validateConditions($conditions)
+    public function isIllegalSmsRequest($ip, $fingerprint)
     {
-        if (empty($conditions)){
-            throw $this->createServiceException('sms request 参数不能为空');
+        if (empty($ip)) {
+            throw $this->createServiceException('ip 不能为空');
         }
-        if (empty($conditions['fingerprint'])){
-            throw $this->createServiceException('sms request 指纹不能为空');
+        if (empty($fingerprint)) {
+            throw $this->createServiceException('fingerprint 不能为空');
         }
-        if (empty($conditions['ip'])){
-            throw $this->createServiceException('sms request IP不能为空');
+
+        if ($this->isIllegalIp($ip) || $this->isIllegalCoordinate($fingerprint)) {
+            return true;
         }
-        if (empty($conditions['mobile'])){
-            throw $this->createServiceException('sms request 手机号不能为空');
-        }
-        if (empty($conditions['user_agent'])){
-            throw $this->createServiceException('sms request user agent不能为空');
-        }
+
+        return false;
+    }
+
+    protected function isIllegalIp($ip)
+    {
+        $requestTimesInOneMinute = $this->getSmsRequestLogDao()->count(['ip' => $ip, 'createdTime_GTE' => time() - 60]);
+        // todo 10 读取对应的配置文件
+        return $requestTimesInOneMinute > 10;
+    }
+
+    protected function isIllegalCoordinate($fingerprint)
+    {
+        $existRequestLogs = $this->getSmsRequestLogDao()->search(['fingerprint' => $fingerprint, 'createdTime_GTE' => time() - 60 * 10], ['id' => 'DESC'], 0, 10);
+
+        return count($existRequestLogs) > 3;
     }
 
     /**

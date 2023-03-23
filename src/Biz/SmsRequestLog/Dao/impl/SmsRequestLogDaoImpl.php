@@ -20,8 +20,7 @@ class SmsRequestLogDaoImpl extends GeneralDaoImpl implements SmsRequestLogDao
                 'ip = :ip',
                 'ip = IN (:ips)',
                 'coordinate = (:coordinate)',
-                'created_time >= :startTime',
-                'updated_time <= :endTime',
+                'created_time >= :createdTime_GTE',
             ],
         );
     }
