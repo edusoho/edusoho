@@ -9,16 +9,16 @@ use Biz\SmsRequestLog\Service\SmsRequestLogService;
 
 class BehaviorVerificationServiceImpl extends BaseService implements BehaviorVerificationService
 {
-    public function behaviorVerification($request)
+    public function verificateBehavior($request)
     {
         if ($request->isXmlHttpRequest()) {
-            $fingerprint = $request->request->get('encryptedPoint');
+            $fingerprint = $request->get('encryptedPoint');
             $ip = $request->getClientIp();
             $fields = [
                 'fingerprint' => $fingerprint,
                 'userAgent' => $request->headers->get('user-agent'),
                 'ip' => $ip,
-                'mobile' => $request->get('mobile')?:$request->get('to'),
+                'mobile' => $request->get('mobile') ?: $request->get('to'),
             ];
             if ($this->isInBlackIpList($ip)) {
                 return true;

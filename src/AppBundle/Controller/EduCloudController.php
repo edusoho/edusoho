@@ -2,10 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\EncryptionToolkit;
 use AppBundle\Common\SmsToolkit;
-use Biz\BehaviorVerification\Service\BehaviorVerificationBlackIpService;
-use Biz\BehaviorVerification\Service\BehaviorVerificationCoordinateService;
 use Biz\BehaviorVerification\Service\BehaviorVerificationService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Sms\SmsException;
@@ -33,8 +30,8 @@ class EduCloudController extends BaseController
     {
         $smsType = 'sms_registration';
 
-        if ($this->getBehaviorVerificationService()->behaviorVerification($request)){
-            return $this->createJsonResponse(['ACK' => 'ok', "allowance" => 0]);
+        if ($this->getBehaviorVerificationService()->verificateBehavior($request)) {
+            return $this->createJsonResponse(['ACK' => 'ok', 'allowance' => 0]);
         }
         $status = $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp());
         if ('captchaRequired' == $status) {
@@ -71,8 +68,8 @@ class EduCloudController extends BaseController
             }
         }
 
-        if ($this->getBehaviorVerificationService()->behaviorVerification($request)){
-            return $this->createJsonResponse(['ACK' => 'ok', "allowance" => 0]);
+        if ($this->getBehaviorVerificationService()->verificateBehavior($request)) {
+            return $this->createJsonResponse(['ACK' => 'ok', 'allowance' => 0]);
         }
 
         $result = $this->sendSms($request, $smsType);
@@ -299,13 +296,13 @@ class EduCloudController extends BaseController
             if ($hasVerifiedMobile && ($to == $user['verifiedMobile'])) {
                 $errorMsg = '您已经绑定了该手机号码';
 
-                return  $errorMsg;
+                return $errorMsg;
             }
 
             if (!$this->getUserService()->isMobileUnique($to)) {
                 $errorMsg = '该手机号码已被其他用户绑定';
 
-                return  $errorMsg;
+                return $errorMsg;
             }
         }
 
@@ -316,19 +313,19 @@ class EduCloudController extends BaseController
             if (empty($targetUser)) {
                 $errorMsg = '用户不存在';
 
-                return  $errorMsg;
+                return $errorMsg;
             }
 
             if ((!isset($targetUser['verifiedMobile']) || (0 == strlen($targetUser['verifiedMobile'])))) {
                 $errorMsg = '用户没有被绑定的手机号';
 
-                return  $errorMsg;
+                return $errorMsg;
             }
 
             if ($targetUser['verifiedMobile'] != $to) {
                 $errorMsg = '手机与用户名不匹配';
 
-                return  $errorMsg;
+                return $errorMsg;
             }
         }
 
@@ -342,7 +339,7 @@ class EduCloudController extends BaseController
             if ((!isset($user['verifiedMobile']) || (0 == strlen($user['verifiedMobile'])))) {
                 $errorMsg = '用户没有被绑定的手机号';
 
-                return  $errorMsg;
+                return $errorMsg;
 
                 //                return $this->createJsonResponse(array('error' => '用户没有被绑定的手机号'));
             }
@@ -350,14 +347,14 @@ class EduCloudController extends BaseController
             if ($user['verifiedMobile'] != $request->request->get('to')) {
                 $errorMsg = '您输入的手机号，不是已绑定的手机';
 
-                return  $errorMsg;
+                return $errorMsg;
             }
         }
 
         if (!$this->checkPhoneNum($to)) {
             $errorMsg = sprintf('手机号错误:%s', $to);
 
-            return  $errorMsg;
+            return $errorMsg;
         }
 
         $currentUser = $this->getCurrentUser();

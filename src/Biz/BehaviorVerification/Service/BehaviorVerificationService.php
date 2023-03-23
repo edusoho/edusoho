@@ -4,7 +4,7 @@ namespace Biz\BehaviorVerification\Service;
 
 interface BehaviorVerificationService
 {
-    public function behaviorVerification($request);
+    public function verificateBehavior($request);
 
     public function isInBlackIpList($ip);
 

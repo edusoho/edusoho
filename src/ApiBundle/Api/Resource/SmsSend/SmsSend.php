@@ -32,7 +32,7 @@ class SmsSend extends AbstractResource
                 return null;
             }
         }
-        if ($this->getBehaviorVerificationService()->behaviorVerification($request->getHttpRequest())) {
+        if ($this->getBehaviorVerificationService()->verificateBehavior($request->getHttpRequest())) {
             return new JsonResponse(['ACK' => 'ok', 'allowance' => 0]);
         }
         $smsType = $request->request->get('type', '');

@@ -24,15 +24,15 @@ class SmsCenter extends AbstractResource
     public function add(ApiRequest $request)
     {
         if (!($request->getHttpRequest()->isXmlHttpRequest())) {
-            $mobileSetting = $this->getSettingService()->get('mobile',array());
-            $wap = $this->getSettingService()->get('wap',array());
-            if ($mobileSetting['enabled'] == 0 && $wap['template'] != 'sail'){
+            $mobileSetting = $this->getSettingService()->get('mobile', []);
+            $wap = $this->getSettingService()->get('wap', []);
+            if (0 == $mobileSetting['enabled'] && 'sail' != $wap['template']) {
                 return null;
             }
         }
 
-        if ($this->getBehaviorVerificationService()->behaviorVerification($request->getHttpRequest())){
-            return new JsonResponse(['ACK' => 'ok', "allowance" => 0]);
+        if ($this->getBehaviorVerificationService()->verificateBehavior($request->getHttpRequest())) {
+            return new JsonResponse(['ACK' => 'ok', 'allowance' => 0]);
         }
 
         $type = $request->request->get('type');
