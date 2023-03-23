@@ -11,7 +11,7 @@ class Template extends AbstractResource
     public function search(ApiRequest $request)
     {
         $keys = $request->query->get('keys', '');
-        $keys = explode(',', $keys);
+        $keys = empty($keys) ? [] : explode(',', $keys);
         $userRoles = $this->getCurrentUser()->getRoles();
         $userRole = in_array('ROLE_TEACHER', $userRoles) ? 'ROLE_TEACHER' : 'ROLE_USER';
 

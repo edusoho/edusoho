@@ -18,6 +18,8 @@ interface NotificationService
 
     public function createEvent($event);
 
+    public function updateEvent($id, $fields);
+
     public function getEvent($id);
 
     public function createStrategy($strategy);
