@@ -33,7 +33,6 @@
   <input type="hidden" name="submit_goto_url" value='{{ submitGotoUrl }}'>
   <input type="hidden" name="save_goto_url" value='{{ saveGotoUrl }}'>
   <input type="hidden" name="show_save_progress_btn" value="{{ showSaveProgressBtn|default(1) }}">
-  <input type="hidden" name="question_bank_attachment_setting" value="{{ setting('question_bank_attachment_setting')|json_encode }}">
   {{ render(controller('AppBundle:FaceInspection/Capture:inspection', {request:app.request, answerSceneId: answerRecord.answer_scene_id, answerRecordId: answerRecord.id})) }}
   {% block footer %}
       {% if showHeader|default(0) %}{{ parent() }}{% endif %}
