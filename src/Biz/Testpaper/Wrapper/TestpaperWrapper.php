@@ -198,6 +198,7 @@ class TestpaperWrapper
                 ArrayToolkit::column($questionReport, 'id'),
                 AttachmentService::ANSWER_TYPE
             ) ?? [];
+            $attachments = ArrayToolkit::group($attachments, 'target_id');
             $question['testResult'] = [
                 'id' => $questionReport['id'],
                 'testId' => $questionReport['assessment_id'],
