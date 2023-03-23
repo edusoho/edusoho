@@ -6,11 +6,8 @@ use Biz\BaseService;
 use Biz\BehaviorVerification\Service\BehaviorVerificationBlackIpService;
 use Biz\BehaviorVerification\Service\BehaviorVerificationCoordinateService;
 use Biz\BehaviorVerification\Service\BehaviorVerificationService;
-use Biz\BehaviorVerification\Service\SmsRequestLogService;
+use Biz\SmsRequestLog\service\SmsRequestLogService;
 use Biz\System\Service\LogService;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
-use Topxia\Service\Common\ServiceKernel;
 
 class BehaviorVerificationServiceImpl extends BaseService implements BehaviorVerificationService
 {
@@ -18,16 +15,17 @@ class BehaviorVerificationServiceImpl extends BaseService implements BehaviorVer
     public function behaviorVerification($request)
     {
         if ($request->isXmlHttpRequest()) {
+            $conditions = [];
             $conditions['fingerprint'] = $request->request->get('encryptedPoint');
             $conditions['user_agent'] = $request->headers->get('user-agent');
             $conditions['ip'] = $request->getClientIp();
             $conditions['mobile'] = $request->get('mobile');
             if ($this->getBehaviorVerificationBlackIpService()->isInBlackIpList($conditions['ip'])) {
-                $this->getSmsRequestLogService()->isRobot($conditions);
+                $this->getSmsRequestLogService()->isIllegalSmsRequest($conditions);
                 return true;
             }
 
-            if ($this->getSmsRequestLogService()->isRobot($conditions)) {
+            if ($this->getSmsRequestLogService()->isIllegalSmsRequest($conditions)) {
                 $this->getBehaviorVerificationBlackIpService()->addBlackIpList($conditions['ip']);
                 return true;
             }

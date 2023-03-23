@@ -11002,3 +11002,4 @@ live_course.record_replay.select3: Only record courseware
 live_course.record_replay.btn: To Record
 live_course.record_replay.safair_tip: Safair may be blocked, please use another browser
 live_course.record_replay.show_btn: local recording
+exception.sms_request.abnormal_SMS_sending: Abnormal SMS sending

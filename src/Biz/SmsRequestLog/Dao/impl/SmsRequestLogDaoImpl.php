@@ -1,8 +1,8 @@
 <?php
 
-namespace Biz\BehaviorVerification\Dao\Impl;
+namespace Biz\SmsRequestLog\Dao\impl;
 
-use Biz\BehaviorVerification\Dao\SmsRequestLogDao;
+use Biz\SmsRequestLog\Dao\SmsRequestLogDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class SmsRequestLogDaoImpl extends GeneralDaoImpl implements SmsRequestLogDao
