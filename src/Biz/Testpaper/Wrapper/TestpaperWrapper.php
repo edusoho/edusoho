@@ -194,6 +194,10 @@ class TestpaperWrapper
 
         if (!empty($this->questionReports[$question['id']])) {
             $questionReport = $this->questionReports[$question['id']];
+            $attachments = $this->getAttachmentService()->findAttachmentsByTargetIdsAndTargetType(
+                ArrayToolkit::column($questionReport, 'id'),
+                AttachmentService::ANSWER_TYPE
+            ) ?? [];
             $question['testResult'] = [
                 'id' => $questionReport['id'],
                 'testId' => $questionReport['assessment_id'],
@@ -203,10 +207,7 @@ class TestpaperWrapper
                 'score' => $questionReport['score'],
                 'answer' => $this->convertAnswer($questionReport['response'], $question),
                 'teacherSay' => $questionReport['comment'],
-                'attachments' => $this->getAttachmentService()->findAttachmentsByTargetIdAndTargetType(
-                    $questionReport['id'],
-                    AttachmentService::ANSWER_TYPE
-                ),
+                'attachments' => $attachments[$questionReport['id']],
             ];
         }
 
