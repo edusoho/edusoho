@@ -66,6 +66,11 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         return $this->getNotificationEventDao()->create($event);
     }
 
+    public function updateEvent($id, $fields)
+    {
+        return $this->getNotificationEventDao()->update($id, ArrayToolkit::parts($fields, ['totalCount', 'succeedCount', 'status', 'reason']));
+    }
+
     public function createStrategy($strategy)
     {
         if (!ArrayToolkit::requireds($strategy, ['eventId', 'type', 'seq'])) {

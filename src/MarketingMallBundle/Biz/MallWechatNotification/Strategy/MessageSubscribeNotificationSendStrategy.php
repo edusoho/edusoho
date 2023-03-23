@@ -32,7 +32,7 @@ class MessageSubscribeNotificationSendStrategy extends AbstractNotificationSendS
                 $notifications[] = $notification;
             }
             if ($notifications) {
-                $notificationBatch = $this->getWeChatService()->sendSubscribeWeChatNotification($templateKey, 'wechat_subscribe_notify_'.$templateKey, $notifications);
+                $notificationBatch = $this->getWeChatService()->sendSubscribeWeChatNotificationLocal($templateKey, 'wechat_subscribe_notify_'.$templateKey, $notifications);
                 if ($notificationBatch) {
                     $this->getWeChatService()->updateSubscribeRecordsByIds(array_column($subscribeRecords, 'id'), ['isSend' => 1]);
                 }

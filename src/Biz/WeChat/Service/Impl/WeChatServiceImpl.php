@@ -26,6 +26,7 @@ use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use ESCloud\SDK\Service\NotificationService;
 use QiQiuYun\SDK\Constants\NotificationChannelTypes;
 use QiQiuYun\SDK\Constants\WeChatPlatformTypes;
+use Ramsey\Uuid\Uuid;
 
 class WeChatServiceImpl extends BaseService implements WeChatService
 {
@@ -245,7 +246,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 ]);
             }
         } catch (\Exception $e) {
-            $this->getLogger()->error('WeChatFreshOfficialUser_'.$e->getMessage(), $e->getTrace());
+            $this->getLogger()->error('WeChatFreshOfficialUser_' . $e->getMessage(), $e->getTrace());
         }
     }
 
@@ -403,6 +404,35 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         }
 
         return $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $templateCode, $list[0]['template_args'], 'wechat_subscribe', $batchId);
+    }
+
+    public function sendSubscribeWeChatNotificationLocal($templateCode, $logName, $notifications)
+    {
+        $client = $this->biz['wechat.subscribe_template_message_client'];
+        $successCount = 0;
+        $failReason = [];
+        foreach ($notifications as $notification) {
+            try {
+                $result = $client->sendMessage($notification['to_id'], $notification['template_id'], $notification['template_args'], ['url' => $notification['goto']['url']]);
+                if (empty($result['errcode'])) {
+                    $successCount++;
+                } else {
+                    $failReason[] = $result['errcode'];
+                }
+            } catch (\Exception $e) {
+                $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'send_wechat_subscribe_notification', "{$logName}:发送微信订阅通知失败:template:{$templateCode}", ['error' => $e->getMessage()]);
+            }
+        }
+        $notificationBatch = $this->getNotificationService()->createWeChatNotificationRecord(Uuid::uuid4()->getHex(), $templateCode, $notifications[0]['template_args'], 'wechat_subscribe');
+        $this->getNotificationService()->updateEvent($notificationBatch['eventId'], [
+            'totalCount' => count($notifications),
+            'succeedCount' => $successCount,
+            'status' => 'finish',
+            'reason' => $failReason,
+        ]);
+        $this->getNotificationService()->updateBatch($notificationBatch['id'], ['status' => 'finished']);
+
+        return $notificationBatch;
     }
 
     /**

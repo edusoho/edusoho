@@ -44,6 +44,8 @@ interface WeChatService
 
     public function sendSubscribeWeChatNotification($templateCode, $logName, $list, $batchId = 0);
 
+    public function sendSubscribeWeChatNotificationLocal($templateCode, $logName, $notifications);
+
     public function getSubscribeTemplateId($templateCode, $scene = '');
 
     public function addTemplate($template, $key, $notificationType);
