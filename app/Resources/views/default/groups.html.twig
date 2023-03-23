@@ -2,7 +2,7 @@
 <!-- 小组动态 -->
 {% set groups = data('HotGroup',{'count':6}) %}
 {% set reviews = data('LatestCourseReviews',{'count':4}) %}
-{% set goodsReviews = is_content_audit_pass(data('LatestGoodsReviews', {'count':4})) %}
+{% set goodsReviews = data('LatestGoodsReviews', {'count':4}) %}
 
 <section class="dynamic-section {{config.background|default("")}}">
   <div class="container">

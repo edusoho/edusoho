@@ -239,7 +239,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_teacher_role', [$this, 'isTeacherRole']),
             new \Twig_SimpleFunction('user_info_select', [$this, 'userInfoSelect']),
             new \Twig_SimpleFunction('user_show_path', [$this, 'userPath']),
-            new \Twig_SimpleFunction('is_content_audit_pass', [$this, 'isContentAuditPass']),
         ];
     }
 
@@ -263,20 +262,6 @@ class WebExtension extends \Twig_Extension
         }
 
         return false;
-    }
-
-    public function isContentAuditPass($values)
-    {
-        $goodsReviews = [];
-        foreach ($values as $value) {
-            if ('none_checked' == $value['auditStatus']) {
-                $goodsReviews = [];
-            } else {
-                $goodsReviews[] = $value;
-            }
-        }
-
-        return $goodsReviews;
     }
 
     public function isShowFeedback()
