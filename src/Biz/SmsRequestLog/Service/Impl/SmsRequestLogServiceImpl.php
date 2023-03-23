@@ -1,29 +1,30 @@
 <?php
 
-namespace Biz\SmsRequestLog\service\impl;
+namespace Biz\SmsRequestLog\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\EncryptionToolkit;
 use Biz\BaseService;
-use Biz\SmsRequestLog\SmsRequestException;
 use Biz\SmsRequestLog\Dao\SmsRequestLogDao;
-use Biz\SmsRequestLog\service\SmsRequestLogService;
+use Biz\SmsRequestLog\Service\SmsRequestLogService;
 
 class SmsRequestLogServiceImpl extends BaseService implements SmsRequestLogService
 {
-    public function createSmsRequestLog($smsRequestLog, $isIllegal)
+    public function createSmsRequestLog($fields)
     {
-        if (!ArrayToolkit::requireds($smsRequestLog, ['fingerprint', 'ip', 'mobile', 'userAgent'])) {
-            throw $this->createServiceException('smsRequestLog 参数不能为空');
-        }
-        if (empty($isIllegal)) {
+        if (!isset($fields['isIllegal'])) {
             throw $this->createServiceException('isIllegal 不能为空');
         }
-        $smsRequestLog['coordinate'] = $this->decryptCoordinate($smsRequestLog['fingerprint']);
-        if (empty($smsRequestLog['coordinate'])) {
-            $this->createNewException(SmsRequestException::GET_COORDINATE_FAILED);
-        }
-        $smsRequestLog['is_illegal'] = $isIllegal;
+
+        $smsRequestLog = [
+            'fingerprint' => $fields['fingerprint'] ?? 'empty fingerprint',
+            'ip' => $fields['ip'] ?? '',
+            'mobile' => $fields['mobile'] ?? '',
+            'userAgent' => $fields['userAgent'] ?? '',
+        ];
+
+        $smsRequestLog['coordinate'] = $this->decryptCoordinate($smsRequestLog['fingerprint']) ?: 'Illegal Coordinate';
+        $smsRequestLog['isIllegal'] = $fields['isIllegal'];
+
         return $this->getSmsRequestLogDao()->create($smsRequestLog);
     }
 
@@ -31,16 +32,17 @@ class SmsRequestLogServiceImpl extends BaseService implements SmsRequestLogServi
     {
         global $kernel;
         $csrfToken = $kernel->getContainer()->get('security.csrf.token_manager')->getToken('site');
+
         return EncryptionToolkit::XXTEADecrypt(base64_decode(mb_substr($fingerprint, 2)), $csrfToken);
     }
 
     public function isIllegalSmsRequest($ip, $fingerprint)
     {
         if (empty($ip)) {
-            throw $this->createServiceException('ip 不能为空');
+            return true;
         }
         if (empty($fingerprint)) {
-            throw $this->createServiceException('fingerprint 不能为空');
+            return true;
         }
 
         if ($this->isIllegalIp($ip) || $this->isIllegalCoordinate($fingerprint)) {
@@ -69,6 +71,6 @@ class SmsRequestLogServiceImpl extends BaseService implements SmsRequestLogServi
      */
     protected function getSmsRequestLogDao()
     {
-        return $this->createDao('BehaviorVerification:SmsRequestLogDao');
+        return $this->createDao('SmsRequestLog:SmsRequestLogDao');
     }
 }

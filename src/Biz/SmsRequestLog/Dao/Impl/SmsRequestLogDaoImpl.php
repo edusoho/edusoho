@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\SmsRequestLog\Dao\impl;
+namespace Biz\SmsRequestLog\Dao\Impl;
 
 use Biz\SmsRequestLog\Dao\SmsRequestLogDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -11,9 +11,9 @@ class SmsRequestLogDaoImpl extends GeneralDaoImpl implements SmsRequestLogDao
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('created_time', 'updated_time'),
-            'orderbys' => array('id', 'created_time', 'updated_time'),
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'orderbys' => ['id', 'createdTime', 'updatedTime'],
             'conditions' => [
                 'mobile = :mobile',
                 'mobile IN (:mobiles)',
@@ -21,8 +21,8 @@ class SmsRequestLogDaoImpl extends GeneralDaoImpl implements SmsRequestLogDao
                 'ip = IN (:ips)',
                 'coordinate = (:coordinate)',
                 'fingerprint = (:fingerprint)',
-                'created_time >= (:createdTime_GTE)',
+                'createdTime >= (:createdTime_GTE)',
             ],
-        );
+        ];
     }
 }

@@ -4,33 +4,36 @@ namespace Biz\BehaviorVerification\Service\Impl;
 
 use Biz\BaseService;
 use Biz\BehaviorVerification\Dao\BehaviorVerificationBlackIpDao;
-use Biz\BehaviorVerification\Service\BehaviorVerificationCoordinateService;
 use Biz\BehaviorVerification\Service\BehaviorVerificationService;
-use Biz\SmsRequestLog\service\SmsRequestLogService;
+use Biz\SmsRequestLog\Service\SmsRequestLogService;
 
 class BehaviorVerificationServiceImpl extends BaseService implements BehaviorVerificationService
 {
-
     public function behaviorVerification($request)
     {
         if ($request->isXmlHttpRequest()) {
-            $smsRequestLog = [];
-            $smsRequestLog['fingerprint'] = $request->request->get('encryptedPoint');
-            $smsRequestLog['userAgent'] = $request->headers->get('user-agent');
-            $smsRequestLog['ip'] = $request->getClientIp();
-            $smsRequestLog['mobile'] = $request->get('mobile');
+            $fingerprint = $request->request->get('encryptedPoint');
             $ip = $request->getClientIp();
+            $fields = [
+                'fingerprint' => $fingerprint,
+                'userAgent' => $request->headers->get('user-agent'),
+                'ip' => $ip,
+                'mobile' => $request->get('mobile')?:$request->get('to'),
+            ];
             if ($this->isInBlackIpList($ip)) {
                 return true;
             }
 
-            if ($this->getSmsRequestLogService()->isIllegalSmsRequest($smsRequestLog['ip'], $smsRequestLog['fingerprint'])) {
-                $this->getSmsRequestLogService()->createSmsRequestLog($smsRequestLog, 1);
+            if ($this->getSmsRequestLogService()->isIllegalSmsRequest($ip, $fingerprint)) {
+                $fields['isIllegal'] = 1;
+                $this->getSmsRequestLogService()->createSmsRequestLog($fields);
                 $this->addBlackIpList($ip);
 
                 return true;
             }
-            $this->getSmsRequestLogService()->createSmsRequestLog($smsRequestLog, 0);
+
+            $fields['isIllegal'] = 0;
+            $this->getSmsRequestLogService()->createSmsRequestLog($fields);
         }
 
         return false;
@@ -45,6 +48,7 @@ class BehaviorVerificationServiceImpl extends BaseService implements BehaviorVer
         if ($smsBlackIp['expire_time'] < time()) {
             return false;
         }
+
         return true;
     }
 
@@ -61,15 +65,7 @@ class BehaviorVerificationServiceImpl extends BaseService implements BehaviorVer
      */
     protected function getBehaviorVerificationIpDao()
     {
-        return $this->createDao("BehaviorVerification:BehaviorVerificationBlackIpDao");
-    }
-
-    /**
-     * @return BehaviorVerificationCoordinateService
-     */
-    protected function getBehaviorVerificationCoordinateService()
-    {
-        return $this->createService('BehaviorVerification:BehaviorVerificationCoordinateService');
+        return $this->createDao('BehaviorVerification:BehaviorVerificationBlackIpDao');
     }
 
     /**
@@ -77,6 +73,6 @@ class BehaviorVerificationServiceImpl extends BaseService implements BehaviorVer
      */
     protected function getSmsRequestLogService()
     {
-        return $this->createService('BehaviorVerification:SmsRequestLogService');
+        return $this->createService('SmsRequestLog:SmsRequestLogService');
     }
 }

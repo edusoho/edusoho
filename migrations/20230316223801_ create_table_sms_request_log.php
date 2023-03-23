@@ -17,14 +17,14 @@ class CreateTableSmsRequestLog extends Migration
             `coordinate` varchar(16) NOT NULL COMMENT '坐标',
             `ip` varchar(32) NOT NULL COMMENT 'ip',
             `mobile` varchar(11)  NOT NULL COMMENT '手机号',
-            `user_agent` varchar(255) NOT NULL DEFAULT '',
-            `is_illegal`  tinyint(1)  NOT NULL COMMENT '是非法记录',
-            `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-            `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+            `userAgent` varchar(255) NOT NULL DEFAULT '',
+            `isIllegal`  tinyint(1)  NOT NULL COMMENT '是非法记录',
+            `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+            `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
           PRIMARY KEY (`id`),
           KEY `mobile` (mobile),
           KEY `ip` (ip),
-          KEY `createdTime` (created_time),
+          KEY `createdTime` (createdTime)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='短信请求日志表';
         ");
     }
