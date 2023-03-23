@@ -208,17 +208,21 @@ export default {
           // 材料题下面有子题需要特殊处理
           paper[key].forEach(item => {
             const title = Object.assign({}, item, { subs: '' });
+
             item.subs.forEach((sub, index) => {
               sub.parentTitle = title; // 材料题题干
               sub.parentType = item.type; // 材料题题型
               sub.materialIndex = index + 1; // 材料题子题的索引值，在页面要显示
 
-              const detail = this.analysisSixType(sub.type, sub);
+              if (item.attachments) {
+                sub.attachments = sub.attachments.concat(item.attachments)
+              }
 
               if (sub.testResult.attachments) {
                 sub.attachments = sub.attachments.concat(sub.testResult.attachments)
               }
 
+              const detail = this.analysisSixType(sub.type, sub);
               this.setData(detail.item, detail.answer);
             });
           });
