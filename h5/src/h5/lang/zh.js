@@ -641,5 +641,10 @@ export default {
     allClass: '全部班级适用',
     allGoods: '全部商品适用',
     allMember: '全部会员适用'
+  },
+  attachment: {
+    waiting: '等待转码',
+    doing: '转码中...',
+    error: '转码失败'
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <div :id="'player' + attachment.id" style="margin-top: 8px;">
+  <div :id="'player' + attachment.id + '-' + randomId" style="margin-top: 8px;">
     <div v-if="!isImmediatePreview && isShow" class="attachment-preview">
       <img :src="iconSrc" class="attachment-preview__icon" />
       
@@ -81,10 +81,11 @@ export default {
       isLoaded: false,
       isShow: true,
       resourceStatus: {
-        'waiting': '等待转码',
-        'doing': '转码中...',
-        'fail': '转码失败'
-      }
+        'waiting': this.$t('attachment.waiting'),
+        'doing': this.$t('attachment.doing'),
+        'error': this.$t('attachment.error'),
+      },
+      randomId: Math.floor(Math.random() * 100)
     }
   },
   computed: {
@@ -130,7 +131,7 @@ export default {
       Api.getItemDetail({ 
         params: { globalId: this.attachment.global_id } 
       }).then(res => {
-        res.data.id = 'player' + this.attachment.id
+        res.data.id = 'player' + this.attachment.id + '-' + this.randomId
         playerInitQueue.push(initPlayer.bind(null, res.data))
 
         if (playerInitQueue.length === queueLength) {

@@ -640,5 +640,10 @@ export default {
     allClass: 'Applicable to all class',
     allGoods: 'Applicable to all goods',
     allMember: 'Applicable to all member'
+  },
+  attachment: {
+    waiting: 'Waiting for transcoding',
+    doing: 'Transcoding...',
+    error: 'Transcoding failed'
   }
 };
