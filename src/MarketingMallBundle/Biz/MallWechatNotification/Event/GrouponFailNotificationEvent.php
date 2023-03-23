@@ -38,7 +38,7 @@ class GrouponFailNotificationEvent extends AbstractNotificationEvent implements 
     {
         return [
             'thing9' => ['value' => $data['grouponTitle']],
-            'number5' => ['value' => $data['grouponMemberNum'] . '人'],
+            'number5' => ['value' => $data['grouponMemberNum']],
             'thing2' => ['value' => '失败'],
             'thing12' => ['value' => $this->transFailReason($data['grouponFailReason'])],
             'thing3' => ['value' => '点击查看活动详情'],
