@@ -23,7 +23,7 @@ class SmsRequestLogServiceImpl extends BaseService implements SmsRequestLogServi
         if (empty($smsRequestLog['coordinate'])) {
             $this->createNewException(SmsRequestException::GET_COORDINATE_FAILED);
         }
-        $smsRequestLog['$is_illegal'] = $isIllegal;
+        $smsRequestLog['is_illegal'] = $isIllegal;
         return $this->getSmsRequestLogDao()->create($smsRequestLog);
     }
 
