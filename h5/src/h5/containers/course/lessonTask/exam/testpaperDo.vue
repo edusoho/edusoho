@@ -334,6 +334,7 @@ export default {
               sub.parentTitle = title; // 材料题题干
               sub.parentType = item.type; // 材料题题型
               sub.materialIndex = index + 1; // 材料题子题的索引值，在页面要显示
+              sub.attachments = sub.attachments.concat(item.attachments)
 
               const detail = this.sixType(sub.type, sub, this.lastAnswer);
               this.$set(this.answer, sub.id, detail.answer);

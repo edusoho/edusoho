@@ -77,6 +77,8 @@
             :analysis="paper.analysis"
             :answer="paper.answer"
             :subject="paper.type"
+            :is-current="currentIndex === index"
+            :attachments="paper.attachments"
             :is-exercise="isExercise"
             :result-show="resultShow"
           />
@@ -127,7 +129,7 @@ export default {
     choiceType,
     singleChoice,
     determineType,
-    analysis,
+    analysis
   },
   props: {
     info: {
@@ -282,7 +284,7 @@ export default {
     // 判断题选择
     determineChoose(name, id) {
       this.$set(this.testAnswer[id], 0, Number(name));
-    },
+    }
   },
 };
 </script>

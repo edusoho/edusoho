@@ -7,6 +7,7 @@
       :answerReport="answerReport"
       :assessment="assessment"
       :answerScene="answerScene"
+      :assessmentResponse="assessmentResponse"
       @getReviewData="getReviewData"
     ></item-review>
   </div>
@@ -25,6 +26,7 @@ export default {
       answerScene: {},
       answerReport: {},
       answerRecord: {},
+      assessmentResponse: {}
     };
   },
   computed: {},
@@ -32,7 +34,17 @@ export default {
   created() {
     this.getData();
   },
+  provide() {
+    return {
+      getResourceToken: this.getResourceToken
+    }
+  },
   methods: {
+    getResourceToken(globalId) {
+      return Api.getItemDetail({ 
+        params: { globalId } 
+      })
+    },
     getData() {
       const query = {
         answerRecordId: Number(this.$route.params.answerRecordId),
@@ -45,6 +57,7 @@ export default {
           this.answerScene = res.answer_scene;
           this.answerReport = res.answer_report;
           this.answerRecord = res.answer_record;
+          this.assessmentResponse = res.assessment_response;
           this.$store.commit(types.SET_NAVBAR_TITLE, this.$route.query.title);
           this.isLoading = false;
         })

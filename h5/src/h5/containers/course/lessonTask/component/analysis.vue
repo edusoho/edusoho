@@ -3,13 +3,13 @@
     <div class="mt10 analysis-result">
       <div class="analysis-title">{{ $t('courseLearning.answerResult') }}</div>
       <div class="analysis-content">
-        <div class="analysis-content__item  mt10">
+        <div class="analysis-content__item mt10">
           <div class="analysis-item__title">{{ $t('courseLearning.answerResult') }}</div>
           <div :class="[statusColor]">{{ status(testResult) }}</div>
         </div>
 
         <div v-if="subject === 'fill'">
-          <div class="analysis-content__item  mt10" v-if="resultShow">
+          <div class="analysis-content__item mt10" v-if="resultShow">
             <div class="analysis-item__title">{{ $t('courseLearning.correctAnswer') }}</div>
             <div class="analysis-item_right analysis-content__item--column">
               <div
@@ -38,11 +38,11 @@
         </div>
 
         <div v-if="subject === 'essay'">
-          <div class="analysis-content__item  mt10" v-if="resultShow">
+          <div class="analysis-content__item mt10" v-if="resultShow">
             <div class="analysis-item__title">{{ $t('courseLearning.correctAnswer') }}</div>
             <div class="analysis-item_right" v-html="answer[0]" />
           </div>
-          <div class="analysis-content__item  mt10">
+          <div class="analysis-content__item mt10">
             <div class="analysis-item__title">{{ $t('courseLearning.yourAnswer') }}</div>
             <div
               v-if="testResult && testResult.answer.length > 0"
@@ -54,14 +54,14 @@
         </div>
 
         <div v-if="subject !== 'fill' && subject !== 'essay'">
-          <div class="analysis-content__item  mt10" v-if="resultShow">
+          <div class="analysis-content__item mt10" v-if="resultShow">
             <div class="analysis-item__title">{{ $t('courseLearning.correctAnswer') }}</div>
             <div
               class="analysis-item_right"
               v-html="filterOrder(answer, 'standard')"
             />
           </div>
-          <div class="analysis-content__item  mt10">
+          <div class="analysis-content__item mt10">
             <div class="analysis-item__title">{{ $t('courseLearning.yourAnswer') }}</div>
             <div v-if="!testResult" class="analysis-item_noAnswer">{{ $t('courseLearning.unanswered') }}</div>
             <div v-else :class="[statusColor]">
@@ -69,17 +69,33 @@
             </div>
           </div>
         </div>
+
+        <attachement-preview 
+          v-for="item in getAttachementByType('answer')"
+          :canLoadPlayer="isCurrent"
+          :attachment="item"
+          :key="item.id" />
       </div>
     </div>
     <div class="mt10 analysis-result" v-if="resultShow">
       <div class="analysis-title">{{ $t('courseLearning.parsing') }}</div>
       <div v-if="analysis" class="analysis-content mt10" v-html="analysis" />
       <div v-else class="analysis-content mt10">{{ $t('courseLearning.noParsing') }}</div>
+      
+      <div class="analysis-content">
+        <attachement-preview 
+          v-for="item in getAttachementByType('analysis')"
+          :canLoadPlayer="isCurrent"
+          :attachment="item"
+          :key="item.id" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import attachementPreview from './attachement-preview.vue';
+
 export default {
   name: 'Analysis',
   props: {
@@ -107,6 +123,17 @@ export default {
       type: Boolean,
       default: true,
     },
+    attachments: {
+      type: Array,
+      default: () => []
+    },
+    isCurrent: {
+      type: Boolean,
+      default: false
+    }
+  },
+  components: {
+    attachementPreview
   },
   computed: {
     statusColor() {
@@ -171,6 +198,9 @@ export default {
         return formateAnswer.length > 0 ? formateAnswer.join(' ') : this.$t('courseLearning.unanswered');
       }
     },
+    getAttachementByType(type) {
+      return this.attachments.filter(item => item.module === type) || []
+    }
   },
 };
 </script>

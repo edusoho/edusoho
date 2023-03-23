@@ -3,6 +3,11 @@
     <div class="subject-stem">
       <span class="serial-number">{{ itemdata.seq }}、</span>
       <div class="rich-text" v-html="stem" />
+      <attachement-preview 
+        v-for="item in getAttachementByType('material')"
+        :canLoadPlayer="isCurrent"
+        :attachment="item"
+        :key="item.id" />
     </div>
 
     <div v-if="itemdata.parentTitle" class="material-title">
@@ -11,7 +16,7 @@
     </div>
 
     <attachement-preview 
-      v-for="item in itemdata.attachments"
+      v-for="item in getAttachementByType('stem')"
       :canLoadPlayer="isCurrent"
       :attachment="item"
       :key="item.id" />
@@ -90,8 +95,8 @@ export default {
     choose() {
       this.$emit('singleChoose', this.radio, this.itemdata.id);
     },
-    initPlayer() {
-      
+    getAttachementByType(type) {
+      return this.itemdata.attachments.filter(item => item.module === type) || []
     }
   },
 };

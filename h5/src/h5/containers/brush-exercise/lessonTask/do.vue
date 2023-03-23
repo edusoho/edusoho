@@ -41,6 +41,7 @@ export default {
       answerRecord: {},
       assessmentResponse: {},
       canLeave: false,
+      resources: [{ id: '1' }, { id: '2' }]
     };
   },
   computed: {},
@@ -48,6 +49,11 @@ export default {
   created() {
     const mode = this.$route.query.mode;
     mode === 'start' ? this.getStart() : this.getContinue();
+  },
+  provide() {
+    return {
+      getResourceToken: this.getResourceToken
+    }
   },
   mounted() {},
   beforeRouteLeave(to, from, next) {
@@ -70,6 +76,11 @@ export default {
         .catch(err => {
           this.handleError(err);
         });
+    },
+    getResourceToken(globalId) {
+      return Api.getItemDetail({ 
+        params: { globalId } 
+      })
     },
     getStart() {
       this.isLoading = true;

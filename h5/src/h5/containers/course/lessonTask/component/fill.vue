@@ -3,6 +3,11 @@
     <div class="subject-stem">
       <div class="serial-number">{{ itemdata.seq }}、</div>
       <div class="rich-text" v-html="stem" />
+      <attachement-preview 
+        v-for="item in getAttachementByType('material')"
+        :canLoadPlayer="isCurrent"
+        :attachment="item"
+        :key="item.id" />
     </div>
 
     <div v-if="itemdata.parentTitle" class="material-title">
@@ -11,7 +16,7 @@
     </div>
 
     <attachement-preview 
-      v-for="item in itemdata.attachments"
+      v-for="item in getAttachementByType('stem')"
       :canLoadPlayer="isCurrent"
       :attachment="item"
       :key="item.id" />
@@ -86,6 +91,10 @@ export default {
       },
     },
   },
-  methods: {},
+  methods: {
+    getAttachementByType(type) {
+      return this.itemdata.attachments.filter(item => item.module === type) || []
+    }
+  },
 };
 </script>

@@ -197,6 +197,10 @@ export default {
           paper[key].forEach(item => {
             const detail = this.analysisSixType(item.type, item);
 
+            if (item.testResult.attachments) {
+              item.attachments = item.attachments.concat(item.testResult.attachments)
+            }
+
             this.setData(detail.item, detail.answer);
           });
         }
@@ -210,6 +214,10 @@ export default {
               sub.materialIndex = index + 1; // 材料题子题的索引值，在页面要显示
 
               const detail = this.analysisSixType(sub.type, sub);
+
+              if (sub.testResult.attachments) {
+                sub.attachments = sub.attachments.concat(sub.testResult.attachments)
+              }
 
               this.setData(detail.item, detail.answer);
             });
