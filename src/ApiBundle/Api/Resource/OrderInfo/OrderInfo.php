@@ -173,7 +173,7 @@ class OrderInfo extends AbstractResource
                 break;
             case '10':
             default:
-                if (!in_array($unit, ['year', 'month'])) {
+                if (!in_array($unit, ['year', 'month', 'day'])) {
                     $result = false;
                 }
                 break;
