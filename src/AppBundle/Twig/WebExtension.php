@@ -38,7 +38,6 @@ use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Theme\Service\ThemeService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
@@ -344,10 +343,10 @@ class WebExtension extends \Twig_Extension
 
     public function userPath($params)
     {
-        $id = $params['id']??0;
+        $id = $params['id'] ?? 0;
         $user = $this->getUserService()->getUser($id);
 
-        return $this->container->get('router')->generate('user_show', ['id' => $user['uuid']??$id]);
+        return $this->container->get('router')->generate('user_show', ['id' => $user['uuid'] ?? $id]);
     }
 
     /**
