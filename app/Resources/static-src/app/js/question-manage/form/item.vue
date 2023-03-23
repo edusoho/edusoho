@@ -116,10 +116,8 @@
       goBack() {
         window.location.href = $('[name=back_url]').val();
       },
-      deleteAttachment(fileId, flag) {
-        if (flag) {
-          this.fileId = fileId;
-        }
+      deleteAttachment(fileId) {
+        this.fileId = fileId;
       },
       previewAttachment(fileId) {
         this.fileId = fileId;

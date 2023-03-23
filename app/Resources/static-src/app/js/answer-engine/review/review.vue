@@ -3,6 +3,7 @@
     <item-review
       :role="role"
       :activity="activity"
+      :isDownload="isDownload"
       :metaActivity="metaActivity"
       :assessment="assessment"
       :answerReport="answerReport"
@@ -44,7 +45,8 @@
         mediaType: $('[name=media_type]').val(),
         finishType: $('[name=finishType]').val(),
         activity: {},
-        submitList: []
+        submitList: [],
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
       };
     },
     created() {

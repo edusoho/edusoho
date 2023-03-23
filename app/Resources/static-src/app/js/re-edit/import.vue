@@ -13,10 +13,10 @@
             :deleteAttachmentCallback="deleteAttachmentCallback"
             :previewAttachmentCallback="previewAttachmentCallback"
             :downloadAttachmentCallback="downloadAttachmentCallback"
+            @deleteAttachment="deleteAttachment"
             @previewAttachment="previewAttachment"
             @downloadAttachment="downloadAttachment"
             @getImportData="getImportData"
-            @deleteAttachment="deleteAttachment"
         ></item-import>
     </div>
 </template>
@@ -103,10 +103,8 @@
           })
         });
       },
-      deleteAttachment(fileId, flag) {
-        if (flag) {
-          this.fileId = fileId;
-        }
+      deleteAttachment(fileId) {
+        this.fileId = fileId;
       },
       previewAttachment(fileId) {
         this.fileId = fileId;
