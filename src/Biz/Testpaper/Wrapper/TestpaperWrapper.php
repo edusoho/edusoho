@@ -195,7 +195,7 @@ class TestpaperWrapper
         if (!empty($this->questionReports[$question['id']])) {
             $questionReport = $this->questionReports[$question['id']];
             $attachments = $this->getAttachmentService()->findAttachmentsByTargetIdsAndTargetType(
-                ArrayToolkit::column($questionReport, 'id'),
+                ArrayToolkit::column($this->questionReports, 'id'),
                 AttachmentService::ANSWER_TYPE
             ) ?? [];
             $attachments = ArrayToolkit::group($attachments, 'target_id');
