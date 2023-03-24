@@ -3,11 +3,11 @@
 namespace Biz\BehaviorVerification\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Biz\BehaviorVerification\Dao\BehaviorVerificationBlackIpDao;
+use Biz\BehaviorVerification\Dao\SmsBlackListDao;
 
-class BehaviorVerificationBlackIpDaoImpl extends GeneralDaoImpl implements BehaviorVerificationBlackIpDao
+class SmsBlackListDaoImpl extends GeneralDaoImpl implements SmsBlackListDao
 {
-    protected $table = 'behavior_verification_black_ip';
+    protected $table = 'sms_black_list';
 
     public function getByIp($ip)
     {

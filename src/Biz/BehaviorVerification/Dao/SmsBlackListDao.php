@@ -4,7 +4,7 @@ namespace Biz\BehaviorVerification\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
-interface BehaviorVerificationBlackIpDao extends GeneralDaoInterface
+interface SmsBlackListDao extends GeneralDaoInterface
 {
     public function getByIp($ip);
 }

@@ -6,7 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
-use Biz\BehaviorVerification\Service\BehaviorVerificationService;
+use Biz\BehaviorVerification\Service\SmsDefenceService;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\User\Service\UserService;
@@ -33,10 +33,18 @@ class UserSmsResetPassword extends AbstractResource
 
         $token = $request->request->get('dragCaptchaToken', '');
         $this->getDragCaptcha()->check($token);
-        if ($this->getBehaviorVerificationService()->verificateBehavior($request->getHttpRequest())) {
-            return [
-                'smsToken' => 'fakeToken',
+        if ($request->getHttpRequest()->isXmlHttpRequest()) {
+            $fields = [
+                'fingerprint' => $request->getHttpRequest()->get('encryptedPoint'),
+                'userAgent' => $request->getHttpRequest()->headers->get('user-agent'),
+                'ip' => $request->getHttpRequest()->getClientIp(),
+                'mobile' => $request->getHttpRequest()->get('mobile') ?: $request->get('to'),
             ];
+            if ($this->getBehaviorVerificationService()->validate($fields)) {
+                return [
+                    'smsToken' => 'fakeToken',
+                ];
+            }
         }
         $smsToken = $this->getBizSms()->send(BizSms::SMS_FORGET_PASSWORD, $mobile);
 
@@ -82,10 +90,10 @@ class UserSmsResetPassword extends AbstractResource
     }
 
     /**
-     * @return BehaviorVerificationService
+     * @return SmsDefenceService
      */
     protected function getBehaviorVerificationService()
     {
-        return $this->biz->service('BehaviorVerification:BehaviorVerificationService');
+        return $this->biz->service('BehaviorVerification:SmsDefenceService');
     }
 }

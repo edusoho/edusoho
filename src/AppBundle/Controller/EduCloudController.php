@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\SmsToolkit;
-use Biz\BehaviorVerification\Service\BehaviorVerificationService;
+use Biz\BehaviorVerification\Service\SmsDefenceService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Sms\SmsException;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
@@ -29,9 +29,16 @@ class EduCloudController extends BaseController
     public function smsSendRegistrationAction(Request $request)
     {
         $smsType = 'sms_registration';
-
-        if ($this->getBehaviorVerificationService()->verificateBehavior($request)) {
-            return $this->createJsonResponse(['ACK' => 'ok', 'allowance' => 0]);
+        if ($request->isXmlHttpRequest()) {
+            $fields = [
+                'fingerprint' => $request->get('encryptedPoint'),
+                'userAgent' => $request->headers->get('user-agent'),
+                'ip' => $request->getClientIp(),
+                'mobile' => $request->get('to'),
+            ];
+            if ($this->getBehaviorVerificationService()->validate($fields)) {
+                return $this->createJsonResponse(['ACK' => 'ok', 'allowance' => 0]);
+            }
         }
         $status = $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp());
         if ('captchaRequired' == $status) {
@@ -67,9 +74,16 @@ class EduCloudController extends BaseController
                 return $this->createJsonResponse(['error' => '验证码错误']);
             }
         }
-
-        if ($this->getBehaviorVerificationService()->verificateBehavior($request)) {
-            return $this->createJsonResponse(['ACK' => 'ok', 'allowance' => 0]);
+        if ($request->isXmlHttpRequest()) {
+            $fields = [
+                'fingerprint' => $request->get('encryptedPoint'),
+                'userAgent' => $request->headers->get('user-agent'),
+                'ip' => $request->getClientIp(),
+                'mobile' => $request->get('mobile') ?: $request->get('to'),
+            ];
+            if ($this->getBehaviorVerificationService()->validate($fields)) {
+                return $this->createJsonResponse(['ACK' => 'ok', 'allowance' => 0]);
+            }
         }
 
         $result = $this->sendSms($request, $smsType);
@@ -491,10 +505,10 @@ class EduCloudController extends BaseController
     }
 
     /**
-     * @return BehaviorVerificationService
+     * @return SmsDefenceService
      */
     protected function getBehaviorVerificationService()
     {
-        return $this->createService('BehaviorVerification:BehaviorVerificationService');
+        return $this->createService('BehaviorVerification:SmsDefenceService');
     }
 }
