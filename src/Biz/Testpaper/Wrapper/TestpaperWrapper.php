@@ -9,6 +9,8 @@ use Codeages\Biz\ItemBank\Item\AnswerMode\SingleChoiceAnswerMode;
 use Codeages\Biz\ItemBank\Item\AnswerMode\TextAnswerMode;
 use Codeages\Biz\ItemBank\Item\AnswerMode\TrueFalseAnswerMode;
 use Codeages\Biz\ItemBank\Item\AnswerMode\UncertainChoiceAnswerMode;
+use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
+use Topxia\Service\Common\ServiceKernel;
 
 class TestpaperWrapper
 {
@@ -118,7 +120,6 @@ class TestpaperWrapper
     {
         $items = [];
         $this->questionReports = ArrayToolkit::index($questionReports, 'question_id');
-
         foreach ($assessment['sections'] as $section) {
             foreach ($section['items'] as $item) {
                 if (1 != $item['isDelete']) {
@@ -147,6 +148,7 @@ class TestpaperWrapper
                 'analysis' => $item['analysis'],
                 'parentId' => '0',
                 'subs' => [],
+                'attachments' => $item['attachments'],
             ];
             foreach ($item['questions'] as $itemQuestion) {
                 if (1 != $itemQuestion['isDelete']) {
@@ -177,6 +179,7 @@ class TestpaperWrapper
             'analysis' => $itemQuestion['analysis'],
             'parentId' => '0',
             'testResult' => [],
+            'attachments' => $itemQuestion['attachments'],
         ];
 
         $question['answer'] = $this->convertAnswer($itemQuestion['answer'], $question);
@@ -191,6 +194,11 @@ class TestpaperWrapper
 
         if (!empty($this->questionReports[$question['id']])) {
             $questionReport = $this->questionReports[$question['id']];
+            $attachments = $this->getAttachmentService()->findAttachmentsByTargetIdsAndTargetType(
+                ArrayToolkit::column($this->questionReports, 'id'),
+                AttachmentService::ANSWER_TYPE
+            ) ?? [];
+            $attachments = ArrayToolkit::group($attachments, 'target_id');
             $question['testResult'] = [
                 'id' => $questionReport['id'],
                 'testId' => $questionReport['assessment_id'],
@@ -200,6 +208,7 @@ class TestpaperWrapper
                 'score' => $questionReport['score'],
                 'answer' => $this->convertAnswer($questionReport['response'], $question),
                 'teacherSay' => $questionReport['comment'],
+                'attachments' => $attachments[$questionReport['id']],
             ];
         }
 
@@ -251,5 +260,13 @@ class TestpaperWrapper
         }
 
         return $metas;
+    }
+
+    /**
+     * @return AttachmentService
+     */
+    protected function getAttachmentService()
+    {
+        return ServiceKernel::instance()->createService('ItemBank:Item:AttachmentService');
     }
 }

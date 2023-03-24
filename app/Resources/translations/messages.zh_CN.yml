@@ -648,7 +648,8 @@ order.paid_course.minus: 抵扣
 order.refund: 退出学习
 order.refund.item_type: 商品类型
 order.refund.reason: 退出原因
-order.refund.reason_tips: 请输入您的退学原因
+order.refund.reason_tips: 请输入您的退出原因
+order.refund.reason_warning: 退出后将无法继续学习，需重新加入或购买！
 order.refund.apply_for_btn: 申请退款
 order.refund.refund_is_not_supported: 暂不支持退款，如有疑问，请联系客服。
 order.refund.buy_price: （购买时的价格：%amount%元）
@@ -7621,6 +7622,12 @@ admin.edu_cloud.key_update.ask_apply_key: 还没有授权码?
 admin.edu_cloud.key_update.key_apply_btn: 申请授权码
 admin.edu_cloud.key_update.key_apply.submiting: 正在申请授权码，请稍等...
 
+#题库附件设置
+admin.question_bank.file.download.setting.enable.tips: 移动端暂不提供下载题库附件功能，不受设置影响
+admin.question_bank.file.download.setting.disable.tips: 压缩文件只能下载后查看，关闭后，学员将无法查看压缩类附件
+admin.question_bank.question_bank_attachment.open_radio: 开启
+admin.question_bank.question_bank_attachment.close_radio: 关闭
+
 # 用户设置
 admin.user_auth.sign_up_settings: 注册设置
 admin.user_auth.user_sign_up_setting: 用户注册设置
@@ -8207,6 +8214,26 @@ admin.post_num_rules.same_ip_rule: 同一IP，5分钟内最多发帖次数（包
 admin.post_num_rules.post_num: 发帖次数
 admin.post_num_rules.post_num_tips: 发帖次数必须大于或者等于0的整数，0表示不限制
 admin.post_num_rules.same_user_rule: 同一用户，5分钟内最多发帖次数（包含回复数）
+
+#APP防诈骗弹窗设置
+admin.anti_fraud_reminder.setting: APP防诈骗弹窗设置
+admin.anti_fraud_reminder.open_radio: 开启
+admin.anti_fraud_reminder.close_radio: 关闭
+admin.anti_fraud_reminder.setting.enable.tips: 开启后，用户进入APP时给出防诈骗弹窗提醒
+admin.anti_fraud_reminder.setting.disable.tips: APP不显示防诈骗弹窗
+admin.anti_fraud_reminder.reminder_frequency: 提醒频率
+admin.anti_fraud_reminder.alert_the_object: 提醒对象
+admin.anti_fraud_reminder.visible_to_all_users: 全部用户可见
+admin.anti_fraud_reminder.visible_only_to_paid_users: 仅付费用户可见
+admin.anti_fraud_reminder.to_paid_users_tips: 付费用户指在机构内支付金额≥0.01的用户
+admin.anti_fraud_reminder.view_reminder_example: 查看提醒示例
+admin.anti_fraud_reminder.tips.title: 【反诈提醒】
+admin.anti_fraud_reminder.tips.content_one: 近期，我们发现有不法分子冒充阔知或网校工作人员，以“阔知学堂/网校退费”的名义实施诈骗！如您收到相关的短信和电话，请勿相信！！！
+admin.anti_fraud_reminder.tips.content_two: 我们为您准备了一份防诈骗防骚扰教程，点击下方按钮了解详情。
+admin.anti_fraud_reminder.tips.detail: 查看防骚扰设置教程 >
+admin.anti_fraud_reminder.tips.app.button: 查看防骚扰设置教程 >
+admin.anti_fraud_reminder.every: 每
+admin.anti_fraud_reminder.every_day_reminder: 天提醒一次
 
 # 系统自检
 admin.reports_status.environmental_detection: 环境检测

@@ -551,6 +551,7 @@ order.refund: 'Quit the course'
 order.refund.item_type: item type
 order.refund.reason: 'Quit reason'
 order.refund.reason_tips: 'Please input your quit reason'
+order.refund.reason_warning: You will not be able to continue learning after exiting, you need to rejoin or buy！
 order.refund.apply_for_btn: 'Apply for refund'
 order.refund.buy_price: '(you have paid：%amount% CNY）'
 order.refund.refund_is_not_supported: Refund is not supported
@@ -6847,6 +6848,25 @@ admin.post_num_rules.same_ip_rule: 'Maximum posts(including replies) per Ip in 5
 admin.post_num_rules.post_num: 'Post count'
 admin.post_num_rules.post_num_tips: 'Post count must be integer greater than or equal to 0. 0 means no limit'
 admin.post_num_rules.same_user_rule: 'Maximum posts(including replies) per user in 5 minutes'
+admin.anti_fraud_reminder.setting: APP anti-fraud pop-up window settings
+admin.anti_fraud_reminder.open_radio: Open
+admin.anti_fraud_reminder.close_radio: Closed
+admin.anti_fraud_reminder.setting.enable.tips: After opening, the user will give an anti-fraud pop-up window reminder when entering the APP
+admin.anti_fraud_reminder.setting.disable.tips: The APP does not display the anti-fraud pop-up window
+admin.anti_fraud_reminder.reminder_frequency: Reminder frequency
+admin.anti_fraud_reminder.alert_the_object: Alert the object
+admin.anti_fraud_reminder.visible_to_all_users: Visible to all users
+admin.anti_fraud_reminder.visible_only_to_paid_users: Visible only to paying users
+admin.anti_fraud_reminder.to_paid_users_tips: Paid users refer to users who pay an amount ≥ 0.01 within the institution
+admin.anti_fraud_reminder.view_reminder_example: See examples of reminders
+admin.anti_fraud_reminder.tips.title: 【Fraud Alert】
+admin.anti_fraud_reminder.tips.content_one: Recently, we have discovered that some criminals are impersonating online school staff and committing fraud under the guise of "refunds"! If you receive any related text messages or phone calls, please do not believe them!!!
+admin.anti_fraud_reminder.tips.content_two: We have prepared an anti-fraud and anti-harassment tutorial for you. Click on the link below to learn more.
+admin.anti_fraud_reminder.tips.detail: Click here to view the anti-harassment settings tutorial >
+admin.anti_fraud_reminder.tips.app.button: View Tutorial >
+admin.anti_fraud_reminder.every: Every
+admin.anti_fraud_reminder.every_day_reminder: Day remind once
+
 admin.reports_status.environmental_detection: 'Environment test'
 admin.reports_status.recommend_config: 'Recommended configuration'
 admin.reports_status.current_status: 'Current status'
@@ -11003,3 +11023,7 @@ live_course.record_replay.btn: To Record
 live_course.record_replay.safair_tip: Safair may be blocked, please use another browser
 live_course.record_replay.show_btn: local recording
 exception.sms_request.abnormal_sms_sending: Abnormal sms sending
+admin.question_bank.file.download.setting.enable.tips: The mobile terminal does not provide the function of downloading question bank attachments, which is not affected by settings
+admin.question_bank.file.download.setting.disable.tips: Compressed files can only be viewed after downloading, and when closed, learners will not be able to view compressed attachments
+admin.question_bank.question_bank_attachment.open_radio: Active
+admin.question_bank.question_bank_attachment.close_radio: Disabled

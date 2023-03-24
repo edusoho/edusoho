@@ -13,10 +13,10 @@
             :deleteAttachmentCallback="deleteAttachmentCallback"
             :previewAttachmentCallback="previewAttachmentCallback"
             :downloadAttachmentCallback="downloadAttachmentCallback"
+            @deleteAttachment="deleteAttachment"
             @previewAttachment="previewAttachment"
             @downloadAttachment="downloadAttachment"
             @getImportData="getImportData"
-            @deleteAttachment="deleteAttachment"
         ></item-import>
     </div>
 </template>
@@ -49,10 +49,14 @@
           finishUrl: $('[name=upload_finish_url]').val(),
           accept: JSON.parse($('[name=upload_accept]').val()),
           fileSingleSizeLimit: $('[name=upload_size_limit]').val(),
+          ui: 'batch',
+          multiple: true,
+          multitaskNum: 3,
+          fileNumLimit: 3,
           locale: document.documentElement.lang
         },
         fileId: 0,
-        redirect:true
+        redirect: true
       }
     },
     created() {
@@ -62,6 +66,11 @@
           return Translator.trans('admin.block.not_saved_data_hint');
         }
       });
+    },
+    provide() {
+      return {
+        modeOrigin: 'create'
+      }
     },
     methods: {
       getImportData(subject) {
@@ -94,10 +103,8 @@
           })
         });
       },
-      deleteAttachment(fileId, flag) {
-        if (flag) {
-          this.fileId = fileId;
-        }
+      deleteAttachment(fileId) {
+        this.fileId = fileId;
       },
       previewAttachment(fileId) {
         this.fileId = fileId;

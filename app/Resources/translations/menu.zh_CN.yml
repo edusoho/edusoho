@@ -993,6 +993,7 @@ admin_v2.system.security_menu: 安全设置
 admin_v2.system.blacklist_tab: IP黑名单
 admin_v2.system.security_tab: 白名单域名
 admin_v2.system.post_num_tab: 发帖限制
+admin_v2.system.anti_fraud_reminder_tab: APP防诈骗弹窗设置
 
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: 数据概览
@@ -1077,3 +1078,4 @@ admin.wap_setting.find: 发现页设置
 admin.wap_setting.version_setting: 版本设置
 admin.wap_setting.pay_setting: 支付设置
 admin_v2.cloud.question_bank.attachment.basic_tab: 题库附件
+admin_v2.cloud.question_bank.attachment_setting.basic_tab: 题库附件设置

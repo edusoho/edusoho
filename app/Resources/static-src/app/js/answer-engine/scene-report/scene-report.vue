@@ -4,6 +4,7 @@
         cdnHost="cdnHost"
         :assessment="assessment"
         :answerScene="answerScene"
+        :isDownload="isDownload"
         :answerSceneReport="answerSceneReport"
         @previewAttachment="previewAttachment"
         @downloadAttachment="downloadAttachment"
@@ -26,6 +27,7 @@
         },
         cdnHost: $('[name=cdn_host]').val(),
         fileId: 0,
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
       };
     },
     created() {

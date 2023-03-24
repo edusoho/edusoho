@@ -963,6 +963,7 @@ admin_v2.system.security_menu: Security Setting
 admin_v2.system.blacklist_tab: IP Blacklist
 admin_v2.system.security_tab: Whitelist Domain
 admin_v2.system.post_num_tab: Post Setting
+admin_v2.system.anti_fraud_reminder_tab: APP anti-fraud pop-up window settings
 
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: Data Overview
@@ -1046,3 +1047,4 @@ admin.wap_setting.find: 'Discovery page settings'
 admin.wap_setting.version_setting: 'Version setting'
 admin.wap_setting.pay_setting: 'Payment setting'
 admin_v2.cloud.question_bank.attachment.basic_tab: Question Attachment
+admin_v2.cloud.question_bank.attachment_setting.basic_tab: Question Attachment Setting

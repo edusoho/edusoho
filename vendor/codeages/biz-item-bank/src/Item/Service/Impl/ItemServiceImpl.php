@@ -37,7 +37,8 @@ class ItemServiceImpl extends BaseService implements ItemService
         try {
             $item = $this->getItemDao()->create($item);
             if (!empty($arguments['attachments'])) {
-                $this->updateAttachments($arguments['attachments'], $item['id'], AttachmentService::ITEM_TYPE);
+                $attachments = $this->sortAttachments($arguments['attachments']);
+                $this->updateAttachments($attachments, $item['id'], AttachmentService::ITEM_TYPE);
             }
 
             $this->createQuestions($item['id'], $questions);
@@ -123,7 +124,8 @@ class ItemServiceImpl extends BaseService implements ItemService
             $item['question_num'] = $this->getQuestionDao()->count(['item_id' => $id]);
             $item = $this->getItemDao()->update($id, $item);
             if (!empty($arguments['attachments'])) {
-                $this->updateAttachments($arguments['attachments'], $id, AttachmentService::ITEM_TYPE);
+                $attachments = $this->sortAttachments($arguments['attachments']);
+                $this->updateAttachments($attachments, $id, AttachmentService::ITEM_TYPE);
             }
 
             $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id']);
@@ -363,11 +365,14 @@ class ItemServiceImpl extends BaseService implements ItemService
         if (empty($questions)) {
             return;
         }
+        $questionAttachments = [];
         foreach ($questions as $question) {
             $question['item_id'] = $itemId;
             $question['created_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
             $question['updated_user_id'] = $question['created_user_id'];
-            $attachments = $question['attachments'];
+            if(!empty($question['attachments'])) {
+                $attachments = $this->sortAttachments($question['attachments']);
+            }
             unset($question['attachments']);
             $itemQuestion = $this->getQuestionDao()->create($question);
             if (!empty($attachments)) {
@@ -390,8 +395,10 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
             if (in_array($question['id'], $originQuestionIds)) {
                 $question['updated_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
-
-                $questionAttachments[] = ['id' => $question['id'], 'attachments' => $question['attachments']];
+                if(!empty($question['attachments'])) {
+                    $attachments = $this->sortAttachments($question['attachments']);
+                    $questionAttachments[] = ['id' => $question['id'], 'attachments' => $attachments];
+                }
                 unset($question['attachments']);
 
                 $updateQuestions[] = $question;
@@ -419,6 +426,22 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
     }
 
+    protected function sortAttachments($sortAttachments)
+    {
+        $attachments = [];
+        $attachmentGroups = ArrayToolkit::group($sortAttachments, 'module');
+        foreach ($attachmentGroups as $module => $attachmentGroup) {
+            $seq = 1;
+            foreach ($attachmentGroup as $sortAttachment) {
+                $sortAttachment['seq'] = $seq;
+                $attachments[] = $sortAttachment;
+                ++$seq;
+            }
+        }
+
+        return $attachments;
+    }
+
     protected function updateAttachments($attachments, $targetId, $targetType)
     {
         foreach ($attachments as $attachment) {
@@ -426,6 +449,7 @@ class ItemServiceImpl extends BaseService implements ItemService
                 'target_id' => $targetId,
                 'target_type' => $targetType,
                 'module' => $attachment['module'],
+                'seq' => $attachment['seq'],
             ]);
         }
     }
@@ -436,7 +460,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         $questions = $this->getQuestionDao()->search($conditions, [], 0, $questionCount);
 
         $result = $this->getQuestionDao()->batchDelete($conditions);
-        if (!empty($questions)){
+        if (!empty($questions)) {
             $this->getAttachmentService()->batchDeleteAttachment(['target_ids' => ArrayToolkit::column($questions, 'id'), 'target_type' => 'question']);
         }
 
