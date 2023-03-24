@@ -19,6 +19,10 @@ class AntiFraudRemindDaoImpl extends GeneralDaoImpl implements AntiFraudRemindDa
     public function declares()
     {
         return [
+            'timestamps' => [
+                'createdTime',
+                'updatedTime',
+            ],
             'orderbys' => [
                 'createdTime',
                 'updatedTime',
