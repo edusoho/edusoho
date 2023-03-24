@@ -24,6 +24,7 @@ class AttachmentWrapper
         }
 
         $item['attachments'] = $this->getAttachmentService()->findAttachmentsByTargetIdAndTargetType($item['id'], 'item');
+        $item['attachments'] = ArrayToolkit::sort($item['attachments'], 'seq', SORT_ASC);
         if (empty($item['questions'])) {
             return $item;
         }
@@ -32,10 +33,7 @@ class AttachmentWrapper
             ArrayToolkit::column($item['questions'], 'id'),
             'question'
         );
-        $sortAttachments = ArrayToolkit::group($attachments, 'module');
-        foreach ($sortAttachments as $sortAttachment) {
-            $attachments = ArrayToolkit::sort($attachments, 'seq', SORT_ASC);
-        }
+        $attachments = ArrayToolkit::sort($attachments, 'seq', SORT_ASC);
         $globalIds = ArrayToolkit::column($attachments, 'global_id');
         $attachments = ArrayToolkit::group($attachments, 'target_id');
         $files = $globalIds ? $this->getUploadFileService()->searchCloudFilesFromLocal([
