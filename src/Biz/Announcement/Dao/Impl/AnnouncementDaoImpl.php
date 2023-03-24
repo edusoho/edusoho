@@ -11,32 +11,36 @@ class AnnouncementDaoImpl extends GeneralDaoImpl implements AnnouncementDao
 
     public function deleteByTargetIdAndTargetType($targetId, $targetType)
     {
-        return $this->db()->delete($this->table(), array('targetId' => $targetId, 'targetType' => $targetType));
+        return $this->db()->delete($this->table(), ['targetId' => $targetId, 'targetType' => $targetType]);
     }
 
     public function declares()
     {
-        return array(
-            'timestamps' => array(
+        return [
+            'timestamps' => [
                 'createdTime', 'updatedTime',
-            ),
-            'orderbys' => array(
+            ],
+            'orderbys' => [
                 'createdTime',
-                'startTime'
-            ),
-            'conditions' => array(
+                'startTime',
+            ],
+            'conditions' => [
                 'targetType = :targetType',
                 'targetId = :targetId',
                 'targetId IN (:targetIds)',
                 'startTime <=:startTime',
                 'endTime >=:endTime',
+                'endTime >=:endTime_GTE',
+                'endTime <=:endTime_LTE',
                 'startTime >=:startTime_GT',
+                'startTime >=:startTime_GTE',
+                'startTime <=:startTime_LTE',
                 'orgCode =:orgCode',
                 'orgCode PRE_LIKE :likeOrgCode',
                 'copyId = :copyId',
                 'userId =:userId',
-            ),
-        );
+            ],
+        ];
     }
 
     protected function createQueryBuilder($conditions)
