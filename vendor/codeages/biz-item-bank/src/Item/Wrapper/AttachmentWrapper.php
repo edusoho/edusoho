@@ -24,6 +24,10 @@ class AttachmentWrapper
         }
 
         $item['attachments'] = $this->getAttachmentService()->findAttachmentsByTargetIdAndTargetType($item['id'], 'item');
+        $sortItemAttachments = ArrayToolkit::group($item['attachments'], 'module');
+        foreach ($sortItemAttachments as $sortItemAttachment) {
+            $item['attachments'] = ArrayToolkit::sort($item['attachments'], 'seq', SORT_ASC);
+        }
         if (empty($item['questions'])) {
             return $item;
         }
