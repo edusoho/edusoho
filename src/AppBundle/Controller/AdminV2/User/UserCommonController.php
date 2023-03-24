@@ -169,7 +169,7 @@ class UserCommonController extends BaseController
             $formData['type'] = 'import';
             $registration = $this->getRegisterData($formData, $request->getClientIp());
 
-            if (true == $isStaff) {
+            if ($isStaff) {
                 if (1 == count($formData['roles'])) {
                     throw UserException::MUST_SELECT_A_STAFFROLE();
                 }
@@ -242,19 +242,19 @@ class UserCommonController extends BaseController
         $auth = $this->getSettingService()->get('auth');
 
         if (isset($auth['register_mode']) && 'email_or_mobile' == $auth['register_mode']) {
-            if (true == $isStaff) {
+            if ($isStaff) {
                 return 'admin-v2/user/user-manage/staff-manage/create-by-mobile-or-email-modal.html.twig';
             }
 
             return 'admin-v2/user/user-manage/create-by-mobile-or-email-modal.html.twig';
         } elseif (isset($auth['register_mode']) && 'mobile' == $auth['register_mode']) {
-            if (true == $isStaff) {
+            if ($isStaff) {
                 return 'admin-v2/user/user-manage/staff-manage/create-by-mobile-modal.html.twig';
             }
 
             return 'admin-v2/user/user-manage/create-by-mobile-modal.html.twig';
         } else {
-            if (true == $isStaff) {
+            if ($isStaff) {
                 return 'admin-v2/user/user-manage/staff-manage/create-modal.html.twig';
             }
 
