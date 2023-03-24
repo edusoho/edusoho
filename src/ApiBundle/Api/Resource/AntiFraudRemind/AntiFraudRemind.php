@@ -108,7 +108,7 @@ class AntiFraudRemind extends AbstractResource
         }
         $this->getAntiFraudRemindService()->creatAntiFraudRemind([
             'userId' => $userId,
-            'lastRemindTime' => '0',
+            'lastRemindTime' => time(),
         ]);
     }
 
