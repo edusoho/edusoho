@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\BehaviorVerification\Service;
+namespace Biz\SmsDefence\Service;
 
 interface SmsDefenceService
 {

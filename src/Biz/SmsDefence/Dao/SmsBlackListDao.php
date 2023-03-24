@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\BehaviorVerification\Dao;
+namespace Biz\SmsDefence\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 

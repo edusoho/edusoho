@@ -1,13 +1,12 @@
 <?php
 
-namespace Biz\BehaviorVerification\Service\Impl;
+namespace Biz\SmsDefence\Service\Impl;
 
 use AppBundle\Common\EncryptionToolkit;
 use Biz\BaseService;
-use Biz\BehaviorVerification\Dao\SmsBlackListDao;
-use Biz\BehaviorVerification\Dao\SmsRequestLogDao;
-use Biz\BehaviorVerification\Service\SmsDefenceService;
-use Biz\BehaviorVerification\Service\SmsRequestLogService;
+use Biz\SmsDefence\Dao\SmsBlackListDao;
+use Biz\SmsDefence\Dao\SmsRequestLogDao;
+use Biz\SmsDefence\Service\SmsDefenceService;
 
 class SmsDefenceServiceImpl extends BaseService implements SmsDefenceService
 {
@@ -42,7 +41,7 @@ class SmsDefenceServiceImpl extends BaseService implements SmsDefenceService
 
     protected function isInBlackIpList($ip)
     {
-        $smsBlackIp = $this->getBehaviorVerificationIpDao()->getByIp($ip);
+        $smsBlackIp = $this->getSmsBlackListDao()->getByIp($ip);
         if (empty($smsBlackIp)) {
             return false;
         }
@@ -55,9 +54,9 @@ class SmsDefenceServiceImpl extends BaseService implements SmsDefenceService
 
     protected function addBlackIpList($ip)
     {
-        $smsBlackIp = $this->getBehaviorVerificationIpDao()->getByIp($ip);
+        $smsBlackIp = $this->getSmsBlackListDao()->getByIp($ip);
         if (empty($smsBlackIp)) {
-            $this->getBehaviorVerificationIpDao()->create(['ip' => $ip, 'expire_time' => time() + 7 * 24 * 3600]);
+            $this->getSmsBlackListDao()->create(['ip' => $ip, 'expire_time' => time() + 7 * 24 * 3600]);
         }
     }
 
@@ -113,14 +112,14 @@ class SmsDefenceServiceImpl extends BaseService implements SmsDefenceService
      */
     protected function getSmsRequestLogDao()
     {
-        return $this->createDao('BehaviorVerification:SmsRequestLogDao');
+        return $this->createDao('SmsDefence:SmsRequestLogDao');
     }
 
     /**
      * @return SmsBlackListDao
      */
-    protected function getBehaviorVerificationIpDao()
+    protected function getSmsBlackListDao()
     {
-        return $this->createDao('BehaviorVerification:SmsBlackListDao');
+        return $this->createDao('SmsDefence:SmsBlackListDao');
     }
 }

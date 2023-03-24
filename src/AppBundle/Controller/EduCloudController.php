@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\SmsToolkit;
-use Biz\BehaviorVerification\Service\SmsDefenceService;
+use Biz\SmsDefence\Service\SmsDefenceService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Sms\SmsException;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
@@ -36,7 +36,7 @@ class EduCloudController extends BaseController
                 'ip' => $request->getClientIp(),
                 'mobile' => $request->get('to'),
             ];
-            if ($this->getBehaviorVerificationService()->validate($fields)) {
+            if ($this->getSmsDefenceService()->validate($fields)) {
                 return $this->createJsonResponse(['ACK' => 'ok', 'allowance' => 0]);
             }
         }
@@ -81,7 +81,7 @@ class EduCloudController extends BaseController
                 'ip' => $request->getClientIp(),
                 'mobile' => $request->get('mobile') ?: $request->get('to'),
             ];
-            if ($this->getBehaviorVerificationService()->validate($fields)) {
+            if ($this->getSmsDefenceService()->validate($fields)) {
                 return $this->createJsonResponse(['ACK' => 'ok', 'allowance' => 0]);
             }
         }
@@ -507,8 +507,8 @@ class EduCloudController extends BaseController
     /**
      * @return SmsDefenceService
      */
-    protected function getBehaviorVerificationService()
+    protected function getSmsDefenceService()
     {
-        return $this->createService('BehaviorVerification:SmsDefenceService');
+        return $this->createService('SmsDefence:SmsDefenceService');
     }
 }

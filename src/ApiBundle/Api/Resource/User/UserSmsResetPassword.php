@@ -6,7 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
-use Biz\BehaviorVerification\Service\SmsDefenceService;
+use Biz\SmsDefence\Service\SmsDefenceService;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\User\Service\UserService;
@@ -40,7 +40,7 @@ class UserSmsResetPassword extends AbstractResource
                 'ip' => $request->getHttpRequest()->getClientIp(),
                 'mobile' => $request->getHttpRequest()->get('mobile') ?: $request->get('to'),
             ];
-            if ($this->getBehaviorVerificationService()->validate($fields)) {
+            if ($this->getSmsDefenceService()->validate($fields)) {
                 return [
                     'smsToken' => 'fakeToken',
                 ];
@@ -92,8 +92,8 @@ class UserSmsResetPassword extends AbstractResource
     /**
      * @return SmsDefenceService
      */
-    protected function getBehaviorVerificationService()
+    protected function getSmsDefenceService()
     {
-        return $this->biz->service('BehaviorVerification:SmsDefenceService');
+        return $this->biz->service('SmsDefence:SmsDefenceService');
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Biz\BehaviorVerification\Dao\Impl;
+namespace Biz\SmsDefence\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Biz\BehaviorVerification\Dao\SmsBlackListDao;
+use Biz\SmsDefence\Dao\SmsBlackListDao;
 
 class SmsBlackListDaoImpl extends GeneralDaoImpl implements SmsBlackListDao
 {

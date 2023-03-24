@@ -5,7 +5,7 @@ namespace ApiBundle\Api\Resource\SmsCenter;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\BehaviorVerification\Service\SmsDefenceService;
+use Biz\SmsDefence\Service\SmsDefenceService;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\System\SettingException;
@@ -37,7 +37,7 @@ class SmsCenter extends AbstractResource
                 'ip' => $request->getHttpRequest()->getClientIp(),
                 'mobile' => $request->getHttpRequest()->get('mobile') ?: $request->get('to'),
             ];
-            if ($this->getBehaviorVerificationService()->validate($fields)) {
+            if ($this->getSmsDefenceService()->validate($fields)) {
                 return new JsonResponse(['ACK' => 'ok', 'allowance' => 0]);
             }
         }
@@ -105,8 +105,8 @@ class SmsCenter extends AbstractResource
     /**
      * @return SmsDefenceService
      */
-    protected function getBehaviorVerificationService()
+    protected function getSmsDefenceService()
     {
-        return $this->biz->service('BehaviorVerification:SmsDefenceService');
+        return $this->biz->service('SmsDefence:SmsDefenceService');
     }
 }
