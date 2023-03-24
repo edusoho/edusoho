@@ -3567,3 +3567,13 @@ admin_v2_api_swagger_ui_api:
     path: /setting/developer/swagger-ui/api
     defaults:
         _controller: 'AppBundle:AdminV2/Developer/DeveloperSetting:swaggerApi'
+admin_v2_sms_request_log_list:
+  path: /setting/sms/request/list
+  defaults:
+    _controller: 'AppBundle:AdminV2/System/SmsDefence:smsRequestLogList'
+  permissions:
+    - admin_v2_sms_request
+admin_v2_sms_black_ip_list:
+  path: /setting/sms/blackIp
+  defaults:
+    _controller: 'AppBundle:AdminV2/System/SmsDefence:smsBlackList'

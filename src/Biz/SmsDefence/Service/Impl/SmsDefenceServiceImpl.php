@@ -107,6 +107,34 @@ class SmsDefenceServiceImpl extends BaseService implements SmsDefenceService
         return count($existRequestLogs) > 3;
     }
 
+    public function searchSmsRequestLog($conditions, $orders, $start, $limit)
+    {
+        return $this->getSmsRequestLogDao()->search($conditions, null, $start, $limit);
+    }
+
+    public function searchSmsBlackIpList($conditions, $orders, $start, $limit)
+    {
+        return $this->getSmsBlackListDao()->search($conditions, null, $start, $limit);
+    }
+
+    public function unLockBlackIp($ip)
+    {
+        $behaviorVerificationIp = $this->getSmsBlackListDao()->getByIp($ip);
+        $this->getSmsBlackListDao()->update($behaviorVerificationIp['id'], ['expire_time' => time() - 3600]);
+
+        return true;
+    }
+
+    public function countSmsRequestLog($conditions)
+    {
+        return $this->getSmsRequestLogDao()->count($conditions);
+    }
+
+    public function countSmsBlackIpList($conditions)
+    {
+        return $this->getSmsBlackListDao()->count($conditions);
+    }
+
     /**
      * @return SmsRequestLogDao
      */

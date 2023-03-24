@@ -12327,3 +12327,17 @@ live_course.record_replay.btn: 去录制
 live_course.record_replay.show_btn: 本地录制
 live_course.record_replay.safair_tip: Safair 浏览器可能会被拦截，请使用其他浏览器
 exception.sms_request.abnormal_sms_sending: 短信发送异常
+
+#短信防御
+sms.defence.request.log.fingerprint: 行为指纹
+sms.defence.request.log.coordinate: 坐标
+sms.defence.request.log.ip: ip
+sms.defence.request.log.mobile: 手机号
+sms.defence.request.log.is_illegal: 是非法记录
+sms.defence.request.log.disable_type: 禁用类型
+sms.defence.request.log.created_time: 创建时间
+sms.defence.request.log.view_record_label: 查看
+smd.defence.black.ip.list.ip: ip
+smd.defence.black.ip.list.expire_time: 过期时间
+smd.defence.black.ip.list.created_time: 创建时间
+smd.defence.black.ip.unlock: 解封IP
