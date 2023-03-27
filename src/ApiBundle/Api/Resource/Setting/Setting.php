@@ -21,7 +21,7 @@ class Setting extends AbstractResource
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
-        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification', 'openStudentInfo', 'course_purchase_agreement','auth',
+        'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification', 'openStudentInfo', 'course_purchase_agreement', 'auth',
         'question_bank_attachment_setting', 'cloud_attachment',
     ];
 
@@ -67,12 +67,14 @@ class Setting extends AbstractResource
     public function getQuestionBankAttachmentSetting()
     {
         $questionBankAttachmentSetting = $this->getSettingService()->get('question_bank_attachment_setting', []);
+
         return $questionBankAttachmentSetting;
     }
 
     public function getCloudAttachment()
     {
         $cloudAttachmentSetting = $this->getSettingService()->get('cloud_attachment', []);
+
         return $cloudAttachmentSetting;
     }
 
@@ -297,8 +299,8 @@ class Setting extends AbstractResource
 
         $splashs = [];
         for ($i = 1; $i < 6; ++$i) {
-            if (!empty($mobileSetting['splash' . $i])) {
-                $splashs[] = AssetHelper::uriForPath('/' . $mobileSetting['splash' . $i]);
+            if (!empty($mobileSetting['splash'.$i])) {
+                $splashs[] = AssetHelper::uriForPath('/'.$mobileSetting['splash'.$i]);
             }
         }
 
@@ -310,8 +312,8 @@ class Setting extends AbstractResource
         ];
 
         return [
-            'enabled' => isset($mobileSetting['enabled']) ? (bool)$mobileSetting['enabled'] : true,
-            'logo' => empty($mobileSetting['logo']) ? '' : AssetHelper::uriForPath('/' . $mobileSetting['logo']),
+            'enabled' => isset($mobileSetting['enabled']) ? (bool) $mobileSetting['enabled'] : true,
+            'logo' => empty($mobileSetting['logo']) ? '' : AssetHelper::uriForPath('/'.$mobileSetting['logo']),
             'splashs' => $splashs,
             'appDiscoveryVersion' => $this->getH5SettingService()->getAppDiscoveryVersion(),
             'studyCenter' => empty($mobileSetting['studyCenter']) ? $defaultStudyCenter : array_merge($defaultStudyCenter, $mobileSetting['studyCenter']),
@@ -352,11 +354,11 @@ class Setting extends AbstractResource
                 'nickname_enabled' => 0 == $partnerSetting['nickname_enabled'] ? false : true,
             ],
             'login_bind' => [
-                'oauth_enabled' => (int)$loginSetting['enabled'] ? true : false,
-                'weibo_enabled' => (int)$loginSetting['weibo_enabled'] ? true : false,
-                'qq_enabled' => (int)$loginSetting['qq_enabled'] ? true : false,
-                'weixinweb_enabled' => (int)$loginSetting['weixinweb_enabled'] ? true : false,
-                'weixinmob_enabled' => (int)$loginSetting['weixinmob_enabled'] ? true : false,
+                'oauth_enabled' => (int) $loginSetting['enabled'] ? true : false,
+                'weibo_enabled' => (int) $loginSetting['weibo_enabled'] ? true : false,
+                'qq_enabled' => (int) $loginSetting['qq_enabled'] ? true : false,
+                'weixinweb_enabled' => (int) $loginSetting['weixinweb_enabled'] ? true : false,
+                'weixinmob_enabled' => (int) $loginSetting['weixinmob_enabled'] ? true : false,
             ],
         ];
     }
@@ -404,13 +406,16 @@ class Setting extends AbstractResource
     {
         $siteSetting = $this->getSettingService()->get('site');
         $url = $request->getHttpRequest()->getSchemeAndHttpHost();
+        $storageSetting = $this->getSettingService()->get('storage');
 
         return [
             'name' => $siteSetting['name'],
             'analytics' => $siteSetting['analytics'],
             'url' => $url,
-            'logo' => empty($siteSetting['logo']) ? '' : $url . '/' . $siteSetting['logo'],
-            'icon' => empty($siteSetting['favicon']) ? '' : $url . '/' . $siteSetting['favicon'],
+            'logo' => empty($siteSetting['logo']) ? '' : $url.'/'.$siteSetting['logo'],
+            'icon' => empty($siteSetting['favicon']) ? '' : $url.'/'.$siteSetting['favicon'],
+            'securityVideoPlayer' => (int) $this->getSettingService()->node('magic.security_video_player', 0),
+            'isEncryptionPlus' => isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'],
         ];
     }
 
@@ -630,11 +635,11 @@ class Setting extends AbstractResource
         $classroomSetting = $this->getSettingService()->get('classroom', []);
 
         return [
-            'show_student_num_enabled' => isset($classroomSetting['show_student_num_enabled']) ? (bool)$classroomSetting['show_student_num_enabled'] : true,
-            'show_hit_num_enabled' => isset($classroomSetting['show_hit_num_enabled']) ? (bool)$classroomSetting['show_hit_num_enabled'] : false,
-            'show_review' => isset($classroomSetting['show_review']) ? (bool)$classroomSetting['show_review'] : true,
-            'show_thread' => isset($classroomSetting['show_thread']) ? (bool)$classroomSetting['show_thread'] : true,
-            'show_note' => isset($classroomSetting['show_note']) ? (bool)$classroomSetting['show_note'] : true,
+            'show_student_num_enabled' => isset($classroomSetting['show_student_num_enabled']) ? (bool) $classroomSetting['show_student_num_enabled'] : true,
+            'show_hit_num_enabled' => isset($classroomSetting['show_hit_num_enabled']) ? (bool) $classroomSetting['show_hit_num_enabled'] : false,
+            'show_review' => isset($classroomSetting['show_review']) ? (bool) $classroomSetting['show_review'] : true,
+            'show_thread' => isset($classroomSetting['show_thread']) ? (bool) $classroomSetting['show_thread'] : true,
+            'show_note' => isset($classroomSetting['show_note']) ? (bool) $classroomSetting['show_note'] : true,
         ];
     }
 
@@ -642,7 +647,7 @@ class Setting extends AbstractResource
     {
         $backstage = $this->getSettingService()->get('backstage');
 
-        return ['is_v2' => isset($backstage['is_v2']) ? (int)$backstage['is_v2'] : 0];
+        return ['is_v2' => isset($backstage['is_v2']) ? (int) $backstage['is_v2'] : 0];
     }
 
     private function checkType($type)
