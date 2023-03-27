@@ -413,8 +413,6 @@ class Setting extends AbstractResource
             'url' => $url,
             'logo' => empty($siteSetting['logo']) ? '' : $url.'/'.$siteSetting['logo'],
             'icon' => empty($siteSetting['favicon']) ? '' : $url.'/'.$siteSetting['favicon'],
-            'securityVideoPlayer' => (int) $this->getSettingService()->node('magic.security_video_player', 0),
-            'isEncryptionPlus' => isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'],
         ];
     }
 
