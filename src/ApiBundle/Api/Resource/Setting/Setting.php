@@ -22,7 +22,7 @@ class Setting extends AbstractResource
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
         'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification', 'openStudentInfo', 'course_purchase_agreement', 'auth',
-        'question_bank_attachment_setting', 'cloud_attachment',
+        'question_bank_attachment_setting', 'cloud_attachment', 'storage',
     ];
 
     public static function convertUnderline($str)
@@ -406,7 +406,6 @@ class Setting extends AbstractResource
     {
         $siteSetting = $this->getSettingService()->get('site');
         $url = $request->getHttpRequest()->getSchemeAndHttpHost();
-        $storageSetting = $this->getSettingService()->get('storage');
 
         return [
             'name' => $siteSetting['name'],
@@ -414,6 +413,14 @@ class Setting extends AbstractResource
             'url' => $url,
             'logo' => empty($siteSetting['logo']) ? '' : $url.'/'.$siteSetting['logo'],
             'icon' => empty($siteSetting['favicon']) ? '' : $url.'/'.$siteSetting['favicon'],
+        ];
+    }
+
+    public function getStorage()
+    {
+        $storageSetting = $this->getSettingService()->get('storage');
+
+        return [
             'securityVideoPlayer' => (int) $this->getSettingService()->node('magic.security_video_player', 0),
             'isEncryptionPlus' => isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'],
         ];
