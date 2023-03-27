@@ -114,5 +114,5 @@ class SmsType
     /**
      * 退款通知短信模板id 你参与的${grouponTitle}拼团失败，发起退款，退款金额为${refundAmount}元，复制链接至微信查看退款详情${url}
      */
-    const GROUPON_ORDER_REFUND = 2478;
+    const GROUPON_ORDER_REFUND = 2504;
 }

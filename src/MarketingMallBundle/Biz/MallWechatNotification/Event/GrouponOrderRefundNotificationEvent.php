@@ -39,7 +39,7 @@ class GrouponOrderRefundNotificationEvent extends AbstractNotificationEvent impl
     {
         return [
             'thing11' => ['value' => $data['grouponTitle']],
-            'amount3' => ['value' => ($data['grouponPrice'] / 100) . '元'],
+            'amount3' => ['value' => ($data['payAmount'] / 100) . '元'],
             'amount12' => ['value' => ($data['refundAmount'] / 100) . '元'],
             'thing5' => ['value' => '拼团失败，费用将在3天内原渠道退还。'],
         ];
