@@ -18,6 +18,7 @@
 
 <script>
 import Api from '@/api';
+import { mapState } from 'vuex';
 import * as types from '@/store/mutation-types.js';
 import { Dialog, Toast } from 'vant';
 import isAuthorized from '@/mixins/isAuthorized';
@@ -44,7 +45,11 @@ export default {
       resources: [{ id: '1' }, { id: '2' }]
     };
   },
-  computed: {},
+  computed: {
+    ...mapState({
+      storageSetting: state => state.storageSetting
+    }),
+  },
   watch: {},
   created() {
     const mode = this.$route.query.mode;
@@ -52,7 +57,8 @@ export default {
   },
   provide() {
     return {
-      getResourceToken: this.getResourceToken
+      getResourceToken: this.getResourceToken,
+      settings: this.storageSetting
     }
   },
   mounted() {},

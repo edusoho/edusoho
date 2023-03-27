@@ -645,6 +645,8 @@ export default {
   attachment: {
     waiting: '等待转码',
     doing: '转码中...',
-    error: '转码失败'
+    error: '转码失败',
+    disableVideo: '该浏览器不支持视频播放，请使用微信或APP',
+    disableVideo2: '该浏览器不支持视频播放，请使用APP'
   }
 };

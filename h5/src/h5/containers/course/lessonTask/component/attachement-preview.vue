@@ -1,6 +1,17 @@
 <template>
   <div :id="'player' + attachment.id + '-' + randomId" style="margin-top: 8px;">
-    <div v-if="!isImmediatePreview && isShow" class="attachment-preview">
+    <div v-if="disableVideo && isMedia" class="attachment-preview">
+      <img :src="disableVideoIcon" style="width: 24px;margin-right: 8px;" />
+      <div class="text-overflow text-12" style="flex: 1;color: #999;">
+        <template v-if="storageSetting.securityVideoPlayer && !this.isWechat()">
+          {{ $t('attachment.disableVideo') }}
+        </template>
+        <template v-else>
+          {{ $t('attachment.disableVideo2') }}
+        </template>
+      </div>
+    </div>
+    <div v-else-if="!isImmediatePreview && isShow" class="attachment-preview">
       <img :src="iconSrc" class="attachment-preview__icon" />
       
       <div class="text-overflow" style="flex: 1;">{{ this.attachment.file_name }}</div>
@@ -28,6 +39,7 @@
 
 <script>
 import Api from '@/api';
+import { mapState } from 'vuex';
 
 const icons = {
   "audio": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFYAAABqCAMAAAARMFYTAAAAWlBMVEUAAABgt19guV5gt1xguV6Z5JeV5JVgu15gul1guV1gul5guV5guV1gr2BguV5gt1pguVxguV2K2Ydgu11gu111xXBgr1Bgul6Z5JeL2ol8z3p2y3RowWaD1IHYnUSrAAAAF3RSTlMAIIBAoO8w779g399vEJAwUK/vr3AwEFCtqHYAAAFrSURBVGje7dhbbsMgEIVhwG4B39Mbdtzuf5t1IlUnkotcmzMPafgX8GmEeGBQ8vXe7Oj9T+aHsWFXL89qu8aGnU1P264Ju5tGuAQV7JbrwyF2y62OsXAJw4LdcF8PshuuTWDjrg4JLFwaC5fLwuWycLksXC4Ll8vC5bJwuSxcLguXy8LlsnC5LFwuCzeR/Rojbho7jzE3iQ1j1E1i57ibwoZz3E1hw+cUc8Eeg+fzr4Glltn/zXa6aDpnyWz5sxENsAlsoW5qfU1lkaGyyMmwgwyr74r1PNbY4Drfq6WiIrEY0LrSEe9tGVBmM5vZzGY2s2JsK8KWSoJ1LZN1Ta8vLSiPrQuFaGzdKgHWaiXBdkqELdasI7B6zVYi0/aBwJrI0bJvQsNZTiu9UlNYuB77x5sjrtLVySyVp+ruFv/MZjazj8AqK8M6GXaQYVXNVusrW7BZj09IXngIGL56zdPO1zbqJl1SYGvai/YNvdG0cw9LsZcAAAAASUVORK5CYII=",
@@ -67,6 +79,16 @@ const startInitAllPlayer = () => {
   });
 };
 
+const disableVideoIcon = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAA
+AOVBMVEUAAADPz8/MzMzMzMzIyMjMzMzLy8vLy8vNzc3MzMzMzMzKysrNzc3MzMzLy8vNzc3MzMzMzMzMzMwPcwYrAAAAEnR
+STlMAEM/fIO9wQKC/YDB/kICPUG9Rq5a2AAAB1ElEQVRIx82WW7aDIAxFDe+3tvMf7G1RbogBbf+aL2Gxk0NIwOVXDDazupe
+txsLnlF3lszOx2o9iJfFkJsMt99CE+BSNGI2j6iJcW6S92RS8dEdb/D+aJhi4Y4E3QOZD07GOOXFgdpBneSQYBuDOaTOWY/S
+MXG8yoPag7jyfmENG7pLMaZZx0yREMilR5wUpq/d+KtS8MI6p1WexEicuzdQAQANKcnBhHL6WUaEB7SnHCQagxV3iqDM9bQjf
+x8jvAVlFGoLvMvfFBgRs5s4oaEwH1NJeKNhMp5FWwC0WBmLvc60bfloGovle74ZHnrECGci3qjA7DlVzkOUXqiMElwuQ9uGXY
+Mbi+Fwq7RzzHmFy1CWYe78qADsZBvJ7j53MFJRD7L7kCjCAtKOeFDnDestM63xzvK09a2QdujfzCP0QpHDFucwN3Zxrd256J6
+tTX1hIG4A4rmTlyJGDvr4eSwXE8bzw+1JdXf7NdORvnIQbknNL3MXcksih2EpO1abpk+yw02ccJ/lTzrk5CWLaDWH3uS/wg5pt
+TgMMxOh4uFacLNi7xUakfeWaKJj9WqDJdByWfMrY/qHKMrRA0dg8Avm4R7flG7NZ4AX+pYE1xbmslh+yP6jDPH3+K7RyAAAAAElFTkSuQmCC`
+
 export default {
   name: 'itemBankResourcePreview',
   props: {
@@ -80,6 +102,7 @@ export default {
     return {
       isLoaded: false,
       isShow: true,
+      disableVideoIcon,
       resourceStatus: {
         'waiting': this.$t('attachment.waiting'),
         'doing': this.$t('attachment.doing'),
@@ -89,8 +112,14 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      storageSetting: state => state.storageSetting
+    }),
+    isMedia() {
+      return ['video', 'audio'].indexOf(this.attachment.file_type) > -1
+    },
     isImmediatePreview() {
-      return ['video', 'audio'].indexOf(this.attachment.file_type) > -1 && this.attachment.convert_status === 'success';
+      return !this.disableVideo && this.isMedia && this.attachment.convert_status === 'success';
     },
     iconSrc() {
       const { ext, file_type } = this.attachment
@@ -101,6 +130,17 @@ export default {
 
       return icons[file_type]
     },
+    disableVideo() {
+      const { isEncryptionPlus, securityVideoPlayer } = this.storageSetting
+
+      if (!isEncryptionPlus) return false
+
+      if (securityVideoPlayer && !this.isWechat()) return true
+
+      if (!securityVideoPlayer) return true
+
+      return false
+    }
   },
   watch: {
     canLoadPlayer(val, oldVal) {
@@ -117,6 +157,14 @@ export default {
     }
   },
   methods: {
+    isWechat() {
+      const ua = navigator.userAgent.toLowerCase();
+      if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+        return true;
+      } else {
+        return false;
+      }
+    },
     loadPlayer() {
       queueLength++
 

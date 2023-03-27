@@ -1089,6 +1089,10 @@ router.beforeEach(async (to, from, next) => {
     store.commit('SET_SETTING_UGC', result);
   }
 
+  if (!Object.keys(store.state.storageSetting).length) {
+    store.dispatch('getGlobalSettings', { type: 'storage', key: 'storageSetting' })
+  }
+
   // 站点后台设置、会员后台配置
   if (!Object.keys(store.state.settings).length) {
     store

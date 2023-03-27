@@ -644,6 +644,8 @@ export default {
   attachment: {
     waiting: 'Waiting for transcoding',
     doing: 'Transcoding...',
-    error: 'Transcoding failed'
+    error: 'Transcoding failed',
+    disableVideo: 'do not support, please use WeChat or APP',
+    disableVideo2: 'do not support, please use APP'
   }
 };

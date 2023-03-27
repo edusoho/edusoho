@@ -27,6 +27,7 @@ const state = {
   vipSettings: {},
   wechatSwitch: false,
   vipSwitch: false,
+  storageSetting: {},
   couponSwitch: null,
   socialBinded: {
     wx: true,

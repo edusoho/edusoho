@@ -15,6 +15,7 @@
 
 <script>
 import Api from '@/api';
+import { mapState } from 'vuex';
 import * as types from '@/store/mutation-types.js';
 import { Toast } from 'vant';
 export default {
@@ -29,14 +30,19 @@ export default {
       assessmentResponse: {}
     };
   },
-  computed: {},
+  computed: {
+    ...mapState({
+      storageSetting: state => state.storageSetting
+    }),
+  },
   watch: {},
   created() {
     this.getData();
   },
   provide() {
     return {
-      getResourceToken: this.getResourceToken
+      getResourceToken: this.getResourceToken,
+      settings: this.storageSetting
     }
   },
   methods: {
