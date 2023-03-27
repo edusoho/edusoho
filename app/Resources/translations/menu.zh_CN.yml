@@ -999,6 +999,7 @@ admin_v2.system.anti_fraud_reminder_tab: APP防诈骗弹窗设置
 admin_v2.system.sms_defence_menu: 短信防御
 admin_v2.sms.request.log.list_tab: 短信请求日志
 admin_v2.sms.ip.black.list_tab: 短信IP黑名单
+admin_v2.user.sms_black_ip_unlock_btn: 解封
 
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: 数据概览

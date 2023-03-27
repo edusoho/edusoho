@@ -15,4 +15,6 @@ interface SmsDefenceService
     public function countSmsRequestLog($conditions);
 
     public function countSmsBlackIpList($conditions);
+
+    public function getSmsRequestLog($id);
 }

@@ -1638,12 +1638,20 @@ admin_v2:
                                     name: admin_v2.system.anti_fraud_reminder_tab
                         admin_v2_sms_defence:
                             name: admin_v2.system.sms_defence_menu
+                            visible: false
                             children:
                                 admin_v2_sms_request_log_list:
                                     name: admin_v2.sms.request.log.list_tab
                                 admin_v2_sms_black_ip_list:
                                     name: admin_v2.sms.ip.black.list_tab
-
+                                    children:
+                                        admin_v2_sms_black_ip_unlock:
+                                            name: admin_v2.user.sms_black_ip_unlock_btn
+                                            group: groupButton
+                                            class: unlockIp
+                                            mode: none
+                                            router_params:
+                                                id: (smsRequestLog.id)
         # 云市场模块
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center

@@ -45,6 +45,22 @@ class SmsDefenceController extends BaseController
         return $this->render("admin-v2/system/SmsDefence/sms-request-log/sms-request-log-show.html.twig", ['smsRequestLogs' => $smsRequestLogs, 'paginator' => $paginator]);
     }
 
+    public function smsRequestLogDetailAction(Request $request, $id)
+    {
+        $smsRequestLog = $this->getSmsDefenceService()->getSmsRequestLog($id);
+        if (empty($smsRequestLog)) {
+
+        }
+        return $this->render("admin-v2/system/SmsDefence/sms-request-log/show-modal.html.twig",['smsRequestLog' => $smsRequestLog]);
+    }
+
+    public function unlockAction(Request $request, $id)
+    {
+        $this->getSmsDefenceService()->unLockBlackIp($id);
+
+        return $this->createJsonResponse(true);
+    }
+
     /**
      * @return SmsDefenceService
      */

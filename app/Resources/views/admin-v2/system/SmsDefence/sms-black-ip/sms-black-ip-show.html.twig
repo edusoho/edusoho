@@ -3,36 +3,9 @@
 
 {% set menu = 'admin_v2_sms_black_ip_list' %}
 
-{#{% set script_controller = 'sms_defence/black_ip_list' %}#}
+{% do script(['app/js/admin-v2/system/SmsDefence/index.js']) %}
 
 {% block main %}
-
-{#  <div class="well well-sm">#}
-{#    <form id="login-record-search-form" class="form-inline" action="" method="get" novalidate>#}
-{#      {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}#}
-
-{#      <div class="form-group controls">#}
-{#        <select id="keywordType" name="keywordType" class="form-control">#}
-{#          {{ select_options(dict('userKeyWordTypes'), app.request.query.get('keywordType')) }}#}
-{#        </select>#}
-{#      </div>#}
-
-{#      <div class="form-group">#}
-{#        <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'admin.user.form.input_placeholder.keyword'|trans}}">#}
-{#      </div>#}
-
-{#      <div class="form-group">#}
-{#        <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{app.request.query.get('startDateTime')}}" placeholder="{{'admin.user.form.input_placeholder.startDate'|trans}}" autocomplete="off">#}
-{#      </div>#}
-
-{#      <div class="form-group">#}
-{#        <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{app.request.query.get('endDateTime')}}" placeholder="{{'admin.user.form.input_placeholder.endDate'|trans}}" autocomplete="off">#}
-{#      </div>#}
-{#      <span></span>#}
-
-{#      <button class="btn btn-primary">{{'admin.user.form.btn.search_submit_btn'|trans}}</button>#}
-{#    </form>#}
-{#  </div>#}
 
   <table id="teacher-table" class="table table-striped table-hover" data-search-form="#user-search-form">
     <thead>
@@ -45,8 +18,22 @@
     </thead>
     <tbody>
     {% for smsBlackIp in smsBlackIpList %}
-{#      {% set user = users[logRecord.userId]|default(null) %}#}
       {% include 'admin-v2/system/SmsDefence/sms-black-ip/table-tr.html.twig' with {smsBlackIp:smsBlackIp} %}
+{#      <tr id="user-table-tr-{{ smsBlackIp.id }}">#}
+{#        <td>#}
+{#          <span>{{ smsBlackIp.ip }}</span>#}
+{#        </td>#}
+{#        <td>#}
+{#          <span class="text-sm">{{ smsBlackIp.created_time|date('Y-n-d H:i:s') }}</span>#}
+{#        </td>#}
+{#        <td>#}
+{#          <span class="text-sm">{{ smsBlackIp.expire_time|date('Y-n-d H:i:s') }}</span>#}
+{#        </td>#}
+{#        <td>#}
+{#          #}{#    <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{ 'admin.course_note.note'|trans }}" data-url="{{ path('admin_v2_sms_black_ip_unlock', {id:smsBlackIp.id}) }}">{{ 'smd.defence.black.ip.unlock'|trans }}</button>#}
+{#          <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'admin.course_review.content'|trans}}" data-url="{{ path('admin_v2_course_review_delete', {id:smsBlackIp.id}) }}">{{'form.btn.delete'|trans}}</button>#}
+{#        </td>#}
+{#      </tr>#}
     {% endfor %}
     </tbody>
   </table>
