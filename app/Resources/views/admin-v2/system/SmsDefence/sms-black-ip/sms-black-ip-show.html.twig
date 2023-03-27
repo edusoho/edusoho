@@ -19,21 +19,6 @@
     <tbody>
     {% for smsBlackIp in smsBlackIpList %}
       {% include 'admin-v2/system/SmsDefence/sms-black-ip/table-tr.html.twig' with {smsBlackIp:smsBlackIp} %}
-{#      <tr id="user-table-tr-{{ smsBlackIp.id }}">#}
-{#        <td>#}
-{#          <span>{{ smsBlackIp.ip }}</span>#}
-{#        </td>#}
-{#        <td>#}
-{#          <span class="text-sm">{{ smsBlackIp.created_time|date('Y-n-d H:i:s') }}</span>#}
-{#        </td>#}
-{#        <td>#}
-{#          <span class="text-sm">{{ smsBlackIp.expire_time|date('Y-n-d H:i:s') }}</span>#}
-{#        </td>#}
-{#        <td>#}
-{#          #}{#    <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{ 'admin.course_note.note'|trans }}" data-url="{{ path('admin_v2_sms_black_ip_unlock', {id:smsBlackIp.id}) }}">{{ 'smd.defence.black.ip.unlock'|trans }}</button>#}
-{#          <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'admin.course_review.content'|trans}}" data-url="{{ path('admin_v2_course_review_delete', {id:smsBlackIp.id}) }}">{{'form.btn.delete'|trans}}</button>#}
-{#        </td>#}
-{#      </tr>#}
     {% endfor %}
     </tbody>
   </table>
