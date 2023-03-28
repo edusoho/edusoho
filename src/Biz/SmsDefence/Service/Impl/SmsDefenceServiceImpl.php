@@ -120,7 +120,7 @@ class SmsDefenceServiceImpl extends BaseService implements SmsDefenceService
     public function unLockBlackIp($id)
     {
         if (empty($id)) {
-
+            return array();
         }
         $this->getSmsBlackListDao()->update($id, ['expire_time' => time() - 3600]);
 
@@ -139,6 +139,9 @@ class SmsDefenceServiceImpl extends BaseService implements SmsDefenceService
 
     public function getSmsRequestLog($id)
     {
+        if (empty($id)) {
+            return array();
+        }
         return $this->getSmsRequestLogDao()->get($id);
     }
 

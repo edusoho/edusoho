@@ -11027,3 +11027,18 @@ admin.question_bank.file.download.setting.enable.tips: The mobile terminal does 
 admin.question_bank.file.download.setting.disable.tips: Compressed files can only be viewed after downloading, and when closed, learners will not be able to view compressed attachments
 admin.question_bank.question_bank_attachment.open_radio: Active
 admin.question_bank.question_bank_attachment.close_radio: Disabled
+
+#短信防御
+sms.defence.request.log.fingerprint: fingerprint
+sms.defence.request.log.coordinate: coordinate
+sms.defence.request.log.ip: ip
+sms.defence.request.log.mobile: mobile
+sms.defence.request.log.userAgent: userAgent
+sms.defence.request.log.is_illegal: is illegal
+sms.defence.request.log.disable_type: disable type
+sms.defence.request.log.created_time: created time
+sms.defence.request.log.view_record_label: show
+smd.defence.black.ip.list.ip: ip
+smd.defence.black.ip.list.expire_time: expire time
+smd.defence.black.ip.list.created_time: created time
+smd.defence.black.ip.unlock: unlock IP

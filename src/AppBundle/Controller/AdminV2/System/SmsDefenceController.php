@@ -48,9 +48,7 @@ class SmsDefenceController extends BaseController
     public function smsRequestLogDetailAction(Request $request, $id)
     {
         $smsRequestLog = $this->getSmsDefenceService()->getSmsRequestLog($id);
-        if (empty($smsRequestLog)) {
 
-        }
         return $this->render("admin-v2/system/SmsDefence/sms-request-log/show-modal.html.twig",['smsRequestLog' => $smsRequestLog]);
     }
 
