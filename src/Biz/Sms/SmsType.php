@@ -92,24 +92,24 @@ class SmsType
     const COMMENT_MODIFY_NOTIFY = 2312;
 
     /**
-     * 开团成功通知短信模板id 你参与的${grouponTitle}已开团成功，拼团价为${grouponPrice}元，需${grouponMemberNum}人成团，拼团结束时间为${grouponEndAt}，快复制链接邀请微信好友一起参与吧${url}
+     * 开团成功通知短信模板id 你参与的${title}已开团成功，拼团价为${price}元，需${num}人成团，拼团结束时间为${endAt}，快复制链接邀请微信好友一起参与吧${url}
      */
-    const GROUPON_CREATE = 2474;
+    const GROUPON_CREATE = 2513;
 
     /**
      * 参团成功通知短信模板id 你已参与${grouponTitle}团成功，拼团价为${grouponPrice}元，还剩${grouponRemain}人成团，拼团结束时间为${grouponEndAt}，快复制链接邀请微信好友一起参与吧${url}
      */
-    const GROUPON_JOIN = 2475;
+    const GROUPON_JOIN = 2512;
 
     /**
      * 拼团成功通知短信模板id 你参与的${grouponTitle}已成团，拼团价为${grouponPrice}元，快复制链接到微信中去学习吧${url}
      */
-    const GROUPON_SUCCESS = 2476;
+    const GROUPON_SUCCESS = 2511;
 
     /**
      * 拼团失败通知短信模板id 你参与的${grouponTitle}拼团失败，可复制链接到微信内重新参与拼团${url}
      */
-    const GROUPON_FAIL = 2477;
+    const GROUPON_FAIL = 2510;
 
     /**
      * 退款通知短信模板id 你参与的${grouponTitle}拼团失败，发起退款，退款金额为${refundAmount}元，复制链接至微信查看退款详情${url}
