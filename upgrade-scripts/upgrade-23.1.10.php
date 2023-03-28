@@ -49,7 +49,8 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'refreshRoles',
-            'createTableSmsRequestLog'
+            'createTableSmsRequestLog',
+            'createTableAntiFraudRemind'
         );
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -88,7 +89,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function createTableSmsRequestLog()
     {
-        $this->getConnection()->exec("
+        if (!$this->isTableExist('sms_request_log')) {
+            $this->getConnection()->exec("
         CREATE TABLE `sms_request_log` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
             `fingerprint` varchar(32) NOT NULL COMMENT '行为指纹',
@@ -108,9 +110,26 @@ class EduSohoUpgrade extends AbstractUpdater
             ALTER TABLE `behavior_verification_black_ip` rename to `sms_black_list`;
             DROP TABLE `behavior_verification_coordinate`;
         ");
+        }
         return 1;
     }
 
+    public function createTableAntiFraudRemind()
+    {
+        if (!$this->isTableExist('anti_fraud_remind')) {
+            $this->getConnection()->exec("
+        CREATE TABLE `anti_fraud_remind` (
+             `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+            `userId` int unsigned DEFAULT '0' COMMENT '用户id',
+            `lastRemindTime` int unsigned NOT NULL DEFAULT '0' COMMENT '上次提醒时间',
+            `createdTime` int unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+            `updatedTime` int unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+            PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='防诈骗弹窗提醒频率表';
+        ");
+        }
+        return 1;
+    }
     protected function installPluginAssets($plugins)
     {
         $rootDir = realpath($this->biz['kernel.root_dir'].'/../');
@@ -168,6 +187,13 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "DESCRIBE `{$table}` `{$filedName}`;";
         $result = $this->getConnection()->fetchAssoc($sql);
 
+        return empty($result) ? false : true;
+    }
+
+    protected function isTableExist($table)
+    {
+        $sql = "SHOW TABLES LIKE '{$table}'";
+        $result = $this->biz['db']->fetchAssoc($sql);
         return empty($result) ? false : true;
     }
 
