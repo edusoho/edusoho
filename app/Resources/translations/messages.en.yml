@@ -6853,7 +6853,6 @@ admin.anti_fraud_reminder.setting: APP anti-fraud pop-up window settings
 admin.anti_fraud_reminder.open_radio: Open
 admin.anti_fraud_reminder.close_radio: Closed
 admin.anti_fraud_reminder.setting.enable.tips: After opening, the user will give an anti-fraud pop-up window reminder when entering the APP
-admin.anti_fraud_reminder.setting.disable.tips: The APP does not display the anti-fraud pop-up window
 admin.anti_fraud_reminder.reminder_frequency: Reminder frequency
 admin.anti_fraud_reminder.alert_the_object: Alert the object
 admin.anti_fraud_reminder.visible_to_all_users: Visible to all users
