@@ -6,9 +6,9 @@ interface SmsDefenceService
 {
     public function validate($fields);
 
-    public function searchSmsRequestLog($conditions, $orders, $start, $limit);
+    public function searchSmsRequestLog($conditions, $sort, $start, $limit);
 
-    public function searchSmsBlackIpList($conditions, $orders, $start, $limit);
+    public function searchSmsBlackIpList($conditions, $sort, $start, $limit);
 
     public function unLockBlackIp($ip);
 

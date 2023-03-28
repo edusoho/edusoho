@@ -4,6 +4,7 @@ namespace Biz\SmsDefence\Service\Impl;
 
 use AppBundle\Common\EncryptionToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\SmsDefence\Dao\SmsBlackListDao;
 use Biz\SmsDefence\Dao\SmsRequestLogDao;
 use Biz\SmsDefence\Service\SmsDefenceService;
@@ -107,14 +108,40 @@ class SmsDefenceServiceImpl extends BaseService implements SmsDefenceService
         return count($existRequestLogs) > 3;
     }
 
-    public function searchSmsRequestLog($conditions, $orders, $start, $limit)
+    public function searchSmsRequestLog($conditions, $sort, $start, $limit)
     {
-        return $this->getSmsRequestLogDao()->search($conditions, null, $start, $limit);
+        if (!is_array($sort)) {
+            switch ($sort) {
+                case 'created':
+                    $sort = array('id' => 'DESC');
+                    break;
+                case 'createdByAsc':
+                    $sort = array('id' => 'ASC');
+                    break;
+                default:
+                    $this->createNewException(CommonException::ERROR_PARAMETER);
+                    break;
+            }
+        }
+        return $this->getSmsRequestLogDao()->search($conditions, $sort, $start, $limit);
     }
 
-    public function searchSmsBlackIpList($conditions, $orders, $start, $limit)
+    public function searchSmsBlackIpList($conditions, $sort, $start, $limit)
     {
-        return $this->getSmsBlackListDao()->search($conditions, null, $start, $limit);
+        if (!is_array($sort)) {
+            switch ($sort) {
+                case 'created':
+                    $sort = array('id' => 'DESC');
+                    break;
+                case 'createdByAsc':
+                    $sort = array('id' => 'ASC');
+                    break;
+                default:
+                    $this->createNewException(CommonException::ERROR_PARAMETER);
+                    break;
+            }
+        }
+        return $this->getSmsBlackListDao()->search($conditions, $sort, $start, $limit);
     }
 
     public function unLockBlackIp($id)

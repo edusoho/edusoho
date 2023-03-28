@@ -24,7 +24,7 @@ class SmsDefenceController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render("admin-v2/system/SmsDefence/sms-black-ip/sms-black-ip-show.html.twig", ['smsBlackIpList' => $smsBlackIpList, 'paginator' => $paginator]);
+        return $this->render("admin-v2/system/sms-defence/sms-black-ip/sms-black-ip-show.html.twig", ['smsBlackIpList' => $smsBlackIpList, 'paginator' => $paginator]);
     }
 
     public function smsRequestLogListAction(Request $request)
@@ -42,14 +42,14 @@ class SmsDefenceController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render("admin-v2/system/SmsDefence/sms-request-log/sms-request-log-show.html.twig", ['smsRequestLogs' => $smsRequestLogs, 'paginator' => $paginator]);
+        return $this->render("admin-v2/system/sms-defence/sms-request-log/sms-request-log-show.html.twig", ['smsRequestLogs' => $smsRequestLogs, 'paginator' => $paginator]);
     }
 
     public function smsRequestLogDetailAction(Request $request, $id)
     {
         $smsRequestLog = $this->getSmsDefenceService()->getSmsRequestLog($id);
 
-        return $this->render("admin-v2/system/SmsDefence/sms-request-log/show-modal.html.twig",['smsRequestLog' => $smsRequestLog]);
+        return $this->render("admin-v2/system/sms-defence/sms-request-log/show-modal.html.twig",['smsRequestLog' => $smsRequestLog]);
     }
 
     public function unlockAction(Request $request, $id)

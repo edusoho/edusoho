@@ -3,7 +3,7 @@
 
 {% set menu = 'admin_v2_sms_black_ip_list' %}
 
-{% do script(['app/js/admin-v2/system/SmsDefence/index.js']) %}
+{% do script(['app/js/admin-v2/system/sms-defence/index.js']) %}
 
 {% block main %}
 
@@ -18,7 +18,7 @@
     </thead>
     <tbody>
     {% for smsBlackIp in smsBlackIpList %}
-      {% include 'admin-v2/system/SmsDefence/sms-black-ip/table-tr.html.twig' with {smsBlackIp:smsBlackIp} %}
+      {% include 'admin-v2/system/sms-defence/sms-black-ip/table-tr.html.twig' with {smsBlackIp:smsBlackIp} %}
     {% endfor %}
     </tbody>
   </table>
