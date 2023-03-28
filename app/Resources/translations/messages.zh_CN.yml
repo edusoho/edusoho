@@ -12342,3 +12342,8 @@ smd.defence.black.ip.list.ip: ip
 smd.defence.black.ip.list.expire_time: 过期时间
 smd.defence.black.ip.list.created_time: 创建时间
 smd.defence.black.ip.unlock: 解封IP
+sms.defence.request.log.is_illegal.yes: 是
+sms.defence.request.log.is_illegal.no: 否
+sms.defence.request.log.disable_type.ip: 同一ip多次请求
+sms.defence.request.log.disable_type.coordinate: 同一坐标多次请求
+sms.defence.request.log.disable_type.none: 无

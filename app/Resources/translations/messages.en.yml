@@ -11042,3 +11042,8 @@ smd.defence.black.ip.list.ip: ip
 smd.defence.black.ip.list.expire_time: expire time
 smd.defence.black.ip.list.created_time: created time
 smd.defence.black.ip.unlock: unlock IP
+sms.defence.request.log.is_illegal.yes: yes
+sms.defence.request.log.is_illegal.no: no
+sms.defence.request.log.disable_type.ip: Multiple requests for the same IP address
+sms.defence.request.log.disable_type.coordinate: Multiple requests for the same coordinate
+sms.defence.request.log.disable_type.none: none

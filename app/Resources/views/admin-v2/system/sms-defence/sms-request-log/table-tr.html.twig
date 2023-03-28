@@ -10,24 +10,25 @@
   </td>
   <td>
     {% if smsRequestLog.isIllegal == 0 %}
-      <span>否</span>
+      <span>{{ 'sms.defence.request.log.is_illegal.no'|trans }}</span>
     {% else %}
-      <span style="color: red">是</span>
+      <span style="color: red">{{ 'sms.defence.request.log.is_illegal.yes'|trans }}</span>
     {% endif %}
   </td>
   <td>
     {% if smsRequestLog.disableType == 'ip' %}
-      <span>同一ip多次请求</span>
+      <span>{{ 'sms.defence.request.log.disable_type.ip'|trans }}</span>
     {% elseif smsRequestLog.disableType == 'coordinate' %}
-      <span>同一坐标多次请求</span>
+      <span>{{ 'sms.defence.request.log.disable_type.coordinate'|trans }}</span>
     {% else %}
-      <span>无</span>
+      <span>{{ 'sms.defence.request.log.disable_type.none'|trans }}</span>
     {% endif %}
   </td>
   <td>
     <span class="text-sm">{{ smsRequestLog.createdTime|date('Y-n-d H:i:s') }}</span>
   </td>
   <td>
-    <a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_sms_request_log_detail', {id:smsRequestLog.id}) }}" data-url="" class="btn btn-default btn-sm">{{'admin.user.btn.show_btn'|trans}}</a>
+    <a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_sms_request_log_detail', {id:smsRequestLog.id}) }}"
+       data-url="" class="btn btn-default btn-sm">{{ 'admin.user.btn.show_btn'|trans }}</a>
   </td>
 </tr>
