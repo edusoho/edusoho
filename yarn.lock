@@ -5751,10 +5751,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@^1.0.41:
-  version "1.0.41"
-  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.41.tgz#6c5db3c87c5d0125ebfcaec12fc782ab543bdf68"
-  integrity sha512-8YWNgzg+YpIY2k/SMQ6i/2gRtRxkj2ChFWnKz5O6PiGHrbX3DHAajGbpRfCjCBBFXbw40oPGGEJBQDzjDBjXjw==
+item-bank@^1.0.42:
+  version "1.0.42"
+  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.42.tgz#e7f3803b609fe78056745174a528829df68e3c51"
+  integrity sha512-y0ISRZWUtYWqockRGH+lwjakGXa1iMHlbmnVwBZ0A77zYfGlDAhdKuQxOkYrU2gXJkMftpLkf9/MXC1b0Ehfcg==
   dependencies:
     ant-design-vue "^1.5.0"
     caniuse-lite "^1.0.30001390"
