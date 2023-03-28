@@ -8221,7 +8221,6 @@ admin.anti_fraud_reminder.setting: APP防诈骗弹窗设置
 admin.anti_fraud_reminder.open_radio: 开启
 admin.anti_fraud_reminder.close_radio: 关闭
 admin.anti_fraud_reminder.setting.enable.tips: 开启后，用户进入APP时给出防诈骗弹窗提醒
-admin.anti_fraud_reminder.setting.disable.tips: APP不显示防诈骗弹窗
 admin.anti_fraud_reminder.reminder_frequency: 提醒频率
 admin.anti_fraud_reminder.alert_the_object: 提醒对象
 admin.anti_fraud_reminder.visible_to_all_users: 全部用户可见
