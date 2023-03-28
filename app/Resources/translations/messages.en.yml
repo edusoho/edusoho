@@ -550,8 +550,9 @@ order.paid_course.minus: 'Deduct'
 order.refund: 'Quit the course'
 order.refund.item_type: item type
 order.refund.reason: 'Quit reason'
-order.refund.reason_tips: 'Please input your quit reason'
+order.refund.reason_tips: 'Please enter the reason for exiting'
 order.refund.reason_warning: You will not be able to continue learning after exiting, you need to rejoin or buy！
+order.refund.reason_select_tips: Please choose a reason for exiting
 order.refund.apply_for_btn: 'Apply for refund'
 order.refund.buy_price: '(you have paid：%amount% CNY）'
 order.refund.refund_is_not_supported: Refund is not supported

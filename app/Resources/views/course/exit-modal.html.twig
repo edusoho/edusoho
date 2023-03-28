@@ -11,7 +11,8 @@
       <div class="col-md-2 control-label">{{'order.refund.reason'|trans}}</div>
       <div class="col-md-9 controls">
         {% if type|default() != 'itemBank' %}
-          <select class="form-control" name="reason[type]" id="reasonType">
+          <select class="form-control" name="reason[type]" value="" id="reasonType">
+            <option value="" class="hidden">{{ 'order.refund.reason_select_tips'|trans }}</option>
             {{ dict_select_options('refund_reason') }}
           </select>
         {% endif %}
