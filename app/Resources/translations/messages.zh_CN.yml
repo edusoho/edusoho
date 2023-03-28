@@ -7582,6 +7582,7 @@ admin.edu_cloud.edu_attachment.attachment_tips: >
   </h4><p>“云附件管理”提供完善的附件资源管理功能，您可以从附件的使用途径、上传时间、资源类型等多个维度对资源进行管理，
   帮助您轻松掌控全站的附件资源，再也不用担心过期资源占用存储空间了</p>
 admin.edu_cloud.edu_attachment.function: 附件功能
+admin.edu_cloud.edu_attachment.download_setting: 题库附件下载设置
 admin.edu_cloud.edu_attachment.open_radio: 开启
 admin.edu_cloud.edu_attachment.close_radio: 关闭
 admin.edu_cloud.edu_attachment.service_setting: 业务设置
