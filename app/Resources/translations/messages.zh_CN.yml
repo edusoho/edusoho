@@ -648,8 +648,9 @@ order.paid_course.minus: 抵扣
 order.refund: 退出学习
 order.refund.item_type: 商品类型
 order.refund.reason: 退出原因
-order.refund.reason_tips: 请输入您的退出原因
+order.refund.reason_tips: 请输入退出原因
 order.refund.reason_warning: 退出后将无法继续学习，需重新加入或购买！
+order.refund.reason_select_tips: 请选择退出原因
 order.refund.apply_for_btn: 申请退款
 order.refund.refund_is_not_supported: 暂不支持退款，如有疑问，请联系客服。
 order.refund.buy_price: （购买时的价格：%amount%元）

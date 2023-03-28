@@ -23,7 +23,7 @@ $form.find('[name="reason[type]"]').on('change', function () {
     $reasonNoteContainer.addClass('hide')
     changeReasonNote($selected.text())
     
-    if ($selected.val() !== 'reason') {
+    if ($selected.val() !== '') {
       $submitBtn.removeAttr('disabled')
     } else {
       $submitBtn.attr('disabled', true)
