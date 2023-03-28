@@ -1,5 +1,5 @@
 <template>
-  <div :id="'player' + attachment.id + '-' + randomId" style="margin-top: 8px;">
+  <div style="margin-top: 8px;">
     <div v-if="disableVideo && isMedia" class="attachment-preview">
       <img :src="disableVideoIcon" style="width: 24px;margin-right: 8px;" />
       <div class="text-overflow text-12" style="flex: 1;color: #999;">
@@ -11,10 +11,11 @@
         </template>
       </div>
     </div>
-    <div v-else-if="!isImmediatePreview && isShow" class="attachment-preview">
+    
+    <div v-else-if="!isImmediatePreview" class="attachment-preview">
       <img :src="iconSrc" class="attachment-preview__icon" />
       
-      <div class="text-overflow" style="flex: 1;">{{ this.attachment.file_name }}</div>
+      <div class="text-overflow" style="flex: 1;">{{ attachment.file_name }}</div>
       
       <div v-if="attachment.convert_status !== 'success'" class="attachment-preview__status">
         {{ resourceStatus[attachment.convert_status] }}
@@ -34,6 +35,22 @@
         XwYc/1RucQAAAAASUVORK5CYII="
       />
     </div>
+
+    <div v-else-if="isMedia" :id="'player' + attachment.id + '-' + randomId"></div>
+
+    <van-popup
+      v-if="!isMedia"
+      v-model="isShow"
+      closeable
+      :close-on-click-overlay="true"
+      close-icon="close"
+      position="bottom"
+      get-container="body"
+      :style="{ height: '70%' }"
+    >
+      <div style="height: 52px;display: flex;justify-content: center;align-items: center;color: #999;">{{ attachment.file_name }}</div>
+      <div :id="'player' + attachment.id + '-' + randomId" style="width: 100%;height: calc(100% - 52px)"></div>
+    </van-popup>
   </div>
 </template>
 
@@ -101,7 +118,7 @@ export default {
   data() {
     return {
       isLoaded: false,
-      isShow: true,
+      isShow: false,
       disableVideoIcon,
       resourceStatus: {
         'waiting': this.$t('attachment.waiting'),
@@ -166,6 +183,8 @@ export default {
       }
     },
     loadPlayer() {
+      if (this.isLoaded) return
+      
       queueLength++
 
       const initPlayer = (data) => {
@@ -188,7 +207,7 @@ export default {
       })
     },
     previewDoc() {
-      this.isShow = false
+      this.isShow = true
       this.loadPlayer()
     }
   }
