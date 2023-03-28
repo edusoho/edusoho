@@ -17,7 +17,7 @@ class SmsDefenceServiceImpl extends BaseService implements SmsDefenceService
         }
 
         if ($this->isIllegalIp($fields['ip'])) {
-            $fields['disableType'] = ['ip'];
+            $fields['disableType'] = 'ip';
             $fields['isIllegal'] = 1;
             $this->createSmsRequestLog($fields);
             $this->addBlackIpList($fields['ip']);
@@ -26,7 +26,7 @@ class SmsDefenceServiceImpl extends BaseService implements SmsDefenceService
         }
 
         if ($this->isIllegalCoordinate($fields['fingerprint'])) {
-            $fields['disableType'] = ['coordinate'];
+            $fields['disableType'] = 'coordinate';
             $fields['isIllegal'] = 1;
             $this->createSmsRequestLog($fields);
             $this->addBlackIpList($fields['ip']);
@@ -71,6 +71,7 @@ class SmsDefenceServiceImpl extends BaseService implements SmsDefenceService
             'ip' => $fields['ip'] ?? '',
             'mobile' => $fields['mobile'] ?? '',
             'userAgent' => $fields['userAgent'] ?? '',
+            'disableType' => $fields['disableType'] ?? 'none',
         ];
 
         $smsRequestLog['coordinate'] = $this->decryptCoordinate($smsRequestLog['fingerprint']) ?: 'Illegal Coordinate';
