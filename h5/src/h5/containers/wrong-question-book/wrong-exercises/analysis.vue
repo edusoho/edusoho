@@ -8,6 +8,7 @@
           :answerReport="answerReport"
           :assessment="assessment"
           :answerScene="answerScene"
+          :assessmentResponse="assessmentResponse"
         ></item-report>
       </div>
     </template>
@@ -29,6 +30,7 @@ export default {
       answerScene: {},
       answerReport: {},
       answerRecord: {},
+      assessmentResponse: {}
     };
   },
 
@@ -58,12 +60,13 @@ export default {
           answerRecordId: this.$route.query.recordId,
         },
       }).then(res => {
-        const { assessment, answer_scene, answer_report, answer_record } = res;
+        const { assessment, answer_scene, answer_report, answer_record, assessment_response } = res;
         _.assign(this, {
           assessment,
           answerScene: answer_scene,
           answerRecord: answer_record,
           answerReport: answer_report,
+          assessmentResponse: assessment_response
         });
         this.isLoading = false;
       });
