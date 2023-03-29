@@ -31,6 +31,7 @@ export default {
   provide() {
     return {
       reload: this.reload,
+      language: this.language
     };
   },
   methods: {
@@ -63,6 +64,7 @@ export default {
       title: 'title',
       isFromMall: state => state.isFromMall,
       settingsName: state => state.settings.name,
+      language: state => state.language
     }),
     routerKeepAlive() {
       return this.$route.meta.keepAlive;
