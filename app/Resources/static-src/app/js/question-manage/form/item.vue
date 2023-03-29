@@ -9,6 +9,7 @@
       :showCKEditorData="showCKEditorData"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
+      :isDownload="isDownload"
       :uploadSDKInitData="uploadSDKInitData"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
@@ -29,6 +30,7 @@
       :showCKEditorData="showCKEditorData"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
+      :isDownload="isDownload"
       :uploadSDKInitData="uploadSDKInitData"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
@@ -68,6 +70,10 @@
         showAttachment: $('[name=show_attachment]').val(),
         cdnHost: $('[name=cdn_host]').val(),
         uploadSDKInitData: {
+          ui: 'batch',
+          multiple: true,
+          multitaskNum: 3,
+          fileNumLimit: 3,
           sdkBaseUri: app.cloudSdkBaseUri,
           disableDataUpload: app.cloudDisableLogReport,
           disableSentry: app.cloudDisableLogReport,
@@ -78,7 +84,13 @@
           locale: document.documentElement.lang
         },
         fileId: 0,
+        isDownload: false
       };
+    },
+    provide() {
+      return {
+        modeOrigin: 'create'
+      }
     },
     methods: {
       getData(data) {
@@ -104,10 +116,8 @@
       goBack() {
         window.location.href = $('[name=back_url]').val();
       },
-      deleteAttachment(fileId, flag) {
-        if (flag) {
-          this.fileId = fileId;
-        }
+      deleteAttachment(fileId) {
+        this.fileId = fileId;
       },
       previewAttachment(fileId) {
         this.fileId = fileId;

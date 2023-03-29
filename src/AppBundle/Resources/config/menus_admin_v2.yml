@@ -540,6 +540,8 @@ admin_v2:
                                   name: admin_v2.cloud.file_setting.basic_tab
                                 admin_v2_cloud_attachment_setting:
                                     name: admin_v2.cloud.attachment_setting.basic_tab
+                                admin_v2_question_bank_attachment_setting:
+                                    name: admin_v2.cloud.question_bank.attachment_setting.basic_tab
                         # 题库管理
                         admin_v2_question_bank:
                             name: admin_v2.question_bank.menu
@@ -1632,7 +1634,24 @@ admin_v2:
                                     name: admin_v2.system.security_tab
                                 admin_v2_post_num_rules_setting:
                                     name: admin_v2.system.post_num_tab
-
+                                admin_v2_anti_fraud_reminder_setting:
+                                    name: admin_v2.system.anti_fraud_reminder_tab
+                        admin_v2_sms_defence:
+                            name: admin_v2.system.sms_defence_menu
+                            visible: false
+                            children:
+                                admin_v2_sms_request_log_list:
+                                    name: admin_v2.sms.request.log.list_tab
+                                admin_v2_sms_black_ip_list:
+                                    name: admin_v2.sms.ip.black.list_tab
+                                    children:
+                                        admin_v2_sms_black_ip_unlock:
+                                            name: admin_v2.user.sms_black_ip_unlock_btn
+                                            group: groupButton
+                                            class: unlockIp
+                                            mode: none
+                                            router_params:
+                                                id: (smsRequestLog.id)
         # 云市场模块
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center

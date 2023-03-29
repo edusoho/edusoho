@@ -8,13 +8,24 @@
 {% block body %}
   <form id="refund-form" class="form-horizontal" method="post" action="{{ action }}">
     <div class="form-group">
-      <div class="col-md-3 control-label">{{'order.refund'|trans}}</div>
-      <div class="col-md-8 controls">
-        <select class="form-control" name="reason[type]" id="reasonType">
-          {{ dict_select_options('refund_reason') }}
-        </select>
-        <textarea id="reasonNote" class="form-control hide mtm" name="reason[note]" placeholder="{{'order.refund.reason_tips'|trans}}"></textarea>
+      <div class="col-md-2 control-label">{{'order.refund.reason'|trans}}</div>
+      <div class="col-md-9 controls">
+        {% if type|default() != 'itemBank' %}
+          <select class="form-control" name="reason[type]" value="" id="reasonType">
+            <option value="" class="hidden">{{ 'order.refund.reason_select_tips'|trans }}</option>
+            {{ dict_select_options('refund_reason') }}
+          </select>
+        {% endif %}
+        <div style="position: relative" id="reasonNote-container" class="{% if type|default() != 'itemBank' %}hide{% endif %}">
+          <textarea id="reasonNote" show-length maxlength="120" class="form-control mtm" 
+            name="reason[note]" placeholder="{{'order.refund.reason_tips'|trans}}" style="height: 120px;resize: none;"></textarea>
+          <span style="position: absolute;right: 12px;bottom:8px;color: #86909c;font-size: 14px;">
+            <span class="js-textarea-number">0</span>
+            <span>/120</span>
+          </span>
+        </div>
         <div class='color-danger warnning mts'></div>
+        <p class="mts" style="color: #F53F3F;">{{ 'order.refund.reason_warning'|trans }}</p>
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -22,5 +33,6 @@
 {% endblock %}
 
 {% block footer %}
-  <button class="btn btn-danger" type="submit" data-toggle="form-submit" data-target="#refund-form" data-loading-text="{{ 'order.refund.quit_study_btn.submiting'|trans }}">{{ 'order.refund.quit_study_btn'|trans }}</button>
+  <a href="javascript:;" data-dismiss="modal" style="margin-right: 24px; color: #333;">取消</a>
+  <button class="btn btn-danger" disabled type="submit" data-toggle="form-submit" data-target="#refund-form" data-loading-text="{{ 'order.refund.quit_study_btn.submiting'|trans }}">{{ 'order.refund.quit_study_btn'|trans }}</button>
 {% endblock %}
