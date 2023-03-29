@@ -27,7 +27,7 @@ class MeClassroomMember extends AbstractResource
 
     public function remove(ApiRequest $request, $classroomId)
     {
-        $note = $this->filterEmoji($request->query->get('note')) ? $this->filterEmoji($request->query->get('note')) : '从移动端退出班级';
+        $note = $this->filterUtf8mb4($request->query->get('note')) ? $this->filterUtf8mb4($request->query->get('note')) : '从移动端退出班级';
 
         $user = $this->getCurrentUser();
 

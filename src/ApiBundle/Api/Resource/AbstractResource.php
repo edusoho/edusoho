@@ -89,7 +89,7 @@ abstract class AbstractResource
         return $requestData;
     }
 
-    protected function filterEmoji($str)
+    protected function filterUtf8mb4($str)
     {
         $str = preg_replace_callback(
             '/./u',
