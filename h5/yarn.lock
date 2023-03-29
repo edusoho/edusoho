@@ -15102,10 +15102,10 @@ walker@~1.0.5:
   dependencies:
     makeerror "1.0.x"
 
-wap-sdk@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.npmjs.org/wap-sdk/-/wap-sdk-0.3.1.tgz#d791b12142ba445d28520b49a12417587f8c4b41"
-  integrity sha512-WhfKlkjusY6APmACBqAESlV/yqOFdjLCP5SQQDwjZzW6aqCLpRlgXcFISpjM3WmqhBMoaUZOZoxMs6OF8yZW6g==
+wap-sdk@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.npmjs.org/wap-sdk/-/wap-sdk-0.3.2.tgz#c29e5a22b2c2fc8402a127ecd8c9e592e697624b"
+  integrity sha512-sQaqH759NXo8mW+aSU59pCXtK+YkHxv+7vLcAOHoFnoZGRKXcJIcA07xjD03tftBdltXIaIiiHaRz2SvNmgUdw==
   dependencies:
     babel-plugin-import "^1.13.0"
     core-js "^3.6.5"

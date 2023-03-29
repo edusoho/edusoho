@@ -17,7 +17,7 @@
       
       <div class="text-overflow" style="flex: 1;">{{ attachment.file_name }}</div>
       
-      <div v-if="attachment.file_type !== 'other' && attachment.convert_status !== 'success'" class="attachment-preview__status">
+      <div v-if="['other', 'audio'].indexOf(attachment.file_type) === -1 && attachment.convert_status !== 'success'"  class="attachment-preview__status">
         {{ resourceStatus[attachment.convert_status] }}
       </div>
 
@@ -26,7 +26,7 @@
       </div>
 
       <img
-        v-if="attachment.file_type !== 'other' && attachment.convert_status === 'success'"
+        v-if="(attachment.file_type !== 'other' && attachment.convert_status === 'success') || attachment.file_type === 'audio'"
         width="30"
         height="30"
         style="margin-left: 8px;"
