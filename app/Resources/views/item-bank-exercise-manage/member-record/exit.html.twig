@@ -8,9 +8,9 @@
     <tr>
       <th>{{'course.members_manage.records.name'|trans}}</th>
       <th width="152">{{'course.members_manage.quit_records.date'|trans}}</th>
-      <th>{{'course.members_manage.quit_type'|trans}}</th>
+      <th width="92">{{'course.members_manage.quit_type'|trans}}</th>
       <th width="165">{{'course.members_manage.quit_records.reason'|trans}}</th>
-      <th width="92">{{'course.members_manage.is_refunded'|trans}}</th>
+      <th>{{'course.members_manage.is_refunded'|trans}}</th>
     </tr>
   </thead>
   <tbody>
@@ -25,7 +25,7 @@
         <td class="vertical-middle" width="152">
             {{ record.createdTime|date('Y-n-d H:i') }}
         </td>
-        <td class="vertical-middle">
+        <td class="vertical-middle" width="92">
           {{ dict_text('exit_reason', record.reasonType) }}
         </td>
         <td class="vertical-middle text-overflow" width="165">
@@ -37,7 +37,7 @@
             {{ record.reason|trans }}
           </div>
         </td>
-        <td class="vertical-middle" width="92">
+        <td class="vertical-middle">
            {% if record.refundId > 0 or 'refund' == record.reasonType %}
               {{ 'site_yes'|trans }}
            {% elseif order['pay_amount']|default() > 0 %}
