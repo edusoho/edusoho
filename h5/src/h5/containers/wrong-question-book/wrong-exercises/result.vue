@@ -59,6 +59,7 @@
 
 <script>
 import Api from '@/api';
+import { mapState } from 'vuex';
 import _ from 'lodash';
 
 export default {
@@ -70,7 +71,16 @@ export default {
       reports: {},
     };
   },
+  provide() {
+    return {
+      getResourceToken: this.getResourceToken,
+      settings: this.storageSetting
+    }
+  },
   computed: {
+    ...mapState({
+      storageSetting: state => state.storageSetting
+    }),
     usedTime() {
       const timeInterval = parseInt(this.answerRecord.used_time) || 0;
       return timeInterval <= 60 ? 1 : Math.round(timeInterval / 60);
@@ -139,6 +149,12 @@ export default {
           recordId: this.$route.query.recordId,
         },
       });
+    },
+
+    getResourceToken(globalId) {
+      return Api.getItemDetail({ 
+        params: { globalId } 
+      })
     },
   },
 };

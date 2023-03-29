@@ -18,6 +18,7 @@
 <script>
 import _ from 'lodash';
 import Api from '@/api';
+import { mapState } from 'vuex';
 import { Toast } from 'vant';
 
 export default {
@@ -32,6 +33,19 @@ export default {
       answerRecord: {},
       assessmentResponse: {},
     };
+  },
+
+  computed: {
+    ...mapState({
+      storageSetting: state => state.storageSetting
+    }),
+  },
+
+  provide() {
+    return {
+      getResourceToken: this.getResourceToken,
+      settings: this.storageSetting
+    }
   },
 
   created() {
@@ -94,6 +108,12 @@ export default {
           recordId: this.answerRecord.id,
         },
       });
+    },
+
+    getResourceToken(globalId) {
+      return Api.getItemDetail({ 
+        params: { globalId } 
+      })
     },
   },
 };

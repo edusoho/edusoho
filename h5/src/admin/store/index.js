@@ -17,6 +17,7 @@ const state = {
   vipLevels: [],
   vipSettings: {},
   vipSetupStatus: false,
+  localeSettings: '',
   vipPlugin: {},
   courseSettings: {},
   classroomSettings: {},

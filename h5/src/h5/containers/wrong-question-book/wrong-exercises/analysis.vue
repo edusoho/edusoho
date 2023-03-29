@@ -17,6 +17,7 @@
 <script>
 import _ from 'lodash';
 import Api from '@/api';
+import { mapState } from 'vuex';
 
 export default {
   name: 'WrongExercisesAnalysis',
@@ -33,6 +34,19 @@ export default {
 
   created() {
     this.fetchData();
+  },
+
+  computed: {
+    ...mapState({
+      storageSetting: state => state.storageSetting
+    }),
+  },
+
+  provide() {
+    return {
+      getResourceToken: this.getResourceToken,
+      settings: this.storageSetting
+    }
   },
 
   methods: {
@@ -53,6 +67,11 @@ export default {
         });
         this.isLoading = false;
       });
+    },
+    getResourceToken(globalId) {
+      return Api.getItemDetail({ 
+        params: { globalId } 
+      })
     },
   },
 };
