@@ -50,7 +50,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'refreshRoles',
             'createTableSmsRequestLog',
-            'createTableAntiFraudRemind'
+            'createTableAntiFraudRemind',
+            'AddBizItemAttachmentColumn'
         );
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -130,6 +131,15 @@ class EduSohoUpgrade extends AbstractUpdater
         }
         return 1;
     }
+
+    public function AddBizItemAttachmentColumn()
+    {
+        if (!$this->isFieldExist('biz_item_attachment', 'seq')) {
+            $this->getConnection()->exec("ALTER TABLE `biz_item_attachment` ADD COLUMN `seq` int(10)  NOT NULL DEFAULT 1 COMMENT '排序'");
+        }
+        return 1;
+    }
+
     protected function installPluginAssets($plugins)
     {
         $rootDir = realpath($this->biz['kernel.root_dir'].'/../');
