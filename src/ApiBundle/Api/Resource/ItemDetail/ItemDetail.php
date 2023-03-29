@@ -25,13 +25,6 @@ class ItemDetail extends AbstractResource
             return ['result' => false, 'msg' => '文件不存在', 'data' => []];
         }
 
-//        $question = $this->getQuestionDao()->get($attachment['target_id']);
-//        $item = $this->getItemService()->getItem($question['item_id']);
-//        $itemBank = $this->getItemBankService()->getItemBank($item['bank_id']);
-//        $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($itemBank['id']);
-//        if (!$this->getQuestionBankService()->canManageBank($questionBank['id']) && !$this->getExerciseMemberService()->isExerciseMember($req['id'], $user['id'])) {
-//        }
-
         $file = $this->getCloudFileService()->getByGlobalId($req['globalId']);
         if (empty($file)) {
             return ['result' => false, 'msg' => '文件不存在', 'data' => []];
