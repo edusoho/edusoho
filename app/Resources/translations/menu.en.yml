@@ -965,6 +965,12 @@ admin_v2.system.security_tab: Whitelist Domain
 admin_v2.system.post_num_tab: Post Setting
 admin_v2.system.anti_fraud_reminder_tab: APP anti-fraud pop-up window settings
 
+# 系统-系统管理-短信防御管理
+admin_v2.system.sms_defence_menu: Sms Defence
+admin_v2.sms.request.log.list_tab: Sms Request Log
+admin_v2.sms.ip.black.list_tab: Sms IP Black List
+
+
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: Data Overview
 admin_v2.data_statistics.overview.basic_tab: Data Overview

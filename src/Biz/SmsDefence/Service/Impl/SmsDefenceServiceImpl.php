@@ -4,6 +4,7 @@ namespace Biz\SmsDefence\Service\Impl;
 
 use AppBundle\Common\EncryptionToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\SmsDefence\Dao\SmsBlackListDao;
 use Biz\SmsDefence\Dao\SmsRequestLogDao;
 use Biz\SmsDefence\Service\SmsDefenceService;
@@ -106,6 +107,70 @@ class SmsDefenceServiceImpl extends BaseService implements SmsDefenceService
         $existRequestLogs = $this->getSmsRequestLogDao()->search(['fingerprint' => $fingerprint, 'createdTime_GTE' => time() - 60 * 10], null, 0, 10);
 
         return count($existRequestLogs) > 3;
+    }
+
+    public function searchSmsRequestLog($conditions, $sort, $start, $limit)
+    {
+        if (!is_array($sort)) {
+            switch ($sort) {
+                case 'created':
+                    $sort = array('id' => 'DESC');
+                    break;
+                case 'createdByAsc':
+                    $sort = array('id' => 'ASC');
+                    break;
+                default:
+                    $this->createNewException(CommonException::ERROR_PARAMETER);
+                    break;
+            }
+        }
+        return $this->getSmsRequestLogDao()->search($conditions, $sort, $start, $limit);
+    }
+
+    public function searchSmsBlackIpList($conditions, $sort, $start, $limit)
+    {
+        if (!is_array($sort)) {
+            switch ($sort) {
+                case 'created':
+                    $sort = array('id' => 'DESC');
+                    break;
+                case 'createdByAsc':
+                    $sort = array('id' => 'ASC');
+                    break;
+                default:
+                    $this->createNewException(CommonException::ERROR_PARAMETER);
+                    break;
+            }
+        }
+        return $this->getSmsBlackListDao()->search($conditions, $sort, $start, $limit);
+    }
+
+    public function unLockBlackIp($id)
+    {
+        if (empty($id)) {
+            return array();
+        }
+        $this->getSmsBlackListDao()->update($id, ['expire_time' => time() - 3600]);
+
+        return true;
+    }
+
+    public function countSmsRequestLog($conditions)
+    {
+        return $this->getSmsRequestLogDao()->count($conditions);
+    }
+
+    public function countSmsBlackIpList($conditions)
+    {
+        return $this->getSmsBlackListDao()->count($conditions);
+    }
+
+    public function getSmsRequestLog($id)
+    {
+        if (empty($id)) {
+            return array();
+        }
+        return $this->getSmsRequestLogDao()->get($id);
     }
 
     /**

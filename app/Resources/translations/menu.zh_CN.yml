@@ -995,6 +995,11 @@ admin_v2.system.security_tab: 白名单域名
 admin_v2.system.post_num_tab: 发帖限制
 admin_v2.system.anti_fraud_reminder_tab: APP防诈骗弹窗设置
 
+# 系统-系统管理-短信防御管理
+admin_v2.system.sms_defence_menu: 短信防御
+admin_v2.sms.request.log.list_tab: 短信请求日志
+admin_v2.sms.ip.black.list_tab: 短信IP黑名单
+
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: 数据概览
 admin_v2.data_statistics.overview.basic_tab: 数据概览
