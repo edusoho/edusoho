@@ -90,7 +90,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import Api from '@/api'
+import Api from '@/api';
 import _ from 'lodash';
 import Choice from './Choice.vue';
 import SingleChoice from './SingleChoice.vue';
