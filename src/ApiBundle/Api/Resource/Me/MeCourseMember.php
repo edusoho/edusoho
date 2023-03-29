@@ -41,7 +41,7 @@ class MeCourseMember extends AbstractResource
 
     public function remove(ApiRequest $request, $courseId)
     {
-        $note = $request->query->get('note') ? $request->query->get('note') : '从App退出课程';
+        $note = $this->filterUtf8mb4($request->query->get('note')) ? $this->filterUtf8mb4($request->query->get('note')) : '从App退出课程';
 
         $user = $this->getCurrentUser();
 
