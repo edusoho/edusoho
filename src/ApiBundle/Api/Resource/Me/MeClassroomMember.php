@@ -27,7 +27,7 @@ class MeClassroomMember extends AbstractResource
 
     public function remove(ApiRequest $request, $classroomId)
     {
-        $note = $request->query->get('note') ? $request->query->get('note') : '从移动端退出班级';
+        $note = $this->filterEmoji($request->query->get('note')) ? $this->filterEmoji($request->query->get('note')) : '从移动端退出班级';
 
         $user = $this->getCurrentUser();
 
@@ -38,11 +38,15 @@ class MeClassroomMember extends AbstractResource
         if (empty($member)) {
             throw MemberException::NOTFOUND_MEMBER();
         }
-
-        $this->getClassroomService()->removeStudent($classroomId, $user->getId(), [
-            'reason' => $note,
-            'reason_type' => 'exit',
-        ]);
+        try {
+            $this->getClassroomService()->removeStudent($classroomId, $user->getId(), [
+                'reason' => $note,
+                'reason_type' => 'exit',
+            ]);
+        } catch (\Exception $e) {
+            file_put_contents('/tmp/log', json_encode($e->getMessage()), 8);
+            exit();
+        }
 
         return ['success' => true];
     }

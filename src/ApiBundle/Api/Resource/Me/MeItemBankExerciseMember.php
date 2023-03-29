@@ -27,7 +27,7 @@ class MeItemBankExerciseMember extends AbstractResource
 
     public function remove(ApiRequest $request, $exerciseId)
     {
-        $note = $request->query->get('note') ? $request->query->get('note') : '从App退出题库练习';
+        $note = $this->filterEmoji($request->query->get('note')) ? $this->filterEmoji($request->query->get('note')) : '从App退出题库练习';
 
         $exercise = $this->getExerciseService()->get($exerciseId);
         $user = $this->getCurrentUser();
