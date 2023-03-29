@@ -77,7 +77,6 @@
 
 <script>
 import _ from 'lodash';
-import loadScripts from "load-scripts";
 import { mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import Api from '@/api';
@@ -141,10 +140,6 @@ export default {
   created() {
     this.setNavbarTitle(this.$route.query.title);
     this.fetchWrongQuestion();
-
-    loadScripts(
-      `https://service-cdn.qiqiuyun.net/js-sdk-v2/sdk-v1.js?${Date.now()}`
-    );
   },
 
   methods: {
