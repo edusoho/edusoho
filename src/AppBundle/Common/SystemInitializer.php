@@ -52,6 +52,11 @@ class SystemInitializer
     public function initSettings()
     {
         $this->_initThemesSetting();
+        $this->_initWapSetting();
+        $this->_initPostNumRulesSetting();
+        $this->_initDeveloperSetting();
+        $this->_initBackstageSetting();
+        $this->_initAppDiscoverySetting();
         $this->_initArticleSetting();
         $this->_initCoinSetting();
         $this->_initDefaultSetting();
@@ -229,34 +234,6 @@ class SystemInitializer
         $defaultSetting = array_merge($default, $defaultSetting);
 
         $settingService->set('default', $defaultSetting);
-
-        $setting = [
-            'rules' => [
-                'thread' => [
-                    'fiveMuniteRule' => [
-                        'interval' => 300,
-                        'postNum' => 100,
-                    ],
-                ],
-                'threadLoginedUser' => [
-                    'fiveMuniteRule' => [
-                        'interval' => 300,
-                        'postNum' => 50,
-                    ],
-                ],
-            ],
-        ];
-        $settingService->set('post_num_rules', $setting);
-
-        $settingService->get('developer', []);
-        $developer['cloud_api_failover'] = 1;
-        $settingService->set('developer', $developer);
-        $settingService->set('backstage', [
-            'is_v2' => 1,
-            'allow_show_switch_btn' => 0,
-            ]);
-        $settingService->set('app_discovery', ['version' => 1]);
-        $this->output->writeln(' ...<info>成功</info>');
     }
 
     private function _initStorageSetting()
@@ -486,7 +463,6 @@ EOD;
 
     protected function _initPages()
     {
-        //判断
         $this->getContentService()->createContent([
             'title' => '关于我们',
             'type' => 'page',
@@ -532,7 +508,7 @@ EOD;
     protected function _initNavigations()
     {
         $this->output->write('  初始化导航');
-        //判断
+
         $this->getNavigationService()->createNavigation([
             'name' => '师资力量',
             'url' => 'teacher',
@@ -565,7 +541,58 @@ EOD;
 
     protected function _initThemesSetting()
     {
-        $this->getSettingService()->set('theme', ['uri' => 'jianmo']);
+        $this->getSettingService()->set('theme', [
+            'uri' => 'jianmo',
+        ]);
+    }
+
+    protected function _initWapSetting()
+    {
+        $this->getSettingService()->set('wap', [
+            'version' => '2',
+            'template' => 'sail',
+        ]);
+    }
+
+    protected function _initPostNumRulesSetting()
+    {
+        $setting = [
+            'rules' => [
+                'thread' => [
+                    'fiveMuniteRule' => [
+                        'interval' => 300,
+                        'postNum' => 100,
+                    ],
+                ],
+                'threadLoginedUser' => [
+                    'fiveMuniteRule' => [
+                        'interval' => 300,
+                        'postNum' => 50,
+                    ],
+                ],
+            ],
+        ];
+        $this->getSettingService()->set('post_num_rules', $setting);
+    }
+
+    protected function _initDeveloperSetting()
+    {
+        $this->getSettingService()->get('developer', []);
+        $developer['cloud_api_failover'] = 1;
+        $this->getSettingService()->set('developer', $developer);
+    }
+
+    protected function _initBackstageSetting()
+    {
+        $this->getSettingService()->set('backstage', [
+            'is_v2' => 1,
+            'allow_show_switch_btn' => 0,
+        ]);
+    }
+
+    protected function _initAppDiscoverySetting()
+    {
+        $this->getSettingService()->set('app_discovery', ['version' => 1]);
     }
 
     protected function _initArticleSetting()
