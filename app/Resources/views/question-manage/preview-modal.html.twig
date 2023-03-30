@@ -27,6 +27,7 @@
   {% endverbatim %}
 
   <input type="hidden" name="item" value="{{ item|json_encode }}">
+  <input type="hidden" name="question_bank_attachment_setting" value="{{ setting('question_bank_attachment_setting')|json_encode }}">
   {% include 'attachment-upload/upload-data.html.twig'  %}
 {% endblock %}
 

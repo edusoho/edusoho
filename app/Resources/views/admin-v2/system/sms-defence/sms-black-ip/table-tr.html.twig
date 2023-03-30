@@ -1,0 +1,14 @@
+<tr id="user-table-tr-{{ smsBlackIp.id }}">
+  <td>
+    <span>{{ smsBlackIp.ip }}</span>
+  </td>
+  <td>
+    <span class="text-sm">{{ smsBlackIp.expire_time|date('Y-n-d H:i:s') }}</span>
+  </td>
+  <td>
+    <span class="text-sm">{{ smsBlackIp.created_time|date('Y-n-d H:i:s') }}</span>
+  </td>
+  <td>
+    <button class="btn btn-default btn-sm unlockIp" data-url="{{ path('admin_v2_sms_black_ip_unlock', {id:smsBlackIp.id}) }}">{{ 'smd.defence.black.ip.unlock'|trans }}</button>
+  </td>
+</tr>

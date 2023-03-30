@@ -1,0 +1,85 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set script_controller = 'system/anti-fraud-reminders' %}
+{% set menu = 'admin_v2_anti_fraud_reminder_setting' %}
+{% do script(['app/js/admin-v2/security/anti-fraud-reminder/index.js'])  %}
+
+{% block main %}
+{{ web_macro.flash_messages() }}
+
+<form id='post-num-rules-form' class="form-horizontal" method="post" novalidate>
+  <fieldset>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.anti_fraud_reminder.setting'|trans }}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <label>
+          <input type="radio" name="enable"
+                 value="1" {% if setting.enable %} checked {% endif %}> {{ 'admin.anti_fraud_reminder.open_radio'|trans }}
+        </label>
+        <label>
+          <input type="radio" name="enable"
+                 value="0" {% if not setting.enable %} checked {% endif %}>{{ 'admin.anti_fraud_reminder.close_radio'|trans }}
+        </label>
+      </div>
+      <div class="help-block col-md-8 col-md-offset-3">
+        <span id="enableTips" {% if not setting.enable %} class="hidden" {% endif %}>{{ 'admin.anti_fraud_reminder.setting.enable.tips'|trans }}</span>
+        <span id="disableTips" {% if setting.enable %} class="hidden" {% endif %}>{{ 'admin.anti_fraud_reminder.setting.enable.tips'|trans }}</span>
+      </div>
+    </div>
+      <div class="form-group remind_setting {% if not setting.enable %} hidden {% endif %}" id="reminder_frequency">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin.anti_fraud_reminder.reminder_frequency'|trans }}</label>
+        </div>
+        <div class="col-md-6 control-label">
+          <div class="pull-left" style="margin-top: 6px;">{{ 'admin.anti_fraud_reminder.every'|trans }}</div>
+          <select class="form-control pull-left" name="reminder_frequency" style="margin: 0 8px; width: 80px;">
+            {% for num in 1..30 %}
+              <option value="{{ num }}" {% if setting.reminder_frequency == num  %}selected{% endif%}>{{ num }}</option>
+            {% endfor %}
+          </select>
+          <div class="pull-left" style="margin-top: 6px;">{{ 'admin.anti_fraud_reminder.every_day_reminder'|trans }}</div>
+        </div>
+      </div>
+      <div class="form-group remind_setting {% if not setting.enable %} hidden {% endif %}" id="alert_the_object">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin.anti_fraud_reminder.alert_the_object'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          <label class="block">
+            <input type="radio" name="all_users_visible" value="1" {% if setting.all_users_visible %} checked {% endif %}>
+            <span class="ml4">{{ 'admin.anti_fraud_reminder.visible_to_all_users'|trans }}</span>
+          </label>
+          <label class="block mt16">
+            <input type="radio" name="all_users_visible"
+                   value="0" {% if not setting.all_users_visible %} checked {% endif %}>
+            <span class="ml4">{{ 'admin.anti_fraud_reminder.visible_only_to_paid_users'|trans }}</span>
+            <span style="color: #999">{{ 'admin.anti_fraud_reminder.to_paid_users_tips'|trans }}</span>
+          </label>
+          <div class="mt8 ml4 js-tooltip-twig-widget">
+            <a class="js-twig-widget-tips" data-placement="right" href="javascript:;">{{ 'admin.anti_fraud_reminder.view_reminder_example'|trans }}</a>
+            <div class="js-twig-widget-html" style="display:none;">
+              <p>{{ 'admin.anti_fraud_reminder.tips.title'|trans }}</p>
+              <p class="mt8">{{ 'admin.anti_fraud_reminder.tips.content_one'|trans }}</p>
+              <p class="mt8">{{ 'admin.anti_fraud_reminder.tips.content_two'|trans }}</p>
+              <a class="block mt8" href="https://www.edusoho.com/policy/privacy_policy_fraud">{{ 'admin.anti_fraud_reminder.tips.detail'|trans }}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </fieldset>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}
