@@ -297,6 +297,7 @@ class ManageController extends BaseController
                 $member .= $users[$answerRecord['user_id']]['verifiedMobile'] ? $users[$answerRecord['user_id']]['verifiedMobile'].',' : '-'.',';
                 $member .= $users[$answerRecord['user_id']]['emailVerified'] ? $users[$answerRecord['user_id']]['email'].',' : '-'.',';
                 $member .= date('Y-m-d H:i:s', $answerRecord['begin_time'])."\t".',';
+                $member .= date('Y-m-d H:i:s', $answerRecord['end_time'])."\t".',';
                 $member .= $this->timeFormatterFilter($answerRecord['used_time']).',';
                 $member .= $this->trans('course.homework_check.review.submit_num_detail', ['%num%' => $index + 1]).',';
                 $member .= $this->getReviewStatus($answerRecord['status']).',';
@@ -317,8 +318,8 @@ class ManageController extends BaseController
     protected function getExportFieldTitle($type)
     {
         $str = [
-            'homework' => '用户名,姓名,手机号,邮箱,作业时间（年-月-日-时-分-秒）,作业用时（时-分-秒）,作业次数,状态,作业成绩,合格成绩,通过状态,批阅人,教师评语',
-            'testpaper' => '用户名,姓名,手机号,邮箱,开考时间（年-月-日-时-分-秒）,考试用时（时-分-秒）,考试次数,状态,本次成绩,通过成绩,通过状态,批阅人,教师评语',
+            'homework' => '用户名,姓名,手机号,邮箱,作业时间（年-月-日-时-分-秒）,提交时间（年-月-日-时-分-秒）,作业用时（时-分-秒）,作业次数,状态,作业成绩,合格成绩,通过状态,批阅人,教师评语',
+            'testpaper' => '用户名,姓名,手机号,邮箱,开考时间（年-月-日-时-分-秒）,提交时间（年-月-日-时-分-秒）,考试用时（时-分-秒）,考试次数,状态,本次成绩,通过成绩,通过状态,批阅人,教师评语',
         ];
 
         return $str[$type];
