@@ -899,9 +899,11 @@ class CourseController extends CourseBaseController
     public function exitModalAction(Request $request)
     {
         $action = $request->query->get('action');
+        $type = $request->query->get('type');
 
         return $this->render('course/exit-modal.html.twig', [
             'action' => $action,
+            'type' => $type,
         ]);
     }
 

@@ -5,7 +5,7 @@ namespace ApiBundle\Api\Resource\SmsSend;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\BehaviorVerification\Service\BehaviorVerificationService;
+use Biz\SmsDefence\Service\SmsDefenceService;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\System\SettingException;
@@ -32,8 +32,16 @@ class SmsSend extends AbstractResource
                 return null;
             }
         }
-        if ($this->getBehaviorVerificationService()->behaviorVerification($request->getHttpRequest())) {
-            return new JsonResponse(['ACK' => 'ok', 'allowance' => 0]);
+        if ($request->getHttpRequest()->isXmlHttpRequest()) {
+            $fields = [
+                'fingerprint' => $request->getHttpRequest()->get('encryptedPoint'),
+                'userAgent' => $request->getHttpRequest()->headers->get('user-agent'),
+                'ip' => $request->getHttpRequest()->getClientIp(),
+                'mobile' => $request->getHttpRequest()->get('mobile'),
+            ];
+            if ($this->getSmsDefenceService()->validate($fields)) {
+                return new JsonResponse(['ACK' => 'ok', 'allowance' => 0]);
+            }
         }
         $smsType = $request->request->get('type', '');
         $mobile = $request->request->get('mobile', '');
@@ -119,10 +127,10 @@ class SmsSend extends AbstractResource
     }
 
     /**
-     * @return BehaviorVerificationService
+     * @return SmsDefenceService
      */
-    protected function getBehaviorVerificationService()
+    protected function getSmsDefenceService()
     {
-        return $this->biz->service('BehaviorVerification:BehaviorVerificationService');
+        return $this->biz->service('SmsDefence:SmsDefenceService');
     }
 }

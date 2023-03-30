@@ -173,7 +173,8 @@
         {% endif %}
         {# 退出班级 #}
         {% if 'student' in member.role or 'auditor' in member.role %}
-          <a class="class-setting hidden-xs hidden-sm" data-toggle="modal" data-target="#modal" data-url="{{ path('course_exit_modal', {action:path('classroom_exit', {id:classroom.id})}) }}" href="javascript:;">
+          <a class="class-setting hidden-xs hidden-sm" data-toggle="modal" data-target="#modal" 
+            data-url="{{ path('course_exit_modal', { action: path('classroom_exit', {id:classroom.id}), type: 'classroom'}) }}" href="javascript:;">
             <i class="es-icon es-icon-exit"></i>
           </a>
         {% endif %}
