@@ -604,7 +604,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             $answerRecord = $this->getAnswerRecordService()->update(
                 $assessmentResponse['answer_record_id'],
-                ['status' => AnswerService::ANSWER_RECORD_STATUS_PAUSED]
+                ['status' => AnswerService::ANSWER_RECORD_STATUS_DOING]
             );
 
             $this->commit();
