@@ -17,11 +17,12 @@ class Note extends BaseResource
         //$courseId暂时用不到
         $user = $this->getCurrentUser();
         $note = $this->getCourseNoteService()->getNote($noteId);
-        if ($note['userId'] != $user['id']) {
-            throw UserException::PERMISSION_DENIED();
-        }
         if (empty($note)) {
             return $this->error('500', "ID为{$noteId}的笔记不存在");
+        }
+
+        if ($note['userId'] != $user['id']) {
+            throw UserException::PERMISSION_DENIED();
         }
 
         return $this->filter($note);
