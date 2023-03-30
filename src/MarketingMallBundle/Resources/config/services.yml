@@ -46,6 +46,12 @@ services:
     tags:
     - { name: codeages_plugin.event.subscriber }
 
+  marketing_mall_wechat_notification_event_subscriber:
+    class: MarketingMallBundle\Biz\MallWechatNotification\Event\WechatNotificationEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+
   mall_wechat_template.extension:
     class: MarketingMallBundle\Extension\WeChatTemplateExtension
     public: true

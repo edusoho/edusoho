@@ -1,6 +1,6 @@
 <?php
 
-namespace MarketingMallBundle\Biz\MallWechatNotification\Event;
+namespace MarketingMallBundle\Biz\MallWechatNotification\NotificationEvent;
 
 interface NotificationEvent
 {
