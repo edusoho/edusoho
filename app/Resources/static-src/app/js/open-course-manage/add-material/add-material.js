@@ -94,6 +94,7 @@ export default class AddMaterial {
     }
 
     $('.js-current-file').text($verifyLink.val());
+    $materials.submit();
   }
 
   initFileChooser() {
@@ -104,8 +105,11 @@ export default class AddMaterial {
       $media.val(JSON.stringify(file));
       chooserUiOpen();
       $('.js-current-file').text(file.name);
+      
       let media = isEmpty($media.val()) ? Object.create(null) : JSON.parse($media.val());
       $materials.val(media.id);
+
+      $materials.submit()
     };
 
     const fileChooser = new FileChooser();

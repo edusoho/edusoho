@@ -87,6 +87,10 @@ export default {
         p {
           margin: 0;
         }
+
+        img {
+          max-width: 100%!important;
+        }
       }
     }
 

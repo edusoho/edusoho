@@ -105,6 +105,7 @@ class OrderInfo extends AbstractResource
             foreach ($orderInfo['availableCoupons'] as &$availableCoupon) {
                 $availableCoupon['target'] = $this->getCouponBatchService()->getTargetByBatchId($availableCoupon['id']);
                 $availableCoupon['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($availableCoupon['batchId']);
+                unset($availableCoupon['targetDetail']['data']);
             }
         }
 

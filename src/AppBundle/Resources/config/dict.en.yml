@@ -67,6 +67,7 @@ orderItemType:
     course: course
     classroom: classroom
     vip: VIP
+    item_bank_exercise: item_bank_exercise
 
 refundItemType:
     course: course
@@ -441,7 +442,6 @@ courseSerializeMode:
     finished: Completed
 
 refund_reason:
-    select_reason: --Reason to quit--
     bad_content: Course quality is not quite good
     bad_teacher_attitude: Service is not quite good
     other: Other

@@ -390,18 +390,20 @@ class BaseController extends Controller
 
         $parsedUrl = parse_url($url);
 
-        if ($parsedUrl == false){
+        if ($parsedUrl == false) {
             return $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
-        if (!empty($parsedUrl['host'])){
+        if (!empty($parsedUrl['host'])) {
             $url = $this->unParseUrl($parsedUrl);
+        } elseif ('/' != $url[0]) {
+            $url = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         $isUnsafeHost = isset($parsedUrl['host']) && !in_array($parsedUrl['host'], $safeHosts);
-        $isInvalidUrl = isset($parsedUrl['scheme']) && !in_array($parsedUrl['scheme'], ['http', 'https']);
+        $isInvalidScheme = isset($parsedUrl['scheme']) && !in_array($parsedUrl['scheme'], ['http', 'https']);
 
-        if (empty($url) || $isUnsafeHost || $isInvalidUrl) {
+        if (empty($url) || $isUnsafeHost || $isInvalidScheme) {
             $url = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
@@ -507,5 +509,20 @@ class BaseController extends Controller
         $key = md5($accessKey.$secretKey);
 
         return new JWTAuth($key);
+    }
+
+    protected function getHttpHost()
+    {
+        return $this->getSchema()."://{$_SERVER['HTTP_HOST']}";
+    }
+
+    protected function getSchema()
+    {
+        $https = empty($_SERVER['HTTPS']) ? '' : $_SERVER['HTTPS'];
+        if (!empty($https) && 'off' !== strtolower($https)) {
+            return 'https';
+        }
+
+        return 'http';
     }
 }

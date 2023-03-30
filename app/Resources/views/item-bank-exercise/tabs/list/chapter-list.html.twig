@@ -4,6 +4,7 @@
   <ul id="sortable-list" class="task-list">
     {% for key, item in categoryTree %}
       {% if records|default(null) %}{% set record = records[item.id]|default(null)  %}{% endif %}
+      {% if questionCounts|default(null) %}{% set questionCount = questionCounts[item.id]|default(null)  %}{% endif %}
       <div class="row">
         {% if item.depth == 3 %}
           {% include 'item-bank-exercise/tabs/list/chapter-lesson.html.twig' with {previewAs:previewAs,exercise: exercise, lesson: item, record: record} %}

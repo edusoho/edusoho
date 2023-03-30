@@ -550,7 +550,9 @@ order.paid_course.minus: 'Deduct'
 order.refund: 'Quit the course'
 order.refund.item_type: item type
 order.refund.reason: 'Quit reason'
-order.refund.reason_tips: 'Please input your quit reason'
+order.refund.reason_tips: 'Please enter the reason for exiting'
+order.refund.reason_warning: You will not be able to continue learning after exiting, you need to rejoin or buy！
+order.refund.reason_select_tips: Please choose a reason for exiting
 order.refund.apply_for_btn: 'Apply for refund'
 order.refund.buy_price: '(you have paid：%amount% CNY）'
 order.refund.refund_is_not_supported: Refund is not supported
@@ -1928,7 +1930,7 @@ course.plan_task.activity_manage.testpaper.mock_tips3: 'The mock exam duration m
 course.plan_task.activity_manage.testpaper.practise_type: 'practice exam'
 course.plan_task.activity_manage.testpaper.practise_tips1: 'Unlimited test time, no automatic hand-in'
 course.plan_task.activity_manage.testpaper.practise_tips2: 'Leaving during the test does not count the test time'
-course.plan_task.activity_manage.testpaper.practise_tips3: 'The length of the test does not affect the student's answering time'
+course.plan_task.activity_manage.testpaper.practise_tips3: "The length of the test does not affect the student's answering time"
 
 course.plan_task.activity_manage.video: Video
 course.plan_task.activity_manage.video.time: 'Duration'
@@ -6320,6 +6322,7 @@ admin.edu_cloud.edu_im.im_describe: 'IM Function description'
 admin.edu_cloud.edu_im.im_describe_tips: 'Currently only supports Kuozhi APP 3.6 And above version; <br>When activated, courses and classes will have corresponding live chat discussion groups, and users can use it for personal chat; <br>It''s a effective tool for teachers to push courses and class information to the student; <br>It also helps to the improve the communications between students and teachers. <br>'
 admin.edu_cloud.edu_attachment.attachment_tips: '<h4> You have not activate cloud video service, so the cloud attachment features are not available. <a href="%videoUrl%"> Activate Now </a><a href="%detailUrl%" target="_blank"> Learn about cloud video </a></h4><p> "Cloud attachment" allows you to manage resources from various dimensions such as upload time and resource type.It helps you to manage all resources, and do not have to worry about the outdated resource which take storage space. </p>'
 admin.edu_cloud.edu_attachment.function: Attachments
+admin.edu_cloud.edu_attachment.download_setting: Download Settings
 admin.edu_cloud.edu_attachment.open_radio: Active
 admin.edu_cloud.edu_attachment.close_radio: Disabled
 admin.edu_cloud.edu_attachment.service_setting: Settings
@@ -6847,6 +6850,24 @@ admin.post_num_rules.same_ip_rule: 'Maximum posts(including replies) per Ip in 5
 admin.post_num_rules.post_num: 'Post count'
 admin.post_num_rules.post_num_tips: 'Post count must be integer greater than or equal to 0. 0 means no limit'
 admin.post_num_rules.same_user_rule: 'Maximum posts(including replies) per user in 5 minutes'
+admin.anti_fraud_reminder.setting: APP anti-fraud pop-up window settings
+admin.anti_fraud_reminder.open_radio: Open
+admin.anti_fraud_reminder.close_radio: Closed
+admin.anti_fraud_reminder.setting.enable.tips: After opening, the user will give an anti-fraud pop-up window reminder when entering the APP
+admin.anti_fraud_reminder.reminder_frequency: Reminder frequency
+admin.anti_fraud_reminder.alert_the_object: Alert the object
+admin.anti_fraud_reminder.visible_to_all_users: Visible to all users
+admin.anti_fraud_reminder.visible_only_to_paid_users: Visible only to paying users
+admin.anti_fraud_reminder.to_paid_users_tips: Paid users refer to users who pay an amount ≥ 0.01 within the institution
+admin.anti_fraud_reminder.view_reminder_example: See examples of reminders
+admin.anti_fraud_reminder.tips.title: 【Fraud Alert】
+admin.anti_fraud_reminder.tips.content_one: Recently, we have discovered that some criminals are impersonating online school staff and committing fraud under the guise of "refunds"! If you receive any related text messages or phone calls, please do not believe them!!!
+admin.anti_fraud_reminder.tips.content_two: We have prepared an anti-fraud and anti-harassment tutorial for you. Click on the link below to learn more.
+admin.anti_fraud_reminder.tips.detail: Click here to view the anti-harassment settings tutorial >
+admin.anti_fraud_reminder.tips.app.button: View Tutorial >
+admin.anti_fraud_reminder.every: Every
+admin.anti_fraud_reminder.every_day_reminder: Day remind once
+
 admin.reports_status.environmental_detection: 'Environment test'
 admin.reports_status.recommend_config: 'Recommended configuration'
 admin.reports_status.current_status: 'Current status'
@@ -11002,3 +11023,28 @@ live_course.record_replay.select3: Only record courseware
 live_course.record_replay.btn: To Record
 live_course.record_replay.safair_tip: Safair may be blocked, please use another browser
 live_course.record_replay.show_btn: local recording
+exception.sms_request.abnormal_sms_sending: Abnormal sms sending
+admin.question_bank.file.download.setting.enable.tips: The mobile terminal does not provide the function of downloading question bank attachments, which is not affected by settings
+admin.question_bank.file.download.setting.disable.tips: Compressed files can only be viewed after downloading, and when closed, learners will not be able to view compressed attachments
+admin.question_bank.question_bank_attachment.open_radio: Active
+admin.question_bank.question_bank_attachment.close_radio: Disabled
+
+#短信防御
+sms.defence.request.log.fingerprint: fingerprint
+sms.defence.request.log.coordinate: coordinate
+sms.defence.request.log.ip: ip
+sms.defence.request.log.mobile: mobile
+sms.defence.request.log.userAgent: userAgent
+sms.defence.request.log.is_illegal: is illegal
+sms.defence.request.log.disable_type: disable type
+sms.defence.request.log.created_time: created time
+sms.defence.request.log.view_record_label: show
+smd.defence.black.ip.list.ip: ip
+smd.defence.black.ip.list.expire_time: expire time
+smd.defence.black.ip.list.created_time: created time
+smd.defence.black.ip.unlock: unlock IP
+sms.defence.request.log.is_illegal.yes: yes
+sms.defence.request.log.is_illegal.no: no
+sms.defence.request.log.disable_type.ip: Multiple requests for the same IP address
+sms.defence.request.log.disable_type.coordinate: Multiple requests for the same coordinate
+sms.defence.request.log.disable_type.none: none

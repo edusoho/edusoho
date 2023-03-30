@@ -768,7 +768,7 @@ admin_v2.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮�
 admin_v2.user.basic.basic_tab.lock_btn: '封禁学员'
 admin_v2.user.basic.basic_tab.unlock_btn: '解禁学员'
 admin_v2.user.basic.basic_tab.delete_btn: '删除学员'
-admin_v2.user.basic.basic_tab.org_update_btn: '修改用户组织机构'
+admin_v2.user.basic.basic_tab.org_update_btn: '修改学员组织机构'
 
 admin_v2.user.staff.basic_tab.create_btn: '添加员工'
 admin_v2.user.staff.basic_tab.edit_btn: '编辑员工信息'
@@ -783,7 +783,7 @@ admin_v2.user.staff.basic_tab.lock_btn: '封禁员工'
 admin_v2.user.staff.basic_tab.unlock_btn: '解禁员工'
 admin_v2.user.staff.basic_tab.delete_btn: '删除员工'
 admin_v2.user.staff.basic_tab.turn_into_student_btn: '转为学员'
-admin_v2.user.staff.basic_tab.org_update_btn: '修改用户组织机构'
+admin_v2.user.staff.basic_tab.org_update_btn: '修改员工组织机构'
 #用户-用户管理-实名认证
 admin_v2.user.approval_menu: 实名认证
 admin_v2.user.approval.basic_tab.cancel_btn: 撤销
@@ -993,6 +993,12 @@ admin_v2.system.security_menu: 安全设置
 admin_v2.system.blacklist_tab: IP黑名单
 admin_v2.system.security_tab: 白名单域名
 admin_v2.system.post_num_tab: 发帖限制
+admin_v2.system.anti_fraud_reminder_tab: APP防诈骗弹窗设置
+
+# 系统-系统管理-短信防御管理
+admin_v2.system.sms_defence_menu: 短信防御
+admin_v2.sms.request.log.list_tab: 短信请求日志
+admin_v2.sms.ip.black.list_tab: 短信IP黑名单
 
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: 数据概览
@@ -1077,3 +1083,4 @@ admin.wap_setting.find: 发现页设置
 admin.wap_setting.version_setting: 版本设置
 admin.wap_setting.pay_setting: 支付设置
 admin_v2.cloud.question_bank.attachment.basic_tab: 题库附件
+admin_v2.cloud.question_bank.attachment_setting.basic_tab: 题库附件设置
