@@ -1,33 +1,33 @@
 <?php
 
-namespace MarketingMallBundle\Biz\MallWechatNotification\Event;
+namespace MarketingMallBundle\Biz\MallWechatNotification\NotificationEvent;
 
 use AppBundle\Common\SmsToolkit;
 use Biz\Sms\SmsType;
 use MarketingMallBundle\Common\WechatNotification\MessageSubscriberTemplateUtil;
 use MarketingMallBundle\Common\WechatNotification\MessageTemplateUtil;
 
-class GrouponJoinNotificationEvent extends AbstractNotificationEvent implements NotificationEvent
+class GrouponCreateNotificationEvent extends AbstractNotificationEvent implements NotificationEvent
 {
     public function getServiceFollowTemplateKey()
     {
-        return MessageTemplateUtil::TEMPLATE_GROUPON_JOIN;
+        return MessageTemplateUtil::TEMPLATE_GROUPON_CREATE;
     }
 
     public function getMessageSubscribeTemplateKey()
     {
-        return MessageSubscriberTemplateUtil::TEMPLATE_GROUPON_JOIN;
+        return MessageSubscriberTemplateUtil::TEMPLATE_GROUPON_CREATE;
     }
 
     public function getSmsTemplateKey()
     {
-        return SmsType::GROUPON_JOIN;
+        return SmsType::GROUPON_CREATE;
     }
 
     public function buildServiceFollowTemplateArgs($data)
     {
         return [
-            'first' => ['value' => '您已参团成功，赶紧邀请好友来参团吧！'],
+            'first' => ['value' => '你已开团成功，赶紧邀请好友来参团吧！'],
             'keyword1' => ['value' => $data['grouponTitle']],
             'keyword2' => ['value' => ($data['grouponPrice'] / 100) . '元'],
             'keyword3' => ['value' => $data['grouponMemberNum'] . '人'],
@@ -41,19 +41,19 @@ class GrouponJoinNotificationEvent extends AbstractNotificationEvent implements 
         return [
             'thing1' => ['value' => $data['grouponTitle']],
             'amount2' => ['value' => ($data['grouponPrice'] / 100) . '元'],
-            'character_string8' => ['value' => "{$data['grouponJoinMemberNum']}/{$data['grouponMemberNum']}"],
-            'time3' => ['value' => date('Y年m月d日 H:i:s', $data['grouponEndAt'])],
-            'thing4' => ['value' => '拉满人数则拼团成功，拼团失败自动退款。'],
+            'number3' => ['value' => $data['grouponMemberNum']],
+            'time4' => ['value' => date('Y年m月d日 H:i:s', $data['grouponEndAt'])],
+            'thing10' => ['value' => '拉满人数则拼团成功，拼团失败自动退款。'],
         ];
     }
 
     public function buildSmsTemplateArgs($data)
     {
         return [
-            'grouponTitle' => "【{$data['grouponMemberNum']}人团】".$data['grouponTitle'],
-            'grouponPrice' => $data['grouponPrice'] / 100,
-            'grouponRemain' => $data['grouponRemain'],
-            'grouponEndAt' => date('Y年m月d日 H:i:s', $data['grouponEndAt']),
+            'title' => "【{$data['grouponMemberNum']}人团】".$data['grouponTitle'],
+            'price' => $data['grouponPrice'] / 100,
+            'num' => $data['grouponMemberNum'],
+            'endAt' => date('Y年m月d日 H:i:s', $data['grouponEndAt']),
             'url' => SmsToolkit::getShortLink($data['url']),
         ];
     }

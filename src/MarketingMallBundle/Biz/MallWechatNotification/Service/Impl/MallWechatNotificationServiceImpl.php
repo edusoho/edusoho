@@ -5,7 +5,7 @@ namespace MarketingMallBundle\Biz\MallWechatNotification\Service\Impl;
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
 use Biz\WeChat\WechatNotificationType;
-use MarketingMallBundle\Biz\MallWechatNotification\Event\NotificationEventFactory;
+use MarketingMallBundle\Biz\MallWechatNotification\NotificationEvent\NotificationEventFactory;
 use MarketingMallBundle\Biz\MallWechatNotification\Service\MallWechatNotificationService;
 use MarketingMallBundle\Biz\MallWechatNotification\Strategy\MessageSubscribeNotificationSendStrategy;
 use MarketingMallBundle\Biz\MallWechatNotification\Strategy\NotificationSendStrategy;
@@ -28,6 +28,11 @@ class MallWechatNotificationServiceImpl extends BaseService implements MallWecha
         if ($notificationSendStrategy) {
             $notificationSendStrategy->send($event, $data);
         }
+    }
+
+    public function init()
+    {
+        // TODO: Implement init() method.
     }
 
     /**

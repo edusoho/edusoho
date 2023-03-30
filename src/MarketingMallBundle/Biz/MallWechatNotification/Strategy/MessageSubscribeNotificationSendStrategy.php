@@ -2,7 +2,7 @@
 
 namespace MarketingMallBundle\Biz\MallWechatNotification\Strategy;
 
-use MarketingMallBundle\Biz\MallWechatNotification\Event\NotificationEvent;
+use MarketingMallBundle\Biz\MallWechatNotification\NotificationEvent\NotificationEvent;
 use MarketingMallBundle\Common\WechatNotification\MessageSubscriberTemplateUtil;
 
 class MessageSubscribeNotificationSendStrategy extends AbstractNotificationSendStrategy implements NotificationSendStrategy

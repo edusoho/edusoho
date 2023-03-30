@@ -2,7 +2,7 @@
 
 namespace MarketingMallBundle\Biz\MallWechatNotification\Strategy;
 
-use MarketingMallBundle\Biz\MallWechatNotification\Event\NotificationEvent;
+use MarketingMallBundle\Biz\MallWechatNotification\NotificationEvent\NotificationEvent;
 
 interface NotificationSendStrategy
 {

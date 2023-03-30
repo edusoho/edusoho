@@ -5,7 +5,7 @@ namespace MarketingMallBundle\Biz\MallWechatNotification\Strategy;
 use Biz\AppLoggerConstant;
 use Biz\Notification\Service\NotificationService;
 use Biz\System\Service\LogService;
-use MarketingMallBundle\Biz\MallWechatNotification\Event\NotificationEvent;
+use MarketingMallBundle\Biz\MallWechatNotification\NotificationEvent\NotificationEvent;
 use MarketingMallBundle\Common\WechatNotification\MessageTemplateUtil;
 
 class ServiceFollowNotificationSendStrategy extends AbstractNotificationSendStrategy implements NotificationSendStrategy
