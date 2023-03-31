@@ -193,6 +193,8 @@ class WeChatNotificationController extends BaseController
         }
         if ($notificationSms) {
             $wechatSetting['notification_sms'] = 1;
+        } else {
+            $wechatSetting['notification_sms'] = 0;
         }
         if (WechatNotificationType::SERVICE_FOLLOW == $notificationType) {
             $wechatSetting['notification_sms'] = 0;
