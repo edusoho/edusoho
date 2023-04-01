@@ -21,7 +21,7 @@
         </h2>
 
         {% if lesson.startTimeLeft <= 3600 %}
-          <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_play',{courseId:course.id,lessonId:lesson.id}) }}"
+          <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_play',{courseId:course.id,lessonId:lesson.id, isClickEnter:'1'}) }}"
             target="_blank">{{ 'my.teaching.open_course.lesson.header.live_open_course_play_btn'|trans }}</a>
         {% else %}
           <button id="alerted-btn" class="btn btn-info btn-lg active {% if not member or (member and not member.isNotified ) %}hidden{% endif %}">
@@ -52,7 +52,7 @@
             class="phm">{{ lesson.endTime|date('m') }}{{ 'date.month'|trans }}{{ lesson.endTime|date('d') }}{{ 'date.day'|trans }} {{ lesson.endTime|date('H:i') }}</span>{{ 'my.teaching.open_course.lesson.header.content.end.tips'|trans }}
         </h2>
         <a class="btn btn-info btn-lg mask-btn"
-          href="{{ path('live_open_course_play',{courseId:course.id,lessonId:lesson.id, refererUrl:refererUrl}) }}"
+          href="{{ path('live_open_course_play',{courseId:course.id,lessonId:lesson.id, refererUrl:refererUrl, isClickEnter:'1'}) }}"
           target="_blank">{{ 'my.teaching.open_course.lesson.header.live_open_course_play_btn'|trans }}</a>
 
       </div>
