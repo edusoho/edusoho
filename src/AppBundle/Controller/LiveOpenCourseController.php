@@ -14,12 +14,6 @@ class LiveOpenCourseController extends BaseOpenCourseController
 {
     public function entryAction(Request $request, $courseId, $lessonId)
     {
-        if (empty($request->query->get('isClickEnter'))) {
-            $this->redirectToRoute('open_course_show', [
-               'courseId' => $courseId,
-           ]);
-        }
-
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
         $course = $this->getOpenCourseService()->getCourse($courseId);
         $result = $this->getLiveCourseService()->checkLessonStatus($lesson);
@@ -31,6 +25,12 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $params = [];
 
         $params['role'] = $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
+
+        if ('unknown' == $params['role']) {
+            return $this->redirectToRoute('open_course_show', [
+                'courseId' => $courseId,
+            ]);
+        }
 
         $user = $this->getCurrentUser();
         $params['id'] = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
