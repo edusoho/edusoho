@@ -560,7 +560,7 @@ class StatisticsController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $orderIds = ArrayToolkit::column($joinLessonDetail, 'order_id');
-        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
+        $orders = ArrayToolkit::index($this->getOrderService()->findOrdersByIds($orderIds),'id');
 
         $joinLessonStartData = $this->getMemberOperationService()->searchRecords(
             ['operate_type' => 'join'],

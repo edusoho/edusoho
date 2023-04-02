@@ -10,7 +10,7 @@
   <tbody>
     {% if JoinLessonDetail %}
       {% for data in JoinLessonDetail %}
-        {% set order = orders[data.order_id-1]|default(null) %}
+        {% set order = orders[data.order_id]|default(null) %}
           <tr>
           {% if users[data.user_id]|default() %}
             <td> {{ admin_macro.user_link(users[data.user_id]) }}</td>
@@ -25,7 +25,7 @@
             <td><strong>{{'admin.operation_analysis.join_lesson.empty'|trans}}</strong><br></td>
           {% endif %}
             <td>{{data.operate_time|date("Y-m-d H:i:s")}}</td>
-            <td class="text-danger">{% if order is not defined %}{{'admin.operation_analysis.join_lesson.free'|trans}}{% else %}{{order.pay_amount}}{% endif %}</td>
+            <td class="text-danger">{% if order %}{{order.pay_amount}}{% else %}{{'admin.operation_analysis.join_lesson.free'|trans}}{% endif %}</td>
           </tr>
       {% endfor %}
     {% endif %}
