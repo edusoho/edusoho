@@ -36,7 +36,7 @@ class LiveReplayController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions['replayPublic'] = 1;
-
+        file_put_contents('/tmp/log',json_encode($courseMember),
         $conditions = $this->buildLiveSearchConditions($conditions);
         list($replays, $paginator, $activities, $users) = $this->buildLiveSearchData($request, $conditions);
 
