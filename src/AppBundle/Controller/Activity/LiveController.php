@@ -293,7 +293,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
         $activity = $this->getActivityService()->getActivity($activityId, true);
         $isTeacher = false;
-        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->id) || '1' == $activity['ext']['replayPublic']) {
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->id) && '1' == $activity['ext']['replayPublic']) {
             $isTeacher = $this->getUser()->isTeacher();
             $role = 'teacher';
         } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
