@@ -16,12 +16,12 @@ class LiveOpenCourseController extends BaseOpenCourseController
     {
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
         if (empty($lesson)) {
-            return $this->createMessageResponse('info', '课程不存在！');
+            return $this->createMessageResponse('info', $this->trans('exception.opencourse.not_found_lesson'));
         }
 
         $course = $this->getOpenCourseService()->getCourse($courseId);
         if (empty($course)) {
-            return $this->createMessageResponse('info', '课程不存在！');
+            return $this->createMessageResponse('info', $this->trans('exception.opencourse.not_found'));
         }
 
         $result = $this->getLiveCourseService()->checkLessonStatus($lesson);
