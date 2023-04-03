@@ -8,6 +8,7 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\System\Service\LoginBindSettingService;
 use Biz\System\Service\SettingService;
+use Biz\System\Service\WechatSettingService;
 use Biz\WeChat\Service\WeChatService;
 use QiQiuYun\SDK\Constants\WeChatPlatformTypes;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,7 +87,7 @@ class WeChatSettingController extends BaseController
                 $wechatSetting['is_authorization'] = 1;
             }
 
-            $this->getSettingService()->set('wechat', $wechatSetting);
+            $this->getWechatSettingService()->set($wechatSetting);
             $this->getSettingService()->set('wechat_notification', $wechatNotificationSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
@@ -250,18 +251,18 @@ class WeChatSettingController extends BaseController
 
     private function getWeixinMpFile()
     {
-        $dir = $this->container->getParameter('kernel.root_dir').'/../web';
-        $mp_secret = array_map('file_get_contents', glob($dir.'/MP_verify_*.txt'));
+        $dir = $this->container->getParameter('kernel.root_dir') . '/../web';
+        $mp_secret = array_map('file_get_contents', glob($dir . '/MP_verify_*.txt'));
 
         return implode($mp_secret);
     }
 
     protected function updateWeixinMpFile($val)
     {
-        $dir = $this->container->getParameter('kernel.root_dir').'/../web';
-        array_map('unlink', glob($dir.'/MP_verify_*.txt'));
+        $dir = $this->container->getParameter('kernel.root_dir') . '/../web';
+        array_map('unlink', glob($dir . '/MP_verify_*.txt'));
         if (!empty($val)) {
-            file_put_contents($dir.'/MP_verify_'.$val.'.txt', $val);
+            file_put_contents($dir . '/MP_verify_' . $val . '.txt', $val);
         }
     }
 
@@ -279,6 +280,14 @@ class WeChatSettingController extends BaseController
     protected function getLoginBindSettingService()
     {
         return $this->createService('System:LoginBindSettingService');
+    }
+
+    /**
+     * @return WechatSettingService
+     */
+    protected function getWechatSettingService()
+    {
+        return $this->createService('System:WechatSettingService');
     }
 
     /**
