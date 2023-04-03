@@ -23,14 +23,14 @@ class LiveOpenCourseController extends BaseOpenCourseController
         }
 
         $params = [];
-
-        $params['role'] = $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
-
-        if ('unknown' == $params['role']) {
+        $courseMember = $this->getOpenCourseService()->getCourseMember($lesson['courseId'], $this->getCurrentUser()->getId());
+        if (!$courseMember) {
             return $this->redirectToRoute('open_course_show', [
                 'courseId' => $courseId,
             ]);
         }
+
+        $params['role'] = $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
 
         $user = $this->getCurrentUser();
         $params['id'] = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);

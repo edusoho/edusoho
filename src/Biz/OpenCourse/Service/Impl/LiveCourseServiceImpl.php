@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\LiveActivityException;
 use Biz\BaseService;
 use Biz\Live\Service\LiveService;
+use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\LiveCourseService;
 use Biz\System\Service\SettingService;
 use Biz\User\UserException;
@@ -71,9 +72,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 
     public function checkCourseUserRole($course, $lesson)
     {
-        $role = '';
         $user = $this->getCurrentUser();
-
         if (!$user->isLogin() && 'liveOpen' == $lesson['type']) {
             return 'student';
         } elseif (!$user->isLogin() && 'liveOpen' != $lesson['type']) {
@@ -83,7 +82,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $courseMember = $this->getOpenCourseService()->getCourseMember($lesson['courseId'], $user['id']);
 
         if (!$courseMember) {
-            return 'unknown';
+            $this->createNewException(OpenCourseException::IS_NOT_MEMBER());
         }
 
         $role = 'student';
