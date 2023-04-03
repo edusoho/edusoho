@@ -44,11 +44,10 @@ class MallWechatNotificationServiceImpl extends BaseService implements MallWecha
         if ($this->isInit($wechatSetting, $wechatNotificationSetting)) {
             return;
         }
-        if (WechatNotificationType::MESSAGE_SUBSCRIBE == $wechatNotificationSetting['notification_type']) {
+        if (!empty($wechatNotificationSetting['is_authorization'])) {
             $this->initMessageSubscribeTemplates();
-        } else {
-            $this->initServiceFollowTemplates();
         }
+        $this->initServiceFollowTemplates();
     }
 
     private function isWechatNotificationEnabled($wechatSetting, $wechatNotificationSetting)
