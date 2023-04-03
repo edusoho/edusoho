@@ -12,12 +12,21 @@ class WechatNotificationEventSubscriber extends EventSubscriber
     {
         return [
             'marketing_mall.init' => 'onMarketingMallInit',
+            'setting.wechat.set' => 'onWechatSettingUpdate',
         ];
     }
 
     public function onMarketingMallInit(Event $event)
     {
         $this->getMallWechatNotificationService()->init();
+    }
+
+    public function onWechatSettingUpdate(Event $event)
+    {
+        $setting = $event->getSubject();
+        if (!empty($setting['wechat_notification_enabled'])) {
+            $this->getMallWechatNotificationService()->init();
+        }
     }
 
     /**
