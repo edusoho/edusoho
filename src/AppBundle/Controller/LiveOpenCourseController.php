@@ -15,7 +15,15 @@ class LiveOpenCourseController extends BaseOpenCourseController
     public function entryAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
+        if (empty($lesson)) {
+            return $this->createMessageResponse('info', '课程不存在！');
+        }
+
         $course = $this->getOpenCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            return $this->createMessageResponse('info', '课程不存在！');
+        }
+
         $result = $this->getLiveCourseService()->checkLessonStatus($lesson);
 
         if (!$result['result']) {
