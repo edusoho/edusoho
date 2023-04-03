@@ -18,6 +18,7 @@ class ReplayController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions['replayTagId'] = empty($conditions['tagId']) ? '' : $conditions['tagId'];
+        $conditions['replayPublic'] = 1;
         $activityIds = $this->getActivityService()->findManageReplayActivityIds($conditions);
         $paginator = new Paginator(
             $request,
