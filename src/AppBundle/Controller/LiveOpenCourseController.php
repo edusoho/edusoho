@@ -15,7 +15,15 @@ class LiveOpenCourseController extends BaseOpenCourseController
     public function entryAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
+        if (empty($lesson)) {
+            return $this->createMessageResponse('info', $this->trans('exception.opencourse.not_found_lesson'));
+        }
+
         $course = $this->getOpenCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            return $this->createMessageResponse('info', $this->trans('exception.opencourse.not_found'));
+        }
+
         $result = $this->getLiveCourseService()->checkLessonStatus($lesson);
 
         if (!$result['result']) {
@@ -23,6 +31,12 @@ class LiveOpenCourseController extends BaseOpenCourseController
         }
 
         $params = [];
+        $courseMember = $this->getOpenCourseService()->getCourseMember($lesson['courseId'], $this->getCurrentUser()->getId());
+        if (!$courseMember) {
+            return $this->redirectToRoute('open_course_show', [
+                'courseId' => $courseId,
+            ]);
+        }
 
         $params['role'] = $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
 
