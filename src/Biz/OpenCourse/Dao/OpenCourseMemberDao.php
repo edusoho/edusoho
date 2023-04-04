@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface OpenCourseMemberDao extends GeneralDaoInterface
 {
-    public function getByUserIdAndCourseId($courseId, $userId);
+    public function getByUserIdAndCourseId($userId, $courseId);
 
     public function getByIpAndCourseId($ip, $courseId);
 
