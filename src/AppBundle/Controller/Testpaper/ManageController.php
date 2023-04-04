@@ -297,7 +297,7 @@ class ManageController extends BaseController
                 $member .= $users[$answerRecord['user_id']]['verifiedMobile'] ? $users[$answerRecord['user_id']]['verifiedMobile'].',' : '-'.',';
                 $member .= $users[$answerRecord['user_id']]['emailVerified'] ? $users[$answerRecord['user_id']]['email'].',' : '-'.',';
                 $member .= date('Y-m-d H:i:s', $answerRecord['begin_time'])."\t".',';
-                $member .= date('Y-m-d H:i:s', $answerRecord['end_time'])."\t".',';
+                $member .= ('doing' == $answerRecord['status']) ? '-'.',' : date('Y-m-d H:i:s', $answerRecord['end_time'])."\t".',';
                 $member .= $this->timeFormatterFilter($answerRecord['used_time']).',';
                 $member .= $this->trans('course.homework_check.review.submit_num_detail', ['%num%' => $index + 1]).',';
                 $member .= $this->getReviewStatus($answerRecord['status']).',';
