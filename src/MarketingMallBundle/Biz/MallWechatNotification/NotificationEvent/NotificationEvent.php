@@ -18,5 +18,7 @@ interface NotificationEvent
 
     public function getToUserIds($data);
 
+    public function getOpenIdMap($data);
+
     public function getGotoUrl($data);
 }
