@@ -31,7 +31,7 @@ class OpenCourseMemberDaoImpl extends GeneralDaoImpl implements OpenCourseMember
         );
     }
 
-    public function getByUserIdAndCourseId($courseId, $userId)
+    public function getByUserIdAndCourseId($userId, $courseId)
     {
         return $this->getByFields(array('userId' => $userId, 'courseId' => $courseId));
     }
