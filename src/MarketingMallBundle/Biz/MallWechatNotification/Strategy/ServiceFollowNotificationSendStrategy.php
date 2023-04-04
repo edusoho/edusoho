@@ -12,7 +12,7 @@ class ServiceFollowNotificationSendStrategy extends AbstractNotificationSendStra
 {
     public function send(NotificationEvent $event, array $data)
     {
-        $toIds = $this->getToIds($event->getToUserIds($data));
+        $toIds = $this->getToIds($event->getToUserIds($data), $event->getOpenIdMap($data));
         if (empty($toIds)) {
             return;
         }
@@ -33,22 +33,20 @@ class ServiceFollowNotificationSendStrategy extends AbstractNotificationSendStra
         $this->sendCloudWeChatNotification($templateKey, $notifications);
     }
 
-    private function getToIds($toUserIds)
+    private function getToIds($toUserIds, $openIdMap)
     {
         $toUserIds = $this->filterLockUser($toUserIds);
         if (empty($toUserIds)) {
             return [];
         }
-        $weChatUsers = $this->getWeChatService()->searchWeChatUsers(
-            ['userIds' => $toUserIds],
-            ['lastRefreshTime' => 'ASC'],
-            0,
-            PHP_INT_MAX,
-            ['id', 'openId', 'unionId', 'userId']
-        );
-        $this->getWeChatService()->batchFreshOfficialWeChatUsers($weChatUsers);
+        $openIds = [];
+        foreach ($toUserIds as $toUserId) {
+            if (!empty($openIdMap[$toUserId])) {
+                $openIds[] = $openIdMap[$toUserId];
+            }
+        }
 
-        return array_column($weChatUsers, 'openId');
+        return $openIds;
     }
 
     protected function sendCloudWeChatNotification($key, $list)
