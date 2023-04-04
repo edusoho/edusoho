@@ -69,7 +69,7 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         }
 
         $user = ServiceKernel::instance()->getCurrentUser();
-        $payload['uid'] = $user['id'] ?? '';
+        $payload['uid'] = (string) $user['id'] ?? '';
         $payload['uname'] = $user['nickname'] ?? '';
 
         $context['token'] = 'cloud' == $file['storage'] ? $this->makePlayToken($file, 600, $payload) : '';
