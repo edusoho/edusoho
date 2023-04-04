@@ -461,7 +461,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
         $payload = ['native' => 1];
         $user = ServiceKernel::instance()->getCurrentUser();
-        $payload['uid'] = $user['id'] ?? '';
+        $payload['uid'] = (string) $user['id'] ?? '';
         $payload['uname'] = $user['nickname'] ?? '';
 
         $result = $this->biz['ESCloudSdk.play']->makePlayUrl(
