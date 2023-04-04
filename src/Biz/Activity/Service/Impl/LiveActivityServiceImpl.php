@@ -23,6 +23,7 @@ use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Event\Event;
+use Topxia\Service\Common\ServiceKernel;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 {
@@ -458,10 +459,15 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
         $file = $this->getUploadFileService()->getFile($activity['fileIds'][0]);
 
+        $payload = ['native' => 1];
+        $user = ServiceKernel::instance()->getCurrentUser();
+        $payload['uid'] = $user['id'] ?? '';
+        $payload['uname'] = $user['nickname'] ?? '';
+
         $result = $this->biz['ESCloudSdk.play']->makePlayUrl(
             $file['globalId'],
             600,
-            ['native' => 1]
+            $payload
         );
         $result = CurlToolkit::request('get', $this->getSchema().$result);
         if (empty($result['type']) || 'video' != $result['type'] || empty($result['args']['playlist'])) {
