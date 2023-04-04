@@ -25,7 +25,7 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         return 'classroom_show';
     }
 
-    public function announcementNotification($targetId, $targetObject, $targetObjectShowUrl)
+    public function announcementNotification($targetId, $targetObject, $targetObjectShowUrl, $announcement)
     {
         $count = $this->getClassroomService()->searchMemberCount(['classroomId' => $targetId, 'role' => 'student']);
 
@@ -38,9 +38,10 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         $result = false;
         if ($members) {
             $this->classroomAnnouncementPush($targetId);
-            $message = ['title' => $targetObject['courseSetTitle'].'-'.(empty($targetObject['title']) ?: '默认计划'),
+            $message = ['title' => $targetObject['courseSetTitle'].'-'.(empty($targetObject['title']) ? '默认计划' : $targetObject['title']),
                 'url' => $targetObjectShowUrl,
-                'type' => 'classroom', ];
+                'type' => 'classroom',
+                'announcement_id' => $announcement['id'], ];
             foreach ($members as $member) {
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
             }

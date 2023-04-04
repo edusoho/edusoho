@@ -43,7 +43,7 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
         $result = false;
         if ($members) {
             $this->courseAnnouncementPush($targetId);
-            $message = ['title' => $targetObject['courseSetTitle'].'-'.(empty($targetObject['title']) ?: '默认计划'),
+            $message = ['title' => $targetObject['courseSetTitle'].'-'.(empty($targetObject['title']) ? '默认计划' : $targetObject['title']),
                 'url' => $targetObjectShowUrl,
                 'type' => 'course',
                 'announcement_id' => $announcement['id'], ];

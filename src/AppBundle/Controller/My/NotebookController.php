@@ -53,7 +53,7 @@ class NotebookController extends BaseController
         $tasks = ArrayToolkit::index($tasks, 'id');
 
         $notes = $this->sortNotesByTaskSeq($notes, $tasks);
-        $title = $course['courseSetTitle'].'-'.(empty($course['title']) ?: '默认计划');
+        $title = $course['courseSetTitle'].'-'.(empty($course['title']) ? '默认计划' : $course['title']);
 
         return $this->render('my/learning/notebook/show.html.twig', [
             'course' => $course,
