@@ -23,7 +23,6 @@ use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 {
@@ -219,7 +218,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($liveActivity)) {
             return;
         }
-        if(empty($startTime)) {
+        if (empty($startTime)) {
             $startTime = $liveActivity['liveStartTime'];
         }
         $activities = $this->getActivityDao()->findActivitiesByMediaIdsAndMediaType([$liveActivity['id']], 'live');
@@ -246,7 +245,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($liveActivity) || (!empty($liveActivity['liveStartTime']) && time() < $liveActivity['liveStartTime']) || EdusohoLiveClient::LIVE_STATUS_CLOSED == $liveActivity['progressStatus']) {
             return;
         }
-        if(empty($closeTime)) {
+        if (empty($closeTime)) {
             $closeTime = $liveActivity['liveEndTime'];
         }
         $activities = $this->getActivityDao()->findActivitiesByMediaIdsAndMediaType([$liveActivity['id']], 'live');
@@ -460,7 +459,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $file = $this->getUploadFileService()->getFile($activity['fileIds'][0]);
 
         $payload = ['native' => 1];
-        $user = ServiceKernel::instance()->getCurrentUser();
+        $user = $this->getCurrentUser();
         $payload['uid'] = (string) $user['id'] ?? '';
         $payload['uname'] = $user['nickname'] ?? '';
 
