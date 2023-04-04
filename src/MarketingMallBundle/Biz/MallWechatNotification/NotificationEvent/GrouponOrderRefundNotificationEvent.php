@@ -59,6 +59,11 @@ class GrouponOrderRefundNotificationEvent extends AbstractNotificationEvent impl
         return $data['userIds'];
     }
 
+    public function getOpenIdMap($data)
+    {
+        return $data['openIds'];
+    }
+
     public function getGotoUrl($data)
     {
         return $data['url'];

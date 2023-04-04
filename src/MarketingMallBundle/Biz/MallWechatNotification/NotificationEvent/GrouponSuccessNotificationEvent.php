@@ -48,7 +48,7 @@ class GrouponSuccessNotificationEvent extends AbstractNotificationEvent implemen
     public function buildSmsTemplateArgs($data)
     {
         return [
-            'grouponTitle' => "【{$data['grouponMemberNum']}人团】".$data['grouponTitle'],
+            'grouponTitle' => "【{$data['grouponMemberNum']}人团】" . $data['grouponTitle'],
             'grouponPrice' => $data['grouponPrice'] / 100,
             'url' => SmsToolkit::getShortLink($data['url']),
         ];
@@ -57,6 +57,11 @@ class GrouponSuccessNotificationEvent extends AbstractNotificationEvent implemen
     public function getToUserIds($data)
     {
         return $data['userIds'];
+    }
+
+    public function getOpenIdMap($data)
+    {
+        return $data['openIds'];
     }
 
     public function getGotoUrl($data)
