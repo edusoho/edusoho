@@ -72,9 +72,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 
     public function checkCourseUserRole($course, $lesson)
     {
-        $role = '';
         $user = $this->getCurrentUser();
-
         if (!$user->isLogin() && 'liveOpen' == $lesson['type']) {
             return 'student';
         } elseif (!$user->isLogin() && 'liveOpen' != $lesson['type']) {

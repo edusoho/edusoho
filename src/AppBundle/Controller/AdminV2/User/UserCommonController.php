@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AppBundle\Controller\AdminV2\User;
 
 use AppBundle\Common\ArrayToolkit;
@@ -19,9 +18,6 @@ use Biz\User\Service\NotificationService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
-use MarketingMallBundle\Biz\SyncList\Service\SyncListService;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class UserCommonController extends BaseController
 {
@@ -95,7 +91,6 @@ class UserCommonController extends BaseController
         $userIds = ArrayToolkit::column($users, 'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
         $allRoles = $this->getAllRoles();
-
 
         return $this->render($indexTwigUrl, [
             'users' => $users,
@@ -174,8 +169,8 @@ class UserCommonController extends BaseController
             $formData['type'] = 'import';
             $registration = $this->getRegisterData($formData, $request->getClientIp());
 
-            if ($isStaff == true) {
-                if (count($formData['roles']) == 1) {
+            if ($isStaff) {
+                if (1 == count($formData['roles'])) {
                     throw UserException::MUST_SELECT_A_STAFFROLE();
                 }
 
@@ -204,7 +199,6 @@ class UserCommonController extends BaseController
             $this->getLogService()->info('user', 'add', "管理员添加新学员 {$user['nickname']} ({$user['id']})");
 
             return $this->redirect($this->generateUrl($route));
-
         }
 
         return $this->render($this->getCreateUserModal($isStaff));
@@ -247,32 +241,29 @@ class UserCommonController extends BaseController
     {
         $auth = $this->getSettingService()->get('auth');
 
-        if (isset($auth['register_enabled']) && 'closed' === $auth['register_enabled']) {
-            if ($isStaff == true) {
+        if (isset($auth['register_mode']) && 'email_or_mobile' == $auth['register_mode']) {
+            if ($isStaff) {
                 return 'admin-v2/user/user-manage/staff-manage/create-by-mobile-or-email-modal.html.twig';
             }
-            return 'admin-v2/user/user-manage/create-by-mobile-or-email-modal.html.twig';
-        } elseif (isset($auth['register_mode']) && 'email_or_mobile' == $auth['register_mode']) {
-            if ($isStaff == true) {
-                return 'admin-v2/user/user-manage/staff-manage/create-by-mobile-or-email-modal.html.twig';
-            }
+
             return 'admin-v2/user/user-manage/create-by-mobile-or-email-modal.html.twig';
         } elseif (isset($auth['register_mode']) && 'mobile' == $auth['register_mode']) {
-            if ($isStaff == true) {
+            if ($isStaff) {
                 return 'admin-v2/user/user-manage/staff-manage/create-by-mobile-modal.html.twig';
             }
+
             return 'admin-v2/user/user-manage/create-by-mobile-modal.html.twig';
         } else {
-            if ($isStaff == true) {
+            if ($isStaff) {
                 return 'admin-v2/user/user-manage/staff-manage/create-modal.html.twig';
             }
+
             return 'admin-v2/user/user-manage/create-modal.html.twig';
         }
     }
 
     public function edit($request, $id, $route, $editTwigUrl)
     {
-
         $user = $this->getUserService()->getUser($id);
 
         $profile = $this->getUserService()->getUserProfile($user['id']);
@@ -575,7 +566,7 @@ class UserCommonController extends BaseController
             $mail->send();
             $this->getLogService()->info('user', 'password-reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'password-reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：" . $e->getMessage());
+            $this->getLogService()->error('user', 'password-reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：".$e->getMessage());
             throw $e;
         }
 
@@ -614,9 +605,10 @@ class UserCommonController extends BaseController
             $mail->send();
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 {$user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 {$user['nickname']}({$user['id']}) 发送Email验证邮件失败：" . $e->getMessage());
+            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 {$user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());
             throw $e;
         }
+
         return $this->createJsonResponse(true);
     }
 

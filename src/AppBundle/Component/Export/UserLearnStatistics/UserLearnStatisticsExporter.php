@@ -20,13 +20,13 @@ class UserLearnStatisticsExporter extends Exporter
 
     public function getCount()
     {
-        return $this->getUserService()->countUsers([ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']),'isStudent' => 0]);
+        return $this->getUserService()->countUsers(ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']));
     }
 
     public function getContent($start, $limit)
     {
         $users = $this->getUserService()->searchUsers(
-            [ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']),'isStudent' => 0],
+            ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']),
             ['id' => 'DESC'],
             $start,
             $limit
@@ -130,6 +130,7 @@ class UserLearnStatisticsExporter extends Exporter
         }
 
         $conditions['destroyed'] = 0;
+
         return $conditions;
     }
 
