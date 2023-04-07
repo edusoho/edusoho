@@ -28,9 +28,8 @@ class GrouponOrderRefundNotificationEvent extends AbstractNotificationEvent impl
     {
         return [
             'first' => ['value' => "很遗憾，你的{$data['grouponMemberNum']}人拼团未成功，已支付费用将原支付渠道退还。"],
-            'keyword1' => ['value' => $data['grouponTitle']],
-            'keyword2' => ['value' => ($data['grouponPrice'] / 100) . '元'],
-            'keyword3' => ['value' => ($data['refundAmount'] / 100) . '元'],
+            'keyword1' => ['value' => '拼团失败，系统自动退款'],
+            'keyword2' => ['value' => ($data['refundAmount'] / 100) . '元'],
             'remark' => ['value' => '点击查看退款详情'],
         ];
     }
