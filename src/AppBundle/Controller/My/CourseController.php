@@ -36,9 +36,9 @@ class CourseController extends CourseBaseController
         $currentUser = $this->getUser();
 
         $members = $this->getCourseMemberService()->searchMembers(['userId' => $currentUser['id'], 'role' => 'student'], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
-
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = ArrayToolkit::sortPerArrayValue($courses, 'createdTime', false);
         $courses = ArrayToolkit::group($courses, 'courseSetId');
         list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
         foreach ($members as &$member) {
@@ -46,7 +46,6 @@ class CourseController extends CourseBaseController
         }
         array_multisort(ArrayToolkit::column($members, 'lastLearnTime'), SORT_DESC, $members);
         $members = ArrayToolkit::index($members, 'courseId');
-
         $conditions = [
             'types' => [CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE],
             'ids' => $learningCourseSetIds,
@@ -57,12 +56,15 @@ class CourseController extends CourseBaseController
             $this->getCourseSetService()->countCourseSets($conditions),
             12
         );
-
+        $conditions['ids'] = array_filter($conditions['ids'], function ($id){
+           return $id > 0;
+        });
+        $conditions['ids'] = array_splice($conditions['ids'], $paginator->getOffsetCount(), $paginator->getOffsetCount() + $paginator->getPerPageCount());
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
             [],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
+            0,
+            PHP_INT_MAX
         );
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
@@ -72,7 +74,6 @@ class CourseController extends CourseBaseController
         $courseSets = $this->getClassrooms($courseSets);
 
         $learningCourses = $this->getCourseService()->findUserLearningCourses($currentUser['id'], 0, PHP_INT_MAX);
-
         return $this->render(
             'my/learning/course/learning.html.twig',
             [

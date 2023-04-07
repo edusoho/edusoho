@@ -183,6 +183,9 @@ class ReadDocx
             }
             $imageId = $img->getAttribute('r:id');
             $imageShape = $imageXml->getElementsByTagName('shape')->item(0);
+            if (empty($imageShape)) {
+                continue;
+            }
             $style = $imageShape->getAttribute('style');
             preg_match('/width:(.*?);/', $style, $widthMatches);
             preg_match('/height:(.*?);/', $style, $heightMatches);

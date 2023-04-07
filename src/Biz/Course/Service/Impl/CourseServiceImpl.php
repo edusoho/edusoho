@@ -1212,7 +1212,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (in_array($chapter['id'], $chapterIds)) {
                 continue;
             }
-            array_push($ids, $chapterType . '-' . $chapter['id']);
+            array_push($ids, $chapterType.'-'.$chapter['id']);
         }
 
         return $ids;
@@ -1224,6 +1224,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::CHAPTERTYPE_INVALID());
         }
 
+        $chapter['title'] = $this->purifyHtml($chapter['title'], true);
         $chapter = $this->getChapterDao()->create($chapter);
 
         $this->dispatchEvent('course.chapter.create', new Event($chapter));
@@ -1234,6 +1235,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function updateChapter($courseId, $chapterId, $fields)
     {
         $this->tryManageCourse($courseId);
+        $fields['title'] = $this->purifyHtml($fields['title'], true);
         $chapter = $this->getChapterDao()->get($chapterId);
         $oldChapter = $chapter;
 
@@ -1853,7 +1855,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $task,
             function ($value, $key) use (&$task) {
                 if (is_numeric($value)) {
-                    $task[$key] = (string)$value;
+                    $task[$key] = (string) $value;
                 } else {
                     $task[$key] = $value;
                 }
@@ -2400,7 +2402,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                         'title' => $courseSet['title'],
                         'courseId' => $task['courseId'],
                         'taskId' => $task['id'],
-                        'event' => $courseSet['title'] . '-' . $course['title'] . '-' . $task['title'],
+                        'event' => $courseSet['title'].'-'.$course['title'].'-'.$task['title'],
                         'startTime' => date('Y-m-d H:i:s', $task['startTime']),
                         'endTime' => date('Y-m-d H:i:s', $task['endTime']),
                         'date' => date('w', $task['startTime']),
@@ -2868,7 +2870,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $fields['buyExpiryTime'] = date('Y-m-d', strlen($fields['buyExpiryTime']) > 10 ? $fields['buyExpiryTime'] / 1000 : $fields['buyExpiryTime']);
             }
 
-            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'] . ' 23:59:59');
+            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');
         } else {
             $fields['buyExpiryTime'] = 0;
         }
@@ -3029,7 +3031,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapterSort = [];
         foreach ($sorts as $sort) {
             foreach ($sort['chapters'] as $chapter) {
-                $chapterSort[] = 'chapter-' . $chapter['id'];
+                $chapterSort[] = 'chapter-'.$chapter['id'];
             }
         }
 

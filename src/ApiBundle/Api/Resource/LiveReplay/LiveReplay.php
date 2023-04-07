@@ -39,12 +39,16 @@ class LiveReplay extends AbstractResource
 
         $fields = $request->request->all();
 
-        if (!empty($fields['remark'])) {
-            $this->getActivityService()->updateActivity($id, ['remark' => $fields['remark']]);
+        if (isset($fields['remark'])) {
+            $this->getActivityService()->updateActivity($id, ['remark' => $fields['remark'] ?: '']);
         }
 
-        if (!empty($fields['replayPublic']) || !empty($fields['tagIds'])) {
-            $this->getLiveActivityService()->updateLiveActivityWithoutEvent($activity['ext']['id'], ['replayTagIds' => empty($fields['tagIds']) ? [] : $fields['tagIds'], 'replayPublic' => $fields['replayPublic']]);
+        if (isset($fields['tagIds'])) {
+            $this->getLiveActivityService()->updateLiveActivityWithoutEvent($activity['ext']['id'], ['replayTagIds' => $fields['tagIds'] ?: []]);
+        }
+
+        if (isset($fields['replayPublic'])) {
+            $this->getLiveActivityService()->updateLiveActivityWithoutEvent($activity['ext']['id'], ['replayPublic' => $fields['replayPublic'] ? 1 : 0]);
         }
 
         return ['success' => true];

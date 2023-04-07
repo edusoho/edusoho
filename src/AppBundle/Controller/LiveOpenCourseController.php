@@ -15,18 +15,24 @@ class LiveOpenCourseController extends BaseOpenCourseController
     public function entryAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
+        if (empty($lesson)) {
+            return $this->createMessageResponse('info', $this->trans('exception.opencourse.not_found_lesson'));
+        }
+
         $course = $this->getOpenCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            return $this->createMessageResponse('info', $this->trans('exception.opencourse.not_found'));
+        }
+
         $result = $this->getLiveCourseService()->checkLessonStatus($lesson);
 
         if (!$result['result']) {
             return $this->createMessageResponse('info', $result['message']);
         }
 
-        $params = [];
-
-        $params['role'] = $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
-
         $user = $this->getCurrentUser();
+        $params = [];
+        $params['role'] = $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
         $params['id'] = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
         $params['displayName'] = $user->isLogin() ? $user['nickname'] : $this->getRandomNickname($request, $courseId, $lessonId);
         $params['nickname'] = $user->isLogin() ? $user['nickname'].'_'.$user['id'] : $this->getRandomNickname($request, $courseId, $lessonId);

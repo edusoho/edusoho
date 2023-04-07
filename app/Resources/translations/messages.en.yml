@@ -6887,12 +6887,14 @@ admin.reports_status.no_install_mysql_pdo: 'MySQL_PDO not installed'
 admin.reports_status.upload_file_size: 'File upload size'
 admin.reports_status.upload_file_size_tips: 'It determines the maximum size of upload videosadmin.reports_status.upload_file_size_greater_than_200m: Larger than 200M'
 admin.reports_status.upload_file_size_greater_than_200m: 'greater than 200M'
+admin.reports_status.upload_file_size_greater_than_2048m: 'greater than 2048M'
 admin.reports_status.form_data_size: 'Form data size'
 admin.reports_status.form_data_size_tips: 'This value cannot be less than the file upload size value'
 admin.reports_status.php_max_run_time: 'Maximum running time of PHP scripts'
 admin.reports_status.php_max_run_time_tips: 'That determines the maximum available time when you upload videos'
 admin.reports_status.php_max_execution_time: '%maxExecutionTime% secondsadmin.reports_status.upload_file_size_greater_than_300m: Larger than 300Madmin.reports_status.upload_file_execution_time_30s: 30 seconds'
 admin.reports_status.upload_file_size_greater_than_300m: 'greater than 300M'
+admin.reports_status.upload_file_size_greater_than_30s: 'greater than 30s'
 admin.reports_status.upload_file_execution_time_30s: '30 seconds'
 admin.reports_status.php_extend: 'PHP Extensionadmin.reports_status.php__mbstring_extend_tips: The extensions used to handle Chinese charactersadmin.reports_status.php__curl_extend_tips: This extension is used to read files remotelyadmin.reports_status.php__gd_extend_tips: The extension is used to process  pictures'
 admin.reports_status.php__mbstring_extend_tips: 'This extension is used to process Chinese characters'
@@ -7621,6 +7623,7 @@ course.homework_check.review_btn: Review
 course.homework_check.review.empty: 'No data found'
 course.homework_check.review.name: Name
 course.homework_check.review.score: Score
+course.homework_check.review.begin_time: 'Begin time'
 course.homework_check.review.submit_time: 'Submit time'
 course.homework_check.review.submit_num: Submit Num
 course.testpaper_check.review.submit_num: Submit Num

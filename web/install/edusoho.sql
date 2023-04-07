@@ -397,6 +397,18 @@ CREATE TABLE `announcement` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `anti_fraud_remind`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `anti_fraud_remind` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `userId` int(10) unsigned DEFAULT '0' COMMENT '用户id',
+  `lastRemindTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上次提醒时间',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='防诈骗弹窗提醒频率表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `article`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -491,31 +503,6 @@ CREATE TABLE `batch_notification` (
   `sendedTime` int(11) NOT NULL DEFAULT '0' COMMENT '群发通知的发送时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='群发通知表';
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `behavior_verification_black_ip`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `behavior_verification_black_ip` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `ip` varchar(32) NOT NULL COMMENT 'ip',
-  `expire_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
-  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `behavior_verification_coordinate`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `behavior_verification_coordinate` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `coordinate` varchar(16) NOT NULL COMMENT '坐标',
-  `hit_counts` bigint(20) NOT NULL DEFAULT '0' COMMENT '命中次数',
-  `expire_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
-  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `biz_answer_question_report`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -823,6 +810,7 @@ CREATE TABLE `biz_item_attachment` (
   `mp4_convert_status` varchar(32) NOT NULL DEFAULT 'none' COMMENT '转mp4状态',
   `updated_time` int(11) NOT NULL DEFAULT '0',
   `created_time` int(11) NOT NULL DEFAULT '0',
+  `seq` int(10) NOT NULL DEFAULT '1' COMMENT '排序',
   PRIMARY KEY (`id`),
   KEY `target_id` (`target_id`),
   KEY `target_type` (`target_type`),
@@ -1202,7 +1190,8 @@ CREATE TABLE `biz_question_favorite` (
   `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户Id',
   `created_time` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `target_type_and_target_id` (`target_type`,`target_id`)
+  KEY `target_type_and_target_id` (`target_type`,`target_id`),
+  KEY `user_id_and_target_type` (`user_id`,`target_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目收藏表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `biz_queue_failed_job`;
@@ -4754,6 +4743,38 @@ CREATE TABLE `sign_user_statistics` (
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sms_black_list`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sms_black_list` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `ip` varchar(32) NOT NULL COMMENT 'ip',
+  `expire_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sms_request_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sms_request_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `fingerprint` varchar(32) NOT NULL COMMENT '行为指纹',
+  `coordinate` varchar(16) NOT NULL COMMENT '坐标',
+  `ip` varchar(32) NOT NULL COMMENT 'ip',
+  `mobile` varchar(11) NOT NULL COMMENT '手机号',
+  `userAgent` varchar(255) NOT NULL DEFAULT '',
+  `isIllegal` tinyint(1) NOT NULL COMMENT '是非法记录',
+  `disableType` varchar(16) NOT NULL DEFAULT 'none' COMMENT '禁用类型',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  PRIMARY KEY (`id`),
+  KEY `mobile` (`mobile`),
+  KEY `ip` (`ip`),
+  KEY `createdTime` (`createdTime`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='短信请求日志表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `status`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

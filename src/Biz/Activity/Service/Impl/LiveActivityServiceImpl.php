@@ -218,7 +218,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($liveActivity)) {
             return;
         }
-        if(empty($startTime)) {
+        if (empty($startTime)) {
             $startTime = $liveActivity['liveStartTime'];
         }
         $activities = $this->getActivityDao()->findActivitiesByMediaIdsAndMediaType([$liveActivity['id']], 'live');
@@ -245,7 +245,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($liveActivity) || (!empty($liveActivity['liveStartTime']) && time() < $liveActivity['liveStartTime']) || EdusohoLiveClient::LIVE_STATUS_CLOSED == $liveActivity['progressStatus']) {
             return;
         }
-        if(empty($closeTime)) {
+        if (empty($closeTime)) {
             $closeTime = $liveActivity['liveEndTime'];
         }
         $activities = $this->getActivityDao()->findActivitiesByMediaIdsAndMediaType([$liveActivity['id']], 'live');
@@ -458,10 +458,15 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
         $file = $this->getUploadFileService()->getFile($activity['fileIds'][0]);
 
+        $payload = ['native' => 1];
+        $user = $this->getCurrentUser();
+        $payload['uid'] = (string) $user['id'] ?? '';
+        $payload['uname'] = $user['nickname'] ?? '';
+
         $result = $this->biz['ESCloudSdk.play']->makePlayUrl(
             $file['globalId'],
             600,
-            ['native' => 1]
+            $payload
         );
         $result = CurlToolkit::request('get', $this->getSchema().$result);
         if (empty($result['type']) || 'video' != $result['type'] || empty($result['args']['playlist'])) {

@@ -480,9 +480,10 @@ class DefaultController extends BaseController
     {
         $isSetConsult = true;
         $user = $this->getCurrentUser();
-        if (in_array('ROLE_SUPER_ADMIN', $user->getRoles()) && $consult = $this->getSettingService()->get('consult', [])) {
-            $phoneNumbers = ArrayToolkit::column($consult['phone'], 'number');
-            if ($consult['enabled'] && [''] == array_unique($phoneNumbers)) {
+        $consult = $this->getSettingService()->get('consult', []);
+        if (in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
+            $phoneNumbers = array_filter(ArrayToolkit::column($consult['phone'] ?? [], 'number'));
+            if ($consult['enabled'] && !$phoneNumbers) {
                 $isSetConsult = false;
             }
         }
