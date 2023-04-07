@@ -97,7 +97,7 @@ class SmsType
     const GROUPON_CREATE = 2513;
 
     /**
-     * 参团成功通知短信模板id 你已参与${grouponTitle}团成功，拼团价为${grouponPrice}元，还剩${grouponRemain}人成团，拼团结束时间为${grouponEndAt}，快复制链接邀请微信好友一起参与吧${url}
+     * 参团成功通知短信模板id 你参与的【${num}人团】${title}已参团成功，拼团价为${price}元，还剩${remain}人成团，拼团结束时间为${endAt}，快复制链接邀请微信好友一起参与吧${url}
      */
     const GROUPON_JOIN = 2512;
 

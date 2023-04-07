@@ -17,7 +17,7 @@ class MessageTemplateUtil
     const TEMPLATE_GROUPON_FAIL_ID = 'OPENTM415259092';
 
     const TEMPLATE_GROUPON_ORDER_REFUND = 'grouponOrderRefund';
-    const TEMPLATE_GROUPON_ORDER_REFUND_ID = 'OPENTM417851769';
+    const TEMPLATE_GROUPON_ORDER_REFUND_ID = 'OPENTM414474089';
 
     public static function templates()
     {
@@ -63,7 +63,7 @@ class MessageTemplateUtil
                 'name' => 'wechat.notification.template_name.groupon_order_refund',
                 'content' => 'wechat.notification.template.groupon_order_refund',
                 'rule' => 'wechat.notification.condition.groupon_order_refund',
-                'detail' => '{{first.DATA}}<br>拼团商品：{{keyword1.DATA}}<br>商品金额：{{keyword2.DATA}}<br>退款金额：{{keyword3.DATA}}<br>{{remark.DATA}}',
+                'detail' => '{{first.DATA}}<br>退款原因：{{keyword1.DATA}}<br>退款金额：{{keyword2.DATA}}<br>{{remark.DATA}}',
                 'object' => '购买者',
                 'status' => 1,
             ]
