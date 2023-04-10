@@ -68,6 +68,11 @@ class GrouponCreateNotificationEvent extends AbstractNotificationEvent implement
         return [$data['userId'] => $data['openId']];
     }
 
+    public function getSubscribeStatus($data)
+    {
+        return [$data['userId'] => $data['isSubscribed']];
+    }
+
     public function getGotoUrl($data)
     {
         return $data['url'];

@@ -64,6 +64,11 @@ class GrouponSuccessNotificationEvent extends AbstractNotificationEvent implemen
         return $data['openIds'];
     }
 
+    public function getSubscribeStatus($data)
+    {
+        return $data['isSubscribed'];
+    }
+
     public function getGotoUrl($data)
     {
         return $data['url'];
