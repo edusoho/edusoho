@@ -20,5 +20,7 @@ interface NotificationEvent
 
     public function getOpenIdMap($data);
 
+    public function getSubscribeStatus($data);
+
     public function getGotoUrl($data);
 }

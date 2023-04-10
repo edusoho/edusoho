@@ -17,7 +17,7 @@ class MessageSubscribeNotificationSendStrategy extends AbstractNotificationSendS
         $templateId = $this->getWeChatService()->getSubscribeTemplateId($templateKey);
         if ($templateId) {
             $this->getWeChatService()->synchronizeSubscriptionRecords();
-            $subscribeRecords = $this->findOnceSubscribeRecords($templateId, $toUserIds, $event->getOpenIdMap($data));
+            $subscribeRecords = $this->findOnceSubscribeRecords($templateId, $toUserIds, $event->getOpenIdMap($data), $event->getSubscribeStatus($data));
             $templates = MessageSubscriberTemplateUtil::templates();
             $notification = [
                 'channel' => $this->getWeChatService()->getWeChatSendChannel(),
@@ -47,10 +47,13 @@ class MessageSubscribeNotificationSendStrategy extends AbstractNotificationSendS
         );
     }
 
-    private function findOnceSubscribeRecords($templateId, $userIds, $openIdMap)
+    private function findOnceSubscribeRecords($templateId, $userIds, $openIdMap, $subscribeStatus)
     {
         $records = [];
         foreach ($userIds as $userId) {
+            if (empty($subscribeStatus[$userId])) {
+                continue;
+            }
             $result = $this->getWeChatService()->searchSubscribeRecords(
                 ['templateCode' => $templateId, 'toId' => $openIdMap[$userId], 'templateType' => 'once', 'isSend_LT' => 1],
                 ['id' => 'ASC'],

@@ -63,6 +63,11 @@ class GrouponFailNotificationEvent extends AbstractNotificationEvent implements 
         return $data['openIds'];
     }
 
+    public function getSubscribeStatus($data)
+    {
+        return $data['isSubscribed'];
+    }
+
     public function getGotoUrl($data)
     {
         return $data['url'];
