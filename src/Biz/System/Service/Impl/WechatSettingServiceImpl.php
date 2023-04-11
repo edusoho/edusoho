@@ -12,7 +12,8 @@ class WechatSettingServiceImpl extends BaseService implements WechatSettingServi
 
     public function set($value)
     {
-        $setting = $this->getSettingService()->set(self::NAME, $value);
+        $this->getSettingService()->set(self::NAME, $value);
+        $setting = $this->getSettingService()->get(self::NAME);
         $this->dispatchEvent('setting.wechat.set', $setting);
 
         return $setting;
