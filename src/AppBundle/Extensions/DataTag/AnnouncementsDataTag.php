@@ -25,16 +25,15 @@ class AnnouncementsDataTag extends BaseDataTag implements DataTag
     {
         $this->checkCount($arguments);
 
-        $currentTime = time();
         // $currentTime = $currentTime - $currentTime%900;
-
-        $conditions = array(
+        $conditions = [
             'targetType' => $arguments['targetType'],
             'targetId' => $arguments['targetId'],
-            'endTime' => $currentTime,
-        );
+            'endTime_GTE' => time(),
+            'startTime_LTE' => time(),
+        ];
 
-        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, $arguments['count']);
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, ['createdTime' => 'DESC'], 0, $arguments['count']);
 
         return $announcements;
     }

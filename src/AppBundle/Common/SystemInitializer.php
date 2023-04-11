@@ -7,7 +7,6 @@ use Biz\Content\Service\ContentService;
 use Biz\Content\Service\FileService;
 use Biz\Content\Service\NavigationService;
 use Biz\Crontab\SystemCrontabInitializer;
-use Biz\Dictionary\Service\DictionaryService;
 use Biz\Org\Service\OrgService;
 use Biz\Role\Service\RoleService;
 use Biz\System\Service\SettingService;
@@ -38,14 +37,28 @@ class SystemInitializer
         $this->_initPages();
         $this->_initNavigations();
         $this->_initBlocks();
-        $this->_initThemes();
-        $this->_initCoin();
         $this->_initJob();
         $this->_initQueueJob();
         $this->_initOrg();
         $this->_initRole();
         $this->_initUserBalance();
 
+        $this->initSettings();
+        $this->_initQuestionBankCategory();
+        $this->_initSystemUsers();
+        $this->_initCustom();
+    }
+
+    public function initSettings()
+    {
+        $this->_initThemesSetting();
+        $this->_initWapSetting();
+        $this->_initPostNumRulesSetting();
+        $this->_initDeveloperSetting();
+        $this->_initBackstageSetting();
+        $this->_initAppDiscoverySetting();
+        $this->_initArticleSetting();
+        $this->_initCoinSetting();
         $this->_initDefaultSetting();
         $this->_initMagicSetting();
         $this->_initMailerSetting();
@@ -55,9 +68,7 @@ class SystemInitializer
         $this->_initSiteSetting();
         $this->_initStorageSetting();
         $this->_initCouponSetting();
-        $this->_initQuestionBankCategory();
-        $this->_initSystemUsers();
-        $this->_initCustom();
+        $this->_initCloudSmsSetting();
     }
 
     public function _initCustom()
@@ -213,40 +224,16 @@ class SystemInitializer
         $this->output->write('  初始化章节的默认设置');
         $settingService = $this->getSettingService();
 
-        $defaultSetting = [];
-        $defaultSetting['chapter_name'] = '章';
-        $defaultSetting['user_name'] = '学员';
-        $defaultSetting['part_name'] = '节';
+        $defaultSetting = [
+            'user_name' => '学员',
+            'chapter_name' => '章',
+            'part_name' => '节',
+        ];
 
         $default = $settingService->get('default', []);
         $defaultSetting = array_merge($default, $defaultSetting);
 
         $settingService->set('default', $defaultSetting);
-
-        $setting = [
-            'rules' => [
-                'thread' => [
-                    'fiveMuniteRule' => [
-                        'interval' => 300,
-                        'postNum' => 100,
-                    ],
-                ],
-                'threadLoginedUser' => [
-                    'fiveMuniteRule' => [
-                        'interval' => 300,
-                        'postNum' => 50,
-                    ],
-                ],
-            ],
-        ];
-        $settingService->set('post_num_rules', $setting);
-
-        $settingService->get('developer', []);
-        $developer['cloud_api_failover'] = 1;
-        $settingService->set('developer', $developer);
-        $settingService->set('backstage', ['is_v2' => 1]);
-        $settingService->set('app_discovery', ['version' => 1]);
-        $this->output->writeln(' ...<info>成功</info>');
     }
 
     private function _initStorageSetting()
@@ -259,6 +246,8 @@ class SystemInitializer
             'cloud_access_key' => '',
             'cloud_secret_key' => '',
             'video_h5_enable' => 1,
+
+            'enable_playback_rates' => 0,
         ];
 
         $this->getSettingService()->set('storage', $default);
@@ -275,6 +264,19 @@ class SystemInitializer
         ];
 
         $this->getSettingService()->set('coupon', $default);
+
+        $this->output->writeln(' ...<info>成功</info>');
+    }
+
+    private function _initCloudSmsSetting()
+    {
+        $this->output->write('  初始化短信设置');
+
+        $default = [
+            'system_remind' => 'on',
+        ];
+
+        $this->getSettingService()->set('cloud_sms', $default);
 
         $this->output->writeln(' ...<info>成功</info>');
     }
@@ -480,14 +482,22 @@ EOD;
         ]);
     }
 
-    protected function _initCoin()
+    protected function _initCoinSetting()
     {
         $this->output->write('  初始化虚拟币');
 
         $default = [
+           'coin_enabled' => 0,
             'cash_model' => 'none',
             'cash_rate' => 1,
-            'coin_enabled' => 0,
+            'coin_name' => '虚拟币',
+            'coin_content' => '',
+            'coin_picture' => '',
+            'coin_picture_50_50' => '',
+            'coin_picture_30_30' => '',
+            'coin_picture_20_20' => '',
+            'coin_picture_10_10' => '',
+            'charge_coin_enabled' => '',
         ];
 
         $this->getSettingService()->set('coin', $default);
@@ -529,9 +539,67 @@ EOD;
         $this->output->writeln(' ...<info>成功</info>');
     }
 
-    protected function _initThemes()
+    protected function _initThemesSetting()
     {
-        $this->getSettingService()->set('theme', ['uri' => 'jianmo']);
+        $this->getSettingService()->set('theme', [
+            'uri' => 'jianmo',
+        ]);
+    }
+
+    protected function _initWapSetting()
+    {
+        $this->getSettingService()->set('wap', [
+            'version' => '2',
+            'template' => 'sail',
+        ]);
+    }
+
+    protected function _initPostNumRulesSetting()
+    {
+        $setting = [
+            'rules' => [
+                'thread' => [
+                    'fiveMuniteRule' => [
+                        'interval' => 300,
+                        'postNum' => 100,
+                    ],
+                ],
+                'threadLoginedUser' => [
+                    'fiveMuniteRule' => [
+                        'interval' => 300,
+                        'postNum' => 50,
+                    ],
+                ],
+            ],
+        ];
+        $this->getSettingService()->set('post_num_rules', $setting);
+    }
+
+    protected function _initDeveloperSetting()
+    {
+        $this->getSettingService()->get('developer', []);
+        $developer['cloud_api_failover'] = 1;
+        $this->getSettingService()->set('developer', $developer);
+    }
+
+    protected function _initBackstageSetting()
+    {
+        $this->getSettingService()->set('backstage', [
+            'is_v2' => 1,
+            'allow_show_switch_btn' => 0,
+        ]);
+    }
+
+    protected function _initAppDiscoverySetting()
+    {
+        $this->getSettingService()->set('app_discovery', ['version' => 1]);
+    }
+
+    protected function _initArticleSetting()
+    {
+        $this->getSettingService()->set('article', [
+            'name' => '资讯频道', 'pageNums' => 20,
+        ]);
     }
 
     protected function _initBlocks()
@@ -801,14 +869,6 @@ EOD;
     protected function getRoleService()
     {
         return ServiceKernel::instance()->getBiz()->service('Role:RoleService');
-    }
-
-    /**
-     * @return DictionaryService
-     */
-    protected function getDictionaryService()
-    {
-        return ServiceKernel::instance()->getBiz()->service('Dictionary:DictionaryService');
     }
 
     /**

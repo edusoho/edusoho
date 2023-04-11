@@ -30,7 +30,7 @@ class UserCourseStatisticsExporter extends Exporter
     public function getContent($start, $limit)
     {
         $users = $this->getUserService()->searchUsers(
-            [ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']),'isStudent' => 0],
+            ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']),
             ['id' => 'DESC'],
             $start,
             $limit,
@@ -135,7 +135,6 @@ class UserCourseStatisticsExporter extends Exporter
         if (!empty($conditions['keyword'])) {
             $userConditions = ['nickname' => $conditions['keyword']];
             if ('mobile' == $conditions['keywordType']) {
-                unset($userConditions['nickname']);
                 $userConditions['verifiedMobile'] = $conditions['keyword'];
             }
             $users = $this->getUserService()->searchUsers(

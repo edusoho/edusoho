@@ -473,7 +473,6 @@ courseSerializeMode:
     finished: 已完结
 
 refund_reason:
-    reason: --请选择退学原因--
     bad_content: 课程内容质量差
     bad_teacher_attitude: 老师服务态度不好
     other: 其他

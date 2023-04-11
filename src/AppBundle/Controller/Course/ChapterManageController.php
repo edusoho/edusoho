@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller\Course;
 
+use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\BaseController;
 
 class ChapterManageController extends BaseController
 {
@@ -13,29 +13,28 @@ class ChapterManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $chapterId = $request->query->get('chapterId', 0);
         $chapter = $this->getCourseService()->getChapter($courseId, $chapterId);
-
         if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
             $chapter = empty($chapter) ? $this->create($fields, $courseId) : $this->editor($chapterId, $courseId, $fields);
 
-            return $this->render('lesson-manage/chapter/item.html.twig', array(
+            return $this->render('lesson-manage/chapter/item.html.twig', [
                 'course' => $course,
                 'chapter' => $chapter,
-            ));
+            ]);
         }
 
         $type = $request->query->get('type', 'chapter');
 
-        return $this->render('lesson-manage/chapter/modal.html.twig', array(
+        return $this->render('lesson-manage/chapter/modal.html.twig', [
             'course' => $course,
             'type' => $type,
             'chapter' => $chapter,
-        ));
+        ]);
     }
 
     protected function editor($chapterId, $courseId, $fields)
     {
-        return $this->getCourseService()->updateChapter($courseId, $chapterId, array('title' => $fields['title']));
+        return $this->getCourseService()->updateChapter($courseId, $chapterId, ['title' => $fields['title']]);
     }
 
     protected function create($chapter, $courseId)
@@ -49,7 +48,7 @@ class ChapterManageController extends BaseController
     {
         $this->getCourseService()->deleteChapter($courseId, $chapterId);
 
-        return $this->createJsonResponse(array('success' => true));
+        return $this->createJsonResponse(['success' => true]);
     }
 
     public function publishAction(Request $request, $courseId, $chapterId)
@@ -57,7 +56,7 @@ class ChapterManageController extends BaseController
         $this->getCourseService()->tryManageCourse($courseId);
         $this->getCourseService()->publishChapter($chapterId);
 
-        return $this->createJsonResponse(array('success' => true));
+        return $this->createJsonResponse(['success' => true]);
     }
 
     public function unpublishAction(Request $request, $courseId, $chapterId)
@@ -65,7 +64,7 @@ class ChapterManageController extends BaseController
         $this->getCourseService()->tryManageCourse($courseId);
         $this->getCourseService()->unpublishChapter($chapterId);
 
-        return $this->createJsonResponse(array('success' => true));
+        return $this->createJsonResponse(['success' => true]);
     }
 
     /**

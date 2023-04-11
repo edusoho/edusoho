@@ -27,7 +27,7 @@
         </label>
       </div>
       <div class="col-md-8 controls">
-        <input id="chapter-title-field" type="text" name="title" value="{{ field_value(chapter, 'title') }}" class="form-control">
+        <input id="chapter-title-field" type="text" name="title" value="{{ chapter.title|default('') }}" class="form-control">
       </div>
     </div>
     <input type="hidden" name="type" value="{{ type }}">

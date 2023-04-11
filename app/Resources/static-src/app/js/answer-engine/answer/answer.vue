@@ -11,6 +11,7 @@
       :assessmentResponse="assessmentResponse"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
+      :isDownload="isDownload"
       :uploadSDKInitData="uploadSDKInitData"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
@@ -64,7 +65,11 @@
           finishUrl: $('[name=upload_finish_url]').val(),
           accept: JSON.parse($('[name=upload_accept]').val()),
           fileSingleSizeLimit: $('[name=upload_size_limit]').val(),
-          locale: document.documentElement.lang
+          locale: document.documentElement.lang,
+          ui: 'batch',
+          multiple: true,
+          multitaskNum: 3,
+          fileNumLimit: 3,
         },
         fileId: 0,
         inspectionOpen: inspectionOpen,
@@ -92,7 +97,13 @@
         },
         ajaxTimeOut: null,
         isReachTime: false,
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
       };
+    },
+    provide() {
+      return {
+        modeOrigin: 'do'
+      }
     },
     created() {
       this.emitter = new ActivityEmitter();
@@ -282,10 +293,8 @@
       returnToCourseDetail() {
         parent.location.href = $('[name=save_goto_url]').val();
       },
-      deleteAttachment(fileId, flag) {
-        if (flag) {
-          this.fileId = fileId;
-        }
+      deleteAttachment(fileId) {
+        this.fileId = fileId;
       },
       previewAttachment(fileId) {
         this.fileId = fileId;
@@ -330,6 +339,7 @@
       },
       deleteAttachmentCallback() {
         let self = this;
+        
         return new Promise(resolve => {
           $.ajax({
             url: $('[name=delete-attachment-url]').val(),

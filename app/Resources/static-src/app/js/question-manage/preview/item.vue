@@ -4,6 +4,7 @@
       :item="item"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
+      :isDownload="isDownload"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
       @previewAttachment="previewAttachment"
@@ -20,6 +21,12 @@
         showAttachment: $('[name=show_attachment]').val(),
         cdnHost: $('[name=cdn_host]').val(),
         fileId: 0,
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
+      }
+    },
+    provide() {
+      return {
+        modeOrigin: 'do'
       }
     },
     methods: {

@@ -92,6 +92,20 @@ class CloudFileController extends BaseController
         return $this->render('admin-v2/teach/cloud-attachment/error.html.twig', []);
     }
 
+    public function  questionBankAttachmentSettingAction(Request $request) {
+        $questionBankAttachment = $this->getSettingService()->get('question_bank_attachment_setting', []);
+        $questionBankAttachment = array_merge(['enable' => 1], $questionBankAttachment);
+
+        if ('POST' == $request->getMethod()) {
+            $questionBankAttachment = $request->request->all();
+            $this->getSettingService()->set('question_bank_attachment_setting', $questionBankAttachment);
+            $this->setFlashMessage('success', 'site.save.success');
+        }
+        return $this->render('admin-v2/teach/question-bank-attachment-setting/index.html.twig', [
+            'questionBankAttachment' => $questionBankAttachment,
+        ]);
+    }
+
     public function livePlaybackAction(Request $request)
     {
         return $this->render('admin-v2/teach/cloud-resources/live-playback.html.twig');

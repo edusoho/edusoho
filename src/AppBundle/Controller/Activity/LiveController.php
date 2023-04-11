@@ -291,8 +291,12 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     {
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+        $activity = $this->getActivityService()->getActivity($activityId, true);
         $isTeacher = false;
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->id)) {
+            $isTeacher = $this->getUser()->isTeacher();
+            $role = 'teacher';
+        } elseif ($this->getUser()->isTeacher() && '1' == $activity['ext']['replayPublic']) {
             $isTeacher = $this->getUser()->isTeacher();
             $role = 'teacher';
         } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
@@ -302,7 +306,6 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         } else {
             return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
         }
-        $activity = $this->getActivityService()->getActivity($activityId, true);
         $isEsLive = $this->getLiveService()->isESLive($activity['ext']['liveProvider']);
         if ($isEsLive) {
             if ('replay' == $activity['mediaType']) {

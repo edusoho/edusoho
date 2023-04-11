@@ -5,8 +5,8 @@ namespace Biz\Announcement\Processor;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\QueueJob\PushJob;
 use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Biz\User\Service\NotificationService;
+use Codeages\Biz\Framework\Queue\Service\QueueService;
 
 class ClassroomAnnouncementProcessor extends AnnouncementProcessor
 {
@@ -25,22 +25,23 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         return 'classroom_show';
     }
 
-    public function announcementNotification($targetId, $targetObject, $targetObjectShowUrl)
+    public function announcementNotification($targetId, $targetObject, $targetObjectShowUrl, $announcement)
     {
-        $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $targetId, 'role' => 'student'));
+        $count = $this->getClassroomService()->searchMemberCount(['classroomId' => $targetId, 'role' => 'student']);
 
         $members = $this->getClassroomService()->searchMembers(
-            array('classroomId' => $targetId, 'role' => 'student'),
-            array('createdTime' => 'DESC'),
+            ['classroomId' => $targetId, 'role' => 'student'],
+            ['createdTime' => 'DESC'],
             0, $count
         );
 
         $result = false;
         if ($members) {
             $this->classroomAnnouncementPush($targetId);
-            $message = array('title' => $targetObject['title'],
+            $message = ['title' => $targetObject['courseSetTitle'].'-'.(empty($targetObject['title']) ? '默认计划' : $targetObject['title']),
                 'url' => $targetObjectShowUrl,
-                'type' => 'classroom', );
+                'type' => 'classroom',
+                'announcement_id' => $announcement['id'], ];
             foreach ($members as $member) {
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
             }
@@ -59,41 +60,41 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
 
         $conv = $this->getConversationService()->getConversationByTarget($classroom['id'], 'classroom-push');
 
-        $from = array(
+        $from = [
             'id' => $classroom['id'],
             'type' => 'classroom',
-        );
+        ];
 
-        $to = array(
+        $to = [
             'type' => 'classroom',
             'id' => 'all',
             'convNo' => $conv['no'],
-        );
+        ];
 
-        $body = array(
+        $body = [
             'type' => 'classroom.announcement.create',
             'classroomId' => $classroom['id'],
             'title' => "《{$classroom['title']}》",
             'message' => "[班级公告] 你正在学习的班级《{$classroom['title']}》有一个新的公告，快去看看吧",
-        );
+        ];
 
         $this->createPushJob($from, $to, $body);
     }
 
     private function createPushJob($from, $to, $body)
     {
-        $pushJob = new PushJob(array(
+        $pushJob = new PushJob([
             'from' => $from,
             'to' => $to,
             'body' => $body,
-        ));
+        ]);
 
         $this->getQueueService()->pushJob($pushJob);
     }
 
     public function isIMEnabled()
     {
-        $setting = $this->getSettingService()->get('app_im', array());
+        $setting = $this->getSettingService()->get('app_im', []);
 
         if (empty($setting) || empty($setting['enabled'])) {
             return false;
@@ -117,11 +118,11 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
 
     public function getActions($action)
     {
-        $config = array(
+        $config = [
             'create' => 'AppBundle:Classroom/Announcement:create',
             'edit' => 'AppBundle:Classroom/Announcement:edit',
             'list' => 'AppBundle:Classroom/Announcement:list',
-        );
+        ];
 
         return $config[$action];
     }
