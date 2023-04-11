@@ -84,8 +84,12 @@ class MallWechatNotificationServiceImpl extends BaseService implements MallWecha
     {
         $templates = MessageTemplateUtil::templates();
         foreach (array_keys($templates) as $key) {
-            $this->getWeChatService()->addTemplate($templates[$key], $key, WechatNotificationType::SERVICE_FOLLOW);
-            $this->getWeChatService()->saveWeChatTemplateSetting($key, ['status' => 1], WechatNotificationType::SERVICE_FOLLOW);
+            try {
+                $this->getWeChatService()->addTemplate($templates[$key], $key, WechatNotificationType::SERVICE_FOLLOW);
+                $this->getWeChatService()->saveWeChatTemplateSetting($key, ['status' => 1], WechatNotificationType::SERVICE_FOLLOW);
+            } catch (\Exception $e) {
+                $this->getLogger()->error("服务号关注[{$key}]添加模板失败");
+            }
         }
     }
 
@@ -93,8 +97,12 @@ class MallWechatNotificationServiceImpl extends BaseService implements MallWecha
     {
         $templates = MessageSubscriberTemplateUtil::templates();
         foreach (array_keys($templates) as $key) {
-            $this->getWeChatService()->addTemplate($templates[$key], $key, WechatNotificationType::MESSAGE_SUBSCRIBE);
-            $this->getWeChatService()->saveWeChatTemplateSetting($key, ['status' => 1], WechatNotificationType::MESSAGE_SUBSCRIBE);
+            try {
+                $this->getWeChatService()->addTemplate($templates[$key], $key, WechatNotificationType::MESSAGE_SUBSCRIBE);
+                $this->getWeChatService()->saveWeChatTemplateSetting($key, ['status' => 1], WechatNotificationType::MESSAGE_SUBSCRIBE);
+            } catch (\Exception $e) {
+                $this->getLogger()->error("消息订阅[{$key}]添加模板失败");
+            }
         }
     }
 
