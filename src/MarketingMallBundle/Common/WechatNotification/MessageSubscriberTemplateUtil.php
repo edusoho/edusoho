@@ -47,7 +47,7 @@ class MessageSubscriberTemplateUtil
                 'sms_content' => 'wechat.notification.message_subscribe_sms.template.groupon_join',
                 'rule' => 'wechat.notification.condition.groupon_join',
                 'detail' => '课程名称：{{thing1.DATA}}<br>拼团价：{{amount2.DATA}}<br>参团人数：{{character_string8.DATA}}<br>剩余时间：{{time3.DATA}}<br>温馨提示：{{thing4.DATA}}',
-                'smsDetail' => [SmsType::GROUPON_JOIN => '你参与的{{grouponTitle.DATA}}已参团成功，拼团价为{{grouponPrice.DATA}}元，还剩{{grouponRemain.DATA}}人成团，拼团结束时间为{{grouponEndAt.DATA}}，快复制链接邀请微信好友一起参与吧{{url.DATA}}'],
+                'smsDetail' => [SmsType::GROUPON_JOIN => '你参与的{{title.DATA}}已参团成功，拼团价为{{price.DATA}}元，还剩{{remain.DATA}}人成团，拼团结束时间为{{endAt.DATA}}，快复制链接邀请微信好友一起参与吧{{url.DATA}}'],
                 'kidList' => ['1', '2', '8', '3', '4'],
                 'object' => '购买者',
                 'sceneDesc' => '参团成功通知',
