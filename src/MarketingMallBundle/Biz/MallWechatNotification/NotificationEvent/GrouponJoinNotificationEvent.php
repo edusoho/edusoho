@@ -50,10 +50,10 @@ class GrouponJoinNotificationEvent extends AbstractNotificationEvent implements 
     public function buildSmsTemplateArgs($data)
     {
         return [
-            'grouponTitle' => "【{$data['grouponMemberNum']}人团】".$data['grouponTitle'],
-            'grouponPrice' => $data['grouponPrice'] / 100,
-            'grouponRemain' => $data['grouponRemain'],
-            'grouponEndAt' => date('Y年m月d日 H:i:s', $data['grouponEndAt']),
+            'title' => "【{$data['grouponMemberNum']}人团】".$data['grouponTitle'],
+            'price' => $data['grouponPrice'] / 100,
+            'remain' => $data['grouponRemain'],
+            'endAt' => date('Y年m月d日 H:i:s', $data['grouponEndAt']),
             'url' => SmsToolkit::getShortLink($data['url']),
         ];
     }
