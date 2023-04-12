@@ -8969,6 +8969,11 @@ load-script@^1.0.0:
   resolved "https://registry.npm.taobao.org/load-script/download/load-script-1.0.0.tgz#0491939e0bee5643ee494a7e3da3d2bac70c6ca4"
   integrity sha1-BJGTngvuVkPuSUp+PaPSuscMbKQ=
 
+load-scripts@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmmirror.com/load-scripts/-/load-scripts-2.0.0.tgz#9e703cda28abf3096fd39e0f92a36facaf459f53"
+  integrity sha512-UHFTisSP4k7n7wGgqcWJzSKr8VfqvAdT4gW7xJmyaQjuhyg7ISubdkpF/8Q2AaamxIhUjWVW7O9+KdOm7iN3yg==
+
 loader-fs-cache@^1.0.0:
   version "1.0.3"
   resolved "https://registry.npm.taobao.org/loader-fs-cache/download/loader-fs-cache-1.0.3.tgz?cache=0&sync_timestamp=1584820647539&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Floader-fs-cache%2Fdownload%2Floader-fs-cache-1.0.3.tgz#f08657646d607078be2f0a032f8bd69dd6f277d9"
@@ -15097,10 +15102,10 @@ walker@~1.0.5:
   dependencies:
     makeerror "1.0.x"
 
-wap-sdk@0.1.3:
-  version "0.1.3"
-  resolved "https://registry.nlark.com/wap-sdk/download/wap-sdk-0.1.3.tgz?cache=0&sync_timestamp=1625798884608&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fwap-sdk%2Fdownload%2Fwap-sdk-0.1.3.tgz#068fa2ab1d9a90c014250c1cb801e887146abba9"
-  integrity sha1-Bo+iqx2akMAUJQwcuAHohxRqu6k=
+wap-sdk@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.npmjs.org/wap-sdk/-/wap-sdk-0.3.2.tgz#c29e5a22b2c2fc8402a127ecd8c9e592e697624b"
+  integrity sha512-sQaqH759NXo8mW+aSU59pCXtK+YkHxv+7vLcAOHoFnoZGRKXcJIcA07xjD03tftBdltXIaIiiHaRz2SvNmgUdw==
   dependencies:
     babel-plugin-import "^1.13.0"
     core-js "^3.6.5"
@@ -15109,6 +15114,7 @@ wap-sdk@0.1.3:
     gulp-clean-css "^4.3.0"
     gulp-concat "^2.6.1"
     gulp-scss "^1.4.0"
+    load-scripts "^2.0.0"
     node-sass "^4.14.1"
     sass "^1.26.8"
     sass-loader "^8.0.2"

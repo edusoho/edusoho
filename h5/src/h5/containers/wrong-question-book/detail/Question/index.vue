@@ -9,9 +9,13 @@
     </div>
 
     <div class="question-body">
-      <div class="question-stem clearfix">
+      <div class="clearfix question-stem">
         <div class="pull-left">{{ order }}、</div>
         <div v-html="formateQuestionStem" />
+        <attachement-preview 
+          v-for="item in getAttachementByType('stem')"
+          :attachment="item"
+          :key="item.id" />
       </div>
 
       <div class="question-answer">
@@ -37,7 +41,6 @@
               v-html="rightAnswer"
             ></div>
           </div>
-
           <div class="analysis-content__item mt10">
             <div class="analysis-item__title">{{ $t('wrongQuestion.yourAnswer') }}</div>
             <div
@@ -46,15 +49,24 @@
               v-html="yourAnswer"
             ></div>
           </div>
+
+          <attachement-preview 
+            v-for="item in getAttachementByType('answer')"
+            :attachment="item"
+            :key="item.id" />
         </div>
       </div>
 
       <div class="mt10 analysis-result">
         <div class="analysis-title">{{ $t('wrongQuestion.parsing') }}</div>
-        <div
-          class="analysis-content mt10"
-          v-html="questions.analysis || $t('wrongQuestion.noParsing')"
-        />
+        <div class="analysis-content mt10" v-html="questions.analysis || $t('wrongQuestion.noParsing')"></div>
+        <div class="analysis-content">
+          <attachement-preview 
+            v-for="item in getAttachementByType('analysis')"
+            :attachment="item"
+            :key="item.id" />
+        </div>
+        
       </div>
 
       <div class="mt10 analysis-result">
@@ -77,10 +89,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import Api from '@/api';
 import _ from 'lodash';
 import Choice from './Choice.vue';
 import SingleChoice from './SingleChoice.vue';
 import Judge from './Judge.vue';
+import attachementPreview from '@/containers/course/lessonTask/component/attachement-preview.vue';
 
 export default {
   components: {
@@ -90,6 +105,7 @@ export default {
     SingleChoice,
     // eslint-disable-next-line vue/no-unused-components
     Judge,
+    attachementPreview
   },
 
   props: {
@@ -136,7 +152,17 @@ export default {
     };
   },
 
+  provide() {
+    return {
+      getResourceToken: this.getResourceToken,
+      settings: this.storageSetting
+    }
+  },
+
   computed: {
+    ...mapState({
+      storageSetting: state => state.storageSetting
+    }),
     questions() {
       return this.question.questions[0];
     },
@@ -193,7 +219,7 @@ export default {
       let { answer, answer_mode } = this.questions;
 
       if (answer_mode === 'true_false') {
-        answer = _.map(answer, function(item) {
+        answer = _.map(answer, (item) => {
           return item === 'T' ? this.$t('wrongQuestion.right') : this.$t('wrongQuestion.wrong');
         });
       }
@@ -239,6 +265,17 @@ export default {
       }
 
       return _.join(response, '、');
+    },
+  },
+
+  methods: {
+    getAttachementByType(type) {
+      return this.questions.attachments.filter(item => item.module === type) || []
+    },
+    getResourceToken(globalId) {
+      return Api.getItemDetail({ 
+        params: { globalId } 
+      })
     },
   }
 };

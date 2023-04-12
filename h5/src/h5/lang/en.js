@@ -396,6 +396,15 @@ export default {
     buy: 'Buy now'
   },
   courseLearning: {
+    leftTime: 'Remaining time: ',
+    hourUnit: 'hr',
+    minuteUnit: 'min.',
+    secondUnit: 'sec.',
+    unpassedTips: 'Unfortunately, you failed this exam!',
+    passedTips: 'Congratulations on passing this exam!',
+    corretAnswer: 'Correct answer',
+    qustionType: 'Question type',
+    teacherSay: 'Teacher comments',
     teachingService: 'Teaching service',
     title: 'Details',
     intro: 'Intro',
@@ -465,8 +474,14 @@ export default {
     nextLesson: 'Next lesson',
     openingTime: 'Opening time',
     examinationDuration: 'Test duration',
+    noLimitTips: 'Kind tips: Once the test starts, the test will be handed in automatically after the countdown is over',
+    noLimitTips1: 'Kind tips: This test will not be handed in automatically, and the time spent on the exam will be displayed in real time, and the time will not be counted if you leave in the middle',
+    oneTips: 'Kind tips: There is only one chance to test. Once the test starts, the test will be handed in automatically after the countdown is over',
+    oneTips1: 'Kind tips: There is only one chance to take the test, and the test will not be handed in automatically. The test time will be displayed in real time, and the time will not be counted if you leave in the middle',
     minutes: 'Minutes',
-    testName: 'Name',
+    second: 'Second',
+    testTips: 'Test Notes',
+    testName: 'Class Name',
     noRestrictions: 'Without limiting',
     fullMark: 'Full score  {number}',
     numberOfTopics: 'Number of topics',
@@ -485,6 +500,7 @@ export default {
     material: 'Material',
     thisScore: 'Score',
     toBeReviewed: 'To be reviewed',
+    reviewing: 'Reviewing',
     correctRate: 'Correct rate',
     branch: 'Branch',
     timeSpentOnTheQuestion: 'Time spent',
@@ -548,7 +564,11 @@ export default {
     publish: 'Publish',
     noContent: 'No content',
     continueLearning: 'Continue learning',
-    startLearning: 'Start learning'
+    startLearning: 'Start learning',
+    continueExam: 'Continue exam',
+    continueAnswer: 'continue answering',
+    examTotalTips: 'Exam used time',
+    examTotalTime: 'Exam time has reached {number} minutes',
   },
   classLearning: {
     intor: 'Intro',
@@ -620,5 +640,13 @@ export default {
     allClass: 'Applicable to all class',
     allGoods: 'Applicable to all goods',
     allMember: 'Applicable to all member'
+  },
+  attachment: {
+    waiting: 'Waiting for transcoding',
+    doing: 'Transcoding...',
+    error: 'Transcoding failed',
+    other: 'download at PC',
+    disableVideo: 'do not support, please use WeChat or APP',
+    disableVideo2: 'do not support, please use APP'
   }
 };

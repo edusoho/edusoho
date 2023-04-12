@@ -7,102 +7,101 @@
       @outFocusMask="outFocusMask"
     ></out-focus-mask>
     <e-loading v-if="isLoading" />
-    <div v-if="result" ref="data" class="result-data">
-      <div class="result-data__item">
-        {{ $t('courseLearning.thisScore') }}
-        <div
-          v-if="isReadOver"
-          class="result-data__bottom data-number-orange data-medium"
-        >
-          <span class="data-number">{{ result.score }}</span
-          >{{ $t('courseLearning.branch') }}
+    <div class="testpaper-result-status">
+      <img v-if="result.passedStatus === 'passed'" src="static/images/testpaper/passed-bg.png" />
+      <img v-else src="static/images/testpaper/unpassed-bg.png" />
+      <div class="trs-content">
+        <template v-if="isReadOver">
+          <div class="result-score">
+            <span class="data-number">{{ result.score }}</span>
+            <span class="data-unit">{{ $t('courseLearning.branch') }}</span>
+          </div>
+          <div class="result-score-tips">
+            {{ result.passedStatus === 'passed' ? $t('courseLearning.passedTips') : $t('courseLearning.unpassedTips') }}
+          </div>
+        </template>
+        <div v-else class="text-center">
+          <img src="static/images/testpaper/reviewing-icon.png" style="width: 44px;" />
+          <div style="margin-top: 4px;">{{ $t('courseLearning.reviewing') }}</div>
         </div>
-        <div v-else class="result-data__bottom data-text-blue">{{ $t('courseLearning.toBeReviewed') }}</div>
       </div>
-      <div class="result-data__item">
-        {{ $t('courseLearning.correctRate') }}
-        <div
-          v-if="isReadOver"
-          class="result-data__bottom data-number-green data-medium"
-        >
-          <span class="data-number">{{ result.rightRate }}</span
-          >%
+      
+    </div>
+
+    <div v-if="result" ref="data" class="testpaper-result-data">
+      <div v-if="isReadOver" class="testpaper-result-data__item">
+        <div class="trd-header">{{ $t('courseLearning.correctRate') }}</div>
+        <div>
+          <span class="data-number">{{ result.rightRate }}</span>
+          <span class="data-unit">%</span>
         </div>
-        <div v-else class="result-data__bottom data-text-blue">{{ $t('courseLearning.toBeReviewed') }}</div>
       </div>
-      <div class="result-data__item">
-        {{ $t('courseLearning.timeSpentOnTheQuestion') }}
-        <div class="result-data__bottom data-number-gray data-medium">
-          <span class="data-number">{{ usedTime }}</span
-          >{{ $t('courseLearning.minutes') }}
+
+      <div v-if="result.limitedTime > 0" class="testpaper-result-data__item">
+        <div class="trd-header">{{ $t('courseLearning.examinationDuration') }}</div>
+        <div>
+          <span class="data-number">{{ result.limitedTime }}</span>
+          <span class="data-unit">{{ $t('courseLearning.minutes') }}</span>
+        </div>
+      </div>
+
+      <div class="testpaper-result-data__item">
+        <div class="trd-header">{{ $t('courseLearning.examTotalTips') }}</div>
+        <div>
+          <span class="data-number">{{ usedTime.minutes }}</span>
+          <span class="data-unit">{{ $t('courseLearning.branch') }}</span>
+          <span class="ml-4 data-number">{{ usedTime.second }}</span>
+          <span class="data-unit">{{ $t('courseLearning.second') }}</span>
         </div>
       </div>
     </div>
-    <div ref="tag" class="result-tag">
-      <div class="result-tag-item clearfix">
-        <div class="result-tag-item__circle circle-green" />
-        {{ $t('courseLearning.right') }}
+    
+    <div v-if="result.teacherSay" class="teacher-say">
+      {{ $t('courseLearning.teacherSay') }}：{{ result.teacherSay }}
+    </div>
+
+    <div class="testpaper-result">
+      <div class="testpaper-result__header">
+        <div>{{ $t('courseLearning.qustionType') }}</div>
+        <div>{{ $t('courseLearning.corretAnswer') }}</div>
+        <div>{{ $t('courseLearning.fullScoreOfTestPaper') }}</div>
       </div>
-      <div class="result-tag-item clearfix">
-        <div class="result-tag-item__circle circle-orange" />
-        {{ $t('courseLearning.wrong') }}
-      </div>
-      <div class="result-tag-item clearfix">
-        <div class="result-tag-item__circle circle-gray" />
-        {{ $t('courseLearning.unanswered') }}
-      </div>
-      <div v-show="!isReadOver" class="result-tag-item clearfix">
-        <div class="result-tag-item__circle circle-brown" />
-        {{ $t('courseLearning.toBeReviewed') }}
+      <div class="testpaper-result__content">
+        <div class="trc-item" v-for="keyItem in question_type_seq" :key="keyItem">
+          <div class="question-type">{{ $t(obj[keyItem]) }}</div>
+          <div class="question-answer">
+            <span class="right-number">{{ getRightAnswerData(keyItem).totalNumber }}</span>/{{ subjectList[keyItem].length }}
+          </div>
+          <div class="question-total">{{ getRightAnswerData(keyItem).totalScore }}</div>
+        </div>
       </div>
     </div>
 
-    <div :style="{ height: calHeight }" class="result-subject">
-      <van-panel
-        v-for="(keyItem, index) in question_type_seq"
-        :key="index"
-        :title="$t(obj[keyItem])"
-        class="result-panel"
+    <div ref="footer" class="result-footer">
+      <van-button
+        v-if="resultShow"
+        :style="{ marginRight: isReadOver && !doTimes ? '2vw' : 0 }"
+        class="result-footer__btn"
+        type="primary"
+        @click="viewAnalysis()"
+        >{{ $t('courseLearning.viewParsed') }}</van-button
       >
-        <ul class="result-list">
-          <li
-            v-for="(item, index) in subjectList[keyItem]"
-            :class="[
-              'result-list__item testpaper-number',
-              `circle-${color[item.status]}`,
-            ]"
-            :key="index"
-          >
-            {{ item.seq }}
-          </li>
-        </ul>
-      </van-panel>
-
-      <div ref="footer" class="result-footer">
-        <van-button
-          v-if="resultShow"
-          :style="{ marginRight: isReadOver && !doTimes ? '2vw' : 0 }"
-          class="result-footer__btn"
-          type="primary"
-          @click="viewAnalysis()"
-          >{{ $t('courseLearning.viewParsed') }}</van-button
+      <van-button
+        v-if="again && isReadOver && doTimes == '0'"
+        class="result-footer__btn"
+        type="primary"
+        @click="startTestpaper()"
+        >{{ $t('courseLearning.takeTheTestAgain') }}</van-button
+      >
+      <van-button
+        v-if="!again && isReadOver && doTimes == '0'"
+        class="result-footer__btn"
+        type="primary"
+        disabled
         >
-        <van-button
-          v-if="again && isReadOver && doTimes == 0"
-          class="result-footer__btn"
-          type="primary"
-          @click="startTestpaper()"
-          >{{ $t('courseLearning.takeTheTestAgain') }}</van-button
-        >
-        <van-button
-          v-if="!again && remainTime && isReadOver && doTimes == 0"
-          class="result-footer__btn"
-          type="primary"
-          disabled
-          style="line-height: 21px"
-          >{{ $t('courseLearning.takeTheTestAgainAfter', { time: remainTime }) }}</van-button
-        >
-      </div>
+        <div>{{ remainTime }}</div>
+        {{ $t('courseLearning.takeTheTestAgain') }}
+      </van-button>
     </div>
   </div>
 </template>
@@ -113,7 +112,7 @@ import { mapState, mapMutations, mapActions } from 'vuex';
 import * as types from '@/store/mutation-types';
 import examMixin from '@/mixins/lessonTask/exam.js';
 import report from '@/mixins/course/report';
-import { getdateTimeDown } from '@/utils/date-toolkit.js';
+import { formatTimeByNumber } from '@/utils/date-toolkit.js';
 import { Dialog, Toast } from 'vant';
 import OutFocusMask from '@/components/out-focus-mask.vue';
 
@@ -167,8 +166,11 @@ export default {
       selectedPlanId: state => state.course.selectedPlanId,
     }),
     usedTime: function() {
-      const timeInterval = parseInt(this.result.usedTime) || 0;
-      return timeInterval <= 60 ? 1 : Math.round(timeInterval / 60);
+      const usedTime = parseInt(this.result.usedTime) || 0;
+      const minutes = Math.floor(usedTime / 60) || 0;
+      const second = usedTime - 60 * minutes;
+
+      return { minutes, second }
     },
   },
   watch: {
@@ -197,6 +199,21 @@ export default {
       setNavbarTitle: types.SET_NAVBAR_TITLE,
     }),
     ...mapActions('course', ['handExamdo']),
+    getRightAnswerData(type) {
+      const currentData = this.subjectList[type] || []
+      let totalNumber = 0;
+      let totalScore = 0;
+
+      currentData.forEach(item => {
+        if (item.status === 'right') {
+          totalNumber++;
+        }
+
+        totalScore += Number(item.score);
+      })
+
+      return { totalNumber, totalScore }
+    },
     async getTestpaperResult() {
       await Api.testpaperResult({
         query: {
@@ -231,21 +248,23 @@ export default {
     },
     judgeTime() {
       const interval = this.redoInterval;
-      let i = 0;
       if (interval == 0) {
         this.again = true;
         return;
       }
+
       const intervalTimestamp = parseInt(interval) * 60 * 1000;
       const nowTimestamp = new Date().getTime();
       const checkedTime = parseInt(this.result.checkedTime) * 1000;
-      const sumTime = checkedTime + intervalTimestamp;
+      let sumTime = checkedTime + intervalTimestamp;
       this.again = nowTimestamp >= sumTime;
+
       if (!this.again) {
+        sumTime = Math.floor((sumTime - nowTimestamp) / 1000)
         this.timeMeter = setInterval(() => {
-          i = i++;
-          this.remainTime = getdateTimeDown(sumTime, i);
-          if (this.remainTime == '') {
+          this.remainTime = formatTimeByNumber(sumTime--);
+
+          if (this.sumTime <= 0) {
             this.again = true;
             this.clearTime();
           }
@@ -280,6 +299,7 @@ export default {
     getStatus(data, arr) {
       const obj = {};
       obj.seq = data.seq;
+      obj.score = data.testResult.score;
       if (data.testResult) {
         obj.status = data.testResult.status;
       } else {
@@ -378,3 +398,185 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.testpaper-result {
+  margin: 8px 16px;
+  border-radius: 8px;
+  background-color: #fff;
+  
+  .testpaper-result__header {
+    display: flex;
+    border-bottom: solid 1px #fafafa;
+
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      height: 40px;
+      font-weight: 400;
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.35);
+    }
+  }
+
+  .testpaper-result__content {
+    .trc-item {
+      display: flex;
+
+      > div {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 48px;
+      }
+
+      > div:not(:last-child) {
+        border-bottom: solid 1px #fafafa;
+      }
+
+      .question-type {
+        font-weight: 400;
+        font-size: 16px;
+        color: rgba(0, 0, 0, 0.55);
+      }
+
+      .question-answer {
+        font-weight: 400;
+        font-size: 16px;
+        color: rgba(0, 0, 0, 0.85);
+
+        .right-number {
+          color: #00BE63;
+        }
+      }
+
+      .question-total {
+        font-weight: 400;
+        font-size: 16px;
+        color: rgba(0, 0, 0, 0.85);
+      }
+    }
+  }
+}
+
+.teacher-say {
+  margin: 8px 16px;
+  padding: 16px;
+  font-weight: 400;
+  font-size: 14px;
+  color: #666666;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.testpaper-result-status {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 121px;
+  margin: 16px 16px 0;
+  color: #fff;
+  border-radius: 8px 8px 0px 0px;
+
+  > img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .trs-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .result-score {
+    display: flex;
+    align-items: center;
+
+    .data-number {
+      font-weight: 600;
+      font-size: 36px;
+    }
+
+    .data-unit {
+      margin-left: 4px;
+      font-weight: 400;
+      font-size: 12px;
+    }
+  }
+
+  .result-score-tips {
+    margin-top: 12px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #fff;
+  }
+  
+}
+
+.testpaper-result-data {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+  margin: -7px 16px 0;
+  background-color: #fff;
+  border-radius: 8px;
+
+  &__item {
+    text-align: center;
+    padding: 0 20px;
+
+    .trd-header {
+      margin-bottom: 8px;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      color: #999;
+    }
+
+    .data-number {
+      font-weight: 600;
+      font-size: 22px;
+      line-height: 30px;
+      color: #333;
+    }
+
+    .data-unit {
+      margin-left: 4px;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      color: #333;
+    }
+  }
+
+  &__item:not(:last-child) {
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 14px;
+      width: 1px;
+      height: 32px;
+      background: #f1f1f1;
+    }
+  }
+}
+</style>

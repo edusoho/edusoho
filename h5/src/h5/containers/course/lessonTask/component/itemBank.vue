@@ -1,7 +1,7 @@
 <template>
   <div class="paper-swiper">
     <van-swipe
-      v-if="testData.length > 0"
+      v-if="testData.length > 0 && sdkLoaded"
       ref="swipe"
       :height="height"
       :show-indicators="false"
@@ -27,8 +27,9 @@
             v-if="paper.type == 'single_choice'"
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
-            :number="index + 1"
+            :is-current="currentIndex === index"
             :can-do="canDo"
+            :cloudSdkCdn="cloudSdkCdn"
             @singleChoose="singleChoose"
           />
 
@@ -36,7 +37,8 @@
             v-if="paper.type == 'choice' || paper.type == 'uncertain_choice'"
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
-            :number="index + 1"
+            :is-current="currentIndex === index"
+            :number="index"
             :can-do="canDo"
             @choiceChoose="choiceChoose"
           />
@@ -45,7 +47,8 @@
             v-if="paper.type == 'determine'"
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
-            :number="index + 1"
+            :is-current="currentIndex === index"
+            :number="index"
             :can-do="canDo"
             @determineChoose="determineChoose"
           />
@@ -55,7 +58,8 @@
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
             :can-do="canDo"
-            :number="index + 1"
+            :is-current="currentIndex === index"
+            :number="index"
           />
 
           <fill-type
@@ -63,7 +67,8 @@
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
             :can-do="canDo"
-            :number="index + 1"
+            :is-current="currentIndex === index"
+            :number="index"
           />
 
           <analysis
@@ -72,6 +77,8 @@
             :analysis="paper.analysis"
             :answer="paper.answer"
             :subject="paper.type"
+            :is-current="currentIndex === index"
+            :attachments="paper.attachments"
             :is-exercise="isExercise"
             :result-show="resultShow"
           />
@@ -100,6 +107,9 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
+import loadScript from 'load-script';
+
 import fillType from '../component/fill';
 import essayType from '../component/essay';
 import headTop from '../component/head';
@@ -119,7 +129,7 @@ export default {
     choiceType,
     singleChoice,
     determineType,
-    analysis,
+    analysis
   },
   props: {
     info: {
@@ -168,7 +178,11 @@ export default {
       testAnswer: this.answer,
       currentIndex: this.current,
       height: WINDOWHEIGHT,
+      sdkLoaded: false,
     };
+  },
+  computed: {
+    ...mapState(['cloudSdkCdn']),
   },
   watch: {
     answer(val) {
@@ -188,8 +202,21 @@ export default {
       }
       this.$refs.swipe.swipeTo(index - 1);
     },
+    cloudSdkCdn() {
+      if (this.sdkLoaded) return
+
+      loadScript(`https://${this.cloudSdkCdn}/js-sdk-v2/sdk-v1.js?${Date.now()}`, () => {
+        this.sdkLoaded = true
+      })
+    }
+  },
+  created() {
+    if (!this.cloudSdkCdn) {
+      this.setCloudAddress();
+    }
   },
   methods: {
+    ...mapActions(['setCloudAddress']),
     changeswiper(index) {
       this.currentIndex = index;
       this.$emit('update:current', index + 1);
@@ -257,7 +284,7 @@ export default {
     // 判断题选择
     determineChoose(name, id) {
       this.$set(this.testAnswer[id], 0, Number(name));
-    },
+    }
   },
 };
 </script>

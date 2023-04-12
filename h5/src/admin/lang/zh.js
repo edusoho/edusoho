@@ -53,7 +53,8 @@ export default {
     mistakesCollection: '我的错题本',
     myOrder: '我的订单',
     activities: '我的活动',
-    more: '更多'
+    more: '更多',
+    all: '全部'
   },
   search: {
     placeholder: '搜索课程、班级、题库',

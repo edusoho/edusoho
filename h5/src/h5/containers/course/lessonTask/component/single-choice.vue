@@ -3,12 +3,23 @@
     <div class="subject-stem">
       <span class="serial-number">{{ itemdata.seq }}、</span>
       <div class="rich-text" v-html="stem" />
+      <attachement-preview 
+        v-for="item in getAttachementByType('material')"
+        :canLoadPlayer="isCurrent"
+        :attachment="item"
+        :key="item.id" />
     </div>
 
     <div v-if="itemdata.parentTitle" class="material-title">
       <span class="serial-number">问题{{ itemdata.materialIndex }}：</span>
       <div class="rich-text" v-html="itemdata.stem" />
     </div>
+
+    <attachement-preview 
+      v-for="item in getAttachementByType('stem')"
+      :canLoadPlayer="isCurrent"
+      :attachment="item"
+      :key="item.id" />
 
     <van-radio-group v-model="radio" class="answer-paper" @change="choose()">
       <van-radio
@@ -21,7 +32,6 @@
         <div class="subject-option__content" v-html="item" />
         <span
           slot="icon"
-          slot-scope="props"
           :class="[
             'subject-option__order',
             !canDo ? checkAnswer(index, itemdata) : '',
@@ -35,6 +45,8 @@
 
 <script>
 import checkAnswer from '../../../../mixins/lessonTask/itemBank';
+import attachementPreview from './attachement-preview.vue';
+
 export default {
   name: 'SingleChoice',
   filters: {
@@ -44,6 +56,9 @@ export default {
     },
   },
   mixins: [checkAnswer],
+  components: {
+    attachementPreview
+  },
   props: {
     itemdata: {
       type: Object,
@@ -53,14 +68,11 @@ export default {
       type: Array,
       default: () => [],
     },
-    number: {
-      type: Number,
-      default: 1,
-    },
     canDo: {
       type: Boolean,
       default: true,
     },
+    isCurrent: Boolean
   },
   data() {
     return {
@@ -83,6 +95,9 @@ export default {
     choose() {
       this.$emit('singleChoose', this.radio, this.itemdata.id);
     },
+    getAttachementByType(type) {
+      return this.itemdata.attachments.filter(item => item.module === type) || []
+    }
   },
 };
 </script>

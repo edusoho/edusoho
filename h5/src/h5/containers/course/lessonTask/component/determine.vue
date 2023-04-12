@@ -3,12 +3,23 @@
     <div class="subject-stem">
       <span class="serial-number">{{ itemdata.seq }}、</span>
       <div class="subject-stem__content rich-text" v-html="stem" />
+      <attachement-preview 
+        v-for="item in getAttachementByType('material')"
+        :canLoadPlayer="isCurrent"
+        :attachment="item"
+        :key="item.id" />
     </div>
 
     <div v-if="itemdata.parentTitle" class="material-title">
       <span class="serial-number">问题{{ itemdata.materialIndex }}：</span>
       <div class="rich-text" v-html="itemdata.stem" />
     </div>
+
+    <attachement-preview 
+      v-for="item in getAttachementByType('stem')"
+      :canLoadPlayer="isCurrent"
+      :attachment="item"
+      :key="item.id" />
 
     <van-radio-group v-model="radio" class="answer-paper" @change="choose()">
       <van-radio
@@ -19,7 +30,6 @@
         <div class="subject-option__content">对</div>
         <i
           slot="icon"
-          slot-scope="props"
           :class="[
             'iconfont',
             'icon-yes',
@@ -36,7 +46,6 @@
         <div class="subject-option__content">错</div>
         <i
           slot="icon"
-          slot-scope="props"
           :class="[
             'iconfont',
             'icon-no',
@@ -51,18 +60,20 @@
 
 <script>
 import checkAnswer from '../../../../mixins/lessonTask/itemBank';
+import attachementPreview from './attachement-preview.vue';
+
 export default {
   name: 'DetermineType',
   mixins: [checkAnswer],
+  components: {
+    attachementPreview
+  },
   props: {
     itemdata: {
       type: Object,
       default: () => {},
     },
-    number: {
-      type: Number,
-      default: 1,
-    },
+    isCurrent: Boolean,
     answer: {
       type: Array,
       default: () => [],
@@ -93,6 +104,9 @@ export default {
     choose() {
       this.$emit('determineChoose', this.radio, this.itemdata.id);
     },
+    getAttachementByType(type) {
+      return this.itemdata.attachments.filter(item => item.module === type) || []
+    }
   },
 };
 </script>

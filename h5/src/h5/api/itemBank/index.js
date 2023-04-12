@@ -22,4 +22,10 @@ export default [
     name: 'answerRecord',
     url: '/answer_record/{answerRecordId}',
   },
+  {
+    // 获取附件信息
+    name: 'getItemDetail',
+    url: '/item_detail',
+    disableLoading: true,
+  }
 ];

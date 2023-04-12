@@ -18,9 +18,11 @@
 
 <script>
 import Api from '@/api';
+import { mapState } from 'vuex';
 import * as types from '@/store/mutation-types.js';
-import { Toast } from 'vant';
+import { Dialog, Toast } from 'vant';
 import isAuthorized from '@/mixins/isAuthorized';
+
 const config = {
   assessment: {
     api: 'getAssessmentExerciseRecord',
@@ -40,24 +42,26 @@ export default {
       answerRecord: {},
       assessmentResponse: {},
       canLeave: false,
+      resources: [{ id: '1' }, { id: '2' }]
     };
   },
-  computed: {},
+  computed: {
+    ...mapState({
+      storageSetting: state => state.storageSetting
+    }),
+  },
   watch: {},
   created() {
     const mode = this.$route.query.mode;
     mode === 'start' ? this.getStart() : this.getContinue();
   },
+  provide() {
+    return {
+      getResourceToken: this.getResourceToken,
+      settings: this.storageSetting
+    }
+  },
   mounted() {},
-  // beforeRouteEnter(to, from, next) {
-  //   // 通过链接进来
-  //   if (from.fullPath === '/') {
-  //     backUrl = '/'
-  //   } else {
-  //     backUrl = ''
-  //   }
-  //   next()
-  // },
   beforeRouteLeave(to, from, next) {
     // 可捕捉离开提醒
     if (this.canLeave) {
@@ -78,6 +82,11 @@ export default {
         .catch(err => {
           this.handleError(err);
         });
+    },
+    getResourceToken(globalId) {
+      return Api.getItemDetail({ 
+        params: { globalId } 
+      })
     },
     getStart() {
       this.isLoading = true;
@@ -115,6 +124,7 @@ export default {
         message: '保存中...',
         forbidClick: true,
       });
+      data.admission_ticket = this.answerRecord.admission_ticket;
       Api.saveAnswer({ data })
         .then(res => {
           Toast.clear();
@@ -126,6 +136,16 @@ export default {
         })
         .catch(err => {
           Toast.clear();
+
+          if (err.code == 50095211) {
+            Dialog.confirm({
+              title: '您已退出题库，无法继续学习',
+              showCancelButton: false,
+              confirmButtonText: '点击刷新'
+            }).then(() => this.exitPage())
+            return
+          }
+
           this.$toast(err.message);
         });
     },
@@ -142,15 +162,35 @@ export default {
         })
         .catch(err => {
           Toast.clear();
+
+          if (err.code == 50095211) {
+            Dialog.confirm({
+              title: '您已退出题库，无法继续学习',
+              showCancelButton: false,
+              confirmButtonText: '点击刷新'
+            }).then(() => this.exitPage())
+            return
+          }
+          
           this.$toast(err.message);
         });
     },
     timeSaveAnswerData(data) {
+      data.admission_ticket = this.answerRecord.admission_ticket;
       Api.saveAnswer({ data })
         .then(res => {
           console.log(res);
         })
         .catch(err => {
+          if (err.code == 50095211) {
+            Dialog.confirm({
+              title: '您已退出题库，无法继续学习',
+              showCancelButton: false,
+              confirmButtonText: '点击刷新'
+            }).then(() => this.exitPage())
+            return
+          }
+          
           this.$toast(err.message);
         });
     },
@@ -169,6 +209,10 @@ export default {
         query,
       });
     },
+    exitPage() {
+      this.canLeave = true
+      this.$router.replace(`/my/courses/learning?active=2`)
+    }
   },
 };
 </script>

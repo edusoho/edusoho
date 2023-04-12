@@ -15,6 +15,28 @@
       continue.</strong>
   </noscript>
   <div id="app"></div>
+  <script>
+    function filterToken() {
+      const search = window.location.href.split('?')[1]
+
+      if (!search) return
+
+      const searchArray = search.split('&')
+      const tokenItemIndex = searchArray.findIndex(item => item.indexOf('token') > -1)
+
+      if (tokenItemIndex === -1) return
+
+      const token = searchArray[tokenItemIndex].split('=')[1]
+
+      if (!token) return
+
+      searchArray.splice(tokenItemIndex, 1)
+      window.localStorage.setItem('token', token)
+      window.location.replace(window.location.href.split('?')[0] + '?' + searchArray.join('&'))
+    }
+
+    filterToken()
+  </script>
   <script src="<%= BASE_URL %>static/js/appJSSDK.js"></script>
   <!-- built files will be auto injected -->
 </body>

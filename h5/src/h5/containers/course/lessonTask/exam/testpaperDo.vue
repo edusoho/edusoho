@@ -24,13 +24,13 @@
     <div class="paper-footer">
       <div>
         <span @click="cardShow = true">
-          <i class="iconfont icon-Questioncard" />
+          <i class="mb-8 iconfont icon-Questioncard" />
          {{ $t('courseLearning.questionCard') }}
         </span>
       </div>
       <div>
         <span @click="submitPaper()">
-          <i class="iconfont icon-submit" />
+          <i class="mb-8 iconfont icon-submit" />
           {{ $t('courseLearning.handInThePaper') }}
         </span>
       </div>
@@ -162,9 +162,19 @@ export default {
       startTime: null,
       backUrl: '',
       slideIndex: 0, // 题库组件当前所在的划片位置
+      forceLeave: false, // 强制离开考试
+      interval: null
     };
   },
-  mounted() {
+  watch: {
+    answer: {
+      handler() {
+        window.localStorage.setItem(this.localanswerName, JSON.stringify(this.answer))
+      },
+      deep: true
+    }
+  },
+  async mounted() {
     this.initReport();
     this.getData();
     this.saveAnswerInterval();
@@ -178,10 +188,13 @@ export default {
     next();
   },
   beforeRouteLeave(to, from, next) {
+    this.clearTime();
+    this.interval && clearInterval(this.interval)
     // 可捕捉离开提醒
     if (
       this.info.length == 0 ||
       this.isHandExam ||
+      this.forceLeave || 
       this.testpaperResult.status != 'doing'
     ) {
       next();
@@ -207,13 +220,8 @@ export default {
       selectedPlanId: state => state.course.selectedPlanId,
     }),
   },
-  watch: {
-    answer: {
-      handler: 'saveAnswer',
-      deep: true,
-    },
-  },
   methods: {
+    ...mapActions(['setCloudAddress']),
     ...mapActions('course', ['handExamdo', 'saveAnswerdo']),
     // 初始化上报数据
     initReport() {
@@ -262,6 +270,7 @@ export default {
       // 赋值数据
       this.items = res.items;
       this.testpaper = res.testpaper;
+      this.testpaper.courseId = res.courseId;
       res.testpaperResult.limitedTime = Number(res.testpaperResult.limitedTime);
       this.testpaperResult = res.testpaperResult;
 
@@ -325,6 +334,7 @@ export default {
               sub.parentTitle = title; // 材料题题干
               sub.parentType = item.type; // 材料题题型
               sub.materialIndex = index + 1; // 材料题子题的索引值，在页面要显示
+              sub.attachments = sub.attachments.concat(item.attachments)
 
               const detail = this.sixType(sub.type, sub, this.lastAnswer);
               this.$set(this.answer, sub.id, detail.answer);
@@ -373,36 +383,76 @@ export default {
     },
     // 考试倒计时
     timer(timeStr) {
-      let i = 0;
-      let time = this.testpaperResult.limitedTime * 60 * 1000;
-      if (time <= 0) {
+      if (this.testpaper.examMode == '0') {
+        let time = this.testpaperResult.limitedTime * 60 * 1000;
+
+        if (time <= 0) {
+          return;
+        }
+
+        // 如果考试过程中中断，剩余时间=考试限制时间-中断时间
+        if (this.lastTime) {
+          const gotime = Math.ceil(
+            new Date().getTime() - this.testpaperResult.beginTime * 1000,
+          );
+          time = time - gotime;
+        }
+
+        let i = 0;
+        this.timeMeter = setInterval(() => {
+          const { hours, minutes, seconds } = getCountDown(time, i++);
+
+          this.time = `${hours}:${minutes}:${seconds}`;
+
+          if (hours == 0 && minutes == 0 && seconds < 60) {
+            this.timeWarn = true;
+          }
+
+          if (
+            (Number(hours) == 0 &&
+              Number(minutes) == 0 &&
+              Number(seconds) == 0) ||
+            Number(seconds) < 0
+          ) {
+            this.clearTime();
+            this.submitExam();
+          }
+        }, 1000);
+
         return;
       }
-      // 如果考试过程中中断，剩余时间=考试限制时间-中断时间
-      if (this.lastTime) {
-        const gotime = Math.ceil(
-          new Date().getTime() - this.testpaperResult.beginTime * 1000,
-        );
-        time = time - gotime;
-      }
 
-      this.timeMeter = setInterval(() => {
-        const { hours, minutes, seconds } = getCountDown(time, i++);
+      if (this.testpaper.examMode == '1') {
+        const usedTime = this.testpaperResult.usedTime;
+        const localUsedTime = localStorage.getItem(this.localuseTime);
+        let time = Math.max(usedTime, localUsedTime) * 1000;
+
+        if (usedTime > localUsedTime) {
+          localStorage.setItem(this.localuseTime, usedTime)
+        }
+
+        const { hours, minutes, seconds } = getCountDown(time, 0);
+
         this.time = `${hours}:${minutes}:${seconds}`;
-        if (hours == 0 && minutes == 0 && seconds < 60) {
-          this.timeWarn = true;
-        }
-        if (
-          (Number(hours) == 0 &&
-            Number(minutes) == 0 &&
-            Number(seconds) == 0) ||
-          Number(seconds) < 0
-        ) {
-          this.clearTime();
-          // 直接交卷
-          this.submitExam();
-        }
-      }, 1000);
+
+        this.timeMeter = setInterval(() => {
+          time += 1000
+
+          const { hours, minutes, seconds } = getCountDown(time, 0);
+
+          this.time = `${hours}:${minutes}:${seconds}`;
+
+          if (this.testpaper.limitedTime > 0 && (time === this.testpaper.limitedTime * 60 * 1000)) {
+            Dialog.confirm({
+              cancelButtonText: this.$t('courseLearning.handInThePaper'),
+              confirmButtonText: this.$t('courseLearning.continueAnswer'),
+              message: this.$t('courseLearning.examTotalTime', { number: parseInt(minutes) }),
+            }).catch(() => {
+              this.submitExam();
+            })
+          }
+        }, 1000);
+      }
     },
     // 清空定时器
     clearTime() {
@@ -414,6 +464,7 @@ export default {
     },
     // 提交试卷
     submitPaper() {
+      console.log('submitPaper')
       let index = 0;
       let message = this.$t('courseLearning.sureSubmit');
       const answer = JSON.parse(JSON.stringify(this.answer));
@@ -482,37 +533,89 @@ export default {
             this.showResult();
           })
           .catch(err => {
+            if (err.code == 50095204) {
+              Dialog.confirm({
+                title: '你已提交过答题，当前页面无法重复提交',
+                showCancelButton: false,
+                confirmButtonText: '退出答题'
+              }).then(() => this.exitPage())
+              return
+            }
+
             reject(err);
             Toast.fail(err.message);
             this.isHandExam = true;
             this.showResult();
-          });
+          }).finally(() => {
+            localStorage.removeItem(this.localuseTime)
+          })
       });
     },
-    // 实时存储答案
-    saveAnswer(val) {
-      localStorage.setItem(this.localanswerName, JSON.stringify(val));
-    },
     saveAnswerInterval() {
-      setInterval(() => {
-        this.saveAnswerdo({
-          answer: JSON.parse(JSON.stringify(this.answer)),
-          resultId: this.testpaperResult.id,
-        })
+      this.interval = setInterval(() => {
+        this.saveAnswerAjax()
       }, 30 * 1000)
+    },
+    saveAnswerAjax() {
+      const used_time = localStorage.getItem(this.localuseTime) || 0;
+      this.saveAnswerdo({
+        admission_ticket: this.testpaperResult.admission_ticket,
+        answer: JSON.parse(JSON.stringify(this.answer)),
+        resultId: this.testpaperResult.id,
+        used_time,
+      })
+      .catch((error) => {
+        const { code: errorCode, message, traceId } = error;
+
+        if (errorCode === 50095204) {
+          // 试卷已提交 -- 退出答题
+          Dialog.confirm({
+            title: '你已提交过答题，当前页面无法重复提交',
+            showCancelButton: false,
+            confirmButtonText: '退出答题'
+          }).then(() => this.exitPage())
+          return
+        }
+
+        if (errorCode === 50095209) {
+          // 不能同时多端答题
+          Dialog.confirm({
+            title: '有新答题页面，请在新页面中继续答题',
+            showCancelButton: false,
+            confirmButtonText: '确定'
+          }).then(() => this.exitPage())
+          return
+        }
+
+        if (traceId) {
+          Dialog.confirm({
+            title: '答题保存失败，请保存截图后，联系技术支持处理',
+            message: `【${message}】【${traceId}】`,
+            confirmButtonText: '退出答题'
+          }).then(() => this.exitPage())
+          return
+        }
+
+        Dialog.confirm({
+          title: '网络连接不可用，自动保存失败',
+          showCancelButton: false,
+          confirmButtonText: '重新保存'
+        }).then(() => this.saveAnswerAjax())
+      })
+    },
+    exitPage() {
+      this.forceLeave = true
+      this.$router.push(`/course/${this.testpaper.courseId}`)
     },
     // 实时存储时间
     saveTime() {
       this.localuseTime = `${this.user.id}-${this.testpaperResult.id}-usedTime`;
-      let time = localStorage.getItem(this.localuseTime) || 0;
       this.localtime = setInterval(() => {
-        if (!this.testpaperResult.limitedTime) {
-          localStorage.setItem(this.localuseTime, ++time);
-        }
+        const time = localStorage.getItem(this.localuseTime) || 0;
+        localStorage.setItem(this.localuseTime, Number(time) + 1);
         localStorage.setItem(this.localtimeName, new Date().getTime());
       }, 1000);
     },
-    // 跳转到结果页
     showResult() {
       this.$router.replace({
         name: 'testpaperResult',
@@ -524,7 +627,6 @@ export default {
         },
       });
     },
-    // 跳转到说明页
     toIntro() {
       this.$router.replace({
         name: 'testpaperIntro',
@@ -536,4 +638,4 @@ export default {
     },
   },
 };
-</script>
+</script> 

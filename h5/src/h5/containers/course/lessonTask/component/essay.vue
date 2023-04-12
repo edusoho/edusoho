@@ -3,12 +3,23 @@
     <div class="subject-stem">
       <div class="serial-number">{{ itemdata.seq }}、</div>
       <div class="rich-text" v-html="stem" />
+      <attachement-preview 
+        v-for="item in getAttachementByType('material')"
+        :canLoadPlayer="isCurrent"
+        :attachment="item"
+        :key="item.id" />
     </div>
 
     <div v-if="itemdata.parentTitle" class="material-title">
       <span class="serial-number">问题{{ itemdata.materialIndex }}：</span>
       <div class="rich-text" v-html="itemdata.stem" />
     </div>
+
+    <attachement-preview 
+      v-for="item in getAttachementByType('stem')"
+      :canLoadPlayer="isCurrent"
+      :attachment="item"
+      :key="item.id" />
 
     <div class="answer-paper">
       <van-field
@@ -26,8 +37,13 @@
 </template>
 
 <script>
+import attachementPreview from './attachement-preview.vue';
+
 export default {
   name: 'EssayType',
+  components: {
+    attachementPreview
+  },
   props: {
     itemdata: {
       type: Object,
@@ -37,10 +53,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    number: {
-      type: Number,
-      default: 1,
-    },
+    isCurrent: Boolean,
     canDo: {
       type: Boolean,
       default: true,
@@ -70,6 +83,9 @@ export default {
     change() {
       // console.log(this.answer[0])
     },
+    getAttachementByType(type) {
+      return this.itemdata.attachments.filter(item => item.module === type) || []
+    }
   },
 };
 </script>

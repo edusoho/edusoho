@@ -91,6 +91,7 @@ export default {
     .van-swipe__indicator {
       width: 12px;
       height: 2px;
+      border-radius: 0 !important;
       background: rgba(255, 255, 255, 0.6);
       &.active {
         background-color: #fff;

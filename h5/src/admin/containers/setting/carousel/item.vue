@@ -4,18 +4,22 @@
     class="clearfix carousel-item"
     @click="selected(index)"
   >
-    <el-upload
-      :http-request="uploadImg"
-      :before-upload="beforeUpload"
-      :show-file-list="false"
-      class="add-img"
-      action="string"
-      accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
-    >
-      <img v-show="item.image.uri" :src="item.image.uri" class="carousel-img" />
-      <div v-show="item.image.uri" class="carousel-img-mask">{{ $t('carousel.replacePicture') }}</div>
-      <span v-show="!item.image.uri"><i class="text-18">+</i>{{ $t('carousel.addPictures') }}</span>
-    </el-upload>
+    <div style="display: flex;">
+      <div class="label-item">轮播图：</div>
+      <el-upload
+        :http-request="uploadImg"
+        :before-upload="beforeUpload"
+        :show-file-list="false"
+        class="add-img"
+        action="string"
+        accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
+      >
+        <img v-show="item.image.uri" :src="item.image.uri" class="carousel-img" />
+        <div v-show="item.image.uri" class="carousel-img-mask">{{ $t('carousel.replacePicture') }}</div>
+        <span v-show="!item.image.uri"><i class="text-18">+</i>{{ $t('carousel.addPictures') }}</span>
+      </el-upload>
+    </div>
+    
 
     <el-dialog
       :visible.sync="dialogVisible"
@@ -50,7 +54,8 @@
       src="static/images/delete.png"
       @click="handleRemove($event, index, itemNum)"
     />
-    <div v-if="pathName !== 'appSetting'" class="add-title">
+    
+    <!-- <div v-if="pathName !== 'appSetting'" class="add-title">
       {{ $t('carousel.title') }}：<el-input
         v-model="item.title"
         size="mini"
@@ -58,14 +63,16 @@
         max-length="15"
         clearable
       />
-    </div>
-    <!-- <div v-if="pathName !== 'appSetting'" class="add-choose">
-      {{ $t('carousel.links') }}：<el-radio v-model="radio" label="insideLink">{{ $t('carousel.siteLink') }}</el-radio>
     </div> -->
+
     <div class="add-choose">
-      <el-radio v-model="radio" class="mt16" label="insideLink">{{ $t('carousel.siteLink') }}</el-radio>
-      <el-radio v-model="radio" class="mt16" label="url">{{ $t('carousel.customLink') }}</el-radio>
+      <div class="label-item">链接：</div>
+      <div style="height: 24px;flex: 1;display: flex;align-items: center;flex-wrap: wrap;">
+        <el-radio v-model="radio" label="insideLink">{{ $t('carousel.siteLink') }}</el-radio>
+        <el-radio v-model="radio" label="url">{{ $t('carousel.customLink') }}</el-radio>
+      </div>
     </div>
+    
     <div v-if="radio === 'insideLink'" class="add-inner">
       <el-dropdown v-show="!linkTextShow">
         <el-button size="mini" class="el-dropdown-link">
@@ -93,14 +100,16 @@
         </el-tooltip>
       </el-tag>
     </div>
+
     <div v-if="radio === 'url'" class="add-outter">
-      <div class="pull-left add-outter-title">输入网址：</div>
+      <div class="label-item">输入网址：</div>
       <el-input
         v-model="item.link.url"
         class="pull-right"
         size="mini"
         placeholder="例如 http://www.eduosho.com"
         clearable
+        style="flex: 1;"
         @change="changeLinkUrl"
       />
     </div>
@@ -301,3 +310,14 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  .label-item {
+    width: 72px;
+    height: 100%;
+    margin-right: 16px;
+    text-align: right;
+    font-size: 14px;
+    color: #303133;
+  }
+</style>

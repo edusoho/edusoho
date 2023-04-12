@@ -397,6 +397,15 @@ export default {
     buy: '立即购买'
   },
   courseLearning: {
+    leftTime: '距离考试：',
+    hourUnit: '时',
+    minuteUnit: '分',
+    secondUnit: '秒',
+    unpassedTips: '很遗憾，您未通过本次考试！',
+    passedTips: '恭喜您已通过本次考试！',
+    corretAnswer: '答对题',
+    qustionType: '题型',
+    teacherSay: '教师评语',
     teachingService: '教学服务',
     title: '课程详情',
     intro: '课程介绍',
@@ -466,12 +475,18 @@ export default {
     nextLesson: '下一课',
     openingTime: '开考时间',
     examinationDuration: '考试时长',
+    noLimitTips: '温馨提示：考试一旦开始，倒计时结束后将自动交卷',
+    noLimitTips1: '温馨提示：本次考试不自动交卷，实时显示考试用时，中途离开不计时',
+    oneTips: '温馨提示：仅有一次考试机会，考试一旦开始，倒计时结束后将自动交卷',
+    oneTips1: '温馨提示：仅有一次考试机会，本次考试不自动交卷，实时显示考试用时，中途离开不计时',
     minutes: '分钟',
-    testName: '考试名称',
+    second: '秒',
+    testTips: '考试须知',
+    testName: '课时名称',
     noRestrictions: '不限制',
     fullMark: '满分 {number} 分',
     numberOfTopics: '题目数量',
-    fullScoreOfTestPaper: '试卷满分',
+    fullScoreOfTestPaper: '总分',
     topic: '题',
     total: '共计',
     viewResult: '查看成绩',
@@ -486,6 +501,7 @@ export default {
     material: '材料题',
     thisScore: '本次得分',
     toBeReviewed: '待批阅',
+    reviewing: '正在批阅中',
     correctRate: '正确率',
     branch: '分',
     timeSpentOnTheQuestion: '做题用时',
@@ -549,7 +565,11 @@ export default {
     publish: '发布',
     noContent: '暂无评价',
     continueLearning: '继续学习',
-    startLearning: '开始学习'
+    startLearning: '开始学习',
+    continueExam: '继续考试',
+    continueAnswer: '继续答题',
+    examTotalTips: '考试用时',
+    examTotalTime: '考试用时已达 {number}分钟',
   },
   classLearning: {
     intor: '班级介绍',
@@ -621,5 +641,13 @@ export default {
     allClass: '全部班级适用',
     allGoods: '全部商品适用',
     allMember: '全部会员适用'
+  },
+  attachment: {
+    waiting: '等待转码',
+    doing: '转码中...',
+    error: '转码失败',
+    other: '请前往PC网校下载!',
+    disableVideo: '该浏览器不支持视频播放，请使用微信或APP',
+    disableVideo2: '该浏览器不支持视频播放，请使用APP'
   }
 };

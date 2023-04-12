@@ -1,45 +1,50 @@
 .module-template {
-  position: relative;
+	position: relative;
 }
 
 .icon-delete {
-  position: absolute;
-  top: -9px;
-  right: -9px;
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  color: $primary-color;
+	position: absolute;
+	top: -9px;
+	right: -9px;
+	width: 18px;
+	height: 18px;
+	color: $primary-color;
+	cursor: pointer;
 }
 
 .courseLink {
-  width: 138px;
-  height: auto;
-  line-height: 1;
-  padding-left: 0;
-  margin-left: -3px;
-  background: none;
-  border: none;
-  font-size: 14px;
-  .text-content {
-    position: relative;
-    top: 2px;
-    display: inline-block;
-    max-width: 9em;
-    margin-left: 4px;
-  }
-  .el-icon-close {
-    right: -2px;
-  }
+	position: relative;
+	width: 138px;
+	height: auto;
+	margin-left: -3px;
+	padding-left: 0;
+	font-size: 14px;
+	line-height: 1;
+	background: none;
+	border: none;
+
+	.text-content {
+		position: relative;
+		top: 2px;
+		display: inline-block;
+		max-width: 9em;
+		margin-left: 4px;
+	}
+
+	&.el-tag .el-icon-close {
+		position: absolute;
+		top: 9px;
+		right: -1px;
+	}
 }
 
 .image-mask {
-  width: 100%;
-  height: 100%;
-  background-color: #e1e1e1;
-  font-size: 26px;
-  color: #919191;
-  font-weight: bold;
-  text-align: center;
-  line-height: 194px;
+	width: 100%;
+	height: 100%;
+	color: #919191;
+	font-weight: bold;
+	font-size: 26px;
+	line-height: 194px;
+	text-align: center;
+	background-color: #e1e1e1;
 }

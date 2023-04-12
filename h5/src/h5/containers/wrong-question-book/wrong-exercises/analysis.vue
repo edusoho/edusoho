@@ -8,6 +8,7 @@
           :answerReport="answerReport"
           :assessment="assessment"
           :answerScene="answerScene"
+          :assessmentResponse="assessmentResponse"
         ></item-report>
       </div>
     </template>
@@ -17,6 +18,7 @@
 <script>
 import _ from 'lodash';
 import Api from '@/api';
+import { mapState } from 'vuex';
 
 export default {
   name: 'WrongExercisesAnalysis',
@@ -28,11 +30,25 @@ export default {
       answerScene: {},
       answerReport: {},
       answerRecord: {},
+      assessmentResponse: {}
     };
   },
 
   created() {
     this.fetchData();
+  },
+
+  computed: {
+    ...mapState({
+      storageSetting: state => state.storageSetting
+    }),
+  },
+
+  provide() {
+    return {
+      getResourceToken: this.getResourceToken,
+      settings: this.storageSetting
+    }
   },
 
   methods: {
@@ -44,15 +60,21 @@ export default {
           answerRecordId: this.$route.query.recordId,
         },
       }).then(res => {
-        const { assessment, answer_scene, answer_report, answer_record } = res;
+        const { assessment, answer_scene, answer_report, answer_record, assessment_response } = res;
         _.assign(this, {
           assessment,
           answerScene: answer_scene,
           answerRecord: answer_record,
           answerReport: answer_report,
+          assessmentResponse: assessment_response
         });
         this.isLoading = false;
       });
+    },
+    getResourceToken(globalId) {
+      return Api.getItemDetail({ 
+        params: { globalId } 
+      })
     },
   },
 };

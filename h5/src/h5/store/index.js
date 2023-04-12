@@ -1,5 +1,6 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
+import { GetUrlParam } from '@/utils/utils';
 
 import { getLanguage } from '@/lang/index';
 
@@ -16,6 +17,7 @@ Vue.use(Vuex);
 
 const state = {
   isLoading: false,
+  isFromMall: !!GetUrlParam('isFromMall'),
   token: null,
   user: {},
   smsToken: '',
@@ -25,6 +27,7 @@ const state = {
   vipSettings: {},
   wechatSwitch: false,
   vipSwitch: false,
+  storageSetting: {},
   couponSwitch: null,
   socialBinded: {
     wx: true,

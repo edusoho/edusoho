@@ -1,6 +1,6 @@
 <template>
   <div class="e-learn e-learn-padding">
-    <van-tabs v-model="active" class="after-tabs">
+    <van-tabs :active="active" @click="updateActive" class="after-tabs">
       <van-tab v-for="item in tabs" :title="$t(item)" :key="item" />
     </van-tabs>
     <emptyCourse
@@ -25,6 +25,7 @@
         :normal-tag-show="false"
         :is-all-data="isAllCourse"
         :course-item-type="courseItemType"
+        :splitLine="true"
         :is-request-compile="isCourseRequestComplete"
         :type-list="'course_list'"
         @needRequest="courseSendRequest"
@@ -89,7 +90,7 @@ export default {
       limit_course: 10,
       limit_class: 10,
       limit_bank: 10,
-      active: 0,
+      active: Number(this.$route.query.active) || 0,
       isCourseFirstRequestCompile: false,
       isClassFirstRequestCompile: false,
       isBankFirstRequestCompile: false,
@@ -149,6 +150,9 @@ export default {
     });
   },
   methods: {
+    updateActive(key, title) {
+      this.active = key;
+    },
     judgeIsAllCourse(courseInfomation) {
       return this.courseList.length == courseInfomation.paging.total;
     },
@@ -253,4 +257,39 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+
+  /deep/ .van-tabs__line {
+    display: none;
+  }
+
+  /deep/ .van-tab--active {
+    color: #1D2129;
+    font-weight: 600;
+
+    .van-tab__text--ellipsis {
+      overflow: visible;
+    }
+
+    .van-tab__text {
+      position: relative;
+      z-index: 10;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: -3px;
+        bottom: -2px;
+        z-index: -1;
+        width: 36px;
+        height: 12px;
+        background: linear-gradient(90deg, #3DCD7F 2.04%, rgba(61, 205, 127, 0) 100%);
+        border-radius: 21px;
+      }
+    }
+  }
+
+  /deep/ img.course-img {
+    border-radius: 6px !important;
+  }
+</style>

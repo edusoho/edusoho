@@ -24,11 +24,6 @@ const appItems = [
     iconUrl: 'static/images/apptab1.png',
   },
   {
-    name: 'dynamic',
-    type: 'footer.learn',
-    iconUrl: 'static/images/apptab2.png',
-  },
-  {
     name: 'learn',
     type: 'footer.message',
     iconUrl: 'static/images/apptab3.png',
@@ -44,17 +39,17 @@ const h5Items = [
   {
     name: 'find',
     type: 'footer.discover',
-    icon: 'iconfont icon-faxian',
+    iconUrl: 'static/images/exploreHL.png',
   },
   {
     name: 'learning',
     type: 'footer.learn',
-    icon: 'iconfont icon-xuexi',
+    iconUrl: 'static/images/learning.png',
   },
   {
     name: 'my',
     type: 'footer.me',
-    icon: 'iconfont icon-faxian',
+    iconUrl: 'static/images/me.png',
   },
 ];
 export default {

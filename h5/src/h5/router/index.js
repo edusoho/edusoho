@@ -951,11 +951,14 @@ const routes = [
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值
-if (localStorage.getItem('token')) {
-  store.commit(types.USER_LOGIN, {
-    token: localStorage.getItem('token'),
-    user: JSON.parse(localStorage.getItem('user')),
-  });
+const token = localStorage.getItem('token')
+const user = localStorage.getItem('user')
+if (token) {
+  store.commit(types.USER_LOGIN, { token, user: JSON.parse(user) });
+
+  if (!user) {
+    store.dispatch('getUserInfo')
+  }
 }
 
 const router = new Router({
@@ -1084,6 +1087,10 @@ router.beforeEach(async (to, from, next) => {
   if (store.state.settingUgc) {
     const result = await Api.getSettings({ query: { type: 'ugc' }});
     store.commit('SET_SETTING_UGC', result);
+  }
+
+  if (!Object.keys(store.state.storageSetting).length) {
+    store.dispatch('getGlobalSettings', { type: 'storage', key: 'storageSetting' })
   }
 
   // 站点后台设置、会员后台配置
