@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Util\ObjectCombinationUtil;
 use Biz\Common\CommonException;
+use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Event\Event;
@@ -254,6 +255,9 @@ abstract class AbstractResource
         return $this->getBiz()->service('S2B2C:S2B2CFacadeService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
