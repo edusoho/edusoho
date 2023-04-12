@@ -51,6 +51,9 @@ class MallController extends BaseController
                 'hasWechatMobilePermission' => $this->getCurrentUser()->hasPermission('admin_v2_setting_wechat_auth'),
                 'wechatMobileUrl' => $this->generateUrl('admin_v2_setting_wechat_auth'),
             ],
+            'marketing' => [
+                'grouponEnable' => true,
+            ],
         ];
 
         return $this->render('MarketingMallBundle:admin-v2/mall:index.html.twig', [

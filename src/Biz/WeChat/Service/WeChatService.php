@@ -40,9 +40,11 @@ interface WeChatService
 
     public function isSubscribeSmsEnabled($smsType = '');
 
-    public function sendSubscribeSms($smsType, array $userIds, $templateId, array $params = []);
+    public function sendSubscribeSms($smsType, array $userIds, $templateId, array $params = [], $batchId = 0);
 
     public function sendSubscribeWeChatNotification($templateCode, $logName, $list, $batchId = 0);
+
+    public function sendSubscribeWeChatNotificationLocal($templateCode, $logName, $notifications);
 
     public function getSubscribeTemplateId($templateCode, $scene = '');
 

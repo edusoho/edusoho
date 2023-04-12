@@ -1,6 +1,6 @@
 <fieldset id="message-subscribe" {% if wechatNotificationSetting.notification_type == 'serviceFollow' or wechatSetting.wechat_notification_enabled == 0 %}style="display:none;"{% endif %}>
   <legend>
-    {{'admin.wechat_notification.template'|trans}}
+    {{'admin.wechat_notification.message_subscribe.template'|trans}}
     {% if wechatNotificationSetting.is_authorization != 1 %}
     <span class='text-danger js-wechat-notification-message-subscribe-authorization' style="margin-left: 3%;font-size: small" data-enabled="{% if wechatNotificationSetting.is_authorization|default('') %}1{% else %}0{% endif %}">{{ 'admin.wechat_notification.message_subscribe.disable_tip'|trans|raw }}</span>
       <a class="btn btn-default btn-sm btn-primary pull-right js-wechat-pre-auth-url" target="_blank" data-url="{{ path('admin_v2_setting_wechat_pre_auth_url', {platformType: 'official_account'}) }}">{{'admin.wechat.notification.go_authorizer'|trans}}</a>
@@ -10,9 +10,9 @@
     <thead>
     <tr>
       <th width="20%">{{ 'admin.wechat_notification.template_name'|trans }}</th>
+      <th width="15%">{{ 'admin.wechat_notification.message_subscribe.sms_template_content_sample'|trans }}</th>
       <th width="30%">{{ 'admin.wechat_notification.message_subscribe.template_content_sample'|trans }}</th>
       <th width="10%">{{ 'admin.wechat_notification.message_subscribe.template_subscribe_position'|trans }}</th>
-      <th width="15%">{{ 'admin.wechat_notification.message_subscribe.sms_template_content_sample'|trans }}</th>
       <th width="10%">{{ 'admin.wechat_notification.send_object'|trans }}</th>
       <th width="10%">{{ 'admin.wechat_notification.template_status'|trans }}</th>
       <th width="10%">{{ 'admin.wechat_notification.operation'|trans }}</th>
@@ -22,9 +22,9 @@
     {% for key,template in messageSubscribeTemplates %}
       <tr>
         <td width="20%">{{ template.name|trans|raw }}</td>
+        <td width="15%">{{ template.sms_content|default('无')|trans|raw }}</td>
         <td width="30%">{{ template.content|trans|default('无')|raw }}</td>
         <td width="10%">{{ template.position|trans|default('无')|raw }}</td>
-        <td width="15%">{{ template.sms_content|default('无')|trans|raw }}</td>
         <td width="10%">{{ template.object|trans|raw }}</td>
         <td width="10%">
           {% if template.status == 1 %}
