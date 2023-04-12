@@ -5284,6 +5284,7 @@ admin.mobile_manage.discovery_upgrade.function: >
 admin.mobile_manage.discovery_upgrade.transfer_btn: 'To use'
 admin.wechat_notification.switch: WeChat Notification Setting
 admin.wechat_notification.template: WeChat Notification Template
+admin.wechat_notification.message_subscribe.template: WeChat Subscriber Notification Template
 admin.wechat_notification.template_name: Template Name
 admin.wechat_notification.template_content_sample: Template Content Sample
 admin.wechat_notification.send_object: Send Object

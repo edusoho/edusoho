@@ -9,6 +9,7 @@ use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Notification\Service\NotificationService;
 use Biz\System\Service\SettingService;
 use Biz\WeChat\Service\WeChatService;
+use Biz\WeChat\WechatNotificationType;
 use QiQiuYun\SDK\Constants\NotificationChannelTypes;
 use QiQiuYun\SDK\Constants\WeChatPlatformTypes;
 use Symfony\Component\HttpFoundation\Request;
@@ -122,7 +123,7 @@ class WeChatNotificationController extends BaseController
         $templates = $this->getTemplateSetting($templates, $wechatSetting);
         $wechat_notification_enabled = $wechatSetting['wechat_notification_enabled'];
 
-        if ('messageSubscribe' == $notificationType) {
+        if (WechatNotificationType::MESSAGE_SUBSCRIBE == $notificationType) {
             $wechatSetting = $this->getSettingService()->get('wechat_notification', []);
             $templates = $this->get('extension.manager')->getMessageSubscribeTemplates();
             $templates = $this->getTemplateSetting($templates, $wechatSetting);
@@ -134,22 +135,19 @@ class WeChatNotificationController extends BaseController
             }
             $fields = $request->request->all();
 
-            if (!$this->templateSettingFilter($notificationType, $templates[$key])) {
-                $this->getWeChatService()->saveWeChatTemplateSetting($key, $fields, $notificationType);
-
-                return $this->createJsonResponse(true);
-            }
-            if (1 == $fields['status']) {
-                $this->getWeChatService()->addTemplate($templates[$key], $key, $notificationType);
-            } else {
-                $this->getWeChatService()->deleteTemplate($templates[$key], $key, $notificationType);
+            if ($this->templateSettingFilter($notificationType, $templates[$key])) {
+                if (1 == $fields['status']) {
+                    $this->getWeChatService()->addTemplate($templates[$key], $key, $notificationType);
+                } else {
+                    $this->getWeChatService()->deleteTemplate($templates[$key], $key, $notificationType);
+                }
             }
 
             $this->getWeChatService()->saveWeChatTemplateSetting($key, $fields, $notificationType);
 
             return $this->createJsonResponse(true);
         }
-        $modal = isset($templates[$key]['setting_modal_v2']) ? $templates[$key]['setting_modal_v2'] : 'admin-v2/operating/wechat-notification/setting-modal/default-modal.html.twig';
+        $modal = $templates[$key]['setting_modal_v2'] ?? 'admin-v2/operating/wechat-notification/setting-modal/default-modal.html.twig';
 
         return $this->render($modal, [
             'template' => $templates[$key],
@@ -161,7 +159,7 @@ class WeChatNotificationController extends BaseController
 
     public function templateSettingFilter($notificationType, $template)
     {
-        if ('messageSubscribe' == $notificationType) {
+        if (WechatNotificationType::MESSAGE_SUBSCRIBE == $notificationType) {
             return isset($template['id']);
         }
 
@@ -175,7 +173,7 @@ class WeChatNotificationController extends BaseController
         $wechat_notification_config = $this->prepareWechatNotificationSetting($notificationType, $notificationSms);
         $this->getSettingService()->set('wechat_notification', $wechat_notification_config);
         $setting = $this->getSettingService()->get('wechat_notification');
-        if ('messageSubscribe' == $setting['notification_type']) {
+        if (WechatNotificationType::MESSAGE_SUBSCRIBE == $setting['notification_type']) {
             $loginConnect = $this->getSettingService()->get('login_bind');
             $this->getBiz()['ESCloudSdk.notification']->openChannel(NotificationChannelTypes::WECHAT_SUBSCRIBE, [
                 'app_id' => $loginConnect['weixinmob_key'],
@@ -195,8 +193,10 @@ class WeChatNotificationController extends BaseController
         }
         if ($notificationSms) {
             $wechatSetting['notification_sms'] = 1;
+        } else {
+            $wechatSetting['notification_sms'] = 0;
         }
-        if ('serviceFollow' == $notificationType) {
+        if (WechatNotificationType::SERVICE_FOLLOW == $notificationType) {
             $wechatSetting['notification_sms'] = 0;
         }
 
