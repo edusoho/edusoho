@@ -3468,6 +3468,10 @@ marketing_activity:
     path: '/marketing/activity/{activityId}'
     defaults:
         _controller: 'AppBundle:Marketing:activity'
+marketing_weixin_pay:
+    path: '/marketing/weixin_pay'
+    defaults:
+        _controller: 'AppBundle:Marketing:weixinPay'
 export:
     path: '/export/{name}/{type}'
     defaults:
