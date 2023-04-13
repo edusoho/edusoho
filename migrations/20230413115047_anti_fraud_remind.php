@@ -11,7 +11,7 @@ class AntiFraudRemind extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("CREATE TABLE `anti_fraud_remind` (
+        $connection->exec("CREATE TABLE IF NOT EXISTS `anti_fraud_remind` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
             `userId` int(10) unsigned DEFAULT '0' COMMENT '用户id',
             `lastRemindTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上次提醒时间',
