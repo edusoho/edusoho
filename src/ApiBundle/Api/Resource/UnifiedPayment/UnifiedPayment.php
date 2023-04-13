@@ -28,34 +28,40 @@ class UnifiedPayment extends AbstractResource
             throw new InvalidArgumentException('请配置授权码');
         }
 
-        $payload =  (array)JWT::decode($params['token'], $storage['cloud_secret_key'], ['HS256']);
-        if (empty($payload)) {
-            throw new InvalidArgumentException('令牌内容错误');
-        }
+//        $payload =  (array)JWT::decode($params['token'], $storage['cloud_secret_key'], ['HS256']);
+//        if (empty($payload)) {
+//            throw new InvalidArgumentException('令牌内容错误');
+//        }
 
-        $trade = $this->createTrade($payload, [
+        $order = [
+            'title'=> '测试商品标题',
+            'trade_sn' => md5(uniqid()),
+            'amount' => '2888.00'
+        ];
+
+        $trade = $this->createTrade($order, [
             'create_ip' => $request->getHttpRequest()->getClientIp()
         ]);
 
         return [
             'config' => $trade,
-            'title' => $payload['title'],
-            'tradeSn' => $payload['trade_sn'],
-            'amount' => $payload['amount'],
+            'title' => $order['title'],
+            'tradeSn' => $order['trade_sn'],
+            'amount' => $order['amount'],
             'returnUrl' => $this->generateUrl('cashier_pay_return', ['payment' => 'wechat'], UrlGeneratorInterface::ABSOLUTE_URL),
         ];
     }
 
-    public function createTrade(array $payload, array $params)
+    public function createTrade(array $order, array $params)
     {
         $url = $this->generateUrl('cashier_pay_notify', ['payment' => 'wechat'], UrlGeneratorInterface::ABSOLUTE_URL);
         $trade = [
             'platform_type' => 'Js',
-            'goods_title' => $payload['title'],
+            'goods_title' => $order['title'],
             'goods_detail' => '',
             'attach' => [],
-            'trade_sn' => $payload['trade_sn'],
-            'amount' => $payload['amount'],
+            'trade_sn' => $order['trade_sn'],
+            'amount' => $order['amount'],
             'notify_url' => $url,
             'open_id' => 'openid',
             'create_ip' => $params['create_ip'],
