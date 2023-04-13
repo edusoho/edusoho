@@ -19,7 +19,7 @@ class UnifiedPayment extends AbstractResource
      */
     public function add(ApiRequest $request)
     {
-        $params = $request->query->all();
+        $params = $request->request->all();
         if (empty($params['token'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
@@ -34,13 +34,13 @@ class UnifiedPayment extends AbstractResource
 //        }
 
         $order = [
-            'title'=> '测试商品标题',
+            'title' => '测试商品标题',
             'trade_sn' => md5(uniqid()),
-            'amount' => '2888.00'
+            'amount' => 288800,
         ];
 
         $trade = $this->createTrade($order, [
-            'create_ip' => $request->getHttpRequest()->getClientIp()
+            'create_ip' => $request->getHttpRequest()->getClientIp(),
         ]);
 
         return [
@@ -85,5 +85,4 @@ class UnifiedPayment extends AbstractResource
     {
         return $this->service('Pay:PayService');
     }
-
 }
