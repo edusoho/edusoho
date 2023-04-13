@@ -15,6 +15,7 @@ use Biz\File\Service\FileImplementor;
 use Biz\File\UploadFileException;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Topxia\Service\Common\ServiceKernel;
 
 class CloudFileImplementorImpl extends BaseService implements FileImplementor
 {
@@ -290,28 +291,22 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function download($globalId, $ssl = false)
     {
-        $params = [];
-        if ($ssl) {
-            $params['protocol'] = 'https';
-        }
-
-        $download = $this->createApi('leaf')->get("/resources/{$globalId}/download", $params);
-
-        return $download;
+        $user = ServiceKernel::instance()->getCurrentUser();
+        $url =  $this->biz['ESCloudSdk.play']->makeDownloadUrl($globalId, 300, array(
+            'uid' => (string) $user['id'] ?? '',
+            'uname' =>$user['nickname'] ?? '',
+        ), array('ssl' => $ssl));
     }
 
     public function getDownloadFile($file, $ssl = false)
     {
-        $params = [];
-        if ($ssl) {
-            $params['protocol'] = 'https';
-        }
+        $user = ServiceKernel::instance()->getCurrentUser();
+        $url =  $this->biz['ESCloudSdk.play']->makeDownloadUrl($file['globalId'], 300, array(
+            'uid' => (string) $user['id'] ?? '',
+            'uname' =>$user['nickname'] ?? '',
+        ), array('ssl' => $ssl));
 
-        $download = $this->createApi('leaf')->get("/resources/{$file['globalId']}/download", $params);
-
-        $download['type'] = 'url';
-
-        return $download;
+        return array('url' => $url, 'type' => 'url');
     }
 
     public function getDefaultHumbnails($globalId)

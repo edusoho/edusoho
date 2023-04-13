@@ -37,4 +37,16 @@ class PlayService extends BaseService
 
         return sprintf('//%s/sdk_api/play?%s', $this->host, http_build_query($params));
     }
+
+    public function makeDownloadUrl($no, $lifetime = 600, $payload = array(), $options = array())
+    {
+        $payload = array_merge($payload, array('iss' => 'download'));
+        $token = $this->makePlayToken($no, $lifetime, $payload);
+
+        $params = array_merge(array('resNo' => $no, 'token' => $token), $options);
+
+        $schema = empty($options['ssl']) ? 'http' : 'https';
+
+        return sprintf($schema . '://%s/sdk_api/download?%s', $this->host, http_build_query($params));
+    }
 }
