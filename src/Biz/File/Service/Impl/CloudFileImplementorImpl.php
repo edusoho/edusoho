@@ -296,6 +296,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'uid' => (string) $user['id'] ?? '',
             'uname' =>$user['nickname'] ?? '',
         ), array('ssl' => $ssl));
+        return array('url' => $url);
     }
 
     public function getDownloadFile($file, $ssl = false)
