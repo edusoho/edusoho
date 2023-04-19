@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 
 class MallUserBind extends AbstractResource
 {
@@ -19,6 +20,10 @@ class MallUserBind extends AbstractResource
         $params = $request->request->all();
         if (ArrayToolkit::requireds($params, ['type', 'fromId', 'toId', 'token'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $userBind = $this->getUserService()->getUserBindByTypeAndUserId($params['type'], $params['toId']);
+        if ($userBind) {
+            throw UserException::USER_ALREADY_BIND();
         }
         $this->getUserService()->bindUser($params['type'], $params['fromId'], $params['toId'], $params['token']);
 
