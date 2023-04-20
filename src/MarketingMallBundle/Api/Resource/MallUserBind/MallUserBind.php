@@ -18,7 +18,7 @@ class MallUserBind extends AbstractResource
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-        if (ArrayToolkit::requireds($params, ['type', 'fromId', 'toId', 'token'])) {
+        if (!ArrayToolkit::requireds($params, ['type', 'fromId', 'toId', 'token'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $userBind = $this->getUserService()->getUserBindByTypeAndUserId($params['type'], $params['toId']);
