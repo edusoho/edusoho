@@ -1,0 +1,52 @@
+<?php
+
+namespace MarketingMallBundle\Api\Resource\MallTrade;
+
+use ApiBundle\Api\Annotation\AuthClass;
+use ApiBundle\Api\ApiRequest;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
+use Biz\UnifiedPayment\Service\UnifiedPaymentService;
+use MarketingMallBundle\Api\Resource\BaseResource;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+class MallTrade extends BaseResource
+{
+    /**
+     * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
+     */
+    public function add(ApiRequest $request)
+    {
+        $fields = $request->request->all();
+        if (!ArrayToolkit::requireds($fields, ['orderSn', 'title', 'amount', 'userId', 'openId'], true)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        $trade = ArrayToolkit::parts($fields, [
+            'orderSn',
+            'title',
+            'amount',
+            'userId',
+            'openId',
+            'description',
+        ]);
+
+        $trade['description'] = $fields['description'] ?? '';
+        $trade['platform'] = 'wechat';
+        $trade['platformType'] = 'Js';
+        $trade['source'] = 'Mall';
+        $trade['notifyUrl'] = $this->generateUrl('marketing_mall_unified_payment_notify', [], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $this->getUnifiedPaymentService()->createTrade($trade);
+
+        return 'success';
+    }
+
+    /**
+     * @return UnifiedPaymentService
+     */
+    protected function getUnifiedPaymentService()
+    {
+        return $this->service('UnifiedPayment:UnifiedPaymentService');
+    }
+}

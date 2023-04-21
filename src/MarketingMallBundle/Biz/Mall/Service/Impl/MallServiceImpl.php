@@ -16,6 +16,7 @@ class MallServiceImpl extends BaseService implements MallService
 {
     public function isShow()
     {
+        return true;
         // 商城内测
         $alphaTest = $this->getSetting('magic.enable_marketing_mall_alpha_test', 0);
 

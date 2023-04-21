@@ -123,7 +123,7 @@ class WechatGateway extends AbstractGateway
             }
         } else {
             $data = $response->getData();
-            throw new PayGatewayException($data['return_msg']);
+            throw new PayGatewayException($data['err_code_des'] ?? $data['return_msg']);
         }
 
 
