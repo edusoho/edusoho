@@ -4,6 +4,7 @@ namespace Biz\UnifiedPayment\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\UnifiedPayment\Dao\TradeDao;
 use Biz\UnifiedPayment\Service\UnifiedPaymentService;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Targetlog\Service\TargetlogService;
@@ -13,10 +14,15 @@ use Exception;
 
 class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentService
 {
-    public function createTrade($fields)
+    public function getTradeByTradeSn(string $sn)
+    {
+        return $this->getTradeDao()->getByTradeSn($sn);
+    }
+
+    public function createTrade($fields, $createPlatformTrade = true)
     {
         $tradeFields = ['title', 'orderSn', 'amount', 'platform', 'platformType', 'userId', 'source'];
-        $platformFields = ['description', 'notifyUrl', 'openId'];
+        $platformFields = ['description', 'notifyUrl', 'openId', 'createIp'];
         if (!ArrayToolkit::requireds($fields, array_merge($tradeFields, $platformFields))) {
             throw new InvalidArgumentException('trade args is invalid.');
         }
@@ -34,22 +40,50 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
             'status' => 'paying',
         ];
 
-        //TODO 策略实现具体业务参数
-        $trade['platformCreatedParams'] = [
-            'goods_detail' => $fields['description'],
-            'attach' => $fields['attach'] ?? [],
-            'goods_title' => $fields['title'],
-            'notify_url' => $fields['notifyUrl'],
-            'open_id' => $fields['openId'],
+        $trade = $this->getTradeDao()->create($trade);
+        if ($trade['amount'] > 0 && $createPlatformTrade) {
+            $trade = $this->createPlatformTrade($fields, $trade);
+        }
+
+        $this->getTargetlogService()->log(TargetlogService::INFO, 'unified_payment.trade.create', $trade['tradeSn'], '创建订单', ['trade' => $trade, 'fields' => $fields]);
+
+        return $trade;
+    }
+
+    protected function createPlatformTrade($data, $trade)
+    {
+        $params = [
+            'goods_detail' => $data['description'],
+            'attach' => $data['attach'] ?? [],
+            'goods_title' => $data['title'],
+            'notify_url' => $data['notifyUrl'],
+            'open_id' => $data['openId'],
             'trade_sn' => $trade['tradeSn'],
             'amount' => $trade['amount'],
             'platform_type' => $trade['platformType'],
             'platform' => $trade['platform'],
+            'create_ip' => $data['createIp'],
         ];
-        $trade = $this->getTradeDao()->create($trade);
-        $this->getTargetlogService()->log(TargetlogService::INFO, 'unified_payment.trade.create', $trade['tradeSn'], '创建订单', ['trade' => $trade, 'fields' => $fields]);
 
-        return $trade;
+        $result = $this->getPayment($params['platform'])->createTrade($params);
+
+        return $this->getTradeDao()->update($trade['id'], [
+            'platformCreatedParams' => $params,
+            'platformCreatedResult' => $result,
+        ]);
+    }
+
+    public function createPlatformTradeByTradeSn($tradeSn)
+    {
+        $trade = $this->getTradeDao()->getByTradeSn($tradeSn);
+
+        $result = $this->getPayment($trade['platform'])->createTrade($trade['platformCreatedParams']);
+
+        $this->getTradeDao()->update($trade['id'], [
+            'platformCreatedResult' => $result,
+        ]);
+
+        return $result;
     }
 
     public function notifyPaid($payment, $data)
@@ -80,16 +114,16 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
 
             if (PayingStatus::NAME != $trade['status']) {
                 $this->getTargetlogService()->log(TargetlogService::WARNING, 'unified_payment.trade.is_not_paying', $data['tradeSn'], "交易号{$data['tradeSn']}状态不正确，状态为：{$trade['status']}", $data);
+
                 return $trade;
             }
             if ($trade['amount'] != $data['pay_amount']) {
-                $this->getTargetlogService()->log(TargetlogService::WARNING, 'unified_payment.trade.pay_amount.mismatch', $data['tradeSn'], "实际支付的价格与交易记录价格不匹配", ['trade' => $trade, 'data' => $data]);
+                $this->getTargetlogService()->log(TargetlogService::WARNING, 'unified_payment.trade.pay_amount.mismatch', $data['tradeSn'], '实际支付的价格与交易记录价格不匹配', ['trade' => $trade, 'data' => $data]);
             }
 
             $trade = $this->updateTradeToPaid($trade['id'], $data);
 
             $this->getTargetlogService()->log(TargetlogService::INFO, 'unified_payment.trade.paid', $data['tradeSn'], "交易号{$data['tradeSn']}，账目流水处理成功", $data);
-
         } catch (Exception $e) {
             $this->getTargetlogService()->log(TargetlogService::ERROR, 'unified_payment.trade.error', $data['tradeSn'], "交易号{$data['tradeSn']}处理失败, {$e->getMessage()}", $data);
             throw $e;
@@ -113,7 +147,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
 
     protected function generateSn($prefix = ''): string
     {
-        return $prefix . date('YmdHis', time()) . mt_rand(10000, 99999);
+        return $prefix.date('YmdHis', time()).mt_rand(10000, 99999);
     }
 
     /**
@@ -123,9 +157,12 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
      */
     protected function getPayment($payment)
     {
-        return $this->biz['payment.' . $payment];
+        return $this->biz['payment.'.$payment];
     }
 
+    /**
+     * @return TradeDao
+     */
     protected function getTradeDao()
     {
         return $this->biz->dao('UnifiedPayment:TradeDao');

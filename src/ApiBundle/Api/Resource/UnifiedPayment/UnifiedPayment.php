@@ -7,8 +7,8 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\Exception\InvalidArgumentException;
 use Biz\Common\CommonException;
+use Biz\UnifiedPayment\Service\UnifiedPaymentService;
 use Codeages\Biz\Pay\Payment\WechatGateway;
-use Codeages\Biz\Pay\Service\PayService;
 use Firebase\JWT\JWT;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -28,46 +28,27 @@ class UnifiedPayment extends AbstractResource
             throw new InvalidArgumentException('请配置授权码');
         }
 
-        $payload =  (array)JWT::decode($params['token'], $storage['cloud_secret_key'], ['HS256']);
+        $payload = (array) JWT::decode($params['token'], $storage['cloud_secret_key'], ['HS256']);
         if (empty($payload)) {
             throw new InvalidArgumentException('令牌内容错误');
         }
 
-        $order = [
-            'title' => '测试商品标题',
-            'trade_sn' => md5(uniqid()),
-            'amount' => 288800,
-        ];
+        if (empty($payload['tradeSn'])) {
+            throw new InvalidArgumentException('令牌内容订单信息缺失：'.json_encode($payload));
+        }
 
-        $trade = $this->createTrade($order, [
-            'create_ip' => $request->getHttpRequest()->getClientIp(),
-        ]);
+        $trade = $this->getUnifiedPaymentService()->getTradeByTradeSn($payload['tradeSn']);
+        if (empty($trade) || 'paid' === $trade['status']) {
+            return ['status' => 'ok', 'paid' => true, 'message' => '', 'returnUrl' => ''];
+        }
+        $config = $this->getUnifiedPaymentService()->createPlatformTradeByTradeSn($payload['tradeSn']);
 
         return [
-            'config' => $trade,
-            'title' => $order['title'],
-            'tradeSn' => $order['trade_sn'],
-            'amount' => $order['amount'],
-            'returnUrl' => $this->generateUrl('cashier_pay_return', ['payment' => 'wechat'], UrlGeneratorInterface::ABSOLUTE_URL),
+            'config' => $config,
+            'orderSn' => $trade['orderSn'],
+            'amount' => $trade['amount'],
+            'returnUrl' => $this->generateUrl('cashier_pay_return', ['payment' => $trade['platform']], UrlGeneratorInterface::ABSOLUTE_URL),
         ];
-    }
-
-    protected function createTrade(array $order, array $params)
-    {
-        $url = $this->generateUrl('cashier_pay_notify', ['payment' => 'wechat'], UrlGeneratorInterface::ABSOLUTE_URL);
-        $trade = [
-            'platform_type' => 'Js',
-            'goods_title' => '',
-            'goods_detail' => '',
-            'attach' => [],
-            'trade_sn' => $order['tradeSn'],
-            'amount' => $order['amount'],
-            'notify_url' => $url,
-            'open_id' => $order['amount'],
-            'create_ip' => $params['createIp'],
-        ];
-
-        return $this->getPayment()->createTrade($trade);
     }
 
     /**
@@ -79,10 +60,10 @@ class UnifiedPayment extends AbstractResource
     }
 
     /**
-     * @return PayService
+     * @return UnifiedPaymentService
      */
-    private function getPayService()
+    protected function getUnifiedPaymentService()
     {
-        return $this->service('Pay:PayService');
+        return $this->service('UnifiedPayment:UnifiedPaymentService');
     }
 }
