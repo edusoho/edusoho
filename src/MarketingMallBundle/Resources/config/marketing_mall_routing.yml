@@ -2,3 +2,8 @@ marketing_mall_callback:
   path: /marketing/mall/callback
   defaults:
     _controller: 'MarketingMallBundle:Callback:index'
+
+marketing_mall_unified_payment_notify:
+  path: /callback/unified_payment/mall
+  defaults:
+    _controller: 'MarketingMallBundle:UnifiedPayment:notify'

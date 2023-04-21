@@ -28,10 +28,10 @@ class UnifiedPayment extends AbstractResource
             throw new InvalidArgumentException('请配置授权码');
         }
 
-//        $payload =  (array)JWT::decode($params['token'], $storage['cloud_secret_key'], ['HS256']);
-//        if (empty($payload)) {
-//            throw new InvalidArgumentException('令牌内容错误');
-//        }
+        $payload =  (array)JWT::decode($params['token'], $storage['cloud_secret_key'], ['HS256']);
+        if (empty($payload)) {
+            throw new InvalidArgumentException('令牌内容错误');
+        }
 
         $order = [
             'title' => '测试商品标题',
@@ -52,19 +52,19 @@ class UnifiedPayment extends AbstractResource
         ];
     }
 
-    public function createTrade(array $order, array $params)
+    protected function createTrade(array $order, array $params)
     {
         $url = $this->generateUrl('cashier_pay_notify', ['payment' => 'wechat'], UrlGeneratorInterface::ABSOLUTE_URL);
         $trade = [
             'platform_type' => 'Js',
-            'goods_title' => $order['title'],
+            'goods_title' => '',
             'goods_detail' => '',
             'attach' => [],
-            'trade_sn' => $order['trade_sn'],
+            'trade_sn' => $order['tradeSn'],
             'amount' => $order['amount'],
             'notify_url' => $url,
-            'open_id' => 'openid',
-            'create_ip' => $params['create_ip'],
+            'open_id' => $order['amount'],
+            'create_ip' => $params['createIp'],
         ];
 
         return $this->getPayment()->createTrade($trade);
