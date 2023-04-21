@@ -25,7 +25,7 @@ class MallUser extends BaseResource
         if (!ArrayToolkit::requireds($fields, ['mobile', 'nickname'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-        $fields = ArrayToolkit::parts($fields, ['mobile', 'nickname', 'openId', 'avatar']);
+        $fields = ArrayToolkit::parts($fields, ['mobile', 'nickname', 'openId', 'avatar', 'unionId']);
         $user = $this->getUserService()->getUserByVerifiedMobile($fields['mobile']);
         if ($user) {
             return $user;
@@ -39,8 +39,8 @@ class MallUser extends BaseResource
             $this->getUserService()->changeAvatarFromImgUrl($user['id'], $fields['avatar']);
         }
 
-        if ($fields['openId']) {
-            $this->getUserService()->UserBindUpdate($fields['openId'], $user['id']);
+        if (!empty($fields['unionId'])) {
+            $this->getUserService()->bindUser('weixin', $fields['unionId'], $user['id'], ['openid' => $fields['openId']]);
         }
 
         $this->getLogService()->info('marketing_mall', 'register', "营销商城用户{$user['nickname']}通过手机注册成功", ['userId' => $user['id']]);
@@ -91,6 +91,19 @@ class MallUser extends BaseResource
         }
 
         return array_values($users);
+    }
+
+    /**
+     * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
+     */
+    public function update(ApiRequest $request, $id)
+    {
+        $params = $request->request->all();
+        if (!empty($params['mobile'])) {
+            $this->getUserService()->changeMobile($id, $params['mobile']);
+        }
+
+        return ['success' => true];
     }
 
     /**

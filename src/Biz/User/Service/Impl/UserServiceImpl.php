@@ -818,13 +818,10 @@ class UserServiceImpl extends BaseService implements UserService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $user = $this->getUser($id);
+        $user = $this->getUser($id) ?: $this->getUserByUUID($id);
 
         if (empty($user)) {
-            $user = $this->getUserByUUID($id);
-            if(empty($user)) {
-                $this->createNewException(UserException::NOTFOUND_USER());
-            }
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $userGetByMobile = $this->getUserDao()->getByVerifiedMobile($mobile);

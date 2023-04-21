@@ -50,7 +50,7 @@ class MallUserBind extends AbstractResource
     /**
      * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
      */
-    public function delete(ApiRequest $request, $type)
+    public function remove(ApiRequest $request, $type)
     {
         $fromId = $request->request->get('fromId');
         $userBind = $this->getUserService()->getUserBindByTypeAndFromId($type, $fromId);
