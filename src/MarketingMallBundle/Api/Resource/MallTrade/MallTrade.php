@@ -18,7 +18,7 @@ class MallTrade extends BaseResource
     public function add(ApiRequest $request)
     {
         $fields = $request->request->all();
-        if (!ArrayToolkit::requireds($fields, ['orderSn', 'title', 'amount', 'userId', 'openId'], true)) {
+        if (!ArrayToolkit::requireds($fields, ['orderSn', 'title', 'amount', 'userId', 'openId', 'createIp'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -29,6 +29,7 @@ class MallTrade extends BaseResource
             'userId',
             'openId',
             'description',
+            'createIp',
         ]);
 
         $trade['description'] = $fields['description'] ?? '';
@@ -37,9 +38,7 @@ class MallTrade extends BaseResource
         $trade['source'] = 'Mall';
         $trade['notifyUrl'] = $this->generateUrl('marketing_mall_unified_payment_notify', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        $this->getUnifiedPaymentService()->createTrade($trade);
-
-        return 'success';
+        return $this->getUnifiedPaymentService()->createTrade($trade);
     }
 
     /**
