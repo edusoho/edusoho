@@ -11,8 +11,7 @@ class ModifySmsRequestLog extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("ALTER TABLE `sms_request_log` 
-            MODIFY COLUMN `userAgent` text NOT NULL AFTER `mobile`;");
+        $connection->exec("ALTER TABLE `sms_request_log` MODIFY COLUMN `userAgent` text NOT NULL AFTER `mobile`;");
     }
 
     /**
@@ -22,7 +21,6 @@ class ModifySmsRequestLog extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec('ALTER TABLE `sms_request_log` 
-            MODIFY COLUMN `userAgent` varchar(255) NOT NULL AFTER `mobile`;');
+        $connection->exec('ALTER TABLE `sms_request_log` MODIFY COLUMN `userAgent` varchar(255) NOT NULL AFTER `mobile`;');
     }
 }

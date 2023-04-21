@@ -36,7 +36,7 @@ if (drag) {
 }
 
 $smsCode.on('click', () => {
-  let coordinate = new Coordinate();
+  const coordinate = new Coordinate();
   const encryptedPoint = coordinate.getCoordinate(event, $('meta[name=csrf-token]').attr('content'));
   $smsCode.attr('disabled', true);
   new SmsSender({
