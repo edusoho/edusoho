@@ -94,19 +94,6 @@ class MallUser extends BaseResource
     }
 
     /**
-     * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
-     */
-    public function update(ApiRequest $request, $id)
-    {
-        $params = $request->request->all();
-        if (!empty($params['mobile'])) {
-            $this->getUserService()->changeMobile($id, $params['mobile']);
-        }
-
-        return ['success' => true];
-    }
-
-    /**
      * @return UserService
      */
     protected function getUserService()
