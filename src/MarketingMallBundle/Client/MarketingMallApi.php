@@ -126,6 +126,11 @@ class MarketingMallApi
         return $this->post('/api-school/wechatSetting/setWechatMobileSetting', ...$params);
     }
 
+    public function notifyPaid($params)
+    {
+        return $this->post('/api-school/unifiedPayment/notifyPaid', ...$params);
+    }
+
     public function notifyUpdateLogo()
     {
         return $this->post('/api-school/setting/removeSiteSettingCache');
