@@ -1,8 +1,7 @@
 <?php
 
-namespace MarketingMallBundle\Controller;
+namespace AppBundle\Controller;
 
-use AppBundle\Controller\BaseController;
 use Biz\UnifiedPayment\Service\UnifiedPaymentService;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -52,14 +52,6 @@ class UnifiedPayment extends AbstractResource
     }
 
     /**
-     * @return WechatGateway
-     */
-    protected function getPayment()
-    {
-        return $this->biz['payment.wechat'];
-    }
-
-    /**
      * @return UnifiedPaymentService
      */
     protected function getUnifiedPaymentService()

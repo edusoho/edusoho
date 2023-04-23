@@ -45,7 +45,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
             $trade = $this->createPlatformTrade($fields, $trade);
         }
 
-        $this->getTargetlogService()->log(TargetlogService::INFO, 'unified_payment.trade.create', $trade['tradeSn'], '创建订单', ['trade' => $trade, 'fields' => $fields]);
+        $this->getTargetlogService()->log(TargetlogService::INFO, 'up_trade.create', $trade['tradeSn'], '创建订单', ['trade' => $trade, 'fields' => $fields]);
 
         return $trade;
     }
@@ -89,7 +89,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
     public function notifyPaid($payment, $data)
     {
         list($data, $result) = $this->getPayment($payment)->converterNotify($data);
-        $this->getTargetlogService()->log(TargetlogService::WARNING, 'unified_payment.trade.paid_notify', $data['tradeSn'], "收到第三方支付平台{$payment}的通知，交易号{$data['tradeSn']}，支付状态{$data['status']}", $data);
+        $this->getTargetlogService()->log(TargetlogService::INFO, 'up_trade.paid_notify', $data['trade_sn'], "收到第三方支付平台{$payment}的通知，交易号{$data['trade_sn']}，支付状态{$data['status']}", (array)$data);
 
         $this->updateTradeToPaidAndTransferAmount($data);
 
@@ -98,13 +98,14 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
 
     protected function updateTradeToPaidAndTransferAmount($data)
     {
+        $tradeSn = $data['trade_sn'];
         if ('paid' !== $data['status']) {
-            return $this->getTradeDao()->getByTradeSn($data['tradeSn']);
+            return $this->getTradeDao()->getByTradeSn($tradeSn);
         }
 
-        $trade = $this->getTradeDao()->getByTradeSn($data['tradeSn']);
+        $trade = $this->getTradeDao()->getByTradeSn($tradeSn);
         if (empty($trade)) {
-            $this->getTargetlogService()->log(TargetlogService::WARNING, 'unified_payment.trade.not_found', $data['tradeSn'], "交易号{$data['tradeSn']}不存在", $data);
+            $this->getTargetlogService()->log(TargetlogService::WARNING, 'up_trade.not_found', $tradeSn, "交易号{$tradeSn}不存在", $data);
 
             return $trade;
         }
@@ -113,21 +114,23 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
             $trade = $this->getTradeDao()->get($trade['id'], ['lock' => true]);
 
             if (PayingStatus::NAME != $trade['status']) {
-                $this->getTargetlogService()->log(TargetlogService::WARNING, 'unified_payment.trade.is_not_paying', $data['tradeSn'], "交易号{$data['tradeSn']}状态不正确，状态为：{$trade['status']}", $data);
+                $this->getTargetlogService()->log(TargetlogService::INFO, 'up_trade.is_not_paying', $tradeSn, "交易号{$tradeSn}状态不正确，状态为：{$trade['status']}");
 
                 return $trade;
             }
             if ($trade['amount'] != $data['pay_amount']) {
-                $this->getTargetlogService()->log(TargetlogService::WARNING, 'unified_payment.trade.pay_amount.mismatch', $data['tradeSn'], '实际支付的价格与交易记录价格不匹配', ['trade' => $trade, 'data' => $data]);
+                $this->getTargetlogService()->log(TargetlogService::WARNING, 'up_trade.pay_amount.mismatch', $tradeSn, '实际支付的价格与交易记录价格不匹配', ['trade' => $trade, 'data' => $data]);
             }
 
             $trade = $this->updateTradeToPaid($trade['id'], $data);
 
-            $this->getTargetlogService()->log(TargetlogService::INFO, 'unified_payment.trade.paid', $data['tradeSn'], "交易号{$data['tradeSn']}，账目流水处理成功", $data);
+            $this->getTargetlogService()->log(TargetlogService::INFO, 'up_trade.paid', $tradeSn, "交易号{$tradeSn}，账目流水处理成功", $data);
         } catch (Exception $e) {
-            $this->getTargetlogService()->log(TargetlogService::ERROR, 'unified_payment.trade.error', $data['tradeSn'], "交易号{$data['tradeSn']}处理失败, {$e->getMessage()}", $data);
+            $this->getTargetlogService()->log(TargetlogService::ERROR, 'up_trade.error', $tradeSn, "交易号{$tradeSn}处理失败, {$e->getMessage()}", $data);
             throw $e;
         }
+
+        $this->dispatch('unified_payment.trade.paid', $trade, $data);
 
         return $trade;
     }
@@ -136,9 +139,9 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
     {
         $updatedFields = [
             'status' => $data['status'],
-            'pay_time' => $data['paid_time'],
-            'platform_sn' => $data['cash_flow'],
-            'notify_data' => $data,
+            'payTime' => $data['paid_time'],
+            'platformSn' => $data['cash_flow'],
+            'notifyData' => $data,
             'currency' => $data['cash_type'],
         ];
 
@@ -147,7 +150,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
 
     protected function generateSn($prefix = ''): string
     {
-        return $prefix.date('YmdHis', time()).mt_rand(10000, 99999);
+        return $prefix . date('YmdHis', time()) . mt_rand(10000, 99999);
     }
 
     /**
@@ -157,7 +160,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
      */
     protected function getPayment($payment)
     {
-        return $this->biz['payment.'.$payment];
+        return $this->biz['payment.' . $payment];
     }
 
     /**
