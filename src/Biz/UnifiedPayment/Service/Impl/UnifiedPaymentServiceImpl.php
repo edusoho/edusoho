@@ -91,7 +91,9 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
         list($data, $result) = $this->getPayment($payment)->converterNotify($data);
         $this->getTargetlogService()->log(TargetlogService::INFO, 'up_trade.paid_notify', $data['trade_sn'], "收到第三方支付平台{$payment}的通知，交易号{$data['trade_sn']}，支付状态{$data['status']}", (array)$data);
 
-        $this->updateTradeToPaidAndTransferAmount($data);
+        $trade = $this->updateTradeToPaidAndTransferAmount($data);
+
+        $this->dispatch('unified_payment.trade.receive_notified', $trade, $data);
 
         return $result;
     }

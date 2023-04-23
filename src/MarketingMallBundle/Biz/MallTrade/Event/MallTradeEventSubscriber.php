@@ -13,11 +13,11 @@ class MallTradeEventSubscriber extends EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            'unified_payment.trade.paid' => 'onTradePaid',
+            'unified_payment.trade.receive_notified' => 'onReceiveNotified',
         ];
     }
 
-    public function onTradePaid(Event $event)
+    public function onReceiveNotified(Event $event)
     {
         if (!$this->getMallService()->isInit()) {
             return;
