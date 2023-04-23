@@ -4118,3 +4118,9 @@ classroom_live_task_statistic_export:
     defaults:
         _controller: 'AppBundle:LiveStatisticExport:classroomLiveStatisticExport'
 
+unified_payment_notify:
+    path: /callback/unified_payment/{payment}/notify
+    defaults:
+        _controller: 'AppBundle:UnifiedPayment:notify'
+        methods:
+          - POST

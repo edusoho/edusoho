@@ -36,7 +36,7 @@ class MallTrade extends BaseResource
         $trade['platform'] = 'wechat';
         $trade['platformType'] = 'Js';
         $trade['source'] = 'Mall';
-        $trade['notifyUrl'] = $this->generateUrl('marketing_mall_unified_payment_notify', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $trade['notifyUrl'] = $this->generateUrl('unified_payment_notify', ['payment' => 'wechat'], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $this->getUnifiedPaymentService()->createTrade($trade);
     }
