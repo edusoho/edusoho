@@ -15,7 +15,6 @@ use Biz\File\Service\FileImplementor;
 use Biz\File\UploadFileException;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Topxia\Service\Common\ServiceKernel;
 
 class CloudFileImplementorImpl extends BaseService implements FileImplementor
 {
@@ -291,7 +290,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function download($globalId, $ssl = false)
     {
-        $user = ServiceKernel::instance()->getCurrentUser();
+        $user = $this->getCurrentUser();
         $url =  $this->biz['ESCloudSdk.play']->makeDownloadUrl($globalId, 300, array(
             'uid' => (string) $user['id'] ?? '',
             'uname' =>$user['nickname'] ?? '',
@@ -301,7 +300,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function getDownloadFile($file, $ssl = false)
     {
-        $user = ServiceKernel::instance()->getCurrentUser();
+        $user = $this->getCurrentUser();
         $url =  $this->biz['ESCloudSdk.play']->makeDownloadUrl($file['globalId'], 300, array(
             'uid' => (string) $user['id'] ?? '',
             'uname' =>$user['nickname'] ?? '',
