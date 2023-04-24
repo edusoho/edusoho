@@ -5725,6 +5725,7 @@ plugin.admin.user.manage.form.user_export_btn: 'Export'
 plugin.admin.user.manage.form.user_student_export_btn: 'Export'
 plugin.admin.user.manage.form.user_staff_export_btn: 'ExportStaffData'
 admin.user.manage.fields.mobile_label: Mobile
+admin.user.manage.fields.wechat_nickname: Wechat Nickname
 admin.user.manage.fields.recent_login_label: 'Recently Logged In'
 admin.user.manage.fields.user_total_num_label: 'User Total: '
 admin.user.manage.fields.forbid_label: Forbid

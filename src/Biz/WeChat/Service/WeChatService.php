@@ -64,6 +64,8 @@ interface WeChatService
 
     public function searchWeChatUsers($conditions, $orderBys, $start, $limit, $columns);
 
+    public function findWechatUsersByUserIds(array $userIds);
+
     public function getWeChatSendChannel();
 
     public function searchSubscribeRecords(array $conditions, array $orderBy, $start, $limit, array $columns = []);

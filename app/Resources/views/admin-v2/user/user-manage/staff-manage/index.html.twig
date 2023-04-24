@@ -51,7 +51,7 @@
 
     <div class="form-group">
       <select id="keywordType" name="keywordType" class="form-control">
-        {{ select_options(dict('staffKeyWordType'), app.request.query.get('keywordType') ? app.request.query.get('keywordType') : 'nickname') }}
+        {{ select_options(dict('staffKeyWordType'), app.request.query.get('keywordType') ?: 'nickname') }}
       </select>
     </div>
 
@@ -78,6 +78,7 @@
         {% endif %}
       <th>{{ 'user.fields.username_staff_label'|trans }}</th>
         {% include 'org/parts/table-thead-tr.html.twig' %}
+      <th>{{ 'admin.user.manage.fields.wechat_nickname'|trans }}</th>
       <th>{{ 'admin.user.manage.fields.mobile_label'|trans }}</th>
       <th>Email</th>
       <th>{{ 'admin.user.fields.register_date_label'|trans }}</th>

@@ -214,6 +214,7 @@ boughtType:
 
 userKeyWordType:
     nickname: Nickname
+    wechatNickname: Wechat Nickname
     verifiedMobile: Mobile
     email: Email
     loginIp: Login Ip

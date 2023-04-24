@@ -23,4 +23,6 @@ interface UserWeChatDao extends AdvancedDaoInterface
     public function countWeChatUserJoinUser($conditions);
 
     public function searchWeChatUsersJoinUser($conditions, $orderBys, $start, $limit);
+
+    public function findByUserIds(array $userIds);
 }
