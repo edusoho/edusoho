@@ -110,8 +110,9 @@ class LoginBindController extends BaseController
             }
 
             if ('weixinmob' == $type) {
-                $user = $this->getCurrentUser();
-                $this->getWeChatService()->freshOfficialWeChatUserWhenLogin($user, $bind, $token);
+                $this->getWeChatService()->freshOfficialWeChatUserWhenLogin($this->getCurrentUser(), $bind, $token);
+            } elseif ('weixinweb' == $type) {
+                $this->getWeChatService()->freshOpenAppWeChatUserWhenLogin($this->getCurrentUser(), $token);
             }
 
             if ($this->getAuthService()->hasPartnerAuth()) {
