@@ -877,7 +877,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
     private function weChatUserFilter($fields)
     {
-        return ArrayToolkit::parts($fields, ['appId', 'type', 'userId', 'openId', 'unionId', 'data', 'lastRefreshTime']);
+        return ArrayToolkit::parts($fields, ['appId', 'type', 'userId', 'openId', 'unionId', 'isSubscribe', 'nickname', 'profilePicture', 'data', 'lastRefreshTime', 'subscribeTime']);
     }
 
     /**
