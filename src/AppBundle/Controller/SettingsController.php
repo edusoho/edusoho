@@ -1051,6 +1051,9 @@ class SettingsController extends BaseController
             $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.authentication_fail');
             goto response;
         }
+        if ('weixinweb' == $type) {
+            $this->getWeChatService()->freshOpenAppWeChatUserWhenLogin($this->getCurrentUser(), $token);
+        }
 
         $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
 

@@ -238,20 +238,56 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         try {
             $weChatUser = $this->getWeChatUserByTypeAndOpenId(WeChatService::OFFICIAL_TYPE, $token['openid']);
             if (empty($weChatUser)) {
-                $this->createWeChatUser([
+                $weChatUser = $this->createWeChatUser([
                     'type' => WeChatService::OFFICIAL_TYPE,
                     'appId' => $this->getSettingService()->node('login_bind.weixinmob_key', ''),
                     'unionId' => $bind['fromId'],
                     'openId' => $token['openid'],
                     'userId' => $user['id'],
                 ]);
-            } elseif ($weChatUser['id'] != $user['id']) {
+            } elseif ($weChatUser['userId'] != $user['id']) {
                 $this->updateWeChatUser($weChatUser['id'], [
                     'userId' => $user['id'],
                 ]);
             }
+            if (!empty($token['username'])) {
+                $this->updateWeChatUser($weChatUser['id'], [
+                    'nickname' => urlencode($token['username']),
+                ]);
+            }
         } catch (\Exception $e) {
             $this->getLogger()->error('WeChatFreshOfficialUser_' . $e->getMessage(), $e->getTrace());
+        }
+    }
+
+    public function freshOpenAppWeChatUserWhenLogin($user, $token)
+    {
+        if (empty($user)) {
+            return;
+        }
+
+        try {
+            $weChatUser = $this->getWeChatUserByTypeAndOpenId(WeChatService::OPEN_TYPE, $token['openid']);
+            if (empty($weChatUser)) {
+                $weChatUser = $this->createWeChatUser([
+                    'type' => WeChatService::OPEN_TYPE,
+                    'appId' => $this->getSettingService()->node('login_bind.weixinweb_key', ''),
+                    'unionId' => $token['userId'],
+                    'openId' => $token['openid'],
+                    'userId' => $user['id'],
+                ]);
+            } elseif ($weChatUser['userId'] != $user['id']) {
+                $this->updateWeChatUser($weChatUser['id'], [
+                    'userId' => $user['id'],
+                ]);
+            }
+            if (!empty($token['username'])) {
+                $this->updateWeChatUser($weChatUser['id'], [
+                    'nickname' => urlencode($token['username']),
+                ]);
+            }
+        } catch (\Exception $e) {
+            $this->getLogger()->error('WeChatFreshWebUser_' . $e->getMessage(), $e->getTrace());
         }
     }
 
