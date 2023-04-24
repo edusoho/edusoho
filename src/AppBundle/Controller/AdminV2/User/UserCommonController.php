@@ -65,10 +65,10 @@ class UserCommonController extends BaseController
                 unset($conditions['keywordType']);
                 unset($conditions['keyword']);
                 $conditions['userIds'] = array_merge(ArrayToolkit::column($users, 'userId'), $userIds);
-            } elseif ('idcard' == $conditions['keywordType']) {
+            } elseif (in_array($conditions['keywordType'], ['idcard', 'wechatNickname'])) {
                 unset($conditions['keywordType']);
                 unset($conditions['keyword']);
-                $conditions['userIds'] = empty($userIds) ? [0] : $userIds;
+                $conditions['userIds'] = [0];
             }
 
             $userCount = $this->getUserService()->countUsers($conditions);
