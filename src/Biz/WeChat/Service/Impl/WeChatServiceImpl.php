@@ -251,7 +251,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 ]);
             }
             if (!empty($token['username'])) {
-                $this->updateWeChatUser($weChatUser['id'], [
+                $this->getUserWeChatDao()->update(['userId' => $user['id']], [
                     'nickname' => urlencode($token['username']),
                 ]);
             }
@@ -282,7 +282,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 ]);
             }
             if (!empty($token['username'])) {
-                $this->updateWeChatUser($weChatUser['id'], [
+                $this->getUserWeChatDao()->update(['userId' => $user['id']], [
                     'nickname' => urlencode($token['username']),
                 ]);
             }
