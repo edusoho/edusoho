@@ -30,6 +30,9 @@ class MallUser extends BaseResource
         if ($user) {
             return $user;
         }
+        if (!$this->getUserService()->isNicknameAvaliable($fields['nickname'])) {
+            $fields['nickname'] = $this->generateNickname($fields['nickname']);
+        }
         $fields['verifiedMobile'] = $fields['mobile'];
         $fields['type'] = 'marketing_mall';
         $user = $this->getUserService()->register($fields, ['mobile']);
@@ -91,6 +94,21 @@ class MallUser extends BaseResource
         }
 
         return array_values($users);
+    }
+
+    private function generateNickname($rawNickname)
+    {
+        $nickname = $rawNickname . substr($this->getRandomChar(), 0, 4);
+        if ($this->getUserService()->isNicknameAvaliable($nickname)) {
+            return $nickname;
+        }
+
+        return $this->generateNickname($rawNickname);
+    }
+
+    private function getRandomChar()
+    {
+        return base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
     /**
