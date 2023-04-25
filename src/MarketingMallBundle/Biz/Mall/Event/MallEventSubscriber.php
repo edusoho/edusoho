@@ -20,6 +20,7 @@ class MallEventSubscriber extends EventSubscriber
             //TODO @see MarketingMallBundle\Event\UserEventSubscriber::onUserLock 存在异步事件，看是否移除
             'user.lock' => 'onUserLock',
             'user.unlock' => 'onUserUnLock',
+            'user.unbind' => 'onUserUnBind',
         ];
     }
 
@@ -78,6 +79,17 @@ class MallEventSubscriber extends EventSubscriber
             return;
         }
         $this->getMallClient()->unlockUser([
+            'id' => $user['id'],
+        ]);
+    }
+
+    public function onUserUnBind(Event $event)
+    {
+        if (!$this->getMallService()->isInit()) {
+            return;
+        }
+        $user = $event->getSubject();
+        $this->getMallClient()->unbindUser([
             'id' => $user['id'],
         ]);
     }

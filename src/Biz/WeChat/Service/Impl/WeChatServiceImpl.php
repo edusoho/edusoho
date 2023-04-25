@@ -238,7 +238,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         try {
             $weChatUser = $this->getWeChatUserByTypeAndOpenId(WeChatService::OFFICIAL_TYPE, $token['openid']);
             if (empty($weChatUser)) {
-                $weChatUser = $this->createWeChatUser([
+                $this->createWeChatUser([
                     'type' => WeChatService::OFFICIAL_TYPE,
                     'appId' => $this->getSettingService()->node('login_bind.weixinmob_key', ''),
                     'unionId' => $bind['fromId'],
@@ -269,7 +269,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         try {
             $weChatUser = $this->getWeChatUserByTypeAndOpenId(WeChatService::OPEN_TYPE, $token['openid']);
             if (empty($weChatUser)) {
-                $weChatUser = $this->createWeChatUser([
+                $this->createWeChatUser([
                     'type' => WeChatService::OPEN_TYPE,
                     'appId' => $this->getSettingService()->node('login_bind.weixinweb_key', ''),
                     'unionId' => $token['userId'],

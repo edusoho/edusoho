@@ -106,6 +106,11 @@ class MarketingMallApi
         $this->post('/api-school/user/unlock', ...$params);
     }
 
+    public function unbindUser($params)
+    {
+        $this->post('/api-school/user/unbind', ...$params);
+    }
+
     public function checkGoodsIsPublishByCodes($params)
     {
         return $this->get('/api-school/goods/getGoodsPublishStatus', ['goodsCodes' => implode(',', $params[0])]);
