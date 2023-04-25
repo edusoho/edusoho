@@ -997,7 +997,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $this->checkBindsName($type);
-        $userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $user->id);
+        $this->getUserService()->unBindUserByTypeAndToId($type, $user->id);
 
         return $this->createJsonResponse(['message' => 'user.settings.unbind_success']);
     }

@@ -1373,13 +1373,10 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function unBindUserByTypeAndToId($type, $toId)
     {
-        $user = $this->getUserDao()->get($toId);
+        $user = $this->getUserDao()->get($toId) ?: $this->getUserDao()->getByUUID($toId);
 
         if (empty($user)) {
-            $user = $this->getUserDao()->getByUUID($toId);
-            if (empty($user)) {
-                $this->createNewException(UserException::NOTFOUND_USER());
-            }
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         if (!$this->typeInOAuthClient($type)) {
