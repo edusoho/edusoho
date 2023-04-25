@@ -5,7 +5,7 @@
 {% block main %}
     {% include 'admin-v2/trade/bill/form-filter.html.twig' with {'exportName': 'bill-cash-flow'} %}
     <p class="text-muted">
-      <span class="mrl">{{ 'finance.net_income'|trans }}：<strong class="inflow-num">{{ math_format(account.cash_amount, 0.01) }}</strong>{{ 'site.currency.CNY'|trans }}</span>
+      <span class="mrl">{{ 'finance.net_income'|trans }}：<strong class="inflow-num">{{ account }}</strong>{{ 'site.currency.CNY'|trans }}</span>
       <span class="mrl">{{ 'finance.income'|trans }}：<strong class="inflow-num">{{ inflow }}</strong>{{ 'site.currency.CNY'|trans }}</span>
       <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ outflow }}</strong>{{ 'site.currency.CNY'|trans }}</span>
     </p>
