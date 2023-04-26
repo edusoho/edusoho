@@ -23,6 +23,7 @@ class CreateTableUnifiedPayment extends Migration
               `sellerId` varchar(32) DEFAULT '' COMMENT '卖家id',
               `userId` INT(10) unsigned NOT NULL COMMENT '买家id',
               `payTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易时间',
+              `redirectUrl`  VARCHAR(1024) DEFAULT '' COMMENT '支付成功后跳转地址',
               `notifyData` text,
               `platform` varchar(32) NOT NULL DEFAULT '' COMMENT '第三方支付平台',
               `platformSn` varchar(64) NOT NULL DEFAULT '' COMMENT '第三方支付平台的交易号',

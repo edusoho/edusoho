@@ -21,7 +21,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
 
     public function createTrade($fields, $createPlatformTrade = true)
     {
-        $tradeFields = ['title', 'orderSn', 'amount', 'platform', 'platformType', 'userId', 'source'];
+        $tradeFields = ['title', 'orderSn', 'amount', 'platform', 'platformType', 'userId', 'source', 'redirectUrl'];
         $platformFields = ['description', 'notifyUrl', 'openId', 'createIp'];
         if (!ArrayToolkit::requireds($fields, array_merge($tradeFields, $platformFields))) {
             throw new InvalidArgumentException('trade args is invalid.');
@@ -36,6 +36,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
             'platformType' => $fields['platformType'],
             'userId' => $fields['userId'],
             'source' => $fields['source'],
+            'redirectUrl' => $fields['redirectUrl'],
             'sellerId' => $fields['sellerId'] ?? '',
             'status' => 'paying',
         ];
