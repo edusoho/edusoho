@@ -47,7 +47,7 @@ class UnifiedPayment extends AbstractResource
             'config' => $config,
             'orderSn' => $trade['orderSn'],
             'amount' => $trade['amount'],
-            'returnUrl' => $this->generateUrl('cashier_pay_return', ['payment' => $trade['platform']], UrlGeneratorInterface::ABSOLUTE_URL),
+            'redirectUrl' => $trade['redirectUrl'],
         ];
     }
 
