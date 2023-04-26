@@ -24,6 +24,8 @@ interface WeChatService
 
     public function getWeChatUserByTypeAndOpenId($type, $openId);
 
+    public function findWeChatUsersByUserId($userId);
+
     public function batchSyncOfficialWeChatUsers($nextOpenId = '');
 
     public function getOfficialWeChatUserByUserId($userId);
