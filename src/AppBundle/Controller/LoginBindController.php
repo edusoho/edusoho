@@ -105,6 +105,10 @@ class LoginBindController extends BaseController
                 return $this->redirect($this->generateUrl('register'));
             }
 
+            if ($user['locked']) {
+                return $this->createMessageResponse('error', 'exception.user.lock', '', 3000);
+            }
+
             if ($this->getCurrentUser()->getId() != $user['id']) {
                 $this->authenticateUser($user);
             }
