@@ -49,6 +49,14 @@ class SmsSend extends AbstractResource
 
         $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
 
+        if (empty($user)) {
+            throw UserException::NOTFOUND_USER();
+        }
+
+        if ($user['locked']) {
+            throw UserException::LOCKED_USER();
+        }
+
         if (!in_array($smsType, $this->supportSmsTypes)) {
             throw CommonException::ERROR_PARAMETER();
         }
@@ -59,10 +67,6 @@ class SmsSend extends AbstractResource
 
         if (empty($smsType) || empty($mobile)) {
             throw CommonException::ERROR_PARAMETER();
-        }
-
-        if ($user['locked']) {
-            throw UserException::LOCKED_USER();
         }
 
         // 根据业务自主检查设置项
