@@ -23,7 +23,7 @@
   </td>
  {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
-    {% if wechatUsers[user.id]|default() %}
+    {% if wechatUsers[user.id]|default() and wechatUsers[user.id].nickname|default() %}
       {{ wechatUsers[user.id].nickname }}
     {% else %}
       --
