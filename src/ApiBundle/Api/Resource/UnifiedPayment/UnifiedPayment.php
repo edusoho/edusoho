@@ -6,11 +6,10 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\Exception\InvalidArgumentException;
+use AppBundle\Common\SettingToolkit;
 use Biz\Common\CommonException;
 use Biz\UnifiedPayment\Service\UnifiedPaymentService;
-use Codeages\Biz\Pay\Payment\WechatGateway;
 use Firebase\JWT\JWT;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class UnifiedPayment extends AbstractResource
 {
@@ -47,6 +46,7 @@ class UnifiedPayment extends AbstractResource
             'config' => $config,
             'orderSn' => $trade['orderSn'],
             'amount' => $trade['amount'],
+            'siteName' => SettingToolkit::getSetting('site.name'),
             'redirectUrl' => $trade['redirectUrl'],
         ];
     }
