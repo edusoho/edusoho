@@ -43,4 +43,10 @@ export default [
     url: '/settings/course_purchase_agreement',
     method: 'GET'
   },
+  // 营销商城订单支付
+  {
+    name: 'getMarketingPayConfig',
+    url: '/unified_payment',
+    method: 'POST'
+  }
 ];
