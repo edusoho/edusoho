@@ -14,6 +14,7 @@ use Biz\Goods\Service\GoodsService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\System\Service\LogService;
+use Biz\System\Service\PaymentSettingService;
 use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
 use Biz\User\Service\AuthService;
@@ -84,9 +85,9 @@ class AssetSettingController extends BaseController
                 file_put_contents($dir.$path, $alipayPublicKey);
             }
             $payment['disabled_message'] = empty($payment['disabled_message']) ? $default['disabled_message'] : $payment['disabled_message'];
-            $formerPayment = $this->getSettingService()->get('payment');
+            $formerPayment = $this->getPaymentSettingService()->get();
             $payment = array_merge($formerPayment, $payment);
-            $this->getSettingService()->set('payment', $payment);
+            $this->getPaymentSettingService()->set($payment);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -496,6 +497,14 @@ class AssetSettingController extends BaseController
     protected function getProductService()
     {
         return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return PaymentSettingService
+     */
+    protected function getPaymentSettingService()
+    {
+        return $this->createService('System:PaymentSettingService');
     }
 
     /**

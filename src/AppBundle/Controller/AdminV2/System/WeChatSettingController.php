@@ -7,6 +7,7 @@ use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\System\Service\LoginBindSettingService;
+use Biz\System\Service\PaymentSettingService;
 use Biz\System\Service\SettingService;
 use Biz\System\Service\WechatSettingService;
 use Biz\WeChat\Service\WeChatService;
@@ -66,7 +67,7 @@ class WeChatSettingController extends BaseController
             $payment['wxpay_appid'] = $loginConnect['weixinmob_key'];
             $payment['wxpay_secret'] = $loginConnect['weixinmob_secret'];
 
-            $this->getSettingService()->set('payment', $payment);
+            $this->getPaymentSettingService()->set($payment);
             $this->getLoginBindSettingService()->set($loginConnect);
             $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
 
@@ -251,18 +252,18 @@ class WeChatSettingController extends BaseController
 
     private function getWeixinMpFile()
     {
-        $dir = $this->container->getParameter('kernel.root_dir') . '/../web';
-        $mp_secret = array_map('file_get_contents', glob($dir . '/MP_verify_*.txt'));
+        $dir = $this->container->getParameter('kernel.root_dir').'/../web';
+        $mp_secret = array_map('file_get_contents', glob($dir.'/MP_verify_*.txt'));
 
         return implode($mp_secret);
     }
 
     protected function updateWeixinMpFile($val)
     {
-        $dir = $this->container->getParameter('kernel.root_dir') . '/../web';
-        array_map('unlink', glob($dir . '/MP_verify_*.txt'));
+        $dir = $this->container->getParameter('kernel.root_dir').'/../web';
+        array_map('unlink', glob($dir.'/MP_verify_*.txt'));
         if (!empty($val)) {
-            file_put_contents($dir . '/MP_verify_' . $val . '.txt', $val);
+            file_put_contents($dir.'/MP_verify_'.$val.'.txt', $val);
         }
     }
 
@@ -272,6 +273,14 @@ class WeChatSettingController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return PaymentSettingService
+     */
+    protected function getPaymentSettingService()
+    {
+        return $this->createService('System:PaymentSettingService');
     }
 
     /**
