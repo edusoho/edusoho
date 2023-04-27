@@ -4,6 +4,7 @@ namespace Biz\UnifiedPayment\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\System\Service\SettingService;
 use Biz\UnifiedPayment\Dao\TradeDao;
 use Biz\UnifiedPayment\Service\UnifiedPaymentService;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
@@ -14,6 +15,25 @@ use Exception;
 
 class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentService
 {
+    public function isEnabledPlatform($platform)
+    {
+        $platformSetting = $this->getSettingService()->get('platform', []);
+        if ('wechat' == $platform) {
+            if (!empty($platformSetting['wxpay_enabled'])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function checkPlatform($platform)
+    {
+        if (!$this->isEnabledPlatform($platform)) {
+            throw new \InvalidArgumentException('支付方式未配置，请联系机构处理。');
+        }
+    }
+
     public function getTradeByTradeSn(string $sn)
     {
         return $this->getTradeDao()->getByTradeSn($sn);
@@ -25,6 +45,10 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
         $platformFields = ['description', 'notifyUrl', 'openId', 'createIp'];
         if (!ArrayToolkit::requireds($fields, array_merge($tradeFields, $platformFields))) {
             throw new InvalidArgumentException('trade args is invalid.');
+        }
+
+        if ($fields['amount'] > 0 && $createPlatformTrade) {
+            $this->checkPlatform($fields['platform']);
         }
 
         $trade = [
@@ -42,7 +66,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
         ];
 
         $trade = $this->getTradeDao()->create($trade);
-        if ($trade['amount'] > 0 && $createPlatformTrade) {
+        if ($fields['amount'] > 0 && $createPlatformTrade) {
             $trade = $this->createPlatformTrade($fields, $trade);
         }
 
@@ -77,6 +101,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
     public function createPlatformTradeByTradeSn($tradeSn)
     {
         $trade = $this->getTradeDao()->getByTradeSn($tradeSn);
+        $this->checkPlatform($trade['platform']);
 
         $result = $this->getPayment($trade['platform'])->createTrade($trade['platformCreatedParams']);
 
@@ -90,7 +115,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
     public function notifyPaid($payment, $data)
     {
         list($data, $result) = $this->getPayment($payment)->converterNotify($data);
-        $this->getTargetlogService()->log(TargetlogService::INFO, 'up_trade.paid_notify', $data['trade_sn'], "收到第三方支付平台{$payment}的通知，交易号{$data['trade_sn']}，支付状态{$data['status']}", (array)$data);
+        $this->getTargetlogService()->log(TargetlogService::INFO, 'up_trade.paid_notify', $data['trade_sn'], "收到第三方支付平台{$payment}的通知，交易号{$data['trade_sn']}，支付状态{$data['status']}", (array) $data);
 
         $trade = $this->updateTradeToPaidAndTransferAmount($data);
 
@@ -153,7 +178,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
 
     protected function generateSn($prefix = ''): string
     {
-        return $prefix . date('YmdHis', time()) . mt_rand(10000, 99999);
+        return $prefix.date('YmdHis', time()).mt_rand(10000, 99999);
     }
 
     /**
@@ -163,7 +188,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
      */
     protected function getPayment($payment)
     {
-        return $this->biz['payment.' . $payment];
+        return $this->biz['payment.'.$payment];
     }
 
     /**
@@ -180,5 +205,13 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
     protected function getTargetlogService()
     {
         return $this->biz->service('Targetlog:TargetlogService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }

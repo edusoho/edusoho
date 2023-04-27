@@ -4,6 +4,8 @@ namespace Biz\UnifiedPayment\Service;
 
 interface UnifiedPaymentService
 {
+    public function isEnabledPlatform($platform);
+
     public function getTradeByTradeSn(string $sn);
 
     public function createTrade($fields);
