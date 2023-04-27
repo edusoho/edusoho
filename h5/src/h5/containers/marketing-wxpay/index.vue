@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isWeixinBrowser" class="marketing-wxpay">
+  <div v-if="isWeixinBrowser && payInfo" class="marketing-wxpay">
     <div class="marketing-wxpay__title">{{ $t('marketingPay.amountLabel') }}</div>
     <div class="marketing-wxpay__amount">
       <span class="amount-unit">￥</span>
@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      payInfo: {}
+      payInfo: null
     }
   },
   computed: {
@@ -50,13 +50,17 @@ export default {
   },
   methods: {
     async handlePay() {
+      const token = this.$route.query.payToken || ''
+
+      this.payInfo = await Api.getMarketingPayConfig({ data: { token } });
+
       // eslint-disable-next-line no-undef
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest',
         this.payInfo.config,
         (res) => {
           if (res.err_msg == 'get_brand_wcpay_request:ok') {
-            window.location.href = this.payInfo.redirectUrl + '&isNeedCheckOrderStatus=1';
+            window.location.href = this.payInfo.redirectUrl + `&isNeedCheckOrderStatus=1&sn=${this.payInfo.orderSn}`;
           } else if (res.err_msg == 'get_brand_wcpay_request:fail') {
             // alert('支付失败');
           } else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
@@ -85,6 +89,7 @@ export default {
       align-items: flex-end;
       justify-content: center;
       margin-top: 12px;
+      margin-bottom: 44px;
       color: #272E3B;
       font-weight: 600;
 
@@ -96,14 +101,13 @@ export default {
 
       .amount-number {
         font-size: 36px;
-        line-height: 44px;
+        line-height: 32px;
       }
     }
 
     &__info {
       display: flex;
       justify-content: space-between;
-      width: 100%;
       padding: 16px 0;
       margin: 0 16px;
       font-weight: 400;
@@ -129,7 +133,6 @@ export default {
     height: 44px;
     line-height: 44px;
     font-size: 16px;
-    line-height: 24px;
     color: #fff;
     text-align: center;
     background: linear-gradient(90.22deg, #FE6301 0.16%, #FF4402 102.24%), #94BFFF;
