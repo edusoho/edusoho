@@ -17,7 +17,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
 {
     public function isEnabledPlatform($platform)
     {
-        $platformSetting = $this->getSettingService()->get('platform', []);
+        $platformSetting = $this->getSettingService()->get('payment', []);
         if ('wechat' == $platform) {
             if (!empty($platformSetting['wxpay_enabled'])) {
                 return true;

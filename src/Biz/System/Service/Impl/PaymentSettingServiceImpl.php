@@ -4,10 +4,11 @@ namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
 use Biz\System\Service\LoginBindSettingService;
+use Biz\System\Service\SettingService;
 
-class LoginBindSettingServiceImpl extends BaseService implements LoginBindSettingService
+class PaymentSettingServiceImpl extends BaseService implements LoginBindSettingService
 {
-    const BASE_NAME = 'login_bind';
+    const BASE_NAME = 'payment';
 
     public function get($default = [])
     {
@@ -17,9 +18,12 @@ class LoginBindSettingServiceImpl extends BaseService implements LoginBindSettin
     public function set($value)
     {
         $this->getSettingService()->set(self::BASE_NAME, $value);
-        $this->dispatchEvent('setting.login_bind.set', $this->get(self::BASE_NAME));
+        $this->dispatchEvent('payment.setting.set', $this->get(self::BASE_NAME));
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');

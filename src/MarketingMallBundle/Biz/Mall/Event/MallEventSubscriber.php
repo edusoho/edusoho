@@ -2,7 +2,7 @@
 
 namespace MarketingMallBundle\Biz\Mall\Event;
 
-use Biz\System\Service\LoginBindSettingService;
+use Biz\System\Service\PaymentSettingService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
 use MarketingMallBundle\Biz\Mall\Service\MallService;
@@ -14,7 +14,7 @@ class MallEventSubscriber extends EventSubscriber
     {
         return [
             'setting.school.logo.update' => 'notifySchoolLogo',
-            'setting.login_bind.set' => 'onLoginBindSettingSet',
+            'payment.setting.set' => 'onPaymentSettingSet',
             'setting.wap.update' => 'onWapSettingUpdate',
             'user.delete' => 'onUserDelete',
             //TODO @see MarketingMallBundle\Event\UserEventSubscriber::onUserLock 存在异步事件，看是否移除
@@ -26,26 +26,28 @@ class MallEventSubscriber extends EventSubscriber
 
     public function notifySchoolLogo(Event $event)
     {
-        $client = new MarketingMallClient($this->getBiz());
-        $client->notifyUpdateLogo();
+        if (!$this->getMallService()->isInit()) {
+            return;
+        }
+        $this->getMallClient()->notifyUpdateLogo();
     }
 
     public function onWapSettingUpdate(Event $event)
     {
-        $client = new MarketingMallClient($this->getBiz());
-        $client->notifyWapUpdate();
-    }
-
-    public function onLoginBindSettingSet(Event $event)
-    {
-        $loginConnect = $this->getLoginBindSettingService()->get();
         if (!$this->getMallService()->isInit()) {
             return;
         }
-        $this->getMallClient()->setWechatMobileSetting([
-            'appId' => $loginConnect['weixinmob_key'] ?? '',
-            'appSecret' => $loginConnect['weixinmob_secret'] ?? '',
-            'mpFileCode' => $loginConnect['weixinmob_mp_secret'] ?? '',
+        $this->getMallClient()->notifyWapUpdate();
+    }
+
+    public function onPaymentSettingSet(Event $event)
+    {
+        if (!$this->getMallService()->isInit()) {
+            return;
+        }
+        $setting = $this->getPaymentSettingService()->get();
+        $this->getMallClient()->setPaymentSetting([
+            'enabled' => $setting['wxpay_enabled'] ?? '',
         ]);
     }
 
@@ -111,10 +113,10 @@ class MallEventSubscriber extends EventSubscriber
     }
 
     /**
-     * @return LoginBindSettingService
+     * @return PaymentSettingService
      */
-    protected function getLoginBindSettingService()
+    protected function getPaymentSettingService()
     {
-        return $this->getBiz()->service('System:LoginBindSettingService');
+        return $this->getBiz()->service('System:PaymentSettingService');
     }
 }
