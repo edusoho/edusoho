@@ -245,13 +245,49 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                     'openId' => $token['openid'],
                     'userId' => $user['id'],
                 ]);
-            } elseif ($weChatUser['id'] != $user['id']) {
+            } elseif ($weChatUser['userId'] != $user['id']) {
                 $this->updateWeChatUser($weChatUser['id'], [
                     'userId' => $user['id'],
                 ]);
             }
+            if (!empty($token['username'])) {
+                $this->getUserWeChatDao()->update(['userId' => $user['id']], [
+                    'nickname' => urlencode($token['username']),
+                ]);
+            }
         } catch (\Exception $e) {
             $this->getLogger()->error('WeChatFreshOfficialUser_' . $e->getMessage(), $e->getTrace());
+        }
+    }
+
+    public function freshOpenAppWeChatUserWhenLogin($user, $token)
+    {
+        if (empty($user)) {
+            return;
+        }
+
+        try {
+            $weChatUser = $this->getWeChatUserByTypeAndOpenId(WeChatService::OPEN_TYPE, $token['openid']);
+            if (empty($weChatUser)) {
+                $this->createWeChatUser([
+                    'type' => WeChatService::OPEN_TYPE,
+                    'appId' => $this->getSettingService()->node('login_bind.weixinweb_key', ''),
+                    'unionId' => $token['userId'],
+                    'openId' => $token['openid'],
+                    'userId' => $user['id'],
+                ]);
+            } elseif ($weChatUser['userId'] != $user['id']) {
+                $this->updateWeChatUser($weChatUser['id'], [
+                    'userId' => $user['id'],
+                ]);
+            }
+            if (!empty($token['username'])) {
+                $this->getUserWeChatDao()->update(['userId' => $user['id']], [
+                    'nickname' => urlencode($token['username']),
+                ]);
+            }
+        } catch (\Exception $e) {
+            $this->getLogger()->error('WeChatFreshWebUser_' . $e->getMessage(), $e->getTrace());
         }
     }
 
@@ -841,7 +877,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
     private function weChatUserFilter($fields)
     {
-        return ArrayToolkit::parts($fields, ['appId', 'type', 'userId', 'openId', 'unionId', 'data', 'lastRefreshTime']);
+        return ArrayToolkit::parts($fields, ['appId', 'type', 'userId', 'openId', 'unionId', 'isSubscribe', 'nickname', 'profilePicture', 'data', 'lastRefreshTime', 'subscribeTime']);
     }
 
     /**
