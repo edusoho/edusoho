@@ -10,6 +10,7 @@ use AppBundle\Common\SettingToolkit;
 use Biz\Common\CommonException;
 use Biz\UnifiedPayment\Service\UnifiedPaymentService;
 use Firebase\JWT\JWT;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UnifiedPayment extends AbstractResource
 {
@@ -37,8 +38,14 @@ class UnifiedPayment extends AbstractResource
         }
 
         $trade = $this->getUnifiedPaymentService()->getTradeByTradeSn($payload['tradeSn']);
-        if (empty($trade) || 'paid' === $trade['status']) {
-            return ['status' => 'ok', 'paid' => true, 'message' => '', 'returnUrl' => ''];
+        if (empty($trade)) {
+            throw new NotFoundHttpException(sprintf('订单#%s未找到', $payload['tradeSn']));
+        }
+        if (!$this->getUnifiedPaymentService()->isEnabledPlatform($trade['platform'])) {
+            return ['success' => false, 'message' => '支付方式未配置，请联系机构处理。'];
+        }
+        if ('paid' === $trade['status']) {
+            return ['success' => false, 'message' => '已支付'];
         }
         $config = $this->getUnifiedPaymentService()->createPlatformTradeByTradeSn($payload['tradeSn']);
 
