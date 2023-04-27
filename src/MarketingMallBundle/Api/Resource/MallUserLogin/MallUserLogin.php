@@ -20,11 +20,15 @@ class MallUserLogin extends AbstractResource
         if (empty($user)) {
             throw UserException::NOTFOUND_USER();
         }
-        if (!$this->getUserService()->verifyPassword($user['id'], $params['password'])) {
-            throw UserException::PASSWORD_ERROR();
-        }
         if ($user['locked']) {
             throw UserException::LOCKED_USER();
+        }
+        $userBind = $this->getUserService()->getUserBindByTypeAndUserId('weixin', $user['id']);
+        if ($userBind) {
+            throw UserException::USER_ALREADY_BIND();
+        }
+        if (!$this->getUserService()->verifyPassword($user['id'], $params['password'])) {
+            throw UserException::PASSWORD_ERROR();
         }
 
         return $user;
