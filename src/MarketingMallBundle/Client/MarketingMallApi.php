@@ -126,7 +126,7 @@ class MarketingMallApi
 
     public function setPaymentSetting($params)
     {
-        return $this->post('/api-school/setting/setPaymentSetting', ...$params);
+        return $this->post('/api-school/unifiedPayment/setPaymentSetting', ...$params);
     }
 
     public function notifyPaid($params)
