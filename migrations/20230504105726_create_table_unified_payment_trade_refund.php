@@ -16,7 +16,7 @@ class CreateTableUnifiedPaymentTradeRefund extends Migration
               `tradeSn` varchar(64) NOT NULL COMMENT '交易号',
               `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT '退款状态',
               `refundAmount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '退款金额',
-              `refundResult` text DEFAULT '' COMMENT '平台接口返回',
+              `refundResult` text COMMENT '平台接口返回',
               `refundTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '退款时间',
               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
