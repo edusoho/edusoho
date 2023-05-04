@@ -205,10 +205,11 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
             throw new AccessDeniedException('can not refund, because the refund amount is greater than the trade amount');
         }
 
-        $trade = $this->getTradeDao()->create([
+        $refund = $this->getTradeRefundDao()->create([
             'tradeSn' => $fields['tradeSn'],
             'refundAmount' => $fields['refundAmount'],
             'status' => 'created',
+            'refundResult' => [],
         ]);
 
         $response = $this->getPayment($trade['platform'])->applyRefund([
@@ -219,18 +220,23 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
         ]);
 
         if (!$response->isSuccessful()) {
-            return $trade;
+            $this->getTargetlogService()->log(TargetlogService::ERROR, 'up_trade.refund', $trade['tradeSn'], "交易号{$trade['tradeSn']}，发起退款失败", (array) $response->getData());
+
+            return $this->getTradeRefundDao()->update($refund['id'], [
+                'status' => 'failed',
+                'refundResult' => (array) $response->getData(),
+            ]);
         }
 
-        $trade = $this->getTradeDao()->update($trade['id'], [
+        $refund = $this->getTradeRefundDao()->update($refund['id'], [
             'status' => 'refunding',
             'refundResult' => (array) $response->getData(),
             'refundTime' => time(),
         ]);
 
-        $this->getTargetlogService()->log(TargetlogService::INFO, 'up_trade.refund', $trade['tradeSn'], "交易号{$trade['tradeSn']}，发起退款成功", $fields);
+        $this->getTargetlogService()->log(TargetlogService::INFO, 'up_trade.refund', $trade['tradeSn'], "交易号{$trade['tradeSn']}，发起退款成功", $refund);
 
-        return $trade;
+        return $refund;
     }
 
     protected function generateSn($prefix = ''): string
