@@ -1,6 +1,6 @@
 <?php
 
-namespace MarketingMallBundle\Api\Resource\MallTrade;
+namespace MarketingMallBundle\Api\Resource\MallTradeRefund;
 
 use ApiBundle\Api\Annotation\AuthClass;
 use ApiBundle\Api\ApiRequest;
