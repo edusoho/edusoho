@@ -17,9 +17,11 @@
   </td>
   <td>
     {% if user.verifiedMobile %}
-      {{ user.verifiedMobile }}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span>
+      {% include 'admin-v2/user-mobile-hidden.html.twig' with { userId: user.id, mobile: user.verifiedMobile } %}
+      <span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span>
     {% elseif profile.mobile %}
-      {{ profile.mobile }}<span class="text-danger">({{'user.fields.mobile_label.no_bind'|trans}})</span>
+      {% include 'admin-v2/user-mobile-hidden.html.twig' with { userId: user.id, mobile: profile.mobile } %}
+      <span class="text-danger">({{'user.fields.mobile_label.no_bind'|trans}})</span>
     {% else %}
        --
     {% endif %}
