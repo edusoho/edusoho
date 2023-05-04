@@ -45,8 +45,12 @@ export default [
   },
   // 营销商城订单支付
   {
-    name: 'getMarketingPayConfig',
+    name: 'getMarketingMallPayConfig',
     url: '/unified_payment',
     method: 'POST'
+  },
+  {
+    name: 'checkMarketingMallPayConfig',
+    url: '/unified_payment'
   }
 ];

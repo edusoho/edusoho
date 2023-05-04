@@ -3,7 +3,7 @@
     <div class="marketing-wxpay__title">{{ $t('marketingPay.amountLabel') }}</div>
     <div class="marketing-wxpay__amount">
       <span class="amount-unit">￥</span>
-      <span class="amount-number">{{ payInfo.amount }}</span>
+      <span class="amount-number">{{ payInfo.amount / 100 }}</span>
     </div>
     <div class="marketing-wxpay__info">
       <div class="info-label">{{ $t('marketingPay.orderSnLabel') }}</div>
@@ -22,7 +22,7 @@
 
 <script>
 import Api from '@/api';
-import { Toast } from 'vant';
+import { Toast, Dialog } from 'vant';
 
 export default {
   name: 'MarketingWXPay',
@@ -46,13 +46,36 @@ export default {
       return
     }
 
-    this.payInfo = await Api.getMarketingPayConfig({ data: { token } });
+    const result = await Api.getMarketingMallPayConfig({ data: { token } });
+
+    if (result.success === false) {
+      Dialog.alert({
+        confirmButtonText: '我知道了',
+        confirmButtonColor: '#165DFF',
+        message: `支付方式未配置，请联系机构处理。`,
+      });
+
+      return
+    }
+
+    this.payInfo = result
   },
   methods: {
+    handleAmount(amount) {
+      return amount / 100
+    },
     async handlePay() {
       const token = this.$route.query.payToken || ''
 
-      this.payInfo = await Api.getMarketingPayConfig({ data: { token } });
+      const result = await Api.checkMarketingMallPayConfig({ params: { token } });
+
+      if (result.success === false) {
+        Dialog.alert({
+          confirmButtonText: '我知道了',
+          confirmButtonColor: '#165DFF',
+          message: `支付方式未配置，请联系机构处理。`,
+        });
+      }
 
       // eslint-disable-next-line no-undef
       WeixinJSBridge.invoke(
