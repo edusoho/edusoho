@@ -80,9 +80,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function modifySmsRequestLogColumn()
     {
-        if (!$this->isFieldExist('biz_item_attachment', 'seq')) {
-            $this->getConnection()->exec("ALTER TABLE `sms_request_log` MODIFY COLUMN `userAgent` text NOT NULL AFTER `mobile`;");
-        }
+        $this->getConnection()->exec("ALTER TABLE `sms_request_log` MODIFY COLUMN `userAgent` text NOT NULL AFTER `mobile`;");
+
         return 1;
     }
 
