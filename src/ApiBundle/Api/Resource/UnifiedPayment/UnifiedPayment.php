@@ -9,14 +9,13 @@ use AppBundle\Common\Exception\InvalidArgumentException;
 use AppBundle\Common\SettingToolkit;
 use Biz\Common\CommonException;
 use Biz\UnifiedPayment\Service\UnifiedPaymentService;
+use Biz\WeChat\Service\WeChatService;
+use Codeages\Weblib\Error\ResourceNotFoundException;
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UnifiedPayment extends AbstractResource
 {
-    /**
-     * @ApiConf(isRequiredAuth=false)
-     */
     public function search(ApiRequest $request)
     {
         $params = $request->query->all();
@@ -41,9 +40,6 @@ class UnifiedPayment extends AbstractResource
         ];
     }
 
-    /**
-     * @ApiConf(isRequiredAuth=false)
-     */
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
@@ -59,7 +55,15 @@ class UnifiedPayment extends AbstractResource
         if ('paid' === $trade['status']) {
             return ['success' => false, 'message' => '已支付'];
         }
-        $config = $this->getUnifiedPaymentService()->createPlatformTradeByTradeSn($payload['tradeSn']);
+
+        $user = $this->getCurrentUser();
+        $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($user['id']);
+        if (empty($weChatUser)) {
+            throw new NotFoundHttpException(sprintf('用户#%s未绑定微信', $user['id']));
+        }
+        $config = $this->getUnifiedPaymentService()->createPlatformTradeByTradeSn($payload['tradeSn'],[
+            'openId' => $weChatUser['openId'],
+        ]);
 
         return [
             'config' => $config,
@@ -99,4 +103,14 @@ class UnifiedPayment extends AbstractResource
     {
         return $this->service('UnifiedPayment:UnifiedPaymentService');
     }
+
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->service('WeChat:WeChatService');
+    }
+
 }

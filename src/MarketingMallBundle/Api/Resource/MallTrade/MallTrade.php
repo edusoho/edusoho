@@ -7,6 +7,9 @@ use ApiBundle\Api\ApiRequest;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\UnifiedPayment\Service\UnifiedPaymentService;
+use Biz\WeChat\Service\WeChatService;
+use Codeages\Weblib\Error\ResourceNotFoundException;
+use GuzzleHttp\Exception\ServerException;
 use MarketingMallBundle\Api\Resource\BaseResource;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -18,7 +21,7 @@ class MallTrade extends BaseResource
     public function add(ApiRequest $request)
     {
         $fields = $request->request->all();
-        if (!ArrayToolkit::requireds($fields, ['orderSn', 'title', 'amount', 'userId', 'openId', 'createIp', 'redirectUrl'], true)) {
+        if (!ArrayToolkit::requireds($fields, ['orderSn', 'title', 'amount', 'userId', 'createIp', 'redirectUrl'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -41,6 +44,7 @@ class MallTrade extends BaseResource
 
         return $this->getUnifiedPaymentService()->createTrade($trade);
     }
+
 
     /**
      * @return UnifiedPaymentService

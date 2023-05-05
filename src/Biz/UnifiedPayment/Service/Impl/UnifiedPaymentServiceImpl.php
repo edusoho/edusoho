@@ -41,6 +41,14 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
         return $this->getTradeDao()->getByTradeSn($sn);
     }
 
+    /**
+     * 创建交易及平台交易，但不发起支付.
+     * @see UnifiedPaymentService::createPlatformTradeByTradeSn() 实际发起支付
+     * @param array $fields
+     * @param bool  $createPlatformTrade
+     *
+     * @return array
+     */
     public function createTrade($fields, $createPlatformTrade = true)
     {
         $tradeFields = ['title', 'orderSn', 'amount', 'platform', 'platformType', 'userId', 'source', 'redirectUrl'];
@@ -92,22 +100,22 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
             'create_ip' => $data['createIp'],
         ];
 
-        $result = $this->getPayment($params['platform'])->createTrade($params);
-
         return $this->getTradeDao()->update($trade['id'], [
             'platformCreatedParams' => $params,
-            'platformCreatedResult' => $result,
         ]);
     }
 
-    public function createPlatformTradeByTradeSn($tradeSn)
+    public function createPlatformTradeByTradeSn($tradeSn, $params)
     {
         $trade = $this->getTradeDao()->getByTradeSn($tradeSn);
         $this->checkPlatform($trade['platform']);
 
-        $result = $this->getPayment($trade['platform'])->createTrade($trade['platformCreatedParams']);
+        $platformCreatedParams = array_merge($trade['platformCreatedParams'], $params);
+
+        $result = $this->getPayment($trade['platform'])->createTrade($platformCreatedParams);
 
         $this->getTradeDao()->update($trade['id'], [
+            'platformCreatedParams' => $platformCreatedParams,
             'platformCreatedResult' => $result,
         ]);
 
