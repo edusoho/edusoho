@@ -43,7 +43,9 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
 
     /**
      * 创建交易及平台交易，但不发起支付.
+     *
      * @see UnifiedPaymentService::createPlatformTradeByTradeSn() 实际发起支付
+     *
      * @param array $fields
      * @param bool  $createPlatformTrade
      *

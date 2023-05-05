@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\UnifiedPayment;
 
-use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\Exception\InvalidArgumentException;
@@ -10,7 +9,6 @@ use AppBundle\Common\SettingToolkit;
 use Biz\Common\CommonException;
 use Biz\UnifiedPayment\Service\UnifiedPaymentService;
 use Biz\WeChat\Service\WeChatService;
-use Codeages\Weblib\Error\ResourceNotFoundException;
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -61,7 +59,7 @@ class UnifiedPayment extends AbstractResource
         if (empty($weChatUser)) {
             throw new NotFoundHttpException(sprintf('用户#%s未绑定微信', $user['id']));
         }
-        $config = $this->getUnifiedPaymentService()->createPlatformTradeByTradeSn($payload['tradeSn'],[
+        $config = $this->getUnifiedPaymentService()->createPlatformTradeByTradeSn($payload['tradeSn'], [
             'openId' => $weChatUser['openId'],
         ]);
 
@@ -104,7 +102,6 @@ class UnifiedPayment extends AbstractResource
         return $this->service('UnifiedPayment:UnifiedPaymentService');
     }
 
-
     /**
      * @return WeChatService
      */
@@ -112,5 +109,4 @@ class UnifiedPayment extends AbstractResource
     {
         return $this->service('WeChat:WeChatService');
     }
-
 }

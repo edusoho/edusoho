@@ -7,9 +7,6 @@ use ApiBundle\Api\ApiRequest;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\UnifiedPayment\Service\UnifiedPaymentService;
-use Biz\WeChat\Service\WeChatService;
-use Codeages\Weblib\Error\ResourceNotFoundException;
-use GuzzleHttp\Exception\ServerException;
 use MarketingMallBundle\Api\Resource\BaseResource;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -44,7 +41,6 @@ class MallTrade extends BaseResource
 
         return $this->getUnifiedPaymentService()->createTrade($trade);
     }
-
 
     /**
      * @return UnifiedPaymentService
