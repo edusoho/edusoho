@@ -1,0 +1,10 @@
+{% do script(['app/js/admin-v2/widget/mobile-mask/index.js']) %}
+
+<div class="js-user-mobile" data-encrypted="{{ mobile_encrypt(mobile) }}">
+  <span class="js-mobile">{{ mobile_mask(mobile) }}</span>
+  <span class="js-toggle">这个是图标</span>
+</div>
+
+<script>
+
+</script>
