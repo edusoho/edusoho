@@ -398,6 +398,7 @@ form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
 form.btn.send: 发送
 form.btn.upload: 上传
+form.btn.reupload: 重新上传
 form.btn.picture_crop: 选择要上传的图片
 form.btn.remove: 移除
 form.btn.comment: 发表评论
@@ -8023,6 +8024,11 @@ admin.setting_wechat_auth.re_authorization_btn: 重新授权
 admin.setting_wechat_auth.authorization_in_new_page_hint: 请在新窗口完成公众号授权
 admin.setting_wechat_auth.authorization_success: 已成功授权
 admin.setting_wechat_auth.message_template: 消息模板
+admin.setting_wechat_pay.cert_key: 微信商户平台私钥
+admin.setting_wechat_pay.cert_key_hint: 微信商户平台私钥文件需要在【微信商户平台】-【账号中心】-【API安全】-【API证书】中申请，如已申请，直接把文件夹中的【apiclient_key.pem】文件上传至ES即可 <a target="_blank" href="javascript:;">申请API证书</a>
+admin.setting_wechat_pay.cert: 微信商户平台证书
+admin.setting_wechat_pay.cert_hint: 微信商户平台证书文件需要在【微信商户平台】-【账号中心】-【API安全】-【API证书】中申请，如已申请，直接把文件夹中的【apiclient_cert.pem】文件上传至ES即可 <a target="_blank" href="javascript:;">申请API证书</a>
+admin.setting_wechat_pay.cert_uploaded: 已上传
 
 #开发者设置
 admin.developer_setting.cloud_notification_api: 通知服务API
