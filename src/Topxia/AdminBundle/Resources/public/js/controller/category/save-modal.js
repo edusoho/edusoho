@@ -54,7 +54,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#category-code-field',
             required: true,
-            rule: 'alphanumeric not_all_digital remote'
+            rule: 'alphanumeric not_all_digital maxlength{max:64} remote'
         });
 
         $modal.find('.delete-category').on('click', function() {

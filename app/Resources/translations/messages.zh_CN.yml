@@ -10810,6 +10810,7 @@ exception.category.code_invalid: 编码含有非法字符，保存分类失败
 exception.category.code_digit_invalid: 编码不能全为数字，保存分类失败
 exception.category.code_unavailable: 编码不可用，保存分类失败
 exception.category.not_found_parent_category: 父分类不存在，保存分类失败
+exception.category.code_length_too_long: 编码长度过长，保存分类失败
 exception.testpaper.not_found: 试卷不存在
 exception.testpaper.draft: 该试卷未发布，如有疑问请联系老师！
 exception.testpaper.closed: 该试卷已关闭，如有疑问请联系老师！
