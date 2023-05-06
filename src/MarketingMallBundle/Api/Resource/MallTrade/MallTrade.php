@@ -18,7 +18,7 @@ class MallTrade extends BaseResource
     public function add(ApiRequest $request)
     {
         $fields = $request->request->all();
-        if (!ArrayToolkit::requireds($fields, ['orderSn', 'title', 'amount', 'userId', 'openId', 'createIp', 'redirectUrl'], true)) {
+        if (!ArrayToolkit::requireds($fields, ['orderSn', 'title', 'amount', 'userId', 'createIp', 'redirectUrl'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
