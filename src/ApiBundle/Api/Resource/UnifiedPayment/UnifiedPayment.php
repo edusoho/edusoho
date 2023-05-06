@@ -51,7 +51,7 @@ class UnifiedPayment extends AbstractResource
             return ['success' => false, 'message' => '支付方式未配置，请联系机构处理。'];
         }
         if ('paid' === $trade['status']) {
-            return ['success' => false, 'message' => '已支付'];
+            return ['success' => false, 'message' => '订单已支付'];
         }
 
         $user = $this->getCurrentUser();
