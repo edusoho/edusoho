@@ -3,7 +3,7 @@
     <div class="marketing-wxpay__title">{{ $t('marketingPay.amountLabel') }}</div>
     <div class="marketing-wxpay__amount">
       <span class="amount-unit">￥</span>
-      <span class="amount-number">{{ payInfo.amount / 100 }}</span>
+      <span class="amount-number">{{ (payInfo.amount / 100).toFixed(2) }}</span>
     </div>
     <div class="marketing-wxpay__info">
       <div class="info-label">{{ $t('marketingPay.orderSnLabel') }}</div>
@@ -23,21 +23,40 @@
 <script>
 import Api from '@/api';
 import { Toast, Dialog } from 'vant';
+import { mapState } from 'vuex';
 
 export default {
   name: 'MarketingWXPay',
   data() {
     return {
       isLoading: false,
-      payInfo: null
+      payInfo: null,
+      loginConfig: {}
     }
   },
   computed: {
+    ...mapState({
+      token: state => state.token
+    }),
     isWeixinBrowser() {
       return /micromessenger/.test(navigator.userAgent.toLowerCase());
     },
   },
   async created() {
+    document.title = this.$t('title.confirmPayment')
+    
+    if (!this.token) {
+      Api.loginConfig({}).then(res => {
+        this.loginConfig = res;
+
+        if (Number(res.weixinmob_enabled) && this.isWeixinBrowser) {
+          this.wxLogin();
+        }
+      })
+
+      return
+    }
+
     const token = this.$route.query.payToken || ''
 
     if (!token) {
@@ -52,13 +71,14 @@ export default {
       Dialog.alert({
         confirmButtonText: '我知道了',
         confirmButtonColor: '#165DFF',
-        message: `支付方式未配置，请联系机构处理。`,
+        message: result.message,
       });
 
       return
     }
 
     this.payInfo = result
+    this.handlePay()
   },
   methods: {
     handleAmount(amount) {
@@ -73,8 +93,10 @@ export default {
         Dialog.alert({
           confirmButtonText: '我知道了',
           confirmButtonColor: '#165DFF',
-          message: `支付方式未配置，请联系机构处理。`,
+          message: result.message,
         });
+
+        return
       }
 
       // eslint-disable-next-line no-undef
@@ -91,7 +113,19 @@ export default {
           }
         },
       );
-    }
+    },
+    wxLogin() {
+      this.$router.push({
+        path: '/auth/social',
+        query: {
+          type: 'wx',
+          weixinmob_key: this.loginConfig.weixinmob_key,
+          redirect: this.$route.query.redirect || this.$route.path,
+          callbackType: this.$route.query.callbackType,
+          activityId: this.$route.query.activityId,
+        },
+      });
+    },
   }
 }
 </script>
@@ -139,10 +173,13 @@ export default {
       border-bottom: solid 1px #F2F3F5;
 
       .info-label {
+        width: 64px;
         color: #86909C;
       }
 
       .info-desc {
+        flex: 1;
+        text-align: right;
         color: #272E3B;
       }
     }
