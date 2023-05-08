@@ -19,39 +19,7 @@ define(function (require, exports, module) {
       }
     });
 
-    var keyUploader = new WebUploader({
-      element: '#wxpay-cert-key-upload',
-      accept: {
-        title: 'Cert',
-        extensions: 'pem,crt',
-        mimeTypes: 'application/x-x509-ca-cert',
-      },
-      server: $('#wxpay-cert-key-upload').data('uploadUrl'),
-    });
-
-    keyUploader.on('uploadSuccess', function (file, response) {
-      $('[name="payment[wxpay_key_uploaded]"]').val(1);
-      $('#wxpay-cert-key-upload').text('重新上传');
-      $('.js-key-uploaded').removeClass('hidden');
-      Notify.success(Translator.trans('site.upload_success_hint'), 1);
-    });
-
-    var certUploader = new WebUploader({
-      element: '#wxpay-cert-upload',
-      accept: {
-        title: 'Cert',
-        extensions: 'pem,crt',
-        mimeTypes: 'application/x-x509-ca-cert',
-      },
-      server: $('#wxpay-cert-upload').data('uploadUrl'),
-    });
-
-    certUploader.on('uploadSuccess', function (file, response) {
-      $('[name="payment[wxpay_cert_uploaded]"]').val(1);
-      $('#wxpay-cert-upload').text('重新上传');
-      $('.js-cert-uploaded').removeClass('hidden');
-      Notify.success(Translator.trans('site.upload_success_hint'), 1);
-    });
+    registerWebUploader();
 
     var validator = new Validator({
       element: '#wechat-setting-form',
@@ -91,6 +59,8 @@ define(function (require, exports, module) {
           $('input[name="wechatSetting[wechat_notification_enabled]"]').change();
         }
       }
+
+      registerWebUploader();
 
       // 关闭微信内登录时，关闭微信支付
       if ($this.context.id == 'weixinmob_enabled' && isEnable == '1') {
@@ -273,6 +243,42 @@ define(function (require, exports, module) {
 
     $('#confirm-modal').on('hidden.bs.modal', function () {
       window.location.reload();
+    });
+  };
+
+  var registerWebUploader = function () {
+    var keyUploader = new WebUploader({
+      element: '#wxpay-cert-key-upload',
+      accept: {
+        title: 'Cert',
+        extensions: 'pem,crt',
+        mimeTypes: 'application/x-x509-ca-cert',
+      },
+      server: $('#wxpay-cert-key-upload').data('uploadUrl'),
+    });
+
+    keyUploader.on('uploadSuccess', function (file, response) {
+      $('[name="payment[wxpay_key_uploaded]"]').val(1);
+      $('#wxpay-cert-key-upload').text('重新上传');
+      $('.js-key-uploaded').removeClass('hidden');
+      Notify.success(Translator.trans('site.upload_success_hint'), 1);
+    });
+
+    var certUploader = new WebUploader({
+      element: '#wxpay-cert-upload',
+      accept: {
+        title: 'Cert',
+        extensions: 'pem,crt',
+        mimeTypes: 'application/x-x509-ca-cert',
+      },
+      server: $('#wxpay-cert-upload').data('uploadUrl'),
+    });
+
+    certUploader.on('uploadSuccess', function (file, response) {
+      $('[name="payment[wxpay_cert_uploaded]"]').val(1);
+      $('#wxpay-cert-upload').text('重新上传');
+      $('.js-cert-uploaded').removeClass('hidden');
+      Notify.success(Translator.trans('site.upload_success_hint'), 1);
     });
   };
 });
