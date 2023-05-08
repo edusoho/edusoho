@@ -63,9 +63,13 @@ class WeChatSettingController extends BaseController
             }
             if (!empty($payment['wxpay_cert_uploaded'])) {
                 $payment['wxpay_cert_path'] = $payment['wxpay_cert_tmp_path'] ?? '';
+                $payment['wxpay_cert_name'] = $payment['wxpay_cert_tmp_name'] ?? '';
+                $payment['wxpay_cert_ext'] = $payment['wxpay_cert_tmp_ext'] ?? '';
             }
             if (!empty($payment['wxpay_key_uploaded'])) {
                 $payment['wxpay_key_path'] = $payment['wxpay_key_tmp_path'] ?? '';
+                $payment['wxpay_key_name'] = $payment['wxpay_key_tmp_name'] ?? '';
+                $payment['wxpay_key_ext'] = $payment['wxpay_key_tmp_ext'] ?? '';
             }
             unset($payment['wxpay_cert_uploaded']);
             unset($payment['wxpay_key_uploaded']);
@@ -136,14 +140,17 @@ class WeChatSettingController extends BaseController
     {
         $this->validateToken($request->request->get('token'));
         $file = $request->files->get('file');
+        $paymentSetting = $this->getSettingService()->get('payment', []);
+        $paymentSetting['wxpay_cert_tmp_name'] = rtrim($file->getClientOriginalName(), '.'.$file->getClientOriginalExtension());
+        $paymentSetting['wxpay_cert_tmp_ext'] = $file->getClientOriginalExtension();
         $directory = $this->getBiz()['topxia.upload.private_directory'] . '/system';
         $file = $file->move($directory, 'wxpay_cert.pem');
-        $paymentSetting = $this->getSettingService()->get('payment', []);
         $paymentSetting['wxpay_cert_tmp_path'] = $file->getRealpath();
         $this->getSettingService()->set('payment', $paymentSetting);
 
         return $this->createJsonResponse([
-            'ok' => true,
+            'name' => $paymentSetting['wxpay_cert_tmp_name'],
+            'ext' => $paymentSetting['wxpay_cert_tmp_ext'],
         ]);
     }
 
@@ -151,14 +158,17 @@ class WeChatSettingController extends BaseController
     {
         $this->validateToken($request->request->get('token'));
         $file = $request->files->get('file');
+        $paymentSetting = $this->getSettingService()->get('payment', []);
+        $paymentSetting['wxpay_key_tmp_name'] = rtrim($file->getClientOriginalName(), '.'.$file->getClientOriginalExtension());
+        $paymentSetting['wxpay_key_tmp_ext'] = $file->getClientOriginalExtension();
         $directory = $this->getBiz()['topxia.upload.private_directory'] . '/system';
         $file = $file->move($directory, 'wxpay_cert_key.pem');
-        $paymentSetting = $this->getSettingService()->get('payment', []);
         $paymentSetting['wxpay_key_tmp_path'] = $file->getRealpath();
         $this->getSettingService()->set('payment', $paymentSetting);
 
         return $this->createJsonResponse([
-            'ok' => true,
+            'name' => $paymentSetting['wxpay_key_tmp_name'],
+            'ext' => $paymentSetting['wxpay_key_tmp_ext'],
         ]);
     }
 

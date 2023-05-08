@@ -261,7 +261,10 @@ define(function (require, exports, module) {
       $('[name="payment[wxpay_key_uploaded]"]').val(1);
       $('#wxpay-cert-key-upload').text('重新上传');
       $('.js-key-uploaded').removeClass('hidden');
+      $('.js-key-name').text(response.name);
+      $('.js-key-ext').text(response.ext);
       Notify.success(Translator.trans('site.upload_success_hint'), 1);
+      registerWebUploader();
     });
 
     var certUploader = new WebUploader({
@@ -278,7 +281,10 @@ define(function (require, exports, module) {
       $('[name="payment[wxpay_cert_uploaded]"]').val(1);
       $('#wxpay-cert-upload').text('重新上传');
       $('.js-cert-uploaded').removeClass('hidden');
+      $('.js-cert-name').text(response.name);
+      $('.js-cert-ext').text(response.ext);
       Notify.success(Translator.trans('site.upload_success_hint'), 1);
+      registerWebUploader();
     });
   };
 });
