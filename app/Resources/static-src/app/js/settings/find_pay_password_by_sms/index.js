@@ -1,5 +1,6 @@
 import SmsSender from 'app/common/widget/sms-sender';
 import Drag from 'app/common/drag';
+import Coordinate from 'app/common/coordinate';
 
 let smsSend = '.js-sms-send';
 let $smsCode = $(smsSend);
@@ -35,6 +36,8 @@ if (drag) {
 }
 
 $smsCode.on('click', () => {
+  const coordinate = new Coordinate();
+  const encryptedPoint = coordinate.getCoordinate(event, $('meta[name=csrf-token]').attr('content'));
   $smsCode.attr('disabled', true);
   new SmsSender({
     element: smsSend,
@@ -42,6 +45,7 @@ $smsCode.on('click', () => {
     smsType: $smsCode.data('smsType'),
     captcha: true,
     captchaValidated: true,
+    encryptedPoint: encryptedPoint,
     captchaNum: 'dragCaptchaToken',
     preSmsSend: () => {
       return true;
