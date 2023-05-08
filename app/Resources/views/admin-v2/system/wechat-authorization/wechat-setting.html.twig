@@ -230,7 +230,9 @@
                 {% if payment.wxpay_key_path|default() %}{{ 'form.btn.reupload'|trans }}{% else %}{{ 'form.btn.upload'|trans }}{% endif %}
               </a>
               {% if payment.wxpay_key_path|default() %}
-                <div><span class="js-key-name wechat-setting-cert-name">{{ payment.wxpay_key_name|default() }}</span>.<span class="js-key-ext">{{ payment.wxpay_key_ext|default() }}</span></div>
+                <div><span class="js-key-name wechat-setting-cert-name">{{ payment.wxpay_key_name|default() }}</span><span class="js-key-ext">{{ payment.wxpay_key_ext|default() }}</span></div>
+              {% else %}
+                <div class="hidden"><span class="js-key-name wechat-setting-cert-name"></span><span class="js-key-ext"></span></div>
               {% endif %}
               <div class="help-block">
                 <div>{{ 'admin.setting_wechat_pay.cert_key_hint'|trans|raw }}</div>
@@ -250,7 +252,9 @@
                 {% if payment.wxpay_cert_path|default() %}{{ 'form.btn.reupload'|trans }}{% else %}{{ 'form.btn.upload'|trans }}{% endif %}
               </a>
               {% if payment.wxpay_cert_path|default() %}
-                <div><span class="js-cert-name wechat-setting-cert-name">{{ payment.wxpay_cert_name|default() }}</span>.<span class="js-cert-ext">{{ payment.wxpay_cert_ext|default() }}</span></div>
+                <div><span class="js-cert-name wechat-setting-cert-name">{{ payment.wxpay_cert_name|default() }}</span><span class="js-cert-ext">{{ payment.wxpay_cert_ext|default() }}</span></div>
+              {% else %}
+                <div class="hidden"><span class="js-cert-name wechat-setting-cert-name"></span><span class="js-cert-ext"></span></div>
               {% endif %}
               <div class="help-block">
                 <div>{{ 'admin.setting_wechat_pay.cert_hint'|trans|raw }}</div>

@@ -142,7 +142,7 @@ class WeChatSettingController extends BaseController
         $file = $request->files->get('file');
         $paymentSetting = $this->getSettingService()->get('payment', []);
         $paymentSetting['wxpay_cert_tmp_name'] = rtrim($file->getClientOriginalName(), '.'.$file->getClientOriginalExtension());
-        $paymentSetting['wxpay_cert_tmp_ext'] = $file->getClientOriginalExtension();
+        $paymentSetting['wxpay_cert_tmp_ext'] = '.'.$file->getClientOriginalExtension();
         $directory = $this->getBiz()['topxia.upload.private_directory'] . '/system';
         $file = $file->move($directory, 'wxpay_cert.pem');
         $paymentSetting['wxpay_cert_tmp_path'] = $file->getRealpath();
@@ -160,7 +160,7 @@ class WeChatSettingController extends BaseController
         $file = $request->files->get('file');
         $paymentSetting = $this->getSettingService()->get('payment', []);
         $paymentSetting['wxpay_key_tmp_name'] = rtrim($file->getClientOriginalName(), '.'.$file->getClientOriginalExtension());
-        $paymentSetting['wxpay_key_tmp_ext'] = $file->getClientOriginalExtension();
+        $paymentSetting['wxpay_key_tmp_ext'] = '.'.$file->getClientOriginalExtension();
         $directory = $this->getBiz()['topxia.upload.private_directory'] . '/system';
         $file = $file->move($directory, 'wxpay_cert_key.pem');
         $paymentSetting['wxpay_key_tmp_path'] = $file->getRealpath();
