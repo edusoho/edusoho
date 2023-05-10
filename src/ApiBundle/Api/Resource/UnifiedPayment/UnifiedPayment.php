@@ -53,6 +53,9 @@ class UnifiedPayment extends AbstractResource
         if ('paid' === $trade['status']) {
             return ['success' => false, 'message' => '订单已支付'];
         }
+        if ('closed' === $trade['status']) {
+            return ['success' => false, 'message' => '订单已关闭'];
+        }
 
         $user = $this->getCurrentUser();
         $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($user['id']);

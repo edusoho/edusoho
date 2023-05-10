@@ -16,7 +16,8 @@ class MallCloseOrder extends BaseResource
             'sn' => $request->request->get('orderSn'),
         ];
         $trade = $this->getUnifiedPaymentService()->getTradeByOrderSnAndPlatform($params['sn'], 'wechat');
-        if ($this->getCurrentUser()->getId() == $trade['userId']) {
+        if ($this->getCurrentUser()->getId() == $trade['userId'] && 'Mall' == $trade['source'] && 'closed' != $trade['status']) {
+            $this->getUnifiedPaymentService()->closeTrade($trade['sn']);
             $client->closeOrder($params);
         }
 

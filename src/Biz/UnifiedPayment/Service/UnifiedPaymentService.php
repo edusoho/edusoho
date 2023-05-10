@@ -17,4 +17,6 @@ interface UnifiedPaymentService
     public function notifyPaid($payment, $data);
 
     public function refund($fields);
+
+    public function closeTrade($sn);
 }

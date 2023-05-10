@@ -254,6 +254,14 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
         return $refund;
     }
 
+    public function closeTrade($sn)
+    {
+        $trade = $this->getTradeByTradeSn($sn);
+        if ($trade && 'closed' != $trade['status']) {
+            $this->getTradeDao()->update($trade['id'], ['status' => 'closed']);
+        }
+    }
+
     protected function generateSn($prefix = ''): string
     {
         return $prefix.date('YmdHis', time()).mt_rand(10000, 99999);
