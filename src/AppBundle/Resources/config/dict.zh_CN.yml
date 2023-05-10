@@ -297,6 +297,11 @@ userType:
     distributor: 分销
     marketing_mall: 网校商城注册
 
+userStatus:
+    all: 全部
+    locked: 封禁
+    unlock: 未封禁
+
 userKeyWordTypes:
     nickname: 学员名
     email: 邮件地址
