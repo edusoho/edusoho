@@ -6,7 +6,7 @@ services:
 
   marketing_mall.logout.success_handler:
     class: MarketingMallBundle\Handler\LogoutSuccessHandler
-    parent: security.logout.success_handler
+    parent: topxia.logout.success_handler
 
   marketing_mall_user_event_subscriber:
     class: MarketingMallBundle\Event\UserEventSubscriber
@@ -74,3 +74,9 @@ services:
       -
         name: extension
         priority: 11
+
+security:
+  firewalls:
+    main:
+      logout:
+        success_handler: marketing_mall.logout.success_handler

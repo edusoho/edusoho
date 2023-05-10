@@ -5,10 +5,9 @@ namespace MarketingMallBundle\Handler;
 use MarketingMallBundle\Biz\Mall\Service\MallService;
 use MarketingMallBundle\Client\MarketingMallClient;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Http\Logout\DefaultLogoutSuccessHandler;
 use Topxia\Service\Common\ServiceKernel;
 
-class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
+class LogoutSuccessHandler extends \AppBundle\Handler\LogoutSuccessHandler
 {
     public function onLogoutSuccess(Request $request)
     {
