@@ -41,6 +41,11 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
         return $this->getTradeDao()->getByTradeSn($sn);
     }
 
+    public function getTradeByOrderSnAndPlatform($orderSn, $platform)
+    {
+        return $this->getTradeDao()->getByOrderSnAndPlatform($orderSn, $platform);
+    }
+
     /**
      * 创建交易及平台交易，但不发起支付.
      *
