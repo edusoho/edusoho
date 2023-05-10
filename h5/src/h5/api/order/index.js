@@ -52,5 +52,10 @@ export default [
   {
     name: 'checkMarketingMallPayConfig',
     url: '/unified_payment'
+  },
+  {
+    name: 'closeMarketingMallOrder',
+    url: '/mall_close_order',
+    method: 'POST'
   }
 ];

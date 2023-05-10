@@ -24,6 +24,7 @@
 import Api from '@/api';
 import { Toast, Dialog } from 'vant';
 import { mapState } from 'vuex';
+import 'navigator.sendbeacon'
 
 export default {
   name: 'MarketingWXPay',
@@ -31,7 +32,8 @@ export default {
     return {
       isLoading: false,
       payInfo: null,
-      loginConfig: {}
+      loginConfig: {},
+      isPay: false,
     }
   },
   computed: {
@@ -79,8 +81,16 @@ export default {
 
     this.payInfo = result
     this.handlePay()
+    window.addEventListener('unload', () => this.closeOrder())
   },
   methods: {
+    async closeOrder() {
+      if (this.isPay) return
+      
+      navigator.sendBeacon('/api/mall_close_order', {
+        orderSn: this.payInfo.orderSn
+      })
+    },
     handleAmount(amount) {
       return amount / 100
     },
@@ -105,6 +115,7 @@ export default {
         this.payInfo.config,
         (res) => {
           if (res.err_msg == 'get_brand_wcpay_request:ok') {
+            this.isPay = true
             window.location.href = this.payInfo.redirectUrl + `&isNeedCheckOrderStatus=1&sn=${this.payInfo.orderSn}`;
           } else if (res.err_msg == 'get_brand_wcpay_request:fail') {
             // alert('支付失败');
