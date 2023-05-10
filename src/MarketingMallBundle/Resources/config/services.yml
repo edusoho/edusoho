@@ -4,6 +4,10 @@ services:
     arguments:
       - '@service_container'
 
+  marketing_mall.logout.success_handler:
+    class: MarketingMallBundle\Handler\LogoutSuccessHandler
+    parent: security.logout.success_handler
+
   marketing_mall_user_event_subscriber:
     class: MarketingMallBundle\Event\UserEventSubscriber
     arguments: [ '@biz' ]

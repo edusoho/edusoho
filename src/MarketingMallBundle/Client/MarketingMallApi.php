@@ -149,6 +149,11 @@ class MarketingMallApi
         return $this->post('/api-school/order/close', ...$params);
     }
 
+    public function logout($params)
+    {
+        return $this->post('/api-school/user/logout', ...$params);
+    }
+
 //    例子  token头直接设置了参数code也直接加了
 //    public function demo($params){
 //        try {
