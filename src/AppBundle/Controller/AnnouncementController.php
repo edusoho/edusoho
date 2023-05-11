@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Announcement\Processor\AnnouncementProcessor;
 use Biz\Announcement\Service\AnnouncementService;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
