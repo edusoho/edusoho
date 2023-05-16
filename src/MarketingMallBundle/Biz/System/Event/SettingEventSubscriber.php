@@ -2,11 +2,10 @@
 
 namespace MarketingMallBundle\Biz\System\Event;
 
-use Biz\System\Service\LoginBindSettingService;
+use Biz\System\Service\PaymentSettingService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use MarketingMallBundle\Client\MarketingMallClient;
 
 class SettingEventSubscriber extends EventSubscriber
@@ -20,12 +19,10 @@ class SettingEventSubscriber extends EventSubscriber
 
     public function onMarketingMallInit(Event $event)
     {
-        $loginConnect = $this->getLoginBindSettingService()->get();
+        $setting = $this->getPaymentSettingService()->get();
 
-        $this->syncWechatMobileSetting([
-            'appId' => $loginConnect['weixinmob_key'] ?? '',
-            'appSecret' => $loginConnect['weixinmob_secret'] ?? '',
-            'mpFileCode' => $loginConnect['weixinmob_mp_secret'] ?? '',
+        $this->getMallClient()->setPaymentSetting([
+            'enabled' => (bool) $setting['wxpay_enabled'] ?? false,
         ]);
 
         $wap = $this->getSettingService()->get('wap');
@@ -37,22 +34,20 @@ class SettingEventSubscriber extends EventSubscriber
         }
     }
 
-    protected function syncWechatMobileSetting($setting)
+    /**
+     * @return MarketingMallClient
+     */
+    public function getMallClient()
     {
-        $client = new MarketingMallClient($this->getBiz());
-        $result = $client->setWechatMobileSetting($setting);
-
-        if (empty($result['ok'])) {
-            throw new ServiceException('设置微信移动端登录失败，请重试！(' . ($result['message'] ?? '') . ')');
-        }
+        return new MarketingMallClient($this->getBiz());
     }
 
     /**
-     * @return LoginBindSettingService
+     * @return PaymentSettingService
      */
-    protected function getLoginBindSettingService()
+    protected function getPaymentSettingService()
     {
-        return $this->getBiz()->service('System:LoginBindSettingService');
+        return $this->getBiz()->service('System:PaymentSettingService');
     }
 
     /**

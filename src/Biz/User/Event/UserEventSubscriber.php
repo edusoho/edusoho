@@ -46,12 +46,14 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $type = $event->getArgument('bindType');
         $bind = $event->getArgument('bind');
-        if (in_array($type, ['weixinmob', 'weixinweb'])) {
-            $weChatUser = $this->getWeChatService()->getWeChatUserByTypeAndUnionId(WeChatService::OFFICIAL_TYPE, $bind['fromId']);
-            if (!empty($weChatUser)) {
-                $this->getWeChatService()->updateWeChatUser($weChatUser['id'], [
-                    'userId' => 0,
-                ]);
+        if (in_array($type, ['weixinmob', 'weixinweb', 'weixin'])) {
+            $weChatUsers = $this->getWeChatService()->findWeChatUsersByUserId($bind['toId']);
+            foreach ($weChatUsers as $weChatUser) {
+                if ($weChatUser['unionId'] == $bind['fromId']) {
+                    $this->getWeChatService()->updateWeChatUser($weChatUser['id'], [
+                        'userId' => 0,
+                    ]);
+                }
             }
         }
     }

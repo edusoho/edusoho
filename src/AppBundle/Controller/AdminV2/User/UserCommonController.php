@@ -18,6 +18,7 @@ use Biz\User\Service\NotificationService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
+use Biz\WeChat\Service\WeChatService;
 
 class UserCommonController extends BaseController
 {
@@ -43,26 +44,31 @@ class UserCommonController extends BaseController
         );
 
         //根据mobile或者idcard查询user_profile获得userIds
-        if (isset($conditions['keywordType']) && in_array($conditions['keywordType'], $this->keywordType) || !empty($conditions['keyword'])) {
-            $preConditions = $this->getUserProfileConditions($conditions);
-            $profilesCount = $this->getUserService()->searchUserProfileCount($preConditions);
-            $userProfiles = $this->getUserService()->searchUserProfiles(
-                $preConditions,
-                ['id' => 'DESC'],
-                0,
-                $profilesCount
-            );
+        if (!empty($conditions['keywordType']) && !empty($conditions['keyword'])) {
+            if (in_array($conditions['keywordType'], $this->keywordType)) {
+                $preConditions = $this->getUserProfileConditions($conditions);
+                $userProfiles = $this->getUserService()->searchUserProfiles(
+                    $preConditions,
+                    ['id' => 'DESC'],
+                    0,
+                    $this->getUserService()->searchUserProfileCount($preConditions)
+                );
 
-            $userIds = ArrayToolkit::column($userProfiles, 'id');
+                $userIds = ArrayToolkit::column($userProfiles, 'id');
+            }
+            if ('wechatNickname' == $conditions['keywordType']) {
+                $wechatUsers = $this->getWeChatService()->searchWeChatUsers(['wechatname' => str_replace('%', '\%', urlencode($conditions['keyword']))], [], 0, PHP_INT_MAX, ['userId']);
+                $userIds = array_column($wechatUsers, 'userId');
+            }
 
             if (!empty($userIds)) {
                 unset($conditions['keywordType']);
                 unset($conditions['keyword']);
                 $conditions['userIds'] = array_merge(ArrayToolkit::column($users, 'userId'), $userIds);
-            } elseif ('idcard' == $conditions['keywordType']) {
+            } elseif (in_array($conditions['keywordType'], ['idcard', 'wechatNickname'])) {
                 unset($conditions['keywordType']);
                 unset($conditions['keyword']);
-                $conditions['userIds'] = empty($userIds) ? [0] : $userIds;
+                $conditions['userIds'] = [0];
             }
 
             $userCount = $this->getUserService()->countUsers($conditions);
@@ -80,25 +86,21 @@ class UserCommonController extends BaseController
             );
         }
 
-        $app = $this->getAppService()->findInstallApp('UserImporter');
-
-        $showUserExport = false;
-
-        if (!empty($app) && array_key_exists('version', $app)) {
-            $showUserExport = version_compare($app['version'], '1.0.2', '>=');
-        }
-
         $userIds = ArrayToolkit::column($users, 'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
-        $allRoles = $this->getAllRoles();
+        $wechatUsers = $this->getWeChatService()->findWechatUsersByUserIds($userIds);
+        foreach ($wechatUsers as &$wechatUser) {
+            $wechatUser['nickname'] = urldecode($wechatUser['nickname']);
+        }
 
         return $this->render($indexTwigUrl, [
             'users' => $users,
             'userCount' => $userCount,
-            'allRoles' => $allRoles,
+            'allRoles' => $this->getAllRoles(),
             'paginator' => $paginator,
             'profiles' => $profiles,
-            'showUserExport' => $showUserExport,
+            'wechatUsers' => array_column($wechatUsers, null, 'userId'),
+            'showUserExport' => $this->showUserExport(),
         ]);
     }
 
@@ -556,7 +558,7 @@ class UserCommonController extends BaseController
                 'template' => 'email_reset_password',
                 'params' => [
                     'nickname' => $user['nickname'],
-                    'verifyurl' => $this->getHttpHost().'/password/reset/update?token='.$token,
+                    'verifyurl' => $this->getHttpHost() . '/password/reset/update?token=' . $token,
                     'sitename' => $site['name'],
                     'siteurl' => $site['url'],
                 ],
@@ -566,7 +568,7 @@ class UserCommonController extends BaseController
             $mail->send();
             $this->getLogService()->info('user', 'password-reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'password-reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：".$e->getMessage());
+            $this->getLogService()->error('user', 'password-reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：" . $e->getMessage());
             throw $e;
         }
 
@@ -587,7 +589,7 @@ class UserCommonController extends BaseController
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
 
         $site = $this->getSettingService()->get('site', []);
-        $verifyurl = $this->getHttpHost().'/register/email/verify/'.$token;
+        $verifyurl = $this->getHttpHost() . '/register/email/verify/' . $token;
         try {
             $mailOptions = [
                 'to' => $user['email'],
@@ -605,7 +607,7 @@ class UserCommonController extends BaseController
             $mail->send();
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 {$user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 {$user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());
+            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 {$user['nickname']}({$user['id']}) 发送Email验证邮件失败：" . $e->getMessage());
             throw $e;
         }
 
@@ -644,6 +646,16 @@ class UserCommonController extends BaseController
         return $this->render($changePasswordTwigUrl, [
             'user' => $user,
         ]);
+    }
+
+    private function showUserExport()
+    {
+        $app = $this->getAppService()->findInstallApp('UserImporter');
+        if (!empty($app) && array_key_exists('version', $app)) {
+            return version_compare($app['version'], '1.0.2', '>=');
+        }
+
+        return false;
     }
 
     protected function kickUserLogout($userId)
@@ -759,5 +771,13 @@ class UserCommonController extends BaseController
     protected function getOrgService()
     {
         return $this->createService('Org:OrgService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->createService('WeChat:WeChatService');
     }
 }

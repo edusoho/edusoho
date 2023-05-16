@@ -25,10 +25,13 @@ class MallUser extends BaseResource
         if (!ArrayToolkit::requireds($fields, ['mobile', 'nickname'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-        $fields = ArrayToolkit::parts($fields, ['mobile', 'nickname', 'openId', 'avatar']);
+        $fields = ArrayToolkit::parts($fields, ['mobile', 'nickname', 'openId', 'avatar', 'unionId']);
         $user = $this->getUserService()->getUserByVerifiedMobile($fields['mobile']);
         if ($user) {
             return $user;
+        }
+        if (!$this->getUserService()->isNicknameAvaliable($fields['nickname'])) {
+            $fields['nickname'] = $this->generateNickname($fields['nickname']);
         }
         $fields['verifiedMobile'] = $fields['mobile'];
         $fields['type'] = 'marketing_mall';
@@ -39,8 +42,8 @@ class MallUser extends BaseResource
             $this->getUserService()->changeAvatarFromImgUrl($user['id'], $fields['avatar']);
         }
 
-        if ($fields['openId']) {
-            $this->getUserService()->UserBindUpdate($fields['openId'], $user['id']);
+        if (!empty($fields['unionId'])) {
+            $this->getUserService()->bindUser('weixin', $fields['unionId'], $user['id'], ['openid' => $fields['openId']]);
         }
 
         $this->getLogService()->info('marketing_mall', 'register', "营销商城用户{$user['nickname']}通过手机注册成功", ['userId' => $user['id']]);
@@ -91,6 +94,21 @@ class MallUser extends BaseResource
         }
 
         return array_values($users);
+    }
+
+    private function generateNickname($rawNickname)
+    {
+        $nickname = $rawNickname . substr($this->getRandomChar(), 0, 4);
+        if ($this->getUserService()->isNicknameAvaliable($nickname)) {
+            return $nickname;
+        }
+
+        return $this->generateNickname($rawNickname);
+    }
+
+    private function getRandomChar()
+    {
+        return base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
     /**
