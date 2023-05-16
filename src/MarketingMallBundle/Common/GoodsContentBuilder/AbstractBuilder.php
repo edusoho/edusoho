@@ -52,7 +52,7 @@ abstract class AbstractBuilder
         }
         $imgList = [];
         foreach ($matches[1] as $imgUrl) {
-            $imgList[] = 0 == strpos($imgUrl, 'http') ? $imgUrl : AssetHelper::uriForPath($imgUrl);
+            $imgList[] = 0 === strpos($imgUrl, 'http') ? $imgUrl : AssetHelper::uriForPath($imgUrl);
         }
         return str_replace($matches[1], $imgList, $summary);
     }
