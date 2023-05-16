@@ -3470,6 +3470,10 @@ marketing_activity:
     path: '/marketing/activity/{activityId}'
     defaults:
         _controller: 'AppBundle:Marketing:activity'
+marketing_weixin_pay:
+    path: '/marketing/weixin_pay'
+    defaults:
+        _controller: 'AppBundle:Marketing:weixinPay'
 export:
     path: '/export/{name}/{type}'
     defaults:
@@ -4116,3 +4120,9 @@ classroom_live_task_statistic_export:
     defaults:
         _controller: 'AppBundle:LiveStatisticExport:classroomLiveStatisticExport'
 
+unified_payment_notify:
+    path: /callback/unified_payment/{payment}/notify
+    defaults:
+        _controller: 'AppBundle:UnifiedPayment:notify'
+        methods:
+          - POST

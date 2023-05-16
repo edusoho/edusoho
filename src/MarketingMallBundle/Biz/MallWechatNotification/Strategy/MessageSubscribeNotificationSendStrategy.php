@@ -33,7 +33,7 @@ class MessageSubscribeNotificationSendStrategy extends AbstractNotificationSendS
             }
             if ($notifications) {
                 $notificationBatch = $this->getWeChatService()->sendSubscribeWeChatNotificationLocal($templateKey, 'wechat_subscribe_notify_'.$templateKey, $notifications);
-                if ($notificationBatch) {
+                if ($notificationBatch && array_column($subscribeRecords, 'id')) {
                     $this->getWeChatService()->updateSubscribeRecordsByIds(array_column($subscribeRecords, 'id'), ['isSend' => 1]);
                 }
             }
@@ -61,7 +61,9 @@ class MessageSubscribeNotificationSendStrategy extends AbstractNotificationSendS
                 1
             );
             if (empty($result)) {
-                continue;
+                $result[] = [
+                    'toId' => $openIdMap[$userId],
+                ];
             }
             $records[] = array_merge($result[0], ['userId' => $userId]);
         }

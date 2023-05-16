@@ -2368,6 +2368,14 @@ admin_v2_setting_wechat_pre_auth_url:
     path: '/wechat/pre_auth_url/{platformType}'
     defaults:
         _controller: 'AppBundle:AdminV2/System/WeChatSetting:preAuthUrl'
+admin_v2_setting_wechat_cert_upload:
+    path: /wechat/cert/upload
+    defaults:
+        _controller: 'AppBundle:AdminV2/System/WeChatSetting:uploadCert'
+admin_v2_setting_wechat_cert_key_upload:
+    path: /wechat/cert_key/upload
+    defaults:
+        _controller: 'AppBundle:AdminV2/System/WeChatSetting:uploadCertKey'
 admin_v2_setting_course_setting:
     path: /setting/course-setting
     defaults:
