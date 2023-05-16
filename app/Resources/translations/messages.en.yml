@@ -322,6 +322,7 @@ form.btn.submit_disabled: Submitted
 form.btn.reset_password: 'Reset password'
 form.btn.send: Send
 form.btn.upload: Upload
+form.btn.reupload: Reupload
 form.btn.picture_crop: 'Select the picture to upload'
 form.btn.remove: Remove
 form.btn.comment: Comment
@@ -5725,6 +5726,7 @@ plugin.admin.user.manage.form.user_export_btn: 'Export'
 plugin.admin.user.manage.form.user_student_export_btn: 'Export'
 plugin.admin.user.manage.form.user_staff_export_btn: 'ExportStaffData'
 admin.user.manage.fields.mobile_label: Mobile
+admin.user.manage.fields.wechat_nickname: Wechat Nickname
 admin.user.manage.fields.recent_login_label: 'Recently Logged In'
 admin.user.manage.fields.user_total_num_label: 'User Total: '
 admin.user.manage.fields.forbid_label: Forbid
@@ -6692,6 +6694,11 @@ admin.setting_wechat_auth.account_code_empty: No QR Code Yet
 admin.setting_wechat_auth.account_code_view: View Larger Image
 admin.setting_wechat_auth.account_code_download: Download QR code
 admin.setting_wechat_auth.message_template: Message template
+admin.setting_wechat_pay.cert_key: Wechat merchant platform certificate key
+admin.setting_wechat_pay.cert_key_hint: The private key file of wechat merchant platform needs to be applied in [wechat Merchant Platform] - [Account Center] - [API Security] - [API Certificate]. If you have applied, you can directly upload the [apiclient_key.pem] file in the folder to ES <a target="_blank" href="javascript:;">Apply for an API certificate</a>
+admin.setting_wechat_pay.cert: Wechat merchant platform certificate
+admin.setting_wechat_pay.cert_hint: The certificate file of wechat merchant platform needs to be applied in [wechat Merchant Platform] - [Account Center] - [API Security] - [API Certificate]. If you have applied, you can directly upload the file [apiclient_cert.pem] in the folder to ES <a target="_blank" href="javascript:;">Apply for an API certificate</a>
+admin.setting_wechat_pay.cert_uploaded: Uploaded
 
 admin.developer_setting.cloud_notification_api: Notification API
 admin.developer_setting.cloud_wechat_api: WeChat API
@@ -6749,6 +6756,8 @@ admin.magic_setting.live_entry_time_tip: second
 admin.magic_setting.biz_answer_scene_report_threshold: Testpaper and Homework Threshold
 admin.magic_setting.biz_answer_scene_report_threshold_tip: Default 15000
 admin.magic_setting.security_video_player: Security video player switch
+admin.magic_setting.enable_marketing_mall_alpha_test: mall alpha test switch
+admin.magic_setting.enable_marketing_mall_license: mall license switch
 
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
@@ -9270,6 +9279,7 @@ exception.user.not_match_auth: 'User is not match auth'
 exception.user.mobile_not_found: 'User mobile is not found'
 exception.user.user_is_destroyed: User is destroyed
 exception.user.email_password_error: The email password is incorrect
+exception.user.already_bind: The user is already bound
 exception.sensitive.words: 'The content contains sensitive words!'
 exception.thread.frequent: 'Reply too many times, please try it later!'
 exception.thread.not_found: Topic does not exist

@@ -234,6 +234,7 @@ boughtType:
 
 userKeyWordType:
     nickname: 学员名
+    wechatNickname: 微信昵称
     verifiedMobile: 手机号
     email: 邮件地址
     loginIp: 登录IP
@@ -241,6 +242,7 @@ userKeyWordType:
 
 staffKeyWordType:
   nickname: 员工名
+  wechatNickname: 微信昵称
   verifiedMobile: 手机号
   email: 邮件地址
   loginIp: 登录IP

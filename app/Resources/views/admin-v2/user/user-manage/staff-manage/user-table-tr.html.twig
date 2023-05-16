@@ -23,6 +23,13 @@
   </td>
  {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
+    {% if wechatUsers[user.id]|default() and wechatUsers[user.id].nickname|default() %}
+      {{ wechatUsers[user.id].nickname }}
+    {% else %}
+      --
+    {% endif %}
+  </td>
+  <td>
     {% if user.verifiedMobile %}
       {{ user.verifiedMobile }}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span>
     {% elseif profile.mobile %}

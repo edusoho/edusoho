@@ -28,7 +28,6 @@ class WeixinmobOAuthClient extends AbstractOAuthClient
             'grant_type' => 'authorization_code',
         );
         $result = $this->getRequest(self::OAUTH_TOKEN_URL, $params);
-        $rawToken = array();
         $rawToken = json_decode($result, true);
         $userInfo = $this->getUserInfo($rawToken);
 
@@ -38,12 +37,12 @@ class WeixinmobOAuthClient extends AbstractOAuthClient
             'access_token' => $rawToken['access_token'],
             'token' => $rawToken['access_token'],
             'openid' => $rawToken['openid'],
+            'username' => $userInfo['name'],
         );
     }
 
     public function getUserInfo($token)
     {
-        $params = array('access_token' => $token['access_token']);
         $params = array(
             'openid' => $token['openid'],
             'access_token' => $token['access_token'],

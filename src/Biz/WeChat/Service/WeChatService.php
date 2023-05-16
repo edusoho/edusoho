@@ -24,11 +24,15 @@ interface WeChatService
 
     public function getWeChatUserByTypeAndOpenId($type, $openId);
 
+    public function findWeChatUsersByUserId($userId);
+
     public function batchSyncOfficialWeChatUsers($nextOpenId = '');
 
     public function getOfficialWeChatUserByUserId($userId);
 
     public function freshOfficialWeChatUserWhenLogin($user, $bind, $token);
+
+    public function freshOpenAppWeChatUserWhenLogin($user, $token);
 
     public function batchFreshOfficialWeChatUsers($weChatUsers);
 
@@ -63,6 +67,8 @@ interface WeChatService
     public function findAllBindUserIds();
 
     public function searchWeChatUsers($conditions, $orderBys, $start, $limit, $columns);
+
+    public function findWechatUsersByUserIds(array $userIds);
 
     public function getWeChatSendChannel();
 

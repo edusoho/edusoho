@@ -217,6 +217,52 @@
               </div>
             </div>
           </div>
+
+          <div class="form-group group-field">
+            <div class="col-md-4 control-label">
+              <label for="wxpay_cert_key">{{ 'admin.setting_wechat_pay.cert_key'|trans }}</label>
+            </div>
+            <div class="controls col-md-7">
+              <span class="wechat-setting-cert-uploaded js-key-uploaded {% if not payment.wxpay_key_path|default() %}hidden{% endif %}">
+                <img width="24px" height="24px" src="{{ asset('static-dist/app/img/admin-v2/file.png') }}" alt="">{{ 'admin.setting_wechat_pay.cert_uploaded'|trans }}
+              </span>
+              <a class="btn btn-default" id="wxpay-cert-key-upload" data-upload-token="{{ upload_token('system', 'cert') }}" data-upload-url="{{ path('admin_v2_setting_wechat_cert_key_upload') }}">
+                {% if payment.wxpay_key_path|default() %}{{ 'form.btn.reupload'|trans }}{% else %}{{ 'form.btn.upload'|trans }}{% endif %}
+              </a>
+              {% if payment.wxpay_key_path|default() %}
+                <div><span class="js-key-name wechat-setting-cert-name">{{ payment.wxpay_key_name|default() }}</span><span class="js-key-ext">{{ payment.wxpay_key_ext|default() }}</span></div>
+              {% else %}
+                <div class="hidden"><span class="js-key-name wechat-setting-cert-name"></span><span class="js-key-ext"></span></div>
+              {% endif %}
+              <div class="help-block">
+                <div>{{ 'admin.setting_wechat_pay.cert_key_hint'|trans|raw }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group group-field">
+            <div class="col-md-4 control-label">
+              <label for="wxpay_cert">{{ 'admin.setting_wechat_pay.cert'|trans }}</label>
+            </div>
+            <div class="controls col-md-7">
+              <span class="wechat-setting-cert-uploaded js-cert-uploaded {% if not payment.wxpay_cert_path|default() %}hidden{% endif %}">
+                <img width="24px" height="24px" src="{{ asset('static-dist/app/img/admin-v2/file.png') }}" alt="">{{ 'admin.setting_wechat_pay.cert_uploaded'|trans }}
+              </span>
+              <a class="btn btn-default" id="wxpay-cert-upload" data-upload-token="{{ upload_token('system', 'cert') }}" data-upload-url="{{ path('admin_v2_setting_wechat_cert_upload') }}">
+                {% if payment.wxpay_cert_path|default() %}{{ 'form.btn.reupload'|trans }}{% else %}{{ 'form.btn.upload'|trans }}{% endif %}
+              </a>
+              {% if payment.wxpay_cert_path|default() %}
+                <div><span class="js-cert-name wechat-setting-cert-name">{{ payment.wxpay_cert_name|default() }}</span><span class="js-cert-ext">{{ payment.wxpay_cert_ext|default() }}</span></div>
+              {% else %}
+                <div class="hidden"><span class="js-cert-name wechat-setting-cert-name"></span><span class="js-cert-ext"></span></div>
+              {% endif %}
+              <div class="help-block">
+                <div>{{ 'admin.setting_wechat_pay.cert_hint'|trans|raw }}</div>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" name="payment[wxpay_cert_uploaded]" value="">
+          <input type="hidden" name="payment[wxpay_key_uploaded]" value="">
         </div>
       </div>
     </div>
