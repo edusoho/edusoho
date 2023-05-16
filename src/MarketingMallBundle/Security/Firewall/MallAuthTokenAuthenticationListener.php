@@ -33,8 +33,8 @@ class MallAuthTokenAuthenticationListener extends BaseListener
             }
             if (empty($result->userId)) {
                 $user = $this->getUserService()->getUserByType('system');
-            }else {
-                $user = $this->getUserService()->getSimpleUser($result->userId);
+            } else {
+                $user = $this->getUserService()->getUser($result->userId);
             }
             if (empty($user)) {
                 throw new NotFoundException('user not found！');

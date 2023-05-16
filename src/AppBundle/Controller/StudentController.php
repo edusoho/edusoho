@@ -37,7 +37,6 @@ class StudentController extends BaseController
                 $userFields[$i]['type'] = 'date';
             }
         }
-        file_put_contents('/tmp/log', json_encode($profile), 8);
 
         return $this->render('student/show-modal.html.twig', [
             'user' => $user,

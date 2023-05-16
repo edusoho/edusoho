@@ -38,15 +38,10 @@ class MeClassroomMember extends AbstractResource
         if (empty($member)) {
             throw MemberException::NOTFOUND_MEMBER();
         }
-        try {
-            $this->getClassroomService()->removeStudent($classroomId, $user->getId(), [
-                'reason' => $note,
-                'reason_type' => 'exit',
-            ]);
-        } catch (\Exception $e) {
-            file_put_contents('/tmp/log', json_encode($e->getMessage()), 8);
-            exit();
-        }
+        $this->getClassroomService()->removeStudent($classroomId, $user->getId(), [
+            'reason' => $note,
+            'reason_type' => 'exit',
+        ]);
 
         return ['success' => true];
     }

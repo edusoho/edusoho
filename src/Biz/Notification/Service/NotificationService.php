@@ -18,6 +18,8 @@ interface NotificationService
 
     public function createEvent($event);
 
+    public function updateEvent($id, $fields);
+
     public function getEvent($id);
 
     public function createStrategy($strategy);
@@ -26,5 +28,5 @@ interface NotificationService
 
     public function createWeChatNotificationRecord($sn, $key, $data, $source, $batchId = 0);
 
-    public function createSmsNotificationRecord($data, $smsParams, $source);
+    public function createSmsNotificationRecord($data, $smsParams, $source, $batchId = 0);
 }

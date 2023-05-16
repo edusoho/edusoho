@@ -13,7 +13,6 @@ class ChapterManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $chapterId = $request->query->get('chapterId', 0);
         $chapter = $this->getCourseService()->getChapter($courseId, $chapterId);
-        //file_put_contents('/tmp/log',json_encode($chapter), 8);
         if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
             $chapter = empty($chapter) ? $this->create($fields, $courseId) : $this->editor($chapterId, $courseId, $fields);
