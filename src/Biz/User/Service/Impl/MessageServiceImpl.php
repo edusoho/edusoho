@@ -24,7 +24,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $this->getMessageDao()->search($conditions, $order, $start, $limit);
     }
 
-    public function sendMessage($fromId, $toId, $content,$replaceContent = '', $type = 'text', $createdTime = null)
+    public function sendMessage($fromId, $toId, $content, $filterType = '', $type = 'text', $createdTime = null)
     {
         if (empty($fromId) || empty($toId)) {
             $this->createNewException(MessageException::NOTFOUND_SENDER_OR_RECEIVER());
@@ -39,7 +39,9 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
 
         $createdTime = empty($createdTime) ? time() : $createdTime;
-        $content = $this->getSensitiveService()->sensitiveCheck(str_replace($replaceContent, '', $content), '');
+        if ($filterType != 'coursePrivateLetter') {
+            $content = $this->getSensitiveService()->sensitiveCheck($content, '');
+        }
         $message = $this->addMessage($fromId, $toId, $content, $type, $createdTime);
         $this->prepareConversationAndRelationForSender($message, $toId, $fromId, $createdTime);
         $this->prepareConversationAndRelationForReceiver($message, $fromId, $toId, $createdTime);
@@ -51,9 +53,9 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $message;
     }
 
-    public function sendFilteredMessage($fromId, $toId, $content, $replaceContent, $type = 'text', $createdTime = null)
+    public function sendFilteredMessage($fromId, $toId, $content)
     {
-        $this->sendMessage($fromId, $toId, $content, $replaceContent, $type, $createdTime);
+        $this->sendMessage($fromId, $toId, $content, 'coursePrivateLetter');
     }
 
     public function getConversation($conversationId)
