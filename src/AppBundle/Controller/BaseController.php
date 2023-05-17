@@ -89,10 +89,6 @@ class BaseController extends Controller
     protected function fillUserStatus($conditions)
     {
         if (isset($conditions['userStatus'])) {
-            if ('all' == $conditions['userStatus']) {
-                unset($conditions['userStatus']);
-            }
-
             if ('locked' == $conditions['userStatus']) {
                 $conditions['locked'] = '1';
             }
@@ -100,11 +96,10 @@ class BaseController extends Controller
             if ('unlock' == $conditions['userStatus']) {
                 $conditions['locked'] = '0';
             }
+            unset($conditions['userStatus']);
 
             return $conditions;
         }
-
-        return $conditions;
     }
 
     protected function fillOrgCode($conditions)
