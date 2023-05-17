@@ -19,6 +19,8 @@ interface MessageService
      */
     public function sendMessage($fromId, $toId, $content, $createdTime = null);
 
+    public function sendFilteredMessage($fromId, $toId, $content, $replaceContent, $createdTime = null);
+
     public function getConversation($conversationId);
 
     /**

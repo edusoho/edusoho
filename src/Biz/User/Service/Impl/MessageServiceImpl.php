@@ -24,7 +24,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $this->getMessageDao()->search($conditions, $order, $start, $limit);
     }
 
-    public function sendMessage($fromId, $toId, $content, $type = 'text', $createdTime = null)
+    public function sendMessage($fromId, $toId, $content,$replaceContent = '', $type = 'text', $createdTime = null)
     {
         if (empty($fromId) || empty($toId)) {
             $this->createNewException(MessageException::NOTFOUND_SENDER_OR_RECEIVER());
@@ -39,6 +39,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
 
         $createdTime = empty($createdTime) ? time() : $createdTime;
+        $content = $this->getSensitiveService()->sensitiveCheck(str_replace($replaceContent, '', $content), '');
         $message = $this->addMessage($fromId, $toId, $content, $type, $createdTime);
         $this->prepareConversationAndRelationForSender($message, $toId, $fromId, $createdTime);
         $this->prepareConversationAndRelationForReceiver($message, $fromId, $toId, $createdTime);
@@ -48,6 +49,11 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
 
         return $message;
+    }
+
+    public function sendFilteredMessage($fromId, $toId, $content, $replaceContent, $type = 'text', $createdTime = null)
+    {
+        $this->sendMessage($fromId, $toId, $content, $replaceContent, $type, $createdTime);
     }
 
     public function getConversation($conversationId)
@@ -184,7 +190,6 @@ class MessageServiceImpl extends BaseService implements MessageService
     protected function addMessage($fromId, $toId, $content, $type, $createdTime)
     {
         $content = $this->biz['html_helper']->purify($content);
-        $content = $this->getSensitiveService()->sensitiveCheck($content, '');
         $message = [
             'fromId' => $fromId,
             'toId' => $toId,
