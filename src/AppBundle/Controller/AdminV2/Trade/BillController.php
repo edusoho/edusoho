@@ -49,14 +49,14 @@ class BillController extends BaseController
 
         list($inflow, $outflow) = $this->getInflowAndOutflow($conditions);
 
-        $account = ($inflow - $outflow) < 0 ? 0 : $inflow - $outflow;
+        $netIncome = ($inflow - $outflow) < 0 ? 0 : $inflow - $outflow;
 
         return $this->render("admin-v2/trade/bill/{$type}.html.twig", [
             'cashes' => $cashes,
             'paginator' => $paginator,
             'users' => $users,
             'userProfiles' => $userProfiles,
-            'account' => $account,
+            'netIncome' => $netIncome,
             'outflow' => $outflow,
             'inflow' => $inflow,
             'trades' => $trades,
