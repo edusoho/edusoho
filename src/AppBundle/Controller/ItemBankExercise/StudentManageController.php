@@ -94,8 +94,10 @@ class StudentManageController extends BaseController
 
             try {
                 $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
+                $this->setFlashMessage('success', 'site.add.success');
             }catch (\Exception $e) {
                 $this->setFlashMessage('danger', $e->getMessage());
+            }finally {
                 return $this->redirect(
                     $this->generateUrl(
                         'item_bank_exercise_manage_students',
@@ -103,14 +105,6 @@ class StudentManageController extends BaseController
                     )
                 );
             }
-            $this->setFlashMessage('success', 'site.add.success');
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'item_bank_exercise_manage_students',
-                    ['exerciseId' => $exerciseId]
-                )
-            );
         }
 
         return $this->render(
