@@ -1,5 +1,6 @@
 import Face from './face';
 import Drag from 'app/common/drag';
+require('app/common/xxtea.js');
 
 let $form = $('#login-form');
 let drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
@@ -39,6 +40,10 @@ $('#login-form').keypress(function (e) {
 $('.js-btn-login').click((event) => {
   if (validator.form()) {
     $(event.currentTarget).button('loadding');
+    var username = $form.find('#login_username').val();
+    var password = $form.find('#login_password').val();
+    $form.find('#login_username').val(window.XXTEA.encryptToBase64(username, 'EduSoho'));
+    $form.find('#login_password').val(window.XXTEA.encryptToBase64(password, 'EduSoho'));
     $form.submit();
   }
 });
