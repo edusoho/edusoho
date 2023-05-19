@@ -59,7 +59,7 @@ class QuestionBankBuilder extends AbstractBuilder
         $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
         $list = $exercise['chapterEnable'] ? $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']) : [];
         $list = $this->buildChapterList($list);
-        $num = $this->getItemService()->countItems(['bank_id' => $exercise['id'], 'category_id' => 0]);
+        $num = $this->getItemService()->countItems(['bank_id' => $exercise['questionBankId'], 'category_id' => 0]);
         if ($num > 0) {
             $list[] = ['title' => '未分类',
                 'questionCount' => $num];

@@ -1,29 +1,37 @@
 .wechat-setting-container {
   display: inline-flex;
+
   .wechat-setting-switch {
     height: auto;
     float: left;
+
     .wechat-setting-field {
       width: 50%;
       margin-bottom: 42px;
+
       .setting-label {
         height: 30px;
+
         .setting-title {
           margin-right: 9px;
         }
+
         .setting-switch {
           margin-bottom: -4px;
         }
       }
+
       .setting-comment {
         width: 450px;
         margin-top: 12px;
         margin-bottom: 0px;
         border-radius: 5px;
         display: flex;
+
         .setting-comment-button {
           padding: 20px 31px 20px 40px;
         }
+
         .setting-comment-block {
           align-items: center;
           display: flex;
@@ -33,40 +41,48 @@
           width: 280px;
         }
       }
+
       .setting-content {
         width: 450px;
         margin-top: 12px;
         border: 1px dashed #D8D8D8;
         border-radius: 5px;
         display: inline-flex;
+
         .setting-content-block {
           font-family: PingFangSC-Regular;
           font-size: 14px;
           color: #737373;
           letter-spacing: 0;
           width: 280px;
+
           .block-scan-login {
             width: 100%;
             margin: 20px 0px 0px 20px;
           }
+
           .block-auth-login {
             width: 100%;
             margin: 10px 0px 0px 20px;
           }
+
           .block-account-notification {
             width: 100%;
             margin: 11px 0px 0px 20px;
           }
+
           .block-wechat-pay {
             width: 100%;
             margin: 10px 0px 0px 20px;
           }
         }
+
         .setting-content-button {
           padding: 44px 31px 44px 40px;
         }
       }
     }
+
     .wechat-setting-field-bottom {
       margin-bottom: 0px;
     }
@@ -82,8 +98,35 @@
     float: right;
     padding-top: 27px;
     padding-bottom: 48px;
+
     .group-field {
       margin-bottom: 23px;
+    }
+
+    .wechat-setting-cert-uploaded {
+      width: 42px;
+      height: 20px;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      align-items: center;
+      text-align: center;
+      color: #00A627;
+      margin-right: 12px;
+
+      img {
+        margin-right: 8px;
+      }
+    }
+
+    .wechat-setting-cert-name {
+      max-width: 308px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
+      vertical-align: bottom;
     }
   }
 }
@@ -92,6 +135,7 @@
   .setting-form-submit {
     margin: 30px auto;
     width: 200px;
+
     .setting-form-submit-btn {
       background: #598BBF;
       border-radius: 20px;

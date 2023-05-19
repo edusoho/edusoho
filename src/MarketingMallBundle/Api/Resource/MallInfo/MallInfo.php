@@ -8,6 +8,7 @@ use ApiBundle\Api\ApiRequest;
 use MarketingMallBundle\Api\Resource\BaseResource;
 use MarketingMallBundle\Biz\Mall\Service\MallService;
 use MarketingMallBundle\Client\MarketingMallClient;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MallInfo extends BaseResource
 {
@@ -17,7 +18,7 @@ class MallInfo extends BaseResource
         if ($result['isShow']) {
             $result['isInit'] = $this->getMallService()->isInit();
             if ($result['isInit']) {
-                $result['url'] = "https://" . $this->container->getParameter('marketing_mall_url') . "/custom-h5/?tab=home&schoolCode=" . $this->getSetting('marketing_mall.code', null);
+                $result['url'] = $this->generateUrl('marketing_mall', [], UrlGeneratorInterface::ABSOLUTE_URL);
                 $result['isPageSaved'] = $this->isHomePageSaved();
             }
         }

@@ -763,7 +763,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function getCourseMember($courseId, $userId)
     {
-        return $this->getOpenCourseMemberDao()->getByUserIdAndCourseId($courseId, $userId);
+        return $this->getOpenCourseMemberDao()->getByUserIdAndCourseId($userId, $courseId);
     }
 
     public function getCourseMemberByIp($courseId, $ip)

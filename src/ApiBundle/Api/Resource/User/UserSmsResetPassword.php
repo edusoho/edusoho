@@ -38,7 +38,7 @@ class UserSmsResetPassword extends AbstractResource
                 'fingerprint' => $request->getHttpRequest()->get('encryptedPoint'),
                 'userAgent' => $request->getHttpRequest()->headers->get('user-agent'),
                 'ip' => $request->getHttpRequest()->getClientIp(),
-                'mobile' => $request->getHttpRequest()->get('mobile') ?: $request->get('to'),
+                'mobile' => $mobile,
             ];
             if ($this->getSmsDefenceService()->validate($fields)) {
                 return [
