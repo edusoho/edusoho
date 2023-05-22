@@ -134,8 +134,7 @@ class AnnouncementController extends BaseController
             $data['startTime'] = isset($data['startTime']) ? strtotime($data['startTime']) : time();
             $data['endTime'] = isset($data['endTime']) ? strtotime($data['endTime']) : time();
 
-            $this->getAnnouncementService()->updateAnnouncement($id, $data);
-            $announcement = $this->getAnnouncementService()->getAnnouncement($id);
+            $announcement = $this->getAnnouncementService()->updateAnnouncement($id, $data);
 
             $targetObjectShowRout = $processor->getTargetShowUrl();
             $targetObjectShowUrl = $this->generateUrl($targetObjectShowRout, ['id' => $targetId], UrlGeneratorInterface::ABSOLUTE_URL);
