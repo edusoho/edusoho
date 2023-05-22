@@ -135,6 +135,23 @@ class AnnouncementController extends BaseController
             $data['endTime'] = isset($data['endTime']) ? strtotime($data['endTime']) : time();
 
             $this->getAnnouncementService()->updateAnnouncement($id, $data);
+            $announcement = $this->getAnnouncementService()->getAnnouncement($id);
+
+            $targetObjectShowRout = $processor->getTargetShowUrl();
+            $targetObjectShowUrl = $this->generateUrl($targetObjectShowRout, ['id' => $targetId], UrlGeneratorInterface::ABSOLUTE_URL);
+
+            $job = $this->getSchedulerService()->getJobByName('announcement_notify_'.$id);
+            if (!empty($job)) {
+                $this->getSchedulerService()->deleteJob($job['id']);
+                $this->getSchedulerService()->register([
+                    'name' => 'announcement_notify_'.$announcement['id'],
+                    'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                    'expression' => intval($announcement['startTime']),
+                    'class' => 'Biz\Announcement\Job\AnnouncementNotifyJob',
+                    'args' => ['targetId' => $targetId, 'targetType' => $targetType, 'params' => ['targetObject' => $targetObject, 'targetObjectShowUrl' => $targetObjectShowUrl, 'announcement' => $announcement]],
+                    'misfire_threshold' => 60 * 60,
+                ]);
+            }
 
             return $this->createJsonResponse(true);
         }
