@@ -67,11 +67,10 @@ class BaseController extends Controller
         return $user;
     }
 
-
     protected function prepareLimitedTime($limitedTime = 0)
     {
         $limitedTime = ltrim($limitedTime, 0);
-        if(empty($limitedTime)) {
+        if (empty($limitedTime)) {
             return 0;
         }
 
@@ -85,6 +84,22 @@ class BaseController extends Controller
         $currentUser->fromArray($user);
 
         return $this->switchUser($this->get('request_stack')->getCurrentRequest(), $currentUser);
+    }
+
+    protected function fillUserStatus($conditions)
+    {
+        if (isset($conditions['userStatus'])) {
+            if ('locked' == $conditions['userStatus']) {
+                $conditions['locked'] = '1';
+            }
+
+            if ('unlock' == $conditions['userStatus']) {
+                $conditions['locked'] = '0';
+            }
+            unset($conditions['userStatus']);
+
+            return $conditions;
+        }
     }
 
     protected function fillOrgCode($conditions)
@@ -390,7 +405,7 @@ class BaseController extends Controller
 
         $parsedUrl = parse_url($url);
 
-        if ($parsedUrl == false) {
+        if (false == $parsedUrl) {
             return $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
@@ -412,32 +427,36 @@ class BaseController extends Controller
 
     protected function unParseUrl($parsedUrl)
     {
-        $scheme   = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '//';
-        $host     = $parsedUrl['host'] ?? '';
-        $port     = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
-        $path     = $parsedUrl['path'] ?? '';
-        $query    = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
-        $fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
+        $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'].'://' : '//';
+        $host = $parsedUrl['host'] ?? '';
+        $port = isset($parsedUrl['port']) ? ':'.$parsedUrl['port'] : '';
+        $path = $parsedUrl['path'] ?? '';
+        $query = isset($parsedUrl['query']) ? '?'.$parsedUrl['query'] : '';
+        $fragment = isset($parsedUrl['fragment']) ? '#'.$parsedUrl['fragment'] : '';
+
         return "$scheme$host$port$path$query$fragment";
     }
 
     /**
      * 验证验证码token
+     *
      * @return [type] [description]
      */
     protected function checkDragCaptchaToken(Request $request, $token)
     {
-        $enableAntiBrushCaptcha = $this->getSettingService()->node("ugc_content_audit.enable_anti_brush_captcha");
-        if(empty($enableAntiBrushCaptcha)){
+        $enableAntiBrushCaptcha = $this->getSettingService()->node('ugc_content_audit.enable_anti_brush_captcha');
+        if (empty($enableAntiBrushCaptcha)) {
             return true;
         }
         $session = $request->getSession();
-        $dragTokens = empty($session->get('dragTokens')) ? array() : $session->get('dragTokens');
-        if(in_array($token, $dragTokens)){
+        $dragTokens = empty($session->get('dragTokens')) ? [] : $session->get('dragTokens');
+        if (in_array($token, $dragTokens)) {
             array_splice($dragTokens, array_search($token, $dragTokens), 1);
-            $session->set("dragTokens", $dragTokens);
+            $session->set('dragTokens', $dragTokens);
+
             return true;
         }
+
         return false;
     }
 
