@@ -63,20 +63,20 @@ define(function (require, exports, module) {
       registerWebUploader();
 
       // 关闭微信内登录时，关闭微信支付
-      if ($this.context.id == 'weixinmob_enabled' && isEnable == '1') {
-        if ($('#wxpay_enabled').val() == '1') {
-          switchCheck('#wxpay_enabled', 0);
-          $('input[name="payment[wxpay_enabled]"]').change();
-        }
-      }
+      // if ($this.context.id == 'weixinmob_enabled' && isEnable == '1') {
+      //   if ($('#wxpay_enabled').val() == '1') {
+      //     switchCheck('#wxpay_enabled', 0);
+      //     $('input[name="payment[wxpay_enabled]"]').change();
+      //   }
+      // }
 
       // 打开微信支付时，打开微信内登录
-      if ($this.context.id == 'wxpay_enabled' && isEnable == '0') {
-        if ($('#weixinmob_enabled').val() == '0') {
-          switchCheck('#weixinmob_enabled', 1);
-          $('input[name="loginConnect[weixinmob_enabled]"]').change();
-        }
-      }
+      // if ($this.context.id == 'wxpay_enabled' && isEnable == '0') {
+      //   if ($('#weixinmob_enabled').val() == '0') {
+      //     switchCheck('#weixinmob_enabled', 1);
+      //     $('input[name="loginConnect[weixinmob_enabled]"]').change();
+      //   }
+      // }
 
       switchCheck(this, reverseEnable);
     });
