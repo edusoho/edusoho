@@ -156,7 +156,10 @@ class SensitiveController extends BaseController
         }
 
         foreach ($banlogs as &$value) {
-            $value['text'] = $this->replaceSensitive($value['keywordName'], $value['text']);
+            $pattern = '/'.$value['keywordName'].'/i';
+            $value['text'] = preg_replace_callback($pattern, function($matches) {
+                return "<span style='color:#FF0000'>".$matches[0].'</span>';
+            }, $value['text']);
             $value['text'] = preg_replace("/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i", '', $value['text']);
         }
 
@@ -167,17 +170,6 @@ class SensitiveController extends BaseController
             'users' => $users,
             'paginator' => $paginator,
         ]);
-    }
-
-    protected function replaceSensitive(String $keyword, String $text){
-        $index = stripos($text, $keyword);
-        while ($index !== false){
-            $replacement = substr($text, $index, strlen($keyword));
-            $text = substr_replace($text, "<span style='color:#FF0000'>".$replacement.'</span>', $index, strlen($replacement));
-            $index = $index + strlen("<span style='color:#FF0000'>".$replacement.'</span>');
-            $index = stripos($text, $keyword, $index);
-        }
-        return $text;
     }
 
     /**
