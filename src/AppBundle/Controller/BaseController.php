@@ -100,6 +100,7 @@ class BaseController extends Controller
 
             return $conditions;
         }
+        return $conditions;
     }
 
     protected function fillOrgCode($conditions)
