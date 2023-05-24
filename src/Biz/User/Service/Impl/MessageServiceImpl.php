@@ -24,7 +24,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $this->getMessageDao()->search($conditions, $order, $start, $limit);
     }
 
-    public function sendMessage($fromId, $toId, $content, $filterType = '', $type = 'text', $createdTime = null)
+    public function sendMessage($fromId, $toId, $content, $type = 'text', $createdTime = null, $isNeedSensitiveCheck = true)
     {
         if (empty($fromId) || empty($toId)) {
             $this->createNewException(MessageException::NOTFOUND_SENDER_OR_RECEIVER());
@@ -39,7 +39,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
 
         $createdTime = empty($createdTime) ? time() : $createdTime;
-        if ($filterType != 'coursePrivateLetter') {
+        if ($isNeedSensitiveCheck) {
             $content = $this->getSensitiveService()->sensitiveCheck($content, '');
         }
         $message = $this->addMessage($fromId, $toId, $content, $type, $createdTime);
@@ -53,9 +53,9 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $message;
     }
 
-    public function sendFilteredMessage($fromId, $toId, $content)
+    public function sendMessageNoSensitiveCheck($fromId, $toId, $content)
     {
-        $this->sendMessage($fromId, $toId, $content, 'coursePrivateLetter');
+        $this->sendMessage($fromId, $toId, $content, 'text', null, false);
     }
 
     public function getConversation($conversationId)

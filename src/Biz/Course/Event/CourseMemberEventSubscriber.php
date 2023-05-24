@@ -172,7 +172,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
         if (!empty($setting['welcome_message_enabled']) && !empty($course['teacherIds'])) {
             $message = $this->getWelcomeMessageBody($user, $course);
-            $this->getMessageService()->sendFilteredMessage($course['teacherIds'][0], $user['id'], $message);
+            $this->getMessageService()->sendMessageNoSensitiveCheck($course['teacherIds'][0], $user['id'], $message);
         }
     }
 
