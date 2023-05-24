@@ -7720,7 +7720,7 @@ admin.login_connect.client_login_restrictions: 设备终端登录限制
 admin.login_connect.closed: 关闭
 admin.login_connect.open: 开启
 admin.login_connect.User_login_restrictions.help_block: 开启后同一帐号只能在一处（同一IP下使用一个浏览器）进行登录
-admin.login_connect.client_login_restrictions.help_block: 开启后，相同类型的设备同一账号同时只能登录一个，设备包括APP和WEB
+admin.login_connect.client_login_restrictions.help_block: 开启后，相同类型的设备一个账号同时只能在一个设备上登录，设备包括APP和WEB
 admin.login_connect.Third_party_login: 第三方登录
 admin.login_connect.Third_party_login.help_block: 开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户
 admin.login_connect.User_login_protection: 用户登录保护
