@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 {% block title %}{{'mobile.page_title'|trans}} - {{ parent() }}{% endblock %}
-{% set isEsApp = (mobileCode == 'edusohov3') %}
+{% set isEsApp = (mobileCode == 'zhixiang') %}
 
 {% set bodyClass="mobile-page" %}
 
@@ -46,7 +46,7 @@
   <div class=" mobile-second">
     <div class="container">
       <div class="step">
-        {% if mobileCode == 'edusohov3' %}
+        {% if mobileCode == 'zhixiang' %}
           {{ 'mobile.step_one'|trans|raw }}
         {% endif %}
           {{'mobile.step_one_tips'|trans}}
