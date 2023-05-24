@@ -4100,7 +4100,7 @@ share.qzone_share: 分享到QQ空间
 
 # 移动端
 mobile.page_title: 移动学习
-mobile.app_name: 阔知学堂
+mobile.app_name: 知享学堂
 mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
 mobile.app_download_btn: 下载APP
 mobile.app_download_tips: >
@@ -4114,7 +4114,7 @@ mobile.step_one_tips: 扫描二维码，下载手机APP。
 mobile.Android_client: Android 客户端
 mobile.iPhone_client: iPhone客户端
 mobile.step_two: >
-  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
+  <span class="member">2</span>第二步: 打开知享学堂APP，扫描网校二维码。
 mobile.vip_free_study: 会员免费买
 
 # 客服
