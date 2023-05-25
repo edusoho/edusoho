@@ -52,7 +52,7 @@ class ReplayController extends BaseController
         if (empty($replays)) {
             return [];
         }
-        $currentUser = $this->getCurrentUser();
+//        $currentUser = $this->getCurrentUser();
         $activityIds = ArrayToolkit::column($replays, 'lessonId');
         $liveActivities = $this->getActivityService()->findActivities($activityIds, true);
         $liveActivities = ArrayToolkit::index($liveActivities, 'id');
@@ -65,9 +65,9 @@ class ReplayController extends BaseController
         foreach ($replays as $replay) {
             $activity = $liveActivities[$replay['lessonId']];
             $anchorId = $activity['ext']['anchorId'];
-            if (!$this->isCanViewReplay($activity, $currentUser)) {
-                continue;
-            }
+//            if (!$this->isCanViewReplay($activity, $currentUser)) {
+//                continue;
+//            }
 
             $liveTime = $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'];
             $activitiesList[] = [
