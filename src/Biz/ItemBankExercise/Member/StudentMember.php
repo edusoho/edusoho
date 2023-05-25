@@ -121,6 +121,10 @@ class StudentMember extends Member
             throw ItemBankExerciseMemberException::DUPLICATE_MEMBER();
         }
 
+        if ('date' == $exercise['expiryMode'] && $exercise['expiryStartDate'] > time()){
+            throw ItemBankExerciseException::EXERCISE_NOT_ARRIVING();
+        }
+
         $expiryMode = ExpiryModeFactory::create($exercise['expiryMode']);
         if ($expiryMode->isExpired($exercise)) {
             throw ItemBankExerciseMemberException::CAN_NOT_BECOME_MEMBER();

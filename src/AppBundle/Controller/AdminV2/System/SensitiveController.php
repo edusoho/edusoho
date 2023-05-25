@@ -156,7 +156,10 @@ class SensitiveController extends BaseController
         }
 
         foreach ($banlogs as &$value) {
-            $value['text'] = str_replace($value['keywordName'], "<span style='color:#FF0000'>".$value['keywordName'].'</span>', $value['text']);
+            $pattern = '/'.$value['keywordName'].'/i';
+            $value['text'] = preg_replace_callback($pattern, function($matches) {
+                return "<span style='color:#FF0000'>".$matches[0].'</span>';
+            }, $value['text']);
             $value['text'] = preg_replace("/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i", '', $value['text']);
         }
 

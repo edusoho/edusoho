@@ -41,10 +41,10 @@ class DefaultController extends BaseController
     public function appDownloadAction()
     {
         $meCount = $this->getMeCount();
-        $mobileCode = (empty($meCount['mobileCode']) ? 'edusohov3' : $meCount['mobileCode']);
+        $mobileCode = (empty($meCount['mobileCode']) ? 'zhixiang' : $meCount['mobileCode']);
 
-        if ($this->getWebExtension()->isMicroMessenger() && 'edusohov3' == $mobileCode) {
-            $url = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi';
+        if ($this->getWebExtension()->isMicroMessenger() && 'zhixiang' == $mobileCode) {
+            $url = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.zhixiang';
         } else {
             $url = $this->generateUrl('mobile_download', ['from' => 'qrcode', 'code' => $mobileCode], UrlGeneratorInterface::ABSOLUTE_URL);
         }

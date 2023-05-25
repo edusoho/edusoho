@@ -36,6 +36,8 @@ class CourseController extends CourseBaseController
         $currentUser = $this->getUser();
 
         $members = $this->getCourseMemberService()->searchMembers(['userId' => $currentUser['id'], 'role' => 'student'], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
+        $members = ArrayToolkit::index($members, 'courseId');
+
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::sortPerArrayValue($courses, 'createdTime', false);
@@ -56,8 +58,8 @@ class CourseController extends CourseBaseController
             $this->getCourseSetService()->countCourseSets($conditions),
             12
         );
-        $conditions['ids'] = array_filter($conditions['ids'], function ($id){
-           return $id > 0;
+        $conditions['ids'] = array_filter($conditions['ids'], function ($id) {
+            return $id > 0;
         });
         $conditions['ids'] = array_splice($conditions['ids'], $paginator->getOffsetCount(), $paginator->getOffsetCount() + $paginator->getPerPageCount());
         $courseSets = $this->getCourseSetService()->searchCourseSets(
@@ -74,6 +76,7 @@ class CourseController extends CourseBaseController
         $courseSets = $this->getClassrooms($courseSets);
 
         $learningCourses = $this->getCourseService()->findUserLearningCourses($currentUser['id'], 0, PHP_INT_MAX);
+
         return $this->render(
             'my/learning/course/learning.html.twig',
             [
@@ -210,7 +213,7 @@ class CourseController extends CourseBaseController
             }
         }
         // 非班级课程，点击介绍跳转到概览商品页
-        if (empty($member) || (0 === (int)$course['parentId'] && 'summary' === $tab)) {
+        if (empty($member) || (0 === (int) $course['parentId'] && 'summary' === $tab)) {
             return $this->redirect($this->generateUrl('course_show', ['id' => $id, 'tab' => $tab]));
         }
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
