@@ -92,6 +92,11 @@ class AnnouncementController extends BaseController
             if ('notify' == $request->request->get('notify')) {
                 $targetObjectShowRout = $processor->getTargetShowUrl();
                 $targetObjectShowUrl = $this->generateUrl($targetObjectShowRout, ['id' => $targetId], UrlGeneratorInterface::ABSOLUTE_URL);
+                if ($announcement['startTime'] <= time()) {
+                    $processor->announcementNotification($targetId, $targetObject, $targetObjectShowUrl, $announcement);
+
+                    return $this->createJsonResponse(true);
+                }
 
                 $this->getSchedulerService()->register([
                     'name' => 'announcement_notify_'.$announcement['id'],
