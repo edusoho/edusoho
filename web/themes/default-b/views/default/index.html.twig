@@ -158,7 +158,8 @@
                     <li class="col-md-6">
                       <em>{{ article.publishedTime|date('m-d H:i') }} </em>
                       <a href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}"> {% if article.categoryId %}
-                        <span>[{{ article.category.name }}]{% endif %}</span>{{ article.title }} </a>
+                        <span>[{{ article.category.name |default('') }}]{% endif %}</span>
+                        {{ article.title }} </a>
                     </li>
                   {% endif %}
                 {% endfor %}
