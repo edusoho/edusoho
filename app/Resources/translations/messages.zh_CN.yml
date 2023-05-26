@@ -4100,7 +4100,7 @@ share.qzone_share: 分享到QQ空间
 
 # 移动端
 mobile.page_title: 移动学习
-mobile.app_name: 阔知学堂
+mobile.app_name: 知享学堂
 mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
 mobile.app_download_btn: 下载APP
 mobile.app_download_tips: >
@@ -4114,7 +4114,7 @@ mobile.step_one_tips: 扫描二维码，下载手机APP。
 mobile.Android_client: Android 客户端
 mobile.iPhone_client: iPhone客户端
 mobile.step_two: >
-  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
+  <span class="member">2</span>第二步: 打开知享学堂APP，扫描网校二维码。
 mobile.vip_free_study: 会员免费买
 
 # 客服
@@ -6761,6 +6761,7 @@ admin.user.manage.form.time_option.register: 注册时间
 admin.user.manage.form.time_option.default: --时间类型--
 admin.user.manage.form.role_option.default: --所有角色--
 admin.user.manage.form.user_type_option.default: --注册来源--
+admin.user.manage.form.user_status_option.default: --学员状态--
 plugin.admin.user.manage.form.user_export_btn: 导出搜索结果
 plugin.admin.user.manage.form.user_student_export_btn: 导出搜索结果
 plugin.admin.user.manage.form.user_staff_export_btn: 导出员工数据
@@ -7723,7 +7724,7 @@ admin.login_connect.client_login_restrictions: 设备终端登录限制
 admin.login_connect.closed: 关闭
 admin.login_connect.open: 开启
 admin.login_connect.User_login_restrictions.help_block: 开启后同一帐号只能在一处（同一IP下使用一个浏览器）进行登录
-admin.login_connect.client_login_restrictions.help_block: 开启后，同一帐号同时只能在APP或WEB一个设备终端上进行登录
+admin.login_connect.client_login_restrictions.help_block: 开启后，相同类型的设备一个账号同时只能在一个设备上登录，设备包括APP和WEB
 admin.login_connect.Third_party_login: 第三方登录
 admin.login_connect.Third_party_login.help_block: 开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户
 admin.login_connect.User_login_protection: 用户登录保护
@@ -10820,6 +10821,7 @@ exception.category.code_invalid: 编码含有非法字符，保存分类失败
 exception.category.code_digit_invalid: 编码不能全为数字，保存分类失败
 exception.category.code_unavailable: 编码不可用，保存分类失败
 exception.category.not_found_parent_category: 父分类不存在，保存分类失败
+exception.category.code_length_too_long: 编码长度过长，保存分类失败
 exception.testpaper.not_found: 试卷不存在
 exception.testpaper.draft: 该试卷未发布，如有疑问请联系老师！
 exception.testpaper.closed: 该试卷已关闭，如有疑问请联系老师！
@@ -11040,6 +11042,7 @@ exception.item_bank_exercise.member.non_expired: 学员未过期
 exception.item_bank_exercise.member.member_not_student: 成员不是学生
 exception.item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或试卷练习至少需要启用一项
 exception.item_bank_exercise.exercise.is_exists: 题库练习已存在，请勿重复开启
+exception.item_bank_exercise.exercise.not_arrive: 题库练习未到学习时间，添加失败
 exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
 exception.item_bank.assessment.not.exist: 试卷不存在
 
