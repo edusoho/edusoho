@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}EDUSOHO安装程序{% endblock %}</title>
+  <link href="../assets/libs/gallery2/bootstrap/3.0.1/css/bootstrap.css" rel="stylesheet" />
+  <link href="assets/install.css" rel="stylesheet" />
+  <!--[if lt IE 9]>
+    <script src="../assets/libs/html5shiv.js"></script>
+  <![endif]-->
+
+  <!--[if IE 8]>
+    <script src="../assets/libs/respond.min.js"></script>
+  <![endif]-->
+
+</head>
+<body>
+  <div class="install-container">
+    <div class="paper">
+      <div class="paper-heading">
+        <h1><span class="brand">EduSoho网络课堂</span> <span class="text-muted">安装向导 <small class="text-info">v{{ edusoho_version }}</small></span></h1>
+      </div>
+      <div class="paper-body">
+        {% if step > 0 %}
+          <ul class="nav nav-pills nav-justified">
+            <li class="disabled {% if step == 1 %}active{% endif %}"><a>1. 环境检测</a></li>
+            <li class="disabled {% if step == 2 %}active{% endif %}"><a>2. 创建数据库</a></li>
+            <li class="disabled {% if step == 3 %}active{% endif %}"><a>3. 初始化系统</a></li>
+            <li class="disabled {% if step == 4 %}active{% endif %}"><a>4. 完成安装</a></li>
+          </ul>
+        {% endif %}
+        {% block main %}{% endblock %}
+      </div>
+    </div>
+  </div>
+
+<script>var app = {}; app.debug = false; app.basePath = '';</script>
+<script src="../assets/libs/seajs/seajs/2.2.1/sea.js"></script>
+<script src="../assets/libs/seajs-global-config.js"></script>
+<script src="../../translations/translator.min.js"></script>
+{% block bottom_scripts %}{% endblock %}
+
+</body>
+</html>
