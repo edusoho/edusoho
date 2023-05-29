@@ -1,5 +1,5 @@
 services:
-  marketing_mall_api_token_header_listener:
+  api_marketing_mall_token_header_listener:
     class: MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener
     arguments:
       - '@service_container'
