@@ -238,8 +238,8 @@ class InformationCollectController extends BaseController
 
     private function filterCloseLocation(array &$locations){
         foreach ($locations as $key=>$location){
-            $event = $this->getEventService()->search(['id'=>$location['eventId']], [], 0 ,1);
-            if ($event[0]['status'] === 'close'){
+            $event = $this->getEventService()->get($location['eventId']);
+            if ($event['status'] === 'close'){
                 unset($locations[$key]);
             }
         }
