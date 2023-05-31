@@ -23,7 +23,7 @@ class SimpleValidatorTest extends BaseTestCase
         $this->assertEquals(true, $result);
         $result = SimpleValidator::nickname('s', array());
         $this->assertEquals(false, $result);
-        $result = SimpleValidator::nickname('qertyuiosdfghjklxcvbnmvb', array());
+        $result = SimpleValidator::nickname('qertyuiosdfghjklxcvbnmvbhdfbegherjk4427', array());
         $this->assertEquals(false, $result);
     }
 
