@@ -5,13 +5,14 @@ namespace ApiBundle\Api\Resource;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Util\ObjectCombinationUtil;
 use Biz\Common\CommonException;
+use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @OA\Info(title="EduSoho接口", version="default", description="EduSoho接口，随版本动态变化")
@@ -87,6 +88,18 @@ abstract class AbstractResource
         }
 
         return $requestData;
+    }
+
+    protected function filterUtf8mb4($str)
+    {
+        $str = preg_replace_callback(
+            '/./u',
+            function (array $match) {
+                return strlen($match[0]) >= 4 ? '' : $match[0];
+            },
+            $str);
+
+        return $str;
     }
 
     protected function getOffsetAndLimit(ApiRequest $request)
@@ -186,24 +199,26 @@ abstract class AbstractResource
 
     /**
      * 验证验证码token
+     *
      * @return [type] [description]
      */
     protected function checkDragCaptchaToken(Request $request, $token)
     {
-        $enableAntiBrushCaptcha = $this->getSettingService()->node("ugc_content_audit.enable_anti_brush_captcha");
-        if(empty($enableAntiBrushCaptcha)){
+        $enableAntiBrushCaptcha = $this->getSettingService()->node('ugc_content_audit.enable_anti_brush_captcha');
+        if (empty($enableAntiBrushCaptcha)) {
             return true;
         }
         $session = $request->getSession();
-        $dragTokens = empty($session->get('dragTokens')) ? array() : $session->get('dragTokens');
-        if(in_array($token, $dragTokens)){
+        $dragTokens = empty($session->get('dragTokens')) ? [] : $session->get('dragTokens');
+        if (in_array($token, $dragTokens)) {
             array_splice($dragTokens, array_search($token, $dragTokens), 1);
-            $session->set("dragTokens", $dragTokens);
+            $session->set('dragTokens', $dragTokens);
+
             return true;
         }
+
         return false;
     }
-
 
     protected function trans($message, $arguments = [], $domain = null, $locale = null)
     {
@@ -240,8 +255,11 @@ abstract class AbstractResource
         return $this->getBiz()->service('S2B2C:S2B2CFacadeService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->getBiz()->service("System:SettingService");
+        return $this->getBiz()->service('System:SettingService');
     }
 }

@@ -33,7 +33,7 @@ class AnswerRecord extends AbstractResource
 
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
-
+        $assessmentResponse = $this->getAnswerService()->getAssessmentResponseByAnswerRecordId($answerRecord['id']);
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         // 之前业务中只有考试需要做特殊处理，应该用到customComments字段
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerScene['id']);
@@ -41,17 +41,17 @@ class AnswerRecord extends AbstractResource
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerScene['id']);
 
         $user = $this->getCurrentUser();
-
-        $activity['isOnlyStudent'] = $user['roles'] == ["ROLE_USER"];
+        $activity['isOnlyStudent'] = $user['roles'] == ['ROLE_USER'];
 
         return [
             'answer_report' => $answerReport,
             'answer_record' => $this->wrapperAnswerRecord($answerRecord),
+            'assessment_response' => $assessmentResponse,
             'assessment' => $assessment,
             'answer_scene' => $this->wrapperAnswerScene($answerScene),
             'resultShow' => empty($testpaperActivity) ? true : $this->getResultShow($answerRecord, $answerScene, $answerReport),
-            'activity' => empty($testpaperActivity) ? (object)[] : $testpaperActivity,
-            'metaActivity' => empty($activity) ? (object)[] : $activity,
+            'activity' => empty($testpaperActivity) ? (object) [] : $testpaperActivity,
+            'metaActivity' => empty($activity) ? (object) [] : $activity,
         ];
     }
 
@@ -59,7 +59,8 @@ class AnswerRecord extends AbstractResource
     {
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerScene['id']);
         $answerScene['fromType'] = $activity['mediaType'];
-        $answerScene['reviewType'] =  $activity['mediaType'] == 'testpaper' || $activity['finishType'] == 'score'  ? 'score' : 'true_false';
+        $answerScene['reviewType'] = 'testpaper' == $activity['mediaType'] || 'score' == $activity['finishType'] ? 'score' : 'true_false';
+
         return $answerScene;
     }
 

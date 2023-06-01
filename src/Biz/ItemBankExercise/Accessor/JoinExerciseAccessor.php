@@ -25,10 +25,19 @@ class JoinExerciseAccessor extends AccessorAdapter
             return $this->buildResult('item_bank_exercise.not_join_enable', ['exerciseId' => $itemBankExercise['id']]);
         }
 
+        if ($this->isNotArriving($itemBankExercise)) {
+            return $this->buildResult('item_bank_exercise.not_arrive', ['exerciseId' => $itemBankExercise['id']]);
+        }
+
         if (ExpiryModeFactory::create($itemBankExercise['expiryMode'])->isExpired($itemBankExercise)) {
             return $this->buildResult('item_bank_exercise.expired', ['exerciseId' => $itemBankExercise['id']]);
         }
 
         return null;
+    }
+
+    private function isNotArriving ($itemBankExercise)
+    {
+        return 'date' == $itemBankExercise['expiryMode'] && $itemBankExercise['expiryStartDate'] > time();
     }
 }

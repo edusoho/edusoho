@@ -164,10 +164,10 @@
             {% if s2b2c_has_behaviour_permission('canManageCourseSetFiles') %} {#S2B2C#}
             <ul class="dropdown-menu btn-group__menu text-center">
               {# 下载 #}
-              <li>                  
+              <li>
                 {% if type|default is empty %}
-                  {% if (uploadFile.createdUserId == app.user.id or setting('cloud_file_setting.enable',0) or app.user.isAdmin()) and teacherIsDownload %}
-                    <a href="javascript:;" data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" >
+                  {% if uploadFile.createdUserId == app.user.id or (setting('cloud_file_setting.enable', 0) and app.user.isTeacher()) or app.user.isAdmin() %}
+                    <a href="{{ path('material_download', {fileId: uploadFile.id}) }}" download="{{ uploadFile.filename }}">
                       {{'material_lib.btn.download'|trans}}
                     </a>
                   {% endif %}
@@ -177,7 +177,7 @@
                     {% else %}
                       {% set fileShowUrl = path('course_set_manage_file_show',{id:courseSet.id,fileId:uploadFile.id}) %}
                     {% endif %}
-                    {% if teacherIsDownload %}
+                    {% if teacherIsDownload|default() %}
                       <a class="link-dark js-download-btn" data-url="{{ fileShowUrl }}"  href="{{ fileShowUrl }}">{{'material_lib.btn.download'|trans}}</a>
                     {% endif %}
                   {% endif %}

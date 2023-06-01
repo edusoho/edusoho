@@ -30,7 +30,7 @@ class MallController extends BaseController
             $mallSettings = $this->getMallService()->init($this->getUserInfo(), $request->getSchemeAndHttpHost());
         }
 
-        $authorization = JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'userInfo' => $this->getUserInfo(), 'access_key' => $mallSettings['access_key'], 'header' => 'MARKETING_MALL'], $mallSettings['secret_key']);
+        $authorization = JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'userInfo' => $this->getUserInfo(), 'session_id' => $request->getSession()->getId(), 'access_key' => $mallSettings['access_key'], 'header' => 'MARKETING_MALL'], $mallSettings['secret_key']);
         $mallUrl = $this->getSchema() . $this->container->getParameter('marketing_mall_url') . '/console-pc/';
 
         $url = "{$mallUrl}?token={$authorization}&code={$mallSettings['access_key']}&url={$request->getSchemeAndHttpHost()}&schoolCode={$mallSettings['code']}";
@@ -50,6 +50,9 @@ class MallController extends BaseController
                 'isWechatMobileConfigured' => $this->isWechatMobileConfigured(),
                 'hasWechatMobilePermission' => $this->getCurrentUser()->hasPermission('admin_v2_setting_wechat_auth'),
                 'wechatMobileUrl' => $this->generateUrl('admin_v2_setting_wechat_auth'),
+            ],
+            'marketing' => [
+                'grouponEnable' => true,
             ],
         ];
 

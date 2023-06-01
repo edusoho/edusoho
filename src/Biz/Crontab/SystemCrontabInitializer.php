@@ -207,6 +207,10 @@ class SystemCrontabInitializer
                 'expression' => "{$xapiRandNum1} 5 * * *",
                 'class' => 'Biz\LiveStatistics\Job\DaySyncLiveDataJob',
             ],
+            'DeleteDevLockJob' => [
+                'expression' => "0 2 * * *",
+                'class' => 'Biz\System\Job\DeleteDevLockJob',
+            ],
 //            'StatisticsPageStayDailyDataJob' => [
 //                'expression' => '30 0 * * *',
 //                'class' => 'Biz\Visualization\Job\StatisticsPageStayDailyDataJob',

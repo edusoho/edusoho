@@ -5,7 +5,6 @@ namespace AppBundle\Controller\Activity;
 use AppBundle\Common\LiveWatermarkToolkit;
 use AppBundle\Controller\LiveroomController;
 use AppBundle\Util\H5LiveEntryToken;
-use Biz\Activity\Dao\ReplayActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
@@ -17,6 +16,7 @@ use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
+use Biz\User\Service\TokenService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -191,6 +191,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
      */
     public function liveReplayAction($courseId, $activityId)
     {
+        $this->getCourseService()->tryTakeCourse($courseId);
         $user = $this->getUser();
         $activity = $this->getActivityService()->getActivity($activityId);
         $live = $this->getActivityService()->getActivityConfig('live')->get($activity['mediaId']);
@@ -201,6 +202,11 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         } else {
             $role = 'student';
         }
+        $token = $this->getTokenService()->makeToken('live.replay.play', [
+            'data' => ['mediaId' => $live['mediaId']],
+            'times' => 1,
+            'userId' => $user['id'],
+        ]);
 
         return $this->render('activity/live/replay-player.html.twig', [
             'courseId' => $courseId,
@@ -209,6 +215,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             'live' => $live,
             'mediaId' => $live['mediaId'],
             'role' => $role,
+            'token' => $token['token'],
         ]);
     }
 
@@ -220,6 +227,11 @@ class LiveController extends BaseActivityController implements ActivityActionInt
      */
     public function liveReplayEntryAction(Request $request, $mediaId)
     {
+        $token = $this->getTokenService()->verifyToken('live.replay.play', $request->query->get('token'));
+        if (empty($token) || $this->getCurrentUser()->getId() != $token['userId'] || $mediaId != $token['data']['mediaId']) {
+            throw UserException::PERMISSION_DENIED();
+        }
+
         return $this->render('activity/live/replay-player-show.html.twig', [
             'mediaId' => $mediaId,
         ]);
@@ -279,8 +291,12 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     {
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+        $activity = $this->getActivityService()->getActivity($activityId, true);
         $isTeacher = false;
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->id)) {
+            $isTeacher = $this->getUser()->isTeacher();
+            $role = 'teacher';
+        } elseif ($this->getUser()->isTeacher() && '1' == $activity['ext']['replayPublic']) {
             $isTeacher = $this->getUser()->isTeacher();
             $role = 'teacher';
         } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
@@ -290,7 +306,6 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         } else {
             return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
         }
-        $activity = $this->getActivityService()->getActivity($activityId, true);
         $isEsLive = $this->getLiveService()->isESLive($activity['ext']['liveProvider']);
         if ($isEsLive) {
             if ('replay' == $activity['mediaType']) {
@@ -578,10 +593,10 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     }
 
     /**
-     * @return ReplayActivityDao
+     * @return TokenService
      */
-    protected function getReplayActivityDao()
+    protected function getTokenService()
     {
-        return $this->getBiz()->dao('Activity:ReplayActivityDao');
+        return $this->createService('User:TokenService');
     }
 }

@@ -5,3 +5,4 @@
 <input type="hidden" name="ckeditor_image_upload_url" value="{{ path('editor_upload', {token:upload_token('course')}) }}">
 <input type="hidden" name="ckeditor_image_download_url" value="{{ path('editor_download', {token:upload_token('course')}) }}">
 <input type="hidden" name="answer_engine_review_url" value="{{ path('answer_engine_review') }}">
+<input type="hidden" name="question_bank_attachment_setting" value="{{ setting('question_bank_attachment_setting')|json_encode }}">

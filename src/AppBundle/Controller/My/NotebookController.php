@@ -2,14 +2,14 @@
 
 namespace AppBundle\Controller\My;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\Paginator;
 
 class NotebookController extends BaseController
 {
@@ -17,10 +17,10 @@ class NotebookController extends BaseController
     {
         $user = $this->getUser();
 
-        $conditions = array(
+        $conditions = [
             'userId' => $user['id'],
             'noteNumGreaterThan' => 0,
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -28,16 +28,16 @@ class NotebookController extends BaseController
             10
         );
 
-        $courseMembers = $this->getCourseMemberService()->searchMembers($conditions, $orderBy = array(), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $courseMembers = $this->getCourseMemberService()->searchMembers($conditions, $orderBy = [], $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
 
-        return $this->render('my/learning/notebook/index.html.twig', array(
+        return $this->render('my/learning/notebook/index.html.twig', [
             'courseMembers' => $courseMembers,
             'paginator' => $paginator,
             'courses' => $courses,
-        ));
+        ]);
     }
 
     public function showAction(Request $request, $courseId)
@@ -53,12 +53,14 @@ class NotebookController extends BaseController
         $tasks = ArrayToolkit::index($tasks, 'id');
 
         $notes = $this->sortNotesByTaskSeq($notes, $tasks);
+        $title = $course['courseSetTitle'].'-'.(empty($course['title']) ? '默认计划' : $course['title']);
 
-        return $this->render('my/learning/notebook/show.html.twig', array(
+        return $this->render('my/learning/notebook/show.html.twig', [
             'course' => $course,
             'tasks' => $tasks,
             'notes' => $notes,
-        ));
+            'title' => $title,
+        ]);
     }
 
     public function deleteAction($id)
@@ -93,7 +95,6 @@ class NotebookController extends BaseController
     }
 
     /**
-
      * @return TaskService
      */
     protected function getTaskService()
@@ -114,7 +115,7 @@ class NotebookController extends BaseController
         }
 
         usort($notes, function ($note1, $note2) {
-            if ($note1['seq'] == 0 || $note2['seq'] == 0) {
+            if (0 == $note1['seq'] || 0 == $note2['seq']) {
                 return true;
             }
 

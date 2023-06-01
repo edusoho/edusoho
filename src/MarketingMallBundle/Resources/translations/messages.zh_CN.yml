@@ -1,0 +1,26 @@
+wechat.notification.template_name.groupon_create: 开团成功通知
+wechat.notification.template_name.groupon_join: 参团成功通知
+wechat.notification.template_name.groupon_success: 拼团成功通知
+wechat.notification.template_name.groupon_fail: 拼团失败通知
+wechat.notification.template_name.groupon_order_refund: 退款通知
+wechat.notification.template.groupon_create: 你已开团成功，赶紧邀请好友来参团哦！
+wechat.notification.template.groupon_join: 您已参团成功，赶紧邀请好友来参团哦！
+wechat.notification.template.groupon_success: 恭喜你，你已成功拼团[商品名称]的课程
+wechat.notification.template.groupon_fail: 你的订单未拼团成功，可到商城重新参与拼团活动
+wechat.notification.template.groupon_order_refund: 很遗憾，你的[活动设置的成团人数]人拼团未成功，已支付费用将自动退还
+wechat.notification.condition.groupon_create: 团长支付成功
+wechat.notification.condition.groupon_join: 团员支付成功
+wechat.notification.condition.groupon_success: 在有效时间内拼团达到指定人数即成团
+wechat.notification.condition.groupon_fail: 拼团过程中因未达成团人数、超出成团时限、活动结束、活动失效导致拼团失败
+wechat.notification.condition.groupon_order_refund: 拼团失败，已付款用户系统自动发起退款，订单状态变为【已退款】时触发
+wechat.notification.message_subscribe_template.groupon_create: '课程名称：[商品名称]<br>拼团价：[团员拼团价]<br>成团人数：[活动设置的成团人数]<br>剩余时间：[年月日时分秒]<br>备注：拉满人数则拼团成功，拼团失败自动退款。'
+wechat.notification.message_subscribe_template.groupon_join: '课程名称：[商品名称]<br>拼团价：[团员拼团价（非团长优惠价）]<br>参团人数：[已参团人数/活动设置的成团人数]<br>剩余时间：[年月日时分秒，开团时间+成团时限]<br>温馨提示:拉满人数则拼团成功，拼团失败自动退款。'
+wechat.notification.message_subscribe_template.groupon_success: '拼团商品：[商品名称]<br>拼团价：[团员拼团价（非团长优惠价）]<br>拼团状态：拼团成功，[成团人数，活动设置的成团人数（含团长）] 人已成团<br>温馨提示：点击详情查看商品'
+wechat.notification.message_subscribe_template.groupon_fail: '拼团商品：[商品名称]<br>拼团人数：[活动设置的成团人数]<br>拼团状态：[失败]<br>失败原因：[超出成团时限]/[拼团活动结束]/[拼团活动失效]/[未在规定时间达到拼团人数]<br>温馨提示：点击查看活动详情'
+wechat.notification.message_subscribe_template.groupon_order_refund: '课程名称：[商品名称]<br>支付金额：[支付成功的金额，不含有优惠]<br>退款金额：[系统退款的金额]<br>温馨提示：拼团失败，费用将在3天内原渠道退还。'
+wechat.notification.message_subscribe_sms.template.groupon_create: '你参与[拼团活动名称]-[商品名称]已开团成功，拼团价为[拼团价]，需[成团人数]人成团，拼团结束时间为[拼团结束时间]，快复制连接邀请微信好友一起参与吧[活动结果展示页短链]'
+wechat.notification.message_subscribe_sms.template.groupon_join: '你已参与[拼团活动名称] -[商品名称]团成功，拼团价为[拼团价]，还剩[待成团人数]人成团，拼团结束时间为[拼团结束时间]，快复制连接邀请微信好友一起参与吧[活动结果展示页连接]'
+wechat.notification.message_subscribe_sms.template.groupon_success: '你参与的[拼团活动名称]-[商品名称]已成团，拼团价为[拼团价]，快复制连接到微信中去学习吧[活动结果展示页连接]'
+wechat.notification.message_subscribe_sms.template.groupon_fail: '你参与的[拼团活动名称] -[商品名称]未拼团成功，可复制商城链接微信内重新参与拼团[机构商城首页链接]'
+wechat.notification.message_subscribe_sms.template.groupon_order_refund: '你参与的[X人团] [商品名称]拼团失败，发起退款，退款金额为[退款金额]，复制链接至微信查看退款详情'
+wechat.notification.message_subscribe_template.position.groupon_page: 拼团详情

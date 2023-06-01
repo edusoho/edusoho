@@ -630,6 +630,10 @@ admin_v2_question_bank_attachment:
     path: /question_bank_attachment
     defaults:
       _controller: 'AppBundle:AdminV2/Teach/CloudFile:questionBankAttachmentList'
+admin_v2_question_bank_attachment_setting:
+  path: /question_bank_attachment_setting
+  defaults:
+    _controller: 'AppBundle:AdminV2/Teach/CloudFile:questionBankAttachmentSetting'
 admin_v2_cloud_file:
     path: /cloud_files
     defaults:
@@ -2023,6 +2027,10 @@ admin_v2_staff_delete:
     _controller: 'AppBundle:AdminV2/User/StaffManage:delete'
   methods:
     - POST
+admin_v2_staff_org_update:
+  path: '/staff/{id}/org/update'
+  defaults:
+    _controller: 'AppBundle:AdminV2/User/StaffManage:orgUpdate'
 admin_v2_staff_change_nickname:
   path: '/staff/{userId}/change/nickname'
   defaults:
@@ -2360,6 +2368,14 @@ admin_v2_setting_wechat_pre_auth_url:
     path: '/wechat/pre_auth_url/{platformType}'
     defaults:
         _controller: 'AppBundle:AdminV2/System/WeChatSetting:preAuthUrl'
+admin_v2_setting_wechat_cert_upload:
+    path: /wechat/cert/upload
+    defaults:
+        _controller: 'AppBundle:AdminV2/System/WeChatSetting:uploadCert'
+admin_v2_setting_wechat_cert_key_upload:
+    path: /wechat/cert_key/upload
+    defaults:
+        _controller: 'AppBundle:AdminV2/System/WeChatSetting:uploadCertKey'
 admin_v2_setting_course_setting:
     path: /setting/course-setting
     defaults:
@@ -2644,6 +2660,12 @@ admin_v2_post_num_rules_setting:
         _controller: 'AppBundle:AdminV2/System/Setting:postNumRules'
     permissions:
         - admin_v2_security
+admin_v2_anti_fraud_reminder_setting:
+    path: /setting/anti_fraud_reminder
+    defaults:
+      _controller: 'AppBundle:AdminV2/System/Setting:antiFraudReminder'
+    permissions:
+      - admin_v2_security
 admin_v2_report_status:
     path: /reports/status
     defaults:
@@ -3553,3 +3575,25 @@ admin_v2_api_swagger_ui_api:
     path: /setting/developer/swagger-ui/api
     defaults:
         _controller: 'AppBundle:AdminV2/Developer/DeveloperSetting:swaggerApi'
+admin_v2_sms_request_log_list:
+  path: /setting/sms/request/list
+  defaults:
+    _controller: 'AppBundle:AdminV2/System/SmsDefence:smsRequestLogList'
+  permissions:
+    - admin_v2_sms_request
+admin_v2_sms_request_log_detail:
+  path: /setting/sms/request/{id}/detail
+  defaults:
+    _controller: 'AppBundle:AdminV2/System/SmsDefence:smsRequestLogDetail'
+  permissions:
+    - admin_v2_sms_request
+admin_v2_sms_black_ip_list:
+  path: /setting/sms/blackIp
+  defaults:
+    _controller: 'AppBundle:AdminV2/System/SmsDefence:smsBlackList'
+admin_v2_sms_black_ip_unlock:
+  path: /setting/sms/blackIp/{id}/unlock
+  defaults:
+    _controller: 'AppBundle:AdminV2/System/SmsDefence:unlock'
+  permissions:
+    - admin_v2_sms_request

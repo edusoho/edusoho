@@ -72,7 +72,7 @@ class Homework extends Activity
                 'limited_time' => 0,
                 'do_times' => 0,
                 'redo_interval' => 0,
-                'need_score' => 0,
+                'need_score' => 'score' == $fields['finishType'] ? 1 : 0,
                 'manual_marking' => 1,
                 'start_time' => 0,
                 'pass_score' => empty($fields['finishData']) ? 0 : $fields['finishData'],
@@ -95,8 +95,18 @@ class Homework extends Activity
 
     protected function createAssessment($name, $fields)
     {
+        $sortItems = [];
         $items = $this->getItemService()->findItemsByIds($fields['questionIds'], true);
-        $items = $this->processItemQuestions($items, $fields);
+
+        $items = ArrayToolkit::index($items,'id');
+        foreach ($fields['questionIds'] as $id) {
+            if (!isset($items[$id])) {
+                continue;
+            }
+            $sortItems[] = $items[$id];
+        }
+
+        $items = $this->processItemQuestions($sortItems, $fields);
         $bankIds = array_column($items, 'bank_id');
         $assessment = [
             'bank_id' => array_shift($bankIds),
@@ -157,7 +167,7 @@ class Homework extends Activity
                 'limited_time' => 0,
                 'do_times' => 0,
                 'redo_interval' => 0,
-                'need_score' => 0,
+                'need_score' => 'score' == $activity['finishType'] ? 1 : 0,
                 'manual_marking' => 1,
                 'start_time' => 0,
             ]);
@@ -202,9 +212,20 @@ class Homework extends Activity
             'name' => $fields['title'],
             'description' => $fields['description'],
         ];
+
+        $sortItems = [];
         if (!empty($fields['questionIds'])) {
             $items = $this->getItemService()->findItemsByIds($fields['questionIds'], true);
-            $items = $this->processItemQuestions($items, $fields);
+
+            $items = ArrayToolkit::index($items,'id');
+            foreach ($fields['questionIds'] as $id) {
+                if (!isset($items[$id])) {
+                    continue;
+                }
+                $sortItems[] = $items[$id];
+            }
+
+            $items = $this->processItemQuestions($sortItems, $fields);
             $bankIds = array_column($items, 'bank_id');
             $accessment['bank_id'] = array_shift($bankIds);
             $accessment['sections'] = [

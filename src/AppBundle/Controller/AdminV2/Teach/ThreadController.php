@@ -18,6 +18,7 @@ class ThreadController extends BaseController
     public function courseThreadIndexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         if (isset($conditions['keywordType']) && 'courseTitle' == $conditions['keywordType']) {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);
@@ -71,6 +72,7 @@ class ThreadController extends BaseController
     public function classroomThreadIndexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         $paginator = new Paginator(
             $request,

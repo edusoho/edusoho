@@ -66,19 +66,25 @@ class AnswerEngineController extends BaseController
         return $this->createJsonResponse($reviewReport);
     }
 
-    public function reviewAnswerAction(Request $request, $answerRecordId, $successGotoUrl, $successContinueGotoUrl = '', $role = 'teacher')
+    public function reviewAnswerAction(Request $request, $answerRecordId, $successGotoUrl, $successContinueGotoUrl = '', $role = 'teacher', $saveGotoUrl = '')
     {
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
 
+        $goBackUrl = $saveGotoUrl;
+
+        if(!empty($activity)) {
+            $goBackUrl = $this->generateUrl('course_manage_testpaper_result_list', ['id' => $activity['fromCourseId'], 'testpaperId' => $answerRecord['assessment_id'], 'activityId' => $activity['id'], 'status' => 'reviewing'], UrlGeneratorInterface::ABSOLUTE_URL);
+        }
+
         return $this->render('answer-engine/review.html.twig', [
             'assessment' => $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']),
-            'successGotoUrl' => $successGotoUrl,
-            'successContinueGotoUrl' => $successContinueGotoUrl,
+            'successGotoUrl' => $this->filterRedirectUrl($successGotoUrl),
+            'successContinueGotoUrl' => $this->filterRedirectUrl($successContinueGotoUrl),
             'answerRecordId' => $answerRecordId,
             'role' => $role,
             'activity' => $activity,
-            'goBackUrl' => $this->generateUrl('course_manage_testpaper_result_list', ['id' => $activity['fromCourseId'], 'testpaperId' => $answerRecord['assessment_id'], 'activityId' => $activity['id'], 'status' => 'reviewing'], UrlGeneratorInterface::ABSOLUTE_URL),
+            'goBackUrl' => $this->filterRedirectUrl($goBackUrl),
         ]);
     }
 

@@ -21,6 +21,7 @@ use Biz\User\Service\TokenService;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Endroid\QrCode\QrCode;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -113,6 +114,24 @@ class ExerciseController extends BaseController
                 'previewAs' => $previewAs,
             ]
         );
+    }
+
+    public function exitAction(Request $request, $exerciseId)
+    {
+        $exercise = $this->getExerciseService()->get($exerciseId);
+        $user = $this->getCurrentUser();
+        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
+        if (empty($member)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_MEMBER());
+        }
+        $req = $request->request->all();
+
+        $this->getExerciseMemberService()->removeStudent($exercise['id'], $user['id'], [
+            'reason' => $req['reason']['note'],
+            'reasonType' => 'exit',
+        ]);
+
+        return $this->redirect($this->generateUrl('item_bank_exercise_show', ['id' => $exerciseId]));
     }
 
     protected function getTabs($exercise)
@@ -535,5 +554,13 @@ class ExerciseController extends BaseController
     protected function getAssessmentExerciseRecordService()
     {
         return $this->createService('ItemBankExercise:AssessmentExerciseRecordService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
     }
 }

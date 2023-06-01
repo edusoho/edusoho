@@ -110,6 +110,7 @@ uploader.error_hint: Upload failed, please try again!
 uploader.num_limit_hint: Add too many files!
 uploader.size_limit_hint: File is too large, please upload a smaller file!
 uploader.size_2m_limit_hint: File too large, please upload files under 2M.
+uploader.size_5m_limit_hint: File too large, please upload files under 5M.
 uploader.type_denied_limit_hint: File type is wrong!
 uploader.error.bad_file.hint: Your source file may be damaged, please check and re-upload
 uploader.btn.batch_paused: Paused All
@@ -800,6 +801,7 @@ validate.course_title.message: Do not support typing <,> characters
 validate.float_input.message: Please enter the correct decimals, leaving only TWO decimal places.
 validate.open_live_course_title.message: Do not support typing <,>, \ ", &, ',',", "characters
 validate.currency.message: Please enter a valid price, up to two decimal places, no more than 8 digits!
+validate.max_effective_time.message: Supports up to 8 bits integers！
 validate.positive_currency.message: Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!
 validate.max_year.message: The maximum validity period can not exceed 99,999 days
 validate.before_date.message: The start date should be earlier than the end date
@@ -818,6 +820,7 @@ validate.valid_image_input.message: Can only upload pictures
 validate.limit_size.message: Size can not exceed 2M
 validate.next_day.message: The start time should be later than the current time
 validate.chinese_alphanumeric.message: Only supports Chinese characters, English letters, numbers and _ . ·
+validate.truename_chinese_alphanumeric.message: Names do not support special symbols
 validate.alphanumeric.message: Must be English letters, numbers and underscores
 validate.only_alphanumeric.message: Please enter numbers or English letters
 validate.raty_star.message: Please score
@@ -1799,6 +1802,7 @@ course.plan_setup.mode.locked: 'Lock'
 course.plan_setup.mode.tips: 'Free:Learn freely<br>Lock:Unlock lessons step by step'
 course.marketing_setup.rule.watch_time_limit: 'Video watch time limit'
 course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video duration'
+course.plan_setup.learn_mode_hint: 'The learn mode cannot be modified after plan is published'
 course.plan_setup.finish_rule: '%taskName% rules'
 course.plan_setup.finish_rule.nothing: 'No limitation'
 course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by %taskName% finish conditions'
@@ -2190,3 +2194,5 @@ live.chooser.video: Please set up live video
 
 cloud.sms_enable_hint: Cloud SMS is not enabled. Please go to <a href="%cloudSmsSettingUrl%" target="_blank">[Cloud SMS Settings]</a> to enable it
 admin_v2.homepage.school_info.enter.copy_success: Link copied successfully
+admin_v2.homepage.wechat_come: Welcome to EduSoho enterprise products
+admin_v2.homepage.wechat_code.m: Join the open source product use learning exchange group, small partners are waiting for you

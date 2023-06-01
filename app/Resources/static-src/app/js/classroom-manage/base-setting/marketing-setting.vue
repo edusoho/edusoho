@@ -65,14 +65,19 @@
                     type="date"
                     value-format="timestamp"
                     :default-value="today"
-                    :picker-options="dateOptions">
+                    :picker-options="dateOptions"
+                    @blur="validateForm('expiryValue','blur')">
                 </el-date-picker>
                 <el-col class="help-block" v-if="form.expiryMode =='date'">
                     {{ 'classroom.expiry_mode_end_date_tips'|trans }}
                 </el-col>
                 <div v-if="form.expiryMode == 'days'">
                     <el-col span="8" class="inline-block">
-                        <el-input v-model="form.expiryValue"></el-input>
+                        <el-input v-model="form.expiryValue" :number-format="{
+                                                                   maxLength: 8,
+                                                                   negative: false,
+                                                                   decimal: false,}"
+                        @blur="validateForm('expiryValue','blur')"></el-input>
                     </el-col>
                     <el-col span="1" class="plm">{{ 'site.date.day'|trans }}</el-col>
                     <el-col class="help-block" v-if="form.expiryMode =='days'">
@@ -120,6 +125,7 @@
 
 <script>
     import * as validation from 'common/element-validation';
+    import {positive_price} from '../../../../common/element-validation';
 
     export default {
         name: "marketing-info",
@@ -198,14 +204,41 @@
                             trigger: 'blur',
                         },
                         {
-                            validator: validation.currency,
-                            trigger: 'blur'
+                            pattern: /(^[1-9][0-9]{0,7}$)/,
+                            message: Translator.trans('validate.max_effective_time.message'),
+                            trigger: 'blur',
                         }
                     ];
                 } else {
                     this.formRule.expiryValue = [];
                 }
             }
+        },
+        created() {
+            if (this.form.expiryMode == 'date') {
+              this.formRule.expiryValue = [
+                {
+                  required: true,
+                  message: Translator.trans('classroom.manage.expiry_mode_date_error_hint'),
+                  trigger: 'blur',
+                }
+              ];
+            } else if (this.form.expiryMode == 'days') {
+            this.formRule.expiryValue = [
+              {
+                required: true,
+                message: Translator.trans('classroom.manage.expiry_mode_days_error_hint'),
+                trigger: 'blur',
+              },
+              {
+                pattern: /(^[1-9][0-9]{0,7}$)/,
+                message: Translator.trans('validate.max_effective_time.message'),
+                trigger: 'blur',
+              }
+            ];
+          } else {
+            this.formRule.expiryValue = [];
+          }
         },
         data() {
 

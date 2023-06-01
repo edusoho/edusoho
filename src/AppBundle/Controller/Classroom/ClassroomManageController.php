@@ -447,7 +447,7 @@ class ClassroomManageController extends BaseController
                         [PHP_EOL, '"'],
                         '',
                         $profiles[$classroomMember['userId']][$key]
-                    ).'",' : '-'.',';
+                    )."\t".'",' : '-'.',';
             }
             $students[] = $member;
         }
@@ -806,6 +806,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $studentDetailCount = $this->getReportService()->getStudentDetailCount($id, $conditions);
         $paginator = new Paginator(
             $request,

@@ -158,7 +158,8 @@
                     <li class="col-md-6">
                       <em>{{ article.publishedTime|date('m-d H:i') }} </em>
                       <a href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}"> {% if article.categoryId %}
-                        <span>[{{ article.category.name }}]{% endif %}</span>{{ article.title }} </a>
+                        <span>[{{ article.category.name |default('') }}]{% endif %}</span>
+                        {{ article.title }} </a>
                     </li>
                   {% endif %}
                 {% endfor %}
@@ -263,7 +264,7 @@
                             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                               <h4> {{ set_price((level.monthPrice) * (setting('coin.cash_rate'))) }}{{ setting('coin.coin_name', '虚拟币') }}</h4>
                             {% else %}
-                              <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                              <h4>¥&nbsp;{{ level.monthPrice |default(0) }}</h4>
                             {% endif %}
                             <h4><a href="{{ path('vip') }}" class="btn btn-success">立即购买</a></h4>
                           </div>

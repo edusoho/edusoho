@@ -12,6 +12,7 @@ use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Taxonomy\CategoryException;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 
 class QuestionBankServiceImpl extends BaseService implements QuestionBankService
@@ -200,6 +201,20 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return false;
     }
 
+    public function canManageBankCategory($categoryId)
+    {
+        $itemBank = $this->getItemCategoryService()->getItemCategory($categoryId);
+        if (empty($itemBank)) {
+            return false;
+        }
+        $bank = $this->getQuestionBankByItemBankId($itemBank['bank_id']);
+        if (empty($bank)) {
+            return false;
+        }
+
+        return $this->canManageBank($bank['id']);
+    }
+
     public function findUserManageBanks()
     {
         $user = $this->getCurrentUser();
@@ -228,6 +243,9 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
     protected function wrapQuestionBanks($questionBanks)
     {
+        if (empty($questionBanks)) {
+            return [];
+        }
         $itemBanks = $this->getItemBankService()->searchItemBanks(['ids' => array_column($questionBanks, 'itemBankId')], [], 0, PHP_INT_MAX);
         $itemBanks = ArrayToolkit::index($itemBanks, 'id');
 
@@ -303,4 +321,11 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return $this->createService('ItemBank:ItemBank:ItemBankService');
     }
 
+    /**
+     * @return ItemCategoryService
+     */
+    protected function getItemCategoryService()
+    {
+        return $this->createService('ItemBank:Item:ItemCategoryService');
+    }
 }

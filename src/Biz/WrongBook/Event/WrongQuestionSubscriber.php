@@ -81,7 +81,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $wrongAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
             'answer_record_id' => $answerRecord['id'],
-            'statues' => ['wrong', 'no_answer'],
+            'statues' => ['wrong', 'no_answer', 'part_right'],
         ], [], 0, PHP_INT_MAX);
 
         $wrongAnswerQuestionReports = ArrayToolkit::index($wrongAnswerQuestionReports, 'item_id');
@@ -133,7 +133,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         //===== wrong=====
         $wrongAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
             'answer_record_id' => $answerRecord['id'],
-            'statues' => ['wrong', 'no_answer'],
+            'statues' => ['wrong', 'no_answer', 'part_right'],
         ], [], 0, PHP_INT_MAX);
 
         $wrongAnswerQuestionReports = ArrayToolkit::index($wrongAnswerQuestionReports, 'item_id');

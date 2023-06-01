@@ -9,12 +9,12 @@ use Ramsey\Uuid\Uuid;
 
 class TokenServiceImpl extends BaseService implements TokenService
 {
-    public function makeToken($type, array $args = array())
+    public function makeToken($type, array $args = [])
     {
-        if($type == 'mobile_login') {
+        if ('mobile_login' == $type) {
             $args['duration'] = TimeMachine::ONE_MONTH * 6;
         }
-        $token = array();
+        $token = [];
         $token['type'] = $type;
         $token['token'] = $this->_makeTokenValue();
         $token['data'] = !isset($args['data']) ? '' : $args['data'];
@@ -33,8 +33,11 @@ class TokenServiceImpl extends BaseService implements TokenService
         return $this->_makeTokenValue();
     }
 
-    public function verifyToken($type, $value, array $data = array())
+    public function verifyToken($type, $value, array $data = [])
     {
+        if (empty($value)) {
+            return false;
+        }
         $token = $this->getTokenDao()->getByToken($value);
 
         if (empty($token)) {
@@ -50,11 +53,11 @@ class TokenServiceImpl extends BaseService implements TokenService
         }
 
         if ($token['remainedTimes'] > 1) {
-            $this->getTokenDao()->wave(array($token['id']), array('remainedTimes' => -1));
+            $this->getTokenDao()->wave([$token['id']], ['remainedTimes' => -1]);
         }
 
         if (!empty($data)) {
-            $token = $this->getTokenDao()->update($token['id'], array('data' => $data));
+            $token = $this->getTokenDao()->update($token['id'], ['data' => $data]);
         }
 
         $this->_gcToken($token);

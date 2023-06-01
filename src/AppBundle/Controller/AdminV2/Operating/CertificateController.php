@@ -17,6 +17,7 @@ class CertificateController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         $paginator = new Paginator(
             $request,
@@ -125,6 +126,7 @@ class CertificateController extends BaseController
     public function targetSearchAction(Request $request, $type)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         $strategy = $this->getBiz()->offsetGet('certificate.strategy_context')->createStrategy($type);
 

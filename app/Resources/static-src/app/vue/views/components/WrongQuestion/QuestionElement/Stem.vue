@@ -49,6 +49,10 @@ export default {
     margin: 0;
   }
 
+  /deep/ img {
+    max-width: 100%!important;
+  }
+
   /deep/ .stem-fill-blank {
     padding-bottom: 2px;
     line-height: 20px;

@@ -52,6 +52,9 @@ class ActivityFilter extends Filter
                 $data['testpaperInfo']['answerRecordId'] = !empty($data['ext']['answerRecordId']) ? $data['ext']['answerRecordId'] : "0";
             }
         }
+        if ('download' == $data['mediaType']) {
+            $data['content'] = null;
+        }
 
         unset($data['ext']);
     }

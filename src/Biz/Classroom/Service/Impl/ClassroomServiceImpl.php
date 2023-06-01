@@ -986,6 +986,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 if ('student' == $value) {
                     unset($member['role'][$key]);
                 }
+                elseif ('assistant' == $value) {
+                    unset($member['role'][$key]);
+                }
             }
 
             $this->getClassroomMemberDao()->update($member['id'], $member);
@@ -1004,7 +1007,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'type' => 'remove',
         ];
         $user = $this->getUserService()->getUser($member['userId']);
-        $this->getNotificationService()->notify($user['id'], 'classroom-student', $message);
+        if (isset($info['reason_type']) && 'remove' == $info['reason_type']) {
+            $this->getNotificationService()->notify($user['id'], 'classroom-student', $message);
+        }
 
         $infoData = [
             'classroomId' => $classroom['id'],
@@ -2287,12 +2292,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $parentCourseIds = ArrayToolkit::column($courses, 'parentId');
 
-        $coursesMember = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($userId, $parentCourseIds);
+        $coursesMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($userId, $parentCourseIds);
+        $coursesMembers = array_filter($coursesMembers, function ($courseMember) {
+            return 0 == $courseMember['deadline'] || $courseMember['deadline'] > time();
+        });
 
-        $paidCourseIds = ArrayToolkit::column($coursesMember, 'courseId');
+        $paidCourseIds = ArrayToolkit::column($coursesMembers, 'courseId');
         $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
 
-        $orderIds = ArrayToolkit::column($coursesMember, 'orderId');
+        $orderIds = ArrayToolkit::column($coursesMembers, 'orderId');
 
         if (!$orderIds) {
             return [[], []];

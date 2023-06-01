@@ -309,7 +309,7 @@ user.fields.phone_label: 电话
 user.fields.sign_label: 个人签名
 user.fields.introduction_label: 自我介绍
 user.fields.web_site_label: 个人网站
-user.fileds.wechat: 微信
+user.fileds.wechat: 微信号
 user.fileds.qq: QQ
 user.fields.gender.male: 男
 user.fields.gender.female: 女
@@ -398,6 +398,7 @@ form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
 form.btn.send: 发送
 form.btn.upload: 上传
+form.btn.reupload: 重新上传
 form.btn.picture_crop: 选择要上传的图片
 form.btn.remove: 移除
 form.btn.comment: 发表评论
@@ -648,7 +649,9 @@ order.paid_course.minus: 抵扣
 order.refund: 退出学习
 order.refund.item_type: 商品类型
 order.refund.reason: 退出原因
-order.refund.reason_tips: 请输入您的退学原因
+order.refund.reason_tips: 请输入退出原因
+order.refund.reason_warning: 退出后将无法继续学习，需重新加入或购买！
+order.refund.reason_select_tips: 请选择退出原因
 order.refund.apply_for_btn: 申请退款
 order.refund.refund_is_not_supported: 暂不支持退款，如有疑问，请联系客服。
 order.refund.buy_price: （购买时的价格：%amount%元）
@@ -1002,7 +1005,7 @@ course.teaching_plan.sort.save: 保存排序
 course.teaching_plan.sort.cancel: 取消排序
 course.teaching_plan.create.max_plan_number: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.teaching_plan.create.new_plan_name: 新计划名称
-course.teaching_plan.create.create_tips: 教学计划创建后“学习模式”将不能修改。
+course.teaching_plan.create.create_tips: 计划发布后“学习模式”无法修改。
 course.teaching_plan.create.name: 名称
 course.teaching_plan.create.mode: 学习模式
 course.teaching_plan.create.mode.free: >
@@ -1016,7 +1019,7 @@ course.teaching_plan.create.status: 状态
 course.teaching_plan.create.operation: 操作
 course.teaching_plan.edit.copy: 复制%title%为一个新的教学计划
 course.teaching_plan.expiry_date: 学习有效期
-course.teaching_plan.expiry_date.not_change_tips: 教学计划首次发布后“学习有效期”不能再更改模式。
+course.teaching_plan.expiry_date.not_change_tips: 计划首次发布后“学习有效期”不能再更改模式。
 course.teaching_plan.expiry_date.anytime: >
   <b>随到随学：</b>有效期从学员加入的当天开始算起，截至到期当天晚上的23:59
 course.teaching_plan.expiry_date.real_time: >
@@ -1276,6 +1279,7 @@ course.homework_check.review_btn: 批阅
 course.homework_check.review.empty: 暂无数据
 course.homework_check.review.name: 姓名
 course.homework_check.review.score: 成绩
+course.homework_check.review.begin_time: 开考时间
 course.homework_check.review.submit_time: 提交时间
 course.homework_check.review.submit_num: 作业次数
 course.homework_check.review.submit_num_detail: 第%num%次
@@ -3115,6 +3119,7 @@ user.settings.oauth_menu: 第三方登录
 user.settings.avatar: >
   <strong>您还没有头像</strong>。拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%setAvatar%" class="alert-link" target="_blank">点击设置</a>
 user.settings.upload.img.tip: 请上传jpg, gif, png格式的图片, 建议图片大小不超过2MB
+user.settings.upload.img.tips: 请上传JPG/GIF/PNG格式的图片，大小不超过5MB，建议尺寸为400X400
 user.settings.upload.qrcode.tip: 助教请务必上传二维码
 user.settings.scrm: 销客助手绑定
 user.settings.scrm.tips: 可同步助教信息到企业微信，方便助教在微信群管理学员并进行社群服务
@@ -4095,7 +4100,7 @@ share.qzone_share: 分享到QQ空间
 
 # 移动端
 mobile.page_title: 移动学习
-mobile.app_name: 阔知学堂
+mobile.app_name: 知享学堂
 mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
 mobile.app_download_btn: 下载APP
 mobile.app_download_tips: >
@@ -4109,7 +4114,7 @@ mobile.step_one_tips: 扫描二维码，下载手机APP。
 mobile.Android_client: Android 客户端
 mobile.iPhone_client: iPhone客户端
 mobile.step_two: >
-  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
+  <span class="member">2</span>第二步: 打开知享学堂APP，扫描网校二维码。
 mobile.vip_free_study: 会员免费买
 
 # 客服
@@ -6268,7 +6273,8 @@ admin.mobile_manage.discovery_upgrade.transfer_btn: '去使用'
 
 # 微信通知管理
 admin.wechat_notification.switch: 微信通知设置
-admin.wechat_notification.template: 微信通知模板
+admin.wechat_notification.template: 服务号通知模板
+admin.wechat_notification.message_subscribe.template: 订阅通知模板
 admin.wechat_notification.template_name: 模板名称
 admin.wechat_notification.template_content_sample: 模板内容示例
 admin.wechat_notification.send_object: 发送对象
@@ -6288,7 +6294,7 @@ admin.wechat.notification.un_authorized_before_open_tip: 开启微信通知前�
 admin.wechat.notification.un_authorized_after_open_tip: 为防止网校服务器IP或消息服务器IP变更造成的通知功能异常，建议您进行扫码授权。
 admin.wechat.notification.authorized_wholeless: 检测到您在扫码授权时，未将群发与通知权限”授予ES第三方平台，将无法启用“微信服务号通知”，请进行重新授权。
 admin.wechat.notification.go_authorizer: 立即授权
-admin.wechat_notification.message_subscribe.template_content_sample: 微信模板内容示例
+admin.wechat_notification.message_subscribe.template_content_sample: 订阅通知模板内容示例
 admin.wechat_notification.message_subscribe.template_subscribe_position: 订阅位置
 admin.wechat_notification.message_subscribe.sms_template_content_sample: 短信模板内容示例
 admin.wechat_notification.message_subscribe.disable_tip: 注意：第一次使用需要授权网站生成微信通知模板
@@ -6755,8 +6761,12 @@ admin.user.manage.form.time_option.register: 注册时间
 admin.user.manage.form.time_option.default: --时间类型--
 admin.user.manage.form.role_option.default: --所有角色--
 admin.user.manage.form.user_type_option.default: --注册来源--
+admin.user.manage.form.user_status_option.default: --学员状态--
 plugin.admin.user.manage.form.user_export_btn: 导出搜索结果
+plugin.admin.user.manage.form.user_student_export_btn: 导出搜索结果
+plugin.admin.user.manage.form.user_staff_export_btn: 导出员工数据
 admin.user.manage.fields.mobile_label: 手机号
+admin.user.manage.fields.wechat_nickname: 微信昵称
 admin.user.manage.fields.recent_login_label: 最近登录
 admin.user.manage.fields.user_total_num_label: 用户总数：
 admin.user.manage.fields.student_total_num_label: 学员总数：
@@ -7578,6 +7588,7 @@ admin.edu_cloud.edu_attachment.attachment_tips: >
   </h4><p>“云附件管理”提供完善的附件资源管理功能，您可以从附件的使用途径、上传时间、资源类型等多个维度对资源进行管理，
   帮助您轻松掌控全站的附件资源，再也不用担心过期资源占用存储空间了</p>
 admin.edu_cloud.edu_attachment.function: 附件功能
+admin.edu_cloud.edu_attachment.download_setting: 题库附件下载设置
 admin.edu_cloud.edu_attachment.open_radio: 开启
 admin.edu_cloud.edu_attachment.close_radio: 关闭
 admin.edu_cloud.edu_attachment.service_setting: 业务设置
@@ -7617,6 +7628,12 @@ admin.edu_cloud.key_update.key_update_hint: 请谨慎更换授权码。如有疑
 admin.edu_cloud.key_update.ask_apply_key: 还没有授权码?
 admin.edu_cloud.key_update.key_apply_btn: 申请授权码
 admin.edu_cloud.key_update.key_apply.submiting: 正在申请授权码，请稍等...
+
+#题库附件设置
+admin.question_bank.file.download.setting.enable.tips: 移动端暂不提供下载题库附件功能，不受设置影响
+admin.question_bank.file.download.setting.disable.tips: 压缩文件只能下载后查看，关闭后，学员将无法查看压缩类附件
+admin.question_bank.question_bank_attachment.open_radio: 开启
+admin.question_bank.question_bank_attachment.close_radio: 关闭
 
 # 用户设置
 admin.user_auth.sign_up_settings: 注册设置
@@ -7707,7 +7724,7 @@ admin.login_connect.client_login_restrictions: 设备终端登录限制
 admin.login_connect.closed: 关闭
 admin.login_connect.open: 开启
 admin.login_connect.User_login_restrictions.help_block: 开启后同一帐号只能在一处（同一IP下使用一个浏览器）进行登录
-admin.login_connect.client_login_restrictions.help_block: 开启后，同一帐号同时只能在APP或WEB一个设备终端上进行登录
+admin.login_connect.client_login_restrictions.help_block: 开启后，相同类型的设备一个账号同时只能在一个设备上登录，设备包括APP和WEB
 admin.login_connect.Third_party_login: 第三方登录
 admin.login_connect.Third_party_login.help_block: 开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户
 admin.login_connect.User_login_protection: 用户登录保护
@@ -8008,6 +8025,11 @@ admin.setting_wechat_auth.re_authorization_btn: 重新授权
 admin.setting_wechat_auth.authorization_in_new_page_hint: 请在新窗口完成公众号授权
 admin.setting_wechat_auth.authorization_success: 已成功授权
 admin.setting_wechat_auth.message_template: 消息模板
+admin.setting_wechat_pay.cert_key: 微信商户平台私钥
+admin.setting_wechat_pay.cert_key_hint: 微信商户平台私钥文件需要在【微信商户平台】-【账号中心】-【API安全】-【API证书】中申请，如已申请，直接把文件夹中的【apiclient_key.pem】文件上传至ES即可 <a target="_blank" href="https://pay.weixin.qq.com">申请API证书</a>
+admin.setting_wechat_pay.cert: 微信商户平台证书
+admin.setting_wechat_pay.cert_hint: 微信商户平台证书文件需要在【微信商户平台】-【账号中心】-【API安全】-【API证书】中申请，如已申请，直接把文件夹中的【apiclient_cert.pem】文件上传至ES即可 <a target="_blank" href="https://pay.weixin.qq.com">申请API证书</a>
+admin.setting_wechat_pay.cert_uploaded: 已上传
 
 #开发者设置
 admin.developer_setting.cloud_notification_api: 通知服务API
@@ -8088,6 +8110,8 @@ admin.magic_setting.live_entry_time_tip: 秒为单位
 admin.magic_setting.biz_answer_scene_report_threshold: 考试、作业人数*场次的试卷答案分数阈值
 admin.magic_setting.biz_answer_scene_report_threshold_tip: 默认值15000
 admin.magic_setting.security_video_player: 安全播放器开关
+admin.magic_setting.enable_marketing_mall_alpha_test: 商城内测开关
+admin.magic_setting.enable_marketing_mall_license: 商业授权开关
 
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
@@ -8205,6 +8229,25 @@ admin.post_num_rules.post_num: 发帖次数
 admin.post_num_rules.post_num_tips: 发帖次数必须大于或者等于0的整数，0表示不限制
 admin.post_num_rules.same_user_rule: 同一用户，5分钟内最多发帖次数（包含回复数）
 
+#APP防诈骗弹窗设置
+admin.anti_fraud_reminder.setting: APP防诈骗弹窗设置
+admin.anti_fraud_reminder.open_radio: 开启
+admin.anti_fraud_reminder.close_radio: 关闭
+admin.anti_fraud_reminder.setting.enable.tips: 开启后，用户进入APP时给出防诈骗弹窗提醒
+admin.anti_fraud_reminder.reminder_frequency: 提醒频率
+admin.anti_fraud_reminder.alert_the_object: 提醒对象
+admin.anti_fraud_reminder.visible_to_all_users: 全部用户可见
+admin.anti_fraud_reminder.visible_only_to_paid_users: 仅付费用户可见
+admin.anti_fraud_reminder.to_paid_users_tips: 付费用户指在机构内支付金额≥0.01的用户
+admin.anti_fraud_reminder.view_reminder_example: 查看提醒示例
+admin.anti_fraud_reminder.tips.title: 【反诈提醒】
+admin.anti_fraud_reminder.tips.content_one: 近期，我们发现有不法分子冒充阔知或网校工作人员，以“阔知学堂/网校退费”的名义实施诈骗！如您收到相关的短信和电话，请勿相信！！！
+admin.anti_fraud_reminder.tips.content_two: 我们为您准备了一份防诈骗防骚扰教程，点击下方按钮了解详情。
+admin.anti_fraud_reminder.tips.detail: 查看防骚扰设置教程 >
+admin.anti_fraud_reminder.tips.app.button: 查看防骚扰设置教程 >
+admin.anti_fraud_reminder.every: 每
+admin.anti_fraud_reminder.every_day_reminder: 天提醒一次
+
 # 系统自检
 admin.reports_status.environmental_detection: 环境检测
 admin.reports_status.recommend_config: 推荐配置
@@ -8225,6 +8268,7 @@ admin.reports_status.no_install_mysql_pdo: 尚未安装MySQL_PDO
 admin.reports_status.upload_file_size: 文件上传大小
 admin.reports_status.upload_file_size_tips: 该值决定可以上传视频的最大大小
 admin.reports_status.upload_file_size_greater_than_200m: 大于200M
+admin.reports_status.upload_file_size_greater_than_2048m: 大于2048M
 admin.reports_status.form_data_size: 表单数据大小
 admin.reports_status.form_data_size_tips: 该值不能小于文件上传大小的值
 admin.reports_status.php_max_run_time: PHP脚本最大执行时间
@@ -8232,6 +8276,7 @@ admin.reports_status.php_max_run_time_tips: 该值决定上传视频时，最长
 admin.reports_status.php_max_execution_time: >
   %maxExecutionTime%秒'
 admin.reports_status.upload_file_size_greater_than_300m: 大于300M
+admin.reports_status.upload_file_size_greater_than_30s: 大于30s
 admin.reports_status.upload_file_execution_time_30s: 30秒
 admin.reports_status.php_extend: PHP扩展
 admin.reports_status.php__mbstring_extend_tips: 该扩展用于处理中文字符
@@ -10553,6 +10598,7 @@ exception.user.not_match_auth: 用户不匹配
 exception.user.mobile_not_found: 用户手机号码不存在
 exception.user.user_is_destroyed: 用户已注销
 exception.user.email_password_error: 邮箱密码错误
+exception.user.already_bind: 用户已绑定
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在
@@ -10775,6 +10821,7 @@ exception.category.code_invalid: 编码含有非法字符，保存分类失败
 exception.category.code_digit_invalid: 编码不能全为数字，保存分类失败
 exception.category.code_unavailable: 编码不可用，保存分类失败
 exception.category.not_found_parent_category: 父分类不存在，保存分类失败
+exception.category.code_length_too_long: 编码长度过长，保存分类失败
 exception.testpaper.not_found: 试卷不存在
 exception.testpaper.draft: 该试卷未发布，如有疑问请联系老师！
 exception.testpaper.closed: 该试卷已关闭，如有疑问请联系老师！
@@ -10995,6 +11042,7 @@ exception.item_bank_exercise.member.non_expired: 学员未过期
 exception.item_bank_exercise.member.member_not_student: 成员不是学生
 exception.item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或试卷练习至少需要启用一项
 exception.item_bank_exercise.exercise.is_exists: 题库练习已存在，请勿重复开启
+exception.item_bank_exercise.exercise.not_arrive: 题库练习未到学习时间，添加失败
 exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
 exception.item_bank.assessment.not.exist: 试卷不存在
 
@@ -11291,6 +11339,7 @@ coupon.status.receive: 已领取
 coupon.status.used: 已使用
 
 coupon.generate_num: 生成数量
+coupon.deduction_amount_range: 折价金额必须在0.01~1000000之间
 coupon.generate_num_hint: 生成数量必须在1～100之间
 coupon.generate_num_unit: 个
 coupon.prefix: 优惠券前缀
@@ -12295,3 +12344,24 @@ live_course.record_replay.select3: 只录制课件
 live_course.record_replay.btn: 去录制
 live_course.record_replay.show_btn: 本地录制
 live_course.record_replay.safair_tip: Safair 浏览器可能会被拦截，请使用其他浏览器
+exception.sms_request.abnormal_sms_sending: 短信发送异常
+
+#短信防御
+sms.defence.request.log.fingerprint: 行为指纹
+sms.defence.request.log.coordinate: 坐标
+sms.defence.request.log.ip: ip
+sms.defence.request.log.mobile: 手机号
+sms.defence.request.log.userAgent: userAgent
+sms.defence.request.log.is_illegal: 是非法记录
+sms.defence.request.log.disable_type: 禁用类型
+sms.defence.request.log.created_time: 创建时间
+sms.defence.request.log.view_record_label: 查看
+smd.defence.black.ip.list.ip: ip
+smd.defence.black.ip.list.expire_time: 过期时间
+smd.defence.black.ip.list.created_time: 创建时间
+smd.defence.black.ip.unlock: 解封IP
+sms.defence.request.log.is_illegal.yes: 是
+sms.defence.request.log.is_illegal.no: 否
+sms.defence.request.log.disable_type.ip: 同一ip多次请求
+sms.defence.request.log.disable_type.coordinate: 同一坐标多次请求
+sms.defence.request.log.disable_type.none: 无

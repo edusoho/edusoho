@@ -57,7 +57,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
             }
 
             if (!$this->encoderFactory->getEncoder($user)->isPasswordValid($user->getPassword(), $presentedPassword, $user->getSalt())) {
-                throw new BadCredentialsException('The presented password is invalid.');
+                throw new BadCredentialsException('Bad credentials.');
             }
         }
     }
@@ -100,19 +100,19 @@ class AuthenticationProvider extends UserAuthenticationProvider
                         $user = $this->getUserService()->getUser($bind['toId']);
                         $user = $this->syncEmailAndPassword($user, $partnerUser, $token);
                     } else {
-                        $setting = $this->getSettingService()->get('user_partner', array());
+                        $setting = $this->getSettingService()->get('user_partner', []);
                         $emailFilter = explode("\n", $setting['email_filter']);
                         if (in_array($partnerUser['email'], $emailFilter)) {
                             $partnerUser['email'] = $partnerUser['id'].'_dz_'.$this->getRandomString(5).'@edusoho.net';
                         }
-                        $registration = array();
+                        $registration = [];
                         $registration['nickname'] = $partnerUser['nickname'];
                         $registration['email'] = $partnerUser['email'];
                         $registration['password'] = $token->getCredentials();
                         $registration['createdIp'] = $partnerUser['createdIp'];
-                        $registration['token'] = array(
+                        $registration['token'] = [
                             'userId' => $partnerUser['id'],
-                        );
+                        ];
                         $registration['type'] = $this->getAuthService()->getPartnerName();
 
                         $this->getUserService()->register(
@@ -150,7 +150,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
                 $this->getUserService()->changeEmail($user['id'], $partnerUser['email']);
             }
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'sync_email', $this->getServiceKernel()->trans('同步用户(#%userId%)Email失败', array('%userId%' => $user['id'])));
+            $this->getLogService()->error('user', 'sync_email', $this->getServiceKernel()->trans('同步用户(#%userId%)Email失败', ['%userId%' => $user['id']]));
         }
 
         try {
@@ -159,7 +159,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
                 $this->getUserService()->changePassword($user['id'], $token->getCredentials());
             }
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'sync_password', $this->getServiceKernel()->trans('同步用户(#%userId%)密码失败', array('%userId%' => $user['id'])));
+            $this->getLogService()->error('user', 'sync_password', $this->getServiceKernel()->trans('同步用户(#%userId%)密码失败', ['%userId%' => $user['id']]));
         }
 
         $user = $this->userProvider->loadUserByUsername($user['email']);

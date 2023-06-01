@@ -347,11 +347,11 @@ class TestpaperController extends BaseController
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
         $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
         if (!$assessment || $assessment['bank_id'] != $questionBank['itemBankId']) {
-            return $this->createMessageResponse('error', 'testpaper not found');
+            return $this->createMessageResponse('error', '试卷不存在');
         }
 
         if ('closed' === $assessment['status']) {
-            return $this->createMessageResponse('warning', 'testpaper already closed');
+            return $this->createMessageResponse('warning', '试卷已关闭');
         }
 
         return $this->render('testpaper/manage/preview.html.twig', [
@@ -369,7 +369,7 @@ class TestpaperController extends BaseController
         $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
 
         if (empty($assessment) || $assessment['bank_id'] != $questionBank['itemBankId']) {
-            return $this->createMessageResponse('error', 'testpaper not found');
+            return $this->createMessageResponse('error', '试卷不存在');
         }
 
         $imgRootDir = $this->get('kernel')->getContainer()->getParameter('kernel.root_dir').'/../web';

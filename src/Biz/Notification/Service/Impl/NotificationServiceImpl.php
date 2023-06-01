@@ -66,6 +66,11 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         return $this->getNotificationEventDao()->create($event);
     }
 
+    public function updateEvent($id, $fields)
+    {
+        return $this->getNotificationEventDao()->update($id, ArrayToolkit::parts($fields, ['totalCount', 'succeedCount', 'status', 'reason']));
+    }
+
     public function createStrategy($strategy)
     {
         if (!ArrayToolkit::requireds($strategy, ['eventId', 'type', 'seq'])) {
@@ -142,7 +147,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         return $this->updateBatch($batchId, $batch);
     }
 
-    public function createSmsNotificationRecord($data, $smsParams, $source)
+    public function createSmsNotificationRecord($data, $smsParams, $source, $batchId = 0)
     {
         global $kernel;
         $templates = $kernel->getContainer()->get('extension.manager')->getMessageSubscribeTemplates();
@@ -170,6 +175,9 @@ class NotificationServiceImpl extends BaseService implements NotificationService
             'source' => $source,
             'smsEventId' => $event['id'],
         ];
+        if ($batchId) {
+            return $this->updateBatch($batchId, ['smsEventId' => $event['id']]);
+        }
 
         return $this->createBatch($batch);
     }

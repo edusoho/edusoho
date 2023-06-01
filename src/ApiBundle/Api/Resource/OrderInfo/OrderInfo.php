@@ -105,6 +105,7 @@ class OrderInfo extends AbstractResource
             foreach ($orderInfo['availableCoupons'] as &$availableCoupon) {
                 $availableCoupon['target'] = $this->getCouponBatchService()->getTargetByBatchId($availableCoupon['id']);
                 $availableCoupon['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($availableCoupon['batchId']);
+                unset($availableCoupon['targetDetail']['data']);
             }
         }
 
@@ -172,7 +173,7 @@ class OrderInfo extends AbstractResource
                 break;
             case '10':
             default:
-                if (!in_array($unit, ['year', 'month'])) {
+                if (!in_array($unit, ['year', 'month', 'day'])) {
                     $result = false;
                 }
                 break;

@@ -708,7 +708,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $questionsFiles = [];
         foreach ($files as $file) {
             $questionsFiles[] = [
-                'id' => 0,
+                'id' => $file['id'],
                 'globalId' => $file['global_id'],
                 'hashId' => $file['hash_id'],
                 'targetId' => $file['target_id'],
@@ -1163,7 +1163,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return $file;
         }
 
-        if (1 == $file['isPublic']) {
+        $cloudFileSetting = $this->getSettingService()->get('cloud_file_setting', []);
+        $cloudFileSetting = array_merge(['enable' => 0], $cloudFileSetting);
+        if (1 == $file['isPublic'] && $user->isTeacher() && 1 == $cloudFileSetting['enable']) {
             return $file;
         }
 
@@ -1209,10 +1211,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function canDownloadFile($fileId)
     {
-        $cloudFileSetting = $this->getSettingService()->get('cloud_file_setting', []);
-        $cloudFileSetting = array_merge(['enable' => 0], $cloudFileSetting);
-
-        if ($this->tryAccessFile($fileId) || 1 == $cloudFileSetting['enable']) {
+        if ($this->tryAccessFile($fileId)) {
             return true;
         }
 

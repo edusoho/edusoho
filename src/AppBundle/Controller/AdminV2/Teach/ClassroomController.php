@@ -23,6 +23,7 @@ class ClassroomController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         $conditions = $this->fillOrgCode($conditions);
         $paginator = new Paginator(
@@ -192,7 +193,7 @@ class ClassroomController extends BaseController
         }
         $this->getClassroomService()->deleteClassroom($id);
 
-        return $this->createJsonResponse(['code' => 0, 'message' => $this->trans('site.delete_success_hint')]);
+        return $this->createJsonResponse(['code' => 0, 'message' => '删除成功']);
     }
 
     public function checkEsProductCanDeleteAction(Request $request, $id)
@@ -315,6 +316,7 @@ class ClassroomController extends BaseController
     public function statisticsAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $conditions = $this->fillOrgCode($conditions);
 
         $paginator = new Paginator(
