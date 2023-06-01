@@ -132,6 +132,13 @@ class ClassroomThreadController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $thread = $this->getThreadService()->getThread($threadId);
+        $thread['postNum'] = $this->getThreadService()->searchPostsCount(
+            [
+                'threadId' => $thread['id'],
+                'parentId' => 0,
+                'excludeAuditStatus' => 'illegal',
+            ]
+        );
 
         if (empty($thread) || $thread['targetId'] != $classroomId) {
             return $this->createMessageResponse('error', "Thread#{$threadId} Not Found in Classroom#{$classroomId}");
