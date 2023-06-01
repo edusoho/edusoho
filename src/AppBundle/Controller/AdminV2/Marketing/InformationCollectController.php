@@ -67,8 +67,8 @@ class InformationCollectController extends BaseController
 
         $allCourseLocations = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => 0], [], 0, 2, ['action', 'eventId']);
         $allClassroomLocations = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => 0], [], 0, 2, ['action', 'eventId']);
-        $this->filterCloseLocation($allCourseLocations);
-        $this->filterCloseLocation($allClassroomLocations);
+        $allCourseLocations = $this->filterCloseLocation($allCourseLocations);
+        $allClassroomLocations = $this->filterCloseLocation($allClassroomLocations);
 
         return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
             'allCourseLocations' => ArrayToolkit::index($allCourseLocations, 'action'),
@@ -111,8 +111,8 @@ class InformationCollectController extends BaseController
 
         $allCourseLocations = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => '0'], [], 0, 2, ['action', 'eventId']);
         $allClassroomLocations = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => '0'], [], 0, 2, ['action', 'eventId']);
-        $this->filterCloseLocation($allCourseLocations);
-        $this->filterCloseLocation($allClassroomLocations);
+        $allCourseLocations = $this->filterCloseLocation($allCourseLocations);
+        $allClassroomLocations = $this->filterCloseLocation($allClassroomLocations);
 
         return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
             'event' => $event,
@@ -236,13 +236,11 @@ class InformationCollectController extends BaseController
         ]);
     }
 
-    private function filterCloseLocation(array &$locations){
-        foreach ($locations as $key=>$location){
+    private function filterCloseLocation(array $locations){
+        return array_filter($locations, function ($location){
             $event = $this->getEventService()->get($location['eventId']);
-            if ($event['status'] === 'close'){
-                unset($locations[$key]);
-            }
-        }
+            return !empty($event['status']) && $event['status'] !== 'close';
+        });
     }
 
     private function searchTargetsByTypeAndConditions($type, array $conditions, $isAjax = false)
