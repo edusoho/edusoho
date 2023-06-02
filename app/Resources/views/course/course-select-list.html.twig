@@ -10,6 +10,15 @@
     background: #eee;
 }
 
+.course-title {
+  word-break: break-all;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+}
+
 </style>
 <table class="table table-striped">
   <thead>
@@ -33,7 +42,7 @@
           <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title|raw }}" width="100">
         </a>
         <div class="mlm">
-          <a class="link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title|raw }}</a>
+          <a class="link-primary course-title" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title|raw }}</a>
           {% if courseSet.serializeMode == 'serialized' %}
             <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
           {% elseif courseSet.serializeMode == 'finished' %}
