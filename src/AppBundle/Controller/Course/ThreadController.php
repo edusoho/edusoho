@@ -52,7 +52,6 @@ class ThreadController extends CourseBaseController
             $threads[$key]['nice'] = $thread['isElite'];
             $threads[$key]['lastPostTime'] = $thread['latestPostTime'];
             $threads[$key]['lastPostUserId'] = $thread['latestPostUserId'];
-            $threads[$key]['postNum'] = $this->getCourseThreadService()->getThreadPostCountByThreadId($thread['id']);
         }
         $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
         $userIds = array_merge(
@@ -102,7 +101,6 @@ class ThreadController extends CourseBaseController
         }
 
         $thread = $this->getThreadService()->getThread($course['id'], $threadId);
-        $thread['postNum'] = $this->getCourseThreadService()->getThreadPostCountByThreadId($thread['id']);
         if (empty($thread)) {
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }

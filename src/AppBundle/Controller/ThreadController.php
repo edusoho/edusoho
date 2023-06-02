@@ -57,16 +57,6 @@ class ThreadController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        foreach ($threads as $key => $thread) {
-            $threads[$key]['postNum'] = $this->getThreadService()->searchPostsCount(
-                [
-                    'threadId' => $thread['id'],
-                    'parentId' => 0,
-                    'excludeAuditStatus' => 'illegal',
-                ]
-            );
-        }
-
         $userIds = array_merge(
             ArrayToolkit::column($threads, 'userId'),
             ArrayToolkit::column($threads, 'lastPostUserId')

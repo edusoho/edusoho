@@ -199,17 +199,6 @@ class CourseController extends CourseBaseController
     public function showAction(Request $request, $id, $tab = 'tasks')
     {
         $course = $this->getCourseService()->getCourse($id);
-        $course['discussionNum'] = $this->getCourseThreadService()->countThreads([
-            'courseId' => $id,
-            'type' => 'discussion',
-            'excludeAuditStatus' => 'illegal',
-        ]);
-
-        $course['questionNum'] = $this->getCourseThreadService()->countThreads([
-            'courseId' => $id,
-            'type' => 'question',
-            'excludeAuditStatus' => 'illegal',
-        ]);
 
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
