@@ -487,7 +487,7 @@ EOD;
         $this->output->write('  初始化虚拟币');
 
         $default = [
-           'coin_enabled' => 0,
+            'coin_enabled' => 0,
             'cash_model' => 'none',
             'cash_rate' => 1,
             'coin_name' => '虚拟币',

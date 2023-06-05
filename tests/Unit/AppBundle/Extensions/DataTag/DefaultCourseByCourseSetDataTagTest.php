@@ -2,27 +2,27 @@
 
 namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
-use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\DefaultCourseByCourseSetDataTag;
+use Biz\BaseTestCase;
 
 class DefaultCourseByCourseSetDataTagTest extends BaseTestCase
 {
     public function testGetData()
     {
-        $courseSet = $this->getCourseSetService()->createCourseSet(array('type' => 'normal', 'title' => 'course set1 title'));
-        $this->getCourseService()->createCourse(array('title' => 'course title', 'courseSetId' => $courseSet['id'], 'expiryMode' => 'forever', 'learnMode' => 'freeMode', 'courseType' => 'default'));
+        $courseSet = $this->getCourseSetService()->createCourseSet(['type' => 'normal', 'title' => 'course set1 title']);
+        $this->getCourseService()->createCourse(['title' => 'course title', 'courseSetId' => $courseSet['id'], 'expiryMode' => 'forever', 'learnMode' => 'freeMode', 'courseType' => 'default']);
         $datatag = new DefaultCourseByCourseSetDataTag();
         $hasException = false;
         try {
-            $result = $datatag->getData(array());
+            $result = $datatag->getData([]);
         } catch (\Exception $e) {
             $hasException = true;
         }
 
         $this->assertTrue($hasException);
 
-        $result = $datatag->getData(array('courseSetId' => $courseSet['id']));
-        $this->assertEquals('', $result['title']);
+        $result = $datatag->getData(['courseSetId' => $courseSet['id']]);
+        $this->assertEquals('默认计划', $result['title']);
     }
 
     private function getCourseService()
