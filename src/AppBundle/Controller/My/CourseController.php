@@ -372,7 +372,7 @@ class CourseController extends CourseBaseController
         if (empty($groupCourses)) {
             return [[-1], [-1]];
         }
-
+        $members = ArrayToolkit::index($members, 'courseId');
         $learnedCourseSetIds = [-1];
         $learningCourseSetIds = [-1];
         foreach ($groupCourses as $courseSetId => $courses) {
