@@ -63,6 +63,7 @@ class InitWebsiteCommand extends BaseCommand
             //生成演示数据
             $result = $this->initUsedData();
             $this->logger($result, $output);
+            $initializer->initSettings();
             //将演示数据中的用户角色降为教师
             $this->updateUsedUserData();
             $setting = [
