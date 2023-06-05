@@ -2,16 +2,26 @@
 
 namespace AppBundle\Twig;
 
-use Biz\Util\Phpsec\Crypt\AES;
-use Biz\Util\Phpsec\Crypt\Base;
+use Biz\User\Service\MobileMaskService;
+use Codeages\Biz\Framework\Context\Biz;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MobileMaskExtension extends \Twig_Extension
 {
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
 
-    public function __construct($container)
+    /**
+     * @var Biz
+     */
+    protected $biz;
+
+    public function __construct(ContainerInterface $container, Biz $biz)
     {
         $this->container = $container;
+        $this->biz = $biz;
     }
 
     public function getFunctions()
@@ -24,14 +34,19 @@ class MobileMaskExtension extends \Twig_Extension
 
     public function mask($mobile)
     {
-        return substr_replace($mobile, '****', 3, 4);
+        return $this->getMobileMaskService()->maskMobile($mobile);
     }
 
     public function encrypt($mobile)
     {
-        $encryptor = new AES(Base::MODE_ECB);
-        $encryptor->setKey('mobile_encrypt_key');
+        return $this->getMobileMaskService()->encryptMobile($mobile);
+    }
 
-        return $encryptor->encrypt($mobile);
+    /**
+     * @return MobileMaskService
+     */
+    private function getMobileMaskService()
+    {
+        return $this->biz->service('User:MobileMaskService');
     }
 }
