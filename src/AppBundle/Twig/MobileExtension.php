@@ -2,11 +2,12 @@
 
 namespace AppBundle\Twig;
 
+use AppBundle\Common\SimpleValidator;
 use Biz\User\Service\MobileMaskService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class MobileMaskExtension extends \Twig_Extension
+class MobileExtension extends \Twig_Extension
 {
     /**
      * @var ContainerInterface
@@ -27,9 +28,15 @@ class MobileMaskExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
+            new \Twig_SimpleFunction('is_mobile', [$this, 'isMobile']),
             new \Twig_SimpleFunction('mobile_mask', [$this, 'mask']),
             new \Twig_SimpleFunction('mobile_encrypt', [$this, 'encrypt']),
         ];
+    }
+
+    public function isMobile($value)
+    {
+        return SimpleValidator::mobile($value);
     }
 
     public function mask($mobile)

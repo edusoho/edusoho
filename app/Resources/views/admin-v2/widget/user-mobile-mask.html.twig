@@ -1,6 +1,0 @@
-{% do script(['app/js/admin-v2/widget/mobile-mask/index.js']) %}
-
-<div class="js-user-mobile" data-encrypted-mobile="{{ mobile_encrypt(mobile) }}" data-url="{{ path('admin_v2_user_show_mobile') }}">
-  <span class="js-mobile">{{ mobile_mask(mobile) }}</span>
-  <span class="js-toggle">这个是图标</span>
-</div>

@@ -11,6 +11,8 @@ use Ramsey\Uuid\Uuid;
 
 class MobileMaskServiceImpl extends BaseService implements MobileMaskService
 {
+    protected $crypt;
+
     public function maskMobile($mobile)
     {
         return substr_replace($mobile, '****', 3, 4);
@@ -28,10 +30,12 @@ class MobileMaskServiceImpl extends BaseService implements MobileMaskService
 
     protected function getCrypt()
     {
-        $crypt = new AES(Base::MODE_ECB);
-        $crypt->setKey($this->getEncryptKey());
+        if (empty($this->crypt)) {
+            $this->crypt = new AES(Base::MODE_ECB);
+            $this->crypt->setKey($this->getEncryptKey());
+        }
 
-        return $crypt;
+        return $this->crypt;
     }
 
     protected function getEncryptKey()
@@ -42,7 +46,7 @@ class MobileMaskServiceImpl extends BaseService implements MobileMaskService
             $this->getSettingService()->set('mobile_encrypt_key', $mobileEncryptKey);
         }
 
-        return $mobileEncryptKey;
+        return md5($this->getCurrentUser()->uuid.$mobileEncryptKey);
     }
 
     /**

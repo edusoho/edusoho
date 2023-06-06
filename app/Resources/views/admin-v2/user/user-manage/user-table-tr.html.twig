@@ -17,10 +17,10 @@
   </td>
   <td>
     {% if user.verifiedMobile %}
-      {% include 'admin-v2/widget/user-mobile-mask.html.twig' with { mobile: user.verifiedMobile } %}
+      {% include 'user-mobile-mask.html.twig' with { mobile: user.verifiedMobile } %}
       <span class="text-success">({{ 'user.fields.mobile_label.bind'|trans }})</span>
     {% elseif profile.mobile %}
-      {% include 'admin-v2/widget/user-mobile-mask.html.twig' with { mobile: profile.mobile } %}
+      {% include 'user-mobile-mask.html.twig' with { mobile: profile.mobile } %}
       <span class="text-danger">({{ 'user.fields.mobile_label.no_bind'|trans }})</span>
     {% else %}
        --

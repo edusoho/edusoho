@@ -12,6 +12,7 @@ use Biz\Course\Service\MemberService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassService;
+use Biz\User\Service\MobileMaskService;
 
 class MultiClassStudent extends AbstractResource
 {
@@ -207,7 +208,8 @@ class MultiClassStudent extends AbstractResource
             $filteredFields['user'] = [
                 'id' => $member['userId'],
                 'nickname' => $member['user']['nickname'],
-                'verifiedMobile' => $member['user']['verifiedMobile'],
+                'encryptedMobile' => empty($member['user']['verifiedMobile']) ? '' : $this->getMobileMaskService()->encryptMobile($member['user']['verifiedMobile']),
+                'verifiedMobile' => empty($member['user']['verifiedMobile']) ? '' : $this->getMobileMaskService()->maskMobile($member['user']['verifiedMobile']),
                 'weixin' => $member['profile']['weixin'],
                 'truename' => $member['profile']['truename'],
             ];
@@ -281,5 +283,13 @@ class MultiClassStudent extends AbstractResource
     private function getMultiClassGroupService()
     {
         return $this->service('MultiClass:MultiClassGroupService');
+    }
+
+    /**
+     * @return MobileMaskService
+     */
+    protected function getMobileMaskService()
+    {
+        return $this->service('User:MobileMaskService');
     }
 }
