@@ -14,7 +14,7 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
         ]);
 
         $result = [
-            'user.learn.statistics.nickname',
+            'user.learn.statistics.student_nickname',
             'user.learn.statistics.mobile',
             'user.learn.statistics.join.classroom.num',
             'user.learn.statistics.exit.classroom.num',

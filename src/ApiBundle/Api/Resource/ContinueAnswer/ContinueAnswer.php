@@ -40,7 +40,7 @@ class ContinueAnswer extends AbstractResource
 
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
-        if ($activity['mediaType'] === 'testpaper'){
+        if ($assessment['displayable'] == 1){
             $this->removeAnalysisAndAnswer($assessment);
         }
 

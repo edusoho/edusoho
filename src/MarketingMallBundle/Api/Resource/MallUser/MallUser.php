@@ -17,7 +17,6 @@ class MallUser extends BaseResource
      * @param ApiRequest $request
      * @return array
      * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
-     * @ResponseFilter(class="ApiBundle\Api\Resource\User\UserFilter")
      */
     public function add(ApiRequest $request)
     {
@@ -39,7 +38,11 @@ class MallUser extends BaseResource
 
         if (!empty($fields['avatar'])) {
             $fields['avatar'] = str_replace('\/', '/', $fields['avatar']);
-            $this->getUserService()->changeAvatarFromImgUrl($user['id'], $fields['avatar']);
+            foreach ($this->getValidAvatarHosts() as $validAvatarHost) {
+                if (0 === strpos($fields['avatar'], $validAvatarHost)) {
+                    $this->getUserService()->changeAvatarFromImgUrl($user['id'], $fields['avatar']);
+                }
+            }
         }
 
         if (!empty($fields['unionId'])) {
@@ -94,6 +97,13 @@ class MallUser extends BaseResource
         }
 
         return array_values($users);
+    }
+
+    private function getValidAvatarHosts()
+    {
+        return [
+            'https://thirdwx.qlogo.cn/',
+        ];
     }
 
     private function generateNickname($rawNickname)
