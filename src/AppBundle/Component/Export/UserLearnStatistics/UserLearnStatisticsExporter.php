@@ -26,7 +26,6 @@ class UserLearnStatisticsExporter extends Exporter
 
     public function getContent($start, $limit)
     {
-        $this->conditions['isStudent'] = true;
         $users = $this->getUserService()->searchUsers(
             ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed', 'isStudent']),
             ['id' => 'DESC'],
@@ -130,7 +129,7 @@ class UserLearnStatisticsExporter extends Exporter
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
         }
-
+        $conditions['isStudent'] = true;
         $conditions['destroyed'] = 0;
 
         return $conditions;
