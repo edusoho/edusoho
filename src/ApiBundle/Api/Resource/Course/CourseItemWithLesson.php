@@ -54,13 +54,15 @@ class CourseItemWithLesson extends AbstractResource
                     if ('live' === $task['type'] && !empty($activityLive = $task['activity']['ext'])) {
                         if ($needReplayStatus) {
                             $task['liveId'] = $activityLive['liveId'];
-                            $liveStatus = $activityLive['liveId']['status'];
-                            if ($liveStatus === 'none') {
-                                $task['replayDownloadStatus'] = 'none';
-                            } elseif ($liveStatus === 'generated') {
+                            $roomType = $activityLive['roomType'];
+                            $replayStatus = $activityLive['replayStatus'];
+                            if ($replayStatus === 'generated') {
                                 $task['replayDownloadStatus'] = 'finished';
                             } else {
                                 $task['replayDownloadStatus'] = 'un_finished';
+                            }
+                            if ($roomType == 'pseudo') {
+                                $task['replayDownloadStatus'] = 'none';
                             }
                         }
                         $task['liveStatus'] = $liveStatus = $activityLive['progressStatus'];
