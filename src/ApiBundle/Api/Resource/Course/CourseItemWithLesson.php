@@ -47,9 +47,6 @@ class CourseItemWithLesson extends AbstractResource
         );
         $needReplayStatus = $request->query->get('needReplayDownloadStatus', 0);
 
-        if ($needReplayStatus) {
-            $liveReplays = $this->getLiveReplays($courseItems);
-        }
         //TODO 循环中调用查询，性能问题
         foreach ($items as &$item) {
             if (!empty($item['tasks'])) {
@@ -57,7 +54,14 @@ class CourseItemWithLesson extends AbstractResource
                     if ('live' === $task['type'] && !empty($activityLive = $task['activity']['ext'])) {
                         if ($needReplayStatus) {
                             $task['liveId'] = $activityLive['liveId'];
-                            $task['replayDownloadStatus'] = !empty($liveReplays[$activityLive['liveId']]) ? ('finished' === $liveReplays[$activityLive['liveId']]['status'] ? 'finished' : 'un_finished') : 'none';
+                            $liveStatus = $activityLive['liveId']['status'];
+                            if ($liveStatus === 'none') {
+                                $task['replayDownloadStatus'] = 'none';
+                            } elseif ($liveStatus === 'generated') {
+                                $task['replayDownloadStatus'] = 'finished';
+                            } else {
+                                $task['replayDownloadStatus'] = 'un_finished';
+                            }
                         }
                         $task['liveStatus'] = $liveStatus = $activityLive['progressStatus'];
                         $currentTime = time();
