@@ -430,6 +430,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'maxStudentNum',
                 'locked',
                 'enableAudio',
+                'discussionNum',
+                'questionNum',
             ]
         );
 
