@@ -495,15 +495,16 @@ export default {
       }
 
       // 图文导航
+			let flag = true
       if (type === 'graphic_navigation') {
         _.forEach(data, (item, index) => {
           const { title, image: { uri }, link: { type } } = item;
           if (!title || !uri || !type) {
             if (!this.alreadyMessage) this.$message.error(Translator.trans('message.gn_module_information'));
-            return false;
+            return flag = false;
           }
         });
-        return true;
+        return flag;
       }
 
        // 优惠券
