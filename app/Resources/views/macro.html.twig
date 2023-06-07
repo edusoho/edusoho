@@ -158,9 +158,9 @@
           <li><a href="javascript:;" data-page="{{ paginator.lastPage }}"><i class="cd-icon cd-icon-last-page"></i></a></li>
         {% endif %}
         <li>
-          <select id="skipCurrentPerPageCount">
+          <select class="js-current-perpage-count">
             {% for perpage in perpages %}
-              <option {% if paginator.getPerPageCount() == perpage %}selected{% endif %}>{{ perpage }}</option>
+              <option class="js-current-option" {% if paginator.getPerPageCount() == perpage %}selected{% endif %}>{{ perpage }}</option>
             {% endfor %}
           </select>
         </li>
