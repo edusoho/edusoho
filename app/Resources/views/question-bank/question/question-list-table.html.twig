@@ -80,5 +80,5 @@
   <span class="pull-right color-gray">{{'course.question_manage.count'|trans({'%getItemCount()%': paginator.getItemCount() })}}</span>
 </div>
 <nav class="text-center">
-  {{ web_macro.ajax_paginator(paginator) }}
+  {{ web_macro.skip_paginator(paginator) }}
 </nav>

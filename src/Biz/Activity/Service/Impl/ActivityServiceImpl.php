@@ -214,7 +214,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
         $activityConfig = $this->getActivityConfig($fields['mediaType']);
         if (empty($fields['mediaId'])) {
@@ -360,7 +359,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $publishActivities = $this->getLiveActivityService()->search(['replayPublic' => 1], [], 0, $this->getLiveActivityService()->count(['replayPublic' => 1]), ['id']);
 
         $liveActivityIds = empty($publishActivities) ? [-1] : ArrayToolkit::column($publishActivities, 'id');
-        $activities = $this->search(['mediaIds' => $liveActivityIds, 'mediaType' => 'live'], [], 0, count($liveActivityIds), ['id']);
+        $activities = $this->search(['mediaIds' => $liveActivityIds, 'mediaType' => 'live'], [], 0, PHP_INT_MAX, ['id']);
         $ids = ArrayToolkit::column($activities, 'id');
 
         return array_values(array_unique(array_merge($activityIds, $ids)));
