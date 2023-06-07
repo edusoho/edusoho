@@ -55,7 +55,7 @@ $('#all-courses').on('click', function () {
 });
 ids = localStorage.getItem('ids') ? localStorage.getItem('ids').split(',') : [];
 $('.js-course-wide-list .js-course-item').each(function (i, element){
-	let id = element.getAttribute('data-id');
+	const id = element.getAttribute('data-id');
 	if (ids.includes(id)) {
 		element.className += ' select'
     $('.js-course-metas-' + id).show();
