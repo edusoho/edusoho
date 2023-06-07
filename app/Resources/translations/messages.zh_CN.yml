@@ -2838,7 +2838,7 @@ classroom.answer_questions_tips: 对于提问做到有问必答，帮您扫清�
 classroom.testpaper_review: 24小时阅卷点评
 classroom.testpaper_review_tips: 24小时内批阅您提交的试卷，给予有针对性的点评
 classroom.homework_review: 24小时作业批阅
-classroom.set_head_teacher_tips: 班主任负责管理整个%name%，班主任只有一位，并且必须要由老师来担任。
+classroom.set_head_teacher_tips: 班主任负责管理整个班级，班主任只有一位，并且必须要由老师来担任。
 classroom.set_teacher: 设置教师
 classroom.set_teacher_tips: >
   <div>相关页面中的老师列举将会按照这里设定的顺序显示。</div>
