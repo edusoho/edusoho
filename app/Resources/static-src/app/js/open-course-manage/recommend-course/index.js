@@ -15,4 +15,6 @@ sortList({
 });
 
 
-
+$('.modal').on('show.bs.modal', function (event) {
+	localStorage.removeItem('ids')
+})
