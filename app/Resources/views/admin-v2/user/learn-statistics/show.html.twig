@@ -111,7 +111,11 @@
                 {% endif %}
               </td>
               <td>
-                {{ user.verifiedMobile|default('--') }}
+                {% if user.verifiedMobile|default() %}
+                  {% include 'user-mobile-mask.html.twig' with { mobile: user.verifiedMobile } %}
+                {% else %}
+                  --
+                {% endif %}
               </td>
               <td>{{ statistic.joinedClassroomNum|default(0) }}</td>
               <td>{{ statistic.exitClassroomNum|default(0) }}</td>

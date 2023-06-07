@@ -411,4 +411,9 @@ abstract class Importer
     {
         return $this->biz->service('User:UserService');
     }
+
+    protected function getLogService()
+    {
+        return $this->biz->service('System:LogService');
+    }
 }

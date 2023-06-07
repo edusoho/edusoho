@@ -1379,7 +1379,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->createNewException(UserException::NOTFOUND_USER());
         }
 
-        if (!$this->typeInOAuthClient($type)) {
+        if (!$this->isValidOAuthClient($type)) {
             $this->createNewException(UserException::CLIENT_TYPE_INVALID());
         }
 
@@ -1432,7 +1432,7 @@ class UserServiceImpl extends BaseService implements UserService
             }
         }
 
-        if (!$this->typeInOAuthClient($type)) {
+        if (!$this->isValidOAuthClient($type)) {
             $this->createNewException(UserException::CLIENT_TYPE_INVALID());
         }
 
@@ -1468,7 +1468,7 @@ class UserServiceImpl extends BaseService implements UserService
             }
         }
 
-        if (!$this->typeInOAuthClient($type)) {
+        if (!$this->isValidOAuthClient($type)) {
             $this->createNewException(UserException::CLIENT_TYPE_INVALID());
         }
 
@@ -2817,6 +2817,14 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         return $type;
+    }
+
+    private function isValidOAuthClient($type)
+    {
+        $types = array_keys(OAuthClientFactory::clients());
+        $types = array_merge($types, ['discuz', 'phpwind', 'marketing', 'wechat_app', 'weixin']);
+
+        return in_array($type, $types);
     }
 }
 

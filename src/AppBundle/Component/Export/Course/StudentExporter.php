@@ -193,6 +193,11 @@ class StudentExporter extends Exporter
         ];
     }
 
+    public function postExport()
+    {
+        $this->getLogService()->warning('course', 'export_students', '导出学员数据');
+    }
+
     /**
      * @return LearningDataAnalysisService
      */

@@ -92,16 +92,19 @@ class StudentManageController extends BaseController
             $data['reasonType'] = OperateReason::JOIN_BY_IMPORT_TYPE;
             $data['source'] = 'outside';
 
-            $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
-
-            $this->setFlashMessage('success', 'site.add.success');
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'item_bank_exercise_manage_students',
-                    ['exerciseId' => $exerciseId]
-                )
-            );
+            try {
+                $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
+                $this->setFlashMessage('success', 'site.add.success');
+            }catch (\Exception $e) {
+                $this->setFlashMessage('danger', $e->getMessage());
+            }finally {
+                return $this->redirect(
+                    $this->generateUrl(
+                        'item_bank_exercise_manage_students',
+                        ['exerciseId' => $exerciseId]
+                    )
+                );
+            }
         }
 
         return $this->render(

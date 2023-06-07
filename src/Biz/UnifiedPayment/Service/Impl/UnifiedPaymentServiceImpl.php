@@ -6,7 +6,9 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
 use Biz\UnifiedPayment\Dao\TradeDao;
+use Biz\UnifiedPayment\Dao\TradeRefundDao;
 use Biz\UnifiedPayment\Service\UnifiedPaymentService;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Targetlog\Service\TargetlogService;
 use Codeages\Biz\Pay\Payment\AbstractGateway;
@@ -39,6 +41,21 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
         return $this->getTradeDao()->getByTradeSn($sn);
     }
 
+    public function getTradeByOrderSnAndPlatform($orderSn, $platform)
+    {
+        return $this->getTradeDao()->getByOrderSnAndPlatform($orderSn, $platform);
+    }
+
+    /**
+     * 创建交易及平台交易，但不发起支付.
+     *
+     * @see UnifiedPaymentService::createPlatformTradeByTradeSn() 实际发起支付
+     *
+     * @param array $fields
+     * @param bool  $createPlatformTrade
+     *
+     * @return array
+     */
     public function createTrade($fields, $createPlatformTrade = true)
     {
         $tradeFields = ['title', 'orderSn', 'amount', 'platform', 'platformType', 'userId', 'source', 'redirectUrl'];
@@ -90,22 +107,22 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
             'create_ip' => $data['createIp'],
         ];
 
-        $result = $this->getPayment($params['platform'])->createTrade($params);
-
         return $this->getTradeDao()->update($trade['id'], [
             'platformCreatedParams' => $params,
-            'platformCreatedResult' => $result,
         ]);
     }
 
-    public function createPlatformTradeByTradeSn($tradeSn)
+    public function createPlatformTradeByTradeSn($tradeSn, $params)
     {
         $trade = $this->getTradeDao()->getByTradeSn($tradeSn);
         $this->checkPlatform($trade['platform']);
 
-        $result = $this->getPayment($trade['platform'])->createTrade($trade['platformCreatedParams']);
+        $platformCreatedParams = array_merge($trade['platformCreatedParams'], $params);
+
+        $result = $this->getPayment($trade['platform'])->createTrade($platformCreatedParams);
 
         $this->getTradeDao()->update($trade['id'], [
+            'platformCreatedParams' => $platformCreatedParams,
             'platformCreatedResult' => $result,
         ]);
 
@@ -176,6 +193,75 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
         return $this->getTradeDao()->update($tradeId, $updatedFields);
     }
 
+    public function refund($fields)
+    {
+        if (!ArrayToolkit::requireds($fields, ['tradeSn', 'refundAmount'])) {
+            throw new InvalidArgumentException('trade args is invalid.');
+        }
+        $trade = $this->getTradeDao()->getByTradeSn($fields['tradeSn']);
+
+        if (empty($trade)) {
+            throw new InvalidArgumentException('trade is not found.');
+        }
+        $this->getTargetlogService()->log(TargetlogService::INFO, 'up_trade.refund', $trade['tradeSn'], "交易号{$trade['tradeSn']}，发起退款", $fields);
+
+        if ('paid' != $trade['status']) {
+            throw new AccessDeniedException('can not refund, because the trade is not paid');
+        }
+
+        $fields['refundAmount'] = (int) $fields['refundAmount'];
+        if ($fields['refundAmount'] > (int) $trade['amount']) {
+            throw new AccessDeniedException('can not refund, because the refund amount is greater than the trade amount');
+        }
+
+        $trades = $this->getTradeRefundDao()->findByTradeSn($fields['tradeSn']);
+        $refundAmount = array_sum(ArrayToolkit::column($trades, 'refundAmount'));
+        if ($refundAmount + $fields['refundAmount'] > (int) $trade['amount']) {
+            throw new AccessDeniedException('can not refund, because the refund amount is greater than the trade amount');
+        }
+
+        $refund = $this->getTradeRefundDao()->create([
+            'tradeSn' => $fields['tradeSn'],
+            'refundAmount' => $fields['refundAmount'],
+            'status' => 'created',
+            'refundResult' => [],
+        ]);
+
+        $response = $this->getPayment($trade['platform'])->applyRefund([
+            'platform_sn' => $trade['platformSn'],
+            'trade_sn' => $trade['tradeSn'],
+            'cash_amount' => $trade['amount'],
+            'refund_amount' => $fields['refundAmount'],
+        ]);
+
+        if (!$response->isSuccessful()) {
+            $this->getTargetlogService()->log(TargetlogService::ERROR, 'up_trade.refund', $trade['tradeSn'], "交易号{$trade['tradeSn']}，发起退款失败", (array) $response->getData());
+
+            return $this->getTradeRefundDao()->update($refund['id'], [
+                'status' => 'failed',
+                'refundResult' => (array) $response->getData(),
+            ]);
+        }
+
+        $refund = $this->getTradeRefundDao()->update($refund['id'], [
+            'status' => 'refunding',
+            'refundResult' => (array) $response->getData(),
+            'refundTime' => time(),
+        ]);
+
+        $this->getTargetlogService()->log(TargetlogService::INFO, 'up_trade.refund', $trade['tradeSn'], "交易号{$trade['tradeSn']}，发起退款成功", $refund);
+
+        return $refund;
+    }
+
+    public function closeTrade($sn)
+    {
+        $trade = $this->getTradeByTradeSn($sn);
+        if ($trade && 'closed' != $trade['status']) {
+            $this->getTradeDao()->update($trade['id'], ['status' => 'closed']);
+        }
+    }
+
     protected function generateSn($prefix = ''): string
     {
         return $prefix.date('YmdHis', time()).mt_rand(10000, 99999);
@@ -197,6 +283,14 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
     protected function getTradeDao()
     {
         return $this->biz->dao('UnifiedPayment:TradeDao');
+    }
+
+    /**
+     * @return TradeRefundDao
+     */
+    private function getTradeRefundDao()
+    {
+        return $this->biz->dao('UnifiedPayment:TradeRefundDao');
     }
 
     /**

@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Security\Http\Firewall;
 
+use AppBundle\Common\EncryptionToolkit;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,7 +91,8 @@ class UsernamePasswordFormAuthenticationListener extends AbstractAuthenticationL
         }
 
         $username = trim($username);
-
+        $username = EncryptionToolkit::XXTEADecrypt(base64_decode($username), 'EduSoho');
+        $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), 'EduSoho');
         if (\strlen($username) > Security::MAX_USERNAME_LENGTH) {
             throw new BadCredentialsException('Invalid username.');
         }

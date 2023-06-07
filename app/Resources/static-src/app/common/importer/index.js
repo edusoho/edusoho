@@ -81,7 +81,15 @@ class Importer {
     });
 
     if(validatior.form()) {
-      this.$form.submit();
+      // 判断文件是否被修改过
+      $('input[type=file]').get(0).files[0].slice(0,1)
+        .arrayBuffer()
+        .then(()=>{
+          this.$form.submit();
+        })
+        .catch(()=>{
+          notify('danger', '文件已被修改，请重新选择');
+        });
     }
   }
 

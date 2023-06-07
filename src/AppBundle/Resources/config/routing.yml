@@ -2801,6 +2801,8 @@ classroom_manage_course_remove:
     path: '/classroom/{id}/manage/course/{courseId}/remove'
     defaults:
         _controller: 'AppBundle:Classroom/ClassroomManage:removeCourse'
+    methods:
+        - POST
 classroom_manage_course_delete:
     path: '/classroom/{classroomId}/manage/course_set/{courseSetId}/course/{courseId}/delete'
     defaults:
@@ -4124,3 +4126,10 @@ unified_payment_notify:
         _controller: 'AppBundle:UnifiedPayment:notify'
         methods:
           - POST
+
+user_show_mobile:
+  path: '/show_mobile'
+  defaults:
+    _controller: 'AppBundle:MobileMask:showMobile'
+  methods:
+    - POST

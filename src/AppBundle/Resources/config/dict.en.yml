@@ -271,6 +271,11 @@ userType:
     marketing: 微营销
     distributor: 分销
 
+userStatus:
+  all: All
+  locked: Locked
+  unlock: Unlock
+
 userKeyWordTypes:
     nickname: Nickname
     email: Email

@@ -199,6 +199,7 @@ class ThreadShowWidget{
         captcha.hideDrag();
       },
       submitError: function (data) {
+        notify('danger', data.responseJSON.error.message);
         formValidate.settings.captcha.isShowCaptcha = 1;
         captcha.hideDrag();
         $btn.button('reset');
