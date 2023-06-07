@@ -45,7 +45,9 @@
 
       <tr>
         <th>手机号码</th>
-        <td>{{ formatStr(user.profile.mobile) }}</td>
+        <td>
+          <mobile-ice :mobile="formatStr(user.profile.mobile)" :encryptedMobile="user.profile.encryptedMobile" />
+        </td>
       </tr>
       <tr>
         <th>公司</th>
