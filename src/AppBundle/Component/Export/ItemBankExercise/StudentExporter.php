@@ -126,6 +126,11 @@ class StudentExporter extends Exporter
         ];
     }
 
+    public function postExport()
+    {
+        $this->getLogService()->warning('item_bank_exercise', 'export_students', '导出学员数据');
+    }
+
     /**
      * @return UserFieldService
      */
@@ -148,13 +153,5 @@ class StudentExporter extends Exporter
     protected function getExerciseMemberService()
     {
         return $this->getBiz()->service('ItemBankExercise:ExerciseMemberService');
-    }
-
-    /**
-     * @return ChapterExerciseRecordService
-     */
-    protected function getChapterExerciseRecordService()
-    {
-        return $this->getBiz()->service('ItemBankExercise:ChapterExerciseRecordService');
     }
 }
