@@ -48,6 +48,7 @@ class MallEventSubscriber extends EventSubscriber
         $setting = $this->getPaymentSettingService()->get();
         $this->getMallClient()->setPaymentSetting([
             'enabled' => (bool) $setting['wxpay_enabled'] ?? false,
+            'refundEnable' => !empty($setting['wxpay_cert_path']) && !empty($setting['wxpay_key_path']),
         ]);
     }
 

@@ -58,7 +58,10 @@ class SmsDefenceServiceImpl extends BaseService implements SmsDefenceService
         $smsBlackIp = $this->getSmsBlackListDao()->getByIp($ip);
         if (empty($smsBlackIp)) {
             $this->getSmsBlackListDao()->create(['ip' => $ip, 'expire_time' => time() + 7 * 24 * 3600]);
+            return;
         }
+
+        $this->getSmsBlackListDao()->update($smsBlackIp['id'], ['expire_time' => time() + 7 * 24 * 3600]);
     }
 
     protected function createSmsRequestLog($fields)

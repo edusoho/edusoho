@@ -5,9 +5,9 @@ namespace ApiBundle\Api\Resource\SmsSend;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\SmsDefence\Service\SmsDefenceService;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
+use Biz\SmsDefence\Service\SmsDefenceService;
 use Biz\System\SettingException;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
@@ -46,6 +46,16 @@ class SmsSend extends AbstractResource
         $smsType = $request->request->get('type', '');
         $mobile = $request->request->get('mobile', '');
         $allowNotExistMobile = $request->request->get('allowNotExistMobile', 1);
+
+        $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
+
+        if (empty($user)) {
+            throw UserException::NOTFOUND_USER();
+        }
+
+        if ($user['locked']) {
+            throw UserException::LOCKED_USER();
+        }
 
         if (!in_array($smsType, $this->supportSmsTypes)) {
             throw CommonException::ERROR_PARAMETER();

@@ -30,7 +30,11 @@
         {% if profile.mobile %}{% include 'user-mobile-mask.html.twig' with { mobile: profile.mobile } %}{% else %}--{% endif %}
       </td>
       <td class="vertical-middle">
-        {{ user.email }}
+        {% if not is_system_generated_email(user.email) %}
+          {{ user.email }}
+        {% else %}
+          --
+        {% endif %}
       </td>
       <td class="vertical-middle" width="152">
         {{ record.operate_time|date('Y-n-d H:i') }}

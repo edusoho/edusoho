@@ -50,6 +50,12 @@
     </div>
 
     <div class="form-group">
+      <select id="keywordUserType" name="userStatus" class="form-control">
+        {{ select_options(dict('userStatus'), app.request.query.get('userStatus'), 'admin.user.manage.form.user_status_option.default'|trans) }}
+      </select>
+    </div>
+
+    <div class="form-group">
       <select id="keywordType" name="keywordType" class="form-control">
         {{ select_options(dict('staffKeyWordType'), app.request.query.get('keywordType') ?: 'nickname') }}
       </select>

@@ -88,6 +88,9 @@ class WrongBookQuestionShow extends AbstractResource
         preg_match_all($reg, $itemMaterial, $imgUrls);
         $imgs = array_unique($imgUrls[2]);
         foreach ($imgs as $imgUrl) {
+            if(preg_match("/^http(s)?:\\/\\/.+/", $imgUrl)) {
+                continue;
+            }
             $realUrl = AssetHelper::uriForPath($imgUrl);
             $itemMaterial = str_replace($imgUrl, $realUrl, $itemMaterial);
         }

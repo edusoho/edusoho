@@ -19,8 +19,13 @@ define(function (require, exports, module) {
           $modal.modal('hide');
           Notify.success(Translator.trans('admin.user.create_new_user_success_hint'));
           window.location.reload();
-        }).error(function () {
-          Notify.danger(Translator.trans('admin.user.create_new_user_fail_hint'));
+        }).error(function (response) {
+          if (response.responseJSON){
+            Notify.danger(response.responseJSON.error.message);
+          }else {
+            Notify.danger(Translator.trans('admin.user.create_new_user_fail_hint'));
+          }
+          $('#user-create-btn').button('reset').removeClass('disabled');
         });
 
       }

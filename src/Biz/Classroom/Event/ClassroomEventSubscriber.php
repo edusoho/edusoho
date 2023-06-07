@@ -43,6 +43,9 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
             $arr = array_intersect($needFields, array_keys($updatedFields));
             if (!empty($arr)) {
                 $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+                if (empty($classroom)) {
+                    return;
+                }
                 $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
                 $this->getClassroomService()->updateClassroom($classroom['id'], [
                     'lessonNum' => array_sum(ArrayToolkit::column($courses, 'lessonNum')),
