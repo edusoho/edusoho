@@ -1,4 +1,6 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% do script(['app/js/admin-v2/article/index.js', 'libs/es-ckeditor/ckeditor.js'])  %}
 
 {% set modalSize = 'large' %}
 
@@ -12,8 +14,12 @@
         <label for="title">{{ 'admin.operation_announcement.modal.content'|trans }}</label>
       </div>
       <div class="col-md-8 controls">
-        <textarea class="form-control" id="content-filed" name="content"
-          data-display="{{ 'admin.operation_announcement.modal.content'|trans }}">{% if announcement|default(null) %}{{ announcement.content }}{% endif %}</textarea>
+        <textarea class="form-control" id="content-field" name="content"
+                  data-display="{{ 'admin.operation_announcement.modal.content'|trans }}"
+                  data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">
+          {% if announcement|default(null) %}{{ announcement.content }}{% endif %}
+        </textarea>
+
       </div>
     </div>
     {% if announcement.url | default('') %}
