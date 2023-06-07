@@ -706,7 +706,7 @@ export default {
 
     handleScroll(el, maxScroll) {
       const elScrollTop = el.scrollTop;
-      if (maxScroll - elScrollTop <= 20) {
+      if (maxScroll - elScrollTop <= 60) {
         el.removeEventListener('scroll', this.throttledScrollHandler);
         this.agreementDisabled = false;
       } else {
