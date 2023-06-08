@@ -16,7 +16,7 @@
           <div class="alert-header">
             <i class="icon-click es-icon es-icon-chevronright"></i>
             <span class="title">
-              {{ announcement.content|plain_text(40) }}
+             {{ announcement.content|plain_text(40)|default('<span class="text-warning">'~'announcement.view_btn'|trans ~'</span>')|raw }}
             </span>
 
             {% if canManage %}

@@ -339,10 +339,11 @@ class UserCommonController extends BaseController
 
         if ('POST' === $request->getMethod()) {
             $roles = $request->request->get('roles');
+            $isStudent = (int) (count($roles) === 1 && $roles[0] === 'ROLE_USER');
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
             if ($studentToStaff) {
-                $this->getUserService()->updateUser($user['id'], ['isStudent' => 2]);
+                $this->getUserService()->updateUser($user['id'], ['isStudent' => $isStudent]);
             }
 
             if (!empty($roles)) {
