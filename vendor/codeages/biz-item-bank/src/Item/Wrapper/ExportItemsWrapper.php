@@ -110,6 +110,7 @@ class ExportItemsWrapper
     protected function answer($item)
     {
         if ('essay' == $item['type']) {
+            $item['answer'] = str_replace('&nbsp;', ' ', $item['answer']);
             $item['answer'] = $this->stripTags(implode($item['answer']));
             $item['answer'] = $this->explodeTextAndImg($item['answer']);
         } elseif ('determine' == $item['type']) {

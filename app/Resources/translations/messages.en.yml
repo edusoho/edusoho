@@ -2467,7 +2467,7 @@ classroom.answer_questions_tips: 'All questions will be answered, help you remov
 classroom.testpaper_review: 'Test paper will be reviewed within 24 hours'
 classroom.testpaper_review_tips: 'Test paper will be reviewed within 24 hours, teachers will point out where the exact issue is.'
 classroom.homework_review: 'Homework will be reviewed within 24 hours'
-classroom.set_head_teacher_tips: 'Head teacher will be in charge of the %name%. There can only be one head teacher.'
+classroom.set_head_teacher_tips: 'Head teacher will be in charge of the classroom. There can only be one head teacher.'
 classroom.set_teacher: 'Teacher Settings'
 classroom.set_teacher_tips: "<div>The teachers will be dispalyed by the orders set here.</div> <div>Teachers can design the learning plan, answer questions, review homeworks and test papers as well as initiate activities.</div> <div>Note: Head teacher is from course teachers, and cannot add manually. </div>\n"
 classroom.set_teacher_empty: 'There is no teacher. Go to course settings now.'

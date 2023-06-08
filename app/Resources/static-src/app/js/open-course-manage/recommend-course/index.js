@@ -15,4 +15,10 @@ sortList({
 });
 
 
+$('#modal').on('show.bs.modal', function () {
+	localStorage.removeItem('ids')
+})
 
+$('#modal').on('hide.bs.modal', function() {
+	localStorage.removeItem('ids')
+});
