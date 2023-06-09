@@ -204,15 +204,16 @@ export default {
     }
   },
   created() {
-    const that = this;
     if (!this.cloudSdkCdn) {
       this.setCloudAddress();
     }
-    if(!this.isLoadedSdk) {
+
+    if (!this.isLoadedSdk) {
       loadScript(`https://${this.cloudSdkCdn}/js-sdk-v2/sdk-v1.js?${Date.now()}`, () => {
-        that.$store.commit(types.LOADED_CLOUD_SDK);
-    })
+        this.$store.commit(types.LOADED_CLOUD_SDK);
+      })
     }
+    
     this.sdkLoaded = true
   },
   methods: {
@@ -288,7 +289,6 @@ export default {
   },
   destroyed(){
     this.$store.commit(types.DESTROY_CLOUD_SDK);
-
   }
 };
 </script>
