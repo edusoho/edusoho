@@ -17,3 +17,4 @@ export const isSuperAdmin = state => {
   const roles = state.user.roles || [];
   return roles.includes('ROLE_SUPER_ADMIN');
 };
+
