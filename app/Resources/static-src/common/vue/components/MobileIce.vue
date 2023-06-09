@@ -1,7 +1,7 @@
 <template>
   <span>
     <span>{{ fullMobile || mobile || '--' }}</span>
-    <span v-if="mobile && mobile.indexOf('1') > -1 && isShowIcon" class="es-icon es-icon-ice cursor-pointer" @click="showMobile"></span>
+    <span v-if="mobile && mobile.indexOf('1') > -1 && isShowIcon" class="es-icon es-icon-ice cursor-pointer" @click="showMobile" style="color: #999;"></span>
   </span>
 </template>
 
