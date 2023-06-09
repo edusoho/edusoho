@@ -1,5 +1,5 @@
 <li class="{% if subNavs %}nav-hover{% endif %}{% if siteNav and siteNav == nav.url %} active {% endif %}">
-  <a href="{% if nav.url %}{{ nav.url|navigation_url }}{% else %}javascript:;{% endif %}" {% if nav.isNewWin %}target="_blank"{% endif %}>{{ nav.name }} {% if subNavs %} <b class="caret"></b>{% endif %}</a>
+  <a href="{% if nav.url %}{{ nav.url|navigation_url }}{% else %}/{% endif %}" {% if nav.isNewWin %}target="_blank"{% endif %}>{{ nav.name }} {% if subNavs %} <b class="caret"></b>{% endif %}</a>
   {% if subNavs %}
     <ul class="dropdown-menu" role="menu">
       {% for subNav in subNavs if subNav.isOpen %}

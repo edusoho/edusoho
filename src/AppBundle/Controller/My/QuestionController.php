@@ -22,7 +22,7 @@ class QuestionController extends BaseController
 
         $conditions = [
             'user_id' => $user['id'],
-            'target_types' => ['assessment', 'exercise', 'homework'],
+            'target_types' => ['assessment', 'exercise', 'homework', 'testpaper'],
         ];
 
         $paginator = new Paginator(

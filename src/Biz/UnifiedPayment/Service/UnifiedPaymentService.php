@@ -8,9 +8,15 @@ interface UnifiedPaymentService
 
     public function getTradeByTradeSn(string $sn);
 
+    public function getTradeByOrderSnAndPlatform($orderSn, $platform);
+
     public function createTrade($fields);
 
-    public function createPlatformTradeByTradeSn($tradeSn);
+    public function createPlatformTradeByTradeSn($tradeSn, $params);
 
     public function notifyPaid($payment, $data);
+
+    public function refund($fields);
+
+    public function closeTrade($sn);
 }

@@ -5,7 +5,10 @@ namespace AppBundle\Controller\AdminV2\System;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use AppBundle\Controller\AdminV2\BaseController;
+use AppBundle\Util\UploadToken;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Common\CommonException;
+use Biz\Content\FileException;
 use Biz\System\Service\LoginBindSettingService;
 use Biz\System\Service\PaymentSettingService;
 use Biz\System\Service\SettingService;
@@ -58,6 +61,18 @@ class WeChatSettingController extends BaseController
             } else {
                 $payment['enabled'] = 1;
             }
+            if (!empty($payment['wxpay_cert_uploaded'])) {
+                $payment['wxpay_cert_path'] = $payment['wxpay_cert_tmp_path'] ?? '';
+                $payment['wxpay_cert_name'] = $payment['wxpay_cert_tmp_name'] ?? '';
+                $payment['wxpay_cert_ext'] = $payment['wxpay_cert_tmp_ext'] ?? '';
+            }
+            if (!empty($payment['wxpay_key_uploaded'])) {
+                $payment['wxpay_key_path'] = $payment['wxpay_key_tmp_path'] ?? '';
+                $payment['wxpay_key_name'] = $payment['wxpay_key_tmp_name'] ?? '';
+                $payment['wxpay_key_ext'] = $payment['wxpay_key_tmp_ext'] ?? '';
+            }
+            unset($payment['wxpay_cert_uploaded']);
+            unset($payment['wxpay_key_uploaded']);
 
             if (empty($loginConnect['weixinweb_enabled']) || empty($loginConnect['weixinmob_enabled'])) {
                 $newWeChatSetting['wechat_notification_enabled'] = 0;
@@ -119,6 +134,58 @@ class WeChatSettingController extends BaseController
         return $this->createJsonResponse([
             'url' => empty($url) ? '' : $url,
         ]);
+    }
+
+    public function uploadCertAction(Request $request)
+    {
+        $this->validateToken($request->request->get('token'));
+        $file = $request->files->get('file');
+        $paymentSetting = $this->getSettingService()->get('payment', []);
+        $paymentSetting['wxpay_cert_tmp_name'] = rtrim($file->getClientOriginalName(), '.'.$file->getClientOriginalExtension());
+        $paymentSetting['wxpay_cert_tmp_ext'] = '.'.$file->getClientOriginalExtension();
+        $directory = $this->getBiz()['topxia.upload.private_directory'] . '/system';
+        $file = $file->move($directory, 'wxpay_cert.pem');
+        $paymentSetting['wxpay_cert_tmp_path'] = $file->getRealpath();
+        $this->getSettingService()->set('payment', $paymentSetting);
+
+        return $this->createJsonResponse([
+            'name' => $paymentSetting['wxpay_cert_tmp_name'],
+            'ext' => $paymentSetting['wxpay_cert_tmp_ext'],
+        ]);
+    }
+
+    public function uploadCertKeyAction(Request $request)
+    {
+        $this->validateToken($request->request->get('token'));
+        $file = $request->files->get('file');
+        $paymentSetting = $this->getSettingService()->get('payment', []);
+        $paymentSetting['wxpay_key_tmp_name'] = rtrim($file->getClientOriginalName(), '.'.$file->getClientOriginalExtension());
+        $paymentSetting['wxpay_key_tmp_ext'] = '.'.$file->getClientOriginalExtension();
+        $directory = $this->getBiz()['topxia.upload.private_directory'] . '/system';
+        $file = $file->move($directory, 'wxpay_cert_key.pem');
+        $paymentSetting['wxpay_key_tmp_path'] = $file->getRealpath();
+        $this->getSettingService()->set('payment', $paymentSetting);
+
+        return $this->createJsonResponse([
+            'name' => $paymentSetting['wxpay_key_tmp_name'],
+            'ext' => $paymentSetting['wxpay_key_tmp_ext'],
+        ]);
+    }
+
+    private function validateToken($token)
+    {
+        $parser = new UploadToken();
+        $token = $parser->parse($token);
+
+        if (empty($token)) {
+            $this->createNewException(CommonException::EXPIRED_UPLOAD_TOKEN());
+        }
+        if ('system' != $token['group']) {
+            $this->createNewException(FileException::FILE_GROUP_INVALID());
+        }
+        if ('cert' != $token['type']) {
+            $this->createNewException(FileException::FILE_TYPE_ERROR());
+        }
     }
 
     protected function isCloudOpen()
@@ -252,18 +319,18 @@ class WeChatSettingController extends BaseController
 
     private function getWeixinMpFile()
     {
-        $dir = $this->container->getParameter('kernel.root_dir').'/../web';
-        $mp_secret = array_map('file_get_contents', glob($dir.'/MP_verify_*.txt'));
+        $dir = $this->container->getParameter('kernel.root_dir') . '/../web';
+        $mp_secret = array_map('file_get_contents', glob($dir . '/MP_verify_*.txt'));
 
         return implode($mp_secret);
     }
 
     protected function updateWeixinMpFile($val)
     {
-        $dir = $this->container->getParameter('kernel.root_dir').'/../web';
-        array_map('unlink', glob($dir.'/MP_verify_*.txt'));
+        $dir = $this->container->getParameter('kernel.root_dir') . '/../web';
+        array_map('unlink', glob($dir . '/MP_verify_*.txt'));
         if (!empty($val)) {
-            file_put_contents($dir.'/MP_verify_'.$val.'.txt', $val);
+            file_put_contents($dir . '/MP_verify_' . $val . '.txt', $val);
         }
     }
 

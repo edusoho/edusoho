@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Announcement\Processor\AnnouncementProcessor;
 use Biz\Announcement\Service\AnnouncementService;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -91,8 +92,20 @@ class AnnouncementController extends BaseController
             if ('notify' == $request->request->get('notify')) {
                 $targetObjectShowRout = $processor->getTargetShowUrl();
                 $targetObjectShowUrl = $this->generateUrl($targetObjectShowRout, ['id' => $targetId], UrlGeneratorInterface::ABSOLUTE_URL);
+                if ($announcement['startTime'] <= time()) {
+                    $processor->announcementNotification($targetId, $targetObject, $targetObjectShowUrl, $announcement);
 
-                $result = $processor->announcementNotification($targetId, $targetObject, $targetObjectShowUrl, $announcement);
+                    return $this->createJsonResponse(true);
+                }
+
+                $this->getSchedulerService()->register([
+                    'name' => 'announcement_notify_'.$announcement['id'],
+                    'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                    'expression' => intval($announcement['startTime']),
+                    'class' => 'Biz\Announcement\Job\AnnouncementNotifyJob',
+                    'args' => ['targetId' => $targetId, 'targetType' => $targetType, 'params' => ['targetObject' => $targetObject, 'targetObjectShowUrl' => $targetObjectShowUrl, 'announcement' => $announcement]],
+                    'misfire_threshold' => 60 * 60,
+                ]);
             }
 
             return $this->createJsonResponse(true);
@@ -126,7 +139,23 @@ class AnnouncementController extends BaseController
             $data['startTime'] = isset($data['startTime']) ? strtotime($data['startTime']) : time();
             $data['endTime'] = isset($data['endTime']) ? strtotime($data['endTime']) : time();
 
-            $this->getAnnouncementService()->updateAnnouncement($id, $data);
+            $announcement = $this->getAnnouncementService()->updateAnnouncement($id, $data);
+
+            $targetObjectShowRout = $processor->getTargetShowUrl();
+            $targetObjectShowUrl = $this->generateUrl($targetObjectShowRout, ['id' => $targetId], UrlGeneratorInterface::ABSOLUTE_URL);
+
+            $job = $this->getSchedulerService()->getJobByName('announcement_notify_'.$id);
+            if (!empty($job)) {
+                $this->getSchedulerService()->deleteJob($job['id']);
+                $this->getSchedulerService()->register([
+                    'name' => 'announcement_notify_'.$announcement['id'],
+                    'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                    'expression' => intval($announcement['startTime']),
+                    'class' => 'Biz\Announcement\Job\AnnouncementNotifyJob',
+                    'args' => ['targetId' => $targetId, 'targetType' => $targetType, 'params' => ['targetObject' => $targetObject, 'targetObjectShowUrl' => $targetObjectShowUrl, 'announcement' => $announcement]],
+                    'misfire_threshold' => 60 * 60,
+                ]);
+            }
 
             return $this->createJsonResponse(true);
         }
@@ -176,5 +205,10 @@ class AnnouncementController extends BaseController
     protected function getUserService()
     {
         return $this->get('biz')->service('User:UserService');
+    }
+
+    protected function getSchedulerService()
+    {
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 }

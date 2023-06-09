@@ -40,6 +40,7 @@ class ContinueAnswer extends AbstractResource
 
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
+        $this->removeAnalysisAndAnswer($assessment);
 
         $assessmentResponse = $this->getAnswerService()->getAssessmentResponseByAnswerRecordId($answerRecord['id']);
         $assessmentResponseFilter = new AssessmentResponseFilter();
@@ -52,6 +53,17 @@ class ContinueAnswer extends AbstractResource
             'answer_record' => $answerRecord,
             'metaActivity'=> empty($activity) ? (object)[] : $activity,
         ];
+    }
+
+    private function removeAnalysisAndAnswer(&$assessment) {
+        foreach ($assessment['sections'] as &$section){
+            foreach ($section['items'] as &$item){
+                foreach ($item['questions'] as &$question){
+                    $question['analysis'] = "";
+                    $question['answer'] = [];
+                }
+            }
+        }
     }
 
     protected function getAnswerActivityService()

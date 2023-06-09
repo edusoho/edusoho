@@ -62,6 +62,13 @@ class BatchExporter
         return $count;
     }
 
+    public function postExport()
+    {
+        foreach ($this->exporters as $exporter) {
+            $exporter->postExport();
+        }
+    }
+
     public function export($name = '')
     {
         if (empty($name)) {
@@ -122,7 +129,7 @@ class BatchExporter
 
     protected function exportCsv($name, $fileName, $customFileName)
     {
-        $exportPath = $this->exportFileRootPath().basename($fileName);
+        $exportPath = $this->exportFileRootPath() . basename($fileName);
 
         return [$exportPath, $this->transTitle($fileName, $customFileName)];
     }
@@ -131,11 +138,11 @@ class BatchExporter
     {
         $zip = new ZipArchive();
 
-        $zipPath = $this->exportFileRootPath().$this->generateExportName();
+        $zipPath = $this->exportFileRootPath() . $this->generateExportName();
 
         if (true === $zip->open($zipPath, ZipArchive::CREATE)) {
             foreach ($fileNames as $value) {
-                $path = $this->exportFileRootPath().basename($value);
+                $path = $this->exportFileRootPath() . basename($value);
                 if (file_exists($path)) {
                     $zip->addFile($path, $this->transTitle($value, $customFileName));
                 }
@@ -147,14 +154,14 @@ class BatchExporter
         $zip->close();
 
         foreach ($fileNames as $value) {
-            $path = $this->exportFileRootPath().basename($value);
+            $path = $this->exportFileRootPath() . basename($value);
             if (file_exists($path)) {
                 FileToolkit::remove($path);
             }
         }
 
         $name = !empty($customFileName) ? urlencode($customFileName) : $name;
-        $fileName = sprintf($name.'-(%s).zip', date('Y-n-d'));
+        $fileName = sprintf($name . '-(%s).zip', date('Y-n-d'));
 
         return [$zipPath, $fileName];
     }
@@ -165,7 +172,7 @@ class BatchExporter
         $translator = $this->container->get('translator');
         $title = !empty($customFileName) ? iconv('UTF-8', 'gb2312', $customFileName) : $translator->trans(ExportUtil::getExportCsvTitle($name[0]));
 
-        return sprintf($title.'-(%s).csv', date('Y-n-d'));
+        return sprintf($title . '-(%s).csv', date('Y-n-d'));
     }
 
     protected function writeCsv($fileName, $csvName)
@@ -173,11 +180,11 @@ class BatchExporter
         if (empty($fileName)) {
             throw new UnexpectedValueException('exporter filename could not be found');
         }
-        $filePath = $this->exportFileRootPath().$fileName;
-        $csvPath = $this->exportFileRootPath().$csvName;
+        $filePath = $this->exportFileRootPath() . $fileName;
+        $csvPath = $this->exportFileRootPath() . $csvName;
         $contentRows = $this->getContentRows($filePath);
         $fp = fopen($csvPath, 'w');
-        fprintf($fp, chr(0xEF).chr(0xBB).chr(0xBF));
+        fprintf($fp, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
         foreach ($contentRows as $fields) {
             fputcsv($fp, $fields);
@@ -215,7 +222,7 @@ class BatchExporter
     {
         $biz = $this->getBiz();
         $filesystem = new Filesystem();
-        $rootPath = $biz['topxia.upload.private_directory'].'/tmp/';
+        $rootPath = $biz['topxia.upload.private_directory'] . '/tmp/';
         if (!$filesystem->exists($rootPath)) {
             $filesystem->mkdir($rootPath);
         }
@@ -237,12 +244,12 @@ class BatchExporter
 
     private function generateCsvName($name)
     {
-        return $name.'_'.time().rand().'.csv';
+        return $name . '_' . time() . rand() . '.csv';
     }
 
     private function generateExportName()
     {
-        return 'export_'.time().rand().'.zip';
+        return 'export_' . time() . rand() . '.zip';
     }
 
     protected function getExportFactory()

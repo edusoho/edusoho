@@ -27,6 +27,7 @@ class UserCommonController extends BaseController
     public function index($fields, $conditions, $indexTwigUrl)
     {
         $conditions = array_merge($conditions, $fields);
+        $conditions = $this->fillUserStatus($conditions);
         $conditions = $this->fillOrgCode($conditions);
 
         $userCount = $this->getUserService()->countUsers($conditions);
