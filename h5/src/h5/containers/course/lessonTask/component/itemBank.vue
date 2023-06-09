@@ -201,19 +201,15 @@ export default {
         return;
       }
       this.$refs.swipe.swipeTo(index - 1);
-    },
-    cloudSdkCdn() {
-      if (this.sdkLoaded) return
-
-      loadScript(`https://${this.cloudSdkCdn}/js-sdk-v2/sdk-v1.js?${Date.now()}`, () => {
-        this.sdkLoaded = true
-      })
     }
   },
   created() {
     if (!this.cloudSdkCdn) {
       this.setCloudAddress();
     }
+    loadScript(`https://${this.cloudSdkCdn}/js-sdk-v2/sdk-v1.js?${Date.now()}`, () => {
+      this.sdkLoaded = true
+    })
   },
   methods: {
     ...mapActions(['setCloudAddress']),
