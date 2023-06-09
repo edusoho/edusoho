@@ -42,10 +42,24 @@ $('.js-btn-login').click((event) => {
     $(event.currentTarget).button('loadding');
     var username = $form.find('#login_username').val();
     var password = $form.find('#login_password').val();
-    if (username !== '' && password !== ''){
-      $form.find('#login_username').val(window.XXTEA.encryptToBase64(username, 'EduSoho'));
-      $form.find('#login_password').val(window.XXTEA.encryptToBase64(password, 'EduSoho'));
-    }
+
+    const encryptedUsername = window.XXTEA.encryptToBase64(username, 'EduSoho');
+    const encryptedPassword = window.XXTEA.encryptToBase64(password, 'EduSoho');
+
+    const encryptedUsernameField = $('<input>', {
+      type: 'hidden',
+      name: '_username',
+      value: encryptedUsername
+    });
+
+    const encryptedPasswordField = $('<input>', {
+      type: 'hidden',
+      name: '_password',
+      value: encryptedPassword
+    });
+
+    $form.append(encryptedUsernameField, encryptedPasswordField);
+
     $form.submit();
   }
 });

@@ -36,8 +36,24 @@ let validator = $form.validate({
 $btn.click((event) => {
   var username = $form.find('#ajax-username').val();
   var password = $form.find('#ajax-password').val();
-  $form.find('#ajax-username').val(window.XXTEA.encryptToBase64(username, 'EduSoho'));
-  $form.find('#ajax-password').val(window.XXTEA.encryptToBase64(password, 'EduSoho'));
+
+  const encryptedUsername = window.XXTEA.encryptToBase64(username, 'EduSoho');
+  const encryptedPassword = window.XXTEA.encryptToBase64(password, 'EduSoho');
+
+  const encryptedUsernameField = $('<input>', {
+    type: 'hidden',
+    name: '_username',
+    value: encryptedUsername
+  });
+
+  const encryptedPasswordField = $('<input>', {
+    type: 'hidden',
+    name: '_password',
+    value: encryptedPassword
+  });
+
+  $form.append(encryptedUsernameField, encryptedPasswordField);
+
   if (validator.form()) {
     $.post($form.attr('action'), $form.serialize(), function (response) {
       $btn.button('loading');
