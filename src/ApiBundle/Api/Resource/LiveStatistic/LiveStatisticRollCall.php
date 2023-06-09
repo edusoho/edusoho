@@ -11,6 +11,7 @@ use Biz\Live\LiveStatisticsException;
 use Biz\Live\Service\LiveStatisticsService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
+use Biz\User\Service\MobileMaskService;
 use Biz\User\Service\UserService;
 
 class LiveStatisticRollCall extends AbstractResource
@@ -51,7 +52,9 @@ class LiveStatisticRollCall extends AbstractResource
             $statistic['nickname'] = empty($users[$statistic['userId']]) ? '--' : $users[$statistic['userId']]['nickname'];
             $statistic['email'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['emailVerified']) ? '--' : $users[$statistic['userId']]['email'];
             $statistic['checkin'] = empty($statistic['checkin']) ? 0 : 1;
-            $statistic['mobile'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['verifiedMobile']) ? '--' : $users[$statistic['userId']]['verifiedMobile'];
+            $statistic['mobile'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['verifiedMobile']) ? '' : $users[$statistic['userId']]['verifiedMobile'];
+            $statistic['encryptedMobile'] = empty($statistic['mobile']) ? '' : $this->getMobileMaskService()->encryptMobile($statistic['mobile']);
+            $statistic['mobile'] = empty($statistic['mobile']) ? '--' : $this->getMobileMaskService()->maskMobile($statistic['mobile']);
         }
 
         return $statistics;
@@ -96,5 +99,13 @@ class LiveStatisticRollCall extends AbstractResource
     protected function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return MobileMaskService
+     */
+    protected function getMobileMaskService()
+    {
+        return $this->service('User:MobileMaskService');
     }
 }
