@@ -5,13 +5,13 @@
         <th width="30%">用户名</th>
         <td width="70%">
           <a class="pull-right" href="javascript:;" @click="toPersonalHomepage(user.user.uuid)">个人主页</a>
-          {{ user.user.nickname }}
+          {{ user.user ? user.user.nickname : '' }}
         </td>
       </tr>
 
       <tr>
         <th>Email</th>
-        <td>{{ user.profile.email || '- -' }}</td>
+        <td>{{ user.profile ? user.profile.email : '- -' }}</td>
       </tr>
 
       <tr>
