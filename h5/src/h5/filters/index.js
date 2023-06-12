@@ -91,7 +91,12 @@ const filters = [
       if (task.status !== 'published') {
         return i18n.t('filters.stayTuned');
       }
-      switch (task.type) {
+
+      if (task.activity.replayStatus === 'generated') {
+        return i18n.t('filters.replay');
+      }
+
+      switch (task.progressStatus) {
         case 'video':
         case 'audio':
           if (task.mediaSource !== 'self' && task.type !== 'audio') {
@@ -99,23 +104,12 @@ const filters = [
           }
           return `${formatTimeByNumber(task.length)}`;
         case 'live':
-          // eslint-disable-next-line no-case-declarations
-          const now = new Date().getTime();
-          // eslint-disable-next-line no-case-declarations
-          const startTimeStamp = new Date(task.startTime * 1000);
-          // eslint-disable-next-line no-case-declarations
-          const endTimeStamp = new Date(task.endTime * 1000);
-          // 直播未开始
-          if (now <= startTimeStamp) {
-            return `${formatCompleteTime(startTimeStamp)}${i18n.t('filters.start')}`;
-          }
-          if (now > endTimeStamp) {
-            if (task.activity.replayStatus === 'ungenerated') {
-              return i18n.t('filters.over');
-            }
-            return i18n.t('filters.replay');
-          }
           return i18n.t('filters.live');
+        case 'created':
+          const startTimeStamp = new Date(task.startTime * 1000);
+          return `${formatCompleteTime(startTimeStamp)}${i18n.t('filters.start')}`;
+        case 'closed':
+          return i18n.t('filters.over');
         // case 'testpaper':
         //   const nowTime = new Date().getTime();
         //   const testStartTime = new Date(task.startTime * 1000);
