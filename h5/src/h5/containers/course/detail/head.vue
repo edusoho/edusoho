@@ -127,6 +127,7 @@ import VideoReportMask from '@/components/video-report-mask';
 import WechatSubscribe from '../components/wechat-subscribe';
 import * as types from '@/store/mutation-types.js';
 import copyUrl from '@/mixins/copyUrl';
+import { getLanguage } from '@/lang/index.js'
 
 export default {
   components: {
@@ -462,6 +463,7 @@ export default {
           width: 30,
           height: 30,
         },
+        language: getLanguage(),
         token: media.token,
         rememberLastPos: true,
         playlist: media.url,
@@ -504,7 +506,6 @@ export default {
           id: 'course-detail__head--video',
           resNo: media.resNo,
           token: media.token,
-          language: 'zh-CN',
           source: {
             type: playerParams.mediaType,
             args: media
@@ -538,7 +539,11 @@ export default {
       loadScript(playerSDKUri, err => {
         this.$store.commit('UPDATE_LOADING_STATUS', false);
         if (err) throw err;
-        options.language = 'zh-CN' ;
+
+        if (options.language === 'zh-cn') {
+          options.language = 'zh-CN'
+        }
+        
         const player = new window.QiQiuYun.Player(options);
         this.player = player;
         player.on('unablePlay', () => {
