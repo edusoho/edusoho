@@ -33,7 +33,9 @@
         <tr id ="announcement-tr-{{ announcement.id }}">
           {% include 'org/parts/table-body-checkbox.html.twig' %}
           <td>
-            <a href="{{ announcement.url }}" target="_content" class="announcement-content">{{ announcement.content|raw }}
+            <div style="max-height:300px;overflow: hidden;">
+              <a href="{{ announcement.url }}" target="_content" class="announcement-content" >{{ announcement.content|raw }}
+            </div>
           </td>
           {% include 'org/parts/table-body-td.html.twig' with {orgCode: announcement.orgCode}%}
           <td>{{ announcement.startTime|date('Y-m-d H:i') }}</td>
