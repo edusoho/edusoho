@@ -40,22 +40,21 @@ $btn.click((event) => {
   const encryptedUsername = window.XXTEA.encryptToBase64(username, 'EduSoho');
   const encryptedPassword = window.XXTEA.encryptToBase64(password, 'EduSoho');
 
-  const encryptedUsernameField = $('<input>', {
-    type: 'hidden',
-    name: '_username',
-    value: encryptedUsername
-  });
+  var formData = $form.serializeArray();
 
-  const encryptedPasswordField = $('<input>', {
-    type: 'hidden',
-    name: '_password',
-    value: encryptedPassword
-  });
+  var fieldsToUpdate = {
+    '_username': encryptedUsername,
+    '_password': encryptedPassword
+  };
 
-  $form.append(encryptedUsernameField, encryptedPasswordField);
+  formData.forEach(function(field) {
+    if (fieldsToUpdate.hasOwnProperty(field.name)) {
+      field.value = fieldsToUpdate[field.name];
+    }
+  });
 
   if (validator.form()) {
-    $.post($form.attr('action'), $form.serialize(), function (response) {
+    $.post($form.attr('action'), $.param(formData), function (response) {
       $btn.button('loading');
       window.location.reload();
     }, 'json').error(function (jqxhr, textStatus, errorThrown) {
