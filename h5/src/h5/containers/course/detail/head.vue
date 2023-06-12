@@ -504,6 +504,7 @@ export default {
           id: 'course-detail__head--video',
           resNo: media.resNo,
           token: media.token,
+          language: 'zh-CN',
           source: {
             type: playerParams.mediaType,
             args: media
@@ -537,6 +538,7 @@ export default {
       loadScript(playerSDKUri, err => {
         this.$store.commit('UPDATE_LOADING_STATUS', false);
         if (err) throw err;
+        options.language = 'zh-CN' ;
         const player = new window.QiQiuYun.Player(options);
         this.player = player;
         player.on('unablePlay', () => {
