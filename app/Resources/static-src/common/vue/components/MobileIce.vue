@@ -1,7 +1,12 @@
 <template>
   <span>
     <span>{{ fullMobile || mobile || '--' }}</span>
-    <span v-if="mobile && mobile.indexOf('1') > -1 && isShowIcon" class="es-icon es-icon-ice cursor-pointer" @click="showMobile" style="color: #999;"></span>
+    <a-tooltip v-if="mobile && mobile.indexOf('1') > -1 && isShowIcon" color="#333">
+      <template #title>
+        <span>点击查看</span>
+      </template>
+      <span class="es-icon es-icon-ice cursor-pointer" @click="showMobile" style="color: #999;"></span>
+    </a-tooltip>
   </span>
 </template>
 
