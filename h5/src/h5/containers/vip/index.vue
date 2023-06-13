@@ -60,7 +60,7 @@
       </div>
     </div>
 
-    <div class="fixed bottom-0 left-0 right-0 z-10 px-16 py-8 bg-text-1">
+    <div class="fixed bottom-0 left-0 right-0 z-20 px-16 py-8 bg-text-1">
       <div class="flex items-center justify-center w-full font-bold text-text-1"
         style="height: 40px; border-radius: 20px; background-color: #E7B15C;" :class="{ disabled: !vipBuyStatu.status }"
         @click="clickVipBuy">
@@ -114,7 +114,7 @@ export default {
         },
       },
       vipOpenSwiperOption: {
-        slidesPerView: 3.1,
+        slidesPerView: 2.4,
       },
       user: {},
       vipInfo: {},

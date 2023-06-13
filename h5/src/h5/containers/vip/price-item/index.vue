@@ -9,7 +9,7 @@
     </span>
     <div class="font-bold text-14" style="color: #000;">{{ item.title }}</div>
     <div class="flex items-center justify-between">
-      <div class="text-14" style="color: #FF7A34;">{{ price }}</div>
+      <div class="text-14 mr-20" style="color: #FF7A34;">{{ price }}</div>
       <van-radio-group :value="activePriceId">
         <van-radio :name="item.id" checked-color="#EAB86A" :icon-size="16"></van-radio>
       </van-radio-group>
@@ -53,7 +53,6 @@ export default {
 <style lang="scss" scoped>
   .price-item {
     position: relative;
-    width: 120px;
     height: 80px;
     padding: 12px;
     background-color: #fff;
