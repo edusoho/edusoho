@@ -5,7 +5,7 @@ namespace ApiBundle\Api\Resource\UserProfile;
 use ApiBundle\Api\Resource\Filter;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ConvertIpToolkit;
-use Biz\User\Service\MobileMaskService;
+use Biz\InfoSecurity\Service\MobileMaskService;
 use Topxia\Service\Common\ServiceKernel;
 
 class UserProfileFilter extends Filter
@@ -50,6 +50,6 @@ class UserProfileFilter extends Filter
      */
     protected function getMobileMaskService()
     {
-        return ServiceKernel::instance()->createService('User:MobileMaskService');
+        return ServiceKernel::instance()->createService('InfoSecurity:MobileMaskService');
     }
 }

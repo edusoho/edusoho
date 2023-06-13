@@ -3,7 +3,7 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Common\SimpleValidator;
-use Biz\User\Service\MobileMaskService;
+use Biz\InfoSecurity\Service\MobileMaskService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -54,6 +54,6 @@ class MobileExtension extends \Twig_Extension
      */
     private function getMobileMaskService()
     {
-        return $this->biz->service('User:MobileMaskService');
+        return $this->biz->service('InfoSecurity:MobileMaskService');
     }
 }

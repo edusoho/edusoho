@@ -9,10 +9,10 @@ use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\InfoSecurity\Service\MobileMaskService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassService;
-use Biz\User\Service\MobileMaskService;
 
 class MultiClassStudent extends AbstractResource
 {
@@ -290,6 +290,6 @@ class MultiClassStudent extends AbstractResource
      */
     protected function getMobileMaskService()
     {
-        return $this->service('User:MobileMaskService');
+        return $this->service('InfoSecurity:MobileMaskService');
     }
 }

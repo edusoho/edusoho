@@ -7,11 +7,11 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\LiveActivityException;
 use Biz\Activity\Service\ActivityService;
+use Biz\InfoSecurity\Service\MobileMaskService;
 use Biz\Live\LiveStatisticsException;
 use Biz\Live\Service\LiveStatisticsService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
-use Biz\User\Service\MobileMaskService;
 use Biz\User\Service\UserService;
 
 class LiveStatisticRollCall extends AbstractResource
@@ -106,6 +106,6 @@ class LiveStatisticRollCall extends AbstractResource
      */
     protected function getMobileMaskService()
     {
-        return $this->service('User:MobileMaskService');
+        return $this->service('InfoSecurity:MobileMaskService');
     }
 }
