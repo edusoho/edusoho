@@ -468,15 +468,34 @@ export default {
       if (lesson.status != 'published' || lesson.type != 'live') {
         return 'nopublished';
       }
-      const now = new Date().getTime();
-      const endTimeStamp = new Date(lesson.endTime * 1000);
-      if (now > endTimeStamp) {
-        if (lesson.activity.replayStatus === 'ungenerated') {
-          return 'end';
-        }
+
+      if (lesson.activity.replayStatus === 'generated') {
         return 'back';
       }
-      return 'play';
+
+      if (lesson.progressStatus === 'closed') {
+        return 'end';
+      }
+
+      if (lesson.progressStatus === 'created') {
+        return 'play';
+      }
+
+      if (lesson.progressStatus === 'live') {
+        return 'play';
+      }
+      // if (lesson.status != 'published' || lesson.type != 'live') {
+      //   return 'nopublished';
+      // }
+      // const now = new Date().getTime();
+      // const endTimeStamp = new Date(lesson.endTime * 1000);
+      // if (now > endTimeStamp) {
+      //   if (lesson.activity.replayStatus === 'ungenerated') {
+      //     return 'end';
+      //   }
+      //   return 'back';
+      // }
+      // return 'play';
     },
   },
 };

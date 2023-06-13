@@ -61,6 +61,12 @@ export default {
   [types.SET_TASK_SATUS](state, payload) {
     state.course.taskStatus = payload;
   },
+  [types.LOADED_CLOUD_SDK](state) {
+    state.isLoadedSdk = true;
+  },
+  [types.DESTROY_CLOUD_SDK](state) {
+    state.isLoadedSdk = false;
+  },
 
   SET_CLOUD_SDK_CDN(state, address) {
     state.cloudSdkCdn = address;

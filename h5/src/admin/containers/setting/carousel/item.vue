@@ -69,7 +69,7 @@
       <div class="label-item">链接：</div>
       <div style="height: 24px;flex: 1;display: flex;align-items: center;flex-wrap: wrap;">
         <el-radio v-model="radio" label="insideLink">{{ $t('carousel.siteLink') }}</el-radio>
-        <el-radio v-model="radio" label="url">{{ $t('carousel.customLink') }}</el-radio>
+        <!-- <el-radio v-model="radio" label="url">{{ $t('carousel.customLink') }}</el-radio> -->
       </div>
     </div>
     
@@ -101,7 +101,7 @@
       </el-tag>
     </div>
 
-    <div v-if="radio === 'url'" class="add-outter">
+    <!-- <div v-if="radio === 'url'" class="add-outter">
       <div class="label-item">输入网址：</div>
       <el-input
         v-model="item.link.url"
@@ -112,7 +112,7 @@
         style="flex: 1;"
         @change="changeLinkUrl"
       />
-    </div>
+    </div> -->
   </div>
 </template>
 

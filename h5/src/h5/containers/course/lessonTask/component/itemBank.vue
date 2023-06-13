@@ -109,7 +109,7 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import loadScript from 'load-script';
-
+import * as types from '@/store/mutation-types';
 import fillType from '../component/fill';
 import essayType from '../component/essay';
 import headTop from '../component/head';
@@ -182,7 +182,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['cloudSdkCdn']),
+    ...mapState(['cloudSdkCdn', 'isLoadedSdk']),
   },
   watch: {
     answer(val) {
@@ -201,19 +201,20 @@ export default {
         return;
       }
       this.$refs.swipe.swipeTo(index - 1);
-    },
-    cloudSdkCdn() {
-      if (this.sdkLoaded) return
-
-      loadScript(`https://${this.cloudSdkCdn}/js-sdk-v2/sdk-v1.js?${Date.now()}`, () => {
-        this.sdkLoaded = true
-      })
     }
   },
   created() {
     if (!this.cloudSdkCdn) {
       this.setCloudAddress();
     }
+
+    if (!this.isLoadedSdk) {
+      loadScript(`https://${this.cloudSdkCdn}/js-sdk-v2/sdk-v1.js?${Date.now()}`, () => {
+        this.$store.commit(types.LOADED_CLOUD_SDK);
+      })
+    }
+    
+    this.sdkLoaded = true
   },
   methods: {
     ...mapActions(['setCloudAddress']),
@@ -286,6 +287,9 @@ export default {
       this.$set(this.testAnswer[id], 0, Number(name));
     }
   },
+  destroyed(){
+    this.$store.commit(types.DESTROY_CLOUD_SDK);
+  }
 };
 </script>
 
