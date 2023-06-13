@@ -88,6 +88,7 @@ const filters = [
   {
     name: 'filterTaskTime',
     handler(task) {
+
       if (task.status !== 'published') {
         return i18n.t('filters.stayTuned');
       }
@@ -96,7 +97,7 @@ const filters = [
         return i18n.t('filters.replay');
       }
 
-      switch (task.progressStatus) {
+      switch (task.type) {
         case 'video':
         case 'audio':
           if (task.mediaSource !== 'self' && task.type !== 'audio') {
@@ -104,12 +105,18 @@ const filters = [
           }
           return `${formatTimeByNumber(task.length)}`;
         case 'live':
-          return i18n.t('filters.live');
-        case 'created':
-          const startTimeStamp = new Date(task.startTime * 1000);
-          return `${formatCompleteTime(startTimeStamp)}${i18n.t('filters.start')}`;
-        case 'closed':
-          return i18n.t('filters.over');
+          if (task.progressStatus === 'live') {
+            return i18n.t('filters.live');
+          }
+
+          if (task.progressStatus === 'created') {
+            const startTimeStamp = new Date(task.startTime * 1000);
+            return `${formatCompleteTime(startTimeStamp)}${i18n.t('filters.start')}`;
+          }
+          
+          if (task.progressStatus === 'closed') {
+            return i18n.t('filters.over');
+          }
         // case 'testpaper':
         //   const nowTime = new Date().getTime();
         //   const testStartTime = new Date(task.startTime * 1000);
