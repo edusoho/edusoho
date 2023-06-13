@@ -5,3 +5,4 @@ $('.js-user-mobile').on('click', '.js-toggle', event => {
     $target.find('.js-toggle').addClass('hidden');
   });
 });
+$('[data-toggle="tooltip"]').tooltip();
