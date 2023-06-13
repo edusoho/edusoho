@@ -156,6 +156,8 @@ class SensitiveController extends BaseController
         }
 
         foreach ($banlogs as &$value) {
+            //对原有存在的异常数据进行过滤
+            $value['text'] = $this->getBiz()['html_helper']->purify($value['text']);
             $pattern = '/'.$value['keywordName'].'/i';
             $value['text'] = preg_replace_callback($pattern, function($matches) {
                 return "<span style='color:#FF0000'>".$matches[0].'</span>';
