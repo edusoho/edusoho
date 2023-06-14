@@ -8,14 +8,14 @@
         <div class="swiper-slide">
           <i class="es-icon es-icon-infooutline mrm"></i>
           <a style="color:#ffa51f" class="alert-link" href="{{announcement.url}}" target="_blank">
-            {{announcement.content|sub_text(50)}}
+            {{announcement.content|sub_text(50)|default('<span class="text-warning">'~'announcement.view_btn'|trans ~'</span>')|raw}}
           </a>
         </div>
         {% else %}
           <div class="swiper-slide">
             <i class="es-icon es-icon-infooutline"></i>
             <a style="color:#ffa51f" class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('announcement_global_show', {id:announcement.id}) }}" >
-              {{announcement.content|sub_text(50)}}
+              {{announcement.content|sub_text(50)|default('<span class="text-warning">'~'announcement.view_btn'|trans ~'</span>')|raw}}
             </a>
           </div>
         {% endif %}

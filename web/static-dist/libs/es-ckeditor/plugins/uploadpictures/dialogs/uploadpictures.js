@@ -8,7 +8,8 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
           var eventName = event.data.eventName;
           if (eventName === 'es-ckeditor.post') {
               var innerHtml = event.data.html;
-              $('.' + editor.id + ' #js-uploadpictures-body').append(innerHtml);
+              var sanitizedHtml = sanitizeHtml(innerHtml);
+              $('.' + editor.id + ' #js-uploadpictures-body').append(sanitizedHtml );
               try{
                 $(document.getElementById("uploadContainer_" + editor.name))[0].remove();
               }catch(err){

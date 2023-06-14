@@ -6762,6 +6762,7 @@ admin.user.manage.form.time_option.default: --时间类型--
 admin.user.manage.form.role_option.default: --所有角色--
 admin.user.manage.form.user_type_option.default: --注册来源--
 admin.user.manage.form.user_status_option.default: --学员状态--
+admin.user.manage.form.staff_status_option.default: --员工状态--
 plugin.admin.user.manage.form.user_export_btn: 导出搜索结果
 plugin.admin.user.manage.form.user_student_export_btn: 导出搜索结果
 plugin.admin.user.manage.form.user_staff_export_btn: 导出员工数据
@@ -10718,6 +10719,7 @@ exception.batch_notification.published: 全站通知已发布
 
 lesson_count_no_more_than_300: 课时总数不能超过300个
 exception.lesson.not_found: 课时不存在
+exception.open_course_live_ticket.not_found: 公开课直播间令牌不存在
 exception.lesson.parameter_missing: 缺少课时编号
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 exception.task.not_found: 任务不存在
