@@ -125,7 +125,7 @@ $('.js-advanced-paginator a').on('click', function () {
 let skipPageQueryUrl = $('.js-skip-paginator').data('url');
 let skipCurrentPerPageCount = $('.js-current-perpage-count').children('option:selected').val();
 // 每页显示数量
-$('.js-current-perpage-count').on('click', function () {
+$('.js-current-perpage-count').on('change', function () {
 		window.location.href = skipPageQueryUrl + 'page=1&perpage=' + $(this).val();
 })
 
