@@ -22,8 +22,8 @@ class CreateTableMobileAccessLog extends Migration
               `ip` varchar(16) NOT NULL COMMENT 'ip',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
-              KEY `user_time` (`userId`, `createdTime`),
-              KEY `mobile_time` (`mobile`, `createdTime`),
+              KEY `userId` (`userId`),
+              KEY `mobile` (`mobile`),
               KEY `createdTime` (`createdTime`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
