@@ -38,7 +38,7 @@ class MarketingMallApi
         $config = [
             'access_key' => $storage['cloud_access_key'] ?? '',
             'secret_key' => $storage['cloud_secret_key'] ?? '',
-            'endpoint' => empty($storage['mall_private_server']) ? $mallUrl : rtrim($storage['mall_private_server'], '/'),
+            'endpoint' => empty($storage['mall_private_server']) ? 'https://'.$mallUrl : rtrim($storage['mall_private_server'], '/'),
         ];
         $logger = self::getLogger();
         $spec = new JsonHmacSpecification('sha1');
