@@ -10,10 +10,10 @@ use Biz\Activity\LiveActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\InfoSecurity\Service\MobileMaskService;
 use Biz\LiveStatistics\Service\Impl\LiveCloudStatisticsServiceImpl;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
-use Biz\User\Service\MobileMaskService;
 use Biz\User\Service\UserService;
 
 class LiveStatisticMember extends AbstractResource
@@ -138,6 +138,6 @@ class LiveStatisticMember extends AbstractResource
      */
     protected function getMobileMaskService()
     {
-        return $this->service('User:MobileMaskService');
+        return $this->service('InfoSecurity:MobileMaskService');
     }
 }

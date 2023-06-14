@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\User\Service;
+namespace Biz\InfoSecurity\Service;
 
 interface MobileMaskService
 {
