@@ -30,7 +30,7 @@ class UnifiedPayment extends AbstractResource
             return ['success' => false, 'message' => '已支付'];
         }
         if ('closed' === $trade['status']) {
-            return ['success' => false, 'message' => '订单已关闭'];
+            return ['success' => false, 'message' => '交易已关闭'];
         }
 
         return [

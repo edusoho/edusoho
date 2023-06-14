@@ -47,7 +47,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
      * @see UnifiedPaymentService::createPlatformTradeByTradeSn() 实际发起支付
      *
      * @param array $fields
-     * @param bool  $createPlatformTrade
+     * @param bool $createPlatformTrade
      *
      * @return array
      */
@@ -252,9 +252,15 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
     public function closeTrade($sn)
     {
         $trade = $this->getTradeByTradeSn($sn);
-        if ($trade && 'closed' != $trade['status']) {
-            $this->getTradeDao()->update($trade['id'], ['status' => 'closed']);
+        if (empty($trade)) {
+            throw new InvalidArgumentException('trade is not found.');
         }
+        if ('closed' == $trade['status']) {
+            throw new AccessDeniedException('trade is already closed.');
+        }
+        $this->getTradeDao()->update($trade['id'], ['status' => 'closed']);
+
+        $this->dispatch('unified_payment.trade.closed', $trade);
     }
 
     protected function generateSn($prefix = ''): string
