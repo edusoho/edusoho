@@ -109,13 +109,12 @@
           customClass="poster-item-setting__section"
           v-show="radio === 'url'"
         >
-          <el-input
+          <el-input 
             size="mini"
-            v-model="copyModuleData.link.url"
-            placeholder="例如 http://www.eduosho.com"
-            clearable
-          >
-          </el-input>
+            v-model="linkUrl" 
+            placeholder="例如 http://www.eduosho.com" 
+            clearable>
+        </el-input>
         </setting-cell>
 
         <setting-cell
@@ -164,6 +163,7 @@ export default {
   },
   data() {
     return {
+      linkUrl: '',
       modalVisible: false,
       imgAdress: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
       courseSets: [],
@@ -240,6 +240,9 @@ export default {
     },
   },
   watch: {
+    linkUrl(val){
+      this.copyModuleData.link.url = val
+    },
     copyModuleData: {
       handler(data) {
         this.$emit('updateModule', data);
