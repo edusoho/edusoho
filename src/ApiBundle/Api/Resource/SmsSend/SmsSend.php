@@ -49,11 +49,7 @@ class SmsSend extends AbstractResource
 
         $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
 
-        if (empty($user)) {
-            throw UserException::NOTFOUND_USER();
-        }
-
-        if ($user['locked']) {
+        if (!empty($user) && $user['locked']) {
             throw UserException::LOCKED_USER();
         }
 

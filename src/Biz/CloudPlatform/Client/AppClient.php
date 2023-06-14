@@ -29,8 +29,6 @@ interface AppClient
      */
     public function checkDownloadPackage($packageId);
 
-    public function repairProblem($token);
-
     /**
      * 获得包信息.
      */
