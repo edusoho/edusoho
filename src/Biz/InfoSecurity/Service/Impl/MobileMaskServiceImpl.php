@@ -21,7 +21,7 @@ class MobileMaskServiceImpl extends BaseService implements MobileMaskService
 
     public function encryptMobile($mobile)
     {
-        $plain = "{$mobile}|{$this->getRequest()->getPathInfo()}";
+        $plain = "{$mobile}|{$this->getCurrentUser()->getId()}|{$this->getRequest()->getPathInfo()}";
 
         return base64_encode($this->getCrypt()->encrypt($plain));
     }
@@ -29,28 +29,28 @@ class MobileMaskServiceImpl extends BaseService implements MobileMaskService
     public function decryptMobile($encryptedMobile)
     {
         $plain = $this->getCrypt()->decrypt(base64_decode($encryptedMobile));
-        if (empty($plain)) {
-            $mobile = $source = '';
-        } else {
-            list($mobile, $source) = explode('|', $plain);
-        }
-        $this->createMobileAccessLog($mobile, $source);
+        $log = $this->createMobileAccessLog($plain);
 
-        return $mobile;
+        return $this->getCurrentUser()->getId() == $log['sourceUserId'] ? $log['mobile'] : '';
     }
 
-    protected function createMobileAccessLog($mobile, $source)
+    protected function createMobileAccessLog($plain)
     {
+        if ($plain) {
+            list($mobile, $sourceUserId, $source) = explode('|', $plain);
+        }
         $request = $this->getRequest();
         $log = [
             'userId' => $this->getCurrentUser()->getId(),
-            'mobile' => $mobile,
-            'source' => $source,
+            'mobile' => $mobile ?? '',
+            'sourceUserId' => $sourceUserId ?? 0,
+            'source' => $source ?? '',
             'referer' => $request->headers->get('Referer'),
             'userAgent' => $request->headers->get('User-Agent'),
             'ip' => $request->getClientIp(),
         ];
-        $this->getMobileAccessLogDao()->create($log);
+
+        return $this->getMobileAccessLogDao()->create($log);
     }
 
     protected function getCrypt()
