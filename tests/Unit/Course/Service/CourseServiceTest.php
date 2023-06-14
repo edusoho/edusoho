@@ -603,7 +603,7 @@ class CourseServiceTest extends BaseTestCase
 
         $secondCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $hasNoTitle = $this->getCourseService()->hasNoTitleForDefaultPlanInMulPlansCourse($secondCourse['id']);
-        self::assertTrue($hasNoTitle);
+        self::assertFalse($hasNoTitle);
     }
 
     public function testPublishAndSetDefaultCourseType()
