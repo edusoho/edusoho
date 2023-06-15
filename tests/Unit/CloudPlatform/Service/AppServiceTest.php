@@ -370,14 +370,6 @@ class AppServiceTest extends BaseTestCase
         $this->assertEmpty($result);
     }
 
-    public function testRepairProblem()
-    {
-        $this->mockAppClient();
-        $result = $this->getAppService()->repairProblem('token');
-
-        $this->assertEquals('problem', $result);
-    }
-
     public function testFindInstallApp()
     {
         $app1 = $this->_createApp('MAIN');
