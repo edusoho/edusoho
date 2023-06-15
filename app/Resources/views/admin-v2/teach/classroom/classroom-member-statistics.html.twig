@@ -39,7 +39,7 @@
         </td>
         <td>
           {% if users[member.userId].mobile|default() %}
-            {{ users[member.userId].mobile }}
+            {% include 'user-mobile-mask.html.twig' with { mobile: users[member.userId].mobile } %}
           {% else %}
             ----
           {% endif %}

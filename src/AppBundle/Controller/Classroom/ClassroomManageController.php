@@ -381,6 +381,7 @@ class ClassroomManageController extends BaseController
     {
         $role = $request->query->get('role');
         $fileName = sprintf('classroom-%s-%s-(%s).csv', $id, $role, date('Y-n-d'));
+        $this->getLogService()->warning('classroom', 'export_students', '导出学员数据');
 
         return ExportHelp::exportCsv($request, $fileName);
     }

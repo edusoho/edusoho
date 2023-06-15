@@ -10,6 +10,7 @@ use Biz\Activity\LiveActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\InfoSecurity\Service\MobileMaskService;
 use Biz\LiveStatistics\Service\Impl\LiveCloudStatisticsServiceImpl;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
@@ -72,11 +73,13 @@ class LiveStatisticMember extends AbstractResource
             $member['nickname'] = empty($users[$member['userId']]) ? '--' : $users[$member['userId']]['nickname'];
             $member['email'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['emailVerified']) ? '--' : $users[$member['userId']]['email'];
             $member['checkinNum'] = empty($cloudStatisticData['checkinNum']) || empty($member['checkinNum']) ? '--' : $member['checkinNum'].'/'.$cloudStatisticData['checkinNum'];
-            $member['mobile'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['verifiedMobile']) ? '--' : $users[$member['userId']]['verifiedMobile'];
+            $member['mobile'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['verifiedMobile']) ? '' : $users[$member['userId']]['verifiedMobile'];
             $member['watchDuration'] = empty($member['watchDuration']) ? 0 : round($member['watchDuration'] / 60, 1);
             $member['answerNum'] = empty($member['answerNum']) ? 0 : $member['answerNum'];
             $member['chatNumber'] = empty($member['chatNum']) ? 0 : $member['chatNum'];
             $member['firstEnterTime'] = empty($member['firstEnterTime']) ? '--' : date('Y-m-d H:i', $member['firstEnterTime']);
+            $member['encryptedMobile'] = empty($member['mobile']) ? '' : $this->getMobileMaskService()->encryptMobile($member['mobile']);
+            $member['mobile'] = empty($member['mobile']) ? '--' : $this->getMobileMaskService()->maskMobile($member['mobile']);
         }
 
         return $members;
@@ -128,5 +131,13 @@ class LiveStatisticMember extends AbstractResource
     protected function getCourseMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return MobileMaskService
+     */
+    protected function getMobileMaskService()
+    {
+        return $this->service('InfoSecurity:MobileMaskService');
     }
 }
