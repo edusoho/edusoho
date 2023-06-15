@@ -79,12 +79,16 @@ check env:
 
 7.1 For main:
   stage: test
-  image: codeages/ci-php71
+  image:
+    name: codeages/ci-php71
+    pull_policy : if-not-present
   services:
     - name: mysql:8.0
+      pull_policy : if-not-present
       alias: mysql
       command: [ "--default-authentication-plugin=mysql_native_password" ]
     - name: redis:latest
+      pull_policy : if-not-present
       alias: redis
   script:
     - bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
