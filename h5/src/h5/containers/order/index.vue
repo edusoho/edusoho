@@ -340,7 +340,7 @@ export default {
       );
     },
     IsCollectUserInfoType() {
-      return this.targetType === 'course' || this.targetType === 'classroom';
+      return ['course', 'classroom', 'vip'].includes(this.targetType) ;
     },
     showCollectEntry() {
       return Object.keys(this.userInfoCollectForm).length > 0;
