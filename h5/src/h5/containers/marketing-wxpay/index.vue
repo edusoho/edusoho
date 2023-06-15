@@ -25,6 +25,7 @@ import Api from '@/api';
 import { Toast, Dialog } from 'vant';
 import { mapState } from 'vuex';
 import 'navigator.sendbeacon'
+import store from '@/store';
 
 export default {
   name: 'MarketingWXPay',
@@ -82,14 +83,29 @@ export default {
     this.payInfo = result
     this.handlePay()
     window.addEventListener('unload', () => this.closeOrder())
+    window.addEventListener('pagehide', () => this.closeOrder())
   },
   methods: {
     async closeOrder() {
       if (this.isPay) return
       
-      navigator.sendBeacon('/api/mall_close_order', {
-        orderSn: this.payInfo.orderSn
+      const url =  `/api/unified_payment/${this.payInfo.tradeSn}/close_trade`
+
+      try {
+
+      await fetch(url, {
+        method: 'POST', // 设置请求方法为POST
+        headers: {
+          'X-Auth-Token': store.state.token,
+          'Accept': 'application/vnd.edusoho.v2+json',
+          'Content-Type': 'application/json', // 设置请求头中的Content-Type为JSON格式
+        },
+        keepalive: true
       })
+    } catch(err) {
+      console.log(err)
+    }
+
     },
     handleAmount(amount) {
       return amount / 100
