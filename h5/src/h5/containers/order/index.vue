@@ -340,7 +340,7 @@ export default {
       );
     },
     IsCollectUserInfoType() {
-      return this.targetType === 'course' || this.targetType === 'classroom';
+      return this.targetType === 'course' || this.targetType === 'classroom' || this.targetType === 'vip';
     },
     showCollectEntry() {
       return Object.keys(this.userInfoCollectForm).length > 0;
