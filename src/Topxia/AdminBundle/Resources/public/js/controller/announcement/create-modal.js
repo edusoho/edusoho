@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require("jquery.bootstrap-datetimepicker");
     require('common/validator-rules').inject(Validator);
-    // require('es-ckeditor');
+    require('es-ckeditor');
     exports.run = function() {
         var $modal = $('#announcement-create-form').parents('.modal');
         $form = $('#announcement-create-form');
@@ -29,8 +29,7 @@ define(function(require, exports, module) {
         });
 
         var editor = CKEDITOR.replace('content-field', {
-            toolbar: 'Simple',
-            filebrowserImageUploadUrl: $('#content-field').data('imageUploadUrl'),
+          toolbar: 'SimpleMini',
         });
 
         validator.on('formValidate', function(elemetn, event) {
