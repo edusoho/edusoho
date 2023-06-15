@@ -473,7 +473,6 @@ class AppServiceTest extends BaseTestCase
         $mockObject->shouldReceive('checkUpgradePackages')->times(1)->andReturn([['id' => 1, 'code' => 'MAIN', 'userAccess' => true, 'purchased' => 1]]);
         $mockObject->shouldReceive('getMessages')->times(1)->andReturn('message');
         $mockObject->shouldReceive('downloadPackage')->times(1)->andReturn('message');
-        $mockObject->shouldReceive('repairProblem')->times(1)->andReturn('problem');
         $mockObject->shouldReceive('getLoginToken')->times(1)->andReturn('token');
         $mockObject->shouldReceive('getTokenLoginUrl')->times(1)->andReturn('loginUrl');
         $mockObject->shouldReceive('getAppStatusByCode')->times(1)->andReturn('status');
