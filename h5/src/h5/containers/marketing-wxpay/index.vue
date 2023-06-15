@@ -103,7 +103,7 @@ export default {
         keepalive: true
       })
     } catch(err) {
-      alert(err)
+      console.log(err)
     }
 
     },
