@@ -93,12 +93,22 @@ class ClassroomController extends BaseController
             'userId' => $user->id,
         ], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
 
+        $auditors = $this->getClassroomService()->searchMembers([
+            'role' => 'auditor',
+            'userId' => $user->id,
+        ], null, 0, PHP_INT_MAX);
+
+        $students = $this->getClassroomService()->searchMembers([
+            'role' => 'student',
+            'userId' => $user->id,
+        ], null, 0, PHP_INT_MAX);
+
         $assistants = $this->getClassroomService()->searchMembers([
             'role' => 'assistant',
             'userId' => $user->id,
         ], null, 0, PHP_INT_MAX);
 
-        $members = array_merge($members, $assistants);
+        $members = array_merge($auditors, $students, $assistants);
         $members = ArrayToolkit::index($members, 'classroomId');
         $classroomIds = ArrayToolkit::column($members, 'classroomId');
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);

@@ -42,9 +42,32 @@ $('.js-btn-login').click((event) => {
     $(event.currentTarget).button('loadding');
     var username = $form.find('#login_username').val();
     var password = $form.find('#login_password').val();
-    $form.find('#login_username').val(window.XXTEA.encryptToBase64(username, 'EduSoho'));
-    $form.find('#login_password').val(window.XXTEA.encryptToBase64(password, 'EduSoho'));
-    $form.submit();
+
+    const encryptedUsername = window.XXTEA.encryptToBase64(username, 'EduSoho');
+    const encryptedPassword = window.XXTEA.encryptToBase64(password, 'EduSoho');
+
+    var formData = $form.serializeArray();
+
+    var fieldsToUpdate = {
+      '_username': encryptedUsername,
+      '_password': encryptedPassword
+    };
+
+    formData.forEach(function(field) {
+      if (fieldsToUpdate.hasOwnProperty(field.name)) {
+        field.value = fieldsToUpdate[field.name];
+      }
+    });
+
+    if (validator.form()) {
+      $.post($form.attr('action'), $.param(formData), function (response) {
+        window.location.reload();
+      }, 'json').error(function (jqxhr, textStatus, errorThrown) {
+        var json = jQuery.parseJSON(jqxhr.responseText);
+        $form.find('.alert-danger').html(Translator.trans(json.message)).show();
+        drag.initDragCaptcha();
+      });
+    }
   }
 });
 

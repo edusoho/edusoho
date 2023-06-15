@@ -122,6 +122,19 @@ $('.js-advanced-paginator a').on('click', function () {
   window.location.href = pageQueryUrl + 'page=' + page + '&perpage=' + currentPerPageCount;
 })
 
+let skipPageQueryUrl = $('.js-skip-paginator').data('url');
+let skipCurrentPerPageCount = $('.js-current-perpage-count').children('option:selected').val();
+// 每页显示数量
+$('.js-current-perpage-count').on('change', function () {
+		window.location.href = skipPageQueryUrl + 'page=1&perpage=' + $(this).val();
+})
+
+// 分页
+$('.js-skip-paginator a').on('click', function () {
+  let page = $(this).data('page');
+  window.location.href = skipPageQueryUrl + 'page=' + page + '&perpage=' + skipCurrentPerPageCount;
+})
+
 // 跳页
 $('#jumpPage').on('blur', function () {
   let currentPage = $(this).data('currentPage');
