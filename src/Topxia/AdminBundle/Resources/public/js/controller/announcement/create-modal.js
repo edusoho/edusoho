@@ -32,6 +32,10 @@ define(function(require, exports, module) {
           toolbar: 'SimpleMini',
         });
 
+        editor.on('blur', () => {
+          editor.setData(editor.getData().replace(/<?img[^>]*?>/g, ''))
+        });
+
         validator.on('formValidate', function(elemetn, event) {
             editor.updateElement();
         });
