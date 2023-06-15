@@ -35,7 +35,11 @@
         </td>
 
         {% if course.type == 'liveOpen' and setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
-          <td>{{ student.mobile }}</td>
+          <td>
+            {% if student.mobile %}
+              {% include 'user-mobile-mask.html.twig' with { mobile: student.mobile } %}
+            {% endif %}
+          </td>
           <td style="vertical-align: middle;">
             {% if student.isNotified %}{{ 'my.teaching.open_course.student_setting.whether_remind.yes'|trans }}{% else %}{{ 'my.teaching.open_course.student_setting.whether_remind.no'|trans }}{% endif %}
           </td>

@@ -6,7 +6,7 @@
     <span>{{ smsRequestLog.ip }}</span>
   </td>
   <td>
-    <span>{{ smsRequestLog.mobile }}</span>
+    <span>{% include 'user-mobile-mask.html.twig' with { mobile: smsRequestLog.mobile } %}</span>
   </td>
   <td>
     {% if smsRequestLog.isIllegal == 0 %}

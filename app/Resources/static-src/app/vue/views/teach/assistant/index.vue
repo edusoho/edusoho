@@ -73,8 +73,8 @@
 
     </a-table>
 
-    <a-modal title="助教详细信息" :visible="visible" @cancel="close">
-      <userInfoTable :user="user" />
+    <a-modal title="助教详细信息" :visible="visible" @cancel="close" :afterClose="afterModalClose">
+      <userInfoTable v-if="userInfoVisible" :user="user" />
 
       <template slot="footer">
         <a-button key="back" @click="close"> 关闭 </a-button>
@@ -149,12 +149,16 @@ export default {
       loading: false,
       pagination: {},
       keyWord: '',
+      userInfoVisible: true,
     };
   },
   created() {
     this.fetchAssistant();
   },
   methods: {
+    afterModalClose() {
+      this.userInfoVisible = false;
+    },
     handleTableChange(pagination) {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
@@ -187,6 +191,8 @@ export default {
       this.fetchAssistant();
     },
     async check(id) {
+      this.user = {};
+      this.userInfoVisible = true;
       this.user = await UserProfiles.get(id);
       this.visible = true;
     },
