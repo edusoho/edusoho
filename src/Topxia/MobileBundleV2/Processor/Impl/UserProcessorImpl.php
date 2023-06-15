@@ -111,6 +111,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $options = $this->createImgCropOptions($naturalSize, $scaledSize);
         $record = $this->getFileService()->getFile($fileId);
+        if ($record['userId'] !== $user['id']) {
+            throw new \RuntimeException('No permission to operate on files');
+        }
         if (empty($record)) {
             throw new \RuntimeException('Error file not exists');
         }
