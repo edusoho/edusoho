@@ -1923,4 +1923,5 @@ t.add("cloud.sms_enable_hint", "\u4e91\u77ed\u4fe1\u672a\u542f\u7528\uff0c\u8bf7
 t.add("admin_v2.homepage.school_info.enter.copy_success", "\u94fe\u63a5\u590d\u5236\u6210\u529f", "js", "zh_CN");
 t.add("admin_v2.homepage.wechat_come", "\u6b22\u8fce\u4f7f\u7528EduSoho\u6559\u57f9\u4ea7\u54c1", "js", "zh_CN");
 t.add("admin_v2.homepage.wechat_code.m", "\u52a0\u5165\u5f00\u6e90\u4ea7\u54c1\u4f7f\u7528\u5b66\u4e60\u4ea4\u6d41\u7fa4\uff0c\u5c0f\u4f19\u4f34\u5728\u7b49\u4f60", "js", "zh_CN");
+t.add("del.role.theater.hover.title", "\u8be5\u7528\u6237\u65e0\u8bb2\u5e08\u6743\u9650\u3002\u79fb\u9664\u540e\u5c06\u4e0d\u5728\u79fb\u52a8\u7aef\u5c55\u793a", "js", "zh_CN");
 })(Translator);

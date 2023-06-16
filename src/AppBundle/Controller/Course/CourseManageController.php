@@ -828,16 +828,20 @@ class CourseManageController extends BaseController
 
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $teachers = $this->getCourseService()->findTeachersByCourseId($courseId);
+        $teacherItems = $this->getUserService()->findUsersByIds(array_column($teachers, 'userId'));
+        $teacherItemIds = array_column($teacherItems, 'id');
+        $indexedTeacherItems = array_combine($teacherItemIds, $teacherItems);
         $teacherIds = [];
 
         if (!empty($teachers)) {
+
             foreach ($teachers as $teacher) {
                 $teacherIds[] = [
                     'id' => $teacher['userId'],
                     'isVisible' => $teacher['isVisible'],
                     'nickname' => $teacher['nickname'],
-
                     'avatar' => $this->get('web.twig.extension')->avatarPath($teacher, 'small'),
+                    'isCanceledTeacherRoles' => !in_array('ROLE_TEACHER',$indexedTeacherItems[$teacher['userId']]['roles']),
                 ];
             }
         }

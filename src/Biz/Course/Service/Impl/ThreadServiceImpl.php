@@ -185,7 +185,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['content'] = $this->biz['html_helper']->purify($thread['content'], $trusted);
 
         $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($thread['content'], 'course-thread-create');
-        $thread['content'] = $sensitiveResult['content'];
         $thread['title'] = $this->sensitiveFilter($thread['title'], 'course-thread-create');
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
@@ -194,6 +193,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['title'] = $this->biz['html_helper']->purify(empty($thread['title']) ? '' : $thread['title']);
         $thread['courseSetId'] = $course['courseSetId'];
 
+        //if user can manage course, we trusted rich editor content
+        $hasCourseManagerRole = $this->getCourseService()->hasCourseManagerRole($thread['courseId']);
+        $trusted = empty($hasCourseManagerRole) ? false : true;
+
+        /**
+         *  当用户无权限管理课程时，对content进行html标签过滤
+         */
+        $sensitiveResult['content'] = $this->biz['html_helper']->purify($thread['content'], $trusted);
+        $thread['content'] = $sensitiveResult['content'];
         $thread['content'] = $this->filter_Emoji($thread['content']);
         $thread['title'] = $this->filter_Emoji($thread['title']);
 
@@ -448,13 +456,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($thread)) {
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
-        $post['content'] = $this->filter_Emoji($post['content']);
 
         //if user can manage course, we trusted rich editor content
         $hasCourseManagerRole = $this->getCourseService()->hasCourseManagerRole($post['courseId']);
         $trusted = empty($hasCourseManagerRole) ? false : true;
-        //创建post过滤html
+
+        /**
+         * 当用户无权限管理课程时，对content进行html标签过滤
+         */
         $post['content'] = $this->biz['html_helper']->purify($post['content'], $trusted);
+        $post['content'] = $this->filter_Emoji($post['content']);
 
         $sensitiveResult = $this->getSensitiveService()->sensitiveCheckResult($post['content'], 'course-thread-post-create');
         $post['content'] = $sensitiveResult['content'];
