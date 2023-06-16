@@ -633,6 +633,11 @@ class ManageController extends BaseController
 
     public function showTemplateAction(Request $request, $type)
     {
+        $validTypes = ['choice', 'determine', 'essay', 'fill', 'material', 'single_choice', 'uncertain_choice'];
+
+        if (!in_array($type, $validTypes)) {
+            throw new \InvalidArgumentException("Invalid type: $type");
+        }
         $question = $request->request->get('question', []);
         $seq = $request->request->get('seq', 1);
         $token = $request->request->get('token', '');
