@@ -6,6 +6,7 @@
       :assessment="assessment"
       :answerRecord="answerRecord"
       :answerScene="answerScene"
+			:isDownload="isDownload"
       :showCKEditorData="showCKEditorData"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
@@ -35,7 +36,8 @@
         cdnHost: $('[name=cdn_host]').val(),
         isErrorCorrection: $('[name=is_error_correction]').val(),
         fileId: 0,
-        metaActivity: {}
+        metaActivity: {},
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
       };
     },
     created() {
