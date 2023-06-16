@@ -98,7 +98,9 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         if (empty($members)) {
             return;
         }
-
+        if (!$this->getClassroomService()->isCourseInClassroom($course['id'], $classroomId)) {
+            return;
+        }
         $memberIds = ArrayToolkit::column($members, 'userId');
         $this->getCourseMemberService()->batchBecomeStudents($course['id'], $memberIds, $classroomId);
     }
