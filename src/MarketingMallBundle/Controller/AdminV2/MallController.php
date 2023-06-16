@@ -3,6 +3,7 @@
 namespace MarketingMallBundle\Controller\AdminV2;
 
 use AppBundle\Common\SmsToolkit;
+use AppBundle\Common\UrlToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Firebase\JWT\JWT;
@@ -31,9 +32,9 @@ class MallController extends BaseController
         }
 
         $authorization = JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'userInfo' => $this->getUserInfo(), 'session_id' => $request->getSession()->getId(), 'access_key' => $mallSettings['access_key'], 'header' => 'MARKETING_MALL'], $mallSettings['secret_key']);
-        $mallUrl = $this->getSchema() . $this->container->getParameter('marketing_mall_url') . '/console-pc/';
+        $mallUrl = $this->getSchema() . UrlToolkit::ltrimHttpProtocol($this->container->getParameter('marketing_mall_url'));
 
-        $url = "{$mallUrl}?token={$authorization}&code={$mallSettings['access_key']}&url={$request->getSchemeAndHttpHost()}&schoolCode={$mallSettings['code']}";
+        $url = "{$mallUrl}/console-pc/?token={$authorization}&code={$mallSettings['access_key']}&url={$request->getSchemeAndHttpHost()}&schoolCode={$mallSettings['code']}";
 
         $options = [
             'overview' => [
