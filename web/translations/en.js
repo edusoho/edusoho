@@ -1962,4 +1962,5 @@ t.add("cloud.sms_enable_hint", "Cloud SMS is not enabled. Please go to <a href=\
 t.add("admin_v2.homepage.school_info.enter.copy_success", "Link copied successfully", "js", "en");
 t.add("admin_v2.homepage.wechat_come", "Welcome to EduSoho enterprise products", "js", "en");
 t.add("admin_v2.homepage.wechat_code.m", "Join the open source product use learning exchange group, small partners are waiting for you", "js", "en");
+t.add("del.role.theater.hover.title", "This user does not have instructor rights. After removal, it will not be displayed on mobile", "js", "en");
 })(Translator);

@@ -1,7 +1,5 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
-{% do script(['app/js/admin-v2/article/index.js', 'libs/es-ckeditor/ckeditor.js'])  %}
-
 {% set modalSize = 'large' %}
 
 {% block title %}{% if announcement|default(null) %}{{ 'admin.operation_announcement.modal.edit'|trans }}{% else %}{{ 'admin.operation_announcement.modal.create'|trans }}{% endif %}{{ 'admin.operation_announcement.modal.announcement'|trans }}{% endblock %}
@@ -15,11 +13,9 @@
       </div>
       <div class="col-md-8 controls">
         <textarea class="form-control" id="content-field" name="content"
-                  data-display="{{ 'admin.operation_announcement.modal.content'|trans }}"
-                  data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">
+                  data-display="{{ 'admin.operation_announcement.modal.content'|trans }}">
           {% if announcement|default(null) %}{{ announcement.content }}{% endif %}
         </textarea>
-
       </div>
     </div>
     {% if announcement.url | default('') %}

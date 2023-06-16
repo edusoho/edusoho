@@ -10,6 +10,7 @@ function initItem(dataSourceUi,data,index,props) {
     avatar: data[props.avatar],
     seq: index,
     id:data[props.id],
+		isCanceledTeacherRoles:data.isCanceledTeacherRoles,
     outputValue: {
       [props.id]: data[props.id],
       [props.isVisible]: data[props.isVisible] ,
