@@ -32,8 +32,23 @@ define(function(require, exports, module) {
           toolbar: 'SimpleMini',
         });
 
-        editor.on('blur', () => {
-          editor.setData(editor.getData().replace(/<?img[^>]*?>/g, ''))
+        let tmp = 0;
+        editor.on('change', () => {
+            if (tmp) {
+              tmp = 0;
+              return;
+            }
+
+            let text = editor.getData()
+              .replace(/<?img[^>]*?>/g, '')
+              .replaceAll('<p></p>' , '');
+
+            if (text === editor.getData()) {
+              return;
+            }
+
+            tmp =1;
+            editor.setData(text)
         });
 
         validator.on('formValidate', function(elemetn, event) {
