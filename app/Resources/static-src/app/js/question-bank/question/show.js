@@ -21,10 +21,6 @@ class QuestionsShow {
       this.onClickSearchBtn(event);
     });
 
-    this.element.on('click', '.pagination li', (event) => {
-      this.onClickPagination(event);
-    });
-
     this.element.on('click', '.js-category-search', (event) => {
       this.onClickCategorySearch(event);
     });
@@ -187,12 +183,6 @@ class QuestionsShow {
     event.preventDefault();
   }
 
-  onClickPagination(event) {
-    let $target = $(event.currentTarget);
-    this.element.find('.js-page').val($target.data('page'));
-    this.renderTable(true);
-    event.preventDefault();
-  }
 
   onClickCategorySearch(event) {
     let $target = $(event.currentTarget);
