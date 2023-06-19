@@ -111,7 +111,7 @@
         >
           <el-input 
             size="mini"
-            v-model="linkUrl" 
+            v-model="copyModuleData.link.url" 
             placeholder="例如 http://www.eduosho.com" 
             clearable>
         </el-input>
@@ -233,7 +233,7 @@ export default {
           return this.type === 'course_list' ? data.displayedTitle : data.title;
         }
         if (this.copyModuleData.link.target) {
-          return this.copyModuleData.link.target.title;
+          return this.copyModuleData.link.target.displayedTitle;
         }
       },
       set() {},
@@ -263,6 +263,7 @@ export default {
     },
   },
   created() {
+    console.log(this.copyModuleData.link.target.displayedTitle)
     if (this.pathName !== 'miniprogramSetting') {
       this.type = this.moduleData.data.link.type;
       if (this.moduleData.data.link.type === 'url') {
