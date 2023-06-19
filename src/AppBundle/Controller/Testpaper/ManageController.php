@@ -636,7 +636,7 @@ class ManageController extends BaseController
         $validTypes = ['choice', 'determine', 'essay', 'fill', 'material', 'single_choice', 'uncertain_choice'];
 
         if (!in_array($type, $validTypes)) {
-            throw new \InvalidArgumentException("Invalid type: $type");
+            throw new \InvalidArgumentException('Invalid type');
         }
         $question = $request->request->get('question', []);
         $seq = $request->request->get('seq', 1);
