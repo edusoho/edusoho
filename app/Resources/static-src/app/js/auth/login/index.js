@@ -61,7 +61,7 @@ $('.js-btn-login').click((event) => {
 
     if (validator.form()) {
       $.post($form.attr('action'), $.param(formData), function (response) {
-        window.location.reload();
+        window.location.replace('/');
       }, 'json').error(function (jqxhr, textStatus, errorThrown) {
         var json = jQuery.parseJSON(jqxhr.responseText);
         $form.find('.alert-danger').html(Translator.trans(json.message)).show();
