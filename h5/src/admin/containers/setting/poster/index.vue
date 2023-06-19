@@ -163,7 +163,6 @@ export default {
   },
   data() {
     return {
-      linkUrl: '',
       modalVisible: false,
       imgAdress: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
       courseSets: [],
@@ -240,9 +239,6 @@ export default {
     },
   },
   watch: {
-    linkUrl(val){
-      this.copyModuleData.link.url = val
-    },
     copyModuleData: {
       handler(data) {
         this.$emit('updateModule', data);
@@ -263,7 +259,6 @@ export default {
     },
   },
   created() {
-    console.log(this.copyModuleData.link.target.displayedTitle)
     if (this.pathName !== 'miniprogramSetting') {
       this.type = this.moduleData.data.link.type;
       if (this.moduleData.data.link.type === 'url') {
