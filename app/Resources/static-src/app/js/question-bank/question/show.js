@@ -21,6 +21,13 @@ class QuestionsShow {
       this.onClickSearchBtn(event);
     });
 
+    this.element.on('click', '.pagination li', (event) => {
+      this.onClickPagination(event);
+    });
+		this.element.on('change', '.js-current-perpage-count', (event) => {
+      this.onChangePagination(event);
+    });
+
     this.element.on('click', '.js-category-search', (event) => {
       this.onClickCategorySearch(event);
     });
@@ -183,6 +190,28 @@ class QuestionsShow {
     event.preventDefault();
   }
 
+  onClickPagination(event) {
+    let $target = $(event.currentTarget);
+    this.element.find('.js-page').val($target.data('page'));
+    this.renderTable(true);
+    event.preventDefault();
+  }
+	
+	onChangePagination(event){
+		let self = this;
+    let conditions = this.element.find('[data-role="search-conditions"]').serialize() + '&page=' + '1'  + '&perpage=' + $('.js-current-perpage-count').children('option:selected').val();
+    this._loading();
+    $.ajax({
+      type: 'GET',
+      url: this.renderUrl,
+      data: conditions
+    }).done(function(resp){
+      self.table.html(resp);
+      self.selector.updateTable();
+    }).fail(function(){
+      self._loaded_error();
+    });
+	}
 
   onClickCategorySearch(event) {
     let $target = $(event.currentTarget);
@@ -203,7 +232,7 @@ class QuestionsShow {
   renderTable(isPaginator) {
     isPaginator || this._resetPage();
     let self = this;
-    let conditions = this.element.find('[data-role="search-conditions"]').serialize() + '&page=' + this.element.find('.js-page').val();
+    let conditions = this.element.find('[data-role="search-conditions"]').serialize() + '&page=' + this.element.find('.js-page').val() + '&perpage=' + $('.js-current-perpage-count').children('option:selected').val();
     this._loading();
     $.ajax({
       type: 'GET',
