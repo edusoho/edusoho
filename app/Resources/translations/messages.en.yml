@@ -11042,7 +11042,7 @@ live_course.record_replay.safair_tip: Safair may be blocked, please use another 
 live_course.record_replay.show_btn: local recording
 exception.sms_request.abnormal_sms_sending: Abnormal sms sending
 admin.question_bank.file.download.setting.enable.tips: The mobile terminal does not provide the function of downloading question bank attachments, which is not affected by settings
-admin.question_bank.file.download.setting.disable.tips: Compressed files can only be viewed after downloading, and when closed, learners will not be able to view compressed attachments
+admin.question_bank.file.download.setting.disable.tips: After the download permission is enabled, both teachers and students can download attachments. Otherwise, they cannot download attachments
 admin.question_bank.question_bank_attachment.open_radio: Active
 admin.question_bank.question_bank_attachment.close_radio: Disabled
 
