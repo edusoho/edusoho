@@ -30,7 +30,7 @@
                   lessonactive:
                     currentTask == lessonItem.tasks[lessonItem.index].id,
                 }"
-                class="text-overflow ks"
+                class="ks py-8" style="display: flex;"
               >
                 <span
                   v-if="isTry(lessonItem.tasks[lessonItem.index])"
@@ -46,6 +46,7 @@
                   :class="iconfont(lessonItem.tasks[lessonItem.index])"
                   class="iconfont"
                 />
+                <div>
                 {{
                   Number(lessonItem.tasks[lessonItem.index].isOptional)
                     ? ''
@@ -57,6 +58,7 @@
                         lessonItem.title
                       }`
                 }}
+                </div>
               </span>
             </div>
 
@@ -141,17 +143,19 @@
           <div class="litem" v-if="showTask(taskItem, taskIndex)">
             <div
               :class="{ lessonactive: currentTask == Number(taskItem.id) }"
-              class="litem-r text-overflow"
+              class="litem-r" style="display: flex;"
             >
               <span v-if="isTry(taskItem)" class="tryLes">{{ $t('goods.preview') }}</span>
               <span v-if="isFree(taskItem)" class="freeAdmission">{{ $t('goods.free') }}</span>
               <i :class="iconfont(taskItem)" class="iconfont" />
+              <div>
               {{ Number(taskItem.isOptional) ? '' : $t('goods.lesson')
               }}{{
                 Number(taskItem.isOptional)
                   ? taskItem.title
                   : `${taskItem.number}:${taskItem.title}`
               }}
+              </div>
             </div>
             <div v-if="showTask(taskItem, taskIndex)" class="litem-l clearfix">
               <span :class="[liveClass(taskItem), 'text-overflow']">{{

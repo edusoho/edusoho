@@ -111,7 +111,7 @@
         >
           <el-input 
             size="mini"
-            v-model="linkUrl" 
+            v-model="copyModuleData.link.url" 
             placeholder="例如 http://www.eduosho.com" 
             clearable>
         </el-input>
@@ -163,7 +163,6 @@ export default {
   },
   data() {
     return {
-      linkUrl: '',
       modalVisible: false,
       imgAdress: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
       courseSets: [],
@@ -233,16 +232,13 @@ export default {
           return this.type === 'course_list' ? data.displayedTitle : data.title;
         }
         if (this.copyModuleData.link.target) {
-          return this.copyModuleData.link.target.title;
+          return this.copyModuleData.link.target.displayedTitle;
         }
       },
       set() {},
     },
   },
   watch: {
-    linkUrl(val){
-      this.copyModuleData.link.url = val
-    },
     copyModuleData: {
       handler(data) {
         this.$emit('updateModule', data);
