@@ -150,9 +150,10 @@
               <i :class="iconfont(taskItem)" class="iconfont" />
               <div>
               {{ Number(taskItem.isOptional) ? '' : $t('goods.lesson')
-              }}
-              {{
-                Number(taskItem.isOptional) ? taskItem.title : taskItem.number + ':' + taskItem.title
+              }}{{
+                Number(taskItem.isOptional)
+                  ? taskItem.title
+                  : `${taskItem.number}:${taskItem.title}`
               }}
               </div>
             </div>
@@ -232,7 +233,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.lesson)
     if (Object.keys(this.$route.query).length) {
       const { sourceType, taskId } = this.$route.query;
       this.setSourceType({
