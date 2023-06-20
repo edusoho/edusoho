@@ -32,7 +32,7 @@
         {% if isParent %}
           <i class="cd-icon cd-icon-add gray-darker js-toggle-show js-remove-icon"></i>
         {% endif %}
-        <a href="javascript:;" class="gray-darker ellipsis question-category-item-name text-overflow js-category-search js-active-set {% if app.request.query.get('category_id') == category.id %}active{% endif %}" data-id="{{ category.id }}" ><span data-toggle="tooltip" data-placement="top" title="{{category.name}}">{{ category.name }}</span></a>
+        <a href="javascript:;" class="gray-darker ellipsis question-category-item-name text-overflow js-category-search js-active-set {% if app.request.query.get('category_id') == category.id %}active{% endif %}" data-id="{{ category.id }}" ><span data-toggle="tooltip" data-placement="left" title="{{category.name}}">{{ category.name }}</span></a>
       </div>
       {% if isParent %}
         {{ _self.showCategoryTree(category.children, isCollapseChildren, deep) }}
