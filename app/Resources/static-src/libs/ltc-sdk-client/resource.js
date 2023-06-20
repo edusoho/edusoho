@@ -65,6 +65,15 @@ let validate = function() {
     return this.optional(element) || /^[^<>]*$/.test(value);
   }, '不支持输入<、>字符');
 
+  $.validator.addMethod('byte_maxlength', function (value, element, params) {
+    let l = calculateByteLength(value);
+    let bool = l <= Number(params);
+    if (!bool) {
+      $.validator.messages.byte_maxlength = `字符长度必须小于等于${params}`;
+    }
+    return this.optional(element) || l <= Number(params);
+  });
+
   $.extend($.validator.prototype, {
     defaultMessage: function(element, rule) {
       if (typeof rule === 'string') {
@@ -108,6 +117,14 @@ let validate = function() {
   });
 }
 
+function calculateByteLength(string) {
+  let length = string.length;
+  for (let i = 0; i < string.length; i++) {
+    if (string.charCodeAt(i) > 127)
+      length++;
+  }
+  return length;
+}
 
 let jquery = () => {
   $.fn.serializeObject = function()
