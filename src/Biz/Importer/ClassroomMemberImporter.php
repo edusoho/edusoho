@@ -58,6 +58,8 @@ class ClassroomMemberImporter extends Importer
             }
         }
 
+        $this->getLogService()->warning('classroom', 'import_user', '导入学员数据');
+
         return array('existsUserCount' => $existsUserCount, 'successCount' => $successCount);
     }
 

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import 'moment';
 import './icons/iconfont.js';
 import SvgIcon from './icons/SvgIcon.vue';
+import MobileIce from './components/MobileIce.vue'
 // import './mock';
 import VueLazyload from 'vue-lazyload';
 
@@ -69,6 +70,7 @@ if (!window.Vue) {
   });
 
   Vue.component('svg-icon', SvgIcon);
+  Vue.component('mobile-ice', MobileIce);
   Vue.use(VueLazyload);
 }
 
