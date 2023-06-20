@@ -3855,10 +3855,10 @@ es-ckeditor@4.7.2-patch13:
   resolved "https://registry.npmmirror.com/es-ckeditor/-/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
   integrity sha512-ZRwmo39MJujytpgs7giJYAhFFBkMzFhS/wdL8Yvu3GqQ6xjbhb1it45VR4q8UlGdOGFR6clzuNJ4mosxZZTbhQ==
 
-es-ckeditor@^4.7.2-patch20:
-  version "4.7.2-patch20"
-  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch20.tgz#e9cd9791f3021f579c1cef598681d60b6ae7e199"
-  integrity sha512-gRMsd2SpSFbr15VNIs+pokEUTM4T10wmiTsVfMeVtXrqTLnTEwqWvoghbQJMFBO77mcOS9YhGhmF9kZ7DrdM/g==
+es-ckeditor@^4.8.0:
+  version "4.8.0"
+  resolved "https://registry.npmmirror.com/es-ckeditor/-/es-ckeditor-4.8.0.tgz#5f9e8da35cd408577fe2822f009c31b69a97faef"
+  integrity sha512-gRYeIZM60+KzQh5M1C/wNC/BJfgg+YukNITypvgI6CCZZzZD49Fs9l+NgMlzv9DbewCj4KKwPf0SvRnDJjyY5g==
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
@@ -5751,10 +5751,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@^1.0.50:
-  version "1.0.50"
-  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.50.tgz#90d9c0f4e890d628aef8cfa400404ab3cf637935"
-  integrity sha512-Aa3Ha8pXO75UuTBlS+B+IBtOi52YJE8MzRAQXWSByEf3QY82Rowylc/vPusUBnjTeX53Y5Z6VzBN025WDsbJ5w==
+item-bank@^1.0.51:
+  version "1.0.51"
+  resolved "https://registry.npmmirror.com/item-bank/-/item-bank-1.0.51.tgz#5259284d89dbc5bfd7bb17639084f5a17a44b93b"
+  integrity sha512-i9WY1AEP6AJnhrBpHnuo0OSK6+OpvMKDnplqy3HVEDa5LI10AawPQ857LaIDAaKjP6GqD/WF7tTlyZ69/DC2cw==
   dependencies:
     ant-design-vue "^1.5.0"
     caniuse-lite "^1.0.30001390"
