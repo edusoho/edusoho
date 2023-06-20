@@ -201,7 +201,7 @@ class QuestionsShow {
 		let self = this;
 		const currentPerpage = $('.js-current-perpage-count').children('option:selected').val()
 		const serialize = this.element.find('[data-role="search-conditions"]').serialize()
-    const conditions = serialize + '&page=' + '1'  + '&perpage=' + currentPerpage;
+    const conditions = `${serialize}&page=1&perpage=${currentPerpage}`;
     this._loading();
     $.ajax({
       type: 'GET',
@@ -233,13 +233,13 @@ class QuestionsShow {
     this.renderTable( '',defaultPages);
   }
 
-  renderTable(isPaginator,defaultPages) {
+  renderTable(isPaginator, defaultPages) {
     isPaginator || this._resetPage();
     let self = this;
 		const currentPerpage = defaultPages ? defaultPages : $('.js-current-perpage-count').children('option:selected').val()
 		const serialize = this.element.find('[data-role="search-conditions"]').serialize()
 		const pages = this.element.find('.js-page').val()
-    let conditions = serialize + '&page=' + pages + '&perpage=' + currentPerpage;
+    const conditions = `${serialize}&page=${pages}&perpage=${currentPerpage}`;
     this._loading();
     $.ajax({
       type: 'GET',
