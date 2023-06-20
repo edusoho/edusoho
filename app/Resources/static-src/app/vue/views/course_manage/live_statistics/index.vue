@@ -28,7 +28,7 @@
       @change="handleTableChange"
     >
       <template slot="customTitle" slot-scope="text, record">
-        <a-button type="link" @click="handleClickViewTask(record.id)">{{ text }}</a-button>
+        <a-button style="max-width: 240px; white-space: pre-wrap;" type="link" @click="handleClickViewTask(record.id)">{{ text }}</a-button>
       </template>
       <template slot="startTime" slot-scope="text">
         {{ $dateFormat(text, 'YYYY-MM-DD HH:mm') }}
@@ -56,7 +56,8 @@ const columns = [
   {
     title: Translator.trans('course.task'),
     dataIndex: 'title',
-    scopedSlots: { customRender: 'customTitle' }
+    scopedSlots: { customRender: 'customTitle' },
+		width:240
   },
   {
     title: Translator.trans('live_statistics.live_start_time'),
