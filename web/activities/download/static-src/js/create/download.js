@@ -18,7 +18,7 @@ export default class DownLoad {
       rules: {
         title: {
           required: true,
-          maxlength: 50,
+          maxlength: 100,
           trim: true,
           course_title: true,
         },

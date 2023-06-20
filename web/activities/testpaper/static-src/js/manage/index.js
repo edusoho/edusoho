@@ -109,7 +109,7 @@ class Testpaper {
         title: {
           required: true,
           trim: true,
-          maxlength: 50,
+          maxlength: 100,
           course_title: true,
         },
         testpaperId: {
