@@ -40,6 +40,56 @@ const calculateByteLength = (string) => {
   return length;
 }
 
+const inter_byte = (rule, value, callback) => {
+
+  if (!value) {
+    return callback();
+  }
+
+  let byteLength = 0;
+  for (let i = 0 ; i < value.length; i++) {
+    let c = value.charAt(i);
+
+    if (/^[\u0000-\u00ff]$/.test(c)) {
+      byteLength++;
+    } else {
+      byteLength += 2;
+    }
+  }
+
+  if ( byteLength > 100 ) {
+    callback(new Error(Translator.trans('validate.length_max.message', {'length': 100})));
+  } else if ( byteLength < 2 ) {
+    callback(new Error(Translator.trans('validate.length_min.message', {'length': 2})));
+  } else {
+    callback()
+  }
+}
+
+const max_byte = (rule, value, callback) => {
+
+  if (!value) {
+    return callback();
+  }
+
+  let byteLength = 0;
+  for (let i = 0 ; i < value.length; i++) {
+    let c = value.charAt(i);
+
+    if (/^[\u0000-\u00ff]$/.test(c)) {
+      byteLength++;
+    } else {
+      byteLength += 2;
+    }
+  }
+
+  if ( byteLength > 100 ) {
+    callback(new Error(Translator.trans('validate.length_max.message', {'length': 100})));
+  } else {
+    callback()
+  }
+}
+
 export {
   trim,
   course_title,
@@ -49,4 +99,6 @@ export {
   digits_0,
   currency,
   course_title_length,
+  inter_byte,
+  max_byte
 };

@@ -47,12 +47,20 @@ class SystemInitializerTest extends BaseTestCase
     {
         $output = new ConsoleOutput();
         $initializer = new \AppBundle\Common\SystemInitializer($output);
-        ReflectionUtils::invokeMethod($initializer, '_initCoin', []);
+        ReflectionUtils::invokeMethod($initializer, '_initCoinSetting', []);
         $result = $this->getSettingService()->get('coin');
         $default = [
+            'coin_enabled' => 0,
             'cash_model' => 'none',
             'cash_rate' => 1,
-            'coin_enabled' => 0,
+            'coin_name' => '虚拟币',
+            'coin_content' => '',
+            'coin_picture' => '',
+            'coin_picture_50_50' => '',
+            'coin_picture_30_30' => '',
+            'coin_picture_20_20' => '',
+            'coin_picture_10_10' => '',
+            'charge_coin_enabled' => '',
         ];
 
         $this->assertArrayEquals($default, $result);
@@ -97,7 +105,7 @@ class SystemInitializerTest extends BaseTestCase
     {
         $output = new ConsoleOutput();
         $initializer = new \AppBundle\Common\SystemInitializer($output);
-        ReflectionUtils::invokeMethod($initializer, '_initThemes', []);
+        ReflectionUtils::invokeMethod($initializer, '_initThemesSetting', []);
 
         $result = $this->getSettingService()->get('theme');
         $default = ['uri' => 'jianmo'];
@@ -138,7 +146,7 @@ class SystemInitializerTest extends BaseTestCase
 
         $result = $this->getSchedulerService()->searchJobs([], [], 0, \PHP_INT_MAX);
 
-        $this->assertEquals(26, count($result));
+        $this->assertEquals(27, count($result));
 
         $this->assertArrayEquals([
             'Order_FinishSuccessOrdersJob',

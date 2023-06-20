@@ -29,7 +29,7 @@ export default class Live {
       rules: {
         title: {
           required: true,
-          maxlength: 50,
+          byte_maxlength: 100,
           trim: true,
           open_live_course_title: true,
         },

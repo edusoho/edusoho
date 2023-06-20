@@ -234,7 +234,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals('exception.course.expirydays_required', $message);
     }
 
-    public function testValidateExpiryModeWhenIsEnd_date()
+    public function testValidateExpiryModeWhenIsEndDate()
     {
         //happy pass1 str
         $course = [
@@ -412,7 +412,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals(count($courses), 1);
         $defaultCourse = reset($courses);
 
-        $this->assertEquals($defaultCourse['title'], '');
+        $this->assertEquals('默认计划', $defaultCourse['title']);
     }
 
     public function testSetDefaultCourse()
@@ -603,7 +603,7 @@ class CourseServiceTest extends BaseTestCase
 
         $secondCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $hasNoTitle = $this->getCourseService()->hasNoTitleForDefaultPlanInMulPlansCourse($secondCourse['id']);
-        self::assertTrue($hasNoTitle);
+        self::assertFalse($hasNoTitle);
     }
 
     public function testPublishAndSetDefaultCourseType()
@@ -612,7 +612,7 @@ class CourseServiceTest extends BaseTestCase
         $defaultCourse = $this->getCourseService()->getCourse($courseSet['defaultCourseId']);
         $secondCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
 
-        $this->assertEquals('', $defaultCourse['title']);
+        $this->assertEquals('默认计划', $defaultCourse['title']);
         $this->assertEquals('draft', $secondCourse['status']);
 
         $this->getCourseService()->publishAndSetDefaultCourseType($secondCourse['id'], '设置的计划名');

@@ -144,9 +144,9 @@ class MarketingMallApi
         return $this->post('/api-school/setting/removeWapSettingCache');
     }
 
-    public function closeOrder($params)
+    public function notifyTradeClosed($params)
     {
-        return $this->post('/api-school/order/close', ...$params);
+        return $this->post('/api-school/unifiedPayment/notifyTradeClosed', ...$params);
     }
 
     public function logout($params)

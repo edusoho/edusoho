@@ -62,7 +62,7 @@ class EditorController extends BaseController
             if ($isWebuploader) {
                 return $this->createJsonResponse(['url' => $url]);
             } else {
-                $funcNum = $request->query->get('CKEditorFuncNum');
+                $funcNum = $this->purifyHtml($request->query->get('CKEditorFuncNum'));
 
                 if ('image' == $token['type']) {
                     $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}', function(){ this._.dialog.getParentEditor().insertHtml('<img src=\"{$url}\">'); this._.dialog.hide(); return false; });</script>";
@@ -78,7 +78,7 @@ class EditorController extends BaseController
             if ($isWebuploader) {
                 return $this->createJsonResponse(['message' => $message]);
             } else {
-                $funcNum = $request->query->get('CKEditorFuncNum');
+                $funcNum = $this->purifyHtml($request->query->get('CKEditorFuncNum'));
                 $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '', '{$message}');</script>";
 
                 return new Response($response);

@@ -7,12 +7,13 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\AuditCenter\Service\ReportRecordService;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\Review\ReviewException;
 use Biz\Review\Service\ReviewService;
 use Biz\User\Service\UserService;
-use Biz\Common\CommonException;
 
 class Review extends AbstractResource
 {
@@ -43,7 +44,7 @@ class Review extends AbstractResource
 
     public function add(ApiRequest $request)
     {
-        if(!$this->checkDragCaptchaToken($request->getHttpRequest(), $request->request->get('_dragCaptchaToken'))){
+        if (!$this->checkDragCaptchaToken($request->getHttpRequest(), $request->request->get('_dragCaptchaToken'))) {
             throw CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR();
         }
 
@@ -54,6 +55,14 @@ class Review extends AbstractResource
             'content' => $request->request->get('content'),
             'rating' => $request->request->get('rating'),
         ];
+
+        $specs = $this->getGoodsService()->findGoodsSpecsByGoodsId($review['targetId']);
+        $courseIds = array_column($specs, 'targetId');
+        foreach ($courseIds as $courseId) {
+            if (!$this->getCourseService()->canTakeCourse($courseId)) {
+                throw ReviewException::FORBIDDEN_CREATE_REVIEW();
+            }
+        }
 
         $review['userId'] = empty($review['userId']) ? $this->getCurrentUser()->getId() : $review['userId'];
 
