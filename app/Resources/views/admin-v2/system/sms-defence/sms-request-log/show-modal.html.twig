@@ -1,4 +1,4 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'admin.user.manage.user_show.fields.heading_title'|trans}}{% endblock %}
 
@@ -26,7 +26,7 @@
     <tr>
       <th width="25%">{{'sms.defence.request.log.mobile'|trans}}</th>
       <td width="75%">
-        {{ smsRequestLog.mobile }}
+        {% include 'user-mobile-mask.html.twig' with { mobile: smsRequestLog.mobile } %}
       </td>
     </tr>
     <tr>

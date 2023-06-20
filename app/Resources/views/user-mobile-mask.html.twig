@@ -1,0 +1,6 @@
+{% do script(['app/js/mobile-mask/index.js']) %}
+
+<span class="js-user-mobile" data-encrypted-mobile="{{ mobile_encrypt(mobile) }}" data-url="{{ path('user_show_mobile') }}">
+  <span class="js-mobile">{{ mobile_mask(mobile) }}</span>
+  <span class="js-toggle es-icon es-icon-ice cursor-pointer mobile-mask-icon" data-toggle="tooltip" title="{{ 'admin.setting.site.logo.view_btn'|trans }}"></span>
+</span>

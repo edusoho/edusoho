@@ -18,7 +18,11 @@
       :pagination="pagination"
       :loading="loading"
       @change="handleTableChange"
-    />
+    >
+      <template slot="mobile" slot-scope="mobile, record">
+        <mobile-ice :mobile="record.mobile" :encryptedMobile="record.encryptedMobile" />
+      </template>
+    </a-table>
   </div>
 </template>
 
@@ -37,7 +41,8 @@ const columns = [
   },
   {
     title: Translator.trans('live_statistics.mobile'),
-    dataIndex: 'mobile'
+    dataIndex: 'mobile',
+    scopedSlots: { customRender: 'mobile' }
   },
   {
     title: Translator.trans('live_statistics.email'),
