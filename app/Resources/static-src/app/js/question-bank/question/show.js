@@ -196,10 +196,12 @@ class QuestionsShow {
     this.renderTable(true);
     event.preventDefault();
   }
-	
-	onChangePagination(event){
+
+	onChangePagination(){
 		let self = this;
-    let conditions = this.element.find('[data-role="search-conditions"]').serialize() + '&page=' + '1'  + '&perpage=' + $('.js-current-perpage-count').children('option:selected').val();
+		const currentPerpage = $('.js-current-perpage-count').children('option:selected').val()
+		const serialize = this.element.find('[data-role="search-conditions"]').serialize()
+    const conditions = `${serialize}&page=1&perpage=${currentPerpage}`;
     this._loading();
     $.ajax({
       type: 'GET',
@@ -218,7 +220,8 @@ class QuestionsShow {
     this.categoryContainer.find('.js-active-set.active').removeClass('active');
     $target.addClass('active');
     $('.js-category-choose').val($target.data('id'));
-    this.renderTable();
+		const defaultPages = 10
+    this.renderTable( '',defaultPages);
   }
 
   onClickAllCategorySearch(event) {
@@ -226,13 +229,17 @@ class QuestionsShow {
     this.categoryContainer.find('.js-active-set.active').removeClass('active');
     $target.addClass('active');
     $('.js-category-choose').val('');
-    this.renderTable();
+		const defaultPages = 10
+    this.renderTable( '',defaultPages);
   }
 
-  renderTable(isPaginator) {
+  renderTable(isPaginator, defaultPages) {
     isPaginator || this._resetPage();
     let self = this;
-    let conditions = this.element.find('[data-role="search-conditions"]').serialize() + '&page=' + this.element.find('.js-page').val() + '&perpage=' + $('.js-current-perpage-count').children('option:selected').val();
+		const currentPerpage = defaultPages ? defaultPages : $('.js-current-perpage-count').children('option:selected').val()
+		const serialize = this.element.find('[data-role="search-conditions"]').serialize()
+		const pages = this.element.find('.js-page').val()
+    const conditions = `${serialize}&page=${pages}&perpage=${currentPerpage}`;
     this._loading();
     $.ajax({
       type: 'GET',
