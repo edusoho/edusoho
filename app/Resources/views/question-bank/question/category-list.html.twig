@@ -3,12 +3,6 @@
 	.tooltip-inner {
 		max-width:none;
 	}
-	.ellipsis{
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    word-wrap: normal;
-	}
 </style>
 <div id="category-table-body question-category-panel__list">
   <input class="js-category-choose" data-role="search-conditions" type="hidden" name="category_id" value="{{ app.request.query.get('category_id') }}">
@@ -32,7 +26,7 @@
         {% if isParent %}
           <i class="cd-icon cd-icon-add gray-darker js-toggle-show js-remove-icon"></i>
         {% endif %}
-        <a href="javascript:;" class="gray-darker ellipsis question-category-item-name text-overflow js-category-search js-active-set {% if app.request.query.get('category_id') == category.id %}active{% endif %}" data-id="{{ category.id }}" ><span data-toggle="tooltip" data-placement="left" title="{{category.name}}">{{ category.name }}</span></a>
+        <a href="javascript:;" class="gray-darker question-category-item-name text-overflow js-category-search js-active-set {% if app.request.query.get('category_id') == category.id %}active{% endif %}" data-id="{{ category.id }}" data-toggle="tooltip" data-placement="top" title="{{category.name}}">{{ category.name }}</a>
       </div>
       {% if isParent %}
         {{ _self.showCategoryTree(category.children, isCollapseChildren, deep) }}
