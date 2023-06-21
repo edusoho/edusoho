@@ -14,7 +14,7 @@ before_script:
   - cp phpunit.xml.dist phpunit.xml
   - ln -s Tests/cli-config.php cli-config.php
   - mysql -e 'create database oauth2_server_bundle;'
-  - php vendor/doctrine/orm/bin/doctrine orm:schema-:update --force
+  - php vendor/doctrine/orm/bin/doctrine orm:schema-tool:update --force
 
 script:
   - phpunit
