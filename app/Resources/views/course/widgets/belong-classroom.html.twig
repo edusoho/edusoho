@@ -1,3 +1,14 @@
+<style>
+.classInfo {
+  word-break: break-all;
+  overflow:hidden; 
+  text-overflow:ellipsis; 
+  display:-webkit-box;
+  -webkit-box-orient:vertical;  
+  -webkit-line-clamp:3;
+}
+</style>
+
 {% set classroom = data('Classroom', {courseId: course.id}) %}
 {% if classroom|default(null) %}
   <div class="panel panel-default belongs-class">
@@ -12,7 +23,7 @@
             <a href="{{ path('classroom_show', {id: classroom.id}) }}"><img src="{{ filepath(classroom.smallPicture, 'classroom.png') }}" alt=""></a>
           </div>
           <div class="media-body">
-            <a href="{{ path('classroom_show', {id: classroom.id}) }}">{{ classroom.title|raw }}</a>
+            <a class="classInfo" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ classroom.title|raw }}" href="{{ path('classroom_show', {id: classroom.id}) }}">{{ classroom.title|raw }}</a>
           </div>
         </div>
     </div>

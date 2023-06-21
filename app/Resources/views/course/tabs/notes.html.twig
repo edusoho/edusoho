@@ -30,7 +30,7 @@
           {% for task in tasks %}
             <li class="{% if task.id == selectedTaskId %} active {% endif %}">
               <a href="{{ path(currentRoute, {id: course.id, tab: 'notes', sort: sort, task: task.id, selectedCourse: selectedCourseId }) }}#notes" title="{{ task.title }}">
-                {{ task.title|sub_text(16) }}
+                {{ task.title }}
               </a>
             </li>
           {% endfor %}
