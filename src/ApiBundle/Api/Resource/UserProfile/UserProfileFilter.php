@@ -5,6 +5,8 @@ namespace ApiBundle\Api\Resource\UserProfile;
 use ApiBundle\Api\Resource\Filter;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ConvertIpToolkit;
+use Biz\InfoSecurity\Service\MobileMaskService;
+use Topxia\Service\Common\ServiceKernel;
 
 class UserProfileFilter extends Filter
 {
@@ -21,6 +23,8 @@ class UserProfileFilter extends Filter
         $data['user'] = ArrayToolkit::parts($data['user'], $this->userFields);
         $data['user']['loginLocation'] = $this->convertIp($data['user']['loginIp']);
         $data['user']['createdLocation'] = $this->convertIp($data['user']['createdIp']);
+        $data['profile']['encryptedMobile'] = empty($data['profile']['mobile']) ? '' : $this->getMobileMaskService()->encryptMobile($data['profile']['mobile']);
+        $data['profile']['mobile'] = empty($data['profile']['mobile']) ? '' : $this->getMobileMaskService()->maskMobile($data['profile']['mobile']);
     }
 
     protected function publicFields(&$data)
@@ -39,5 +43,13 @@ class UserProfileFilter extends Filter
         }
 
         return $location;
+    }
+
+    /**
+     * @return MobileMaskService
+     */
+    protected function getMobileMaskService()
+    {
+        return ServiceKernel::instance()->createService('InfoSecurity:MobileMaskService');
     }
 }

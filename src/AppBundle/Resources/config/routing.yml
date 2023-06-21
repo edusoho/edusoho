@@ -4126,3 +4126,10 @@ unified_payment_notify:
         _controller: 'AppBundle:UnifiedPayment:notify'
         methods:
           - POST
+
+user_show_mobile:
+  path: '/show_mobile'
+  defaults:
+    _controller: 'AppBundle:MobileMask:showMobile'
+  methods:
+    - POST

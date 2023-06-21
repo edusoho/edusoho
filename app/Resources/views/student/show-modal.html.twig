@@ -84,8 +84,8 @@
 	<tr>
 		<th>{{'user.fields.phone_label'|trans}}</th>
 		<td>
-		{% if profile.mobile %}
-				{{ profile.mobile }}
+      {% if profile.mobile %}
+        {% include 'user-mobile-mask.html.twig' with { mobile: profile.mobile } %}
 			{% else %}
 				{{'site.datagrid.empty'|trans}}
 			{% endif %}
