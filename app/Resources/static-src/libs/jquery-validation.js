@@ -525,7 +525,7 @@ $.validator.addMethod('byte_maxlength', function (value, element, params) {
   let l = calculateByteLength(value);
   let bool = l <= Number(params);
   if (!bool) {
-    $.validator.messages.byte_maxlength = `字符长度必须小于等于${params}`;
+    $.validator.messages.byte_maxlength = `最多只能输入${params}`;
   }
   return this.optional(element) || l <= Number(params);
 }, Translator.trans('validate.byte_maxlength.message'));
