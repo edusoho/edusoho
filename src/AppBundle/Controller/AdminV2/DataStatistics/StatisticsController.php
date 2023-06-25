@@ -819,13 +819,14 @@ class StatisticsController extends BaseController
 
         $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
         $orderItems = ArrayToolkit::index($orderItems, 'order_id');
+        $goodsSpecs = $this->getGoodsService()->findGoodsSpecsByIds(array_column($orderItems, 'target_id'));
 
         $orderPaymentTrades = $this->getPayService()->findTradesByOrderSns($orderSns);
         $paymentTrades = ArrayToolkit::index($orderPaymentTrades, 'order_sn');
 
         foreach ($paidClassroomDetails as &$paidClassroomDetail) {
             $paidClassroomDetail['item'] = empty($orderItems[$paidClassroomDetail['id']]) ? [] : $orderItems[$paidClassroomDetail['id']];
-            $paidClassroomDetail['classroom_id'] = empty($paidClassroomDetail['item']) ? 0 : $paidClassroomDetail['item']['target_id'];
+            $paidClassroomDetail['classroom_id'] = empty($paidClassroomDetail['item']) ? 0 : $goodsSpecs[$paidClassroomDetail['item']['target_id']]['targetId'];
             $paidClassroomDetail['trade'] = empty($paymentTrades[$paidClassroomDetail['sn']]) ? [] : $paymentTrades[$paidClassroomDetail['sn']];
             $paidClassroomDetail = MathToolkit::multiply($paidClassroomDetail, ['price_amount', 'pay_amount'], 0.01);
         }
