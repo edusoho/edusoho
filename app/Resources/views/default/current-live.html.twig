@@ -1,4 +1,3 @@
-{% do script(['app/js/testpaper-manage/check-list/index.js']) %}
 <div class="js-current-live-course hidden" data-position="{{ setting('homepage_live_notify.position') }}">
   {% set liveEntryUrl = path('task_live_entry',{courseId:task.courseId, activityId:task.activityId}) %}
   <div class="js-live-notify-title">
