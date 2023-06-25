@@ -1,3 +1,13 @@
+<style>
+.translate-classroom {
+  word-break: break-all;
+  overflow:hidden; 
+  text-overflow:ellipsis; 
+  display:-webkit-box;
+  -webkit-box-orient:vertical;  
+  -webkit-line-clamp:2;
+}
+</style>
 <div class="panel panel-default live-course-body">
 	<div class="panel-heading">
         <h3 class="panel-title">{{'cloud_search.course.recommend.content_title'|trans}}</h3>
@@ -15,7 +25,7 @@
 	      </div>
 	      <div class="media-body">
 	        <div class="title"  data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ courseSet.title }}" target="_blank">
-			  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="gray-darker" title="{{ courseSet.title }}" target="_blank">{{ courseSet.title|plain_text(20) }}</a>
+			  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="gray-darker ranslate-classroom" title="{{ courseSet.title }}" target="_blank">{{ courseSet.title}}</a>
 	        </div>
 	        <div class="metas">
                 {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}
