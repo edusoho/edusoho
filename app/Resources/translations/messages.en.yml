@@ -1225,7 +1225,7 @@ course.preview.course: Preview course
 course.preview.plan: Preview Plan
 course.check.plan: View Plan
 course.share: Share
-course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please enroll to learn'
+course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a><div>please enroll to learn</div>'
 course.course_limited_tips: 'Limited access, please contact the customer service.'
 item_bank_exercise.course_limited_tips: 'Limited access, please contact the customer service.'
 course.course_closed_tips: 'Sorry, this course %title% has been closed.'

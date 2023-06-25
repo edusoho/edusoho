@@ -1468,7 +1468,7 @@ course.share: 分享
 course.belong_to_classroom_tips: >
   该课程属于
   <a href="%classroomUrl%">%classroomTitle%</a>
-  请加入后再学习
+  <div>请加入后再学习</div>
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
 item_bank_exercise.course_limited_tips: 抱歉，该题库练习为限制题库练习，请联系客服
 course.course_closed_tips: 抱歉，教学计划%title%已关闭！

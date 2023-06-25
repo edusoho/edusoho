@@ -15,8 +15,8 @@
     <a class="js-toggle-show js-toggle-{{ chapter.type }} cd-link-assist" href="javascript:;">
       <i class="es-icon es-icon-keyboardarrowdown cd-mr16"></i>
     </a>
-    <div style="display: inline-flex; width: 610px;">
-      {{'course.plan_task.which_chapter'|trans({'%chapterNumber%':chapter.number, '%chapter%':course_chapter_alias(chapter.type)|trans, '%colon%':colon|default(), '%title%':chapter.title|sub_text(30)})|raw }}
+    <div style="display: inline-block; width: 610px;">
+      {{'course.plan_task.which_chapter'|trans({'%chapterNumber%':chapter.number, '%chapter%':course_chapter_alias(chapter.type)|trans, '%colon%':colon|default(), '%title%':chapter.title})|raw }}
     </div>
   </div>
   {# 章可以创建课时，节
