@@ -14,7 +14,7 @@
 	        
 	      </div>
 	      <div class="media-body">
-	        <div class="title">
+	        <div class="title"  data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ courseSet.title }}" target="_blank">
 			  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="gray-darker" title="{{ courseSet.title }}" target="_blank">{{ courseSet.title|plain_text(20) }}</a>
 	        </div>
 	        <div class="metas">
