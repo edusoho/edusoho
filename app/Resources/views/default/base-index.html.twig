@@ -14,6 +14,11 @@
 {% set consultDisplay = true %}
 
 {% block full_content %}
+  <style>
+  .cd-notification {
+    overflow: visible !important;
+  }
+  </style>
   {% if appDownload  %}
     {{ render(controller('AppBundle:Default:appDownload')) }}
   {% endif %}
