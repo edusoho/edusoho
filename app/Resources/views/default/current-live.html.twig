@@ -23,7 +23,16 @@
   </div>
 </div>
 <script type="text/javascript">
-$('[data-toggle="tooltip"]').tooltip({
+window.addEventListener('load', (event) => {
+  $('[data-toggle="tooltip"]').tooltip({
   html: true,
+  });
 });
+
+{# setTimeout(() => {
+  $('[data-toggle="tooltip"]').tooltip({
+  html: true,
+  });
+}, 2000) #}
+
 </script>
