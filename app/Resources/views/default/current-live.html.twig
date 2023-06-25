@@ -1,3 +1,4 @@
+{% do script(['app/js/current-live/index.js']) %}
 <div class="js-current-live-course hidden" data-position="{{ setting('homepage_live_notify.position') }}">
   {% set liveEntryUrl = path('task_live_entry',{courseId:task.courseId, activityId:task.activityId}) %}
   <div class="js-live-notify-title">
@@ -22,21 +23,3 @@
     </div>
   </div>
 </div>
-<script type="text/javascript">
-console.log(1)
-window.addEventListener('load', (event) => {
-  console.log(2)
-  $('[data-toggle="tooltip"]').tooltip({
-  html: true,
-  });
-  console.log(3)
-});
-console.log(4)
-
-{# setTimeout(() => {
-  $('[data-toggle="tooltip"]').tooltip({
-  html: true,
-  });
-}, 2000) #}
-
-</script>

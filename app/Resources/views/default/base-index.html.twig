@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-
+{% do script(['app/js/current-live/index.js']) %}
 {% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
 
