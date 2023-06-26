@@ -46,6 +46,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'updateUserIsStudent',
+            'closeAntiBrushCaptcha',
         );
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -78,6 +79,13 @@ class EduSohoUpgrade extends AbstractUpdater
     public function updateUserIsStudent()
     {
         $this->getConnection()->exec("update user set isStudent = 0 where roles != '|ROLE_USER|';");
+
+        return 1;
+    }
+
+    public function closeAntiBrushCaptcha()
+    {
+        $this->getSettingService()->set('ugc_content_audit.enable_anti_brush_captcha', 0);
 
         return 1;
     }
