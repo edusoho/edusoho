@@ -6,6 +6,24 @@
   border-left: 2px solid #f1f1f1;
 }
 
+.list-actions {
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+  right: 24px;
+  padding-right: 0;
+  line-height: normal;
+  font-size: 16px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .item-actions__btn {
+    vertical-align: middle;
+  }
+}
+
 .open-course-lesson-item,
 .live-course-lesson-item {
   margin-left: 24px;
@@ -92,24 +110,6 @@
       max-width: 600px;
       min-height: 56px;
       padding: 16px 0;
-    }
-  }
-
-  .list-actions {
-    position: absolute;
-    top: 50%;
-    margin-top: -10px;
-    right: 24px;
-    padding-right: 0;
-    line-height: normal;
-    font-size: 16px
-
-    &:hover {
-      cursor: pointer;
-    }
-
-    .item-actions__btn {
-      vertical-align: middle;
     }
   }
 
