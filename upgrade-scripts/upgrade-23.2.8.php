@@ -85,7 +85,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function closeAntiBrushCaptcha()
     {
-        $this->getSettingService()->set('ugc_content_audit.enable_anti_brush_captcha', 0);
+        $setting = $this->getSettingService()->get('ugc_content_audit', array());
+        $setting['enable_anti_brush_captcha'] = 1;
+        $this->getSettingService()->set('ugc_content_audit', $setting);
 
         return 1;
     }
