@@ -282,11 +282,12 @@ class SystemInitializer
         $this->output->writeln(' ...<info>成功</info>');
     }
 
-    private function _initUgcContentAuditSetting() {
+    private function _initUgcContentAuditSetting()
+    {
         $this->output->write('  初始化放刷弹窗设置');
 
         $default = [
-            'enable_anti_brush_captcha' => '0',
+            'enable_anti_brush_captcha' => '1',
         ];
 
         $this->getSettingService()->set('ugc_content_audit', $default);

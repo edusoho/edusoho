@@ -2,16 +2,16 @@
 
 namespace AppBundle\Command;
 
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 
 class SettingChangeCommand extends BaseCommand
 {
     protected function configure()
     {
         $this->setName('setting:change')
-            ->addArgument('settingName', InputArgument::OPTIONAL, '设置名称 ')
+            ->addArgument('name', InputArgument::OPTIONAL, '设置名称 ')
             ->addArgument('key', InputArgument::OPTIONAL, '键')
             ->addArgument('value', InputArgument::OPTIONAL, '值');
     }
@@ -19,15 +19,15 @@ class SettingChangeCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->initServiceKernel();
-        $settingName = $input->getArgument('settingName');
+        $settingName = $input->getArgument('name');
         $settingKey = $input->getArgument('key');
-        $settingValue= $input->getArgument('value');
+        $settingValue = $input->getArgument('value');
         $output->writeln('<info>'.sprintf('设置setting名称: %s   键: %s  值: %s', $settingName, $settingKey, $settingValue).'</info>');
-        if (!isset($settingName) || !isset($settingKey) || !isset($settingValue)) {
+        if (is_null($settingName) || is_null($settingKey) || is_null($settingValue)) {
             return;
         }
 
-        $setting = $this->getSettingService()->get($settingName, array());
+        $setting = $this->getSettingService()->get($settingName, []);
         if (empty($setting)) {
             return;
         }
