@@ -46,7 +46,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'updateUserIsStudent',
-            'closeAntiBrushCaptcha',
+            'enableAntiBrushCaptcha',
         );
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -83,7 +83,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    public function closeAntiBrushCaptcha()
+    public function enableAntiBrushCaptcha()
     {
         $setting = $this->getSettingService()->get('ugc_content_audit', array());
         $setting['enable_anti_brush_captcha'] = 1;
