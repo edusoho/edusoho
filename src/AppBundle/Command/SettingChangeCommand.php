@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-class SetEnableAntiBrushCaptchaCommand extends BaseCommand
+class SettingChangeCommand extends BaseCommand
 {
     protected function configure()
     {
@@ -28,8 +28,10 @@ class SetEnableAntiBrushCaptchaCommand extends BaseCommand
         }
 
         $setting = $this->getSettingService()->get($settingName, array());
+        if (empty($setting)) {
+            return;
+        }
         $setting[$settingKey] = $settingValue;
-        $output->writeln('设置成功');
         $this->getSettingService()->set($settingName, $setting);
     }
 
