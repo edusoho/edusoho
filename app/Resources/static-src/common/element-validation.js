@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const trim = (rule, value, callback) => {
   value.trim().length > 0 ? callback() : callback(new Error(Translator.trans('validate.trim.message')));
 };
@@ -43,18 +45,14 @@ const calculateByteLength = (string) => {
 const isPositiveInteger = (num) => {
   if (_.isInteger(num) && num > 0) {
     return true;
-  } else {
-    return false;
   }
+
+  return false;
 }
 
 const inter_byte = (rule, value, callback) => {
 
-  if (!value || (rule.maxSize && rule.maxSize)) {
-    return callback();
-  }
-
-  if (!isPositiveInteger(rule.maxSize) && !isPositiveInteger(rule.minSize)) {
+  if (!value || (rule.maxSize && rule.maxSize) ) {
     return callback();
   }
 
@@ -69,9 +67,9 @@ const inter_byte = (rule, value, callback) => {
     }
   }
 
-  if ( rule.maxSize && byteLength > rule.maxSize ) {
+  if ( rule.maxSize && isPositiveInteger(rule.maxSize) && byteLength > rule.maxSize ) {
     callback(new Error(Translator.trans('validate.length_max.message', {'length': rule.maxSize})));
-  } else if ( rule.minSize && byteLength < rule.minSize ) {
+  } else if ( rule.minSize && isPositiveInteger(rule.minSize) && byteLength < rule.minSize ) {
     callback(new Error(Translator.trans('validate.length_min.message', {'length': rule.minSize})));
   } else {
     callback();
