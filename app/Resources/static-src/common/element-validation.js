@@ -57,12 +57,10 @@ const inter_byte = (rule, value, callback) => {
     }
   }
 
-  if ( byteLength > 100 ) {
+  if ( byteLength > rule.maxSize ) {
     callback(new Error(Translator.trans('validate.length_max.message', {'length': 100})));
-  } else if ( byteLength < 2 ) {
+  } else if ( byteLength < rule.minSize ) {
     callback(new Error(Translator.trans('validate.length_min.message', {'length': 2})));
-  } else {
-    callback()
   }
 }
 
@@ -83,7 +81,7 @@ const max_byte = (rule, value, callback) => {
     }
   }
 
-  if ( byteLength > 100 ) {
+  if ( byteLength > rule.maxSize ) {
     callback(new Error(Translator.trans('validate.length_max.message', {'length': 100})));
   } else {
     callback()

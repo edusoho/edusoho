@@ -170,6 +170,8 @@
                             trigger: 'blur'
                         },
                       {
+                        maxSize: 100,
+                        minSize: 2,
                         validator: validation.inter_byte,
                         trigger: 'blur'
                       },
@@ -178,6 +180,7 @@
                     ],
                     subtitle: [
                         {
+                          maxSize: 100,
                           validator: validation.max_byte,
                           trigger: 'blur'
                         },
