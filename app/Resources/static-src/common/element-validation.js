@@ -47,7 +47,7 @@ const isPositiveInteger = (num) => {
 }
 
 const inter_byte = (rule, value, callback) => {
-  
+
   if (!value || (!rule.maxSize && !rule.minSize)) {
     return callback();
   }
