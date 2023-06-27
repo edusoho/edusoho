@@ -42,7 +42,7 @@ const calculateByteLength = (string) => {
 
 const inter_byte = (rule, value, callback) => {
 
-  if (!value) {
+  if (!value && (rule.maxSize && rule.maxSize)) {
     return callback();
   }
 
@@ -57,36 +57,15 @@ const inter_byte = (rule, value, callback) => {
     }
   }
 
-  if ( byteLength > rule.maxSize ) {
-    callback(new Error(Translator.trans('validate.length_max.message', {'length': 100})));
-  } else if ( byteLength < rule.minSize ) {
-    callback(new Error(Translator.trans('validate.length_min.message', {'length': 2})));
-  }
-}
-
-const max_byte = (rule, value, callback) => {
-
-  if (!value) {
-    return callback();
-  }
-
-  let byteLength = 0;
-  for (let i = 0 ; i < value.length; i++) {
-    let c = value.charAt(i);
-
-    if (/^[\u0000-\u00ff]$/.test(c)) {
-      byteLength++;
-    } else {
-      byteLength += 2;
-    }
-  }
-
-  if ( byteLength > rule.maxSize ) {
-    callback(new Error(Translator.trans('validate.length_max.message', {'length': 100})));
+  if ( rule.maxSize && byteLength > rule.maxSize ) {
+    callback(new Error(Translator.trans('validate.length_max.message', {'length': rule.maxSize})));
+  } else if ( rule.minSize && byteLength < rule.minSize ) {
+    callback(new Error(Translator.trans('validate.length_min.message', {'length': rule.minSize})));
   } else {
-    callback()
+    callback();
   }
 }
+
 
 export {
   trim,
@@ -97,6 +76,5 @@ export {
   digits_0,
   currency,
   course_title_length,
-  inter_byte,
-  max_byte
+  inter_byte
 };

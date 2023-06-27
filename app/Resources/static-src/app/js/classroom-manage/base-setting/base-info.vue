@@ -181,7 +181,7 @@
                     subtitle: [
                         {
                           maxSize: 100,
-                          validator: validation.max_byte,
+                          validator: validation.inter_byte,
                           trigger: 'blur'
                         },
                     ]
