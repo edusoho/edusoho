@@ -43,16 +43,12 @@ const calculateByteLength = (string) => {
 }
 
 const isPositiveInteger = (num) => {
-  if (_.isInteger(num) && num > 0) {
-    return true;
-  }
-
-  return false;
+  return _.isInteger(num) && num > 0 ;
 }
 
 const inter_byte = (rule, value, callback) => {
-
-  if (!value || (rule.maxSize && rule.maxSize) ) {
+  
+  if (!value || (!rule.maxSize && !rule.minSize)) {
     return callback();
   }
 
