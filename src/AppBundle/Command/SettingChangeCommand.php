@@ -28,11 +28,9 @@ class SettingChangeCommand extends BaseCommand
         }
 
         $setting = $this->getSettingService()->get($settingName, []);
-        if (empty($setting)) {
-            return;
-        }
         $setting[$settingKey] = $settingValue;
         $this->getSettingService()->set($settingName, $setting);
+        $output->writeln('<info>设置成功</info>');
     }
 
     protected function getSettingService()
