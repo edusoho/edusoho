@@ -3242,7 +3242,7 @@ Firefox浏览器: Firefox
 '%display%必须以英文字母或下划线开头': '%display% must be started with english characters or underline'
 '%display%的长度必须大于等于%min%，一个中文字算2个字符': 'The length of %display% must be longer than %min% ,a chinese character consists of two characters.'
 '请输入合法的%display%,如:200, 221.99, 0.99, 0等': 'Please input valid %display%,for example :200, 221.99, 0.99, 0 etc.'
-'%display%的长度必须小于等于%max%，一个中文字算2个字符': 'The length of %display% should not exceed %max%，a chinese character consists of two characters.'
+'最多只能输入%max%个字符': 'You can only enter up to %max% characters.'
 '%display%格式不正确': 'The format of %display% is not correct.'
 '%display%只能由4-20个字符组成': '%display% can only consist of 4-20 characters.'
 秒数只能在0-59之间: 'Sencond number should be within 0-59.'
