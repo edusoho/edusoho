@@ -40,9 +40,21 @@ const calculateByteLength = (string) => {
   return length;
 }
 
+const isPositiveInteger = (num) => {
+  if (_.isInteger(num) && num > 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 const inter_byte = (rule, value, callback) => {
 
-  if (!value && (rule.maxSize && rule.maxSize)) {
+  if (!value || (rule.maxSize && rule.maxSize)) {
+    return callback();
+  }
+
+  if (!isPositiveInteger(rule.maxSize) && !isPositiveInteger(rule.minSize)) {
     return callback();
   }
 
