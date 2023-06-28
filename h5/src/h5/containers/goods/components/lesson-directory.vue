@@ -73,7 +73,7 @@
                     lessonactive:
                       currentTask == lessonItem.tasks[lessonItem.index].id,
                   }"
-                  class="bl text-overflow ks"
+                  class="bl ks"
                 >
                   <span
                     v-if="isTry(lessonItem.tasks[lessonItem.index])"
@@ -103,6 +103,7 @@
                 </span>
                 <span class="bl zbtime">
                   <span
+                    class="whitespace-nowrap"
                     :class="[liveClass(lessonItem.tasks[lessonItem.index])]"
                     >{{
                       lessonItem.tasks[lessonItem.index] | filterTaskTime
@@ -158,7 +159,7 @@
               </div>
             </div>
             <div v-if="showTask(taskItem, taskIndex)" class="litem-l clearfix">
-              <span :class="[liveClass(taskItem), 'text-overflow']">{{
+              <span :class="[liveClass(taskItem)]">{{
                 taskItem | filterTaskTime
               }}</span>
               <i :class="studyStatus(taskItem)" class="iconfont" />
