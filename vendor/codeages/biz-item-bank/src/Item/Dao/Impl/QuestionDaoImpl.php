@@ -40,6 +40,7 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
                 'id = :id',
                 'id in (:ids)',
                 'item_id = :item_id',
+                'item_id in (:itemIds)',
             ],
             'serializes' => [
                 'answer' => 'json',
