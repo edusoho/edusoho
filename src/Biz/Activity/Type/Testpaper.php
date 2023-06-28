@@ -275,7 +275,7 @@ class Testpaper extends Activity
                 'enable_facein',
                 'answerMode',
                 'customComments',
-                'exam_mode',
+                'exam_mode'
             ]
         );
 
