@@ -100,8 +100,6 @@
 	}
 
 	.bl {
-		display: block !important;
-
 		.iconfont {
 			color: #bebebe;
 		}
@@ -221,8 +219,10 @@
 					}
 
 					.ks {
-						display: inline-block;
+						display: inline-flex;
 						width: vw(224);
+						padding-top: 4px;
+						padding-bottom: 4px;
 						vertical-align: top;
 					}
 				}
@@ -262,7 +262,6 @@
 		}
 
 		.zb-ks {
-			height: vw(60);
 			padding: vw(10) vw(15);
 
 			.lesson-title-l {
@@ -296,6 +295,8 @@
 				}
 
 				.litem-r {
+					display: flex;
+					width: vw(225);
 					color: #666;
 					font-size: vw(14);
 

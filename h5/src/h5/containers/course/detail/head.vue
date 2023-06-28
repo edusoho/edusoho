@@ -539,8 +539,7 @@ export default {
       loadScript(playerSDKUri, err => {
         this.$store.commit('UPDATE_LOADING_STATUS', false);
         if (err) throw err;
-
-        if (options.language === 'zh-cn') {
+        if (options.language === 'zh-cn' || !options.language) {
           options.language = 'zh-CN'
         }
         
