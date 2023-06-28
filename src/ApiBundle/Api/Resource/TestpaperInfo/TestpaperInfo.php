@@ -83,6 +83,12 @@ class TestpaperInfo extends AbstractResource
         $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
 
+        $countTestpaperRecord = $this->getAnswerRecordService()->count(['answer_scene_id' => $activity['ext']['answerSceneId'], 'user_id' => $user['id']]);
+        if (empty($countTestpaperRecord)) {
+            $activity['ext']['residueExamTimes'] = $activity['ext']['doTimes'];
+        }
+        $activity['ext']['residueExamTimes'] = $activity['ext']['doTimes'] - $countTestpaperRecord;
+
         if (!empty($testpaperRecord)) {
             $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_report_id']);
             $testpaperWrapper = new TestpaperWrapper();
