@@ -22,6 +22,9 @@ class LessonManageController extends BaseController
         if ($request->isMethod('POST')) {
             $formData = $request->request->all();
             $formData['length'] = $this->prepareLimitedTime($formData['length']);
+            if (!empty($formData['doTimes']) && $formData['doTimes'] > 100) {
+                throw LessonException::TESTPAPER_DOTIMES_LIMIT();
+            }
             $formData['_base_url'] = $request->getSchemeAndHttpHost();
             $formData['fromUserId'] = $this->getUser()->getId();
             $formData['fromCourseSetId'] = $course['courseSetId'];

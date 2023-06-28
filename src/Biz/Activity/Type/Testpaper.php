@@ -65,6 +65,9 @@ class Testpaper extends Activity
                 'pass_score' => empty($fields['passScore']) ? 0 : $fields['passScore'],
                 'enable_facein' => empty($fields['enable_facein']) ? 0 : $fields['enable_facein'],
                 'exam_mode' => empty($fields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $fields['exam_mode'],
+                'end_time' => empty($fields['endTime']) ? 0 : $fields['endTime'],
+                'is_items_seq_random' => empty($fields['isItemsSeqRandom']) ? 0 : $fields['isItemsSeqRandom'],
+                'is_options_seq_random' => empty($fields['isOptionsSeqRandom']) ? 0 : $fields['isOptionsSeqRandom'],
             ]);
 
             $testpaperActivity = $this->getTestpaperActivityService()->createActivity([
@@ -266,7 +269,10 @@ class Testpaper extends Activity
                 'enable_facein',
                 'answerMode',
                 'customComments',
-                'exam_mode'
+                'exam_mode',
+                'endTime',
+                'isItemsSeqRandom',
+                'isOptionsSeqRandom',
             ]
         );
 

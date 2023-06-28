@@ -9407,6 +9407,7 @@ exception.coupon.over_batch_limit: Exceeding the batch total limit
 
 exception.lesson.not_found: Lesson is not exist
 exception.lesson.parameter_missing: Missing class number
+exception.lesson.testpaper_do_times_more_than_100: Exam frequency exceeds the maximum value
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 exception.task.not_found: Task is not exist

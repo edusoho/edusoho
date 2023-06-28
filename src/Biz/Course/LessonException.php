@@ -14,9 +14,12 @@ class LessonException extends AbstractException
 
     const PARAMETERS_MISSING = 5001303;
 
+    const TESTPAPER_DOTIMES_LIMIT = 5001304;
+
     public $messages = [
         4031301 => 'lesson_count_no_more_than_300',
         4041302 => 'exception.lesson.not_found',
         5001303 => 'exception.lesson.parameter_missing',
+        5001304 => 'exception.lesson.testpaper_do_times_more_than_100',
     ];
 }
