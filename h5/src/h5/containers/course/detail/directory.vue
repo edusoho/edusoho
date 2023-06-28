@@ -506,7 +506,6 @@ export default {
   },
   filters: {
     liveStatusText(lesson) {
-      console.log(lesson)
       const now = new Date().getTime();
       const startTimeStamp = new Date(lesson.startTime * 1000);
       const endTimeStamp = new Date(lesson.endTime * 1000);
