@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Common\Exception\InvalidArgumentException;
 use AppBundle\Util\UploaderToken;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\LessonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\File\Service\UploadFileService;
@@ -161,6 +162,9 @@ class TaskManageController extends BaseController
             $task['redoInterval'] = empty($task['redoInterval']) ? 0 : $task['redoInterval'] * 60;
             if (!isset($task['fromCourseSetId'])) {
                 $task['fromCourseSetId'] = $course['courseSetId'];
+            }
+            if (!empty($formData['doTimes']) && $formData['doTimes'] > 100) {
+                throw LessonException::TESTPAPER_DOTIMES_LIMIT();
             }
 
             $task = $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));

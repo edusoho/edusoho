@@ -109,6 +109,9 @@ class Testpaper extends Activity
             'testMode' => $testpaperActivity['testMode'],
             'finishCondition' => $testpaperActivity['finishCondition'],
             'answerMode' => $testpaperActivity['answerMode'],
+            'endTime' => $activity['endTime'],
+            'isItemsSeqRandom' => $testpaperActivity['answerScene']['is_items_seq_random'],
+            'isOptionsSeqRandom' => $testpaperActivity['answerScene']['is_options_seq_random'],
         ];
 
         return $this->create($newExt);
@@ -133,6 +136,9 @@ class Testpaper extends Activity
         $ext['testMode'] = $sourceExt['testMode'];
         $ext['finishCondition'] = $sourceExt['finishCondition'];
         $ext['answerMode'] = $sourceExt['answerMode'];
+        $ext['endTime'] = $sourceActivity['endTime'];
+        $ext['isItemsSeqRandom'] = $sourceExt['answerScene']['is_items_seq_random'];
+        $ext['isOptionsSeqRandom'] = $sourceExt['answerScene']['is_options_seq_random'];
 
         return $this->update($ext['id'], $ext, $activity);
     }
@@ -159,6 +165,9 @@ class Testpaper extends Activity
                 'pass_score' => empty($filterFields['passScore']) ? 0 : $filterFields['passScore'],
                 'enable_facein' => empty($filterFields['enable_facein']) ? 0 : $filterFields['enable_facein'],
                 'exam_mode' => empty($filterFields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $filterFields['exam_mode'],
+                'end_time' => empty($fields['endTime']) ? 0 : $fields['endTime'],
+                'is_items_seq_random' => empty($fields['isItemsSeqRandom']) ? 0 : $fields['isItemsSeqRandom'],
+                'is_options_seq_random' => empty($fields['isOptionsSeqRandom']) ? 0 : $fields['isOptionsSeqRandom'],
             ]);
 
             $testpaperActivity = $this->getTestpaperActivityService()->updateActivity($activity['id'], [
@@ -266,7 +275,7 @@ class Testpaper extends Activity
                 'enable_facein',
                 'answerMode',
                 'customComments',
-                'exam_mode'
+                'exam_mode',
             ]
         );
 
@@ -275,20 +284,7 @@ class Testpaper extends Activity
             unset($filterFields['length']);
         }
 
-        if (isset($filterFields['doTimes']) && 0 == $filterFields['doTimes']) {
-            $filterFields['testMode'] = 'normal';
-            $filterFields['answerMode'] = isset($fields['answerMode']) ? $fields['answerMode'] : 0;
-        } else {
-            $filterFields['answerMode'] = 0;
-        }
-
-        /* #73707
-        *不限考试次数时,即:无考试开始时间限制,且startTime默认置0.
-        *单次考试次数时,且不限考试开始时间,即:startTime补充置0.
-        */
-        if ((isset($filterFields['doTimes']) && 0 == $filterFields['doTimes']) || (isset($filterFields['testMode']) && 'normal' == $filterFields['testMode'])) {
-            $filterFields['startTime'] = 0;
-        }
+        $filterFields['answerMode'] = isset($fields['answerMode']) ? $fields['answerMode'] : 0;
 
         $filterFields['mediaId'] = $filterFields['testpaperId'];
         unset($filterFields['testpaperId']);
