@@ -244,6 +244,13 @@ class MockEdusohoLiveClient
     {
     }
 
+    public function getLiveAccount()
+    {
+        return [
+            'provider' => rand(1, 10),
+        ];
+    }
+
     public function createLive($live)
     {
         return [

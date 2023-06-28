@@ -69,6 +69,7 @@ class SystemInitializer
         $this->_initStorageSetting();
         $this->_initCouponSetting();
         $this->_initCloudSmsSetting();
+        $this->_initUgcContentAuditSetting();
     }
 
     public function _initCustom()
@@ -281,6 +282,19 @@ class SystemInitializer
         $this->output->writeln(' ...<info>成功</info>');
     }
 
+    private function _initUgcContentAuditSetting()
+    {
+        $this->output->write('  初始化放刷弹窗设置');
+
+        $default = [
+            'enable_anti_brush_captcha' => '1',
+        ];
+
+        $this->getSettingService()->set('ugc_content_audit', $default);
+
+        $this->output->writeln(' ...<info>成功</info>');
+    }
+
     public function initRegisterSetting($user)
     {
         $this->output->write('  初始化注册设置');
@@ -487,7 +501,7 @@ EOD;
         $this->output->write('  初始化虚拟币');
 
         $default = [
-           'coin_enabled' => 0,
+            'coin_enabled' => 0,
             'cash_model' => 'none',
             'cash_rate' => 1,
             'coin_name' => '虚拟币',

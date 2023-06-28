@@ -24,6 +24,9 @@ class QuestionsShow {
     this.element.on('click', '.pagination li', (event) => {
       this.onClickPagination(event);
     });
+		this.element.on('change', '.js-current-perpage-count', (event) => {
+      this.onChangePagination(event);
+    });
 
     this.element.on('click', '.js-category-search', (event) => {
       this.onClickCategorySearch(event);
@@ -194,12 +197,31 @@ class QuestionsShow {
     event.preventDefault();
   }
 
+	onChangePagination(){
+		let self = this;
+		const currentPerpage = $('.js-current-perpage-count').children('option:selected').val()
+		const serialize = this.element.find('[data-role="search-conditions"]').serialize()
+    const conditions = `${serialize}&page=1&perpage=${currentPerpage}`;
+    this._loading();
+    $.ajax({
+      type: 'GET',
+      url: this.renderUrl,
+      data: conditions
+    }).done(function(resp){
+      self.table.html(resp);
+      self.selector.updateTable();
+    }).fail(function(){
+      self._loaded_error();
+    });
+	}
+
   onClickCategorySearch(event) {
     let $target = $(event.currentTarget);
     this.categoryContainer.find('.js-active-set.active').removeClass('active');
     $target.addClass('active');
     $('.js-category-choose').val($target.data('id'));
-    this.renderTable();
+		const defaultPages = 10
+    this.renderTable( '',defaultPages);
   }
 
   onClickAllCategorySearch(event) {
@@ -207,13 +229,17 @@ class QuestionsShow {
     this.categoryContainer.find('.js-active-set.active').removeClass('active');
     $target.addClass('active');
     $('.js-category-choose').val('');
-    this.renderTable();
+		const defaultPages = 10
+    this.renderTable( '',defaultPages);
   }
 
-  renderTable(isPaginator) {
+  renderTable(isPaginator, defaultPages) {
     isPaginator || this._resetPage();
     let self = this;
-    let conditions = this.element.find('[data-role="search-conditions"]').serialize() + '&page=' + this.element.find('.js-page').val();
+		const currentPerpage = defaultPages ? defaultPages : $('.js-current-perpage-count').children('option:selected').val()
+		const serialize = this.element.find('[data-role="search-conditions"]').serialize()
+		const pages = this.element.find('.js-page').val()
+    const conditions = `${serialize}&page=${pages}&perpage=${currentPerpage}`;
     this._loading();
     $.ajax({
       type: 'GET',

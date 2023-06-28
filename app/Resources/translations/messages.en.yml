@@ -1225,7 +1225,7 @@ course.preview.course: Preview course
 course.preview.plan: Preview Plan
 course.check.plan: View Plan
 course.share: Share
-course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please enroll to learn'
+course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a><div>please enroll to learn</div>'
 course.course_limited_tips: 'Limited access, please contact the customer service.'
 item_bank_exercise.course_limited_tips: 'Limited access, please contact the customer service.'
 course.course_closed_tips: 'Sorry, this course %title% has been closed.'
@@ -2467,7 +2467,7 @@ classroom.answer_questions_tips: 'All questions will be answered, help you remov
 classroom.testpaper_review: 'Test paper will be reviewed within 24 hours'
 classroom.testpaper_review_tips: 'Test paper will be reviewed within 24 hours, teachers will point out where the exact issue is.'
 classroom.homework_review: 'Homework will be reviewed within 24 hours'
-classroom.set_head_teacher_tips: 'Head teacher will be in charge of the %name%. There can only be one head teacher.'
+classroom.set_head_teacher_tips: 'Head teacher will be in charge of the classroom. There can only be one head teacher.'
 classroom.set_teacher: 'Teacher Settings'
 classroom.set_teacher_tips: "<div>The teachers will be dispalyed by the orders set here.</div> <div>Teachers can design the learning plan, answer questions, review homeworks and test papers as well as initiate activities.</div> <div>Note: Head teacher is from course teachers, and cannot add manually. </div>\n"
 classroom.set_teacher_empty: 'There is no teacher. Go to course settings now.'
@@ -9406,6 +9406,7 @@ exception.coupon.finished: Coupon finished
 exception.coupon.over_batch_limit: Exceeding the batch total limit
 
 exception.lesson.not_found: Lesson is not exist
+exception.open_course_live_ticket.not_found: Open Course Live Ticket is not exist
 exception.lesson.parameter_missing: Missing class number
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
@@ -11041,7 +11042,7 @@ live_course.record_replay.safair_tip: Safair may be blocked, please use another 
 live_course.record_replay.show_btn: local recording
 exception.sms_request.abnormal_sms_sending: Abnormal sms sending
 admin.question_bank.file.download.setting.enable.tips: The mobile terminal does not provide the function of downloading question bank attachments, which is not affected by settings
-admin.question_bank.file.download.setting.disable.tips: Compressed files can only be viewed after downloading, and when closed, learners will not be able to view compressed attachments
+admin.question_bank.file.download.setting.disable.tips: After the download permission is enabled, both teachers and students can download attachments. Otherwise, they cannot download attachments
 admin.question_bank.question_bank_attachment.open_radio: Active
 admin.question_bank.question_bank_attachment.close_radio: Disabled
 

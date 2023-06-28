@@ -53,7 +53,14 @@ $('#all-courses').on('click', function () {
 
 
 });
-
+ids = localStorage.getItem('ids') ? localStorage.getItem('ids').split(',') : [];
+$('.js-course-wide-list .js-course-item').each(function (i, element){
+	const id = element.getAttribute('data-id');
+	if (ids.includes(id)) {
+		element.className += ' select'
+    $('.js-course-metas-' + id).show();
+	}
+});
 $('.row').on('click', '.course-item ', function () {
 
   let id = $(this).data('id');
@@ -71,11 +78,13 @@ $('.row').on('click', '.course-item ', function () {
       if (val != id)
         return true;
     }, false);
+		localStorage.setItem('ids', ids);
 
   } else {
     $(this).addClass('select');
     $('.course-metas-' + id).show();
     ids.push(id);
+		localStorage.setItem('ids', ids)
   }
 });
 

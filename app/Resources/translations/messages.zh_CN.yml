@@ -1468,7 +1468,7 @@ course.share: 分享
 course.belong_to_classroom_tips: >
   该课程属于
   <a href="%classroomUrl%">%classroomTitle%</a>
-  请加入后再学习
+  <div>请加入后再学习</div>
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
 item_bank_exercise.course_limited_tips: 抱歉，该题库练习为限制题库练习，请联系客服
 course.course_closed_tips: 抱歉，教学计划%title%已关闭！
@@ -1989,7 +1989,7 @@ course.plan_task.live_finish_tips: 直播已经结束
 course.plan_task.converting: 转码中
 course.plan_task.convert_failed: 转码失败
 course.plan_task.which_chapter: >
-  </i>第<span class="number">%chapterNumber%</span>%chapter%<span class="colon">%colon%</span><span class="title">%title%</span>
+  </i>第%chapterNumber%%chapter%%colon%%title%
 course.plan_task.which_lesson: >
   </i>课时<span class="number">%chapterNumber%</span>：<span class="js-lesson-title title">%title%</span>
 course.plan_task.create_btn: 添加
@@ -2838,7 +2838,7 @@ classroom.answer_questions_tips: 对于提问做到有问必答，帮您扫清�
 classroom.testpaper_review: 24小时阅卷点评
 classroom.testpaper_review_tips: 24小时内批阅您提交的试卷，给予有针对性的点评
 classroom.homework_review: 24小时作业批阅
-classroom.set_head_teacher_tips: 班主任负责管理整个%name%，班主任只有一位，并且必须要由老师来担任。
+classroom.set_head_teacher_tips: 班主任负责管理整个班级，班主任只有一位，并且必须要由老师来担任。
 classroom.set_teacher: 设置教师
 classroom.set_teacher_tips: >
   <div>相关页面中的老师列举将会按照这里设定的顺序显示。</div>
@@ -6762,6 +6762,7 @@ admin.user.manage.form.time_option.default: --时间类型--
 admin.user.manage.form.role_option.default: --所有角色--
 admin.user.manage.form.user_type_option.default: --注册来源--
 admin.user.manage.form.user_status_option.default: --学员状态--
+admin.user.manage.form.staff_status_option.default: --员工状态--
 plugin.admin.user.manage.form.user_export_btn: 导出搜索结果
 plugin.admin.user.manage.form.user_student_export_btn: 导出搜索结果
 plugin.admin.user.manage.form.user_staff_export_btn: 导出员工数据
@@ -7631,7 +7632,7 @@ admin.edu_cloud.key_update.key_apply.submiting: 正在申请授权码，请稍�
 
 #题库附件设置
 admin.question_bank.file.download.setting.enable.tips: 移动端暂不提供下载题库附件功能，不受设置影响
-admin.question_bank.file.download.setting.disable.tips: 压缩文件只能下载后查看，关闭后，学员将无法查看压缩类附件
+admin.question_bank.file.download.setting.disable.tips: 开启下载权限后老师和学生均可下载附件，反之均不可下载附件
 admin.question_bank.question_bank_attachment.open_radio: 开启
 admin.question_bank.question_bank_attachment.close_radio: 关闭
 
@@ -10718,6 +10719,7 @@ exception.batch_notification.published: 全站通知已发布
 
 lesson_count_no_more_than_300: 课时总数不能超过300个
 exception.lesson.not_found: 课时不存在
+exception.open_course_live_ticket.not_found: 公开课直播间令牌不存在
 exception.lesson.parameter_missing: 缺少课时编号
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 exception.task.not_found: 任务不存在

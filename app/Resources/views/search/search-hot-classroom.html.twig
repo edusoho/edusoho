@@ -1,3 +1,13 @@
+<style>
+.translate-classroom {
+  word-break: break-all;
+  overflow:hidden; 
+  text-overflow:ellipsis; 
+  display:-webkit-box;
+  -webkit-box-orient:vertical;  
+  -webkit-line-clamp:2;
+}
+</style>
 {% set classroomName = setting('classroom.name')|default('site.default.classroom'|trans) %}
 <div class="panel panel-default live-course-body">
     <div class="panel-heading">
@@ -8,16 +18,16 @@
       {% for classroom in recommendClassrooms if recommendClassrooms %}
           <div class="media">
               <div class="media-left">
-                  <a href="{{ path('classroom_show', {id: classroom.id}) }}" title="{{ classroom.title }}" target="_blank">
+                  <a href="{{ path('classroom_show', {id: classroom.id}) }}" >
                     {{ lazy_img(filepath(classroom.largePicture, 'classroom.png'), 'img-responsive es-live-recommend__img', classroom.title) }}
                   </a>
 
               </div>
               <div class="media-body">
-                  <div class="title">
-                      <a href="{{ path('classroom_show', {id: classroom.id}) }}" class="gray-darker" title="{{ classroom.title }}" target="_blank">{{ classroom.title|plain_text(20) }}</a>
+                  <div class="title"  data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ classroom.title }}" target="_blank">
+                      <a href="{{ path('classroom_show', {id: classroom.id}) }}" class="gray-darker translate-classroom" title="{{ classroom.title }}" target="_blank">{{ classroom.title }}</a>
                   </div>
-                  <div class="metas">
+                  <div class="metas" style="margin-top: 22px;">
                       <span class="classroom-course-num color-gray">{{ 'es_bar.study_place.classroom_course_num'|trans({'%courseNum%': classroom.courseNum}) }}</span>
                   </div>
               </div>

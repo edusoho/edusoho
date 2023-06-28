@@ -56,6 +56,7 @@ class ClassroomController extends BaseController
             'targetType' => 'classroom',
             'targetId' => $classroom['id'],
             'typeExcludes' => $typeExcludes,
+            'excludeAuditStatus' => 'illegal',
         ]);
 
         return $this->render('classroom/dashboard-nav.html.twig', [

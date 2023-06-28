@@ -2,8 +2,8 @@
 
 namespace AppBundle\Common\Tests;
 
-use Biz\BaseTestCase;
 use AppBundle\Common\SimpleValidator;
+use Biz\BaseTestCase;
 
 class SimpleValidatorTest extends BaseTestCase
 {
@@ -19,25 +19,25 @@ class SimpleValidatorTest extends BaseTestCase
 
     public function testNickname()
     {
-        $result = SimpleValidator::nickname('ffgifghjfdggg', array());
+        $result = SimpleValidator::nickname('ffgifghjfdggg', []);
         $this->assertEquals(true, $result);
-        $result = SimpleValidator::nickname('s', array());
+        $result = SimpleValidator::nickname('s', []);
         $this->assertEquals(false, $result);
-        $result = SimpleValidator::nickname('qertyuiosdfghjklxcvbnmvb', array());
+        $result = SimpleValidator::nickname('qertyuiosdfghjklxcvbnmvbhdfbegherjk4427', []);
         $this->assertEquals(false, $result);
     }
 
     public function testPassword()
     {
-        $result = SimpleValidator::password('qwer', array());
+        $result = SimpleValidator::password('qwer', []);
         $this->assertEquals(false, $result);
-        $result = SimpleValidator::password('qwert', array());
+        $result = SimpleValidator::password('qwert', []);
         $this->assertEquals(true, $result);
-        $result = SimpleValidator::password('123456', array());
+        $result = SimpleValidator::password('123456', []);
         $this->assertEquals(true, $result);
-        $result = SimpleValidator::password('qwertqwertqwertqwetq', array());
+        $result = SimpleValidator::password('qwertqwertqwertqwetq', []);
         $this->assertEquals(true, $result);
-        $result = SimpleValidator::password('qwertqwertqwertq2wetq', array());
+        $result = SimpleValidator::password('qwertqwertqwertq2wetq', []);
         $this->assertEquals(false, $result);
     }
 

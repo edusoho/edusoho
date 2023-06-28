@@ -14,8 +14,17 @@
 	        
 	      </div>
 	      <div class="media-body">
-	        <div class="title">
-			  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="gray-darker" title="{{ courseSet.title }}" target="_blank">{{ courseSet.title|plain_text(20) }}</a>
+	        <div class="title"  data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ courseSet.title }}" target="_blank">
+			  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" 
+          class="gray-darker" 
+          style="word-break: break-all;
+                overflow:hidden; 
+                text-overflow:ellipsis; 
+                display:-webkit-box;
+                -webkit-box-orient:vertical;  
+                -webkit-line-clamp:2;" 
+          title="{{ courseSet.title }}" 
+          target="_blank">{{ courseSet.title}}</a>
 	        </div>
 	        <div class="metas">
                 {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}
