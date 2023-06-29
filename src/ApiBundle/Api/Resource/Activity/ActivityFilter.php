@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class ActivityFilter extends Filter
 {
     protected $publicFields = [
-        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title', 'finishData', 'finishType', 'finishCondition', 'exam_mode'
+        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title', 'finishData', 'finishType', 'finishCondition', 'exam_mode', 'endTime',
     ];
 
     protected function publicFields(&$data)
@@ -45,11 +45,14 @@ class ActivityFilter extends Filter
                 $data['testpaperInfo']['redoInterval'] = $data['ext']['redoInterval']; //分钟
                 $data['testpaperInfo']['doTimes'] = $data['ext']['doTimes'];
                 $data['testpaperInfo']['startTime'] = !empty($data['startTime']) ? $data['startTime'] : null;
-                $data['testpaperInfo']['examMode'] = !empty($data['ext']['answerScene']['exam_mode']) ? $data['ext']['answerScene']['exam_mode'] : "0";
+                $data['testpaperInfo']['examMode'] = !empty($data['ext']['answerScene']['exam_mode']) ? $data['ext']['answerScene']['exam_mode'] : '0';
                 /**
                  * @see \ApiBundle\Api\Resource\Course\CourseItemWithLesson::search()
                  */
-                $data['testpaperInfo']['answerRecordId'] = !empty($data['ext']['answerRecordId']) ? $data['ext']['answerRecordId'] : "0";
+                $data['testpaperInfo']['answerRecordId'] = !empty($data['ext']['answerRecordId']) ? $data['ext']['answerRecordId'] : '0';
+                $data['testpaperInfo']['endTime'] = !empty($data['endTime']) ? $data['endTime'] : null;
+                $data['testpaperInfo']['remainderExamTimes'] = !empty($data['ext']['remainderExamTimes']) ? $data['ext']['remainderExamTimes'] : $data['ext']['doTimes'];
+                $data['testpaperInfo']['isLimitDoTimes'] = !empty($data['ext']['isLimitDoTimes']) ? $data['ext']['isLimitDoTimes'] : '0';
             }
         }
         if ('download' == $data['mediaType']) {
