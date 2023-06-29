@@ -73,10 +73,6 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             $answerScene['redo_interval'] = 0;
         }
 
-        if (isset($answerScene['do_times']) && 0 == $answerScene['do_times']) {
-            $answerScene['start_time'] = 0;
-        }
-
         return $answerScene;
     }
 
