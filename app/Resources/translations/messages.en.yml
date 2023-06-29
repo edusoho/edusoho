@@ -9528,7 +9528,6 @@ exception.testpaper.doing: The test paper has not been submitted
 exception.testpaper.redo_interval_exist: Teacher set retry interval
 exception.testpaper.forbidden_delete_open_testpaper: Opne testpaper can not be deleted
 exception.testpaper.do_times_more_than_100: Exam frequency exceeds the maximum value
-exception.testpaper.start_time_earlier_than_current: The start time should be later than the current time
 exception.testpaper.end_time_earlier_than_start_time: The end time can not be earlier than or equal to the start time
 exception.uploadfile.file_not_found: file does not exist
 exception.uploadfile.forbidden_manage_file: No rights to manage resources

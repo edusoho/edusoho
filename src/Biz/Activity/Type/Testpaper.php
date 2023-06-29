@@ -229,10 +229,6 @@ class Testpaper extends Activity
             throw TestpaperException::TESTPAPER_DOTIMES_LIMIT();
         }
 
-        if (!empty($fields['startTime']) && $fields['startTime'] < time()) {
-            throw TestpaperException::START_TIME_EARLIER();
-        }
-
         if (!empty($fields['endTime']) && $fields['endTime'] <= $fields['startTime']) {
             throw TestpaperException::END_TIME_EARLIER();
         }
