@@ -284,6 +284,7 @@ t.add("activity.testpaper_manage.media_required", "Please select the testpapers"
 t.add("activity.testpaper_manage.arithmetic_float_error_hint", "Must be a positive number, keep a decimal", "js", "en");
 t.add("activity.testpaper_manage.positive_integer_error_hint", "Must be a positive integer", "js", "en");
 t.add("activity.testpaper_manage.media_error_hint", "Please select the testpapers", "js", "en");
+t.add("activity.testpaper_manage.required.number", "Please enter at least one digit", "js", "en");
 t.add("activity.testpaper_manage.input_title_hint", "Please enter the testpaper title", "js", "en");
 t.add("activity.testpaper_manage.question_scope", "Please select a range of questions", "js", "en");
 t.add("activity.testpaper_manage.question_num_error", "The number of qeustions in this range is insufficient", "js", "en");
@@ -648,6 +649,9 @@ t.add("homework_manage.result_graph.first_status_num", "Number of first result",
 t.add("homework_manage.result_graph.max_status_num", "Number of max result", "js", "en");
 t.add("intro.confirm_hint", "Finish", "js", "en");
 t.add("validate.required.message", "Please input %display%", "js", "en");
+t.add("validate.valid_enter.retest.interval", "Retest interval", "js", "en");
+t.add("course.plan_task.activity_manage.testpaper.time_limit", "Test duration", "js", "en");
+t.add("validate.valid_enter_a_positive.integer", "Please enter a positive integer from 1 to 100", "js", "en");
 t.add("validate.valid_email_input.message", "Please enter a valid email address.", "js", "en");
 t.add("validate.valid_url_input.message", "Please enter a valid URL.", "js", "en");
 t.add("validate.valid_date_input.message", "Please enter a valid date.", "js", "en");
