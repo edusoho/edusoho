@@ -10,9 +10,9 @@
           alt=""
         />
       </div>
-      <div class="pl-20" style='width: 275px;'>
+      <div class="pl-20 flex flex-col justify-between" style='width: 275px;height: 60px'>
         <div class="font-bold text-text-5 text-20">{{ user.nickname }}</div>
-        <div class="w-full mt-4 font-bold text-overflow text-text-3 text-14" style="height: 20px;" v-html="user.about || ''"></div>
+        <div class="w-full mt-4 font-bold text-overflow text-text-3 text-14" style="line-height: 22px;height: 22px;" v-html="user.about || ''"></div>
       </div>
     </div>
 

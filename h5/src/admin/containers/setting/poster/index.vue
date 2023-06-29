@@ -109,13 +109,12 @@
           customClass="poster-item-setting__section"
           v-show="radio === 'url'"
         >
-          <el-input
+          <el-input 
             size="mini"
-            v-model="copyModuleData.link.url"
-            placeholder="例如 http://www.eduosho.com"
-            clearable
-          >
-          </el-input>
+            v-model="copyModuleData.link.url" 
+            placeholder="例如 http://www.eduosho.com" 
+            clearable>
+        </el-input>
         </setting-cell>
 
         <setting-cell
@@ -233,7 +232,7 @@ export default {
           return this.type === 'course_list' ? data.displayedTitle : data.title;
         }
         if (this.copyModuleData.link.target) {
-          return this.copyModuleData.link.target.title;
+          return this.copyModuleData.link.target.displayedTitle;
         }
       },
       set() {},

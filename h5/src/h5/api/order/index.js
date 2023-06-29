@@ -43,4 +43,19 @@ export default [
     url: '/settings/course_purchase_agreement',
     method: 'GET'
   },
+  // 营销商城订单支付
+  {
+    name: 'getMarketingMallPayConfig',
+    url: '/unified_payment',
+    method: 'POST'
+  },
+  {
+    name: 'checkMarketingMallPayConfig',
+    url: '/unified_payment'
+  },
+  {
+    name: 'closeMarketingMallOrder',
+    url: '/mall_close_order',
+    method: 'POST'
+  }
 ];

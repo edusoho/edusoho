@@ -405,6 +405,17 @@ const routes = [
       import(/* webpackChunkName: "wxpay" */ '@/containers/wxpay/index.vue'),
   },
   {
+    path: '/marketing/weixin_pay',
+    name: 'marketingWxpay',
+    meta: {
+      i18n: true,
+      title: 'title.confirmPayment',
+      hideTitle: true
+    },
+    component: () =>
+      import(/* webpackChunkName: "marketingWxpay" */ '@/containers/marketing-wxpay/index.vue'),
+  },
+  {
     path: '/pay_success',
     name: 'paySuccess',
     meta: {
@@ -1026,7 +1037,7 @@ const mobileBindCheck = (to, from, next) => {
 
       resolve()
     }).catch(() => {
-      resolve()
+      resolve() 
     })
   })
 };

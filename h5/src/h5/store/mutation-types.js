@@ -18,6 +18,8 @@ export const GET_NEXT_STUDY = 'GET_NEXT_STUDY';
 export const HAND_EXAM = 'HAND_EXAM';
 export const SET_ALL_TASK = 'SET_ALL_TASK';
 export const SET_TASK_SATUS = 'SET_TASK_SATUS';
+export const LOADED_CLOUD_SDK = 'LOADED_CLOUD_SDK';
+export const DESTROY_CLOUD_SDK = 'DESTROY_CLOUD_SDK';
 export const UPDATE_PROGRESS = 'UPDATE_PROGRESS ';
 export const SET_COURSELIST = 'SET_COURSELIST';
 // register

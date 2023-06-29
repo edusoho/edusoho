@@ -29,8 +29,17 @@ export const fastLogin = ({ commit }, data) =>
 
 export const getUserInfo = ({ commit }) =>
   Api.getUserInfo({}).then(res => {
-    commit(types.USER_INFO, res);
-    return res;
+    const userInfo = res;
+    
+    // html字符串处理，删除所有的P标签
+    const delPResult = res.about.replace(/<p>|<\/p>/g, '');
+
+    // 对img标签进行处理，固定图片的高度
+    const changeImgResult = delPResult.replace(/<img/g, '<img style="height:22px !important;"');
+    
+    userInfo.about = changeImgResult;
+    commit(types.USER_INFO, userInfo);
+    return userInfo;
   });
 
 export const addUser = ({ commit }, data) =>

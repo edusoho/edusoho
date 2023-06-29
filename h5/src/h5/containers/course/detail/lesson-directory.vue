@@ -27,23 +27,25 @@
                     lessonactive:
                       currentTask == lessonItem.tasks[lessonItem.index].id,
                   }"
-                  class="text-overflow ks"
+                  class="ks"
                 >
                   <i
                     :class="iconfont(lessonItem.tasks[lessonItem.index])"
                     class="iconfont"
                   />
-                  {{
-                    Number(lessonItem.tasks[lessonItem.index].isOptional)
-                      ? ''
-                      : $t('courseLearning.lesson')
-                  }}{{
-                    Number(lessonItem.tasks[lessonItem.index].isOptional)
-                      ? lessonItem.title
-                      : `${lessonItem.tasks[lessonItem.index].number}:${
-                          lessonItem.title
-                        }`
-                  }}
+                  <div>
+                    {{
+                      Number(lessonItem.tasks[lessonItem.index].isOptional)
+                        ? ''
+                        : $t('courseLearning.lesson')
+                    }}{{
+                      Number(lessonItem.tasks[lessonItem.index].isOptional)
+                        ? lessonItem.title
+                        : `${lessonItem.tasks[lessonItem.index].number}:${
+                            lessonItem.title
+                          }`
+                    }}
+                  </div>
                 </span>
               </div>
 
@@ -59,23 +61,25 @@
                       lessonactive:
                         currentTask == lessonItem.tasks[lessonItem.index].id,
                     }"
-                    class="bl text-overflow ks"
+                    class="bl ks" style="display: flex;"
                   >
                     <i
                       :class="iconfont(lessonItem.tasks[lessonItem.index])"
                       class="iconfont"
                     />
-                    {{
-                      Number(lessonItem.tasks[lessonItem.index].isOptional)
-                        ? ''
-                        : $t('courseLearning.lesson')
-                    }}{{
-                      Number(lessonItem.tasks[lessonItem.index].isOptional)
-                        ? lessonItem.title
-                        : `${lessonItem.tasks[lessonItem.index].number}:${
-                            lessonItem.title
-                          }`
-                    }}
+                    <div>
+                      {{
+                        Number(lessonItem.tasks[lessonItem.index].isOptional)
+                          ? ''
+                          : $t('courseLearning.lesson')
+                      }}{{
+                        Number(lessonItem.tasks[lessonItem.index].isOptional)
+                          ? lessonItem.title
+                          : `${lessonItem.tasks[lessonItem.index].number}:${
+                              lessonItem.title
+                            }`
+                      }}
+                    </div>
                   </span>
                   <span class="bl zbtime">
                     <span
@@ -120,19 +124,21 @@
             >
               <div
                 :class="{ lessonactive: currentTask == Number(taskItem.id) }"
-                class="litem-r text-overflow"
+                class="litem-r"
               >
                 <!-- <span class="tryLes">试听</span> -->
                 <i :class="iconfont(taskItem)" class="iconfont" />
-                {{ Number(taskItem.isOptional) ? '' : $t('courseLearning.lesson')
-                }}{{
-                  Number(taskItem.isOptional)
-                    ? taskItem.title
-                    : `${taskItem.number}:${taskItem.title}`
-                }}
+                <div>
+                  {{ Number(taskItem.isOptional) ? '' : $t('courseLearning.lesson')
+                  }}{{
+                    Number(taskItem.isOptional)
+                      ? taskItem.title
+                      : `${taskItem.number}:${taskItem.title}`
+                  }}
+                </div>
               </div>
               <div class="litem-l clearfix">
-                <span :class="[liveClass(taskItem), 'text-overflow']">{{
+                <span :class="[liveClass(taskItem)]">{{
                   taskItem | filterTaskTime
                 }}</span>
                 <i :class="studyStatus(taskItem)" class="iconfont" />
@@ -468,15 +474,34 @@ export default {
       if (lesson.status != 'published' || lesson.type != 'live') {
         return 'nopublished';
       }
-      const now = new Date().getTime();
-      const endTimeStamp = new Date(lesson.endTime * 1000);
-      if (now > endTimeStamp) {
-        if (lesson.activity.replayStatus === 'ungenerated') {
-          return 'end';
-        }
+
+      if (lesson.activity.replayStatus === 'generated') {
         return 'back';
       }
-      return 'play';
+
+      if (lesson.progressStatus === 'closed') {
+        return 'end';
+      }
+
+      if (lesson.progressStatus === 'created') {
+        return 'play';
+      }
+
+      if (lesson.progressStatus === 'live') {
+        return 'play';
+      }
+      // if (lesson.status != 'published' || lesson.type != 'live') {
+      //   return 'nopublished';
+      // }
+      // const now = new Date().getTime();
+      // const endTimeStamp = new Date(lesson.endTime * 1000);
+      // if (now > endTimeStamp) {
+      //   if (lesson.activity.replayStatus === 'ungenerated') {
+      //     return 'end';
+      //   }
+      //   return 'back';
+      // }
+      // return 'play';
     },
   },
 };
