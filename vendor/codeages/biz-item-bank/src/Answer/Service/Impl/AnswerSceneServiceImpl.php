@@ -51,7 +51,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         $answerScene = $this->getValidator()->validate($answerScene, [
             'name' => ['required'],
             'limited_time' => ['integer', ['min', 0]],
-            'do_times' => ['integer', ['in', [0, 1]]],
+            'do_times' => ['integer', ['min', 0], ['max', 100]],
             'redo_interval' => ['integer', ['min', 0]],
             'need_score' => ['integer', ['in', [0, 1]]],
             'manual_marking' => ['integer', ['in', [0, 1]]],
@@ -64,6 +64,9 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             'question_report_update_time' => ['integer'],
             'exam_mode' => ['integer'],
             'id' => ['integer'],
+            'end_time' => ['integer'],
+            'is_items_seq_random' => ['integer', ['in', [0, 1]]],
+            'is_options_seq_random' => ['integer', ['in', [0, 1]]],
         ]);
 
         if (isset($answerScene['do_times']) && 1 == $answerScene['do_times']) {
