@@ -1,98 +1,98 @@
-import {dateFormat, htmlEscape} from 'app/common/unit.js';
+import { dateFormat, htmlEscape } from 'app/common/unit.js';
 import DateRangePicker from 'app/common/daterangepicker';
 import 'moment';
 
 const locale = {
-	'format': 'YYYY/MM/DD HH:mm:ss',
-	'separator': '-',
-	'applyLabel': '确定',
-	'cancelLabel': '取消',
-	'fromLabel': '起始时间',
-	'toLabel': '结束时间',
-	'customRangeLabel': '自定义',
-	'weekLabel': 'W',
-	'daysOfWeek': [
-		'日',
-		'一',
-		'二',
-		'三',
-		'四',
-		'五',
-		'六'
-	],
-	'monthNames': [
-		'一月',
-		'二月',
-		'三月',
-		'四月',
-		'五月',
-		'六月',
-		'七月',
-		'八月',
-		'九月',
-		'十月',
-		'十一月',
-		'十二月'
-	],
-	'firstDay': 1
+  'format': 'YYYY/MM/DD HH:mm:ss',
+  'separator': '-',
+  'applyLabel': '确定',
+  'cancelLabel': '取消',
+  'fromLabel': '起始时间',
+  'toLabel': '结束时间',
+  'customRangeLabel': '自定义',
+  'weekLabel': 'W',
+  'daysOfWeek': [
+    '日',
+    '一',
+    '二',
+    '三',
+    '四',
+    '五',
+    '六'
+  ],
+  'monthNames': [
+    '一月',
+    '二月',
+    '三月',
+    '四月',
+    '五月',
+    '六月',
+    '七月',
+    '八月',
+    '九月',
+    '十月',
+    '十一月',
+    '十二月'
+  ],
+  'firstDay': 1
 };
 if (app.lang !== 'zh_CN') {
-	locale = {
-		'format': 'YYYY/MM/DD HH:mm:ss',
-		'separator': '-',
-		'applyLabel': 'Apply',
-		'cancelLabel': 'Cancel',
-		'fromLabel': 'From',
-		'toLabel': 'To',
-		'customRangeLabel': 'Custom',
-		'weekLabel': 'W',
-		'daysOfWeek': [
-			'Su',
-			'Mo',
-			'Tu',
-			'We',
-			'Th',
-			'Fr',
-			'Sa'
-		],
-		'monthNames': [
-			'January',
-			'February',
-			'March',
-			'April',
-			'May',
-			'June',
-			'July',
-			'August',
-			'September',
-			'October',
-			'November',
-			'December'
-		],
-		'firstDay': 1
-	};
+  locale = {
+    'format': 'YYYY/MM/DD HH:mm:ss',
+    'separator': '-',
+    'applyLabel': 'Apply',
+    'cancelLabel': 'Cancel',
+    'fromLabel': 'From',
+    'toLabel': 'To',
+    'customRangeLabel': 'Custom',
+    'weekLabel': 'W',
+    'daysOfWeek': [
+      'Su',
+      'Mo',
+      'Tu',
+      'We',
+      'Th',
+      'Fr',
+      'Sa'
+    ],
+    'monthNames': [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ],
+    'firstDay': 1
+  };
 }
 
 
 $('.js-realTimeRange-data input').daterangepicker({
-	"timePicker": true,
-	"timePicker24Hour": true,
-	"timePickerSeconds": true,
-	locale,
-}, function(start, end, label) {
-	$('input[name=startTime]').val(start.format('YYYY-MM-DD HH:mm:ss'))
-	$('input[name=endTime]').val(end.format('YYYY-MM-DD HH:mm:ss'))
+  "timePicker": true,
+  "timePicker24Hour": true,
+  "timePickerSeconds": true,
+  locale,
+}, function (start, end, label) {
+  $('input[name=startTime]').val(start.format('YYYY-MM-DD HH:mm:ss'))
+  $('input[name=endTime]').val(end.format('YYYY-MM-DD HH:mm:ss'))
 });
 
 
 $('.js-start-range input').daterangepicker({
-	"timePicker": true,
-	'singleDatePicker': true,
-	"timePicker24Hour": true,
-	"timePickerSeconds": true,
-	locale,
-}, function(start, end, label) {
-	$('input[name=startTime]').val(start.format('YYYY-MM-DD HH:mm:ss'))
+  "timePicker": true,
+  'singleDatePicker': true,
+  "timePicker24Hour": true,
+  "timePickerSeconds": true,
+  locale,
+}, function (start, end, label) {
+  $('input[name=startTime]').val(start.format('YYYY-MM-DD HH:mm:ss'))
 });
 
 class Testpaper {
@@ -128,10 +128,10 @@ class Testpaper {
           score: this.$testpaperSelector.select2('data').score,
         }
       });
-      window.ltc.emit('returnValidate', {valid: this.validator.form()});
+      window.ltc.emit('returnValidate', { valid: this.validator.form() });
     });
 
-		if ($('.form-switch').length) {
+    if ($('.form-switch').length) {
       $('[data-toggle="switch"]').on('click', function () {
         var $this = $(this);
         var $parent = $this.parent();
@@ -179,11 +179,11 @@ class Testpaper {
     $('#addComment').on('click', function () {
       let tr = '<tr>\n' +
         '              <td class="form-inline">\n' +
-        '                <input type="text" class="form-control" name="start['+ii+']" style="width: 47px; padding: 6px;"> -\n' +
-        '                <input type="text" class="form-control" name="end['+ii+']" style="width: 47px; padding: 6px;">\n' +
+        '                <input type="text" class="form-control" name="start[' + ii + ']" style="width: 47px; padding: 6px;"> -\n' +
+        '                <input type="text" class="form-control" name="end[' + ii + ']" style="width: 47px; padding: 6px;">\n' +
         '              </td>\n' +
         '              <td class="form-inline">\n' +
-        '                <textarea name="comment['+ii+']" rows="1" maxlength="1500" class="form-control js-comment-content" style="width: 339px;margin-right: 15px;"></textarea>\n' +
+        '                <textarea name="comment[' + ii + ']" rows="1" maxlength="1500" class="form-control js-comment-content" style="width: 339px;margin-right: 15px;"></textarea>\n' +
         '                <div class="default-comment">\n' +
         '                  <a href="javascript:;" class="js-default-comment">' + Translator.trans('activity.testpaper_manage.default_comment') + '</a>\n' +
         '                   <div class="default-comment-list hidden">' +
@@ -236,12 +236,12 @@ class Testpaper {
           digits: true,
           examLength: true
         },
-				doTimes: {
+        doTimes: {
           required: function () {
             return $('[name="isLimitDoTimes"]:checked').val() == 1;
           },
-					section_number:/^([1-9][0-9]{0,1}|100)$/,
-				},
+          section_number: /^([1-9][0-9]{0,1}|100)$/,
+        },
         // startTime: {
         //   required: function () {
         //     return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
@@ -265,15 +265,15 @@ class Testpaper {
           min: Translator.trans('activity.testpaper_manage.media_error_hint'),
         },
         redoInterval: {
-					required: Translator.trans('validate.required.message', { 'display': Translator.trans('validate.valid_enter.retest.interval') }),
+          required: Translator.trans('validate.required.message', { 'display': Translator.trans('validate.valid_enter.retest.interval') }),
           max: Translator.trans('activity.testpaper_manage.max_error_hint')
         },
-				length: {
-					required: Translator.trans('validate.required.message', { 'display': Translator.trans('course.plan_task.activity_manage.testpaper.time_limit') }),
-				},
-				doTimes: {
-					required: Translator.trans('validate.valid_enter_a_positive.integer')
-				}
+        length: {
+          required: Translator.trans('validate.required.message', { 'display': Translator.trans('course.plan_task.activity_manage.testpaper.time_limit') }),
+        },
+        doTimes: {
+          required: Translator.trans('validate.valid_enter_a_positive.integer')
+        }
       }
     });
   }
@@ -415,7 +415,7 @@ class Testpaper {
       self.$testpaperSelector.data('url', url);
       self.initAjaxTestPaperSelector();
     }).error(function (e) {
-      cd.message({type: 'danger', message: e.responseJson.error.message});
+      cd.message({ type: 'danger', message: e.responseJson.error.message });
     });
   }
 
@@ -424,30 +424,30 @@ class Testpaper {
     this.initSelectTestPaper($selected);
   }
 
-	showRedoExamination(event){
+  showRedoExamination(event) {
     const $this = $(event.currentTarget);
-		if($this.val() == 1) {
+    if ($this.val() == 1) {
       $('.js-realTimeRange-data').show();
-			$('.js-start-range').hide();
-		}
-		if($this.val() == 0) {
-			$('.js-start-range').hide();
+      $('.js-start-range').hide();
+    }
+    if ($this.val() == 0) {
+      $('.js-start-range').hide();
       $('.js-realTimeRange-data').hide();
-		}
-		if($this.val() == 2) {
+    }
+    if ($this.val() == 2) {
       $('.js-start-range').show();
       $('.js-realTimeRange-data').hide();
-		}
-	}
+    }
+  }
 
   showRedoInterval(event) {
     const $this = $(event.currentTarget);
-		if($this.val() == 1){
-			$('.js-examinations-num').show();
-		}
-		if($this.val() == 0){
-			$('.js-examinations-num').hide();
-		}
+    if ($this.val() == 1) {
+      $('.js-examinations-num').show();
+    }
+    if ($this.val() == 0) {
+      $('.js-examinations-num').hide();
+    }
 
 
     // if ($('input[name="showAnswerMode"]:checked').length) {
@@ -482,7 +482,7 @@ class Testpaper {
   }
 
   getItemsTable(url, testpaperId) {
-    $.post(url, {testpaperId: testpaperId}, function (html) {
+    $.post(url, { testpaperId: testpaperId }, function (html) {
       $('#questionItemShowTable').html(html);
       $('#questionItemShowDiv').show();
     });
@@ -549,7 +549,7 @@ class Testpaper {
       $('#finishData').val(percentage / 100);
     });
 
-    let tooltipInnerText = Translator.trans('activity.testpaper_manage.qualified_score_hint', {'passScore': '<span class="js-passScore">' + passScore + '</span>'});
+    let tooltipInnerText = Translator.trans('activity.testpaper_manage.qualified_score_hint', { 'passScore': '<span class="js-passScore">' + passScore + '</span>' });
     let html = `<div class="score-tooltip js-score-tooltip"><div class="tooltip top" role="tooltip" style="">
       <div class="tooltip-arrow"></div>
       <div class="tooltip-inner ">
