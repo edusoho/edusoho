@@ -92,10 +92,6 @@ class ActivityController extends BaseController
             $activity['liveFile'] = json_decode(json_decode($activity['content'], true));
         }
 
-        if ('testpaper' == $activity['mediaType'] && !empty($activity['ext'])) {
-            $activity['ext']['isLimitDoTimes'] = empty($activity['ext']['doTimes']) ? '0' : '1';
-        }
-
         $container = $this->get('activity_runtime_container');
 
         return $container->content($activity);
