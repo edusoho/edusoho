@@ -199,6 +199,7 @@ class CourseController extends CourseBaseController
     public function showAction(Request $request, $id, $tab = 'tasks')
     {
         $course = $this->getCourseService()->getCourse($id);
+
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             return $this->redirect($this->generateUrl('course_show', ['id' => $id, 'tab' => $tab]));
@@ -372,7 +373,7 @@ class CourseController extends CourseBaseController
         if (empty($groupCourses)) {
             return [[-1], [-1]];
         }
-
+        $members = ArrayToolkit::index($members, 'courseId');
         $learnedCourseSetIds = [-1];
         $learningCourseSetIds = [-1];
         foreach ($groupCourses as $courseSetId => $courses) {
@@ -485,5 +486,10 @@ class CourseController extends CourseBaseController
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    protected function getCourseThreadService()
+    {
+        return $this->createService('Course:ThreadService');
     }
 }

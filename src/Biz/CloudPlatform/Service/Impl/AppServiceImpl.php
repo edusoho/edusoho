@@ -655,11 +655,6 @@ class AppServiceImpl extends BaseService implements AppService
         }
     }
 
-    public function repairProblem($token)
-    {
-        return $this->createAppClient()->repairProblem($token);
-    }
-
     public function findInstallApp($code)
     {
         return $this->getAppDao()->getByCode($code);

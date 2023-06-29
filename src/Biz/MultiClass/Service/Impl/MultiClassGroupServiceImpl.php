@@ -156,6 +156,9 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
         }
         $this->getMultiClassGroupDao()->batchDelete(['ids' => $ids]);
         $liveGroups = $this->getMultiClassLiveGroupDao()->findByGroupIds($ids);
+        if (empty($liveGroups)) {
+            return;
+        }
         $this->getMultiClassLiveGroupDao()->batchDelete(['ids' => array_column($liveGroups, 'id')]);
 
         $this->dispatchEvent('multi_class.group_batch_delete', $liveGroups);

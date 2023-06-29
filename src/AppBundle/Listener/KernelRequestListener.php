@@ -74,22 +74,14 @@ class KernelRequestListener
 
             $expectedToken = $this->container->get('security.csrf.token_manager')->getToken('site');
             if ($token != $expectedToken) {
-                // @todo 需要区分ajax的response
-                if ($request->getPathInfo() == '/admin') {
-                    $token = $request->request->get('token');
-                    $result = $this->getAppService()->repairProblem($token);
-
-                    $this->container->set('Topxia.RepairProblem', $result);
-                } else {
-                    $response = $this->container->get('templating')->renderResponse('default/message.html.twig', array(
-                        'type' => 'error',
-                        'message' => $this->trans('exception.form.expire'),
-                        'goto' => '',
-                        'duration' => 0,
-                    ));
-                    $response->setStatusCode(403);
-                    $event->setResponse($response);
-                }
+                $response = $this->container->get('templating')->renderResponse('default/message.html.twig', array(
+                    'type' => 'error',
+                    'message' => $this->trans('exception.form.expire'),
+                    'goto' => '',
+                    'duration' => 0,
+                ));
+                $response->setStatusCode(403);
+                $event->setResponse($response);
             }
         }else {
             $request->request->remove('_csrf_token');

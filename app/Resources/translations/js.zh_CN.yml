@@ -2165,3 +2165,5 @@ cloud.sms_enable_hint: 云短信未启用，请前往<a href="%cloudSmsSettingUr
 admin_v2.homepage.school_info.enter.copy_success: 链接复制成功
 admin_v2.homepage.wechat_come: 欢迎使用EduSoho教培产品
 admin_v2.homepage.wechat_code.m: 加入开源产品使用学习交流群，小伙伴在等你
+
+del.role.theater.hover.title: 该用户无讲师权限。移除后将不在移动端展示

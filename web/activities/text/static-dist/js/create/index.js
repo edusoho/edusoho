@@ -17,7 +17,7 @@ load.then(function(){
       rules: {
         title: {
           required: true,
-          maxlength: 50,
+          byte_maxlength: 100,
           trim: true,
           course_title: true,
         },

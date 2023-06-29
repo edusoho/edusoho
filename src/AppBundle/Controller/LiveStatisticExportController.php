@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Classroom\ClassroomException;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
@@ -18,6 +21,10 @@ class LiveStatisticExportController extends BaseController
 {
     public function classroomLiveStatisticExportAction(Request $request, $classroomId)
     {
+        if (!$this->getClassroomService()->canManageClassroom($classroomId)) {
+            throw ClassroomException::FORBIDDEN_MANAGE_CLASSROOM();
+        }
+
         $exporter = new ClassroomLiveStatisticExporter($this->getBiz());
         $objWriter = $exporter->exporter([
             'classroomId' => $classroomId,
@@ -30,6 +37,10 @@ class LiveStatisticExportController extends BaseController
 
     public function courseLiveStatisticExportAction(Request $request, $courseId)
     {
+        if (!$this->getCourseService()->hasCourseManagerRole($courseId)) {
+            throw CourseException::FORBIDDEN_MANAGE_COURSE();
+        }
+
         $exporter = (new CourseLiveStatisticExporter($this->getBiz()));
         $objWriter = $exporter->exporter([
             'courseId' => $courseId,
@@ -42,6 +53,10 @@ class LiveStatisticExportController extends BaseController
     public function taskLiveStatisticExportAction(Request $request, $taskId)
     {
         $task = $this->getTaskService()->getTask($taskId);
+        if (!$this->getCourseService()->hasCourseManagerRole($task['courseId'])) {
+            throw CourseException::FORBIDDEN_MANAGE_COURSE();
+        }
+
         $exporter = (new TaskLiveStatisticMemberExporter($this->getBiz()));
         $objWriter = $exporter->exporter([
             'taskId' => $task['id'],
@@ -54,6 +69,10 @@ class LiveStatisticExportController extends BaseController
     public function rollCallExportAction(Request $request, $taskId)
     {
         $task = $this->getTaskService()->getTask($taskId);
+        if (!$this->getCourseService()->hasCourseManagerRole($task['courseId'])) {
+            throw CourseException::FORBIDDEN_MANAGE_COURSE();
+        }
+
         $exporter = (new TaskRolCallExporter($this->getBiz()));
         $objWriter = $exporter->exporter([
             'taskId' => $task['id'],
@@ -111,6 +130,14 @@ class LiveStatisticExportController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 
     /**

@@ -12,6 +12,7 @@ use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\LiveReplayService;
 use Biz\Course\Service\MemberService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -47,9 +48,6 @@ class CourseItemWithLesson extends AbstractResource
         );
         $needReplayStatus = $request->query->get('needReplayDownloadStatus', 0);
 
-        if ($needReplayStatus) {
-            $liveReplays = $this->getLiveReplays($courseItems);
-        }
         //TODO 循环中调用查询，性能问题
         foreach ($items as &$item) {
             if (!empty($item['tasks'])) {
@@ -57,7 +55,7 @@ class CourseItemWithLesson extends AbstractResource
                     if ('live' === $task['type'] && !empty($activityLive = $task['activity']['ext'])) {
                         if ($needReplayStatus) {
                             $task['liveId'] = $activityLive['liveId'];
-                            $task['replayDownloadStatus'] = !empty($liveReplays[$activityLive['liveId']]) ? ('finished' === $liveReplays[$activityLive['liveId']]['status'] ? 'finished' : 'un_finished') : 'none';
+                            $task['replayDownloadStatus'] = in_array($activityLive['replayStatus'], [LiveReplayService::REPLAY_GENERATE_STATUS, LiveReplayService::REPLAY_GENERATE_STATUS]) ? 'finished' : 'un_finished';
                         }
                         $task['liveStatus'] = $liveStatus = $activityLive['progressStatus'];
                         $currentTime = time();

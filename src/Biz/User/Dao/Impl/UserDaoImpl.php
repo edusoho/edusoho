@@ -317,7 +317,7 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
                 'distributorToken = :distributorToken',
                 'destroyed = :destroyed',
                 'showable = :showable',
-                'isStudent != :isStudent',
+                'isStudent = :isStudent',
             ],
         ];
     }

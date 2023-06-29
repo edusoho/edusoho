@@ -8,6 +8,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\Goods\Service\GoodsService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Review\Dao\ReviewDao;
 use Biz\Review\ReviewException;
@@ -25,6 +26,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         'course' => 'tryCreateCourseReview',
         'classroom' => 'tryCreateClassroomReview',
         'item_bank_exercise' => 'tryCreateItemBankExerciseReview',
+        'goods' => 'tryCreateGoodsReview',
     ];
 
     public function getReview($id)
@@ -181,21 +183,21 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     {
         //判断当前批阅是不是题库练习或考试练习
         $answerReport = $this->getAnswerReportService()->get($reportId);
-        if (empty($answerReport)){
+        if (empty($answerReport)) {
             return false;
         }
         // 查询场次是否在activity_homework
         $activityHomework = $this->getHomeworkActivityService()->getByAnswerSceneId($answerReport['answer_scene_id']);
-        if (!empty($activityHomework)){
+        if (!empty($activityHomework)) {
             return false;
         }
         // 查询场次是否在activity_testpaper
         $activityTestpaper = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
-        if (!empty($activityTestpaper)){
+        if (!empty($activityTestpaper)) {
             return false;
         }
         // 只能批阅自己
-        if ($answerReport['user_id'] != $userId){
+        if ($answerReport['user_id'] != $userId) {
             return false;
         }
 
@@ -214,6 +216,19 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     {
         if (!$this->getCourseService()->canTakeCourse($review['targetId'])) {
             $this->createNewException(ReviewException::FORBIDDEN_CREATE_REVIEW());
+        }
+
+        return $review;
+    }
+
+    protected function tryCreateGoodsReview($review)
+    {
+        $specs = $this->getGoodsService()->findGoodsSpecsByGoodsId($review['targetId']);
+        $courseIds = array_column($specs, 'targetId');
+        foreach ($courseIds as $courseId) {
+            if (!$this->getCourseService()->canTakeCourse($courseId)) {
+                throw ReviewException::FORBIDDEN_CREATE_REVIEW();
+            }
         }
 
         return $review;
@@ -287,7 +302,6 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         return $this->createService('ItemBankExercise:ExerciseService');
     }
 
-
     /**
      * @return TestpaperActivityService
      */
@@ -310,5 +324,13 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     protected function getAnswerReportService()
     {
         return $this->createService('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }
