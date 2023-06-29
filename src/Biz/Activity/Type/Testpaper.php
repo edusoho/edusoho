@@ -109,7 +109,7 @@ class Testpaper extends Activity
             'testMode' => $testpaperActivity['testMode'],
             'finishCondition' => $testpaperActivity['finishCondition'],
             'answerMode' => $testpaperActivity['answerMode'],
-            'endTime' => $activity['endTime'],
+            'endTime' => $testpaperActivity['answerScene']['end_time'],
             'isItemsSeqRandom' => $testpaperActivity['answerScene']['is_items_seq_random'],
             'isOptionsSeqRandom' => $testpaperActivity['answerScene']['is_options_seq_random'],
         ];
@@ -136,7 +136,7 @@ class Testpaper extends Activity
         $ext['testMode'] = $sourceExt['testMode'];
         $ext['finishCondition'] = $sourceExt['finishCondition'];
         $ext['answerMode'] = $sourceExt['answerMode'];
-        $ext['endTime'] = $sourceActivity['endTime'];
+        $ext['endTime'] = $sourceExt['answerScene']['end_time'];
         $ext['isItemsSeqRandom'] = $sourceExt['answerScene']['is_items_seq_random'];
         $ext['isOptionsSeqRandom'] = $sourceExt['answerScene']['is_options_seq_random'];
 
@@ -151,6 +151,7 @@ class Testpaper extends Activity
             throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
+        $fields = $this->checkFields($fields);
         $filterFields = $this->filterFields($fields);
 
         try {
