@@ -8,6 +8,7 @@ use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -50,6 +51,7 @@ class Testpaper extends Activity
 
     public function create($fields)
     {
+        $fields = $this->checkFields($fields);
         $fields = $this->filterFields($fields);
 
         try {
@@ -219,6 +221,23 @@ class Testpaper extends Activity
         }
 
         return false;
+    }
+
+    protected function checkFields($fields)
+    {
+        if (!empty($fields['isLimitDoTimes']) && !empty($fields['doTimes']) && $fields['doTimes'] > 100) {
+            throw TestpaperException::TESTPAPER_DOTIMES_LIMIT();
+        }
+
+        if (!empty($fields['startTime']) && $fields['startTime'] < time()) {
+            throw TestpaperException::START_TIME_EARLIER();
+        }
+
+        if (!empty($fields['endTime']) && $fields['endTime'] <= $fields['startTime']) {
+            throw TestpaperException::END_TIME_EARLIER();
+        }
+
+        return $fields;
     }
 
     protected function filterFields($fields)

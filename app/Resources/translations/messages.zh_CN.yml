@@ -10719,9 +10719,6 @@ exception.batch_notification.published: 全站通知已发布
 lesson_count_no_more_than_300: 课时总数不能超过300个
 exception.lesson.not_found: 课时不存在
 exception.lesson.parameter_missing: 缺少课时编号
-exception.lesson.testpaper_do_times_more_than_100: 考试次数超过最大值
-exception.lesson.start_time_earlier_than_current: 开始时间应晚于当前时间
-exception.lesson.end_time_earlier_than_start_time: 结束时间不能早于或等于开始时间
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 exception.task.not_found: 任务不存在
 exception.task.unpublished_task: 任务未发布
@@ -10840,6 +10837,9 @@ exception.testpaper.modify_committed_testpaper: 已经交卷的试卷不能修�
 exception.testpaper.doing: 试卷还未提交
 exception.testpaper.redo_interval_exist: 教师设置了重考间隔
 exception.testpaper.forbidden_delete_open_testpaper: 已发布试卷无法删除
+exception.testpaper.do_times_more_than_100: 考试次数超过最大值
+exception.testpaper.start_time_earlier_than_current: 开始时间应晚于当前时间
+exception.testpaper.end_time_earlier_than_start_time: 结束时间不能早于或等于开始时间
 exception.homework.not_found: 作业不存在
 exception.homework.draft: 该作业未发布，如有疑问请联系老师！
 exception.homework.closed: 该作业已关闭，如有疑问请联系老师！
