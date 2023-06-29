@@ -1882,23 +1882,31 @@ course.plan_task.activity_manage.testpaper.default_comment3: You are awesome! I 
 course.plan_task.activity_manage.testpaper.default_comment4: A little slack, right? Keep going!
 course.plan_task.activity_manage.testpaper.default_comment5: With heart, focus and persistence, you can do better!
 course.plan_task.activity_manage.testpaper.comment_remove: Remove
+course.plan_task.activity_manage.testpaper.validity.period.of.examination: Validity period of examination
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
-course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Hour, No limitation.'
+course.plan_task.activity_manage.testpaper.time_limit_tips: 0 hours, indicates no limit. When the test count is set to 1, Retest Interval does not take effect.
 course.plan_task.activity_manage.testpaper.time_length_tips: 0 Minute, No limitation.
 course.plan_task.activity_manage.testpaper.times: 'Number of test'
 course.plan_task.activity_manage.testpaper.mode: 'Mode of test'
 course.plan_task.activity_manage.testpaper.start_time: 'Test start time'
-course.plan_task.activity_manage.testpaper.times.once: Single
+course.plan_task.activity_manage.testpaper.times.once: Restrict
 course.plan_task.activity_manage.testpaper.times.always: 'No limitation'
 course.plan_task.activity_manage.testpaper.show_answer: Show the answer and analysis after passing
 course.plan_task.activity_manage.testpaper.show_answer_tips: The setting takes effect when the number of exams is not limited.
 course.plan_task.activity_manage.testpaper.redo_interval: 'Retry interval'
+course.plan_task.activity_manage.testpaper.topic.out.of.order: Topic out of order  
+course.plan_task.activity_manage.testpaper.option.out.of.order: Option out of order  
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 'Retry Time Interval: Start time after completion of approval. '
+course.plan_task.activity_manage.testpaper.question.disorder: After this is enabled, when students enter the exam, all the small questions within the corresponding big question will be randomly sorted
+course.plan_task.activity_manage.testpaper.option.disorder: When turned on, all multiple choice options will be randomly ordered when students enter the exam
+course.plan_task.activity_manage.testpaper.rangedate: "<div>1. unlimited: no time limit, permanent validity;</div>2. the specified date interval: there is a fixed start and end time, outside this time can not participate in the exam;<div>3. specify the start time: only specify the start time, do not specify the end time, permanently valid, not to the start time can not participate in the test;</div>4. after the test is created, the test validity mode cannot be modified when editing again"
 course.plan_task.activity_manage.testpaper.comment_tips: 'Scoring interval setting rules: 1. The scoring interval includes the lower limit and upper limit of the interval. 2. When the student score is greater than or equal to the lower limit of the interval or less than the upper limit of the interval, the comments of the interval will be automatically displayed. 3. If there are overlapping score ranges, the comments ranked at the top in the comment list will be displayed first.'
 course.plan_task.activity_manage.testpaper.time: Time
 course.plan_task.activity_manage.testpaper.time_tips: 'Students can only take the exam within the time frame.'
 course.plan_task.activity_manage.testpaper.mode.always: 'No limitation'
 course.plan_task.activity_manage.testpaper.mode.realTime: Specify
+course.plan_task.activity_manage.testpaper.mode.realTimeRange: Specified date interval
+course.plan_task.activity_manage.testpaper.mode.startTime: Specify start time
 course.plan_task.activity_manage.testpaper.mode.require_credit: 'Limit credits'
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credits required to take the test, 0 is no limitation'
 course.plan_task.activity_manage.testpaper.pass: 'Pass mark'

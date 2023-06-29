@@ -2186,22 +2186,30 @@ course.plan_task.activity_manage.testpaper.default_comment3: 你真棒！我为�
 course.plan_task.activity_manage.testpaper.default_comment4: 有点松懈了吧？继续加油吧！
 course.plan_task.activity_manage.testpaper.default_comment5: 用心、专注、坚持，你能做的更好的！
 course.plan_task.activity_manage.testpaper.comment_remove: 移除
+course.plan_task.activity_manage.testpaper.validity.period.of.examination: 考试有效期
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 course.plan_task.activity_manage.testpaper.times: 考试次数
 course.plan_task.activity_manage.testpaper.mode: 考试模式
 course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
-course.plan_task.activity_manage.testpaper.times.once: 单次
+course.plan_task.activity_manage.testpaper.times.once: 限制
 course.plan_task.activity_manage.testpaper.times.always: 不限
 course.plan_task.activity_manage.testpaper.show_answer: 合格之后显示答案和解析
 course.plan_task.activity_manage.testpaper.show_answer_tips: 考试次数不限时，设置生效。
 course.plan_task.activity_manage.testpaper.redo_interval: 重考间隔
+course.plan_task.activity_manage.testpaper.topic.out.of.order: 题目乱序  
+course.plan_task.activity_manage.testpaper.option.out.of.order: 选项乱序  
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。
-course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制。
+course.plan_task.activity_manage.testpaper.question.disorder: 开启后，学员进入考试时，对应大题内所有小题将随机排序
+course.plan_task.activity_manage.testpaper.option.disorder: 开启后，学员进入考试时，所有选择题选项将随机排序
+course.plan_task.activity_manage.testpaper.rangedate: "<div>1、不限：没有时间限制，永久有效；</div>2、指定日期区间：有固定开始和结束时间，在此以为外的时间无法参加考试；<div>3、指定开始时间：仅指定开始时间，不指定结束时间，永久有效，未到开始时间无法参加考试；</div>4、考试完成创建后，再次编辑时，考试有效期模式无法修改"
+course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制，考试次数设置为1次时，“重考间隔”不生效。
 course.plan_task.activity_manage.testpaper.time_length_tips: 0分钟，表示无限制
 course.plan_task.activity_manage.testpaper.time: 考试时间
 course.plan_task.activity_manage.testpaper.time_tips: 学员只能在时间范围内参加考试！
 course.plan_task.activity_manage.testpaper.mode.always: 不限
 course.plan_task.activity_manage.testpaper.mode.realTime: 指定
+course.plan_task.activity_manage.testpaper.mode.realTimeRange: 指定日期区间
+course.plan_task.activity_manage.testpaper.mode.startTime: 指定开始时间
 course.plan_task.activity_manage.testpaper.mode.require_credit: 限制学分
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 参加此次考试所需的学分，０分则不限制。
 course.plan_task.activity_manage.testpaper.pass: 分数达标

@@ -1,5 +1,6 @@
 import loadAnimation from 'common/load-animation';
 import notify from 'common/notify';
+import 'moment';
 
 class Editor {
   constructor($modal) {
@@ -98,7 +99,7 @@ class Editor {
 
   async getActivityFinishCondition() {
     let self = this;
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       if (!self.$finishIframe.attr('src')) {
         resolve({});
       }
@@ -111,13 +112,13 @@ class Editor {
         }
 
         resolve(msg.data);
-      });  
+      });
     });
   }
 
   async getActivityContent() {
     let self = this;
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       window.ltc.emitChild('task-create-content-iframe', 'getActivity');
       window.ltc.once('returnActivity', (msg) => {
         if (!msg.valid) {
@@ -126,8 +127,8 @@ class Editor {
         }
 
         resolve(msg.data);
-      });      
-    }); 
+      });
+    });
   }
 
   async _onSave() {
@@ -139,6 +140,17 @@ class Editor {
     }).then((condition) => {
       this.$taskSubmit.button('loading');
       let postData = Object.assign(this._getFormSerializeObject($('#step1-form')), content, condition);
+
+      if (postData.validPeriodMode == 1) {
+        postData.startTime = moment((new Date(new Date().toLocaleDateString()).getTime())).format("YYYY-MM-DD HH:mm:ss")
+        postData.endTime = moment(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1).format("YYYY-MM-DD HH:mm:ss")
+      } else if (postData.validPeriodMode == 2) {
+        postData.startTime = moment((new Date(new Date().toLocaleDateString()).getTime())).format("YYYY-MM-DD HH:mm:ss")
+      }
+      if (postData.isLimitDoTimes == 0) {
+        postData.doTimes = 1
+      }
+
       $.post(this.taskConfig['saveUrl'], postData)
         .done((response) => {
           this.$element.modal('hide');
@@ -226,7 +238,7 @@ class Editor {
   }
 
   _sendContent() {
-    window.ltc.once('returnValidate',  (msg) => {
+    window.ltc.once('returnValidate', (msg) => {
       window.ltc.emitChild('task-create-finish-iframe', 'getContent', msg);
     });
     window.ltc.emitChild('task-create-content-iframe', 'getValidate');
@@ -251,7 +263,7 @@ class Editor {
     if (1 === step) {
       this.$element.find('.modal-footer').children().addClass('hidden');
     }
-    if (2=== step) {
+    if (2 === step) {
       if (this.taskConfig.mode === 'edit') {
 
         this.$element.find('#course-tasks-prev').addClass('hidden').siblings().removeClass('hidden');
@@ -288,7 +300,7 @@ class Editor {
   _getFormSerializeObject($e) {
     let o = {};
     let a = $e.serializeArray();
-    $.each(a, function() {
+    $.each(a, function () {
       if (o[this.name]) {
         if (!o[this.name].push) {
           o[this.name] = [o[this.name]];

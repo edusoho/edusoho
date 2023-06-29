@@ -530,6 +530,10 @@ $.validator.addMethod('byte_maxlength', function (value, element, params) {
   return this.optional(element) || l <= Number(params);
 }, Translator.trans('validate.byte_maxlength.message'));
 
+$.validator.addMethod('section_number', function (value, element, params) {
+	return this.optional(element) || params.test(Number(value))
+}, Translator.trans('validate.valid_enter_a_positive.integer'));
+
 $.validator.addMethod('es_email', function (value, element, params) {
   return this.optional(element) || /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(value);
 }, Translator.trans('validate.valid_email_input.message'));

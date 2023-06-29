@@ -592,8 +592,12 @@ t.add("homework_manage.result_graph.first_status_num", "\u9996\u6b21\u6210\u7ee9
 t.add("homework_manage.result_graph.max_status_num", "\u6700\u4f18\u6210\u7ee9\u7ed3\u679c\u4eba\u6570", "js", "zh_CN");
 t.add("intro.confirm_hint", "\u5b8c\u6210", "js", "zh_CN");
 t.add("validate.required.message", "\u8bf7\u8f93\u5165%display%", "js", "zh_CN");
+t.add("validate.valid_enter.retest.interval", "\u91cd\u8003\u95f4\u9694", "js", "zh_CN");
+t.add("course.plan_task.activity_manage.testpaper.time_limit", "\u8003\u8bd5\u65f6\u957f", "js", "zh_CN");
+t.add("validate.valid_enter_a_positive.integer", "\u8bf7\u8f93\u51651\u81f3100\u7684\u6b63\u6574\u6570", "js", "zh_CN");
 t.add("validate.valid_email_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u7535\u5b50\u90ae\u4ef6\u5730\u5740", "js", "zh_CN");
 t.add("validate.valid_url_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u7f51\u5740", "js", "zh_CN");
+t.add("activity.testpaper_manage.required.number", "\u8bf7\u81f3\u5c11\u8f93\u5165\u4e00\u4f4d\u6570\u5b57", "js", "zh_CN");
 t.add("validate.valid_date_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u65e5\u671f", "js", "zh_CN");
 t.add("validate.valid_date_iso_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u65e5\u671f (YYYY-MM-DD)", "js", "zh_CN");
 t.add("validate.valid_number_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u6570\u5b57", "js", "zh_CN");
