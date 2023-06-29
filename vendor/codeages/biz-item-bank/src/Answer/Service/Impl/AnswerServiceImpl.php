@@ -18,6 +18,7 @@ use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\BaseService;
@@ -43,8 +44,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'admission_ticket' => $this->generateAdmissionTicket(),
             'exam_mode' => $answerScene['exam_mode'],
             'limited_time' => $answerScene['limited_time'],
-
+            'is_items_seq_random' => $answerScene['is_items_seq_random'],
+            'is_options_seq_random' => $answerScene['is_options_seq_random'],
         ]);
+        $this->getAnswerRandomSeqService()->createAnswerRandomSeqRecordIfNecessary($answerRecord['id']);
 
         $this->dispatch('answer.started', $answerRecord);
 
@@ -820,6 +823,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getItemService()
     {
         return $this->biz->service('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return AnswerRandomSeqService
+     */
+    protected function getAnswerRandomSeqService()
+    {
+        return $this->biz->service('ItemBank:Answer:AnswerRandomSeqService');
     }
 
     /**

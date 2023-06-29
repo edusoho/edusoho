@@ -16,6 +16,7 @@ use Biz\Testpaper\TestpaperException;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -93,6 +94,7 @@ class TestpaperAction extends AbstractResource
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+        $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
         $testpaperWrapper = new TestpaperWrapper();
         $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment, $questionReports), 'type', 'id');
@@ -170,6 +172,7 @@ class TestpaperAction extends AbstractResource
         }
 
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+        $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
         $testpaperWrapper = new TestpaperWrapper();
         $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment, $questionReports), 'type', 'id');
@@ -263,5 +266,13 @@ class TestpaperAction extends AbstractResource
     protected function getAnswerService()
     {
         return $this->service('ItemBank:Answer:AnswerService');
+    }
+
+    /**
+     * @return AnswerRandomSeqService
+     */
+    protected function getAnswerRandomSeqService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRandomSeqService');
     }
 }

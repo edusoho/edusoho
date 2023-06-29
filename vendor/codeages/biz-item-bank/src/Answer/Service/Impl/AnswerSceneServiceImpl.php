@@ -89,21 +89,23 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             return false;
         }
 
-        if (0 != $answerScene['start_time'] && $answerScene['start_time'] > time()) {
+        if ($answerScene['start_time'] > 0 && $answerScene['start_time'] > time()) {
+            return false;
+        }
+        if ($answerScene['end_time'] > 0 && $answerScene['end_time'] < time()) {
+            return false;
+        }
+
+        $doneTimes = $this->getAnswerRecordService()->count(['answer_scene_id' => $id, 'user_id' => $userId]);
+        if ($answerScene['do_times'] > 0 && $doneTimes >= $answerScene['do_times']) {
             return false;
         }
 
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($id, $userId);
-        if ($latestAnswerRecord) {
-            if (1 == $answerScene['do_times']) {
-                return false;
-            }
+        if ($latestAnswerRecord && 0 < $answerScene['redo_interval']) {
+            $answerReport = $this->getAnswerReportService()->getSimple($latestAnswerRecord['answer_report_id']);
 
-            if (0 < $answerScene['redo_interval']) {
-                $answerReport = $this->getAnswerReportService()->getSimple($latestAnswerRecord['answer_report_id']);
-
-                return $answerScene['redo_interval'] * 60 <= time() - $answerReport['review_time'];
-            }
+            return $answerScene['redo_interval'] * 60 <= time() - $answerReport['review_time'];
         }
 
         return true;

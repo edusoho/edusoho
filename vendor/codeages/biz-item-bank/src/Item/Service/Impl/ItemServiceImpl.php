@@ -360,6 +360,11 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $this->getItemDao()->countItemQuestionNumByCategoryId($categoryId);
     }
 
+    public function searchQuestions($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        return $this->getQuestionDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
     protected function createQuestions($itemId, $questions)
     {
         if (empty($questions)) {
