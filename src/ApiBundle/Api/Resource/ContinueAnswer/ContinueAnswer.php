@@ -40,7 +40,9 @@ class ContinueAnswer extends AbstractResource
 
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
-        $this->removeAnalysisAndAnswer($assessment);
+        if ($assessment['displayable'] == 1){
+            $this->removeAnalysisAndAnswer($assessment);
+        }
 
         $assessmentResponse = $this->getAnswerService()->getAssessmentResponseByAnswerRecordId($answerRecord['id']);
         $assessmentResponseFilter = new AssessmentResponseFilter();

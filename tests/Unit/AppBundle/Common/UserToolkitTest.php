@@ -11,7 +11,7 @@ class UserToolkitTest extends BaseTestCase
     {
         $this->assertFalse(UserToolkit::isEmailGeneratedBySystem(''));
         $this->assertFalse(UserToolkit::isEmailGeneratedBySystem('test@test.com'));
-        $this->assertTrue(UserToolkit::isEmailGeneratedBySystem('test@edusoho.net'));
+        $this->assertTrue(UserToolkit::isEmailGeneratedBySystem('user_testemail@edusoho.net'));
     }
 
     public function testIsGenderDefault()

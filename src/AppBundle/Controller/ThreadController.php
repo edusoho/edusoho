@@ -307,8 +307,8 @@ class ThreadController extends BaseController
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
 
-            if(!$this->checkDragCaptchaToken($request, $fields['_dragCaptchaToken'])){
-                return $this->createJsonResponse(['error' => ['code'=> 403, 'message' => $this->trans("exception.form..drag.expire")]], 403);
+            if (!$this->checkDragCaptchaToken($request, $fields['_dragCaptchaToken'])) {
+                return $this->createJsonResponse(['error' => ['code' => 403, 'message' => $this->trans('exception.form..drag.expire')]], 403);
             }
             unset($fields['_dragCaptchaToken']);
 

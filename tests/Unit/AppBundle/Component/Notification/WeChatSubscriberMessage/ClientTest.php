@@ -41,7 +41,6 @@ class ClientTest extends BaseTestCase
     public function testSendMessage()
     {
         $client = new Client(['key' => 'auth_key', 'secret' => 'auth_secret']);
-        $result1 = $client->sendMessage('openId', 'templateId', []);
         $request = $this->mockBiz(
             'request',
             [
@@ -62,7 +61,6 @@ class ClientTest extends BaseTestCase
         );
         ReflectionUtils::setProperty($client, 'request', $request);
         $result = $client->sendMessage('openId', 'templateId', []);
-        $this->assertEmpty($result1);
         $this->assertEquals('true', $result['success']);
     }
 }

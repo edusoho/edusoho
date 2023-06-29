@@ -14,6 +14,7 @@ class MallTradeEventSubscriber extends EventSubscriber
     {
         return [
             'unified_payment.trade.receive_notified' => 'onReceiveNotified',
+            'unified_payment.trade.closed' => 'onTradeClosed',
         ];
     }
 
@@ -29,8 +30,25 @@ class MallTradeEventSubscriber extends EventSubscriber
             'status' => $trade['status']
         ];
 
-        $client = new MarketingMallClient($this->getBiz());
-        $client->notifyPaid($params);
+        $this->getMallClient()->notifyPaid($params);
+    }
+
+    public function onTradeClosed(Event $event)
+    {
+        if (!$this->getMallService()->isInit()) {
+            return;
+        }
+        $trade = $event->getSubject();
+        $params = [
+            'orderSn' => $trade['orderSn'],
+        ];
+
+        $this->getMallClient()->notifyTradeClosed($params);
+    }
+
+    protected function getMallClient()
+    {
+        return new MarketingMallClient($this->getBiz());
     }
 
     /**

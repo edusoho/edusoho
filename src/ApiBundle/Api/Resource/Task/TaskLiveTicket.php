@@ -55,6 +55,7 @@ class TaskLiveTicket extends AbstractResource
     {
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+
         if (!empty($activity['syncId'])) {
             $liveTicket = $this->getS2B2CFacadeService()->getS2B2CService()->consumeLiveEntryTicket($activity['ext']['liveId'], $liveTicket);
         } else {
@@ -70,6 +71,11 @@ class TaskLiveTicket extends AbstractResource
     protected function getLiveService()
     {
         return $this->service('Live:LiveService');
+    }
+
+    protected function getOpenCourseService()
+    {
+        return $this->service('OpenCourse:OpenCourseService');
     }
 
     /**

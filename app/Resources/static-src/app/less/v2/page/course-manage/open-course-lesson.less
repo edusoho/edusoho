@@ -6,9 +6,28 @@
   border-left: 2px solid #f1f1f1;
 }
 
+.list-actions {
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+  right: 24px;
+  padding-right: 0;
+  line-height: normal;
+  font-size: 16px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .item-actions__btn {
+    vertical-align: middle;
+  }
+}
+
 .open-course-lesson-item,
 .live-course-lesson-item {
   margin-left: 24px;
+
   .item-line {
     float: left;
     margin-top: 8px;
@@ -19,30 +38,78 @@
     display: inline-block;
     border-bottom: 2px solid #f1f1f1;
   }
+
   .item-content {
+    position: relative;
     float: left;
     margin-left: 0;
     padding: 0 24px;
     width: 100%;
-    height: 56px;
-    line-height: 56px;
     background: @cd-bg-light;
     .cd-border-radius;
     color: @cd-dark-major;
     overflow: hidden;
+
+    .cd-tag-icon {
+      position: absolute;
+      top: 50%;
+      left: 24px;
+      margin-top: -8px;
+      line-height: normal;
+    }
+
+    .cd-tag-title {
+      display: inline-block;
+      max-width: 600px;
+      min-height: 56px;
+      padding: 16px 0;
+    }
   }
+
   .item-actions {
     position: absolute;
-    right: 56px;
+    top: 50%;
+    right: 24px;
     padding-right: 0;
-    height: 56px;
-    line-height: 56px;
+    margin-top: -8px;
+    line-height: normal;
     font-size: 16px;
+
     &:hover {
       cursor: pointer;
     }
+
     .item-actions__btn {
       vertical-align: middle;
+    }
+  }
+
+  .item-contents {
+    position: relative;
+    float: left;
+    margin-left: 0;
+    padding: 0 24px;
+    height: 56px;
+    line-height: 56px;
+    width: 100%;
+    background: @cd-bg-light;
+    .cd-border-radius;
+    color: @cd-dark-major;
+    overflow: hidden;
+
+    .cd-tag-icon {
+      position: absolute;
+      top: 50%;
+      left: 24px;
+      margin-top: -8px;
+      line-height: normal;
+    }
+
+    .cd-tag-title {
+      display: inline-block;
+      max-width: 600px;
+      min-height: 56px;
+      padding: 16px 0;
     }
   }
 
@@ -59,6 +126,7 @@
 
 .open-course-heading {
   padding: 16px 32px;
+
   .open-course-heading__title {
     line-height: 32px;
   }

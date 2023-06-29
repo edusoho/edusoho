@@ -36,10 +36,25 @@ let validator = $form.validate({
 $btn.click((event) => {
   var username = $form.find('#ajax-username').val();
   var password = $form.find('#ajax-password').val();
-  $form.find('#ajax-username').val(window.XXTEA.encryptToBase64(username, 'EduSoho'));
-  $form.find('#ajax-password').val(window.XXTEA.encryptToBase64(password, 'EduSoho'));
+
+  const encryptedUsername = window.XXTEA.encryptToBase64(username, 'EduSoho');
+  const encryptedPassword = window.XXTEA.encryptToBase64(password, 'EduSoho');
+
+  var formData = $form.serializeArray();
+
+  var fieldsToUpdate = {
+    '_username': encryptedUsername,
+    '_password': encryptedPassword
+  };
+
+  formData.forEach(function(field) {
+    if (fieldsToUpdate.hasOwnProperty(field.name)) {
+      field.value = fieldsToUpdate[field.name];
+    }
+  });
+
   if (validator.form()) {
-    $.post($form.attr('action'), $form.serialize(), function (response) {
+    $.post($form.attr('action'), $.param(formData), function (response) {
       $btn.button('loading');
       window.location.reload();
     }, 'json').error(function (jqxhr, textStatus, errorThrown) {

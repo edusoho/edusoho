@@ -46,7 +46,14 @@ class LessonManageController extends BaseController
 
         if ('video' === $mediaType) {
             $setting = $this->getSettingService()->get('videoEffectiveTimeStatistics');
-            $finishType = empty($setting) ? 'end' : ('playing' === $setting['statistical_dimension'] ? 'watchTime' : 'time');
+            $finishType = $setting['statistical_dimension'] ?? 'end';
+            if ('playing' === $finishType) {
+                $finishType = 'watchTime';
+            }
+            if ('page' === $finishType) {
+                $finishType = 'time';
+            }
+
             $activityFinishConditions = array_column($activityConfig['finish_condition'], null, 'type');
             $finishCondition = $activityFinishConditions[$finishType];
         } else {

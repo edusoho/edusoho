@@ -113,7 +113,7 @@ class SyncLiveMemberDataJob extends AbstractJob
             return;
         }
         try {
-            $memberData = $this->EdusohoLiveClient->getEsLiveMembers($activity['ext']['liveId'], ['start' => 0, 'limit' => self::LIMIT]);
+            $memberData = $this->EdusohoLiveClient->getEsLiveMembers($activity['ext']['liveId'], ['start' => $this->start, 'limit' => self::LIMIT]);
         } catch (CloudAPIIOException $cloudAPIIOException) {
             $this->finish = 1;
 

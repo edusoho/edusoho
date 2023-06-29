@@ -1,6 +1,6 @@
-<li class="open-course-lesson-item clearfix" id="lesson-{{ lesson.id }}">
+<li class="open-course-lesson-item clearfix" id="lesson-{{ lesson.id }}" style="position: relative;">
 	<div class="item-line"></div>
-	<div class="item-content">
+	<div class="item-contents">
 
 		{{ 'course.lesson'|trans }} <span class="number">{{ lesson.number }}</span>： {{ lesson.title }}
 
@@ -32,7 +32,7 @@
 			{% endif %}
 		{% endif %}
 	</div>
-	<div class="item-actions">
+	<div class="list-actions">
 		{% set editUrl = path('open_course_manage_lesson_replays_edit',{ lessonId:lesson.id ,courseId:course.id}) %}
 		{% set createUrl = path('live_open_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) %}
 		{% set uploadUrl = path('live_open_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
