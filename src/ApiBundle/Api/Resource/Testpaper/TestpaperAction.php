@@ -94,9 +94,7 @@ class TestpaperAction extends AbstractResource
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
-        if ($answerRecord['is_items_seq_random'] || $answerRecord['is_options_seq_random']) {
-            $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptions($assessment, $answerRecord['id']);
-        }
+        $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
         $testpaperWrapper = new TestpaperWrapper();
         $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment, $questionReports), 'type', 'id');
@@ -174,9 +172,7 @@ class TestpaperAction extends AbstractResource
         }
 
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
-        if ($answerRecord['is_items_seq_random'] || $answerRecord['is_options_seq_random']) {
-            $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptions($assessment, $answerRecord['id']);
-        }
+        $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
         $testpaperWrapper = new TestpaperWrapper();
         $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment, $questionReports), 'type', 'id');

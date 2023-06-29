@@ -6,5 +6,5 @@ interface AnswerRandomSeqService
 {
     public function createAnswerRandomSeqRecordIfNecessary($answerRecordId);
 
-    public function shuffleItemsAndOptions($assessment, $answerRecordId);
+    public function shuffleItemsAndOptionsIfNecessary($assessment, $answerRecordId);
 }

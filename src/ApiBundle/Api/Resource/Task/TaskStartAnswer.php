@@ -37,9 +37,7 @@ class TaskStartAnswer extends AbstractResource
         if ('open' !== $assessment['status']) {
             throw AssessmentException::ASSESSMENT_NOTOPEN();
         }
-        if ($answerRecord['is_items_seq_random'] || $answerRecord['is_options_seq_random']) {
-            $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptions($assessment, $answerRecord['id']);
-        }
+        $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
