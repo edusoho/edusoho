@@ -9408,6 +9408,8 @@ exception.coupon.over_batch_limit: Exceeding the batch total limit
 exception.lesson.not_found: Lesson is not exist
 exception.lesson.parameter_missing: Missing class number
 exception.lesson.testpaper_do_times_more_than_100: Exam frequency exceeds the maximum value
+exception.lesson.start_time_earlier_than_current: The start time should be later than the current time
+exception.lesson.end_time_earlier_than_start_time: The end time can not be earlier than or equal to the start time
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 exception.task.not_found: Task is not exist

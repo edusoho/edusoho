@@ -22,9 +22,8 @@ class LessonManageController extends BaseController
         if ($request->isMethod('POST')) {
             $formData = $request->request->all();
             $formData['length'] = $this->prepareLimitedTime($formData['length']);
-            if (!empty($formData['doTimes']) && $formData['doTimes'] > 100) {
-                throw LessonException::TESTPAPER_DOTIMES_LIMIT();
-            }
+            $formData = $this->checkTimeConditions($formData);
+
             $formData['_base_url'] = $request->getSchemeAndHttpHost();
             $formData['fromUserId'] = $this->getUser()->getId();
             $formData['fromCourseSetId'] = $course['courseSetId'];
@@ -36,6 +35,23 @@ class LessonManageController extends BaseController
         }
 
         return $this->forward('AppBundle:TaskManage:create', ['courseId' => $course['id']]);
+    }
+
+    protected function checkTimeConditions($fields)
+    {
+        if (!empty($fields['isLimitDoTimes']) && !empty($fields['doTimes']) && $fields['doTimes'] > 100) {
+            throw LessonException::TESTPAPER_DOTIMES_LIMIT();
+        }
+
+        if (!empty($fields['startTime']) && strtotime($fields['startTime']) < time()) {
+            throw LessonException::START_TIME_EARLIER();
+        }
+
+        if (!empty($fields['endTime']) && strtotime($fields['endTime']) <= strtotime($fields['startTime'])) {
+            throw LessonException::END_TIME_EARLIER();
+        }
+
+        return $fields;
     }
 
     private function getDefaultFinishCondition($mediaType)
