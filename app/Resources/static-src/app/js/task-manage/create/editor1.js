@@ -1,5 +1,6 @@
 import loadAnimation from 'common/load-animation';
 import notify from 'common/notify';
+import 'moment';
 
 class Editor {
   constructor($modal) {
@@ -139,6 +140,17 @@ class Editor {
     }).then((condition) => {
       this.$taskSubmit.button('loading');
       let postData = Object.assign(this._getFormSerializeObject($('#step1-form')), content, condition);
+
+			if(postData.validPeriodMode == 1 ){
+				postData.startTime = moment((new Date(new Date().toLocaleDateString()).getTime())).format("YYYY-MM-DD HH:mm:ss")
+				postData.endTime = moment(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1).format("YYYY-MM-DD HH:mm:ss") 
+			}else if(postData.validPeriodMode == 2){
+				postData.startTime = moment((new Date(new Date().toLocaleDateString()).getTime())).format("YYYY-MM-DD HH:mm:ss")
+			}
+			if(postData.isLimitDoTimes == 0){
+				postData.doTimes = 1
+			}
+
       $.post(this.taskConfig['saveUrl'], postData)
         .done((response) => {
           this.$element.modal('hide');
