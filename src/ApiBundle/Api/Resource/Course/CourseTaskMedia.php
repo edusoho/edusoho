@@ -267,21 +267,20 @@ class CourseTaskMedia extends AbstractResource
         $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
         $testpaperWrapper = new TestpaperWrapper();
-        if (empty($answerRecord)) {
+        if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
             $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], [$activity['ext']['drawCondition']['section']]);
             $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
-            $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
         } else {
             $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
             $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
-            $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
-            $activity['ext']['latestExerciseResult'] = $testpaperWrapper->wrapTestpaperResult(
-                $answerRecord,
-                $assessment,
-                $answerScene,
-                $answerReport
-            );
         }
+        $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
+        $activity['ext']['latestExerciseResult'] = empty($answerRecord) ? null : $testpaperWrapper->wrapTestpaperResult(
+            $answerRecord,
+            $assessment,
+            $answerScene,
+            $answerReport ?? []
+        );
 
         return $activity['ext'];
     }
