@@ -24,6 +24,8 @@ class Testpaper extends Activity
 
     const EXAM_MODE_PRACTICE = 1;
 
+    const VALID_PERIOD_MODE_RANGE = 1;
+
     protected function registerListeners()
     {
         return [
@@ -52,7 +54,7 @@ class Testpaper extends Activity
     public function create($fields)
     {
         $fields = $this->parseTimeFields($fields);
-        $fields = $this->checkFields($fields);
+        $this->checkFields($fields);
         $fields = $this->filterFields($fields);
 
         try {
@@ -158,7 +160,7 @@ class Testpaper extends Activity
         }
 
         $fields = $this->parseTimeFields($fields);
-        $fields = $this->checkFields($fields);
+        $this->checkFields($fields);
         $filterFields = $this->filterFields($fields);
 
         try {
@@ -237,7 +239,7 @@ class Testpaper extends Activity
 
     protected function parseTimeFields($fields)
     {
-        if ('1' == $fields['validPeriodMode']) {
+        if (self::VALID_PERIOD_MODE_RANGE == $fields['validPeriodMode']) {
             $times = explode('-', $fields['rangeTime']);
             $fields['startTime'] = strtotime($times[0]);
             $fields['endTime'] = strtotime($times[1]);
@@ -255,8 +257,6 @@ class Testpaper extends Activity
         if (!empty($fields['endTime']) && $fields['endTime'] <= $fields['startTime']) {
             throw TestpaperException::END_TIME_EARLIER();
         }
-
-        return $fields;
     }
 
     protected function filterFields($fields)
@@ -338,7 +338,7 @@ class Testpaper extends Activity
             $activity['testMode'] = !empty($scene['start_time']) ? 'realTime' : 'normal';
             $activity['isLimitDoTimes'] = empty($scene['do_times']) ? '0' : '1';
             $countTestpaperRecord = $this->getAnswerRecordService()->count(['answer_scene_id' => $scene['id'], 'user_id' => $this->getCurrentUser()['id']]);
-            $activity['remainderExamTimes'] = max($scene['do_times'] - ($countTestpaperRecord ?: 0), 0);
+            $activity['remainderDoTimes'] = max($scene['do_times'] - ($countTestpaperRecord ?: 0), 0);
         }
 
         return $activity;

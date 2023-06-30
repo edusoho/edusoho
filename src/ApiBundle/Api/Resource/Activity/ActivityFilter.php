@@ -51,7 +51,7 @@ class ActivityFilter extends Filter
                  */
                 $data['testpaperInfo']['answerRecordId'] = !empty($data['ext']['answerRecordId']) ? $data['ext']['answerRecordId'] : '0';
                 $data['testpaperInfo']['endTime'] = !empty($data['endTime']) ? $data['endTime'] : null;
-                $data['testpaperInfo']['remainderExamTimes'] = !empty($data['ext']['remainderExamTimes']) ? $data['ext']['remainderExamTimes'] : $data['ext']['doTimes'];
+                $data['testpaperInfo']['remainderDoTimes'] = !empty($data['ext']['remainderDoTimes']) ? $data['ext']['remainderDoTimes'] : $data['ext']['doTimes'];
                 $data['testpaperInfo']['isLimitDoTimes'] = !empty($data['ext']['isLimitDoTimes']) ? $data['ext']['isLimitDoTimes'] : '0';
             }
         }
