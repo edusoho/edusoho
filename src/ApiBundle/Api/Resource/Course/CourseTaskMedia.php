@@ -20,7 +20,6 @@ use Biz\File\Service\UploadFileService;
 use Biz\File\UploadFileException;
 use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
-use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
@@ -268,11 +267,10 @@ class CourseTaskMedia extends AbstractResource
         $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
         $testpaperWrapper = new TestpaperWrapper();
-        if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
+        if (empty($answerRecord)) {
             $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], [$activity['ext']['drawCondition']['section']]);
             $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
-            $activity['ext']['latestExerciseResult'] = null;
         } else {
             $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
             $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
@@ -358,7 +356,7 @@ class CourseTaskMedia extends AbstractResource
         if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
             $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
 
-            return  $this->getResourceFacadeService()->getPlayerContext($file);
+            return $this->getResourceFacadeService()->getPlayerContext($file);
         }
 
         list($result, $error) = $this->getPlayerService()->getDocFilePlayer($doc, $ssl);
@@ -377,7 +375,7 @@ class CourseTaskMedia extends AbstractResource
         $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
 
         if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
-            return  $this->getResourceFacadeService()->getPlayerContext($file);
+            return $this->getResourceFacadeService()->getPlayerContext($file);
         }
 
         list($result, $error) = $this->getPlayerService()->getPptFilePlayer($ppt, $ssl);
