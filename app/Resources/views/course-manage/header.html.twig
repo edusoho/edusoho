@@ -22,7 +22,7 @@
         <span class="cd-dark-major">{{ course.title }}</span>
       {% endblock %}
     </h1>
-    <div class="course-manage-header-info__type" style="position: relative">
+    <div class="course-manage-header-info__type relative">
       {% if 'freeMode' == course.learnMode %}{{'course.teaching_plan.free_mode'|trans}}{% else %}{{'course.teaching_plan.locked_mode'|trans}}{% endif %}
       {% block planType %}
       {% endblock %}
