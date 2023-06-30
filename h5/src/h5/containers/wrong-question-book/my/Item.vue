@@ -4,7 +4,7 @@
       <img :src="question.target_data.cover.middle" />
     </div>
     <div class="list-item__detail">
-      <h3 class="title text-overflow">{{ question.target_data.title }}</h3>
+      <h3 class="title line-clamp-2">{{ question.target_data.title }}</h3>
       <p class="number text-overflow">{{ question.item_num }} {{ $t('wrongQuestion.question') }}</p>
     </div>
   </div>

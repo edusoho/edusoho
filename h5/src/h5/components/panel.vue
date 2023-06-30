@@ -37,3 +37,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.e-panel-heading {
+  width: 343px;
+}
+</style>
