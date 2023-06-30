@@ -186,6 +186,7 @@ export default {
     // 关闭弹窗时触发
     onClose() {
       this.show = false;
+      this.handleClick(this.currentSku)
     },
     onConfirm() {
       this.$emit('changeSku', this.specs.targetId);
