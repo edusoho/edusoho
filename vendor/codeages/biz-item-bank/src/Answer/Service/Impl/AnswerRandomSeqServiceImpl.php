@@ -70,6 +70,20 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         return $this->restoreAssessmentResponseOptionSeq($assessmentResponse, $answerRandomSeqRecord['options_random_seq']);
     }
 
+    public function convertQuestionReportOptionsIfNecessary($questionReports, $answerRecordId)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        if (empty($answerRecord['is_options_seq_random'])) {
+            return $questionReports;
+        }
+        $answerRandomSeqRecord = $this->getAnswerRandomSeqRecordDao()->getByAnswerRecordId($answerRecord['id']);
+        if (empty($answerRandomSeqRecord['options_random_seq'])) {
+            return $questionReports;
+        }
+
+        return $this->convertQuestionReportOptions($questionReports, $answerRandomSeqRecord['options_random_seq']);
+    }
+
     private function isRandomSeq($answerRecord)
     {
         return $answerRecord['is_items_seq_random'] || $answerRecord['is_options_seq_random'];
@@ -151,8 +165,7 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
                     continue;
                 }
                 foreach ($itemResponse['question_responses'] as &$questionResponse) {
-                    $randomOptions = $randomSeq[$questionResponse['question_id']];
-                    $questionResponse['response'] = $this->restoreOptionsToOriginalSeq($questionResponse['response'], $randomOptions);
+                    $questionResponse['response'] = $this->restoreOptionsToOriginalSeq($questionResponse['response'], $randomSeq[$questionResponse['question_id']]);
                 }
             }
         }
@@ -160,13 +173,27 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         return $assessmentResponse;
     }
 
-    private function findChoiceItemIds($sectionItems)
+    private function convertQuestionReportOptions($questionReports, $randomSeq)
     {
-        if (empty($sectionItems)) {
+        $choiceItemIds = $this->findChoiceItemIds($questionReports);
+        $choiceItemIdMap = array_flip($choiceItemIds);
+        foreach ($questionReports as &$questionReport) {
+            if (!isset($choiceItemIdMap[$questionReport['item_id']])) {
+                continue;
+            }
+            $questionReport['response'] = $this->convertOptions($questionReport['response'], $randomSeq[$questionReport['question_id']]);
+        }
+
+        return $questionReports;
+    }
+
+    private function findChoiceItemIds($itemIds)
+    {
+        if (empty($itemIds)) {
             return [];
         }
         $choiceItems = $this->getItemService()->searchItems([
-            'ids' => array_column($sectionItems, 'item_id'),
+            'ids' => array_column($itemIds, 'item_id'),
             'types' => $this->getChoiceItemTypes(),
         ], [], 0, PHP_INT_MAX, ['id']);
 
@@ -224,6 +251,18 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         $originalOptions = $randomOptions;
         sort($originalOptions);
         $optionMap = array_combine($originalOptions, $randomOptions);
+        foreach ($options as &$option) {
+            $option = $optionMap[$option];
+        }
+
+        return $options;
+    }
+
+    private function convertOptions($options, $randomOptions)
+    {
+        $originalOptions = $randomOptions;
+        sort($originalOptions);
+        $optionMap = array_combine($randomOptions, $originalOptions);
         foreach ($options as &$option) {
             $option = $optionMap[$option];
         }
