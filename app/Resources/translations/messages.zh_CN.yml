@@ -1051,6 +1051,7 @@ course.plan_setup.finish_rule: %taskName%完成规则
 course.plan_setup.finish_rule.depend_on_finish_condition: 由%taskName%完成条件决定
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，%taskName%才算完成
 course.plan_setup.finish_rule.nothing: 无限制
+course.plan_setup.finish_rule.indefinite.duration: 无限期
 course.plan_setup.member_numbers: 课程人数
 course.plan_setup.member_numbers.view_rule_btn: 【查看直播课程细则】
 course.plan_setup.summary: 计划简介
@@ -2187,6 +2188,7 @@ course.plan_task.activity_manage.testpaper.default_comment4: 有点松懈了吧�
 course.plan_task.activity_manage.testpaper.default_comment5: 用心、专注、坚持，你能做的更好的！
 course.plan_task.activity_manage.testpaper.comment_remove: 移除
 course.plan_task.activity_manage.testpaper.validity.period.of.examination: 考试有效期
+course.plan_task.activity_manage.testpaper.number.of.remaining.tests: 剩余考试次数
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 course.plan_task.activity_manage.testpaper.times: 考试次数
 course.plan_task.activity_manage.testpaper.mode: 考试模式
@@ -2217,6 +2219,7 @@ course.plan_task.activity_manage.testpaper.score_pass: 考试合格
 course.plan_task.activity_manage.homework.score_pass: 作业合格
 course.plan_task.activity_manage.testpaper.finish_tip: 提示：若任务完成条件选择了“考试合格”，则学员的考试分数必须达到上一步中设置的“合格分数”，才能完成此任务。
 course.plan_task.activity_manage.testpaper.not_start_tips: 考试未开始
+course.plan_task.activity_manage.testpaper.end_tips: 考试已结束
 course.plan_task.activity_manage.testpaper.start_time_tips: 开考时间
 course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始\n 请在%startTime%之后再来
 course.plan_task.activity_manage.testpaper.total_question: >
@@ -2228,7 +2231,8 @@ course.plan_task.activity_manage.testpaper.answer: >
 course.plan_task.activity_manage.testpaper.once_trance: >
   仅有<span class="color-danger">一次</span>考试机会。
 course.plan_task.activity_manage.testpaper.limit_tips: 
-  <span class="color-gray">温馨提示：考试一旦开始，倒计时结束后将自动交卷。</span>
+  温馨提示：考试一旦开始，倒计时结束后将自动交卷。
+course.plan_task.activity_manage.testpaper.enddate.limit_tips: 温馨提示：当前考试已结束，请点击按钮查看考试结果
 course.plan_task.activity_manage.testpaper.limit_tips1: 
   <span class="color-gray">温馨提示：本次考试不自动交卷，实时显示考试用时，中途离开不计时。</span>
 course.plan_task.activity_manage.testpaper.one_limit_tips: 

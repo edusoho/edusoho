@@ -78,6 +78,7 @@ $('.js-realTimeRange-data input').daterangepicker({
   "timePicker": true,
   "timePicker24Hour": true,
   "timePickerSeconds": true,
+  endDate: '2099-12-30 23:59:59',
   locale,
 }, function (start, end, label) {
   $('input[name=startTime]').val(start.format('YYYY-MM-DD HH:mm:ss'))
