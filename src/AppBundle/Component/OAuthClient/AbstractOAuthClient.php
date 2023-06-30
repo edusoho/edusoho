@@ -50,7 +50,7 @@ abstract class AbstractOAuthClient
         return $token;
     }
 
-    abstract public function getAuthorizeUrl($callbackUrl);
+    abstract public function getAuthorizeUrl($callbackUrl, $credential);
 
     abstract public function getAccessToken($code, $callbackUrl);
 

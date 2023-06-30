@@ -12,7 +12,7 @@ class AppleOAuthClient extends AbstractOAuthClient
     const AUTHORIZE_URL = 'https://appleid.apple.com/auth/authorize?';
     const OAUTH_TOKEN_URL = 'https://appleid.apple.com/auth/token';
 
-    public function getAuthorizeUrl($callbackUrl)
+    public function getAuthorizeUrl($callbackUrl, $credential)
     {
         $params = [];
         $params['client_id'] = $this->config['clientId'];
