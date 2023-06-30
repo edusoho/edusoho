@@ -7,7 +7,7 @@
     >
       <div class="pull-left plan-left">{{ $t('goods.plan') }}</div>
       <div class="pull-left plan-right">
-        {{ currentSku.title }}
+        <label class="block" style="width: 280px;">{{ currentSku.title }}</label>
         <i
           v-if="goods.specs.length > 1"
           class="iconfont icon-arrow-right plan-right__icon"
@@ -22,10 +22,13 @@
       @close="onClose"
       class="detail-plan__popup plan-popup"
     >
+    <div class="flex justify-between">
       <div class="plan-popup__title">
         <span></span>
         {{ $t('goods.choosePlan') }}
       </div>
+      <div class="confirmText" @click="onConfirm">确定</div>
+    </div>
       <div class="plan-popup__type">
         <span
           class="plan-popup__type__item"
@@ -36,21 +39,20 @@
           >{{ specs.title }}</span
         >
       </div>
-
+        <!-- v-if="!(currentSku.services === null) && currentSku.services.length" -->
       <div
         class="plan-popup__other"
-        v-if="!(currentSku.services === null) && currentSku.services.length"
       >
         <!-- 学习有效期 -->
-        <!-- <div class="popup-other clearfix">
+        <div class="popup-other clearfix">
           <div class="pull-left popup-other__left">学习有效期</div>
           <div
             class="pull-left popup-other__right"
             v-html="buyableModeHtml"
           ></div>
-        </div> -->
+        </div>
         <!-- 承诺服务 -->
-        <div class="popup-other clearfix">
+        <!-- <div class="popup-other clearfix">
           <div class="pull-left popup-other__left">{{ $t('goods.services') }}</div>
           <div class="pull-left popup-other__right">
             <span
@@ -60,7 +62,7 @@
               >{{ $t('goods.practice') }}</span
             >
           </div>
-        </div>
+        </div> -->
       </div>
       <!--      <div class="plan-popup__buy">立即购买</div>-->
     </van-popup>
@@ -151,6 +153,8 @@ export default {
     return {
       show: false, // 是否显示弹出层
       marketingActivities: {},
+      specs: {},
+      currentSkus: {}
     };
   },
   mixins: [activityMixin],
@@ -183,9 +187,19 @@ export default {
     onClose() {
       this.show = false;
     },
-    handleClick(specs) {
-      this.$emit('changeSku', specs.targetId);
+    onConfirm() {
+      this.$emit('changeSku', this.specs.targetId);
       this.show = false;
+    },
+    handleClick(specs) {
+      this.specs = specs;
+      for (const key in this.goods.specs) {
+        this.$set(this.goods.specs[key], 'active', false);
+        if (specs.targetId == this.goods.specs[key].targetId) {
+          this.$set(this.goods.specs[key], 'active', true);
+          this.currentSkus = this.goods.specs[key];
+        }
+      }
     },
     formatDate(time, fmt = 'yyyy-MM-dd') {
       time = time * 1000;
@@ -216,6 +230,7 @@ export default {
     },
   },
   mounted() {
+    this.currentSkus = this.currentSku
     // 获取营销活动
     if (this.goods.type === 'classroom') {
       Api.classroomsActivities({
@@ -252,27 +267,27 @@ export default {
     buyableModeHtml() {
       const memberInfo = this.goods.member;
       if (!memberInfo) {
-        switch (this.currentSku.usageMode) {
+        switch (this.currentSkus.usageMode) {
           case 'forever':
             return this.$t('goods.longTermEffective');
           case 'end_date':
             return (
-              this.formatDate(this.currentSku.usageEndTime.slice(0, 10)) +
+              this.formatDate(this.currentSkus.usageEndTime.slice(0, 10)) +
               `&nbsp;${this.$t('goods.canLearnBefore')}`
             );
           case 'days':
-            return  this.$t('goods.studyWithinDay', { number: this.currentSku.usageDays });
+            return  this.$t('goods.studyWithinDay', { number: this.currentSkus.usageDays });
           case 'date':
             return (
-              this.formatDate(this.currentSku.usageStartTime.slice(0, 10)) +
+              this.formatDate(this.currentSkus.usageStartTime.slice(0, 10)) +
               '&nbsp;~&nbsp;' +
-              this.formatDate(this.currentSku.usageEndTime.slice(0, 10))
+              this.formatDate(this.currentSkus.usageEndTime.slice(0, 10))
             );
           default:
             return '';
         }
       } else {
-        if (this.currentSku.usageMode == 'forever') {
+        if (this.currentSkus.usageMode == 'forever') {
           return this.$t('goods.longTermEffective');
         }
         return memberInfo.deadline != 0
@@ -283,3 +298,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.confirmText {
+  color: #00B42A;
+}
+</style>
