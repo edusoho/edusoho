@@ -1,27 +1,27 @@
-import loadAnimation from 'common/load-animation';
-import notify from 'common/notify';
-import 'moment';
+import loadAnimation from "common/load-animation";
+import notify from "common/notify";
+import "moment";
 
 class Editor {
   constructor($modal) {
     this.$element = $modal;
     this.step = 1;
-    let $taskType = $('#task-create-type');
+    let $taskType = $("#task-create-type");
     this.taskConfig = {
-      type: $taskType.data('editorType'),
-      mode: $taskType.data('editorMode'),
-      contentUrl: $taskType.data('contentUrl'),
-      finishUrl: $taskType.data('finishUrl'),
-      saveUrl: $taskType.data('saveUrl'),
+      type: $taskType.data("editorType"),
+      mode: $taskType.data("editorMode"),
+      contentUrl: $taskType.data("contentUrl"),
+      finishUrl: $taskType.data("finishUrl"),
+      saveUrl: $taskType.data("saveUrl")
     };
 
     this.$taskType = $taskType;
-    this.$taskContent = $('#task-create-content');
-    this.$taskFinish = $('#task-create-finish');
-    this.$taskSubmit = $('#course-tasks-submit');
-    this.$contentIframe = $('#task-create-content-iframe');
-    this.$finishIframe = $('#task-create-finish-iframe');
-    $('#task-create-content-iframe, #task-create-finish-iframe').iFrameResize();
+    this.$taskContent = $("#task-create-content");
+    this.$taskFinish = $("#task-create-finish");
+    this.$taskSubmit = $("#course-tasks-submit");
+    this.$contentIframe = $("#task-create-content-iframe");
+    this.$finishIframe = $("#task-create-finish-iframe");
+    $("#task-create-content-iframe, #task-create-finish-iframe").iFrameResize();
 
     this._init();
     this._initEvent();
@@ -29,19 +29,19 @@ class Editor {
 
   _initEvent() {
     this.$taskSubmit.click(event => this._onSave());
-    $('#course-tasks-next').click(event => this._onNext(event));
-    $('#course-tasks-prev').click(event => this._onPrev(event));
+    $("#course-tasks-next").click(event => this._onNext(event));
+    $("#course-tasks-prev").click(event => this._onPrev(event));
 
-    if (this.taskConfig.mode != 'edit') {
-      $('.js-course-tasks-item').click(event => this._onSetType(event));
+    if (this.taskConfig.mode != "edit") {
+      $(".js-course-tasks-item").click(event => this._onSetType(event));
     } else {
-      $('.delete-task').click(event => this._onDelete(event));
+      $(".delete-task").click(event => this._onDelete(event));
     }
   }
 
   _init() {
     this._inItStep1form();
-    if ('edit' == this.taskConfig.mode) {
+    if ("edit" == this.taskConfig.mode) {
       //编辑的时候，跳转到第二步
       this._doNext();
     } else {
@@ -57,8 +57,8 @@ class Editor {
     }
 
     if (this.step === 2) {
-      window.ltc.emitChild('task-create-content-iframe', 'getValidate');
-      window.ltc.once('returnValidate', (msg) => {
+      window.ltc.emitChild("task-create-content-iframe", "getValidate");
+      window.ltc.once("returnValidate", msg => {
         if (msg.valid) {
           this._doNext();
         }
@@ -79,18 +79,18 @@ class Editor {
   _doNext() {
     this.step += 1;
     this._switchPage();
-    this.$element.trigger('afterNext');
+    this.$element.trigger("afterNext");
   }
 
   _onSetType(event) {
-    let $this = $(event.currentTarget).addClass('active');
-    let type = $this.data('type');
+    let $this = $(event.currentTarget).addClass("active");
+    let type = $this.data("type");
     if (this.type != type) {
-      $this.siblings().removeClass('active');
-      this.$finishIframe.attr('src', '');
+      $this.siblings().removeClass("active");
+      this.$finishIframe.attr("src", "");
       $('[name="mediaType"]').val(type);
-      this.taskConfig.contentUrl = $this.data('contentUrl');
-      this.taskConfig.finishUrl = $this.data('finishUrl');
+      this.taskConfig.contentUrl = $this.data("contentUrl");
+      this.taskConfig.finishUrl = $this.data("finishUrl");
       this.type = type;
     }
 
@@ -100,12 +100,12 @@ class Editor {
   async getActivityFinishCondition() {
     let self = this;
     return new Promise((resolve, reject) => {
-      if (!self.$finishIframe.attr('src')) {
+      if (!self.$finishIframe.attr("src")) {
         resolve({});
       }
 
-      window.ltc.emitChild('task-create-finish-iframe', 'getCondition');
-      window.ltc.once('returnCondition', (msg) => {
+      window.ltc.emitChild("task-create-finish-iframe", "getCondition");
+      window.ltc.once("returnCondition", msg => {
         if (!msg.valid) {
           reject();
           return;
@@ -119,8 +119,8 @@ class Editor {
   async getActivityContent() {
     let self = this;
     return new Promise((resolve, reject) => {
-      window.ltc.emitChild('task-create-content-iframe', 'getActivity');
-      window.ltc.once('returnActivity', (msg) => {
+      window.ltc.emitChild("task-create-content-iframe", "getActivity");
+      window.ltc.once("returnActivity", msg => {
         if (!msg.valid) {
           reject();
           return;
@@ -132,60 +132,77 @@ class Editor {
   }
 
   async _onSave() {
-    this.$taskSubmit.attr('disabled', true);
+    this.$taskSubmit.attr("disabled", true);
     let content;
-    await this.getActivityContent().then((data) => {
-      content = data;
-      return this.getActivityFinishCondition();
-    }).then((condition) => {
-      this.$taskSubmit.button('loading');
-      let postData = Object.assign(this._getFormSerializeObject($('#step1-form')), content, condition);
+    await this.getActivityContent()
+      .then(data => {
+        content = data;
+        return this.getActivityFinishCondition();
+      })
+      .then(condition => {
+        this.$taskSubmit.button("loading");
+        let postData = Object.assign(
+          this._getFormSerializeObject($("#step1-form")),
+          content,
+          condition
+        );
 
-      if (postData.validPeriodMode == 1 && postData.startTime == 0) {
-        postData.startTime = moment((new Date(new Date().toLocaleDateString()).getTime())).format("YYYY-MM-DD HH:mm:ss")
-        postData.endTime = moment(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1).format("YYYY-MM-DD HH:mm:ss")
-      } else if (postData.validPeriodMode == 2 && postData.startTime == 0) {
-        postData.startTime = moment((new Date(new Date().toLocaleDateString()).getTime())).format("YYYY-MM-DD HH:mm:ss")
-      }
-      if (postData.isLimitDoTimes == 0) {
-        postData.doTimes = 1
-      }
+        if (postData.validPeriodMode == 1 && postData.startTime == 0) {
+          postData.startTime = moment(
+            new Date(new Date().toLocaleDateString()).getTime()
+          ).format("YYYY-MM-DD HH:mm:ss");
+          postData.endTime = moment(
+            new Date(new Date().toLocaleDateString()).getTime() +
+              24 * 60 * 60 * 1000 -
+              1
+          ).format("YYYY-MM-DD HH:mm:ss");
+        } else if (postData.validPeriodMode == 2 && postData.startTime == 0) {
+          postData.startTime = moment(
+            new Date(new Date().toLocaleDateString()).getTime()
+          ).format("YYYY-MM-DD HH:mm:ss");
+        }
+        if (postData.isLimitDoTimes == 0) {
+          postData.doTimes = 1;
+        }
 
-      $.post(this.taskConfig['saveUrl'], postData)
-        .done((response) => {
-          this.$element.modal('hide');
-          if (response) {
-            $('#sortable-list').trigger('addItem', response);
-          }
-        })
-        .fail((response) => {
-          this.$taskSubmit.button('reset');
-        });
-    }).catch(() => {
-      this.$taskSubmit.attr('disabled', false);
-      this.$taskSubmit.button('reset');
-    })
+        $.post(this.taskConfig["saveUrl"], postData)
+          .done(response => {
+            this.$element.modal("hide");
+            if (response) {
+              $("#sortable-list").trigger("addItem", response);
+            }
+          })
+          .fail(response => {
+            this.$taskSubmit.button("reset");
+          });
+      })
+      .catch(() => {
+        this.$taskSubmit.attr("disabled", false);
+        this.$taskSubmit.button("reset");
+      });
   }
 
   _onDelete(event) {
     let $btn = $(event.currentTarget);
-    let url = $btn.data('url');
+    let url = $btn.data("url");
     if (url === undefined) {
       return;
     }
-    if (!confirm(Translator.trans(Translator.trans('task_manage.delete_hint')))) {
+    if (
+      !confirm(Translator.trans(Translator.trans("task_manage.delete_hint")))
+    ) {
       return;
     }
     $.post(url)
-      .then((response) => {
-        notify('success', Translator.trans('task_manage.delete_success_hint'));
-        this.$element.modal('hide');
-        $('#sortable-list').trigger('removeItem');
+      .then(response => {
+        notify("success", Translator.trans("task_manage.delete_success_hint"));
+        this.$element.modal("hide");
+        $("#sortable-list").trigger("removeItem");
 
         document.location.reload();
       })
       .fail(error => {
-        notify('warning', Translator.trans('task_manage.delete_failed_hint'));
+        notify("warning", Translator.trans("task_manage.delete_failed_hint"));
       });
   }
 
@@ -209,12 +226,14 @@ class Editor {
       return;
     }
 
-    if (this.$contentIframe.attr('src') != this.taskConfig.contentUrl) {
+    if (this.$contentIframe.attr("src") != this.taskConfig.contentUrl) {
       this.$contentIframe.hide();
-      this.$contentIframe.attr('src', this.taskConfig.contentUrl);
-      this.$contentIframe.load(loadAnimation(() => {
-        this._rendButton(2);
-      }, this.$taskContent));
+      this.$contentIframe.attr("src", this.taskConfig.contentUrl);
+      this.$contentIframe.load(
+        loadAnimation(() => {
+          this._rendButton(2);
+        }, this.$taskContent)
+      );
     } else {
       this._rendButton(2);
     }
@@ -224,13 +243,15 @@ class Editor {
     if (!this.taskConfig.finishUrl) {
       return;
     }
-    if (this.$finishIframe.attr('src') != this.taskConfig.finishUrl) {
+    if (this.$finishIframe.attr("src") != this.taskConfig.finishUrl) {
       this.$finishIframe.hide();
-      this.$finishIframe.attr('src', this.taskConfig.finishUrl);
-      this.$finishIframe.load(loadAnimation(() => {
-        this._sendContent();
-        this._rendButton(3);
-      }, this.$taskFinish));
+      this.$finishIframe.attr("src", this.taskConfig.finishUrl);
+      this.$finishIframe.load(
+        loadAnimation(() => {
+          this._sendContent();
+          this._rendButton(3);
+        }, this.$taskFinish)
+      );
     } else {
       this._sendContent();
       this._rendButton(3);
@@ -238,76 +259,99 @@ class Editor {
   }
 
   _sendContent() {
-    window.ltc.once('returnValidate', (msg) => {
-      window.ltc.emitChild('task-create-finish-iframe', 'getContent', msg);
+    window.ltc.once("returnValidate", msg => {
+      window.ltc.emitChild("task-create-finish-iframe", "getContent", msg);
     });
-    window.ltc.emitChild('task-create-content-iframe', 'getValidate');
+    window.ltc.emitChild("task-create-content-iframe", "getValidate");
   }
 
   _inItStep1form() {
-    let $step1_form = $('#step1-form');
+    let $step1_form = $("#step1-form");
     let validator = $step1_form.validate({
       rules: {
         mediaType: {
-          required: true,
-        },
+          required: true
+        }
       },
       messages: {
-        mediaType: Translator.trans('validate.choose_item.message'),
+        mediaType: Translator.trans("validate.choose_item.message")
       }
     });
-    $step1_form.data('validator', validator);
+    $step1_form.data("validator", validator);
   }
 
   _rendButton(step) {
     if (1 === step) {
-      this.$element.find('.modal-footer').children().addClass('hidden');
+      this.$element
+        .find(".modal-footer")
+        .children()
+        .addClass("hidden");
     }
     if (2 === step) {
-      if (this.taskConfig.mode === 'edit') {
-
-        this.$element.find('#course-tasks-prev').addClass('hidden').siblings().removeClass('hidden');
+      if (this.taskConfig.mode === "edit") {
+        this.$element
+          .find("#course-tasks-prev")
+          .addClass("hidden")
+          .siblings()
+          .removeClass("hidden");
       } else {
-        this.$element.find('.modal-footer').children().removeClass('hidden');
+        this.$element
+          .find(".modal-footer")
+          .children()
+          .removeClass("hidden");
       }
     }
 
     if (3 === step) {
-      this.$element.find('#course-tasks-next').addClass('hidden').siblings().removeClass('hidden');
+      this.$element
+        .find("#course-tasks-next")
+        .addClass("hidden")
+        .siblings()
+        .removeClass("hidden");
     }
   }
 
   _renderStep() {
     if (!this.$setp) {
-      this.$step = $('#task-create-step');
+      this.$step = $("#task-create-step");
     }
-    let $currentSetp = this.$step.find('li').eq(this.step - 1);
-    $currentSetp.addClass('doing').prev().addClass('done').removeClass('doing');
-    $currentSetp.next().removeClass('doing').removeClass('done');
+    let $currentSetp = this.$step.find("li").eq(this.step - 1);
+    $currentSetp
+      .addClass("doing")
+      .prev()
+      .addClass("done")
+      .removeClass("doing");
+    $currentSetp
+      .next()
+      .removeClass("doing")
+      .removeClass("done");
   }
 
   _renderContent() {
     let content = {
       1: this.$taskType,
       2: this.$taskContent,
-      3: this.$taskFinish,
+      3: this.$taskFinish
     };
     if (content[this.step]) {
-      content[this.step].removeClass('hidden').siblings('div').addClass('hidden');
+      content[this.step]
+        .removeClass("hidden")
+        .siblings("div")
+        .addClass("hidden");
     }
   }
 
   _getFormSerializeObject($e) {
     let o = {};
     let a = $e.serializeArray();
-    $.each(a, function () {
+    $.each(a, function() {
       if (o[this.name]) {
         if (!o[this.name].push) {
           o[this.name] = [o[this.name]];
         }
-        o[this.name].push(this.value || '');
+        o[this.name].push(this.value || "");
       } else {
-        o[this.name] = this.value || '';
+        o[this.name] = this.value || "";
       }
     });
 
