@@ -139,6 +139,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $assessmentResponse = ['answer_record_id' => $answerRecordId, 'assessment_id' => $answerRecord['assessment_id']];
         $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
+        $answerQuestionReports = $this->getAnswerRandomSeqService()->convertQuestionReportOptionsIfNecessary($answerQuestionReports, $answerRecordId);
         $sectionResponses = ArrayToolkit::group($answerQuestionReports, 'section_id');
         foreach ($sectionResponses as $sectionId => &$sectionResponse) {
             $itemResponses = ArrayToolkit::group($sectionResponse, 'item_id');
@@ -157,7 +158,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $assessmentResponse['section_responses'] = array_values($sectionResponses);
         // 自动交卷时认为用时即考试限制时间
         $assessmentResponse['used_time'] = $answerScene['limited_time'] * 60;
-
 
         return $assessmentResponse;
     }
@@ -553,6 +553,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
+        $answerQuestionReports = $this->getAnswerRandomSeqService()->convertQuestionReportOptionsIfNecessary($answerQuestionReports, $answerRecordId);
         if (!empty($answerQuestionReports)) {
             $answerQuestionReports = $this->getAnswerReportService()->wrapperAnswerQuestionReports(
                 $answerRecord['id'],
