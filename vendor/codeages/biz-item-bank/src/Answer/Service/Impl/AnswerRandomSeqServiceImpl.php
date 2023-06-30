@@ -70,18 +70,21 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         return $this->restoreAssessmentResponseOptionSeq($assessmentResponse, $answerRandomSeqRecord['options_random_seq']);
     }
 
-    public function convertQuestionReportOptionsIfNecessary($questionReports, $answerRecordId)
+    public function shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecordId)
     {
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
-        if (empty($answerRecord['is_options_seq_random'])) {
+        if (!$this->isRandomSeq($answerRecord)) {
             return $questionReports;
         }
         $answerRandomSeqRecord = $this->getAnswerRandomSeqRecordDao()->getByAnswerRecordId($answerRecord['id']);
-        if (empty($answerRandomSeqRecord['options_random_seq'])) {
-            return $questionReports;
+        if ($answerRecord['is_items_seq_random']) {
+            $questionReports = $this->shuffleQuestionReports($questionReports, $answerRandomSeqRecord['items_random_seq']);
+        }
+        if ($answerRecord['is_options_seq_random']) {
+            $questionReports = $this->convertQuestionReportOptions($questionReports, $answerRandomSeqRecord['options_random_seq']);
         }
 
-        return $this->convertQuestionReportOptions($questionReports, $answerRandomSeqRecord['options_random_seq']);
+        return $questionReports;
     }
 
     private function isRandomSeq($answerRecord)
@@ -94,7 +97,7 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
      * @return array
      * 构建以section_id为key，打乱的itemId列表为val的数组
      */
-    protected function buildAssessmentItemsRandomSeq($sectionItems)
+    private function buildAssessmentItemsRandomSeq($sectionItems)
     {
         $itemsSectionGroup = ArrayToolkit::group($sectionItems, 'section_id');
         $randomItems = [];
@@ -112,7 +115,7 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
      * @return array
      * 构建以questionId为key，打乱的选项列表为val的数组
      */
-    protected function buildAssessmentChoiceItemOptionsRandomSeq($sectionItems)
+    private function buildAssessmentChoiceItemOptionsRandomSeq($sectionItems)
     {
         $choiceItemIds = $this->findChoiceItemIds($sectionItems);
         if (empty($choiceItemIds)) {
@@ -147,6 +150,7 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
                 }
                 foreach ($item['questions'] as &$question) {
                     $question['response_points'] = $this->shuffleOptions($question, $randomSeq[$question['id']]);
+                    $question['answer'] = $this->convertOptions($question['answer'], $randomSeq[$question['id']]);
                 }
             }
         }
@@ -173,8 +177,30 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         return $assessmentResponse;
     }
 
+    private function shuffleQuestionReports($questionReports, $randomSeq)
+    {
+        if (empty($randomSeq)) {
+            return $questionReports;
+        }
+        $sectionReports = ArrayToolkit::group($questionReports, 'section_id');
+        foreach ($sectionReports as $sectionId => $sectionReport) {
+            $sectionReports[$sectionId] = ArrayToolkit::group($sectionReport, 'item_id');
+        }
+        $shuffledQuestionReports = [];
+        foreach ($randomSeq as $sectionId => $itemIds) {
+            foreach ($itemIds as $itemId) {
+                $shuffledQuestionReports = array_merge($shuffledQuestionReports, $sectionReports[$sectionId][$itemId]);
+            }
+        }
+
+        return $shuffledQuestionReports;
+    }
+
     private function convertQuestionReportOptions($questionReports, $randomSeq)
     {
+        if (empty($randomSeq)) {
+            return $questionReports;
+        }
         $choiceItemIds = $this->findChoiceItemIds($questionReports);
         $choiceItemIdMap = array_flip($choiceItemIds);
         foreach ($questionReports as &$questionReport) {
@@ -254,6 +280,7 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         foreach ($options as &$option) {
             $option = $optionMap[$option];
         }
+        sort($options);
 
         return $options;
     }
@@ -266,6 +293,7 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         foreach ($options as &$option) {
             $option = $optionMap[$option];
         }
+        sort($options);
 
         return $options;
     }

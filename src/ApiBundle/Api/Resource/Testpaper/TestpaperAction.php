@@ -93,7 +93,7 @@ class TestpaperAction extends AbstractResource
 
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
-        $questionReports = $this->getAnswerRandomSeqService()->convertQuestionReportOptionsIfNecessary($questionReports, $answerRecord['id']);
+        $questionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecord['id']);
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
         $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
@@ -175,7 +175,7 @@ class TestpaperAction extends AbstractResource
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
         $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
-        $questionReports = $this->getAnswerRandomSeqService()->convertQuestionReportOptionsIfNecessary($questionReports, $answerRecord['id']);
+        $questionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecord['id']);
         $testpaperWrapper = new TestpaperWrapper();
         $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment, $questionReports), 'type', 'id');
         $testpaper = $testpaperWrapper->wrapTestpaper($assessment, $scene);

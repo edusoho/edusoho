@@ -9,18 +9,16 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Activity\Type\Testpaper;
 use Biz\Course\Service\CourseService;
-use Biz\Question\Service\QuestionService;
-use Biz\System\Service\SettingService;
 use Biz\Testpaper\TestpaperException;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Codeages\Biz\ItemBank\Item\Service\QuestionFavoriteService;
 
 class TestpaperResult extends AbstractResource
@@ -116,9 +114,11 @@ class TestpaperResult extends AbstractResource
         }
 
         $assessment = $this->getAssessmentService()->showAssessment($testpaperRecord['assessment_id']);
+        $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $testpaperRecord['id']);
 
         $testpaperWrapper = new TestpaperWrapper();
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($testpaperRecord['id']);
+        $questionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $testpaperRecord['id']);
         $items = $testpaperWrapper->wrapTestpaperItems($assessment, $questionReports);
         $accuracy = $this->makeAccuracy($items, $questionReports);
 
@@ -224,14 +224,6 @@ class TestpaperResult extends AbstractResource
     }
 
     /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->service('Question:QuestionService');
-    }
-
-    /**
      * @return AssessmentService
      */
     protected function getAssessmentService()
@@ -280,19 +272,19 @@ class TestpaperResult extends AbstractResource
     }
 
     /**
+     * @return AnswerRandomSeqService
+     */
+    protected function getAnswerRandomSeqService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRandomSeqService');
+    }
+
+    /**
      * @return QuestionFavoriteService
      */
     protected function getQuestionFavoriteService()
     {
         return $this->service('ItemBank:Item:QuestionFavoriteService');
-    }
-
-    /**
-     * @return ItemService
-     */
-    protected function getItemService()
-    {
-        return $this->service('ItemBank:Item:ItemService');
     }
 
     /**
