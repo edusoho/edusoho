@@ -24,7 +24,7 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         if (empty($answerRecord)) {
             return;
         }
-        if (empty($answerRecord['is_items_seq_random']) && empty($answerRecord['is_options_seq_random'])) {
+        if (!$this->isRandomSeq($answerRecord)) {
             return;
         }
         $sectionItems = $this->getSectionItemService()->searchAssessmentSectionItems(['assessment_id' => $answerRecord['assessment_id']], [], 0, PHP_INT_MAX, ['item_id', 'section_id']);
@@ -34,15 +34,15 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
 
         return $this->getAnswerRandomSeqRecordDao()->create([
             'answer_record_id' => $answerRecord['id'],
-            'items_random_seq' => $this->buildAssessmentItemsRandomSeq($sectionItems),
-            'options_random_seq' => $this->buildAssessmentChoiceItemOptionsRandomSeq($sectionItems),
+            'items_random_seq' => $answerRecord['is_items_seq_random'] ? $this->buildAssessmentItemsRandomSeq($sectionItems) : [],
+            'options_random_seq' => $answerRecord['is_options_seq_random'] ? $this->buildAssessmentChoiceItemOptionsRandomSeq($sectionItems) : [],
         ]);
     }
 
     public function shuffleItemsAndOptionsIfNecessary($assessment, $answerRecordId)
     {
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
-        if (empty($answerRecord['is_items_seq_random']) && empty($answerRecord['is_options_seq_random'])) {
+        if (!$this->isRandomSeq($answerRecord)) {
             return $assessment;
         }
         $answerRandomSeqRecord = $this->getAnswerRandomSeqRecordDao()->getByAnswerRecordId($answerRecordId);
@@ -54,6 +54,25 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         }
 
         return $assessment;
+    }
+
+    public function restoreOptionsToOriginalSeqIfNecessary($assessmentResponse)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
+        if (empty($answerRecord['is_options_seq_random'])) {
+            return $assessmentResponse;
+        }
+        $answerRandomSeqRecord = $this->getAnswerRandomSeqRecordDao()->getByAnswerRecordId($answerRecord['id']);
+        if (empty($answerRandomSeqRecord['options_random_seq'])) {
+            return $assessmentResponse;
+        }
+
+        return $this->restoreAssessmentResponseOptionSeq($assessmentResponse, $answerRandomSeqRecord['options_random_seq']);
+    }
+
+    private function isRandomSeq($answerRecord)
+    {
+        return $answerRecord['is_items_seq_random'] || $answerRecord['is_options_seq_random'];
     }
 
     /**
@@ -81,14 +100,11 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
      */
     protected function buildAssessmentChoiceItemOptionsRandomSeq($sectionItems)
     {
-        $choiceItems = $this->getItemService()->searchItems([
-            'ids' => array_column($sectionItems, 'item_id'),
-            'types' => $this->getChoiceItemTypes(),
-        ], [], 0, PHP_INT_MAX, ['id']);
-        if (empty($choiceItems)) {
+        $choiceItemIds = $this->findChoiceItemIds($sectionItems);
+        if (empty($choiceItemIds)) {
             return [];
         }
-        $questions = $this->getItemService()->searchQuestions(['item_ids' => array_column($choiceItems, 'id')], [], 0, PHP_INT_MAX, ['id', 'answer_mode', 'response_points']);
+        $questions = $this->getItemService()->searchQuestions(['item_ids' => $choiceItemIds], [], 0, PHP_INT_MAX, ['id', 'answer_mode', 'response_points']);
         $randomOptions = [];
         foreach ($questions as $question) {
             $options = array_column(array_column($question['response_points'], $this->getAnswerModeInputType($question['answer_mode'])), 'val');
@@ -122,6 +138,39 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         }
 
         return $assessment;
+    }
+
+    private function restoreAssessmentResponseOptionSeq($assessmentResponse, $randomSeq)
+    {
+        $sectionItems = $this->getSectionItemService()->searchAssessmentSectionItems(['assessment_id' => $assessmentResponse['assessment_id']], [], 0, PHP_INT_MAX, ['item_id']);
+        $choiceItemIds = $this->findChoiceItemIds($sectionItems);
+        $choiceItemIdMap = array_flip($choiceItemIds);
+        foreach ($assessmentResponse['section_responses'] as &$sectionResponse) {
+            foreach ($sectionResponse['item_responses'] as &$itemResponse) {
+                if (!isset($choiceItemIdMap[$itemResponse['item_id']])) {
+                    continue;
+                }
+                foreach ($itemResponse['question_responses'] as &$questionResponse) {
+                    $randomOptions = $randomSeq[$questionResponse['question_id']];
+                    $questionResponse['response'] = $this->restoreOptionsToOriginalSeq($questionResponse['response'], $randomOptions);
+                }
+            }
+        }
+
+        return $assessmentResponse;
+    }
+
+    private function findChoiceItemIds($sectionItems)
+    {
+        if (empty($sectionItems)) {
+            return [];
+        }
+        $choiceItems = $this->getItemService()->searchItems([
+            'ids' => array_column($sectionItems, 'item_id'),
+            'types' => $this->getChoiceItemTypes(),
+        ], [], 0, PHP_INT_MAX, ['id']);
+
+        return array_column($choiceItems, 'id');
     }
 
     /**
@@ -168,6 +217,18 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         }
 
         return $question['response_points'];
+    }
+
+    private function restoreOptionsToOriginalSeq($options, $randomOptions)
+    {
+        $originalOptions = $randomOptions;
+        sort($originalOptions);
+        $optionMap = array_combine($originalOptions, $randomOptions);
+        foreach ($options as &$option) {
+            $option = $optionMap[$option];
+        }
+
+        return $options;
     }
 
     private function getChoiceItemTypes()

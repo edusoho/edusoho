@@ -64,6 +64,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     public function submitAnswer(array $assessmentResponse)
     {
         $assessmentResponse = $this->validateAssessmentResponse($assessmentResponse);
+        $assessmentResponse = $this->getAnswerRandomSeqService()->restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
         $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
         $assessmentReport = $this->getAssessmentService()->review(
             $assessmentResponse['assessment_id'],
@@ -656,6 +657,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     public function saveAnswer(array $assessmentResponse)
     {
         $assessmentResponse = $this->validateAssessmentResponse($assessmentResponse);
+        $assessmentResponse = $this->getAnswerRandomSeqService()->restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
 
         try {
             $this->beginTransaction();
