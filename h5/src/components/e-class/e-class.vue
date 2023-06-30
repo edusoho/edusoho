@@ -17,7 +17,7 @@
         <div class="text-14 text-overflow ">{{ course.header }}</div>
       </div>
 
-      <div v-if="course.middle.value" class="text-text-3 text-12">{{ course.middle.value }}</div>
+      <div v-if="course.middle.value" class="text-text-3 text-12 text-overflow">{{ course.middle.value }}</div>
 
       <div
         class="e-course__bottom"

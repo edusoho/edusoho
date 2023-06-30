@@ -12,15 +12,15 @@
           {{ title }}
         </div>
         <div v-else>
-          <div class="e-course__title text-overflow">{{ title }}</div>
+          <div class="e-course__title line-clamp-2">{{ title }}</div>
           <div v-if="typeList === 'classroom_list'" class="e-course__count">
             {{ $t('e.totalOfTwoCourses', { number: course.courseNum }) }}
           </div>
           <div
             v-if="typeList === 'course_list'"
-            class="e-course__project text-overflow"
+            class="e-course__project"
           >
-            <span v-if="teachPlan">{{ teachPlan }}</span>
+            <span class="text-overflow" style="max-width: 192px;" v-if="teachPlan">{{ teachPlan }}</span>
           </div>
         </div>
         <switchBox
