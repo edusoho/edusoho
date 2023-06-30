@@ -31,7 +31,6 @@ class SaveAnswer extends AbstractResource
             throw new AnswerException("有新答题页面，请在新页面中继续答题",ErrorCode::ANSWER_NO_BOTH_DOING);
         }
 
-
         return $this->getAnswerService()->saveAnswer($assessmentResponse);
     }
 
