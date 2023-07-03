@@ -111,12 +111,15 @@ class EduSohoUpgrade extends AbstractUpdater
 
         return 1;
     }
+
     //答题记录添加字段
     public function bizAnswerRecordAddField()
     {
         $connection = $this->getConnection();
         if (!$this->isFieldExist('biz_answer_record', 'exam_mode')) {
             $connection->exec("ALTER TABLE `biz_answer_record` ADD COLUMN `exam_mode` tinyint(1)  NOT NULL DEFAULT 0 COMMENT '考试模式类型 0模拟考试 1练习考试'");
+
+            $connection->exec("UPDATE `biz_answer_record` SET `exam_mode` = '1' WHERE `exam_mode` = '0'");
         }
 
         $this->logger('info', 'biz_answer_record新增字段exam_mode完成');
@@ -129,77 +132,65 @@ class EduSohoUpgrade extends AbstractUpdater
 
         return 1;
     }
+
     //考试时长等于0
     public function limitedTimeAmountZero()
     {
-        $answerRecordData= [];
-        $activitys = $this->getActivityService()->search(['mediaType'=>'testpaper'], [], 0, PHP_INT_MAX, ['id', 'mediaId']);
-        if(empty($activitys)) {
+        $activitys = $this->getActivityService()->search(['mediaType' => 'testpaper'], [], 0, PHP_INT_MAX, ['id', 'mediaId']);
+        if (empty($activitys)) {
             return 1;
         }
-        $activityTestpapers = $this->getTestpaperActivityService()->findActivitiesByIds(array_column($activitys,'mediaId'));
-        if(empty($activityTestpapers)) {
+        $activityTestpapers = $this->getTestpaperActivityService()->findActivitiesByIds(array_column($activitys, 'mediaId'));
+        if (empty($activityTestpapers)) {
             return 1;
         }
 
-        $answerScenes = $this->getAnswerSceneService()->search(['limited_time' => 0, 'ids'=>array_column($activityTestpapers, 'answerSceneId')], [], 0, PHP_INT_MAX, ['id', 'exam_mode', 'enable_facein', 'name', 'limited_time']);
-        if(empty($answerScenes)) {
+        $answerScenes = $this->getAnswerSceneService()->search(['limited_time' => 0, 'ids' => array_column($activityTestpapers, 'answerSceneId')], [], 0, PHP_INT_MAX, ['id', 'exam_mode', 'enable_facein', 'name', 'limited_time']);
+        if (empty($answerScenes)) {
             return 1;
         }
+
+        $answerEqZeroScenesData = [];
         foreach ($answerScenes as $answerScene) {
-            $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['exam_mode'=> 1, 'enable_facein'=> 0, 'name' => $answerScene['name']]);
-            $answerRecords = $this->getAnswerRecordService()->search(['answer_scene_id' => $answerScene['id']], [], 0, PHP_INT_MAX, ['id', 'exam_mode', 'limited_time']);
-            foreach ($answerRecords as $answerRecord) {
-                $answerRecordData[$answerRecord['id']] = [
-                    'exam_mode' => $answerScene['exam_mode'],
-                    'limited_time' => $answerScene['limited_time'],
-                ];
-            }
-        }
-        if(empty($answerRecordData)) {
-            return 1;
+            $answerEqZeroScenesData[$answerScene['id']] = ['exam_mode' => 1, 'enable_facein' => 0, 'name' => $answerScene['name']];
         }
 
-        $this->getAnswerRecordDao()->batchUpdate(array_keys($answerRecordData), array_values($answerRecordData));
+        if ($answerEqZeroScenesData) {
+            $this->getAnswerSceneDao()->batchUpdate(array_keys($answerEqZeroScenesData), array_values($answerEqZeroScenesData));
+        }
 
         $this->logger('info', '执行成功');
 
         return 1;
     }
+
     //考试时长大于0
     public function limitedTimeGreaterThanZero()
     {
-        $answerRecordData= [];
-        $activitys = $this->getActivityService()->search(['mediaType'=>'testpaper'], [], 0, PHP_INT_MAX, ['id', 'mediaId']);
-        if(empty($activitys)) {
+        $activitys = $this->getActivityService()->search(['mediaType' => 'testpaper'], [], 0, PHP_INT_MAX, ['id', 'mediaId']);
+        if (empty($activitys)) {
             return 1;
         }
-        $activityTestpapers = $this->getTestpaperActivityService()->findActivitiesByIds(array_column($activitys,'mediaId'));
-        if(empty($activityTestpapers)) {
+        $activityTestpapers = $this->getTestpaperActivityService()->findActivitiesByIds(array_column($activitys, 'mediaId'));
+        if (empty($activityTestpapers)) {
             return 1;
         }
 
-        $answerScenes = $this->getAnswerSceneService()->search(['limited_times' => 0, 'ids'=>array_column($activityTestpapers, 'answerSceneId')], [], 0, PHP_INT_MAX, ['id', 'exam_mode', 'enable_facein', 'name', 'limited_time']);
-        if(empty($answerScenes)) {
+        $answerScenes = $this->getAnswerSceneService()->search(['limited_times' => 0, 'ids' => array_column($activityTestpapers, 'answerSceneId')], [], 0, PHP_INT_MAX, ['id', 'exam_mode', 'enable_facein', 'name', 'limited_time']);
+        if (empty($answerScenes)) {
             return 1;
         }
+
+        $answerGtZeroScenesData = [];
         foreach ($answerScenes as $answerScene) {
-            if($answerScene['exam_mode'] == 0) {
-                $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['exam_mode'=> 0, 'name' => $answerScene['name']]);
+            if ($answerScene['exam_mode'] == 0) {
+                $answerGtZeroScenesData[$answerScene['id']] = ['exam_mode' => 0, 'name' => $answerScene['name']];
             }
-            $answerRecords = $this->getAnswerRecordService()->search(['answer_scene_id' => $answerScene['id']], [], 0, PHP_INT_MAX, ['id', 'exam_mode', 'limited_time']);
-            foreach ($answerRecords as $answerRecord) {
-                $answerRecordData[$answerRecord['id']] = [
-                    'exam_mode' => $answerScene['exam_mode'],
-                    'limited_time' => $answerScene['limited_time'],
-                ];
-            }
-        }
-        if(empty($answerRecordData)) {
-            return 1;
         }
 
-        $this->getAnswerRecordDao()->batchUpdate(array_keys($answerRecordData),array_values($answerRecordData));
+        if ($answerGtZeroScenesData) {
+            $this->getAnswerSceneDao()->batchUpdate(array_keys($answerGtZeroScenesData), array_values($answerGtZeroScenesData));
+        }
 
         $this->logger('info', '执行成功');
 
@@ -233,10 +224,10 @@ class EduSohoUpgrade extends AbstractUpdater
         $pluginCode = $plugin[0];
         $pluginPackageId = $plugin[1];
 
-        $this->logger('warning', '检测是否安装'.$pluginCode);
+        $this->logger('warning', '检测是否安装' . $pluginCode);
         $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
         if (empty($pluginApp)) {
-            $this->logger('warning', '网校未安装'.$pluginCode);
+            $this->logger('warning', '网校未安装' . $pluginCode);
 
             return $page + 1;
         }
@@ -315,14 +306,14 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function installPluginAssets($plugins)
     {
-        $rootDir = realpath($this->biz['kernel.root_dir'].'/../');
+        $rootDir = realpath($this->biz['kernel.root_dir'] . '/../');
         foreach ($plugins as $plugin) {
             $pluginApp = $this->getAppService()->getAppByCode($plugin);
             if (empty($pluginApp)) {
                 continue;
             }
             $originDir = "{$rootDir}/plugins/{$plugin}Plugin/Resources/public";
-            $targetDir = "{$rootDir}/web/bundles/".strtolower($plugin).'plugin';
+            $targetDir = "{$rootDir}/web/bundles/" . strtolower($plugin) . 'plugin';
             $filesystem = new Filesystem();
             if ($filesystem->exists($targetDir)) {
                 $filesystem->remove($targetDir);
@@ -330,11 +321,11 @@ class EduSohoUpgrade extends AbstractUpdater
             if ($filesystem->exists($originDir)) {
                 $filesystem->mirror($originDir, $targetDir, null, ['override' => true, 'delete' => true]);
             }
-            $originDir = "{$rootDir}/plugins/{$plugin}Plugin/Resources/static-dist/".strtolower($plugin).'plugin/';
+            $originDir = "{$rootDir}/plugins/{$plugin}Plugin/Resources/static-dist/" . strtolower($plugin) . 'plugin/';
             if (!is_dir($originDir)) {
                 return false;
             }
-            $targetDir = "{$rootDir}/web/static-dist/".strtolower($plugin).'plugin/';
+            $targetDir = "{$rootDir}/web/static-dist/" . strtolower($plugin) . 'plugin/';
             $filesystem = new Filesystem();
             $filesystem->mirror($originDir, $targetDir, null, ['override' => true, 'delete' => true]);
         }
