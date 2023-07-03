@@ -24,7 +24,11 @@ class Testpaper extends Activity
 
     const EXAM_MODE_PRACTICE = 1;
 
+    const VALID_PERIOD_MODE_NO_LIMIT = 0;
+
     const VALID_PERIOD_MODE_RANGE = 1;
+
+    const VALID_PERIOD_MODE_ONLY_START = 2;
 
     protected function registerListeners()
     {
@@ -337,11 +341,25 @@ class Testpaper extends Activity
             $activity['limitedTime'] = $scene['limited_time'];
             $activity['testMode'] = !empty($scene['start_time']) ? 'realTime' : 'normal';
             $activity['isLimitDoTimes'] = empty($scene['do_times']) ? '0' : '1';
+            $activity['validPeriodMode'] = $this->preValidPeriodMode($scene);
             $countTestpaperRecord = $this->getAnswerRecordService()->count(['answer_scene_id' => $scene['id'], 'user_id' => $this->getCurrentUser()['id']]);
             $activity['remainderDoTimes'] = max($scene['do_times'] - ($countTestpaperRecord ?: 0), 0);
         }
 
         return $activity;
+    }
+
+    protected function preValidPeriodMode($scene)
+    {
+        if (!empty($scene['start_time']) && !empty($scene['end_time'])) {
+            $validPeriodMode = self::VALID_PERIOD_MODE_RANGE;
+        } elseif (!empty($scene['start_time']) && empty($scene['end_time'])) {
+            $validPeriodMode = self::VALID_PERIOD_MODE_ONLY_START;
+        } else {
+            $validPeriodMode = self::VALID_PERIOD_MODE_NO_LIMIT;
+        }
+
+        return $validPeriodMode;
     }
 
     /**
