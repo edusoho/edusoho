@@ -82,6 +82,7 @@ class AbstractCloudAPI
 
     public function post($uri, array $params = array(), array $header = array())
     {
+        $header['Referer'] = $_SERVER['HTTP_REFERER'];
         return $this->_request('POST', $uri, $params, $header);
     }
 
