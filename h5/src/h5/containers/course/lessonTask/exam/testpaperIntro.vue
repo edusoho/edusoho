@@ -7,7 +7,7 @@
       @outFocusMask="outFocusMask"
     ></out-focus-mask>
     <e-loading v-if="isLoading" />
-    <div v-if="info.doTimes == '1' && startTime > Date.now()" class="test-start-count-down">
+    <div v-if="startTime > Date.now()" class="test-start-count-down">
       <div class="tips">{{ $t('courseLearning.leftTime') }}</div>
       <div class="number">{{ countDown.hours }}</div>
       <div class="unit">{{ $t('courseLearning.hourUnit') }}</div>
@@ -17,6 +17,9 @@
       <div class="unit">{{ $t('courseLearning.secondUnit') }}</div>
     </div>
     <div class="intro-body">
+			<div v-if="endTime < Date.now()" class="exam-over">
+				{{ $t('courseLearning.examOver') }}
+			</div>
       <van-panel class="panel intro-panel" :title="$t('courseLearning.testTips')">
         <van-cell class="intro-cell test-name" :border="false" :title="$t('courseLearning.testName')" :value="testpaperTitle" />
 
@@ -25,17 +28,29 @@
 
         <van-cell :class="['intro-panel__content', result || !disabled ? '' : 'intro-tip']"
           class="intro-cell" :border="false" :title="$t('courseLearning.examinationDuration')" 
-          :value="limitTime ? `${limitTime} ${$t('courseLearning.minutes')}` : $t('courseLearning.noRestrictions')" />
+          :value="limitTime ? `${limitTime} ${$t('courseLearning.minutes')}` : $t('courseLearning.unlimited')" />
 
         <van-cell class="intro-cell" :border="false" :title="$t('courseLearning.fullScoreOfTestPaper')" :value="score + ' ' + $t('courseLearning.branch')" />
+
+        <van-cell class="intro-cell" :border="false" :title="$t('courseLearning.numberOfRemainingTests')" :value="info.doTimes == '0' ? $t('courseLearning.unlimited') : info.doTimes + ' ' + $t('courseLearning.times')"   />
+
+				<van-cell v-if="info.startTime == null && info.endTime == null" class="intro-cell" :border="false" :title="$t('courseLearning.validityPeriodOfExamination')" :value="$t('courseLearning.unlimited')" />
+
+				<!-- <van-cell v-if="info.startTime == null && info.endTime == null" class="intro-cell" :border="false" :title="$t('courseLearning.validityPeriodOfExamination')" :value="$t('courseLearning.unlimited')" /> -->
+
+				<van-cell v-if="startTime" :class="['intro-panel__content', result || !disabled ? '' : 'intro-tip']"
+          class="intro-cell" :border="false" :title="$t('courseLearning.testStartTime')" :value="formateStartTime(startTime)" />
+
+				<van-cell v-if="startTime" :class="['intro-panel__content', result || !disabled ? '' : 'intro-tip']"
+          class="intro-cell" :border="false" :title="$t('courseLearning.examDeadline')" :value="endTime ? formateStartTime(endTime) : $t('courseLearning.unlimitedDuration')" />
 
         <template #footer>
           <div v-if="info.examMode == '0'" class="testpaper-tips">
             {{ info.doTimes == '0' ? $t('courseLearning.noLimitTips') : $t('courseLearning.oneTips') }}
           </div>
-          <div v-if="info.examMode == '1'" class="testpaper-tips">
+          <!-- <div v-if="info.examMode == '1'" class="testpaper-tips">
             {{ info.doTimes == '0' ? $t('courseLearning.noLimitTips1') : $t('courseLearning.oneTips1') }}
-          </div>
+          </div> -->
         </template>
       </van-panel>
 
@@ -77,15 +92,21 @@
           {{ $t('courseLearning.viewResult') }}
         </van-button>
       </template>
-      
-      <van-button
-        v-else
-        :disabled="startTime > Date.now()"
-        class="intro-footer__btn"
-        type="primary"
-        @click="startTestpaper()"
-        >{{ $t('courseLearning.startTheExam') }}</van-button
-      >
+      <template v-else>
+				<van-button v-if="endTime < Date.now()"
+					class="intro-footer__btn"
+					type="primary"
+					@click="startTestpaper()"
+					>{{ $t('courseLearning.viewResult') }}</van-button
+				>
+				<van-button v-else
+					:disabled="startTime > Date.now()"
+					class="intro-footer__btn"
+					type="primary"
+					@click="startTestpaper()"
+					>{{ $t('courseLearning.startTheExam') }}</van-button
+				>
+			</template>
     </div>
   </div>
 </template>
@@ -113,6 +134,7 @@ export default {
       testpaperTitle: '', // 考试标题
       info: {}, // 考试类型说明，是否能重考相关信息
       startTime: null, // 考试开始时间
+			endTime: null, // 考试结束时间
       limitTime: null, // 考试限制时间/分钟
       score: null, // 考试满分
       total: 0, // 考试题目总计数量
@@ -200,8 +222,9 @@ export default {
         },
       })
         .then(res => {
+					console.log(res);
           this.counts = res.items;
-          this.testpaperTitle = res.task.title;
+          this.testpaperTitle = res.testpaper.name;
           this.testpaper = res.testpaper;
           this.result = res.testpaperResult;
           this.info = res.task.activity.testpaperInfo;
@@ -209,10 +232,11 @@ export default {
 
           this.score = this.testpaper.score;
           this.startTime = parseInt(this.info.startTime) * 1000;
+          this.endTime = parseInt(this.info.endTime) * 1000;
           this.limitTime = parseInt(this.info.limitTime);
           this.question_type_seq = this.testpaper.metas.question_type_seq;
 
-          if (this.info.doTimes == '1' && this.startTime > Date.now()) {
+          if (this.startTime > Date.now()) {
             this.startCountDown()
           }
         })
