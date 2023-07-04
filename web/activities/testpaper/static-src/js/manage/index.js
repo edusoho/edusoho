@@ -78,21 +78,28 @@ $('.js-realTimeRange-data input').daterangepicker({
   "timePicker": true,
   "timePicker24Hour": true,
   "timePickerSeconds": true,
+	'autoUpdateInput':false,
   locale,
-}, function (start, end, label) {
-  $('input[name=startTime]').val(start.format('YYYY-MM-DD HH:mm:ss'))
-  $('input[name=endTime]').val(end.format('YYYY-MM-DD HH:mm:ss'))
 });
 
+$('.js-realTimeRange-data input').on('apply.daterangepicker', function(ev, picker) {
+	$('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
+  $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'))
+	$(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+});
 
 $('.js-start-range input').daterangepicker({
   "timePicker": true,
   'singleDatePicker': true,
   "timePicker24Hour": true,
   "timePickerSeconds": true,
+	'autoUpdateInput':false,
   locale,
-}, function (start, end, label) {
-  $('input[name=startTime]').val(start.format('YYYY-MM-DD HH:mm:ss'))
+});
+
+$('.js-start-range input').on('apply.daterangepicker', function(ev, picker) {
+	$('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
+	$(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
 });
 
 class Testpaper {
@@ -242,14 +249,22 @@ class Testpaper {
           },
           section_number: /^([1-9][0-9]{0,1}|100)$/,
         },
-        // startTime: {
+				rangeTime: {
+					required: function () {
+						return ($('[name="validPeriodMode"]:checked').val() == 1);
+					},
+				},
+        startTime: {
+					required: function () {
+						return ($('[name="validPeriodMode"]:checked').val() == 2);
+					},
         //   required: function () {
         //     return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
         //   },
         //   DateAndTime: function () {
         //     return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
         //   }
-        // },
+        },
         redoInterval: {
           required: function () {
             return $('[name="isLimitDoTimes"]:checked').val() == 0;
@@ -273,7 +288,13 @@ class Testpaper {
         },
         doTimes: {
           required: Translator.trans('validate.valid_enter_a_positive.integer')
-        }
+        },
+				rangeTime: {
+          required: Translator.trans('validate.valid_rangetime.required')
+				},
+				startTime: {
+          required: Translator.trans('validate.valid_starttime.required')
+				}
       }
     });
   }
