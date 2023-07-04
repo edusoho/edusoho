@@ -224,6 +224,16 @@ class SearchController extends BaseController
 
         try {
             list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
+
+            $resultSet = array_map(function ($items) {
+                if ($items['about']) {
+                    if (mb_strlen($items['about']) > 150) {
+                        $items['about'] = substr($items['about'], 0, 150).'...';
+                    }
+                }
+
+                return $items;
+            }, $resultSet);
         } catch (\Exception $e) {
             return $this->redirect(
                 $this->generateUrl(
