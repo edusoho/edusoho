@@ -396,6 +396,7 @@ export default {
     buy: 'Buy now'
   },
   courseLearning: {
+    times: "times",
     leftTime: 'Remaining time: ',
     hourUnit: 'hr',
     minuteUnit: 'min.',

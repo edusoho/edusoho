@@ -27,7 +27,7 @@
           class="intro-cell" :border="false" :title="$t('courseLearning.openingTime')" :value="formateStartTime(startTime)" />
 
         <van-cell :class="['intro-panel__content', result || !disabled ? '' : 'intro-tip']"
-          class="intro-cell" :border="false" :title="$t('courseLearning.examinationDuration')" 
+          class="intro-cell" :border="false" :title="$t('courseLearning.examinationDuration')"
           :value="limitTime ? `${limitTime} ${$t('courseLearning.minutes')}` : $t('courseLearning.unlimited')" />
 
         <van-cell class="intro-cell" :border="false" :title="$t('courseLearning.fullScoreOfTestPaper')" :value="score + ' ' + $t('courseLearning.branch')" />
@@ -79,10 +79,16 @@
           v-if="result.status === 'doing'"
           class="intro-footer__btn"
           type="primary"
-          @click="startTestpaper"
+          @click="startTestpaper(true)"
           >
           {{ $t('courseLearning.continueExam') }}
         </van-button>
+        <van-button
+          v-else-if="hasRemainderDoTimes"
+          class="intro-footer__btn"
+          type="primary"
+          @click="startTestpaper(false, true)"
+        >{{ $t('courseLearning.startTheExam') }}</van-button>
         <van-button
           v-else
           class="intro-footer__btn"
@@ -136,6 +142,7 @@ export default {
       startTime: null, // 考试开始时间
 			endTime: null, // 考试结束时间
       limitTime: null, // 考试限制时间/分钟
+      hasRemainderDoTimes: false, // 是否还剩下考试次数
       score: null, // 考试满分
       total: 0, // 考试题目总计数量
       testId: null, // 考试试卷ID
@@ -195,7 +202,7 @@ export default {
     try {
       this.interval && clearInterval(this.interval);
     } catch(e) {}
-    
+
     document.getElementById('app').style.background = '';
     next();
   },
@@ -222,13 +229,13 @@ export default {
         },
       })
         .then(res => {
-					console.log(res);
           this.counts = res.items;
           this.testpaperTitle = res.testpaper.name;
           this.testpaper = res.testpaper;
           this.result = res.testpaperResult;
           this.info = res.task.activity.testpaperInfo;
           this.enable_facein = res.task.enable_facein;
+          this.hasRemainderDoTimes = this.info.isLimitDoTimes === '0' || (this.info.isLimitDoTimes === '1' && this.info.remainderDoTimes > 0)
 
           this.score = this.testpaper.score;
           this.startTime = parseInt(this.info.startTime) * 1000;
@@ -262,7 +269,7 @@ export default {
           Toast.fail(err.message);
         });
     },
-    startTestpaper() {
+    startTestpaper(KeepDoing = false, reDo = false) {
       if (this.enable_facein === 1) {
         Dialog.alert({
           title: '',
@@ -271,20 +278,20 @@ export default {
             '本场考试已开启云监考，暂不支持在移动端答题，请前往PC端进行答题。',
         }).then(() => {});
       } else {
-        this.goDoTestpaper();
+        this.goDoTestpaper(KeepDoing, reDo);
       }
     },
-    goDoTestpaper() {
+    goDoTestpaper(KeepDoing, reDo) {
       this.$router.push({
         name: 'testpaperDo',
         query: {
           testId: this.testId,
           targetId: this.targetId,
           title: this.testpaperTitle,
-          action: 'do',
+          action: reDo ? 'redo' : 'do',
         },
         params: {
-          KeepDoing: true,
+          KeepDoing,
         },
       });
     },

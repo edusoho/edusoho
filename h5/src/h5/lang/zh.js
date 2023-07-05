@@ -397,6 +397,7 @@ export default {
     buy: '立即购买'
   },
   courseLearning: {
+    times: "次",
     leftTime: '距离考试：',
     hourUnit: '时',
     minuteUnit: '分',
