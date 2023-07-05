@@ -594,14 +594,15 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
         }
 
-        if (isset($fields['validPeriodMode']) && self::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
-            $fields['startTime'] = 0;
-            $fields['endTime'] = 0;
-        } elseif (isset($fields['validPeriodMode']) && self::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
-            $fields['endTime'] = 0;
+        if (isset($fields['validPeriodMode'])) {
+            if (self::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
+                $fields['startTime'] = 0;
+                $fields['endTime'] = 0;
+            } elseif (self::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
+                $fields['endTime'] = 0;
+            }
+            unset($fields['validPeriodMode']);
         }
-
-        unset($fields['validPeriodMode']);
 
         if (empty($fields['mediaType'])) {
             unset($fields['mediaType']);
