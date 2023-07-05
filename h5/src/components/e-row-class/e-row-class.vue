@@ -23,11 +23,11 @@
         <div v-if="course.hasCertificate" style="height:14px;margin: 3px 4px 0 0;text-align: center;line-height: 14px;border: 1px solid #3DCD7F;border-radius: 2px;">
           <div style="font-size: 12px; transform: scale(0.75); color: #3DCD7F;">{{ $t('e.certificate') }}</div>
         </div>
-        <div class="text-overflow">{{ course.header }}</div>
+        <div class="line-clamp-2">{{ course.header }}</div>
       </div>
 
-      <div class="row-class-right__center text-overflow">
-        <div v-if="course.middle.value" v-html="course.middle.html" />
+      <div class="row-class-right__center">
+        <div class="text-overflow" v-if="course.middle.value" v-html="course.middle.html" />
       </div>
 
       <div class="row-class-right__bottom text-overflow">

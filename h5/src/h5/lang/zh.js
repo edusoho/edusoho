@@ -79,6 +79,7 @@ export default {
     confirmOrder: '确认订单',
     orderPayment: '订单支付',
     wechatPayment: '微信支付',
+    confirmPayment: '确认支付',
     paymentSuccessful: '支付成功',
     paymentSuccessfulTransferPage: '支付成功中转页',
     couponCollection: '优惠券领取',
@@ -658,5 +659,11 @@ export default {
     other: '请前往PC网校下载!',
     disableVideo: '该浏览器不支持视频播放，请使用微信或APP',
     disableVideo2: '该浏览器不支持视频播放，请使用APP'
+  },
+  marketingPay: {
+    amountLabel: '支付金额',
+    orderSnLabel: '订单编号',
+    acceptLabel: '收款方',
+    payNow: '立即支付'
   }
 };

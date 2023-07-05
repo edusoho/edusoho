@@ -340,7 +340,7 @@ export default {
       );
     },
     IsCollectUserInfoType() {
-      return this.targetType === 'course' || this.targetType === 'classroom';
+      return ['course', 'classroom', 'vip'].includes(this.targetType) ;
     },
     showCollectEntry() {
       return Object.keys(this.userInfoCollectForm).length > 0;
@@ -705,8 +705,8 @@ export default {
     },
 
     handleScroll(el, maxScroll) {
-      const elScrollTop = el.scrollTop;
-      if (maxScroll - elScrollTop <= 20) {
+      const elScrollTop = el.scrollTop
+      if (maxScroll - elScrollTop <= 60) {
         el.removeEventListener('scroll', this.throttledScrollHandler);
         this.agreementDisabled = false;
       } else {

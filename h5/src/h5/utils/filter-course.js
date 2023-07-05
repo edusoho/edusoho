@@ -262,7 +262,7 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
           value: data.progress.percent,
           data,
           html: `<div class="text-text-3 text-12">
-                  <span>共${data.learnedCompulsoryTaskNum}课时</span>
+                  <span>共${data.compulsoryTaskNum}课时</span>
                   <span style="color: #E5E6EB;">|</span>
                   <span>已学${data.learnedCompulsoryTaskNum}课时</span>
                 </div>`,

@@ -59,7 +59,8 @@ import {
   Divider,
   Empty,
   CellGroup,
-  Cascader
+  Cascader,
+  TreeSelect
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -88,6 +89,7 @@ Vue.component('van-count-down', CountDown);
 Vue.component('van-divider', Divider);
 Vue.component('van-cell-group', CellGroup);
 Vue.component('van-cascader', Cascader);
+Vue.component('van-tree-select', TreeSelect);
 
 Vue.use(ActionSheet);
 Vue.use(filters);
@@ -122,6 +124,7 @@ Vue.use(DropdownItem);
 Vue.use(wapSdk);
 Vue.use(Empty);
 Vue.use(Cascader);
+Vue.use(TreeSelect);
 Vue.config.productionTip = false;
 
 Vue.prototype.$moment = moment;

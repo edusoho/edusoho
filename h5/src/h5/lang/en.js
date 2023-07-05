@@ -78,6 +78,7 @@ export default {
     confirmOrder: 'Confirm order',
     orderPayment: 'Order payment',
     wechatPayment: 'Wechat payment',
+    confirmPayment: 'confirm payment',
     paymentSuccessful: 'Payment successful',
     paymentSuccessfulTransferPage: 'Payment successful transfer page',
     couponCollection: 'Coupon collection',
@@ -657,5 +658,11 @@ export default {
     other: 'download at PC',
     disableVideo: 'do not support, please use WeChat or APP',
     disableVideo2: 'do not support, please use APP'
+  },
+  marketingPay: {
+    amountLabel: 'Payment amount',
+    orderSnLabel: 'Order number',
+    acceptLabel: 'recipient',
+    payNow: 'Pay Now'
   }
 };

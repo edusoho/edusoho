@@ -17,6 +17,7 @@ Vue.use(Vuex);
 
 const state = {
   isLoading: false,
+  isLoadedSdk: false,
   isFromMall: !!GetUrlParam('isFromMall'),
   token: null,
   user: {},

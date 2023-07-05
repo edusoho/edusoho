@@ -100,8 +100,6 @@
 	}
 
 	.bl {
-		display: block !important;
-
 		.iconfont {
 			color: #bebebe;
 		}
@@ -196,10 +194,8 @@
 		.lesson-title {
 			box-sizing: border-box;
 			width: 100%;
-			height: vw(40);
 			padding: 0 vw(15);
 			font-size: vw(14);
-			line-height: vw(40);
 			background: rgba(245, 245, 245, 1);
 
 			div {
@@ -210,7 +206,6 @@
 				.lesson-title-des {
 					display: inline-block;
 					box-sizing: border-box;
-					line-height: vw(40);
 
 					i {
 						margin-right: vw(8);
@@ -224,8 +219,10 @@
 					}
 
 					.ks {
-						display: inline-block;
-						width: vw(190);
+						display: inline-flex;
+						width: vw(224);
+						padding-top: 4px;
+						padding-bottom: 4px;
 						vertical-align: top;
 					}
 				}
@@ -265,7 +262,6 @@
 		}
 
 		.zb-ks {
-			height: vw(60);
 			padding: vw(10) vw(15);
 
 			.lesson-title-l {
@@ -291,7 +287,6 @@
 			.litem {
 				display: flex;
 				justify-content: space-between;
-				height: vw(20);
 				padding: vw(12) vw(0);
 				line-height: vw(20);
 
@@ -300,6 +295,8 @@
 				}
 
 				.litem-r {
+					display: flex;
+					width: vw(225);
 					color: #666;
 					font-size: vw(14);
 

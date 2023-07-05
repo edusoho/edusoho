@@ -17,10 +17,10 @@
       <keep-alive>
         <!-- 目录 -->
         <div style="position: relative;" v-if="active == 0">
-          <div class="course-info" @click="gotoGoodsPage">
+          <div class="course-info py-12" @click="gotoGoodsPage">
             <div class="course-info__left">
-              <div class="title text-overflow" :class="{ 'title--full': !details.goodsId }">{{ details.courseSet && details.courseSet.title }}</div>
-              <div class="learning-progress" :class="{ 'learning-progress--full': !details.goodsId }">
+              <div class="title" :class="{ 'title--full': !details.goodsId }">{{ details.courseSet && details.courseSet.title }}</div>
+              <div class="learning-progress mt-8" :class="{ 'learning-progress--full': !details.goodsId }">
                 <div class="learning-progress__bar" :style="{ width: progress }" />
                 <div class="learning-progress__text">
                   {{ progress }}
@@ -579,8 +579,8 @@ export default {
   align-items: center;
   padding-right: vw(16);
   padding-left: vw(16);
-  height: vw(56);
   border-bottom: vw(8) solid #f5f5f5;
+  align-items: flex-start;
 
   &__left {
     display: flex;
