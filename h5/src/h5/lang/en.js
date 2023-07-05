@@ -497,6 +497,7 @@ export default {
     topic: 'question',
     total: 'Total',
     viewResult: 'View result',
+    ViewDetail: 'View Detail',
     startTheExam: 'Start',
     iKnow: 'I know',
     singleChoice: 'Single choice',

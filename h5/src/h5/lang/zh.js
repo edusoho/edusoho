@@ -498,6 +498,7 @@ export default {
     topic: '题',
     total: '共计',
     viewResult: '查看成绩',
+    ViewDetail: '查看详情',
     startTheExam: '开始考试',
     iKnow: '我知道了',
     singleChoice: '单选题',

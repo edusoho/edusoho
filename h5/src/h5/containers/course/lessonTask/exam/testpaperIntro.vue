@@ -95,7 +95,7 @@
           type="primary"
           @click="showResult"
           >
-          {{ $t('courseLearning.viewResult') }}
+          {{ $t('courseLearning.ViewDetail') }}
         </van-button>
       </template>
       <template v-else>
@@ -103,7 +103,7 @@
 					class="intro-footer__btn"
 					type="primary"
 					@click="startTestpaper()"
-					>{{ $t('courseLearning.viewResult') }}</van-button
+					>{{ $t('courseLearning.ViewDetail') }}</van-button
 				>
 				<van-button v-else
 					:disabled="startTime > Date.now()"

@@ -91,6 +91,23 @@ export default {
         },
       }).then(res => {
         this.exercise = res.exercise;
+
+        const { lastExerciseResult, latestExerciseResult } = this.exercise;
+
+        if (!latestExerciseResult && lastExerciseResult) {
+          this.$router.replace({
+            name: 'exerciseResult',
+            query: {
+              exerciseId: this.exercise.id,
+              exerciseResultId: lastExerciseResult.id,
+              courseId: this.courseId,
+              taskId: this.taskId,
+            },
+          });
+
+          return;
+        }
+
         this.interruption();
       });
     },
