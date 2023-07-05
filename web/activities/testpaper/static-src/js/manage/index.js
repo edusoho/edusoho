@@ -1,6 +1,7 @@
 import { dateFormat, htmlEscape } from 'app/common/unit.js';
 import DateRangePicker from 'app/common/daterangepicker';
 import 'moment';
+import { cloneDeep } from 'lodash';
 
 const locale = {
   'format': 'YYYY/MM/DD HH:mm:ss',
@@ -36,6 +37,7 @@ const locale = {
   ],
   'firstDay': 1
 };
+
 if (app.lang !== 'zh_CN') {
   locale = {
     'format': 'YYYY/MM/DD HH:mm:ss',
@@ -244,26 +246,14 @@ class Testpaper {
           examLength: true
         },
         doTimes: {
-          required: function () {
-            return $('[name="isLimitDoTimes"]:checked').val() == 1;
-          },
-          section_number: /^([1-9][0-9]{0,1}|100)$/,
+          required: () => $('[name="isLimitDoTimes"]:checked').val() == 1,
+          section_number: () => $('[name="isLimitDoTimes"]:checked').val() == 1 ? /^([1-9][0-9]{0,1}|100)$/ : '',
         },
-				rangeTime: {
-					required: function () {
-						return ($('[name="validPeriodMode"]:checked').val() == 1);
-					},
-				},
-        startTime: {
-					required: function () {
-						return ($('[name="validPeriodMode"]:checked').val() == 2);
-					},
-        //   required: function () {
-        //     return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
-        //   },
-        //   DateAndTime: function () {
-        //     return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
-        //   }
+        rangeTime: {
+          required: () => $('[name="validPeriodMode"]:checked').val() == 1
+        },
+        rangeStartTime: {
+          required: () => $('[name="validPeriodMode"]:checked').val() == 2
         },
         redoInterval: {
           required: function () {
@@ -272,7 +262,6 @@ class Testpaper {
           arithmeticFloat: true,
           max: 1000000000
         }
-
       },
       messages: {
         testpaperId: {
@@ -289,12 +278,12 @@ class Testpaper {
         doTimes: {
           required: Translator.trans('validate.valid_enter_a_positive.integer')
         },
-				rangeTime: {
+        rangeTime: {
           required: Translator.trans('validate.valid_rangetime.required')
-				},
-				startTime: {
+        },
+        rangeStartTime: {
           required: Translator.trans('validate.valid_starttime.required')
-				}
+        }
       }
     });
   }
@@ -463,38 +452,15 @@ class Testpaper {
 
   showRedoInterval(event) {
     const $this = $(event.currentTarget);
+    
     if ($this.val() == 1) {
-      $('.js-examinations-num').show();
+      $('.js-examinations-num').attr('type', 'text');
     }
+
     if ($this.val() == 0) {
-      $('.js-examinations-num').hide();
+      $('.js-examinations-num').attr('type', 'hidden');
     }
-
-
-    // if ($('input[name="showAnswerMode"]:checked').length) {
-    //   $('input[name="showAnswerMode"]:checked').prop('checked', false);
-    // }
-    // if ($this.val() == 1) {
-    //   $('#lesson-redo-interval-field').closest('.form-group').hide();
-    //   $('.starttime-check-div').show();
-    //   $('.js-show-answer-mode').length > 0 && $('.js-show-answer-mode').hide();
-    // } else {
-    //   $('#lesson-redo-interval-field').closest('.form-group').show();
-    //   $('.starttime-check-div').hide();
-    //   $('.js-show-answer-mode').length > 0 && $('.js-show-answer-mode').show();
-    // }
   }
-
-  // startTimeCheck(event) {
-  //   let $this = $(event.currentTarget);
-
-  //   if ($this.val() == 'realTime') {
-  //     $('.starttime-input').removeClass('hidden');
-  //     this.dateTimePicker();
-  //   } else {
-  //     $('.starttime-input').addClass('hidden');
-  //   }
-  // }
 
   changeCondition(event) {
     let $this = $(event.currentTarget);
@@ -508,30 +474,6 @@ class Testpaper {
       $('#questionItemShowDiv').show();
     });
   }
-
-  // dateTimePicker() {
-  //   let data = new Date();
-  //   let $starttime = $('#startTime');
-  //   if ($starttime.is(':visible') && ($starttime.val() == '' || $starttime.val() == '0')) {
-  //     $starttime.val(data.Format('yyyy-MM-dd hh:mm'));
-  //   }
-  //   $starttime.datetimepicker({
-  //     autoclose: true,
-  //     format: 'yyyy-mm-dd hh:ii',
-  //     language: document.documentElement.lang,
-  //     minView: 'hour',
-  //     endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
-  //   }).on('show', event => {
-  //     this.$form.height(this.$form.height() + 270);
-  //   })
-  //     .on('hide', event => {
-  //       this.validator.form();
-  //       this.$form.height(this.$form.height() - 270);
-  //     })
-  //     .on('changeDate', event => {
-  //     });
-  //   $starttime.datetimepicker('setStartDate', data);
-  // }
 
   initScoreSlider() {
     let score = 0;

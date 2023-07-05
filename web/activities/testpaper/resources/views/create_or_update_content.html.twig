@@ -189,15 +189,16 @@
           <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.rangedate'|trans|raw }}"></i>
 				</div>
 				<div class="col-sm-10 controls radios">
+        {{ dump(activity) }}
 				  {{ radios('validPeriodMode', {'0':'course.plan_task.activity_manage.exercise.default_difficulty'|trans, '1':'course.plan_task.activity_manage.testpaper.mode.realTimeRange'|trans, '2':'course.plan_task.activity_manage.testpaper.mode.startTime'|trans }, activity.ext.answerScene.validPeriodMode|default('0') )}}
         </div>
           <input type="hidden" name="startTime" value="0" size="25" >
           <input type="hidden" name="endTime" value="0" size="25" >
 				<div class="col-sm-offset-2 col-sm-10 controls js-realTimeRange-data" style="display:none;">
-          <input type="text" id="rangeTime" name="rangeTime" size="25" class="form-control col-sm-6" autocomplete="off" >
+          <input type="text" id="rangeTime" name="rangeTime" size="25" class="form-control" autocomplete="off" style="width: 320px;">
         </div>
 				<div class="col-sm-offset-2 col-sm-10 controls js-start-range" style="display:none;">
-          <input type="text" size="25" value="" class="form-control col-sm-3" >
+          <input type="text" size="25" id="rangeStartTime" name="rangeStartTime" class="form-control" style="width: 160px;">
         </div>
 			</div>
 
@@ -221,9 +222,10 @@
         <div class="col-sm-10 controls radios">
           {{ radios('isLimitDoTimes', {'0':'course.plan_task.activity_manage.testpaper.times.always'|trans, '1':'course.plan_task.activity_manage.testpaper.times.once'|trans}, activity.ext.answerScene.isLimitDoTimes|default('0')) }}
         </div>
-					{# {% if isLimitDoTimes == '0' %} hidden {% endif %} #}
-				<div class="col-sm-offset-2 col-sm-10 controls js-examinations-num ">
-          <input type="text" size="25" id="doTimes" name="doTimes" value="{{ activity.ext.answerScene.do_times|default('1') }}" class="form-control inline-block width-150" >
+					
+				<div class="col-sm-offset-2 col-sm-10 controls">
+          <input type="{% if activity.ext.answerScene.isLimitDoTimes|default('0') == '0' %}hidden{% else %}text{% endif %}"
+            size="25" id="doTimes" name="doTimes" value="{{ activity.ext.answerScene.do_times|default('1') }}" class="form-control inline-block width-150 js-examinations-num" >
         </div>
 
 				<div class="col-sm-offset-2 col-sm-10 controls">

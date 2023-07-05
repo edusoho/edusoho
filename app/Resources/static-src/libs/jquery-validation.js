@@ -531,6 +531,8 @@ $.validator.addMethod('byte_maxlength', function (value, element, params) {
 }, Translator.trans('validate.byte_maxlength.message'));
 
 $.validator.addMethod('section_number', function (value, element, params) {
+  if (!value) return true;
+  
 	return this.optional(element) || params.test(Number(value))
 }, Translator.trans('validate.valid_enter_a_positive.integer'));
 
