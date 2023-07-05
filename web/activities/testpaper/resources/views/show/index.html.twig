@@ -1,5 +1,7 @@
 {% extends 'layout.html.twig' %}
 {% block body %}
+  {% set canStartTestpaper = (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime > ('now'|date('U'))) or (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime == '0') or (activity.startTime == '0' and activity.endTime == '0') %}
+
   <div class="iframe-parent-content">
     <div class="modal show iframe-modal">
       <div class="modal-dialog">
@@ -10,7 +12,7 @@
               {% if testpaper and testpaper.status == 'open' %}
                 {% if activity.startTime and activity.startTime > ('now'|date('U')) %}
                   {{ 'course.plan_task.activity_manage.testpaper.not_start_tips'|trans }}
-                {% elseif (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime > ('now'|date('U'))) or (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime == '0') or (activity.startTime == '0' and activity.endTime == '0') %}
+                {% elseif canStartTestpaper %}
                   {{ 'course.plan_task.activity_manage.testpaper.info'|trans }}
                 {% elseif activity.endTime and activity.endTime < ('now'|date('U')) %}
                   {{ 'course.plan_task.activity_manage.testpaper.end_tips'|trans }}
@@ -33,7 +35,7 @@
                       {% endif %}
                     </span>
                   </div>
-                {% elseif (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime > ('now'|date('U'))) or (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime == '0') or (activity.startTime == '0' and activity.endTime == '0') %}
+                {% elseif canStartTestpaper %}
                   {# 已开始或者不限 #}
                   <div class="text-14">
                     <div class="text-919399">
@@ -85,13 +87,13 @@
                     <div class="text-919399">
                       {{ 'course.plan_task.activity_manage.testpaper.validity.period.of.examination'|trans }}
                       <span class="pull-right text-37393D">
-                        {% if activity.startTime == '0' and activity.endTime == '0' %}
+                        {% if activity.ext.validPeriodMode == '0' %}
                           {{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
-                        {% elseif activity.startTime != '0' and activity.endTime == '0' %}
+                        {% elseif activity.ext.validPeriodMode == '2' %}
                           {{ activity.startTime|date('Y/m/d H:i:s') }}
                           -
                           {{ 'course.plan_setup.finish_rule.indefinite.duration'|trans }}
-                        {% elseif activity.startTime != '0' and activity.endTime != '0' %}
+                        {% elseif activity.ext.validPeriodMode == '1' %}
                           {{ activity.startTime|date('Y/m/d H:i:s') }}
                           -
                           {{ activity.endTime|date('Y/m/d H:i:s') }}
@@ -112,29 +114,26 @@
                 {% endif %}
               </div>
 
-              {% if testpaper and testpaper.status == 'open' %}
-                {# 开始考试 或 查看详情 #}
-                {% if activity.startTime and activity.startTime > ('now'|date('U')) %}
-
-                {% elseif (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime > ('now'|date('U'))) or (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime == '0') or (activity.startTime == '0' and activity.endTime == '0') %}
-                  <div class="mt24 mb8 footer-btn">
-                    <span class="text-919399">{{ 'course.plan_task.activity_manage.testpaper.limit_tips'|trans }}</span>
-                    <span class="pull-right inline-block text-right">
-                      {% if not activity.startTime or testMode == 'normal' or (testMode == 'realTime' and activity.startTime and activity.startTime <= ('now'|date('U'))) %}
-                        <a class="btn btn-primary" href="{{ path('testpaper_do', { lessonId: activity.id, testId: testpaper.id }) }}">{{ 'course.plan_task.activity_manage.testpaper.start_exam'|trans }}</a>
-                      {% endif %}
-                    </span>
-                  </div>
-                {% elseif activity.endTime and activity.endTime < ('now'|date('U')) %}
-                  <div class="mt24 mb8 footer-btn">
-                    <span class="text-919399">{{ 'course.plan_task.activity_manage.testpaper.enddate.limit_tips'|trans }}</span>
-                    <span class="pull-right inline-block text-right">
-                      {% if not activity.startTime or testMode == 'normal' or (testMode == 'realTime' and activity.startTime and activity.startTime <= ('now'|date('U'))) %}
-                        <a class="btn btn-primary" href="{{ path('testpaper_do', { lessonId: activity.id, testId: testpaper.id }) }}">{{ 'admin.live_manage.show_detail'|trans }}</a>
-                      {% endif %}
-                    </span>
-                  </div>
-                {% endif %}
+              {# 开始考试 或 查看详情 #}
+              {% if activity.startTime and activity.startTime > ('now'|date('U')) %}
+              {% elseif canStartTestpaper %}
+                <div class="mt24 mb8 footer-btn">
+                  <span class="text-919399">{{ 'course.plan_task.activity_manage.testpaper.limit_tips'|trans }}</span>
+                  <span class="pull-right inline-block text-right">
+                    {% if not activity.startTime or testMode == 'normal' or (testMode == 'realTime' and activity.startTime and activity.startTime <= ('now'|date('U'))) %}
+                      <a class="btn btn-primary" href="{{ path('testpaper_do', { lessonId: activity.id, testId: testpaper.id }) }}">{{ 'course.plan_task.activity_manage.testpaper.start_exam'|trans }}</a>
+                    {% endif %}
+                  </span>
+                </div>
+              {% elseif activity.endTime and activity.endTime < ('now'|date('U')) %}
+                <div class="mt24 mb8 footer-btn">
+                  <span class="text-919399">{{ 'course.plan_task.activity_manage.testpaper.enddate.limit_tips'|trans }}</span>
+                  <span class="pull-right inline-block text-right">
+                    {% if not activity.startTime or testMode == 'normal' or (testMode == 'realTime' and activity.startTime and activity.startTime <= ('now'|date('U'))) %}
+                      <a class="btn btn-primary" href="{{ path('testpaper_do', { lessonId: activity.id, testId: testpaper.id }) }}">{{ 'admin.live_manage.show_detail'|trans }}</a>
+                    {% endif %}
+                  </span>
+                </div>
               {% endif %}
             {% else %}
               <div class="content">
