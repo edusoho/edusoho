@@ -178,9 +178,9 @@ class Testpaper extends Activity
                 'pass_score' => empty($filterFields['passScore']) ? 0 : $filterFields['passScore'],
                 'enable_facein' => empty($filterFields['enable_facein']) ? 0 : $filterFields['enable_facein'],
                 'exam_mode' => empty($filterFields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $filterFields['exam_mode'],
-                'end_time' => empty($fields['endTime']) ? 0 : $fields['endTime'],
-                'is_items_seq_random' => empty($fields['isItemsSeqRandom']) ? 0 : $fields['isItemsSeqRandom'],
-                'is_options_seq_random' => empty($fields['isOptionsSeqRandom']) ? 0 : $fields['isOptionsSeqRandom'],
+                'end_time' => empty($filterFields['endTime']) ? 0 : $filterFields['endTime'],
+                'is_items_seq_random' => empty($filterFields['isItemsSeqRandom']) ? 0 : $filterFields['isItemsSeqRandom'],
+                'is_options_seq_random' => empty($filterFields['isOptionsSeqRandom']) ? 0 : $filterFields['isOptionsSeqRandom'],
             ]);
 
             $testpaperActivity = $this->getTestpaperActivityService()->updateActivity($activity['id'], [
@@ -294,8 +294,10 @@ class Testpaper extends Activity
 
         $fields['doTimes'] = empty($fields['isLimitDoTimes']) ? '0' : $fields['doTimes'];
 
-        if (empty($fields['validPeriodMode'])) {
+        if (self::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
             $fields['startTime'] = 0;
+            $fields['endTime'] = 0;
+        } elseif (self::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
             $fields['endTime'] = 0;
         }
 
