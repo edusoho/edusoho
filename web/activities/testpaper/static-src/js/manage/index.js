@@ -241,7 +241,12 @@ class Testpaper {
           required: function () {
             return $('[name="isLimitDoTimes"]:checked').val() == 1;
           },
-          section_number: /^([1-9][0-9]{0,1}|100)$/,
+          optional_range: {
+            optional: function () {
+              return $('[name="isLimitDoTimes"]:checked').val() == 0;
+            },
+            range: [1, 100],
+          },
         },
         // startTime: {
         //   required: function () {

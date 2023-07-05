@@ -530,8 +530,8 @@ $.validator.addMethod('byte_maxlength', function (value, element, params) {
   return this.optional(element) || l <= Number(params);
 }, Translator.trans('validate.byte_maxlength.message'));
 
-$.validator.addMethod('section_number', function (value, element, params) {
-	return this.optional(element) || params.test(Number(value))
+$.validator.addMethod('optional_range', function (value, element, params) {
+	return this.optional(element) || params.optional() || (Number(value) >= params.range[0] && Number(value) <= params.range[1])
 }, Translator.trans('validate.valid_enter_a_positive.integer'));
 
 $.validator.addMethod('es_email', function (value, element, params) {
