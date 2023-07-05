@@ -1,27 +1,27 @@
 <?php
-namespace Biz\Course\Job;
 
+namespace Biz\Course\Job;
 
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class CourseTaskJobLogJob extends AbstractJob{
-
+class CourseTaskJobLogJob extends AbstractJob
+{
     /**
      * upgrade-22.3.7升级脚本用到的job
      */
     public function execute()
     {
-        $limit = (int)$this->args['limit'];
-        $page = (int)$this->args['page'];
+        $limit = (int) $this->args['limit'];
+        $page = (int) $this->args['page'];
 
         $jobLogs = $this->getJobLogDao()->search(
             ['name' => 'course_task_create_sync_job_', 'status' => 'error'],
             ['id' => 'asc'],
-            ($page-1)*$limit,
+            ($page - 1) * $limit,
             $limit,
             ['id', 'args']
         );
-        if ($jobLogs){
+        if ($jobLogs) {
             $taskId = $jobLogs[0]['args']['taskId'];
             $task = $this->getTaskService()->getTask($taskId);
             if (!empty($task)) {
@@ -35,7 +35,6 @@ class CourseTaskJobLogJob extends AbstractJob{
             }
         }
     }
-
 
     public function getTaskService()
     {
