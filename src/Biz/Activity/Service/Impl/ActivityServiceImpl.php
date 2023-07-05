@@ -29,12 +29,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     const LIVE_STARTTIME_DIFF_SECONDS = 7200;
     const LIVE_ENDTIME_DIFF_SECONDS = 7200;
 
-    const VALID_PERIOD_MODE_NO_LIMIT = 0;
-
-    const VALID_PERIOD_MODE_RANGE = 1;
-
-    const VALID_PERIOD_MODE_ONLY_START = 2;
-
     public function getActivity($id, $fetchMedia = false)
     {
         $activity = $this->getActivityDao()->get($id);
@@ -586,22 +580,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 'endTime',
                 'finishType',
                 'finishData',
-                'validPeriodMode',
             ]
         );
 
         if (!empty($fields['startTime']) && !empty($fields['length']) && 'testpaper' != $fields['mediaType']) {
             $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
-        }
-
-        if (isset($fields['validPeriodMode'])) {
-            if (self::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
-                $fields['startTime'] = 0;
-                $fields['endTime'] = 0;
-            } elseif (self::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
-                $fields['endTime'] = 0;
-            }
-            unset($fields['validPeriodMode']);
         }
 
         if (empty($fields['mediaType'])) {
