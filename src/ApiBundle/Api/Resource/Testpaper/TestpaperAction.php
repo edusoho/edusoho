@@ -87,7 +87,7 @@ class TestpaperAction extends AbstractResource
             }
 
             $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $assessment['id'], $user['id']);
-        }else if('reviewing' != $answerRecord['status']){
+        } elseif ('reviewing' != $answerRecord['status']) {
             $answerRecord = $this->getAnswerService()->continueAnswer($answerRecord['id']);
         }
 
@@ -107,7 +107,7 @@ class TestpaperAction extends AbstractResource
             'testpaper' => $testpaper,
             'items' => $items,
             'isShowTestResult' => 1,
-            'courseId' => $course['id']
+            'courseId' => $course['id'],
         ];
     }
 
@@ -156,7 +156,7 @@ class TestpaperAction extends AbstractResource
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
 
-        if ($scene['do_times'] && $answerRecord && 'finished' == $answerRecord['status']) {
+        if ('1' == $scene['do_times'] && $answerRecord && 'finished' == $answerRecord['status']) {
             throw TestpaperException::FORBIDDEN_RESIT();
         } elseif ($scene['redo_interval'] && $answerReport) {
             $nextDoTime = $answerReport['review_time'] + $scene['redo_interval'] * 60;
@@ -168,7 +168,7 @@ class TestpaperAction extends AbstractResource
         if (!$answerRecord || ($answerRecord && 'finished' == $answerRecord['status'])) {
             $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $assessment['id'], $user['id']);
             $answerReport = [];
-        }else if('reviewing' != $answerRecord['status']){
+        } elseif ('reviewing' != $answerRecord['status']) {
             $answerRecord = $this->getAnswerService()->continueAnswer($answerRecord['id']);
         }
 
@@ -186,7 +186,7 @@ class TestpaperAction extends AbstractResource
             'testpaper' => $testpaper,
             'items' => $items,
             'isShowTestResult' => 0,
-            'courseId' => $course['id']
+            'courseId' => $course['id'],
         ];
     }
 

@@ -72,6 +72,10 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
 
     public function shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecordId)
     {
+        if (empty($questionReports)) {
+            return $questionReports;
+        }
+
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         if (!$this->isRandomSeq($answerRecord)) {
             return $questionReports;
