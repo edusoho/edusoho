@@ -194,7 +194,7 @@ export default {
     if (
       this.info.length == 0 ||
       this.isHandExam ||
-      this.forceLeave || 
+      this.forceLeave ||
       this.testpaperResult.status != 'doing'
     ) {
       next();
@@ -638,4 +638,4 @@ export default {
     },
   },
 };
-</script> 
+</script>
