@@ -249,10 +249,32 @@ const routes = [
       i18n: true,
       title: 'title.testDescription',
     },
+		beforeEnter: (to, from, next) => {
+			// ...
+			const testId = to.query.testId;
+      const targetId = to.query.targetId;
+      Api.testpaperIntro({
+        params: {
+          targetId: targetId,
+          targetType: 'task',
+        },
+        query: {
+          testId: testId,
+        },
+      })
+        .then(res => {
+					to.meta.title = res.task.title
+					next();
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+					next();
+        });
+		},
     component: () =>
       import(
         /* webpackChunkName: "testpaperIntro" */ '@/containers/course/lessonTask/exam/testpaperIntro.vue'
-      ),
+      )
   },
   {
     path: '/testpaperDo',

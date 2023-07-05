@@ -25,7 +25,7 @@
           <div style="margin-top: 4px;">{{ $t('courseLearning.reviewing') }}</div>
         </div>
       </div>
-      
+
     </div>
 
     <div v-if="result" ref="data" class="testpaper-result-data">
@@ -55,7 +55,7 @@
         </div>
       </div>
     </div>
-    
+
     <div v-if="result.teacherSay" class="teacher-say">
       {{ $t('courseLearning.teacherSay') }}：{{ result.teacherSay }}
     </div>
@@ -80,21 +80,21 @@
     <div ref="footer" class="result-footer">
       <van-button
         v-if="resultShow"
-        :style="{ marginRight: isReadOver && !doTimes ? '2vw' : 0 }"
+        :style="{ marginRight: isReadOver && hasRemainderDoTimes ? '2vw' : 0 }"
         class="result-footer__btn"
         type="primary"
         @click="viewAnalysis()"
         >{{ $t('courseLearning.viewParsed') }}</van-button
       >
       <van-button
-        v-if="again && isReadOver && doTimes == '0'"
+        v-if="again && isReadOver && hasRemainderDoTimes"
         class="result-footer__btn"
         type="primary"
         @click="startTestpaper()"
         >{{ $t('courseLearning.takeTheTestAgain') }}</van-button
       >
       <van-button
-        v-if="!again && isReadOver && doTimes == '0'"
+        v-if="!again && isReadOver && hasRemainderDoTimes"
         class="result-footer__btn"
         type="primary"
         disabled
@@ -133,7 +133,7 @@ export default {
       subjectList: {}, // 题目列表对象
       question_type_seq: [], // 考试已有题型
       targetId: null, // 任务ID
-      doTimes: null, // 考试允许次数
+      hasRemainderDoTimes: null, // 是否还有考试次数
       redoInterval: null, // 重考间隔
       remainTime: null, // 再次重考剩余时间
       timeMeter: null, // 重考间隔倒计时
@@ -171,10 +171,10 @@ export default {
       const second = usedTime - 60 * minutes;
 
       return { minutes, second }
-    },
+    }
   },
   watch: {
-    doTimes: function() {
+    hasRemainderDoTimes: function() {
       this.calSubjectHeight();
     },
   },
@@ -349,16 +349,11 @@ export default {
       }
     },
     goDoTestpaper() {
-      this.$router.replace({
-        name: 'testpaperDo',
+      this.$router.push({
+        name: 'testpaperIntro',
         query: {
           testId: this.result.testId,
-          targetId: this.targetId,
-          title: this.testpaperTitle,
-          action: 'redo',
-        },
-        params: {
-          KeepDoing: true,
+          targetId: this.reportData.taskId,
         },
       });
     },
@@ -374,13 +369,16 @@ export default {
           testId: this.testId,
         },
       }).then(res => {
+        const { isLimitDoTimes, remainderDoTimes } = res.task.activity.testpaperInfo;
+
         this.testpaperTitle = res.task.title;
         this.setNavbarTitle(res.task.title);
-        this.doTimes = Number(res.task.activity.testpaperInfo.doTimes);
         this.redoInterval = Number(
           res.task.activity.testpaperInfo.redoInterval,
         );
         this.enable_facein = res.task.enable_facein;
+        this.hasRemainderDoTimes = isLimitDoTimes === '0' || (isLimitDoTimes === '1' && remainderDoTimes > 0)
+
         this.judgeTime();
       });
     },
@@ -404,7 +402,7 @@ export default {
   margin: 8px 16px;
   border-radius: 8px;
   background-color: #fff;
-  
+
   .testpaper-result__header {
     display: flex;
     border-bottom: solid 1px #fafafa;
@@ -523,7 +521,7 @@ export default {
     font-size: 16px;
     color: #fff;
   }
-  
+
 }
 
 .testpaper-result-data {
@@ -567,7 +565,7 @@ export default {
 
   &__item:not(:last-child) {
     position: relative;
-    
+
     &::after {
       content: '';
       position: absolute;
