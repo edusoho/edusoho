@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Activity\Type\Testpaper;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
 class AnswerRecord extends AbstractResource
@@ -16,7 +17,7 @@ class AnswerRecord extends AbstractResource
     {
         $answerRecord = $this->getAnswerRecordService()->get($id);
         if (empty($answerRecord['answer_report_id'])) {
-            return (object) [];
+            return (object)[];
         }
 
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
@@ -30,6 +31,7 @@ class AnswerRecord extends AbstractResource
         if ('open' !== $assessment['status']) {
             throw AssessmentException::ASSESSMENT_NOTOPEN();
         }
+        $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
@@ -50,8 +52,8 @@ class AnswerRecord extends AbstractResource
             'assessment' => $assessment,
             'answer_scene' => $this->wrapperAnswerScene($answerScene),
             'resultShow' => empty($testpaperActivity) ? true : $this->getResultShow($answerRecord, $answerScene, $answerReport),
-            'activity' => empty($testpaperActivity) ? (object) [] : $testpaperActivity,
-            'metaActivity' => empty($activity) ? (object) [] : $activity,
+            'activity' => empty($testpaperActivity) ? (object)[] : $testpaperActivity,
+            'metaActivity' => empty($activity) ? (object)[] : $activity,
         ];
     }
 
@@ -120,6 +122,14 @@ class AnswerRecord extends AbstractResource
     protected function getAnswerSceneService()
     {
         return $this->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerRandomSeqService
+     */
+    protected function getAnswerRandomSeqService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRandomSeqService');
     }
 
     protected function getAssessmentService()

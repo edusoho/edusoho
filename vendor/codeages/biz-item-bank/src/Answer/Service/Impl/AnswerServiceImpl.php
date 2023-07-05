@@ -30,6 +30,7 @@ use Ramsey\Uuid\Uuid;
 class AnswerServiceImpl extends BaseService implements AnswerService
 {
     const EXAM_MODE_SIMULATION = 0;
+
     public function startAnswer($answerSceneId, $assessmentId, $userId)
     {
         if (!$this->getAnswerSceneService()->canStart($answerSceneId, $userId)) {
@@ -139,7 +140,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $assessmentResponse = ['answer_record_id' => $answerRecordId, 'assessment_id' => $answerRecord['assessment_id']];
         $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
-        $answerQuestionReports = $this->getAnswerRandomSeqService()->convertQuestionReportOptionsIfNecessary($answerQuestionReports, $answerRecordId);
+        $answerQuestionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($answerQuestionReports, $answerRecordId);
         $sectionResponses = ArrayToolkit::group($answerQuestionReports, 'section_id');
         foreach ($sectionResponses as $sectionId => &$sectionResponse) {
             $itemResponses = ArrayToolkit::group($sectionResponse, 'item_id');
@@ -231,7 +232,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             foreach ($sectionReport['item_reports'] as $itemReport) {
                 foreach ($itemReport['question_reports'] as $questionReport) {
                     $answerQuestionReports[] = [
-                        'identify' => $assessmentReport['answer_record_id'].'_'.$questionReport['id'],
+                        'identify' => $assessmentReport['answer_record_id'] . '_' . $questionReport['id'],
                         'total_score' => empty($questionReport['total_score']) ? 0.0 : $questionReport['total_score'],
                         'answer_record_id' => $assessmentReport['answer_record_id'],
                         'assessment_id' => $assessmentReport['id'],
@@ -258,7 +259,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             foreach ($sectionResponse['item_responses'] as $itemResponse) {
                 foreach ($itemResponse['question_responses'] as $questionResponse) {
                     $answerQuestionReports[] = [
-                        'identify' => $assessmentResponse['answer_record_id'].'_'.$questionResponse['question_id'],
+                        'identify' => $assessmentResponse['answer_record_id'] . '_' . $questionResponse['question_id'],
                         'answer_record_id' => $assessmentResponse['answer_record_id'],
                         'assessment_id' => $assessmentResponse['assessment_id'],
                         'section_id' => $sectionResponse['section_id'],
@@ -515,7 +516,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $questionReport,
         $reviewQuestionReport,
         $assessmentQuestion
-    ) {
+    )
+    {
         if (empty($reviewQuestionReport) || empty($assessmentQuestion)) {
             return [0, AnswerQuestionReportService::STATUS_NOANSWER];
         }
@@ -553,7 +555,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
-        $answerQuestionReports = $this->getAnswerRandomSeqService()->convertQuestionReportOptionsIfNecessary($answerQuestionReports, $answerRecordId);
         if (!empty($answerQuestionReports)) {
             $answerQuestionReports = $this->getAnswerReportService()->wrapperAnswerQuestionReports(
                 $answerRecord['id'],
@@ -678,7 +679,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             //判断模拟考试应该取当前时间减去开始时间
             $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
-            if($answerRecord['exam_mode'] == self::EXAM_MODE_SIMULATION) {
+            if ($answerRecord['exam_mode'] == self::EXAM_MODE_SIMULATION) {
                 $assessmentResponse['used_time'] = time() - $answerRecord['created_time'];
             }
 
@@ -734,7 +735,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             throw $this->createInvalidArgumentException('assessment_id invalid.');
         }
 
-        if (!in_array($answerRecord['status'],[AnswerService::ANSWER_RECORD_STATUS_DOING,AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
+        if (!in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_DOING, AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
             throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
         }
 
@@ -752,14 +753,15 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $assessmentResponse;
     }
 
-    protected function registerAutoSubmitJob($answerRecord){
+    protected function registerAutoSubmitJob($answerRecord)
+    {
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
 
-        if (empty($answerScene['limited_time'])){
+        if (empty($answerScene['limited_time'])) {
             return;
         }
 
-        if($answerRecord['exam_mode'] != self::EXAM_MODE_SIMULATION) {
+        if ($answerRecord['exam_mode'] != self::EXAM_MODE_SIMULATION) {
             return;
         }
         $autoSubmitJob = [

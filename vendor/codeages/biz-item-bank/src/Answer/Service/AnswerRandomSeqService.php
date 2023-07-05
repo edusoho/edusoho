@@ -10,5 +10,5 @@ interface AnswerRandomSeqService
 
     public function restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
 
-    public function convertQuestionReportOptionsIfNecessary($questionReports, $answerRecordId);
+    public function shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecordId);
 }

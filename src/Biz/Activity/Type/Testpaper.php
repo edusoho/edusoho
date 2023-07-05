@@ -7,7 +7,6 @@ use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
@@ -24,7 +23,11 @@ class Testpaper extends Activity
 
     const EXAM_MODE_PRACTICE = 1;
 
+    const VALID_PERIOD_MODE_NO_LIMIT = 0;
+
     const VALID_PERIOD_MODE_RANGE = 1;
+
+    const VALID_PERIOD_MODE_ONLY_START = 2;
 
     protected function registerListeners()
     {
@@ -337,11 +340,53 @@ class Testpaper extends Activity
             $activity['limitedTime'] = $scene['limited_time'];
             $activity['testMode'] = !empty($scene['start_time']) ? 'realTime' : 'normal';
             $activity['isLimitDoTimes'] = empty($scene['do_times']) ? '0' : '1';
+            $activity['validPeriodMode'] = $this->preValidPeriodMode($scene);
             $countTestpaperRecord = $this->getAnswerRecordService()->count(['answer_scene_id' => $scene['id'], 'user_id' => $this->getCurrentUser()['id']]);
             $activity['remainderDoTimes'] = max($scene['do_times'] - ($countTestpaperRecord ?: 0), 0);
+            $activity['canDoAgain'] = $this->canDoAgain($activity) && $this->isWithinTheTimeByScene($scene) ? '1' : '0';
         }
 
         return $activity;
+    }
+
+    protected function canDoAgain($activity): bool
+    {
+        // 不限制考试次数可重考
+        if (empty($activity['isLimitDoTimes'])) {
+            return true;
+        }
+        // 有剩余次数可重考
+        if (!empty($activity['remainderDoTimes'])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isWithinTheTimeByScene($scene)
+    {
+        if ($scene['start_time'] > time()) {
+            return false;
+        }
+
+        if (!empty($scene['end_time']) && $scene['end_time'] < time()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function preValidPeriodMode($scene)
+    {
+        if (!empty($scene['start_time']) && !empty($scene['end_time'])) {
+            $validPeriodMode = self::VALID_PERIOD_MODE_RANGE;
+        } elseif (!empty($scene['start_time']) && empty($scene['end_time'])) {
+            $validPeriodMode = self::VALID_PERIOD_MODE_ONLY_START;
+        } else {
+            $validPeriodMode = self::VALID_PERIOD_MODE_NO_LIMIT;
+        }
+
+        return $validPeriodMode;
     }
 
     /**
@@ -358,14 +403,6 @@ class Testpaper extends Activity
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 
     /**
