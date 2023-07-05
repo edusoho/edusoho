@@ -93,9 +93,7 @@ class TestpaperAction extends AbstractResource
 
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
-        if (!empty($questionReports)) {
-            $questionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecord['id']);
-        }
+        $questionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecord['id']);
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
         $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
