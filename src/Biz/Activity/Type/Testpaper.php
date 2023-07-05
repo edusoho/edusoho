@@ -7,7 +7,7 @@ use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Testpaper\Service\TestpaperService;
+use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -22,6 +22,12 @@ class Testpaper extends Activity
     const EXAM_MODE_SIMULATION = 0;
 
     const EXAM_MODE_PRACTICE = 1;
+
+    const VALID_PERIOD_MODE_NO_LIMIT = 0;
+
+    const VALID_PERIOD_MODE_RANGE = 1;
+
+    const VALID_PERIOD_MODE_ONLY_START = 2;
 
     protected function registerListeners()
     {
@@ -50,6 +56,8 @@ class Testpaper extends Activity
 
     public function create($fields)
     {
+        $fields = $this->parseTimeFields($fields);
+        $this->checkFields($fields);
         $fields = $this->filterFields($fields);
 
         try {
@@ -65,6 +73,9 @@ class Testpaper extends Activity
                 'pass_score' => empty($fields['passScore']) ? 0 : $fields['passScore'],
                 'enable_facein' => empty($fields['enable_facein']) ? 0 : $fields['enable_facein'],
                 'exam_mode' => empty($fields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $fields['exam_mode'],
+                'end_time' => empty($fields['endTime']) ? 0 : $fields['endTime'],
+                'is_items_seq_random' => empty($fields['isItemsSeqRandom']) ? 0 : $fields['isItemsSeqRandom'],
+                'is_options_seq_random' => empty($fields['isOptionsSeqRandom']) ? 0 : $fields['isOptionsSeqRandom'],
             ]);
 
             $testpaperActivity = $this->getTestpaperActivityService()->createActivity([
@@ -109,6 +120,9 @@ class Testpaper extends Activity
             'testMode' => $testpaperActivity['testMode'],
             'finishCondition' => $testpaperActivity['finishCondition'],
             'answerMode' => $testpaperActivity['answerMode'],
+            'endTime' => $testpaperActivity['answerScene']['end_time'],
+            'isItemsSeqRandom' => $testpaperActivity['answerScene']['is_items_seq_random'],
+            'isOptionsSeqRandom' => $testpaperActivity['answerScene']['is_options_seq_random'],
         ];
 
         return $this->create($newExt);
@@ -133,6 +147,9 @@ class Testpaper extends Activity
         $ext['testMode'] = $sourceExt['testMode'];
         $ext['finishCondition'] = $sourceExt['finishCondition'];
         $ext['answerMode'] = $sourceExt['answerMode'];
+        $ext['endTime'] = $sourceExt['answerScene']['end_time'];
+        $ext['isItemsSeqRandom'] = $sourceExt['answerScene']['is_items_seq_random'];
+        $ext['isOptionsSeqRandom'] = $sourceExt['answerScene']['is_options_seq_random'];
 
         return $this->update($ext['id'], $ext, $activity);
     }
@@ -145,6 +162,8 @@ class Testpaper extends Activity
             throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
+        $fields = $this->parseTimeFields($fields);
+        $this->checkFields($fields);
         $filterFields = $this->filterFields($fields);
 
         try {
@@ -159,6 +178,9 @@ class Testpaper extends Activity
                 'pass_score' => empty($filterFields['passScore']) ? 0 : $filterFields['passScore'],
                 'enable_facein' => empty($filterFields['enable_facein']) ? 0 : $filterFields['enable_facein'],
                 'exam_mode' => empty($filterFields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $filterFields['exam_mode'],
+                'end_time' => empty($fields['endTime']) ? 0 : $fields['endTime'],
+                'is_items_seq_random' => empty($fields['isItemsSeqRandom']) ? 0 : $fields['isItemsSeqRandom'],
+                'is_options_seq_random' => empty($fields['isOptionsSeqRandom']) ? 0 : $fields['isOptionsSeqRandom'],
             ]);
 
             $testpaperActivity = $this->getTestpaperActivityService()->updateActivity($activity['id'], [
@@ -218,6 +240,28 @@ class Testpaper extends Activity
         return false;
     }
 
+    protected function parseTimeFields($fields)
+    {
+        if (self::VALID_PERIOD_MODE_RANGE == $fields['validPeriodMode']) {
+            $times = explode('-', $fields['rangeTime']);
+            $fields['startTime'] = strtotime($times[0]);
+            $fields['endTime'] = strtotime($times[1]);
+        }
+
+        return $fields;
+    }
+
+    protected function checkFields($fields)
+    {
+        if (!empty($fields['isLimitDoTimes']) && !empty($fields['doTimes']) && $fields['doTimes'] > 100) {
+            throw TestpaperException::TESTPAPER_DOTIMES_LIMIT();
+        }
+
+        if (!empty($fields['endTime']) && $fields['endTime'] <= $fields['startTime']) {
+            throw TestpaperException::END_TIME_EARLIER();
+        }
+    }
+
     protected function filterFields($fields)
     {
         $testPaper = $this->getAssessmentService()->getAssessment($fields['testpaperId']);
@@ -248,6 +292,8 @@ class Testpaper extends Activity
             }
         }
 
+        $fields['doTimes'] = empty($fields['isLimitDoTimes']) ? '0' : $fields['doTimes'];
+
         $filterFields = ArrayToolkit::parts(
             $fields,
             [
@@ -266,7 +312,10 @@ class Testpaper extends Activity
                 'enable_facein',
                 'answerMode',
                 'customComments',
-                'exam_mode'
+                'exam_mode',
+                'endTime',
+                'isItemsSeqRandom',
+                'isOptionsSeqRandom',
             ]
         );
 
@@ -275,20 +324,7 @@ class Testpaper extends Activity
             unset($filterFields['length']);
         }
 
-        if (isset($filterFields['doTimes']) && 0 == $filterFields['doTimes']) {
-            $filterFields['testMode'] = 'normal';
-            $filterFields['answerMode'] = isset($fields['answerMode']) ? $fields['answerMode'] : 0;
-        } else {
-            $filterFields['answerMode'] = 0;
-        }
-
-        /* #73707
-        *不限考试次数时,即:无考试开始时间限制,且startTime默认置0.
-        *单次考试次数时,且不限考试开始时间,即:startTime补充置0.
-        */
-        if ((isset($filterFields['doTimes']) && 0 == $filterFields['doTimes']) || (isset($filterFields['testMode']) && 'normal' == $filterFields['testMode'])) {
-            $filterFields['startTime'] = 0;
-        }
+        $filterFields['answerMode'] = isset($fields['answerMode']) ? $fields['answerMode'] : 0;
 
         $filterFields['mediaId'] = $filterFields['testpaperId'];
         unset($filterFields['testpaperId']);
@@ -303,9 +339,54 @@ class Testpaper extends Activity
             $activity['redoInterval'] = $scene['redo_interval'];
             $activity['limitedTime'] = $scene['limited_time'];
             $activity['testMode'] = !empty($scene['start_time']) ? 'realTime' : 'normal';
+            $activity['isLimitDoTimes'] = empty($scene['do_times']) ? '0' : '1';
+            $activity['validPeriodMode'] = $this->preValidPeriodMode($scene);
+            $countTestpaperRecord = $this->getAnswerRecordService()->count(['answer_scene_id' => $scene['id'], 'user_id' => $this->getCurrentUser()['id']]);
+            $activity['remainderDoTimes'] = max($scene['do_times'] - ($countTestpaperRecord ?: 0), 0);
+            $activity['canDoAgain'] = $this->canDoAgain($activity) && $this->isWithinTheTimeByScene($scene) ? '1' : '0';
         }
 
         return $activity;
+    }
+
+    protected function canDoAgain($activity): bool
+    {
+        // 不限制考试次数可重考
+        if (empty($activity['isLimitDoTimes'])) {
+            return true;
+        }
+        // 有剩余次数可重考
+        if (!empty($activity['remainderDoTimes'])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isWithinTheTimeByScene($scene)
+    {
+        if ($scene['start_time'] > time()) {
+            return false;
+        }
+
+        if (!empty($scene['end_time']) && $scene['end_time'] < time()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function preValidPeriodMode($scene)
+    {
+        if (!empty($scene['start_time']) && !empty($scene['end_time'])) {
+            $validPeriodMode = self::VALID_PERIOD_MODE_RANGE;
+        } elseif (!empty($scene['start_time']) && empty($scene['end_time'])) {
+            $validPeriodMode = self::VALID_PERIOD_MODE_ONLY_START;
+        } else {
+            $validPeriodMode = self::VALID_PERIOD_MODE_NO_LIMIT;
+        }
+
+        return $validPeriodMode;
     }
 
     /**
@@ -322,14 +403,6 @@ class Testpaper extends Activity
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 
     /**

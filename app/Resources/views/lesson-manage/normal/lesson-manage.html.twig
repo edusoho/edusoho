@@ -25,7 +25,7 @@
   {% set displayText = displayText ~ '<span class="number mls">' ~ displayedLessonNum ~ '</span>' %}
   {% set displayText = displayText ~ '：' %}
 
-  {% set customTitle = displayText ~ lesson.title|sub_text(30) %}
+  {% set customTitle = displayText ~ lesson.title %}
   {% set shouldDisplayTask = count(lesson.tasks|default()) > 1 %}  <!-- 单任务课时，不显示任务 -->
 
   {% set task = lesson.tasks[0] %}

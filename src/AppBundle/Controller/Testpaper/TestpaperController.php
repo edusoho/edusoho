@@ -62,7 +62,8 @@ class TestpaperController extends BaseController
             $task = $this->getTaskByAnswerSceneId($answerRecord['answer_scene_id']);
             $restartUrl = $this->generateUrl('course_task_show', ['id' => $task['id'], 'courseId' => $task['courseId']]);
         } elseif ('' == $request->query->get('action', '')) {
-            $restartUrl = $this->generateUrl('testpaper_do', ['lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'testId' => 1]);
+            $task = $this->getTaskByAnswerSceneId($answerRecord['answer_scene_id']);
+            $restartUrl = $this->generateUrl('course_task_activity_show', ['courseId' => $task['courseId'], 'id' => $task['id'], 'doAgain' => true]);
         } else {
             $restartUrl = '';
         }

@@ -148,7 +148,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             return ['result' => false, 'message' => '直播还没开始!'];
         }
 
-        if ($this->checkLiveFinished($lesson)) {
+        if ($this->checkLiveStatus($lesson)) {
             return ['result' => false, 'message' => '直播已结束!'];
         }
 
@@ -165,6 +165,15 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $esLiveFinished = $isEsLive && $endLeftSeconds > self::LIVE_ENDTIME_DIFF_SECONDS;
 
         return $thirdLiveFinished || $esLiveFinished;
+    }
+
+    protected function checkLiveStatus($lesson)
+    {
+        if (EdusohoLiveClient::LIVE_STATUS_CLOSED == $lesson['progressStatus']) {
+            $LiveFinished = true;
+        }
+
+        return $LiveFinished;
     }
 
     public function checkCourseUserRole($course, $lesson)
@@ -216,9 +225,9 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             return true;
         }
 
-        if ($this->checkLiveFinished($lesson)) {
-            return true;
-        }
+//        if ($this->checkLiveFinished($lesson)) {
+//            return true;
+//        }
 
         if (EdusohoLiveClient::LIVE_STATUS_CLOSED == $lesson['progressStatus']) {
             return true;

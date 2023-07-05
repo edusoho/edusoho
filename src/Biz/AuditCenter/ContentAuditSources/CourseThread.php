@@ -14,10 +14,22 @@ class CourseThread extends AbstractSource
             return;
         }
 
+        $course = $this->getCourseService()->getCourse($thread['courseId']);
+        if (empty($course)) {
+            return;
+        }
+
         $fields = $this->getAuditFields($audit);
 
         if (!empty($fields)) {
             $this->getCourseThreadDao()->update($thread['id'], $fields);
+            if ('illegal' == $fields['auditStatus']) {
+                if ('course_thread' == $audit['targetType']) {
+                    $this->getCourseService()->updateCourse($course['id'], ['discussionNum' => $course['discussionNum'] - 1]);
+                } else {
+                    $this->getCourseService()->updateCourse($course['id'], ['questionNum' => $course['questionNum'] - 1]);
+                }
+            }
         }
     }
 
@@ -26,7 +38,7 @@ class CourseThread extends AbstractSource
      */
     protected function getCourseThreadService()
     {
-        return  $this->biz->service('Course:ThreadService');
+        return $this->biz->service('Course:ThreadService');
     }
 
     /**
@@ -35,5 +47,10 @@ class CourseThread extends AbstractSource
     protected function getCourseThreadDao()
     {
         return $this->biz->dao('Course:ThreadDao');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 }

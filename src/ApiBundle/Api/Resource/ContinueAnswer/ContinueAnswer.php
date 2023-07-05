@@ -7,9 +7,9 @@ use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Activity\ActivityFilter;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use ApiBundle\Api\Resource\Assessment\AssessmentResponseFilter;
-use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
 class ContinueAnswer extends AbstractResource
@@ -37,10 +37,13 @@ class ContinueAnswer extends AbstractResource
         if ('open' !== $assessment['status']) {
             throw AssessmentException::ASSESSMENT_NOTOPEN();
         }
+        $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
-        $this->removeAnalysisAndAnswer($assessment);
+        if ($assessment['displayable'] == 1) {
+            $this->removeAnalysisAndAnswer($assessment);
+        }
 
         $assessmentResponse = $this->getAnswerService()->getAssessmentResponseByAnswerRecordId($answerRecord['id']);
         $assessmentResponseFilter = new AssessmentResponseFilter();
@@ -51,24 +54,20 @@ class ContinueAnswer extends AbstractResource
             'assessment_response' => $assessmentResponse,
             'answer_scene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'answer_record' => $answerRecord,
-            'metaActivity'=> empty($activity) ? (object)[] : $activity,
+            'metaActivity' => empty($activity) ? (object)[] : $activity,
         ];
     }
 
-    private function removeAnalysisAndAnswer(&$assessment) {
-        foreach ($assessment['sections'] as &$section){
-            foreach ($section['items'] as &$item){
-                foreach ($item['questions'] as &$question){
+    private function removeAnalysisAndAnswer(&$assessment)
+    {
+        foreach ($assessment['sections'] as &$section) {
+            foreach ($section['items'] as &$item) {
+                foreach ($item['questions'] as &$question) {
                     $question['analysis'] = "";
                     $question['answer'] = [];
                 }
             }
         }
-    }
-
-    protected function getAnswerActivityService()
-    {
-        return $this->service('AnswerActivity:AnswerActivityService');
     }
 
     protected function getAnswerService()
@@ -92,15 +91,18 @@ class ContinueAnswer extends AbstractResource
     }
 
     /**
+     * @return AnswerRandomSeqService
+     */
+    protected function getAnswerRandomSeqService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRandomSeqService');
+    }
+
+    /**
      * @return ActivityService
      */
     protected function getActivityService()
     {
         return $this->service('Activity:ActivityService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->service('User:UserService');
     }
 }

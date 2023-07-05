@@ -572,6 +572,7 @@ class ClassroomManageController extends BaseController
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
                 'avatar' => $this->getWebExtension()->avatarPath($user, 'small'),
+                'isCanceledTeacherRoles' => !in_array('ROLE_TEACHER',$user['roles']),
             ];
         }
         $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
@@ -605,6 +606,7 @@ class ClassroomManageController extends BaseController
                 'id' => $headTeacher['id'],
                 'nickname' => $headTeacher['nickname'],
                 'avatar' => $this->getWebExtension()->avatarPath($headTeacher, 'small'),
+                'isCanceledTeacherRoles' => !in_array('ROLE_TEACHER',$headTeacher['roles']),
             ];
         }
 

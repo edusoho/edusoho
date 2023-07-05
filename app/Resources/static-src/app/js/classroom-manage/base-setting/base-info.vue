@@ -169,24 +169,17 @@
                             message: Translator.trans('validate.required.message', {'display': Translator.trans('classroom.title_label')}),
                             trigger: 'blur'
                         },
-                        {
-                            min: 2,
-                            message: Translator.trans('validate.length_min.message', {'length': 2}),
-                            trigger: 'blur',
-                        },
-                        {
-                            max: 30,
-                            message: Translator.trans('validate.length_max.message', {'length': 30}),
-                            trigger: 'blur',
-                        },
+                      {
+                        validator: validation.inter_byte,
+                        trigger: 'blur'
+                      },
                         {validator: validation.trim, trigger: 'blur'},
                         {validator: validation.course_title, trigger: 'blur'}
                     ],
                     subtitle: [
                         {
-                            max: 30,
-                            message: Translator.trans('validate.length_max.message', {'length': 30}),
-                            trigger: 'blur',
+                          validator: validation.max_byte,
+                          trigger: 'blur'
                         },
                     ]
                 },

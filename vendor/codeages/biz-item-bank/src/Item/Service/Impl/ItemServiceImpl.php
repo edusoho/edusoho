@@ -331,6 +331,11 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
 
         $conditions['bank_id'] = $bankId;
+        if (!empty($conditions['category_id']) && $conditions['category_id'] !== 0) {
+            $conditions['category_ids'] = $this->getItemCategoryService()->findCategoryChildrenIds($conditions['category_id']);
+            $conditions['category_ids'][] = $conditions['category_id'];
+            unset($conditions['category_id']);
+        }
         $items = $this->searchItems($conditions, ['created_time' => 'DESC'], 0, $this->countItems($conditions));
         if (empty($items)) {
             return false;
@@ -358,6 +363,11 @@ class ItemServiceImpl extends BaseService implements ItemService
     public function countQuestionsByCategoryId($categoryId)
     {
         return $this->getItemDao()->countItemQuestionNumByCategoryId($categoryId);
+    }
+
+    public function searchQuestions($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        return $this->getQuestionDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
     protected function createQuestions($itemId, $questions)

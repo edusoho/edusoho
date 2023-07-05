@@ -2202,3 +2202,5 @@ cloud.sms_enable_hint: Cloud SMS is not enabled. Please go to <a href="%cloudSms
 admin_v2.homepage.school_info.enter.copy_success: Link copied successfully
 admin_v2.homepage.wechat_come: Welcome to EduSoho enterprise products
 admin_v2.homepage.wechat_code.m: Join the open source product use learning exchange group, small partners are waiting for you
+
+del.role.theater.hover.title: This user does not have instructor rights. After removal, it will not be displayed on mobile

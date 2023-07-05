@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-
+{% do script(['app/js/base-index/index.js']) %}
 {% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
 
@@ -14,6 +14,11 @@
 {% set consultDisplay = true %}
 
 {% block full_content %}
+  <style>
+  .cd-notification {
+    overflow: visible !important;
+  }
+  </style>
   {% if appDownload  %}
     {{ render(controller('AppBundle:Default:appDownload')) }}
   {% endif %}
