@@ -294,13 +294,6 @@ class Testpaper extends Activity
 
         $fields['doTimes'] = empty($fields['isLimitDoTimes']) ? '0' : $fields['doTimes'];
 
-        if (self::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
-            $fields['startTime'] = 0;
-            $fields['endTime'] = 0;
-        } elseif (self::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
-            $fields['endTime'] = 0;
-        }
-
         $filterFields = ArrayToolkit::parts(
             $fields,
             [
