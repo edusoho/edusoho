@@ -84,7 +84,7 @@ class Testpaper {
     this.$questionItemShow = this.$element.find('#questionItemShowDiv');
     this.$scoreItem = this.$element.find('.js-score-form-group');
     this.$rangeStartTime = $('.js-start-range')
-    this.$rangeDateInput = $('.js-realTimeRange-data input')
+    this.$rangeDateInput = $('.js-realTimeRange-data');
     this._init();
   }
 
