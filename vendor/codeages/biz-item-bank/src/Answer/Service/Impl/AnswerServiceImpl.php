@@ -9,6 +9,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Review\Service\ReviewService;
 use Biz\System\Service\LogService;
 use Biz\Testpaper\Job\AssessmentAutoSubmitJob;
+use Biz\Testpaper\TestpaperException;
 use Biz\User\UserException;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
@@ -161,6 +162,109 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $assessmentResponse['used_time'] = $answerScene['limited_time'] * 60;
 
         return $assessmentResponse;
+    }
+
+    public function batchAutoSubmit($answerSceneId, $assessmentId, $userIds)
+    {
+        if (empty($userIds)) {
+            return;
+        }
+
+        $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
+        if (empty($answerScene)) {
+            return;
+        }
+
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        if (empty($assessment)) {
+            return;
+        }
+
+        $answerRecords = $this->batchCreateAnswerRecords($answerScene, $assessmentId, $userIds);
+
+        $answerReports = $this->batchCreateAnswerReports($assessmentId, $answerRecords);
+
+        $this->getAnswerRecordService()->batchUpdateAnswerRecord(array_column($answerRecords, 'id'), ['answer_report_id' => array_column($answerReports, 'id')]);
+
+        $this->batchCreateAnswerQuestionReports($assessmentId, $answerReports);
+    }
+
+    protected function batchCreateAnswerRecords($answerScene, $assessmentId, $userIds)
+    {
+        $newAnswerRecords = [];
+        $newAnswerRecord = [
+            'answer_scene_id' => $answerScene['id'],
+            'assessment_id' => $assessmentId,
+            'exam_mode' => $answerScene['exam_mode'],
+            'limited_time' => $answerScene['limited_time'],
+            'status' => 'finished',
+            'created_time' => $answerScene['end_time'],
+            'updated_time' => $answerScene['end_time'],
+        ];
+        foreach ($userIds as $userId) {
+            $newAnswerRecord['user_id'] = $userId;
+            $newAnswerRecords[] = $newAnswerRecord;
+        }
+
+        $this->getAnswerRecordService()->batchCreateAnswerRecords($newAnswerRecords);
+
+        return $this->getAnswerRecordService()->search(['answer_scene_id' => $answerSceneId, 'user_ids' => $userIds], 0, count($userIds), ['id', 'user_id']);
+    }
+
+    protected function batchCreateAnswerReports($assessmentId, $answerRecords)
+    {
+        $newAnswerReports = [];
+        $newAnswerReport = [
+            'assessment_id' => $assessmentId,
+            'total_score' => 0,
+            'score' => 0,
+            'subjective_score' => 0,
+            'objective_score' => 0,
+            'right_rate' => 0,
+            'right_question_count' => 0,
+            'review_time' => time(),
+        ];
+
+        foreach ($answerRecords as $answerRecord) {
+            $newAnswerReport['answer_record_id'] = $answerRecord['id'];
+            $newAnswerReport['user_id'] = $answerRecord['user_id'];
+            $newAnswerReports[] = $newAnswerReport;
+        }
+
+        $this->getAnswerReportService()->batchCreateAnswerReports($newAnswerReports);
+
+        return $this->getAnswerReportService()->search(['answer_scene_id' => $answerSceneId, 'user_ids' => $userIds], 0, count($userIds), ['id', 'answer_record_id']);
+    }
+
+    protected function batchCreateAnswerQuestionReports($assessmentId, $answerReports)
+    {
+        $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
+        if (empty($assessment)) {
+            return;
+        }
+
+        $answerQuestionReports = [];
+        $newAnswerQuestionReport = [
+            'assessment_id' => $assessmentId,
+            'status' => 'no_answer'
+        ];
+
+        foreach ($answerReports as $answerReport) {
+            $newAnswerQuestionReport['answer_record_id'] = $answerReport['answer_record_id'];
+            foreach ($assessment['sessions'] as $session) {
+                $newAnswerQuestionReport['section_id'] = $session['id'];
+                foreach ($session as $item) {
+                    $newAnswerQuestionReport['item_id'] = $item['id'];
+                    foreach ($item as $question) {
+                        $newAnswerQuestionReport['question_id'] = $question['id'];
+                        $newAnswerQuestionReport['identify'] = $answerReport['answer_record_id'] . '_' . $question['id'];
+                        $answerQuestionReports[] = $newAnswerQuestionReport;
+                    }
+                }
+            }
+        }
+
+        $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
     }
 
     protected function sumTotalScore(array $answerQuestionReports)

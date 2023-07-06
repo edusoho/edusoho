@@ -221,6 +221,11 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         return $this->getAnswerReportDao()->batchUpdate($ids, $updateColumnsList);
     }
 
+    public function batchCreateAnswerReports($answerReports)
+    {
+        return $this->getAnswerReportDao()->batchCreate($answerReports);
+    }
+
     /**
      * @return \Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService
      */

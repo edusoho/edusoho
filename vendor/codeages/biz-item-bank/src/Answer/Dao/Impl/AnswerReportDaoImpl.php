@@ -37,6 +37,7 @@ class AnswerReportDaoImpl extends AdvancedDaoImpl implements AnswerReportDao
             'serializes' => [],
             'conditions' => [
                 'user_id = :user_id',
+                'user_id in (:user_ids)',
                 'answer_scene_id = :answer_scene_id',
                 'answer_scene_id IN (:answer_scene_ids)',
                 'id != :exclude_id',
