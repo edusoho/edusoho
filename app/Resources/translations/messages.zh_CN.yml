@@ -10852,6 +10852,7 @@ exception.testpaper.doing: 试卷还未提交
 exception.testpaper.redo_interval_exist: 教师设置了重考间隔
 exception.testpaper.forbidden_delete_open_testpaper: 已发布试卷无法删除
 exception.testpaper.do_times_more_than_100: 考试次数超过最大值
+exception.testpaper.start_time_earlier_than_current: 考试已开始，无法修改
 exception.testpaper.end_time_earlier_than_start_time: 结束时间不能早于或等于开始时间
 exception.homework.not_found: 作业不存在
 exception.homework.draft: 该作业未发布，如有疑问请联系老师！

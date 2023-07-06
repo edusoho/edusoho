@@ -8,6 +8,7 @@ use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Testpaper\TestpaperException;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -56,7 +57,6 @@ class Testpaper extends Activity
 
     public function create($fields)
     {
-        $fields = $this->parseTimeFields($fields);
         $this->checkFields($fields);
         $fields = $this->filterFields($fields);
 
@@ -89,6 +89,9 @@ class Testpaper extends Activity
             ]);
 
             $this->getBiz()['db']->commit();
+            if (!empty($answerScene['end_time'])) {
+                $this->registerJob($answerScene);
+            }
 
             return $testpaperActivity;
         } catch (\Exception $e) {
@@ -162,8 +165,7 @@ class Testpaper extends Activity
             throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
-        $fields = $this->parseTimeFields($fields);
-        $this->checkFields($fields);
+        $this->checkUpdateFields($fields, $activity);
         $filterFields = $this->filterFields($fields);
 
         try {
@@ -193,6 +195,9 @@ class Testpaper extends Activity
             ]);
 
             $this->getBiz()['db']->commit();
+            if (!empty($answerScene['end_time'])) {
+                $this->registerJob($answerScene);
+            }
 
             return $testpaperActivity;
         } catch (\Exception $e) {
@@ -240,21 +245,25 @@ class Testpaper extends Activity
         return false;
     }
 
-    protected function parseTimeFields($fields)
-    {
-        if (self::VALID_PERIOD_MODE_RANGE == $fields['validPeriodMode']) {
-            $times = explode('-', $fields['rangeTime']);
-            $fields['startTime'] = strtotime($times[0]);
-            $fields['endTime'] = strtotime($times[1]);
-        }
-
-        return $fields;
-    }
-
     protected function checkFields($fields)
     {
         if (!empty($fields['isLimitDoTimes']) && !empty($fields['doTimes']) && $fields['doTimes'] > 100) {
             throw TestpaperException::TESTPAPER_DOTIMES_LIMIT();
+        }
+
+        if (!empty($fields['endTime']) && $fields['endTime'] <= $fields['startTime']) {
+            throw TestpaperException::END_TIME_EARLIER();
+        }
+    }
+
+    protected function checkUpdateFields($fields, $activity)
+    {
+        $answerScene = $this->getAnswerSceneService()->get($activity['answerScene']['id']);
+        if (!empty($fields['isLimitDoTimes']) && !empty($fields['doTimes']) && $fields['doTimes'] > 100) {
+            throw TestpaperException::TESTPAPER_DOTIMES_LIMIT();
+        }
+        if ($answerScene['start_time'] < time() && (!empty($fields['startTime']) && time() < $fields['startTime'])) {
+            throw TestpaperException::START_TIME_EARLIER();
         }
 
         if (!empty($fields['endTime']) && $fields['endTime'] <= $fields['startTime']) {
@@ -387,6 +396,28 @@ class Testpaper extends Activity
         }
 
         return $validPeriodMode;
+    }
+
+    private function registerJob($scene)
+    {
+        $submitFailedExamJob = self::getSchedulerService()->countJobs(['name' => 'submitFailedExamJob']);
+        if (0 == $submitFailedExamJob) {
+            self::getSchedulerService()->register([
+                'name' => 'submitFailedExamJob_'.$scene['id'],
+                'expression' => intval($scene['end_time']),
+                'class' => 'Biz\Activity\Job\submitFailedExamJob',
+                'misfire_threshold' => 60 * 10,
+                'args' => ['answerSceneId' => $scene['id']],
+                ]);
+        }
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 
     /**
