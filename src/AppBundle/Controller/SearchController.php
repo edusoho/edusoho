@@ -228,7 +228,7 @@ class SearchController extends BaseController
             $resultSet = array_map(function ($items) {
                 if ($items['about']) {
                     if (mb_strlen($items['about']) > 150) {
-                        $items['about'] = substr($items['about'], 0, 150).'...';
+                        $items['about'] = mb_substr($items['about'], 0, 150).'...';
                     }
                 }
 
