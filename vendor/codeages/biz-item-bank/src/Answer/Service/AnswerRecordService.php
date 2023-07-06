@@ -21,4 +21,9 @@ interface AnswerRecordService
     public function findByAnswerSceneId($answerSceneId);
 
     public function countGroupByAnswerSceneId($conditions);
+
+    public function batchCreateAnswerRecords($answerRecords);
+
+    public function batchUpdateAnswerRecord($ids, $updateColumnsList);
+
 }

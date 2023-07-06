@@ -114,6 +114,16 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
         return $this->getAnswerRecordDao()->countGroupByAnswerSceneId($conditions);
     }
 
+    public function batchCreateAnswerRecords($answerRecords)
+    {
+        return $this->getAnswerRecordDao()->batchCreate($answerRecords);
+    }
+
+    public function batchUpdateAnswerRecord($ids, $updateColumnsList)
+    {
+        return $this->getAnswerRecordDao()->batchUpdate($ids, $updateColumnsList);
+    }
+
     /**
      * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService
      */

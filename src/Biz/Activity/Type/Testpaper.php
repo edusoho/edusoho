@@ -195,7 +195,7 @@ class Testpaper extends Activity
             ]);
 
             $this->getBiz()['db']->commit();
-            if (!empty($answerScene['end_time'])) {
+            if (!empty($filterFields['endTime']) && $filterFields['endTime'] != $activity['answerScene']['end_time']) {
                 $this->registerJob($answerScene);
             }
 
@@ -339,6 +339,7 @@ class Testpaper extends Activity
 
     protected function filterActivity($activity, $scene)
     {
+        $userId = $this->getCurrentUser()->getId();
         if (!empty($scene)) {
             $activity['doTimes'] = $scene['do_times'];
             $activity['redoInterval'] = $scene['redo_interval'];
@@ -346,39 +347,12 @@ class Testpaper extends Activity
             $activity['testMode'] = !empty($scene['start_time']) ? 'realTime' : 'normal';
             $activity['isLimitDoTimes'] = empty($scene['do_times']) ? '0' : '1';
             $activity['validPeriodMode'] = $this->preValidPeriodMode($scene);
-            $countTestpaperRecord = $this->getAnswerRecordService()->count(['answer_scene_id' => $scene['id'], 'user_id' => $this->getCurrentUser()['id']]);
+            $countTestpaperRecord = $this->getAnswerRecordService()->count(['answer_scene_id' => $scene['id'], 'user_id' => $userId]);
             $activity['remainderDoTimes'] = max($scene['do_times'] - ($countTestpaperRecord ?: 0), 0);
-            $activity['canDoAgain'] = $this->canDoAgain($activity) && $this->isWithinTheTimeByScene($scene) ? '1' : '0';
+            $activity['canDoAgain'] = $this->getAnswerSceneService()->canStart($scene['id'], $userId) ? '1' : '0';
         }
 
         return $activity;
-    }
-
-    protected function canDoAgain($activity): bool
-    {
-        // 不限制考试次数可重考
-        if (empty($activity['isLimitDoTimes'])) {
-            return true;
-        }
-        // 有剩余次数可重考
-        if (!empty($activity['remainderDoTimes'])) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function isWithinTheTimeByScene($scene)
-    {
-        if ($scene['start_time'] > time()) {
-            return false;
-        }
-
-        if (!empty($scene['end_time']) && $scene['end_time'] < time()) {
-            return false;
-        }
-
-        return true;
     }
 
     protected function preValidPeriodMode($scene)
@@ -396,16 +370,16 @@ class Testpaper extends Activity
 
     private function registerJob($scene)
     {
-        $submitFailedExamJob = self::getSchedulerService()->countJobs(['name' => 'submitFailedExamJob_'.$scene['id']]);
-        if (0 == $submitFailedExamJob) {
-            self::getSchedulerService()->register([
-                'name' => 'submitFailedExamJob_'.$scene['id'],
-                'expression' => intval($scene['end_time']),
-                'class' => 'Biz\Activity\Job\submitFailedExamJob',
-                'misfire_threshold' => 60 * 10,
-                'args' => ['answerSceneId' => $scene['id']],
-                ]);
-        }
+        $this->getSchedulerService()->deleteJobByName('noAnswerAssessmentAutoSubmitJob_'.$scene['id']);
+
+        $this->getSchedulerService()->register([
+            'name' => 'noAnswerAssessmentAutoSubmitJob_'.$scene['id'],
+            'expression' => intval($scene['end_time']),
+            'class' => 'Biz\Testpaper\Job\NoAnswerAssessmentAutoSubmitJob',
+            'misfire_threshold' => 60 * 10,
+            'misfire_policy' => 'executing',
+            'args' => ['answerSceneId' => $scene['id']],
+        ]);
     }
 
     /**
