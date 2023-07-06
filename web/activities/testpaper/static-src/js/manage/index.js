@@ -436,17 +436,20 @@ class Testpaper {
 
   showRedoExamination(event) {
     const $this = $(event.currentTarget);
-    if ($this.val() == 1) {
-      $('.js-realTimeRange-data').show();
-      $('.js-start-range').hide();
-    }
+
     if ($this.val() == 0) {
-      $('.js-start-range').hide();
-      $('.js-realTimeRange-data').hide();
+      $('.js-start-range').attr('type', 'hidden');
+      $('.js-realTimeRange-data').attr('type', 'hidden');
     }
+
+    if ($this.val() == 1) {
+      $('.js-realTimeRange-data').attr('type', 'test');
+      $('.js-start-range').attr('type', 'hidden');
+    }
+
     if ($this.val() == 2) {
-      $('.js-start-range').show();
-      $('.js-realTimeRange-data').hide();
+      $('.js-start-range').attr('type', 'test');
+      $('.js-realTimeRange-data').attr('type', 'hidden');
     }
   }
 
