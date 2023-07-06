@@ -1,7 +1,5 @@
 <?php
 
-use AppBundle\Common\ArrayToolkit;
-use Biz\Activity\Dao\ActivityDao;
 use Biz\Course\Dao\CourseDao;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\Filesystem\Filesystem;
@@ -48,8 +46,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'registerCallbackUrl',
-            'registerSyncTask',
+            'registerCallbackUrl'
         );
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -93,42 +90,6 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         return 1;
-    }
-
-    public function registerSyncTask($page)
-    {
-        if($page > 1) {
-            $logPage = (int)($page / 1000);
-            $coursePage = $page % 1000;
-        }else {
-            $logPage = 1;
-            $coursePage = 1;
-        }
-        $jobLogs = $this->getJobLogDao()->search(['name'=>'course_task_create_sync_job_', 'status'=>'error'],['id'=>'asc'], ($logPage-1) * 1, 1);
-        if(empty($jobLogs)) {
-            return 1;
-        }
-        $taskId = $jobLogs[0]['args']['taskId'];
-        $task = $this->getTaskService()->getTask($taskId);
-
-        if(!empty($task)) {
-            $courseId = $task['courseId'];
-            $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($courseId, 1);
-            foreach ($copiedCourses as $index => $copiedCourse) {
-                if ($coursePage - 1 == $index) {
-                    $result = $this->getTaskService()->syncClassroomCourseTasks($copiedCourse['id'], true);
-                    $this->logger('info', json_encode($result));
-                }
-            }
-        }
-        if (!isset($copiedCourses) || empty($copiedCourses) || $coursePage - 1 == $index) {
-            $coursePage = 1;
-            $logPage++;
-        } else {
-            $coursePage++;
-        }
-
-        return (int)($logPage*1000+$coursePage);
     }
 
 
