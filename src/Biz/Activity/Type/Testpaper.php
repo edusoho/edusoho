@@ -259,16 +259,12 @@ class Testpaper extends Activity
     protected function checkUpdateFields($fields, $activity)
     {
         $answerScene = $this->getAnswerSceneService()->get($activity['answerScene']['id']);
-        if (!empty($fields['isLimitDoTimes']) && !empty($fields['doTimes']) && $fields['doTimes'] > 100) {
-            throw TestpaperException::TESTPAPER_DOTIMES_LIMIT();
-        }
+
         if ($answerScene['start_time'] < time() && (!empty($fields['startTime']) && time() < $fields['startTime'])) {
             throw TestpaperException::START_TIME_EARLIER();
         }
 
-        if (!empty($fields['endTime']) && $fields['endTime'] <= $fields['startTime']) {
-            throw TestpaperException::END_TIME_EARLIER();
-        }
+        $this->checkFields($fields);
     }
 
     protected function filterFields($fields)
@@ -400,7 +396,7 @@ class Testpaper extends Activity
 
     private function registerJob($scene)
     {
-        $submitFailedExamJob = self::getSchedulerService()->countJobs(['name' => 'submitFailedExamJob']);
+        $submitFailedExamJob = self::getSchedulerService()->countJobs(['name' => 'submitFailedExamJob_'.$scene['id']]);
         if (0 == $submitFailedExamJob) {
             self::getSchedulerService()->register([
                 'name' => 'submitFailedExamJob_'.$scene['id'],
