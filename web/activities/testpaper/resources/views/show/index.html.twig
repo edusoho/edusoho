@@ -1,6 +1,7 @@
 {% extends 'layout.html.twig' %}
 {% block body %}
   {% set canStartTestpaper = (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime > ('now'|date('U'))) or (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime == '0') or (activity.startTime == '0' and activity.endTime == '0') %}
+  {% set latestAnswerRecord = data('LatestAnswerRecord', {answerSceneId: activity.ext.answerSceneId}) %}
 
   <div class="iframe-parent-content">
     <div class="modal show iframe-modal">
@@ -118,7 +119,7 @@
               {% if activity.startTime and activity.startTime > ('now'|date('U')) %}
               {% elseif canStartTestpaper %}
                 <div class="mt24 mb8 footer-btn">
-                  <span class="text-919399">{{ 'course.plan_task.activity_manage.testpaper.limit_tips'|trans }}</span>
+                  <span class="text-919399 {% if activity.ext.answerScene.exam_mode == '1' %} hidden {% endif %}">{{ 'course.plan_task.activity_manage.testpaper.limit_tips'|trans }}</span>
                   <span class="pull-right inline-block text-right">
                     {% if not activity.startTime or testMode == 'normal' or (testMode == 'realTime' and activity.startTime and activity.startTime <= ('now'|date('U'))) %}
                       <a class="btn btn-primary" href="{{ path('testpaper_do', { lessonId: activity.id, testId: testpaper.id }) }}">{{ 'course.plan_task.activity_manage.testpaper.start_exam'|trans }}</a>
@@ -130,7 +131,7 @@
                   <span class="text-919399">{{ 'course.plan_task.activity_manage.testpaper.enddate.limit_tips'|trans }}</span>
                   <span class="pull-right inline-block text-right">
                     {% if not activity.startTime or testMode == 'normal' or (testMode == 'realTime' and activity.startTime and activity.startTime <= ('now'|date('U'))) %}
-                      <a class="btn btn-primary" href="{{ path('testpaper_do', { lessonId: activity.id, testId: testpaper.id }) }}">{{ 'admin.live_manage.show_detail'|trans }}</a>
+                      <a class="btn btn-primary" href="{{ path('testpaper_result_show', { answerRecordId: latestAnswerRecord.id, type: 'activity' }) }}">{{ 'admin.live_manage.show_detail'|trans }}</a>
                     {% endif %}
                   </span>
                 </div>

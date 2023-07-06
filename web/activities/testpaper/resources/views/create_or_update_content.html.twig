@@ -255,9 +255,9 @@
 						<i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.question.disorder'|trans }}"></i>
 					</div>
         <div class="col-sm-10 controls switch-content">
-					<label class="form-switch setting-switch">
-						<input type="checkbox" name="abandonIsItemsSeqRandom" value="" id="weixinweb_enabled" data-toggle="switch">
-						<input type="hidden" name="isItemsSeqRandom" value="{{ activity.ext.answerScene.is_items_deq_random|default(0) }}">
+					<label class="form-switch setting-switch {% if activity.ext.answerScene.is_items_seq_random|default(0) %}checked{% endif %}">
+						<input type="checkbox" name="abandonIsItemsSeqRandom" value="{{ activity.ext.answerScene.is_options_seq_random|default(0) }}" id="weixinweb_enabled" data-toggle="switch">
+						<input type="hidden" name="isItemsSeqRandom" value="{{ activity.ext.answerScene.is_items_seq_random|default(0) }}">
 					</label>
 				</div>
       </div>
@@ -268,7 +268,7 @@
 						<i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.option.disorder'|trans }}"></i>
 					</div>
         <div class="col-sm-10 controls switch-content">
-					<label class="form-switch setting-switch">
+					<label class="form-switch setting-switch {% if activity.ext.answerScene.is_options_seq_random|default(0) %}checked{% endif %}">
 						<input type="checkbox" name="abandonIsOptionsSeqRandom" value="{{ activity.ext.answerScene.is_options_seq_random|default(0) }}" id="weixinweb_enabled" data-toggle="switch">
 						<input type="hidden" name="isOptionsSeqRandom" value="{{ activity.ext.answerScene.is_options_seq_random|default(0) }}">
 					</label>

@@ -84,7 +84,7 @@ class Testpaper {
     this.$questionItemShow = this.$element.find('#questionItemShowDiv');
     this.$scoreItem = this.$element.find('.js-score-form-group');
     this.$rangeStartTime = $('.js-start-range')
-    this.$rangeDateInput = $('.js-realTimeRange-data input')
+    this.$rangeDateInput = $('.js-realTimeRange-data');
     this._init();
   }
 
@@ -121,6 +121,7 @@ class Testpaper {
         var $this = $(this);
         var $parent = $this.parent();
         var isEnable = $this.val();
+				console.log(isEnable);
         var reverseEnable = isEnable == 1 ? 0 : 1;
 
         if ($parent.hasClass('checked')) {
