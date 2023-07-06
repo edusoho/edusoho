@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Scheduler\AbstractJob;
 class CourseTaskJobLogJob extends AbstractJob
 {
     /**
-     * upgrade-22.3.7升级脚本用到的job
+     * upgrade-23.3.9升级脚本用到的job
      */
     public function execute()
     {
