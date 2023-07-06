@@ -62,7 +62,7 @@ class AnswerRecord extends AbstractResource
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerScene['id']);
         $answerScene['fromType'] = $activity['mediaType'];
         $answerScene['reviewType'] = 'testpaper' == $activity['mediaType'] || 'score' == $activity['finishType'] ? 'score' : 'true_false';
-
+        $answerScene['isLimitDoTimes'] = empty($answerScene['do_times']) ? '0' : '1';
         return $answerScene;
     }
 
