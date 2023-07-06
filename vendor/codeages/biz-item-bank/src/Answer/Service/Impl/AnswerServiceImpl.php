@@ -251,8 +251,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         foreach ($answerReports as $answerReport) {
             $newAnswerQuestionReport['answer_record_id'] = $answerReport['answer_record_id'];
-            foreach ($assessment['sessions'] as $session) {
-                $newAnswerQuestionReport['section_id'] = $session['id'];
+            foreach ($assessment['sections'] as $section) {
+                $newAnswerQuestionReport['section_id'] = $section['id'];
                 foreach ($session as $item) {
                     $newAnswerQuestionReport['item_id'] = $item['id'];
                     foreach ($item as $question) {

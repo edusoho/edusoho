@@ -377,6 +377,7 @@ class Testpaper extends Activity
             'expression' => intval($scene['end_time']),
             'class' => 'Biz\Testpaper\Job\NoAnswerAssessmentAutoSubmitJob',
             'misfire_threshold' => 60 * 10,
+            'misfire_policy' => 'executing',
             'args' => ['answerSceneId' => $scene['id']],
         ]);
     }

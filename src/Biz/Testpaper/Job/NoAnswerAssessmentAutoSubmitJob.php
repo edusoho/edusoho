@@ -39,9 +39,10 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
         $this->getAnswerService()->batchAutoSubmit($answerScene['id'], $testpaperActivity['mediaId'], array_column($members, 'userId'));
         $this->getSchedulerService()->register([
             'name' => 'noAnswerAssessmentAutoSubmitJob_'.$answerScene['id'],
-            'expression' => intval($answerScene['end_time']),
+            'expression' => time(),
             'class' => 'Biz\Testpaper\Job\NoAnswerAssessmentAutoSubmitJob',
             'misfire_threshold' => 60 * 10,
+            'misfire_policy' => 'executing',
             'args' => ['answerSceneId' => $answerScene['id']],
         ]);
     }
