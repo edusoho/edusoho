@@ -17,7 +17,7 @@ class AnswerRecord extends AbstractResource
     {
         $answerRecord = $this->getAnswerRecordService()->get($id);
         if (empty($answerRecord['answer_report_id'])) {
-            return (object)[];
+            return (object) [];
         }
 
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
@@ -52,8 +52,8 @@ class AnswerRecord extends AbstractResource
             'assessment' => $assessment,
             'answer_scene' => $this->wrapperAnswerScene($answerScene),
             'resultShow' => empty($testpaperActivity) ? true : $this->getResultShow($answerRecord, $answerScene, $answerReport),
-            'activity' => empty($testpaperActivity) ? (object)[] : $testpaperActivity,
-            'metaActivity' => empty($activity) ? (object)[] : $activity,
+            'activity' => empty($testpaperActivity) ? (object) [] : $testpaperActivity,
+            'metaActivity' => empty($activity) ? (object) [] : $activity,
         ];
     }
 
@@ -63,6 +63,9 @@ class AnswerRecord extends AbstractResource
         $answerScene['fromType'] = $activity['mediaType'];
         $answerScene['reviewType'] = 'testpaper' == $activity['mediaType'] || 'score' == $activity['finishType'] ? 'score' : 'true_false';
         $answerScene['isLimitDoTimes'] = empty($answerScene['do_times']) ? '0' : '1';
+        $countTestpaperRecord = $this->getAnswerRecordService()->count(['answer_scene_id' => $answerScene['id'], 'user_id' => $this->getCurrentUser()->getId()]);
+        $answerScene['remainderDoTimes'] = max($answerScene['do_times'] - ($countTestpaperRecord ?: 0), 0);
+
         return $answerScene;
     }
 
