@@ -2,6 +2,8 @@
 
 namespace AppBundle\Component\OAuthClient;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class QqOAuthClient extends AbstractOAuthClient
 {
     const USERINFO_URL = 'https://graph.qq.com/user/get_user_info';
@@ -81,5 +83,11 @@ class QqOAuthClient extends AbstractOAuthClient
         }
 
         return $userInfo;
+    }
+
+    public function verifyCredential(Request $request, $session_credential)
+    {
+        // TODO: Implement verifyCredential() method.
+        return true;
     }
 }

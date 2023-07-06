@@ -1043,8 +1043,14 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_binds'));
         }
 
-        //校验各个端认证参数
-        $this->verifyCredential($request, $type);
+        //校验参数
+        $oAuthClient = $this->createOAuthClient($type);
+        $result = $oAuthClient->verifyCredential($request, $this->get('session')->get('login_bind.credential'));
+        if (!$result) {
+            $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.state.authentication_fail');
+
+            return $this->redirect($this->generateUrl('settings_binds'));
+        }
 
         $callbackUrl = $this->generateUrl(
             'settings_binds_bind_callback',
@@ -1053,7 +1059,7 @@ class SettingsController extends BaseController
         );
 
         try {
-            $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
+            $token = $oAuthClient->getAccessToken($code, $callbackUrl);
         } catch (\Exception $e) {
             $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.authentication_fail');
 
@@ -1234,29 +1240,6 @@ class SettingsController extends BaseController
         $client = OAuthClientFactory::create($type, $config);
 
         return $client;
-    }
-
-    /**
-     * 校验第三方认证的各个端认证参数
-     *
-     * @param $type
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|void
-     */
-    public function verifyCredential(Request $query, $type)
-    {
-        $weixinCredential = $this->get('session')->get('login_bind.credential');
-        switch ($type) {
-            case 'weixinweb':
-            case 'weixinmob':
-                $state = $query->query->get('state');
-                if (empty($weixinCredential) || empty($state) || $weixinCredential != $state) {
-                    $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.state.authentication_fail');
-
-                    return $this->redirect($this->generateUrl('settings_binds'));
-                }
-                break;
-        }
     }
 
     protected function dragCaptchaValidator($registration, $authSettings)

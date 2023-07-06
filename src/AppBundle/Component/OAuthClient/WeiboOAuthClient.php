@@ -3,6 +3,7 @@
 namespace AppBundle\Component\OAuthClient;
 
 use AppBundle\Common\Exception\UnexpectedValueException;
+use Symfony\Component\HttpFoundation\Request;
 
 class WeiboOAuthClient extends AbstractOAuthClient
 {
@@ -84,5 +85,11 @@ class WeiboOAuthClient extends AbstractOAuthClient
             throw new UnexpectedValueException('unAuthorize');
         }
         throw new UnexpectedValueException($userInfo['error']);
+    }
+
+    public function verifyCredential(Request $request, $session_credential)
+    {
+        // TODO: Implement verifyCredential() method.
+        return true;
     }
 }

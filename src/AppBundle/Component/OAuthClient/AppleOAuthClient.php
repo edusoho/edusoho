@@ -5,6 +5,7 @@ namespace AppBundle\Component\OAuthClient;
 use AppBundle\Common\Exception\UnexpectedValueException;
 use Biz\System\Service\SettingService;
 use Firebase\JWT\JWT;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
 class AppleOAuthClient extends AbstractOAuthClient
@@ -118,5 +119,11 @@ class AppleOAuthClient extends AbstractOAuthClient
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System:SettingService');
+    }
+
+    public function verifyCredential(Request $request, $session_credential)
+    {
+        // TODO: Implement verifyCredential() method.
+        return true;
     }
 }

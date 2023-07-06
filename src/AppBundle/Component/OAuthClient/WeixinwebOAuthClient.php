@@ -2,6 +2,8 @@
 
 namespace AppBundle\Component\OAuthClient;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class WeixinwebOAuthClient extends AbstractOAuthClient
 {
     const USERINFO_URL = 'https://api.weixin.qq.com/sns/userinfo';
@@ -18,6 +20,23 @@ class WeixinwebOAuthClient extends AbstractOAuthClient
         $params['state'] = $weixinState;
 
         return self::AUTHORIZE_URL.http_build_query($params);
+    }
+
+    /**
+     * 微信校验令牌
+     *
+     * @param $session_credential
+     *
+     * @return bool
+     */
+    public function verifyCredential(Request $request, $session_credential)
+    {
+        $state = $request->query->get('state');
+        if (empty($session_credential) || empty($state) || $session_credential != $state) {
+            return false;
+        }
+
+        return true;
     }
 
     public function getAccessToken($code, $callbackUrl)
