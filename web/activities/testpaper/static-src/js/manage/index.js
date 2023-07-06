@@ -141,6 +141,7 @@ class Testpaper {
       "timePicker24Hour": true,
       "timePickerSeconds": true,
       'autoUpdateInput':false,
+			'startDate':moment().startOf('seconds'),
       locale,
     });
     
@@ -156,6 +157,7 @@ class Testpaper {
       "timePicker24Hour": true,
       "timePickerSeconds": true,
       'autoUpdateInput':false,
+			'startDate':moment().startOf('seconds'),
       locale,
     });
     
