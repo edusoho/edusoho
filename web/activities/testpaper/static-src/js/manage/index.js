@@ -1,7 +1,6 @@
 import { dateFormat, htmlEscape } from 'app/common/unit.js';
 import DateRangePicker from 'app/common/daterangepicker';
 import 'moment';
-import { cloneDeep } from 'lodash';
 
 const locale = {
   'format': 'YYYY/MM/DD HH:mm:ss',
@@ -76,34 +75,6 @@ if (app.lang !== 'zh_CN') {
 }
 
 
-$('.js-realTimeRange-data input').daterangepicker({
-  "timePicker": true,
-  "timePicker24Hour": true,
-  "timePickerSeconds": true,
-	'autoUpdateInput':false,
-  locale,
-});
-
-$('.js-realTimeRange-data input').on('apply.daterangepicker', function(ev, picker) {
-	$('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
-  $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'))
-	$(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
-});
-
-$('.js-start-range input').daterangepicker({
-  "timePicker": true,
-  'singleDatePicker': true,
-  "timePicker24Hour": true,
-  "timePickerSeconds": true,
-	'autoUpdateInput':false,
-  locale,
-});
-
-$('.js-start-range input').on('apply.daterangepicker', function(ev, picker) {
-	$('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
-	$(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
-});
-
 class Testpaper {
   constructor($element) {
     this.$element = $element;
@@ -112,6 +83,8 @@ class Testpaper {
     this.$testpaperSelector = this.$element.find('#testpaper-media');
     this.$questionItemShow = this.$element.find('#questionItemShowDiv');
     this.$scoreItem = this.$element.find('.js-score-form-group');
+    this.$rangeStartTime = $('.js-start-range')
+    this.$rangeDateInput = $('.js-realTimeRange-data input')
     this._init();
   }
 
@@ -124,7 +97,9 @@ class Testpaper {
     this.initEvent();
     this.initStepForm2();
     this.initAddComment();
+    this.initDatePicker();
     this.initFormItemData();
+
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {
         valid: this.validator.form(),
@@ -160,6 +135,36 @@ class Testpaper {
 
   }
 
+  initDatePicker() {
+    this.$rangeDateInput.daterangepicker({
+      "timePicker": true,
+      "timePicker24Hour": true,
+      "timePickerSeconds": true,
+      'autoUpdateInput':false,
+      locale,
+    });
+    
+    this.$rangeDateInput.on('apply.daterangepicker', function(ev, picker) {
+      $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
+      $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'))
+      $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+    });
+
+    this.$rangeStartTime.daterangepicker({
+      "timePicker": true,
+      'singleDatePicker': true,
+      "timePicker24Hour": true,
+      "timePickerSeconds": true,
+      'autoUpdateInput':false,
+      locale,
+    });
+    
+    this.$rangeStartTime.on('apply.daterangepicker', function(ev, picker) {
+      $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
+      $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+    });
+  }
+
   initFormItemData() {
     const activityId = $('#activityId').val()
 
@@ -167,13 +172,15 @@ class Testpaper {
 
     const startTime = $('[name=startTime]').val()
     const endTime = $('[name=endTime]').val()
+    const $rangeDateInput = this.$rangeDateInput
+    const $rangeStartTime = $('#rangeStartTime')
 
     if (startTime != 0 && endTime != 0) {
-      $('.js-realTimeRange-data input').val(startTime + ' - ' + endTime)
-      $('.js-realTimeRange-data input').attr('disabled', 'disabled')
+      $rangeDateInput.val(startTime + ' - ' + endTime)
+      $rangeDateInput.attr('disabled', 'disabled')
     } else if (startTime != 0) {
-      $('#rangeStartTime').val(startTime)
-      $('#rangeStartTime').attr('disabled', 'disabled')
+      $rangeStartTime.val(startTime)
+      $rangeStartTime.attr('disabled', 'disabled')
     }
 
     $('[name=validPeriodMode]').attr('disabled', 'disabled')
@@ -462,17 +469,17 @@ class Testpaper {
     const $this = $(event.currentTarget);
 
     if ($this.val() == 0) {
-      $('.js-start-range').attr('type', 'hidden');
+      this.$rangeStartTime.attr('type', 'hidden');
       $('.js-realTimeRange-data').attr('type', 'hidden');
     }
 
     if ($this.val() == 1) {
       $('.js-realTimeRange-data').attr('type', 'test');
-      $('.js-start-range').attr('type', 'hidden');
+      this.$rangeStartTime.attr('type', 'hidden');
     }
 
     if ($this.val() == 2) {
-      $('.js-start-range').attr('type', 'test');
+      this.$rangeStartTime.attr('type', 'test');
       $('.js-realTimeRange-data').attr('type', 'hidden');
     }
   }
