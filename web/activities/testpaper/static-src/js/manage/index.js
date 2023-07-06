@@ -247,7 +247,11 @@ class Testpaper {
         },
         doTimes: {
           required: () => $('[name="isLimitDoTimes"]:checked').val() == 1,
-          section_number: () => $('[name="isLimitDoTimes"]:checked').val() == 1 ? /^([1-9][0-9]{0,1}|100)$/ : '',
+          optional_range: {
+            optional: () => $('[name="isLimitDoTimes"]:checked').val() == 0,
+            range: [1, 100],
+          },
+          // section_number: () => $('[name="isLimitDoTimes"]:checked').val() == 1 ? /^([1-9][0-9]{0,1}|100)$/ : '',
         },
         rangeTime: {
           required: () => $('[name="validPeriodMode"]:checked').val() == 1
@@ -455,7 +459,7 @@ class Testpaper {
 
   showRedoInterval(event) {
     const $this = $(event.currentTarget);
-    
+
     if ($this.val() == 1) {
       $('.js-examinations-num').attr('type', 'text');
     }
