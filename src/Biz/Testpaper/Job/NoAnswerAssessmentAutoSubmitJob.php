@@ -18,14 +18,20 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
         if (empty($answerScene['end_time'])) {
             return;
         }
-        $answerRecords = $this->getAnswerRecordService()->findByAnswerSceneId($answerScene['id']);
-        $userIds = array_column($answerRecords, 'user_id');
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerScene['id']);
+        if (empty($testpaperActivity)) {
+            return;
+        }
         $activity = $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
+        if (empty($activity)) {
+            return;
+        }
+
+        $answerRecords = $this->getAnswerRecordService()->findByAnswerSceneId($answerScene['id']);
         $members = $this->getCourseMemberService()->searchMembers(
             [
                 'courseId' => $activity['fromCourseId'],
-                'excludeUserIds' => $userIds,
+                'excludeUserIds' => array_column($answerRecords, 'user_id'),
             ],
             ['createdTime' => 'DESC'],
             0,
