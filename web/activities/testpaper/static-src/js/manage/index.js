@@ -121,7 +121,6 @@ class Testpaper {
         var $this = $(this);
         var $parent = $this.parent();
         var isEnable = $this.val();
-				console.log(isEnable);
         var reverseEnable = isEnable == 1 ? 0 : 1;
 
         if ($parent.hasClass('checked')) {
