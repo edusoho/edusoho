@@ -1,7 +1,6 @@
 <?php
 
-use Biz\Course\Dao\CourseDao;
-use Biz\Task\Service\TaskService;
+use Biz\Crontab\SystemCrontabInitializer;
 use Symfony\Component\Filesystem\Filesystem;
 use Biz\Util\EdusohoLiveClient;
 
@@ -46,7 +45,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'registerCallbackUrl'
+            'registerSyncTask',
         );
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -76,22 +75,43 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    public function registerCallbackUrl()
+    public function registerSyncTask($page)
     {
-        try {
-            $site = $this->getSettingService()->get('site', []);
-            if (empty($site['url'])) {
-                return 1;
-            }
-            $client = new EdusohoLiveClient();
-            $client->uploadCallbackUrl(rtrim($site['url'], '/').'/callback/live/handle');
-            $this->logger('info', '修改直播回调');
-        } catch (\RuntimeException $e) {
+
+        if ($page > 1) {
+            $logPage = (int)($page / 1000);
+            $coursePage = $page % 1000;
+        } else {
+            $logPage = 1;
+            $coursePage = 1;
         }
 
-        return 1;
-    }
+        $totalJobLogsCount = $this->getJobLogDao()
+            ->count(['name' => 'course_task_create_sync_job_', 'status' => 'error']);
+        $limit = 1000;
+        $totalPage = ceil($totalJobLogsCount/$limit);
+        if ($logPage > $totalPage){
+            return 1;
+        }
 
+        $this->getSchedulerService()->register([
+            'name' => 'CourseTaskJobLogJob',
+            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+            'expression' => time() + 10,
+            'class' => 'Biz\Course\Job\CourseTaskJobLogJob',
+            'args' => ['page'=>$coursePage,'limit'=>$limit],
+            'misfire_threshold' => 60 * 60,
+        ]);
+
+        if (!isset($copiedCourses) || empty($copiedCourses) || $coursePage - 1 == $index) {
+            $coursePage = 1;
+            $logPage++;
+        } else {
+            $coursePage++;
+        }
+
+        return (int)($logPage * 1000 + $coursePage);
+    }
 
     protected function generateIndex($step, $page)
     {
@@ -106,38 +126,14 @@ class EduSohoUpgrade extends AbstractUpdater
         return array($step, $page);
     }
 
-    protected function isFieldExist($table, $filedName)
-    {
-        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
-        $result = $this->getConnection()->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
-    }
-
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
-    /**
-     * @return TaskService
-     */
-    public function getTaskService()
-    {
-        return $this->createService('Task:TaskService');
-    }
-
     protected function getJobLogDao()
     {
         return $this->createDao('Scheduler:JobLogDao');
-    }
-
-    /**
-     * @return CourseDao
-     */
-    protected function getCourseDao()
-    {
-        return $this->createDao('Course:CourseDao');
     }
 }
 
