@@ -40,6 +40,8 @@ class TestpaperException extends AbstractException
 
     const TESTPAPER_DOTIMES_LIMIT = 5002215;
 
+    const START_TIME_EARLIER = 5002216;
+
     const END_TIME_EARLIER = 5002217;
 
     public $messages = [
@@ -59,6 +61,7 @@ class TestpaperException extends AbstractException
         5002214 => 'exception.testpaper.redo_interval_exist',
         4032215 => 'exception.testpaper.forbidden_delete_open_testpaper',
         5002215 => 'exception.testpaper.do_times_more_than_100',
+        5002216 => 'exception.testpaper.start_time_earlier_than_current',
         5002217 => 'exception.testpaper.end_time_earlier_than_start_time',
     ];
 }
