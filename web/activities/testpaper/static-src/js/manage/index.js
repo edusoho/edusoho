@@ -124,6 +124,7 @@ class Testpaper {
     this.initEvent();
     this.initStepForm2();
     this.initAddComment();
+    this.initFormItemData();
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {
         valid: this.validator.form(),
@@ -157,6 +158,25 @@ class Testpaper {
       });
     }
 
+  }
+
+  initFormItemData() {
+    const activityId = $('#activityId').val()
+
+    if (activityId == 0) return
+
+    const startTime = $('[name=startTime]').val()
+    const endTime = $('[name=endTime]').val()
+
+    if (startTime != 0 && endTime != 0) {
+      $('.js-realTimeRange-data input').val(startTime + ' - ' + endTime)
+      $('.js-realTimeRange-data input').attr('disabled', 'disabled')
+    } else if (startTime != 0) {
+      $('#rangeStartTime').val(startTime)
+      $('#rangeStartTime').attr('disabled', 'disabled')
+    }
+
+    $('[name=validPeriodMode]').attr('disabled', 'disabled')
   }
 
   setValidateRule() {

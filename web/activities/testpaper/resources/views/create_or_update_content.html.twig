@@ -50,6 +50,7 @@
 </style>
 
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
+  
     <form class="form-horizontal" id="step2-form">
       {% set course = get_course(activity.fromCourseId) %}
       {% set testpaper = activity.ext.testpaper|default('') %}
@@ -57,6 +58,7 @@
       {% set features = get_features() %}
       {% set testMode = activity.ext.answerScene.start_time|default(0) > 0 ? 'realTime' : 'normal' %}
       {% set examMode = activity.ext.answerScene.exam_mode|default(0) %}
+      <input type="hidden" id="activityId" value="{{ activity.id|default(0) }}" />
       <div class="form-group">
         <div class="col-sm-2 control-label">
           <label for="examMode">{{ 'course.plan_task.activity_manage.testpaper.mode'|trans }}</label>
@@ -191,16 +193,15 @@
 				<div class="col-sm-10 controls radios">
 				  {{ radios('validPeriodMode', {'0':'course.plan_task.activity_manage.exercise.default_difficulty'|trans, '1':'course.plan_task.activity_manage.testpaper.mode.realTimeRange'|trans, '2':'course.plan_task.activity_manage.testpaper.mode.startTime'|trans }, activity.ext.validPeriodMode|default('0') )}}
         </div>
-        {{ dump(activity.ext) }}
-          <input type="hidden" name="startTime" value="{% if activity.ext.answerScene.start_time > 0 %}{{ activity.ext.answerScene.start_time|date('Y-m-d H:m:s') }}{% else %}0{% endif %}" size="25" >
-          <input type="hidden" name="endTime" value="{% if activity.ext.answerScene.end_time > 0 %}{{ activity.ext.answerScene.end_time|date('Y-m-d H:m:s') }}{% else %}0{% endif %}" size="25" >
+          <input type="hidden" name="startTime" value="{% if activity.ext.answerScene.start_time|default(0) > 0 %}{{ activity.ext.answerScene.start_time|date('Y-m-d H:m:s') }}{% else %}0{% endif %}" size="25" >
+          <input type="hidden" name="endTime" value="{% if activity.ext.answerScene.end_time|default(0) > 0 %}{{ activity.ext.answerScene.end_time|date('Y-m-d H:m:s') }}{% else %}0{% endif %}" size="25" >
 				<div class="col-sm-offset-2 col-sm-10 controls">
           <input type="{% if activity.ext.validPeriodMode|default('0') != 1 %}hidden{% else %}text{% endif %}" 
             id="rangeTime" name="rangeTime" size="25" class="form-control js-realTimeRange-data" autocomplete="off" style="width: 320px;">
         </div>
 				<div class="col-sm-offset-2 col-sm-10 controls">
           <input type="{% if activity.ext.validPeriodMode|default('0') != 2 %}hidden{% else %}text{% endif %}" 
-            size="25" id="rangeStartTime" name="rangeStartTime" class="form-control js-start-range" style="width: 160px;" value="{{ activity.ext.answerScene.start_time|date('Y-m-d H:i:s') }}">
+            size="25" id="rangeStartTime" name="rangeStartTime" class="form-control js-start-range" style="width: 160px;" >
         </div>
 			</div>
 
