@@ -48,14 +48,14 @@ $.validator.setDefaults({
     let $form = $(form);
     let $btn = $(settings.currentDom);
     $form.triggerHandler("submitHandler");
-    
+
     if(settings.captcha != null && Object.keys(settings.captcha).length > 0 && settings.captcha.isShowCaptcha == 1){
       settings.captcha.captchaClass.showDrag();
       return false;
     }
 
     //规定不要用模态框 submit按钮（<input type=’submit’>）提交表单；
-    
+
     if (!$btn.length) {
       $btn = $(form).find('[type="submit"]');
     }
@@ -531,6 +531,8 @@ $.validator.addMethod('byte_maxlength', function (value, element, params) {
 }, Translator.trans('validate.byte_maxlength.message'));
 
 $.validator.addMethod('optional_range', function (value, element, params) {
+  if (!value) return true;
+
 	return this.optional(element) || params.optional() || (Number(value) >= params.range[0] && Number(value) <= params.range[1])
 }, Translator.trans('validate.valid_enter_a_positive.integer'));
 
