@@ -179,10 +179,8 @@ class Testpaper {
 
     if (startTime != 0 && endTime != 0) {
       $rangeDateInput.val(startTime + ' - ' + endTime)
-      $rangeDateInput.attr('disabled', 'disabled')
     } else if (startTime != 0) {
       $rangeStartTime.val(startTime)
-      $rangeStartTime.attr('disabled', 'disabled')
     }
 
     $('[name=validPeriodMode]').attr('disabled', 'disabled')
