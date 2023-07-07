@@ -165,6 +165,21 @@ class Testpaper {
       $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
       $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
     });
+
+		// this.$rangeStartTime.daterangepicker({
+    //   "timePicker": true,
+    //   'singleDatePicker': true,
+    //   "timePicker24Hour": true,
+    //   "timePickerSeconds": true,
+    //   'autoUpdateInput':false,
+		// 	'startDate':moment().startOf('seconds'),
+    //   locale,
+    // });
+    
+    // this.$rangeStartTime.on('apply.daterangepicker', function(ev, picker) {
+    //   $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
+    //   $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+    // });
   }
 
   initFormItemData() {
