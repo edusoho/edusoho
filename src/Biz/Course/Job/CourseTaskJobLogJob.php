@@ -13,12 +13,12 @@ class CourseTaskJobLogJob extends AbstractJob
      */
     public function execute()
     {
-        $page = (int) $this->args['page'];
+        $start = $this->args['start'] ?? 0;
 
         $jobLogs = $this->getJobLogDao()->search(
             ['name' => 'course_task_create_sync_job_', 'status' => 'error'],
             ['id' => 'asc'],
-            ($page - 1) * 1,
+            $start,
             1,
             ['id', 'args']
         );
@@ -28,26 +28,25 @@ class CourseTaskJobLogJob extends AbstractJob
             if (!empty($task)) {
                 $courseId = $task['courseId'];
                 $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($courseId, 1);
-                foreach ($copiedCourses as $index => $copiedCourse) {
-                    if ($page - 1 == $index) {
-                        $this->getTaskService()->syncClassroomCourseTasks($copiedCourse['id'], true);
-                    }
+                foreach ($copiedCourses as $copiedCourse) {
+                    $this->getTaskService()->syncClassroomCourseTasks($copiedCourse['id'], true);
                 }
             }
 
-            $this->createCourseTaskJobLogJob(++$page);
+            $start++;
+            $this->createCourseTaskJobLogJob($start);
         }
     }
 
-    public function createCourseTaskJobLogJob(int $page)
+    public function createCourseTaskJobLogJob(int $start)
     {
         $this->getSchedulerService()->register([
-            'name' => 'CourseTaskJobLogJob_'.$page,
+            'name' => 'CourseTaskJobLogJob_'.$start,
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => time() + 3,
             'class' => 'Biz\Course\Job\CourseTaskJobLogJob',
-            'args' => ['page' => $page],
-            'misfire_threshold' => 60 * 60,
+            'args' => ['start' => $start],
+            'misfire_threshold' => 10 * 60,
         ]);
     }
 
