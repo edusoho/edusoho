@@ -597,6 +597,7 @@ t.add("course.plan_task.activity_manage.testpaper.time_limit", "\u8003\u8bd5\u65
 t.add("validate.valid_enter_a_positive.integer", "\u8bf7\u8f93\u51651\u81f3100\u7684\u6b63\u6574\u6570", "js", "zh_CN");
 t.add("validate.valid_rangetime.required", "\u8bf7\u9009\u62e9\u65e5\u671f\u533a\u95f4", "js", "zh_CN");
 t.add("validate.valid_starttime.required", "\u8bf7\u9009\u62e9\u5f00\u59cb\u65f6\u95f4", "js", "zh_CN");
+t.add("validate.valid_endtime.required", "\u8bf7\u9009\u62e9\u7ed3\u675f\u65f6\u95f4", "js", "zh_CN");
 t.add("validate.valid_email_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u7535\u5b50\u90ae\u4ef6\u5730\u5740", "js", "zh_CN");
 t.add("validate.valid_url_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u7f51\u5740", "js", "zh_CN");
 t.add("activity.testpaper_manage.required.number", "\u8bf7\u81f3\u5c11\u8f93\u5165\u4e00\u4f4d\u6570\u5b57", "js", "zh_CN");
