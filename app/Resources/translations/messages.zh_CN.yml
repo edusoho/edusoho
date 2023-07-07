@@ -2188,6 +2188,7 @@ course.plan_task.activity_manage.testpaper.default_comment4: 有点松懈了吧�
 course.plan_task.activity_manage.testpaper.default_comment5: 用心、专注、坚持，你能做的更好的！
 course.plan_task.activity_manage.testpaper.comment_remove: 移除
 course.plan_task.activity_manage.testpaper.validity.period.of.examination: 考试有效期
+course.plan_task.activity_manage.testpaper.please.enter.endtime: 请输入结束时间
 course.plan_task.activity_manage.testpaper.number.of.remaining.tests: 剩余考试次数
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 course.plan_task.activity_manage.testpaper.times: 考试次数

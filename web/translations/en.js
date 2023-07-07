@@ -654,6 +654,7 @@ t.add("course.plan_task.activity_manage.testpaper.time_limit", "Test duration", 
 t.add("validate.valid_enter_a_positive.integer", "Please enter a positive integer from 1 to 100", "js", "en");
 t.add("validate.valid_rangetime.required", "Please select a date range", "js", "en");
 t.add("validate.valid_starttime.required", "Please select a start time", "js", "en");
+t.add("validate.valid_endtime.required", "Please select an end time", "js", "en");
 t.add("validate.valid_email_input.message", "Please enter a valid email address.", "js", "en");
 t.add("validate.valid_url_input.message", "Please enter a valid URL.", "js", "en");
 t.add("validate.valid_date_input.message", "Please enter a valid date.", "js", "en");

@@ -1884,6 +1884,7 @@ course.plan_task.activity_manage.testpaper.default_comment4: A little slack, rig
 course.plan_task.activity_manage.testpaper.default_comment5: With heart, focus and persistence, you can do better!
 course.plan_task.activity_manage.testpaper.comment_remove: Remove
 course.plan_task.activity_manage.testpaper.validity.period.of.examination: Validity period of examination
+course.plan_task.activity_manage.testpaper.please.enter.endtime: Please enter the end time
 course.plan_task.activity_manage.testpaper.number.of.remaining.tests: Number of remaining tests
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 course.plan_task.activity_manage.testpaper.time_limit_tips: 0 hours, indicates no limit. When the test count is set to 1, Retest Interval does not take effect.
