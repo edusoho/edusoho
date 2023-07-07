@@ -5,11 +5,13 @@
 {% do script(['libs/bootstrap-datetimepicker.js','app/js/admin-v2/operating/user-content-audit/index.js']) %}
 
 {% block main %}
+
 <style>
 .audit-content  img {
   width: 200px;
 }
 </style>
+
   <form id="audit-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
     <div class="form-group">
@@ -61,7 +63,7 @@
       <thead>
       <tr>
         <th width="4%"><input type="checkbox" data-role="batch-select"></th>
-        <th width="20%">{{ 'admin_v2.operation.user_content_audit.content_th'|trans }}</th>
+        <th width="40%">{{ 'admin_v2.operation.user_content_audit.content_th'|trans }}</th>
         <th width="20%">{{ 'admin_v2.operation.user_content_audit.contain_sensitive_words_th'|trans }}</th>
         <th>{{ 'admin_v2.operation.user_content_audit.type_th'|trans }}</th>
         <th>{{ 'admin_v2.operation.user_content_audit.author_time_th'|trans }}</th>
