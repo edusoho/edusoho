@@ -369,7 +369,7 @@ export default {
           testId: this.testId,
         },
       }).then(res => {
-        const { isLimitDoTimes, remainderDoTimes } = res.task.activity.testpaperInfo;
+        const { isLimitDoTimes, remainderDoTimes ,canDoAgain } = res.task.activity.testpaperInfo;
 
         this.testpaperTitle = res.task.title;
         this.setNavbarTitle(res.task.title);
@@ -377,7 +377,7 @@ export default {
           res.task.activity.testpaperInfo.redoInterval,
         );
         this.enable_facein = res.task.enable_facein;
-        this.hasRemainderDoTimes = isLimitDoTimes === '0' || (isLimitDoTimes === '1' && remainderDoTimes > 0)
+        this.hasRemainderDoTimes = canDoAgain === '1' || (isLimitDoTimes === '1' && remainderDoTimes > 0)
 
         this.judgeTime();
       });
