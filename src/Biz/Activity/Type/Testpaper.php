@@ -372,9 +372,11 @@ class Testpaper extends Activity
     {
         $this->getSchedulerService()->deleteJobByName('noAnswerAssessmentAutoSubmitJob_'.$scene['id']);
 
+        $executeTime = strtotime(date('Y-m-d H:i', $scene['end_time']));
+        $executeTime = $scene['end_time'] > $executeTime ? $executeTime + 60 : $executeTime;
         $this->getSchedulerService()->register([
             'name' => 'noAnswerAssessmentAutoSubmitJob_'.$scene['id'],
-            'expression' => intval($scene['end_time']),
+            'expression' => intval($executeTime),
             'class' => 'Biz\Testpaper\Job\NoAnswerAssessmentAutoSubmitJob',
             'misfire_threshold' => 60 * 10,
             'misfire_policy' => 'executing',
