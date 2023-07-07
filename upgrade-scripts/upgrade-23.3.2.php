@@ -2,7 +2,6 @@
 
 use Biz\Crontab\SystemCrontabInitializer;
 use Symfony\Component\Filesystem\Filesystem;
-use Biz\Util\EdusohoLiveClient;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -27,6 +26,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->logger('error', $e->getTraceAsString());
             throw $e;
         }
+
         try {
             $dir = realpath($this->biz['kernel.root_dir'] . '/../web/install');
             $filesystem = new Filesystem();
@@ -44,9 +44,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme($index)
     {
-        $definedFuncNames = array(
-            'registerSyncTask',
-        );
+        $definedFuncNames = ['registerSyncTask'];
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
             $funcNames[$key + 1] = $funcName;
@@ -60,6 +58,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+
         list($step, $page) = $this->getStepAndPage($index);
         $method = $funcNames[$step];
         $page = $this->$method($page);
@@ -75,42 +74,18 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    public function registerSyncTask($page)
+    public function registerSyncTask()
     {
-
-        if ($page > 1) {
-            $logPage = (int)($page / 1000);
-            $coursePage = $page % 1000;
-        } else {
-            $logPage = 1;
-            $coursePage = 1;
-        }
-
-        $totalJobLogsCount = $this->getJobLogDao()
-            ->count(['name' => 'course_task_create_sync_job_', 'status' => 'error']);
-        $limit = 1000;
-        $totalPage = ceil($totalJobLogsCount/$limit);
-        if ($logPage > $totalPage){
-            return 1;
-        }
-
         $this->getSchedulerService()->register([
             'name' => 'CourseTaskJobLogJob',
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-            'expression' => time() + 10,
+            'expression' => time() + 3,
             'class' => 'Biz\Course\Job\CourseTaskJobLogJob',
-            'args' => ['page'=>$coursePage,'limit'=>$limit],
-            'misfire_threshold' => 60 * 60,
+            'args' => [],
+            'misfire_threshold' => 10 * 60,
         ]);
 
-        if (!isset($copiedCourses) || empty($copiedCourses) || $coursePage - 1 == $index) {
-            $coursePage = 1;
-            $logPage++;
-        } else {
-            $coursePage++;
-        }
-
-        return (int)($logPage * 1000 + $coursePage);
+        return 1;
     }
 
     protected function generateIndex($step, $page)
@@ -124,6 +99,11 @@ class EduSohoUpgrade extends AbstractUpdater
         $page = $index % 1000000;
 
         return array($step, $page);
+    }
+
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 
     protected function getSettingService()
