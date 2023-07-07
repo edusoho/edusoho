@@ -46,7 +46,7 @@
 
         <template #footer>
           <div v-if="info.examMode == '0'" class="testpaper-tips">
-            {{ info.doTimes == '0' ? $t('courseLearning.noLimitTips') : $t('courseLearning.oneTips') }}
+            {{ $t('courseLearning.noLimitTips') }}
           </div>
           <!-- <div v-if="info.examMode == '1'" class="testpaper-tips">
             {{ info.doTimes == '0' ? $t('courseLearning.noLimitTips1') : $t('courseLearning.oneTips1') }}
