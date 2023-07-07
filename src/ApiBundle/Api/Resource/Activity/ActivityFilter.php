@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class ActivityFilter extends Filter
 {
     protected $publicFields = [
-        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title', 'finishData', 'finishType', 'finishCondition', 'exam_mode', 'endTime', 'validPeriodMode',
+        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title', 'finishData', 'finishType', 'finishCondition', 'exam_mode', 'endTime', 'validPeriodMode', 'canDoAgain',
     ];
 
     protected function publicFields(&$data)
@@ -54,6 +54,7 @@ class ActivityFilter extends Filter
                 $data['testpaperInfo']['remainderDoTimes'] = $data['ext']['remainderDoTimes'];
                 $data['testpaperInfo']['isLimitDoTimes'] = !empty($data['ext']['isLimitDoTimes']) ? $data['ext']['isLimitDoTimes'] : '0';
                 $data['testpaperInfo']['validPeriodMode'] = !empty($data['ext']['validPeriodMode']) ? $data['ext']['validPeriodMode'] : '0';
+                $data['testpaperInfo']['canDoAgain'] = !empty($data['ext']['canDoAgain']) ? $data['ext']['canDoAgain'] : '0';
             }
         }
         if ('download' == $data['mediaType']) {

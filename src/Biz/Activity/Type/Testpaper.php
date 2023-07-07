@@ -437,4 +437,9 @@ class Testpaper extends Activity
     {
         return $this->getBiz()->service('ItemBank:Answer:AnswerReportService');
     }
+
+    protected function getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
+    }
 }

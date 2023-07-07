@@ -15,6 +15,7 @@ use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class TestpaperInfo extends AbstractResource
@@ -82,6 +83,13 @@ class TestpaperInfo extends AbstractResource
 
         $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
+
+        if (empty($testpaperRecord)) {
+            $this->getAnswerService()->batchAutoSubmit($scene['id'], $activity['ext']['mediaId'], [$user['id']]);
+
+            $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
+        }
+
         $countTestpaperRecord = $this->getAnswerRecordService()->count(['answer_scene_id' => $activity['ext']['answerSceneId'], 'user_id' => $user['id']]);
 
         $activity['ext']['remainderDoTimes'] = max($activity['ext']['doTimes'] - ($countTestpaperRecord ?: 0), 0);
@@ -167,5 +175,13 @@ class TestpaperInfo extends AbstractResource
     protected function getAnswerReportService()
     {
         return $this->service('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return AnswerService
+     */
+    protected function getAnswerService()
+    {
+        return $this->service('ItemBank:Answer:AnswerService');
     }
 }
