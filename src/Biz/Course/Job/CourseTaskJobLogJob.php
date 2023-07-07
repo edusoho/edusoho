@@ -2,7 +2,9 @@
 
 namespace Biz\Course\Job;
 
+use Biz\Crontab\SystemCrontabInitializer;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseTaskJobLogJob extends AbstractJob
 {
@@ -11,14 +13,13 @@ class CourseTaskJobLogJob extends AbstractJob
      */
     public function execute()
     {
-        $limit = (int) $this->args['limit'];
         $page = (int) $this->args['page'];
 
         $jobLogs = $this->getJobLogDao()->search(
             ['name' => 'course_task_create_sync_job_', 'status' => 'error'],
             ['id' => 'asc'],
-            ($page - 1) * $limit,
-            $limit,
+            ($page - 1) * 1,
+            1,
             ['id', 'args']
         );
         if ($jobLogs) {
@@ -33,7 +34,26 @@ class CourseTaskJobLogJob extends AbstractJob
                     }
                 }
             }
+
+            $this->createCourseTaskJobLogJob(++$page);
         }
+    }
+
+    public function createCourseTaskJobLogJob(int $page)
+    {
+        $this->getSchedulerService()->register([
+            'name' => 'CourseTaskJobLogJob_'.$page,
+            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+            'expression' => time() + 3,
+            'class' => 'Biz\Course\Job\CourseTaskJobLogJob',
+            'args' => ['page' => $page],
+            'misfire_threshold' => 60 * 60,
+        ]);
+    }
+
+    protected function getSchedulerService()
+    {
+        return ServiceKernel::instance()->createService('Scheduler:SchedulerService');
     }
 
     public function getTaskService()
