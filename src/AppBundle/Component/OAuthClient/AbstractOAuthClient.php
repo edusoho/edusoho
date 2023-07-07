@@ -58,7 +58,7 @@ abstract class AbstractOAuthClient
 
     abstract public function getUserInfo($token);
 
-    abstract public function verifyCredential(Request $request, $session_credential);
+    abstract public function verifyCredential(Request $request, $sessionCredential);
 
     /**
      * HTTP POST.

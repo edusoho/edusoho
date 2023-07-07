@@ -29,10 +29,10 @@ class WeixinwebOAuthClient extends AbstractOAuthClient
      *
      * @return bool
      */
-    public function verifyCredential(Request $request, $session_credential)
+    public function verifyCredential(Request $request, $sessionCredential)
     {
         $state = $request->query->get('state');
-        if (empty($session_credential) || empty($state) || $session_credential != $state) {
+        if (empty($sessionCredential) || empty($state) || $sessionCredential != $state) {
             return false;
         }
 

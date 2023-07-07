@@ -87,7 +87,7 @@ class WeiboOAuthClient extends AbstractOAuthClient
         throw new UnexpectedValueException($userInfo['error']);
     }
 
-    public function verifyCredential(Request $request, $session_credential)
+    public function verifyCredential(Request $request, $sessionCredential)
     {
         // TODO: Implement verifyCredential() method.
         return true;

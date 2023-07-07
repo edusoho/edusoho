@@ -121,7 +121,7 @@ class AppleOAuthClient extends AbstractOAuthClient
         return ServiceKernel::instance()->createService('System:SettingService');
     }
 
-    public function verifyCredential(Request $request, $session_credential)
+    public function verifyCredential(Request $request, $sessionCredential)
     {
         // TODO: Implement verifyCredential() method.
         return true;
