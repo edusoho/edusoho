@@ -33,7 +33,7 @@ class CourseTaskJobLogJob extends AbstractJob
                 }
             }
 
-            $start++;
+            ++$start;
             $this->createCourseTaskJobLogJob($start);
         }
     }
