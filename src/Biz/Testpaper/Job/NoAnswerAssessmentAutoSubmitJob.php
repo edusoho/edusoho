@@ -43,6 +43,9 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
         }
 
         $this->getAnswerService()->batchAutoSubmit($answerScene['id'], $testpaperActivity['mediaId'], array_column($members, 'userId'));
+
+        $this->getLogService()->info('answer', 'create', '提交成功');
+
         $this->getSchedulerService()->register([
             'name' => 'noAnswerAssessmentAutoSubmitJob_'.$answerScene['id'],
             'expression' => time(),
@@ -51,6 +54,8 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
             'misfire_policy' => 'executing',
             'args' => ['answerSceneId' => $answerScene['id']],
         ]);
+
+        $this->getLogService()->info('job', 'register', "定时任务noAnswerAssessmentAutoSubmitJob_(#{$answerScene['id']})创建成功");
     }
 
     /**
@@ -101,5 +106,10 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
     protected function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->biz->service('System:LogService');
     }
 }

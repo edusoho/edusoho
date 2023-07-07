@@ -174,6 +174,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         if (empty($answerScene)) {
             return;
         }
+        if (empty($answerScene['end_time']) || $answerScene['end_time'] >= time()) {
+            return;
+        }
 
         $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
         if (empty($assessment)) {
@@ -184,7 +187,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         $answerReports = $this->batchCreateAnswerReports($assessmentId, $answerRecords);
 
-        $this->getAnswerRecordService()->batchUpdateAnswerRecord(array_column($answerRecords, 'id'), ['answer_report_id' => array_column($answerReports, 'id')]);
+        $updateAnswerRecords = [];
+        $answerReports = array_column($answerReports, null, 'answer_record_id');
+        foreach ($answerRecords as $answerRecord) {
+            $updateAnswerRecords[] = [
+                'answer_report_id' => $answerReports[$answerRecord['id']]['id'],
+            ];
+        }
+        $this->getAnswerRecordService()->batchUpdateAnswerRecord(array_column($answerRecords, 'id'), $updateAnswerRecords);
 
         $this->batchCreateAnswerQuestionReports($assessmentId, $answerReports);
     }
@@ -198,6 +208,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'exam_mode' => $answerScene['exam_mode'],
             'limited_time' => $answerScene['limited_time'],
             'status' => 'finished',
+            'begin_time' => $answerScene['end_time'],
+            'end_time' => $answerScene['end_time'],
             'created_time' => $answerScene['end_time'],
             'updated_time' => $answerScene['end_time'],
         ];
@@ -208,7 +220,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         $this->getAnswerRecordService()->batchCreateAnswerRecords($newAnswerRecords);
 
-        return $this->getAnswerRecordService()->search(['answer_scene_id' => $answerSceneId, 'user_ids' => $userIds], 0, count($userIds), ['id', 'user_id']);
+        return $this->getAnswerRecordService()->search(['answer_scene_id' => $answerScene['id'], 'user_ids' => $userIds], [], 0, count($userIds), ['id', 'user_id', 'answer_scene_id']);
     }
 
     protected function batchCreateAnswerReports($assessmentId, $answerRecords)
@@ -228,12 +240,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         foreach ($answerRecords as $answerRecord) {
             $newAnswerReport['answer_record_id'] = $answerRecord['id'];
             $newAnswerReport['user_id'] = $answerRecord['user_id'];
+            $newAnswerReport['answer_scene_id'] = $answerRecord['answer_scene_id'];
             $newAnswerReports[] = $newAnswerReport;
         }
 
         $this->getAnswerReportService()->batchCreateAnswerReports($newAnswerReports);
+        $answerRecordIds = array_column($answerRecords, 'id');
 
-        return $this->getAnswerReportService()->search(['answer_scene_id' => $answerSceneId, 'user_ids' => $userIds], 0, count($userIds), ['id', 'answer_record_id']);
+        return $this->getAnswerReportService()->search(['answer_record_ids' => $answerRecordIds], [], 0, count($answerRecordIds), ['id', 'answer_record_id']);
     }
 
     protected function batchCreateAnswerQuestionReports($assessmentId, $answerReports)
@@ -253,9 +267,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $newAnswerQuestionReport['answer_record_id'] = $answerReport['answer_record_id'];
             foreach ($assessment['sections'] as $section) {
                 $newAnswerQuestionReport['section_id'] = $section['id'];
-                foreach ($session as $item) {
+                foreach ($section['items'] as $item) {
                     $newAnswerQuestionReport['item_id'] = $item['id'];
-                    foreach ($item as $question) {
+                    foreach ($item['questions'] as $question) {
                         $newAnswerQuestionReport['question_id'] = $question['id'];
                         $newAnswerQuestionReport['identify'] = $answerReport['answer_record_id'] . '_' . $question['id'];
                         $answerQuestionReports[] = $newAnswerQuestionReport;
