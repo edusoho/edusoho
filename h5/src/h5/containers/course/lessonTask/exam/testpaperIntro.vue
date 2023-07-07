@@ -32,7 +32,7 @@
 
         <van-cell class="intro-cell" :border="false" :title="$t('courseLearning.fullScoreOfTestPaper')" :value="score + ' ' + $t('courseLearning.branch')" />
 
-        <van-cell class="intro-cell" :border="false" :title="$t('courseLearning.numberOfRemainingTests')" :value="info.doTimes == '0' ? $t('courseLearning.unlimited') : info.doTimes + ' ' + $t('courseLearning.times')"   />
+        <van-cell class="intro-cell" :border="false" :title="$t('courseLearning.numberOfRemainingTests')" :value="info.doTimes == '0' ? $t('courseLearning.unlimited') : info.remainderDoTimes + ' ' + $t('courseLearning.times')"   />
 
 				<van-cell v-if="info.startTime == null && info.endTime == null" class="intro-cell" :border="false" :title="$t('courseLearning.validityPeriodOfExamination')" :value="$t('courseLearning.unlimited')" />
 
