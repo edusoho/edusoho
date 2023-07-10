@@ -1,5 +1,4 @@
 {% import "macro.html.twig" as web_macro %}
-
 <div class="courseset-manage-header cd-mb32 clearfix">
   {% block coursesetImg %}
   {% endblock %}
@@ -13,7 +12,7 @@
   {% endif %}
 
   <div class="courseset-manage-header-info">
-    <div class="courseset-manage-header-info__title text-overflow" {% if item.title|length > 21 %}data-toggle="tooltip" title="{{ item.title }}" data-container="body" {% endif %}>
+    <div class="courseset-manage-header-info__title" style="width: 320px; display: block;" {% if item.title|length > 21 %}data-toggle="tooltip" title="{{ item.title }}" data-container="body" {% endif %}>
     {% block coursesetTitle %}
       <span class="cd-dark-major">{{ item.title }}</span>
     {% endblock %}
