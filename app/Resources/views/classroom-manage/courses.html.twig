@@ -70,15 +70,15 @@
                       {% endif %}
                     </div>
 
-                    <h4 class="course-title text-overflow mv0">
+                    <h4 class="course-title mv0" style="width: 529px;">
                       {% if course.serializeMode=='serialized' %}
                         <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
                       {% elseif course.serializeMode=='finished' %}
                         <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
                       {% endif %}
-                      <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title|raw }}</a>
+                      <a class="text-overflow" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ course.courseSet.title|raw }}" href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title|raw }}</a>
 
-                      {% if course.title %}<div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{ course.title|sub_text(20)|raw }}</div>{% endif %}
+                      {% if course.title %}<div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{ course.title|raw }}</div>{% endif %}
                     </h4>
                     <div class="course-manage-btn"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div>
 

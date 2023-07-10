@@ -36,6 +36,7 @@ use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Order\Service\OrderService;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
@@ -2233,17 +2234,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         ]);
     }
 
-    public function updateClassroomMembersFinishedStatus($classroomId)
+    public function updateClassroomMembersFinishedStatusByLimit($classroomId, $start, $limit = 2000)
     {
         $classroom = $this->getClassroom($classroomId);
         if (empty($classroom)) {
             return;
         }
-        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId, 'role' => '%student%']);
-        if (empty($classroomMembersCount)) {
-            return;
-        }
-        $classroomMembers = $this->findClassroomStudents($classroomId, 0, $classroomMembersCount);
+        $classroomMembers = $this->findClassroomStudents($classroomId, $start, $limit);
 
         $courses = $this->findCoursesByClassroomId($classroomId);
         $courseIds = ArrayToolkit::column($courses, 'id');
@@ -2266,6 +2263,35 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'learnedElectiveTaskNum' => array_sum(ArrayToolkit::column($coursesMembers, 'learnedElectiveTaskNum')),
             ]);
         }
+    }
+
+    public function updateClassroomMembersFinishedStatus($classroomId)
+    {
+        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId, 'role' => '%student%']);
+        if (empty($classroomMembersCount)) {
+            return;
+        }
+        if ($classroomMembersCount > 2000) {
+            $this->createUpdateClassroomMembersFinishedStatusJob($classroomId);
+
+            return;
+        }
+        $this->updateClassroomMembersFinishedStatusByLimit($classroomId, 0, $classroomMembersCount);
+    }
+
+    private function createUpdateClassroomMembersFinishedStatusJob($classroomId)
+    {
+        $startJob = [
+            'name' => 'UpdateClassroomMembersFinishedStatusJob'.'_'.$classroomId,
+            'expression' => time() - 100,
+            'class' => 'Biz\Classroom\Job\UpdateClassroomMembersFinishedStatusJob',
+            'misfire_threshold' => 10 * 60,
+            'args' => [
+                'classroomId' => $classroomId,
+                'start' => 0,
+            ],
+        ];
+        $this->getSchedulerService()->register($startJob);
     }
 
     public function countCoursesByClassroomId($classroomId)
@@ -2580,19 +2606,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return array_column($classrooms, null, 'id');
     }
 
-    public function updateClassroomMembersNoteAndThreadNums($classroomId)
+    public function updateClassroomMembersNoteAndThreadNumsByLimit($classroomId, $start, $limit)
     {
         $classroom = $this->getClassroom($classroomId);
         if (empty($classroom)) {
             return;
         }
 
-        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId]);
-        if (empty($classroomMembersCount)) {
-            return;
-        }
-
-        $classroomMembers = $this->searchMembers(['classroomId' => $classroomId], [], 0, $classroomMembersCount, ['id', 'userId']);
+        $classroomMembers = $this->searchMembers(['classroomId' => $classroomId], [], $start, $limit, ['id', 'userId']);
         $classroomCourses = $this->findCoursesByClassroomId($classroomId);
         $classroomCourseIds = array_column($classroomCourses, 'courseId');
 
@@ -2603,6 +2624,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'questionNum' => $this->getClassroomMemberThreadNum($classroomId, $member['userId'], $classroomCourseIds, 'question'),
             ]);
         }
+    }
+
+    public function updateClassroomMembersNoteAndThreadNums($classroomId)
+    {
+        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId]);
+        if (empty($classroomMembersCount)) {
+            return;
+        }
+        if ($classroomMembersCount > 2000) {
+            $this->createUpdateClassroomMembersFinishedStatusJob($classroomId);
+
+            return;
+        }
+        $this->updateClassroomMembersNoteAndThreadNumsByLimit($classroomId, 0, $classroomMembersCount);
     }
 
     public function updateMemberFieldsByClassroomIdAndUserId($classroomId, $userId, array $fields)
@@ -2869,5 +2904,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getProductMallGoodsRelationService()
     {
         return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }

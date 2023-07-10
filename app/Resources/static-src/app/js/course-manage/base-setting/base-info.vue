@@ -209,18 +209,19 @@
                             trigger: 'blur'
                         },
                         {
-                            max: 10,
-                            message: Translator.trans('validate.length_max.message', {'length': 10}),
-                            trigger: 'blur',
+                          maxSize: 100,
+                          minSize: 2,
+                          validator: validation.inter_byte,
+                          trigger: 'blur'
                         },
                         {validator: validation.trim, trigger: 'blur'},
                         {validator: validation.course_title, trigger: 'blur'}
                     ],
                     subtitle: [
                         {
-                            max: 30,
-                            message: Translator.trans('validate.length_max.message', {'length': 30}),
-                            trigger: 'blur',
+                          maxSize: 100,
+                          validator: validation.inter_byte,
+                          trigger: 'blur'
                         },
                     ]
                 },

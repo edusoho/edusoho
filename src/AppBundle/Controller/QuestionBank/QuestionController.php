@@ -93,7 +93,7 @@ class QuestionController extends BaseController
             $fields['bank_id'] = $questionBank['itemBankId'];
             $fields['category_id'] = empty($fields['category_id']) ? $categoryId : $fields['category_id'];
             $item = $this->getItemService()->createItem($fields);
-            
+
             if ('continue' === $fields['submission']) {
                 $urlParams = ArrayToolkit::parts($item, ['difficulty']);
                 $urlParams['id'] = $id;
@@ -402,7 +402,14 @@ class QuestionController extends BaseController
         }
 
         if (isset($conditions['categoryId']) && '' != $conditions['categoryId']) {
-            $conditions['category_ids'] = [$conditions['categoryId']];
+            //查询是否有子分类
+            $categoryIds = $this->getItemCategoryService()->findCategoryChildrenIds((int) $conditions['categoryId']);
+            if ($categoryIds) {
+                $categoryIds[] = $conditions['categoryId'];
+                $conditions['category_ids'] = $categoryIds;
+            } else {
+                $conditions['category_ids'] = [$conditions['categoryId']];
+            }
             unset($conditions['categoryId']);
         }
 
