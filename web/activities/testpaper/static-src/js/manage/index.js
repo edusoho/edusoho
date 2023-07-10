@@ -140,7 +140,6 @@ class Testpaper {
     const activityId = $('#activityId').val()
     const startTime = $('[name=startTime]').val()
     const endTime = $('[name=endTime]').val()
-		console.log(startTime);
     this.$rangeDateInput.daterangepicker({
       "timePicker": true,
       "timePicker24Hour": true,

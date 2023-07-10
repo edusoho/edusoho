@@ -59,6 +59,7 @@
       {% set testMode = activity.ext.answerScene.start_time|default(0) > 0 ? 'realTime' : 'normal' %}
       {% set examMode = activity.ext.answerScene.exam_mode|default(0) %}
       <input type="hidden" id="activityId" value="{{ activity.id|default(0) }}" />
+      <input type="hidden" name="mediaType" value="testpaper" />
       <div class="form-group">
         <div class="col-sm-2 control-label">
           <label for="examMode">{{ 'course.plan_task.activity_manage.testpaper.mode'|trans }}</label>
