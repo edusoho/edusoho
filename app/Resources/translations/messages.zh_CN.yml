@@ -4501,7 +4501,7 @@ my.teaching.open_course.material.upload_time: 上传于
 my.teaching.question_bank.create: 创建题库
 my.teaching.question_bank.instructions: 使用说明
 my.teaching.question_bank.list: 题库列表
-my.teaching.question_bank.name_tip: 最多输入30个字符
+my.teaching.question_bank.name_tip: 最多输入100个字符
 my.teaching.question_bank.info: 题库信息
 my.teaching.question_bank.exercise_set: 题库练习设置
 my.teaching.question_bank.name_label: 题库名称
