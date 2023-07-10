@@ -138,6 +138,7 @@ export default {
       remainTime: null, // 再次重考剩余时间
       timeMeter: null, // 重考间隔倒计时
       testpaperTitle: null, // 考试题目
+			canDoAgain: '',
       obj: {
         // 题型判断
         single_choice: 'courseLearning.singleChoice',
@@ -369,7 +370,7 @@ export default {
           testId: this.testId,
         },
       }).then(res => {
-        const { isLimitDoTimes, remainderDoTimes ,canDoAgain } = res.task.activity.testpaperInfo;
+        const { canDoAgain  } = res.task.activity.testpaperInfo;
 
         this.testpaperTitle = res.task.title;
         this.setNavbarTitle(res.task.title);
@@ -377,8 +378,8 @@ export default {
           res.task.activity.testpaperInfo.redoInterval,
         );
         this.enable_facein = res.task.enable_facein;
-        this.hasRemainderDoTimes = canDoAgain === '1' || (isLimitDoTimes === '1' && remainderDoTimes > 0)
-
+				this.canDoAgain = canDoAgain
+        this.hasRemainderDoTimes = this.canDoAgain === '1';
         this.judgeTime();
       });
     },
