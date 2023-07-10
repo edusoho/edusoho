@@ -196,7 +196,7 @@ class CourseTaskEvent extends AbstractResource
 
         if (!$this->getTaskService()->isFinished($taskId)) {
             $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
-            $learningProgress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $result['userId']);
+            $learningProgress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $taskResult['userId']);
 
             return [
                 'result' => $taskResult,
