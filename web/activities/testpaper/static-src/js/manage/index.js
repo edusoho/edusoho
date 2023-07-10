@@ -140,7 +140,6 @@ class Testpaper {
     const activityId = $('#activityId').val()
     const startTime = $('[name=startTime]').val()
     const endTime = $('[name=endTime]').val()
-		console.log(startTime);
     this.$rangeDateInput.daterangepicker({
       "timePicker": true,
       "timePicker24Hour": true,
@@ -306,6 +305,7 @@ class Testpaper {
             optional: () => $('[name="isLimitDoTimes"]:checked').val() == 0,
             range: [1, 100],
           },
+					trim: true,
           // section_number: () => $('[name="isLimitDoTimes"]:checked').val() == 1 ? /^([1-9][0-9]{0,1}|100)$/ : '',
         },
         rangeTime: {
