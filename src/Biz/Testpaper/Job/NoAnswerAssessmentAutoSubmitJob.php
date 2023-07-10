@@ -32,6 +32,7 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
             [
                 'courseId' => $activity['fromCourseId'],
                 'excludeUserIds' => array_column($answerRecords, 'user_id'),
+                'role' => 'student'
             ],
             ['createdTime' => 'DESC'],
             0,
