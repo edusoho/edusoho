@@ -3,6 +3,7 @@
 namespace MarketingMallBundle\Event;
 
 use Codeages\Biz\Framework\Event\Event;
+use MarketingMallBundle\Biz\Mall\Service\MallService;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use MarketingMallBundle\Biz\SyncList\Service\SyncListService;
 use MarketingMallBundle\Common\GoodsContentBuilder\ClassroomInfoBuilder;
@@ -14,6 +15,7 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
         return [
             'classroom.course.create' => 'onClassroomCourseCreate',
             'classroom.course.delete' => 'onClassroomCourseDelete',
+            'classroom.courses.delete' => 'onClassroomCourseDelete',
             'classroom.course.update' => 'onClassroomCourseUpdate',
             'classroom.info.update' => 'onClassroomInfoUpdate',
             'classroom.delete' => 'onClassroomProductDelete'
@@ -31,6 +33,10 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
 
     public function onClassroomCourseDelete(Event $event)
     {
+        if (!$this->getMallService()->isInit()) {
+            return;
+        }
+
         $classroom = $event->getSubject();
         $this->syncClassroomToMarketingMall($classroom['id']);
     }
@@ -54,7 +60,6 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
     public function onClassroomProductDelete(Event $event)
     {
         $classroom = $event->getSubject();
-
         $this->deleteClassroomProductToMarketingMall($classroom['id']);
     }
 
@@ -96,5 +101,13 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
     protected function getSyncListService()
     {
         return $this->getBiz()->service('MarketingMallBundle:SyncList:SyncListService');
+    }
+
+    /**
+     * @return MallService
+     */
+    protected function getMallService()
+    {
+        return $this->getBiz()->service('Mall:MallService');
     }
 }

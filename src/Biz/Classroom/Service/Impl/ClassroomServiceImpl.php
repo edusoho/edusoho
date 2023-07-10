@@ -584,7 +584,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $this->tryManageClassroom($classroomId);
 
-        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date . ' 23:59:59');
+        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
         if ($this->checkDeadlineForUpdateDeadline($classroomId, $userIds, $date)) {
             $members = $this->findMembersByClassroomIdAndUserIds($classroomId, $userIds);
             $updateDeadlines = [];
@@ -704,25 +704,28 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     /**
      * @param $id
+     *
      * @return bool|mixed
+     *
      * @throws \Exception
      */
     public function deleteClassroom($id)
     {
+        $classroom = $this->getClassroom($id);
+        if (empty($classroom)) {
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
+        }
+
+        if ('published' === $classroom['status']) {
+            $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
+        }
+        $this->tryManageClassroom($id, 'admin_classroom_delete');
+        if ('error' === $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'classroom')) {
+            throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
+        }
+
         try {
             $this->beginTransaction();
-            $classroom = $this->getClassroom($id);
-            if (empty($classroom)) {
-                $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
-            }
-
-            if ('published' === $classroom['status']) {
-                $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
-            }
-            $this->tryManageClassroom($id, 'admin_classroom_delete');
-            if ($this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'classroom') === 'error') {
-                throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
-            }
             $this->deleteAllCoursesInClass($id);
             $this->getClassroomDao()->delete($id);
             $this->getClassroomGoodsMediator()->onDelete($classroom);
@@ -836,9 +839,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fileIds = ArrayToolkit::index($data, 'type');
         $version = ClassroomService::COVER_SIZE_VERSION;
         $fields = [
-            'smallPicture' => $files[$fileIds['small']['id']]['uri'] . "?version={$version}",
-            'middlePicture' => $files[$fileIds['middle']['id']]['uri'] . "?version={$version}",
-            'largePicture' => $files[$fileIds['large']['id']]['uri'] . "?version={$version}",
+            'smallPicture' => $files[$fileIds['small']['id']]['uri']."?version={$version}",
+            'middlePicture' => $files[$fileIds['middle']['id']]['uri']."?version={$version}",
+            'largePicture' => $files[$fileIds['large']['id']]['uri']."?version={$version}",
         ];
 
         $this->deleteNotUsedPictures($classroom);
@@ -889,11 +892,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         try {
             $this->beginTransaction();
+            $classroomCouresIds = $courseIdsArray = [];
             foreach ($courses as $course) {
                 $classroomRef = $this->getClassroomCourse($classroomId, $course['id']);
                 if (empty($classroomRef)) {
                     continue;
                 }
+                $classroomCouresIds[] = $classroomRef['id'];
+                $courseIdsArray[] = $course['id'];
                 // 最早一批班级中的课程是引用，不是复制。处理这种特殊情况
                 if (0 != $classroomRef['parentCourseId']) {
                     $this->getCourseSetService()->unlockCourseSet($course['courseSetId'], true);
@@ -901,24 +907,28 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 if ($real) {
                     $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
                 }
-                $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
-                $infoData = [
-                    'classroomId' => $classroom['id'],
-                    'title' => $classroom['title'],
-                    'courseSetId' => $course['id'],
-                    'courseSetTitle' => $course['courseSetTitle'],
-                ];
                 $this->getLogService()->info(
                     'classroom',
                     'delete_course',
                     "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})",
-                    $infoData
-                );
-                $this->dispatchEvent(
-                    'classroom.course.delete',
-                    new Event($classroom, ['deleteCourseId' => $course['id']])
+                    [
+                        'classroomId' => $classroom['id'],
+                        'title' => $classroom['title'],
+                        'courseSetId' => $course['courseSetId'],
+                        'courseSetTitle' => $course['courseSetTitle'],
+                    ]
                 );
             }
+            //批量执行删除操作
+            if ($classroomCouresIds) {
+                $this->getClassroomCourseDao()->deleteByIds($classroomCouresIds);
+            }
+
+            $this->dispatchEvent(
+                'classroom.courses.delete',
+                new Event($classroom, ['deleteCourseIds' => $courseIdsArray])
+            );
+
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -958,7 +968,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->createNewException(ClassroomException::NOTFOUND_MEMBER());
         }
 
-        $fields = ['remark' => empty($remark) ? '' : (string)$remark];
+        $fields = ['remark' => empty($remark) ? '' : (string) $remark];
 
         return $this->getClassroomMemberDao()->update($member['id'], $fields);
     }
@@ -985,8 +995,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             foreach ($member['role'] as $key => $value) {
                 if ('student' == $value) {
                     unset($member['role'][$key]);
-                }
-                elseif ('assistant' == $value) {
+                } elseif ('assistant' == $value) {
                     unset($member['role'][$key]);
                 }
             }
@@ -1281,7 +1290,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
             $user = $this->getUserService()->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1587,7 +1596,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (empty($user)) {
             $user = $this->getUserService()->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1635,7 +1644,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (empty($user)) {
             $user = $this->getUserService()->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1677,7 +1686,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             if (empty($user)) {
                 $user = $this->getUserService()->getUserByUUID($userId);
-                if(empty($user)) {
+                if (empty($user)) {
                     $this->createNewException(UserException::NOTFOUND_USER());
                 }
             }
@@ -1725,7 +1734,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $intList = ['buyable', 'showable'];
         foreach ($intList as $key) {
             if (isset($conditions[$key])) {
-                $conditions[$key] = (int)$conditions[$key];
+                $conditions[$key] = (int) $conditions[$key];
             }
         }
 
@@ -2097,7 +2106,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $id,
             [
                 'recommended' => 1,
-                'recommendedSeq' => (int)$number,
+                'recommendedSeq' => (int) $number,
                 'recommendedTime' => time(),
             ]
         );
@@ -2857,7 +2866,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     /**
      * @return ProductMallGoodsRelationService
      */
-
     protected function getProductMallGoodsRelationService()
     {
         return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
