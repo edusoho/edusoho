@@ -72,6 +72,7 @@ class AnswerRecord extends AbstractResource
         $countTestpaperRecord = $this->getAnswerRecordService()->count(['answer_scene_id' => $answerScene['id'], 'user_id' => $this->getCurrentUser()->getId()]);
         $answerScene['remainderDoTimes'] = max($answerScene['do_times'] - ($countTestpaperRecord ?: 0), 0);
         $answerScene['validPeriodMode'] = $this->preValidPeriodMode($answerScene);
+        $answerScene['canDoAgain'] = $this->getAnswerSceneService()->canStart($answerScene['id'], $this->getCurrentUser()->getId()) ? '1' : '0';
 
         return $answerScene;
     }
