@@ -137,6 +137,11 @@ class Testpaper {
   }
 
   initDatePicker() {
+		const todayYear=(new Date()).getFullYear();
+		const todayMonth=(new Date()).getMonth();
+		const todayDay=(new Date()).getDate();
+		const todayTime=(new Date(todayYear,todayMonth,todayDay,'23','59','59')).getTime();//毫秒
+
     const activityId = $('#activityId').val()
     const startTime = $('[name=startTime]').val()
     const endTime = $('[name=endTime]').val()
@@ -145,7 +150,7 @@ class Testpaper {
       "timePicker24Hour": true,
       "timePickerSeconds": true,
       'autoUpdateInput':false,
-			'endDate': endTime != '0' ? endTime : moment().startOf('day'),
+			'endDate': endTime != '0' ? endTime : todayTime,
 			'startDate': activityId != '0' ? startTime : moment().startOf('seconds'),
       locale,
     });
@@ -305,7 +310,7 @@ class Testpaper {
             optional: () => $('[name="isLimitDoTimes"]:checked').val() == 0,
             range: [1, 100],
           },
-					trim: true,
+					digits: true,
           // section_number: () => $('[name="isLimitDoTimes"]:checked').val() == 1 ? /^([1-9][0-9]{0,1}|100)$/ : '',
         },
         rangeTime: {
