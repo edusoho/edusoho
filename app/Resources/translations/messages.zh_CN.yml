@@ -3274,7 +3274,7 @@ user.settings.security.oauth_bind.success: 帐号绑定成功
 user.settings.security.oauth_bind.exist_account: 该第三方帐号已经被其他帐号绑定，不能重复绑定。
 user.settings.security.oauth_bind.authentication_fail: 授权失败，请重试绑定。
 user.settings.security.oauth_bind.duplicate_bind: 您已经绑定了该第三方网站的帐号，不能重复绑定。
-
+user.settings.security.oauth_bind.state.authentication_fail: 令牌校验失败。
 
 # 个人设置模块-基础信息
 user.settings.basic_info: 基础信息
