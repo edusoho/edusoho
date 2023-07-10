@@ -300,6 +300,8 @@ interface ClassroomService
 
     public function searchMembersSignStatistics($classroomId, array $conditions, array $orderBy, $start, $limit);
 
+    public function updateClassroomMembersFinishedStatusByLimit($classroomId, $start, $limit);
+
     public function updateClassroomMembersFinishedStatus($classroomId);
 
     public function updateClassroomMemberFinishedStatus($classroomId, $userId);
@@ -309,6 +311,8 @@ interface ClassroomService
     public function calClassroomsTaskNums(array $classrooms, $withMemberInfo = false);
 
     public function updateMemberFieldsByClassroomIdAndUserId($classroomId, $userId, array $fields);
+
+    public function updateClassroomMembersNoteAndThreadNumsByLimit($classroomId, $start, $limit);
 
     public function updateClassroomMembersNoteAndThreadNums($classroomId);
 }
