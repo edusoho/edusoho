@@ -80,21 +80,21 @@
     <div ref="footer" class="result-footer">
       <van-button
         v-if="resultShow"
-        :style="{ marginRight: isReadOver && hasRemainderDoTimes ? '2vw' : 0 }"
+        :style="{ marginRight: isReadOver && canDoAgain ? '2vw' : 0 }"
         class="result-footer__btn"
         type="primary"
         @click="viewAnalysis()"
         >{{ $t('courseLearning.viewParsed') }}</van-button
       >
       <van-button
-        v-if="again && isReadOver && hasRemainderDoTimes"
+        v-if="again && isReadOver && canDoAgain"
         class="result-footer__btn"
         type="primary"
         @click="startTestpaper()"
         >{{ $t('courseLearning.takeTheTestAgain') }}</van-button
       >
       <van-button
-        v-if="!again && isReadOver && hasRemainderDoTimes"
+        v-if="!again && isReadOver && canDoAgain"
         class="result-footer__btn"
         type="primary"
         disabled
@@ -133,7 +133,7 @@ export default {
       subjectList: {}, // 题目列表对象
       question_type_seq: [], // 考试已有题型
       targetId: null, // 任务ID
-      hasRemainderDoTimes: null, // 是否还有考试次数
+      canDoAgain: '', // 是否还可以考试
       redoInterval: null, // 重考间隔
       remainTime: null, // 再次重考剩余时间
       timeMeter: null, // 重考间隔倒计时
@@ -369,7 +369,7 @@ export default {
           testId: this.testId,
         },
       }).then(res => {
-        const { isLimitDoTimes, remainderDoTimes ,canDoAgain } = res.task.activity.testpaperInfo;
+        const { canDoAgain  } = res.task.activity.testpaperInfo;
 
         this.testpaperTitle = res.task.title;
         this.setNavbarTitle(res.task.title);
@@ -377,8 +377,7 @@ export default {
           res.task.activity.testpaperInfo.redoInterval,
         );
         this.enable_facein = res.task.enable_facein;
-        this.hasRemainderDoTimes = canDoAgain === '1' || (isLimitDoTimes === '1' && remainderDoTimes > 0)
-
+        this.canDoAgain = canDoAgain;
         this.judgeTime();
       });
     },
