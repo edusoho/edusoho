@@ -57,7 +57,8 @@ class Testpaper extends Activity
 
     public function create($fields)
     {
-        $fields = $this->checkFields($fields);
+        $fields = $this->preFields($fields);
+        $this->checkFields($fields);
         $fields = $this->filterFields($fields);
 
         try {
@@ -165,6 +166,7 @@ class Testpaper extends Activity
             throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
+        $fields = $this->preFields($fields);
         $this->checkUpdateFields($fields, $activity);
         $filterFields = $this->filterFields($fields);
 
@@ -245,12 +247,8 @@ class Testpaper extends Activity
         return false;
     }
 
-    protected function checkFields($fields)
+    protected function preFields($fields)
     {
-        if (!empty($fields['isLimitDoTimes']) && !empty($fields['doTimes']) && $fields['doTimes'] > 100) {
-            throw TestpaperException::TESTPAPER_DOTIMES_LIMIT();
-        }
-
         if (self::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
             $fields['endTime'] = 0;
         } elseif (self::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
@@ -258,11 +256,18 @@ class Testpaper extends Activity
             $fields['endTime'] = 0;
         }
 
+        return $fields;
+    }
+
+    protected function checkFields($fields)
+    {
+        if (!empty($fields['isLimitDoTimes']) && !empty($fields['doTimes']) && $fields['doTimes'] > 100) {
+            throw TestpaperException::TESTPAPER_DOTIMES_LIMIT();
+        }
+
         if (!empty($fields['endTime']) && $fields['endTime'] <= $fields['startTime']) {
             throw TestpaperException::END_TIME_EARLIER();
         }
-
-        return $fields;
     }
 
     protected function checkUpdateFields($fields, $activity)
