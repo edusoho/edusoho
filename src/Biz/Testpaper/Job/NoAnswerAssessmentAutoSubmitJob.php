@@ -14,7 +14,7 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
     public function execute()
     {
         $params = $this->args;
-        $answerScene = $this->getAnswerSceneService()->get($params['id']);
+        $answerScene = $this->getAnswerSceneService()->get($params['answerSceneId']);
         if (empty($answerScene['end_time'])) {
             return;
         }
