@@ -236,7 +236,7 @@ export default {
           this.result = res.testpaperResult;
           this.info = res.task.activity.testpaperInfo;
           this.enable_facein = res.task.enable_facein;
-          this.canDoAgain = this.info.canDoAgain;
+          this.canDoAgain = this.info.canDoAgain === '1';
           this.score = this.testpaper.score;
           this.startTime = parseInt(this.info.startTime) * 1000;
           this.endTime = parseInt(this.info.endTime) * 1000;

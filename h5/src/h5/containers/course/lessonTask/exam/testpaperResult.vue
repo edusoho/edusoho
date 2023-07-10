@@ -377,7 +377,7 @@ export default {
           res.task.activity.testpaperInfo.redoInterval,
         );
         this.enable_facein = res.task.enable_facein;
-        this.canDoAgain = canDoAgain;
+        this.canDoAgain = canDoAgain === '1';
         this.judgeTime();
       });
     },
