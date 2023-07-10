@@ -31,7 +31,8 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
         $members = $this->getCourseMemberService()->searchMembers(
             [
                 'courseId' => $activity['fromCourseId'],
-                'excludeUserIds' => array_merge(array_column($answerRecords, 'user_id'), [$activity['fromUserId']]),
+                'excludeUserIds' => array_column($answerRecords, 'user_id'),
+                'role' => 'student'
             ],
             ['createdTime' => 'DESC'],
             0,
