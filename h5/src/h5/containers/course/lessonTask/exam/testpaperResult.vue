@@ -138,7 +138,6 @@ export default {
       remainTime: null, // 再次重考剩余时间
       timeMeter: null, // 重考间隔倒计时
       testpaperTitle: null, // 考试题目
-			canDoAgain: '',
       obj: {
         // 题型判断
         single_choice: 'courseLearning.singleChoice',
@@ -378,8 +377,7 @@ export default {
           res.task.activity.testpaperInfo.redoInterval,
         );
         this.enable_facein = res.task.enable_facein;
-				this.canDoAgain = canDoAgain
-        this.hasRemainderDoTimes = this.canDoAgain === '1';
+        this.hasRemainderDoTimes = canDoAgain === '1';
         this.judgeTime();
       });
     },
