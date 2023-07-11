@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Task;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
+use Biz\Activity\Type\Testpaper;
 use Biz\Common\CommonException;
 use Biz\Course\MemberException;
 use Biz\Testpaper\TestpaperException;
@@ -14,8 +15,6 @@ use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
 class TaskStartAnswer extends AbstractResource
 {
-    const VALID_PERIOD_MODE_RANGE = 1;
-
     public function add(ApiRequest $request, $taskId)
     {
         $canLearn = $this->getCourseService()->canLearnTask($taskId);
@@ -65,7 +64,7 @@ class TaskStartAnswer extends AbstractResource
 
     protected function startTestpaper($task, $activity)
     {
-        if (self::VALID_PERIOD_MODE_RANGE == $activity['ext']['validPeriodMode'] && $activity['endTime'] < time()) {
+        if (Testpaper::VALID_PERIOD_MODE_RANGE == $activity['ext']['validPeriodMode'] && $activity['endTime'] < time()) {
             throw TestpaperException::END_OF_EXAM();
         }
 

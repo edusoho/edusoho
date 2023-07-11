@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Activity\Type\Testpaper;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
@@ -25,8 +26,6 @@ use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class TestpaperAction extends AbstractResource
 {
-    const VALID_PERIOD_MODE_RANGE = 1;
-
     /**
      * @param $request
      * @param $id
@@ -75,7 +74,7 @@ class TestpaperAction extends AbstractResource
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        if (self::VALID_PERIOD_MODE_RANGE == $activity['ext']['validPeriodMode'] && $activity['endTime'] < time()) {
+        if (Testpaper::VALID_PERIOD_MODE_RANGE == $activity['ext']['validPeriodMode'] && $activity['endTime'] < time()) {
             throw TestpaperException::END_OF_EXAM();
         }
 
