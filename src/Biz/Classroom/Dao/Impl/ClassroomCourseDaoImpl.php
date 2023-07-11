@@ -63,7 +63,7 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql = "DELETE FROM {$this->table} WHERE `threadId` IN ({$marks});";
+        $sql = "DELETE FROM {$this->table} WHERE `id` IN ({$marks});";
 
         return $this->db()->executeUpdate($sql, $ids);
     }
