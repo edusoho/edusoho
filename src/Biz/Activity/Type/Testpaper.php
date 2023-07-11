@@ -166,7 +166,6 @@ class Testpaper extends Activity
             throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
-        $fields = $this->preFields($fields);
         $this->checkUpdateFields($fields, $activity);
         $filterFields = $this->filterFields($fields);
 
