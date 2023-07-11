@@ -25,6 +25,8 @@ use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class TestpaperAction extends AbstractResource
 {
+    const VALID_PERIOD_MODE_RANGE = 1;
+
     /**
      * @param $request
      * @param $id
@@ -73,6 +75,14 @@ class TestpaperAction extends AbstractResource
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        if (self::VALID_PERIOD_MODE_RANGE == $activity['ext']['validPeriodMode'] && $activity['endTime'] < time()) {
+            throw TestpaperException::END_OF_EXAM();
+        }
+
+        if (0 == $activity['ext']['remainderDoTimes'] && '1' == $activity['ext']['isLimitDoTimes']) {
+            throw TestpaperException::NO_DO_TIMES();
+        }
+
         $task['activity'] = $activity;
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 

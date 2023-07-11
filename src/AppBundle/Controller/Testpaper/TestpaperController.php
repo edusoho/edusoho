@@ -22,16 +22,26 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController
 {
+    const VALID_PERIOD_MODE_RANGE = 1;
+
     //由于学习引擎改造，这里的 lessonId 等于 activityId
     public function doTestpaperAction(Request $request, $testId, $lessonId)
     {
-        $activity = $this->getActivityService()->getActivity($lessonId);
+        $activity = $this->getActivityService()->getActivity($lessonId, true);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
         if (!$canTakeCourse) {
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
+        }
+
+        if (self::VALID_PERIOD_MODE_RANGE == $activity['ext']['validPeriodMode'] && $activity['endTime'] < time()) {
+            return $this->createMessageResponse('error', '当前考试已结束，请重新选择考试', '', 3, $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]));
+        }
+
+        if (0 == $activity['ext']['remainderDoTimes'] && '1' == $activity['ext']['isLimitDoTimes']) {
+            return $this->createMessageResponse('error', '当前考试次数已用完，请重新选择考试', '', 3, $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]));
         }
 
         $user = $this->getCurrentUser();
