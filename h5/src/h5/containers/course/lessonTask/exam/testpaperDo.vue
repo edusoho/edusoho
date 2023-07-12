@@ -486,8 +486,11 @@ export default {
           cancelButtonText: this.$t('courseLearning.confirmSubmission'),
           confirmButtonText: this.$t('courseLearning.check'),
           message: message,
+					className: 'backDialog'
         })
           .then(res => {
+						// 销毁dialog Dom
+						document.getElementsByClassName('backDialog')[0].remove();
             // 显示答题卡
             this.cardShow = true;
             reject(res);

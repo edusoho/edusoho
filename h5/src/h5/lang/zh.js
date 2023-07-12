@@ -577,6 +577,7 @@ export default {
     continueLearning: '继续学习',
     startLearning: '开始学习',
     continueExam: '继续考试',
+		examOverExam: '当前考试已结束，请重新选择考试',
     continueAnswer: '继续答题',
     examTotalTips: '考试用时',
     examTotalTime: '考试用时已达 {number}分钟',
