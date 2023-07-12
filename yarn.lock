@@ -5753,7 +5753,7 @@ istanbul@^0.4.5:
 
 item-bank@^1.0.53:
   version "1.0.53"
-  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.53.tgz#40d845aebdf727677d4434e7fe88f0dbf7ccae9f"
+  resolved "https://registry.npmjs.org/item-bank/-/item-bank-1.0.53.tgz#40d845aebdf727677d4434e7fe88f0dbf7ccae9f"
   integrity sha512-CKCuIq6MmjkyL5Uv8BEqN/7f9Rh3w/+wKiN4rfHqypKHQJZDGmAHXEXaoYGkghYfnSJF0x5RQWNzUKHtUkXQfA==
   dependencies:
     ant-design-vue "^1.5.0"
