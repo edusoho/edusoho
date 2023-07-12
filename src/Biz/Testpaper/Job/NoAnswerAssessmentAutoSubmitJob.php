@@ -27,11 +27,17 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
             return;
         }
 
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        if ('published' != $task['status']) {
+            return;
+        }
+
         $answerRecords = $this->getAnswerRecordService()->findByAnswerSceneId($answerScene['id']);
         $members = $this->getCourseMemberService()->searchMembers(
             [
                 'courseId' => $activity['fromCourseId'],
                 'excludeUserIds' => array_column($answerRecords, 'user_id'),
+                'role' => 'student',
             ],
             ['createdTime' => 'DESC'],
             0,
@@ -111,5 +117,13 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
     protected function getLogService()
     {
         return $this->biz->service('System:LogService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->biz->service('Task:TaskService');
     }
 }

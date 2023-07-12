@@ -57,6 +57,7 @@ class Testpaper extends Activity
 
     public function create($fields)
     {
+        $fields = $this->preFields($fields);
         $this->checkFields($fields);
         $fields = $this->filterFields($fields);
 
@@ -243,6 +244,18 @@ class Testpaper extends Activity
         }
 
         return false;
+    }
+
+    protected function preFields($fields)
+    {
+        if (self::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
+            $fields['endTime'] = 0;
+        } elseif (self::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
+            $fields['startTime'] = 0;
+            $fields['endTime'] = 0;
+        }
+
+        return $fields;
     }
 
     protected function checkFields($fields)

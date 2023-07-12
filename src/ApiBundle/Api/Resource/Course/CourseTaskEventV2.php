@@ -220,6 +220,22 @@ class CourseTaskEventV2 extends AbstractResource
             ],
         ]);
 
+        if (!$this->getTaskService()->isFinished($taskId)) {
+            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
+
+            return [
+                'taskResult' => $taskResult,
+                'nextTask' => null,
+                'completionRate' => null,
+                'record' => $record,
+                'learnControl' => [
+                    'allowLearn' => $canDoing,
+                    'denyReason' => $denyReason,
+                ],
+                'learnedTime' => $this->getMyLearnedTime($activity),
+            ];
+        }
+
         $triggerData = [
             'lastTime' => $record['endTime'],
             'finish' => [
