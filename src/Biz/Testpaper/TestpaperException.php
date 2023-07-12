@@ -48,6 +48,8 @@ class TestpaperException extends AbstractException
 
     const END_OF_EXAM = 5002219;
 
+    const END_TIME_EARLIER_THAN_CURRENT_TIME = 5002220;
+
     public $messages = [
         4042201 => 'exception.testpaper.not_found',
         4032202 => 'exception.testpaper.draft',
@@ -69,5 +71,6 @@ class TestpaperException extends AbstractException
         5002217 => 'exception.testpaper.end_time_earlier_than_start_time',
         5002218 => 'exception.testpaper.no_do_times',
         5002219 => 'exception.testpaper.end_of_exam',
+        5002220 => 'exception.testpaper.end_time_earlier_than_current_time',
     ];
 }
