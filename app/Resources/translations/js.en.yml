@@ -868,6 +868,7 @@ validate.check_password_high.message: 8-32 letters or numbers, , including lette
 validate.custom_integer.message: Please enter the correct integer
 validate.int.message: up to 9 integers
 validate.float.message: up to two decimal places, and the integer digits should not exceed 8 digits!
+validate.endTime.validity: The current exam is over, please re-select the exam
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
 notify.file_not_select.message: No file records selected
