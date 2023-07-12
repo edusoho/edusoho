@@ -742,6 +742,7 @@ t.add("validate.check_password_high.message", "8-32 letters or numbers, , includ
 t.add("validate.custom_integer.message", "Please enter the correct integer", "js", "en");
 t.add("validate.int.message", "up to 9 integers", "js", "en");
 t.add("validate.float.message", "up to two decimal places, and the integer digits should not exceed 8 digits!", "js", "en");
+t.add("validate.endTime.validity", "The current exam is over, please re-select the exam", "js", "en");
 t.add("alert.file_convert_error.message", "File conversion submission failed, please try again!", "js", "en");
 t.add("notify.file_not_select.message", "No file records selected", "js", "en");
 t.add("page.file_converting.message", "Converting in file format", "js", "en");

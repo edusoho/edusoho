@@ -1,4 +1,6 @@
 {% extends 'layout.html.twig' %}
+{% do script(['libs/ltc-sdk-client.js', 'libs/jquery-nouislider.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'testpaperactivity/js/show/index.js'], 300) %}
+
 {% block body %}
   {% set canStartTestpaper = (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime > ('now'|date('U'))) or (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime == '0') or (activity.startTime == '0' and activity.endTime == '0') %}
 
@@ -57,16 +59,17 @@
                     </div>
 
                     <div class="mv16 border-bottom-line"></div>
-
-                    {% if activity.ext.answerScene.limited_time %}
                       <div class="text-919399">
                         {{ 'course.live_lesson_manage.live_length.input_placeholder'|trans }}
                         <span class="pull-right text-37393D">
-                          {{ activity.ext.answerScene.limited_time }}
-                          {{ 'course.live_lesson_manage.live_length.minutes'|trans }}
+													{% if activity.ext.answerScene.limited_time %}
+														{{ activity.ext.answerScene.limited_time }}
+                          	{{ 'course.live_lesson_manage.live_length.minutes'|trans }}
+													{% else %}
+                          	{{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
+													{% endif %}
                         </span>
                       </div>
-                    {% endif %}
 
                     <div class="mv16 border-bottom-line"></div>
 
@@ -121,7 +124,8 @@
                   <span class="text-919399 {% if activity.ext.answerScene.exam_mode == '1' %} hidden {% endif %}">{{ 'course.plan_task.activity_manage.testpaper.limit_tips'|trans }}</span>
                   <span class="pull-right inline-block text-right">
                     {% if not activity.startTime or testMode == 'normal' or (testMode == 'realTime' and activity.startTime and activity.startTime <= ('now'|date('U'))) %}
-                      <a class="btn btn-primary" href="{{ path('testpaper_do', { lessonId: activity.id, testId: testpaper.id }) }}">{{ 'course.plan_task.activity_manage.testpaper.start_exam'|trans }}</a>
+                    {# href="{{ path('testpaper_do', { lessonId: activity.id, testId: testpaper.id }) }}" #}
+										  <a class="btn btn-primary js-start-exam" href="{{ path('testpaper_do', { lessonId: activity.id, testId: testpaper.id }) }}">{{ 'course.plan_task.activity_manage.testpaper.start_exam'|trans }}</a>
                     {% endif %}
                   </span>
                 </div>
@@ -147,4 +151,6 @@
     </div>
   </div>
   <div class="modal-backdrop in"></div>
+	<input type="hidden" name="startTime" value="{{activity.startTime}}">
+	<input type="hidden" name="endTime" value="{{activity.endTime}}">
 {% endblock %}
