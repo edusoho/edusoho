@@ -576,6 +576,7 @@ export default {
     continueLearning: 'Continue learning',
     startLearning: 'Start learning',
     continueExam: 'Continue exam',
+		examOverExam: 'The current exam is over, please re-select the exam',
     continueAnswer: 'continue answering',
     examTotalTips: 'Exam used time',
     examTotalTime: 'Exam time has reached {number} minutes',

@@ -204,6 +204,8 @@ export default {
           next();
         })
         .catch(() => {
+					const dialogDom = document.getElementsByClassName('van-dialog')[0];
+					dialogDom.parentElement.removeChild(dialogDom)
           next(false);
         });
     }

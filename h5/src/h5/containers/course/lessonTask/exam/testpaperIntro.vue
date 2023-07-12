@@ -76,10 +76,10 @@
     <div class="intro-footer">
       <template v-if="result">
         <van-button
-          v-if="result.status === 'doing'"
+          v-if="result.status === 'doing' && canDoAgain"
           class="intro-footer__btn"
           type="primary"
-          @click="startTestpaper(true)"
+          @click="startTestpaper(true, true)"
           >
           {{ $t('courseLearning.continueExam') }}
         </van-button>
@@ -87,7 +87,7 @@
           v-else-if="canDoAgain"
           class="intro-footer__btn"
           type="primary"
-          @click="startTestpaper(false, true)"
+          @click="startTestpaper(true, true)"
         >{{ $t('courseLearning.startTheExam') }}</van-button>
         <van-button
           v-else
@@ -109,7 +109,7 @@
 					:disabled="startTime > Date.now()"
 					class="intro-footer__btn"
 					type="primary"
-					@click="startTestpaper()"
+					@click="startTestpaper(true,true)"
 					>{{ $t('courseLearning.startTheExam') }}</van-button
 				>
 			</template>
@@ -156,6 +156,7 @@ export default {
       time: null,
       interval: null,
 			canDoAgain:'',
+			courseId: '',
       countDown: {
         hours: '00',
         minutes: '00',
@@ -233,6 +234,7 @@ export default {
           this.counts = res.items;
           this.testpaperTitle = res.testpaper.name;
           this.testpaper = res.testpaper;
+					this.courseId = res.task.activity.fromCourseId
           this.result = res.testpaperResult;
           this.info = res.task.activity.testpaperInfo;
           this.enable_facein = res.task.enable_facein;
@@ -269,17 +271,47 @@ export default {
           Toast.fail(err.message);
         });
     },
-    startTestpaper(KeepDoing = false, reDo = false) {
-      if (this.enable_facein === 1) {
-        Dialog.alert({
-          title: '',
-          confirmButtonText: this.$t('courseLearning.iKnow'),
-          message:
-            '本场考试已开启云监考，暂不支持在移动端答题，请前往PC端进行答题。',
-        }).then(() => {});
-      } else {
-        this.goDoTestpaper(KeepDoing, reDo);
-      }
+    startTestpaper(KeepDoing, reDo) {
+
+      this.testId = this.$route.query.testId;
+      this.targetId = this.$route.query.targetId;
+      Api.testpaperIntro({
+        params: {
+          targetId: this.targetId,
+          targetType: 'task',
+        },
+        query: {
+          testId: this.testId,
+        },
+      })
+        .then(res => {
+          this.canDoAgain = res.task.activity.testpaperInfo.canDoAgain === '1';
+					if(this.canDoAgain){
+						if (this.enable_facein === 1) {
+							Dialog.alert({
+								title: '',
+								confirmButtonText: this.$t('courseLearning.iKnow'),
+								message:
+									'本场考试已开启云监考，暂不支持在移动端答题，请前往PC端进行答题。',
+							}).then(() => {});
+						} else {
+							this.goDoTestpaper(KeepDoing, reDo);
+						}
+					}else {
+						Dialog.alert({
+							message: this.$t('courseLearning.examOverExam'),
+						}).then(() => {
+							this.$router.push(`/course/${this.courseId}`)
+						});
+					}
+
+          if (this.startTime > Date.now()) {
+            this.startCountDown()
+          }
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
     },
     goDoTestpaper(KeepDoing, reDo) {
       this.$router.push({
