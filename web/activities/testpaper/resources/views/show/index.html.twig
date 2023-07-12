@@ -124,7 +124,6 @@
                   <span class="text-919399 {% if activity.ext.answerScene.exam_mode == '1' %} hidden {% endif %}">{{ 'course.plan_task.activity_manage.testpaper.limit_tips'|trans }}</span>
                   <span class="pull-right inline-block text-right">
                     {% if not activity.startTime or testMode == 'normal' or (testMode == 'realTime' and activity.startTime and activity.startTime <= ('now'|date('U'))) %}
-                    {# href="{{ path('testpaper_do', { lessonId: activity.id, testId: testpaper.id }) }}" #}
 										  <a class="btn btn-primary js-start-exam" href="{{ path('testpaper_do', { lessonId: activity.id, testId: testpaper.id }) }}">{{ 'course.plan_task.activity_manage.testpaper.start_exam'|trans }}</a>
                     {% endif %}
                   </span>
@@ -151,6 +150,5 @@
     </div>
   </div>
   <div class="modal-backdrop in"></div>
-	<input type="hidden" name="startTime" value="{{activity.startTime}}">
 	<input type="hidden" name="endTime" value="{{activity.endTime}}">
 {% endblock %}
