@@ -267,13 +267,17 @@ class Testpaper extends Activity
         if (!empty($fields['endTime']) && $fields['endTime'] <= $fields['startTime']) {
             throw TestpaperException::END_TIME_EARLIER();
         }
+
+        if (!empty($fields['endTime']) && $fields['endTime'] < time()) {
+            throw TestpaperException::END_TIME_EARLIER_THAN_CURRENT_TIME();
+        }
     }
 
     protected function checkUpdateFields($fields, $activity)
     {
         $answerScene = $this->getAnswerSceneService()->get($activity['answerScene']['id']);
 
-        if (!empty($fields['endTime']) && ($fields['endTime'] < time() || $fields['endTime'] < $answerScene['start_time'])) {
+        if (!empty($fields['endTime']) && $fields['endTime'] < $answerScene['start_time']) {
             throw TestpaperException::END_TIME_EARLIER();
         }
 
