@@ -273,8 +273,8 @@ class Testpaper extends Activity
     {
         $answerScene = $this->getAnswerSceneService()->get($activity['answerScene']['id']);
 
-        if ($answerScene['start_time'] < time() && (!empty($fields['startTime']) && time() < $fields['startTime'])) {
-            throw TestpaperException::START_TIME_EARLIER();
+        if (!empty($fields['endTime']) && ($fields['endTime'] < time() || $fields['endTime'] < $answerScene['start_time'])) {
+            throw TestpaperException::END_TIME_EARLIER();
         }
 
         $this->checkFields($fields);
