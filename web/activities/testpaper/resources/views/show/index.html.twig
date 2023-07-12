@@ -130,7 +130,7 @@
                 </div>
               {% elseif activity.endTime and activity.endTime < ('now'|date('U')) %}
                 <div class="mt24 mb8 footer-btn">
-                  <span class="text-919399">{{ 'course.plan_task.activity_manage.testpaper.enddate.limit_tips'|trans }}</span>
+                  <span class="text-919399 {% if activity.ext.answerScene.exam_mode == '1' %} hidden {% endif %}">{{ 'course.plan_task.activity_manage.testpaper.enddate.limit_tips'|trans }}</span>
                   <span class="pull-right inline-block text-right">
                     {% if not activity.startTime or testMode == 'normal' or (testMode == 'realTime' and activity.startTime and activity.startTime <= ('now'|date('U'))) %}
                       {% set blankAssessmentAnswerRecord = data('BlankAssessmentAnswerRecord', {answerSceneId: activity.ext.answerSceneId, assessmentId: activity.ext.mediaId, userId: app.user.id}) %}
