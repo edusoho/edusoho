@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Activity\Type\Testpaper;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
@@ -73,6 +74,14 @@ class TestpaperAction extends AbstractResource
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        if (Testpaper::VALID_PERIOD_MODE_RANGE == $activity['ext']['validPeriodMode'] && $activity['endTime'] < time()) {
+            throw TestpaperException::END_OF_EXAM();
+        }
+
+        if (0 == $activity['ext']['remainderDoTimes'] && '1' == $activity['ext']['isLimitDoTimes']) {
+            throw TestpaperException::NO_DO_TIMES();
+        }
+
         $task['activity'] = $activity;
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 

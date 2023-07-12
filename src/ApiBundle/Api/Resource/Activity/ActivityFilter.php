@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class ActivityFilter extends Filter
 {
     protected $publicFields = [
-        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title', 'finishData', 'finishType', 'finishCondition', 'exam_mode', 'endTime', 'validPeriodMode', 'canDoAgain',
+        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title', 'finishData', 'finishType', 'finishCondition', 'exam_mode', 'endTime', 'validPeriodMode', 'canDoAgain', 'fromCourseId'
     ];
 
     protected function publicFields(&$data)

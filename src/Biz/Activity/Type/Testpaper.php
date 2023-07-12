@@ -57,6 +57,7 @@ class Testpaper extends Activity
 
     public function create($fields)
     {
+        $fields = $this->preFields($fields);
         $this->checkFields($fields);
         $fields = $this->filterFields($fields);
 
@@ -245,6 +246,18 @@ class Testpaper extends Activity
         return false;
     }
 
+    protected function preFields($fields)
+    {
+        if (self::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
+            $fields['endTime'] = 0;
+        } elseif (self::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
+            $fields['startTime'] = 0;
+            $fields['endTime'] = 0;
+        }
+
+        return $fields;
+    }
+
     protected function checkFields($fields)
     {
         if (!empty($fields['isLimitDoTimes']) && !empty($fields['doTimes']) && $fields['doTimes'] > 100) {
@@ -254,14 +267,18 @@ class Testpaper extends Activity
         if (!empty($fields['endTime']) && $fields['endTime'] <= $fields['startTime']) {
             throw TestpaperException::END_TIME_EARLIER();
         }
+
+        if (!empty($fields['endTime']) && $fields['endTime'] < time()) {
+            throw TestpaperException::END_TIME_EARLIER_THAN_CURRENT_TIME();
+        }
     }
 
     protected function checkUpdateFields($fields, $activity)
     {
         $answerScene = $this->getAnswerSceneService()->get($activity['answerScene']['id']);
 
-        if ($answerScene['start_time'] < time() && (!empty($fields['startTime']) && time() < $fields['startTime'])) {
-            throw TestpaperException::START_TIME_EARLIER();
+        if (!empty($fields['endTime']) && $fields['endTime'] < $answerScene['start_time']) {
+            throw TestpaperException::END_TIME_EARLIER();
         }
 
         $this->checkFields($fields);
