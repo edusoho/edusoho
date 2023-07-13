@@ -580,6 +580,7 @@ export default {
     continueAnswer: 'continue answering',
     examTotalTips: 'Exam used time',
     examTotalTime: 'Exam time has reached {number} minutes',
+		examNotStart: 'The current exam has not yet started'
   },
   classLearning: {
     intor: 'Intro',

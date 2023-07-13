@@ -496,6 +496,7 @@ export default {
             reject(res);
           })
           .catch(() => {
+						document.getElementsByClassName('backDialog')[0].remove();
             this.clearTime();
             this.submitExam(answer)
               .then(res => {
