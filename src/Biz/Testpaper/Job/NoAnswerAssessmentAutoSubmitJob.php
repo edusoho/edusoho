@@ -46,10 +46,6 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
             ['userId']
         );
 
-        if (empty($courseMembers)) {
-            return;
-        }
-
         $classroom = $this->getClassroomService()->getClassroomByCourseId($activity['fromCourseId']);
         $classroomMembers = $this->getClassroomService()->searchMembers(
             [
@@ -63,11 +59,10 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
             ['userId']
         );
 
-        if (empty($classroomMembers)) {
+        $userIds = array_values(array_unique(array_column(array_merge($classroomMembers, $courseMembers), 'userId')));
+        if (empty($userIds)) {
             return;
         }
-
-        $userIds = array_unique(array_column(array_merge($classroomMembers, $courseMembers), 'userId'));
 
         $this->getAnswerService()->batchAutoSubmit($answerScene['id'], $testpaperActivity['mediaId'], $userIds);
 
