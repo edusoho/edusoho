@@ -2,6 +2,7 @@
 
 namespace Biz\Testpaper\Job;
 
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
@@ -33,7 +34,7 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
         }
 
         $answerRecords = $this->getAnswerRecordService()->findByAnswerSceneId($answerScene['id']);
-        $members = $this->getCourseMemberService()->searchMembers(
+        $courseMembers = $this->getCourseMemberService()->searchMembers(
             [
                 'courseId' => $activity['fromCourseId'],
                 'excludeUserIds' => array_column($answerRecords, 'user_id'),
@@ -44,11 +45,31 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
             1000,
             ['userId']
         );
-        if (empty($members)) {
+
+        if (empty($courseMembers)) {
             return;
         }
 
-        $this->getAnswerService()->batchAutoSubmit($answerScene['id'], $testpaperActivity['mediaId'], array_column($members, 'userId'));
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($activity['fromCourseId']);
+        $classroomMembers = $this->getClassroomService()->searchMembers(
+            [
+                'classroomId' => $classroom['id'],
+                'excludeUserIds' => array_column($answerRecords, 'user_id'),
+                'role' => 'student',
+            ],
+            ['createdTime' => 'DESC'],
+            0,
+            1000,
+            ['userId']
+        );
+
+        if (empty($classroomMembers)) {
+            return;
+        }
+
+        $userIds = array_unique(array_column(array_merge($classroomMembers, $courseMembers), 'userId'));
+
+        $this->getAnswerService()->batchAutoSubmit($answerScene['id'], $testpaperActivity['mediaId'], $userIds);
 
         $this->getLogService()->info('answer', 'create', '提交成功');
 
@@ -125,5 +146,13 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->biz->service('Classroom:ClassroomService');
     }
 }
