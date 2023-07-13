@@ -581,6 +581,7 @@ export default {
     continueAnswer: '继续答题',
     examTotalTips: '考试用时',
     examTotalTime: '考试用时已达 {number}分钟',
+		examNotStart: '当前考试暂未开始'
   },
   classLearning: {
     intor: '班级介绍',

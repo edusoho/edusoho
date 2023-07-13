@@ -106,7 +106,6 @@
 					>{{ $t('courseLearning.ViewDetail') }}</van-button
 				>
 				<van-button v-else
-					:disabled="startTime > Date.now()"
 					class="intro-footer__btn"
 					type="primary"
 					@click="startTestpaper(true,true)"
@@ -192,9 +191,11 @@ export default {
       selectedPlanId: state => state.course.selectedPlanId,
     }),
   },
+	created(){
+    this.getInfo();
+	},
   mounted() {
     this.initReport();
-    this.getInfo();
   },
   beforeRouteEnter(to, from, next) {
     document.getElementById('app').style.background = '#f6f6f6';
@@ -272,6 +273,10 @@ export default {
         });
     },
     startTestpaper(KeepDoing, reDo) {
+			if(this.startTime > Date.now()) {
+			 	Toast.fail(this.$t('courseLearning.examNotStart'))
+				return
+			} 
 
       this.testId = this.$route.query.testId;
       this.targetId = this.$route.query.targetId;

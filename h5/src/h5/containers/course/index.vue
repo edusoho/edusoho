@@ -64,6 +64,13 @@ export default {
     }
   },
 
+  beforeRouteEnter(to, from, next) {
+		if (to.name === 'course' && from.name === 'testpaperResult' || to.name === 'course' && from.name === 'testpaperIntro') {
+			window.location.reload();
+		}
+    next();
+  },
+
   beforeRouteLeave(to, from, next) {
     this.setSourceType({
       sourceType: 'img',
