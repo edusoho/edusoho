@@ -127,6 +127,7 @@ class Testpaper extends Activity
             'endTime' => $testpaperActivity['answerScene']['end_time'],
             'isItemsSeqRandom' => $testpaperActivity['answerScene']['is_items_seq_random'],
             'isOptionsSeqRandom' => $testpaperActivity['answerScene']['is_options_seq_random'],
+            'isCopy' => 1,
         ];
         $newExt['validPeriodMode'] = $this->preValidPeriodMode(['start_time' => $newExt['startTime'], 'end_time' => $newExt['endTime']]);
 
@@ -155,6 +156,7 @@ class Testpaper extends Activity
         $ext['endTime'] = $sourceExt['answerScene']['end_time'];
         $ext['isItemsSeqRandom'] = $sourceExt['answerScene']['is_items_seq_random'];
         $ext['isOptionsSeqRandom'] = $sourceExt['answerScene']['is_options_seq_random'];
+        $ext['isSync'] = 1;
 
         return $this->update($ext['id'], $ext, $activity);
     }
@@ -261,6 +263,10 @@ class Testpaper extends Activity
 
     protected function checkFields($fields)
     {
+        if (isset($fields['isCopy']) || isset($fields['isSync'])) {
+            return;
+        }
+
         if (!empty($fields['isLimitDoTimes']) && !empty($fields['doTimes']) && $fields['doTimes'] > 100) {
             throw TestpaperException::TESTPAPER_DOTIMES_LIMIT();
         }
