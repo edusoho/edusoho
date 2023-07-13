@@ -128,6 +128,7 @@ class Testpaper extends Activity
             'isItemsSeqRandom' => $testpaperActivity['answerScene']['is_items_seq_random'],
             'isOptionsSeqRandom' => $testpaperActivity['answerScene']['is_options_seq_random'],
             'isCopy' => 1,
+            'isLimitDoTimes' => $testpaperActivity['isLimitDoTimes'],
         ];
         $newExt['validPeriodMode'] = $this->preValidPeriodMode(['start_time' => $newExt['startTime'], 'end_time' => $newExt['endTime']]);
 
@@ -157,6 +158,7 @@ class Testpaper extends Activity
         $ext['isItemsSeqRandom'] = $sourceExt['answerScene']['is_items_seq_random'];
         $ext['isOptionsSeqRandom'] = $sourceExt['answerScene']['is_options_seq_random'];
         $ext['isSync'] = 1;
+        $ext['isLimitDoTimes'] = $sourceExt['isLimitDoTimes'];
 
         return $this->update($ext['id'], $ext, $activity);
     }
