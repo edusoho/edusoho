@@ -128,6 +128,7 @@ class Testpaper extends Activity
             'isItemsSeqRandom' => $testpaperActivity['answerScene']['is_items_seq_random'],
             'isOptionsSeqRandom' => $testpaperActivity['answerScene']['is_options_seq_random'],
         ];
+        $newExt['validPeriodMode'] = $this->preValidPeriodMode(['start_time' => $newExt['startTime'], 'end_time' => $newExt['endTime']]);
 
         return $this->create($newExt);
     }
