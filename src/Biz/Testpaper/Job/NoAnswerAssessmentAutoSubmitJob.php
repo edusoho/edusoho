@@ -45,21 +45,24 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
             1000,
             ['userId']
         );
+        $userIds = array_column($courseMembers, 'userId');
 
         $classroom = $this->getClassroomService()->getClassroomByCourseId($activity['fromCourseId']);
-        $classroomMembers = $this->getClassroomService()->searchMembers(
-            [
-                'classroomId' => $classroom['id'],
-                'excludeUserIds' => array_column($answerRecords, 'user_id'),
-                'role' => 'student',
-            ],
-            ['createdTime' => 'DESC'],
-            0,
-            1000,
-            ['userId']
-        );
+        if (!empty($classroom)) {
+            $classroomMembers = $this->getClassroomService()->searchMembers(
+                [
+                    'classroomId' => $classroom['id'],
+                    'excludeUserIds' => array_merge($userIds, array_column($answerRecords, 'user_id')),
+                    'role' => 'student',
+                ],
+                ['createdTime' => 'DESC'],
+                0,
+                1000,
+                ['userId']
+            );
+            $userIds = array_merge($userIds, array_column($classroomMembers, 'userId'));
+        }
 
-        $userIds = array_values(array_unique(array_column(array_merge($classroomMembers, $courseMembers), 'userId')));
         if (empty($userIds)) {
             return;
         }
