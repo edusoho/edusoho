@@ -131,7 +131,6 @@ class Testpaper extends Activity
             'isLimitDoTimes' => $testpaperActivity['isLimitDoTimes'],
         ];
         $newExt['validPeriodMode'] = $this->preValidPeriodMode(['start_time' => $newExt['startTime'], 'end_time' => $newExt['endTime']]);
-        $newExt['isLimitDoTimes'] = empty($newExt['doTimes']) ? 0 : 1;
 
         return $this->create($newExt);
     }
