@@ -192,9 +192,11 @@ export default {
       selectedPlanId: state => state.course.selectedPlanId,
     }),
   },
+	created(){
+    this.getInfo();
+	},
   mounted() {
     this.initReport();
-    this.getInfo();
   },
   beforeRouteEnter(to, from, next) {
     document.getElementById('app').style.background = '#f6f6f6';
