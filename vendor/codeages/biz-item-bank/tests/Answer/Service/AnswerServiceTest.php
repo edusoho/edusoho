@@ -13,7 +13,7 @@ class AnswerServiceTest extends IntegrationTestCase
         $this->mockObjectIntoBiz('ItemBank:Answer:AnswerRecordService', [
             [
                 'functionName' => 'create',
-                'returnValue' => ['answer_scene_id' => 1, 'assessment_id' => 1, 'user_id' => 1],
+                'returnValue' => ['id' => 1, 'answer_scene_id' => 1, 'assessment_id' => 1, 'user_id' => 1],
             ],
             [
                 'functionName' => 'getLatestAnswerRecordByAnswerSceneIdAndUserId',
@@ -26,6 +26,22 @@ class AnswerServiceTest extends IntegrationTestCase
                 'functionName' => 'canStart',
                 'returnValue' => true,
             ],
+            [
+                'withParams' => [1],
+                'functionName' => 'get',
+                'returnValue' => [
+                    'exam_mode' => 0,
+                    'limited_time' => 0,
+                    'is_items_seq_random' => 0,
+                    'is_options_seq_random' => 0,
+                ],
+            ],
+        ]);
+        $this->mockObjectIntoBiz('ItemBank:Answer:AnswerRandomSeqService', [
+            [
+                'withParams' => [1],
+                'functionName' => 'createAnswerRandomSeqRecordIfNecessary',
+            ]
         ]);
 
         $answerRecord = $this->getAnswerService()->startAnswer(1, 1, 1);
@@ -130,9 +146,9 @@ class AnswerServiceTest extends IntegrationTestCase
 
     /**
      * @expectedException \Codeages\Biz\ItemBank\Answer\Exception\AnswerException
-     * @expectedExceptionCode 50095205
+     * @expectedExceptionCode 50095204
      */
-    public function testContinueAnswer_whenStatusNotPaused_thenThrowException()
+    public function testContinueAnswer_whenStatusNotDoing_thenThrowException()
     {
         $this->mockObjectIntoBiz('ItemBank:Answer:AnswerRecordService', [
             [
@@ -157,6 +173,8 @@ class AnswerServiceTest extends IntegrationTestCase
                     'id' => '1',
                     'status' => AnswerService::ANSWER_RECORD_STATUS_DOING,
                     'assessment_id' => 1,
+                    'exam_mode' => 0,
+                    'created_time' => time(),
                 ],
             ],
             [
@@ -184,6 +202,7 @@ class AnswerServiceTest extends IntegrationTestCase
                 'functionName' => 'get',
                 'returnValue' => [
                     'id' => '1',
+                    'name' => 'scene_for_test',
                     'need_score' => 1,
                     'manual_marking' => 1,
                 ],
@@ -193,6 +212,9 @@ class AnswerServiceTest extends IntegrationTestCase
                 'returnValue' => [
                 ],
             ],
+            [
+                'functionName' => 'update',
+            ]
         ]);
 
         $this->mockObjectIntoBiz('ItemBank:Answer:AnswerRecordService', [
@@ -363,7 +385,11 @@ class AnswerServiceTest extends IntegrationTestCase
                 'returnValue' => [
                     'id' => '1',
                     'need_score' => 1,
+                    'name' => 'answer_scene_for_test',
                 ],
+            ],
+            [
+                'functionName' => 'update',
             ],
             [
                 'functionName' => 'buildAnswerSceneReport',
@@ -451,7 +477,9 @@ class AnswerServiceTest extends IntegrationTestCase
         $this->getAnswerReportDao()->create([
             'id' => 1,
             'assessment_id' => 1,
+            'answer_scene_id' => 1,
             'answer_record_id' => 1,
+            'user_id' => 1,
         ]);
 
         $answerReport = $this->getAnswerService()->review($reviewReport);

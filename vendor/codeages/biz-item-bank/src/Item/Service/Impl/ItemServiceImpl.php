@@ -76,7 +76,6 @@ class ItemServiceImpl extends BaseService implements ItemService
 
             $this->getItemBankService()->updateItemNumAndQuestionNum($bankId);
             $this->getItemCategoryService()->buildItemNumAndQuestionNumBybankId($bankId);
-//            $this->dispatch('item.import', $savedItems);
             $this->dispatchEvent('item.import', new Event($savedItems));
             $this->commit();
 

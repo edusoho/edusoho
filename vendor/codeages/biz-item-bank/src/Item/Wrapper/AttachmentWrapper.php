@@ -2,7 +2,6 @@
 
 namespace Codeages\Biz\ItemBank\Item\Wrapper;
 
-use Biz\CloudFile\Service\CloudFileService;
 use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
@@ -61,14 +60,6 @@ class AttachmentWrapper
     protected function getAttachmentService()
     {
         return $this->biz->service('ItemBank:Item:AttachmentService');
-    }
-
-    /**
-     * @return CloudFileService
-     */
-    protected function getCloudFileService()
-    {
-        return $this->biz->service('CloudFile:CloudFileService');
     }
 
     /**

@@ -217,13 +217,13 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         return $questionReports;
     }
 
-    private function findChoiceItemIds($itemIds)
+    private function findChoiceItemIds($items)
     {
-        if (empty($itemIds)) {
+        if (empty($items)) {
             return [];
         }
         $choiceItems = $this->getItemService()->searchItems([
-            'ids' => array_column($itemIds, 'item_id'),
+            'ids' => array_column($items, 'item_id'),
             'types' => $this->getChoiceItemTypes(),
         ], [], 0, PHP_INT_MAX, ['id']);
 

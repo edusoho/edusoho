@@ -15,6 +15,7 @@ class AnswerRecordServiceTest extends IntegrationTestCase
             'answer_scene_id' => 1,
             'assessment_id' => 1,
             'user_id' => 1,
+            'admission_ticket' => 'admission_ticket',
         ];
 
         $answerRecord = $this->getAnswerRecordService()->create($answerRecord);
@@ -50,6 +51,11 @@ class AnswerRecordServiceTest extends IntegrationTestCase
             'answer_scene_id' => 1,
             'assessment_id' => 1,
             'user_id' => 1,
+            'admission_ticket' => 'admission_ticket',
+            'exam_mode' => 0,
+            'limited_time' => 0,
+            'is_items_seq_random' => 0,
+            'is_options_seq_random' => 0,
         ];
 
         $answerRecord = $this->getAnswerRecordService()->create($answerRecord);
