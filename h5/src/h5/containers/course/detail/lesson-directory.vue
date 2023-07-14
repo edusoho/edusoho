@@ -61,7 +61,8 @@
                       lessonactive:
                         currentTask == lessonItem.tasks[lessonItem.index].id,
                     }"
-                    class="bl ks" style="display: flex;"
+                    class="bl ks"
+                    style="display: flex;"
                   >
                     <i
                       :class="iconfont(lessonItem.tasks[lessonItem.index])"
@@ -129,7 +130,10 @@
                 <!-- <span class="tryLes">试听</span> -->
                 <i :class="iconfont(taskItem)" class="iconfont" />
                 <div>
-                  {{ Number(taskItem.isOptional) ? '' : $t('courseLearning.lesson')
+                  {{
+                    Number(taskItem.isOptional)
+                      ? ''
+                      : $t('courseLearning.lesson')
                   }}{{
                     Number(taskItem.isOptional)
                       ? taskItem.title
@@ -160,6 +164,8 @@ import copyUrl from '@/mixins/copyUrl';
 import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import { Toast } from 'vant';
+import Api from '@/api';
+
 export default {
   name: 'LessonDirectory',
   mixins: [redirectMixin, copyUrl],
@@ -365,28 +371,42 @@ export default {
           break;
         }
         case 'testpaper': {
-          const { testpaperId: testId, answerRecordId: resultId } = task.activity.testpaperInfo;
-          const { status } = task.result || {}
+					const { testpaperId: testId, answerRecordId: resultId } = task.activity.testpaperInfo;
+          Api.testpaperIntro({
+            params: {
+              targetId: task.id,
+              targetType: 'task',
+            },
+            query: {
+              testId: testId,
+            },
+          })
+            .then(res => {
+              const { endTime } = res.task.activity.testpaperInfo
+							const result = res.testpaperResult
+              if ((result?.status == 'finished' || result?.status == 'reviewing') && (endTime * 1000 > Date.now() || endTime == 0) ) {
+                this.$router.push({
+                  name: 'testpaperResult',
+                  query: {
+                    testId,
+                    targetId: task.id,
+                    resultId,
+                  },
+                });
+              } else {
+                this.$router.push({
+                  name: 'testpaperIntro',
+                  query: {
+                    testId,
+                    targetId: task.id,
+                  },
+                });
+              }
+            })
+            .catch(err => {
+              Toast.fail(err.message);
+            });
 
-          if (status === 'finish') {
-            this.$router.push({
-              name: 'testpaperResult',
-              query: {
-                testId,
-                targetId: task.id,
-                resultId
-              },
-            });
-          } else {
-            this.$router.push({
-              name: 'testpaperIntro',
-              query: {
-                testId,
-                targetId: task.id,
-              },
-            });
-          }
-          
           break;
         }
         case 'homework':
