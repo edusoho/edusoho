@@ -5751,10 +5751,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@^1.0.52:
-  version "1.0.52"
-  resolved "https://registry.npmmirror.com/item-bank/-/item-bank-1.0.52.tgz#736c16b341c3afd8d7a0d05d0b0b3c885349ca3c"
-  integrity sha512-wbiaErEwylM0dUTS3MJ/vUMxet0sxXUAUdQ31X08pW5cznfxFgftEFKH4xSVJWcAX7uOCx3RFaHMUl7R55H0Cg==
+item-bank@^1.0.54:
+  version "1.0.54"
+  resolved "https://registry.npmjs.org/item-bank/-/item-bank-1.0.54.tgz#16ac7ce96f3b987b208dcc93d58dd169c8eebc3d"
+  integrity sha512-f8nD/JOKKTQWZ4fIawgUMeOfxoYOvbmihYfF73mZLWtlQFmYfYL1wSVL4UaP+ALm3bMyLA2WA8mMUzZZV/5+/g==
   dependencies:
     ant-design-vue "^1.5.0"
     caniuse-lite "^1.0.30001390"

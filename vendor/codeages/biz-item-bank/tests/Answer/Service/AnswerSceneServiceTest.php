@@ -197,6 +197,7 @@ class AnswerSceneServiceTest extends IntegrationTestCase
 
         $answerRecord = $this->getAnswerRecordDao()->create([
             'answer_scene_id' => 1,
+            'assessment_id' => 1,
             'user_id' => 1,
             'status' => 'finished',
         ]);
@@ -224,6 +225,7 @@ class AnswerSceneServiceTest extends IntegrationTestCase
 
         $answerRecord = $this->getAnswerRecordDao()->create([
             'answer_scene_id' => 1,
+            'assessment_id' => 1,
             'answer_report_id' => 1,
             'user_id' => 1,
             'status' => 'finished',
@@ -232,7 +234,10 @@ class AnswerSceneServiceTest extends IntegrationTestCase
 
         $answerReport = $this->getAnswerReportDao()->create([
             'id' => 1,
+            'user_id' => 1,
+            'assessment_id' => 1,
             'answer_record_id' => 1,
+            'answer_scene_id' => 1,
             'review_time' => time(),
         ]);
 

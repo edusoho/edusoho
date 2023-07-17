@@ -49,13 +49,14 @@ class AssessmentSectionItemServiceTest extends IntegrationTestCase
             'id' => 5,
             'seq' => 1,
             'questions' => [
-                ['id' => 1, 'score' => 2, 'seq' => 1],
+                ['id' => 1, 'score' => 2, 'seq' => 1, 'answer_mode' => 'choice'],
             ],
         ];
         $result = $this->getSectionItemService()->createAssessmentSectionItem($item, ['id' => 1, 'assessment_id' => 1]);
 
         $this->assertEquals([
             ['name' => 'all_right', 'score' => 2],
+            ['name' => 'part_right', 'score' => 0, 'score_rule' => []],
             ['name' => 'no_answer', 'score' => 0],
             ['name' => 'wrong', 'score' => 0],
         ], $result['score_rule'][0]['rule']);

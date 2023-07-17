@@ -5,8 +5,11 @@ namespace ApiBundle\Api\Resource\Task;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
+use Biz\Activity\Type\Testpaper;
 use Biz\Common\CommonException;
 use Biz\Course\MemberException;
+use Biz\Testpaper\TestpaperException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
@@ -36,6 +39,7 @@ class TaskStartAnswer extends AbstractResource
         if ('open' !== $assessment['status']) {
             throw AssessmentException::ASSESSMENT_NOTOPEN();
         }
+        $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
@@ -60,6 +64,14 @@ class TaskStartAnswer extends AbstractResource
 
     protected function startTestpaper($task, $activity)
     {
+        if (Testpaper::VALID_PERIOD_MODE_RANGE == $activity['ext']['validPeriodMode'] && $activity['endTime'] < time()) {
+            throw TestpaperException::END_OF_EXAM();
+        }
+
+        if (0 == $activity['ext']['remainderDoTimes'] && '1' == $activity['ext']['isLimitDoTimes']) {
+            throw TestpaperException::NO_DO_TIMES();
+        }
+
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()['id']);
         if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
             return $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $activity['ext']['mediaId'], $this->getCurrentUser()['id']);
@@ -157,5 +169,13 @@ class TaskStartAnswer extends AbstractResource
     protected function getAnswerRecordService()
     {
         return $this->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerRandomSeqService
+     */
+    protected function getAnswerRandomSeqService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRandomSeqService');
     }
 }

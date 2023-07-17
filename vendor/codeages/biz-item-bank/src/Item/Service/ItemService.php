@@ -45,4 +45,6 @@ interface ItemService
     public function countQuestionsByBankId($bankId);
 
     public function countQuestionsByCategoryId($categoryId);
+
+    public function searchQuestions($conditions, $orderBys, $start, $limit, $columns = []);
 }
