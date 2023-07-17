@@ -284,6 +284,7 @@ t.add("activity.testpaper_manage.media_required", "Please select the testpapers"
 t.add("activity.testpaper_manage.arithmetic_float_error_hint", "Must be a positive number, keep a decimal", "js", "en");
 t.add("activity.testpaper_manage.positive_integer_error_hint", "Must be a positive integer", "js", "en");
 t.add("activity.testpaper_manage.media_error_hint", "Please select the testpapers", "js", "en");
+t.add("activity.testpaper_manage.required.number", "Please enter at least one digit", "js", "en");
 t.add("activity.testpaper_manage.input_title_hint", "Please enter the testpaper title", "js", "en");
 t.add("activity.testpaper_manage.question_scope", "Please select a range of questions", "js", "en");
 t.add("activity.testpaper_manage.question_num_error", "The number of qeustions in this range is insufficient", "js", "en");
@@ -648,6 +649,12 @@ t.add("homework_manage.result_graph.first_status_num", "Number of first result",
 t.add("homework_manage.result_graph.max_status_num", "Number of max result", "js", "en");
 t.add("intro.confirm_hint", "Finish", "js", "en");
 t.add("validate.required.message", "Please input %display%", "js", "en");
+t.add("validate.valid_enter.retest.interval", "Retest interval", "js", "en");
+t.add("course.plan_task.activity_manage.testpaper.time_limit", "Test duration", "js", "en");
+t.add("validate.valid_enter_a_positive.integer", "Please enter a positive integer from 1 to 100", "js", "en");
+t.add("validate.valid_rangetime.required", "Please select a date range", "js", "en");
+t.add("validate.valid_starttime.required", "Please select a start time", "js", "en");
+t.add("validate.valid_endtime.required", "Please select an end time", "js", "en");
 t.add("validate.valid_email_input.message", "Please enter a valid email address.", "js", "en");
 t.add("validate.valid_url_input.message", "Please enter a valid URL.", "js", "en");
 t.add("validate.valid_date_input.message", "Please enter a valid date.", "js", "en");
@@ -735,6 +742,7 @@ t.add("validate.check_password_high.message", "8-32 letters or numbers, , includ
 t.add("validate.custom_integer.message", "Please enter the correct integer", "js", "en");
 t.add("validate.int.message", "up to 9 integers", "js", "en");
 t.add("validate.float.message", "up to two decimal places, and the integer digits should not exceed 8 digits!", "js", "en");
+t.add("validate.endTime.validity", "The current exam is over, please re-select the exam", "js", "en");
 t.add("alert.file_convert_error.message", "File conversion submission failed, please try again!", "js", "en");
 t.add("notify.file_not_select.message", "No file records selected", "js", "en");
 t.add("page.file_converting.message", "Converting in file format", "js", "en");

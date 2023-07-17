@@ -592,8 +592,15 @@ t.add("homework_manage.result_graph.first_status_num", "\u9996\u6b21\u6210\u7ee9
 t.add("homework_manage.result_graph.max_status_num", "\u6700\u4f18\u6210\u7ee9\u7ed3\u679c\u4eba\u6570", "js", "zh_CN");
 t.add("intro.confirm_hint", "\u5b8c\u6210", "js", "zh_CN");
 t.add("validate.required.message", "\u8bf7\u8f93\u5165%display%", "js", "zh_CN");
+t.add("validate.valid_enter.retest.interval", "\u91cd\u8003\u95f4\u9694", "js", "zh_CN");
+t.add("course.plan_task.activity_manage.testpaper.time_limit", "\u8003\u8bd5\u65f6\u957f", "js", "zh_CN");
+t.add("validate.valid_enter_a_positive.integer", "\u8bf7\u8f93\u51651\u81f3100\u7684\u6b63\u6574\u6570", "js", "zh_CN");
+t.add("validate.valid_rangetime.required", "\u8bf7\u9009\u62e9\u65e5\u671f\u533a\u95f4", "js", "zh_CN");
+t.add("validate.valid_starttime.required", "\u8bf7\u9009\u62e9\u5f00\u59cb\u65f6\u95f4", "js", "zh_CN");
+t.add("validate.valid_endtime.required", "\u8bf7\u9009\u62e9\u7ed3\u675f\u65f6\u95f4", "js", "zh_CN");
 t.add("validate.valid_email_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u7535\u5b50\u90ae\u4ef6\u5730\u5740", "js", "zh_CN");
 t.add("validate.valid_url_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u7f51\u5740", "js", "zh_CN");
+t.add("activity.testpaper_manage.required.number", "\u8bf7\u81f3\u5c11\u8f93\u5165\u4e00\u4f4d\u6570\u5b57", "js", "zh_CN");
 t.add("validate.valid_date_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u65e5\u671f", "js", "zh_CN");
 t.add("validate.valid_date_iso_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u65e5\u671f (YYYY-MM-DD)", "js", "zh_CN");
 t.add("validate.valid_number_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u6570\u5b57", "js", "zh_CN");
@@ -681,6 +688,7 @@ t.add("validate.check_password_high.message", "8-32\u4f4d\u82f1\u6587\u3001\u657
 t.add("validate.custom_integer.message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u6574\u6570", "js", "zh_CN");
 t.add("validate.int.message", "\u6700\u591a9\u4f4d\u6574\u6570", "js", "zh_CN");
 t.add("validate.float.message", "\u6700\u591a\u4e24\u4f4d\u5c0f\u6570\uff0c\u6574\u6570\u4f4d\u4e0d\u8d85\u8fc78\u4f4d\uff01", "js", "zh_CN");
+t.add("validate.endTime.validity", "\u5f53\u524d\u8003\u8bd5\u5df2\u7ed3\u675f\uff0c\u8bf7\u91cd\u65b0\u9009\u62e9\u8003\u8bd5", "js", "zh_CN");
 t.add("alert.file_convert_error.message", "\u6587\u4ef6\u8f6c\u6362\u63d0\u4ea4\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5\uff01", "js", "zh_CN");
 t.add("notify.file_not_select.message", "\u672a\u9009\u4e2d\u4efb\u4f55\u6587\u4ef6\u8bb0\u5f55", "js", "zh_CN");
 t.add("page.file_converting.message", "\u6b63\u5728\u6587\u4ef6\u683c\u5f0f\u8f6c\u6362", "js", "zh_CN");

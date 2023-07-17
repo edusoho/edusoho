@@ -20,7 +20,6 @@ use Biz\File\Service\UploadFileService;
 use Biz\File\UploadFileException;
 use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
-use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
@@ -281,9 +280,16 @@ class CourseTaskMedia extends AbstractResource
                 $answerRecord,
                 $assessment,
                 $answerScene,
-                $answerReport
+                $answerReport ?? []
             );
         }
+
+        $activity['ext']['lastExerciseResult'] = empty($answerRecord) ? null : $testpaperWrapper->wrapTestpaperResult(
+            $answerRecord,
+            $assessment,
+            $answerScene,
+            $answerReport ?? []
+        );
 
         return $activity['ext'];
     }
@@ -358,7 +364,7 @@ class CourseTaskMedia extends AbstractResource
         if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
             $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
 
-            return  $this->getResourceFacadeService()->getPlayerContext($file);
+            return $this->getResourceFacadeService()->getPlayerContext($file);
         }
 
         list($result, $error) = $this->getPlayerService()->getDocFilePlayer($doc, $ssl);
@@ -377,7 +383,7 @@ class CourseTaskMedia extends AbstractResource
         $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
 
         if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
-            return  $this->getResourceFacadeService()->getPlayerContext($file);
+            return $this->getResourceFacadeService()->getPlayerContext($file);
         }
 
         list($result, $error) = $this->getPlayerService()->getPptFilePlayer($ppt, $ssl);

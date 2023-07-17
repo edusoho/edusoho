@@ -1051,6 +1051,7 @@ course.plan_setup.finish_rule: %taskName%完成规则
 course.plan_setup.finish_rule.depend_on_finish_condition: 由%taskName%完成条件决定
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，%taskName%才算完成
 course.plan_setup.finish_rule.nothing: 无限制
+course.plan_setup.finish_rule.indefinite.duration: 无限期
 course.plan_setup.member_numbers: 课程人数
 course.plan_setup.member_numbers.view_rule_btn: 【查看直播课程细则】
 course.plan_setup.summary: 计划简介
@@ -2186,22 +2187,32 @@ course.plan_task.activity_manage.testpaper.default_comment3: 你真棒！我为�
 course.plan_task.activity_manage.testpaper.default_comment4: 有点松懈了吧？继续加油吧！
 course.plan_task.activity_manage.testpaper.default_comment5: 用心、专注、坚持，你能做的更好的！
 course.plan_task.activity_manage.testpaper.comment_remove: 移除
+course.plan_task.activity_manage.testpaper.validity.period.of.examination: 考试有效期
+course.plan_task.activity_manage.testpaper.please.enter.endtime: 请输入结束时间
+course.plan_task.activity_manage.testpaper.number.of.remaining.tests: 剩余考试次数
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 course.plan_task.activity_manage.testpaper.times: 考试次数
 course.plan_task.activity_manage.testpaper.mode: 考试模式
 course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
-course.plan_task.activity_manage.testpaper.times.once: 单次
+course.plan_task.activity_manage.testpaper.times.once: 限制
 course.plan_task.activity_manage.testpaper.times.always: 不限
 course.plan_task.activity_manage.testpaper.show_answer: 合格之后显示答案和解析
 course.plan_task.activity_manage.testpaper.show_answer_tips: 考试次数不限时，设置生效。
 course.plan_task.activity_manage.testpaper.redo_interval: 重考间隔
+course.plan_task.activity_manage.testpaper.topic.out.of.order: 题目乱序  
+course.plan_task.activity_manage.testpaper.option.out.of.order: 选项乱序  
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。
-course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制。
+course.plan_task.activity_manage.testpaper.question.disorder: 开启后，学员进入考试时，对应大题内所有小题将随机排序
+course.plan_task.activity_manage.testpaper.option.disorder: 开启后，学员进入考试时，所有选择题选项将随机排序
+course.plan_task.activity_manage.testpaper.rangedate: "<div>1、不限：没有时间限制，永久有效；</div>2、指定日期区间：有固定开始和结束时间，在此以为外的时间无法参加考试；<div>3、指定开始时间：仅指定开始时间，不指定结束时间，永久有效，未到开始时间无法参加考试；</div>4、考试完成创建后，再次编辑时，考试有效期模式无法修改"
+course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制，考试次数设置为1次时，“重考间隔”不生效。
 course.plan_task.activity_manage.testpaper.time_length_tips: 0分钟，表示无限制
 course.plan_task.activity_manage.testpaper.time: 考试时间
 course.plan_task.activity_manage.testpaper.time_tips: 学员只能在时间范围内参加考试！
 course.plan_task.activity_manage.testpaper.mode.always: 不限
 course.plan_task.activity_manage.testpaper.mode.realTime: 指定
+course.plan_task.activity_manage.testpaper.mode.realTimeRange: 指定日期区间
+course.plan_task.activity_manage.testpaper.mode.startTime: 指定开始时间
 course.plan_task.activity_manage.testpaper.mode.require_credit: 限制学分
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 参加此次考试所需的学分，０分则不限制。
 course.plan_task.activity_manage.testpaper.pass: 分数达标
@@ -2209,6 +2220,7 @@ course.plan_task.activity_manage.testpaper.score_pass: 考试合格
 course.plan_task.activity_manage.homework.score_pass: 作业合格
 course.plan_task.activity_manage.testpaper.finish_tip: 提示：若任务完成条件选择了“考试合格”，则学员的考试分数必须达到上一步中设置的“合格分数”，才能完成此任务。
 course.plan_task.activity_manage.testpaper.not_start_tips: 考试未开始
+course.plan_task.activity_manage.testpaper.end_tips: 考试已结束
 course.plan_task.activity_manage.testpaper.start_time_tips: 开考时间
 course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始\n 请在%startTime%之后再来
 course.plan_task.activity_manage.testpaper.total_question: >
@@ -2220,7 +2232,8 @@ course.plan_task.activity_manage.testpaper.answer: >
 course.plan_task.activity_manage.testpaper.once_trance: >
   仅有<span class="color-danger">一次</span>考试机会。
 course.plan_task.activity_manage.testpaper.limit_tips: 
-  <span class="color-gray">温馨提示：考试一旦开始，倒计时结束后将自动交卷。</span>
+  温馨提示：考试一旦开始，倒计时结束后将自动交卷。
+course.plan_task.activity_manage.testpaper.enddate.limit_tips: 温馨提示：当前考试已结束，请点击按钮查看考试结果
 course.plan_task.activity_manage.testpaper.limit_tips1: 
   <span class="color-gray">温馨提示：本次考试不自动交卷，实时显示考试用时，中途离开不计时。</span>
 course.plan_task.activity_manage.testpaper.one_limit_tips: 
@@ -10839,6 +10852,12 @@ exception.testpaper.modify_committed_testpaper: 已经交卷的试卷不能修�
 exception.testpaper.doing: 试卷还未提交
 exception.testpaper.redo_interval_exist: 教师设置了重考间隔
 exception.testpaper.forbidden_delete_open_testpaper: 已发布试卷无法删除
+exception.testpaper.do_times_more_than_100: 考试次数超过最大值
+exception.testpaper.start_time_earlier_than_current: 考试已开始，无法修改
+exception.testpaper.end_time_earlier_than_start_time: 结束时间不能早于或等于开始时间
+exception.testpaper.no_do_times: 当前考试次数已用完，请重新选择考试
+exception.testpaper.end_of_exam: 当前考试已结束，请重新选择考试
+exception.testpaper.end_time_earlier_than_current_time: 结束时间不能早于当前时间
 exception.homework.not_found: 作业不存在
 exception.homework.draft: 该作业未发布，如有疑问请联系老师！
 exception.homework.closed: 该作业已关闭，如有疑问请联系老师！

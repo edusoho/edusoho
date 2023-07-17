@@ -9,6 +9,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Review\Service\ReviewService;
 use Biz\System\Service\LogService;
 use Biz\Testpaper\Job\AssessmentAutoSubmitJob;
+use Biz\Testpaper\TestpaperException;
 use Biz\User\UserException;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
@@ -18,6 +19,7 @@ use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\BaseService;
@@ -29,6 +31,7 @@ use Ramsey\Uuid\Uuid;
 class AnswerServiceImpl extends BaseService implements AnswerService
 {
     const EXAM_MODE_SIMULATION = 0;
+
     public function startAnswer($answerSceneId, $assessmentId, $userId)
     {
         if (!$this->getAnswerSceneService()->canStart($answerSceneId, $userId)) {
@@ -43,8 +46,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'admission_ticket' => $this->generateAdmissionTicket(),
             'exam_mode' => $answerScene['exam_mode'],
             'limited_time' => $answerScene['limited_time'],
-
+            'is_items_seq_random' => $answerScene['is_items_seq_random'],
+            'is_options_seq_random' => $answerScene['is_options_seq_random'],
         ]);
+        $this->getAnswerRandomSeqService()->createAnswerRandomSeqRecordIfNecessary($answerRecord['id']);
 
         $this->dispatch('answer.started', $answerRecord);
 
@@ -61,6 +66,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     public function submitAnswer(array $assessmentResponse)
     {
         $assessmentResponse = $this->validateAssessmentResponse($assessmentResponse);
+        $assessmentResponse = $this->getAnswerRandomSeqService()->restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
         $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
         $assessmentReport = $this->getAssessmentService()->review(
             $assessmentResponse['assessment_id'],
@@ -135,6 +141,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $assessmentResponse = ['answer_record_id' => $answerRecordId, 'assessment_id' => $answerRecord['assessment_id']];
         $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
+        $answerQuestionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($answerQuestionReports, $answerRecordId);
         $sectionResponses = ArrayToolkit::group($answerQuestionReports, 'section_id');
         foreach ($sectionResponses as $sectionId => &$sectionResponse) {
             $itemResponses = ArrayToolkit::group($sectionResponse, 'item_id');
@@ -154,8 +161,124 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         // 自动交卷时认为用时即考试限制时间
         $assessmentResponse['used_time'] = $answerScene['limited_time'] * 60;
 
-
         return $assessmentResponse;
+    }
+
+    public function batchAutoSubmit($answerSceneId, $assessmentId, $userIds)
+    {
+        if (empty($userIds)) {
+            return;
+        }
+
+        $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
+        if (empty($answerScene)) {
+            return;
+        }
+        if (empty($answerScene['end_time']) || $answerScene['end_time'] >= time()) {
+            return;
+        }
+
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        if (empty($assessment)) {
+            return;
+        }
+
+        $answerRecords = $this->batchCreateAnswerRecords($answerScene, $assessmentId, $userIds);
+
+        $answerReports = $this->batchCreateAnswerReports($assessmentId, $answerRecords);
+
+        $updateAnswerRecords = [];
+        $answerReports = array_column($answerReports, null, 'answer_record_id');
+        foreach ($answerRecords as $answerRecord) {
+            $updateAnswerRecords[] = [
+                'answer_report_id' => $answerReports[$answerRecord['id']]['id'],
+            ];
+        }
+        $this->getAnswerRecordService()->batchUpdateAnswerRecord(array_column($answerRecords, 'id'), $updateAnswerRecords);
+
+        $this->batchCreateAnswerQuestionReports($assessmentId, $answerReports);
+    }
+
+    protected function batchCreateAnswerRecords($answerScene, $assessmentId, $userIds)
+    {
+        $newAnswerRecords = [];
+        $newAnswerRecord = [
+            'answer_scene_id' => $answerScene['id'],
+            'assessment_id' => $assessmentId,
+            'exam_mode' => $answerScene['exam_mode'],
+            'limited_time' => $answerScene['limited_time'],
+            'status' => 'finished',
+            'begin_time' => $answerScene['end_time'],
+            'end_time' => $answerScene['end_time'],
+            'created_time' => $answerScene['end_time'],
+            'updated_time' => $answerScene['end_time'],
+        ];
+        foreach ($userIds as $userId) {
+            $newAnswerRecord['user_id'] = $userId;
+            $newAnswerRecords[] = $newAnswerRecord;
+        }
+
+        $this->getAnswerRecordService()->batchCreateAnswerRecords($newAnswerRecords);
+
+        return $this->getAnswerRecordService()->search(['answer_scene_id' => $answerScene['id'], 'user_ids' => $userIds], [], 0, count($userIds), ['id', 'user_id', 'answer_scene_id']);
+    }
+
+    protected function batchCreateAnswerReports($assessmentId, $answerRecords)
+    {
+        $newAnswerReports = [];
+        $newAnswerReport = [
+            'assessment_id' => $assessmentId,
+            'total_score' => 0,
+            'score' => 0,
+            'subjective_score' => 0,
+            'objective_score' => 0,
+            'right_rate' => 0,
+            'right_question_count' => 0,
+            'review_time' => time(),
+        ];
+
+        foreach ($answerRecords as $answerRecord) {
+            $newAnswerReport['answer_record_id'] = $answerRecord['id'];
+            $newAnswerReport['user_id'] = $answerRecord['user_id'];
+            $newAnswerReport['answer_scene_id'] = $answerRecord['answer_scene_id'];
+            $newAnswerReports[] = $newAnswerReport;
+        }
+
+        $this->getAnswerReportService()->batchCreateAnswerReports($newAnswerReports);
+        $answerRecordIds = array_column($answerRecords, 'id');
+
+        return $this->getAnswerReportService()->search(['answer_record_ids' => $answerRecordIds], [], 0, count($answerRecordIds), ['id', 'answer_record_id']);
+    }
+
+    protected function batchCreateAnswerQuestionReports($assessmentId, $answerReports)
+    {
+        $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
+        if (empty($assessment)) {
+            return;
+        }
+
+        $answerQuestionReports = [];
+        $newAnswerQuestionReport = [
+            'assessment_id' => $assessmentId,
+            'status' => 'no_answer'
+        ];
+
+        foreach ($answerReports as $answerReport) {
+            $newAnswerQuestionReport['answer_record_id'] = $answerReport['answer_record_id'];
+            foreach ($assessment['sections'] as $section) {
+                $newAnswerQuestionReport['section_id'] = $section['id'];
+                foreach ($section['items'] as $item) {
+                    $newAnswerQuestionReport['item_id'] = $item['id'];
+                    foreach ($item['questions'] as $question) {
+                        $newAnswerQuestionReport['question_id'] = $question['id'];
+                        $newAnswerQuestionReport['identify'] = $answerReport['answer_record_id'] . '_' . $question['id'];
+                        $answerQuestionReports[] = $newAnswerQuestionReport;
+                    }
+                }
+            }
+        }
+
+        $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
     }
 
     protected function sumTotalScore(array $answerQuestionReports)
@@ -227,7 +350,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             foreach ($sectionReport['item_reports'] as $itemReport) {
                 foreach ($itemReport['question_reports'] as $questionReport) {
                     $answerQuestionReports[] = [
-                        'identify' => $assessmentReport['answer_record_id'].'_'.$questionReport['id'],
+                        'identify' => $assessmentReport['answer_record_id'] . '_' . $questionReport['id'],
                         'total_score' => empty($questionReport['total_score']) ? 0.0 : $questionReport['total_score'],
                         'answer_record_id' => $assessmentReport['answer_record_id'],
                         'assessment_id' => $assessmentReport['id'],
@@ -254,7 +377,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             foreach ($sectionResponse['item_responses'] as $itemResponse) {
                 foreach ($itemResponse['question_responses'] as $questionResponse) {
                     $answerQuestionReports[] = [
-                        'identify' => $assessmentResponse['answer_record_id'].'_'.$questionResponse['question_id'],
+                        'identify' => $assessmentResponse['answer_record_id'] . '_' . $questionResponse['question_id'],
                         'answer_record_id' => $assessmentResponse['answer_record_id'],
                         'assessment_id' => $assessmentResponse['assessment_id'],
                         'section_id' => $sectionResponse['section_id'],
@@ -511,7 +634,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $questionReport,
         $reviewQuestionReport,
         $assessmentQuestion
-    ) {
+    )
+    {
         if (empty($reviewQuestionReport) || empty($assessmentQuestion)) {
             return [0, AnswerQuestionReportService::STATUS_NOANSWER];
         }
@@ -653,6 +777,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     public function saveAnswer(array $assessmentResponse)
     {
         $assessmentResponse = $this->validateAssessmentResponse($assessmentResponse);
+        $assessmentResponse = $this->getAnswerRandomSeqService()->restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
 
         try {
             $this->beginTransaction();
@@ -672,7 +797,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             //判断模拟考试应该取当前时间减去开始时间
             $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
-            if($answerRecord['exam_mode'] == self::EXAM_MODE_SIMULATION) {
+            if ($answerRecord['exam_mode'] == self::EXAM_MODE_SIMULATION) {
                 $assessmentResponse['used_time'] = time() - $answerRecord['created_time'];
             }
 
@@ -728,7 +853,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             throw $this->createInvalidArgumentException('assessment_id invalid.');
         }
 
-        if (!in_array($answerRecord['status'],[AnswerService::ANSWER_RECORD_STATUS_DOING,AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
+        if (!in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_DOING, AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
             throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
         }
 
@@ -746,14 +871,15 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $assessmentResponse;
     }
 
-    protected function registerAutoSubmitJob($answerRecord){
+    protected function registerAutoSubmitJob($answerRecord)
+    {
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
 
-        if (empty($answerScene['limited_time'])){
+        if (empty($answerScene['limited_time'])) {
             return;
         }
 
-        if($answerRecord['exam_mode'] != self::EXAM_MODE_SIMULATION) {
+        if ($answerRecord['exam_mode'] != self::EXAM_MODE_SIMULATION) {
             return;
         }
         $autoSubmitJob = [
@@ -820,6 +946,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getItemService()
     {
         return $this->biz->service('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return AnswerRandomSeqService
+     */
+    protected function getAnswerRandomSeqService()
+    {
+        return $this->biz->service('ItemBank:Answer:AnswerRandomSeqService');
     }
 
     /**
