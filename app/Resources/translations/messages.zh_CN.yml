@@ -3277,7 +3277,7 @@ user.settings.security.oauth_bind.success: 帐号绑定成功
 user.settings.security.oauth_bind.exist_account: 该第三方帐号已经被其他帐号绑定，不能重复绑定。
 user.settings.security.oauth_bind.authentication_fail: 授权失败，请重试绑定。
 user.settings.security.oauth_bind.duplicate_bind: 您已经绑定了该第三方网站的帐号，不能重复绑定。
-
+user.settings.security.oauth_bind.state.authentication_fail: 令牌校验失败。
 
 # 个人设置模块-基础信息
 user.settings.basic_info: 基础信息
@@ -4504,7 +4504,7 @@ my.teaching.open_course.material.upload_time: 上传于
 my.teaching.question_bank.create: 创建题库
 my.teaching.question_bank.instructions: 使用说明
 my.teaching.question_bank.list: 题库列表
-my.teaching.question_bank.name_tip: 最多输入30个字符
+my.teaching.question_bank.name_tip: 最多输入100个字符
 my.teaching.question_bank.info: 题库信息
 my.teaching.question_bank.exercise_set: 题库练习设置
 my.teaching.question_bank.name_label: 题库名称
