@@ -119,7 +119,10 @@ export default {
     userServiceAgreement: '用户服务',
     privacyAgreemen: '隐私协议',
     viewAfterLogin: '登录后查看更多信息',
-    loginNow: '立即登录'
+    loginNow: '立即登录',
+		agreeAndSignin: '同意并登录',
+		agreeAndRegister: '同意并注册',
+		PleaseReadAgreeAndTerms: '请阅读并同意以下条款'
   },
   toast: {
     switchSucceeded: '切换成功',

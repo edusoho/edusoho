@@ -118,7 +118,10 @@ export default {
     userServiceAgreement: 'User Service Agreement',
     privacyAgreemen: 'Privacy Agreement',
     viewAfterLogin: 'View after login',
-    loginNow: 'Login now'
+    loginNow: 'Login now',
+		agreeAndSignin: 'Agree and sign in',
+		agreeAndRegister: 'Agree and register',
+		PleaseReadAgreeAndTerms: 'Please read and agree to the following terms'
   },
   toast: {
     switchSucceeded: 'Switch succeeded',

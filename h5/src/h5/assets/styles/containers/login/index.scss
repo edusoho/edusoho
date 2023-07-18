@@ -66,6 +66,7 @@
 		left: 0;
 		margin-top: vw(30);
 		padding: vw(10) 0;
+		padding-bottom: vw(28);
 		// border-bottom: vw(1) solid #D8D8D8;
 		.van-field__body {
 			padding-bottom: vw(15);
@@ -75,6 +76,30 @@
 		&.van-cell:not(:last-child)::after {
 			left: 0;
 		}
+	}
+
+	&-register {
+		width: 100%;
+		text-align: left;
+	}
+
+	&-pop {
+		overflow: hidden;
+		text-align: center;
+	}
+
+	&-pop-title {
+		margin: 0 auto;
+		margin-top: vw(16);
+		margin-bottom: vw(24);
+		color: #000;
+		font-size: vw(14);
+		line-height: vw(22);
+	}
+
+	&-pop-btn {
+		width: 92%;
+		border-radius: 2px;
 	}
 
 	&-account {

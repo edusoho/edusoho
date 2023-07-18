@@ -51,24 +51,50 @@ export default {
       }, 1000);
     },
     handleSubmit(cb, cb2 = undefined) {
-      if (this.btnDisable) {
-        return;
-      }
-      this.fastLogin({
-        mobile: this.userinfo.mobile,
-        smsToken: this.userinfo.smsToken,
-        smsCode: this.userinfo.smsCode,
-        loginType: 'sms',
-        client: 'h5',
-      })
-        .then(res => cb(res))
-        .catch(err => {
-          if (cb2) {
-            cb2(err.message);
-          }
-          Toast.fail(err.message);
-        });
+			if(this.agreement) {
+				if (this.btnDisable) {
+					return;
+				}
+				this.fastLogin({
+					mobile: this.userinfo.mobile,
+					smsToken: this.userinfo.smsToken,
+					smsCode: this.userinfo.smsCode,
+					loginType: 'sms',
+					client: 'h5',
+				})
+				.then(res => cb(res))
+				.catch(err => {
+					if (cb2) {
+						cb2(err.message);
+					}
+					Toast.fail(err.message);
+				});
+
+				return
+			}
+			
+			this.popUpBottom = true;
     },
+		agreeSign(cb, cb2 = undefined) {
+			if (this.btnDisable) {
+				return;
+			}
+			this.fastLogin({
+				mobile: this.userinfo.mobile,
+				smsToken: this.userinfo.smsToken,
+				smsCode: this.userinfo.smsCode,
+				loginType: 'sms',
+				client: 'h5',
+			})
+			.then(res => cb (res))
+			.catch(err => {
+				if (cb2) {
+					cb2(err.message);
+				}
+				this.popUpBottom = false;
+				Toast.fail(err.message);
+			});
+		},
     handleSendSms() {
       if (this.userinfo.dragCaptchaToken === '') {
         this.$refs.dragComponent.initDragCaptcha();
