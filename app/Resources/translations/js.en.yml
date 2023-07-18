@@ -413,6 +413,10 @@ auth.register.password_required_error_hint: Please input password
 auth.mobile_captcha_required_error_hint: Please enter a verification code
 auth.mobile_captcha_error_hint: Verification code error
 
+user.login.read.agree.policy.and.user.terms: Please read and check the 《User Service Agreement》 and 《Privacy Policy》
+user.login.read.user.terms: Please read and check 《User Service Agreement》
+user.login.read.agree.policy: Please read and check the 《Privacy Policy》
+
 card.card_receive_success_hint: Learning card has been used, recharge%coinAmount%%coinName%  success, you can go to the [account center] - [my account] to check the situation.
 card.card_receive_failed_hint: Failed!
 

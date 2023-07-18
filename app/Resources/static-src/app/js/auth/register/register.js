@@ -290,7 +290,7 @@ export default class Register {
 
       if (!validator.form()) return;
 
-      if (inputCheckbox) {
+      if (inputCheckbox || inputCheckbox == undefined) {
         $registerFrom.submit();
 
         return;
