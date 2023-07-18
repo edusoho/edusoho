@@ -91,8 +91,10 @@ export default {
 				if (cb2) {
 					cb2(err.message);
 				}
-				this.popUpBottom = false;
 				Toast.fail(err.message);
+			})
+			.finally(() => {
+				this.popUpBottom = false;
 			});
 		},
     handleSendSms() {
