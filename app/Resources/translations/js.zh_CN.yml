@@ -359,6 +359,11 @@ auth.register.password_required_error_hint: 请输入密码
 auth.mobile_captcha_required_error_hint: 请输入验证码
 auth.mobile_captcha_error_hint: 验证码错误
 
+user.login.read.agree.policy.and.user.terms: 请阅读并勾选《用户服务协议》和《隐私政策》
+user.login.read.user.terms: 请阅读并勾选《用户服务协议》
+user.login.read.agree.policy: 请阅读并勾选《隐私政策》
+
+
 card.card_receive_success_hint: 学习卡已使用，充值%coinAmount%%coinName%成功，可前往【账户中心】-【我的账户】查看充值情况。
 card.card_receive_failed_hint: 失败!
 

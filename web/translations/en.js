@@ -358,6 +358,9 @@ t.add("auth.register.name_required_error_hint", "Please input username", "js", "
 t.add("auth.register.password_required_error_hint", "Please input password", "js", "en");
 t.add("auth.mobile_captcha_required_error_hint", "Please enter a verification code", "js", "en");
 t.add("auth.mobile_captcha_error_hint", "Verification code error", "js", "en");
+t.add("user.login.read.agree.policy.and.user.terms", "Please read and check the \u300aUser Service Agreement\u300b and \u300aPrivacy Policy\u300b", "js", "en");
+t.add("user.login.read.user.terms", "Please read and check \u300aUser Service Agreement\u300b", "js", "en");
+t.add("user.login.read.agree.policy", "Please read and check the \u300aPrivacy Policy\u300b", "js", "en");
 t.add("card.card_receive_success_hint", "Learning card has been used, recharge%coinAmount%%coinName%  success, you can go to the [account center] - [my account] to check the situation.", "js", "en");
 t.add("card.card_receive_failed_hint", "Failed!", "js", "en");
 t.add("classroom.cancel_refund_hint", "Do you really want to cancel your refund?", "js", "en");

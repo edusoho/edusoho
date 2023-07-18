@@ -63,7 +63,7 @@ $(".js-btn-login").click(event => {
 
   if (!validator.form()) return;
 
-  if (inputCheckbox) {
+  if (inputCheckbox || inputCheckbox == undefined) {
     $.post(
       $form.attr("action"),
       $.param(formData),

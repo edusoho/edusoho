@@ -298,6 +298,9 @@ t.add("auth.register.name_required_error_hint", "\u8bf7\u8f93\u5165\u5e10\u53f7"
 t.add("auth.register.password_required_error_hint", "\u8bf7\u8f93\u5165\u5bc6\u7801", "js", "zh_CN");
 t.add("auth.mobile_captcha_required_error_hint", "\u8bf7\u8f93\u5165\u9a8c\u8bc1\u7801", "js", "zh_CN");
 t.add("auth.mobile_captcha_error_hint", "\u9a8c\u8bc1\u7801\u9519\u8bef", "js", "zh_CN");
+t.add("user.login.read.agree.policy.and.user.terms", "\u8bf7\u9605\u8bfb\u5e76\u52fe\u9009\u300a\u7528\u6237\u670d\u52a1\u534f\u8bae\u300b\u548c\u300a\u9690\u79c1\u653f\u7b56\u300b", "js", "zh_CN");
+t.add("user.login.read.user.terms", "\u8bf7\u9605\u8bfb\u5e76\u52fe\u9009\u300a\u7528\u6237\u670d\u52a1\u534f\u8bae\u300b", "js", "zh_CN");
+t.add("user.login.read.agree.policy", "\u8bf7\u9605\u8bfb\u5e76\u52fe\u9009\u300a\u9690\u79c1\u653f\u7b56\u300b", "js", "zh_CN");
 t.add("card.card_receive_success_hint", "\u5b66\u4e60\u5361\u5df2\u4f7f\u7528\uff0c\u5145\u503c%coinAmount%%coinName%\u6210\u529f\uff0c\u53ef\u524d\u5f80\u3010\u8d26\u6237\u4e2d\u5fc3\u3011-\u3010\u6211\u7684\u8d26\u6237\u3011\u67e5\u770b\u5145\u503c\u60c5\u51b5\u3002", "js", "zh_CN");
 t.add("card.card_receive_failed_hint", "\u5931\u8d25!", "js", "zh_CN");
 t.add("classroom.cancel_refund_hint", "\u771f\u7684\u8981\u53d6\u6d88\u9000\u6b3e\u5417\uff1f", "js", "zh_CN");
