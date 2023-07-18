@@ -59,14 +59,16 @@
       >{{ $t(btnType[pathName]) }}</van-button
     >
 
-		<div v-if="userTerms || privacyPolicy" class="login-agree">
+    <div v-if="userTerms || privacyPolicy" class="login-agree">
       <van-checkbox
         v-model="agreement"
         :icon-size="16"
         checked-color="#408ffb"
       />
       {{ $t('tips.iHaveReadAndAgreeToThe') }}
-      <i v-if="userTerms" @click="lookUserTerms">《{{ $t('btn.userServiceAgreement') }}》</i>
+      <i v-if="userTerms" @click="lookUserTerms"
+        >《{{ $t('btn.userServiceAgreement') }}》</i
+      >
       <span v-if="userTerms && privacyPolicy">{{ $t('tips.and') }}</span>
       <span v-if="privacyPolicy">
         <i @click="lookPrivacyPolicy">《{{ $t('btn.privacyAgreemen') }}》</i>
@@ -87,23 +89,30 @@
         <div class="line"></div>
       </div> -->
 
-		<van-popup v-model="popUpBottom" class="login-pop" position="bottom" round :style="{ height: '30%' }" >
-			<div class="login-pop-title">{{ $t('btn.PleaseReadAgreeAndTerms') }}</div>
-			<div v-if="userTerms || privacyPolicy" class="login-agree">
-				<i v-if="userTerms" @click="lookPrivacyPolicy">《{{ $t('btn.userServiceAgreement') }}》</i>
+    <van-popup
+      v-model="popUpBottom"
+      class="login-pop"
+      position="bottom"
+      round
+      :style="{ height: '30%' }"
+    >
+      <div class="login-pop-title">{{ $t('btn.PleaseReadAgreeAndTerms') }}</div>
+      <div v-if="userTerms || privacyPolicy" class="login-agree">
+        <i v-if="userTerms" @click="lookPrivacyPolicy"
+          >《{{ $t('btn.userServiceAgreement') }}》</i
+        >
         <span v-if="privacyPolicy">
           <i @click="lookPrivacyPolicy">《{{ $t('btn.privacyAgreemen') }}》</i>
         </span>
-			</div>
-			<van-button
-				:disabled="btnDisable"
-				type="info"
-				class="primary-btn mb20 login-pop-btn"
-				@click="registerSign"
-				>{{ $t('btn.agreeAndRegister') }}</van-button
-			>
-		</van-popup>	
-
+      </div>
+      <van-button
+        :disabled="btnDisable"
+        type="info"
+        class="primary-btn mb20 login-pop-btn"
+        @click="registerSign"
+        >{{ $t('btn.agreeAndRegister') }}</van-button
+      >
+    </van-popup>
   </div>
 </template>
 <script>
@@ -164,10 +173,10 @@ export default {
       registerType,
       btnType,
       placeHolder,
-			userTerms: false, // 用户协议
+      userTerms: false, // 用户协议
       privacyPolicy: false, // 隐私协议
       agreement: false, // 是否勾选
-			popUpBottom:false, // 底部弹出层
+      popUpBottom: false, // 底部弹出层
     };
   },
   computed: {
@@ -182,9 +191,9 @@ export default {
       );
     },
   },
-	created() {
-		this.getPrivacySetting()
-	},
+  created() {
+    this.getPrivacySetting();
+  },
   mounted() {
     this.registerInfo.registerVisitId = window._VISITOR_ID;
   },
@@ -217,7 +226,7 @@ export default {
       this.handleSendSms();
     },
 
-		async getPrivacySetting() {
+    async getPrivacySetting() {
       this.registerSettings = await Api.getSettings({
         query: {
           type: 'user',
@@ -235,16 +244,16 @@ export default {
           Toast.fail(err.message);
         });
     },
-		// 获取隐私政策
+    // 获取隐私政策
     lookPrivacyPolicy() {
       window.location.href =
         window.location.origin + '/mapi_v2/School/getPrivacyPolicy';
     },
-		// 获取服务条款
-		lookUserTerms() {
-			window.location.href =
+    // 获取服务条款
+    lookUserTerms() {
+      window.location.href =
         window.location.origin + '/mapi_v2/School/getUserterms';
-		},
+    },
     handleSubmit() {
       const registerInfo = Object.assign({}, this.registerInfo);
       const password = registerInfo.encrypt_password;
@@ -271,7 +280,7 @@ export default {
           .then(res => {
             Toast.success({
               duration: 2000,
-              message: this.$t('toast.bindingSuccess')
+              message: this.$t('toast.bindingSuccess'),
             });
             this.afterLogin();
           })
@@ -281,33 +290,33 @@ export default {
         return;
       }
 
-			if(this.agreement){
-				// 手机注册
-				this.addUser(registerInfo)
-        .then(res => {
-          Toast.success({
-            duration: 2000,
-            message: this.$t('toast.registrationSuccess')
+      if (this.agreement) {
+        // 手机注册
+        this.addUser(registerInfo)
+          .then(res => {
+            Toast.success({
+              duration: 2000,
+              message: this.$t('toast.registrationSuccess'),
+            });
+            this.afterLogin();
+          })
+          .then(() => {
+            this.userLogin({
+              password,
+              username: mobile,
+            });
+          })
+          .catch(err => {
+            Toast.fail(err.message);
           });
-          this.afterLogin();
-        })
-        .then(() => {
-          this.userLogin({
-            password,
-            username: mobile,
-          });
-        })
-        .catch(err => {
-          Toast.fail(err.message);
-        });
 
-				return
-			} 
+        return;
+      }
 
-			this.popUpBottom = true;
+      this.popUpBottom = true;
     },
-		registerSign() {
-			const registerInfo = Object.assign({}, this.registerInfo);
+    registerSign() {
+      const registerInfo = Object.assign({}, this.registerInfo);
       const password = registerInfo.encrypt_password;
       const mobile = registerInfo.mobile;
       const encrypt = window.XXTEA.encryptToBase64(
@@ -317,14 +326,14 @@ export default {
 
       registerInfo.encrypt_password = encrypt;
 
-			// 手机注册
-			this.addUser(registerInfo)
+      // 手机注册
+      this.addUser(registerInfo)
         .then(res => {
-					this.agreement = true;
-					this.popUpBottom = false;
+          this.agreement = true;
+          this.popUpBottom = false;
           Toast.success({
             duration: 2000,
-            message: this.$t('toast.registrationSuccess')
+            message: this.$t('toast.registrationSuccess'),
           });
           this.afterLogin();
         })
@@ -336,9 +345,9 @@ export default {
         })
         .catch(err => {
           Toast.fail(err.message);
-					this.popUpBottom = false;
+          this.popUpBottom = false;
         });
-		},
+    },
 
     clickSmsBtn() {
       if (!this.dragEnable) {

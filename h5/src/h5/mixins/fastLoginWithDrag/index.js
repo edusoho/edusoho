@@ -51,52 +51,52 @@ export default {
       }, 1000);
     },
     handleSubmit(cb, cb2 = undefined) {
-			if(this.agreement) {
-				if (this.btnDisable) {
-					return;
-				}
-				this.fastLogin({
-					mobile: this.userinfo.mobile,
-					smsToken: this.userinfo.smsToken,
-					smsCode: this.userinfo.smsCode,
-					loginType: 'sms',
-					client: 'h5',
-				})
-				.then(res => cb(res))
-				.catch(err => {
-					if (cb2) {
-						cb2(err.message);
-					}
-					Toast.fail(err.message);
-				});
+      if (!this.agreement) {
+        this.popUpBottom = true;
 
-				return
-			}
-			
-			this.popUpBottom = true;
+        return;
+      }
+
+      if (this.btnDisable) {
+        return;
+      }
+      this.fastLogin({
+        mobile: this.userinfo.mobile,
+        smsToken: this.userinfo.smsToken,
+        smsCode: this.userinfo.smsCode,
+        loginType: 'sms',
+        client: 'h5',
+      })
+        .then(res => cb(res))
+        .catch(err => {
+          if (cb2) {
+            cb2(err.message);
+          }
+          Toast.fail(err.message);
+        });
     },
-		agreeSign(cb, cb2 = undefined) {
-			if (this.btnDisable) {
-				return;
-			}
-			this.fastLogin({
-				mobile: this.userinfo.mobile,
-				smsToken: this.userinfo.smsToken,
-				smsCode: this.userinfo.smsCode,
-				loginType: 'sms',
-				client: 'h5',
-			})
-			.then(res => cb (res))
-			.catch(err => {
-				if (cb2) {
-					cb2(err.message);
-				}
-				Toast.fail(err.message);
-			})
-			.finally(() => {
-				this.popUpBottom = false;
-			});
-		},
+    agreeSign(cb, cb2 = undefined) {
+      if (this.btnDisable) {
+        return;
+      }
+      this.fastLogin({
+        mobile: this.userinfo.mobile,
+        smsToken: this.userinfo.smsToken,
+        smsCode: this.userinfo.smsCode,
+        loginType: 'sms',
+        client: 'h5',
+      })
+        .then(res => cb(res))
+        .catch(err => {
+          if (cb2) {
+            cb2(err.message);
+          }
+          Toast.fail(err.message);
+        })
+        .finally(() => {
+          this.popUpBottom = false;
+        });
+    },
     handleSendSms() {
       if (this.userinfo.dragCaptchaToken === '') {
         this.$refs.dragComponent.initDragCaptcha();
