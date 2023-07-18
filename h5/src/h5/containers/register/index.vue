@@ -290,7 +290,10 @@ export default {
         return;
       }
 
-      if (this.agreement) {
+      if (
+        this.agreement ||
+        (this.privacyPolicy === false && this.userTerms === false)
+      ) {
         // 手机注册
         this.addUser(registerInfo)
           .then(res => {

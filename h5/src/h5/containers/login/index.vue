@@ -195,7 +195,10 @@ export default {
         });
     },
     onSubmit(data) {
-      if (this.agreement) {
+      if (
+        this.agreement ||
+        (this.privacyPolicy === false && this.userTerms === false)
+      ) {
         this.userLogin({
           username: this.username,
           password: this.password,
