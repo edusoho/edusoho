@@ -9,7 +9,7 @@ interface AnswerService
     const ANSWER_RECORD_STATUS_PAUSED = 'paused';
 
     const ANSWER_RECORD_STATUS_REVIEWING = 'reviewing';
-    
+
     const ANSWER_RECORD_STATUS_FINISHED = 'finished';
 
     /**
@@ -64,7 +64,7 @@ interface AnswerService
      * @return AssessmentResponse
      */
     public function getAssessmentResponseByAnswerRecordId($answerRecordId);
-    
+
     /**
      * 手动批阅
      *
@@ -82,4 +82,6 @@ interface AnswerService
     public function reviseFillAnswer($answerRecordId, $fillData);
 
     public function buildAutoSubmitAssessmentResponse($answerRecordId);
+
+    public function batchAutoSubmit($answerSceneId, $assessmentId, $userIds);
 }

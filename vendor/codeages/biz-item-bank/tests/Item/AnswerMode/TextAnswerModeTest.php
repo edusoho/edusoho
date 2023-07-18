@@ -48,15 +48,15 @@ class TextAnswerModeTest extends IntegrationTestCase
         ];
         $answer = ['李白', '青莲居士|谪仙人'];
 
-        $result = $this->getAnswerMode()->review($responsePoints, $answer, []);
+        $result = $this->getAnswerMode()->review($responsePoints, $answer, ['', '']);
         $this->assertEquals('wrong', $result['result']);
         $this->assertEquals(['none', 'none'], $result['response_points_result']);
 
-        $result = $this->getAnswerMode()->review($responsePoints, $answer, ['李白']);
+        $result = $this->getAnswerMode()->review($responsePoints, $answer, ['李白', '']);
         $this->assertEquals('wrong', $result['result']);
         $this->assertEquals(['right', 'none'], $result['response_points_result']);
 
-        $result = $this->getAnswerMode()->review($responsePoints, $answer, ['青莲居士']);
+        $result = $this->getAnswerMode()->review($responsePoints, $answer, ['青莲居士', '']);
         $this->assertEquals('wrong', $result['result']);
         $this->assertEquals(['wrong', 'none'], $result['response_points_result']);
 

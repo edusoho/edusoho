@@ -8,10 +8,17 @@ use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Activity\Type\Testpaper;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
 class AnswerRecord extends AbstractResource
 {
+    const VALID_PERIOD_MODE_NO_LIMIT = 0;
+
+    const VALID_PERIOD_MODE_RANGE = 1;
+
+    const VALID_PERIOD_MODE_ONLY_START = 2;
+
     public function get(ApiRequest $request, $id)
     {
         $answerRecord = $this->getAnswerRecordService()->get($id);
@@ -30,6 +37,7 @@ class AnswerRecord extends AbstractResource
         if ('open' !== $assessment['status']) {
             throw AssessmentException::ASSESSMENT_NOTOPEN();
         }
+        $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
@@ -60,8 +68,26 @@ class AnswerRecord extends AbstractResource
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerScene['id']);
         $answerScene['fromType'] = $activity['mediaType'];
         $answerScene['reviewType'] = 'testpaper' == $activity['mediaType'] || 'score' == $activity['finishType'] ? 'score' : 'true_false';
+        $answerScene['isLimitDoTimes'] = empty($answerScene['do_times']) ? '0' : '1';
+        $countTestpaperRecord = $this->getAnswerRecordService()->count(['answer_scene_id' => $answerScene['id'], 'user_id' => $this->getCurrentUser()->getId()]);
+        $answerScene['remainderDoTimes'] = max($answerScene['do_times'] - ($countTestpaperRecord ?: 0), 0);
+        $answerScene['validPeriodMode'] = $this->preValidPeriodMode($answerScene);
+        $answerScene['canDoAgain'] = $this->getAnswerSceneService()->canStart($answerScene['id'], $this->getCurrentUser()->getId()) ? '1' : '0';
 
         return $answerScene;
+    }
+
+    protected function preValidPeriodMode($scene)
+    {
+        if (!empty($scene['start_time']) && !empty($scene['end_time'])) {
+            $validPeriodMode = self::VALID_PERIOD_MODE_RANGE;
+        } elseif (!empty($scene['start_time']) && empty($scene['end_time'])) {
+            $validPeriodMode = self::VALID_PERIOD_MODE_ONLY_START;
+        } else {
+            $validPeriodMode = self::VALID_PERIOD_MODE_NO_LIMIT;
+        }
+
+        return $validPeriodMode;
     }
 
     protected function wrapperAnswerRecord($answerRecord)
@@ -120,6 +146,14 @@ class AnswerRecord extends AbstractResource
     protected function getAnswerSceneService()
     {
         return $this->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerRandomSeqService
+     */
+    protected function getAnswerRandomSeqService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRandomSeqService');
     }
 
     protected function getAssessmentService()
