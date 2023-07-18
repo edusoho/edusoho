@@ -13,6 +13,7 @@ export default class Register {
     this.inEventMobile();
     this.initMobileMsgVeriCodeSendBtn();
     this.initFieldVisitId();
+		this.submitFrom();
   }
 
   dragEvent() {
@@ -200,9 +201,6 @@ export default class Register {
         dragCaptchaToken: {
           required: true,
         },
-        agree_policy: {
-          required: true,
-        },
       },
       messages: {
         nickname: {
@@ -219,9 +217,6 @@ export default class Register {
         },
         dragCaptchaToken: {
           required: Translator.trans('auth.register.drag_captcha_tips')
-        },
-        agree_policy: {
-          required: Translator.trans('validate.valid_policy_input.message'),
         },
         password: {
           required: Translator.trans('auth.register.password_required_error_hint'),
@@ -259,4 +254,30 @@ export default class Register {
       }
     });
   }
+	
+	submitFrom() {
+		const registerFrom = $('#register-form')
+		$('#register-btn').on('click', () =>{
+			const validator = registerFrom.validate();
+			const inputCheckbox = $('input[name="agree_policy"]').prop("checked");
+
+			if (validator.form() && inputCheckbox) {
+				registerFrom.submit();
+			} else if(validator.form() && !inputCheckbox) {
+				// $("#modal").modal({backdrop:'static'}); // 点击遮罩关闭弹框
+				$('#modal').load('/register/agreement');
+    		$('#modal').modal('show');
+				$('#modal').on('click', '.js-agree-register', () => {
+					$('input[name="agree_policy"]').prop('checked', true);
+					$('#modal').modal('hide');
+					registerFrom.submit();
+				})
+				$('#modal').on('click', '.js-close-modal', () => {
+					$('#modal').modal('hide');
+				})
+			}
+
+		})
+	}
+
 }

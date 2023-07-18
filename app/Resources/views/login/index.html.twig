@@ -57,6 +57,33 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
 
+			<div class="mbl">
+				{% if setting('auth.user_terms') == 'opened' and setting('auth.privacy_policy') == 'opened' %}
+					<div class="form-group mbl">
+						<div class="controls">
+							<input type="checkbox" name="agree_policy"> {{ 'user.register.read_agree'|trans }}
+							<a href="{{ path('user_terms') }}" target="_blank">《{{'user.register.user_service_protocol'|trans}}》</a>
+							{{ 'site.default.and'|trans }}
+							<a href="{{ path('privacy_policy') }}" target="_blank">《{{'user.register.privacy_policy'|trans}}》</a>
+						</div>
+					</div>
+				{% elseif setting('auth.user_terms') == 'opened' %}
+					<div class="form-group mbl">
+						<div class="controls">
+							<input type="checkbox" name="agree_policy"> {{ 'user.register.read_agree'|trans }}
+							<a href="{{ path('user_terms') }}" target="_blank">《{{'user.register.user_service_protocol'|trans}}》</a>
+						</div>
+					</div>
+				{% elseif setting('auth.privacy_policy') == 'opened' %}
+					<div class="form-group mbl">
+						<div class="controls">
+							<input type="checkbox" name="agree_policy"> {{ 'user.register.read_agree'|trans }}
+							<a href="{{ path('privacy_policy') }}" target="_blank">《{{'user.register.privacy_policy'|trans}}》</a>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+
       <div class="mbl">
         <a class="link-primary" href="{{ path('password_reset') }}">{{ 'user.login.find_password'|trans }}</a>
         <span class="color-gray mhs">|</span>

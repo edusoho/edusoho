@@ -38,26 +38,28 @@ $('#login-form').keypress(function (e) {
 });
 
 $('.js-btn-login').click((event) => {
-  if (validator.form()) {
-    $(event.currentTarget).button('loadding');
-    var username = $form.find('#login_username').val();
-    var password = $form.find('#login_password').val();
+	const inputCheckbox = $('input[name="agree_policy"]').prop("checked");
+	$(event.currentTarget).button('loadding');
+	const username = $form.find('#login_username').val();
+	const password = $form.find('#login_password').val();
 
-    const encryptedUsername = window.XXTEA.encryptToBase64(username, 'EduSoho');
-    const encryptedPassword = window.XXTEA.encryptToBase64(password, 'EduSoho');
+	const encryptedUsername = window.XXTEA.encryptToBase64(username, 'EduSoho');
+	const encryptedPassword = window.XXTEA.encryptToBase64(password, 'EduSoho');
 
-    var formData = $form.serializeArray();
+	const formData = $form.serializeArray();
 
-    var fieldsToUpdate = {
-      '_username': encryptedUsername,
-      '_password': encryptedPassword
-    };
+	const fieldsToUpdate = {
+		'_username': encryptedUsername,
+		'_password': encryptedPassword
+	};
 
-    formData.forEach(function(field) {
-      if (fieldsToUpdate.hasOwnProperty(field.name)) {
-        field.value = fieldsToUpdate[field.name];
-      }
-    });
+	formData.forEach(function(field) {
+		if (fieldsToUpdate.hasOwnProperty(field.name)) {
+			field.value = fieldsToUpdate[field.name];
+		}
+	});
+
+  if (validator.form() && inputCheckbox) {
 
     if (validator.form()) {
       $.post($form.attr('action'), $.param(formData), function (response) {
@@ -68,7 +70,31 @@ $('.js-btn-login').click((event) => {
         drag.initDragCaptcha();
       });
     }
-  }
+
+  } else if (validator.form() && !inputCheckbox) {
+		// $("#modal").modal({backdrop:'static'}); // 点击遮罩关闭弹框
+		$('#modal').load('/login/agreement');
+		$('#modal').modal('show');
+
+		$('#modal').on('click', '.js-agree-register', () => {
+			$('input[name="agree_policy"]').prop('checked', true);
+			$('#modal').modal('hide');
+
+			$.post($form.attr('action'), $.param(formData), function (response) {
+        window.location.replace('/');
+      }, 'json').error(function (jqxhr, textStatus, errorThrown) {
+        const json = jQuery.parseJSON(jqxhr.responseText);
+        $form.find('.alert-danger').html(Translator.trans(json.message)).show();
+        drag.initDragCaptcha();
+      });
+
+		})
+
+		$('#modal').on('click', '.js-close-modal', () => {
+			$('#modal').modal('hide');
+		})	
+	}
+	
 });
 
 $('.receive-modal').click();
