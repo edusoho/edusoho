@@ -227,7 +227,7 @@ export default {
     },
 
     async getPrivacySetting() {
-      this.registerSettings = await Api.getSettings({
+      await Api.getSettings({
         query: {
           type: 'user',
         },
