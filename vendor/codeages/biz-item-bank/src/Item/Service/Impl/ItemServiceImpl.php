@@ -76,7 +76,6 @@ class ItemServiceImpl extends BaseService implements ItemService
 
             $this->getItemBankService()->updateItemNumAndQuestionNum($bankId);
             $this->getItemCategoryService()->buildItemNumAndQuestionNumBybankId($bankId);
-//            $this->dispatch('item.import', $savedItems);
             $this->dispatchEvent('item.import', new Event($savedItems));
             $this->commit();
 
@@ -363,6 +362,11 @@ class ItemServiceImpl extends BaseService implements ItemService
     public function countQuestionsByCategoryId($categoryId)
     {
         return $this->getItemDao()->countItemQuestionNumByCategoryId($categoryId);
+    }
+
+    public function searchQuestions($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        return $this->getQuestionDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
     protected function createQuestions($itemId, $questions)

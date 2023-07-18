@@ -41,7 +41,7 @@ class TaskController extends BaseController
             return $this->createMessageResponse('info', '请先登录', '', 3, $this->generateUrl('login'));
         }
         try {
-            $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
+            $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
             if (!empty($activity['ext']) && !empty($activity['ext']['file'])) {
                 $media = $activity['ext']['file'];
@@ -110,7 +110,7 @@ class TaskController extends BaseController
             //需要8.3.8重构
             $number = explode('-', $task['number']);
             if (array_key_exists(1, $number)) {
-                $task['number'] = $chapter['published_number'] . '-' . $number[1];
+                $task['number'] = $chapter['published_number'].'-'.$number[1];
             }
         }
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
@@ -323,6 +323,7 @@ class TaskController extends BaseController
             [
                 'task' => $task,
                 'preview' => $preview,
+                'doAgain' => $request->query->get('doAgain', false),
             ]
         );
     }
@@ -474,7 +475,7 @@ class TaskController extends BaseController
         }
 
         $config = $this->getActivityConfig();
-        $action = $config[$task['type']]['controller'] . ':finishCondition';
+        $action = $config[$task['type']]['controller'].':finishCondition';
 
         return $this->forward($action, ['activity' => $activity]);
     }
@@ -524,8 +525,8 @@ class TaskController extends BaseController
      * @param  $taskId
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Exception
      *
+     * @throws \Exception
      */
     protected function handleAccessDeniedException(\Exception $exception, Request $request, $taskId)
     {
@@ -580,7 +581,7 @@ class TaskController extends BaseController
 
     private function freshTaskLearnStat(Request $request, $taskId)
     {
-        $key = 'task.' . $taskId;
+        $key = 'task.'.$taskId;
         $session = $request->getSession();
         $taskStore = $session->get($key, []);
         $taskStore['start'] = time();
@@ -591,7 +592,7 @@ class TaskController extends BaseController
 
     private function validTaskLearnStat(Request $request, $taskId)
     {
-        $key = 'task.' . $taskId;
+        $key = 'task.'.$taskId;
         $session = $request->getSession();
         $taskStore = $session->get($key);
 
