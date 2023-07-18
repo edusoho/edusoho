@@ -51,29 +51,32 @@ export default {
       }, 1000);
     },
     handleSubmit(cb, cb2 = undefined) {
-      if (!this.agreement) {
-        this.popUpBottom = true;
+      if (
+        this.agreement ||
+        (this.privacyPolicy === false && this.userTerms === false)
+      ) {
+        if (this.btnDisable) {
+          return;
+        }
+        this.fastLogin({
+          mobile: this.userinfo.mobile,
+          smsToken: this.userinfo.smsToken,
+          smsCode: this.userinfo.smsCode,
+          loginType: 'sms',
+          client: 'h5',
+        })
+          .then(res => cb(res))
+          .catch(err => {
+            if (cb2) {
+              cb2(err.message);
+            }
+            Toast.fail(err.message);
+          });
 
         return;
       }
 
-      if (this.btnDisable) {
-        return;
-      }
-      this.fastLogin({
-        mobile: this.userinfo.mobile,
-        smsToken: this.userinfo.smsToken,
-        smsCode: this.userinfo.smsCode,
-        loginType: 'sms',
-        client: 'h5',
-      })
-        .then(res => cb(res))
-        .catch(err => {
-          if (cb2) {
-            cb2(err.message);
-          }
-          Toast.fail(err.message);
-        });
+      this.popUpBottom = true;
     },
     agreeSign(cb, cb2 = undefined) {
       if (this.btnDisable) {
