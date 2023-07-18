@@ -1,14 +1,13 @@
-
 export default {
   lang: {
     language: '简体中文',
     zh: '简体中文',
-    en: 'English'
+    en: 'English',
   },
   footer: {
     discover: '发现',
     learn: '学习',
-    me: '我的'
+    me: '我的',
   },
   e: {
     freeForMembers: '会员免费',
@@ -50,7 +49,7 @@ export default {
     moreCourse: '更多好课等您加入',
     moreClass: '更多班级等您加入',
     moreQuestionBanks: '更多题库等您加入',
-    browse: '人浏览'
+    browse: '人浏览',
   },
   title: {
     me: '我的',
@@ -101,7 +100,7 @@ export default {
     faceAuthentication: '人脸认证',
     groupFreeLearningCourse: '进群免费学习课程',
     productPage: '商品页',
-    preview: '预览'
+    preview: '预览',
   },
   btn: {
     save: '保存',
@@ -119,7 +118,10 @@ export default {
     userServiceAgreement: '用户服务',
     privacyAgreemen: '隐私协议',
     viewAfterLogin: '登录后查看更多信息',
-    loginNow: '立即登录'
+    loginNow: '立即登录',
+    agreeAndSignin: '同意并登录',
+    agreeAndRegister: '同意并注册',
+    PleaseReadAgreeAndTerms: '请阅读并同意以下条款',
   },
   toast: {
     switchSucceeded: '切换成功',
@@ -142,7 +144,7 @@ export default {
     setPassword: '请设置密码（5-20位字符）',
     verificationCode: '请输入验证码',
     mobileNumberOrEmail: '请输入手机号或邮箱号',
-    dragTheSliderToCompleteThePuzzle: '拖动左边滑块完成上方拼图'
+    dragTheSliderToCompleteThePuzzle: '拖动左边滑块完成上方拼图',
   },
   enter: {
     coupon: '兑换卡券',
@@ -156,7 +158,7 @@ export default {
   },
   tips: {
     iHaveReadAndAgreeToThe: '我已阅读并同意',
-    and: '和'
+    and: '和',
   },
   setting: {
     heads: '头像',
@@ -166,7 +168,7 @@ export default {
     dropOutCancelConfirm: '确定要退出登录吗？',
     fileTypeOnlySupportsImageFormat: '文件类型仅支持图片格式',
     fileSizeMustNotExceed2MB: '文件大小不得超过 2 MB',
-    modifySuccess: '修改成功'
+    modifySuccess: '修改成功',
   },
   vip: {
     title: '会员中心',
@@ -200,7 +202,7 @@ export default {
     notMemberPleaseUpgrade: '您还不是该等级会员请升级',
     upgrade: '升级',
     cny: '元',
-    piece: '个'
+    piece: '个',
   },
   certificate: {
     title: '我的证书',
@@ -218,7 +220,7 @@ export default {
     certificateNumber: '证书编号',
     getTime2: '发证日期',
     effectiveTime2: '有效日期',
-    longPressToSaveThePicture: '长按图片保存'
+    longPressToSaveThePicture: '长按图片保存',
   },
   wrongQuestion: {
     title: '我的错题本',
@@ -239,9 +241,9 @@ export default {
     iKnow: '我知道了',
     singleChoice: '单选题',
     fill: '填空题',
-    uncertainChoice: "不定项选择题",
-    choice: "多选题",
-    determine: "判断题",
+    uncertainChoice: '不定项选择题',
+    choice: '多选题',
+    determine: '判断题',
     answerResult: '做题结果',
     yourAnswer: '你的答案',
     correctAnswer: '正确答案',
@@ -278,7 +280,7 @@ export default {
     correctRate: '正确率',
     timeSpentOnTheQuestion: '做题用时',
     minutes: '分钟',
-    viewParsed: '查看解析'
+    viewParsed: '查看解析',
   },
   search: {
     title: '搜索',
@@ -286,7 +288,7 @@ export default {
     course: '课程',
     classroom: '班级',
     questionBank: '题库',
-    noFound: '抱歉，没有找到相关内容'
+    noFound: '抱歉，没有找到相关内容',
   },
   learning: {
     title: '我的学习',
@@ -295,7 +297,7 @@ export default {
     questionBank: '我的题库',
     noCourses: '暂无课程',
     noClass: '暂无班级',
-    noQuestionBank: '暂无题库'
+    noQuestionBank: '暂无题库',
   },
   more: {
     membersClass: '会员班级',
@@ -313,7 +315,7 @@ export default {
     noClass: '暂无班级',
     all: '全部',
     course: '课程',
-    live: '直播'
+    live: '直播',
   },
   goods: {
     title: '商品详情',
@@ -395,10 +397,10 @@ export default {
     pm: '下午',
     night: '晚上',
     toLearn: '去学习',
-    buy: '立即购买'
+    buy: '立即购买',
   },
   courseLearning: {
-    times: "次",
+    times: '次',
     leftTime: '距离考试：',
     hourUnit: '时',
     minuteUnit: '分',
@@ -476,17 +478,19 @@ export default {
     congratulationsOnCompletion: '恭喜完成',
     nextLesson: '下一课',
     openingTime: '开考时间',
-		testStartTime: '考试开始时间',
-		examDeadline: '考试截止时间',
+    testStartTime: '考试开始时间',
+    examDeadline: '考试截止时间',
     examinationDuration: '考试时长',
     noLimitTips: '温馨提示：考试一旦开始，倒计时结束后将自动交卷',
-    noLimitTips1: '温馨提示：本次考试不自动交卷，实时显示考试用时，中途离开不计时',
+    noLimitTips1:
+      '温馨提示：本次考试不自动交卷，实时显示考试用时，中途离开不计时',
     oneTips: '温馨提示：仅有一次考试机会，考试一旦开始，倒计时结束后将自动交卷',
-    oneTips1: '温馨提示：仅有一次考试机会，本次考试不自动交卷，实时显示考试用时，中途离开不计时',
+    oneTips1:
+      '温馨提示：仅有一次考试机会，本次考试不自动交卷，实时显示考试用时，中途离开不计时',
     minutes: '分钟',
     second: '秒',
     testTips: '考试须知',
-		examOver: '考试已结束',
+    examOver: '考试已结束',
     testName: '试卷名称',
     noRestrictions: '不限制',
     unlimited: '不限',
@@ -494,8 +498,8 @@ export default {
     numberOfTopics: '题目数量',
     fullScoreOfTestPaper: '总分',
     validityPeriodOfExamination: '考试有效期',
-		numberOfRemainingTests: '剩余考试次数',
-		unlimitedDuration: '无期限',
+    numberOfRemainingTests: '剩余考试次数',
+    unlimitedDuration: '无期限',
     topic: '题',
     total: '共计',
     viewResult: '查看成绩',
@@ -504,9 +508,9 @@ export default {
     iKnow: '我知道了',
     singleChoice: '单选题',
     fill: '填空题',
-    uncertainChoice: "不定项选择题",
-    choice: "多选题",
-    determine: "判断题",
+    uncertainChoice: '不定项选择题',
+    choice: '多选题',
+    determine: '判断题',
     essay: '问答题',
     material: '材料题',
     thisScore: '本次得分',
@@ -577,11 +581,11 @@ export default {
     continueLearning: '继续学习',
     startLearning: '开始学习',
     continueExam: '继续考试',
-		examOverExam: '当前考试已结束，请重新选择考试',
+    examOverExam: '当前考试已结束，请重新选择考试',
     continueAnswer: '继续答题',
     examTotalTips: '考试用时',
     examTotalTime: '考试用时已达 {number}分钟',
-		examNotStart: '当前考试暂未开始'
+    examNotStart: '当前考试暂未开始',
   },
   classLearning: {
     intor: '班级介绍',
@@ -611,7 +615,7 @@ export default {
     free: '免费',
     personStudying: '{number}人在学',
     viewReport: '查看报告',
-    continue: '继续做题'
+    continue: '继续做题',
   },
   filters: {
     free: '免费',
@@ -630,7 +634,7 @@ export default {
     vipJoinForfree: '会员免费加入',
     totalOfTwoCourses: '共 {number} 门课程',
     answerRate: '答题率',
-    accuracy: '掌握率'
+    accuracy: '掌握率',
   },
   order: {
     coupon: '优惠券',
@@ -646,13 +650,13 @@ export default {
     noCouponsAvailable: '无可用优惠券',
     available: '张可用',
     longTermEffective: '长期有效',
-    noOrderRecord: '暂无订单记录'
+    noOrderRecord: '暂无订单记录',
   },
   coupon: {
     allCourse: '全部课程适用',
     allClass: '全部班级适用',
     allGoods: '全部商品适用',
-    allMember: '全部会员适用'
+    allMember: '全部会员适用',
   },
   attachment: {
     waiting: '等待转码',
@@ -660,12 +664,12 @@ export default {
     error: '转码失败',
     other: '请前往PC网校下载!',
     disableVideo: '该浏览器不支持视频播放，请使用微信或APP',
-    disableVideo2: '该浏览器不支持视频播放，请使用APP'
+    disableVideo2: '该浏览器不支持视频播放，请使用APP',
   },
   marketingPay: {
     amountLabel: '支付金额',
     orderSnLabel: '订单编号',
     acceptLabel: '收款方',
-    payNow: '立即支付'
-  }
+    payNow: '立即支付',
+  },
 };
