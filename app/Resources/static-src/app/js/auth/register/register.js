@@ -282,7 +282,8 @@ export default class Register {
 
   submitFrom() {
     const $registerFrom = $("#register-form");
-		const $modal = $("#modal")
+    const $modal = $("#modal");
+
     $("#register-btn").on("click", () => {
       const validator = $registerFrom.validate();
       const inputCheckbox = $('input[name="agree_policy"]').prop("checked");
@@ -294,7 +295,7 @@ export default class Register {
 
         return;
       }
-			
+
       // $("#modal").modal({backdrop:'static'}); // 点击遮罩关闭弹框
       $modal.load("/register/agreement");
       $modal.modal("show");
@@ -308,7 +309,6 @@ export default class Register {
       $modal.on("click", ".js-close-modal", () => {
         $modal.modal("hide");
       });
-
     });
   }
 }
