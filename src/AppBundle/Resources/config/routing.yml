@@ -72,6 +72,10 @@ login_parse_face_token:
     path: '/login/face_token/parse/{token}'
     defaults:
         _controller: 'AppBundle:Login:parseFaceToken'
+login_agreement:
+    path: '/login/agreement'
+    defaults:
+        _controller: 'AppBundle:Login:agreement'
 login_bind:
     path: '/login/bind/{type}'
     defaults:
@@ -216,6 +220,10 @@ register_analysis:
     path: '/register/analysis'
     defaults:
         _controller: 'AppBundle:Register:analysis'
+register_agreement:
+    path: '/register/agreement'
+    defaults:
+        _controller: 'AppBundle:Register:agreement'
 register_captcha_num:
     path: '/captcha_num'
     defaults:

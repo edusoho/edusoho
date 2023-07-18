@@ -2666,6 +2666,9 @@ user.init.password_placeholder: 'Please input your password'
 user.init.password_placeholder_again: 'Please input your password again'
 user.init.password.confirm.password: 'Confirm'
 user.init.password.submit.password.loading: 'submitting...'
+register.read.and.agree: Read and agree
+register.agree.and.register: Agree and register
+register.agree.and.sign.in: Agree and sign in
 
 user.oauth.login_by_email: 'Email'
 user.oauth.login_by_mobile: 'Mobile'
