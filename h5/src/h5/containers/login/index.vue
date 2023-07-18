@@ -157,7 +157,7 @@ export default {
   methods: {
     ...mapActions(['userLogin']),
     async getPrivacySetting() {
-      this.registerSettings = await Api.getSettings({
+      await Api.getSettings({
         query: {
           type: 'user',
         },
