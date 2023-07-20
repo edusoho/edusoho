@@ -32,6 +32,8 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
             'admission_ticket' => ['required'],
             'exam_mode' => ['integer'],
             'limited_time' => ['integer'],
+            'is_items_seq_random' => ['integer'],
+            'is_options_seq_random' => ['integer'],
         ]);
 
         if ($answerRecord['user_id'] <= 0) {
@@ -110,6 +112,16 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
     public function countGroupByAnswerSceneId($conditions)
     {
         return $this->getAnswerRecordDao()->countGroupByAnswerSceneId($conditions);
+    }
+
+    public function batchCreateAnswerRecords($answerRecords)
+    {
+        return $this->getAnswerRecordDao()->batchCreate($answerRecords);
+    }
+
+    public function batchUpdateAnswerRecord($ids, $updateColumnsList)
+    {
+        return $this->getAnswerRecordDao()->batchUpdate($ids, $updateColumnsList);
     }
 
     /**

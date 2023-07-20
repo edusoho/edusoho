@@ -75,7 +75,7 @@ class AssessmentServiceTest extends IntegrationTestCase
                     'items' => [
                         [
                             'id' => 1,
-                            'questions' => [['id' => 2, 'score' => 2]],
+                            'questions' => [['id' => 2, 'score' => 2, 'answer_mode' => 'choice']],
                         ],
                     ],
                 ],
@@ -209,7 +209,7 @@ class AssessmentServiceTest extends IntegrationTestCase
                         [
                             'id' => 1,
                             'seq' => 1,
-                            'questions' => [['id' => 2, 'score' => 2]],
+                            'questions' => [['id' => 2, 'score' => 2, 'answer_mode' => 'choice']],
                         ],
                     ],
                 ],
@@ -576,11 +576,15 @@ class AssessmentServiceTest extends IntegrationTestCase
 
     protected function mockItemCategoryService()
     {
-        $this->mockObjectIntoBiz('ItemBank:Item:ItemCategoryService', [[
-            'functionName' => 'getItemCategory',
-            'functionName' => 'getItemCategory',
-            'returnValue' => ['id' => 1],
-        ]]);
+        $this->mockObjectIntoBiz('ItemBank:Item:ItemCategoryService', [
+            [
+                'functionName' => 'getItemCategory',
+                'returnValue' => ['id' => 1],
+            ],
+            [
+                'functionName' => 'buildItemNumAndQuestionNumBybankId',
+            ]
+        ]);
     }
 
     /**

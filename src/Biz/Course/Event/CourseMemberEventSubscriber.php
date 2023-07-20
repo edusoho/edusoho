@@ -18,6 +18,7 @@ use Biz\User\Service\MessageService;
 use Biz\User\Service\StatusService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -94,6 +95,12 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $course = $event->getSubject();
         $classroomId = $event->getArgument('classroomId');
+        $classroomMemberCount = $this->getClassroomService()->countMembersByClassroomId($classroomId, []);
+        if ($classroomMemberCount > 2000) {
+            $this->createClassroomCourseBatchBecomeStudentsJob($classroomId, $course['id']);
+
+            return;
+        }
         $members = $this->getClassroomService()->findClassroomStudents($classroomId, 0, PHP_INT_MAX);
         if (empty($members)) {
             return;
@@ -103,6 +110,22 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         }
         $memberIds = ArrayToolkit::column($members, 'userId');
         $this->getCourseMemberService()->batchBecomeStudents($course['id'], $memberIds, $classroomId);
+    }
+
+    private function createClassroomCourseBatchBecomeStudentsJob($classroomId, $courseId)
+    {
+        $startJob = [
+            'name' => 'ClassroomCourseBatchBecomeStudentsJob'.'_'.$classroomId.'_'.$courseId,
+            'expression' => time() - 100,
+            'class' => 'Biz\Course\Job\ClassroomCourseBatchBecomeStudentsJob',
+            'misfire_threshold' => 10 * 60,
+            'args' => [
+                'classroomId' => $classroomId,
+                'start' => 0,
+                'courseId' => $courseId,
+            ],
+        ];
+        $this->getSchedulerService()->register($startJob);
     }
 
     public function onTaskUpdateSync(Event $event)
@@ -383,5 +406,13 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     protected function getTaskDao()
     {
         return $this->getBiz()->dao('Task:TaskDao');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 }

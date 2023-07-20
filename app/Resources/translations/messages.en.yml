@@ -916,6 +916,7 @@ course.plan_setup.finish_rule: '%taskName% rules'
 course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by %taskName% finish conditions'
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the %taskName%'
 course.plan_setup.finish_rule.nothing: 'No limitation'
+course.plan_setup.finish_rule.indefinite.duration: Indefinite duration
 course.plan_setup.member_numbers: Students
 course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
 course.plan_setup.summary: Summary
@@ -1882,36 +1883,48 @@ course.plan_task.activity_manage.testpaper.default_comment3: You are awesome! I 
 course.plan_task.activity_manage.testpaper.default_comment4: A little slack, right? Keep going!
 course.plan_task.activity_manage.testpaper.default_comment5: With heart, focus and persistence, you can do better!
 course.plan_task.activity_manage.testpaper.comment_remove: Remove
+course.plan_task.activity_manage.testpaper.validity.period.of.examination: Validity period of examination
+course.plan_task.activity_manage.testpaper.please.enter.endtime: Please enter the end time
+course.plan_task.activity_manage.testpaper.number.of.remaining.tests: Number of remaining tests
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
-course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Hour, No limitation.'
+course.plan_task.activity_manage.testpaper.time_limit_tips: 0 hours, indicates no limit. When the test count is set to 1, Retest Interval does not take effect.
 course.plan_task.activity_manage.testpaper.time_length_tips: 0 Minute, No limitation.
 course.plan_task.activity_manage.testpaper.times: 'Number of test'
 course.plan_task.activity_manage.testpaper.mode: 'Mode of test'
 course.plan_task.activity_manage.testpaper.start_time: 'Test start time'
-course.plan_task.activity_manage.testpaper.times.once: Single
+course.plan_task.activity_manage.testpaper.times.once: Restrict
 course.plan_task.activity_manage.testpaper.times.always: 'No limitation'
 course.plan_task.activity_manage.testpaper.show_answer: Show the answer and analysis after passing
 course.plan_task.activity_manage.testpaper.show_answer_tips: The setting takes effect when the number of exams is not limited.
 course.plan_task.activity_manage.testpaper.redo_interval: 'Retry interval'
+course.plan_task.activity_manage.testpaper.topic.out.of.order: Topic out of order  
+course.plan_task.activity_manage.testpaper.option.out.of.order: Option out of order  
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 'Retry Time Interval: Start time after completion of approval. '
+course.plan_task.activity_manage.testpaper.question.disorder: After this is enabled, when students enter the exam, all the small questions within the corresponding big question will be randomly sorted
+course.plan_task.activity_manage.testpaper.option.disorder: When turned on, all multiple choice options will be randomly ordered when students enter the exam
+course.plan_task.activity_manage.testpaper.rangedate: "<div>1. unlimited: no time limit, permanent validity;</div>2. the specified date interval: there is a fixed start and end time, outside this time can not participate in the exam;<div>3. specify the start time: only specify the start time, do not specify the end time, permanently valid, not to the start time can not participate in the test;</div>4. after the test is created, the test validity mode cannot be modified when editing again"
 course.plan_task.activity_manage.testpaper.comment_tips: 'Scoring interval setting rules: 1. The scoring interval includes the lower limit and upper limit of the interval. 2. When the student score is greater than or equal to the lower limit of the interval or less than the upper limit of the interval, the comments of the interval will be automatically displayed. 3. If there are overlapping score ranges, the comments ranked at the top in the comment list will be displayed first.'
 course.plan_task.activity_manage.testpaper.time: Time
 course.plan_task.activity_manage.testpaper.time_tips: 'Students can only take the exam within the time frame.'
 course.plan_task.activity_manage.testpaper.mode.always: 'No limitation'
 course.plan_task.activity_manage.testpaper.mode.realTime: Specify
+course.plan_task.activity_manage.testpaper.mode.realTimeRange: Specified date interval
+course.plan_task.activity_manage.testpaper.mode.startTime: Specify start time
 course.plan_task.activity_manage.testpaper.mode.require_credit: 'Limit credits'
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credits required to take the test, 0 is no limitation'
 course.plan_task.activity_manage.testpaper.pass: 'Pass mark'
 course.plan_task.activity_manage.testpaper.score_pass: 'Pass Score'
 course.plan_task.activity_manage.homework.score_pass: 'Pass Score'
 course.plan_task.activity_manage.testpaper.not_start_tips: 'The exam does not start'
+course.plan_task.activity_manage.testpaper.end_tips: The examination is over
 course.plan_task.activity_manage.testpaper.start_time_tips: 'Test start time'
 course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not start, please come back at %startTime%.'
 course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points</span>.'
 course.plan_task.activity_manage.testpaper.pass_score: "pass score is <span class=\"color-primary\">%finishScore% points</span>.\n"
 course.plan_task.activity_manage.testpaper.answer: 'Please answer within <span class = "color-primary">%limitedTime% minutes</span>.'
 course.plan_task.activity_manage.testpaper.limit_tips: 
-  '<span class="color-gray">Reminder: Once the test starts, the test will be handed in automatically after the countdown is over.</span>'
+  'Reminder: Once the test starts, the test will be handed in automatically after the countdown is over.'
+course.plan_task.activity_manage.testpaper.enddate.limit_tips: 'Reminder: The current exam has ended, please click the button to view the test results'
 course.plan_task.activity_manage.testpaper.limit_tips1: 
   '<span class="color-gray">Reminder: This test will not be handed in automatically, and the time spent on the exam will be displayed in real time, and the time will not be counted if you leave halfway.</span>'
 course.plan_task.activity_manage.testpaper.one_limit_tips: 
@@ -2666,6 +2679,9 @@ user.init.password_placeholder: 'Please input your password'
 user.init.password_placeholder_again: 'Please input your password again'
 user.init.password.confirm.password: 'Confirm'
 user.init.password.submit.password.loading: 'submitting...'
+register.read.and.agree: Read and agree
+register.agree.and.register: Agree and register
+register.agree.and.sign.in: Agree and sign in
 
 user.oauth.login_by_email: 'Email'
 user.oauth.login_by_mobile: 'Mobile'
@@ -2844,6 +2860,7 @@ user.settings.security.oauth_bind.success: Bind oauth account successfully
 user.settings.security.oauth_bind.exist_account: The oauth account had beend bind.
 user.settings.security.oauth_bind.authentication_fail: Authentication fail
 user.settings.security.oauth_bind.duplicate_bind: You had bind it, donnot do again.
+user.settings.security.oauth_bind.state.authentication_fail: state authentication fail.
 user.settings.basic_info: 'Basic info'
 user.settings.basic_info.content_title: 'Basic info'
 user.settings.basic_info.occupation: Occupation
@@ -9408,6 +9425,7 @@ exception.coupon.over_batch_limit: Exceeding the batch total limit
 exception.lesson.not_found: Lesson is not exist
 exception.open_course_live_ticket.not_found: Open Course Live Ticket is not exist
 exception.lesson.parameter_missing: Missing class number
+
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 exception.task.not_found: Task is not exist
@@ -9527,6 +9545,12 @@ exception.testpaper.modify_committed_testpaper: The test paper that has been sub
 exception.testpaper.doing: The test paper has not been submitted
 exception.testpaper.redo_interval_exist: Teacher set retry interval
 exception.testpaper.forbidden_delete_open_testpaper: Opne testpaper can not be deleted
+exception.testpaper.do_times_more_than_100: Exam frequency exceeds the maximum value
+exception.testpaper.start_time_earlier_than_current: The exam has started and cannot be modified
+exception.testpaper.end_time_earlier_than_start_time: The end time cannot be earlier than or equal to the start time
+exception.testpaper.no_do_times: The current exam count has been used up, please reselect the exam
+exception.testpaper.end_of_exam: The current exam has ended, please reselect the exam
+exception.testpaper.end_time_earlier_than_current_time: The end time cannot be earlier than the current time
 exception.uploadfile.file_not_found: file does not exist
 exception.uploadfile.forbidden_manage_file: No rights to manage resources
 exception.uploadfile.error_status: Incorrect state

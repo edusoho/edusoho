@@ -69,6 +69,7 @@ class SystemInitializer
         $this->_initStorageSetting();
         $this->_initCouponSetting();
         $this->_initCloudSmsSetting();
+        $this->_initUgcContentAuditSetting();
     }
 
     public function _initCustom()
@@ -277,6 +278,19 @@ class SystemInitializer
         ];
 
         $this->getSettingService()->set('cloud_sms', $default);
+
+        $this->output->writeln(' ...<info>成功</info>');
+    }
+
+    private function _initUgcContentAuditSetting()
+    {
+        $this->output->write('  初始化放刷弹窗设置');
+
+        $default = [
+            'enable_anti_brush_captcha' => '1',
+        ];
+
+        $this->getSettingService()->set('ugc_content_audit', $default);
 
         $this->output->writeln(' ...<info>成功</info>');
     }

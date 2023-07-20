@@ -359,6 +359,11 @@ auth.register.password_required_error_hint: 请输入密码
 auth.mobile_captcha_required_error_hint: 请输入验证码
 auth.mobile_captcha_error_hint: 验证码错误
 
+user.login.read.agree.policy.and.user.terms: 请阅读并勾选《用户服务协议》和《隐私政策》
+user.login.read.user.terms: 请阅读并勾选《用户服务协议》
+user.login.read.agree.policy: 请阅读并勾选《隐私政策》
+
+
 card.card_receive_success_hint: 学习卡已使用，充值%coinAmount%%coinName%成功，可前往【账户中心】-【我的账户】查看充值情况。
 card.card_receive_failed_hint: 失败!
 
@@ -716,8 +721,15 @@ intro.confirm_hint: 完成
 
 
 validate.required.message: 请输入%display%
+validate.valid_enter.retest.interval: 重考间隔
+course.plan_task.activity_manage.testpaper.time_limit: 考试时长
+validate.valid_enter_a_positive.integer: 请输入1至100的正整数
+validate.valid_rangetime.required: 请选择日期区间
+validate.valid_starttime.required: 请选择开始时间
+validate.valid_endtime.required: 请选择结束时间
 validate.valid_email_input.message: 请输入有效的电子邮件地址
 validate.valid_url_input.message: 请输入有效的网址
+activity.testpaper_manage.required.number: 请至少输入一位数字
 validate.valid_date_input.message: 请输入有效的日期
 validate.valid_date_iso_input.message: 请输入有效的日期 (YYYY-MM-DD)
 validate.valid_number_input.message: 请输入有效的数字
@@ -805,7 +817,7 @@ validate.check_password_high.message: 8-32位英文、数字、符号，同时�
 validate.custom_integer.message: 请输入正确的整数
 validate.int.message: 最多9位整数
 validate.float.message: 最多两位小数，整数位不超过8位！
-
+validate.endTime.validity: 当前考试已结束，请重新选择考试
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录

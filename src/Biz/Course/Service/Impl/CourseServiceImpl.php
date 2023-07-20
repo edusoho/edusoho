@@ -1192,6 +1192,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
+            //监控此处是否存在异常
+            $this->getLogService()->info('course', 'sortCourseItems', $e->getMessage(), [$courseId, $ids]);
             throw $e;
         }
     }

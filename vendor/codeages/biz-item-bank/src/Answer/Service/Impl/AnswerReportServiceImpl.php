@@ -7,6 +7,7 @@ use Codeages\Biz\ItemBank\Answer\Dao\AnswerReportDao;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\BaseService;
@@ -168,8 +169,10 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
                 'revise' => empty($answerQuestionReports[$questionId]) ? [] : $answerQuestionReports[$questionId]['revise'],
             ];
         }
+        $questionReports = $this->sortPerArrayValue($questionReports, 'seq');
+        $questionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecordId);
 
-        return $this->sortPerArrayValue($questionReports, 'seq');
+        return $questionReports;
     }
 
     protected function sortPerArrayValue($arr, $attrName, $ascending = true)
@@ -218,6 +221,11 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         return $this->getAnswerReportDao()->batchUpdate($ids, $updateColumnsList);
     }
 
+    public function batchCreateAnswerReports($answerReports)
+    {
+        return $this->getAnswerReportDao()->batchCreate($answerReports);
+    }
+
     /**
      * @return \Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService
      */
@@ -248,6 +256,14 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
     protected function getAnswerQuestionReportService()
     {
         return $this->biz->service('ItemBank:Answer:AnswerQuestionReportService');
+    }
+
+    /**
+     * @return AnswerRandomSeqService
+     */
+    protected function getAnswerRandomSeqService()
+    {
+        return $this->biz->service('ItemBank:Answer:AnswerRandomSeqService');
     }
 
     /**
