@@ -86,6 +86,7 @@ class InitWebsiteCommand extends BaseCommand
         $user = $this->initUser($user);
         $this->logger('网校设置用户成功', $output);
 
+        $initializer->initRegisterSetting($user);
         $initializer->initFolders();
         $initializer->initLockFile();
         SystemCrontabInitializer::init();
@@ -162,7 +163,7 @@ class InitWebsiteCommand extends BaseCommand
             foreach ($checkTableResult as $i) {
                 return '创建数据库表结构失败，数据库内已存在表结构，请删除数据库后重试';
             }
-            $sqlFile = $this->getContainer()->getParameter('kernel.root_dir') . '/../web/install/edusoho.sql';
+            $sqlFile = $this->getContainer()->getParameter('kernel.root_dir').'/../web/install/edusoho.sql';
             $sql = file_get_contents($sqlFile);
             $result = $pdo->exec($sql);
             $pdo = null;
