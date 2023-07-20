@@ -80,8 +80,8 @@ class TaskServiceImpl extends BaseService implements TaskService
             $this->createNewException(TaskException::FORBIDDEN_CREATE_TASK());
         }
         $this->preCreateTaskCheck($fields);
-        $this->beginTransaction();
         try {
+            $this->beginTransaction();
             if (isset($fields['content'])) {
                 $fields['content'] = $this->purifyHtml($fields['content'], true);
             }
@@ -95,6 +95,9 @@ class TaskServiceImpl extends BaseService implements TaskService
             return $task;
         } catch (\Exception $exception) {
             $this->rollback();
+
+            //监控此处是否存在报错问题
+            $this->getLogService()->info('task', 'createTask', $exception->getMessage(), $fields);
             throw $exception;
         }
     }

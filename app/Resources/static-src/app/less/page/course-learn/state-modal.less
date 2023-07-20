@@ -1,50 +1,59 @@
 .task-state-modal {
+  padding: 24px;
+  background: url("@{img-src}testpaper/examination.instructions.png");
+  background-size: cover;
+  border-radius: 4px;
+
   .title {
-    text-align: center;
+    height: 28px;
+    line-height: 28px;
     font-size: 22px;
-    color: @gray-darker;
-    margin-bottom: 20px;
-    line-height: 1;
-    i {
-      font-size: 22px;
-      margin-right: 10px;
-    }
+    font-weight: 600;
+    margin-bottom: 24px;
   }
+
   .content {
     font-size: 12px;
-    background-color: #fafafa;
-    padding: 30px 52px;
+    background-color: #fff;
+    padding: 24px 24px;
+    border-radius: 4px;
+    box-shadow: 0px 4px 66px 0px rgba(30, 104, 167, 0.08);
 
     @media (max-width: 768px) {
       padding: 30px 20px;
     }
-    
-    text-align: center;
+
     .content-title {
       line-height: 1;
       font-size: 16px;
       color: @gray-darker;
       margin-bottom: 40px;
     }
+
     .content-progress {
       margin-bottom: 15px;
     }
   }
+
   &.task-state-modal-xs {
     padding: 6px 0;
+
     .title {
       font-size: 12px;
       text-align: left;
+
       i {
         font-size: 14px;
       }
     }
+
     .content {
       padding: 0;
       background-color: transparent;
       text-align: left;
       margin-bottom: 13px;
       color: @gray;
+
       .content-title {
         font-size: 12px;
         color: @gray-dark;
@@ -53,12 +62,18 @@
         font-weight: normal;
         border-bottom: 1px solid @border-color;
       }
+
       .content-progress {
         padding-bottom: 14px;
         border-bottom: 1px solid @border-color;
         margin-bottom: 0;
       }
     }
+  }
+
+  .footer-btn {
+    height: 38px;
+    line-height: 38px;
   }
 }
 
@@ -68,6 +83,7 @@
     padding-bottom: 0;
     text-align: center;
   }
+
   .modal-footer {
     border-top: 0;
     padding-top: 0;

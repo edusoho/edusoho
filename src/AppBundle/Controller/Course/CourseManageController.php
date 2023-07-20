@@ -647,7 +647,7 @@ class CourseManageController extends BaseController
                 'vipLevelId' => $data['vipLevelId'],
                 'supplierCode' => 'course',
                 'uniqueCode' => $course['id'],
-                'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['courseSetTitle'] . '-' . $course['title'],
+                'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['courseSetTitle'].'-'.$course['title'],
             ]);
         }
     }
@@ -834,14 +834,13 @@ class CourseManageController extends BaseController
         $teacherIds = [];
 
         if (!empty($teachers)) {
-
             foreach ($teachers as $teacher) {
                 $teacherIds[] = [
                     'id' => $teacher['userId'],
                     'isVisible' => $teacher['isVisible'],
                     'nickname' => $teacher['nickname'],
                     'avatar' => $this->get('web.twig.extension')->avatarPath($teacher, 'small'),
-                    'isCanceledTeacherRoles' => !in_array('ROLE_TEACHER',$indexedTeacherItems[$teacher['userId']]['roles']),
+                    'isCanceledTeacherRoles' => !in_array('ROLE_TEACHER', $indexedTeacherItems[$teacher['userId']]['roles']),
                 ];
             }
         }
@@ -911,7 +910,7 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(['success' => true]);
     }
 
-    public function checkEsProductCanDeleteAction(Request $request,$courseId)
+    public function checkEsProductCanDeleteAction(Request $request, $courseId)
     {
         $status = $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$courseId], 'course');
 
@@ -961,6 +960,7 @@ class CourseManageController extends BaseController
     {
         $ids = $request->request->get('ids', []);
         $ids = $this->getCourseService()->courseItemIdsHandle($courseId, $ids);
+
         $this->getCourseService()->sortCourseItems($courseId, $ids);
         $this->getCourseService()->sortLiveTasksWithLiveCourse($courseId, $ids);
 

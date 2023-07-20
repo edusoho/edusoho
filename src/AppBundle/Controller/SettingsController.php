@@ -68,7 +68,7 @@ class SettingsController extends BaseController
 
             if (abs(filesize($faceImg)) > 2 * 1024 * 1024 || abs(filesize($backImg)) > 2 * 1024 * 1024
                 || !FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)
-                || getimagesize($faceImg) == false || getimagesize($backImg) == false) {
+                || false == getimagesize($faceImg) || false == getimagesize($backImg)) {
                 $this->setFlashMessage('danger', 'user.settings.verification.photo_require_tips');
 
                 return $this->render('settings/approval.html.twig', [
@@ -1013,8 +1013,9 @@ class SettingsController extends BaseController
         $settings = $this->setting('login_bind');
         $config = ['key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']];
         $client = OAuthClientFactory::create($type, $config);
+        $credential = (string) $this->get('session')->get('login_bind.credential');
 
-        return $this->redirect($client->getAuthorizeUrl($callback));
+        return $this->redirect($client->getAuthorizeUrl($callback, $credential));
     }
 
     public function bindCallbackAction(Request $request, $type)
@@ -1030,14 +1031,25 @@ class SettingsController extends BaseController
 
         if (!empty($bind)) {
             $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.duplicate_bind');
-            goto response;
+
+            return $this->redirect($this->generateUrl('settings_binds'));
         }
 
         $code = $request->query->get('code');
 
         if (empty($code)) {
             $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.authentication_fail');
-            goto response;
+
+            return $this->redirect($this->generateUrl('settings_binds'));
+        }
+
+        //校验参数
+        $oAuthClient = $this->createOAuthClient($type);
+        $result = $oAuthClient->verifyCredential($request, $this->get('session')->get('login_bind.credential'));
+        if (!$result) {
+            $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.state.authentication_fail');
+
+            return $this->redirect($this->generateUrl('settings_binds'));
         }
 
         $callbackUrl = $this->generateUrl(
@@ -1045,12 +1057,15 @@ class SettingsController extends BaseController
             ['type' => $type],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
+
         try {
-            $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
+            $token = $oAuthClient->getAccessToken($code, $callbackUrl);
         } catch (\Exception $e) {
             $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.authentication_fail');
-            goto response;
+
+            return $this->redirect($this->generateUrl('settings_binds'));
         }
+
         if ('weixinweb' == $type) {
             $this->getWeChatService()->freshOpenAppWeChatUserWhenLogin($this->getCurrentUser(), $token);
         }
@@ -1059,13 +1074,12 @@ class SettingsController extends BaseController
 
         if (!empty($bind)) {
             $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.exist_account');
-            goto response;
+
+            return $this->redirect($this->generateUrl('settings_binds'));
         }
 
         $this->getUserService()->bindUser($type, $token['userId'], $user['id'], $token);
         $this->setFlashMessage('success', 'user.settings.security.oauth_bind.success');
-
-        response:
 
         return $this->redirect($this->generateUrl('settings_binds'));
     }

@@ -487,6 +487,11 @@ class RegisterController extends BaseController
         return $this->render('register/analysis.html.twig', []);
     }
 
+    public function agreementAction()
+    {
+        return $this->render('register/agreement.html.twig');
+    }
+
     public function captchaAction(Request $request)
     {
         $imgBuilder = new CaptchaBuilder();
