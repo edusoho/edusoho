@@ -2679,6 +2679,9 @@ user.init.password_placeholder: 'Please input your password'
 user.init.password_placeholder_again: 'Please input your password again'
 user.init.password.confirm.password: 'Confirm'
 user.init.password.submit.password.loading: 'submitting...'
+register.read.and.agree: Read and agree
+register.agree.and.register: Agree and register
+register.agree.and.sign.in: Agree and sign in
 
 user.oauth.login_by_email: 'Email'
 user.oauth.login_by_mobile: 'Mobile'
@@ -2857,6 +2860,7 @@ user.settings.security.oauth_bind.success: Bind oauth account successfully
 user.settings.security.oauth_bind.exist_account: The oauth account had beend bind.
 user.settings.security.oauth_bind.authentication_fail: Authentication fail
 user.settings.security.oauth_bind.duplicate_bind: You had bind it, donnot do again.
+user.settings.security.oauth_bind.state.authentication_fail: state authentication fail.
 user.settings.basic_info: 'Basic info'
 user.settings.basic_info.content_title: 'Basic info'
 user.settings.basic_info.occupation: Occupation
@@ -3863,7 +3867,7 @@ my.teaching.open_course.material.upload_time: 'Uploaded At'
 my.teaching.question_bank.create: Create
 my.teaching.question_bank.list: Question Bank List
 my.teaching.question_bank.instructions: Instructions
-my.teaching.question_bank.name_tip: Enter up to 30 characters
+my.teaching.question_bank.name_tip: Enter up to 100 characters
 my.teaching.question_bank.info: Bank Info
 my.teaching.question_bank.exercise_set: The setting of item bank exercise
 my.teaching.question_bank.name_label: Name

@@ -14,6 +14,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
 use Biz\Question\Service\QuestionService;
+use Biz\System\Service\H5SettingService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
@@ -28,7 +29,6 @@ use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
-use Biz\System\Service\H5SettingService;
 
 class BaseProcessor
 {
@@ -79,8 +79,8 @@ class BaseProcessor
 
         return array_map(function ($user) use ($container) {
             foreach ($user as $key => $value) {
-                if (!in_array($key, array(
-                    'id', 'email', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'nickname', 'roles', 'locked', 'about', 'title', 'destroyed', ))
+                if (!in_array($key, [
+                    'id', 'email', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'nickname', 'roles', 'locked', 'about', 'title', 'destroyed', ])
                 ) {
                     unset($user[$key]);
                 }
@@ -89,7 +89,7 @@ class BaseProcessor
             $user['smallAvatar'] = $container->get('web.twig.extension')->getFurl($user['smallAvatar'], 'avatar.png');
             $user['mediumAvatar'] = $container->get('web.twig.extension')->getFurl($user['mediumAvatar'], 'avatar.png');
             $user['largeAvatar'] = $container->get('web.twig.extension')->getFurl($user['largeAvatar'], 'avatar-large.png');
-            $user['nickname'] = ($user['destroyed'] == 1) ? '帐号已注销' : $user['nickname'];
+            $user['nickname'] = (1 == $user['destroyed']) ? '帐号已注销' : $user['nickname'];
 
             return $user;
         }, $users);
@@ -134,9 +134,9 @@ class BaseProcessor
 
     protected function filterAnnouncement($announcement)
     {
-        return $this->filterAnnouncements(array(
+        return $this->filterAnnouncements([
             $announcement,
-        ));
+        ]);
     }
 
     protected function setParam($name, $value)
@@ -369,12 +369,12 @@ class BaseProcessor
 
     public function createErrorResponse($name, $message)
     {
-        $error = array(
-            'error' => array(
+        $error = [
+            'error' => [
                 'name' => $name,
                 'message' => $message,
-            ),
-        );
+            ],
+        ];
 
         return $error;
     }
@@ -399,7 +399,7 @@ class BaseProcessor
 
     public function array2Map($learnCourses)
     {
-        $mapCourses = array();
+        $mapCourses = [];
 
         if (empty($learnCourses)) {
             return $mapCourses;
@@ -414,8 +414,8 @@ class BaseProcessor
 
     protected function getSiteInfo($request, $version)
     {
-        $site = $this->controller->getSettingService()->get('site', array());
-        $mobile = $this->controller->getSettingService()->get('mobile', array());
+        $site = $this->controller->getSettingService()->get('site', []);
+        $mobile = $this->controller->getSettingService()->get('mobile', []);
 
         if (!empty($mobile['logo'])) {
             $logo = $this->getBaseUrl().'/'.$mobile['logo'];
@@ -423,7 +423,7 @@ class BaseProcessor
             $logo = '';
         }
 
-        $splashs = array();
+        $splashs = [];
 
         for ($i = 1; $i < 6; ++$i) {
             if (!empty($mobile['splash'.$i])) {
@@ -431,25 +431,25 @@ class BaseProcessor
             }
         }
 
-        return array(
+        return [
             'name' => $site['name'],
             'url' => $request->getSchemeAndHttpHost().'/mapi_v'.$version,
             'host' => $request->getSchemeAndHttpHost(),
             'logo' => $logo,
             'splashs' => $splashs,
             'appDiscoveryVersion' => $this->getH5SettingService()->getAppDiscoveryVersion(),
-            'apiVersionRange' => array(
+            'apiVersionRange' => [
                 'min' => '1.0.0',
                 'max' => self::API_VERSIN_RANGE,
-            ),
-        );
+            ],
+        ];
     }
 
     protected function guessDeviceFromUserAgent($userAgent)
     {
         $userAgent = strtolower($userAgent);
 
-        $ios = array('iphone', 'ipad', 'ipod');
+        $ios = ['iphone', 'ipad', 'ipod'];
         foreach ($ios as $keyword) {
             if (strpos($userAgent, $keyword) > -1) {
                 return 'ios';
@@ -463,7 +463,7 @@ class BaseProcessor
         return 'unknown';
     }
 
-    protected function curlRequest($method, $url, $params = array())
+    protected function curlRequest($method, $url, $params = [])
     {
         $curl = curl_init();
 

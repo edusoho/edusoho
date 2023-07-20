@@ -558,7 +558,7 @@ class TestpaperController extends BaseController
         $data = $request->request->all();
         $data['itemBankId'] = $questionBank['itemBankId'];
 
-        $result = $result = $this->getBiz()['testpaper_builder.random_testpaper']->canBuild($data);
+        $result = $this->getBiz()['testpaper_builder.random_testpaper']->canBuild($data);
 
         return $this->createJsonResponse($result);
     }

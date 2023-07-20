@@ -11,35 +11,32 @@ class CourseChapter extends AbstractSychronizer
     public function syncWhenCreate($sourceId)
     {
         $sourceChapter = $this->getCourseChapterDao()->get($sourceId);
+        if (empty($sourceChapter)) {
+            return;
+        }
+
+        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($sourceChapter['courseId'], 1);
+        if (empty($copiedCourses)) {
+            return;
+        }
 
         try {
             $this->getLock()->get("sync_course_{$sourceChapter['courseId']}", 10);
 
-            $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($sourceChapter['courseId'], 1);
-            if (empty($copiedCourses)) {
-                $this->getLock()->release("sync_course_{$sourceChapter['courseId']}");
-
-                return;
-            }
-
             $this->beginTransaction();
-
             $helper = $this->getBatchHelper(self::BATCH_CREATE_HELPER, $this->getCourseChapterDao());
+
+            $copyChapter = $sourceChapter;
             foreach ($copiedCourses as $copyCourse) {
-                $copyChapter = $sourceChapter;
                 $copyChapter['courseId'] = $copyCourse['id'];
                 $copyChapter['copyId'] = $sourceChapter['id'];
                 unset($copyChapter['id']);
                 $helper->add($copyChapter);
-                unset($copyChapter);
             }
-
-            unset($copiedCourses);
-
             $this->commit();
-            $this->getLock()->release("sync_course_{$sourceChapter['courseId']}");
         } catch (\Exception $e) {
             $this->rollback();
+        } finally {
             $this->getLock()->release("sync_course_{$sourceChapter['courseId']}");
         }
     }

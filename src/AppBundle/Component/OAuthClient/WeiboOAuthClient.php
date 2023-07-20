@@ -3,12 +3,13 @@
 namespace AppBundle\Component\OAuthClient;
 
 use AppBundle\Common\Exception\UnexpectedValueException;
+use Symfony\Component\HttpFoundation\Request;
 
 class WeiboOAuthClient extends AbstractOAuthClient
 {
-    public function getAuthorizeUrl($callbackUrl)
+    public function getAuthorizeUrl($callbackUrl, $credential)
     {
-        $params = array();
+        $params = [];
         $params['client_id'] = $this->config['key'];
         $params['response_type'] = 'code';
         $params['redirect_uri'] = $callbackUrl;
@@ -18,37 +19,37 @@ class WeiboOAuthClient extends AbstractOAuthClient
 
     public function getAccessToken($code, $callbackUrl)
     {
-        $params = array();
+        $params = [];
         $params['client_id'] = $this->config['key'];
         $params['client_secret'] = $this->config['secret'];
         $params['authorization_code'] = 'code';
         $params['redirect_uri'] = $callbackUrl;
         $params['code'] = $code;
 
-        $data = $this->postRequest('https://api.weibo.com/oauth2/access_token?'.http_build_query($params), array());
+        $data = $this->postRequest('https://api.weibo.com/oauth2/access_token?'.http_build_query($params), []);
 
         $rawToken = json_decode($data, true);
 
         if (array_key_exists('error', $rawToken)) {
-            return array(
+            return [
                 'token' => null,
                 'userId' => null,
                 'expiredTime' => null,
-            );
+            ];
         }
 
-        $token = array(
+        $token = [
             'token' => $rawToken['access_token'],
             'userId' => $rawToken['uid'],
             'expiredTime' => $rawToken['expires_in'],
-        );
+        ];
 
         return $token;
     }
 
     public function getUserInfo($token)
     {
-        $params = array();
+        $params = [];
 
         $params['access_token'] = $token['token'];
         $params['uid'] = $token['userId'];
@@ -63,7 +64,7 @@ class WeiboOAuthClient extends AbstractOAuthClient
 
     protected function convertUserInfo($rawUserInfo)
     {
-        $info = array();
+        $info = [];
         $info['id'] = $rawUserInfo['idstr'];
         $info['name'] = $rawUserInfo['screen_name'];
         $info['location'] = $rawUserInfo['location'];
@@ -84,5 +85,11 @@ class WeiboOAuthClient extends AbstractOAuthClient
             throw new UnexpectedValueException('unAuthorize');
         }
         throw new UnexpectedValueException($userInfo['error']);
+    }
+
+    public function verifyCredential(Request $request, $sessionCredential)
+    {
+        // TODO: Implement verifyCredential() method.
+        return true;
     }
 }

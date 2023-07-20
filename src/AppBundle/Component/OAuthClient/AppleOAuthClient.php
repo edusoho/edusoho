@@ -5,6 +5,7 @@ namespace AppBundle\Component\OAuthClient;
 use AppBundle\Common\Exception\UnexpectedValueException;
 use Biz\System\Service\SettingService;
 use Firebase\JWT\JWT;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
 class AppleOAuthClient extends AbstractOAuthClient
@@ -12,7 +13,7 @@ class AppleOAuthClient extends AbstractOAuthClient
     const AUTHORIZE_URL = 'https://appleid.apple.com/auth/authorize?';
     const OAUTH_TOKEN_URL = 'https://appleid.apple.com/auth/token';
 
-    public function getAuthorizeUrl($callbackUrl)
+    public function getAuthorizeUrl($callbackUrl, $credential)
     {
         $params = [];
         $params['client_id'] = $this->config['clientId'];
@@ -118,5 +119,11 @@ class AppleOAuthClient extends AbstractOAuthClient
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System:SettingService');
+    }
+
+    public function verifyCredential(Request $request, $sessionCredential)
+    {
+        // TODO: Implement verifyCredential() method.
+        return true;
     }
 }
