@@ -30,6 +30,9 @@ class ClassroomThread extends AbstractResource
 
         $total = $this->getThreadService()->searchThreadCount($conditions);
         $threads = $this->getThreadService()->searchThreads($conditions, $sort, $offset, $limit);
+        foreach ($threads as &$thread) {
+            $this->extractImgs($thread);
+        }
         $this->getOCUtil()->multiple($threads, ['userId']);
 
         return $this->makePagingObject($threads, $total, $offset, $limit);
@@ -45,6 +48,7 @@ class ClassroomThread extends AbstractResource
         if (empty($thread)) {
             throw ThreadException::NOTFOUND_THREAD();
         }
+        $this->extractImgs($thread);
 
         $this->getOCUtil()->single($thread, ['userId']);
         $this->getOCUtil()->single($thread, ['targetId'], 'classroom');
@@ -70,6 +74,21 @@ class ClassroomThread extends AbstractResource
         $this->getOCUtil()->single($thread, ['userId']);
 
         return $thread;
+    }
+
+    protected function extractImgs(&$thread)
+    {
+        $thread['imgs'] = [];
+        if (empty($thread['content'])) {
+            return;
+        }
+        preg_match_all('/<img.*?src=["\'](.*?)["\'].*?>/i', $thread['content'], $matches);
+
+        if (empty($matches)) {
+            return;
+        }
+        $thread['imgs'] = $matches[1];
+        $thread['content'] = preg_replace('/\n*?(<p>)<img.*?src=["\'].*?["\'].*?>(<\/p>)?\n*?/i', '', $thread['content']);
     }
 
     /**
