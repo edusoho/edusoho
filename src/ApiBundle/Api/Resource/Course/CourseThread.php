@@ -15,6 +15,7 @@ class CourseThread extends AbstractResource
         $this->getCourseService()->tryTakeCourse($courseId);
 
         $thread = $this->getCourseThreadService()->getThreadByThreadId($threadId);
+        $this->extractImgs($thread);
         $this->handleAttachments($thread);
 
         if (!empty($thread['videoId'])) {
@@ -79,6 +80,7 @@ class CourseThread extends AbstractResource
             $limit
         );
         foreach ($threads as &$thread) {
+            $this->extractImgs($thread);
             $this->handleAttachments($thread);
         }
         $this->getOCUtil()->multiple($threads, ['userId']);
@@ -143,6 +145,21 @@ class CourseThread extends AbstractResource
         }
 
         return $result;
+    }
+
+    protected function extractImgs(&$thread)
+    {
+        $thread['imgs'] = [];
+        if (empty($thread['content'])) {
+            return;
+        }
+        preg_match_all('/<img.*?src=["\'](.*?)["\'].*?>/i', $thread['content'], $matches);
+
+        if (empty($matches)) {
+            return;
+        }
+        $thread['imgs'] = $matches[1];
+        $thread['content'] = preg_replace('/\n*?(<p>)<img.*?src=["\'].*?["\'].*?>(<\/p>)?\n*?/i', '', $thread['content']);
     }
 
     protected function handleAttachments(&$thread)
