@@ -193,8 +193,8 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
             $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
-            if ($courseSet['parentId'] > 0) {
-                $classCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
+            $classCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
+            if ($classCourse) {
                 $targetType = 'classroom';
                 $targetId = $classCourse['classroomId'];
             } else {
