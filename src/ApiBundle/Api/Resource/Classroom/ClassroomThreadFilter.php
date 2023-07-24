@@ -64,7 +64,7 @@ class ClassroomThreadFilter extends Filter
 
         if (isset($data['imgs'])) {
             foreach ($data['imgs'] as &$img) {
-                $img = AssetHelper::uriForPath($img);
+                $img = AssetHelper::getFurl($img);
             }
         }
     }

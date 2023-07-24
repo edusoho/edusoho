@@ -1542,7 +1542,10 @@ class WebExtension extends \Twig_Extension
         } else {
             $url = $uri;
         }
-        $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').'/'.$url;
+        $publicPrefix = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /');
+        if (0 !== strpos($url, $publicPrefix)) {
+            $url = $publicPrefix.'/'.$url;
+        }
 
         return $this->addHost($url, $absolute, $package);
     }
