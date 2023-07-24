@@ -32,7 +32,7 @@ class ClassroomThread extends AbstractResource
         $total = $this->getThreadService()->searchThreadCount($conditions);
         $threads = $this->getThreadService()->searchThreads($conditions, $sort, $offset, $limit);
         foreach ($threads as &$thread) {
-            $thread = ContentToolkit::extractImgs($thread);
+            $this->extractImgs($thread);
         }
         $this->getOCUtil()->multiple($threads, ['userId']);
 
@@ -49,7 +49,7 @@ class ClassroomThread extends AbstractResource
         if (empty($thread)) {
             throw ThreadException::NOTFOUND_THREAD();
         }
-        $thread = ContentToolkit::extractImgs($thread);
+        $this->extractImgs($thread);
 
         $this->getOCUtil()->single($thread, ['userId']);
         $this->getOCUtil()->single($thread, ['targetId'], 'classroom');
@@ -73,13 +73,24 @@ class ClassroomThread extends AbstractResource
         ];
 
         if (isset($thread['imgs'])) {
-            $thread = ContentToolkit::insertionImgs($thread);
+            $thread['content'] = ContentToolkit::appendImgs($thread['content'], $thread['imgs']);
         }
 
         $thread = $this->getThreadService()->createThread($thread);
         $this->getOCUtil()->single($thread, ['userId']);
 
         return $thread;
+    }
+
+    protected function extractImgs(&$thread)
+    {
+        $thread['imgs'] = [];
+        if (empty($thread['content'])) {
+            return;
+        }
+
+        $thread['imgs'] = ContentToolkit::extractImgs($thread['content']);
+        $thread['content'] = ContentToolkit::filterImgs($thread['content']);
     }
 
     /**

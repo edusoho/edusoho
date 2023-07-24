@@ -16,7 +16,7 @@ class CourseThread extends AbstractResource
         $this->getCourseService()->tryTakeCourse($courseId);
 
         $thread = $this->getCourseThreadService()->getThreadByThreadId($threadId);
-        $thread = ContentToolkit::extractImgs($thread);
+        $this->extractImgs($thread);
         $this->handleAttachments($thread);
 
         if (!empty($thread['videoId'])) {
@@ -81,7 +81,7 @@ class CourseThread extends AbstractResource
             $limit
         );
         foreach ($threads as &$thread) {
-            $thread = ContentToolkit::extractImgs($thread);
+            $this->extractImgs($thread);
             $this->handleAttachments($thread);
         }
         $this->getOCUtil()->multiple($threads, ['userId']);
@@ -111,7 +111,7 @@ class CourseThread extends AbstractResource
         }
 
         if (isset($fields['imgs'])) {
-            $fields = ContentToolkit::insertionImgs($fields);
+            $fields['content'] = ContentToolkit::appendImgs($fields['content'], $fields['imgs']);
         }
 
         $thread = $this->getCourseThreadService()->createThread($fields);
@@ -151,6 +151,17 @@ class CourseThread extends AbstractResource
         }
 
         return $result;
+    }
+
+    protected function extractImgs(&$thread)
+    {
+        $thread['imgs'] = [];
+        if (empty($thread['content'])) {
+            return;
+        }
+
+        $thread['imgs'] = ContentToolkit::extractImgs($thread['content']);
+        $thread['content'] = ContentToolkit::filterImgs($thread['content']);
     }
 
     protected function handleAttachments(&$thread)
