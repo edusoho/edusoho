@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ContentToolkit;
 use Biz\Common\CommonException;
 use Biz\File\UploadFileException;
 
@@ -108,6 +109,11 @@ class CourseThread extends AbstractResource
         if (empty($fields['title'])) {
             $fields['questionType'] = $this->getQuestionType($fields['fileIds']);
         }
+
+        if (isset($fields['imgs'])) {
+            $fields['content'] = ContentToolkit::appendImgs($fields['content'], $fields['imgs']);
+        }
+
         $thread = $this->getCourseThreadService()->createThread($fields);
 
         if (isset($fields['fileIds'])) {
@@ -153,13 +159,9 @@ class CourseThread extends AbstractResource
         if (empty($thread['content'])) {
             return;
         }
-        preg_match_all('/<img.*?src=["\'](.*?)["\'].*?>/i', $thread['content'], $matches);
 
-        if (empty($matches)) {
-            return;
-        }
-        $thread['imgs'] = $matches[1];
-        $thread['content'] = preg_replace('/\n*?(<p>)<img.*?src=["\'].*?["\'].*?>(<\/p>)?\n*?/i', '', $thread['content']);
+        $thread['imgs'] = ContentToolkit::extractImgs($thread['content']);
+        $thread['content'] = ContentToolkit::filterImgs($thread['content']);
     }
 
     protected function handleAttachments(&$thread)

@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Classroom;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ContentToolkit;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Group\ThreadException;
@@ -68,7 +69,12 @@ class ClassroomThread extends AbstractResource
             'targetId' => $classroomId,
             'type' => $request->request->get('type'),
             'targetType' => 'classroom',
+            'imgs' => $request->request->get('imgs', []),
         ];
+
+        if (isset($thread['imgs'])) {
+            $thread['content'] = ContentToolkit::appendImgs($thread['content'], $thread['imgs']);
+        }
 
         $thread = $this->getThreadService()->createThread($thread);
         $this->getOCUtil()->single($thread, ['userId']);
@@ -82,13 +88,9 @@ class ClassroomThread extends AbstractResource
         if (empty($thread['content'])) {
             return;
         }
-        preg_match_all('/<img.*?src=["\'](.*?)["\'].*?>/i', $thread['content'], $matches);
 
-        if (empty($matches)) {
-            return;
-        }
-        $thread['imgs'] = $matches[1];
-        $thread['content'] = preg_replace('/\n*?(<p>)<img.*?src=["\'].*?["\'].*?>(<\/p>)?\n*?/i', '', $thread['content']);
+        $thread['imgs'] = ContentToolkit::extractImgs($thread['content']);
+        $thread['content'] = ContentToolkit::filterImgs($thread['content']);
     }
 
     /**
