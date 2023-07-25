@@ -5,8 +5,6 @@ namespace ApiBundle\Api\Resource\ItemBankExercise;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\QuestionBank\QuestionBankException;
-use Biz\QuestionBank\Service\QuestionBankService;
 
 class ItemBankExercise extends AbstractResource
 {
@@ -16,10 +14,6 @@ class ItemBankExercise extends AbstractResource
     public function get(ApiRequest $request, $id)
     {
         $itemBankExercise = $this->getItemBankExerciseService()->get($id);
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($itemBankExercise['questionBankId']);
-        if (empty($questionBank['itemBank'])) {
-            throw QuestionBankException::NOT_FOUND_BANK();
-        }
 
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
@@ -61,17 +55,7 @@ class ItemBankExercise extends AbstractResource
             $itemBankExercises = $this->getItemBankExerciseService()->search($conditions, $sort, $offset, $limit);
         }
 
-        $count = $this->getItemBankExerciseService()->count($conditions);
-
-        foreach ($itemBankExercises as &$itemBankExercise) {
-            $questionBank = $this->getQuestionBankService()->getQuestionBank($itemBankExercise['questionBankId']);
-            if (empty($questionBank['itemBank'])) {
-                $itemBankExercise = [];
-                --$count;
-            }
-        }
-
-        return $this->makePagingObject($itemBankExercises, $count, $offset, $limit);
+        return $this->makePagingObject($itemBankExercises, $this->getItemBankExerciseService()->count($conditions), $offset, $limit);
     }
 
     /**
@@ -88,13 +72,5 @@ class ItemBankExercise extends AbstractResource
     protected function getItemBankExerciseMemberService()
     {
         return $this->service('ItemBankExercise:ExerciseMemberService');
-    }
-
-    /**
-     * @return QuestionBankService
-     */
-    protected function getQuestionBankService()
-    {
-        return $this->service('QuestionBank:QuestionBankService');
     }
 }
