@@ -39,7 +39,7 @@ class TechSupportSyncClassroomCoursesTaskCommand extends BaseCommand
 
             return;
         }
-        $copyCourses = $this->getCourseService()->searchCourses($conditions, ['updatedTime' => 'DESC'], 0, $count, ['id', 'parentId', 'courseSetId', 'creator']);
+        $copyCourses = $this->getCourseService()->searchCourses($conditions, ['updatedTime' => 'DESC'], 0, $count, ['id', 'parentId', 'courseSetId', 'creator', 'courseType']);
         // 原课程下的课时
         $originCourseIds = array_column($copyCourses, 'parentId');
         $originTasks = $this->getTaskService()->searchTasks(['courseIds' => $originCourseIds], [], 0, PHP_INT_MAX, ['id', 'courseId', 'activityId', 'title', 'categoryId', 'type']);
