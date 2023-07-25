@@ -338,25 +338,4 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     {
         return $this->createService('ItemBank:Item:ItemCategoryService');
     }
-
-    /**
-     * @return ExerciseMemberDao
-     */
-    protected function getExerciseMemberDao()
-    {
-        return $this->createDao('ItemBankExercise:ExerciseMemberDao');
-    }
-
-    /**
-     * @return MemberOperationRecordDao
-     */
-    protected function getMemberOperationRecordDao()
-    {
-        return $this->createDao('ItemBankExercise:MemberOperationRecordDao');
-    }
-
-    protected function getItemBankChapterExerciseRecordDao()
-    {
-        return $this->createDao('ItemBankExercise:ChapterExerciseRecordDao');
-    }
 }
