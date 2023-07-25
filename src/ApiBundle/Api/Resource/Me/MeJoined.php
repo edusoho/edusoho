@@ -119,16 +119,16 @@ class MeJoined extends AbstractResource
 
         $classrooms = array_values($this->getClassroomService()->findClassroomsByIds($classroomIds));
         $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
-        $classrooms = ArrayToolkit::index($classrooms, 'id');
+        $members = ArrayToolkit::index($members, 'classroomId');
 
-        foreach ($members as $member) {
-            $classrooms[$member['classroomId']]['meJoinedType'] = 'classroom';
-            $classrooms[$member['classroomId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
-            $classrooms[$member['classroomId']]['smallPicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
-            $classrooms[$member['classroomId']]['middlePicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
-            $classrooms[$member['classroomId']]['largePicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
-            $progress = $this->getClassroomLearningDataAnalysisService()->getUserLearningProgress($member['classroomId'], $this->getCurrentUser()->getId());
-            $classrooms[$member['classroomId']]['learningProgressPercent'] = $progress['percent'];
+        foreach ($classrooms as &$classroom) {
+            $classroom['meJoinedType'] = 'classroom';
+            $classroom['lastLearnTime'] = (0 == $members[$classroom['id']]['lastLearnTime']) ? $members[$classroom['id']]['updatedTime'] : $members[$classroom['id']]['lastLearnTime'];
+            $classroom['smallPicture'] = AssetHelper::getFurl($classroom['smallPicture'], 'classroom.png');
+            $classroom['middlePicture'] = AssetHelper::getFurl($classroom['smallPicture'], 'classroom.png');
+            $classroom['largePicture'] = AssetHelper::getFurl($classroom['smallPicture'], 'classroom.png');
+            $progress = $this->getClassroomLearningDataAnalysisService()->getUserLearningProgress($members[$classroom['id']]['classroomId'], $this->getCurrentUser()->getId());
+            $classroom['learningProgressPercent'] = $progress['percent'];
         }
 
         return $classrooms;
