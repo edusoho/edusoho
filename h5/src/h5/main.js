@@ -60,7 +60,8 @@ import {
   Empty,
   CellGroup,
   Cascader,
-  TreeSelect
+  TreeSelect,
+  Image,
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -90,6 +91,7 @@ Vue.component('van-divider', Divider);
 Vue.component('van-cell-group', CellGroup);
 Vue.component('van-cascader', Cascader);
 Vue.component('van-tree-select', TreeSelect);
+Vue.component('van-image', Image);
 
 Vue.use(ActionSheet);
 Vue.use(filters);
