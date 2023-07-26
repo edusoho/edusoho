@@ -1401,10 +1401,10 @@ class TaskServiceImpl extends BaseService implements TaskService
         $task = $this->getTask($taskId);
         $wrappedTasks = ArrayToolkit::index($this->wrapTaskResultToTasks($task['courseId'], $this->findTasksByCourseId($task['courseId'])), 'id');
         if (!empty($wrappedTasks[$taskId]) && $wrappedTasks[$taskId]['lock']) {
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
