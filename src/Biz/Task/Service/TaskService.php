@@ -249,4 +249,6 @@ interface TaskService
     public function findTasksByCopyIdAndLockedCourseIds($copyId, $courseIds);
 
     public function syncClassroomCourseTasks($courseId, $real);
+
+    public function isTaskLocked($taskId);
 }
