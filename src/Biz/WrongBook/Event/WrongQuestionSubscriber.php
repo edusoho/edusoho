@@ -36,11 +36,11 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
     public function onWrongQuestionPoolDelete(Event $event)
     {
-        $contions = $event->getSubject();
-        if (empty($contions['target_id'])) {
+        $conditions = $event->getSubject();
+        if (empty($conditions['target_id'])) {
             throw WrongBookException::WRONG_QUESTION_BOOK_POOL_TARGET_ID_REQUIRE();
         }
-        $wrongPools = $this->getWrongQuestionBookPoolDao()->findPoolsByTargetIdAndTargetType($contions['target_id'], $contions['target_type']);
+        $wrongPools = $this->getWrongQuestionBookPoolDao()->findPoolsByTargetIdAndTargetType($conditions['target_id'], $conditions['target_type']);
         if (empty($wrongPools)) {
             return;
         }
@@ -49,22 +49,33 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         try {
             $db->beginTransaction();
 
-            $this->getWrongQuestionBookPoolDao()->deleteWrongPoolByTargetIdAndTargetType($contions['target_id'], $contions['target_type']);
+            $this->getWrongQuestionBookPoolDao()->deleteWrongPoolByTargetIdAndTargetType($conditions['target_id'], $conditions['target_type']);
             $collecIds = $this->getWrongQuestionCollectDao()->getCollectIdsBYPoolIds($wrongPoolIds);
             $this->getWrongQuestionCollectDao()->deleteCollectByPoolIds($wrongPoolIds);
             $collecIds = ArrayToolkit::column($collecIds, 'id');
             $this->getWrongQuestionDao()->batchDelete(['collect_ids' => $collecIds]);
-            $this->getLogService()->info(
-                'wrong_question',
-                'delete_wrong_question',
-                "删除课程#{$contions['target_id']}错题池"
-            );
+            $this->logDeleteWrongQuestionPool($conditions['target_type'], $conditions['target_id']);
 
             $db->commit();
         } catch (\Exception $e) {
             $db->rollback();
             throw $e;
         }
+    }
+
+    protected function logDeleteWrongQuestionPool($targetType, $targetId)
+    {
+        $typeNames = [
+            'classroom' => '班级',
+            'course' => '课程',
+        ];
+        $typeName = $typeNames[$targetType];
+
+        $this->getLogService()->info(
+            'wrong_question',
+            'delete_wrong_question_pool',
+            "删除{$typeName}#{$targetId}错题池"
+        );
     }
 
     public function onAnswerSubmitted(Event $event)
@@ -218,7 +229,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         }
 
         return [
-             $targetType, $targetId, $sourceType, $sourceId,
+            $targetType, $targetId, $sourceType, $sourceId,
         ];
     }
 
