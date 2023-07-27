@@ -546,8 +546,7 @@ class TestpaperForm {
       return;
     }
 
-    // button('loading').addClass('disabled');
-				$target.addClass('disabled').text(Translator.trans('task.plugin_redmine_save_hint'))
+		$target.addClass('disabled').text(Translator.trans('task.plugin_redmine_save_hint'))
 				
     let baseInfo = {
       name: this.$form.find('#name-field').val(),
