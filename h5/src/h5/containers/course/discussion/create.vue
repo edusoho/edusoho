@@ -46,6 +46,7 @@
           v-model="fileList"
           :after-read="afterRead"
           :max-count="6"
+          @delete="deleteImgItem"
         />
       </div>
     </van-form>
@@ -137,6 +138,9 @@ export default {
         .catch(err => {
           Toast.fail(err.message);
         });
+    },
+    deleteImgItem(e, detail) {
+      this.imgs.splice(detail.index, 1);
     },
   },
 };
