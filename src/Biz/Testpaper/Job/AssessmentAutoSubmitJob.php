@@ -2,6 +2,7 @@
 
 namespace Biz\Testpaper\Job;
 
+use Biz\Activity\Service\ActivityService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
@@ -15,10 +16,15 @@ class AssessmentAutoSubmitJob extends AbstractJob
         $record = $this->getAnswerRecordService()->get($this->args['answerRecordId']);
         $user = $this->getUserService()->getUser($record['user_id']);
         try {
-            if (empty($record) || $record['status'] != 'doing') {
+            if (empty($record) || 'doing' != $record['status']) {
                 return;
             }
             $this->getAnswerService()->submitAnswer($this->getAnswerService()->buildAutoSubmitAssessmentResponse($record['id']));
+
+            $activity = $this->getActivityService()->getActivityByAnswerSceneId($record['answer_scene_id']);
+            $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+            $this->getTaskService()->finishTaskResult($task['id'], $user['id']);
+
             $this->getLogService()->info('assessment', 'auto_submit_answers', "{$user['nickname']}({$user['id']})的答题(记录id:{$record['id']})自动提交", ['recordId' => $record['id']]);
         } catch (\Exception $e) {
             $this->getLogService()->error('assessment', 'auto_submit_answers_error', "{$user['nickname']}({$user['id']})的答题(记录id:{$record['id']})自动提交失败", $e->getMessage());
@@ -55,5 +61,21 @@ class AssessmentAutoSubmitJob extends AbstractJob
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    /**
+     * @return \Biz\Task\Service\Impl\TaskServiceImpl
+     */
+    protected function getTaskService()
+    {
+        return $this->biz->service('Task:TaskService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
     }
 }

@@ -753,9 +753,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->finishTaskResult($taskId);
     }
 
-    public function finishTaskResult($taskId)
+    public function finishTaskResult($taskId, $userId = 0)
     {
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
+        $taskResult = empty($userId)
+            ? $this->getTaskResultService()->getUserTaskResultByTaskId($taskId)
+            : $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($taskId, $userId);
 
         if (empty($taskResult)) {
             $task = $this->getTask($taskId);
@@ -779,6 +781,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->dispatchEvent('course.task.finish', new Event($taskResult, ['user' => $this->getCurrentUser()]));
 
         return $taskResult;
+    }
+
+    public function autoFinishTaskResult($taskId, $userId)
+    {
+        $taskResult = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($taskId, $userId);
     }
 
     public function findFreeTasksByCourseId($courseId)
