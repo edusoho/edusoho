@@ -21,13 +21,20 @@ class AssessmentAutoSubmitJob extends AbstractJob
             }
             $this->getAnswerService()->submitAnswer($this->getAnswerService()->buildAutoSubmitAssessmentResponse($record['id']));
 
-            $activity = $this->getActivityService()->getActivityByAnswerSceneId($record['answer_scene_id']);
-            $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
-            $this->getTaskService()->finishTaskResult($task['id'], $user['id']);
+            $this->finishTask($record['answer_scene_id'], $user['id']);
 
             $this->getLogService()->info('assessment', 'auto_submit_answers', "{$user['nickname']}({$user['id']})的答题(记录id:{$record['id']})自动提交", ['recordId' => $record['id']]);
         } catch (\Exception $e) {
             $this->getLogService()->error('assessment', 'auto_submit_answers_error', "{$user['nickname']}({$user['id']})的答题(记录id:{$record['id']})自动提交失败", $e->getMessage());
+        }
+    }
+
+    protected function finishTask($answerSceneId, $userId)
+    {
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        if ($this->getTaskService()->isFinished($task['id'])) {
+            $this->getTaskService()->finishTaskResult($task['id'], $userId);
         }
     }
 
@@ -64,7 +71,7 @@ class AssessmentAutoSubmitJob extends AbstractJob
     }
 
     /**
-     * @return \Biz\Task\Service\Impl\TaskServiceImpl
+     * @return \Biz\Task\Service\TaskService
      */
     protected function getTaskService()
     {
