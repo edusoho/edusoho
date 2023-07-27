@@ -783,11 +783,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $taskResult;
     }
 
-    public function autoFinishTaskResult($taskId, $userId)
-    {
-        $taskResult = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($taskId, $userId);
-    }
-
     public function findFreeTasksByCourseId($courseId)
     {
         $tasks = $this->getTaskDao()->findByCourseIdAndIsFree($courseId, $isFree = true);
