@@ -5,6 +5,7 @@ namespace AppBundle\Controller\AdminV2\Teach;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
@@ -54,6 +55,11 @@ class QuestionBankController extends BaseController
 
     public function editAction(Request $request, $id)
     {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
         if ($request->isMethod('POST')) {
             $questionBank = $this->getQuestionBankService()->updateQuestionBankWithMembers(
                 $id,
@@ -73,7 +79,7 @@ class QuestionBankController extends BaseController
         }
 
         return $this->render('admin-v2/teach/question-bank/modal.html.twig', [
-            'questionBank' => $this->getQuestionBankService()->getQuestionBank($id),
+            'questionBank' => $questionBank,
             'categoryTree' => $this->getCategoryService()->getCategoryTree(),
             'bankMembers' => json_encode($bankMembers),
         ]);
@@ -109,5 +115,4 @@ class QuestionBankController extends BaseController
     {
         return $this->createService('QuestionBank:MemberService');
     }
-
 }
