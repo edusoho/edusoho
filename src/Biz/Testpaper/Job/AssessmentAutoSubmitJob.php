@@ -4,6 +4,7 @@ namespace Biz\Testpaper\Job;
 
 use Biz\Activity\Service\ActivityService;
 use Biz\System\Service\LogService;
+use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -21,7 +22,7 @@ class AssessmentAutoSubmitJob extends AbstractJob
             }
             $this->getAnswerService()->submitAnswer($this->getAnswerService()->buildAutoSubmitAssessmentResponse($record['id']));
 
-            $this->finishTask($record['answer_scene_id'], $user['id']);
+            $this->tryFinishTask($record['answer_scene_id'], $user['id']);
 
             $this->getLogService()->info('assessment', 'auto_submit_answers', "{$user['nickname']}({$user['id']})的答题(记录id:{$record['id']})自动提交", ['recordId' => $record['id']]);
         } catch (\Exception $e) {
@@ -29,10 +30,16 @@ class AssessmentAutoSubmitJob extends AbstractJob
         }
     }
 
-    protected function finishTask($answerSceneId, $userId)
+    protected function tryFinishTask($answerSceneId, $userId)
     {
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
+        if (empty($activity)) {
+            return;
+        }
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        if (empty($task)) {
+            return;
+        }
         if ($this->getTaskService()->isFinished($task['id'])) {
             $this->getTaskService()->finishTaskResult($task['id'], $userId);
         }
@@ -71,7 +78,7 @@ class AssessmentAutoSubmitJob extends AbstractJob
     }
 
     /**
-     * @return \Biz\Task\Service\TaskService
+     * @return TaskService
      */
     protected function getTaskService()
     {
