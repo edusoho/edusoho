@@ -153,7 +153,7 @@ interface TaskService
 
     public function findTasksFetchActivityByChapterId($chapterId);
 
-    public function finishTaskResult($taskId);
+    public function finishTaskResult($taskId, $userId = 0);
 
     public function findFreeTasksByCourseId($courseId);
 
