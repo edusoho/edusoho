@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\System\Service\SettingService;
+use Biz\User\Service\UserAuthNotificationService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserFieldException;
 use Symfony\Component\HttpFoundation\Request;
@@ -95,6 +96,7 @@ class UserSettingController extends BaseController
             }
 
             $auth = array_merge($auth, $authUpdate);
+            $this->getUserAuthNotificationService()->notifyMallAuthSettingUpdate($auth);
             $this->getSettingService()->set('auth', $auth);
 
             $this->setFlashMessage('success', 'site.save.success');
@@ -569,5 +571,13 @@ class UserSettingController extends BaseController
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
+    }
+
+    /**
+     * @return UserAuthNotificationService
+     */
+    protected function getUserAuthNotificationService()
+    {
+        return $this->createService('User:UserAuthNotificationService');
     }
 }
