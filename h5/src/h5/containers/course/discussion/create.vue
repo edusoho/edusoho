@@ -45,7 +45,6 @@
         <van-uploader
           v-model="fileList"
           :after-read="afterRead"
-          :before-read="beforeUpload"
           :max-count="6"
         />
       </div>
@@ -138,21 +137,6 @@ export default {
         .catch(err => {
           Toast.fail(err.message);
         });
-    },
-    beforeUpload(file) {
-      const type = file.type;
-      const size = file.size / 1024 / 1024;
-
-      if (type.indexOf('image') === -1) {
-        Toast.fail(this.$t('setting.fileTypeOnlySupportsImageFormat'));
-        return;
-      }
-
-      if (size > 2) {
-        Toast.fail(this.$t('setting.fileSizeMustNotExceed2MB'));
-        return;
-      }
-      return true;
     },
   },
 };
