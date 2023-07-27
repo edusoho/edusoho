@@ -35,7 +35,7 @@ class ExerciseController extends BaseController
             return $this->createMessageResponse('error', $this->trans('item_bank_exercise.exercise_create.forbidden'));
         }
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
+        if (empty($questionBank['itemBank'])) {
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
         $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
