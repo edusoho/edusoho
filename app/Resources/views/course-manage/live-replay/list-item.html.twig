@@ -1,15 +1,10 @@
-<style>
-  .overflow-tip {
-    overflow: visible !important;
-  }
-</style>
 <li class="live-course-lesson-item cd-mb16 clearfix" id="lesson-{{ task.id }}">
 	{% set roomType =  activity.ext.roomType|default(null) %}
 	{%  if roomType == 'pseudo' %}
 		<img style="position: absolute; width: 28px; z-index: 100;" src="{{ asset('assets/img/live/pseudolive_left.png') }}"></img>
 {% endif %}
 <div class="item-line"></div>
-<div class="item-content overflow-tip">
+<div class="item-content" style="overflow: visible;">
 	{% set mediaStatus = task.mediaStatus|default(null) %}
 
 	{% if task.type in ['video', 'live'] %}
