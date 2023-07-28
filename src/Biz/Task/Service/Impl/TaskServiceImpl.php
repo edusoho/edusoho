@@ -879,11 +879,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return ArrayToolkit::column($arrays, 'fromCourseSetId');
     }
 
-    public function isFinished($taskId)
+    public function isFinished($taskId, $userId = 0)
     {
         $task = $this->getTask($taskId);
 
-        return $this->getActivityService()->isFinished($task['activityId']);
+        return $this->getActivityService()->isFinished($task['activityId'], $userId);
     }
 
     public function tryTakeTask($taskId)

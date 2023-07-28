@@ -219,16 +219,16 @@ class Testpaper extends Activity
         return $this->getTestpaperActivityService()->deleteActivity($targetId);
     }
 
-    public function isFinished($activityId)
+    public function isFinished($activityId, $userId = 0)
     {
-        $user = $this->getCurrentUser();
+        $userId = empty($userId) ? $this->getCurrentUser()->getId() : $userId;
 
         $activity = $this->getActivityService()->getActivity($activityId, true);
         $testpaperActivity = $activity['ext'];
 
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId(
             $testpaperActivity['answerScene']['id'],
-            $user['id']
+            $userId
         );
 
         if (empty($answerRecord)) {
