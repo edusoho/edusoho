@@ -302,12 +302,12 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
     }
 
-    public function isFinished($id)
+    public function isFinished($id, $userId = 0)
     {
         $activity = $this->getActivity($id);
         $activityConfig = $this->getActivityConfig($activity['mediaType']);
 
-        return $activityConfig->isFinished($id);
+        return $activityConfig->isFinished($id, $userId);
     }
 
     public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId)

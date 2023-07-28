@@ -110,7 +110,7 @@ interface TaskService
 
     public function finishTask($taskId);
 
-    public function isFinished($taskId);
+    public function isFinished($taskId, $userId = 0);
 
     public function tryTakeTask($taskId);
 

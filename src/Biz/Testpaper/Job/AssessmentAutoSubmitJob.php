@@ -40,7 +40,7 @@ class AssessmentAutoSubmitJob extends AbstractJob
         if (empty($task)) {
             return;
         }
-        if ($this->getTaskService()->isFinished($task['id'])) {
+        if ($this->getTaskService()->isFinished($task['id'], $userId)) {
             $this->getTaskService()->finishTaskResult($task['id'], $userId);
         }
     }
