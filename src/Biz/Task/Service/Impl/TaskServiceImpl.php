@@ -21,6 +21,7 @@ use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\TaskException;
 use Biz\Visualization\Service\ActivityLearnDataService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class TaskServiceImpl extends BaseService implements TaskService
@@ -1420,10 +1421,10 @@ class TaskServiceImpl extends BaseService implements TaskService
     /**
      * @param  $courseId
      *
-     * @throws CourseException
-     * @throws \Exception
-     *
      * @return CourseStrategy
+     *
+     * @throws \Exception
+     * @throws CourseException
      */
     protected function createCourseStrategy($courseId)
     {
@@ -1494,7 +1495,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $canLearn = false;
                 break;
             }
-            if ($preTask['canLearn'] && (empty($preTask['result']) || 'finish' != $preTask['result']['status'])) {
+            if ($preTask['canLearn'] && !$this->isTaskFinished($preTask)) {
                 $canLearn = false;
                 break;
             }
@@ -1517,7 +1518,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         //如果该任务已经完成则忽略其他的条件
-        if (isset($task['result']['status']) && ('finish' === $task['result']['status'])) {
+        if ($this->isTaskFinished($task)) {
             $task['lock'] = false;
         }
 
@@ -1526,31 +1527,29 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     protected function canLearn($task)
     {
-        if ('published' !== $preTask['status']) {
-            return fasle;
+        if ($this->isTaskFinished($task)) {
+            return true;
         }
 
-        if ($preTask['isOptional']) {
-            return false;
-        }
+        if ('testpaper' === $task['type']) {
+            $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+            $lastAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()->getId());
 
-        if ('live' === $task['type']) {
-            if (time() > $task['endTime']) {
-                return false;
-            }
-        }
-
-        if ('testpaper' === $task['type'] && $task['endTime']) {
-            if ('1' == $task['activity']['ext']['doTimes'] && time() > $task['endTime']) {
-                return false;
+            if ($lastAnswerRecord && 'doing' == $lastAnswerRecord['status']) {
+                return true;
             }
 
-            if (time() > $task['endTime']) {
+            if (!$activity['ext']['canDoAgain']) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    protected function isTaskFinished($task)
+    {
+        return isset($task['result']['status']) && ('finish' === $task['result']['status']);
     }
 
     /**
@@ -1697,5 +1696,13 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getActivityDao()
     {
         return $this->biz->dao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 }
