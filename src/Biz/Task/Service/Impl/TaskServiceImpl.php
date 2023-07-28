@@ -753,9 +753,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->finishTaskResult($taskId);
     }
 
-    public function finishTaskResult($taskId)
+    public function finishTaskResult($taskId, $userId = 0)
     {
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
+        $taskResult = empty($userId)
+            ? $this->getTaskResultService()->getUserTaskResultByTaskId($taskId)
+            : $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($taskId, $userId);
 
         if (empty($taskResult)) {
             $task = $this->getTask($taskId);
@@ -877,11 +879,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return ArrayToolkit::column($arrays, 'fromCourseSetId');
     }
 
-    public function isFinished($taskId)
+    public function isFinished($taskId, $userId = 0)
     {
         $task = $this->getTask($taskId);
 
-        return $this->getActivityService()->isFinished($task['activityId']);
+        return $this->getActivityService()->isFinished($task['activityId'], $userId);
     }
 
     public function tryTakeTask($taskId)
