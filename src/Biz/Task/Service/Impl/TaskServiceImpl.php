@@ -1488,9 +1488,24 @@ class TaskServiceImpl extends BaseService implements TaskService
             $task['lock'] = false;
         }
 
-        $finish = $this->isPreTasksIsFinished($preTasks);
-        //当前任务未完成且前一个问题未完成则锁定
-        $task['lock'] = !$finish;
+        $canLearn = true;
+        foreach ($preTasks as $preTask) {
+            if ($preTask['lock']) {
+                $canLearn = false;
+                break;
+            }
+            if ($preTask['canLearn'] && (empty($preTask['result']) || 'finish' != $preTask['result']['status'])) {
+                $canLearn = false;
+                break;
+            }
+        }
+        if ($canLearn) {
+            $task['lock'] = false;
+            $task['canLearn'] = $this->canLearn($task);
+        } else {
+            $task['lock'] = true;
+            $task['canLearn'] = false;
+        }
 
         //选修任务不需要判断解锁条件
         if ($task['isOptional']) {
@@ -1501,16 +1516,41 @@ class TaskServiceImpl extends BaseService implements TaskService
             $task['lock'] = false;
         }
 
-        if ('testpaper' === $task['type'] && $task['startTime']) {
-            $task['lock'] = false;
-        }
-
         //如果该任务已经完成则忽略其他的条件
         if (isset($task['result']['status']) && ('finish' === $task['result']['status'])) {
             $task['lock'] = false;
         }
 
         return $task;
+    }
+
+    protected function canLearn($task)
+    {
+        if ('published' !== $preTask['status']) {
+            return fasle;
+        }
+
+        if ($preTask['isOptional']) {
+            return false;
+        }
+
+        if ('live' === $task['type']) {
+            if (time() > $task['endTime']) {
+                return false;
+            }
+        }
+
+        if ('testpaper' === $task['type'] && $task['endTime']) {
+            if ('1' == $task['activity']['ext']['doTimes'] && time() > $task['endTime']) {
+                return false;
+            }
+
+            if (time() > $task['endTime']) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
