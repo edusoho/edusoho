@@ -12,7 +12,7 @@ class AuthSettingEventSubscriber extends EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            'user.Auth.setting.update' => 'onUserProtocolUpdate',
+            'user.auth.setting.update' => 'onUserProtocolUpdate',
         ];
     }
 
