@@ -12,10 +12,10 @@ class UserProtocolSetting extends BaseResource
         $auth = $this->getSettingService()->get('auth', []);
 
         return [
-            'userTerms' => $auth['user_terms'],
-            'userTermsBody' => $auth['user_terms_body'],
-            'privacyPolicy' => $auth['privacy_policy'],
-            'privacyPolicyBody' => $auth['privacy_policy_body'],
+            'userTerms' => $auth['user_terms'] ?? 'closed',
+            'userTermsBody' => $auth['user_terms_body'] ?? '',
+            'privacyPolicy' => $auth['privacy_policy'] ?? 'closed',
+            'privacyPolicyBody' => $auth['privacy_policy_body'] ?? '',
         ];
     }
 
