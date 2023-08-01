@@ -2,14 +2,15 @@
 
 namespace AppBundle\Command;
 
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DeleteNotExitItemBankExerciseCommand extends BaseCommand
+class DeleteNotExistItemBankExerciseCommand extends BaseCommand
 {
     protected function configure()
     {
-        $this->setName('delete:noExit-itemBankExercise');
+        $this->setName('delete:notExist-itemBankExercise');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -30,7 +31,7 @@ class DeleteNotExitItemBankExerciseCommand extends BaseCommand
     }
 
     /**
-     * @return \Codeages\Biz\Framework\Scheduler\Service\SchedulerService
+     * @return SchedulerService
      */
     private function getSchedulerService()
     {
