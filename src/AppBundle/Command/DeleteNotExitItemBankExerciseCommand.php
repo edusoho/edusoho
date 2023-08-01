@@ -17,16 +17,16 @@ class DeleteNotExitItemBankExerciseCommand extends BaseCommand
         //在升级第二天的凌晨2点执行
         $execTime = strtotime(date('Y-m-d', time())) + 86400 + 3600 * 2;
         $jobFields = [
-            'name' => 'DeleteNotExitItemBankExerciseJob',
+            'name' => 'DeleteNotExistItemBankExerciseJob',
             'expression' => $execTime,
-            'class' => 'Biz\ItemBankExercise\Job\DeleteNotExitItemBankExerciseJob',
+            'class' => 'Biz\ItemBankExercise\Job\DeleteNotExistItemBankExerciseJob',
             'misfire_policy' => 'executing',
             'misfire_threshold' => 0,
             'args' => [],
         ];
 
         $this->getSchedulerService()->register($jobFields);
-        $output->writeln('<info>注册定时任务DeleteNotExitItemBankExerciseJob成功</info>');
+        $output->writeln('<info>注册定时任务DeleteNotExistItemBankExerciseJob成功</info>');
     }
 
     /**
