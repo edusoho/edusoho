@@ -11,7 +11,6 @@ use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
-use Topxia\Service\Common\ServiceKernel;
 
 class DeleteNotExistItemBankExerciseJob extends AbstractJob
 {
@@ -19,7 +18,7 @@ class DeleteNotExistItemBankExerciseJob extends AbstractJob
 
     public function execute()
     {
-        $this->initServiceKernel();
+        $this->setCurrentUser();
 
         $excludeIds = $this->args['excludeIds'] ?? [];
 
@@ -58,16 +57,14 @@ class DeleteNotExistItemBankExerciseJob extends AbstractJob
         ]);
     }
 
-    protected function initServiceKernel()
+    protected function setCurrentUser()
     {
-        $serviceKernel = ServiceKernel::instance();
-        $serviceKernel->setBiz($this->biz);
-        $currentUser = new CurrentUser();
         $systemUser = $this->getUserService()->getUserByType('system');
         $systemUser['currentIp'] = '127.0.0.1';
+        $currentUser = new CurrentUser();
         $currentUser->fromArray($systemUser);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
-        $serviceKernel->setCurrentUser($currentUser);
+        $this->biz['user'] = $currentUser;
     }
 
     /**
