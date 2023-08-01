@@ -144,6 +144,7 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
                 'recommended = :recommended',
                 'price > :price_GT',
                 'questionBankId NOT IN (:excludeQuestionBankIds)',
+                'questionBankId IN :questionBankIds',
             ],
         ];
     }
