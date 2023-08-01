@@ -2,8 +2,6 @@
 
 namespace AppBundle\Command;
 
-use Biz\ItemBankExercise\Service\ExerciseService;
-use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
