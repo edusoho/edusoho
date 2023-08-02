@@ -44,8 +44,9 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = [
-            'registerDeleteNotExistItemBankExerciseTask',
-            'generateSystemUUID',
+            'registerDeleteNotExistItemBankExerciseJob',
+            'generateSystemUserUUID',
+            'addCdnUrlToSafeIframeDomains'
         ];
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -76,7 +77,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    public function registerDeleteNotExistItemBankExerciseTask()
+    public function registerDeleteNotExistItemBankExerciseJob()
     {
         if (!empty($this->getSchedulerService()->getJobByName('DeleteNotExistItemBankExerciseJob'))) {
             $this->logger('info', "删除不存在题库的题库练习定时任务已存在，直接跳过");
@@ -99,7 +100,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    public function generateSystemUUID()
+    public function generateSystemUserUUID()
     {
         $user = $this->getUserService()->getUserByType('system');
 
@@ -107,6 +108,23 @@ class EduSohoUpgrade extends AbstractUpdater
             $uuid = $this->getUserService()->generateUUID();
             $this->getUserService()->updateUser($user['id'],['uuid' => $uuid]);
             $this->logger('info', '创建系统用户的uuid成功');
+        }
+
+        return 1;
+    }
+
+    public function addCdnUrlToSafeIframeDomains()
+    {
+        $cdn = $this->getSettingService()->get('cdn', []);
+        if (!empty($cdn['defaultUrl'])) {
+            if (false !== strpos($cdn['defaultUrl'], '//')) {
+                list($_, $cdn['defaultUrl']) = explode('//', $cdn['defaultUrl']);
+            }
+            $cdnUrl = rtrim($cdn['defaultUrl'], " \/");
+            $safeDomains = $this->createService('System:CacheService')->get('safe_iframe_domains', []);
+            $safeDomains[] = $cdnUrl;
+            $safeDomains = array_values(array_unique($safeDomains));
+            $this->createService('System:CacheService')->set('safe_iframe_domains', $safeDomains);
         }
 
         return 1;
