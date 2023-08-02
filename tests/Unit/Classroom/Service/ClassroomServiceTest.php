@@ -1325,7 +1325,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->becomeStudentWithOrder($classroom['id'], 10, ['price' => 0, 'remark' => 'remark', 'isNotify' => 1]);
     }
 
-    public function testBecomeStudent_whenHasJoinRecord_thenJoinSuccess()
+    public function testBecomeStudentWhenHasJoinRecordThenJoinSuccess()
     {
         $textClassroom = [
             'title' => 'test066',
@@ -1846,7 +1846,7 @@ class ClassroomServiceTest extends BaseTestCase
                     'functionName' => 'getUserByUUID',
                     'returnValue' => [],
                     'withParams' => [1],
-                ]
+                ],
             ]
         );
 
