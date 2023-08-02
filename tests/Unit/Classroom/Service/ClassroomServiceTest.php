@@ -1842,6 +1842,11 @@ class ClassroomServiceTest extends BaseTestCase
                     'returnValue' => [],
                     'withParams' => [1],
                 ],
+                [
+                    'functionName' => 'getUserByUUID',
+                    'returnValue' => [],
+                    'withParams' => [1],
+                ]
             ]
         );
 
@@ -2151,6 +2156,11 @@ class ClassroomServiceTest extends BaseTestCase
             [
                 [
                     'functionName' => 'getUser',
+                    'returnValue' => [],
+                    'withParams' => [1],
+                ],
+                [
+                    'functionName' => 'getUserByUUID',
                     'returnValue' => [],
                     'withParams' => [1],
                 ],
