@@ -41,6 +41,6 @@ class AuthSettingEventSubscriber extends EventSubscriber
      */
     protected function getMallService()
     {
-        return $this->getBiz()->service('Mall:MallService');
+        return $this->getBiz()->service('MarketingMallBundle:Mall:MallService');
     }
 }
