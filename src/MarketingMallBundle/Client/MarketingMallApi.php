@@ -149,6 +149,11 @@ class MarketingMallApi
         return $this->post('/api-school/unifiedPayment/notifyTradeClosed', ...$params);
     }
 
+    public function notifyUserProtocolUpdate($params)
+    {
+        return $this->post('/api-school/userAuthSetting/updateProtocol', ...$params);
+    }
+
     public function logout($params)
     {
         return $this->post('/api-school/user/logout', ...$params);

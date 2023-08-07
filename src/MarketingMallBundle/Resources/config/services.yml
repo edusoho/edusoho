@@ -50,6 +50,12 @@ services:
     tags:
     - { name: codeages_plugin.event.subscriber }
 
+  marketing_mall_auth_setting_event_subscriber:
+    class: MarketingMallBundle\Biz\AuthSetting\Event\AuthSettingEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+
   marketing_mall_wechat_notification_event_subscriber:
     class: MarketingMallBundle\Biz\MallWechatNotification\Event\WechatNotificationEventSubscriber
     arguments: [ '@biz' ]
