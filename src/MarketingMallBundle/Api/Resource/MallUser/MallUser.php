@@ -21,10 +21,17 @@ class MallUser extends BaseResource
     public function add(ApiRequest $request)
     {
         $fields = $request->request->all();
-        if (!ArrayToolkit::requireds($fields, ['nickname'], true)) {
+        if (!ArrayToolkit::requireds($fields, ['openId', 'nickname'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $fields = ArrayToolkit::parts($fields, ['nickname', 'openId', 'avatar', 'unionId']);
+        $userBind = $this->getUserService()->getUserBindByTypeAndFromId('weixin', $fields['openId']);
+        if (!empty($userBind) && $userBind['toId'] != 0) {
+            $user = $this->getUserService()->getUser($userBind['toId']);
+            if ($user) {
+                return $user;
+            }
+        }
 
         if (!$this->getUserService()->isNicknameAvaliable($fields['nickname'])) {
             $fields['nickname'] = $this->generateNickname($fields['nickname']);
