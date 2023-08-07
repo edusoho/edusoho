@@ -12,7 +12,7 @@ class AuthSettingEventSubscriber extends EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            'user.protocol.update' => 'onUserProtocolUpdate',
+            'user.auth.setting.update' => 'onUserProtocolUpdate',
         ];
     }
 
@@ -21,9 +21,14 @@ class AuthSettingEventSubscriber extends EventSubscriber
         if (!$this->getMallService()->isInit()) {
             return;
         }
-        $userProtocol = $event->getSubject();
+        $auth = $event->getSubject();
 
-        $this->getMallClient()->notifyUserProtocolUpdate($userProtocol);
+        $this->getMallClient()->notifyUserProtocolUpdate([
+            'userTerms' => $auth['user_terms'] ?? 'closed',
+            'userTermsBody' => $auth['user_terms_body'] ?? '',
+            'privacyPolicy' => $auth['privacy_policy'] ?? 'closed',
+            'privacyPolicyBody' => $auth['privacy_policy_body'] ?? '',
+        ]);
     }
 
     protected function getMallClient()

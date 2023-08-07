@@ -11,17 +11,7 @@ class UserAuthSettingServiceImpl extends BaseService implements UserAuthSettingS
     public function update($auth)
     {
         $this->getSettingService()->set('auth', $auth);
-        $this->notifyUserProtocolUpdate($auth);
-    }
-
-    protected function notifyUserProtocolUpdate($auth)
-    {
-        $this->dispatch('user.protocol.update', [
-            'userTerms' => $auth['user_terms'] ?? 'closed',
-            'userTermsBody' => $auth['user_terms_body'] ?? '',
-            'privacyPolicy' => $auth['privacy_policy'] ?? 'closed',
-            'privacyPolicyBody' => $auth['privacy_policy_body'] ?? '',
-        ]);
+        $this->dispatch('user.auth.setting.update', $auth);
     }
 
     /**
