@@ -21,20 +21,18 @@ class MallUser extends BaseResource
     public function add(ApiRequest $request)
     {
         $fields = $request->request->all();
-        if (!ArrayToolkit::requireds($fields, ['mobile', 'nickname'], true)) {
+        if (!ArrayToolkit::requireds($fields, ['nickname'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-        $fields = ArrayToolkit::parts($fields, ['mobile', 'nickname', 'openId', 'avatar', 'unionId']);
-        $user = $this->getUserService()->getUserByVerifiedMobile($fields['mobile']);
-        if ($user) {
-            return $user;
-        }
+        $fields = ArrayToolkit::parts($fields, ['nickname', 'openId', 'avatar', 'unionId']);
+
         if (!$this->getUserService()->isNicknameAvaliable($fields['nickname'])) {
             $fields['nickname'] = $this->generateNickname($fields['nickname']);
         }
-        $fields['verifiedMobile'] = $fields['mobile'];
+
+        $fields['email'] = $this->getUserService()->generateEmail($fields);
         $fields['type'] = 'marketing_mall';
-        $user = $this->getUserService()->register($fields, ['mobile']);
+        $user = $this->getUserService()->register($fields);
 
         if (!empty($fields['avatar'])) {
             $fields['avatar'] = str_replace('\/', '/', $fields['avatar']);
@@ -49,7 +47,7 @@ class MallUser extends BaseResource
             $this->getUserService()->bindUser('weixin', $fields['unionId'], $user['id'], ['openid' => $fields['openId']]);
         }
 
-        $this->getLogService()->info('marketing_mall', 'register', "营销商城用户{$user['nickname']}通过手机注册成功", ['userId' => $user['id']]);
+        $this->getLogService()->info('marketing_mall', 'register', "营销商城用户{$user['nickname']}通过邮箱注册成功", ['userId' => $user['id']]);
 
         return $user;
     }
