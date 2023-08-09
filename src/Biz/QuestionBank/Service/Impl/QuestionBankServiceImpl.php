@@ -166,6 +166,8 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
             $this->createAccessDeniedException();
         }
 
+        $itemBankExercise = $this->getItemBankExerciseService()->getByQuestionBankId($questionBank['id']);
+
         try {
             $this->beginTransaction();
             $this->getQuestionBankDao()->delete($id);
@@ -174,6 +176,14 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
             $this->getCategoryService()->waveCategoryBankNum($questionBank['categoryId'], -1);
 
             $this->getMemberService()->batchDeleteByBankId($questionBank['id']);
+
+            if (isset($itemBankExercise)) {
+                if ('closed' != $itemBankExercise['status']) {
+                    $this->getItemBankExerciseService()->closeExercise($itemBankExercise['id']);
+                }
+
+                $this->getItemBankExerciseService()->deleteExercise($itemBankExercise['id']);
+            }
 
             $this->commit();
         } catch (\Exception $e) {

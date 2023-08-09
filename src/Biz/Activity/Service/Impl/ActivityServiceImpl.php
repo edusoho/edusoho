@@ -11,6 +11,7 @@ use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Activity\Type\Testpaper;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
@@ -28,12 +29,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 {
     const LIVE_STARTTIME_DIFF_SECONDS = 7200;
     const LIVE_ENDTIME_DIFF_SECONDS = 7200;
-
-    const VALID_PERIOD_MODE_NO_LIMIT = 0;
-
-    const VALID_PERIOD_MODE_RANGE = 1;
-
-    const VALID_PERIOD_MODE_ONLY_START = 2;
 
     public function getActivity($id, $fetchMedia = false)
     {
@@ -302,12 +297,12 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
     }
 
-    public function isFinished($id)
+    public function isFinished($id, $userId = 0)
     {
         $activity = $this->getActivity($id);
         $activityConfig = $this->getActivityConfig($activity['mediaType']);
 
-        return $activityConfig->isFinished($id);
+        return $activityConfig->isFinished($id, $userId);
     }
 
     public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId)
@@ -595,9 +590,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         if ('testpaper' == $fields['mediaType'] && isset($fields['validPeriodMode'])) {
-            if (self::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
+            if (Testpaper::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
                 $fields['endTime'] = 0;
-            } elseif (self::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
+            } elseif (Testpaper::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
                 $fields['startTime'] = 0;
                 $fields['endTime'] = 0;
             }

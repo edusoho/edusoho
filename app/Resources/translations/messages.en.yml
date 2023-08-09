@@ -1902,7 +1902,7 @@ course.plan_task.activity_manage.testpaper.option.out.of.order: Option out of or
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 'Retry Time Interval: Start time after completion of approval. '
 course.plan_task.activity_manage.testpaper.question.disorder: After this is enabled, when students enter the exam, all the small questions within the corresponding big question will be randomly sorted
 course.plan_task.activity_manage.testpaper.option.disorder: When turned on, all multiple choice options will be randomly ordered when students enter the exam
-course.plan_task.activity_manage.testpaper.rangedate: "<div>1. unlimited: no time limit, permanent validity;</div>2. the specified date interval: there is a fixed start and end time, outside this time can not participate in the exam;<div>3. specify the start time: only specify the start time, do not specify the end time, permanently valid, not to the start time can not participate in the test;</div>4. after the test is created, the test validity mode cannot be modified when editing again"
+course.plan_task.activity_manage.testpaper.rangedate: "<div>1. unlimited: no time limit, permanent validity;</div>2. the specified date interval: there is a fixed start and end time, outside this time can not participate in the exam;<div>3. specify the start time: only specify the start time, do not specify the end time, permanently valid, not to the start time can not participate in the test;</div>"
 course.plan_task.activity_manage.testpaper.comment_tips: 'Scoring interval setting rules: 1. The scoring interval includes the lower limit and upper limit of the interval. 2. When the student score is greater than or equal to the lower limit of the interval or less than the upper limit of the interval, the comments of the interval will be automatically displayed. 3. If there are overlapping score ranges, the comments ranked at the top in the comment list will be displayed first.'
 course.plan_task.activity_manage.testpaper.time: Time
 course.plan_task.activity_manage.testpaper.time_tips: 'Students can only take the exam within the time frame.'
@@ -2679,6 +2679,9 @@ user.init.password_placeholder: 'Please input your password'
 user.init.password_placeholder_again: 'Please input your password again'
 user.init.password.confirm.password: 'Confirm'
 user.init.password.submit.password.loading: 'submitting...'
+register.read.and.agree: Read and agree
+register.agree.and.register: Agree and register
+register.agree.and.sign.in: Agree and sign in
 
 user.oauth.login_by_email: 'Email'
 user.oauth.login_by_mobile: 'Mobile'
@@ -2857,6 +2860,7 @@ user.settings.security.oauth_bind.success: Bind oauth account successfully
 user.settings.security.oauth_bind.exist_account: The oauth account had beend bind.
 user.settings.security.oauth_bind.authentication_fail: Authentication fail
 user.settings.security.oauth_bind.duplicate_bind: You had bind it, donnot do again.
+user.settings.security.oauth_bind.state.authentication_fail: state authentication fail.
 user.settings.basic_info: 'Basic info'
 user.settings.basic_info.content_title: 'Basic info'
 user.settings.basic_info.occupation: Occupation
@@ -3863,7 +3867,7 @@ my.teaching.open_course.material.upload_time: 'Uploaded At'
 my.teaching.question_bank.create: Create
 my.teaching.question_bank.list: Question Bank List
 my.teaching.question_bank.instructions: Instructions
-my.teaching.question_bank.name_tip: Enter up to 30 characters
+my.teaching.question_bank.name_tip: Enter up to 100 characters
 my.teaching.question_bank.info: Bank Info
 my.teaching.question_bank.exercise_set: The setting of item bank exercise
 my.teaching.question_bank.name_label: Name

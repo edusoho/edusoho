@@ -414,6 +414,10 @@ auth.register.password_required_error_hint: Please input password
 auth.mobile_captcha_required_error_hint: Please enter a verification code
 auth.mobile_captcha_error_hint: Verification code error
 
+user.login.read.agree.policy.and.user.terms: Please read and check the 《User Service Agreement》 and 《Privacy Policy》
+user.login.read.user.terms: Please read and check 《User Service Agreement》
+user.login.read.agree.policy: Please read and check the 《Privacy Policy》
+
 card.card_receive_success_hint: Learning card has been used, recharge%coinAmount%%coinName%  success, you can go to the [account center] - [my account] to check the situation.
 card.card_receive_failed_hint: Failed!
 
@@ -777,6 +781,7 @@ validate.required.message: Please input %display%
 validate.valid_enter.retest.interval: Retest interval
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 validate.valid_enter_a_positive.integer: Please enter a positive integer from 1 to 100
+validate.valid_starttime_smaller_currenttime: The start time cannot be smaller than the current time
 validate.valid_rangetime.required: Please select a date range
 validate.valid_starttime.required: Please select a start time
 validate.valid_endtime.required: Please select an end time
@@ -963,7 +968,7 @@ validate_old.alphanumeric.message: %display% must be alphabetical, numeric, and 
 validate_old.alphabet_underline.message: %display% must begin with an English letter or an underscore
 validate_old.byte_minlength.message: %display% must be greater than or equal to %min%, a Chinese word is 2 characters
 validate_old.currency_check.message: Please enter a valid %display%, such as:200, 221.99, 0.99, 0 and so on
-validate_old.currency.message: %display% must be less than or equal to% max%, and one Chinese word is 2 characters
+validate_old.currency.message: You can only enter up to %max% characters.
 validate_old.idcard.message: %display% is not formatted correctly
 validate_old.password.message: %display% can only be composed of 4-20 characters
 validate_old.second_range.message: Seconds can only be between 0-59

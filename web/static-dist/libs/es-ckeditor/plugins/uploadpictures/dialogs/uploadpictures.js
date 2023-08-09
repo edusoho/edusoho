@@ -5,6 +5,7 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
 
     var initEvent = function () {
       function receiveMessage(event) {
+		if(window.location.origin !== event.origin) return
           var eventName = event.data.eventName;
           if (eventName === 'es-ckeditor.post') {
               var innerHtml = event.data.html;

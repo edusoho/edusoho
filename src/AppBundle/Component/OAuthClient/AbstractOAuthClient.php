@@ -2,6 +2,8 @@
 
 namespace AppBundle\Component\OAuthClient;
 
+use Symfony\Component\HttpFoundation\Request;
+
 abstract class AbstractOAuthClient
 {
     protected $config;
@@ -50,11 +52,13 @@ abstract class AbstractOAuthClient
         return $token;
     }
 
-    abstract public function getAuthorizeUrl($callbackUrl);
+    abstract public function getAuthorizeUrl($callbackUrl, $credential);
 
     abstract public function getAccessToken($code, $callbackUrl);
 
     abstract public function getUserInfo($token);
+
+    abstract public function verifyCredential(Request $request, $sessionCredential);
 
     /**
      * HTTP POST.

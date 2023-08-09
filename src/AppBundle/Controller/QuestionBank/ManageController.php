@@ -71,6 +71,11 @@ class ManageController extends BaseController
 
     public function manageAction(Request $request, $id)
     {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            return $this->createMessageResponse('error', 'exception.question_bank.not_found_bank', '', '30');
+        }
+
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
@@ -96,7 +101,7 @@ class ManageController extends BaseController
         }
 
         return $this->render('question-bank/manage/info.html.twig', [
-            'questionBank' => $this->getQuestionBankService()->getQuestionBank($id),
+            'questionBank' => $questionBank,
             'categoryTree' => $this->getCategoryService()->getCategoryTree(),
             'bankMembers' => json_encode($bankMembers),
         ]);

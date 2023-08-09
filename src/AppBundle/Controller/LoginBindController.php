@@ -49,9 +49,13 @@ class LoginBindController extends BaseController
             $params['os'] = $request->query->get('os');
         }
 
+        //设置微信校验逻辑
+        $state = uniqid('edusoho');
+        $this->get('session')->set('login_bind.credential', $state);
+
         $callbackUrl = $this->generateUrl('login_bind_callback', $params, UrlGeneratorInterface::ABSOLUTE_URL);
 
-        $url = $client->getAuthorizeUrl($callbackUrl);
+        $url = $client->getAuthorizeUrl($callbackUrl, $state);
 
         return $this->redirect($url);
     }

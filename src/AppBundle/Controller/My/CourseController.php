@@ -58,9 +58,6 @@ class CourseController extends CourseBaseController
             $this->getCourseSetService()->countCourseSets($conditions),
             12
         );
-        $conditions['ids'] = array_filter($conditions['ids'], function ($id) {
-            return $id > 0;
-        });
         $conditions['ids'] = array_splice($conditions['ids'], $paginator->getOffsetCount(), $paginator->getOffsetCount() + $paginator->getPerPageCount());
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
@@ -374,8 +371,8 @@ class CourseController extends CourseBaseController
             return [[-1], [-1]];
         }
         $members = ArrayToolkit::index($members, 'courseId');
-        $learnedCourseSetIds = [-1];
-        $learningCourseSetIds = [-1];
+        $learnedCourseSetIds = [];
+        $learningCourseSetIds = [];
         foreach ($groupCourses as $courseSetId => $courses) {
             $isLearned = 1;
             array_map(function ($course) use ($members, &$isLearned) {
@@ -392,7 +389,7 @@ class CourseController extends CourseBaseController
             }
         }
 
-        return [$learnedCourseSetIds, $learningCourseSetIds];
+        return [$learnedCourseSetIds ?: [-1], $learningCourseSetIds ?: [-1]];
     }
 
     /**

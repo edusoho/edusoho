@@ -56,6 +56,18 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
         return $this->db()->fetchAssoc($sql, [$classroomId, $courseId]) ?: null;
     }
 
+    public function deleteByIds(array $ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "DELETE FROM {$this->table} WHERE `id` IN ({$marks});";
+
+        return $this->db()->executeUpdate($sql, $ids);
+    }
+
     public function deleteByClassroomId($classroomId)
     {
         $sql = "DELETE FROM {$this->table} WHERE classroomId = ?";

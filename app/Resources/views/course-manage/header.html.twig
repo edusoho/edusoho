@@ -17,12 +17,12 @@
   {% endif %}
 
   <div class="course-manage-header-info">
-    <h1 class="course-manage-header-info__title text-overflow" {% if course.title|length > 10 %}data-toggle="tooltip" data-container="body" title="{{ course.title }}" {% endif %}>
+    <h1 class="course-manage-header-info__title" {% if course.title|length > 10 %}data-toggle="tooltip" data-container="body" title="{{ course.title }}" {% endif %}>
       {% block title %}
         <span class="cd-dark-major">{{ course.title }}</span>
       {% endblock %}
     </h1>
-    <div class="course-manage-header-info__type">
+    <div class="course-manage-header-info__type relative">
       {% if 'freeMode' == course.learnMode %}{{'course.teaching_plan.free_mode'|trans}}{% else %}{{'course.teaching_plan.locked_mode'|trans}}{% endif %}
       {% block planType %}
       {% endblock %}

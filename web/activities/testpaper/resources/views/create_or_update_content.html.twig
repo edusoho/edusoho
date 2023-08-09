@@ -197,14 +197,8 @@
           <input type="hidden" name="startTime" value="{% if activity.ext.answerScene.start_time|default(0) > 0 %}{{ activity.ext.answerScene.start_time|date('Y-m-d H:i:s') }}{% else %}0{% endif %}" size="25" >
           <input type="hidden" name="endTime" value="{% if activity.ext.answerScene.end_time|default(0) > 0 %}{{ activity.ext.answerScene.end_time|date('Y-m-d H:i:s') }}{% else %}0{% endif %}" size="25" >
 				<div class="col-sm-offset-2 col-sm-10 controls">
-					{% if activity.ext.answerScene.start_time|default(0) != 0 and activity.ext.answerScene.start_time|default(0) < ('now'|date('U')) and  activity.ext.answerScene.end_time|default(0) > ('now'|date('U')) %}
-						{{ activity.ext.answerScene.start_time|date('Y-m-d H:i:s') }} -
-						<input type="{% if ( activity.ext.validPeriodMode|default('0') != 1 ) and ( activity.id|default(0) != 0 ) %}hidden{% else %}text{% endif %}" 
-							size="25" id="rangeEndTime" name="rangeEndTime" class="form-control js-endTime-data" placeholder="{{ 'course.plan_task.activity_manage.testpaper.please.enter.endtime'|trans }}" autocomplete="off" style="display:inline-block; width: 160px;">
-					{% else %}
 						<input type="{% if activity.ext.validPeriodMode|default('0') != 1 %}hidden{% else %}text{% endif %}" 
 							id="rangeTime" name="rangeTime" size="25" class="form-control js-realTimeRange-data" autocomplete="off" style="width: 320px;">
-					{% endif %}
         </div>
 				<div class="col-sm-offset-2 col-sm-10 controls">
           <input type="{% if activity.ext.validPeriodMode|default('0') != 2 %}hidden{% else %}text{% endif %}" 
