@@ -7,12 +7,13 @@ use ApiBundle\Api\ApiRequest;
 use Biz\User\Service\UserService;
 use MarketingMallBundle\Api\Resource\BaseResource;
 
-class MallUserResetPassword extends BaseResource {
-
+class MallUserResetPassword extends BaseResource
+{
     /**
      * @AuthClass(ClassName="MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener")
      */
-    public function add(ApiRequest $request, $id) {
+    public function add(ApiRequest $request, $id)
+    {
         $password = $request->request->all();
         $this->getUserService()->initPassword($id, $password['password']);
 
