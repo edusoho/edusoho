@@ -228,6 +228,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $fields['mediaSource'] = $media['source'];
             }
 
+            $fields['startTime'] = $activity['startTime'];
             $fields['endTime'] = $activity['endTime'];
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
