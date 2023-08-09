@@ -129,6 +129,7 @@ class Testpaper extends Activity
             'isOptionsSeqRandom' => $testpaperActivity['answerScene']['is_options_seq_random'],
             'isCopy' => 1,
             'isLimitDoTimes' => $testpaperActivity['isLimitDoTimes'],
+            'customComments' => $testpaperActivity['customComments'],
         ];
         $newExt['validPeriodMode'] = $this->preValidPeriodMode(['start_time' => $newExt['startTime'], 'end_time' => $newExt['endTime']]);
 
@@ -159,6 +160,7 @@ class Testpaper extends Activity
         $ext['isOptionsSeqRandom'] = $sourceExt['answerScene']['is_options_seq_random'];
         $ext['isSync'] = 1;
         $ext['isLimitDoTimes'] = $sourceExt['isLimitDoTimes'];
+        $ext['customComments'] = $sourceExt['customComments'];
 
         return $this->update($ext['id'], $ext, $activity);
     }
@@ -218,16 +220,16 @@ class Testpaper extends Activity
         return $this->getTestpaperActivityService()->deleteActivity($targetId);
     }
 
-    public function isFinished($activityId)
+    public function isFinished($activityId, $userId = 0)
     {
-        $user = $this->getCurrentUser();
+        $userId = empty($userId) ? $this->getCurrentUser()->getId() : $userId;
 
         $activity = $this->getActivityService()->getActivity($activityId, true);
         $testpaperActivity = $activity['ext'];
 
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId(
             $testpaperActivity['answerScene']['id'],
-            $user['id']
+            $userId
         );
 
         if (empty($answerRecord)) {
@@ -311,14 +313,16 @@ class Testpaper extends Activity
             }
         }
 
-        $fields['customComments'] = [];
-        if (!empty($fields['start'])) {
-            foreach ($fields['start'] as $key => $val) {
-                $fields['customComments'][] = [
-                    'start' => $val,
-                    'end' => $fields['end'][$key],
-                    'comment' => $fields['comment'][$key],
-                ];
+        if (!isset($fields['customComments'])) {
+            $fields['customComments'] = [];
+            if (!empty($fields['start'])) {
+                foreach ($fields['start'] as $key => $val) {
+                    $fields['customComments'][] = [
+                        'start' => $val,
+                        'end' => $fields['end'][$key],
+                        'comment' => $fields['comment'][$key],
+                    ];
+                }
             }
         }
 
