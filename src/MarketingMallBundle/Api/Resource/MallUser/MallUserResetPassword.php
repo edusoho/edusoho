@@ -1,15 +1,18 @@
 <?php
 
-namespace MarketingMallBundle\Api\Resource\ResetPassword;
+namespace MarketingMallBundle\Api\Resource\MallUser;
 
 use ApiBundle\Api\ApiRequest;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 use MarketingMallBundle\Api\Resource\BaseResource;
 
-class ResetPassword extends BaseResource {
-    public function add(ApiRequest $request) {
+class MallUserResetPassword extends BaseResource {
+    public function add(ApiRequest $request, $id) {
         $password = $request->request->all();
-        $this->getUserService()->initPassword($this->getCurrentUser()->getId(), $password['password']);
+        $this->getUserService()->initPassword($id, $password['password']);
+
+        return ['success' => true];
     }
 
     /**
