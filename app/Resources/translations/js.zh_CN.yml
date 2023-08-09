@@ -724,6 +724,7 @@ validate.required.message: 请输入%display%
 validate.valid_enter.retest.interval: 重考间隔
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 validate.valid_enter_a_positive.integer: 请输入1至100的正整数
+validate.valid_starttime_smaller_currenttime: 开始时间不能小于当前时间
 validate.valid_rangetime.required: 请选择日期区间
 validate.valid_starttime.required: 请选择开始时间
 validate.valid_endtime.required: 请选择结束时间
