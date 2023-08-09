@@ -4,6 +4,7 @@ namespace AppBundle\Controller\QuestionBank;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
+use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
@@ -18,6 +19,10 @@ class QuestionCategoryController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
         $categories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
 
         return $this->render('question-bank/question-category/index.html.twig', [
@@ -40,6 +45,9 @@ class QuestionCategoryController extends BaseController
             $categoryNames = array_filter($categoryNames);
             $parentId = $request->request->get('parentId');
             $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+            if (empty($questionBank['itemBank'])) {
+                $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+            }
 
             $this->getItemCategoryService()->createItemCategories($questionBank['itemBankId'], $parentId, $categoryNames);
 

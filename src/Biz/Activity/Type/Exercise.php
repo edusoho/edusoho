@@ -105,7 +105,7 @@ class Exercise extends Activity
         return $this->getExerciseActivityService()->deleteActivity($targetId);
     }
 
-    public function isFinished($activityId)
+    public function isFinished($activityId, $userId = 0)
     {
         $user = $this->getCurrentUser();
 
