@@ -359,6 +359,9 @@ t.add("auth.register.name_required_error_hint", "Please input username", "js", "
 t.add("auth.register.password_required_error_hint", "Please input password", "js", "en");
 t.add("auth.mobile_captcha_required_error_hint", "Please enter a verification code", "js", "en");
 t.add("auth.mobile_captcha_error_hint", "Verification code error", "js", "en");
+t.add("user.login.read.agree.policy.and.user.terms", "Please read and check the \u300aUser Service Agreement\u300b and \u300aPrivacy Policy\u300b", "js", "en");
+t.add("user.login.read.user.terms", "Please read and check \u300aUser Service Agreement\u300b", "js", "en");
+t.add("user.login.read.agree.policy", "Please read and check the \u300aPrivacy Policy\u300b", "js", "en");
 t.add("card.card_receive_success_hint", "Learning card has been used, recharge%coinAmount%%coinName%  success, you can go to the [account center] - [my account] to check the situation.", "js", "en");
 t.add("card.card_receive_failed_hint", "Failed!", "js", "en");
 t.add("classroom.cancel_refund_hint", "Do you really want to cancel your refund?", "js", "en");
@@ -833,7 +836,7 @@ t.add("validate_old.alphanumeric.message", "%display% must be alphabetical, nume
 t.add("validate_old.alphabet_underline.message", "%display% must begin with an English letter or an underscore", "js", "en");
 t.add("validate_old.byte_minlength.message", "%display% must be greater than or equal to %min%, a Chinese word is 2 characters", "js", "en");
 t.add("validate_old.currency_check.message", "Please enter a valid %display%, such as:200, 221.99, 0.99, 0 and so on", "js", "en");
-t.add("validate_old.currency.message", "%display% must be less than or equal to% max%, and one Chinese word is 2 characters", "js", "en");
+t.add("validate_old.currency.message", "You can only enter up to %max% characters.", "js", "en");
 t.add("validate_old.idcard.message", "%display% is not formatted correctly", "js", "en");
 t.add("validate_old.password.message", "%display% can only be composed of 4-20 characters", "js", "en");
 t.add("validate_old.second_range.message", "Seconds can only be between 0-59", "js", "en");

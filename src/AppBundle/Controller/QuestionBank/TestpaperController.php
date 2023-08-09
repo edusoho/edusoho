@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -24,6 +25,9 @@ class TestpaperController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
 
         $conditions = [
             'bank_id' => $questionBank['itemBankId'],
@@ -59,6 +63,9 @@ class TestpaperController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
 
         $conditions = [
             'bank_id' => $questionBank['itemBankId'],
@@ -109,6 +116,9 @@ class TestpaperController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
 
         if ($request->isMethod('POST')) {
             $assessment = $request->request->get('baseInfo', []);
@@ -177,6 +187,9 @@ class TestpaperController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
 
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
@@ -558,7 +571,7 @@ class TestpaperController extends BaseController
         $data = $request->request->all();
         $data['itemBankId'] = $questionBank['itemBankId'];
 
-        $result = $result = $this->getBiz()['testpaper_builder.random_testpaper']->canBuild($data);
+        $result = $this->getBiz()['testpaper_builder.random_testpaper']->canBuild($data);
 
         return $this->createJsonResponse($result);
     }

@@ -98,7 +98,7 @@ class Homework extends Activity
         $sortItems = [];
         $items = $this->getItemService()->findItemsByIds($fields['questionIds'], true);
 
-        $items = ArrayToolkit::index($items,'id');
+        $items = ArrayToolkit::index($items, 'id');
         foreach ($fields['questionIds'] as $id) {
             if (!isset($items[$id])) {
                 continue;
@@ -217,7 +217,7 @@ class Homework extends Activity
         if (!empty($fields['questionIds'])) {
             $items = $this->getItemService()->findItemsByIds($fields['questionIds'], true);
 
-            $items = ArrayToolkit::index($items,'id');
+            $items = ArrayToolkit::index($items, 'id');
             foreach ($fields['questionIds'] as $id) {
                 if (!isset($items[$id])) {
                     continue;
@@ -250,7 +250,7 @@ class Homework extends Activity
         return $this->getHomeworkActivityService()->delete($targetId);
     }
 
-    public function isFinished($activityId)
+    public function isFinished($activityId, $userId = 0)
     {
         $user = $this->getCurrentUser();
 

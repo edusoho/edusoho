@@ -43,12 +43,12 @@ class MeClassroom extends AbstractResource
 
             $classrooms = array_values($this->getClassroomService()->findClassroomsByIds($classroomIds));
             $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
-            $classrooms = ArrayToolkit::index($classrooms, 'id');
+            $members = ArrayToolkit::index($members, 'classroomId');
 
-            foreach ($members as $member) {
-                $classrooms[$member['classroomId']]['lastLearnTime'] = $member['createdTime'];
-                $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($member['classroomId'], $this->getCurrentUser()->getId());
-                $classrooms[$member['classroomId']]['learningProgressPercent'] = $progress['percent'];
+            foreach ($classrooms as &$classroom) {
+                $classroom['lastLearnTime'] = $members[$classroom['id']]['createdTime'];
+                $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
+                $classroom['learningProgressPercent'] = $progress['percent'];
             }
 
             array_multisort(ArrayToolkit::column($classrooms, 'lastLearnTime'), SORT_DESC, $classrooms);

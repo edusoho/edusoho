@@ -298,6 +298,9 @@ t.add("auth.register.name_required_error_hint", "\u8bf7\u8f93\u5165\u5e10\u53f7"
 t.add("auth.register.password_required_error_hint", "\u8bf7\u8f93\u5165\u5bc6\u7801", "js", "zh_CN");
 t.add("auth.mobile_captcha_required_error_hint", "\u8bf7\u8f93\u5165\u9a8c\u8bc1\u7801", "js", "zh_CN");
 t.add("auth.mobile_captcha_error_hint", "\u9a8c\u8bc1\u7801\u9519\u8bef", "js", "zh_CN");
+t.add("user.login.read.agree.policy.and.user.terms", "\u8bf7\u9605\u8bfb\u5e76\u52fe\u9009\u300a\u7528\u6237\u670d\u52a1\u534f\u8bae\u300b\u548c\u300a\u9690\u79c1\u653f\u7b56\u300b", "js", "zh_CN");
+t.add("user.login.read.user.terms", "\u8bf7\u9605\u8bfb\u5e76\u52fe\u9009\u300a\u7528\u6237\u670d\u52a1\u534f\u8bae\u300b", "js", "zh_CN");
+t.add("user.login.read.agree.policy", "\u8bf7\u9605\u8bfb\u5e76\u52fe\u9009\u300a\u9690\u79c1\u653f\u7b56\u300b", "js", "zh_CN");
 t.add("card.card_receive_success_hint", "\u5b66\u4e60\u5361\u5df2\u4f7f\u7528\uff0c\u5145\u503c%coinAmount%%coinName%\u6210\u529f\uff0c\u53ef\u524d\u5f80\u3010\u8d26\u6237\u4e2d\u5fc3\u3011-\u3010\u6211\u7684\u8d26\u6237\u3011\u67e5\u770b\u5145\u503c\u60c5\u51b5\u3002", "js", "zh_CN");
 t.add("card.card_receive_failed_hint", "\u5931\u8d25!", "js", "zh_CN");
 t.add("classroom.cancel_refund_hint", "\u771f\u7684\u8981\u53d6\u6d88\u9000\u6b3e\u5417\uff1f", "js", "zh_CN");
@@ -779,7 +782,7 @@ t.add("validate_old.alphanumeric.message", "%display%\u5fc5\u987b\u662f\u82f1\u6
 t.add("validate_old.alphabet_underline.message", "%display%\u5fc5\u987b\u4ee5\u82f1\u6587\u5b57\u6bcd\u6216\u4e0b\u5212\u7ebf\u5f00\u5934", "js", "zh_CN");
 t.add("validate_old.byte_minlength.message", "%display%\u7684\u957f\u5ea6\u5fc5\u987b\u5927\u4e8e\u7b49\u4e8e%min%\uff0c\u4e00\u4e2a\u4e2d\u6587\u5b57\u7b972\u4e2a\u5b57\u7b26", "js", "zh_CN");
 t.add("validate_old.currency_check.message", "\u8bf7\u8f93\u5165\u5408\u6cd5\u7684%display%,\u5982:200, 221.99, 0.99, 0\u7b49", "js", "zh_CN");
-t.add("validate_old.currency.message", "%display%\u7684\u957f\u5ea6\u5fc5\u987b\u5c0f\u4e8e\u7b49\u4e8e%max%\uff0c\u4e00\u4e2a\u4e2d\u6587\u5b57\u7b972\u4e2a\u5b57\u7b26", "js", "zh_CN");
+t.add("validate_old.currency.message", "\u6700\u591a\u53ea\u80fd\u8f93\u5165%max%\u4e2a\u5b57\u7b26", "js", "zh_CN");
 t.add("validate_old.idcard.message", "%display%\u683c\u5f0f\u4e0d\u6b63\u786e", "js", "zh_CN");
 t.add("validate_old.password.message", "%display%\u53ea\u80fd\u75314-20\u4e2a\u5b57\u7b26\u7ec4\u6210", "js", "zh_CN");
 t.add("validate_old.second_range.message", "\u79d2\u6570\u53ea\u80fd\u57280-59\u4e4b\u95f4", "js", "zh_CN");

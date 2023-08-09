@@ -133,6 +133,11 @@ class LoginController extends BaseController
         return $this->redirect($goto);
     }
 
+    public function agreementAction()
+    {
+        return $this->render('login/agreement.html.twig');
+    }
+
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();

@@ -21,6 +21,7 @@ use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\TaskException;
 use Biz\Visualization\Service\ActivityLearnDataService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class TaskServiceImpl extends BaseService implements TaskService
@@ -80,8 +81,8 @@ class TaskServiceImpl extends BaseService implements TaskService
             $this->createNewException(TaskException::FORBIDDEN_CREATE_TASK());
         }
         $this->preCreateTaskCheck($fields);
-        $this->beginTransaction();
         try {
+            $this->beginTransaction();
             if (isset($fields['content'])) {
                 $fields['content'] = $this->purifyHtml($fields['content'], true);
             }
@@ -95,6 +96,9 @@ class TaskServiceImpl extends BaseService implements TaskService
             return $task;
         } catch (\Exception $exception) {
             $this->rollback();
+
+            //监控此处是否存在报错问题
+            $this->getLogService()->info('task', 'createTask', $exception->getMessage(), $fields);
             throw $exception;
         }
     }
@@ -750,9 +754,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->finishTaskResult($taskId);
     }
 
-    public function finishTaskResult($taskId)
+    public function finishTaskResult($taskId, $userId = 0)
     {
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
+        $taskResult = empty($userId)
+            ? $this->getTaskResultService()->getUserTaskResultByTaskId($taskId)
+            : $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($taskId, $userId);
 
         if (empty($taskResult)) {
             $task = $this->getTask($taskId);
@@ -874,11 +880,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return ArrayToolkit::column($arrays, 'fromCourseSetId');
     }
 
-    public function isFinished($taskId)
+    public function isFinished($taskId, $userId = 0)
     {
         $task = $this->getTask($taskId);
 
-        return $this->getActivityService()->isFinished($task['activityId']);
+        return $this->getActivityService()->isFinished($task['activityId'], $userId);
     }
 
     public function tryTakeTask($taskId)
@@ -1393,6 +1399,17 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $output;
     }
 
+    public function isTaskLocked($taskId)
+    {
+        $task = $this->getTask($taskId);
+        $wrappedTasks = ArrayToolkit::index($this->wrapTaskResultToTasks($task['courseId'], $this->findTasksByCourseId($task['courseId'])), 'id');
+        if (!empty($wrappedTasks[$taskId]) && $wrappedTasks[$taskId]['lock']) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * @return TaskDao
      */
@@ -1404,10 +1421,10 @@ class TaskServiceImpl extends BaseService implements TaskService
     /**
      * @param  $courseId
      *
-     * @throws CourseException
-     * @throws \Exception
-     *
      * @return CourseStrategy
+     *
+     * @throws \Exception
+     * @throws CourseException
      */
     protected function createCourseStrategy($courseId)
     {
@@ -1472,9 +1489,24 @@ class TaskServiceImpl extends BaseService implements TaskService
             $task['lock'] = false;
         }
 
-        $finish = $this->isPreTasksIsFinished($preTasks);
-        //当前任务未完成且前一个问题未完成则锁定
-        $task['lock'] = !$finish;
+        $canLearn = true;
+        foreach ($preTasks as $preTask) {
+            if ($preTask['lock']) {
+                $canLearn = false;
+                break;
+            }
+            if ($preTask['canLearn'] && !$this->isTaskFinished($preTask)) {
+                $canLearn = false;
+                break;
+            }
+        }
+        if ($canLearn) {
+            $task['lock'] = false;
+            $task['canLearn'] = $this->canLearn($task);
+        } else {
+            $task['lock'] = true;
+            $task['canLearn'] = false;
+        }
 
         //选修任务不需要判断解锁条件
         if ($task['isOptional']) {
@@ -1485,16 +1517,39 @@ class TaskServiceImpl extends BaseService implements TaskService
             $task['lock'] = false;
         }
 
-        if ('testpaper' === $task['type'] && $task['startTime']) {
-            $task['lock'] = false;
-        }
-
         //如果该任务已经完成则忽略其他的条件
-        if (isset($task['result']['status']) && ('finish' === $task['result']['status'])) {
+        if ($this->isTaskFinished($task)) {
             $task['lock'] = false;
         }
 
         return $task;
+    }
+
+    protected function canLearn($task)
+    {
+        if ($this->isTaskFinished($task)) {
+            return true;
+        }
+
+        if ('testpaper' === $task['type']) {
+            $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+            $lastAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()->getId());
+
+            if ($lastAnswerRecord && 'doing' == $lastAnswerRecord['status']) {
+                return true;
+            }
+
+            if (!$activity['ext']['canDoAgain']) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected function isTaskFinished($task)
+    {
+        return isset($task['result']['status']) && ('finish' === $task['result']['status']);
     }
 
     /**
@@ -1641,5 +1696,13 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getActivityDao()
     {
         return $this->biz->dao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 }

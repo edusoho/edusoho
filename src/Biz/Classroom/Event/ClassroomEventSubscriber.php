@@ -24,6 +24,7 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
             'classroom.course.create' => 'onClassroomCourseChange',
             'classroom.course.delete' => 'onClassroomCourseChange',
             'classroom.course.update' => 'onClassroomCourseChange',
+            'classroom.courses.delete' => 'onClassroomCoursesDelete',
             'review.create' => 'onReviewChanged',
             'review.update' => 'onReviewChanged',
             'review.delete' => 'onReviewChanged',
@@ -91,6 +92,23 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
         ]);
         $this->getClassroomService()->updateClassroomMembersFinishedStatus($classroom['id']);
 
+        $this->getClassroomService()->updateClassroomTeachers($classroomId);
+    }
+
+    public function onClassroomCoursesDelete(Event $event)
+    {
+        $classroom = $event->getSubject();
+        $classroomId = $classroom['id'];
+        $courseNum = $this->getClassroomService()->countCoursesByClassroomId($classroomId);
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+        $this->getClassroomService()->updateClassroom($classroomId, [
+            'courseNum' => $courseNum,
+            'lessonNum' => array_sum(ArrayToolkit::column($courses, 'lessonNum')),
+            'compulsoryTaskNum' => array_sum(ArrayToolkit::column($courses, 'compulsoryTaskNum')),
+            'electiveTaskNum' => array_sum(ArrayToolkit::column($courses, 'electiveTaskNum')),
+        ]);
+        $this->getClassroomService()->updateClassroomMembersFinishedStatus($classroomId);
+        $this->getClassroomService()->updateClassroomMembersNoteAndThreadNums($classroomId);
         $this->getClassroomService()->updateClassroomTeachers($classroomId);
     }
 
