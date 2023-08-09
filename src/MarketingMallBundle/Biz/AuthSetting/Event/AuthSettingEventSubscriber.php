@@ -13,6 +13,7 @@ class AuthSettingEventSubscriber extends EventSubscriber
     {
         return [
             'user.auth.setting.update' => 'onUserProtocolUpdate',
+            'user.auth.setting.update' => 'onPasswordLevelUpdate',
         ];
     }
 
@@ -28,6 +29,17 @@ class AuthSettingEventSubscriber extends EventSubscriber
             'userTermsBody' => $auth['user_terms_body'] ?? '',
             'privacyPolicy' => $auth['privacy_policy'] ?? 'closed',
             'privacyPolicyBody' => $auth['privacy_policy_body'] ?? '',
+        ]);
+    }
+
+    public function onPasswordLevelUpdate(Event $event) {
+        if (!$this->getMallService()->isInit()) {
+            return;
+        }
+        $auth = $event->getSubject();
+
+        $this->getMallClient()->notifyPasswordLevelUpdate([
+            'passwordLevel' => $auth['password_level'] ?? 'low',
         ]);
     }
 

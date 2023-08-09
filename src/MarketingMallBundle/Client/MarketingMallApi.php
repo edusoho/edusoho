@@ -154,6 +154,11 @@ class MarketingMallApi
         return $this->post('/api-school/userAuthSetting/updateProtocol', ...$params);
     }
 
+    public function notifyPasswordLevelUpdate($params)
+    {
+        return $this->post('/api-school/userAuthSetting/updatePasswordLevel', ...$params);
+    }
+
     public function logout($params)
     {
         return $this->post('/api-school/user/logout', ...$params);
