@@ -209,11 +209,12 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
                 IF(m.lastSignTime, m.lastSignTime, 0) AS lastSignTime
             ")->leftJoin(
                 $this->table,
-                "(SELECT * FROM sign_user_statistics WHERE userId IN ({$userIdsMarks}) AND targetType = 'classroom_sign' AND targetId = {$classroomId})",
+                "(SELECT * FROM sign_user_statistics WHERE userId IN ({$userIdsMarks}) AND targetType = 'classroom_sign' AND targetId = :target_id)",
                 'm',
                 "m.userId = {$this->table}.userId"
             )->setFirstResult($start)
             ->setMaxResults($limit);
+        $builder->setParameter(':target_id', $classroomId);
 
         foreach ($orderBys as $sort => $order) {
             if (in_array($sort, ['keepDays', 'signDays'])) {

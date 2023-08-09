@@ -6,7 +6,6 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
-use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -48,7 +47,7 @@ class CourseTaskEventV2 extends AbstractResource
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $sign = date('YmdHis').'-'.$user['id'].'-'.$activity['id'].'-'.substr(md5($user['id'].$data['client'].microtime()), 0, 6);
         list($canCreate, $denyReason) = $this->getLearnControlService()->checkCreateNewFlow($user['id'], $request->request->get('lastSign', ''));
-        if (!$canCreate) {
+        if (!$canCreate || $this->getTaskService()->isTaskLocked($taskId)) {
             return [
                 'taskResult' => null,
                 'nextTask' => null,
@@ -220,6 +219,14 @@ class CourseTaskEventV2 extends AbstractResource
             ],
         ]);
 
+        $triggerData = [
+            'lastTime' => $record['endTime'],
+            'finish' => [
+                'data' => [],
+            ],
+        ];
+        $result = $this->getTaskService()->trigger($taskId, self::EVENT_FINISH, $triggerData);
+
         if (!$this->getTaskService()->isFinished($taskId)) {
             $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
 
@@ -235,14 +242,6 @@ class CourseTaskEventV2 extends AbstractResource
                 'learnedTime' => $this->getMyLearnedTime($activity),
             ];
         }
-
-        $triggerData = [
-            'lastTime' => $record['endTime'],
-            'finish' => [
-                'data' => [],
-            ],
-        ];
-        $result = $this->getTaskService()->trigger($taskId, self::EVENT_FINISH, $triggerData);
         if ($course['enableFinish']) {
             $result = $this->getTaskService()->finishTaskResult($taskId);
         }

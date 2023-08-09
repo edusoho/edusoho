@@ -2,6 +2,7 @@
 
 namespace Biz\Common;
 
+use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
 use Biz\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Context\Biz;
@@ -24,18 +25,12 @@ class HTMLHelper
             return '';
         }
 
-        $security = $this->getSettingService()->get('security');
+        $safeDomains = $this->getCacheService()->get('safe_iframe_domains') ?: [];
 
-        if (!empty($security['safe_iframe_domains'])) {
-            $safeDomains = $security['safe_iframe_domains'];
-        } else {
-            $safeDomains = array();
-        }
-
-        $config = array(
+        $config = [
             'cacheDir' => $this->biz['cache_directory'].'/htmlpurifier',
             'safeIframeDomains' => $safeDomains,
-        );
+        ];
 
         $factory = new HTMLPurifierFactory($config);
         $purifier = $factory->create($trusted);
@@ -50,12 +45,12 @@ class HTMLHelper
         }
         $styles = $purifier->context->get('StyleBlocks');
         if ($styles) {
-            $html = implode("\n", array(
+            $html = implode("\n", [
                 '<style type="text/css">',
                 implode("\n", $styles),
                 '</style>',
                 $html,
-            ));
+            ]);
         }
 
         return $html;
@@ -67,9 +62,9 @@ class HTMLHelper
             return '';
         }
 
-        $config = array(
+        $config = [
             'cacheDir' => $this->biz['cache_directory'].'/htmlpurifier',
-        );
+        ];
 
         $factory = new HTMLPurifierFactory($config);
         $purifier = $factory->createSimple();
@@ -103,7 +98,7 @@ class HTMLHelper
 
     protected function handleOuterLink($html, $safeDomains)
     {
-        $siteSettings = $this->getSettingService()->get('site', array());
+        $siteSettings = $this->getSettingService()->get('site', []);
         $url = isset($siteSettings['url']) ? $this->getTrimUrl($siteSettings['url']) : '';
 
         preg_match_all('/\<img[^\>]*?src\s*=\s*[\'\"](?:http:\/\/|https:\/\/)(.*?)[\'\"].*?\>/i', $html, $matches);
@@ -133,7 +128,7 @@ class HTMLHelper
         $siteSettings = $this->getSettingService()->get('site', []);
         $siteUrl = isset($siteSettings['url']) ? $this->getTrimUrl($siteSettings['url']) : '';
         preg_match_all('/\<img[^\>]*?src\s*=\s*[\'\"](?:http:\/\/|https:\/\/)?(.*?)[\'\"].*?\>/i', $html, $matches);
-        $webDir = $this->biz['kernel.root_dir'] . '/../web';
+        $webDir = $this->biz['kernel.root_dir'].'/../web';
         foreach ($matches[1] as $key => $match) {
             if (0 === strpos($match, '/')) {
                 $imgPath = $webDir.$match;
@@ -164,5 +159,13 @@ class HTMLHelper
     private function getSettingService()
     {
         return $this->biz->service('System:SettingService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    private function getCacheService()
+    {
+        return $this->biz->service('System:CacheService');
     }
 }

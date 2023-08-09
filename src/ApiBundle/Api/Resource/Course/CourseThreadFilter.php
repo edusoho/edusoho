@@ -4,12 +4,16 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
+use ApiBundle\Api\Util\AssetHelper;
 
 class CourseThreadFilter extends Filter
 {
     protected $publicFields = [
-        'id', 'courseId', 'taskId', 'type', 'isStick', 'isElite', 'isClosed', 'private', 'title', 'content', 'source', 'postNum', 'userId', 'attachments', 'attachments',
-        'hitNum', 'followNum', 'questionType', 'latestPostUserId', 'videoAskTime', 'videoId', 'latestPostTime', 'courseSetId', 'createdTime', 'updatedTime', 'user', 'course', 'askVideoUri', 'askVideoLength', 'askVideoThumbnail', 'notReadPostNum', 'lastPost',
+        'id', 'courseId', 'taskId', 'type', 'isStick', 'isElite', 'isClosed', 'private', 'title', 'content',
+        'source', 'postNum', 'userId', 'attachments', 'attachments', 'hitNum', 'followNum', 'questionType',
+        'latestPostUserId', 'videoAskTime', 'videoId', 'latestPostTime', 'courseSetId', 'createdTime',
+        'updatedTime', 'user', 'course', 'askVideoUri', 'askVideoLength', 'askVideoThumbnail', 'notReadPostNum',
+        'lastPost', 'imgs',
     ];
 
     protected function publicFields(&$data)
@@ -36,5 +40,11 @@ class CourseThreadFilter extends Filter
         }
 
         $data['content'] = $this->convertAbsoluteUrl($data['content']);
+
+        if (isset($data['imgs'])) {
+            foreach ($data['imgs'] as &$img) {
+                $img = AssetHelper::getFurl($img);
+            }
+        }
     }
 }
