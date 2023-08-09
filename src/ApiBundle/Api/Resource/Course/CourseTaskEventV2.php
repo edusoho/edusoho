@@ -227,7 +227,7 @@ class CourseTaskEventV2 extends AbstractResource
         ];
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_FINISH, $triggerData);
 
-        if (!$this->getTaskService()->isFinished($taskId)) {
+        if (!$this->getTaskService()->isFinished($taskId) && empty($course['enableFinish'])) {
             $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
 
             return [
