@@ -1494,7 +1494,8 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $canLearn = false;
                 break;
             }
-            if ($preTask['canLearn'] && !$this->isTaskFinished($preTask) && !$preTask['isOptional'] && $preTask['status'] == 'published') {
+            $preTask['canLearn'] = $preTask['canLearn'] ?? $this->canLearn($preTask);
+            if ($preTask['canLearn'] && !$this->isTaskFinished($preTask) && !$preTask['isOptional'] && ('published' == $preTask['status'])) {
                 $canLearn = false;
                 break;
             }
