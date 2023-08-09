@@ -598,6 +598,7 @@ t.add("validate.required.message", "\u8bf7\u8f93\u5165%display%", "js", "zh_CN")
 t.add("validate.valid_enter.retest.interval", "\u91cd\u8003\u95f4\u9694", "js", "zh_CN");
 t.add("course.plan_task.activity_manage.testpaper.time_limit", "\u8003\u8bd5\u65f6\u957f", "js", "zh_CN");
 t.add("validate.valid_enter_a_positive.integer", "\u8bf7\u8f93\u51651\u81f3100\u7684\u6b63\u6574\u6570", "js", "zh_CN");
+t.add("validate.valid_starttime_smaller_currenttime", "\u5f00\u59cb\u65f6\u95f4\u4e0d\u80fd\u5c0f\u4e8e\u5f53\u524d\u65f6\u95f4", "js", "zh_CN");
 t.add("validate.valid_rangetime.required", "\u8bf7\u9009\u62e9\u65e5\u671f\u533a\u95f4", "js", "zh_CN");
 t.add("validate.valid_starttime.required", "\u8bf7\u9009\u62e9\u5f00\u59cb\u65f6\u95f4", "js", "zh_CN");
 t.add("validate.valid_endtime.required", "\u8bf7\u9009\u62e9\u7ed3\u675f\u65f6\u95f4", "js", "zh_CN");

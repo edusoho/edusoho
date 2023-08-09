@@ -655,6 +655,7 @@ t.add("validate.required.message", "Please input %display%", "js", "en");
 t.add("validate.valid_enter.retest.interval", "Retest interval", "js", "en");
 t.add("course.plan_task.activity_manage.testpaper.time_limit", "Test duration", "js", "en");
 t.add("validate.valid_enter_a_positive.integer", "Please enter a positive integer from 1 to 100", "js", "en");
+t.add("validate.valid_starttime_smaller_currenttime", "The start time cannot be smaller than the current time", "js", "en");
 t.add("validate.valid_rangetime.required", "Please select a date range", "js", "en");
 t.add("validate.valid_starttime.required", "Please select a start time", "js", "en");
 t.add("validate.valid_endtime.required", "Please select an end time", "js", "en");
