@@ -14,10 +14,19 @@ class EventController extends BaseController
         if (!$currentUser->isLogin() && !in_array($eventName, $this->needNotLoginEventList())) {
             return $this->createJsonResponse('fail');
         }
+
+        if (!in_array($eventName, $this->needEventNameList())) {
+            return $this->createJsonResponse('fail');
+        }
+
         $data = $request->request->all();
         $data['userId'] = $currentUser->getId();
         $subjectId = $request->request->get('subjectId');
         $subjectType = $request->request->get('subjectType');
+
+        if (!in_array($subjectType, $this->needSubjectTypeList())) {
+            return $this->createJsonResponse('fail');
+        }
 
         $subject = $this->getEventService()->getEventSubject($subjectType, $subjectId);
 
@@ -32,9 +41,19 @@ class EventController extends BaseController
 
     private function needNotLoginEventList()
     {
-        return array(
+        return [
             'task.preview',
-        );
+        ];
+    }
+
+    private function needEventNameList()
+    {
+        return ['course.view', 'classroom.view', 'task.view'];
+    }
+
+    private function needSubjectTypeList()
+    {
+        return ['course', 'classroom', 'task', 'courseMember'];
     }
 
     /**
