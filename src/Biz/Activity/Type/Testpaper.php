@@ -171,6 +171,7 @@ class Testpaper extends Activity
             throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
+        $fields = $this->preFields($fields);
         $this->checkUpdateFields($fields, $activity);
         $filterFields = $this->filterFields($fields);
 
@@ -253,11 +254,13 @@ class Testpaper extends Activity
 
     protected function preFields($fields)
     {
-        if (self::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
-            $fields['endTime'] = 0;
-        } elseif (self::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
-            $fields['startTime'] = 0;
-            $fields['endTime'] = 0;
+        if (isset($fields['validPeriodMode'])) {
+            if (self::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
+                $fields['endTime'] = 0;
+            } elseif (self::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
+                $fields['startTime'] = 0;
+                $fields['endTime'] = 0;
+            }
         }
 
         return $fields;
@@ -296,19 +299,15 @@ class Testpaper extends Activity
     protected function filterFields($fields)
     {
         $testPaper = $this->getAssessmentService()->getAssessment($fields['testpaperId']);
-        $fields['passScore'] = empty($fields['finishData']) ? 0 : round(
-            $testPaper['total_score'] * $fields['finishData'],
-            0
-        );
+        $fields['passScore'] = empty($fields['finishData']) ? 0 : round($testPaper['total_score'] * $fields['finishData']);
 
         if (!empty($fields['finishType'])) {
+            $fields['finishCondition'] = [];
             if ('score' == $fields['finishType']) {
                 $fields['finishCondition'] = [
                     'type' => 'score',
                     'finishScore' => $fields['passScore'],
                 ];
-            } else {
-                $fields['finishCondition'] = [];
             }
         }
 
