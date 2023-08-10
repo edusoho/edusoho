@@ -10860,7 +10860,8 @@ exception.testpaper.start_time_earlier_than_current: 考试已开始，无法修
 exception.testpaper.end_time_earlier_than_start_time: 结束时间不能早于或等于开始时间
 exception.testpaper.no_do_times: 当前考试次数已用完，请重新选择考试
 exception.testpaper.end_of_exam: 当前考试已结束，请重新选择考试
-exception.testpaper.end_time_earlier_than_current_time: 结束时间不能早于当前时间
+exception.testpaper.exam_not_started: 当前考试未开始
+exception.testpaper.start_time_earlier_than_current_time: 开始时间不能早于当前时间
 exception.homework.not_found: 作业不存在
 exception.homework.draft: 该作业未发布，如有疑问请联系老师！
 exception.homework.closed: 该作业已关闭，如有疑问请联系老师！
