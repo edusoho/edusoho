@@ -174,7 +174,7 @@ class Testpaper extends Activity
         }
 
         $fields = $this->preFields($fields);
-        $this->checkFields($fields);
+        $this->checkFields($fields, $activity);
         $filterFields = $this->filterFields($fields);
 
         try {
@@ -268,7 +268,7 @@ class Testpaper extends Activity
         return $fields;
     }
 
-    protected function checkFields($fields)
+    protected function checkFields($fields, $activity = null)
     {
         if (isset($fields['isCopy']) || isset($fields['isSync'])) {
             return;
@@ -282,8 +282,11 @@ class Testpaper extends Activity
             throw TestpaperException::END_TIME_EARLIER();
         }
 
-        if (!empty($fields['endTime']) && $fields['endTime'] < time()) {
-            throw TestpaperException::END_TIME_EARLIER_THAN_CURRENT_TIME();
+        if (!empty($activity) && !empty($fields['startTime']) && $fields['startTime'] == $activity['answerScene']['start_time']) {
+            return;
+        }
+        if (!empty($fields['startTime']) && $fields['startTime'] < time()) {
+            throw TestpaperException::START_TIME_EARLIER_THAN_CURRENT_TIME();
         }
     }
 
