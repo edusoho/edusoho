@@ -174,7 +174,7 @@ class Testpaper extends Activity
         }
 
         $fields = $this->preFields($fields);
-        $this->checkUpdateFields($fields, $activity);
+        $this->checkFields($fields);
         $filterFields = $this->filterFields($fields);
 
         try {
@@ -285,17 +285,6 @@ class Testpaper extends Activity
         if (!empty($fields['endTime']) && $fields['endTime'] < time()) {
             throw TestpaperException::END_TIME_EARLIER_THAN_CURRENT_TIME();
         }
-    }
-
-    protected function checkUpdateFields($fields, $activity)
-    {
-        $answerScene = $this->getAnswerSceneService()->get($activity['answerScene']['id']);
-
-        if (!empty($fields['endTime']) && $fields['endTime'] < $answerScene['start_time']) {
-            throw TestpaperException::END_TIME_EARLIER();
-        }
-
-        $this->checkFields($fields);
     }
 
     protected function filterFields($fields)
