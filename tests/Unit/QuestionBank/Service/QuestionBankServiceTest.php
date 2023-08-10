@@ -32,8 +32,8 @@ class QuestionBankServiceTest extends BaseTestCase
 
     public function testCreateQuestionBank()
     {
-        $field = ['name' => 'QuestionBank_test', 'categoryId' => '1'];
-        $this->createCategory();
+        $categoryId = $this->createCategory()['id'];
+        $field = ['name' => 'QuestionBank_test', 'categoryId' => $categoryId];
 
         $result = $this->getQuestionBankService()->createQuestionBank($field);
         $this->assertEquals('QuestionBank_test', $result['name']);
@@ -111,7 +111,8 @@ class QuestionBankServiceTest extends BaseTestCase
     protected function createCategory()
     {
         $category = ['name' => 'test', 'parentId' => '0', 'id' => '1'];
-        $this->getCategoryService()->createCategory($category);
+
+        return $this->getCategoryService()->createCategory($category);
     }
 
     protected function createQuestionBank()
