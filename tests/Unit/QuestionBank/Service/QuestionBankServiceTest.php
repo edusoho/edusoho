@@ -27,6 +27,12 @@ class QuestionBankServiceTest extends BaseTestCase
     public function testCreateQuestionBankWithEmptyArgumentCategoryException()
     {
         $field = ['name' => 'test', 'categoryId' => '1'];
+        $this->mockBiz('QuestionBank:CategoryService')
+            ->shouldReceive('getCategory')
+            ->times(self::once())
+            ->with(1)
+            ->andReturn(null);
+
         $this->getQuestionBankService()->createQuestionBank($field);
     }
 
