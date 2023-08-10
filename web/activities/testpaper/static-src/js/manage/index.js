@@ -296,14 +296,16 @@ class Testpaper {
           required: () => $('[name="validPeriodMode"]:checked').val() == 1,
           mini_date_validate: {
             optional: () => $('[name=startTime]').val(),
-            validPeriodMode: ()=> $('[name="validPeriodMode"]:checked').val()
+            validPeriodMode: ()=> $('[name="validPeriodMode"]:checked').val(),
+            validatorMode: '1',
           },
         },
         rangeStartTime: {
           required: () => $('[name="validPeriodMode"]:checked').val() == 2,
           mini_date_validate: {
             optional: () => $('[name=startTime]').val(),
-            validPeriodMode: ()=> $('[name="validPeriodMode"]:checked').val()
+            validPeriodMode: ()=> $('[name="validPeriodMode"]:checked').val(),
+            validatorMode: '2',
           }
         },
         redoInterval: {

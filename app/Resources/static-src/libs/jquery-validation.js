@@ -538,6 +538,7 @@ $.validator.addMethod('optional_range', function (value, element, params) {
 
 $.validator.addMethod('mini_date_validate', function (value, element, params) {
   if(params.validPeriodMode() === '0') return true
+  if(!(params.validatorMode == params.validPeriodMode())) return true
   if (!(new Date(params.optional()).getTime() < Date.now())) return true;
   return this.optional(element);
 }, Translator.trans('validate.valid_starttime_smaller_currenttime'));
