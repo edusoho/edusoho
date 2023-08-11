@@ -5,7 +5,6 @@ namespace MarketingMallBundle\Event;
 use Codeages\Biz\Framework\Event\Event;
 use MarketingMallBundle\Biz\Mall\Service\MallService;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
-use MarketingMallBundle\Biz\SyncList\Service\SyncListService;
 use MarketingMallBundle\Common\GoodsContentBuilder\ClassroomInfoBuilder;
 
 class ClassroomEventSubscriber extends BaseEventSubscriber
@@ -65,14 +64,6 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
 
     protected function syncClassroomToMarketingMall($classroomId)
     {
-//        $this->updateGoodsContent('classroom', new ClassroomInfoBuilder(), $classroomId);
-//        $data = $this->getSyncListService()->getSyncDataId($classroomId);
-//        foreach ($data as $value) {
-//            if($value['id'] && $value['type'] == 'classroom' && $value['status'] == 'new') {
-//                return;
-//            }
-//        }
-//        $this->getSyncListService()->addSyncList(['type' => 'classroom', 'data' => $classroomId]);
 
         $this->updateGoodsContent('classroom', new ClassroomInfoBuilder(), $classroomId);
     }
@@ -93,14 +84,6 @@ class ClassroomEventSubscriber extends BaseEventSubscriber
     protected function getProductMallGoodsRelationService()
     {
         return $this->getBiz()->service('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
-    }
-
-    /**
-     * @return SyncListService
-     */
-    protected function getSyncListService()
-    {
-        return $this->getBiz()->service('MarketingMallBundle:SyncList:SyncListService');
     }
 
     /**
