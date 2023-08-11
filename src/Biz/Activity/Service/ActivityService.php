@@ -67,7 +67,7 @@ interface ActivityService
 
     public function trigger($activityId, $name, $data = []);
 
-    public function isFinished($activityId);
+    public function isFinished($activityId, $userId = 0);
 
     public function findActivitySupportVideoTryLook($courseIds);
 

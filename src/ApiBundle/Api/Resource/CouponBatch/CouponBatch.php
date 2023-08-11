@@ -7,14 +7,15 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Coupon\CouponException;
 use Biz\Coupon\Service\CouponBatchService;
+use Biz\User\UserException;
 
 class CouponBatch extends AbstractResource
 {
-    /**
-     * @ApiConf(isRequiredAuth=false)
-     */
     public function search(ApiRequest $request)
     {
+        if (!$this->getCurrentUser()->isAdmin()) {
+            throw UserException::PERMISSION_DENIED();
+        }
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions = $this->fillConditions($request->query->all());
         $total = $this->getCouponBatchService()->searchBatchsCount($conditions);

@@ -13,12 +13,6 @@ use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
 class AnswerRecord extends AbstractResource
 {
-    const VALID_PERIOD_MODE_NO_LIMIT = 0;
-
-    const VALID_PERIOD_MODE_RANGE = 1;
-
-    const VALID_PERIOD_MODE_ONLY_START = 2;
-
     public function get(ApiRequest $request, $id)
     {
         $answerRecord = $this->getAnswerRecordService()->get($id);
@@ -80,11 +74,11 @@ class AnswerRecord extends AbstractResource
     protected function preValidPeriodMode($scene)
     {
         if (!empty($scene['start_time']) && !empty($scene['end_time'])) {
-            $validPeriodMode = self::VALID_PERIOD_MODE_RANGE;
+            $validPeriodMode = Testpaper::VALID_PERIOD_MODE_RANGE;
         } elseif (!empty($scene['start_time']) && empty($scene['end_time'])) {
-            $validPeriodMode = self::VALID_PERIOD_MODE_ONLY_START;
+            $validPeriodMode = Testpaper::VALID_PERIOD_MODE_ONLY_START;
         } else {
-            $validPeriodMode = self::VALID_PERIOD_MODE_NO_LIMIT;
+            $validPeriodMode = Testpaper::VALID_PERIOD_MODE_NO_LIMIT;
         }
 
         return $validPeriodMode;

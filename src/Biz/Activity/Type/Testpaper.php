@@ -129,6 +129,7 @@ class Testpaper extends Activity
             'isOptionsSeqRandom' => $testpaperActivity['answerScene']['is_options_seq_random'],
             'isCopy' => 1,
             'isLimitDoTimes' => $testpaperActivity['isLimitDoTimes'],
+            'customComments' => $testpaperActivity['customComments'],
         ];
         $newExt['validPeriodMode'] = $this->preValidPeriodMode(['start_time' => $newExt['startTime'], 'end_time' => $newExt['endTime']]);
 
@@ -159,6 +160,7 @@ class Testpaper extends Activity
         $ext['isOptionsSeqRandom'] = $sourceExt['answerScene']['is_options_seq_random'];
         $ext['isSync'] = 1;
         $ext['isLimitDoTimes'] = $sourceExt['isLimitDoTimes'];
+        $ext['customComments'] = $sourceExt['customComments'];
 
         return $this->update($ext['id'], $ext, $activity);
     }
@@ -171,7 +173,8 @@ class Testpaper extends Activity
             throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
-        $this->checkUpdateFields($fields, $activity);
+        $fields = $this->preFields($fields);
+        $this->checkFields($fields, $activity);
         $filterFields = $this->filterFields($fields);
 
         try {
@@ -217,16 +220,16 @@ class Testpaper extends Activity
         return $this->getTestpaperActivityService()->deleteActivity($targetId);
     }
 
-    public function isFinished($activityId)
+    public function isFinished($activityId, $userId = 0)
     {
-        $user = $this->getCurrentUser();
+        $userId = empty($userId) ? $this->getCurrentUser()->getId() : $userId;
 
         $activity = $this->getActivityService()->getActivity($activityId, true);
         $testpaperActivity = $activity['ext'];
 
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId(
             $testpaperActivity['answerScene']['id'],
-            $user['id']
+            $userId
         );
 
         if (empty($answerRecord)) {
@@ -253,17 +256,19 @@ class Testpaper extends Activity
 
     protected function preFields($fields)
     {
-        if (self::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
-            $fields['endTime'] = 0;
-        } elseif (self::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
-            $fields['startTime'] = 0;
-            $fields['endTime'] = 0;
+        if (isset($fields['validPeriodMode'])) {
+            if (self::VALID_PERIOD_MODE_ONLY_START == $fields['validPeriodMode']) {
+                $fields['endTime'] = 0;
+            } elseif (self::VALID_PERIOD_MODE_NO_LIMIT == $fields['validPeriodMode']) {
+                $fields['startTime'] = 0;
+                $fields['endTime'] = 0;
+            }
         }
 
         return $fields;
     }
 
-    protected function checkFields($fields)
+    protected function checkFields($fields, $activity = null)
     {
         if (isset($fields['isCopy']) || isset($fields['isSync'])) {
             return;
@@ -277,49 +282,39 @@ class Testpaper extends Activity
             throw TestpaperException::END_TIME_EARLIER();
         }
 
-        if (!empty($fields['endTime']) && $fields['endTime'] < time()) {
-            throw TestpaperException::END_TIME_EARLIER_THAN_CURRENT_TIME();
+        if (!empty($activity) && !empty($fields['startTime']) && $fields['startTime'] == $activity['answerScene']['start_time']) {
+            return;
         }
-    }
-
-    protected function checkUpdateFields($fields, $activity)
-    {
-        $answerScene = $this->getAnswerSceneService()->get($activity['answerScene']['id']);
-
-        if (!empty($fields['endTime']) && $fields['endTime'] < $answerScene['start_time']) {
-            throw TestpaperException::END_TIME_EARLIER();
+        if (!empty($fields['startTime']) && $fields['startTime'] < time()) {
+            throw TestpaperException::START_TIME_EARLIER_THAN_CURRENT_TIME();
         }
-
-        $this->checkFields($fields);
     }
 
     protected function filterFields($fields)
     {
         $testPaper = $this->getAssessmentService()->getAssessment($fields['testpaperId']);
-        $fields['passScore'] = empty($fields['finishData']) ? 0 : round(
-            $testPaper['total_score'] * $fields['finishData'],
-            0
-        );
+        $fields['passScore'] = empty($fields['finishData']) ? 0 : round($testPaper['total_score'] * $fields['finishData']);
 
         if (!empty($fields['finishType'])) {
+            $fields['finishCondition'] = [];
             if ('score' == $fields['finishType']) {
                 $fields['finishCondition'] = [
                     'type' => 'score',
                     'finishScore' => $fields['passScore'],
                 ];
-            } else {
-                $fields['finishCondition'] = [];
             }
         }
 
-        $fields['customComments'] = [];
-        if (!empty($fields['start'])) {
-            foreach ($fields['start'] as $key => $val) {
-                $fields['customComments'][] = [
-                    'start' => $val,
-                    'end' => $fields['end'][$key],
-                    'comment' => $fields['comment'][$key],
-                ];
+        if (!isset($fields['customComments'])) {
+            $fields['customComments'] = [];
+            if (!empty($fields['start'])) {
+                foreach ($fields['start'] as $key => $val) {
+                    $fields['customComments'][] = [
+                        'start' => $val,
+                        'end' => $fields['end'][$key],
+                        'comment' => $fields['comment'][$key],
+                    ];
+                }
             }
         }
 

@@ -731,6 +731,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->getClassroomDao()->delete($id);
             $this->getClassroomGoodsMediator()->onDelete($classroom);
             $this->dispatchEvent('classroom.delete', $classroom);
+            $this->dispatchEvent('wrong_question_pool.delete', ['target_id' => $id, 'target_type' => 'classroom']);
 
             $this->commit();
         } catch (\Exception $exception) {

@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ContentToolkit;
 use Biz\Common\CommonException;
 use Biz\File\UploadFileException;
 
@@ -15,6 +16,7 @@ class CourseThread extends AbstractResource
         $this->getCourseService()->tryTakeCourse($courseId);
 
         $thread = $this->getCourseThreadService()->getThreadByThreadId($threadId);
+        $this->extractImgs($thread);
         $this->handleAttachments($thread);
 
         if (!empty($thread['videoId'])) {
@@ -79,6 +81,7 @@ class CourseThread extends AbstractResource
             $limit
         );
         foreach ($threads as &$thread) {
+            $this->extractImgs($thread);
             $this->handleAttachments($thread);
         }
         $this->getOCUtil()->multiple($threads, ['userId']);
@@ -106,6 +109,11 @@ class CourseThread extends AbstractResource
         if (empty($fields['title'])) {
             $fields['questionType'] = $this->getQuestionType($fields['fileIds']);
         }
+
+        if (isset($fields['imgs'])) {
+            $fields['content'] = ContentToolkit::appendImgs($fields['content'], $fields['imgs']);
+        }
+
         $thread = $this->getCourseThreadService()->createThread($fields);
 
         if (isset($fields['fileIds'])) {
@@ -143,6 +151,17 @@ class CourseThread extends AbstractResource
         }
 
         return $result;
+    }
+
+    protected function extractImgs(&$thread)
+    {
+        $thread['imgs'] = [];
+        if (empty($thread['content'])) {
+            return;
+        }
+
+        $thread['imgs'] = ContentToolkit::extractImgs($thread['content']);
+        $thread['content'] = ContentToolkit::filterImgs($thread['content']);
     }
 
     protected function handleAttachments(&$thread)

@@ -34,7 +34,7 @@ class SettingController extends BaseController
             $safeIframeDomains = $security['safe_iframe_domains'];
             $cdnUrl = (new CdnUrl())->get();
             if ($cdnUrl) {
-                $safeIframeDomains[] = $cdnUrl;
+                $safeIframeDomains[] = ltrim($cdnUrl, '/');
             }
             $this->getCacheService()->set('safe_iframe_domains', array_unique($safeIframeDomains));
             $this->getSettingService()->set('security', $security);

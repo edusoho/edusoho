@@ -69,10 +69,10 @@ class ItemBankExerciseController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-
-
     public function recommendAction(Request $request, $id)
     {
+        $this->getExerciseService()->tryManageExercise($id);
+
         $exercise = $this->getExerciseService()->get($id);
 
         if ('POST' == $request->getMethod()) {
@@ -119,6 +119,7 @@ class ItemBankExerciseController extends BaseController
     public function checkEsProductCanDeleteAction(Request $request, $id)
     {
         $status = $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'questionBank');
+
         return $this->createJsonResponse(['status' => $status]);
     }
 
