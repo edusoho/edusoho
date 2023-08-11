@@ -536,13 +536,6 @@ $.validator.addMethod('optional_range', function (value, element, params) {
 	return this.optional(element) || params.optional() || (Number(value) >= params.range[0] && Number(value) <= params.range[1])
 }, Translator.trans('validate.valid_enter_a_positive.integer'));
 
-$.validator.addMethod('mini_date_validate', function (value, element, params) {
-  if (params.validPeriodMode() === '0') return true
-  if (params.validatorMode != params.validPeriodMode()) return true
-  if (new Date(params.optional()).getTime() >= Date.now()) return true;
-  return this.optional(element);
-}, Translator.trans('validate.valid_starttime_smaller_currenttime'));
-
 $.validator.addMethod('es_email', function (value, element, params) {
   return this.optional(element) || /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(value);
 }, Translator.trans('validate.valid_email_input.message'));
