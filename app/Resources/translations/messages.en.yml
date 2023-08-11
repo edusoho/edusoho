@@ -9550,7 +9550,8 @@ exception.testpaper.start_time_earlier_than_current: The exam has started and ca
 exception.testpaper.end_time_earlier_than_start_time: The end time cannot be earlier than or equal to the start time
 exception.testpaper.no_do_times: The current exam count has been used up, please reselect the exam
 exception.testpaper.end_of_exam: The current exam has ended, please reselect the exam
-exception.testpaper.end_time_earlier_than_current_time: The end time cannot be earlier than the current time
+exception.testpaper.exam_not_started: The current exam has not started
+exception.testpaper.start_time_earlier_than_current_time: The start time cannot be earlier than the current time
 exception.uploadfile.file_not_found: file does not exist
 exception.uploadfile.forbidden_manage_file: No rights to manage resources
 exception.uploadfile.error_status: Incorrect state
