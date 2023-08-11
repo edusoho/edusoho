@@ -6,13 +6,16 @@ use Codeages\Biz\Framework\Dao\Connection;
 
 class TestCaseConnection extends Connection
 {
-    private $insertedTables = array();
+    private $insertedTables = [];
 
-    public function insert($tableName, array $data, array $types = array())
+    public function executeUpdate($query, array $params = [], array $types = [])
     {
-        $this->insertedTables[] = $tableName;
+        if ('insert' === strtolower(substr($query, 0, 6)) &&
+            preg_match('/^insert\s+into\s+(\w+)\s+.*/i', $query, $matches)) {
+            $this->insertedTables[] = $matches[1];
+        }
 
-        return parent::insert($tableName, $data, $types);
+        return parent::executeUpdate($query, $params, $types);
     }
 
     public function getInsertedTables()
@@ -22,6 +25,6 @@ class TestCaseConnection extends Connection
 
     public function resetInsertedTables()
     {
-        $this->insertedTables = array();
+        $this->insertedTables = [];
     }
 }
