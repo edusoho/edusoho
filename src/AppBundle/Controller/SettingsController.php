@@ -1005,6 +1005,8 @@ class SettingsController extends BaseController
     public function bindAction(Request $request, $type)
     {
         $this->checkBindsName($type);
+        $state = uniqid('edusoho');
+        $this->get('session')->set('login_bind.credential', $state);
         $callback = $this->generateUrl(
             'settings_binds_bind_callback',
             ['type' => $type],
