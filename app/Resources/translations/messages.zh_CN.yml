@@ -2204,7 +2204,7 @@ course.plan_task.activity_manage.testpaper.option.out.of.order: 选项乱序
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。
 course.plan_task.activity_manage.testpaper.question.disorder: 开启后，学员进入考试时，对应大题内所有小题将随机排序
 course.plan_task.activity_manage.testpaper.option.disorder: 开启后，学员进入考试时，所有选择题选项将随机排序
-course.plan_task.activity_manage.testpaper.rangedate: "<div>1、不限：没有时间限制，永久有效；</div>2、指定日期区间：有固定开始和结束时间，在此以为外的时间无法参加考试；<div>3、指定开始时间：仅指定开始时间，不指定结束时间，永久有效，未到开始时间无法参加考试；</div>4、考试完成创建后，再次编辑时，考试有效期模式无法修改"
+course.plan_task.activity_manage.testpaper.rangedate: "<div>1、不限：没有时间限制，永久有效；</div>2、指定日期区间：有固定开始和结束时间，在此以为外的时间无法参加考试；<div>3、指定开始时间：仅指定开始时间，不指定结束时间，永久有效，未到开始时间无法参加考试；</div>"
 course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制，考试次数设置为1次时，“重考间隔”不生效。
 course.plan_task.activity_manage.testpaper.time_length_tips: 0分钟，表示无限制
 course.plan_task.activity_manage.testpaper.time: 考试时间
@@ -10860,7 +10860,8 @@ exception.testpaper.start_time_earlier_than_current: 考试已开始，无法修
 exception.testpaper.end_time_earlier_than_start_time: 结束时间不能早于或等于开始时间
 exception.testpaper.no_do_times: 当前考试次数已用完，请重新选择考试
 exception.testpaper.end_of_exam: 当前考试已结束，请重新选择考试
-exception.testpaper.end_time_earlier_than_current_time: 结束时间不能早于当前时间
+exception.testpaper.exam_not_started: 当前考试未开始
+exception.testpaper.start_time_earlier_than_current_time: 开始时间不能早于当前时间
 exception.homework.not_found: 作业不存在
 exception.homework.draft: 该作业未发布，如有疑问请联系老师！
 exception.homework.closed: 该作业已关闭，如有疑问请联系老师！

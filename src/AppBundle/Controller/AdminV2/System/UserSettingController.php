@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\System\Service\SettingService;
+use Biz\User\Service\UserAuthSettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserFieldException;
 use Symfony\Component\HttpFoundation\Request;
@@ -95,7 +96,7 @@ class UserSettingController extends BaseController
             }
 
             $auth = array_merge($auth, $authUpdate);
-            $this->getSettingService()->set('auth', $auth);
+            $this->getUserAuthSettingService()->update($auth);
 
             $this->setFlashMessage('success', 'site.save.success');
         }
@@ -569,5 +570,13 @@ class UserSettingController extends BaseController
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
+    }
+
+    /**
+     * @return UserAuthSettingService
+     */
+    protected function getUserAuthSettingService()
+    {
+        return $this->createService('User:UserAuthSettingService');
     }
 }
