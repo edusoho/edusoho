@@ -8,6 +8,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\ThreadService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Search\Service\SearchService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
@@ -42,7 +43,7 @@ class SearchController extends BaseController
 
         $this->dispatchSearchEvent($keywords, $type, $page);
 
-        if (!in_array($type, ['course', 'classroom'])) {
+        if (!in_array($type, ['course', 'classroom', 'itemBankExercise'])) {
             $type = 'course';
         }
 
@@ -171,6 +172,62 @@ class SearchController extends BaseController
                 'keywords' => $keywords,
                 'isShowVipSearch' => $isShowVipSearch,
                 'currentUserVipLevel' => $currentUserVipLevel,
+                'categoryIds' => $categoryIds,
+                'filter' => $filter,
+                'count' => $count,
+            ]
+        );
+    }
+
+    public function itemBankExerciseSearchAction(Request $request)
+    {
+        $keywords = $request->query->get('q');
+        $keywords = $this->filterKeyWord(trim($keywords));
+        $type = 'itemBankExercise';
+        $parentId = 0;
+        $categories = $this->getQuestionBankCategoryService()->findAllCategoriesByParentId($parentId);
+
+        $categoryIds = [];
+
+        foreach ($categories as $key => $category) {
+            $categoryIds[$key] = $category['name'];
+        }
+
+        $categoryId = $request->query->get('categoryIds');
+        $filter = $request->query->get('filter');
+
+        $conditions = [
+            'status' => 'published',
+            'title' => $keywords,
+            'categoryId' => $categoryId,
+            'parentId' => 0,
+        ];
+
+        if ('free' == $filter) {
+            $conditions['price'] = '0.00';
+        }
+
+        $conditions = $this->filterCourseConditions($conditions);
+
+        $count = $this->getItemBankExerciseService()->count($conditions);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $count, 12
+        );
+        $itemBankExercises = $this->getItemBankExerciseService()->search(
+            $conditions,
+            ['updatedTime' => 'desc', 'recommendedSeq' => 'asc'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render(
+            'search/index.html.twig',
+            [
+                'type' => $type,
+                'itemBankExercises' => $itemBankExercises,
+                'paginator' => $paginator,
+                'keywords' => $keywords,
                 'categoryIds' => $categoryIds,
                 'filter' => $filter,
                 'count' => $count,
@@ -391,5 +448,21 @@ class SearchController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return CategoryService
+     */
+    private function getQuestionBankCategoryService()
+    {
+        return $this->createService('QuestionBank:CategoryService');
     }
 }
