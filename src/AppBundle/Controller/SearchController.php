@@ -216,7 +216,7 @@ class SearchController extends BaseController
         );
         $itemBankExercises = $this->getItemBankExerciseService()->search(
             $conditions,
-            ['updatedTime' => 'desc', 'recommendedSeq' => 'asc'],
+            ['recommended' => 'desc', 'recommendedSeq' => 'asc', 'updatedTime' => 'desc'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
