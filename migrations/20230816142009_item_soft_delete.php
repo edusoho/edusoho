@@ -49,22 +49,22 @@ class ItemSoftDelete extends Migration
         $biz['db']->exec('DROP TABLE IF EXISTS `biz_assessment_snapshot`;');
 
         if ($this->isFieldExist('biz_answer_record', 'exercise_mode')) {
-            $biz['db']->exec("ALTER TABLE `biz_answer_record` DROP COLUMN `exercise_mode`;");
+            $biz['db']->exec('ALTER TABLE `biz_answer_record` DROP COLUMN `exercise_mode`;');
         }
         if ($this->isFieldExist('biz_item_category', 'seq')) {
-            $biz['db']->exec("ALTER TABLE `biz_item_category` DROP COLUMN `seq`;");
+            $biz['db']->exec('ALTER TABLE `biz_item_category` DROP COLUMN `seq`;');
         }
         if ($this->isFieldExist('item_bank_exercise', 'hiddenChapterIds')) {
-            $biz['db']->exec("ALTER TABLE `item_bank_exercise` DROP COLUMN `hiddenChapterIds`;");
+            $biz['db']->exec('ALTER TABLE `item_bank_exercise` DROP COLUMN `hiddenChapterIds`;');
         }
         if ($this->isFieldExist('biz_item', 'is_deleted')) {
-            $biz['db']->exec("ALTER TABLE `biz_item` DROP COLUMN `is_deleted`;");
+            $biz['db']->exec('ALTER TABLE `biz_item` DROP COLUMN `is_deleted`;');
         }
         if ($this->isFieldExist('biz_item_attachment', 'is_deleted')) {
-            $biz['db']->exec("ALTER TABLE `biz_item_attachment` DROP COLUMN `is_deleted`;");
+            $biz['db']->exec('ALTER TABLE `biz_item_attachment` DROP COLUMN `is_deleted`;');
         }
         if ($this->isFieldExist('biz_question', 'is_deleted')) {
-            $biz['db']->exec("ALTER TABLE `biz_question` DROP COLUMN `is_deleted`;");
+            $biz['db']->exec('ALTER TABLE `biz_question` DROP COLUMN `is_deleted`;');
         }
     }
 
