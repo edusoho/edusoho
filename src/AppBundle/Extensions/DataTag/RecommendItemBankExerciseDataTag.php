@@ -23,7 +23,6 @@ class RecommendItemBankExerciseDataTag extends BaseDataTag implements DataTag
         $conditions = [
             'status' => 'published',
             'recommended' => 1,
-            'parentId' => 0,
         ];
 
         $itemBankExercises = $this->getItemBankExerciseService()->search(
@@ -39,7 +38,7 @@ class RecommendItemBankExerciseDataTag extends BaseDataTag implements DataTag
             $conditions['recommended'] = 0;
             $itemBankExercisesTemp = $this->getItemBankExerciseService()->search(
                 $conditions,
-                ['recommendedSeq' => 'asc', 'updatedTime' => 'desc'],
+                ['updatedTime' => 'desc'],
                 0,
                 $arguments['count'] - $itemBankExerciseCount
             );
