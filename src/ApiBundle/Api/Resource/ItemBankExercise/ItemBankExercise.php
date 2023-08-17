@@ -47,7 +47,8 @@ class ItemBankExercise extends AbstractResource
             unset($conditions['categoryId']);
         }
 
-        $sort = $this->getSort($request);
+        $sort = empty($this->getSort($request)) ? ['recommended' => 'DESC', 'recommendedSeq' => 'ASC', 'updatedTime' => 'DESC'] : [];
+
         if (array_key_exists('recommendedSeq', $sort)) {
             $sort = ['recommended' => 'DESC', 'recommendedSeq' => 'ASC', 'updatedTime' => 'DESC'];
             $itemBankExercises = $this->getItemBankExerciseService()->search($conditions, $sort, $offset, $limit);
