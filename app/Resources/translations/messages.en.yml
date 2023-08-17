@@ -3271,6 +3271,13 @@ cloud_search.thread.from: From
 cloud_search.thread.recommend.content_title: 'Popular groups'
 cloud_search.article: Article
 cloud_search.article.result: 'Have found <span class="color-danger">%counts%</span> article(s)'
+
+cloud_search.itemBankExercise: 'Exercise of question bank'
+cloud_search.itemBankExercise.result: 'Have found <span class="color-danger">%counts%</span> Exercise of question bank(s)'
+cloud_search.itemBankExercise.evaluate: 'Judgments %ratingNum%'
+cloud_search.itemBankExercise.recommend.content_title: 'Recommend Exercise of question bank'
+cloud_search.itemBankExercise.recommend.empty: 'Sorry, no Recommend Exercise of question bank now.'
+
 group: 'Group Channel'
 group.name: 'Group name'
 group.about: 'Group Instruction'

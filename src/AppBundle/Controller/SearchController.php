@@ -191,6 +191,18 @@ class SearchController extends BaseController
         $type = $request->query->get('type', 'course');
         $page = $request->query->get('page', '1');
 
+        if ('itemBankExercise' == $type) {
+            return $this->redirect(
+                $this->generateUrl(
+                    'search',
+                    [
+                        'q' => $keywords,
+                        'type' => $type,
+                    ]
+                )
+            );
+        }
+
         $this->dispatchSearchEvent($keywords, $type, $page);
 
         if (!$this->isTypeUseable($type)) {

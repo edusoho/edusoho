@@ -3794,6 +3794,13 @@ cloud_search.article: 资讯
 cloud_search.article.result: >
   为您找到资讯结果约 <span class="color-danger">%counts%</span>个
 
+cloud_search.itemBankExercise: 题库练习
+cloud_search.itemBankExercise.result: >
+  为您找到题库练习结果约 <span class="color-danger">%counts%</span>个
+cloud_search.itemBankExercise.evaluate: %ratingNum%人评价
+cloud_search.itemBankExercise.recommend.content_title: 推荐题库练习
+cloud_search.itemBankExercise.recommend.empty: 暂无推荐题库练习
+
 # 小组
 group: 小组频道
 group.name: 小组名称

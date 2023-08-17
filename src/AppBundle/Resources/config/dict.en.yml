@@ -4,6 +4,7 @@ searchResultType:
     teacher: Teacher
     thread: Topic
     article: Article
+    itemBankExercise: Exercise of question bank
 
 courseStatus:
     draft: Unpublished
