@@ -221,6 +221,37 @@ class SearchController extends BaseController
         $type = $request->query->get('type', 'course');
         $page = $request->query->get('page', '1');
 
+        if ('itemBankExercise' == $type) {
+            $conditions = [
+                'status' => 'published',
+                'title' => $keywords,
+            ];
+
+            $count = $this->getItemBankExerciseService()->count($conditions);
+            $paginator = new Paginator(
+                $request,
+                $count,
+                $pageSize
+            );
+            $itemBankExercises = $this->getItemBankExerciseService()->search(
+                $conditions,
+                ['recommended' => 'desc', 'recommendedSeq' => 'asc', 'updatedTime' => 'desc'],
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+
+            return $this->render(
+                'search/cloud-search.html.twig',
+                [
+                    'keywords' => $keywords,
+                    'type' => $type,
+                    'resultSet' => $itemBankExercises,
+                    'counts' => $count,
+                    'paginator' => $paginator,
+                ]
+            );
+        }
+
         $this->dispatchSearchEvent($keywords, $type, $page);
 
         if (!$this->isTypeUseable($type)) {

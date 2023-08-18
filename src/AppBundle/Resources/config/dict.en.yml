@@ -1,6 +1,7 @@
 searchResultType:
     course: Course
     classroom: Classroom
+    itemBankExercise: Exercise of question bank
     teacher: Teacher
     thread: Topic
     article: Article
