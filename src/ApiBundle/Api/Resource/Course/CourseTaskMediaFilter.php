@@ -9,7 +9,7 @@ use ApiBundle\Api\Resource\Homework\HomeworkFilter;
 class CourseTaskMediaFilter extends Filter
 {
     protected $publicFields = [
-        'mediaType', 'media', 'format', 'itemCounts',
+        'mediaType', 'media', 'format',
     ];
 
     protected function publicFields(&$data)

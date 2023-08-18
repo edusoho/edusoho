@@ -62,15 +62,10 @@ class CourseTaskMedia extends AbstractResource
         }
         $media = $this->$method($course, $task, $activity, $request->getHttpRequest(), $ssl);
 
-        if ('exercise' == $activity['mediaType']) {
-            $media['metas']['counts']['total'] = $media['itemCount'] ?: 0;
-        }
-
         return [
             'mediaType' => $activity['mediaType'],
             'media' => $media,
             'format' => $request->query->get('format', 'common'),
-            'itemCounts' => ('exercise' == $activity['mediaType']) ? $media['metas']['counts'] : (object) [],
         ];
     }
 
@@ -295,6 +290,9 @@ class CourseTaskMedia extends AbstractResource
             $answerScene,
             $answerReport ?? []
         );
+
+        $activity['ext']['itemCounts'] = $activity['ext']['metas']['counts'] ?: [];
+        $activity['ext']['itemCounts']['total'] = $activity['ext']['itemCount'] ?: 0;
 
         return $activity['ext'];
     }
