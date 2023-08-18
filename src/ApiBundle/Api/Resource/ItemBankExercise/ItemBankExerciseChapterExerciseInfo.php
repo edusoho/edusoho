@@ -11,58 +11,70 @@ use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class ItemBankExerciseChapterExerciseInfo extends AbstractResource
 {
     public function search(ApiRequest $request, $exerciseId)
     {
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
+        if (!$this->getCurrentUser()->isLogin()) {
             throw UserException::UN_LOGIN();
         }
-        list($exercise, $member) = $this->getItemBankExerciseService()->tryTakeExercise($exerciseId);
-
         $moduleId = $request->query->get('moduleId', '');
         $categoryId = $request->query->get('categoryId', '');
-
-        $this->canLearnExercise($moduleId, $exerciseId);
-
+        $this->validateParams($exerciseId, $moduleId, $categoryId);
         $category = $this->getItemCategoryService()->getItemCategory($categoryId);
 
-        if (empty($category) || empty($category['question_num'])) {
-            throw CommonException::ERROR_PARAMETER_MISSING();
-        }
-
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
-        if ($category['bank_id'] != $questionBank['id']) {
-            throw ItemBankExerciseException::FORBIDDEN_TAKE_EXERCISE();
-        }
+        $items = $this->getItemService()->searchItems(['category_id' => $categoryId, 'bank_id' => $category['bank_id']], [], 0, PHP_INT_MAX);
+        $typesNum = $this->countItemTypesNum($items);
+        $typesNum['total'] = $category['item_num'];
 
         return [
             'chapterName' => $category['name'],
-            'itemNums' => $category['item_num'],
+            'itemCounts' => $typesNum,
         ];
     }
 
-    public function canLearnExercise($moduleId, $exerciseId)
+    public function validateParams($exerciseId, $moduleId, $categoryId)
     {
-        $module = $this->getItemBankExerciseModuleService()->get($moduleId);
-        if (empty($module) || ExerciseModuleService::TYPE_CHAPTER != $module['type']) {
-            throw CommonException::ERROR_PARAMETER_MISSING();
-        }
-
-        if ($module['exerciseId'] != $exerciseId) {
-            throw ItemBankExerciseException::FORBIDDEN_TAKE_EXERCISE();
-        }
-
-        if (!$this->getItemBankExerciseService()->canTakeItemBankExercise($module['exerciseId'])) {
-            throw ItemBankExerciseException::FORBIDDEN_TAKE_EXERCISE();
-        }
-
-        $itemBankExercise = $this->getItemBankExerciseService()->get($module['exerciseId']);
-        if (0 == $itemBankExercise['chapterEnable']) {
+        list($exercise) = $this->getItemBankExerciseService()->tryTakeExercise($exerciseId);
+        if (0 == $exercise['chapterEnable']) {
             throw ItemBankExerciseException::CHAPTER_EXERCISE_CLOSED();
         }
+
+        $module = $this->getItemBankExerciseModuleService()->get($moduleId);
+        if (empty($module) || ExerciseModuleService::TYPE_CHAPTER != $module['type'] || $module['exerciseId'] != $exerciseId) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+
+        $category = $this->getItemCategoryService()->getItemCategory($categoryId);
+        if (empty($category)) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
+        if (empty($questionBank) || $category['bank_id'] != $questionBank['id']) {
+            throw ItemBankExerciseException::FORBIDDEN_TAKE_EXERCISE();
+        }
+    }
+
+    public function countItemTypesNum($items)
+    {
+        $typesNum = [
+            'single_choice' => 0,
+            'choice' => 0,
+            'essay' => 0,
+            'uncertain_choice' => 0,
+            'determine' => 0,
+            'fill' => 0,
+            'material' => 0,
+        ];
+
+        foreach ($items as $item) {
+            ++$typesNum[$item['type']];
+        }
+
+        return $typesNum;
     }
 
     /**
@@ -70,7 +82,7 @@ class ItemBankExerciseChapterExerciseInfo extends AbstractResource
      */
     protected function getItemCategoryService()
     {
-        return $this->getBiz()->service('ItemBank:Item:ItemCategoryService');
+        return $this->service('ItemBank:Item:ItemCategoryService');
     }
 
     /**
@@ -78,7 +90,7 @@ class ItemBankExerciseChapterExerciseInfo extends AbstractResource
      */
     protected function getItemBankExerciseModuleService()
     {
-        return $this->getBiz()->service('ItemBankExercise:ExerciseModuleService');
+        return $this->service('ItemBankExercise:ExerciseModuleService');
     }
 
     /**
@@ -86,7 +98,7 @@ class ItemBankExerciseChapterExerciseInfo extends AbstractResource
      */
     protected function getItemBankExerciseService()
     {
-        return $this->getBiz()->service('ItemBankExercise:ExerciseService');
+        return $this->service('ItemBankExercise:ExerciseService');
     }
 
     /**
@@ -94,6 +106,14 @@ class ItemBankExerciseChapterExerciseInfo extends AbstractResource
      */
     protected function getQuestionBankService()
     {
-        return $this->getBiz()->service('QuestionBank:QuestionBankService');
+        return $this->service('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->service('ItemBank:Item:ItemService');
     }
 }
