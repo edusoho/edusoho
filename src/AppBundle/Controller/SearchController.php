@@ -76,7 +76,7 @@ class SearchController extends BaseController
         $count = $this->getClassroomService()->countClassrooms($conditions);
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $count, 12
         );
 
@@ -122,22 +122,11 @@ class SearchController extends BaseController
             }
         }
 
-        $parentId = 0;
-        $categories = $this->getCategoryService()->findAllCategoriesByParentId($parentId);
-
-        $categoryIds = [];
-
-        foreach ($categories as $key => $category) {
-            $categoryIds[$key] = $category['name'];
-        }
-
-        $categoryId = $request->query->get('categoryIds');
         $filter = $request->query->get('filter');
 
         $conditions = [
             'status' => 'published',
             'title' => $keywords,
-            'categoryId' => $categoryId,
             'parentId' => 0,
         ];
 
@@ -153,7 +142,7 @@ class SearchController extends BaseController
 
         $count = $this->getCourseSetService()->countCourseSets($conditions);
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $count, 12
         );
         $courseSets = $this->getCourseSetService()->searchCourseSets(
@@ -172,7 +161,6 @@ class SearchController extends BaseController
                 'keywords' => $keywords,
                 'isShowVipSearch' => $isShowVipSearch,
                 'currentUserVipLevel' => $currentUserVipLevel,
-                'categoryIds' => $categoryIds,
                 'filter' => $filter,
                 'count' => $count,
             ]
@@ -183,36 +171,22 @@ class SearchController extends BaseController
     {
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord(trim($keywords));
-        $type = 'itemBankExercise';
-        $parentId = 0;
-        $categories = $this->getQuestionBankCategoryService()->findAllCategoriesByParentId($parentId);
-
-        $categoryIds = [];
-
-        foreach ($categories as $key => $category) {
-            $categoryIds[$key] = $category['name'];
-        }
-
-        $categoryId = $request->query->get('categoryIds');
         $filter = $request->query->get('filter');
 
         $conditions = [
             'status' => 'published',
             'title' => $keywords,
-            'categoryId' => $categoryId,
-            'parentId' => 0,
         ];
 
         if ('free' == $filter) {
             $conditions['price'] = '0.00';
         }
 
-        $conditions = $this->filterCourseConditions($conditions);
-
         $count = $this->getItemBankExerciseService()->count($conditions);
         $paginator = new Paginator(
-            $this->get('request'),
-            $count, 12
+            $request,
+            $count,
+            12
         );
         $itemBankExercises = $this->getItemBankExerciseService()->search(
             $conditions,
@@ -224,11 +198,10 @@ class SearchController extends BaseController
         return $this->render(
             'search/index.html.twig',
             [
-                'type' => $type,
+                'type' => 'itemBankExercise',
                 'itemBankExercises' => $itemBankExercises,
                 'paginator' => $paginator,
                 'keywords' => $keywords,
-                'categoryIds' => $categoryIds,
                 'filter' => $filter,
                 'count' => $count,
             ]
