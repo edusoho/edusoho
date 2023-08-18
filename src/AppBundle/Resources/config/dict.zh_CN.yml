@@ -1,10 +1,10 @@
 searchResultType:
     course: 课程
     classroom: 班级
+    itemBankExercise: 题库练习
     teacher: 教师
     thread: 小组话题
     article: 资讯
-    itemBankExercise: 题库练习
 
 courseStatus:
     draft: 未发布

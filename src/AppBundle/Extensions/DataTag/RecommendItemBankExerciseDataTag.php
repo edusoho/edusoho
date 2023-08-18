@@ -34,7 +34,7 @@ class RecommendItemBankExerciseDataTag extends BaseDataTag implements DataTag
 
         $itemBankExerciseCount = count($itemBankExercises);
 
-        if ($itemBankExerciseCount < $arguments['count']) {
+        if ($itemBankExerciseCount < $arguments['count'] && empty($arguments['notFill'])) {
             $conditions['recommended'] = 0;
             $itemBankExercisesTemp = $this->getItemBankExerciseService()->search(
                 $conditions,
