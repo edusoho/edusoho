@@ -18,7 +18,11 @@
     "style-lint:fix": "stylelint src/**/*.scss --fix",
     "format-code": "prettier-eslint --write \"src/**/*.js\" \"src/**/*.vue\""
   },
-
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "*.scss": [
       "stylelint --syntax=scss --fix"
