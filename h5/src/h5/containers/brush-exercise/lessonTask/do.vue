@@ -22,7 +22,7 @@ import { mapState } from 'vuex';
 import * as types from '@/store/mutation-types.js';
 import { Dialog, Toast } from 'vant';
 import isAuthorized from '@/mixins/isAuthorized';
-
+import itemEngine from '@/src/components/item-engine/src/item-engine.vue';
 const config = {
   assessment: {
     api: 'getAssessmentExerciseRecord',
@@ -33,7 +33,7 @@ const config = {
 };
 export default {
   mixins: [isAuthorized],
-  components: {},
+  components: {itemEngine},
   data() {
     return {
       isLoading: true,

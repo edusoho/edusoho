@@ -1,0 +1,23 @@
+.ibs-count-down{
+  position: fixed;
+  z-index: 2;
+  left: 50%;
+  bottom: vw(76);
+  margin-left: vw(-45);
+  width: vw(130);
+  text-align: center;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  .van-count-down{
+    color: #fff;
+    font-size: vw(14);
+    line-height: vw(30);
+  }
+}
+
+.ibs-count-down-warn {
+  background: rgba(251, 97, 64, 0.2) !important;
+  .van-count-down{
+    color: rgba(251, 97, 64, 1) !important;
+  }
+}
