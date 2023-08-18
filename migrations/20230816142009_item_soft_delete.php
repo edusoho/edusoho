@@ -1,0 +1,79 @@
+<?php
+
+use Phpmig\Migration\Migration;
+
+class ItemSoftDelete extends Migration
+{
+    /**
+     * Do the migration
+     */
+    public function up()
+    {
+        $biz = $this->getContainer();
+        $biz['db']->exec("
+            CREATE TABLE IF NOT EXISTS `biz_assessment_snapshot` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `origin_assessment_id` INT(10) unsigned NOT NULL COMMENT '原试卷id',
+              `snapshot_assessment_id` INT(10) unsigned NOT NULL COMMENT '快照试卷id',
+              `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              KEY `origin_assessment_id` (`origin_assessment_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
+        if (!$this->isFieldExist('biz_answer_record', 'exercise_mode')) {
+            $biz['db']->exec("ALTER TABLE `biz_answer_record` ADD COLUMN `exercise_mode` tinyint(1) NOT NULL DEFAULT 0 COMMENT '练习模式 0测试模式 1一题一答' AFTER `exam_mode`;");
+        }
+        if (!$this->isFieldExist('biz_item_category', 'seq')) {
+            $biz['db']->exec("ALTER TABLE `biz_item_category` ADD COLUMN `seq` int(10) NOT NULL DEFAULT 0 COMMENT '同一父分类下分类排序' AFTER `weight`;");
+        }
+        if (!$this->isFieldExist('item_bank_exercise', 'hiddenChapterIds')) {
+            $biz['db']->exec("ALTER TABLE `item_bank_exercise` ADD COLUMN `hiddenChapterIds` TEXT COMMENT '不发布的章节(题目分类)id序列' AFTER `teacherIds`;");
+        }
+        if (!$this->isFieldExist('biz_item', 'is_deleted')) {
+            $biz['db']->exec("ALTER TABLE `biz_item` ADD COLUMN `is_deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除';");
+        }
+        if (!$this->isFieldExist('biz_item_attachment', 'is_deleted')) {
+            $biz['db']->exec("ALTER TABLE `biz_item_attachment` ADD COLUMN `is_deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除';");
+        }
+        if (!$this->isFieldExist('biz_question', 'is_deleted')) {
+            $biz['db']->exec("ALTER TABLE `biz_question` ADD COLUMN `is_deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除';");
+        }
+    }
+
+    /**
+     * Undo the migration
+     */
+    public function down()
+    {
+        $biz = $this->getContainer();
+        $biz['db']->exec('DROP TABLE IF EXISTS `biz_assessment_snapshot`;');
+
+        if ($this->isFieldExist('biz_answer_record', 'exercise_mode')) {
+            $biz['db']->exec('ALTER TABLE `biz_answer_record` DROP COLUMN `exercise_mode`;');
+        }
+        if ($this->isFieldExist('biz_item_category', 'seq')) {
+            $biz['db']->exec('ALTER TABLE `biz_item_category` DROP COLUMN `seq`;');
+        }
+        if ($this->isFieldExist('item_bank_exercise', 'hiddenChapterIds')) {
+            $biz['db']->exec('ALTER TABLE `item_bank_exercise` DROP COLUMN `hiddenChapterIds`;');
+        }
+        if ($this->isFieldExist('biz_item', 'is_deleted')) {
+            $biz['db']->exec('ALTER TABLE `biz_item` DROP COLUMN `is_deleted`;');
+        }
+        if ($this->isFieldExist('biz_item_attachment', 'is_deleted')) {
+            $biz['db']->exec('ALTER TABLE `biz_item_attachment` DROP COLUMN `is_deleted`;');
+        }
+        if ($this->isFieldExist('biz_question', 'is_deleted')) {
+            $biz['db']->exec('ALTER TABLE `biz_question` DROP COLUMN `is_deleted`;');
+        }
+    }
+
+    protected function isFieldExist($table, $filedName)
+    {
+        $biz = $this->getContainer();
+        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $biz['db']->fetchAssoc($sql);
+
+        return !empty($result);
+    }
+}

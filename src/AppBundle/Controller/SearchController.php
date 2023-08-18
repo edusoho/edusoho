@@ -8,6 +8,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\ThreadService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Search\Service\SearchService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
@@ -42,7 +43,7 @@ class SearchController extends BaseController
 
         $this->dispatchSearchEvent($keywords, $type, $page);
 
-        if (!in_array($type, ['course', 'classroom'])) {
+        if (!in_array($type, ['course', 'classroom', 'itemBankExercise'])) {
             $type = 'course';
         }
 
@@ -75,7 +76,7 @@ class SearchController extends BaseController
         $count = $this->getClassroomService()->countClassrooms($conditions);
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $count, 12
         );
 
@@ -121,22 +122,11 @@ class SearchController extends BaseController
             }
         }
 
-        $parentId = 0;
-        $categories = $this->getCategoryService()->findAllCategoriesByParentId($parentId);
-
-        $categoryIds = [];
-
-        foreach ($categories as $key => $category) {
-            $categoryIds[$key] = $category['name'];
-        }
-
-        $categoryId = $request->query->get('categoryIds');
         $filter = $request->query->get('filter');
 
         $conditions = [
             'status' => 'published',
             'title' => $keywords,
-            'categoryId' => $categoryId,
             'parentId' => 0,
         ];
 
@@ -152,7 +142,7 @@ class SearchController extends BaseController
 
         $count = $this->getCourseSetService()->countCourseSets($conditions);
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $count, 12
         );
         $courseSets = $this->getCourseSetService()->searchCourseSets(
@@ -171,7 +161,47 @@ class SearchController extends BaseController
                 'keywords' => $keywords,
                 'isShowVipSearch' => $isShowVipSearch,
                 'currentUserVipLevel' => $currentUserVipLevel,
-                'categoryIds' => $categoryIds,
+                'filter' => $filter,
+                'count' => $count,
+            ]
+        );
+    }
+
+    public function itemBankExerciseSearchAction(Request $request)
+    {
+        $keywords = $request->query->get('q');
+        $keywords = $this->filterKeyWord(trim($keywords));
+        $filter = $request->query->get('filter');
+
+        $conditions = [
+            'status' => 'published',
+            'title' => $keywords,
+        ];
+
+        if ('free' == $filter) {
+            $conditions['price'] = '0.00';
+        }
+
+        $count = $this->getItemBankExerciseService()->count($conditions);
+        $paginator = new Paginator(
+            $request,
+            $count,
+            12
+        );
+        $itemBankExercises = $this->getItemBankExerciseService()->search(
+            $conditions,
+            ['recommended' => 'desc', 'recommendedSeq' => 'asc', 'updatedTime' => 'desc'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render(
+            'search/index.html.twig',
+            [
+                'type' => 'itemBankExercise',
+                'itemBankExercises' => $itemBankExercises,
+                'paginator' => $paginator,
+                'keywords' => $keywords,
                 'filter' => $filter,
                 'count' => $count,
             ]
@@ -403,5 +433,13 @@ class SearchController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 }
