@@ -292,7 +292,6 @@ class CourseTaskMedia extends AbstractResource
         );
 
         $activity['ext']['itemCounts'] = $activity['ext']['metas']['counts'] ?: [];
-        $activity['ext']['itemCounts']['total'] = $activity['ext']['itemCount'] ?: 0;
 
         return $activity['ext'];
     }
