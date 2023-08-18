@@ -65,6 +65,7 @@ site.default.all: All
 site.default.user: User
 site.default.course: Course
 site.default.question.bank: Question Bank
+site.default.item.bank.exercise: Item Bank Exercise
 site.default.plan: Plan
 site.default.more: More
 site.default.manage: Config
@@ -3136,9 +3137,11 @@ custom_page.empty: 'The current page has not been edited yet ,please edit in the
 search.empty: 'Cannot find related %name%, please change your keyword.'
 search.content_title: Search
 search.relative_courses_result: 'Total <span class="color-danger phm">%count%</span> courses with <span class="color-danger phm">“%keywords%”</span>'
-search.relative_classrooms_result: Total <span class="color-danger phm">%count%</span> classrooms with <span class="color-danger phm">“%keywords%”</span> related %classroom%
+search.relative_classrooms_result: 'Total <span class="color-danger phm">%count%</span> classrooms with <span class="color-danger phm">“%keywords%”</span> related %classroom%'
+search.relative_item_bank_exercises_result: 'Total <span class="color-danger phm">%count%</span> itemBankExercises with <span class="color-danger phm">“%keywords%”</span>'
 search.result_course_copy: 'Total <span class="color-danger phm">%count%</span> courses'
 search.result_classrooms_copy: 'Total <span class="color-danger phm">%count%</span> %classroom%'
+search.result_item_bank_exercises_copy: 'Total <span class="color-danger phm">%count%</span> itemBankExercises'
 search.all_courses: 'All courses'
 search.vip_courses: 'VIP courses'
 search.free_courses: 'Free courses'
@@ -3147,6 +3150,8 @@ search.reservation_courses: Reservation courses
 search.all_classrooms: 'All %classroom%'
 search.free_classrooms: 'Free %classroom%'
 search.free_item_bank: Free
+search.all_item_bank_exercise: 'All itemBankExercise'
+search.free_item_bank_exercise: 'Free itemBankExercise'
 cloud_file.preview: 'preview'
 cloud_file.re_transcoding_btn: Re-transcoding
 cloud_file.re_transcoding.submiting: Submiting...

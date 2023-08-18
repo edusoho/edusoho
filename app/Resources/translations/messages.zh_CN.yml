@@ -70,6 +70,7 @@ site.default.all: 所有
 site.default.user: 用户
 site.default.course: 课程
 site.default.question.bank: 题库
+site.default.item.bank.exercise: 题库练习
 site.default.plan: 计划
 site.default.more: 更多
 site.default.manage: 管理
@@ -3640,8 +3641,10 @@ search.empty: 没有搜到相关%name%，请换个关键词试试！
 search.content_title: 搜索
 search.relative_courses_result: 共找到<span class="color-danger phm">%count%</span>门<span class="color-danger phm">“%keywords%”</span>相关课程
 search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关%classroom%
+search.relative_item_bank_exercises_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关题库练习
 search.result_course_copy: 共找到<span class="color-danger phm">%count%</span>门课程
 search.result_classrooms_copy: 共找到<span class="color-danger phm">%count%</span>个%classroom%
+search.result_item_bank_exercises_copy: 共找到<span class="color-danger phm">%count%</span>个题库练习
 search.all_courses: 全部课程
 search.vip_courses: 会员课程
 search.free_courses: 免费课程
@@ -3650,6 +3653,8 @@ search.reservation_courses: 一对一约课
 search.all_classrooms: 全部%classroom%
 search.free_classrooms: 免费%classroom%
 search.free_item_bank: 免费题库
+search.all_item_bank_exercise: 全部题库练习
+search.free_item_bank_exercise: 免费题库练习
 
 
 #云资源
