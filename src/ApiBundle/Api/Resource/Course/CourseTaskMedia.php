@@ -291,7 +291,7 @@ class CourseTaskMedia extends AbstractResource
             $answerReport ?? []
         );
 
-        $activity['ext']['itemCounts'] = $activity['ext']['metas']['counts'] ?: [];
+        $activity['ext']['itemCounts'] = $activity['ext']['metas']['counts'] ?: (object)[];
 
         return $activity['ext'];
     }
