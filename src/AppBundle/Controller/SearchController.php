@@ -430,12 +430,4 @@ class SearchController extends BaseController
     {
         return $this->createService('ItemBankExercise:ExerciseService');
     }
-
-    /**
-     * @return CategoryService
-     */
-    private function getQuestionBankCategoryService()
-    {
-        return $this->createService('QuestionBank:CategoryService');
-    }
 }
