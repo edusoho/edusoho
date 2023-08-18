@@ -16,7 +16,6 @@ class CourseTaskMediaFilter extends Filter
     {
         switch ($data['mediaType']) {
             case 'homework':
-
                 $homeworkFilter = new HomeworkFilter();
                 $homeworkFilter->filter($data['media']);
                 $data['homework'] = $data['media'];
@@ -24,7 +23,6 @@ class CourseTaskMediaFilter extends Filter
                 break;
 
             case 'exercise':
-
                 $exerciseFilter = new ExerciseFilter();
                 $exerciseFilter->filter($data['media']);
                 $data['exercise'] = $data['media'];
@@ -32,7 +30,6 @@ class CourseTaskMediaFilter extends Filter
                 break;
 
             case 'text':
-
                 $data['media']['content'] = $this->convertAbsoluteUrl($data['media']['content']);
                 break;
 
@@ -43,7 +40,6 @@ class CourseTaskMediaFilter extends Filter
                 break;
 
             case 'download':
-
                 // /api/courses/{courseId}/task_medias/{taskId}接口 为App/微网校提供 "获取教学任务" 的功能
                 // 由于 Android 端语言规范，需要12种类型返回出去的 media key 不一样(因为里面字段也不一样)
                 $data['downloadMedia'] = $data['media'];
