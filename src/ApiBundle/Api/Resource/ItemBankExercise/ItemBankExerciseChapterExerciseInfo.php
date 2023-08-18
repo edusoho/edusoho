@@ -23,9 +23,9 @@ class ItemBankExerciseChapterExerciseInfo extends AbstractResource
         $moduleId = $request->query->get('moduleId', '');
         $categoryId = $request->query->get('categoryId', '');
         $this->validateParams($exerciseId, $moduleId, $categoryId);
-        $category = $this->getItemCategoryService()->getItemCategory($categoryId);
 
-        $items = $this->getItemService()->searchItems(['category_id' => $categoryId, 'bank_id' => $category['bank_id']], [], 0, PHP_INT_MAX);
+        $category = $this->getItemCategoryService()->getItemCategory($categoryId);
+        $items = $this->getItemService()->searchItems(['bank_id' => $category['bank_id'], 'category_id' => $categoryId], [], 0, PHP_INT_MAX);
         $typesNum = $this->countItemTypesNum($items);
         $typesNum['total'] = $category['item_num'];
 
@@ -53,7 +53,7 @@ class ItemBankExerciseChapterExerciseInfo extends AbstractResource
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
-        if (empty($questionBank) || $category['bank_id'] != $questionBank['id']) {
+        if (empty($questionBank) || $category['bank_id'] != $questionBank['itemBankId']) {
             throw ItemBankExerciseException::FORBIDDEN_TAKE_EXERCISE();
         }
     }
