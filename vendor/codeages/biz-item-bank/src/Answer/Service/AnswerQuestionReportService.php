@@ -25,4 +25,6 @@ interface AnswerQuestionReportService
     public function batchUpdate(array $answerQuestionReports);
 
     public function findByAnswerRecordId($answerRecordId);
+
+    public function getByAnswerRecordIdAndItemId($answerRecordId, $itemId);
 }

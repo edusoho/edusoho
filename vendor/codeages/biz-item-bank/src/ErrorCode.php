@@ -103,4 +103,9 @@ class ErrorCode
     const ITEM_BANK_NOT_FOUND = 40495301;
 
     const ITEM_BANK_NOT_EMPTY = 40395302;
+
+    /**
+     * 练习模式错误
+     */
+    const EXERCISE_MODE_ERROR = 50095203;
 }

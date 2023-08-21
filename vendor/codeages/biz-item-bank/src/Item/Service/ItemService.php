@@ -47,4 +47,6 @@ interface ItemService
     public function countQuestionsByCategoryId($categoryId);
 
     public function searchQuestions($conditions, $orderBys, $start, $limit, $columns = []);
+
+    public function getItemWithQuestion($id);
 }

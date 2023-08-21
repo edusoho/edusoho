@@ -23,6 +23,11 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
     {
         return $this->findInField('id', $questionIds);
     }
+
+    public function getByItemId($itemId)
+    {
+        return $this->getByFields(['item_id' => $itemId]);
+    }
     
     public function declares()
     {
