@@ -9737,6 +9737,7 @@ exception.coupon.target_type_error: The batch does not support viewing details
 exception.coupon.setting_close: Coupon global switch is closed
 exception.coupon.receive_late: You are one step too late, the coupon has been claimed!
 
+exception.item_bank_exercise.chapter_answer_is_doing: 'Exercise record already exists, please start answering again'
 exception.item_bank_exercise.forbidden_learn: 'Your purchased item bank exercise was expired and you cannot proceed with the chapter, test paper, etc. and ask questions now. Please contact your teacher for help.'
 exception.item_bank_exercise.exercise.not_found: Item bank exercise does not exist
 exception.item_bank_exercise.exercise.forbidden_manage_exercise: Forbidden manage this item bank exercise
@@ -11007,8 +11008,10 @@ admin.multi_class_copy.failure.notify: Your new multi-class《%newTitle%》is co
 
 course.task_manage.no_permission_tips: 'Sorry, you can not edit tasks. Contact site administrator for help.'
 
-exception.wrong_question.data_fields_missing: Wrong question data fields missing
+exception.wrong_book.wrong_question.data_fields_missing: Wrong question data fields missing
 exception.wrong_book.wrong_question.not_exist: Wrong question not exist
+exception.wrong_book.wrong_question_num.limit: 'Out of input range'
+
 course.replay_manage.no_permission_tips: 'Sorry, you can not edit replays. Contact site administrator for help.'
 course.teacher_manage.no_permission_tips: 'Sorry, you can not edit teachers. Contact site administrator for help.'
 

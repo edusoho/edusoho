@@ -34,6 +34,7 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
             'limited_time' => ['integer'],
             'is_items_seq_random' => ['integer'],
             'is_options_seq_random' => ['integer'],
+            'exercise_mode' => [['in', [0, 1]]],
         ]);
 
         if ($answerRecord['user_id'] <= 0) {
@@ -94,6 +95,7 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
             'exam_mode' => ['integer'],
             'limited_time' => ['integer'],
             'id' => ['integer'],
+            'exercise_mode' => [['in', [0, 1]]],
         ]);
 
         return $this->getAnswerRecordDao()->update($id, $answerRecord);

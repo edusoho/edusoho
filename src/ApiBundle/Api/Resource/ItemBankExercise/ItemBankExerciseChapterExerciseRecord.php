@@ -5,17 +5,28 @@ namespace ApiBundle\Api\Resource\ItemBankExercise;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
+use Biz\ItemBankExercise\ItemBankExerciseException;
+use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class ItemBankExerciseChapterExerciseRecord extends AbstractResource
 {
     public function add(ApiRequest $request, $exerciseId)
     {
         $user = $this->getCurrentUser();
+        $moduleId = $request->request->get('moduleId', '');
+        $categoryId = $request->request->get('categoryId', '');
+
+        $latestRecord = $this->getItemBankChapterExerciseRecordService()->getLatestRecord($moduleId, $categoryId, $user['id']);
+        if (!empty($latestRecord) && AnswerService::ANSWER_RECORD_STATUS_FINISHED != $latestRecord['status']) {
+            throw ItemBankExerciseException::CHAPTER_ANSWER_IS_DOING();
+        }
 
         $chapterExerciseRecord = $this->getItemBankChapterExerciseService()->startAnswer(
-            $request->request->get('moduleId', ''),
-            $request->request->get('categoryId', ''),
-            $user['id']
+            $moduleId,
+            $categoryId,
+            $user['id'],
+            $request->request->get('exerciseMode', '0')
         );
         $answerRecord = $this->getAnswerRecordService()->get($chapterExerciseRecord['answerRecordId']);
 
@@ -69,5 +80,13 @@ class ItemBankExerciseChapterExerciseRecord extends AbstractResource
     protected function getAssessmentService()
     {
         return $this->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return ChapterExerciseRecordService
+     */
+    protected function getItemBankChapterExerciseRecordService()
+    {
+        return $this->service('ItemBankExercise:ChapterExerciseRecordService');
     }
 }
