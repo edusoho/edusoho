@@ -22,7 +22,7 @@ class WrongBook extends AbstractResource
 
         $wrongQuestionCount = $this->getWrongQuestionService()->countWrongQuestionWithCollect($conditions);
 
-        return ['sum_wrong_num' => $wrongQuestionCount];
+        return ['wrongNumCount' => $wrongQuestionCount];
     }
 
     protected function prepareConditions($poolId, $conditions)
