@@ -9,5 +9,5 @@ interface AnswerQuestionReportDao
 
     public function deleteByAssessmentId($assessmentId);
 
-    public function getByAnswerRecordIdAndItemId($answerRecordId, $itemId);
+    public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
 }

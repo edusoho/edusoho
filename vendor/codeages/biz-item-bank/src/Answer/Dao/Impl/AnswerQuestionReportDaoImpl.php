@@ -25,11 +25,11 @@ class AnswerQuestionReportDaoImpl extends AdvancedDaoImpl implements AnswerQuest
         return $this->findByFields(['answer_record_id' => $answerRecordId]);
     }
 
-    public function getByAnswerRecordIdAndItemId($answerRecordId, $itemId)
+    public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId)
     {
         return $this->getByFields([
             'answer_record_id' => $answerRecordId,
-            'item_id' => $itemId
+            'question_id' => $questionId
         ]);
     }
 
@@ -50,8 +50,9 @@ class AnswerQuestionReportDaoImpl extends AdvancedDaoImpl implements AnswerQuest
                 'answer_record_id IN (:answer_record_ids)',
                 'status = :status',
                 'status IN (:statues)',
+                'status != (:statusNo)',
                 'id IN (:ids)',
-                'item_id = :item_id'
+                'item_id = :question_id'
             ],
         ];
     }

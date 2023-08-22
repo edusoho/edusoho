@@ -84,4 +84,6 @@ interface AnswerService
     public function buildAutoSubmitAssessmentResponse($answerRecordId);
 
     public function batchAutoSubmit($answerSceneId, $assessmentId, $userIds);
+
+    public function reviewSingleAnswer($params);
 }

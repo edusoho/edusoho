@@ -26,6 +26,7 @@ use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
+use Codeages\Biz\ItemBank\Item\Type\Question;
 use Ramsey\Uuid\Uuid;
 
 class AnswerServiceImpl extends BaseService implements AnswerService
@@ -279,6 +280,90 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
+    }
+
+    public function reviewSingleAnswer($params)
+    {
+        $attachments = $this->getAttachmentService()->getAttachment($params['attachments']);
+
+        $questionReport = $this->getQuestionProcessor()->review($params['question_id'], empty($params['response']) ? [] : $params['response']);
+        if ('none' == $questionReport['result']) {
+            $questionReport['result'] = AnswerQuestionReportService::STATUS_REVIEWING;
+        }
+
+        $answerQuestionReports = [
+            'identify' => $params['answer_record_id'] . '_' . $questionReport['question_id'],
+            'total_score' => empty($questionReport['total_score']) ? 0.0 : $questionReport['total_score'],
+            'answer_record_id' => $params['answer_record_id'],
+            'assessment_id' => $params['assessment_id'],
+            'section_id' => $params['section_id'],
+            'item_id' => $params['item_id'],
+            'question_id' => $questionReport['question_id'],
+            'score' => empty($questionReport['score']) ? 0.0 : $questionReport['score'],
+            'status' => empty($questionReport['result']) ? '' : $questionReport['result'],
+            'response' => empty($questionReport['response']) ? [] : $questionReport['response'],
+        ];
+
+        $answerRecord = $this->getAnswerRecordService()->get($params['answer_record_id']);
+        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+
+        try {
+            $this->beginTransaction();
+
+            if ($this->getAnswerQuestionReportService()->getByAnswerRecordIdAndQuestionId($params['answer_record_id'], $params['question_id'])) {
+                $this->getAnswerQuestionReportService()->updateAnswerQuestionReport($answerQuestionReport['id'], $answerQuestionReports);
+            } else {
+                $this->getAnswerQuestionReportService()->createAnswerQuestionReport($answerQuestionReports);
+            }
+
+            $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($params['answer_record_id']);
+
+            $assessment = $this->getAssessmentService()->getAssessment($params['assessment_id']);
+            $canFinished = $this->canFinished($answerQuestionReports, $answerScene);
+
+            if ($assessment['item_count'] == count($answerQuestionReports)) {
+                $subjectiveScore = $this->sumSubjectiveScore($answerQuestionReports);
+                $score = $this->sumScore($answerQuestionReports);
+
+                $answerReport = $this->getAnswerReportService()->create([
+                    'user_id' => $answerRecord['user_id'],
+                    'assessment_id' => $params['assessment_id'],
+                    'answer_record_id' => $params['answer_record_id'],
+                    'total_score' => $this->sumTotalScore($answerQuestionReports),
+                    'score' => $score,
+                    'subjective_score' => $subjectiveScore,
+                    'objective_score' => $score - $subjectiveScore,
+                    'right_rate' => $this->sumRightRate($answerQuestionReports),
+                    'right_question_count' => $this->getRightQuestionCount($answerQuestionReports),
+                    'review_time' => $canFinished ? time() : 0,
+                ]);
+
+                $this->updateAttachmentsTarget($params['answer_record_id'], $attachments ?? []);
+
+                $answerRecord = $this->getAnswerRecordService()->update(
+                    $params['answer_record_id'],
+                    [
+                        'answer_report_id' => $answerReport['id'],
+                        'status' => $canFinished ? AnswerService::ANSWER_RECORD_STATUS_FINISHED : AnswerService::ANSWER_RECORD_STATUS_REVIEWING,
+                        'end_time' => time(),
+                    ]
+                );
+
+                if ($canFinished) {
+                    $this->getAnswerSceneService()->update(
+                        $answerScene['id'],
+                        ['name' => $answerScene['name'], 'last_review_time' => time()]
+                    );
+                }
+            }
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        return [$answerScene, $assessment, $answerQuestionReports, $canFinished];
     }
 
     protected function sumTotalScore(array $answerQuestionReports)
@@ -991,5 +1076,13 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getSchedulerService()
     {
         return $this->biz->service('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return Question
+     */
+    protected function getQuestionProcessor()
+    {
+        return $this->biz['question_processor'];
     }
 }

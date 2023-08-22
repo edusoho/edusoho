@@ -4,7 +4,7 @@ namespace ApiBundle\Api\Resource\AnswerRecord;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -15,22 +15,23 @@ use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class AnswerRecordSubmitSingleAnswer extends AbstractResource
 {
-    const TEST_MODE = '0';
-
-    const ONE_QUESTION_ONE_ANSWER = '1';
-
     public function add(ApiRequest $request, $recordId)
     {
         $params = $request->request->all();
-        $params = $this->validateParams($params, $recordId);
+        $params['user_id'] = $this->getCurrentUser()->getId();
+//        $params = $this->validateParams($params, $recordId);
 
-        $questionReport = $this->getAnswerQuestionReportService()->getByAnswerRecordIdAndItemId($recordId, $params['item_id']);
-        $answerRecord = $this->getAnswerRecordService()->get($params['answer_record_id']);
-        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+        list($answerScene, $assessment, $answerQuestionReports, $isAnswerFinished) = $this->getAnswerService()->reviewSingleAnswer($params);
+        $questionReport = $this->getAnswerQuestionReportService()->getByAnswerRecordIdAndQuestionId($recordId, $params['question_id']);
 
         $itemInfo = $this->getItemService()->getItemWithQuestion($params['item_id']);
+        $reviewedCount = $this->getAnswerQuestionReportService()->count(
+            [
+                'answer_record_id' => $params['answer_record_id'],
+                'statusNo' => AnswerQuestionReportService::STATUS_REVIEWING
+            ]);
 
-        $isAnswerFinished = $this->canFinishedAnswer($recordId);
+//        $reviewedCount = $this->getReviewdCount($answerQuestionReports, $answerScene);
 
         return [
             'answer' => $itemInfo['question']['answer'],
@@ -38,29 +39,29 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
             'questionAnalysis' => $itemInfo['question']['analysis'],
             'status' => $questionReport['status'],
             'manualMarking' => $answerScene['manual_marking'],
-            'reviewedCount' => 1,
-            'totalCount' => 1,
+            'reviewedCount' => $reviewedCount,
+            'totalCount' => $assessment['item_count'],
             'isAnswerFinished' => $isAnswerFinished ? 1 : 0,
         ];
     }
 
     public function validateParams($params, $recordId)
     {
-        if (empty($params['exercise_mode']) || (self::ONE_QUESTION_ONE_ANSWER != $params['exercise_mode'])) {
-            throw new AnswerException('非一题一答模式，不能保存', ErrorCode::EXERCISE_MODE_ERROR);
-        }
-
         if (empty($assessmentResponse['admission_ticket'])) {
             throw new AnswerException('答题保存功能已升级，请更新客户端版本', ErrorCode::ANSWER_OLD_VERSION);
         }
 
         $answerRecord = $this->getAnswerRecordService()->get($params['answer_record_id']);
-        if (empty($answerRecord) || $answerRecord['id'] != $recordId || $this->getCurrentUser()['id'] != $answerRecord['user_id']) {
+        if (empty($params['exercise_mode']) || $params['exercise_mode'] != $answerRecord['exercise_mode']) {
+            throw new AnswerException('非一题一答模式，不能保存', ErrorCode::EXERCISE_MODE_ERROR);
+        }
+
+        if (empty($answerRecord) || $answerRecord['id'] != $recordId || $params['user_id'] != $answerRecord['user_id']) {
             throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
         }
 
         if ($answerRecord['assessment_id'] != $params['assessment_id']) {
-            throw $this->createInvalidArgumentException('assessment_id invalid.');
+            throw new InvalidArgumentException('assessment_id invalid.');
         }
 
         if ($answerRecord['admission_ticket'] != $params['admission_ticket']) {
@@ -78,12 +79,21 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
         return $params;
     }
 
-    protected function canFinishedAnswer($recordId)
+    protected function getReviewdCount($answerQuestionReports, $answerScene)
     {
-        $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($recordId);
-        $answerQuestionReports = ArrayToolkit::group($answerQuestionReports, 'status');
+        $reviewedCount = 0;
 
-        return empty($answerQuestionReports[AnswerQuestionReportService::STATUS_REVIEWING]);
+        if (empty($answerScene['manual_marking'])) {
+            return count($answerQuestionReports);
+        }
+
+        foreach ($answerQuestionReports as $answerQuestionReport) {
+            if (AnswerQuestionReportService::STATUS_REVIEWING != $answerQuestionReport['status']) {
+                ++$reviewedCount;
+            }
+        }
+
+        return $reviewedCount;
     }
 
     /**
@@ -116,5 +126,13 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
     protected function getItemService()
     {
         return $this->service('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return AnswerService
+     */
+    protected function getAnswerService()
+    {
+        return $this->service('ItemBank:Answer:AnswerService');
     }
 }

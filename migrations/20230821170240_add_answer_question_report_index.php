@@ -10,8 +10,8 @@ class AddAnswerQuestionReportIndex extends Migration
     public function up()
     {
         $connection = $this->getContainer()['db'];
-        if (!$this->isIndexExist('biz_answer_question_report', 'item_id')) {
-            $connection->exec('ALTER TABLE `biz_answer_question_report` ADD INDEX `item_id` (`item_id`);');
+        if (!$this->isIndexExist('biz_answer_question_report', 'question_id')) {
+            $connection->exec('ALTER TABLE `biz_answer_question_report` ADD INDEX `question_id` (`question_id`);');
         }
     }
 
@@ -21,8 +21,8 @@ class AddAnswerQuestionReportIndex extends Migration
     public function down()
     {
         $connection = $this->getContainer()['db'];
-        if ($this->isIndexExist('biz_answer_question_report', 'item_id')) {
-            $connection->exec('ALTER TABLE `biz_answer_question_report` DROP INDEX `item_id`;');
+        if ($this->isIndexExist('biz_answer_question_report', 'question_id')) {
+            $connection->exec('ALTER TABLE `biz_answer_question_report` DROP INDEX `question_id`;');
         }
     }
 
