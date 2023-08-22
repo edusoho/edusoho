@@ -29,6 +29,6 @@ class ExerciseException extends AbstractException
         4036804 => 'exception.exercise.forbidden_access_exercise',
         4036805 => 'exception.exercise.forbidden_duplicate_commit_exercise',
         4046806 => 'exception.exercise.not_found_result',
-        4046807 => 'exception.exercise.exercise_is_doing',
+        4006807 => 'exception.exercise.exercise_is_doing',
     ];
 }
