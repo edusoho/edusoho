@@ -8,7 +8,7 @@ use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use Biz\Activity\Type\Testpaper;
 use Biz\Common\CommonException;
 use Biz\Course\MemberException;
-use Biz\ItemBankExercise\ItemBankExerciseException;
+use Biz\Testpaper\ExerciseException;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
@@ -90,14 +90,14 @@ class TaskStartAnswer extends AbstractResource
 
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()['id']);
         if (!empty($latestAnswerRecord) && AnswerService::ANSWER_RECORD_STATUS_FINISHED != $latestAnswerRecord['status']) {
-            throw ItemBankExerciseException::CHAPTER_ANSWER_IS_DOING();
+            throw ExerciseException::EXERCISE_IS_DOING();
         }
 
         $assessment = $this->createExerciseAssessment($activity);
 
         $answerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessment['id'], $this->getCurrentUser()['id']);
 
-        return $this->getAnswerRecordService()->update($answerRecord['id'], ['exerciseMode' => $exerciseMode]);
+        return $this->getAnswerRecordService()->update($answerRecord['id'], ['exercise_mode' => $exerciseMode]);
     }
 
     protected function createExerciseAssessment($activity)
