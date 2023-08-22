@@ -94,6 +94,7 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
             'exam_mode' => ['integer'],
             'limited_time' => ['integer'],
             'id' => ['integer'],
+            'exercise_mode' => [['in', [0, 1]]],
         ]);
 
         return $this->getAnswerRecordDao()->update($id, $answerRecord);

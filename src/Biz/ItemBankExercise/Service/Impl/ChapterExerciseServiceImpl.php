@@ -9,11 +9,12 @@ use Biz\Common\CommonException;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ChapterExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseService
 {
-    public function startAnswer($moduleId, $categroyId, $userId)
+    public function startAnswer($moduleId, $categroyId, $userId, $exerciseMode = 0)
     {
         $this->canStartAnswer($moduleId, $categroyId, $userId);
 
@@ -25,6 +26,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
             $assessment = $this->createAssessmentByCategroyId($categroyId, $module);
 
             $answerRecord = $this->getAnswerService()->startAnswer($module['answerSceneId'], $assessment['id'], $userId);
+            $answerRecord = $this->getAnswerRecordService()->update($answerRecord['id'], ['exercise_mode' => $exerciseMode]);
 
             $chapterExerciseRecord = $this->getItemBankChapterExerciseRecordService()->create([
                 'moduleId' => $moduleId,
@@ -223,5 +225,13 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
     protected function getUserFootprintService()
     {
         return $this->createService('User:UserFootprintService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 }

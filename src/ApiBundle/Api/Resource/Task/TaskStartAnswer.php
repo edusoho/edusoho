@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use Biz\Activity\Type\Testpaper;
 use Biz\Common\CommonException;
 use Biz\Course\MemberException;
+use Biz\Testpaper\ExerciseException;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
@@ -30,7 +31,7 @@ class TaskStartAnswer extends AbstractResource
             throw CommonException::NOTFOUND_METHOD();
         }
 
-        $answerRecord = $this->$method($task, $activity);
+        $answerRecord = $this->$method($task, $activity, $request->getHttpRequest());
 
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         if (empty($assessment)) {
@@ -52,7 +53,7 @@ class TaskStartAnswer extends AbstractResource
         ];
     }
 
-    protected function startHomeWork($task, $activity)
+    protected function startHomeWork($task, $activity, $request)
     {
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()['id']);
         if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
@@ -62,7 +63,7 @@ class TaskStartAnswer extends AbstractResource
         }
     }
 
-    protected function startTestpaper($task, $activity)
+    protected function startTestpaper($task, $activity, $request)
     {
         if ($activity['startTime'] > time()) {
             throw TestpaperException::EXAM_NOT_START();
@@ -83,16 +84,20 @@ class TaskStartAnswer extends AbstractResource
         }
     }
 
-    protected function startExercise($task, $activity)
+    protected function startExercise($task, $activity, $request)
     {
-        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()['id']);
-        if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
-            $assessment = $this->createExerciseAssessment($activity);
+        $exerciseMode = $request->request->get('exerciseMode', '0');
 
-            return $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessment['id'], $this->getCurrentUser()['id']);
-        } else {
-            return $latestAnswerRecord;
+        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()['id']);
+        if (!empty($latestAnswerRecord) && AnswerService::ANSWER_RECORD_STATUS_FINISHED != $latestAnswerRecord['status']) {
+            throw ExerciseException::EXERCISE_IS_DOING();
         }
+
+        $assessment = $this->createExerciseAssessment($activity);
+
+        $answerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessment['id'], $this->getCurrentUser()['id']);
+
+        return $this->getAnswerRecordService()->update($answerRecord['id'], ['exercise_mode' => $exerciseMode]);
     }
 
     protected function createExerciseAssessment($activity)
