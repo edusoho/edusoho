@@ -64,6 +64,9 @@ class TaskStartAnswer extends AbstractResource
 
     protected function startTestpaper($task, $activity)
     {
+        if ($activity['startTime'] > time()) {
+            throw TestpaperException::EXAM_NOT_START();
+        }
         if (Testpaper::VALID_PERIOD_MODE_RANGE == $activity['ext']['validPeriodMode'] && $activity['endTime'] < time()) {
             throw TestpaperException::END_OF_EXAM();
         }

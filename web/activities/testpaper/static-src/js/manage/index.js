@@ -85,7 +85,6 @@ class Testpaper {
     this.$scoreItem = this.$element.find('.js-score-form-group');
     this.$rangeStartTime = $('.js-start-range')
     this.$rangeDateInput = $('.js-realTimeRange-data');
-    this.$rangeEndTime = $('.js-endTime-data');
     this._init();
   }
 
@@ -137,10 +136,11 @@ class Testpaper {
   }
 
   initDatePicker() {
-		const todayYear=(new Date()).getFullYear();
-		const todayMonth=(new Date()).getMonth();
-		const todayDay=(new Date()).getDate();
-		const todayTime=(new Date(todayYear,todayMonth,todayDay,'23','59','59')).getTime();//毫秒
+    const todayYear=(new Date()).getFullYear();
+    const todayMonth=(new Date()).getMonth();
+    const todayDay=(new Date()).getDate();
+    const todayTime=(new Date(todayYear,todayMonth,todayDay,'23','59','59')).getTime();//毫秒
+    const validPeriodMode = $('[name="validPeriodMode"]:checked').val()
 
     const activityId = $('#activityId').val()
     const startTime = $('[name=startTime]').val()
@@ -150,8 +150,9 @@ class Testpaper {
       "timePicker24Hour": true,
       "timePickerSeconds": true,
       'autoUpdateInput':false,
-			'endDate': endTime != '0' ? endTime : todayTime,
-			'startDate': activityId != '0' ? startTime : moment().startOf('seconds'),
+      'minDate': new Date(),
+      'endDate': validPeriodMode == '1' ? endTime != '0' ? endTime : todayTime : todayTime,
+      'startDate': validPeriodMode == '1' ? activityId != '0' ? startTime : moment().startOf('seconds') : moment().startOf('seconds'),
       locale,
     });
     
@@ -167,7 +168,8 @@ class Testpaper {
       "timePicker24Hour": true,
       "timePickerSeconds": true,
       'autoUpdateInput':false,
-			'startDate': activityId != '0' ? startTime : moment().startOf('seconds'),
+      'minDate': new Date(),
+      'startDate': validPeriodMode == '2' ? activityId != '0' ? startTime : moment().startOf('seconds') : moment().startOf('seconds'),
       locale,
     });
     
@@ -175,47 +177,24 @@ class Testpaper {
       $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
       $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
     });
-
-			this.$rangeEndTime.daterangepicker({
-				"timePicker": true,
-				'singleDatePicker': true,
-				"timePicker24Hour": true,
-				"timePickerSeconds": true,
-				'autoUpdateInput':false,
-				'startDate': endTime,
-				'minDate': new Date(),
-				locale,
-			});
-			
-			this.$rangeEndTime.on('apply.daterangepicker', function(ev, picker) {
-				$('input[name=endTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
-				$(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
-			});
   }
 
   initFormItemData() {
     const activityId = $('#activityId').val()
-
+    const validPeriodMode = $('[name="validPeriodMode"]:checked').val()
+    
     if (activityId == 0) return
 
     const startTime = $('[name=startTime]').val()
     const endTime = $('[name=endTime]').val()
-    const $rangeDateInput = this.$rangeDateInput
-    const $rangeStartTime = $('#rangeStartTime')
+    const defaultStartTime = startTime == '0' ? '' : startTime
+    const defaultEndTime = endTime == '0' ? '' : endTime
 
-		if( new Date(startTime).getTime() < new Date().getTime() && new Date(endTime).getTime() > new Date().getTime()){
-			this.$rangeEndTime.val(endTime)
-		} else if( new Date(startTime).getTime() > new Date().getTime()) {
-      $rangeDateInput.val(startTime + ' - ' + endTime)
-			$rangeStartTime.val(startTime)
-		} else if( new Date(startTime).getTime() < new Date().getTime()) {
-			$rangeDateInput.val(startTime + ' - ' + endTime)
-			$rangeDateInput.attr('disabled', 'disabled')
-			$rangeStartTime.val(startTime)
-			$rangeStartTime.attr('disabled', 'disabled')
-		}
-
-    $('[name=validPeriodMode]').attr('disabled', 'disabled')
+    if(validPeriodMode == 1) {
+      defaultStartTime == '' && defaultEndTime == '' ? this.$rangeDateInput.val() : this.$rangeDateInput.val(defaultStartTime + ' - ' + defaultEndTime)
+    } else if(validPeriodMode == 2) {
+      this.$rangeStartTime.val(defaultStartTime)
+    }
   }
 
   setValidateRule() {
@@ -310,18 +289,15 @@ class Testpaper {
             optional: () => $('[name="isLimitDoTimes"]:checked').val() == 0,
             range: [1, 100],
           },
-					digits: true,
+          digits: true,
           // section_number: () => $('[name="isLimitDoTimes"]:checked').val() == 1 ? /^([1-9][0-9]{0,1}|100)$/ : '',
         },
         rangeTime: {
-          required: () => $('[name="validPeriodMode"]:checked').val() == 1
+          required: () => $('[name="validPeriodMode"]:checked').val() == 1,
         },
         rangeStartTime: {
-          required: () => $('[name="validPeriodMode"]:checked').val() == 2
+          required: () => $('[name="validPeriodMode"]:checked').val() == 2,
         },
-				rangeEndTime: {
-          required: () => $('[name="validPeriodMode"]:checked').val() == 1
-				},
         redoInterval: {
           required: function () {
             return $('[name="isLimitDoTimes"]:checked').val() == 0;
@@ -351,9 +327,6 @@ class Testpaper {
         rangeStartTime: {
           required: Translator.trans('validate.valid_starttime.required')
         },
-				rangeEndTime: {
-          required: Translator.trans('validate.valid_endtime.required')
-        }
       }
     });
   }
