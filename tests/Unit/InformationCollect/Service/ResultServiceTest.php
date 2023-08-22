@@ -59,7 +59,7 @@ class ResultServiceTest extends BaseTestCase
      * @expectedException \Biz\InformationCollect\InformationCollectException
      * @expectedExceptionCode 4047801
      */
-    public function testSubmitForm_whenEventNotFound_thenThrowException()
+    public function testSubmitFormWhenEventNotFoundThenThrowException()
     {
         $this->getInformationCollectResultService()->submitForm(1, 1, ['name' => '张三', 'gender' => '男']);
     }
@@ -68,7 +68,7 @@ class ResultServiceTest extends BaseTestCase
      * @expectedException \Biz\InformationCollect\InformationCollectException
      * @expectedExceptionCode 5007802
      */
-    public function testSubmitForm_whenEventClosed_thenThrowException()
+    public function testSubmitFormWhenEventClosedThenThrowException()
     {
         $this->getInformationCollectEventDao()->create([
             'id' => 1,
@@ -86,7 +86,7 @@ class ResultServiceTest extends BaseTestCase
      * @expectedException \Biz\User\UserException
      * @expectedExceptionCode 4040104
      */
-    public function testSubmitForm_whenUserNotFound_thenThrowException()
+    public function testSubmitFormWhenUserNotFoundThenThrowException()
     {
         $this->getInformationCollectEventDao()->create([
             'id' => 1,
@@ -103,9 +103,9 @@ class ResultServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\Common\CommonException
-     * @expectedExceptionCode 5000305
+     * @expectedExceptionCode 4000305
      */
-    public function testSubmitForm_whenFormMiss_thenThrowException()
+    public function testSubmitFormWhenFormMissThenThrowException()
     {
         $this->getInformationCollectEventDao()->create([
             'id' => 1,

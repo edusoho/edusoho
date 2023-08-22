@@ -69,18 +69,18 @@ class AssessmentExerciseServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\Common\CommonException
-     * @expectedExceptionCode 5000305
+     * @expectedExceptionCode 4000305
      */
-    public function testStartAnswer_whenModuleMiss_thenThrowCommonException()
+    public function testStartAnswerWhenModuleMissThenThrowCommonException()
     {
         $answerRecord = $this->getItemBankAssessmentExerciseService()->startAnswer(1, 1, 1);
     }
 
     /**
      * @expectedException \Biz\Common\CommonException
-     * @expectedExceptionCode 5000305
+     * @expectedExceptionCode 4000305
      */
-    public function testStartAnswer_whenAssessmentMiss_thenThrowCommonException()
+    public function testStartAnswerWhenAssessmentMissThenThrowCommonException()
     {
         $this->mockItemBankExerciseModuleService();
         $answerRecord = $this->getItemBankAssessmentExerciseService()->startAnswer(1, 1, 1);
@@ -90,7 +90,7 @@ class AssessmentExerciseServiceTest extends BaseTestCase
      * @expectedException \Biz\ItemBankExercise\ItemBankExerciseException
      * @expectedExceptionCode 4037501
      */
-    public function testStartAnswer_whenCannotLearningExercise_thenThrowItemBankExerciseException()
+    public function testStartAnswerWhenCannotLearningExerciseThenThrowItemBankExerciseException()
     {
         $this->mockAssessmentExercise();
         $this->mockItemBankExerciseModuleService();
@@ -102,7 +102,7 @@ class AssessmentExerciseServiceTest extends BaseTestCase
      * @expectedException \Biz\ItemBankExercise\ItemBankExerciseException
      * @expectedExceptionCode 5007513
      */
-    public function testStartAnswer_whenAssessmentEnableFalse_thenThrowItemBankExerciseException()
+    public function testStartAnswerWhenAssessmentEnableFalseThenThrowItemBankExerciseException()
     {
         $this->mockAssessmentExercise();
         $this->mockItemBankExerciseModuleService();
@@ -128,7 +128,7 @@ class AssessmentExerciseServiceTest extends BaseTestCase
      * @expectedException \Biz\ItemBankExercise\ItemBankExerciseException
      * @expectedExceptionCode 5007514
      */
-    public function testStartAnswer_whenLatestRecordIsDoing_thenThrowItemBankExerciseException()
+    public function testStartAnswerWhenLatestRecordIsDoingThenThrowItemBankExerciseException()
     {
         $this->mockAssessmentExercise();
         $this->mockItemBankExerciseModuleService();
