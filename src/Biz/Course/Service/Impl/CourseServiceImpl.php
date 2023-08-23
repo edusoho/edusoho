@@ -65,6 +65,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
     }
 
+    public function findCoursesByIdsAndCourseSetTitle($ids, $title)
+    {
+        $courses = $this->getCourseDao()->findCoursesByIdsAndCourseSetTitle($ids, $title);
+
+        return ArrayToolkit::index($courses, 'id');
+    }
+
     public function findCourseByCourseSetTitleLike($courseSetTitle)
     {
         return $this->getCourseDao()->findCourseByCourseSetTitleLike($courseSetTitle);

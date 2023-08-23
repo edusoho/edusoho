@@ -1453,6 +1453,32 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $sortedCourses;
     }
 
+    public function findCoursesByClassroomIdAndTitle(int $classroomId, string $title)
+    {
+        $classroomCourses = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIdsAndCourseSetTitle($courseIds, $title);
+        $courses = ArrayToolkit::index($courses, 'id');
+        $coursesIds = ArrayToolkit::column($courses, 'id');
+
+        $sortedCourses = [];
+        $int = 0;
+        foreach ($classroomCourses as $classroomCourse) {
+            if (!in_array($classroomCourse['courseId'], $coursesIds)) {
+                continue;
+            }
+            $sortedCourses[$int] = $courses[$classroomCourse['courseId']];
+            if (empty($sortedCourses[$int]['drainage'])) {
+                $sortedCourses[$int]['drainage'] = ['enabled' => 0, 'image' => '', 'text' => ''];
+            }
+            ++$int;
+        }
+
+        unset($courses);
+
+        return $sortedCourses;
+    }
+
     public function getClassroomStudentCount($classroomId)
     {
         return $this->getClassroomMemberDao()->countStudents($classroomId);

@@ -229,6 +229,8 @@ interface ClassroomService
 
     public function findCoursesByClassroomId($classroomId);
 
+    public function findCoursesByClassroomIdAndTitle(int $classroomId, string $title);
+
     public function getClassroomStudentCount($classroomId);
 
     public function findClassroomStudents($classroomId, $start, $limit);

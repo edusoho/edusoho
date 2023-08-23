@@ -21,6 +21,8 @@ interface CourseService
 
     public function findCoursesByIds($ids);
 
+    public function findCoursesByIdsAndCourseSetTitle($ids, $courseSetTitle);
+
     public function findCoursesByCourseSetIds(array $setIds);
 
     public function findCoursesByParentIdAndLocked($parentId, $locked);
