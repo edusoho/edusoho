@@ -91,40 +91,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
             }
 
-            $subjectiveScore = $this->sumSubjectiveScore($answerQuestionReports);
-            $score = $this->sumScore($answerQuestionReports);
+            list($answerRecord) = $this->answerReportResult($answerQuestionReports, $assessmentResponse, $canFinished, $attachments, $answerRecord);
 
-            $answerReport = $this->getAnswerReportService()->create([
-                'user_id' => $answerRecord['user_id'],
-                'assessment_id' => $assessmentResponse['assessment_id'],
-                'answer_record_id' => $assessmentResponse['answer_record_id'],
-                'total_score' => $this->sumTotalScore($answerQuestionReports),
-                'score' => $score,
-                'subjective_score' => $subjectiveScore,
-                'objective_score' => $score - $subjectiveScore,
-                'right_rate' => $this->sumRightRate($answerQuestionReports),
-                'right_question_count' => $this->getRightQuestionCount($answerQuestionReports),
-                'review_time' => $canFinished ? time() : 0,
-            ]);
-
-            $this->updateAttachmentsTarget($assessmentResponse['answer_record_id'], $attachments);
-
-            $answerRecord = $this->getAnswerRecordService()->update(
-                $assessmentResponse['answer_record_id'],
-                [
-                    'answer_report_id' => $answerReport['id'],
-                    'status' => $canFinished ? AnswerService::ANSWER_RECORD_STATUS_FINISHED : AnswerService::ANSWER_RECORD_STATUS_REVIEWING,
-                    'end_time' => time(),
-                    'used_time' => $assessmentResponse['used_time'],
-                ]
-            );
-
-            if ($canFinished) {
-                $this->getAnswerSceneService()->update(
-                    $answerScene['id'],
-                    ['name' => $answerScene['name'], 'last_review_time' => time()]
-                );
-            }
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -282,10 +250,44 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
     }
 
-    public function reviewSingleAnswer($params)
+    public function submitSingleAnswer($params)
     {
         $attachments = $this->getAttachmentService()->getAttachment($params['attachments']);
 
+        $answerQuestionReport = $this->getAnswerQuestionReport($params);
+
+        $answerRecord = $this->getAnswerRecordService()->get($params['answer_record_id']);
+        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+
+        try {
+            $this->beginTransaction();
+
+            if ($this->getAnswerQuestionReportService()->getByAnswerRecordIdAndQuestionId($params['answer_record_id'], $params['question_id'])) {
+                $this->getAnswerQuestionReportService()->updateAnswerQuestionReport($answerQuestionReport['id'], $answerQuestionReport);
+            } else {
+                $this->getAnswerQuestionReportService()->createAnswerQuestionReport($answerQuestionReport);
+            }
+
+            $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($params['answer_record_id']);
+
+            $assessment = $this->getAssessmentService()->getAssessment($params['assessment_id']);
+            $canFinished = $this->canFinished($answerQuestionReports, $answerScene);
+
+            if ($assessment['item_count'] == count($answerQuestionReports)) {
+                list($canFinished) = $this->answerReportResult($answerQuestionReports, $params, $canFinished, $attachments, $answerRecord);
+            }
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        return [$answerScene, $assessment, $canFinished];
+    }
+
+    protected function getAnswerQuestionReport($params)
+    {
         $questionReport = $this->getQuestionProcessor()->review($params['question_id'], empty($params['response']) ? [] : $params['response']);
         if ('none' == $questionReport['result']) {
             $questionReport['result'] = AnswerQuestionReportService::STATUS_REVIEWING;
@@ -304,66 +306,47 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'response' => empty($questionReport['response']) ? [] : $questionReport['response'],
         ];
 
-        $answerRecord = $this->getAnswerRecordService()->get($params['answer_record_id']);
-        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+        return $answerQuestionReports;
+    }
 
-        try {
-            $this->beginTransaction();
+    protected function answerReportResult($answerQuestionReports, $assessmentResponse, $canFinished, $attachments, $answerRecord)
+    {
+        $subjectiveScore = $this->sumSubjectiveScore($answerQuestionReports);
+        $score = $this->sumScore($answerQuestionReports);
 
-            if ($this->getAnswerQuestionReportService()->getByAnswerRecordIdAndQuestionId($params['answer_record_id'], $params['question_id'])) {
-                $this->getAnswerQuestionReportService()->updateAnswerQuestionReport($answerQuestionReport['id'], $answerQuestionReports);
-            } else {
-                $this->getAnswerQuestionReportService()->createAnswerQuestionReport($answerQuestionReports);
-            }
+        $answerReport = $this->getAnswerReportService()->create([
+            'user_id' => $answerRecord['user_id'],
+            'assessment_id' => $assessmentResponse['assessment_id'],
+            'answer_record_id' => $assessmentResponse['answer_record_id'],
+            'total_score' => $this->sumTotalScore($answerQuestionReports),
+            'score' => $score,
+            'subjective_score' => $subjectiveScore,
+            'objective_score' => $score - $subjectiveScore,
+            'right_rate' => $this->sumRightRate($answerQuestionReports),
+            'right_question_count' => $this->getRightQuestionCount($answerQuestionReports),
+            'review_time' => $canFinished ? time() : 0,
+        ]);
 
-            $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($params['answer_record_id']);
+        $this->updateAttachmentsTarget($assessmentResponse['answer_record_id'], $attachments);
 
-            $assessment = $this->getAssessmentService()->getAssessment($params['assessment_id']);
-            $canFinished = $this->canFinished($answerQuestionReports, $answerScene);
+        $answerRecord = $this->getAnswerRecordService()->update(
+            $assessmentResponse['answer_record_id'],
+            [
+                'answer_report_id' => $answerReport['id'],
+                'status' => $canFinished ? AnswerService::ANSWER_RECORD_STATUS_FINISHED : AnswerService::ANSWER_RECORD_STATUS_REVIEWING,
+                'end_time' => time(),
+                'used_time' => $assessmentResponse['used_time'] ?: 0,
+            ]
+        );
 
-            if ($assessment['item_count'] == count($answerQuestionReports)) {
-                $subjectiveScore = $this->sumSubjectiveScore($answerQuestionReports);
-                $score = $this->sumScore($answerQuestionReports);
-
-                $answerReport = $this->getAnswerReportService()->create([
-                    'user_id' => $answerRecord['user_id'],
-                    'assessment_id' => $params['assessment_id'],
-                    'answer_record_id' => $params['answer_record_id'],
-                    'total_score' => $this->sumTotalScore($answerQuestionReports),
-                    'score' => $score,
-                    'subjective_score' => $subjectiveScore,
-                    'objective_score' => $score - $subjectiveScore,
-                    'right_rate' => $this->sumRightRate($answerQuestionReports),
-                    'right_question_count' => $this->getRightQuestionCount($answerQuestionReports),
-                    'review_time' => $canFinished ? time() : 0,
-                ]);
-
-                $this->updateAttachmentsTarget($params['answer_record_id'], $attachments ?? []);
-
-                $answerRecord = $this->getAnswerRecordService()->update(
-                    $params['answer_record_id'],
-                    [
-                        'answer_report_id' => $answerReport['id'],
-                        'status' => $canFinished ? AnswerService::ANSWER_RECORD_STATUS_FINISHED : AnswerService::ANSWER_RECORD_STATUS_REVIEWING,
-                        'end_time' => time(),
-                    ]
-                );
-
-                if ($canFinished) {
-                    $this->getAnswerSceneService()->update(
-                        $answerScene['id'],
-                        ['name' => $answerScene['name'], 'last_review_time' => time()]
-                    );
-                }
-            }
-
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollback();
-            throw $e;
+        if ($canFinished) {
+            $this->getAnswerSceneService()->update(
+                $answerScene['id'],
+                ['name' => $answerScene['name'], 'last_review_time' => time()]
+            );
         }
 
-        return [$answerScene, $assessment, $answerQuestionReports, $canFinished];
+        return [$canFinished, $answerRecord];
     }
 
     protected function sumTotalScore(array $answerQuestionReports)

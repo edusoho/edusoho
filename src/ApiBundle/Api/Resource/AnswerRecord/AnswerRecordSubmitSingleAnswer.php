@@ -19,19 +19,17 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
     {
         $params = $request->request->all();
         $params['user_id'] = $this->getCurrentUser()->getId();
-//        $params = $this->validateParams($params, $recordId);
+        $params = $this->validateParams($params, $recordId);
 
-        list($answerScene, $assessment, $answerQuestionReports, $isAnswerFinished) = $this->getAnswerService()->reviewSingleAnswer($params);
+        list($answerScene, $assessment, $isAnswerFinished) = $this->getAnswerService()->submitSingleAnswer($params);
         $questionReport = $this->getAnswerQuestionReportService()->getByAnswerRecordIdAndQuestionId($recordId, $params['question_id']);
 
         $itemInfo = $this->getItemService()->getItemWithQuestion($params['item_id']);
         $reviewedCount = $this->getAnswerQuestionReportService()->count(
             [
                 'answer_record_id' => $params['answer_record_id'],
-                'statusNo' => AnswerQuestionReportService::STATUS_REVIEWING
+                'statusNo' => AnswerQuestionReportService::STATUS_REVIEWING,
             ]);
-
-//        $reviewedCount = $this->getReviewdCount($answerQuestionReports, $answerScene);
 
         return [
             'answer' => $itemInfo['question']['answer'],
@@ -77,23 +75,6 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
         }
 
         return $params;
-    }
-
-    protected function getReviewdCount($answerQuestionReports, $answerScene)
-    {
-        $reviewedCount = 0;
-
-        if (empty($answerScene['manual_marking'])) {
-            return count($answerQuestionReports);
-        }
-
-        foreach ($answerQuestionReports as $answerQuestionReport) {
-            if (AnswerQuestionReportService::STATUS_REVIEWING != $answerQuestionReport['status']) {
-                ++$reviewedCount;
-            }
-        }
-
-        return $reviewedCount;
     }
 
     /**

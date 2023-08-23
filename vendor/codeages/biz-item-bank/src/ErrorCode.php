@@ -107,5 +107,5 @@ class ErrorCode
     /**
      * 练习模式错误
      */
-    const EXERCISE_MODE_ERROR = 50095203;
+    const EXERCISE_MODE_ERROR = 40095203;
 }
