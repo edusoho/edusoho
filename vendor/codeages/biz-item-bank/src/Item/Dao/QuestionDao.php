@@ -11,6 +11,4 @@ interface QuestionDao extends AdvancedDaoInterface
     public function findByItemsIds($itemIds);
 
     public function findQuestionsByQuestionIds($questionIds);
-
-    public function getByItemId($itemId);
 }

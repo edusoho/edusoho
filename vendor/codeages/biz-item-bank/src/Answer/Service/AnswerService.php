@@ -86,4 +86,6 @@ interface AnswerService
     public function batchAutoSubmit($answerSceneId, $assessmentId, $userIds);
 
     public function submitSingleAnswer($params);
+
+//    public function reviewSingleAnswer($params);
 }

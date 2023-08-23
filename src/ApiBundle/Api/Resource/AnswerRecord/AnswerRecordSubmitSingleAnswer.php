@@ -10,21 +10,29 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class AnswerRecordSubmitSingleAnswer extends AbstractResource
 {
+    const ONE_QUESTION_ONE_ANSWER = '1';
+
     public function add(ApiRequest $request, $recordId)
     {
         $params = $request->request->all();
-        $params['user_id'] = $this->getCurrentUser()->getId();
-        $params = $this->validateParams($params, $recordId);
+        $this->validateParams($params, $recordId);
+        $params = $this->trimResponse($params);
 
-        list($answerScene, $assessment, $isAnswerFinished) = $this->getAnswerService()->submitSingleAnswer($params);
-        $questionReport = $this->getAnswerQuestionReportService()->getByAnswerRecordIdAndQuestionId($recordId, $params['question_id']);
+        $questionReport = $this->getAnswerService()->submitSingleAnswer($params);
 
-        $itemInfo = $this->getItemService()->getItemWithQuestion($params['item_id']);
+        $item = $this->getItemService()->getItem($questionReport['item_id']);
+        $question = $this->getItemService()->getQuestion($questionReport['question_id']);
+
+        $answerRecord = $this->getAnswerRecordService()->get($questionReport['answer_record_id']);
+        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+        $assessment = $this->getAssessmentService()->getAssessment($questionReport['assessment_id']);
+
         $reviewedCount = $this->getAnswerQuestionReportService()->count(
             [
                 'answer_record_id' => $params['answer_record_id'],
@@ -32,30 +40,31 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
             ]);
 
         return [
-            'answer' => $itemInfo['question']['answer'],
-            'itemAnalysis' => $itemInfo['analysis'],
-            'questionAnalysis' => $itemInfo['question']['analysis'],
+            'answer' => $question['answer'],
+            'itemAnalysis' => $item['analysis'],
+            'questionAnalysis' => $question['analysis'],
             'status' => $questionReport['status'],
             'manualMarking' => $answerScene['manual_marking'],
             'reviewedCount' => $reviewedCount,
-            'totalCount' => $assessment['item_count'],
-            'isAnswerFinished' => $isAnswerFinished ? 1 : 0,
+            'totalCount' => $assessment['question_count'],
+            'isAnswerFinished' => ('finish' == $answerRecord['status']) ? 1 : 0,
         ];
     }
 
     public function validateParams($params, $recordId)
     {
-        if (empty($assessmentResponse['admission_ticket'])) {
+        if (empty($params['admission_ticket'])) {
             throw new AnswerException('答题保存功能已升级，请更新客户端版本', ErrorCode::ANSWER_OLD_VERSION);
         }
 
-        $answerRecord = $this->getAnswerRecordService()->get($params['answer_record_id']);
-        if (empty($params['exercise_mode']) || $params['exercise_mode'] != $answerRecord['exercise_mode']) {
-            throw new AnswerException('非一题一答模式，不能保存', ErrorCode::EXERCISE_MODE_ERROR);
+        $answerRecord = $this->getAnswerRecordService()->get($recordId);
+
+        if (empty($answerRecord) || $this->getCurrentUser()->getId() != $answerRecord['user_id']) {
+            throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
         }
 
-        if (empty($answerRecord) || $answerRecord['id'] != $recordId || $params['user_id'] != $answerRecord['user_id']) {
-            throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
+        if (self::ONE_QUESTION_ONE_ANSWER != $answerRecord['exercise_mode']) {
+            throw new AnswerException('非一题一答模式，不能保存', ErrorCode::EXERCISE_MODE_ERROR);
         }
 
         if ($answerRecord['assessment_id'] != $params['assessment_id']) {
@@ -69,7 +78,10 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
         if (!in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_DOING, AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
             throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
         }
+    }
 
+    protected function trimResponse($params)
+    {
         foreach ($params['response'] as &$response) {
             $response = trim($response);
         }
@@ -115,5 +127,13 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
     protected function getAnswerService()
     {
         return $this->service('ItemBank:Answer:AnswerService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->service('ItemBank:Assessment:AssessmentService');
     }
 }

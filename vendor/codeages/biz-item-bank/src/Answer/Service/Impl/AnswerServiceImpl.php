@@ -77,8 +77,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerQuestionReports = $this->getAnswerQuestionReportsByAssessmentReport($assessmentReport);
 
         $answerRecord = $this->getAnswerRecordService()->get($assessmentReport['answer_record_id']);
-        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
-        $canFinished = $this->canFinished($answerQuestionReports, $answerScene);
 
         try {
             $this->beginTransaction();
@@ -91,7 +89,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
             }
 
-            list($answerRecord) = $this->answerReportResult($answerQuestionReports, $assessmentResponse, $canFinished, $attachments, $answerRecord);
+            $answerRecord = $this->answerReportResult($answerQuestionReports, $assessmentResponse, $attachments, $answerRecord);
 
             $this->commit();
         } catch (\Exception $e) {
@@ -252,7 +250,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     public function submitSingleAnswer($params)
     {
-        $attachments = $this->getAttachmentService()->getAttachment($params['attachments']);
+        $attachments = $this->getAttachments($params);
 
         $answerQuestionReport = $this->getAnswerQuestionReport($params);
 
@@ -262,10 +260,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         try {
             $this->beginTransaction();
 
-            if ($this->getAnswerQuestionReportService()->getByAnswerRecordIdAndQuestionId($params['answer_record_id'], $params['question_id'])) {
-                $this->getAnswerQuestionReportService()->updateAnswerQuestionReport($answerQuestionReport['id'], $answerQuestionReport);
+            $answerQuestionReport = $this->getAnswerQuestionReportService()->getByAnswerRecordIdAndQuestionId($params['answer_record_id'], $params['question_id']);
+            if ($answerQuestionReport) {
+                $answerQuestionReport = $this->getAnswerQuestionReportService()->updateAnswerQuestionReport($answerQuestionReport['id'], $answerQuestionReport);
             } else {
-                $this->getAnswerQuestionReportService()->createAnswerQuestionReport($answerQuestionReport);
+                $answerQuestionReport = $this->getAnswerQuestionReportService()->createAnswerQuestionReport($answerQuestionReport);
             }
 
             $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($params['answer_record_id']);
@@ -274,7 +273,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $canFinished = $this->canFinished($answerQuestionReports, $answerScene);
 
             if ($assessment['item_count'] == count($answerQuestionReports)) {
-                list($canFinished) = $this->answerReportResult($answerQuestionReports, $params, $canFinished, $attachments, $answerRecord);
+                $this->answerReportResult($answerQuestionReports, $params, $attachments, $answerRecord);
             }
 
             $this->commit();
@@ -283,7 +282,21 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             throw $e;
         }
 
-        return [$answerScene, $assessment, $canFinished];
+        return $answerQuestionReport;
+    }
+
+    protected function getAttachments($params)
+    {
+        $attachments = [];
+        foreach ($params['attachments'] as $attachment) {
+            $attachments[] = [
+                'id' => $attachment['id'],
+                'module' => $attachment['module'],
+                'question_id' => $params['question_id'],
+            ];
+        }
+
+        return $attachments;
     }
 
     protected function getAnswerQuestionReport($params)
@@ -309,8 +322,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $answerQuestionReports;
     }
 
-    protected function answerReportResult($answerQuestionReports, $assessmentResponse, $canFinished, $attachments, $answerRecord)
+    protected function answerReportResult($answerQuestionReports, $assessmentResponse, $attachments, $answerRecord)
     {
+        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+        $canFinished = $this->canFinished($answerQuestionReports, $answerScene);
         $subjectiveScore = $this->sumSubjectiveScore($answerQuestionReports);
         $score = $this->sumScore($answerQuestionReports);
 
@@ -346,7 +361,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             );
         }
 
-        return [$canFinished, $answerRecord];
+        return $answerRecord;
     }
 
     protected function sumTotalScore(array $answerQuestionReports)
