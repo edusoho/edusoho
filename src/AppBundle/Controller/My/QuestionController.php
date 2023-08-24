@@ -94,7 +94,6 @@ class QuestionController extends BaseController
 
         $conditions = [
             'user_id' => $user['id'],
-            'target_type' => 'assessment',
         ];
 
         $favoriteItems = $this->getQuestionFavoriteService()->search(
