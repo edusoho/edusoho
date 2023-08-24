@@ -112,6 +112,46 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $sortedCourses;
     }
 
+    public function findActiveCoursesByClassroomIdAndTitle(int $classroomId, string $title)
+    {
+        $classroomCourses = $this->getClassroomCourseDao()->findActiveCoursesByClassroomId($classroomId);
+        if (empty($classroomCourses)) {
+            return [];
+        }
+
+        $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIdsAndCourseSetTitle($courseIds, $title);
+
+        if (empty($courses)) {
+            return [];
+        }
+
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+
+        $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds($courseSetIds);
+        $courseNums = ArrayToolkit::index($courseNums, 'courseSetId');
+        foreach ($courses as &$course) {
+            $curCourseSet = $courseSets[$course['courseSetId']];
+            $course['courseSet'] = $curCourseSet;
+            $course['courseNum'] = $courseNums[$curCourseSet['id']]['courseNum'];
+            $course['parentCourseSetId'] = $curCourseSet['parentId'];
+        }
+
+        $sortedCourses = [];
+        $courses = ArrayToolkit::index($courses, 'id');
+        foreach ($classroomCourses as $key => $classroomCourse) {
+            if (in_array($classroomCourse['courseId'], $courseIds)) {
+                $sortedCourses[$key] = $courses[$classroomCourse['courseId']];
+                $sortedCourses[$key]['classroom_course_id'] = $classroomCourse['id'];
+            }
+        }
+
+        return $sortedCourses;
+    }
+
     public function findMembersByUserIdAndClassroomIds($userId, $classroomIds)
     {
         $members = $this->getClassroomMemberDao()->findByUserIdAndClassroomIds($userId, $classroomIds);
