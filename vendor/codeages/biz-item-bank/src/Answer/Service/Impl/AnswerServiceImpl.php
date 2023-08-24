@@ -613,6 +613,39 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $answerReport;
     }
 
+    public function reviewSingleAnswer($params, $recordId)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($recordId);
+        $questionReport = $this->getAnswerQuestionReportService()->getByAnswerRecordIdAndQuestionId($recordId, $params['question_id']);
+
+        try {
+            $this->beginTransaction();
+
+            if ($questionReport) {
+                $answerQuestionReport = $this->getAnswerQuestionReportService()->updateAnswerQuestionReport($questionReport['id'], ['status' => $params['status']]);
+            }
+
+            $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id'], $questionReport['id']);
+            $isAllQuestionReviewed = $this->isAllQuestionReviewed($answerRecord);
+
+            if ($isAllQuestionReviewed) {
+                $answerRecord = $this->getAnswerReportResult($answerQuestionReports, $answerRecord);
+                $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+            }
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        if ($isAllQuestionReviewed) {
+            $this->dispatch('answer.finished', $answerReport);
+        }
+
+        return $answerQuestionReport;
+    }
+
     public function reviseFillAnswer($answerRecordId, $fillData)
     {
         if (empty($fillData)) {

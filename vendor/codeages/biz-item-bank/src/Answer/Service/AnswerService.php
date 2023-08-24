@@ -89,5 +89,5 @@ interface AnswerService
 
     public function submitSingleAnswer($params, $recordId);
 
-//    public function reviewSingleAnswer($params);
+    public function reviewSingleAnswer($params, $recordId);
 }

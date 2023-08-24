@@ -5,12 +5,11 @@ namespace ApiBundle\Api\Resource\AnswerRecord;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Exception\InvalidArgumentException;
 use Biz\Common\CommonException;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Dao\AssessmentSectionItemDao;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -18,55 +17,43 @@ use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Topxia\Service\Common\ServiceKernel;
 
-class AnswerRecordSubmitSingleAnswer extends AbstractResource
+class AnswerRecordReviewSingleAnswer extends AbstractResource
 {
     public function add(ApiRequest $request, $recordId)
     {
         $params = $request->request->all();
         $this->validateParams($params, $recordId);
-        $params = $this->trimResponse($params);
 
-        $questionReport = $this->getAnswerService()->submitSingleAnswer($params, $recordId);
-
-        $item = $this->getItemService()->getItem($questionReport['item_id']);
-        $question = $this->getItemService()->getQuestion($questionReport['question_id']);
+        $questionReport = $this->getAnswerService()->reviewSingleAnswer($params, $recordId);
 
         $answerRecord = $this->getAnswerRecordService()->get($questionReport['answer_record_id']);
-        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $assessment = $this->getAssessmentService()->getAssessment($questionReport['assessment_id']);
-
-        $reviewedCount = $this->getAnswerQuestionReportService()->count(
-            [
+        $reviewedCount = $this->getAnswerQuestionReportService()->count([
                 'answer_record_id' => $recordId,
                 'not_status' => AnswerQuestionReportService::STATUS_REVIEWING,
             ]);
 
         return [
-            'answer' => $question['answer'],
-            'itemAnalysis' => $item['analysis'],
-            'questionAnalysis' => $question['analysis'],
             'status' => $questionReport['status'],
-            'manualMarking' => $answerScene['manual_marking'],
             'reviewedCount' => $reviewedCount,
             'totalCount' => $assessment['question_count'],
             'isAnswerFinished' => (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) ? 1 : 0,
         ];
     }
 
-    public function validateParams($params, $recordId)
+    protected function validateParams($params, $recordId)
     {
         if (empty($params['admission_ticket'])) {
             throw new AnswerException('答题保存功能已升级，请更新客户端版本', ErrorCode::ANSWER_OLD_VERSION);
         }
 
         $answerRecord = $this->getAnswerRecordService()->get($recordId);
+        if (AnswerService::EXERCISE_MODE_SUBMIT_SINGLE != $answerRecord['exercise_mode']) {
+            throw new AnswerException('非一题一答模式，不能批阅', ErrorCode::EXERCISE_MODE_ERROR);
+        }
 
         if (empty($answerRecord) || $this->getCurrentUser()->getId() != $answerRecord['user_id']) {
             throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
-        }
-
-        if (AnswerService::EXERCISE_MODE_SUBMIT_SINGLE != $answerRecord['exercise_mode']) {
-            throw new AnswerException('非一题一答模式，不能保存', ErrorCode::EXERCISE_MODE_ERROR);
         }
 
         if ($answerRecord['assessment_id'] != $params['assessment_id']) {
@@ -83,39 +70,14 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
         if (!in_array($params['question_id'], $questionId)) {
             throw CommonException::ERROR_PARAMETER();
         }
-
-        if ($answerRecord['admission_ticket'] != $params['admission_ticket']) {
-            throw new AnswerException('有新答题页面，请在新页面中继续答题', ErrorCode::ANSWER_NO_BOTH_DOING);
-        }
-
-        if (!in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_DOING, AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
-            throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
-        }
-    }
-
-    protected function trimResponse($params)
-    {
-        foreach ($params['response'] as &$response) {
-            $response = trim($response);
-        }
-
-        return $params;
     }
 
     /**
-     * @return AnswerRecordService
+     * @return AnswerService
      */
-    protected function getAnswerRecordService()
+    protected function getAnswerService()
     {
-        return $this->service('ItemBank:Answer:AnswerRecordService');
-    }
-
-    /**
-     * @return AnswerSceneService
-     */
-    protected function getAnswerSceneService()
-    {
-        return $this->service('ItemBank:Answer:AnswerSceneService');
+        return $this->service('ItemBank:Answer:AnswerService');
     }
 
     /**
@@ -127,19 +89,11 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
     }
 
     /**
-     * @return ItemService
+     * @return AnswerRecordService
      */
-    protected function getItemService()
+    protected function getAnswerRecordService()
     {
-        return $this->service('ItemBank:Item:ItemService');
-    }
-
-    /**
-     * @return AnswerService
-     */
-    protected function getAnswerService()
-    {
-        return $this->service('ItemBank:Answer:AnswerService');
+        return $this->service('ItemBank:Answer:AnswerRecordService');
     }
 
     /**
@@ -156,5 +110,13 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
     protected function getAssessmentSectionItemDao()
     {
         return ServiceKernel::instance()->createDao('ItemBank:Assessment:AssessmentSectionItemDao');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->service('ItemBank:Item:ItemService');
     }
 }
