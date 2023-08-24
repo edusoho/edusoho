@@ -39,6 +39,21 @@ class AnswerQuestionReportServiceImpl extends BaseService implements AnswerQuest
         return $this->getAnswerQuestionReportDao()->batchUpdate(ArrayToolkit::column($answerQuestionReports, 'identify'), $answerQuestionReports, 'identify');
     }
 
+    public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId)
+    {
+        return $this->getAnswerQuestionReportDao()->getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
+    }
+
+    public function createAnswerQuestionReport($answerQuestionReport)
+    {
+        return $this->getAnswerQuestionReportDao()->create($answerQuestionReport);
+    }
+
+    public function updateAnswerQuestionReport($id, $answerQuestionReport)
+    {
+        return $this->getAnswerQuestionReportDao()->update($id, $answerQuestionReport);
+    }
+
     protected function getAnswerQuestionReportDao()
     {
         return $this->biz->dao('ItemBank:Answer:AnswerQuestionReportDao');

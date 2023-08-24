@@ -473,6 +473,11 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $result;
     }
 
+    public function getQuestion($questionId)
+    {
+        return $this->getQuestionDao()->get($questionId);
+    }
+
     protected function findQuestionsByItemId($itemId)
     {
         return $this->getQuestionDao()->findByItemId($itemId);

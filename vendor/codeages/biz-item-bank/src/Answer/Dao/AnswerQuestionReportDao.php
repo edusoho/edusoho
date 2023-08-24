@@ -8,4 +8,6 @@ interface AnswerQuestionReportDao
     public function findByAnswerRecordId($answerRecordId);
 
     public function deleteByAssessmentId($assessmentId);
+
+    public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
 }
