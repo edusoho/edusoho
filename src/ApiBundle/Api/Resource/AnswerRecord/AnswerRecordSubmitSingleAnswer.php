@@ -16,15 +16,13 @@ use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class AnswerRecordSubmitSingleAnswer extends AbstractResource
 {
-    const ONE_QUESTION_ONE_ANSWER = '1';
-
     public function add(ApiRequest $request, $recordId)
     {
         $params = $request->request->all();
         $this->validateParams($params, $recordId);
         $params = $this->trimResponse($params);
 
-        $questionReport = $this->getAnswerService()->submitSingleAnswer($params);
+        $questionReport = $this->getAnswerService()->submitSingleAnswer($params, $recordId);
 
         $item = $this->getItemService()->getItem($questionReport['item_id']);
         $question = $this->getItemService()->getQuestion($questionReport['question_id']);
@@ -35,8 +33,8 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
 
         $reviewedCount = $this->getAnswerQuestionReportService()->count(
             [
-                'answer_record_id' => $params['answer_record_id'],
-                'statusNo' => AnswerQuestionReportService::STATUS_REVIEWING,
+                'answer_record_id' => $recordId,
+                'not_status' => AnswerQuestionReportService::STATUS_REVIEWING,
             ]);
 
         return [
@@ -47,7 +45,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
             'manualMarking' => $answerScene['manual_marking'],
             'reviewedCount' => $reviewedCount,
             'totalCount' => $assessment['question_count'],
-            'isAnswerFinished' => ('finish' == $answerRecord['status']) ? 1 : 0,
+            'isAnswerFinished' => (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) ? 1 : 0,
         ];
     }
 
@@ -63,7 +61,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
             throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
         }
 
-        if (self::ONE_QUESTION_ONE_ANSWER != $answerRecord['exercise_mode']) {
+        if (AnswerService::EXERCISE_MODE_SUBMIT_SINGLE != $answerRecord['exercise_mode']) {
             throw new AnswerException('非一题一答模式，不能保存', ErrorCode::EXERCISE_MODE_ERROR);
         }
 

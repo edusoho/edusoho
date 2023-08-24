@@ -28,7 +28,7 @@ interface AnswerQuestionReportService
 
     public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
 
-    public function createAnswerQuestionReport(array $answerQuestionReports);
+    public function createAnswerQuestionReport($answerQuestionReport);
 
-    public function updateAnswerQuestionReport($id, $answerQuestionReports);
+    public function updateAnswerQuestionReport($id, $answerQuestionReport);
 }

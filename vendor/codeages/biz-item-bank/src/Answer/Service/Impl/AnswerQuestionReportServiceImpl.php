@@ -44,14 +44,14 @@ class AnswerQuestionReportServiceImpl extends BaseService implements AnswerQuest
         return $this->getAnswerQuestionReportDao()->getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
     }
 
-    public function createAnswerQuestionReport(array $answerQuestionReports)
+    public function createAnswerQuestionReport($answerQuestionReport)
     {
-        return $this->getAnswerQuestionReportDao()->create($answerQuestionReports);
+        return $this->getAnswerQuestionReportDao()->create($answerQuestionReport);
     }
 
-    public function updateAnswerQuestionReport($id, $answerQuestionReports)
+    public function updateAnswerQuestionReport($id, $answerQuestionReport)
     {
-        return $this->getAnswerQuestionReportDao()->update($id, $answerQuestionReports);
+        return $this->getAnswerQuestionReportDao()->update($id, $answerQuestionReport);
     }
 
     protected function getAnswerQuestionReportDao()
