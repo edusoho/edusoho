@@ -6933,6 +6933,7 @@ admin.reports_status.system_status: Status
 admin.reports_status.system_communication_with_discuz: 'Connection with Discuz Ucenter'
 admin.reports_status.system_checking: Detecting.....
 admin.reports_status.system_email_send: 'Send email'
+admin.reports_status.system_email_send_detection: 'Immediate detection'
 admin.reports_status.system_email_send_tips: 'System will send a test email to current user during each test. Please make sure the current user''s email is correct.Check email exception in system log.'
 admin.reports_status.system_file_and_catalog_authority: 'System files, directory permissions checking'
 admin.reports_status.system_file_and_catalog_authority_available: 'File directory permissions properly'

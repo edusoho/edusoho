@@ -170,6 +170,7 @@ class SystemController extends BaseController
         return array_map(function ($array) {
             $name = $array['name'];
             $dir = $array['dir'];
+
             $total = disk_total_space($dir);
             $free = disk_free_space($dir);
             $rate = (string) number_format($free / $total, 2) * 100 .'%';
