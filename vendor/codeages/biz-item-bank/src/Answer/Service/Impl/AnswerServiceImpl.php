@@ -2,24 +2,15 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
-use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MemberService;
-use Biz\Review\Service\ReviewService;
-use Biz\System\Service\LogService;
-use Biz\Testpaper\Job\AssessmentAutoSubmitJob;
-use Biz\Testpaper\TestpaperException;
-use Biz\User\UserException;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\BaseService;
@@ -90,7 +81,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
-            $answerRecord = $this->getAnswerReportResult($answerQuestionReports, $answerRecord, $assessmentResponse['used_time']);
+            $answerRecord = $this->generateAnswerReport($answerQuestionReports, $answerRecord, $assessmentResponse['used_time']);
 
             $this->commit();
         } catch (\Exception $e) {
@@ -119,7 +110,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 }
                 $itemResponse = ['question_responses' => $itemResponse];
                 $itemResponse['item_id'] = $itemId;
-
             }
             $itemResponses = array_values($itemResponses);
             $sectionResponse = ['item_responses' => $itemResponses];
@@ -228,7 +218,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerQuestionReports = [];
         $newAnswerQuestionReport = [
             'assessment_id' => $assessmentId,
-            'status' => 'no_answer'
+            'status' => AnswerQuestionReportService::STATUS_NOANSWER,
         ];
 
         foreach ($answerReports as $answerReport) {
@@ -239,7 +229,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                     $newAnswerQuestionReport['item_id'] = $item['id'];
                     foreach ($item['questions'] as $question) {
                         $newAnswerQuestionReport['question_id'] = $question['id'];
-                        $newAnswerQuestionReport['identify'] = $answerReport['answer_record_id'] . '_' . $question['id'];
+                        $newAnswerQuestionReport['identify'] = $answerReport['answer_record_id'].'_'.$question['id'];
                         $answerQuestionReports[] = $newAnswerQuestionReport;
                     }
                 }
@@ -249,11 +239,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
     }
 
-    public function submitSingleAnswer($params, $recordId)
+    public function submitSingleAnswer($answerRecordId, $params)
     {
-        $attachments = $params['attachment'] ? $this->getAttachments($params) : [];
-        $answerQuestionReport = $this->getAnswerQuestionReport($params, $recordId);
-        $answerRecord = $this->getAnswerRecordService()->get($recordId);
+        $answerQuestionReport = $this->reviewSingleAnswer($answerRecordId, $params);
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
 
         try {
             $this->beginTransaction();
@@ -264,12 +253,12 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             } else {
                 $answerQuestionReport = $this->getAnswerQuestionReportService()->createAnswerQuestionReport($answerQuestionReport);
             }
-
-            $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
-            $isAllQuestionReviewed = $this->isAllQuestionReviewed($answerRecord);
+            $attachments = $this->getSingleAnswerAttachments($params);
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
-            if ($isAllQuestionReviewed) {
-                $answerRecord = $this->getAnswerReportResult($answerQuestionReports, $answerRecord);
+
+            if (!$this->needManualMarking($answerQuestionReport['status'], $answerRecord['answer_scene_id'])) {
+                $this->createAnswerReviewedQuestion($answerRecord['id'], $answerQuestionReport['question_id']);
+                $answerQuestionReport['isReviewed'] = true;
             }
 
             $this->commit();
@@ -277,27 +266,51 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $this->rollback();
             throw $e;
         }
-        if ($isAllQuestionReviewed) {
-            $this->dispatch('answer.submitted', $answerRecord);
-        }
 
         return $answerQuestionReport;
     }
 
+    private function needManualMarking($status, $answerSceneId)
+    {
+        if (AnswerQuestionReportService::STATUS_REVIEWING != $status) {
+            return false;
+        }
+        $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
+
+        return $answerScene['manual_marking'];
+    }
+
+    private function createAnswerReviewedQuestion($answerRecordId, $questionId)
+    {
+        $answerReviewedQuestion = [
+            'answer_record_id' => $answerRecordId,
+            'question_id' => $questionId,
+        ];
+
+        $this->getAnswerReviewedQuestionService()->createAnswerReviewedQuestion($answerReviewedQuestion);
+    }
+
+    public function finishAllSingleAnswer($answerRecord)
+    {
+        $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
+        $answerRecord = $this->generateAnswerReport($answerQuestionReports, $answerRecord);
+        $this->dispatch('answer.submitted', $answerRecord);
+    }
+
     private function isAllQuestionReviewed($answerRecord)
     {
-        $reviewedCount = $this->getAnswerQuestionReportService()->count([
-            'answer_record_id' => $answerRecord['id'],
-            'not_status' => AnswerQuestionReportService::STATUS_REVIEWING,
-        ]);
+        $reviewedCount = $this->getAnswerReviewedQuestionService()->countByAnswerRecordId($answerRecord['id']);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
 
         return $assessment['question_count'] == $reviewedCount;
     }
 
-    protected function getAttachments($params)
+    protected function getSingleAnswerAttachments($params)
     {
         $attachments = [];
+        if (empty($params['attachments'])) {
+            return $attachments;
+        }
         foreach ($params['attachments'] as $attachment) {
             $attachments[] = [
                 'id' => $attachment['id'],
@@ -309,17 +322,17 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $attachments;
     }
 
-    protected function getAnswerQuestionReport($params, $recordId)
+    protected function reviewSingleAnswer($answerRecordId, $params)
     {
         $questionReport = $this->getQuestionProcessor()->review($params['question_id'], empty($params['response']) ? [] : $params['response']);
         if ('none' == $questionReport['result']) {
             $questionReport['result'] = AnswerQuestionReportService::STATUS_REVIEWING;
         }
 
-        $answerQuestionReports = [
-            'identify' => $recordId . '_' . $questionReport['question_id'],
+        $answerQuestionReport = [
+            'identify' => $answerRecordId.'_'.$questionReport['question_id'],
             'total_score' => empty($questionReport['total_score']) ? 0.0 : $questionReport['total_score'],
-            'answer_record_id' => $recordId,
+            'answer_record_id' => $answerRecordId,
             'assessment_id' => $params['assessment_id'],
             'section_id' => $params['section_id'],
             'item_id' => $params['item_id'],
@@ -329,10 +342,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'response' => empty($questionReport['response']) ? [] : $questionReport['response'],
         ];
 
-        return $answerQuestionReports;
+        return $answerQuestionReport;
     }
 
-    protected function getAnswerReportResult($answerQuestionReports, $answerRecord, $usedTime = 0)
+    protected function generateAnswerReport($answerQuestionReports, $answerRecord, $usedTime = 0)
     {
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $canFinished = $this->canFinished($answerQuestionReports, $answerScene);
@@ -441,7 +454,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             foreach ($sectionReport['item_reports'] as $itemReport) {
                 foreach ($itemReport['question_reports'] as $questionReport) {
                     $answerQuestionReports[] = [
-                        'identify' => $assessmentReport['answer_record_id'] . '_' . $questionReport['id'],
+                        'identify' => $assessmentReport['answer_record_id'].'_'.$questionReport['id'],
                         'total_score' => empty($questionReport['total_score']) ? 0.0 : $questionReport['total_score'],
                         'answer_record_id' => $assessmentReport['answer_record_id'],
                         'assessment_id' => $assessmentReport['id'],
@@ -468,7 +481,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             foreach ($sectionResponse['item_responses'] as $itemResponse) {
                 foreach ($itemResponse['question_responses'] as $questionResponse) {
                     $answerQuestionReports[] = [
-                        'identify' => $assessmentResponse['answer_record_id'] . '_' . $questionResponse['question_id'],
+                        'identify' => $assessmentResponse['answer_record_id'].'_'.$questionResponse['question_id'],
                         'answer_record_id' => $assessmentResponse['answer_record_id'],
                         'assessment_id' => $assessmentResponse['assessment_id'],
                         'section_id' => $sectionResponse['section_id'],
@@ -557,8 +570,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             list($score, $status) = $this->getQuestionReportScoreAndStatus(
                 $answerScene,
                 $questionReport,
-                empty($reviewQuestionReports[$questionReport['id']]) ? array() : $reviewQuestionReports[$questionReport['id']],
-                empty($assessmentQuestions[$questionReport['question_id']]) ? array() : $assessmentQuestions[$questionReport['question_id']]
+                empty($reviewQuestionReports[$questionReport['id']]) ? [] : $reviewQuestionReports[$questionReport['id']],
+                empty($assessmentQuestions[$questionReport['question_id']]) ? [] : $assessmentQuestions[$questionReport['question_id']]
             );
             $questionReport['score'] = $score;
             $questionReport['status'] = $status;
@@ -657,7 +670,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'right_rate' => $this->sumRightRate($answerReports),
             'right_question_count' => $this->getRightQuestionCount($answerReports),
         ]);
-
     }
 
     protected function processFillQuestionReviseScore($answerRecord, $answerReportQuestion, $fillData)
@@ -682,22 +694,22 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $revise = $answerReportQuestion['revise'];
         foreach ($fillData['answer'] as $key => $value) {
             if (!empty($revise[$key])) {
-                $rightCount++;
+                ++$rightCount;
                 continue;
             } else {
                 $revise[$key] = 0;
             }
             if (!empty($result[$key]) || (empty($result[$key]) && !empty($value))) {
                 $revise[$key] = 1;
-                $rightCount++;
+                ++$rightCount;
                 continue;
             }
         }
         $rule = $questionRule['part_right'];
-        if ($rule['score_rule']['scoreType'] == 'question') {
+        if ('question' == $rule['score_rule']['scoreType']) {
             $score = $rightCount == count($answers) ? $item['score'] : 0.0;
         }
-        if ($rule['score_rule']['scoreType'] == 'option') {
+        if ('option' == $rule['score_rule']['scoreType']) {
             $totle = $rule['score_rule']['otherScore'] * $rightCount;
             $score = $totle >= $answerReportQuestion['score'] && $totle <= $answerReportQuestion['total_score'] ? $totle : $answerReportQuestion['score'];
         }
@@ -725,8 +737,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $questionReport,
         $reviewQuestionReport,
         $assessmentQuestion
-    )
-    {
+    ) {
         if (empty($reviewQuestionReport) || empty($assessmentQuestion)) {
             return [0, AnswerQuestionReportService::STATUS_NOANSWER];
         }
@@ -735,7 +746,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             if (empty($reviewQuestionReport['status'])) {
                 $status = AnswerQuestionReportService::STATUS_RIGHT;
             } else {
-                $status = $reviewQuestionReport['status'] == AnswerQuestionReportService::STATUS_WRONG ? AnswerQuestionReportService::STATUS_WRONG : AnswerQuestionReportService::STATUS_RIGHT;
+                $status = AnswerQuestionReportService::STATUS_WRONG == $reviewQuestionReport['status'] ? AnswerQuestionReportService::STATUS_WRONG : AnswerQuestionReportService::STATUS_RIGHT;
             }
 
             return [0, $status];
@@ -888,7 +899,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             //判断模拟考试应该取当前时间减去开始时间
             $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
-            if ($answerRecord['exam_mode'] == self::EXAM_MODE_SIMULATION) {
+            if (self::EXAM_MODE_SIMULATION == $answerRecord['exam_mode']) {
                 $assessmentResponse['used_time'] = time() - $answerRecord['created_time'];
             }
 
@@ -948,7 +959,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
         }
 
-
         foreach ($assessmentResponse['section_responses'] as &$sectionResponse) {
             foreach ($sectionResponse['item_responses'] as &$itemResponse) {
                 foreach ($itemResponse['question_responses'] as &$questionResponse) {
@@ -970,14 +980,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             return;
         }
 
-        if ($answerRecord['exam_mode'] != self::EXAM_MODE_SIMULATION) {
+        if (self::EXAM_MODE_SIMULATION != $answerRecord['exam_mode']) {
             return;
         }
         $autoSubmitJob = [
-            'name' => 'AssessmentAutoSubmitJob_' . $answerRecord['id'] . '_' . time(),
+            'name' => 'AssessmentAutoSubmitJob_'.$answerRecord['id'].'_'.time(),
             'expression' => time() + $answerScene['limited_time'] * 60 + 120,
             'class' => 'Biz\Testpaper\Job\AssessmentAutoSubmitJob',
-            'args' => ['answerRecordId' => $answerRecord['id']]
+            'args' => ['answerRecordId' => $answerRecord['id']],
         ];
 
         $this->getSchedulerService()->register($autoSubmitJob);
@@ -1090,5 +1100,13 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getQuestionProcessor()
     {
         return $this->biz['question_processor'];
+    }
+
+    /**
+     * @return AnswerReviewedQuestionService
+     */
+    protected function getAnswerReviewedQuestionService()
+    {
+        return $this->biz->service('ItemBank:Answer:AnswerReviewedQuestionService');
     }
 }
