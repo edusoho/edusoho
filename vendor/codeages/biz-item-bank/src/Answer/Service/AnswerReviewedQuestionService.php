@@ -2,7 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service;
 
-interface AnswerQuestionReportReviewedService
+interface AnswerReviewedQuestionService
 {
     public function findByAnswerRecordId($answerRecordId);
 

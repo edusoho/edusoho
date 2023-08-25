@@ -1,7 +1,7 @@
 <?php
 namespace Codeages\Biz\ItemBank\Answer\Dao;
 
-interface AnswerQuestionReportReviewedDao
+interface AnswerReviewedQuestionDao
 {
     public function findByAnswerRecordId($answerRecordId);
 

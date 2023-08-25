@@ -6,9 +6,9 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportReviewedService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\ErrorCode;
@@ -26,7 +26,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
 
         $assessment = $this->getAssessmentService()->getAssessment($questionReport['assessment_id']);
         $answerRecord = $this->getAnswerRecordService()->get($questionReport['answer_record_id']);
-        $reviewedCount = $this->getAnswerQuestionReportReviewedService()->countByAnswerRecordId($questionReport['answer_record_id']);
+        $reviewedCount = $this->getAnswerReviewedQuestionService()->countByAnswerRecordId($questionReport['answer_record_id']);
 
         if ($reviewedCount >= $assessment['question_count']) {
             $this->getAnswerService()->finishAllSingleAnswer($answerRecord);
@@ -126,10 +126,10 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
     }
 
     /**
-     * @return AnswerQuestionReportReviewedService
+     * @return AnswerReviewedQuestionService
      */
-    protected function getAnswerQuestionReportReviewedService()
+    protected function getAnswerReviewedQuestionService()
     {
-        return $this->biz->service('ItemBank:Answer:AnswerQuestionReportReviewedService');
+        return $this->biz->service('ItemBank:Answer:AnswerReviewedQuestionService');
     }
 }

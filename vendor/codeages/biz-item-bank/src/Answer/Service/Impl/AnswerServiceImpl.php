@@ -21,6 +21,7 @@ use Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportReviewedService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\BaseService;
@@ -269,7 +270,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
 
             if (!$this->needManualMarking($answerQuestionReport['status'], $answerRecord['answer_scene_id'])) {
-                $this->createAnswerQuestionReportReviewed($answerRecord['id'], $answerQuestionReport['question_id']);
+                $this->createAnswerReviewedQuestion($answerRecord['id'], $answerQuestionReport['question_id']);
                 $answerQuestionReport['isReviewed'] = true;
             }
 
@@ -292,16 +293,16 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $answerScene['manual_marking'];
     }
 
-    private function createAnswerQuestionReportReviewed($recordId, $questionId)
+    private function createAnswerReviewedQuestion($recordId, $questionId)
     {
         $questionReportReviewed = [
             'answer_record_id' => $recordId,
             'question_id' => $questionId
         ];
 
-        $reviewed = $this->getAnswerQuestionReportReviewedService()->getByAnswerRecordIdAndQuestionId($recordId, $questionId);
+        $reviewed = $this->getAnswerReviewedQuestionService()->getByAnswerRecordIdAndQuestionId($recordId, $questionId);
         if(!$reviewed) {
-            $this->getAnswerQuestionReportReviewedService()->createAnswerQuestionReportReviewed($questionReportReviewed);
+            $this->getAnswerReviewedQuestionService()->createAnswerReviewedQuestion($questionReportReviewed);
         }
     }
 
@@ -314,7 +315,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     private function isAllQuestionReviewed($answerRecord)
     {
-        $reviewedCount = $this->getAnswerQuestionReportReviewedService()->countByAnswerRecordId($answerRecord['id']);
+        $reviewedCount = $this->getAnswerReviewedQuestionService()->countByAnswerRecordId($answerRecord['id']);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
 
         return $assessment['question_count'] == $reviewedCount;
@@ -1121,10 +1122,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     }
 
     /**
-     * @return AnswerQuestionReportReviewedService
+     * @return AnswerReviewedQuestionService
      */
-    protected function getAnswerQuestionReportReviewedService()
+    protected function getAnswerReviewedQuestionService()
     {
-        return $this->biz->service('ItemBank:Answer:AnswerQuestionReportReviewedService');
+        return $this->biz->service('ItemBank:Answer:AnswerReviewedQuestionService');
     }
 }

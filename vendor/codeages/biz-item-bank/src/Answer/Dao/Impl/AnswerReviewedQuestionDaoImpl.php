@@ -4,7 +4,7 @@ namespace Codeages\Biz\ItemBank\Answer\Dao\Impl;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerQuestionReportReviewedDao;
 
-class AnswerQuestionReportReviewedDaoImpl extends AdvancedDaoImpl implements AnswerQuestionReportReviewedDao
+class AnswerReviewedQuestionDaoImpl extends AdvancedDaoImpl implements AnswerQuestionReportReviewedDao
 {
     protected $table = 'biz_answer_reviewed_question';
 

@@ -6,7 +6,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportReviewedService;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 
-class AnswerQuestionReportReviewedServiceImpl extends BaseService implements AnswerQuestionReportReviewedService
+class AnswerReviewedQuestionServiceImpl extends BaseService implements AnswerQuestionReportReviewedService
 {
     public function findByAnswerRecordId($answerRecordId)
     {
