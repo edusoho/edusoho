@@ -1,10 +1,11 @@
 <?php
+
 namespace Codeages\Biz\ItemBank\Answer\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
-use Codeages\Biz\ItemBank\Answer\Dao\AnswerQuestionReportReviewedDao;
+use Codeages\Biz\ItemBank\Answer\Dao\AnswerReviewedQuestionDao;
 
-class AnswerReviewedQuestionDaoImpl extends AdvancedDaoImpl implements AnswerQuestionReportReviewedDao
+class AnswerReviewedQuestionDaoImpl extends AdvancedDaoImpl implements AnswerReviewedQuestionDao
 {
     protected $table = 'biz_answer_reviewed_question';
 
@@ -22,7 +23,7 @@ class AnswerReviewedQuestionDaoImpl extends AdvancedDaoImpl implements AnswerQue
     {
         return $this->getByFields([
             'answer_record_id' => $recordId,
-            'question_id' => $questionId
+            'question_id' => $questionId,
             ]);
     }
 
@@ -34,13 +35,13 @@ class AnswerReviewedQuestionDaoImpl extends AdvancedDaoImpl implements AnswerQue
             ],
             'orderbys' => [],
             'serializes' => [
-                'revise' => 'json'
+                'revise' => 'json',
             ],
             'conditions' => [
                 'answer_record_id = :answer_record_id',
                 'answer_record_id IN (:answer_record_ids)',
                 'id IN (:ids)',
-                'question_id = :question_id'
+                'question_id = :question_id',
             ],
         ];
     }
