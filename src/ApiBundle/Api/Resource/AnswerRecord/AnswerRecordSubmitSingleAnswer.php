@@ -6,9 +6,9 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportReviewedService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\ErrorCode;
@@ -24,25 +24,23 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
 
         $questionReport = $this->getAnswerService()->submitSingleAnswer($params, $recordId);
 
+        $assessment = $this->getAssessmentService()->getAssessment($questionReport['assessment_id']);
+        $answerRecord = $this->getAnswerRecordService()->get($questionReport['answer_record_id']);
+        $reviewedCount = $this->getAnswerQuestionReportReviewedService()->countByAnswerRecordId($questionReport['answer_record_id']);
+
+        if ($reviewedCount >= $assessment['question_count']) {
+            $this->getAnswerService()->finishAllSingleAnswer($answerRecord);
+        }
+
         $item = $this->getItemService()->getItem($questionReport['item_id']);
         $question = $this->getItemService()->getQuestion($questionReport['question_id']);
-
-        $answerRecord = $this->getAnswerRecordService()->get($questionReport['answer_record_id']);
-        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
-        $assessment = $this->getAssessmentService()->getAssessment($questionReport['assessment_id']);
-
-        $reviewedCount = $this->getAnswerQuestionReportService()->count(
-            [
-                'answer_record_id' => $recordId,
-                'not_status' => AnswerQuestionReportService::STATUS_REVIEWING,
-            ]);
 
         return [
             'answer' => $question['answer'],
             'itemAnalysis' => $item['analysis'],
             'questionAnalysis' => $question['analysis'],
             'status' => $questionReport['status'],
-            'manualMarking' => $answerScene['manual_marking'],
+            'manualMarking' => empty($questionReport['isReviewed']) ? 1 : 0,
             'reviewedCount' => $reviewedCount,
             'totalCount' => $assessment['question_count'],
             'isAnswerFinished' => (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) ? 1 : 0,
@@ -96,14 +94,6 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
     }
 
     /**
-     * @return AnswerSceneService
-     */
-    protected function getAnswerSceneService()
-    {
-        return $this->service('ItemBank:Answer:AnswerSceneService');
-    }
-
-    /**
      * @return AnswerQuestionReportService
      */
     protected function getAnswerQuestionReportService()
@@ -133,5 +123,13 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
     protected function getAssessmentService()
     {
         return $this->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerQuestionReportReviewedService
+     */
+    protected function getAnswerQuestionReportReviewedService()
+    {
+        return $this->biz->service('ItemBank:Answer:AnswerQuestionReportReviewedService');
     }
 }
