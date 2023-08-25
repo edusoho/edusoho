@@ -25,7 +25,7 @@ class AnswerReviewedQuestionServiceImpl extends BaseService implements AnswerRev
 
     public function createAnswerReviewedQuestion($answerReviewedQuestion)
     {
-        $reviewedQuestion = $this->getAnswerReviewedQuestionService()->getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
+        $reviewedQuestion = $this->getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
         if ($reviewedQuestion) {
             return $reviewedQuestion;
         }

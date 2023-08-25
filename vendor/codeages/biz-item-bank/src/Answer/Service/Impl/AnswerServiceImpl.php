@@ -218,7 +218,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerQuestionReports = [];
         $newAnswerQuestionReport = [
             'assessment_id' => $assessmentId,
-            'status' => 'no_answer',
+            'status' => AnswerQuestionReportService::STATUS_NOANSWER,
         ];
 
         foreach ($answerReports as $answerReport) {
@@ -241,7 +241,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     public function submitSingleAnswer($answerRecordId, $params)
     {
-        $answerQuestionReport = $this->reviewAnswerQuestion($answerRecordId, $params);
+        $answerQuestionReport = $this->reviewSingleAnswer($answerRecordId, $params);
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
 
         try {
@@ -322,7 +322,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $attachments;
     }
 
-    protected function reviewAnswerQuestion($answerRecordId, $params)
+    protected function reviewSingleAnswer($answerRecordId, $params)
     {
         $questionReport = $this->getQuestionProcessor()->review($params['question_id'], empty($params['response']) ? [] : $params['response']);
         if ('none' == $questionReport['result']) {
