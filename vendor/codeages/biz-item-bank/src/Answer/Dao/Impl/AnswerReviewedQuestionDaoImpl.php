@@ -34,7 +34,6 @@ class AnswerReviewedQuestionDaoImpl extends AdvancedDaoImpl implements AnswerQue
             ],
             'orderbys' => [],
             'serializes' => [
-                'response' => 'json',
                 'revise' => 'json'
             ],
             'conditions' => [
