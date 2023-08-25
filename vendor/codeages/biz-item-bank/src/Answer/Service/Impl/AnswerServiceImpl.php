@@ -239,10 +239,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
     }
 
-    public function submitSingleAnswer($params, $recordId)
+    public function submitSingleAnswer($answerRecordId, $params)
     {
-        $answerQuestionReport = $this->getReviewedAnswerQuestionReport($params, $recordId);
-        $answerRecord = $this->getAnswerRecordService()->get($recordId);
+        $answerQuestionReport = $this->reviewAnswerQuestion($answerRecordId, $params);
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
 
         try {
             $this->beginTransaction();
@@ -280,17 +280,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $answerScene['manual_marking'];
     }
 
-    private function createAnswerReviewedQuestion($recordId, $questionId)
+    private function createAnswerReviewedQuestion($answerRecordId, $questionId)
     {
-        $questionReportReviewed = [
-            'answer_record_id' => $recordId,
+        $answerReviewedQuestion = [
+            'answer_record_id' => $answerRecordId,
             'question_id' => $questionId,
         ];
 
-        $reviewed = $this->getAnswerReviewedQuestionService()->getByAnswerRecordIdAndQuestionId($recordId, $questionId);
-        if (!$reviewed) {
-            $this->getAnswerReviewedQuestionService()->createAnswerReviewedQuestion($questionReportReviewed);
-        }
+        $this->getAnswerReviewedQuestionService()->createAnswerReviewedQuestion($answerReviewedQuestion);
     }
 
     public function finishAllSingleAnswer($answerRecord)
@@ -325,7 +322,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $attachments;
     }
 
-    protected function getReviewedAnswerQuestionReport($params, $recordId)
+    protected function reviewAnswerQuestion($answerRecordId, $params)
     {
         $questionReport = $this->getQuestionProcessor()->review($params['question_id'], empty($params['response']) ? [] : $params['response']);
         if ('none' == $questionReport['result']) {
@@ -333,9 +330,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $answerQuestionReport = [
-            'identify' => $recordId.'_'.$questionReport['question_id'],
+            'identify' => $answerRecordId.'_'.$questionReport['question_id'],
             'total_score' => empty($questionReport['total_score']) ? 0.0 : $questionReport['total_score'],
-            'answer_record_id' => $recordId,
+            'answer_record_id' => $answerRecordId,
             'assessment_id' => $params['assessment_id'],
             'section_id' => $params['section_id'],
             'item_id' => $params['item_id'],

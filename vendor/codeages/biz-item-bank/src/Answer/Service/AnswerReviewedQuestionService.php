@@ -10,5 +10,5 @@ interface AnswerReviewedQuestionService
 
     public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
 
-    public function createAnswerReviewedQuestion($answerQuestionReportReviewed);
+    public function createAnswerReviewedQuestion($answerReviewedQuestion);
 }

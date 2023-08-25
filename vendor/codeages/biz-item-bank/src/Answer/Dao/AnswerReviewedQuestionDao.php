@@ -7,5 +7,5 @@ interface AnswerReviewedQuestionDao
 
     public function countByAnswerRecordId($answerRecordId);
 
-    public function getByAnswerRecordIdAndQuestionId($recordId, $questionId);
+    public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
 }

@@ -18,14 +18,19 @@ class AnswerReviewedQuestionServiceImpl extends BaseService implements AnswerRev
         return $this->getAnswerReviewedQuestionDao()->countByAnswerRecordId($answerRecordId);
     }
 
-    public function getByAnswerRecordIdAndQuestionId($recordId, $questionId)
+    public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId)
     {
-        return $this->getAnswerReviewedQuestionDao()->getByAnswerRecordIdAndQuestionId($recordId, $questionId);
+        return $this->getAnswerReviewedQuestionDao()->getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
     }
 
-    public function createAnswerReviewedQuestion($answerQuestionReportReviewed)
+    public function createAnswerReviewedQuestion($answerReviewedQuestion)
     {
-        return $this->getAnswerReviewedQuestionDao()->create($answerQuestionReportReviewed);
+        $reviewedQuestion = $this->getAnswerReviewedQuestionService()->getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
+        if ($reviewedQuestion) {
+            return $reviewedQuestion;
+        }
+
+        return $this->getAnswerReviewedQuestionDao()->create($answerReviewedQuestion);
     }
 
     /**

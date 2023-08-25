@@ -16,17 +16,17 @@ use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class AnswerRecordSubmitSingleAnswer extends AbstractResource
 {
-    public function add(ApiRequest $request, $recordId)
+    public function add(ApiRequest $request, $answerRecordId)
     {
         $params = $request->request->all();
-        $this->validateParams($params, $recordId);
+        $this->validateParams($answerRecordId, $params);
         $params = $this->trimResponse($params);
 
-        $questionReport = $this->getAnswerService()->submitSingleAnswer($params, $recordId);
+        $questionReport = $this->getAnswerService()->submitSingleAnswer($answerRecordId, $params);
 
         $assessment = $this->getAssessmentService()->getAssessment($questionReport['assessment_id']);
-        $answerRecord = $this->getAnswerRecordService()->get($questionReport['answer_record_id']);
         $reviewedCount = $this->getAnswerReviewedQuestionService()->countByAnswerRecordId($questionReport['answer_record_id']);
+        $answerRecord = $this->getAnswerRecordService()->get($questionReport['answer_record_id']);
 
         if ($reviewedCount >= $assessment['question_count']) {
             $this->getAnswerService()->finishAllSingleAnswer($answerRecord);
@@ -47,13 +47,13 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
         ];
     }
 
-    public function validateParams($params, $recordId)
+    public function validateParams($answerRecordId, $params)
     {
         if (empty($params['admission_ticket'])) {
             throw new AnswerException('答题保存功能已升级，请更新客户端版本', ErrorCode::ANSWER_OLD_VERSION);
         }
 
-        $answerRecord = $this->getAnswerRecordService()->get($recordId);
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
 
         if (empty($answerRecord) || $this->getCurrentUser()->getId() != $answerRecord['user_id']) {
             throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
@@ -130,6 +130,6 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
      */
     protected function getAnswerReviewedQuestionService()
     {
-        return $this->biz->service('ItemBank:Answer:AnswerReviewedQuestionService');
+        return $this->service('ItemBank:Answer:AnswerReviewedQuestionService');
     }
 }
