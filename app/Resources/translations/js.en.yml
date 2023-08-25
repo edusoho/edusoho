@@ -1445,6 +1445,7 @@ admin.user.import_fail_hint: %title% failure：
 admin.user.import_completed_hint: %title% completed
 admin.user.import_error_hint: %title%, An unknown error has occurred.
 admin.user.lock_operational_hint: Really want %title%?
+admin.user.lock_operational_hint_new: %title%,it cannot be restored
 admin.user.lock_operational_success_hint: %title% successfully！
 admin.user.lock_operational_fail_hint: %title% failed
 admin.user.sending_passwordreset_email_hint: A password reset verification email is being sent, please wait a moment.
