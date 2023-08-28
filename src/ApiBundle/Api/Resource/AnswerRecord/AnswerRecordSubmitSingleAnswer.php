@@ -68,7 +68,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
         }
 
         $sectionItem = $this->getSectionItemService()->getItemByAssessmentIdAndItemId($params['assessment_id'], $params['item_id']);
-        if ($sectionItem['item_id'] != $params['item_id'] || $sectionItem['section_id'] != $params['section_id']) {
+        if (empty($sectionItem) || $sectionItem['section_id'] != $params['section_id']) {
             throw CommonException::ERROR_PARAMETER();
         }
 
