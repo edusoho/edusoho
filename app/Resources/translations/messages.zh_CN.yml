@@ -12390,3 +12390,7 @@ sms.defence.request.log.is_illegal.no: 否
 sms.defence.request.log.disable_type.ip: 同一ip多次请求
 sms.defence.request.log.disable_type.coordinate: 同一坐标多次请求
 sms.defence.request.log.disable_type.none: 无
+
+user.login.password.is.empty: 输入的密码不能为空
+user.login.is.another.session: 登录状态已失效
+user.login.is.bad: 过期凭证
