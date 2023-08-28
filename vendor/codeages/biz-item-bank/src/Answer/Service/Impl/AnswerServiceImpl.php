@@ -652,6 +652,68 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $answerQuestionReport;
     }
 
+    public function finishAnswer($answerRecordId)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        list($questionReports, $answerReviewedQuestions) = $this->generateNoAnswerQuestionReports($answerRecord);
+
+        try {
+            $this->beginTransaction();
+
+            $this->getAnswerQuestionReportService()->batchCreate($questionReports);
+            $this->getAnswerReviewedQuestionService()->batchCreateReviewedQuestions($answerReviewedQuestions);
+            $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
+
+            list($answerRecord) = $this->generateAnswerReport($answerQuestionReports, $answerRecord);
+
+            $this->commit();
+        }catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        return $answerRecord;
+    }
+
+    private function generateNoAnswerQuestionReports($answerRecord)
+    {
+        $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($answerRecord['assessment_id']);
+        $questionIds = array_column($assessmentQuestions,'question_id');
+        $assessmentQuestions = ArrayToolkit::index($assessmentQuestions, 'question_id');
+
+        $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
+        $questionReportQuestionIds = array_column($answerQuestionReports, 'question_id');
+
+        $noAnswerQuestionIds = array_diff($questionIds, $questionReportQuestionIds);
+        if (empty($noAnswerQuestionIds)) {
+            throw new AnswerException('答题已结束', ErrorCode::ANSWER_FINISHED);
+        }
+
+        foreach ($noAnswerQuestionIds as $noAnswerQuestionId) {
+            $questionReports[] = [
+                'identify' => $answerRecord['id']. '_' . $noAnswerQuestionId,
+                'answer_record_id' => $answerRecord['id'],
+                'assessment_id' => $answerRecord['assessment_id'],
+                'section_id' => $assessmentQuestions[$noAnswerQuestionId]['section_id'],
+                'item_id' => $assessmentQuestions[$noAnswerQuestionId]['item_id'],
+                'question_id' => $noAnswerQuestionId,
+                'score' => '0',
+                'total_score' => $assessmentQuestions[$noAnswerQuestionId]['score'],
+                'response' => [],
+                'status' => AnswerQuestionReportService::STATUS_NOANSWER,
+                'comment' => '',
+                'revise' => [],
+            ];
+
+            $answerReviewedQuestions[] = [
+                'answer_record_id' => $answerRecord['id'],
+                'question_id' => $noAnswerQuestionId
+            ];
+        }
+
+        return [$questionReports, $answerReviewedQuestions];
+    }
+
     public function reviseFillAnswer($answerRecordId, $fillData)
     {
         if (empty($fillData)) {

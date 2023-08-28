@@ -2,10 +2,10 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerReviewedQuestionDao;
 
-class AnswerReviewedQuestionDaoImpl extends GeneralDaoImpl implements AnswerReviewedQuestionDao
+class AnswerReviewedQuestionDaoImpl extends AdvancedDaoImpl implements AnswerReviewedQuestionDao
 {
     protected $table = 'biz_answer_reviewed_question';
 

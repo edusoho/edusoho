@@ -11,4 +11,6 @@ interface AnswerReviewedQuestionService
     public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
 
     public function createAnswerReviewedQuestion($answerReviewedQuestion);
+
+    public function batchCreateReviewedQuestions($answerReviewedQuestions);
 }

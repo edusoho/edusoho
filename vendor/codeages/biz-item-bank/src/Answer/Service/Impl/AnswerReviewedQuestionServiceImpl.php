@@ -33,6 +33,11 @@ class AnswerReviewedQuestionServiceImpl extends BaseService implements AnswerRev
         return $this->getAnswerReviewedQuestionDao()->create($answerReviewedQuestion);
     }
 
+    public function batchCreateReviewedQuestions($answerReviewedQuestions)
+    {
+        return $this->getAnswerReviewedQuestionDao()->batchCreate($answerReviewedQuestions);
+    }
+
     /**
      * @return AnswerReviewedQuestionDao
      */
