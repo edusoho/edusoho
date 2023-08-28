@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\StringToolkit;
+use Biz\Common\CommonException;
 use Biz\System\Service\SettingService;
 use Biz\User\AuthProvider\DiscuzAuthProvider;
 use Symfony\Component\Finder\Finder;
@@ -67,7 +68,13 @@ class SystemController extends BaseController
 
             return $this->createJsonResponse(['status' => true, 'message' => '邮件发送正常']);
         } catch (\Exception $e) {
-            $this->getLogService()->error('system', 'email_send_check', '【系统邮件发送自检】 发送邮件失败：'.$e->getMessage());
+            if ($e instanceof CommonException) {
+                $message = $this->trans($e->getMessage());
+            } else {
+                $message = $e->getMessage();
+            }
+
+            $this->getLogService()->error('system', 'email_send_check', '【系统邮件发送自检】 发送邮件失败：'.$message);
 
             return $this->createJsonResponse(['status' => false, 'message' => '邮件发送异常']);
         }
