@@ -639,9 +639,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         try {
             $this->beginTransaction();
 
-            if ($questionReport) {
-                $answerQuestionReport = $this->getAnswerQuestionReportService()->updateAnswerQuestionReport($questionReport['id'], ['status' => $params['status']]);
-            }
+            $answerQuestionReport = $this->getAnswerQuestionReportService()->updateAnswerQuestionReport($questionReport['id'], ['status' => $params['status']]);
 
             $this->createAnswerReviewedQuestion($answerRecord['id'], $answerQuestionReport['question_id']);
 
