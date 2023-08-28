@@ -28,12 +28,12 @@ class LearnStatisticsController extends BaseController
         $conditions = array_merge($defaultCondition, $conditions);
 
         $userConditions = ['destroyed' => 0, 'isStudent' => true];
-        $keyword = $conditions['keyword'] ? trim($conditions['keyword']) : '';
-        if ($keyword){
+        $keyword = trim($conditions['keyword'] ?? '');
+        if ($keyword) {
             $userConditions['nickname'] = $keyword;
         }
 
-        if (isset($conditions['keywordType']) && $keyword && 'mobile' == $conditions['keywordType']) {
+        if (isset($conditions['keywordType']) && 'mobile' == $conditions['keywordType'] && $keyword) {
             unset($userConditions['nickname']);
             $userConditions['verifiedMobile'] = $keyword;
         }
