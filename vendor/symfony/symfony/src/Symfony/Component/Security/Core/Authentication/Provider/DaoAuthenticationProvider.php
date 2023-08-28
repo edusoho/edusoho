@@ -19,7 +19,6 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Topxia\Service\Common\ServiceKernel;
 
 /**
  * DaoAuthenticationProvider uses a UserProviderInterface to retrieve the user
@@ -55,15 +54,15 @@ class DaoAuthenticationProvider extends UserAuthenticationProvider
         $currentUser = $token->getUser();
         if ($currentUser instanceof UserInterface) {
             if ($currentUser->getPassword() !== $user->getPassword()) {
-                throw new BadCredentialsException(ServiceKernel::instance()->trans('user.login.is.another.session'));
+                throw new BadCredentialsException('The credentials were changed from another session.');
             }
         } else {
             if ('' === ($presentedPassword = $token->getCredentials())) {
-                throw new BadCredentialsException(ServiceKernel::instance()->trans('user.login.password.is.empty'));
+                throw new BadCredentialsException('The presented password cannot be empty.');
             }
 
             if (null === $user->getPassword() || !$this->encoderFactory->getEncoder($user)->isPasswordValid($user->getPassword(), $presentedPassword, $user->getSalt())) {
-                throw new BadCredentialsException(ServiceKernel::instance()->trans('user.login.is.bad'));
+                throw new BadCredentialsException('Bad credentials.');
             }
         }
     }
