@@ -664,13 +664,15 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $this->getAnswerReviewedQuestionService()->batchCreateReviewedQuestions($answerReviewedQuestions);
             $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
 
-            list($answerRecord) = $this->generateAnswerReport($answerQuestionReports, $answerRecord);
+            list($answerRecord, $answerReport) = $this->generateAnswerReport($answerQuestionReports, $answerRecord);
 
             $this->commit();
         }catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }
+
+        $this->dispatch('answer.finished', $answerReport);
 
         return $answerRecord;
     }
