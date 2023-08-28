@@ -82,7 +82,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
-            $answerRecord = $this->generateAnswerReport($answerQuestionReports, $answerRecord, $assessmentResponse['used_time']);
+            list($answerRecord) = $this->generateAnswerReport($answerQuestionReports, $answerRecord, $assessmentResponse['used_time']);
 
             $this->commit();
         } catch (\Exception $e) {
