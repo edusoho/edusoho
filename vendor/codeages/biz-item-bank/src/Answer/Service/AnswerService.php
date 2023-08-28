@@ -89,7 +89,7 @@ interface AnswerService
 
     public function submitSingleAnswer($answerRecordId, $params);
 
-    public function finishAllSingleAnswer($answerRecord);
+    public function finishAllSingleAnswer($answerRecord, $type);
 
-//    public function reviewSingleAnswer($params);
+    public function reviewSingleAnswerByManual($answerRecordId, $params);
 }

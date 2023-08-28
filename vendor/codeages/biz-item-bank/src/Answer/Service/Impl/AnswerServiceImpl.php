@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use Biz\Common\CommonException;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
@@ -81,7 +82,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
-            $answerRecord = $this->generateAnswerReport($answerQuestionReports, $answerRecord, $assessmentResponse['used_time']);
+            list($answerRecord) = $this->generateAnswerReport($answerQuestionReports, $answerRecord, $assessmentResponse['used_time']);
 
             $this->commit();
         } catch (\Exception $e) {
@@ -290,19 +291,20 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $this->getAnswerReviewedQuestionService()->createAnswerReviewedQuestion($answerReviewedQuestion);
     }
 
-    public function finishAllSingleAnswer($answerRecord)
+    public function finishAllSingleAnswer($answerRecord, $type)
     {
+        if (!in_array($type, ['submit', 'review', 'finish'])) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+
         $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
-        $answerRecord = $this->generateAnswerReport($answerQuestionReports, $answerRecord);
-        $this->dispatch('answer.submitted', $answerRecord);
-    }
+        list($answerRecord, $answerReport) = $this->generateAnswerReport($answerQuestionReports, $answerRecord);
 
-    private function isAllQuestionReviewed($answerRecord)
-    {
-        $reviewedCount = $this->getAnswerReviewedQuestionService()->countByAnswerRecordId($answerRecord['id']);
-        $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
-
-        return $assessment['question_count'] == $reviewedCount;
+        if($type == 'submit') {
+            $this->dispatch('answer.submitted', $answerRecord);
+        } elseif($type == 'review') {
+            $this->dispatch('answer.finished', $answerReport);
+        }
     }
 
     protected function getSingleAnswerAttachments($params)
@@ -382,7 +384,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             );
         }
 
-        return $answerRecord;
+        return [$answerRecord, $answerReport];
     }
 
     protected function sumTotalScore(array $answerQuestionReports)
@@ -624,6 +626,30 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $this->dispatch('answer.finished', $answerReport);
 
         return $answerReport;
+    }
+
+    public function reviewSingleAnswerByManual($answerRecordId, $params)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        $questionReport = $this->getAnswerQuestionReportService()->getByAnswerRecordIdAndQuestionId($answerRecordId, $params['question_id']);
+        if (empty($questionReport)) {
+            throw new AnswerReportException('Answer report not found.', ErrorCode::ANSWER_REPORT_NOTFOUND);
+        }
+        
+        try {
+            $this->beginTransaction();
+
+            $answerQuestionReport = $this->getAnswerQuestionReportService()->updateAnswerQuestionReport($questionReport['id'], ['status' => $params['status']]);
+
+            $this->createAnswerReviewedQuestion($answerRecord['id'], $answerQuestionReport['question_id']);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        return $answerQuestionReport;
     }
 
     public function reviseFillAnswer($answerRecordId, $fillData)
