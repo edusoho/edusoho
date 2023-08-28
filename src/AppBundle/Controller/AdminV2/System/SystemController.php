@@ -68,9 +68,10 @@ class SystemController extends BaseController
 
             return $this->createJsonResponse(['status' => true, 'message' => '邮件发送正常']);
         } catch (\Exception $e) {
-            $this->getLogService()->error('system', 'email_send_check', '【系统邮件发送自检】 发送邮件失败：'.$e->getMessage());
+            $message = $this->trans($e->getMessage());
+            $this->getLogService()->error('system', 'email_send_check', '【系统邮件发送自检】 发送邮件失败：'.$message);
 
-            return $this->createJsonResponse(['status' => false, 'message' => '邮件发送异常']);
+            return $this->createJsonResponse(['status' => false, 'message' => '邮件发送异常:'.$message]);
         }
     }
 
