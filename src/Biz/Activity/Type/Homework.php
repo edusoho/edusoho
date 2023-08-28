@@ -200,9 +200,9 @@ class Homework extends Activity
         $this->getAssessmentService()->updateBasicAssessment($homework['assessmentId'], $fields);
 
         $answerScene = $this->getAnswerSceneService()->get($homework['answerSceneId']);
-        $this->getAnswerSceneService()->update($homework['answerSceneId'],[
+        $this->getAnswerSceneService()->update($homework['answerSceneId'], [
             'need_score' => ('score' == $activity['finishType']) ? 1 : 0,
-            'finishData' => empty($activity['finishData']) ? $answerScene['pass_score'] : $activity['finishData']
+            'finishData' => empty($activity['finishData']) ? $answerScene['pass_score'] : $activity['finishData'],
         ]);
 
         return $homework;
