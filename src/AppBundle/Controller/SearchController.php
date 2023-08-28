@@ -3,17 +3,15 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\CloudPlatform\Service\AppService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\ThreadService;
-use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\Common\CommonException;
 use Biz\Search\Service\SearchService;
+use Biz\Search\Strategy\ClassroomLocalSearchStrategy;
+use Biz\Search\Strategy\CourseLocalSearchStrategy;
+use Biz\Search\Strategy\ItemBankExerciseLocalSearchStrategy;
+use Biz\Search\Strategy\LocalSearchStrategy;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\HttpFoundation\Request;
-use VipPlugin\Biz\Vip\Service\LevelService;
-use VipPlugin\Biz\Vip\Service\VipService;
 
 class SearchController extends BaseController
 {
@@ -39,147 +37,28 @@ class SearchController extends BaseController
         if (!in_array($type, ['course', 'classroom', 'itemBankExercise'])) {
             $type = 'course';
         }
-
-        return $this->forward(
-            "AppBundle:Search:{$type}Search",
-            [
-                'request' => $request,
-            ],
-            $request->query->all()
-        );
-    }
-
-    public function classroomSearchAction(Request $request)
-    {
-        $keywords = $request->query->get('q');
-        $keywords = $this->filterKeyWord($keywords);
-        $type = 'classroom';
         $filter = $request->query->get('filter');
-
-        $conditions = [
-            'status' => 'published',
-            'titleLike' => $keywords,
-            'showable' => 1,
+        $searchStrategy = $this->createLocalSearchStrategy($type, $keywords, $filter);
+        $paginator = new Paginator($request, $searchStrategy->count(), 12);
+        $results = $searchStrategy->search($paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $resultNames = [
+            'course' => 'courseSets',
+            'classroom' => 'classrooms',
+            'itemBankExercise' => 'itemBankExercises',
         ];
 
-        if ('free' == $filter) {
-            $conditions['price'] = '0.00';
-        }
-
-        $count = $this->getClassroomService()->countClassrooms($conditions);
-
-        $paginator = new Paginator(
-            $request,
-            $count, 12
-        );
-
-        $classrooms = $this->getClassroomService()->searchClassrooms(
-            $conditions,
-            ['updatedTime' => 'desc'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        $params = [
+            'type' => $type,
+            'paginator' => $paginator,
+            'keywords' => $keywords,
+            'filter' => $filter,
+            'count' => $paginator->getItemCount(),
+        ];
+        $params[$resultNames[$type]] = $results;
 
         return $this->render(
             'search/index.html.twig',
-            [
-                'type' => $type,
-                'classrooms' => $this->getWebExtension()->filterClassroomsVipRight($classrooms),
-                'filter' => $filter,
-                'count' => $count,
-                'paginator' => $paginator,
-                'keywords' => $keywords,
-            ]
-        );
-    }
-
-    public function courseSearchAction(Request $request)
-    {
-        $keywords = $request->query->get('q');
-        $keywords = $this->filterKeyWord($keywords);
-        $type = 'course';
-
-        $filter = $request->query->get('filter');
-
-        $conditions = [
-            'status' => 'published',
-            'title' => $keywords,
-            'parentId' => 0,
-        ];
-
-        if ('vip' == $filter) {
-            $conditions['vipLevelIds'] = $this->getVipLevelIds();
-        } elseif ('live' == $filter) {
-            $conditions['type'] = 'live';
-        } elseif ('free' == $filter) {
-            $conditions['minCoursePrice'] = '0.00';
-        }
-
-        $conditions = $this->filterCourseConditions($conditions);
-
-        $count = $this->getCourseSetService()->countCourseSets($conditions);
-        $paginator = new Paginator(
-            $request,
-            $count, 12
-        );
-        $courseSets = $this->getCourseSetService()->searchCourseSets(
-            $conditions,
-            ['updatedTime' => 'desc'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        return $this->render(
-            'search/index.html.twig',
-            [
-                'type' => $type,
-                'courseSets' => $courseSets,
-                'paginator' => $paginator,
-                'keywords' => $keywords,
-                'filter' => $filter,
-                'count' => $count,
-            ]
-        );
-    }
-
-    public function itemBankExerciseSearchAction(Request $request)
-    {
-        $keywords = $request->query->get('q');
-        $keywords = $this->filterKeyWord($keywords);
-        $filter = $request->query->get('filter');
-
-        $conditions = [
-            'status' => 'published',
-            'title' => $keywords,
-        ];
-
-        if ('free' == $filter) {
-            $conditions['price'] = '0.00';
-        }
-
-        $count = $this->getItemBankExerciseService()->count($conditions);
-        $paginator = new Paginator(
-            $request,
-            $count,
-            12
-        );
-        $itemBankExercises = $this->getItemBankExerciseService()->search(
-            $conditions,
-            ['recommended' => 'desc', 'recommendedSeq' => 'asc', 'updatedTime' => 'desc'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        return $this->render(
-            'search/index.html.twig',
-            [
-                'type' => 'itemBankExercise',
-                'itemBankExercises' => $itemBankExercises,
-                'paginator' => $paginator,
-                'keywords' => $keywords,
-                'filter' => $filter,
-                'count' => $count,
-            ]
+            $params
         );
     }
 
@@ -195,37 +74,6 @@ class SearchController extends BaseController
         $type = $request->query->get('type', 'course');
         $page = $request->query->get('page', '1');
 
-        if ('itemBankExercise' == $type) {
-            $conditions = [
-                'status' => 'published',
-                'title' => $keywords,
-            ];
-
-            $count = $this->getItemBankExerciseService()->count($conditions);
-            $paginator = new Paginator(
-                $request,
-                $count,
-                $pageSize
-            );
-            $itemBankExercises = $this->getItemBankExerciseService()->search(
-                $conditions,
-                ['recommended' => 'desc', 'recommendedSeq' => 'asc', 'updatedTime' => 'desc'],
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-
-            return $this->render(
-                'search/cloud-search.html.twig',
-                [
-                    'keywords' => $keywords,
-                    'type' => $type,
-                    'resultSet' => $itemBankExercises,
-                    'counts' => $count,
-                    'paginator' => $paginator,
-                ]
-            );
-        }
-
         $this->dispatchSearchEvent($keywords, $type, $page);
 
         if (!$this->isTypeUsable($type)) {
@@ -239,6 +87,22 @@ class SearchController extends BaseController
                     'keywords' => $keywords,
                     'type' => $type,
                     'errorMessage' => '在上方搜索框输入关键词进行搜索.',
+                ]
+            );
+        }
+        if ('itemBankExercise' == $type) {
+            $searchStrategy = $this->createLocalSearchStrategy($type, $keywords, '');
+            $paginator = new Paginator($request, $searchStrategy->count(), $pageSize);
+            $resultSet = $searchStrategy->search($paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+            return $this->render(
+                'search/cloud-search.html.twig',
+                [
+                    'keywords' => $keywords,
+                    'type' => $type,
+                    'resultSet' => $resultSet,
+                    'counts' => $paginator->getItemCount(),
+                    'paginator' => $paginator,
                 ]
             );
         }
@@ -261,7 +125,6 @@ class SearchController extends BaseController
             list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
 
             $resultSet = $this->filterCloudSearchResults($resultSet);
-
         } catch (\Exception $e) {
             return $this->redirectToRoute(
                 'search',
@@ -297,26 +160,6 @@ class SearchController extends BaseController
 
             return $items;
         }, $resultSet);
-    }
-
-    private function getVipLevelIds()
-    {
-        $vip = $this->getAppService()->findInstallApp('Vip');
-        $isShowVipSearch = $vip && version_compare($vip['version'], '1.0.7', '>=');
-
-        $vipLevelIds = '';
-        if (!$isShowVipSearch) {
-            return $vipLevelIds;
-        }
-
-        $currentUserVip = $this->getVipService()->getMemberByUserId($this->getCurrentUser()->getId());
-        if (!empty($currentUserVip) && isset($currentUserVip['levelId'])) {
-            $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
-            $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
-            $vipLevelIds = array_column($vipLevels, 'id');
-        }
-
-        return $vipLevelIds;
     }
 
     private function isCloudSearchUsable()
@@ -366,58 +209,24 @@ class SearchController extends BaseController
         ]));
     }
 
-    protected function filterCourseConditions($conditions)
+    /**
+     * @return LocalSearchStrategy
+     */
+    private function createLocalSearchStrategy($type, $keyword, $filter)
     {
-        if (!$this->isPluginInstalled('Reservation')) {
-            $conditions['excludeTypes'] = ['reservation'];
+        $searchStrategies = [
+            'course' => CourseLocalSearchStrategy::class,
+            'classroom' => ClassroomLocalSearchStrategy::class,
+            'itemBankExercise' => ItemBankExerciseLocalSearchStrategy::class,
+        ];
+        if (empty($searchStrategies[$type])) {
+            throw CommonException::ERROR_PARAMETER();
         }
+        $searchStrategy = new $searchStrategies[$type];
+        $searchStrategy->setBiz($this->getBiz());
+        $searchStrategy->buildSearchConditions($keyword, $filter);
 
-        return $conditions;
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->getBiz()->service('Course:CourseService');
-    }
-
-    protected function getCourseSetService()
-    {
-        return $this->getBiz()->service('Course:CourseSetService');
-    }
-
-    /**
-     * @return ThreadService
-     */
-    protected function getThreadService()
-    {
-        return $this->getBiz()->service('Course:ThreadService');
-    }
-
-    /**
-     * @return AppService
-     */
-    protected function getAppService()
-    {
-        return $this->getBiz()->service('CloudPlatform:AppService');
-    }
-
-    /**
-     * @return LevelService
-     */
-    protected function getLevelService()
-    {
-        return $this->getBiz()->service('VipPlugin:Vip:LevelService');
-    }
-
-    /**
-     * @return VipService
-     */
-    protected function getVipService()
-    {
-        return $this->getBiz()->service('VipPlugin:Vip:VipService');
+        return $searchStrategy;
     }
 
     /**
@@ -425,7 +234,7 @@ class SearchController extends BaseController
      */
     protected function getSearchService()
     {
-        return $this->getBiz()->service('Search:SearchService');
+        return $this->createService('Search:SearchService');
     }
 
     /**
@@ -433,22 +242,6 @@ class SearchController extends BaseController
      */
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
-    }
-
-    /**
-     * @return ClassroomService
-     */
-    protected function getClassroomService()
-    {
-        return $this->createService('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return ExerciseService
-     */
-    protected function getItemBankExerciseService()
-    {
-        return $this->createService('ItemBankExercise:ExerciseService');
+        return $this->createService('System:SettingService');
     }
 }

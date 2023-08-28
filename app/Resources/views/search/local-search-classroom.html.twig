@@ -38,6 +38,7 @@
   <div class="class-list local-search-class-list cd-mt8">
     <div class="row">
       {% if classrooms %}
+        {% set classrooms = filter_classrooms_vip_right(classrooms) %}
         {% for classroom in classrooms %}
           <div class="col-md-3 col-sm-6">
             <div class="class-item local-search-class-item class-item--tag">
