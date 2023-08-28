@@ -47,25 +47,25 @@ class AnswerRecordReviewSingleAnswer extends AbstractResource
         }
 
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
-        if (AnswerService::EXERCISE_MODE_SUBMIT_SINGLE != $answerRecord['exercise_mode']) {
-            throw new AnswerException('非一题一答模式，不能批阅', ErrorCode::EXERCISE_MODE_ERROR);
-        }
-
         if (empty($answerRecord) || $this->getCurrentUser()->getId() != $answerRecord['user_id']) {
             throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
+        }
+
+        if (AnswerService::EXERCISE_MODE_SUBMIT_SINGLE != $answerRecord['exercise_mode']) {
+            throw new AnswerException('非一题一答模式，不能批阅', ErrorCode::EXERCISE_MODE_ERROR);
         }
 
         if ($answerRecord['assessment_id'] != $params['assessment_id']) {
             throw new InvalidArgumentException('assessment_id invalid.');
         }
 
-        $sectionItems = $this->getSectionItemService()->getItemByAssessmentIdAndItemId($params['assessment_id'], $params['item_id']);
-        if ($sectionItems['item_id'] != $params['item_id'] || $sectionItems['section_id'] != $params['section_id']) {
+        $sectionItem = $this->getSectionItemService()->getItemByAssessmentIdAndItemId($params['assessment_id'], $params['item_id']);
+        if ($sectionItem['item_id'] != $params['item_id'] || $sectionItem['section_id'] != $params['section_id']) {
             throw CommonException::ERROR_PARAMETER();
         }
 
-        $item = $this->getItemService()->getQuestion($params['question_id']);
-        if ($params['question_id'] != $item['id']) {
+        $question = $this->getItemService()->getQuestion($params['question_id']);
+        if (empty($question) || $params['item_id'] != $question['item_id']) {
             throw CommonException::ERROR_PARAMETER();
         }
     }

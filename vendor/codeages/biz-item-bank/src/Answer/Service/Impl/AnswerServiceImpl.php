@@ -298,12 +298,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
-        $answerRecord = $this->generateAnswerReport($answerQuestionReports, $answerRecord);
+        list($answerRecord, $answerReport) = $this->generateAnswerReport($answerQuestionReports, $answerRecord);
 
         if($type == 'submit') {
             $this->dispatch('answer.submitted', $answerRecord);
         } elseif($type == 'review') {
-            $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
             $this->dispatch('answer.finished', $answerReport);
         }
     }
@@ -385,7 +384,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             );
         }
 
-        return $answerRecord;
+        return [$answerRecord, $answerReport];
     }
 
     protected function sumTotalScore(array $answerQuestionReports)
@@ -644,9 +643,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $answerQuestionReport = $this->getAnswerQuestionReportService()->updateAnswerQuestionReport($questionReport['id'], ['status' => $params['status']]);
             }
 
-            if (!$this->needManualMarking($answerQuestionReport['status'], $answerRecord['answer_scene_id'])) {
-                $this->createAnswerReviewedQuestion($answerRecord['id'], $answerQuestionReport['question_id']);
-            }
+            $this->createAnswerReviewedQuestion($answerRecord['id'], $answerQuestionReport['question_id']);
 
             $this->commit();
         } catch (\Exception $e) {
