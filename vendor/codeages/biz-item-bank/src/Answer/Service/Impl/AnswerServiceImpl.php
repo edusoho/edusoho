@@ -445,36 +445,36 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $reviewQuestionReports = ArrayToolkit::index($reviewReport['question_reports'], 'id');
         $questionReportIds = ArrayToolkit::column($reviewReport['question_reports'], 'id');
-        if (empty($questionReportIds)) {
-            goto changeReportStatus;
-        }
-        $conditions = [
-            'ids' => $questionReportIds,
-            'answer_record_id' => $answerRecord['id'],
-        ];
-        $questionReports = $this->getAnswerQuestionReportService()->search(
-            $conditions,
-            [],
-            0,
-            $this->getAnswerQuestionReportService()->count($conditions)
-        );
-        $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($answerRecord['assessment_id']);
-        foreach ($questionReports as &$questionReport) {
-            $questionReport['comment'] = empty($reviewQuestionReports[$questionReport['id']]['comment']) ? '' : $this->biz['item_bank_html_helper']->purify(
-                $reviewQuestionReports[$questionReport['id']]['comment']
+        if ($questionReportIds){
+            $conditions = [
+                'ids' => $questionReportIds,
+                'answer_record_id' => $answerRecord['id'],
+            ];
+            $questionReports = $this->getAnswerQuestionReportService()->search(
+                $conditions,
+                [],
+                0,
+                $this->getAnswerQuestionReportService()->count($conditions)
             );
-            list($score, $status) = $this->getQuestionReportScoreAndStatus(
-                $answerScene,
-                $questionReport,
-                empty($reviewQuestionReports[$questionReport['id']]) ? array() : $reviewQuestionReports[$questionReport['id']],
-                empty($assessmentQuestions[$questionReport['question_id']]) ? array() : $assessmentQuestions[$questionReport['question_id']]
-            );
-            $questionReport['score'] = $score;
-            $questionReport['status'] = $status;
-            $questionReport['total_score'] = empty($assessmentQuestions['score']) ? 0 : $assessmentQuestions['score'];
+
+            $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($answerRecord['assessment_id']);
+            foreach ($questionReports as &$questionReport) {
+                $questionReport['comment'] = empty($reviewQuestionReports[$questionReport['id']]['comment']) ? '' : $this->biz['item_bank_html_helper']->purify(
+                    $reviewQuestionReports[$questionReport['id']]['comment']
+                );
+
+                list($score, $status) = $this->getQuestionReportScoreAndStatus(
+                    $answerScene,
+                    $questionReport,
+                    empty($reviewQuestionReports[$questionReport['id']]) ? array() : $reviewQuestionReports[$questionReport['id']],
+                    empty($assessmentQuestions[$questionReport['question_id']]) ? array() : $assessmentQuestions[$questionReport['question_id']]
+                );
+                $questionReport['score'] = $score;
+                $questionReport['status'] = $status;
+                $questionReport['total_score'] = empty($assessmentQuestions['score']) ? 0 : $assessmentQuestions['score'];
+            }
         }
 
-        changeReportStatus:
         try {
             $this->beginTransaction();
 
