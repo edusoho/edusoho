@@ -25,7 +25,7 @@ class AnswerRecordReviewSingleAnswer extends AbstractResource
         $questionReport = $this->getAnswerService()->reviewSingleAnswerByManual($answerRecordId, $params);
 
         $assessment = $this->getAssessmentService()->getAssessment($questionReport['assessment_id']);
-        $reviewedCount = $this->getAnswerReviewedQuestionService()->countByAnswerRecordId($questionReport['answer_record_id']);
+        $reviewedCount = $this->getAnswerReviewedQuestionService()->countReviewedByAnswerRecordId($questionReport['answer_record_id']);
         $answerRecord = $this->getAnswerRecordService()->get($questionReport['answer_record_id']);
 
         if ($reviewedCount >= $assessment['question_count']) {
