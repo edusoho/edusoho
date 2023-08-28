@@ -35,7 +35,7 @@ class ItemBankExerciseChapterExerciseInfo extends AbstractResource
         ];
     }
 
-    public function validateParams($exerciseId, $moduleId, $categoryId)
+    private function validateParams($exerciseId, $moduleId, $categoryId)
     {
         list($exercise) = $this->getItemBankExerciseService()->tryTakeExercise($exerciseId);
         if (0 == $exercise['chapterEnable']) {
@@ -58,7 +58,7 @@ class ItemBankExerciseChapterExerciseInfo extends AbstractResource
         }
     }
 
-    public function countItemTypesNum($items)
+    private function countItemTypesNum($items)
     {
         $typesNum = [
             'single_choice' => 0,

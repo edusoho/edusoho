@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
@@ -11,7 +10,6 @@ use Biz\Course\Service\ThreadService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Search\Service\SearchService;
 use Biz\System\Service\SettingService;
-use Biz\Taxonomy\Service\CategoryService;
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\HttpFoundation\Request;
 use VipPlugin\Biz\Vip\Service\LevelService;
@@ -22,22 +20,17 @@ class SearchController extends BaseController
     public function indexAction(Request $request)
     {
         $keywords = $request->query->get('q');
-        $keywords = $this->filterKeyWord(trim($keywords));
+        $keywords = $this->filterKeyWord($keywords);
         $type = $request->query->get('type', 'course');
         $page = $request->query->get('page', 1);
 
-        $cloud_search_setting = $this->getSettingService()->get('cloud_search', []);
-        $cloud_search_restore_time = $this->getSettingService()->get('_cloud_search_restore_time', 0);
-
-        if (isset($cloud_search_setting['search_enabled']) && $cloud_search_setting['search_enabled'] && 'ok' == $cloud_search_setting['status'] && $cloud_search_restore_time < time()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'cloud_search',
-                    [
-                        'q' => $keywords,
-                        'type' => $type,
-                    ]
-                )
+        if ($this->isCloudSearchUsable()) {
+            return $this->redirectToRoute(
+                'cloud_search',
+                [
+                    'q' => $keywords,
+                    'type' => $type,
+                ]
             );
         }
 
@@ -59,7 +52,7 @@ class SearchController extends BaseController
     public function classroomSearchAction(Request $request)
     {
         $keywords = $request->query->get('q');
-        $keywords = $this->filterKeyWord(trim($keywords));
+        $keywords = $this->filterKeyWord($keywords);
         $type = 'classroom';
         $filter = $request->query->get('filter');
 
@@ -103,24 +96,8 @@ class SearchController extends BaseController
     public function courseSearchAction(Request $request)
     {
         $keywords = $request->query->get('q');
-        $keywords = $this->filterKeyWord(trim($keywords));
+        $keywords = $this->filterKeyWord($keywords);
         $type = 'course';
-        $currentUser = $this->getCurrentUser();
-        $vip = $this->getAppService()->findInstallApp('Vip');
-
-        $isShowVipSearch = $vip && version_compare($vip['version'], '1.0.7', '>=');
-
-        $currentUserVipLevel = '';
-        $vipLevelIds = '';
-
-        if ($isShowVipSearch) {
-            $currentUserVip = $this->getVipService()->getMemberByUserId($currentUser['id']);
-            if (!empty($currentUserVip) && isset($currentUserVip['levelId'])) {
-                $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
-                $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
-                $vipLevelIds = ArrayToolkit::column($vipLevels, 'id');
-            }
-        }
 
         $filter = $request->query->get('filter');
 
@@ -131,7 +108,7 @@ class SearchController extends BaseController
         ];
 
         if ('vip' == $filter) {
-            $conditions['vipLevelIds'] = $vipLevelIds;
+            $conditions['vipLevelIds'] = $this->getVipLevelIds();
         } elseif ('live' == $filter) {
             $conditions['type'] = 'live';
         } elseif ('free' == $filter) {
@@ -159,8 +136,6 @@ class SearchController extends BaseController
                 'courseSets' => $courseSets,
                 'paginator' => $paginator,
                 'keywords' => $keywords,
-                'isShowVipSearch' => $isShowVipSearch,
-                'currentUserVipLevel' => $currentUserVipLevel,
                 'filter' => $filter,
                 'count' => $count,
             ]
@@ -170,7 +145,7 @@ class SearchController extends BaseController
     public function itemBankExerciseSearchAction(Request $request)
     {
         $keywords = $request->query->get('q');
-        $keywords = $this->filterKeyWord(trim($keywords));
+        $keywords = $this->filterKeyWord($keywords);
         $filter = $request->query->get('filter');
 
         $conditions = [
@@ -210,13 +185,12 @@ class SearchController extends BaseController
 
     public function cloudSearchAction(Request $request)
     {
-        $setting = $this->getSettingService()->get('cloud_search');
-        if (empty($setting['search_enabled'])) {
+        if (!$this->isCloudSearchUsable()) {
             return $this->redirectToRoute('search');
         }
         $pageSize = 10;
         $keywords = $request->query->get('q');
-        $keywords = $this->filterKeyWord(trim($keywords));
+        $keywords = $this->filterKeyWord($keywords);
 
         $type = $request->query->get('type', 'course');
         $page = $request->query->get('page', '1');
@@ -254,7 +228,7 @@ class SearchController extends BaseController
 
         $this->dispatchSearchEvent($keywords, $type, $page);
 
-        if (!$this->isTypeUseable($type)) {
+        if (!$this->isTypeUsable($type)) {
             return $this->render('TwigBundle:Exception:error403.html.twig');
         }
 
@@ -286,28 +260,19 @@ class SearchController extends BaseController
         try {
             list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
 
-            $resultSet = array_map(function ($items) {
-                if ($items['about']) {
-                    if (mb_strlen($items['about']) > 150) {
-                        $items['about'] = mb_substr($items['about'], 0, 150).'...';
-                    }
-                }
+            $resultSet = $this->filterCloudSearchResults($resultSet);
 
-                return $items;
-            }, $resultSet);
         } catch (\Exception $e) {
-            return $this->redirect(
-                $this->generateUrl(
+            return $this->redirectToRoute(
                 'search',
-                    [
-                        'q' => $keywords,
-                        'errorType' => 'cloudSearchError',
-                    ]
-                )
+                [
+                    'q' => $keywords,
+                    'errorType' => 'cloudSearchError',
+                ]
             );
         }
 
-        $paginator = new Paginator($this->get('request'), $counts, $pageSize);
+        $paginator = new Paginator($request, $counts, $pageSize);
 
         return $this->render(
             'search/cloud-search.html.twig',
@@ -321,7 +286,48 @@ class SearchController extends BaseController
         );
     }
 
-    protected function isTypeUseable($type)
+    private function filterCloudSearchResults($resultSet)
+    {
+        return array_map(function ($items) {
+            if ($items['about']) {
+                if (mb_strlen($items['about']) > 150) {
+                    $items['about'] = mb_substr($items['about'], 0, 150) . '...';
+                }
+            }
+
+            return $items;
+        }, $resultSet);
+    }
+
+    private function getVipLevelIds()
+    {
+        $vip = $this->getAppService()->findInstallApp('Vip');
+        $isShowVipSearch = $vip && version_compare($vip['version'], '1.0.7', '>=');
+
+        $vipLevelIds = '';
+        if (!$isShowVipSearch) {
+            return $vipLevelIds;
+        }
+
+        $currentUserVip = $this->getVipService()->getMemberByUserId($this->getCurrentUser()->getId());
+        if (!empty($currentUserVip) && isset($currentUserVip['levelId'])) {
+            $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
+            $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
+            $vipLevelIds = array_column($vipLevels, 'id');
+        }
+
+        return $vipLevelIds;
+    }
+
+    private function isCloudSearchUsable()
+    {
+        $cloudSearchSetting = $this->getSettingService()->get('cloud_search', []);
+        $cloudSearchRestoreTime = $this->getSettingService()->get('_cloud_search_restore_time', 0);
+
+        return !empty($cloudSearchSetting['search_enabled']) && 'ok' == $cloudSearchSetting['status'] && $cloudSearchRestoreTime < time();
+    }
+
+    protected function isTypeUsable($type)
     {
         $cloudSearchSetting = $this->getSettingService()->get('cloud_search');
 
@@ -340,15 +346,7 @@ class SearchController extends BaseController
 
     private function filterKeyWord($keyword)
     {
-        $keyword = str_replace('<', '', $keyword);
-        $keyword = str_replace('>', '', $keyword);
-        $keyword = str_replace("'", '', $keyword);
-        $keyword = str_replace('"', '', $keyword);
-        $keyword = str_replace('=', '', $keyword);
-        $keyword = str_replace('&', '', $keyword);
-        $keyword = str_replace('/', '', $keyword);
-
-        return $keyword;
+        return str_replace(['<', '>', "'", '"', '=', '&', '/'], '', trim($keyword));
     }
 
     private function dispatchSearchEvent($keyword, $type, $page)
@@ -420,14 +418,6 @@ class SearchController extends BaseController
     protected function getVipService()
     {
         return $this->getBiz()->service('VipPlugin:Vip:VipService');
-    }
-
-    /**
-     * @return CategoryService
-     */
-    protected function getCategoryService()
-    {
-        return $this->getBiz()->service('Taxonomy:CategoryService');
     }
 
     /**
