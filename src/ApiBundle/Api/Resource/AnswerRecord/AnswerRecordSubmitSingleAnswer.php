@@ -4,62 +4,57 @@ namespace ApiBundle\Api\Resource\AnswerRecord;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\Assessment\Dao\AssessmentSectionItemDao;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
-use Topxia\Service\Common\ServiceKernel;
 
 class AnswerRecordSubmitSingleAnswer extends AbstractResource
 {
-    public function add(ApiRequest $request, $recordId)
+    public function add(ApiRequest $request, $answerRecordId)
     {
         $params = $request->request->all();
-        $this->validateParams($params, $recordId);
+        $this->validateParams($answerRecordId, $params);
         $params = $this->trimResponse($params);
 
-        $questionReport = $this->getAnswerService()->submitSingleAnswer($params, $recordId);
+        $questionReport = $this->getAnswerService()->submitSingleAnswer($answerRecordId, $params);
+
+        $assessment = $this->getAssessmentService()->getAssessment($questionReport['assessment_id']);
+        $reviewedCount = $this->getAnswerReviewedQuestionService()->countByAnswerRecordId($questionReport['answer_record_id']);
+        $answerRecord = $this->getAnswerRecordService()->get($questionReport['answer_record_id']);
+
+        if ($reviewedCount >= $assessment['question_count']) {
+            $this->getAnswerService()->finishAllSingleAnswer($answerRecord, 'submit');
+        }
 
         $item = $this->getItemService()->getItem($questionReport['item_id']);
         $question = $this->getItemService()->getQuestion($questionReport['question_id']);
-
-        $answerRecord = $this->getAnswerRecordService()->get($questionReport['answer_record_id']);
-        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
-        $assessment = $this->getAssessmentService()->getAssessment($questionReport['assessment_id']);
-
-        $reviewedCount = $this->getAnswerQuestionReportService()->count(
-            [
-                'answer_record_id' => $recordId,
-                'not_status' => AnswerQuestionReportService::STATUS_REVIEWING,
-            ]);
 
         return [
             'answer' => $question['answer'],
             'itemAnalysis' => $item['analysis'],
             'questionAnalysis' => $question['analysis'],
             'status' => $questionReport['status'],
-            'manualMarking' => $answerScene['manual_marking'],
+            'manualMarking' => empty($questionReport['isReviewed']) ? 1 : 0,
             'reviewedCount' => $reviewedCount,
             'totalCount' => $assessment['question_count'],
             'isAnswerFinished' => (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) ? 1 : 0,
         ];
     }
 
-    public function validateParams($params, $recordId)
+    public function validateParams($answerRecordId, $params)
     {
         if (empty($params['admission_ticket'])) {
             throw new AnswerException('答题保存功能已升级，请更新客户端版本', ErrorCode::ANSWER_OLD_VERSION);
         }
 
-        $answerRecord = $this->getAnswerRecordService()->get($recordId);
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
 
         if (empty($answerRecord) || $this->getCurrentUser()->getId() != $answerRecord['user_id']) {
             throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
@@ -73,14 +68,13 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
             throw new InvalidArgumentException('assessment_id invalid.');
         }
 
-        $sectionItems = $this->getAssessmentSectionItemDao()->findByAssessmentId($params['assessment_id']);
+        $sectionItems = $this->getSectionItemService()->getItemByAssessmentIdAndItemId($params['assessment_id'], $params['item_id']);
         if ($sectionItems['item_id'] != $params['item_id'] || $sectionItems['section_id'] != $params['section_id']) {
             throw CommonException::ERROR_PARAMETER();
         }
 
-        $item = $this->getItemService()->getItemWithQuestions($params['item_id'], true);
-        $questionId = ArrayToolkit::column($item['questions'], 'id');
-        if (!in_array($params['question_id'], $questionId)) {
+        $item = $this->getItemService()->getQuestion($params['question_id']);
+        if ($params['question_id'] != $item['id']) {
             throw CommonException::ERROR_PARAMETER();
         }
 
@@ -111,22 +105,6 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
     }
 
     /**
-     * @return AnswerSceneService
-     */
-    protected function getAnswerSceneService()
-    {
-        return $this->service('ItemBank:Answer:AnswerSceneService');
-    }
-
-    /**
-     * @return AnswerQuestionReportService
-     */
-    protected function getAnswerQuestionReportService()
-    {
-        return $this->service('ItemBank:Answer:AnswerQuestionReportService');
-    }
-
-    /**
      * @return ItemService
      */
     protected function getItemService()
@@ -151,10 +129,18 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
     }
 
     /**
-     * @return AssessmentSectionItemDao
+     * @return AnswerReviewedQuestionService
      */
-    protected function getAssessmentSectionItemDao()
+    protected function getAnswerReviewedQuestionService()
     {
-        return ServiceKernel::instance()->createDao('ItemBank:Assessment:AssessmentSectionItemDao');
+        return $this->service('ItemBank:Answer:AnswerReviewedQuestionService');
+    }
+
+    /**
+     * @return AssessmentSectionItemService
+     */
+    protected function getSectionItemService()
+    {
+        return $this->service('ItemBank:Assessment:AssessmentSectionItemService');
     }
 }
