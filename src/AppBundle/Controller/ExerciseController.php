@@ -73,11 +73,22 @@ class ExerciseController extends BaseController
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
 
+        $task = $this->getTaskByAnswerSceneId($answerRecord['answer_scene_id']);
+        $restartUrl = $this->generateUrl('course_task_activity_show', ['courseId' => $task['courseId'], 'id' => $task['id'], 'doAgain' => true]);
+
         return $this->render('exercise/result.html.twig', [
             'answerRecordId' => $answerRecordId,
             'assessment' => $assessment,
-            'restartUrl' => $this->generateUrl('exercise_start_do', ['lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'exerciseId' => 1]),
+            'restartUrl' => $restartUrl,
         ]);
+    }
+
+    protected function getTaskByAnswerSceneId($answerSceneId)
+    {
+        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerSceneId);
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($exerciseActivity['id'], 'exercise');
+
+        return $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
     }
 
     protected function getActivityIdByAnswerSceneId($answerSceneId)

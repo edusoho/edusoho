@@ -12,6 +12,7 @@ use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 
 class Exercise extends Activity
 {
@@ -22,7 +23,34 @@ class Exercise extends Activity
 
     public function get($targetId)
     {
-        return $this->getExerciseActivityService()->getActivity($targetId);
+        $exerciseActivity = $this->getExerciseActivityService()->getActivity($targetId);
+
+        if ($exerciseActivity) {
+            $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $this->getCurrentUser()->getId());
+            $assessmentItems = $this->getSectionItemService()->findSectionItemDetailByAssessmentId($answerRecord['assessment_id']);
+            $exerciseActivity['itemCounts'] = $this->countItemTypesNum($assessmentItems);
+        }
+
+        return $exerciseActivity;
+    }
+
+    public function countItemTypesNum($assessmentItems)
+    {
+        $typesNum = [
+            'single_choice' => 0,
+            'choice' => 0,
+            'essay' => 0,
+            'uncertain_choice' => 0,
+            'determine' => 0,
+            'fill' => 0,
+            'material' => 0,
+        ];
+
+        foreach ($assessmentItems as $item) {
+            ++$typesNum[$item['type']];
+        }
+
+        return $typesNum;
     }
 
     public function find($targetIds, $showCloud = 1)
@@ -224,5 +252,13 @@ class Exercise extends Activity
     protected function getAnswerRecordService()
     {
         return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AssessmentSectionItemService
+     */
+    protected function getSectionItemService()
+    {
+        return $this->getBiz()->service('ItemBank:Assessment:AssessmentSectionItemService');
     }
 }
