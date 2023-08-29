@@ -679,7 +679,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     private function generateNoAnswerQuestionReports($answerRecord)
     {
         $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($answerRecord['assessment_id']);
-        $questionIds = array_column($assessmentQuestions, 'question_id');
 
         $answerReviewedQuestions = $this->getAnswerReviewedQuestionService()->findByAnswerRecordId($answerRecord['id']);
         $answerReviewedQuestions = ArrayToolkit::index($answerReviewedQuestions, 'question_id');
@@ -689,17 +688,17 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         $createQuestionReports = [];
         $updateQuestionReports = [];
-        foreach ($questionIds as $questionId) {
+        foreach ($assessmentQuestions as $questionId => $assessmentQuestion) {
             if (empty($answerQuestionReports[$questionId])) {
                 $createQuestionReports[] = [
                     'identify' => $answerRecord['id'] . '_' . $questionId,
                     'answer_record_id' => $answerRecord['id'],
                     'assessment_id' => $answerRecord['assessment_id'],
-                    'section_id' => $assessmentQuestions[$questionId]['section_id'],
-                    'item_id' => $assessmentQuestions[$questionId]['item_id'],
+                    'section_id' => $assessmentQuestion['section_id'],
+                    'item_id' => $assessmentQuestion['item_id'],
                     'question_id' => $questionId,
                     'score' => '0',
-                    'total_score' => $assessmentQuestions[$questionId]['score'],
+                    'total_score' => $assessmentQuestion['score'],
                     'response' => [],
                     'status' => AnswerQuestionReportService::STATUS_NOANSWER,
                     'comment' => '',
