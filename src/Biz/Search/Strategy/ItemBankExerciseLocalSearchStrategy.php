@@ -3,13 +3,10 @@
 namespace Biz\Search\Strategy;
 
 use Biz\ItemBankExercise\Service\ExerciseService;
-use Codeages\Biz\Framework\Context\BizAwareTrait;
 
 class ItemBankExerciseLocalSearchStrategy implements LocalSearchStrategy
 {
-    use BizAwareTrait;
-
-    private $conditions = [];
+    use LocalSearchStrategyTrait;
 
     public function buildSearchConditions($keyword, $filter)
     {
@@ -41,7 +38,7 @@ class ItemBankExerciseLocalSearchStrategy implements LocalSearchStrategy
     /**
      * @return ExerciseService
      */
-    protected function getItemBankExerciseService()
+    private function getItemBankExerciseService()
     {
         return $this->biz->service('ItemBankExercise:ExerciseService');
     }

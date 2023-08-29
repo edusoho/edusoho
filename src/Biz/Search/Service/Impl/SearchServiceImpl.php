@@ -117,6 +117,14 @@ class SearchServiceImpl extends BaseService implements SearchService
         return !empty($result['success']);
     }
 
+    public function isCloudSearchUsable()
+    {
+        $cloudSearchSetting = $this->getSettingService()->get('cloud_search', []);
+        $cloudSearchRestoreTime = $this->getSettingService()->get('_cloud_search_restore_time', 0);
+
+        return !empty($cloudSearchSetting['search_enabled']) && 'ok' == $cloudSearchSetting['status'] && $cloudSearchRestoreTime < time();
+    }
+
     protected function getSiteUrl()
     {
         $siteSetting = $this->getSettingService()->get('site');

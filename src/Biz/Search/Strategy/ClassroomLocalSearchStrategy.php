@@ -3,13 +3,10 @@
 namespace Biz\Search\Strategy;
 
 use Biz\Classroom\Service\ClassroomService;
-use Codeages\Biz\Framework\Context\BizAwareTrait;
 
 class ClassroomLocalSearchStrategy implements LocalSearchStrategy
 {
-    use BizAwareTrait;
-
-    private $conditions = [];
+    use LocalSearchStrategyTrait;
 
     public function buildSearchConditions($keyword, $filter)
     {

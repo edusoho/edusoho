@@ -36,6 +36,7 @@
 
 {% block content %}
   <!-- 题库练习列表 -->
+  {% set itemBankExercises = itemBankExercises|default(results) %}
   <div class="course-list course-list-new cd-mt8">
     <div class="row">
       {% if itemBankExercises %}

@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use Biz\Common\CommonException;
+use Biz\Search\Constant\CloudSearchType;
+use Biz\Search\Constant\LocalSearchType;
 use Biz\Search\Service\SearchService;
 use Biz\Search\Strategy\ClassroomLocalSearchStrategy;
 use Biz\Search\Strategy\CourseLocalSearchStrategy;
@@ -19,10 +21,10 @@ class SearchController extends BaseController
     {
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord($keywords);
-        $type = $request->query->get('type', 'course');
+        $type = $request->query->get('type', LocalSearchType::COURSE);
         $page = $request->query->get('page', 1);
 
-        if ($this->isCloudSearchUsable()) {
+        if ($this->getSearchService()->isCloudSearchUsable()) {
             return $this->redirectToRoute(
                 'cloud_search',
                 [
@@ -34,44 +36,37 @@ class SearchController extends BaseController
 
         $this->dispatchSearchEvent($keywords, $type, $page);
 
-        if (!in_array($type, ['course', 'classroom', 'itemBankExercise'])) {
-            $type = 'course';
+        if (!in_array($type, [LocalSearchType::COURSE, LocalSearchType::CLASSROOM, LocalSearchType::ITEM_BANK_EXERCISE])) {
+            $type = LocalSearchType::COURSE;
         }
         $filter = $request->query->get('filter');
         $searchStrategy = $this->createLocalSearchStrategy($type, $keywords, $filter);
         $paginator = new Paginator($request, $searchStrategy->count(), 12);
         $results = $searchStrategy->search($paginator->getOffsetCount(), $paginator->getPerPageCount());
-        $resultNames = [
-            'course' => 'courseSets',
-            'classroom' => 'classrooms',
-            'itemBankExercise' => 'itemBankExercises',
-        ];
-
-        $params = [
-            'type' => $type,
-            'paginator' => $paginator,
-            'keywords' => $keywords,
-            'filter' => $filter,
-            'count' => $paginator->getItemCount(),
-        ];
-        $params[$resultNames[$type]] = $results;
 
         return $this->render(
             'search/index.html.twig',
-            $params
+            [
+                'type' => $type,
+                'paginator' => $paginator,
+                'keywords' => $keywords,
+                'filter' => $filter,
+                'count' => $paginator->getItemCount(),
+                'results' => $results,
+            ]
         );
     }
 
     public function cloudSearchAction(Request $request)
     {
-        if (!$this->isCloudSearchUsable()) {
+        if (!$this->getSearchService()->isCloudSearchUsable()) {
             return $this->redirectToRoute('search');
         }
         $pageSize = 10;
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord($keywords);
 
-        $type = $request->query->get('type', 'course');
+        $type = $request->query->get('type', CloudSearchType::COURSE);
         $page = $request->query->get('page', '1');
 
         $this->dispatchSearchEvent($keywords, $type, $page);
@@ -90,7 +85,7 @@ class SearchController extends BaseController
                 ]
             );
         }
-        if ('itemBankExercise' == $type) {
+        if (CloudSearchType::ITEM_BANK_EXERCISE == $type) {
             $searchStrategy = $this->createLocalSearchStrategy($type, $keywords, '');
             $paginator = new Paginator($request, $searchStrategy->count(), $pageSize);
             $resultSet = $searchStrategy->search($paginator->getOffsetCount(), $paginator->getPerPageCount());
@@ -162,14 +157,6 @@ class SearchController extends BaseController
         }, $resultSet);
     }
 
-    private function isCloudSearchUsable()
-    {
-        $cloudSearchSetting = $this->getSettingService()->get('cloud_search', []);
-        $cloudSearchRestoreTime = $this->getSettingService()->get('_cloud_search_restore_time', 0);
-
-        return !empty($cloudSearchSetting['search_enabled']) && 'ok' == $cloudSearchSetting['status'] && $cloudSearchRestoreTime < time();
-    }
-
     protected function isTypeUsable($type)
     {
         $cloudSearchSetting = $this->getSettingService()->get('cloud_search');
@@ -215,9 +202,9 @@ class SearchController extends BaseController
     private function createLocalSearchStrategy($type, $keyword, $filter)
     {
         $searchStrategies = [
-            'course' => CourseLocalSearchStrategy::class,
-            'classroom' => ClassroomLocalSearchStrategy::class,
-            'itemBankExercise' => ItemBankExerciseLocalSearchStrategy::class,
+            LocalSearchType::COURSE => CourseLocalSearchStrategy::class,
+            LocalSearchType::CLASSROOM => ClassroomLocalSearchStrategy::class,
+            LocalSearchType::ITEM_BANK_EXERCISE => ItemBankExerciseLocalSearchStrategy::class,
         ];
         if (empty($searchStrategies[$type])) {
             throw CommonException::ERROR_PARAMETER();

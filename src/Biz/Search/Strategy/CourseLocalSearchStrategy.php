@@ -5,15 +5,12 @@ namespace Biz\Search\Strategy;
 use AppBundle\Common\PluginToolkit;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseSetService;
-use Codeages\Biz\Framework\Context\BizAwareTrait;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
 
 class CourseLocalSearchStrategy implements LocalSearchStrategy
 {
-    use BizAwareTrait;
-
-    private $conditions = [];
+    use LocalSearchStrategyTrait;
 
     public function buildSearchConditions($keyword, $filter)
     {
@@ -69,7 +66,7 @@ class CourseLocalSearchStrategy implements LocalSearchStrategy
         return $vipLevelIds;
     }
 
-    protected function filterCourseConditions($conditions)
+    private function filterCourseConditions($conditions)
     {
         if (!PluginToolkit::isPluginInstalled('Reservation')) {
             $conditions['excludeTypes'] = ['reservation'];

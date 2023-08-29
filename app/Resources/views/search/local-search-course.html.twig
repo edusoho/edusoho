@@ -43,6 +43,7 @@
 
 
 {% block content %}
+  {% set courseSets = courseSets|default(results) %}
   <!-- 课程列表 -->
   <div class="course-list course-list-new cd-mt8">
     {% if courseSets %}

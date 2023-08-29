@@ -35,6 +35,7 @@
 
 {% block content %}
   <!-- 班级列表 -->
+  {% set classrooms = classrooms|default(results) %}
   <div class="class-list local-search-class-list cd-mt8">
     <div class="row">
       {% if classrooms %}
