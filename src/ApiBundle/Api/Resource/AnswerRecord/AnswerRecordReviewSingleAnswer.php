@@ -55,6 +55,10 @@ class AnswerRecordReviewSingleAnswer extends AbstractResource
             throw new AnswerException('非一题一答模式，不能批阅', ErrorCode::EXERCISE_MODE_ERROR);
         }
 
+        if (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
+            throw new AnswerException('答题已结束,不能批阅', ErrorCode::ANSWER_FINISHED);
+        }
+
         if ($answerRecord['assessment_id'] != $params['assessment_id']) {
             throw new InvalidArgumentException('assessment_id invalid.');
         }
