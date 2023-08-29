@@ -14,11 +14,6 @@ class AnswerReviewedQuestionDaoImpl extends GeneralDaoImpl implements AnswerRevi
         return $this->findByFields(['answer_record_id' => $answerRecordId]);
     }
 
-    public function countByAnswerRecordId($answerRecordId)
-    {
-        return $this->count(['answer_record_id' => $answerRecordId]);
-    }
-
     public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId)
     {
         return $this->getByFields([
@@ -36,6 +31,7 @@ class AnswerReviewedQuestionDaoImpl extends GeneralDaoImpl implements AnswerRevi
             'orderbys' => [],
             'conditions' => [
                 'answer_record_id = :answer_record_id',
+                'is_reviewed = :is_reviewed',
             ],
         ];
     }

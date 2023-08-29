@@ -108,4 +108,9 @@ class ErrorCode
      * 练习模式错误
      */
     const EXERCISE_MODE_ERROR = 40095203;
+
+    /**
+     * 答题已结束
+     */
+    const ANSWER_FINISHED = 40095204;
 }

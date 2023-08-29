@@ -13,9 +13,9 @@ class AnswerReviewedQuestionServiceImpl extends BaseService implements AnswerRev
         return $this->getAnswerReviewedQuestionDao()->findByAnswerRecordId($answerRecordId);
     }
 
-    public function countByAnswerRecordId($answerRecordId)
+    public function countReviewedByAnswerRecordId($answerRecordId)
     {
-        return $this->getAnswerReviewedQuestionDao()->countByAnswerRecordId($answerRecordId);
+        return $this->getAnswerReviewedQuestionDao()->count(['answer_record_id' => $answerRecordId, 'is_reviewed' => 1]);
     }
 
     public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId)
@@ -31,6 +31,11 @@ class AnswerReviewedQuestionServiceImpl extends BaseService implements AnswerRev
         }
 
         return $this->getAnswerReviewedQuestionDao()->create($answerReviewedQuestion);
+    }
+
+    public function updateAnswerReviewedQuestion($id, $params)
+    {
+        return $this->getAnswerReviewedQuestionDao()->update($id, $params);
     }
 
     /**

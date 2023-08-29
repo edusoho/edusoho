@@ -92,4 +92,6 @@ interface AnswerService
     public function finishAllSingleAnswer($answerRecord, $type);
 
     public function reviewSingleAnswerByManual($answerRecordId, $params);
+
+    public function finishAnswer($answerRecordId);
 }

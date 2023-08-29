@@ -16,6 +16,10 @@ class AnswerQuestionReportServiceImpl extends BaseService implements AnswerQuest
 
     public function batchCreate(array $answerQuestionReports)
     {
+        if (empty($answerQuestionReports)) {
+            return [];
+        }
+
         return $this->getAnswerQuestionReportDao()->batchCreate($answerQuestionReports);
     }
 
@@ -36,6 +40,10 @@ class AnswerQuestionReportServiceImpl extends BaseService implements AnswerQuest
 
     public function batchUpdate(array $answerQuestionReports)
     {
+        if (empty($answerQuestionReports)) {
+            return [];
+        }
+
         return $this->getAnswerQuestionReportDao()->batchUpdate(ArrayToolkit::column($answerQuestionReports, 'identify'), $answerQuestionReports, 'identify');
     }
 
