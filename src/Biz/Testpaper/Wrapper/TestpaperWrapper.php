@@ -183,6 +183,7 @@ class TestpaperWrapper
             'testResult' => [],
             'attachments' => $itemQuestion['attachments'],
             'sectionId' => $item['section_id'],
+            'itemId' => $item['id'],
         ];
 
         $question['answer'] = $this->convertAnswer($itemQuestion['answer'], $question);
