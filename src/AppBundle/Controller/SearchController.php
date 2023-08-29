@@ -149,7 +149,7 @@ class SearchController extends BaseController
         return array_map(function ($items) {
             if ($items['about']) {
                 if (mb_strlen($items['about']) > 150) {
-                    $items['about'] = mb_substr($items['about'], 0, 150) . '...';
+                    $items['about'] = mb_substr($items['about'], 0, 150).'...';
                 }
             }
 
@@ -209,7 +209,7 @@ class SearchController extends BaseController
         if (empty($searchStrategies[$type])) {
             throw CommonException::ERROR_PARAMETER();
         }
-        $searchStrategy = new $searchStrategies[$type];
+        $searchStrategy = new $searchStrategies[$type]();
         $searchStrategy->setBiz($this->getBiz());
         $searchStrategy->buildSearchConditions($keyword, $filter);
 
