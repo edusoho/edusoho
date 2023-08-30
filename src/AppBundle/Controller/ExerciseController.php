@@ -9,6 +9,7 @@ use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
+use Biz\Testpaper\ExerciseException;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
@@ -21,24 +22,18 @@ class ExerciseController extends BaseController
     public function startDoAction(Request $request, $lessonId, $exerciseId)
     {
         $activity = $this->getActivityService()->getActivity($lessonId, true);
-        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
-        $user = $this->getCurrentUser();
-        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
-
         if (!$this->getCourseService()->canTakeCourse($activity['fromCourseId'])) {
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
 
+        $user = $this->getCurrentUser();
+        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
         if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED === $latestAnswerRecord['status']) {
-            $assessment = $this->createAssessment(
-                $activity['title'],
-                $activity['ext']['drawCondition']['range'],
-                [$activity['ext']['drawCondition']['section']]
-            );
-            $latestAnswerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessment['id'], $user['id']);
+            $latestAnswerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $request->get('assessmentId'), $user['id']);
         } else {
-            $assessmentId = $latestAnswerRecord['assessment_id'];
+            throw ExerciseException::EXERCISE_IS_DOING();
         }
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
             'answerRecordId' => $latestAnswerRecord['id'],
