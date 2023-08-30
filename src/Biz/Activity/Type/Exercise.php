@@ -8,11 +8,11 @@ use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ExerciseActivityService;
 use Biz\QuestionBank\Service\QuestionBankService;
-use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class Exercise extends Activity
 {
@@ -28,29 +28,10 @@ class Exercise extends Activity
         if ($exerciseActivity) {
             $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $this->getCurrentUser()->getId());
             $assessmentItems = $this->getSectionItemService()->findSectionItemDetailByAssessmentId($answerRecord['assessment_id']);
-            $exerciseActivity['itemCounts'] = $this->countItemTypesNum($assessmentItems);
+            $exerciseActivity['itemCounts'] = $this->getAssessmentService()->countItemTypesNum($assessmentItems);
         }
 
         return $exerciseActivity;
-    }
-
-    public function countItemTypesNum($assessmentItems)
-    {
-        $typesNum = [
-            'single_choice' => 0,
-            'choice' => 0,
-            'essay' => 0,
-            'uncertain_choice' => 0,
-            'determine' => 0,
-            'fill' => 0,
-            'material' => 0,
-        ];
-
-        foreach ($assessmentItems as $item) {
-            ++$typesNum[$item['type']];
-        }
-
-        return $typesNum;
     }
 
     public function find($targetIds, $showCloud = 1)
@@ -207,14 +188,6 @@ class Exercise extends Activity
     }
 
     /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
-    }
-
-    /**
      * @return ActivityService
      */
     protected function getActivityService()
@@ -260,5 +233,13 @@ class Exercise extends Activity
     protected function getSectionItemService()
     {
         return $this->getBiz()->service('ItemBank:Assessment:AssessmentSectionItemService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->getBiz()->service('ItemBank:Assessment:AssessmentService');
     }
 }

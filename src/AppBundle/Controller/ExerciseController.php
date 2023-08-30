@@ -91,13 +91,6 @@ class ExerciseController extends BaseController
         return $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
     }
 
-    protected function getActivityIdByAnswerSceneId($answerSceneId)
-    {
-        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerSceneId);
-
-        return $this->getActivityService()->getByMediaIdAndMediaType($exerciseActivity['id'], 'exercise')['id'];
-    }
-
     protected function canLookAnswerRecord($answerRecordId)
     {
         $user = $this->getCurrentUser();

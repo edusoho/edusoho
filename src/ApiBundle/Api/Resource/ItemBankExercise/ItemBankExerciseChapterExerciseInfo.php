@@ -10,6 +10,7 @@ use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
@@ -26,7 +27,7 @@ class ItemBankExerciseChapterExerciseInfo extends AbstractResource
 
         $category = $this->getItemCategoryService()->getItemCategory($categoryId);
         $items = $this->getItemService()->searchItems(['bank_id' => $category['bank_id'], 'category_id' => $categoryId], [], 0, PHP_INT_MAX);
-        $typesNum = $this->countItemTypesNum($items);
+        $typesNum = $this->getAssessmentService()->countItemTypesNum($items);
         $typesNum['total'] = $category['item_num'];
 
         return [
@@ -115,5 +116,13 @@ class ItemBankExerciseChapterExerciseInfo extends AbstractResource
     protected function getItemService()
     {
         return $this->service('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->service('ItemBank:Assessment:AssessmentService');
     }
 }
