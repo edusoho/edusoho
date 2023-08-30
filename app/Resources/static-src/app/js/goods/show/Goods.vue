@@ -56,7 +56,13 @@
                     </div>
                     <div v-if="goods.product.targetType === 'classroom'" id="info-left-2"
                          class="content-item js-content-item">
-                        <h3 class="content-item__title">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
+                        <h3 class="content-item__title inline-block">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
+                        <div class="inline-block pull-right">
+                          <input v-model="courseName" type="text" 
+                            placeholder="请输入课程名称"
+                            />
+                          <button @click="searchCourse">搜索</button>
+                        </div>
                         <classroom-courses :classroomCourses="componentsData.classroomCourses"></classroom-courses>
                     </div>
 
@@ -106,6 +112,7 @@
     export default {
         data() {
             return {
+                courseName: '',
                 howActive: 1,
                 flag: true,
                 isFixed: false,
@@ -208,6 +215,15 @@
             },
         },
         methods: {
+            searchCourse() {
+              axios.get(`/api/classrooms/${this.goods.product.targetId}/courses`, {
+                    params: {
+                        title: this.courseName
+                    }
+                }).then((res) => {
+                    console.log(res)
+                });
+            },
             getGoodsInfo() {
                 axios.get(`/api/good/${this.goodsId}`, {
                     headers: {'Accept': 'application/vnd.edusoho.v2+json'}
@@ -309,7 +325,7 @@
         },
         created() {
             window.addEventListener("scroll", this.handleScroll);
-            console.log(this.goods);
+
             if (this.goods.type == 'classroom') {
                 return this.changeSku(this.goods.product.target.id);
             }
@@ -341,3 +357,6 @@
         }
     }
 </script>
+
+<style scoped>
+</style>

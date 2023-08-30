@@ -984,6 +984,7 @@ lesson_count_no_more_than_300: 课时总数不能超过300个
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 
 Bad credentials.: 用户名或密码错误
+The presented password cannot be empty.: 密码不能为空
 User account is locked.: 帐号被封禁
 
 cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
