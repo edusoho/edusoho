@@ -21,14 +21,7 @@ class Exercise extends Activity
 
     public function get($targetId)
     {
-        $exerciseActivity = $this->getExerciseActivityService()->getActivity($targetId);
-
-        if ($exerciseActivity) {
-            $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $this->getCurrentUser()->getId());
-            $exerciseActivity['itemCounts'] = $this->getAssessmentService()->countAssessmentItemTypesNum($answerRecord['assessment_id']);
-        }
-
-        return $exerciseActivity;
+        return $this->getExerciseActivityService()->getActivity($targetId);
     }
 
     public function find($targetIds, $showCloud = 1)
