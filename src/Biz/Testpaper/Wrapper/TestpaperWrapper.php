@@ -113,6 +113,7 @@ class TestpaperWrapper
             'checkTeacherId' => empty($report['review_user_id']) ? '0' : $report['review_user_id'],
             'checkedTime' => empty($report['review_time']) ? '0' : $report['review_time'],
             'usedTime' => $record['used_time'],
+            'exerciseMode' => $record['exercise_mode'],
         ];
     }
 
