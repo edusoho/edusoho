@@ -58,12 +58,14 @@
                          class="content-item js-content-item">
                         <h3 class="content-item__title inline-block">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
                         <div class="inline-block pull-right">
-                          <input v-model="courseName" type="text" 
+                          <!-- <input v-model="courseName" type="text" 
+                            @keydown.enter="searchCourse"
                             placeholder="请输入课程名称"
                             />
-                          <button @click="searchCourse">搜索</button>
+                          <button @click="searchCourse">搜索</button> -->
+                          <a-input-search placeholder="请输入课程名称" enter-button @search="searchCourse" />
                         </div>
-                        <classroom-courses :classroomCourses="componentsData.classroomCourses"></classroom-courses>
+                        <classroom-courses :classroomCourses="searchResult.length > 0 ? searchResult : componentsData.classroomCourses"></classroom-courses>
                     </div>
 
                     <div v-if="ugcReviewSetting.enable_review == 1
@@ -122,6 +124,7 @@
                 goods: {},
                 currentSku: {},
                 componentsData: {},
+                searchResult: []
             }
         },
         props: {
@@ -216,13 +219,14 @@
         },
         methods: {
             searchCourse() {
-              axios.get(`/api/classrooms/${this.goods.product.targetId}/courses`, {
-                    params: {
-                        title: this.courseName
-                    }
-                }).then((res) => {
-                    console.log(res)
-                });
+              console.log(123)
+              // axios.get(`/api/classrooms/${this.goods.product.targetId}/courses`, {
+              //       params: {
+              //           title: this.courseName
+              //       }
+              //   }).then((res) => {
+              //       this.searchResult = res.data
+              //   });
             },
             getGoodsInfo() {
                 axios.get(`/api/good/${this.goodsId}`, {
