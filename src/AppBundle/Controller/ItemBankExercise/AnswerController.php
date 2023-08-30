@@ -6,6 +6,9 @@ use AppBundle\Controller\BaseController;
 use Biz\Accessor\AccessorInterface;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
 class AnswerController extends BaseController
@@ -91,6 +94,30 @@ class AnswerController extends BaseController
         }
     }
 
+    public function categoryInfoModalAction(Request $request, $exerciseId, $moduleId, $categoryId)
+    {
+        $access = $this->getItemBankExerciseService()->canLearnExercise($exerciseId);
+        if (AccessorInterface::SUCCESS != $access['code']) {
+            $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
+        }
+
+        $category = $this->getItemCategoryService()->getItemCategory($categoryId);
+        $items = $this->getItemService()->searchItems(['bank_id' => $category['bank_id'], 'category_id' => $categoryId], [], 0, PHP_INT_MAX);
+
+        $chapterInfo = [
+            'typesNum' => $this->getAssessmentService()->countItemTypesNum($items),
+            'total' => $category['item_num'],
+            'chapterName' => $category['name'],
+            'categoryId' => $category['id'],
+            'moduleId' => $moduleId,
+            'exerciseId' => $exerciseId,
+        ];
+
+        return $this->render('item-bank-exercise/answer/category-info-modal.html.twig', [
+            'chapterInfo' => $chapterInfo,
+        ]);
+    }
+
     /**
      * @return \Biz\ItemBankExercise\Service\ExerciseService
      */
@@ -137,5 +164,29 @@ class AnswerController extends BaseController
     protected function getAnswerService()
     {
         return $this->createService('ItemBank:Answer:AnswerService');
+    }
+
+    /**
+     * @return ItemCategoryService
+     */
+    protected function getItemCategoryService()
+    {
+        return $this->createService('ItemBank:Item:ItemCategoryService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }
