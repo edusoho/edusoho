@@ -894,6 +894,7 @@ t.add("admin.article_setting.choose_category", "Choose column", "js", "en");
 t.add("lesson_count_no_more_than_300", "Lesson count no more than three hundred.", "js", "en");
 t.add("lesson_tasks_no_more_than_5", "Lesson task no more than 5.", "js", "en");
 t.add("Bad credentials.", "Bad credentials", "js", "en");
+t.add("The presented password cannot be empty.", "The presented password cannot be empty.", "js", "en");
 t.add("User account is locked.", "The account is blocked.", "js", "en");
 t.add("cloud_search.network.error_message", "Due to the poor network condition, you are switched to simple search mode.", "js", "en");
 t.add("message.send.not_allowed", "not allowed to send messages", "js", "en");

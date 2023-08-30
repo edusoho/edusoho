@@ -1042,6 +1042,7 @@ lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 
 Bad credentials.: Bad credentials
+The presented password cannot be empty.: The presented password cannot be empty.
 User account is locked.: The account is blocked.
 
 cloud_search.network.error_message: Due to the poor network condition, you are switched to simple search mode.
