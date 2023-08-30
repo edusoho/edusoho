@@ -44,5 +44,5 @@ interface AssessmentService
 
     public function findAssessmentQuestions($assessmentId);
 
-    public function countItemTypesNum($assessmentItems);
+    public function countAssessmentItemTypesNum($assessmentId);
 }

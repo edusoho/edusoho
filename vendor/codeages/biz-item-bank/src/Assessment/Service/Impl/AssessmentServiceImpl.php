@@ -372,23 +372,12 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         return ArrayToolkit::index($questions, 'question_id');
     }
 
-    public function countItemTypesNum($assessmentItems)
+    public function countAssessmentItemTypesNum($assessmentId)
     {
-        $typesNum = [
-            'single_choice' => 0,
-            'choice' => 0,
-            'essay' => 0,
-            'uncertain_choice' => 0,
-            'determine' => 0,
-            'fill' => 0,
-            'material' => 0,
-        ];
+        $assessmentItems = $this->getSectionItemService()->findSectionItemsByAssessmentId($assessmentId);
+        $items = $this->getItemService()->findItemsByIds(array_column($assessmentItems, 'item_id'));
 
-        foreach ($assessmentItems as $item) {
-            ++$typesNum[$item['type']];
-        }
-
-        return $typesNum;
+        return $this->getItemService()->countItemTypesNum($items);
     }
 
     protected function findExportItems($sections, $sectionItems)

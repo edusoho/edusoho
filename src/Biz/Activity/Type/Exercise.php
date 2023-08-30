@@ -5,13 +5,11 @@ namespace Biz\Activity\Type;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ExerciseActivityService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class Exercise extends Activity
@@ -27,8 +25,7 @@ class Exercise extends Activity
 
         if ($exerciseActivity) {
             $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $this->getCurrentUser()->getId());
-            $assessmentItems = $this->getSectionItemService()->findSectionItemDetailByAssessmentId($answerRecord['assessment_id']);
-            $exerciseActivity['itemCounts'] = $this->getAssessmentService()->countItemTypesNum($assessmentItems);
+            $exerciseActivity['itemCounts'] = $this->getAssessmentService()->countAssessmentItemTypesNum($answerRecord['assessment_id']);
         }
 
         return $exerciseActivity;
@@ -188,14 +185,6 @@ class Exercise extends Activity
     }
 
     /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->getBiz()->service('Activity:ActivityService');
-    }
-
-    /**
      * @return AnswerSceneService
      */
     protected function getAnswerSceneService()
@@ -225,14 +214,6 @@ class Exercise extends Activity
     protected function getAnswerRecordService()
     {
         return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
-    }
-
-    /**
-     * @return AssessmentSectionItemService
-     */
-    protected function getSectionItemService()
-    {
-        return $this->getBiz()->service('ItemBank:Assessment:AssessmentSectionItemService');
     }
 
     /**

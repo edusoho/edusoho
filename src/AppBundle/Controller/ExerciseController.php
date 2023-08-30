@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Activity\Constant\ActivityMediaType;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Common\CommonException;
@@ -85,8 +86,7 @@ class ExerciseController extends BaseController
 
     protected function getTaskByAnswerSceneId($answerSceneId)
     {
-        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerSceneId);
-        $activity = $this->getActivityService()->getByMediaIdAndMediaType($exerciseActivity['id'], 'exercise');
+        $activity = $this->getActivityService()->getActivityByAnswerSceneIdAndMediaType($answerSceneId, ActivityMediaType::EXERCISE);
 
         return $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
     }
