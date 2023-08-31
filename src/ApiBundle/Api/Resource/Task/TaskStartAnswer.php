@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Task;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
+use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Activity\Type\Testpaper;
 use Biz\Common\CommonException;
 use Biz\Course\MemberException;
@@ -87,40 +88,20 @@ class TaskStartAnswer extends AbstractResource
     protected function startExercise($task, $activity, $request)
     {
         $exerciseMode = $request->request->get('exerciseMode', '0');
+        $assessmentId = $request->request->get('assessmentId');
 
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()['id']);
         if (!empty($latestAnswerRecord) && AnswerService::ANSWER_RECORD_STATUS_FINISHED != $latestAnswerRecord['status']) {
             throw ExerciseException::EXERCISE_IS_DOING();
         }
 
-        $assessment = $this->createExerciseAssessment($activity);
+        if (!$this->getExerciseActivityService()->isExerciseAssessment($assessmentId, $activity['ext'])) {
+            throw ExerciseException::EXERCISE_NOTDO();
+        }
 
-        $answerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessment['id'], $this->getCurrentUser()['id']);
+        $answerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessmentId, $this->getCurrentUser()['id']);
 
         return $this->getAnswerRecordService()->update($answerRecord['id'], ['exercise_mode' => $exerciseMode]);
-    }
-
-    protected function createExerciseAssessment($activity)
-    {
-        $range = $activity['ext']['drawCondition']['range'];
-        $sections = $this->getAssessmentService()->drawItems(
-            $range,
-            [$activity['ext']['drawCondition']['section']]
-        );
-
-        $assessment = [
-            'name' => $activity['title'],
-            'displayable' => 0,
-            'description' => '',
-            'bank_id' => $range['bank_id'],
-            'sections' => $sections,
-        ];
-
-        $assessment = $this->getAssessmentService()->createAssessment($assessment);
-
-        $this->getAssessmentService()->openAssessment($assessment['id']);
-
-        return $assessment;
     }
 
     /**
@@ -185,5 +166,13 @@ class TaskStartAnswer extends AbstractResource
     protected function getAnswerRandomSeqService()
     {
         return $this->service('ItemBank:Answer:AnswerRandomSeqService');
+    }
+
+    /**
+     * @return ExerciseActivityService
+     */
+    protected function getExerciseActivityService()
+    {
+        return $this->service('Activity:ExerciseActivityService');
     }
 }

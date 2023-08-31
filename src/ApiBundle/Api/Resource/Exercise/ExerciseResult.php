@@ -31,11 +31,6 @@ class ExerciseResult extends AbstractResource
         $targetType = $request->request->get('targetType');
         $targetId = $request->request->get('targetId');
 
-        $assessment = $this->getAssessmentService()->getAssessment($exerciseId);
-        if (empty($assessment) || '0' != $assessment['displayable']) {
-            throw ExerciseException::NOTFOUND_EXERCISE();
-        }
-
         $task = $this->getTaskService()->getTask($targetId);
         if (empty($task) || 'exercise' != $task['type']) {
             throw TaskException::NOTFOUND_TASK();
@@ -51,7 +46,12 @@ class ExerciseResult extends AbstractResource
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        if (!$this->getExerciseActivityService()->isExerciseAssessment($exerciseId, $activity['ext'])) {
+            throw ExerciseException::EXERCISE_NOTDO();
+        }
+
         $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+        $assessment = $this->getAssessmentService()->getAssessment($exerciseId);
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
         $testpaperWrapper = new TestpaperWrapper();
