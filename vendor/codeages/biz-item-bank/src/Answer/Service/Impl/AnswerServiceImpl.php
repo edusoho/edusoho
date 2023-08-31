@@ -6,6 +6,7 @@ use Biz\Common\CommonException;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException;
@@ -475,22 +476,17 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $answerQuestionReports;
     }
 
-    protected function getAnswerQuestionReportsAndAttachmentsByAssessmentResponse(array $assessmentResponse)
+    protected function getAnswerQuestionReportsAndAttachmentsByAssessmentResponse(array $assessmentResponse, $reviewedQuestions = [])
     {
         $answerQuestionReports = [];
         $attachments = [];
-
-        $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
-        $reciewedQuestions = $this->getAnswerReviewedQuestionService()->findByAnswerRecordId($answerRecord['id']);
-        $reciewedQuestions = ArrayToolkit::index($reciewedQuestions, 'question_id');
+        $reviewedQuestions = ArrayToolkit::index($reviewedQuestions, 'question_id');
 
         foreach ($assessmentResponse['section_responses'] as $sectionResponse) {
             foreach ($sectionResponse['item_responses'] as $itemResponse) {
                 foreach ($itemResponse['question_responses'] as $questionResponse) {
-                    if (AnswerService::EXERCISE_MODE_SUBMIT_SINGLE == $answerRecord['exercise_mode']) {
-                        if ($questionResponse['question_id'] == $reciewedQuestions[$questionResponse['question_id']]['question_id']){
-                            continue;
-                        }
+                    if (!empty($reviewedQuestions[$questionResponse['question_id']])) {
+                        continue;
                     }
 
                     $answerQuestionReports[] = [
@@ -988,8 +984,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         try {
             $this->beginTransaction();
 
+            $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
+            if (ExerciseMode::SUBMIT_SINGLE == $answerRecord['exercise_mode']) {
+                $reviewedQuestions = $this->getAnswerReviewedQuestionService()->findByAnswerRecordId($answerRecord['id']);
+            }
+            
             list($answerQuestionReports, $attachments) = $this->getAnswerQuestionReportsAndAttachmentsByAssessmentResponse(
-                $assessmentResponse
+                $assessmentResponse,
+                $reviewedQuestions ?? []
             );
             if ($this->getAnswerQuestionReportService()->count(
                 ['answer_record_id' => $assessmentResponse['answer_record_id']]
@@ -1002,7 +1004,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $this->updateAttachmentsTarget($assessmentResponse['answer_record_id'], $attachments);
 
             //判断模拟考试应该取当前时间减去开始时间
-            $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
             if (self::EXAM_MODE_SIMULATION == $answerRecord['exam_mode']) {
                 $assessmentResponse['used_time'] = time() - $answerRecord['created_time'];
             }
