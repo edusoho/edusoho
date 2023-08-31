@@ -244,7 +244,7 @@
 
                     if (this.goods.type == 'classroom') {
                         return this.changeSku(this.goods.product.target.id);
-                    }kliii
+                    }
 
                     if (this.goods.type == 'course' && this.targetId) {
                         return this.changeSku(this.targetId);
@@ -370,5 +370,3 @@
     }
 </script>
 
-<style scoped>
-</style>
