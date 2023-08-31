@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
+use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class ItemBankExerciseChapterExerciseRecord extends AbstractResource
@@ -26,7 +27,7 @@ class ItemBankExerciseChapterExerciseRecord extends AbstractResource
             $moduleId,
             $categoryId,
             $user['id'],
-            $request->request->get('exerciseMode', '0')
+            $request->request->get('exerciseMode', ExerciseMode::SUBMIT_ALL)
         );
         $answerRecord = $this->getAnswerRecordService()->get($chapterExerciseRecord['answerRecordId']);
 
