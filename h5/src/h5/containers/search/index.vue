@@ -249,7 +249,6 @@ export default {
         params: config,
       })
         .then(({ data, paging }) => {
-          console.log(data, paging);
           data.forEach(element => {
             this.courseList.push(element);
           });

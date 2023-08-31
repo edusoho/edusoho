@@ -106,7 +106,6 @@
               <IconSearch />
               <label class="ml-4 text-text-6">找课程</label>
             </div>
-            <!-- <div>123</div> -->
           </div>
           <!-- 学习课程目录 -->
           <classroom-courses v-if="componentsInfo.classroomCourses.length > 0"

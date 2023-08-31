@@ -29,7 +29,7 @@
       </template>
     </template>
     <div class="empty-course" v-if="courseSets.length <= 0">
-        <img class="empty-course__img" src="static/images/search_course_empty.png" alt="" />
+        <img class="empty-course__img" src="static/images/classroom/none-course.png" alt="" />
       <p class="empty-course__text">{{ $t('more.noCourses') }}</p>
       </div>
   </e-panel>
