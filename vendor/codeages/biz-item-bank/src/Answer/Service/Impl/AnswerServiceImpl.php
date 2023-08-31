@@ -480,9 +480,19 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerQuestionReports = [];
         $attachments = [];
 
+        $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
+        $reciewedQuestions = $this->getAnswerReviewedQuestionService()->findByAnswerRecordId($answerRecord['id']);
+        $reciewedQuestions = ArrayToolkit::index($reciewedQuestions, 'question_id');
+
         foreach ($assessmentResponse['section_responses'] as $sectionResponse) {
             foreach ($sectionResponse['item_responses'] as $itemResponse) {
                 foreach ($itemResponse['question_responses'] as $questionResponse) {
+                    if (AnswerService::EXERCISE_MODE_SUBMIT_SINGLE == $answerRecord['exercise_mode']) {
+                        if ($questionResponse['question_id'] == $reciewedQuestions[$questionResponse['question_id']]['question_id']){
+                            continue;
+                        }
+                    }
+
                     $answerQuestionReports[] = [
                         'identify' => $assessmentResponse['answer_record_id'] . '_' . $questionResponse['question_id'],
                         'answer_record_id' => $assessmentResponse['answer_record_id'],
