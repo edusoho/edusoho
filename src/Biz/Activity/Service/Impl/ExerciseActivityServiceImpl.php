@@ -41,7 +41,7 @@ class ExerciseActivityServiceImpl extends BaseService implements ExerciseActivit
             return false;
         }
 
-        if ($assessment['question_count'] != $section['item_count']) {
+        if ($assessment['item_count'] != $section['item_count']) {
             return false;
         }
 
