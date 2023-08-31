@@ -1674,6 +1674,8 @@ t.add("course.task.out_focus_mask.stop.tips", "<p class=\"ineffective-learning\"
 t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">Do not open more tasks to learn at the same time<\/p> <p class=\"kick-each-other\">Don\u2019t multitask !<\/p>\n", "js", "en");
 t.add("classroom.manage.data_statistics.echarts.student_increase_num", "Student Increasement", "js", "en");
 t.add("classroom.manage.data_statistics.echarts.auditor_increase_num", "Auditor Increasement", "js", "en");
+t.add("classroom.empty.course", "There are currently no courses available", "js", "en");
+t.add("classroom.search.empty.course", "There are currently no suitable courses available~", "js", "en");
 t.add("course.intro.wechat_subscribe", "Please click here to subscribe to the course related notice", "js", "en");
 t.add("admin_v2.operation.report_content_audit.batch_operate_tips", "Please select the content to be operated in batches first", "js", "en");
 t.add("admin_v2.operation.report_content_audit.batch_operate_success_tips", "Success", "js", "en");

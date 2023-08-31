@@ -1634,6 +1634,8 @@ t.add("course.task.out_focus_mask.stop.tips", "<p class=\"ineffective-learning\"
 t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">\u8bf7\u52ff\u540c\u65f6\u591a\u5f00\u4efb\u52a1\u5b66\u4e60<\/p> <p class=\"kick-each-other\">\u4e0d\u8981\u4e00\u5fc3\u591a\u7528\u54e6\uff01<\/p>\n", "js", "zh_CN");
 t.add("classroom.manage.data_statistics.echarts.student_increase_num", "\u65b0\u589e\u6b63\u5f0f\u5b66\u5458", "js", "zh_CN");
 t.add("classroom.manage.data_statistics.echarts.auditor_increase_num", "\u65b0\u589e\u65c1\u542c\u751f", "js", "zh_CN");
+t.add("classroom.empty.course", "\u6682\u65e0\u8bfe\u7a0b", "js", "zh_CN");
+t.add("classroom.search.empty.course", "\u6682\u65f6\u6ca1\u6709\u5408\u9002\u7684\u8bfe\u7a0b~", "js", "zh_CN");
 t.add("course.intro.wechat_subscribe", "\u8bf7\u70b9\u6b64\u8ba2\u9605\u8bfe\u7a0b\u76f8\u5173\u901a\u77e5", "js", "zh_CN");
 t.add("admin_v2.operation.report_content_audit.batch_operate_tips", "\u8bf7\u5148\u9009\u62e9\u8981\u6279\u91cf\u64cd\u4f5c\u7684\u5185\u5bb9", "js", "zh_CN");
 t.add("admin_v2.operation.report_content_audit.batch_operate_success_tips", "\u64cd\u4f5c\u6210\u529f", "js", "zh_CN");
