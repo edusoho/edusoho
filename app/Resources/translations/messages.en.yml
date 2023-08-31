@@ -9763,7 +9763,6 @@ exception.item_bank_exercise.exercise.is_exists: The item bank exercise already 
 exception.item_bank_exercise.exercise.not_arrive: The item bank exercise has not reached learning time，add failed
 exception.item_bank.assessment.not.open: The test paper is closed, please contact the teacher
 exception.item_bank.assessment.not.exist: Test paper does not exist
-exception.item_bank.assessment.not.do: 'This exercise cannot be answered. Please exit and start again'
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
@@ -10728,6 +10727,7 @@ exception.exercise.forbidden_access_exercise: No access to other students' exerc
 exception.exercise.forbidden_duplicate_commit_exercise: Exercises have been completed, do not repeat the submission!
 exception.exercise.not_found_result: The result of the exercise does not exist
 exception.exercise.exercise_is_doing: 'Exercise record already exists, please start answering again'
+exception.exercise.exercise_not_do: 'This exercise cannot be answered. Please exit and start again'
 
 exception.homework.not_found: Homework does not exist
 exception.homework.draft: This homework has not been published. If you have any questions, please contact the teacher!

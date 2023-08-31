@@ -20,7 +20,6 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class ExerciseResult extends AbstractResource
@@ -47,8 +46,8 @@ class ExerciseResult extends AbstractResource
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        if (!$this->getAssessmentService()->canLearnAssessment($exerciseId, $activity)) {
-            throw AssessmentException::ASSESSMENT_NOTDO();
+        if (!$this->getExerciseActivityService()->isExerciseAssessment($exerciseId, $activity['ext'])) {
+            throw ExerciseException::EXERCISE_NOTDO();
         }
 
         $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);

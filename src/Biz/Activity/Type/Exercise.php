@@ -10,7 +10,6 @@ use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class Exercise extends Activity
 {
@@ -207,13 +206,5 @@ class Exercise extends Activity
     protected function getAnswerRecordService()
     {
         return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
-    }
-
-    /**
-     * @return AssessmentService
-     */
-    protected function getAssessmentService()
-    {
-        return $this->getBiz()->service('ItemBank:Assessment:AssessmentService');
     }
 }

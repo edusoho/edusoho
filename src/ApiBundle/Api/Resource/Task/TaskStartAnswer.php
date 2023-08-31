@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Task;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
+use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Activity\Type\Testpaper;
 use Biz\Common\CommonException;
 use Biz\Course\MemberException;
@@ -94,8 +95,8 @@ class TaskStartAnswer extends AbstractResource
             throw ExerciseException::EXERCISE_IS_DOING();
         }
 
-        if (!$this->getAssessmentService()->canLearnAssessment($assessmentId, $activity)) {
-            throw AssessmentException::ASSESSMENT_NOTDO();
+        if (!$this->getExerciseActivityService()->isExerciseAssessment($assessmentId, $activity['ext'])) {
+            throw ExerciseException::EXERCISE_NOTDO();
         }
 
         $answerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessmentId, $this->getCurrentUser()['id']);
@@ -165,5 +166,13 @@ class TaskStartAnswer extends AbstractResource
     protected function getAnswerRandomSeqService()
     {
         return $this->service('ItemBank:Answer:AnswerRandomSeqService');
+    }
+
+    /**
+     * @return ExerciseActivityService
+     */
+    protected function getExerciseActivityService()
+    {
+        return $this->service('Activity:ExerciseActivityService');
     }
 }

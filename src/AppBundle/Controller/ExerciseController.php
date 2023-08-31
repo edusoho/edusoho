@@ -13,7 +13,6 @@ use Biz\Testpaper\ExerciseException;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
@@ -27,8 +26,8 @@ class ExerciseController extends BaseController
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
 
-        if (!$this->getAssessmentService()->canLearnAssessment($request->get('assessmentId'), $activity)) {
-            $this->createNewException(AssessmentException::ASSESSMENT_NOTDO());
+        if (!$this->getExerciseActivityService()->isExerciseAssessment($request->get('assessmentId'), $activity['ext'])) {
+            $this->createNewException(ExerciseException::EXERCISE_NOTDO());
         }
 
         $user = $this->getCurrentUser();
@@ -36,7 +35,7 @@ class ExerciseController extends BaseController
         if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED === $latestAnswerRecord['status']) {
             $latestAnswerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $request->get('assessmentId'), $user['id']);
         } else {
-            throw ExerciseException::EXERCISE_IS_DOING();
+            $this->createNewException(ExerciseException::EXERCISE_IS_DOING());
         }
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 

@@ -380,30 +380,6 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         return $this->getItemService()->countItemTypesNum($items);
     }
 
-    public function canLearnAssessment($assessmentId, $activity)
-    {
-        $assessment = $this->getAssessment($assessmentId);
-        $range = $activity['ext']['drawCondition']['range'];
-        $section = $activity['ext']['drawCondition']['section'];
-        if (empty($assessment)) {
-            return false;
-        }
-
-        if ($assessment['displayable']) {
-            return false;
-        }
-
-        if ( $assessment['bank_id'] != $range['bank_id']) {
-            return false;
-        }
-
-        if ($assessment['question_count'] != $section['item_count']) {
-            return false;
-        }
-
-        return true;
-    }
-
     protected function findExportItems($sections, $sectionItems)
     {
         $exportItems = [];

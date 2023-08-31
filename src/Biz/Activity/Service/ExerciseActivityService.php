@@ -15,4 +15,6 @@ interface ExerciseActivityService
     public function deleteActivity($id);
 
     public function getByAnswerSceneId($answerSceneId);
+
+    public function isExerciseAssessment($assessmentId, $exerciseActivity);
 }
