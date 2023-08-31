@@ -9,6 +9,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
+use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
@@ -58,7 +59,7 @@ class WrongBookStartAnswer extends AbstractResource
 
         $this->getAssessmentService()->openAssessment($assessment['id']);
 
-        $exerciseMode = $request->request->get('exerciseMode', '0');
+        $exerciseMode = $request->request->get('exerciseMode', ExerciseMode::SUBMIT_ALL);
         $answerRecord = $this->getAnswerService()->startAnswer($answerScene['id'], $assessment['id'], $this->getCurrentUser()['id']);
         $answerRecord = $this->getAnswerRecordService()->update($answerRecord['id'], ['exercise_mode' => $exerciseMode]);
 

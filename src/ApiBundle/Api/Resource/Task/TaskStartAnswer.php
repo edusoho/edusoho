@@ -11,6 +11,8 @@ use Biz\Common\CommonException;
 use Biz\Course\MemberException;
 use Biz\Testpaper\ExerciseException;
 use Biz\Testpaper\TestpaperException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
+use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
@@ -87,11 +89,14 @@ class TaskStartAnswer extends AbstractResource
 
     protected function startExercise($task, $activity, $request)
     {
-        $exerciseMode = $request->request->get('exerciseMode', '0');
+        $exerciseMode = $request->request->get('exerciseMode', ExerciseMode::SUBMIT_ALL);
         $assessmentId = $request->request->get('assessmentId');
 
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()['id']);
-        if (!empty($latestAnswerRecord) && AnswerService::ANSWER_RECORD_STATUS_FINISHED != $latestAnswerRecord['status']) {
+        if (!empty($latestAnswerRecord) && AnswerRecordStatus::FINISHED != $latestAnswerRecord['status']) {
+            if ($latestAnswerRecord['exercise_mode'] == $exerciseMode) {
+                return $latestAnswerRecord;
+            }
             throw ExerciseException::EXERCISE_IS_DOING();
         }
 

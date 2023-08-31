@@ -15,6 +15,7 @@ use Biz\Task\TaskException;
 use Biz\Testpaper\ExerciseException;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
+use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
@@ -65,7 +66,7 @@ class ExerciseResult extends AbstractResource
             }
 
             $answerRecord = $this->getAnswerService()->startAnswer($answerScene['id'], $assessment['id'], $user['id']);
-            $answerRecord = $this->getAnswerRecordService()->update($answerRecord['id'], ['exercise_mode' => $request->request->get('exerciseMode', '0')]);
+            $answerRecord = $this->getAnswerRecordService()->update($answerRecord['id'], ['exercise_mode' => $request->request->get('exerciseMode', ExerciseMode::SUBMIT_ALL)]);
         } elseif ('reviewing' != $answerRecord['status']) {
             $answerRecord = $this->getAnswerService()->continueAnswer($answerRecord['id']);
         }
