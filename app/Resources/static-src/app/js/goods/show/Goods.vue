@@ -56,16 +56,19 @@
                     </div>
                     <div v-if="goods.product.targetType === 'classroom'" id="info-left-2"
                          class="content-item js-content-item">
-                        <h3 class="content-item__title inline-block">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
-                        <div class="inline-block pull-right">
-                          <!-- <input v-model="courseName" type="text" 
-                            @keydown.enter="searchCourse"
-                            placeholder="请输入课程名称"
-                            />
-                          <button @click="searchCourse">搜索</button> -->
+                        <h3 class="content-item__title">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
+                        <div class="searchInput">
                           <a-input-search placeholder="请输入课程名称" enter-button @search="searchCourse" />
                         </div>
-                        <classroom-courses :classroomCourses="searchResult.length > 0 ? searchResult : componentsData.classroomCourses"></classroom-courses>
+                        <classroom-courses v-if="searchResult.length > 0 || componentsData.classroomCourses.length > 0" :classroomCourses="isSearch ? searchResult : componentsData.classroomCourses"></classroom-courses>
+                        <div v-if="searchResult.length === 0 && isSearch" class="emptyCourse">
+                          <img class="emptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
+                          <p class="emptyCourseContent">{{ 'classroom.search.empty.course' | trans }}</p>
+                        </div>
+                        <div v-if="componentsData.classroomCourses.length === 0 && !isSearch" class="emptyCourse">
+                          <img class="emptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
+                          <p class="emptyCourseContent">{{ 'classroom.empty.course' | trans }}</p>
+                        </div>
                     </div>
 
                     <div v-if="ugcReviewSetting.enable_review == 1
@@ -114,7 +117,7 @@
     export default {
         data() {
             return {
-                courseName: '',
+                isSearch: false,
                 howActive: 1,
                 flag: true,
                 isFixed: false,
@@ -218,15 +221,20 @@
             },
         },
         methods: {
-            searchCourse() {
-              console.log(123)
-              // axios.get(`/api/classrooms/${this.goods.product.targetId}/courses`, {
-              //       params: {
-              //           title: this.courseName
-              //       }
-              //   }).then((res) => {
-              //       this.searchResult = res.data
-              //   });
+            searchCourse(value) {
+              if (value) {
+                this.isSearch = true
+              } else {
+                this.isSearch = false
+              }
+
+              axios.get(`/api/classrooms/${this.goods.product.targetId}/courses`, {
+                    params: {
+                        title: value
+                    }
+                }).then((res) => {
+                    this.searchResult = res.data
+                });
             },
             getGoodsInfo() {
                 axios.get(`/api/good/${this.goodsId}`, {
@@ -236,7 +244,7 @@
 
                     if (this.goods.type == 'classroom') {
                         return this.changeSku(this.goods.product.target.id);
-                    }
+                    }kliii
 
                     if (this.goods.type == 'course' && this.targetId) {
                         return this.changeSku(this.targetId);

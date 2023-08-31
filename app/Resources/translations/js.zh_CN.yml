@@ -984,7 +984,7 @@ lesson_count_no_more_than_300: 课时总数不能超过300个
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 
 Bad credentials.: 用户名或密码错误
-The presented password cannot be empty.: 密码不能为空
+
 User account is locked.: 帐号被封禁
 
 cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
@@ -1853,7 +1853,8 @@ course.task.out_focus_mask.anti_brush.tips: >
 
 classroom.manage.data_statistics.echarts.student_increase_num: 新增正式学员
 classroom.manage.data_statistics.echarts.auditor_increase_num: 新增旁听生
-
+classroom.empty.course: 暂无课程
+classroom.search.empty.course: 暂时没有合适的课程~
 course.intro.wechat_subscribe: 请点此订阅课程相关通知
 admin_v2.operation.report_content_audit.batch_operate_tips: 请先选择要批量操作的内容
 admin_v2.operation.report_content_audit.batch_operate_success_tips: 操作成功
