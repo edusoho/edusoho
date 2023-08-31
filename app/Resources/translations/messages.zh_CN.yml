@@ -10888,6 +10888,7 @@ exception.exercise.forbidden_access_exercise: 不可以访问其他学生的练�
 exception.exercise.forbidden_duplicate_commit_exercise: 练习已经做完，不能重复提交!
 exception.exercise.not_found_result: 练习结果不存在
 exception.exercise.exercise_is_doing: 已存在练习记录，请重新开始答题
+exception.exercise.exercise_not_do: 该练习不能进行答题，请退出重新开始
 exception.uploadfile.file_not_found: 文件不存在
 exception.uploadfile.forbidden_manage_file: 没有权限管理资源
 exception.uploadfile.error_status: 状态不正确

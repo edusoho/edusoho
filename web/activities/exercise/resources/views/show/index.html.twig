@@ -1,5 +1,6 @@
 {% extends 'layout.html.twig' %}
 {% set exercise = activity.ext|default(null) %}
+{% set assessment = create_exercise_assessment(activity) %}
 
 {% block body %}
   <div class="modal show iframe-modal">
@@ -21,7 +22,7 @@
           </div>
           {% if not questionLack %}
             <div class="text-right mt20">
-              <a class="btn btn-primary" href="{{ path('exercise_start_do',{lessonId:activity.id,exerciseId:exercise.id}) }}">{{ 'course.plan_task.activity_manage.exercise.start_btn'|trans }}</a>
+              <a class="btn btn-primary" href="{{ path('exercise_start_do', {lessonId: activity.id, exerciseId: exercise.id, assessmentId: assessment.id}) }}">{{ 'course.plan_task.activity_manage.exercise.start_btn'|trans }}</a>
             </div>
           {% endif %}
         </div>

@@ -24,7 +24,7 @@ class SearchServiceImpl extends BaseService implements SearchService
         $this->cloudRootApi = CloudAPIFactory::create('root');
     }
 
-    public function cloudSearch($type, $conditions = array())
+    public function cloudSearch($type, $conditions = [])
     {
         $api = $this->getCloudApi('leaf');
 
@@ -46,20 +46,20 @@ class SearchServiceImpl extends BaseService implements SearchService
         }
 
         if (empty($result['body']['datas'])) {
-            return array(array(), 0);
+            return [[], 0];
         }
 
         $resultSet = $result['body']['datas'];
         $counts = $result['body']['count'];
         $resultSet = SearchAdapterFactory::create($type)->adapt($resultSet);
 
-        return array($resultSet, $counts);
+        return [$resultSet, $counts];
     }
 
     public function refactorAllDocuments()
     {
         $api = $this->getCloudApi('root');
-        $conditions = array('categorys' => 'course,classroom,user,thread,article');
+        $conditions = ['categorys' => 'course,classroom,user,thread,article'];
 
         return $api->post('/search/refactor_documents', $conditions);
     }
@@ -69,52 +69,60 @@ class SearchServiceImpl extends BaseService implements SearchService
         $siteUrl = $this->getSiteUrl();
 
         $api = $this->getCloudApi('root');
-        $urls = array(
-            array(
+        $urls = [
+            [
                 'category' => 'course',
                 'url' => $siteUrl.'/callback/cloud_search?provider=courses&cursor=0&start=0&limit=100',
-            ),
-            array(
+            ],
+            [
                 'category' => 'lesson',
                 'url' => $siteUrl.'/callback/cloud_search?provider=lessons&cursor=0&start=0&limit=100',
-            ),
-            array(
+            ],
+            [
                 'category' => 'user',
                 'url' => $siteUrl.'/callback/cloud_search?provider=users&cursor=0&start=0&limit=100',
-            ),
-            array(
+            ],
+            [
                 'category' => 'thread',
                 'url' => $siteUrl.'/callback/cloud_search?provider=chaos_threads&cursor=0,0,0&start=0,0,0&limit=50',
-            ),
-            array(
+            ],
+            [
                 'category' => 'article',
                 'url' => $siteUrl.'/callback/cloud_search?provider=articles&cursor=0&start=0&limit=100',
-            ),
-            array(
+            ],
+            [
                 'category' => 'openCourse',
                 'url' => $siteUrl.'/callback/cloud_search?provider=open_courses&cursor=0&start=0&limit=100',
-            ),
-            array(
+            ],
+            [
                 'category' => 'openLesson',
                 'url' => $siteUrl.'/callback/cloud_search?provider=open_course_lessons&cursor=0&start=0&limit=100',
-            ),
-            array(
+            ],
+            [
                 'category' => 'classroom',
                 'url' => $siteUrl.'/callback/cloud_search?provider=classrooms&cursor=0&start=0&limit=100',
-            ),
-        );
+            ],
+        ];
         $urls = urlencode(json_encode($urls));
 
         $callbackUrl = $siteUrl.$callbackRouteUrl;
         $sign = $this->getSignEncoder()->encodePassword($callbackUrl, $api->getAccessKey());
         $callbackUrl .= '?sign='.rawurlencode($sign);
 
-        $result = $api->post('/search/accounts', array('urls' => $urls, 'callback' => $callbackUrl));
+        $result = $api->post('/search/accounts', ['urls' => $urls, 'callback' => $callbackUrl]);
         if ($result['success']) {
             $this->setCloudSearchWaiting();
         }
 
         return !empty($result['success']);
+    }
+
+    public function isCloudSearchUsable()
+    {
+        $cloudSearchSetting = $this->getSettingService()->get('cloud_search', []);
+        $cloudSearchRestoreTime = $this->getSettingService()->get('_cloud_search_restore_time', 0);
+
+        return !empty($cloudSearchSetting['search_enabled']) && 'ok' == $cloudSearchSetting['status'] && $cloudSearchRestoreTime < time();
     }
 
     protected function getSiteUrl()
@@ -131,22 +139,22 @@ class SearchServiceImpl extends BaseService implements SearchService
     protected function setCloudSearchWaiting()
     {
         $searchSetting = $this->getSettingService()->get('cloud_search');
-        $settingTemplate = array(
+        $settingTemplate = [
             'search_enabled' => 1,
             'status' => 'waiting',
-            'type' => array(
+            'type' => [
                 'course' => 1,
                 'classroom' => 1,
                 'teacher' => 1,
                 'thread' => 1,
                 'article' => 1,
-            ),
-        );
+            ],
+        ];
         $searchSetting = array_merge($searchSetting, $settingTemplate);
         $this->getSettingService()->set('cloud_search', $searchSetting);
     }
 
-    private function searchBase64Encode($conditions = array())
+    private function searchBase64Encode($conditions = [])
     {
         if (!empty($conditions['type'])) {
             $conditions['type'] = base64_encode($conditions['type']);

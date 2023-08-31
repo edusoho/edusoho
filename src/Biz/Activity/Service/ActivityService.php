@@ -89,5 +89,7 @@ interface ActivityService
 
     public function getActivityByAnswerSceneId($answerSceneId);
 
+    public function getActivityByAnswerSceneIdAndMediaType($answerSceneId, $mediaType);
+
     public function orderAssessmentSubmitNumber($userIds, $answerSceneId);
 }
