@@ -13,6 +13,7 @@ use Biz\Testpaper\ExerciseException;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
@@ -24,6 +25,10 @@ class ExerciseController extends BaseController
         $activity = $this->getActivityService()->getActivity($lessonId, true);
         if (!$this->getCourseService()->canTakeCourse($activity['fromCourseId'])) {
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
+        }
+
+        if (!$this->getAssessmentService()->canLearnAssessment($request->get('assessmentId'), $activity)) {
+            $this->createNewException(AssessmentException::ASSESSMENT_NOTDO());
         }
 
         $user = $this->getCurrentUser();

@@ -20,6 +20,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class ExerciseResult extends AbstractResource
@@ -30,11 +31,6 @@ class ExerciseResult extends AbstractResource
 
         $targetType = $request->request->get('targetType');
         $targetId = $request->request->get('targetId');
-
-        $assessment = $this->getAssessmentService()->getAssessment($exerciseId);
-        if (empty($assessment) || '0' != $assessment['displayable']) {
-            throw ExerciseException::NOTFOUND_EXERCISE();
-        }
 
         $task = $this->getTaskService()->getTask($targetId);
         if (empty($task) || 'exercise' != $task['type']) {
@@ -51,7 +47,12 @@ class ExerciseResult extends AbstractResource
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        if (!$this->getAssessmentService()->canLearnAssessment($exerciseId, $activity)) {
+            throw AssessmentException::ASSESSMENT_NOTDO();
+        }
+
         $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+        $assessment = $this->getAssessmentService()->getAssessment($exerciseId);
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
         $testpaperWrapper = new TestpaperWrapper();

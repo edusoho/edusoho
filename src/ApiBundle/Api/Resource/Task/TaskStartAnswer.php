@@ -94,6 +94,10 @@ class TaskStartAnswer extends AbstractResource
             throw ExerciseException::EXERCISE_IS_DOING();
         }
 
+        if (!$this->getAssessmentService()->canLearnAssessment($assessmentId, $activity)) {
+            throw AssessmentException::ASSESSMENT_NOTDO();
+        }
+
         $answerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessmentId, $this->getCurrentUser()['id']);
 
         return $this->getAnswerRecordService()->update($answerRecord['id'], ['exercise_mode' => $exerciseMode]);

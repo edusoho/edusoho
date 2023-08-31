@@ -45,4 +45,6 @@ interface AssessmentService
     public function findAssessmentQuestions($assessmentId);
 
     public function countAssessmentItemTypesNum($assessmentId);
+
+    public function canLearnAssessment($assessmentId, $activity);
 }
