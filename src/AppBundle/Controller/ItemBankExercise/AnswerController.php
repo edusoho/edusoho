@@ -6,7 +6,6 @@ use AppBundle\Controller\BaseController;
 use Biz\Accessor\AccessorInterface;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
@@ -105,7 +104,7 @@ class AnswerController extends BaseController
         $items = $this->getItemService()->searchItems(['bank_id' => $category['bank_id'], 'category_id' => $categoryId], [], 0, PHP_INT_MAX);
 
         $chapterInfo = [
-            'typesNum' => $this->getAssessmentService()->countItemTypesNum($items),
+            'typesNum' => $this->getItemService()->countItemTypesNum($items),
             'total' => $category['item_num'],
             'chapterName' => $category['name'],
             'categoryId' => $category['id'],
@@ -180,13 +179,5 @@ class AnswerController extends BaseController
     protected function getItemService()
     {
         return $this->createService('ItemBank:Item:ItemService');
-    }
-
-    /**
-     * @return AssessmentService
-     */
-    protected function getAssessmentService()
-    {
-        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }
