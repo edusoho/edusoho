@@ -11032,7 +11032,10 @@ course.live_replay.tips: The current version only supports viewing of live playb
 course.homework.pass_score: Set passing score
 course.homework.pass_score.tip1: 'Full marks：'
 course.homework.pass_score.tip2: Qualified if the score is reached
+course.placeholder.name: Please enter the course name
+
 testpaper.score_set.option: question score
+
 
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%.%taskNumber%:%taskTitle%'
