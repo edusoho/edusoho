@@ -94,4 +94,6 @@ interface AnswerService
     public function reviewSingleAnswerByManual($answerRecordId, $params);
 
     public function finishAnswer($answerRecordId);
+
+    public function getSingleSubmitInfo($answerRecordId, $assessment, $answerScene);
 }

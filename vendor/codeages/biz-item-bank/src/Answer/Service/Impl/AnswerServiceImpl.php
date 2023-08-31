@@ -19,6 +19,7 @@ use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
+use Codeages\Biz\ItemBank\Item\Type\EssayItem;
 use Codeages\Biz\ItemBank\Item\Type\Question;
 use Ramsey\Uuid\Uuid;
 
@@ -680,6 +681,55 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $this->dispatch('answer.submitted', $answerRecord);
 
         return $answerRecord;
+    }
+
+    public function getSingleSubmitInfo($answerRecordId, $assessment, $answerScene)
+    {
+        $submitSingle = [];
+        $reviewedQuestions = $this->getAnswerReviewedQuestionService()->findByAnswerRecordId($answerRecordId);
+        $reviewedQuestions = ArrayToolkit::index($reviewedQuestions, 'question_id');
+
+        $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
+        $answerQuestionReports = ArrayToolkit::index($answerQuestionReports, 'question_id');
+
+        foreach ($assessment['sections'] as $section) {
+            foreach ($section['items'] as $item) {
+                foreach ($item['questions'] as $question) {
+                    $submitSingle[] = [
+                        'questionId' => $question['id'],
+                        'answer' => $question['answer'],
+                        'analysis' => $question['analysis'],
+                        'isReviewed' => !$this->isReviewed($reviewedQuestions[$question['id']]) ? true : false,
+                        'manualMarking' => ($answerScene['manual_marking'] == 1 && $item['type'] == EssayItem::TYPE) ? 1 : 0,
+                        'status' => $this->getSingleSubmitQuesionStatus($reviewedQuestions[$question['id']], $answerQuestionReports[$question['id']]),
+                    ];
+                }
+            }
+        }
+
+        return $submitSingle;
+    }
+
+    private function isReviewed($reviewedQuestion)
+    {
+        if ($reviewedQuestion && $reviewedQuestion['is_reviewed']) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function getSingleSubmitQuesionStatus($reviewedQuestion, $answerQuestionReport)
+    {
+        if (!$this->isReviewed($reviewedQuestion)) {
+            return $answerQuestionReport['status'];
+        }
+
+        if ($reviewedQuestion && empty($reviewedQuestion['is_reviewed'])) {
+            return AnswerQuestionReportService::STATUS_REVIEWING;
+        }
+
+        return AnswerQuestionReportService::STATUS_NOANSWER;
     }
 
     private function generateNoAnswerQuestionReports($answerRecord)
