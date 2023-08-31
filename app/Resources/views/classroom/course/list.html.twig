@@ -13,9 +13,9 @@
     {% endif %}
 
     <div class="class-course-list">
-      <form method="get">
-        <input type="text" name="title" value="{{ app.request.get("title") }}" placeholder="{{ 'course.placeholder.name'|trans }}" />
-        <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+      <form class="search-form" method="get">
+        <input class="search-input-content inline-block" type="text" name="title" value="{{ app.request.get("title") }}" placeholder="{{ 'course.placeholder.name'|trans }}" />
+        <button class="btn btn-primary inline-block searchCourseBtn es-icon es-icon-search" type="submit"></button>
       </form>
         {% for course in courses %}
             <div class="course-item">

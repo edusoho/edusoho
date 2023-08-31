@@ -4,6 +4,39 @@
 
 // 班级-课程列表
 .class-course-list {
+  .search-form {
+      display: inline-block;
+      position: relative;
+    }
+  
+    .search-input-content {
+      width: 260px;
+      padding: 8px 12px;
+      height: 36px;
+      border: 1px solid #E1E3E5;
+      border-right: none;
+      border-top-left-radius: 4px !important;
+      border-bottom-left-radius: 4px !important;
+    }
+  
+    .search-input-content:hover {
+      border-color: @brand-primary !important;
+    }
+
+    .search-input-content:focus {
+      outline: none !important;
+    }
+  
+    .searchCourseBtn {
+      position: absolute;
+      left: 260px;
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+      height: 36px;
+      line-height: 34px;
+      padding: 0 16px !important;
+    }
+
   .course-item {
     margin-top: 30px;
     background-color: #fff;
