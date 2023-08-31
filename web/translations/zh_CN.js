@@ -839,7 +839,7 @@ t.add("admin.article_setting.choose_category", "--\u9009\u62e9\u6240\u5c5e\u680f
 t.add("lesson_count_no_more_than_300", "\u8bfe\u65f6\u603b\u6570\u4e0d\u80fd\u8d85\u8fc7300\u4e2a", "js", "zh_CN");
 t.add("lesson_tasks_no_more_than_5", "\u8bfe\u65f6\u4e0b\u7684\u4efb\u52a1\u6570\u91cf\u4e0d\u80fd\u8d85\u8fc75\u4e2a", "js", "zh_CN");
 t.add("Bad credentials.", "\u7528\u6237\u540d\u6216\u5bc6\u7801\u9519\u8bef", "js", "zh_CN");
-t.add("The presented password cannot be empty.", "\u5bc6\u7801\u4e0d\u80fd\u4e3a\u7a7a", "js", "zh_CN");
+t.add("The presented password cannot be empty.", "\u7528\u6237\u5bc6\u7801\u4e0d\u80fd\u4e3a\u7a7a", "js", "zh_CN");
 t.add("User account is locked.", "\u5e10\u53f7\u88ab\u5c01\u7981", "js", "zh_CN");
 t.add("cloud_search.network.error_message", "\u7f51\u7edc\u4e0d\u7ed9\u529b\uff0c\u4e3a\u60a8\u5207\u6362\u6781\u7b80\u641c\u7d22\u6a21\u5f0f", "js", "zh_CN");
 t.add("message.send.not_allowed", "\u4e0d\u5141\u8bb8\u53d1\u9001\u79c1\u4fe1", "js", "zh_CN");
