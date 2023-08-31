@@ -2,12 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Activity\Constant\ActivityMediaType;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
+use Biz\Testpaper\ExerciseException;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
@@ -20,24 +22,22 @@ class ExerciseController extends BaseController
     public function startDoAction(Request $request, $lessonId, $exerciseId)
     {
         $activity = $this->getActivityService()->getActivity($lessonId, true);
-        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
-        $user = $this->getCurrentUser();
-        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
-
         if (!$this->getCourseService()->canTakeCourse($activity['fromCourseId'])) {
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
 
-        if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED === $latestAnswerRecord['status']) {
-            $assessment = $this->createAssessment(
-                $activity['title'],
-                $activity['ext']['drawCondition']['range'],
-                [$activity['ext']['drawCondition']['section']]
-            );
-            $latestAnswerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessment['id'], $user['id']);
-        } else {
-            $assessmentId = $latestAnswerRecord['assessment_id'];
+        if (!$this->getExerciseActivityService()->isExerciseAssessment($request->get('assessmentId'), $activity['ext'])) {
+            $this->createNewException(ExerciseException::EXERCISE_NOTDO());
         }
+
+        $user = $this->getCurrentUser();
+        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
+        if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED === $latestAnswerRecord['status']) {
+            $latestAnswerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $request->get('assessmentId'), $user['id']);
+        } else {
+            $this->createNewException(ExerciseException::EXERCISE_IS_DOING());
+        }
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
             'answerRecordId' => $latestAnswerRecord['id'],
@@ -73,18 +73,21 @@ class ExerciseController extends BaseController
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
 
+        $task = $this->getTaskByAnswerSceneId($answerRecord['answer_scene_id']);
+        $restartUrl = $this->generateUrl('course_task_activity_show', ['courseId' => $task['courseId'], 'id' => $task['id'], 'doAgain' => true]);
+
         return $this->render('exercise/result.html.twig', [
             'answerRecordId' => $answerRecordId,
             'assessment' => $assessment,
-            'restartUrl' => $this->generateUrl('exercise_start_do', ['lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'exerciseId' => 1]),
+            'restartUrl' => $restartUrl,
         ]);
     }
 
-    protected function getActivityIdByAnswerSceneId($answerSceneId)
+    protected function getTaskByAnswerSceneId($answerSceneId)
     {
-        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerSceneId);
+        $activity = $this->getActivityService()->getActivityByAnswerSceneIdAndMediaType($answerSceneId, ActivityMediaType::EXERCISE);
 
-        return $this->getActivityService()->getByMediaIdAndMediaType($exerciseActivity['id'], 'exercise')['id'];
+        return $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
     }
 
     protected function canLookAnswerRecord($answerRecordId)

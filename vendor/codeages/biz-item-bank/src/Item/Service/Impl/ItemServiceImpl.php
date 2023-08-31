@@ -13,7 +13,13 @@ use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Codeages\Biz\ItemBank\Item\Type\ChoiceItem;
+use Codeages\Biz\ItemBank\Item\Type\DetermineItem;
+use Codeages\Biz\ItemBank\Item\Type\EssayItem;
+use Codeages\Biz\ItemBank\Item\Type\FillItem;
 use Codeages\Biz\ItemBank\Item\Type\Item;
+use Codeages\Biz\ItemBank\Item\Type\MaterialItem;
+use Codeages\Biz\ItemBank\Item\Type\SingleChoiceItem;
+use Codeages\Biz\ItemBank\Item\Type\UncertainChoiceItem;
 use Codeages\Biz\ItemBank\Item\Wrapper\ExportItemsWrapper;
 use Codeages\Biz\ItemBank\ItemBank\Exception\ItemBankException;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
@@ -471,6 +477,30 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
 
         return $result;
+    }
+
+    public function getQuestion($questionId)
+    {
+        return $this->getQuestionDao()->get($questionId);
+    }
+
+    public function countItemTypesNum($items)
+    {
+        $typesNum = [
+            SingleChoiceItem::TYPE => 0,
+            ChoiceItem::TYPE => 0,
+            UncertainChoiceItem::TYPE => 0,
+            DetermineItem::TYPE => 0,
+            FillItem::TYPE => 0,
+            EssayItem::TYPE => 0,
+            MaterialItem::TYPE => 0,
+        ];
+
+        foreach ($items as $item) {
+            ++$typesNum[$item['type']];
+        }
+
+        return $typesNum;
     }
 
     protected function findQuestionsByItemId($itemId)

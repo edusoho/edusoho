@@ -26,7 +26,7 @@ class ItemBankExerciseChapterExerciseInfo extends AbstractResource
 
         $category = $this->getItemCategoryService()->getItemCategory($categoryId);
         $items = $this->getItemService()->searchItems(['bank_id' => $category['bank_id'], 'category_id' => $categoryId], [], 0, PHP_INT_MAX);
-        $typesNum = $this->countItemTypesNum($items);
+        $typesNum = $this->getItemService()->countItemTypesNum($items);
         $typesNum['total'] = $category['item_num'];
 
         return [
@@ -56,25 +56,6 @@ class ItemBankExerciseChapterExerciseInfo extends AbstractResource
         if (empty($questionBank) || $category['bank_id'] != $questionBank['itemBankId']) {
             throw ItemBankExerciseException::FORBIDDEN_TAKE_EXERCISE();
         }
-    }
-
-    private function countItemTypesNum($items)
-    {
-        $typesNum = [
-            'single_choice' => 0,
-            'choice' => 0,
-            'essay' => 0,
-            'uncertain_choice' => 0,
-            'determine' => 0,
-            'fill' => 0,
-            'material' => 0,
-        ];
-
-        foreach ($items as $item) {
-            ++$typesNum[$item['type']];
-        }
-
-        return $typesNum;
     }
 
     /**

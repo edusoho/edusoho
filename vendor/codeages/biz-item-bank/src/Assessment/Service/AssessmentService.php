@@ -43,4 +43,6 @@ interface AssessmentService
     public function exportAssessment($assessmentId, $path, $imgRootDir);
 
     public function findAssessmentQuestions($assessmentId);
+
+    public function countAssessmentItemTypesNum($assessmentId);
 }

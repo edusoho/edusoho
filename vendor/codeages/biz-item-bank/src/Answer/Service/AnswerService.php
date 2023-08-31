@@ -12,6 +12,8 @@ interface AnswerService
 
     const ANSWER_RECORD_STATUS_FINISHED = 'finished';
 
+    const EXERCISE_MODE_SUBMIT_SINGLE = '1';
+
     /**
      * 开始答题
      *
@@ -84,4 +86,12 @@ interface AnswerService
     public function buildAutoSubmitAssessmentResponse($answerRecordId);
 
     public function batchAutoSubmit($answerSceneId, $assessmentId, $userIds);
+
+    public function submitSingleAnswer($answerRecordId, $params);
+
+    public function finishAllSingleAnswer($answerRecord, $type);
+
+    public function reviewSingleAnswerByManual($answerRecordId, $params);
+
+    public function finishAnswer($answerRecordId);
 }

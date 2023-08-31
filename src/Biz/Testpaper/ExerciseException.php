@@ -22,6 +22,8 @@ class ExerciseException extends AbstractException
 
     const EXERCISE_IS_DOING = 4006807;
 
+    const EXERCISE_NOTDO = 4006808;
+
     public $messages = [
         4046801 => 'exception.exercise.not_found',
         4036802 => 'exception.exercise.draft',
@@ -30,5 +32,6 @@ class ExerciseException extends AbstractException
         4036805 => 'exception.exercise.forbidden_duplicate_commit_exercise',
         4046806 => 'exception.exercise.not_found_result',
         4006807 => 'exception.exercise.exercise_is_doing',
+        4006808 => 'exception.exercise.exercise_not_do',
     ];
 }

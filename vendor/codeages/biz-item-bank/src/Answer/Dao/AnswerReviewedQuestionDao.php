@@ -1,13 +1,9 @@
 <?php
 namespace Codeages\Biz\ItemBank\Answer\Dao;
 
-interface AnswerQuestionReportDao
+interface AnswerReviewedQuestionDao
 {
-    public function findByIds($ids);
-
     public function findByAnswerRecordId($answerRecordId);
-
-    public function deleteByAssessmentId($assessmentId);
 
     public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
 }

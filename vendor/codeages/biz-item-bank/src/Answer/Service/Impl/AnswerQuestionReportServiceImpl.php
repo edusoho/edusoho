@@ -16,6 +16,10 @@ class AnswerQuestionReportServiceImpl extends BaseService implements AnswerQuest
 
     public function batchCreate(array $answerQuestionReports)
     {
+        if (empty($answerQuestionReports)) {
+            return [];
+        }
+
         return $this->getAnswerQuestionReportDao()->batchCreate($answerQuestionReports);
     }
 
@@ -36,7 +40,26 @@ class AnswerQuestionReportServiceImpl extends BaseService implements AnswerQuest
 
     public function batchUpdate(array $answerQuestionReports)
     {
+        if (empty($answerQuestionReports)) {
+            return [];
+        }
+
         return $this->getAnswerQuestionReportDao()->batchUpdate(ArrayToolkit::column($answerQuestionReports, 'identify'), $answerQuestionReports, 'identify');
+    }
+
+    public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId)
+    {
+        return $this->getAnswerQuestionReportDao()->getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
+    }
+
+    public function createAnswerQuestionReport($answerQuestionReport)
+    {
+        return $this->getAnswerQuestionReportDao()->create($answerQuestionReport);
+    }
+
+    public function updateAnswerQuestionReport($id, $answerQuestionReport)
+    {
+        return $this->getAnswerQuestionReportDao()->update($id, $answerQuestionReport);
     }
 
     protected function getAnswerQuestionReportDao()
