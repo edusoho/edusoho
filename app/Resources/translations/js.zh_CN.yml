@@ -1854,7 +1854,8 @@ course.task.out_focus_mask.anti_brush.tips: >
 
 classroom.manage.data_statistics.echarts.student_increase_num: 新增正式学员
 classroom.manage.data_statistics.echarts.auditor_increase_num: 新增旁听生
-
+classroom.empty.course: 暂无课程
+classroom.search.empty.course: 暂时没有合适的课程~
 course.intro.wechat_subscribe: 请点此订阅课程相关通知
 admin_v2.operation.report_content_audit.batch_operate_tips: 请先选择要批量操作的内容
 admin_v2.operation.report_content_audit.batch_operate_success_tips: 操作成功

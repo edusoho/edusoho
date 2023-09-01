@@ -1890,7 +1890,8 @@ course.task.out_focus_mask.anti_brush.tips: >
 
 classroom.manage.data_statistics.echarts.student_increase_num: Student Increasement
 classroom.manage.data_statistics.echarts.auditor_increase_num: Auditor Increasement
-
+classroom.empty.course: There are currently no courses available
+classroom.search.empty.course: There are currently no suitable courses available~
 course.intro.wechat_subscribe: Please click here to subscribe to the course related notice
 admin_v2.operation.report_content_audit.batch_operate_tips: Please select the content to be operated in batches first
 admin_v2.operation.report_content_audit.batch_operate_success_tips: Success

@@ -1,1 +1,1 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[467,319],{672:function(e,t){$(".js-org-tree-select").select2({treeview:!0,dropdownAutoWidth:!0,treeviewInitState:"collapsed",placeholderOption:"first"})}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[467,319],{695:function(e,t){$(".js-org-tree-select").select2({treeview:!0,dropdownAutoWidth:!0,treeviewInitState:"collapsed",placeholderOption:"first"})}}]);

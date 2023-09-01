@@ -1493,7 +1493,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $sortedCourses;
     }
 
-    public function findCoursesByClassroomIdAndTitle(int $classroomId, string $title)
+    public function findCoursesByClassroomIdAndCourseSetTitle(int $classroomId, string $title)
     {
         $classroomCourses = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
         $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');

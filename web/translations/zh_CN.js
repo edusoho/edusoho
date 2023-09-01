@@ -1246,6 +1246,7 @@ t.add("admin.user.import_fail_hint", "%title%\u5931\u8d25\uff1a", "js", "zh_CN")
 t.add("admin.user.import_completed_hint", "%title%\u5b8c\u6210", "js", "zh_CN");
 t.add("admin.user.import_error_hint", "%title%\u65f6\uff0c\u53d1\u751f\u4e86\u672a\u77e5\u9519\u8bef\u3002", "js", "zh_CN");
 t.add("admin.user.lock_operational_hint", "\u771f\u7684\u8981%title%\u5417\uff1f", "js", "zh_CN");
+t.add("admin.user.lock_operational_hint_new", "%title%\u540e\u4e0d\u53ef\u6062\u590d\uff0c\u8bf7\u8c28\u614e\u64cd\u4f5c", "js", "zh_CN");
 t.add("admin.user.lock_operational_success_hint", "%title%\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.user.lock_operational_fail_hint", "%title%\u5931\u8d25", "js", "zh_CN");
 t.add("admin.user.sending_passwordreset_email_hint", "\u6b63\u5728\u53d1\u9001\u5bc6\u7801\u91cd\u7f6e\u9a8c\u8bc1\u90ae\u4ef6\uff0c\u8bf7\u7a0d\u7b49\u3002", "js", "zh_CN");
@@ -1633,6 +1634,8 @@ t.add("course.task.out_focus_mask.stop.tips", "<p class=\"ineffective-learning\"
 t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">\u8bf7\u52ff\u540c\u65f6\u591a\u5f00\u4efb\u52a1\u5b66\u4e60<\/p> <p class=\"kick-each-other\">\u4e0d\u8981\u4e00\u5fc3\u591a\u7528\u54e6\uff01<\/p>\n", "js", "zh_CN");
 t.add("classroom.manage.data_statistics.echarts.student_increase_num", "\u65b0\u589e\u6b63\u5f0f\u5b66\u5458", "js", "zh_CN");
 t.add("classroom.manage.data_statistics.echarts.auditor_increase_num", "\u65b0\u589e\u65c1\u542c\u751f", "js", "zh_CN");
+t.add("classroom.empty.course", "\u6682\u65e0\u8bfe\u7a0b", "js", "zh_CN");
+t.add("classroom.search.empty.course", "\u6682\u65f6\u6ca1\u6709\u5408\u9002\u7684\u8bfe\u7a0b~", "js", "zh_CN");
 t.add("course.intro.wechat_subscribe", "\u8bf7\u70b9\u6b64\u8ba2\u9605\u8bfe\u7a0b\u76f8\u5173\u901a\u77e5", "js", "zh_CN");
 t.add("admin_v2.operation.report_content_audit.batch_operate_tips", "\u8bf7\u5148\u9009\u62e9\u8981\u6279\u91cf\u64cd\u4f5c\u7684\u5185\u5bb9", "js", "zh_CN");
 t.add("admin_v2.operation.report_content_audit.batch_operate_success_tips", "\u64cd\u4f5c\u6210\u529f", "js", "zh_CN");
