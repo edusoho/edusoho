@@ -103,17 +103,13 @@ class AnswerController extends BaseController
         $category = $this->getItemCategoryService()->getItemCategory($categoryId);
         $items = $this->getItemService()->searchItems(['bank_id' => $category['bank_id'], 'category_id' => $categoryId], [], 0, PHP_INT_MAX);
 
-        $chapterInfo = [
+        return $this->render('item-bank-exercise/answer/category-info-modal.html.twig', [
             'typesNum' => $this->getItemService()->countItemTypesNum($items),
             'total' => $category['item_num'],
             'chapterName' => $category['name'],
             'categoryId' => $category['id'],
             'moduleId' => $moduleId,
             'exerciseId' => $exerciseId,
-        ];
-
-        return $this->render('item-bank-exercise/answer/category-info-modal.html.twig', [
-            'chapterInfo' => $chapterInfo,
         ]);
     }
 
