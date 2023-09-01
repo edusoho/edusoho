@@ -100,6 +100,11 @@ class TaskStartAnswer extends AbstractResource
             throw ExerciseException::EXERCISE_IS_DOING();
         }
 
+        if (empty($assessmentId)) {
+            $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
+            $assessmentId = $assessment['id'];
+        }
+
         if (!$this->getExerciseActivityService()->isExerciseAssessment($assessmentId, $activity['ext'])) {
             throw ExerciseException::EXERCISE_NOTDO();
         }

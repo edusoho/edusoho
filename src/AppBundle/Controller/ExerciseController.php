@@ -49,24 +49,6 @@ class ExerciseController extends BaseController
         ]);
     }
 
-    protected function createAssessment($name, $range, $sections)
-    {
-        $sections = $this->getAssessmentService()->drawItems($range, $sections);
-        $assessment = [
-            'name' => $name,
-            'displayable' => 0,
-            'description' => '',
-            'bank_id' => $range['bank_id'],
-            'sections' => $sections,
-        ];
-
-        $assessment = $this->getAssessmentService()->createAssessment($assessment);
-
-        $this->getAssessmentService()->openAssessment($assessment['id']);
-
-        return $assessment;
-    }
-
     public function showResultAction(Request $request, $answerRecordId)
     {
         if (!$this->canLookAnswerRecord($answerRecordId)) {

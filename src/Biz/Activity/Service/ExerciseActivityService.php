@@ -17,4 +17,6 @@ interface ExerciseActivityService
     public function getByAnswerSceneId($answerSceneId);
 
     public function isExerciseAssessment($assessmentId, $exerciseActivity);
+
+    public function createExerciseAssessment($activity);
 }
