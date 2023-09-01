@@ -9,6 +9,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\FileToolkit;
 use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Classroom\ClassroomException;
 use Biz\Common\CommonException;
 use Biz\Course\MemberException;
@@ -268,7 +269,7 @@ class CourseTaskMedia extends AbstractResource
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
         $testpaperWrapper = new TestpaperWrapper();
         if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
-            $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], [$activity['ext']['drawCondition']['section']]);
+            $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
             $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
             $activity['ext']['latestExerciseResult'] = null;
@@ -291,27 +292,9 @@ class CourseTaskMedia extends AbstractResource
             $answerReport ?? []
         );
 
-        $activity['ext']['itemCounts'] = $activity['ext']['metas']['counts'] ?: (object)[];
+        $activity['ext']['itemCounts'] = $activity['ext']['metas']['counts'] ?: (object) [];
 
         return $activity['ext'];
-    }
-
-    protected function createAssessment($name, $range, $sections)
-    {
-        $sections = $this->getAssessmentService()->drawItems($range, $sections);
-        $assessment = [
-            'name' => $name,
-            'displayable' => 0,
-            'description' => '',
-            'bank_id' => $range['bank_id'],
-            'sections' => $sections,
-        ];
-
-        $assessment = $this->getAssessmentService()->createAssessment($assessment);
-
-        $this->getAssessmentService()->openAssessment($assessment['id']);
-
-        return $assessment;
     }
 
     protected function getAudio($course, $task, $activity, $request, $ssl = false)
@@ -545,5 +528,13 @@ class CourseTaskMedia extends AbstractResource
     protected function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ExerciseActivityService
+     */
+    protected function getExerciseActivityService()
+    {
+        return $this->service('Activity:ExerciseActivityService');
     }
 }

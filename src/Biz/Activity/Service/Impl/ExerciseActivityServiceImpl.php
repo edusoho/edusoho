@@ -48,6 +48,29 @@ class ExerciseActivityServiceImpl extends BaseService implements ExerciseActivit
         return true;
     }
 
+    public function createExerciseAssessment($activity)
+    {
+        $range = $activity['ext']['drawCondition']['range'];
+        $sections = $this->getAssessmentService()->drawItems(
+            $range,
+            [$activity['ext']['drawCondition']['section']]
+        );
+
+        $assessment = [
+            'name' => $activity['title'],
+            'displayable' => 0,
+            'description' => '',
+            'bank_id' => $range['bank_id'],
+            'sections' => $sections,
+        ];
+
+        $assessment = $this->getAssessmentService()->createAssessment($assessment);
+
+        $this->getAssessmentService()->openAssessment($assessment['id']);
+
+        return $assessment;
+    }
+
     public function createActivity($fields)
     {
         return $this->getExerciseActivityDao()->create($fields);
