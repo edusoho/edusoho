@@ -17,6 +17,7 @@ use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskService;
 use Biz\Util\EdusohoLiveClient;
+use Symfony\Component\HttpFoundation\Response;
 
 // Refactor: 该类不应该在Course模块，应该在和LiveActivity放一块，或者另启一个模块LiveRoom
 class LiveReplayServiceImpl extends BaseService implements LiveReplayService
@@ -198,7 +199,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
 
         if (isset($replayList['error']) && !empty($replayList['error'])) {
             //抛出异常
-            $this->handleReplayErrorException($liveId, $replayList['error'], 500);
+            $this->handleReplayErrorException($liveId, $replayList['error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $this->deleteReplayByLessonId($lessonId, $type);
