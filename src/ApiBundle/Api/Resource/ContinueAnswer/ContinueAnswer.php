@@ -55,7 +55,7 @@ class ContinueAnswer extends AbstractResource
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         if (ExerciseMode::SUBMIT_SINGLE == $answerRecord['exercise_mode']) {
             $reviewedCount = $this->getAnswerReviewedQuestionService()->countReviewedByAnswerRecordId($answerRecord['id']);
-            $submitSingle = $this->getAnswerService()->getSingleSubmitInfo($answerRecord['id'], $assessment, $answerScene);
+            $submittedQuestions = $this->getAnswerService()->getSubmittedQuestions($answerRecord['id']);
         }
 
         return [
@@ -65,7 +65,7 @@ class ContinueAnswer extends AbstractResource
             'answer_record' => $answerRecord,
             'metaActivity' => empty($activity) ? (object) [] : $activity,
             'reviewedCount' => $reviewedCount ?? 0,
-            'submitSingleInfo' => $submitSingle ?? [],
+            'submittedQuestions' => $submittedQuestions ?? [],
         ];
     }
 

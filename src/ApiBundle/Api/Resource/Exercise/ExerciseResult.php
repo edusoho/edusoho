@@ -81,10 +81,10 @@ class ExerciseResult extends AbstractResource
 
         if (ExerciseMode::SUBMIT_SINGLE == $answerRecord['exercise_mode']) {
             $reviewedCount = $this->getAnswerReviewedQuestionService()->countReviewedByAnswerRecordId($answerRecord['id']);
-            $submitSingle = $this->getAnswerService()->getSingleSubmitInfo($answerRecord['id'], $assessment, $answerScene);
+            $submittedQuestions = $this->getAnswerService()->getSubmittedQuestions($answerRecord['id']);
         }
         $exerciseResult['reviewedCount'] = $reviewedCount ?? 0;
-        $exerciseResult['submitSingle'] = $submitSingle ?? [];
+        $exerciseResult['submittedQuestions'] = $submittedQuestions ?? [];
 
         return $exerciseResult;
     }

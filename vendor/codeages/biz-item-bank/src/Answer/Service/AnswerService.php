@@ -93,5 +93,5 @@ interface AnswerService
 
     public function finishAnswer($answerRecordId);
 
-    public function getSingleSubmitInfo($answerRecordId, $assessment, $answerScene);
+    public function getSubmittedQuestions($answerRecordId);
 }
