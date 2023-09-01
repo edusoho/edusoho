@@ -244,6 +244,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     public function submitSingleAnswer($answerRecordId, $params)
     {
+        $reviewedQuestion = $this->getAnswerReviewedQuestionService()->getByAnswerRecordIdAndQuestionId($answerRecordId, $params['question_id']);
+        if ($reviewedQuestion) {
+            throw new AnswerException('该题已提交，不能再次提交', ErrorCode::ANSWER_SUMBMITTED);
+        }
+
         $answerQuestionReport = $this->reviewSingleAnswer($answerRecordId, $params);
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
 
@@ -637,6 +642,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     public function reviewSingleAnswerByManual($answerRecordId, $params)
     {
+        $reviewedQuestion = $this->getAnswerReviewedQuestionService()->getByAnswerRecordIdAndQuestionId($answerRecordId, $params['question_id']);
+        if (empty($reviewedQuestion)) {
+            throw new AnswerException('该题还未提交，不能批阅', ErrorCode::ANSWER_NOT_SUBMIT);
+        }
+        if ($reviewedQuestion['is_reviewed']) {
+            throw new AnswerException('该题已批阅，不能再次批阅', ErrorCode::ANSWER_REVIEWED);
+        }
+
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         $questionReport = $this->getAnswerQuestionReportService()->getByAnswerRecordIdAndQuestionId($answerRecordId, $params['question_id']);
         if (empty($questionReport)) {
