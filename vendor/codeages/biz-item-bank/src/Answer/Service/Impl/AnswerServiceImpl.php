@@ -244,6 +244,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     public function submitSingleAnswer($answerRecordId, $params)
     {
+        $reviewedQuestion = $this->getAnswerReviewedQuestionService()->getByAnswerRecordIdAndQuestionId($answerRecordId, $params['question_id']);
+        if ($reviewedQuestion) {
+            throw new AnswerException('该题已提交，不能再次提交', ErrorCode::ANSWER_SUMBMITTED);
+        }
+
         $answerQuestionReport = $this->reviewSingleAnswer($answerRecordId, $params);
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
 

@@ -113,4 +113,9 @@ class ErrorCode
      * 答题已结束
      */
     const ANSWER_FINISHED = 40095204;
+
+    /**
+     * 题目已提交
+     */
+    const ANSWER_SUMBMITTED = 40095205;
 }
