@@ -28,17 +28,20 @@ class ExerciseController extends BaseController
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
 
-        if (!$this->getExerciseActivityService()->isExerciseAssessment($request->get('assessmentId'), $activity['ext'])) {
-            $this->createNewException(ExerciseException::EXERCISE_NOTDO());
-        }
-
         $user = $this->getCurrentUser();
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
         if ($latestAnswerRecord && AnswerRecordStatus::FINISHED != $latestAnswerRecord['status'] && ExerciseMode::SUBMIT_SINGLE == $latestAnswerRecord['exercise_mode']) {
             $this->createNewException(ExerciseException::EXERCISE_IS_DOING());
         }
         if (empty($latestAnswerRecord) || AnswerRecordStatus::FINISHED === $latestAnswerRecord['status']) {
-            $latestAnswerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $request->get('assessmentId'), $user['id']);
+            $assessmentId = $request->get('assessmentId');
+            if (empty($assessmentId)) {
+                $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
+                $assessmentId = $assessment['id'];
+            } elseif (!$this->getExerciseActivityService()->isExerciseAssessment($assessmentId, $activity['ext'])) {
+                $this->createNewException(ExerciseException::EXERCISE_NOTDO());
+            }
+            $latestAnswerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessmentId, $user['id']);
         }
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
