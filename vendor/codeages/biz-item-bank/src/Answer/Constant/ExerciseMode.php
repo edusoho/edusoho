@@ -2,7 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Constant;
 
-class ExerciseMode
+final class ExerciseMode
 {
     const SUBMIT_ALL = 0;
 

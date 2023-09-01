@@ -2,7 +2,7 @@
 
 namespace Biz\Activity\Constant;
 
-class ActivityMediaType
+final class ActivityMediaType
 {
     const HOMEWORK = 'homework';
 
