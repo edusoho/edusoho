@@ -19,6 +19,7 @@ use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -77,6 +78,13 @@ class ExerciseResult extends AbstractResource
         $exerciseResult = $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $answerScene, $answerReport);
         $exerciseResult['items'] = array_values($items);
         $exerciseResult['courseId'] = $course['id'];
+
+        if (ExerciseMode::SUBMIT_SINGLE == $answerRecord['exercise_mode']) {
+            $reviewedCount = $this->getAnswerReviewedQuestionService()->countReviewedByAnswerRecordId($answerRecord['id']);
+            $submittedQuestions = $this->getAnswerService()->getSubmittedQuestions($answerRecord['id']);
+        }
+        $exerciseResult['reviewedCount'] = $reviewedCount ?? 0;
+        $exerciseResult['submittedQuestions'] = $submittedQuestions ?? [];
 
         return $exerciseResult;
     }
@@ -278,5 +286,13 @@ class ExerciseResult extends AbstractResource
     protected function getExerciseActivityService()
     {
         return $this->service('Activity:ExerciseActivityService');
+    }
+
+    /**
+     * @return AnswerReviewedQuestionService
+     */
+    protected function getAnswerReviewedQuestionService()
+    {
+        return $this->service('ItemBank:Answer:AnswerReviewedQuestionService');
     }
 }

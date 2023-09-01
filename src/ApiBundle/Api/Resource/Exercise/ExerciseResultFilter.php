@@ -10,7 +10,7 @@ class ExerciseResultFilter extends Filter
     protected $publicFields = [
         'id', 'paperName', 'testId', 'userId', 'score', 'objectiveScore', 'subjectiveScore', 'teacherSay', 'rightItemCount', 'passedStatus',
         'limitedTime', 'beginTime', 'endTime', 'status', 'checkTeacherId', 'checkedTime', 'usedTime', 'migrateResultId', 'items', 'rightRate',
-        'admission_ticket', 'courseId', 'exerciseMode',
+        'admission_ticket', 'courseId', 'exerciseMode', 'reviewedCount', 'submittedQuestions',
     ];
 
     protected $simpleFields = [

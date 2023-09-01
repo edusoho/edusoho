@@ -682,6 +682,39 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $answerRecord;
     }
 
+    public function getSubmittedQuestions($answerRecordId)
+    {
+        $reviewedQuestions = $this->getAnswerReviewedQuestionService()->findByAnswerRecordId($answerRecordId);
+        if (empty($reviewedQuestions)) {
+            return [];
+        }
+        $reviewedQuestions = ArrayToolkit::index($reviewedQuestions, 'question_id');
+
+        $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
+        if (empty($answerQuestionReports)) {
+            return [];
+        }
+        $answerQuestionReports = ArrayToolkit::index($answerQuestionReports, 'question_id');
+
+        $questions = $this->getItemService()->findQuestionsByQuestionIds(array_column($reviewedQuestions, 'question_id'));
+        if (empty($questions)) {
+            return [];
+        }
+
+        $submittedQuestions = [];
+        foreach ($reviewedQuestions as $questionId => $reviewedQuestion) {
+            $submittedQuestions[] = [
+                'questionId' => $questionId,
+                'answer' => $questions[$questionId]['answer'],
+                'analysis' => $questions[$questionId]['analysis'],
+                'manualMarking' => $reviewedQuestion['is_reviewed'] ? 0 : 1,
+                'status' => $answerQuestionReports[$questionId]['status'],
+            ];
+        }
+
+        return $submittedQuestions;
+    }
+
     private function generateNoAnswerQuestionReports($answerRecord)
     {
         $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($answerRecord['assessment_id']);
