@@ -67,7 +67,7 @@ class ExerciseResult extends AbstractResource
             }
 
             $answerRecord = $this->getAnswerService()->startAnswer($answerScene['id'], $assessment['id'], $user['id']);
-            $answerRecord = $this->getAnswerRecordService()->update($answerRecord['id'], ['exercise_mode' => $request->request->get('exerciseMode', '0')]);
+            $answerRecord = $this->getAnswerRecordService()->update($answerRecord['id'], ['exercise_mode' => $request->request->get('exerciseMode', ExerciseMode::SUBMIT_ALL)]);
         } elseif ('reviewing' != $answerRecord['status']) {
             $answerRecord = $this->getAnswerService()->continueAnswer($answerRecord['id']);
         }

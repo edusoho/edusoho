@@ -12,8 +12,6 @@ interface AnswerService
 
     const ANSWER_RECORD_STATUS_FINISHED = 'finished';
 
-    const EXERCISE_MODE_SUBMIT_SINGLE = '1';
-
     /**
      * 开始答题
      *
