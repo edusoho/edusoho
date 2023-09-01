@@ -99,7 +99,7 @@ class CourseController extends BaseController
 
         //课程数据 ?title=
         $title = trim($request->get('title', ''));
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomIdAndTitle($classroomId, $title);
+        $courses = $this->getClassroomService()->findSortedCoursesByClassroomIdAndTitle($classroomId, $title);
         $currentUser = $this->getCurrentUser();
         $courseMembers = $teachers = [];
         foreach ($courses as &$course) {
@@ -128,7 +128,7 @@ class CourseController extends BaseController
             $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
             $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
 
-            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'preview' => 'guest' == $previewAs ? 1 : 0]));
+            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'preview' => 'guest' == $request->query->get('previewAs', '') ? 1 : 0]));
         }
 
         //是否注册了vip
