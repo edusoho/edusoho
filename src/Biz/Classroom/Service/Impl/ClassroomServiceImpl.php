@@ -112,24 +112,22 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $sortedCourses;
     }
 
-    public function findActiveCoursesByClassroomIdAndTitle(int $classroomId, string $title)
+    public function findSortedCoursesByClassroomIdAndTitle(int $classroomId, string $title)
     {
         $classroomCourses = $this->getClassroomCourseDao()->findActiveCoursesByClassroomId($classroomId);
         if (empty($classroomCourses)) {
             return [];
         }
 
-        $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
-        $courses = $this->getCourseService()->findCoursesByIdsAndCourseSetTitle($courseIds, $title);
-
+        $courses = $this->getCourseService()->findCoursesByIdsAndCourseSetTitle(ArrayToolkit::column($classroomCourses, 'courseId'), $title);
         if (empty($courses)) {
             return [];
         }
 
         $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
-        $courseIds = ArrayToolkit::column($courses, 'id');
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
         $courseSets = ArrayToolkit::index($courseSets, 'id');
+        $courseIds = ArrayToolkit::column($courses, 'id');
 
         $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds($courseSetIds);
         $courseNums = ArrayToolkit::index($courseNums, 'courseSetId');
@@ -1493,7 +1491,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $sortedCourses;
     }
 
-    public function findCoursesByClassroomIdAndCourseSetTitle(int $classroomId, string $title)
+    public function findSortedCoursesByClassroomIdAndCourseSetTitle(int $classroomId, string $title)
     {
         $classroomCourses = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
         $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');

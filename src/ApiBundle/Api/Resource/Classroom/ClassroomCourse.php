@@ -18,7 +18,7 @@ class ClassroomCourse extends AbstractResource
     {
         $title = trim($request->query->get('title', ''));
         if ($title) {
-            $courses = $this->getClassroomService()->findCoursesByClassroomIdAndCourseSetTitle($classroomId, $title);
+            $courses = $this->getClassroomService()->findSortedCoursesByClassroomIdAndCourseSetTitle($classroomId, $title);
         } else {
             $courses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
         }

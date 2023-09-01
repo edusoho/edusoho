@@ -99,7 +99,7 @@ class CourseController extends BaseController
 
         //课程数据 ?title=
         $title = trim($request->get('title', ''));
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomIdAndTitle($classroomId, $title);
+        $courses = $this->getClassroomService()->findSortedCoursesByClassroomIdAndTitle($classroomId, $title);
         $currentUser = $this->getCurrentUser();
         $courseMembers = $teachers = [];
         foreach ($courses as &$course) {

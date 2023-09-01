@@ -20,7 +20,7 @@ interface CourseDao extends GeneralDaoInterface
 
     public function findCoursesByIds($ids);
 
-    public function findCoursesByIdsAndCourseSetTitle($ids, $title);
+    public function findCoursesByIdsAndCourseSetTitleLike($ids, $title);
 
     public function findCoursesByCategoryIds($categoryIds);
 
