@@ -128,6 +128,7 @@ abstract class BaseRegister
         }
 
         $user['uuid'] = $this->getUserService()->generateUUID();
+        $user['inviteCode'] = $registration['invitedCode'] ?? null;
 
         return [$user, $registration];
     }
@@ -248,7 +249,6 @@ abstract class BaseRegister
         $invitedCode = empty($originUser['invitedCode']) ? '' : $originUser['invitedCode'];
         $invitedCode = empty($registration['invitedCode']) ? $invitedCode : $registration['invitedCode'];
         $inviteUser = empty($invitedCode) ? [] : $this->getUserDao()->getByInviteCode($invitedCode);
-
         if (!empty($inviteUser)) {
             $this->getInviteRecordService()->createInviteRecord($inviteUser['id'], $userId);
             $invitedCoupon = $this->getCouponService()->generateInviteCoupon($userId, 'register');

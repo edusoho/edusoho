@@ -17,7 +17,6 @@ use Biz\User\UserException;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class RegisterController extends BaseController
 {
@@ -71,6 +70,8 @@ class RegisterController extends BaseController
                     }
                 }
 
+                //获取GET地址的邀请码
+                $registration['invitedCode'] = trim($request->get('inviteCode', ''));
                 $registration['createdIp'] = $request->getClientIp();
                 $registration['registeredWay'] = 'web';
                 if ($this->isPluginInstalled('Drp')) {

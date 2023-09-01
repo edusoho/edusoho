@@ -31,7 +31,7 @@ define(function(require, exports, module) {
         $table.on('click', '.delete-user', function() {
             var $trigger = $(this);
 
-            if (!confirm(Translator.trans('admin.user.lock_operational_hint',{title:$trigger.attr('title')}))) {
+            if (!confirm(Translator.trans('admin.user.lock_operational_hint_new',{title:$trigger.attr('title')}))) {
                 return;
             }
 
