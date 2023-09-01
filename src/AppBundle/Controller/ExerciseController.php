@@ -60,6 +60,7 @@ class ExerciseController extends BaseController
             if (ExerciseMode::SUBMIT_SINGLE == $latestAnswerRecord['exercise_mode']) {
                 $this->createNewException(ExerciseException::EXERCISE_IS_DOING());
             }
+
             return $latestAnswerRecord;
         }
         if (empty($assessmentId)) {
