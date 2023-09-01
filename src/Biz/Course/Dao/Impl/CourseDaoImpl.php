@@ -75,7 +75,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $this->findInField('courseSetId', $setIds);
     }
 
-    public function findCoursesByIdsAndCourseSetTitle($ids, $title)
+    public function findCoursesByIdsAndCourseSetTitleLike($ids, $title)
     {
         if (empty($ids)) {
             return [];
