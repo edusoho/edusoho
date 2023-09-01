@@ -19,7 +19,6 @@ use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
-use Codeages\Biz\ItemBank\Item\Type\EssayItem;
 use Codeages\Biz\ItemBank\Item\Type\Question;
 use Ramsey\Uuid\Uuid;
 
@@ -695,13 +694,12 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         if (empty($answerQuestionReports)) {
             return [];
         }
+        $answerQuestionReports = ArrayToolkit::index($answerQuestionReports, 'question_id');
 
-        $questions = $this->getItemService()->findQuestionsByItemIds(array_column($answerQuestionReports, 'item_id'));
+        $questions = $this->getItemService()->findQuestionsByQuestionIds(array_column($reviewedQuestions, 'question_id'));
         if (empty($questions)) {
             return [];
         }
-        $questions = ArrayToolkit::index($questions, 'id');
-        $answerQuestionReports = ArrayToolkit::index($answerQuestionReports, 'question_id');
 
         $submittedQuestions = [];
         foreach ($reviewedQuestions as $questionId => $reviewedQuestion) {
@@ -709,7 +707,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 'questionId' => $questionId,
                 'answer' => $questions[$questionId]['answer'],
                 'analysis' => $questions[$questionId]['analysis'],
-                'isReviewed' => $reviewedQuestion['is_reviewed'] ? true : false,
                 'manualMarking' => $reviewedQuestion['is_reviewed'] ? 0 : 1,
                 'status' => $answerQuestionReports[$questionId]['status'],
             ];
