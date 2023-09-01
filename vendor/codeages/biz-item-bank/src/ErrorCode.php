@@ -118,4 +118,14 @@ class ErrorCode
      * 题目已提交
      */
     const ANSWER_SUMBMITTED = 40095205;
+
+    /**
+     * 题目未提交
+     */
+    const ANSWER_NOT_SUBMIT = 40095206;
+
+    /**
+     * 题目已批阅
+     */
+    const ANSWER_REVIEWED = 40095207;
 }
