@@ -2,7 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Constant;
 
-class AnswerRecordStatus
+final class AnswerRecordStatus
 {
     const DOING = 'doing';
 

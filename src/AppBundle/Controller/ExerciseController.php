@@ -17,7 +17,6 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class ExerciseController extends BaseController
 {
@@ -28,21 +27,7 @@ class ExerciseController extends BaseController
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
 
-        $user = $this->getCurrentUser();
-        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
-        if ($latestAnswerRecord && AnswerRecordStatus::FINISHED != $latestAnswerRecord['status'] && ExerciseMode::SUBMIT_SINGLE == $latestAnswerRecord['exercise_mode']) {
-            $this->createNewException(ExerciseException::EXERCISE_IS_DOING());
-        }
-        if (empty($latestAnswerRecord) || AnswerRecordStatus::FINISHED === $latestAnswerRecord['status']) {
-            $assessmentId = $request->get('assessmentId');
-            if (empty($assessmentId)) {
-                $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
-                $assessmentId = $assessment['id'];
-            } elseif (!$this->getExerciseActivityService()->isExerciseAssessment($assessmentId, $activity['ext'])) {
-                $this->createNewException(ExerciseException::EXERCISE_NOTDO());
-            }
-            $latestAnswerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessmentId, $user['id']);
-        }
+        $latestAnswerRecord = $this->getCurrentAnswerRecordOrStartNew($activity, $request->get('assessmentId'), $this->getCurrentUser()->getId());
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
@@ -68,6 +53,25 @@ class ExerciseController extends BaseController
         ]);
     }
 
+    private function getCurrentAnswerRecordOrStartNew($activity, $assessmentId, $userId)
+    {
+        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $userId);
+        if ($latestAnswerRecord && AnswerRecordStatus::FINISHED != $latestAnswerRecord['status']) {
+            if (ExerciseMode::SUBMIT_SINGLE == $latestAnswerRecord['exercise_mode']) {
+                $this->createNewException(ExerciseException::EXERCISE_IS_DOING());
+            }
+            return $latestAnswerRecord;
+        }
+        if (empty($assessmentId)) {
+            $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
+            $assessmentId = $assessment['id'];
+        } elseif (!$this->getExerciseActivityService()->isExerciseAssessment($assessmentId, $activity['ext'])) {
+            $this->createNewException(ExerciseException::EXERCISE_NOTDO());
+        }
+
+        return $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessmentId, $userId);
+    }
+
     protected function getActivityIdByAnswerSceneId($answerSceneId)
     {
         $activity = $this->getActivityService()->getActivityByAnswerSceneIdAndMediaType($answerSceneId, ActivityMediaType::EXERCISE);
@@ -89,7 +93,7 @@ class ExerciseController extends BaseController
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        if ('doing' === $answerRecord['status'] && ($answerRecord['user_id'] != $user['id'])) {
+        if (AnswerRecordStatus::DOING === $answerRecord['status'] && ($answerRecord['user_id'] != $user['id'])) {
             $this->createNewException(CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR());
         }
 
@@ -97,8 +101,7 @@ class ExerciseController extends BaseController
             return true;
         }
 
-        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerRecord['answer_scene_id']);
-        $activity = $this->getActivityService()->getByMediaIdAndMediaType($exerciseActivity['id'], 'testpaper');
+        $activity = $this->getActivityService()->getActivityByAnswerSceneIdAndMediaType($answerRecord['answer_scene_id'], ActivityMediaType::EXERCISE);
 
         $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
@@ -140,14 +143,6 @@ class ExerciseController extends BaseController
     }
 
     /**
-     * @return ServiceKernel
-     */
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
-    /**
      * @return TaskService
      */
     protected function getTaskService()
@@ -181,7 +176,7 @@ class ExerciseController extends BaseController
      */
     protected function getExerciseActivityService()
     {
-        return $this->getBiz()->service('Activity:ExerciseActivityService');
+        return $this->createService('Activity:ExerciseActivityService');
     }
 
     /**
