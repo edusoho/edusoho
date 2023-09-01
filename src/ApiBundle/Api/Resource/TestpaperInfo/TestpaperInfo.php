@@ -94,8 +94,7 @@ class TestpaperInfo extends AbstractResource
 
         $activity['ext']['remainderDoTimes'] = max($activity['ext']['doTimes'] - ($countTestpaperRecord ?: 0), 0);
 
-        if (!empty($testpaperRecord) && ($testpaperRecord['assessment_id'] == $activity['ext']['mediaId'])) {
-
+        if (!empty($testpaperRecord)) {
             $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_report_id']);
             $testpaperWrapper = new TestpaperWrapper();
             $testpaperResult = $testpaperWrapper->wrapTestpaperResult($testpaperRecord, $testpaper, $scene, $answerReport);
