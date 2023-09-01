@@ -222,11 +222,7 @@
         },
         methods: {
             searchCourse(value) {
-              if (value) {
-                this.isSearch = true
-              } else {
-                this.isSearch = false
-              }
+              this.isSearch = Boolean(value)
 
               axios.get(`/api/classrooms/${this.goods.product.targetId}/courses`, {
                     params: {
