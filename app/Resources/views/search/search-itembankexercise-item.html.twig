@@ -3,7 +3,7 @@
 
   <div class="course-img">
     <a href="{{ itembankExercise_show_url }}" target="_blank">
-      <img class="img-responsive" src="{{ filepath(itemBankExercise.cover, 'item_bank_exercise.png') }}" alt="">
+      <img class="img-responsive" src="{{ filepath(itemBankExercise.cover.large|default(null), 'item_bank_exercise.png') }}" alt="">
     </a>
   </div>
   <div class="course-info">
