@@ -197,7 +197,8 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         }
 
         if (isset($replayList['error']) && !empty($replayList['error'])) {
-            throw $this->createServiceException($replayList['error'], 500);
+            //抛出异常
+            $this->handleReplayErrorException($liveId, $replayList['error'], 500);
         }
 
         $this->deleteReplayByLessonId($lessonId, $type);
@@ -223,6 +224,24 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         $this->dispatchEvent('live.replay.generate', $replays);
 
         return $replayList;
+    }
+
+    /**
+     * 处理直播回放返回的错误数据 对直播的返回进行重新返回
+     * 此处的匹配是根据教育云返回的字符串进行匹配 若教育云返回消息变了这个代码将失效
+     */
+    public function handleReplayErrorException(int $liveId, string $message, int $code)
+    {
+        if ('回放状态错误，当前状态：none' == $message) {
+            $message = '该直播无回放（未上课或未录制）';
+
+            $liveActivity = $this->getLiveActivityDao()->getByLiveId($liveId);
+            if ($liveActivity && LiveReplayService::REPLAY_FAILURE_STATUS != $liveActivity['replayStatus']) {
+                $this->getLiveActivityDao()->update($liveActivity['id'], ['replayStatus' => LiveReplayService::REPLAY_FAILURE_STATUS]);
+            }
+        }
+
+        throw $this->createServiceException($message, $code);
     }
 
     public function handleReplayGenerateEvent($liveId, $replayDatas)
