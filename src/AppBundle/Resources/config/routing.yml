@@ -4025,6 +4025,10 @@ item_bank_exercise_category_answer:
     path: '/item_bank_exercise/{exerciseId}/module/{moduleId}/category/{categoryId}/answer'
     defaults:
         _controller: 'AppBundle:ItemBankExercise/Answer:categoryAnswer'
+item_bank_exercise_category_info_modal:
+    path: '/item_bank_exercise/{exerciseId}/module/{moduleId}/category/{categoryId}/info_modal'
+    defaults:
+        _controller: 'AppBundle:ItemBankExercise/Answer:categoryInfoModal'
 goods_show:
     path: '/goods/show/{id}'
     defaults:
