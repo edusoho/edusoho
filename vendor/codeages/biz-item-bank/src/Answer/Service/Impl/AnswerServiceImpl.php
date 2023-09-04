@@ -722,6 +722,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 'analysis' => $questions[$questionId]['analysis'],
                 'manualMarking' => $reviewedQuestion['is_reviewed'] ? 0 : 1,
                 'status' => $answerQuestionReports[$questionId]['status'],
+                'response' => $answerQuestionReports[$questionId]['response'],
             ];
         }
 
