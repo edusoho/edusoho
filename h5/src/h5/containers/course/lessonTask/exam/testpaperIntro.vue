@@ -290,6 +290,7 @@ export default {
         },
       })
         .then(res => {
+          this.testId = res.testpaper.id
           this.canDoAgain = res.task.activity.testpaperInfo.canDoAgain === '1';
 					if(this.canDoAgain){
 						if (this.enable_facein === 1) {
