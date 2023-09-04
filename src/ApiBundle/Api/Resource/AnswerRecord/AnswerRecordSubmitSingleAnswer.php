@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\AnswerRecord;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
@@ -22,7 +23,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
     {
         $params = $request->request->all();
         $this->validateParams($answerRecordId, $params);
-        $params = $this->trimResponse($params);
+        $params['response'] = ArrayToolkit::trim($params['response']);
 
         $questionReport = $this->getAnswerService()->submitSingleAnswer($answerRecordId, $params);
 
@@ -38,6 +39,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
         $question = $this->getItemService()->getQuestion($questionReport['question_id']);
 
         return [
+            'response' => $params['response'],
             'answer' => $question['answer'],
             'itemAnalysis' => $item['analysis'],
             'questionAnalysis' => $question['analysis'],
@@ -85,15 +87,6 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
         if (!in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_DOING, AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
             throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
         }
-    }
-
-    protected function trimResponse($params)
-    {
-        foreach ($params['response'] as &$response) {
-            $response = trim($response);
-        }
-
-        return $params;
     }
 
     /**
