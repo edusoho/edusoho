@@ -15,7 +15,7 @@
     <div class="class-course-list">
       <form class="search-form" method="get">
         <input class="search-input-content inline-block" type="text" name="title" value="{{ app.request.get("title") }}" placeholder="{{ 'course.placeholder.name'|trans }}" />
-        <button class="btn btn-primary inline-block searchCourseBtn es-icon es-icon-search" type="submit">{{'form.btn.search'|trans}}</button>
+        <button class="btn btn-primary inline-block searchCourseBtn es-icon es-icon-search" type="submit"></button>
       </form>
       
       {% if courses|default(null) %}
