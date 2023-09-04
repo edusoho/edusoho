@@ -13,9 +13,9 @@
     {% endif %}
 
     <div class="class-course-list">
-      <form method="get">
-        <input type="text" name="title" value="{{ app.request.get("title") }}" placeholder="{{ 'course.placeholder.name'|trans }}" />
-        <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+      <form class="search-form" method="get">
+        <input class="search-input-content inline-block" type="text" name="title" value="{{ app.request.get("title") }}" placeholder="{{ 'course.placeholder.name'|trans }}" />
+        <button class="btn btn-primary inline-block searchCourseBtn es-icon es-icon-search" type="submit">{{'form.btn.search'|trans}}</button>
       </form>
       
       {% if courses|default(null) %}
@@ -68,7 +68,7 @@
       {% else %}
         <div class="emptyCourse">
           <img class="emptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
-          <p class="emptyCourseContent">{{ 'classroom.empty.course' | trans }}</p>
+          <p class="emptyCourseContent">{{ 'classroom.search.empty.course' | trans }}</p>
         </div>
       {% endif %}
     </div>

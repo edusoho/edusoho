@@ -2177,6 +2177,7 @@ open_course.lesson.create_success: Lesson create success
 open_course.lesson.create_error: Lesson create error
 classroom: Class
 column: Column
+classroom.search.empty.course: There are currently no suitable courses available~
 classroom.name: Class Name
 classroom.buy_classroom.purchase_timeout_tips: 'Please complete the payment within 30 minutes, otherwise the order will be expired.'
 classroom.buy_classroom.no_avatar_tips: 'You have no avatar,please set an avatar to enroll courses<br />An unique avatar makes it easier to draw attentions from your teachers or classmates. <a href="%avatarSettingUrl%" class="alert-link" target="_blank">Click to set</a>'
