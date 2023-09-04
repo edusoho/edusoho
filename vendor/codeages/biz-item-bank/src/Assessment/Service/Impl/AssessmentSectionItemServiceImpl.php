@@ -126,6 +126,19 @@ class AssessmentSectionItemServiceImpl extends BaseService implements Assessment
         return $this->getAssessmentSectionItemDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
+    public function findSectionItemsByAssessmentIds($assessmentIds)
+    {
+        return $this->getAssessmentSectionItemDao()->findByAssessmentIds($assessmentIds);
+    }
+
+    public function createAssessmentSectionItems($items)
+    {
+        if (empty($items)) {
+            return;
+        }
+        $this->getAssessmentSectionItemDao()->batchCreate($items);
+    }
+
     protected function getScoreRuleProcessor()
     {
         return $this->biz['score_rule_processor'];

@@ -7,6 +7,7 @@ use Codeages\Biz\ItemBank\Answer\Dao\AnswerRecordDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerReportDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerSceneDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerSceneQuestionReportDao;
+use Codeages\Biz\ItemBank\Assessment\Dao\AssessmentSnapshotDao;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService;
@@ -380,6 +381,77 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         return $this->getItemService()->countItemTypesNum($items);
     }
 
+    public function createAssessmentSnapshotsIncludeSectionsAndItems(array $assessmentIds)
+    {
+        if (empty($assessmentIds)) {
+            return;
+        }
+        $assessments = $this->findAssessmentsByIds($assessmentIds);
+        $assessmentSnapshots = $this->createAssessmentSnapshots($assessments);
+        $this->createSnapshotAssessmentSectionsAndItems($assessmentSnapshots);
+    }
+
+    private function createAssessmentSnapshots($assessments)
+    {
+        $assessmentSnapshots = [];
+        foreach ($assessments as $assessment) {
+            $assessmentSnapshot = ['origin_assessment_id' => $assessment['id']];
+            unset($assessment['id']);
+            $assessment['displayable'] = 0;
+            $snapshotAssessment = $this->getAssessmentDao()->create($assessment);
+            $assessmentSnapshot['snapshot_assessment_id'] = $snapshotAssessment['id'];
+            $assessmentSnapshots[] = $assessmentSnapshot;
+        }
+        $this->getAssessmentSnapshotDao()->batchCreate($assessmentSnapshots);
+
+        return $assessmentSnapshots;
+    }
+
+    private function createSnapshotAssessmentSectionsAndItems($assessmentSnapshots)
+    {
+        $originAssessmentIds = array_column($assessmentSnapshots, 'origin_assessment_id');
+        $originAssessmentSections = $this->getSectionService()->findSectionsByAssessmentIds($originAssessmentIds);
+        $assessmentSnapshots = array_column($assessmentSnapshots, null, 'origin_assessment_id');
+        $assessmentSectionSnapshots = $this->createSnapshotAssessmentSections($originAssessmentSections, $assessmentSnapshots);
+        $this->createSnapshotAssessmentSectionItems($originAssessmentIds, $assessmentSnapshots, $assessmentSectionSnapshots);
+    }
+
+    private function createSnapshotAssessmentSections($originAssessmentSections, $assessmentSnapshots)
+    {
+        $snapshotAssessmentSections = [];
+        foreach ($originAssessmentSections as $originAssessmentSection) {
+            $originAssessmentSection['assessment_id'] = $assessmentSnapshots[$originAssessmentSection['assessment_id']]['snapshot_assessment_id'];
+            $snapshotAssessmentSections[] = $originAssessmentSection;
+        }
+        $this->getSectionService()->createAssessmentSections($snapshotAssessmentSections);
+        $snapshotAssessmentSections = $this->getSectionService()->findSectionsByAssessmentIds(array_column($assessmentSnapshots, 'snapshot_assessment_id'));
+
+        return $this->buildAssessmentSectionSnapshots($originAssessmentSections, $snapshotAssessmentSections);
+    }
+
+    private function createSnapshotAssessmentSectionItems($originAssessmentIds, $assessmentSnapshots, $assessmentSectionSnapshots)
+    {
+        $originAssessmentSectionItems = $this->getSectionItemService()->findSectionItemsByAssessmentIds($originAssessmentIds);
+        $snapshotAssessmentSectionItems = [];
+        foreach ($originAssessmentSectionItems as $originAssessmentSectionItem) {
+            $originAssessmentSectionItem['assessment_id'] = $assessmentSnapshots[$originAssessmentSectionItem['assessment_id']]['snapshot_assessment_id'];
+            $originAssessmentSectionItem['section_id'] = $assessmentSectionSnapshots[$originAssessmentSectionItem['section_id']]['id'];
+            $snapshotAssessmentSectionItems[] = $originAssessmentSectionItem;
+        }
+        $this->getSectionItemService()->createAssessmentSectionItems($snapshotAssessmentSectionItems);
+    }
+
+    private function buildAssessmentSectionSnapshots($originAssessmentSections, $snapshotAssessmentSections)
+    {
+        $snapshotAssessmentSections = ArrayToolkit::groupIndex($snapshotAssessmentSections, 'assessment_id', 'seq');
+        $assessmentSectionSnapshots = [];
+        foreach ($originAssessmentSections as $originAssessmentSection) {
+            $assessmentSectionSnapshots[$originAssessmentSection['id']] = $snapshotAssessmentSections[$originAssessmentSection['assessment_id']][$originAssessmentSection['seq']];
+        }
+
+        return $assessmentSectionSnapshots;
+    }
+
     protected function findExportItems($sections, $sectionItems)
     {
         $exportItems = [];
@@ -465,5 +537,13 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
     protected function getItemBankService()
     {
         return $this->biz->service('ItemBank:ItemBank:ItemBankService');
+    }
+
+    /**
+     * @return AssessmentSnapshotDao
+     */
+    protected function getAssessmentSnapshotDao()
+    {
+        return $this->biz->dao('ItemBank:Assessment:AssessmentSnapshotDao');
     }
 }

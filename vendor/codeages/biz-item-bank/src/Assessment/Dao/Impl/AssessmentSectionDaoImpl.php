@@ -23,6 +23,11 @@ class AssessmentSectionDaoImpl extends AdvancedDaoImpl implements AssessmentSect
         return $this->db()->executeUpdate($sql, [$assessmentId]);
     }
 
+    public function findByAssessmentIds($assessmentIds)
+    {
+        return $this->findInField('assessment_id', $assessmentIds);
+    }
+
     public function declares()
     {
         return array(

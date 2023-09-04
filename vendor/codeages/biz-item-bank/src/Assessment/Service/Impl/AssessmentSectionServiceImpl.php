@@ -99,6 +99,19 @@ class AssessmentSectionServiceImpl extends BaseService implements AssessmentSect
         return $this->getAssessmentSectionDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
+    public function findSectionsByAssessmentIds($assessmentIds)
+    {
+        return $this->getAssessmentSectionDao()->findByAssessmentIds($assessmentIds);
+    }
+
+    public function createAssessmentSections($assessmentSections)
+    {
+        if (empty($assessmentSections)) {
+            return;
+        }
+        $this->getAssessmentSectionDao()->batchCreate($assessmentSections);
+    }
+
     /**
      * @return AssessmentSectionDao
      */

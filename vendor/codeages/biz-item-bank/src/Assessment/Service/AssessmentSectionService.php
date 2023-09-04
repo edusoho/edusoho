@@ -20,5 +20,9 @@ interface AssessmentSectionService
 
     public function countAssessmentSections($conditions);
 
-    public function searchAssessmentSections($conditions, $orderBys, $start, $limit, $columns = array());
+    public function searchAssessmentSections($conditions, $orderBys, $start, $limit, $columns = []);
+
+    public function findSectionsByAssessmentIds($assessmentIds);
+
+    public function createAssessmentSections($assessmentSections);
 }
