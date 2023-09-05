@@ -25,4 +25,8 @@ interface AssessmentSectionService
     public function findSectionsByAssessmentIds($assessmentIds);
 
     public function createAssessmentSections($assessmentSections);
+
+    public function updateAssessmentSections($assessmentSections);
+
+    public function deleteAssessmentSections($ids);
 }

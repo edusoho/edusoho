@@ -13,21 +13,40 @@ class AssessmentEventSubscriber extends EventSubscriber
     {
         return [
             'item.delete' => 'onItemDelete',
+            'item.batchDelete' => 'onItemBatchDelete',
         ];
     }
 
     public function onItemDelete(Event $event)
     {
         $item = $event->getSubject();
-        $assessments = $this->getAssessmentService()->searchAssessments(['bank_id' => $item['bank_id'], 'displayable' => 1], [], 0, PHP_INT_MAX, ['id']);
+        $this->processOnItemsDelete($item['bank_id'], [$item]);
+    }
+
+    public function onItemBatchDelete(Event $event)
+    {
+        $deleteItems = $event->getSubject();
+        $this->processOnItemsDelete(current($deleteItems)['bank_id'], $deleteItems);
+    }
+
+    private function processOnItemsDelete($bankId, $deleteItems)
+    {
+        $assessments = $this->getAssessmentService()->searchAssessments(['bank_id' => $bankId, 'displayable' => 1], [], 0, PHP_INT_MAX, ['id']);
         if (empty($assessments)) {
             return;
         }
-        $sectionItems = $this->getAssessmentSectionItemService()->searchAssessmentSectionItems(['assessmentIds' => array_column($assessments, 'id'), 'item_id' => $item['id']], [], 0, PHP_INT_MAX, ['assessment_id']);
-        if (empty($sectionItems)) {
+        $toDeletesectionItems = $this->getAssessmentSectionItemService()->searchAssessmentSectionItems(
+            ['assessmentIds' => array_column($assessments, 'id'), 'item_ids' => array_column($deleteItems, 'id')],
+            [],
+            0,
+            PHP_INT_MAX,
+            ['assessment_id', 'section_id', 'score', 'question_count']
+        );
+        if (empty($toDeletesectionItems)) {
             return;
         }
-        $this->getAssessmentService()->createAssessmentSnapshotsIncludeSectionsAndItems(array_column($sectionItems, 'assessment_id'));
+        $this->getAssessmentService()->createAssessmentSnapshotsIncludeSectionsAndItems(array_column($toDeletesectionItems, 'assessment_id'));
+        $this->getAssessmentService()->modifyAssessmentsAndSectionsWithToDeleteSectionItems($toDeletesectionItems);
     }
 
     /**
@@ -41,7 +60,7 @@ class AssessmentEventSubscriber extends EventSubscriber
     /**
      * @return AssessmentSectionItemService
      */
-    protected function getAssessmentSectionItemService()
+    private function getAssessmentSectionItemService()
     {
         return $this->getBiz()->service('ItemBank:Assessment:AssessmentSectionItemService');
     }

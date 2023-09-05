@@ -106,10 +106,23 @@ class AssessmentSectionServiceImpl extends BaseService implements AssessmentSect
 
     public function createAssessmentSections($assessmentSections)
     {
+        $this->getAssessmentSectionDao()->batchCreate($assessmentSections);
+    }
+
+    public function updateAssessmentSections($assessmentSections)
+    {
         if (empty($assessmentSections)) {
             return;
         }
-        $this->getAssessmentSectionDao()->batchCreate($assessmentSections);
+        $this->getAssessmentSectionDao()->batchUpdate(array_keys($assessmentSections), $assessmentSections);
+    }
+
+    public function deleteAssessmentSections($ids)
+    {
+        if (empty($ids)) {
+            return;
+        }
+        $this->getAssessmentSectionDao()->batchDelete(['ids' => $ids]);
     }
 
     /**

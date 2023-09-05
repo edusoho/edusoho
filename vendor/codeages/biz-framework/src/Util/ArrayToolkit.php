@@ -37,6 +37,16 @@ class ArrayToolkit
         return $column;
     }
 
+    public static function unique(array $array)
+    {
+        return array_values(array_unique($array));
+    }
+
+    public static function uniqueColumn(array $array, $columnName)
+    {
+        return self::unique(array_column($array, $columnName));
+    }
+
     public static function parts(array $array, array $keys)
     {
         foreach (array_keys($array) as $key) {
@@ -95,12 +105,13 @@ class ArrayToolkit
         return $grouped;
     }
 
-    public static function sort($array, $keys, $sort = SORT_DESC) {
+    public static function sort(array $array, $key, $sort = SORT_DESC) {
         $keysValue = [];
         foreach ($array as $k => $v) {
-            $keysValue[$k] = $v[$keys];
+            $keysValue[$k] = $v[$key];
         }
         array_multisort($keysValue, $sort, $array);
+
         return $array;
     }
 

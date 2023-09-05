@@ -391,6 +391,21 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         $this->createSnapshotAssessmentSectionsAndItems($assessmentSnapshots);
     }
 
+    public function modifyAssessmentsAndSectionsWithToDeleteSectionItems($sectionItems)
+    {
+        if (empty($sectionItems)) {
+            return;
+        }
+        list($eachAssessmentToUpdateSections, $toDeleteSectionIds) = $this->extractToUpdateSectionsAndToDeleteSectionIds($sectionItems);
+        $this->getSectionService()->deleteAssessmentSections($toDeleteSectionIds);
+
+        $toUpdateSections = $this->extractToUpdateSections($eachAssessmentToUpdateSections);
+        $this->getSectionService()->updateAssessmentSections($toUpdateSections);
+
+        $toUpdateAssessments = $this->extractToUpdateAssessments($eachAssessmentToUpdateSections);
+        $this->getAssessmentDao()->batchUpdate(array_keys($toUpdateAssessments), $toUpdateAssessments);
+    }
+
     private function createAssessmentSnapshots($assessments)
     {
         $assessmentSnapshots = [];
@@ -450,6 +465,65 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         }
 
         return $assessmentSectionSnapshots;
+    }
+
+    private function extractToUpdateSectionsAndToDeleteSectionIds($sectionItems)
+    {
+        $assessmentIds = ArrayToolkit::uniqueColumn($sectionItems, 'assessment_id');
+        $sections = $this->getSectionService()->findSectionsByAssessmentIds($assessmentIds);
+        $sectionItems = ArrayToolkit::group($sectionItems, 'section_id');
+
+        $eachAssessmentToUpdateSections = [];
+        $toDeleteSectionIds = [];
+        foreach ($sections as $section) {
+            $eachAssessmentToUpdateSections[$section['assessment_id']] = $eachAssessmentToUpdateSections[$section['assessment_id']] ?? [];
+            if (empty($sectionItems[$section['id']])) {
+                $eachAssessmentToUpdateSections[$section['assessment_id']][] = $section;
+                continue;
+            }
+            if (count($sectionItems[$section['id']]) == $section['item_count']) {
+                $toDeleteSectionIds[] = $section['id'];
+                continue;
+            }
+            $section['item_count'] -= count($sectionItems[$section['id']]);
+            $section['total_score'] -= array_sum(array_column($sectionItems[$section['id']], 'score'));
+            $section['question_count'] -= array_sum(array_column($sectionItems[$section['id']], 'question_count'));
+            $eachAssessmentToUpdateSections[$section['assessment_id']][] = $section;
+        }
+
+        return [$eachAssessmentToUpdateSections, $toDeleteSectionIds];
+    }
+
+    private function extractToUpdateSections($eachAssessmentToUpdateSections)
+    {
+        $toUpdateSections = [];
+        foreach ($eachAssessmentToUpdateSections as $singleAssessmentToUpdateSections) {
+            $singleAssessmentToUpdateSections = ArrayToolkit::sort($singleAssessmentToUpdateSections, 'seq', SORT_ASC);
+            foreach ($singleAssessmentToUpdateSections as $index => $toUpdateSection) {
+                $toUpdateSections[$toUpdateSection['id']] = [
+                    'seq' => $index + 1,
+                    'total_score' => $toUpdateSection['total_score'],
+                    'item_count' => $toUpdateSection['item_count'],
+                    'question_count' => $toUpdateSection['question_count'],
+                ];
+            }
+        }
+
+        return $toUpdateSections;
+    }
+
+    private function extractToUpdateAssessments($eachAssessmentToUpdateSections)
+    {
+        $toUpdateAssessments = [];
+        foreach ($eachAssessmentToUpdateSections as $assessmentId => $singleAssessmentToUpdateSections) {
+            $toUpdateAssessments[$assessmentId] = [
+                'total_score' => array_sum(array_column($singleAssessmentToUpdateSections, 'total_score')),
+                'item_count' => array_sum(array_column($singleAssessmentToUpdateSections, 'item_count')),
+                'question_count' => array_sum(array_column($singleAssessmentToUpdateSections, 'question_count')),
+            ];
+        }
+
+        return $toUpdateAssessments;
     }
 
     protected function findExportItems($sections, $sectionItems)

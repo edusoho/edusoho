@@ -2,9 +2,9 @@
 
 namespace Codeages\Biz\ItemBank\Assessment\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface AssessmentDao extends GeneralDaoInterface
+interface AssessmentDao extends AdvancedDaoInterface
 {
     public function findByIds($ids);
 }

@@ -133,10 +133,15 @@ class AssessmentSectionItemServiceImpl extends BaseService implements Assessment
 
     public function createAssessmentSectionItems($items)
     {
-        if (empty($items)) {
+        $this->getAssessmentSectionItemDao()->batchCreate($items);
+    }
+
+    public function deleteAssessmentSectionItems($ids)
+    {
+        if (empty($ids)) {
             return;
         }
-        $this->getAssessmentSectionItemDao()->batchCreate($items);
+        $this->getAssessmentSectionItemDao()->batchDelete(['ids' => $ids]);
     }
 
     protected function getScoreRuleProcessor()
