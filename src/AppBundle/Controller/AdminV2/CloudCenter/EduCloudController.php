@@ -1341,7 +1341,7 @@ class EduCloudController extends BaseController
 
         //同步到商城云短信的配置
         if ($settings && isset($settings['sms_shipping_notify'])) {
-            $this->getSettingService()->notifyCloudSmsUpdate(['isShippingNotifyEnabled' => 'on' == $settings['sms_shipping_notify'] ? true : false]);
+            $this->getSettingService()->notifyCloudSmsUpdate(['isShippingNotifyEnabled' => 'on' == $settings['sms_shipping_notify']]);
         }
     }
 
