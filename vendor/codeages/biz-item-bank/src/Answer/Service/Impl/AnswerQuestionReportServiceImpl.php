@@ -1,6 +1,7 @@
 <?php
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use Codeages\Biz\ItemBank\Answer\Dao\AnswerQuestionReportDao;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
@@ -16,10 +17,6 @@ class AnswerQuestionReportServiceImpl extends BaseService implements AnswerQuest
 
     public function batchCreate(array $answerQuestionReports)
     {
-        if (empty($answerQuestionReports)) {
-            return [];
-        }
-
         return $this->getAnswerQuestionReportDao()->batchCreate($answerQuestionReports);
     }
 
@@ -62,6 +59,24 @@ class AnswerQuestionReportServiceImpl extends BaseService implements AnswerQuest
         return $this->getAnswerQuestionReportDao()->update($id, $answerQuestionReport);
     }
 
+    public function replaceAssessmentsAndSectionsWithSnapshotAssessmentsAndSections($updateAssessments, $updateSections)
+    {
+        if (empty($updateAssessments) || empty($updateSections)) {
+            return;
+        }
+        $this->getAnswerQuestionReportDao()->batchUpdateByTwoIdentify(
+            'assessment_id',
+            array_keys($updateAssessments),
+            'section_id',
+            array_keys($updateSections),
+            $updateSections
+        );
+        $this->getAnswerQuestionReportDao()->batchUpdate(array_keys($updateAssessments), $updateAssessments, 'assessment_id');
+    }
+
+    /**
+     * @return AnswerQuestionReportDao
+     */
     protected function getAnswerQuestionReportDao()
     {
         return $this->biz->dao('ItemBank:Answer:AnswerQuestionReportDao');

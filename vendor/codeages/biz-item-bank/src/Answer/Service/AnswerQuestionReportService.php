@@ -31,4 +31,6 @@ interface AnswerQuestionReportService
     public function createAnswerQuestionReport($answerQuestionReport);
 
     public function updateAnswerQuestionReport($id, $answerQuestionReport);
+
+    public function replaceAssessmentsAndSectionsWithSnapshotAssessmentsAndSections($updateAssessments, $updateSections);
 }

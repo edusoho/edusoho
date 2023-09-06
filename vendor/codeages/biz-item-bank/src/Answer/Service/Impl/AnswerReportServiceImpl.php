@@ -226,6 +226,37 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         return $this->getAnswerReportDao()->batchCreate($answerReports);
     }
 
+    public function replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots)
+    {
+        if (empty($assessmentSnapshots)) {
+            return;
+        }
+        $update = [];
+        foreach ($assessmentSnapshots as $assessmentSnapshot) {
+            $update[$assessmentSnapshot['origin_assessment_id']] = [
+                'assessment_id' => $assessmentSnapshot['snapshot_assessment_id'],
+            ];
+        }
+        $this->getAnswerReportDao()->batchUpdate(array_keys($update), $update, 'assessment_id');
+        $this->replaceQuestionReportAssessmentsAndSections($update);
+    }
+
+    private function replaceQuestionReportAssessmentsAndSections($updateAssessments)
+    {
+        $snapshotAssessmentSections = $this->geAssessmentSectionService()->findSectionsByAssessmentIds(array_column($updateAssessments, 'assessment_id'));
+        $snapshotAssessmentSections = ArrayToolkit::groupIndex($snapshotAssessmentSections, 'assessment_id', 'seq');
+        $originAssessmentSections = $this->geAssessmentSectionService()->findSectionsByAssessmentIds(array_keys($updateAssessments));
+
+        $updateSections = [];
+        foreach ($originAssessmentSections as $originAssessmentSection) {
+            $snapshotAssessmentId = $updateAssessments[$originAssessmentSection['assessment_id']]['assessment_id'];
+            $updateSections[$originAssessmentSection['id']] = [
+                'section_id' => $snapshotAssessmentSections[$snapshotAssessmentId][$originAssessmentSection['seq']]['id'],
+            ];
+        }
+        $this->getAnswerQuestionReportService()->replaceAssessmentsAndSectionsWithSnapshotAssessmentsAndSections($updateAssessments, $updateSections);
+    }
+
     /**
      * @return \Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService
      */

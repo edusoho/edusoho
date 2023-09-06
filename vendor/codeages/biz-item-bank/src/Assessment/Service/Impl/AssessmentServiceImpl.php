@@ -389,9 +389,11 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         $assessments = $this->findAssessmentsByIds($assessmentIds);
         $assessmentSnapshots = $this->createAssessmentSnapshots($assessments);
         $this->createSnapshotAssessmentSectionsAndItems($assessmentSnapshots);
+
+        return $assessmentSnapshots;
     }
 
-    public function modifyAssessmentsAndSectionsWithToDeleteSectionItems($sectionItems)
+    public function modifyAssessmentsAndSectionsWithToDeleteSectionItems(array $sectionItems)
     {
         if (empty($sectionItems)) {
             return;
@@ -441,7 +443,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         $this->getSectionService()->createAssessmentSections($snapshotAssessmentSections);
         $snapshotAssessmentSections = $this->getSectionService()->findSectionsByAssessmentIds(array_column($assessmentSnapshots, 'snapshot_assessment_id'));
 
-        return $this->buildAssessmentSectionSnapshots($originAssessmentSections, $snapshotAssessmentSections);
+        return $this->buildAssessmentSectionSnapshots($assessmentSnapshots, $originAssessmentSections, $snapshotAssessmentSections);
     }
 
     private function createSnapshotAssessmentSectionItems($originAssessmentIds, $assessmentSnapshots, $assessmentSectionSnapshots)
@@ -450,18 +452,19 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         $snapshotAssessmentSectionItems = [];
         foreach ($originAssessmentSectionItems as $originAssessmentSectionItem) {
             $originAssessmentSectionItem['assessment_id'] = $assessmentSnapshots[$originAssessmentSectionItem['assessment_id']]['snapshot_assessment_id'];
-            $originAssessmentSectionItem['section_id'] = $assessmentSectionSnapshots[$originAssessmentSectionItem['section_id']]['id'];
+            $originAssessmentSectionItem['section_id'] = $assessmentSectionSnapshots[$originAssessmentSectionItem['section_id']];
             $snapshotAssessmentSectionItems[] = $originAssessmentSectionItem;
         }
         $this->getSectionItemService()->createAssessmentSectionItems($snapshotAssessmentSectionItems);
     }
 
-    private function buildAssessmentSectionSnapshots($originAssessmentSections, $snapshotAssessmentSections)
+    private function buildAssessmentSectionSnapshots($assessmentSnapshots, $originAssessmentSections, $snapshotAssessmentSections)
     {
         $snapshotAssessmentSections = ArrayToolkit::groupIndex($snapshotAssessmentSections, 'assessment_id', 'seq');
         $assessmentSectionSnapshots = [];
         foreach ($originAssessmentSections as $originAssessmentSection) {
-            $assessmentSectionSnapshots[$originAssessmentSection['id']] = $snapshotAssessmentSections[$originAssessmentSection['assessment_id']][$originAssessmentSection['seq']];
+            $snapshotAssessmentId = $assessmentSnapshots[$originAssessmentSection['assessment_id']]['snapshot_assessment_id'];
+            $assessmentSectionSnapshots[$originAssessmentSection['id']] = $snapshotAssessmentSections[$snapshotAssessmentId][$originAssessmentSection['seq']]['id'];
         }
 
         return $assessmentSectionSnapshots;
