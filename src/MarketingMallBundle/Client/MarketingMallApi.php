@@ -159,6 +159,11 @@ class MarketingMallApi
         return $this->post('/api-school/userAuthSetting/updatePasswordLevel', ...$params);
     }
 
+    public function notifyCloudSmsUpdate($params)
+    {
+        return $this->post('/api-school/setting/updateCloudSms', ...$params);
+    }
+
     public function logout($params)
     {
         return $this->post('/api-school/user/logout', ...$params);

@@ -7309,6 +7309,8 @@ admin.edu_cloud.edu_sms.validation_type: 验证类
 admin.edu_cloud.edu_sms.bind_mobile: 手机绑定
 admin.edu_cloud.edu_sms.login: 手机短信快捷登录
 admin.edu_cloud.edu_sms.verification_code_tips: 您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。
+admin.edu_cloud.edu_sms.shipping_notify: 发货通知
+admin.edu_cloud.edu_sms.shipping_notify_tips: 您在《网校商城名称》购买的《商品名称》已发货。
 admin.edu_cloud.edu_sms.singel_user: 单个用户
 admin.edu_cloud.edu_sms.auto_singel_send: 自动单发
 admin.edu_cloud.edu_sms.default_open: 默认开启
