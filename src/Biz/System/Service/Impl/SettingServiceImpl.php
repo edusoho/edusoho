@@ -4,6 +4,7 @@ namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
+use MarketingMallBundle\Client\MarketingMallClient;
 
 class SettingServiceImpl extends BaseService implements SettingService
 {
@@ -15,10 +16,10 @@ class SettingServiceImpl extends BaseService implements SettingService
     public function set($name, $value)
     {
         $this->getSettingDao()->deleteByName($name);
-        $setting = array(
+        $setting = [
             'name' => $name,
             'value' => serialize($value),
-        );
+        ];
         $this->getSettingDao()->create($setting);
         $this->clearCache();
     }
@@ -63,7 +64,7 @@ class SettingServiceImpl extends BaseService implements SettingService
         return $result;
     }
 
-    public function get($name, $default = array())
+    public function get($name, $default = [])
     {
         if (is_null($this->cached)) {
             $this->cached = $this->getCacheService()->get(self::CACHE_NAME);
@@ -102,11 +103,11 @@ class SettingServiceImpl extends BaseService implements SettingService
     public function setByNamespace($namespace, $name, $value)
     {
         $this->getSettingDao()->deleteByNamespaceAndName($namespace, $name);
-        $setting = array(
+        $setting = [
             'namespace' => $namespace,
             'name' => $name,
             'value' => serialize($value),
-        );
+        ];
         $this->getSettingDao()->create($setting);
         $this->clearCache();
     }
@@ -119,9 +120,19 @@ class SettingServiceImpl extends BaseService implements SettingService
 
     public function isReservationOpen()
     {
-        $setting = $this->get('plugin_reservation', array());
+        $setting = $this->get('plugin_reservation', []);
 
         return !empty($setting['reservation_enabled']) && 1 == $setting['reservation_enabled'];
+    }
+
+    /**
+     * 通知商城云短信配置修改
+     *
+     * @return mixed
+     */
+    public function notifyCloudSmsUpdate(array $params)
+    {
+        return (new MarketingMallClient($this->biz))->notifyCloudSmsUpdate($params);
     }
 
     protected function clearCache()

@@ -17,7 +17,7 @@ interface SettingService
 
     public function setByNamespace($namespace, $name, $value);
 
-    public function get($name, $default = array());
+    public function get($name, $default = []);
 
     public function node($name, $default = null);
 
@@ -26,4 +26,6 @@ interface SettingService
     public function deleteByNamespaceAndName($namespace, $name);
 
     public function isReservationOpen();
+
+    public function notifyCloudSmsUpdate(array $params);
 }
