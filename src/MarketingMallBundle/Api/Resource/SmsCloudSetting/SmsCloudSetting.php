@@ -14,11 +14,7 @@ class SmsCloudSetting extends BaseResource
             return 0;
         }
 
-        if (isset($mySetting['sms_shipping_notify']) && 'on' == $mySetting['sms_shipping_notify']) {
-            return ['isShippingNotifyEnabled' => true];
-        }
-
-        return ['isShippingNotifyEnabled' => false];
+        return ['isShippingNotifyEnabled' => isset($mySetting['sms_shipping_notify']) && 'on' == $mySetting['sms_shipping_notify']];
     }
 
     protected function getSettingService()

@@ -4,6 +4,7 @@ namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
+use MarketingMallBundle\Biz\Mall\Service\MallService;
 use MarketingMallBundle\Client\MarketingMallClient;
 
 class SettingServiceImpl extends BaseService implements SettingService
@@ -132,7 +133,19 @@ class SettingServiceImpl extends BaseService implements SettingService
      */
     public function notifyCloudSmsUpdate(array $params)
     {
+        if (!$this->getMallService()->isInit()) {
+            return;
+        }
+
         return (new MarketingMallClient($this->biz))->notifyCloudSmsUpdate($params);
+    }
+
+    /**
+     * @return MallService
+     */
+    protected function getMallService()
+    {
+        return $this->biz->service('Mall:MallService');
     }
 
     protected function clearCache()
