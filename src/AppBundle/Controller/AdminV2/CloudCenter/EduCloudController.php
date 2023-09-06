@@ -581,7 +581,6 @@ class EduCloudController extends BaseController
         }
 
         $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
-        $smsStatus['sms_shipping_notify'] = 'off';
 
         $this->getSettingService()->set('cloud_sms', $smsStatus);
         $this->getSettingService()->notifyCloudSmsUpdate(['isShippingNotifyEnabled' => false]);
@@ -1375,6 +1374,7 @@ class EduCloudController extends BaseController
             'sms_vip_buy_notify' => 'off',
             'sms_coin_buy_notify' => 'off',
             'sms_comment_modify' => 'off',
+            'sms_shipping_notify' => 'off',
         ];
 
         $dataUserPosted = ArrayToolkit::filter($dataUserPosted, $defaultSetting);
