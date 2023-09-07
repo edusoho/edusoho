@@ -85,26 +85,20 @@ export default {
     },
     startDo(item) {
       const query = {
-        mode: 'start',
-        type: 'chapter',
-        title: item.name,
-        exerciseId: this.exerciseId,
-        categoryId: item.id,
         moduleId: this.moduleId,
+        categoryId: item.id,
+        exerciseId: this.exerciseId,
       };
-      this.$router.push({ path: '/brushDo', query });
+      this.$router.push({ path: '/brushIntro', query });
     },
     continueDo(item) {
       const query = {
-        mode: 'continue',
-        type: 'chapter',
-        title: item.name,
-        exerciseId: this.exerciseId,
-        categoryId: item.id,
         moduleId: this.moduleId,
-        answer_record_id: item.latestAnswerRecord.answerRecordId,
+        categoryId: item.id,
+        exerciseId: this.exerciseId,
+        answer_record_id: item.latestAnswerRecord.answerRecordId
       };
-      this.$router.push({ path: '/brushDo', query });
+      this.$router.push({ path: '/brushIntro', query });
     },
     goResult(item) {
       const query = {

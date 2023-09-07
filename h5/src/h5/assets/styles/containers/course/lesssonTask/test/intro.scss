@@ -100,3 +100,43 @@
 		border-radius: 4px;
 	}
 }
+
+.choose-mode-popup {
+  padding: vw(24) vw(16) 0;
+  text-align: center;
+
+	.choose-mode-title{
+    color: #272E3B;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+	}
+
+  .choose-mode-change-radio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: vw(38) 0;
+    height: vw(94); 
+
+    .choose-mode-group-radio{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .choose-mode-radio {
+      display: flex;
+      flex-direction: column;
+
+			&:nth-child(1) {
+				margin-right: vw(64);
+			}
+    }
+  }
+
+  .choose-mode__btn {
+    width: 100%;
+    border-radius: 4px;
+  }
+}

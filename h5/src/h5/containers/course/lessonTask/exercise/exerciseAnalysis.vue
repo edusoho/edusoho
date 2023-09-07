@@ -17,6 +17,7 @@
       :can-do="canDo"
       :all="allList.length"
       :is-exercise="true"
+      :mode="mode"
     />
     <!-- 底部 -->
     <div class="paper-footer">
@@ -46,7 +47,7 @@
       </div>
     </div>
     <!-- 答题卡 -->
-    <van-popup v-model="cardShow" position="bottom">
+    <van-popup v-model="cardShow" position="bottom" :style="{ height: '100%' }">
       <div v-if="info.length > 0" class="card">
         <div class="card-title">
           <div>
@@ -128,6 +129,7 @@ export default {
       answer: {},
       slideIndex: 0, // 题库组件当前所在的划片位置
       canDo: false, // 是否能答题，解析模式下不能答题
+      mode: 'exercise'
     };
   },
   computed: {
@@ -135,6 +137,14 @@ export default {
       isLoading: state => state.isLoading,
       user: state => state.user,
     }),
+  },
+  beforeRouteEnter(to, from, next) {
+    document.getElementById('app').style.background = '#f6f6f6';
+    next();
+  },
+  beforeRouteLeave(to, from, next) {
+    document.getElementById('app').style.background = '';
+    next();
   },
   mounted() {
     this.initReport();
@@ -171,19 +181,22 @@ export default {
       res.items.forEach(item => {
         if (item.type != 'material') {
           const detail = this.analysisSixType(item.type, item);
-
+          
           this.setData(detail.item, detail.answer);
         }
         if (item.type == 'material') {
           item.subs.forEach(sub => {
             const detail = this.analysisSixType(sub.type, sub);
-
-            this.setData(detail.item, detail.answer);
+            this.setData(detail.item, detail.answer, item.type, item.stem, item.analysis);
           });
         }
       });
     },
-    setData(item, answer) {
+    setData(item, answer, type, stem, analysis) {
+      if (stem !== undefined) {
+        item.parentType = type;
+        item.parentTitle = {'stem': stem, 'analysis': analysis}
+      }
       this.$set(this.answer, item.id, answer);
       this.info.push(item);
       this.allList.push(item);

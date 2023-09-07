@@ -120,6 +120,19 @@
     }
   }
 
+	.submit-footer {
+		position:fixed;
+		bottom: 0;
+		padding: vw(6) vw(10);
+		height: vw(55);
+		background-color: #fff;
+
+		.submit-footer-btn {
+			height: vw(40);
+			border-radius: vw(4);
+		}
+	}
+
   .card {
     background: #f5f5f5;
 
@@ -314,4 +327,13 @@
     }
 
   }
+	.end-answer__btn {
+		position: fixed;
+		left: 50%;
+		bottom: 20px;
+		transform: translate(-50%,-50%);
+		display: block;
+		width: 94%;
+		border-radius: 4px;
+	}
 }

@@ -17,13 +17,19 @@
       :show-score="false"
       :slide-index.sync="slideIndex"
       :all="info.length"
+      :exerciseInfo="exerciseInfo"
+      :assessment_id="exerciseInfo.testId"
+      :exerciseMode="exerciseMode"
+      :admission_ticket="exerciseInfo.admission_ticket"
+      :mode="mode"
+      @getData="getData"
     />
 
     <!-- 引导页 -->
     <guide-page />
 
     <!-- 底部 -->
-    <div class="paper-footer">
+    <div v-if="this.exerciseMode === '0'" class="paper-footer">
       <div>
         <span @click="cardShow = true">
           <i class="mb-8 iconfont icon-Questioncard" />
@@ -39,7 +45,7 @@
     </div>
 
     <!-- 答题卡 -->
-    <van-popup v-model="cardShow" position="bottom">
+    <van-popup v-model="cardShow" position="bottom" :style="{ height: '100%' }">
       <div v-if="info.length > 0" class="card">
         <div class="card-title">
           <div>
@@ -66,6 +72,13 @@
           </div>
         </div>
       </div>
+      <van-button
+        v-if="exerciseMode === '1'"
+        class="end-answer__btn"
+        type="primary"
+        @click="endAnswer"
+        >{{ $t('courseLearning.endAnswer') }}</van-button
+      >
     </van-popup>
   </div>
 </template>
@@ -109,7 +122,11 @@ export default {
       isHandExercise: false, // 是否已经交完练习
       slideIndex: 0, // 题库组件当前所在的划片位置
       forceLeave: false,
-      interval: null
+      interval: null,
+      exerciseMode: this.$route.query.exerciseMode,
+      exerciseInfo: null,
+      isLeave: false,
+      mode: 'exercise'
     };
   },
   computed: {
@@ -121,9 +138,14 @@ export default {
   mounted() {
     this.getData();
     this.initReport();
-    this.saveAnswerInterval();
+    // 一题一答不需要自动保存
+    if(this.exerciseMode === '0'){
+      this.saveAnswerInterval();
+    }
   },
   beforeRouteEnter(to, from, next) {
+    document.getElementById('app').style.background = '#F5F5F7';
+
     // 通过链接进来
     if (from.fullPath === '/') {
       backUrl = '/';
@@ -133,20 +155,23 @@ export default {
     next();
   },
   beforeRouteLeave(to, from, next) {
+    document.getElementById('app').style.background = '';
+
     this.interval && clearInterval(this.interval)
     // 可捕捉离开提醒
     if (
       this.info.length == 0 ||
       this.isHandExercise ||
       this.forceLeave ||
-      this.exercise.status != 'doing'
+      this.exercise.status != 'doing' ||
+      this.isLeave
     ) {
       next();
     } else {
       if (this.submitpaper()) {
         next();
       } else {
-        next();
+        next(false);
       }
     }
   },
@@ -171,9 +196,12 @@ export default {
         data: {
           targetId,
           targetType: 'task',
+          exerciseMode: this.exerciseMode
         },
       })
         .then(res => {
+          this.exerciseMode = res.exerciseMode
+          this.exerciseInfo = res
           this.afterGetData(res);
         })
         .catch(err => {
@@ -345,13 +373,17 @@ export default {
         .catch(() => {
           this.clearTime();
           // 提交练习
-          this.submitExercise(answer)
-            .then(res => {
-              return true;
-            })
-            .catch(() => {
-              return false;
-            });
+          if (this.exerciseMode === '1') {
+            this.endCueentAnswer()
+          } else {
+            this.submitExercise(answer)
+              .then(res => {
+                return true;
+              })
+              .catch(() => {
+                return false;
+              });
+          }
         });
       // })
     },
@@ -488,6 +520,35 @@ export default {
         },
       });
     },
+    // 结束提示框
+    endAnswer() {
+      Dialog.confirm({
+        title: `是否结束本次答题`,
+        confirmButtonText: '是',
+        cancelButtonText: '否'
+      })
+      .then(() => this.endCueentAnswer())
+      .catch(() => {
+      });
+    },
+    // 结束答题
+    endCueentAnswer() {
+      Api.finishAnswer({
+        query: {
+          id: this.exerciseInfo.id
+        }
+      }).then(res =>{
+        this.isLeave = true;
+        this.showResult()
+      }).catch(err =>{
+        Toast.fail(err.message)
+      })
+    }
   },
 };
 </script>
+<style scoped lang="scss">
+/deep/.van-popup__close-icon--top-left {
+  color: #333333;
+}
+</style>
