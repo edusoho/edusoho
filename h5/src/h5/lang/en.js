@@ -295,6 +295,7 @@ export default {
     classroom: 'Classroom',
     questionBank: 'Question bank',
     noFound: 'Sorry, no related content was found',
+    emptyCourse: 'There are currently no suitable courses available～'
   },
   learning: {
     title: 'Learn',

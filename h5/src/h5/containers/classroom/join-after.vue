@@ -57,6 +57,7 @@
           :disable-mask="true"
           :title="$t('classLearning.course')"
           :defaul-value="$t('classLearning.empty')"
+          :classId="details.classId"
           @click.native="showDialog('click')"
         />
       </div>

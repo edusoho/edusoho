@@ -289,6 +289,7 @@ export default {
     classroom: '班级',
     questionBank: '题库',
     noFound: '抱歉，没有找到相关内容',
+    emptyCourse: '暂时没有合适的课程～'
   },
   learning: {
     title: '我的学习',
