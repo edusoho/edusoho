@@ -187,15 +187,16 @@ export default {
         if (item.type == 'material') {
           item.subs.forEach(sub => {
             const detail = this.analysisSixType(sub.type, sub);
-            this.setData(detail.item, detail.answer, item.type, item.stem, item.analysis);
+            this.setData(detail.item, detail.answer, item.type, item.stem, item.analysis, item.attachments);
           });
         }
       });
     },
-    setData(item, answer, type, stem, analysis) {
+    setData(item, answer, type, stem, analysis, attachments) {
       if (stem !== undefined) {
         item.parentType = type;
         item.parentTitle = {'stem': stem, 'analysis': analysis}
+        item.parentTitle.attachments = attachments
       }
       this.$set(this.answer, item.id, answer);
       this.info.push(item);
