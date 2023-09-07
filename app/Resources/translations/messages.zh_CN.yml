@@ -11085,6 +11085,7 @@ exception.item_bank_exercise.exercise.is_exists: 题库练习已存在，请勿�
 exception.item_bank_exercise.exercise.not_arrive: 题库练习未到学习时间，添加失败
 exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
 exception.item_bank.assessment.not.exist: 试卷不存在
+exception.item_bank.assessment.is_empty: 试卷全部题目已被删除，请联系教师或管理员
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试

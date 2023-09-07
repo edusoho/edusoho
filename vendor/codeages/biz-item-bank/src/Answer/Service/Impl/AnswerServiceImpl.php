@@ -15,6 +15,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
@@ -30,6 +31,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     {
         if (!$this->getAnswerSceneService()->canStart($answerSceneId, $userId)) {
             throw new AnswerSceneException('AnswerScene did not start.', ErrorCode::ANSWER_SCENE_NOTSTART);
+        }
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        if (empty($assessment['item_count'])) {
+            throw new AnswerException('试卷全部题目已被删除，请联系教师或管理员', ErrorCode::ASSESSMENT_EMPTY);
         }
         $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
 
@@ -145,7 +150,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $answerRecords = $this->batchCreateAnswerRecords($answerScene, $assessmentId, $userIds);
-
         $answerReports = $this->batchCreateAnswerReports($assessmentId, $answerRecords);
 
         $updateAnswerRecords = [];
@@ -213,10 +217,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     protected function batchCreateAnswerQuestionReports($assessmentId, $answerReports)
     {
-        $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
-        if (empty($assessment)) {
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        if (empty($assessment['item_count'])) {
             return;
         }
+        $sections = $this->getAssessmentSectionService()->findSectionDetailByAssessmentId($assessmentId);
 
         $answerQuestionReports = [];
         $newAnswerQuestionReport = [
@@ -226,7 +231,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         foreach ($answerReports as $answerReport) {
             $newAnswerQuestionReport['answer_record_id'] = $answerReport['answer_record_id'];
-            foreach ($assessment['sections'] as $section) {
+            foreach ($sections as $section) {
                 $newAnswerQuestionReport['section_id'] = $section['id'];
                 foreach ($section['items'] as $item) {
                     $newAnswerQuestionReport['item_id'] = $item['id'];
@@ -826,7 +831,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $questions = \AppBundle\Common\ArrayToolkit::index($item['score_rule'], 'question_id');
         $questionRule = $questions[$answerReportQuestion['question_id']]['rule'];
         $questionRule = \AppBundle\Common\ArrayToolkit::index($questionRule, 'name');
-        $question = $this->getQuestionDao()->get($answerReportQuestion['question_id']);
+        $question = $this->getItemService()->getQuestion($answerReportQuestion['question_id']);
         $answers = [];
         foreach ($question['answer'] as $key => $answer) {
             $answers[$key] = explode('|', $answer);
@@ -1034,7 +1039,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             if (ExerciseMode::SUBMIT_SINGLE == $answerRecord['exercise_mode']) {
                 $reviewedQuestions = $this->getAnswerReviewedQuestionService()->findByAnswerRecordId($answerRecord['id']);
             }
-            
+
             list($answerQuestionReports, $attachments) = $this->getAnswerQuestionReportsAndAttachmentsByAssessmentResponse(
                 $assessmentResponse,
                 $reviewedQuestions ?? []
@@ -1209,11 +1214,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     }
 
     /**
-     * @return QuestionDao
+     * @return AssessmentSectionService
      */
-    protected function getQuestionDao()
+    protected function getAssessmentSectionService()
     {
-        return $this->biz->dao('ItemBank:Item:QuestionDao');
+        return $this->biz->service('ItemBank:Assessment:AssessmentSectionService');
     }
 
     /**
