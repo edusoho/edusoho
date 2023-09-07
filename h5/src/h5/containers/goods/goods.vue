@@ -100,11 +100,21 @@
           class="js-scroll-top goods-info__item"
           id="catalog"
         >
-          <div class="goods-info__title">{{ $t('goods.learningCatalog') }}</div>
+          <div class="flex justify-between items-center">
+            <div class="goods-info__title">{{ $t('goods.learningCatalog') }}</div>
+            <div class="flex items-center bg-fill-7 py-4 px-12 rounded-full" @click="goSearch">
+              <IconSearch />
+              <label class="ml-4 text-text-6">找课程</label>
+            </div>
+          </div>
           <!-- 学习课程目录 -->
-          <classroom-courses
+          <classroom-courses v-if="componentsInfo.classroomCourses.length > 0"
             :classroomCourses="componentsInfo.classroomCourses"
           />
+          <div class="w-full flex flex-col items-center pt-28" style="height: 223px;" v-else>
+            <img style="width: 142px; height: 116px;" src="static/images/classroom/none-course.png" alt="暂无课程" />
+            <span class="mt-12 text-text-6 text-14">暂无课程</span>
+          </div>
         </section>
 
         <!-- 评价 -->
@@ -167,7 +177,7 @@ import Specs from './components/specs';
 import Certificate from './components/certificate';
 import Vip from './components/vip';
 import EnterLearning from './components/enter-learning';
-
+import IconSearch from '&/components/IconSvg/IconSearch.vue'
 import Teacher from './components/teacher';
 import Reviews from '@/containers/review';
 import Recommend from './components/recommend';
@@ -213,6 +223,7 @@ export default {
     Certificate,
     EnterLearning,
     Vip,
+    IconSearch
   },
   computed: {
     ...mapState(['vipSwitch']),
@@ -255,6 +266,9 @@ export default {
           Toast.fail(err.message);
         });
       this.getGoodsCourseComponents();
+    },
+    goSearch() {
+      this.$router.push({ path: '/search', query: { id: this.goods.product.id } });
     },
     share(message) {
       let desc = ''

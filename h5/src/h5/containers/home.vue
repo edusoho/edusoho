@@ -77,6 +77,6 @@ export default {
         name: this.items[index].name,
       });
     },
-  },
+  }
 };
 </script>
