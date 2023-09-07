@@ -3693,6 +3693,12 @@ question_bank_manage_question_category_show:
         _controller: 'AppBundle:QuestionBank/QuestionCategory:showCategories'
     methods:
         - POST
+question_bank_manage_question_category_sort:
+    path: '/question_bank/{id}/question/category/sort'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/QuestionCategory:sort'
+    methods:
+        - POST
 question_bank_manage_question_set_category:
     path: '/question_bank/{id}/questions/set_category'
     defaults:
