@@ -62,7 +62,7 @@ import {
   Cascader,
   TreeSelect,
   Image,
-	Progress
+  Progress
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);

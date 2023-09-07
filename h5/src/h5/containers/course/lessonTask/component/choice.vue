@@ -211,7 +211,6 @@ export default {
       isShowUpIcon: false,
       width: WINDOWWIDTH,
       radioDisabled:false,
-      // myAnswer: ['B', 'C'],
       refreshKey: true,
       question: [],
     };

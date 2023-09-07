@@ -7,7 +7,7 @@
         </span>
         <span class="material-text material-icon" v-html="stem" @click="handleClickImage($event.target.src)" >
         </span>
-				<attachement-preview 
+        <attachement-preview 
           v-for="item in getAttachementMaterialType('material')"
           :canLoadPlayer="isCurrent"
           :attachment="item"
@@ -93,11 +93,11 @@
       {{ $t('courseLearning.analyze') }}：
       <span v-if="parentTitleAnalysis !== ''" v-html="parentTitleAnalysis" @click="handleClickImage($event.target.src)" />
       <span v-else>{{ $t('courseLearning.noParsing') }}</span>
-			<attachement-preview 
-				v-for="item in getAttachementMaterialType('analysis')"
-				:canLoadPlayer="isCurrent"
-				:attachment="item"
-				:key="item.id" />
+      <attachement-preview 
+        v-for="item in getAttachementMaterialType('analysis')"
+        :canLoadPlayer="isCurrent"
+        :attachment="item"
+        :key="item.id" />
     </div>
   </div>
   
@@ -237,7 +237,7 @@ export default {
     },
     handleClickImage (imagesUrl) {
       if (imagesUrl === undefined) return;
-			event.stopPropagation();//  阻止冒泡
+      event.stopPropagation();//  阻止冒泡
       const images = [imagesUrl]
       ImagePreview({
         images
@@ -295,10 +295,10 @@ export default {
       this.$emit('singleChoose', this.radio, this.itemdata);
     },
     getAttachementByType(type) {
-			return this.itemdata.attachments.filter(item => item.module === type) || []
+      return this.itemdata.attachments.filter(item => item.module === type) || []
     },
-		getAttachementMaterialType(type) {
-			return this.itemdata.parentTitle.attachments.filter(item => item.module === type) || []
+    getAttachementMaterialType(type) {
+      return this.itemdata.parentTitle.attachments.filter(item => item.module === type) || []
     },
     changeUpIcon() {
       this.isShowUpIcon = false

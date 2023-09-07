@@ -22,12 +22,12 @@
       >
         <template #header>
           <div class="van-cell van-panel__header">
-            <span
-              style="font-size:16px;font-weight:500;color:rgba(0,0,0,0.85)"
+            <span class="font-medium text-16"
+              style="color:rgba(0,0,0,0.85)"
               >{{ $t('courseLearning.numberOfTopics') }}</span
             >
-            <span
-              style="margin-left:12px;font-size:14px;font-weight:400;color:rgba(0,0,0,0.35)"
+            <span class="ml-12 font-normal text-14 leading-6"
+              style="color:rgba(0,0,0,0.35)"
               >{{ exercise.itemCount + ' ' + $t('courseLearning.topic') }}</span
             >
           </div>

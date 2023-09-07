@@ -16,12 +16,12 @@
       >
         <template #header>
           <div class="van-cell van-panel__header">
-            <span
-              style="font-size:16px;font-weight:500;color:rgba(0,0,0,0.85)"
+            <span class="font-medium text-16"
+              style="color:rgba(0,0,0,0.85)"
               >{{ $t('courseLearning.numberOfTopics') }}</span
             >
-            <span
-              style="margin-left:12px;font-size:14px;font-weight:400;color:rgba(0,0,0,0.35)"
+            <span class="ml-12 font-normal text-14 leading-6"
+              style="color:rgba(0,0,0,0.35)"
               >{{
                 exerciseIntro.itemCounts.total +
                   ' ' +
@@ -149,7 +149,7 @@ export default {
     next();
   },
   methods: {
-		// 获取信息
+    // 获取信息
     getExerciseIntro() {
       this.exerciseId = this.$route.query.exerciseId;
       this.moduleId = this.$route.query.moduleId;
@@ -177,25 +177,25 @@ export default {
           Toast.fail(err.message);
         });
     },
-		// 开始答题
+    // 开始答题
     startExercise() {
       const query = {
         mode: 'start',
         type: 'chapter',
-				exerciseMode: this.radio,
-				title: this.exerciseIntro.chapterName,
+        exerciseMode: this.radio,
+        title: this.exerciseIntro.chapterName,
         exerciseId: this.exerciseId,
         categoryId: this.categoryId,
         moduleId: this.moduleId,
       };
       this.$router.push({ path: '/brushDo', query });
     },
-		// 继续答题
+    // 继续答题
     continueDo() {
       const query = {
         mode: 'continue',
         type: 'chapter',
-				title: this.exerciseIntro.chapterName,
+        title: this.exerciseIntro.chapterName,
         exerciseId: this.exerciseId,
         categoryId: this.categoryId,
         moduleId: this.moduleId,

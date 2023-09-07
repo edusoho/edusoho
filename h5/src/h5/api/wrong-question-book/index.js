@@ -41,7 +41,7 @@ export default [
     url: '/wrong_books/{poolId}/submit_answer/{recordId}',
     method: 'PUT',
   },
-	{
+  {
     // 获取错题总数
     name: 'getWrongNumCount',
     url: '/wrong_book/{poolId}',

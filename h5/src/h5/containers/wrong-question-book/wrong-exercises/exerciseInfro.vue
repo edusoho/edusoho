@@ -89,14 +89,14 @@ export default {
     next();
   },
   methods: {
-		// 失焦校验
+    // 失焦校验
     blurInput(e) {
       if (Number(e.target.value) > this.wrongNumCount) {
-				this.questionsNum = this.wrongNumCount
+        this.questionsNum = this.wrongNumCount
         Toast.fail('超出输入范围');
       }
     },
-		// 获取信息
+    // 获取信息
     getWrongNumCount() {
       Api.getWrongNumCount({
         query: {

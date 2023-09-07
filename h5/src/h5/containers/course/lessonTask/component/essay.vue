@@ -109,10 +109,10 @@
       <span v-if="parentTitleAnalysis !== ''" v-html="parentTitleAnalysis" @click="handleClickImage($event.target.src)" />
       <span v-else>{{ $t('courseLearning.noParsing') }}</span>
       <attachement-preview 
-				v-for="item in getAttachementMaterialType('analysis')"
-				:canLoadPlayer="isCurrent"
-				:attachment="item"
-				:key="item.id" />
+        v-for="item in getAttachementMaterialType('analysis')"
+        :canLoadPlayer="isCurrent"
+        :attachment="item"
+        :key="item.id" />
     </div>
     <div v-if="canDo && exerciseMode === '1' && disabledData" class="submit-footer" :style="{width:width+ 'px'}">
       <van-button
@@ -272,7 +272,7 @@ export default {
       return this.itemdata.attachments.filter(item => item.module === type) || []
     },
     getAttachementMaterialType(type) {
-			return this.itemdata.parentTitle.attachments.filter(item => item.module === type) || []
+      return this.itemdata.parentTitle.attachments.filter(item => item.module === type) || []
     },
     refreshChoice(res) {
       if (res) {

@@ -42,13 +42,13 @@
             :subject="subject(paper)"
             :exerciseInfo="exerciseInfo"
             :exerciseMode="exerciseMode"
-						:parentTitleAnalysis="paper.parentTitle ? paper.parentTitle.analysis : ''"
-						:parentType="paper.parentType ? paper.parentType : ''"
+            :parentTitleAnalysis="paper.parentTitle ? paper.parentTitle.analysis : ''"
+            :parentType="paper.parentType ? paper.parentType : ''"
             :analysis="paper.analysis"
             :test-result="paper.testResult"
             :key="refreshKey"
-						:mode="mode"
-						:isExercise="isExercise"
+            :mode="mode"
+            :isExercise="isExercise"
             :disabledData="mode === 'exercise' ? canDo && iscando[index] : canDo"
             @singleChoose="singleChoose"
           />
@@ -68,9 +68,9 @@
             :analysis="paper.analysis"
             :myAnswer="myAnswer"
             :test-result="paper.testResult"
-						:mode="mode"
-						:parentTitleAnalysis="paper.parentTitle ? paper.parentTitle.analysis : ''"
-						:parentType="paper.parentType ? paper.parentType : ''"
+            :mode="mode"
+            :parentTitleAnalysis="paper.parentTitle ? paper.parentTitle.analysis : ''"
+            :parentType="paper.parentType ? paper.parentType : ''"
             :disabledData="mode === 'exercise' ? canDo && iscando[index] : canDo"
             @choiceChoose="choiceChoose"
             @submitSingleAnswer = "submitSingleAnswer"
@@ -90,9 +90,9 @@
             :exerciseMode="exerciseMode"
             :exerciseInfo="exerciseInfo"
             :analysis="paper.analysis"
-						:mode="mode"
-						:parentTitleAnalysis="paper.parentTitle ? paper.parentTitle.analysis : ''"
-						:parentType="paper.parentType ? paper.parentType : ''"
+            :mode="mode"
+            :parentTitleAnalysis="paper.parentTitle ? paper.parentTitle.analysis : ''"
+            :parentType="paper.parentType ? paper.parentType : ''"
             :disabledData="mode === 'exercise' ? canDo && iscando[index] : canDo"
             @determineChoose="determineChoose"
           />
@@ -106,14 +106,14 @@
             :showShadow = "info[info.length - 1].id"
             :is-current="currentIndex === index"
             :number="index"
-						:mode="mode"
-						:parentTitleAnalysis="paper.parentTitle ? paper.parentTitle.analysis : ''"
-						:parentType="paper.parentType ? paper.parentType : ''"
+            :mode="mode"
+            :parentTitleAnalysis="paper.parentTitle ? paper.parentTitle.analysis : ''"
+            :parentType="paper.parentType ? paper.parentType : ''"
             :exerciseMode="exerciseMode"
             :subject="subject(paper)"
             :analysis="paper.analysis"
             :disabledData="mode === 'exercise' ? canDo && iscando[index] : canDo"
-						@submitSingleAnswer = "submitSingleAnswer"
+            @submitSingleAnswer = "submitSingleAnswer"
           />
 
           <fill-type
@@ -125,9 +125,9 @@
             :showShadow = "info[info.length - 1].id"
             :is-current="currentIndex === index"
             :number="index"
-						:mode="mode"
-						:parentTitleAnalysis="paper.parentTitle ? paper.parentTitle.analysis : ''"
-						:parentType="paper.parentType ? paper.parentType : ''"
+            :mode="mode"
+            :parentTitleAnalysis="paper.parentTitle ? paper.parentTitle.analysis : ''"
+            :parentType="paper.parentType ? paper.parentType : ''"
             :subject="subject(paper)"
             :exerciseMode="exerciseMode"
             :exerciseInfo="exerciseInfo"
@@ -260,10 +260,10 @@ export default {
       type: String,
       default: ''
     },
-		mode: {
-			type: String,
-			default: ''
-		}
+    mode: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
@@ -354,7 +354,7 @@ export default {
       let typeName;
 
       if (paper.parentType) {
-				parentType = this.$t('courseLearning.material');
+        parentType = this.$t('courseLearning.material');
         return parentType;
       }
 
@@ -407,7 +407,7 @@ export default {
     submitSingleAnswer: _.debounce(function (response, data) {
       if(data.type === "choice" || data.type === "uncertain_choice"){
         response = this.numberFormatterCode(response)
-				response = response.sort()
+        response = response.sort()
       }
       Api.submitSingleAnswer({
         query:{

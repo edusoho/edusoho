@@ -213,16 +213,16 @@ export default {
     },
 
     onClickWrongExercise() {
-			this.$router.replace({
+      this.$router.replace({
         name: 'WrongExercisesIntro',
         query: {
-					targetType: this.$route.params.type,
+          targetType: this.$route.params.type,
           id: this.targetId,
           ...this.searchParams,
         },
       });
     },
-		// WrongExercisesIntro
+    // WrongExercisesIntro
     goToStartAnswer() {
       this.$router.replace({
         name: 'WrongExercisesDo',
