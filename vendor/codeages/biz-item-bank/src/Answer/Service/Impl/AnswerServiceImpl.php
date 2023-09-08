@@ -83,6 +83,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
+            $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
             $isFinished = $this->isFinished($answerQuestionReports, $answerScene);
             list($answerRecord) = $this->generateAnswerReport($answerQuestionReports, $answerRecord, $assessmentResponse['used_time'], $isFinished);
 
@@ -357,7 +358,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     protected function generateAnswerReport($answerQuestionReports, $answerRecord, $usedTime = 0, $isFinished = true)
     {
-        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $subjectiveScore = $this->sumSubjectiveScore($answerQuestionReports);
         $score = $this->sumScore($answerQuestionReports);
 
@@ -385,6 +385,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         );
 
         if ($isFinished) {
+            $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
             $this->getAnswerSceneService()->update(
                 $answerScene['id'],
                 ['name' => $answerScene['name'], 'last_review_time' => time()]
