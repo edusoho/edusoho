@@ -259,7 +259,7 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
             ];
         }
 
-       return $updateFields;
+        return $this->batchUpdateItemCategory($updateFields);
     }
 
     public function batchUpdateItemCategory($updateFields)

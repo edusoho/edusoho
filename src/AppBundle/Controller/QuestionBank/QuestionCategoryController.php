@@ -122,20 +122,25 @@ class QuestionCategoryController extends BaseController
     {
         $ids = $request->request->get('ids');
         if (!$this->getQuestionBankService()->canManageBankCategory($id)) {
-            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+            return $this->createJsonResponse([
+                'success' => false,
+                'message' => '您不是该题库管理者，不能查看此页面！',
+            ]);
         }
 
         $categories = $this->getItemCategoryService()->findItemCategoriesByIds($ids);
         $parentIds = array_unique(array_column($categories, 'parent_id'));
         if (count($parentIds) > 1) {
-            return $this->createMessageResponse('error', '非同一父分类下的分类，不可移动');
+            return $this->createJsonResponse([
+                'success' => false,
+                'message' => '非同一父分类下的分类，不可移动',
+            ]);
         }
 
-        $updateFields = $this->getItemCategoryService()->sortItemCategories($ids);
-        $this->getItemCategoryService()->batchUpdateItemCategory($updateFields);
+        $this->getItemCategoryService()->sortItemCategories($ids);
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        $this->getLogService()->info('question_bank', 'update_category', "管理员{$this->getCurrentUser()['nickname']}修改题库《{$questionBank['name']}》的题目分类排序");
+        $this->getLogService()->info('question_bank', 'sort_question_category', "管理员{$this->getCurrentUser()['nickname']}修改题库《{$questionBank['name']}》的题目分类排序");
 
         return $this->createJsonResponse(true);
     }
