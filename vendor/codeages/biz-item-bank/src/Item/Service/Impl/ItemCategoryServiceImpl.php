@@ -259,11 +259,6 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
             ];
         }
 
-        return $this->batchUpdateItemCategory($updateFields);
-    }
-
-    public function batchUpdateItemCategory($updateFields)
-    {
         return $this->getItemCategoryDao()->batchUpdate(ArrayToolkit::column($updateFields, 'id'), $updateFields);
     }
 
