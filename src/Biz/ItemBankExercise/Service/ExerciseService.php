@@ -63,4 +63,6 @@ interface ExerciseService
     public function findExercisesByLikeTitle($title);
 
     public function tryTakeExercise($exerciseId);
+
+    public function publishExerciseChapter($exerciseId, $ids);
 }

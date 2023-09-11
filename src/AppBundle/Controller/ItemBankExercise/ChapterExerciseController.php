@@ -5,9 +5,7 @@ namespace AppBundle\Controller\ItemBankExercise;
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
-use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class ChapterExerciseController extends BaseController
@@ -40,36 +38,13 @@ class ChapterExerciseController extends BaseController
     public function publishAction(Request $request, $exerciseId)
     {
         $ids = $request->request->get('ids');
-        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+        try {
+            $this->getExerciseService()->publishExerciseChapter($exerciseId, $ids);
 
-        $categories = $this->getItemCategoryService()->findItemCategoriesByIds($ids);
-        $parentIds = array_unique(array_column($categories, 'parent_id'));
-
-        $hiddenChapterIds = $exercise['hiddenChapterIds'] ? explode(',', $exercise['hiddenChapterIds']) : [];
-
-        foreach ($parentIds as $parentId) {
-            if (empty($hiddenChapterIds) && $parentId && !in_array($parentId, $ids)) {
-                return $this->createJsonResponse([
-                    'success' => false,
-                    'message' => '请先发布上一级章节',
-                ]);
-            }
-
-            if ($hiddenChapterIds && $parentId && !in_array($parentId, array_unique(array_merge($hiddenChapterIds, $ids)))) {
-                return $this->createJsonResponse([
-                    'success' => false,
-                    'message' => '请先发布上一级章节',
-                ]);
-            }
+            return $this->createJsonResponse(['success' => true]);
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(['success' => false, 'message' => $this->trans($e->getMessage())]);
         }
-
-        $updateHiddenChapterIds = array_merge($hiddenChapterIds, array_diff($ids, $hiddenChapterIds));
-        $this->getExerciseService()->update($exerciseId, ['hiddenChapterIds' => implode(',', $updateHiddenChapterIds)]);
-
-        $this->dispatchEvent('itemBankExerciseChapter.publish', new Event($exercise));
-        $this->getLogService()->info('item_bank_exercise', 'publish_exercise_chapter', "管理员{$this->getCurrentUser()['nickname']}发布题库练习《{$exercise['title']}》的章节");
-
-        return $this->createJsonResponse(['success' => true]);
     }
 
     /**
@@ -94,13 +69,5 @@ class ChapterExerciseController extends BaseController
     protected function getItemCategoryService()
     {
         return $this->createService('ItemBank:Item:ItemCategoryService');
-    }
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected function dispatchEvent($eventName, Event $event)
-    {
-        return $this->getBiz()['dispatcher']->dispatch($eventName, $event);
     }
 }
