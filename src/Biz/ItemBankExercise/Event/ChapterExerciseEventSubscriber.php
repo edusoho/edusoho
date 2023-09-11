@@ -32,8 +32,7 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
         $item = $event->getSubject();
         if (!empty($item)) {
             $exercise = $this->getItemBankExercise($item['bank_id']);
-
-            $this->createUpdateMemberMasteryRateJob($exercise['id']);
+            $this->createUpdateMemberMasteryRateJob($exercise);
         }
     }
 
@@ -54,8 +53,7 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
             if ($deleteQuestionIds) {
                 $this->getItemBankExerciseQuestionRecordService()->deleteByQuestionIds($deleteQuestionIds);
                 $exercise = $this->getItemBankExercise($item['bank_id']);
-
-                $this->createUpdateMemberMasteryRateJob($exercise['id']);
+                $this->createUpdateMemberMasteryRateJob($exercise);
             }
         }
     }
@@ -66,8 +64,7 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
         if (!empty($item)) {
             $this->getItemBankExerciseQuestionRecordService()->deleteByItemIds([$item['id']]);
             $exercise = $this->getItemBankExercise($item['bank_id']);
-
-            $this->createUpdateMemberMasteryRateJob($exercise['id']);
+            $this->createUpdateMemberMasteryRateJob($exercise);
         }
     }
 
@@ -76,8 +73,7 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
         $items = $event->getSubject();
         if (!empty($items)) {
             $exercise = $this->getItemBankExercise(current($items)['bank_id']);
-
-            $this->createUpdateMemberMasteryRateJob($exercise['id']);
+            $this->createUpdateMemberMasteryRateJob($exercise);
         }
     }
 
@@ -87,8 +83,7 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
         if (!empty($items)) {
             $this->getItemBankExerciseQuestionRecordService()->deleteByItemIds(ArrayToolkit::column($items, 'id'));
             $exercise = $this->getItemBankExercise(current($items)['bank_id']);
-
-            $this->createUpdateMemberMasteryRateJob($exercise['id']);
+            $this->createUpdateMemberMasteryRateJob($exercise);
         }
     }
 
@@ -142,36 +137,36 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
 
     public function onItemBankExerciseChapterStatusUpdate(Event $event)
     {
-        $exerciseId = $event->getSubject();
-        if (empty($exerciseId)) {
+        $exercise = $event->getSubject();
+        if (empty($exercise)) {
             return;
         }
 
-        $this->createUpdateMemberMasteryRateJob($exerciseId);
+        $this->createUpdateMemberMasteryRateJob($exercise);
     }
 
     protected function getItemBankExercise($itemBankId)
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($itemBankId);
-        $itemBankExericse = $this->getItemBankExerciseService()->getByQuestionBankId($questionBank['id']);
-        if (empty($itemBankExericse)) {
+
+        return empty($questionBank) ? [] : $this->getItemBankExerciseService()->getByQuestionBankId($questionBank['id']);
+    }
+
+    protected function createUpdateMemberMasteryRateJob($exercise)
+    {
+        if (empty($exercise)) {
             return;
         }
 
-        return $itemBankExericse;
-    }
-
-    protected function createUpdateMemberMasteryRateJob($exericseId)
-    {
-        $job = $this->getSchedulerService()->getJobByName('UpdateItemBankMemberMasteryRateJob_'.$exericseId);
+        $job = $this->getSchedulerService()->getJobByName('UpdateItemBankMemberMasteryRateJob_'.$exercise['id']);
         if (empty($job)) {
             $this->getSchedulerService()->register([
-                'name' => 'UpdateItemBankMemberMasteryRateJob_'.$exericseId,
+                'name' => 'UpdateItemBankMemberMasteryRateJob_'.$exercise['id'],
                 'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
                 'expression' => intval(time() + 3 * 60),
                 'misfire_policy' => 'executing',
                 'class' => 'Biz\ItemBankExercise\Job\UpdateMemberMasteryRateJob',
-                'args' => ['itemBankExericseId' => $exericseId],
+                'args' => ['itemBankExericseId' => $exercise['id']],
             ]);
         }
     }

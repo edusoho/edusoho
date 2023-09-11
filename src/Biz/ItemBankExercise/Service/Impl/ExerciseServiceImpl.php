@@ -532,7 +532,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $updateHiddenChapterIds = array_diff($exercise['hiddenChapterIds'], $ids);
         $this->update($exerciseId, ['hiddenChapterIds' => $updateHiddenChapterIds]);
 
-        $this->dispatchEvent('itemBankExercise.chapter.publish', new Event($exerciseId));
+        $this->dispatchEvent('itemBankExercise.chapter.publish', new Event($exercise));
         $this->getLogService()->info('item_bank_exercise', 'publish_exercise_chapter', "管理员{$this->getCurrentUser()->nickname}发布题库练习《{$exercise['title']}》的章节", ['ids' => $ids]);
     }
 
