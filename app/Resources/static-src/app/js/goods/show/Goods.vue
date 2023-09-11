@@ -58,7 +58,7 @@
                          class="content-item js-content-item">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
                         <div class="searchInput">
-                          <a-input-search placeholder="请输入课程名称" enter-button @search="searchCourse" />
+                          <a-input-search :placeholder="'course.search.placeholder'|trans" enter-button @search="searchCourse" />
                         </div>
                         <classroom-courses v-if="searchResult.length > 0 || componentsData.classroomCourses.length > 0" :classroomCourses="isSearch ? searchResult : componentsData.classroomCourses"></classroom-courses>
                         <div v-if="searchResult.length === 0 && isSearch" class="emptyCourse">
