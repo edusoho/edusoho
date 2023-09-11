@@ -55,7 +55,7 @@ class ChapterExerciseController extends BaseController
                 ]);
             }
 
-            if ($hiddenChapterIds && $parentId && !in_array($parentId, $hiddenChapterIds)) {
+            if ($hiddenChapterIds && $parentId && !in_array($parentId, array_unique(array_merge($hiddenChapterIds, $ids)))) {
                 return $this->createJsonResponse([
                     'success' => false,
                     'message' => '请先发布上一级章节',
@@ -63,13 +63,7 @@ class ChapterExerciseController extends BaseController
             }
         }
 
-        if (empty($hiddenChapterIds)) {
-            $updateHiddenChapterIds = array_diff($ids, $hiddenChapterIds);
-        } else {
-            $updateHiddenChapterIds = array_diff($ids, $hiddenChapterIds);
-            $updateHiddenChapterIds = array_merge($hiddenChapterIds, $updateHiddenChapterIds);
-        }
-
+        $updateHiddenChapterIds = array_merge($hiddenChapterIds, array_diff($ids, $hiddenChapterIds));
         $this->getExerciseService()->update($exerciseId, ['hiddenChapterIds' => implode(',', $updateHiddenChapterIds)]);
 
         $this->dispatchEvent('itemBankExerciseChapter.publish', new Event($exercise));
