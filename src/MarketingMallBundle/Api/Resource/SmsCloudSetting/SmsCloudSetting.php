@@ -1,11 +1,11 @@
 <?php
 
-namespace MarketingMallBundle\Api\Resource\SmsSetting;
+namespace MarketingMallBundle\Api\Resource\SmsCloudSetting;
 
 use ApiBundle\Api\ApiRequest;
 use MarketingMallBundle\Api\Resource\BaseResource;
 
-class SmsSetting extends BaseResource
+class SmsCloudSetting extends BaseResource
 {
     public function search(ApiRequest $request)
     {
@@ -14,7 +14,7 @@ class SmsSetting extends BaseResource
             return 0;
         }
 
-        return $mySetting['sms_enabled'];
+        return ['isShippingNotifyEnabled' => isset($mySetting['sms_shipping_notify']) && 'on' == $mySetting['sms_shipping_notify']];
     }
 
     protected function getSettingService()

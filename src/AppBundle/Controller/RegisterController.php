@@ -70,8 +70,11 @@ class RegisterController extends BaseController
                     }
                 }
 
-                //获取GET地址的邀请码
-                $registration['invitedCode'] = trim($request->get('inviteCode', ''));
+                //获取POST参数验证码
+                if (!isset($registration['invitedCode']) || empty($registration['invitedCode'])) {
+                    //获取GET地址的邀请码
+                    $registration['invitedCode'] = trim($request->get('inviteCode', ''));
+                }
                 $registration['createdIp'] = $request->getClientIp();
                 $registration['registeredWay'] = 'web';
                 if ($this->isPluginInstalled('Drp')) {
