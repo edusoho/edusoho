@@ -2,7 +2,7 @@
   <e-panel class="relative" :title="title" :need-flex="false" :defaul-value="defaulValue">
     <div class="absolute top-32 right-0 flex items-center bg-fill-7 py-4 px-12 rounded-full" @click="goSearch">
       <IconSearch />
-      <label class="ml-4 text-text-6">找课程</label>
+      <label class="ml-4 text-text-6">{{ $t('e.searchCourse') }}</label>
     </div>
     <template v-if="courseSets.length">
       <moreMask
@@ -67,6 +67,10 @@ export default {
     feedback: {
       type: Boolean,
       default: true,
+    },
+    details: {
+      type: Object,
+      default: {}
     },
   },
   data() {

@@ -104,7 +104,7 @@
             <div class="goods-info__title">{{ $t('goods.learningCatalog') }}</div>
             <div class="flex items-center bg-fill-7 py-4 px-12 rounded-full" @click="goSearch">
               <IconSearch />
-              <label class="ml-4 text-text-6">找课程</label>
+              <label class="ml-4 text-text-6">{{ $t('e.searchCourse') }}</label>
             </div>
           </div>
           <!-- 学习课程目录 -->
@@ -268,7 +268,7 @@ export default {
       this.getGoodsCourseComponents();
     },
     goSearch() {
-      this.$router.push({ path: '/search', query: { id: this.goods.product.id } });
+      this.$router.push({ path: '/search', query: { id: this.goods.product.targetId } });
     },
     share(message) {
       let desc = ''
