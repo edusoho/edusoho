@@ -517,20 +517,23 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function publishExerciseChapter($exerciseId, $ids)
     {
+        if (empty($ids)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
         $exercise = $this->tryManageExercise($exerciseId);
 
         $chapters = $this->getItemBankChapterExerciseService()->findChaptersByIds($ids);
         $parentIds = array_unique(array_column($chapters, 'parent_id'));
 
-        if (array_intersect(array_diff($exercise['hiddenChapterIds'], $ids), $parentIds)) {
+        $hiddenChapterIds = array_diff($exercise['hiddenChapterIds'], $ids);
+        if (array_intersect($hiddenChapterIds, $parentIds)) {
             throw ItemBankExerciseException::UNPUBLISHED_PARENT_CHAPTER();
         }
 
         if (empty(array_intersect($exercise['hiddenChapterIds'], $ids))) {
             return;
         }
-        $updateHiddenChapterIds = array_diff($exercise['hiddenChapterIds'], $ids);
-        $this->update($exerciseId, ['hiddenChapterIds' => $updateHiddenChapterIds]);
+        $this->update($exerciseId, ['hiddenChapterIds' => $hiddenChapterIds]);
 
         $this->dispatchEvent('itemBankExercise.chapter.publish', new Event($exercise));
         $this->getLogService()->info('item_bank_exercise', 'publish_exercise_chapter', "管理员{$this->getCurrentUser()->nickname}发布题库练习《{$exercise['title']}》的章节", ['ids' => $ids]);

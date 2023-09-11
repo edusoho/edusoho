@@ -3968,6 +3968,8 @@ item_bank_exercise_manage_chapter_exercise_publish:
     path: '/item_bank_exercise/{exerciseId}/manage/chapter/publish'
     defaults:
         _controller: 'AppBundle:ItemBankExercise/ChapterExercise:publish'
+    methods:
+        - POST
 item_bank_exercise_manage_marketing_info:
     path: '/item_bank_exercise/{exerciseId}/manage/marketing/info'
     defaults:
