@@ -9729,6 +9729,7 @@ log.action.item_bank_exercise.recommend_exercise: 推荐题库练习
 log.action.item_bank_exercise.cancel_recommend_exercise: 取消推荐题库练习
 log.action.item_bank_exercise.publish_exercise: 发布题库练习
 log.action.item_bank_exercise.close_exercise: 关闭题库练习
+log.action.item_bank_exercise.publish_exercise_chapter: 发布题库练习章节
 log.action.certifiacte.create_certificate: 创建证书
 log.action.certifiacte.auto_issue: 自动发放证书
 log.action.certifiacte.create_template: 创建证书模板
@@ -11084,6 +11085,7 @@ exception.item_bank_exercise.member.member_not_student: 成员不是学生
 exception.item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或试卷练习至少需要启用一项
 exception.item_bank_exercise.exercise.is_exists: 题库练习已存在，请勿重复开启
 exception.item_bank_exercise.exercise.not_arrive: 题库练习未到学习时间，添加失败
+exception.item_bank_exercise.parent_chapter_unpublish: 请先发布上一级章节
 exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
 exception.item_bank.assessment.not.exist: 试卷不存在
 
