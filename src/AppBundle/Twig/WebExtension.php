@@ -42,6 +42,7 @@ use Biz\Theme\Service\ThemeService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -239,6 +240,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_teacher_role', [$this, 'isTeacherRole']),
             new \Twig_SimpleFunction('user_info_select', [$this, 'userInfoSelect']),
             new \Twig_SimpleFunction('user_show_path', [$this, 'userPath']),
+            new \Twig_SimpleFunction('get_record_exercise_mode', [$this, 'getRecordExerciseMode']),
         ];
     }
 
@@ -347,6 +349,16 @@ class WebExtension extends \Twig_Extension
         $user = $this->getUserService()->getUser($id);
 
         return $this->container->get('router')->generate('user_show', ['id' => $user['uuid'] ?? $id]);
+    }
+
+    public function getRecordExerciseMode($params)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($params['answerRecordId']);
+        if (empty($answerRecord)) {
+            return '0';
+        }
+
+        return $answerRecord['exercise_mode'];
     }
 
     /**
@@ -2645,5 +2657,13 @@ class WebExtension extends \Twig_Extension
     protected function getMallService()
     {
         return $this->createService('Mall:MallService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 }
