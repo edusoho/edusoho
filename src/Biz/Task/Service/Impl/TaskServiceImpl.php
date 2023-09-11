@@ -1491,13 +1491,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
         $canLearn = true;
         foreach ($preTasks as $preTask) {
-            if ('3987' == $task['id']) {
-                file_put_contents('/tmp/log', 'preTask: '.json_encode($preTask)."\n", 8);
-                file_put_contents('/tmp/log', 'preTaskId: '.json_encode($preTask['id'])."\n", 8);
-                file_put_contents('/tmp/log', 'preTaskLock: '.json_encode($preTask['lock'])."\n", 8);
-                file_put_contents('/tmp/log', 'preTaskCanLearn: '.json_encode($preTask['canLearn'])."\n", 8);
-            }
-
             if ($preTask['lock']) {
                 $canLearn = false;
                 break;
