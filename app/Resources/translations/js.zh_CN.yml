@@ -1843,6 +1843,7 @@ goods.show_page.free_join_btn: 免费加入
 goods.show_page.buy_btn: 立即购买
 classroom.go_inside: 进去逛逛
 course.base.title.placeholder: 请输入课程标题
+course.search.placeholder: 请输入课程名称
 course.unname_title: 未命名计划
 
 course.task.out_focus_mask.continue_studying: 继续学习

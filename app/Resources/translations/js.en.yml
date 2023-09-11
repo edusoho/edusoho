@@ -1879,6 +1879,7 @@ goods.show_page.free_join_btn: Free Join
 goods.show_page.buy_btn: Buy
 classroom.go_inside: Go to preview
 course.base.title.placeholder: Please insert course title
+course.search.placeholder: Please enter the course name
 course.unname_title: Unnamed plan
 
 course.task.out_focus_mask.continue_studying: Continue studying
