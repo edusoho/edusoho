@@ -20,10 +20,13 @@ import _ from 'lodash';
 import Api from '@/api';
 import { mapState } from 'vuex';
 import { Toast } from 'vant';
+import itemEngine from '@/src/components/item-engine/src/item-engine.vue';
 
 export default {
   name: 'WrongQuestionDo',
-
+  components: {
+    itemEngine
+  },
   data() {
     return {
       poolId: this.$route.query.id,
