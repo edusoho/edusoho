@@ -23,6 +23,7 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
             'item.delete' => 'onItemDelete',
             'item.import' => 'onItemImport',
             'item.batchDelete' => 'onItemBatchDelete',
+            'itemBankExerciseChapter.publish' => 'onItemBankExerciseChapterStatusUpdate',
         ];
     }
 
@@ -129,6 +130,21 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
         $this->finished($chapterExerciseRecord, $answerReport['id']);
     }
 
+    public function onItemBankExerciseChapterStatusUpdate(Event $event)
+    {
+        $exercise = $event->getSubject();
+        if (empty($exercise)) {
+            return;
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
+        if (empty($questionBank['itemBank'])) {
+            return;
+        }
+
+        $this->createUpdateMemberMasteryRateJob($questionBank['itemBankId']);
+    }
+
     protected function createUpdateMemberMasteryRateJob($itemBankId)
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($itemBankId);
@@ -137,17 +153,15 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
             return;
         }
 
-        $job = $this->getSchedulerService()->getJobByName('UpdateItemBankMemberMasteryRateJob_'.$itemBankExericse['id']);
-        if (empty($job)) {
-            $this->getSchedulerService()->register([
-                'name' => 'UpdateItemBankMemberMasteryRateJob_'.$itemBankExericse['id'],
-                'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-                'expression' => intval(time() + 3 * 60),
-                'misfire_policy' => 'executing',
-                'class' => 'Biz\ItemBankExercise\Job\UpdateMemberMasteryRateJob',
-                'args' => ['itemBankExericseId' => $itemBankExericse['id']],
-            ]);
-        }
+        $this->getSchedulerService()->deleteJobByName('UpdateItemBankMemberMasteryRateJob_'.$itemBankExericse['id']);
+        $this->getSchedulerService()->register([
+            'name' => 'UpdateItemBankMemberMasteryRateJob_'.$itemBankExericse['id'],
+            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+            'expression' => intval(time() + 3 * 60),
+            'misfire_policy' => 'executing',
+            'class' => 'Biz\ItemBankExercise\Job\UpdateMemberMasteryRateJob',
+            'args' => ['itemBankExericseId' => $itemBankExericse['id']],
+        ]);
     }
 
     protected function finished($chapterExerciseRecord, $answerReportId)

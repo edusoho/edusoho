@@ -9728,6 +9728,7 @@ log.action.item_bank_exercise.recommend_exercise: 推荐题库练习
 log.action.item_bank_exercise.cancel_recommend_exercise: 取消推荐题库练习
 log.action.item_bank_exercise.publish_exercise: 发布题库练习
 log.action.item_bank_exercise.close_exercise: 关闭题库练习
+log.action.item_bank_exercise.publish_exercise_chapter: 发布题库练习章节
 log.action.certifiacte.create_certificate: 创建证书
 log.action.certifiacte.auto_issue: 自动发放证书
 log.action.certifiacte.create_template: 创建证书模板

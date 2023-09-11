@@ -8469,6 +8469,7 @@ log.action.item_bank_exercise.recommend_exercise: Recommend Item Exercise
 log.action.item_bank_exercise.cancel_recommend_exercise: Cancel Recommend Item Exercise
 log.action.item_bank_exercise.publish_exercise: Publish Item Exercise
 log.action.item_bank_exercise.close_exercise: Close Item Exercise
+log.action.item_bank_exercise.publish_exercise_chapter: 'Publish the question bank exercise chapter'
 log.action.certifiacte.create_certificate: Create Certificate
 log.action.certifiacte.auto_issue: Auto Issue Certificate
 log.action.certifiacte.create_template: Create Template
