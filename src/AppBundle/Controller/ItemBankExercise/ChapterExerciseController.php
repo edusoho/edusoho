@@ -55,7 +55,7 @@ class ChapterExerciseController extends BaseController
                 ]);
             }
 
-            if ($hiddenChapterIds && $parentId && !in_array($parentId, $ids)) {
+            if ($hiddenChapterIds && $parentId && !in_array($parentId, $hiddenChapterIds)) {
                 return $this->createJsonResponse([
                     'success' => false,
                     'message' => '请先发布上一级章节',
