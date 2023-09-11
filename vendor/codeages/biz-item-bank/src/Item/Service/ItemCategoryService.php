@@ -27,4 +27,6 @@ interface ItemCategoryService
     public function updateItemNumAndQuestionNum($id);
 
     public function buildItemNumAndQuestionNumBybankId($bankId);
+
+    public function sortItemCategories($ids);
 }
