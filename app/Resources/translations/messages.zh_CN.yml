@@ -9718,6 +9718,7 @@ log.action.question_bank.create_category: 创建题库分类
 log.action.question_bank.delete_category: 删除题库分类
 log.action.question_bank.update_category: 更新题库分类
 log.action.question_bank.delete_question: 删除题库题目
+log.action.question_bank.sort_question_category: 题库分类排序
 log.action.destroy_account_record.create: 申请注销帐号
 log.action.destroy_account_record.pass: 通过注销帐号申请
 log.action.destroy_account_record.reject: 拒绝注销帐号申请

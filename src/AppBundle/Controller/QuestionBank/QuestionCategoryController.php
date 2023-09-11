@@ -124,7 +124,7 @@ class QuestionCategoryController extends BaseController
         if (!$this->getQuestionBankService()->canManageBankCategory($id)) {
             return $this->createJsonResponse([
                 'success' => false,
-                'message' => '您不是该题库管理者，不能查看此页面！',
+                'message' => '您不是该题库管理者，不能对分类进行排序',
             ]);
         }
 
@@ -133,7 +133,7 @@ class QuestionCategoryController extends BaseController
         if (count($parentIds) > 1) {
             return $this->createJsonResponse([
                 'success' => false,
-                'message' => '非同一父分类下的分类，不可移动',
+                'message' => '非同一父分类下的分类，不可排序',
             ]);
         }
 
