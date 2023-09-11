@@ -1628,6 +1628,7 @@ t.add("goods.show_page.free_join_btn", "\u514d\u8d39\u52a0\u5165", "js", "zh_CN"
 t.add("goods.show_page.buy_btn", "\u7acb\u5373\u8d2d\u4e70", "js", "zh_CN");
 t.add("classroom.go_inside", "\u8fdb\u53bb\u901b\u901b", "js", "zh_CN");
 t.add("course.base.title.placeholder", "\u8bf7\u8f93\u5165\u8bfe\u7a0b\u6807\u9898", "js", "zh_CN");
+t.add("course.search.placeholder", "\u8bf7\u8f93\u5165\u8bfe\u7a0b\u540d\u79f0", "js", "zh_CN");
 t.add("course.unname_title", "\u672a\u547d\u540d\u8ba1\u5212", "js", "zh_CN");
 t.add("course.task.out_focus_mask.continue_studying", "\u7ee7\u7eed\u5b66\u4e60", "js", "zh_CN");
 t.add("course.task.out_focus_mask.stop.tips", "<p class=\"ineffective-learning\">\u5b66\u7d2f\u4e86\u53ef\u4ee5\u4f11\u606f\u4e00\u4f1a :D<\/p>\n", "js", "zh_CN");
