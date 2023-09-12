@@ -79,7 +79,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $smsSetting = $this->getSettingService()->get('cloud_sms');
         if ($smsSetting && !isset($smsSetting['sms_shipping_notify'])){
-            $smsSetting['sms_shipping_notify'] = 'on';
+            $smsSetting['sms_shipping_notify'] = 'off';
             $this->getSettingService()->set('cloud_sms',$smsSetting);
         }
 
