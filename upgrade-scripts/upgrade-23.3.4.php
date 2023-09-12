@@ -11,6 +11,21 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function update($index = 0)
     {
+        $this->getConnection()->beginTransaction();
+        try {
+            $result = $this->updateScheme((int)$index);
+            $this->getConnection()->commit();
+            if (!empty($result)) {
+                return $result;
+            } else {
+                $this->logger('info', '执行升级脚本结束');
+            }
+        } catch (\Exception $e) {
+            $this->getConnection()->rollback();
+            $this->logger('error', $e->getTraceAsString());
+            throw $e;
+        }
+
         try {
             $dir = realpath($this->biz['kernel.root_dir'] . '/../web/install');
             $filesystem = new Filesystem();
@@ -20,20 +35,92 @@ class EduSohoUpgrade extends AbstractUpdater
         } catch (\Exception $e) {
             $this->logger('error', $e->getTraceAsString());
         }
+        $developerSetting = $this->getSettingService()->get('developer', array());
+        $developerSetting['debug'] = 0;
+        $this->getSettingService()->set('developer', $developerSetting);
+        $this->getSettingService()->set('crontab_next_executed_time', time());
+    }
+
+    private function updateScheme($index)
+    {
+        $definedFuncNames = [
+            'setCloudSmsWithSmsShippingNotify'
+        ];
+        $funcNames = array();
+        foreach ($definedFuncNames as $key => $funcName) {
+            $funcNames[$key + 1] = $funcName;
+        }
+        if (0 == $index) {
+            $this->logger('info', '开始执行升级脚本');
+
+            return array(
+                'index' => $this->generateIndex(1, 1),
+                'message' => '升级数据...',
+                'progress' => 0,
+            );
+        }
+
+        list($step, $page) = $this->getStepAndPage($index);
+        $method = $funcNames[$step];
+        $page = $this->$method($page);
+        if (1 == $page) {
+            ++$step;
+        }
+        if ($step <= count($funcNames)) {
+            return array(
+                'index' => $this->generateIndex($step, $page),
+                'message' => '升级数据...',
+                'progress' => 0,
+            );
+        }
+    }
+
+    public function setCloudSmsWithSmsShippingNotify(){
 
         $smsSetting = $this->getSettingService()->get('cloud_sms');
         if ($smsSetting && !isset($smsSetting['sms_shipping_notify'])){
             $smsSetting['sms_shipping_notify'] = 'on';
             $this->getSettingService()->set('cloud_sms',$smsSetting);
         }
+
+        return 1;
     }
 
+    protected function generateIndex($step, $page)
+    {
+        return $step * 1000000 + $page;
+    }
+
+    protected function getStepAndPage($index)
+    {
+        $step = intval($index / 1000000);
+        $page = $index % 1000000;
+
+        return array($step, $page);
+    }
+
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
+    }
 
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
+    protected function getJobLogDao()
+    {
+        return $this->createDao('Scheduler:JobLogDao');
+    }
+
+    /**
+     * @return \Biz\User\Service\UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
+    }
 }
 
 abstract class AbstractUpdater
