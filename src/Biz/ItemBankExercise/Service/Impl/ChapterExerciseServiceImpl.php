@@ -53,6 +53,26 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         return $chapterExerciseRecord;
     }
 
+    public function findChaptersByIds($ids)
+    {
+        return $this->getItemCategoryService()->findItemCategoriesByIds($ids);
+    }
+
+    public function getChapterTree($itemBankId)
+    {
+        return $this->getItemCategoryService()->getItemCategoryTree($itemBankId);
+    }
+
+    public function getChapterTreeList($itemBankId)
+    {
+        return $this->getItemCategoryService()->getItemCategoryTreeList($itemBankId);
+    }
+
+    public function findChapterChildrenIds($id)
+    {
+        return $this->getItemCategoryService()->findCategoryChildrenIds($id);
+    }
+
     protected function canStartAnswer($moduleId, $categroyId, $userId)
     {
         $module = $this->getItemBankExerciseModuleService()->get($moduleId);
