@@ -47,6 +47,18 @@ class ChapterExerciseController extends BaseController
         }
     }
 
+    public function unpublishAction(Request $request, $exerciseId)
+    {
+        $ids = $request->request->get('ids');
+        try {
+            $this->getExerciseService()->unpublishExerciseChapter($exerciseId, $ids);
+
+            return $this->createJsonResponse(['success' => true]);
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(['success' => false, 'message' => $this->trans($e->getMessage())]);
+        }
+    }
+
     /**
      * @return ExerciseService
      */

@@ -539,6 +539,26 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $this->getLogService()->info('item_bank_exercise', 'publish_exercise_chapter', "管理员{$this->getCurrentUser()->nickname}发布题库练习《{$exercise['title']}》的章节", ['ids' => $ids]);
     }
 
+    public function unpublishExerciseChapter($exerciseId, $ids)
+    {
+        if (empty($ids)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        $exercise = $this->tryManageExercise($exerciseId);
+
+        $childrenIds = $this->getItemBankChapterExerciseService()->findChapterChildrenIds($exercise['questionBankId'], $ids);
+        $hiddenChapterIds = array_unique(array_merge($exercise['hiddenChapterIds'], $ids, $childrenIds));
+
+        if (empty(array_diff($hiddenChapterIds, $exercise['hiddenChapterIds']))) {
+            return;
+        }
+        $this->update($exerciseId, ['hiddenChapterIds' => $hiddenChapterIds]);
+
+        $this->dispatchEvent('itemBankExercise.chapter.unpublish', new Event($exercise));
+        $this->getLogService()->info('item_bank_exercise', 'unpublish_exercise_chapter', "管理员{$this->getCurrentUser()['nickname']}取消发布题库练习《{$exercise['title']}》的章节", ['ids' => $ids]);
+    }
+
     /**
      * @return ExerciseDao
      */

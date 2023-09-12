@@ -3980,6 +3980,12 @@ item_bank_exercise_manage_chapter_exercise_publish:
         _controller: 'AppBundle:ItemBankExercise/ChapterExercise:publish'
     methods:
         - POST
+item_bank_exercise_manage_chapter_exercise_unpublish:
+    path: '/item_bank_exercise/{exerciseId}/manage/chapter/unpublish'
+    defaults:
+        _controller: 'AppBundle:ItemBankExercise/ChapterExercise:unpublish'
+    methods:
+        - POST
 item_bank_exercise_manage_marketing_info:
     path: '/item_bank_exercise/{exerciseId}/manage/marketing/info'
     defaults:

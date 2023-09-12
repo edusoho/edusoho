@@ -22,6 +22,8 @@ interface ItemCategoryService
 
     public function findCategoryChildrenIds($id);
 
+    public function findMultiCategoryChildrenIds($bankId, $ids);
+
     public function getItemCategoryTreeList($bankId);
 
     public function updateItemNumAndQuestionNum($id);

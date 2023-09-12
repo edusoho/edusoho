@@ -24,6 +24,7 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
             'item.import' => 'onItemImport',
             'item.batchDelete' => 'onItemBatchDelete',
             'itemBankExercise.chapter.publish' => 'onItemBankExerciseChapterStatusUpdate',
+            'itemBankExercise.chapter.unpublish' => 'onItemBankExerciseChapterStatusUpdate',
         ];
     }
 

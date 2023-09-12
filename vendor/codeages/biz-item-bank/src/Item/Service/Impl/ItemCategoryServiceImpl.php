@@ -173,15 +173,30 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
             return [];
         }
 
-        list($map, $tree) = $this->prepareCategoryTree($this->findItemCategoriesByBankId($category['bank_id']));
+        list($map) = $this->prepareCategoryTree($this->findItemCategoriesByBankId($category['bank_id']));
+
+        return $this->seekCategoryChildrenIds($map, [$id]);
+    }
+
+    public function findMultiCategoryChildrenIds($bankId, $ids)
+    {
+        list($map) = $this->prepareCategoryTree($this->findItemCategoriesByBankId($bankId));
+
+        return $this->seekCategoryChildrenIds($map, $ids);
+    }
+
+    protected function seekCategoryChildrenIds($map, $ids)
+    {
         $childrenIds = [];
 
-        $childrenIdsQueue = array_column($map[$id]['children'], 'id');
-        while (!empty($childrenIdsQueue)) {
-            $parent = $map[$childrenIdsQueue[0]];
-            $childrenIds[] = array_shift($childrenIdsQueue);
-            $childrenIdsQueue = array_merge($childrenIdsQueue, array_column($parent['children'], 'id'));
-            unset($parent);
+        foreach ($ids as $id) {
+            $childrenIdsQueue = array_column($map[$id]['children'], 'id');
+            while (!empty($childrenIdsQueue)) {
+                $parent = $map[$childrenIdsQueue[0]];
+                $childrenIds[] = array_shift($childrenIdsQueue);
+                $childrenIdsQueue = array_merge($childrenIdsQueue, array_column($parent['children'], 'id'));
+                unset($parent);
+            }
         }
 
         return $childrenIds;
