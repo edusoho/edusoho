@@ -4530,6 +4530,9 @@ admin.user.statistics.data_detail.active_chart: Active
 admin.user.statistics.data_detail.learn_detail: Learn Detail
 admin.user.statistics.data_detail.teaching_plan_name: 'Plan name'
 admin.user.statistics.data_detail.student_trend_ninety_days: '90 days'
+admin.user.statistics.data_detail.student_trend_one_year: '1 year'
+admin.user.statistics.data_detail.student_trend_two_year: '2 years'
+admin.user.statistics.data_detail.student_trend_three_year: '3 years'
 admin.user.statistics.data_detail.plan_progress_tip: 'The average plan progress is the average of all plans'
 admin.user.statistics.data_detail.task_progress_tip: 'Task completion ratio is the number of completed tasks divide the total number of tasks'
 admin.user.statistics.data_detail.from_classroom: From Class
