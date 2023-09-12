@@ -5352,6 +5352,9 @@ admin.user.statistics.data_detail.active_chart: 活跃度
 admin.user.statistics.data_detail.teaching_plan_name: 计划名
 admin.user.statistics.data_detail.learn_detail: 学习详情
 admin.user.statistics.data_detail.student_trend_ninety_days: 90天
+admin.user.statistics.data_detail.student_trend_one_year: 1年
+admin.user.statistics.data_detail.student_trend_two_year: 2年
+admin.user.statistics.data_detail.student_trend_three_year: 3年
 admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
 admin.user.statistics.data_detail.task_progress_tip: %taskName%完成比为已完成%taskName%数比总%taskName%数
 admin.user.statistics.data_detail.from_classroom: 来自班级
