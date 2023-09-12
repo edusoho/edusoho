@@ -53,7 +53,7 @@ class ExerciseController extends BaseController
         ]);
     }
 
-    public function notSupportSubmitSingle()
+    public function notSupportSubmitSingleAction()
     {
         return $this->render('exercise/not-support-submit-single-modal.html.twig');
     }
