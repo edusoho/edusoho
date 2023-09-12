@@ -33,6 +33,10 @@ class TestpaperInfo extends AbstractResource
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
+        if ($assessment['status'] == 'closed') {
+            throw TestpaperException::CLOSED_TESTPAPER();
+        }
+
         $testpaperWrapper = new TestpaperWrapper();
         $testpaper = $testpaperWrapper->wrapTestpaper($assessment);
         $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment), 'type', 'id');

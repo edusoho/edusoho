@@ -583,6 +583,7 @@ class EduCloudController extends BaseController
         $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
 
         $this->getSettingService()->set('cloud_sms', $smsStatus);
+        $this->getSettingService()->notifyCloudSmsUpdate(['isShippingNotifyEnabled' => false]);
 
         return $this->redirect($this->generateUrl('admin_v2_edu_cloud_sms_overview'));
     }
@@ -1337,6 +1338,11 @@ class EduCloudController extends BaseController
 
             $this->getSettingService()->set('cloud_sms', $smsStatus);
         }
+
+        //同步到商城云短信的配置
+        if ($dataUserPosted && isset($dataUserPosted['sms_shipping_notify'])) {
+            $this->getSettingService()->notifyCloudSmsUpdate(['isShippingNotifyEnabled' => 'on' == $dataUserPosted['sms_shipping_notify']]);
+        }
     }
 
     /**
@@ -1368,6 +1374,7 @@ class EduCloudController extends BaseController
             'sms_vip_buy_notify' => 'off',
             'sms_coin_buy_notify' => 'off',
             'sms_comment_modify' => 'off',
+            'sms_shipping_notify' => 'off',
         ];
 
         $dataUserPosted = ArrayToolkit::filter($dataUserPosted, $defaultSetting);
