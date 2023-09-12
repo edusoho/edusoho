@@ -125,6 +125,11 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
         return $this->getAnswerRecordDao()->batchUpdate($ids, $updateColumnsList);
     }
 
+    public function findByIds($ids)
+    {
+        return $this->getAnswerRecordDao()->findByIds($ids);
+    }
+
     /**
      * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService
      */

@@ -119,13 +119,8 @@ class AnswerController extends BaseController
         ]);
     }
 
-    public function categoryErrorModalAction(Request $request, $exerciseId, $moduleId, $categoryId)
+    public function errorModalAction()
     {
-        $access = $this->getItemBankExerciseService()->canLearnExercise($exerciseId);
-        if (AccessorInterface::SUCCESS != $access['code']) {
-            $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
-        }
-
         return $this->render('item-bank-exercise/answer/error-modal.html.twig');
     }
 

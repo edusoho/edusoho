@@ -4035,10 +4035,10 @@ item_bank_exercise_category_info_modal:
     path: '/item_bank_exercise/{exerciseId}/module/{moduleId}/category/{categoryId}/info_modal'
     defaults:
         _controller: 'AppBundle:ItemBankExercise/Answer:categoryInfoModal'
-item_bank_exercise_category_error_modal:
-    path: '/item_bank_exercise/{exerciseId}/module/{moduleId}/category/{categoryId}/error_modal'
+item_bank_exercise_error_modal:
+    path: '/exercise/error_modal'
     defaults:
-        _controller: 'AppBundle:ItemBankExercise/Answer:categoryErrorModal'
+        _controller: 'AppBundle:ItemBankExercise/Answer:errorModal'
 goods_show:
     path: '/goods/show/{id}'
     defaults:
