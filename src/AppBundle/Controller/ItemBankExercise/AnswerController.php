@@ -119,11 +119,6 @@ class AnswerController extends BaseController
         ]);
     }
 
-    public function errorModalAction()
-    {
-        return $this->render('item-bank-exercise/answer/error-modal.html.twig');
-    }
-
     /**
      * @return \Biz\ItemBankExercise\Service\ExerciseService
      */

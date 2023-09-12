@@ -304,9 +304,7 @@ class ExerciseController extends BaseController
             );
             $records = ArrayToolkit::index($records, 'itemCategoryId');
 
-            $answerRecordIds = array_column($records, 'answerRecordId');
-            $answerRecords = $this->getAnswerRecordService()->findByIds($answerRecordIds);
-            $answerRecords = ArrayToolkit::index($answerRecords, 'id');
+            $answerRecords = $this->getAnswerRecordService()->findByIds(array_column($records, 'answerRecordId'));
             foreach ($records as &$record) {
                 $record['exercise_mode'] = $answerRecords[$record['answerRecordId']]['exercise_mode'];
             }

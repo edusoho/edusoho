@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException;
@@ -127,7 +128,9 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
 
     public function findByIds($ids)
     {
-        return $this->getAnswerRecordDao()->findByIds($ids);
+        $answerRecords = $this->getAnswerRecordDao()->findByIds($ids);
+
+        return ArrayToolkit::index($answerRecords, 'id');
     }
 
     /**
