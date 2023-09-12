@@ -18,7 +18,7 @@
           :vip-tag-show="true"
           course-item-type="price"
           :is-request-compile="true"
-          :type-list="'course_list'"
+          :type-list="'classroom_course_list'"
           @needRequest="sendRequestCourse"
           :showNumberData="showNumberData"
         />
