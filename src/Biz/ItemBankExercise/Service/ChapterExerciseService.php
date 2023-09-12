@@ -12,5 +12,5 @@ interface ChapterExerciseService
 
     public function getChapterTreeList($itemBankId);
 
-    public function findChapterChildrenIds($id);
+    public function findChapterChildrenIds($questionBankId, $ids);
 }

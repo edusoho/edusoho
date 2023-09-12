@@ -23,7 +23,6 @@ use Biz\ItemBankExercise\Service\ChapterExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
-use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\System\Service\LogService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
@@ -548,17 +547,8 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
         $exercise = $this->tryManageExercise($exerciseId);
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
-        $chapterTrees = $this->getItemBankChapterExerciseService()->getChapterTreeList($questionBank['itemBankId']);
-        $parentIds = array_intersect($ids, array_unique(array_column($chapterTrees, 'parent_id')));
-
-        $hiddenChapterIds = array_merge($exercise['hiddenChapterIds'], $ids);
-        if (!empty($parentIds)) {
-            foreach ($parentIds as $parentId) {
-                $childrenIds = $this->getItemBankChapterExerciseService()->findChapterChildrenIds($parentId);
-                $hiddenChapterIds = array_unique(array_merge($hiddenChapterIds, $childrenIds));
-            }
-        }
+        $childrenIds = $this->getItemBankChapterExerciseService()->findChapterChildrenIds($exercise['questionBankId'], $ids);
+        $hiddenChapterIds = array_unique(array_merge($exercise['hiddenChapterIds'], $ids, $childrenIds));
 
         if (empty(array_diff($hiddenChapterIds, $exercise['hiddenChapterIds']))) {
             return;
@@ -687,13 +677,5 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     protected function getItemBankChapterExerciseService()
     {
         return $this->createService('ItemBankExercise:ChapterExerciseService');
-    }
-
-    /**
-     * @return QuestionBankService
-     */
-    protected function getQuestionBankService()
-    {
-        return $this->createService('QuestionBank:QuestionBankService');
     }
 }
