@@ -31,4 +31,8 @@ interface ItemCategoryService
     public function buildItemNumAndQuestionNumBybankId($bankId);
 
     public function sortItemCategories($ids);
+
+    public function getChapterTreeList($categories, $hiddenChapterIds);
+
+    public function getChapterTree($categories, $hiddenChapterIds);
 }

@@ -58,14 +58,40 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         return $this->getItemCategoryService()->findItemCategoriesByIds($ids);
     }
 
-    public function getChapterTree($itemBankId)
+    public function getChapterTree($exerciseId)
     {
-        return $this->getItemCategoryService()->getItemCategoryTree($itemBankId);
+        $exercise = $this->getItemBankExerciseService()->get($exerciseId);
+        if (empty($exercise)) {
+            return [];
+        }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
+        if (empty($questionBank)) {
+            return [];
+        }
+        $chapters = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
+        if (empty($chapters)) {
+            return [];
+        }
+
+        return $this->getItemCategoryService()->getChapterTree($chapters, $exercise['hiddenChapterIds']);
     }
 
-    public function getChapterTreeList($itemBankId)
+    public function getChapterTreeList($exerciseId)
     {
-        return $this->getItemCategoryService()->getItemCategoryTreeList($itemBankId);
+        $exercise = $this->getItemBankExerciseService()->get($exerciseId);
+        if (empty($exercise)) {
+            return [];
+        }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
+        if (empty($questionBank)) {
+            return [];
+        }
+        $chapters = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
+        if (empty($chapters)) {
+            return [];
+        }
+
+        return $this->getItemCategoryService()->getChapterTreeList($chapters, $exercise['hiddenChapterIds']);
     }
 
     public function findChapterChildrenIds($questionBankId, $ids)

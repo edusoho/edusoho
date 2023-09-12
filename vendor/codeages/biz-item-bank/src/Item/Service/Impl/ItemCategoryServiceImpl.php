@@ -147,6 +147,38 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
         return $tree;
     }
 
+    public function getChapterTreeList($chapters, $hiddenChapterIds)
+    {
+        $categories = $this->getUnpublishCategoryList($chapters, $hiddenChapterIds);
+        $categories = ArrayToolkit::group($categories, 'parent_id');
+
+        $tree = [];
+        $this->prepareCategoryTreeList($tree, $categories, 0);
+
+        return $tree;
+    }
+
+    public function getChapterTree($chapters, $hiddenChapterIds)
+    {
+        $categories = $this->getUnpublishCategoryList($chapters, $hiddenChapterIds);
+        list($map, $tree) = $this->prepareCategoryTree($categories);
+
+        return $tree;
+    }
+
+    protected function getUnpublishCategoryList($chapters, $hiddenChapterIds)
+    {
+        $chapters = ArrayToolkit::index($chapters, 'id');
+        $diffIds = array_diff(array_column($chapters, 'id'), $hiddenChapterIds);
+
+        $chapterTree = [];
+        foreach ($diffIds as $diffId) {
+            $chapterTree[] = $chapters[$diffId];
+        }
+
+        return $chapterTree;
+    }
+
     protected function prepareCategoryTreeList(&$tree, &$categories, $parentId)
     {
         static $depth = 0;
