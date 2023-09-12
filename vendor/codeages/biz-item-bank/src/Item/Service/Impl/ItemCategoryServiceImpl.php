@@ -128,9 +128,8 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
         }
 
         $categories = $this->findItemCategoriesByBankId($bankId);
-        list($map, $tree) = $this->prepareCategoryTree($categories);
 
-        return $tree;
+        return $this->buildCategoryTree($categories);
     }
 
     public function getItemCategoryTreeList($bankId)
@@ -145,38 +144,6 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
         $tree = array();
         $this->prepareCategoryTreeList($tree, $categories, 0);
         return $tree;
-    }
-
-    public function getChapterTreeList($chapters, $hiddenChapterIds)
-    {
-        $categories = $this->getUnpublishCategoryList($chapters, $hiddenChapterIds);
-        $categories = ArrayToolkit::group($categories, 'parent_id');
-
-        $tree = [];
-        $this->prepareCategoryTreeList($tree, $categories, 0);
-
-        return $tree;
-    }
-
-    public function getChapterTree($chapters, $hiddenChapterIds)
-    {
-        $categories = $this->getUnpublishCategoryList($chapters, $hiddenChapterIds);
-        list($map, $tree) = $this->prepareCategoryTree($categories);
-
-        return $tree;
-    }
-
-    protected function getUnpublishCategoryList($chapters, $hiddenChapterIds)
-    {
-        $chapters = ArrayToolkit::index($chapters, 'id');
-        $diffIds = array_diff(array_column($chapters, 'id'), $hiddenChapterIds);
-
-        $chapterTree = [];
-        foreach ($diffIds as $diffId) {
-            $chapterTree[] = $chapters[$diffId];
-        }
-
-        return $chapterTree;
     }
 
     protected function prepareCategoryTreeList(&$tree, &$categories, $parentId)
@@ -306,6 +273,22 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
         }
 
         return $this->getItemCategoryDao()->batchUpdate($ids, $updateFields);
+    }
+
+    public function buildCategoryTreeList($categories, $parentId)
+    {
+        $categories = ArrayToolkit::group($categories, 'parent_id');
+        $tree = [];
+        $this->prepareCategoryTreeList($tree, $categories, $parentId);
+
+        return $tree;
+    }
+
+    public function buildCategoryTree($categories)
+    {
+        list($map, $tree) = $this->prepareCategoryTree($categories);
+
+        return $tree;
     }
 
     /**

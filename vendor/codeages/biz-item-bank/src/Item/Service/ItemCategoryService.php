@@ -32,7 +32,7 @@ interface ItemCategoryService
 
     public function sortItemCategories($ids);
 
-    public function getChapterTreeList($categories, $hiddenChapterIds);
+    public function buildCategoryTreeList($categories, $parentId);
 
-    public function getChapterTree($categories, $hiddenChapterIds);
+    public function buildCategoryTree($categories);
 }

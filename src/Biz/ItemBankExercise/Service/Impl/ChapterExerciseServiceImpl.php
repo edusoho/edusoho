@@ -58,9 +58,9 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         return $this->getItemCategoryService()->findItemCategoriesByIds($ids);
     }
 
-    public function getChapterTree($exerciseId)
+    public function getChapterTree($questionBankId)
     {
-        $exercise = $this->getItemBankExerciseService()->get($exerciseId);
+        $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($questionBankId);
         if (empty($exercise)) {
             return [];
         }
@@ -73,12 +73,14 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
             return [];
         }
 
-        return $this->getItemCategoryService()->getChapterTree($chapters, $exercise['hiddenChapterIds']);
+        $chapters = $this->filterHiddenChapters($chapters, $exercise['hiddenChapterIds']);
+
+        return $this->getItemCategoryService()->buildCategoryTree($chapters);
     }
 
-    public function getChapterTreeList($exerciseId)
+    public function getChapterTreeList($questionBankId)
     {
-        $exercise = $this->getItemBankExerciseService()->get($exerciseId);
+        $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($questionBankId);
         if (empty($exercise)) {
             return [];
         }
@@ -91,7 +93,9 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
             return [];
         }
 
-        return $this->getItemCategoryService()->getChapterTreeList($chapters, $exercise['hiddenChapterIds']);
+        $chapters = $this->filterHiddenChapters($chapters, $exercise['hiddenChapterIds']);
+
+        return $this->getItemCategoryService()->buildCategoryTreeList($chapters, 0);
     }
 
     public function findChapterChildrenIds($questionBankId, $ids)
@@ -99,6 +103,15 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         $questionBank = $this->getQuestionBankService()->getQuestionBank($questionBankId);
 
         return $this->getItemCategoryService()->findMultiCategoryChildrenIds($questionBank['itemBankId'], $ids);
+    }
+
+    protected function filterHiddenChapters($chapters, $hiddenChapterIds)
+    {
+        $hiddenChapterIds = array_flip($hiddenChapterIds);
+
+        return array_filter($chapters, function ($chapter) use ($hiddenChapterIds) {
+            return !isset($hiddenChapterIds[$chapter['id']]);
+        });
     }
 
     protected function canStartAnswer($moduleId, $categroyId, $userId)

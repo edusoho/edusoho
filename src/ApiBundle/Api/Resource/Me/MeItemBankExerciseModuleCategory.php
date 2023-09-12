@@ -22,7 +22,7 @@ class MeItemBankExerciseModuleCategory extends AbstractResource
             return [];
         }
 
-        $chapters = $this->getItemBankChapterExerciseService()->getChapterTreeList($exerciseId);
+        $chapters = $this->getItemBankChapterExerciseService()->getChapterTreeList($itemBankExercise['questionBankId']);
 
         $answerRecords = $this->getItemBankChapterExerciseRecordService()->search(
             ['userId' => $user['id'], 'moduleId' => $moduleId],
@@ -38,14 +38,6 @@ class MeItemBankExerciseModuleCategory extends AbstractResource
         }
 
         return $chapters;
-    }
-
-    /**
-     * @return \Biz\QuestionBank\Service\QuestionBankService
-     */
-    protected function getQuestionBankService()
-    {
-        return $this->service('QuestionBank:QuestionBankService');
     }
 
     /**

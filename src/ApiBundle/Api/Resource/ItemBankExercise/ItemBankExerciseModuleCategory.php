@@ -19,7 +19,7 @@ class ItemBankExerciseModuleCategory extends AbstractResource
             return [];
         }
 
-        return $this->getItemBankChapterExerciseService()->getChapterTreeList($exerciseId);
+        return $this->getItemBankChapterExerciseService()->getChapterTreeList($itemBankExercise['questionBankId']);
     }
 
     /**
