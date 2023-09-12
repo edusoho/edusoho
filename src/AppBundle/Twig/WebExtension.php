@@ -42,6 +42,7 @@ use Biz\Theme\Service\ThemeService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -2645,5 +2646,13 @@ class WebExtension extends \Twig_Extension
     protected function getMallService()
     {
         return $this->createService('Mall:MallService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 }

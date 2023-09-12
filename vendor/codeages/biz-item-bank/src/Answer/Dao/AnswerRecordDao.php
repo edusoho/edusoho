@@ -12,4 +12,6 @@ interface AnswerRecordDao
     public function countGroupByAnswerSceneId($conditions);
 
     public function deleteByAssessmentId($assessmentId);
+
+    public function findByIds($ids);
 }

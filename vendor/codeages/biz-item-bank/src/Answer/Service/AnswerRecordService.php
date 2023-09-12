@@ -26,4 +26,5 @@ interface AnswerRecordService
 
     public function batchUpdateAnswerRecord($ids, $updateColumnsList);
 
+    public function findByIds($ids);
 }

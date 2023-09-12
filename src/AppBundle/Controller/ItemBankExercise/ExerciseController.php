@@ -19,6 +19,7 @@ use Biz\Review\Service\ReviewService;
 use Biz\System\Service\CacheService;
 use Biz\User\Service\TokenService;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
@@ -302,6 +303,11 @@ class ExerciseController extends BaseController
                 PHP_INT_MAX
             );
             $records = ArrayToolkit::index($records, 'itemCategoryId');
+
+            $answerRecords = $this->getAnswerRecordService()->findByIds(array_column($records, 'answerRecordId'));
+            foreach ($records as &$record) {
+                $record['exercise_mode'] = $answerRecords[$record['answerRecordId']]['exercise_mode'];
+            }
         }
 
         return $this->render('item-bank-exercise/tabs/list/chapter-list.html.twig', [
@@ -562,5 +568,13 @@ class ExerciseController extends BaseController
     protected function getItemService()
     {
         return $this->createService('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 }

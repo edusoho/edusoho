@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException;
@@ -123,6 +124,13 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
     public function batchUpdateAnswerRecord($ids, $updateColumnsList)
     {
         return $this->getAnswerRecordDao()->batchUpdate($ids, $updateColumnsList);
+    }
+
+    public function findByIds($ids)
+    {
+        $answerRecords = $this->getAnswerRecordDao()->findByIds($ids);
+
+        return ArrayToolkit::index($answerRecords, 'id');
     }
 
     /**

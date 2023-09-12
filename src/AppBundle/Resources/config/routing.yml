@@ -2755,6 +2755,10 @@ exercise_finish:
         _controller: 'AppBundle:Exercise:submit'
     methods:
         - POST
+exercise_submit_single_mode_not_support_modal:
+  path: '/exercise/submit_single_mode_not_support_modal'
+  defaults:
+    _controller: 'AppBundle:Exercise:notSupportSubmitSingle'
 attachment_upload:
     path: '/attachment/upload'
     defaults:
