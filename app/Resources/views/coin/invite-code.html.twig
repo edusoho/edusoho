@@ -88,8 +88,8 @@
               {% endif %}
             </td>
             <td>
-              {% if coupon.createdTime|default() %}
-                {{coupon.createdTime|date('Y-m-d H:i:s')}}
+              {% if coupon.receiveTime|default() %}
+                {{coupon.receiveTime|date('Y-m-d H:i:s')}}
               {% else %}
                 -
               {% endif %}
