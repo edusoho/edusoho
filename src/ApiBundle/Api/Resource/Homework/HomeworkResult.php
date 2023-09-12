@@ -15,6 +15,7 @@ use Biz\Task\TaskException;
 use Biz\Testpaper\HomeworkException;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
@@ -54,7 +55,7 @@ class HomeworkResult extends AbstractResource
 
         $homeworkRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
 
-        if (empty($homeworkRecord) || 'finished' == $homeworkRecord['status']) {
+        if (empty($homeworkRecord) || AnswerRecordStatus::FINISHED == $homeworkRecord['status']) {
             if ('draft' == $homework['status']) {
                 throw HomeworkException::DRAFT_HOMEWORK();
             }
@@ -63,10 +64,11 @@ class HomeworkResult extends AbstractResource
             }
 
             $homeworkRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $homework['id'], $user['id']);
-        } elseif ('reviewing' == $homeworkRecord['status']) {
+        } elseif (AnswerRecordStatus::REVIEWING == $homeworkRecord['status']) {
             throw HomeworkException::REVIEWING_HOMEWORK();
         } else {
             $homeworkRecord = $this->getAnswerService()->continueAnswer($homeworkRecord['id']);
+            $homework = $homeworkRecord['assessment_id'] == $homework['id'] ? $homework : $this->getAssessmentService()->showAssessment($homeworkRecord['assessment_id']);
         }
 
         $testpaperWrapper = new TestpaperWrapper();

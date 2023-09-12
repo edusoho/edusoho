@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Resource;
 
+use Biz\Activity\Constant\ActivityMediaType;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
@@ -25,16 +26,12 @@ class HomeworkResult extends BaseResource
 
         $assessment = $this->getAssessmentService()->showAssessment($homeworkId);
         $homeworkActivity = $this->getHomeworkActivityService()->getByAssessmentId($assessment['id']);
-        $conditions = [
-            'mediaId' => $homeworkActivity['id'],
-            'mediaType' => 'homework',
-        ];
-        $activities = $this->getActivityService()->search($conditions, null, 0, 1);
-        if (!$activities) {
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], ActivityMediaType::HOMEWORK);
+        if (empty($activity)) {
             return $this->error('404', '该作业任务不存在!');
         }
 
-        $canTakeCourse = $this->getCourseService()->canTakeCourse($activities[0]['fromCourseId']);
+        $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
         if (!$canTakeCourse) {
             return $this->error('500', '无权限访问!');
         }
@@ -83,16 +80,12 @@ class HomeworkResult extends BaseResource
         }
 
         $homeworkActivity = $this->getHomeworkActivityService()->getByAssessmentId($assessment['id']);
-        $conditions = [
-            'mediaId' => $homeworkActivity['id'],
-            'mediaType' => 'homework',
-        ];
-        $activities = $this->getActivityService()->search($conditions, null, 0, 1);
-        if (!$activities) {
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], ActivityMediaType::HOMEWORK);
+        if (empty($activity)) {
             return $this->error('404', '该作业任务不存在!');
         }
 
-        $canTakeCourse = $this->getCourseService()->canTakeCourse($activities[0]['fromCourseId']);
+        $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
         if (!$canTakeCourse) {
             return $this->error('500', '无权限访问!');
         }
@@ -167,7 +160,6 @@ class HomeworkResult extends BaseResource
 
     public function filter($res)
     {
-        $res['usedTime'] = $res['usedTime'];
         $res['updatedTime'] = date('c', $res['updateTime']);
         $res['createdTime'] = date('c', $res['beginTime']);
 

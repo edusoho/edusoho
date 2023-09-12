@@ -24,6 +24,7 @@ use Biz\Player\Service\PlayerService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
@@ -268,7 +269,7 @@ class CourseTaskMedia extends AbstractResource
         $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
         $testpaperWrapper = new TestpaperWrapper();
-        if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
+        if (empty($answerRecord) || AnswerRecordStatus::FINISHED == $answerRecord['status']) {
             $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
             $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);

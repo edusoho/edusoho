@@ -69,7 +69,7 @@ class AnswerRecordReviewSingleAnswer extends AbstractResource
             throw CommonException::ERROR_PARAMETER();
         }
 
-        $question = $this->getItemService()->getQuestion($params['question_id']);
+        $question = $this->getItemService()->getQuestionIncludeDeleted($params['question_id']);
         if (empty($question) || $params['item_id'] != $question['item_id']) {
             throw CommonException::ERROR_PARAMETER();
         }

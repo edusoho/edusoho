@@ -416,7 +416,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function sumSubjectiveScore(array $answerQuestionReports)
     {
         $score = 0;
-        $questions = $this->getItemService()->findQuestionsByQuestionIds(
+        $questions = $this->getItemService()->findQuestionsByQuestionIdsIncludeDeleted(
             ArrayToolkit::column($answerQuestionReports, 'question_id')
         );
 
@@ -714,7 +714,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
         $answerQuestionReports = ArrayToolkit::index($answerQuestionReports, 'question_id');
 
-        $questions = $this->getItemService()->findQuestionsByQuestionIds(array_column($reviewedQuestions, 'question_id'));
+        $questions = $this->getItemService()->findQuestionsByQuestionIdsIncludeDeleted(array_column($reviewedQuestions, 'question_id'));
         if (empty($questions)) {
             return [];
         }
@@ -831,7 +831,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $questions = \AppBundle\Common\ArrayToolkit::index($item['score_rule'], 'question_id');
         $questionRule = $questions[$answerReportQuestion['question_id']]['rule'];
         $questionRule = \AppBundle\Common\ArrayToolkit::index($questionRule, 'name');
-        $question = $this->getItemService()->getQuestion($answerReportQuestion['question_id']);
+        $question = $this->getItemService()->getQuestionIncludeDeleted($answerReportQuestion['question_id']);
         $answers = [];
         foreach ($question['answer'] as $key => $answer) {
             $answers[$key] = explode('|', $answer);

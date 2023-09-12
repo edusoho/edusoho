@@ -140,7 +140,7 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         $answerQuestionReports = ArrayToolkit::index($answerQuestionReports, 'question_id');
         $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($answerRecord['assessment_id']);
-        $questions = $this->getItemService()->findQuestionsByQuestionIds(
+        $questions = $this->getItemService()->findQuestionsByQuestionIdsIncludeDeleted(
             ArrayToolkit::column($assessmentQuestions, 'question_id')
         );
 

@@ -28,7 +28,7 @@ class AssessmentSectionItemServiceImpl extends BaseService implements Assessment
     public function findSectionItemDetailByAssessmentId($assessmentId)
     {
         $assessmentItems = $this->getAssessmentSectionItemDao()->findByAssessmentId($assessmentId);
-        $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($assessmentItems, 'item_id'), true);
+        $items = $this->getItemService()->findItemsByIdsIncludeDeleted(ArrayToolkit::column($assessmentItems, 'item_id'), true);
         foreach ($assessmentItems as &$assessmentItem) {
             $assessmentItem = $this->convertItem(empty($items[$assessmentItem['item_id']]) ? [] : $items[$assessmentItem['item_id']], $assessmentItem);
         }

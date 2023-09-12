@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -34,8 +35,8 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
             $this->getAnswerService()->finishAllSingleAnswer($answerRecord, 'submit');
         }
 
-        $item = $this->getItemService()->getItem($questionReport['item_id']);
-        $question = $this->getItemService()->getQuestion($questionReport['question_id']);
+        $item = $this->getItemService()->getItemIncludeDeleted($questionReport['item_id']);
+        $question = $this->getItemService()->getQuestionIncludeDeleted($questionReport['question_id']);
 
         return [
             'answer' => $question['answer'],
@@ -49,7 +50,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
         ];
     }
 
-    public function validateParams($answerRecordId, $params)
+    private function validateParams($answerRecordId, $params)
     {
         if (empty($params['admission_ticket'])) {
             throw new AnswerException('答题保存功能已升级，请更新客户端版本', ErrorCode::ANSWER_OLD_VERSION);
@@ -68,22 +69,22 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
             throw new InvalidArgumentException('assessment_id invalid.');
         }
 
+        if ($answerRecord['admission_ticket'] != $params['admission_ticket']) {
+            throw new AnswerException('有新答题页面，请在新页面中继续答题', ErrorCode::ANSWER_NO_BOTH_DOING);
+        }
+
+        if (!in_array($answerRecord['status'], [AnswerRecordStatus::DOING, AnswerRecordStatus::PAUSED])) {
+            throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
+        }
+
         $sectionItem = $this->getSectionItemService()->getItemByAssessmentIdAndItemId($params['assessment_id'], $params['item_id']);
         if (empty($sectionItem) || $sectionItem['section_id'] != $params['section_id']) {
             throw CommonException::ERROR_PARAMETER();
         }
 
-        $question = $this->getItemService()->getQuestion($params['question_id']);
+        $question = $this->getItemService()->getQuestionIncludeDeleted($params['question_id']);
         if (empty($question) || $params['item_id'] != $question['item_id']) {
             throw CommonException::ERROR_PARAMETER();
-        }
-
-        if ($answerRecord['admission_ticket'] != $params['admission_ticket']) {
-            throw new AnswerException('有新答题页面，请在新页面中继续答题', ErrorCode::ANSWER_NO_BOTH_DOING);
-        }
-
-        if (!in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_DOING, AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
-            throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
         }
     }
 
