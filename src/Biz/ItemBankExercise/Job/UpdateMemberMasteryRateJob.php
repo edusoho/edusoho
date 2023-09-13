@@ -3,7 +3,12 @@
 namespace Biz\ItemBankExercise\Job;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\ItemBankExercise\Service\ExerciseMemberService;
+use Biz\ItemBankExercise\Service\ExerciseQuestionRecordService;
+use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class UpdateMemberMasteryRateJob extends AbstractJob
 {
@@ -30,19 +35,31 @@ class UpdateMemberMasteryRateJob extends AbstractJob
     protected function updateData()
     {
         if (0 == $this->questionNum) {
-            $this->biz['db']->executeUpdate('UPDATE item_bank_exercise_member SET doneQuestionNum = 0, rightQuestionNum = 0, masteryRate = 0, completionRate = 0 WHERE exerciseId = ?;', [$this->exerciseId]);
+            $this->getExerciseMemberService()->update($this->exerciseId, [
+                'doneQuestionNum' => 0,
+                'rightQuestionNum' => 0,
+                'masteryRate' => 0,
+                'completionRate' => 0,
+            ]);
 
             return;
         }
 
-        $sql = 'SELECT userId, `status`, count(*) AS num from item_bank_exercise_question_record WHERE exerciseId = ? GROUP BY userId, `status`;';
-        $rightNumWrongNumGroups = ArrayToolkit::group(
-            $this->biz['db']->fetchAll($sql, [$this->exerciseId]),
-            'userId'
-        );
+        $itemBankExercise = $this->getItemBankExerciseService()->get($this->exerciseId);
+        $items = $this->getItemService()->findItemsByCategoryIds($itemBankExercise['hiddenChapterIds']);
+        if ($items) {
+            $questions = $this->getItemService()->findQuestionsByItemIds(ArrayToolkit::column($items, 'id'));
+            $questionIds = ArrayToolkit::column($questions, 'id');
+        }
+
+        $rightNumWrongNums = $this->getItemBankExerciseQuestionRecordService()->countQuestionRecordStatus($this->exerciseId, ($questionIds ?? [-1]));
+        if (empty($rightNumWrongNums)) {
+            return;
+        }
+        $rightNumWrongNumGroups = ArrayToolkit::group($rightNumWrongNums, 'userId');
 
         $updateMembers = [];
-        $members = $this->biz['db']->fetchAll('SELECT id, userId from item_bank_exercise_member WHERE exerciseId = ?;', [$this->exerciseId]);
+        $members = $this->getExerciseMemberService()->findByExerciseId($this->exerciseId);
         foreach ($members as $member) {
             $doneQuestionNum = $rightQuestionNum = 0;
             if (!empty($rightNumWrongNumGroups[$member['userId']])) {
@@ -61,12 +78,12 @@ class UpdateMemberMasteryRateJob extends AbstractJob
         }
 
         if (count($members)) {
-            $this->getItemBankExerciseMemberDao()->batchUpdate(ArrayToolkit::column($updateMembers, 'id'), $updateMembers);
+            $this->getExerciseMemberService()->batchUpdateMembers($updateMembers);
         }
     }
 
     /**
-     * @return \Biz\QuestionBank\Service\QuestionBankService
+     * @return QuestionBankService
      */
     protected function getQuestionBankService()
     {
@@ -74,7 +91,7 @@ class UpdateMemberMasteryRateJob extends AbstractJob
     }
 
     /**
-     * @return \Biz\ItemBankExercise\Service\ExerciseService
+     * @return ExerciseService
      */
     protected function getItemBankExerciseService()
     {
@@ -82,15 +99,26 @@ class UpdateMemberMasteryRateJob extends AbstractJob
     }
 
     /**
-     * @return \Biz\ItemBankExercise\Service\ExerciseModuleService
+     * @return ItemService
      */
-    protected function getItemBankExerciseModuleService()
+    protected function getItemService()
     {
-        return $this->biz->service('ItemBankExercise:ExerciseModuleService');
+        return $this->biz->service('ItemBank:Item:ItemService');
     }
 
-    protected function getItemBankExerciseMemberDao()
+    /**
+     * @return ExerciseQuestionRecordService
+     */
+    protected function getItemBankExerciseQuestionRecordService()
     {
-        return $this->biz->dao('ItemBankExercise:ExerciseMemberDao');
+        return $this->biz->service('ItemBankExercise:ExerciseQuestionRecordService');
+    }
+
+    /**
+     * @return ExerciseMemberService
+     */
+    protected function getExerciseMemberService()
+    {
+        return $this->biz->service('ItemBankExercise:ExerciseMemberService');
     }
 }

@@ -201,6 +201,16 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return true;
     }
 
+    public function findByExerciseId($exerciseId)
+    {
+        return $this->getExerciseMemberDao()->findByExerciseId($exerciseId);
+    }
+
+    public function batchUpdateMembers($updateFields)
+    {
+        return $this->getExerciseMemberDao()->batchUpdate(ArrayToolkit::column($updateFields, 'id'), $updateFields);
+    }
+
     public function getExerciseMember($exerciseId, $userId)
     {
         return $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);

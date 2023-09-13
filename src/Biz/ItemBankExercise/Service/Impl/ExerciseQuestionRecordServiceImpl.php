@@ -76,6 +76,11 @@ class ExerciseQuestionRecordServiceImpl extends BaseService implements ExerciseQ
         !empty($createRecords) && $this->batchCreate($createRecords);
     }
 
+    public function countQuestionRecordStatus($exerciseId, $questionIds)
+    {
+        return $this->getItemBankExerciseQuestionRecordDao()->countQuestionRecordStatus($exerciseId, $questionIds);
+    }
+
     protected function getAnswerQuestionReports($answerReportId)
     {
         $answerReport = $this->getAnswerReportService()->get($answerReportId);
