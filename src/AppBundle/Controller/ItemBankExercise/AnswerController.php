@@ -119,6 +119,11 @@ class AnswerController extends BaseController
         ]);
     }
 
+    public function notSupportSubmitSingleAction()
+    {
+        return $this->render('item-bank-exercise/answer/not-support-submit-single-modal.html.twig');
+    }
+
     /**
      * @return \Biz\ItemBankExercise\Service\ExerciseService
      */
