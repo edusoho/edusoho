@@ -49,10 +49,10 @@ class UpdateMemberMasteryRateJob extends AbstractJob
         $items = $this->getItemService()->findItemsByCategoryIds($itemBankExercise['hiddenChapterIds']);
         if ($items) {
             $questions = $this->getItemService()->findQuestionsByItemIds(ArrayToolkit::column($items, 'id'));
-            $questionIds = ArrayToolkit::column($questions, 'id');
         }
 
-        $rightNumWrongNums = $this->getItemBankExerciseQuestionRecordService()->countQuestionRecordStatus($this->exerciseId, ($questionIds ?? [-1]));
+        $questionIds = empty($questions) ? [-1] : ArrayToolkit::column($questions, 'id');
+        $rightNumWrongNums = $this->getItemBankExerciseQuestionRecordService()->countQuestionRecordStatus($this->exerciseId, $questionIds);
         if (empty($rightNumWrongNums)) {
             return;
         }
