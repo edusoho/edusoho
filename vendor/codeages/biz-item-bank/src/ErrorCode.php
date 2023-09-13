@@ -128,4 +128,6 @@ class ErrorCode
      * 题目已批阅
      */
     const ANSWER_REVIEWED = 40095207;
+
+    const ANSWER_ENDTIME_WITHIN_EXPIRY_DATE = 40095208;
 }

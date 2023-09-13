@@ -3,6 +3,7 @@
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
 use Biz\Common\CommonException;
+use Biz\User\UserException;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
@@ -14,6 +15,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\ErrorCode;
@@ -129,20 +131,20 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     public function batchAutoSubmit($answerSceneId, $assessmentId, $userIds)
     {
         if (empty($userIds)) {
-            return;
+            throw UserException::NOTFOUND_USER();
         }
 
         $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
         if (empty($answerScene)) {
-            return;
+            throw new AnswerSceneException('AnswerScene not found.', ErrorCode::ANSWER_SCENE_NOTFOUD);
         }
         if (empty($answerScene['end_time']) || $answerScene['end_time'] >= time()) {
-            return;
+            throw new AnswerSceneException('AnswerScene endTime within expory date.', ErrorCode::ANSWER_ENDTIME_WITHIN_EXPIRY_DATE);
         }
 
         $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
         if (empty($assessment)) {
-            return;
+            throw AssessmentException::ASSESSMENT_NOTEXIST();
         }
 
         $answerRecords = $this->batchCreateAnswerRecords($answerScene, $assessmentId, $userIds);
@@ -216,7 +218,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     {
         $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
         if (empty($assessment)) {
-            return;
+            throw AssessmentException::ASSESSMENT_NOTEXIST();
         }
 
         $answerQuestionReports = [];
