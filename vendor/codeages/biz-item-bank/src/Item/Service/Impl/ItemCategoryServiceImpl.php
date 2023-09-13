@@ -128,9 +128,8 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
         }
 
         $categories = $this->findItemCategoriesByBankId($bankId);
-        list($map, $tree) = $this->prepareCategoryTree($categories);
 
-        return $tree;
+        return $this->buildCategoryTree($categories);
     }
 
     public function getItemCategoryTreeList($bankId)
@@ -274,6 +273,22 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
         }
 
         return $this->getItemCategoryDao()->batchUpdate($ids, $updateFields);
+    }
+
+    public function buildCategoryTreeList($categories, $parentId)
+    {
+        $categories = ArrayToolkit::group($categories, 'parent_id');
+        $tree = [];
+        $this->prepareCategoryTreeList($tree, $categories, $parentId);
+
+        return $tree;
+    }
+
+    public function buildCategoryTree($categories)
+    {
+        list($map, $tree) = $this->prepareCategoryTree($categories);
+
+        return $tree;
     }
 
     /**

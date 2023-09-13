@@ -10,6 +10,7 @@ use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\AssessmentExerciseRecordService;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
+use Biz\ItemBankExercise\Service\ChapterExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -21,8 +22,6 @@ use Biz\User\Service\TokenService;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
-use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Endroid\QrCode\QrCode;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -289,10 +288,9 @@ class ExerciseController extends BaseController
         $exercise = $this->getExerciseService()->get($exerciseId);
         $user = $this->getCurrentUser();
         $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
-        $categoryTree = [];
+        $chapterTree = [];
         if ($exercise['chapterEnable']) {
-            $categoryTree = $this->getItemCategoryService()->getItemCategoryTreeList($questionBank['itemBankId']);
+            $chapterTree = $this->getItemBankChapterExerciseService()->getChapterTreeList($exercise['questionBankId']);
         }
         $records = [];
         if ($member) {
@@ -315,7 +313,7 @@ class ExerciseController extends BaseController
             'moduleId' => $moduleId,
             'member' => $member,
             'records' => $records,
-            'categoryTree' => $categoryTree,
+            'categoryTree' => $chapterTree,
             'previewAs' => $previewAs,
         ]);
     }
@@ -523,14 +521,6 @@ class ExerciseController extends BaseController
     }
 
     /**
-     * @return ItemCategoryService
-     */
-    protected function getItemCategoryService()
-    {
-        return $this->createService('ItemBank:Item:ItemCategoryService');
-    }
-
-    /**
      * @return AssessmentExerciseService
      */
     protected function getAssessmentExerciseService()
@@ -563,11 +553,11 @@ class ExerciseController extends BaseController
     }
 
     /**
-     * @return ItemService
+     * @return ChapterExerciseService
      */
-    protected function getItemService()
+    protected function getItemBankChapterExerciseService()
     {
-        return $this->createService('ItemBank:Item:ItemService');
+        return $this->createService('ItemBankExercise:ChapterExerciseService');
     }
 
     /**
