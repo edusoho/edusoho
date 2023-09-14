@@ -3,7 +3,6 @@
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
 use Biz\Common\CommonException;
-use Biz\User\UserException;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
