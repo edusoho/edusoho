@@ -131,7 +131,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     public function batchAutoSubmit($answerSceneId, $assessmentId, $userIds)
     {
         if (empty($userIds)) {
-            throw UserException::NOTFOUND_USER();
+            throw new AnswerException('没有要自动交卷的用户', ErrorCode::NO_USER_AUTO_SUMBMIT_ANSWER);
         }
 
         $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
