@@ -2140,6 +2140,8 @@ course.plan_task.activity_manage.exercise.selective.answer.mode: 选择答题模
 course.plan_task.activity_manage.exercise.test.mode: 测验模式
 course.plan_task.activity_manage.exercise.one.question.one.answer.mode: 一题一答模式
 course.plan_task.activity_manage.exercise.currently.not.supported.on.pc: （暂不支持PC端）
+course.plan_task.activity_manage.exercise.continue.tips-title: 当前练习模式为【一题一答】，PC端暂不支持，请移步手机端继续答题
+course.plan_task.activity_manage.exercise.continue.back-btn: 返回课程目录
 course.plan_task.activity_manage.exercise.confirm_submit: 确认提交
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 您真的要提交吗？
 course.plan_task.activity_manage.exercise.finished_condition: 提交练习
