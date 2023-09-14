@@ -42,4 +42,9 @@ class LianlianPayWebTrade extends BaseTrade
 
         return $bindPhone;
     }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
+    }
 }
