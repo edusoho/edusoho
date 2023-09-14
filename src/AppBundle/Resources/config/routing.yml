@@ -4036,7 +4036,7 @@ item_bank_exercise_category_info_modal:
     defaults:
         _controller: 'AppBundle:ItemBankExercise/Answer:categoryInfoModal'
 item_bank_exercise_submit_single_mode_not_support_modal:
-    path: '/exercise/submit_single_mode_not_support_modal'
+    path: '/item_bank/exercise/submit_single_mode_not_support_modal'
     defaults:
         _controller: 'AppBundle:ItemBankExercise/Answer:notSupportSubmitSingle'
 goods_show:
