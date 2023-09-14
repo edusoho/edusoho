@@ -1840,6 +1840,8 @@ course.plan_task.activity_manage.exercise.selective.answer.mode: Selective answe
 course.plan_task.activity_manage.exercise.test.mode: Test mode
 course.plan_task.activity_manage.exercise.one.question.one.answer.mode: One question one answer mode
 course.plan_task.activity_manage.exercise.currently.not.supported.on.pc: (Currently not supported on PC)
+course.plan_task.activity_manage.exercise.continue.tips-title: The current practice mode is [one question, one answer], which is not supported on the PC, please move to the mobile phone to continue answering
+course.plan_task.activity_manage.exercise.continue.back-btn: Back to course catalog
 course.plan_task.activity_manage.exercise.confirm_submit: Confirm
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 'Are you sure to submit?'
 course.plan_task.activity_manage.flash.play_tips: 'Note：Flash is not supported on mobile'
