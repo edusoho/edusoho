@@ -1828,6 +1828,18 @@ course.plan_task.activity_manage.exercise.info: Introduction
 course.plan_task.activity_manage.exercise.info_tips: 'This assignment is random generate <span class="color-success">%itemCount% questions</span>'
 course.plan_task.activity_manage.exercise.info_tips.question_lack: The number of questions is inconsistent with the teacher's settings, please contact the teacher!
 course.plan_task.activity_manage.exercise.total_questions: '%itemCount% questions in total'
+course.plan_task.activity_manage.exercise.single_choice: Single_choice
+course.plan_task.activity_manage.exercise.choice: Choice
+course.plan_task.activity_manage.exercise.uncertain_choice: Uncertain_choice
+course.plan_task.activity_manage.exercise.determine: Determine
+course.plan_task.activity_manage.exercise.fill: Fill
+course.plan_task.activity_manage.exercise.essay: Essay
+course.plan_task.activity_manage.exercise.material: Material
+course.plan_task.activity_manage.exercise.questions: '%itemCount% questions'
+course.plan_task.activity_manage.exercise.selective.answer.mode: Selective answer mode
+course.plan_task.activity_manage.exercise.test.mode: Test mode
+course.plan_task.activity_manage.exercise.one.question.one.answer.mode: One question one answer mode
+course.plan_task.activity_manage.exercise.currently.not.supported.on.pc: (Currently not supported on PC)
 course.plan_task.activity_manage.exercise.confirm_submit: Confirm
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 'Are you sure to submit?'
 course.plan_task.activity_manage.flash.play_tips: 'Note：Flash is not supported on mobile'
