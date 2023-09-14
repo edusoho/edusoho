@@ -67,20 +67,22 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
             return;
         }
 
-        $this->getAnswerService()->batchAutoSubmit($answerScene['id'], $testpaperActivity['mediaId'], $userIds);
+        try {
+            $this->getAnswerService()->batchAutoSubmit($answerScene['id'], $testpaperActivity['mediaId'], $userIds);
 
-        $this->getLogService()->info('answer', 'create', '提交成功');
+            $this->getLogService()->info('assessment', 'auto_submit_answers', "用户自动交卷成功,答题场次为{$answerScene['id']}");
 
-        $this->getSchedulerService()->register([
-            'name' => 'noAnswerAssessmentAutoSubmitJob_'.$answerScene['id'],
-            'expression' => time(),
-            'class' => 'Biz\Testpaper\Job\NoAnswerAssessmentAutoSubmitJob',
-            'misfire_threshold' => 60 * 10,
-            'misfire_policy' => 'executing',
-            'args' => ['answerSceneId' => $answerScene['id']],
-        ]);
-
-        $this->getLogService()->info('job', 'register', "定时任务noAnswerAssessmentAutoSubmitJob_(#{$answerScene['id']})创建成功");
+            $this->getSchedulerService()->register([
+                'name' => 'noAnswerAssessmentAutoSubmitJob_'.$answerScene['id'],
+                'expression' => time(),
+                'class' => 'Biz\Testpaper\Job\NoAnswerAssessmentAutoSubmitJob',
+                'misfire_threshold' => 60 * 10,
+                'misfire_policy' => 'executing',
+                'args' => ['answerSceneId' => $answerScene['id']],
+            ]);
+        } catch (\Exception $e) {
+            $this->getLogService()->error('assessment', 'auto_submit_answers_error', "用户自动交卷失败,答题场次为{$answerScene['id']}", $e->getMessage());
+        }
     }
 
     /**
