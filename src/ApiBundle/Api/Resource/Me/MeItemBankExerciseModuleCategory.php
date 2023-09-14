@@ -32,7 +32,7 @@ class MeItemBankExerciseModuleCategory extends AbstractResource
         );
         $answerRecordGroups = ArrayToolkit::group($answerRecords, 'itemCategoryId');
         foreach ($chapters as &$chapter) {
-            if (!empty($answerRecordGroups[$category['id']])) {
+            if (!empty($answerRecordGroups[$chapter['id']])) {
                 $chapter['latestAnswerRecord'] = end($answerRecordGroups[$chapter['id']]);
             }
         }

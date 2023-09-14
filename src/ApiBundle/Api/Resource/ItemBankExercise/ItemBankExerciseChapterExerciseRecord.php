@@ -5,10 +5,8 @@ namespace ApiBundle\Api\Resource\ItemBankExercise;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
-use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class ItemBankExerciseChapterExerciseRecord extends AbstractResource
 {
@@ -17,11 +15,6 @@ class ItemBankExerciseChapterExerciseRecord extends AbstractResource
         $user = $this->getCurrentUser();
         $moduleId = $request->request->get('moduleId', '');
         $categoryId = $request->request->get('categoryId', '');
-
-        $latestRecord = $this->getItemBankChapterExerciseRecordService()->getLatestRecord($moduleId, $categoryId, $user['id']);
-        if (!empty($latestRecord) && AnswerService::ANSWER_RECORD_STATUS_FINISHED != $latestRecord['status']) {
-            throw ItemBankExerciseException::CHAPTER_ANSWER_IS_DOING();
-        }
 
         $chapterExerciseRecord = $this->getItemBankChapterExerciseService()->startAnswer(
             $moduleId,
