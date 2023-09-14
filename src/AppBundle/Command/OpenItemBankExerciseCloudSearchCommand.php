@@ -7,7 +7,7 @@ use Biz\System\Service\SettingService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AddCloudSearchSettingTypeCommand extends BaseCommand
+class OpenItemBankExerciseCloudSearchCommand extends BaseCommand
 {
     protected function configure()
     {
