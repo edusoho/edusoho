@@ -10,7 +10,11 @@
   {% elseif latestAnswerRecord and  (latestAnswerRecord.status == 'finished' or latestAnswerRecord.status == 'reviewing') %}
     {{ render(controller('AppBundle:Exercise:showResult', {answerRecordId: latestAnswerRecord.id})) }}
   {% else %}
+    {% if latestAnswerRecord.exercise_mode == '1' %}
+      {% include('@activity/exercise/resources/views/show/not-support-submit-single-modal.html.twig') %}
+    {% else %}
       {% include('@activity/exercise/resources/views/show/do-exercise.html.twig') %}
+    {% endif %}
   {% endif %}
 
 {% endif %}
