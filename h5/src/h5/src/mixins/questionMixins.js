@@ -5,7 +5,13 @@ export default {
       default() {
         return {};
       }
-    }
+    },
+		commonData: {
+			type: Object,
+			default() {
+				return {}
+			}
+		}
   },
   computed: {
     disabled() {

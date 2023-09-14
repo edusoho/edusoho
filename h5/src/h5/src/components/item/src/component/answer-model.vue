@@ -9,11 +9,11 @@
       :all="commonData.all"
     />
     <!-- 题干 -->
-    <stem
+    <!-- <stem
       :questionsType="commonData.questionsType"
       :questionSeq="commonData.current"
       :questionStem="commonData.questionStem"
-    ></stem>
+    ></stem> -->
 
     <attachement-preview
       v-for="item in getAttachmentTypeData('stem')"
@@ -32,7 +32,7 @@
       :answer_mode="commonData.questionsType"
     ></report>
     <!-- 答题解析 -->
-    <analysis
+    <!-- <analysis
       v-if="showAnalysis"
       :mode="mode"
       :analysis="commonData.analysis"
@@ -40,7 +40,7 @@
       :attachements="getAttachmentTypeData('analysis')"
       :answer_mode="commonData.questionsType"
       v-on="$listeners"
-    ></analysis>
+    ></analysis> -->
     <!-- 答题自评 -->
     <review
       v-if="showReview"

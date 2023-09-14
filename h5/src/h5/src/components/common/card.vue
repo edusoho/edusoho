@@ -1,6 +1,6 @@
 <template>
   <!-- 答题卡 -->
-  <van-popup v-model="cardShow" position="bottom">
+  <van-popup class="ibs-popup-card" v-model="cardShow" position="bottom" :style="{ height: '100%' }">
     <div class="ibs-card">
       <div class="ibs-card-title">
         <div>
@@ -42,14 +42,25 @@
         </div>
       </div>
     </div>
+    <van-button
+      v-if="brushDo.exerciseModes === '1' && brushDo.status === 'doing'"
+      class="end-answer__btn"
+      type="primary"
+      @click="endAnswer"
+      >{{ $t('courseLearning.endAnswer') }}</van-button
+    >
   </van-popup>
 </template>
 <script>
+import Api from '@/api';
 import { do_card, report_card, review_card } from "@/src/utils/cradConfig.js";
+import { Dialog, Toast } from 'vant';
 export default {
   name: "ibs-card",
   data() {
-    return {};
+    return {
+			isLeave: false,
+		};
   },
   props: {
     mode: {
@@ -80,12 +91,17 @@ export default {
       type: Boolean,
       default: false
     },
-    value: Boolean
+    value: Boolean,
+		assessmentResponse: {
+			type: Object,
+			default: () => {}
+		},
   },
   model: {
     prop: "value",
     event: "update"
   },
+  inject: ['brushDo'],
   computed: {
     cardShow: {
       get: function() {
@@ -199,7 +215,43 @@ export default {
         return section.richTextNum && section.richTextNum > 0;
       }
       return true;
-    }
+    },
+    // 结束答题
+		endAnswer() {
+			const that = this;
+			Dialog.confirm({
+				title: `是否结束本次答题`,
+				confirmButtonText: '是',
+				cancelButtonText: '否',
+				className: 'backDialog'
+			})
+			.then(() => {
+				Api.finishAnswer({
+					query: {
+						id: that.brushDo.recordId
+					}
+				}).then(res =>{
+					that.isLeave = true;
+					const query = {
+						type: 'chapter',
+						title: that.$route.query.title,
+						exerciseId: that.$route.query.exerciseId,
+						categoryId: that.$route.query.categoryId,
+						moduleId: that.$route.query.moduleId,
+						isLeave: that.isLeave,
+					};
+					const answerRecordId = that.assessmentResponse.answer_record_id;
+					that.$router.replace({
+						path: `/brushResult/${answerRecordId}`,
+						query,
+					});
+				}).catch(err =>{
+					Toast.fail(err.message)
+					})
+				})
+			.catch((err) => {
+			});
+		}
   }
 };
 </script>

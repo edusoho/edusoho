@@ -65,6 +65,22 @@ export default {
         .offsetTop;
       const WINDOWHEIGHT = document.documentElement.clientHeight;
       this.height = WINDOWHEIGHT - offsetTopHeight;
+    },
+		getStem() {
+      if (this.commonData.questionsType === "text") {
+        return this.filterFillHtml(this.commonData.questionStem);
+      }
+      return this.commonData.questionStem;
+    },
+    filterFillHtml(text) {
+      const reg = /\[\[\]\]/g;
+      if (!text.match(reg)) {
+        return text;
+      }
+      let index = 1;
+      return text.replace(reg, function() {
+        return `<span class="ibs-fill-bank">(${index++}）</span>`;
+      });
     }
   }
 };

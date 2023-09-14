@@ -46,12 +46,14 @@
               <singleChoice
                 v-if="question.answer_mode === 'single_choice'"
                 :itemData="getItemProps(question, questionIndex)"
+								:commonData="getAnswerModeProps(question, questionIndex)"
                 @changeAnswer="changeAnswer"
               />
 
               <judge
                 v-if="question.answer_mode === 'true_false'"
                 :itemData="getItemProps(question, questionIndex)"
+								:commonData="getAnswerModeProps(question, questionIndex)"
                 @changeAnswer="changeAnswer"
               />
 
@@ -61,18 +63,21 @@
                     question.answer_mode === 'uncertain_choice'
                 "
                 :itemData="getItemProps(question, questionIndex)"
+								:commonData="getAnswerModeProps(question, questionIndex)"
                 @changeAnswer="changeAnswerArray"
               />
 
               <essay
                 v-if="question.answer_mode === 'rich_text'"
                 :itemData="getItemProps(question, questionIndex)"
+								:commonData="getAnswerModeProps(question, questionIndex)"
                 @changeAnswer="changeAnswer"
               />
 
               <fill
                 v-if="question.answer_mode === 'text'"
                 :itemData="getItemProps(question, questionIndex)"
+								:commonData="getAnswerModeProps(question, questionIndex)"
                 @changeAnswer="changeAnswerArray"
               />
             </answer-model>

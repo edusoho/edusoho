@@ -38,13 +38,17 @@
 
       <!-- 答题卡 -->
       <card
+				ref="card"
         v-model="cardShow"
         :mode="mode"
         :sections="assessment.sections"
         :section_responses="section_responses"
+				:assessmentResponse="assessmentResponse"
         @slideTo="slideTo"
       ></card>
+      {{ brushDo.status }}
       <ibs-footer
+        v-if="brushDo.exerciseModes === '0'"
         :mode="mode"
         :show-save-process-btn="showSaveProcessBtn"
         @showcard="showcard"
@@ -109,6 +113,12 @@ export default {
       default: true
     }
   },
+  provide() {
+    return {
+      itemEngine:this
+    }
+  },
+  inject: ["brushDo"],
   data() {
     return {
       section_responses: [],
@@ -143,7 +153,9 @@ export default {
     }
     this.setSwiperHeight();
     this.getSectionResponses();
-    this.countTime();
+    if (this.brushDo.exerciseModes === '0') {
+      this.countTime();
+    }
     this.$nextTick(() => {
       console.log(this.$refs.mySwiper.$swiper);
     });
@@ -350,15 +362,18 @@ export default {
           cancelButtonText: "确认",
           confirmButtonText: "继续答题",
           message: message,
-          getContainer: "#ibs-item-bank"
+          getContainer: "#ibs-item-bank",
+					className: 'backDialog'
         })
           .then(() => {
             // 显示答题卡
             //this.cardShow = true;
+						document.getElementsByClassName('backDialog')[0].remove();
             reject();
           })
           .catch(() => {
             flge ? this.answerData() : this.saveAnswerData();
+						document.getElementsByClassName('backDialog')[0].remove();
             resolve();
           });
       });

@@ -115,6 +115,12 @@ export default {
       answerAttachments: {}
     };
   },
+  provide() {
+    return {
+      itemEngine:this
+    }
+  },
+  inject: ["brushDo"],
   computed: {
     needScore() {
       return !!Number(this.answerScene.need_score);

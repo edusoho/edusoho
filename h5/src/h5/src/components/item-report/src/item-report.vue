@@ -75,6 +75,12 @@ export default {
     card,
     ibsFooter
   },
+  provide() {
+    return {
+      itemEngine:this
+    }
+  },
+  inject: ["brushDo"],
   props: {
     mode: {
       type: String,

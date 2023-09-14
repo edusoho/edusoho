@@ -31,6 +31,8 @@ const config = {
     api: 'getChapterExerciseRecord',
   },
 };
+let backUrl = '';
+
 export default {
   mixins: [isAuthorized],
   components: {itemEngine},
@@ -42,7 +44,12 @@ export default {
       answerRecord: {},
       assessmentResponse: {},
       canLeave: false,
-      resources: [{ id: '1' }, { id: '2' }]
+      resources: [{ id: '1' }, { id: '2' }],
+      exerciseModes: this.$route.query.exerciseMode,
+      status: '',
+      reviewedCount: 0,
+      recordId: '',
+      backUrl: ''
     };
   },
   computed: {
@@ -58,16 +65,26 @@ export default {
   provide() {
     return {
       getResourceToken: this.getResourceToken,
-      settings: this.storageSetting
+      settings: this.storageSetting,
+      brushDo:this
     }
   },
   mounted() {},
+  beforeRouteEnter(to, from, next) {
+    document.getElementById('app').style.background = '#f6f6f6';
+    if (from.fullPath === '/') {
+      backUrl = '/';
+    } else {
+      backUrl = '';
+    }
+    next();
+  },
   beforeRouteLeave(to, from, next) {
-    // 可捕捉离开提醒
-    if (this.canLeave) {
+    document.getElementById('app').style.background = '';
+    if (this.canLeave || to.query.isLeave) {
       next();
     } else {
-      this.$refs.itemEngine.submitPaper(true);
+      this.$refs.itemEngine.submitPaper(true)
     }
   },
   methods: {
@@ -76,6 +93,10 @@ export default {
       const data = { answer_record_id: this.$route.query.answer_record_id };
       Api.continueAnswer({ data })
         .then(res => {
+          this.recordId = res.answer_record.id
+          this.reviewedCount = res.reviewedCount
+          this.exerciseModes = res.answer_record.exercise_mode;
+          this.status = res.answer_record.status;
           this.assignData(res);
           this.isLoading = false;
         })
@@ -92,7 +113,7 @@ export default {
       this.isLoading = true;
       const type = this.$route.query.type;
       const query = { exerciseId: this.$route.query.exerciseId };
-      const data = { moduleId: this.$route.query.moduleId ,exerciseMode: this.$route.query.exerciseMode};
+      const data = { moduleId: this.$route.query.moduleId ,exerciseMode: this.exerciseModes};
       if (type === 'assessment') {
         data.assessmentId = this.$route.query.assessmentId;
       } else {
@@ -100,6 +121,9 @@ export default {
       }
       Api[config[type].api]({ query, data })
         .then(res => {
+          this.recordId = res.answer_record.id
+          this.exerciseModes = res.answer_record.exercise_mode
+          this.status = res.answer_record.status;
           this.isLoading = false;
           this.assignData(res);
         })
@@ -202,6 +226,7 @@ export default {
         assessmentId: this.$route.query.assessmentId,
         moduleId: this.$route.query.moduleId,
         categoryId: this.$route.query.categoryId,
+        backUrl: backUrl,
       };
       const answerRecordId = this.assessmentResponse.answer_record_id;
       this.$router.replace({
