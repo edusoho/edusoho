@@ -34,11 +34,14 @@ class WrongQuestionBookController extends BaseController
 
     public function practiseRedirectAction(Request $request, $poolId)
     {
-        $apiRequest = new ApiRequest("/api/wrong_book/{$poolId}/start_answer", 'POST', $request->query->all());
+        $query = $request->query->all();
+        $body = ['itemNum' => $query['itemNum'] ?? 20];
+        unset($query['itemNum']);
+        $apiRequest = new ApiRequest("/api/wrong_book/{$poolId}/start_answer", 'POST', $query, $body);
         $result = $this->container->get('api_resource_kernel')->handleApiRequest($apiRequest);
         $record = $result['answer_record'];
 
-        return $this->redirect($this->generateUrl('wrong_question_book_practise', ['poolId' => $poolId, 'recordId' => $record['id']]));
+        return $this->redirectToRoute('wrong_question_book_practise', ['poolId' => $poolId, 'recordId' => $record['id']]);
     }
 
     public function startDoAction(Request $request, $poolId, $recordId)

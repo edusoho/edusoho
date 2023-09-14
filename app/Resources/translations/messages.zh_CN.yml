@@ -2128,6 +2128,20 @@ course.plan_task.activity_manage.exercise.info_tips: >
   本次练习随机生成<span class="color-success">%itemCount%题</span>
 course.plan_task.activity_manage.exercise.info_tips.question_lack: 题目数与老师设定不一致，请联系老师处理！
 course.plan_task.activity_manage.exercise.total_questions: 共%itemCount%题
+course.plan_task.activity_manage.exercise.single_choice: 单选题
+course.plan_task.activity_manage.exercise.choice: 多选题
+course.plan_task.activity_manage.exercise.uncertain_choice: 不定项选择题
+course.plan_task.activity_manage.exercise.determine: 判断题
+course.plan_task.activity_manage.exercise.fill: 填空题
+course.plan_task.activity_manage.exercise.essay: 问答题
+course.plan_task.activity_manage.exercise.material: 材料题
+course.plan_task.activity_manage.exercise.questions: '%itemCount% 题'
+course.plan_task.activity_manage.exercise.selective.answer.mode: 选择答题模式
+course.plan_task.activity_manage.exercise.test.mode: 测验模式
+course.plan_task.activity_manage.exercise.one.question.one.answer.mode: 一题一答模式
+course.plan_task.activity_manage.exercise.currently.not.supported.on.pc: （暂不支持PC端）
+course.plan_task.activity_manage.exercise.continue.tips-title: 当前练习模式为【一题一答】，PC端暂不支持，请移步手机端继续答题
+course.plan_task.activity_manage.exercise.continue.back-btn: 返回课程目录
 course.plan_task.activity_manage.exercise.confirm_submit: 确认提交
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 您真的要提交吗？
 course.plan_task.activity_manage.exercise.finished_condition: 提交练习
@@ -9718,6 +9732,7 @@ log.action.question_bank.create_category: 创建题库分类
 log.action.question_bank.delete_category: 删除题库分类
 log.action.question_bank.update_category: 更新题库分类
 log.action.question_bank.delete_question: 删除题库题目
+log.action.question_bank.sort_question_category: 题库分类排序
 log.action.destroy_account_record.create: 申请注销帐号
 log.action.destroy_account_record.pass: 通过注销帐号申请
 log.action.destroy_account_record.reject: 拒绝注销帐号申请
@@ -9728,6 +9743,8 @@ log.action.item_bank_exercise.recommend_exercise: 推荐题库练习
 log.action.item_bank_exercise.cancel_recommend_exercise: 取消推荐题库练习
 log.action.item_bank_exercise.publish_exercise: 发布题库练习
 log.action.item_bank_exercise.close_exercise: 关闭题库练习
+log.action.item_bank_exercise.publish_exercise_chapter: 发布题库练习章节
+log.action.item_bank_exercise.unpublish_exercise_chapter: 取消发布题库练习章节
 log.action.certifiacte.create_certificate: 创建证书
 log.action.certifiacte.auto_issue: 自动发放证书
 log.action.certifiacte.create_template: 创建证书模板
@@ -11083,6 +11100,7 @@ exception.item_bank_exercise.member.member_not_student: 成员不是学生
 exception.item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或试卷练习至少需要启用一项
 exception.item_bank_exercise.exercise.is_exists: 题库练习已存在，请勿重复开启
 exception.item_bank_exercise.exercise.not_arrive: 题库练习未到学习时间，添加失败
+exception.item_bank_exercise.parent_chapter_unpublish: 请先发布上一级章节
 exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
 exception.item_bank.assessment.not.exist: 试卷不存在
 exception.item_bank.assessment.is_empty: 试卷全部题目已被删除，请联系教师或管理员

@@ -1828,6 +1828,20 @@ course.plan_task.activity_manage.exercise.info: Introduction
 course.plan_task.activity_manage.exercise.info_tips: 'This assignment is random generate <span class="color-success">%itemCount% questions</span>'
 course.plan_task.activity_manage.exercise.info_tips.question_lack: The number of questions is inconsistent with the teacher's settings, please contact the teacher!
 course.plan_task.activity_manage.exercise.total_questions: '%itemCount% questions in total'
+course.plan_task.activity_manage.exercise.single_choice: Single_choice
+course.plan_task.activity_manage.exercise.choice: Choice
+course.plan_task.activity_manage.exercise.uncertain_choice: Uncertain_choice
+course.plan_task.activity_manage.exercise.determine: Determine
+course.plan_task.activity_manage.exercise.fill: Fill
+course.plan_task.activity_manage.exercise.essay: Essay
+course.plan_task.activity_manage.exercise.material: Material
+course.plan_task.activity_manage.exercise.questions: '%itemCount% questions'
+course.plan_task.activity_manage.exercise.selective.answer.mode: Selective answer mode
+course.plan_task.activity_manage.exercise.test.mode: Test mode
+course.plan_task.activity_manage.exercise.one.question.one.answer.mode: One question one answer mode
+course.plan_task.activity_manage.exercise.currently.not.supported.on.pc: (Currently not supported on PC)
+course.plan_task.activity_manage.exercise.continue.tips-title: The current practice mode is [one question, one answer], which is not supported on the PC, please move to the mobile phone to continue answering
+course.plan_task.activity_manage.exercise.continue.back-btn: Back to course catalog
 course.plan_task.activity_manage.exercise.confirm_submit: Confirm
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 'Are you sure to submit?'
 course.plan_task.activity_manage.flash.play_tips: 'Note：Flash is not supported on mobile'
@@ -8462,6 +8476,7 @@ log.action.question_bank.create_category: Create Bank Category
 log.action.question_bank.delete_category: Delete Bank Category
 log.action.question_bank.update_category: Update Bank Category
 log.action.question_bank.delete_question: Delete Question
+log.action.question_bank.sort_question_category: 'Bank Category Sort'
 log.action.item_bank_exercise.add_student: 'Add student'
 log.action.item_bank_exercise.remove_student: Remove Student
 log.action.item_bank_exercise.delete_exercise: Delete Item Exercise
@@ -8469,6 +8484,8 @@ log.action.item_bank_exercise.recommend_exercise: Recommend Item Exercise
 log.action.item_bank_exercise.cancel_recommend_exercise: Cancel Recommend Item Exercise
 log.action.item_bank_exercise.publish_exercise: Publish Item Exercise
 log.action.item_bank_exercise.close_exercise: Close Item Exercise
+log.action.item_bank_exercise.publish_exercise_chapter: 'Publish the question bank exercise chapter'
+log.action.item_bank_exercise.unpublish_exercise_chapter: 'Cancel the release of the question bank exercise chapter'
 log.action.certifiacte.create_certificate: Create Certificate
 log.action.certifiacte.auto_issue: Auto Issue Certificate
 log.action.certifiacte.create_template: Create Template
@@ -9761,6 +9778,7 @@ exception.item_bank_exercise.member.member_not_student: Member is not student
 exception.item_bank_exercise.module.switch.danger: At the time of publication of the item bank exercise, at least one chapter exercise or assessment exercise must be enabled
 exception.item_bank_exercise.exercise.is_exists: The item bank exercise already exists. Please do not open it repeatedly
 exception.item_bank_exercise.exercise.not_arrive: The item bank exercise has not reached learning time，add failed
+exception.item_bank_exercise.parent_chapter_unpublish: 'Please publish the previous chapter first'
 exception.item_bank.assessment.not.open: The test paper is closed, please contact the teacher
 exception.item_bank.assessment.not.exist: Test paper does not exist
 exception.item_bank.assessment.is_empty: All questions have been removed from the paper. Please contact the teacher or administrator

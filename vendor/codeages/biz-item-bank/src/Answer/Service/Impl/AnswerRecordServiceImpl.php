@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerRecordDao;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -138,6 +139,13 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
             ];
         }
         $this->getAnswerRecordDao()->batchUpdate(array_keys($update), $update, 'assessment_id');
+    }
+
+    public function findByIds($ids)
+    {
+        $answerRecords = $this->getAnswerRecordDao()->findByIds($ids);
+
+        return ArrayToolkit::index($answerRecords, 'id');
     }
 
     /**

@@ -15,6 +15,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService;
 use Codeages\Biz\ItemBank\BaseService;
@@ -90,6 +91,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
+            $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
             $isFinished = $this->isFinished($answerQuestionReports, $answerScene);
             list($answerRecord) = $this->generateAnswerReport($answerQuestionReports, $answerRecord, $assessmentResponse['used_time'], $isFinished);
 
@@ -135,20 +137,20 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     public function batchAutoSubmit($answerSceneId, $assessmentId, $userIds)
     {
         if (empty($userIds)) {
-            return;
+            throw new AnswerException('没有要自动交卷的用户', ErrorCode::NO_USER_AUTO_SUMBMIT_ANSWER);
         }
 
         $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
         if (empty($answerScene)) {
-            return;
+            throw new AnswerSceneException('AnswerScene not found.', ErrorCode::ANSWER_SCENE_NOTFOUD);
         }
         if (empty($answerScene['end_time']) || $answerScene['end_time'] >= time()) {
-            return;
+            throw new AnswerSceneException('AnswerScene endTime within expory date.', ErrorCode::ANSWER_ENDTIME_WITHIN_EXPIRY_DATE);
         }
 
         $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
         if (empty($assessment)) {
-            return;
+            throw AssessmentException::ASSESSMENT_NOTEXIST();
         }
 
         $answerRecords = $this->batchCreateAnswerRecords($answerScene, $assessmentId, $userIds);
@@ -364,7 +366,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     protected function generateAnswerReport($answerQuestionReports, $answerRecord, $usedTime = 0, $isFinished = true)
     {
-        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $subjectiveScore = $this->sumSubjectiveScore($answerQuestionReports);
         $score = $this->sumScore($answerQuestionReports);
 
@@ -392,6 +393,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         );
 
         if ($isFinished) {
+            $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
             $this->getAnswerSceneService()->update(
                 $answerScene['id'],
                 ['name' => $answerScene['name'], 'last_review_time' => time()]
@@ -729,6 +731,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 'analysis' => $questions[$questionId]['analysis'],
                 'manualMarking' => $reviewedQuestion['is_reviewed'] ? 0 : 1,
                 'status' => $answerQuestionReports[$questionId]['status'],
+                'response' => $answerQuestionReports[$questionId]['response'],
             ];
         }
 

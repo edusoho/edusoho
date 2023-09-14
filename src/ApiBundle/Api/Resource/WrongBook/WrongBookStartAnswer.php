@@ -31,7 +31,7 @@ class WrongBookStartAnswer extends AbstractResource
         $filterConditions = $this->prepareConditions($poolId, $conditions);
         $wrongQuestionsCount = $this->getWrongQuestionService()->countWrongQuestionWithCollect($filterConditions);
 
-        $itemNum = $request->request->get('itemNum');
+        $itemNum = $request->request->get('itemNum', 20);
         if ($wrongQuestionsCount < $itemNum) {
             throw WrongBookException::WRONG_QUESTION_NUM_LIMIT();
         }

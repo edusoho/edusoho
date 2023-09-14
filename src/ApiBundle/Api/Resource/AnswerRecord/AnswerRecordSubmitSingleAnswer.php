@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\AnswerRecord;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
@@ -23,7 +24,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
     {
         $params = $this->convertParams($answerRecordId, $request->request->all());
         $this->validateParams($answerRecordId, $params);
-        $params = $this->trimResponse($params);
+        $params['response'] = ArrayToolkit::trim($params['response']);
 
         $questionReport = $this->getAnswerService()->submitSingleAnswer($answerRecordId, $params);
 
@@ -39,6 +40,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
         $question = $this->getItemService()->getQuestionIncludeDeleted($questionReport['question_id']);
 
         return [
+            'response' => $params['response'],
             'answer' => $question['answer'],
             'itemAnalysis' => $item['analysis'],
             'questionAnalysis' => $question['analysis'],
@@ -105,15 +107,6 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
         if (empty($question) || $params['item_id'] != $question['item_id']) {
             throw CommonException::ERROR_PARAMETER();
         }
-    }
-
-    protected function trimResponse($params)
-    {
-        foreach ($params['response'] as &$response) {
-            $response = trim($response);
-        }
-
-        return $params;
     }
 
     /**

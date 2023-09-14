@@ -128,9 +128,8 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
         }
 
         $categories = $this->findItemCategoriesByBankId($bankId);
-        list($map, $tree) = $this->prepareCategoryTree($categories);
 
-        return $tree;
+        return $this->buildCategoryTree($categories);
     }
 
     public function getItemCategoryTreeList($bankId)
@@ -173,15 +172,30 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
             return [];
         }
 
-        list($map, $tree) = $this->prepareCategoryTree($this->findItemCategoriesByBankId($category['bank_id']));
+        list($map) = $this->prepareCategoryTree($this->findItemCategoriesByBankId($category['bank_id']));
+
+        return $this->seekCategoryChildrenIds($map, [$id]);
+    }
+
+    public function findMultiCategoryChildrenIds($bankId, $ids)
+    {
+        list($map) = $this->prepareCategoryTree($this->findItemCategoriesByBankId($bankId));
+
+        return $this->seekCategoryChildrenIds($map, $ids);
+    }
+
+    protected function seekCategoryChildrenIds($map, $ids)
+    {
         $childrenIds = [];
 
-        $childrenIdsQueue = array_column($map[$id]['children'], 'id');
-        while (!empty($childrenIdsQueue)) {
-            $parent = $map[$childrenIdsQueue[0]];
-            $childrenIds[] = array_shift($childrenIdsQueue);
-            $childrenIdsQueue = array_merge($childrenIdsQueue, array_column($parent['children'], 'id'));
-            unset($parent);
+        foreach ($ids as $id) {
+            $childrenIdsQueue = array_column($map[$id]['children'], 'id');
+            while (!empty($childrenIdsQueue)) {
+                $parent = $map[$childrenIdsQueue[0]];
+                $childrenIds[] = array_shift($childrenIdsQueue);
+                $childrenIdsQueue = array_merge($childrenIdsQueue, array_column($parent['children'], 'id'));
+                unset($parent);
+            }
         }
 
         return $childrenIds;
@@ -247,6 +261,34 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
 
         $this->getItemCategoryDao()->resetItemNumAndQuestionNumByBankId($bankId);
         $this->getItemCategoryDao()->batchUpdate(ArrayToolkit::column($updateCategories, 'id'), $updateCategories);
+    }
+
+    public function sortItemCategories($ids)
+    {
+        $updateFields = [];
+        foreach ($ids as $index => $id) {
+            $updateFields[] = [
+                'seq' => $index + 1
+            ];
+        }
+
+        return $this->getItemCategoryDao()->batchUpdate($ids, $updateFields);
+    }
+
+    public function buildCategoryTreeList($categories, $parentId)
+    {
+        $categories = ArrayToolkit::group($categories, 'parent_id');
+        $tree = [];
+        $this->prepareCategoryTreeList($tree, $categories, $parentId);
+
+        return $tree;
+    }
+
+    public function buildCategoryTree($categories)
+    {
+        list($map, $tree) = $this->prepareCategoryTree($categories);
+
+        return $tree;
     }
 
     /**
