@@ -15,9 +15,11 @@ class ItemSoftDelete extends Migration
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `origin_assessment_id` INT(10) unsigned NOT NULL COMMENT '原试卷id',
               `snapshot_assessment_id` INT(10) unsigned NOT NULL COMMENT '快照试卷id',
+              `sections_snapshot` text COMMENT '原section和快照section对应关系',
               `created_time` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
-              KEY `origin_assessment_id` (`origin_assessment_id`)
+              KEY `origin_assessment_id` (`origin_assessment_id`),
+              KEY `snapshot_assessment_id` (`snapshot_assessment_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
         if (!$this->isFieldExist('biz_answer_record', 'exercise_mode')) {

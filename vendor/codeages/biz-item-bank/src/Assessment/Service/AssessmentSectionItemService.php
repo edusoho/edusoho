@@ -28,5 +28,5 @@ interface AssessmentSectionItemService
 
     public function createAssessmentSectionItems($items);
 
-    public function deleteAssessmentSectionItems($ids);
+    public function deleteAssessmentSectionItems($toDeleteSectionItems);
 }

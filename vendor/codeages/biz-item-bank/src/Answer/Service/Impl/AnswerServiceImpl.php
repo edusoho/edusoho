@@ -6,6 +6,7 @@ use Biz\Common\CommonException;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
@@ -64,6 +65,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     public function submitAnswer(array $assessmentResponse)
     {
+        $assessmentResponse = $this->convertAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->validateAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->getAnswerRandomSeqService()->restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
         $assessmentReport = $this->getAssessmentService()->review(
@@ -1029,6 +1031,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     public function saveAnswer(array $assessmentResponse)
     {
+        $assessmentResponse = $this->convertAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->validateAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->getAnswerRandomSeqService()->restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
 
@@ -1045,21 +1048,21 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $reviewedQuestions ?? []
             );
             if ($this->getAnswerQuestionReportService()->count(
-                ['answer_record_id' => $assessmentResponse['answer_record_id']]
+                ['answer_record_id' => $answerRecord['id']]
             )) {
                 $this->getAnswerQuestionReportService()->batchUpdate($answerQuestionReports);
             } else {
                 $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
             }
 
-            $this->updateAttachmentsTarget($assessmentResponse['answer_record_id'], $attachments);
+            $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
 
             //判断模拟考试应该取当前时间减去开始时间
             if (self::EXAM_MODE_SIMULATION == $answerRecord['exam_mode']) {
                 $assessmentResponse['used_time'] = time() - $answerRecord['created_time'];
             }
 
-            $this->getAnswerRecordService()->update($assessmentResponse['answer_record_id'], [
+            $this->getAnswerRecordService()->update($answerRecord['id'], [
                 'used_time' => $assessmentResponse['used_time'],
             ]);
 
@@ -1070,6 +1073,27 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $this->dispatch('answer.saved', $assessmentResponse);
+
+        return $assessmentResponse;
+    }
+
+    private function convertAssessmentResponse($assessmentResponse)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
+        if (empty($answerRecord)) {
+            return $assessmentResponse;
+        }
+        if ($answerRecord['assessment_id'] == $assessmentResponse['assessment_id']) {
+            return $assessmentResponse;
+        }
+        $assessmentSnapshot = $this->getAssessmentService()->getAssessmentSnapshotBySnapshotAssessmentId($answerRecord['assessment_id']);
+        if (empty($assessmentSnapshot) || $assessmentSnapshot['origin_assessment_id'] != $assessmentResponse['assessment_id']) {
+            return $assessmentResponse;
+        }
+        $assessmentResponse['assessment_id'] = $answerRecord['assessment_id'];
+        foreach ($assessmentResponse['section_responses'] as &$sectionResponse) {
+            $sectionResponse['section_id'] = $assessmentSnapshot['sections_snapshot'][$sectionResponse['section_id']];
+        }
 
         return $assessmentResponse;
     }
@@ -1103,7 +1127,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         ]);
 
         $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
-        if (empty($this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']))) {
+        if (empty($answerRecord)) {
             throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
         }
 
@@ -1111,7 +1135,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             throw $this->createInvalidArgumentException('assessment_id invalid.');
         }
 
-        if (!in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_DOING, AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
+        if (!in_array($answerRecord['status'], [AnswerRecordStatus::DOING, AnswerRecordStatus::PAUSED])) {
             throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
         }
 

@@ -48,5 +48,7 @@ interface AssessmentService
 
     public function createAssessmentSnapshotsIncludeSectionsAndItems(array $assessmentIds);
 
-    public function modifyAssessmentsAndSectionsWithToDeleteSectionItems(array $sectionItems);
+    public function modifyAssessmentsAndSectionsWithToDeleteSectionItems(array $toDeleteSectionItems);
+
+    public function getAssessmentSnapshotBySnapshotAssessmentId($snapshotAssessmentId);
 }

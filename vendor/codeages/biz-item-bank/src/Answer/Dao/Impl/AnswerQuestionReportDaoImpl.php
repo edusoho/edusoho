@@ -33,7 +33,7 @@ class AnswerQuestionReportDaoImpl extends AdvancedDaoImpl implements AnswerQuest
         ]);
     }
 
-    public function batchUpdateByTwoIdentify($whereIdentifyColumn, $whereIdentifies, $caseIdentifyColumn, $caseIdentifies, $updateColumnsList)
+    public function batchUpdateByTwoIdentify($caseIdentifies, $updateColumnsList, $caseIdentifyColumn, $whereIdentifyColumn, $whereIdentifies)
     {
         $updateColumns = array_keys(reset($updateColumnsList));
 

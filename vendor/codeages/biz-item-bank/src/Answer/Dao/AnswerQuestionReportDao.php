@@ -14,5 +14,5 @@ interface AnswerQuestionReportDao extends AdvancedDaoInterface
 
     public function getByAnswerRecordIdAndQuestionId($answerRecordId, $questionId);
 
-    public function batchUpdateByTwoIdentify($whereIdentifyColumn, $whereIdentifies, $caseIdentifyColumn, $caseIdentifies, $updateColumnsList);
+    public function batchUpdateByTwoIdentify($caseIdentifies, $updateColumnsList, $caseIdentifyColumn, $whereIdentifyColumn, $whereIdentifies);
 }

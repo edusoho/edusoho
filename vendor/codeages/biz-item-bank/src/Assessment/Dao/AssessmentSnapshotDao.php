@@ -6,4 +6,5 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
 interface AssessmentSnapshotDao extends AdvancedDaoInterface
 {
+    public function getBySnapshotAssessmentId($snapshotAssessmentId);
 }

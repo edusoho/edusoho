@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\Exception\InvalidArgumentException;
 use Biz\Common\CommonException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -20,7 +21,7 @@ class AnswerRecordReviewSingleAnswer extends AbstractResource
 {
     public function add(ApiRequest $request, $answerRecordId)
     {
-        $params = $request->request->all();
+        $params = $this->convertParams($answerRecordId, $request->request->all());
         $this->validateParams($answerRecordId, $params);
 
         $questionReport = $this->getAnswerService()->reviewSingleAnswerByManual($answerRecordId, $params);
@@ -37,8 +38,27 @@ class AnswerRecordReviewSingleAnswer extends AbstractResource
             'status' => $questionReport['status'],
             'reviewedCount' => $reviewedCount,
             'totalCount' => $assessment['question_count'],
-            'isAnswerFinished' => (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) ? 1 : 0,
+            'isAnswerFinished' => (AnswerRecordStatus::FINISHED == $answerRecord['status']) ? 1 : 0,
         ];
+    }
+
+    private function convertParams($answerRecordId, $params)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        if (empty($answerRecord)) {
+            return $params;
+        }
+        if ($answerRecord['assessment_id'] == $params['assessment_id']) {
+            return $params;
+        }
+        $assessmentSnapshot = $this->getAssessmentService()->getAssessmentSnapshotBySnapshotAssessmentId($answerRecord['assessment_id']);
+        if (empty($assessmentSnapshot) || $assessmentSnapshot['origin_assessment_id'] != $params['assessment_id']) {
+            return $params;
+        }
+        $params['assessment_id'] = $answerRecord['assessment_id'];
+        $params['section_id'] = $assessmentSnapshot['sections_snapshot'][$params['section_id']];
+
+        return $params;
     }
 
     protected function validateParams($answerRecordId, $params)
@@ -56,7 +76,7 @@ class AnswerRecordReviewSingleAnswer extends AbstractResource
             throw new AnswerException('非一题一答模式，不能批阅', ErrorCode::EXERCISE_MODE_ERROR);
         }
 
-        if (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
+        if (AnswerRecordStatus::FINISHED == $answerRecord['status']) {
             throw new AnswerException('答题已结束,不能批阅', ErrorCode::ANSWER_FINISHED);
         }
 

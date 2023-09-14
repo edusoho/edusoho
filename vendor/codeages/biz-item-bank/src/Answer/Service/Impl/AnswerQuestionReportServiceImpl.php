@@ -65,11 +65,11 @@ class AnswerQuestionReportServiceImpl extends BaseService implements AnswerQuest
             return;
         }
         $this->getAnswerQuestionReportDao()->batchUpdateByTwoIdentify(
-            'assessment_id',
-            array_keys($updateAssessments),
-            'section_id',
             array_keys($updateSections),
-            $updateSections
+            $updateSections,
+            'section_id',
+            'assessment_id',
+            array_keys($updateAssessments)
         );
         $this->getAnswerQuestionReportDao()->batchUpdate(array_keys($updateAssessments), $updateAssessments, 'assessment_id');
     }

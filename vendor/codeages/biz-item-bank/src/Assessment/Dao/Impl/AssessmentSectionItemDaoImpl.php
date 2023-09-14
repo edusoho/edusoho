@@ -39,15 +39,13 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
             'orderbys' => [
                 'id',
                 'created_time',
+                'assessment_id',
+                'seq',
             ],
             'serializes' => [
                 'score_rule' => 'json',
                 'answer_mode' => 'json',
                 'question_scores' => 'json',
-            ],
-            'orderbys' => [
-                'id',
-                'created_time',
             ],
             'timestamps' => [
                 'created_time',

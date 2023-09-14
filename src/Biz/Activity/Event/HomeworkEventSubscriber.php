@@ -59,7 +59,7 @@ class HomeworkEventSubscriber extends EventSubscriber
         $this->getAnswerRecordService()->replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots);
         $this->getAnswerReportService()->replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots);
         $this->getAssessmentService()->modifyAssessmentsAndSectionsWithToDeleteSectionItems($toDeleteSectionItems);
-        $this->getAssessmentSectionItemService()->deleteAssessmentSectionItems(array_column($toDeleteSectionItems, 'id'));
+        $this->getAssessmentSectionItemService()->deleteAssessmentSectionItems($toDeleteSectionItems);
     }
 
     /**

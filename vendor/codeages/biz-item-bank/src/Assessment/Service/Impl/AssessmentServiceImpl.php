@@ -393,19 +393,26 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         return $assessmentSnapshots;
     }
 
-    public function modifyAssessmentsAndSectionsWithToDeleteSectionItems(array $sectionItems)
+    public function modifyAssessmentsAndSectionsWithToDeleteSectionItems(array $toDeleteSectionItems)
     {
-        if (empty($sectionItems)) {
+        if (empty($toDeleteSectionItems)) {
             return;
         }
-        list($eachAssessmentToUpdateSections, $toDeleteSectionIds) = $this->extractToUpdateSectionsAndToDeleteSectionIds($sectionItems);
+        $toDeleteSectionIds = $this->extractToDeleteSectionIds($toDeleteSectionItems);
         $this->getSectionService()->deleteAssessmentSections($toDeleteSectionIds);
+
+        $eachAssessmentToUpdateSections = $this->extractEachAssessmentToUpdateSections($toDeleteSectionItems);
 
         $toUpdateSections = $this->extractToUpdateSections($eachAssessmentToUpdateSections);
         $this->getSectionService()->updateAssessmentSections($toUpdateSections);
 
         $toUpdateAssessments = $this->extractToUpdateAssessments($eachAssessmentToUpdateSections);
         $this->getAssessmentDao()->batchUpdate(array_keys($toUpdateAssessments), $toUpdateAssessments);
+    }
+
+    public function getAssessmentSnapshotBySnapshotAssessmentId($snapshotAssessmentId)
+    {
+        return $this->getAssessmentSnapshotDao()->getBySnapshotAssessmentId($snapshotAssessmentId);
     }
 
     private function createAssessmentSnapshots($assessments)
@@ -438,6 +445,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         $snapshotAssessmentSections = [];
         foreach ($originAssessmentSections as $originAssessmentSection) {
             $originAssessmentSection['assessment_id'] = $assessmentSnapshots[$originAssessmentSection['assessment_id']]['snapshot_assessment_id'];
+            unset($originAssessmentSection['id']);
             $snapshotAssessmentSections[] = $originAssessmentSection;
         }
         $this->getSectionService()->createAssessmentSections($snapshotAssessmentSections);
@@ -453,6 +461,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         foreach ($originAssessmentSectionItems as $originAssessmentSectionItem) {
             $originAssessmentSectionItem['assessment_id'] = $assessmentSnapshots[$originAssessmentSectionItem['assessment_id']]['snapshot_assessment_id'];
             $originAssessmentSectionItem['section_id'] = $assessmentSectionSnapshots[$originAssessmentSectionItem['section_id']];
+            unset($originAssessmentSectionItem['id']);
             $snapshotAssessmentSectionItems[] = $originAssessmentSectionItem;
         }
         $this->getSectionItemService()->createAssessmentSectionItems($snapshotAssessmentSectionItems);
@@ -462,46 +471,64 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
     {
         $snapshotAssessmentSections = ArrayToolkit::groupIndex($snapshotAssessmentSections, 'assessment_id', 'seq');
         $assessmentSectionSnapshots = [];
+        $updateAssessmentSnapshots = [];
         foreach ($originAssessmentSections as $originAssessmentSection) {
             $snapshotAssessmentId = $assessmentSnapshots[$originAssessmentSection['assessment_id']]['snapshot_assessment_id'];
             $assessmentSectionSnapshots[$originAssessmentSection['id']] = $snapshotAssessmentSections[$snapshotAssessmentId][$originAssessmentSection['seq']]['id'];
+
+            $updateAssessmentSnapshots[$snapshotAssessmentId]['sections_snapshot'] = $updateAssessmentSnapshots[$snapshotAssessmentId]['sections_snapshot'] ?? [];
+            $updateAssessmentSnapshots[$snapshotAssessmentId]['sections_snapshot'][$originAssessmentSection['id']] = $assessmentSectionSnapshots[$originAssessmentSection['id']];
         }
+        $this->getAssessmentSnapshotDao()->batchUpdate(array_keys($updateAssessmentSnapshots), $updateAssessmentSnapshots, 'snapshot_assessment_id');
 
         return $assessmentSectionSnapshots;
     }
 
-    private function extractToUpdateSectionsAndToDeleteSectionIds($sectionItems)
+    private function extractToDeleteSectionIds($toDeleteSectionItems)
     {
-        $assessmentIds = ArrayToolkit::uniqueColumn($sectionItems, 'assessment_id');
-        $sections = $this->getSectionService()->findSectionsByAssessmentIds($assessmentIds);
-        $sectionItems = ArrayToolkit::group($sectionItems, 'section_id');
-
-        $eachAssessmentToUpdateSections = [];
+        $sectionIds = ArrayToolkit::uniqueColumn($toDeleteSectionItems, 'section_id');
+        $sections = $this->getSectionService()->searchAssessmentSections(
+            ['ids' => $sectionIds],
+            [],
+            0,
+            count($sectionIds),
+            ['id', 'item_count']
+        );
+        $toDeleteSectionItems = ArrayToolkit::group($toDeleteSectionItems, 'section_id');
         $toDeleteSectionIds = [];
         foreach ($sections as $section) {
-            $eachAssessmentToUpdateSections[$section['assessment_id']] = $eachAssessmentToUpdateSections[$section['assessment_id']] ?? [];
-            if (empty($sectionItems[$section['id']])) {
-                $eachAssessmentToUpdateSections[$section['assessment_id']][] = $section;
-                continue;
-            }
-            if (count($sectionItems[$section['id']]) == $section['item_count']) {
+            if (count($toDeleteSectionItems[$section['id']]) == $section['item_count']) {
                 $toDeleteSectionIds[] = $section['id'];
-                continue;
             }
-            $section['item_count'] -= count($sectionItems[$section['id']]);
-            $section['total_score'] -= array_sum(array_column($sectionItems[$section['id']], 'score'));
-            $section['question_count'] -= array_sum(array_column($sectionItems[$section['id']], 'question_count'));
+        }
+
+        return $toDeleteSectionIds;
+    }
+
+    private function extractEachAssessmentToUpdateSections($toDeleteSectionItems)
+    {
+        $assessmentIds = ArrayToolkit::uniqueColumn($toDeleteSectionItems, 'assessment_id');
+        $sections = $this->getSectionService()->searchAssessmentSections(['assessmentIds' => $assessmentIds], ['assessment_id' => 'ASC', 'seq' => 'ASC'], 0, PHP_INT_MAX);
+        $toDeleteSectionItems = ArrayToolkit::group($toDeleteSectionItems, 'section_id');
+
+        $eachAssessmentToUpdateSections = [];
+        foreach ($sections as $section) {
+            $eachAssessmentToUpdateSections[$section['assessment_id']] = $eachAssessmentToUpdateSections[$section['assessment_id']] ?? [];
+            if (!empty($toDeleteSectionItems[$section['id']])) {
+                $section['item_count'] -= count($toDeleteSectionItems[$section['id']]);
+                $section['total_score'] -= array_sum(array_column($toDeleteSectionItems[$section['id']], 'score'));
+                $section['question_count'] -= array_sum(array_column($toDeleteSectionItems[$section['id']], 'question_count'));
+            }
             $eachAssessmentToUpdateSections[$section['assessment_id']][] = $section;
         }
 
-        return [$eachAssessmentToUpdateSections, $toDeleteSectionIds];
+        return $eachAssessmentToUpdateSections;
     }
 
     private function extractToUpdateSections($eachAssessmentToUpdateSections)
     {
         $toUpdateSections = [];
         foreach ($eachAssessmentToUpdateSections as $singleAssessmentToUpdateSections) {
-            $singleAssessmentToUpdateSections = ArrayToolkit::sort($singleAssessmentToUpdateSections, 'seq', SORT_ASC);
             foreach ($singleAssessmentToUpdateSections as $index => $toUpdateSection) {
                 $toUpdateSections[$toUpdateSection['id']] = [
                     'seq' => $index + 1,

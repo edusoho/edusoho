@@ -9,11 +9,19 @@ class AssessmentSnapshotDaoImpl extends AdvancedDaoImpl implements AssessmentSna
 {
     protected $table = 'biz_assessment_snapshot';
 
+    public function getBySnapshotAssessmentId($snapshotAssessmentId)
+    {
+        return $this->getByFields(['snapshot_assessment_id' => $snapshotAssessmentId]);
+    }
+
     public function declares()
     {
         return [
             'timestamps' => [
                 'created_time',
+            ],
+            'serializes' => [
+                'sections_snapshot' => 'json',
             ],
         ];
     }

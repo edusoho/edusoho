@@ -21,7 +21,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
 {
     public function add(ApiRequest $request, $answerRecordId)
     {
-        $params = $request->request->all();
+        $params = $this->convertParams($answerRecordId, $request->request->all());
         $this->validateParams($answerRecordId, $params);
         $params = $this->trimResponse($params);
 
@@ -46,8 +46,27 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
             'manualMarking' => empty($questionReport['isReviewed']) ? 1 : 0,
             'reviewedCount' => $reviewedCount,
             'totalCount' => $assessment['question_count'],
-            'isAnswerFinished' => (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) ? 1 : 0,
+            'isAnswerFinished' => (AnswerRecordStatus::FINISHED == $answerRecord['status']) ? 1 : 0,
         ];
+    }
+
+    private function convertParams($answerRecordId, $params)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        if (empty($answerRecord)) {
+            return $params;
+        }
+        if ($answerRecord['assessment_id'] == $params['assessment_id']) {
+            return $params;
+        }
+        $assessmentSnapshot = $this->getAssessmentService()->getAssessmentSnapshotBySnapshotAssessmentId($answerRecord['assessment_id']);
+        if (empty($assessmentSnapshot) || $assessmentSnapshot['origin_assessment_id'] != $params['assessment_id']) {
+            return $params;
+        }
+        $params['assessment_id'] = $answerRecord['assessment_id'];
+        $params['section_id'] = $assessmentSnapshot['sections_snapshot'][$params['section_id']];
+
+        return $params;
     }
 
     private function validateParams($answerRecordId, $params)
