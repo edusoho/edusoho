@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use Biz\Search\Constant\CloudSearchType;
 use Biz\System\Service\SettingService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -10,7 +11,7 @@ class AddCloudSearchSettingTypeCommand extends BaseCommand
 {
     protected function configure()
     {
-        $this->setName('util:add-cloud-search-type');
+        $this->setName('util:open-itemBankExercise-cloud-search');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -21,12 +22,12 @@ class AddCloudSearchSettingTypeCommand extends BaseCommand
         }
 
         $searchSetting['type'] = [
-            'course' => 1,
-            'classroom' => 1,
-            'itemBankExercise' => 1,
-            'teacher' => 1,
-            'thread' => 1,
-            'article' => 1,
+            CloudSearchType::COURSE => $searchSetting['type']['course'],
+            CloudSearchType::CLASSROOM => $searchSetting['type']['classroom'],
+            CloudSearchType::ITEM_BANK_EXERCISE => 1,
+            CloudSearchType::TEACHER => $searchSetting['type']['teacher'],
+            CloudSearchType::THREAD => $searchSetting['type']['thread'],
+            CloudSearchType::ARTICLE => $searchSetting['type']['article'],
         ];
 
         $this->getSettingService()->set('cloud_search', $searchSetting);

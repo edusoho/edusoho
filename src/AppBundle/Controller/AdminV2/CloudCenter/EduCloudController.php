@@ -17,6 +17,7 @@ use Biz\Content\Service\FileService;
 use Biz\EduCloud\Service\Impl\MicroyanConsultServiceImpl;
 use Biz\File\Service\UploadFileService;
 use Biz\IM\Service\ConversationService;
+use Biz\Search\Constant\CloudSearchType;
 use Biz\Search\Service\SearchService;
 use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
@@ -1269,11 +1270,12 @@ class EduCloudController extends BaseController
         }
         if (empty($data['type'])) {
             $data['type'] = [
-                'course' => 1,
-                'classroom' => 1,
-                'teacher' => 1,
-                'thread' => 1,
-                'article' => 1,
+                CloudSearchType::COURSE => 1,
+                CloudSearchType::CLASSROOM => 1,
+                CloudSearchType::ITEM_BANK_EXERCISE => 1,
+                CloudSearchType::TEACHER => 1,
+                CloudSearchType::THREAD => 1,
+                CloudSearchType::ARTICLE => 1,
             ];
         }
         $this->getSettingService()->set('cloud_search', $data);
