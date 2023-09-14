@@ -17,6 +17,7 @@ use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskService;
 use Biz\Util\EdusohoLiveClient;
+use Symfony\Component\HttpFoundation\Response;
 
 // Refactor: 该类不应该在Course模块，应该在和LiveActivity放一块，或者另启一个模块LiveRoom
 class LiveReplayServiceImpl extends BaseService implements LiveReplayService
@@ -197,7 +198,8 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         }
 
         if (isset($replayList['error']) && !empty($replayList['error'])) {
-            throw $this->createServiceException($replayList['error'], 500);
+            //抛出异常
+            $this->handleReplayErrorException($liveId, $replayList['error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $this->deleteReplayByLessonId($lessonId, $type);
@@ -223,6 +225,24 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         $this->dispatchEvent('live.replay.generate', $replays);
 
         return $replayList;
+    }
+
+    /**
+     * 处理直播回放返回的错误数据 对直播的返回进行重新返回
+     * 此处的匹配是根据教育云返回的字符串进行匹配 若教育云返回消息变了这个代码将失效
+     */
+    public function handleReplayErrorException(int $liveId, string $message, int $code)
+    {
+        if ('回放状态错误，当前状态：none' == $message) {
+            $message = '该直播无回放（未上课或未录制）';
+
+            $liveActivity = $this->getLiveActivityDao()->getByLiveId($liveId);
+            if ($liveActivity && LiveReplayService::REPLAY_FAILURE_STATUS != $liveActivity['replayStatus']) {
+                $this->getLiveActivityDao()->update($liveActivity['id'], ['replayStatus' => LiveReplayService::REPLAY_FAILURE_STATUS]);
+            }
+        }
+
+        throw $this->createServiceException($message, $code);
     }
 
     public function handleReplayGenerateEvent($liveId, $replayDatas)

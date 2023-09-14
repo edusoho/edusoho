@@ -57,7 +57,18 @@
                     <div v-if="goods.product.targetType === 'classroom'" id="info-left-2"
                          class="content-item js-content-item">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
-                        <classroom-courses :classroomCourses="componentsData.classroomCourses"></classroom-courses>
+                        <div class="searchInput">
+                          <a-input-search :placeholder="'course.search.placeholder'|trans" enter-button @search="searchCourse" />
+                        </div>
+                        <classroom-courses v-if="searchResult.length > 0 || componentsData.classroomCourses.length > 0" :classroomCourses="isSearch ? searchResult : componentsData.classroomCourses"></classroom-courses>
+                        <div v-if="searchResult.length === 0 && isSearch" class="emptyCourse">
+                          <img class="emptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
+                          <p class="emptyCourseContent">{{ 'classroom.search.empty.course' | trans }}</p>
+                        </div>
+                        <div v-if="componentsData.classroomCourses.length === 0 && !isSearch" class="emptyCourse">
+                          <img class="emptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
+                          <p class="emptyCourseContent">{{ 'classroom.empty.course' | trans }}</p>
+                        </div>
                     </div>
 
                     <div v-if="ugcReviewSetting.enable_review == 1
@@ -106,6 +117,7 @@
     export default {
         data() {
             return {
+                isSearch: false,
                 howActive: 1,
                 flag: true,
                 isFixed: false,
@@ -115,6 +127,7 @@
                 goods: {},
                 currentSku: {},
                 componentsData: {},
+                searchResult: []
             }
         },
         props: {
@@ -208,6 +221,17 @@
             },
         },
         methods: {
+            searchCourse(value) {
+              this.isSearch = Boolean(value)
+
+              axios.get(`/api/classrooms/${this.goods.product.targetId}/courses`, {
+                    params: {
+                        title: value
+                    }
+                }).then((res) => {
+                    this.searchResult = res.data
+                });
+            },
             getGoodsInfo() {
                 axios.get(`/api/good/${this.goodsId}`, {
                     headers: {'Accept': 'application/vnd.edusoho.v2+json'}
@@ -309,7 +333,7 @@
         },
         created() {
             window.addEventListener("scroll", this.handleScroll);
-            console.log(this.goods);
+
             if (this.goods.type == 'classroom') {
                 return this.changeSku(this.goods.product.target.id);
             }
@@ -341,3 +365,4 @@
         }
     }
 </script>
+
