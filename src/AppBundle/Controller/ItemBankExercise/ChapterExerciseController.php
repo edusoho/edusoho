@@ -3,9 +3,9 @@
 namespace AppBundle\Controller\ItemBankExercise;
 
 use AppBundle\Controller\BaseController;
+use Biz\ItemBankExercise\Service\ChapterExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
-use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ChapterExerciseController extends BaseController
@@ -14,14 +14,14 @@ class ChapterExerciseController extends BaseController
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
         $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
-        $categoryTree = [];
+        $chapterTree = [];
         if ($exercise['chapterEnable']) {
-            $categoryTree = $this->getItemCategoryService()->getItemCategoryTreeList($questionBank['itemBankId']);
+            $chapterTree = $this->getItemBankChapterExerciseService()->getChapterTreeList($questionBank['id']);
         }
 
         return $this->render('item-bank-exercise-manage/chapter-exercise/list.html.twig', [
             'exercise' => $exercise,
-            'categoryTree' => $categoryTree,
+            'categoryTree' => $chapterTree,
             'questionBank' => $questionBank,
         ]);
     }
@@ -76,10 +76,10 @@ class ChapterExerciseController extends BaseController
     }
 
     /**
-     * @return ItemCategoryService
+     * @return ChapterExerciseService
      */
-    protected function getItemCategoryService()
+    protected function getItemBankChapterExerciseService()
     {
-        return $this->createService('ItemBank:Item:ItemCategoryService');
+        return $this->createService('ItemBankExercise:ChapterExerciseService');
     }
 }

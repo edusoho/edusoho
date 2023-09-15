@@ -58,7 +58,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         return $this->getItemCategoryService()->findItemCategoriesByIds($ids);
     }
 
-    public function getChapterTree($questionBankId)
+    public function getPublishChapterTree($questionBankId)
     {
         $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($questionBankId);
         if (empty($exercise)) {
@@ -78,7 +78,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         return $this->getItemCategoryService()->buildCategoryTree($chapters);
     }
 
-    public function getChapterTreeList($questionBankId)
+    public function getPublishChapterTreeList($questionBankId)
     {
         $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($questionBankId);
         if (empty($exercise)) {
@@ -96,6 +96,25 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         $chapters = $this->filterHiddenChapters($chapters, $exercise['hiddenChapterIds']);
 
         return $this->getItemCategoryService()->buildCategoryTreeList($chapters, 0);
+    }
+
+    public function getChapterTreeList($questionBankId)
+    {
+        $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($questionBankId);
+        if (empty($exercise)) {
+            return [];
+        }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($questionBankId);
+        if (empty($questionBank)) {
+            return [];
+        }
+        $chapters = $this->getItemCategoryService()->getItemCategoryTreeList($questionBank['itemBankId']);
+        $hiddenChapterIds = array_flip($exercise['hiddenChapterIds']);
+        foreach ($chapters as &$chapter) {
+            $chapter['status'] = isset($hiddenChapterIds[$chapter['id']]) ? 'unpublished' : 'published';
+        }
+
+        return $chapters;
     }
 
     public function findChapterChildrenIds($questionBankId, $ids)

@@ -8,7 +8,9 @@ interface ChapterExerciseService
 
     public function findChaptersByIds($ids);
 
-    public function getChapterTree($questionBankId);
+    public function getPublishChapterTree($questionBankId);
+
+    public function getPublishChapterTreeList($questionBankId);
 
     public function getChapterTreeList($questionBankId);
 

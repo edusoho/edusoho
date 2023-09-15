@@ -75,7 +75,7 @@ class ItemBankExercisePool extends AbstractPool
             return [];
         }
 
-        return $this->getItemBankChapterExerciseService()->getChapterTree($targetId);
+        return $this->getItemBankChapterExerciseService()->getPublishChapterTree($targetId);
     }
 
     protected function exerciseAssessmentSearch($targetId, $conditions, $wrongQuestions)
