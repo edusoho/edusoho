@@ -5,9 +5,9 @@ namespace ApiBundle\Api\Resource\Exercise;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Constant\ActivityMediaType;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ExerciseActivityService;
-use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
@@ -15,6 +15,7 @@ use Biz\Task\TaskException;
 use Biz\Testpaper\ExerciseException;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -126,15 +127,14 @@ class ExerciseResult extends AbstractResource
         }
 
         $scene = $this->getAnswerSceneService()->get($exerciseRecord['answer_scene_id']);
-        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($scene['id']);
-        $activity = $this->getActivityService()->getByMediaIdAndMediaType($exerciseActivity['id'], 'exercise');
+        $activity = $this->getActivityService()->getActivityByAnswerSceneIdAndMediaType($scene['id'], ActivityMediaType::EXERCISE);
 
         $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
         if (!$canTakeCourse) {
             throw CourseException::FORBIDDEN_TAKE_COURSE();
         }
 
-        if ('doing' === $exerciseRecord['status'] && ($exerciseRecord['user_id'] != $user['id'])) {
+        if (AnswerRecordStatus::DOING === $exerciseRecord['status'] && ($exerciseRecord['user_id'] != $user['id'])) {
             throw ExerciseException::FORBIDDEN_ACCESS_EXERCISE();
         }
 
@@ -198,14 +198,6 @@ class ExerciseResult extends AbstractResource
         }
 
         return $items;
-    }
-
-    /**
-     * @return TestpaperActivityService
-     */
-    protected function getTestpaperActivityService()
-    {
-        return $this->service('Activity:TestpaperActivityService');
     }
 
     /**

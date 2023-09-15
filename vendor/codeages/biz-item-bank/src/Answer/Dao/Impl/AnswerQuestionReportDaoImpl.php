@@ -33,6 +33,54 @@ class AnswerQuestionReportDaoImpl extends AdvancedDaoImpl implements AnswerQuest
         ]);
     }
 
+    public function batchUpdateByTwoIdentify($caseIdentifies, $updateColumnsList, $caseIdentifyColumn, $whereIdentifyColumn, $whereIdentifies)
+    {
+        $updateColumns = array_keys(reset($updateColumnsList));
+
+        $this->db()->checkFieldNames($updateColumns);
+        $this->db()->checkFieldNames([$whereIdentifyColumn]);
+        $this->db()->checkFieldNames([$caseIdentifyColumn]);
+
+        $pageSize = 500;
+        $pageCount = ceil(count($caseIdentifies) / $pageSize);
+
+        for ($i = 1; $i <= $pageCount; ++$i) {
+            $start = ($i - 1) * $pageSize;
+            $partCaseIdentifies = array_slice($caseIdentifies, $start, $pageSize);
+            $partUpdateColumnsList = array_slice($updateColumnsList, $start, $pageSize);
+            $this->partUpdate($whereIdentifyColumn, $whereIdentifies, $caseIdentifyColumn, $partCaseIdentifies, $partUpdateColumnsList, $updateColumns);
+        }
+    }
+
+    private function partUpdate($whereIdentifyColumn, $whereIdentifies, $caseIdentifyColumn, $caseIdentifies, $updateColumnsList, $updateColumns)
+    {
+        $sql = "UPDATE {$this->table} SET ";
+
+        $updateSql = [];
+
+        $params = [];
+        foreach ($updateColumns as $updateColumn) {
+            $caseWhenSql = "{$updateColumn} = CASE {$caseIdentifyColumn} ";
+
+            foreach ($caseIdentifies as $identifyIndex => $caseIdentify) {
+                $caseWhenSql .= ' WHEN ? THEN ? ';
+                $params[] = $caseIdentify;
+                $params[] = $updateColumnsList[$identifyIndex][$updateColumn];
+                if ($identifyIndex === count($caseIdentifies) - 1) {
+                    $caseWhenSql .= " ELSE {$updateColumn} END";
+                }
+            }
+            $updateSql[] = $caseWhenSql;
+        }
+        $sql .= implode(',', $updateSql);
+
+        $marks = str_repeat('?,', count($whereIdentifies) - 1).'?';
+        $sql .= " WHERE {$whereIdentifyColumn} IN ({$marks})";
+        $params = array_merge($params, $whereIdentifies);
+
+        return $this->db()->executeUpdate($sql, $params);
+    }
+
     public function declares()
     {
         return [

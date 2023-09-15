@@ -45,4 +45,10 @@ interface AssessmentService
     public function findAssessmentQuestions($assessmentId);
 
     public function countAssessmentItemTypesNum($assessmentId);
+
+    public function createAssessmentSnapshotsIncludeSectionsAndItems(array $assessmentIds);
+
+    public function modifyAssessmentsAndSectionsWithToDeleteSectionItems(array $toDeleteSectionItems);
+
+    public function getAssessmentSnapshotBySnapshotAssessmentId($snapshotAssessmentId);
 }

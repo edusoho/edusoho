@@ -25,4 +25,6 @@ interface AnswerReportService
     public function batchUpdate($ids, $updateColumnsList);
 
     public function batchCreateAnswerReports($answerReports);
+
+    public function replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots);
 }

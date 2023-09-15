@@ -140,7 +140,7 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         $answerQuestionReports = ArrayToolkit::index($answerQuestionReports, 'question_id');
         $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($answerRecord['assessment_id']);
-        $questions = $this->getItemService()->findQuestionsByQuestionIds(
+        $questions = $this->getItemService()->findQuestionsByQuestionIdsIncludeDeleted(
             ArrayToolkit::column($assessmentQuestions, 'question_id')
         );
 
@@ -224,6 +224,27 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
     public function batchCreateAnswerReports($answerReports)
     {
         return $this->getAnswerReportDao()->batchCreate($answerReports);
+    }
+
+    public function replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots)
+    {
+        if (empty($assessmentSnapshots)) {
+            return;
+        }
+        $updateAssessments = [];
+        $updateSections = [];
+        foreach ($assessmentSnapshots as $assessmentSnapshot) {
+            $updateAssessments[$assessmentSnapshot['origin_assessment_id']] = [
+                'assessment_id' => $assessmentSnapshot['snapshot_assessment_id'],
+            ];
+            foreach ($assessmentSnapshot['sections_snapshot'] as $originSectionId => $snapshotSectionId) {
+                $updateSections[$originSectionId] = [
+                    'section_id' => $snapshotSectionId,
+                ];
+            }
+        }
+        $this->getAnswerReportDao()->batchUpdate(array_keys($updateAssessments), $updateAssessments, 'assessment_id');
+        $this->getAnswerQuestionReportService()->replaceAssessmentsAndSectionsWithSnapshotAssessmentsAndSections($updateAssessments, $updateSections);
     }
 
     /**

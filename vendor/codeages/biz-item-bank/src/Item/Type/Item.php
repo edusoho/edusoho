@@ -118,7 +118,7 @@ abstract class Item
 
     public function review($itemId, $questionResponses)
     {
-        $item = $this->getItemService()->getItemWithQuestions($itemId);
+        $item = $this->getItemService()->getItemIncludeDeleted($itemId);
         if (empty($item)) {
             return $this->getDeleteItemReviewResult($itemId, $questionResponses);
         }

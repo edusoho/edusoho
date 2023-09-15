@@ -3,10 +3,13 @@
 namespace Codeages\Biz\ItemBank\Item\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
+use Codeages\Biz\Framework\Dao\SoftDelete;
 use Codeages\Biz\ItemBank\Item\Dao\ItemDao;
 
 class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
 {
+    use SoftDelete;
+
     protected $table = 'biz_item';
 
     public function findByIds($ids)

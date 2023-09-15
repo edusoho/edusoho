@@ -222,7 +222,7 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         if (empty($items)) {
             return [];
         }
-        $choiceItems = $this->getItemService()->searchItems([
+        $choiceItems = $this->getItemService()->searchItemsIncludeDeleted([
             'ids' => array_column($items, 'item_id'),
             'types' => $this->getChoiceItemTypes(),
         ], [], 0, PHP_INT_MAX, ['id']);

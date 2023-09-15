@@ -12,5 +12,5 @@ interface AssessmentSectionItemDao extends AdvancedDaoInterface
 
     public function getByAssessmentIdAndItemId($assessmentId, $itemId);
 
-    public function findSectionItemsByAssessmentIds($assessmentIds);
+    public function findByAssessmentIds($assessmentIds);
 }

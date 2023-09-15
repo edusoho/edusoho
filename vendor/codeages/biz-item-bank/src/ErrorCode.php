@@ -97,6 +97,8 @@ class ErrorCode
      */
     const ASSESSMENT_NOTOPEN = 50095103;
 
+    const ASSESSMENT_EMPTY = 50095104;
+
     /**
      * 题库不存在
      */
