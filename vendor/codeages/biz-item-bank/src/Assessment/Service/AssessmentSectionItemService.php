@@ -23,4 +23,10 @@ interface AssessmentSectionItemService
     public function countAssessmentSectionItems($conditions);
 
     public function searchAssessmentSectionItems($conditions, $orderBys, $start, $limit, $columns = array());
+
+    public function findSectionItemsByAssessmentIds($assessmentIds);
+
+    public function createAssessmentSectionItems($items);
+
+    public function deleteAssessmentSectionItems($toDeleteSectionItems);
 }

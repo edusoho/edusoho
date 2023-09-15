@@ -2,8 +2,10 @@
 
 namespace Biz\Testpaper\Job;
 
+use Biz\Activity\Constant\ActivityMediaType;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\MemberService;
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -23,7 +25,7 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
         if (empty($testpaperActivity)) {
             return;
         }
-        $activity = $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], ActivityMediaType::TESTPAPER);
         if (empty($activity)) {
             return;
         }
@@ -33,36 +35,7 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
             return;
         }
 
-        $answerRecords = $this->getAnswerRecordService()->findByAnswerSceneId($answerScene['id']);
-        $courseMembers = $this->getCourseMemberService()->searchMembers(
-            [
-                'courseId' => $activity['fromCourseId'],
-                'excludeUserIds' => array_column($answerRecords, 'user_id'),
-                'role' => 'student',
-            ],
-            ['createdTime' => 'DESC'],
-            0,
-            1000,
-            ['userId']
-        );
-        $userIds = array_column($courseMembers, 'userId');
-
-        $classroom = $this->getClassroomService()->getClassroomByCourseId($activity['fromCourseId']);
-        if (!empty($classroom)) {
-            $classroomMembers = $this->getClassroomService()->searchMembers(
-                [
-                    'classroomId' => $classroom['id'],
-                    'excludeUserIds' => array_merge($userIds, array_column($answerRecords, 'user_id')),
-                    'role' => 'student',
-                ],
-                ['createdTime' => 'DESC'],
-                0,
-                1000,
-                ['userId']
-            );
-            $userIds = array_merge($userIds, array_column($classroomMembers, 'userId'));
-        }
-
+        $userIds = $this->findNeedSubmitUserIds($answerScene['id'], $activity['fromCourseId'], 1000);
         if (empty($userIds)) {
             return;
         }
@@ -83,6 +56,42 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
         } catch (\Exception $e) {
             $this->getLogService()->error('assessment', 'auto_submit_answers_error', "用户自动交卷失败,答题场次为{$answerScene['id']}", $e->getMessage());
         }
+    }
+
+    private function findNeedSubmitUserIds($answerSceneId, $courseId, $limit)
+    {
+        $answerRecords = $this->getAnswerRecordService()->findByAnswerSceneId($answerSceneId);
+        $excludeUserIds = array_column($answerRecords, 'user_id');
+        $courseMembers = $this->getCourseMemberService()->searchMembers(
+            [
+                'courseId' => $courseId,
+                'excludeUserIds' => $excludeUserIds,
+                'role' => 'student',
+            ],
+            ['createdTime' => 'DESC'],
+            0,
+            $limit,
+            ['userId']
+        );
+        $userIds = array_column($courseMembers, 'userId');
+
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
+        if (!empty($classroom)) {
+            $classroomMembers = $this->getClassroomService()->searchMembers(
+                [
+                    'classroomId' => $classroom['id'],
+                    'excludeUserIds' => array_merge($userIds, $excludeUserIds),
+                    'role' => 'student',
+                ],
+                ['createdTime' => 'DESC'],
+                0,
+                $limit,
+                ['userId']
+            );
+            $userIds = array_merge($userIds, array_column($classroomMembers, 'userId'));
+        }
+
+        return $userIds;
     }
 
     /**

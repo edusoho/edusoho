@@ -28,7 +28,7 @@ class AssessmentSectionItemServiceImpl extends BaseService implements Assessment
     public function findSectionItemDetailByAssessmentId($assessmentId)
     {
         $assessmentItems = $this->getAssessmentSectionItemDao()->findByAssessmentId($assessmentId);
-        $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($assessmentItems, 'item_id'), true);
+        $items = $this->getItemService()->findItemsByIdsIncludeDeleted(ArrayToolkit::column($assessmentItems, 'item_id'), true);
         foreach ($assessmentItems as &$assessmentItem) {
             $assessmentItem = $this->convertItem(empty($items[$assessmentItem['item_id']]) ? [] : $items[$assessmentItem['item_id']], $assessmentItem);
         }
@@ -124,6 +124,52 @@ class AssessmentSectionItemServiceImpl extends BaseService implements Assessment
     public function searchAssessmentSectionItems($conditions, $orderBys, $start, $limit, $columns = array())
     {
         return $this->getAssessmentSectionItemDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function findSectionItemsByAssessmentIds($assessmentIds)
+    {
+        return $this->getAssessmentSectionItemDao()->findByAssessmentIds($assessmentIds);
+    }
+
+    public function createAssessmentSectionItems($items)
+    {
+        $this->getAssessmentSectionItemDao()->batchCreate($items);
+    }
+
+    public function deleteAssessmentSectionItems($toDeleteSectionItems)
+    {
+        if (empty($toDeleteSectionItems)) {
+            return;
+        }
+        $this->getAssessmentSectionItemDao()->batchDelete(['ids' => array_column($toDeleteSectionItems, 'id')]);
+        $this->sortAssessmentSectionItemsSeq(ArrayToolkit::uniqueColumn($toDeleteSectionItems, 'assessment_id'));
+    }
+
+    private function sortAssessmentSectionItemsSeq($assessmentIds)
+    {
+        $sectionItems = $this->searchAssessmentSectionItems(
+            ['assessmentIds' => $assessmentIds],
+            ['assessment_id' => 'ASC', 'seq' => 'ASC'],
+            0,
+            PHP_INT_MAX,
+            ['id', 'assessment_id', 'seq', 'score_rule']
+        );
+        $sectionItems = ArrayToolkit::group($sectionItems, 'assessment_id');
+        $updateSectionItems = [];
+        foreach ($sectionItems as $singleAssessmentSectionItems) {
+            $questionSeq = 1;
+            foreach ($singleAssessmentSectionItems as $index => $sectionItem) {
+                $scoreRules = $sectionItem['score_rule'];
+                foreach ($scoreRules as &$scoreRule) {
+                    $scoreRule['seq'] = $questionSeq++;
+                }
+                $updateSectionItems[$sectionItem['id']] = [
+                    'seq' => $index + 1,
+                    'score_rule' => $scoreRules,
+                ];
+            }
+        }
+        $this->getAssessmentSectionItemDao()->batchUpdate(array_keys($updateSectionItems), $updateSectionItems);
     }
 
     protected function getScoreRuleProcessor()

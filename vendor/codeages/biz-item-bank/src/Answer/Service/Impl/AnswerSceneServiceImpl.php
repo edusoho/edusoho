@@ -240,7 +240,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         }
 
         $answerSceneQuestionReports = [];
-        $questions = $this->getItemService()->findQuestionsByQuestionIds(array_keys($questionReports));
+        $questions = $this->getItemService()->findQuestionsByQuestionIdsIncludeDeleted(array_keys($questionReports));
         foreach ($questionReports as $questionId => $reports) {
             if (empty($questions[$questionId])) {
                 continue;
