@@ -2128,6 +2128,20 @@ course.plan_task.activity_manage.exercise.info_tips: >
   本次练习随机生成<span class="color-success">%itemCount%题</span>
 course.plan_task.activity_manage.exercise.info_tips.question_lack: 题目数与老师设定不一致，请联系老师处理！
 course.plan_task.activity_manage.exercise.total_questions: 共%itemCount%题
+course.plan_task.activity_manage.exercise.single_choice: 单选题
+course.plan_task.activity_manage.exercise.choice: 多选题
+course.plan_task.activity_manage.exercise.uncertain_choice: 不定项选择题
+course.plan_task.activity_manage.exercise.determine: 判断题
+course.plan_task.activity_manage.exercise.fill: 填空题
+course.plan_task.activity_manage.exercise.essay: 问答题
+course.plan_task.activity_manage.exercise.material: 材料题
+course.plan_task.activity_manage.exercise.questions: '%itemCount% 题'
+course.plan_task.activity_manage.exercise.selective.answer.mode: 选择答题模式
+course.plan_task.activity_manage.exercise.test.mode: 测验模式
+course.plan_task.activity_manage.exercise.one.question.one.answer.mode: 一题一答模式
+course.plan_task.activity_manage.exercise.currently.not.supported.on.pc: （暂不支持PC端）
+course.plan_task.activity_manage.exercise.continue.tips-title: 当前练习模式为【一题一答】，PC端暂不支持，请移步手机端继续答题
+course.plan_task.activity_manage.exercise.continue.back-btn: 返回课程目录
 course.plan_task.activity_manage.exercise.confirm_submit: 确认提交
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 您真的要提交吗？
 course.plan_task.activity_manage.exercise.finished_condition: 提交练习

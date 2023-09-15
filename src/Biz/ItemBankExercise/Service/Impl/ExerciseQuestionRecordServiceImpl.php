@@ -4,6 +4,8 @@ namespace Biz\ItemBankExercise\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\ItemBankExercise\Dao\ExerciseQuestionRecordDao;
 use Biz\ItemBankExercise\Service\ExerciseQuestionRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 
@@ -76,9 +78,13 @@ class ExerciseQuestionRecordServiceImpl extends BaseService implements ExerciseQ
         !empty($createRecords) && $this->batchCreate($createRecords);
     }
 
-    public function countQuestionRecordStatus($exerciseId, $questionIds)
+    public function countQuestionRecordStatusByModuleType($exerciseId, $itemIds, $moduleType)
     {
-        return $this->getItemBankExerciseQuestionRecordDao()->countQuestionRecordStatus($exerciseId, $questionIds);
+        if (!in_array($moduleType, ['chapter', 'assessment'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        return $this->getItemBankExerciseQuestionRecordDao()->countQuestionRecordStatusByModuleType($exerciseId, $itemIds, $moduleType);
     }
 
     protected function getAnswerQuestionReports($answerReportId)
@@ -127,6 +133,9 @@ class ExerciseQuestionRecordServiceImpl extends BaseService implements ExerciseQ
         return $this->createService('ItemBankExercise:ExerciseModuleService');
     }
 
+    /**
+     * @return ExerciseQuestionRecordDao
+     */
     protected function getItemBankExerciseQuestionRecordDao()
     {
         return $this->createDao('ItemBankExercise:ExerciseQuestionRecordDao');

@@ -167,7 +167,7 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
                 'expression' => intval(time() + 3 * 60),
                 'misfire_policy' => 'executing',
                 'class' => 'Biz\ItemBankExercise\Job\UpdateMemberMasteryRateJob',
-                'args' => ['itemBankExericseId' => $exercise['id']],
+                'args' => ['itemBankExerciseId' => $exercise['id']],
             ]);
         }
     }

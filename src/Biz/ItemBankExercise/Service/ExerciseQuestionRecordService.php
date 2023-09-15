@@ -16,5 +16,5 @@ interface ExerciseQuestionRecordService
 
     public function updateByAnswerRecordIdAndModuleId($answerRecordId, $moduleId);
 
-    public function countQuestionRecordStatus($exerciseId, $questionIds);
+    public function countQuestionRecordStatusByModuleType($exerciseId, $itemIds, $moduleType);
 }

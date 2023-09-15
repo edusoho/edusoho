@@ -8,5 +8,5 @@ interface ExerciseQuestionRecordDao
 
     public function deleteByExerciseId($exerciseId);
 
-    public function countQuestionRecordStatus($exerciseId, $questionIds);
+    public function countQuestionRecordStatusByModuleType($exerciseId, $itemIds, $moduleType);
 }

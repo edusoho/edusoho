@@ -53,11 +53,6 @@ class ExerciseController extends BaseController
         ]);
     }
 
-    public function notSupportSubmitSingleAction()
-    {
-        return $this->render('exercise/not-support-submit-single-modal.html.twig');
-    }
-
     private function getCurrentAnswerRecordOrStartNew($activity, $assessmentId, $userId)
     {
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $userId);

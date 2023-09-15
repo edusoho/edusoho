@@ -28,6 +28,17 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
         return $this->db()->executeUpdate($sql, [$assessmentId]);
     }
 
+    public function findSectionItemsByAssessmentIds($assessmentIds)
+    {
+        if (empty($assessmentIds)) {
+            return [];
+        }
+        $marks = str_repeat('?,', count($assessmentIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE assessment_id IN ({$marks}) order by seq ASC";
+
+        return $this->db()->fetchAll($sql, $assessmentIds);
+    }
+
     public function declares()
     {
         return array(

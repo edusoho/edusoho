@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\ItemBankExercise\Job;
+namespace AppBundle\Command;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
@@ -9,41 +9,49 @@ use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseQuestionRecordService;
 use Biz\ItemBankExercise\Service\ExerciseService;
-use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateMemberMasteryRateJob extends AbstractJob
+class updateJobCommand extends BaseCommand
 {
+    protected function configure()
+    {
+        $this->setName('util:update-job')
+            ->addArgument('exerciseId', InputArgument::REQUIRED);
+    }
+
     public $questionNum = 0;
 
     public $exerciseId = 0;
 
     public $itemIds = [];
 
-    public function execute()
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->setParams();
+        $this->setParams($input->getArgument('exerciseId'), $output);
 
-        $this->updateData();
+        $this->updateData($input, $output);
     }
 
-    protected function setParams()
+    protected function setParams($exerciseId, OutputInterface $output)
     {
-        $itemBankExercise = $this->getItemBankExerciseService()->get($this->args['itemBankExerciseId']);
+        $itemBankExercise = $this->getItemBankExerciseService()->get($exerciseId);
         $this->exerciseId = $itemBankExercise['id'];
 
-        list($chapterItemIds, $chapterQuestionIds) = $this->getChapterItemIdsAndQuestionIds($itemBankExercise['questionBankId']);
-        list($assessmentItemIds, $assessmentQuestionIds) = $this->getAssessmentItemIdsAndQuestionIds();
+        list($chapterItemIds, $chapterQuestionIds) = $this->getChapterItemIdsAndQuestionIds($itemBankExercise['questionBankId'], $output);
+        list($assessmentItemIds, $assessmentQuestionIds) = $this->getAssessmentItemIdsAndQuestionIds($output);
 
         $this->itemIds = array_unique(array_merge($chapterItemIds, $assessmentItemIds));
         $this->questionNum = count(array_unique(array_merge($chapterQuestionIds, $assessmentQuestionIds)));
     }
 
-    protected function updateData()
+    protected function updateData(InputInterface $input, OutputInterface $output)
     {
         if (0 == $this->questionNum) {
-            $this->biz['db']->executeUpdate('UPDATE item_bank_exercise_member SET doneQuestionNum = 0, rightQuestionNum = 0, masteryRate = 0, completionRate = 0 WHERE exerciseId = ?;', [$this->exerciseId]);
+            $this->getBiz()['db']->executeUpdate('UPDATE item_bank_exercise_member SET doneQuestionNum = 0, rightQuestionNum = 0, masteryRate = 0, completionRate = 0 WHERE exerciseId = ?;', [$this->exerciseId]);
 
             return;
         }
@@ -57,7 +65,7 @@ class UpdateMemberMasteryRateJob extends AbstractJob
         $rightNumWrongNumGroups = ArrayToolkit::group($rightNumWrongNums, 'userId');
 
         $updateMembers = [];
-        $members = $this->biz['db']->fetchAll('SELECT id, userId from item_bank_exercise_member WHERE exerciseId = ?;', [$this->exerciseId]);
+        $members = $this->getBiz()['db']->fetchAll('SELECT id, userId from item_bank_exercise_member WHERE exerciseId = ?;', [$this->exerciseId]);
         foreach ($members as $member) {
             $doneQuestionNum = $rightQuestionNum = 0;
             if (!empty($rightNumWrongNumGroups[$member['userId']])) {
@@ -79,7 +87,7 @@ class UpdateMemberMasteryRateJob extends AbstractJob
         }
     }
 
-    protected function getChapterItemIdsAndQuestionIds($questionBankId)
+    protected function getChapterItemIdsAndQuestionIds($questionBankId, OutputInterface $output)
     {
         $chapters = $this->getItemBankChapterExerciseService()->getChapterTreeList($questionBankId);
         if (empty($chapters)) {
@@ -100,7 +108,7 @@ class UpdateMemberMasteryRateJob extends AbstractJob
         return [$chapterItemIds, $chapterQuestionIds];
     }
 
-    protected function getAssessmentItemIdsAndQuestionIds()
+    protected function getAssessmentItemIdsAndQuestionIds(OutputInterface $output)
     {
         $module = $this->getItemBankExerciseModuleService()->findByExerciseIdAndType($this->exerciseId, ExerciseModuleService::TYPE_ASSESSMENT);
         if (empty($module)) {
@@ -129,7 +137,7 @@ class UpdateMemberMasteryRateJob extends AbstractJob
      */
     protected function getItemBankExerciseService()
     {
-        return $this->biz->service('ItemBankExercise:ExerciseService');
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 
     /**
@@ -137,7 +145,7 @@ class UpdateMemberMasteryRateJob extends AbstractJob
      */
     protected function getItemService()
     {
-        return $this->biz->service('ItemBank:Item:ItemService');
+        return $this->createService('ItemBank:Item:ItemService');
     }
 
     /**
@@ -145,7 +153,7 @@ class UpdateMemberMasteryRateJob extends AbstractJob
      */
     protected function getItemBankExerciseQuestionRecordService()
     {
-        return $this->biz->service('ItemBankExercise:ExerciseQuestionRecordService');
+        return $this->createService('ItemBankExercise:ExerciseQuestionRecordService');
     }
 
     /**
@@ -153,7 +161,7 @@ class UpdateMemberMasteryRateJob extends AbstractJob
      */
     protected function getExerciseMemberService()
     {
-        return $this->biz->service('ItemBankExercise:ExerciseMemberService');
+        return $this->createService('ItemBankExercise:ExerciseMemberService');
     }
 
     /**
@@ -161,7 +169,7 @@ class UpdateMemberMasteryRateJob extends AbstractJob
      */
     protected function getItemBankAssessmentExerciseService()
     {
-        return $this->biz->service('ItemBankExercise:AssessmentExerciseService');
+        return $this->createService('ItemBankExercise:AssessmentExerciseService');
     }
 
     /**
@@ -169,7 +177,7 @@ class UpdateMemberMasteryRateJob extends AbstractJob
      */
     protected function getItemBankExerciseModuleService()
     {
-        return $this->biz->service('ItemBankExercise:ExerciseModuleService');
+        return $this->createService('ItemBankExercise:ExerciseModuleService');
     }
 
     /**
@@ -177,7 +185,7 @@ class UpdateMemberMasteryRateJob extends AbstractJob
      */
     protected function getSectionItemService()
     {
-        return $this->biz->service('ItemBank:Assessment:AssessmentSectionItemService');
+        return $this->createService('ItemBank:Assessment:AssessmentSectionItemService');
     }
 
     /**
@@ -185,6 +193,6 @@ class UpdateMemberMasteryRateJob extends AbstractJob
      */
     protected function getItemBankChapterExerciseService()
     {
-        return $this->biz->service('ItemBankExercise:ChapterExerciseService');
+        return $this->createService('ItemBankExercise:ChapterExerciseService');
     }
 }

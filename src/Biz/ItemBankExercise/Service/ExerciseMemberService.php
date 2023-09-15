@@ -42,7 +42,5 @@ interface ExerciseMemberService
 
     public function removeStudents($exerciseId, $userIds, $reason = []);
 
-    public function findByExerciseId($exerciseId);
-
     public function batchUpdateMembers($updateFields);
 }
