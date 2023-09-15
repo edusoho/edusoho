@@ -56,9 +56,6 @@ class UpdateMemberMasteryRateJob extends AbstractJob
         }
 
         $rightNumWrongNums = $this->getItemBankExerciseQuestionRecordService()->countQuestionRecordStatus($this->exerciseId, $this->itemIds);
-        if (empty($rightNumWrongNums)) {
-            return;
-        }
         $rightNumWrongNumGroups = ArrayToolkit::group($rightNumWrongNums, 'userId');
 
         $updateMembers = [];
