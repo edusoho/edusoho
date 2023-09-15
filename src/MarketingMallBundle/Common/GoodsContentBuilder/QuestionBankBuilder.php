@@ -55,7 +55,7 @@ class QuestionBankBuilder extends AbstractBuilder
 
     protected function buildChapterExercise($exercise)
     {
-        $list = $exercise['chapterEnable'] ? $this->getItemBankChapterExerciseService()->getChapterTree($exercise['questionBankId']) : [];
+        $list = $exercise['chapterEnable'] ? $this->getItemBankChapterExerciseService()->getPublishChapterTree($exercise['questionBankId']) : [];
         $list = $this->buildChapterList($list);
         $num = $this->getItemService()->countItems(['bank_id' => $exercise['questionBankId'], 'category_id' => 0]);
         if ($num > 0) {

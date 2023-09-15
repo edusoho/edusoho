@@ -290,7 +290,7 @@ class ExerciseController extends BaseController
         $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
         $chapterTree = [];
         if ($exercise['chapterEnable']) {
-            $chapterTree = $this->getItemBankChapterExerciseService()->getChapterTreeList($exercise['questionBankId']);
+            $chapterTree = $this->getItemBankChapterExerciseService()->getPublishChapterTreeList($exercise['questionBankId']);
         }
         $records = [];
         if ($member) {

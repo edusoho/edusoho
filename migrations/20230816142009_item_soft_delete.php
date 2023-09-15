@@ -72,11 +72,20 @@ class ItemSoftDelete extends Migration
         if ($this->isFieldExist('biz_item', 'is_deleted')) {
             $biz['db']->exec('ALTER TABLE `biz_item` DROP COLUMN `is_deleted`;');
         }
+        if ($this->isFieldExist('biz_item', 'deleted_time')) {
+            $biz['db']->exec('ALTER TABLE `biz_item` DROP COLUMN `deleted_time`;');
+        }
         if ($this->isFieldExist('biz_item_attachment', 'is_deleted')) {
             $biz['db']->exec('ALTER TABLE `biz_item_attachment` DROP COLUMN `is_deleted`;');
         }
+        if ($this->isFieldExist('biz_item_attachment', 'deleted_time')) {
+            $biz['db']->exec('ALTER TABLE `biz_item_attachment` DROP COLUMN `deleted_time`;');
+        }
         if ($this->isFieldExist('biz_question', 'is_deleted')) {
             $biz['db']->exec('ALTER TABLE `biz_question` DROP COLUMN `is_deleted`;');
+        }
+        if ($this->isFieldExist('biz_question', 'deleted_time')) {
+            $biz['db']->exec('ALTER TABLE `biz_question` DROP COLUMN `deleted_time`;');
         }
     }
 

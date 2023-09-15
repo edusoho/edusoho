@@ -139,11 +139,8 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
         }
 
         $categories = $this->findItemCategoriesByBankId($bankId);
-        $categories = ArrayToolkit::group($categories, 'parent_id');
-       
-        $tree = array();
-        $this->prepareCategoryTreeList($tree, $categories, 0);
-        return $tree;
+
+        return $this->buildCategoryTreeList($categories, 0);
     }
 
     protected function prepareCategoryTreeList(&$tree, &$categories, $parentId)

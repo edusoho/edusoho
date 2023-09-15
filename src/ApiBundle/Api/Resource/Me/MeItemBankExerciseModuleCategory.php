@@ -22,7 +22,7 @@ class MeItemBankExerciseModuleCategory extends AbstractResource
             return [];
         }
 
-        $chapters = $this->getItemBankChapterExerciseService()->getChapterTreeList($itemBankExercise['questionBankId']);
+        $chapters = $this->getItemBankChapterExerciseService()->getPublishChapterTreeList($itemBankExercise['questionBankId']);
 
         $answerRecords = $this->getItemBankChapterExerciseRecordService()->search(
             ['userId' => $user['id'], 'moduleId' => $moduleId],
