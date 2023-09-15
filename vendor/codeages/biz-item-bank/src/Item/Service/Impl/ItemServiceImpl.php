@@ -549,7 +549,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $this->getQuestionDao()->findByItemId($itemId);
     }
 
-    public function findQuestionsByItemIds($itemIds)
+    protected function findQuestionsByItemIds($itemIds)
     {
         return $this->getQuestionDao()->findByItemsIds($itemIds);
     }

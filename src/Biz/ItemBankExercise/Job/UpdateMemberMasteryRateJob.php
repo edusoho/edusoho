@@ -15,11 +15,11 @@ use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class UpdateMemberMasteryRateJob extends AbstractJob
 {
-    public $questionNum = 0;
+    private $questionNum = 0;
 
-    public $exerciseId = 0;
+    private $exerciseId = 0;
 
-    public $itemIds = [];
+    private $itemIds = [];
 
     public function execute()
     {
@@ -33,11 +33,18 @@ class UpdateMemberMasteryRateJob extends AbstractJob
         $itemBankExercise = $this->getItemBankExerciseService()->get($this->args['itemBankExerciseId']);
         $this->exerciseId = $itemBankExercise['id'];
 
-        list($chapterItemIds, $chapterQuestionIds) = $this->getChapterItemIdsAndQuestionIds($itemBankExercise['questionBankId']);
-        list($assessmentItemIds, $assessmentQuestionIds) = $this->getAssessmentItemIdsAndQuestionIds();
+        $items = [];
+        if ($itemBankExercise['chapterEnable']) {
+            $items = array_merge($items, $this->getChapterItems($itemBankExercise['questionBankId']));
+        }
+        if ($itemBankExercise['assessmentEnable']) {
+            $items = array_merge($items, $this->getAssessmentItems());
+        }
 
-        $this->itemIds = array_unique(array_merge($chapterItemIds, $assessmentItemIds));
-        $this->questionNum = count(array_unique(array_merge($chapterQuestionIds, $assessmentQuestionIds)));
+        $items = array_unique($items);
+
+        $this->itemIds = array_column($items, 'id');
+        $this->questionNum = array_sum(array_column($items, 'question_num'));
     }
 
     protected function updateData()
@@ -48,9 +55,7 @@ class UpdateMemberMasteryRateJob extends AbstractJob
             return;
         }
 
-        $chapterRightNumWrongNums = $this->getItemBankExerciseQuestionRecordService()->countQuestionRecordStatusByModuleType($this->exerciseId, $this->itemIds, 'chapter');
-        $assessmentRightNumWrongNums = $this->getItemBankExerciseQuestionRecordService()->countQuestionRecordStatusByModuleType($this->exerciseId, $this->itemIds, 'assessment');
-        $rightNumWrongNums = array_merge($chapterRightNumWrongNums, $assessmentRightNumWrongNums);
+        $rightNumWrongNums = $this->getItemBankExerciseQuestionRecordService()->countQuestionRecordStatus($this->exerciseId, $this->itemIds);
         if (empty($rightNumWrongNums)) {
             return;
         }
@@ -79,49 +84,32 @@ class UpdateMemberMasteryRateJob extends AbstractJob
         }
     }
 
-    protected function getChapterItemIdsAndQuestionIds($questionBankId)
+    private function getChapterItems($questionBankId)
     {
-        $chapters = $this->getItemBankChapterExerciseService()->getChapterTreeList($questionBankId);
+        $chapters = $this->getItemBankChapterExerciseService()->getPublishChapterTreeList($questionBankId);
         if (empty($chapters)) {
-            return [[], []];
+            return [];
         }
 
-        $chapterItems = $this->getItemService()->findItemsByCategoryIds(ArrayToolkit::column($chapters, 'id'));
-        if (empty($chapterItems)) {
-            return [[], []];
-        }
-        $chapterItemIds = ArrayToolkit::column($chapterItems, 'id');
-        $chapterQuestions = $this->getItemService()->findQuestionsByItemIds($chapterItemIds);
-        if (empty($chapterQuestions)) {
-            return [[], []];
-        }
-        $chapterQuestionIds = ArrayToolkit::column($chapterQuestions, 'id');
-
-        return [$chapterItemIds, $chapterQuestionIds];
+        return $this->getItemService()->findItemsByCategoryIds(array_column($chapters, 'id'));
     }
 
-    protected function getAssessmentItemIdsAndQuestionIds()
+    private function getAssessmentItems()
     {
-        $module = $this->getItemBankExerciseModuleService()->findByExerciseIdAndType($this->exerciseId, ExerciseModuleService::TYPE_ASSESSMENT);
-        if (empty($module)) {
-            return [[], []];
+        $modules = $this->getItemBankExerciseModuleService()->findByExerciseIdAndType($this->exerciseId, ExerciseModuleService::TYPE_ASSESSMENT);
+        if (empty($modules)) {
+            return [];
         }
-        $assessmentExercises = $this->getItemBankAssessmentExerciseService()->findByModuleIds(ArrayToolkit::column($module, 'id'));
+        $assessmentExercises = $this->getItemBankAssessmentExerciseService()->findByModuleIds(array_column($modules, 'id'));
         if (empty($assessmentExercises)) {
-            return [[], []];
+            return [];
         }
-        $assessmentItems = $this->getSectionItemService()->findSectionItemsByAssessmentIds(ArrayToolkit::column($assessmentExercises, 'assessmentId'));
+        $assessmentItems = $this->getSectionItemService()->findSectionItemsByAssessmentIds(array_column($assessmentExercises, 'assessmentId'));
         if (empty($assessmentItems)) {
-            return [[], []];
+            return [];
         }
-        $assessmentItemIds = ArrayToolkit::column($assessmentItems, 'item_id');
-        $assessmentQuestions = $this->getItemService()->findQuestionsByItemIds($assessmentItemIds);
-        if (empty($assessmentQuestions)) {
-            return [[], []];
-        }
-        $assessmentQuestionIds = ArrayToolkit::column($assessmentQuestions, 'id');
 
-        return [$assessmentItemIds, $assessmentQuestionIds];
+        return $this->getItemService()->findItemsByIds(array_column($assessmentItems, 'item_id'));
     }
 
     /**

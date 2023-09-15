@@ -19,15 +19,15 @@ class ExerciseQuestionRecordDaoImpl extends AdvancedDaoImpl implements ExerciseQ
         return $this->db()->delete($this->table(), ['exerciseId' => $exerciseId]);
     }
 
-    public function countQuestionRecordStatusByModuleType($exerciseId, $itemIds, $moduleType)
+    public function countQuestionRecordStatus($exerciseId, $itemIds)
     {
         if (empty($itemIds)) {
             return [];
         }
         $marks = str_repeat('?,', count($itemIds) - 1).'?';
-        $sql = "SELECT userId, `status`, count(*) AS num from {$this->table} WHERE exerciseId = ? and itemId IN ({$marks}) and moduleType = ? GROUP BY userId, `status`;";
+        $sql = "SELECT userId, `status`, count(*) AS num from {$this->table} WHERE exerciseId = ? and itemId IN ({$marks}) GROUP BY userId, `status`;";
 
-        return $this->db()->fetchAll($sql, array_merge([$exerciseId], $itemIds, [$moduleType]));
+        return $this->db()->fetchAll($sql, array_merge([$exerciseId], $itemIds));
     }
 
     public function declares()

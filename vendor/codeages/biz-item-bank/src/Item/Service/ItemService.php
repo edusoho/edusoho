@@ -59,6 +59,4 @@ interface ItemService
     public function getQuestionIncludeDeleted($questionId);
 
     public function countItemTypesNum($items);
-
-    public function findQuestionsByItemIds($itemIds);
 }
