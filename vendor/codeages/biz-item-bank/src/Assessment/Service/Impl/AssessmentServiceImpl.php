@@ -390,7 +390,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         $assessmentSnapshots = $this->createAssessmentSnapshots($assessments);
         $this->createSnapshotAssessmentSectionsAndItems($assessmentSnapshots);
 
-        return $assessmentSnapshots;
+        return $this->getAssessmentSnapshotDao()->findBySnapshotAssessmentIds(array_column($assessmentSnapshots, 'snapshot_assessment_id'));
     }
 
     public function modifyAssessmentsAndSectionsWithToDeleteSectionItems(array $toDeleteSectionItems)

@@ -215,7 +215,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         $that = $this;
         array_walk($items, function (&$item) use ($that) {
             $item['includeImg'] = $that->hasImg($item['material']);
-            $item = $this->biz['item_attachment_wrapper']->wrap($item);
+            $item = $that->biz['item_attachment_wrapper']->wrap($item);
         });
 
         return ArrayToolkit::index($items, 'id');

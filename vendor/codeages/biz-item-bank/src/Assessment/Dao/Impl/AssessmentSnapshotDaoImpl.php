@@ -14,6 +14,11 @@ class AssessmentSnapshotDaoImpl extends AdvancedDaoImpl implements AssessmentSna
         return $this->getByFields(['snapshot_assessment_id' => $snapshotAssessmentId]);
     }
 
+    public function findBySnapshotAssessmentIds(array $snapshotAssessmentIds)
+    {
+        return $this->findInField('snapshot_assessment_id', $snapshotAssessmentIds);
+    }
+
     public function declares()
     {
         return [
