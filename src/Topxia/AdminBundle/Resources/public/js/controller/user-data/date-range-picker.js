@@ -5,7 +5,7 @@ define(function (require, exports, module) {
   var OverviewDateRangePicker = function() {
     var dateRangePickerSelector = '.js-date-range-input';
     var maxDate = moment().format('YYYY/MM/DD');
-    var minDate = moment().subtract(1,'years').format('YYYY/MM/DD');
+    var minDate = moment().subtract(3,'years').format('YYYY/MM/DD');
     new DateRangePicker(dateRangePickerSelector,{'minDate' : minDate, 'maxDate' : maxDate});
     var self = this;
     this.$drp = $(dateRangePickerSelector);

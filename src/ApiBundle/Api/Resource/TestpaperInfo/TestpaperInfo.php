@@ -33,6 +33,10 @@ class TestpaperInfo extends AbstractResource
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
+        if ($assessment['status'] == 'closed') {
+            throw TestpaperException::CLOSED_TESTPAPER();
+        }
+
         $results = $this->wrapTeatpaper($assessment);
 
         $targetType = $request->query->get('targetType');

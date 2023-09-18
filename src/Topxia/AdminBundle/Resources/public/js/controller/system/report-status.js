@@ -16,15 +16,17 @@ define(function(require, exports, module) {
 
         });
 
-        $.post($('.js-email-send-check').data('url'), function(resp) {
-            var $td = $('.js-email-send-check').closest('td');
-            if (resp.status) {
-                $td.html('<span class="text-success">√ ' + resp.message + '</span>');
-            } else {
-                $td.html('<span class="text-danger">X ' + resp.message + '</span>');
-            }
-
-        });
+        //邮件的手动检测
+        $('#js-email-send-detection').on('click',function (){
+          $.post($('.js-email-send-check').data('url'), function(resp) {
+              var $td = $('.js-email-send-check').closest('td');
+              if (resp.status) {
+                  $td.html('<span class="text-success">√ ' + resp.message + '</span>');
+              } else {
+                  $td.html('<span class="text-danger">X ' + resp.message + '</span>');
+              }
+          });
+        })
     };
 
 });

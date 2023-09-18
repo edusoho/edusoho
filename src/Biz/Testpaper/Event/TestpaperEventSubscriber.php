@@ -76,8 +76,14 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
             'testpaperType' => $activity['mediaType'],
         ];
 
-        $result = $this->getNotificationService()->notify($answerRecord['user_id'], 'test-paper', $message);
-        $this->notify($answerRecord);
+        $this->getNotificationService()->notify($answerRecord['user_id'], 'test-paper', $message);
+
+        /**
+         * 存在评论才去创建消息
+         */
+        if ($answerReport['comment']) {
+            $this->notify($answerRecord);
+        }
     }
 
     protected function processAnswerReportPassed($activity, $answerRecord)
@@ -88,6 +94,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         if ('homework' == $activity['mediaType']) {
             if ('submit' === $activity['finishType'] && in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED])) {
                 $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' => 'passed']);
+
                 return;
             }
             $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);

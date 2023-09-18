@@ -2192,6 +2192,7 @@ open_course.lesson.create_success: Lesson create success
 open_course.lesson.create_error: Lesson create error
 classroom: Class
 column: Column
+classroom.search.empty.course: There are currently no suitable courses available~
 classroom.name: Class Name
 classroom.buy_classroom.purchase_timeout_tips: 'Please complete the payment within 30 minutes, otherwise the order will be expired.'
 classroom.buy_classroom.no_avatar_tips: 'You have no avatar,please set an avatar to enroll courses<br />An unique avatar makes it easier to draw attentions from your teachers or classmates. <a href="%avatarSettingUrl%" class="alert-link" target="_blank">Click to set</a>'
@@ -4555,6 +4556,9 @@ admin.user.statistics.data_detail.active_chart: Active
 admin.user.statistics.data_detail.learn_detail: Learn Detail
 admin.user.statistics.data_detail.teaching_plan_name: 'Plan name'
 admin.user.statistics.data_detail.student_trend_ninety_days: '90 days'
+admin.user.statistics.data_detail.student_trend_one_year: '1 year'
+admin.user.statistics.data_detail.student_trend_two_year: '2 years'
+admin.user.statistics.data_detail.student_trend_three_year: '3 years'
 admin.user.statistics.data_detail.plan_progress_tip: 'The average plan progress is the average of all plans'
 admin.user.statistics.data_detail.task_progress_tip: 'Task completion ratio is the number of completed tasks divide the total number of tasks'
 admin.user.statistics.data_detail.from_classroom: From Class
@@ -6190,6 +6194,8 @@ admin.edu_cloud.edu_sms.validation_type: Validation
 admin.edu_cloud.edu_sms.bind_mobile: 'Phone Binding'
 admin.edu_cloud.edu_sms.login: 'Login with sms'
 admin.edu_cloud.edu_sms.verification_code_tips: 'Your verification code is 123456 (do not divulge), this verification code within 30 minutes of input is valid.'
+admin.edu_cloud.edu_sms.shipping_notify: 'Shipping notice'
+admin.edu_cloud.edu_sms.shipping_notify_tips: 'The 《Product Name》 you purchased from 《Marketing Mall Name》 has been shipped.'
 admin.edu_cloud.edu_sms.singel_user: 'Single User'
 admin.edu_cloud.edu_sms.auto_singel_send: 'Automatically sent separately'
 admin.edu_cloud.edu_sms.default_open: 'Default Enable'
@@ -6959,6 +6965,7 @@ admin.reports_status.system_status: Status
 admin.reports_status.system_communication_with_discuz: 'Connection with Discuz Ucenter'
 admin.reports_status.system_checking: Detecting.....
 admin.reports_status.system_email_send: 'Send email'
+admin.reports_status.system_email_send_detection: 'Immediate detection'
 admin.reports_status.system_email_send_tips: 'System will send a test email to current user during each test. Please make sure the current user''s email is correct.Check email exception in system log.'
 admin.reports_status.system_file_and_catalog_authority: 'System files, directory permissions checking'
 admin.reports_status.system_file_and_catalog_authority_available: 'File directory permissions properly'
@@ -11068,7 +11075,10 @@ course.live_replay.tips: The current version only supports viewing of live playb
 course.homework.pass_score: Set passing score
 course.homework.pass_score.tip1: 'Full marks：'
 course.homework.pass_score.tip2: Qualified if the score is reached
+course.placeholder.name: Please enter the course name
+
 testpaper.score_set.option: question score
+
 
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%.%taskNumber%:%taskTitle%'
