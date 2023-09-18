@@ -64,6 +64,9 @@ class Category {
         $.post(item.closest('ul').data('sortUrl'), {
           ids: ids
         }, function (response) {
+          if(!response.success) {
+            cd.message({ type: 'warning', message: response.message });
+          }
         });
         _super(item, container);
       }

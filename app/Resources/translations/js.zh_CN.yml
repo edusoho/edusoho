@@ -503,6 +503,7 @@ course.manage.task_batch_delete_hint: 删除所选课时后，课时下对应任
 course.manage.chapter_delete_hint: 是否确定删除该%name%吗？
 course.manage.chapter_batch_delete_hint: 已选中%length%个章节，是否确定删除？
 course.manage.task_publish_success_hint: 发布成功
+course.manage.item_task_unpublish_success_hint: 取消成功
 course.manage.task_publish_fail_hint: 发布失败
 course.manage.task_unpublish_success_hint: 取消发布成功
 course.manage.task_unpublish_fail_hint: 取消发布失败
