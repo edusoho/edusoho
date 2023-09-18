@@ -121,7 +121,7 @@ class QuestionCategoryController extends BaseController
     public function sortAction(Request $request, $id)
     {
         $ids = $request->request->get('ids');
-        if (!$this->getQuestionBankService()->canManageBankCategory($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createJsonResponse([
                 'success' => false,
                 'message' => '您不是该题库管理者，不能对分类进行排序',
