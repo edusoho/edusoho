@@ -11,7 +11,6 @@ use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
 use Biz\ItemBankExercise\Service\ExerciseService;
-use Biz\Review\ReviewException;
 use Biz\Review\Service\ReviewService;
 use Biz\User\Service\UserService;
 
@@ -56,13 +55,8 @@ class Review extends AbstractResource
             'rating' => $request->request->get('rating'),
         ];
 
-        $specs = $this->getGoodsService()->findGoodsSpecsByGoodsId($review['targetId']);
-        $courseIds = array_column($specs, 'targetId');
-        foreach ($courseIds as $courseId) {
-            if (!$this->getCourseService()->canTakeCourse($courseId)) {
-                throw ReviewException::FORBIDDEN_CREATE_REVIEW();
-            }
-        }
+        //校验是否能评价
+        $review = $this->getReviewService()->tryCreateReview($review);
 
         $review['userId'] = empty($review['userId']) ? $this->getCurrentUser()->getId() : $review['userId'];
 
