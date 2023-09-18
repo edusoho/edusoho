@@ -9,8 +9,8 @@ class SmsSetting extends BaseResource
 {
     public function search(ApiRequest $request)
     {
-        $mySetting = $this->getSettingService()->get('cloud_sms', array());
-        if (empty($mySetting)){
+        $mySetting = $this->getSettingService()->get('cloud_sms', []);
+        if (empty($mySetting)) {
             return 0;
         }
 

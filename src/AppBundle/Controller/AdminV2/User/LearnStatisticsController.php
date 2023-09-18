@@ -26,10 +26,16 @@ class LearnStatisticsController extends BaseController
         $conditions = $request->query->all();
         unset($conditions['page']);
         $conditions = array_merge($defaultCondition, $conditions);
-        $userConditions = ['destroyed' => 0, 'nickname' => $conditions['keyword'], 'isStudent' => true];
-        if ('mobile' == $conditions['keywordType']) {
+
+        $userConditions = ['destroyed' => 0, 'isStudent' => true];
+        $keyword = trim($conditions['keyword'] ?? '');
+        if ($keyword) {
+            $userConditions['nickname'] = $keyword;
+        }
+
+        if (isset($conditions['keywordType']) && 'mobile' == $conditions['keywordType'] && $keyword) {
             unset($userConditions['nickname']);
-            $userConditions['verifiedMobile'] = $conditions['keyword'];
+            $userConditions['verifiedMobile'] = $keyword;
         }
         $paginator = new Paginator(
             $request,

@@ -28,9 +28,12 @@ class AnswerRecord extends AbstractResource
         if (empty($assessment)) {
             throw AssessmentException::ASSESSMENT_NOTEXIST();
         }
-        if ('open' !== $assessment['status']) {
-            throw AssessmentException::ASSESSMENT_NOTOPEN();
-        }
+
+        /**
+         * 如果在考试中 已关闭的试卷 仍然能进行考试不会强行结束
+         * if ('open' !== $assessment['status']) {
+            }
+         */
         $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
         $assessmentFilter = new AssessmentFilter();

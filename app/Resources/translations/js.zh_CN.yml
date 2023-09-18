@@ -984,6 +984,8 @@ lesson_count_no_more_than_300: 课时总数不能超过300个
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 
 Bad credentials.: 用户名或密码错误
+The presented password cannot be empty.: 用户密码不能为空
+
 User account is locked.: 帐号被封禁
 
 cloud_search.network.error_message: 网络不给力，为您切换极简搜索模式
@@ -1395,6 +1397,7 @@ admin.user.import_fail_hint: %title%失败：
 admin.user.import_completed_hint: %title%完成
 admin.user.import_error_hint: %title%时，发生了未知错误。
 admin.user.lock_operational_hint: 真的要%title%吗？
+admin.user.lock_operational_hint_new: %title%后不可恢复，请谨慎操作
 admin.user.lock_operational_success_hint: %title%成功！
 admin.user.lock_operational_fail_hint: %title%失败
 admin.user.sending_passwordreset_email_hint: 正在发送密码重置验证邮件，请稍等。
@@ -1840,6 +1843,7 @@ goods.show_page.free_join_btn: 免费加入
 goods.show_page.buy_btn: 立即购买
 classroom.go_inside: 进去逛逛
 course.base.title.placeholder: 请输入课程标题
+course.search.placeholder: 请输入课程名称
 course.unname_title: 未命名计划
 
 course.task.out_focus_mask.continue_studying: 继续学习
@@ -1851,7 +1855,8 @@ course.task.out_focus_mask.anti_brush.tips: >
 
 classroom.manage.data_statistics.echarts.student_increase_num: 新增正式学员
 classroom.manage.data_statistics.echarts.auditor_increase_num: 新增旁听生
-
+classroom.empty.course: 暂无课程
+classroom.search.empty.course: 暂时没有合适的课程~
 course.intro.wechat_subscribe: 请点此订阅课程相关通知
 admin_v2.operation.report_content_audit.batch_operate_tips: 请先选择要批量操作的内容
 admin_v2.operation.report_content_audit.batch_operate_success_tips: 操作成功

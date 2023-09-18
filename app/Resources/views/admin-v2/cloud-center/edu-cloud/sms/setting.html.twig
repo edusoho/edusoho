@@ -107,6 +107,28 @@
           </thead>
           <tbody>
           <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.shipping_notify'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.shipping_notify_tips'|trans() }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+            <td>
+              <label>
+                <input type="radio" name="sms_shipping_notify" value="on"
+                       {% if (setting('cloud_sms.sms_shipping_notify')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="sms_shipping_notify" value="off"
+                       {% if (setting('cloud_sms.sms_shipping_notify')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
+              </label>
+            </td>
+          </tr>
+          <tr>
             <td>{{ 'admin.edu_cloud.edu_sms.validation_type'|trans }}</td>
             <td>{{ 'admin.edu_cloud.edu_sms.login'|trans }}</td>
             <td>
