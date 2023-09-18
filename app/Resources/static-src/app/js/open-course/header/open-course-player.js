@@ -45,6 +45,8 @@ class OpenCoursePlayer {
       let mediaSourceActionsMap = {
         'iframe': this.onIframe,
         'bilibili': this.onIframe,
+        'youku': this.onIframe,
+        'qqvideo' : this.onIframe,
         'iqiyi': this.onIframe,
         'self': this.onVideo,
       };
