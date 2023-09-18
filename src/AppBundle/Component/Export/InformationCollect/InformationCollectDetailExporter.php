@@ -90,7 +90,10 @@ class InformationCollectDetailExporter extends Exporter
             }
 
             $resultItemValues = ArrayToolkit::column($exportData[$result['id']], 'value');
-            foreach ($resultItemValues as $value) {
+            foreach ($resultItemValues as &$value) {
+                if (mb_strlen($value) >= 15) {
+                    $value = "\t".$value."\t";
+                }
                 $data[] = $value;
             }
             $contents[] = $data;
