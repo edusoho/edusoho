@@ -65,8 +65,9 @@ class LiveReplayController extends BaseController
         return $this->createJsonResponse(['status' => true, 'message' => '操作成功']);
     }
 
-    public function editAction(Request $request, $liveActivityId)
+    public function editAction(Request $request, $activityId)
     {
+        $liveActivityId = $this->getActivityService()->getActivity($activityId)['mediaId'];
         $live = $this->getLiveActivityService()->getLiveActivity($liveActivityId);
         if ($live['anchorId'] != $this->getCurrentUser()->getId()) {
             return $this->createJsonResponse(['status' => false, 'message' => '你无权进行设置！']);
