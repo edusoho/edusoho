@@ -199,6 +199,12 @@ class Homework extends Activity
 
         $this->getAssessmentService()->updateBasicAssessment($homework['assessmentId'], $fields);
 
+        $answerScene = $this->getAnswerSceneService()->get($homework['answerSceneId']);
+        $this->getAnswerSceneService()->update($homework['answerSceneId'], [
+            'need_score' => ('score' == $activity['finishType']) ? 1 : 0,
+            'finishData' => empty($activity['finishData']) ? $answerScene['pass_score'] : $activity['finishData'],
+        ]);
+
         return $homework;
     }
 
@@ -238,6 +244,7 @@ class Homework extends Activity
 
         $answerScene = $this->getAnswerSceneService()->get($homework['answerSceneId']);
         $answerScene['pass_score'] = empty($fields['finishData']) ? $answerScene['pass_score'] : $fields['finishData'];
+        $answerScene['need_score'] = ('score' == $fields['finishType']) ? 1 : 0;
 
         $this->getAnswerSceneService()->update($homework['answerSceneId'], $answerScene);
         $this->getAssessmentService()->updateAssessment($homework['assessmentId'], $accessment);

@@ -840,6 +840,7 @@ t.add("admin.article_setting.choose_category", "--\u9009\u62e9\u6240\u5c5e\u680f
 t.add("lesson_count_no_more_than_300", "\u8bfe\u65f6\u603b\u6570\u4e0d\u80fd\u8d85\u8fc7300\u4e2a", "js", "zh_CN");
 t.add("lesson_tasks_no_more_than_5", "\u8bfe\u65f6\u4e0b\u7684\u4efb\u52a1\u6570\u91cf\u4e0d\u80fd\u8d85\u8fc75\u4e2a", "js", "zh_CN");
 t.add("Bad credentials.", "\u7528\u6237\u540d\u6216\u5bc6\u7801\u9519\u8bef", "js", "zh_CN");
+t.add("The presented password cannot be empty.", "\u7528\u6237\u5bc6\u7801\u4e0d\u80fd\u4e3a\u7a7a", "js", "zh_CN");
 t.add("User account is locked.", "\u5e10\u53f7\u88ab\u5c01\u7981", "js", "zh_CN");
 t.add("cloud_search.network.error_message", "\u7f51\u7edc\u4e0d\u7ed9\u529b\uff0c\u4e3a\u60a8\u5207\u6362\u6781\u7b80\u641c\u7d22\u6a21\u5f0f", "js", "zh_CN");
 t.add("message.send.not_allowed", "\u4e0d\u5141\u8bb8\u53d1\u9001\u79c1\u4fe1", "js", "zh_CN");
@@ -1246,6 +1247,7 @@ t.add("admin.user.import_fail_hint", "%title%\u5931\u8d25\uff1a", "js", "zh_CN")
 t.add("admin.user.import_completed_hint", "%title%\u5b8c\u6210", "js", "zh_CN");
 t.add("admin.user.import_error_hint", "%title%\u65f6\uff0c\u53d1\u751f\u4e86\u672a\u77e5\u9519\u8bef\u3002", "js", "zh_CN");
 t.add("admin.user.lock_operational_hint", "\u771f\u7684\u8981%title%\u5417\uff1f", "js", "zh_CN");
+t.add("admin.user.lock_operational_hint_new", "%title%\u540e\u4e0d\u53ef\u6062\u590d\uff0c\u8bf7\u8c28\u614e\u64cd\u4f5c", "js", "zh_CN");
 t.add("admin.user.lock_operational_success_hint", "%title%\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.user.lock_operational_fail_hint", "%title%\u5931\u8d25", "js", "zh_CN");
 t.add("admin.user.sending_passwordreset_email_hint", "\u6b63\u5728\u53d1\u9001\u5bc6\u7801\u91cd\u7f6e\u9a8c\u8bc1\u90ae\u4ef6\uff0c\u8bf7\u7a0d\u7b49\u3002", "js", "zh_CN");
@@ -1627,12 +1629,15 @@ t.add("goods.show_page.free_join_btn", "\u514d\u8d39\u52a0\u5165", "js", "zh_CN"
 t.add("goods.show_page.buy_btn", "\u7acb\u5373\u8d2d\u4e70", "js", "zh_CN");
 t.add("classroom.go_inside", "\u8fdb\u53bb\u901b\u901b", "js", "zh_CN");
 t.add("course.base.title.placeholder", "\u8bf7\u8f93\u5165\u8bfe\u7a0b\u6807\u9898", "js", "zh_CN");
+t.add("course.search.placeholder", "\u8bf7\u8f93\u5165\u8bfe\u7a0b\u540d\u79f0", "js", "zh_CN");
 t.add("course.unname_title", "\u672a\u547d\u540d\u8ba1\u5212", "js", "zh_CN");
 t.add("course.task.out_focus_mask.continue_studying", "\u7ee7\u7eed\u5b66\u4e60", "js", "zh_CN");
 t.add("course.task.out_focus_mask.stop.tips", "<p class=\"ineffective-learning\">\u5b66\u7d2f\u4e86\u53ef\u4ee5\u4f11\u606f\u4e00\u4f1a :D<\/p>\n", "js", "zh_CN");
 t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">\u8bf7\u52ff\u540c\u65f6\u591a\u5f00\u4efb\u52a1\u5b66\u4e60<\/p> <p class=\"kick-each-other\">\u4e0d\u8981\u4e00\u5fc3\u591a\u7528\u54e6\uff01<\/p>\n", "js", "zh_CN");
 t.add("classroom.manage.data_statistics.echarts.student_increase_num", "\u65b0\u589e\u6b63\u5f0f\u5b66\u5458", "js", "zh_CN");
 t.add("classroom.manage.data_statistics.echarts.auditor_increase_num", "\u65b0\u589e\u65c1\u542c\u751f", "js", "zh_CN");
+t.add("classroom.empty.course", "\u6682\u65e0\u8bfe\u7a0b", "js", "zh_CN");
+t.add("classroom.search.empty.course", "\u6682\u65f6\u6ca1\u6709\u5408\u9002\u7684\u8bfe\u7a0b~", "js", "zh_CN");
 t.add("course.intro.wechat_subscribe", "\u8bf7\u70b9\u6b64\u8ba2\u9605\u8bfe\u7a0b\u76f8\u5173\u901a\u77e5", "js", "zh_CN");
 t.add("admin_v2.operation.report_content_audit.batch_operate_tips", "\u8bf7\u5148\u9009\u62e9\u8981\u6279\u91cf\u64cd\u4f5c\u7684\u5185\u5bb9", "js", "zh_CN");
 t.add("admin_v2.operation.report_content_audit.batch_operate_success_tips", "\u64cd\u4f5c\u6210\u529f", "js", "zh_CN");

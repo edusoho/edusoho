@@ -33,6 +33,10 @@ class TestpaperInfo extends AbstractResource
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
+        if ('closed' == $assessment['status']) {
+            throw TestpaperException::CLOSED_TESTPAPER();
+        }
+
         $results = $this->wrapTeatpaper($assessment);
 
         $targetType = $request->query->get('targetType');
@@ -69,7 +73,7 @@ class TestpaperInfo extends AbstractResource
         $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
 
-        if (empty($testpaperRecord)) {
+        if (empty($testpaperRecord) && $scene['endTime'] && $scene['endTime'] < time()) {
             $this->getAnswerService()->batchAutoSubmit($scene['id'], $activity['ext']['mediaId'], [$user['id']]);
 
             $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);

@@ -80,11 +80,26 @@ class CourseController extends BaseController
     public function listAction(Request $request, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $previewAs = '';
         if (empty($classroom)) {
             $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+
+        //检查权限
+        if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
+            $classroomName = $this->setting('classroom.name', '班级');
+
+            return $this->createMessageResponse(
+                'info',
+                "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服",
+                '',
+                3,
+                $this->generateUrl('homepage')
+            );
+        }
+
+        //课程数据 ?title=
+        $title = trim($request->get('title', ''));
+        $courses = $this->getClassroomService()->findSortedCoursesByClassroomIdAndTitle($classroomId, $title);
         $currentUser = $this->getCurrentUser();
         $courseMembers = $teachers = [];
         foreach ($courses as &$course) {
@@ -100,46 +115,37 @@ class CourseController extends BaseController
                 $course['originPrice'] = '0.00';
             }
         }
-        $user = $this->getCurrentUser();
-        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            $classroomName = $this->setting('classroom.name', '班级');
 
-            return $this->createMessageResponse(
-                'info',
-                "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服",
-                '',
-                3,
-                $this->generateUrl('homepage')
-            );
-        }
+        //是否有管理课程的权限
         $canManageClassroom = $this->getClassroomService()->canManageClassroom($classroomId);
-        if ($request->query->get('previewAs') && $canManageClassroom) {
-            $previewAs = $request->query->get('previewAs');
+        $previewAs = $request->query->get('previewAs', '');
+        if (empty($previewAs) || !$canManageClassroom) {
+            $previewAs = '';
         }
+        $member = $currentUser['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $currentUser['id']) : null;
         $member = $this->previewAsMember($previewAs, $member, $classroom);
         if (!$member || $member['locked']) {
             $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
             $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
 
-            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'preview' => 'guest' == $request->query->get('previewAs', '') ? 1 : 0]));
+            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'preview' => 'guest' == $previewAs ? 1 : 0]));
         }
+
+        //是否注册了vip
         if ($this->isPluginInstalled('Vip')) {
             $member['access'] = $this->getClassroomService()->canLearnClassroom($classroomId);
         }
+
         $layout = 'classroom/layout.html.twig';
         $isCourseMember = false;
         if ($member && !$member['locked']) {
             $isCourseMember = true;
             $layout = 'classroom/join-layout.html.twig';
         }
-        if (!$classroom) {
-            $classroomDescription = [];
-        } else {
-            $classroomDescription = $classroom['about'];
-            $classroomDescription = strip_tags($classroomDescription, '');
-            $classroomDescription = preg_replace('/ /', '', $classroomDescription);
-        }
+
+        $classroomDescription = $classroom['about'];
+        $classroomDescription = strip_tags($classroomDescription, '');
+        $classroomDescription = preg_replace('/ /', '', $classroomDescription);
 
         return $this->render(
             'classroom/course/list.html.twig',

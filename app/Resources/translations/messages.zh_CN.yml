@@ -2504,6 +2504,7 @@ open_course.lesson.create_error: 课时创建失败
 # 班级
 classroom: 班级
 column: 专栏
+classroom.search.empty.course: 暂时没有合适的课程~
 classroom.buy_classroom.purchase_timeout_tips: 注意：请在30分钟内完成支付，否则订单将会过期失效
 classroom.buy_classroom.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%avatarSettingUrl%" class="alert-link" target="_blank">点击设置</a>
@@ -5381,6 +5382,9 @@ admin.user.statistics.data_detail.active_chart: 活跃度
 admin.user.statistics.data_detail.teaching_plan_name: 计划名
 admin.user.statistics.data_detail.learn_detail: 学习详情
 admin.user.statistics.data_detail.student_trend_ninety_days: 90天
+admin.user.statistics.data_detail.student_trend_one_year: 1年
+admin.user.statistics.data_detail.student_trend_two_year: 2年
+admin.user.statistics.data_detail.student_trend_three_year: 3年
 admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
 admin.user.statistics.data_detail.task_progress_tip: %taskName%完成比为已完成%taskName%数比总%taskName%数
 admin.user.statistics.data_detail.from_classroom: 来自班级
@@ -7338,6 +7342,8 @@ admin.edu_cloud.edu_sms.validation_type: 验证类
 admin.edu_cloud.edu_sms.bind_mobile: 手机绑定
 admin.edu_cloud.edu_sms.login: 手机短信快捷登录
 admin.edu_cloud.edu_sms.verification_code_tips: 您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。
+admin.edu_cloud.edu_sms.shipping_notify: 发货通知
+admin.edu_cloud.edu_sms.shipping_notify_tips: 您在《网校商城名称》购买的《商品名称》已发货。
 admin.edu_cloud.edu_sms.singel_user: 单个用户
 admin.edu_cloud.edu_sms.auto_singel_send: 自动单发
 admin.edu_cloud.edu_sms.default_open: 默认开启
@@ -8334,6 +8340,7 @@ admin.reports_status.system_status: 状态
 admin.reports_status.system_communication_with_discuz: 与Discuz Ucenter的连接
 admin.reports_status.system_checking: 正在检测.....
 admin.reports_status.system_email_send: 邮件发送
+admin.reports_status.system_email_send_detection: 立即检测
 admin.reports_status.system_email_send_tips: 每次检测，都会向当前用户发一封测试邮件，请保证当前用户的邮箱正确,邮件异常请到系统日志查看
 admin.reports_status.system_file_and_catalog_authority: 系统文件、目录权限检查
 admin.reports_status.system_file_and_catalog_authority_available: 文件目录权限正常
@@ -12378,6 +12385,7 @@ course.homework.score_set.select.option2: 每项正确得分
 course.homework.score.tip: 注：有作业合格要求时，需要设置题目分值
 course.homework.score.finish.tip: 注：得分仅作为作业合格的判断依据，不对学员展示
 testpaper.score_set.option: 每题分值
+course.placeholder.name: 请输入课程名称
 
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%%taskNumber%： %taskTitle%'
