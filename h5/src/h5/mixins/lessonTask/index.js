@@ -76,7 +76,7 @@ export default {
       while (reg.exec(stem) !== null) {
         stem = stem.replace(reg, () => {
           index += 1;
-          return `<span class="fill-bank">(${index}）</span>`;
+          return `<span class=""> (${index}) ____</span>`;
         });
       }
       return { stem, index };

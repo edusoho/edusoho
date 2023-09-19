@@ -1,19 +1,13 @@
 <template>
   <div>
-    <out-focus-mask
-      :type="outFocusMaskType"
-      :isShow="isShowOutFocusMask"
-      :reportType="reportType"
-      @outFocusMask="outFocusMask"
-    ></out-focus-mask>
     <e-loading v-if="isLoading" />
-    <div v-if="exercise" class="intro-body">
+    <div v-if="exerciseIntro" class="intro-body">
       <van-cell-group class="intro-panel">
         <van-cell
           class="intro-cell test-name"
           :border="false"
-          :title="$t('courseLearning.exerciseName')"
-          :value="exercise.name"
+          :title="$t('courseLearning.chapterName')"
+          :value="exerciseIntro.chapterName"
         />
       </van-cell-group>
       <van-panel
@@ -28,7 +22,11 @@
             >
             <span class="ml-12 font-normal text-14 leading-6"
               style="color:rgba(0,0,0,0.35)"
-              >{{ exercise.itemCount + ' ' + $t('courseLearning.topic') }}</span
+              >{{
+                exerciseIntro.itemCounts.total +
+                  ' ' +
+                  $t('courseLearning.topic')
+              }}</span
             >
           </div>
         </template>
@@ -42,15 +40,20 @@
         />
       </van-panel>
     </div>
-    <div v-if="exercise" class="intro-footer">
-      <van-button
+    <div v-if="exerciseIntro" class="intro-footer">
+      <van-button v-if="!answer_record_id"
         class="intro-footer__btn"
         type="primary"
         @click="chooseQuestionMode = true"
         >{{ $t('courseLearning.chooseQuestionAnsweringMode') }}</van-button
       >
+      <van-button v-else
+        class="intro-footer__btn"
+        type="primary"
+        @click="continueDo()"
+        >{{ $t('questionBank.continue') }}</van-button
+      >
     </div>
-    <!-- 选择模式弹框 -->
     <van-popup
       v-model="chooseQuestionMode"
       position="bottom"
@@ -74,7 +77,7 @@
               <i v-show="props.checked" class="iconfont icon-check"></i>
             </template>
           </van-radio>
-          <van-radio name="1" class="choose-mode-radio">
+          <!-- <van-radio name="1" class="choose-mode-radio" disabled>
             {{ $t('courseLearning.answerOneQuestionAtTime') }}
             <template #icon="props">
               <img
@@ -83,7 +86,7 @@
               />
               <i v-show="props.checked" class="iconfont icon-check"></i>
             </template>
-          </van-radio>
+          </van-radio> -->
         </van-radio-group>
       </div>
       <van-button
@@ -98,31 +101,25 @@
 
 <script>
 import Api from '@/api';
-import { mapState, mapActions } from 'vuex';
 import { Toast } from 'vant';
-import exerciseMixin from '@/mixins/lessonTask/exercise.js';
-import report from '@/mixins/course/report';
-import OutFocusMask from '@/components/out-focus-mask.vue';
+import { mapState } from 'vuex';
 
 export default {
-  name: 'ExerciseIntro',
-  mixins: [exerciseMixin, report],
-  components: {
-    OutFocusMask,
-  },
   data() {
     return {
-      courseId: null,
-      taskId: null,
-      exercise: null,
+      exerciseId: null,
+      moduleId: null,
+      categoryId: null,
+      answer_record_id: this.$route.query.answer_record_id,
       chooseQuestionMode: false,
       question_type_seq: [], // 试卷已有题型
       counts: {}, // 考试题型数量对象
-      radio: '0',
+      exerciseIntro: null,
       activeIcon: 'static/images/exercise/active-icon.png',
       defaultIcon: 'static/images/exercise/default-icon.png',
       activeQuestions: 'static/images/exercise/active-on-questions.png',
       defaultQuestions: 'static/images/exercise/default-on-questions.png',
+      radio: '0',
       obj: {
         single_choice: 'courseLearning.singleChoice',
         choice: 'courseLearning.choice',
@@ -134,19 +131,14 @@ export default {
       },
     };
   },
+
+  created() {
+    this.getExerciseIntro();
+  },
   computed: {
-    hasResult() {
-      const latestExerciseResult = this.exercise.latestExerciseResult;
-      return !!latestExerciseResult;
-    },
     ...mapState({
       isLoading: state => state.isLoading,
-      user: state => state.user,
     }),
-  },
-  mounted() {
-    this.initReport();
-    this.getInfo();
   },
   beforeRouteEnter(to, from, next) {
     document.getElementById('app').style.background = '#f6f6f6';
@@ -157,116 +149,60 @@ export default {
     next();
   },
   methods: {
-    ...mapActions('course', ['handExercisedo']),
-    getInfo() {
-      this.courseId = this.$route.query.courseId;
-      this.taskId = this.$route.query.taskId;
-      Api.getExerciseIntro({
+    // 获取信息
+    getExerciseIntro() {
+      this.exerciseId = this.$route.query.exerciseId;
+      this.moduleId = this.$route.query.moduleId;
+      this.categoryId = this.$route.query.categoryId;
+      Api.getExerciseInfro({
         query: {
-          courseId: this.courseId,
-          taskId: this.taskId,
-        },
-      }).then(res => {
-        this.exercise = res.exercise;
-        this.counts = res.exercise.itemCounts;
-
-        const { lastExerciseResult, latestExerciseResult } = this.exercise;
-
-        if (!latestExerciseResult && lastExerciseResult) {
-          this.formatItem();
-
-          if (this.$route.query.answerAgain) return;
-
-          this.$router.replace({
-            name: 'exerciseResult',
-            query: {
-              exerciseId: this.exercise.id,
-              exerciseResultId: lastExerciseResult.id,
-              courseId: this.courseId,
-              taskId: this.taskId,
-            },
-          });
-
-          return;
-        }
-        this.formatItem();
-        this.interruption();
-      });
-    },
-
-    // 遍历出题目类型
-    formatItem() {
-      for (const i in this.counts) {
-        if (this.counts[i] > 0) {
-          this.question_type_seq.push(i);
-        }
-      }
-    },
-
-    // 初始化上报数据
-    initReport() {
-      this.initReportData(
-        this.$route.query.courseId,
-        this.$route.query.taskId,
-        'exercise',
-      );
-    },
-    // 异常中断
-    interruption() {
-      this.canDoing(this.exercise.latestExerciseResult, this.user.id)
-        .then(() => {
-          this.startExercise();
-        })
-        .catch(({ answer }) => {
-          this.submitExercise(answer);
-        });
-    },
-    // 跳转到结果页
-    showResult() {
-      this.$router.push({
-        name: 'exerciseResult',
-        query: {
-          exerciseId: this.exercise.id,
-          exerciseResultId: this.exercise.latestExerciseResult.id,
-          courseId: this.courseId,
-          taskId: this.taskId,
-        },
-      });
-    },
-    // 开始作业
-    startExercise() {
-      this.$router.push({
-        name: 'exerciseDo',
-        query: {
-          targetId: this.taskId,
-          exerciseId: this.exercise.id,
-          courseId: this.courseId,
-          exerciseMode: this.radio,
+          exerciseId: this.exerciseId,
         },
         params: {
-          KeepDoing: true,
+          moduleId: this.moduleId,
+          categoryId: this.categoryId,
         },
-      });
-    },
-    // 交练习
-    submitExercise(answer) {
-      const datas = {
-        answer,
-        exerciseId: this.exercise.id,
-        userId: this.user.id,
-        exerciseResultId: this.exercise.latestExerciseResult.id,
-      };
-      // 提交练习+跳转到结果页
-      this.handExercisedo(datas)
+      })
         .then(res => {
-          // 上报完成作业课时
-          this.reprtData({ eventName: 'finish' });
-          this.showResult();
+          this.exerciseIntro = res;
+          this.counts = res.itemCounts;
+
+          for (const i in this.counts) {
+            if (this.counts[i] > 0 && i !== 'total') {
+              this.question_type_seq.push(i);
+            }
+          }
         })
         .catch(err => {
           Toast.fail(err.message);
         });
     },
+    // 开始答题
+    startExercise() {
+      const query = {
+        mode: 'start',
+        type: 'chapter',
+        exerciseMode: this.radio,
+        title: this.exerciseIntro.chapterName,
+        exerciseId: this.exerciseId,
+        categoryId: this.categoryId,
+        moduleId: this.moduleId,
+      };
+      this.$router.push({ path: '/brushDo', query });
+    },
+    // 继续答题
+    continueDo() {
+      const query = {
+        mode: 'continue',
+        type: 'chapter',
+        title: this.exerciseIntro.chapterName,
+        exerciseId: this.exerciseId,
+        categoryId: this.categoryId,
+        moduleId: this.moduleId,
+        answer_record_id: this.answer_record_id,
+      };
+      this.$router.push({ path: '/brushDo', query });
+    }
   },
 };
 </script>
@@ -274,8 +210,8 @@ export default {
 <style lang="scss" scoped>
 .test-name {
   .van-cell__title {
-    max-width: vw(70);
-    margin-right: vw(12);
+    max-width: 70px;
+    margin-right: 12px;
   }
 
   .van-cell__value {
@@ -284,6 +220,7 @@ export default {
     white-space: nowrap;
   }
 }
+
 .choose-mode-group-radio {
   ::v-deep .van-radio__icon {
     position: relative;
@@ -306,15 +243,6 @@ export default {
     bottom: vw(-10);
     font-size: vw(14);
     color: #00be63;
-  }
-
-  .choose-mode-radio {
-    display: flex;
-    flex-direction: column;
-
-    &:nth-child(1) {
-      margin-right: vw(64);
-    }
   }
 }
 </style>
