@@ -304,7 +304,7 @@ class ManageController extends BaseController
                 $member .= $answerReport['score'].',';
                 $member .= $answerScene['pass_score'].',';
                 $member .= $this->getPassStatus($answerReport['grade']).',';
-                $reviewer = $this->getReviewer($users[$answerReport['review_user_id']], $answerRecord);
+                $reviewer = $this->getReviewer($users[$answerReport['review_user_id']] ?? [], $answerRecord);
                 $member .= is_numeric($reviewer) ? $reviewer."\t".',' : $reviewer.','; //批阅人
                 $member .= $answerReport['comment'] ? $answerReport['comment'].',' : '-'.','; //教师评语
 
