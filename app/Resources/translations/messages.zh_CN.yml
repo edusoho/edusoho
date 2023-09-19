@@ -1253,6 +1253,7 @@ item_bank_exercise.my_teaching_notice: 题库练习，请前往 <a class="alert-
 exercise.answers.done_num: 累计答题数
 exercise.answers.completion_rate: 答题率
 exercise.answers.mastery_rate: 掌握率
+item_bank_exercise.continue.back-btn: 返回章节目录
 
 
 course.testpaper_check: 试卷批阅
