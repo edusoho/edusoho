@@ -366,6 +366,9 @@ class TestpaperController extends BaseController
         if ('closed' === $assessment['status']) {
             return $this->createMessageResponse('warning', '试卷已关闭');
         }
+        if (empty($assessment['item_count'])) {
+            return $this->createMessageResponse('warning', '当前试卷所有题目内容均已被删除');
+        }
 
         return $this->render('testpaper/manage/preview.html.twig', [
             'assessment' => $assessment,

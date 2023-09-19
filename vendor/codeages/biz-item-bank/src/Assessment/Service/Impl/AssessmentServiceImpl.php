@@ -521,6 +521,9 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             }
             $eachAssessmentToUpdateSections[$section['assessment_id']][] = $section;
         }
+        foreach ($assessmentIds as $assessmentId) {
+            $eachAssessmentToUpdateSections[$assessmentId] = $eachAssessmentToUpdateSections[$assessmentId] ?? [];
+        }
 
         return $eachAssessmentToUpdateSections;
     }
