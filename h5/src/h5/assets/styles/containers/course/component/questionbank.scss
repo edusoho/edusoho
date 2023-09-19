@@ -27,7 +27,11 @@ $common-padding: 35;
 .exercise-do, 
 .exercise-analysis  {
   .rich-text img {
-    max-width: 100% !important;
+    display: block;
+    margin-bottom: vw(8);
+    width: vw(156);
+    height: vw(88);
+    border-radius: vw(6);
   }
   
   .head-top {
@@ -109,6 +113,14 @@ $common-padding: 35;
     background: #FFF;
     box-shadow: 0 vw(4) vw(24) 0 rgba(0, 0, 0, 0.05);
 
+    img {
+      display: block;
+      margin-bottom: vw(8);
+      width: vw(156);
+      height: vw(88);
+      border-radius: vw(6);
+    }
+
     P {
       color: #37393D;
     }
@@ -185,7 +197,9 @@ $common-padding: 35;
       font-size: vw(14);
       word-break: break-word;
 
-      .img {
+      img {
+        display: block;
+        margin-bottom: vw(8);
         width: vw(156);
         height: vw(88);
         border-radius: vw(6);
@@ -430,6 +444,14 @@ $common-padding: 35;
     font-size: vw(14);
     color: #919399;
     word-break: break-all;
+
+    img {
+      display: block;
+      margin-bottom: vw(8);
+      width: vw(156);
+      height: vw(88);
+      border-radius: vw(6);
+    }
 
     P {
       color: #37393D;

@@ -307,5 +307,14 @@ export default {
     font-size: vw(14);
     color: #00be63;
   }
+
+  .choose-mode-radio {
+    display: flex;
+    flex-direction: column;
+
+    &:nth-child(1) {
+      margin-right: vw(64);
+    }
+  }
 }
 </style>

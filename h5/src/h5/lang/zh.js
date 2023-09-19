@@ -404,6 +404,8 @@ export default {
     yourAreAnswer: '你的回答',
     analyze: '解析',
     selectedAnswer: '已选答案',
+    score: '得分',
+    comment: '评语',
     referenceAnswer: '参考答案',
     submitATopic: '提交本题',
     answerProgress: '答题进度',
@@ -498,6 +500,7 @@ export default {
     oneTips1:
       '温馨提示：仅有一次考试机会，本次考试不自动交卷，实时显示考试用时，中途离开不计时',
     minutes: '分钟',
+    questionsNumTips: '注意：自定义题目数量只能为整数，范围：1 ≤ 题目数量 ≤ 单个错题本全部错题，且仅对本次生效，下次进入仍为默认值',
     second: '秒',
     testTips: '考试须知',
     examOver: '考试已结束',

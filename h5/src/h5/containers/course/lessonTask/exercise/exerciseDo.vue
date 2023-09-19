@@ -23,6 +23,7 @@
       :admission_ticket="exerciseInfo.admission_ticket"
       :mode="mode"
       @getData="getData"
+      @goResults="goResults"
     />
 
     <!-- 引导页 -->
@@ -543,6 +544,10 @@ export default {
       }).catch(err =>{
         Toast.fail(err.message)
       })
+    },
+    goResults() {
+      this.isLeave = true;
+      this.showResult()
     }
   },
 };
