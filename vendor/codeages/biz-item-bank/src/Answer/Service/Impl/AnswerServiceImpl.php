@@ -663,6 +663,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         if (empty($questionReport)) {
             throw new AnswerReportException('Answer report not found.', ErrorCode::ANSWER_REPORT_NOTFOUND);
         }
+        if ($questionReport['status'] == AnswerQuestionReportService::STATUS_NOANSWER) {
+            $params['status'] == AnswerQuestionReportService::STATUS_WRONG;
+        }
 
         try {
             $this->beginTransaction();
