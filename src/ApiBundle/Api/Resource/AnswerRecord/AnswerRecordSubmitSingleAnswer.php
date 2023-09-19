@@ -42,6 +42,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
         return [
             'response' => $params['response'],
             'answer' => $question['answer'],
+            'questionId' => $question['id'],
             'itemAnalysis' => $item['analysis'],
             'questionAnalysis' => $question['analysis'],
             'status' => $questionReport['status'],
