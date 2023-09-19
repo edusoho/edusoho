@@ -5,9 +5,10 @@
   {% include 'item-bank-exercise-manage/chapter-exercise/header.html.twig' with {taskMode:'lesson'}  %}
   <div style="margin: 20px auto;display: {% if categoryTree %}block{% else %}none{% endif %}">
     <span class="chapter-exercise-title" style="margin-left:27px">{{ 'item_bank_exercise.chapter_exercise.list'|trans }}</span>
-    <span class="chapter-exercise-title" style="float: right">{{ 'item_bank_exercise.chapter_exercise.item_num'|trans }}</span>
+    <span class="chapter-exercise-title mr24" style="float: right;">{{ 'course.members_manage.official_student.operation'|trans }}</span>
+    <span class="chapter-exercise-title" style="float: right; margin-right:96px;">{{ 'item_bank_exercise.chapter_exercise.item_num'|trans }}</span>
   </div>
-  <ul id="sortable-list" class="task-manage-list sortable-list">
+  <ul id="sortable-list" class="js-task-manage-list task-manage-list sortable-list">
     {% for key, item in categoryTree %}
       {% if item.depth == 3 %}
         {% include 'item-bank-exercise-manage/chapter-exercise/lesson.html.twig' with {exercise: exercise, lesson: item} %}
@@ -23,5 +24,20 @@
     {% else %}
       {{'item_bank_exercise.chapter_exercise.empty'|trans}}
     {% endif %}
+  </div>
+  <div class="task-manage-footer-option">
+    <label 
+      class="cd-checkbox chapter-operation js-chapter-all mb12" 
+      <input type="checkbox" value="1" data-toggle="cd-checkbox">
+    </label>
+    <span>{{ 'course.question_manage.select_all'|trans }} </span>
+    <span>{{ 'classroom.import_file_preview'|trans }}</span>
+    <span class="js-task-manage-close-num"> 0 </span>
+    <span>{{ 'item_bank_exercise.chapter_exercise.item'|trans }} </span>
+    <span class="task-manage-num-clear js-task-manage-clear hidden">{{ 'item_bank_exercise.chapter_exercise.batch.num.clear'|trans }}</span>
+    <button class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-task-all-published" disabled>{{ 'item_bank_exercise.chapter_exercise.batch.release'|trans }}</button>
+    <button class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-task-all-unpublished" disabled>{{ 'item_bank_exercise.chapter_exercise.batch.cancellation'|trans }}</button>
+    <input type="hidden" name="exercise_publish" value="{{ path('item_bank_exercise_manage_chapter_exercise_publish', {exerciseId: exercise.id}) }}">
+    <input type="hidden" name="exercise_unpublish" value="{{ path('item_bank_exercise_manage_chapter_exercise_unpublish', {exerciseId: exercise.id}) }}">
   </div>
 {% endblock %}

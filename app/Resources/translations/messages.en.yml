@@ -2067,6 +2067,10 @@ item_bank_exercise.assessment_exercise.add_new_module: Create
 item_bank_exercise.assessment_exercise.add_assessment: Add Assessment
 item_bank_exercise.assessment_exercise.remove_assessment: Remove Assessment
 item_bank_exercise.chapter_exercise.category_empty: No chapters have been added to the current item bank exercise
+item_bank_exercise.chapter_exercise.item: item
+item_bank_exercise.chapter_exercise.batch.release: Batch release
+item_bank_exercise.chapter_exercise.batch.cancellation: Batch cancellation
+item_bank_exercise.chapter_exercise.batch.num.clear: Clear away
 item_bank_exercise.chapter_exercise.empty: 'It is empty, open the chapter exercise now'
 item_bank_exercise.assessment_exercise.empty: 'It is empty, open the assessment exercise now'
 item_bank_exercise.chapter_exercise.info: Chapter exercises are based on the setting of "Item management by category".Provide students with a hierarchical list of brushing exercises

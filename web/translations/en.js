@@ -467,6 +467,7 @@ t.add("course.manage.task_batch_delete_hint", "After deleting the selected lesso
 t.add("course.manage.chapter_delete_hint", "Are you sure you want to delete this %name%?", "js", "en");
 t.add("course.manage.chapter_batch_delete_hint", "%length% chapters have been selected, are you sure to delete?", "js", "en");
 t.add("course.manage.task_publish_success_hint", "Published successfully", "js", "en");
+t.add("course.manage.item_task_unpublish_success_hint", "Cancel successfully", "js", "en");
 t.add("course.manage.task_publish_fail_hint", "Publish failed", "js", "en");
 t.add("course.manage.task_unpublish_success_hint", "Publish cancelled successful", "js", "en");
 t.add("course.manage.task_unpublish_fail_hint", "Cancel publish failed", "js", "en");
