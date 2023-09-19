@@ -5,9 +5,9 @@ namespace AppBundle\Controller\ItemBankExercise;
 use AppBundle\Controller\BaseController;
 use Biz\Accessor\AccessorInterface;
 use Biz\ItemBankExercise\ItemBankExerciseException;
-use Biz\Testpaper\ExerciseException;
 use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
@@ -65,6 +65,12 @@ class AnswerController extends BaseController
         }
 
         $latestAnswerRecord = $this->getItemBankChapterExerciseRecordService()->getLatestRecord($moduleId, $categoryId, $user['id']);
+        if ($latestAnswerRecord) {
+            $answerRecord = $this->getAnswerRecordService()->get($latestAnswerRecord['answerRecordId']);
+            if (ExerciseMode::SUBMIT_SINGLE == $answerRecord['exercise_mode']) {
+                return $this->render('item-bank-exercise/answer/not-support-submit-single.html.twig', ['exerciseId' => $exerciseId]);
+            }
+        }
         if (empty($latestAnswerRecord) || 'redo' == $request->get('action')) {
             $latestAnswerRecord = $this->getItemBankChapterExerciseService()->startAnswer($moduleId, $categoryId, $user['id']);
         }
@@ -86,9 +92,7 @@ class AnswerController extends BaseController
                 ]
             );
         }
-        if (ExerciseMode::SUBMIT_SINGLE == $latestAnswerRecord['exercise_mode']) {
-            $this->createNewException(ExerciseException::EXERCISE_IS_DOING());
-        }
+
         $this->getAnswerService()->continueAnswer($latestAnswerRecord['answerRecordId']);
 
         return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
@@ -186,5 +190,13 @@ class AnswerController extends BaseController
     protected function getItemService()
     {
         return $this->createService('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 }

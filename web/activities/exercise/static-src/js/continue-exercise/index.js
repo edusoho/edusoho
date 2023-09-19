@@ -1,19 +1,19 @@
-class continueExercisesBack {
+class ContinueExercisesBack {
   constructor() {
     this.modal = '#modal';
     this.init();
   }
 
   init() {
-    this.continueExercise()
-    this.continueExerciseClose()
+    this.continueExercise();
+    this.continueExerciseClose();
   }
 
   // 返回上一页
   continueExercise() {
-    $('.js-continue-exercise-back').on('click', ()=> {
-      window.history.back()
-    })
+    $('.js-continue-exercise-back').on('click', event => {
+      window.parent.location.href = $(event.currentTarget).data('url');
+    });
   }
 
   // 关闭弹框
@@ -25,4 +25,4 @@ class continueExercisesBack {
   }
 }
 
-new continueExercisesBack();
+new ContinueExercisesBack();
