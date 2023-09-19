@@ -58,6 +58,9 @@
         <testsuite name="SpecialTest">
             <file>../tests/Unit/CloudPlatform/Service/AppServiceTest.php</file>
         </testsuite>
+        <testsuite name="ReviewServiceTest">
+            <file>../tests/Unit/Review/Service/ReviewServiceTest.php</file>
+        </testsuite>
         <testsuite name="CustomBundle">
             <directory>../src/CustomBundle/Tests</directory>
             <directory>../src/CustomBundle/Extensions/DataTag/Tests</directory>

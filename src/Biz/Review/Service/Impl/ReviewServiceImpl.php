@@ -225,7 +225,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     {
         $specs = $this->getGoodsService()->findGoodsSpecsByGoodsId($review['targetId']);
         if (empty($specs)) {
-            return $review;
+            throw ReviewException::NOT_FOUND_REVIEW();
         }
 
         $courseIds = array_column($specs, 'targetId');
