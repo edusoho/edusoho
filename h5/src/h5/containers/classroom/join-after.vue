@@ -52,6 +52,7 @@
       <div v-show="active == 1">
         <course-set-list
           ref="course"
+          :details="details"
           :feedback="!errorMsg"
           :course-sets="details.courses"
           :disable-mask="true"

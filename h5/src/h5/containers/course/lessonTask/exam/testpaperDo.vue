@@ -250,6 +250,7 @@ export default {
           this.afterGetData(res);
         })
         .catch(err => {
+
           /**
            * 4032207:考试正在批阅中
            * 4032204：考试只能考一次，不能重复考试

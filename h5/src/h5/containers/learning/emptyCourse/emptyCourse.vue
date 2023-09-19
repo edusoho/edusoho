@@ -1,6 +1,6 @@
 <template>
   <div class="empty-course">
-    <img class="empty-course__img" :src="isSearch ? 'static/images/search_course_empty.png' : 'static/images/courseEmpty.png'" alt="" />
+    <img class="empty-course__img" :src="isSearch ? 'static/images/classroom/none-course.png' : 'static/images/courseEmpty.png'" alt="" />
     <p class="empty-course__text">{{ emptyText }}</p>
     <div v-if="hasButton" class="empty-course__btn" @click="jumpBack">
       + {{ moreText }}

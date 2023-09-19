@@ -10,6 +10,7 @@ export default {
     me: 'Me',
   },
   e: {
+    searchCourse: 'Find courses',
     freeForMembers: 'Free for members',
     live: 'Live',
     certificate: 'Cert.',

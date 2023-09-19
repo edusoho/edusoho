@@ -10,6 +10,7 @@ export default {
     me: '我的',
   },
   e: {
+    searchCourse: '找课程',
     freeForMembers: '会员免费',
     live: '直播',
     certificate: '证',
