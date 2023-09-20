@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\My;
 
 use ApiBundle\Api\ApiRequest;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Common\CommonException;
 use Biz\User\UserException;
@@ -35,7 +36,7 @@ class WrongQuestionBookController extends BaseController
     public function practiseRedirectAction(Request $request, $poolId)
     {
         $query = $request->query->all();
-        $body = ['itemNum' => $query['itemNum'] ?? 20];
+        $body = ArrayToolkit::parts($query, ['itemNum']);
         unset($query['itemNum']);
         $apiRequest = new ApiRequest("/api/wrong_book/{$poolId}/start_answer", 'POST', $query, $body);
         $result = $this->container->get('api_resource_kernel')->handleApiRequest($apiRequest);
