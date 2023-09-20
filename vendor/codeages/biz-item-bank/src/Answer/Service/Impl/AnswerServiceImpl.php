@@ -34,6 +34,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         if (!$this->getAnswerSceneService()->canStart($answerSceneId, $userId)) {
             throw new AnswerSceneException('AnswerScene did not start.', ErrorCode::ANSWER_SCENE_NOTSTART);
         }
+        $this->modifyAssessmentIfItemDeleted($assessmentId);
         $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
         if (empty($assessment['item_count'])) {
             throw new AnswerException('试卷全部题目已被删除，请联系教师或管理员', ErrorCode::ASSESSMENT_EMPTY);
@@ -735,6 +736,19 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         return $submittedQuestions;
+    }
+
+    private function modifyAssessmentIfItemDeleted($assessmentId)
+    {
+        $toDeleteSectionItems = $this->getSectionItemService()->findDeletedAssessmentSectionItems($assessmentId);
+        if (empty($toDeleteSectionItems)) {
+            return;
+        }
+        $assessmentSnapshots = $this->getAssessmentService()->createAssessmentSnapshotsIncludeSectionsAndItems([$assessmentId]);
+        $this->getAnswerRecordService()->replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots);
+        $this->getAnswerReportService()->replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots);
+        $this->getAssessmentService()->modifyAssessmentsAndSectionsWithToDeleteSectionItems($toDeleteSectionItems);
+        $this->getSectionItemService()->deleteAssessmentSectionItems($toDeleteSectionItems);
     }
 
     private function generateNoAnswerQuestionReports($answerRecord)

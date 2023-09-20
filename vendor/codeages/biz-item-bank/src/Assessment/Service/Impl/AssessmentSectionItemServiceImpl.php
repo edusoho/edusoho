@@ -59,10 +59,10 @@ class AssessmentSectionItemServiceImpl extends BaseService implements Assessment
                 ];
             }
 
-            if(!empty($scoreRule['rule'])) {
+            if (!empty($scoreRule['rule'])) {
                 $scoreRule['rule'] = ArrayToolkit::index($scoreRule['rule'], 'name');
-                if(!empty($scoreRule['rule']['part_right']) && !empty($scoreRule['rule']['part_right']['score_rule'])) {
-                    $question['score_rule']  = $scoreRule['rule']['part_right']['score_rule'];
+                if (!empty($scoreRule['rule']['part_right']) && !empty($scoreRule['rule']['part_right']['score_rule'])) {
+                    $question['score_rule'] = $scoreRule['rule']['part_right']['score_rule'];
                 }
             }
             $item['questions'][] = $question;
@@ -70,7 +70,7 @@ class AssessmentSectionItemServiceImpl extends BaseService implements Assessment
 
         return $item;
     }
-    
+
     public function createAssessmentSectionItem($item, $section)
     {
         $questionScoreRule = [];
@@ -143,6 +143,16 @@ class AssessmentSectionItemServiceImpl extends BaseService implements Assessment
         }
         $this->getAssessmentSectionItemDao()->batchDelete(['ids' => array_column($toDeleteSectionItems, 'id')]);
         $this->sortAssessmentSectionItemsSeq(ArrayToolkit::uniqueColumn($toDeleteSectionItems, 'assessment_id'));
+    }
+
+    public function findDeletedAssessmentSectionItems($assessmentId)
+    {
+        $sectionItems = $this->findSectionItemsByAssessmentId($assessmentId);
+        $items = $this->getItemService()->findItemsByIdsIncludeDeleted(array_column($sectionItems, 'item_id'));
+
+        return array_filter($sectionItems, function ($sectionItem) use ($items) {
+            return empty($items[$sectionItem['item_id']]);
+        });
     }
 
     private function sortAssessmentSectionItemsSeq($assessmentIds)
