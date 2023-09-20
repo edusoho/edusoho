@@ -224,11 +224,21 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     protected function tryCreateGoodsReview($review)
     {
         $specs = $this->getGoodsService()->findGoodsSpecsByGoodsId($review['targetId']);
+        if (empty($specs)) {
+            throw ReviewException::NOT_FOUND_REVIEW();
+        }
+
         $courseIds = array_column($specs, 'targetId');
+        $canTakeCourse = false;
         foreach ($courseIds as $courseId) {
-            if (!$this->getCourseService()->canTakeCourse($courseId)) {
-                throw ReviewException::FORBIDDEN_CREATE_REVIEW();
+            if ($this->getCourseService()->canTakeCourse($courseId)) {
+                $canTakeCourse = true;
+                break;
             }
+        }
+
+        if (!$canTakeCourse) {
+            throw ReviewException::FORBIDDEN_CREATE_REVIEW();
         }
 
         return $review;
