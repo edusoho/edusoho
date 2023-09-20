@@ -60,13 +60,13 @@
           <img v-if="question.length > 0 && question[0].status === 'right' || itemdata.testResult.status === 'right'" :src="rigth" alt="" class="fill-status">
           <img v-if="question.length > 0 && question[0].status === 'wrong' || itemdata.testResult.status === 'wrong' || itemdata.testResult.status === 'none' || itemdata.testResult.status === 'noAnswer'" :src="wrong" alt="" class="fill-status">
           <span v-if="isunanswered()" class="your-answer is-wrong-answer"> {{ $t('courseLearning.unanswered') }}</span>
-          <span v-for="(i, index) in answer" :key="index" :class="[question.length > 0 && question[0].status === 'right' ? 'is-right-answer' : 'is-wrong-answer']"> {{ answer.length - 1 === index ? i === '' ? $t('courseLearning.unanswered') : i : ((i === '' ? $t('courseLearning.unanswered') : i)+ ',') }}</span>
+          <span v-for="(i, index) in answer" :key="index" :class="[question.length > 0 && question[0].status === 'right' ? 'is-right-answer' : 'is-wrong-answer']"> {{ answer.length - 1 === index ? i === '' ? $t('courseLearning.unanswered') : i : ((i === '' ? $t('courseLearning.unanswered') : i)+ ';') }}</span>
         </div>
         <div class="your-answer mt-16">
           正确答案：
         </div>
         <div class="mb-16">
-          <span v-for="(i, index) in itemdata.answer" :key="index" class="is-right-answer"> {{  itemdata.answer.length - 1 === index ? i : i + ',' }}</span>
+          <span v-for="(i, index) in itemdata.answer" :key="index" class="is-right-answer"> {{  itemdata.answer.length - 1 === index ? i : i + ';' }}</span>
         </div>
         <div v-if="mode === 'exam'" class="analysis-color mb-8">
           {{ $t('courseLearning.score') }}：<div>{{ itemdata.testResult ? itemdata.testResult.score : 0.0 }}</div>

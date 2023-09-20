@@ -569,6 +569,8 @@ export default {
     jobName: 'Job name',
     jobDescription: 'Job description',
     viewResult2: 'View result',
+    returnList: 'Return list',
+    doYouToResults: 'The current exercise is complete. Do you want to see the results?',
     startAnsweringQuestions: 'Start answering questions',
     chooseQuestionAnsweringMode:'Choose a question answering mode',
     answerMode:'Answer mode',

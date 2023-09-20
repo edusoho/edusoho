@@ -314,6 +314,11 @@ export default {
         return;
       }
       this.$refs.swipe.swipeTo(index - 1);
+    },
+    reviewedCount() {
+      if (this.reviewedCount === this.info.length) {
+        this.$emit('reviewedCount')
+      }
     }
   },
   created() {
@@ -452,7 +457,7 @@ export default {
       }).catch(err=> {
         Toast.fail(err.message)
       })
-    }, 1000),
+    }, 0),
     // 数值转换英文
     numberFormatterCode(response, type) {
       if (Array.isArray(response)) {
