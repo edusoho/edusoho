@@ -434,6 +434,7 @@ export default {
       display: block;
       margin-bottom: vw(8);
       border-radius: vw(8);
+      height: vw(175);
     }
   }
 </style>
