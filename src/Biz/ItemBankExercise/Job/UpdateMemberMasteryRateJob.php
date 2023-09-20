@@ -41,10 +41,11 @@ class UpdateMemberMasteryRateJob extends AbstractJob
             $items = array_merge($items, $this->getAssessmentItems());
         }
 
-        $items = array_unique($items);
-
-        $this->itemIds = array_column($items, 'id');
-        $this->questionNum = array_sum(array_column($items, 'question_num'));
+        $this->itemIds = array_unique(array_column($items, 'id'));
+        $items = ArrayToolkit::group($items, 'id');
+        foreach ($this->itemIds as $itemId) {
+            $this->questionNum += array_sum(array_column($items[$itemId], 'question_num'));
+        }
     }
 
     protected function updateData()
