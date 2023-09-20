@@ -14,64 +14,36 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
     || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
     || !(in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']) || 'cli-server' === php_sapi_name())
 ) {
-    if (!file_exists(__DIR__.'/../app/data/dev.lock')) {
+    if (!file_exists(__DIR__ . '/../app/data/dev.lock')) {
         header('HTTP/1.0 403 Forbidden');
-        exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
+        exit('You are not allowed to access this file. Check ' . basename(__FILE__) . ' for more information.');
     }
 }
 
-if (isOldApiCall()) {
+require __DIR__ . '/../app/security.php';
+
+define("APP_ENVIRONMENT", "dev");
+
+//设置cookie的安全模式
+if (isHttpsRequest()) {
+    setCookieSecure();
+}
+
+if (isOldApiCall(APP_ENVIRONMENT)) {
     define('API_ENV', 'dev');
-    include __DIR__.'/../api/index.php';
+    include __DIR__ . '/../api/index.php';
     exit();
 }
 
 fix_gpc_magic();
 
-$loader = require_once __DIR__.'/../app/autoload.php';
+$loader = require_once __DIR__ . '/../app/autoload.php';
 Debug::enable();
 
-$kernel = new AppKernel('dev', true);
+$kernel = new AppKernel(APP_ENVIRONMENT, true);
 //$kernel->loadClassCache();
 $request = Request::createFromGlobals();
 $kernel->setRequest($request);
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);
-
-function fix_gpc_magic()
-{
-    if (get_magic_quotes_gpc()) {
-        array_walk($_GET, '_fix_gpc_magic');
-        array_walk($_POST, '_fix_gpc_magic');
-        array_walk($_COOKIE, '_fix_gpc_magic');
-        array_walk($_REQUEST, '_fix_gpc_magic');
-        array_walk($_FILES, '_fix_gpc_magic_files');
-    }
-}
-
-function _fix_gpc_magic(&$item)
-{
-    if (is_array($item)) {
-        array_walk($item, '_fix_gpc_magic');
-    } else {
-        $item = stripslashes($item);
-    }
-}
-
-function _fix_gpc_magic_files(&$item, $key)
-{
-    if ('tmp_name' != $key) {
-        if (is_array($item)) {
-            array_walk($item, '_fix_gpc_magic_files');
-        } else {
-            $item = stripslashes($item);
-        }
-    }
-}
-
-function isOldApiCall()
-{
-    return (!(isset($_SERVER['HTTP_ACCEPT']) && 'application/vnd.edusoho.v2+json' == $_SERVER['HTTP_ACCEPT']))
-    && ((0 === strpos($_SERVER['REQUEST_URI'], '/api')) || (0 === strpos($_SERVER['REQUEST_URI'], '/app_dev.php/api')));
-}
