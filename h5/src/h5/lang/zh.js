@@ -556,6 +556,8 @@ export default {
     jobName: '作业名称',
     jobDescription: '作业说明',
     viewResult2: '查看结果',
+    returnList: '返回列表',
+    doYouToResults: '当前练习已完成，是否查看结果？',
     startAnsweringQuestions: '开始答题',
     chooseQuestionAnsweringMode: '选择答题模式',
     answerMode: '答题模式',

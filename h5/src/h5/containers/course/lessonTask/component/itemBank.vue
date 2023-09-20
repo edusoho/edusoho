@@ -314,6 +314,11 @@ export default {
         return;
       }
       this.$refs.swipe.swipeTo(index - 1);
+    },
+    reviewedCount() {
+      if (this.reviewedCount === this.info.length) {
+        this.$emit('reviewedCount')
+      }
     }
   },
   created() {

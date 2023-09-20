@@ -24,6 +24,7 @@
       :mode="mode"
       @getData="getData"
       @goResults="goResults"
+      @reviewedCount="reviewedCount"
     />
 
     <!-- 引导页 -->
@@ -80,6 +81,13 @@
         @click="endAnswer"
         >{{ $t('courseLearning.endAnswer') }}</van-button
       >
+      <van-button
+        v-if="exerciseMode === '1' && revieweNumLast"
+        class="end-answer__btn"
+        type="primary"
+        @click="goResults"
+        >{{ $t('courseLearning.viewResult2') }}</van-button
+      >
     </van-popup>
   </div>
 </template>
@@ -127,7 +135,8 @@ export default {
       exerciseMode: this.$route.query.exerciseMode,
       exerciseInfo: null,
       isLeave: false,
-      mode: 'exercise'
+      mode: 'exercise',
+      revieweNumLast: false
     };
   },
   computed: {
@@ -359,16 +368,19 @@ export default {
       if (index > 0) {
         message = this.$t('courseLearning.notSureSubmit', { number: index });
       }
-      // return new Promise((resolve,reject)=>{
+      const confirmButtonText = this.revieweNumLast ? this.$t('courseLearning.viewResult2'): this.$t('courseLearning.check')
+      const cancelButtonText = this.revieweNumLast ? this.$t('courseLearning.returnList') : this.$t('courseLearning.submitNow')
+
       Dialog.confirm({
-        title: this.$t('courseLearning.submit2'),
-        cancelButtonText: this.$t('courseLearning.submitNow'),
-        confirmButtonText: this.$t('courseLearning.check'),
-        message: message,
+        title: this.revieweNumLast ? '' : this.$t('courseLearning.submit2'),
+        cancelButtonText: cancelButtonText,
+        confirmButtonText: confirmButtonText,
+        message: this.revieweNumLast ? this.$t('courseLearning.doYouToResults') : message,
         className: 'backDialog'
       })
         .then(() => {
           document.getElementsByClassName('backDialog')[0].remove();
+          if(this.revieweNumLast) return this.goResults()
           // 显示答题卡
           this.cardShow = true;
           return false;
@@ -376,6 +388,7 @@ export default {
         .catch(() => {
           document.getElementsByClassName('backDialog')[0].remove();
           this.clearTime();
+          if(this.revieweNumLast) return this.toCourseList()
           // 提交练习
           if (this.exerciseMode === '1') {
             this.endCueentAnswer()
@@ -535,6 +548,12 @@ export default {
       .catch(() => {
       });
     },
+    toCourseList() {
+      this.isLeave = true;
+      this.$router.replace({
+        path: `/course/${this.$route.query.courseId}`
+      });
+    },
     // 结束答题
     endCueentAnswer() {
       Api.finishAnswer({
@@ -551,6 +570,9 @@ export default {
     goResults() {
       this.isLeave = true;
       this.showResult()
+    },
+    reviewedCount() {
+      this.revieweNumLast = true
     }
   },
 };
