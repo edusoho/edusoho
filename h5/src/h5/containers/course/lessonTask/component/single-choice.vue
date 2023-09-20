@@ -34,7 +34,7 @@
         :canLoadPlayer="isCurrent"
         :attachment="item"
         :key="item.id" />
-      <van-radio-group v-model="radio" class="answer-paper" :key="refreshKey" @change="choose">
+      <van-radio-group v-model="radio" :class="['answer-paper',{'convention': mode !== 'exercise'}]" :key="refreshKey" @change="choose">
         <van-radio
           v-for="(item, index) in itemdata.metas.choices"
           :key="index"
@@ -332,7 +332,8 @@ export default {
     margin-right: vw(40);
   }
 
-  .exercise-do .active {
+  .exercise-do .active,
+  .convention .active {
       background: #F6F9FF;
       border: 1px solid #428FFA;
       .icon-a-Frame34723 {

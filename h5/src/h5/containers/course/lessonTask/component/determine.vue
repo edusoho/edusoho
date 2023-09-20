@@ -35,7 +35,7 @@
         :canLoadPlayer="isCurrent"
         :attachment="item"
         :key="item.id" />
-      <van-radio-group v-model="radio" class="answer-paper" @change="choose">
+      <van-radio-group v-model="radio"  :class="['answer-paper',{'convention': mode !== 'exercise'}]" @change="choose">
         <van-radio
           :name="1"
           :disabled="!disabledData"
@@ -45,7 +45,7 @@
             { active: 1 === currentItem && disabledData } , 
             { 'van-checked__right' : itemdata.answer && itemdata.answer[0] === 1 ? itemdata.testResult.answer && itemdata.testResult.answer[0] === 1 ? true : true : false },
             {isRight: question.length > 0 &&  question[0].answer[0] === 'T'},
-            {isWrong: question.length > 0 &&  'F' !== question[0].response && question[0].response !== question[0].answer[0]}
+            {isWrong: question.length > 0 &&  'F' !== question[0].response && question[0].response[0] !== question[0].answer[0]}
           ]"
         >
           <i class="iconfont icon-a-Frame34723"></i>
@@ -353,7 +353,7 @@ export default {
     color: #F53F3F;
   }
   .exercise-do .active,
-  .exercise-analysis .active {
+  .convention .active {
       background: #F6F9FF;
       border: 1px solid #428FFA;
       .icon-a-Frame34723 {

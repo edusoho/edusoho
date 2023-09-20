@@ -365,13 +365,16 @@ export default {
         cancelButtonText: this.$t('courseLearning.submitNow'),
         confirmButtonText: this.$t('courseLearning.check'),
         message: message,
+        className: 'backDialog'
       })
         .then(() => {
+          document.getElementsByClassName('backDialog')[0].remove();
           // 显示答题卡
           this.cardShow = true;
           return false;
         })
         .catch(() => {
+          document.getElementsByClassName('backDialog')[0].remove();
           this.clearTime();
           // 提交练习
           if (this.exerciseMode === '1') {

@@ -36,7 +36,7 @@
         :key="item.id" />
       <van-checkbox-group
         v-model="result"
-        class="answer-paper"
+        :class="['answer-paper',{'convention': mode !== 'exercise'}]"
         @change="choose"
         :refreshKey="refreshKey"
       >
@@ -385,7 +385,8 @@ export default {
   .not-can-do {
     margin-right: vw(40);
   }
-  .exercise-do .active {
+  .exercise-do .active,
+  .convention .active {
       background: #F6F9FF;
       border: 1px solid #428FFA;
       .icon-a-Frame34723 {
