@@ -457,7 +457,7 @@ export default {
       }).catch(err=> {
         Toast.fail(err.message)
       })
-    }, 0),
+    }, 1000),
     // 数值转换英文
     numberFormatterCode(response, type) {
       if (Array.isArray(response)) {
