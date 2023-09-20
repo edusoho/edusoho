@@ -28,6 +28,9 @@ class ExerciseController extends BaseController
         }
 
         $latestAnswerRecord = $this->getCurrentAnswerRecordOrStartNew($activity, $request->get('assessmentId'), $this->getCurrentUser()->getId());
+        if (ExerciseMode::SUBMIT_SINGLE == $latestAnswerRecord['exercise_mode']) {
+            return $this->render('@activity/exercise/resources/views/show/not-support-submit-single-modal.html.twig', ['activity' => $activity]);
+        }
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
@@ -60,10 +63,6 @@ class ExerciseController extends BaseController
     {
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $userId);
         if ($latestAnswerRecord && AnswerRecordStatus::FINISHED != $latestAnswerRecord['status']) {
-            if (ExerciseMode::SUBMIT_SINGLE == $latestAnswerRecord['exercise_mode']) {
-                $this->createNewException(ExerciseException::EXERCISE_IS_DOING());
-            }
-
             return $latestAnswerRecord;
         }
         if (empty($assessmentId)) {

@@ -10,18 +10,14 @@
   {% else %}
     {% if latestAnswerRecord.status == 'reviewing' %}
       {{ render(controller('AppBundle:Exercise:showResult', {answerRecordId: latestAnswerRecord.id})) }}
-    {% elseif  latestAnswerRecord.status == 'finished'%}
+    {% elseif latestAnswerRecord.status == 'finished' %}
       {% if app.request.get('doAgain')|default(false) == 1 %}
-        {% if latestAnswerRecord.exercise_mode == '1' %}
-          {% include('@activity/exercise/resources/views/show/not-support-submit-single-modal.html.twig') %}
-        {% else %}
-          {% include('@activity/exercise/resources/views/show/do-exercise.html.twig') %}
-        {% endif %}
+        {% include('@activity/exercise/resources/views/show/do-exercise.html.twig') %}
       {% else %}
         {{ render(controller('AppBundle:Exercise:showResult', {answerRecordId: latestAnswerRecord.id})) }}
       {% endif %}
     {% else %}
-      {% if latestAnswerRecord.exercise_mode == '1' %}
+      {% if latestAnswerRecord.exercise_mode == '1' or app.request.get('doAgain')|default(false) == 1 %}
         {% include('@activity/exercise/resources/views/show/not-support-submit-single-modal.html.twig') %}
       {% else %}
         {% include('@activity/exercise/resources/views/show/do-exercise.html.twig') %}

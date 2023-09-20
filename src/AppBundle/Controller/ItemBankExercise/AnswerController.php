@@ -67,7 +67,7 @@ class AnswerController extends BaseController
         $latestAnswerRecord = $this->getItemBankChapterExerciseRecordService()->getLatestRecord($moduleId, $categoryId, $user['id']);
         if ($latestAnswerRecord) {
             $answerRecord = $this->getAnswerRecordService()->get($latestAnswerRecord['answerRecordId']);
-            if (ExerciseMode::SUBMIT_SINGLE == $answerRecord['exercise_mode']) {
+            if (ExerciseMode::SUBMIT_SINGLE == $answerRecord['exercise_mode'] && AnswerRecordStatus::DOING == $answerRecord['status']) {
                 return $this->render('item-bank-exercise/answer/not-support-submit-single.html.twig', ['exerciseId' => $exerciseId]);
             }
         }
