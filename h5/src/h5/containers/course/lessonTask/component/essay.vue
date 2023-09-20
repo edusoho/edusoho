@@ -68,13 +68,13 @@
                 :src="wrong" 
                 alt="" 
                 class="fill-status">
-              <span class="is-right-answer" v-if="(exerciseMode == '' &&  question.length > 0 && question[0].status === 'right') || (itemdata.testResult.status === 'right' && itemdata.testResult.status !== 'none')" v-html="answer[0]"></span>
-              <span class="is-wrong-answer" v-else-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'none') || (itemdata.testResult.status === 'partRight')" v-html="answer[0]"></span>
+              <span class="is-right-answer" v-if="(exerciseMode == '' &&  question.length > 0 && question[0].status === 'right') || (itemdata.testResult.status === 'right' && itemdata.testResult.status !== 'none')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
+              <span class="is-wrong-answer" v-else-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'none') || (itemdata.testResult.status === 'partRight')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
               <span v-if="answer[0] === '' || itemdata.testResult.answer && itemdata.testResult.answer.length === 0" class="your-answer is-wrong-answer"> {{ $t('courseLearning.unanswered') }}</span>
             </div>
             <div v-else>
               <span v-if="answer[0] === '' || itemdata.testResult.answer && itemdata.testResult.answer.length === 0" class="your-answer"> {{ $t('courseLearning.unanswered') }}</span>
-              <span class="text-14 essay-answer" style="color: #37393D;" v-html="answer[0]" ></span>
+              <span class="text-14 essay-answer" style="color: #37393D;" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
             </div>
           </div>
           <div class="your-answer mt-16">
@@ -154,7 +154,6 @@ export default {
       handler(data) {
         this.answer[0] = data + this.fileStr
       },
-      deep: true,
     },
     imgs: {
       handler(data) {
@@ -264,7 +263,7 @@ export default {
     },
   },
   mounted() {
-    this.answerText = this.answer[0]
+    // this.answerText = this.answer[0]
     this.isShowDownIcon = document.getElementsByClassName('material-icon')[this.number]?.childNodes[0].offsetWidth > 234
   },
   methods: {
@@ -336,10 +335,10 @@ export default {
           // on confirm
         })
         .catch(() => {
-          this.$emit('submitSingleAnswer', this.answer[0], this.itemdata);
+          this.$emit('submitSingleAnswer', this.answer, this.itemdata);
         });
       } else {
-        this.$emit('submitSingleAnswer', this.answer[0], this.itemdata);
+        this.$emit('submitSingleAnswer', this.answer, this.itemdata);
       }
 
     },

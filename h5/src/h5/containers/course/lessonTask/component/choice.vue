@@ -193,10 +193,6 @@ export default {
       type: String,
       default: '',
     },
-    myAnswer: {
-      type: Array,
-      default: () => []
-    },
     mode: {
       type: String,
       default: ''
