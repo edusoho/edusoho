@@ -79,7 +79,7 @@ import Choice from './components/Choice.vue';
 import Judge from './components/Judge.vue';
 import Fill from './components/Fill.vue';
 import Empty from 'app/vue/views/components/Empty.vue';
-
+import { message } from 'ant-design-vue';
 export default {
   name: 'WrongQuestionDetail',
 
@@ -196,6 +196,8 @@ export default {
     },
 
     goToWrongExercises() {
+      if(this.itemNum == 0 && this.modeValue === 'B') return message.warning('答题数不能为0');
+
       this.visible = false;
       // 错题练习
       if (this.modeValue === 'B') {
