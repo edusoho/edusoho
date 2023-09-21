@@ -80,10 +80,9 @@ class ExerciseResult extends BaseResource
         $testpaperWrapper = new TestpaperWrapper();
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
         $scene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
-        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
-        $result = $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $scene, $answerReport);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
 
-        return $result;
+        return $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $scene, $answerReport);
     }
 
     private function filterItem($items)

@@ -104,7 +104,7 @@ class TestpaperAction extends AbstractResource
             $answerRecord = $this->getAnswerService()->continueAnswer($answerRecord['id']);
         }
 
-        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
         $questionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecord['id']);
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
@@ -167,7 +167,7 @@ class TestpaperAction extends AbstractResource
 
         $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
-        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
 
         if ('1' == $scene['do_times'] && $answerRecord && AnswerRecordStatus::FINISHED == $answerRecord['status']) {
             throw TestpaperException::FORBIDDEN_RESIT();

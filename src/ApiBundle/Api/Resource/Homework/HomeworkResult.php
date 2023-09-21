@@ -74,7 +74,7 @@ class HomeworkResult extends AbstractResource
         $testpaperWrapper = new TestpaperWrapper();
         $scene = $this->getAnswerSceneService()->get($homeworkRecord['answer_scene_id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($homeworkRecord['id']);
-        $answerReport = $this->getAnswerReportService()->get($homeworkRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($homeworkRecord['answer_report_id']);
         $homeworkResult = $testpaperWrapper->wrapTestpaperResult($homeworkRecord, $homework, $scene, $answerReport);
         $homeworkResult['items'] = array_values($testpaperWrapper->wrapTestpaperItems($homework, $questionReports));
         $homeworkResult['courseId'] = $course['id'];
@@ -106,7 +106,7 @@ class HomeworkResult extends AbstractResource
         }
 
         $testpaperWrapper = new TestpaperWrapper();
-        $answerReport = $this->getAnswerReportService()->get($homeworkRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($homeworkRecord['answer_report_id']);
 
         return $testpaperWrapper->wrapTestpaperResult($homeworkRecord, $assessment, $scene, $answerReport);
     }
@@ -139,7 +139,7 @@ class HomeworkResult extends AbstractResource
 
         $testpaperWrapper = new TestpaperWrapper();
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($homeworkRecord['id']);
-        $answerReport = $this->getAnswerReportService()->get($homeworkRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($homeworkRecord['answer_report_id']);
         $homeworkResult = $testpaperWrapper->wrapTestpaperResult($homeworkRecord, $homework, $scene, $answerReport);
         $homeworkResult['items'] = array_values($testpaperWrapper->wrapTestpaperItems($homework, $questionReports));
         $homeworkResult['items'] = $this->fillItems($homeworkResult['items'], $questionReports);

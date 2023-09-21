@@ -53,7 +53,7 @@ class TestpaperResult extends AbstractResource
             throw TestpaperException::FORBIDDEN_ACCESS_TESTPAPER();
         }
 
-        $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($testpaperRecord['answer_report_id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($testpaperRecord['id']);
         $testpaperWrapper = new TestpaperWrapper();
         $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment, $questionReports), 'type', 'id');
@@ -89,7 +89,7 @@ class TestpaperResult extends AbstractResource
             $resultShow = false;
         }
 
-        $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($testpaperRecord['answer_report_id']);
         $scene = $this->getAnswerSceneService()->get($testpaperRecord['answer_scene_id']);
 
         if ('submitted' === $answerShowMode) {

@@ -63,7 +63,7 @@ class TestpaperController extends BaseController
         }
 
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
-        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
 
