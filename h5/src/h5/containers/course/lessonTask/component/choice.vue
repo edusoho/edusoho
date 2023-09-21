@@ -253,10 +253,7 @@ export default {
     filterOrders: function(answer = [], mode = 'do') {
       // standard表示标砖答案过滤
       const arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-      let formateAnswer = null;
-      formateAnswer = answer.map(element => {
-        return arr[element];
-      });
+      const formateAnswer = answer.map(element => arr[element]);
       if (mode == 'standard') {
         return formateAnswer.length > 0 ? formateAnswer.join('') : '';
       }
