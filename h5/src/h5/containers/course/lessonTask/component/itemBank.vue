@@ -455,16 +455,17 @@ export default {
       }).then(res=> {
         const idx = this.current === 0 ? this.current : this.current - 1
         this.$refs['submit'+idx][0].refreshChoice(res)
+        this.reviewedCount = res.reviewedCount
+        this.status = res.status
+        this.myAnswer = res.response
+
+        this.touchable = true
         if (res.status === 'right') {
           this.next()
           this.iscando[idx] = false
         } else {
           this.iscando[idx] = false
         }
-        this.reviewedCount = res.reviewedCount
-        this.status = res.status
-        this.myAnswer = res.response
-        this.touchable = true
       }).catch(err=> {
         this.touchable = true
         Toast.fail(err.message)

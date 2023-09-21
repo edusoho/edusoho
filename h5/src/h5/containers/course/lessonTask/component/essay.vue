@@ -138,14 +138,16 @@
 <script>
 import Api from '@/api';
 import attachementPreview from './attachement-preview.vue';
-import { ImagePreview, Dialog, Toast } from 'vant'
-import isShowFooterShardow from '../../../../mixins/lessonTask/footerShardow';
+import { Dialog, Toast } from 'vant'
+import isShowFooterShardow from '@/mixins/lessonTask/footerShardow';
+import refreshChoice from '@/mixins/lessonTask/swipeRefResh.js';
+import handleClickImage from '@/mixins/lessonTask/handleClickImage.js';
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
 export default {
   name: 'EssayType',
-  mixins: [isShowFooterShardow],
+  mixins: [isShowFooterShardow, refreshChoice, handleClickImage],
   components: {
     attachementPreview
   },
@@ -263,7 +265,6 @@ export default {
     },
   },
   mounted() {
-    // this.answerText = this.answer[0]
     this.isShowDownIcon = document.getElementsByClassName('material-icon')[this.number]?.childNodes[0].offsetWidth > 234
   },
   methods: {
@@ -275,29 +276,6 @@ export default {
     },
     getAttachementMaterialType(type) {
       return this.itemdata.parentTitle.attachments.filter(item => item.module === type) || []
-    },
-    refreshChoice(res) {
-      if (res) {
-        this.$nextTick(() => {
-          this.question[0] = res
-          this.refreshKey = !this.refreshKey
-        })
-        return
-        
-      }
-      const obj = this.exerciseInfo.submittedQuestions
-      this.$nextTick(() => {
-        this.question = obj.filter(item => item.questionId + '' === this.itemdata.id)
-        this.refreshKey = !this.refreshKey
-      })
-    },
-
-    handleClickImage (imagesUrl) {
-      if (imagesUrl === undefined) return;
-      const images = [imagesUrl]
-      ImagePreview({
-        images
-      })
     },
     afterRead(file) {
       const formData = new FormData();

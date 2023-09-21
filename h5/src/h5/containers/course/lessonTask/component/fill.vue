@@ -121,8 +121,10 @@
 
 <script>
 import attachementPreview from './attachement-preview.vue';
-import isShowFooterShardow from '../../../../mixins/lessonTask/footerShardow';
-import { ImagePreview, Dialog } from 'vant'
+import isShowFooterShardow from '@/mixins/lessonTask/footerShardow';
+import refreshChoice from '@/mixins/lessonTask/swipeRefResh.js';
+import handleClickImage from '@/mixins/lessonTask/handleClickImage.js';
+import { Dialog } from 'vant'
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
@@ -131,7 +133,7 @@ export default {
   components: {
     attachementPreview
   },
-  mixins: [isShowFooterShardow],
+  mixins: [isShowFooterShardow, refreshChoice, handleClickImage],
   props: {
     filldata: {
       type: Object,
@@ -245,23 +247,6 @@ export default {
     getAttachementMaterialType(type) {
       return this.itemdata.parentTitle.attachments.filter(item => item.module === type) || []
     },
-    refreshChoice(res) {
-      if (res) {
-        this.$nextTick(() => {
-          this.question[0] = res
-          this.refreshKey = !this.refreshKey
-        })
-        return
-        
-      }
-      const obj = this.exerciseInfo.submittedQuestions
-      this.$nextTick(() => {
-        this.question = obj.filter(item => item.questionId + '' === this.itemdata.id)
-        // console.log(this.question);
-        this.refreshKey = !this.refreshKey
-      })
-    },
-    
     isunanswered() {
       if (this.answer) {
         return this.answer.every(item => {
@@ -274,13 +259,6 @@ export default {
           item === ''
         })
       }
-    },
-    handleClickImage (imagesUrl) {
-      if (imagesUrl === undefined) return;
-      const images = [imagesUrl]
-      ImagePreview({
-        images
-      })
     },
     changeUpIcon() {
       this.isShowUpIcon = true

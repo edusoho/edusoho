@@ -137,16 +137,17 @@
 </template>
 
 <script>
-import checkAnswer from '../../../../mixins/lessonTask/itemBank';
-import isShowFooterShardow from '../../../../mixins/lessonTask/footerShardow';
+import refreshChoice from '@/mixins/lessonTask/swipeRefResh.js';
+import checkAnswer from '@/mixins/lessonTask/itemBank';
+import isShowFooterShardow from '@/mixins/lessonTask/footerShardow';
 import attachementPreview from './attachement-preview.vue';
-import { ImagePreview } from 'vant'
+import handleClickImage from '@/mixins/lessonTask/handleClickImage.js';
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
 export default {
   name: 'DetermineType',
-  mixins: [checkAnswer, isShowFooterShardow],
+  mixins: [checkAnswer, isShowFooterShardow, refreshChoice, handleClickImage],
   components: {
     attachementPreview
   },
@@ -246,53 +247,6 @@ export default {
     this.isShowDownIcon = document.getElementsByClassName('material-icon')[this.number]?.childNodes[0].offsetWidth > 234
   },
   methods: {
-    filterOrders: function(answer = [], mode = 'do') {
-      // standard表示标砖答案过滤
-      if (this.subject == 'fill') {
-        if (mode == 'standard') {
-          return answer.length > 0 ? answer.toString() : '无';
-        } else {
-          return answer.length > 0 ? answer.toString() : this.$t('courseLearning.unanswered');
-        }
-      } else {
-        let arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-        if (this.subject == 'determine') {
-          arr = ['错', '对'];
-        }
-        let formateAnswer = null;
-        formateAnswer = answer.map(element => {
-          return arr[element];
-        });
-        if (mode == 'standard') {
-          return formateAnswer.length > 0 ? formateAnswer.join(' ') : '无';
-        }
-        return formateAnswer.length > 0 ? formateAnswer.join(' ') : this.$t('courseLearning.unanswered');
-      }
-    },
-    
-    handleClickImage (imagesUrl) {
-      if (imagesUrl === undefined) return;
-      event.stopPropagation();//  阻止冒泡
-      const images = [imagesUrl]
-      ImagePreview({
-        images
-      })
-    },
-    refreshChoice(res) {
-      if (res) {
-        this.$nextTick(() => {
-          this.question[0] = res
-          this.refreshKey = !this.refreshKey
-        })
-        return
-        
-      }
-      const obj = this.exerciseInfo.submittedQuestions
-      this.$nextTick(() => {
-        this.question = obj.filter(item => item.questionId+'' === this.itemdata.id)
-        this.refreshKey = !this.refreshKey
-      })
-    },
     // 向父级提交数据
     choose(name) {
       this.currentItem = name
