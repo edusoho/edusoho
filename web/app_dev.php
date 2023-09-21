@@ -14,30 +14,25 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
     || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
     || !(in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']) || 'cli-server' === php_sapi_name())
 ) {
-    if (!file_exists(__DIR__ . '/../app/data/dev.lock')) {
+    if (!file_exists(__DIR__.'/../app/data/dev.lock')) {
         header('HTTP/1.0 403 Forbidden');
-        exit('You are not allowed to access this file. Check ' . basename(__FILE__) . ' for more information.');
+        exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
     }
 }
 
-require __DIR__ . '/../app/security.php';
+require __DIR__.'/../app/security.php';
 
-define("APP_ENVIRONMENT", "dev");
-
-//设置cookie的安全模式
-if (isHttpsRequest()) {
-    setCookieSecure();
-}
+define('APP_ENVIRONMENT', 'dev');
 
 if (isOldApiCall(APP_ENVIRONMENT)) {
     define('API_ENV', 'dev');
-    include __DIR__ . '/../api/index.php';
+    include __DIR__.'/../api/index.php';
     exit();
 }
 
 fix_gpc_magic();
 
-$loader = require_once __DIR__ . '/../app/autoload.php';
+$loader = require_once __DIR__.'/../app/autoload.php';
 Debug::enable();
 
 $kernel = new AppKernel(APP_ENVIRONMENT, true);

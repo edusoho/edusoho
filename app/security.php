@@ -6,29 +6,7 @@
 function isOldApiCall(string $environment)
 {
     return (!(isset($_SERVER['HTTP_ACCEPT']) && 'application/vnd.edusoho.v2+json' == $_SERVER['HTTP_ACCEPT']))
-        && ((0 === strpos($_SERVER['REQUEST_URI'], '/api')) || (0 === strpos($_SERVER['REQUEST_URI'], $environment == 'prod' ? '/app.php/api' : '/app_dev.php/api')));
-}
-
-/**
- * 设置cookie的安全模式 对于HTTPS的请求可以获取到cookie的信息
- */
-function setCookieSecure()
-{
-    if (!function_exists('ini_set')) {
-        return;
-    }
-
-    ini_set("session.cookie_secure", true);
-}
-
-
-/**
- * 检测请求是否为https请求 注意nginx配置环境
- */
-function isHttpsRequest()
-{
-    return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ||
-        (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+        && ((0 === strpos($_SERVER['REQUEST_URI'], '/api')) || (0 === strpos($_SERVER['REQUEST_URI'], 'prod' == $environment ? '/app.php/api' : '/app_dev.php/api')));
 }
 
 function fix_gpc_magic()

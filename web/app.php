@@ -26,11 +26,6 @@ require __DIR__.'/../app/security.php';
 
 define('APP_ENVIRONMENT', 'prod');
 
-//设置cookie的安全模式
-if (isHttpsRequest()) {
-    setCookieSecure();
-}
-
 if (isOldApiCall(APP_ENVIRONMENT)) {
     define('API_ENV', 'prod');
     include __DIR__.'/../api/index.php';
