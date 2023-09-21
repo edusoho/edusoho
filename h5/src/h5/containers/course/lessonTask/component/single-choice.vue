@@ -113,11 +113,11 @@
 </template>
 
 <script>
-import checkAnswer from '../../../../mixins/lessonTask/itemBank';
-import isShowFooterShardow from '../../../../mixins/lessonTask/footerShardow';
-
+import checkAnswer from '@/mixins/lessonTask/itemBank';
+import isShowFooterShardow from '@/mixins/lessonTask/footerShardow';
+import refreshChoice from '@/mixins/lessonTask/swipeRefResh.js';
+import handleClickImage from '@/mixins/lessonTask/handleClickImage.js';
 import attachementPreview from './attachement-preview.vue';
-import { ImagePreview } from 'vant'
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
@@ -133,7 +133,7 @@ export default {
       return arr[index];
     },
   },
-  mixins: [checkAnswer,isShowFooterShardow],
+  mixins: [checkAnswer, isShowFooterShardow, refreshChoice, handleClickImage],
   components: {
     attachementPreview
   },
@@ -241,29 +241,6 @@ export default {
     },
   },
   methods: {
-    refreshChoice(res) {
-      if (res) {
-        this.$nextTick(() => {
-          this.question[0] = res
-          this.refreshKey = !this.refreshKey
-        })
-
-        return
-      }
-      const obj = this.exerciseInfo.submittedQuestions
-      this.$nextTick(() => {
-        this.question = obj.filter(item => item.questionId + '' === this.itemdata.id)
-        this.refreshKey = !this.refreshKey
-      })
-    },
-    handleClickImage (imagesUrl) {
-      if (imagesUrl === undefined) return;
-      event.stopPropagation();//  阻止冒泡
-      const images = [imagesUrl]
-      ImagePreview({
-        images
-      })
-    },
     filterOrder(index) {
       const arr = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.', 'G.', 'H.', 'I.', 'J.'];
       return arr[index];

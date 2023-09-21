@@ -56,7 +56,7 @@
       position="bottom"
       closeable
       round
-      :safe-area-inset-bottom="true"
+      safe-area-inset-bottom
       :style="{ height: '44%' }"
       class="choose-mode-popup"
     >
