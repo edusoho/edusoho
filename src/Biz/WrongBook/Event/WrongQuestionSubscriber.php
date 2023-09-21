@@ -19,6 +19,8 @@ use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Codeages\Biz\ItemBank\Item\Type\EssayItem;
+use Codeages\Biz\ItemBank\Item\Type\MaterialItem;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -100,7 +102,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $wrongQuestion = [];
         foreach ($items as $item) {
-            if ('material' !== $item['type']) {
+            if (!in_array($item['type'], [MaterialItem::TYPE, EssayItem::TYPE])) {
                 $wrongQuestion[] = $wrongAnswerQuestionReports[$item['id']];
             }
         }
@@ -127,7 +129,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         $correctItems = $this->getItemService()->findItemsByIds(ArrayToolkit::column($correctAnswerQuestionReports, 'item_id'));
         $correctQuestions = [];
         foreach ($correctItems as $item) {
-            if ('material' !== $item['type']) {
+            if (!in_array($item['type'], [MaterialItem::TYPE, EssayItem::TYPE])) {
                 $correctQuestions[] = $correctAnswerQuestionReports[$item['id']];
             }
         }
@@ -152,7 +154,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $wrongQuestion = [];
         foreach ($items as $item) {
-            if ('material' !== $item['type']) {
+            if (!in_array($item['type'], [MaterialItem::TYPE, EssayItem::TYPE])) {
                 $wrongQuestion[] = $wrongAnswerQuestionReports[$item['id']];
             }
         }
