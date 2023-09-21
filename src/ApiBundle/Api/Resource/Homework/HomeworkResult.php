@@ -32,7 +32,7 @@ class HomeworkResult extends AbstractResource
         $targetType = $request->request->get('targetType');
         $targetId = $request->request->get('targetId');
 
-        $homework = $this->getAssessmentService()->showAssessment($homeworkId);
+        $homework = $this->getAssessmentService()->getAssessment($homeworkId);
         if (empty($homework) || '0' != $homework['displayable']) {
             throw HomeworkException::NOTFOUND_HOMEWORK();
         }
@@ -68,8 +68,8 @@ class HomeworkResult extends AbstractResource
             throw HomeworkException::REVIEWING_HOMEWORK();
         } else {
             $homeworkRecord = $this->getAnswerService()->continueAnswer($homeworkRecord['id']);
-            $homework = $homeworkRecord['assessment_id'] == $homework['id'] ? $homework : $this->getAssessmentService()->showAssessment($homeworkRecord['assessment_id']);
         }
+        $homework = $this->getAssessmentService()->showAssessment($homeworkRecord['assessment_id']);
 
         $testpaperWrapper = new TestpaperWrapper();
         $scene = $this->getAnswerSceneService()->get($homeworkRecord['answer_scene_id']);

@@ -6,6 +6,7 @@ use Biz\Activity\Constant\ActivityMediaType;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
@@ -24,8 +25,7 @@ class HomeworkResult extends BaseResource
         $answers['usedTime'] = 0;
         $user = $this->getCurrentUser();
 
-        $assessment = $this->getAssessmentService()->showAssessment($homeworkId);
-        $homeworkActivity = $this->getHomeworkActivityService()->getByAssessmentId($assessment['id']);
+        $homeworkActivity = $this->getHomeworkActivityService()->getByAssessmentId($homeworkId);
         $activity = $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], ActivityMediaType::HOMEWORK);
         if (empty($activity)) {
             return $this->error('404', '该作业任务不存在!');
@@ -37,9 +37,10 @@ class HomeworkResult extends BaseResource
         }
 
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($homeworkActivity['answerSceneId'], $user['id']);
-        if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
-            $answerRecord = $this->getAnswerService()->startAnswer($homeworkActivity['answerSceneId'], $assessment['id'], $user['id']);
+        if (empty($answerRecord) || AnswerRecordStatus::FINISHED == $answerRecord['status']) {
+            $answerRecord = $this->getAnswerService()->startAnswer($homeworkActivity['answerSceneId'], $homeworkId, $user['id']);
         }
+        $assessment = $this->getAssessmentService()->showAssessment($homeworkId);
 
         try {
             $wrapper = new AssessmentResponseWrapper();
@@ -92,7 +93,7 @@ class HomeworkResult extends BaseResource
 
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($homeworkActivity['answerSceneId'], $user['id']);
 
-        if ('doing' === $answerRecord['status'] && ($answerRecord['user_id'] != $user['id'])) {
+        if (AnswerRecordStatus::DOING === $answerRecord['status'] && ($answerRecord['user_id'] != $user['id'])) {
             return $this->error('500', '无权限访问!');
         }
 
