@@ -26,7 +26,7 @@
         <td>
           {% if answerRecord.status == 'finished' %}
             {% if activity.mediaType == 'testpaper' %}
-              {{ answerReports[answerRecord.answer_report_id].score }}/{{ assessment.total_score }}
+              {{ answerReports[answerRecord.answer_report_id].score }}/{{ answerReports[answerRecord.answer_report_id].total_score }}
             {% else %}
               {{ dict_text('passedStatus', answerReports[answerRecord.answer_report_id].grade) }}
             {% endif %}

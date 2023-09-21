@@ -7,6 +7,7 @@ use Codeages\Biz\ItemBank\Answer\Dao\AnswerRecordDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerReportDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerSceneDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerSceneQuestionReportDao;
+use Codeages\Biz\ItemBank\Assessment\Constant\AssessmentStatus;
 use Codeages\Biz\ItemBank\Assessment\Dao\AssessmentSnapshotDao;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
@@ -419,6 +420,9 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
     {
         $assessmentSnapshots = [];
         foreach ($assessments as $assessment) {
+            if (AssessmentStatus::DRAFT == $assessment['status']) {
+                continue;
+            }
             $assessmentSnapshot = ['origin_assessment_id' => $assessment['id']];
             unset($assessment['id']);
             $assessment['displayable'] = 0;
@@ -426,13 +430,18 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             $assessmentSnapshot['snapshot_assessment_id'] = $snapshotAssessment['id'];
             $assessmentSnapshots[] = $assessmentSnapshot;
         }
-        $this->getAssessmentSnapshotDao()->batchCreate($assessmentSnapshots);
+        if ($assessmentSnapshots) {
+            $this->getAssessmentSnapshotDao()->batchCreate($assessmentSnapshots);
+        }
 
         return $assessmentSnapshots;
     }
 
     private function createSnapshotAssessmentSectionsAndItems($assessmentSnapshots)
     {
+        if (empty($assessmentSnapshots)) {
+            return;
+        }
         $originAssessmentIds = array_column($assessmentSnapshots, 'origin_assessment_id');
         $originAssessmentSections = $this->getSectionService()->findSectionsByAssessmentIds($originAssessmentIds);
         $assessmentSnapshots = array_column($assessmentSnapshots, null, 'origin_assessment_id');

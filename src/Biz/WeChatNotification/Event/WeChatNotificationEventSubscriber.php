@@ -95,7 +95,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     public function onAnswerFinished(Event $event)
     {
         $answerReport = $event->getSubject();
-        $answerReport = $this->getAnswerReportService()->get($answerReport['id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerReport['id']);
         $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
         if (empty($activity)) {

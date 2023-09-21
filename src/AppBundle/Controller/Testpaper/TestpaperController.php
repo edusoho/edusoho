@@ -13,6 +13,7 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -36,7 +37,7 @@ class TestpaperController extends BaseController
 
         $user = $this->getCurrentUser();
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($testpaperActivity['answerSceneId'], $user['id']);
-        if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
+        if (empty($latestAnswerRecord) || AnswerRecordStatus::FINISHED == $latestAnswerRecord['status']) {
             if (Testpaper::VALID_PERIOD_MODE_RANGE == $activity['ext']['validPeriodMode'] && $activity['endTime'] < time()) {
                 return $this->createMessageResponse('error', '当前考试已结束，请重新选择考试', '', 3, $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]));
             }
@@ -62,7 +63,7 @@ class TestpaperController extends BaseController
         }
 
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
-        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
 
