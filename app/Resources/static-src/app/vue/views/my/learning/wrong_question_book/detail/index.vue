@@ -50,7 +50,7 @@
       <div>
         展示数量：
         <a-radio-group v-model:value="modeValue" name="radioGroup">
-          <a-radio class="font-normal" value="A">20题</a-radio>
+          <a-radio class="font-normal" value="A">{{ Math.min(wrongNumCount,20) }}题</a-radio>
           <a-radio class="font-normal" value="B">自定义</a-radio>
         </a-radio-group>
         <div v-show="modeValue === 'B'">
