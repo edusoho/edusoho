@@ -152,7 +152,7 @@ class EditorController extends BaseController
             $this->createNewException(CommonException::EXPIRED_UPLOAD_TOKEN());
         }
 
-        $name = date('Ymdhis').'_formula.jpg';
+        $name = FileToolkit::generateFilename('formula.jpg');
         $path = $this->get('service_container')->getParameter('topxia.upload.public_directory').'/tmp/'.$name;
 
         $imageData = CurlToolkit::request('POST', $url, [], ['contentType' => 'plain']);
@@ -162,6 +162,7 @@ class EditorController extends BaseController
         fclose($tp);
         $record = $this->getFileService()->uploadFile($token['group'], new File($path));
         $url = $this->get('web.twig.extension')->getFilePath($record['uri']);
+        $url = strstr($url, '?', true);
 
         return new Response($url);
     }
