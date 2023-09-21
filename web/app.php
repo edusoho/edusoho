@@ -22,7 +22,11 @@ if ((0 === strpos($_SERVER['REQUEST_URI'], '/admin/setting/developer')) || (0 ==
     exit('You are not allowed to access this link.');
 }
 
-if (isOldApiCall()) {
+require __DIR__.'/../app/security.php';
+
+define('APP_ENVIRONMENT', 'prod');
+
+if (isOldApiCall(APP_ENVIRONMENT)) {
     define('API_ENV', 'prod');
     include __DIR__.'/../api/index.php';
     exit();
@@ -35,47 +39,10 @@ fix_gpc_magic();
 $loader = require_once __DIR__.'/../app/autoload.php';
 require_once __DIR__.'/../app/bootstrap.php.cache';
 
-$kernel = new AppKernel('prod', false);
+$kernel = new AppKernel(APP_ENVIRONMENT, false);
 //$kernel->loadClassCache();
 $request = Request::createFromGlobals();
 $kernel->setRequest($request);
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);
-
-function fix_gpc_magic()
-{
-    if (get_magic_quotes_gpc()) {
-        array_walk($_GET, '_fix_gpc_magic');
-        array_walk($_POST, '_fix_gpc_magic');
-        array_walk($_COOKIE, '_fix_gpc_magic');
-        array_walk($_REQUEST, '_fix_gpc_magic');
-        array_walk($_FILES, '_fix_gpc_magic_files');
-    }
-}
-
-function _fix_gpc_magic(&$item)
-{
-    if (is_array($item)) {
-        array_walk($item, '_fix_gpc_magic');
-    } else {
-        $item = stripslashes($item);
-    }
-}
-
-function _fix_gpc_magic_files(&$item, $key)
-{
-    if ('tmp_name' != $key) {
-        if (is_array($item)) {
-            array_walk($item, '_fix_gpc_magic_files');
-        } else {
-            $item = stripslashes($item);
-        }
-    }
-}
-
-function isOldApiCall()
-{
-    return (!(isset($_SERVER['HTTP_ACCEPT']) && 'application/vnd.edusoho.v2+json' == $_SERVER['HTTP_ACCEPT']))
-        && ((0 === strpos($_SERVER['REQUEST_URI'], '/api')) || (0 === strpos($_SERVER['REQUEST_URI'], '/app.php/api')));
-}
