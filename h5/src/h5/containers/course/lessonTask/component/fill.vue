@@ -304,9 +304,11 @@ export default {
           // on confirm
         })
         .catch(() => {
+          this.$emit('changeTouch')
           this.$emit('submitSingleAnswer', this.answer, this.itemdata);
         });
       } else {
+        this.$emit('changeTouch')
         this.radioDisabled = true
         this.$emit('submitSingleAnswer', this.answer, this.itemdata);
       }
