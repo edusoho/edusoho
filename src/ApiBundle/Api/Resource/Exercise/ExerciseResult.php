@@ -74,7 +74,7 @@ class ExerciseResult extends AbstractResource
         }
 
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
-        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
         $items = $testpaperWrapper->wrapTestpaperItems($assessment, $questionReports);
         $exerciseResult = $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $answerScene, $answerReport);
         $exerciseResult['items'] = array_values($items);
@@ -105,7 +105,7 @@ class ExerciseResult extends AbstractResource
         $assessment = $this->getAssessmentService()->showAssessment($exerciseRecord['assessment_id']);
         $assessmentResponse = $wrapper->wrap($data, $assessment, $exerciseRecord);
         $answerRecord = $this->getAnswerService()->submitAnswer($assessmentResponse);
-        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
         $scene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $testpaperWrapper = new TestpaperWrapper();
 
@@ -141,7 +141,7 @@ class ExerciseResult extends AbstractResource
         $testpaperWrapper = new TestpaperWrapper();
         $assessment = $this->getAssessmentService()->showAssessment($exercise['id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($exerciseRecord['id']);
-        $answerReport = $this->getAnswerReportService()->get($exerciseRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($exerciseRecord['answer_report_id']);
         $exerciseResult = $testpaperWrapper->wrapTestpaperResult($exerciseRecord, $exercise, $scene, $answerReport);
         $exerciseResult['items'] = array_values($testpaperWrapper->wrapTestpaperItems($assessment, $questionReports));
         $exerciseResult['items'] = $this->fillItems($exerciseResult['items'], $questionReports);

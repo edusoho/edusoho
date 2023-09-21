@@ -251,7 +251,7 @@ class CourseTaskMedia extends AbstractResource
         if (empty($answerRecord)) {
             $activity['ext']['latestHomeworkResult'] = null;
         } else {
-            $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+            $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
             $activity['ext']['latestHomeworkResult'] = $testpaperWrapper->wrapTestpaperResult(
                 $answerRecord,
                 $assessment,
@@ -276,7 +276,7 @@ class CourseTaskMedia extends AbstractResource
             $activity['ext']['latestExerciseResult'] = null;
         } else {
             $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
-            $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+            $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
             $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
             $activity['ext']['latestExerciseResult'] = $testpaperWrapper->wrapTestpaperResult(
                 $answerRecord,

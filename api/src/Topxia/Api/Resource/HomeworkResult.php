@@ -99,7 +99,7 @@ class HomeworkResult extends BaseResource
 
         $testpaperWrapper = new TestpaperWrapper();
         $scene = $this->getAnswerSceneService()->get($homeworkActivity['answerSceneId']);
-        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
         $homeworkResult = $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $scene, $answerReport);
 
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);

@@ -124,7 +124,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         if ('testpaper' == $activity['mediaType'] && $testPaper = $this->getTestpaperActivityService()->getActivity($activity['mediaId'])) {
             $comment = '';
-            $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+            $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
             foreach ($testPaper['customComments'] as $customComment) {
                 if ($customComment['start'] <= $answerReport['score'] && $answerReport['score'] <= $customComment['end']) {
                     $comment = $customComment['comment'];
