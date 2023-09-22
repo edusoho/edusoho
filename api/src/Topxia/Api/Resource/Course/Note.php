@@ -21,7 +21,7 @@ class Note extends BaseResource
             return $this->error('500', "ID为{$noteId}的笔记不存在");
         }
 
-        if ($note['userId'] != $user['id']) {
+        if ($note['userId'] != $user['id'] && empty($note['status'])) {
             throw UserException::PERMISSION_DENIED();
         }
 
