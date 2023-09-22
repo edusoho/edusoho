@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -259,6 +260,19 @@ class BaseController extends Controller
     protected function setFlashMessage($level, $message)
     {
         $this->get('session')->getFlashBag()->add($level, $message);
+    }
+
+    protected function setFlashException(HttpExceptionInterface $exception)
+    {
+        $this->setFlashMessage(
+            'currentThrowedException',
+            [
+                'code' => $exception->getCode(),
+                'message' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'statusCode' => $exception->getStatusCode(),
+            ]
+        );
     }
 
     protected function agentInWhiteList($userAgent)

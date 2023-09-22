@@ -6,6 +6,8 @@ interface ChapterExerciseService
 {
     public function startAnswer($moduleId, $categroyId, $userId, $exerciseMode = 0);
 
+    public function getChapter($chapterId);
+
     public function findChaptersByIds($ids);
 
     public function getPublishChapterTree($questionBankId);

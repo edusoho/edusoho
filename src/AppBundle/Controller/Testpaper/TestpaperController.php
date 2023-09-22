@@ -45,6 +45,9 @@ class TestpaperController extends BaseController
             if (0 == $activity['ext']['remainderDoTimes'] && '1' == $activity['ext']['isLimitDoTimes']) {
                 return $this->createMessageResponse('error', '当前考试次数已用完，请重新选择考试', '', 3, $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]));
             }
+            if ($this->getAssessmentService()->isEmptyAssessment($testpaperActivity['mediaId'])) {
+                return $this->redirectToRoute('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]);
+            }
 
             $latestAnswerRecord = $this->getAnswerService()->startAnswer($testpaperActivity['answerSceneId'], $testpaperActivity['mediaId'], $user['id']);
         }

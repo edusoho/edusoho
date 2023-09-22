@@ -11,6 +11,7 @@ use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
@@ -33,7 +34,11 @@ class HomeworkController extends BaseController
 
         $user = $this->getCurrentUser();
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($homeworkActivity['answerSceneId'], $user['id']);
-        if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
+        if (empty($latestAnswerRecord) || AnswerRecordStatus::FINISHED == $latestAnswerRecord['status']) {
+            if ($this->getAssessmentService()->isEmptyAssessment($homeworkActivity['assessmentId'])) {
+                return $this->render('@activity/homework/resources/views/show/empty-assessment.html.twig');
+            }
+
             $latestAnswerRecord = $this->getAnswerService()->startAnswer($homeworkActivity['answerSceneId'], $homeworkActivity['assessmentId'], $user['id']);
         }
 
@@ -204,14 +209,6 @@ class HomeworkController extends BaseController
     protected function getUserService()
     {
         return $this->createService('User:UserService');
-    }
-
-    /**
-     * @return ServiceKernel
-     */
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 
     protected function getCourseMemberService()

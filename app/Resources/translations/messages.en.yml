@@ -9791,6 +9791,7 @@ exception.item_bank_exercise.module.switch.danger: At the time of publication of
 exception.item_bank_exercise.exercise.is_exists: The item bank exercise already exists. Please do not open it repeatedly
 exception.item_bank_exercise.exercise.not_arrive: The item bank exercise has not reached learning time，add failed
 exception.item_bank_exercise.parent_chapter_unpublish: 'Please publish the previous chapter first'
+exception.item_bank_exercise.answer_unpublish_chapter: The current chapter has been cancelled and cannot continue to answer ~
 exception.item_bank.assessment.not.open: The test paper is closed, please contact the teacher
 exception.item_bank.assessment.not.exist: Test paper does not exist
 exception.item_bank.assessment.is_empty: All questions have been removed from the paper. Please contact the teacher or administrator
@@ -11141,3 +11142,5 @@ sms.defence.request.log.is_illegal.no: no
 sms.defence.request.log.disable_type.ip: Multiple requests for the same IP address
 sms.defence.request.log.disable_type.coordinate: Multiple requests for the same coordinate
 sms.defence.request.log.disable_type.none: none
+
+course.start_answer.all_question_deleted: 'All questions have been deleted, please contact the teacher or administrator'

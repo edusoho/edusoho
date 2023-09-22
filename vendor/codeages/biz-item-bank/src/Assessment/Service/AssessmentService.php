@@ -51,4 +51,6 @@ interface AssessmentService
     public function modifyAssessmentsAndSectionsWithToDeleteSectionItems(array $toDeleteSectionItems);
 
     public function getAssessmentSnapshotBySnapshotAssessmentId($snapshotAssessmentId);
+
+    public function isEmptyAssessment($assessmentId);
 }

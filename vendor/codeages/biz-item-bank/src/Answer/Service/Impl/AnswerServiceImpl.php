@@ -35,8 +35,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             throw new AnswerSceneException('AnswerScene did not start.', ErrorCode::ANSWER_SCENE_NOTSTART);
         }
         $this->modifyAssessmentIfItemDeleted($assessmentId);
-        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
-        if (empty($assessment['item_count'])) {
+        if ($this->getAssessmentService()->isEmptyAssessment($assessmentId)) {
             throw new AnswerException('试卷全部题目已被删除，请联系教师或管理员', ErrorCode::ASSESSMENT_EMPTY);
         }
         $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
@@ -222,8 +221,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     protected function batchCreateAnswerQuestionReports($assessmentId, $answerReports)
     {
-        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
-        if (empty($assessment['item_count'])) {
+        if ($this->getAssessmentService()->isEmptyAssessment($assessmentId)) {
             return;
         }
         $sections = $this->getAssessmentSectionService()->findSectionDetailByAssessmentId($assessmentId);
