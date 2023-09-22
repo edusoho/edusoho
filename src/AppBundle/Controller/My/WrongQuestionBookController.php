@@ -80,7 +80,7 @@ class WrongQuestionBookController extends BaseController
             'showHeader' => 1,
             'restartUrl' => '',
             'showDoAgainBtn' => 0,
-            'submitReturnUrl' => $this->generateUrl('my_wrong_question_book_target_detail', [], UrlGeneratorInterface::ABSOLUTE_URL) . "#/target_type/{$pool['target_type']}/target_id/{$poolId}",
+            'submitReturnUrl' => $this->generateUrl('my_wrong_question_book_target_detail', [], UrlGeneratorInterface::ABSOLUTE_URL)."#/target_type/{$pool['target_type']}/target_id/{$poolId}",
         ]);
     }
 

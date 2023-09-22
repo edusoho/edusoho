@@ -101,6 +101,7 @@ class BaseController extends Controller
 
             return $conditions;
         }
+
         return $conditions;
     }
 
