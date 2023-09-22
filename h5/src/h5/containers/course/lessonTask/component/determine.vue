@@ -270,23 +270,7 @@ export default {
     },
     goResults() {
       this.$emit('goResults');
-    },
-    isWrong() {
-      if (!this.question.response) return true
-      // const rightanswer = itemdata.answer;
-      // if (itemdata.testResult && itemdata.testResult.answer) {
-      //   const answer = itemdata.testResult.answer || [];
-      //   if (rightanswer.includes(index)) {
-      //     return 'subject-option__order_right';
-      //   } else if (
-      //     (rightanswer.includes(index) && !answer.includes(index)) ||
-      //     (!rightanswer.includes(index) && answer.includes(index))
-      //   ) {
-      //     return 'van-checked__wrong';
-      //   }
-      // }
-      // return '';
-    },
+    }
   },
 };
 </script>
