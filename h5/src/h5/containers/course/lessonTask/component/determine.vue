@@ -81,7 +81,7 @@
               {{ question[0].answer[0] === 'T' ? '对' : '错' }}
             </span>
             <span class="options" v-if="!canDo" style="color:#00B42A;">
-              {{ itemdata.answer[0] === 1 ? '对'  : '错' }}
+              {{ itemdata.answer[0] === 1 ? '对' : '错' }}
             </span>
           </div>
           <div class="flex items-center" v-if="itemdata.testResult.answer && itemdata.testResult.answer.length > 0 || question.length > 0">
