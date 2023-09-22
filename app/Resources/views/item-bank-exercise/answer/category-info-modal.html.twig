@@ -13,40 +13,78 @@
         </div>
         <div class="content">
           <div class="text-14 js-show-exercise-create">
-              <div class="text-919399">
-                {{ 'course.plan_task.activity_manage.exercise.single_choice'|trans }}
-                <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.single_choice|default(0) }) }}</span>
+            {% if typesNum.single_choice > 0 %}
+              <div>
+                <div class="text-919399">
+                  {{ 'course.plan_task.activity_manage.exercise.single_choice'|trans }}
+                  <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.single_choice|default(0) }) }}</span>
+                </div>
+                {% if typesNum.choice > 0 or  typesNum.uncertain_choice > 0 or typesNum.determine > 0  or typesNum.fill > 0 or typesNum.essay > 0 or typesNum.material > 0 %}
+                  <div class="mv16 border-bottom-line"></div>
+                {% endif %}
               </div>
-              <div class="mv16 border-bottom-line"></div>
-              <div class="text-919399">
-                {{ 'course.plan_task.activity_manage.exercise.choice'|trans }}
-                <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.choice|default(0) }) }}</span>
+            {% endif %}
+            {% if typesNum.choice > 0 %}
+              <div>
+                <div class="text-919399">
+                  {{ 'course.plan_task.activity_manage.exercise.choice'|trans }}
+                  <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.choice|default(0) }) }}</span>
+                </div>
+                {% if typesNum.uncertain_choice > 0 or typesNum.determine > 0  or typesNum.fill > 0 or typesNum.essay > 0 or typesNum.material > 0 %}
+                  <div class="mv16 border-bottom-line"></div>
+                {% endif %}
               </div>
-              <div class="mv16 border-bottom-line"></div>
-              <div class="text-919399">
-                {{ 'course.plan_task.activity_manage.exercise.uncertain_choice'|trans }}
-                <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.uncertain_choice|default(0) }) }}</span>
+            {% endif %}
+            {% if typesNum.uncertain_choice > 0 %}
+              <div>
+                <div class="text-919399">
+                  {{ 'course.plan_task.activity_manage.exercise.uncertain_choice'|trans }}
+                  <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.uncertain_choice|default(0) }) }}</span>
+                </div>
+                {% if typesNum.determine > 0  or typesNum.fill > 0 or typesNum.essay > 0  or typesNum.material > 0 %}
+                  <div class="mv16 border-bottom-line"></div>
+                {% endif %}
               </div>
-              <div class="mv16 border-bottom-line"></div>
-              <div class="text-919399">
-                {{ 'course.plan_task.activity_manage.exercise.determine'|trans }}
-                <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.determine|default(0) }) }}</span>
+            {% endif %}
+            {% if typesNum.determine > 0 %}
+              <div>
+                <div class="text-919399">
+                  {{ 'course.plan_task.activity_manage.exercise.determine'|trans }}
+                  <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.determine|default(0) }) }}</span>
+                </div>
+                {% if typesNum.fill > 0 or typesNum.essay > 0 or typesNum.material > 0 %}
+                  <div class="mv16 border-bottom-line"></div>
+                {% endif %}
               </div>
-              <div class="mv16 border-bottom-line"></div>
-              <div class="text-919399">
-                {{ 'course.plan_task.activity_manage.exercise.fill'|trans }}
-                <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.fill|default(0) }) }}</span>
+            {% endif %}
+            {% if typesNum.fill > 0 %}
+              <div>
+                <div class="text-919399">
+                  {{ 'course.plan_task.activity_manage.exercise.fill'|trans }}
+                  <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.fill|default(0) }) }}</span>
+                </div>
+                {% if typesNum.essay > 0 or typesNum.material > 0 %}
+                  <div class="mv16 border-bottom-line"></div>
+                {% endif %}
               </div>
-              <div class="mv16 border-bottom-line"></div>
-              <div class="text-919399">
-                {{ 'course.plan_task.activity_manage.exercise.essay'|trans }}
-                <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.essay|default(0) }) }}</span>
+            {% endif %}
+            {% if typesNum.essay > 0 %}
+              <div>
+                <div class="text-919399">
+                  {{ 'course.plan_task.activity_manage.exercise.essay'|trans }}
+                  <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.essay|default(0) }) }}</span>
+                </div>
+                {% if typesNum.material > 0 %}
+                  <div class="mv16 border-bottom-line"></div>
+                {% endif %}
               </div>
-              <div class="mv16 border-bottom-line"></div>
+            {% endif %}
+            {% if typesNum.material > 0 %}
               <div class="text-919399">
                 {{ 'course.plan_task.activity_manage.exercise.material'|trans }}
                 <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.material|default(0) }) }}</span>
               </div>
+            {% endif %}
           </div>
           <div class="exercise-create-modal hidden js-exercise-create">
             <span class="relative">
