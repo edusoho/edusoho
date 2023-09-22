@@ -24,7 +24,7 @@ class CourseNote extends AbstractResource
         if (empty($note)) {
             throw CourseNoteException::NOTFOUND_NOTE();
         }
-        if ($note['userId'] != $userId) {
+        if ($note['userId'] != $userId && empty($note['status'])) {
             throw UserException::PERMISSION_DENIED();
         }
         $this->getOCUtil()->single($note, ['userId']);
