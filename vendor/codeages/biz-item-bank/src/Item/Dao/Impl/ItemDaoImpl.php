@@ -33,13 +33,15 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
 
     public function countItemQuestionNumByBankId($bankId)
     {
-        $sql = "SELECT count(*) FROM {$this->table} i INNER JOIN `biz_question` q ON i.id = q.item_id WHERE i.bank_id = ?;";
+        $sql = "SELECT count(*) FROM {$this->table} i INNER JOIN `biz_question` q ON i.id = q.item_id WHERE i.bank_id = ? AND i.is_deleted = 0;";
+
         return $this->db()->fetchColumn($sql, [$bankId]);
     }
 
     public function countItemQuestionNumByCategoryId($categoryId)
     {
-        $sql = "SELECT count(*) FROM {$this->table} i INNER JOIN `biz_question` q ON i.id = q.item_id WHERE i.category_id = ?;";
+        $sql = "SELECT count(*) FROM {$this->table} i INNER JOIN `biz_question` q ON i.id = q.item_id WHERE i.category_id = ? AND i.is_deleted = 0;";
+
         return $this->db()->fetchColumn($sql, [$categoryId]);
     }
 

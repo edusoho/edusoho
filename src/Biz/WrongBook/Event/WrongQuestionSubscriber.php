@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
+use Biz\ItemBankExercise\Service\AssessmentExerciseRecordService;
 use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -202,6 +203,23 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
     protected function getWrongQuestionSource($answerRecord)
     {
+        $chapterExerciseRecord = $this->getItemBankChapterExerciseRecordService()->getByAnswerRecordId($answerRecord['id']);
+        if ($chapterExerciseRecord) {
+            $bankExercise = $this->getItemBankExerciseService()->get($chapterExerciseRecord['exerciseId']);
+
+            return [
+                'exercise', $bankExercise['questionBankId'] ?? 0, 'item_bank_chapter', $chapterExerciseRecord['exerciseId'],
+            ];
+        }
+        $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseRecordService()->getByAnswerRecordId($answerRecord['id']);
+        if ($assessmentExerciseRecord) {
+            $bankExercise = $this->getItemBankExerciseService()->get($assessmentExerciseRecord['exerciseId']);
+
+            return [
+                'exercise', $bankExercise['questionBankId'] ?? 0, 'item_bank_assessment', $assessmentExerciseRecord['exerciseId'],
+            ];
+        }
+
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
 
         if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
@@ -329,6 +347,14 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     protected function getItemBankChapterExerciseRecordService()
     {
         return $this->getBiz()->service('ItemBankExercise:ChapterExerciseRecordService');
+    }
+
+    /**
+     * @return AssessmentExerciseRecordService
+     */
+    protected function getItemBankAssessmentExerciseRecordService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:AssessmentExerciseRecordService');
     }
 
     /**
