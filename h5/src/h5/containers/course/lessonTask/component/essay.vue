@@ -64,17 +64,18 @@
             <div v-if="mode === 'exam' && !canDo">
               <img v-if="(exerciseMode == '' &&  question.length > 0 && question[0].status === 'right') || (itemdata.testResult.status === 'right' && itemdata.testResult.status !== 'none')" :src="rigth" alt="" class="fill-status">
               <img 
-                v-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'none') || (itemdata.testResult.status === 'partRight')" 
+                v-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'partRight')" 
                 :src="wrong" 
                 alt="" 
                 class="fill-status">
               <span class="is-right-answer" v-if="(exerciseMode == '' &&  question.length > 0 && question[0].status === 'right') || (itemdata.testResult.status === 'right' && itemdata.testResult.status !== 'none')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
-              <span class="is-wrong-answer" v-else-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'none') || (itemdata.testResult.status === 'partRight')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
+              <span class="is-wrong-answer" v-else-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'partRight')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
+              <span v-if="itemdata.testResult.status === 'none'" class="your-answer" style="color: #37393D;" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
               <span v-if="answer[0] === '' || itemdata.testResult.answer && itemdata.testResult.answer.length === 0" class="your-answer is-wrong-answer"> {{ $t('courseLearning.unanswered') }}</span>
             </div>
             <div v-else>
               <span v-if="answer[0] === '' || itemdata.testResult.answer && itemdata.testResult.answer.length === 0" class="your-answer"> {{ $t('courseLearning.unanswered') }}</span>
-              <span class="text-14 essay-answer" style="color: #37393D;" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
+              <span class="essay-answer" style="color: #37393D;" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
             </div>
           </div>
           <div class="your-answer mt-16">
@@ -352,19 +353,6 @@ export default {
       border-radius: vw(4);
       overflow: hidden;
     }
-    /deep/.van-uploader__preview-delete {
-      border-radius: 50%;
-    }
-
-    /deep/.van-uploader__preview-delete-icon {
-      position: absolute;
-      top: vw(-1);
-      right: vw(-1);
-      color: #fff;
-      font-size: vw(16);
-      -webkit-transform: scale(0.5);
-      transform: scale(0.5);
-    }
   }
   .icon-arrow-up {
     display: none;
@@ -409,6 +397,8 @@ export default {
     height: 18px;
   }
   /deep/.essay-answer {
+    font-size: vw(14);
+    line-height: vw(22);
     img {
       display: block;
       margin-bottom: vw(8);
