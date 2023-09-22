@@ -291,9 +291,9 @@ export default {
     submitTopic() {
       if (this.result.length === 0 && this.exerciseMode === '1') {
         Dialog.confirm({
-          message: '当前题目暂未作答，您确认提交吗？',
-          confirmButtonText: '继续答题',
-          cancelButtonText:'确认'
+          message: this.$t('courseLearning.questionNotAnswer'),
+          confirmButtonText: this.$t('courseLearning.continueAnswer'),
+          cancelButtonText: this.$t('btn.confirm')
         })
         .then(() => {
           // on confirm

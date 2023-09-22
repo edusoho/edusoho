@@ -51,7 +51,7 @@
           <i class="iconfont icon-a-Frame34723"></i>
           <i class="iconfont icon-cuowu2"></i>
           <i class="iconfont icon-zhengque1"></i>
-          <div class="subject-option__content">正确</div>
+          <div class="subject-option__content">{{ $t('courseLearning.right') }}</div>
         
         </van-radio>
         <van-radio
@@ -69,7 +69,7 @@
           <i class="iconfont icon-a-Frame34723"></i>
           <i class="iconfont icon-cuowu2"></i>
           <i class="iconfont icon-zhengque1"></i>
-          <div class="subject-option__content">错误</div>
+          <div class="subject-option__content">{{ $t('courseLearning.wrong') }}</div>
           
         </van-radio>
       </van-radio-group>
@@ -78,19 +78,19 @@
           <div class="flex items-center">
             <span class="answer">{{ $t('courseLearning.referenceAnswer') }}：</span>
             <span class="options" style="color:#00B42A;" v-if="question.length > 0">
-              {{ question[0].answer[0] === 'T' ? '对' : '错' }}
+              {{ question[0].answer[0] === 'T' ? $t('wrongQuestion.right') : $t('wrongQuestion.wrong') }}
             </span>
             <span class="options" v-if="!canDo" style="color:#00B42A;">
-              {{ itemdata.answer[0] === 1 ? '对' : '错' }}
+              {{ itemdata.answer[0] === 1 ? $t('wrongQuestion.right') : $t('wrongQuestion.wrong') }}
             </span>
           </div>
           <div class="flex items-center" v-if="itemdata.testResult.answer && itemdata.testResult.answer.length > 0 || question.length > 0">
             <span class="answer">{{ $t('courseLearning.selectedAnswer') }}：</span>
             <span class="options" v-if="question.length > 0">
-              {{ question[0].response[0] === 'T' ? '对' : '错' }}
+              {{ question[0].response[0] === 'T' ? $t('wrongQuestion.right') : $t('wrongQuestion.wrong') }}
             </span>
             <span v-if="!canDo">
-              <span class="options">{{ itemdata.testResult.answer[0] === 1 ? '对' : '错'  }}</span>
+              <span class="options">{{ itemdata.testResult.answer[0] === 1 ? $t('wrongQuestion.right') : $t('wrongQuestion.wrong')  }}</span>
             </span>
           </div>
         </div>

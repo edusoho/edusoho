@@ -78,7 +78,7 @@
             </div>
           </div>
           <div class="your-answer mt-16">
-            正确答案：
+            {{ $t('courseLearning.correctAnswer') }}：
           </div>
           <div class="mb-16">
             <span class="is-right-answer" v-html="itemdata.answer[0]" @click="handleClickImage($event.target.src)" /> 
@@ -257,9 +257,9 @@ export default {
     placeholder: {
       get() {
         if (this.canDo) {
-          return '你的回答...';
+          return this.$t('courseLearning.yourAreAnswer') + '...';
         } else {
-          return '未作答';
+          return this.$t('wrongQuestion.unanswered');
         }
       },
     },
@@ -305,9 +305,9 @@ export default {
     submitTopic() {
       if ( this.answer[0] === '' && this.exerciseMode === '1') {
         Dialog.confirm({
-          message: '当前题目暂未作答，您确认提交吗？',
-          confirmButtonText: '继续答题',
-          cancelButtonText:'确认'
+          message: this.$t('courseLearning.questionNotAnswer'),
+          confirmButtonText: this.$t('courseLearning.continueAnswer'),
+          cancelButtonText: this.$t('btn.confirm')
         })
         .then(() => {
           // on confirm
