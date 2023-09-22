@@ -45,7 +45,7 @@
             { active: 1 === currentItem && disabledData } , 
             { 'van-checked__right' : itemdata.answer && itemdata.answer[0] === 1 ? itemdata.testResult.answer && itemdata.testResult.answer[0] === 1 ? true : true : false },
             {isRight: question.length > 0 &&  question[0].answer[0] === 'T'},
-            {isWrong: question.length > 0 &&  'F' !== question[0].response && question[0].response[0] !== question[0].answer[0]}
+            {isWrong: question.length > 0 &&  'F' !== question[0].response[0] &&  myRadioAnswer !== question[0].answer[0]}
           ]"
         >
           <i class="iconfont icon-a-Frame34723"></i>
@@ -63,7 +63,7 @@
             { active: 0 === currentItem } , 
             { 'van-checked__right' :  itemdata.answer && itemdata.answer[0] === 0 ? itemdata.testResult.answer && itemdata.testResult.answer[0] === 0 ? true : true : false },
             {isRight: question.length > 0 &&  question[0].answer[0] === 'F'},
-            {isWrong: question.length > 0 &&  'T' !== myAnswer &&  myAnswer !== question[0].answer[0]}
+            {isWrong: question.length > 0 &&  'F' === question[0].response[0] &&  myAnswer !== question[0].answer[0]}
           ]"
         >
           <i class="iconfont icon-a-Frame34723"></i>
@@ -84,7 +84,7 @@
               {{ itemdata.answer[0] === 1 ? '对' : '错' }}
             </span>
           </div>
-          <div class="flex items-center" v-if="itemdata.testResult.answer && itemdata.testResult.answer.length > 0">
+          <div class="flex items-center" v-if="itemdata.testResult.answer && itemdata.testResult.answer.length > 0 || question.length > 0">
             <span class="answer">{{ $t('courseLearning.selectedAnswer') }}：</span>
             <span class="options" v-if="question.length > 0">
               {{ question[0].response[0] === 'T' ? '对' : '错' }}
@@ -224,9 +224,10 @@ export default {
       currentItem: null,
       isShowDownIcon: null,
       isShowUpIcon: false,
-      myAnswer: 'T',
+      myAnswer: 'F',
       question: [],
       width: WINDOWWIDTH,
+      myRadioAnswer: 'T'
     };
   },
   computed: {
