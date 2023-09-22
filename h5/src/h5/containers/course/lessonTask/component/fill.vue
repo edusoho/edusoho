@@ -63,7 +63,7 @@
           <span v-for="(i, index) in answer" :key="index" :class="[question.length > 0 && question[0].status === 'right' ? 'is-right-answer' : 'is-wrong-answer']"> {{ answer.length - 1 === index ? i === '' ? $t('courseLearning.unanswered') : i : ((i === '' ? $t('courseLearning.unanswered') : i)+ ';') }}</span>
         </div>
         <div class="your-answer mt-16">
-          正确答案：
+          {{ $t('courseLearning.correctAnswer') }}：
         </div>
         <div class="mb-16">
           <span v-for="(i, index) in itemdata.answer" :key="index" class="is-right-answer"> {{  itemdata.answer.length - 1 === index ? i : i + ';' }}</span>
@@ -227,9 +227,9 @@ export default {
     placeholder: {
       get() {
         if (this.canDo) {
-          return '请填写答案';
+          return this.$t('courseLearning.placeEntAnswer');
         } else {
-          return '未作答';
+          return this.$t('wrongQuestion.unanswered');
         }
       },
     },
@@ -274,9 +274,9 @@ export default {
       })
       if (thereNoAnswer && this.exerciseMode === '1') {
         Dialog.confirm({
-          message: '当前题目暂未作答，您确认提交吗？',
-          confirmButtonText: '继续答题',
-          cancelButtonText:'确认'
+          message: this.$t('courseLearning.questionNotAnswer'),
+          confirmButtonText: this.$t('courseLearning.continueAnswer'),
+          cancelButtonText: this.$t('btn.confirm')
         })
         .then(() => {
           // on confirm
