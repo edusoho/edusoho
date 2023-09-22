@@ -179,7 +179,9 @@ class AssessmentSectionItemServiceImpl extends BaseService implements Assessment
                 ];
             }
         }
-        $this->getAssessmentSectionItemDao()->batchUpdate(array_keys($updateSectionItems), $updateSectionItems);
+        if ($updateSectionItems) {
+            $this->getAssessmentSectionItemDao()->batchUpdate(array_keys($updateSectionItems), $updateSectionItems);
+        }
     }
 
     protected function getScoreRuleProcessor()

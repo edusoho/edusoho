@@ -408,12 +408,21 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         $this->getSectionService()->updateAssessmentSections($toUpdateSections);
 
         $toUpdateAssessments = $this->extractToUpdateAssessments($eachAssessmentToUpdateSections);
-        $this->getAssessmentDao()->batchUpdate(array_keys($toUpdateAssessments), $toUpdateAssessments);
+        if ($toUpdateAssessments) {
+            $this->getAssessmentDao()->batchUpdate(array_keys($toUpdateAssessments), $toUpdateAssessments);
+        }
     }
 
     public function getAssessmentSnapshotBySnapshotAssessmentId($snapshotAssessmentId)
     {
         return $this->getAssessmentSnapshotDao()->getBySnapshotAssessmentId($snapshotAssessmentId);
+    }
+
+    public function isEmptyAssessment($assessmentId)
+    {
+        $assessment = $this->getAssessment($assessmentId);
+
+        return empty($assessment['item_count']);
     }
 
     private function createAssessmentSnapshots($assessments)
@@ -488,7 +497,9 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             $updateAssessmentSnapshots[$snapshotAssessmentId]['sections_snapshot'] = $updateAssessmentSnapshots[$snapshotAssessmentId]['sections_snapshot'] ?? [];
             $updateAssessmentSnapshots[$snapshotAssessmentId]['sections_snapshot'][$originAssessmentSection['id']] = $assessmentSectionSnapshots[$originAssessmentSection['id']];
         }
-        $this->getAssessmentSnapshotDao()->batchUpdate(array_keys($updateAssessmentSnapshots), $updateAssessmentSnapshots, 'snapshot_assessment_id');
+        if ($updateAssessmentSnapshots) {
+            $this->getAssessmentSnapshotDao()->batchUpdate(array_keys($updateAssessmentSnapshots), $updateAssessmentSnapshots, 'snapshot_assessment_id');
+        }
 
         return $assessmentSectionSnapshots;
     }

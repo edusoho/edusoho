@@ -9,7 +9,8 @@ use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,6 +27,9 @@ class AnswerController extends BaseController
 
         $latestAnswerRecord = $this->getItemBankAssessmentExerciseRecordService()->getLatestRecord($moduleId, $assessmentId, $user['id']);
         if (empty($latestAnswerRecord) || 'redo' == $request->get('action')) {
+            if (!$this->checkStartAssessmentExercise($assessmentId)) {
+                return $this->redirectToRoute('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'assessment']);
+            }
             $latestAnswerRecord = $this->getItemBankAssessmentExerciseService()->startAnswer($moduleId, $assessmentId, $user['id']);
         }
 
@@ -72,6 +76,9 @@ class AnswerController extends BaseController
             }
         }
         if (empty($latestAnswerRecord) || 'redo' == $request->get('action')) {
+            if (!$this->checkStartChapterExercise($exerciseId, $categoryId)) {
+                return $this->redirectToRoute('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']);
+            }
             $latestAnswerRecord = $this->getItemBankChapterExerciseService()->startAnswer($moduleId, $categoryId, $user['id']);
         }
 
@@ -110,7 +117,7 @@ class AnswerController extends BaseController
             $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
         }
 
-        $category = $this->getItemCategoryService()->getItemCategory($categoryId);
+        $category = $this->getItemBankChapterExerciseService()->getChapter($categoryId);
         $items = $this->getItemService()->searchItems(['bank_id' => $category['bank_id'], 'category_id' => $categoryId], [], 0, PHP_INT_MAX);
 
         return $this->render('item-bank-exercise/answer/category-info-modal.html.twig', [
@@ -126,6 +133,35 @@ class AnswerController extends BaseController
     public function notSupportSubmitSingleAction()
     {
         return $this->render('item-bank-exercise/answer/not-support-submit-single-modal.html.twig');
+    }
+
+    private function checkStartAssessmentExercise($assessmentId)
+    {
+        if ($this->getAssessmentService()->isEmptyAssessment($assessmentId)) {
+            $this->setFlashException(AssessmentException::ASSESSMENT_EMPTY());
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private function checkStartChapterExercise($exerciseId, $categoryId)
+    {
+        $chapter = $this->getItemBankChapterExerciseService()->getChapter($categoryId);
+        if (empty($chapter['item_num'])) {
+            $this->setFlashException(AssessmentException::ASSESSMENT_EMPTY());
+
+            return false;
+        }
+        $exercise = $this->getItemBankExerciseService()->get($exerciseId);
+        if (in_array($chapter['id'], $exercise['hiddenChapterIds'])) {
+            $this->setFlashException(ItemBankExerciseException::ANSWER_UNPUBLISHED_CHAPTER());
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -177,19 +213,19 @@ class AnswerController extends BaseController
     }
 
     /**
-     * @return ItemCategoryService
-     */
-    protected function getItemCategoryService()
-    {
-        return $this->createService('ItemBank:Item:ItemCategoryService');
-    }
-
-    /**
      * @return ItemService
      */
     protected function getItemService()
     {
         return $this->createService('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 
     /**

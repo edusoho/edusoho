@@ -11113,6 +11113,7 @@ exception.item_bank_exercise.module.switch.danger: 题库练习发布时，章�
 exception.item_bank_exercise.exercise.is_exists: 题库练习已存在，请勿重复开启
 exception.item_bank_exercise.exercise.not_arrive: 题库练习未到学习时间，添加失败
 exception.item_bank_exercise.parent_chapter_unpublish: 请先发布上一级章节
+exception.item_bank_exercise.answer_unpublish_chapter: 当前章节已取消发布，无法继续答题~
 exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
 exception.item_bank.assessment.not.exist: 试卷不存在
 exception.item_bank.assessment.is_empty: 试卷全部题目已被删除，请联系教师或管理员
@@ -12438,3 +12439,5 @@ sms.defence.request.log.is_illegal.no: 否
 sms.defence.request.log.disable_type.ip: 同一ip多次请求
 sms.defence.request.log.disable_type.coordinate: 同一坐标多次请求
 sms.defence.request.log.disable_type.none: 无
+
+course.start_answer.all_question_deleted: 全部题目已被删除，请联系教师或管理员
