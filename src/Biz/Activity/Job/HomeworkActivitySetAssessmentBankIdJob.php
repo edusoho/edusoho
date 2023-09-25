@@ -25,9 +25,11 @@ class HomeworkActivitySetAssessmentBankIdJob extends AbstractJob
         $assessments = array_column($assessments, null, 'id');
         $updateHomeworkActivities = [];
         foreach ($homeworkActivities as $homeworkActivity) {
-            $updateHomeworkActivities[$homeworkActivity['id']] = [
-                'assessmentBankId' => $assessments[$homeworkActivity['assessmentId']]['bank_id'],
-            ];
+            if (!empty($assessments[$homeworkActivity['assessmentId']])) {
+                $updateHomeworkActivities[$homeworkActivity['id']] = [
+                    'assessmentBankId' => $assessments[$homeworkActivity['assessmentId']]['bank_id'],
+                ];
+            }
         }
         if ($updateHomeworkActivities) {
             $this->getHomeworkActivityDao()->batchUpdate(array_keys($updateHomeworkActivities), $updateHomeworkActivities);
