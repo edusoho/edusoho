@@ -251,7 +251,9 @@ class Homework extends Activity
 
         $this->getAnswerSceneService()->update($homework['answerSceneId'], $answerScene);
         $this->getAssessmentService()->updateAssessment($homework['assessmentId'], $assessment);
-        $this->getHomeworkActivityService()->update($homework['id'], ['assessmentBankId' => $assessment['bank_id']]);
+        if (!empty($assessment['bank_id'])) {
+            $this->getHomeworkActivityService()->update($homework['id'], ['assessmentBankId' => $assessment['bank_id']]);
+        }
 
         return $homework;
     }
