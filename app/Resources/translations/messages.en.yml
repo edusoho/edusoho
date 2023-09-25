@@ -7073,7 +7073,7 @@ admin.setting_course.video_play_setting.multiple_forbidden_effect: Multi-opening
 admin.setting_course.video_play_setting.kick_previous_play: Kick the previous learning page
 admin.setting_course.video_play_setting.kick_previous_play.tips: >
   <p>When a user opens more than one page, the next learning page is the main one, and the previous learning page is kicked out.</p>
-  <p>When the three types of lessons (homework/exam/live) are being studied, the study page will not be able to kick out these three types of lessons.</p>
+  <p>In order to ensure the real-time upload of learning data, homework/exam/live class hours are prohibited and cannot be changed by default.</p>
   <p>require terminal upgrade to PC side V20.4.6, APP side V4.9.3</p>
 admin.setting_course.video_play_setting.reject_current_play: Reject this access to the study page
 admin.setting_course.video_play_setting.reject_current_play.tips: When the user opens more than one page, the first learning page will take precedence and the second learning page will not be allowed to enter.Only available in the micro online school for the start-up theme.
