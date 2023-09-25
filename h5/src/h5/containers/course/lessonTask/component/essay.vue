@@ -64,21 +64,22 @@
             <div v-if="mode === 'exam' && !canDo">
               <img v-if="(exerciseMode == '' &&  question.length > 0 && question[0].status === 'right') || (itemdata.testResult.status === 'right' && itemdata.testResult.status !== 'none')" :src="rigth" alt="" class="fill-status">
               <img 
-                v-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'none') || (itemdata.testResult.status === 'partRight')" 
+                v-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'partRight')" 
                 :src="wrong" 
                 alt="" 
                 class="fill-status">
               <span class="is-right-answer" v-if="(exerciseMode == '' &&  question.length > 0 && question[0].status === 'right') || (itemdata.testResult.status === 'right' && itemdata.testResult.status !== 'none')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
-              <span class="is-wrong-answer" v-else-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'none') || (itemdata.testResult.status === 'partRight')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
+              <span class="is-wrong-answer" v-else-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'partRight')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
+              <span v-if="itemdata.testResult.status === 'none'" class="your-answer" style="color: #37393D;" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
               <span v-if="answer[0] === '' || itemdata.testResult.answer && itemdata.testResult.answer.length === 0" class="your-answer is-wrong-answer"> {{ $t('courseLearning.unanswered') }}</span>
             </div>
             <div v-else>
               <span v-if="answer[0] === '' || itemdata.testResult.answer && itemdata.testResult.answer.length === 0" class="your-answer"> {{ $t('courseLearning.unanswered') }}</span>
-              <span class="text-14 essay-answer" style="color: #37393D;" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
+              <span class="essay-answer" style="color: #37393D;" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
             </div>
           </div>
           <div class="your-answer mt-16">
-            正确答案：
+            {{ $t('courseLearning.correctAnswer') }}：
           </div>
           <div class="mb-16">
             <span class="is-right-answer" v-html="itemdata.answer[0]" @click="handleClickImage($event.target.src)" /> 
@@ -138,14 +139,16 @@
 <script>
 import Api from '@/api';
 import attachementPreview from './attachement-preview.vue';
-import { ImagePreview, Dialog, Toast } from 'vant'
-import isShowFooterShardow from '../../../../mixins/lessonTask/footerShardow';
+import { Dialog, Toast } from 'vant'
+import isShowFooterShardow from '@/mixins/lessonTask/footerShardow';
+import refreshChoice from '@/mixins/lessonTask/swipeRefResh.js';
+import handleClickImage from '@/mixins/lessonTask/handleClickImage.js';
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
 export default {
   name: 'EssayType',
-  mixins: [isShowFooterShardow],
+  mixins: [isShowFooterShardow, refreshChoice, handleClickImage],
   components: {
     attachementPreview
   },
@@ -255,15 +258,14 @@ export default {
     placeholder: {
       get() {
         if (this.canDo) {
-          return '你的回答...';
+          return this.$t('courseLearning.yourAreAnswer') + '...';
         } else {
-          return '未作答';
+          return this.$t('wrongQuestion.unanswered');
         }
       },
     },
   },
   mounted() {
-    // this.answerText = this.answer[0]
     this.isShowDownIcon = document.getElementsByClassName('material-icon')[this.number]?.childNodes[0].offsetWidth > 234
   },
   methods: {
@@ -275,29 +277,6 @@ export default {
     },
     getAttachementMaterialType(type) {
       return this.itemdata.parentTitle.attachments.filter(item => item.module === type) || []
-    },
-    refreshChoice(res) {
-      if (res) {
-        this.$nextTick(() => {
-          this.question[0] = res
-          this.refreshKey = !this.refreshKey
-        })
-        return
-        
-      }
-      const obj = this.exerciseInfo.submittedQuestions
-      this.$nextTick(() => {
-        this.question = obj.filter(item => item.questionId + '' === this.itemdata.id)
-        this.refreshKey = !this.refreshKey
-      })
-    },
-
-    handleClickImage (imagesUrl) {
-      if (imagesUrl === undefined) return;
-      const images = [imagesUrl]
-      ImagePreview({
-        images
-      })
     },
     afterRead(file) {
       const formData = new FormData();
@@ -327,17 +306,19 @@ export default {
     submitTopic() {
       if ( this.answer[0] === '' && this.exerciseMode === '1') {
         Dialog.confirm({
-          message: '当前题目暂未作答，您确认提交吗？',
-          confirmButtonText: '继续答题',
-          cancelButtonText:'确认'
+          message: this.$t('courseLearning.questionNotAnswer'),
+          confirmButtonText: this.$t('courseLearning.continueAnswer'),
+          cancelButtonText: this.$t('btn.confirm')
         })
         .then(() => {
           // on confirm
         })
         .catch(() => {
+          this.$emit('changeTouch')
           this.$emit('submitSingleAnswer', this.answer, this.itemdata);
         });
       } else {
+        this.$emit('changeTouch')
         this.$emit('submitSingleAnswer', this.answer, this.itemdata);
       }
 
@@ -371,19 +352,6 @@ export default {
       height: vw(64) !important;
       border-radius: vw(4);
       overflow: hidden;
-    }
-    /deep/.van-uploader__preview-delete {
-      border-radius: 50%;
-    }
-
-    /deep/.van-uploader__preview-delete-icon {
-      position: absolute;
-      top: vw(-1);
-      right: vw(-1);
-      color: #fff;
-      font-size: vw(16);
-      -webkit-transform: scale(0.5);
-      transform: scale(0.5);
     }
   }
   .icon-arrow-up {
@@ -429,6 +397,8 @@ export default {
     height: 18px;
   }
   /deep/.essay-answer {
+    font-size: vw(14);
+    line-height: vw(22);
     img {
       display: block;
       margin-bottom: vw(8);

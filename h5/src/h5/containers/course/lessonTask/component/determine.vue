@@ -45,13 +45,13 @@
             { active: 1 === currentItem && disabledData } , 
             { 'van-checked__right' : itemdata.answer && itemdata.answer[0] === 1 ? itemdata.testResult.answer && itemdata.testResult.answer[0] === 1 ? true : true : false },
             {isRight: question.length > 0 &&  question[0].answer[0] === 'T'},
-            {isWrong: question.length > 0 &&  'F' !== question[0].response && question[0].response[0] !== question[0].answer[0]}
+            {isWrong: question.length > 0 &&  'F' !== question[0].response[0] &&  myRadioAnswer !== question[0].answer[0]}
           ]"
         >
           <i class="iconfont icon-a-Frame34723"></i>
           <i class="iconfont icon-cuowu2"></i>
           <i class="iconfont icon-zhengque1"></i>
-          <div class="subject-option__content">正确</div>
+          <div class="subject-option__content">{{ $t('courseLearning.right') }}</div>
         
         </van-radio>
         <van-radio
@@ -63,13 +63,13 @@
             { active: 0 === currentItem } , 
             { 'van-checked__right' :  itemdata.answer && itemdata.answer[0] === 0 ? itemdata.testResult.answer && itemdata.testResult.answer[0] === 0 ? true : true : false },
             {isRight: question.length > 0 &&  question[0].answer[0] === 'F'},
-            {isWrong: question.length > 0 &&  'T' !== myAnswer &&  myAnswer !== question[0].answer[0]}
+            {isWrong: question.length > 0 &&  'F' === question[0].response[0] &&  myAnswer !== question[0].answer[0]}
           ]"
         >
           <i class="iconfont icon-a-Frame34723"></i>
           <i class="iconfont icon-cuowu2"></i>
           <i class="iconfont icon-zhengque1"></i>
-          <div class="subject-option__content">错误</div>
+          <div class="subject-option__content">{{ $t('courseLearning.wrong') }}</div>
           
         </van-radio>
       </van-radio-group>
@@ -78,19 +78,19 @@
           <div class="flex items-center">
             <span class="answer">{{ $t('courseLearning.referenceAnswer') }}：</span>
             <span class="options" style="color:#00B42A;" v-if="question.length > 0">
-              {{ question[0].answer[0] === 'T' ? '对' : '错' }}
+              {{ question[0].answer[0] === 'T' ? $t('wrongQuestion.right') : $t('wrongQuestion.wrong') }}
             </span>
             <span class="options" v-if="!canDo" style="color:#00B42A;">
-              {{ itemdata.answer[0] === 1 ? '对' : '错' }}
+              {{ itemdata.answer[0] === 1 ? $t('wrongQuestion.right') : $t('wrongQuestion.wrong') }}
             </span>
           </div>
-          <div class="flex items-center" v-if="itemdata.testResult.answer && itemdata.testResult.answer.length > 0">
+          <div class="flex items-center" v-if="itemdata.testResult.answer && itemdata.testResult.answer.length > 0 || question.length > 0">
             <span class="answer">{{ $t('courseLearning.selectedAnswer') }}：</span>
             <span class="options" v-if="question.length > 0">
-              {{ question[0].response[0] === 'T' ? '对' : '错' }}
+              {{ question[0].response[0] === 'T' ? $t('wrongQuestion.right') : $t('wrongQuestion.wrong') }}
             </span>
             <span v-if="!canDo">
-              <span class="options">{{ itemdata.testResult.answer[0] === 1 ? '对' : '错'  }}</span>
+              <span class="options">{{ itemdata.testResult.answer[0] === 1 ? $t('wrongQuestion.right') : $t('wrongQuestion.wrong')  }}</span>
             </span>
           </div>
         </div>
@@ -137,16 +137,17 @@
 </template>
 
 <script>
-import checkAnswer from '../../../../mixins/lessonTask/itemBank';
-import isShowFooterShardow from '../../../../mixins/lessonTask/footerShardow';
+import refreshChoice from '@/mixins/lessonTask/swipeRefResh.js';
+import checkAnswer from '@/mixins/lessonTask/itemBank';
+import isShowFooterShardow from '@/mixins/lessonTask/footerShardow';
 import attachementPreview from './attachement-preview.vue';
-import { ImagePreview } from 'vant'
+import handleClickImage from '@/mixins/lessonTask/handleClickImage.js';
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
 export default {
   name: 'DetermineType',
-  mixins: [checkAnswer, isShowFooterShardow],
+  mixins: [checkAnswer, isShowFooterShardow, refreshChoice, handleClickImage],
   components: {
     attachementPreview
   },
@@ -223,9 +224,10 @@ export default {
       currentItem: null,
       isShowDownIcon: null,
       isShowUpIcon: false,
-      myAnswer: 'T',
+      myAnswer: 'F',
       question: [],
       width: WINDOWWIDTH,
+      myRadioAnswer: 'T'
     };
   },
   computed: {
@@ -246,53 +248,6 @@ export default {
     this.isShowDownIcon = document.getElementsByClassName('material-icon')[this.number]?.childNodes[0].offsetWidth > 234
   },
   methods: {
-    filterOrders: function(answer = [], mode = 'do') {
-      // standard表示标砖答案过滤
-      if (this.subject == 'fill') {
-        if (mode == 'standard') {
-          return answer.length > 0 ? answer.toString() : '无';
-        } else {
-          return answer.length > 0 ? answer.toString() : this.$t('courseLearning.unanswered');
-        }
-      } else {
-        let arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-        if (this.subject == 'determine') {
-          arr = ['错', '对'];
-        }
-        let formateAnswer = null;
-        formateAnswer = answer.map(element => {
-          return arr[element];
-        });
-        if (mode == 'standard') {
-          return formateAnswer.length > 0 ? formateAnswer.join(' ') : '无';
-        }
-        return formateAnswer.length > 0 ? formateAnswer.join(' ') : this.$t('courseLearning.unanswered');
-      }
-    },
-    
-    handleClickImage (imagesUrl) {
-      if (imagesUrl === undefined) return;
-      event.stopPropagation();//  阻止冒泡
-      const images = [imagesUrl]
-      ImagePreview({
-        images
-      })
-    },
-    refreshChoice(res) {
-      if (res) {
-        this.$nextTick(() => {
-          this.question[0] = res
-          this.refreshKey = !this.refreshKey
-        })
-        return
-        
-      }
-      const obj = this.exerciseInfo.submittedQuestions
-      this.$nextTick(() => {
-        this.question = obj.filter(item => item.questionId+'' === this.itemdata.id)
-        this.refreshKey = !this.refreshKey
-      })
-    },
     // 向父级提交数据
     choose(name) {
       this.currentItem = name

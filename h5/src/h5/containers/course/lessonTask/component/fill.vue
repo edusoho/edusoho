@@ -60,13 +60,13 @@
           <img v-if="question.length > 0 && question[0].status === 'right' || itemdata.testResult.status === 'right'" :src="rigth" alt="" class="fill-status">
           <img v-if="question.length > 0 && question[0].status === 'wrong' || itemdata.testResult.status === 'wrong' || itemdata.testResult.status === 'none' || itemdata.testResult.status === 'noAnswer'" :src="wrong" alt="" class="fill-status">
           <span v-if="isunanswered()" class="your-answer is-wrong-answer"> {{ $t('courseLearning.unanswered') }}</span>
-          <span v-for="(i, index) in answer" :key="index" :class="[question.length > 0 && question[0].status === 'right' ? 'is-right-answer' : 'is-wrong-answer']"> {{ answer.length - 1 === index ? i === '' ? $t('courseLearning.unanswered') : i : ((i === '' ? $t('courseLearning.unanswered') : i)+ ',') }}</span>
+          <span v-for="(i, index) in answer" :key="index" :class="[question.length > 0 && question[0].status === 'right' ? 'is-right-answer' : 'is-wrong-answer']"> {{ answer.length - 1 === index ? i === '' ? $t('courseLearning.unanswered') : i : ((i === '' ? $t('courseLearning.unanswered') : i)+ ';') }}</span>
         </div>
         <div class="your-answer mt-16">
-          正确答案：
+          {{ $t('courseLearning.correctAnswer') }}：
         </div>
         <div class="mb-16">
-          <span v-for="(i, index) in itemdata.answer" :key="index" class="is-right-answer"> {{  itemdata.answer.length - 1 === index ? i : i + ',' }}</span>
+          <span v-for="(i, index) in itemdata.answer" :key="index" class="is-right-answer"> {{  itemdata.answer.length - 1 === index ? i : i + ';' }}</span>
         </div>
         <div v-if="mode === 'exam'" class="analysis-color mb-8">
           {{ $t('courseLearning.score') }}：<div>{{ itemdata.testResult ? itemdata.testResult.score : 0.0 }}</div>
@@ -121,8 +121,10 @@
 
 <script>
 import attachementPreview from './attachement-preview.vue';
-import isShowFooterShardow from '../../../../mixins/lessonTask/footerShardow';
-import { ImagePreview, Dialog } from 'vant'
+import isShowFooterShardow from '@/mixins/lessonTask/footerShardow';
+import refreshChoice from '@/mixins/lessonTask/swipeRefResh.js';
+import handleClickImage from '@/mixins/lessonTask/handleClickImage.js';
+import { Dialog } from 'vant'
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
@@ -131,7 +133,7 @@ export default {
   components: {
     attachementPreview
   },
-  mixins: [isShowFooterShardow],
+  mixins: [isShowFooterShardow, refreshChoice, handleClickImage],
   props: {
     filldata: {
       type: Object,
@@ -225,9 +227,9 @@ export default {
     placeholder: {
       get() {
         if (this.canDo) {
-          return '请填写答案';
+          return this.$t('courseLearning.placeEntAnswer');
         } else {
-          return '未作答';
+          return this.$t('wrongQuestion.unanswered');
         }
       },
     },
@@ -245,23 +247,6 @@ export default {
     getAttachementMaterialType(type) {
       return this.itemdata.parentTitle.attachments.filter(item => item.module === type) || []
     },
-    refreshChoice(res) {
-      if (res) {
-        this.$nextTick(() => {
-          this.question[0] = res
-          this.refreshKey = !this.refreshKey
-        })
-        return
-        
-      }
-      const obj = this.exerciseInfo.submittedQuestions
-      this.$nextTick(() => {
-        this.question = obj.filter(item => item.questionId + '' === this.itemdata.id)
-        // console.log(this.question);
-        this.refreshKey = !this.refreshKey
-      })
-    },
-    
     isunanswered() {
       if (this.answer) {
         return this.answer.every(item => {
@@ -274,13 +259,6 @@ export default {
           item === ''
         })
       }
-    },
-    handleClickImage (imagesUrl) {
-      if (imagesUrl === undefined) return;
-      const images = [imagesUrl]
-      ImagePreview({
-        images
-      })
     },
     changeUpIcon() {
       this.isShowUpIcon = true
@@ -296,17 +274,19 @@ export default {
       })
       if (thereNoAnswer && this.exerciseMode === '1') {
         Dialog.confirm({
-          message: '当前题目暂未作答，您确认提交吗？',
-          confirmButtonText: '继续答题',
-          cancelButtonText:'确认'
+          message: this.$t('courseLearning.questionNotAnswer'),
+          confirmButtonText: this.$t('courseLearning.continueAnswer'),
+          cancelButtonText: this.$t('btn.confirm')
         })
         .then(() => {
           // on confirm
         })
         .catch(() => {
+          this.$emit('changeTouch')
           this.$emit('submitSingleAnswer', this.answer, this.itemdata);
         });
       } else {
+        this.$emit('changeTouch')
         this.radioDisabled = true
         this.$emit('submitSingleAnswer', this.answer, this.itemdata);
       }

@@ -5,6 +5,7 @@
       ref="swipe"
       :height="height"
       :show-indicators="false"
+      :touchable="touchable"
       :loop="false"
       :duration="100"
       @change="changeswiper"
@@ -77,6 +78,7 @@
             :disabledData="mode === 'exercise' ? canDo && iscando[index] : canDo"
             @choiceChoose="choiceChoose"
             @submitSingleAnswer = "submitSingleAnswer"
+            @changeTouch="changeTouch"
             @goResults="goResults"
             :totalCount="info.length"
             :reviewedCount="reviewedCount ? reviewedCount : exerciseInfo ? exerciseInfo.reviewedCount : 0"
@@ -125,6 +127,7 @@
             @submitSingleAnswer = "submitSingleAnswer"
             @goResults="goResults"
             :totalCount="info.length"
+            @changeTouch="changeTouch"
             :reviewedCount="reviewedCount ? reviewedCount : exerciseInfo ? exerciseInfo.reviewedCount : 0"
           />
 
@@ -148,6 +151,7 @@
             @submitSingleAnswer = "submitSingleAnswer"
             @goResults="goResults"
             :totalCount="info.length"
+            @changeTouch="changeTouch"
             :reviewedCount="reviewedCount ? reviewedCount : exerciseInfo ? exerciseInfo.reviewedCount : 0"
           />
 
@@ -292,6 +296,7 @@ export default {
       iscando: [],
       refreshKey: true,
       myAnswer: null,
+      touchable: true
     };
   },
   computed: {
@@ -314,6 +319,11 @@ export default {
         return;
       }
       this.$refs.swipe.swipeTo(index - 1);
+    },
+    reviewedCount() {
+      if (this.reviewedCount === this.info.length) {
+        this.$emit('reviewedCount')
+      }
     }
   },
   created() {
@@ -350,14 +360,14 @@ export default {
     },
     // 左滑动
     last() {
-      if (this.currentIndex == 0) {
+      if (this.currentIndex == 0 || !this.touchable) {
         return;
       }
       this.$refs.swipe.swipeTo(this.currentIndex - 1);
     },
     // 右滑动
     next() {
-      if (this.currentIndex == this.info.length - 1) {
+      if (this.currentIndex == this.info.length - 1 || !this.touchable) {
         return;
       }
       this.$refs.swipe.swipeTo(this.currentIndex + 1);
@@ -403,6 +413,7 @@ export default {
     // 单选题选择
     singleChoose(response, data) {
       if ( this.exerciseMode === '1' ) {
+      this.touchable = false
         this.submitSingleAnswer(this.numberFormatterCode(response) , data)
       }
       this.$set(this.testAnswer[data.id], 0, response);	
@@ -411,9 +422,13 @@ export default {
     choiceChoose(response, data) {
       this.$set(this.testAnswer, data.id, response);
     },
+    changeTouch() {
+      this.touchable = false
+    },
     // 判断题选择
     determineChoose(response, data) {
       if(this.exerciseMode === '1') {
+        this.touchable = false
         this.submitSingleAnswer(this.numberFormatterCode(response, data.type) , data)
       }
         this.$set(this.testAnswer[data.id], 0, Number(response));
@@ -440,16 +455,19 @@ export default {
       }).then(res=> {
         const idx = this.current === 0 ? this.current : this.current - 1
         this.$refs['submit'+idx][0].refreshChoice(res)
+        this.reviewedCount = res.reviewedCount
+        this.status = res.status
+        this.myAnswer = res.response
+
+        this.touchable = true
         if (res.status === 'right') {
           this.next()
           this.iscando[idx] = false
         } else {
           this.iscando[idx] = false
         }
-        this.reviewedCount = res.reviewedCount
-        this.status = res.status
-        this.myAnswer = res.response
       }).catch(err=> {
+        this.touchable = true
         Toast.fail(err.message)
       })
     }, 1000),

@@ -68,7 +68,7 @@ export default {
       activeQuestions: 'static/images/exercise/active-on-questions.png',
       defaultQuestions: 'static/images/exercise/default-on-questions.png',
       radio: '0',
-      questionsNum: '',
+      questionsNum: 20,
       targetId: this.$route.query.id,
       targetType: this.$route.query.targetType,
       searchParams: this.$route.query.searchParams,
@@ -106,12 +106,16 @@ export default {
         }
       }).then(res =>{
         this.wrongNumCount = res.wrongNumCount
+        this.questionsNum = Math.min(this.questionsNum,this.wrongNumCount)
       }).catch(err =>{
         Toast.fail(err.message);
       })
     },
     // 开始答题
     startExercise() {
+      if(this.questionsNum === '0') return Toast.fail(this.$t('courseLearning.theNumberAnswers'))
+      if(this.questionsNum === '') return Toast.fail(this.$t('courseLearning.theNumberblank'))
+
       this.$router.replace({
         name: 'WrongExercisesDo',
         query: {
