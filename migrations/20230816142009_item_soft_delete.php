@@ -50,6 +50,9 @@ class ItemSoftDelete extends Migration
             $biz['db']->exec("ALTER TABLE `biz_question` ADD COLUMN `deleted_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '删除时间';");
         }
         $biz['db']->exec('ALTER TABLE `biz_question_favorite` ADD INDEX `item_id` (`item_id`);');
+        if (!$this->isFieldExist('activity_homework', 'assessmentBankId')) {
+            $biz['db']->exec("ALTER TABLE `activity_homework` ADD COLUMN `assessmentBankId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '试卷所属题库id' AFTER `assessmentId`;");
+        }
     }
 
     /**
@@ -86,6 +89,9 @@ class ItemSoftDelete extends Migration
         }
         if ($this->isFieldExist('biz_question', 'deleted_time')) {
             $biz['db']->exec('ALTER TABLE `biz_question` DROP COLUMN `deleted_time`;');
+        }
+        if ($this->isFieldExist('activity_homework', 'assessmentBankId')) {
+            $biz['db']->exec('ALTER TABLE `activity_homework` DROP COLUMN `assessmentBankId`;');
         }
     }
 

@@ -34,7 +34,10 @@ class HomeworkEventSubscriber extends EventSubscriber
 
     private function processOnItemsDelete($bankId, $deleteItems)
     {
-        $homeworkActivities = $this->getHomeworkActivityDao()->search([], [], 0, PHP_INT_MAX, ['assessmentId']);
+        $homeworkActivities = $this->getHomeworkActivityDao()->search(['assessmentBankId' => $bankId], [], 0, PHP_INT_MAX, ['assessmentId']);
+        if (empty($homeworkActivities)) {
+            return;
+        }
         $assessments = $this->getAssessmentService()->searchAssessments(
             ['bank_id' => $bankId, 'ids' => array_column($homeworkActivities, 'assessmentId'), 'displayable' => 0],
             [],

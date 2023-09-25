@@ -41,6 +41,7 @@ class HomeworkActivityDaoImpl extends AdvancedDaoImpl implements HomeworkActivit
             'conditions' => [
                 'answerSceneId = :answerSceneId',
                 'assessmentId = :assessmentId',
+                'assessmentBankId = :assessmentBankId',
                 /*S2B2C增加syncId*/
                 'syncId = :syncId',
                 'syncId in (:syncIds)',
