@@ -106,8 +106,8 @@ class ActivityDaoTest extends BaseDaoTestCase
     public function testFindOverlapTimeActivitiesByCourseId()
     {
         $activity1 = $this->mockActivity(['title' => 'activity1', 'mediaType' => 'live', 'startTime' => 20, 'endTime' => 30]);
-        $activity2 = $this->mockActivity(['title' => 'activity2', 'mediaType' => 'live', 'startTime' => 30, 'endTime' => 40]);
-        $activity3 = $this->mockActivity(['title' => 'activity3', 'startTime' => 25, 'endTime' => 35]);
+        $activity2 = $this->mockActivity(['title' => 'activity2', 'startTime' => 30, 'endTime' => 40]);
+        $activity3 = $this->mockActivity(['title' => 'activity3', 'mediaType' => 'live', 'startTime' => 25, 'endTime' => 35]);
         $activities = $this->getActivityDao()->findOverlapTimeActivitiesByCourseId(1, 30, 20, 2);
 
         $this->assertEquals(count($activities), 2);
