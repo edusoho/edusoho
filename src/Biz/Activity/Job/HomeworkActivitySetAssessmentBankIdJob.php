@@ -34,7 +34,7 @@ class HomeworkActivitySetAssessmentBankIdJob extends AbstractJob
         if ($updateHomeworkActivities) {
             $this->getHomeworkActivityDao()->batchUpdate(array_keys($updateHomeworkActivities), $updateHomeworkActivities);
         }
-        if (count($homeworkActivities) === 1000) {
+        if (1000 === count($homeworkActivities)) {
             $this->getSchedulerService()->register([
                 'name' => 'HomeworkActivitySetAssessmentBankIdJob',
                 'expression' => time(),
