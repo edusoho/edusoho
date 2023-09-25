@@ -166,6 +166,14 @@ Api.getSettings({
     }
 
     const hasToken = window.localStorage.getItem('token');
+
+    if (hasToken && !store.state.user) {
+      Api.getUserInfo({}).then(res => {
+        store.state.user = res;
+        localStorage.setItem('user', JSON.stringify(res));
+      });
+    }
+
     if (!hasToken && Number(GetUrlParam('needLogin'))) {
       window.location.href = `${
         location.origin

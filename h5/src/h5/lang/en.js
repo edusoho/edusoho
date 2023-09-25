@@ -10,6 +10,7 @@ export default {
     me: 'Me',
   },
   e: {
+    searchCourse: 'Find courses',
     freeForMembers: 'Free for members',
     live: 'Live',
     certificate: 'Cert.',
@@ -410,6 +411,8 @@ export default {
     yourAreAnswer: 'Your answer',
     analyze: 'analyze',
     selectedAnswer: 'Selected answer',
+    score: 'score',
+    comment: 'comment',
     referenceAnswer: 'Reference answer',
     submitATopic: 'Submit a topic',
     answerProgress: 'Answer progress',
@@ -511,6 +514,7 @@ export default {
     oneTips1:
       'Kind tips: There is only one chance to take the test, and the test will not be handed in automatically. The test time will be displayed in real time, and the time will not be counted if you leave in the middle',
     minutes: 'Minutes',
+    questionsNumTips: 'Note: The number of customized questions can only be an integer, range: 1 ≤ Number of questions ≤ A single error book All error questions, and the effect is only this time, the next time you enter the default value',
     second: 'Second',
     testTips: 'Test Notes',
     examOver: 'Exam is over',

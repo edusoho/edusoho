@@ -32,6 +32,7 @@
         style="margin-left: 8px;"
         @click="previewFile"
         :src="icons.preview"
+        class="review-img"
       />
     </div>
 
@@ -238,7 +239,9 @@ export default {
     border-radius: 4px;
 
     &__icon {
-      width: 24px;
+      width: 24px !important;
+      height: auto !important;
+      margin-bottom: 0 !important;
       margin-right: 8px;
     }
 
@@ -246,6 +249,12 @@ export default {
       margin-left: 8px;
       font-size: 12px;
       color: #999;
+    }
+
+    .review-img {
+      margin-bottom: 0 !important;
+      width: vw(30) !important;
+      height: vw(30) !important;
     }
   }
 </style>

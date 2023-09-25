@@ -1,20 +1,20 @@
 <template>
   <div>
     <div v-if="itemdata.parentTitle" class="subject-material">
-      <div :class="['material-stem-nowrap', isShowUpIcon ? 'material-stem' : '', {'exist-material': getAttachementMaterialType('material').length > 0 && isShowUpIcon }]">
+      <div :class="['material-stem-nowrap', isShowDownIcon ? 'material-stem' : '']">
         <span v-if="itemdata.parentTitle" :class="['material-tags']">
           {{ subject }}
         </span>
         <span class="material-text material-icon" v-html="stem" @click="handleClickImage($event.target.src)">
         </span>
-        <attachement-preview 
-          v-for="item in getAttachementByType('material')"
-          :canLoadPlayer="isCurrent"
-          :attachment="item"
-          :key="item.id" />
       </div>
-      <i @click="changeUpIcon" :class="['iconfont', 'icon-arrow-up', {'show-up-icon': isShowUpIcon }]"></i>
-      <i @click="changeDownIcon" :class="['iconfont', 'icon-arrow-down', {'show-down-icon': isShowDownIcon}]"></i>
+      <i @click="changeUpIcon" :class="['iconfont', 'icon-arrow-up', {'show-up-icon': isShowDownIcon }]"></i>
+      <i @click="changeDownIcon" :class="['iconfont', 'icon-arrow-down', {'show-down-icon': isShowUpIcon}]"></i>
+      <attachement-preview 
+        v-for="item in getAttachementMaterialType('material')"
+        :canLoadPlayer="isCurrent"
+        :attachment="item"
+        :key="item.id" />
     </div>
     <div class="subject">
       <span v-if="!itemdata.parentTitle" class="tags">
@@ -23,11 +23,6 @@
       <div v-if="!itemdata.parentTitle" class="subject-stem">
         <span class="serial-number">{{ itemdata.seq }}、</span>
         <div class="subject-stem__content rich-text" v-html="stem" @click="handleClickImage($event.target.src)" />
-        <attachement-preview 
-          v-for="item in getAttachementByType('material')"
-          :canLoadPlayer="isCurrent"
-          :attachment="item"
-          :key="item.id" />
       </div>
       <div v-if="itemdata.parentTitle" :class="['material-title',{'material-title-weight': itemdata.parentTitle}]">
         <span class="serial-number"><span class="material-type">[{{ itemdata.type === "uncertain_choice" ? $t('courseLearning.uncertainChoice') : $t('courseLearning.choice') }}] </span> {{ itemdata.materialIndex }}、</span>
@@ -41,7 +36,7 @@
         :key="item.id" />
       <van-checkbox-group
         v-model="result"
-        class="answer-paper"
+        :class="['answer-paper',{'convention': mode !== 'exercise'}]"
         @change="choose"
         :refreshKey="refreshKey"
       >
@@ -88,8 +83,14 @@
             </span>
           </div>
         </div>
+        <div v-if="mode === 'exam'" class="analysis-color mb-8">
+          {{ $t('courseLearning.score') }}：{{ itemdata.testResult ? itemdata.testResult.score : 0.0 }}
+        </div>
+        <div v-if="mode === 'exam'" class="analysis-color mb-8">
+          {{ $t('courseLearning.comment') }}：{{ itemdata.testResult ? itemdata.testResult.teacherSay === null ? '--' : itemdata.testResult.teacherSay : '' }}
+        </div>
         <div class="analysis-color">
-          {{ $t('courseLearning.analyze') }}：
+          <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
           <span v-if="analysis" v-html="analysis" @click="handleClickImage($event.target.src)" />
           <span v-else>{{ $t('courseLearning.noParsing') }}</span>
         </div>
@@ -104,11 +105,11 @@
     <div v-if="isShowFooterShardow()" class="footer-shadow">
     </div>
     <div v-if="parentType && parentType === 'material' && !disabledData" class="subject-footer">
-      {{ $t('courseLearning.analyze') }}：
+      <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
       <span v-if="parentTitleAnalysis !== ''" v-html="parentTitleAnalysis" @click="handleClickImage($event.target.src)" />
       <span v-else>{{ $t('courseLearning.noParsing') }}</span>
       <attachement-preview 
-        v-for="item in getAttachementByType('analysis')"
+        v-for="item in getAttachementMaterialType('analysis')"
         :canLoadPlayer="isCurrent"
         :attachment="item"
         :key="item.id" />
@@ -122,11 +123,21 @@
         >{{ $t('courseLearning.submitATopic') }}</van-button
       >
     </div>
+    <div v-if="totalCount === reviewedCount" class="submit-footer">
+      <van-button
+        class="submit-footer-btn"
+        :style="{width:width - 20 + 'px'}"
+        type="primary"
+        @click="goResults()"
+        >{{ $t('courseLearning.viewResult2') }}</van-button
+      >
+    </div>
   </div>
 </template>
 
 <script>
 import checkAnswer from '../../../../mixins/lessonTask/itemBank';
+import isShowFooterShardow from '../../../../mixins/lessonTask/footerShardow';
 import attachementPreview from './attachement-preview.vue';
 import { ImagePreview, Dialog } from 'vant'
 
@@ -140,7 +151,7 @@ export default {
       return arr[index];
     },
   },
-  mixins: [checkAnswer],
+  mixins: [checkAnswer,isShowFooterShardow],
   components: {
     attachementPreview,
   },
@@ -182,10 +193,6 @@ export default {
       type: String,
       default: '',
     },
-    myAnswer: {
-      type: Array,
-      default: () => []
-    },
     mode: {
       type: String,
       default: ''
@@ -201,6 +208,14 @@ export default {
     parentType: {
       type: String,
       default: '',
+    },
+    totalCount: {
+      type: Number,
+      default: 0
+    },
+    reviewedCount: {
+      type: Number,
+      default: 0
     },
   },
   data() {
@@ -260,43 +275,6 @@ export default {
       const arr = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.', 'G.', 'H.', 'I.', 'J.'];
       return arr[index];
     },
-    isShowFooterShardow() {
-      // 模式不为练习 并且不是最后一题,并且为答题模式
-      const lastQuestion = this.showShadow !== this.itemdata.id
-      if (this.mode === '' && lastQuestion && this.canDo) {
-        return true;
-      } else if (this.mode === '' && lastQuestion && !this.canDo && this.parentType !== 'material' ) {
-        // 模式不为练习，不是最后一题，是解析模式，并且题型不为材料题
-        return true;
-      }
-      
-      // 只有练习才有 isExercise --- 是不是练习解析页
-      if (this.isExercise) {
-        // 不是最后一题，练习模式为测验。并且不是材料题
-        if (this.mode === 'exercise' && lastQuestion && this.parentType !== 'material') {
-          return true;
-        } else if (this.mode === 'exercise' && lastQuestion && this.parentType === 'material') {
-          // 是练习解析页，不是最后一题，是材料题返回false
-          return false;
-        }
-      } 
-
-      // 是练习模式 并且为答题模式
-      if (this.mode === 'exercise' && this.canDo) {
-        // 为一题一答模式，不是最后一题，一题一答做题（true为可以选择，false为不可选，表示已提交）有没有提交
-        if (this.exerciseMode === '1' && lastQuestion && this.disabledData) {
-          return true
-        } 
-        // 一题一答，不是材料题，不是最后一题
-        if (this.exerciseMode === '1' && lastQuestion && this.parentType !== 'material') {
-          return true
-        }
-
-        if ( this.exerciseMode === '0' && lastQuestion && this.canDo ) {
-          return true
-        }
-      }
-    },
     refreshChoice(res) {
       if (res) {
         this.$nextTick(() => {
@@ -339,12 +317,12 @@ export default {
       return this.itemdata.parentTitle.attachments.filter(item => item.module === type) || []
     },
     changeUpIcon() {
-      this.isShowUpIcon = false
-      this.isShowDownIcon = true
-    },
-    changeDownIcon() {
       this.isShowUpIcon = true
       this.isShowDownIcon = false
+    },
+    changeDownIcon() {
+      this.isShowUpIcon = false
+      this.isShowDownIcon = true
     },
     submitTopic() {
       if (this.result.length === 0 && this.exerciseMode === '1') {
@@ -363,6 +341,9 @@ export default {
         this.radioDisabled = true
         this.$emit('submitSingleAnswer', this.result, this.itemdata);
       }
+    },
+    goResults() {
+      this.$emit('goResults');
     }
   },
 };
@@ -400,7 +381,8 @@ export default {
   .not-can-do {
     margin-right: vw(40);
   }
-  .exercise-do .active {
+  .exercise-do .active,
+  .convention .active {
       background: #F6F9FF;
       border: 1px solid #428FFA;
       .icon-a-Frame34723 {
@@ -425,9 +407,17 @@ export default {
     color: #D2D3D4;
   }
   /deep/.material-text {
+    img {
+      display: block !important;
+      margin-bottom: vw(8);
+      width: vw(156);
+      height: vw(88);
+      border-radius: vw(8);
+    }
     p {
       display: inline !important;
       font-size: vw(14);
+      overflow: hidden;
     }
   }
   .show-down-icon {

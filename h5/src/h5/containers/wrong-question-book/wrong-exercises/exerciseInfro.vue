@@ -16,7 +16,7 @@
               <i v-show="props.checked" class="iconfont icon-check"></i>
             </template>
           </van-radio>
-          <van-radio name="1" class="choose-mode-radio">
+          <!-- <van-radio name="1" class="choose-mode-radio" disabled>
             {{ $t('courseLearning.answerOneQuestionAtTime') }}
             <template #icon="props">
               <img
@@ -25,7 +25,7 @@
               />
               <i v-show="props.checked" class="iconfont icon-check"></i>
             </template>
-          </van-radio>
+          </van-radio> -->
         </van-radio-group>
       </div>
       <div class="amswer-num">
@@ -41,8 +41,7 @@
           />
         </div>
         <div class="questions-num-tips">
-          注意：自定义题目数量只能为整数，范围：1 ≤ 题目数量 ≤
-          单个错题本全部错题，且仅对本次生效，下次进入仍为默认值
+          {{ $t('courseLearning.questionsNumTips') }}
         </div>
       </div>
     </div>
@@ -154,9 +153,9 @@ export default {
       display: flex;
       flex-direction: column;
 
-      &:nth-child(1) {
-        margin-right: vw(64);
-      }
+      // &:nth-child(1) {
+      //   margin-right: vw(64);
+      // }
     }
   }
   .amswer-num {

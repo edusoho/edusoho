@@ -51,6 +51,9 @@
             :isExercise="isExercise"
             :disabledData="mode === 'exercise' ? canDo && iscando[index] : canDo"
             @singleChoose="singleChoose"
+            @goResults="goResults"
+            :totalCount="info.length"
+            :reviewedCount="reviewedCount ? reviewedCount : exerciseInfo ? exerciseInfo.reviewedCount : 0"
           />
 
           <choice-type
@@ -74,6 +77,9 @@
             :disabledData="mode === 'exercise' ? canDo && iscando[index] : canDo"
             @choiceChoose="choiceChoose"
             @submitSingleAnswer = "submitSingleAnswer"
+            @goResults="goResults"
+            :totalCount="info.length"
+            :reviewedCount="reviewedCount ? reviewedCount : exerciseInfo ? exerciseInfo.reviewedCount : 0"
           />
 
           <determine-type
@@ -95,6 +101,9 @@
             :parentType="paper.parentType ? paper.parentType : ''"
             :disabledData="mode === 'exercise' ? canDo && iscando[index] : canDo"
             @determineChoose="determineChoose"
+            @goResults="goResults"
+            :totalCount="info.length"
+            :reviewedCount="reviewedCount ? reviewedCount : exerciseInfo ? exerciseInfo.reviewedCount : 0"
           />
 
           <essay-type
@@ -114,6 +123,9 @@
             :analysis="paper.analysis"
             :disabledData="mode === 'exercise' ? canDo && iscando[index] : canDo"
             @submitSingleAnswer = "submitSingleAnswer"
+            @goResults="goResults"
+            :totalCount="info.length"
+            :reviewedCount="reviewedCount ? reviewedCount : exerciseInfo ? exerciseInfo.reviewedCount : 0"
           />
 
           <fill-type
@@ -134,6 +146,9 @@
             :analysis="paper.analysis"
             :disabledData="mode === 'exercise' ? canDo && iscando[index] : canDo"
             @submitSingleAnswer = "submitSingleAnswer"
+            @goResults="goResults"
+            :totalCount="info.length"
+            :reviewedCount="reviewedCount ? reviewedCount : exerciseInfo ? exerciseInfo.reviewedCount : 0"
           />
 
           <!-- <analysis
@@ -431,9 +446,6 @@ export default {
         } else {
           this.iscando[idx] = false
         }
-        // this.refreshKey = !this.refreshKey
-        // this.$emit('getData')
-        // console.log(this.$refs, this.current,this.$refs['choice'+idx][0]);
         this.reviewedCount = res.reviewedCount
         this.status = res.status
         this.myAnswer = res.response
@@ -453,13 +465,10 @@ export default {
         return String.fromCharCode(response + 65).split('')
       }
     },
-    // 答案对比
-    // answerComparison(answer, response) {
-    //   if(answer.length !== response.length) return false
-    //   return answer.sort().every((item,index) => {
-    //     return response.sort()[index] === item
-    //   })
-    // }
+    
+    goResults() {
+      this.$emit('goResults');
+    }
   },
   destroyed(){
     this.$store.commit(types.DESTROY_CLOUD_SDK);

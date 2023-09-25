@@ -56,6 +56,7 @@
       position="bottom"
       closeable
       round
+      :safe-area-inset-bottom="true"
       :style="{ height: '36%' }"
       class="choose-mode-popup"
     >
@@ -306,6 +307,15 @@ export default {
     bottom: vw(-10);
     font-size: vw(14);
     color: #00be63;
+  }
+
+  .choose-mode-radio {
+    display: flex;
+    flex-direction: column;
+
+    &:nth-child(1) {
+      margin-right: vw(64);
+    }
   }
 }
 </style>
