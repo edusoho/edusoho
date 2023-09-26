@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
+use Biz\ItemBankExercise\Service\AssessmentExerciseRecordService;
 use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -19,6 +20,8 @@ use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Codeages\Biz\ItemBank\Item\Type\EssayItem;
+use Codeages\Biz\ItemBank\Item\Type\MaterialItem;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -100,7 +103,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $wrongQuestion = [];
         foreach ($items as $item) {
-            if ('material' !== $item['type']) {
+            if (!in_array($item['type'], [MaterialItem::TYPE, EssayItem::TYPE])) {
                 $wrongQuestion[] = $wrongAnswerQuestionReports[$item['id']];
             }
         }
@@ -127,7 +130,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         $correctItems = $this->getItemService()->findItemsByIds(ArrayToolkit::column($correctAnswerQuestionReports, 'item_id'));
         $correctQuestions = [];
         foreach ($correctItems as $item) {
-            if ('material' !== $item['type']) {
+            if (!in_array($item['type'], [MaterialItem::TYPE, EssayItem::TYPE])) {
                 $correctQuestions[] = $correctAnswerQuestionReports[$item['id']];
             }
         }
@@ -152,7 +155,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $wrongQuestion = [];
         foreach ($items as $item) {
-            if ('material' !== $item['type']) {
+            if (!in_array($item['type'], [MaterialItem::TYPE, EssayItem::TYPE])) {
                 $wrongQuestion[] = $wrongAnswerQuestionReports[$item['id']];
             }
         }
@@ -200,6 +203,23 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
     protected function getWrongQuestionSource($answerRecord)
     {
+        $chapterExerciseRecord = $this->getItemBankChapterExerciseRecordService()->getByAnswerRecordId($answerRecord['id']);
+        if ($chapterExerciseRecord) {
+            $bankExercise = $this->getItemBankExerciseService()->get($chapterExerciseRecord['exerciseId']);
+
+            return [
+                'exercise', $bankExercise['questionBankId'] ?? 0, 'item_bank_chapter', $chapterExerciseRecord['exerciseId'],
+            ];
+        }
+        $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseRecordService()->getByAnswerRecordId($answerRecord['id']);
+        if ($assessmentExerciseRecord) {
+            $bankExercise = $this->getItemBankExerciseService()->get($assessmentExerciseRecord['exerciseId']);
+
+            return [
+                'exercise', $bankExercise['questionBankId'] ?? 0, 'item_bank_assessment', $assessmentExerciseRecord['exerciseId'],
+            ];
+        }
+
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
 
         if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
@@ -327,6 +347,14 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     protected function getItemBankChapterExerciseRecordService()
     {
         return $this->getBiz()->service('ItemBankExercise:ChapterExerciseRecordService');
+    }
+
+    /**
+     * @return AssessmentExerciseRecordService
+     */
+    protected function getItemBankAssessmentExerciseRecordService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:AssessmentExerciseRecordService');
     }
 
     /**

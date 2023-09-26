@@ -182,7 +182,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     public function canReviewBySelf($reportId, $userId)
     {
         //判断当前批阅是不是题库练习或考试练习
-        $answerReport = $this->getAnswerReportService()->get($reportId);
+        $answerReport = $this->getAnswerReportService()->getSimple($reportId);
         if (empty($answerReport)) {
             return false;
         }

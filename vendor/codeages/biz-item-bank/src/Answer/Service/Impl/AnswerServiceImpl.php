@@ -2,30 +2,27 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
-use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MemberService;
-use Biz\Review\Service\ReviewService;
-use Biz\System\Service\LogService;
-use Biz\Testpaper\Job\AssessmentAutoSubmitJob;
-use Biz\Testpaper\TestpaperException;
-use Biz\User\UserException;
+use Biz\Common\CommonException;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
+use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
+use Codeages\Biz\ItemBank\Item\Type\Question;
 use Ramsey\Uuid\Uuid;
 
 class AnswerServiceImpl extends BaseService implements AnswerService
@@ -36,6 +33,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     {
         if (!$this->getAnswerSceneService()->canStart($answerSceneId, $userId)) {
             throw new AnswerSceneException('AnswerScene did not start.', ErrorCode::ANSWER_SCENE_NOTSTART);
+        }
+        $this->modifyAssessmentIfItemDeleted($assessmentId);
+        if ($this->getAssessmentService()->isEmptyAssessment($assessmentId)) {
+            throw new AnswerException('试卷全部题目已被删除，请联系教师或管理员', ErrorCode::ASSESSMENT_EMPTY);
         }
         $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
 
@@ -65,9 +66,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     public function submitAnswer(array $assessmentResponse)
     {
+        $assessmentResponse = $this->convertAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->validateAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->getAnswerRandomSeqService()->restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
-        $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
         $assessmentReport = $this->getAssessmentService()->review(
             $assessmentResponse['assessment_id'],
             $assessmentResponse['section_responses']
@@ -76,54 +77,24 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerQuestionReports = $this->getAnswerQuestionReportsByAssessmentReport($assessmentReport);
 
         $answerRecord = $this->getAnswerRecordService()->get($assessmentReport['answer_record_id']);
-        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
-        $canFinished = $this->canFinished($answerQuestionReports, $answerScene);
 
         try {
             $this->beginTransaction();
 
             if ($this->getAnswerQuestionReportService()->count(
-                ['answer_record_id' => $assessmentResponse['answer_record_id']]
+                ['answer_record_id' => $answerRecord['id']]
             )) {
                 $this->getAnswerQuestionReportService()->batchUpdate($answerQuestionReports);
             } else {
                 $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
             }
 
-            $subjectiveScore = $this->sumSubjectiveScore($answerQuestionReports);
-            $score = $this->sumScore($answerQuestionReports);
+            $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
+            $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
+            $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+            $isFinished = $this->isFinished($answerQuestionReports, $answerScene);
+            list($answerRecord) = $this->generateAnswerReport($answerQuestionReports, $answerRecord, $assessmentResponse['used_time'], $isFinished);
 
-            $answerReport = $this->getAnswerReportService()->create([
-                'user_id' => $answerRecord['user_id'],
-                'assessment_id' => $assessmentResponse['assessment_id'],
-                'answer_record_id' => $assessmentResponse['answer_record_id'],
-                'total_score' => $this->sumTotalScore($answerQuestionReports),
-                'score' => $score,
-                'subjective_score' => $subjectiveScore,
-                'objective_score' => $score - $subjectiveScore,
-                'right_rate' => $this->sumRightRate($answerQuestionReports),
-                'right_question_count' => $this->getRightQuestionCount($answerQuestionReports),
-                'review_time' => $canFinished ? time() : 0,
-            ]);
-
-            $this->updateAttachmentsTarget($assessmentResponse['answer_record_id'], $attachments);
-
-            $answerRecord = $this->getAnswerRecordService()->update(
-                $assessmentResponse['answer_record_id'],
-                [
-                    'answer_report_id' => $answerReport['id'],
-                    'status' => $canFinished ? AnswerService::ANSWER_RECORD_STATUS_FINISHED : AnswerService::ANSWER_RECORD_STATUS_REVIEWING,
-                    'end_time' => time(),
-                    'used_time' => $assessmentResponse['used_time'],
-                ]
-            );
-
-            if ($canFinished) {
-                $this->getAnswerSceneService()->update(
-                    $answerScene['id'],
-                    ['name' => $answerScene['name'], 'last_review_time' => time()]
-                );
-            }
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -151,7 +122,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 }
                 $itemResponse = ['question_responses' => $itemResponse];
                 $itemResponse['item_id'] = $itemId;
-
             }
             $itemResponses = array_values($itemResponses);
             $sectionResponse = ['item_responses' => $itemResponses];
@@ -167,24 +137,23 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     public function batchAutoSubmit($answerSceneId, $assessmentId, $userIds)
     {
         if (empty($userIds)) {
-            return;
+            throw new AnswerException('没有要自动交卷的用户', ErrorCode::NO_USER_AUTO_SUMBMIT_ANSWER);
         }
 
         $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
         if (empty($answerScene)) {
-            return;
+            throw new AnswerSceneException('AnswerScene not found.', ErrorCode::ANSWER_SCENE_NOTFOUD);
         }
         if (empty($answerScene['end_time']) || $answerScene['end_time'] >= time()) {
-            return;
+            throw new AnswerSceneException('AnswerScene endTime within expory date.', ErrorCode::ANSWER_ENDTIME_WITHIN_EXPIRY_DATE);
         }
 
         $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
         if (empty($assessment)) {
-            return;
+            throw AssessmentException::ASSESSMENT_NOTEXIST();
         }
 
         $answerRecords = $this->batchCreateAnswerRecords($answerScene, $assessmentId, $userIds);
-
         $answerReports = $this->batchCreateAnswerReports($assessmentId, $answerRecords);
 
         $updateAnswerRecords = [];
@@ -252,20 +221,20 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     protected function batchCreateAnswerQuestionReports($assessmentId, $answerReports)
     {
-        $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
-        if (empty($assessment)) {
+        if ($this->getAssessmentService()->isEmptyAssessment($assessmentId)) {
             return;
         }
+        $sections = $this->getAssessmentSectionService()->findSectionDetailByAssessmentId($assessmentId);
 
         $answerQuestionReports = [];
         $newAnswerQuestionReport = [
             'assessment_id' => $assessmentId,
-            'status' => 'no_answer'
+            'status' => AnswerQuestionReportService::STATUS_NOANSWER,
         ];
 
         foreach ($answerReports as $answerReport) {
             $newAnswerQuestionReport['answer_record_id'] = $answerReport['answer_record_id'];
-            foreach ($assessment['sections'] as $section) {
+            foreach ($sections as $section) {
                 $newAnswerQuestionReport['section_id'] = $section['id'];
                 foreach ($section['items'] as $item) {
                     $newAnswerQuestionReport['item_id'] = $item['id'];
@@ -279,6 +248,158 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
+    }
+
+    public function submitSingleAnswer($answerRecordId, $params)
+    {
+        $reviewedQuestion = $this->getAnswerReviewedQuestionService()->getByAnswerRecordIdAndQuestionId($answerRecordId, $params['question_id']);
+        if ($reviewedQuestion) {
+            throw new AnswerException('该题已提交，不能再次提交', ErrorCode::ANSWER_SUMBMITTED);
+        }
+
+        $answerQuestionReport = $this->reviewSingleAnswer($answerRecordId, $params);
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+
+        try {
+            $this->beginTransaction();
+
+            $questionReport = $this->getAnswerQuestionReportService()->getByAnswerRecordIdAndQuestionId($answerRecord['id'], $params['question_id']);
+            if ($questionReport) {
+                $answerQuestionReport = $this->getAnswerQuestionReportService()->updateAnswerQuestionReport($questionReport['id'], $answerQuestionReport);
+            } else {
+                $answerQuestionReport = $this->getAnswerQuestionReportService()->createAnswerQuestionReport($answerQuestionReport);
+            }
+            $attachments = $this->getSingleAnswerAttachments($params);
+            $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
+
+            $answerReviewedQuestion = $this->createAnswerReviewedQuestion($answerRecord['id'], $answerQuestionReport['question_id']);
+            if (!$this->needManualMarking($answerQuestionReport['status'], $answerRecord['answer_scene_id'])) {
+                $this->getAnswerReviewedQuestionService()->updateAnswerReviewedQuestion($answerReviewedQuestion['id'], ['is_reviewed' => 1]);
+                $answerQuestionReport['isReviewed'] = true;
+            }
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        return $answerQuestionReport;
+    }
+
+    private function needManualMarking($status, $answerSceneId)
+    {
+        if (AnswerQuestionReportService::STATUS_REVIEWING != $status) {
+            return false;
+        }
+        $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
+
+        return $answerScene['manual_marking'];
+    }
+
+    private function createAnswerReviewedQuestion($answerRecordId, $questionId)
+    {
+        $answerReviewedQuestion = [
+            'answer_record_id' => $answerRecordId,
+            'question_id' => $questionId,
+        ];
+
+        return $this->getAnswerReviewedQuestionService()->createAnswerReviewedQuestion($answerReviewedQuestion);
+    }
+
+    public function finishAllSingleAnswer($answerRecord, $type)
+    {
+        if (!in_array($type, ['submit', 'review', 'finish'])) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+
+        $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
+        list($answerRecord, $answerReport) = $this->generateAnswerReport($answerQuestionReports, $answerRecord);
+
+        if ($type == 'submit') {
+            $this->dispatch('answer.submitted', $answerRecord);
+        } elseif ($type == 'review') {
+            $this->dispatch('answer.finished', $answerReport);
+        }
+    }
+
+    protected function getSingleAnswerAttachments($params)
+    {
+        $attachments = [];
+        if (empty($params['attachments'])) {
+            return $attachments;
+        }
+        foreach ($params['attachments'] as $attachment) {
+            $attachments[] = [
+                'id' => $attachment['id'],
+                'module' => $attachment['module'],
+                'question_id' => $params['question_id'],
+            ];
+        }
+
+        return $attachments;
+    }
+
+    protected function reviewSingleAnswer($answerRecordId, $params)
+    {
+        $questionReport = $this->getQuestionProcessor()->review($params['question_id'], empty($params['response']) ? [] : $params['response']);
+        if ('none' == $questionReport['result']) {
+            $questionReport['result'] = AnswerQuestionReportService::STATUS_REVIEWING;
+        }
+
+        $answerQuestionReport = [
+            'identify' => $answerRecordId . '_' . $questionReport['question_id'],
+            'total_score' => empty($questionReport['total_score']) ? 0.0 : $questionReport['total_score'],
+            'answer_record_id' => $answerRecordId,
+            'assessment_id' => $params['assessment_id'],
+            'section_id' => $params['section_id'],
+            'item_id' => $params['item_id'],
+            'question_id' => $questionReport['question_id'],
+            'score' => empty($questionReport['score']) ? 0.0 : $questionReport['score'],
+            'status' => empty($questionReport['result']) ? '' : $questionReport['result'],
+            'response' => empty($questionReport['response']) ? [] : $questionReport['response'],
+        ];
+
+        return $answerQuestionReport;
+    }
+
+    protected function generateAnswerReport($answerQuestionReports, $answerRecord, $usedTime = 0, $isFinished = true)
+    {
+        $subjectiveScore = $this->sumSubjectiveScore($answerQuestionReports);
+        $score = $this->sumScore($answerQuestionReports);
+
+        $answerReport = $this->getAnswerReportService()->create([
+            'user_id' => $answerRecord['user_id'],
+            'assessment_id' => $answerRecord['assessment_id'],
+            'answer_record_id' => $answerRecord['id'],
+            'total_score' => $this->sumTotalScore($answerQuestionReports),
+            'score' => $score,
+            'subjective_score' => $subjectiveScore,
+            'objective_score' => $score - $subjectiveScore,
+            'right_rate' => $this->sumRightRate($answerQuestionReports),
+            'right_question_count' => $this->getRightQuestionCount($answerQuestionReports),
+            'review_time' => $isFinished ? time() : 0,
+        ]);
+
+        $answerRecord = $this->getAnswerRecordService()->update(
+            $answerRecord['id'],
+            [
+                'answer_report_id' => $answerReport['id'],
+                'status' => $isFinished ? AnswerService::ANSWER_RECORD_STATUS_FINISHED : AnswerService::ANSWER_RECORD_STATUS_REVIEWING,
+                'end_time' => time(),
+                'used_time' => $usedTime ?: time() - $answerRecord['created_time'],
+            ]
+        );
+
+        if ($isFinished) {
+            $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+            $this->getAnswerSceneService()->update(
+                $answerScene['id'],
+                ['name' => $answerScene['name'], 'last_review_time' => time()]
+            );
+        }
+
+        return [$answerRecord, $answerReport];
     }
 
     protected function sumTotalScore(array $answerQuestionReports)
@@ -298,7 +419,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function sumSubjectiveScore(array $answerQuestionReports)
     {
         $score = 0;
-        $questions = $this->getItemService()->findQuestionsByQuestionIds(
+        $questions = $this->getItemService()->findQuestionsByQuestionIdsIncludeDeleted(
             ArrayToolkit::column($answerQuestionReports, 'question_id')
         );
 
@@ -331,7 +452,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return array_sum(ArrayToolkit::column($answerQuestionReports, 'score'));
     }
 
-    protected function canFinished(array $answerQuestionReports, $answerScene)
+    protected function isFinished(array $answerQuestionReports, $answerScene)
     {
         if (0 == $answerScene['manual_marking']) {
             return true;
@@ -368,14 +489,19 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $answerQuestionReports;
     }
 
-    protected function getAnswerQuestionReportsAndAttachmentsByAssessmentResponse(array $assessmentResponse)
+    protected function getAnswerQuestionReportsAndAttachmentsByAssessmentResponse(array $assessmentResponse, $reviewedQuestions = [])
     {
         $answerQuestionReports = [];
         $attachments = [];
+        $reviewedQuestions = ArrayToolkit::index($reviewedQuestions, 'question_id');
 
         foreach ($assessmentResponse['section_responses'] as $sectionResponse) {
             foreach ($sectionResponse['item_responses'] as $itemResponse) {
                 foreach ($itemResponse['question_responses'] as $questionResponse) {
+                    if (!empty($reviewedQuestions[$questionResponse['question_id']])) {
+                        continue;
+                    }
+
                     $answerQuestionReports[] = [
                         'identify' => $assessmentResponse['answer_record_id'] . '_' . $questionResponse['question_id'],
                         'answer_record_id' => $assessmentResponse['answer_record_id'],
@@ -445,7 +571,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $reviewQuestionReports = ArrayToolkit::index($reviewReport['question_reports'], 'id');
         $questionReportIds = ArrayToolkit::column($reviewReport['question_reports'], 'id');
-        if ($questionReportIds){
+        if ($questionReportIds) {
             $conditions = [
                 'ids' => $questionReportIds,
                 'answer_record_id' => $answerRecord['id'],
@@ -456,7 +582,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 0,
                 $this->getAnswerQuestionReportService()->count($conditions)
             );
-
             $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($answerRecord['assessment_id']);
             foreach ($questionReports as &$questionReport) {
                 $questionReport['comment'] = empty($reviewQuestionReports[$questionReport['id']]['comment']) ? '' : $this->biz['item_bank_html_helper']->purify(
@@ -522,6 +647,154 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $answerReport;
     }
 
+    public function reviewSingleAnswerByManual($answerRecordId, $params)
+    {
+        $reviewedQuestion = $this->getAnswerReviewedQuestionService()->getByAnswerRecordIdAndQuestionId($answerRecordId, $params['question_id']);
+        if (empty($reviewedQuestion)) {
+            throw new AnswerException('该题还未提交，不能批阅', ErrorCode::ANSWER_NOT_SUBMIT);
+        }
+        if ($reviewedQuestion['is_reviewed']) {
+            throw new AnswerException('该题已批阅，不能再次批阅', ErrorCode::ANSWER_REVIEWED);
+        }
+
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        $questionReport = $this->getAnswerQuestionReportService()->getByAnswerRecordIdAndQuestionId($answerRecordId, $params['question_id']);
+        if (empty($questionReport)) {
+            throw new AnswerReportException('Answer report not found.', ErrorCode::ANSWER_REPORT_NOTFOUND);
+        }
+        if ($questionReport['status'] == AnswerQuestionReportService::STATUS_NOANSWER) {
+            $params['status'] == AnswerQuestionReportService::STATUS_WRONG;
+        }
+
+        try {
+            $this->beginTransaction();
+
+            $answerQuestionReport = $this->getAnswerQuestionReportService()->updateAnswerQuestionReport($questionReport['id'], ['status' => $params['status']]);
+
+            $answerReviewedQuestion = $this->getAnswerReviewedQuestionService()->getByAnswerRecordIdAndQuestionId($answerRecord['id'], $questionReport['question_id']);
+            $this->getAnswerReviewedQuestionService()->updateAnswerReviewedQuestion($answerReviewedQuestion['id'], ['is_reviewed' => 1]);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        return $answerQuestionReport;
+    }
+
+    public function finishAnswer($answerRecordId)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+
+        try {
+            $this->beginTransaction();
+
+            $this->generateNoAnswerQuestionReports($answerRecord);
+            $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
+            list($answerRecord) = $this->generateAnswerReport($answerQuestionReports, $answerRecord);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        $this->dispatch('answer.submitted', $answerRecord);
+
+        return $answerRecord;
+    }
+
+    public function getSubmittedQuestions($answerRecordId)
+    {
+        $reviewedQuestions = $this->getAnswerReviewedQuestionService()->findByAnswerRecordId($answerRecordId);
+        if (empty($reviewedQuestions)) {
+            return [];
+        }
+        $reviewedQuestions = ArrayToolkit::index($reviewedQuestions, 'question_id');
+
+        $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
+        if (empty($answerQuestionReports)) {
+            return [];
+        }
+        $answerQuestionReports = ArrayToolkit::index($answerQuestionReports, 'question_id');
+
+        $questions = $this->getItemService()->findQuestionsByQuestionIdsIncludeDeleted(array_column($reviewedQuestions, 'question_id'));
+        if (empty($questions)) {
+            return [];
+        }
+
+        $submittedQuestions = [];
+        foreach ($reviewedQuestions as $questionId => $reviewedQuestion) {
+            $submittedQuestions[] = [
+                'questionId' => $questionId,
+                'answer' => $questions[$questionId]['answer'],
+                'analysis' => $questions[$questionId]['analysis'],
+                'manualMarking' => $reviewedQuestion['is_reviewed'] ? 0 : 1,
+                'status' => $answerQuestionReports[$questionId]['status'],
+                'response' => $answerQuestionReports[$questionId]['response'],
+            ];
+        }
+
+        return $submittedQuestions;
+    }
+
+    private function modifyAssessmentIfItemDeleted($assessmentId)
+    {
+        $toDeleteSectionItems = $this->getSectionItemService()->findDeletedAssessmentSectionItems($assessmentId);
+        if (empty($toDeleteSectionItems)) {
+            return;
+        }
+        $assessmentSnapshots = $this->getAssessmentService()->createAssessmentSnapshotsIncludeSectionsAndItems([$assessmentId]);
+        $this->getAnswerRecordService()->replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots);
+        $this->getAnswerReportService()->replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots);
+        $this->getAssessmentService()->modifyAssessmentsAndSectionsWithToDeleteSectionItems($toDeleteSectionItems);
+        $this->getSectionItemService()->deleteAssessmentSectionItems($toDeleteSectionItems);
+    }
+
+    private function generateNoAnswerQuestionReports($answerRecord)
+    {
+        $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($answerRecord['assessment_id']);
+
+        $answerReviewedQuestions = $this->getAnswerReviewedQuestionService()->findByAnswerRecordId($answerRecord['id']);
+        $answerReviewedQuestions = ArrayToolkit::index($answerReviewedQuestions, 'question_id');
+
+        $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
+        $answerQuestionReports = ArrayToolkit::index($answerQuestionReports, 'question_id');
+
+        $createQuestionReports = [];
+        $updateQuestionReports = [];
+        foreach ($assessmentQuestions as $questionId => $assessmentQuestion) {
+            if (empty($answerQuestionReports[$questionId])) {
+                $createQuestionReports[] = [
+                    'identify' => $answerRecord['id'] . '_' . $questionId,
+                    'answer_record_id' => $answerRecord['id'],
+                    'assessment_id' => $answerRecord['assessment_id'],
+                    'section_id' => $assessmentQuestion['section_id'],
+                    'item_id' => $assessmentQuestion['item_id'],
+                    'question_id' => $questionId,
+                    'score' => '0',
+                    'total_score' => $assessmentQuestion['score'],
+                    'response' => [],
+                    'status' => AnswerQuestionReportService::STATUS_NOANSWER,
+                    'comment' => '',
+                    'revise' => [],
+                ];
+                continue;
+            }
+            if (empty($answerReviewedQuestions[$questionId])) {
+                $updateQuestionReports[] = [
+                    'identify' => $answerQuestionReports[$questionId]['identify'],
+                    'response' => [],
+                    'status' => AnswerQuestionReportService::STATUS_NOANSWER,
+                ];
+            }
+        }
+
+        $this->getAnswerQuestionReportService()->batchCreate($createQuestionReports);
+        $this->getAnswerQuestionReportService()->batchUpdate($updateQuestionReports);
+    }
+
     public function reviseFillAnswer($answerRecordId, $fillData)
     {
         if (empty($fillData)) {
@@ -566,7 +839,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'right_rate' => $this->sumRightRate($answerReports),
             'right_question_count' => $this->getRightQuestionCount($answerReports),
         ]);
-
     }
 
     protected function processFillQuestionReviseScore($answerRecord, $answerReportQuestion, $fillData)
@@ -578,7 +850,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $questions = \AppBundle\Common\ArrayToolkit::index($item['score_rule'], 'question_id');
         $questionRule = $questions[$answerReportQuestion['question_id']]['rule'];
         $questionRule = \AppBundle\Common\ArrayToolkit::index($questionRule, 'name');
-        $question = $this->getQuestionDao()->get($answerReportQuestion['question_id']);
+        $question = $this->getItemService()->getQuestionIncludeDeleted($answerReportQuestion['question_id']);
         $answers = [];
         foreach ($question['answer'] as $key => $answer) {
             $answers[$key] = explode('|', $answer);
@@ -591,22 +863,22 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $revise = $answerReportQuestion['revise'];
         foreach ($fillData['answer'] as $key => $value) {
             if (!empty($revise[$key])) {
-                $rightCount++;
+                ++$rightCount;
                 continue;
             } else {
                 $revise[$key] = 0;
             }
             if (!empty($result[$key]) || (empty($result[$key]) && !empty($value))) {
                 $revise[$key] = 1;
-                $rightCount++;
+                ++$rightCount;
                 continue;
             }
         }
         $rule = $questionRule['part_right'];
-        if ($rule['score_rule']['scoreType'] == 'question') {
+        if ('question' == $rule['score_rule']['scoreType']) {
             $score = $rightCount == count($answers) ? $item['score'] : 0.0;
         }
-        if ($rule['score_rule']['scoreType'] == 'option') {
+        if ('option' == $rule['score_rule']['scoreType']) {
             $totle = $rule['score_rule']['otherScore'] * $rightCount;
             $score = $totle >= $answerReportQuestion['score'] && $totle <= $answerReportQuestion['total_score'] ? $totle : $answerReportQuestion['score'];
         }
@@ -644,7 +916,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             if (empty($reviewQuestionReport['status'])) {
                 $status = AnswerQuestionReportService::STATUS_RIGHT;
             } else {
-                $status = $reviewQuestionReport['status'] == AnswerQuestionReportService::STATUS_WRONG ? AnswerQuestionReportService::STATUS_WRONG : AnswerQuestionReportService::STATUS_RIGHT;
+                $status = AnswerQuestionReportService::STATUS_WRONG == $reviewQuestionReport['status'] ? AnswerQuestionReportService::STATUS_WRONG : AnswerQuestionReportService::STATUS_RIGHT;
             }
 
             return [0, $status];
@@ -776,32 +1048,38 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     public function saveAnswer(array $assessmentResponse)
     {
+        $assessmentResponse = $this->convertAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->validateAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->getAnswerRandomSeqService()->restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
 
         try {
             $this->beginTransaction();
 
+            $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
+            if (ExerciseMode::SUBMIT_SINGLE == $answerRecord['exercise_mode']) {
+                $reviewedQuestions = $this->getAnswerReviewedQuestionService()->findByAnswerRecordId($answerRecord['id']);
+            }
+
             list($answerQuestionReports, $attachments) = $this->getAnswerQuestionReportsAndAttachmentsByAssessmentResponse(
-                $assessmentResponse
+                $assessmentResponse,
+                $reviewedQuestions ?? []
             );
             if ($this->getAnswerQuestionReportService()->count(
-                ['answer_record_id' => $assessmentResponse['answer_record_id']]
+                ['answer_record_id' => $answerRecord['id']]
             )) {
                 $this->getAnswerQuestionReportService()->batchUpdate($answerQuestionReports);
             } else {
                 $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
             }
 
-            $this->updateAttachmentsTarget($assessmentResponse['answer_record_id'], $attachments);
+            $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
 
             //判断模拟考试应该取当前时间减去开始时间
-            $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
-            if ($answerRecord['exam_mode'] == self::EXAM_MODE_SIMULATION) {
+            if (self::EXAM_MODE_SIMULATION == $answerRecord['exam_mode']) {
                 $assessmentResponse['used_time'] = time() - $answerRecord['created_time'];
             }
 
-            $this->getAnswerRecordService()->update($assessmentResponse['answer_record_id'], [
+            $this->getAnswerRecordService()->update($answerRecord['id'], [
                 'used_time' => $assessmentResponse['used_time'],
             ]);
 
@@ -812,6 +1090,27 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $this->dispatch('answer.saved', $assessmentResponse);
+
+        return $assessmentResponse;
+    }
+
+    private function convertAssessmentResponse($assessmentResponse)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
+        if (empty($answerRecord)) {
+            return $assessmentResponse;
+        }
+        if ($answerRecord['assessment_id'] == $assessmentResponse['assessment_id']) {
+            return $assessmentResponse;
+        }
+        $assessmentSnapshot = $this->getAssessmentService()->getAssessmentSnapshotBySnapshotAssessmentId($answerRecord['assessment_id']);
+        if (empty($assessmentSnapshot) || $assessmentSnapshot['origin_assessment_id'] != $assessmentResponse['assessment_id']) {
+            return $assessmentResponse;
+        }
+        $assessmentResponse['assessment_id'] = $answerRecord['assessment_id'];
+        foreach ($assessmentResponse['section_responses'] as &$sectionResponse) {
+            $sectionResponse['section_id'] = $assessmentSnapshot['sections_snapshot'][$sectionResponse['section_id']];
+        }
 
         return $assessmentResponse;
     }
@@ -845,7 +1144,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         ]);
 
         $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
-        if (empty($this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']))) {
+        if (empty($answerRecord)) {
             throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
         }
 
@@ -853,10 +1152,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             throw $this->createInvalidArgumentException('assessment_id invalid.');
         }
 
-        if (!in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_DOING, AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
+        if (!in_array($answerRecord['status'], [AnswerRecordStatus::DOING, AnswerRecordStatus::PAUSED])) {
             throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);
         }
-
 
         foreach ($assessmentResponse['section_responses'] as &$sectionResponse) {
             foreach ($sectionResponse['item_responses'] as &$itemResponse) {
@@ -879,14 +1177,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             return;
         }
 
-        if ($answerRecord['exam_mode'] != self::EXAM_MODE_SIMULATION) {
+        if (self::EXAM_MODE_SIMULATION != $answerRecord['exam_mode']) {
             return;
         }
         $autoSubmitJob = [
             'name' => 'AssessmentAutoSubmitJob_' . $answerRecord['id'] . '_' . time(),
             'expression' => time() + $answerScene['limited_time'] * 60 + 120,
             'class' => 'Biz\Testpaper\Job\AssessmentAutoSubmitJob',
-            'args' => ['answerRecordId' => $answerRecord['id']]
+            'args' => ['answerRecordId' => $answerRecord['id']],
         ];
 
         $this->getSchedulerService()->register($autoSubmitJob);
@@ -957,11 +1255,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     }
 
     /**
-     * @return QuestionDao
+     * @return AssessmentSectionService
      */
-    protected function getQuestionDao()
+    protected function getAssessmentSectionService()
     {
-        return $this->biz->dao('ItemBank:Item:QuestionDao');
+        return $this->biz->service('ItemBank:Assessment:AssessmentSectionService');
     }
 
     /**
@@ -991,5 +1289,21 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getSchedulerService()
     {
         return $this->biz->service('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return Question
+     */
+    protected function getQuestionProcessor()
+    {
+        return $this->biz['question_processor'];
+    }
+
+    /**
+     * @return AnswerReviewedQuestionService
+     */
+    protected function getAnswerReviewedQuestionService()
+    {
+        return $this->biz->service('ItemBank:Answer:AnswerReviewedQuestionService');
     }
 }

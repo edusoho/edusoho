@@ -4,6 +4,7 @@ namespace Biz\ItemBankExercise\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\ItemBankExercise\Dao\ExerciseQuestionRecordDao;
 use Biz\ItemBankExercise\Service\ExerciseQuestionRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 
@@ -76,6 +77,11 @@ class ExerciseQuestionRecordServiceImpl extends BaseService implements ExerciseQ
         !empty($createRecords) && $this->batchCreate($createRecords);
     }
 
+    public function countQuestionRecordStatus($exerciseId, $itemIds)
+    {
+        return $this->getItemBankExerciseQuestionRecordDao()->countQuestionRecordStatus($exerciseId, $itemIds);
+    }
+
     protected function getAnswerQuestionReports($answerReportId)
     {
         $answerReport = $this->getAnswerReportService()->get($answerReportId);
@@ -122,6 +128,9 @@ class ExerciseQuestionRecordServiceImpl extends BaseService implements ExerciseQ
         return $this->createService('ItemBankExercise:ExerciseModuleService');
     }
 
+    /**
+     * @return ExerciseQuestionRecordDao
+     */
     protected function getItemBankExerciseQuestionRecordDao()
     {
         return $this->createDao('ItemBankExercise:ExerciseQuestionRecordDao');

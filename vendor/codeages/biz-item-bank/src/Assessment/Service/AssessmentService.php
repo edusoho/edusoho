@@ -43,4 +43,14 @@ interface AssessmentService
     public function exportAssessment($assessmentId, $path, $imgRootDir);
 
     public function findAssessmentQuestions($assessmentId);
+
+    public function countAssessmentItemTypesNum($assessmentId);
+
+    public function createAssessmentSnapshotsIncludeSectionsAndItems(array $assessmentIds);
+
+    public function modifyAssessmentsAndSectionsWithToDeleteSectionItems(array $toDeleteSectionItems);
+
+    public function getAssessmentSnapshotBySnapshotAssessmentId($snapshotAssessmentId);
+
+    public function isEmptyAssessment($assessmentId);
 }

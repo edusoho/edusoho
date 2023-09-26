@@ -3,10 +3,13 @@
 namespace Codeages\Biz\ItemBank\Item\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
+use Codeages\Biz\Framework\Dao\SoftDelete;
 use Codeages\Biz\ItemBank\Item\Dao\AttachmentDao;
 
 class AttachmentDaoImpl extends AdvancedDaoImpl implements AttachmentDao
 {
+    use SoftDelete;
+
     protected $table = 'biz_item_attachment';
 
     public function getByGlobalId($globalId)

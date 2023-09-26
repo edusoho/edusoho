@@ -47,9 +47,10 @@ class ItemBankExercise extends AbstractResource
             unset($conditions['categoryId']);
         }
 
-        $sort = $this->getSort($request);
+        $sort = $this->getSort($request) ?: ['recommendedSeq' => 'ASC'];
+
         if (array_key_exists('recommendedSeq', $sort)) {
-            $sort = ['recommended' => 'DESC', 'recommendedSeq' => 'ASC', 'createdTime' => 'DESC'];
+            $sort = ['recommended' => 'DESC', 'recommendedSeq' => 'ASC', 'updatedTime' => 'DESC'];
             $itemBankExercises = $this->getItemBankExerciseService()->search($conditions, $sort, $offset, $limit);
         } elseif (array_key_exists('studentNum', $sort) && array_key_exists('lastDays', $conditions)) {
             $itemBankExercises = $this->getItemBankExerciseService()->searchOrderByStudentNumAndLastDays($conditions, $conditions['lastDays'], $offset, $limit);

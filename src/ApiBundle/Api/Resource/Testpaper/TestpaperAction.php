@@ -16,6 +16,7 @@ use Biz\Task\TaskException;
 use Biz\Testpaper\TestpaperException;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -99,14 +100,14 @@ class TestpaperAction extends AbstractResource
             }
 
             $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $assessment['id'], $user['id']);
-        } elseif ('reviewing' != $answerRecord['status']) {
+        } elseif (AnswerRecordStatus::REVIEWING != $answerRecord['status']) {
             $answerRecord = $this->getAnswerService()->continueAnswer($answerRecord['id']);
         }
 
-        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
         $questionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecord['id']);
-        $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+        $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
         $testpaperWrapper = new TestpaperWrapper();
@@ -166,9 +167,9 @@ class TestpaperAction extends AbstractResource
 
         $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
-        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
 
-        if ('1' == $scene['do_times'] && $answerRecord && 'finished' == $answerRecord['status']) {
+        if ('1' == $scene['do_times'] && $answerRecord && AnswerRecordStatus::FINISHED == $answerRecord['status']) {
             throw TestpaperException::FORBIDDEN_RESIT();
         } elseif ($scene['redo_interval'] && $answerReport) {
             $nextDoTime = $answerReport['review_time'] + $scene['redo_interval'] * 60;
@@ -177,14 +178,14 @@ class TestpaperAction extends AbstractResource
             }
         }
 
-        if (!$answerRecord || ($answerRecord && 'finished' == $answerRecord['status'])) {
+        if (!$answerRecord || (AnswerRecordStatus::FINISHED == $answerRecord['status'])) {
             $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $assessment['id'], $user['id']);
             $answerReport = [];
-        } elseif ('reviewing' != $answerRecord['status']) {
+        } elseif (AnswerRecordStatus::REVIEWING != $answerRecord['status']) {
             $answerRecord = $this->getAnswerService()->continueAnswer($answerRecord['id']);
         }
 
-        $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+        $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
         $questionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecord['id']);

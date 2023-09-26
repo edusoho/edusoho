@@ -29,7 +29,7 @@ export default {
       if (answer_mode === 'text') {
         let result = '';
         _.forEach(answer, function(item, index) {
-          result += `<div>填空(${index + 1})：正确答案：<span class="success">${item}</span>， 你的答案：<span class="danger">${response[index]}</span></div>`;
+          result += `<div>填空(${index + 1})：正确答案：<span class="success">${item}</span>， 你的答案：<span class="danger">${response.length > 0 ? response[index] : '未作答'}</span></div>`;
         });
         return result;
       }

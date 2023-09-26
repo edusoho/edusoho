@@ -15,6 +15,7 @@ class ChapterExerciseServiceTest extends BaseTestCase
         $this->mockItemService();
         $this->mockAssessmentService();
         $this->mockAnswerService();
+        $this->mockUpdateAnswerRecordService();
 
         $answerRecord = $this->getItemBankChapterExerciseService()->startAnswer(1, 1, 1);
 
@@ -23,9 +24,9 @@ class ChapterExerciseServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\Common\CommonException
-     * @expectedExceptionCode 5000305
+     * @expectedExceptionCode 4000305
      */
-    public function testStartAnswer_whenModuleMiss_thenThrowCommonException()
+    public function testStartAnswerWhenModuleMissThenThrowCommonException()
     {
         $answerRecord = $this->getItemBankChapterExerciseService()->startAnswer(1, 1, 1);
     }
@@ -34,7 +35,7 @@ class ChapterExerciseServiceTest extends BaseTestCase
      * @expectedException \Biz\ItemBankExercise\ItemBankExerciseException
      * @expectedExceptionCode 4037501
      */
-    public function testStartAnswer_whenCannotLearningExercise_thenThrowItemBankExerciseException()
+    public function testStartAnswerWhenCannotLearningExerciseThenThrowItemBankExerciseException()
     {
         $this->mockItemBankExerciseModuleService();
 
@@ -43,9 +44,9 @@ class ChapterExerciseServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\Common\CommonException
-     * @expectedExceptionCode 5000305
+     * @expectedExceptionCode 4000305
      */
-    public function testStartAnswer_whenItemCategoryQuestionNumEq0_thenThrowCommonException()
+    public function testStartAnswerWhenItemCategoryQuestionNumEq0ThenThrowCommonException()
     {
         $this->mockItemBankExerciseModuleService();
         $this->mockItemBankExerciseService();
@@ -56,7 +57,7 @@ class ChapterExerciseServiceTest extends BaseTestCase
      * @expectedException \Biz\ItemBankExercise\ItemBankExerciseException
      * @expectedExceptionCode 5007512
      */
-    public function testStartAnswer_whenChapterEnableFalse_thenThrowItemBankExerciseException()
+    public function testStartAnswerWhenChapterEnableFalseThenThrowItemBankExerciseException()
     {
         $this->mockItemBankExerciseModuleService();
         $this->mockItemCategoryService();
@@ -79,9 +80,9 @@ class ChapterExerciseServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\Common\CommonException
-     * @expectedExceptionCode 5000305
+     * @expectedExceptionCode 4000305
      */
-    public function testStartAnswer_whenCategoryIdMiss_thenThrowCommonException()
+    public function testStartAnswerWhenCategoryIdMissThenThrowCommonException()
     {
         $this->mockItemBankExerciseModuleService();
         $this->mockItemBankExerciseService();
@@ -93,7 +94,7 @@ class ChapterExerciseServiceTest extends BaseTestCase
      * @expectedException \Biz\ItemBankExercise\ItemBankExerciseException
      * @expectedExceptionCode 5007502
      */
-    public function testStartAnswer_whenLatestRecordIsDoing_thenThrowItemBankExerciseException()
+    public function testStartAnswerWhenLatestRecordIsDoingThenThrowItemBankExerciseException()
     {
         $this->mockItemBankExerciseService();
         $this->mockItemBankExerciseModuleService();
@@ -240,6 +241,21 @@ class ChapterExerciseServiceTest extends BaseTestCase
             [
                 [
                     'functionName' => 'startAnswer',
+                    'returnValue' => [
+                        'id' => 1,
+                    ],
+                ],
+            ]
+        );
+    }
+
+    protected function mockUpdateAnswerRecordService()
+    {
+        $this->mockBiz(
+            'ItemBank:Answer:AnswerRecordService',
+            [
+                [
+                    'functionName' => 'update',
                     'returnValue' => [
                         'id' => 1,
                     ],

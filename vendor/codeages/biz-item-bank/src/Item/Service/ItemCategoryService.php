@@ -22,9 +22,17 @@ interface ItemCategoryService
 
     public function findCategoryChildrenIds($id);
 
+    public function findMultiCategoryChildrenIds($bankId, $ids);
+
     public function getItemCategoryTreeList($bankId);
 
     public function updateItemNumAndQuestionNum($id);
 
     public function buildItemNumAndQuestionNumBybankId($bankId);
+
+    public function sortItemCategories($ids);
+
+    public function buildCategoryTreeList($categories, $parentId);
+
+    public function buildCategoryTree($categories);
 }

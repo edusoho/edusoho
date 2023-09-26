@@ -1,0 +1,16 @@
+{% do script(['exerciseactivity/js/continue-exercise/index.js'], 300) %}
+
+{% block body %}
+  <div class="modal show iframe-modal">
+    <div class="modal-dialog continue-exercise-abnormal">
+      <div class="review-img">
+        <img src="{{asset("assets/img/exercise/review-tip.png")}}" alt="">
+      </div>
+      <div class="review-tip-title">
+        {{ 'course.plan_task.activity_manage.exercise.continue.tips-title'|trans }}
+      </div>
+      <a class="back-btn js-continue-exercise-close">{{ 'attachments.modal.upload.close_btn'|trans }}</a>
+    </div>
+  </div>
+{% include 'js_loader_async.html.twig' %}
+{% endblock %}

@@ -30,6 +30,7 @@ class QuestionFavoriteDaoImpl extends AdvancedDaoImpl implements QuestionFavorit
             'conditions' => [
                 'question_id = :question_id',
                 'item_id = :item_id',
+                'item_id IN (:item_ids)',
                 'target_id = :target_id',
                 'target_ids IN (:target_ids)',
                 'target_type = :target_type',

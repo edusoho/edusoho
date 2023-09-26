@@ -3,6 +3,7 @@
 namespace AppBundle\Extensions\DataTag;
 
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class BlankAssessmentAnswerRecordDataTag extends BaseDataTag
@@ -19,8 +20,10 @@ class BlankAssessmentAnswerRecordDataTag extends BaseDataTag
         if (!empty($answerRecord)) {
             return $answerRecord;
         }
-
-        $this->getAnswerService()->batchAutoSubmit($arguments['answerSceneId'], $arguments['assessmentId'], [$arguments['userId']]);
+        $answerScene = $this->getAnswerSceneService()->get($arguments['answerSceneId']);
+        if ($answerScene['endTime'] && $answerScene['endTime'] < time()) {
+            $this->getAnswerService()->batchAutoSubmit($arguments['answerSceneId'], $arguments['assessmentId'], [$arguments['userId']]);
+        }
 
         return $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($arguments['answerSceneId'], $arguments['userId']);
     }
@@ -39,5 +42,13 @@ class BlankAssessmentAnswerRecordDataTag extends BaseDataTag
     public function getAnswerRecordService()
     {
         return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
     }
 }

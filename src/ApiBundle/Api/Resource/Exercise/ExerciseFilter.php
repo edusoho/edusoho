@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class ExerciseFilter extends Filter
 {
     protected $publicFields = [
-        'id', 'name', 'itemCount', 'latestExerciseResult', 'createdTime', 'updatedTime', 'lastExerciseResult',
+        'id', 'name', 'itemCount', 'latestExerciseResult', 'createdTime', 'updatedTime', 'lastExerciseResult', 'itemCounts',
     ];
 
     protected function publicFields(&$data)
