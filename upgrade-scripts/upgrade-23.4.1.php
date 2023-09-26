@@ -99,7 +99,8 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $answerSceneIds = array_column($homeworkActivityList, 'answerSceneId');
-        $answerSceneList = $this->getAnswerSceneService()->search(['need_score' => 0, 'ids' => array_unique($answerSceneIds)], [], 0, PHP_INT_MAX, ['id']);
+        $answerSceneIds = array_values(array_unique($answerSceneIds));
+        $answerSceneList = $this->getAnswerSceneService()->search(['need_score' => 0, 'ids' => $answerSceneIds], [], 0, PHP_INT_MAX, ['id']);
         if (empty($answerSceneList)) {
             return 1;
         }
