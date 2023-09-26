@@ -45,7 +45,7 @@ class HomeworkTest extends BaseTypeTestCase
             ],
             [
                 'functionName' => 'openAssessment',
-                'returnValue' => ['id' => 1],
+                'returnValue' => ['id' => 1, 'bank_id' => 1],
             ],
         ]);
 
@@ -65,7 +65,7 @@ class HomeworkTest extends BaseTypeTestCase
             ],
             [
                 'functionName' => 'getAssessment',
-                'returnValue' => ['id' => 1],
+                'returnValue' => ['id' => 1, 'bank_id' => 1],
             ],
             [
                 'functionName' => 'openAssessment',
@@ -107,6 +107,16 @@ class HomeworkTest extends BaseTypeTestCase
             [
                 'functionName' => 'getAssessment',
                 'returnValue' => ['id' => 1, 'name' => 'name', 'description' => 'description'],
+            ],
+        ]);
+        $this->mockBiz('ItemBank:Answer:AnswerSceneService', [
+            [
+                'functionName' => 'get',
+                'returnValue' => ['id' => 2],
+            ],
+            [
+                'functionName' => 'update',
+                'returnValue' => ['id' => 2],
             ],
         ]);
 

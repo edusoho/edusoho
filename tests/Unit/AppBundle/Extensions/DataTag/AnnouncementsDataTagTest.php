@@ -10,58 +10,58 @@ class AnnouncementsDataTagTest extends BaseTestCase
 {
     public function testGetData()
     {
-        $this->getAnnouncementService()->createAnnouncement(array(
+        $this->getAnnouncementService()->createAnnouncement([
             'content' => 'Announcement1',
             'url' => 'http://',
             'userId' => '1',
-            'startTime' => time() + 3600,
+            'startTime' => time() - 3600,
             'endTime' => time() + 3600 * 2,
             'targetType' => 'course',
             'targetId' => '1',
-        ));
+        ]);
 
-        $this->getAnnouncementService()->createAnnouncement(array(
+        $this->getAnnouncementService()->createAnnouncement([
             'content' => 'Announcement2',
             'url' => 'http://',
             'userId' => '1',
-            'startTime' => time() + 3600,
+            'startTime' => time() - 3600,
             'endTime' => time() + 3600 * 2,
             'targetType' => 'course',
             'targetId' => '1',
-        ));
+        ]);
 
-        $this->getAnnouncementService()->createAnnouncement(array(
+        $this->getAnnouncementService()->createAnnouncement([
             'content' => 'Announcement3',
             'url' => 'http://',
             'userId' => '1',
-            'startTime' => time() + 3600,
+            'startTime' => time() - 3600,
             'endTime' => time() + 3600 * 2,
             'targetType' => 'classroom',
             'targetId' => '1',
-        ));
+        ]);
 
-        $this->getAnnouncementService()->createAnnouncement(array(
+        $this->getAnnouncementService()->createAnnouncement([
             'content' => 'Announcement4',
             'url' => 'http://',
             'userId' => '1',
-            'startTime' => time() + 3600,
+            'startTime' => time() - 3600,
             'endTime' => time() + 3600 * 2,
             'targetType' => 'classroom',
             'targetId' => '1',
-        ));
+        ]);
 
-        $this->getAnnouncementService()->createAnnouncement(array(
+        $this->getAnnouncementService()->createAnnouncement([
             'content' => 'Announcement5',
             'url' => 'http://',
             'userId' => '1',
-            'startTime' => time() + 3600,
+            'startTime' => time() - 3600,
             'endTime' => time() + 3600 * 2,
             'targetType' => 'global',
             'targetId' => '1',
-        ));
+        ]);
 
         $dataTag = new AnnouncementsDataTag();
-        $announcement = $dataTag->getData(array('count' => '5', 'targetType' => 'course', 'targetId' => 1));
+        $announcement = $dataTag->getData(['count' => '5', 'targetType' => 'course', 'targetId' => 1]);
         $this->assertEquals(2, count($announcement));
     }
 
@@ -72,7 +72,7 @@ class AnnouncementsDataTagTest extends BaseTestCase
     public function testEmptyCount()
     {
         $dataTag = new AnnouncementsDataTag();
-        $announcement = $dataTag->getData(array('targetType' => 'course', 'targetId' => 1));
+        $announcement = $dataTag->getData(['targetType' => 'course', 'targetId' => 1]);
     }
 
     /**
@@ -82,7 +82,7 @@ class AnnouncementsDataTagTest extends BaseTestCase
     public function testCountGT100()
     {
         $dataTag = new AnnouncementsDataTag();
-        $announcement = $dataTag->getData(array('count' => 101, 'targetType' => 'course', 'targetId' => 1));
+        $announcement = $dataTag->getData(['count' => 101, 'targetType' => 'course', 'targetId' => 1]);
     }
 
     /**

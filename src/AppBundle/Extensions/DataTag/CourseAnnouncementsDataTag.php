@@ -2,6 +2,7 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use AppBundle\Common\TimeMachine;
 use Biz\Announcement\Service\AnnouncementService;
 
 /**
@@ -27,8 +28,8 @@ class CourseAnnouncementsDataTag extends BaseDataTag implements DataTag
 
         $conditions = [
             'targetType' => 'course',
-            'endTime_GTE' => time(),
-            'startTime_LTE' => time(),
+            'endTime_GTE' => TimeMachine::time(),
+            'startTime_LTE' => TimeMachine::time(),
         ];
 
         if (!empty($arguments['courseId'])) {
