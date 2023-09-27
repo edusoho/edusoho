@@ -13,7 +13,13 @@ use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Codeages\Biz\ItemBank\Item\Type\ChoiceItem;
+use Codeages\Biz\ItemBank\Item\Type\DetermineItem;
+use Codeages\Biz\ItemBank\Item\Type\EssayItem;
+use Codeages\Biz\ItemBank\Item\Type\FillItem;
 use Codeages\Biz\ItemBank\Item\Type\Item;
+use Codeages\Biz\ItemBank\Item\Type\MaterialItem;
+use Codeages\Biz\ItemBank\Item\Type\SingleChoiceItem;
+use Codeages\Biz\ItemBank\Item\Type\UncertainChoiceItem;
 use Codeages\Biz\ItemBank\Item\Wrapper\ExportItemsWrapper;
 use Codeages\Biz\ItemBank\ItemBank\Exception\ItemBankException;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
@@ -158,6 +164,11 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $this->getItemDao()->get($id);
     }
 
+    public function getItemIncludeDeleted($id)
+    {
+        return $this->getItemDao()->getIncludeDeleted($id);
+    }
+
     public function getItemWithQuestions($id, $withAnswer = false)
     {
         $item = $this->getItem($id);
@@ -191,6 +202,25 @@ class ItemServiceImpl extends BaseService implements ItemService
         return ArrayToolkit::index($items, 'id');
     }
 
+    public function findItemsByIdsIncludeDeleted($ids, $withQuestions = false)
+    {
+        $items = $this->getItemDao()->findByIdsIncludeDeleted($ids);
+        if ($withQuestions) {
+            $questions = $this->getQuestionDao()->findByItemsIdsIncludeDeleted(array_column($items, 'id'));
+            $questions = ArrayToolkit::group($questions, 'item_id');
+            foreach ($items as &$item) {
+                $item['questions'] = empty($questions[$item['id']]) ? [] : $questions[$item['id']];
+            }
+        }
+        $that = $this;
+        array_walk($items, function (&$item) use ($that) {
+            $item['includeImg'] = $that->hasImg($item['material']);
+            $item = $that->biz['item_attachment_wrapper']->wrap($item);
+        });
+
+        return ArrayToolkit::index($items, 'id');
+    }
+
     public function searchItems($conditions, $orderBys, $start, $limit, $columns = [])
     {
         $conditions = $this->filterItemConditions($conditions);
@@ -205,6 +235,11 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
 
         return $items;
+    }
+
+    public function searchItemsIncludeDeleted($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        return $this->getItemDao()->searchIncludeDeleted($conditions, $orderBys, $start, $limit, $columns);
     }
 
     public function countItems($conditions)
@@ -310,7 +345,7 @@ class ItemServiceImpl extends BaseService implements ItemService
     {
         $reviewResults = [];
 
-        $items = $this->getItemDao()->findByIds(array_column($itemResponses, 'item_id'));
+        $items = $this->getItemDao()->findByIdsIncludeDeleted(array_column($itemResponses, 'item_id'));
         $items = ArrayToolkit::index($items, 'id');
         foreach ($itemResponses as $itemResponse) {
             $itemType = empty($items[$itemResponse['item_id']]['type']) ? ChoiceItem::TYPE : $items[$itemResponse['item_id']]['type'];
@@ -350,6 +385,13 @@ class ItemServiceImpl extends BaseService implements ItemService
     public function findQuestionsByQuestionIds($questionIds)
     {
         $questions = $this->getQuestionDao()->findQuestionsByQuestionIds($questionIds);
+
+        return ArrayToolkit::index($questions, 'id');
+    }
+
+    public function findQuestionsByQuestionIdsIncludeDeleted($questionIds)
+    {
+        $questions = $this->getQuestionDao()->findQuestionsByQuestionIdsIncludeDeleted($questionIds);
 
         return ArrayToolkit::index($questions, 'id');
     }
@@ -473,12 +515,41 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $result;
     }
 
+    public function getQuestion($questionId)
+    {
+        return $this->getQuestionDao()->get($questionId);
+    }
+
+    public function getQuestionIncludeDeleted($questionId)
+    {
+        return $this->getQuestionDao()->getIncludeDeleted($questionId);
+    }
+
+    public function countItemTypesNum($items)
+    {
+        $typesNum = [
+            SingleChoiceItem::TYPE => 0,
+            ChoiceItem::TYPE => 0,
+            UncertainChoiceItem::TYPE => 0,
+            DetermineItem::TYPE => 0,
+            FillItem::TYPE => 0,
+            EssayItem::TYPE => 0,
+            MaterialItem::TYPE => 0,
+        ];
+
+        foreach ($items as $item) {
+            ++$typesNum[$item['type']];
+        }
+
+        return $typesNum;
+    }
+
     protected function findQuestionsByItemId($itemId)
     {
         return $this->getQuestionDao()->findByItemId($itemId);
     }
 
-    public function findQuestionsByItemIds($itemIds)
+    protected function findQuestionsByItemIds($itemIds)
     {
         return $this->getQuestionDao()->findByItemsIds($itemIds);
     }

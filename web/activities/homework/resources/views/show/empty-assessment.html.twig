@@ -1,0 +1,21 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+  <div class="iframe-parent-content">
+    <div class="modal show iframe-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body task-state-modal 4">
+            <div class="title text-37393D">
+              {{ 'site.tips'|trans }}
+            </div>
+            <div class="content">
+              <div class="text-16">{{ 'course.start_answer.all_question_deleted'|trans }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop in"></div>
+{% endblock %}

@@ -70,6 +70,7 @@ site.default.all: 所有
 site.default.user: 用户
 site.default.course: 课程
 site.default.question.bank: 题库
+site.default.item.bank.exercise: 题库练习
 site.default.plan: 计划
 site.default.more: 更多
 site.default.manage: 管理
@@ -1234,6 +1235,10 @@ item_bank_exercise.assessment_exercise.add_new_module: 添加新模块
 item_bank_exercise.assessment_exercise.add_assessment: 添加试卷
 item_bank_exercise.assessment_exercise.remove_assessment: 移除试卷
 item_bank_exercise.chapter_exercise.category_empty: 当前题库练习还未添加章节
+item_bank_exercise.chapter_exercise.item: 项
+item_bank_exercise.chapter_exercise.batch.release: 批量发布
+item_bank_exercise.chapter_exercise.batch.cancellation: 批量取消
+item_bank_exercise.chapter_exercise.batch.num.clear: 清除
 item_bank_exercise.chapter_exercise.empty: 什么都没有，快去开启章节练习吧
 item_bank_exercise.assessment_exercise.empty: 什么都没有，快去开启试卷练习吧
 item_bank_exercise.chapter_exercise.info: 章节练习依据“题目分类管理”的设置。按层级目录向学员提供刷题练习
@@ -1248,6 +1253,7 @@ item_bank_exercise.my_teaching_notice: 题库练习，请前往 <a class="alert-
 exercise.answers.done_num: 累计答题数
 exercise.answers.completion_rate: 答题率
 exercise.answers.mastery_rate: 掌握率
+item_bank_exercise.continue.back-btn: 返回章节目录
 
 
 course.testpaper_check: 试卷批阅
@@ -2127,6 +2133,20 @@ course.plan_task.activity_manage.exercise.info_tips: >
   本次练习随机生成<span class="color-success">%itemCount%题</span>
 course.plan_task.activity_manage.exercise.info_tips.question_lack: 题目数与老师设定不一致，请联系老师处理！
 course.plan_task.activity_manage.exercise.total_questions: 共%itemCount%题
+course.plan_task.activity_manage.exercise.single_choice: 单选题
+course.plan_task.activity_manage.exercise.choice: 多选题
+course.plan_task.activity_manage.exercise.uncertain_choice: 不定项选择题
+course.plan_task.activity_manage.exercise.determine: 判断题
+course.plan_task.activity_manage.exercise.fill: 填空题
+course.plan_task.activity_manage.exercise.essay: 问答题
+course.plan_task.activity_manage.exercise.material: 材料题
+course.plan_task.activity_manage.exercise.questions: '%itemCount% 题'
+course.plan_task.activity_manage.exercise.selective.answer.mode: 选择答题模式
+course.plan_task.activity_manage.exercise.test.mode: 测验模式
+course.plan_task.activity_manage.exercise.one.question.one.answer.mode: 一题一答模式
+course.plan_task.activity_manage.exercise.currently.not.supported.on.pc: （暂不支持PC端）
+course.plan_task.activity_manage.exercise.continue.tips-title: 当前练习模式为【一题一答】，PC端暂不支持，请移步手机端继续答题
+course.plan_task.activity_manage.exercise.continue.back-btn: 返回课程目录
 course.plan_task.activity_manage.exercise.confirm_submit: 确认提交
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 您真的要提交吗？
 course.plan_task.activity_manage.exercise.finished_condition: 提交练习
@@ -3641,8 +3661,10 @@ search.empty: 没有搜到相关%name%，请换个关键词试试！
 search.content_title: 搜索
 search.relative_courses_result: 共找到<span class="color-danger phm">%count%</span>门<span class="color-danger phm">“%keywords%”</span>相关课程
 search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关%classroom%
+search.relative_item_bank_exercises_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关题库练习
 search.result_course_copy: 共找到<span class="color-danger phm">%count%</span>门课程
 search.result_classrooms_copy: 共找到<span class="color-danger phm">%count%</span>个%classroom%
+search.result_item_bank_exercises_copy: 共找到<span class="color-danger phm">%count%</span>个题库练习
 search.all_courses: 全部课程
 search.vip_courses: 会员课程
 search.free_courses: 免费课程
@@ -3651,6 +3673,8 @@ search.reservation_courses: 一对一约课
 search.all_classrooms: 全部%classroom%
 search.free_classrooms: 免费%classroom%
 search.free_item_bank: 免费题库
+search.all_item_bank_exercise: 全部题库练习
+search.free_item_bank_exercise: 免费题库练习
 
 
 #云资源
@@ -3794,6 +3818,13 @@ cloud_search.thread.recommend.content_title: 热门小组
 cloud_search.article: 资讯
 cloud_search.article.result: >
   为您找到资讯结果约 <span class="color-danger">%counts%</span>个
+
+cloud_search.itemBankExercise: 题库练习
+cloud_search.itemBankExercise.result: >
+  为您找到题库练习结果约 <span class="color-danger">%counts%</span>个
+cloud_search.itemBankExercise.evaluate: %ratingNum%人评价
+cloud_search.itemBankExercise.recommend.content_title: 推荐题库练习
+cloud_search.itemBankExercise.recommend.empty: 暂无推荐题库练习
 
 # 小组
 group: 小组频道
@@ -9713,6 +9744,7 @@ log.action.question_bank.create_category: 创建题库分类
 log.action.question_bank.delete_category: 删除题库分类
 log.action.question_bank.update_category: 更新题库分类
 log.action.question_bank.delete_question: 删除题库题目
+log.action.question_bank.sort_question_category: 题库分类排序
 log.action.destroy_account_record.create: 申请注销帐号
 log.action.destroy_account_record.pass: 通过注销帐号申请
 log.action.destroy_account_record.reject: 拒绝注销帐号申请
@@ -9723,6 +9755,8 @@ log.action.item_bank_exercise.recommend_exercise: 推荐题库练习
 log.action.item_bank_exercise.cancel_recommend_exercise: 取消推荐题库练习
 log.action.item_bank_exercise.publish_exercise: 发布题库练习
 log.action.item_bank_exercise.close_exercise: 关闭题库练习
+log.action.item_bank_exercise.publish_exercise_chapter: 发布题库练习章节
+log.action.item_bank_exercise.unpublish_exercise_chapter: 取消发布题库练习章节
 log.action.certifiacte.create_certificate: 创建证书
 log.action.certifiacte.auto_issue: 自动发放证书
 log.action.certifiacte.create_template: 创建证书模板
@@ -10882,6 +10916,8 @@ exception.exercise.closed: 该练习已关闭，如有疑问请联系老师！
 exception.exercise.forbidden_access_exercise: 不可以访问其他学生的练习!
 exception.exercise.forbidden_duplicate_commit_exercise: 练习已经做完，不能重复提交!
 exception.exercise.not_found_result: 练习结果不存在
+exception.exercise.exercise_is_doing: 已存在练习记录，请重新开始答题
+exception.exercise.exercise_not_do: 该练习不能进行答题，请退出重新开始
 exception.uploadfile.file_not_found: 文件不存在
 exception.uploadfile.forbidden_manage_file: 没有权限管理资源
 exception.uploadfile.error_status: 状态不正确
@@ -11052,6 +11088,7 @@ exception.question_bank.forbidden_delete_category: 分类或子分类下有所�
 exception.question_bank.not_found_bank: 题库不存在
 exception.question_bank.forbidden_access_bank: 没有访问该题库的权限
 
+exception.item_bank_exercise.chapter_answer_is_doing: 已存在练习记录，请重新开始答题
 exception.item_bank_exercise.forbidden_learn: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师。
 exception.item_bank_exercise.exercise.not_found: 题库练习不存在
 exception.item_bank_exercise.exercise.forbidden_manage_exercise: 没有管理题库练习的权限
@@ -11075,8 +11112,11 @@ exception.item_bank_exercise.member.member_not_student: 成员不是学生
 exception.item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或试卷练习至少需要启用一项
 exception.item_bank_exercise.exercise.is_exists: 题库练习已存在，请勿重复开启
 exception.item_bank_exercise.exercise.not_arrive: 题库练习未到学习时间，添加失败
+exception.item_bank_exercise.parent_chapter_unpublish: 请先发布上一级章节
+exception.item_bank_exercise.answer_unpublish_chapter: 当前章节已取消发布，无法继续答题~
 exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
 exception.item_bank.assessment.not.exist: 试卷不存在
+exception.item_bank.assessment.is_empty: 试卷全部题目已被删除，请联系教师或管理员
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
@@ -12294,8 +12334,9 @@ admin.multi_class_copy.failure.notify: 您的新班课《%newTitle%》从原班�
 
 course.task_manage.no_permission_tips: 抱歉，您无权管理课程课时，如有需要请联系网站管理员！
 
-exception.wrong_book.wrong_book.wrong_question.data_fields_missing: 错题本参数缺失
-exception.wrong_book.wrong_book.wrong_question.not_exist: 错题本题目不存在
+exception.wrong_book.wrong_question.data_fields_missing: 错题本参数缺失
+exception.wrong_book.wrong_question.not_exist: 错题本题目不存在
+exception.wrong_book.wrong_question_num.limit: 超出输入范围
 
 course.replay_manage.no_permission_tips: 抱歉，您无权管理课程录播，如有需要请联系网站管理员！
 course.teacher_manage.no_permission_tips: 抱歉，您无权管理课程教师，如有需要请联系网站管理员！
@@ -12398,3 +12439,5 @@ sms.defence.request.log.is_illegal.no: 否
 sms.defence.request.log.disable_type.ip: 同一ip多次请求
 sms.defence.request.log.disable_type.coordinate: 同一坐标多次请求
 sms.defence.request.log.disable_type.none: 无
+
+course.start_answer.all_question_deleted: 全部题目已被删除，请联系教师或管理员

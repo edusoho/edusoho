@@ -9,6 +9,8 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
+use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
@@ -28,8 +30,14 @@ class WrongBookStartAnswer extends AbstractResource
         $conditions['targetType'] = $pool['target_type'];
         $filterConditions = $this->prepareConditions($poolId, $conditions);
         $wrongQuestionsCount = $this->getWrongQuestionService()->countWrongQuestionWithCollect($filterConditions);
-        list($orderBy, $start) = $this->getSearchFields($wrongQuestionsCount);
-        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect($filterConditions, $orderBy, $start, 20);
+
+        $itemNum = $request->request->get('itemNum', min($wrongQuestionsCount, 20));
+        if ($wrongQuestionsCount < $itemNum) {
+            throw WrongBookException::WRONG_QUESTION_NUM_LIMIT();
+        }
+
+        list($orderBy, $start) = $this->getSearchFields($wrongQuestionsCount, $itemNum);
+        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithCollect($filterConditions, $orderBy, $start, $itemNum);
 
         $itemIds = ArrayToolkit::column($wrongQuestions, 'item_id');
         $items = $this->getItemService()->findItemsByIds($itemIds, true);
@@ -51,7 +59,9 @@ class WrongBookStartAnswer extends AbstractResource
 
         $this->getAssessmentService()->openAssessment($assessment['id']);
 
+        $exerciseMode = $request->request->get('exerciseMode', ExerciseMode::SUBMIT_ALL);
         $answerRecord = $this->getAnswerService()->startAnswer($answerScene['id'], $assessment['id'], $this->getCurrentUser()['id']);
+        $answerRecord = $this->getAnswerRecordService()->update($answerRecord['id'], ['exercise_mode' => $exerciseMode]);
 
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
 
@@ -98,7 +108,7 @@ class WrongBookStartAnswer extends AbstractResource
         return $prepareConditions;
     }
 
-    protected function getSearchFields($count)
+    protected function getSearchFields($count, $limitNum)
     {
         $regularWrongTimes = [
             ['wrong_times' => 'DESC'],
@@ -116,8 +126,8 @@ class WrongBookStartAnswer extends AbstractResource
         $orderBys = [$regularWrongTimes, $regularUpdatedTime, $regularEmpty];
         $orderBy = $orderBys[mt_rand(0, 2)][mt_rand(0, 1)];
 
-        if ($count > 20) {
-            $start = mt_rand(0, $count - 20);
+        if ($count > $limitNum) {
+            $start = mt_rand(0, $count - $limitNum);
         } else {
             $start = 0;
         }
@@ -201,6 +211,14 @@ class WrongBookStartAnswer extends AbstractResource
      */
     protected function getItemCategoryService()
     {
-        return  $this->service('ItemBank:Item:ItemCategoryService');
+        return $this->service('ItemBank:Item:ItemCategoryService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRecordService');
     }
 }

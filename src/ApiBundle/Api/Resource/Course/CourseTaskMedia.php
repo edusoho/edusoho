@@ -9,6 +9,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\FileToolkit;
 use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Classroom\ClassroomException;
 use Biz\Common\CommonException;
 use Biz\Course\MemberException;
@@ -23,6 +24,7 @@ use Biz\Player\Service\PlayerService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
@@ -249,7 +251,7 @@ class CourseTaskMedia extends AbstractResource
         if (empty($answerRecord)) {
             $activity['ext']['latestHomeworkResult'] = null;
         } else {
-            $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+            $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
             $activity['ext']['latestHomeworkResult'] = $testpaperWrapper->wrapTestpaperResult(
                 $answerRecord,
                 $assessment,
@@ -267,14 +269,14 @@ class CourseTaskMedia extends AbstractResource
         $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
         $testpaperWrapper = new TestpaperWrapper();
-        if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
-            $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], [$activity['ext']['drawCondition']['section']]);
+        if (empty($answerRecord) || AnswerRecordStatus::FINISHED == $answerRecord['status']) {
+            $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
             $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
             $activity['ext']['latestExerciseResult'] = null;
         } else {
             $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
-            $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+            $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
             $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
             $activity['ext']['latestExerciseResult'] = $testpaperWrapper->wrapTestpaperResult(
                 $answerRecord,
@@ -291,25 +293,9 @@ class CourseTaskMedia extends AbstractResource
             $answerReport ?? []
         );
 
+        $activity['ext']['itemCounts'] = $activity['ext']['metas']['counts'] ?: (object) [];
+
         return $activity['ext'];
-    }
-
-    protected function createAssessment($name, $range, $sections)
-    {
-        $sections = $this->getAssessmentService()->drawItems($range, $sections);
-        $assessment = [
-            'name' => $name,
-            'displayable' => 0,
-            'description' => '',
-            'bank_id' => $range['bank_id'],
-            'sections' => $sections,
-        ];
-
-        $assessment = $this->getAssessmentService()->createAssessment($assessment);
-
-        $this->getAssessmentService()->openAssessment($assessment['id']);
-
-        return $assessment;
     }
 
     protected function getAudio($course, $task, $activity, $request, $ssl = false)
@@ -543,5 +529,13 @@ class CourseTaskMedia extends AbstractResource
     protected function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ExerciseActivityService
+     */
+    protected function getExerciseActivityService()
+    {
+        return $this->service('Activity:ExerciseActivityService');
     }
 }

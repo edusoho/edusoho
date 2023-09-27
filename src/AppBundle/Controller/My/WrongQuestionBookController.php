@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\My;
 
 use ApiBundle\Api\ApiRequest;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Common\CommonException;
 use Biz\User\UserException;
@@ -10,6 +11,7 @@ use Biz\WrongBook\Service\WrongQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class WrongQuestionBookController extends BaseController
@@ -34,11 +36,20 @@ class WrongQuestionBookController extends BaseController
 
     public function practiseRedirectAction(Request $request, $poolId)
     {
-        $apiRequest = new ApiRequest("/api/wrong_book/{$poolId}/start_answer", 'POST', $request->query->all());
-        $result = $this->container->get('api_resource_kernel')->handleApiRequest($apiRequest);
-        $record = $result['answer_record'];
+        $query = $request->query->all();
+        $body = ArrayToolkit::parts($query, ['itemNum']);
+        unset($query['itemNum']);
+        try {
+            $apiRequest = new ApiRequest("/api/wrong_book/{$poolId}/start_answer", 'POST', $query, $body);
+            $result = $this->container->get('api_resource_kernel')->handleApiRequest($apiRequest);
+            $record = $result['answer_record'];
+        } catch (HttpExceptionInterface $exception) {
+            $this->setFlashException($exception);
 
-        return $this->redirect($this->generateUrl('wrong_question_book_practise', ['poolId' => $poolId, 'recordId' => $record['id']]));
+            return $this->redirect($this->generateUrl('my_wrong_question_book_target_detail')."#/target_type/{$query['targetType']}/target_id/{$poolId}");
+        }
+
+        return $this->redirectToRoute('wrong_question_book_practise', ['poolId' => $poolId, 'recordId' => $record['id']]);
     }
 
     public function startDoAction(Request $request, $poolId, $recordId)

@@ -3,6 +3,7 @@
 namespace Biz\Activity\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Constant\ActivityMediaType;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Listener\ActivityLearnLogListener;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -771,29 +772,34 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     public function getActivityByAnswerSceneId($answerSceneId)
     {
-        $homeworkActivity = $this->getHomeworkActivityService()->getByAnswerSceneId($answerSceneId);
-        if ($homeworkActivity) {
-            $activity = $this->getByMediaIdAndMediaType($homeworkActivity['id'], 'homework');
+        $mediaTypes = [
+            ActivityMediaType::HOMEWORK,
+            ActivityMediaType::TESTPAPER,
+            ActivityMediaType::EXERCISE,
+        ];
+        foreach ($mediaTypes as $mediaType) {
+            $activity = $this->getActivityByAnswerSceneIdAndMediaType($answerSceneId, $mediaType);
             if (!empty($activity)) {
                 return $activity;
             }
         }
 
-        $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerSceneId);
-        if ($testpaperActivity) {
-            $activity = $this->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
-            if (!empty($activity)) {
-                return $activity;
-            }
+        return [];
+    }
+
+    public function getActivityByAnswerSceneIdAndMediaType($answerSceneId, $mediaType)
+    {
+        if (ActivityMediaType::HOMEWORK == $mediaType) {
+            $mediaActivity = $this->getHomeworkActivityService()->getByAnswerSceneId($answerSceneId);
+        }
+        if (ActivityMediaType::TESTPAPER == $mediaType) {
+            $mediaActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerSceneId);
+        }
+        if (ActivityMediaType::EXERCISE == $mediaType) {
+            $mediaActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerSceneId);
         }
 
-        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerSceneId);
-        if ($exerciseActivity) {
-            $activity = $this->getByMediaIdAndMediaType($exerciseActivity['id'], 'exercise');
-            if (!empty($activity)) {
-                return $activity;
-            }
-        }
+        return empty($mediaActivity) ? [] : $this->getByMediaIdAndMediaType($mediaActivity['id'], $mediaType);
     }
 
     public function orderAssessmentSubmitNumber($userIds, $answerSceneId)

@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
+use AppBundle\Extensions\DataTag\AnnouncementDataTag;
 use Biz\Announcement\Service\AnnouncementService;
 use Biz\BaseTestCase;
-use AppBundle\Extensions\DataTag\AnnouncementDataTag;
 
 class AnnouncementDataTagTest extends BaseTestCase
 {
@@ -14,7 +14,7 @@ class AnnouncementDataTagTest extends BaseTestCase
     public function testEmptyCount()
     {
         $dataTag = new AnnouncementDataTag();
-        $dataTag->getData(array());
+        $dataTag->getData([]);
     }
 
     /**
@@ -23,63 +23,63 @@ class AnnouncementDataTagTest extends BaseTestCase
     public function testMaxCount()
     {
         $dataTag = new AnnouncementDataTag();
-        $dataTag->getData(array('count' => 101));
+        $dataTag->getData(['count' => 101]);
     }
 
     public function testGetData()
     {
-        $this->getAnnouncementService()->createAnnouncement(array(
+        $this->getAnnouncementService()->createAnnouncement([
             'content' => 'Announcement1',
             'url' => 'http://',
             'userId' => '1',
-            'startTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
-            'endTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
+            'startTime' => time() - 10,
+            'endTime' => time() + 10,
             'targetType' => 'global',
             'targetId' => '1',
-        ));
+        ]);
 
-        $this->getAnnouncementService()->createAnnouncement(array(
+        $this->getAnnouncementService()->createAnnouncement([
             'content' => 'Announcement3',
             'url' => 'http://',
             'userId' => '1',
-            'startTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
+            'startTime' => time() - 10,
             'targetType' => 'global',
-            'endTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
+            'endTime' => time() + 10,
             'targetId' => '1',
-        ));
+        ]);
 
-        $this->getAnnouncementService()->createAnnouncement(array(
+        $this->getAnnouncementService()->createAnnouncement([
             'content' => 'Announcement3',
             'url' => 'http://',
             'userId' => '1',
-            'startTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
-            'endTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
+            'startTime' => time() - 10,
+            'endTime' => time() + 10,
             'targetType' => 'global',
             'targetId' => '1',
-        ));
+        ]);
 
-        $this->getAnnouncementService()->createAnnouncement(array(
+        $this->getAnnouncementService()->createAnnouncement([
             'content' => 'Announcement4',
             'url' => 'http://',
             'userId' => '1',
-            'startTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
-            'endTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
+            'startTime' => time() - 10,
+            'endTime' => time() + 10,
             'targetType' => 'global',
             'targetId' => '1',
-        ));
+        ]);
 
-        $this->getAnnouncementService()->createAnnouncement(array(
+        $this->getAnnouncementService()->createAnnouncement([
             'content' => 'Announcement5',
             'url' => 'http://',
             'userId' => '1',
-            'startTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
-            'endTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
+            'startTime' => time() - 10,
+            'endTime' => time() + 10,
             'targetType' => 'global',
             'targetId' => '1',
-        ));
+        ]);
 
         $dataTag = new AnnouncementDataTag();
-        $announcement = $dataTag->getData(array('count' => '5'));
+        $announcement = $dataTag->getData(['count' => '5']);
         $this->assertEquals(5, count($announcement));
     }
 

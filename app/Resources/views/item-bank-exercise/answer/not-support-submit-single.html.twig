@@ -1,0 +1,17 @@
+{% extends 'layout.html.twig' %}
+{% do script(['exerciseactivity/js/continue-exercise/index.js'], 300) %}
+
+{% block body %}
+  <div class="modal show iframe-modal">
+    <div class="modal-body continue-exercise-abnormal">
+      <div class="review-img">
+        <img src="{{asset("assets/img/exercise/review-tip.png")}}" alt="">
+      </div>
+      <div class="review-tip-title">
+        {{ 'course.plan_task.activity_manage.exercise.continue.tips-title'|trans }}
+      </div>
+      <a class="back-btn js-continue-exercise-back" data-url="{{ path('my_item_bank_exercise_show', {id: exerciseId}) }}">{{ 'item_bank_exercise.continue.back-btn'|trans }}</a>
+    </div>
+  </div>
+  <div class="modal-backdrop in"></div>
+{% endblock %}

@@ -82,6 +82,7 @@ class Homework extends Activity
             $activity = $this->getHomeworkActivityService()->create([
                 'answerSceneId' => $answerScene['id'],
                 'assessmentId' => $assessment['id'],
+                'assessmentBankId' => $assessment['bank_id'],
             ]);
 
             $this->getBiz()['db']->commit();
@@ -171,10 +172,12 @@ class Homework extends Activity
                 'manual_marking' => 1,
                 'start_time' => 0,
             ]);
+            $assessment = $this->getAssessmentService()->getAssessment($homework['assessmentId']);
 
             $activity = $this->getHomeworkActivityService()->create([
                 'answerSceneId' => $answerScene['id'],
                 'assessmentId' => $homework['assessmentId'],
+                'assessmentBankId' => $assessment['bank_id'],
                 'has_published' => $this->isQuote,
             ]);
 
@@ -214,7 +217,7 @@ class Homework extends Activity
         if (!$homework) {
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
-        $accessment = [
+        $assessment = [
             'name' => $fields['title'],
             'description' => $fields['description'],
         ];
@@ -233,8 +236,8 @@ class Homework extends Activity
 
             $items = $this->processItemQuestions($sortItems, $fields);
             $bankIds = array_column($items, 'bank_id');
-            $accessment['bank_id'] = array_shift($bankIds);
-            $accessment['sections'] = [
+            $assessment['bank_id'] = array_shift($bankIds);
+            $assessment['sections'] = [
                 [
                     'name' => '作业题目',
                     'items' => $items,
@@ -247,7 +250,10 @@ class Homework extends Activity
         $answerScene['need_score'] = ('score' == $fields['finishType']) ? 1 : 0;
 
         $this->getAnswerSceneService()->update($homework['answerSceneId'], $answerScene);
-        $this->getAssessmentService()->updateAssessment($homework['assessmentId'], $accessment);
+        $this->getAssessmentService()->updateAssessment($homework['assessmentId'], $assessment);
+        if (!empty($assessment['bank_id'])) {
+            $this->getHomeworkActivityService()->update($homework['id'], ['assessmentBankId' => $assessment['bank_id']]);
+        }
 
         return $homework;
     }

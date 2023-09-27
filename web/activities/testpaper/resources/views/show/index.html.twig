@@ -11,7 +11,9 @@
           <div class="modal-body task-state-modal 4">
             <div class="title text-37393D">
               {# 不同标题显示 #}
-              {% if testpaper and testpaper.status == 'open' %}
+              {% if testpaper.item_count|default(0) == 0 %}
+                {{ 'site.tips'|trans }}
+              {% elseif testpaper and testpaper.status == 'open' %}
                 {% if activity.startTime and activity.startTime > ('now'|date('U')) %}
                   {{ 'course.plan_task.activity_manage.testpaper.not_start_tips'|trans }}
                 {% elseif canStartTestpaper %}
@@ -22,7 +24,11 @@
               {% endif %}
             </div>
             {% set testMode = activity.ext.answerScene.start_time > 0 ? 'realTime' : 'normal' %}
-            {% if testpaper and testpaper.status == 'open' %}
+            {% if testpaper.item_count|default(0) == 0 %}
+              <div class="content">
+                <div class="text-16">{{ 'course.start_answer.all_question_deleted'|trans }}</div>
+              </div>
+            {% elseif testpaper and testpaper.status == 'open' %}
               <div class="content">
                 {% if activity.startTime and activity.startTime > ('now'|date('U')) %}
                   {# 未开始 #}

@@ -118,6 +118,33 @@ class QuestionCategoryController extends BaseController
         return $this->createJsonResponse($categories);
     }
 
+    public function sortAction(Request $request, $id)
+    {
+        $ids = $request->request->get('ids');
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            return $this->createJsonResponse([
+                'success' => false,
+                'message' => '您不是该题库管理者，不能对分类进行排序',
+            ]);
+        }
+
+        $categories = $this->getItemCategoryService()->findItemCategoriesByIds($ids);
+        $parentIds = array_unique(array_column($categories, 'parent_id'));
+        if (count($parentIds) > 1) {
+            return $this->createJsonResponse([
+                'success' => false,
+                'message' => '非同一父分类下的分类，不可排序',
+            ]);
+        }
+
+        $this->getItemCategoryService()->sortItemCategories($ids);
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $this->getLogService()->info('question_bank', 'sort_question_category', "管理员{$this->getCurrentUser()['nickname']}修改题库《{$questionBank['name']}》的题目分类排序");
+
+        return $this->createJsonResponse(['success' => true]);
+    }
+
     /**
      * @return QuestionBankService
      */

@@ -1,0 +1,22 @@
+<div class="course-item clearfix">
+    {% set itembankExercise_show_url = path('item_bank_exercise_show',{id : itemBankExercise.id}) %}
+
+  <div class="course-img">
+    <a href="{{ itembankExercise_show_url }}" target="_blank">
+      <img class="img-responsive" src="{{ filepath(itemBankExercise.cover.large|default(null), 'item_bank_exercise.png') }}" alt="">
+    </a>
+  </div>
+  <div class="course-info">
+    <h3 class="title">
+      <a href="{{ itembankExercise_show_url }}" target="_blank">
+        {{ itemBankExercise.title|raw }}
+      </a>
+    </h3>
+    <div class="score">
+        {{ web_macro.star(itemBankExercise.rating|default(0)) }}
+       <span>
+        {{'cloud_search.itemBankExercise.evaluate'|trans({'%ratingNum%':itemBankExercise.rating|default(0)})}}
+        </span>
+    </div>
+  </div>
+</div>

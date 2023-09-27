@@ -17,7 +17,7 @@ class AppleAuthClientTest extends BaseTestCase
             'secretKey' => 'secret',
         ];
         $client = new AppleOAuthClient($config);
-        $result = $client->getAuthorizeUrl('www.edusoho.cn');
+        $result = $client->getAuthorizeUrl('www.edusoho.cn', 'credential');
         $this->assertEquals(
             'https://appleid.apple.com/auth/authorize?client_id=test&redirect_uri=www.edusoho.cn&response_type=code&scope=scope&state=es-state',
             $result

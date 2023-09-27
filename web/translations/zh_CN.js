@@ -409,6 +409,7 @@ t.add("course.manage.task_batch_delete_hint", "\u5220\u9664\u6240\u9009\u8bfe\u6
 t.add("course.manage.chapter_delete_hint", "\u662f\u5426\u786e\u5b9a\u5220\u9664\u8be5%name%\u5417\uff1f", "js", "zh_CN");
 t.add("course.manage.chapter_batch_delete_hint", "\u5df2\u9009\u4e2d%length%\u4e2a\u7ae0\u8282\uff0c\u662f\u5426\u786e\u5b9a\u5220\u9664\uff1f", "js", "zh_CN");
 t.add("course.manage.task_publish_success_hint", "\u53d1\u5e03\u6210\u529f", "js", "zh_CN");
+t.add("course.manage.item_task_unpublish_success_hint", "\u53d6\u6d88\u6210\u529f", "js", "zh_CN");
 t.add("course.manage.task_publish_fail_hint", "\u53d1\u5e03\u5931\u8d25", "js", "zh_CN");
 t.add("course.manage.task_unpublish_success_hint", "\u53d6\u6d88\u53d1\u5e03\u6210\u529f", "js", "zh_CN");
 t.add("course.manage.task_unpublish_fail_hint", "\u53d6\u6d88\u53d1\u5e03\u5931\u8d25", "js", "zh_CN");

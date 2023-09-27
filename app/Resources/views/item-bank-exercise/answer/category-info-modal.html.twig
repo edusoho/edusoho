@@ -1,0 +1,112 @@
+{% do script(['exerciseactivity/js/exercise_info_modal/index.js'],300) %}
+
+
+{% block body %}
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body task-state-modal">
+        <div class="title font-blod text-37393D">
+          {{ 'course.plan_task.activity_manage.exercise.info'|trans }}
+          <span>
+            <span class="text-20 font-normal js-exercise-schedule">1</span><span class="text-20 font-normal text-919399">/</span><span class="text-14 font-normal text-919399">2</span>
+          </span>
+        </div>
+        <div class="content">
+          <div class="text-14 js-show-exercise-create">
+            {% if typesNum.single_choice > 0 %}
+              <div>
+                <div class="text-919399">
+                  {{ 'course.plan_task.activity_manage.exercise.single_choice'|trans }}
+                  <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.single_choice|default(0) }) }}</span>
+                </div>
+                {% if typesNum.choice > 0 or  typesNum.uncertain_choice > 0 or typesNum.determine > 0  or typesNum.fill > 0 or typesNum.essay > 0 or typesNum.material > 0 %}
+                  <div class="mv16 border-bottom-line"></div>
+                {% endif %}
+              </div>
+            {% endif %}
+            {% if typesNum.choice > 0 %}
+              <div>
+                <div class="text-919399">
+                  {{ 'course.plan_task.activity_manage.exercise.choice'|trans }}
+                  <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.choice|default(0) }) }}</span>
+                </div>
+                {% if typesNum.uncertain_choice > 0 or typesNum.determine > 0  or typesNum.fill > 0 or typesNum.essay > 0 or typesNum.material > 0 %}
+                  <div class="mv16 border-bottom-line"></div>
+                {% endif %}
+              </div>
+            {% endif %}
+            {% if typesNum.uncertain_choice > 0 %}
+              <div>
+                <div class="text-919399">
+                  {{ 'course.plan_task.activity_manage.exercise.uncertain_choice'|trans }}
+                  <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.uncertain_choice|default(0) }) }}</span>
+                </div>
+                {% if typesNum.determine > 0  or typesNum.fill > 0 or typesNum.essay > 0  or typesNum.material > 0 %}
+                  <div class="mv16 border-bottom-line"></div>
+                {% endif %}
+              </div>
+            {% endif %}
+            {% if typesNum.determine > 0 %}
+              <div>
+                <div class="text-919399">
+                  {{ 'course.plan_task.activity_manage.exercise.determine'|trans }}
+                  <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.determine|default(0) }) }}</span>
+                </div>
+                {% if typesNum.fill > 0 or typesNum.essay > 0 or typesNum.material > 0 %}
+                  <div class="mv16 border-bottom-line"></div>
+                {% endif %}
+              </div>
+            {% endif %}
+            {% if typesNum.fill > 0 %}
+              <div>
+                <div class="text-919399">
+                  {{ 'course.plan_task.activity_manage.exercise.fill'|trans }}
+                  <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.fill|default(0) }) }}</span>
+                </div>
+                {% if typesNum.essay > 0 or typesNum.material > 0 %}
+                  <div class="mv16 border-bottom-line"></div>
+                {% endif %}
+              </div>
+            {% endif %}
+            {% if typesNum.essay > 0 %}
+              <div>
+                <div class="text-919399">
+                  {{ 'course.plan_task.activity_manage.exercise.essay'|trans }}
+                  <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.essay|default(0) }) }}</span>
+                </div>
+                {% if typesNum.material > 0 %}
+                  <div class="mv16 border-bottom-line"></div>
+                {% endif %}
+              </div>
+            {% endif %}
+            {% if typesNum.material > 0 %}
+              <div class="text-919399">
+                {{ 'course.plan_task.activity_manage.exercise.material'|trans }}
+                <span class="pull-right text-37393D">{{ 'course.plan_task.activity_manage.exercise.questions'|trans({ '%itemCount%': typesNum.material|default(0) }) }}</span>
+              </div>
+            {% endif %}
+          </div>
+          <div class="exercise-create-modal hidden js-exercise-create">
+            <span class="relative">
+              <img class="test-modal" src="{{asset("assets/img/exercise/test-mode.png")}}" alt="">
+              <span class="absolute test-modal-text">{{ 'course.plan_task.activity_manage.exercise.test.mode'|trans }}</span>
+            </span>
+            <span class="relative">
+              <img class="one-question" src="{{asset("assets/img/exercise/answer-one-question.png")}}" alt="">
+              <span class="absolute one-question-text">{{ 'course.plan_task.activity_manage.exercise.one.question.one.answer.mode'|trans }}</span>
+              <span class="absolute one-question-tips">{{ 'course.plan_task.activity_manage.exercise.currently.not.supported.on.pc'|trans }}</span>
+            </span>
+          </div>
+        </div>
+        <div class="text-right mt20">
+          <a class="btn btn-primary js-show-exercise-create-btn" href="javascript:;">{{ 'course.plan_task.activity_manage.exercise.selective.answer.mode'|trans }}</a>
+        </div>
+        <div class="text-right mt20 hidden js-exercise-create-btn">
+          <a class="btn btn-default mr16 js-close-modal">{{ 'admin.user_auth.Email_verification_sign.closed'|trans }}<a/>
+          <a class="btn btn-primary" target="_blank" href="{{ path('item_bank_exercise_category_answer', {exerciseId:exerciseId, moduleId:moduleId, categoryId:categoryId}) }}">{{ 'item_bank_exercise.chapter.exercise.start_btn'|trans }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% include 'js_loader_async.html.twig' %}
+{% endblock %}

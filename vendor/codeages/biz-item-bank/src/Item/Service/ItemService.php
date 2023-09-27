@@ -16,11 +16,17 @@ interface ItemService
 
     public function getItem($id);
 
+    public function getItemIncludeDeleted($id);
+
     public function getItemWithQuestions($id, $withAnswer = false);
 
     public function findItemsByIds($ids, $withQuestions = false);
 
+    public function findItemsByIdsIncludeDeleted($ids, $withQuestions = false);
+
     public function searchItems($conditions, $orderBys, $start, $limit, $columns = []);
+
+    public function searchItemsIncludeDeleted($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function countItems($conditions);
 
@@ -34,17 +40,23 @@ interface ItemService
 
     public function updateItemsCategoryId($ids, $categoryId);
 
-    public function findQuestionsByItemIds($itemIds);
-
     public function review($itemResponses);
 
     public function exportItems($bankId, $conditions, $path, $imgRootDir);
 
     public function findQuestionsByQuestionIds($questionIds);
 
+    public function findQuestionsByQuestionIdsIncludeDeleted($questionIds);
+
     public function countQuestionsByBankId($bankId);
 
     public function countQuestionsByCategoryId($categoryId);
 
     public function searchQuestions($conditions, $orderBys, $start, $limit, $columns = []);
+
+    public function getQuestion($questionId);
+
+    public function getQuestionIncludeDeleted($questionId);
+
+    public function countItemTypesNum($items);
 }

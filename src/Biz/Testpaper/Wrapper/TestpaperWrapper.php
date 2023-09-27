@@ -113,6 +113,7 @@ class TestpaperWrapper
             'checkTeacherId' => empty($report['review_user_id']) ? '0' : $report['review_user_id'],
             'checkedTime' => empty($report['review_time']) ? '0' : $report['review_time'],
             'usedTime' => $record['used_time'],
+            'exerciseMode' => $record['exercise_mode'],
         ];
     }
 
@@ -122,6 +123,7 @@ class TestpaperWrapper
         $this->questionReports = ArrayToolkit::index($questionReports, 'question_id');
         foreach ($assessment['sections'] as $section) {
             foreach ($section['items'] as $item) {
+                $item['section_id'] = $section['id'];
                 if (1 != $item['isDelete']) {
                     $items[$item['id']] = $this->wrapItem($item);
                 }
@@ -149,6 +151,7 @@ class TestpaperWrapper
                 'parentId' => '0',
                 'subs' => [],
                 'attachments' => $item['attachments'],
+                'sectionId' => $item['section_id'],
             ];
             foreach ($item['questions'] as $itemQuestion) {
                 if (1 != $itemQuestion['isDelete']) {
@@ -180,6 +183,8 @@ class TestpaperWrapper
             'parentId' => '0',
             'testResult' => [],
             'attachments' => $itemQuestion['attachments'],
+            'sectionId' => $item['section_id'],
+            'itemId' => $item['id'],
         ];
 
         $question['answer'] = $this->convertAnswer($itemQuestion['answer'], $question);

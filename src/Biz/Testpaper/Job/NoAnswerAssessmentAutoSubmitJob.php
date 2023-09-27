@@ -2,8 +2,10 @@
 
 namespace Biz\Testpaper\Job;
 
+use Biz\Activity\Constant\ActivityMediaType;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\MemberService;
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -23,7 +25,7 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
         if (empty($testpaperActivity)) {
             return;
         }
-        $activity = $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], ActivityMediaType::TESTPAPER);
         if (empty($activity)) {
             return;
         }
@@ -33,54 +35,63 @@ class NoAnswerAssessmentAutoSubmitJob extends AbstractJob
             return;
         }
 
-        $answerRecords = $this->getAnswerRecordService()->findByAnswerSceneId($answerScene['id']);
+        $userIds = $this->findNeedSubmitUserIds($answerScene['id'], $activity['fromCourseId'], 1000);
+        if (empty($userIds)) {
+            return;
+        }
+
+        try {
+            $this->getAnswerService()->batchAutoSubmit($answerScene['id'], $testpaperActivity['mediaId'], $userIds);
+
+            $this->getLogService()->info('assessment', 'auto_submit_answers', "用户自动交卷成功,答题场次为{$answerScene['id']}");
+
+            $this->getSchedulerService()->register([
+                'name' => 'noAnswerAssessmentAutoSubmitJob_'.$answerScene['id'],
+                'expression' => time(),
+                'class' => 'Biz\Testpaper\Job\NoAnswerAssessmentAutoSubmitJob',
+                'misfire_threshold' => 60 * 10,
+                'misfire_policy' => 'executing',
+                'args' => ['answerSceneId' => $answerScene['id']],
+            ]);
+        } catch (\Exception $e) {
+            $this->getLogService()->error('assessment', 'auto_submit_answers_error', "用户自动交卷失败,答题场次为{$answerScene['id']}", $e->getMessage());
+        }
+    }
+
+    private function findNeedSubmitUserIds($answerSceneId, $courseId, $limit)
+    {
+        $answerRecords = $this->getAnswerRecordService()->findByAnswerSceneId($answerSceneId);
+        $excludeUserIds = array_column($answerRecords, 'user_id');
         $courseMembers = $this->getCourseMemberService()->searchMembers(
             [
-                'courseId' => $activity['fromCourseId'],
-                'excludeUserIds' => array_column($answerRecords, 'user_id'),
+                'courseId' => $courseId,
+                'excludeUserIds' => $excludeUserIds,
                 'role' => 'student',
             ],
             ['createdTime' => 'DESC'],
             0,
-            1000,
+            $limit,
             ['userId']
         );
         $userIds = array_column($courseMembers, 'userId');
 
-        $classroom = $this->getClassroomService()->getClassroomByCourseId($activity['fromCourseId']);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
         if (!empty($classroom)) {
             $classroomMembers = $this->getClassroomService()->searchMembers(
                 [
                     'classroomId' => $classroom['id'],
-                    'excludeUserIds' => array_merge($userIds, array_column($answerRecords, 'user_id')),
+                    'excludeUserIds' => array_merge($userIds, $excludeUserIds),
                     'role' => 'student',
                 ],
                 ['createdTime' => 'DESC'],
                 0,
-                1000,
+                $limit,
                 ['userId']
             );
             $userIds = array_merge($userIds, array_column($classroomMembers, 'userId'));
         }
 
-        if (empty($userIds)) {
-            return;
-        }
-
-        $this->getAnswerService()->batchAutoSubmit($answerScene['id'], $testpaperActivity['mediaId'], $userIds);
-
-        $this->getLogService()->info('answer', 'create', '提交成功');
-
-        $this->getSchedulerService()->register([
-            'name' => 'noAnswerAssessmentAutoSubmitJob_'.$answerScene['id'],
-            'expression' => time(),
-            'class' => 'Biz\Testpaper\Job\NoAnswerAssessmentAutoSubmitJob',
-            'misfire_threshold' => 60 * 10,
-            'misfire_policy' => 'executing',
-            'args' => ['answerSceneId' => $answerScene['id']],
-        ]);
-
-        $this->getLogService()->info('job', 'register', "定时任务noAnswerAssessmentAutoSubmitJob_(#{$answerScene['id']})创建成功");
+        return $userIds;
     }
 
     /**

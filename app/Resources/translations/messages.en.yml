@@ -65,6 +65,7 @@ site.default.all: All
 site.default.user: User
 site.default.course: Course
 site.default.question.bank: Question Bank
+site.default.item.bank.exercise: Item Bank Exercise
 site.default.plan: Plan
 site.default.more: More
 site.default.manage: Config
@@ -1827,6 +1828,20 @@ course.plan_task.activity_manage.exercise.info: Introduction
 course.plan_task.activity_manage.exercise.info_tips: 'This assignment is random generate <span class="color-success">%itemCount% questions</span>'
 course.plan_task.activity_manage.exercise.info_tips.question_lack: The number of questions is inconsistent with the teacher's settings, please contact the teacher!
 course.plan_task.activity_manage.exercise.total_questions: '%itemCount% questions in total'
+course.plan_task.activity_manage.exercise.single_choice: Single_choice
+course.plan_task.activity_manage.exercise.choice: Choice
+course.plan_task.activity_manage.exercise.uncertain_choice: Uncertain_choice
+course.plan_task.activity_manage.exercise.determine: Determine
+course.plan_task.activity_manage.exercise.fill: Fill
+course.plan_task.activity_manage.exercise.essay: Essay
+course.plan_task.activity_manage.exercise.material: Material
+course.plan_task.activity_manage.exercise.questions: '%itemCount% questions'
+course.plan_task.activity_manage.exercise.selective.answer.mode: Selective answer mode
+course.plan_task.activity_manage.exercise.test.mode: Test mode
+course.plan_task.activity_manage.exercise.one.question.one.answer.mode: One question one answer mode
+course.plan_task.activity_manage.exercise.currently.not.supported.on.pc: (Currently not supported on PC)
+course.plan_task.activity_manage.exercise.continue.tips-title: The current practice mode is [one question, one answer], which is not supported on the PC, please move to the mobile phone to continue answering
+course.plan_task.activity_manage.exercise.continue.back-btn: Back to course catalog
 course.plan_task.activity_manage.exercise.confirm_submit: Confirm
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 'Are you sure to submit?'
 course.plan_task.activity_manage.flash.play_tips: 'Note：Flash is not supported on mobile'
@@ -2052,6 +2067,10 @@ item_bank_exercise.assessment_exercise.add_new_module: Create
 item_bank_exercise.assessment_exercise.add_assessment: Add Assessment
 item_bank_exercise.assessment_exercise.remove_assessment: Remove Assessment
 item_bank_exercise.chapter_exercise.category_empty: No chapters have been added to the current item bank exercise
+item_bank_exercise.chapter_exercise.item: item
+item_bank_exercise.chapter_exercise.batch.release: Batch release
+item_bank_exercise.chapter_exercise.batch.cancellation: Batch cancellation
+item_bank_exercise.chapter_exercise.batch.num.clear: Clear away
 item_bank_exercise.chapter_exercise.empty: 'It is empty, open the chapter exercise now'
 item_bank_exercise.assessment_exercise.empty: 'It is empty, open the assessment exercise now'
 item_bank_exercise.chapter_exercise.info: Chapter exercises are based on the setting of "Item management by category".Provide students with a hierarchical list of brushing exercises
@@ -2063,6 +2082,7 @@ item_bank_exercise.assessment_exercise.edit_module: Edit
 item_bank_exercise.assessment_exercise.module.name: Module Name
 item_bank_exercise.goto_learning: Goto learning
 item_bank_exercise.my_teaching_notice: Itembank Exercise，Please goto <a class="alert-link" href="%url%"><u>Itembank</u></a> Create
+item_bank_exercise.continue.back-btn: 'Back to Chapter Table of Contents'
 
 activity.live.not_created_notice: Live classroom not yet created!
 activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
@@ -3137,9 +3157,11 @@ custom_page.empty: 'The current page has not been edited yet ,please edit in the
 search.empty: 'Cannot find related %name%, please change your keyword.'
 search.content_title: Search
 search.relative_courses_result: 'Total <span class="color-danger phm">%count%</span> courses with <span class="color-danger phm">“%keywords%”</span>'
-search.relative_classrooms_result: Total <span class="color-danger phm">%count%</span> classrooms with <span class="color-danger phm">“%keywords%”</span> related %classroom%
+search.relative_classrooms_result: 'Total <span class="color-danger phm">%count%</span> classrooms with <span class="color-danger phm">“%keywords%”</span> related %classroom%'
+search.relative_item_bank_exercises_result: 'Total <span class="color-danger phm">%count%</span> itemBankExercises with <span class="color-danger phm">“%keywords%”</span>'
 search.result_course_copy: 'Total <span class="color-danger phm">%count%</span> courses'
 search.result_classrooms_copy: 'Total <span class="color-danger phm">%count%</span> %classroom%'
+search.result_item_bank_exercises_copy: 'Total <span class="color-danger phm">%count%</span> itemBankExercises'
 search.all_courses: 'All courses'
 search.vip_courses: 'VIP courses'
 search.free_courses: 'Free courses'
@@ -3148,6 +3170,8 @@ search.reservation_courses: Reservation courses
 search.all_classrooms: 'All %classroom%'
 search.free_classrooms: 'Free %classroom%'
 search.free_item_bank: Free
+search.all_item_bank_exercise: 'All itemBankExercise'
+search.free_item_bank_exercise: 'Free itemBankExercise'
 cloud_file.preview: 'preview'
 cloud_file.re_transcoding_btn: Re-transcoding
 cloud_file.re_transcoding.submiting: Submiting...
@@ -3272,6 +3296,13 @@ cloud_search.thread.from: From
 cloud_search.thread.recommend.content_title: 'Popular groups'
 cloud_search.article: Article
 cloud_search.article.result: 'Have found <span class="color-danger">%counts%</span> article(s)'
+
+cloud_search.itemBankExercise: 'Exercise of question bank'
+cloud_search.itemBankExercise.result: 'Have found <span class="color-danger">%counts%</span> Exercise of question bank(s)'
+cloud_search.itemBankExercise.evaluate: 'Judgments %ratingNum%'
+cloud_search.itemBankExercise.recommend.content_title: 'Recommend Exercise of question bank'
+cloud_search.itemBankExercise.recommend.empty: 'Sorry, no Recommend Exercise of question bank now.'
+
 group: 'Group Channel'
 group.name: 'Group name'
 group.about: 'Group Instruction'
@@ -8457,6 +8488,7 @@ log.action.question_bank.create_category: Create Bank Category
 log.action.question_bank.delete_category: Delete Bank Category
 log.action.question_bank.update_category: Update Bank Category
 log.action.question_bank.delete_question: Delete Question
+log.action.question_bank.sort_question_category: 'Bank Category Sort'
 log.action.item_bank_exercise.add_student: 'Add student'
 log.action.item_bank_exercise.remove_student: Remove Student
 log.action.item_bank_exercise.delete_exercise: Delete Item Exercise
@@ -8464,6 +8496,8 @@ log.action.item_bank_exercise.recommend_exercise: Recommend Item Exercise
 log.action.item_bank_exercise.cancel_recommend_exercise: Cancel Recommend Item Exercise
 log.action.item_bank_exercise.publish_exercise: Publish Item Exercise
 log.action.item_bank_exercise.close_exercise: Close Item Exercise
+log.action.item_bank_exercise.publish_exercise_chapter: 'Publish the question bank exercise chapter'
+log.action.item_bank_exercise.unpublish_exercise_chapter: 'Cancel the release of the question bank exercise chapter'
 log.action.certifiacte.create_certificate: Create Certificate
 log.action.certifiacte.auto_issue: Auto Issue Certificate
 log.action.certifiacte.create_template: Create Template
@@ -9732,6 +9766,7 @@ exception.coupon.target_type_error: The batch does not support viewing details
 exception.coupon.setting_close: Coupon global switch is closed
 exception.coupon.receive_late: You are one step too late, the coupon has been claimed!
 
+exception.item_bank_exercise.chapter_answer_is_doing: 'Exercise record already exists, please start answering again'
 exception.item_bank_exercise.forbidden_learn: 'Your purchased item bank exercise was expired and you cannot proceed with the chapter, test paper, etc. and ask questions now. Please contact your teacher for help.'
 exception.item_bank_exercise.exercise.not_found: Item bank exercise does not exist
 exception.item_bank_exercise.exercise.forbidden_manage_exercise: Forbidden manage this item bank exercise
@@ -9755,8 +9790,11 @@ exception.item_bank_exercise.member.member_not_student: Member is not student
 exception.item_bank_exercise.module.switch.danger: At the time of publication of the item bank exercise, at least one chapter exercise or assessment exercise must be enabled
 exception.item_bank_exercise.exercise.is_exists: The item bank exercise already exists. Please do not open it repeatedly
 exception.item_bank_exercise.exercise.not_arrive: The item bank exercise has not reached learning time，add failed
+exception.item_bank_exercise.parent_chapter_unpublish: 'Please publish the previous chapter first'
+exception.item_bank_exercise.answer_unpublish_chapter: The current chapter has been cancelled and cannot continue to answer ~
 exception.item_bank.assessment.not.open: The test paper is closed, please contact the teacher
 exception.item_bank.assessment.not.exist: Test paper does not exist
+exception.item_bank.assessment.is_empty: All questions have been removed from the paper. Please contact the teacher or administrator
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
@@ -10720,6 +10758,8 @@ exception.exercise.closed: This exercise is closed. If you have any questions, p
 exception.exercise.forbidden_access_exercise: No access to other students' exercises!
 exception.exercise.forbidden_duplicate_commit_exercise: Exercises have been completed, do not repeat the submission!
 exception.exercise.not_found_result: The result of the exercise does not exist
+exception.exercise.exercise_is_doing: 'Exercise record already exists, please start answering again'
+exception.exercise.exercise_not_do: 'This exercise cannot be answered. Please exit and start again'
 
 exception.homework.not_found: Homework does not exist
 exception.homework.draft: This homework has not been published. If you have any questions, please contact the teacher!
@@ -11002,8 +11042,10 @@ admin.multi_class_copy.failure.notify: Your new multi-class《%newTitle%》is co
 
 course.task_manage.no_permission_tips: 'Sorry, you can not edit tasks. Contact site administrator for help.'
 
-exception.wrong_question.data_fields_missing: Wrong question data fields missing
+exception.wrong_book.wrong_question.data_fields_missing: Wrong question data fields missing
 exception.wrong_book.wrong_question.not_exist: Wrong question not exist
+exception.wrong_book.wrong_question_num.limit: 'Out of input range'
+
 course.replay_manage.no_permission_tips: 'Sorry, you can not edit replays. Contact site administrator for help.'
 course.teacher_manage.no_permission_tips: 'Sorry, you can not edit teachers. Contact site administrator for help.'
 
@@ -11100,3 +11142,5 @@ sms.defence.request.log.is_illegal.no: no
 sms.defence.request.log.disable_type.ip: Multiple requests for the same IP address
 sms.defence.request.log.disable_type.coordinate: Multiple requests for the same coordinate
 sms.defence.request.log.disable_type.none: none
+
+course.start_answer.all_question_deleted: 'All questions have been deleted, please contact the teacher or administrator'
