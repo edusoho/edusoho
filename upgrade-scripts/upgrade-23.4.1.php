@@ -109,7 +109,8 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $answerSceneIds = array_column($answerSceneList, 'id');
-        $this->getAnswerSceneDao()->update(['ids'=>$answerSceneIds], ['need_score' => 1]);
+        $this->getAnswerSceneDao()->update(['ids' => $answerSceneIds], ['need_score' => 1]);
+
         return 1;
     }
 
