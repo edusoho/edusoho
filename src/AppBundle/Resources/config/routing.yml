@@ -3237,7 +3237,7 @@ material_lib_live_replay_remove:
     methods:
       - POST
 material_lib_live_replay_edit:
-    path: '/material/lib/live_replay/{liveActivityId}/edit'
+    path: '/material/lib/live_replay/{activityId}/edit'
     defaults:
       _controller: 'AppBundle:MaterialLib/LiveReplay:edit'
 app_download:

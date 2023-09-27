@@ -65,16 +65,20 @@ class LiveReplayController extends BaseController
         return $this->createJsonResponse(['status' => true, 'message' => '操作成功']);
     }
 
-    public function editAction(Request $request, $liveActivityId)
+    public function editAction(Request $request, $activityId)
     {
-        $live = $this->getLiveActivityService()->getLiveActivity($liveActivityId);
+        $liveActivity = $this->getActivityService()->getActivity($activityId);
+        if (empty($liveActivity)) {
+            return $this->createJsonResponse(['status' => false, 'message' => '直播不存在']);
+        }
+        $live = $this->getLiveActivityService()->getLiveActivity($liveActivity['mediaId']);
         if ($live['anchorId'] != $this->getCurrentUser()->getId()) {
             return $this->createJsonResponse(['status' => false, 'message' => '你无权进行设置！']);
         }
         if ('POST' == $request->getMethod()) {
             $tags = $request->request->get('tags', '');
             $tagIds = empty($tags) ? [] : explode(',', $tags);
-            $this->getLiveActivityService()->updateLiveReplayTags($liveActivityId, $tagIds);
+            $this->getLiveActivityService()->updateLiveReplayTags($liveActivity['mediaId'], $tagIds);
 
             return $this->createJsonpResponse(true);
         }
@@ -86,7 +90,7 @@ class LiveReplayController extends BaseController
 
         return $this->render('material-lib/web/live-replay/update.html.twig', [
             'tags' => $data,
-            'live' => $live,
+            'live' => $liveActivity,
         ]);
     }
 
