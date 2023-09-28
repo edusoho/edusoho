@@ -20,6 +20,15 @@
       :placeholder="$t('placeholder.password')"
     />
 
+    <div class="login-register">
+      <router-link to="/setting/password/reset" class="login-account">
+        {{ $t('btn.forgetPassword') }} ？ &nbsp;|
+      </router-link>
+      <span class="login-account" @click="jumpRegister">
+        &nbsp; {{ $t('btn.registerNow') }} &nbsp;
+      </span>
+    </div>
+
     <van-button
       :disabled="btnDisable"
       type="info"
@@ -28,19 +37,53 @@
       >{{ $t('btn.login') }}</van-button
     >
     <div class="login-bottom text-center">
-      <router-link to="/setting/password/reset" class="login-account">
-        {{ $t('btn.forgetPassword') }} ？ &nbsp;|
-      </router-link>
-      <span class="login-account" @click="jumpRegister">
-        &nbsp; {{ $t('btn.registerNow') }} &nbsp;
-      </span>
+      <div v-if="userTerms || privacyPolicy" class="login-agree">
+        <van-checkbox
+          v-model="agreement"
+          :icon-size="16"
+          checked-color="#408ffb"
+        />
+        {{ $t('tips.iHaveReadAndAgreeToThe') }}
+        <i v-if="userTerms" @click="lookUserTerms"
+          >《{{ $t('btn.userServiceAgreement') }}》</i
+        >
+        <span v-if="userTerms && privacyPolicy">{{ $t('tips.and') }}</span>
+        <span v-if="privacyPolicy">
+          <i @click="lookPrivacyPolicy">《{{ $t('btn.privacyAgreemen') }}》</i>
+        </span>
+      </div>
+
       <div v-show="cloudSetting" class="login-change" @click="changeLogin">
-        <img
-          src="static/images/login_change.png"
-          class="login_change-icon"
-        />{{ $t('btn.loginWithMobileNumber') }}
+        <img src="static/images/login_change.png" class="login_change-icon" />{{
+          $t('btn.loginWithMobileNumber')
+        }}
       </div>
     </div>
+
+    <van-popup
+      v-model="popUpBottom"
+      class="login-pop"
+      position="bottom"
+      round
+      :style="{ height: '30%' }"
+    >
+      <div class="login-pop-title">{{ $t('btn.PleaseReadAgreeAndTerms') }}</div>
+      <div v-if="userTerms || privacyPolicy" class="login-agree">
+        <i v-if="userTerms" @click="lookUserTerms"
+          >《{{ $t('btn.userServiceAgreement') }}》</i
+        >
+        <span v-if="privacyPolicy">
+          <i @click="lookPrivacyPolicy">《{{ $t('btn.privacyAgreemen') }}》</i>
+        </span>
+      </div>
+      <van-button
+        :disabled="btnDisable"
+        type="info"
+        class="primary-btn mb20 login-pop-btn"
+        @click="agreeSign"
+        >{{ $t('btn.agreeAndSignin') }}</van-button
+      >
+    </van-popup>
   </div>
 </template>
 <script>
@@ -63,6 +106,10 @@ export default {
       bodyHeight: 520,
       loginConfig: {},
       cloudSetting: false,
+      userTerms: false, // 用户协议
+      privacyPolicy: false, // 隐私协议
+      agreement: false, // 是否勾选
+      popUpBottom: false, // 底部弹出层
     };
   },
   computed: {
@@ -82,7 +129,7 @@ export default {
   async created() {
     if (this.$store.state.token) {
       Toast.loading({
-        message: this.$t('toast.pleaseWait')
+        message: this.$t('toast.pleaseWait'),
       });
       this.afterLogin();
       return;
@@ -95,19 +142,48 @@ export default {
       Toast.fail(err.message);
     });
     this.getsettingsCloud();
+    this.getPrivacySetting();
   },
   mounted() {
     this.bodyHeight = document.documentElement.clientHeight - 46;
     this.username =
       this.$route.params.username || this.$route.query.account || '';
     Toast.loading({
-      message: this.$t('toast.pleaseWait')
+      message: this.$t('toast.pleaseWait'),
     });
     this.faceLogin();
     this.thirdPartyLogin();
   },
   methods: {
     ...mapActions(['userLogin']),
+    async getPrivacySetting() {
+      await Api.getSettings({
+        query: {
+          type: 'user',
+        },
+      })
+        .then(res => {
+          if (res.auth.user_terms_enabled) {
+            this.userTerms = true;
+          }
+          if (res.auth.privacy_policy_enabled) {
+            this.privacyPolicy = true;
+          }
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+    },
+    // 隐私政策
+    lookPrivacyPolicy() {
+      window.location.href =
+        window.location.origin + '/mapi_v2/School/getPrivacyPolicy';
+    },
+    // 获取服务条款
+    lookUserTerms() {
+      window.location.href =
+        window.location.origin + '/mapi_v2/School/getUserterms';
+    },
     // 网校是否开启短信云服务
     async getsettingsCloud() {
       await Api.settingsCloud()
@@ -119,11 +195,38 @@ export default {
         });
     },
     onSubmit(data) {
+      if (
+        this.agreement ||
+        (this.privacyPolicy === false && this.userTerms === false)
+      ) {
+        this.userLogin({
+          username: this.username,
+          password: this.password,
+        })
+          .then(res => {
+            Toast.success({
+              duration: 1000,
+              message: this.$t('toast.signInSuccessfully'),
+            });
+            this.afterLogin();
+          })
+          .catch(err => {
+            Toast.fail(err.message);
+          });
+
+        return;
+      }
+
+      this.popUpBottom = true;
+    },
+    agreeSign() {
       this.userLogin({
         username: this.username,
         password: this.password,
       })
         .then(res => {
+          this.agreement = true;
+          this.popUpBottom = false;
           Toast.success({
             duration: 1000,
             message: this.$t('toast.signInSuccessfully'),
@@ -132,8 +235,10 @@ export default {
         })
         .catch(err => {
           Toast.fail(err.message);
+          this.popUpBottom = false;
         });
     },
+
     jumpRegister() {
       if (
         !this.registerSettings ||

@@ -18,8 +18,9 @@ import Api from '@/api';
 import { mapState } from 'vuex';
 import * as types from '@/store/mutation-types.js';
 import { Toast } from 'vant';
+import itemReview from '@/src/components/item-review/src/item-review.vue';
 export default {
-  components: {},
+  components: {itemReview},
   data() {
     return {
       isLoading: true,

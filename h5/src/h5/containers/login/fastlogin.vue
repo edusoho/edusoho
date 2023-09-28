@@ -58,22 +58,47 @@
           v-model="agreement"
           :icon-size="16"
           checked-color="#408ffb"
-          @click="checkAgree"
         />
         {{ $t('tips.iHaveReadAndAgreeToThe') }}
-        <i v-if="userTerms" @click="lookPrivacyPolicy">《{{ $t('btn.userServiceAgreement') }}》</i>
+        <i v-if="userTerms" @click="lookUserTerms"
+          >《{{ $t('btn.userServiceAgreement') }}》</i
+        >
         <span v-if="userTerms && privacyPolicy">{{ $t('tips.and') }}</span>
         <span v-if="privacyPolicy">
           <i @click="lookPrivacyPolicy">《{{ $t('btn.privacyAgreemen') }}》</i>
         </span>
       </div>
       <div class="login-change" @click="changeLogin">
-        <img
-          src="static/images/login_change.png"
-          class="login_change-icon"
-        />{{ $t('btn.switchAccountPasswordToLogin') }}
+        <img src="static/images/login_change.png" class="login_change-icon" />{{
+          $t('btn.switchAccountPasswordToLogin')
+        }}
       </div>
     </div>
+
+    <van-popup
+      v-model="popUpBottom"
+      class="login-pop"
+      position="bottom"
+      round
+      :style="{ height: '30%' }"
+    >
+      <div class="login-pop-title">{{ $t('btn.PleaseReadAgreeAndTerms') }}</div>
+      <div v-if="userTerms || privacyPolicy" class="login-agree">
+        <i v-if="userTerms" @click="lookUserTerms"
+          >《{{ $t('btn.userServiceAgreement') }}》</i
+        >
+        <span v-if="privacyPolicy">
+          <i @click="lookPrivacyPolicy">《{{ $t('btn.privacyAgreemen') }}》</i>
+        </span>
+      </div>
+      <van-button
+        :disabled="btnDisable"
+        type="info"
+        class="primary-btn mb20 login-pop-btn"
+        @click="agreeSign(handleSubmitSuccess)"
+        >{{ $t('btn.agreeAndSignin') }}</van-button
+      >
+    </van-popup>
   </div>
 </template>
 <script>
@@ -103,7 +128,7 @@ export default {
       userTerms: false, // 用户协议
       privacyPolicy: false, // 隐私协议
       registerSettings: null,
-      agreement: true,
+      agreement: false,
       dragEnable: true,
       dragKey: 0,
       errorMessage: {
@@ -112,17 +137,18 @@ export default {
       validated: {
         mobile: false,
       },
+      popUpBottom: false,
     };
   },
   computed: {
     btnDisable() {
-      return !(this.userinfo.mobile && this.userinfo.smsCode && this.agreement);
+      return !(this.userinfo.mobile && this.userinfo.smsCode);
     },
   },
   async created() {
     if (this.$store.state.token) {
       Toast.loading({
-        message: this.$t('toast.pleaseWait')
+        message: this.$t('toast.pleaseWait'),
       });
       this.afterLogin();
       return;
@@ -154,6 +180,11 @@ export default {
       window.location.href =
         window.location.origin + '/mapi_v2/School/getPrivacyPolicy';
     },
+    // 获取服务条款
+    lookUserTerms() {
+      window.location.href =
+        window.location.origin + '/mapi_v2/School/getUserterms';
+    },
     // 校验成功
     handleSmsSuccess(token) {
       this.userinfo.dragCaptchaToken = token;
@@ -167,10 +198,6 @@ export default {
       this.afterLogin();
     },
 
-    // 同意协议
-    checkAgree() {
-      this.agreement = !this.agreement;
-    },
     changeLogin() {
       this.$router.push({
         name: 'login',

@@ -47,7 +47,11 @@ export default {
   },
   async created() {
     document.title = this.$t('title.confirmPayment')
-    
+
+    if (this.$route.query.loginToken) {
+      store.state.token = this.$route.query.loginToken
+    }
+
     if (!this.token) {
       Api.loginConfig({}).then(res => {
         this.loginConfig = res;

@@ -250,6 +250,7 @@ export default {
           this.afterGetData(res);
         })
         .catch(err => {
+
           /**
            * 4032207:考试正在批阅中
            * 4032204：考试只能考一次，不能重复考试
@@ -486,13 +487,17 @@ export default {
           cancelButtonText: this.$t('courseLearning.confirmSubmission'),
           confirmButtonText: this.$t('courseLearning.check'),
           message: message,
+					className: 'backDialog'
         })
           .then(res => {
+						// 销毁dialog Dom
+						document.getElementsByClassName('backDialog')[0].remove();
             // 显示答题卡
             this.cardShow = true;
             reject(res);
           })
           .catch(() => {
+						document.getElementsByClassName('backDialog')[0].remove();
             this.clearTime();
             this.submitExam(answer)
               .then(res => {

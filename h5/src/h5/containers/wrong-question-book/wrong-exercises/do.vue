@@ -20,10 +20,13 @@ import _ from 'lodash';
 import Api from '@/api';
 import { mapState } from 'vuex';
 import { Toast } from 'vant';
+import itemEngine from '@/src/components/item-engine/src/item-engine.vue';
 
 export default {
   name: 'WrongQuestionDo',
-
+  components: {
+    itemEngine
+  },
   data() {
     return {
       poolId: this.$route.query.id,
@@ -55,13 +58,13 @@ export default {
   methods: {
     fetchQuestion() {
       this.isLoading = true;
-      const params = _.assign({}, this.$route.query);
-      delete params.id;
+      const data = _.assign({}, this.$route.query);
+      delete data.id;
       Api.getWrongQuestionStartAnswer({
         query: {
           poolId: this.poolId,
         },
-        params,
+        data
       }).then(res => {
         const {
           assessment,

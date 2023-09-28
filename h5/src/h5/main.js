@@ -60,7 +60,9 @@ import {
   Empty,
   CellGroup,
   Cascader,
-  TreeSelect
+  TreeSelect,
+  Image,
+  Progress
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -90,6 +92,8 @@ Vue.component('van-divider', Divider);
 Vue.component('van-cell-group', CellGroup);
 Vue.component('van-cascader', Cascader);
 Vue.component('van-tree-select', TreeSelect);
+Vue.component('van-image', Image);
+Vue.component('van-progress', Progress);
 
 Vue.use(ActionSheet);
 Vue.use(filters);
@@ -162,6 +166,14 @@ Api.getSettings({
     }
 
     const hasToken = window.localStorage.getItem('token');
+
+    if (hasToken && !store.state.user) {
+      Api.getUserInfo({}).then(res => {
+        store.state.user = res;
+        localStorage.setItem('user', JSON.stringify(res));
+      });
+    }
+
     if (!hasToken && Number(GetUrlParam('needLogin'))) {
       window.location.href = `${
         location.origin

@@ -19,10 +19,13 @@
 import _ from 'lodash';
 import Api from '@/api';
 import { mapState } from 'vuex';
+import itemReport from '@/src/components/item-report/src/item-report.vue';
 
 export default {
   name: 'WrongExercisesAnalysis',
-
+  components:{
+    itemReport
+  },
   data() {
     return {
       isLoading: false,
