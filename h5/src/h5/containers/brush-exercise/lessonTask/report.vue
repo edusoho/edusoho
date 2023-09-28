@@ -19,8 +19,9 @@
 import Api from '@/api';
 import { mapState } from 'vuex';
 import * as types from '@/store/mutation-types.js';
+import itemReport from "@/src/components/item-report/src/item-report.vue";
 export default {
-  components: {},
+  components: {itemReport},
   data() {
     return {
       isLoading: true,

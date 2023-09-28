@@ -135,20 +135,33 @@ export default {
       this.$router.push({ path: `/brushReview/${answerRecordId}`, query });
     },
     doAgain() {
-      const type = this.$route.query.type;
-      const query = {
-        mode: 'start',
-        title: this.$route.query.title,
-        type: this.$route.query.type,
-        exerciseId: this.$route.query.exerciseId,
-        moduleId: this.$route.query.moduleId,
-      };
-      if (type === 'chapter') {
-        query.categoryId = this.$route.query.categoryId;
+      if (this.$route.query.type === "assessment") {
+        const type = this.$route.query.type;
+        const query = {
+          mode: 'start',
+          title: this.$route.query.title,
+          type: this.$route.query.type,
+          exerciseId: this.$route.query.exerciseId,
+          moduleId: this.$route.query.moduleId,
+        };
+
+        if (type === 'chapter') {
+          query.categoryId = this.$route.query.categoryId;
+        } else {
+          query.assessmentId = this.$route.query.assessmentId;
+        }
+        
+        this.$router.replace({ path: '/brushDo', query });
       } else {
-        query.assessmentId = this.$route.query.assessmentId;
+        const query = {
+          title: this.$route.query.title,
+          moduleId: this.$route.query.moduleId,
+          categoryId: this.$route.query.categoryId,
+          exerciseId: this.$route.query.exerciseId,
+        };
+        this.$router.push({ path: '/brushIntro', query });
       }
-      this.$router.replace({ path: '/brushDo', query });
+
     },
     doAnalysis() {
       const query = {

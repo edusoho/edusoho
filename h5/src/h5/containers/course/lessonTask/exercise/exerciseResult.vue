@@ -75,7 +75,7 @@
           v-if="isReadOver"
           class="result-footer__btn"
           type="primary"
-          @click="startExercise()"
+          @click="skipExerciseInfo()"
           >{{ $t('courseLearning.doItAgain') }}
         </van-button>
       </div>
@@ -217,6 +217,16 @@ export default {
           KeepDoing: true,
         },
       });
+    },
+    skipExerciseInfo() {
+      this.$router.replace({
+        name: 'exerciseIntro',
+        query: {
+          courseId: this.$route.query.courseId,
+          taskId: this.$route.query.taskId,
+          answerAgain: true,
+        },
+      })
     },
     // 交练习
     submitExercise(answer) {

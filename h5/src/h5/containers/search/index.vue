@@ -11,6 +11,24 @@
         @cancel="onCancel"
       />
     </form>
+    <lazyLoading
+          v-if="searchByClassroom && courseList.length > 0"
+          :course-list="courseList"
+          :is-all-data="true"
+          :vip-tag-show="true"
+          course-item-type="price"
+          :is-request-compile="true"
+          :type-list="'classroom_course_list'"
+          @needRequest="sendRequestCourse"
+          :showNumberData="showNumberData"
+        />
+    <emptyCourse
+        v-if="searchByClassroom && courseList.length === 0"
+        :has-button="false"
+        :text="$t('search.emptyCourse')"
+        :type="'course_list'"
+        :isSearch="true"
+      />
     <van-tabs
       v-if="isSearch"
       v-model="active"
@@ -94,6 +112,7 @@ export default {
   data() {
     return {
       active: 0,
+      searchByClassroom: false,
       selectedData: {
         courseSetTitle: '',
       },
@@ -130,7 +149,12 @@ export default {
   },
   methods: {
     onSearch() {
-      this.isSearch = true;
+      if (this.$route.query.id) {
+        this.searchByClassroom = true
+      } else {
+        this.isSearch = true;
+      }
+
       this.initCourseList();
       this.requestCourses();
 
@@ -143,7 +167,7 @@ export default {
     },
     onCancel() {
       this.isSearch = false;
-      this.$router.push({ path: '/' });
+      this.$router.go(-1);
     },
     initClassroomList() {
       this.classroom.isRequestCompile = false;
@@ -210,6 +234,17 @@ export default {
         limit: this.course.limit,
       };
       const config = Object.assign({}, this.selectedData, setting);
+
+      if (this.$route.query.id) {
+        return Api.searchCourse({ query: { id: this.$route.query.id }, params: { title: this.selectedData.courseSetTitle } })
+          .then((res) => {
+            this.courseList = res;
+            })
+          .catch(err => {
+              console.log(err, 'error');
+            });
+      }
+      
       return Api.getCourseList({
         params: config,
       })

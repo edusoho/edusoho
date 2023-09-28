@@ -145,6 +145,12 @@ export default {
         return;
       }
 
+      if(this.typeList === 'classroom_course_list') {
+        this.$router.push({
+          path: `/course/${this.course.id}`
+        });
+      }
+
       if (this.typeList === 'classroom_list') {
         this.$router.push({
           path: `/goods/${this.course.goodsId}/show`,

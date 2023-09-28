@@ -12,16 +12,19 @@
           class="graphic-navigation-img"
         />
         <img v-else :src="item.image.uri" class="graphic-navigation-img" />
-        <div class="graphic-navigation-img-mask">{{ $t('navigation.replacePicture') }}</div>
+        <div class="graphic-navigation-img-mask">
+          {{ $t('navigation.replacePicture') }}
+        </div>
       </div>
     </div>
     <div class="clearfix graphic-navigation-item-right">
       <div class="add-title">
-        {{ $t('navigation.title') }}<el-input
+        {{ $t('navigation.title')
+        }}<el-input
           v-model="item.title"
           size="mini"
           placeholder="请输入标题"
-          maxlength="5"
+          maxlength="20"
           clearable
         />
       </div>
@@ -183,8 +186,8 @@ export default {
         },
         {
           value: 'vip',
-          label: '会员专区'
-        }
+          label: '会员专区',
+        },
       ],
       typeText: {
         openCourse: this.$t('navigation.openClassSorts'),
