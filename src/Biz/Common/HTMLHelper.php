@@ -131,6 +131,7 @@ class HTMLHelper
         $webDir = $this->biz['kernel.root_dir'].'/../web';
         foreach ($matches[1] as $key => $match) {
             if (0 === strpos($match, '/')) {
+                $match = preg_replace('/\?version=[\d.]+/', '', $match);
                 $imgPath = $webDir.$match;
             }
             if (!empty($siteUrl) && 0 === strpos($match, $siteUrl)) {
