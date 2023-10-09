@@ -12,9 +12,9 @@ class ChangelogToolkit
 
     public static function parseSingleChangelog($changelogStr)
     {
-        $result = array(
-            'items' => array(),
-        );
+        $result = [
+            'items' => [],
+        ];
         $pattern = "/^(?:\S|\s)*((?:[1-9]\d|[1-9])(?:\.(?:[1-9]\d|\d)){2})\s*(?:\(|（)(\S*)(?:\)|）)\s*/";
         preg_match($pattern, $changelogStr, $metas);
         if (!empty($metas)) {
@@ -31,16 +31,16 @@ class ChangelogToolkit
 
     protected static function matchItems($changelogArr)
     {
-        $items = array();
-        $types = array(
+        $items = [];
+        $types = [
             self::CHANGELOG_FIX,
             self::CHANGELOG_NEW,
             self::CHANGELOG_OPTIMIZATION,
-        );
+        ];
 
         foreach ($types as $type) {
             foreach ($changelogArr as $line) {
-                if (0 === strpos(trim($line), $type)) {
+                if (false !== strpos(trim($line), $type)) {
                     $items[] = trim($line);
                 }
             }
