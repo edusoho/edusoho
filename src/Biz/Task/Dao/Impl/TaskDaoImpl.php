@@ -253,7 +253,6 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
             ],
             'conditions' => [
                 'id = :id',
-                'id >= :id_GE',
                 'id IN ( :ids )',
                 'id NOT IN (:excludeIds)',
                 'courseId = :courseId',
