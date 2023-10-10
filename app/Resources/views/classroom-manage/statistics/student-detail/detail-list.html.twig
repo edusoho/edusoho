@@ -30,7 +30,11 @@
       {{ user.nickname }}
     </div>
     <ul class="col-15 ">
-      {% include 'user-mobile-mask.html.twig' with { mobile: user.verifiedMobile } %}
+      {% if user.verifiedMobile %}
+        {% include 'user-mobile-mask.html.twig' with { mobile: user.verifiedMobile } %}
+      {% else %}
+        --
+      {% endif %}
     </ul>
     <ul class="col-50 student-detail">
       {% include 'classroom-manage/statistics/student-detail/student-chart-item.html.twig' %}
@@ -63,3 +67,4 @@
     {{ web_macro.paginator(paginator) }}
   </div>
 {% endif %}
+{% include 'js_loader.html.twig' %}
