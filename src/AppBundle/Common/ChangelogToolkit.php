@@ -31,20 +31,10 @@ class ChangelogToolkit
 
     protected static function matchItems($changelogArr)
     {
-        $items = [];
-        $types = [
-            self::CHANGELOG_FIX,
-            self::CHANGELOG_NEW,
-            self::CHANGELOG_OPTIMIZATION,
-        ];
-
-        foreach ($types as $type) {
-            foreach ($changelogArr as $line) {
-                if (false !== strpos(trim($line), $type)) {
-                    $items[] = trim($line);
-                }
-            }
-        }
+        $items[0] = explode(' ', $changelogArr[2])[0] ?? '';
+        $items[1] = $changelogArr[3] ?? '';
+        $items[1] .= $changelogArr[4] ?? '';
+        $items[2] = $changelogArr[5] ?? '';
 
         return $items;
     }
