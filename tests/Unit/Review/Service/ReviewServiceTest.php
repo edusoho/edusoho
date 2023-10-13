@@ -159,6 +159,13 @@ class ReviewServiceTest extends BaseTestCase
                 ['targetId' => 1],
             ]);
 
+        $mock->shouldReceive('getGoods')
+            ->once()
+            ->with(1)
+            ->andReturn([
+                ['type' => null, 'targetId' => 1],
+            ]);
+
         $this->mockBiz('Course:CourseService')
             ->shouldReceive('canTakeCourse')
             ->once()

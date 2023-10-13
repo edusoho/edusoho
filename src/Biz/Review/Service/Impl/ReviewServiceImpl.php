@@ -223,11 +223,33 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
     protected function tryCreateGoodsReview($review)
     {
+        $goods = $this->getGoodsService()->getGoods($review['targetId']);
+        if (empty($goods)) {
+            throw ReviewException::NOT_FOUND_REVIEW();
+        }
         $specs = $this->getGoodsService()->findGoodsSpecsByGoodsId($review['targetId']);
         if (empty($specs)) {
             throw ReviewException::NOT_FOUND_REVIEW();
         }
 
+        switch ($goods['type']) {
+            case 'classroom':
+                $this->canTakeClassRoomReview($specs);
+                break;
+            case 'course':
+            default:
+                $this->canTakeCourseReview($specs);
+                break;
+        }
+
+        return $review;
+    }
+
+    /**
+     * 是否能够评价课程 对于课程ID是通过goods_specs表的targetId获取的
+     */
+    private function canTakeCourseReview($specs)
+    {
         $courseIds = array_column($specs, 'targetId');
         $canTakeCourse = false;
         foreach ($courseIds as $courseId) {
@@ -240,8 +262,19 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         if (!$canTakeCourse) {
             throw ReviewException::FORBIDDEN_CREATE_REVIEW();
         }
+    }
 
-        return $review;
+    /**
+     * 是否能够评价班級 对于班级ID是通过goods_specs表的targetId获取的
+     */
+    private function canTakeClassRoomReview($specs)
+    {
+        //班级有且仅有一个
+        if ($this->getClassroomService()->canTakeClassroom($specs[0]['targetId'])) {
+            return;
+        }
+
+        $this->createNewException(ReviewException::FORBIDDEN_CREATE_REVIEW());
     }
 
     //    TODO: 商品剥离暂时兼容班级
