@@ -1,11 +1,10 @@
 {% set testpaper = activity.ext.testpaper %}
+<h1>{{app.request.get('doAgain')|default(false)}}</h1>
+<h1>{{activity.ext.remainderDoTimes|default(0) == 0 and activity.ext.isLimitDoTimes == 1}}</h1>
 {% if app.request.get('preview') %}
   {{ render(controller('AppBundle:Activity/Testpaper:preview', {task: {courseId: activity.fromCourseId, activityId: activity.id}})) }}
 {% else %}
   {% set latestAnswerRecord = data('LatestAnswerRecord', {answerSceneId: activity.ext.answerSceneId}) %}
-<h1>{{latestAnswerRecord}}</h1>
-<h1>{{latestAnswerRecord.status}}</h1>
-<h1>{{activity.ext.remainderDoTimes}}</h1>
   {% if activity.startTime and activity.startTime > ('now'|date('U')) %}
     {% include('@activity/testpaper/resources/views/show/index.html.twig') %}
   {% elseif activity.endTime and activity.endTime < ('now'|date('U')) %}
