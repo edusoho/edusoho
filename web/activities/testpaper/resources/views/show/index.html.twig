@@ -3,14 +3,16 @@
 
 {% block body %}
   {% set canStartTestpaper = (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime > ('now'|date('U'))) or (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime == '0') or (activity.startTime == '0' and activity.endTime == '0') %}
-  {{activity}}
-
+  
   <div class="iframe-parent-content">
     <div class="modal show iframe-modal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-body task-state-modal 4">
             <div class="title text-37393D">
+            {% for item in activity %}
+              {{ item }}
+            {% endfor %}
               {# 不同标题显示 #}
               {% if testpaper.item_count|default(0) == 0 %}
                 {{ 'site.tips'|trans }}
