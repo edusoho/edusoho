@@ -534,7 +534,7 @@ export default {
         this.$set(module, 'validatorResult', result);
 
         if(module.type == 'item_bank_exercise') {
-          if (modle.data.items.length > 1) {
+          if (module.data.items.length > 1) {
             const moduleType = `${module.type}-${index}`;
             module.moduleType = moduleType;
             data[moduleType] = module;
