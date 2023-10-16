@@ -8,7 +8,7 @@
   <legend style="height: 50px;">
     <div class="row form-group">
       <div class="col-md-2" style="padding-top: 5px; width: 15%;">
-        <label class="pull-left" for="enable_review">{{ 'admin_v2.system.user_content_control.review_manage'|trans }}：</label>
+        <label class="pull-left" style="width: max-content;" for="enable_review">{{ 'admin_v2.system.user_content_control.review_manage'|trans }}：</label>
       </div>
       <div class="col-md-8 controls radios">
         {{ radios('enable_review', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, reviewSetting.enable_review|default('1')) }}
