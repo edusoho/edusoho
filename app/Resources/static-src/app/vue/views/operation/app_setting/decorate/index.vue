@@ -532,9 +532,19 @@ export default {
           this.validatorResult = false;
         }
         this.$set(module, 'validatorResult', result);
-        const moduleType = `${module.type}-${index}`;
-        module.moduleType = moduleType;
-        data[moduleType] = module;
+
+        if(module.type == 'item_bank_exercise') {
+          if (modle.data.items.length > 1) {
+            const moduleType = `${module.type}-${index}`;
+            module.moduleType = moduleType;
+            data[moduleType] = module;
+          }
+        } else {
+          const moduleType = `${module.type}-${index}`;
+          module.moduleType = moduleType;
+          data[moduleType] = module;
+        }
+
       });
 
       // 校验不通过
