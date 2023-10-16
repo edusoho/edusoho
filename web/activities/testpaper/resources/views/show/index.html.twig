@@ -10,8 +10,11 @@
         <div class="modal-content">
           <div class="modal-body task-state-modal 4">
             <div class="title text-37393D">
+            <p>{{activity.startTime}}</p>
+            <p>{{activity.endTime}}</p>
+
             {% for item in activity %}
-              {{ item }}
+              <p>{{ item }}</p>
             {% endfor %}
               {# 不同标题显示 #}
               {% if testpaper.item_count|default(0) == 0 %}
