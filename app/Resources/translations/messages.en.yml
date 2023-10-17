@@ -8490,6 +8490,7 @@ log.action.question_bank.delete_category: Delete Bank Category
 log.action.question_bank.update_category: Update Bank Category
 log.action.question_bank.delete_question: Delete Question
 log.action.question_bank.sort_question_category: 'Bank Category Sort'
+log.action.question_bank.edit_testpaper: 'Edit testpaper'
 log.action.item_bank_exercise.add_student: 'Add student'
 log.action.item_bank_exercise.remove_student: Remove Student
 log.action.item_bank_exercise.delete_exercise: Delete Item Exercise
