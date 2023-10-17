@@ -15,6 +15,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\AnswerQuestionTag\Service\AnswerQuestionTagService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService;
@@ -1072,6 +1073,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
             }
 
+            $this->getAnswerQuestionTag($assessmentResponse, $answerRecord['id']);
+
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
 
             //判断模拟考试应该取当前时间减去开始时间
@@ -1113,6 +1116,33 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         return $assessmentResponse;
+    }
+
+    protected function getAnswerQuestionTag(array $assessmentResponse, $answerRecordId)
+    {
+        $answerQuestionTag = [];
+        $questionIds = [];
+        foreach ($assessmentResponse['section_responses'] as $sectionResponse) {
+            foreach ($sectionResponse['item_responses'] as $itemResponse) {
+                foreach ($itemResponse['question_responses'] as $questionResponse) {
+                   $questionIds[] = $questionResponse['isTag'] ? 1 : 0;
+                }
+            }
+        }
+
+        $answerQuestionTag = [
+            'answer_record_id' => $answerRecordId,
+            'tag_question_ids' => $questionIds,
+        ];
+
+        $questionTag = $this->getAnswerQuestionTagService()->getByAnswerRecordId($answerRecordId);
+        if ($questionTag) {
+            $this->getAnswerQuestionTagService()->updateAnswerQuestionTag($questionTag['id'], ['tag_question_ids' => $questionIds]);
+        }else {
+            $this->getAnswerQuestionTagService()->createAnswerQuestionTag($answerQuestionTag);
+        }
+
+        return $answerQuestionTag;
     }
 
     protected function updateAttachmentsTarget($answerRecordId, $attachments)
@@ -1305,5 +1335,13 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getAnswerReviewedQuestionService()
     {
         return $this->biz->service('ItemBank:Answer:AnswerReviewedQuestionService');
+    }
+
+    /**
+     * @return AnswerQuestionTagService
+     */
+    protected function getAnswerQuestionTagService()
+    {
+        return $this->biz->service('ItemBank:AnswerQuestionTag:AnswerQuestionTagService');
     }
 }
