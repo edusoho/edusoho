@@ -1811,6 +1811,7 @@ course.testpaper_manage.close_btn: 关闭试卷
 course.testpaper_manage.close_tips: 真的要关闭试卷%name%吗？
 course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被%taskName%引用，关闭试卷可能会导致学员无法参与考试，请勿关闭试卷
 course.testpaper_manage.edit_btn: 编辑试卷信息
+course.testpaper_manage.edit_tips: 当前试卷可能已被应用在考试中，修改试卷内容，可能会对学员答题记录、答题成绩等产生影响，是否继续？
 course.testpaper_manage.manage_btn: 管理题目
 course.testpaper_manage.repead_btn: 重新生成题目
 course.testpaper_manage.export: 导出试卷

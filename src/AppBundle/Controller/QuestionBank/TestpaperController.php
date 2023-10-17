@@ -236,10 +236,6 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        if ('draft' != $assessment['status']) {
-            return $this->createMessageResponse('error', '已发布或已关闭的试卷不能再修改题目');
-        }
-
         if ($request->isMethod('POST')) {
             $assessment = $request->request->get('baseInfo', []);
             $sections = $request->request->get('sections', []);
