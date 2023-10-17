@@ -964,6 +964,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'section_responses' => [],
         ];
 
+        $answerQuestionTag = $this->getAnswerQuestionTagService()->getByAnswerRecordId($answerRecord['id']);
         $sectionResponses = ArrayToolkit::group($answerQuestionReports, 'section_id');
         $attachments = ArrayToolkit::group($attachments, 'target_id');
         foreach ($sectionResponses as $sectionId => $sectionResponse) {
@@ -974,6 +975,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                         'question_id' => intval($questionResponse['question_id']),
                         'response' => $questionResponse['response'],
                         'attachments' => empty($attachments[$questionResponse['id']]) ? [] : $attachments[$questionResponse['id']],
+                        'isTag' => in_array($questionResponse['question_id'],$answerQuestionTag['tag_question_ids']) ? true : false,
                     ];
                 }
                 $itemResponse = [
