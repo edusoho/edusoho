@@ -32,7 +32,7 @@ class TestpaperShow {
       this.onDeleteSingle(event);
     });
 
-    this.element.on('click','.edit-testpaper', (event) => {
+    this.element.on('click','.js-edit-testpaper', (event) => {
       this.onEditTestpaper(event);
     });
   }

@@ -40,7 +40,7 @@
           <ul class="dropdown-menu pull-right">
             {% if testpaper.status == 'closed' %}
               <li>
-                <a class="edit-testpaper" href="javascript:" title="{{ 'course.testpaper_manage.edit_tips'|trans }}" data-url="{{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, assessmentId: testpaper.id}) }}">
+                <a class="js-edit-testpaper" href="javascript:" title="{{ 'course.testpaper_manage.edit_tips'|trans }}" data-url="{{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, assessmentId: testpaper.id}) }}">
                   <span class="glyphicon glyphicon-edit mrm"></span> {{'my.teaching.question_bank.testpaper.edit'|trans}}
                 </a>
               </li>
@@ -50,7 +50,7 @@
             {% endif %}
             {% if testpaper.status == 'open' %}
               <li>
-                <a class="edit-testpaper" href="javascript:" title="{{ 'course.testpaper_manage.edit_tips'|trans }}" data-url="{{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, assessmentId: testpaper.id}) }}">
+                <a class="js-edit-testpaper" href="javascript:" title="{{ 'course.testpaper_manage.edit_tips'|trans }}" data-url="{{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, assessmentId: testpaper.id}) }}">
                   <span class="glyphicon glyphicon-edit mrm"></span> {{'my.teaching.question_bank.testpaper.edit'|trans}}</a>
               </li>
               <li><a class="close-testpaper" href="javascript:" title="
