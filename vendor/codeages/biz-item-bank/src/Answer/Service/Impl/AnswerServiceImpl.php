@@ -1125,7 +1125,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         foreach ($assessmentResponse['section_responses'] as $sectionResponse) {
             foreach ($sectionResponse['item_responses'] as $itemResponse) {
                 foreach ($itemResponse['question_responses'] as $questionResponse) {
-                   $questionIds[] = $questionResponse['isTag'] ? 1 : 0;
+                    if ($questionResponse['isTag']) {
+                        $questionIds[] = $questionResponse['question_id'];
+                    }
                 }
             }
         }
