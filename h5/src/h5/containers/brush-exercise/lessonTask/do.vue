@@ -92,7 +92,7 @@ export default {
       this.isLoading = true;
       const type = this.$route.query.type;
       const query = { exerciseId: this.$route.query.exerciseId };
-      const data = { moduleId: this.$route.query.moduleId };
+      const data = { moduleId: this.$route.query.moduleId ,exerciseMode: this.$route.query.exerciseMode};
       if (type === 'assessment') {
         data.assessmentId = this.$route.query.assessmentId;
       } else {

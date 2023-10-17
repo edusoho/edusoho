@@ -80,7 +80,6 @@ import _ from 'lodash';
 import { mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import Api from '@/api';
-import { Dialog } from 'vant';
 import Question from './Question/index.vue';
 import CourseSearch from './Search/Course.vue';
 import ClassroomSearch from './Search/Classroom.vue';
@@ -214,20 +213,16 @@ export default {
     },
 
     onClickWrongExercise() {
-      if (!localStorage.getItem('first_wrong_exercises')) {
-        Dialog.alert({
-          message: this.$t('wrongQuestion.systemRandomlySelectsQuestions'),
-          confirmButtonText: this.$t('wrongQuestion.iKnow'),
-          confirmButtonColor: '#03c777 !important',
-        }).then(() => {
-          this.goToStartAnswer();
-        });
-        localStorage.setItem('first_wrong_exercises', true);
-        return;
-      }
-      this.goToStartAnswer();
+      this.$router.replace({
+        name: 'WrongExercisesIntro',
+        query: {
+          targetType: this.$route.params.type,
+          id: this.targetId,
+          ...this.searchParams,
+        },
+      });
     },
-
+    // WrongExercisesIntro
     goToStartAnswer() {
       this.$router.replace({
         name: 'WrongExercisesDo',

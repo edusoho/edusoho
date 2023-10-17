@@ -249,9 +249,9 @@ const routes = [
       i18n: true,
       title: 'title.testDescription',
     },
-		beforeEnter: (to, from, next) => {
-			// ...
-			const testId = to.query.testId;
+    beforeEnter: (to, from, next) => {
+      // ...
+      const testId = to.query.testId;
       const targetId = to.query.targetId;
       Api.testpaperIntro({
         params: {
@@ -263,14 +263,14 @@ const routes = [
         },
       })
         .then(res => {
-					to.meta.title = res.task.title
-					next();
+          to.meta.title = res.task.title
+          next();
         })
         .catch(err => {
           Toast.fail(err.message);
-					next();
+          next();
         });
-		},
+    },
     component: () =>
       import(
         /* webpackChunkName: "testpaperIntro" */ '@/containers/course/lessonTask/exam/testpaperIntro.vue'
@@ -870,6 +870,32 @@ const routes = [
       ),
   },
   {
+    path: '/brushIntro',
+    name: 'brush_Intro',
+    meta: {
+      i18n: true,
+      title: 'title.exerciseInstructions'
+    },
+    beforeEnter: (to, from, next) => {
+      Api.myStudyBanks().then(res => {
+        const itemIotro = res.data.filter(item => { 
+          return item.exerciseId == to.query.exerciseId 
+        })
+        to.meta.title = itemIotro[0].itemBankExercise.title
+        next();
+      }).catch(err => {
+        Toast.fail(err.message);
+        next();
+      })
+      // ...
+      next()
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "exerciseInfo" */ '@/containers/brush-exercise/lessonTask/exerciseInfo.vue'
+      ),
+  },
+  {
     path: '/brushReport/:answerRecordId',
     name: 'brush_report',
     meta: {
@@ -955,6 +981,18 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/wrong-exercises/do.vue'
+      ),
+  },
+  {
+    path: '/wrong-exercises/Intro',
+    name: 'WrongExercisesIntro',
+    meta: {
+      i18n: true,
+      title: 'wrongQuestion.exercise',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/wrong-exercises/exerciseInfro.vue'
       ),
   },
   {

@@ -6,6 +6,62 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "37242196",
+      "name": "错误",
+      "font_class": "cuowu4",
+      "unicode": "e68e",
+      "unicode_decimal": 59022
+    },
+    {
+      "icon_id": "37242197",
+      "name": "正确",
+      "font_class": "zhengque3",
+      "unicode": "e68b",
+      "unicode_decimal": 59019
+    },
+    {
+      "icon_id": "37241872",
+      "name": "正确",
+      "font_class": "zhengque2",
+      "unicode": "e687",
+      "unicode_decimal": 59015
+    },
+    {
+      "icon_id": "37241873",
+      "name": "错误",
+      "font_class": "cuowu3",
+      "unicode": "e688",
+      "unicode_decimal": 59016
+    },
+    {
+      "icon_id": "37072286",
+      "name": "角标",
+      "font_class": "a-Frame34723",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "37035926",
+      "name": "错误",
+      "font_class": "cuowu2",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "37035925",
+      "name": "正确",
+      "font_class": "zhengque1",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "111904",
+      "name": "五角星",
+      "font_class": "star",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
       "icon_id": "27375320",
       "name": "drainage",
       "font_class": "drainage",

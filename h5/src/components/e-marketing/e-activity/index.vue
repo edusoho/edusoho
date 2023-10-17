@@ -5,12 +5,12 @@
     </div>
     <div :class="{ 'e-groupon__image-empty': !activity.cover }" class="e-groupon__image-container">
       <img v-if="activity.cover" v-lazy="activity.cover" class="e-groupon__image" />
-      
+
       <div v-if="tag.length" class="e-groupon__tag">{{ tag }}</div>
 
-      <div 
+      <div
         v-if="type === 'cut'"
-        class="absolute bottom-0 left-0 right-0 flex items-end p-8 text-12 text-text-1" 
+        class="absolute bottom-0 left-0 right-0 flex items-end p-8 text-12 text-text-1"
         style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);border-radius: 6px 6px 0px 0px;height: 32px;"
       >
         <span>砍价享</span>
@@ -21,9 +21,9 @@
         </s>
       </div>
 
-      <div 
+      <div
         v-else-if="type === 'groupon'"
-        class="absolute bottom-0 left-0 right-0 text-text-1" 
+        class="absolute bottom-0 left-0 right-0 text-text-1"
         style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);border-radius: 6px 6px 0px 0px;height: 32px;"
       >
         <div class="flex items-center justify-between h-full px-8">
@@ -44,9 +44,9 @@
         </div>
       </div>
 
-      <div 
+      <div
         v-else-if="type === 'seckill'"
-        class="absolute bottom-0 left-0 right-0 text-text-1" 
+        class="absolute bottom-0 left-0 right-0 text-text-1"
         style="background: linear-gradient(90.57deg, #3BC77B 0%, #63DB91 52.03%, #3AC269 99.9%);border-radius: 6px 6px 0px 0px;height: 32px;"
       >
         <div class="flex items-center justify-between h-full px-8">
@@ -60,7 +60,7 @@
               ￥{{ activity.originPrice }}
             </s>
           </div>
-          <div class="flex text-12" v-if="activityData && counting && !isEmpty && activity.status === 'ongoing'"> 
+          <div class="flex text-12" v-if="activityData && counting && !isEmpty && activity.status === 'ongoing'">
             <div class="mr-4">倒计时</div>
             <div class="time-block">{{ endTimeDown.day }}</div> 天
             <div class="time-block">{{ endTimeDown.hour }}</div> 时
@@ -126,7 +126,7 @@ export default {
   },
   created() {
     this.countDownTime();
-    
+
     if (this.type === 'groupon') {
       Api.groupon({
         query: { activityId: this.activity.id }
@@ -153,21 +153,12 @@ export default {
       if (this.type === 'groupon') return this.activity.rule.ownerPrice;
 
       if (this.type === 'seckill') return this.activity.rule.seckillPrice;
-      
+
       return '00.00'
     },
     grouponStatus() {
       const status = this.activity.status;
-      const typeText = {
-        seckill: '秒杀',
-        cut: '砍价',
-        groupon: '拼团',
-      };
-      
-      if (status === 'ongoing' && !this.counting) {
-        this.activity.status = 'closed';
-        return `${typeText[this.type]}已结束`;
-      }
+
       switch (this.type) {
         case 'groupon':
           if (status === 'unstart') return '拼团未开始';
@@ -178,6 +169,10 @@ export default {
           if (status === 'unstart') return '秒杀未开始';
           if (status === 'closed') return '秒杀已结束';
           if (status === 'ongoing') {
+            if (!this.counting){
+              this.activity.status = 'closed';
+              return '秒杀已结束';
+            }
             if (this.activity.productRemaind == 0) return '商品已售空';
             const nowStamp = new Date().getTime();
             const startStamp = new Date(this.activity.startTime).getTime();
@@ -191,7 +186,13 @@ export default {
           break;
         case 'cut':
           if (status === 'unstart') return '砍价未开始';
-          if (status === 'ongoing') return '发起砍价';
+          if (status === 'ongoing') {
+            if (!this.counting){
+              this.activity.status = 'closed';
+              return '砍价已结束';
+            }
+            return '发起砍价';
+          }
           if (status === 'closed') return '砍价已结束';
           break;
       }
@@ -214,7 +215,7 @@ export default {
       this.timer = setInterval(() => {
         this.endTimeDown = getTimeData(new Date(this.activity.endTime).getTime());
         this.buyTimeDown = getTimeData(new Date(this.activity.startTime).getTime());
-        
+
         if (this.endTimeDown === '已到期') {
           this.seckillClass = 'seckill-closed';
           clearInterval(this.timer);

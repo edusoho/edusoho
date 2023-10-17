@@ -58,13 +58,13 @@ export default {
   methods: {
     fetchQuestion() {
       this.isLoading = true;
-      const params = _.assign({}, this.$route.query);
-      delete params.id;
+      const data = _.assign({}, this.$route.query);
+      delete data.id;
       Api.getWrongQuestionStartAnswer({
         query: {
           poolId: this.poolId,
         },
-        params,
+        data
       }).then(res => {
         const {
           assessment,

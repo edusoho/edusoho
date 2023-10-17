@@ -62,6 +62,7 @@ import {
   Cascader,
   TreeSelect,
   Image,
+  Progress
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -92,6 +93,7 @@ Vue.component('van-cell-group', CellGroup);
 Vue.component('van-cascader', Cascader);
 Vue.component('van-tree-select', TreeSelect);
 Vue.component('van-image', Image);
+Vue.component('van-progress', Progress);
 
 Vue.use(ActionSheet);
 Vue.use(filters);
