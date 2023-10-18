@@ -2,7 +2,6 @@
 
 namespace Codeages\Biz\ItemBank\Assessment\Service\Impl;
 
-use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerQuestionReportDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerRecordDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerReportDao;
@@ -23,7 +22,6 @@ use Codeages\Biz\ItemBank\Item\Wrapper\ExportItemsWrapper;
 use Codeages\Biz\ItemBank\ItemBank\Exception\ItemBankException;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 use ExamParser\Writer\WriteDocx;
-use phpDocumentor\Reflection\File;
 
 class AssessmentServiceImpl extends BaseService implements AssessmentService
 {
@@ -171,7 +169,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
 
         try {
             $this->beginTransaction();
-            $this->dispatchEvent('assessment.before_update', new Event($assessmentId));
+            $this->dispatchEvent('assessment.before_update', $assessmentId);
 
             if (!empty($assessment['sections'])) {
                 $this->getSectionService()->deleteAssessmentSectionsByAssessmentId($assessmentId);

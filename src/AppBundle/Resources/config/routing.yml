@@ -3546,6 +3546,10 @@ question_re_edit:
     path: '/question/re_edit/{token}'
     defaults:
         _controller: 'AppBundle:Question/Manage:reEdit'
+question_parse_progress:
+    path: '/question/parse_progress/{token}'
+    defaults:
+      _controller: 'AppBundle:Question/Manage:parseProgress'
 subject_edit_template:
     path: '/subject/edit/{type}'
     methods:

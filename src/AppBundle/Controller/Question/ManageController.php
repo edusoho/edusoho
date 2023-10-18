@@ -6,12 +6,16 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Question\QuestionParseAdapter;
+use Biz\Question\QuestionParseClient;
 use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
+use Codeages\Biz\ItemBank\Item\ItemParser;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
 class ManageController extends BaseController
@@ -70,6 +74,25 @@ class ManageController extends BaseController
         ]);
     }
 
+    public function parseProgressAction($token)
+    {
+        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+        $data = $token['data'];
+        $client = new QuestionParseClient();
+        $results = $client->getJob($data['jobId']);
+        $results = array_column($results, null, 'no');
+        $result = $results[$data['jobId']];
+        if ($result['status'] == 'finished') {
+            $adapter = new QuestionParseAdapter();
+            $questions = $adapter->adapt($result['result']);
+            $questions = $this->getItemParser()->formatData($questions);
+            $fileSystem = new Filesystem();
+            $fileSystem->dumpFile($data['cacheFilePath'], json_encode($questions));
+        }
+
+        return $this->createJsonResponse(['status' => $result['status']]);
+    }
+
     public function saveImportQuestionsAction(Request $request, $token)
     {
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
@@ -82,6 +105,16 @@ class ManageController extends BaseController
         $this->getItemService()->importItems($postData['items'], $questionBank['itemBankId']);
 
         return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_question_list', ['id' => $data['questionBankId']])]);
+    }
+
+    /**
+     * @return ItemParser
+     */
+    protected function getItemParser()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['item_parser'];
     }
 
     /**
