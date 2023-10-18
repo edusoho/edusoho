@@ -83,6 +83,7 @@ site.default.times: 次
 site.default.detail: 明细
 site.default.program_name: 默认教学计划
 site.default.plan_setting: 默认计划设置
+site.default.mobile: 手机号
 site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.tips: 提示
@@ -9418,6 +9419,7 @@ my.reward_points_message: ￥%num%现金，%reward%使用后，申请退款时�
 my.reward_points_instructions: %reward%说明
 
 task.learn_data_detail.nickname: 用户名
+task.learn_data_detail.mobile: 手机号
 task.learn_data_detail.createdTime: 任务开始时间
 task.learn_data_detail.join_time: 任务开始时间
 task.learn_data_detail.finishedTime: 任务完成时间
