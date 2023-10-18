@@ -86,7 +86,7 @@ class StudentExporter extends Exporter
 
             $member[] = $user['nickname']."\t";
             $member[] = $user['email'];
-            $member[] = empty($user['mobile']) ? empty($userProfile['mobile']) ? '-' : $userProfile['mobile'] : $user['mobile'];
+            $member[] = empty($user['mobile']) ? (empty($userProfile['mobile']) ? '-' : $userProfile['mobile']) : $user['mobile'];
             $member[] = date('Y-n-d H:i:s', $exerciseMember['createdTime']);
             $member[] = $exerciseMember['doneQuestionNum'];
             $member[] = $exerciseMember['completionRate'].'%';
