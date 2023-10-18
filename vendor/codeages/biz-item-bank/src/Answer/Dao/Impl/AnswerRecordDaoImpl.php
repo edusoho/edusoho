@@ -49,13 +49,6 @@ class AnswerRecordDaoImpl extends AdvancedDaoImpl implements AnswerRecordDao
         return $this->findInField('id', $ids);
     }
 
-    public function countByAssessmentId($assessmentId)
-    {
-        $sql = "SELECT count(*) FROM {$this->table} WHERE assessment_id = ?";
-
-        return $this->db()->fetchColumn($sql, [$assessmentId]);
-    }
-
     public function declares()
     {
         return [

@@ -150,7 +150,7 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
 
     public function countByAssessmentId($assessmentId)
     {
-       return $this->getAnswerRecordDao()->countByAssessmentId($assessmentId);
+       return $this->getAnswerRecordDao()->count(['assessment_id' => $assessmentId]);
     }
 
     /**
