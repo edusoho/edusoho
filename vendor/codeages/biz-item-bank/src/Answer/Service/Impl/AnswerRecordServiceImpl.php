@@ -149,6 +149,11 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
         return ArrayToolkit::index($answerRecords, 'id');
     }
 
+    public function countByAssessmentId($assessmentId)
+    {
+       return $this->getAnswerRecordDao()->count(['assessment_id' => $assessmentId]);
+    }
+
     /**
      * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService
      */
