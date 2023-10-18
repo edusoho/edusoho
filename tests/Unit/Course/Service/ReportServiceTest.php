@@ -10,15 +10,15 @@ class ReportServiceTest extends BaseTestCase
     public function testSummary()
     {
         $mockStartTime = strtotime('2017-07-01');
-        $course = $this->mockCourse(array('id' => 1, 'compulsoryTaskNum' => '3'));
-        $this->mockCourseMember(array('courseId' => 1, 'learnedCompulsoryTaskNum' => 3, 'lastLearnTime' => $mockStartTime + 24 * 60 * 60));
-        $this->mockTaskTryView(array('courseId' => 1));
+        $course = $this->mockCourse(['id' => 1, 'compulsoryTaskNum' => '3']);
+        $this->mockCourseMember(['courseId' => 1, 'learnedCompulsoryTaskNum' => 3, 'lastLearnTime' => $mockStartTime + 24 * 60 * 60]);
+        $this->mockTaskTryView(['courseId' => 1]);
         $this->mockCourseNote();
         $this->mockThread();
-        $this->mockThread(array('type' => 'discussion'));
+        $this->mockThread(['type' => 'discussion']);
         $this->getReportService()->mockStartTime($mockStartTime);
         $result = $this->getReportService()->summary(1);
-        $expect = array(
+        $expect = [
             'studentNum' => 1,
             'studentNumToday' => 1,
             'finishedNum' => 1,
@@ -31,15 +31,15 @@ class ReportServiceTest extends BaseTestCase
             'askNumToday' => 1,
             'discussionNum' => 1,
             'discussionNumToday' => 1,
-        );
+        ];
         $this->assertArrayEquals($expect, $result);
     }
 
     public function testGetCompletionRateTrend()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'studentNum' => 10)),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['id' => 1, 'studentNum' => 10]],
+        ]);
 
         $result = $this->getReportService()->getCompletionRateTrend(1, '2017-07-01', '2017-07-10');
 
@@ -48,153 +48,166 @@ class ReportServiceTest extends BaseTestCase
 
     public function testGetStudentTrend()
     {
-        $result = $this->getReportService()->getStudentTrend(1, array('startDate' => '2017-07-01', 'endDate' => '2017-07-10'));
+        $result = $this->getReportService()->getStudentTrend(1, ['startDate' => '2017-07-01', 'endDate' => '2017-07-10']);
         $this->assertCount(10, $result);
     }
 
     public function testGetStudentDetail()
     {
         $this->mockBiz(
-            'User:UserService', array(
-                array(
+            'User:UserService', [
+                [
                     'functionName' => 'searchUsers',
-                    'withParams' => array(
-                        array('userIds' => array(1, 2)),
-                        array(),
+                    'withParams' => [
+                        ['userIds' => [1, 2]],
+                        [],
                         0,
                         2,
-                    ),
-                    'returnValue' => array(
-                        array('id' => 1, 'nickname' => 'user1'),
-                        array('id' => 2, 'nickname' => 'user2'),
-                    ),
-                ),
-            )
+                    ],
+                    'returnValue' => [
+                        ['id' => 1, 'nickname' => 'user1'],
+                        ['id' => 2, 'nickname' => 'user2'],
+                    ],
+                ],
+                [
+                    'functionName' => 'findUserProfilesByIds',
+                    'withParams' => [[1, 2]],
+                    'returnValue' => [
+                        [
+                            'id' => 1,
+                            'idcard' => '123',
+                        ],
+                        [
+                            'id' => 2,
+                            'idcard' => '222',
+                        ],
+                ], ],
+            ]
         );
 
         $this->mockBiz(
-            'Task:TaskService', array(
-                array(
+            'Task:TaskService', [
+                [
                     'functionName' => 'searchTasks',
-                    'withParams' => array(
-                        array(
+                    'withParams' => [
+                        [
                             'courseId' => 1,
                             'isOptional' => 0,
                             'status' => 'published',
-                        ),
-                        array('seq' => 'ASC'),
+                        ],
+                        ['seq' => 'ASC'],
                         0,
                         20,
-                    ),
-                    'returnValue' => array(
-                        array('id' => 1, 'courseId' => '1'),
-                        array('id' => 2, 'courseId' => '1'),
-                    ),
-                ),
-            )
+                    ],
+                    'returnValue' => [
+                        ['id' => 1, 'courseId' => '1'],
+                        ['id' => 2, 'courseId' => '1'],
+                    ],
+                ],
+            ]
         );
 
         $this->mockBiz(
-            'Task:TaskResultService', array(
-                array(
+            'Task:TaskResultService', [
+                [
                     'functionName' => 'searchTaskResults',
-                    'withParams' => array(
-                        array(
+                    'withParams' => [
+                        [
                             'courseId' => 1,
-                            'userIds' => array(1, 2),
-                            'courseTaskIds' => array(1, 2),
-                        ),
-                        array(),
+                            'userIds' => [1, 2],
+                            'courseTaskIds' => [1, 2],
+                        ],
+                        [],
                         0,
                         PHP_INT_MAX,
-                    ),
-                    'returnValue' => array(
-                        array('userId' => 1, 'courseTaskId' => '1'),
-                        array('userId' => 1, 'courseTaskId' => '2'),
-                        array('userId' => 2, 'courseTaskId' => '1'),
-                        array('userId' => 2, 'courseTaskId' => '2'),
-                    ),
-                ),
-            )
+                    ],
+                    'returnValue' => [
+                        ['userId' => 1, 'courseTaskId' => '1'],
+                        ['userId' => 1, 'courseTaskId' => '2'],
+                        ['userId' => 2, 'courseTaskId' => '1'],
+                        ['userId' => 2, 'courseTaskId' => '2'],
+                    ],
+                ],
+            ]
         );
-        $result = $this->getReportService()->getStudentDetail(1, array(1, 2));
-        $this->assertEquals(3, count($result));
+        $result = $this->getReportService()->getStudentDetail(1, [1, 2]);
+        $this->assertEquals(4, count($result));
     }
 
     public function testBuildStudentDetailOrderBy()
     {
-        $conditions1 = array('orderBy' => 'createdTimeDesc');
-        $conditions2 = array('orderBy' => 'createdTimeAsc');
-        $conditions3 = array('orderBy' => 'learnedCompulsoryTaskNumDesc');
-        $conditions4 = array('orderBy' => 'learnedCompulsoryTaskNumAsc');
+        $conditions1 = ['orderBy' => 'createdTimeDesc'];
+        $conditions2 = ['orderBy' => 'createdTimeAsc'];
+        $conditions3 = ['orderBy' => 'learnedCompulsoryTaskNumDesc'];
+        $conditions4 = ['orderBy' => 'learnedCompulsoryTaskNumAsc'];
         $result1 = $this->getReportService()->buildStudentDetailOrderBy($conditions1);
         $result2 = $this->getReportService()->buildStudentDetailOrderBy($conditions2);
         $result3 = $this->getReportService()->buildStudentDetailOrderBy($conditions3);
         $result4 = $this->getReportService()->buildStudentDetailOrderBy($conditions4);
-        $this->assertArrayEquals(array('createdTime' => 'DESC'), $result1);
-        $this->assertArrayEquals(array('createdTime' => 'ASC'), $result2);
-        $this->assertArrayEquals(array('learnedCompulsoryTaskNum' => 'DESC'), $result3);
-        $this->assertArrayEquals(array('learnedCompulsoryTaskNum' => 'ASC'), $result4);
+        $this->assertArrayEquals(['createdTime' => 'DESC'], $result1);
+        $this->assertArrayEquals(['createdTime' => 'ASC'], $result2);
+        $this->assertArrayEquals(['learnedCompulsoryTaskNum' => 'DESC'], $result3);
+        $this->assertArrayEquals(['learnedCompulsoryTaskNum' => 'ASC'], $result4);
     }
 
     public function testBuildStudentDetailConditions()
     {
-        $course = $this->mockCourse(array('id' => 1, 'compulsoryTaskNum' => '3'));
+        $course = $this->mockCourse(['id' => 1, 'compulsoryTaskNum' => '3']);
         $this->mockBiz(
-            'User:UserService', array(
-                array(
+            'User:UserService', [
+                [
                     'functionName' => 'getUserByVerifiedMobile',
-                    'withParams' => array(
+                    'withParams' => [
                         '18435180001',
-                    ),
-                    'returnValue' => array('id' => 1, 'nickname' => 'user name'),
-                ),
-            )
+                    ],
+                    'returnValue' => ['id' => 1, 'nickname' => 'user name'],
+                ],
+            ]
         );
-        $conditions = array(
+        $conditions = [
             'range' => 'unLearnedSevenDays',
             'nameOrMobile' => '18435180001',
-        );
+        ];
         $result = $this->getReportService()->buildStudentDetailConditions($conditions, 1);
-        $expect = array('courseId' => 1, 'role' => 'student', 'learnedCompulsoryTaskNumLT' => 3, 'userIds' => array(1));
-        $this->assertArrayEquals($expect, array('courseId' => $result['courseId'], 'role' => $result['role'], 'learnedCompulsoryTaskNumLT' => $result['learnedCompulsoryTaskNumLT'], 'userIds' => $result['userIds']));
+        $expect = ['courseId' => 1, 'role' => 'student', 'learnedCompulsoryTaskNumLT' => 3, 'userIds' => [1]];
+        $this->assertArrayEquals($expect, ['courseId' => $result['courseId'], 'role' => $result['role'], 'learnedCompulsoryTaskNumLT' => $result['learnedCompulsoryTaskNumLT'], 'userIds' => $result['userIds']]);
     }
 
     public function testSearchUserIdsByCourseIdAndFilterAndSortAndKeyword()
     {
-        $this->mockCourseMember(array('userId' => 1, 'courseId' => 1, 'isLearned' => '1', 'learnedCompulsoryTaskNum' => 1));
-        $this->mockCourseMember(array('userId' => 2, 'courseId' => 1, 'isLearned' => '0', 'learnedCompulsoryTaskNum' => 2));
-        $this->mockCourseMember(array('userId' => 3, 'courseId' => 1, 'isLearned' => '0', 'learnedCompulsoryTaskNum' => 3));
+        $this->mockCourseMember(['userId' => 1, 'courseId' => 1, 'isLearned' => '1', 'learnedCompulsoryTaskNum' => 1]);
+        $this->mockCourseMember(['userId' => 2, 'courseId' => 1, 'isLearned' => '0', 'learnedCompulsoryTaskNum' => 2]);
+        $this->mockCourseMember(['userId' => 3, 'courseId' => 1, 'isLearned' => '0', 'learnedCompulsoryTaskNum' => 3]);
 
         $result1 = $this->getReportService()->searchUserIdsByCourseIdAndFilterAndSortAndKeyword(1, 'all', 'createdTimeDesc', 0, PHP_INT_MAX);
         $result2 = $this->getReportService()->searchUserIdsByCourseIdAndFilterAndSortAndKeyword(1, 'unFinished', 'createdTimeAsc', 0, PHP_INT_MAX);
         $result3 = $this->getReportService()->searchUserIdsByCourseIdAndFilterAndSortAndKeyword(1, 'unFinished', 'CompletionRateDAsc', 0, PHP_INT_MAX);
         $result4 = $this->getReportService()->searchUserIdsByCourseIdAndFilterAndSortAndKeyword(1, 'unFinished', 'CompletionRateDesc', 0, PHP_INT_MAX);
 
-        $this->assertArrayValueEquals(array(1, 2, 3), $result1);
-        $this->assertArrayValueEquals(array(2, 3), $result2);
-        $this->assertArrayValueEquals(array(2, 3), $result3);
-        $this->assertArrayValueEquals(array(3, 2), $result4);
+        $this->assertArrayValueEquals([1, 2, 3], $result1);
+        $this->assertArrayValueEquals([2, 3], $result2);
+        $this->assertArrayValueEquals([2, 3], $result3);
+        $this->assertArrayValueEquals([3, 2], $result4);
     }
 
     public function testGetCourseTaskLearnData()
     {
-        $this->mockCourse(array('id' => 1, 'studentNum' => 3));
-        $this->mockTaskResult(array('courseTaskId' => 1, 'userId' => 1, 'status' => 'finish'));
-        $this->mockTaskResult(array('courseTaskId' => 1, 'userId' => 2, 'status' => 'finish'));
-        $this->mockTaskResult(array('courseTaskId' => 1, 'userId' => 3, 'status' => 'start'));
-        $tasks = array(
-            array('id' => 1, 'status' => 'published'),
-        );
+        $this->mockCourse(['id' => 1, 'studentNum' => 3]);
+        $this->mockTaskResult(['courseTaskId' => 1, 'userId' => 1, 'status' => 'finish']);
+        $this->mockTaskResult(['courseTaskId' => 1, 'userId' => 2, 'status' => 'finish']);
+        $this->mockTaskResult(['courseTaskId' => 1, 'userId' => 3, 'status' => 'start']);
+        $tasks = [
+            ['id' => 1, 'status' => 'published'],
+        ];
         $result = $this->getReportService()->getCourseTaskLearnData($tasks, 1);
-        $expect = array(array(
+        $expect = [[
             'id' => 1,
             'status' => 'published',
             'finishedNum' => 2,
             'learnNum' => 1,
             'notStartedNum' => 0,
             'rate' => (float) 66.667,
-        ));
+        ]];
         $this->assertArrayEquals($expect, $result);
     }
 
@@ -206,9 +219,9 @@ class ReportServiceTest extends BaseTestCase
         return $this->createService('Course:ReportService');
     }
 
-    protected function mockCourseMember($fileds = array())
+    protected function mockCourseMember($fileds = [])
     {
-        $defaultFileds = array(
+        $defaultFileds = [
             'courseId' => 1,
             'classroomId' => 0,
             'joinedType' => 'course',
@@ -216,76 +229,76 @@ class ReportServiceTest extends BaseTestCase
             'role' => 'student',
             'learnedCompulsoryTaskNum' => 1,
             'courseSetId' => 1,
-        );
+        ];
         $courseMember = array_merge($defaultFileds, $fileds);
 
         return $this->getCourseMemberDao()->create($courseMember);
     }
 
-    protected function mockCourse($fileds = array())
+    protected function mockCourse($fileds = [])
     {
-        $defaultFileds = array(
+        $defaultFileds = [
             'courseSetId' => 1,
             'title' => 'course title',
             'summary' => '<p>summary</p>',
             'status' => 'published',
-        );
+        ];
         $course = array_merge($defaultFileds, $fileds);
 
         return $this->getCourseDao()->create($course);
     }
 
-    protected function mockTaskTryView($fileds = array())
+    protected function mockTaskTryView($fileds = [])
     {
-        $defaultFileds = array(
+        $defaultFileds = [
             'userId' => 1,
             'courseSetId' => 1,
             'courseId' => 1,
             'taskId' => 1,
             'taskType' => 'text',
-        );
+        ];
         $course = array_merge($defaultFileds, $fileds);
 
         return $this->getTryViewLogDao()->create($course);
     }
 
-    protected function mockThread($fileds = array())
+    protected function mockThread($fileds = [])
     {
-        $defaultFileds = array(
+        $defaultFileds = [
             'userId' => 1,
             'courseId' => 1,
             'taskId' => 1,
             'type' => 'question',
             'courseSetId' => 1,
             'title' => 'title',
-        );
+        ];
         $thread = array_merge($defaultFileds, $fileds);
 
         return $this->getThreadDao()->create($thread);
     }
 
-    protected function mockCourseNote($fileds = array())
+    protected function mockCourseNote($fileds = [])
     {
-        $defaultFileds = array(
+        $defaultFileds = [
             'userId' => 1,
             'courseId' => 1,
             'taskId' => 1,
             'content' => 'content',
             'courseSetId' => 1,
-        );
+        ];
         $thread = array_merge($defaultFileds, $fileds);
 
         return $this->getCourseNoteDao()->create($thread);
     }
 
-    protected function mockTaskResult($fileds = array())
+    protected function mockTaskResult($fileds = [])
     {
-        $defaultFileds = array(
+        $defaultFileds = [
             'userId' => 1,
             'courseId' => 1,
             'courseTaskId' => 1,
             'status' => 'finish',
-        );
+        ];
         $taskResult = array_merge($defaultFileds, $fileds);
 
         return $this->getTaskResultDao()->create($taskResult);
