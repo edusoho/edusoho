@@ -4,11 +4,9 @@ namespace Codeages\Biz\ItemBank\AnswerQuestionTag\Service;
 
 interface AnswerQuestionTagService
 {
-    public function createAnswerQuestionTag($answerQuestionTag);
+    public function createAnswerQuestionTag($answerRecordId, $questionIds);
 
-    public function updateAnswerQuestionTag($id, $answerQuestionTag);
+    public function updateByAnswerRecordId($answerRecordId, $questionIds);
 
-    public function getByAnswerRecordId($answerRecordId);
-    
-    public function deleteByAnswerRecordId($id);
+    public function deleteByAnswerRecordId($answerRecordId);
 }

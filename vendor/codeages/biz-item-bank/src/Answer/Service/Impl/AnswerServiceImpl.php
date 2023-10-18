@@ -1139,21 +1139,12 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             return;
         }
-
         if ($answerRecord['isTag']) {
-            $this->getAnswerQuestionTagService()->updateAnswerQuestionTag(
-                ['answer_record_id' => $answerRecord['id']],
-                ['tag_question_ids' => $questionIds]
-            );
+            $this->getAnswerQuestionTagService()->updateByAnswerRecordId($answerRecord['id'], $questionIds);
         } else {
-            $this->getAnswerQuestionTagService()->createAnswerQuestionTag([
-                'answer_record_id' => $answerRecord['id'], 
-                'tag_question_ids' => $questionIds
-            ]);
+            $this->getAnswerQuestionTagService()->createAnswerQuestionTag($answerRecord['id'], $questionIds);
             $this->getAnswerRecordService()->update($answerRecord['id'], ['isTag' => 1]);
         }
-
-        return;
     }
 
     protected function updateAttachmentsTarget($answerRecordId, $attachments)

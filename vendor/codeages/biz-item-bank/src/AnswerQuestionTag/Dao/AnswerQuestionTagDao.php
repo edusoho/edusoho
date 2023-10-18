@@ -2,9 +2,9 @@
 
 namespace Codeages\Biz\ItemBank\AnswerQuestionTag\Dao;
 
-interface AnswerQuestionTagDao
-{
-    public function getByAnswerRecordId($answerRecordId);
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-    public function deleteByAnswerRecordId($answerRecordId);
+interface AnswerQuestionTagDao extends AdvancedDaoInterface
+{
+
 }
