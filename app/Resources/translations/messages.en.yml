@@ -78,6 +78,7 @@ site.default.times: Times
 site.default.detail: Detail
 site.default.program_name: Default Program
 site.default.plan_setting: Default plan settings
+site.default.mobile: mobile
 site.org.belongs_to_org_th: Organiztion
 site.org.code: Code
 site.tips: Tips
@@ -8122,6 +8123,7 @@ my.reward_points_message: '$ %num% in cash, the credits will not be refunded whe
 my.reward_points_instructions: 'Points instructions'
 
 task.learn_data_detail.nickname: name
+task.learn_data_detail.mobile: mobile
 task.learn_data_detail.createdTime: Join Time
 task.learn_data_detail.join_time: Join Time
 task.learn_data_detail.finishedTime: Finished Time
