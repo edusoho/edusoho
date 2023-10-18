@@ -171,7 +171,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
 
         try {
             $this->beginTransaction();
-            $this->dispatchEvent('assessment.update', new Event($assessmentId));
+            $this->dispatchEvent('assessment.before_update', new Event($assessmentId));
 
             if (!empty($assessment['sections'])) {
                 $this->getSectionService()->deleteAssessmentSectionsByAssessmentId($assessmentId);
@@ -182,6 +182,8 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             }
 
             $assessment = $this->updateBasicAssessment($assessmentId, $assessment);
+
+            $this->dispatch('assessment.update', $assessment);
 
             $this->commit();
 

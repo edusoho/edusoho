@@ -148,9 +148,9 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
         return ArrayToolkit::index($answerRecords, 'id');
     }
 
-    public function findByAssessmentId($assessmentId)
+    public function countByAssessmentId($assessmentId)
     {
-       return $this->getAnswerRecordDao()->findByAssessmentId($assessmentId);
+       return $this->getAnswerRecordDao()->countByAssessmentId($assessmentId);
     }
 
     /**

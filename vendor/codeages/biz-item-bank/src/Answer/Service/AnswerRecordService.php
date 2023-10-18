@@ -30,5 +30,5 @@ interface AnswerRecordService
 
     public function findByIds($ids);
 
-    public function findByAssessmentId($assessmentId);
+    public function countByAssessmentId($assessmentId);
 }

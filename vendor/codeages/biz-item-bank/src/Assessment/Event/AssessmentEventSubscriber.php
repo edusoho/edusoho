@@ -16,7 +16,7 @@ class AssessmentEventSubscriber extends EventSubscriber
         return [
             'item.delete' => 'onItemDelete',
             'item.batchDelete' => 'onItemBatchDelete',
-            'assessment.update' => 'onAssessmentUpdate',
+            'assessment.before_update' => 'onAssessmentBeforeUpdate',
         ];
     }
 
@@ -55,13 +55,13 @@ class AssessmentEventSubscriber extends EventSubscriber
         $this->getAssessmentSectionItemService()->deleteAssessmentSectionItems($toDeleteSectionItems);
     }
 
-    public function onAssessmentUpdate(Event $event)
+    public function onAssessmentBeforeUpdate(Event $event)
     {
-        $answerRecord = $this->getAnswerRecordService()->findByAssessmentId($event->getSubject());
+        $answerRecord = $this->getAnswerRecordService()->countByAssessmentId($event->getSubject());
         if (empty($answerRecord)) {
             return;
         }
-        $assessmentSnapshots = $this->getAssessmentService()->createAssessmentSnapshotsIncludeSectionsAndItems(array_unique(array_column($answerRecord, 'assessment_id')));
+        $assessmentSnapshots = $this->getAssessmentService()->createAssessmentSnapshotsIncludeSectionsAndItems([$event->getSubject()]);
         $this->getAnswerRecordService()->replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots);
         $this->getAnswerReportService()->replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots);
     }
