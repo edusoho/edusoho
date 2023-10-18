@@ -49,6 +49,11 @@ class AnswerRecordDaoImpl extends AdvancedDaoImpl implements AnswerRecordDao
         return $this->findInField('id', $ids);
     }
 
+    public function findByAssessmentId($assessmentId)
+    {
+        return $this->findByFields(['assessment_id' => $assessmentId]);
+    }
+
     public function declares()
     {
         return [

@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Assessment\Service\Impl;
 
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerQuestionReportDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerRecordDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerReportDao;
@@ -170,6 +171,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
 
         try {
             $this->beginTransaction();
+            $this->dispatchEvent('assessment.update', new Event($assessmentId));
 
             if (!empty($assessment['sections'])) {
                 $this->getSectionService()->deleteAssessmentSectionsByAssessmentId($assessmentId);
@@ -180,8 +182,6 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             }
 
             $assessment = $this->updateBasicAssessment($assessmentId, $assessment);
-
-            $this->dispatch('assessment.update', $assessment);
 
             $this->commit();
 

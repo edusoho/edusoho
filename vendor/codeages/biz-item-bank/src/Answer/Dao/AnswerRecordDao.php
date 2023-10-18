@@ -17,4 +17,6 @@ interface AnswerRecordDao extends AdvancedDaoInterface
     public function deleteByAssessmentId($assessmentId);
 
     public function findByIds($ids);
+
+    public function findByAssessmentId($assessmentId);
 }

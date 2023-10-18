@@ -16,6 +16,7 @@ class AssessmentEventSubscriber extends EventSubscriber
         return [
             'item.delete' => 'onItemDelete',
             'item.batchDelete' => 'onItemBatchDelete',
+            'assessment.update' => 'onAssessmentUpdate',
         ];
     }
 
@@ -52,6 +53,19 @@ class AssessmentEventSubscriber extends EventSubscriber
         $this->getAnswerReportService()->replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots);
         $this->getAssessmentService()->modifyAssessmentsAndSectionsWithToDeleteSectionItems($toDeleteSectionItems);
         $this->getAssessmentSectionItemService()->deleteAssessmentSectionItems($toDeleteSectionItems);
+    }
+
+    public function onAssessmentUpdate(Event $event)
+    {
+        $assessmentIds = [];
+        $updateAssessmentId = $event->getSubject();
+        $answerRecord = $this->getAnswerRecordService()->findByAssessmentId($updateAssessmentId);
+        if (empty($answerRecord)) {
+            return;
+        }
+        $assessmentSnapshots = $this->getAssessmentService()->createAssessmentSnapshotsIncludeSectionsAndItems(array_unique(array_column($answerRecord, 'assessment_id')));
+        $this->getAnswerRecordService()->replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots);
+        $this->getAnswerReportService()->replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots);
     }
 
     /**
