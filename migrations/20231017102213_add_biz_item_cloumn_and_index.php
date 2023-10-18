@@ -10,7 +10,7 @@ class AddBizItemCloumnAndIndex extends Migration
     public function up()
     {
         $connection = $this->getContainer()['db'];
-        if (!$this->isFieldExist('biz_item', 'bank_id_material_hash')) {
+        if (!$this->isFieldExist('biz_item', 'material_hash')) {
             $connection->exec("ALTER TABLE `biz_item` ADD COLUMN `material_hash` char(32) NOT NULL DEFAULT '' COMMENT '题目材料hash' AFTER `material`;");
         }
 
