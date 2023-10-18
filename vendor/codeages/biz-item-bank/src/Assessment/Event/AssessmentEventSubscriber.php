@@ -57,9 +57,7 @@ class AssessmentEventSubscriber extends EventSubscriber
 
     public function onAssessmentUpdate(Event $event)
     {
-        $assessmentIds = [];
-        $updateAssessmentId = $event->getSubject();
-        $answerRecord = $this->getAnswerRecordService()->findByAssessmentId($updateAssessmentId);
+        $answerRecord = $this->getAnswerRecordService()->findByAssessmentId($event->getSubject());
         if (empty($answerRecord)) {
             return;
         }
