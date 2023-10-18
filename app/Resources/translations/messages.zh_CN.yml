@@ -4667,6 +4667,7 @@ my.learning.thread.target_course_deleted: 课程已删除
 my.learning.course: 我的课程
 my.learning.course.learning: 学习中
 my.learning.course.learned: 已学完
+my.learning.course.expired: 已过期
 my.learning.course.favorite: 收藏
 my.learning.course.favorited: 已收藏
 my.learning.course.favorite_empty: 暂无已收藏的课程
