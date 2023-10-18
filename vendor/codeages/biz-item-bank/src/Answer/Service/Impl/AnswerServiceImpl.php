@@ -1073,7 +1073,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
             }
 
-            $this->getAnswerQuestionTag($assessmentResponse, $answerRecord);
+            $this->saveAnswerQuestionTag($assessmentResponse, $answerRecord);
 
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
 
@@ -1118,9 +1118,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $assessmentResponse;
     }
 
-    protected function getAnswerQuestionTag(array $assessmentResponse, $answerRecord)
+    protected function saveAnswerQuestionTag(array $assessmentResponse, $answerRecord)
     {
-        $answerQuestionTag = [];
         $questionIds = [];
         foreach ($assessmentResponse['section_responses'] as $sectionResponse) {
             foreach ($sectionResponse['item_responses'] as $itemResponse) {
@@ -1132,31 +1131,29 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             }
         }
 
-        $answerQuestionTag = [
-            'answer_record_id' => $answerRecord['id'],
-            'tag_question_ids' => $questionIds,
-        ];
+        if (empty($questionIds)) {
+            if ($answerRecord['isTag']) {
+                $this->getAnswerRecordService()->update($answerRecord['id'], ['isTag' => 0]);
+                $this->getAnswerQuestionTagService()->deleteByAnswerRecordId($answerRecord['id']);
+            }
 
-        if ($questionIds) {
-            $answerRecord = $this->getAnswerRecordService()->update($answerRecord['id'], ['isTag' => 1]);
+            return;
         }
 
         if ($answerRecord['isTag']) {
-            $questionTag = $this->getAnswerQuestionTagService()->getByAnswerRecordId($answerRecord['id']);
-
-            if ($questionTag) {
-                if ($questionIds) {
-                    $this->getAnswerQuestionTagService()->updateAnswerQuestionTag($questionTag['id'], ['tag_question_ids' => $questionIds]);
-                } else {
-                    $answerRecord = $this->getAnswerRecordService()->update($answerRecord['id'], ['isTag' => 0]);
-                    $this->getAnswerQuestionTagService()->deleteAnswerQuestionTag($questionTag['id']);
-                }
-            } elseif ($questionIds) {
-                $this->getAnswerQuestionTagService()->createAnswerQuestionTag($answerQuestionTag);
-            }
+            $this->getAnswerQuestionTagService()->updateAnswerQuestionTag(
+                ['answer_record_id' => $answerRecord['id']],
+                ['tag_question_ids' => $questionIds]
+            );
+        } else {
+            $this->getAnswerQuestionTagService()->createAnswerQuestionTag([
+                'answer_record_id' => $answerRecord['id'], 
+                'tag_question_ids' => $questionIds
+            ]);
+            $this->getAnswerRecordService()->update($answerRecord['id'], ['isTag' => 1]);
         }
 
-        return $answerQuestionTag;
+        return;
     }
 
     protected function updateAttachmentsTarget($answerRecordId, $attachments)

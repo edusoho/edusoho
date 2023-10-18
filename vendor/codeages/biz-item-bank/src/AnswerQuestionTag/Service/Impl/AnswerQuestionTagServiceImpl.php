@@ -23,9 +23,14 @@ class AnswerQuestionTagServiceImpl  extends BaseService implements AnswerQuestio
        return $this->getAnswerQuestionTagDao()->getByAnswerRecordId($answerRecordId);
     }
 
-    public function deleteAnswerQuestionTag($id)
+    public function updateByAnswerRecordId($answerRecordId, $questionIds)
     {
-        return $this->getAnswerQuestionTagDao()->delete($id);
+        return $this->getAnswerQuestionTagDao()->updateByAnswerRecordId($answerRecordId, $questionIds);
+    }
+
+    public function deleteByAnswerRecordId($answerRecordId)
+    {
+        return $this->getAnswerQuestionTagDao()->deleteByAnswerRecordId($answerRecordId);
     }
 
     /**

@@ -16,6 +16,13 @@ class AnswerQuestionTagDaoImpl extends AdvancedDaoImpl implements AnswerQuestion
         ]);
     }
 
+    public function deleteByAnswerRecordId($answerRecordId)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE answer_record_id = ? LIMIT 1";
+
+        return $this->db()->executeUpdate($sql, [$answerRecordId]);
+    }
+
     public function declares()
     {
         return [
@@ -25,6 +32,9 @@ class AnswerQuestionTagDaoImpl extends AdvancedDaoImpl implements AnswerQuestion
             ],
             'serializes' => [
                 'tag_question_ids' => 'delimiter',
+            ],
+            'conditions' => [
+                'answer_record_id = :answer_record_id',
             ]
         ];
     }

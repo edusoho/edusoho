@@ -10,5 +10,5 @@ interface AnswerQuestionTagService
 
     public function getByAnswerRecordId($answerRecordId);
     
-    public function deleteAnswerQuestionTag($id);
+    public function deleteByAnswerRecordId($id);
 }
