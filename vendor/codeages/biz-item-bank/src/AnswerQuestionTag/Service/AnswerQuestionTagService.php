@@ -9,4 +9,6 @@ interface AnswerQuestionTagService
     public function updateAnswerQuestionTag($id, $answerQuestionTag);
 
     public function getByAnswerRecordId($answerRecordId);
+    
+    public function deleteAnswerQuestionTag($id);
 }

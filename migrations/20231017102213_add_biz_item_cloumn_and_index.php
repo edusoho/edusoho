@@ -11,8 +11,7 @@ class AddBizItemCloumnAndIndex extends Migration
     {
         $connection = $this->getContainer()['db'];
         if (!$this->isFieldExist('biz_item', 'bank_id_material_hash')) {
-            $biz = $this->getContainer();
-            $biz['db']->exec("ALTER TABLE `biz_item` ADD COLUMN `material_hash` char(32) NOT NULL DEFAULT '' COMMENT '题目材料hash' AFTER `material`;");
+            $connection->exec("ALTER TABLE `biz_item` ADD COLUMN `material_hash` char(32) NOT NULL DEFAULT '' COMMENT '题目材料hash' AFTER `material`;");
         }
 
         if (!$this->isIndexExist('biz_item', 'bank_id_material_hash')) {
@@ -27,8 +26,7 @@ class AddBizItemCloumnAndIndex extends Migration
     {
         $connection = $this->getContainer()['db'];
         if ($this->isFieldExist('biz_item', 'material_hash')) {
-            $biz = $this->getContainer();
-            $biz['db']->exec('ALTER TABLE `biz_item` DROP COLUMN `material_hash`');
+            $connection->exec('ALTER TABLE `biz_item` DROP COLUMN `material_hash`');
         }
 
         if ($this->isIndexExist('biz_item', 'bank_id_material_hash')) {

@@ -1073,7 +1073,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
             }
 
-            $this->getAnswerQuestionTag($assessmentResponse, $answerRecord['id']);
+            $this->getAnswerQuestionTag($assessmentResponse, $answerRecord);
 
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
 
@@ -1118,7 +1118,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $assessmentResponse;
     }
 
-    protected function getAnswerQuestionTag(array $assessmentResponse, $answerRecordId)
+    protected function getAnswerQuestionTag(array $assessmentResponse, $answerRecord)
     {
         $answerQuestionTag = [];
         $questionIds = [];
@@ -1133,15 +1133,27 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $answerQuestionTag = [
-            'answer_record_id' => $answerRecordId,
+            'answer_record_id' => $answerRecord['id'],
             'tag_question_ids' => $questionIds,
         ];
 
-        $questionTag = $this->getAnswerQuestionTagService()->getByAnswerRecordId($answerRecordId);
-        if ($questionTag) {
-            $this->getAnswerQuestionTagService()->updateAnswerQuestionTag($questionTag['id'], ['tag_question_ids' => $questionIds]);
-        }else {
-            $this->getAnswerQuestionTagService()->createAnswerQuestionTag($answerQuestionTag);
+        if ($questionIds) {
+            $answerRecord = $this->getAnswerRecordService()->update($answerRecord['id'], ['isTag' => 1]);
+        }
+
+        if ($answerRecord['isTag']) {
+            $questionTag = $this->getAnswerQuestionTagService()->getByAnswerRecordId($answerRecord['id']);
+
+            if ($questionTag) {
+                if ($questionIds) {
+                    $this->getAnswerQuestionTagService()->updateAnswerQuestionTag($questionTag['id'], ['tag_question_ids' => $questionIds]);
+                } else {
+                    $answerRecord = $this->getAnswerRecordService()->update($answerRecord['id'], ['isTag' => 0]);
+                    $this->getAnswerQuestionTagService()->deleteAnswerQuestionTag($questionTag['id']);
+                }
+            } elseif ($questionIds) {
+                $this->getAnswerQuestionTagService()->createAnswerQuestionTag($answerQuestionTag);
+            }
         }
 
         return $answerQuestionTag;
