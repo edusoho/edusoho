@@ -3,7 +3,10 @@
     <div class="col-10">
         {{ 'site.default.student'|trans }}
     </div>
-    <div class="col-80">
+    <div class="col-15">
+      {{ 'site.default.mobile'|trans }}
+    </div>
+    <div class="col-65">
         {% include 'course-manage/overview/task-detail/chart-data-legend.html.twig' %}
     </div>
     <div class="col-10">{{ 'course.task.rate.finish'|trans }}</div>
@@ -15,7 +18,16 @@
         <div class="col-10 color-gray text-overflow" data-toggle="popover" data-trigger="hover" data-placement="top" data-delay="100" data-content="{{ user.nickname }}">
            {{ user.nickname }}
         </div>
-        <ul class="col-80 student-detail">
+        <div class="col-15">
+          {% if user.verifiedMobile %}
+            {% include 'user-mobile-mask.html.twig' with { mobile: user.verifiedMobile } %}
+          {% elseif userProfiles[user.id].mobile %}
+            {% include 'user-mobile-mask.html.twig' with { mobile: userProfiles[user.id].mobile } %}
+          {% else %}
+              --
+          {% endif %}
+        </div>
+        <ul class="col-65 student-detail">
             {% include 'course-manage/overview/task-detail/student-chart-item.html.twig' %}
         </ul>
         <div class="col-10">
@@ -43,3 +55,4 @@
       {{ web_macro.paginator(paginator) }}
     </div>
 {% endif %}
+{% include 'js_loader.html.twig' %}
