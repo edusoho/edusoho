@@ -90,6 +90,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
             }
 
+            $this->saveAnswerQuestionTag($assessmentResponse, $answerRecord);
             $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
             $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
