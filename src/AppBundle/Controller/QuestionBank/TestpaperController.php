@@ -236,10 +236,6 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        if ('draft' != $assessment['status']) {
-            return $this->createMessageResponse('error', '已发布或已关闭的试卷不能再修改题目');
-        }
-
         if ($request->isMethod('POST')) {
             $assessment = $request->request->get('baseInfo', []);
             $sections = $request->request->get('sections', []);
@@ -254,6 +250,8 @@ class TestpaperController extends BaseController
             }
             $assessment['sections'] = $this->processAssessmentSections($assessment['sections']);
             $this->getAssessmentService()->updateAssessment($assessmentId, $assessment);
+
+            $this->getLogService()->info('question_bank', 'edit_testpaper', "用户{$this->getCurrentUser()->nickname}修改了{$questionBank['name']}名为{$assessment['name']}的试卷");
 
             return $this->createJsonResponse([
                 'goto' => $this->generateUrl('question_bank_manage_testpaper_list', ['id' => $id]),

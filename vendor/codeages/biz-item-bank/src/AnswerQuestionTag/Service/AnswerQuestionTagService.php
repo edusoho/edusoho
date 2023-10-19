@@ -1,0 +1,12 @@
+<?php
+
+namespace Codeages\Biz\ItemBank\AnswerQuestionTag\Service;
+
+interface AnswerQuestionTagService
+{
+    public function createAnswerQuestionTag($answerRecordId, $questionIds);
+
+    public function updateByAnswerRecordId($answerRecordId, $questionIds);
+
+    public function deleteByAnswerRecordId($answerRecordId);
+}
