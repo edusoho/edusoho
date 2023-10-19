@@ -4005,6 +4005,7 @@ my.learning.thread.target_course_deleted: 'Course has been deleted'
 my.learning.course: 'My Course'
 my.learning.course.learning: Learning
 my.learning.course.learned: Learned
+my.learning.course.expired: Expired
 my.learning.course.favorite: Favorite
 my.learning.course.favorited: Favorited
 my.learning.course.favorite_empty: 'No record'

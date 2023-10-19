@@ -968,7 +968,7 @@ validate_old.alphanumeric.message: %display% must be alphabetical, numeric, and 
 validate_old.alphabet_underline.message: %display% must begin with an English letter or an underscore
 validate_old.byte_minlength.message: %display% must be greater than or equal to %min%, a Chinese word is 2 characters
 validate_old.currency_check.message: Please enter a valid %display%, such as:200, 221.99, 0.99, 0 and so on
-validate_old.currency.message: You can only enter up to %max% characters.
+validate_old.currency.message: You can only enter up to %max% characters，one Chinese word counts as two characters.
 validate_old.idcard.message: %display% is not formatted correctly
 validate_old.password.message: %display% can only be composed of 4-20 characters
 validate_old.second_range.message: Seconds can only be between 0-59

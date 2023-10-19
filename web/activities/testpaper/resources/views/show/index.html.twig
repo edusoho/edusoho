@@ -3,7 +3,7 @@
 
 {% block body %}
   {% set canStartTestpaper = (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime > ('now'|date('U'))) or (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime == '0') or (activity.startTime == '0' and activity.endTime == '0') %}
-
+  
   <div class="iframe-parent-content">
     <div class="modal show iframe-modal">
       <div class="modal-dialog">
