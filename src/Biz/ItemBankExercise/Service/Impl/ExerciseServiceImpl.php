@@ -358,7 +358,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     {
         $this->tryManageExercise($exerciseId);
 
-        $exercise = $this->getExerciseDao()->update($exerciseId, ['status' => 'published']);
+        $exercise = $this->getExerciseDao()->update($exerciseId, ['status' => 'published', 'showable' => 1]);
 
         $user = $this->getCurrentUser();
         $this->getLogService()->info('item_bank_exercise', 'publish_exercise', "发布练习{$user['nickname']}(#{$user['id']})");

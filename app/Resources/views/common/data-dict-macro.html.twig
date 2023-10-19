@@ -7,6 +7,17 @@
         <span class="color-danger">{{ 'common.courseStatus.closed'|trans }}</span>
     {% endif %}
 {% endmacro %}
+{% macro showAble(status,isShow) %}
+  {% if status == 'published' %}
+    {% if isShow == 1 %}
+       {{ 'common.courseStatus.show'|trans }}
+    {% else %}
+       {{ 'common.courseStatus.hide'|trans }}
+    {% endif %}   
+  {% else %}
+    <span class="color-gray"> - </span>
+  {% endif %}
+{% endmacro %}
 {% macro goodsStatus(status) %}
   {% if status == 'created' %}
     <span class="color-gray">{{ 'common.courseStatus.draft'|trans }}</span>

@@ -25,6 +25,7 @@
     <br>
     <span class="text-muted text-sm">{{ exercise.createdTime|date('Y-n-d H:i') }}</span>
   </td>
+  <td>{{ dict_macro.showAble( exercise.status,exercise.showable ) }}</td>
   <td>{{ dict_macro.courseStatus( exercise.status) }}</td>
   <td>
     <div class="btn-group">

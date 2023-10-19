@@ -42,6 +42,7 @@ class ItemBankExercise extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions = $request->query->all();
         $conditions['status'] = 'published';
+        $conditions['showable'] = 1;
 
         if (isset($conditions['categoryId']) && '0' == $conditions['categoryId']) {
             unset($conditions['categoryId']);

@@ -4887,6 +4887,8 @@ change_log: 更新日志
 # common
 common.courseStatus.draft: 未发布
 common.courseStatus.published: 已发布
+common.courseStatus.show: 展示
+common.courseStatus.hide: 隐藏
 common.courseStatus.closed: 已关闭
 common.classroomStatus.draft: 未发布
 common.classroomStatus.published: 已发布
@@ -5211,6 +5213,7 @@ admin.course_manage.manage.price: 价格
 admin.course_manage.manage.serialize_mode: 连载状态
 admin.course_manage.manage.status: 课程状态
 admin.course_manage.manage.creator: 创建者/时间
+admin.course_manage.manage.showable: 页面显示
 admin.course_manage.manage.manage_btn: 管理
 admin.course_manage.manage.empty: 暂无课程记录
 admin.course_manage.manage.category: 分类
