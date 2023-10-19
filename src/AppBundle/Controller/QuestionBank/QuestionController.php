@@ -287,6 +287,7 @@ class QuestionController extends BaseController
         }
 
         $urlParams = [
+            'difficulty' => $fields['difficulty'],
             'id' => $id,
             'type' => $type,
             'categoryId' => $request->query->get('categoryId', 0),
