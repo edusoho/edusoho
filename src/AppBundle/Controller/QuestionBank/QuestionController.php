@@ -269,7 +269,7 @@ class QuestionController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function repeatCheckingAction(Request $request, $id)
+    public function singleQuestionRepeatCheckingAction(Request $request, $id)
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
         if (empty($questionBank['itemBank'])) {
