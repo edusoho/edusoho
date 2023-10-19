@@ -544,7 +544,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $typesNum;
     }
 
-    public function findRepeatMaterial($bankId, $items)
+    public function findDuplicatedMaterial($bankId, $items)
     {
         $materialHash = [];
         foreach ($items as $item) {
@@ -552,14 +552,14 @@ class ItemServiceImpl extends BaseService implements ItemService
                 $materialHash[] = md5($question['stem']);
             }
         }
-        $repeatMaterialHashes = array_column($this->getItemDao()->findRepeatMaterialHashByBankId($bankId), 'material_hash');
-        $materialHashes = array_intersect($repeatMaterialHashes, $materialHash);
+        $duplicatedMaterialHashes = array_column($this->getItemDao()->findDuplicatedMaterialHashByBankId($bankId), 'material_hash');
+        $materialHashes = array_intersect($duplicatedMaterialHashes, $materialHash);
 
         if (empty($materialHashes)) {
             return [];
         }
 
-        return $this->getItemDao()->findRepeatMaterial($bankId, $materialHashes);
+        return $this->getItemDao()->findDuplicatedMaterial($bankId, $materialHashes);
     }
 
     protected function findQuestionsByItemId($itemId)

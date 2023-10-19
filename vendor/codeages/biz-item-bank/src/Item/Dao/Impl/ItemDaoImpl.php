@@ -45,14 +45,14 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
         return $this->db()->fetchColumn($sql, [$categoryId]);
     }
 
-    public function findRepeatMaterialHashByBankId($bankId)
+    public function findDuplicatedMaterialHashByBankId($bankId)
     {
         $sql = "SELECT material_hash, count(*) as c FROM {$this->table} WHERE bank_id = ? GROUP BY material_hash HAVING c > 1;";
 
         return $this->db()->fetchAll($sql, [$bankId]) ?: [];
     }
 
-    public function findRepeatMaterial($bankId, $materialHashes)
+    public function findDuplicatedMaterial($bankId, $materialHashes)
     {
         $marks = str_repeat('?,', count($materialHashes) - 1).'?';
 
