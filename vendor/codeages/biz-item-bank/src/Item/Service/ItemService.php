@@ -60,5 +60,5 @@ interface ItemService
 
     public function countItemTypesNum($items);
 
-    public function countSingleMaterialRepeat($bankId, $materialHash);
+    public function isSingleMaterialDuplicative($bankId, $material);
 }

@@ -544,9 +544,15 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $typesNum;
     }
 
-    public function countSingleMaterialRepeat($bankId, $materialHash)
+    public function isSingleMaterialDuplicative($bankId, $material)
     {
-        return $this->getItemDao()->count(['bank_id' => $bankId, 'material_hash'=> $materialHash]);
+        $materialHash = md5($material);
+        $count = $this->getItemDao()->count(['bank_id' => $bankId, 'material_hash'=> $materialHash, 'material' => $material]);
+        if ($count > 1) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function findQuestionsByItemId($itemId)

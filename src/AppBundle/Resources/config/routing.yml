@@ -3683,10 +3683,10 @@ question_bank_manage_question_delete:
     path: '/question_bank/{id}/question/{itemId}/delete'
     defaults:
         _controller: 'AppBundle:QuestionBank/Question:delete'
-question_bank_manage_single_question_repeat_checking:
-    path: '/question_bank/{id}/singleQuestionRepeatChecking'
+question_bank_manage_single_question_duplicative_checking:
+    path: '/question_bank/{id}/singleQuestionDuplicativeChecking'
     defaults:
-        _controller: 'AppBundle:QuestionBank/Question:singleQuestionRepeatChecking'
+        _controller: 'AppBundle:QuestionBank/Question:singleQuestionDuplicativeChecking'
 question_bank_manage_question_export:
     path: '/question_bank/{id}/questions/export'
     defaults:

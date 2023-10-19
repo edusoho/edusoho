@@ -269,7 +269,7 @@ class QuestionController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function singleQuestionRepeatCheckingAction(Request $request, $id)
+    public function singleQuestionDuplicativeCheckingAction(Request $request, $id)
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
         if (empty($questionBank['itemBank'])) {
@@ -279,32 +279,12 @@ class QuestionController extends BaseController
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
+        $material = $request->query->get('stem');
 
-        $fields = json_decode($request->getContent(), true);
-        foreach ($fields['questions'] as $item) {
-            $materialHash = md5($item['stem']);
-            $type = $item['answer_mode'];
-        }
-
-        $urlParams = [
-            'difficulty' => $fields['difficulty'],
-            'id' => $id,
-            'type' => $type,
-            'categoryId' => $request->query->get('categoryId', 0),
-        ];
-
-        $repeatMaterialCount = $this->getItemService()->countSingleMaterialRepeat($id, $materialHash);
-        if ($repeatMaterialCount) {
-            return $this->createJsonResponse([
-                'status' => true,
-                'saveUrl' => $this->filterRedirectUrl($this->generateUrl('question_bank_manage_question_create', $urlParams)),
-                'returnUrl' => $this->filterRedirectUrl($this->generateUrl('question_bank_manage_question_list', ['id' => $id])),
-            ]);
+        if ($this->getItemService()->isSingleMaterialDuplicative($id, $material)) {
+            return $this->createJsonResponse(['status' => true]);
         } else {
-            return $this->createJsonResponse([
-                'status' => false,
-                'saveUrl' => $this->filterRedirectUrl($this->generateUrl('question_bank_manage_question_create', $urlParams)),
-            ]);
+            return $this->createJsonResponse(['status' => false]);
         }
     }
 
