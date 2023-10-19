@@ -15,7 +15,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\AnswerQuestionTag\Service\AnswerQuestionTagService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionTagService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService;
@@ -1349,6 +1349,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
      */
     protected function getAnswerQuestionTagService()
     {
-        return $this->biz->service('ItemBank:AnswerQuestionTag:AnswerQuestionTagService');
+        return $this->biz->service('ItemBank:Answer:AnswerQuestionTagService');
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Codeages\Biz\ItemBank\AnswerQuestionTag\Service\Impl;
+namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
-use Codeages\Biz\ItemBank\AnswerQuestionTag\Dao\AnswerQuestionTagDao;
-use Codeages\Biz\ItemBank\AnswerQuestionTag\Service\AnswerQuestionTagService;
+use Codeages\Biz\ItemBank\Answer\Dao\AnswerQuestionTagDao;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionTagService;
 use Codeages\Biz\ItemBank\BaseService;
 
 class AnswerQuestionTagServiceImpl  extends BaseService implements AnswerQuestionTagService
@@ -30,7 +30,7 @@ class AnswerQuestionTagServiceImpl  extends BaseService implements AnswerQuestio
     {
         $answerQuestionTag = $this->getAnswerQuestionTagDao()->getByAnswerRecordId($answerRecordId);
 
-        return $answerQuestionTag['tag_question_ids'];
+        return empty($answerQuestionTag) ? [] : $answerQuestionTag['tag_question_ids'];
     }
 
     /**
@@ -38,6 +38,6 @@ class AnswerQuestionTagServiceImpl  extends BaseService implements AnswerQuestio
      */
     protected function getAnswerQuestionTagDao()
     {
-        return $this->biz->dao('ItemBank:AnswerQuestionTag:AnswerQuestionTagDao');
+        return $this->biz->dao('ItemBank:Answer:AnswerQuestionTagDao');
     }
 }
