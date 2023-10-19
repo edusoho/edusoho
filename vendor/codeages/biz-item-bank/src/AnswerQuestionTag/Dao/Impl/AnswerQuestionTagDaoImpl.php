@@ -9,6 +9,11 @@ class AnswerQuestionTagDaoImpl extends AdvancedDaoImpl implements AnswerQuestion
 {
     protected $table = 'biz_answer_question_tag';
 
+    public function getByAnswerRecordId($answerRecordId)
+    {
+        return $this->getByFields(['answer_record_id' => $answerRecordId]);
+    }
+
     public function declares()
     {
         return [
