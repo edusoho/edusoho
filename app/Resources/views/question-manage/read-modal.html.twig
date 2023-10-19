@@ -9,6 +9,14 @@
 {% endblock %}
 
 {% block body %}
+  {% if cloudStatus() %}
+    导入题目
+  {% elseif has_permission('admin_v2_cloud_center') %}
+    <a class="cd-link-primary" target="_blank" href="{{ path('admin_v2_app_center') }}">{{ 'item_bank.access_cloud'|trans }}</a>
+  {% else %}
+    升级云能力可使用导入功能，需联系超级管理员进行操作
+  {% endif %}
+
   {% if is_plugin_installed('QuestionPlus') %}
     {% set disable = version_compare(plugin_version('QuestionPlus'), '2.1.0', '<=') %}
   {% else %}

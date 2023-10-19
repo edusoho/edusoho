@@ -11146,3 +11146,4 @@ sms.defence.request.log.disable_type.coordinate: Multiple requests for the same 
 sms.defence.request.log.disable_type.none: none
 
 course.start_answer.all_question_deleted: 'All questions have been deleted, please contact the teacher or administrator'
+item_bank.access_cloud: Upgrade now

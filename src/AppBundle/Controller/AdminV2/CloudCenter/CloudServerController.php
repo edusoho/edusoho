@@ -16,7 +16,7 @@ class CloudServerController extends BaseController
             return $this->render('admin-v2/cloud-center/cloud-server/sms/trial.html.twig');
         }
 
-        if (!($this->isVisibleCloud())) {
+        if (!$this->getEduCloudService()->isVisibleCloud()) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
@@ -94,11 +94,6 @@ class CloudServerController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
-    }
-
-    private function isVisibleCloud()
-    {
-        return $this->getEduCloudService()->isVisibleCloud();
     }
 
     private function isSmsWithoutEnable($overview, $cloudSmsSettings)
