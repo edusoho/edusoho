@@ -3580,6 +3580,12 @@ questions_import_save:
         - POST
     defaults:
         _controller: 'AppBundle:Question/Manage:saveImportQuestions'
+questions_import_repeat_checking:
+    path: '/questions/{token}/repeatChecking'
+    methods:
+        - POST
+    defaults:
+        _controller: 'AppBundle:Question/Manage:repeatChecking'
 coupon_receive:
     pattern: '/coupon/{token}/receive'
     defaults:

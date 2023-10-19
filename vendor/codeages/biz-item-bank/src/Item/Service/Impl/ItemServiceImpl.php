@@ -544,6 +544,24 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $typesNum;
     }
 
+    public function findRepeatMaterial($bankId, $items)
+    {
+        $materialHash = [];
+        foreach ($items as $item) {
+            foreach ($item['questions'] as $question) {
+                $materialHash[] = md5($question['stem']);
+            }
+        }
+        $repeatMaterialHashes = array_column($this->getItemDao()->findRepeatMaterialHashByBankId($bankId), 'material_hash');
+        $materialHashes = array_intersect($repeatMaterialHashes, $materialHash);
+
+        if (empty($materialHashes)) {
+            return [];
+        }
+
+        return $this->getItemDao()->findRepeatMaterial($bankId, $materialHashes);
+    }
+
     protected function findQuestionsByItemId($itemId)
     {
         return $this->getQuestionDao()->findByItemId($itemId);

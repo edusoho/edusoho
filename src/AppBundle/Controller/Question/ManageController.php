@@ -84,6 +84,40 @@ class ManageController extends BaseController
         return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_question_list', ['id' => $data['questionBankId']])]);
     }
 
+    public function repeatCheckingAction(Request $request, $token)
+    {
+        $verifiedToken = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+        $data = $verifiedToken['data'];
+        if (!$this->getQuestionBankService()->canManageBank($data['questionBankId'])) {
+            $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
+        }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
+        $fields = json_decode($request->getContent(), true);
+
+        $repeatMaterials = $this->getItemService()->findRepeatMaterial($questionBank['itemBankId'], $fields['items']);
+        if ($repeatMaterials) {
+            return $this->createJsonResponse([
+                'status' => true,
+                'repeatMaterials' => $repeatMaterials,
+                'importUrl' => $this->generateUrl('questions_import_save', [
+                    'token' => $token,
+                    'categoryId' => $request->query->get('categoryId', 0),
+                ]),
+                'returnUrl' => $this->filterRedirectUrl(
+                    $this->generateUrl('question_bank_manage_question_list', ['id' => $questionBank['itemBankId']])
+                ),
+            ]);
+        } else {
+            return $this->createJsonResponse([
+                'status' => false,
+                'importUrl' => $this->generateUrl('questions_import_save', [
+                    'token' => $token,
+                    'categoryId' => $request->query->get('categoryId', 0),
+                ]),
+            ]);
+        }
+    }
+
     /**
      * @return CourseService
      */
