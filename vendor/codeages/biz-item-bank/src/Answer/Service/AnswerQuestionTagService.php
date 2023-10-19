@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\ItemBank\AnswerQuestionTag\Service;
+namespace Codeages\Biz\ItemBank\Answer\Service;
 
 interface AnswerQuestionTagService
 {
@@ -9,4 +9,6 @@ interface AnswerQuestionTagService
     public function updateByAnswerRecordId($answerRecordId, $questionIds);
 
     public function deleteByAnswerRecordId($answerRecordId);
+    
+    public function getTagQuestionIdsByAnswerRecordId($answerRecordId);
 }
