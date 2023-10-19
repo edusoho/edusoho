@@ -269,6 +269,44 @@ class QuestionController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function repeatCheckingAction(Request $request, $id)
+    {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $fields = json_decode($request->getContent(), true);
+        foreach ($fields['questions'] as $item) {
+            $materialHash = md5($item['stem']);
+            $type = $item['answer_mode'];
+        }
+
+        $urlParams = [
+            'id' => $id,
+            'type' => $type,
+            'categoryId' => $request->query->get('categoryId', 0),
+        ];
+
+        $repeatMaterialCount = $this->getItemService()->countSingleMaterialRepeat($id, $materialHash);
+        if ($repeatMaterialCount) {
+            return $this->createJsonResponse([
+                'status' => true,
+                'saveUrl' => $this->filterRedirectUrl($this->generateUrl('question_bank_manage_question_create', $urlParams)),
+                'returnUrl' => $this->filterRedirectUrl($this->generateUrl('question_bank_manage_question_list', ['id' => $id])),
+            ]);
+        } else {
+            return $this->createJsonResponse([
+                'status' => false,
+                'saveUrl' => $this->filterRedirectUrl($this->generateUrl('question_bank_manage_question_create', $urlParams)),
+            ]);
+        }
+    }
+
     public function deleteQuestionsAction(Request $request, $id)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {

@@ -544,6 +544,11 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $typesNum;
     }
 
+    public function countSingleMaterialRepeat($bankId, $materialHash)
+    {
+        return $this->getItemDao()->count(['bank_id' => $bankId, 'material_hash'=> $materialHash]);
+    }
+
     protected function findQuestionsByItemId($itemId)
     {
         return $this->getQuestionDao()->findByItemId($itemId);
