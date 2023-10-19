@@ -12443,3 +12443,4 @@ sms.defence.request.log.disable_type.coordinate: 同一坐标多次请求
 sms.defence.request.log.disable_type.none: 无
 
 course.start_answer.all_question_deleted: 全部题目已被删除，请联系教师或管理员
+item_bank.access_cloud: 立即升级

@@ -30,7 +30,7 @@ class AnswerQuestionTagServiceImpl  extends BaseService implements AnswerQuestio
     {
         $answerQuestionTag = $this->getAnswerQuestionTagDao()->getByAnswerRecordId($answerRecordId);
 
-        return empty($answerQuestionTag) ? [] : $answerQuestionTag['tag_question_ids'];
+        return $answerQuestionTag['tag_question_ids'] ?? [];
     }
 
     /**
