@@ -72,7 +72,10 @@ class ManageController extends BaseController
             $fileSystem->dumpFile($data['cacheFilePath'], json_encode($questions));
         }
 
-        return $this->createJsonResponse(['status' => $result['status']]);
+        return $this->createJsonResponse([
+            'status' => $result['status'],
+            'progress' => $result['progress'],
+        ]);
     }
 
     public function saveImportQuestionsAction(Request $request, $token)
