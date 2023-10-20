@@ -279,7 +279,7 @@ class QuestionController extends BaseController
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
-        $material = $request->query->get('material');
+        $material = $this->purifyHtml($request->request->get('material'));
 
         if ($this->getItemService()->isMaterialDuplicative($id, $material)) {
             return $this->createJsonResponse(true);
