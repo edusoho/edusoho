@@ -31,7 +31,7 @@ class QuestionParserController extends BaseController
             return $this->render($templateInfo['readErrorModalTemplate'], ['type' => 'length']);
         }
 
-        if ('docx' != FileToolkit::getFileExtension($file)) {
+        if (!$this->isFileExtensionValid($file)) {
             return $this->render($templateInfo['readErrorModalTemplate']);
         }
 
@@ -89,6 +89,13 @@ class QuestionParserController extends BaseController
         $filename = substr($filename, 0, strripos($filename, '.'));
 
         return mb_strlen($filename) <= 50;
+    }
+
+    protected function isFileExtensionValid($file)
+    {
+        $extension = FileToolkit::getFileExtension($file);
+
+        return in_array($extension, ['docx', 'xlsx']);
     }
 
     protected function parseQuestionThenMakeToken($questionBankId, $file)

@@ -2,13 +2,11 @@
 
 namespace AppBundle\Controller\Question;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Question\QuestionParseAdapter;
+use Biz\Question\Adapter\QuestionParseAdapter;
 use Biz\Question\QuestionParseClient;
-use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
@@ -51,20 +49,6 @@ class ManageController extends BaseController
         return $this->createJsonResponse($courseTasks);
     }
 
-    public function showQuestionTypesNumAction(Request $request, $courseSetId)
-    {
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $conditions = $request->request->all();
-        $conditions['courseSetId'] = $courseSetId;
-        $conditions['parentId'] = 0;
-
-        $typesNum = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
-        $typesNum = ArrayToolkit::index($typesNum, 'type');
-
-        return $this->createJsonResponse($typesNum);
-    }
-
     public function reEditAction(Request $request, $token)
     {
         return $this->forward('AppBundle:Question/QuestionParser:reEdit', [
@@ -78,13 +62,11 @@ class ManageController extends BaseController
     {
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
         $data = $token['data'];
-        $client = new QuestionParseClient();
-        $results = $client->getJob($data['jobId']);
+        $results = $this->getQuestionParseClient()->getJob($data['jobId']);
         $results = array_column($results, null, 'no');
         $result = $results[$data['jobId']];
-        if ($result['status'] == 'finished') {
-            $adapter = new QuestionParseAdapter();
-            $questions = $adapter->adapt($result['result']);
+        if ('finished' == $result['status']) {
+            $questions = $this->getQuestionParseAdapter()->adapt($result['result']);
             $questions = $this->getItemParser()->formatData($questions);
             $fileSystem = new Filesystem();
             $fileSystem->dumpFile($data['cacheFilePath'], json_encode($questions));
@@ -105,6 +87,16 @@ class ManageController extends BaseController
         $this->getItemService()->importItems($postData['items'], $questionBank['itemBankId']);
 
         return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_question_list', ['id' => $data['questionBankId']])]);
+    }
+
+    protected function getQuestionParseClient()
+    {
+        return new QuestionParseClient();
+    }
+
+    protected function getQuestionParseAdapter()
+    {
+        return new QuestionParseAdapter();
     }
 
     /**
@@ -131,14 +123,6 @@ class ManageController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
-    }
-
-    /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
     }
 
     /**
