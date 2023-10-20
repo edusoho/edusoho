@@ -68,6 +68,7 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
                 'type in (:types)',
                 'material_hash in (:material_hashs)',
                 'id not in (:exclude_ids)',
+                'material_hash = :material_hash',
             ],
         ];
     }

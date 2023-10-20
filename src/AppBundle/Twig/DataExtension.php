@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 use AppBundle\Common\ExtensionManager;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\Service\EduCloudService;
 use Biz\EduCloud\Service\ConsultService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
@@ -104,13 +105,9 @@ class DataExtension extends \Twig_Extension
         try {
             $settings = $this->getSettingService()->get('storage', []);
             $sdk = new ESCloudSDK(['access_key' => $settings['cloud_access_key'], 'secret_key' => $settings['cloud_secret_key']]);
-            $service = $sdk->getInspectionService();
-            $account = $service->getAccount();
-            if (!empty($account['enabled'])) {
-                return true;
-            } else {
-                return false;
-            }
+            $account = $sdk->getInspectionService()->getAccount();
+
+            return !empty($account['enabled']);
         } catch (\Exception $e) {
             return false;
         }
@@ -129,7 +126,7 @@ class DataExtension extends \Twig_Extension
 
         $setting = $this->getSettingService()->get('merchant_setting');
 
-        return empty($setting['coop_mode']) ? true : in_array($setting['coop_mode'], $allowCoopMode);
+        return empty($setting['coop_mode']) || in_array($setting['coop_mode'], $allowCoopMode);
     }
 
     public function getCloudConsultPath()
@@ -148,6 +145,9 @@ class DataExtension extends \Twig_Extension
         return empty($cloudConsult['cloud_consult_js']) ? false : $cloudConsult['cloud_consult_js'];
     }
 
+    /**
+     * @return EduCloudService
+     */
     private function getEduCloudService()
     {
         return $this->biz->service('CloudPlatform:EduCloudService');

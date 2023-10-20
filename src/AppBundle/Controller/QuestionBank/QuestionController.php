@@ -269,6 +269,25 @@ class QuestionController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function checkQuestionDuplicativeAction(Request $request, $id)
+    {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+        $material = $request->request->get('material');
+
+        if ($this->getItemService()->isMaterialDuplicative($id, $material)) {
+            return $this->createJsonResponse(true);
+        } else {
+            return $this->createJsonResponse(false);
+        }
+    }
+
     public function deleteQuestionsAction(Request $request, $id)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {

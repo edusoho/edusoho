@@ -15,7 +15,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\AnswerQuestionTag\Service\AnswerQuestionTagService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionTagService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService;
@@ -966,6 +966,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'section_responses' => [],
         ];
 
+        $tagQuestionIds = $answerRecord['isTag']
+            ? $this->getAnswerQuestionTagService()->getTagQuestionIdsByAnswerRecordId($answerRecord['id'])
+            : [];
         $sectionResponses = ArrayToolkit::group($answerQuestionReports, 'section_id');
         $attachments = ArrayToolkit::group($attachments, 'target_id');
         foreach ($sectionResponses as $sectionId => $sectionResponse) {
@@ -976,6 +979,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                         'question_id' => intval($questionResponse['question_id']),
                         'response' => $questionResponse['response'],
                         'attachments' => empty($attachments[$questionResponse['id']]) ? [] : $attachments[$questionResponse['id']],
+                        'isTag' => in_array($questionResponse['question_id'], $tagQuestionIds),
                     ];
                 }
                 $itemResponse = [
@@ -1345,6 +1349,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
      */
     protected function getAnswerQuestionTagService()
     {
-        return $this->biz->service('ItemBank:AnswerQuestionTag:AnswerQuestionTagService');
+        return $this->biz->service('ItemBank:Answer:AnswerQuestionTagService');
     }
 }
