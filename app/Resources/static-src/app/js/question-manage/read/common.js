@@ -95,7 +95,6 @@ const registerEvent = function($importBox) {
       processData: false,
       contentType: false,
       success: function(res) {
-        $uploadBtn.button('reset');
         if (res.success === true) {
           readSuccessCallBack(res);
         } else {
@@ -112,11 +111,37 @@ const registerEvent = function($importBox) {
   }
 
   function readSuccessCallBack(res) {
-    window.location.href = res.url;
+    let pending = false;
+    let interval = setInterval(() => {
+      if (pending) {
+        return;
+      }
+      pending = true;
+      $.ajax({
+        type: 'get',
+        url: res.progressUrl,
+        success: resp => {
+          pending = false;
+          if (resp.status === 'finished') {
+            clearInterval(interval);
+            $uploadBtn.button('reset');
+            window.location.href = res.url;
+          }
+        },
+        error: err => {
+          clearInterval(interval);
+          $uploadBtn.button('reset');
+          $inputFile.val('');
+          err = err.responseJSON.error;
+          console.log('Read error:', err);
+        }
+      });
+    }, 1000);
   }
 
   // 读取失败回调
   function readErrorCallBack(res) {
+    $uploadBtn.button('reset');
     $oldTemplate.addClass('hidden');
     $step1View.addClass('hidden');
     $step3View.html(res).removeClass('hidden');
