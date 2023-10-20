@@ -1506,6 +1506,15 @@ course.question_manage.import.download_template: Download template
 course.question_manage.import.doc_to_docx_hint: How doc convert to docx?
 question_manage.import.doc_to_docx_hint.tutorial: Tutorial
 course.question_manage.import.upload_document: Upload
+question_manage.import.click: Click
+question_manage.import.description.supported: 'Import Description: Upload is supported'
+question_manage.import.formate.text: Format document
+question_manage.import.format.conversion: Format conversion
+question_manage.import.new.version.introduction: New version import function introduction
+question_manage.import.administrator.tip1: Identify and import common formulas, tables, and special characters
+question_manage.import.administrator.tip2: Improve import recognition accuracy and make topic import easier
+question_manage.import.non-administrator-tip: To upgrade the cloud capability, you need to contact the super administrator for the import function
+question_manage.import.non.administrator.close.btn: I know
 course.question_manage.import.reupload_document: Re-Upload
 course.question_manage.import.uploading: Uploading...
 course.question_manage.import.use_old_template: Use Old Template

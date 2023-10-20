@@ -1,0 +1,108 @@
+// 题目导入、试卷导入模态框共用
+.questions-input-modal {
+  .modal-content {
+    width: 460px;
+    transform: translateX(10px);
+
+    .modal-header {
+      padding: 12px 20px;
+
+      .modal-title {
+        height: 26px;
+        line-height: 26px;
+        font-size: 18px;
+        font-weight: 500;
+        color: #37393D;
+        text-align: center;
+      }
+    }
+    .modal-body {
+      border-top: 1px solid #EFF0F5;
+      padding: 20px;
+
+      .modal-body-contnet {
+        padding: 30px 16px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        border: 1px dashed #E5E6EB;
+        background: #FAFAFA;
+        cursor: pointer;
+
+        .upload-img {
+          width: 105px;
+        }
+
+        .upload-tips {
+          font-size: 14px;
+          height: 22px;
+          line-height: 22px;
+          color: #919399;
+        }
+
+        .upload-text {
+          font-size: 14px;
+          line-height: 22px;
+          color: #37393D;
+        }
+      }
+
+      .format-conversion {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 8px;
+
+        .format-span {
+          align-items: center;
+        }
+      }
+
+      .import-questions-content {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+
+        .view-the-tutorial {
+          float: right;
+        }
+      }
+      .import-info {
+        display: inline-block;
+        height: 22px;
+        line-height: 22px; 
+        font-size: 14px;
+        color: #37393D;
+        font-size: 14px;
+      }
+      .anchor-point {
+        display: inline-block;
+        margin: 6px;
+        width: 6px;
+        height: 6px;
+        background-color: #333;
+        border-radius: 50%;
+      }
+    }
+    .modal-footer {
+      padding: 24px;
+      text-align: center;
+
+      .footer-import-rule {
+        display: inline-block;
+        height: 36px;
+        padding: 6px 32px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+        border: 1px solid @brand-primary;
+        background: @brand-primary;
+
+        color: #FFF;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 22px;
+      }
+    }
+  }
+}
