@@ -546,6 +546,7 @@ class ItemServiceImpl extends BaseService implements ItemService
 
     public function isMaterialDuplicative($bankId, $material)
     {
+        $material = $this->purifyHtml($material);
         $materialHash = md5($material);
         $count = $this->getItemDao()->count(['bank_id' => $bankId, 'material_hash'=> $materialHash, 'material' => $material]);
         if ($count) {
@@ -582,6 +583,11 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
 
         return false;
+    }
+
+    protected function purifyHtml($html)
+    {
+        return $this->biz['item_bank_html_helper']->purify($html);
     }
 
     /**
