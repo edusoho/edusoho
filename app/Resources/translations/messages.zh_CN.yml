@@ -4887,8 +4887,8 @@ change_log: 更新日志
 # common
 common.courseStatus.draft: 未发布
 common.courseStatus.published: 已发布
-common.courseStatus.show: 展示
-common.courseStatus.hide: 隐藏
+common.course.showable.show: 展示
+common.course.showable.hide: 隐藏
 common.courseStatus.closed: 已关闭
 common.classroomStatus.draft: 未发布
 common.classroomStatus.published: 已发布

@@ -4163,8 +4163,8 @@ change_log.edusoho_title: 'EduSoho changelog'
 change_log: Changelog
 common.courseStatus.draft: Draft
 common.courseStatus.published: Published
-common.courseStatus.show: Show
-common.courseStatus.hide: Hide
+common.course.showable.show: show
+common.course.showable.hide: hide
 common.courseStatus.closed: Closed
 common.classroomStatus.draft: Draft
 common.classroomStatus.published: Published
