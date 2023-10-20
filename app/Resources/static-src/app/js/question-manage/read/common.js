@@ -1,7 +1,9 @@
+import { event } from "jquery";
+
 const registerEvent = function($importBox) {
   let fileName;
   let $form = $('#import-step-form');
-
+  
   let $uploadBtn = $('#upload-btn');
   let $inputFile = $('#form_file');
   let $uploadFileBox = $('#upload-file-box');
@@ -12,6 +14,11 @@ const registerEvent = function($importBox) {
   let $step3View = $('.js-step3-view');
   let $step2Btns = $('.js-step2-btn');
   let $step3Btns = $('.js-step3-btn');
+  const $jsUploadHotSpot = $('.js-upload-hot-spot')
+
+  $jsUploadHotSpot.on('click',()=> {
+    $inputFile.click()
+  })
 
   $inputFile.on('change', e => {
     let fileList = e.currentTarget.files;
