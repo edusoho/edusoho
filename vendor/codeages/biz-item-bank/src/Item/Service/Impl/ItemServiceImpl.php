@@ -544,11 +544,11 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $typesNum;
     }
 
-    public function isSingleMaterialDuplicative($bankId, $material)
+    public function isMaterialDuplicative($bankId, $material)
     {
         $materialHash = md5($material);
         $count = $this->getItemDao()->count(['bank_id' => $bankId, 'material_hash'=> $materialHash, 'material' => $material]);
-        if ($count > 1) {
+        if ($count) {
             return true;
         }
 

@@ -269,7 +269,7 @@ class QuestionController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function singleQuestionDuplicativeCheckingAction(Request $request, $id)
+    public function checkQuestionDuplicativeAction(Request $request, $id)
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
         if (empty($questionBank['itemBank'])) {
@@ -279,12 +279,12 @@ class QuestionController extends BaseController
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
-        $material = $request->query->get('stem');
+        $material = $request->query->get('material');
 
-        if ($this->getItemService()->isSingleMaterialDuplicative($id, $material)) {
-            return $this->createJsonResponse(['status' => true]);
+        if ($this->getItemService()->isMaterialDuplicative($id, $material)) {
+            return $this->createJsonResponse(true);
         } else {
-            return $this->createJsonResponse(['status' => false]);
+            return $this->createJsonResponse(false);
         }
     }
 
