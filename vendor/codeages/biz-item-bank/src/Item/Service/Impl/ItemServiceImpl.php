@@ -569,6 +569,17 @@ class ItemServiceImpl extends BaseService implements ItemService
         return empty($allDuplicatedIds) ? [] : $allDuplicatedIds;
     }
 
+    public function isMaterialDuplicative($bankId, $material)
+    {
+        $materialHash = md5($material);
+        $count = $this->getItemDao()->count(['bank_id' => $bankId, 'material_hash'=> $materialHash, 'material' => $material]);
+        if ($count) {
+            return true;
+        }
+
+        return false;
+    }
+
     protected function findQuestionsByItemId($itemId)
     {
         return $this->getQuestionDao()->findByItemId($itemId);

@@ -102,8 +102,8 @@ class EduCloudController extends BaseController
         return $this->render('admin-v2/cloud-center/edu-cloud/overview/index.html.twig', [
             'isBinded' => $isBinded,
             'overview' => $overview,
-            'paidService' => isset($paidService) ? $paidService : false,
-            'unPaidService' => isset($unPaidService) ? $unPaidService : false,
+            'paidService' => $paidService ?? false,
+            'unPaidService' => $unPaidService ?? false,
         ]);
     }
 
