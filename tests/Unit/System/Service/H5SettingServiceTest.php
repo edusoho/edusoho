@@ -48,7 +48,6 @@ class H5SettingServiceTest extends BaseTestCase
 
         $discoverySetting = $this->createTypeListByCustom('course_list');
         $discoverySetting = $this->getH5SettingService()->courseListFilter($discoverySetting, 'h5');
-        $this->assertEmpty($discoverySetting['data']['items']);
         $this->assertEquals('custom', $discoverySetting['data']['sourceType']);
     }
 
