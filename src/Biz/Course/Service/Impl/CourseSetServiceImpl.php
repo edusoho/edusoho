@@ -663,7 +663,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 }
             }
 
-            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'published', 'showable' => '0']);
+            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'published', 'showable' => '1']);
             $this->getCourseSetGoodsMediator()->onUpdateNormalData($courseSet);
             $this->getCourseSetGoodsMediator()->onPublish($courseSet);
 

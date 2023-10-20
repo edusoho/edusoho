@@ -830,9 +830,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             $id,
             [
                 'status' => 'published',
-                'showable' => '0',
+                'showable' => '1',
             ]
         );
+        $this->getCourseSetService()->publishCourseSet($course['courseSetId']);
         $this->dispatchEvent('course.publish', $course);
 
         $this->getCourseLessonService()->publishLessonByCourseId($course['id']);
