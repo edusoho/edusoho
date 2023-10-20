@@ -395,18 +395,6 @@ class ManageController extends BaseController
         return ExportHelp::exportCsv($request, $fileName);
     }
 
-    public function buildCheckAction(Request $request, $courseSetId, $type)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $data = $request->request->all();
-        $data['courseSetId'] = $courseSet['id'];
-
-        $result = $this->getTestpaperService()->canBuildTestpaper($type, $data);
-
-        return $this->createJsonResponse($result);
-    }
-
     public function infoAction(Request $request, $id)
     {
         $this->getCourseSetService()->tryManageCourseSet($id);
@@ -811,45 +799,6 @@ class ManageController extends BaseController
         return $data;
     }
 
-    protected function getCheckedEssayQuestions($questions)
-    {
-        $essayQuestions = [];
-
-        $essayQuestions['essay'] = !empty($questions['essay']) ? $questions['essay'] : [];
-
-        if (empty($questions['material'])) {
-            return $essayQuestions;
-        }
-
-        foreach ($questions['material'] as $questionId => $question) {
-            $questionTypes = ArrayToolkit::column(empty($question['subs']) ? [] : $question['subs'], 'type');
-
-            if (in_array('essay', $questionTypes)) {
-                $essayQuestions['material'][$questionId] = $question;
-            }
-        }
-
-        return $essayQuestions;
-    }
-
-    protected function findRelatedData($activity, $paper)
-    {
-        $relatedData = [];
-        $userFirstResults = $this->getTestpaperService()->findExamFirstResults($paper['id'], $paper['type'], $activity['id']);
-
-        $relatedData['total'] = count($userFirstResults);
-
-        $userFirstResults = ArrayToolkit::group($userFirstResults, 'status');
-        $finishedResults = empty($userFirstResults['finished']) ? [] : $userFirstResults['finished'];
-
-        $relatedData['finished'] = count($finishedResults);
-        $scores = array_sum(ArrayToolkit::column($finishedResults, 'score'));
-        $avg = empty($relatedData['finished']) ? 0 : $scores / $relatedData['finished'];
-        $relatedData['avgScore'] = number_format($avg, 1);
-
-        return $relatedData;
-    }
-
     protected function findTestpapersStatusNum($tasks)
     {
         $resultStatusNum = [];
@@ -871,18 +820,6 @@ class ManageController extends BaseController
         }
 
         return $resultStatusNum;
-    }
-
-    protected function getRedirectRoute($mode, $type)
-    {
-        $routes = [
-            'nextCheck' => [
-                'course' => 'course_manage_exam_next_result_check',
-                'classroom' => 'classroom_manage_exam_next_result_check',
-            ],
-        ];
-
-        return $routes[$mode][$type];
     }
 
     protected function getQuestionTypes()
@@ -907,32 +844,11 @@ class ManageController extends BaseController
     }
 
     /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
-    }
-
-    /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
-    }
-
-    /**
      * @return CategoryService
      */
     protected function getQuestionCategoryService()
     {
         return $this->createService('Question:CategoryService');
-    }
-
-    protected function getQuestionAnalysisService()
-    {
-        return $this->createService('Question:QuestionAnalysisService');
     }
 
     /**

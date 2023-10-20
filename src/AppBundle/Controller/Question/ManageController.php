@@ -2,16 +2,18 @@
 
 namespace AppBundle\Controller\Question;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Question\Service\QuestionService;
+use Biz\Question\Adapter\QuestionParseAdapter;
+use Biz\Question\QuestionParseClient;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
+use Codeages\Biz\ItemBank\Item\ItemParser;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
 class ManageController extends BaseController
@@ -47,26 +49,32 @@ class ManageController extends BaseController
         return $this->createJsonResponse($courseTasks);
     }
 
-    public function showQuestionTypesNumAction(Request $request, $courseSetId)
-    {
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $conditions = $request->request->all();
-        $conditions['courseSetId'] = $courseSetId;
-        $conditions['parentId'] = 0;
-
-        $typesNum = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
-        $typesNum = ArrayToolkit::index($typesNum, 'type');
-
-        return $this->createJsonResponse($typesNum);
-    }
-
     public function reEditAction(Request $request, $token)
     {
         return $this->forward('AppBundle:Question/QuestionParser:reEdit', [
             'request' => $request,
             'token' => $token,
             'type' => 'item',
+        ]);
+    }
+
+    public function parseProgressAction($token)
+    {
+        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+        $data = $token['data'];
+        $results = $this->getQuestionParseClient()->getJob($data['jobId']);
+        $results = array_column($results, null, 'no');
+        $result = $results[$data['jobId']];
+        if ('finished' == $result['status']) {
+            $questions = $this->getQuestionParseAdapter()->adapt($result['result']);
+            $questions = $this->getItemParser()->formatData($questions);
+            $fileSystem = new Filesystem();
+            $fileSystem->dumpFile($data['cacheFilePath'], json_encode($questions));
+        }
+
+        return $this->createJsonResponse([
+            'status' => $result['status'],
+            'progress' => $result['progress'],
         ]);
     }
 
@@ -84,6 +92,26 @@ class ManageController extends BaseController
         return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_question_list', ['id' => $data['questionBankId']])]);
     }
 
+    protected function getQuestionParseClient()
+    {
+        return new QuestionParseClient();
+    }
+
+    protected function getQuestionParseAdapter()
+    {
+        return new QuestionParseAdapter();
+    }
+
+    /**
+     * @return ItemParser
+     */
+    protected function getItemParser()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['item_parser'];
+    }
+
     /**
      * @return CourseService
      */
@@ -98,14 +126,6 @@ class ManageController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
-    }
-
-    /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
     }
 
     /**

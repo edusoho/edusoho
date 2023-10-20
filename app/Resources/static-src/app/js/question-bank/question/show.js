@@ -59,6 +59,12 @@ class QuestionsShow {
     this.element.on('click','.js-update-btn', (event) => {
       this.onUpdateQuestion(event);
     });
+
+    $('.js-item-create').click(event => {
+      let categoryId = $('#select_category').val();
+      let importUrl = $(event.currentTarget).data('url');
+      location.href = importUrl + '&categoryId=' + categoryId;
+    });
   }
 
   initSelect() {

@@ -9,6 +9,7 @@ use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Dao\ItemDao;
 use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
 use Codeages\Biz\ItemBank\Item\Exception\ItemException;
+use Codeages\Biz\ItemBank\Item\ItemParser;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
@@ -98,16 +99,13 @@ class ItemServiceImpl extends BaseService implements ItemService
         if (!empty($resourcePath)) {
             $options = ['resourceTmpPath' => $resourcePath];
         }
-        $parser = $this->biz['item_parser'];
 
-        return $parser->read($wordPath, $options);
+        return $this->getItemParser()->read($wordPath, $options);
     }
 
     public function parseItems($text)
     {
-        $parser = $this->biz['item_parser'];
-
-        return $parser->parse($text);
+        return $this->getItemParser()->parse($text);
     }
 
     public function updateItem($id, $item)
@@ -611,6 +609,14 @@ class ItemServiceImpl extends BaseService implements ItemService
     protected function getItemProcessor($type)
     {
         return $this->biz['item_type_factory']->create($type);
+    }
+
+    /**
+     * @return ItemParser
+     */
+    protected function getItemParser()
+    {
+        return $this->biz['item_parser'];
     }
 
     /**
