@@ -4165,6 +4165,8 @@ change_log.edusoho_title: 'EduSoho changelog'
 change_log: Changelog
 common.courseStatus.draft: Draft
 common.courseStatus.published: Published
+common.course.showable.show: show
+common.course.showable.hide: hide
 common.courseStatus.closed: Closed
 common.classroomStatus.draft: Draft
 common.classroomStatus.published: Published
@@ -4412,6 +4414,7 @@ admin.course_manage.manage.price: Price
 admin.course_manage.manage.serialize_mode: 'Serialize Status'
 admin.course_manage.manage.status: Status
 admin.course_manage.manage.creator: Creator/Date
+admin.course_manage.manage.showable: IsShow
 admin.course_manage.manage.manage_btn: Config
 admin.course_manage.manage.empty: 'No record'
 admin.course_manage.manage.category: Category

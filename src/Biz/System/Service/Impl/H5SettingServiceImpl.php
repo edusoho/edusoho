@@ -109,10 +109,12 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    protected function appendLiveStatus($courses) {
+    protected function appendLiveStatus($courses)
+    {
         foreach ($courses as $key => &$course) {
             $course['liveStatus'] = $this->getCourseTaskService()->getRecentLiveTaskStatus($course['id']);
         }
+
         return $courses;
     }
 
@@ -200,7 +202,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function itemBankExerciseFilter($discoverySetting, $portal, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
-            $conditions = ['status' => 'published'];
+            $conditions = ['status' => 'published', 'showable' => 1];
             $discoverySetting['data']['categoryId'] > 0 && $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
 
             $sort = $this->getSortByStr($discoverySetting['data']['sort']);
@@ -374,7 +376,8 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function announcementFilter($discoverySetting, $portal, $usage = 'show'){
+    public function announcementFilter($discoverySetting, $portal, $usage = 'show')
+    {
         return $discoverySetting;
     }
 

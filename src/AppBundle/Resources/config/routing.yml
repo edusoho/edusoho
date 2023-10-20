@@ -3982,6 +3982,18 @@ item_bank_exercise_manage_chapter_exercise_unpublish:
         _controller: 'AppBundle:ItemBankExercise/ChapterExercise:unpublish'
     methods:
         - POST
+item_bank_exercise_manage_marketing_open_display:
+    path: '/item_bank_exercise/{exerciseId}/manage/marketing/open_display'
+    defaults:
+        _controller: 'AppBundle:ItemBankExercise/ExerciseManage:openDisplay'
+    methods:
+        - POST
+item_bank_exercise_manage_marketing_close_display:
+    path: '/item_bank_exercise/{exerciseId}/manage/marketing/close_display'
+    defaults:
+        _controller: 'AppBundle:ItemBankExercise/ExerciseManage:closeDisplay'
+    methods:
+        - POST
 item_bank_exercise_manage_marketing_info:
     path: '/item_bank_exercise/{exerciseId}/manage/marketing/info'
     defaults:
