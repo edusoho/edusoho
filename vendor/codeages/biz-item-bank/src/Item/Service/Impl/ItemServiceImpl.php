@@ -80,9 +80,6 @@ class ItemServiceImpl extends BaseService implements ItemService
                 $savedItem = $this->createItem($item, true);
                 $savedItems[] = array_merge($savedItems, $savedItem);
             }
-//            $materialHashs = array_column($savedItems, 'material_hash');
-//            $duplicatedItems = $this->getItemDao()->search(['material_hashs' => $materialHashs], [], 0, PHP_INT_MAX, ['id']);
-//            file_put_contents('/tmp/log', json_encode($duplicatedItems), 8);
 
             $this->getItemBankService()->updateItemNumAndQuestionNum($bankId);
             $this->getItemCategoryService()->buildItemNumAndQuestionNumBybankId($bankId);
