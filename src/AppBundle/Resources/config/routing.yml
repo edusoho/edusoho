@@ -3683,6 +3683,12 @@ question_bank_manage_question_delete:
     path: '/question_bank/{id}/question/{itemId}/delete'
     defaults:
         _controller: 'AppBundle:QuestionBank/Question:delete'
+question_bank_manage_check_question_duplicative:
+    path: '/question_bank/{id}/checkQuestionDuplicative'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/Question:checkQuestionDuplicative'
+    methods:
+        - POST
 question_bank_manage_question_export:
     path: '/question_bank/{id}/questions/export'
     defaults:
