@@ -544,22 +544,29 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $typesNum;
     }
 
-    public function findDuplicatedMaterial($bankId, $items)
+    public function findDuplicatedMaterialIds($bankId, $items)
     {
-        $materialHash = [];
+        $materialHashes = [];
+        $materials = [];
         foreach ($items as $item) {
-            foreach ($item['questions'] as $question) {
-                $materialHash[] = md5($question['stem']);
+            $item['bank_id'] = $bankId;
+            $item = $this->getItemProcessor($item['type'])->process($item);
+            $materialHashes[] = md5($item['material']);
+            $materials[] = $item['material'];
+        }
+
+        $selfDuplicatedIds = [];
+        foreach (array_count_values($materials) as $value => $count) {
+            if ($count > 1) {
+                $selfDuplicatedIds = array_keys($materials, $value);
             }
         }
-        $duplicatedMaterialHashes = array_column($this->getItemDao()->findDuplicatedMaterialHashByBankId($bankId), 'material_hash');
-        $materialHashes = array_intersect($duplicatedMaterialHashes, $materialHash);
 
-        if (empty($materialHashes)) {
-            return [];
-        }
+        $duplicatedMaterials = array_column($this->getItemDao()->findDuplicatedMaterial($bankId, $materialHashes), 'material');
+        $duplicatedIds = array_keys(array_intersect($materials, $duplicatedMaterials));
+        $allDuplicatedIds = array_values(array_unique(array_merge($selfDuplicatedIds, $duplicatedIds)));
 
-        return $this->getItemDao()->findDuplicatedMaterial($bankId, $materialHashes);
+        return empty($allDuplicatedIds) ? [] : $allDuplicatedIds;
     }
 
     protected function findQuestionsByItemId($itemId)

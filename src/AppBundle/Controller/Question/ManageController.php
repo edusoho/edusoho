@@ -84,21 +84,21 @@ class ManageController extends BaseController
         return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_question_list', ['id' => $data['questionBankId']])]);
     }
 
-    public function duplicatedCheckingAction(Request $request, $token)
+    public function checkDuplicatedQuestionsAction(Request $request, $token)
     {
-        $verifiedToken = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
-        $data = $verifiedToken['data'];
+        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+        $data = $token['data'];
         if (!$this->getQuestionBankService()->canManageBank($data['questionBankId'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
         $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
         $fields = json_decode($request->getContent(), true);
 
-        $duplicatedMaterials = $this->getItemService()->findDuplicatedMaterial($questionBank['itemBankId'], $fields['items']);
-        if ($duplicatedMaterials) {
+        $duplicatedMaterialIds = $this->getItemService()->findDuplicatedMaterialIds($questionBank['itemBankId'], $fields['items']);
+        if ($duplicatedMaterialIds) {
             return $this->createJsonResponse([
                 'status' => true,
-                'repeatMaterials' => $duplicatedMaterials,
+                'duplicatedMaterialIds' => $duplicatedMaterialIds,
             ]);
         } else {
             return $this->createJsonResponse(['status' => false]);

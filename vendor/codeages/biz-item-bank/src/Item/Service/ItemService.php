@@ -60,5 +60,5 @@ interface ItemService
 
     public function countItemTypesNum($items);
     
-    public function findRepeatMaterial($bankId, $items);
+    public function findDuplicatedMaterialIds($bankId, $items);
 }
