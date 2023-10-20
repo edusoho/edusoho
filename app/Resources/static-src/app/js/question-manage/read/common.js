@@ -1,5 +1,3 @@
-import { event } from "jquery";
-
 const registerEvent = function($importBox) {
   let fileName;
   let $form = $('#import-step-form');
