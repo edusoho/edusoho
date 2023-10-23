@@ -22,6 +22,8 @@
           <div class="mtl question-list-content">
             {% include 'question-bank/question/question-list.html.twig' %}
           </div>
+          <input type="hidden" name="accessCloud" value="{{ cloudStatus() }}">
+          <input type="hidden" name="canManageCloud" value="{{ has_permission('admin_v2_cloud_center') }}">
         </div>
       </div>
     {% endblock %}

@@ -3657,6 +3657,10 @@ question_bank_manage_question_show_ajax:
     path: '/question_bank/{id}/questions/show/ajax'
     defaults:
         _controller: 'AppBundle:QuestionBank/Question:getQuestionsHtml'
+question_bank_manage_import_intro:
+    path: '/question_bank/import_intro'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/Question:importIntro'
 question_bank_manage_question_import:
     path: '/question_bank/{id}/question/import'
     defaults:
