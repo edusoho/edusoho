@@ -69,6 +69,8 @@ class ManageController extends BaseController
         $conditions = [
             'courseIds' => empty($courseIds) ? [-1] : $courseIds,
             'type' => $type,
+            'titleLike' => $this->purifyHtml($request->query->get('title')),
+            'categoryId' => $request->query->get('categoryId'),
         ];
 
         $paginator = new Paginator(
