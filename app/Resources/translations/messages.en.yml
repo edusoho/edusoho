@@ -4171,6 +4171,8 @@ common.courseStatus.closed: Closed
 common.classroomStatus.draft: Draft
 common.classroomStatus.published: Published
 common.classroomStatus.closed: Closed
+common.classroom.showable.show: show
+common.classroom.showable.hide: hide
 common.fileType.video: Video
 common.fileType.audio: Audio
 common.fileType.document: Document
@@ -4738,6 +4740,7 @@ admin.classroom_manage.manage.student_number_th: 'Student Number'
 admin.classroom_manage.manage.price_th: Price
 admin.classroom_manage.manage.creator: Creator/Date
 admin.classroom_manage.manage.status_th: Status
+admin.classroom_manage.manage.showable: isShow
 admin.classroom_manage.manage.operate_th: Action
 admin.classroom_manage.manage.empty: 'No %name% Record!'
 admin.classroom_manage.manage.category: Category

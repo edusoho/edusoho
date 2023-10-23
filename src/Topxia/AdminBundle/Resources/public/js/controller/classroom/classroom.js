@@ -6,7 +6,7 @@ define(function (require, exports, module) {
   exports.run = function () {
     var $table = $('#classroom-table');
 
-    $table.on('click', '.close-classroom,.open-classroom,.cancel-recommend-classroom', function () {
+    $table.on('click', '.close-classroom,.open-classroom,.cancel-recommend-classroom,.hide-classroom,.show-classroom', function () {
       var $trigger = $(this);
       if (!confirm($trigger.attr('title') + Translator.trans('admin.classroom.operation_hint'))) {
         return;

@@ -66,6 +66,18 @@
   </td>
 
   <td>
+    {% if classroom.status!='closed' %}
+      {% if classroom.showable == 1 %}
+        {{ 'common.classroom.showable.show'|trans }}
+      {% else %}
+        {{ 'common.classroom.showable.hide'|trans }}
+      {% endif %}
+    {% else %}
+      <span class="color-gray"> - </span>
+    {% endif %}
+  </td>
+
+  <td>
     {{ admin_macro.user_link(user|default) }}
     <br>
     <span class="text-muted text-sm">{{ classroom.createdTime|date('Y-n-d H:i') }}</span>
