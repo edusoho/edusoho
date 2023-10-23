@@ -62,6 +62,11 @@ class QuestionController extends BaseController
         ]);
     }
 
+    public function importIntroAction()
+    {
+        return $this->render('question-bank/question/import-intro-modal.html.twig');
+    }
+
     public function importAction(Request $request, $id)
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
