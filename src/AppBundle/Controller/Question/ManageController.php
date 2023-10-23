@@ -103,14 +103,10 @@ class ManageController extends BaseController
         $fields = json_decode($request->getContent(), true);
 
         $duplicatedMaterialIds = $this->getItemService()->findDuplicatedMaterialIds($questionBank['itemBankId'], $fields['items']);
-        if ($duplicatedMaterialIds) {
-            return $this->createJsonResponse([
-                'status' => true,
-                'duplicatedMaterialIds' => $duplicatedMaterialIds,
-            ]);
-        } else {
-            return $this->createJsonResponse(['status' => false]);
-        }
+
+        return $this->createJsonResponse([
+            'duplicatedIds' => $duplicatedMaterialIds,
+        ]);
     }
 
     protected function getQuestionParseClient()
