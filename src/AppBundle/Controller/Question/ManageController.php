@@ -71,6 +71,12 @@ class ManageController extends BaseController
             $fileSystem = new Filesystem();
             $fileSystem->dumpFile($data['cacheFilePath'], json_encode($questions));
         }
+        if ('failed' == $result['status']) {
+            return $this->createJsonResponse([
+                'status' => $result['status'],
+                'errorHtml' => $this->renderView('question-manage/read-error.html.twig'),
+            ]);
+        }
 
         return $this->createJsonResponse([
             'status' => $result['status'],

@@ -27,10 +27,6 @@ class QuestionParserController extends BaseController
 
         $file = $request->files->get('importFile');
 
-        if (!$this->isFilenameValid($file->getClientOriginalName())) {
-            return $this->render($templateInfo['readErrorModalTemplate'], ['type' => 'length']);
-        }
-
         if (!$this->isFileExtensionValid($file)) {
             return $this->render($templateInfo['readErrorModalTemplate']);
         }
@@ -82,13 +78,6 @@ class QuestionParserController extends BaseController
             'type' => $type,
             'categoryId' => $categoryId,
         ]);
-    }
-
-    protected function isFilenameValid($filename)
-    {
-        $filename = substr($filename, 0, strripos($filename, '.'));
-
-        return mb_strlen($filename) <= 50;
     }
 
     protected function isFileExtensionValid($file)

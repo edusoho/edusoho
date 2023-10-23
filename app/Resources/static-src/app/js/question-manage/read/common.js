@@ -1,7 +1,7 @@
-const registerEvent = function($importBox) {
+const registerEvent = function ($importBox) {
   let fileName;
   let $form = $('#import-step-form');
-  
+
   let $uploadBtn = $('#upload-btn');
   let $inputFile = $('#form_file');
   let $uploadFileBox = $('#upload-file-box');
@@ -19,11 +19,11 @@ const registerEvent = function($importBox) {
   const $tutorialLink = $('.js-tutorial-link')
   const $docxLink = $('.js-DOCX-link')
   const $xlsxLink = $('.js-XLSX-link')
-  const $uploadImg = $('.js-uploda-img') 
-  const $uploadSuccessfulImg = $('.js-upload-successful-img') 
+  const $uploadImg = $('.js-uploda-img')
+  const $uploadSuccessfulImg = $('.js-upload-successful-img')
   const $uploadSuccessfulText = $('.js-upload-successful-text')
-  
-  $jsUploadHotSpot.on('click',()=> {
+
+  $jsUploadHotSpot.on('click', () => {
     $inputFile.click()
   })
 
@@ -42,33 +42,33 @@ const registerEvent = function($importBox) {
   });
   // 拖拽上传
   $uploadFileBox.on({
-    dragleave: function(e) { // 拖出
+    dragleave: function (e) { // 拖出
       e.preventDefault();
       e.stopPropagation();
     },
-    drop: function(e) { // 拖进后释放
+    drop: function (e) { // 拖进后释放
       e.preventDefault();
       e.stopPropagation();
     },
-    dragenter: function(e) {    //拖进
+    dragenter: function (e) {    //拖进
       e.preventDefault();
       e.stopPropagation();
     },
-    dragover: function(e) {    //拖着不动
+    dragover: function (e) {    //拖着不动
       e.preventDefault();
       e.stopPropagation();
     }
   });
 
-  uploadFileBoxEl.addEventListener('dragenter', function(e) {
+  uploadFileBoxEl.addEventListener('dragenter', function (e) {
     $uploadFileBox.toggleClass('bg-primary-light');
   }, false);
 
-  uploadFileBoxEl.addEventListener('dragleave', function(e) {
+  uploadFileBoxEl.addEventListener('dragleave', function (e) {
     $uploadFileBox.toggleClass('bg-primary-light');
   }, false);
 
-  uploadFileBoxEl.addEventListener('drop', function(e) {
+  uploadFileBoxEl.addEventListener('drop', function (e) {
     $uploadFileBox.removeClass('bg-primary-light');
     const fileList = e.dataTransfer.files;
 
@@ -88,7 +88,7 @@ const registerEvent = function($importBox) {
 
   // 读取文件
   function readFile(data) {
-    if(!data) {
+    if (!data) {
       return false;
     }
 
@@ -102,7 +102,7 @@ const registerEvent = function($importBox) {
     $tutorialLink.addClass('a-not-click')
     $docxLink.addClass('a-not-click')
     $xlsxLink.addClass('a-not-click')
-    $importRuleBtn.attr('disabled',true)
+    $importRuleBtn.attr('disabled', true)
     $importRuleBtn.addClass('import-btn-disabled')
 
     $.ajax({
@@ -112,14 +112,14 @@ const registerEvent = function($importBox) {
       cache: false,
       processData: false,
       contentType: false,
-      success: function(res) {
+      success: function (res) {
         if (res.success === true) {
           readSuccessCallBack(res);
         } else {
           readErrorCallBack(res);
         }
       },
-      error: function(err) {
+      error: function (err) {
         $inputFile.val('');
         err = err.responseJSON.error;
         console.log('Read error:', err);
@@ -140,23 +140,23 @@ const registerEvent = function($importBox) {
         success: resp => {
           pending = false;
 
-          $uploadProgress.attr("value",resp.progress);
-          
+          if (resp.status === 'failed') {
+            clearInterval(interval);
+            readErrorCallBack(resp.errorHtml);
+            return;
+          }
+          $uploadProgress.attr('value', resp.progress);
+
           if (resp.status === 'finished') {
-            $uploadImg.addClass('hidden')
+            $uploadImg.addClass('hidden');
             $uploadSuccessfulImg.removeClass('hidden');
             $uploadProgress.addClass('hidden');
             $uploadSuccessfulText.removeClass('hidden');
             clearInterval(interval);
 
-            setTimeout(() =>{
+            setTimeout(() => {
               window.location.href = res.url;
-            },1000)
-          }
-          if (resp.status === "failed") {
-            clearInterval(interval);
-            readErrorCallBack(res)
-            return
+            }, 1000);
           }
         },
         error: err => {
@@ -169,7 +169,6 @@ const registerEvent = function($importBox) {
     }, 1000);
   }
 
-
   // 读取失败回调
   function readErrorCallBack(res) {
     $uploadBtn.button('reset');
@@ -177,10 +176,10 @@ const registerEvent = function($importBox) {
     $step1View.addClass('hidden');
     $step3View.html(res).removeClass('hidden');
     $step3Btns.removeClass('hidden');
-    $importRuleBtn.hide()
+    $importRuleBtn.hide();
   }
 
-  $oldTemplate.click(function() {
+  $oldTemplate.click(function () {
     if ('1' == $(this).data('need-upgrade')) {
       $('#modal').modal('hide');
       cd.confirm({
@@ -199,14 +198,14 @@ const registerEvent = function($importBox) {
     $.ajax({
       type: 'get',
       url: $form.data('plumberUrl'),
-    }).done(function(resp) {
+    }).done(function (resp) {
       let $modal = $('#modal');
       $modal.html(resp);
     });
   });
 
   // 重新上传
-  $('#re-import-btn').click(function() {
+  $('#re-import-btn').click(function () {
     $oldTemplate.removeClass('hidden');
     $step1View.removeClass('hidden');
     $step2View.addClass('hidden');
@@ -214,7 +213,7 @@ const registerEvent = function($importBox) {
     $step2Btns.addClass('hidden');
     $step3Btns.addClass('hidden');
     $inputFile.val('');
-    $uploadProgress.attr("value",0);
+    $uploadProgress.attr('value', 0);
     $importRuleBtn.show();
     $importQuestionTips.show();
     $uploadProgress.addClass('hidden')
@@ -222,10 +221,10 @@ const registerEvent = function($importBox) {
     $tutorialLink.removeClass('a-not-click')
     $docxLink.removeClass('a-not-click')
     $xlsxLink.removeClass('a-not-click')
-    $importRuleBtn.attr('disabled',false)
+    $importRuleBtn.attr('disabled', false)
     $importRuleBtn.removeClass('import-btn-disabled')
     $uploadImg.removeClass('hidden')
-    $jsUploadHotSpot.on('click',()=> {
+    $jsUploadHotSpot.on('click', () => {
       $inputFile.click()
     })
   });
