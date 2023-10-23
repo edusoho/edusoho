@@ -542,6 +542,31 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $typesNum;
     }
 
+    public function findDuplicatedMaterialIds($bankId, $items)
+    {
+        $materialHashes = [];
+        $materials = [];
+        foreach ($items as $item) {
+            $item['bank_id'] = $bankId;
+            $item = $this->getItemProcessor($item['type'])->process($item);
+            $materialHashes[] = md5($item['material']);
+            $materials[] = $item['material'];
+        }
+
+        $selfDuplicatedIds = [];
+        foreach (array_count_values($materials) as $value => $count) {
+            if ($count > 1) {
+                $selfDuplicatedIds = array_keys($materials, $value);
+            }
+        }
+
+        $duplicatedMaterials = array_column($this->getItemDao()->findDuplicatedMaterial($bankId, $materialHashes), 'material');
+        $duplicatedIds = array_keys(array_intersect($materials, $duplicatedMaterials));
+        $allDuplicatedIds = array_values(array_unique(array_merge($selfDuplicatedIds, $duplicatedIds)));
+
+        return empty($allDuplicatedIds) ? [] : $allDuplicatedIds;
+    }
+
     public function isMaterialDuplicative($bankId, $material)
     {
         $material = $this->purifyHtml($material);

@@ -92,6 +92,23 @@ class ManageController extends BaseController
         return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_question_list', ['id' => $data['questionBankId']])]);
     }
 
+    public function checkDuplicatedQuestionsAction(Request $request, $token)
+    {
+        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+        $data = $token['data'];
+        if (!$this->getQuestionBankService()->canManageBank($data['questionBankId'])) {
+            $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
+        }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
+        $fields = json_decode($request->getContent(), true);
+
+        $duplicatedMaterialIds = $this->getItemService()->findDuplicatedMaterialIds($questionBank['itemBankId'], $fields['items']);
+
+        return $this->createJsonResponse([
+            'duplicatedIds' => $duplicatedMaterialIds,
+        ]);
+    }
+
     protected function getQuestionParseClient()
     {
         return new QuestionParseClient();

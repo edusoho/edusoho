@@ -47,7 +47,7 @@ class QuestionParserController extends BaseController
                 'categoryId' => $request->request->get('category_Id'),
             ]),
             'success' => true,
-            'progressUrl' => $this->generateUrl('question_parse_progress', ['token' => $token])
+            'progressUrl' => $this->generateUrl('question_parse_progress', ['token' => $token]),
         ]);
     }
 

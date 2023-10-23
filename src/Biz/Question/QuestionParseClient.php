@@ -45,7 +45,7 @@ class QuestionParseClient
 
     private function get($uri, $params)
     {
-        $uri = $uri . (strpos($uri, '?') ? '&' : '?') . http_build_query($params);
+        $uri = $uri.(strpos($uri, '?') ? '&' : '?').http_build_query($params);
 
         return $this->request->request('GET', $this->api.$uri, $params, ["Authorization: Bearer $this->token"]);
     }

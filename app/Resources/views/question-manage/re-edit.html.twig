@@ -39,6 +39,7 @@
   <input type="hidden" name="saveUrl" value="
     {% if type == 'item' %}
       {{ path('questions_import_save', {token: app.request.get('token'),categoryId: categoryId}) }}
+      {{ path('questions_import_check_duplicated_questions', {token: app.request.get('token')}) }}
     {% else %}
       {{ path('testpaper_import_save', {token: app.request.get('token')}) }}
     {% endif %}
