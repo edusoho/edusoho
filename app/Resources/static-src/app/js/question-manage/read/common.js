@@ -13,7 +13,16 @@ const registerEvent = function($importBox) {
   let $step2Btns = $('.js-step2-btn');
   let $step3Btns = $('.js-step3-btn');
   const $jsUploadHotSpot = $('.js-upload-hot-spot')
-
+  const $importRuleBtn = $('.js-import-rule-btn')
+  const $importQuestionTips = $('.js-question-import-tips')
+  const $uploadProgress = $('.js-upload-progress')
+  const $tutorialLink = $('.js-tutorial-link')
+  const $docxLink = $('.js-DOCX-link')
+  const $xlsxLink = $('.js-XLSX-link')
+  const $uploadImg = $('.js-uploda-img') 
+  const $uploadSuccessfulImg = $('.js-upload-successful-img') 
+  const $uploadSuccessfulText = $('.js-upload-successful-text')
+  
   $jsUploadHotSpot.on('click',()=> {
     $inputFile.click()
   })
@@ -86,7 +95,16 @@ const registerEvent = function($importBox) {
     let url = $form.attr('action');
     let type = $form.attr('method');
 
-    $uploadBtn.button('loading');
+    $importQuestionTips.hide()
+    $jsUploadHotSpot.off('click');
+    $jsUploadHotSpot.addClass('modal-body-lodaing')
+    $uploadProgress.removeClass('hidden')
+    $tutorialLink.addClass('a-not-click')
+    $docxLink.addClass('a-not-click')
+    $xlsxLink.addClass('a-not-click')
+    $importRuleBtn.attr('disabled',true)
+    $importRuleBtn.addClass('import-btn-disabled')
+
     $.ajax({
       type: type,
       url: url,
@@ -102,7 +120,6 @@ const registerEvent = function($importBox) {
         }
       },
       error: function(err) {
-        $uploadBtn.button('reset');
         $inputFile.val('');
         err = err.responseJSON.error;
         console.log('Read error:', err);
@@ -122,15 +139,28 @@ const registerEvent = function($importBox) {
         url: res.progressUrl,
         success: resp => {
           pending = false;
+
+          $uploadProgress.attr("value",resp.progress);
+          
           if (resp.status === 'finished') {
+            $uploadImg.addClass('hidden')
+            $uploadSuccessfulImg.removeClass('hidden');
+            $uploadProgress.addClass('hidden');
+            $uploadSuccessfulText.removeClass('hidden');
             clearInterval(interval);
-            $uploadBtn.button('reset');
-            window.location.href = res.url;
+
+            setTimeout(() =>{
+              window.location.href = res.url;
+            },1000)
+          }
+          if (resp.status === "failed") {
+            clearInterval(interval);
+            readErrorCallBack(res)
+            return
           }
         },
         error: err => {
           clearInterval(interval);
-          $uploadBtn.button('reset');
           $inputFile.val('');
           err = err.responseJSON.error;
           console.log('Read error:', err);
@@ -139,6 +169,7 @@ const registerEvent = function($importBox) {
     }, 1000);
   }
 
+
   // 读取失败回调
   function readErrorCallBack(res) {
     $uploadBtn.button('reset');
@@ -146,6 +177,7 @@ const registerEvent = function($importBox) {
     $step1View.addClass('hidden');
     $step3View.html(res).removeClass('hidden');
     $step3Btns.removeClass('hidden');
+    $importRuleBtn.hide()
   }
 
   $oldTemplate.click(function() {
@@ -182,6 +214,20 @@ const registerEvent = function($importBox) {
     $step2Btns.addClass('hidden');
     $step3Btns.addClass('hidden');
     $inputFile.val('');
+    $uploadProgress.attr("value",0);
+    $importRuleBtn.show();
+    $importQuestionTips.show();
+    $uploadProgress.addClass('hidden')
+    $jsUploadHotSpot.removeClass('modal-body-lodaing')
+    $tutorialLink.removeClass('a-not-click')
+    $docxLink.removeClass('a-not-click')
+    $xlsxLink.removeClass('a-not-click')
+    $importRuleBtn.attr('disabled',false)
+    $importRuleBtn.removeClass('import-btn-disabled')
+    $uploadImg.removeClass('hidden')
+    $jsUploadHotSpot.on('click',()=> {
+      $inputFile.click()
+    })
   });
 
   $('[data-toggle="popover"]').popover();
