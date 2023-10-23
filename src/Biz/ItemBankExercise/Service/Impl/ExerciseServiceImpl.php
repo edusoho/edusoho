@@ -559,6 +559,20 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $this->getLogService()->info('item_bank_exercise', 'unpublish_exercise_chapter', "管理员{$this->getCurrentUser()['nickname']}取消发布题库练习《{$exercise['title']}》的章节", ['ids' => $ids]);
     }
 
+    public function showExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+
+        $exercise = $this->getExerciseDao()->update($exerciseId, ['showable' => '1']);
+    }
+
+    public function hideExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+
+        $exercise = $this->getExerciseDao()->update($exerciseId, ['showable' => '0']);
+    }
+
     /**
      * @return ExerciseDao
      */
