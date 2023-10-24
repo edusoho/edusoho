@@ -404,7 +404,7 @@ admin_v2:
                                             router_params:
                                                 id: (exercise.id)
                                             group: groupButton
-                                            class: hide-exercise
+                                            class: show-exercise
                                             icon: 'glyphicon glyphicon-ok-circle'
                                             mode: none
                                             visible: (exercise.status == 'published' and exercise.showable == '0')

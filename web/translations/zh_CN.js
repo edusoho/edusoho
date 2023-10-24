@@ -1279,6 +1279,7 @@ t.add("admin.item_bank_exercise.exercise.close_hint", "\u786e\u5b9a\u8981\u5173\
 t.add("admin.item_bank_exercise.exercise.close_success_hint", "\u9898\u5e93\u7ec3\u4e60\u5173\u95ed\u6210\u529f!", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.hide_hint", "\u5173\u95ed\u540e\u9898\u5e93\u7ec3\u4e60\u5c06\u5f7b\u5e95\u9690\u85cf\uff0c\u5b66\u5458\u65e0\u6cd5\u5728\u524d\u53f0\u67e5\u770b", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.hide_success_hint", "\u5df2\u5173\u95ed\u9875\u9762\u663e\u793a", "js", "zh_CN");
+t.add("admin.item_bank_exercise.exercise.show_success_hint", "\u5df2\u5f00\u542f\u9875\u9762\u663e\u793a", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.recommend_success_hint", "\u8bbe\u7f6e\u63a8\u8350\u9898\u5e93\u64cd\u4f5c\u6210\u529f!", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.recommend_fail_hint", "\u8bbe\u7f6e\u63a8\u8350\u9898\u5e93\u64cd\u4f5c\u5931\u8d25!", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.cancel_recommend_success_hint", "\u9898\u5e93\u7ec3\u4e60\u63a8\u8350\u5df2\u53d6\u6d88!", "js", "zh_CN");
