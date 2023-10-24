@@ -1087,6 +1087,9 @@ admin.classroom.choose_success_hint: 指定班级成功
 admin.classroom.operation_success_hint: 成功！
 admin.classroom.operation_fail_hint: 失败
 admin.classroom.operation_hint: 吗？
+admin.classroom.hide_hint: 关闭后班级将彻底隐藏，学员无法在前台查看
+admin.classroom.hide_success_hint: 已关闭页面显示
+admin.classroom.show_success_hint: 已开启页面显示
 admin.classroom.delete_hint: 删除班级，将删除班级中所有课程的章节、课时、学员等信息。确认要删除该班级吗？
 admin.classroom.mall_goods_exist.delete_hint: 删除班级，将删除班级中所有课程的章节、课时、学员等信息。并且该产品已在营销商城中有对应商品，将同时删除已在营销商城中的对应商品，确认要删除该班级吗？
 admin.classroom.delete_success_hint: 删除成功！
