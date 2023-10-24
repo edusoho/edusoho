@@ -4889,9 +4889,13 @@ change_log: 更新日志
 # common
 common.courseStatus.draft: 未发布
 common.courseStatus.published: 已发布
+common.course.showable.show: 展示
+common.course.showable.hide: 隐藏
 common.courseStatus.closed: 已关闭
 common.classroomStatus.draft: 未发布
 common.classroomStatus.published: 已发布
+common.classroom.showable.show: 展示
+common.classroom.showable.hide: 隐藏
 common.classroomStatus.closed: 已关闭
 common.fileType.video: 视频
 common.fileType.audio: 音频
@@ -5213,6 +5217,7 @@ admin.course_manage.manage.price: 价格
 admin.course_manage.manage.serialize_mode: 连载状态
 admin.course_manage.manage.status: 课程状态
 admin.course_manage.manage.creator: 创建者/时间
+admin.course_manage.manage.showable: 页面显示
 admin.course_manage.manage.manage_btn: 管理
 admin.course_manage.manage.empty: 暂无课程记录
 admin.course_manage.manage.category: 分类
@@ -5613,6 +5618,7 @@ admin.classroom_manage.manage.student_number_th: 学员数
 admin.classroom_manage.manage.price_th: 价格
 admin.classroom_manage.manage.creator: 创建者/时间
 admin.classroom_manage.manage.status_th: 状态
+admin.classroom_manage.manage.showable: 页面显示
 admin.classroom_manage.manage.operate_th: 操作
 admin.classroom_manage.manage.empty: 暂无%name%信息!
 admin.classroom_manage.manage.category: 分类

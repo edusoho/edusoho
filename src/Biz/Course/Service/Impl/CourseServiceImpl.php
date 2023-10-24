@@ -800,6 +800,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::UNPUBLISHED_COURSE());
         }
         $course['status'] = 'closed';
+        $course['showable'] = '0';
 
         try {
             $this->beginTransaction();
@@ -829,8 +830,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             $id,
             [
                 'status' => 'published',
+                'showable' => '1',
             ]
         );
+        $this->getCourseSetService()->publishCourseSet($course['courseSetId']);
         $this->dispatchEvent('course.publish', $course);
 
         $this->getCourseLessonService()->publishLessonByCourseId($course['id']);

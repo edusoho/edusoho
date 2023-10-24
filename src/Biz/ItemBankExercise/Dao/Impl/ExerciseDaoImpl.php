@@ -143,6 +143,7 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
                 'studentNum = :studentNum',
                 'categoryId = :categoryId',
                 'recommended = :recommended',
+                'showable = :showable',
                 'price > :price_GT',
                 'questionBankId NOT IN (:excludeQuestionBankIds)',
             ],

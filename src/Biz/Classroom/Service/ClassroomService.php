@@ -319,4 +319,8 @@ interface ClassroomService
     public function updateClassroomMembersNoteAndThreadNumsByLimit($classroomId, $start, $limit);
 
     public function updateClassroomMembersNoteAndThreadNums($classroomId);
+
+    public function showClassroom($id);
+
+    public function hideClassroom($id);
 }
