@@ -454,6 +454,11 @@ course.unit: '%part_name% %number% %colon% %title%'
 course.lesson: '%part_name% %number% : %title%'
 course.catalogue.task_status.task: '%taskName%.%taskNumber%:%taskTitle%'
 
+created.question.confirm.ok.btn: Continue editing
+created.question.confirm.close.btn: Direct creation
+created.question.confirm.title: Whether to continue to create the same topic
+
+
 course.thread_replay_failed_hint: Posted reply failed, please try again
 course.thread_delete_hint: Do you really want to delete this reply?
 

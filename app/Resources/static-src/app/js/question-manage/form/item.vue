@@ -10,6 +10,7 @@
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
       :isDownload="isDownload"
+      :isDisable="isDisable"
       :uploadSDKInitData="uploadSDKInitData"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
@@ -31,6 +32,7 @@
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
       :isDownload="isDownload"
+      :isDisable="isDisable"
       :uploadSDKInitData="uploadSDKInitData"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
@@ -84,7 +86,8 @@
           locale: document.documentElement.lang
         },
         fileId: 0,
-        isDownload: false
+        isDownload: false,
+        isDisable: null, 
       };
     },
     provide() {
@@ -93,7 +96,47 @@
       }
     },
     methods: {
+      getRepeatStem(data) {
+        const stem = data.data.type === 'material' ? data.data.material : data.data.questions[0].stem
+        return new Promise(resolve => {
+          $.ajax({
+            url: `/question_bank/${data.data.bank_id}/checkQuestionDuplicative`,
+            type: 'post',
+            data: {material:stem},
+            beforeSend(request) {
+              request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            }
+          }).done(function (res) {
+            resolve(res);
+          })
+        });
+        
+      },
       getData(data) {
+        const that = this
+        that.isDisable = true;
+        this.getRepeatStem(data).then( (res)=> {
+          if (res) {
+            this.$confirm({
+              title: Translator.trans('created.question.confirm.title'),
+              okText: Translator.trans('created.question.confirm.ok.btn'),
+              cancelText: Translator.trans('created.question.confirm.close.btn'),
+              icon: 'exclamation-circle',
+              onOk() {
+                that.isDisable = false;
+              },
+              onCancel() {
+                that.createdItemQuestion(data)
+              },
+            });
+          } else {
+            that.createdItemQuestion(data)
+          }
+        }).catch( (res)=> {
+          console.log(res);
+        });
+      },
+      createdItemQuestion(data) {
         let submission = data.isAgain ? 'continue' : '';
         data = data.data;
         data['submission'] = submission;

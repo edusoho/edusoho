@@ -327,6 +327,9 @@ t.add("course.chapter", "\u7b2c%number%%chapter_name%%colon% %title%", "js", "zh
 t.add("course.unit", "\u7b2c%number%%part_name%%colon% %title%", "js", "zh_CN");
 t.add("course.lesson", "%part_name% %number% : %title%", "js", "zh_CN");
 t.add("course.catalogue.task_status.task", "%taskName%%taskNumber%\uff1a %taskTitle%", "js", "zh_CN");
+t.add("created.question.confirm.ok.btn", "\u7ee7\u7eed\u7f16\u8f91", "js", "zh_CN");
+t.add("created.question.confirm.close.btn", "\u76f4\u63a5\u521b\u5efa", "js", "zh_CN");
+t.add("created.question.confirm.title", "\u5df2\u5b58\u5728\u76f8\u540c\u9898\u76ee\uff0c\u662f\u5426\u7ee7\u7eed\u521b\u5efa", "js", "zh_CN");
 t.add("course.thread_replay_failed_hint", "\u53d1\u8868\u56de\u590d\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5", "js", "zh_CN");
 t.add("course.thread_delete_hint", "\u60a8\u771f\u7684\u8981\u5220\u9664\u8be5\u56de\u5e16\u5417\uff1f", "js", "zh_CN");
 t.add("course_manage.course_dashboard.student_num", "\u5b66\u5458\u6570", "js", "zh_CN");
