@@ -404,7 +404,7 @@ admin_v2:
                                             router_params:
                                                 id: (exercise.id)
                                             group: groupButton
-                                            class: close-exercise
+                                            class: hide-exercise
                                             icon: 'glyphicon glyphicon-ok-circle'
                                             mode: none
                                             visible: (exercise.status == 'published' and exercise.showable == '0')
@@ -413,7 +413,7 @@ admin_v2:
                                             router_params:
                                                 id: (exercise.id)
                                             group: groupButton
-                                            class: close-exercise
+                                            class: hide-exercise
                                             icon: 'glyphicon glyphicon-ok-circle'
                                             mode: none
                                             visible: (exercise.status == 'published' and exercise.showable == '1')
