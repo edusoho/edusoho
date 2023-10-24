@@ -979,7 +979,10 @@ t.add("admin.course.delete_course.check_password_fail_hint", "\u9a8c\u8bc1\u5bc6
 t.add("admin.course.validate_old.password_required_hint", "\u5bc6\u7801", "js", "zh_CN");
 t.add("admin.course.cancel_recommend_success_hint", "\u8bfe\u7a0b\u63a8\u8350\u5df2\u53d6\u6d88\uff01", "js", "zh_CN");
 t.add("admin.course.close_course_hint", "\u60a8\u786e\u8ba4\u8981\u5173\u95ed\u6b64\u8bfe\u7a0b\u5417\uff1f\u8bfe\u7a0b\u5173\u95ed\u540e\uff0c\u4ecd\u7136\u8fd8\u5728\u6709\u6548\u671f\u5185\u7684\u5b66\u5458\u5c06\u53ef\u4ee5\u7ee7\u7eed\u5b66\u4e60\u3002", "js", "zh_CN");
-t.add("admin.course.close_success_hint", "\u8bfe\u7a0b\u5173\u95ed\u6210\u529f\uff01", "js", "zh_CN");
+t.add("admin.course.close_success_hint", "\u5df2\u5173\u95ed\u9875\u9762\u663e\u793a", "js", "zh_CN");
+t.add("admin.course.hide_course_hint", "\u5173\u95ed\u540e\u8bfe\u7a0b\u5c06\u5f7b\u5e95\u9690\u85cf\uff0c\u5b66\u5458\u65e0\u6cd5\u5728\u524d\u53f0\u67e5\u770b", "js", "zh_CN");
+t.add("admin.course.hide_success_hint", "\u8bfe\u7a0b\u5173\u95ed\u6210\u529f\uff01", "js", "zh_CN");
+t.add("admin.course.show_success_hint", "\u5df2\u5f00\u542f\u9875\u9762", "js", "zh_CN");
 t.add("admin.course.publish_hint", "\u60a8\u786e\u8ba4\u8981\u53d1\u5e03\u6b64\u8bfe\u7a0b\u5417\uff1f", "js", "zh_CN");
 t.add("admin.course.publish_success_hint", "\u8bfe\u7a0b\u53d1\u5e03\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.course.unknow_error_hint", "\u672a\u77e5\u9519\u8bef", "js", "zh_CN");

@@ -1130,7 +1130,10 @@ admin.course.delete_course.check_password_fail_hint: 验证密码错误
 admin.course.validate_old.password_required_hint: 密码
 admin.course.cancel_recommend_success_hint: 课程推荐已取消！
 admin.course.close_course_hint: 您确认要关闭此课程吗？课程关闭后，仍然还在有效期内的学员将可以继续学习。
-admin.course.close_success_hint: 课程关闭成功！
+admin.course.close_success_hint: 已关闭页面显示
+admin.course.hide_course_hint: 关闭后课程将彻底隐藏，学员无法在前台查看
+admin.course.hide_success_hint: 课程关闭成功！
+admin.course.show_success_hint: 已开启页面
 admin.course.publish_hint: 您确认要发布此课程吗？
 admin.course.publish_success_hint: 课程发布成功！
 admin.course.unknow_error_hint: 未知错误

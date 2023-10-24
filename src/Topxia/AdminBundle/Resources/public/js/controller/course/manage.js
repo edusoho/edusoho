@@ -39,6 +39,25 @@ define(function (require, exports, module) {
       });
     });
 
+    $table.on('click', '.hide-course', function () {
+      var user_name = $(this).data('user');
+      if (!confirm(Translator.trans('admin.course.hide_course_hint'))) return false;
+      $.post($(this).data('url'), function (html) {
+        var $tr = $(html);
+        $table.find('#' + $tr.attr('id')).replaceWith(html);
+        Notify.success(Translator.trans('admin.course.hide_success_hint'));
+      });
+    });
+
+    $table.on('click', '.show-course', function () {
+      var user_name = $(this).data('user');
+      $.post($(this).data('url'), function (html) {
+        var $tr = $(html);
+        $table.find('#' + $tr.attr('id')).replaceWith(html);
+        Notify.success(Translator.trans('admin.course.show_success_hint'));
+      });
+    });
+
     $table.on('click', '.publish-course', function () {
       var studentNum = $(this).closest('tr').next().val();
       if (!confirm(Translator.trans('admin.course.publish_hint'))) return false;
