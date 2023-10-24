@@ -1429,8 +1429,8 @@ admin.shortcut_delete_success_hint: 删除常用链接成功！
 
 admin.item_bank_exercise.exercise.close_hint: 确定要关闭当前题库练习吗？题库练习关闭后，仍然还在有效期内的学员将可以继续学习。
 admin.item_bank_exercise.exercise.close_success_hint: 题库练习关闭成功!
-admin.item_bank_exercise.exercise.hide_hint: 123
-admin.item_bank_exercise.exercise.hide_success_hint: 题库练习关闭成功!
+admin.item_bank_exercise.exercise.hide_hint: 关闭后题库练习将彻底隐藏，学员无法在前台查看
+admin.item_bank_exercise.exercise.hide_success_hint: 已关闭页面显示
 admin.item_bank_exercise.exercise.recommend_success_hint: 设置推荐题库操作成功!
 admin.item_bank_exercise.exercise.recommend_fail_hint: 设置推荐题库操作失败!
 admin.item_bank_exercise.exercise.cancel_recommend_success_hint: 题库练习推荐已取消!

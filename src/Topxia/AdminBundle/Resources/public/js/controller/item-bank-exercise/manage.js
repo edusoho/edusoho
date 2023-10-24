@@ -24,7 +24,6 @@ define(function(require, exports, module) {
     });
 
     $table.on('click', '.close-exercise', function() {
-      console.log(1)
       if (!confirm(Translator.trans('admin.item_bank_exercise.exercise.close_hint'))) return false;
       $.post($(this).data('url'), function(response) {
         Notify.success(Translator.trans('admin.item_bank_exercise.exercise.close_success_hint'));
@@ -36,7 +35,6 @@ define(function(require, exports, module) {
     });
 
     $table.on('click', '.hide-exercise', function() {
-      console.log(2)
       if (!confirm(Translator.trans('admin.item_bank_exercise.exercise.hide_hint'))) return false;
       $.post($(this).data('url'), function(response) {
         Notify.success(Translator.trans('admin.item_bank_exercise.exercise.hide_success_hint'));
