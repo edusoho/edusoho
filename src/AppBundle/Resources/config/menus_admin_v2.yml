@@ -164,6 +164,26 @@ admin_v2:
                                             icon: 'glyphicon glyphicon-envelope'
                                             mode: modal
                                             visible: (courseSet.status == 'published')
+                                        admin_v2_course_set_show:
+                                            name: admin_v2.course.basic_tab.show_btn
+                                            router_params:
+                                                id: (courseSet.id)
+                                                filter: (filter)
+                                            group: groupButton
+                                            icon: 'glyphicon glyphicon-ban-circle'
+                                            mode: none
+                                            class: close-course
+                                            visible: (courseSet.status == 'published' and courseSet.showable == '0')
+                                        admin_v2_course_set_hide:
+                                            name: admin_v2.course.basic_tab.hide_btn
+                                            router_params:
+                                                id: (courseSet.id)
+                                                filter: (filter)
+                                            group: groupButton
+                                            icon: 'glyphicon glyphicon-ban-circle'
+                                            mode: none
+                                            class: close-course
+                                            visible: (courseSet.status == 'published' and courseSet.showable == '1')
                                         admin_v2_course_set_clone:
                                             name: admin_v2.course.basic.basic_tab.clone_btn
                                             router_params:
@@ -379,6 +399,24 @@ admin_v2:
                                             group: groupButton
                                             icon: 'glyphicon glyphicon-eye-open'
                                             blank: 1
+                                        admin_v2_item_bank_exercise_show:
+                                            name: admin_v2.course.item_bank_exercise.basic_tab.show_btn
+                                            router_params:
+                                                id: (exercise.id)
+                                            group: groupButton
+                                            class: close-exercise
+                                            icon: 'glyphicon glyphicon-ok-circle'
+                                            mode: none
+                                            visible: (exercise.status == 'published' and exercise.showable == '0')
+                                        admin_v2_item_bank_exercise_hide:
+                                            name: admin_v2.course.item_bank_exercise.basic_tab.hide_btn
+                                            router_params:
+                                                id: (exercise.id)
+                                            group: groupButton
+                                            class: close-exercise
+                                            icon: 'glyphicon glyphicon-ok-circle'
+                                            mode: none
+                                            visible: (exercise.status == 'published' and exercise.showable == '1')
                                         admin_v2_item_bank_exercise_publish:
                                             name: admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn
                                             router_params:

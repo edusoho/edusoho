@@ -469,6 +469,18 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
+    public function showCourseSet($id)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '1']);
+    }
+
+    public function hideCourseSet($id)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '0']);
+    }
+
     public function updateCourseSetRatingNum($id, $fields)
     {
         $fields = ArrayToolkit::parts(

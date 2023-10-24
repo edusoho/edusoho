@@ -62,6 +62,20 @@ class ItemBankExerciseController extends BaseController
         return $this->createJsonResponse($exercise);
     }
 
+    public function showAction(Request $request, $id)
+    {
+        $exercise = $this->getExerciseService()->showExercise($id);
+
+        return $this->createJsonResponse($exercise);
+    }
+
+    public function hideAction(Request $request, $id)
+    {
+        $exercise = $this->getExerciseService()->hideExercise($id);
+
+        return $this->createJsonResponse($exercise);
+    }
+
     public function deleteAction(Request $request, $id)
     {
         $this->getExerciseService()->deleteExercise($id);
