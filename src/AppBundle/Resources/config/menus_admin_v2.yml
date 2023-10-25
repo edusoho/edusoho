@@ -172,7 +172,7 @@ admin_v2:
                                             group: groupButton
                                             icon: 'glyphicon glyphicon-ban-circle'
                                             mode: none
-                                            class: close-course
+                                            class: show-course
                                             visible: (courseSet.status == 'published' and courseSet.showable == '0')
                                         admin_v2_course_set_hide:
                                             name: admin_v2.course.basic_tab.hide_btn
@@ -182,7 +182,7 @@ admin_v2:
                                             group: groupButton
                                             icon: 'glyphicon glyphicon-ban-circle'
                                             mode: none
-                                            class: close-course
+                                            class: hide-course
                                             visible: (courseSet.status == 'published' and courseSet.showable == '1')
                                         admin_v2_course_set_clone:
                                             name: admin_v2.course.basic.basic_tab.clone_btn
@@ -404,7 +404,7 @@ admin_v2:
                                             router_params:
                                                 id: (exercise.id)
                                             group: groupButton
-                                            class: close-exercise
+                                            class: show-exercise
                                             icon: 'glyphicon glyphicon-ok-circle'
                                             mode: none
                                             visible: (exercise.status == 'published' and exercise.showable == '0')
@@ -413,7 +413,7 @@ admin_v2:
                                             router_params:
                                                 id: (exercise.id)
                                             group: groupButton
-                                            class: close-exercise
+                                            class: hide-exercise
                                             icon: 'glyphicon glyphicon-ok-circle'
                                             mode: none
                                             visible: (exercise.status == 'published' and exercise.showable == '1')

@@ -23,7 +23,7 @@
                 <el-col span="4" class="mlm">{{ 'site.currency.CNY'|trans }}</el-col>
             </el-form-item>
 
-            <el-form-item :label="'classroom.show_label'|trans({'name':classroomLabel})">
+            <el-form-item :label="'classroom.show_page_label'|trans()">
                 <el-radio v-model="form.showable"
                           v-for="item in statusRadios"
                           :key="item.value"
@@ -31,7 +31,7 @@
                           class="cd-radio">{{ item.label }}
                 </el-radio>
                 <div class="help-block">
-                    关闭后，班级将彻底隐藏，无法在前台查看到。
+                    {{ 'classroom.show_page_tips'|trans }}
                 </div>
             </el-form-item>
 

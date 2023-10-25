@@ -1071,6 +1071,9 @@ course.student_manage: '学员管理'
 course.marketing_setup.setup: 加入设置
 course.marketing_setup.setup.can_join: 可加入
 course.marketing_setup.setup.can_not_join: 不可加入
+course.marketing_setup.setup.is_show_label: 页面显示
+course.marketing_setup.setup.can_show: 开启
+course.marketing_setup.setup.can_hide: 关闭
 course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
 course.marketing_setup.price.free: 免费
 course.marketing_setup.price.not_free: 收费
@@ -1246,6 +1249,7 @@ item_bank_exercise.chapter_exercise.info: 章节练习依据“题目分类管�
 item_bank_exercise.marketing_setup.no_permission_tips: 抱歉，您无权管理题库练习基础设置，如有需要请联系网站管理员！
 item_bank_exercise.marketing_setup.setup.can_join.tips: 关闭后，学员自己无法加入，需要由老师手动添加学员。
 item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: 变更学习有效期，仅对修改后新增的学员有效
+item_bank_exercise.marketing_setup.rule.show: 关闭后该题库练习将彻底隐藏，学员无法在前台查看
 item_bank_exercise.assessment_exercise.add_module: 添加模块
 item_bank_exercise.assessment_exercise.edit_module: 修改模块
 item_bank_exercise.assessment_exercise.module.name: 模块名称

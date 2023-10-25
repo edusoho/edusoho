@@ -525,10 +525,10 @@
   margin-top: 16px;
   margin-bottom: 16px;
   @media (min-width: 1400px) {
-    padding: 12px 50px 12px 23px;
+    padding: 12px;
   }
   padding: 12px 30px 12px 14px;
-  background-color: @cdv2-bg;
+  background-color: #FAFAFA;
   text-align: center;
   border-radius: 4px;
   .admin-update__cell {
@@ -560,18 +560,26 @@
   }
   .admin-update__version {
     display: inline-block;
-    margin-right: 8px;
+    margin-right: 12px;
     font-weight: 500;
     text-align: right;
+  }
+  .admin-update__updated {
+    color: #5E6166;
+    background-color: #F3F3F5;
+    border-radius: 2px;
+    padding: 2px 4px;
   }
   .admin-update__link {
     display: inline-block;
     a {
-      color: #ff5c3b;
+      color: #F53F3F;
+      background-color: #FFECE8;
+      border-radius: 2px;
+      padding: 2px 4px;
       &:hover,
       &:focus {
         text-decoration: none;
-        border-bottom: 1px solid #ff5c3b;
       }
     }
   }

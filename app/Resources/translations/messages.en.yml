@@ -936,6 +936,9 @@ course.student_manage: 'Student config'
 course.marketing_setup.setup: 'Enrollment settings'
 course.marketing_setup.setup.can_join: 'Enrollment'
 course.marketing_setup.setup.can_not_join: Not joinable
+course.marketing_setup.setup.is_show_label: Page display
+course.marketing_setup.setup.can_show: Enable
+course.marketing_setup.setup.can_hide: Disable
 course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not enroll the course except added by teahcers. It is used for closed teaching.'
 course.marketing_setup.price.free: Free
 course.marketing_setup.price.not_free: Paid
@@ -2078,6 +2081,7 @@ item_bank_exercise.chapter_exercise.info: Chapter exercises are based on the set
 item_bank_exercise.marketing_setup.no_permission_tips: 'Sorry, you can not edit base settings. Contact site administrator for help.'
 item_bank_exercise.marketing_setup.setup.can_join.tips: After it is closed, students cannot join by themselves. Teachers need to add students manually.
 item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: The change of validity period is only valid for new students after the change
+item_bank_exercise.marketing_setup.rule.show: After disabling, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.
 item_bank_exercise.assessment_exercise.add_module: Create
 item_bank_exercise.assessment_exercise.edit_module: Edit
 item_bank_exercise.assessment_exercise.module.name: Module Name

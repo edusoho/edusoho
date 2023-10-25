@@ -1087,6 +1087,9 @@ admin.classroom.choose_success_hint: 指定班级成功
 admin.classroom.operation_success_hint: 成功！
 admin.classroom.operation_fail_hint: 失败
 admin.classroom.operation_hint: 吗？
+admin.classroom.hide_hint: 关闭后班级将彻底隐藏，学员无法在前台查看
+admin.classroom.hide_success_hint: 已关闭页面显示
+admin.classroom.show_success_hint: 已开启页面显示
 admin.classroom.delete_hint: 删除班级，将删除班级中所有课程的章节、课时、学员等信息。确认要删除该班级吗？
 admin.classroom.mall_goods_exist.delete_hint: 删除班级，将删除班级中所有课程的章节、课时、学员等信息。并且该产品已在营销商城中有对应商品，将同时删除已在营销商城中的对应商品，确认要删除该班级吗？
 admin.classroom.delete_success_hint: 删除成功！
@@ -1127,7 +1130,10 @@ admin.course.delete_course.check_password_fail_hint: 验证密码错误
 admin.course.validate_old.password_required_hint: 密码
 admin.course.cancel_recommend_success_hint: 课程推荐已取消！
 admin.course.close_course_hint: 您确认要关闭此课程吗？课程关闭后，仍然还在有效期内的学员将可以继续学习。
-admin.course.close_success_hint: 课程关闭成功！
+admin.course.close_success_hint: 已关闭页面显示
+admin.course.hide_course_hint: 关闭后课程将彻底隐藏，学员无法在前台查看
+admin.course.hide_success_hint: 课程关闭成功！
+admin.course.show_success_hint: 已开启页面
 admin.course.publish_hint: 您确认要发布此课程吗？
 admin.course.publish_success_hint: 课程发布成功！
 admin.course.unknow_error_hint: 未知错误
@@ -1429,6 +1435,9 @@ admin.shortcut_delete_success_hint: 删除常用链接成功！
 
 admin.item_bank_exercise.exercise.close_hint: 确定要关闭当前题库练习吗？题库练习关闭后，仍然还在有效期内的学员将可以继续学习。
 admin.item_bank_exercise.exercise.close_success_hint: 题库练习关闭成功!
+admin.item_bank_exercise.exercise.hide_hint: 关闭后题库练习将彻底隐藏，学员无法在前台查看
+admin.item_bank_exercise.exercise.hide_success_hint: 已关闭页面显示
+admin.item_bank_exercise.exercise.show_success_hint: 已开启页面显示
 admin.item_bank_exercise.exercise.recommend_success_hint: 设置推荐题库操作成功!
 admin.item_bank_exercise.exercise.recommend_fail_hint: 设置推荐题库操作失败!
 admin.item_bank_exercise.exercise.cancel_recommend_success_hint: 题库练习推荐已取消!
@@ -1622,6 +1631,8 @@ classroom.upload_picture_btn: 修改封面图片
 classroom.marketing_setting: 营销设置
 classroom.price_label: 价格
 classroom.show_label: %name%展示
+classroom.show_page_label: 页面展示
+classroom.show_page_tips: 关闭后班级将彻底隐藏，无法在前台查看到。
 classroom.buy_label: %name%购买
 classroom.expiry_mode_label: 班级有效期
 classroom.watch_expiry_mode_rule: 查看有效期规则
