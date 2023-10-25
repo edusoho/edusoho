@@ -285,8 +285,9 @@ class QuestionController extends BaseController
             throw $this->createAccessDeniedException();
         }
         $material = $request->request->get('material');
+        $items = $request->request->get('items', []);
 
-        if ($this->getItemService()->isMaterialDuplicative($id, $material)) {
+        if ($this->getItemService()->isMaterialDuplicative($id, $material, $items)) {
             return $this->createJsonResponse(true);
         } else {
             return $this->createJsonResponse(false);

@@ -62,5 +62,5 @@ interface ItemService
 
     public function findDuplicatedMaterialIds($bankId, $items);
 
-    public function isMaterialDuplicative($bankId, $material);
+    public function isMaterialDuplicative($bankId, $material, $items);
 }
