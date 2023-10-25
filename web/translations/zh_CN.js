@@ -1434,6 +1434,7 @@ t.add("classroom.upload_picture_btn", "\u4fee\u6539\u5c01\u9762\u56fe\u7247", "j
 t.add("classroom.marketing_setting", "\u8425\u9500\u8bbe\u7f6e", "js", "zh_CN");
 t.add("classroom.price_label", "\u4ef7\u683c", "js", "zh_CN");
 t.add("classroom.show_label", "%name%\u5c55\u793a", "js", "zh_CN");
+t.add("classroom.show_page_label", "\u9875\u9762\u5c55\u793a", "js", "zh_CN");
 t.add("classroom.buy_label", "%name%\u8d2d\u4e70", "js", "zh_CN");
 t.add("classroom.expiry_mode_label", "\u73ed\u7ea7\u6709\u6548\u671f", "js", "zh_CN");
 t.add("classroom.watch_expiry_mode_rule", "\u67e5\u770b\u6709\u6548\u671f\u89c4\u5219", "js", "zh_CN");

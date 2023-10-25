@@ -1631,6 +1631,7 @@ classroom.upload_picture_btn: 修改封面图片
 classroom.marketing_setting: 营销设置
 classroom.price_label: 价格
 classroom.show_label: %name%展示
+classroom.show_page_label: 页面展示
 classroom.buy_label: %name%购买
 classroom.expiry_mode_label: 班级有效期
 classroom.watch_expiry_mode_rule: 查看有效期规则

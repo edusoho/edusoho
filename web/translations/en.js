@@ -990,6 +990,9 @@ t.add("admin.classroom.choose_success_hint", "Choose classroom success", "js", "
 t.add("admin.classroom.operation_success_hint", "successfully\uff01", "js", "en");
 t.add("admin.classroom.operation_fail_hint", "failure", "js", "en");
 t.add("admin.classroom.operation_hint", "\uff1f", "js", "en");
+t.add("admin.classroom.hide_hint", "\u5173\u95ed\u540e\u73ed\u7ea7\u5c06\u5f7b\u5e95\u9690\u85cf\uff0c\u5b66\u5458\u65e0\u6cd5\u5728\u524d\u53f0\u67e5\u770b", "js", "en");
+t.add("admin.classroom.hide_success_hint", "\u5df2\u5173\u95ed\u9875\u9762\u663e\u793a", "js", "en");
+t.add("admin.classroom.show_success_hint", "\u5df2\u5f00\u542f\u9875\u9762\u663e\u793a", "js", "en");
 t.add("admin.classroom.delete_hint", "Deleting a class will delete the chapters, class hours, students and other information of all courses in the class. Are you sure you want to delete this class?", "js", "en");
 t.add("admin.classroom.delete_success_hint", "successfully deleted!", "js", "en");
 t.add("admin.classroom.cancel_recommend_hint", "%title% ?", "js", "en");
@@ -1030,6 +1033,9 @@ t.add("admin.course.validate_old.password_required_hint", "password", "js", "en"
 t.add("admin.course.cancel_recommend_success_hint", "Course recommendation has been cancelled!", "js", "en");
 t.add("admin.course.close_course_hint", "Are you sure you want to close this class? After the course is closed, students who are still in the validity period will be able to continue their studies.", "js", "en");
 t.add("admin.course.close_success_hint", "Course was closed successfully!", "js", "en");
+t.add("admin.course.hide_course_hint", "After hiding, the course will be completely hidden and students will not be able to view it on the front-end.", "js", "en");
+t.add("admin.course.hide_success_hint", "Course hidden successfully!", "js", "en");
+t.add("admin.course.show_success_hint", "Page enabled!", "js", "en");
 t.add("admin.course.publish_hint", "Are you sure you want to publish this course?", "js", "en");
 t.add("admin.course.publish_success_hint", "The course was published successfully!", "js", "en");
 t.add("admin.course.unknow_error_hint", "unknown mistake", "js", "en");
@@ -1324,6 +1330,9 @@ t.add("admin.shortcut_add_success_hint", "The current page has been added as a p
 t.add("admin.shortcut_delete_success_hint", "Delete frequently used links successfully!", "js", "en");
 t.add("admin.item_bank_exercise.exercise.close_hint", "Are you sure you want to close the current exercise? After the itembank exercise is closed, students who are still in the validity period will be able to continue their studies.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.close_success_hint", "Close successfully", "js", "en");
+t.add("admin.item_bank_exercise.exercise.hide_hint", "After hiding, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.", "js", "en");
+t.add("admin.item_bank_exercise.exercise.hide_success_hint", "Item bank exercise display hidden successfully.", "js", "en");
+t.add("admin.item_bank_exercise.exercise.show_success_hint", "Item bank exercise display enabled successfully.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.recommend_success_hint", "Successfully set recommended item bank!", "js", "en");
 t.add("admin.item_bank_exercise.exercise.recommend_fail_hint", "Failed to set recommended item bank!", "js", "en");
 t.add("admin.item_bank_exercise.exercise.cancel_recommend_success_hint", "The item bank exercise recommendation has been cancelled!", "js", "en");
