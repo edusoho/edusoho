@@ -36,6 +36,13 @@ class QuestionParseClient
         return json_decode($body, true);
     }
 
+    public function convertLatex2Img($exps)
+    {
+        $body = $this->post('/latex2img', json_encode(['exps' => $exps], JSON_UNESCAPED_SLASHES), ['Content-Type: application/json']);
+
+        return json_decode($body, true);
+    }
+
     private function post($uri, $body, array $headers)
     {
         $headers[] = "Authorization: Bearer $this->token";
