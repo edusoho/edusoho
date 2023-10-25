@@ -31,7 +31,7 @@
                           class="cd-radio">{{ item.label }}
                 </el-radio>
                 <div class="help-block">
-                    关闭后班级将彻底隐藏，无法在前台查看到。
+                    {{ 'classroom.show_page_tips'|trans }}
                 </div>
             </el-form-item>
 

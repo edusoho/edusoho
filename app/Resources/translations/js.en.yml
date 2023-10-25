@@ -1672,7 +1672,9 @@ classroom.upload_picture_btn: 'Upload an image'
 
 classroom.marketing_setting: Marketing Setting
 classroom.price_label: Price
-classroom.show_label: "Show %name%\n"
+classroom.show_label: "Show %name%"
+classroom.show_page_label: Page Display
+classroom.show_page_tips: After closing, the classroom will be completely hidden and cannot be viewed on the front-end.
 classroom.buy_label: Buy %name%
 classroom.expiry_mode_label: 'Expired on'
 classroom.watch_expiry_mode_rule: 'View the rule'
