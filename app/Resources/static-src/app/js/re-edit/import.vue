@@ -9,6 +9,8 @@
             :importType="importType"
             :showAttachment="showAttachment"
             :cdnHost="cdnHost"
+            :repeatList="repeatList"
+            :loading="loading"
             :uploadSDKInitData="uploadSDKInitData"
             :deleteAttachmentCallback="deleteAttachmentCallback"
             :previewAttachmentCallback="previewAttachmentCallback"
@@ -16,6 +18,7 @@
             @deleteAttachment="deleteAttachment"
             @previewAttachment="previewAttachment"
             @downloadAttachment="downloadAttachment"
+            @getRepeatQuestion="getRepeatQuestion"
             @getImportData="getImportData"
         ></item-import>
     </div>
@@ -56,7 +59,10 @@
           locale: document.documentElement.lang
         },
         fileId: 0,
-        redirect: true
+        redirect: true,
+        token: $('[name="import_token"]').val(),
+        repeatList: [],
+        loading: false,
       }
     },
     created() {
@@ -73,6 +79,38 @@
       }
     },
     methods: {
+      getRepeatQuestion(subject) {
+        const that = this
+        that.loading = true
+        $.ajax({
+          url: `/questions/${this.token}/checkDuplicatedQuestions`,
+          contentType: 'application/json;charset=utf-8',
+          type: 'post',
+          data: JSON.stringify(subject),
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+          }
+        }).done(function (res) {
+          that.repeatList = res.duplicatedIds
+
+          if(that.repeatList.length > 0) {
+            that.$confirm({
+              title: Translator.trans('created.question.confirm.title'),
+              okText: Translator.trans('created.question.confirm.ok.btn'),
+              cancelText: Translator.trans('created.question.confirm.close.btn'),
+              icon: 'exclamation-circle',
+              onOk() {
+                that.loading = false;
+              },
+              onCancel() {
+                that.getImportData(subject)
+              },
+            });
+          } else {
+            that.getImportData(subject)
+          }
+        })
+      },
       getImportData(subject) {
         this.redirect = false;
         $.ajax({
