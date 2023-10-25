@@ -2,6 +2,7 @@
 
 {% block title %}{{'my.learning.classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}} - {{ parent() }}{% endblock %}
 
+{% set tab_nav = 'learning' %}
 {% set side_nav = 'my-classroom' %}
 
 {% block main %}
@@ -21,6 +22,7 @@
   </div>
 
   <div class="panel-body">
+      {% include 'my/learning/classroom/nav-pill.html.twig' %}
     <ul class="course-wide-list">
       {% for classroom in classrooms if classroom %}
         <li class="my-course-item my-course-item--classroom cd-mb16 clearfix">
