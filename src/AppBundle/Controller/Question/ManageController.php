@@ -66,6 +66,7 @@ class ManageController extends BaseController
         $results = array_column($results, null, 'no');
         $result = $results[$data['jobId']];
         if ('finished' == $result['status']) {
+            $result['result'] = $this->getTransferImgs($result['result']);
             $questions = $this->getQuestionParseAdapter()->adapt($result['result']);
             $questions = $this->getTransferImg($questions);
             $questions = $this->getItemParser()->formatData($questions);
@@ -120,32 +121,27 @@ class ManageController extends BaseController
     {
         $formulas = [];
         foreach ($questions as &$question) {
-            $formulas = array_merge($formulas, $this->getFormulasFromText(html_entity_decode($question['stem'])));
+            $formulas = array_merge($formulas, $this->getFormulasFromText($question['stem']));
             if (isset($question['options'])) {
                 foreach ($question['options'] as &$option) {
-                    $formulas = array_merge($formulas, $this->getFormulasFromText(html_entity_decode($option)));
+                    $formulas = array_merge($formulas, $this->getFormulasFromText($option));
                 }
             }
         }
 
-        if (count($formulas) > 100) {
-            $dataResults = [];
-            $formulas = array_chunk($formulas, 100);
-            foreach ($formulas as $formula) {
-                $results = $this->getQuestionParseClient()->convertLatex2Img($formula);
-                $dataResults = array_merge($dataResults, $results);
-            }
-
-            return $this->replaceQuestions($formulas, $dataResults, $questions);
+        $dataResults = [];
+        $formulas = array_chunk($formulas, 100);
+        foreach ($formulas as $formula) {
+            $results = $this->getQuestionParseClient()->convertLatex2Img($formula);
+            $dataResults = array_merge($dataResults, $results);
         }
 
-        $results = $this->getQuestionParseClient()->convertLatex2Img($formulas);
-
-        return $this->replaceQuestions($formulas, $results, $questions);
+        return $this->replaceQuestions($formulas, $dataResults, $questions);
     }
 
     protected function getFormulasFromText($text)
     {
+        $text = html_entity_decode($text);
         preg_match_all('/data-tex\s*=\s*"([^\"]*)"/', $text, $matches);
         $formulas = $matches[1] ?? [];
 
