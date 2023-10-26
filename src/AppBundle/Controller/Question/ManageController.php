@@ -66,7 +66,6 @@ class ManageController extends BaseController
         $results = array_column($results, null, 'no');
         $result = $results[$data['jobId']];
         if ('finished' == $result['status']) {
-            $result['result'] = $this->getTransferImgs($result['result']);
             $questions = $this->getQuestionParseAdapter()->adapt($result['result']);
             $questions = $this->getTransferImg($questions);
             $questions = $this->getItemParser()->formatData($questions);
@@ -130,8 +129,7 @@ class ManageController extends BaseController
         }
 
         $dataResults = [];
-        $formulas = array_chunk($formulas, 100);
-        foreach ($formulas as $formula) {
+        foreach (array_chunk($formulas, 100) as $formula) {
             $results = $this->getQuestionParseClient()->convertLatex2Img($formula);
             $dataResults = array_merge($dataResults, $results);
         }
