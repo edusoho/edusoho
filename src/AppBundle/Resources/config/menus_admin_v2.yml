@@ -8,7 +8,7 @@ admin_v2:
             disable: true
         # 教务模块
         admin_v2_education:
-            quick_entrance_icon_class: 'icon-color-green'
+            quick_entrance_icon_class: 'icon-color-purple'
             name: admin_v2.nav.education
             children:
                 admin_v2_education_overview:
@@ -81,7 +81,7 @@ admin_v2:
                                     router_name: admin_v2_multi_class_setting
         # 教学模块
         admin_v2_teach:
-            quick_entrance_icon_class: 'icon-color-green'
+            quick_entrance_icon_class: 'icon-color-blue'
             name: admin_v2.nav.teach
             children:
                 # 课程管理（group）
@@ -625,7 +625,7 @@ admin_v2:
                                             mode: modal
         # 营销管理模块
         admin_v2_marketing:
-            quick_entrance_icon_class: 'icon-color-yellow'
+            quick_entrance_icon_class: 'icon-color-orange'
             name: admin_v2.nav.marketing
             children:
                 # 公开课管理
@@ -779,7 +779,7 @@ admin_v2:
                                     disable: true
         # 运营管理模块
         admin_v2_operating:
-            quick_entrance_icon_class: 'icon-color-yellow'
+            quick_entrance_icon_class: 'icon-color-orange'
             name: admin_v2.nav.operating
             children:
                 # 网校装修(group)
@@ -1063,7 +1063,7 @@ admin_v2:
                                     disable: true
         # 用户管理模块
         admin_v2_user:
-            quick_entrance_icon_class: 'icon-color-blue'
+            quick_entrance_icon_class: 'icon-color-green'
             name: admin_v2.nav.user
             children:
                 admin_v2_user_group:
@@ -1346,7 +1346,7 @@ admin_v2:
                                     router_name: admin_v2_scrm
         # 交易模块
         admin_v2_trade:
-            quick_entrance_icon_class: 'icon-color-yellow'
+            quick_entrance_icon_class: 'icon-color-red'
             name: admin_v2.nav.trade
             children:
                 # 订单管理
@@ -1441,7 +1441,7 @@ admin_v2:
                                     router_name: admin_v2_data_statistics_index
         # 系统模块
         admin_v2_system:
-            quick_entrance_icon_class: 'icon-color-blue'
+            quick_entrance_icon_class: 'icon-color-light-blue'
             name: admin_v2.nav.system
             children:
                 # 通用管理
