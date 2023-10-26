@@ -56,6 +56,8 @@ class MeCourse extends AbstractResource
         foreach ($courses as &$course) {
             if (isset($members[$course['id']])) {
                 $course['lastLearnTime'] = $members[$course['id']]['lastLearnTime'];
+                $deadline = $members[$course['id']]['deadline'];
+                $course['isExpired'] = $deadline !== 0 && $deadline > time();
             }
         }
         array_multisort(ArrayToolkit::column($courses, 'lastLearnTime'), SORT_DESC, $courses);
