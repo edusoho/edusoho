@@ -360,6 +360,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'buyExpiryTime',
                 'learnMode',
                 'buyable',
+                'showable',
                 'expiryStartDate',
                 'expiryEndDate',
                 'expiryMode',
