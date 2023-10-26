@@ -572,21 +572,13 @@ class ItemServiceImpl extends BaseService implements ItemService
         $material = $this->purifyHtml($material);
         $materialHash = md5($material);
 
-        if (isset($items)) {
-            $materials = [];
+        if ($items) {
             foreach ($items as $item) {
                 $item['bank_id'] = $bankId;
                 $item = $this->getItemProcessor($item['type'])->process($item);
-                $materialHashes[] = md5($item['material']);
-                $materials[] = $item['material'];
-            }
-
-            if (isset($materialHashes) && in_array($materialHash, $materialHashes)) {
-                return true;
-            }
-
-            if (isset($materials) && in_array($material, $materials)) {
-                return true;
+                if ($material == $item['material']) {
+                    return true;
+                }
             }
         }
 
