@@ -36,6 +36,7 @@ class MeCourse extends AbstractResource
         $courseConditions = [
             'ids' => ArrayToolkit::column($members, 'courseId') ?: [0],
             'excludeTypes' => ['reservation'],
+            'courseSetTitleLike' => $conditions['title']
         ];
 
         $courses = $this->getCourseService()->searchCourses(
