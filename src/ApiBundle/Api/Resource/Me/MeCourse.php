@@ -23,7 +23,7 @@ class MeCourse extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $members = $this->getCourseMemberService()->searchMembers(
             $conditions,
-            ['lastLearnTime' => 'DESC'],
+            ['lastLearnTime' => 'desc', 'createdTime' => 'desc'],
             0,
             PHP_INT_MAX
         );
