@@ -24,6 +24,7 @@
           </div>
           <input type="hidden" name="accessCloud" value="{{ cloudStatus() }}">
           <input type="hidden" name="canManageCloud" value="{{ has_permission('admin_v2_cloud_center') }}">
+          <input type="hidden" name="introModalUrl" value="{{ path('question_bank_manage_import_intro') }}">
         </div>
       </div>
     {% endblock %}
