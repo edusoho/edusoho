@@ -58,6 +58,7 @@ class MeJoined extends AbstractResource
             $courseSets[$member['courseSetId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
             $courseSets[$member['courseSetId']]['meJoinedType'] = 'live';
             $courseSets[$member['courseSetId']]['cover'] = $this->transformCover($courseSets[$member['courseSetId']]['cover'], 'course');
+            $courseSets[$member['courseId']]['isExpired'] = $member['deadline'] !== 0 && $member['deadline'] > time();
         }
 
         return array_values($this->orderByLastViewTime($courseSets, $uniqueMemberIds));
@@ -99,6 +100,7 @@ class MeJoined extends AbstractResource
                 $courses[$member['courseId']]['meJoinedType'] = 'course';
                 $courses[$member['courseId']]['courseSet']['cover'] = $this->transformCover($courses[$member['courseId']]['courseSet']['cover'], 'course');
                 $courses[$member['courseId']]['cover'] = is_string($courses[$member['courseId']]['cover']) ? null : $courses[$member['courseId']]['cover'];
+                $courses[$member['courseId']]['isExpired'] = $member['deadline'] !== 0 && $member['deadline'] > time();
             }
         }
 
@@ -129,6 +131,7 @@ class MeJoined extends AbstractResource
             $classroom['largePicture'] = AssetHelper::getFurl($classroom['smallPicture'], 'classroom.png');
             $progress = $this->getClassroomLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
             $classroom['learningProgressPercent'] = $progress['percent'];
+            $classroom['isExpired'] = $members[$classroom['id']]['deadline'] !== 0 && $members[$classroom['id']]['deadline'] > time();
         }
 
         return $classrooms;
@@ -152,6 +155,7 @@ class MeJoined extends AbstractResource
             if (empty($itemBankExercises[$member['exerciseId']])) {
                 unset($members[$key]);
             } else {
+                $itemBankExercises['isExpired'] = $member['deadline'] !== 0 && $member['deadline'] > time();
                 $member['itemBankExercise'] = $itemBankExercises[$member['exerciseId']];
             }
             $member['meJoinedType'] = 'itemBankExercise';
