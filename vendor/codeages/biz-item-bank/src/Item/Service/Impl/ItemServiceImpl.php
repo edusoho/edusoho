@@ -563,14 +563,14 @@ class ItemServiceImpl extends BaseService implements ItemService
         $allDuplicatedIds = [];
         foreach ($selfDuplicatedIdsGroup as $selfDuplicatedIds) {
             foreach ($selfDuplicatedIds as $selfDuplicatedId) {
-                $allDuplicatedIds[$selfDuplicatedId] = array_values(array_diff($selfDuplicatedIds, [$selfDuplicatedId]));
+                $allDuplicatedIds[$selfDuplicatedId]['local'] = array_values(array_diff($selfDuplicatedIds, [$selfDuplicatedId]));
             }
         }
 
         $duplicatedMaterials = array_column($this->getItemDao()->findDuplicatedMaterial($bankId, $materialHashes), 'material');
         $duplicatedIds = array_keys(array_intersect($materials, $duplicatedMaterials));
         foreach ($duplicatedIds as $duplicatedId) {
-            $allDuplicatedIds[$duplicatedId] = $allDuplicatedIds[$duplicatedId] ?? [];
+            $allDuplicatedIds[$duplicatedId]['remote'] = true;
         }
 
         return $allDuplicatedIds;
