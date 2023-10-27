@@ -2657,6 +2657,10 @@ course_manage_exam_result_anlysis:
     path: '/course/{id}/manage/exam/activity/{activityId}/analysis'
     defaults:
         _controller: 'AppBundle:Course/TestpaperManage:resultAnalysis'
+course_testpaper_check_list:
+    path: '/testpaper/check'
+    defaults:
+        _controller: 'AppBundle:Testpaper/Manage:checkList'
 testpaper_do:
     path: '/lesson/{lessonId}/testpaper/{testId}/do'
     defaults:

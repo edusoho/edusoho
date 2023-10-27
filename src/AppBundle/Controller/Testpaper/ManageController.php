@@ -55,23 +55,31 @@ class ManageController extends BaseController
         ]);
     }
 
-    public function checkListAction(Request $request, $targetId, $targetType, $type)
+    public function checkListAction(Request $request)
     {
-        $courseIds = [$targetId];
+        $data = json_decode($request->getContent(), true);
+
+        $courseIds = [$data['targetId']];
         $courses = [];
         $courseSets = [];
-        if ('classroom' === $targetType) {
-            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
+        if ('classroom' === $data['targetType']) {
+            $courses = $this->getClassroomService()->findCoursesByClassroomId($data['targetId']);
             $courseIds = ArrayToolkit::column($courses, 'id');
             $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
         }
 
         $conditions = [
             'courseIds' => empty($courseIds) ? [-1] : $courseIds,
-            'type' => $type,
-            'titleLike' => $this->purifyHtml($request->query->get('title')),
-            'categoryId' => $request->query->get('categoryId'),
+            'type' => $data['type'],
         ];
+
+        if (isset($data['title'])) {
+            $conditions['titleLike'] = $this->purifyHtml($data['title']);
+        }
+
+        if (isset($data['categoryId'])) {
+            $conditions['categoryId'] = $data['categoryId'];
+        }
 
         $paginator = new Paginator(
             $request,
@@ -85,20 +93,18 @@ class ManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        list($tasks, $testpapers) = $this->getTaskService()->findTestpapers($tasks, $type);
+        list($tasks, $testpapers) = $this->getTaskService()->findTestpapers($tasks, $data['type']);
 
-        $resultStatusNum = $this->findTestpapersStatusNum($tasks);
-
-        return $this->render('testpaper/manage/check-list.html.twig', [
+        return $this->createJsonResponse([
             'testpapers' => $testpapers,
             'paginator' => $paginator,
-            'targetId' => $targetId,
-            'targetType' => $targetType,
+            'targetId' => $data['targetId'],
+            'targetType' => $data['targetType'],
             'tasks' => $tasks,
-            'resultStatusNum' => $resultStatusNum,
+            'resultStatusNum' => $this->findTestpapersStatusNum($tasks),
             'courses' => ArrayToolkit::index($courses, 'id'),
             'courseSets' => ArrayToolkit::index($courseSets, 'id'),
-            'type' => $type,
+            'type' => $data['type'],
         ]);
     }
 
