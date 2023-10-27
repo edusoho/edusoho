@@ -578,7 +578,7 @@ class ItemServiceImpl extends BaseService implements ItemService
 
     public function isMaterialDuplicative($bankId, $material, $items = [])
     {
-        $material = $this->purifyHtml($material);
+        $material = $this->purifyHtml(trim($material));
         $materialHash = md5($material);
 
         if ($items) {
