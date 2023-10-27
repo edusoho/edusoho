@@ -553,18 +553,27 @@ class ItemServiceImpl extends BaseService implements ItemService
             $materials[] = $item['material'];
         }
 
-        $selfDuplicatedIds = [];
+        $selfDuplicatedIdsGroup = [];
         foreach (array_count_values($materials) as $value => $count) {
             if ($count > 1) {
-                $selfDuplicatedIds = array_keys($materials, $value);
+                $selfDuplicatedIdsGroup[] = array_keys($materials, $value);
+            }
+        }
+
+        $allDuplicatedIds = [];
+        foreach ($selfDuplicatedIdsGroup as $selfDuplicatedIds) {
+            foreach ($selfDuplicatedIds as $selfDuplicatedId) {
+                $allDuplicatedIds[$selfDuplicatedId]['local'] = array_values(array_diff($selfDuplicatedIds, [$selfDuplicatedId]));
             }
         }
 
         $duplicatedMaterials = array_column($this->getItemDao()->findDuplicatedMaterial($bankId, $materialHashes), 'material');
         $duplicatedIds = array_keys(array_intersect($materials, $duplicatedMaterials));
-        $allDuplicatedIds = array_values(array_unique(array_merge($selfDuplicatedIds, $duplicatedIds)));
+        foreach ($duplicatedIds as $duplicatedId) {
+            $allDuplicatedIds[$duplicatedId]['remote'] = true;
+        }
 
-        return empty($allDuplicatedIds) ? [] : $allDuplicatedIds;
+        return $allDuplicatedIds;
     }
 
     public function isMaterialDuplicative($bankId, $material, $items = [])
