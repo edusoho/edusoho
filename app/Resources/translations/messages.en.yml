@@ -10245,8 +10245,10 @@ admin_v2.homepage.school_info.system_status.has_upgrade: New upgrade
 admin_v2.homepage.school_info.system_status.upgraded: Latest
 admin_v2.homepage.school_info.system_version: System version
 admin_v2.homepage.school_info.access_web: Home
-admin_v2.homepage.school_info.access_mobile_app: Access App
-admin_v2.homepage.school_info.access_wechat_app: Access wechat app
+admin_v2.homepage.school_info.access_mobile_web: Micronetwork school
+admin_v2.homepage.school_info.access_mobile_app: App
+admin_v2.homepage.school_info.access_wechat_app: Wechat app
+admin_v2.homepage.school_info.no_access: Have not opened
 admin_v2.homepage.school_info.level.none: Open source
 admin_v2.homepage.school_info.level.saas: SaaS
 admin_v2.homepage.school_info.level.license: License

@@ -8,18 +8,7 @@
 
   <div class="panel panel-default panel-col">
 
-    <div class="panel-heading">
-      {{ 'my.learning.course'|trans }}
-      <div class="pull-right">
-        <form class="search-form" style="margin-right: 54px;" method="get">
-          <input class="search-input-content inline-block" type="text" name="title" value="{{ app.request.get("title") }}" placeholder="{{ 'course.placeholder.name'|trans }}" />
-          <a class="btn inline-block searchCourseBtn es-icon es-icon-search" type="submit"></a>
-        </form>
-        <a class="live-course-btn" href="{{ path('my_courses_live_calendar') }}">{{ 'my.learning.live_schedule_menu'|trans }}</a>
-      </div>
-    </div>
-
-    <div class="panel-body">
+    
     <div id="app"></div>
       {# {% include 'my/learning/course/nav-pill.html.twig' %}
       {% set type = 'learning' %}

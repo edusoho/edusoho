@@ -1,6 +1,7 @@
 {% set currentTheme = current_theme() %}
 {% set mobileEnabled = setting('mobile.enabled', 0) %}
 {% set isWithoutNetwork = is_without_network() %}
+{% do script(['app/js/school-info/index.js']) %}
 
 <div class="admin-info-section">
   <div class="admin-website text-center">
@@ -51,7 +52,28 @@
 </div>
 {% endif %}
 <div class="admin-link">
-  <a class="admin-link__btn" href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-site"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}</a>
-  <a {% if mobileEnabled %}class="admin-link__btn" href="{{ path('mobile') }}" target="_blank" {% else %}class="admin-link__btn admin-link__btn--disabled" href="{{ path('admin_v2_setting_mobile') }}"{% endif %}>{% if not mobileEnabled %}<span class="closed-tag"></span>{% endif %}<i class="es-icon es-icon-app"></i>{{ 'admin_v2.homepage.school_info.access_mobile_app'|trans }}</a>
-  <a {% if wechatAppStatus.installed|default(false) and wechatAppStatus.configured|default(false) %}class="admin-link__btn js-mini-program mb0" href="javascript:;" data-src="{{ miniProgramCodeImg.img_url|default() }}" {% else %}class="admin-link__btn admin-link__btn--disabled" href="{{ path('admin_v2_wechat_app') }}"{% endif %}>{% if not wechatAppStatus.installed %}<span class="closed-tag"></span>{% endif %}<i class="es-icon es-icon-entry-miniprogram"></i>{{ 'admin_v2.homepage.school_info.access_wechat_app'|trans }}</a>
+<div class="cd-dropdown js-sass" data-toggle="cd-dropdown" data-trigger="hover">
+  <a class="admin-link__btn" href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-micronetwork-school"></i>{{ 'admin_v2.homepage.school_info.access_mobile_web'|trans }}</a>
+            <div class="dropdown-menu" style="width: 232px;left: -20px; top: 44px;">
+              <div class="js-mall-card" style="position: absolute;top:-2000px;left:0;z-index:1;padding: 20px 16px;background-color: #fff;border-radius: 4px;">
+                <div style="display: flex;width: 300px;margin-bottom:20px;align-items:center;">
+                  <div style="width: 124px;height:58px;text-align: center;">
+                    <img src="{{ asset(setting('site.logo')|default('/static-dist/app/img/admin-v2/default-logo@2x.png')) }}" 
+                      style="max-width: 100%;max-height: 100%;margin-right:16px;border-radius: 2px;">
+                  </div>
+                  <div style="flex: 1;line-height: initial;font-size: 16px;font-weight: bold;">{{ setting('site.name') }}的商城</div>
+                </div>
+                <canvas class="js-marketing-qrcode1"></canvas>
+              </div>
+              <div class="school-share-container">
+                123
+              </div>
+            </div>
+          </div>
+  <a {% if mobileEnabled %}class="admin-link__btn" href="{{ path('mobile') }}" target="_blank" {% else %}class="admin-link__btn admin-link__btn--disabled" data-toggle="tooltip" title="{{ 'admin_v2.homepage.school_info.no_access'|trans }}" href="{{ path('admin_v2_setting_mobile') }}"{% endif %}>{% if not mobileEnabled %}{% endif %}<i class="es-icon es-icon-app"></i>{{ 'admin_v2.homepage.school_info.access_mobile_app'|trans }}</a>
+  <a {% if wechatAppStatus.installed|default(false) and wechatAppStatus.configured|default(false) %}class="admin-link__btn js-mini-program mb0" href="javascript:;" data-src="{{ miniProgramCodeImg.img_url|default() }}" {% else %}class="admin-link__btn admin-link__btn--disabled" data-toggle="tooltip" title="{{ 'admin_v2.homepage.school_info.no_access'|trans }}" href="{{ path('admin_v2_wechat_app') }}"{% endif %}>{% if not wechatAppStatus.installed %}{% endif %}<i class="es-icon es-icon-entry-miniprogram"></i>{{ 'admin_v2.homepage.school_info.access_wechat_app'|trans }}</a>
 </div>
+
+<script>
+$('[data-toggle="tooltip"]').tooltip();
+</script>

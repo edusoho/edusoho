@@ -11576,8 +11576,10 @@ admin_v2.homepage.school_info.system_status.has_upgrade: 有更新
 admin_v2.homepage.school_info.system_status.upgraded: 已更新
 admin_v2.homepage.school_info.system_version: 系统版本
 admin_v2.homepage.school_info.access_web: 访问首页
-admin_v2.homepage.school_info.access_mobile_app: 访问App
-admin_v2.homepage.school_info.access_wechat_app: 访问小程序
+admin_v2.homepage.school_info.access_mobile_web: 微网校
+admin_v2.homepage.school_info.access_mobile_app: App
+admin_v2.homepage.school_info.access_wechat_app: 小程序
+admin_v2.homepage.school_info.no_access: 未开通
 admin_v2.homepage.school_info.level.none: 开源版
 admin_v2.homepage.school_info.level.saas: SaaS版
 admin_v2.homepage.school_info.level.license: 商业授权

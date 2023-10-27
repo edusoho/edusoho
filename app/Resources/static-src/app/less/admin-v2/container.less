@@ -267,19 +267,37 @@
 
 .icon-color-green {
   .admin-function__icon {
-    background-color: #46c37b;
+    background-color: #21C213;
   }
 }
 
-.icon-color-yellow {
+.icon-color-orange {
   .admin-function__icon {
-    background-color: #f7d370;
+    background-color: #FF9A35;
   }
 }
 
 .icon-color-blue {
   .admin-function__icon {
-    background-color: #88b5ee;
+    background-color: #3B73F3;
+  }
+}
+
+.icon-color-purple {
+  .admin-function__icon {
+    background-color: #AF36F9;
+  }
+}
+
+.icon-color-red {
+  .admin-function__icon {
+    background-color: #F55454;
+  }
+}
+
+.icon-color-light-blue {
+  .admin-function__icon {
+    background-color: #23AEFD;
   }
 }
 
@@ -319,7 +337,7 @@
     display: table-cell;
     width: 48px;
     height: 48px;
-    border-radius: 100%;
+    border-radius: 8px;
     color: @cdv2-white;
     vertical-align: top;
     i {
@@ -333,7 +351,7 @@
     font-size: 14px;
     line-height: 48px;
     text-align: left;
-    color: @cdv2-dark-minor;
+    color: #37393D;
   }
 }
 
@@ -585,17 +603,21 @@
   }
 }
 
+.admin-link {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 将容器分为三列，每列的宽度平均分配 */
+  grid-gap: 12px;
+}
+
 .admin-link__btn {
-  display: block;
-  margin-bottom: 12px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  padding-left: 35%;
-  background-color: rgba(66,139,202,0.1);
+  display: inline-block;
+  min-width: max-content;
+  text-align: center;
+  padding: 6px 8px;
+  background-color: #FAFAFA;
   .cdv2-text-md;
   color: @brand-primary;
-  border-radius: 24px;
+  border-radius: 8px;
   &:last-child {
     margin-bottom: 0;
   }
@@ -604,19 +626,23 @@
     font-size: 16px;
     line-height: 20px;
     vertical-align: bottom;
+    color: @brand-primary;
   }
   .es-transition;
   &:hover,
   &:focus {
     .es-transition;
-    color: @cdv2-white;
-    background-color: @brand-primary;
+    color: @brand-primary;
+    background-color: #F0F7FF;
     text-decoration: none;
   }
   &.admin-link__btn--disabled {
     position: relative;
-    background-color: rgba(240,240,240,1);
-    color: @cdv2-light-minor;
+    background-color: #FAFAFA;
+    color: #919399;
+    i {
+      color: #3B73F366;
+    }
     .closed-tag {
       position: absolute;
       left: 0;

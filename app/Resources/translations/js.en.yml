@@ -1777,7 +1777,7 @@ course.marketing_setup: 'Markets'
 site.currency.CNY: CNY
 s2b2c.product.cooperation_price: Cooperation Price
 s2b2c.product.suggestion_price: Suggestion Price
-s2b2c.resource.sync.prev_price.notify: 上个版本价格为
+s2b2c.resource.sync.prev_price.notify: The price of the previous version was
 site.price: Price
 course.marketing_setup.setup.can_join: Can join
 course.marketing_setup.setup.can_not_join: Can not join

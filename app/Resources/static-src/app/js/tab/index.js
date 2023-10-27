@@ -1,5 +1,8 @@
 import Tab from './Tab.vue';
 import { isMobileDevice } from 'common/utils';
+import Axios from 'axios';
+
+Vue.prototype.$axios = Axios;
 
 jQuery.support.cors = true;
 
