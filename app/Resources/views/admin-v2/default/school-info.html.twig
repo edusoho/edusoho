@@ -14,7 +14,7 @@
     <div class="">
       <div class="rank-tag {% if schoolLevel == 'saas' %}rank-tag--yellow{% elseif schoolLevel == 'license' %}{% elseif schoolLevel == 'none' %}rank-tag--green{% endif %}">
         <span class="rank-tag__icon">
-            <img src={{ asset('static-dist/app/img/edition/edition-'~schoolLevel~'.png') }} alt="">
+            <img src={{ asset('static-dist/app/img/edition/edition-'~schoolLevel~'.svg') }} alt="">
         </span>
         <div class="rank-tag__text">{{ ('admin_v2.homepage.school_info.level.'~schoolLevel)|trans }}</div>
       </div>
