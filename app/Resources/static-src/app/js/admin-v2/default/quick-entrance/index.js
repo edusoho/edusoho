@@ -4,6 +4,7 @@ $('html').on('shown.bs.modal', '#functionModal', (e) => {
   $('html').css('overflow', 'scroll');
 });
 
+
 $('.js-quick-entrance').on('click', '.js-function-choose', (event) => {
   const $target = $(event.currentTarget);
 

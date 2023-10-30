@@ -391,8 +391,7 @@
 .admin-application {
   display: block;
   padding-top: 32px;
-  padding-bottom: 26px;
-  background-color: @cdv2-bg;
+  padding-bottom: 32px;
   border-radius: 4px;
   i {
     display: inline-block;
@@ -402,7 +401,6 @@
     color: @cdv2-text-assist;
   }
   img {
-    margin-bottom: 16px;
     height: 48px;
     width: 48px;
     border-radius: 4px;
@@ -411,6 +409,7 @@
     font-size: 16px;
     line-height: 22px;
     color: @cdv2-dark-minor;
+    margin-left: 12px;
   }
 }
 
@@ -609,6 +608,25 @@
   grid-gap: 12px;
 }
 
+.school-share-link {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  color: #5E6166;
+  margin-bottom: 8px;
+  
+  .school-share-divider {
+    color: #D9D9D9;
+    margin-left: 12px;
+  }
+
+  .school-share-copy {
+    color: #165DFF;
+    display: inline-block;
+    margin-left: 12px;
+  }
+}
+
 .admin-link__btn {
   display: inline-block;
   min-width: max-content;
@@ -618,6 +636,7 @@
   .cdv2-text-md;
   color: @brand-primary;
   border-radius: 8px;
+
   &:last-child {
     margin-bottom: 0;
   }
