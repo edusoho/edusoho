@@ -13,7 +13,10 @@
     {# 三种颜色的客户等级 #}
     <div class="">
       <div class="rank-tag {% if schoolLevel == 'saas' %}rank-tag--yellow{% elseif schoolLevel == 'license' %}{% elseif schoolLevel == 'none' %}rank-tag--green{% endif %}">
-        <span class="rank-tag__icon"><i class="cd-icon cd-icon-star"></i></span><div class="rank-tag__text">{{ ('admin_v2.homepage.school_info.level.'~schoolLevel)|trans }}</div>
+        <span class="rank-tag__icon">
+            <img src={{ asset('static-dist/app/img/edition/edition-'~schoolLevel~'.svg') }} alt="">
+        </span>
+        <div class="rank-tag__text">{{ ('admin_v2.homepage.school_info.level.'~schoolLevel)|trans }}</div>
       </div>
       <div class="theme-tag">{{ currentTheme.name }}</div>
     </div>

@@ -335,21 +335,21 @@
   }
   .admin-function__icon {
     display: table-cell;
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     border-radius: 8px;
     color: @cdv2-white;
     vertical-align: top;
     i {
       font-size: 24px;
-      line-height: 48px;
+      line-height: 40px;
     }
   }
   .admin-function__name {
     width: 100px;
     padding-left: 16px;
     font-size: 14px;
-    line-height: 48px;
+    line-height: 40px;
     text-align: left;
     color: #37393D;
   }
@@ -401,8 +401,8 @@
     color: @cdv2-text-assist;
   }
   img {
-    height: 48px;
-    width: 48px;
+    height: 52px;
+    width: 52px;
     border-radius: 4px;
   }
   .admin-application__name {
@@ -491,16 +491,15 @@
         line-height: 28px;
       }
       text-align: center;
-      background: linear-gradient(90deg,rgba(141,205,255,1) 0%,rgba(37,173,238,1) 100%);
       color: @cdv2-white;
       border-radius: 100%;
     }
     .rank-tag__text {
       display: inline-block;
-      margin-left: 12px;
+      margin-left: 8px;
       padding: 4px 4px 4px 20px;
-      background-color: #73baf1;
-      color: @cdv2-white;
+      background-color: #EFF3FD;
+      color: #2B64E5;
       font-weight: 500;
       font-size: 12px;
       line-height: 16px;
@@ -508,20 +507,22 @@
     }
 
     &.rank-tag--yellow {
-      .rank-tag__icon {
-        background: linear-gradient(90deg,rgba(255,238,144,1) 0%,rgba(245,186,8,1) 100%);
-      }
       .rank-tag__text {
-        background-color: #f6c93f;
+        background-color: #FFEECE;
+        color: #91693B;
       }
     }
 
     &.rank-tag--green {
-      .rank-tag__icon {
-        background: linear-gradient(90deg,rgba(136,234,195,1) 0%,rgba(23,207,160,1) 100%);
-      }
       .rank-tag__text {
-        background-color: #6ad9af;
+        background-color: #DEFAE6;
+        color: #0F9233
+      }
+    }
+    &.rank-tag--purple {
+      .rank-tag__text {
+        background-color: #F3DEFA;
+        color: #6F0F92
       }
     }
   }
@@ -532,7 +533,7 @@
     padding: 4px;
     font-size: 12px;
     line-height: 16px;
-    color: @cdv2-light-minor;
+    color: @gray-black;
     background-color: @cdv2-line-color;
     border-radius: 4px;
   }
