@@ -2288,6 +2288,18 @@ course_set_manage_course_close:
         _controller: 'AppBundle:Course/CourseManage:close'
     methods:
         - POST
+course_set_manage_course_hide:
+    path: '/course_set/{courseSetId}/course/{courseId}/hide'
+    defaults:
+        _controller: 'AppBundle:Course/CourseManage:hide'
+    methods:
+        - POST
+course_set_manage_course_show:
+    path: '/course_set/{courseSetId}/course/{courseId}/show'
+    defaults:
+        _controller: 'AppBundle:Course/CourseManage:show'
+    methods:
+        - POST
 course_set_manage_course_delete:
     path: '/course_set/{courseSetId}/course/{courseId}/delete'
     defaults:
