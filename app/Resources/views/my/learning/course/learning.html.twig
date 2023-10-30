@@ -1,5 +1,5 @@
 {% extends 'my/learning/course/layout.html.twig' %}
-{% do script(['libs/vue.js', 'app/js/tab/index.js'])  %}
+{% do script(['app/js/tab/index.js'])  %}
 {% set mobile = is_show_mobile_page() %}
 {% set tab_nav = 'learning' %}
 {% block title %}{{ 'my.learning.course.learning'|trans }} - {{ parent() }}{% endblock %}

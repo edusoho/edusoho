@@ -35,7 +35,6 @@
 </template>
 <script>
 import CourseItem from './CourseItem.vue';
-import { Tabs } from '@codeages/design-vue';
 export default {
   data(){
     return {

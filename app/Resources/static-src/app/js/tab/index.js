@@ -1,6 +1,8 @@
 import Tab from './Tab.vue';
 import { isMobileDevice } from 'common/utils';
 import Axios from 'axios';
+import Vue from 'common/vue';
+
 
 Vue.prototype.$axios = Axios;
 
