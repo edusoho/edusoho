@@ -1740,6 +1740,10 @@ s2b2c.resource.sync.prev_price.notify: 上个版本价格为
 site.price: 价格
 course.marketing_setup.setup.can_join: 可加入
 course.marketing_setup.setup.can_not_join: 不可加入
+course.marketing_setup.setup.is_show_label: 页面显示
+course.marketing_setup.setup.can_show: 开启
+course.marketing_setup.setup.can_hide: 关闭
+item_bank_exercise.marketing_setup.rule.show: 关闭后该题库练习将彻底隐藏，学员无法在前台查看
 course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
 course.marketing_setup.expiry_date: 加入截止日期
 course.marketing_setup.rule.expiry_date: 学习有效期

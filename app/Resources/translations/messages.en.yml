@@ -900,6 +900,8 @@ course.teaching_plan.expiry_date.end_date_mode: 'Expiration date mode'
 course.teaching_plan.expiry_date.days_mode: 'Valid days mode'
 course.teaching_plan.publish_btn: 'Publish'
 course.teaching_plan.manage: Teaching plan manage
+course.teaching_plan.show_page: Enable page display
+course.teaching_plan.hide_page: Disable page display
 course.teaching_plan.delete_btn: Delete
 course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
@@ -10245,8 +10247,10 @@ admin_v2.homepage.school_info.system_status.has_upgrade: New upgrade
 admin_v2.homepage.school_info.system_status.upgraded: Latest
 admin_v2.homepage.school_info.system_version: System version
 admin_v2.homepage.school_info.access_web: Home
-admin_v2.homepage.school_info.access_mobile_app: Access App
-admin_v2.homepage.school_info.access_wechat_app: Access wechat app
+admin_v2.homepage.school_info.access_mobile_web: Micronetwork school
+admin_v2.homepage.school_info.access_mobile_app: App
+admin_v2.homepage.school_info.access_wechat_app: Wechat app
+admin_v2.homepage.school_info.no_access: Have not opened
 admin_v2.homepage.school_info.level.none: Open source
 admin_v2.homepage.school_info.level.saas: SaaS
 admin_v2.homepage.school_info.level.license: License
