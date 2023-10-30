@@ -67,6 +67,7 @@ class ManageController extends BaseController
         $result = $results[$data['jobId']];
         if ('finished' == $result['status']) {
             $questions = $this->getQuestionParseAdapter()->adapt($result['result']);
+            $questions = $this->getTransferImg($questions);
             $questions = $this->getItemParser()->formatData($questions);
             $fileSystem = new Filesystem();
             $fileSystem->dumpFile($data['cacheFilePath'], json_encode($questions));
@@ -113,6 +114,62 @@ class ManageController extends BaseController
         return $this->createJsonResponse([
             'duplicatedIds' => $duplicatedMaterialIds,
         ]);
+    }
+
+    protected function getTransferImg($questions)
+    {
+        $formulas = [];
+        foreach ($questions as &$question) {
+            $formulas = array_merge($formulas, $this->getFormulasFromText($question['stem']));
+            if (isset($question['options'])) {
+                foreach ($question['options'] as &$option) {
+                    $formulas = array_merge($formulas, $this->getFormulasFromText($option));
+                }
+            }
+        }
+
+        $dataResults = [];
+        foreach (array_chunk($formulas, 100) as $formula) {
+            $results = $this->getQuestionParseClient()->convertLatex2Img($formula);
+            $dataResults = array_merge($dataResults, $results);
+        }
+
+        return $this->replaceQuestions($formulas, $dataResults, $questions);
+    }
+
+    protected function getFormulasFromText($text)
+    {
+        $text = html_entity_decode($text);
+        preg_match_all('/data-tex\s*=\s*"([^\"]*)"/', $text, $matches);
+        $formulas = $matches[1] ?? [];
+
+        return $formulas;
+    }
+
+    protected function replaceQuestions($formulas, $results, $questions)
+    {
+        $replaceFormulas = array_combine($formulas, $results);
+        $questions = array_map(function ($question) use ($replaceFormulas) {
+            $question['stem'] = $this->getReplaceTexts($replaceFormulas, $question['stem']);
+            if (isset($question['options'])) {
+                $question['options'] = array_map(function ($option) use ($replaceFormulas) {
+                    return $this->getReplaceTexts($replaceFormulas, $option);
+                }, $question['options']);
+            }
+
+            return $question;
+        }, $questions);
+
+        return $questions;
+    }
+
+    protected function getReplaceTexts($replaceFormulas, $text)
+    {
+        $replaceFunc = function ($match) use ($replaceFormulas) {
+            return "<img src=\"{$replaceFormulas[$match[1]]}\" >";
+        };
+
+        return preg_replace_callback('/<span.*?data-tex\s*=\s*"(.*?)".*?><\/span>/', $replaceFunc, $text);
     }
 
     protected function getQuestionParseClient()
