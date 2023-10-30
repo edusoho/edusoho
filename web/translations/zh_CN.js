@@ -398,8 +398,11 @@ t.add("course.manage.publish_title", "\u53d1\u5e03\u6559\u5b66\u8ba1\u5212", "js
 t.add("course.manage.publish_success_hint", "\u6559\u5b66\u8ba1\u5212\u53d1\u5e03\u6210\u529f", "js", "zh_CN");
 t.add("course.manage.publish_fail_hint", "\u6559\u5b66\u8ba1\u5212\u53d1\u5e03\u5931\u8d25", "js", "zh_CN");
 t.add("course.manage.close_hint", "\u662f\u5426\u786e\u5b9a\u5173\u95ed\u8be5\u6559\u5b66\u8ba1\u5212\uff1f", "js", "zh_CN");
+t.add("course.manage.hide_hint", "\u5173\u95ed\u540e\u8be5\u8bfe\u7a0b\u8ba1\u5212\u5c06\u5f7b\u5e95\u9690\u85cf\uff0c\u5b66\u5458\u65e0\u6cd5\u5728\u524d\u53f0\u67e5\u770b", "js", "zh_CN");
 t.add("course.manage.close_success_hint", "\u5173\u95ed\u6210\u529f", "js", "zh_CN");
 t.add("course.manage.close_fail_hint", "\u5173\u95ed\u5931\u8d25", "js", "zh_CN");
+t.add("course.manage.show_success_hint", "\u5f00\u542f\u6210\u529f", "js", "zh_CN");
+t.add("course.manage.show_fail_hint", "\u5f00\u542f\u5931\u8d25", "js", "zh_CN");
 t.add("course.manage.copy_title", "\u590d\u5236\u8ba1\u5212", "js", "zh_CN");
 t.add("course.manage.max_course_number_tip", "\u652f\u6301\u521b\u5efa10\u4e2a\u8ba1\u5212\uff0c\u82e5\u9700\u65b0\u589e\uff0c\u8bf7\u5bf9\u539f\u6709\u8ba1\u5212\u5220\u9664\u540e\u6dfb\u52a0\u3002", "js", "zh_CN");
 t.add("course.manage.delete_hint", "\u662f\u5426\u786e\u5b9a\u5220\u9664\u8be5\u6559\u5b66\u8ba1\u5212\uff1f", "js", "zh_CN");

@@ -27,6 +27,45 @@ export const closeCourse = () => {
   });
 };
 
+export const hideCourse = () => {
+  $('body').on('click', '.js-hide-course', (evt) => {
+    let $target = $(evt.currentTarget);
+    cd.confirm({
+      title: Translator.trans('site.tips'),
+      content: Translator.trans('course.manage.hide_hint'),
+      okText: Translator.trans('site.confirm'),
+      cancelText: Translator.trans('site.cancel')
+    }).on('ok', () => {
+      hideCourseAction($target);
+    });
+  });
+};
+
+const hideCourseAction = ($target) => {
+    $.post($target.data('url'), (data) => {
+      if (data.success) {
+        cd.message({type: 'success', message: Translator.trans('course.manage.close_success_hint')});
+        location.reload();
+      } else {
+        cd.message({type: 'danger', message: Translator.trans('course.manage.close_fail_hint') + ':' + data.message});
+      }
+    });
+}
+
+export const showCourse = () => {
+  $('body').on('click', '.js-show-course', (evt) => {
+    let $target = $(evt.currentTarget);
+    $.post($target.data('url'), (data) => {
+      if (data.success) {
+        cd.message({type: 'success', message: Translator.trans('course.manage.show_success_hint')});
+        location.reload();
+      } else {
+        cd.message({type: 'danger', message: Translator.trans('course.manage.show_fail_hint') + ':' + data.message});
+      }
+    });
+  });
+};
+
 const closeCourseAction = ($target) => {
   $.post($target.data('url'), (data) => {
     if (data.success) {
