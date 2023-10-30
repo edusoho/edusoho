@@ -548,8 +548,11 @@ course.manage.publish_title: Publish teaching plan
 course.manage.publish_success_hint: The program was published successfully
 course.manage.publish_fail_hint: Publish program failed
 course.manage.close_hint: Are you sure to close the program?
+course.manage.hide_hint: After closing, the course plan will be completely hidden and students will not be able to view it on the front-end.
 course.manage.close_success_hint: closed successfully
 course.manage.close_fail_hint: Close failed
+course.manage.show_success_hint: Enabled successfully
+course.manage.show_fail_hint: Enable failed
 course.manage.copy_title: Copy teaching plan
 course.manage.max_course_number_tip: Allowed to create 10 plans, if you need to add more, please add after the original plan is deleted.
 course.manage.delete_hint: Are you sure you want to delete the plan?
