@@ -45,7 +45,7 @@ const hideCourseAction = ($target) => {
     $.post($target.data('url'), (data) => {
       if (data.success) {
         cd.message({type: 'success', message: Translator.trans('course.manage.close_success_hint')});
-        location.reload();
+        window.location.reload();
       } else {
         cd.message({type: 'danger', message: Translator.trans('course.manage.close_fail_hint') + ':' + data.message});
       }
@@ -58,7 +58,7 @@ export const showCourse = () => {
     $.post($target.data('url'), (data) => {
       if (data.success) {
         cd.message({type: 'success', message: Translator.trans('course.manage.show_success_hint')});
-        location.reload();
+        window.location.reload();
       } else {
         cd.message({type: 'danger', message: Translator.trans('course.manage.show_fail_hint') + ':' + data.message});
       }
@@ -70,7 +70,7 @@ const closeCourseAction = ($target) => {
   $.post($target.data('url'), (data) => {
     if (data.success) {
       cd.message({type: 'success', message: Translator.trans('course.manage.close_success_hint')});
-      location.reload();
+      window.location.reload();
     } else {
       cd.message({type: 'danger', message: Translator.trans('course.manage.close_fail_hint') + ':' + data.message});
     }
@@ -113,7 +113,7 @@ export const deleteCourse = () => {
           if (data.redirect) {
             window.location.href = data.redirect;
           } else {
-            location.reload();
+            window.location.reload();
           }
         } else {
           cd.message({type: 'danger', message: Translator.trans('site.delete_fail_hint') + ':' + data.message});
