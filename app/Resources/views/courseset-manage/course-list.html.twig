@@ -1,8 +1,6 @@
 {% extends 'course-manage/header.html.twig' %}
 {% block js %}
 {% endblock %}
-    {% set showStatus = 'close' %}
-
 {% block title %}
   <a class="cd-link-major"
      href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}"
@@ -42,18 +40,18 @@
             </li>
             {% if course.status|default('') == 'published' %}
               {% if courseSet.platform|default('self') == 'self' %}
-              {% if showStatus == 'close' %}
+              {% if showable == '0' %}
                   <li>
-                    <a class="js-copy-plan" href="javascript:;"
-                      data-url="{{ path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id}) }}">
-                     开启页面显示
+                    <a href="javascript:;"
+                      data-url="{{ path('course_set_manage_course_show', {courseSetId: courseSet.id, courseId: course.id}) }}">
+                     {{'course.teaching_plan.show_page'|trans}}
                     </a>
                   </li>
                   {% else %}
                   <li>
-                    <a class="js-copy-plan" href="javascript:;"
-                      data-url="{{ path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id}) }}">
-                     关闭页面显示
+                    <a href="javascript:;"
+                      data-url="{{ path('course_set_manage_course_hide', {courseSetId: courseSet.id, courseId: course.id}) }}">
+                        {{'course.teaching_plan.hide_page'|trans}}
                     </a>
                   </li>
               {% endif %}

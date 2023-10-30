@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="ibs-vue">
+  <div>
     <div class="panel-heading" style="border-bottom: 1px solid #f5f5f5; padding: 10px 0; line-height: 30px;">
       <label class="text-18">我的课程</label>
       <div class="pull-right">
