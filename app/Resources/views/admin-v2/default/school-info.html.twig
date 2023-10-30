@@ -48,7 +48,7 @@
     {% if mainAppUpgrade and not isWithoutNetwork %}
       <div class="admin-update__link pull-right"><div class="cdv2-light-minor admin-update__version">{{ version }}</div><a class="admin-update__link" href="{{ path('admin_v2_app_upgrades') }}">{{ 'admin_v2.homepage.school_info.system_status.has_upgrade'|trans }}</a></div>
     {% else %}
-      <div class="cdv2-light-minor pull-right"><div class="cdv2-light-minor admin-update__version">{{ version }}</div><span class="">{{ 'admin_v2.homepage.school_info.system_status.upgraded'|trans }}</span></div>
+      <div class="cdv2-light-minor pull-right"><div class="cdv2-light-minor admin-update__version">{{ version }}</div><span class="admin-update__updated">{{ 'admin_v2.homepage.school_info.system_status.upgraded'|trans }}</span></div>
     {% endif %}
   </div>
 </div>
