@@ -6,7 +6,7 @@
     :preview="preview"
     :validator-result="validatorResult"
     @event-actions="handleClickAction"
-    :class="currentItemBank ? '' : 'hidden'"
+    v-show="currentItemBank"
   >
     <div v-if="currentItemBank" class="item-bank-list">
       <div class="clearfix">
