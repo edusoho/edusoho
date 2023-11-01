@@ -26,22 +26,21 @@ class MeClassroom extends AbstractResource
             'lastLearnTime' => 'desc',
             'createdTime' => 'desc',
         ];
-
+        $members = $this->getClassroomService()->searchMembers($conditions, $orderBy, 0, PHP_INT_MAX);
         if (isset($querys['format']) && 'pagelist' == $querys['format']) {
             list($offset, $limit) = $this->getOffsetAndLimit($request);
-
-            $classrooms = array_values($this->getClassroomService()->searchClassrooms($this->buildCourseConditions($conditions, $orderBy, $querys), [], $offset, $limit));
+            $classroomConditions = $this->buildClassroomConditions($members, $querys);
+            $classrooms = array_values($this->getClassroomService()->searchClassrooms($classroomConditions, [], $offset, $limit));
             $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
 
             foreach ($classrooms as &$classroom) {
                 $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
                 $classroom['learningProgressPercent'] = $progress['percent'];
-                $classroom['isExpired'] = 0 !== $classroom['deadline'] && $classroom['deadline'] > time();
+                $classroom['isExpired'] = 0 !== $classroom['deadline'] && $classroom['deadline'] < time();
             }
 
-            return $this->makePagingObject($classrooms, count($classrooms), $offset, $limit);
+            return $this->makePagingObject($classrooms, count($classroomConditions['ids']), $offset, $limit);
         } else {
-            $members = $this->getClassroomService()->searchMembers($conditions, $orderBy, 0, PHP_INT_MAX);
             $classroomIds = ArrayToolkit::column($members, 'classroomId');
 
             $classrooms = array_values($this->getClassroomService()->findClassroomsByIds($classroomIds));
@@ -61,10 +60,9 @@ class MeClassroom extends AbstractResource
         }
     }
 
-    private function buildCourseConditions($conditions, $orderBy, $querys)
+    private function buildClassroomConditions($members, $querys)
     {
         $courseConditions = [];
-        $members = $this->getClassroomService()->searchMembers($conditions, $orderBy, 0, PHP_INT_MAX);
         if (!isset($querys['type'])) {
             $courseConditions['ids'] = ArrayToolkit::column($members, 'classroomId');
 
