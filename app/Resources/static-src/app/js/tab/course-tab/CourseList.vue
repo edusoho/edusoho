@@ -1,73 +1,24 @@
 <template>
   <div>
-    <div class="my-course-item cd-mb16 clearfix">
-
-      <a class="my-course-item__link relative" href="/course_set/931">
-        <img :src="course.courseSet.cover.middle"
-          :alt="course.courseSetTitle" class="my-course-item__picture">
-        <span class="absolute" :class="courseStatus.class">{{courseStatus.text}}
-        </span> </a>
-      <div class="my-course-item__info">
-        <div class="my-course-item__title text-overflow">
-          <a class="cd-link-major text-16" href="/course_set/931">{{course.courseSetTitle}}</a>
+    <CourseItem v-for="(item, index) in courseLists" :key="index" :course="item"></CourseItem>
+        <div v-if="courseLists.length == 0" class="searchEmptyCourse">
+          <img class="searchEmptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
+          <p class="searchEmptyCourseContent">暂无课程</p>
         </div>
-
-
-        <div class="my-course-item__progress cd-mt32 cd-clearfix">
-          <span class="my-course-item__progress__text">学习进度</span>
-          <div class="cd-progress cd-progress-sm">
-            <div class="progress-bar">
-              <div class="progress-outer">
-                <div class="progress-inner" :style="`width: ${course.progress.percent}%;`"></div>
-              </div>
-            </div>
-            <div class="progress-text">{{ course.progress.percent }}%</div>
-          </div>
-        </div>
-      </div>
-      <div class="my-course-item__btn">
-        <a class="btn cd-btn cd-btn-primary" :href="'/my/course/'+course.id">{{btnContent}}</a>
-      </div>
-
-    </div>
   </div>
 </template>
 <script>
-export default {
-  props: {
-    course: Object
-  },
-  data() {
-    return {
-    }
-  },
-  computed:{
-    courseStatus() {
-      let status = {
-        class: '',
-        text: ''
-      }
-      if (this.course.spec.status == 'closed') {
-        status = {
-          class: 'course-status-expired',
-          text: '已关闭'
-        }
-      }else if(this.course.courseSet.type == 'live') {
-        status = {
-          class: 'course-status-live',
-          text: '直播'
-        }
-      }
-      
-      return status
-    },
-    btnContent() {
-      if (this.course.spec.status === 'closed') {
-        return '查看课程'
-      }
+import CourseItem from './CourseItem.vue';
 
-      return '继续学习'
+export default {
+  props:{
+    courseLists: {
+      type:Array,
+      default:[]
     }
-  }
+  },
+  components: {
+    CourseItem
+        },
 }
 </script>

@@ -18,32 +18,16 @@
     size="small" 
     @change="tabOnChange">
       <a-tab-pane key="learning" tab="学习中">
-        <CourseList v-for="(item, index) in courseLists" :key="index" :course="item"></CourseList>
-        <div v-if="courseLists.length == 0" class="searchEmptyCourse">
-          <img class="searchEmptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
-          <p class="searchEmptyCourseContent">暂无课程</p>
-        </div>
+        <CourseList :courseLists="courseLists"></CourseList>
       </a-tab-pane>
-      <a-tab-pane key="learned" tab="已学完" force-render>
-        <CourseList v-for="(item, index) in courseLists" :key="index" :course="item"></CourseList>
-        <div v-if="courseLists.length == 0" class="searchEmptyCourse">
-          <img class="searchEmptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
-          <p class="searchEmptyCourseContent">暂无课程</p>
-        </div>
+      <a-tab-pane key="learned" tab="已学完">
+        <CourseList :courseLists="courseLists"></CourseList>
       </a-tab-pane>
       <a-tab-pane key="expired" tab="已过期">
-        <CourseList v-for="(item, index) in courseLists" :key="index" :course="item"></CourseList>
-        <div v-if="courseLists.length == 0" class="searchEmptyCourse">
-          <img class="searchEmptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
-          <p class="searchEmptyCourseContent">暂无课程</p>
-        </div>
+        <CourseList :courseLists="courseLists"></CourseList>
       </a-tab-pane>
       <a-tab-pane key="favorited" tab="收藏">
-        <CourseList v-for="(item, index) in courseLists" :key="index" :course="item"></CourseList>
-        <div v-if="courseLists.length == 0" class="searchEmptyCourse">
-          <img class="searchEmptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
-          <p class="searchEmptyCourseContent">暂无课程</p>
-        </div>
+        <CourseList :courseLists="courseLists"></CourseList>
       </a-tab-pane>
     </a-tabs>
     <a-pagination v-if="total>pageSize" :defaultPageSize="pageSize" v-model="current" @change="onChange" :total="total" />

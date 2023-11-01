@@ -17,25 +17,13 @@
     size="small" 
     @change="tabOnChange">
       <a-tab-pane key="learning" tab="学习中">
-        <ClassroomList v-for="(item, index) in courseLists" :key="index" :course="item"></ClassroomList>
-        <div v-if="courseLists.length == 0" class="searchEmptyCourse">
-          <img class="searchEmptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
-          <p class="searchEmptyCourseContent">暂无班级</p>
-        </div>
+        <ClassroomList :courseLists="courseLists"></ClassroomList>
       </a-tab-pane>
       <a-tab-pane key="learned" tab="已学完" force-render>
-        <ClassroomList v-for="(item, index) in courseLists" :key="index" :course="item"></ClassroomList>
-        <div v-if="courseLists.length == 0" class="searchEmptyCourse">
-          <img class="searchEmptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
-          <p class="searchEmptyCourseContent">暂无班级</p>
-        </div>
+        <ClassroomList :courseLists="courseLists"></ClassroomList>
       </a-tab-pane>
       <a-tab-pane key="expired" tab="已过期">
-        <ClassroomList v-for="(item, index) in courseLists" :key="index" :course="item"></ClassroomList>
-        <div v-if="courseLists.length == 0" class="searchEmptyCourse">
-          <img class="searchEmptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
-          <p class="searchEmptyCourseContent">暂无班级</p>
-        </div>
+        <ClassroomList :courseLists="courseLists"></ClassroomList>
       </a-tab-pane>
     </a-tabs>
     <a-pagination v-if="total>pageSize" :defaultPageSize="pageSize" v-model="current" @change="onChange" :total="total" />
