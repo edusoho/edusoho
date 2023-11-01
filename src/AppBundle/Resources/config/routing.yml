@@ -2605,12 +2605,6 @@ course_set_manage_question:
     path: '/course_set/{id}/manage/question'
     defaults:
         _controller: 'AppBundle:Question/Manage:index'
-course_set_manage_show_tasks:
-    path: '/course_set/{courseSetId}/manage/show/tasks'
-    defaults:
-        _controller: 'AppBundle:Question/Manage:showTasks'
-    methods:
-        - POST
 course_set_manage_testpaper:
     path: '/course_set/{id}/manage/testpaper'
     defaults:
@@ -3665,6 +3659,10 @@ question_bank_manage_question_import:
     path: '/question_bank/{id}/question/import'
     defaults:
         _controller: 'AppBundle:QuestionBank/Question:import'
+question_bank_manage_download_import_template:
+    path: '/question_bank/{id}/download_import_template/{type}'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/Question:downloadImportTemplate'
 question_bank_manage_question_create:
     path: '/question_bank/{id}/question/{type}/create'
     defaults:
