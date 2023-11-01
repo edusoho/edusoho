@@ -80,16 +80,16 @@ class MeCourse extends AbstractResource
 
     private function filterCourseIdsByConditions($conditions, $courses, $members, $validCourseIds, $invalidCourseIds, &$courseConditions)
     {
-        if (!empty($conditions['learningStatus'])) {
-            switch ($conditions['learningStatus']) {
+        if (!empty($conditions['type'])) {
+            switch ($conditions['type']) {
                 case 'learning':
                 case 'learned':
                     $courses = ArrayToolkit::group($courses, 'courseSetId');
                     list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
                     $courseConditions['status'] = 'published';
-                    $courseConditions['ids'] = ('learning' === $conditions['learningStatus']) ? $learningCourseSetIds : $learnedCourseSetIds;
+                    $courseConditions['ids'] = ('learning' === $conditions['type']) ? $learningCourseSetIds : $learnedCourseSetIds;
                     break;
-                case 'isExpired':
+                case 'expired':
                     $closedCourses = $this->getCourseService()->searchCourses(['status' => 'closed', 'ids' => array_merge($validCourseIds)], [], 0, PHP_INT_MAX);
                     $courses = $this->getCourseService()->findCoursesByIds($invalidCourseIds);
                     $mergedCourses = array_merge($courses, $closedCourses);
