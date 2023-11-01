@@ -39,7 +39,7 @@ class MeClassroom extends AbstractResource
                 $classroom['isExpired'] = 0 !== $classroom['deadline'] && $classroom['deadline'] < time();
             }
 
-            return $this->makePagingObject($classrooms, count($classroomConditions['ids']), $offset, $limit);
+            return $this->makePagingObject($classrooms, $this->getClassroomService()->countClassrooms($classroomConditions), $offset, $limit);
         } else {
             $classroomIds = ArrayToolkit::column($members, 'classroomId');
 
