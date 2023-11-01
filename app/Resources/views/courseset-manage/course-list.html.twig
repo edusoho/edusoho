@@ -40,7 +40,7 @@
             </li>
             {% if course.status|default('') == 'published' %}
               {% if courseSet.platform|default('self') == 'self' %}
-              {% if showable == '0' %}
+              {% if course.showable == '0' %}
                   <li>
                     <a href="javascript:;"
                       class="js-show-course"
