@@ -15,7 +15,6 @@ class QuestionsShow {
     this.modalUrl = $('[name="introModalUrl"]').val()
     this.accessCloud = $('[name="accessCloud"]').val()
     this.canManageCloud = $('[name="canManageCloud"]').val()
-    this.skipLabel = '<i class="es-icon es-icon-close01"></i>'
     this.init();
   }
 
