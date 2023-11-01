@@ -373,4 +373,8 @@ interface CourseService
     public function findCourseByCourseSetTitleLike($courseSetTitle);
 
     public function courseItemIdsHandle($courseId, $ids);
+
+    public function showCourse($id);
+
+    public function hideCourse($id);
 }
