@@ -14,7 +14,6 @@ class MeCourse extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $this->buildSearchConditions($request);
-        file_put_contents('/tmp/jc123', json_encode($conditions), 8);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $members = $this->getCourseMemberService()->searchMembers(
             $conditions,
@@ -22,37 +21,39 @@ class MeCourse extends AbstractResource
             0,
             PHP_INT_MAX
         );
+        $validCourseIds = [];
+        $invalidCourseIds = [];
         foreach ($members as &$member) {
             $member['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
+            if (0 === intval($member['deadline']) || intval($member['deadline']) > time()) {
+                $validCourseIds[] = $member['courseId'];
+            } else {
+                $invalidCourseIds[] = $member['courseId'];
+            }
         }
         array_multisort(ArrayToolkit::column($members, 'lastLearnTime'), SORT_DESC, $members);
-        $courseIds = ArrayToolkit::column($members, 'courseId');
         $courseConditions = [
-            'ids' => $courseIds,
+            'ids' => $validCourseIds,
             'excludeTypes' => ['reservation'],
             'courseSetTitleLike' => $conditions['title'],
         ];
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        if ('isExpired' === $conditions['learningStatus']) {
-            $closedCourses = $this->getCourseService()->searchCourses(['status' => 'closed'], [], 0, PHP_INT_MAX);
-            $mergedCourses = array_merge($courses, $closedCourses);
-            $courses = array_unique($mergedCourses, SORT_REGULAR);
-        }
+        $courses = $this->getCourseService()->findCoursesByIds($validCourseIds);
         if (!empty($conditions['learningStatus'])) {
-            if ('learning' === $conditions['learningStatus']) {
-                $courses = ArrayToolkit::group($courses, 'courseSetId');
-                list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
-                $courseConditions['ids'] = $learningCourseSetIds;
-                $courseConditions['status'] = 'published';
-            }
-            if ('learned' === $conditions['learningStatus']) {
-                $courses = ArrayToolkit::group($courses, 'courseSetId');
-                list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
-                $courseConditions['ids'] = $learnedCourseSetIds;
-                $courseConditions['status'] = 'published';
-            }
-            if ('isExpired' === $conditions['learningStatus']) {
-                $courseConditions['ids'] = array_column($courses, 'id');
+            switch ($conditions['learningStatus']) {
+                case 'learning':
+                case 'learned':
+                    $courses = ArrayToolkit::group($courses, 'courseSetId');
+                    list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
+                    $courseConditions['status'] = 'published';
+                    $courseConditions['ids'] = ('learning' === $conditions['learningStatus']) ? $learningCourseSetIds : $learnedCourseSetIds;
+                    break;
+                case 'isExpired':
+                    $closedCourses = $this->getCourseService()->searchCourses(['status' => 'closed', 'ids' => array_merge($validCourseIds)], [], 0, PHP_INT_MAX);
+                    $courses = $this->getCourseService()->findCoursesByIds($invalidCourseIds);
+                    $mergedCourses = array_merge($courses, $closedCourses);
+                    $courses = array_unique($mergedCourses, SORT_REGULAR);
+                    $courseConditions['ids'] = array_column($courses, 'id');
+                    break;
             }
         }
 
@@ -91,26 +92,8 @@ class MeCourse extends AbstractResource
         $conditions['joinedType'] = 'course';
         $conditions['userId'] = $this->getCurrentUser()->getId();
         $conditions['role'] = 'student';
-        if (!empty($conditions['learningStatus'])) {
-            $this->applyLearningStatusConditions($conditions['learningStatus'], $conditions);
-        }
 
         return $conditions;
-    }
-
-    private function applyLearningStatusConditions($learningStatus, &$conditions)
-    {
-        switch ($learningStatus) {
-            case 'learning':
-            case 'learned':
-                $conditions['deadline'] = '0';
-                $conditions['orDeadlineGreaterThan'] = time();
-                break;
-            case 'isExpired':
-                $conditions['deadlineNotEqual'] = '0';
-                $conditions['deadlineLessThen'] = time();
-                break;
-        }
     }
 
     protected function differentiateCourseSetIds($groupCourses, $members)
