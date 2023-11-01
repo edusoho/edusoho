@@ -1516,7 +1516,7 @@ question_manage.import.administrator.tip2: Improve import recognition accuracy a
 question_manage.import.non-administrator-tip: To upgrade the cloud capability, you need to contact the super administrator for the import function
 question_manage.import.non.administrator.close.btn: I know
 course.question_manage.import.reupload_document: reupload
-course.question_manage.import.Successful: Import successfully
+course.question_manage.import.Successful: Upload successfully
 course.question_manage.import.uploading: Uploading...
 course.question_manage.import.use_old_template: Use Old Template
 course.question_manage.impport.cancle: Cancel
@@ -11158,3 +11158,4 @@ sms.defence.request.log.disable_type.none: none
 
 course.start_answer.all_question_deleted: 'All questions have been deleted, please contact the teacher or administrator'
 item_bank.access_cloud: Upgrade now
+next.skip: 'Next Step (1/2)'

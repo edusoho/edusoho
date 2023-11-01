@@ -1,0 +1,30 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog administrator-perspective-modal' %}
+
+{% block title %}
+  {{ 'question_manage.import.new.version.introduction'|trans }}
+{% endblock %}
+
+{% block body %}
+  <div>
+    <div class="administrator-content">
+      <img class="administrator-tip-img" src="{{ asset('static-dist/app/img/question-manage/guide-img-1.png') }}" alt="guide"/>
+      <img class="free-for-limited-img" src="{{ asset('static-dist/app/img/question-manage/free-for-limited-time.png') }}" alt="guide"/>
+    </div>
+    <div class="administrator-tips-text">
+      <div class="import-questions-content">
+        <span class="anchor-point"></span>
+        <span class="import-info">{{ 'question_manage.import.administrator.tip1'|trans }}</span>
+      </div>
+      <div class="import-questions-content">
+        <span class="anchor-point"></span>
+        <span class="import-info">{{ 'question_manage.import.administrator.tip2'|trans }}</span>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <a class="administrator-footer js-next-btn" href="javascript:;">{{ 'next.skip'|trans }}</a>
+{% endblock %}
