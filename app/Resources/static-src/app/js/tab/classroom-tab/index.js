@@ -1,4 +1,4 @@
-import Tab from './Tab.vue';
+import Tab from './index.vue';
 import { isMobileDevice } from 'common/utils';
 import Axios from 'axios';
 import Vue from 'common/vue';

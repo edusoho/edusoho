@@ -5,13 +5,13 @@
       <a class="my-course-item__link relative" href="/course_set/931">
         <img :src="course.courseSet.cover.middle"
           :alt="course.courseSetTitle" class="my-course-item__picture">
-        <span class="absolute" :class="">{{courseStatus}}
+        <span class="absolute" :class="courseStatus.class">{{courseStatus.text}}
         </span> </a>
       <div class="my-course-item__info">
         <div class="my-course-item__title text-overflow">
-
-          <a class="cd-link-major" href="/course_set/931">{{course.courseSetTitle}}</a>
+          <a class="cd-link-major text-16" href="/course_set/931">{{course.courseSetTitle}}</a>
         </div>
+        <div class="my-course-item__classroom"><span>已学了0天</span></div>
 
 
         <div class="my-course-item__progress cd-mt32 cd-clearfix">
@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="my-course-item__btn">
-        <a class="btn cd-btn cd-btn-primary" href="/my/course/981">继续学习</a>
+        <a class="btn cd-btn cd-btn-primary" href="/my/course/981">{{btnContent}}</a>
       </div>
 
     </div>
@@ -40,29 +40,34 @@ export default {
   },
   data() {
     return {
-      progress: 97,
     }
   },
   computed:{
     courseStatus() {
-      if (this.course.spec.status === 'closed') {
-        return {
+      let status = {
+        class: '',
+        text: ''
+      }
+      if (this.course.spec.status == 'closed') {
+        status = {
           class: 'course-status-expired',
           text: '已关闭'
         }
-      }
-
-      if(this.course.courseSet.type === 'live') {
-        return  {
+      }else if(this.course.courseSet.type == 'live') {
+        status = {
           class: 'course-status-live',
           text: '直播'
         }
       }
       
-      return
+      return status
     },
     btnContent() {
-      
+      if (this.course.spec.status === 'closed') {
+        return '查看课程'
+      }
+
+      return '继续学习'
     }
   }
 }

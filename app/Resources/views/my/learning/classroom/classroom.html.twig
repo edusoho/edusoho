@@ -1,4 +1,5 @@
 {% extends 'my/layout.html.twig' %}
+{% do script(['app/js/tab/classroom-tab/index.js'])  %}
 
 {% block title %}{{'my.learning.classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}} - {{ parent() }}{% endblock %}
 
@@ -13,7 +14,8 @@
 }
 </style>
 <div class="panel panel-default panel-col lesson-manage-panel">
-  <div class="panel-heading">
+  <div id="app"></div>
+  {# <div class="panel-heading">
     {{'my.learning.classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}
     <form class="search-form pull-right" style="margin-right: 34px;" method="get">
       <input class="search-input-content inline-block" type="text" name="title" value="{{ app.request.get("title") }}" placeholder="{{ 'course.placeholder.name'|trans }}" />
@@ -79,7 +81,7 @@
         <div class="empty">{{'my.learning.classroom.not_join_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
       {% endfor %}
     </ul>
-  </div>
+  </div> #}
 </div>
 
 {% endblock %}
