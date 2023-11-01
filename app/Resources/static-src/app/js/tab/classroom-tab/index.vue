@@ -32,6 +32,8 @@
 </template>
 <script>
 import ClassroomList from './ClassroomList.vue';
+import { Me } from 'common/vue/service/index.js';
+
 export default {
   data(){
     return {
@@ -70,9 +72,16 @@ export default {
       window.location.href = window.location.pathname + `?type=${this.tabValue}&page=${pageNumber}${this.searchValue ? `&search=${this.searchValue}` : ''}`
     },
     async getTabData(type, pageNumber=1) {
-      await this.$axios.get(`/api/me/courses?title=${this.searchValue}&limit=${this.pageSize}&offset=0&page=${pageNumber}&type=${type}`).then((res) => {
-        this.courseLists = res.data.data
-      });
+      let params = {
+        title: this.searchValue,
+        limit: this.pageSize,
+        offset: 0,
+        page: pageNumber,
+        type
+      }
+
+      const { data, paging } = await Me.searchCourses(params)
+      this.courseLists = data
     },
     getParams(str) {
       let search = str.includes('?') ? str.split('?')[1] : str;
