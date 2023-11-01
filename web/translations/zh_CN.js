@@ -1944,4 +1944,8 @@ t.add("admin_v2.homepage.school_info.enter.copy_success", "\u94fe\u63a5\u590d\u5
 t.add("admin_v2.homepage.wechat_come", "\u6b22\u8fce\u4f7f\u7528EduSoho\u6559\u57f9\u4ea7\u54c1", "js", "zh_CN");
 t.add("admin_v2.homepage.wechat_code.m", "\u52a0\u5165\u5f00\u6e90\u4ea7\u54c1\u4f7f\u7528\u5b66\u4e60\u4ea4\u6d41\u7fa4\uff0c\u5c0f\u4f19\u4f34\u5728\u7b49\u4f60", "js", "zh_CN");
 t.add("del.role.theater.hover.title", "\u8be5\u7528\u6237\u65e0\u8bb2\u5e08\u6743\u9650\u3002\u79fb\u9664\u540e\u5c06\u4e0d\u5728\u79fb\u52a8\u7aef\u5c55\u793a", "js", "zh_CN");
+t.add("upgrade.cloud.capabilities.to.experience", "<p class=\"title cd-dark-major\">\u9898\u76ee\u5bfc\u5165<\/p><div class=\"cd-dark-minor cd-text-md\">\u5347\u7ea7\u4e91\u80fd\u529b\u53ef\u4f53\u9a8c\u66f4\u5f3a\u5927\u7684\u5bfc\u5165\u529f\u80fd<\/div>\n", "js", "zh_CN");
+t.add("next.skip.intro.text", "<p class=\"title cd-dark-major\">\u9898\u76ee\u5bfc\u5165<\/p><div class=\"cd-dark-minor cd-text-md\">\u5347\u7ea7\u4e91\u80fd\u529b\u53ef\u4f53\u9a8c\u66f4\u5f3a\u5927\u7684\u5bfc\u5165\u529f\u80fd\uff0c\u9700\u8054\u7cfb\u8d85\u7ea7\u7ba1\u7406\u5458\u8fdb\u884c\u64cd\u4f5c<\/div>\n", "js", "zh_CN");
+t.add("skip.i.know", "\u6211\u77e5\u9053\u4e86\uff082\/2\uff09", "js", "zh_CN");
+t.add("skip.upgrade.btn", "\u7acb\u5373\u5347\u7ea7 (2\/2)", "js", "zh_CN");
 })(Translator);

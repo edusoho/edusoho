@@ -92,7 +92,8 @@
     },
     provide() {
       return {
-        modeOrigin: 'create'
+        modeOrigin: 'create',
+        self: this
       }
     },
     methods: {

@@ -1773,7 +1773,7 @@ question_manage.import.non-administrator-tip: 升级云能力可使用导入功�
 question_manage.import.non.administrator.close.btn: 我知道了
 course.question_manage.import.upload_document: 上传文档
 course.question_manage.import.reupload_document: 重新上传
-course.question_manage.import.Successful: 导入成功
+course.question_manage.import.Successful: 上传成功
 course.question_manage.import.uploading: 上传中...
 course.question_manage.import.use_old_template: 仍然使用旧模板
 course.question_manage.impport.cancle: 取消
@@ -12455,3 +12455,4 @@ sms.defence.request.log.disable_type.none: 无
 
 course.start_answer.all_question_deleted: 全部题目已被删除，请联系教师或管理员
 item_bank.access_cloud: 立即升级
+next.skip: '下一步 (1/2)'

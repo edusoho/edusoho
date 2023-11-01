@@ -11,6 +11,7 @@
             :cdnHost="cdnHost"
             :repeatList="repeatList"
             :loading="loading"
+            :isVisiblePopconfim= "isVisiblePopconfim"
             :uploadSDKInitData="uploadSDKInitData"
             :deleteAttachmentCallback="deleteAttachmentCallback"
             :previewAttachmentCallback="previewAttachmentCallback"
@@ -20,6 +21,8 @@
             @downloadAttachment="downloadAttachment"
             @getRepeatQuestion="getRepeatQuestion"
             @getImportData="getImportData"
+            @editQuestion="editQuestion"
+            @changeEditor="changeEditor"
         ></item-import>
     </div>
 </template>
@@ -63,6 +66,11 @@
         token: $('[name="import_token"]').val(),
         repeatList: [],
         loading: false,
+        isVisiblePopconfim: false,
+        isWrong: false,
+        duplicatedIds: [],
+        ids: null,
+        isRepeat: false,
       }
     },
     created() {
@@ -75,7 +83,8 @@
     },
     provide() {
       return {
-        modeOrigin: 'create'
+        modeOrigin: 'create',
+        self: this
       }
     },
     methods: {
@@ -91,8 +100,11 @@
             request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
           }
         }).done(function (res) {
-          that.repeatList = res.duplicatedIds
+          that.duplicatedIds = res.duplicatedIds
 
+          for (const key in res.duplicatedIds) {
+            that.repeatList.push(Number(key));
+          }
           if(that.repeatList.length > 0) {
             that.$confirm({
               title: Translator.trans('created.question.confirm.title'),
@@ -110,6 +122,30 @@
             that.getImportData(subject)
           }
         })
+      },
+      editQuestion(data, items) {
+        this.ids = data.ids
+
+        items = items.filter((item)=> {
+          return item.ids !== data.ids
+        })
+
+        const that = this;
+        const material = data.type === 'material' ? data.material : data.questions[0].stem
+        return new Promise(resolve => {
+          $.ajax({
+            url: `/question_bank/${this.bank_id}/checkQuestionDuplicative`,
+            contentType: 'application/json;charset=utf-8',
+            type: 'post',
+            data: JSON.stringify({material:material, items:items}),
+            beforeSend(request) {
+              request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            }
+          }).done(function (res) {
+            that.isRepeat = res;
+            resolve(res);
+          })
+        });
       },
       getImportData(subject) {
         this.redirect = false;
@@ -184,6 +220,32 @@
           }).done(function (resp) {
             resolve(resp);
             self.fileId = 0;
+          })
+        });
+      },
+      changeEditor(material, items) {
+        const that = this;
+      
+        items = items.filter((item)=> {
+          return item.ids !== that.ids
+        })
+        return new Promise(resolve => {
+          $.ajax({
+            url: `/question_bank/${this.bank_id}/checkQuestionDuplicative`,
+            contentType: 'application/json;charset=utf-8',
+            type: 'post',
+            data: JSON.stringify({material:material, items:items}),
+            beforeSend(request) {
+              request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            }
+          }).done(function (res) {
+            that.isRepeat = res;
+            if (!res) {
+              that.isWrong = false;
+              resolve(res);
+            } else {
+              that.isWrong = true;
+            }
           })
         });
       }
