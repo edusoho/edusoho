@@ -73,6 +73,7 @@ abstract class BaseChoiceMode extends AnswerMode
             ++$ascll;
         }
 
+        $parsedQuestion['answer'] = [];
         foreach ($question['answers'] as $answer) {
             $parsedQuestion['answer'][] = $parsedQuestion['response_points'][$answer][static::INPUT_TYPE]['val'];
         }
