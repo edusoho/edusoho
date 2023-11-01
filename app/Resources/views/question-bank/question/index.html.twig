@@ -4,7 +4,7 @@
 {% set side_nav = 'my-question-bank' %}
 {% set active_tab = 'question-list' %}
 
-{% do script(['libs/select2.js', 'app/js/question-bank/question/index.js'])  %}
+{% do script(['libs/select2.js', 'libs/jquery-intro.js' , 'app/js/question-bank/question/index.js'])  %}
 
 {% block main %}
   <div class="panel panel-default panel-col">
@@ -26,6 +26,7 @@
           <input type="hidden" name="canManageCloud" value="{{ has_permission('admin_v2_cloud_center') }}">
           <input type="hidden" name="introModalUrl" value="{{ path('question_bank_manage_import_intro') }}">
         </div>
+        <a class="js-skip-btn hidden" target="_blank" href="{{ path('admin_v2_app_center') }}">{{ 'item_bank.access_cloud'|trans }}</a>
       </div>
     {% endblock %}
   </div>
