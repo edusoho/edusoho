@@ -67,6 +67,14 @@ class ChapterManageController extends BaseController
         return $this->createJsonResponse(['success' => true]);
     }
 
+    public function lessonTreeAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lessonTree = $this->getCourseService()->getLessonTree($course['id']);
+
+        return $this->createJsonResponse($lessonTree);
+    }
+
     /**
      * @return CourseService
      */
