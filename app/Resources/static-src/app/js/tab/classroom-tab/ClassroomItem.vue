@@ -2,7 +2,7 @@
   <div class="my-course-item cd-mb16 clearfix">
 
     <a class="my-course-item__link relative" href="/course_set/931">
-      <img :src="course.courseSet.cover.middle" :alt="course.courseSetTitle" class="my-course-item__picture">
+      <img :src="classItem.cover.middle" :alt="classItem.courseSetTitle" class="my-course-item__picture">
       <span class="absolute" :class="courseStatus.class">
         {{ courseStatus.text }}
       </span>
@@ -10,9 +10,9 @@
     <div class="my-course-item__info">
       <div class="my-course-item__title text-overflow">
         <a class="cd-link-major text-16" href="/course_set/931">
-          {{ course.courseSetTitle }}</a>
+          {{ classItem.title }}</a>
       </div>
-      <div class="my-course-item__classroom"><span>已学了0天</span></div>
+      <div class="my-course-item__classroom"><span>已学了{{classItem.spec.usageDays}}天</span></div>
 
       <div class="my-course-item__progress cd-mt32 cd-clearfix">
         <span class="my-course-item__progress__text">学习进度</span>
@@ -22,7 +22,7 @@
               <div class="progress-inner" :style="progressClass"></div>
             </div>
           </div>
-          <div class="progress-text">{{ course.progress.percent }}%</div>
+          <div class="progress-text">{{ classItem.learningProgressPercent }}%</div>
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@
 <script>
 export default {
   props: {
-    course: Object
+    classItem: Object
   },
   data() {
     return {
@@ -47,30 +47,26 @@ export default {
         class: '',
         text: ''
       }
-      if (this.course.spec.status == 'closed') {
+      
+      if (this.classItem.spec.status == 'closed') {
         status = {
           class: 'course-status-expired',
           text: '已关闭'
-        }
-      } else if (this.course.courseSet.type == 'live') {
-        status = {
-          class: 'course-status-live',
-          text: '直播'
         }
       }
 
       return status
     },
     btnContent() {
-      if (this.course.spec.status === 'closed') {
-        return '查看课程'
+      if (this.classItem.spec.status === 'closed') {
+        return '查看班级'
       }
 
       return '继续学习'
     },
     progressClass() {
       return {
-        width: `${this.course.progress.percent}%`
+        width: `${this.classItem.learningProgressPercent}%`
       }
     }
   }

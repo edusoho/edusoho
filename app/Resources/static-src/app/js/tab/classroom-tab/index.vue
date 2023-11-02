@@ -17,13 +17,13 @@
     size="small" 
     @change="tabOnChange">
       <a-tab-pane key="learning" tab="学习中">
-        <ClassroomList :courseLists="courseLists"></ClassroomList>
+        <ClassroomList :classroomLists="classroomLists"></ClassroomList>
       </a-tab-pane>
       <a-tab-pane key="learned" tab="已学完" force-render>
-        <ClassroomList :courseLists="courseLists"></ClassroomList>
+        <ClassroomList :classroomLists="classroomLists"></ClassroomList>
       </a-tab-pane>
       <a-tab-pane key="expired" tab="已过期">
-        <ClassroomList :courseLists="courseLists"></ClassroomList>
+        <ClassroomList :classroomLists="classroomLists"></ClassroomList>
       </a-tab-pane>
     </a-tabs>
     <a-pagination v-if="total>pageSize" :defaultPageSize="pageSize" v-model="current" @change="onChange" :total="total" />
@@ -32,13 +32,15 @@
 </template>
 <script>
 import ClassroomList from './ClassroomList.vue';
+import { Me } from 'common/vue/service/index.js';
+
 export default {
   data(){
     return {
       tabValue: 'learning',
       searchValue: '',
       current: 1,
-      courseLists: [],
+      classroomLists: [],
       total: 130,
       pageSize: 12
     }
@@ -48,7 +50,7 @@ export default {
         },
   async mounted(){
     const params = this.getParams(window.location.href)
-    console.log(params)
+    
     if (params.search) {
       this.searchValue = decodeURIComponent(params.search)
     }
@@ -70,9 +72,17 @@ export default {
       window.location.href = window.location.pathname + `?type=${this.tabValue}&page=${pageNumber}${this.searchValue ? `&search=${this.searchValue}` : ''}`
     },
     async getTabData(type, pageNumber=1) {
-      await this.$axios.get(`/api/me/courses?title=${this.searchValue}&limit=${this.pageSize}&offset=0&page=${pageNumber}&type=${type}`).then((res) => {
-        this.courseLists = res.data.data
-      });
+      let params = {
+        title: this.searchValue,
+        limit: this.pageSize,
+        offset: 0,
+        page: pageNumber,
+        type,
+        format: 'pagelist'
+      }
+
+      const { data, paging } = await Me.searchClassrooms(params)
+      this.classroomLists = data
     },
     getParams(str) {
       let search = str.includes('?') ? str.split('?')[1] : str;
