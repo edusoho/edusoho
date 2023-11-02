@@ -2943,6 +2943,26 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->tryManageCourse($courseId, $courseSetId);
     }
 
+    public function showCourse($id)
+    {
+        $course = $this->tryManageCourse($id);
+        if ('published' != $course['status']) {
+            $this->createNewException(CourseException::UNPUBLISHED_COURSE());
+        }
+        $course['showable'] = '1';
+        $this->getCourseDao()->update($id, $course);
+    }
+
+    public function hideCourse($id)
+    {
+        $course = $this->tryManageCourse($id);
+        if ('published' != $course['status']) {
+            $this->createNewException(CourseException::UNPUBLISHED_COURSE());
+        }
+        $course['showable'] = '0';
+        $this->getCourseDao()->update($id, $course);
+    }
+
     /**
      * @return CourseSpecsMediator
      */
