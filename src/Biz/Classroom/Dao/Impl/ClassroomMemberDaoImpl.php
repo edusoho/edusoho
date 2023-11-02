@@ -246,6 +246,7 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
             ],
             'orderbys' => ['name', 'createdTime', 'updatedTime', 'id', 'deadline', 'learnedCompulsoryTaskNum', 'lastLearnTime'],
             'conditions' => [
+                'id in (:ids)',
                 'userId = :userId',
                 'classroomId = :classroomId',
                 'noteNum > :noteNumGreaterThan',
