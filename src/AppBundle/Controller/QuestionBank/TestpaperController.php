@@ -238,15 +238,17 @@ class TestpaperController extends BaseController
 
         if ($request->isMethod('POST')) {
             $assessment = $request->request->get('baseInfo', []);
-            $sections = $request->request->get('sections', []);
+            $sections = $request->request->get('sections', '');
 
+            $sections = json_decode($sections, true);
             if (empty($sections)) {
-                return $this->createMessageResponse('error', '试卷模块不能为空！');
+                return $this->createJsonResponse(['error' => '试卷模块不能为空!']);
             }
-            $assessment['sections'] = json_decode($sections, true);
+
+            $assessment['sections'] = $sections;
 
             if ($this->calculateItemCount($assessment['sections']) > 2000) {
-                return $this->createMessageResponse('error', '试卷题目数量不能超过2000！');
+                return $this->createJsonResponse(['error' => '试卷题目数量不能超过2000!']);
             }
             $assessment['sections'] = $this->processAssessmentSections($assessment['sections']);
             $this->getAssessmentService()->updateAssessment($assessmentId, $assessment);
