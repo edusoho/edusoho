@@ -1229,6 +1229,61 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $ids;
     }
 
+    public function searchCourseChapters($conditions, $orderBy, $start, $limit, $column)
+    {
+        $conditions['status'] = 'published';
+
+        return $this->getChapterDao()->search($conditions, $orderBy, $start, $limit, $column);
+    }
+
+    public function getLessonTree($chapters)
+    {
+        $lessonTree = [];
+        foreach ($chapters as $chapter) {
+            if ('chapter' == $chapter['type']) {
+                if (isset($currentChapter)) {
+                    if (isset($currentUnit)) {
+                        $currentChapter['children'][] = $currentUnit;
+                        unset($currentUnit);
+                    }
+                    $lessonTree[] = $currentChapter;
+                }
+                $currentChapter = $chapter;
+            }
+            if ('unit' == $chapter['type']) {
+                if (isset($currentUnit)) {
+                    if (isset($currentChapter)) {
+                        $currentChapter['children'][] = $currentUnit;
+                    } else {
+                        $lessonTree[] = $currentUnit;
+                    }
+                }
+                $currentUnit = $chapter;
+            }
+            if ('lesson' == $chapter['type']) {
+                if (isset($currentUnit)) {
+                    $currentUnit['children'][] = $chapter;
+                } elseif (isset($currentChapter)) {
+                    $currentChapter['children'][] = $chapter;
+                } else {
+                    $lessonTree[] = $chapter;
+                }
+            }
+        }
+        if (isset($currentUnit)) {
+            if (isset($currentChapter)) {
+                $currentChapter['children'][] = $currentUnit;
+            } else {
+                $lessonTree[] = $currentUnit;
+            }
+        }
+        if (isset($currentChapter)) {
+            $lessonTree[] = $currentChapter;
+        }
+
+        return $lessonTree;
+    }
+
     public function createChapter($chapter)
     {
         if (!in_array($chapter['type'], CourseToolkit::getAvailableChapterTypes())) {

@@ -2042,6 +2042,10 @@ course_manage_chapter_delete:
         _controller: 'AppBundle:Course/ChapterManage:delete'
     methods:
         - POST
+course_manage_acquire_filter_chapter:
+    path: '/course/{courseId}/manage/acquireFilterChapter'
+    defaults:
+        _controller: 'AppBundle:Course/ChapterManage:acquireFilterChapter'
 course_manage_lesson_create:
     path: '/course/{courseId}/lesson/create'
     defaults:

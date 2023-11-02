@@ -373,4 +373,8 @@ interface CourseService
     public function findCourseByCourseSetTitleLike($courseSetTitle);
 
     public function courseItemIdsHandle($courseId, $ids);
+
+    public function searchCourseChapters($conditions, $orderBy, $start, $limit, $column);
+
+    public function getLessonTree($chapters);
 }
