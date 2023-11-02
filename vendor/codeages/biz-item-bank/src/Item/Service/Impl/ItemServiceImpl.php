@@ -542,12 +542,12 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $typesNum;
     }
 
-    public function findDuplicatedMaterialIds($bankId, $items)
+    public function findDuplicatedMaterialIds($itemBankId, $items)
     {
         $materialHashes = [];
         $materials = [];
         foreach ($items as $item) {
-            $item['bank_id'] = $bankId;
+            $item['bank_id'] = $itemBankId;
             $item = $this->getItemProcessor($item['type'])->process($item);
             $materialHashes[] = md5($item['material']);
             $materials[] = $item['material'];
@@ -560,21 +560,21 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
         }
 
-        $duplicatedMaterials = array_column($this->getItemDao()->findDuplicatedMaterial($bankId, $materialHashes), 'material');
+        $duplicatedMaterials = array_column($this->getItemDao()->findDuplicatedMaterial($itemBankId, $materialHashes), 'material');
         $duplicatedIds = array_keys(array_intersect($materials, $duplicatedMaterials));
         $allDuplicatedIds = array_values(array_unique(array_merge($selfDuplicatedIds, $duplicatedIds)));
 
         return empty($allDuplicatedIds) ? [] : $allDuplicatedIds;
     }
 
-    public function isMaterialDuplicative($bankId, $material, $items = [])
+    public function isMaterialDuplicative($itemBankId, $material, $items = [])
     {
         $material = $this->purifyHtml(trim($material));
         $materialHash = md5($material);
 
         if ($items) {
             foreach ($items as $item) {
-                $item['bank_id'] = $bankId;
+                $item['bank_id'] = $itemBankId;
                 $item = $this->getItemProcessor($item['type'])->process($item);
                 if ($material == $item['material']) {
                     return true;
@@ -582,7 +582,7 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
         }
 
-        $count = $this->getItemDao()->count(['bank_id' => $bankId, 'material_hash'=> $materialHash, 'material' => $material]);
+        $count = $this->getItemDao()->count(['bank_id' => $itemBankId, 'material_hash'=> $materialHash, 'material' => $material]);
         if ($count) {
             return true;
         }

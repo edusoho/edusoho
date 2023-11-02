@@ -286,7 +286,7 @@ class QuestionController extends BaseController
         }
         $data = json_decode($request->getContent(), true);
 
-        if ($this->getItemService()->isMaterialDuplicative($id, $data['material'], $data['items'])) {
+        if ($this->getItemService()->isMaterialDuplicative($questionBank['itemBankId'], $data['material'], $data['items'])) {
             return $this->createJsonResponse(true);
         } else {
             return $this->createJsonResponse(false);
