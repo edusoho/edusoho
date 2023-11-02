@@ -51,7 +51,7 @@ class MeClassroom extends AbstractResource
                 $classroom['lastLearnTime'] = $members[$classroom['id']]['createdTime'];
                 $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
                 $classroom['learningProgressPercent'] = $progress['percent'];
-                $classroom['isExpired'] = 0 !== $classroom['deadline'] && $classroom['deadline'] > time();
+                $classroom['isExpired'] = 0 !== $classroom['deadline'] && $classroom['deadline'] < time();
             }
 
             array_multisort(ArrayToolkit::column($classrooms, 'lastLearnTime'), SORT_DESC, $classrooms);
@@ -62,11 +62,11 @@ class MeClassroom extends AbstractResource
 
     private function buildClassroomConditions($members, $querys)
     {
-        $courseConditions = [];
+        $classroomConditions = [];
         if (!isset($querys['type'])) {
-            $courseConditions['ids'] = ArrayToolkit::column($members, 'classroomId');
+            $classroomConditions['ids'] = ArrayToolkit::column($members, 'classroomId');
 
-            return $courseConditions;
+            return $classroomConditions;
         }
 
         $learningIds = [];
@@ -85,29 +85,16 @@ class MeClassroom extends AbstractResource
         switch ($querys['type']) {
             case 'learning':
             case 'learned':
-                $courseConditions['ids'] = 'learning' === $querys['type'] ? $learningIds : $learnedIds;
-                $courseConditions['status'] = 'published';
+                $classroomConditions['ids'] = 'learning' === $querys['type'] ? $learningIds : $learnedIds;
+                $classroomConditions['status'] = 'published';
                 break;
             default:
-                $closedClassroomIds = ArrayToolkit::column(
-                    $this->getClassroomService()->searchClassrooms(['status' => 'closed', 'ids' => array_merge($learningIds, $learnedIds)], [], 0, PHP_INT_MAX),
-                    'id'
-                );
-                $courseConditions['ids'] = array_merge($isExpiredIds, $closedClassroomIds);
+                $closedClassroomIds = $this->getClassroomService()->searchClassrooms(['status' => 'closed', 'ids' => array_merge($learningIds, $learnedIds)], [], 0, PHP_INT_MAX, ['id']);
+                $classroomConditions['ids'] = array_merge($isExpiredIds, $closedClassroomIds);
                 break;
         }
 
-        return $courseConditions;
-    }
-
-    private function getClassrooms($conditions, $orderBy, $offset, $limit)
-    {
-        $classroomIds = ArrayToolkit::column(
-            $this->getClassroomService()->searchMembers($conditions, $orderBy, $offset, $limit),
-            'classroomId'
-        );
-
-        return array_values($this->getClassroomService()->findClassroomsByIds($classroomIds));
+        return $classroomConditions;
     }
 
     /**
