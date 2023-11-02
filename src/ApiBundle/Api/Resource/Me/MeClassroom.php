@@ -30,13 +30,13 @@ class MeClassroom extends AbstractResource
         if (isset($querys['format']) && 'pagelist' == $querys['format']) {
             list($offset, $limit) = $this->getOffsetAndLimit($request);
             $classroomConditions = $this->buildClassroomConditions($members, $querys);
-            $classrooms = array_values($this->getClassroomService()->searchClassrooms($classroomConditions, [], $offset, $limit));
+            $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions, [], $offset, $limit);
             $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
 
             foreach ($classrooms as &$classroom) {
                 $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
                 $classroom['learningProgressPercent'] = $progress['percent'];
-                $classroom['isExpired'] = 0 !== $classroom['deadline'] && $classroom['deadline'] < time();
+                $classroom['isExpired'] = $this->isExpired($classroom['deadline']);
             }
 
             return $this->makePagingObject($classrooms, $this->getClassroomService()->countClassrooms($classroomConditions), $offset, $limit);
@@ -51,7 +51,7 @@ class MeClassroom extends AbstractResource
                 $classroom['lastLearnTime'] = $members[$classroom['id']]['createdTime'];
                 $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
                 $classroom['learningProgressPercent'] = $progress['percent'];
-                $classroom['isExpired'] = 0 !== $classroom['deadline'] && $classroom['deadline'] < time();
+                $classroom['isExpired'] = $this->isExpired($classroom['deadline']);
             }
 
             array_multisort(ArrayToolkit::column($classrooms, 'lastLearnTime'), SORT_DESC, $classrooms);
@@ -72,9 +72,8 @@ class MeClassroom extends AbstractResource
         $learningIds = [];
         $learnedIds = [];
         $isExpiredIds = [];
-        foreach ($members as &$member) {
-            $deadline = intval($member['deadline']);
-            if (0 !== $deadline && $deadline < time()) {
+        foreach ($members as $member) {
+            if ($this->isExpired($member['deadline'])) {
                 $isExpiredIds[] = $member['classroomId'];
             } elseif ($member['isFinished']) {
                 $learnedIds[] = $member['classroomId'];
@@ -95,6 +94,11 @@ class MeClassroom extends AbstractResource
         }
 
         return $classroomConditions;
+    }
+
+    private function isExpired($deadline)
+    {
+        return $deadline != 0 && $deadline < time();
     }
 
     /**
