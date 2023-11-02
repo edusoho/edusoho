@@ -19,5 +19,10 @@ export const Me = _.assignIn(baseService, {
   // 我的课程里搜索课程
   async searchCourses(params) {
     return apiClient.get(`${this.baseUrl}/courses`)
+  },
+
+  // 我的班级里搜索班级
+  async searchClassrooms(params) {
+    return apiClient.get(`${this.baseUrl}/classrooms`)
   }
 });

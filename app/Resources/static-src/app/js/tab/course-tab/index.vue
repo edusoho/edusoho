@@ -54,7 +54,7 @@ export default {
         },
   async mounted(){
     const params = this.getParams(window.location.href)
-    console.log(params)
+    
     if (params.search) {
       this.searchValue = decodeURIComponent(params.search)
     }

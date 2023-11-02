@@ -17,13 +17,13 @@
     size="small" 
     @change="tabOnChange">
       <a-tab-pane key="learning" tab="学习中">
-        <ClassroomList :courseLists="courseLists"></ClassroomList>
+        <ClassroomList :classroomLists="classroomLists"></ClassroomList>
       </a-tab-pane>
       <a-tab-pane key="learned" tab="已学完" force-render>
-        <ClassroomList :courseLists="courseLists"></ClassroomList>
+        <ClassroomList :classroomLists="classroomLists"></ClassroomList>
       </a-tab-pane>
       <a-tab-pane key="expired" tab="已过期">
-        <ClassroomList :courseLists="courseLists"></ClassroomList>
+        <ClassroomList :classroomLists="classroomLists"></ClassroomList>
       </a-tab-pane>
     </a-tabs>
     <a-pagination v-if="total>pageSize" :defaultPageSize="pageSize" v-model="current" @change="onChange" :total="total" />
@@ -40,7 +40,7 @@ export default {
       tabValue: 'learning',
       searchValue: '',
       current: 1,
-      courseLists: [],
+      classroomLists: [],
       total: 130,
       pageSize: 12
     }
@@ -50,7 +50,7 @@ export default {
         },
   async mounted(){
     const params = this.getParams(window.location.href)
-    console.log(params)
+    
     if (params.search) {
       this.searchValue = decodeURIComponent(params.search)
     }
@@ -77,11 +77,12 @@ export default {
         limit: this.pageSize,
         offset: 0,
         page: pageNumber,
-        type
+        type,
+        format: 'pagelist'
       }
 
-      const { data, paging } = await Me.searchCourses(params)
-      this.courseLists = data
+      const { data, paging } = await Me.searchClassrooms(params)
+      this.classroomLists = data
     },
     getParams(str) {
       let search = str.includes('?') ? str.split('?')[1] : str;
