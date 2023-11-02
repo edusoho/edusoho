@@ -1229,25 +1229,28 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $ids;
     }
 
-    public function searchCourseChapters($conditions, $orderBy, $start, $limit, $column)
+    public function getLessonTree($courseId)
     {
-        $conditions['status'] = 'published';
+        $chapters = $this->getChapterDao()->search(
+            ['courseId' => $courseId, 'status' => 'published'],
+            ['seq' => 'ASC'],
+            0,
+            PHP_INT_MAX,
+            ['id', 'title', 'type']
+        );
 
-        return $this->getChapterDao()->search($conditions, $orderBy, $start, $limit, $column);
-    }
-
-    public function getLessonTree($chapters)
-    {
         $lessonTree = [];
         foreach ($chapters as $chapter) {
             if ('chapter' == $chapter['type']) {
                 if (isset($currentChapter)) {
                     if (isset($currentUnit)) {
                         $currentChapter['children'][] = $currentUnit;
-                        unset($currentUnit);
                     }
                     $lessonTree[] = $currentChapter;
+                } elseif (isset($currentUnit)) {
+                    $lessonTree[] = $currentUnit;
                 }
+                unset($currentUnit);
                 $currentChapter = $chapter;
             }
             if ('unit' == $chapter['type']) {

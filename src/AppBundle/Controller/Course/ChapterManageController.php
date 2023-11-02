@@ -67,18 +67,10 @@ class ChapterManageController extends BaseController
         return $this->createJsonResponse(['success' => true]);
     }
 
-    public function acquireFilterChapterAction(Request $request, $courseId)
+    public function lessonTreeAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $chapters = $this->getCourseService()->searchCourseChapters(
-            ['courseId' => $course['id']],
-            ['seq' => 'ASC'],
-            0,
-            PHP_INT_MAX,
-            ['id', 'title', 'type']
-        );
-
-        $lessonTree = $this->getCourseService()->getLessonTree($chapters);
+        $lessonTree = $this->getCourseService()->getLessonTree($course['id']);
 
         return $this->createJsonResponse($lessonTree);
     }
