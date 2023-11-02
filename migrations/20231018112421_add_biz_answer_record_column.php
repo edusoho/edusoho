@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AddBizAnswerRecordCloumn extends Migration
+class AddBizAnswerRecordColumn extends Migration
 {
     /**
      * Do the migration
