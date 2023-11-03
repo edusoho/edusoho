@@ -10,7 +10,7 @@
 <div class="text-center modal-read-error js-read-error">
   <div>
     <img class="error-img" src="{{ asset('static-dist/app/img/question-manage/import-error.png') }}" alt="error"/>
-    <div class="error-tip-text">{{ 'course.question_manage.import.text.rule.tip'|trans|raw }}</div>
+    <div class="error-tip-text">{{ error|default('course.question_manage.import.text.rule.tip'|trans|raw) }}</div>
   </div>
 </div>
 <div>
