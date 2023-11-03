@@ -12,7 +12,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class QuestionParseClient
 {
-    private $api = 'http://question-parse-service.labs-dev.edusoho.cn';
+    private $api = 'question-parse-service.labs-dev.edusoho.cn';
 
     private $request;
 
@@ -43,11 +43,12 @@ class QuestionParseClient
         return json_decode($body, true);
     }
 
-    public function getTemplateFileDownloadUrl($type)
+    public function getTemplateFileDownloadUrl($type, $ssl)
     {
         $type = in_array($type, ['docx-full', 'docx-simple', 'xlsx']) ? $type : 'docx-full';
+        $protocol = $ssl ? 'https://' : 'http://';
 
-        return "{$this->api}/api-public/templateFile?type={$type}";
+        return "$protocol{$this->api}/api-public/templateFile?type={$type}";
     }
 
     private function post($uri, $body, array $headers)
