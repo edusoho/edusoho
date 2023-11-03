@@ -6,7 +6,7 @@ use Codeages\Biz\ItemBank\Answer\Dao\AnswerQuestionTagDao;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionTagService;
 use Codeages\Biz\ItemBank\BaseService;
 
-class AnswerQuestionTagServiceImpl  extends BaseService implements AnswerQuestionTagService
+class AnswerQuestionTagServiceImpl extends BaseService implements AnswerQuestionTagService
 {
     public function createAnswerQuestionTag($answerRecordId, $questionIds)
     {
