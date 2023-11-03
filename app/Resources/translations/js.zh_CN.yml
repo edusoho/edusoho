@@ -399,6 +399,10 @@ course.unit: '第%number%%part_name%%colon% %title%'
 course.lesson: '%part_name% %number% : %title%'
 course.catalogue.task_status.task: '%taskName%%taskNumber%： %taskTitle%'
 
+created.question.confirm.ok.btn: 继续编辑
+created.question.confirm.close.btn: 直接创建
+created.question.confirm.title: 已存在相同题目，是否继续创建
+
 course.thread_replay_failed_hint: 发表回复失败，请重试
 course.thread_delete_hint: 您真的要删除该回帖吗？
 
@@ -2181,3 +2185,9 @@ admin_v2.homepage.wechat_come: 欢迎使用EduSoho教培产品
 admin_v2.homepage.wechat_code.m: 加入开源产品使用学习交流群，小伙伴在等你
 
 del.role.theater.hover.title: 该用户无讲师权限。移除后将不在移动端展示
+upgrade.cloud.capabilities.to.experience: >
+  <p class="title cd-dark-major">题目导入</p><div class="cd-dark-minor cd-text-md">升级云能力可体验更强大的导入功能</div>
+next.skip.intro.text: >
+  <p class="title cd-dark-major">题目导入</p><div class="cd-dark-minor cd-text-md">升级云能力可体验更强大的导入功能，需联系超级管理员进行操作</div>
+skip.i.know: 我知道了（2/2）
+skip.upgrade.btn: 立即升级 (2/2)

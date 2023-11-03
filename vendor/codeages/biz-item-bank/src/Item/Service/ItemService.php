@@ -60,7 +60,7 @@ interface ItemService
 
     public function countItemTypesNum($items);
 
-    public function findDuplicatedMaterialIds($bankId, $items);
+    public function findDuplicatedMaterialIds($itemBankId, $items);
 
-    public function isMaterialDuplicative($bankId, $material);
+    public function isMaterialDuplicative($itemBankId, $material, $items);
 }

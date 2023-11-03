@@ -12,6 +12,8 @@ class QuestionErrors
 
     const NO_SUB_QUESTIONS = 100004;
 
+    const LACK_ANSWER = 100005;
+
     const UNKNOWN = 999999;
 
     public static function getErrorMsg($code)

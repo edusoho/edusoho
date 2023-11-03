@@ -388,6 +388,9 @@ t.add("course.chapter", "%chapter_name% %number% %colon% %title%", "js", "en");
 t.add("course.unit", "%part_name% %number% %colon% %title%", "js", "en");
 t.add("course.lesson", "%part_name% %number% : %title%", "js", "en");
 t.add("course.catalogue.task_status.task", "%taskName%.%taskNumber%:%taskTitle%", "js", "en");
+t.add("created.question.confirm.ok.btn", "Continue editing", "js", "en");
+t.add("created.question.confirm.close.btn", "Direct creation", "js", "en");
+t.add("created.question.confirm.title", "Whether to continue to create the same topic", "js", "en");
 t.add("course.thread_replay_failed_hint", "Posted reply failed, please try again", "js", "en");
 t.add("course.thread_delete_hint", "Do you really want to delete this reply?", "js", "en");
 t.add("course_manage.course_dashboard.student_num", "Number of students", "js", "en");
@@ -1980,4 +1983,8 @@ t.add("admin_v2.homepage.school_info.enter.copy_success", "Link copied successfu
 t.add("admin_v2.homepage.wechat_come", "Welcome to EduSoho enterprise products", "js", "en");
 t.add("admin_v2.homepage.wechat_code.m", "Join the open source product use learning exchange group, small partners are waiting for you", "js", "en");
 t.add("del.role.theater.hover.title", "This user does not have instructor rights. After removal, it will not be displayed on mobile", "js", "en");
+t.add("upgrade.cloud.capabilities.to.experience", "<p class=\"title cd-dark-major\">Topic introduction<\/p><div class=\"cd-dark-minor cd-text-md\">Upgrade cloud capabilities to experience more powerful import capabilities<\/div>\n", "js", "en");
+t.add("next.skip.intro.text", "<p class=\"title cd-dark-major\">Topic introduction<\/p><div class=\"cd-dark-minor cd-text-md\">To upgrade the cloud capability and experience more powerful import functions, contact the super administrator<\/div>\n", "js", "en");
+t.add("skip.i.know", "I know(2\/2)", "js", "en");
+t.add("skip.upgrade.btn", "Upgrade now(2\/2)", "js", "en");
 })(Translator);

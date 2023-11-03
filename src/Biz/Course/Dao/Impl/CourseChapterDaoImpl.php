@@ -113,6 +113,9 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
+            'orderbys' => [
+                'seq',
+            ],
             'conditions' => [
                 'id = :id',
                 'id in (:ids)',

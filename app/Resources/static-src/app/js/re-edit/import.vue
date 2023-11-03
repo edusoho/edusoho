@@ -9,6 +9,9 @@
             :importType="importType"
             :showAttachment="showAttachment"
             :cdnHost="cdnHost"
+            :repeatList="repeatList"
+            :loading="loading"
+            :isVisiblePopconfim= "isVisiblePopconfim"
             :uploadSDKInitData="uploadSDKInitData"
             :deleteAttachmentCallback="deleteAttachmentCallback"
             :previewAttachmentCallback="previewAttachmentCallback"
@@ -16,7 +19,10 @@
             @deleteAttachment="deleteAttachment"
             @previewAttachment="previewAttachment"
             @downloadAttachment="downloadAttachment"
+            @getRepeatQuestion="getRepeatQuestion"
             @getImportData="getImportData"
+            @editQuestion="editQuestion"
+            @changeEditor="changeEditor"
         ></item-import>
     </div>
 </template>
@@ -56,7 +62,15 @@
           locale: document.documentElement.lang
         },
         fileId: 0,
-        redirect: true
+        redirect: true,
+        token: $('[name="import_token"]').val(),
+        repeatList: [],
+        loading: false,
+        isVisiblePopconfim: false,
+        isWrong: false,
+        duplicatedIds: [],
+        ids: null,
+        isRepeat: false,
       }
     },
     created() {
@@ -69,10 +83,70 @@
     },
     provide() {
       return {
-        modeOrigin: 'create'
+        modeOrigin: 'create',
+        self: this
       }
     },
     methods: {
+      getRepeatQuestion(subject) {
+        const that = this
+        that.loading = true
+        $.ajax({
+          url: `/questions/${this.token}/checkDuplicatedQuestions`,
+          contentType: 'application/json;charset=utf-8',
+          type: 'post',
+          data: JSON.stringify(subject),
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+          }
+        }).done(function (res) {
+          that.duplicatedIds = res.duplicatedIds
+
+          for (const key in res.duplicatedIds) {
+            that.repeatList.push(Number(key));
+          }
+          if(that.repeatList.length > 0) {
+            that.$confirm({
+              title: Translator.trans('created.question.confirm.title'),
+              okText: Translator.trans('created.question.confirm.ok.btn'),
+              cancelText: Translator.trans('created.question.confirm.close.btn'),
+              icon: 'exclamation-circle',
+              onOk() {
+                that.loading = false;
+              },
+              onCancel() {
+                that.getImportData(subject)
+              },
+            });
+          } else {
+            that.getImportData(subject)
+          }
+        })
+      },
+      editQuestion(data, items) {
+        this.ids = data.ids
+
+        items = items.filter((item)=> {
+          return item.ids !== data.ids
+        })
+
+        const that = this;
+        const material = data.type === 'material' ? data.material : data.questions[0].stem
+        return new Promise(resolve => {
+          $.ajax({
+            url: `/question_bank/${this.bank_id}/checkQuestionDuplicative`,
+            contentType: 'application/json;charset=utf-8',
+            type: 'post',
+            data: JSON.stringify({material:material, items:items}),
+            beforeSend(request) {
+              request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            }
+          }).done(function (res) {
+            that.isRepeat = res;
+            resolve(res);
+          })
+        });
+      },
       getImportData(subject) {
         this.redirect = false;
         $.ajax({
@@ -146,6 +220,32 @@
           }).done(function (resp) {
             resolve(resp);
             self.fileId = 0;
+          })
+        });
+      },
+      changeEditor(material, items) {
+        const that = this;
+      
+        items = items.filter((item)=> {
+          return item.ids !== that.ids
+        })
+        return new Promise(resolve => {
+          $.ajax({
+            url: `/question_bank/${this.bank_id}/checkQuestionDuplicative`,
+            contentType: 'application/json;charset=utf-8',
+            type: 'post',
+            data: JSON.stringify({material:material, items:items}),
+            beforeSend(request) {
+              request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            }
+          }).done(function (res) {
+            that.isRepeat = res;
+            if (!res) {
+              that.isWrong = false;
+              resolve(res);
+            } else {
+              that.isWrong = true;
+            }
           })
         });
       }

@@ -12,7 +12,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class QuestionParseClient
 {
-    private $api = 'http://question-parse-service.labs-dev.edusoho.cn/api-open';
+    private $api = 'http://question-parse-service.labs-dev.edusoho.cn';
 
     private $request;
 
@@ -26,14 +26,28 @@ class QuestionParseClient
 
     public function parse($filename)
     {
-        return $this->post('/parse', ['file' => new \CURLFile($filename)], ['Content-Type: multipart/form-data']);
+        return $this->post('/api-open/parse', ['file' => new \CURLFile($filename)], ['Content-Type: multipart/form-data']);
     }
 
     public function getJob($nos)
     {
-        $body = $this->get('/job', ['nos' => $nos]);
+        $body = $this->get('/api-open/job', ['nos' => $nos]);
 
         return json_decode($body, true);
+    }
+
+    public function convertLatex2Img($exps)
+    {
+        $body = $this->post('/api-open/latex2img', json_encode(['exps' => $exps], JSON_UNESCAPED_SLASHES), ['Content-Type: application/json']);
+
+        return json_decode($body, true);
+    }
+
+    public function getTemplateFileDownloadUrl($type)
+    {
+        $type = in_array($type, ['docx-full', 'docx-simple', 'xlsx']) ? $type : 'docx-full';
+
+        return "{$this->api}/api-public/templateFile?type={$type}";
     }
 
     private function post($uri, $body, array $headers)

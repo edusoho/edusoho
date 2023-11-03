@@ -13,7 +13,7 @@ trait FillAdapterTrait
         $adaptQuestion = $this->adaptQuestion($question);
         $adaptQuestion['type'] = FillItem::TYPE;
         $adaptQuestion['answers'] = $this->adaptFillAnswer($question);
-        $errors = $this->adaptFillErrors($question);
+        $errors = $this->adaptFillErrors($adaptQuestion);
         if ($errors) {
             $adaptQuestion['errors'] = empty($adaptQuestion['errors']) ? $errors : array_merge($adaptQuestion['errors'], $errors);
         }
@@ -34,13 +34,10 @@ trait FillAdapterTrait
 
     private function adaptFillErrors($question)
     {
-        if (empty($question['errors'])) {
-            return [];
-        }
         $errors = [];
-        foreach ($question['errors'] as $error) {
-            if ('ANSWER_MISSING' == $error['code']) {
-                $errors[QuestionElement::ANSWERS] = $this->adaptError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER);
+        foreach ($question[QuestionElement::ANSWERS] as $key => $answer) {
+            if ('' == trim($answer)) {
+                $errors[QuestionElement::ANSWERS.'_'.$key] = $this->adaptError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER, $key);
             }
         }
 

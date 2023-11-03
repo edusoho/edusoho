@@ -454,6 +454,11 @@ course.unit: '%part_name% %number% %colon% %title%'
 course.lesson: '%part_name% %number% : %title%'
 course.catalogue.task_status.task: '%taskName%.%taskNumber%:%taskTitle%'
 
+created.question.confirm.ok.btn: Continue editing
+created.question.confirm.close.btn: Direct creation
+created.question.confirm.title: Whether to continue to create the same topic
+
+
 course.thread_replay_failed_hint: Posted reply failed, please try again
 course.thread_delete_hint: Do you really want to delete this reply?
 
@@ -2215,3 +2220,9 @@ admin_v2.homepage.wechat_come: Welcome to EduSoho enterprise products
 admin_v2.homepage.wechat_code.m: Join the open source product use learning exchange group, small partners are waiting for you
 
 del.role.theater.hover.title: This user does not have instructor rights. After removal, it will not be displayed on mobile
+upgrade.cloud.capabilities.to.experience: >
+  <p class="title cd-dark-major">Topic introduction</p><div class="cd-dark-minor cd-text-md">Upgrade cloud capabilities to experience more powerful import capabilities</div>
+next.skip.intro.text: >
+  <p class="title cd-dark-major">Topic introduction</p><div class="cd-dark-minor cd-text-md">To upgrade the cloud capability and experience more powerful import functions, contact the super administrator</div>
+skip.i.know: I know(2/2)
+skip.upgrade.btn: Upgrade now(2/2)

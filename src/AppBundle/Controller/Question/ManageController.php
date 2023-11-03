@@ -35,20 +35,6 @@ class ManageController extends BaseController
         ]);
     }
 
-    public function showTasksAction(Request $request, $courseSetId)
-    {
-        $courseId = $request->request->get('courseId', 0);
-        if (empty($courseId)) {
-            return $this->createJsonResponse([]);
-        }
-
-        $this->getCourseService()->tryManageCourse($courseId);
-
-        $courseTasks = $this->getTaskService()->findTasksByCourseId($courseId);
-
-        return $this->createJsonResponse($courseTasks);
-    }
-
     public function reEditAction(Request $request, $token)
     {
         return $this->forward('AppBundle:Question/QuestionParser:reEdit', [
@@ -60,16 +46,26 @@ class ManageController extends BaseController
 
     public function parseProgressAction($token)
     {
-        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
-        $data = $token['data'];
-        $results = $this->getQuestionParseClient()->getJob($data['jobId']);
-        $results = array_column($results, null, 'no');
-        $result = $results[$data['jobId']];
+        $data = $this->getDataFromToken($token);
+        $result = $this->getParseResult($data['jobId']);
+        if ('failed' == $result['status']) {
+            return $this->createJsonResponse([
+                'status' => 'failed',
+                'errorHtml' => $this->renderView('question-manage/read-error.html.twig'),
+            ]);
+        }
         if ('finished' == $result['status']) {
-            $questions = $this->getQuestionParseAdapter()->adapt($result['result']);
-            $questions = $this->getItemParser()->formatData($questions);
-            $fileSystem = new Filesystem();
-            $fileSystem->dumpFile($data['cacheFilePath'], json_encode($questions));
+            try {
+                $questions = $this->getQuestionParseAdapter()->adapt($result['result']);
+                $questions = $this->getTransferImg($questions);
+                $questions = $this->getItemParser()->formatData($questions);
+            } catch (\Exception $e) {
+                return $this->createJsonResponse([
+                    'status' => 'failed',
+                    'errorHtml' => $this->renderView('question-manage/read-error.html.twig'),
+                ]);
+            }
+            $this->cacheQuestions($data['cacheFilePath'], $questions);
         }
 
         return $this->createJsonResponse([
@@ -80,8 +76,7 @@ class ManageController extends BaseController
 
     public function saveImportQuestionsAction(Request $request, $token)
     {
-        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
-        $data = $token['data'];
+        $data = $this->getDataFromToken($token);
         if (!$this->getQuestionBankService()->canManageBank($data['questionBankId'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
@@ -94,8 +89,7 @@ class ManageController extends BaseController
 
     public function checkDuplicatedQuestionsAction(Request $request, $token)
     {
-        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
-        $data = $token['data'];
+        $data = $this->getDataFromToken($token);
         if (!$this->getQuestionBankService()->canManageBank($data['questionBankId'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
@@ -107,6 +101,83 @@ class ManageController extends BaseController
         return $this->createJsonResponse([
             'duplicatedIds' => $duplicatedMaterialIds,
         ]);
+    }
+
+    private function getDataFromToken($token)
+    {
+        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+
+        return $token['data'];
+    }
+
+    private function getParseResult($jobId)
+    {
+        $results = $this->getQuestionParseClient()->getJob($jobId);
+        $results = array_column($results, null, 'no');
+
+        return $results[$jobId];
+    }
+
+    private function cacheQuestions($cacheFilePath, $questions)
+    {
+        $fileSystem = new Filesystem();
+        $fileSystem->dumpFile($cacheFilePath, json_encode($questions));
+    }
+
+    protected function getTransferImg($questions)
+    {
+        $formulas = [];
+        foreach ($questions as &$question) {
+            $formulas = array_merge($formulas, $this->getFormulasFromText($question['stem']));
+            if (isset($question['options'])) {
+                foreach ($question['options'] as &$option) {
+                    $formulas = array_merge($formulas, $this->getFormulasFromText($option));
+                }
+            }
+        }
+
+        $dataResults = [];
+        foreach (array_chunk($formulas, 100) as $formula) {
+            $results = $this->getQuestionParseClient()->convertLatex2Img($formula);
+            $dataResults = array_merge($dataResults, $results);
+        }
+
+        return $this->replaceQuestions($formulas, $dataResults, $questions);
+    }
+
+    protected function getFormulasFromText($text)
+    {
+        $text = html_entity_decode($text);
+        preg_match_all('/data-tex\s*=\s*"([^\"]*)"/', $text, $matches);
+        $formulas = $matches[1] ?? [];
+
+        return $formulas;
+    }
+
+    protected function replaceQuestions($formulas, $results, $questions)
+    {
+        $replaceFormulas = array_combine($formulas, $results);
+        $questions = array_map(function ($question) use ($replaceFormulas) {
+            $question['stem'] = $this->getReplaceTexts($replaceFormulas, $question['stem']);
+            if (isset($question['options'])) {
+                $question['options'] = array_map(function ($option) use ($replaceFormulas) {
+                    return $this->getReplaceTexts($replaceFormulas, $option);
+                }, $question['options']);
+            }
+
+            return $question;
+        }, $questions);
+
+        return $questions;
+    }
+
+    protected function getReplaceTexts($replaceFormulas, $text)
+    {
+        $replaceFunc = function ($match) use ($replaceFormulas) {
+            return "<img src=\"{$replaceFormulas[$match[1]]}\" >";
+        };
+
+        return preg_replace_callback('/<span.*?data-tex\s*=\s*"(.*?)".*?><\/span>/', $replaceFunc, $text);
     }
 
     protected function getQuestionParseClient()
@@ -130,27 +201,11 @@ class ManageController extends BaseController
     }
 
     /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    /**
      * @return CourseSetService
      */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
-    }
-
-    /**
-     * @return TaskService
-     */
-    protected function getTaskService()
-    {
-        return $this->createService('Task:TaskService');
     }
 
     /**

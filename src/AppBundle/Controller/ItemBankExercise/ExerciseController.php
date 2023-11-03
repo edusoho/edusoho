@@ -214,8 +214,10 @@ class ExerciseController extends BaseController
         $qrCode->setPadding(10);
         $img = $qrCode->get('png');
 
-        $headers = ['Content-Type' => 'image/png',
-            'Content-Disposition' => 'inline; filename="image.png"', ];
+        $headers = [
+            'Content-Type' => 'image/png',
+            'Content-Disposition' => 'inline; filename="image.png"',
+        ];
 
         return new Response($img, 200, $headers);
     }
@@ -352,6 +354,9 @@ class ExerciseController extends BaseController
                 0,
                 PHP_INT_MAX
             );
+            if ($exercise['assessmentEnable']) {
+                $records = $this->addAssessmentInfo($records);
+            }
             $records = ArrayToolkit::index($records, 'assessmentId');
         }
 
@@ -417,6 +422,19 @@ class ExerciseController extends BaseController
         $this->getExerciseMemberService()->quitExerciseByDeadlineReach($user['id'], $id);
 
         return $this->redirect($this->generateUrl('item_bank_exercise_show', ['id' => $id]));
+    }
+
+    private function addAssessmentInfo(array $records)
+    {
+        $answerRecords = $this->getAnswerRecordService()->findByIds(array_column($records, 'answerRecordId'));
+        $answerAssessments = $this->getAssessmentService()->findAssessmentsByIds(array_column($answerRecords, 'assessment_id'));
+        foreach ($records as &$record) {
+            $answerAssessment = $answerAssessments[$answerRecords[$record['answerRecordId']]['assessment_id']];
+            $record['item_count'] = $answerAssessment['item_count'];
+            $record['total_score'] = $answerAssessment['total_score'];
+        }
+
+        return $records;
     }
 
     protected function getQrcodeUrl($id)

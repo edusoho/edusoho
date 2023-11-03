@@ -542,36 +542,56 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $typesNum;
     }
 
-    public function findDuplicatedMaterialIds($bankId, $items)
+    public function findDuplicatedMaterialIds($itemBankId, $items)
     {
         $materialHashes = [];
         $materials = [];
         foreach ($items as $item) {
-            $item['bank_id'] = $bankId;
+            $item['bank_id'] = $itemBankId;
             $item = $this->getItemProcessor($item['type'])->process($item);
             $materialHashes[] = md5($item['material']);
             $materials[] = $item['material'];
         }
 
-        $selfDuplicatedIds = [];
+        $selfDuplicatedIdsGroup = [];
         foreach (array_count_values($materials) as $value => $count) {
             if ($count > 1) {
-                $selfDuplicatedIds = array_keys($materials, $value);
+                $selfDuplicatedIdsGroup[] = array_keys($materials, $value);
             }
         }
 
-        $duplicatedMaterials = array_column($this->getItemDao()->findDuplicatedMaterial($bankId, $materialHashes), 'material');
-        $duplicatedIds = array_keys(array_intersect($materials, $duplicatedMaterials));
-        $allDuplicatedIds = array_values(array_unique(array_merge($selfDuplicatedIds, $duplicatedIds)));
+        $allDuplicatedIds = [];
+        foreach ($selfDuplicatedIdsGroup as $selfDuplicatedIds) {
+            foreach ($selfDuplicatedIds as $selfDuplicatedId) {
+                $allDuplicatedIds[$selfDuplicatedId]['local'] = array_values(array_diff($selfDuplicatedIds, [$selfDuplicatedId]));
+            }
+        }
 
-        return empty($allDuplicatedIds) ? [] : $allDuplicatedIds;
+        $duplicatedMaterials = array_column($this->getItemDao()->findDuplicatedMaterial($itemBankId, $materialHashes), 'material');
+        $duplicatedIds = array_keys(array_intersect($materials, $duplicatedMaterials));
+        foreach ($duplicatedIds as $duplicatedId) {
+            $allDuplicatedIds[$duplicatedId]['remote'] = true;
+        }
+
+        return $allDuplicatedIds;
     }
 
-    public function isMaterialDuplicative($bankId, $material)
+    public function isMaterialDuplicative($itemBankId, $material, $items = [])
     {
-        $material = $this->purifyHtml($material);
+        $material = $this->purifyHtml(trim($material));
         $materialHash = md5($material);
-        $count = $this->getItemDao()->count(['bank_id' => $bankId, 'material_hash'=> $materialHash, 'material' => $material]);
+
+        if ($items) {
+            foreach ($items as $item) {
+                $item['bank_id'] = $itemBankId;
+                $item = $this->getItemProcessor($item['type'])->process($item);
+                if ($material == $item['material']) {
+                    return true;
+                }
+            }
+        }
+
+        $count = $this->getItemDao()->count(['bank_id' => $itemBankId, 'material_hash'=> $materialHash, 'material' => $material]);
         if ($count) {
             return true;
         }

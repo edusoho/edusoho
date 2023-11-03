@@ -16,7 +16,7 @@ trait ChoiceAdapterTrait
         $adaptQuestion['type'] = SingleChoiceItem::TYPE;
         $adaptQuestion['options'] = $this->adaptOptions($question);
         $adaptQuestion['answers'] = $this->adaptChoiceAnswer($question);
-        $errors = $this->adaptChoiceErrors($question);
+        $errors = $this->adaptChoiceErrors($adaptQuestion, $question);
         if ($errors) {
             $adaptQuestion['errors'] = empty($adaptQuestion['errors']) ? $errors : array_merge($adaptQuestion['errors'], $errors);
         }
@@ -43,10 +43,15 @@ trait ChoiceAdapterTrait
     private function adaptOptions($question)
     {
         if (empty($question['body']['options'])) {
-            return [];
+            return ['', ''];
         }
 
-        return array_column($question['body']['options'], 'content');
+        $options = array_column($question['body']['options'], 'content');
+        if (count($options) == 1) {
+            $options[] = '';
+        }
+
+        return $options;
     }
 
     private function adaptChoiceAnswer($question)
@@ -54,21 +59,37 @@ trait ChoiceAdapterTrait
         if (empty($question['answer']['correct'])) {
             return [];
         }
-
-        return array_map(function ($answer) {
+        $answers = array_map(function ($answer) {
             return $answer - 1;
         }, $question['answer']['correct']);
+        $options = $this->adaptOptions($question);
+
+        return array_filter($answers, function ($answer) use ($options) {
+            return isset($options[$answer]);
+        });
     }
 
-    private function adaptChoiceErrors($question)
+    private function adaptChoiceErrors($adaptQuestion, $question)
     {
-        if (empty($question['errors'])) {
-            return [];
-        }
         $errors = [];
+        foreach ($adaptQuestion['options'] as $index => $option) {
+            if (empty($option)) {
+                $errors[QuestionElement::OPTIONS.'_'.$index] = $this->adaptError(QuestionElement::OPTIONS, QuestionErrors::NO_OPTION, $index);
+            }
+        }
+        if (empty($adaptQuestion['answers'])) {
+            $errors[QuestionElement::ANSWERS] = $this->adaptError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER);
+        }
+        if ('multipleChoice' == $question['type'] && count(array_unique($adaptQuestion['answers'])) < 2) {
+            $errors[QuestionElement::ANSWERS] = $this->adaptError(QuestionElement::ANSWERS, QuestionErrors::LACK_ANSWER);
+        }
+        if (empty($question['errors'])) {
+            return $errors;
+        }
         foreach ($question['errors'] as $error) {
-            if ('ANSWER_MISSING' == $error['code']) {
-                $errors[QuestionElement::ANSWERS] = $this->adaptError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER);
+            if ('OPTION_TEXT_EMPTY' == $error['code']) {
+                $index = $error['option'] - 1;
+                $errors[QuestionElement::OPTIONS.'_'.$index] = $this->adaptError(QuestionElement::OPTIONS, QuestionErrors::NO_OPTION, $index);
             }
         }
 

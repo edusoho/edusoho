@@ -1772,13 +1772,15 @@ question_manage.import.administrator.tip2: 提升导入识别准确率，让题�
 question_manage.import.non-administrator-tip: 升级云能力可使用导入功能，需联系超级管理员进行操作
 question_manage.import.non.administrator.close.btn: 我知道了
 course.question_manage.import.upload_document: 上传文档
-course.question_manage.import.reupload_document: 重新上传文档
+course.question_manage.import.reupload_document: 重新上传
+course.question_manage.import.Successful: 上传成功
 course.question_manage.import.uploading: 上传中...
 course.question_manage.import.use_old_template: 仍然使用旧模板
 course.question_manage.impport.cancle: 取消
 course.question_manage.import.filename_length_limit: 文件名称不能超过50个字符
 course.question_manage.import.docx_support_hint2: 请上传DOCX格式的Word文档
 course.question_manage.import.doc_to_docx_hint2: DOC如何转换成DOCX可<a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">点击此处</a>进行查看
+course.question_manage.import.text.rule.tip: 请上传DOCX或XLSX格式的文档
 course.question_manage.import.rule: 导入规则说明
 course.question_manage.export_hint: (当前题目导出仅支持新模板)
 course.question_manage.export_btn: 导出题目
@@ -12453,3 +12455,4 @@ sms.defence.request.log.disable_type.none: 无
 
 course.start_answer.all_question_deleted: 全部题目已被删除，请联系教师或管理员
 item_bank.access_cloud: 立即升级
+next.skip: '下一步 (1/2)'
