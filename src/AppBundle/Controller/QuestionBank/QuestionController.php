@@ -86,12 +86,12 @@ class QuestionController extends BaseController
         ]);
     }
 
-    public function downloadImportTemplateAction($id, $type)
+    public function downloadImportTemplateAction(Request $request, $id, $type)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '没有题库管理权限');
         }
-        $downloadUrl = $this->getQuestionParseClient()->getTemplateFileDownloadUrl($type);
+        $downloadUrl = $this->getQuestionParseClient()->getTemplateFileDownloadUrl($type, $request->isSecure());
 
         return $this->redirect($downloadUrl);
     }
