@@ -1229,16 +1229,29 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $ids;
     }
 
-    public function getLessonTree($courseId)
+    public function getLessonTree($courseIds)
     {
+        $lessonTrees = [];
         $chapters = $this->getChapterDao()->search(
-            ['courseId' => $courseId, 'status' => 'published'],
+            ['courseIds' => $courseIds, 'status' => 'published'],
             ['seq' => 'ASC'],
             0,
             PHP_INT_MAX,
-            ['id', 'title', 'type']
+            ['id', 'title', 'type', 'courseId']
         );
+        $chapters = ArrayToolkit::group($chapters, 'courseId');
 
+        foreach ($courseIds as $courseId) {
+            $course = $this->tryManageCourse($courseId);
+            $lessonTree = $this->getCourseLessonTree($chapters[$courseId]);
+            $lessonTrees[$course['courseSetTitle']]['children'] = $lessonTree;
+        }
+
+        return $lessonTrees;
+    }
+
+    protected function getCourseLessonTree($chapters)
+    {
         $lessonTree = [];
         foreach ($chapters as $chapter) {
             if ('chapter' == $chapter['type']) {
@@ -1285,6 +1298,54 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $lessonTree;
+    }
+
+    public function findLessonIds($courseIds, $chapterId)
+    {
+        $lessonTree = $this->getLessonTree($courseIds);
+
+        $lessonIds = [];
+        foreach ($lessonTree as $courseChapter) {
+            foreach ($courseChapter['children'] as $chapter) {
+                if ('chapter' == $chapter['type']) {
+                    if ($chapter['id'] == $chapterId) {
+                        foreach ($chapter['children'] as $unit) {
+                            if ('unit' == $unit['type'] && $unit['children']) {
+                                $lessonIds = array_merge($lessonIds, array_column($unit['children'], 'id'));
+                            } elseif ('lesson' == $unit['type']) {
+                                $lessonIds[] = $unit['id'];
+                            }
+                        }
+                    } else {
+                        foreach ($chapter['children'] as $unit) {
+                            if ('unit' == $unit['type'] && $unit['children']) {
+                                if ($unit['id'] == $chapterId) {
+                                    $lessonIds = array_merge($lessonIds, array_column($unit['children'], 'id'));
+                                } else {
+                                    if (in_array($chapterId, array_column($unit['children'], 'id'))) {
+                                        $lessonIds[] = $chapterId;
+                                    }
+                                }
+                            } elseif ('lesson' == $unit['type'] && $unit['id'] == $chapterId) {
+                                $lessonIds[] = $unit['id'];
+                            }
+                        }
+                    }
+                } elseif ('unit' == $chapter['type']) {
+                    if ($chapter['id'] == $chapterId) {
+                        $lessonIds = array_merge($lessonIds, array_column($chapter['children'], 'id'));
+                    } else {
+                        if (in_array($chapterId, array_column($chapter['children'], 'id'))) {
+                            $lessonIds[] = $chapterId;
+                        }
+                    }
+                } elseif ('lesson' == $chapter['type'] && $chapter['id'] == $chapterId) {
+                    $lessonIds[] = $chapterId;
+                }
+            }
+        }
+
+        return $lessonIds;
     }
 
     public function createChapter($chapter)

@@ -55,30 +55,30 @@ class ManageController extends BaseController
         ]);
     }
 
-    public function checkListAction(Request $request)
+    public function checkListAction(Request $request, $targetId, $targetType, $type)
     {
-        $data = json_decode($request->getContent(), true);
-
-        $courseIds = [$data['targetId']];
+        $courseIds = [$targetId];
         $courses = [];
         $courseSets = [];
-        if ('classroom' === $data['targetType']) {
-            $courses = $this->getClassroomService()->findCoursesByClassroomId($data['targetId']);
+        if ('classroom' === $targetType) {
+            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
             $courseIds = ArrayToolkit::column($courses, 'id');
             $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
         }
 
         $conditions = [
             'courseIds' => empty($courseIds) ? [-1] : $courseIds,
-            'type' => $data['type'],
+            'type' => $type,
         ];
 
-        if (isset($data['title'])) {
-            $conditions['titleLike'] = $this->purifyHtml($data['title']);
+        $params = json_decode($request->getContent(), true) ?? [];
+        if (isset($params['title'])) {
+            $conditions['titleLike'] = $this->purifyHtml($params['title']);
         }
 
-        if (isset($data['categoryId'])) {
-            $conditions['categoryId'] = $data['categoryId'];
+        if (isset($params['categoryId'])) {
+            $categoryIds = $this->getCourseService()->findLessonIds($courseIds, $params['categoryId']);
+            $conditions['categoryIds'] = $categoryIds;
         }
 
         $paginator = new Paginator(
@@ -93,18 +93,32 @@ class ManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        list($tasks, $testpapers) = $this->getTaskService()->findTestpapers($tasks, $data['type']);
+        list($tasks, $testpapers) = $this->getTaskService()->findTestpapers($tasks, $type);
+        $resultStatusNum = $this->findTestpapersStatusNum($tasks);
+        if (!$request->isXmlHttpRequest()) {
+            return $this->render('testpaper/manage/check-list.html.twig', [
+                'testpapers' => $testpapers,
+                'paginator' => $paginator,
+                'targetId' => $targetId,
+                'targetType' => $targetType,
+                'tasks' => $tasks,
+                'resultStatusNum' => $resultStatusNum,
+                'courses' => ArrayToolkit::index($courses, 'id'),
+                'courseSets' => ArrayToolkit::index($courseSets, 'id'),
+                'type' => $type,
+            ]);
+        }
 
         return $this->createJsonResponse([
             'testpapers' => $testpapers,
             'paginator' => $paginator,
-            'targetId' => $data['targetId'],
-            'targetType' => $data['targetType'],
+            'targetId' => $targetId,
+            'targetType' => $targetType,
             'tasks' => $tasks,
-            'resultStatusNum' => $this->findTestpapersStatusNum($tasks),
+            'resultStatusNum' => $resultStatusNum,
             'courses' => ArrayToolkit::index($courses, 'id'),
             'courseSets' => ArrayToolkit::index($courseSets, 'id'),
-            'type' => $data['type'],
+            'type' => $type,
         ]);
     }
 
