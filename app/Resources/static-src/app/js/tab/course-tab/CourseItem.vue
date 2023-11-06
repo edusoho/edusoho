@@ -1,7 +1,7 @@
 <template>
   <div class="my-course-item cd-mb16 clearfix">
 
-    <a class="my-course-item__link relative" href="/course_set/931">
+    <a class="my-course-item__link relative" :href="'/my/course/' + course.id">
       <img :src="course.courseSet.cover.middle" :alt="course.courseSetTitle" class="my-course-item__picture">
       <span class="absolute" :class="courseStatus.class">
         {{ courseStatus.text }}
@@ -9,7 +9,7 @@
     </a>
     <div class="my-course-item__info">
       <div class="my-course-item__title text-overflow">
-        <a class="cd-link-major text-16" href="/course_set/931">
+        <a class="cd-link-major text-16" :href="'/my/course/' + course.id">
           {{ course.courseSetTitle }}
         </a>
       </div>

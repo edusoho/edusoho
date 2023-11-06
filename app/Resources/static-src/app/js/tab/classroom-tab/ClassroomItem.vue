@@ -1,7 +1,7 @@
 <template>
   <div class="my-course-item cd-mb16 clearfix">
 
-    <a class="my-course-item__link relative" href="/course_set/931">
+    <a class="my-course-item__link relative" :href="'/classroom/'+classItem.id">
       <img :src="classItem.cover.middle" :alt="classItem.courseSetTitle" class="my-course-item__picture">
       <span class="absolute" :class="courseStatus.class">
         {{ courseStatus.text }}
@@ -9,7 +9,7 @@
     </a>
     <div class="my-course-item__info">
       <div class="my-course-item__title text-overflow">
-        <a class="cd-link-major text-16" href="/course_set/931">
+        <a class="cd-link-major text-16" :href="'/classroom/'+classItem.id">
           {{ classItem.title }}</a>
       </div>
       <div class="my-course-item__classroom"><span>已学了{{classItem.spec.usageDays}}天</span></div>
@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="my-course-item__btn">
-      <a class="btn cd-btn cd-btn-primary" href="/my/course/981">{{ btnContent }}</a>
+      <a class="btn cd-btn cd-btn-primary" :href="'/classroom/'+classItem.id">{{ btnContent }}</a>
     </div>
 
   </div>

@@ -115,6 +115,10 @@
             },
         },
         props: {
+          goods: {
+                type: Object,
+                default: null,
+            },
             targetType: {
                 type: String,
                 default: null,
@@ -285,6 +289,13 @@
                 return true;
             },
             onConfirm() {
+              if(this.goods.product.target.status == 'closed') {
+                cd.message({
+                    'type': 'danger',
+                    'message': Translator.trans('validate.course.closed')
+                });
+                return
+              }
                 if (!this.validateFormItems()) return;
 
                 Api.review.review({

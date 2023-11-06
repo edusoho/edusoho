@@ -45,7 +45,7 @@ export default {
       searchValue: '',
       current: 1,
       courseLists: [],
-      total: 130,
+      total: 0,
       pageSize: 12
     }
   },
@@ -86,6 +86,7 @@ export default {
 
       const { data, paging } = await Me.searchCourses(params)
       this.courseLists = data
+      this.total = paging.total
     },
     getParams(str) {
       let search = str.includes('?') ? str.split('?')[1] : str;

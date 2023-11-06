@@ -3,7 +3,7 @@
         <div v-if="reviews.length <= 0 && !canCreate" v-html="reviewEmptyHtml" class="description-content"
              style="padding-left: 14px; padding-top: 10px;"></div>
         <div class="reviews">
-            <create-review :target-id="targetId" :target-type="targetType" :can-create="canCreate"
+            <create-review :target-id="targetId" :goods="goods" :target-type="targetType" :can-create="canCreate"
                            :current-user-id="currentUserId"
                            :captcha="captcha"></create-review>
             <div class="reviews-item" v-for="review in reviews" :key="review.id" :class="'reviews-item-'+ review.id">
@@ -181,6 +181,10 @@
             }
         },
         props: {
+          goods: {
+                type: Object,
+                default: null,
+            },
             targetType: {
                 type: String,
                 default: null
