@@ -1,5 +1,5 @@
 import ListHandel from './index.vue';
-import { Button, Dropdown, Select } from 'ant-design-vue';
+import { Button, Dropdown, Select, FormModel } from 'ant-design-vue';
 import Axios from 'axios';
 import qs from 'qs';
 
@@ -24,6 +24,7 @@ Vue.filter('trans', function (value, params) {
 Vue.use(Button)
 Vue.use(Select)
 Vue.use(Dropdown)
+Vue.use(FormModel)
 new Vue({
   el: '#app',
   render: createElement => createElement(ListHandel)
