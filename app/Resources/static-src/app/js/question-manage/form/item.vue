@@ -154,7 +154,7 @@
           }
         }).done(function (resp) {
           if (resp.goto) {
-            // window.location.href = resp.goto;
+            window.location.href = resp.goto;
           }
         })
       },
