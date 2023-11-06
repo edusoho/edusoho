@@ -456,7 +456,7 @@ course.catalogue.task_status.task: '%taskName%.%taskNumber%:%taskTitle%'
 
 created.question.confirm.ok.btn: Continue editing
 created.question.confirm.close.btn: Direct creation
-created.question.confirm.title: Whether to continue to create the same topic
+created.question.confirm.title: If the same topic already exists, determine whether to continue importing
 
 
 course.thread_replay_failed_hint: Posted reply failed, please try again
@@ -624,8 +624,10 @@ course.question.create.choose_min_num_hint: Maximum %minNum% options
 course.question.create_hint: Added options
 course.question.right_answer_hint: Correct answer
 course.question.right_answer_content_hint: Please enter the option content
+course.question.by.question.type: By question type
 course.question.type.single_choice: single choice
 course.question.type.uncertain_choice: uncertain choice
+course.question.type.uncertain_choices: uncertain choice
 course.question.type.choice: choice
 course.question.type.determine: determine
 course.question.type.essay: essay
@@ -2226,3 +2228,12 @@ next.skip.intro.text: >
   <p class="title cd-dark-major">Topic introduction</p><div class="cd-dark-minor cd-text-md">To upgrade the cloud capability and experience more powerful import functions, contact the super administrator</div>
 skip.i.know: I know(2/2)
 skip.upgrade.btn: Upgrade now(2/2)
+question.bank.name: Question bank name
+question.bank.expoet: Derived problem
+question.bank.add: Add topic
+question.bank.import: Lead-in topic
+question.bank.difficulty.default: Difficulty
+question.bank.difficulty.simple: Simple
+question.bank.difficulty.normal: Normal
+question.bank.difficulty: Hard
+question.bank.reset.btn: Reset
