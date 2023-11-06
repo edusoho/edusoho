@@ -3,13 +3,11 @@
 namespace AppBundle\Controller\Question;
 
 use AppBundle\Controller\BaseController;
-use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Question\Adapter\QuestionParseAdapter;
 use Biz\Question\QuestionParseClient;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
-use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
 use Codeages\Biz\ItemBank\Item\ItemParser;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
@@ -51,13 +49,13 @@ class ManageController extends BaseController
         if ('failed' == $result['status']) {
             return $this->createJsonResponse([
                 'status' => 'failed',
-                'errorHtml' => $this->renderView('question-manage/read-error.html.twig'),
+                'errorHtml' => $this->renderView('question-manage/read-error.html.twig', ['error' => $result['error']]),
             ]);
         }
         if ('finished' == $result['status']) {
             try {
+                $result['result'] = $this->replaceFormulaToImg($result['result']);
                 $questions = $this->getQuestionParseAdapter()->adapt($result['result']);
-                $questions = $this->getTransferImg($questions);
                 $questions = $this->getItemParser()->formatData($questions);
             } catch (\Exception $e) {
                 return $this->createJsonResponse([
@@ -124,60 +122,25 @@ class ManageController extends BaseController
         $fileSystem->dumpFile($cacheFilePath, json_encode($questions));
     }
 
-    protected function getTransferImg($questions)
+    private function replaceFormulaToImg($text)
     {
-        $formulas = [];
-        foreach ($questions as &$question) {
-            $formulas = array_merge($formulas, $this->getFormulasFromText($question['stem']));
-            if (isset($question['options'])) {
-                foreach ($question['options'] as &$option) {
-                    $formulas = array_merge($formulas, $this->getFormulasFromText($option));
-                }
-            }
-        }
-
-        $dataResults = [];
-        foreach (array_chunk($formulas, 100) as $formula) {
-            $results = $this->getQuestionParseClient()->convertLatex2Img($formula);
-            $dataResults = array_merge($dataResults, $results);
-        }
-
-        return $this->replaceQuestions($formulas, $dataResults, $questions);
-    }
-
-    protected function getFormulasFromText($text)
-    {
-        $text = html_entity_decode($text);
-        preg_match_all('/data-tex\s*=\s*"([^\"]*)"/', $text, $matches);
+        preg_match_all('/data-tex=\\\\"([^"]*)\\\\"/', html_entity_decode($text), $matches);
         $formulas = $matches[1] ?? [];
-
-        return $formulas;
-    }
-
-    protected function replaceQuestions($formulas, $results, $questions)
-    {
-        $replaceFormulas = array_combine($formulas, $results);
-        $questions = array_map(function ($question) use ($replaceFormulas) {
-            $question['stem'] = $this->getReplaceTexts($replaceFormulas, $question['stem']);
-            if (isset($question['options'])) {
-                $question['options'] = array_map(function ($option) use ($replaceFormulas) {
-                    return $this->getReplaceTexts($replaceFormulas, $option);
-                }, $question['options']);
-            }
-
-            return $question;
-        }, $questions);
-
-        return $questions;
-    }
-
-    protected function getReplaceTexts($replaceFormulas, $text)
-    {
-        $replaceFunc = function ($match) use ($replaceFormulas) {
-            return "<img src=\"{$replaceFormulas[$match[1]]}\" >";
+        if (empty($formulas)) {
+            return $text;
+        }
+        $unescapeFormulas = str_replace('\\\\', '\\', $formulas);
+        $imgs = [];
+        foreach (array_chunk($unescapeFormulas, 100) as $formulaChunk) {
+            $imgChunk = $this->getQuestionParseClient()->convertLatex2Img($formulaChunk);
+            $imgs = array_merge($imgs, $imgChunk);
+        }
+        $replaceImgs = array_combine($formulas, $imgs);
+        $replaceFunc = function ($match) use ($replaceImgs) {
+            return "<img src=\\\"{$replaceImgs[html_entity_decode($match[1])]}\\\">";
         };
 
-        return preg_replace_callback('/<span.*?data-tex\s*=\s*"(.*?)".*?><\/span>/', $replaceFunc, $text);
+        return preg_replace_callback('/<span data-tex=\\\\"(.*?)\\\\".*?><\/span>/', $replaceFunc, $text);
     }
 
     protected function getQuestionParseClient()
