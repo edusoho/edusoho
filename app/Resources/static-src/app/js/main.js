@@ -24,6 +24,18 @@ if ($('#rewardPointNotify').length > 0) {
   }
 }
 
+$(document).on('click', '.handleLearn', function (event) {
+  event.preventDefault();
+});
+
+$(document).on('click', '.handleLearnOnMessage', function (event) {
+  event.preventDefault();
+  cd.message({
+    type: 'danger', 
+    message: Translator.trans('validate.course.closed')
+  });
+});
+
 $('[data-toggle="popover"]').popover({
   html: true
 });

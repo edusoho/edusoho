@@ -1,6 +1,6 @@
 <template>
-    <div class="es-share top js-es-share">
-        <span class="dropdown-toggle" :class="customizedClass" data-toggle="dropdown">
+    <div class="es-share top js-es-share">{{ goods.product.target.status }}
+        <span class="dropdown-toggle" :class="customizedClass" :data-toggle="goods.product.target.status == 'closed'? '' : 'dropdown'">
             <i class="es-icon es-icon-share"></i>
              <slot></slot>
         </span>
@@ -44,6 +44,10 @@
     export default {
         name: "share",
         props: {
+          goods: {
+                type: Object,
+                default: null
+            },
             title: {
                 type: String,
                 default: '',

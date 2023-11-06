@@ -739,6 +739,7 @@ t.add("validate.title_required_hint", "Please enter a title, it cannot be empty.
 t.add("validate.mobile_or_email_message", "please input the right mobile\/email", "js", "en");
 t.add("validate.success", "Verified successfully", "js", "en");
 t.add("validate.fail", "Failed to verify", "js", "en");
+t.add("validate.course.closed", "The course is closed", "js", "en");
 t.add("validate.expiry_days_required_hint", "please input the expiry days", "js", "en");
 t.add("validate.empty_content_hint", "please input content!", "js", "en");
 t.add("validate.no_number_first_hint", "URL path can only contain letters and numbers, please start with a letter! Length is greater than 2 digits", "js", "en");

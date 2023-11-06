@@ -685,6 +685,7 @@ t.add("validate.modify_days", "\u8bf7\u8f93\u5165\u4fee\u6539\u5929\u6570", "js"
 t.add("validate.modify_day_number", "\u8bf7\u8f93\u5165\u4e0d\u5927\u4e8e 7300\uff0820\u5e74\uff09\u7684\u6570\u503c", "js", "zh_CN");
 t.add("validate.success", "\u9a8c\u8bc1\u6210\u529f", "js", "zh_CN");
 t.add("validate.fail", "\u9a8c\u8bc1\u5931\u8d25", "js", "zh_CN");
+t.add("validate.course.closed", "\u8be5\u8bfe\u7a0b\u5df2\u5173\u95ed", "js", "zh_CN");
 t.add("validate.expiry_days_required_hint", "\u8bf7\u8f93\u5165\u6709\u6548\u671f", "js", "zh_CN");
 t.add("validate.empty_content_hint", "\u8bf7\u8f93\u5165\u5185\u5bb9!", "js", "zh_CN");
 t.add("validate.no_number_first_hint", "URL\u8def\u5f84\u53ea\u80fd\u5305\u542b\u5b57\u6bcd\u548c\u6570\u5b57,\u8bf7\u4ee5\u5b57\u6bcd\u5f00\u5934!\u957f\u5ea6\u5927\u4e8e2\u4f4d", "js", "zh_CN");

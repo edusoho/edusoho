@@ -811,6 +811,7 @@ validate.modify_days: 请输入修改天数
 validate.modify_day_number: 请输入不大于 7300（20年）的数值
 validate.success: 验证成功
 validate.fail: 验证失败
+validate.course.closed: 该课程已关闭
 validate.expiry_days_required_hint: 请输入有效期
 validate.empty_content_hint: 请输入内容!
 validate.no_number_first_hint: URL路径只能包含字母和数字,请以字母开头!长度大于2位

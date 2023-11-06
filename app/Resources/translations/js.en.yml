@@ -866,6 +866,7 @@ validate.title_required_hint: Please enter a title, it cannot be empty.
 validate.mobile_or_email_message: please input the right mobile/email
 validate.success: Verified successfully
 validate.fail: Failed to verify
+validate.course.closed: The course is closed
 validate.expiry_days_required_hint: please input the expiry days
 validate.empty_content_hint: please input content!
 validate.no_number_first_hint: URL path can only contain letters and numbers, please start with a letter! Length is greater than 2 digits
