@@ -20,7 +20,7 @@
                             </li>
                         </ul>
                         <div class="buy__btn pull-right">
-                            <buy-sku :sku="currentSku" :isShow="false" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
+                            <buy-sku :sku="currentSku" :btn-class="goods.status == 'unpublished' ? 'product-detail__btn disabled btn' : 'product-detail__btn'" :isShow="false" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
                         </div>
                     </div>
                 </div>
@@ -80,6 +80,7 @@
                                  :target-type="'goods'"
                                  :current-user-id="currentUserId"
                                  :target-id="goods.id"
+                                 :goods="goods"
                                  v-if="ugcReviewSetting.enable_review == 1
                                  && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))"
                         >

@@ -41,7 +41,7 @@ export default {
       searchValue: '',
       current: 1,
       classroomLists: [],
-      total: 130,
+      total: 0,
       pageSize: 12
     }
   },
@@ -83,6 +83,7 @@ export default {
 
       const { data, paging } = await Me.searchClassrooms(params)
       this.classroomLists = data
+      this.total = paging.total
     },
     getParams(str) {
       let search = str.includes('?') ? str.split('?')[1] : str;
