@@ -64,6 +64,8 @@
 <script>
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
+import { isOpen } from '@/utils/on-status.js';
+
 export default {
   components: {},
   data() {
@@ -74,6 +76,7 @@ export default {
       answerReport: {},
       answerRecord: {},
       height: 0,
+      isOpen: false
     };
   },
   computed: {
@@ -135,6 +138,11 @@ export default {
       this.$router.push({ path: `/brushReview/${answerRecordId}`, query });
     },
     doAgain() {
+      if (!this.isOpen) {
+        isOpen('test')
+        return 
+      }
+      
       if (this.$route.query.type === "assessment") {
         const type = this.$route.query.type;
         const query = {

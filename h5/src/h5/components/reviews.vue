@@ -76,6 +76,8 @@
 import Api from '@/api';
 import { mapState } from 'vuex';
 import EDrag from '&/components/e-drag';
+import { isOpen } from '@/utils/on-status.js';
+
 
 export default {
   name: 'Reviews',
@@ -87,7 +89,8 @@ export default {
       value: 0,
       message: '',
       reviews: null,
-      showDrag: false
+      showDrag: false,
+      isOpened: false
     };
   },
   props: {
@@ -132,6 +135,11 @@ export default {
       })
     },
     onSubmit() {
+      if (!this.isOpened) {
+        isOpen('classroom')
+        return 
+      }
+
       if (this.value == 0) {
         this.$toast(this.$t('courseLearning.scoreCannotBeBlank'));
         return;

@@ -21,11 +21,15 @@
 <script>
 import { getBtnText } from '@/utils/itemBank-status.js';
 import { mapState } from 'vuex';
+import { isOpen } from '@/utils/on-status.js';
+
 export default {
   nama: 'exercise-section',
   components: {},
   data() {
-    return {};
+    return {
+      isOpen: false
+    };
   },
   props: {
     section: {},
@@ -84,6 +88,10 @@ export default {
       }
     },
     startDo(item) {
+      if (!this.isOpen) {
+        isOpen('test')
+        return 
+      }
       const query = {
         moduleId: this.moduleId,
         categoryId: item.id,
@@ -92,6 +100,10 @@ export default {
       this.$router.push({ path: '/brushIntro', query });
     },
     continueDo(item) {
+      if (!this.isOpen) {
+        isOpen(isOpen('test'))
+        return 
+      }
       const query = {
         moduleId: this.moduleId,
         categoryId: item.id,
