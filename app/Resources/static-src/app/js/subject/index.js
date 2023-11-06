@@ -725,6 +725,7 @@ export default class sbList {
   }
 
   finishImport(event) {
+    console.log(11111112222222);
     if (this.isEditing()) {
       return;
     }

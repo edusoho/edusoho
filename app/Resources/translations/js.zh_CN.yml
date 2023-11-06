@@ -401,7 +401,7 @@ course.catalogue.task_status.task: '%taskName%%taskNumber%： %taskTitle%'
 
 created.question.confirm.ok.btn: 继续编辑
 created.question.confirm.close.btn: 直接创建
-created.question.confirm.title: 已存在相同题目，是否继续创建
+created.question.confirm.title: 已存在相同题目，是否继续导入
 
 course.thread_replay_failed_hint: 发表回复失败，请重试
 course.thread_delete_hint: 您真的要删除该回帖吗？
@@ -569,8 +569,10 @@ course.question.create.choose_min_num_hint: 选项最少%minNum%个!
 course.question.create_hint: 新增选项
 course.question.right_answer_hint: 正确答案
 course.question.right_answer_content_hint: 请输入选项内容
+course.question.by.question.type: 按题型
 course.question.type.single_choice: 单选题
 course.question.type.uncertain_choice: 不定项
+course.question.type.uncertain_choices: 不定项选择题
 course.question.type.choice: 多选题
 course.question.type.determine: 判断题
 course.question.type.essay: 问答题
@@ -2191,3 +2193,12 @@ next.skip.intro.text: >
   <p class="title cd-dark-major">题目导入</p><div class="cd-dark-minor cd-text-md">升级云能力可体验更强大的导入功能，需联系超级管理员进行操作</div>
 skip.i.know: 我知道了（2/2）
 skip.upgrade.btn: 立即升级 (2/2)
+question.bank.name: 题库名称
+question.bank.expoet: 导出题目
+question.bank.add: 添加题目
+question.bank.import: 导入题目
+question.bank.difficulty.default: 难度
+question.bank.difficulty.simple: 简单
+question.bank.difficulty.normal: 一般
+question.bank.difficulty: 困难
+question.bank.reset.btn: 重置

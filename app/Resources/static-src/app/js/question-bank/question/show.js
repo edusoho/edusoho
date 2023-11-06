@@ -23,8 +23,8 @@ class QuestionsShow {
     this.initSelect();
     this.initShortLongText();
 
-    if (!store.get('MODAL_URL_INTRO') && this.accessCloud !== 1) {
-      store.set('MODAL_URL_INTRO', true);
+    if (!store.get('QUESTION_IMPORT_INTRO') && this.accessCloud != 1) {
+      store.set('QUESTION_IMPORT_INTRO', true);
       this.modal.load(this.modalUrl);
       this.modal.modal('show')
     }
@@ -34,20 +34,20 @@ class QuestionsShow {
       this.onClickSearchBtn(event);
     });
 
-    this.element.on('click', '.pagination li', (event) => {
-      this.onClickPagination(event);
-    });
-    this.element.on('change', '.js-current-perpage-count', (event) => {
-      this.onChangePagination(event);
-    });
+    // this.element.on('click', '.pagination li', (event) => {
+    //   this.onClickPagination(event);
+    // });
+    // this.element.on('change', '.js-current-perpage-count', (event) => {
+    //   this.onChangePagination(event);
+    // });
 
-    this.element.on('click', '.js-category-search', (event) => {
-      this.onClickCategorySearch(event);
-    });
+    // this.element.on('click', '.js-category-search', (event) => {
+    //   this.onClickCategorySearch(event);
+    // });
 
-    this.element.on('click', '.js-all-category-search', (event) => {
-      this.onClickAllCategorySearch(event);
-    });
+    // this.element.on('click', '.js-all-category-search', (event) => {
+    //   this.onClickAllCategorySearch(event);
+    // });
 
     this.element.on('click', '.js-batch-delete', (event) => {
       this.onDeleteQuestions(event);
@@ -81,7 +81,7 @@ class QuestionsShow {
 
     this.modal.on('click', '.js-next-btn' , (event) => { 
       this.modal.modal('hide');
-      if(this.canManageCloud !== 1) {
+      if(this.canManageCloud != 1) {
         this.skipCanManageCloud()
       } else {
         this.skipAccessCloud()
@@ -303,14 +303,27 @@ class QuestionsShow {
     isPaginator || this._resetPage();
     let self = this;
     const currentPerpage = defaultPages ? defaultPages : $('.js-current-perpage-count').children('option:selected').val()
-    const serialize = this.element.find('[data-role="search-conditions"]').serialize()
+    // const serialize = this.element.find('[data-role="search-conditions"]').serialize()
     const pages = this.element.find('.js-page').val()
-    const conditions = `${serialize}&page=${pages}&perpage=${currentPerpage}`;
+    const categoryId = $('.js-category-choose').val()
+    const difficulty = $('.js-list-header-difficulty').val() === 'default' ? '' : $('.js-list-header-difficulty').val()
+    const type = $('.js-list-header-type').val() === 'default' ? '' : $('.js-list-header-type').val()
+    const keyword = $('.js-list-header-keyword').val() === 'default' ? '' : $('.js-list-header-keyword').val()
+    
+    const params = {
+      category_id: categoryId,
+      difficulty: difficulty,
+      type: type,
+      keyword: keyword,
+      perpage: currentPerpage,
+      page: pages
+    }
+
     this._loading();
     $.ajax({
       type: 'GET',
       url: this.renderUrl,
-      data: conditions
+      data: params
     }).done(function(resp){
       self.table.html(resp);
       self.selector.updateTable();

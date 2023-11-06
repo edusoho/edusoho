@@ -101,9 +101,10 @@
         const stem = data.data.type === 'material' ? data.data.material : data.data.questions[0].stem
         return new Promise(resolve => {
           $.ajax({
-            url: `/question_bank/${data.data.bank_id}/checkQuestionDuplicative`,
+            url: `/question_bank/${this.bank_id}/checkQuestionDuplicative`,
+            contentType: 'application/json;charset=utf-8',
             type: 'post',
-            data: {material:stem},
+            data: JSON.stringify({material:stem}),
             beforeSend(request) {
               request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
             }
@@ -153,7 +154,7 @@
           }
         }).done(function (resp) {
           if (resp.goto) {
-            window.location.href = resp.goto;
+            // window.location.href = resp.goto;
           }
         })
       },
