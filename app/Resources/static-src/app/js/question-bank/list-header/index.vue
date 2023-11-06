@@ -18,7 +18,7 @@
       </div>
     </div>
     <div>
-      <a-form-model layout="inline" :form="form">
+      <a-form-model layout="inline">
         <a-form-model-item>
           <a-select v-model="difficulty" style="width: 216px;"
             v-decorator="[
@@ -71,7 +71,6 @@ import Selector from '../common/selector';
 export default {
   data () {
     return {
-      form: this.$form.createForm(this, { name: 'horizontal_login' }),
       exportUrl: $('.js-export-value').val(),
       selector: new Selector($('.js-question-html')),
       difficulty: 'default',
@@ -113,9 +112,6 @@ export default {
     }
   },
   mounted(){
-    this.$nextTick(() => {
-      this.form.validateFields();
-    });
     this.element.on('click', '.pagination li', (event) => {
       this.onClickPagination(event);
     });
