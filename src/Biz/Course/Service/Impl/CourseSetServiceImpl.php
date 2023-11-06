@@ -469,6 +469,18 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
+    public function showCourseSet($id)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '1']);
+    }
+
+    public function hideCourseSet($id)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '0']);
+    }
+
     public function updateCourseSetRatingNum($id, $fields)
     {
         $fields = ArrayToolkit::parts(
@@ -663,7 +675,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 }
             }
 
-            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'published']);
+            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'published', 'showable' => '1']);
             $this->getCourseSetGoodsMediator()->onUpdateNormalData($courseSet);
             $this->getCourseSetGoodsMediator()->onPublish($courseSet);
 
@@ -691,7 +703,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             if (!empty($classroomRef)) {
                 $this->getCourseService()->closeCourse($classroomRef['courseId']);
             }
-            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'closed']);
+            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'closed', 'showable' => '0']);
             $this->getCourseSetGoodsMediator()->onClose($courseSet);
 
             $this->commit();

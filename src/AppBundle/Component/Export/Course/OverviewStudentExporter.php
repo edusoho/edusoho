@@ -28,6 +28,7 @@ class OverviewStudentExporter extends Exporter
     {
         $titles = [
             'task.learn_data_detail.nickname',
+            'task.learn_data_detail.mobile',
             'task.learn_data_detail.finished_rate',
         ];
         $tasks = $this->getAllTaskByCourseId();
@@ -54,7 +55,7 @@ class OverviewStudentExporter extends Exporter
         $userIds = ArrayToolkit::column($members, 'userId');
         $taskCount = $this->countTasksByCourseId();
 
-        list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($course['id'], $userIds, $taskCount);
+        list($users, $tasks, $taskResults, $userProfiles) = $this->getReportService()->getStudentDetail($course['id'], $userIds, $taskCount);
 
         $datas = [];
 
@@ -69,7 +70,8 @@ class OverviewStudentExporter extends Exporter
             $user = $users[$member['userId']];
             $data = [];
             $data[] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
-
+            $userProfile = $userProfiles[$member['userId']];
+            $data[] = empty($user['mobile']) ? empty($userProfile['mobile']) ? '' : $userProfile['mobile'] : $user['mobile'];
             $learnProccess = (empty($member['learnedCompulsoryTaskNum']) || empty($course['compulsoryTaskNum'])) ? 0 : (int) ($member['learnedCompulsoryTaskNum'] * 100 / $course['compulsoryTaskNum']);
             $data[] = $learnProccess > 100 ? '100%' : $learnProccess.'%';
 

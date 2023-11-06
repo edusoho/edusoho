@@ -2762,6 +2762,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return 'ok' === $status;
     }
 
+    public function showClassroom($id)
+    {
+        $this->tryManageClassroom($id);
+
+        $classroom = $this->updateClassroom($id, ['showable' => '1']);
+    }
+
+    public function hideClassroom($id)
+    {
+        $this->tryManageClassroom($id);
+
+        $classroom = $this->updateClassroom($id, ['showable' => '0']);
+    }
+
     /**
      * @return CourseNoteService
      */

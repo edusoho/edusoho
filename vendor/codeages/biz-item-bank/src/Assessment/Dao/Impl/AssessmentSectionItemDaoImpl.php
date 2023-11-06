@@ -54,6 +54,7 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
             'conditions' => [
                 'id = :id',
                 'id in (:ids)',
+                'id > :id_GT',
                 'assessment_id = :assessment_id',
                 'assessment_id in (:assessmentIds)',
                 'item_id = :item_id',

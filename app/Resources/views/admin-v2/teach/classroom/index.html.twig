@@ -41,7 +41,7 @@
   </p>
 
   {% if classroomInfo %}
-    <table class="table table-striped table-hover 111" id="classroom-table">
+    <table class="table table-striped table-hover" id="classroom-table">
       <thead>
       <tr>
         {% if setting('magic.enable_org','0') %}
@@ -54,6 +54,7 @@
         <th>{{ 'admin.classroom_manage.manage.student_number_th'|trans }}</th>
         <th width="12%">{{ 'admin.classroom_manage.manage.price_th'|trans }}</th>
         <th>{{ 'admin.classroom_manage.manage.status_th'|trans }}</th>
+        <th>{{ 'admin.classroom_manage.manage.showable'|trans }}</th>
         <th>{{ 'admin.classroom_manage.manage.creator'|trans }}</th>
         <th>{{ 'admin.classroom_manage.manage.operate_th'|trans }}</th>
       </tr>

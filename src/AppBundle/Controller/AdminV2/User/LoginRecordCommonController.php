@@ -1,13 +1,12 @@
 <?php
 
-
 namespace AppBundle\Controller\AdminV2\User;
+
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ConvertIpToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\System\Service\LogService;
-use Symfony\Component\HttpFoundation\Request;
 
 class LoginRecordCommonController extends BaseController
 {
@@ -19,6 +18,7 @@ class LoginRecordCommonController extends BaseController
         $userIds = empty($users) ? [-1] : ArrayToolkit::column($users, 'id');
 
         $conditions = [
+            'module' => 'user',
             'action' => 'login_success',
             'startDateTime' => $request->query->get('startDateTime'),
             'endDateTime' => $request->query->get('endDateTime'),

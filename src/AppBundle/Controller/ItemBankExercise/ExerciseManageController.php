@@ -111,6 +111,27 @@ class ExerciseManageController extends BaseController
         return $data;
     }
 
+    /**
+     * 更新该题库的展示状态
+     */
+    public function openDisplayAction(Request $request, $exerciseId)
+    {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        $this->getExerciseService()->update($exerciseId, ['showable' => 1]);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function closeDisplayAction(Request $request, $exerciseId)
+    {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        $this->getExerciseService()->update($exerciseId, ['showable' => 0]);
+
+        return $this->createJsonResponse(true);
+    }
+
     public function canOpenAction(Request $request, $exerciseId, $type)
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);

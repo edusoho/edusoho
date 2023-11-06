@@ -8,7 +8,7 @@
     <legend style="height: 50px;">
       <div class="row form-group">
         <div class="col-lg-2 col-md-3" style="padding-top: 5px;">
-          <label for="enable_thread">{{ 'admin_v2.system.user_content_control.thread_manage'|trans }}：</label>
+          <label for="enable_thread" style="width: max-content;">{{ 'admin_v2.system.user_content_control.thread_manage'|trans }}：</label>
         </div>
         <div class="col-lg-10 col-md-9 controls radios">
           {{ radios('enable_thread', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, threadSetting.enable_thread|default('1')) }}

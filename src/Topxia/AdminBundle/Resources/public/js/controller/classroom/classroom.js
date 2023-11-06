@@ -20,6 +20,31 @@ define(function (require, exports, module) {
       });
     });
 
+    $table.on('click', '.hide-classroom', function () {
+      var $trigger = $(this);
+      if (!confirm(Translator.trans('admin.classroom.hide_hint'))) {
+        return;
+      }
+      $.post($(this).data('url'), function (html) {
+        Notify.success(Translator.trans('admin.classroom.hide_success_hint'));
+        var $tr = $(html);
+        $('#' + $tr.attr('id')).replaceWith($tr);
+      }).error(function () {
+        Notify.danger($trigger.attr('title') + Translator.trans('admin.classroom.operation_fail_hint'));
+      });
+    });
+
+    $table.on('click', '.show-classroom', function () {
+      var $trigger = $(this);
+      $.post($(this).data('url'), function (html) {
+        Notify.success(Translator.trans('admin.classroom.show_success_hint'));
+        var $tr = $(html);
+        $('#' + $tr.attr('id')).replaceWith($tr);
+      }).error(function () {
+        Notify.danger($trigger.attr('title') + Translator.trans('admin.classroom.operation_fail_hint'));
+      });
+    });
+
     // 确认后,弹出密码确认框;确认后删除
     $table.on('click', '.delete-classroom', function () {
       let msg = 'admin.classroom.delete_hint';

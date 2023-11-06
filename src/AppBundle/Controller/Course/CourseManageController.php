@@ -893,6 +893,20 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(['warn' => false]);
     }
 
+    public function showAction(Request $request, $courseSetId, $courseId)
+    {
+        $this->getCourseService()->showCourse($courseId);
+
+        return $this->createJsonResponse(['success' => true]);
+    }
+
+    public function hideAction(Request $request, $courseSetId, $courseId)
+    {
+        $this->getCourseService()->hideCourse($courseId);
+
+        return $this->createJsonResponse(['success' => true]);
+    }
+
     public function closeAction(Request $request, $courseSetId, $courseId)
     {
         $this->getCourseService()->closeCourse($courseId);

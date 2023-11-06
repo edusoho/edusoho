@@ -78,6 +78,7 @@ site.default.times: Times
 site.default.detail: Detail
 site.default.program_name: Default Program
 site.default.plan_setting: Default plan settings
+site.default.mobile: mobile
 site.org.belongs_to_org_th: Organiztion
 site.org.code: Code
 site.tips: Tips
@@ -899,6 +900,8 @@ course.teaching_plan.expiry_date.end_date_mode: 'Expiration date mode'
 course.teaching_plan.expiry_date.days_mode: 'Valid days mode'
 course.teaching_plan.publish_btn: 'Publish'
 course.teaching_plan.manage: Teaching plan manage
+course.teaching_plan.show_page: Enable page display
+course.teaching_plan.hide_page: Disable page display
 course.teaching_plan.delete_btn: Delete
 course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
@@ -935,6 +938,9 @@ course.student_manage: 'Student config'
 course.marketing_setup.setup: 'Enrollment settings'
 course.marketing_setup.setup.can_join: 'Enrollment'
 course.marketing_setup.setup.can_not_join: Not joinable
+course.marketing_setup.setup.is_show_label: Page display
+course.marketing_setup.setup.can_show: Enable
+course.marketing_setup.setup.can_hide: Disable
 course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not enroll the course except added by teahcers. It is used for closed teaching.'
 course.marketing_setup.price.free: Free
 course.marketing_setup.price.not_free: Paid
@@ -2077,6 +2083,7 @@ item_bank_exercise.chapter_exercise.info: Chapter exercises are based on the set
 item_bank_exercise.marketing_setup.no_permission_tips: 'Sorry, you can not edit base settings. Contact site administrator for help.'
 item_bank_exercise.marketing_setup.setup.can_join.tips: After it is closed, students cannot join by themselves. Teachers need to add students manually.
 item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: The change of validity period is only valid for new students after the change
+item_bank_exercise.marketing_setup.rule.show: After disabling, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.
 item_bank_exercise.assessment_exercise.add_module: Create
 item_bank_exercise.assessment_exercise.edit_module: Edit
 item_bank_exercise.assessment_exercise.module.name: Module Name
@@ -4004,6 +4011,7 @@ my.learning.thread.target_course_deleted: 'Course has been deleted'
 my.learning.course: 'My Course'
 my.learning.course.learning: Learning
 my.learning.course.learned: Learned
+my.learning.course.expired: Expired
 my.learning.course.favorite: Favorite
 my.learning.course.favorited: Favorited
 my.learning.course.favorite_empty: 'No record'
@@ -4163,10 +4171,14 @@ change_log.edusoho_title: 'EduSoho changelog'
 change_log: Changelog
 common.courseStatus.draft: Draft
 common.courseStatus.published: Published
+common.course.showable.show: show
+common.course.showable.hide: hide
 common.courseStatus.closed: Closed
 common.classroomStatus.draft: Draft
 common.classroomStatus.published: Published
 common.classroomStatus.closed: Closed
+common.classroom.showable.show: show
+common.classroom.showable.hide: hide
 common.fileType.video: Video
 common.fileType.audio: Audio
 common.fileType.document: Document
@@ -4410,6 +4422,7 @@ admin.course_manage.manage.price: Price
 admin.course_manage.manage.serialize_mode: 'Serialize Status'
 admin.course_manage.manage.status: Status
 admin.course_manage.manage.creator: Creator/Date
+admin.course_manage.manage.showable: IsShow
 admin.course_manage.manage.manage_btn: Config
 admin.course_manage.manage.empty: 'No record'
 admin.course_manage.manage.category: Category
@@ -4733,6 +4746,7 @@ admin.classroom_manage.manage.student_number_th: 'Student Number'
 admin.classroom_manage.manage.price_th: Price
 admin.classroom_manage.manage.creator: Creator/Date
 admin.classroom_manage.manage.status_th: Status
+admin.classroom_manage.manage.showable: isShow
 admin.classroom_manage.manage.operate_th: Action
 admin.classroom_manage.manage.empty: 'No %name% Record!'
 admin.classroom_manage.manage.category: Category
@@ -7104,7 +7118,7 @@ admin.setting_course.video_play_setting.multiple_forbidden_effect: Multi-opening
 admin.setting_course.video_play_setting.kick_previous_play: Kick the previous learning page
 admin.setting_course.video_play_setting.kick_previous_play.tips: >
   <p>When a user opens more than one page, the next learning page is the main one, and the previous learning page is kicked out.</p>
-  <p>When the three types of lessons (homework/exam/live) are being studied, the study page will not be able to kick out these three types of lessons.</p>
+  <p>In order to ensure the real-time upload of learning data, homework/exam/live class hours are prohibited and cannot be changed by default.</p>
   <p>require terminal upgrade to PC side V20.4.6, APP side V4.9.3</p>
 admin.setting_course.video_play_setting.reject_current_play: Reject this access to the study page
 admin.setting_course.video_play_setting.reject_current_play.tips: When the user opens more than one page, the first learning page will take precedence and the second learning page will not be allowed to enter.Only available in the micro online school for the start-up theme.
@@ -8121,6 +8135,7 @@ my.reward_points_message: '$ %num% in cash, the credits will not be refunded whe
 my.reward_points_instructions: 'Points instructions'
 
 task.learn_data_detail.nickname: name
+task.learn_data_detail.mobile: mobile
 task.learn_data_detail.createdTime: Join Time
 task.learn_data_detail.join_time: Join Time
 task.learn_data_detail.finishedTime: Finished Time
@@ -10232,8 +10247,10 @@ admin_v2.homepage.school_info.system_status.has_upgrade: New upgrade
 admin_v2.homepage.school_info.system_status.upgraded: Latest
 admin_v2.homepage.school_info.system_version: System version
 admin_v2.homepage.school_info.access_web: Home
-admin_v2.homepage.school_info.access_mobile_app: Access App
-admin_v2.homepage.school_info.access_wechat_app: Access wechat app
+admin_v2.homepage.school_info.access_mobile_web: Micronetwork school
+admin_v2.homepage.school_info.access_mobile_app: App
+admin_v2.homepage.school_info.access_wechat_app: Wechat app
+admin_v2.homepage.school_info.no_access: Have not opened
 admin_v2.homepage.school_info.level.none: Open source
 admin_v2.homepage.school_info.level.saas: SaaS
 admin_v2.homepage.school_info.level.license: License

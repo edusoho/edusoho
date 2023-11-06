@@ -548,8 +548,11 @@ course.manage.publish_title: Publish teaching plan
 course.manage.publish_success_hint: The program was published successfully
 course.manage.publish_fail_hint: Publish program failed
 course.manage.close_hint: Are you sure to close the program?
+course.manage.hide_hint: After closing, the course plan will be completely hidden and students will not be able to view it on the front-end.
 course.manage.close_success_hint: closed successfully
 course.manage.close_fail_hint: Close failed
+course.manage.show_success_hint: Enabled successfully
+course.manage.show_fail_hint: Enable failed
 course.manage.copy_title: Copy teaching plan
 course.manage.max_course_number_tip: Allowed to create 10 plans, if you need to add more, please add after the original plan is deleted.
 course.manage.delete_hint: Are you sure you want to delete the plan?
@@ -968,7 +971,7 @@ validate_old.alphanumeric.message: %display% must be alphabetical, numeric, and 
 validate_old.alphabet_underline.message: %display% must begin with an English letter or an underscore
 validate_old.byte_minlength.message: %display% must be greater than or equal to %min%, a Chinese word is 2 characters
 validate_old.currency_check.message: Please enter a valid %display%, such as:200, 221.99, 0.99, 0 and so on
-validate_old.currency.message: You can only enter up to %max% characters.
+validate_old.currency.message: You can only enter up to %max% characters，one Chinese word counts as two characters.
 validate_old.idcard.message: %display% is not formatted correctly
 validate_old.password.message: %display% can only be composed of 4-20 characters
 validate_old.second_range.message: Seconds can only be between 0-59
@@ -1143,6 +1146,9 @@ admin.classroom.choose_success_hint: Choose classroom success
 admin.classroom.operation_success_hint: successfully！
 admin.classroom.operation_fail_hint: failure
 admin.classroom.operation_hint: ？
+admin.classroom.hide_hint: 关闭后班级将彻底隐藏，学员无法在前台查看
+admin.classroom.hide_success_hint: 已关闭页面显示
+admin.classroom.show_success_hint: 已开启页面显示
 admin.classroom.delete_hint: Deleting a class will delete the chapters, class hours, students and other information of all courses in the class. Are you sure you want to delete this class?
 admin.classroom.delete_success_hint: successfully deleted!
 admin.classroom.cancel_recommend_hint: "%title% ?"
@@ -1183,6 +1189,9 @@ admin.course.validate_old.password_required_hint: password
 admin.course.cancel_recommend_success_hint: Course recommendation has been cancelled!
 admin.course.close_course_hint: Are you sure you want to close this class? After the course is closed, students who are still in the validity period will be able to continue their studies.
 admin.course.close_success_hint: Course was closed successfully!
+admin.course.hide_course_hint: After hiding, the course will be completely hidden and students will not be able to view it on the front-end.
+admin.course.hide_success_hint: Course hidden successfully!
+admin.course.show_success_hint: Page enabled!
 admin.course.publish_hint: Are you sure you want to publish this course?
 admin.course.publish_success_hint: The course was published successfully!
 admin.course.unknow_error_hint: unknown mistake
@@ -1478,6 +1487,9 @@ admin.shortcut_delete_success_hint: Delete frequently used links successfully!
 
 admin.item_bank_exercise.exercise.close_hint: Are you sure you want to close the current exercise? After the itembank exercise is closed, students who are still in the validity period will be able to continue their studies.
 admin.item_bank_exercise.exercise.close_success_hint: Close successfully
+admin.item_bank_exercise.exercise.hide_hint: After hiding, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.
+admin.item_bank_exercise.exercise.hide_success_hint: Item bank exercise display hidden successfully.
+admin.item_bank_exercise.exercise.show_success_hint: Item bank exercise display enabled successfully.
 admin.item_bank_exercise.exercise.recommend_success_hint: Successfully set recommended item bank!
 admin.item_bank_exercise.exercise.recommend_fail_hint: Failed to set recommended item bank!
 admin.item_bank_exercise.exercise.cancel_recommend_success_hint: The item bank exercise recommendation has been cancelled!
@@ -1663,7 +1675,9 @@ classroom.upload_picture_btn: 'Upload an image'
 
 classroom.marketing_setting: Marketing Setting
 classroom.price_label: Price
-classroom.show_label: "Show %name%\n"
+classroom.show_label: "Show %name%"
+classroom.show_page_label: Page Display
+classroom.show_page_tips: After closing, the classroom will be completely hidden and cannot be viewed on the front-end.
 classroom.buy_label: Buy %name%
 classroom.expiry_mode_label: 'Expired on'
 classroom.watch_expiry_mode_rule: 'View the rule'
@@ -1766,10 +1780,14 @@ course.marketing_setup: 'Markets'
 site.currency.CNY: CNY
 s2b2c.product.cooperation_price: Cooperation Price
 s2b2c.product.suggestion_price: Suggestion Price
-s2b2c.resource.sync.prev_price.notify: 上个版本价格为
+s2b2c.resource.sync.prev_price.notify: The price of the previous version was
 site.price: Price
 course.marketing_setup.setup.can_join: Can join
 course.marketing_setup.setup.can_not_join: Can not join
+course.marketing_setup.setup.is_show_label: Page display
+course.marketing_setup.setup.can_show: Enable
+course.marketing_setup.setup.can_hide: Disable
+item_bank_exercise.marketing_setup.rule.show: After disabling, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.
 course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not enroll the course except added by teahcers. It is used for closed teaching.'
 course.marketing_setup.expiry_date: 'Deadline'
 course.marketing_setup.rule.expiry_date: 'Learn expiry date'

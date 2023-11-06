@@ -3,7 +3,7 @@
 {% block title %}{{'编辑回放'|trans}}{% endblock %}
 {% do script(['libs/select2.js', 'app/js/live-replay/edit/index.js'])  %}
 {% block body %}
-  <form class="form-horizontal" id="replay-form" method="post" action="{{ path('material_lib_live_replay_edit', {'liveActivityId':live.id}) }}" >
+  <form class="form-horizontal" id="replay-form" method="post" action="{{ path('material_lib_live_replay_edit', {'activityId':live.id}) }}" >
     <div class="form-group">
       <label class="col-md-2 control-label">{{ 'my.teaching.open_course.Basic_Info.tags'|trans }}</label>
       <div class="col-md-8 controls">

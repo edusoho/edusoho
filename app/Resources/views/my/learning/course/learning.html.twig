@@ -1,5 +1,5 @@
 {% extends 'my/learning/course/layout.html.twig' %}
-
+{% do script(['app/js/tab/course-tab/index.js'])  %}
 {% set mobile = is_show_mobile_page() %}
 {% set tab_nav = 'learning' %}
 {% block title %}{{ 'my.learning.course.learning'|trans }} - {{ parent() }}{% endblock %}
@@ -8,13 +8,9 @@
 
   <div class="panel panel-default panel-col">
 
-    <div class="panel-heading">
-      {{ 'my.learning.course'|trans }}
-      <a class="btn cd-btn cd-btn-info cd-btn-sm pull-right" href="{{ path('my_courses_live_calendar') }}">{{ 'my.learning.live_schedule_menu'|trans }}</a>
-    </div>
-
-    <div class="panel-body">
-      {% include 'my/learning/course/nav-pill.html.twig' %}
+    
+    <div id="app"></div>
+      {# {% include 'my/learning/course/nav-pill.html.twig' %}
       {% set type = 'learning' %}
 
       {% for courseSet in courseSets if courseSet %}
@@ -28,7 +24,7 @@
         <div class="cd-empty">{{ 'my.learning.course.learning_empty'|trans }}</div>
       {% endfor %}
       {{ web_macro.paginator(paginator) }}
-    </div>
+    </div> #}
   </div>
 {% endblock %}
 

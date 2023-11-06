@@ -83,6 +83,7 @@ site.default.times: 次
 site.default.detail: 明细
 site.default.program_name: 默认教学计划
 site.default.plan_setting: 默认计划设置
+site.default.mobile: 手机号
 site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.tips: 提示
@@ -1033,6 +1034,8 @@ course.teaching_plan.expiry_date.end_date_mode: 按截止日期
 course.teaching_plan.expiry_date.days_mode: 按有效天数
 course.teaching_plan.publish_btn: 发布计划
 course.teaching_plan.manage: 计划管理
+course.teaching_plan.show_page: 开启页面显示
+course.teaching_plan.hide_page: 关闭页面显示
 course.teaching_plan.delete_btn: 删除
 course.teaching_plan.copy_btn: 复制
 course.teaching_plan.preview_btn: 预览
@@ -1070,6 +1073,9 @@ course.student_manage: '学员管理'
 course.marketing_setup.setup: 加入设置
 course.marketing_setup.setup.can_join: 可加入
 course.marketing_setup.setup.can_not_join: 不可加入
+course.marketing_setup.setup.is_show_label: 页面显示
+course.marketing_setup.setup.can_show: 开启
+course.marketing_setup.setup.can_hide: 关闭
 course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
 course.marketing_setup.price.free: 免费
 course.marketing_setup.price.not_free: 收费
@@ -1245,6 +1251,7 @@ item_bank_exercise.chapter_exercise.info: 章节练习依据“题目分类管�
 item_bank_exercise.marketing_setup.no_permission_tips: 抱歉，您无权管理题库练习基础设置，如有需要请联系网站管理员！
 item_bank_exercise.marketing_setup.setup.can_join.tips: 关闭后，学员自己无法加入，需要由老师手动添加学员。
 item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: 变更学习有效期，仅对修改后新增的学员有效
+item_bank_exercise.marketing_setup.rule.show: 关闭后该题库练习将彻底隐藏，学员无法在前台查看
 item_bank_exercise.assessment_exercise.add_module: 添加模块
 item_bank_exercise.assessment_exercise.edit_module: 修改模块
 item_bank_exercise.assessment_exercise.module.name: 模块名称
@@ -4667,6 +4674,7 @@ my.learning.thread.target_course_deleted: 课程已删除
 my.learning.course: 我的课程
 my.learning.course.learning: 学习中
 my.learning.course.learned: 已学完
+my.learning.course.expired: 已过期
 my.learning.course.favorite: 收藏
 my.learning.course.favorited: 已收藏
 my.learning.course.favorite_empty: 暂无已收藏的课程
@@ -4887,9 +4895,13 @@ change_log: 更新日志
 # common
 common.courseStatus.draft: 未发布
 common.courseStatus.published: 已发布
+common.course.showable.show: 展示
+common.course.showable.hide: 隐藏
 common.courseStatus.closed: 已关闭
 common.classroomStatus.draft: 未发布
 common.classroomStatus.published: 已发布
+common.classroom.showable.show: 展示
+common.classroom.showable.hide: 隐藏
 common.classroomStatus.closed: 已关闭
 common.fileType.video: 视频
 common.fileType.audio: 音频
@@ -5211,6 +5223,7 @@ admin.course_manage.manage.price: 价格
 admin.course_manage.manage.serialize_mode: 连载状态
 admin.course_manage.manage.status: 课程状态
 admin.course_manage.manage.creator: 创建者/时间
+admin.course_manage.manage.showable: 页面显示
 admin.course_manage.manage.manage_btn: 管理
 admin.course_manage.manage.empty: 暂无课程记录
 admin.course_manage.manage.category: 分类
@@ -5611,6 +5624,7 @@ admin.classroom_manage.manage.student_number_th: 学员数
 admin.classroom_manage.manage.price_th: 价格
 admin.classroom_manage.manage.creator: 创建者/时间
 admin.classroom_manage.manage.status_th: 状态
+admin.classroom_manage.manage.showable: 页面显示
 admin.classroom_manage.manage.operate_th: 操作
 admin.classroom_manage.manage.empty: 暂无%name%信息!
 admin.classroom_manage.manage.category: 分类
@@ -8012,7 +8026,7 @@ admin.setting_course.video_play_setting.multiple_forbidden_effect: 禁止多开�
 admin.setting_course.video_play_setting.kick_previous_play: 踢掉前次学习页面
 admin.setting_course.video_play_setting.kick_previous_play.tips: >
   <p>当用户多开时，以后开的学习页面为主，踢掉前次学习页面。</p>
-  <p>作业课时/考试课时/直播课时三类课时在学习时，后开的学习页面将无法踢掉这三类课时。</p>
+  <p>为保证学习数据实时上传，作业课时/考试课时/直播课时默认禁止多开且不可更改。</p>
   <p>注：需要终端升级至PC端V20.4.6，APP端V4.9.3</p>
 admin.setting_course.video_play_setting.reject_current_play: 拒绝本次进入学习页面
 admin.setting_course.video_play_setting.reject_current_play.tips: 当用户多开时，以先开的学习页面为主，后开学习页面不允许进入。微网校中仅对启航主题生效。
@@ -9418,6 +9432,7 @@ my.reward_points_message: ￥%num%现金，%reward%使用后，申请退款时�
 my.reward_points_instructions: %reward%说明
 
 task.learn_data_detail.nickname: 用户名
+task.learn_data_detail.mobile: 手机号
 task.learn_data_detail.createdTime: 任务开始时间
 task.learn_data_detail.join_time: 任务开始时间
 task.learn_data_detail.finishedTime: 任务完成时间
@@ -11563,8 +11578,10 @@ admin_v2.homepage.school_info.system_status.has_upgrade: 有更新
 admin_v2.homepage.school_info.system_status.upgraded: 已更新
 admin_v2.homepage.school_info.system_version: 系统版本
 admin_v2.homepage.school_info.access_web: 访问首页
-admin_v2.homepage.school_info.access_mobile_app: 访问App
-admin_v2.homepage.school_info.access_wechat_app: 访问小程序
+admin_v2.homepage.school_info.access_mobile_web: 微网校
+admin_v2.homepage.school_info.access_mobile_app: App
+admin_v2.homepage.school_info.access_wechat_app: 小程序
+admin_v2.homepage.school_info.no_access: 未开通
 admin_v2.homepage.school_info.level.none: 开源版
 admin_v2.homepage.school_info.level.saas: SaaS版
 admin_v2.homepage.school_info.level.license: 商业授权

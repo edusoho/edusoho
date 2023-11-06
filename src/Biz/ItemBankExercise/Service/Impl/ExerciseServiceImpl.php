@@ -358,7 +358,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     {
         $this->tryManageExercise($exerciseId);
 
-        $exercise = $this->getExerciseDao()->update($exerciseId, ['status' => 'published']);
+        $exercise = $this->getExerciseDao()->update($exerciseId, ['status' => 'published', 'showable' => 1]);
 
         $user = $this->getCurrentUser();
         $this->getLogService()->info('item_bank_exercise', 'publish_exercise', "发布练习{$user['nickname']}(#{$user['id']})");
@@ -370,7 +370,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     {
         $this->tryManageExercise($exerciseId);
 
-        $exercise = $this->getExerciseDao()->update($exerciseId, ['status' => 'closed']);
+        $exercise = $this->getExerciseDao()->update($exerciseId, ['status' => 'closed', 'showable' => '0']);
 
         $user = $this->getCurrentUser();
         $this->getLogService()->info('item_bank_exercise', 'close_exercise', "关闭练习{$user['nickname']}(#{$user['id']})");
@@ -557,6 +557,20 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
         $this->dispatchEvent('itemBankExercise.chapter.unpublish', new Event($exercise));
         $this->getLogService()->info('item_bank_exercise', 'unpublish_exercise_chapter', "管理员{$this->getCurrentUser()['nickname']}取消发布题库练习《{$exercise['title']}》的章节", ['ids' => $ids]);
+    }
+
+    public function showExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+
+        $exercise = $this->getExerciseDao()->update($exerciseId, ['showable' => '1']);
+    }
+
+    public function hideExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+
+        $exercise = $this->getExerciseDao()->update($exerciseId, ['showable' => '0']);
     }
 
     /**

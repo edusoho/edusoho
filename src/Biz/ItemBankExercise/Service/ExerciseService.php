@@ -67,4 +67,8 @@ interface ExerciseService
     public function publishExerciseChapter($exerciseId, $ids);
 
     public function unpublishExerciseChapter($exerciseId, $ids);
+
+    public function showExercise($exerciseId);
+
+    public function hideExercise($exerciseId);
 }

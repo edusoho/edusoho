@@ -460,6 +460,10 @@ class TestCaseLazyDispatcher extends LazyDispatcher
             $event = new Event();
         }
 
+        if (!empty($this->biz['@noEvent'])) {
+            return $event;
+        }
+
 //        $event->setDispatcher($this);
 //        $event->setName($eventName);
 

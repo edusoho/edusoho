@@ -360,6 +360,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'buyExpiryTime',
                 'learnMode',
                 'buyable',
+                'showable',
                 'expiryStartDate',
                 'expiryEndDate',
                 'expiryMode',
@@ -800,6 +801,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::UNPUBLISHED_COURSE());
         }
         $course['status'] = 'closed';
+        $course['showable'] = '0';
 
         try {
             $this->beginTransaction();
@@ -829,8 +831,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             $id,
             [
                 'status' => 'published',
+                'showable' => '1',
             ]
         );
+        $this->getCourseSetService()->publishCourseSet($course['courseSetId']);
         $this->dispatchEvent('course.publish', $course);
 
         $this->getCourseLessonService()->publishLessonByCourseId($course['id']);
@@ -2937,6 +2941,26 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $this->tryManageCourse($courseId, $courseSetId);
+    }
+
+    public function showCourse($id)
+    {
+        $course = $this->tryManageCourse($id);
+        if ('published' != $course['status']) {
+            $this->createNewException(CourseException::UNPUBLISHED_COURSE());
+        }
+        $course['showable'] = '1';
+        $this->getCourseDao()->update($id, $course);
+    }
+
+    public function hideCourse($id)
+    {
+        $course = $this->tryManageCourse($id);
+        if ('published' != $course['status']) {
+            $this->createNewException(CourseException::UNPUBLISHED_COURSE());
+        }
+        $course['showable'] = '0';
+        $this->getCourseDao()->update($id, $course);
     }
 
     /**
