@@ -302,28 +302,27 @@ class QuestionsShow {
   renderTable(isPaginator, defaultPages) {
     isPaginator || this._resetPage();
     let self = this;
-    const currentPerpage = defaultPages ? defaultPages : $('.js-current-perpage-count').children('option:selected').val()
-    // const serialize = this.element.find('[data-role="search-conditions"]').serialize()
-    const pages = this.element.find('.js-page').val()
-    const categoryId = $('.js-category-choose').val()
+    const perpage = defaultPages ? defaultPages : $('.js-current-perpage-count').children('option:selected').val()
+    const page = this.element.find('.js-page').val()
+    const category_id = $('.js-category-choose').val()
     const difficulty = $('.js-list-header-difficulty').val() === 'default' ? '' : $('.js-list-header-difficulty').val()
     const type = $('.js-list-header-type').val() === 'default' ? '' : $('.js-list-header-type').val()
     const keyword = $('.js-list-header-keyword').val() === 'default' ? '' : $('.js-list-header-keyword').val()
     
-    const params = {
-      category_id: categoryId,
-      difficulty: difficulty,
-      type: type,
-      keyword: keyword,
-      perpage: currentPerpage,
-      page: pages
+    const data = {
+      category_id,
+      difficulty,
+      type,
+      keyword,
+      perpage,
+      page
     }
 
     this._loading();
     $.ajax({
       type: 'GET',
       url: this.renderUrl,
-      data: params
+      data
     }).done(function(resp){
       self.table.html(resp);
       self.selector.updateTable();

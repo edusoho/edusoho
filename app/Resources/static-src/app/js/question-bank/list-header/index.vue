@@ -3,7 +3,7 @@
     <div class="header-btn-list">
       <div class="question-name">{{ 'question.bank.name'|trans }}</div>
       <div class="">
-        <a-button class="report" type="default" @click="expoetQuestion">{{ 'question.bank.expoet'|trans }}</a-button>
+        <a-button class="report" type="default" @click="exportQuestion">{{ 'question.bank.expoet'|trans }}</a-button>
         <a-dropdown>
           <a-button class="add-question" type="default">{{ 'question.bank.add'|trans }}</a-button>
           <a-menu slot="overlay">
@@ -117,11 +117,9 @@ export default {
       this.form.validateFields();
     });
     this.element.on('click', '.pagination li', (event) => {
-      console.log(1111111);
       this.onClickPagination(event);
     });
     this.element.on('change', '.js-current-perpage-count', (event) => {
-      console.log(111111111);
       this.onChangePagination(event);
     });
     this.element.on('click', '.js-category-search', (event) => {
@@ -147,7 +145,7 @@ export default {
       return isFieldTouched('password') && getFieldError('password');
     },
 
-    expoetQuestion() {
+    exportQuestion() {
       const difficulty = this.difficulty === 'default' ? '' : this.difficulty
       const type = this.type === 'default' ? '' : this.type
       const categoryId = $('.js-category-choose').val()
@@ -167,17 +165,17 @@ export default {
       const that = this
       const difficulty = this.difficulty === 'default' ? '' : this.difficulty
       const type = this.type === 'default' ? '' : this.type
-      const categoryId = $('.js-category-choose').val()
-      that.categoryId = categoryId
-      const currentPerpage = defaultPages ? defaultPages : $('.js-current-perpage-count').children('option:selected').val()
-      const pages = this.element.find('.js-page').val()
+      const category_id = $('.js-category-choose').val()
+      that.categoryId = category_id
+      const perpage = defaultPages ? defaultPages : $('.js-current-perpage-count').children('option:selected').val()
+      const page = this.element.find('.js-page').val()
       const params = {
-        category_id: categoryId,
-        difficulty: difficulty,
-        type: type,
+        category_id,
+        difficulty,
+        type,
         keyword: this.keyword,
-        perpage: currentPerpage,
-        page: pages
+        perpage,
+        page
       }
 
       $.ajax({
