@@ -52,6 +52,7 @@ class ManagementSettingController extends BaseController
                     continue;
                 }
                 $permits['permits'][$key]['name'] = trim($permit['name']);
+                $permits['permits'][$key]['picture'] = preg_replace('/^(.*\/)files/', '/files', $permits['permits'][$key]['picture']);
             }
             $permits['license_name'] = trim($permits['license_name']);
             $this->getSettingService()->set('license', $permits);
