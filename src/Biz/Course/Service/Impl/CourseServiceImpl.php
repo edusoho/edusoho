@@ -1246,7 +1246,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             $course = $this->tryManageCourse($courseId);
             $lessonTree = $this->getCourseLessonTree($chapters[$courseId]);
             if (count($courseIds) > 1) {
-                $lessonTrees[$course['courseSetTitle']]['children'] = $lessonTree;
+                $lessonTrees[] = [
+                    'id' => $course['id'],
+                    'title' => $course['courseSetTitle'],
+                    'type' => 'course',
+                    'children' => $lessonTree,
+                ];
             }
         }
 
@@ -1264,6 +1269,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if ('chapter' == $chapter['type']) {
                 if (isset($currentChapter)) {
                     if (isset($currentUnit)) {
+                        $currentUnit['parentId'] = $currentChapter['id'];
                         $currentChapter['children'][] = $currentUnit;
                     }
                     $lessonTree[] = $currentChapter;
@@ -1276,6 +1282,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if ('unit' == $chapter['type']) {
                 if (isset($currentUnit)) {
                     if (isset($currentChapter)) {
+                        $currentUnit['parentId'] = $currentChapter['id'];
                         $currentChapter['children'][] = $currentUnit;
                     } else {
                         $lessonTree[] = $currentUnit;
@@ -1285,8 +1292,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
             if ('lesson' == $chapter['type']) {
                 if (isset($currentUnit)) {
+                    $chapter['parentId'] = $currentUnit['id'];
                     $currentUnit['children'][] = $chapter;
                 } elseif (isset($currentChapter)) {
+                    $chapter['parentId'] = $currentChapter['id'];
                     $currentChapter['children'][] = $chapter;
                 } else {
                     $lessonTree[] = $chapter;
@@ -1295,6 +1304,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         if (isset($currentUnit)) {
             if (isset($currentChapter)) {
+                $currentUnit['parentId'] = $currentChapter['id'];
                 $currentChapter['children'][] = $currentUnit;
             } else {
                 $lessonTree[] = $currentUnit;
@@ -1307,46 +1317,36 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $lessonTree;
     }
 
-    public function findLessonIds($courseId, $chapterId)
+    public function findLessonIds($courseId, $type, $chapterId)
     {
         $lessonTree = $this->getLessonTree([$courseId]);
-
+        $lessonTree = ArrayToolkit::index($lessonTree, 'id');
+        if ('unit' == $type) {
+            if (!empty($lessonTree[$chapterId]) && 'unit' == $lessonTree[$chapterId]['type']) {
+                return array_column($lessonTree[$chapterId]['children'] ?? [], 'id');
+            }
+            foreach ($lessonTree as $chapter) {
+                if ('chapter' != $chapter['type'] || empty($chapter['children'])) {
+                    continue;
+                }
+                foreach ($chapter['children'] as $child) {
+                    if ('unit' == $child['type'] && $chapterId == $child['id']) {
+                        return array_column($child['children'] ?? [], 'id');
+                    }
+                }
+            }
+        }
         $lessonIds = [];
-        foreach ($lessonTree as $chapter) {
-            if ('chapter' == $chapter['type']) {
-                if ($chapter['id'] == $chapterId) {
-                    foreach ($chapter['children'] as $unit) {
-                        if ('unit' == $unit['type'] && $unit['children']) {
-                            $lessonIds = array_merge($lessonIds, array_column($unit['children'], 'id'));
-                        } elseif ('lesson' == $unit['type']) {
-                            $lessonIds[] = $unit['id'];
-                        }
-                    }
+        if ('chapter' == $type) {
+            if (empty($lessonTree[$chapterId]) || 'chapter' != $lessonTree[$chapterId]['type']) {
+                return [];
+            }
+            foreach ($lessonTree[$chapterId]['children'] ?? [] as $child) {
+                if ('unit' == $child['type']) {
+                    $lessonIds = array_merge($lessonIds, array_column($child['children'] ?? [], 'id'));
                 } else {
-                    foreach ($chapter['children'] as $unit) {
-                        if ('unit' == $unit['type'] && $unit['children']) {
-                            if ($unit['id'] == $chapterId) {
-                                $lessonIds = array_merge($lessonIds, array_column($unit['children'], 'id'));
-                            } else {
-                                if (in_array($chapterId, array_column($unit['children'], 'id'))) {
-                                    $lessonIds[] = $chapterId;
-                                }
-                            }
-                        } elseif ('lesson' == $unit['type'] && $unit['id'] == $chapterId) {
-                            $lessonIds[] = $unit['id'];
-                        }
-                    }
+                    $lessonIds[] = $child['id'];
                 }
-            } elseif ('unit' == $chapter['type']) {
-                if ($chapter['id'] == $chapterId) {
-                    $lessonIds = array_merge($lessonIds, array_column($chapter['children'], 'id'));
-                } else {
-                    if (in_array($chapterId, array_column($chapter['children'], 'id'))) {
-                        $lessonIds[] = $chapterId;
-                    }
-                }
-            } elseif ('lesson' == $chapter['type'] && $chapter['id'] == $chapterId) {
-                $lessonIds[] = $chapterId;
             }
         }
 

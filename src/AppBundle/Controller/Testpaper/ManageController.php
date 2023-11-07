@@ -59,16 +59,6 @@ class ManageController extends BaseController
     {
         $params = json_decode($request->getContent(), true) ?? [];
         $conditions = $this->prepareConditions($targetType, $targetId, $params);
-
-        $courses = [];
-        $courseSets = [];
-        if ('classroom' === $targetType) {
-            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
-            $courseIds = ArrayToolkit::column($courses, 'id');
-            $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
-        }
-
-        $conditions['courseIds'] = empty($conditions['courseIds']) ? (empty($courseIds) ? [-1] : $courseIds) : $conditions['courseIds'];
         $conditions['type'] = $type;
 
         $paginator = new Paginator(
@@ -82,32 +72,20 @@ class ManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        $courses = $this->getCourseService()->findCoursesByIds(array_column($tasks, 'courseId'));
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds(array_column($courses, 'id'));
 
         list($tasks, $testpapers) = $this->getTaskService()->findTestpapers($tasks, $type);
-        $resultStatusNum = $this->findTestpapersStatusNum($tasks);
-        if (!$request->isXmlHttpRequest()) {
-            return $this->render('testpaper/manage/check-list.html.twig', [
-                'testpapers' => $testpapers,
-                'paginator' => $paginator,
-                'targetId' => $targetId,
-                'targetType' => $targetType,
-                'tasks' => $tasks,
-                'resultStatusNum' => $resultStatusNum,
-                'courses' => ArrayToolkit::index($courses, 'id'),
-                'courseSets' => ArrayToolkit::index($courseSets, 'id'),
-                'type' => $type,
-            ]);
-        }
 
-        return $this->createJsonResponse([
+        return $this->render('testpaper/manage/check-list.html.twig', [
             'testpapers' => $testpapers,
             'paginator' => $paginator,
             'targetId' => $targetId,
             'targetType' => $targetType,
             'tasks' => $tasks,
-            'resultStatusNum' => $resultStatusNum,
-            'courses' => ArrayToolkit::index($courses, 'id'),
-            'courseSets' => ArrayToolkit::index($courseSets, 'id'),
+            'resultStatusNum' => $this->findTestpapersStatusNum($tasks),
+            'courses' => $courses,
+            'courseSets' => $courseSets,
             'type' => $type,
         ]);
     }
@@ -118,26 +96,27 @@ class ManageController extends BaseController
         if (isset($params['title'])) {
             $conditions['titleLike'] = $this->purifyHtml($params['title']);
         }
+        if ('classroom' === $targetType && empty($params['courseId'])) {
+            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
+            $conditions['courseIds'] = array_column($courses, 'id');
 
-        if ('classroom' === $targetType && isset($params['courseId'])) {
-            if (isset($params['categoryId'])) {
-                $courseId = $params['courseId'];
-                $categoryId = $params['categoryId'];
-            } else {
-                $conditions['courseIds'] = [$params['courseId']];
-            }
-        } else {
-            if (isset($params['categoryId'])) {
-                $categoryId = $params['categoryId'];
-                $courseId = $targetId;
-            } else {
-                $conditions['courseIds'] = [$targetId];
-            }
+            return $conditions;
         }
+        $courseId = 'course' == $targetType ? $targetId : $params['courseId'];
+        $conditions['courseId'] = $courseId;
 
-        if ($courseId && $categoryId) {
-            $categoryIds = $this->getCourseService()->findLessonIds($courseId, $categoryId);
-            $conditions['categoryIds'] = empty($categoryIds) ? [-1] : $categoryIds;
+        if (!empty($params['lessonId'])) {
+            $conditions['categoryId'] = $params['lessonId'];
+
+            return $conditions;
+        }
+        if (!empty($params['unitId'])) {
+            $conditions['categoryIds'] = $this->getCourseService()->findLessonIds($courseId, 'unit', $params['unitId']) ?: [-1];
+
+            return $conditions;
+        }
+        if (!empty($params['chapterId'])) {
+            $conditions['categoryIds'] = $this->getCourseService()->findLessonIds($courseId, 'chapter', $params['chapterId']) ?: [-1];
         }
 
         return $conditions;
