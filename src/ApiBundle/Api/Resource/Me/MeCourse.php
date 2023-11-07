@@ -13,31 +13,35 @@ class MeCourse extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
-        $conditions = $request->query->all();
-        $conditions['status'] = 'published';
-        $conditions['classroomId'] = 0;
-        $conditions['joinedType'] = 'course';
-        $conditions['userId'] = $this->getCurrentUser()->getId();
-        $conditions['role'] = 'student';
-
+        $conditions = $this->buildSearchConditions($request);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $members = $this->getCourseMemberService()->searchMembers(
             $conditions,
-            ['lastLearnTime' => 'DESC'],
+            ['lastLearnTime' => 'desc', 'createdTime' => 'desc'],
             0,
             PHP_INT_MAX
         );
-
+        $validCourseIds = [];
+        $invalidCourseIds = [];
         foreach ($members as &$member) {
             $member['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
+            if ($this->isExpired($member['deadline'])) {
+                $invalidCourseIds[] = $member['courseId'];
+            } else {
+                $validCourseIds[] = $member['courseId'];
+            }
         }
         array_multisort(ArrayToolkit::column($members, 'lastLearnTime'), SORT_DESC, $members);
-
         $courseConditions = [
-            'ids' => ArrayToolkit::column($members, 'courseId') ?: [0],
+            'ids' => $validCourseIds,
             'excludeTypes' => ['reservation'],
+            'courseSetTitleLike' => $conditions['title'],
         ];
-
+        $courses = $this->getCourseService()->findCoursesByIds($validCourseIds);
+        $this->filterCourseIdsByConditions($conditions, $courses, $members, $validCourseIds, $invalidCourseIds, $courseConditions);
+        if (isset($conditions['type']) && empty($courseConditions['ids'])) {
+            return $this->makePagingObject([], 0, $offset, $limit);
+        }
         $courses = $this->getCourseService()->searchCourses(
             $courseConditions,
             [],
@@ -56,11 +60,78 @@ class MeCourse extends AbstractResource
         foreach ($courses as &$course) {
             if (isset($members[$course['id']])) {
                 $course['lastLearnTime'] = $members[$course['id']]['lastLearnTime'];
+                $course['isExpired'] = $this->isExpired($members[$course['id']]['deadline']);
             }
         }
         array_multisort(ArrayToolkit::column($courses, 'lastLearnTime'), SORT_DESC, $courses);
 
         return $this->makePagingObject($courses, $total, $offset, $limit);
+    }
+
+    private function buildSearchConditions($request)
+    {
+        $conditions = $request->query->all();
+        $conditions['status'] = 'published';
+        $conditions['classroomId'] = 0;
+        $conditions['joinedType'] = 'course';
+        $conditions['userId'] = $this->getCurrentUser()->getId();
+        $conditions['role'] = 'student';
+
+        return $conditions;
+    }
+
+    private function filterCourseIdsByConditions($conditions, $courses, $members, $validCourseIds, $invalidCourseIds, &$courseConditions)
+    {
+        if (!empty($conditions['type'])) {
+            switch ($conditions['type']) {
+                case 'learning':
+                case 'learned':
+                    $courses = ArrayToolkit::group($courses, 'courseSetId');
+                    list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
+                    $courseConditions['status'] = 'published';
+                    $courseConditions['ids'] = ('learning' === $conditions['type']) ? $learningCourseSetIds : $learnedCourseSetIds;
+                    break;
+                case 'expired':
+                    $closedCourses = $this->getCourseService()->searchCourses(['status' => 'closed', 'ids' => array_merge($validCourseIds)], [], 0, PHP_INT_MAX);
+                    $courses = $this->getCourseService()->findCoursesByIds($invalidCourseIds);
+                    $mergedCourses = array_merge($courses, $closedCourses);
+                    $courses = array_unique($mergedCourses, SORT_REGULAR);
+                    $courseConditions['ids'] = array_column($courses, 'id');
+                    break;
+            }
+        }
+    }
+
+    private function isExpired($deadline)
+    {
+        return $deadline != 0 && $deadline < time();
+    }
+
+    protected function differentiateCourseSetIds($groupCourses, $members)
+    {
+        if (empty($groupCourses)) {
+            return [[], []];
+        }
+        $members = ArrayToolkit::index($members, 'courseId');
+        $learnedCourseSetIds = [];
+        $learningCourseSetIds = [];
+        foreach ($groupCourses as $courseSetId => $courses) {
+            $isLearned = 1;
+            array_map(function ($course) use ($members, &$isLearned) {
+                $member = $members[$course['id']];
+                if ($member['learnedCompulsoryTaskNum'] < $course['compulsoryTaskNum'] or 0 == $course['compulsoryTaskNum']) {
+                    $isLearned = 0;
+                }
+            }, $courses);
+
+            if ($isLearned) {
+                array_push($learnedCourseSetIds, $courseSetId);
+            } else {
+                array_push($learningCourseSetIds, $courseSetId);
+            }
+        }
+
+        return [$learnedCourseSetIds, $learningCourseSetIds];
     }
 
     private function appendAttrAndOrder($courses, $members)
