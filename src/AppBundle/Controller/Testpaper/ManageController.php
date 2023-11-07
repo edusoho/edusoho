@@ -55,21 +55,11 @@ class ManageController extends BaseController
         ]);
     }
 
-    public function checkListAction(Request $request, $targetId, $targetType, $type)
+    public function checkListAction(Request $request, $targetType, $targetId, $type)
     {
-        $courseIds = [$targetId];
-        $courses = [];
-        $courseSets = [];
-        if ('classroom' === $targetType) {
-            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
-            $courseIds = ArrayToolkit::column($courses, 'id');
-            $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
-        }
-
-        $conditions = [
-            'courseIds' => empty($courseIds) ? [-1] : $courseIds,
-            'type' => $type,
-        ];
+        $params = json_decode($request->getContent(), true) ?? [];
+        $conditions = $this->prepareConditions($targetType, $targetId, $params);
+        $conditions['type'] = $type;
 
         $paginator = new Paginator(
             $request,
@@ -82,10 +72,10 @@ class ManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        $courses = $this->getCourseService()->findCoursesByIds(array_column($tasks, 'courseId'));
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds(array_column($courses, 'id'));
 
         list($tasks, $testpapers) = $this->getTaskService()->findTestpapers($tasks, $type);
-
-        $resultStatusNum = $this->findTestpapersStatusNum($tasks);
 
         return $this->render('testpaper/manage/check-list.html.twig', [
             'testpapers' => $testpapers,
@@ -93,11 +83,43 @@ class ManageController extends BaseController
             'targetId' => $targetId,
             'targetType' => $targetType,
             'tasks' => $tasks,
-            'resultStatusNum' => $resultStatusNum,
-            'courses' => ArrayToolkit::index($courses, 'id'),
-            'courseSets' => ArrayToolkit::index($courseSets, 'id'),
+            'resultStatusNum' => $this->findTestpapersStatusNum($tasks),
+            'courses' => $courses,
+            'courseSets' => $courseSets,
             'type' => $type,
         ]);
+    }
+
+    protected function prepareConditions($targetType, $targetId, $params)
+    {
+        $conditions = [];
+        if (isset($params['title'])) {
+            $conditions['titleLike'] = $this->purifyHtml($params['title']);
+        }
+        if ('classroom' === $targetType && empty($params['courseId'])) {
+            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
+            $conditions['courseIds'] = array_column($courses, 'id');
+
+            return $conditions;
+        }
+        $courseId = 'course' == $targetType ? $targetId : $params['courseId'];
+        $conditions['courseId'] = $courseId;
+
+        if (!empty($params['lessonId'])) {
+            $conditions['categoryId'] = $params['lessonId'];
+
+            return $conditions;
+        }
+        if (!empty($params['unitId'])) {
+            $conditions['categoryIds'] = $this->getCourseService()->findLessonIds($courseId, 'unit', $params['unitId']) ?: [-1];
+
+            return $conditions;
+        }
+        if (!empty($params['chapterId'])) {
+            $conditions['categoryIds'] = $this->getCourseService()->findLessonIds($courseId, 'chapter', $params['chapterId']) ?: [-1];
+        }
+
+        return $conditions;
     }
 
     public function checkAction(Request $request, $answerRecordId, $targetId, $source = 'course')

@@ -78,7 +78,7 @@ class ItemParser
             ];
 
             $itemQuestions = [];
-            if (!empty($question['subQuestions'])) {
+            if ('material' == $question['type']) {
                 $item = $this->checkErrors($item, $question);
                 foreach ($question['subQuestions'] as $subQuestion) {
                     $itemQuestions[] = $this->convertItemQuestion($subQuestion);
