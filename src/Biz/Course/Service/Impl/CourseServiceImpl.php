@@ -1319,34 +1319,28 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findLessonIds($courseId, $type, $chapterId)
     {
-        $lessonTree = $this->getLessonTree([$courseId]);
-        $lessonTree = ArrayToolkit::index($lessonTree, 'id');
-        if ('unit' == $type) {
-            if (!empty($lessonTree[$chapterId]) && 'unit' == $lessonTree[$chapterId]['type']) {
-                return array_column($lessonTree[$chapterId]['children'] ?? [], 'id');
-            }
-            foreach ($lessonTree as $chapter) {
-                if ('chapter' != $chapter['type'] || empty($chapter['children'])) {
-                    continue;
-                }
-                foreach ($chapter['children'] as $child) {
-                    if ('unit' == $child['type'] && $chapterId == $child['id']) {
-                        return array_column($child['children'] ?? [], 'id');
-                    }
-                }
-            }
-        }
+        $chapters = $this->getChapterDao()->search(
+            ['courseId' => $courseId, 'status' => 'published'],
+            ['seq' => 'ASC'],
+            0,
+            PHP_INT_MAX,
+            ['id', 'type']
+        );
+        $start = false;
         $lessonIds = [];
-        if ('chapter' == $type) {
-            if (empty($lessonTree[$chapterId]) || 'chapter' != $lessonTree[$chapterId]['type']) {
-                return [];
+        foreach ($chapters as $chapter) {
+            if ($chapter['id'] == $chapterId) {
+                $start = true;
+                continue;
             }
-            foreach ($lessonTree[$chapterId]['children'] ?? [] as $child) {
-                if ('unit' == $child['type']) {
-                    $lessonIds = array_merge($lessonIds, array_column($child['children'] ?? [], 'id'));
-                } else {
-                    $lessonIds[] = $child['id'];
-                }
+            if ('lesson' == $chapter['type'] && $start) {
+                $lessonIds[] = $chapter['id'];
+            }
+            if ('chapter' == $chapter['type'] && $start) {
+                break;
+            }
+            if ('unit' == $chapter['type'] && 'unit' == $type && $start) {
+                break;
             }
         }
 
