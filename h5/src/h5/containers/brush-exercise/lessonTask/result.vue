@@ -63,8 +63,9 @@
 
 <script>
 import Api from '@/api';
+import { mapState } from 'vuex';
 import * as types from '@/store/mutation-types.js';
-import { isOpen } from '@/utils/on-status.js';
+import { closedToast } from '@/utils/on-status.js';
 
 export default {
   components: {},
@@ -76,10 +77,12 @@ export default {
       answerReport: {},
       answerRecord: {},
       height: 0,
-      isOpen: false
     };
   },
   computed: {
+    ...mapState('ItemBank', {
+      ItemBankExercise: state => state.ItemBankExercise,
+    }),
     usedTime() {
       return this.answerRecord.used_time / 60;
     },
@@ -138,11 +141,11 @@ export default {
       this.$router.push({ path: `/brushReview/${answerRecordId}`, query });
     },
     doAgain() {
-      if (!this.isOpen) {
-        isOpen('test')
+      if (this.ItemBankExercise?.status == 'closed') {
+        closedToast('exercise')
         return 
       }
-      
+
       if (this.$route.query.type === "assessment") {
         const type = this.$route.query.type;
         const query = {

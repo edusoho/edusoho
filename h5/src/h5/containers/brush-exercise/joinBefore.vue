@@ -33,6 +33,8 @@ import { Toast } from 'vant';
 import reviewList from './review-list';
 import introduction from './introduction';
 import { learnExpiry } from '@/utils/itemBank-status';
+import { closedToast } from '@/utils/on-status.js';
+
 const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
   'ItemBank',
 );
@@ -65,6 +67,11 @@ export default {
     ...mapActions(['setItemBankExercise']),
     ...mapMutations({ changJoinStatus: types.CHANGE_ITEMBANK_JOINSTATUS }),
     handleJoin() {
+      if (this.ItemBankExercise?.status == 'closed') {
+        this.$router.push({ path: '/empty', query: { type: 'exercise' } });
+        return 
+      }
+
       if (!this.$store.state.token) {
         this.$router.push({
           name: 'login',

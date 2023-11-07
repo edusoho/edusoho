@@ -1,7 +1,6 @@
 <template>
   <div class="join-after">
     <detail-head :course-set="details.courseSet" />
-
     <van-tabs
       v-show="showTabs"
       class="tabs"
@@ -62,7 +61,7 @@
             </van-popup>
           </div>
 
-          <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" />
+          <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" :course-set="details.courseSet" />
         </div>
 
         <!-- 问答、话题、笔记、评价 通过动态组件实现 -->

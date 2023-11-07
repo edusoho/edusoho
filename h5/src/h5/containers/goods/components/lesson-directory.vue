@@ -180,6 +180,8 @@ import copyUrl from '@/mixins/copyUrl';
 import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import { Toast } from 'vant';
+import { closedToast } from '@/utils/on-status.js';
+
 export default {
   name: 'LessonDirectory',
   mixins: [redirectMixin, copyUrl],
@@ -204,6 +206,10 @@ export default {
       type: Number,
       default: -1,
     },
+    goods: {
+      type: Object,
+      default: () => {}
+    }
   },
   data() {
     return {
@@ -301,6 +307,10 @@ export default {
       return result;
     },
     lessonCellClick(task) {
+      if(this.goods?.status == 'unpublished') {
+        return closedToast('course');
+      }
+
       // 课程错误和未发布状态，不允许学习任务
       if (this.errorMsg || task.status === 'create') {
         this.$emit('showDialog');
