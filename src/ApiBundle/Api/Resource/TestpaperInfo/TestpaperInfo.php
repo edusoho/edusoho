@@ -12,6 +12,7 @@ use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -84,7 +85,7 @@ class TestpaperInfo extends AbstractResource
         $activity['ext']['remainderDoTimes'] = max($activity['ext']['doTimes'] - ($countTestpaperRecord ?: 0), 0);
 
         if (!empty($testpaperRecord)) {
-            if ($testpaperRecord['assessment_id'] != $assessment['id']) {
+            if ($testpaperRecord['assessment_id'] != $assessment['id'] && AnswerRecordStatus::DOING == $testpaperRecord['status']) {
                 $assessment = $this->getAssessmentService()->showAssessment($testpaperRecord['assessment_id']);
                 $results = $this->wrapTeatpaper($assessment);
             }
