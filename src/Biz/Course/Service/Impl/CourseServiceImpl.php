@@ -1232,6 +1232,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function getLessonTree($courseIds)
     {
         $lessonTrees = [];
+        $lessonTree = [];
         $chapters = $this->getChapterDao()->search(
             ['courseIds' => $courseIds, 'status' => 'published'],
             ['seq' => 'ASC'],
@@ -1244,10 +1245,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         foreach ($courseIds as $courseId) {
             $course = $this->tryManageCourse($courseId);
             $lessonTree = $this->getCourseLessonTree($chapters[$courseId]);
-            $lessonTrees[$course['courseSetTitle']]['children'] = $lessonTree;
+            if (count($courseIds) > 1) {
+                $lessonTrees[$course['courseSetTitle']]['children'] = $lessonTree;
+            }
         }
 
-        return $lessonTrees;
+        if (count($courseIds) > 1) {
+            return $lessonTrees;
+        }
+
+        return $lessonTree;
     }
 
     protected function getCourseLessonTree($chapters)
@@ -1300,48 +1307,46 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $lessonTree;
     }
 
-    public function findLessonIds($courseIds, $chapterId)
+    public function findLessonIds($courseId, $chapterId)
     {
-        $lessonTree = $this->getLessonTree($courseIds);
+        $lessonTree = $this->getLessonTree([$courseId]);
 
         $lessonIds = [];
-        foreach ($lessonTree as $courseChapter) {
-            foreach ($courseChapter['children'] as $chapter) {
-                if ('chapter' == $chapter['type']) {
-                    if ($chapter['id'] == $chapterId) {
-                        foreach ($chapter['children'] as $unit) {
-                            if ('unit' == $unit['type'] && $unit['children']) {
+        foreach ($lessonTree as $chapter) {
+            if ('chapter' == $chapter['type']) {
+                if ($chapter['id'] == $chapterId) {
+                    foreach ($chapter['children'] as $unit) {
+                        if ('unit' == $unit['type'] && $unit['children']) {
+                            $lessonIds = array_merge($lessonIds, array_column($unit['children'], 'id'));
+                        } elseif ('lesson' == $unit['type']) {
+                            $lessonIds[] = $unit['id'];
+                        }
+                    }
+                } else {
+                    foreach ($chapter['children'] as $unit) {
+                        if ('unit' == $unit['type'] && $unit['children']) {
+                            if ($unit['id'] == $chapterId) {
                                 $lessonIds = array_merge($lessonIds, array_column($unit['children'], 'id'));
-                            } elseif ('lesson' == $unit['type']) {
-                                $lessonIds[] = $unit['id'];
-                            }
-                        }
-                    } else {
-                        foreach ($chapter['children'] as $unit) {
-                            if ('unit' == $unit['type'] && $unit['children']) {
-                                if ($unit['id'] == $chapterId) {
-                                    $lessonIds = array_merge($lessonIds, array_column($unit['children'], 'id'));
-                                } else {
-                                    if (in_array($chapterId, array_column($unit['children'], 'id'))) {
-                                        $lessonIds[] = $chapterId;
-                                    }
+                            } else {
+                                if (in_array($chapterId, array_column($unit['children'], 'id'))) {
+                                    $lessonIds[] = $chapterId;
                                 }
-                            } elseif ('lesson' == $unit['type'] && $unit['id'] == $chapterId) {
-                                $lessonIds[] = $unit['id'];
                             }
+                        } elseif ('lesson' == $unit['type'] && $unit['id'] == $chapterId) {
+                            $lessonIds[] = $unit['id'];
                         }
                     }
-                } elseif ('unit' == $chapter['type']) {
-                    if ($chapter['id'] == $chapterId) {
-                        $lessonIds = array_merge($lessonIds, array_column($chapter['children'], 'id'));
-                    } else {
-                        if (in_array($chapterId, array_column($chapter['children'], 'id'))) {
-                            $lessonIds[] = $chapterId;
-                        }
-                    }
-                } elseif ('lesson' == $chapter['type'] && $chapter['id'] == $chapterId) {
-                    $lessonIds[] = $chapterId;
                 }
+            } elseif ('unit' == $chapter['type']) {
+                if ($chapter['id'] == $chapterId) {
+                    $lessonIds = array_merge($lessonIds, array_column($chapter['children'], 'id'));
+                } else {
+                    if (in_array($chapterId, array_column($chapter['children'], 'id'))) {
+                        $lessonIds[] = $chapterId;
+                    }
+                }
+            } elseif ('lesson' == $chapter['type'] && $chapter['id'] == $chapterId) {
+                $lessonIds[] = $chapterId;
             }
         }
 

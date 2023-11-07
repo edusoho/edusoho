@@ -55,9 +55,11 @@ class ManageController extends BaseController
         ]);
     }
 
-    public function checkListAction(Request $request, $targetId, $targetType, $type)
+    public function checkListAction(Request $request, $targetType, $targetId, $type)
     {
-        $courseIds = [$targetId];
+        $params = json_decode($request->getContent(), true) ?? [];
+        $conditions = $this->prepareConditions($targetType, $targetId, $params);
+
         $courses = [];
         $courseSets = [];
         if ('classroom' === $targetType) {
@@ -66,20 +68,8 @@ class ManageController extends BaseController
             $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
         }
 
-        $conditions = [
-            'courseIds' => empty($courseIds) ? [-1] : $courseIds,
-            'type' => $type,
-        ];
-
-        $params = json_decode($request->getContent(), true) ?? [];
-        if (isset($params['title'])) {
-            $conditions['titleLike'] = $this->purifyHtml($params['title']);
-        }
-
-        if (isset($params['categoryId'])) {
-            $categoryIds = $this->getCourseService()->findLessonIds($courseIds, $params['categoryId']);
-            $conditions['categoryIds'] = $categoryIds;
-        }
+        $conditions['courseIds'] = empty($conditions['courseIds']) ? (empty($courseIds) ? [-1] : $courseIds) : $conditions['courseIds'];
+        $conditions['type'] = $type;
 
         $paginator = new Paginator(
             $request,
@@ -120,6 +110,37 @@ class ManageController extends BaseController
             'courseSets' => ArrayToolkit::index($courseSets, 'id'),
             'type' => $type,
         ]);
+    }
+
+    protected function prepareConditions($targetType, $targetId, $params)
+    {
+        $conditions = [];
+        if (isset($params['title'])) {
+            $conditions['titleLike'] = $this->purifyHtml($params['title']);
+        }
+
+        if ('classroom' === $targetType && isset($params['courseId'])) {
+            if (isset($params['categoryId'])) {
+                $courseId = $params['courseId'];
+                $categoryId = $params['categoryId'];
+            } else {
+                $conditions['courseIds'] = [$params['courseId']];
+            }
+        } else {
+            if (isset($params['categoryId'])) {
+                $categoryId = $params['categoryId'];
+                $courseId = $targetId;
+            } else {
+                $conditions['courseIds'] = [$targetId];
+            }
+        }
+
+        if ($courseId && $categoryId) {
+            $categoryIds = $this->getCourseService()->findLessonIds($courseId, $categoryId);
+            $conditions['categoryIds'] = empty($categoryIds) ? [-1] : $categoryIds;
+        }
+
+        return $conditions;
     }
 
     public function checkAction(Request $request, $answerRecordId, $targetId, $source = 'course')
