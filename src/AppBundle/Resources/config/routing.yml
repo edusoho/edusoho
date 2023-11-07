@@ -2042,8 +2042,8 @@ course_manage_chapter_delete:
         _controller: 'AppBundle:Course/ChapterManage:delete'
     methods:
         - POST
-course_manage_lesson_tree:
-    path: '/course/{courseId}/manage/lessonTree'
+chapter_manage_lesson_tree:
+    path: '/chapter/manage/lessonTree/{targetType}/{targetId}'
     defaults:
         _controller: 'AppBundle:Course/ChapterManage:lessonTree'
 course_manage_lesson_create:
@@ -2655,6 +2655,10 @@ course_manage_exam_result_anlysis:
     path: '/course/{id}/manage/exam/activity/{activityId}/analysis'
     defaults:
         _controller: 'AppBundle:Course/TestpaperManage:resultAnalysis'
+course_testpaper_check_list:
+    path: '/testpaper/check/{targetType}/{targetId}/{type}'
+    defaults:
+        _controller: 'AppBundle:Testpaper/Manage:checkList'
 testpaper_do:
     path: '/lesson/{lessonId}/testpaper/{testId}/do'
     defaults:
