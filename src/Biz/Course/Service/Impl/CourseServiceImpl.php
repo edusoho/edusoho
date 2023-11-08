@@ -1241,7 +1241,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             ['seq' => 'DESC'],
             0,
             PHP_INT_MAX,
-            ['id', 'title', 'type', 'courseId', 'seq']
+            ['id', 'title', 'type', 'courseId']
         );
         $chapters = ArrayToolkit::group($chapters, 'courseId');
         foreach ($tasks as $courseId => $taskGroup) {
@@ -1329,61 +1329,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $children;
-    }
-
-    protected function getCourseLessonTree($chapters)
-    {
-        $lessonTree = [];
-        foreach ($chapters as $chapter) {
-            if ('chapter' == $chapter['type']) {
-                if (isset($currentChapter)) {
-                    if (isset($currentUnit)) {
-                        $currentUnit['parentId'] = $currentChapter['id'];
-                        $currentChapter['children'][] = $currentUnit;
-                    }
-                    $lessonTree[] = $currentChapter;
-                } elseif (isset($currentUnit)) {
-                    $lessonTree[] = $currentUnit;
-                }
-                unset($currentUnit);
-                $currentChapter = $chapter;
-            }
-            if ('unit' == $chapter['type']) {
-                if (isset($currentUnit)) {
-                    if (isset($currentChapter)) {
-                        $currentUnit['parentId'] = $currentChapter['id'];
-                        $currentChapter['children'][] = $currentUnit;
-                    } else {
-                        $lessonTree[] = $currentUnit;
-                    }
-                }
-                $currentUnit = $chapter;
-            }
-            if ('lesson' == $chapter['type']) {
-                if (isset($currentUnit)) {
-                    $chapter['parentId'] = $currentUnit['id'];
-                    $currentUnit['children'][] = $chapter;
-                } elseif (isset($currentChapter)) {
-                    $chapter['parentId'] = $currentChapter['id'];
-                    $currentChapter['children'][] = $chapter;
-                } else {
-                    $lessonTree[] = $chapter;
-                }
-            }
-        }
-        if (isset($currentUnit)) {
-            if (isset($currentChapter)) {
-                $currentUnit['parentId'] = $currentChapter['id'];
-                $currentChapter['children'][] = $currentUnit;
-            } else {
-                $lessonTree[] = $currentUnit;
-            }
-        }
-        if (isset($currentChapter)) {
-            $lessonTree[] = $currentChapter;
-        }
-
-        return $lessonTree;
     }
 
     public function findLessonIds($courseId, $type, $chapterId)
