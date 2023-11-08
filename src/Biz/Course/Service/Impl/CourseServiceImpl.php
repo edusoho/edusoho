@@ -1437,6 +1437,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return [];
     }
 
+    public function getChapterById($chapterId)
+    {
+        return $this->getChapterDao()->get($chapterId);
+    }
+
     public function countUserLearningCourses($userId, $filters = [])
     {
         $conditions = $this->prepareUserLearnCondition($userId, $filters);
