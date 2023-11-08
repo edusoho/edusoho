@@ -1059,6 +1059,7 @@ course.members_manage.join_records.date: 'join date'
 course.testpaper_check: 'Marking testpaper'
 course.testpaper_check.no_permission_tips: 'You are not teacher of this course and can not mark the testpaper.'
 course.testpaper_check.empty: 'No data'
+course.testpaper_check.tips: No related content
 course.testpaper_check.start_date: 'Start date:'
 course.testpaper_check.status.check: Checked
 course.testpaper_check.status.not_check: 'UnCheck'
