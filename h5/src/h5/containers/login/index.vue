@@ -84,7 +84,7 @@
         type="info"
         class="primary-btn mb20 login-pop-btn"
         @click="agreeSign"
-        >{{ $t('btn.agreeAndSignin') }}123</van-button
+        >{{ $t('btn.agreeAndSignin') }}</van-button
       >
      
     </van-popup>

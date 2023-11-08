@@ -21,14 +21,13 @@
 <script>
 import { getBtnText } from '@/utils/itemBank-status.js';
 import { mapState } from 'vuex';
-import { isOpen } from '@/utils/on-status.js';
+import { closedToast } from '@/utils/on-status.js';
 
 export default {
   nama: 'exercise-section',
   components: {},
   data() {
     return {
-      isOpen: false
     };
   },
   props: {
@@ -45,6 +44,7 @@ export default {
   computed: {
     ...mapState('ItemBank', {
       isMember: state => state.ItemBankExercise.isMember,
+      ItemBankExercise: state => state.ItemBankExercise,
     }),
     btnText() {
       return getBtnText(this.section.latestAnswerRecord?.status || '');
@@ -69,7 +69,8 @@ export default {
     },
   },
   watch: {},
-  created() {},
+  created() {
+  },
   methods: {
     clickBtn() {
       const status = this.section.latestAnswerRecord?.status;
@@ -88,10 +89,11 @@ export default {
       }
     },
     startDo(item) {
-      if (!this.isOpen) {
-        isOpen('test')
+      if (this.ItemBankExercise?.status == 'closed') {
+        closedToast('exercise')
         return 
       }
+
       const query = {
         moduleId: this.moduleId,
         categoryId: item.id,
@@ -100,10 +102,11 @@ export default {
       this.$router.push({ path: '/brushIntro', query });
     },
     continueDo(item) {
-      if (!this.isOpen) {
-        isOpen(isOpen('test'))
+      if (this.ItemBankExercise?.status == 'closed') {
+        closedToast('exercise')
         return 
       }
+
       const query = {
         moduleId: this.moduleId,
         categoryId: item.id,

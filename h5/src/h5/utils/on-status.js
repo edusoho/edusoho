@@ -1,15 +1,17 @@
 import { Toast } from 'vant';
+import i18n from '@/lang';
 
-export const isOpen = (kind) => {
+
+export const closedToast = (kind) => {
   switch (kind) {
-    case 'test':
-      Toast.fail('题库已关闭');
+    case 'course':
+      Toast(i18n.t('goods.courseClosedToast'));
       break;
     case 'classroom':
-      Toast.fail('班级已关闭');
+      Toast(i18n.t('goods.classroomClosedToast'));
       break;
-    case 'lesson':
-      Toast.fail('课程已关闭');
+    case 'exercise':
+      Toast(i18n.t('goods.exerciseClosedToast'));
       break;
   }
 }

@@ -76,7 +76,7 @@
 import Api from '@/api';
 import { mapState } from 'vuex';
 import EDrag from '&/components/e-drag';
-import { isOpen } from '@/utils/on-status.js';
+import { closedToast } from '@/utils/on-status.js';
 
 
 export default {
@@ -89,8 +89,7 @@ export default {
       value: 0,
       message: '',
       reviews: null,
-      showDrag: false,
-      isOpened: false
+      showDrag: false
     };
   },
   props: {
@@ -135,9 +134,8 @@ export default {
       })
     },
     onSubmit() {
-      if (!this.isOpened) {
-        isOpen('classroom')
-        return 
+      if(this.details?.status == 'closed') {
+        return closedToast('classroom');
       }
 
       if (this.value == 0) {

@@ -4,6 +4,7 @@
       :is="currentComponent"
       :user-review="userReview"
       :target-info="targetInfo"
+      :details="details"
       @change-current-component="changeCurrentComponent"
     />
   </div>
