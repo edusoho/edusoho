@@ -4,8 +4,8 @@
       <a-form-model-item>
         <a-tree-select
           v-model="currentValue"
-          style="width: 180px"
-          :dropdown-style="{ maxHeight: '400px', maxWidth: '180px'}"
+          style="width: 200px"
+          :dropdown-style="{ maxHeight: '400px', maxWidth: '200px'}"
           dropdownClassName="testpaper-dropdown"
           :tree-data="treeData"
           :defaultValue="'placeholder.class.name' | trans"
@@ -70,21 +70,20 @@ export default {
         type: 'GET',
         url: `/testpaper/check/${this.targetType}/${this.targetId}/${this.type}`,
         data:this.currentSelectItem == undefined ? JSON.parse({title: this.title}) : {[type[this.currentSelectItem]]: this.currentValue, title: this.title}
-      }).done(function(resp){
+      }).done((resp) =>{
           $('.js-task-list').html(resp)
       }).fail(function(){
         
       });
     },
     getTreeData() {
-      const that = this
       $.ajax({
         type: 'GET',
         url: `/chapter/manage/lessonTree/${this.targetType}/${this.targetId}/${this.type}`,
-      }).done(function(resp){
-          that.treeData = resp
-          that.treeData.forEach(element => {
-            that.setData(element)
+      }).done((resp) =>{
+          this.treeData = resp || []
+          this.treeData.forEach(element => {
+            this.setData(element)
           });
       }).fail(function(){
         
@@ -101,6 +100,7 @@ export default {
     },
 
     changeDrop(value, label, extra) {
+      if (value == undefined) return
       this.currentSelectItem =  extra.triggerNode._props.dataRef.type
     }
   }
