@@ -81,7 +81,7 @@ export default {
         type: 'GET',
         url: `/chapter/manage/lessonTree/${this.targetType}/${this.targetId}/${this.type}`,
       }).done((resp) =>{
-          this.treeData = resp
+          this.treeData = resp || []
           this.treeData.forEach(element => {
             this.setData(element)
           });
