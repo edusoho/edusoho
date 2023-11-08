@@ -1,6 +1,14 @@
 <template>
     <div class="cd-container">
         <div class="product-breadcrumb"><a href="/">{{ 'homepage'|trans }}</a> / {{goods.title|removeHtml}}</div>
+        <a-alert
+            v-if="goods.status == 'unpublished'"
+            class="mt16"
+            message="课程已关闭，无法购买/学习"
+            description=""
+            type="warning"
+            show-icon
+            />
         <detail :vip-enabled="vipEnabled" :drp-recruit-switch="drpRecruitSwitch" :goodsSetting="goodsSetting" :timestamp="timestamp" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
         </detail>
 
@@ -20,7 +28,7 @@
                             </li>
                         </ul>
                         <div class="buy__btn pull-right">
-                            <buy-sku :sku="currentSku" :btn-class="goods.status == 'unpublished' ? 'product-detail__btn disabled btn' : 'product-detail__btn'" :isShow="false" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
+                            <buy-sku :sku="currentSku" :btn-class="goods.status == 'unpublished' ? 'product-detail__btn handleLearnOnMessage' : 'product-detail__btn'" :isShow="false" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
                         </div>
                     </div>
                 </div>

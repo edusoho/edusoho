@@ -30,10 +30,11 @@ $(document).on('click', '.handleLearn', function (event) {
 
 $(document).on('click', '.handleLearnOnMessage', function (event) {
   event.preventDefault();
-  cd.message({
-    type: 'danger', 
-    message: Translator.trans('validate.course.closed')
-  });
+  notify('danger', decodeURIComponent(Translator.trans('validate.course.closed')));
+  // cd.message({
+  //   type: 'danger', 
+  //   message: Translator.trans('validate.course.closed')
+  // });
 });
 
 $('[data-toggle="popover"]').popover({

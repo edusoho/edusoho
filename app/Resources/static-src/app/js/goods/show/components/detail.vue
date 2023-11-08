@@ -98,7 +98,7 @@
             </div>
 
             <!-- 立即购买 -->
-            <buy-sku :sku="currentSku" :btn-class="goods.status == 'unpublished' ? 'product-detail__btn disabled btn' : 'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods" :vip-enabled="vipEnabled"></buy-sku>
+            <buy-sku :sku="currentSku" :btn-class="goods.status == 'unpublished' ? 'product-detail__btn handleLearnOnMessage' : 'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods" :vip-enabled="vipEnabled"></buy-sku>
         </div>
     </div>
 </template>

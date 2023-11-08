@@ -50,7 +50,7 @@
         <i class="es-icon es-icon-chatcircle color-info" data-toggle="tooltip" data-placement="top" title="{{'thread.hover_tips.thread'|trans}}"></i>
       {% endif %}
 
-      <a class="{% if courseSet.status == 'closed'%}handleLearn link-disable{% endif %}" href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}">{{ thread.title|default('course.thread.question.title'|trans({'%questionType%':questionType|default('course.thread.question_type.content'|trans)})) }}
+      <a class="{% if courseSet.status == 'closed'%}handleLearnOnMessage{% endif %}" href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}">{{ thread.title|default('course.thread.question.title'|trans({'%questionType%':questionType|default('course.thread.question_type.content'|trans)})) }}
       </a>
 
       {% if thread.sticky %}
