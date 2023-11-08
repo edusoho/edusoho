@@ -49,11 +49,6 @@ export default {
       currentSelectItem: ''
     };
   },
-  watch: {
-    value(value) {
-      console.log(value);
-    },
-  },
   created() {
     this.getTreeData()
   },
