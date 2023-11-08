@@ -2043,7 +2043,7 @@ course_manage_chapter_delete:
     methods:
         - POST
 chapter_manage_lesson_tree:
-    path: '/chapter/manage/lessonTree/{targetType}/{targetId}'
+    path: '/chapter/manage/lessonTree/{targetType}/{targetId}/{type}'
     defaults:
         _controller: 'AppBundle:Course/ChapterManage:lessonTree'
 course_manage_lesson_create:
