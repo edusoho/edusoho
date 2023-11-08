@@ -53,7 +53,6 @@ class KernelControllerListener
             $event->setController(function () use ($url) {
                 return new RedirectResponse($url);
             });
-
         }
     }
 
@@ -76,6 +75,7 @@ class KernelControllerListener
             '/register/email_or_mobile/check', '/settings/bind_mobile',
             '/edu_cloud/sms_send_check_captcha', '/settings/mobile_bind', '/switch/language',
             '/scrm/buy/goods/callback', '/file/upload', '/file/img/crop', '/online/sample',
+            '/settings/setup_password',
         ];
     }
 
