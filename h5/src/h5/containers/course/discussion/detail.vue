@@ -148,7 +148,7 @@ export default {
 
     async handleClickEnter() {
       if(this.details.courseSet.status == 'closed') {
-        return
+        return closedToast('course')
       }
 
       const content = _.trim(this.content);

@@ -313,7 +313,7 @@ export default {
         }).then(res => {});
         this.getCourse({
           courseId: targetId,
-        }).then(res => {console.log(res)});
+        }).then(res => {});
       }
       this.goods.hasExtension = true;
     },
