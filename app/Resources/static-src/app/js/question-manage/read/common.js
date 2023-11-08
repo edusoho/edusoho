@@ -1,3 +1,4 @@
+import { initTooltips } from 'common/utils';
 const registerEvent = function ($importBox) {
   let fileName;
   let $form = $('#import-step-form');
@@ -231,7 +232,7 @@ const registerEvent = function ($importBox) {
 
   $('[data-toggle="popover"]').popover();
 };
-
+initTooltips()
 export {
   registerEvent
 }
