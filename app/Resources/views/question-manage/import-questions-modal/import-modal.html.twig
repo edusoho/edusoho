@@ -37,7 +37,16 @@
           <div>
             <div class="import-questions-content">
               <span class="anchor-point"></span>
-              <span class="import-info">{{ 'question_manage.import.description.supported'|trans }} <a class="cd-link-primary js-DOCX-link" href="{{ path('question_bank_manage_download_import_template', {id: questionBank.id, type: 'docx-full'}) }}">DOCX</a> {{ 'site.default.and'|trans }} <a class="cd-link-primary js-XLSX-link" href="{{ path('question_bank_manage_download_import_template', {id: questionBank.id, type: 'xlsx'}) }}">XLSX</a> {{ 'question_manage.import.formate.text'|trans }}</span>
+              <span class="import-info">
+              {{ 'question_manage.import.description.supported'|trans }}
+               <a class="cd-link-primary js-DOCX-link" href="{{ path('question_bank_manage_download_import_template', {id: questionBank.id, type: 'docx-simple'}) }}">DOCX{{ 'question_manage.import.easy'|trans }}</a>
+                 <i class="es-icon es-icon-help-copy" data-toggle="tooltip" title="{{ 'question_manage.import.easy.tips'|trans }}"></i>、
+                <a class="cd-link-primary js-DOCX-link" href="{{ path('question_bank_manage_download_import_template', {id: questionBank.id, type: 'docx-full'}) }}">DOCX{{ 'question_manage.import.integrity'|trans }}</a>
+                 <i class="es-icon es-icon-help-copy" data-toggle="tooltip" title="{{ 'question_manage.import.easy.integrity'|trans }}"></i>
+                {{ 'site.default.and'|trans }} 
+                <a class="cd-link-primary js-XLSX-link" href="{{ path('question_bank_manage_download_import_template', {id: questionBank.id, type: 'xlsx'}) }}">XLSX</a> 
+                {{ 'question_manage.import.formate.text'|trans }}
+              </span>
             </div>
             <div class="format-conversion">
               <span class="flex format-span">

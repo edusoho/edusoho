@@ -1765,6 +1765,10 @@ course.question_manage.import.doc_to_docx_hint: DOC如何转换成DOCX?
 question_manage.import.doc_to_docx_hint.tutorial: 查看教程
 question_manage.import.click: 单击
 question_manage.import.description.supported: 导入说明：支持上传
+question_manage.import.easy: (简单)
+question_manage.import.integrity: (完整)
+question_manage.import.easy.tips: 可在之前的word模版上增加导入模式和说明（复制新模版上的文案粘贴），自动识别提醒，仅支持单选、多选、填空、 判断、问答题
+question_manage.import.easy.integrity: 需每题标明题型，且支特单选、多选、不定项选择、填空、判断、问答题材料题
 question_manage.import.formate.text: 格式文档
 question_manage.import.format.conversion: 格式转换
 question_manage.import.new.version.introduction: 新版导入功能介绍
