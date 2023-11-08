@@ -57,8 +57,7 @@ class ManageController extends BaseController
 
     public function checkListAction(Request $request, $targetType, $targetId, $type)
     {
-        $params = json_decode($request->getContent(), true) ?? [];
-        $conditions = $this->prepareConditions($targetType, $targetId, $params);
+        $conditions = $this->prepareConditions($targetType, $targetId, $request->query->all());
         $conditions['type'] = $type;
 
         $paginator = new Paginator(
@@ -96,13 +95,13 @@ class ManageController extends BaseController
         if (isset($params['title'])) {
             $conditions['titleLike'] = $this->purifyHtml($params['title']);
         }
-        if ('classroom' === $targetType && empty($params['courseId'])) {
+        $courseId = $this->prepareCourseId($targetType, $targetId, $params);
+        if ('classroom' === $targetType && empty($courseId)) {
             $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
             $conditions['courseIds'] = array_column($courses, 'id');
 
             return $conditions;
         }
-        $courseId = 'course' == $targetType ? $targetId : $params['courseId'];
         $conditions['courseId'] = $courseId;
 
         if (!empty($params['lessonId'])) {
@@ -120,6 +119,25 @@ class ManageController extends BaseController
         }
 
         return $conditions;
+    }
+
+    private function prepareCourseId($targetType, $targetId, $params)
+    {
+        if (!empty($params['courseId'])) {
+            return $params['courseId'];
+        }
+        if ('course' == $targetType) {
+            return $targetId;
+        }
+        foreach (['chapterId', 'unitId', 'lessonId'] as $key) {
+            if (!empty($params[$key])) {
+                $chapter = $this->getCourseService()->getChapterById($params[$key]);
+
+                return $chapter['courseId'];
+            }
+        }
+
+        return 0;
     }
 
     public function checkAction(Request $request, $answerRecordId, $targetId, $source = 'course')

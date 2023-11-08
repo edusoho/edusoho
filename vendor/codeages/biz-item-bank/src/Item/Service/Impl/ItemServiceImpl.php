@@ -513,11 +513,6 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $result;
     }
 
-    public function getQuestion($questionId)
-    {
-        return $this->getQuestionDao()->get($questionId);
-    }
-
     public function getQuestionIncludeDeleted($questionId)
     {
         return $this->getQuestionDao()->getIncludeDeleted($questionId);

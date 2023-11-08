@@ -64,6 +64,8 @@ interface CourseService
 
     public function getChapter($courseId, $chapterId);
 
+    public function getChapterById($chapterId);
+
     /**
      * @param $chapter
      *
