@@ -374,7 +374,7 @@ interface CourseService
 
     public function courseItemIdsHandle($courseId, $ids);
 
-    public function getLessonTree($courseIds);
+    public function getLessonTree($courseIds, $type);
 
     public function findLessonIds($courseId, $type, $chapterId);
 }
