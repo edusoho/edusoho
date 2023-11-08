@@ -416,6 +416,10 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
         $questionAttachments = [];
         foreach ($questions as $question) {
+            preg_match_all('/^<p>.*/', $question['stem'], $result);
+            if (empty($result[0])) {
+                $question['stem'] = "<p>{$question['stem']}</p>";
+            }
             $question['item_id'] = $itemId;
             $question['created_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
             $question['updated_user_id'] = $question['created_user_id'];
