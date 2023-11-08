@@ -57,8 +57,7 @@ class ManageController extends BaseController
 
     public function checkListAction(Request $request, $targetType, $targetId, $type)
     {
-        $params = json_decode($request->getContent(), true) ?? [];
-        $conditions = $this->prepareConditions($targetType, $targetId, $params);
+        $conditions = $this->prepareConditions($targetType, $targetId, $request->query->all());
         $conditions['type'] = $type;
 
         $paginator = new Paginator(
