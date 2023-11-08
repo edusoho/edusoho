@@ -1672,6 +1672,8 @@ t.add("form.label.tag", "\u6807\u7b7e", "js", "zh_CN");
 t.add("form.label.share", "\u5206\u4eab", "js", "zh_CN");
 t.add("placeholder.playback_label", "\u56de\u653e\u6807\u7b7e", "js", "zh_CN");
 t.add("placeholder.enter_keyword", "\u8bf7\u8f93\u5165\u5173\u952e\u5b57", "js", "zh_CN");
+t.add("placeholder.task.name", "\u8bf7\u8f93\u5165\u4efb\u52a1\u540d\u79f0", "js", "zh_CN");
+t.add("placeholder.class.name", "\u8bfe\u65f6\u540d\u79f0", "js", "zh_CN");
 t.add("placeholder.course_category", "\u8bfe\u7a0b\u5206\u7c7b", "js", "zh_CN");
 t.add("radio.share_to_live_playback", "\u5171\u4eab\u5230\u76f4\u64ad\u56de\u653e\uff08\u5176\u4ed6\u8001\u5e08\u53ef\u4ee5\u67e5\u770b\u3001\u9884\u89c8\u3001\u5f15\u7528\u8be5\u56de\u653e\uff09", "js", "zh_CN");
 t.add("radio.visible_only_to_yourself", "\u4ec5\u81ea\u5df1\u53ef\u89c1", "js", "zh_CN");

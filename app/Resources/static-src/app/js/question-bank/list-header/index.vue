@@ -14,7 +14,7 @@
             </a-menu-item>
           </a-menu>
         </a-dropdown>
-        <a-button class="import" type="primary" @click="importQuestion">{{ 'question.bank.import'|trans }}</a-button>
+        <a-button class="import js-import-btn" type="primary" @click="importQuestion">{{ 'question.bank.import'|trans }}</a-button>
       </div>
     </div>
     <div>

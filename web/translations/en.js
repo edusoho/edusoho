@@ -1712,6 +1712,8 @@ t.add("form.label.tag", "Tag", "js", "en");
 t.add("form.label.share", "Share", "js", "en");
 t.add("placeholder.playback_label", "Playback labe", "js", "en");
 t.add("placeholder.enter_keyword", "Please enter keyword", "js", "en");
+t.add("placeholder.task.name", "Please enter a task name", "js", "en");
+t.add("placeholder.class.name", "Class name", "js", "en");
 t.add("placeholder.course_category", "Course category", "js", "en");
 t.add("radio.share_to_live_playback", "Share to live playback (other teachers can view, preview and reference this playback)", "js", "en");
 t.add("radio.visible_only_to_yourself", "Visible only to yourself", "js", "en");
