@@ -57,7 +57,8 @@ class ManageController extends BaseController
 
     public function checkListAction(Request $request, $targetType, $targetId, $type)
     {
-        $conditions = $this->prepareConditions($targetType, $targetId, $request->query->all());
+        $params = $request->query->all();
+        $conditions = $this->prepareConditions($targetType, $targetId, $params);
         $conditions['type'] = $type;
 
         $paginator = new Paginator(
@@ -65,6 +66,7 @@ class ManageController extends BaseController
             $this->getTaskService()->countTasks($conditions),
             10
         );
+        $paginator->setBaseUrl($this->generateUrl('course_testpaper_check_list', array_merge(['targetType' => $targetType, 'targetId' => $targetId, 'type' => $type], $params)));
         $tasks = $this->getTaskService()->searchTasks(
             $conditions,
             ['seq' => 'ASC', 'id' => 'ASC'],
