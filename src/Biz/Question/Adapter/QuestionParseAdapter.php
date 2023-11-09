@@ -36,7 +36,7 @@ class QuestionParseAdapter
     private function adaptQuestion($question)
     {
         $adaptedQuestion = [
-            'stem' => $question['title'] ?? '',
+            'stem' => $this->adaptStem($question['title'] ?? ''),
             'difficulty' => $this->adaptDifficulty($question),
             'score' => $question['score'] ?? 2,
             'analysis' => $question['analysis'] ?? '',
@@ -61,6 +61,16 @@ class QuestionParseAdapter
         ];
 
         return $difficulties[$question['difficulty']] ?? ItemDifficulty::NORMAL;
+    }
+
+    private function adaptStem($stem)
+    {
+        preg_match_all('/^<p>.*/', $stem, $match);
+        if (empty($match[0])) {
+            $stem = "<p>{$stem}</p>";
+        }
+
+        return $stem;
     }
 
     private function adaptCommonErrors($question)

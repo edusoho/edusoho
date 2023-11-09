@@ -157,11 +157,6 @@ abstract class Item
 
     protected function getMaterial($item)
     {
-        preg_match_all('/^<p>.*/', $item['questions'][0]['stem'], $result);
-        if (empty($result[0])) {
-            $item['questions'][0]['stem'] = "<p>{$item['questions'][0]['stem']}</p>";
-        }
-
         return trim($item['questions'][0]['stem']);
     }
 
