@@ -28,13 +28,17 @@ class QuestionParserController extends BaseController
         $file = $request->files->get('importFile');
 
         if (!$this->isFileExtensionValid($file)) {
-            return $this->render($templateInfo['readErrorModalTemplate']);
+            return $this->render($templateInfo['readErrorModalTemplate'], [
+                'questionBank' => $questionBank,
+            ]);
         }
 
         try {
             $token = $this->parseQuestionThenMakeToken($questionBank['id'], $file);
         } catch (\Exception $e) {
-            return $this->render($templateInfo['readErrorModalTemplate']);
+            return $this->render($templateInfo['readErrorModalTemplate'], [
+                'questionBank' => $questionBank,
+            ]);
         }
 
         return $this->createJsonResponse([
