@@ -26,9 +26,10 @@ trait FillAdapterTrait
     private function adaptFillStem($question)
     {
         $key = 0;
+
         return preg_replace_callback('/___/', function () use (&$key, $question) {
             $answer = empty($question['answers'][$key]) ? '' : $question['answers'][$key];
-            $key++;
+            ++$key;
 
             return "[[$answer]]";
         }, $question['stem']);
