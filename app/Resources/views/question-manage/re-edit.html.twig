@@ -25,7 +25,7 @@
   {% block header %}
     {% if showHeader %}{{ parent() }}{% endif %}
   {% endblock %}
-  
+
   <div id="app"></div>
   <input type="hidden" name="filename" value='{{ filename }}'>
   <input type="hidden" name="items" value='{{ items|json_encode }}'>
