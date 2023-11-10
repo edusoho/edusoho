@@ -87,7 +87,7 @@
         },
         fileId: 0,
         isDownload: false,
-        isDisable: null, 
+        isDisable: null,
       };
     },
     provide() {
@@ -101,7 +101,7 @@
         const stem = data.data.type === 'material' ? data.data.material : data.data.questions[0].stem
         return new Promise(resolve => {
           $.ajax({
-            url: `/question_bank/${this.bank_id}/checkQuestionDuplicative`,
+            url: $('[name=check_duplicative_url]').val(),
             contentType: 'application/json;charset=utf-8',
             type: 'post',
             data: JSON.stringify({material:stem}),
@@ -112,7 +112,6 @@
             resolve(res);
           })
         });
-        
       },
       getData(data) {
         const that = this
