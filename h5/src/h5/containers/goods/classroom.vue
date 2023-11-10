@@ -63,9 +63,9 @@
           <span slot="title">猜你想学</span>
         </Recommend>
       </section>
-
       <!-- 收藏/购买 -->
-      <buy />
+        <buy />
+      
 
       <!-- 回到顶部 -->
       <back-to-top v-show="backToTopShow" />
@@ -87,6 +87,7 @@ import ClassroomCourses from './components/classroom-courses';
 import Api from '@/api';
 import { Toast } from 'vant';
 import { mapActions } from 'vuex';
+
 
 export default {
   data() {

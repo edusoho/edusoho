@@ -269,8 +269,20 @@ export default {
       }
       return result;
     },
+    // 判断课程关闭后是否可以学习
+    isCanLearn(task) {
+      const allowedTaskTypes = ['testpaper', 'homework', 'exercise'];
+      const isTaskTypeAllowed = allowedTaskTypes.includes(task.type);
+      const isTaskResultIncomplete = !task.result || task.result.status != 'finish';
+
+      if(this.courseSet?.status == 'closed' && (!isTaskTypeAllowed || (isTaskTypeAllowed && isTaskResultIncomplete))) {
+        return false
+      }
+
+      return true
+    },
     lessonCellClick(task, lessonIndex, taskIndex) {
-      if(this.courseSet?.status == 'closed') {
+      if(!this.isCanLearn(task)) {
         return closedToast('course');
       }
 

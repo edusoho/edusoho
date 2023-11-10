@@ -35,6 +35,7 @@
 <script>
 import _ from 'lodash';
 import Api from '@/api';
+import { closedToast } from '@/utils/on-status.js';
 
 export default {
   name: 'NoteDetail',
@@ -43,6 +44,10 @@ export default {
     note: {
       type: Object,
       required: true
+    },
+    details: {
+      type: Object,
+      default: () => {}
     }
   },
 
@@ -71,6 +76,10 @@ export default {
     },
 
     handleClickLike() {
+      if(this.details?.courseSet?.status == 'closed') {
+        return closedToast('course');
+      }
+
       const { id, likeNum } = this.noteDetail;
 
       const query = {

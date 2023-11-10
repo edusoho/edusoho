@@ -237,8 +237,11 @@ export default {
     getGoodsCourse() {
       Api.getGoodsCourse({
         query: {
-          id: this.$route.params.id,
+          id: this.$route.params.id
         },
+        params: {
+          preview: 1
+        }
       })
         .then(res => {
           this.goods = res;

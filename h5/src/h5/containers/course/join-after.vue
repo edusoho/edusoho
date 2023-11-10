@@ -109,6 +109,9 @@
         {{ isWeixin ? $t('courseLearning.longPressThePicture') : $t('courseLearning.longPressThePicture2') }}
       </van-button>
     </van-popup>
+    <div class="footer">
+      <closedFixed v-if="details.courseSet.status == 'closed' && active == '0'" :isJoin="true" title="课程已关闭，无法学习" content="考试与作业结果可查看" />
+    </div>
   </div>
 </template>
 <script>
@@ -121,6 +124,8 @@ import { Dialog, Toast } from 'vant';
 import infoCollection from '@/components/info-collection.vue';
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
+import closedFixed from '@/components/closed-fixed.vue'
+
 
 // tabs 子组件
 import firstDiscussion from './discussion/index.vue'; // 问答
@@ -163,7 +168,8 @@ export default {
     firstDiscussion,
     secondDiscussion,
     Notes,
-    Reviews
+    Reviews,
+    closedFixed
   },
 
   props: {
@@ -730,4 +736,11 @@ export default {
     left: 0;
   }
 }
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
 </style>

@@ -19,6 +19,9 @@
       </van-tab>
     </van-tabs>
   </div>
+  <div class="footer">
+    <closedFixed v-if="ItemBankExercise.status == 'closed'" :isJoin="true" title="题库练习已关闭，无法学习" content="题库练习结果可查看" />
+  </div>
 </div>
 </template>
 
@@ -27,12 +30,15 @@ import { createNamespacedHelpers } from 'vuex';
 import directory from './directory';
 import reviewList from './review-list';
 import introduction from './introduction';
+import closedFixed from '@/components/closed-fixed.vue'
+
 const { mapState } = createNamespacedHelpers('ItemBank');
 export default {
   components: {
     directory,
     reviewList,
     introduction,
+    closedFixed
   },
   props: ['details'],
   data() {
@@ -45,6 +51,7 @@ export default {
   },
   computed: {
     ...mapState({
+      ItemBankExercise: state => state.ItemBankExercise,
       cover: state => state.ItemBankExercise.cover,
       id: state => state.ItemBankExercise.id,
     }),
@@ -56,4 +63,9 @@ export default {
 };
 </script>
 <style scoped>
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
 </style>
