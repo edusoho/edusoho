@@ -1901,6 +1901,8 @@ form.label.share: 分享
 
 placeholder.playback_label: 回放标签
 placeholder.enter_keyword: 请输入关键字
+placeholder.task.name: 请输入任务名称
+placeholder.class.name: 课时名称
 placeholder.course_category: 课程分类
 
 radio.share_to_live_playback: 共享到直播回放（其他老师可以查看、预览、引用该回放）

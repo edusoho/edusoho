@@ -50,7 +50,7 @@ class ManageController extends BaseController
         if ('failed' == $result['status']) {
             return $this->createJsonResponse([
                 'status' => 'failed',
-                'errorHtml' => $this->renderView('question-manage/read-error.html.twig', ['error' => $result['error']]),
+                'errorHtml' => $this->renderView('question-manage/read-error.html.twig', ['error' => $result['error'], 'questionBank' => ['id' => $data['questionBankId']]]),
             ]);
         }
         if ('finished' == $result['status']) {
@@ -60,7 +60,7 @@ class ManageController extends BaseController
             } catch (\Exception $e) {
                 return $this->createJsonResponse([
                     'status' => 'failed',
-                    'errorHtml' => $this->renderView('question-manage/read-error.html.twig'),
+                    'errorHtml' => $this->renderView('question-manage/read-error.html.twig', ['questionBank' => ['id' => $data['questionBankId']]]),
                 ]);
             }
             $this->cacheQuestions($data['cacheFilePath'], $questions);
