@@ -190,6 +190,23 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         $this->db()->update($this->table, $fields, ['courseSetId' => $courseSetId]);
     }
 
+    public function updateByCourseSetId($courseSetId, $fields)
+    {
+        $this->db()->update($this->table, $fields, ['courseSetId' => $courseSetId]);
+    }
+
+    public function modifyDisplay($courseSetId)
+    {
+        $sql = "UPDATE {$this->table} set display = '1' where courseSetId = ?;";
+        $this->db()->executeQuery($sql, [$courseSetId]);
+    }
+
+    public function modifyCanLearn($courseSetId)
+    {
+        $sql = "UPDATE {$this->table} set canLearn = '1' where courseSetId = ?;";
+        $this->db()->executeQuery($sql, [$courseSetId]);
+    }
+
     public function searchWithJoinCourseSet($conditions, $orderBys, $start, $limit)
     {
         $builder = $this->createJoinCourseSetQueryBuilder($conditions)

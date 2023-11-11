@@ -377,4 +377,12 @@ interface CourseService
     public function showCourse($id);
 
     public function hideCourse($id);
+
+    public function banLearningByCourseSetId($courseSetId);
+
+    public function canLearningByCourseSetId($courseSetId);
+
+    public function hideByCourseSetId($courseSetId);
+
+    public function showByCourseSetId($courseSetId);
 }

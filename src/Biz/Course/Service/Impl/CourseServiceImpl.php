@@ -802,6 +802,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         $course['status'] = 'closed';
         $course['showable'] = '0';
+        $course['canLearn'] = '0';
 
         try {
             $this->beginTransaction();
@@ -832,6 +833,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             [
                 'status' => 'published',
                 'showable' => '1',
+                'canLearn' => '1',
             ]
         );
         $this->getCourseSetService()->publishCourseSet($course['courseSetId']);
@@ -2961,6 +2963,28 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         $course['showable'] = '0';
         $this->getCourseDao()->update($id, $course);
+    }
+
+    public function banLearningByCourseSetId($courseSetId)
+    {
+        $this->getCourseDao()->updateByCourseSetId($courseSetId, ['canLearn' => '0']);
+    }
+
+    public function canLearningByCourseSetId($courseSetId)
+    {
+        // todo 需要看course的状态
+        $this->getCourseDao()->modifyCanLearn($courseSetId);
+    }
+
+    public function hideByCourseSetId($courseSetId)
+    {
+        $this->getCourseDao()->updateByCourseSetId($courseSetId, ['showable' => '0']);
+    }
+
+    public function showByCourseSetId($courseSetId)
+    {
+        // todo 需要看课程showable状态
+        $this->getCourseDao()->modifyDisplay($courseSetId);
     }
 
     /**

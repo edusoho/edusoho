@@ -472,13 +472,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function showCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
-        $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '1']);
+        $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '1', 'display' => '1']);
     }
 
     public function hideCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
-        $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '0']);
+        $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '0', 'display' => '0']);
     }
 
     public function updateCourseSetRatingNum($id, $fields)
@@ -678,6 +678,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'published', 'showable' => '1']);
             $this->getCourseSetGoodsMediator()->onUpdateNormalData($courseSet);
             $this->getCourseSetGoodsMediator()->onPublish($courseSet);
+            $this->getCourseService()->showByCourseSetId($courseSet['id']);
+            $this->getCourseService()->canLearningByCourseSetId($courseSet['id']);
 
             $this->commit();
 
@@ -703,9 +705,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             if (!empty($classroomRef)) {
                 $this->getCourseService()->closeCourse($classroomRef['courseId']);
             }
-            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'closed', 'showable' => '0']);
+            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'closed', 'canLearn' => '0', 'display' => '0', 'showable' => '0']);
             $this->getCourseSetGoodsMediator()->onClose($courseSet);
-
+            $this->getCourseService()->banLearningByCourseSetId($courseSet['id']);
+            $this->getCourseService()->hideByCourseSetId($courseSet['id']);
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();

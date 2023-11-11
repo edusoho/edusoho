@@ -849,7 +849,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->updateClassroom($id, ['status' => 'published', 'canLearn' => '1']);
 
         $this->getClassroomGoodsMediator()->onPublish($classroom);
-        $this->dispatchEvent('classroom.publish', new Event($classroom));
+        foreach ($this->getCourseSetsById($classroom['id']) as $courseSet) {
+            $this->dispatchEvent('course-set.publish', new Event($courseSet));
+        }
+        $this->dispatchEvent('classroom.closed', new Event($classroom));
 
         return $classroom;
     }
@@ -860,9 +863,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0']);
         $this->getClassroomGoodsMediator()->onClose($classroom);
+        foreach ($this->getCourseSetsById($classroom['id']) as $courseSet) {
+            $this->dispatchEvent('course-set.closed', new Event($courseSet));
+        }
         $this->dispatchEvent('classroom.close', new Event($classroom));
 
         return $classroom;
+    }
+
+    private function getCourseSetsById($id)
+    {
+        $classroomCourses = $this->findCoursesByClassroomId($id);
+        $courseSets = $this->getCourseSetService()->searchCourseSets(['ids' => array_column($classroomCourses, 'courseSetId')], [], 0, PHP_INT_MAX);
+
+        return $courseSets;
     }
 
     public function changePicture($id, $data)
