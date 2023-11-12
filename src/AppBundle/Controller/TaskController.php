@@ -22,6 +22,7 @@ use Biz\User\Service\TokenService;
 use Biz\User\TokenException;
 use Biz\User\UserException;
 use Biz\Visualization\Service\LearnControlService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -32,6 +33,7 @@ class TaskController extends BaseController
     {
         //blank返回空页面的原因是因为firefox中iframe必须加载有效的src属性才能不出现闪烁的问题.
         $blank = $request->query->get('blank');
+//        file_put_contents("/tmp/jc123", '9');
         if ($blank) {
             return new Response();
         }
@@ -40,9 +42,11 @@ class TaskController extends BaseController
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '请先登录', '', 3, $this->generateUrl('login'));
         }
+        $activity = [];
         try {
             $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+            file_put_contents('/tmp/jc123', json_encode($activity));
             if (!empty($activity['ext']) && !empty($activity['ext']['file'])) {
                 $media = $activity['ext']['file'];
             }
@@ -54,6 +58,17 @@ class TaskController extends BaseController
         }
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        if ('0' == $courseSet['canLearn']) {
+            if (in_array($activity['mediaType'], ['homework', 'testpaper', 'exercise'])) {
+                $answerReports = $this->getAnswerReportService()->search(['user_id' => $user['id'], 'answer_scene_id' => $activity['ext']['answerSceneId']], [], 0, PHP_INT_MAX);
+                if (empty($answerReports)) {
+                    return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
+                }
+            } else {
+                return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
+            }
+        }
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
         if ('classroom' === $member['joinedType'] && !empty($member['classroomId'])) {
             $classroomMember = $this->getClassroomService()->getClassroomMember($member['classroomId'], $member['userId']);
@@ -140,6 +155,27 @@ class TaskController extends BaseController
                 'videoHeaderLength' => $videoHeaderLength,
             ]
         );
+    }
+
+    private function taskCanLearn($courseId, $task)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $activity = $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        if ('closed' == $courseSet['status']) {
+            if (in_array($activity['mediaType'], ['homework', 'testpaper', 'exercise'])) {
+                $answerReports = $this->getAnswerReportService()->search(['user_id' => '', 'answer_scene_id' => $activity['ext']['answerSceneId']], [], 0, PHP_INT_MAX);
+                if (empty($answerReports)) {
+                    file_put_contents('/tmp/jc123', '1111', 8);
+
+                    return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
+                }
+            } else {
+                file_put_contents('/tmp/jc123', '2222', 8);
+
+                return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
+            }
+        }
     }
 
     protected function getPreviousTaskAndTaskResult($task)
@@ -741,5 +777,13 @@ class TaskController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerReportService');
     }
 }
