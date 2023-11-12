@@ -473,12 +473,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courseSet = $this->tryManageCourseSet($id);
         $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '1', 'display' => '1']);
+        $this->getCourseService()->showByCourseSetId($courseSet['id']);
     }
 
     public function hideCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
         $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '0', 'display' => '0']);
+        $this->getCourseService()->hideByCourseSetId($courseSet['id']);
     }
 
     public function updateCourseSetRatingNum($id, $fields)
@@ -675,7 +677,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 }
             }
 
-            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'published', 'showable' => '1']);
+            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'published', 'showable' => '1', 'display' => '1', 'canLearn' => '1']);
             $this->getCourseSetGoodsMediator()->onUpdateNormalData($courseSet);
             $this->getCourseSetGoodsMediator()->onPublish($courseSet);
             $this->getCourseService()->showByCourseSetId($courseSet['id']);
