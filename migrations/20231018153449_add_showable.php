@@ -11,15 +11,15 @@ class AddShowable extends Migration
     {
         $biz = $this->getContainer();
         $biz['db']->exec("
-            ALTER TABLE `course_set_v8` ADD COLUMN `showable` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否开放展示' AFTER `platform`;
-            ALTER TABLE `course_set_v8` ADD COLUMN `display` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否开放逻辑展示' AFTER `platform`;
-            ALTER TABLE `course_v8` ADD COLUMN `showable` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否开放展示' AFTER `platform`;
-            ALTER TABLE `course_v8` ADD COLUMN `display` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否开放逻辑展示' AFTER `platform`;
-            ALTER TABLE `item_bank_exercise` ADD COLUMN `showable` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否开放展示' AFTER `isFree`;
-            ALTER TABLE `item_bank_exercise` ADD COLUMN `display` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否开放逻辑展示' AFTER `isFree`;
-            update course_set_v8 set showable = 1, display = 1 where status = 'published';
-            update course_v8 set showable = 1, display = 1 where status = 'published';
-            update item_bank_exercise set showable = 1, display = 1 where status = 'published';
+            ALTER TABLE `course_set_v8` ADD COLUMN `showable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放展示' AFTER `platform`;
+            ALTER TABLE `course_set_v8` ADD COLUMN `display` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放逻辑展示' AFTER `platform`;
+            ALTER TABLE `course_v8` ADD COLUMN `showable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放展示' AFTER `platform`;
+            ALTER TABLE `course_v8` ADD COLUMN `display` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放逻辑展示' AFTER `platform`;
+            ALTER TABLE `item_bank_exercise` ADD COLUMN `showable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放展示' AFTER `isFree`;
+            ALTER TABLE `item_bank_exercise` ADD COLUMN `display` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放逻辑展示' AFTER `isFree`;
+            update course_set_v8 set showable = 0, display = 0 where status = 'closed';
+            update course_v8 set showable = 0, display = 0 where status = 'closed';
+            update item_bank_exercise set showable = 0, display = 0 where status = 'closed';
         ");
     }
 

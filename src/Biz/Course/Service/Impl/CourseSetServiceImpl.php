@@ -483,6 +483,30 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->getCourseService()->hideByCourseSetId($courseSet['id']);
     }
 
+    public function banLearningByIds($ids)
+    {
+        $this->getCourseSetDao()->banLearningByIds($ids);
+        $this->getCourseService()->banLearningByCourseSetIds($ids);
+    }
+
+    public function hideByIds($ids)
+    {
+        $this->getCourseSetDao()->hideByIds($ids);
+        $this->getCourseService()->hideByCourseSetIds($ids);
+    }
+
+    public function canLearningByIds($ids)
+    {
+        $this->getCourseSetDao()->canLearningByIds($ids);
+        $this->getCourseService()->canLearningByCourseSetIds($ids);
+    }
+
+    public function showByIds($ids)
+    {
+        $this->getCourseSetDao()->showByIds($ids);
+        $this->getCourseService()->showByCourseSetIds($ids);
+    }
+
     public function updateCourseSetRatingNum($id, $fields)
     {
         $fields = ArrayToolkit::parts(

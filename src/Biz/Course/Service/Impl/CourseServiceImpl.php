@@ -2982,7 +2982,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function canLearningByCourseSetId($courseSetId)
     {
-        $this->getCourseDao()->modifyCanLearn($courseSetId);
+        $this->getCourseDao()->canLearningByCourseSetId($courseSetId);
     }
 
     public function hideByCourseSetId($courseSetId)
@@ -2992,7 +2992,27 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function showByCourseSetId($courseSetId)
     {
-        $this->getCourseDao()->modifyDisplay($courseSetId);
+        $this->getCourseDao()->showByCourseSetId($courseSetId);
+    }
+
+    public function hideByCourseSetIds($courseSetIds)
+    {
+        $this->getCourseDao()->hideByCourseSetIds($courseSetIds);
+    }
+
+    public function showByCourseSetIds($courseSetIds)
+    {
+        $this->getCourseDao()->showByCourseSetIds($courseSetIds);
+    }
+
+    public function banLearningByCourseSetIds($courseSetIds)
+    {
+        $this->getCourseDao()->banLearningByCourseSetIds($courseSetIds);
+    }
+
+    public function canLearningByCourseSetIds($courseSetIds)
+    {
+        $this->getCourseDao()->canLearningByCourseSetId($courseSetIds);
     }
 
     /**

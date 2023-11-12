@@ -301,4 +301,12 @@ interface CourseSetService
     public function showCourseSet($id);
 
     public function hideCourseSet($id);
+
+    public function banLearningByIds($ids);
+
+    public function hideByIds($ids);
+
+    public function canLearningByIds($ids);
+
+    public function showByIds($ids);
 }

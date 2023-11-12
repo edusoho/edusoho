@@ -849,9 +849,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->updateClassroom($id, ['status' => 'published', 'canLearn' => '1']);
 
         $this->getClassroomGoodsMediator()->onPublish($classroom);
-        foreach ($this->getCourseSetsById($classroom['id']) as $courseSet) {
-            $this->dispatchEvent('course-set.publish', new Event($courseSet));
-        }
+        $courseIds = implode(',', array_column($this->findCoursesByClassroomId($id), 'courseSetId'));
+        $this->getCourseSetService()->canLearningByIds($courseIds);
+        $this->getCourseSetService()->showByIds($courseIds);
         $this->dispatchEvent('classroom.closed', new Event($classroom));
 
         return $classroom;
@@ -861,11 +861,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $this->tryManageClassroom($id, 'admin_classroom_close');
 
-        $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0']);
+        $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0', 'showable' => '0', 'display' => '0']);
         $this->getClassroomGoodsMediator()->onClose($classroom);
-        foreach ($this->getCourseSetsById($classroom['id']) as $courseSet) {
-            $this->dispatchEvent('course-set.closed', new Event($courseSet));
-        }
+        $courseIds = implode(',', array_column($this->findCoursesByClassroomId($id), 'courseSetId'));
+        $this->getCourseSetService()->banLearningByIds($courseIds);
+        $this->getCourseSetService()->hideByIds($courseIds);
         $this->dispatchEvent('classroom.close', new Event($classroom));
 
         return $classroom;
@@ -2780,14 +2780,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function showClassroom($id)
     {
         $this->tryManageClassroom($id);
-
+        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
+        $this->getCourseSetService()->showByIds($courseIds);
         $classroom = $this->updateClassroom($id, ['showable' => '1']);
     }
 
     public function hideClassroom($id)
     {
         $this->tryManageClassroom($id);
-
+        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
+        $this->getCourseSetService()->hideByIds($courseIds);
         $classroom = $this->updateClassroom($id, ['showable' => '0']);
     }
 

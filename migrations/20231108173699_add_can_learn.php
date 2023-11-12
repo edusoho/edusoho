@@ -11,14 +11,14 @@ class AddCanLearn extends Migration
     {
         $biz = $this->getContainer();
         $biz['db']->exec("
-            ALTER TABLE `course_set_v8` ADD COLUMN `canLearn` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否可学' AFTER `showable`;
-            UPDATE `course_set_v8` set canLearn = 1 where status = 'published';
-            ALTER TABLE `course_v8` ADD COLUMN `canLearn` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否可学' AFTER `showable`;
-            UPDATE `course_v8` set canLearn = 1 where status = 'published';
-            ALTER TABLE `item_bank_exercise` ADD COLUMN `canLearn` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否可学' AFTER `showable`;
-            UPDATE `item_bank_exercise` set canLearn = 1 where status = 'published';
-            ALTER TABLE `classroom` ADD COLUMN `canLearn` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否可学' AFTER `showable`;
-            UPDATE `classroom` set canLearn = 1 where status = 'published';
+            ALTER TABLE `course_set_v8` ADD COLUMN `canLearn` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否可学' AFTER `showable`;
+            UPDATE `course_set_v8` set canLearn = 0 where status = 'closed';
+            ALTER TABLE `course_v8` ADD COLUMN `canLearn` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否可学' AFTER `showable`;
+            UPDATE `course_v8` set canLearn = 0 where status = 'closed';
+            ALTER TABLE `item_bank_exercise` ADD COLUMN `canLearn` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否可学' AFTER `showable`;
+            UPDATE `item_bank_exercise` set canLearn = 0 where status = 'closed';
+            ALTER TABLE `classroom` ADD COLUMN `canLearn` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否可学' AFTER `showable`;
+            UPDATE `classroom` set canLearn = 0 where status = 'closed';
         ");
     }
 

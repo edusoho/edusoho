@@ -385,4 +385,12 @@ interface CourseService
     public function hideByCourseSetId($courseSetId);
 
     public function showByCourseSetId($courseSetId);
+
+    public function hideByCourseSetIds($courseSetIds);
+
+    public function showByCourseSetIds($courseSetIds);
+
+    public function banLearningByCourseSetIds($courseSetIds);
+
+    public function canLearningByCourseSetIds($courseSetIds);
 }

@@ -21,7 +21,7 @@ use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 class CourseFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'courseSetTitle', 'goodsId', 'specsId',
+        'id', 'title', 'courseSetTitle', 'goodsId', 'specsId','canLearn'
     ];
 
     protected $publicFields = [
