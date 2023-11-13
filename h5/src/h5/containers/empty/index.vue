@@ -2,7 +2,7 @@
    <div class="flex flex-col items-center">
     <img class="hide-exercise" src="static/images/exercise/hide-exerice.png" />
     <div class="text-text-7 font-medium">{{typeContent}}</div>
-    <div class="text-12 text-text-6 mt-6">{{ $t('closed.cannotLearn') }}</div>
+    <div class="text-12 text-text-6" style="margin-top: 6px;">{{ $t('closed.cannotLearn') }}</div>
     <a @click="goLearn" class="goLearn mt-36">{{ $t('closed.goLearnPage') }}</a>
   </div>
 </template>
