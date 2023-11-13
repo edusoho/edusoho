@@ -54,8 +54,7 @@ class ExerciseResult extends AbstractResource
         }
 
         $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
-        $assessment = $this->getAssessmentService()->getAssessment($exerciseId);
-        $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+        $assessment = $this->getAssessmentService()->showAssessment($exerciseId);
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
         $testpaperWrapper = new TestpaperWrapper();
 

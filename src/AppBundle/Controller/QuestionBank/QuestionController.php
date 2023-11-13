@@ -7,6 +7,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Question\QuestionException;
 use Biz\Question\QuestionParseClient;
+use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
@@ -16,6 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class QuestionController extends BaseController
 {
+    use QuestionImportTrait;
+
     public function indexAction(Request $request, $id)
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
@@ -163,7 +166,8 @@ class QuestionController extends BaseController
         $goto = $this->filterRedirectUrl($goto);
 
         if ($request->isMethod('POST')) {
-            $this->getItemService()->updateItem($item['id'], json_decode($request->getContent(), true));
+            $content = $this->replaceFormulaToLocalImg($request->getContent());
+            $this->getItemService()->updateItem($item['id'], json_decode($content, true));
 
             return $this->createJsonResponse(['goto' => $goto]);
         }

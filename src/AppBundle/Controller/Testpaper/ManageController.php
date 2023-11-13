@@ -14,6 +14,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
@@ -27,6 +28,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ManageController extends BaseController
 {
+    use QuestionImportTrait;
+
     public function indexAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
@@ -643,9 +646,8 @@ class ManageController extends BaseController
             $question['options'] = [];
             $question['answers'] = [];
         }
-        $question = $this->filterQuestion($question);
 
-        return $question;
+        return $this->filterQuestion($question);
     }
 
     protected function convertChoice($toType, $question)
@@ -656,9 +658,8 @@ class ManageController extends BaseController
         if ('single_choice' == $toType) {
             $question['answers'] = [reset($question['answers'])];
         }
-        $question = $this->filterQuestion($question);
 
-        return $question;
+        return $this->filterQuestion($question);
     }
 
     public function showTemplateAction(Request $request, $type)
@@ -700,7 +701,8 @@ class ManageController extends BaseController
 
     public function saveImportTestpaperAction(Request $request, $token)
     {
-        $content = $request->getContent();
+        $content = $this->replaceRemoteImgToLocalImg($request->getContent());
+        $content = $this->replaceFormulaToLocalImg($content);
         $postData = json_decode($content, true);
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
         $data = $token['data'];

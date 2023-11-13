@@ -2825,6 +2825,11 @@ commander@^4.0.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-4.1.1.tgz#9fd602bd936294e9e9ef46a3f4d6964044b18068"
 
+commander@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.npmjs.org/commander/-/commander-8.3.0.tgz#4837ea1b2da67b9c616a67afbb0fafee567bca66"
+  integrity sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==
+
 commander@~2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.1.0.tgz#d121bbae860d9992a3d517ba96f56588e47c6781"
@@ -3855,10 +3860,10 @@ es-ckeditor@4.7.2-patch13:
   resolved "https://registry.npmmirror.com/es-ckeditor/-/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
   integrity sha512-ZRwmo39MJujytpgs7giJYAhFFBkMzFhS/wdL8Yvu3GqQ6xjbhb1it45VR4q8UlGdOGFR6clzuNJ4mosxZZTbhQ==
 
-es-ckeditor@4.7.2-patch20:
-  version "4.7.2-patch20"
-  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch20.tgz#e9cd9791f3021f579c1cef598681d60b6ae7e199"
-  integrity sha512-gRMsd2SpSFbr15VNIs+pokEUTM4T10wmiTsVfMeVtXrqTLnTEwqWvoghbQJMFBO77mcOS9YhGhmF9kZ7DrdM/g==
+es-ckeditor@4.9.0:
+  version "4.9.0"
+  resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-4.9.0.tgz#b314fbfc546c1781b5f58ce813f395ba045c8c0f"
+  integrity sha512-rxw0cVJlVkfe8i0LkQKOKOGpCCh/Vk11JMXGB11DHRSdwguCRjphTxj7vp5AC/q9PeaF7IKrY437R9Ik0JBbhw==
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
@@ -5996,6 +6001,13 @@ jsx-ast-utils@^2.4.1:
 just-extend@^4.0.2:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/just-extend/-/just-extend-4.1.0.tgz#7278a4027d889601640ee0ce0e5a00b992467da4"
+
+katex@^0.16.9:
+  version "0.16.9"
+  resolved "https://registry.npmjs.org/katex/-/katex-0.16.9.tgz#bc62d8f7abfea6e181250f85a56e4ef292dcb1fa"
+  integrity sha512-fsSYjWS0EEOwvy81j3vRA8TEAhQhKiqO+FQaKWp0m39qwOzHVBgAUBIXWj1pB+O2W3fIpNa6Y9KSKCVbfPhyAQ==
+  dependencies:
+    commander "^8.3.0"
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
