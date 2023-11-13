@@ -15,16 +15,17 @@
                     </span>
                 </li>
                 <li class="pull-right">
-                    <share :customized-class="'detail-left__text-share'"
+                    <share :customized-class="goodsClass"
                            :title="goods.title|removeHtml"
                            :summary="goods.summary|removeHtml"
                            :message="`我正在学习《${goods.title|removeHtml}》，收获巨大哦，一起来学习吧！`"
                            :picture="goods.images.large"
                            :url="currentUrl"
-                           :type="'courseSet'">{{ 'site.share'|trans }}
-                           :goods="goods"
+                           :type="'courseSet'"
+                           :goods="goods">{{ 'site.share'|trans }}
+                           
                     </share>
-                    <favorite :is-favorite="goods.isFavorite" :target-type="'goods'"
+                    <favorite :is-favorite="goods.isFavorite" :target-type="'goods'" :goods="goods"
                               :target-id="goods.id"></favorite>
                 </li>
             </ul>
@@ -265,6 +266,15 @@
                 },
                 discountCountDown: '',
                 drpInfo: [],
+            }
+        },
+        computed: {
+            goodsClass() {
+                if(this.goods.type == 'course') {
+                    return 'detail-left__text-share handleLearnOnMessage'
+                } else {
+                    return 'detail-left__text-share handleClassroomOnMessage'
+                }
             }
         },
         mounted() {

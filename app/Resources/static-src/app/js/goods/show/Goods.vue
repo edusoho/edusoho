@@ -4,8 +4,7 @@
         <a-alert
             v-if="goods.status == 'unpublished'"
             class="mt16"
-            message="课程已关闭，无法购买/学习"
-            description=""
+            :message="alertMessage"
             type="warning"
             show-icon
             />
@@ -206,6 +205,15 @@
             Certificate,
         },
         computed: {
+            alertMessage() {
+                if (this.goods.type === 'classroom') {
+                    return '班级已关闭，无法购买/学习';
+                }
+
+                if (this.goods.type === 'course' && this.targetId) {
+                    return '课程已关闭，无法购买/学习';
+                }
+            },
             summaryHtml() {
                 if (!this.goods.summary) return Translator.trans('goods.show_page.tab.summary_empty_tips');
                 return this.goods.summary;
