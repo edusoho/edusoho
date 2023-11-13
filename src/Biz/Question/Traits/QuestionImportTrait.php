@@ -61,18 +61,18 @@ trait QuestionImportTrait
         $unescapeFormulas = str_replace('\\\\', '\\', $formulas);
         $replaceImgs = array_combine($formulas, $this->convertFormulaToImg($unescapeFormulas));
         $replaceFunc = function ($match) use ($replaceImgs) {
-            return "<span data-tex=\\\"$match[1]\\\"$match[2] data-img=\\\"{$replaceImgs[html_entity_decode($match[1])]}\\\"></span>";
+            return "<span$match[1] data-tex=\\\"$match[3]\\\"$match[4] data-img=\\\"{$replaceImgs[html_entity_decode($match[3])]}\\\"></span>";
         };
 
-        return preg_replace_callback('/<span data-tex=\\\\"(.*?)\\\\"(.*?)><\/span>/', $replaceFunc, $text);
+        return preg_replace_callback('/<span( data-display)?(.*?) data-tex=\\\\"(.*?)\\\\"( data-display)?(.*?)><\/span>/', $replaceFunc, $text);
     }
 
     private function convertFormulaToImg(array $formulas)
     {
         $convertedFormulas = $this->getQuestionService()->findQuestionFormulaImgRecordsByFormulas($formulas);
-        $toConvertFormulas = array_diff($formulas, array_column($convertedFormulas, 'formula'));
-        if ($toConvertFormulas) {
-            $this->downloadFormulaImgToLocal($toConvertFormulas);
+        $needConvertFormulas = array_values(array_diff($formulas, array_column($convertedFormulas, 'formula')));
+        if ($needConvertFormulas) {
+            $this->downloadFormulaImgToLocal($needConvertFormulas);
             $convertedFormulas = $this->getQuestionService()->findQuestionFormulaImgRecordsByFormulas($formulas);
         }
 
