@@ -19,7 +19,7 @@
     </van-tabs>
     <!-- 加入学习 -->
     <e-footer>
-    <closedFixed v-if="ItemBankExercise.status == 'closed'" :isJoin="false" title="题库练习已关闭，无法学习" />
+    <closedFixed v-if="ItemBankExercise.status == 'closed'" :isJoin="false" :title="$t('closed.exerciseTitle')" />
       <div @click.native="handleJoin">加入题库</div>
     </e-footer>
   </div>

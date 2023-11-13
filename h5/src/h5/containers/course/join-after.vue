@@ -110,7 +110,7 @@
       </van-button>
     </van-popup>
     <div class="footer">
-      <closedFixed v-if="details.courseSet.status == 'closed' && active == '0'" :isJoin="true" title="课程已关闭，无法学习" content="考试与作业结果可查看" />
+      <closedFixed v-if="details.courseSet.status == 'closed' && active == '0'" :isJoin="true" :title="$t('closed.courseTitle')" :content="$t('closed.courseContent')" />
     </div>
   </div>
 </template>

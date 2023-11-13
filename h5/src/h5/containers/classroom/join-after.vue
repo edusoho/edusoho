@@ -89,7 +89,7 @@
     <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
 
     <div class="footer">
-    <closedFixed v-if="details.status == 'closed'" :isJoin="true" title="班级已关闭，无法学习" content="课程中的考试与作业结果可查看" />
+    <closedFixed v-if="details.status == 'closed'" :isJoin="true" :title="$t('closed.classroomTitle')" :content="$t('closed.classroomContent')" />
   </div>
   </div>
 </template>

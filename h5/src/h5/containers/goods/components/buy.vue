@@ -1,6 +1,6 @@
 <template>
   <div class="info-buy">
-    <closedFixed v-if="goods.status == 'unpublished'" :isJoin="false" :title="goods.type == 'classroom' ? ' 班级已关闭，无法学习' : '课程已关闭，无法学习'" />
+    <closedFixed v-if="goods.status == 'unpublished'" :isJoin="false" :title="goods.type == 'classroom' ? $t('closed.classroomTitle') : $t('closed.courseTitle')" />
     <van-action-sheet
       v-model="isShowForm"
       class="minHeight50"

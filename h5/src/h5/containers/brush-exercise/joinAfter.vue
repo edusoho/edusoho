@@ -20,7 +20,7 @@
     </van-tabs>
   </div>
   <div class="footer">
-    <closedFixed v-if="ItemBankExercise.status == 'closed'" :isJoin="true" title="题库练习已关闭，无法学习" content="题库练习结果可查看" />
+    <closedFixed v-if="ItemBankExercise.status == 'closed'" :isJoin="true" :title="$t('closed.exerciseTitle')" :content="$t('closed.exerciseContent')" />
   </div>
 </div>
 </template>

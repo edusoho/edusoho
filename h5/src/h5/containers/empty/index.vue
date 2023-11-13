@@ -1,9 +1,9 @@
 <template>
    <div class="flex flex-col items-center">
     <img class="hide-exercise" src="static/images/exercise/hide-exerice.png" />
-    <div class="text-text-7 font-medium">当前{{typeContent}}练习已关闭</div>
-    <div class="text-12 text-text-6 mt-6">无法继续学习</div>
-    <a @click="goLearn" class="goLearn mt-36">回到学习页</a>
+    <div class="text-text-7 font-medium">{{typeContent}}</div>
+    <div class="text-12 text-text-6 mt-6">{{ $t('closed.cannotLearn') }}</div>
+    <a @click="goLearn" class="goLearn mt-36">{{ $t('closed.goLearnPage') }}</a>
   </div>
 </template>
 <script>
@@ -17,11 +17,11 @@ export default {
     typeContent() {
       switch (this.kind) {
         case 'course':
-          return '课程';
+          return $t('closed.course');
         case 'classroom':
-          return '班级';
+          return $t('closed.classroom');
         case 'exercise':
-          return '题库'
+          return $t('closed.exercise')
         default:
           return ''
       }

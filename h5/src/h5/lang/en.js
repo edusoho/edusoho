@@ -661,6 +661,19 @@ export default {
     viewReport: 'View report',
     continue: 'Continue',
   },
+  closed: {  
+    exerciseTitle: 'Question bank exercise closed, unable to learn',  
+    exerciseContent: 'Exercise results can be viewed',  
+    courseTitle: 'Course closed, unable to learn',  
+    courseContent: 'Exam and homework results can be viewed',  
+    classroomTitle: 'Class closed, unable to learn',  
+    classroomContent: 'Exam and homework results in the course can be viewed',
+    cannotLearn: 'Cannot continue learning',  
+    goLearnPage: 'Go to learning page',  
+    course: 'Current course is closed',  
+    classroom: 'Current classroom is closed',  
+    exercise: 'Current exercise library is closed'  
+  },
   filters: {
     free: 'Free',
     stayTuned: 'Stay tuned',
