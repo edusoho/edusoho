@@ -143,7 +143,6 @@
               request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
             }
           }).done((res) => {
-            this.isRepeat = res;
             this.isWrong = res;
             resolve(res);
           })
@@ -241,7 +240,6 @@
               request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
             }
           }).done(function (res) {
-            that.isRepeat = res;
             if (!res) {
               that.isWrong = false;
               resolve(res);
