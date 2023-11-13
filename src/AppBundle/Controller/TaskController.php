@@ -33,7 +33,6 @@ class TaskController extends BaseController
     {
         //blank返回空页面的原因是因为firefox中iframe必须加载有效的src属性才能不出现闪烁的问题.
         $blank = $request->query->get('blank');
-//        file_put_contents("/tmp/jc123", '9');
         if ($blank) {
             return new Response();
         }
@@ -46,7 +45,6 @@ class TaskController extends BaseController
         try {
             $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-            file_put_contents('/tmp/jc123', json_encode($activity));
             if (!empty($activity['ext']) && !empty($activity['ext']['file'])) {
                 $media = $activity['ext']['file'];
             }
@@ -155,27 +153,6 @@ class TaskController extends BaseController
                 'videoHeaderLength' => $videoHeaderLength,
             ]
         );
-    }
-
-    private function taskCanLearn($courseId, $task)
-    {
-        $course = $this->getCourseService()->getCourse($courseId);
-        $activity = $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        if ('closed' == $courseSet['status']) {
-            if (in_array($activity['mediaType'], ['homework', 'testpaper', 'exercise'])) {
-                $answerReports = $this->getAnswerReportService()->search(['user_id' => '', 'answer_scene_id' => $activity['ext']['answerSceneId']], [], 0, PHP_INT_MAX);
-                if (empty($answerReports)) {
-                    file_put_contents('/tmp/jc123', '1111', 8);
-
-                    return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
-                }
-            } else {
-                file_put_contents('/tmp/jc123', '2222', 8);
-
-                return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
-            }
-        }
     }
 
     protected function getPreviousTaskAndTaskResult($task)

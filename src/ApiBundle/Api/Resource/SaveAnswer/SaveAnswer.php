@@ -5,11 +5,10 @@ namespace ApiBundle\Api\Resource\SaveAnswer;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
+use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
-use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -21,11 +20,9 @@ class SaveAnswer extends AbstractResource
     {
         $assessmentResponse = $request->request->all();
         $course = $this->getCourseService()->getCourse($assessmentResponse['courseId']);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        if ('0' == $courseSet['canLearn']) {
-            throw new AnswerException('课程已经关闭', ErrorCode::COURSE_IS_CLOSED);
+        if ('0' == $course['canLearn']) {
+            throw CourseException::CLOSED_COURSE();
         }
-        $this->dispatchEvent('course.check', new Event($assessmentResponse['courseId']));
         $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
         $userId = $this->getCurrentUser()->getId();
         if (empty($answerRecord) || $userId != $answerRecord['user_id']) {
@@ -107,13 +104,5 @@ class SaveAnswer extends AbstractResource
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
-    }
-
-    /**
-     * @return CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->service('Course:CourseSetService');
     }
 }
