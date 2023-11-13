@@ -141,7 +141,7 @@ export default {
   },
   methods: {
     onClick(e) {
-      if(this.classroom?.status == 'closed') {
+      if(!parseInt(this.course?.canLearn)) {
         return closedToast('course');
       }
 
