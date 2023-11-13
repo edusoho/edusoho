@@ -3,9 +3,12 @@
 namespace ApiBundle\Api\Resource\Item;
 
 use ApiBundle\Api\Resource\Filter;
+use Biz\Question\Traits\QuestionFormulaImgTrait;
 
 class QuestionFilter extends Filter
 {
+    use QuestionFormulaImgTrait;
+
     protected $publicFields = [
         'id',
         'item_id',
@@ -22,6 +25,7 @@ class QuestionFilter extends Filter
 
     protected function publicFields(&$question)
     {
+        $question = $this->convertFormulaToImg($question);
         !empty($question['stem']) && $question['stem'] = $this->convertAbsoluteUrl($question['stem']);
         !empty($question['analysis']) && $question['analysis'] = $this->convertAbsoluteUrl($question['analysis']);
         empty($question['analysis']) && $question['analysis'] = '';

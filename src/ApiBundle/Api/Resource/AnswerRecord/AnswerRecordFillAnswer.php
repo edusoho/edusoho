@@ -20,8 +20,8 @@ class AnswerRecordFillAnswer extends AbstractResource
             return false;
         }
         $result = $this->getAnswerService()->reviseFillAnswer($recordId, $answerData);
-        if($result){
-            $this->getLogService()->info('course', 'revise-fill-answer', "修改了学员填空题得分", ['answerRecordId'=>$recordId, 'userId' => $this->getCurrentUser()->getId(),'data'=>$answerData]);
+        if ($result) {
+            $this->getLogService()->info('course', 'revise-fill-answer', "修改了学员填空题得分", ['answerRecordId' => $recordId, 'userId' => $this->getCurrentUser()->getId(), 'data' => $answerData]);
         }
 
         return true;
@@ -35,11 +35,6 @@ class AnswerRecordFillAnswer extends AbstractResource
         return $this->service('System:LogService');
     }
 
-    protected function getAnswerReportService()
-    {
-        return $this->service('ItemBank:Answer:AnswerReportService');
-    }
-
     /**
      * @return AnswerService
      */
@@ -51,28 +46,5 @@ class AnswerRecordFillAnswer extends AbstractResource
     protected function getAnswerRecordService()
     {
         return $this->service('ItemBank:Answer:AnswerRecordService');
-    }
-
-    protected function getAnswerSceneService()
-    {
-        return $this->service('ItemBank:Answer:AnswerSceneService');
-    }
-
-    protected function getAssessmentService()
-    {
-        return $this->service('ItemBank:Assessment:AssessmentService');
-    }
-
-    /**
-     * @return TestpaperActivityService
-     */
-    protected function getTestpaperActivityService()
-    {
-        return $this->service('Activity:TestpaperActivityService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->service('User:UserService');
     }
 }
