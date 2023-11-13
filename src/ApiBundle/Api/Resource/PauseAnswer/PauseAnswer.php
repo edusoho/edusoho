@@ -13,9 +13,11 @@ class PauseAnswer extends AbstractResource
     public function add(ApiRequest $request)
     {
         $assessmentResponse = $request->request->all();
-        $course = $this->getCourseService()->getCourse($assessmentResponse['courseId']);
-        if ('0' == $course['canLearn']) {
-            throw CourseException::CLOSED_COURSE();
+        if (!empty($assessmentResponse['courseId'])) {
+            $course = $this->getCourseService()->getCourse($assessmentResponse['courseId']);
+            if ('0' == $course['canLearn']) {
+                throw CourseException::CLOSED_COURSE();
+            }
         }
         $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
         if (empty($answerRecord) || $this->getCurrentUser()['id'] != $answerRecord['user_id']) {

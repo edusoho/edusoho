@@ -19,9 +19,11 @@ class SaveAnswer extends AbstractResource
     public function add(ApiRequest $request)
     {
         $assessmentResponse = $request->request->all();
-        $course = $this->getCourseService()->getCourse($assessmentResponse['courseId']);
-        if ('0' == $course['canLearn']) {
-            throw CourseException::CLOSED_COURSE();
+        if (!empty($assessmentResponse['courseId'])) {
+            $course = $this->getCourseService()->getCourse($assessmentResponse['courseId']);
+            if ('0' == $course['canLearn']) {
+                throw CourseException::CLOSED_COURSE();
+            }
         }
         $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
         $userId = $this->getCurrentUser()->getId();
