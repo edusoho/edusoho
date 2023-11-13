@@ -401,7 +401,7 @@ course.catalogue.task_status.task: '%taskName%%taskNumber%： %taskTitle%'
 
 created.question.confirm.ok.btn: 继续编辑
 created.question.confirm.close.btn: 直接创建
-created.question.confirm.title: 已存在相同题目，是否继续导入
+created.question.confirm.title: 已存在相同题目，是否继续创建？
 
 course.thread_replay_failed_hint: 发表回复失败，请重试
 course.thread_delete_hint: 您真的要删除该回帖吗？

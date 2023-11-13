@@ -390,7 +390,7 @@ t.add("course.lesson", "%part_name% %number% : %title%", "js", "en");
 t.add("course.catalogue.task_status.task", "%taskName%.%taskNumber%:%taskTitle%", "js", "en");
 t.add("created.question.confirm.ok.btn", "Continue editing", "js", "en");
 t.add("created.question.confirm.close.btn", "Direct creation", "js", "en");
-t.add("created.question.confirm.title", "If the same topic already exists, determine whether to continue importing", "js", "en");
+t.add("created.question.confirm.title", "The same topic already exists. Do you want to create another one?", "js", "en");
 t.add("course.thread_replay_failed_hint", "Posted reply failed, please try again", "js", "en");
 t.add("course.thread_delete_hint", "Do you really want to delete this reply?", "js", "en");
 t.add("course_manage.course_dashboard.student_num", "Number of students", "js", "en");

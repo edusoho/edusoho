@@ -9,8 +9,8 @@
   .ant-btn-primary {
     background-color: @brand-primary;
     border-color: @brand-primary;
-    text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
-    box-shadow: 0 2px 0 rgb(0 0 0 / 5%);
+    text-shadow: none;
+    box-shadow: none;
   }
   .ant-btn:hover {
     border-color: @brand-primary;
@@ -38,6 +38,10 @@
     box-shadow: none;
   }
   .ant-select-focused .ant-select-selection {
+    box-shadow: none;
+  }
+  .ant-select-selection:focus {
+    border-color: @brand-primary;
     box-shadow: none;
   }
 }
