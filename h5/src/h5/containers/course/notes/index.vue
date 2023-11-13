@@ -5,6 +5,7 @@
         :is="currentComponent"
         :note="currentNote"
         @change-current-component="changeCurrentComponent"
+        :details="details"
       />
     </keep-alive>
   </div>
@@ -21,6 +22,12 @@ export default {
   components: {
     List,
     Detail
+  },
+  props: {
+    details: {
+      type: Object,
+      default: () => {}
+    }
   },
 
   data() {

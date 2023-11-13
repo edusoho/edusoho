@@ -37,6 +37,7 @@
 
 <script>
 import switchBox from './e-course-switch-box.vue';
+import { closedToast } from '@/utils/on-status.js';
 
 export default {
   components: {
@@ -50,6 +51,12 @@ export default {
       },
     },
     order: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+    classroom: {
       type: Object,
       default() {
         return {};
@@ -134,6 +141,10 @@ export default {
   },
   methods: {
     onClick(e) {
+      if(!parseInt(this.course?.canLearn)) {
+        return closedToast('course');
+      }
+
       if (!this.feedback) {
         return;
       }

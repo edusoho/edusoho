@@ -14,6 +14,7 @@
           <course
             :feedback="feedback"
             :course="item"
+            :classroom="details"
             style="padding-left: 0;padding-right: 0;"
           />
         </template>
@@ -23,6 +24,7 @@
           <course
             :feedback="feedback"
             :course="item"
+            :classroom="details"
             style="padding-left: 0;padding-right: 0;"
           />
         </template>

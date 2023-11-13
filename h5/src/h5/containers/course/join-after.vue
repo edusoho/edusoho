@@ -1,7 +1,6 @@
 <template>
   <div class="join-after">
     <detail-head :course-set="details.courseSet" />
-
     <van-tabs
       v-show="showTabs"
       class="tabs"
@@ -62,7 +61,7 @@
             </van-popup>
           </div>
 
-          <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" />
+          <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" :course-set="details.courseSet" />
         </div>
 
         <!-- 问答、话题、笔记、评价 通过动态组件实现 -->
@@ -110,6 +109,9 @@
         {{ isWeixin ? $t('courseLearning.longPressThePicture') : $t('courseLearning.longPressThePicture2') }}
       </van-button>
     </van-popup>
+    <div class="footer">
+      <closedFixed v-if="details.courseSet.status == 'closed' && active == '0'" :isJoin="true" :title="$t('closed.courseTitle')" :content="$t('closed.courseContent')" />
+    </div>
   </div>
 </template>
 <script>
@@ -122,6 +124,8 @@ import { Dialog, Toast } from 'vant';
 import infoCollection from '@/components/info-collection.vue';
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
+import closedFixed from '@/components/closed-fixed.vue'
+
 
 // tabs 子组件
 import firstDiscussion from './discussion/index.vue'; // 问答
@@ -164,7 +168,8 @@ export default {
     firstDiscussion,
     secondDiscussion,
     Notes,
-    Reviews
+    Reviews,
+    closedFixed
   },
 
   props: {
@@ -731,4 +736,11 @@ export default {
     left: 0;
   }
 }
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
 </style>

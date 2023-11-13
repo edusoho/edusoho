@@ -2,6 +2,7 @@
   <div class="">
     <e-loading v-if="isLoading" />
     <component :is="currentComp"></component>
+
   </div>
 </template>
 
@@ -9,6 +10,7 @@
 import joinAfter from './joinAfter';
 import joinBefore from './joinBefore';
 import { mapState, mapActions } from 'vuex';
+
 export default {
   components: {},
   data() {
@@ -33,7 +35,7 @@ export default {
   },
   created() {
     this.getData();
-    this.getDataItemBank();
+    this.getDataItemBank()
   },
   methods: {
     ...mapActions('ItemBank', [
@@ -44,7 +46,7 @@ export default {
     getData() {
       const id = Number(this.$route.params.id);
       if (id) {
-        this.setItemBankExercise(id);
+        this.setItemBankExercise(id)
         this.getDirectoryModules(id);
       }
     },

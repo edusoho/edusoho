@@ -24,9 +24,8 @@
           :currentSku="currentSku"
           :type="goods.type"
         />
-
         <specs
-          v-if="goods.specs.length > 1 || currentSku.services.length"
+          v-if="goods.specs.length > 1 || currentSku.services"
           :goods="goods"
           :currentSku="currentSku"
           @changeSku="changeSku"
@@ -88,7 +87,7 @@
         >
           <div class="goods-info__title">{{ $t('goods.tableOfContents') }}</div>
           <!-- 课程详情 -->
-          <afterjoin-directory v-if="currentSku.taskDisplay == 1" />
+          <afterjoin-directory v-if="currentSku.taskDisplay == 1" :goods="goods" />
           <div class="goods-empty-content" v-else>
             <img src="static/images/goods/empty-content.png" alt="">
             <p>{{ $t('goods.tableOfContentsEmpty') }}</p>
@@ -238,8 +237,11 @@ export default {
     getGoodsCourse() {
       Api.getGoodsCourse({
         query: {
-          id: this.$route.params.id,
+          id: this.$route.params.id
         },
+        params: {
+          preview: 1
+        }
       })
         .then(res => {
           this.goods = res;

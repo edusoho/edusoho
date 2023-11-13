@@ -782,6 +782,17 @@ const routes = [
       import(/* webpackChunkName: "goods" */ '@/containers/goods/qr.vue'),
   },
   {
+    path: '/empty',
+    name: 'empty',
+    meta: {
+      i18n: true,
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "empty" */ '@/containers/empty/index.vue'
+      ),
+  },
+  {
     path: '/goods/reviews',
     name: 'goods_reviews',
     meta: {

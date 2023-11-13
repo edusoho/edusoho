@@ -165,6 +165,8 @@ import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import { Toast } from 'vant';
 import Api from '@/api';
+import { closedToast } from '@/utils/on-status.js';
+
 
 export default {
   name: 'LessonDirectory',
@@ -190,6 +192,10 @@ export default {
       type: Number,
       default: -1,
     },
+    courseSet: {
+      type: Object,
+      default: () => {},
+    }
   },
   data() {
     return {
@@ -263,7 +269,31 @@ export default {
       }
       return result;
     },
+    // 判断课程关闭后是否可以学习
+    isCanLearn(task) {
+      const allowedTaskTypes = ['testpaper', 'homework', 'exercise'];
+      const isTaskTypeAllowed = allowedTaskTypes.includes(task.type);
+      const isTaskResultIncomplete = !task.result || task.result.status != 'finish';
+
+      if(this.courseSet?.status !== 'closed') {
+        return true
+      }
+
+      if(!isTaskTypeAllowed) {
+        return false
+      }
+
+      if(isTaskTypeAllowed && isTaskResultIncomplete) {
+        return false
+      }
+
+      return true
+    },
     lessonCellClick(task, lessonIndex, taskIndex) {
+      if(!this.isCanLearn(task)) {
+        return closedToast('course');
+      }
+
       this.$store.commit(types.SET_TASK_SATUS, '');
       // 课程错误和未发布状态，不允许学习任务
       if (this.errorMsg && !Number(task.isFree)) {

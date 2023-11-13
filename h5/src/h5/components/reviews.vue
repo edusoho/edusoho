@@ -76,6 +76,8 @@
 import Api from '@/api';
 import { mapState } from 'vuex';
 import EDrag from '&/components/e-drag';
+import { closedToast } from '@/utils/on-status.js';
+
 
 export default {
   name: 'Reviews',
@@ -132,6 +134,10 @@ export default {
       })
     },
     onSubmit() {
+      if(this.details?.status == 'closed') {
+        return closedToast('classroom');
+      }
+
       if (this.value == 0) {
         this.$toast(this.$t('courseLearning.scoreCannotBeBlank'));
         return;

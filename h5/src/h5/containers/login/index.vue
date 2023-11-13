@@ -28,14 +28,17 @@
         &nbsp; {{ $t('btn.registerNow') }} &nbsp;
       </span>
     </div>
-
-    <van-button
-      :disabled="btnDisable"
-      type="info"
-      class="primary-btn mb20"
-      @click="onSubmit"
-      >{{ $t('btn.login') }}</van-button
-    >
+    <div class="w-full btn-login">
+       <van-button
+          :disabled="btnDisable"
+          type="info"
+          class="primary-btn mb20 w-full"
+          @click="onSubmit"
+          >{{ $t('btn.login') }}</van-button
+        >
+    </div>
+     
+   
     <div class="login-bottom text-center">
       <div v-if="userTerms || privacyPolicy" class="login-agree">
         <van-checkbox
@@ -76,13 +79,14 @@
           <i @click="lookPrivacyPolicy">《{{ $t('btn.privacyAgreemen') }}》</i>
         </span>
       </div>
-      <van-button
+        <van-button
         :disabled="btnDisable"
         type="info"
         class="primary-btn mb20 login-pop-btn"
         @click="agreeSign"
         >{{ $t('btn.agreeAndSignin') }}</van-button
       >
+     
     </van-popup>
   </div>
 </template>
@@ -317,3 +321,18 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+/* 小于 600px 的分辨率 */
+@media (max-width: 600px) {
+  .van-button {
+    height: 44px !important;
+  }
+}
+
+/* 大于等于 600px 的分辨率 */
+@media (min-width: 600px) {
+  .van-button {
+    height: 4rem !important;
+  }
+}
+</style>

@@ -4,6 +4,7 @@
       :is="currentComponent"
       :discussion="currentDiscussion"
       :type="type"
+      :details="details"
       @change-current-component="changeCurrentComponent"
     />
   </div>
@@ -28,6 +29,10 @@ export default {
     type: {
       type: String,
       required: true
+    },
+    details: {
+      type: Object,
+      default: () => ({})
     }
   },
 
