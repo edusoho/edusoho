@@ -21,7 +21,7 @@ class Courses extends BaseProvider
         $conditions['status'] = 'published';
         $conditions['parentId'] = 0;
         $conditions['updatedTime_GE'] = $cursor;
-        $conditions['showable'] = '1';
+        $conditions['display'] = '1';
         $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, ['updatedTime' => 'ASC'], $start, $limit);
         $courseSets = $this->build($courseSets);
         $next = $this->nextCursorPaging($cursor, $start, $limit, $courseSets);
