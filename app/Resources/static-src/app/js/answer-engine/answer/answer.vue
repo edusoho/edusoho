@@ -47,6 +47,7 @@
       let inspectionOpen = $('[name=token]').length > 0 && $('[name=token]').val() !== '';
       let comp = checkBrowserCompatibility();
       return {
+        fromId: '',
         showCKEditorData: {
           publicPath: $('[name=ckeditor_path]').val(),
           filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
@@ -106,6 +107,11 @@
       }
     },
     created() {
+      console.log(window.location.href)
+      if(this.getCourseNumber(window.top.location.href)) {
+        this.fromId = this.getCourseNumber(window.top.location.href);
+      }
+
       this.emitter = new ActivityEmitter();
       this.emitter.emit('doing', {data: ''});
 
@@ -130,6 +136,15 @@
       })
     },
     methods: {
+      getCourseNumber(path) {
+          const match = path.match(/\/course\/\d+/);
+
+          if (match) {  
+              return match[0].split('/').pop();  
+          }
+
+          return null;  
+      },
       getAnswerData(assessmentResponse) {
         const that = this;
         $.ajax({
