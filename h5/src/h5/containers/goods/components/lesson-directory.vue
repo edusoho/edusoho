@@ -312,7 +312,15 @@ export default {
       const isTaskTypeAllowed = allowedTaskTypes.includes(task.type);
       const isTaskResultIncomplete = !task.result || task.result.status != 'finish';
 
-      if(this.goods?.status == 'unpublished' && (!isTaskTypeAllowed || (isTaskTypeAllowed && isTaskResultIncomplete))) {
+      if(this.goods?.status !== 'unpublished') {
+        return true
+      }
+
+      if(!isTaskTypeAllowed) {
+        return false
+      }
+
+      if(isTaskTypeAllowed && isTaskResultIncomplete) {
         return false
       }
 

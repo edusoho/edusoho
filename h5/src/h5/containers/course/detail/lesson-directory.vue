@@ -275,7 +275,15 @@ export default {
       const isTaskTypeAllowed = allowedTaskTypes.includes(task.type);
       const isTaskResultIncomplete = !task.result || task.result.status != 'finish';
 
-      if(this.courseSet?.status == 'closed' && (!isTaskTypeAllowed || (isTaskTypeAllowed && isTaskResultIncomplete))) {
+      if(this.courseSet?.status !== 'closed') {
+        return true
+      }
+
+      if(!isTaskTypeAllowed) {
+        return false
+      }
+
+      if(isTaskTypeAllowed && isTaskResultIncomplete) {
         return false
       }
 

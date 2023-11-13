@@ -789,7 +789,7 @@ const routes = [
     },
     component: () =>
       import(
-        /* webpackChunkName: "goods" */ '@/containers/empty/index.vue'
+        /* webpackChunkName: "empty" */ '@/containers/empty/index.vue'
       ),
   },
   {
