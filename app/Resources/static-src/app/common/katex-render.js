@@ -1,6 +1,6 @@
 import katex from 'katex';
 
-$(() => {
+const renderKatex = () => {
   const appEl = document.getElementById('app');
   if (appEl === null) {
     return;
@@ -16,4 +16,10 @@ $(() => {
       displayMode: true,
     });
   });
-});
+};
+
+$(renderKatex);
+
+export {
+  renderKatex
+};

@@ -3860,10 +3860,10 @@ es-ckeditor@4.7.2-patch13:
   resolved "https://registry.npmmirror.com/es-ckeditor/-/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
   integrity sha512-ZRwmo39MJujytpgs7giJYAhFFBkMzFhS/wdL8Yvu3GqQ6xjbhb1it45VR4q8UlGdOGFR6clzuNJ4mosxZZTbhQ==
 
-es-ckeditor@4.7.2-patch20:
-  version "4.7.2-patch20"
-  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch20.tgz#e9cd9791f3021f579c1cef598681d60b6ae7e199"
-  integrity sha512-gRMsd2SpSFbr15VNIs+pokEUTM4T10wmiTsVfMeVtXrqTLnTEwqWvoghbQJMFBO77mcOS9YhGhmF9kZ7DrdM/g==
+es-ckeditor@4.9.0:
+  version "4.9.0"
+  resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-4.9.0.tgz#b314fbfc546c1781b5f58ce813f395ba045c8c0f"
+  integrity sha512-rxw0cVJlVkfe8i0LkQKOKOGpCCh/Vk11JMXGB11DHRSdwguCRjphTxj7vp5AC/q9PeaF7IKrY437R9Ik0JBbhw==
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"

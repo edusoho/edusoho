@@ -68,12 +68,10 @@ CKEDITOR.editorConfig = function( config ) {
 
     config.extraAllowedContent = 'img[src,width,height,alt,title]';
 
-    config.extraPlugins = 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,katex';
+    config.extraPlugins = 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures';
     // config.stylesSet = 'my_styles';
     config.codeSnippet_theme = 'zenburn';
 
-    config.katexLibCss = '/static-dist/app/css/main.css';
-    config.katexLibJs = '';
 
 };
 
