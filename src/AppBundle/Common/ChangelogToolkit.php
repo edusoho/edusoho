@@ -36,8 +36,8 @@ class ChangelogToolkit
             self::CHANGELOG_OPTIMIZATION,
         ];
 
-        foreach ($types as $type) {
-            foreach ($changelogArr as $line) {
+        foreach ($changelogArr as $line) {
+            foreach ($types as $type) {
                 if (false !== strpos(trim($line), $type) && 0 == count($items)) {
                     $items[] = trim($line);
                 }
