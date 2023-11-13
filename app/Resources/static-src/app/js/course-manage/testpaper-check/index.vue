@@ -8,8 +8,7 @@
           :dropdown-style="{ maxHeight: '400px', maxWidth: '200px'}"
           dropdownClassName="testpaper-dropdown"
           :tree-data="treeData"
-          :defaultValue="'placeholder.class.name' | trans"
-          allowClear
+          :placeholder="'placeholder.class.name' | trans"
           @change="changeDrop"
         >
         </a-tree-select>

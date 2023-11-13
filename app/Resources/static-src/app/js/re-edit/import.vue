@@ -23,11 +23,14 @@
             @getImportData="getImportData"
             @editQuestion="editQuestion"
             @changeEditor="changeEditor"
+            @getInitRepeatQuestion="getInitRepeatQuestion"
+            @getEditRepeatQuestion="getEditRepeatQuestion"
         ></item-import>
     </div>
 </template>
 
 <script>
+  import axios from 'axios';
   export default {
     data() {
       return {
@@ -70,7 +73,6 @@
         isWrong: false,
         duplicatedIds: [],
         ids: null,
-        isRepeat: false,
       }
     },
     created() {
@@ -130,7 +132,6 @@
           return item.ids !== data.ids
         })
 
-        const that = this;
         const material = data.type === 'material' ? data.material : data.questions[0].stem
         return new Promise(resolve => {
           $.ajax({
@@ -141,8 +142,9 @@
             beforeSend(request) {
               request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
             }
-          }).done(function (res) {
-            that.isRepeat = res;
+          }).done((res) => {
+            this.isRepeat = res;
+            this.isWrong = res;
             resolve(res);
           })
         });
@@ -248,6 +250,29 @@
             }
           })
         });
+      },
+      getInitRepeatQuestion(subject) {
+        axios({
+          url: `/questions/${this.token}/checkDuplicatedQuestions`,
+          method: "POST",
+          data: subject,
+          headers: {
+            'Accept': 'application/vnd.edusoho.v2+json',
+            'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'),
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        }).then(res => {
+          this.repeatList = []
+          this.duplicatedIds = res.data.duplicatedIds
+
+          for (const key in res.data.duplicatedIds) {	
+            this.repeatList.push(Number(key));
+          }
+        });
+      
+      },
+      getEditRepeatQuestion(subject) {
+        this.getInitRepeatQuestion(subject)
       }
     }
   }
