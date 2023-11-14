@@ -456,7 +456,9 @@ course.catalogue.task_status.task: '%taskName%.%taskNumber%:%taskTitle%'
 
 created.question.confirm.ok.btn: Continue editing
 created.question.confirm.close.btn: Direct creation
+created.question.confirm.import.close.btn: Direct import
 created.question.confirm.title: The same topic already exists. Do you want to create another one?
+created.question.confirm.import.title: If the same topic already exists, determine whether to continue importing?
 
 
 course.thread_replay_failed_hint: Posted reply failed, please try again
