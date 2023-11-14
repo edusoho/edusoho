@@ -92,7 +92,7 @@
       },
       parseMath: parseMath,
       generateMath: function (expr, displayMode) {
-				this.data.displayMode = displayMode;
+        this.data.displayMode = displayMode;
         var delimiter = this._delimiters.find(function (d) {
           return displayMode === !!d[2];
         });
@@ -104,7 +104,7 @@
         return delimiter[0] + expr.trim() + delimiter[1];
       },
       data: function () {
-				var parsed = this.parseMath(this.data.math);
+        var parsed = this.parseMath(this.data.math);
         var math = parsed.expr;
         this.data.math = math;
         var displayMode = this.data.displayMode;
