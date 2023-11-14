@@ -64,7 +64,7 @@ trait QuestionImportTrait
             return "<span$match[1] data-tex=\\\"$match[3]\\\"$match[4] data-img=\\\"{$replaceImgs[html_entity_decode($match[3])]}\\\"></span>";
         };
 
-        return preg_replace_callback('/<span( data-display)?(.*?) data-tex=\\\\"(.*?)\\\\"( data-display)?(.*?)><\/span>/', $replaceFunc, $text);
+        return preg_replace_callback('/<span( data-display)?([^>]*?) data-tex=\\\\"(.*?)\\\\"( data-display)?(.*?)><\/span>/', $replaceFunc, $text);
     }
 
     private function convertFormulaToImg(array $formulas)
