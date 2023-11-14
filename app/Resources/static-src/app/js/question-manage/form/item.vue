@@ -125,9 +125,11 @@
               icon: 'exclamation-circle',
               onOk() {
                 that.isDisable = false;
+                that.forceRemoveModalDom()
               },
               onCancel() {
                 that.createdItemQuestion(data)
+                that.forceRemoveModalDom()
               },
             });
           } else {
@@ -156,6 +158,15 @@
             window.location.href = resp.goto;
           }
         })
+      },
+      forceRemoveModalDom() {
+        const modal = document.querySelector(".ant-modal-root");
+
+        if (modal) {
+          modal.remove();
+        }
+
+        document.body.style = "";
       },
       goBack() {
         window.location.href = $('[name=back_url]').val();
