@@ -2521,6 +2521,8 @@ classroom.add_course_tips: 'Inprogress, please wait.'
 classroom.delete_btn: Delete
 classroom.free_course: Free
 classroom.teach_plan: 'Program'
+classroom.closed.course: Close the course
+classroom.open.course: Publish course
 classroom.live_course_playing: 'On live'
 classroom.live: Live
 classroom.task_num: "%taskName% number: %number%\n"

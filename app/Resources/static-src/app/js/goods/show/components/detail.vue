@@ -15,16 +15,17 @@
                     </span>
                 </li>
                 <li class="pull-right">
-                    <share :customized-class="'detail-left__text-share'"
+                    <share :customized-class="goodsClass"
                            :title="goods.title|removeHtml"
                            :summary="goods.summary|removeHtml"
                            :message="`我正在学习《${goods.title|removeHtml}》，收获巨大哦，一起来学习吧！`"
                            :picture="goods.images.large"
                            :url="currentUrl"
-                           :type="'courseSet'">{{ 'site.share'|trans }}
-                           :goods="goods"
+                           :type="'courseSet'"
+                           :goods="goods">{{ 'site.share'|trans }}
+                           
                     </share>
-                    <favorite :is-favorite="goods.isFavorite" :target-type="'goods'"
+                    <favorite :is-favorite="goods.isFavorite" :target-type="'goods'" :goods="goods"
                               :target-id="goods.id"></favorite>
                 </li>
             </ul>
@@ -98,7 +99,7 @@
             </div>
 
             <!-- 立即购买 -->
-            <buy-sku :sku="currentSku" :btn-class="goods.status == 'unpublished' ? 'product-detail__btn disabled btn' : 'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods" :vip-enabled="vipEnabled"></buy-sku>
+            <buy-sku :sku="currentSku" :btn-class="goods.status == 'unpublished' ? 'product-detail__btn js-handleLearnOnMessage' : 'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods" :vip-enabled="vipEnabled"></buy-sku>
         </div>
     </div>
 </template>
@@ -265,6 +266,19 @@
                 },
                 discountCountDown: '',
                 drpInfo: [],
+            }
+        },
+        computed: {
+            goodsClass() {
+                if(this.goods.type == 'course') {
+                    return 'detail-left__text-share js-handleLearnOnMessage'
+                }
+                
+                if(this.goods.type == 'classroom'){
+                    return 'detail-left__text-share js-handleClassroomOnMessage'
+                }
+
+                return ''
             }
         },
         mounted() {

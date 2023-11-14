@@ -2896,6 +2896,8 @@ classroom.add_course_tips: 班级数据处理中，请耐心等待。
 classroom.delete_btn: 删除
 classroom.free_course: 免费
 classroom.teach_plan: 教学计划
+classroom.closed.course: 关闭课程
+classroom.open.course: 发布课程
 classroom.live_course_playing: 正在直播中
 classroom.live: 直播
 classroom.task_num: >

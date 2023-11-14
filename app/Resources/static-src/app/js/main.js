@@ -24,16 +24,19 @@ if ($('#rewardPointNotify').length > 0) {
   }
 }
 
-$(document).on('click', '.handleLearn', function (event) {
+$(document).on('click', '.js-handleLearnOnMessage', function (event) {
   event.preventDefault();
+  notify('danger', decodeURIComponent(Translator.trans('validate.course.closed')));
 });
 
-$(document).on('click', '.handleLearnOnMessage', function (event) {
+$(document).on('click', '.js-handleClassroomOnMessage', function (event) {
   event.preventDefault();
-  cd.message({
-    type: 'danger', 
-    message: Translator.trans('validate.course.closed')
-  });
+  notify('danger', decodeURIComponent(Translator.trans('validate.classroom.closed')));
+});
+
+$(document).on('click', '.js-handleExerciseOnMessage', function (event) {
+  event.preventDefault();
+  notify('danger', decodeURIComponent(Translator.trans('validate.exercise.closed')));
 });
 
 $('[data-toggle="popover"]').popover({

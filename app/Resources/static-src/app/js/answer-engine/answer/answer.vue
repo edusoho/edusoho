@@ -17,6 +17,9 @@
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
       :getCurrentTime="getCurrentTime"
+      :courseId="courseId"
+      :exerciseId="exerciseId"
+      :type="type"
       @getAnswerData="getAnswerData"
       @saveAnswerData="saveAnswerData"
       @exitAnswer="returnToCourseDetail"
@@ -47,6 +50,9 @@
       let inspectionOpen = $('[name=token]').length > 0 && $('[name=token]').val() !== '';
       let comp = checkBrowserCompatibility();
       return {
+        courseId: '',
+        exerciseId: '',
+        type: '',
         showCKEditorData: {
           publicPath: $('[name=ckeditor_path]').val(),
           filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
@@ -106,6 +112,16 @@
       }
     },
     created() {
+      if(this.getCourseId(window.top.location.href)) {
+        this.courseId = this.getCourseId(window.top.location.href);
+        this.type = 'course';
+      }
+
+      if(this.getExerciseId(window.top.location.href)) {
+        this.exerciseId = this.getExerciseId(window.top.location.href);
+        this.type = 'exercise';
+      }
+
       this.emitter = new ActivityEmitter();
       this.emitter.emit('doing', {data: ''});
 
@@ -130,6 +146,24 @@
       })
     },
     methods: {
+      getCourseId(path) {
+          const match = path.match(/\/course\/\d+/);
+
+          if (match) {  
+              return match[0].split('/').pop();  
+          }
+
+          return null;  
+      },
+      getExerciseId(path) {
+          const match = path.match(/\/item_bank_exercise\/\d+/);
+
+          if (match) {  
+              return match[0].split('/').pop();  
+          }
+
+          return null;  
+      },
       getAnswerData(assessmentResponse) {
         const that = this;
         $.ajax({

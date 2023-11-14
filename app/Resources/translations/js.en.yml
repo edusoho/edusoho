@@ -866,7 +866,9 @@ validate.title_required_hint: Please enter a title, it cannot be empty.
 validate.mobile_or_email_message: please input the right mobile/email
 validate.success: Verified successfully
 validate.fail: Failed to verify
-validate.course.closed: The course is closed
+validate.course.closed: The course is closed and cannot be continued
+validate.classroom.closed: The classroom is closed and cannot be continued
+validate.exercise.closed: The exercise is closed and cannot be continued
 validate.expiry_days_required_hint: please input the expiry days
 validate.empty_content_hint: please input content!
 validate.no_number_first_hint: URL path can only contain letters and numbers, please start with a letter! Length is greater than 2 digits
@@ -1867,6 +1869,9 @@ goods.show_page.tab.catalogue.empty: After purchasing, you can view the course c
 goods.show_page.tab.reviews: Reviews
 goods.show_page.tab.reviews_empty_tips: No Reviews
 goods.show_page.tab.summary_empty_tips: No Summary
+goods.show_page.tab.course.closed_tip: Course is closed, unable to purchase/study.
+goods.show_page.tab.classroom.closed_tip: Classroom is closed, unable to purchase/study.
+goods.show_page.tab.exercise.closed_tip: Question bank is closed, unable to purchase/study.
 goods.show_page.authentication_certificate: Authentication Certificate
 site.favorited: Favorited
 site.favorite: Favorite

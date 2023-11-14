@@ -14,6 +14,7 @@
       :showDoAgainBtn="showDoAgainBtn"
       :cdnHost="cdnHost"
       :collect="collect"
+      :courseSetStatus="courseSetStatus"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
       @previewAttachment="previewAttachment"
@@ -35,6 +36,8 @@
 </template>
 
 <script>
+  import { CourseSet } from 'common/vue/service/index.js';
+
   export default {
     data() {
       return {
@@ -47,6 +50,7 @@
           language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang,
           jqueryPath: $('[name=jquery_path]').val()
         },
+        courseSetStatus: '',
         showAttachment: $('[name=show_attachment]').val(),
         cdnHost: $('[name=cdn_host]').val(),
         fileId: 0,
@@ -61,6 +65,16 @@
       }
     },
     created() {
+      const path = location.pathname;
+      const reg = /\/([^\/]+)\/([^\/]+)/;
+      const match = path.match(reg);
+      const type = match[1];
+      const id = match[2];
+
+      if(type == 'course') {
+        this.getCourse(id)
+      }
+
         const that = this;
         $.ajax({
           url: '/api/answer_record/'+$("[name='answer_record_id']").val(),
@@ -95,8 +109,13 @@
         }).done(function (res) {
           that.questionFavorites = res;
         })
+
     },
     methods: {
+      async getCourse(id) {
+        const {status} = await CourseSet.get(id)
+        this.courseSetStatus = status;
+      },
       doAgainEvent(data) {
         location.href = $('[name=restart_url]').val();
       },

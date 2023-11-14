@@ -89,6 +89,10 @@
                 });
             },
             buySku() {
+                if(this.goods.status == 'unpublished') {
+                    return
+                }
+
                 if (!this.isUserLogin) {
                     axios.get($('#login-modal').data('url')).then(res => {
                         $('#login-modal').modal('show').html(res.data);

@@ -296,6 +296,15 @@ export default {
         });
         return
       }
+
+      if(this.goods?.status == 'unpublished') {
+        cd.message({
+          'type': 'danger',
+          'message': Translator.trans('validate.course.closed')
+        });
+        return
+      }
+
       if (!this.validateFormItems()) return;
 
       Api.review.review({
