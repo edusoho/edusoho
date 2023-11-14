@@ -27,11 +27,11 @@ trait FillAdapterTrait
     {
         $key = 0;
 
-        return preg_replace_callback('/___/', function () use (&$key, $question) {
+        return preg_replace_callback('/_+?([^_])/', function ($match) use (&$key, $question) {
             $answer = empty($question['answers'][$key]) ? '' : $question['answers'][$key];
             ++$key;
 
-            return "[[$answer]]";
+            return "[[$answer]]$match[1]";
         }, $question['stem']);
     }
 
@@ -53,6 +53,9 @@ trait FillAdapterTrait
             if ('' == trim($answer)) {
                 $errors[QuestionElement::ANSWERS.'_'.$key] = $this->adaptError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER, $key);
             }
+        }
+        if (substr_count($question['stem'], '[[') < count($question['answers'])) {
+            $errors[QuestionElement::STEM] = $this->adaptError(QuestionElement::STEM, QuestionErrors::LACK_ANSWER_POINT);
         }
 
         return $errors;
