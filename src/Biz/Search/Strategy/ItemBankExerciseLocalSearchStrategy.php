@@ -13,6 +13,7 @@ class ItemBankExerciseLocalSearchStrategy implements LocalSearchStrategy
         $this->conditions = [
             'status' => 'published',
             'title' => $keyword,
+            'display' => '1',
         ];
 
         if ('free' == $filter) {
