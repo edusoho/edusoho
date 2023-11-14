@@ -79,6 +79,10 @@ export default {
     ibsFooter
   },
   props: {
+    exerciseId: {
+      type: String,
+      default: ""
+    },
     mode: {
       type: String,
       default: "do"
@@ -319,7 +323,7 @@ export default {
     },
     //开始计时
     countTime() {
-      const saveProgressInterval = 180; //单位秒
+      const saveProgressInterval = 10; //单位秒
 
       if (this.intervalId != null) {
         return;
@@ -406,6 +410,8 @@ export default {
       finalData.assessment_id = this.assessment.id;
       finalData.answer_record_id = this.answerRecord.id;
       finalData.section_responses = this.section_responses;
+      finalData.exerciseId = this.exerciseId;
+      finalData.type = 'exercise'
       return finalData;
     }
   }

@@ -419,6 +419,7 @@ export default {
         exerciseId: this.$route.query.exerciseId,
         userId: this.user.id,
         exerciseResultId: this.exercise.id,
+        courseId: this.$route.query.courseId
       };
 
       return new Promise((resolve, reject) => {
@@ -456,6 +457,7 @@ export default {
               return
             }
 
+            Toast.fail(err.message)
             reject(err);
           });
       });
@@ -470,6 +472,7 @@ export default {
         admission_ticket: this.exercise.admission_ticket,
         answer: JSON.parse(JSON.stringify(this.answer)),
         resultId: this.exercise.id,
+        courseId: this.$route.query.courseId
       }).catch((error) => {
         const { code: errorCode, message, traceId } = error;
 
@@ -507,6 +510,8 @@ export default {
           showCancelButton: false,
           confirmButtonText: '重新保存'
         }).then(() => this.saveAnswerAjax())
+
+        Toast.fail(err.message);
       })
     },
     exitPage() {

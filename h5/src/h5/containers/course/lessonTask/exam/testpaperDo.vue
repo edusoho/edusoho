@@ -527,6 +527,7 @@ export default {
         userId: this.user.id,
         endTime,
         beginTime: Number(this.testpaperResult.beginTime),
+        courseId: this.$route.query.courseId
       };
 
       return new Promise((resolve, reject) => {
@@ -568,6 +569,7 @@ export default {
         answer: JSON.parse(JSON.stringify(this.answer)),
         resultId: this.testpaperResult.id,
         used_time,
+        courseId: this.$route.query.courseId
       })
       .catch((error) => {
         const { code: errorCode, message, traceId } = error;
@@ -606,6 +608,8 @@ export default {
           showCancelButton: false,
           confirmButtonText: '重新保存'
         }).then(() => this.saveAnswerAjax())
+
+        Toast.fail(err.message);
       })
     },
     exitPage() {

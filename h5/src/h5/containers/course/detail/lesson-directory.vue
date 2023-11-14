@@ -421,6 +421,7 @@ export default {
                     testId,
                     targetId: task.id,
                     resultId,
+                    courseId: this.$route.params.id
                   },
                 });
               } else {
@@ -429,6 +430,7 @@ export default {
                   query: {
                     testId,
                     targetId: task.id,
+                    courseId: this.$route.params.id
                   },
                 });
               }

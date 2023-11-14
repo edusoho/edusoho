@@ -256,6 +256,7 @@ export default {
         exerciseId: this.exercise.id,
         userId: this.user.id,
         exerciseResultId: this.exercise.latestExerciseResult.id,
+        courseId: this.courseId,
       };
       // 提交练习+跳转到结果页
       this.handExercisedo(datas)
