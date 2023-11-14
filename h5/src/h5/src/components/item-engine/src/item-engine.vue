@@ -323,7 +323,7 @@ export default {
     },
     //开始计时
     countTime() {
-      const saveProgressInterval = 10; //单位秒
+      const saveProgressInterval = 180; //单位秒
 
       if (this.intervalId != null) {
         return;

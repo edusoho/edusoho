@@ -341,7 +341,6 @@ export default {
     getData() {
       Api.getMedia(this.getParams())
         .then(async res => {
-          console.log('getMedia', res);
           const {
             media: { resNo },
             mediaType,
@@ -425,7 +424,6 @@ export default {
     },
 
     formateVedioData(player) {
-      console.log(player)
       const media = player.media;
       const timelimit = media.timeLimit;
       const securityVideoPlayer = media.securityVideoPlayer;
@@ -532,7 +530,6 @@ export default {
     },
 
     async initPlayer(options) {
-      console.log(options)
       if (!this.cloudSdkCdn) {
         await this.setCloudAddress();
       }

@@ -505,13 +505,13 @@ export default {
           return
         }
 
+        Toast.fail(err.message);
+
         Dialog.confirm({
           title: '网络连接不可用，自动保存失败',
           showCancelButton: false,
           confirmButtonText: '重新保存'
         }).then(() => this.saveAnswerAjax())
-
-        Toast.fail(err.message);
       })
     },
     exitPage() {
