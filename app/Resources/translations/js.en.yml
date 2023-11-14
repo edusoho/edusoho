@@ -1869,6 +1869,9 @@ goods.show_page.tab.catalogue.empty: After purchasing, you can view the course c
 goods.show_page.tab.reviews: Reviews
 goods.show_page.tab.reviews_empty_tips: No Reviews
 goods.show_page.tab.summary_empty_tips: No Summary
+goods.show_page.tab.course.closed_tip: Course is closed, unable to purchase/study.
+goods.show_page.tab.classroom.closed_tip: Classroom is closed, unable to purchase/study.
+goods.show_page.tab.exercise.closed_tip: Question bank is closed, unable to purchase/study.
 goods.show_page.authentication_certificate: Authentication Certificate
 site.favorited: Favorited
 site.favorite: Favorite

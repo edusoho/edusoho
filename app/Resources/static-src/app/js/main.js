@@ -27,10 +27,6 @@ if ($('#rewardPointNotify').length > 0) {
 $(document).on('click', '.handleLearnOnMessage', function (event) {
   event.preventDefault();
   notify('danger', decodeURIComponent(Translator.trans('validate.course.closed')));
-  // cd.message({
-  //   type: 'danger', 
-  //   message: Translator.trans('validate.course.closed')
-  // });
 });
 
 $(document).on('click', '.handleClassroomOnMessage', function (event) {

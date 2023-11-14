@@ -1,5 +1,4 @@
 import Index from './index.vue';
-
 import Vue from 'common/vue';
 
 

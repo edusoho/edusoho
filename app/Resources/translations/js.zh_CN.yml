@@ -1833,6 +1833,9 @@ goods.show_page.tab.catalogue.empty: 购买完成后即可查看课程目录～
 goods.show_page.tab.reviews: 学员评价
 goods.show_page.tab.reviews_empty_tips: 暂无评价哦~
 goods.show_page.tab.summary_empty_tips: 暂无简介哦～
+goods.show_page.tab.course.closed_tip: 课程已关闭，无法购买/学习
+goods.show_page.tab.classroom.closed_tip: 班级已关闭，无法购买/学习
+goods.show_page.tab.exercise.closed_tip: 题库已关闭，无法购买/学习
 goods.show_page.authentication_certificate: 认证证书
 site.favorited: 已收藏
 site.favorite: 收藏

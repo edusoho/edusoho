@@ -207,11 +207,11 @@
         computed: {
             alertMessage() {
                 if (this.goods.type === 'classroom') {
-                    return '班级已关闭，无法购买/学习';
+                    return Translator.trans('goods.show_page.tab.classroom.closed_tip');
                 }
 
                 if (this.goods.type === 'course' && this.targetId) {
-                    return '课程已关闭，无法购买/学习';
+                    return Translator.trans('goods.show_page.tab.course.closed_tip');
                 }
             },
             summaryHtml() {

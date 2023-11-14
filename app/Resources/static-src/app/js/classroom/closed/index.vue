@@ -1,5 +1,6 @@
 <template>
     <div>
+        
         <a-alert
             message="班级已关闭，无法学习"
             class="mb16"
