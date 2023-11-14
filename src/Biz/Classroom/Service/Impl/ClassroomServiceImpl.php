@@ -2790,7 +2790,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->tryManageClassroom($id);
         $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->getCourseSetService()->hideByIds($courseIds);
-        $classroom = $this->updateClassroom($id, ['showable' => '0']);
+        $classroom = $this->updateClassroom($id, ['showable' => '0', 'display' => '0']);
+        $this->dispatchEvent(
+            'classroom.update',
+            new Event([
+                'classroom' => $classroom,
+                'fields' => ['showable' => '0'],
+            ])
+        );
     }
 
     /**

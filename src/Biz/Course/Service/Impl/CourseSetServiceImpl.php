@@ -474,6 +474,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet = $this->tryManageCourseSet($id);
         $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '1', 'display' => '1']);
         $this->getCourseService()->showByCourseSetId($courseSet['id']);
+        $this->dispatchEvent('course-set.show', new Event($courseSet));
     }
 
     public function hideCourseSet($id)
@@ -481,6 +482,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet = $this->tryManageCourseSet($id);
         $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '0', 'display' => '0']);
         $this->getCourseService()->hideByCourseSetId($courseSet['id']);
+        $this->dispatchEvent('course-set.hide', new Event($courseSet));
     }
 
     public function banLearningByIds($ids)
