@@ -58,6 +58,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'classroom.quit' => 'onClassroomQuit',
 
             'classroom.update' => 'onClassroomUpdate',
+            'classroom.hide' => 'onClassroomUpdate',
 
             //小组开启/关闭（云搜索支持小组话题搜索）
             'group.open' => 'onGroupOpen',
@@ -93,8 +94,10 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             //兼容模式，courseSet映射到course
             'course-set.publish' => 'onCourseCreate',
             'course-set.update' => 'onCourseUpdate',
+            'course-set.show' => 'onCourseCreate',
             'course-set.delete' => 'onCourseDelete',
             'course-set.closed' => 'onCourseDelete',
+            'course-set.hide' => 'onCourseDelete',
 
             'open.course.publish' => 'onOpenCourseCreate',
             'open.course.delete' => 'onOpenCourseDelete',
@@ -2023,14 +2026,14 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 if ('draft' == $classroom['status']) {
                     return;
                 }
-                if ('published' == $classroom['status']) {
+                if ('published' == $classroom['status'] && '1' == $classroom['display']) {
                     $args = [
                         'category' => 'classroom',
                     ];
                     $this->createSearchJob('update', $args);
                 }
 
-                if ('closed' == $classroom['status']) {
+                if ('closed' == $classroom['status'] || '0' == $classroom['display']) {
                     $args = [
                         'category' => 'classroom',
                         'id' => $classroom['id'],

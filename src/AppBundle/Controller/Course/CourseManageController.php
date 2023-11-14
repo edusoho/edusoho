@@ -895,14 +895,16 @@ class CourseManageController extends BaseController
 
     public function showAction(Request $request, $courseSetId, $courseId)
     {
-        $this->getCourseService()->showCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $this->getCourseService()->showCourse($courseId, $courseSet['status']  == 'published');
 
         return $this->createJsonResponse(['success' => true]);
     }
 
     public function hideAction(Request $request, $courseSetId, $courseId)
     {
-        $this->getCourseService()->hideCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $this->getCourseService()->hideCourse($courseId, $courseSet['status']  == 'published');
 
         return $this->createJsonResponse(['success' => true]);
     }
