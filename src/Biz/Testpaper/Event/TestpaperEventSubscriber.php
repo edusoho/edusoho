@@ -33,7 +33,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
                 return;
             }
             $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
-            $user = $this->getBiz()['user'];
+            $user = $this->getUserService()->getUser($answerRecord['user_id']);
             $message = [
                 'id' => $answerRecord['id'],
                 'courseId' => $activity['fromCourseId'],
