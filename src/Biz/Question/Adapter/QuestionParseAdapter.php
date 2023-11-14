@@ -26,6 +26,9 @@ class QuestionParseAdapter
         $adaptedQuestions = [];
         $adaptMethods = $this->getAdaptMethods();
         foreach ($questions as $question) {
+            if (empty($question['type'])) {
+                continue;
+            }
             $adaptMethod = $adaptMethods[$question['type']];
             $adaptedQuestions[] = $this->$adaptMethod($question);
         }
