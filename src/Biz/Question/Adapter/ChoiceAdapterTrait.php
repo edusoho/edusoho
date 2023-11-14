@@ -16,6 +16,9 @@ trait ChoiceAdapterTrait
         $adaptQuestion['type'] = SingleChoiceItem::TYPE;
         $adaptQuestion['options'] = $this->adaptOptions($question);
         $adaptQuestion['answers'] = $this->adaptChoiceAnswer($question);
+        if ('choice' == $question['type'] && !empty($adaptQuestion['answers'])) {
+            $adaptQuestion['answers'] = [$adaptQuestion['answers'][0]];
+        }
         $errors = $this->adaptChoiceErrors($adaptQuestion, $question);
         if ($errors) {
             $adaptQuestion['errors'] = empty($adaptQuestion['errors']) ? $errors : array_merge($adaptQuestion['errors'], $errors);
