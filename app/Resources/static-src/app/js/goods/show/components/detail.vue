@@ -99,7 +99,7 @@
             </div>
 
             <!-- 立即购买 -->
-            <buy-sku :sku="currentSku" :btn-class="goods.status == 'unpublished' ? 'product-detail__btn handleLearnOnMessage' : 'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods" :vip-enabled="vipEnabled"></buy-sku>
+            <buy-sku :sku="currentSku" :btn-class="goods.status == 'unpublished' ? 'product-detail__btn js-handleLearnOnMessage' : 'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods" :vip-enabled="vipEnabled"></buy-sku>
         </div>
     </div>
 </template>
@@ -271,10 +271,14 @@
         computed: {
             goodsClass() {
                 if(this.goods.type == 'course') {
-                    return 'detail-left__text-share handleLearnOnMessage'
-                } else {
-                    return 'detail-left__text-share handleClassroomOnMessage'
+                    return 'detail-left__text-share js-handleLearnOnMessage'
                 }
+                
+                if(this.goods.type == 'classroom'){
+                    return 'detail-left__text-share js-handleClassroomOnMessage'
+                }
+
+                return ''
             }
         },
         mounted() {

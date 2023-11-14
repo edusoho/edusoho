@@ -1,7 +1,7 @@
 <template>
   <div class="es-share top js-es-share">
     <span class="dropdown-toggle" :class="customizedClass"
-      :data-toggle="(goods.product.target.status == 'closed' | goods.status == 'unpublished') ? '' : 'dropdown'">
+      :data-toggle="(goods.product.target.status == 'closed' || goods.status == 'unpublished') ? '' : 'dropdown'">
       <i class="es-icon es-icon-share"></i>
       <slot></slot>
     </span>

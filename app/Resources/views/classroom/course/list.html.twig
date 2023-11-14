@@ -21,12 +21,12 @@
         {% for course in courses %}
           <div class="course-item">
             <div class="media">
-              <a class="media-left {% if classroom.status == 'closed' %}handleClassroomOnMessage{% endif %}" href="{{ path(courseShowPath, {id:course.id}) }}">
+              <a class="media-left {% if classroom.status == 'closed' %}js-handleClassroomOnMessage{% endif %}" href="{{ path(courseShowPath, {id:course.id}) }}">
                 {{ lazy_img(filepath(course_cover(course, 'middle'), 'course.png'), '', '') }}
               </a>
               <div class="media-body">
                 <div class="title">
-                  <a class="{% if classroom.status == 'closed' %}handleClassroomOnMessage{% endif %}" href="{{ path(courseShowPath, {id:course.id}) }}">
+                  <a class="{% if classroom.status == 'closed' %}js-handleClassroomOnMessage{% endif %}" href="{{ path(courseShowPath, {id:course.id}) }}">
                     {% if course.courseNum|default(1) > 1 %}
                       {{ course.courseSet.title ~ ' - ' ~ course.title }}
                     {% else %}
