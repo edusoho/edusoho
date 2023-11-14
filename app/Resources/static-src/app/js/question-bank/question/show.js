@@ -34,21 +34,6 @@ class QuestionsShow {
       this.onClickSearchBtn(event);
     });
 
-    // this.element.on('click', '.pagination li', (event) => {
-    //   this.onClickPagination(event);
-    // });
-    // this.element.on('change', '.js-current-perpage-count', (event) => {
-    //   this.onChangePagination(event);
-    // });
-
-    // this.element.on('click', '.js-category-search', (event) => {
-    //   this.onClickCategorySearch(event);
-    // });
-
-    // this.element.on('click', '.js-all-category-search', (event) => {
-    //   this.onClickAllCategorySearch(event);
-    // });
-
     this.element.on('click', '.js-batch-delete', (event) => {
       this.onDeleteQuestions(event);
     });
@@ -95,6 +80,7 @@ class QuestionsShow {
       steps: [{
         element: '.js-import-btn',
         intro: Translator.trans('upgrade.cloud.capabilities.to.experience'),
+				position: 'left',
       }],
       doneLabel: Translator.trans('skip.upgrade.btn'),
       showBullets: false,
@@ -117,6 +103,7 @@ class QuestionsShow {
       steps: [{
         element: '.js-import-btn',
         intro: Translator.trans('next.skip.intro.text'),
+				position: 'left'
       }],
       doneLabel: Translator.trans('skip.i.know'),
       showBullets: false,
