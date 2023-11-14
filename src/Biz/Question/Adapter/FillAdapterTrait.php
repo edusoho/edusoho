@@ -14,8 +14,8 @@ trait FillAdapterTrait
         $adaptQuestion['type'] = FillItem::TYPE;
         $adaptQuestion['answers'] = $this->adaptFillAnswer($question);
         $adaptQuestion['stemShow'] = $adaptQuestion['stem'];
-        $adaptQuestion['stem'] = $this->adaptFillStem($adaptQuestion);
         $errors = $this->adaptFillErrors($adaptQuestion);
+        $adaptQuestion['stem'] = $this->adaptFillStem($adaptQuestion);
         if ($errors) {
             $adaptQuestion['errors'] = empty($adaptQuestion['errors']) ? $errors : array_merge($adaptQuestion['errors'], $errors);
         }
@@ -53,6 +53,9 @@ trait FillAdapterTrait
             if ('' == trim($answer)) {
                 $errors[QuestionElement::ANSWERS.'_'.$key] = $this->adaptError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER, $key);
             }
+        }
+        if (substr_count($question['stem'], '___') < count($question['answers'])) {
+            $errors[QuestionElement::STEM] = $this->adaptError(QuestionElement::STEM, QuestionErrors::LACK_ANSWER_POINT);
         }
 
         return $errors;
