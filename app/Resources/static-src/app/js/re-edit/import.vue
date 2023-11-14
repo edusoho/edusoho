@@ -21,7 +21,7 @@
             @downloadAttachment="downloadAttachment"
             @getRepeatQuestion="getRepeatQuestion"
             @getImportData="getImportData"
-						@renderFormula="renderFormula"
+            @renderFormula="renderFormula"
             @editQuestion="editQuestion"
             @changeEditor="changeEditor"
             @getInitRepeatQuestion="getInitRepeatQuestion"
@@ -32,7 +32,7 @@
 
 <script>
   import axios from 'axios';
-	import {renderKatex} from 'app/common/katex-render';
+  import {renderKatex} from 'app/common/katex-render';
 
   export default {
     data() {
@@ -118,15 +118,26 @@
               icon: 'exclamation-circle',
               onOk() {
                 that.loading = false;
+                that.forceRemoveModalDom()
               },
               onCancel() {
                 that.getImportData(subject)
+                that.forceRemoveModalDom()
               },
             });
           } else {
             that.getImportData(subject)
           }
         })
+      },
+      forceRemoveModalDom() {
+        const modal = document.querySelector(".ant-modal-root");
+
+        if (modal) {
+          modal.remove();
+        }
+
+        document.body.style = "";
       },
       editQuestion(data, items) {
         this.ids = data.ids
@@ -275,11 +286,11 @@
       getEditRepeatQuestion(subject) {
         this.getInitRepeatQuestion(subject)
       },
-			renderFormula() {
-				this.$nextTick(()=> {
-					renderKatex()
-				})
-			}
+      renderFormula() {
+        this.$nextTick(()=> {
+          renderKatex()
+        })
+      }
     }
   }
 </script>
