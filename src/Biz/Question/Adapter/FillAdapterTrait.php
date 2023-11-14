@@ -14,8 +14,8 @@ trait FillAdapterTrait
         $adaptQuestion['type'] = FillItem::TYPE;
         $adaptQuestion['answers'] = $this->adaptFillAnswer($question);
         $adaptQuestion['stemShow'] = $adaptQuestion['stem'];
-        $errors = $this->adaptFillErrors($adaptQuestion);
         $adaptQuestion['stem'] = $this->adaptFillStem($adaptQuestion);
+        $errors = $this->adaptFillErrors($adaptQuestion);
         if ($errors) {
             $adaptQuestion['errors'] = empty($adaptQuestion['errors']) ? $errors : array_merge($adaptQuestion['errors'], $errors);
         }
@@ -27,11 +27,11 @@ trait FillAdapterTrait
     {
         $key = 0;
 
-        return preg_replace_callback('/___/', function () use (&$key, $question) {
+        return preg_replace_callback('/_+?([^_])/', function ($match) use (&$key, $question) {
             $answer = empty($question['answers'][$key]) ? '' : $question['answers'][$key];
             ++$key;
 
-            return "[[$answer]]";
+            return "[[$answer]]$match[1]";
         }, $question['stem']);
     }
 
@@ -54,7 +54,7 @@ trait FillAdapterTrait
                 $errors[QuestionElement::ANSWERS.'_'.$key] = $this->adaptError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER, $key);
             }
         }
-        if (substr_count($question['stem'], '___') < count($question['answers'])) {
+        if (substr_count($question['stem'], '[[') < count($question['answers'])) {
             $errors[QuestionElement::STEM] = $this->adaptError(QuestionElement::STEM, QuestionErrors::LACK_ANSWER_POINT);
         }
 
