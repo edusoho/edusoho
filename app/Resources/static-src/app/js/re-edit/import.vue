@@ -21,6 +21,7 @@
             @downloadAttachment="downloadAttachment"
             @getRepeatQuestion="getRepeatQuestion"
             @getImportData="getImportData"
+						@renderFormula="renderFormula"
             @editQuestion="editQuestion"
             @changeEditor="changeEditor"
             @getInitRepeatQuestion="getInitRepeatQuestion"
@@ -31,6 +32,8 @@
 
 <script>
   import axios from 'axios';
+	import {renderKatex} from 'app/common/katex-render';
+
   export default {
     data() {
       return {
@@ -109,9 +112,9 @@
           }
           if(that.repeatList.length > 0) {
             that.$confirm({
-              title: Translator.trans('created.question.confirm.title'),
+              title: Translator.trans('created.question.confirm.import.title'),
               okText: Translator.trans('created.question.confirm.ok.btn'),
-              cancelText: Translator.trans('created.question.confirm.close.btn'),
+              cancelText: Translator.trans('created.question.confirm.import.close.btn'),
               icon: 'exclamation-circle',
               onOk() {
                 that.loading = false;
@@ -271,7 +274,12 @@
       },
       getEditRepeatQuestion(subject) {
         this.getInitRepeatQuestion(subject)
-      }
+      },
+			renderFormula() {
+				this.$nextTick(()=> {
+					renderKatex()
+				})
+			}
     }
   }
 </script>
