@@ -80,7 +80,7 @@ class QuestionsShow {
       steps: [{
         element: '.js-import-btn',
         intro: Translator.trans('upgrade.cloud.capabilities.to.experience'),
-				position: 'left',
+        position: 'left',
       }],
       doneLabel: Translator.trans('skip.upgrade.btn'),
       showBullets: false,
@@ -103,7 +103,7 @@ class QuestionsShow {
       steps: [{
         element: '.js-import-btn',
         intro: Translator.trans('next.skip.intro.text'),
-				position: 'left'
+        position: 'left'
       }],
       doneLabel: Translator.trans('skip.i.know'),
       showBullets: false,
