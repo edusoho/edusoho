@@ -66,7 +66,7 @@
         if (katex) {
           var _this$parseMath = this.parseMath(math),
               expr = _this$parseMath.expr,
-              displayMode = this.data.displayMode;
+              displayMode = _this$parseMath.displayMode;
 
           var options = Object.assign({}, this._katexOptions, {
             displayMode: displayMode
@@ -92,7 +92,6 @@
       },
       parseMath: parseMath,
       generateMath: function (expr, displayMode) {
-        this.data.displayMode = displayMode;
         var delimiter = this._delimiters.find(function (d) {
           return displayMode === !!d[2];
         });
@@ -104,9 +103,7 @@
         return delimiter[0] + expr.trim() + delimiter[1];
       },
       data: function () {
-        var parsed = this.parseMath(this.data.math);
-        var math = parsed.expr;
-        this.data.math = math;
+        var math = this.data.math;
         var displayMode = this.data.displayMode;
 
         // var _this$parseMath2 = this.parseMath(math),
