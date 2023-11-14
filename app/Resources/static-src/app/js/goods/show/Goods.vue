@@ -27,7 +27,7 @@
                             </li>
                         </ul>
                         <div class="buy__btn pull-right">
-                            <buy-sku :sku="currentSku" :btn-class="goods.status == 'unpublished' ? 'product-detail__btn handleLearnOnMessage' : 'product-detail__btn'" :isShow="false" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
+                            <buy-sku :sku="currentSku" :btn-class="goods.status == 'unpublished' ? 'product-detail__btn handleLearnClosed' : 'product-detail__btn'" :isShow="false" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
                         </div>
                     </div>
                 </div>
