@@ -1184,6 +1184,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function canLearnTask($taskId)
     {
         $task = $this->getTaskService()->getTask($taskId);
+        $course = $this->getCourse($task['courseId']);
+        if ('0' == $course['canLearn']) {
+            throw CourseException::CLOSED_COURSE();
+        }
         $chain = $this->biz['course.task.learn_chain'];
 
         if (empty($chain)) {
