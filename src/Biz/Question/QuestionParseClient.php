@@ -21,6 +21,7 @@ class QuestionParseClient
     public function __construct()
     {
         $this->request = new CurlHttpRequest([], $this->getLogger(), true);
+        $this->initApi();
         $this->initToken();
     }
 
@@ -47,8 +48,9 @@ class QuestionParseClient
     {
         $type = in_array($type, ['docx-full', 'docx-simple', 'xlsx']) ? $type : 'docx-full';
         $protocol = $ssl ? 'https://' : 'http://';
+        $api = 0 === strpos($this->api, 'http') ? $this->api : $protocol.$this->api;
 
-        return "$protocol{$this->api}/api-public/templateFile?type={$type}";
+        return "$api/api-public/templateFile?type={$type}";
     }
 
     private function post($uri, $body, array $headers)
@@ -63,6 +65,14 @@ class QuestionParseClient
         $uri = $uri.(strpos($uri, '?') ? '&' : '?').http_build_query($params);
 
         return $this->request->request('GET', $this->api.$uri, $params, ["Authorization: Bearer $this->token"]);
+    }
+
+    private function initApi()
+    {
+        $storage = $this->getSettingService()->get('storage');
+        if (!empty($storage['question_parse_api_server'])) {
+            $this->api = $storage['question_parse_api_server'];
+        }
     }
 
     private function initToken()
