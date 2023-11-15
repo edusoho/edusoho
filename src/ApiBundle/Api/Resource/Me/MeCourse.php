@@ -92,7 +92,7 @@ class MeCourse extends AbstractResource
                     $courseConditions['courseSetIds'] = ('learning' === $conditions['type']) ? $learningCourseSetIds : $learnedCourseSetIds;
                     break;
                 case 'expired':
-                    $closedCourses = $this->getCourseService()->searchCourses(['status' => 'closed', 'ids' => array_merge($validCourseIds)], [], 0, PHP_INT_MAX);
+                    $closedCourses = $this->getCourseService()->searchCourses(['canLearn' => '0', 'ids' => $validCourseIds], [], 0, PHP_INT_MAX);
                     $courses = $this->getCourseService()->findCoursesByIds($invalidCourseIds);
                     $mergedCourses = array_merge($courses, $closedCourses);
                     $courses = array_unique($mergedCourses, SORT_REGULAR);
