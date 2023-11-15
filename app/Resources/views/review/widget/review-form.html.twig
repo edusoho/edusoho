@@ -12,7 +12,7 @@
 
   <div class="form-group clearfix">
     <span class="color-success pull-left js-review-remind" style="display: none;">{{'course.reviews.success_tips'|trans}}</span>
-    <a href="javascript:;" class="btn btn-primary pull-right js-btn-save" data-target-type="{{ targetType|default('course') }}" data-target-id="{{ targetId|default() }}" data-loading-text="{{'form.btn.save.submiting'|trans}}" autocomplete="off">{{'form.btn.save'|trans}}</a>
+    <a href="javascript:;" class="btn btn-primary pull-right {% if exercise.status == 'closed'%} js-handleExerciseOnMessage {% else %} js-btn-save{% endif %}" data-target-type="{{ targetType|default('course') }}" data-target-id="{{ targetId|default() }}" data-loading-text="{{'form.btn.save.submiting'|trans}}" autocomplete="off">{{'form.btn.save'|trans}}</a>
     <a href="javascript:;" class="btn btn-link pull-right js-hide-review-form" {% if userReview %}style="display:none;"{% endif %}>{{'form.btn.cancel'|trans}}</a>
   </div>
 

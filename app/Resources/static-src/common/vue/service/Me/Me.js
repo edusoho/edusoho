@@ -21,6 +21,11 @@ export const Me = _.assignIn(baseService, {
     return apiClient.get(`${this.baseUrl}/courses`, { params })
   },
 
+  // 我的课程里搜索课程
+  async searchFavoriteCourses(params) {
+    return apiClient.get(`${this.baseUrl}/favorite_course_sets`, { params })
+  },
+
   // 我的班级里搜索班级
   async searchClassrooms(params) {
     return apiClient.get(`${this.baseUrl}/classrooms`, { params })
