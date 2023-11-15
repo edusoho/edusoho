@@ -21,7 +21,7 @@ class BlankAssessmentAnswerRecordDataTag extends BaseDataTag
             return $answerRecord;
         }
         $answerScene = $this->getAnswerSceneService()->get($arguments['answerSceneId']);
-        if ($answerScene['endTime'] && $answerScene['endTime'] < time()) {
+        if ($answerScene['end_time'] && $answerScene['end_time'] < time()) {
             $this->getAnswerService()->batchAutoSubmit($arguments['answerSceneId'], $arguments['assessmentId'], [$arguments['userId']]);
         }
 
