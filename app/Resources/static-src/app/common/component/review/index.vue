@@ -28,7 +28,7 @@
               :data-url="`/common/report/${reportType}/target_id/${review.id}/tags_modal?contentTarget=review-content-${review.id}&modalTarget=js-review-modal-${review.id}`">举报</a>
             <a href="javascript:;" v-if="canCreate || review.posts.length > 0"
               :data-toggle="'reviews-text__reply-content-' + review.id" @click="switchDisplay">
-              <span v-if="review.posts.length == 0">{{ 'thread.post.reply' | trans }}12312</span>
+              <span v-if="review.posts.length == 0">{{ 'thread.post.reply' | trans }}</span>
               <span v-else>{{ 'site.data.collapse' | trans }}</span>
             </a>
           </div>
