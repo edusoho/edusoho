@@ -296,6 +296,13 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $specs;
     }
 
+    public function updateGoodsSpecsDisplay($id, $display)
+    {
+        $specs = $this->getGoodsSpecsDao()->update($id, ['display' => $display]);
+
+        return $specs;
+    }
+
     public function countGoodsSpecs($conditions)
     {
         return $this->getGoodsSpecsDao()->count($conditions);
