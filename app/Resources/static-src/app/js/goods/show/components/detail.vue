@@ -270,15 +270,15 @@
         },
         computed: {
             goodsClass() {
-                if(this.goods.type == 'course') {
-                    return 'detail-left__text-share js-handleLearnOnMessage'
+                if(this.goods.type == 'course' && this.goods.status == 'unpublished') {
+                    return 'detail-left__text-share js-handleCoursePage'
                 }
                 
-                if(this.goods.type == 'classroom'){
-                    return 'detail-left__text-share js-handleClassroomOnMessage'
+                if(this.goods.type == 'classroom' && this.goods.status == 'unpublished'){
+                    return 'detail-left__text-share js-handleClassroomPage'
                 }
 
-                return ''
+                return 'detail-left__text-share'
             }
         },
         mounted() {

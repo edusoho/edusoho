@@ -131,7 +131,7 @@ class CourseController extends CourseBaseController
 
     public function closedAction(Request $request)
     {
-        return $this->render('course/course-show.html.twig');
+        return $this->render('closed/index.html.twig');
     }
 
     protected function isGoods($course)
