@@ -473,7 +473,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courseSet = $this->tryManageCourseSet($id);
         $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '1', 'display' => '1']);
-        $this->getCourseService()->showByCourseSetId($courseSet['id']);
+        $this->getCourseService()->showByCourseSetIds([$courseSet['id']]);
         $this->dispatchEvent('course-set.show', new Event($courseSet));
     }
 
@@ -481,18 +481,24 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courseSet = $this->tryManageCourseSet($id);
         $this->getCourseSetDao()->update($courseSet['id'], ['showable' => '0', 'display' => '0']);
-        $this->getCourseService()->hideByCourseSetId($courseSet['id']);
+        $this->getCourseService()->hideByCourseSetIds([$courseSet['id']]);
         $this->dispatchEvent('course-set.hide', new Event($courseSet));
     }
 
     public function banLearningByIds($ids)
     {
+        if (empty($ids)) {
+            return;
+        }
         $this->getCourseSetDao()->banLearningByIds($ids);
         $this->getCourseService()->banLearningByCourseSetIds($ids);
     }
 
     public function hideByIds($ids)
     {
+        if (empty($ids)) {
+            return;
+        }
         $this->getCourseSetDao()->hideByIds($ids);
         $this->getCourseService()->hideByCourseSetIds($ids);
     }
@@ -505,6 +511,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function showByIds($ids)
     {
+        if (empty($ids)) {
+            return;
+        }
         $this->getCourseSetDao()->showByIds($ids);
         $this->getCourseService()->showByCourseSetIds($ids);
     }
@@ -706,8 +715,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'published', 'showable' => '1', 'display' => '1', 'canLearn' => '1']);
             $this->getCourseSetGoodsMediator()->onUpdateNormalData($courseSet);
             $this->getCourseSetGoodsMediator()->onPublish($courseSet);
-            $this->getCourseService()->showByCourseSetId($courseSet['id']);
-            $this->getCourseService()->canLearningByCourseSetId($courseSet['id']);
+            $this->getCourseService()->showByCourseSetIds([$courseSet['id']]);
+            $this->getCourseService()->canLearningByCourseSetIds([$courseSet['id']]);
 
             $this->commit();
 
@@ -735,8 +744,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             }
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'closed', 'canLearn' => '0', 'display' => '0', 'showable' => '0']);
             $this->getCourseSetGoodsMediator()->onClose($courseSet);
-            $this->getCourseService()->banLearningByCourseSetId($courseSet['id']);
-            $this->getCourseService()->hideByCourseSetId($courseSet['id']);
+            $this->getCourseService()->banLearningByCourseSetIds([$courseSet['id']]);
+            $this->getCourseService()->hideByCourseSetIds([$courseSet['id']]);
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
