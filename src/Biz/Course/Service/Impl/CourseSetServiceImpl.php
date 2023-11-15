@@ -518,6 +518,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->getCourseService()->showByCourseSetIds($ids);
     }
 
+    public function updateDefaultCourse($courseSetId, $courseId)
+    {
+        $this->getCourseSetDao()->update($courseSetId, ['defaultCourseId' => $courseId]);
+    }
+
     public function updateCourseSetRatingNum($id, $fields)
     {
         $fields = ArrayToolkit::parts(

@@ -912,6 +912,14 @@ class CourseManageController extends BaseController
         $displayCourses = $this->getCourseService()->findDisplayCoursesByCourseSetId($courseSetId, '1');
         if (1 == count($displayCourses)) {
             $this->getCourseSetService()->hideCourseSet($courseSet['id']);
+        } else {
+            $displayIds = array_column(array_filter($displayCourses, function ($item) {
+                return 1 == $item['display'];
+            }), 'id');
+            $filteredIds = array_diff($displayIds, [$courseId]);
+            if (!empty($filteredIds)) {
+                $this->getCourseSetService()->updateDefaultCourse($courseSet['id'], reset($filteredIds));
+            }
         }
         $this->getCourseService()->hideCourse($courseId, 'published' == $courseSet['status']);
 

@@ -333,7 +333,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
         $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
-        $goodsSpecs = $this->getGoodsService()->updateGoodsSpecsDisplay($goodsSpecs['id'],  '1');
+        $goodsSpecs = $this->getGoodsService()->updateGoodsSpecsDisplay($goodsSpecs['id'], '1');
 
         return $goodsSpecs;
     }
@@ -841,6 +841,11 @@ class CourseServiceImpl extends BaseService implements CourseService
                 if ('published' === $courseSet['status']) {
                     $this->getCourseSetService()->closeCourseSet($course['courseSetId']);
                 }
+            }
+            // 如果课程下没有已展示的教学计划，关闭此课程页面展示
+            $displayCourses = $this->findDisplayCoursesByCourseSetId($course['courseSetId'], '1');
+            if (empty($displayCourses)) {
+                $this->getCourseSetService()->hideCourseSet($course['courseSetId']);
             }
             $this->commit();
             $this->dispatchEvent('course.close', new Event($course));
