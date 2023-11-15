@@ -7,6 +7,7 @@ use AppBundle\Common\TimeMachine;
 use AppBundle\Controller\BaseController;
 use Biz\Content\Service\FileService;
 use Biz\Question\QuestionParseClient;
+use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\User\Service\TokenService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
@@ -16,6 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class QuestionParserController extends BaseController
 {
+    use QuestionImportTrait;
+
     public function readAction(Request $request, $type, $questionBank)
     {
         $templateInfo = $this->getTemplateInfo($type);
@@ -67,6 +70,7 @@ class QuestionParserController extends BaseController
         $itemsJson = file_get_contents($data['cacheFilePath']);
         $categoryId = $request->query->get('categoryId', 0);
         $category = $this->getItemCategoryService()->getItemCategory($categoryId);
+        $itemsJson = $this->addEmphasisStyle($itemsJson);
         $items = json_decode($itemsJson, true);
         foreach ($items as &$item) {
             $item['category_id'] = $categoryId;

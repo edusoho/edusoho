@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\TestpaperException;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController
 {
+    use QuestionImportTrait;
+
     public function indexAction(Request $request, $id)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
@@ -371,7 +374,7 @@ class TestpaperController extends BaseController
         }
 
         return $this->render('testpaper/manage/preview.html.twig', [
-            'assessment' => $assessment,
+            'assessment' => $this->addItemEmphasisStyle($assessment),
         ]);
     }
 

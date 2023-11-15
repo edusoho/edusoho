@@ -176,7 +176,7 @@ class QuestionController extends BaseController
         return $this->render('question-manage/question-form-layout.html.twig', [
             'mode' => 'edit',
             'questionBank' => $questionBank,
-            'item' => $item,
+            'item' => $this->addItemEmphasisStyle($item),
             'type' => $item['type'],
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($item['bank_id']),
             'goto' => $goto,
@@ -365,6 +365,7 @@ class QuestionController extends BaseController
         if (!$item || $item['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
+        $item = $this->addItemEmphasisStyle($item);
 
         $template = $request->query->get(
             'isNew'

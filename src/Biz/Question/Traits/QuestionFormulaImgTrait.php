@@ -12,4 +12,18 @@ trait QuestionFormulaImgTrait
 
         return json_decode($question, true);
     }
+
+    private function addEmphasisStyle($text)
+    {
+        return preg_replace_callback('/data-emphasis/', function () {
+            return 'style=\"-webkit-text-emphasis-style:\'ꔷ\';-webkit-text-emphasis-position:under;\" data-emphasis';
+        }, $text);
+    }
+
+    private function addItemEmphasisStyle($item)
+    {
+        $text = $this->addEmphasisStyle(json_encode($item));
+
+        return json_decode($text, true);
+    }
 }
