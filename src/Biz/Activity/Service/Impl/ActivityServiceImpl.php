@@ -778,7 +778,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             ActivityMediaType::EXERCISE,
         ];
         foreach ($mediaTypes as $mediaType) {
+            file_put_contents("/tmp/jc123", json_encode($answerSceneId), 8);
+            file_put_contents("/tmp/jc123", json_encode($mediaType), 8);
             $activity = $this->getActivityByAnswerSceneIdAndMediaType($answerSceneId, $mediaType);
+            file_put_contents("/tmp/jc123", json_encode($activity), 8);
+            // $activity = $this->getActivityByAnswerSceneIdAndMediaType($answerSceneId, $mediaType);
             if (!empty($activity)) {
                 return $activity;
             }

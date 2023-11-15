@@ -56,17 +56,17 @@ class TaskController extends BaseController
         }
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        if ('0' == $courseSet['canLearn']) {
-            if (in_array($activity['mediaType'], ['homework', 'testpaper', 'exercise'])) {
-                $answerReports = $this->getAnswerReportService()->search(['user_id' => $user['id'], 'answer_scene_id' => $activity['ext']['answerSceneId']], [], 0, PHP_INT_MAX);
-                if (empty($answerReports)) {
-                    return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
-                }
-            } else {
-                return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
-            }
-        }
+        // $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        // if ('0' == $courseSet['canLearn']) {
+        //     if (in_array($activity['mediaType'], ['homework', 'testpaper', 'exercise'])) {
+        //         $answerReports = $this->getAnswerReportService()->search(['user_id' => $user['id'], 'answer_scene_id' => $activity['ext']['answerSceneId']], [], 0, PHP_INT_MAX);
+        //         if (empty($answerReports)) {
+        //             return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
+        //         }
+        //     } else {
+        //         return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
+        //     }
+        // }
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
         if ('classroom' === $member['joinedType'] && !empty($member['classroomId'])) {
             $classroomMember = $this->getClassroomService()->getClassroomMember($member['classroomId'], $member['userId']);

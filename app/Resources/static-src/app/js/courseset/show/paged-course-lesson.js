@@ -161,15 +161,23 @@ class PagedCourseLesson {
 
         'taskItemClass': function(data, context) {
           const canLearn = context.course.canLearn
-          let classNames = 'title';
           const allowedTaskTypes = ['testpaper', 'homework', 'exercise'];
           const isTaskTypeAllowed = allowedTaskTypes.includes(data.type);
           const isTaskResultIncomplete = data.resultStatus != 'finish';
-          if(canLearn == '0' && (!isTaskTypeAllowed ||(isTaskTypeAllowed && isTaskResultIncomplete))) {
-            classNames += ' js-handleLearnContentOnMessage'
+
+          if(canLearn == '1') {
+            return 'title'
           }
 
-          return classNames;
+          if(!isTaskTypeAllowed) {
+            return 'title js-handleLearnContentOnMessage'
+          }
+
+          if(isTaskResultIncomplete) {
+            return 'title js-handleLearnContentOnMessage'
+          }
+
+          return 'title';
         },
 
         'lessonContainerClass': function(data, context) {
