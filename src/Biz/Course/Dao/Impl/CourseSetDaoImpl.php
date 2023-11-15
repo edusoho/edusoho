@@ -158,6 +158,7 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
                 'locked = :locked',
                 'platform = :platform',
                 'isClassroomRef = :isClassroomRef',
+                'display = :display',
             ],
             'serializes' => [
                 'goals' => 'delimiter',

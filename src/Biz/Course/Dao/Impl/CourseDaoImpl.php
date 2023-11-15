@@ -80,6 +80,11 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $this->findByFields(['courseSetId' => $courseSetId, 'status' => $status]);
     }
 
+    public function findCoursesByCourseSetIdAndDisplay($courseSetId, $display = 1)
+    {
+        return $this->findByFields(['courseSetId' => $courseSetId, 'display' => $display]);
+    }
+
     public function getDefaultCourseByCourseSetId($courseSetId)
     {
         return $this->getByFields(['courseSetId' => $courseSetId, 'isDefault' => 1]);
