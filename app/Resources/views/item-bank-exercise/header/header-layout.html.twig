@@ -48,9 +48,9 @@
     <div class="exercise-closed-tip">
       <span class="es-icon es-icon-infooutline exercise-closed-icon"></span>
       <div class="ml12 font-500 inline-block exercise-closed-content">
-        课程练习已关闭，无法购买/学习
+        {{'exception.exercise.closed.tips.title'|trans}}
         {% if page_type|default('guest') == 'member' %}
-          <div class="exercise-closed-result">题库练习结果可查看</div>
+          <div class="exercise-closed-result">{{'exception.exercise.closed.tips.content'|trans}}</div>
         {% endif %}
       </div>
     </div>

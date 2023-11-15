@@ -779,8 +779,6 @@ homework_manage.result_graph.max_status_num: Number of max result
 intro.confirm_hint: Finish
 
 
-
-
 validate.required.message: Please input %display%
 validate.valid_enter.retest.interval: Retest interval
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
