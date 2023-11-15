@@ -95,6 +95,13 @@ export default {
         type
       }
 
+      if(type == 'favorite') {
+        const { data, paging } = await Me.searchFavoriteCourses(params)
+        this.courseLists = data
+        this.total = paging.total
+        return
+      }
+
       const { data, paging } = await Me.searchCourses(params)
       this.courseLists = data
       this.total = paging.total
