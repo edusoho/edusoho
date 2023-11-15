@@ -103,7 +103,7 @@ class ManageController extends BaseController
         $courseId = $this->prepareCourseId($targetType, $targetId, $params);
         if ('classroom' === $targetType && empty($courseId)) {
             $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
-            $conditions['courseIds'] = array_column($courses, 'id');
+            $conditions['courseIds'] = array_column($courses, 'id') ?: [-1];
 
             return $conditions;
         }
