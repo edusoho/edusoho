@@ -33,14 +33,18 @@ class MeCourse extends AbstractResource
         }
         array_multisort(ArrayToolkit::column($members, 'lastLearnTime'), SORT_DESC, $members);
         $courseConditions = [
-            'ids' => $validCourseIds,
+            'ids' => array_merge($invalidCourseIds, $validCourseIds),
             'excludeTypes' => ['reservation'],
             'courseSetTitleLike' => $conditions['title'],
         ];
         $courses = $this->getCourseService()->findCoursesByIds($validCourseIds);
         $this->filterCourseIdsByConditions($conditions, $courses, $members, $validCourseIds, $invalidCourseIds, $courseConditions);
-        if (isset($conditions['type']) && empty($courseConditions['ids'])) {
-            return $this->makePagingObject([], 0, $offset, $limit);
+        if (isset($conditions['type'])) {
+            if (in_array($conditions['type'], ['learned', 'learning']) && empty($courseConditions['courseSetIds'])) {
+                return $this->makePagingObject([], 0, $offset, $limit);
+            } else if ($conditions['type'] == ['expired'] && empty($courseConditions['ids'])) {
+                return $this->makePagingObject([], 0, $offset, $limit);
+            }
         }
         $courses = $this->getCourseService()->searchCourses(
             $courseConditions,
@@ -89,6 +93,7 @@ class MeCourse extends AbstractResource
                     $courses = ArrayToolkit::group($courses, 'courseSetId');
                     list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
                     $courseConditions['canLearn'] = '1';
+                    unset($courseConditions['ids']);
                     $courseConditions['courseSetIds'] = ('learning' === $conditions['type']) ? $learningCourseSetIds : $learnedCourseSetIds;
                     break;
                 case 'expired':
