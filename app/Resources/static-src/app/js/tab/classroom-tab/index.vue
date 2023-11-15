@@ -23,7 +23,7 @@
         <ClassroomList :classroomLists="classroomLists"></ClassroomList>
       </a-tab-pane>
       <a-tab-pane key="expired" tab="已过期">
-        <ClassroomList :classroomLists="classroomLists"></ClassroomList>
+        <ClassroomList :classroomLists="classroomLists" :tabValue="tabValue"></ClassroomList>
       </a-tab-pane>
     </a-tabs>
     <a-pagination v-if="total>pageSize" :defaultPageSize="pageSize" v-model="current" @change="onChange" :total="total" />
@@ -75,8 +75,7 @@ export default {
       let params = {
         title: this.searchValue,
         limit: this.pageSize,
-        offset: 0,
-        page: pageNumber,
+        offset: pageNumber-1,
         type,
         format: 'pagelist'
       }

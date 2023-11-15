@@ -166,7 +166,7 @@ class PagedCourseLesson {
           const isTaskTypeAllowed = allowedTaskTypes.includes(data.type);
           const isTaskResultIncomplete = data.resultStatus != 'finish';
           if(canLearn == '0' && (!isTaskTypeAllowed ||(isTaskTypeAllowed && isTaskResultIncomplete))) {
-            classNames += ' js-handleLearnOnMessage'
+            classNames += ' js-handleLearnContentOnMessage'
           }
 
           return classNames;
