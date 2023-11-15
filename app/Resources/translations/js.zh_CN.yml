@@ -814,6 +814,7 @@ validate.fail: 验证失败
 validate.course.closed: 课程已关闭，无法继续学习
 validate.classroom.closed: 班级已关闭，无法继续学习
 validate.exercise.closed: 题库已关闭，无法继续学习
+validate.learn_content.closed: 学习内容已关闭，无法继续学习
 validate.expiry_days_required_hint: 请输入有效期
 validate.empty_content_hint: 请输入内容!
 validate.no_number_first_hint: URL路径只能包含字母和数字,请以字母开头!长度大于2位

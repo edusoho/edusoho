@@ -159,6 +159,19 @@ class PagedCourseLesson {
           return classNames;
         },
 
+        'taskItemClass': function(data, context) {
+          const canLearn = context.course.canLearn
+          let classNames = 'title';
+          const allowedTaskTypes = ['testpaper', 'homework', 'exercise'];
+          const isTaskTypeAllowed = allowedTaskTypes.includes(data.type);
+          const isTaskResultIncomplete = data.resultStatus != 'finish';
+          if(canLearn == '0' && (!isTaskTypeAllowed ||(isTaskTypeAllowed && isTaskResultIncomplete))) {
+            classNames += ' js-handleLearnOnMessage'
+          }
+
+          return classNames;
+        },
+
         'lessonContainerClass': function(data, context) {
           let containerClass = 'color-gray';
           if (context.isTask(data, context)) {

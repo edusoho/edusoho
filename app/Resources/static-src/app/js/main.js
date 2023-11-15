@@ -39,6 +39,11 @@ $(document).on('click', '.js-handleExerciseOnMessage', function (event) {
   notify('danger', decodeURIComponent(Translator.trans('validate.exercise.closed')));
 });
 
+$(document).on('click', '.js-handleLearnContentOnMessage', function (event) {
+  event.preventDefault();
+  notify('danger', decodeURIComponent(Translator.trans('validate.learn_content.closed')));
+});
+
 $('[data-toggle="popover"]').popover({
   html: true
 });
