@@ -30,6 +30,7 @@ class ItemFilter extends Filter
     protected function publicFields(&$item)
     {
         $item = $this->convertFormulaToImg($item);
+        $item = $this->addItemEmphasisStyle($item);
         !empty($item['material']) && $item['material'] = $this->convertAbsoluteUrl($item['material']);
         !empty($item['analysis']) && $item['analysis'] = $this->convertAbsoluteUrl($item['analysis']);
         empty($item['analysis']) && $item['analysis'] = '';

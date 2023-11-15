@@ -139,6 +139,7 @@ class TestpaperWrapper
     protected function wrapItem($item)
     {
         $item = $this->convertFormulaToImg($item);
+        $item = $this->addItemEmphasisStyle($item);
         if ('material' == $item['type']) {
             $question = [
                 'id' => $item['id'],
