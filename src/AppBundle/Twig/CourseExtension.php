@@ -193,7 +193,6 @@ class CourseExtension extends \Twig_Extension
                     'resultStatus' => empty($item['result']['status']) ? '' : $item['result']['status'],
                     'lock' => $preview ? false : $item['lock'],
                     'status' => $item['status'],
-                    'canLearn' => $item['canLearn'],
                     'taskId' => $item['id'],
                     'isOptional' => $item['isOptional'],
                     'type' => $item['type'],
