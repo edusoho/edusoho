@@ -98,7 +98,7 @@
     },
     methods: {
       getRepeatStem(data) {
-        const stem = data.data.type === 'material' ? data.data.material : data.data.questions[0].stem
+        const stem = data.data.material !== '' ? data.data.material : data.data.questions[0].stem
         return new Promise(resolve => {
           $.ajax({
             url: $('[name=check_duplicative_url]').val(),
