@@ -30,6 +30,9 @@ class MeClassroom extends AbstractResource
         if (isset($querys['format']) && 'pagelist' == $querys['format']) {
             list($offset, $limit) = $this->getOffsetAndLimit($request);
             $classroomConditions = $this->buildClassroomConditions($members, $querys);
+            if (empty($classroomConditions['ids'])) {
+                return $this->makePagingObject([], 0, $offset, $limit);
+            }
             $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions, [], $offset, $limit);
             $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
 
@@ -89,7 +92,7 @@ class MeClassroom extends AbstractResource
                 break;
             default:
                 $closedClassroomIds = $this->getClassroomService()->searchClassrooms(['status' => 'closed', 'ids' => array_merge($learningIds, $learnedIds)], [], 0, PHP_INT_MAX, ['id']);
-                $classroomConditions['ids'] = array_merge($isExpiredIds, $closedClassroomIds);
+                $classroomConditions['ids'] = array_merge($isExpiredIds, array_column($closedClassroomIds, 'id'));
                 break;
         }
 
@@ -98,7 +101,7 @@ class MeClassroom extends AbstractResource
 
     private function isExpired($deadline)
     {
-        return $deadline != 0 && $deadline < time();
+        return 0 != $deadline && $deadline < time();
     }
 
     /**
