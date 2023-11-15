@@ -555,6 +555,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'maxRate',
             'buyable',
             'showable',
+            'canLearn',
             'orgCode',
             'orgId',
             'expiryMode',
@@ -845,10 +846,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (0 == $classroom['courseNum']) {
             $this->createNewException(ClassroomException::AT_LEAST_ONE_COURSE());
         }
-        $classroom = $this->updateClassroom($id, ['status' => 'published']);
+        $classroom = $this->updateClassroom($id, ['status' => 'published', 'canLearn' => '1']);
 
         $this->getClassroomGoodsMediator()->onPublish($classroom);
-        $this->dispatchEvent('classroom.publish', new Event($classroom));
+        $courseIds = implode(',', array_column($this->findCoursesByClassroomId($id), 'courseSetId'));
+        $this->getCourseSetService()->canLearningByIds($courseIds);
+        $this->getCourseSetService()->showByIds($courseIds);
+        $this->dispatchEvent('classroom.closed', new Event($classroom));
 
         return $classroom;
     }
@@ -857,11 +861,22 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $this->tryManageClassroom($id, 'admin_classroom_close');
 
-        $classroom = $this->updateClassroom($id, ['status' => 'closed']);
+        $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0', 'showable' => '0', 'display' => '0']);
         $this->getClassroomGoodsMediator()->onClose($classroom);
+        $courseIds = implode(',', array_column($this->findCoursesByClassroomId($id), 'courseSetId'));
+        $this->getCourseSetService()->banLearningByIds($courseIds);
+        $this->getCourseSetService()->hideByIds($courseIds);
         $this->dispatchEvent('classroom.close', new Event($classroom));
 
         return $classroom;
+    }
+
+    private function getCourseSetsById($id)
+    {
+        $classroomCourses = $this->findCoursesByClassroomId($id);
+        $courseSets = $this->getCourseSetService()->searchCourseSets(['ids' => array_column($classroomCourses, 'courseSetId')], [], 0, PHP_INT_MAX);
+
+        return $courseSets;
     }
 
     public function changePicture($id, $data)
@@ -2765,15 +2780,24 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function showClassroom($id)
     {
         $this->tryManageClassroom($id);
-
+        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
+        $this->getCourseSetService()->showByIds($courseIds);
         $classroom = $this->updateClassroom($id, ['showable' => '1']);
     }
 
     public function hideClassroom($id)
     {
         $this->tryManageClassroom($id);
-
-        $classroom = $this->updateClassroom($id, ['showable' => '0']);
+        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
+        $this->getCourseSetService()->hideByIds($courseIds);
+        $classroom = $this->updateClassroom($id, ['showable' => '0', 'display' => '0']);
+        $this->dispatchEvent(
+            'classroom.update',
+            new Event([
+                'classroom' => $classroom,
+                'fields' => ['showable' => '0'],
+            ])
+        );
     }
 
     /**

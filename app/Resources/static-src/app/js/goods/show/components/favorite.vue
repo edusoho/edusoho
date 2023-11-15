@@ -23,6 +23,11 @@
                 required: true
             },
 
+            goods: {
+                type: Object,
+                default: () => {}
+            },
+
             targetType: {
                 type: String,
                 required: true
@@ -67,6 +72,10 @@
             },
 
             onFavorite() {
+                if(this.goods.status == 'unpublished') {
+                    return this.$message.error(Translator.trans('validate.course.closed'));
+                }
+
                 if (this.favorite) {
                     this.removeFavorite(this.targetType, this.targetId);
                 } else {

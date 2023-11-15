@@ -2896,6 +2896,8 @@ classroom.add_course_tips: 班级数据处理中，请耐心等待。
 classroom.delete_btn: 删除
 classroom.free_course: 免费
 classroom.teach_plan: 教学计划
+classroom.closed.course: 关闭课程
+classroom.open.course: 发布课程
 classroom.live_course_playing: 正在直播中
 classroom.live: 直播
 classroom.task_num: >
@@ -11132,7 +11134,8 @@ exception.item_bank_exercise.answer_unpublish_chapter: 当前章节已取消发�
 exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
 exception.item_bank.assessment.not.exist: 试卷不存在
 exception.item_bank.assessment.is_empty: 试卷全部题目已被删除，请联系教师或管理员
-
+exception.exercise.closed.tips.title: 课程练习已关闭，无法购买/学习
+exception.exercise.closed.tips.content: 题库练习结果可查看
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
 exception.wechat.template_conflict_industry_hint: 服务号行业设置错误

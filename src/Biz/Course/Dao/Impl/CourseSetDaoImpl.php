@@ -76,6 +76,30 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
         return $builder->execute()->fetchAll();
     }
 
+    public function banLearningByIds($ids)
+    {
+        $sql = "UPDATE {$this->table} set canLearn = '0' where id in ({$ids})";
+        $this->db()->executeQuery($sql);
+    }
+
+    public function hideByIds($ids)
+    {
+        $sql = "UPDATE {$this->table} set display = '0' where id in ({$ids})";
+        $this->db()->executeQuery($sql);
+    }
+
+    public function canLearningByIds($ids)
+    {
+        $sql = "UPDATE {$this->table} set canLearn = '1' where id in ({$ids}) and status = 'published'";
+        $this->db()->executeQuery($sql);
+    }
+
+    public function showByIds($ids)
+    {
+        $sql = "UPDATE {$this->table} set display = '1' where id in ({$ids}) and showable = '1'";
+        $this->db()->executeQuery($sql);
+    }
+
     public function analysisCourseSetDataByTime($startTime, $endTime)
     {
         $conditions = [

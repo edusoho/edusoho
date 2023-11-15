@@ -2,6 +2,9 @@ import 'app/common/widget/qrcode';
 import { isMobileDevice } from 'common/utils';
 import Api from 'common/api';
 import 'store';
+import Vue from 'common/vue';
+import closedAlert from './closedAlert.vue';
+
 
 const WECHAT_SUBSCRIBE_INTRO = 'WECHAT_SUBSCRIBE_INTRO';
 
@@ -100,3 +103,13 @@ if ($notificationEnable == 'messageSubscribe' && !store.get(WECHAT_SUBSCRIBE_INT
   store.set(WECHAT_SUBSCRIBE_INTRO, true);
   wechatIntro();
 }
+
+
+jQuery.support.cors = true;
+
+Vue.config.productionTip = false;
+
+
+new Vue({
+  render: createElement => createElement(closedAlert)
+}).$mount('#closedAlert');

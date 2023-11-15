@@ -44,6 +44,30 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $this->db()->fetchAll($sql, [$courseSetTitle]);
     }
 
+    public function showByCourseSetIds($courseSetIds)
+    {
+        $sql = "UPDATE {$this->table} set display = '1' where courseSetId in ({$courseSetIds}) and showable = '1';";
+        $this->db()->executeQuery($sql);
+    }
+
+    public function hideByCourseSetIds($courseSetIds)
+    {
+        $sql = "UPDATE {$this->table} set display = '0' where courseSetId in ({$courseSetIds});";
+        $this->db()->executeQuery($sql);
+    }
+
+    public function canLearningByCourseSetIds($courseSetIds)
+    {
+        $sql = "UPDATE {$this->table} set canLearn = '1' where courseSetId in ({$courseSetIds}) and status = 'published';";
+        $this->db()->executeQuery($sql);
+    }
+
+    public function banLearningByCourseSetIds($courseSetIds)
+    {
+        $sql = "UPDATE {$this->table} set canLearn = '0' where courseSetId in ({$courseSetIds});";
+        $this->db()->executeQuery($sql);
+    }
+
     public function findCoursesByCourseSetIdAndStatus($courseSetId, $status = null)
     {
         if (empty($status)) {
@@ -190,6 +214,23 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         $this->db()->update($this->table, $fields, ['courseSetId' => $courseSetId]);
     }
 
+    public function updateByCourseSetId($courseSetId, $fields)
+    {
+        $this->db()->update($this->table, $fields, ['courseSetId' => $courseSetId]);
+    }
+
+    public function showByCourseSetId($courseSetIds)
+    {
+        $sql = "UPDATE {$this->table} set display = '1' where courseSetId in ({$courseSetIds}) and showable = '1';";
+        $this->db()->executeQuery($sql);
+    }
+
+    public function canLearningByCourseSetId($courseSetIds)
+    {
+        $sql = "UPDATE {$this->table} set canLearn = '1' where courseSetId in ({$courseSetIds}) and status = 'published';";
+        $this->db()->executeQuery($sql);
+    }
+
     public function searchWithJoinCourseSet($conditions, $orderBys, $start, $limit)
     {
         $builder = $this->createJoinCourseSetQueryBuilder($conditions)
@@ -313,6 +354,8 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'course_v8.type IN (:types)',
                 'course_v8.courseType = :courseType',
                 'course_v8.isDefault = :isDefault',
+                'course_v8.canLearn = :canLearn',
+                'course_v8.showable = :showable',
             ],
             'wave_cahceable_fields' => ['hitNum'],
         ];

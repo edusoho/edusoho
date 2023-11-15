@@ -28,10 +28,16 @@ class MeItemBankExercise extends AbstractResource
                 unset($members[$key]);
             } else {
                 $member['itemBankExercise'] = $itemBankExercises[$member['exerciseId']];
+                $member['isExpired'] = $this->isExpired($members['deadline']);
             }
         }
 
         return $this->makePagingObject(array_values($members), $total, $offset, $limit);
+    }
+
+    private function isExpired($deadline)
+    {
+        return 0 != $deadline && $deadline < time();
     }
 
     protected function getUserService()

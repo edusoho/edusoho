@@ -374,7 +374,23 @@ interface CourseService
 
     public function courseItemIdsHandle($courseId, $ids);
 
-    public function showCourse($id);
+    public function showCourse($id, $courseSetIsPublished);
 
-    public function hideCourse($id);
+    public function hideCourse($id, $courseSetIsPublished);
+
+    public function banLearningByCourseSetId($courseSetId);
+
+    public function canLearningByCourseSetId($courseSetId);
+
+    public function hideByCourseSetId($courseSetId);
+
+    public function showByCourseSetId($courseSetId);
+
+    public function hideByCourseSetIds($courseSetIds);
+
+    public function showByCourseSetIds($courseSetIds);
+
+    public function banLearningByCourseSetIds($courseSetIds);
+
+    public function canLearningByCourseSetIds($courseSetIds);
 }

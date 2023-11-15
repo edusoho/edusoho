@@ -18,11 +18,7 @@ $form.validate({
   },
   submitSuccess(res) {
     notify('success', Translator.trans(res.message));
-    if ($form.data('targeType') == 'modal') {
-      $('#modal').load($form.data('goto')).modal('show');
-    } else {
-      window.location.href = res.data.targetPath;
-    }
+      window.location.href = '/';
     
     return false;
   },

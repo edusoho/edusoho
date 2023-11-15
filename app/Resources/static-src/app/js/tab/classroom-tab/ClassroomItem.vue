@@ -35,7 +35,14 @@
 <script>
 export default {
   props: {
-    classItem: Object
+    classItem: {
+      type: Object,
+      default: {}
+    },
+    tabValue: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
@@ -48,7 +55,7 @@ export default {
         text: ''
       }
       
-      if (this.classItem.spec.status == 'closed') {
+      if (this.classItem.status == 'closed') {
         status = {
           class: 'course-status-expired',
           text: '已关闭'
@@ -58,7 +65,7 @@ export default {
       return status
     },
     btnContent() {
-      if (this.classItem.spec.status === 'closed') {
+      if (this.classItem?.status === 'closed' || this.classItem?.learningProgressPercent == 100 || this.tabValue == 'expired') {
         return '查看班级'
       }
 

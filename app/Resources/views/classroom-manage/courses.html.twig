@@ -80,16 +80,32 @@
 
                       {% if course.title %}<div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{ course.title|raw }}</div>{% endif %}
                     </h4>
-                    <div class="btn-group course-manage-btn">
-
-                      {% if has_permission('admin_v2_course_content_manage') %}
-                        <a class="btn btn-default btn-sm" href="{{ path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'}) }}"
+                    <div class="cd-dropdown btn-group course-manage-btn" data-toggle="cd-dropdown" data-trigger="hover">
+                      <a class="btn btn-default btn-sm"
+                            href="path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'})"
                           target="_blank">{{ 'admin.course_manage.manage.manage_btn'|trans }}</a>
-                      {% endif %}
-                      {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_course_manage', group:'groupButton', courseSet: course.courseSet,filter:''} %}
+                          <a href="#" type="button" class="cd-link-major btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                          </a>
+                      <ul class="dropdown-menu courses-operation-dropdown" style="top: 30px !important; left: 36px;">
+                        {% if course.status == 'published' %}
+                        <li>
+                          <a
+                            href="javascript:;"
+                            data-url="{{ path('course_set_manage_course_close', {courseSetId: course.courseSet.id, courseId: course.id}) }}">
+                            {{ 'classroom.closed.course'|trans }}</a>
+                        </li>
+                        {% else %}
+                        <li>
+                          <a
+                            href="javascript:;"
+                            data-url="{{ path('course_set_manage_course_publish', {courseSetId: course.courseSet.id, courseId: course.id}) }}">
+                            {{ 'classroom.open.course'|trans }}</a>
+                        </li>
+                        {% endif %}
+                      </ul>
                     </div>
                     {# <div class="course-manage-btn"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div> #}
-
                     <div class="course-footer clearfix">
                       {% set teacher = users[course.teacherIds|first]|default(null) %}
                       {% if teacher %}

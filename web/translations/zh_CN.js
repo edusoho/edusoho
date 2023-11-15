@@ -685,7 +685,10 @@ t.add("validate.modify_days", "\u8bf7\u8f93\u5165\u4fee\u6539\u5929\u6570", "js"
 t.add("validate.modify_day_number", "\u8bf7\u8f93\u5165\u4e0d\u5927\u4e8e 7300\uff0820\u5e74\uff09\u7684\u6570\u503c", "js", "zh_CN");
 t.add("validate.success", "\u9a8c\u8bc1\u6210\u529f", "js", "zh_CN");
 t.add("validate.fail", "\u9a8c\u8bc1\u5931\u8d25", "js", "zh_CN");
-t.add("validate.course.closed", "\u8be5\u8bfe\u7a0b\u5df2\u5173\u95ed", "js", "zh_CN");
+t.add("validate.course.closed", "\u8bfe\u7a0b\u5df2\u5173\u95ed\uff0c\u65e0\u6cd5\u7ee7\u7eed\u5b66\u4e60", "js", "zh_CN");
+t.add("validate.classroom.closed", "\u73ed\u7ea7\u5df2\u5173\u95ed\uff0c\u65e0\u6cd5\u7ee7\u7eed\u5b66\u4e60", "js", "zh_CN");
+t.add("validate.exercise.closed", "\u9898\u5e93\u5df2\u5173\u95ed\uff0c\u65e0\u6cd5\u7ee7\u7eed\u5b66\u4e60", "js", "zh_CN");
+t.add("validate.learn_content.closed", "\u5b66\u4e60\u5185\u5bb9\u5df2\u5173\u95ed\uff0c\u65e0\u6cd5\u7ee7\u7eed\u5b66\u4e60", "js", "zh_CN");
 t.add("validate.expiry_days_required_hint", "\u8bf7\u8f93\u5165\u6709\u6548\u671f", "js", "zh_CN");
 t.add("validate.empty_content_hint", "\u8bf7\u8f93\u5165\u5185\u5bb9!", "js", "zh_CN");
 t.add("validate.no_number_first_hint", "URL\u8def\u5f84\u53ea\u80fd\u5305\u542b\u5b57\u6bcd\u548c\u6570\u5b57,\u8bf7\u4ee5\u5b57\u6bcd\u5f00\u5934!\u957f\u5ea6\u5927\u4e8e2\u4f4d", "js", "zh_CN");
@@ -1616,6 +1619,9 @@ t.add("goods.show_page.tab.catalogue.empty", "\u8d2d\u4e70\u5b8c\u6210\u540e\u53
 t.add("goods.show_page.tab.reviews", "\u5b66\u5458\u8bc4\u4ef7", "js", "zh_CN");
 t.add("goods.show_page.tab.reviews_empty_tips", "\u6682\u65e0\u8bc4\u4ef7\u54e6~", "js", "zh_CN");
 t.add("goods.show_page.tab.summary_empty_tips", "\u6682\u65e0\u7b80\u4ecb\u54e6\uff5e", "js", "zh_CN");
+t.add("goods.show_page.tab.course.closed_tip", "\u8bfe\u7a0b\u5df2\u5173\u95ed\uff0c\u65e0\u6cd5\u8d2d\u4e70\/\u5b66\u4e60", "js", "zh_CN");
+t.add("goods.show_page.tab.classroom.closed_tip", "\u73ed\u7ea7\u5df2\u5173\u95ed\uff0c\u65e0\u6cd5\u8d2d\u4e70\/\u5b66\u4e60", "js", "zh_CN");
+t.add("goods.show_page.tab.exercise.closed_tip", "\u9898\u5e93\u5df2\u5173\u95ed\uff0c\u65e0\u6cd5\u8d2d\u4e70\/\u5b66\u4e60", "js", "zh_CN");
 t.add("goods.show_page.authentication_certificate", "\u8ba4\u8bc1\u8bc1\u4e66", "js", "zh_CN");
 t.add("site.favorited", "\u5df2\u6536\u85cf", "js", "zh_CN");
 t.add("site.favorite", "\u6536\u85cf", "js", "zh_CN");

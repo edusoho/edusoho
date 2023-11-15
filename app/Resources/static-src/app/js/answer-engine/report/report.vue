@@ -14,6 +14,8 @@
       :showDoAgainBtn="showDoAgainBtn"
       :cdnHost="cdnHost"
       :collect="collect"
+      :exercise="exercise"
+      :courseSetStatus="courseSetStatus"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
       @previewAttachment="previewAttachment"
@@ -35,6 +37,9 @@
 </template>
 
 <script>
+  import { CourseSet } from 'common/vue/service/index.js';
+  import { ItemBankExercises } from 'common/vue/service/index.js';
+
   export default {
     data() {
       return {
@@ -47,12 +52,14 @@
           language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang,
           jqueryPath: $('[name=jquery_path]').val()
         },
+        courseSetStatus: '',
         showAttachment: $('[name=show_attachment]').val(),
         cdnHost: $('[name=cdn_host]').val(),
         fileId: 0,
         showDoAgainBtn: $('[name=show_do_again_btn]').val() === undefined ? 1 : parseInt($('[name=show_do_again_btn]').val()),
         showReturnBtn: $('[name=submit_return_url]').val() === undefined ? 0 : $('[name=submit_return_url]').val().length,
-        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1',
+        exercise: {}
       };
     },
     provide() {
@@ -61,7 +68,22 @@
       }
     },
     created() {
+      const path = location.pathname;
+      const reg = /\/([^\/]+)\/([^\/]+)/;
+      const match = path.match(reg);
+      const type = match[1];
+      const id = match[2];
+
+      if(type == 'course') {
+        this.getCourse(id)
+      }
+
+      if(type == 'item_bank_exercise') {
+        this.getExercise()
+      }
+      
         const that = this;
+
         $.ajax({
           url: '/api/answer_record/'+$("[name='answer_record_id']").val(),
           type: 'GET',
@@ -95,8 +117,17 @@
         }).done(function (res) {
           that.questionFavorites = res;
         })
+
     },
     methods: {
+      async getExercise() {
+        const res = await ItemBankExercises.getExercise($("[name='answer_record_id']").val());
+        this.exercise = res
+      },
+      async getCourse(id) {
+        const {status} = await CourseSet.get(id)
+        this.courseSetStatus = status;
+      },
       doAgainEvent(data) {
         location.href = $('[name=restart_url]').val();
       },

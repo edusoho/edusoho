@@ -24,13 +24,13 @@
       {% endif %}
       <div id="sign">
         {% if not isSignedToday %}
-          <div class="sign-area"  data-role="sign">
+          <div class="sign-area {% if classroom.status == 'closed' %}js-handleClassroomOnMessage{% endif %}" {% if classroom.status != 'closed' %}data-role="sign"{% endif %}>
             <a class="btn-signin" href="javascript:;">
               {{'classroom.member_sign'|trans}}
             </a>
           </div>
         {% else %}
-          <div class="sign-area" data-role="signed" onclick="return false;" >
+          <div class="sign-area {% if classroom.status == 'closed' %}js-handleClassroomOnMessage{% endif %}"  {% if classroom.status != 'closed' %} data-role="signed" onclick="return false;"{% endif %} >
             <a class="btn-signin after" >{{'classroom.member_signed'|trans}}
             <br>{{'classroom.sign_keep_days'|trans({'%keepDays%':userSignStatistics.keepDays})}}</a>
           </div>

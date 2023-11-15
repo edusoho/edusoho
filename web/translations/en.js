@@ -739,7 +739,10 @@ t.add("validate.title_required_hint", "Please enter a title, it cannot be empty.
 t.add("validate.mobile_or_email_message", "please input the right mobile\/email", "js", "en");
 t.add("validate.success", "Verified successfully", "js", "en");
 t.add("validate.fail", "Failed to verify", "js", "en");
-t.add("validate.course.closed", "The course is closed", "js", "en");
+t.add("validate.course.closed", "The course is closed and cannot be continued", "js", "en");
+t.add("validate.classroom.closed", "The classroom is closed and cannot be continued", "js", "en");
+t.add("validate.exercise.closed", "The exercise is closed and cannot be continued", "js", "en");
+t.add("validate.learn_content.closed", "The learning content has been closed and you cannot continue studying", "js", "en");
 t.add("validate.expiry_days_required_hint", "please input the expiry days", "js", "en");
 t.add("validate.empty_content_hint", "please input content!", "js", "en");
 t.add("validate.no_number_first_hint", "URL path can only contain letters and numbers, please start with a letter! Length is greater than 2 digits", "js", "en");
@@ -1656,6 +1659,9 @@ t.add("goods.show_page.tab.catalogue.empty", "After purchasing, you can view the
 t.add("goods.show_page.tab.reviews", "Reviews", "js", "en");
 t.add("goods.show_page.tab.reviews_empty_tips", "No Reviews", "js", "en");
 t.add("goods.show_page.tab.summary_empty_tips", "No Summary", "js", "en");
+t.add("goods.show_page.tab.course.closed_tip", "Course is closed, unable to purchase\/study.", "js", "en");
+t.add("goods.show_page.tab.classroom.closed_tip", "Classroom is closed, unable to purchase\/study.", "js", "en");
+t.add("goods.show_page.tab.exercise.closed_tip", "Question bank is closed, unable to purchase\/study.", "js", "en");
 t.add("goods.show_page.authentication_certificate", "Authentication Certificate", "js", "en");
 t.add("site.favorited", "Favorited", "js", "en");
 t.add("site.favorite", "Favorite", "js", "en");
