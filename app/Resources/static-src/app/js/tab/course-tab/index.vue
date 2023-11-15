@@ -24,9 +24,9 @@
         <CourseList :courseLists="courseLists"></CourseList>
       </a-tab-pane>
       <a-tab-pane key="expired" tab="已过期">
-        <CourseList :courseLists="courseLists"></CourseList>
+        <CourseList :courseLists="courseLists" :tabValue="tabValue"></CourseList>
       </a-tab-pane>
-      <a-tab-pane key="favorited" tab="收藏">
+      <a-tab-pane key="favorite" tab="收藏">
         <CourseList :courseLists="courseLists"></CourseList>
       </a-tab-pane>
     </a-tabs>
@@ -70,6 +70,18 @@ export default {
   methods: {
     async tabOnChange(key) {
       this.current = 1
+      if(key == 'favorite') {
+        let params = {
+        limit: this.pageSize,
+        offset: 0
+      }
+
+        const { data, paging } = await Me.searchFavoriteCourses(params)
+        this.courseLists = data
+        this.total = paging.total
+        return
+      }
+
       await this.getTabData(key);
     },
     onChange(pageNumber) {
@@ -79,9 +91,15 @@ export default {
       let params = {
         title: this.searchValue,
         limit: this.pageSize,
-        offset: 0,
-        page: pageNumber,
+        offset: pageNumber-1,
         type
+      }
+
+      if(type == 'favorite') {
+        const { data, paging } = await Me.searchFavoriteCourses(params)
+        this.courseLists = data
+        this.total = paging.total
+        return
       }
 
       const { data, paging } = await Me.searchCourses(params)

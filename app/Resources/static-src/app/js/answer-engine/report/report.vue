@@ -14,6 +14,7 @@
       :showDoAgainBtn="showDoAgainBtn"
       :cdnHost="cdnHost"
       :collect="collect"
+      :exercise="exercise"
       :courseSetStatus="courseSetStatus"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
@@ -37,6 +38,7 @@
 
 <script>
   import { CourseSet } from 'common/vue/service/index.js';
+  import { ItemBankExercises } from 'common/vue/service/index.js';
 
   export default {
     data() {
@@ -56,7 +58,8 @@
         fileId: 0,
         showDoAgainBtn: $('[name=show_do_again_btn]').val() === undefined ? 1 : parseInt($('[name=show_do_again_btn]').val()),
         showReturnBtn: $('[name=submit_return_url]').val() === undefined ? 0 : $('[name=submit_return_url]').val().length,
-        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1',
+        exercise: {}
       };
     },
     provide() {
@@ -75,7 +78,12 @@
         this.getCourse(id)
       }
 
+      if(type == 'item_bank_exercise') {
+        this.getExercise()
+      }
+      
         const that = this;
+
         $.ajax({
           url: '/api/answer_record/'+$("[name='answer_record_id']").val(),
           type: 'GET',
@@ -112,6 +120,10 @@
 
     },
     methods: {
+      async getExercise() {
+        const res = await ItemBankExercises.getExercise($("[name='answer_record_id']").val());
+        this.exercise = res
+      },
       async getCourse(id) {
         const {status} = await CourseSet.get(id)
         this.courseSetStatus = status;

@@ -9812,7 +9812,8 @@ exception.item_bank_exercise.answer_unpublish_chapter: The current chapter has b
 exception.item_bank.assessment.not.open: The test paper is closed, please contact the teacher
 exception.item_bank.assessment.not.exist: Test paper does not exist
 exception.item_bank.assessment.is_empty: All questions have been removed from the paper. Please contact the teacher or administrator
-
+exception.exercise.closed.tips.title: Course exercises have been closed and cannot be purchased/studied
+exception.exercise.closed.tips.content: The results of the question bank exercises can be viewed
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
 exception.wechat.template_conflict_industry_hint: Service number industry setting error.

@@ -24,10 +24,9 @@
         </tmp>
       </span>
     </li>
-
     <li display-if="{isTask}" class="task-item task-content {highlightTaskClass} {lessonContainerClass} mouse-control infinite-item">
       <i class="{taskClass}"></i>
-      <a display-if="{isPublishedTaskUnlocked}" class="title"
+      <a display-if="{isPublishedTaskUnlocked}" class="{taskItemClass}"
           href="{{ path('course_task_show', {id: '{taskId}',courseId: course.id}) }}">
         <tmp display-if="{isItemDisplayedAsOptional}">
           <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>

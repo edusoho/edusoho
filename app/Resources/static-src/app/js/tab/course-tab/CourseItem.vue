@@ -35,7 +35,14 @@
 <script>
 export default {
   props: {
-    course: Object
+    course: {
+      type: Object,
+      default: {}
+    },
+    tabValue: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
@@ -47,12 +54,12 @@ export default {
         class: '',
         text: ''
       }
-      if (this.course.spec.status == 'closed') {
+      if (this.course?.courseSet?.status == 'closed') {
         status = {
           class: 'course-status-expired',
           text: '已关闭'
         }
-      } else if (this.course.courseSet.type == 'live') {
+      } else if (this.course?.courseSet?.type == 'live') {
         status = {
           class: 'course-status-live',
           text: '直播'
@@ -62,7 +69,7 @@ export default {
       return status
     },
     btnContent() {
-      if (this.course.spec.status === 'closed') {
+      if (this.course?.courseSet?.status === 'closed' || this.tabValue == 'expired' || this.course?.progress?.percent == 100) {
         return '查看课程'
       }
 
@@ -70,7 +77,7 @@ export default {
     },
     progressClass() {
       return {
-        width: `${this.course.progress.percent}%`
+        width: `${this.course?.progress?.percent}%`
       }
     }
   }

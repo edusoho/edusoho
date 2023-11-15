@@ -779,8 +779,6 @@ homework_manage.result_graph.max_status_num: Number of max result
 intro.confirm_hint: Finish
 
 
-
-
 validate.required.message: Please input %display%
 validate.valid_enter.retest.interval: Retest interval
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
@@ -869,6 +867,7 @@ validate.fail: Failed to verify
 validate.course.closed: The course is closed and cannot be continued
 validate.classroom.closed: The classroom is closed and cannot be continued
 validate.exercise.closed: The exercise is closed and cannot be continued
+validate.learn_content.closed: The learning content has been closed and you cannot continue studying
 validate.expiry_days_required_hint: please input the expiry days
 validate.empty_content_hint: please input content!
 validate.no_number_first_hint: URL path can only contain letters and numbers, please start with a letter! Length is greater than 2 digits
