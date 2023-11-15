@@ -45,6 +45,7 @@ class HTMLPurifierFactory
         $def->addAttribute('span', 'data-tex', 'Text');
         $def->addAttribute('span', 'data-img', 'Text');
         $def->addAttribute('span', 'data-display', 'Text');
+        $def->addAttribute('span', 'data-emphasis', 'Text');
 
         return new \HTMLPurifier($config);
     }
