@@ -128,12 +128,12 @@
                 that.forceRemoveModalDom()
               },
               onCancel() {
-                // that.createdItemQuestion(data)
+                that.createdItemQuestion(data)
                 that.forceRemoveModalDom()
               },
             });
           } else {
-            // that.createdItemQuestion(data)
+            that.createdItemQuestion(data)
           }
         }).catch( (res)=> {
           console.log(res);
