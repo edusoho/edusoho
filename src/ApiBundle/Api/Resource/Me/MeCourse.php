@@ -71,7 +71,7 @@ class MeCourse extends AbstractResource
     private function buildSearchConditions($request)
     {
         $conditions = $request->query->all();
-        $conditions['status'] = 'published';
+        $conditions['canLearn'] = '1';
         $conditions['classroomId'] = 0;
         $conditions['joinedType'] = 'course';
         $conditions['userId'] = $this->getCurrentUser()->getId();
@@ -88,8 +88,8 @@ class MeCourse extends AbstractResource
                 case 'learned':
                     $courses = ArrayToolkit::group($courses, 'courseSetId');
                     list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
-                    $courseConditions['status'] = 'published';
-                    $courseConditions['ids'] = ('learning' === $conditions['type']) ? $learningCourseSetIds : $learnedCourseSetIds;
+                    $courseConditions['canLearn'] = '1';
+                    $courseConditions['courseSetIds'] = ('learning' === $conditions['type']) ? $learningCourseSetIds : $learnedCourseSetIds;
                     break;
                 case 'expired':
                     $closedCourses = $this->getCourseService()->searchCourses(['status' => 'closed', 'ids' => array_merge($validCourseIds)], [], 0, PHP_INT_MAX);
@@ -104,7 +104,7 @@ class MeCourse extends AbstractResource
 
     private function isExpired($deadline)
     {
-        return $deadline != 0 && $deadline < time();
+        return 0 != $deadline && $deadline < time();
     }
 
     protected function differentiateCourseSetIds($groupCourses, $members)
