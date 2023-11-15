@@ -742,6 +742,7 @@ t.add("validate.fail", "Failed to verify", "js", "en");
 t.add("validate.course.closed", "The course is closed and cannot be continued", "js", "en");
 t.add("validate.classroom.closed", "The classroom is closed and cannot be continued", "js", "en");
 t.add("validate.exercise.closed", "The exercise is closed and cannot be continued", "js", "en");
+t.add("validate.learn_content.closed", "The learning content has been closed and you cannot continue studying", "js", "en");
 t.add("validate.expiry_days_required_hint", "please input the expiry days", "js", "en");
 t.add("validate.empty_content_hint", "please input content!", "js", "en");
 t.add("validate.no_number_first_hint", "URL path can only contain letters and numbers, please start with a letter! Length is greater than 2 digits", "js", "en");

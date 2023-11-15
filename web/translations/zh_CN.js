@@ -688,6 +688,7 @@ t.add("validate.fail", "\u9a8c\u8bc1\u5931\u8d25", "js", "zh_CN");
 t.add("validate.course.closed", "\u8bfe\u7a0b\u5df2\u5173\u95ed\uff0c\u65e0\u6cd5\u7ee7\u7eed\u5b66\u4e60", "js", "zh_CN");
 t.add("validate.classroom.closed", "\u73ed\u7ea7\u5df2\u5173\u95ed\uff0c\u65e0\u6cd5\u7ee7\u7eed\u5b66\u4e60", "js", "zh_CN");
 t.add("validate.exercise.closed", "\u9898\u5e93\u5df2\u5173\u95ed\uff0c\u65e0\u6cd5\u7ee7\u7eed\u5b66\u4e60", "js", "zh_CN");
+t.add("validate.learn_content.closed", "\u5b66\u4e60\u5185\u5bb9\u5df2\u5173\u95ed\uff0c\u65e0\u6cd5\u7ee7\u7eed\u5b66\u4e60", "js", "zh_CN");
 t.add("validate.expiry_days_required_hint", "\u8bf7\u8f93\u5165\u6709\u6548\u671f", "js", "zh_CN");
 t.add("validate.empty_content_hint", "\u8bf7\u8f93\u5165\u5185\u5bb9!", "js", "zh_CN");
 t.add("validate.no_number_first_hint", "URL\u8def\u5f84\u53ea\u80fd\u5305\u542b\u5b57\u6bcd\u548c\u6570\u5b57,\u8bf7\u4ee5\u5b57\u6bcd\u5f00\u5934!\u957f\u5ea6\u5927\u4e8e2\u4f4d", "js", "zh_CN");
