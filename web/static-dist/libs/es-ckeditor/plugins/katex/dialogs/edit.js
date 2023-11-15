@@ -111,7 +111,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
         }, {
           id: 'doc',
           type: 'html',
-          html: "\n            <div style=\"width: 100%; text-align: right; margin: -8px 0 10px;\">\n              <a\n                href=\"http://en.wikibooks.org/wiki/LaTeX/Mathematics\"\n                target=\"_blank\"\n                rel=\"noopener noreferrer\"\n                style=\"cursor:pointer;text-decoration:underline;\"\n               >\n                TeX documentation\n              </a>\n            </div>\n          "
+          html: ""
         }, {
           id: 'preview',
           type: 'html',
