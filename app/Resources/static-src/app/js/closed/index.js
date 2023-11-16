@@ -8,17 +8,3 @@ function getUrlParameter(name) {
 const type = getUrlParameter('type');
 
 $('.js-closed-title').html(Translator.trans(`exception.${type}.closed.content`))
-// switch (type) {
-//     case 'course':
-//         $('.js-closed-title').html('12e3')
-//       break;
-//     case 'classroom':
-//         $('.js-closed-title').html('12f3')
-//       break;
-//     case 'exercise':
-//         $('.js-closed-title').html(Translator.trans('exception.exercise.closed.content'))
-//       break;
-//     default:
-//         $('.js-closed-title').html('123')
-//       break;
-//   }
