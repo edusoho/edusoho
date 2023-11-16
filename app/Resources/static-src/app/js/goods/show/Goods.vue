@@ -1,7 +1,6 @@
 <template>
     <div class="cd-container">
         <div class="product-breadcrumb"><a href="/">{{ 'homepage'|trans }}</a> / {{goods.title|removeHtml}}</div>
-        {{ goods.status }}
         <a-alert
             v-if="goods.status == 'unpublished'"
             class="mt16"
