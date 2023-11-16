@@ -46,12 +46,14 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
 
     public function showByCourseSetIds($courseSetIds)
     {
+        $courseSetIds = implode(',', $courseSetIds);
         $sql = "UPDATE {$this->table} set display = '1' where courseSetId in ({$courseSetIds}) and showable = '1';";
         $this->db()->executeQuery($sql);
     }
 
     public function hideByCourseSetIds($courseSetIds)
     {
+        $courseSetIds = implode(',', $courseSetIds);
         $sql = "UPDATE {$this->table} set display = '0' where courseSetId in ({$courseSetIds});";
         $this->db()->executeQuery($sql);
     }
@@ -64,6 +66,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
 
     public function banLearningByCourseSetIds($courseSetIds)
     {
+        $courseSetIds = implode(',', $courseSetIds);
         $sql = "UPDATE {$this->table} set canLearn = '0' where courseSetId in ({$courseSetIds});";
         $this->db()->executeQuery($sql);
     }
@@ -75,6 +78,11 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         }
 
         return $this->findByFields(['courseSetId' => $courseSetId, 'status' => $status]);
+    }
+
+    public function findCoursesByCourseSetIdAndDisplay($courseSetId, $display = 1)
+    {
+        return $this->findByFields(['courseSetId' => $courseSetId, 'display' => $display]);
     }
 
     public function getDefaultCourseByCourseSetId($courseSetId)
@@ -227,6 +235,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
 
     public function canLearningByCourseSetId($courseSetIds)
     {
+        $courseSetIds = implode(',', $courseSetIds);
         $sql = "UPDATE {$this->table} set canLearn = '1' where courseSetId in ({$courseSetIds}) and status = 'published';";
         $this->db()->executeQuery($sql);
     }

@@ -21,6 +21,7 @@ class LatestCourseSetsDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCount($arguments);
         $conditions = [
             'status' => 'published',
+            'display' => '1',
             'parentId' => 0,
         ];
         $conditions = $this->getCourseService()->appendReservationConditions($conditions);
