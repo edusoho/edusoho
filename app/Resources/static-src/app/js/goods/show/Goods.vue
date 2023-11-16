@@ -1,6 +1,7 @@
 <template>
     <div class="cd-container">
         <div class="product-breadcrumb"><a href="/">{{ 'homepage'|trans }}</a> / {{goods.title|removeHtml}}</div>
+        {{ goods.status }}
         <a-alert
             v-if="goods.status == 'unpublished'"
             class="mt16"
@@ -213,6 +214,8 @@
                 if (this.goods.type === 'course' && this.targetId) {
                     return Translator.trans('goods.show_page.tab.course.closed_tip');
                 }
+
+                return Translator.trans('validate.learn_content.closed');
             },
             summaryHtml() {
                 if (!this.goods.summary) return Translator.trans('goods.show_page.tab.summary_empty_tips');
