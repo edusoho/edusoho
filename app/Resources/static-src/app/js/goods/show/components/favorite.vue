@@ -73,7 +73,8 @@
 
             onFavorite() {
                 if(this.goods.status == 'unpublished') {
-                    return this.$message.error(Translator.trans('validate.course.closed'));
+                    window.location.href = `/course/closed?type=${this.goods.type}`
+                    return
                 }
 
                 if (this.favorite) {

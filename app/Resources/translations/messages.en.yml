@@ -9817,6 +9817,8 @@ exception.exercise.closed.tips.content: The results of the question bank exercis
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
 exception.wechat.template_conflict_industry_hint: Service number industry setting error.
+exception.not_continue.look: Cannot continue viewing.
+exception.go_home: Go back home.
 
 exception.destroy_account.reason_too_long: Write off reason limit 200 words
 exception.destroy_account.not_found_record: Record Not Found

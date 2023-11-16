@@ -3348,6 +3348,12 @@ my_course_show:
         _controller: 'AppBundle:My/Course:show'
         tab: tasks
     h5: true
+course_closed:
+  path: '/course/closed'
+  defaults:
+    _controller: 'AppBundle:Course/Course:closed'
+    tab: tasks
+  h5: true
 course_member_expired:
     path: '/course/{id}/member/expired'
     defaults:
