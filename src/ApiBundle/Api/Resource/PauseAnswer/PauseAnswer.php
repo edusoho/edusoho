@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Testpaper\ExerciseException;
 
 class PauseAnswer extends AbstractResource
@@ -50,5 +51,13 @@ class PauseAnswer extends AbstractResource
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getExerciseService()
+    {
+        return $this->service('ItemBankExercise:ExerciseService');
     }
 }
