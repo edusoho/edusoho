@@ -87,10 +87,11 @@
                           <a href="#" type="button" class="cd-link-major btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                           </a>
-                      <ul class="dropdown-menu courses-operation-dropdown" style="top: 30px !important; left: 36px;">
+                      <ul class="dropdown-menu courses-operation-dropdown" style="top: 30px !important; left: 0px;">
                         {% if course.status == 'published' %}
                         <li>
                           <a
+                          class="js-manage-course-close"
                             href="javascript:;"
                             data-url="{{ path('course_set_manage_course_close', {courseSetId: course.courseSet.id, courseId: course.id}) }}">
                             {{ 'classroom.closed.course'|trans }}</a>
@@ -98,6 +99,7 @@
                         {% else %}
                         <li>
                           <a
+                          class="js-manage-course-open"
                             href="javascript:;"
                             data-url="{{ path('course_set_manage_course_publish', {courseSetId: course.courseSet.id, courseId: course.id}) }}">
                             {{ 'classroom.open.course'|trans }}</a>
