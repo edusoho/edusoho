@@ -372,6 +372,7 @@ export default {
         homeworkId: this.$route.query.homeworkId,
         userId: this.user.id,
         homeworkResultId: this.homework.id,
+        courseId: this.$route.query.courseId
       };
 
       return new Promise((resolve, reject) => {
@@ -409,6 +410,7 @@ export default {
               return
             }
 
+            Toast.fail(err.message);
             reject(err);
           });
       });
@@ -423,6 +425,7 @@ export default {
         admission_ticket: this.homework.admission_ticket,
         answer: JSON.parse(JSON.stringify(this.answer)),
         resultId: this.homework.id,
+        courseId: this.$route.query.courseId
       }).catch((error) => {
         const { code: errorCode, message, traceId } = error;
 
@@ -454,6 +457,8 @@ export default {
           }).then(() => this.exitPage())
           return
         }
+
+        Toast.fail(err.message);
 
         Dialog.confirm({
           title: '网络连接不可用，自动保存失败',

@@ -185,6 +185,7 @@ const getstudyItemBankDisplay = data => {
     },
     bottom: {
       value: data.masteryRate,
+      data,
       html: `<class class="masteryRate">${i18n.t('filters.accuracy')}${data.masteryRate}％</class>`,
     },
   };

@@ -527,6 +527,7 @@ export default {
         userId: this.user.id,
         endTime,
         beginTime: Number(this.testpaperResult.beginTime),
+        courseId: this.$route.query.courseId
       };
 
       return new Promise((resolve, reject) => {
@@ -568,6 +569,7 @@ export default {
         answer: JSON.parse(JSON.stringify(this.answer)),
         resultId: this.testpaperResult.id,
         used_time,
+        courseId: this.$route.query.courseId
       })
       .catch((error) => {
         const { code: errorCode, message, traceId } = error;
@@ -600,6 +602,8 @@ export default {
           }).then(() => this.exitPage())
           return
         }
+
+        Toast.fail(err.message);
 
         Dialog.confirm({
           title: '网络连接不可用，自动保存失败',

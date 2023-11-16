@@ -5,8 +5,8 @@
       <span v-if="normalTagShow && courseType === 'live'" class="tag-live">{{ $t('e.live') }}</span>
       <span v-if="vipTagShow && vipSwitch && Number(isVip)" class="tag-vip">{{ $t('e.freeForMembers') }}</span>
     </div>
-    <div class="flex flex-col justify-between flex-1 p-12" style="width: calc(100% - 170px);border-radius: 0 6px 6px 0;">
-
+    <div class="flex flex-col justify-between flex-1 p-12 relative" style="width: calc(100% - 170px);border-radius: 0 6px 6px 0;">
+      <img v-if="isShowErrImg" class="err-img" :src="errImgUrl" />
       <div class="flex font-bold text-text-5">
         <div v-if="discountNum" style="width: 14px;height:14px;margin:3px 4px 0 0;text-align: center;line-height: 14px;border: 1px solid #ff900e;border-radius: 2px;">
           <div style="font-size: 12px; transform: scale(0.75); color: #FF900E;">{{ $t('e.discount') }}</div>
@@ -18,7 +18,6 @@
       </div>
 
       <div v-if="course.middle.value" class="text-text-3 text-12 text-overflow">{{ course.middle.value }}</div>
-
       <div
         class="e-course__bottom"
         v-html="course.bottom.html"
@@ -107,6 +106,36 @@ export default {
         }
       }
     },
+    isShowErrImg() {
+      if(this.course?.bottom?.data?.courseSet?.status == 'closed') {
+        return true;
+      } 
+
+      if(this.course?.bottom?.data?.status == 'closed') {
+        return true;
+      } 
+
+      if(this.course?.bottom?.data?.isExpired) {
+        return true;
+      } 
+
+      return false;
+    },
+    errImgUrl() {
+      if(this.course?.bottom?.data?.courseSet?.status == 'closed') {
+        return '/static/images/closed.png';
+      } 
+
+      if(this.course?.bottom?.data?.status == 'closed') {
+        return '/static/images/closed.png';
+      } 
+
+      if(this.course?.bottom?.data?.isExpired) {
+        return '/static/images/expired.png';
+      } 
+
+      return '';
+    }
   },
   watch: {
     course: {
@@ -205,5 +234,12 @@ export default {
     background-color: #162923;
     border-radius: 0 0 0 6px;
     transform: scale(0.83);
+  }
+
+  .err-img {
+    position: absolute;
+    height: 40px;
+    top: 0;
+    right: 0;
   }
 </style>

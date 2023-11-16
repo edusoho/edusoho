@@ -410,6 +410,12 @@ export default {
     night: 'Night',
     toLearn: 'To learn',
     buy: 'Buy now',
+    goHome: "Go back to home page",
+    closed_title: "The current content is closed",
+    closed_course: "The current course is closed",
+    closed_classroom: "The current classroom is closed",
+    closed_exercise: "The current question bank is closed",
+    closed_content: "Cannot continue viewing",
   },
   courseLearning: {
     yourAreAnswer: 'Your answer',

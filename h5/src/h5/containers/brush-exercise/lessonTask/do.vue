@@ -8,6 +8,7 @@
         :assessmentResponse="assessmentResponse"
         :assessment="assessment"
         :answerScene="answerScene"
+        :exerciseId="exerciseId"
         @saveAnswerData="saveAnswerData"
         @getAnswerData="getAnswerData"
         @timeSaveAnswerData="timeSaveAnswerData"
@@ -36,6 +37,7 @@ export default {
   components: {itemEngine},
   data() {
     return {
+      exerciseId: '',
       isLoading: true,
       assessment: {},
       answerScene: {},
@@ -61,7 +63,9 @@ export default {
       settings: this.storageSetting
     }
   },
-  mounted() {},
+  mounted() {
+    this.exerciseId = this.$route.query.exerciseId
+  },
   beforeRouteLeave(to, from, next) {
     // 可捕捉离开提醒
     if (this.canLeave) {

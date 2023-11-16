@@ -137,7 +137,7 @@ const actions = {
   // eslint-disable-next-line no-unused-vars
   handExamdo({ commit }, datas) {
     // eslint-disable-next-line prefer-const
-    let { answer, resultId, beginTime, endTime, userId } = { ...datas };
+    let { answer, resultId, beginTime, endTime, userId, courseId } = { ...datas };
     beginTime *= 1000;
     let used_time = Math.ceil((endTime - beginTime) / 1000);
 
@@ -153,6 +153,7 @@ const actions = {
           data: answer,
           resultId,
           used_time,
+          courseId
         },
       })
         .then(res => {
@@ -184,7 +185,7 @@ const actions = {
   // eslint-disable-next-line no-unused-vars
   handHomeworkdo({ commit }, datas) {
     // eslint-disable-next-line prefer-const
-    let { answer, homeworkResultId, homeworkId, userId } = { ...datas };
+    let { answer, homeworkResultId, homeworkId, userId, courseId } = { ...datas };
 
     // 时间取localstorge存储时间，默认值为0
     const localuseTime = `homework-${userId}-${homeworkResultId}-usedTime`;
@@ -198,6 +199,7 @@ const actions = {
         },
         data: {
           data: answer,
+          courseId,
           usedTime,
         },
       })
@@ -214,7 +216,7 @@ const actions = {
   // eslint-disable-next-line no-unused-vars
   handExercisedo({ commit }, datas) {
     // eslint-disable-next-line prefer-const
-    let { answer, exerciseResultId, exerciseId, userId } = { ...datas };
+    let { answer, exerciseResultId, exerciseId, userId, courseId } = { ...datas };
 
     // 时间取localstorge存储时间，默认值为0
     const localuseTime = `exercise-${userId}-${exerciseResultId}-usedTime`;
@@ -228,6 +230,7 @@ const actions = {
         },
         data: {
           data: answer,
+          courseId,
           usedTime,
         },
       })

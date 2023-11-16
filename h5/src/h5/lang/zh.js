@@ -403,6 +403,12 @@ export default {
     night: '晚上',
     toLearn: '去学习',
     buy: '立即购买',
+    goHome: '回到首页',
+    closed_title: '当前内容已关闭',
+    closed_course: '当前课程已关闭',
+    closed_classroom: '当前班级已关闭',
+    closed_exercise: '当前题库已关闭',
+    closed_content: '无法继续查看'
   },
   courseLearning: {
     yourAreAnswer: '你的回答',

@@ -542,7 +542,7 @@ export default {
         if (options.language === 'zh-cn' || !options.language) {
           options.language = 'zh-CN'
         }
-        
+
         const player = new window.QiQiuYun.Player(options);
         this.player = player;
         player.on('unablePlay', () => {
