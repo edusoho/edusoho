@@ -835,8 +835,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             $course = $this->getCourseDao()->update($id, $course);
 
             $publishedCourses = $this->findPublishedCoursesByCourseSetId($course['courseSetId']);
+            $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($course['courseSetId']);
             //如果课程下没有了已发布的教学计划，则关闭此课程
-            if (empty($publishedCourses)) {
+            if (empty($publishedCourses) && empty($classroomRef)) {
                 $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
                 if ('published' === $courseSet['status']) {
                     $this->getCourseSetService()->closeCourseSet($course['courseSetId']);
