@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
+use Biz\Testpaper\ExerciseException;
 
 class PauseAnswer extends AbstractResource
 {
@@ -17,6 +18,12 @@ class PauseAnswer extends AbstractResource
             $course = $this->getCourseService()->getCourse($assessmentResponse['courseId']);
             if ('0' == $course['canLearn']) {
                 throw CourseException::CLOSED_COURSE();
+            }
+        }
+        if (!empty($assessmentResponse['exerciseId'])) {
+            $exercise = $this->getExerciseService()->get($assessmentResponse['exerciseId']);
+            if ($exercise['status'] == 'closed') {
+                throw ExerciseException::CLOSED_EXERCISE();
             }
         }
         $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
