@@ -1133,6 +1133,10 @@ admin.course.copy_success_hint: 复制课程成功
 admin.course.copy_fail_hint: 复制课程失败
 admin.course.delete_success_hint: 删除课程成功
 admin.course.delete_failed_hint: 删除课程失败
+admin.course.publish_success_hint: 发布课程成功
+admin.course.publish_failed_hint: 发布课程失败
+admin.course.close_success_hint: 关闭课程成功
+admin.course.close_failed_hint: 关闭课程失败
 admin.course.delete_course.check_password_fail_hint: 验证密码错误
 admin.course.validate_old.password_required_hint: 密码
 admin.course.cancel_recommend_success_hint: 课程推荐已取消！

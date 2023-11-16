@@ -84,3 +84,24 @@ sortList({
 },(data)=>{
   $.post($('#course-list-group').data('sortUrl'), $('#courses-form').serialize(), (response) => {});
 });
+
+
+$('.js-manage-course-open').on('click',function () {
+  $.post($(this).data('url'), function () {
+    notify('success', Translator.trans('admin.course.publish_success_hint'));
+    window.location.reload();
+  }).error(function (e) {
+    notify('success', Translator.trans('admin.course.publish_failed_hint'));
+   console.log(e)
+  });
+});
+
+$('.js-manage-course-close').on('click',function () {
+  $.post($(this).data('url'), function () {
+    notify('success', Translator.trans('admin.course.close_success_hint'));
+    window.location.reload();
+  }).error(function (e) {
+    notify('success', Translator.trans('admin.course.close_failed_hint'));
+   console.log(e)
+  });
+});

@@ -1189,6 +1189,10 @@ admin.course.choose_success_hint: choose course success
 admin.course.copy_success_hint: Copy course successfully
 admin.course.copy_fail_hint: Copy course failed
 admin.course.delete_success_hint: Delete course successfully
+admin.course.publish_success_hint: Course published successfully
+admin.course.publish_failed_hint: Failed to publish the course
+admin.course.close_success_hint: Course closed successfully
+admin.course.close_failed_hint: Failed to close the course
 admin.course.delete_failed_hint: Delete course failed
 admin.course.delete_course.check_password_fail_hint: Verify password error
 admin.course.validate_old.password_required_hint: password
