@@ -11156,6 +11156,9 @@ exception.certificate.reject.forbidden_audit: 审核驳回失败
 
 exception.information_collect.not_found: 用户信息采集记录不存在
 exception.information_collect.closed: 用户信息采集已关闭
+exception.not_continue.look: 无法继续查看
+exception.go_home: 回到首页
+
 
 course.unname_title: 未命名计划
 

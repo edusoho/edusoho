@@ -12,3 +12,8 @@ function ancelRefund() {
     });
   });
 }
+
+$(document).on('click', '.js-handleExerciseClosed', function (event) {
+  event.preventDefault();
+  window.location.href = '/course/closed?type=exercise'
+});
