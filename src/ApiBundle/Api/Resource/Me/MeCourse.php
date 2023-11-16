@@ -42,7 +42,7 @@ class MeCourse extends AbstractResource
         if (isset($conditions['type'])) {
             if (in_array($conditions['type'], ['learned', 'learning']) && empty($courseConditions['courseSetIds'])) {
                 return $this->makePagingObject([], 0, $offset, $limit);
-            } else if ($conditions['type'] == ['expired'] && empty($courseConditions['ids'])) {
+            } elseif ('expired' == $conditions['type'] && empty($courseConditions['ids'])) {
                 return $this->makePagingObject([], 0, $offset, $limit);
             }
         }
