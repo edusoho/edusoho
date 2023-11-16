@@ -846,13 +846,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (0 == $classroom['courseNum']) {
             $this->createNewException(ClassroomException::AT_LEAST_ONE_COURSE());
         }
-        $classroom = $this->updateClassroom($id, ['status' => 'published', 'canLearn' => '1', 'showable' => '1']);
+        $classroom = $this->updateClassroom($id, ['status' => 'published', 'canLearn' => '1', 'display' => 1 == $classroom['showable'] ? 1 : 0]);
 
         $this->getClassroomGoodsMediator()->onPublish($classroom);
         $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->getCourseSetService()->canLearningByIds($courseIds);
         $this->getCourseSetService()->showByIds($courseIds);
-        $this->dispatchEvent('classroom.closed', new Event($classroom));
+        $this->dispatchEvent('classroom.publish', new Event($classroom));
 
         return $classroom;
     }
@@ -861,7 +861,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $this->tryManageClassroom($id, 'admin_classroom_close');
 
-        $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0', 'showable' => '0', 'display' => '0']);
+        $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0', 'display' => '0']);
         $this->getClassroomGoodsMediator()->onClose($classroom);
         $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->getCourseSetService()->banLearningByIds($courseIds);
@@ -2779,10 +2779,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function showClassroom($id)
     {
-        $this->tryManageClassroom($id);
+        $classroom = $this->tryManageClassroom($id);
         $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->getCourseSetService()->showByIds($courseIds);
-        $classroom = $this->updateClassroom($id, ['showable' => '1']);
+        $this->updateClassroom($id, ['showable' => '1', 'display' => 'closed' == $classroom['status'] ? 0 : 1]);
     }
 
     public function hideClassroom($id)
