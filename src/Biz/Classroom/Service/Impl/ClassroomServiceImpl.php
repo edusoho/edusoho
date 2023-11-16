@@ -846,7 +846,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (0 == $classroom['courseNum']) {
             $this->createNewException(ClassroomException::AT_LEAST_ONE_COURSE());
         }
-        $classroom = $this->updateClassroom($id, ['status' => 'published', 'canLearn' => '1']);
+        $classroom = $this->updateClassroom($id, ['status' => 'published', 'canLearn' => '1', 'showable' => '1']);
 
         $this->getClassroomGoodsMediator()->onPublish($classroom);
         $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
