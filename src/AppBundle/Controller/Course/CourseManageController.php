@@ -896,15 +896,32 @@ class CourseManageController extends BaseController
     public function showAction(Request $request, $courseSetId, $courseId)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $this->getCourseService()->showCourse($courseId, $courseSet['status']  == 'published');
+        $displayCourses = $this->getCourseService()->findDisplayCoursesByCourseSetId($courseSetId, '1');
+        if (1 == count($displayCourses)) {
+            $this->getCourseSetService()->showCourseSet($courseSet['id']);
+        }
+        $this->getCourseService()->showCourse($courseId, 'published' == $courseSet['status']);
 
         return $this->createJsonResponse(['success' => true]);
     }
 
     public function hideAction(Request $request, $courseSetId, $courseId)
     {
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $this->getCourseService()->hideCourse($courseId, $courseSet['status']  == 'published');
+        $displayCourses = $this->getCourseService()->findDisplayCoursesByCourseSetId($courseSetId, '1');
+        if (1 == count($displayCourses)) {
+            $this->getCourseSetService()->hideCourseSet($courseSet['id']);
+        } else {
+            $displayIds = array_column(array_filter($displayCourses, function ($item) {
+                return 1 == $item['display'];
+            }), 'id');
+            $filteredIds = array_diff($displayIds, [$courseId]);
+            if (!empty($filteredIds)) {
+                $this->getCourseSetService()->updateDefaultCourse($courseSet['id'], reset($filteredIds));
+            }
+        }
+        $this->getCourseService()->hideCourse($courseId, 'published' == $courseSet['status']);
 
         return $this->createJsonResponse(['success' => true]);
     }

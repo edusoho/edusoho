@@ -290,6 +290,13 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     public function unpublishGoodsSpecs($id)
     {
         $specs = $this->getGoodsSpecsDao()->update($id, ['status' => 'unpublished']);
+
+        return $specs;
+    }
+
+    public function updateGoodsSpecsDisplay($id, $display)
+    {
+        $specs = $this->getGoodsSpecsDao()->update($id, ['display' => $display]);
         $this->updateGoodsMinAndMaxPrice($specs['goodsId']);
         $this->freshGoodsSpecsCount($specs['goodsId']);
 
@@ -364,7 +371,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         $maxDisplayPrice = $goods['maxPrice'];
         if ($goods['discountId'] && $this->isPluginInstalled('Discount')) {
             $discount = $this->getDiscountService()->getDiscount($goods['discountId']);
-            if($discount['endTime'] > time()) {
+            if ($discount['endTime'] > time()) {
                 if ('discount' === $discount['type']) {
                     $discountItem = $this->getDiscountService()->getItemByDiscountIdAndGoodsId($goods['discountId'], $goods['id']);
                     if (!empty($discountItem)) {
@@ -403,7 +410,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         $displayPrice = $specs['price'];
         if ($goods['discountId'] && $this->isPluginInstalled('Discount')) {
             $discount = $this->getDiscountService()->getDiscount($goods['discountId']);
-            if($discount['endTime'] > time()) {
+            if ($discount['endTime'] > time()) {
                 if ('discount' === $discount['type']) {
                     $discountItem = $this->getDiscountService()->getItemByDiscountIdAndGoodsId($goods['discountId'], $goods['id']);
                     if (!empty($discount)) {

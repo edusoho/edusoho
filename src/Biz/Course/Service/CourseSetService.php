@@ -309,4 +309,6 @@ interface CourseSetService
     public function canLearningByIds($ids);
 
     public function showByIds($ids);
+
+    public function updateDefaultCourse($courseSetId, $courseId);
 }

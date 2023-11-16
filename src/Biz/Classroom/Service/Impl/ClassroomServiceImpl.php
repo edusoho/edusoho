@@ -849,7 +849,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->updateClassroom($id, ['status' => 'published', 'canLearn' => '1']);
 
         $this->getClassroomGoodsMediator()->onPublish($classroom);
-        $courseIds = implode(',', array_column($this->findCoursesByClassroomId($id), 'courseSetId'));
+        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->getCourseSetService()->canLearningByIds($courseIds);
         $this->getCourseSetService()->showByIds($courseIds);
         $this->dispatchEvent('classroom.closed', new Event($classroom));
@@ -863,7 +863,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0', 'showable' => '0', 'display' => '0']);
         $this->getClassroomGoodsMediator()->onClose($classroom);
-        $courseIds = implode(',', array_column($this->findCoursesByClassroomId($id), 'courseSetId'));
+        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->getCourseSetService()->banLearningByIds($courseIds);
         $this->getCourseSetService()->hideByIds($courseIds);
         $this->dispatchEvent('classroom.close', new Event($classroom));
