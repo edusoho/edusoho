@@ -84,6 +84,7 @@ class MeClassroom extends AbstractResource
                 $learningIds[] = $member['classroomId'];
             }
         }
+        $classroomConditions['titleLike'] = $querys['title'];
         switch ($querys['type']) {
             case 'learning':
             case 'learned':
