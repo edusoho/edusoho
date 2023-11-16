@@ -20,7 +20,7 @@
     <!-- 加入学习 -->
     <e-footer>
     <closedFixed v-if="ItemBankExercise.status == 'closed'" :isJoin="false" :title="$t('closed.exerciseTitle')" />
-      <div @click.native="handleJoin">加入题库</div>
+      <div @click="handleJoin">加入题库</div>
     </e-footer>
   </div>
 </template>
@@ -71,7 +71,7 @@ export default {
     ...mapMutations({ changJoinStatus: types.CHANGE_ITEMBANK_JOINSTATUS }),
     handleJoin() {
       if (this.ItemBankExercise?.status == 'closed') {
-        this.$router.push({ path: '/empty', query: { type: 'exercise' } });
+        this.$router.push({ path: '/goods/closed', query: { type: 'exercise' } });
         return 
       }
 
