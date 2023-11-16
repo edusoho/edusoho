@@ -109,6 +109,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, 'published');
     }
 
+    public function findDisplayCoursesByCourseSetId($courseSetId, $display)
+    {
+        return $this->getCourseDao()->findCoursesByCourseSetIdAndDisplay($courseSetId, $display);
+    }
+
     public function getDefaultCourseByCourseSetId($courseSetId)
     {
         return $this->getCourseDao()->getDefaultCourseByCourseSetId($courseSetId);
@@ -309,6 +314,26 @@ class CourseServiceImpl extends BaseService implements CourseService
         $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
         $goodsSpecs = $this->getGoodsService()->unpublishGoodsSpecs($goodsSpecs['id']);
+
+        return $goodsSpecs;
+    }
+
+    private function hideGoodsSpecs($course)
+    {
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
+        $goodsSpecs = $this->getGoodsService()->updateGoodsSpecsDisplay($goodsSpecs['id'], '0');
+
+        return $goodsSpecs;
+    }
+
+    private function showGoodsSpecs($course)
+    {
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
+        $goodsSpecs = $this->getGoodsService()->updateGoodsSpecsDisplay($goodsSpecs['id'], '1');
 
         return $goodsSpecs;
     }
@@ -816,6 +841,11 @@ class CourseServiceImpl extends BaseService implements CourseService
                 if ('published' === $courseSet['status']) {
                     $this->getCourseSetService()->closeCourseSet($course['courseSetId']);
                 }
+            }
+            // 如果课程下没有已展示的教学计划，关闭此课程页面展示
+            $displayCourses = $this->findDisplayCoursesByCourseSetId($course['courseSetId'], '1');
+            if (empty($displayCourses)) {
+                $this->getCourseSetService()->hideCourseSet($course['courseSetId']);
             }
             $this->commit();
             $this->dispatchEvent('course.close', new Event($course));
@@ -2963,6 +2993,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course['showable'] = '1';
 
         $this->getCourseDao()->update($id, $course);
+        $this->showGoodsSpecs($course);
     }
 
     public function hideCourse($id, $courseSetIsPublished)
@@ -2977,6 +3008,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course['showable'] = '0';
 
         $this->getCourseDao()->update($id, $course);
+        $this->hideGoodsSpecs($course);
     }
 
     public function banLearningByCourseSetId($courseSetId)
