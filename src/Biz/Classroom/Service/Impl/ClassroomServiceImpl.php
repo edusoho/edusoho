@@ -555,6 +555,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'maxRate',
             'buyable',
             'showable',
+            'display',
             'canLearn',
             'orgCode',
             'orgId',
@@ -2779,7 +2780,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function showClassroom($id)
     {
-        $classroom = $this->tryManageClassroom($id);
+        $this->tryManageClassroom($id);
+        $classroom = $this->getClassroom($id);
         $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->getCourseSetService()->showByIds($courseIds);
         $this->updateClassroom($id, ['showable' => '1', 'display' => 'closed' == $classroom['status'] ? 0 : 1]);
