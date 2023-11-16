@@ -213,6 +213,8 @@
                 if (this.goods.type === 'course' && this.targetId) {
                     return Translator.trans('goods.show_page.tab.course.closed_tip');
                 }
+
+                return Translator.trans('validate.learn_content.closed');
             },
             summaryHtml() {
                 if (!this.goods.summary) return Translator.trans('goods.show_page.tab.summary_empty_tips');

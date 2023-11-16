@@ -1,5 +1,7 @@
 import Goods from './Goods';
 import { Input } from 'ant-design-vue';
+import Vue from 'common/vue';
+
 
 Vue.config.productionTip = false;
 Vue.use(Input);
