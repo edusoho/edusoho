@@ -14,6 +14,7 @@
       :showDoAgainBtn="showDoAgainBtn"
       :cdnHost="cdnHost"
       :collect="collect"
+      :assessmentResponses="assessmentResponses"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
       @previewAttachment="previewAttachment"
@@ -52,7 +53,8 @@
         fileId: 0,
         showDoAgainBtn: $('[name=show_do_again_btn]').val() === undefined ? 1 : parseInt($('[name=show_do_again_btn]').val()),
         showReturnBtn: $('[name=submit_return_url]').val() === undefined ? 0 : $('[name=submit_return_url]').val().length,
-        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1',
+        assessmentResponses: {}
       };
     },
     provide() {
@@ -79,6 +81,7 @@
           that.answerReport = res.answer_report;
           that.answerRecord = res.answer_record;
           that.answerScene = res.answer_scene;
+          that.assessmentResponses = res.assessment_response;
         })
 
         $.ajax({

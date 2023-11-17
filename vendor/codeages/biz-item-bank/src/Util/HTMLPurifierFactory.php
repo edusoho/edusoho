@@ -42,6 +42,10 @@ class HTMLPurifierFactory
 
         $def = $config->getHTMLDefinition(true);
         $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+        $def->addAttribute('span', 'data-tex', 'Text');
+        $def->addAttribute('span', 'data-img', 'Text');
+        $def->addAttribute('span', 'data-display', 'Text');
+        $def->addAttribute('span', 'data-emphasis', 'Text');
 
         return new \HTMLPurifier($config);
     }

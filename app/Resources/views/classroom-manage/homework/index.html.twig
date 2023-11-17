@@ -3,10 +3,17 @@
 {% block title %}{{'classroom.homework_check'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'homework-check' %}
 
+{% do script(['libs/vue.js', 'app/js/course-manage/testpaper-check/index.js']) %}
+
 {% block main %}
   <div class="panel panel-default panel-col">
-    <div class="panel-heading">{{'classroom.homework_check'|trans}}</div>
-    <div class="panel-body">
+    <div class="classroom-testpaper">
+      {{'classroom.homework_check'|trans}}
+      <div class="testpaper-check-title">
+        <div id="app"></div>
+      </div>
+    </div>
+    <div class="panel-body js-task-list">
       {% if isTeacher is defined and not isTeacher %}
         <span class="color-danger">{{'classroom.homework_check_tips'|trans}}</span>
       {% endif %}
@@ -15,4 +22,7 @@
 
     </div>
   </div>
+  <input type="hidden" value="classroom" class="js-testpaper-check-header">
+  <input type="hidden" value="{{classroom.id}}" class="js-testpaper-check-targetid">
+  <input type="hidden" value="homework" class="js-testpaper-check-type">
 {% endblock %}

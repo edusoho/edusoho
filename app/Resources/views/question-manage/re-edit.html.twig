@@ -25,7 +25,7 @@
   {% block header %}
     {% if showHeader %}{{ parent() }}{% endif %}
   {% endblock %}
-  
+
   <div id="app"></div>
   <input type="hidden" name="filename" value='{{ filename }}'>
   <input type="hidden" name="items" value='{{ items|json_encode }}'>
@@ -39,10 +39,12 @@
   <input type="hidden" name="saveUrl" value="
     {% if type == 'item' %}
       {{ path('questions_import_save', {token: app.request.get('token'),categoryId: categoryId}) }}
+      {{ path('questions_import_check_duplicated_questions', {token: app.request.get('token')}) }}
     {% else %}
       {{ path('testpaper_import_save', {token: app.request.get('token')}) }}
     {% endif %}
   ">
+  <input type="hidden" name="import_token" value="{{app.request.get('token')}}">
   {% include 'attachment-upload/upload-data.html.twig' %}
 
   {% block footer %}

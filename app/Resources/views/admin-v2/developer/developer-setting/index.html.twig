@@ -239,6 +239,15 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.question_parse_api_server'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="question_parse_api_server" value="{{ developerSetting.question_parse_api_server|default('') }}">
+    </div>
+  </div>
+
   <fieldset>
     <legend>云平台播放器配置</legend>
     <div class="form-group">

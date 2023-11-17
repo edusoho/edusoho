@@ -36,6 +36,10 @@ class TestpaperAction extends AbstractResource
     public function add(ApiRequest $request, $id)
     {
         $action = $request->request->get('action');
+        $assessmentSnapshot = $this->getAssessmentService()->getAssessmentSnapshotBySnapshotAssessmentId($id);
+        if ($assessmentSnapshot) {
+            $id = $assessmentSnapshot['origin_assessment_id'];
+        }
         $assessment = $this->getAssessmentService()->getAssessment($id);
         $method = $action.'Testpaper';
         if (!method_exists($this, $method)) {

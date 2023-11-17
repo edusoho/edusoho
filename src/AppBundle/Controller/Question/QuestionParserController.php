@@ -3,66 +3,54 @@
 namespace AppBundle\Controller\Question;
 
 use AppBundle\Common\FileToolkit;
+use AppBundle\Common\TimeMachine;
 use AppBundle\Controller\BaseController;
 use Biz\Content\Service\FileService;
+use Biz\Question\QuestionParseClient;
+use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\User\Service\TokenService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File as FileObject;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionParserController extends BaseController
 {
+    use QuestionImportTrait;
+
     public function readAction(Request $request, $type, $questionBank)
     {
         $templateInfo = $this->getTemplateInfo($type);
-        if ($request->isMethod('POST')) {
-            $file = $request->files->get('importFile');
-            $categoryId = $request->request->get('category_Id');
-            $filename = $file->getClientOriginalName();
-            $filename = substr($filename, 0, strripos($filename, '.'));
-            if (mb_strlen($filename) > 50) {
-                return $this->render($templateInfo['readErrorModalTemplate'], ['type' => 'length']);
-            }
-
-            if ('docx' == FileToolkit::getFileExtension($file)) {
-                $result = $this->getFileService()->uploadFile('course_private', $file);
-                $uploadFile = $this->getFileService()->parseFileUri($result['uri']);
-                try {
-                    $items = $this->parseQuestions($uploadFile['fullpath']);
-                } catch (\Exception $e) {
-                    return $this->render($templateInfo['readErrorModalTemplate']);
-                }
-
-                $token = $this->getTokenService()->makeToken('upload.course_private_file', [
-                    'data' => [
-                        'id' => $result['id'],
-                        'filename' => $file->getClientOriginalName(),
-                        'fileuri' => $result['uri'],
-                        'filepath' => $uploadFile['fullpath'],
-                        'questionBankId' => $questionBank['id'],
-                        'cacheFilePath' => $this->cacheQuestions($items, $uploadFile),
-                    ],
-                    'duration' => 86400,
-                    'userId' => $this->getCurrentUser()->getId(),
-                ]);
-
-                return $this->createJsonResponse([
-                    'url' => $this->generateUrl($templateInfo['reEditRoute'], [
-                        'token' => $token['token'],
-                        'categoryId' => $categoryId,
-                    ]),
-                    'success' => true,
-                ]);
-            } else {
-                return $this->render($templateInfo['readErrorModalTemplate']);
-            }
+        if (!$request->isMethod('POST')) {
+            return $this->render($templateInfo['readModalTemplate'], [
+                'questionBank' => $questionBank,
+            ]);
         }
 
-        return $this->render($templateInfo['readModalTemplate'], [
-            'questionBank' => $questionBank,
+        $file = $request->files->get('importFile');
+
+        if (!$this->isFileExtensionValid($file)) {
+            return $this->render($templateInfo['readErrorModalTemplate'], [
+                'questionBank' => $questionBank,
+            ]);
+        }
+
+        try {
+            $token = $this->parseQuestionThenMakeToken($questionBank['id'], $file);
+        } catch (\Exception $e) {
+            return $this->render($templateInfo['readErrorModalTemplate'], [
+                'questionBank' => $questionBank,
+            ]);
+        }
+
+        return $this->createJsonResponse([
+            'url' => $this->generateUrl($templateInfo['reEditRoute'], [
+                'token' => $token,
+                'categoryId' => $request->request->get('category_Id'),
+            ]),
+            'success' => true,
+            'progressUrl' => $this->generateUrl('question_parse_progress', ['token' => $token]),
         ]);
     }
 
@@ -82,6 +70,7 @@ class QuestionParserController extends BaseController
         $itemsJson = file_get_contents($data['cacheFilePath']);
         $categoryId = $request->query->get('categoryId', 0);
         $category = $this->getItemCategoryService()->getItemCategory($categoryId);
+        $itemsJson = $this->addEmphasisStyle($itemsJson);
         $items = json_decode($itemsJson, true);
         foreach ($items as &$item) {
             $item['category_id'] = $categoryId;
@@ -97,6 +86,35 @@ class QuestionParserController extends BaseController
             'type' => $type,
             'categoryId' => $categoryId,
         ]);
+    }
+
+    protected function isFileExtensionValid($file)
+    {
+        $extension = FileToolkit::getFileExtension($file);
+
+        return in_array($extension, ['docx', 'xlsx']);
+    }
+
+    protected function parseQuestionThenMakeToken($questionBankId, $file)
+    {
+        $result = $this->getFileService()->uploadFile('course_private', $file);
+        $uploadFile = $this->getFileService()->parseFileUri($result['uri']);
+        $client = new QuestionParseClient();
+        $jobId = $client->parse($uploadFile['fullpath']);
+
+        $token = $this->getTokenService()->makeToken('upload.course_private_file', [
+            'data' => [
+                'id' => $result['id'],
+                'filename' => $file->getClientOriginalName(),
+                'questionBankId' => $questionBankId,
+                'jobId' => $jobId,
+                'cacheFilePath' => $uploadFile['fullpath'].'json',
+            ],
+            'duration' => TimeMachine::ONE_DAY,
+            'userId' => $this->getCurrentUser()->getId(),
+        ]);
+
+        return $token['token'];
     }
 
     protected function parseQuestions($fullpath)
@@ -118,15 +136,6 @@ class QuestionParserController extends BaseController
         );
 
         return $this->getItemService()->parseItems($text);
-    }
-
-    protected function cacheQuestions($questions, $uploadFile)
-    {
-        $fileSystem = new Filesystem();
-        $filePath = $uploadFile['fullpath'].'json';
-        $fileSystem->dumpFile($filePath, json_encode($questions));
-
-        return $filePath;
     }
 
     protected function getTemplateInfo($type)

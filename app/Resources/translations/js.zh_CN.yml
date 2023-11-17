@@ -399,6 +399,12 @@ course.unit: '第%number%%part_name%%colon% %title%'
 course.lesson: '%part_name% %number% : %title%'
 course.catalogue.task_status.task: '%taskName%%taskNumber%： %taskTitle%'
 
+created.question.confirm.ok.btn: 继续编辑
+created.question.confirm.close.btn: 直接创建
+created.question.confirm.import.close.btn: 直接导入
+created.question.confirm.title: 已存在相同题目，是否继续创建？
+created.question.confirm.import.title: 已存在相同题目，是否继续导入？
+
 course.thread_replay_failed_hint: 发表回复失败，请重试
 course.thread_delete_hint: 您真的要删除该回帖吗？
 
@@ -565,8 +571,10 @@ course.question.create.choose_min_num_hint: 选项最少%minNum%个!
 course.question.create_hint: 新增选项
 course.question.right_answer_hint: 正确答案
 course.question.right_answer_content_hint: 请输入选项内容
+course.question.by.question.type: 按题型
 course.question.type.single_choice: 单选题
 course.question.type.uncertain_choice: 不定项
+course.question.type.uncertain_choices: 不定项选择题
 course.question.type.choice: 多选题
 course.question.type.determine: 判断题
 course.question.type.essay: 问答题
@@ -1895,6 +1903,8 @@ form.label.share: 分享
 
 placeholder.playback_label: 回放标签
 placeholder.enter_keyword: 请输入关键字
+placeholder.task.name: 请输入任务名称
+placeholder.class.name: 课时名称
 placeholder.course_category: 课程分类
 
 radio.share_to_live_playback: 共享到直播回放（其他老师可以查看、预览、引用该回放）
@@ -2181,3 +2191,18 @@ admin_v2.homepage.wechat_come: 欢迎使用EduSoho教培产品
 admin_v2.homepage.wechat_code.m: 加入开源产品使用学习交流群，小伙伴在等你
 
 del.role.theater.hover.title: 该用户无讲师权限。移除后将不在移动端展示
+upgrade.cloud.capabilities.to.experience: >
+  <p class="title cd-dark-major">题目导入</p><div class="cd-dark-minor cd-text-md">升级云能力可体验更强大的导入功能</div>
+next.skip.intro.text: >
+  <p class="title cd-dark-major">题目导入</p><div class="cd-dark-minor cd-text-md">升级云能力可体验更强大的导入功能，需联系超级管理员进行操作</div>
+skip.i.know: 我知道了（2/2）
+skip.upgrade.btn: 立即升级 (2/2)
+question.bank.name: 题库名称
+question.bank.expoet: 导出题目
+question.bank.add: 添加题目
+question.bank.import: 导入题目
+question.bank.difficulty.default: 难度
+question.bank.difficulty.simple: 简单
+question.bank.difficulty.normal: 一般
+question.bank.difficulty: 困难
+question.bank.reset.btn: 重置
