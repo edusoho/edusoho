@@ -303,6 +303,11 @@ class QuestionController extends BaseController
         }
     }
 
+    public function checkDuplicativeQuestionsAction(Request $request, $id)
+    {
+        return $this->render('question-manage/duplicative-questions.html.twig');
+    }
+
     public function deleteQuestionsAction(Request $request, $id)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
