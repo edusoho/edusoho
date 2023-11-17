@@ -46,7 +46,11 @@ class CourseTaskEventV2 extends AbstractResource
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $sign = date('YmdHis').'-'.$user['id'].'-'.$activity['id'].'-'.substr(md5($user['id'].$data['client'].microtime()), 0, 6);
-        list($canCreate, $denyReason) = $this->getLearnControlService()->checkCreateNewFlow($user['id'], $request->request->get('lastSign', ''));
+        if ($this->needLearnControl($task['type'])) {
+            list($canCreate, $denyReason) = $this->getLearnControlService()->checkCreateNewFlow($user['id'], $request->request->get('lastSign', ''));
+        } else {
+            list($canCreate, $denyReason) = [true, ''];
+        }
         if (!$canCreate || $this->getTaskService()->isTaskLocked($taskId)) {
             return [
                 'taskResult' => null,
@@ -112,10 +116,10 @@ class CourseTaskEventV2 extends AbstractResource
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        if (in_array($task['type'], ['live', 'testpaper', 'homework'])) {
-            list($canDoing, $denyReason) = [true, ''];
+        if ($this->needLearnControl($task['type'])) {
+            list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 0));
         } else {
-            list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 1));
+            list($canDoing, $denyReason) = [true, ''];
         }
         if (!empty($data['watchData'])) {
             $watchData = $data['watchData'];
@@ -309,6 +313,11 @@ class CourseTaskEventV2 extends AbstractResource
             'taskResult' => $result,
             'record' => $record,
         ];
+    }
+
+    private function needLearnControl($type)
+    {
+        return !in_array($type, ['live', 'testpaper', 'homework']);
     }
 
     protected function checkEvents(ApiRequest $request, $eventName, $taskId, $courseId)

@@ -54,7 +54,7 @@ abstract class BaseChoiceMode extends AnswerMode
     public function filter($responsePoints)
     {
         foreach ($responsePoints as &$responsePoint) {
-            $responsePoint[static::INPUT_TYPE]['text'] = $this->purifyHtml($responsePoint[static::INPUT_TYPE]['text']);
+            $responsePoint[static::INPUT_TYPE]['text'] = $this->purifyHtml(trim($responsePoint[static::INPUT_TYPE]['text']));
             $responsePoint[static::INPUT_TYPE] = ArrayToolkit::parts($responsePoint[static::INPUT_TYPE], ['val', 'text']);
             unset($responsePoint);
         }
@@ -73,6 +73,7 @@ abstract class BaseChoiceMode extends AnswerMode
             ++$ascll;
         }
 
+        $parsedQuestion['answer'] = [];
         foreach ($question['answers'] as $answer) {
             $parsedQuestion['answer'][] = $parsedQuestion['response_points'][$answer][static::INPUT_TYPE]['val'];
         }

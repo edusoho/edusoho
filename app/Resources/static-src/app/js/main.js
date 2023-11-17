@@ -11,6 +11,7 @@ import {isMobileDevice} from 'common/utils';
 import notify from 'common/notify';
 import './alert';
 import 'echo-js';
+import 'app/common/katex-render';
 
 echo.init();
 
@@ -132,4 +133,4 @@ $('#jumpPage').on('blur', function () {
   } else {
     window.location.href = pageQueryUrl + 'page=' + jumpPage + '&perpage=' + currentPerPageCount;
   }
-})
+});

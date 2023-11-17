@@ -97,6 +97,7 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
             'limited_time' => ['integer'],
             'id' => ['integer'],
             'exercise_mode' => [['in', [0, 1]]],
+            'isTag' => [['in', [0, 1]]],
         ]);
 
         return $this->getAnswerRecordDao()->update($id, $answerRecord);
@@ -146,6 +147,11 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
         $answerRecords = $this->getAnswerRecordDao()->findByIds($ids);
 
         return ArrayToolkit::index($answerRecords, 'id');
+    }
+
+    public function countByAssessmentId($assessmentId)
+    {
+       return $this->getAnswerRecordDao()->count(['assessment_id' => $assessmentId]);
     }
 
     /**

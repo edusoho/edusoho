@@ -2,17 +2,20 @@
 
 {% do script(['app/js/testpaper-manage/check-list/index.js']) %}
 
-{% for task in tasks if task %}
-  {% if task.testId|default(null) %}
-    {% set resultListRout = targetType|default('course') ~ '_manage_testpaper_result_list' %}
-    {% set testpaper = testpapers[task.testId]|default(null) %}
-    {% set statusNum = resultStatusNum[task.activityId]|default(null) %}
-    {% include 'testpaper/manage/check-list-item.html.twig' with {task:task, testpaper:testpaper,targetResultInfo:statusNum,targetId:targetId,type:type} %}
-  {% endif %}
+{% for task in tasks if task.testId|default(null) %}
+  {% set resultListRout = targetType|default('course') ~ '_manage_testpaper_result_list' %}
+  {% set testpaper = testpapers[task.testId]|default(null) %}
+  {% set statusNum = resultStatusNum[task.activityId]|default(null) %}
+  {% include 'testpaper/manage/check-list-item.html.twig' with {task:task, testpaper:testpaper,targetResultInfo:statusNum,targetId:targetId,type:type} %}
 {% else %}
-  <div class="empty">{{'course.testpaper_check.empty'|trans}}</div>
+  <div class="empty">
+    <div>
+      <img style="width: 90px;" src="{{ asset('static-dist/app/img/testpaper/empty.png') }}" />
+    </div>
+    {{'course.testpaper_check.tips'|trans}}
+  </div>
 {% endfor %}
 
 <nav class="text-center">
-  {{ web_macro.paginator(paginator) }}
+  {{ web_macro.ajax_paginator(paginator) }}
 </nav>

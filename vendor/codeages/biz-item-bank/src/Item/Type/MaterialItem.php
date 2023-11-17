@@ -42,6 +42,6 @@ class MaterialItem extends Item
 
     protected function getMaterial($item)
     {
-        return $item['material'];
+        return trim($item['material']);
     }
 }

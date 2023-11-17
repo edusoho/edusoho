@@ -38,12 +38,21 @@
             {{'course.btn.more'|trans}}<i class="es-icon es-icon-arrowdropdown"></i>
           </a>
           <ul class="dropdown-menu pull-right">
-            {% if testpaper.status in ['draft', 'closed'] %}
+            {% if testpaper.status == 'closed' %}
+              <li>
+                <a class="js-edit-testpaper" href="javascript:" title="{{ 'course.testpaper_manage.edit_tips'|trans }}" data-url="{{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, assessmentId: testpaper.id}) }}">
+                  <span class="glyphicon glyphicon-edit mrm"></span> {{'my.teaching.question_bank.testpaper.edit'|trans}}
+                </a>
+              </li>
               <li><a class="open-testpaper" href="javascript:" title="{{'course.testpaper_manage.publish_tips'|trans({'%name%': testpaper.name })}}" data-url="{{ path('question_bank_manage_testpaper_publish', {id: questionBank.id, assessmentId: testpaper.id}) }}">
                 <span class="es-icon es-icon--check-circle mrm"></span> {{'course.testpaper_manage.publish_btn'|trans}}
               </a></li>
             {% endif %}
             {% if testpaper.status == 'open' %}
+              <li>
+                <a class="js-edit-testpaper" href="javascript:" title="{{ 'course.testpaper_manage.edit_tips'|trans }}" data-url="{{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, assessmentId: testpaper.id}) }}">
+                  <span class="glyphicon glyphicon-edit mrm"></span> {{'my.teaching.question_bank.testpaper.edit'|trans}}</a>
+              </li>
               <li><a class="close-testpaper" href="javascript:" title="
                 {% if testpaperActivities[testpaper.id]|default(null) %}
                   {{'course.testpaper_manage.testpaper_quoted_close_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}
@@ -56,6 +65,11 @@
             {% endif %}
 
             {% if testpaper.status == 'draft' %}
+              <li>
+                <a class="open-testpaper" href="javascript:" title="{{'course.testpaper_manage.publish_tips'|trans({'%name%': testpaper.name })}}" data-url="{{ path('question_bank_manage_testpaper_publish', {id: questionBank.id, assessmentId: testpaper.id}) }}">
+                  <span class="es-icon es-icon--check-circle mrm"></span> {{'course.testpaper_manage.publish_btn'|trans}}
+                </a>
+              </li>
               <li><a href="{{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, assessmentId: testpaper.id}) }}"><span class="glyphicon glyphicon-edit mrm"></span> {{'my.teaching.question_bank.testpaper.edit'|trans}}</a></li>
               <li><a href="javascript:" class="js-delete-btn" data-name='{{'course.testpaper_manage.testpaper'|trans}}' data-url="{{ path('question_bank_manage_testpaper_delete', {id: questionBank.id, assessmentId: testpaper.id}) }}">
                 <span class="es-icon es-icon-delete mrm"></span> {{'course.testpaper_manage.delete_btn'|trans}}

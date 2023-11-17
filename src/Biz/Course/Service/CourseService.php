@@ -64,6 +64,8 @@ interface CourseService
 
     public function getChapter($courseId, $chapterId);
 
+    public function getChapterById($chapterId);
+
     /**
      * @param $chapter
      *
@@ -373,4 +375,8 @@ interface CourseService
     public function findCourseByCourseSetTitleLike($courseSetTitle);
 
     public function courseItemIdsHandle($courseId, $ids);
+
+    public function getLessonTree($courseIds, $type);
+
+    public function findLessonIds($courseId, $type, $chapterId);
 }

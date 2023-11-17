@@ -1,3 +1,5 @@
+{% do script(['app/js/question-manage/error/index.js']) %}
+
 <style>
   .icon-danger__style {
     color: red;
@@ -7,8 +9,32 @@
     color: rgba(0, 0, 0, .88);
   }
 </style>
-<div class="text-center js-read-error">
-  <i class="cd-icon cd-icon-danger icon-danger__style"></i>
-  <p class="text-14 cd-mt16 cd-mb16 color088">{{ 'course.question_manage.import.docx_support_hint2'|trans }}</p>
-  <p class="text-14 color088">{{ 'course.question_manage.import.doc_to_docx_hint2'|trans|raw }}</p>
+<div class="text-center modal-read-error js-read-error">
+  <div>
+    <img class="error-img" src="{{ asset('static-dist/app/img/question-manage/import-error.png') }}" alt="error"/>
+    <div class="error-tip-text">{{ error|default('course.question_manage.import.text.rule.tip'|trans|raw) }}</div>
+  </div>
 </div>
+<div>
+  <div class="import-questions-content">
+    <span class="anchor-point"></span>
+    <span class="import-info">
+      {{ 'question_manage.import.description.supported'|trans }} 
+      <a class="cd-link-primary" href="{{ path('question_bank_manage_download_import_template', {id: questionBank.id, type: 'docx-simple'}) }}">DOCX{{ 'question_manage.import.easy'|trans }}</a>
+      <i class="es-icon es-icon-wenhao1" data-toggle="tooltip" title="{{ 'question_manage.import.easy.tips'|trans }}"></i>、
+      <a class="cd-link-primary js-DOCX-link" href="{{ path('question_bank_manage_download_import_template', {id: questionBank.id, type: 'docx-full'}) }}">DOCX{{ 'question_manage.import.integrity'|trans }}</a>
+      <i class="es-icon es-icon-wenhao1" data-toggle="tooltip" title="{{ 'question_manage.import.easy.integrity'|trans }}"></i>
+      {{ 'site.default.and'|trans }} 
+      <a class="cd-link-primary" href="{{ path('question_bank_manage_download_import_template', {id: questionBank.id, type: 'xlsx'}) }}">XLSX</a>
+      {{ 'question_manage.import.formate.text'|trans }}
+    </span>
+  </div>
+  <div class="format-conversion">
+    <span class="flex format-span">
+      <span class="anchor-point"></span>
+      <span class="import-info">{{ 'question_manage.import.format.conversion'|trans }}：{{ 'course.question_manage.import.doc_to_docx_hint'|trans }}</span>
+    </span>
+    <a class="view-the-tutorial cd-link-primary" href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">{{ 'question_manage.import.doc_to_docx_hint.tutorial'|trans }}</a>
+  </div>
+</div>
+{% include 'js_loader.html.twig' %}

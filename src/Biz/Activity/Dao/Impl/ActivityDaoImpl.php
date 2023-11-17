@@ -146,7 +146,7 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
 
     public function findOverlapTimeActivitiesByCourseId($courseId, $newStartTime, $newEndTime, $excludeId = null)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE fromCourseId = ? AND (( startTime >= ? AND startTime <= ? ) OR ( startTime <= ? AND endTime >= ? ) OR ( endTime >= ? AND endTime <= ? ))";
+        $sql = "SELECT * FROM {$this->table} WHERE fromCourseId = ? AND mediaType = 'live' AND (( startTime >= ? AND startTime <= ? ) OR ( startTime <= ? AND endTime >= ? ) OR ( endTime >= ? AND endTime <= ? ))";
 
         if ($excludeId) {
             $excludeId = intval($excludeId);

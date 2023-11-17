@@ -10,6 +10,7 @@
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
       :isDownload="isDownload"
+      :isDisable="isDisable"
       :uploadSDKInitData="uploadSDKInitData"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
@@ -31,6 +32,7 @@
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
       :isDownload="isDownload"
+      :isDisable="isDisable"
       :uploadSDKInitData="uploadSDKInitData"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
@@ -84,16 +86,60 @@
           locale: document.documentElement.lang
         },
         fileId: 0,
-        isDownload: false
+        isDownload: false,
+        isDisable: null,
       };
     },
     provide() {
       return {
-        modeOrigin: 'create'
+        modeOrigin: 'create',
+        self: this
       }
     },
     methods: {
+      getRepeatStem(data) {
+        const stem = data.data.material !== '' ? data.data.material : data.data.questions[0].stem
+        return new Promise(resolve => {
+          $.ajax({
+            url: $('[name=check_duplicative_url]').val(),
+            contentType: 'application/json;charset=utf-8',
+            type: 'post',
+            data: JSON.stringify({material:stem}),
+            beforeSend(request) {
+              request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            }
+          }).done(function (res) {
+            resolve(res);
+          })
+        });
+      },
       getData(data) {
+        const that = this
+        that.isDisable = true;
+        this.getRepeatStem(data).then( (res)=> {
+          if (res) {
+            this.$confirm({
+              title: Translator.trans('created.question.confirm.title'),
+              okText: Translator.trans('created.question.confirm.ok.btn'),
+              cancelText: Translator.trans('created.question.confirm.close.btn'),
+              icon: 'exclamation-circle',
+              onOk() {
+                that.isDisable = false;
+                that.forceRemoveModalDom()
+              },
+              onCancel() {
+                that.createdItemQuestion(data)
+                that.forceRemoveModalDom()
+              },
+            });
+          } else {
+            that.createdItemQuestion(data)
+          }
+        }).catch( (res)=> {
+          console.log(res);
+        });
+      },
+      createdItemQuestion(data) {
         let submission = data.isAgain ? 'continue' : '';
         data = data.data;
         data['submission'] = submission;
@@ -112,6 +158,15 @@
             window.location.href = resp.goto;
           }
         })
+      },
+      forceRemoveModalDom() {
+        const modal = document.querySelector(".ant-modal-root");
+
+        if (modal) {
+          modal.remove();
+        }
+
+        document.body.style = "";
       },
       goBack() {
         window.location.href = $('[name=back_url]').val();

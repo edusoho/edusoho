@@ -19,26 +19,33 @@ class MeItemBankExerciseModuleAssessment extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions = ['exerciseId' => $exerciseId, 'moduleId' => $moduleId];
         $exerciseAssessments = $this->getItemBankAssessmentExerciseService()->search($conditions, [], $offset, $limit);
+        $exerciseAssessments = ArrayToolkit::index($exerciseAssessments, 'id');
 
         $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($exerciseAssessments, 'assessmentId'));
-        $answerRecords = $this->getItemBankAssessmentExerciseRecordService()->search(
-            ['userId' => $user['id'], 'moduleId' => $moduleId],
+        $records = $this->getItemBankAssessmentExerciseRecordService()->search(
+            ['userId' => $user['id'], 'moduleId' => $moduleId, 'exerciseId' => $exerciseId],
             [],
             0,
             PHP_INT_MAX
         );
-        $answerRecordGroups = ArrayToolkit::group($answerRecords, 'assessmentId');
 
-        foreach ($exerciseAssessments as $key => &$exerciseAssessment) {
-            if (empty($assessments[$exerciseAssessment['assessmentId']])) {
-                unset($exerciseAssessments[$key]);
-                continue;
-            } else {
+        $answerRecords = $this->getAnswerRecordService()->findByIds(array_column($records, 'answerRecordId'));
+        $answerAssessments = $this->getAssessmentService()->findAssessmentsByIds(array_column($answerRecords, 'assessment_id'));
+        foreach ($records as &$record) {
+            $record['assessment'] = $answerAssessments[$answerRecords[$record['answerRecordId']]['assessment_id']];
+        }
+        $records = ArrayToolkit::index($records, 'assessmentExerciseId');
+        $answerRecordGroups = ArrayToolkit::group($records, 'assessmentExerciseId');
+
+        foreach ($exerciseAssessments as &$exerciseAssessment) {
+            if (empty($records[$exerciseAssessment['id']]['assessment'])) {
                 $exerciseAssessment['assessment'] = $assessments[$exerciseAssessment['assessmentId']];
+            } else {
+                $exerciseAssessment['assessment'] = $records[$exerciseAssessment['id']]['assessment'];
             }
 
-            if (!empty($answerRecordGroups[$exerciseAssessment['assessmentId']])) {
-                $exerciseAssessment['latestAnswerRecord'] = end($answerRecordGroups[$exerciseAssessment['assessmentId']]);
+            if (!empty($records[$exerciseAssessment['id']]['assessment'])) {
+                $exerciseAssessment['latestAnswerRecord'] = end($answerRecordGroups[$exerciseAssessment['id']]);
             }
         }
 
@@ -69,5 +76,13 @@ class MeItemBankExerciseModuleAssessment extends AbstractResource
     protected function getItemBankAssessmentExerciseRecordService()
     {
         return $this->service('ItemBankExercise:AssessmentExerciseRecordService');
+    }
+
+    /**
+     * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRecordService');
     }
 }

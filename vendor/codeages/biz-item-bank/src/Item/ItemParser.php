@@ -4,6 +4,7 @@ namespace Codeages\Biz\ItemBank\Item;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\ItemBank\ErrorCode;
+use Codeages\Biz\ItemBank\Item\AnswerMode\AnswerMode;
 use Codeages\Biz\ItemBank\Item\AnswerMode\ChoiceAnswerMode;
 use Codeages\Biz\ItemBank\Item\AnswerMode\RichTextAnswerMode;
 use Codeages\Biz\ItemBank\Item\AnswerMode\SingleChoiceAnswerMode;
@@ -77,7 +78,7 @@ class ItemParser
             ];
 
             $itemQuestions = [];
-            if (!empty($question['subQuestions'])) {
+            if ('material' == $question['type']) {
                 $item = $this->checkErrors($item, $question);
                 foreach ($question['subQuestions'] as $subQuestion) {
                     $itemQuestions[] = $this->convertItemQuestion($subQuestion);
@@ -136,6 +137,10 @@ class ItemParser
         return $this->answerMode[$type];
     }
 
+    /**
+     * @param $answerMode
+     * @return AnswerMode
+     */
     protected function getAnswerModeClass($answerMode)
     {
         return $this->biz['answer_mode_factory']->create($answerMode);

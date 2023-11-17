@@ -2,6 +2,7 @@
 
 namespace Biz\Common;
 
+use AppBundle\Common\UrlToolkit;
 use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
 use Biz\Util\HTMLPurifierFactory;
@@ -131,6 +132,7 @@ class HTMLHelper
         $webDir = $this->biz['kernel.root_dir'].'/../web';
         foreach ($matches[1] as $key => $match) {
             if (0 === strpos($match, '/')) {
+                $match = preg_replace('/\?version=[\d.]+/', '', $match);
                 $imgPath = $webDir.$match;
             }
             if (!empty($siteUrl) && 0 === strpos($match, $siteUrl)) {
@@ -138,6 +140,7 @@ class HTMLHelper
             }
             if (!empty($imgPath) && !file_exists($imgPath)) {
                 $html = str_replace($matches[0][$key], '', $html);
+                $imgPath = '';
             }
         }
 
@@ -148,9 +151,8 @@ class HTMLHelper
     {
         $url = !empty($url) ? $url : '';
         $url = rtrim($url, '/');
-        $url = ltrim($url, 'http://');
 
-        return ltrim($url, 'https://');
+        return UrlToolkit::ltrimHttpProtocol($url);
     }
 
     /**

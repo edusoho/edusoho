@@ -20,7 +20,7 @@
 </template>
 
 <script>
-const pattern = /^http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?$/i;
+const pattern = /^http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=#]*)?$/i;
 
 const checkLink = (rule, value, callback) => {
   if (value === '') {

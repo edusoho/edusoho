@@ -3,15 +3,18 @@
 namespace Biz\Content\Dao\Impl;
 
 use Biz\Content\Dao\FileDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class FileDaoImpl extends GeneralDaoImpl implements FileDao
+class FileDaoImpl extends AdvancedDaoImpl implements FileDao
 {
     protected $table = 'file';
 
     public function declares()
     {
         return [
+            'timestamps' => [
+                'createdTime',
+            ],
             'orderbys' => [
                 'createdTime',
             ],

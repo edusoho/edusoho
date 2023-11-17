@@ -1,8 +1,10 @@
 {% do script(['app/js/question-category/widgets/index.js']) %}
 <style>
-	.tooltip-inner {
-		max-width:none;
-	}
+  .question-category-panel__item {
+    .tooltip-inner {
+      max-width:none;
+    }
+  }
 </style>
 <div id="category-table-body question-category-panel__list">
   <input class="js-category-choose" data-role="search-conditions" type="hidden" name="category_id" value="{{ app.request.query.get('category_id') }}">

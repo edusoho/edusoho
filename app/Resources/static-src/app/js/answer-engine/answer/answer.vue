@@ -17,6 +17,7 @@
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
       :getCurrentTime="getCurrentTime"
+      :assessmentResponses="assessmentResponses"
       @getAnswerData="getAnswerData"
       @saveAnswerData="saveAnswerData"
       @exitAnswer="returnToCourseDetail"
@@ -97,7 +98,8 @@
         },
         ajaxTimeOut: null,
         isReachTime: false,
-        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1',
+        assessmentResponses: {}
       };
     },
     provide() {
@@ -127,6 +129,7 @@
         this.answerRecord = res.answer_record;
         this.answerScene = res.answer_scene;
         this.assessmentResponse = res.assessment_response;
+        this.assessmentResponses = res.assessment_response;
       })
     },
     methods: {

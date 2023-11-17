@@ -6,6 +6,8 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Question\QuestionException;
+use Biz\Question\QuestionParseClient;
+use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
@@ -15,6 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class QuestionController extends BaseController
 {
+    use QuestionImportTrait;
+
     public function indexAction(Request $request, $id)
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
@@ -43,7 +47,7 @@ class QuestionController extends BaseController
 
         $items = $this->getItemService()->searchItems(
             $conditions,
-            ['created_time' => 'ASC', 'id' => 'ASC'],
+            ['updated_time' => 'DESC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -62,6 +66,11 @@ class QuestionController extends BaseController
         ]);
     }
 
+    public function importIntroAction()
+    {
+        return $this->render('question-bank/question/import-intro-modal.html.twig');
+    }
+
     public function importAction(Request $request, $id)
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
@@ -78,6 +87,16 @@ class QuestionController extends BaseController
             'type' => 'item',
             'questionBank' => $questionBank,
         ]);
+    }
+
+    public function downloadImportTemplateAction(Request $request, $id, $type)
+    {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            return $this->createMessageResponse('error', '没有题库管理权限');
+        }
+        $downloadUrl = $this->getQuestionParseClient()->getTemplateFileDownloadUrl($type, $request->isSecure());
+
+        return $this->redirect($downloadUrl);
     }
 
     public function createAction(Request $request, $id, $type)
@@ -107,12 +126,7 @@ class QuestionController extends BaseController
                 $urlParams['id'] = $id;
                 $urlParams['type'] = $type;
                 $urlParams['goto'] = $goto;
-
-                return $this->createJsonResponse(
-                    [
-                        'goto' => $this->generateUrl('question_bank_manage_question_create', $urlParams),
-                    ]
-                );
+                $goto = $this->generateUrl('question_bank_manage_question_create', $urlParams);
             }
 
             return $this->createJsonResponse(['goto' => $goto]);
@@ -152,7 +166,8 @@ class QuestionController extends BaseController
         $goto = $this->filterRedirectUrl($goto);
 
         if ($request->isMethod('POST')) {
-            $this->getItemService()->updateItem($item['id'], json_decode($request->getContent(), true));
+            $content = $this->replaceFormulaToLocalImg($request->getContent());
+            $this->getItemService()->updateItem($item['id'], json_decode($content, true));
 
             return $this->createJsonResponse(['goto' => $goto]);
         }
@@ -161,7 +176,7 @@ class QuestionController extends BaseController
         return $this->render('question-manage/question-form-layout.html.twig', [
             'mode' => 'edit',
             'questionBank' => $questionBank,
-            'item' => $item,
+            'item' => $this->addItemEmphasisStyle($item),
             'type' => $item['type'],
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($item['bank_id']),
             'goto' => $goto,
@@ -217,7 +232,7 @@ class QuestionController extends BaseController
 
         $questions = $this->getItemService()->searchItems(
             $conditions,
-            ['created_time' => 'ASC', 'id' => 'ASC'],
+            ['updated_time' => 'DESC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -267,6 +282,25 @@ class QuestionController extends BaseController
         }
 
         return $this->createJsonResponse(true);
+    }
+
+    public function checkQuestionDuplicativeAction(Request $request, $id)
+    {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+        $data = json_decode($request->getContent(), true);
+
+        if ($this->getItemService()->isMaterialDuplicative($questionBank['itemBankId'], $data['material'], $data['items'])) {
+            return $this->createJsonResponse(true);
+        } else {
+            return $this->createJsonResponse(false);
+        }
     }
 
     public function deleteQuestionsAction(Request $request, $id)
@@ -331,6 +365,7 @@ class QuestionController extends BaseController
         if (!$item || $item['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
+        $item = $this->addItemEmphasisStyle($item);
 
         $template = $request->query->get(
             'isNew'
@@ -461,6 +496,11 @@ class QuestionController extends BaseController
         $push(['children' => $categoryTree]);
 
         return $categoryTreeArray;
+    }
+
+    private function getQuestionParseClient()
+    {
+        return new QuestionParseClient();
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -67,11 +68,35 @@ class ChapterManageController extends BaseController
         return $this->createJsonResponse(['success' => true]);
     }
 
+    public function lessonTreeAction(Request $request, $targetType, $targetId, $type)
+    {
+        $courseIds = [$targetId];
+        if ('classroom' === $targetType) {
+            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
+            $courseIds = array_column($courses, 'id');
+        }
+        if (empty($courseIds)) {
+            return $this->createJsonResponse([]);
+        }
+
+        $lessonTree = $this->getCourseService()->getLessonTree($courseIds, $type);
+
+        return $this->createJsonResponse($lessonTree);
+    }
+
     /**
      * @return CourseService
      */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

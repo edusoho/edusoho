@@ -1259,6 +1259,7 @@ item_bank_exercise.continue.back-btn: 返回章节目录
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
 course.testpaper_check.empty: 暂无数据
+course.testpaper_check.tips: 暂无相关内容
 course.testpaper_check.start_date: '开始日期：'
 course.testpaper_check.status.check: 已批
 course.testpaper_check.status.not_check: 未批
@@ -1762,14 +1763,29 @@ course.question_manage.import.docx_support_hint: 文档仅支持DOCX格式，
 course.question_manage.import.download_template: 模板下载
 course.question_manage.import.doc_to_docx_hint: DOC如何转换成DOCX?
 question_manage.import.doc_to_docx_hint.tutorial: 查看教程
+question_manage.import.click: 单击
+question_manage.import.description.supported: 导入说明：支持上传
+question_manage.import.easy: (简单)
+question_manage.import.integrity: (完整)
+question_manage.import.easy.tips: 可在之前的word模版上增加导入模式和说明（复制新模版上的文案粘贴），自动识别提醒，仅支持单选、多选、填空、 判断、问答题
+question_manage.import.easy.integrity: 需每题标明题型，且支特单选、多选、不定项选择、填空、判断、问答题材料题
+question_manage.import.formate.text: 格式文档
+question_manage.import.format.conversion: 格式转换
+question_manage.import.new.version.introduction: 新版导入功能介绍
+question_manage.import.administrator.tip1: 支持常见公式、表格、特殊字符等内容识别导入
+question_manage.import.administrator.tip2: 提升导入识别准确率，让题目导入更简单
+question_manage.import.non-administrator-tip: 升级云能力可使用导入功能，需联系超级管理员进行操作
+question_manage.import.non.administrator.close.btn: 我知道了
 course.question_manage.import.upload_document: 上传文档
-course.question_manage.import.reupload_document: 重新上传文档
+course.question_manage.import.reupload_document: 重新上传
+course.question_manage.import.Successful: 上传成功
 course.question_manage.import.uploading: 上传中...
 course.question_manage.import.use_old_template: 仍然使用旧模板
 course.question_manage.impport.cancle: 取消
 course.question_manage.import.filename_length_limit: 文件名称不能超过50个字符
 course.question_manage.import.docx_support_hint2: 请上传DOCX格式的Word文档
 course.question_manage.import.doc_to_docx_hint2: DOC如何转换成DOCX可<a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">点击此处</a>进行查看
+course.question_manage.import.text.rule.tip: 请上传DOCX或XLSX格式的文档
 course.question_manage.import.rule: 导入规则说明
 course.question_manage.export_hint: (当前题目导出仅支持新模板)
 course.question_manage.export_btn: 导出题目
@@ -1811,6 +1827,7 @@ course.testpaper_manage.close_btn: 关闭试卷
 course.testpaper_manage.close_tips: 真的要关闭试卷%name%吗？
 course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被%taskName%引用，关闭试卷可能会导致学员无法参与考试，请勿关闭试卷
 course.testpaper_manage.edit_btn: 编辑试卷信息
+course.testpaper_manage.edit_tips: 当前试卷可能已被应用在考试中，修改试卷内容，可能会对学员答题记录、答题成绩等产生影响，是否继续？
 course.testpaper_manage.manage_btn: 管理题目
 course.testpaper_manage.repead_btn: 重新生成题目
 course.testpaper_manage.export: 导出试卷
@@ -8012,7 +8029,7 @@ admin.setting_course.video_play_setting.multiple_forbidden_effect: 禁止多开�
 admin.setting_course.video_play_setting.kick_previous_play: 踢掉前次学习页面
 admin.setting_course.video_play_setting.kick_previous_play.tips: >
   <p>当用户多开时，以后开的学习页面为主，踢掉前次学习页面。</p>
-  <p>作业课时/考试课时/直播课时三类课时在学习时，后开的学习页面将无法踢掉这三类课时。</p>
+  <p>为保证学习数据实时上传，作业课时/考试课时/直播课时默认禁止多开且不可更改。</p>
   <p>注：需要终端升级至PC端V20.4.6，APP端V4.9.3</p>
 admin.setting_course.video_play_setting.reject_current_play: 拒绝本次进入学习页面
 admin.setting_course.video_play_setting.reject_current_play.tips: 当用户多开时，以先开的学习页面为主，后开学习页面不允许进入。微网校中仅对启航主题生效。
@@ -8094,6 +8111,7 @@ admin.developer_setting.content_title: 开发者设置
 admin.developer_setting.debug_label: 调试
 admin.developer_setting.app_center_api_address: 应用中心API地址
 admin.developer_setting.es_live_api_server: 自研直播API地址
+admin.developer_setting.question_parse_api_server: 题目解析API地址
 admin.developer_xapi_address: XAPI 推送地址
 admin.developer_face_address: 人脸识别API地址
 admin.developer_push_address: 消息推送API地址
@@ -9745,6 +9763,7 @@ log.action.question_bank.delete_category: 删除题库分类
 log.action.question_bank.update_category: 更新题库分类
 log.action.question_bank.delete_question: 删除题库题目
 log.action.question_bank.sort_question_category: 题库分类排序
+log.action.question_bank.edit_testpaper: 编辑试卷
 log.action.destroy_account_record.create: 申请注销帐号
 log.action.destroy_account_record.pass: 通过注销帐号申请
 log.action.destroy_account_record.reject: 拒绝注销帐号申请
@@ -12441,3 +12460,5 @@ sms.defence.request.log.disable_type.coordinate: 同一坐标多次请求
 sms.defence.request.log.disable_type.none: 无
 
 course.start_answer.all_question_deleted: 全部题目已被删除，请联系教师或管理员
+item_bank.access_cloud: 立即升级
+next.skip: '下一步 (1/2)'
