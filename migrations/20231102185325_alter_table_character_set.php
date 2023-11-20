@@ -10,10 +10,10 @@ class AlterTableCharacterSet extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("
+        $biz['db']->exec('
             ALTER TABLE `biz_item` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
             ALTER TABLE `biz_question` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-        ");
+        ');
     }
 
     /**
@@ -22,9 +22,9 @@ class AlterTableCharacterSet extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("
+        $biz['db']->exec('
             ALTER TABLE `biz_item` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
             ALTER TABLE `biz_question` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-        ");
+        ');
     }
 }
