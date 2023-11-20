@@ -8,7 +8,7 @@
         <span class="duplicate-divider"></span>
         <span class="duplicate-title">【全部题目】试题查重</span>
        </div>
-       <div class="duplicate-body">
+       <div class="duplicate-body flex">
         <div class="duplicate-question">
             <div class="duplicate-question-head">
                 共有重复题目:<label class="duplicate-question-count">4</label>道

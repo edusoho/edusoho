@@ -5,6 +5,7 @@
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
       :isDownload="isDownload"
+      :needScore="0"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
       @previewAttachment="previewAttachment"
