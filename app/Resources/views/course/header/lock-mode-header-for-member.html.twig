@@ -108,7 +108,7 @@
             {% endif %}
             ></i>
             {% if task_lock is empty %}
-              <a class="title"
+              <a class="title {% if course.canLearn == '0' %} js-handleLearnContentOnMessage{% endif %}"
                 href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">{{ task.title }}</a>
             {% else %}
               <span class="title">{{ task.title }}</span>
