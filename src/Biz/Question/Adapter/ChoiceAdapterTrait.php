@@ -50,7 +50,7 @@ trait ChoiceAdapterTrait
         }
 
         $options = array_column($question['body']['options'], 'content');
-        if (count($options) == 1) {
+        if (1 == count($options)) {
             $options[] = '';
         }
 
