@@ -1,0 +1,15 @@
+import DuplicativeQuestions from './index.vue';
+// import Vue from 'common/vue';
+import qs from 'qs';
+
+Vue.prototype.$qs = qs;
+
+Vue.filter('trans', function (value, params) {
+  if (!value) return '';
+  return Translator.trans(value, params);
+});
+
+new Vue({
+  el: '#app',
+  render: createElement => createElement(DuplicativeQuestions)
+})

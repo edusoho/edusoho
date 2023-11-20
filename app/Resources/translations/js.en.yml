@@ -2234,6 +2234,7 @@ skip.i.know: I know(2/2)
 skip.upgrade.btn: Upgrade now(2/2)
 question.bank.name: Question bank name
 question.bank.expoet: Derived problem
+question.bank.check: Item reexamination
 question.bank.add: Add topic
 question.bank.import: Lead-in topic
 question.bank.difficulty.default: Difficulty

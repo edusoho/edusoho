@@ -3,6 +3,7 @@
     <div class="header-btn-list">
       <div class="question-name">{{ 'question.bank.name'|trans }}</div>
       <div class="">
+        <a-button class="duplicate-checking" type="default" @click="duplicateChecking">{{ 'question.bank.check'|trans }}</a-button>
         <a-button class="report" type="default" @click="exportQuestion">{{ 'question.bank.expoet'|trans }}</a-button>
         <a-dropdown>
           <a-button class="add-question" type="default">{{ 'question.bank.add'|trans }}</a-button>
@@ -59,6 +60,7 @@
         </a-form-model-item>
       </a-form-model>
     </div>
+    <a-spin class="spin-fixed" :spinning="isLoading" :indicator="indicator" tip="正在查重..." />
     <input type="hidden" class="js-list-header-difficulty" :value=difficulty>
     <input type="hidden" class="js-list-header-type" :value=type>
     <input type="hidden" class="js-list-header-keyword" :value=keyword>
@@ -71,6 +73,8 @@ import Selector from '../common/selector';
 export default {
   data () {
     return {
+      isLoading: false,
+      indicator: '<a-icon type="loading" style="font-size: 24px" spin />',
       exportUrl: $('.js-export-value').val(),
       selector: new Selector($('.js-question-html')),
       difficulty: 'default',
@@ -131,6 +135,9 @@ export default {
   },
 
   methods: {
+    duplicateChecking() {
+      this.isLoading = !this.isLoading;
+    },
     userNameError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('userName') && getFieldError('userName');

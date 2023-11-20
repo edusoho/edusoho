@@ -2199,6 +2199,7 @@ skip.i.know: 我知道了（2/2）
 skip.upgrade.btn: 立即升级 (2/2)
 question.bank.name: 题库名称
 question.bank.expoet: 导出题目
+question.bank.check: 试题查重
 question.bank.add: 添加题目
 question.bank.import: 导入题目
 question.bank.difficulty.default: 难度
