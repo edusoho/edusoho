@@ -178,7 +178,7 @@ class OrderController extends BaseController
         $currentUser = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
 
-        if ($currentUser['id'] != $order['user_id']) {
+        if (!$currentUser->isSuperAdmin() && !$currentUser->isAdmin() && $currentUser['id'] != $order['user_id']) {
             $this->createNewException(OrderException::BEYOND_AUTHORITY());
         }
 
