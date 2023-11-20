@@ -1,6 +1,6 @@
 <template>
     <div class="duplicate-question-content">
-        <div>
+        <div class="question-num">
             <button v-for="(item, index) in 20" :key="index" class="numbering">{{ item }}</button>
         </div>
         <div class="question-content mt8">

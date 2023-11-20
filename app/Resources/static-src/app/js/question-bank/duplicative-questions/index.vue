@@ -12,6 +12,12 @@
         <div class="duplicate-question">
             <div class="duplicate-question-head">
                 共有重复题目:<label class="duplicate-question-count">4</label>道
+                <div v-show="isShowGuide" class="duplicate-question-item duplicate-question-active">
+                    <div class="duplicate-question-title">
+                        《诗经》的表现手法归纳为赋、比、兴，其中（ ）的手法是铺
+                    </div>
+                    <span class="duplicate-question-check-count">10次</span>
+                </div>
             </div>
             <duplicate-question-item 
                 v-for="(item, index) in 5" 
@@ -33,18 +39,64 @@
 <script>
 import DuplicateQuestionItem from "./components/DuplicateQuestionItem.vue";
 import DuplicateQuestionContent from "./components/DuplicateQuestionContent.vue";
+import 'store';
 
 export default {
     data(){
         return{
-            activeKey: 0
+            activeKey: 0,
+            introOption: {
+                prevLabel: '上一步',
+                nextLabel: '下一步(1/2)',
+                skipLabel: '跳过',
+                doneLabel: '我知道了(2/2)',
+                showBullets: false,
+                showStepNumbers: false,
+                exitOnEsc: false,
+                exitOnOverlayClick: false,
+                tooltipClass: 'duplicate-intro',
+                steps: [],
+          },
+          isShowGuide: false,
         }
     },
     components:{
         DuplicateQuestionItem,
         DuplicateQuestionContent
     },
+    mounted() {
+        // if(!store.get('QUESTION_IMPORT_INTRO')) { 
+            this.isShowGuide = true
+
+            this.$nextTick(() => {
+                this.initGuide()
+        })
+        // }
+    },
     methods:{
+        initGuide() {
+            let that = this;
+            this.isShowGuide = true
+            that.introOption.steps = [{
+                element: '.duplicate-question-head',
+                intro: Translator.trans('upgrade.cloud.capabilities.to.experience'),
+                position: 'bottom',
+            },
+            {
+                element: '.question-num',
+                intro: Translator.trans('upgrade.cloud.capabilities.to.experience'),
+                position: 'bottom',
+            }],
+            introJs()
+                .setOptions(that.introOption)
+                .start().onchange(function() {
+                    that.isShowGuide = false
+                    document.querySelectorAll('.introjs-skipbutton')[0].style.display = 'inline-block'
+                    document.querySelectorAll('.introjs-prevbutton')[0].style.display = 'none'
+                    }).oncomplete(function() {
+                        store.set('DUPLICATE_IMPORT_INTRO', true);
+                    })
+        },
         changeOption(activeKey){
             this.activeKey = activeKey;
         }

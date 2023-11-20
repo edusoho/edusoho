@@ -15,20 +15,28 @@ new Vue({
   render: createElement => createElement(DuplicativeQuestions)
 })
 
-const wechatIntro = () => {
-    introJs().setOptions({
-      steps: [{
-        element: '.duplicate-question',
-        intro: Translator.trans('course.intro.wechat_subscribe'),
-      }],
-      doneLabel: '确认',
-      showBullets: false,
-      showStepNumbers: false,
-      exitOnEsc: false,
-      exitOnOverlayClick: false,
-      tooltipClass: 'duplicate-intro',
-    }).start();
-  }
+
+// const wechatIntro = () => {
+//     introJs().setOptions({
+//         steps: [{
+//           element: '.duplicate-question',
+//           intro: Translator.trans('upgrade.cloud.capabilities.to.experience'),
+//           position: 'bottom',
+//         },
+//         {
+//             element: '.question-head',
+//             intro: Translator.trans('upgrade.cloud.capabilities.to.experience'),
+//             position: 'bottom',
+//           }],
+//         doneLabel: '我知道了（2/2）',
+//         nextLabel: '下一步（1/2）',
+//         showBullets: false,
+//         showStepNumbers: false,
+//         exitOnEsc: false,
+//         exitOnOverlayClick: false,
+//         tooltipClass: '',
+//       }).start()
+//   }
 
   
-    wechatIntro();
+//     wechatIntro();

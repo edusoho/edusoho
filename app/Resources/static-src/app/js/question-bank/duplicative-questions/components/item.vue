@@ -100,9 +100,9 @@ export default {
     };
   },
   mounted() {
-    console.log(this.showAttachment);
-    console.log(this.cdnHost);
-    console.log(this.isDownload);
+    // console.log(this.showAttachment);
+    // console.log(this.cdnHost);
+    // console.log(this.isDownload);
   },
   methods: {
     previewAttachment(fileId) {
