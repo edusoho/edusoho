@@ -75,6 +75,9 @@ class ChapterManageController extends BaseController
             $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
             $courseIds = array_column($courses, 'id');
         }
+        if (empty($courseIds)) {
+            return $this->createJsonResponse([]);
+        }
 
         $lessonTree = $this->getCourseService()->getLessonTree($courseIds, $type);
 

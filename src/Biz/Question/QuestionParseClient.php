@@ -12,7 +12,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class QuestionParseClient
 {
-    private $api = 'question-parse-service.labs-dev.edusoho.cn';
+    private $api = 'question-parse-service.edusoho.net';
 
     private $request;
 
@@ -80,10 +80,8 @@ class QuestionParseClient
         $storage = $this->getSettingService()->get('storage');
         $payload = [
             'iss' => 'QuestionParseService',
-            'exp' => time() + 3000,
+            'exp' => time() + 300,
         ];
-        $storage['cloud_access_key'] = '9KZsGvJaLhSfD4YDjRyLiaRXtwhGejv2';
-        $storage['cloud_secret_key'] = '8ovd4TvFCCtKNCtEJLdTwTUUMeQoUrjB';
         $this->token = JWT::encode($payload, $storage['cloud_secret_key'], 'HS256', $storage['cloud_access_key']);
     }
 
