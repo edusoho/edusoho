@@ -9,6 +9,7 @@ use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\Testpaper\ExerciseException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -23,6 +24,12 @@ class SaveAnswer extends AbstractResource
             $course = $this->getCourseService()->getCourse($assessmentResponse['courseId']);
             if ('0' == $course['canLearn']) {
                 throw CourseException::CLOSED_COURSE();
+            }
+        }
+        if (!empty($assessmentResponse['exerciseId'])) {
+            $exercise = $this->getExerciseService()->get($assessmentResponse['exerciseId']);
+            if ($exercise['status'] == 'closed') {
+                throw ExerciseException::CLOSED_EXERCISE();
             }
         }
         $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
