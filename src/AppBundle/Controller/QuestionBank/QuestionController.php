@@ -305,7 +305,14 @@ class QuestionController extends BaseController
 
     public function checkDuplicativeQuestionsAction(Request $request, $id)
     {
-        return $this->render('question-manage/duplicative-questions.html.twig');
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('question-manage/duplicative-questions.html.twig', [
+            'questionBankId' => $id,
+            'categoryId' => $request->query->get('categoryId', ''),
+        ]);
     }
 
     public function deleteQuestionsAction(Request $request, $id)
