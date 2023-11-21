@@ -11562,7 +11562,7 @@ admin_v2.homepage.cloud_notice: '欢迎使用,试用将于<strong> %endTime% </s
 admin_v2.homepage.quick_entrance: 常用入口
 admin_v2.edit_quick_entrance.btn: 编辑入口
 admin_v2.quick_entrance_setting: 设置常用入口
-admin_v2.quick_entrance_setting.tips: (最多设置7个快捷入口位）
+admin_v2.quick_entrance_setting.tips: (最多设置8个快捷入口位）
 
 ##分类标签
 admin_v2.course.tag: 标签管理
