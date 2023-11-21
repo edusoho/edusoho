@@ -562,7 +562,7 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
         }
 
-        $duplicatedMaterials = array_column($this->getItemDao()->findDuplicatedMaterial($itemBankId, $materialHashes), 'material');
+        $duplicatedMaterials = array_column($this->getItemDao()->findMaterialByMaterialHashes($itemBankId, $materialHashes), 'material');
         $duplicatedIds = array_keys(array_intersect($materials, $duplicatedMaterials));
         foreach ($duplicatedIds as $duplicatedId) {
             $allDuplicatedIds[$duplicatedId]['remote'] = true;
@@ -593,6 +593,16 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
 
         return false;
+    }
+
+    public function findDuplicatedMaterials($bankId, $categoryId = 0)
+    {
+        $duplicatedMaterialHashes = $this->getItemDao()->findDuplicatedMaterialHashes($bankId, $categoryId);
+        if (empty($duplicatedMaterialHashes)) {
+            return [];
+        }
+
+        return $this->getItemDao()->findDuplicatedMaterials($bankId, array_column($duplicatedMaterialHashes, 'material_hash'));
     }
 
     protected function findQuestionsByItemId($itemId)

@@ -45,13 +45,47 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
         return $this->db()->fetchColumn($sql, [$categoryId]);
     }
 
-    public function findDuplicatedMaterial($bankId, $materialHashes)
+    public function findMaterialByMaterialHashes($bankId, $materialHashes)
     {
         $marks = str_repeat('?,', count($materialHashes) - 1).'?';
 
         $sql = "SELECT material FROM {$this->table} WHERE bank_id = ? AND material_hash IN ({$marks}) AND is_deleted = 0;";
 
         return $this->db()->fetchAll($sql, array_merge([$bankId], $materialHashes)) ?: [];
+    }
+
+    public function findDuplicatedMaterialHashes($bankId, $categoryId = 0)
+    {
+        $conditions = [
+            'bank_id' => $bankId,
+        ];
+        if ($categoryId) {
+            $conditions['category_id'] = $categoryId;
+        }
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('material_hash, count(*) as frequency')
+            ->groupBy('material_hash')
+            ->having('frequency > 1');
+
+        return $builder->execute()->fetchAll() ?: [];
+    }
+
+    public function findDuplicatedMaterials($bankId, array $materialHashes)
+    {
+        if (empty($materialHashes)) {
+            return [];
+        }
+        $conditions = [
+            'bank_id' => $bankId,
+            'material_hashs' => $materialHashes,
+        ];
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('material, count(*) as frequency')
+            ->groupBy('material')
+            ->having('frequency > 1')
+            ->orderBy('frequency', 'DESC');
+
+        return $builder->execute()->fetchAll() ?: [];
     }
 
     public function declares()
