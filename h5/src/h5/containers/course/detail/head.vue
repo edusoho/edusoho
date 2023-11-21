@@ -425,7 +425,6 @@ export default {
     },
 
     formateVedioData(player) {
-      console.log(player)
       const media = player.media;
       const timelimit = media.timeLimit;
       const securityVideoPlayer = media.securityVideoPlayer;
