@@ -222,12 +222,8 @@ export default {
     isShowClosedFooter() {
       const { status: courseSetStatus } = this.details.courseSet;
       const activeNotInArray = [1, 2, 4].includes(this.active);
-      if (courseSetStatus == 'closed' && !activeNotInArray) {
-        return true;
-      }
-
-      return false
       
+      return courseSetStatus == 'closed' && !activeNotInArray
     },
 
     summary() {
