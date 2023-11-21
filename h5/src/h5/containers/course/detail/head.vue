@@ -346,6 +346,7 @@ export default {
             mediaType,
           } = res;
 
+
           if (resNo === '0') {
             const media = await Api.getLocalMediaLive({
               query: {
@@ -455,6 +456,10 @@ export default {
         pluck: {
           timelimit: timelimit,
         },
+        fingerprint: {
+          html: player.fingerPrintSetting?.video_fingerprint,
+          duration: player.fingerPrintSetting?.video_fingerprint_time * 100
+        },
         playbackRates: [0.75, 1, 1.25, 1.5, 2, 3],
         resNo: media.resNo,
         disableDataUpload: true,
@@ -462,6 +467,7 @@ export default {
           pos: 'top.right',
           width: 30,
           height: 30,
+          file: player.watermarkSetting?.video_watermark_image
         },
         language: getLanguage(),
         token: media.token,

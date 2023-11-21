@@ -110,7 +110,7 @@
       </van-button>
     </van-popup>
     <div class="footer">
-      <closedFixed v-if="details.courseSet.status == 'closed'" :isJoin="true" :title="$t('closed.courseTitle')" :content="$t('closed.courseContent')" />
+      <closedFixed v-if="isShowClosedFooter" :isJoin="true" :title="$t('closed.courseTitle')" :content="$t('closed.courseContent')" />
     </div>
   </div>
 </template>
@@ -217,6 +217,13 @@ export default {
     progress() {
       if (!Number(this.details.publishedTaskNum)) return '0%';
       return parseInt(this.details.progress.percent) + '%';
+    },
+
+    isShowClosedFooter() {
+      const { status: courseSetStatus } = this.details.courseSet;
+      const activeNotInArray = [1, 2, 4].includes(this.active);
+      
+      return courseSetStatus == 'closed' && !activeNotInArray
     },
 
     summary() {
