@@ -1,6 +1,6 @@
 <div class="row">
-  {% for i in 0..3 %}
-    <div class="col-md-3">
+  {% for i in 0..5 %}
+    <div class="col-md-3" style="width: 16.66%;">
       {% if advice.details[i] is defined %}
         {% set item = advice.details[i] %}
         <a class="admin-advice__item" href="{{ item.url|default() }}" target="_blank">
