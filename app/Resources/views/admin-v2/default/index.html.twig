@@ -59,7 +59,7 @@
         {# 常用入口 #}
         <div class="admin-v2-section cd-pb16 relative">
           <div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.homepage.quick_entrance'|trans }}
-           <a class="admin-v2-section__more" data-toggle="modal" data-target="#functionModal">自定义<i
+           <a class="admin-v2-section__more" data-toggle="modal" data-target="#functionModal">{{ 'admin_v2.homepage.quick_custom'|trans }}<i
                 class="es-icon es-icon-edit-line ml4"></i>
               </a>
           </div>
@@ -105,7 +105,7 @@
                  data-url="{{ path('admin_v2_homepage_business_advice') }}">
               <div class="row text-center" style="line-height: 90px;">
                 {% for i in 0..5 %}
-                  <div class="col-md-3" style="width: 16.66%;">
+                  <div class="col-md-2">
                     <div class=" admin-advice__item">
                       <div class="admin-advice__placeholder"><i class="es-icon es-icon-placeholder"></i></div>
                     </div>
