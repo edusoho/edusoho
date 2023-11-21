@@ -52,10 +52,13 @@ export default {
     methods: {
         confirm() {
             this.$confirm({
-                title: 'Confirm',
-                content: 'Bla bla ...',
+                title: '真的要删除该题目吗？',
+                content: '删除题目，可能会影响课时的练习，请谨慎操作！',
+                icon: 'exclamation-circle',
                 okText: '确认',
                 cancelText: '取消',
+                onOk() {console.log("确认")},
+                onCancel() {console.log("取消")}
             });
          },
     }

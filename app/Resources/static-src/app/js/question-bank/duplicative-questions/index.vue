@@ -28,9 +28,12 @@
         </div>
         <div class="duplicate-content">
             <div class="duplicate-content-title">题目对比</div>
-            <div class="mt16 flex flex-nowrap">
+            <div v-if="isHaveRepeat" class="mt16 flex flex-nowrap">
                 <duplicate-question-content class="mr16" />
                 <duplicate-question-content />
+            </div>
+            <div v-else>
+                数据为空
             </div>
         </div>
        </div>
@@ -57,6 +60,7 @@ export default {
                 tooltipClass: 'duplicate-intro',
                 steps: [],
           },
+          isHaveRepeat: false,
           isShowGuide: false,
         }
     },
@@ -65,13 +69,13 @@ export default {
         DuplicateQuestionContent
     },
     mounted() {
-        // if(!store.get('QUESTION_IMPORT_INTRO')) { 
+        if(!store.get('QUESTION_IMPORT_INTRO')) { 
             this.isShowGuide = true
 
             this.$nextTick(() => {
                 this.initGuide()
         })
-        // }
+        }
     },
     methods:{
         initGuide() {
