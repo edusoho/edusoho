@@ -1450,7 +1450,7 @@ t.add("question.marker_question.select_question_category", "--Select question ca
 t.add("queston_bank.testpaper.no_open_tips", "If you can not find a testpaper, please make sure that the testpaper has been published", "js", "en");
 t.add("queston_bank.testpaper.empty_tips", "There is no testpaper in this question bank", "js", "en");
 t.add("admin_v2.user.cloude_sms_enable_hint", "please go to\u3010Admin\u3011-\u3010App Cente\u3011-\u3010Cloud service\u3011-\u3010Cloud Sms\u3011open cloud sms first.", "js", "en");
-t.add("admin_v2.homepage.quick_entrance.hint", "Set up to 7 quick entries", "js", "en");
+t.add("admin_v2.homepage.quick_entrance.hint", "Set up to 8 quick entries", "js", "en");
 t.add("admin_v2.homepage.mini_program.title", "Scan code to open the miniprogram", "js", "en");
 t.add("admin.switch_old_version.permission_error", "Please contact super administrator or administrator operation", "js", "en");
 t.add("admin.switch_old_version.title", "Toggle backstage", "js", "en");

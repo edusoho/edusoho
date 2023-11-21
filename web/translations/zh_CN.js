@@ -1403,7 +1403,7 @@ t.add("question.marker_question.select_question_category", "--\u9009\u62e9\u5206
 t.add("queston_bank.testpaper.no_open_tips", "\u5982\u679c\u627e\u4e0d\u5230\u8bd5\u5377\uff0c\u8bf7\u5148\u786e\u5b9a\u8be5\u8bd5\u5377\u5df2\u7ecf\u53d1\u5e03", "js", "zh_CN");
 t.add("queston_bank.testpaper.empty_tips", "\u6b64\u9898\u5e93\u8fd8\u6ca1\u6709\u8bd5\u5377", "js", "zh_CN");
 t.add("admin_v2.user.cloude_sms_enable_hint", "\u8bf7\u5148\u5230\u3010\u7ba1\u7406\u540e\u53f0\u3011-\u3010\u4e91\u5e02\u573a\u3011-\u3010\u4e91\u670d\u52a1\u3011-\u3010\u4e91\u77ed\u4fe1\u3011\u4e2d\u5f00\u542f\u4e91\u77ed\u4fe1\u54e6~", "js", "zh_CN");
-t.add("admin_v2.homepage.quick_entrance.hint", "\u6700\u591a\u8bbe\u7f6e7\u4e2a\u5feb\u6377\u5165\u53e3\u4f4d", "js", "zh_CN");
+t.add("admin_v2.homepage.quick_entrance.hint", "\u6700\u591a\u8bbe\u7f6e8\u4e2a\u5feb\u6377\u5165\u53e3\u4f4d", "js", "zh_CN");
 t.add("admin_v2.homepage.mini_program.title", "\u626b\u7801\u6253\u5f00\u5c0f\u7a0b\u5e8f", "js", "zh_CN");
 t.add("admin.switch_old_version.permission_error", "\u8bf7\u8054\u7cfb\u8d85\u7ea7\u7ba1\u7406\u5458\u6216\u7ba1\u7406\u5458\u64cd\u4f5c", "js", "zh_CN");
 t.add("admin.switch_old_version.title", "\u5207\u6362\u540e\u53f0", "js", "zh_CN");
