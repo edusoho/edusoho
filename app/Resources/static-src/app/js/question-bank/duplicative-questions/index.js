@@ -1,6 +1,7 @@
 import DuplicativeQuestions from './index.vue';
 import qs from 'qs';
 
+
 Vue.prototype.$qs = qs;
 
 
@@ -13,3 +14,4 @@ new Vue({
   el: '#app',
   render: createElement => createElement(DuplicativeQuestions)
 })
+

@@ -43,6 +43,8 @@
 import DuplicateQuestionItem from "./components/DuplicateQuestionItem.vue";
 import DuplicateQuestionContent from "./components/DuplicateQuestionContent.vue";
 import 'store';
+import { Repeat } from 'common/vue/service';
+
 
 export default {
     data(){
@@ -60,7 +62,7 @@ export default {
                 tooltipClass: 'duplicate-intro',
                 steps: [],
           },
-          isHaveRepeat: false,
+          isHaveRepeat: true,
           isShowGuide: false,
         }
     },
@@ -69,6 +71,7 @@ export default {
         DuplicateQuestionContent
     },
     mounted() {
+        console.log(this.$route)
         if(!store.get('QUESTION_IMPORT_INTRO')) { 
             this.isShowGuide = true
 
@@ -103,6 +106,10 @@ export default {
         },
         changeOption(activeKey){
             this.activeKey = activeKey;
+        },
+        getData() {
+            Repeat.getRepeatQuestion(this.courseId, { }).then(res => {
+      });
         }
     }
 }
