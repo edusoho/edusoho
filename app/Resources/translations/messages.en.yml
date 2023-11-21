@@ -10325,9 +10325,9 @@ admin_v2.wechat_official_account.text: Follow the EduSoho official account to ge
 admin_v2.homepage.announcement_from_platform: Announcement From Platform
 admin_v2.homepage.application_intro: Application Introduction
 admin_v2.homepage.quick_custom: Custom
-admin_v2.homepage.application_intro.more_btn: View more marketing cloud application
+admin_v2.homepage.application_intro.more_btn: Marketing cloud application
 admin_v2.business_advice.title: Business advice
-admin_v2.buiness_advice.goto_qiqiuyu: EduSoho Business School
+admin_v2.buiness_advice.goto_qiqiuyu: Business School
 
 admin_v2.notice.upgrade_notice: The new background for the plugin for a new adaptation, in order to facilitate your background management, need to manually upgrade all installed plugins
 admin_v2.notice.go_to_upgrade: Go to upgrade
