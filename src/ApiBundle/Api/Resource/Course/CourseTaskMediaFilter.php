@@ -9,7 +9,7 @@ use ApiBundle\Api\Resource\Homework\HomeworkFilter;
 class CourseTaskMediaFilter extends Filter
 {
     protected $publicFields = [
-        'mediaType', 'media', 'format',
+        'mediaType', 'media', 'format', 'watermarkSetting', 'fingerPrintSetting',
     ];
 
     protected function publicFields(&$data)
@@ -55,5 +55,14 @@ class CourseTaskMediaFilter extends Filter
         }
 
         unset($data['format']);
+
+        if (!empty($data['watermarkSetting'])) {
+            if (!empty($data['watermarkSetting']['video_watermark_image'])) {
+                $data['watermarkSetting']['video_watermark_image'] = $this->convertFilePath('/files/'.$data['watermarkSetting']['video_watermark_image']);
+            }
+            if (!empty($data['watermarkSetting']['video_embed_watermark_image'])) {
+                $data['watermarkSetting']['video_embed_watermark_image'] = $this->convertFilePath('/files/'.$data['watermarkSetting']['video_embed_watermark_image']);
+            }
+        }
     }
 }
