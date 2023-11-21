@@ -1,9 +1,14 @@
 import DuplicativeQuestions from './index.vue';
 import qs from 'qs';
-import { Button } from '@codeages/design-vue';
+import { Button, Message, Modal } from '@codeages/design-vue';
   
 Vue.use(Button)
+Vue.use(Modal)
+
 Vue.prototype.$qs = qs;
+Vue.prototype.$confirm = Modal.confirm;
+Vue.prototype.$message = Message;
+
 
 Vue.filter('trans', function (value, params) {
   if (!value) return '';

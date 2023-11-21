@@ -15,7 +15,7 @@
             </div>
             <div class="question-foot">
                 <a-button class="mr10">编辑</a-button>
-                <a-button>删除</a-button>
+                <a-button @click="confirm">删除</a-button>
             </div>
 
         </div>
@@ -48,6 +48,16 @@ export default {
     },
     components: {
         QuestionItem
+    },
+    methods: {
+        confirm() {
+            this.$confirm({
+                title: 'Confirm',
+                content: 'Bla bla ...',
+                okText: '确认',
+                cancelText: '取消',
+            });
+         },
     }
 }
 </script>
