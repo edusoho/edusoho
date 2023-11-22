@@ -1587,6 +1587,7 @@ t.add("course.marketing_setup.setup.is_show_label", "Page display", "js", "en");
 t.add("course.marketing_setup.setup.can_show", "Enable", "js", "en");
 t.add("course.marketing_setup.setup.can_hide", "Disable", "js", "en");
 t.add("item_bank_exercise.marketing_setup.rule.show", "After disabling, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.", "js", "en");
+t.add("course.marketing_setup.rule.show", "After closure, the course plan will be completely hidden and cannot be viewed at the front desk.", "js", "en");
 t.add("course.marketing_setup.setup.can_join.tips", "If enrollment is closed\uff0cthe course will appeared as \"restricted course\". Students can not enroll the course except added by teahcers. It is used for closed teaching.", "js", "en");
 t.add("course.marketing_setup.expiry_date", "Deadline", "js", "en");
 t.add("course.marketing_setup.rule.expiry_date", "Learn expiry date", "js", "en");
