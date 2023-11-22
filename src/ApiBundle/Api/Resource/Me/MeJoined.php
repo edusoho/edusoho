@@ -139,7 +139,7 @@ class MeJoined extends AbstractResource
 
     private function isExpired($deadline)
     {
-        return $deadline !== 0 && $deadline < time();
+        return 0 != $deadline && $deadline < time();
     }
 
     protected function getItemBanks()
