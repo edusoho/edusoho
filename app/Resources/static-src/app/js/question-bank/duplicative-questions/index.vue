@@ -1,7 +1,7 @@
 <template>
     <div id="duplicate-check">
        <div class="duplicate-head">
-        <span class="duplicate-back">
+        <span class="duplicate-back" @click="goBack">
             <a-icon type="left" />
             返回
         </span>
@@ -106,6 +106,9 @@ export default {
         },
         changeOption(activeKey){
             this.activeKey = activeKey;
+        },
+        goBack() {
+            window.history.back();
         },
         getData() {
             Repeat.getRepeatQuestion(this.courseId, { }).then(res => {

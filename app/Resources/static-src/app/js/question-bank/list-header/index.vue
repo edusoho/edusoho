@@ -136,7 +136,8 @@ export default {
 
   methods: {
     duplicateChecking() {
-      this.isLoading = !this.isLoading;
+      window.location.href = `/question_bank/${$('.js-questionBank-id').val()}/check_duplicative_questions?categoryId=${this.categoryId}`
+      // this.isLoading = !this.isLoading;
     },
     userNameError() {
       const { getFieldError, isFieldTouched } = this.form;
