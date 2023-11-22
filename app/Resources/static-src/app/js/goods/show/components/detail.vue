@@ -270,12 +270,23 @@
         },
         computed: {
             goodsClass() {
+                if (!this.goods.isMember) {
+                    
+                    if(this.goods.type == 'course' && this.goods.status == 'unpublished') {
+                        return 'detail-left__text-share js-handleCoursePage'
+                    }
+                    
+                    if(this.goods.type == 'classroom' && this.goods.status == 'unpublished'){
+                        return 'detail-left__text-share js-handleClassroomPage'
+                    }
+                }
+
                 if(this.goods.type == 'course' && this.goods.status == 'unpublished') {
-                    return 'detail-left__text-share js-handleCoursePage'
+                    return 'detail-left__text-share js-handleLearnOnMessage'
                 }
                 
                 if(this.goods.type == 'classroom' && this.goods.status == 'unpublished'){
-                    return 'detail-left__text-share js-handleClassroomPage'
+                    return 'detail-left__text-share js-handleClassroomOnMessage'
                 }
 
                 return 'detail-left__text-share'
