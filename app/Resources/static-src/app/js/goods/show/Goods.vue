@@ -369,6 +369,7 @@
                 console.log(3)
                 return this.changeSku(this.goods.product.target.defaultCourseId);
             }
+            console.log(this.goods)
         },
         watch: {
             goods(newVal, oldVal) {
