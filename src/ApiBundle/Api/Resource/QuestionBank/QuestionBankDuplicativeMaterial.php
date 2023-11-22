@@ -21,7 +21,7 @@ class QuestionBankDuplicativeMaterial extends AbstractResource
             throw QuestionBankException::NOT_FOUND_BANK();
         }
 
-        return $this->getItemService()->findDuplicatedMaterials($questionBank['itemBankId'], $request->query->get('categoryId'));
+        return $this->getItemService()->findDuplicatedMaterials($questionBank['itemBankId'], $request->query->get('categoryId', ''));
     }
 
     /**
