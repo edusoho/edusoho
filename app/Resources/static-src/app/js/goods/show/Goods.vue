@@ -355,14 +355,18 @@
             window.addEventListener("scroll", this.handleScroll);
 
             if (this.goods.type == 'classroom') {
+                console.log(1)
                 return this.changeSku(this.goods.product.target.id);
             }
 
             if (this.goods.type == 'course' && this.targetId) {
+                console.log(2)
+                console.log(this.targetId)
                 return this.changeSku(this.targetId);
             }
 
             if (this.goods.product.target.defaultCourseId) {
+                console.log(3)
                 return this.changeSku(this.goods.product.target.defaultCourseId);
             }
         },
