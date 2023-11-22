@@ -72,8 +72,13 @@
             },
 
             onFavorite() {
-                if(this.goods.status == 'unpublished') {
+                if (this.goods.status == 'unpublished' && !this.goods.isMember) {
                     window.location.href = `/course/closed?type=${this.goods.type}`
+                    return
+                }
+
+                if (this.goods.status == 'unpublished' && this.goods.isMember) {
+                    this.$message.error(Translator.trans(`validate.${this.goods.type}.closed`));
                     return
                 }
 

@@ -90,7 +90,14 @@
       <div class="course-detail-info__btn js-course-header-operation">
         <ul class="course-operation course-operation--market hidden-xs hidden-sm clearfix mb0">
           <li class="es-qrcode top hidden-xs mrl" data-url="{{ path('item_bank_exercise_qrcode', { id: exercise.id }) }}">
-            <a class="cd-link-assist {% if exercise.status == 'closed' %}js-handleExerciseClosed{% endif %}" href="javascript:;"><i class="es-icon es-icon-saoyisao course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'site.qrcode_tips'|trans }}</span></a>
+            <a class="cd-link-assist 
+            {% if exercise.status == 'closed' %}
+              {% if member | default(false) %}
+                js-handleExerciseOnMessage
+              {% else %}
+                js-handleExerciseClosed
+              {% endif %}
+            {% endif %}" href="javascript:;"><i class="es-icon es-icon-saoyisao course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'site.qrcode_tips'|trans }}</span></a>
             {% if exercise.status != 'closed' %}
               <span class="qrcode-popover">
                 <img class="mb0" src="" alt="">{{ 'site.tips.scan_qrcode_tips'|trans }}
@@ -100,7 +107,14 @@
 
           {# 分享图标功能设置 #}
           <li class="es-share es-share-item top mrl js-es-share">
-            <a class="dropdown-toggle cd-link-assist {% if exercise.status == 'closed' %}js-handleExerciseClosed{% endif %}" href="javascript:;" {% if exercise.status != 'closed' %}data-toggle="dropdown"{% endif %}>
+            <a class="dropdown-toggle cd-link-assist 
+            {% if exercise.status == 'closed' %}
+              {% if member | default(false) %}
+                js-handleExerciseOnMessage
+              {% else %}
+                js-handleExerciseClosed
+              {% endif %}
+            {% endif %}" href="javascript:;" {% if exercise.status != 'closed' %}data-toggle="dropdown"{% endif %}>
               <i class="es-icon es-icon-share course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.share'|trans }}</span>
             </a>
             {% include 'common/share-dropdown.html.twig' with {type:'item_bank_exercise'} %}
