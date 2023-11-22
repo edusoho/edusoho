@@ -297,6 +297,7 @@
                         this.currentSku = this.goods.specs[key];
                     }
                 }
+                console.log(this.currentSku);
 
                 // this.goods.hasExtension = true;
                 // this.initGoodsComponents();

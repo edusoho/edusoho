@@ -34,6 +34,7 @@
         },
         methods: {
             getTasksListInfo() {
+                console.log(this.sku.targetId);
                 this.renderUrl = `/course/${this.sku.targetId}/task/list/render/default?showOptional=1`;
                 $('.js-tasks-show').data('url', this.renderUrl);
                 $('.js-tasks-show').html('');
