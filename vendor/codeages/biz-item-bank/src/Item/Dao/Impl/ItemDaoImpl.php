@@ -59,7 +59,7 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
         $conditions = [
             'bank_id' => $bankId,
         ];
-        if ($categoryId) {
+        if ('' != $categoryId) {
             $conditions['category_id'] = $categoryId;
         }
         $builder = $this->createQueryBuilder($conditions)
