@@ -1798,6 +1798,7 @@ course.marketing_setup.setup.is_show_label: Page display
 course.marketing_setup.setup.can_show: Enable
 course.marketing_setup.setup.can_hide: Disable
 item_bank_exercise.marketing_setup.rule.show: After disabling, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.
+course.marketing_setup.rule.show: After closure, the course plan will be completely hidden and cannot be viewed at the front desk.
 course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not enroll the course except added by teahcers. It is used for closed teaching.'
 course.marketing_setup.expiry_date: 'Deadline'
 course.marketing_setup.rule.expiry_date: 'Learn expiry date'

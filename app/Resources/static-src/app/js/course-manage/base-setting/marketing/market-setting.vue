@@ -61,7 +61,7 @@
                               class="cd-radio">
                         {{ showableRadio.label }}
                     </el-radio>
-             <div class="course-mangae-info__tip js-expiry-tip ml0">{{ 'item_bank_exercise.marketing_setup.rule.show'|trans }}</div>
+             <div class="course-mangae-info__tip js-expiry-tip ml0">{{ 'course.marketing_setup.rule.show'|trans }}</div>
                 </el-col>
             </el-form-item>
 

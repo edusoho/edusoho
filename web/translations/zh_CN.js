@@ -1544,6 +1544,7 @@ t.add("course.marketing_setup.setup.is_show_label", "\u9875\u9762\u663e\u793a", 
 t.add("course.marketing_setup.setup.can_show", "\u5f00\u542f", "js", "zh_CN");
 t.add("course.marketing_setup.setup.can_hide", "\u5173\u95ed", "js", "zh_CN");
 t.add("item_bank_exercise.marketing_setup.rule.show", "\u5173\u95ed\u540e\u8be5\u9898\u5e93\u7ec3\u4e60\u5c06\u5f7b\u5e95\u9690\u85cf\uff0c\u5b66\u5458\u65e0\u6cd5\u5728\u524d\u53f0\u67e5\u770b", "js", "zh_CN");
+t.add("course.marketing_setup.rule.show", "\u5173\u95ed\u540e\u8be5\u8bfe\u7a0b\u8ba1\u5212\u5c06\u5f7b\u5e95\u9690\u85cf\uff0c\u5b66\u5458\u65e0\u6cd5\u5728\u524d\u53f0\u67e5\u770b", "js", "zh_CN");
 t.add("course.marketing_setup.setup.can_join.tips", "\u5173\u95ed\u540e\uff0c\u524d\u53f0\u663e\u793a\u4e3a\u201c\u9650\u5236\u8bfe\u7a0b\u201d\uff0c\u5b66\u5458\u81ea\u5df1\u65e0\u6cd5\u52a0\u5165\uff0c\u9700\u8981\u7531\u8001\u5e08\u624b\u52a8\u6dfb\u52a0\u5b66\u5458\u3002\u5e38\u7528\u4e8e\u5c01\u95ed\u578b\u6559\u5b66\u3002", "js", "zh_CN");
 t.add("course.marketing_setup.expiry_date", "\u52a0\u5165\u622a\u6b62\u65e5\u671f", "js", "zh_CN");
 t.add("course.marketing_setup.rule.expiry_date", "\u5b66\u4e60\u6709\u6548\u671f", "js", "zh_CN");
