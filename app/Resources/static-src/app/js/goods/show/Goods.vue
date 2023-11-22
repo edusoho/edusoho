@@ -362,6 +362,7 @@
             if (this.goods.type == 'course' && this.targetId) {
                 console.log(2)
                 console.log(this.targetId)
+                console.log(this.goods)
                 return this.changeSku(this.targetId);
             }
 
@@ -369,7 +370,6 @@
                 console.log(3)
                 return this.changeSku(this.goods.product.target.defaultCourseId);
             }
-            console.log(this.goods)
         },
         watch: {
             goods(newVal, oldVal) {
