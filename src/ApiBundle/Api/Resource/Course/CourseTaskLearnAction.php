@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
-use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
 use Biz\Visualization\Service\DataCollectService;
@@ -22,9 +21,6 @@ class CourseTaskLearnAction extends AbstractResource
         }
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
-        if ('0' == $course['canLearn']) {
-            throw CourseException::CLOSED_COURSE();
-        }
         $task = $this->getTaskService()->getTask($taskId);
         if (empty($course) || empty($task)) {
             $allowLearn = false;
