@@ -37,7 +37,7 @@
 </template>
 
 <script>
-  import { CourseSet } from 'common/vue/service/index.js';
+  import { Course } from 'common/vue/service/index.js';
   import { ItemBankExercises } from 'common/vue/service/index.js';
 
   export default {
@@ -125,8 +125,9 @@
         this.exercise = res
       },
       async getCourse(id) {
-        const {status} = await CourseSet.get(id)
-        this.courseSetStatus = status;
+        await Course.getSingleCourse(id).then((res) => {
+          this.courseSetStatus = res.canLearn
+        })
       },
       doAgainEvent(data) {
         location.href = $('[name=restart_url]').val();
