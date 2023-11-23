@@ -24,13 +24,15 @@
         <div class="form-group" id="courses-form-group">
           <div class="col-md-12 controls">
             <ul class="js-course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" data-sort-url="{{path('classroom_manage_items_sort',{id:classroom.id})}}">
-
               {% for course in courses %}
 
               <li class="course-item item-{{course.id}} clearfix" data-role="item" >
               <input type="hidden" name="courseIds[]" value="{{course.id}}" />
               <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>
-              <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+              <a class="course-picture-link relative" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+              <span class="course-status {% if course.status == 'published' %} course-status-active {% endif %}">
+              {% if course.status == 'closed' %} {{'course.status.closed'|trans}} {% else %} {{'course.status.published'|trans}} {% endif %}
+              </span>
               {% if course.type == 'live' %}
                 <span class="tags">
                   <span class="tag-live"></span>
@@ -82,7 +84,7 @@
                     </h4>
                     <div class="cd-dropdown btn-group course-manage-btn" data-toggle="cd-dropdown" data-trigger="hover">
                       <a class="btn btn-default btn-sm"
-                            href="path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'})"
+                            href="{{path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'})}}"
                           target="_blank">{{ 'admin.course_manage.manage.manage_btn'|trans }}</a>
                           <a href="#" type="button" class="cd-link-major btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>

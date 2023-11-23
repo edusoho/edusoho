@@ -32,7 +32,7 @@
             {{ 'course.marketing_setup.setup.is_show_label'|trans }}
           </label>
           <div class="col-sm-8 cd-radio-group mbm">
-            {{ cd_radios('showable', { '1': 'course.marketing_setup.setup.can_show'|trans, '0': 'course.marketing_setup.setup.can_hide'|trans }, exercise.showable|default(0)) }}
+            {{ cd_radios('showable', { '1': 'common.course.showable.show'|trans, '0': 'common.course.showable.hide'|trans }, exercise.showable|default(0)) }}
             <div
               class="course-mangae-info__tip js-expiry-tip">{{ 'item_bank_exercise.marketing_setup.rule.show'|trans }}
             </div>
