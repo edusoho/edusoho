@@ -133,7 +133,10 @@
         headers: {
           'Accept':'application/vnd.edusoho.v2+json'
         },
-        data: {answer_record_id: $("[name='answer_record_id']").val()},
+        data: {
+          answer_record_id: $("[name='answer_record_id']").val(),
+          exerciseId: this.exerciseId
+      },
         beforeSend(request) {
           request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
         },
