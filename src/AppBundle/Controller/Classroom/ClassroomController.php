@@ -679,6 +679,10 @@ class ClassroomController extends BaseController
             $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
+        if ('closed' == $classroom['status']) {
+            $this->createNewException(ClassroomException::CLOSED_CLASSROOM());
+        }
+
         if ('published' != $classroom['status']) {
             $this->createNewException(ClassroomException::UNPUBLISHED_CLASSROOM());
         }
