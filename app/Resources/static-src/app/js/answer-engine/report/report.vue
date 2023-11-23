@@ -37,7 +37,7 @@
 </template>
 
 <script>
-  import { CourseSet } from 'common/vue/service/index.js';
+  import { Course } from 'common/vue/service/index.js';
   import { ItemBankExercises } from 'common/vue/service/index.js';
 
   export default {
@@ -125,7 +125,8 @@
         this.exercise = res
       },
       async getCourse(id) {
-        const {status} = await CourseSet.get(id)
+        const {status} = Course.getSingleCourse(id)
+        // const {status} = await CourseSet.get(id)
         this.courseSetStatus = status;
       },
       doAgainEvent(data) {
