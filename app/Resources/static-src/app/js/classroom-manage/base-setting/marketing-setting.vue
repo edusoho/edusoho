@@ -25,7 +25,7 @@
 
             <el-form-item :label="'classroom.show_page_label'|trans()">
                 <el-radio v-model="form.showable"
-                          v-for="item in statusRadios"
+                          v-for="item in isShowStatusRadios"
                           :key="item.value"
                           :label="item.value"
                           class="cd-radio">{{ item.label }}
@@ -263,6 +263,16 @@
                     {
                         'value': '0',
                         'label': Translator.trans('site.close')
+                    },
+                ],
+                isShowStatusRadios: [
+                    {
+                        'value': '1',
+                        'label': Translator.trans('site.show')
+                    },
+                    {
+                        'value': '0',
+                        'label': Translator.trans('site.hide')
                     },
                 ],
                 expiryModeRadios: {

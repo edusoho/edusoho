@@ -965,7 +965,7 @@ buy.payments_disabled_tips: 由于网校未开通任一支付功能，当前商�
 course.buy_failed_tips: 真不巧，已经有人抢在你前面下单了，请继续关注
 course.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br/>拥有一个独有的头像，老师和同学们能更容易关注到你哦～～
-course.remove_students_tips: 课程已关闭，在有效期内的学员仍可正常学习，若不希望学员继续学习，需在【学员管理】中移除学员。
+course.remove_students_tips: 课程已关闭无法学习，若希望课程不对外展示但学员仍可继续学习，可将课程发布后在【基础设置】内设置“隐藏前台展示”。
 course.name: 课程名称
 course.price: 价格
 course.price.RMB: %price%元
@@ -1034,8 +1034,8 @@ course.teaching_plan.expiry_date.end_date_mode: 按截止日期
 course.teaching_plan.expiry_date.days_mode: 按有效天数
 course.teaching_plan.publish_btn: 发布计划
 course.teaching_plan.manage: 计划管理
-course.teaching_plan.show_page: 开启页面显示
-course.teaching_plan.hide_page: 关闭页面显示
+course.teaching_plan.show_page: 开启前台展示
+course.teaching_plan.hide_page: 隐藏前台展示
 course.teaching_plan.delete_btn: 删除
 course.teaching_plan.copy_btn: 复制
 course.teaching_plan.preview_btn: 预览
@@ -1073,7 +1073,7 @@ course.student_manage: '学员管理'
 course.marketing_setup.setup: 加入设置
 course.marketing_setup.setup.can_join: 可加入
 course.marketing_setup.setup.can_not_join: 不可加入
-course.marketing_setup.setup.is_show_label: 页面显示
+course.marketing_setup.setup.is_show_label: 前台展示
 course.marketing_setup.setup.can_show: 开启
 course.marketing_setup.setup.can_hide: 关闭
 course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
@@ -5225,7 +5225,7 @@ admin.course_manage.manage.price: 价格
 admin.course_manage.manage.serialize_mode: 连载状态
 admin.course_manage.manage.status: 课程状态
 admin.course_manage.manage.creator: 创建者/时间
-admin.course_manage.manage.showable: 页面显示
+admin.course_manage.manage.showable: 前台展示
 admin.course_manage.manage.manage_btn: 管理
 admin.course_manage.manage.empty: 暂无课程记录
 admin.course_manage.manage.category: 分类
@@ -5626,7 +5626,7 @@ admin.classroom_manage.manage.student_number_th: 学员数
 admin.classroom_manage.manage.price_th: 价格
 admin.classroom_manage.manage.creator: 创建者/时间
 admin.classroom_manage.manage.status_th: 状态
-admin.classroom_manage.manage.showable: 页面显示
+admin.classroom_manage.manage.showable: 前台展示
 admin.classroom_manage.manage.operate_th: 操作
 admin.classroom_manage.manage.empty: 暂无%name%信息!
 admin.classroom_manage.manage.category: 分类
@@ -11134,7 +11134,7 @@ exception.item_bank_exercise.answer_unpublish_chapter: 当前章节已取消发�
 exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
 exception.item_bank.assessment.not.exist: 试卷不存在
 exception.item_bank.assessment.is_empty: 试卷全部题目已被删除，请联系教师或管理员
-exception.exercise.closed.tips.title: 课程练习已关闭，无法购买/学习
+exception.exercise.closed.tips.title: 题库练习已关闭，无法购买/学习
 exception.exercise.closed.tips.content: 题库练习结果可查看
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试

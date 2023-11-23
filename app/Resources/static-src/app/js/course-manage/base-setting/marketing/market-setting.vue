@@ -472,11 +472,11 @@
                 showableRadios: [
                     {
                         value: '1',
-                        label: Translator.trans('course.marketing_setup.setup.can_show'),
+                        label: Translator.trans('site.show'),
                     },
                     {
                         value: '0',
-                        label: Translator.trans('course.marketing_setup.setup.can_hide'),
+                        label: Translator.trans('site.hide'),
                     }
                 ],
                 buyableRadios: [

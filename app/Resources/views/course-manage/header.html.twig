@@ -53,7 +53,7 @@
       {% if course.status != 'published' %}
       --
       {% elseif course.showable == '1' %} 
-      {{ 'log.attr.system.update_settings.group.group_show.1'|trans }}
+      {{ 'common.course.showable.show'|trans }}
       {% else %}
       {{ 'common.classroom.showable.hide'|trans }}
       {% endif %}

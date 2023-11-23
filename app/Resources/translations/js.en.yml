@@ -1152,9 +1152,10 @@ admin.classroom.choose_success_hint: Choose classroom success
 admin.classroom.operation_success_hint: successfully！
 admin.classroom.operation_fail_hint: failure
 admin.classroom.operation_hint: ？
-admin.classroom.hide_hint: 关闭后班级将彻底隐藏，学员无法在前台查看
-admin.classroom.hide_success_hint: 已关闭页面显示
-admin.classroom.show_success_hint: 已开启页面显示
+admin.classroom.hide_hint: Closing the classroom will completely hide it, and students will not be able to view it on the front desk.
+admin.classroom.close_hint: After closing, students who are still within the validity period will not be able to continue learning. Please operate with caution.
+admin.classroom.hide_success_hint: The page display has been closed.
+admin.classroom.show_success_hint: The page display has been turned on.
 admin.classroom.delete_hint: Deleting a class will delete the chapters, class hours, students and other information of all courses in the class. Are you sure you want to delete this class?
 admin.classroom.delete_success_hint: successfully deleted!
 admin.classroom.cancel_recommend_hint: "%title% ?"
@@ -1197,7 +1198,7 @@ admin.course.delete_failed_hint: Delete course failed
 admin.course.delete_course.check_password_fail_hint: Verify password error
 admin.course.validate_old.password_required_hint: password
 admin.course.cancel_recommend_success_hint: Course recommendation has been cancelled!
-admin.course.close_course_hint: Are you sure you want to close this class? After the course is closed, students who are still in the validity period will be able to continue their studies.
+admin.course.close_course_hint: Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation.
 admin.course.close_success_hint: Course was closed successfully!
 admin.course.hide_course_hint: After hiding, the course will be completely hidden and students will not be able to view it on the front-end.
 admin.course.hide_success_hint: Course hidden successfully!
@@ -1702,6 +1703,8 @@ classroom.amount: "Equals to "
 
 
 site.open: Open
+site.show: Display
+site.hide: Hide
 site.date.day: Day
 course.marketing_setup.services.provide_services: Services
 course.marketing_setup.services.course_list_display: Task List With Goods
