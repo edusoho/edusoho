@@ -125,9 +125,9 @@
         this.exercise = res
       },
       async getCourse(id) {
-        const {status} = Course.getSingleCourse(id)
+        const {canLearn} = Course.getSingleCourse(id)
         // const {status} = await CourseSet.get(id)
-        this.courseSetStatus = status;
+        this.courseSetStatus = canLearn;
       },
       doAgainEvent(data) {
         location.href = $('[name=restart_url]').val();
