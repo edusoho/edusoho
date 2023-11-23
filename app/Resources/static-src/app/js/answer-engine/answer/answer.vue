@@ -135,7 +135,8 @@
         },
         data: {
           answer_record_id: $("[name='answer_record_id']").val(),
-          exerciseId: this.exerciseId
+          exerciseId: this.exerciseId,
+          courseId: this.courseId
       },
         beforeSend(request) {
           request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
@@ -251,7 +252,8 @@
             this.ajaxTimeOut = null
           }, 10 * 1000)
         }
-
+        assessmentResponse.courseId = this.courseId;
+        assessmentResponse.exerciseId = this.exerciseId;
         assessmentResponse.admission_ticket = this.answerRecord.admission_ticket;
         return $.ajax({
           url: '/api/save_answer',

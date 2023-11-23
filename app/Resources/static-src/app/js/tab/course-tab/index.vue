@@ -91,7 +91,7 @@ export default {
       let params = {
         title: this.searchValue,
         limit: this.pageSize,
-        offset: pageNumber-1,
+        offset: (pageNumber-1)*this.pageSize,
         type
       }
 
