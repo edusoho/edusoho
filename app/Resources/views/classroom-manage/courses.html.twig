@@ -95,7 +95,7 @@
                           <a
                           class="js-manage-course-close"
                             href="javascript:;"
-                            data-url="{{ path('course_set_manage_course_close', {courseSetId: course.courseSet.id, courseId: course.id}) }}">
+                            data-url="{{ path('course_set_manage_close', {id: course.courseSet.id}) }}">
                             {{ 'classroom.closed.course'|trans }}</a>
                         </li>
                         {% else %}
@@ -103,7 +103,7 @@
                           <a
                           class="js-manage-course-open"
                             href="javascript:;"
-                            data-url="{{ path('course_set_manage_course_publish', {courseSetId: course.courseSet.id, courseId: course.id}) }}">
+                            data-url="{{ path('course_set_manage_publish', {id: course.courseSet.id}) }}">
                             {{ 'classroom.open.course'|trans }}</a>
                         </li>
                         {% endif %}
