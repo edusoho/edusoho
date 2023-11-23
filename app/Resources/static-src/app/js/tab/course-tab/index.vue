@@ -7,7 +7,7 @@
           <input class="search-input-content inline-block" v-model:value="searchValue" type="text" name="title" placeholder="请输入课程名称" />
           <a class="btn inline-block searchCourseBtn es-icon es-icon-search" type="submit" @click="getTabData(tabValue)"></a>
         </form>
-        <a href="/my/courses/live/calenda" v-show="tabValue == 'learning'" class="live-course-btn">直播课表</a>
+        <a href="/my/courses/live/calendar" v-show="tabValue == 'learning'" class="live-course-btn">直播课表</a>
       </div>
     </div>
 
