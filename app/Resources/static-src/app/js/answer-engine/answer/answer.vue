@@ -147,6 +147,10 @@
         this.answerRecord = res.answer_record;
         this.answerScene = res.answer_scene;
         this.assessmentResponse = res.assessment_response;
+      }).error((err) => {
+        if(this.exerciseId) {
+          window.location.href = `/my/item_bank_exercise/${this.exerciseId}/assessment/${$('[name=answer_record]').val()}?previewAs=member`;
+        }
       })
     },
     methods: {

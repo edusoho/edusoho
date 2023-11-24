@@ -107,7 +107,7 @@ export default class TaskPipe {
     };
 
     this._clearInterval();
-    this.intervalId = setInterval(() => this._addPipeCounter(), 1000);
+    this.intervalId = setInterval(() => this._addPipeCounter(), 30000);
   }
 
   _addPipeCounter() {
@@ -177,7 +177,7 @@ export default class TaskPipe {
         this.sign = res.record.flowSign;
         this.record = res.record;
         this._doing(param);
-      });
+      })
     } else{
       this._doing(param);
     }
@@ -280,6 +280,11 @@ export default class TaskPipe {
         this.waitingEventData = {};
       }
     }).catch(error => {
+      console.log(error)
+      if(JSON.parse(error.responseText).error.code == '5001620') {
+        console.log(1)
+        return window.location.href = `/my/course/${this.courseId}`
+      }
       this.pushing = false;
       this._clearInterval();
     });
