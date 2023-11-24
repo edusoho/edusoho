@@ -456,7 +456,7 @@ t.add("course.manage.publish_hint", "Are you sure you want to publish the progra
 t.add("course.manage.publish_title", "Publish teaching plan", "js", "en");
 t.add("course.manage.publish_success_hint", "The program was published successfully", "js", "en");
 t.add("course.manage.publish_fail_hint", "Publish program failed", "js", "en");
-t.add("course.manage.close_hint", "Are you sure to close the program?", "js", "en");
+t.add("course.manage.close_hint", "Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation", "js", "en");
 t.add("course.manage.hide_hint", "After closing, the course plan will be completely hidden and students will not be able to view it on the front-end.", "js", "en");
 t.add("course.manage.close_success_hint", "closed successfully", "js", "en");
 t.add("course.manage.close_fail_hint", "Close failed", "js", "en");
@@ -556,6 +556,8 @@ t.add("item_bank_exercise.module.switch.danger", "At the time of publication of 
 t.add("classroom.manage.tag_required_hint", "Please enter a tag", "js", "en");
 t.add("classroom.manage.delete_course_hint", "Do you want to remove the course from the class?", "js", "en");
 t.add("classroom.manage.delete_course_hint_title", "Course removal", "js", "en");
+t.add("classroom.manage.close_course_hint_title", "Course closed", "js", "en");
+t.add("classroom.manage.close_course_hint_content", "Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation", "js", "en");
 t.add("classroom.manage.delete_course_success_hint", "The course was removed successfully", "js", "en");
 t.add("classroom.manage.delete_course_fail_hint", "Course removal failed", "js", "en");
 t.add("classroom.manage.expiry_mode_days_error_hint", "Please enter the number of valid days", "js", "en");
@@ -1341,7 +1343,7 @@ t.add("admin.util.item_delete.delete_hint", "Really want to delete the %name%?",
 t.add("admin.util.item_delete.delete_success_hint", "Delete %name% successfully", "js", "en");
 t.add("admin.shortcut_add_success_hint", "The current page has been added as a popular link!", "js", "en");
 t.add("admin.shortcut_delete_success_hint", "Delete frequently used links successfully!", "js", "en");
-t.add("admin.item_bank_exercise.exercise.close_hint", "Are you sure you want to close the current exercise? After the itembank exercise is closed, students who are still in the validity period will be able to continue their studies.", "js", "en");
+t.add("admin.item_bank_exercise.exercise.close_hint", "After the itembank exercise is closed, students who are still in the validity period will be able to continue their studies.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.close_success_hint", "Close successfully", "js", "en");
 t.add("admin.item_bank_exercise.exercise.hide_hint", "After hiding, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.hide_success_hint", "Item bank exercise display hidden successfully.", "js", "en");

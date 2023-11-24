@@ -491,8 +491,8 @@ course.manage.publish_hint: 是否确定发布该教学计划？
 course.manage.publish_title: 发布教学计划
 course.manage.publish_success_hint: 教学计划发布成功
 course.manage.publish_fail_hint: 教学计划发布失败
-course.manage.close_hint: 是否确定关闭该教学计划？
-course.manage.hide_hint: 关闭后该课程计划将彻底隐藏，学员无法在前台查看
+course.manage.close_hint: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
+course.manage.hide_hint: 隐藏后前台不可见，不可见范围：首页、列表页、搜索结果页、班级中添加课程列表页
 course.manage.close_success_hint: 关闭成功
 course.manage.close_fail_hint: 关闭失败
 course.manage.show_success_hint: 开启成功
@@ -600,6 +600,8 @@ item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或
 classroom.manage.tag_required_hint: 请输入标签
 classroom.manage.delete_course_hint: 是否要从班级移除该课程？
 classroom.manage.delete_course_hint_title: 移除课程
+classroom.manage.close_course_hint_title: 关闭课程
+classroom.manage.close_course_hint_content: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
 classroom.manage.delete_course_success_hint: 课程移除成功
 classroom.manage.delete_course_fail_hint: 课程移除失败
 classroom.manage.expiry_mode_days_error_hint: 请输入有效期天数
@@ -1445,7 +1447,7 @@ admin.util.item_delete.delete_success_hint: 删除%name%成功
 admin.shortcut_add_success_hint: 已添加当前页面为常用链接！
 admin.shortcut_delete_success_hint: 删除常用链接成功！
 
-admin.item_bank_exercise.exercise.close_hint: 确定要关闭当前题库练习吗？题库练习关闭后，仍然还在有效期内的学员将可以继续学习。
+admin.item_bank_exercise.exercise.close_hint: 题库练习关闭后，仍然还在有效期内的学员将可以继续学习。
 admin.item_bank_exercise.exercise.close_success_hint: 题库练习关闭成功!
 admin.item_bank_exercise.exercise.hide_hint: 关闭后题库练习将彻底隐藏，学员无法在前台查看
 admin.item_bank_exercise.exercise.hide_success_hint: 已关闭页面显示
@@ -1644,7 +1646,7 @@ classroom.marketing_setting: 营销设置
 classroom.price_label: 价格
 classroom.show_label: %name%展示
 classroom.show_page_label: 前台展示
-classroom.show_page_tips: 关闭后班级将彻底隐藏，无法在前台查看到。
+classroom.show_page_tips: 隐藏后前台不可见，不可见范围：首页、列表页、搜索结果页、班级中添加课程列表页。
 classroom.buy_label: %name%购买
 classroom.expiry_mode_label: 班级有效期
 classroom.watch_expiry_mode_rule: 查看有效期规则
@@ -1757,8 +1759,8 @@ course.marketing_setup.setup.can_not_join: 不可加入
 course.marketing_setup.setup.is_show_label: 前台展示
 course.marketing_setup.setup.can_show: 开启
 course.marketing_setup.setup.can_hide: 关闭
-item_bank_exercise.marketing_setup.rule.show: 关闭后该题库练习将彻底隐藏，学员无法在前台查看
-course.marketing_setup.rule.show: 关闭后该课程计划将彻底隐藏，学员无法在前台查看
+item_bank_exercise.marketing_setup.rule.show: 隐藏后前台不可见，不可见范围：首页、列表页、搜索结果页、班级中添加课程列表页
+course.marketing_setup.rule.show: 隐藏后前台不可见，不可见范围：首页、列表页、搜索结果页、班级中添加课程列表页
 course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
 course.marketing_setup.expiry_date: 加入截止日期
 course.marketing_setup.rule.expiry_date: 学习有效期

@@ -547,7 +547,7 @@ course.manage.publish_hint: Are you sure you want to publish the program?
 course.manage.publish_title: Publish teaching plan
 course.manage.publish_success_hint: The program was published successfully
 course.manage.publish_fail_hint: Publish program failed
-course.manage.close_hint: Are you sure to close the program?
+course.manage.close_hint: Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation
 course.manage.hide_hint: After closing, the course plan will be completely hidden and students will not be able to view it on the front-end.
 course.manage.close_success_hint: closed successfully
 course.manage.close_fail_hint: Close failed
@@ -654,6 +654,8 @@ item_bank_exercise.module.switch.danger: At the time of publication of the item 
 classroom.manage.tag_required_hint: Please enter a tag
 classroom.manage.delete_course_hint: Do you want to remove the course from the class?
 classroom.manage.delete_course_hint_title: Course removal
+classroom.manage.close_course_hint_title: Course closed
+classroom.manage.close_course_hint_content: Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation
 classroom.manage.delete_course_success_hint: The course was removed successfully
 classroom.manage.delete_course_fail_hint: Course removal failed
 classroom.manage.expiry_mode_days_error_hint: Please enter the number of valid days
@@ -1496,7 +1498,7 @@ admin.util.item_delete.delete_success_hint: Delete %name% successfully
 admin.shortcut_add_success_hint: The current page has been added as a popular link!
 admin.shortcut_delete_success_hint: Delete frequently used links successfully!
 
-admin.item_bank_exercise.exercise.close_hint: Are you sure you want to close the current exercise? After the itembank exercise is closed, students who are still in the validity period will be able to continue their studies.
+admin.item_bank_exercise.exercise.close_hint: After the itembank exercise is closed, students who are still in the validity period will be able to continue their studies.
 admin.item_bank_exercise.exercise.close_success_hint: Close successfully
 admin.item_bank_exercise.exercise.hide_hint: After hiding, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.
 admin.item_bank_exercise.exercise.hide_success_hint: Item bank exercise display hidden successfully.
