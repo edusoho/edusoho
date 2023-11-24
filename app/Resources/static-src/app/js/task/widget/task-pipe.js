@@ -281,7 +281,7 @@ export default class TaskPipe {
       }
     }).catch(error => {
       console.log(error)
-      if(error.code == '5001620') {
+      if(JSON.parse(error.responseText).error.code == '5001620') {
         console.log(1)
         return window.location.href = `/my/course/${this.courseId}`
       }
