@@ -72,7 +72,7 @@ site.audio.quality.low: 流畅
 site.audio.quality.normal: 标准
 site.audio.quality.high: 精细
 
-site.maxlength_hint: 最多只能输入%length%个字符
+site.maxlength_hint: 最多支持%length%个字符
 site.browser_useless_play_video_hint: 您的浏览器不能播放当前视频。
 site.choose_hint: 请选择
 site.service_error_hint: 服务器错误!
@@ -744,7 +744,7 @@ validate.valid_creditcard_input.message: 请输入有效的信用卡号码
 validate.valid_equal_to_input.message: 你的输入不相同
 validate.valid_extension_input.message: 请输入有效的后缀
 validate.valid_policy_input.message: 请先同意相关条款
-validate.max_length.message: 最多只能输入 {0} 个字符
+validate.max_length.message: 最多支持 {0} 个字符
 validate.min_length.message: 最少需要输入 {0} 个字符
 validate.range_length.message: 请输入长度在 {0} 到 {1} 之间的字符串
 validate.range.message: 请输入范围在 {0} 到 {1} 之间的数值
@@ -922,7 +922,7 @@ validate_old.alphanumeric.message: %display%必须是英文字母、数字及下
 validate_old.alphabet_underline.message: %display%必须以英文字母或下划线开头
 validate_old.byte_minlength.message: %display%的长度必须大于等于%min%，一个中文字算2个字符
 validate_old.currency_check.message: 请输入合法的%display%,如:200, 221.99, 0.99, 0等
-validate_old.currency.message: 最多只能输入%max%个字符，一个中文算2个字符
+validate_old.currency.message: 最多支持%max%个字符，一个中文算2个字符
 validate_old.idcard.message: %display%格式不正确
 validate_old.password.message: %display%只能由4-20个字符组成
 validate_old.second_range.message: 秒数只能在0-59之间
@@ -1624,7 +1624,7 @@ course_manage.positive_currency.message: 请输入大于0的有效价格，最�
 merchant.resource.product_version.update_success_hint: 更新成功
 merchant.resource.product_version.update_failed_hint: 更新失败
 
-validate.length_max.message: 最多只能输入 %length% 个字符
+validate.length_max.message: 最多支持 %length% 个字符
 validate.length_min.message: 至少输入 %length% 个字符
 course.manage.expiry_date.error_hint: 请输入时间范围
 

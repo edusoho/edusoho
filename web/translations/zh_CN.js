@@ -70,7 +70,7 @@ t.add("site.audio.quality.quota", "\u97f3\u8d28", "js", "zh_CN");
 t.add("site.audio.quality.low", "\u6d41\u7545", "js", "zh_CN");
 t.add("site.audio.quality.normal", "\u6807\u51c6", "js", "zh_CN");
 t.add("site.audio.quality.high", "\u7cbe\u7ec6", "js", "zh_CN");
-t.add("site.maxlength_hint", "\u6700\u591a\u53ea\u80fd\u8f93\u5165%length%\u4e2a\u5b57\u7b26", "js", "zh_CN");
+t.add("site.maxlength_hint", "\u6700\u591a\u652f\u6301%length%\u4e2a\u5b57\u7b26", "js", "zh_CN");
 t.add("site.browser_useless_play_video_hint", "\u60a8\u7684\u6d4f\u89c8\u5668\u4e0d\u80fd\u64ad\u653e\u5f53\u524d\u89c6\u9891\u3002", "js", "zh_CN");
 t.add("site.choose_hint", "\u8bf7\u9009\u62e9", "js", "zh_CN");
 t.add("site.service_error_hint", "\u670d\u52a1\u5668\u9519\u8bef!", "js", "zh_CN");
@@ -618,7 +618,7 @@ t.add("validate.valid_creditcard_input.message", "\u8bf7\u8f93\u5165\u6709\u6548
 t.add("validate.valid_equal_to_input.message", "\u4f60\u7684\u8f93\u5165\u4e0d\u76f8\u540c", "js", "zh_CN");
 t.add("validate.valid_extension_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u540e\u7f00", "js", "zh_CN");
 t.add("validate.valid_policy_input.message", "\u8bf7\u5148\u540c\u610f\u76f8\u5173\u6761\u6b3e", "js", "zh_CN");
-t.add("validate.max_length.message", "\u6700\u591a\u53ea\u80fd\u8f93\u5165 {0} \u4e2a\u5b57\u7b26", "js", "zh_CN");
+t.add("validate.max_length.message", "\u6700\u591a\u652f\u6301 {0} \u4e2a\u5b57\u7b26", "js", "zh_CN");
 t.add("validate.min_length.message", "\u6700\u5c11\u9700\u8981\u8f93\u5165 {0} \u4e2a\u5b57\u7b26", "js", "zh_CN");
 t.add("validate.range_length.message", "\u8bf7\u8f93\u5165\u957f\u5ea6\u5728 {0} \u5230 {1} \u4e4b\u95f4\u7684\u5b57\u7b26\u4e32", "js", "zh_CN");
 t.add("validate.range.message", "\u8bf7\u8f93\u5165\u8303\u56f4\u5728 {0} \u5230 {1} \u4e4b\u95f4\u7684\u6570\u503c", "js", "zh_CN");
@@ -792,7 +792,7 @@ t.add("validate_old.alphanumeric.message", "%display%\u5fc5\u987b\u662f\u82f1\u6
 t.add("validate_old.alphabet_underline.message", "%display%\u5fc5\u987b\u4ee5\u82f1\u6587\u5b57\u6bcd\u6216\u4e0b\u5212\u7ebf\u5f00\u5934", "js", "zh_CN");
 t.add("validate_old.byte_minlength.message", "%display%\u7684\u957f\u5ea6\u5fc5\u987b\u5927\u4e8e\u7b49\u4e8e%min%\uff0c\u4e00\u4e2a\u4e2d\u6587\u5b57\u7b972\u4e2a\u5b57\u7b26", "js", "zh_CN");
 t.add("validate_old.currency_check.message", "\u8bf7\u8f93\u5165\u5408\u6cd5\u7684%display%,\u5982:200, 221.99, 0.99, 0\u7b49", "js", "zh_CN");
-t.add("validate_old.currency.message", "\u6700\u591a\u53ea\u80fd\u8f93\u5165%max%\u4e2a\u5b57\u7b26\uff0c\u4e00\u4e2a\u4e2d\u6587\u7b972\u4e2a\u5b57\u7b26", "js", "zh_CN");
+t.add("validate_old.currency.message", "\u6700\u591a\u652f\u6301%max%\u4e2a\u5b57\u7b26\uff0c\u4e00\u4e2a\u4e2d\u6587\u7b972\u4e2a\u5b57\u7b26", "js", "zh_CN");
 t.add("validate_old.idcard.message", "%display%\u683c\u5f0f\u4e0d\u6b63\u786e", "js", "zh_CN");
 t.add("validate_old.password.message", "%display%\u53ea\u80fd\u75314-20\u4e2a\u5b57\u7b26\u7ec4\u6210", "js", "zh_CN");
 t.add("validate_old.second_range.message", "\u79d2\u6570\u53ea\u80fd\u57280-59\u4e4b\u95f4", "js", "zh_CN");
@@ -1427,7 +1427,7 @@ t.add("admin_v2.developer.plumber_operate_success_hint", "\u64cd\u4f5c\u6210\u52
 t.add("course_manage.positive_currency.message", "\u8bf7\u8f93\u5165\u5927\u4e8e0\u7684\u6709\u6548\u4ef7\u683c\uff0c\u6700\u591a\u4e24\u4f4d\u5c0f\u6570\uff0c\u6574\u6570\u4f4d\u4e0d\u8d85\u8fc78\u4f4d\uff01", "js", "zh_CN");
 t.add("merchant.resource.product_version.update_success_hint", "\u66f4\u65b0\u6210\u529f", "js", "zh_CN");
 t.add("merchant.resource.product_version.update_failed_hint", "\u66f4\u65b0\u5931\u8d25", "js", "zh_CN");
-t.add("validate.length_max.message", "\u6700\u591a\u53ea\u80fd\u8f93\u5165 %length% \u4e2a\u5b57\u7b26", "js", "zh_CN");
+t.add("validate.length_max.message", "\u6700\u591a\u652f\u6301 %length% \u4e2a\u5b57\u7b26", "js", "zh_CN");
 t.add("validate.length_min.message", "\u81f3\u5c11\u8f93\u5165 %length% \u4e2a\u5b57\u7b26", "js", "zh_CN");
 t.add("course.manage.expiry_date.error_hint", "\u8bf7\u8f93\u5165\u65f6\u95f4\u8303\u56f4", "js", "zh_CN");
 t.add("classroom.title_label", "\u73ed\u7ea7\u6807\u9898", "js", "zh_CN");
