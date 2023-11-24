@@ -74,6 +74,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $conditions['outerEndTime'] = $timeRange['endTime'];
             }
             $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
+            $conditions['display'] = '1';
             $sort = $this->getSortByStr($discoverySetting['data']['sort']);
             $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
             $courses = $this->getCourseService()->searchBySort($conditions, $sort, 0, $limit);
@@ -171,6 +172,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $conditions['outerEndTime'] = $timeRange['endTime'];
             }
             $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
+            $conditions['showable'] = '1';
             $sort = $this->getSortByStr($discoverySetting['data']['sort']);
             $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
             $classrooms = $this->getClassroomService()->searchClassrooms($conditions, $sort, 0, $limit, [], true);
