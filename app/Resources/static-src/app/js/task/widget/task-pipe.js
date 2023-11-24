@@ -177,6 +177,8 @@ export default class TaskPipe {
         this.sign = res.record.flowSign;
         this.record = res.record;
         this._doing(param);
+      }).error((err) => {
+        this._clearInterval();
       })
     } else{
       this._doing(param);
