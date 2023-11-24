@@ -79,7 +79,7 @@
       }
 
       if(type == 'item_bank_exercise') {
-        this.getExercise()
+        this.getExercise(id)
       }
       
         const that = this;
@@ -120,8 +120,8 @@
 
     },
     methods: {
-      async getExercise() {
-        const res = await ItemBankExercises.getExercise($("[name='answer_record_id']").val());
+      async getExercise(id) {
+        const res = await ItemBankExercises.getExercise(id);
         this.exercise = res
       },
       async getCourse(id) {
