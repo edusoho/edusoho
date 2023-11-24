@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="panel-heading" style="border-bottom: 1px solid #f5f5f5; padding: 10px 0; line-height: 30px;">
+    <div class="panel-heading" style="padding: 10px 0; line-height: 30px;">
       <label class="text-18">我的班级</label>
       <div class="pull-right">
         <form class="search-form" @submit.prevent="getTabData(tabValue)" style="margin-right: 54px;">
           <input class="search-input-content inline-block" v-model:value="searchValue" type="text" name="title" placeholder="请输入班级名称" />
-          <a class="btn inline-block searchCourseBtn es-icon es-icon-search" type="submit" @click="getTabData(tabValue)"></a>
+          <a class="btn inline-block searchCourseBtn es-icon es-icon-search" type="submit" @click="getTabData(tabValue)" style="padding-top: 6px !important;"></a>
         </form>
       </div>
     </div>

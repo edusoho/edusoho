@@ -180,7 +180,8 @@ export default class TaskPipe {
       }).error((err) => {
         this._clearInterval();
         if(JSON.parse(error.responseText).error.code == '5001620') {
-          return window.location.href = `/my/course/${this.courseId}`
+          window.location.href = `/my/course/${this.courseId}`
+          return
         }
       })
     } else{
@@ -285,11 +286,12 @@ export default class TaskPipe {
         this.waitingEventData = {};
       }
     }).catch(error => {
+      this._clearInterval();
       if(JSON.parse(error.responseText).error.code == '5001620') {
-        return window.location.href = `/my/course/${this.courseId}`
+        window.location.href = `/my/course/${this.courseId}`
+        return
       }
       this.pushing = false;
-      this._clearInterval();
     });
   }
 
