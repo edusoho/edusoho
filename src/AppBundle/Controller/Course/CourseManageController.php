@@ -552,6 +552,11 @@ class CourseManageController extends BaseController
                 'text' => empty($data['drainageText']) ? '' : $data['drainageText'],
             ];
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+            if ('0' == $data['showable']) {
+                $this->hideCourse($courseId, $courseSetId);
+            } else {
+                $this->showCourse($courseId, $courseSetId);
+            }
             if (in_array($courseSet['type'], ['live', 'reservation']) || !empty($courseSet['parentId'])) {
                 $this->getCourseSetService()->updateCourseSet($courseSetId, $data);
                 unset($data['title']);
@@ -631,6 +636,35 @@ class CourseManageController extends BaseController
                 'vipLevels' => empty($vipLevels) ? [] : array_values($vipLevels),
             ]
         );
+    }
+
+    protected function hideCourse($courseId, $courseSetId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $displayCourses = $this->getCourseService()->findDisplayCoursesByCourseSetId($courseSetId, '1');
+        if (1 == count($displayCourses)) {
+            $this->getCourseSetService()->hideCourseSet($courseSet['id']);
+        } else {
+            $displayIds = array_column(array_filter($displayCourses, function ($item) {
+                return 1 == $item['display'];
+            }), 'id');
+            $filteredIds = array_diff($displayIds, [$courseId]);
+            if (!empty($filteredIds)) {
+                $this->getCourseSetService()->updateDefaultCourse($courseSet['id'], reset($filteredIds));
+            }
+        }
+        $this->getCourseService()->hideCourse($courseId, 'published' == $courseSet['status']);
+    }
+
+    protected function showCourse($courseId, $courseSetId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $displayCourses = $this->getCourseService()->findDisplayCoursesByCourseSetId($courseSetId, '0');
+        if (1 == count($displayCourses)) {
+            $this->getCourseSetService()->showCourseSet($courseSet['id']);
+        }
+        $this->getCourseService()->showCourse($courseId, 'published' == $courseSet['status']);
     }
 
     protected function setVipRight($course, $data)
