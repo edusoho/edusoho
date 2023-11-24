@@ -69,7 +69,7 @@ let validate = function() {
     let l = calculateByteLength(value);
     let bool = l <= Number(params);
     if (!bool) {
-      $.validator.messages.byte_maxlength = `最多只能输入${params}个字符，一个中文字算2个字符`;
+      $.validator.messages.byte_maxlength = `最多支持${params}个字符，一个中文字算2个字符`;
     }
     return this.optional(element) || l <= Number(params);
   });
