@@ -280,7 +280,9 @@ export default class TaskPipe {
         this.waitingEventData = {};
       }
     }).catch(error => {
+      console.log(error)
       if(error.code == '5001620') {
+        console.log(1)
         return window.location.href = `/my/course/${this.courseId}`
       }
       this.pushing = false;
