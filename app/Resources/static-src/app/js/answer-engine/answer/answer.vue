@@ -194,6 +194,12 @@
 
           const { code: errorCode } = result.responseJSON.error;
 
+          if (errorCode == '5001620') {
+            this.$message.error('课程已关闭，无法继续学习')
+            this.returnToCourseDetail()
+            return
+          }
+
           if (errorCode == '50095204') {
             // 试卷已提交 -- 退出答题
             Modal.error({
@@ -294,6 +300,12 @@
               okText: '退出答题',
               onOk: () => this.returnToCourseDetail()
             })
+            return
+          }
+
+          if (errorCode == '5001620') {
+            this.$message.error('课程已关闭，无法继续学习')
+            this.returnToCourseDetail()
             return
           }
 

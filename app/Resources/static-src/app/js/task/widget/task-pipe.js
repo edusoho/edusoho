@@ -107,7 +107,7 @@ export default class TaskPipe {
     };
 
     this._clearInterval();
-    this.intervalId = setInterval(() => this._addPipeCounter(), 30000);
+    this.intervalId = setInterval(() => this._addPipeCounter(), 1000);
   }
 
   _addPipeCounter() {
@@ -177,6 +177,11 @@ export default class TaskPipe {
         this.sign = res.record.flowSign;
         this.record = res.record;
         this._doing(param);
+      }).error((err) => {
+        this._clearInterval();
+        if(JSON.parse(error.responseText).error.code == '5001620') {
+          return window.location.href = `/my/course/${this.courseId}`
+        }
       })
     } else{
       this._doing(param);
