@@ -177,7 +177,7 @@ export default class TaskPipe {
         this.sign = res.record.flowSign;
         this.record = res.record;
         this._doing(param);
-      }).error((err) => {
+      }).catch((err) => {
         this._clearInterval();
         if(JSON.parse(error.responseText).error.code == '5001620') {
           window.location.href = `/my/course/${this.courseId}`
