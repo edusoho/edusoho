@@ -280,9 +280,11 @@ export default class TaskPipe {
         this.waitingEventData = {};
       }
     }).catch(error => {
+      if(error.code == '5001620') {
+        return window.location.href = `/my/course/${this.courseId}`
+      }
       this.pushing = false;
       this._clearInterval();
-      window.location.href = `/my/course/${this.courseId}`
     });
   }
 
@@ -314,7 +316,7 @@ export default class TaskPipe {
         this._clearInterval();
       } else if(status === 'visible') {
         this.taskPipeCounter = Math.round((new Date().getTime() - this.lastTimestamp) / 1000);
-        this.intervalId = setInterval(() => this._addPipeCounter(), 5000);
+        this.intervalId = setInterval(() => this._addPipeCounter(), 1000);
       }
     });
   }
