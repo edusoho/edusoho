@@ -17,7 +17,7 @@ class ExploreController extends BaseController
         $orderBy = empty($conditions['orderBy']) ? 'latest' : $conditions['orderBy'];
         unset($conditions['orderBy']);
         $conditions['status'] = 'published';
-        $conditions['display'] = 1;
+        $conditions['showable'] = 1;
 
         $paginator = new Paginator(
             $this->get('request'),
