@@ -107,7 +107,7 @@ export default class TaskPipe {
     };
 
     this._clearInterval();
-    this.intervalId = setInterval(() => this._addPipeCounter(), 30000);
+    this.intervalId = setInterval(() => this._addPipeCounter(), 5000);
   }
 
   _addPipeCounter() {
