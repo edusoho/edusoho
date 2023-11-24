@@ -177,10 +177,7 @@ export default class TaskPipe {
         this.sign = res.record.flowSign;
         this.record = res.record;
         this._doing(param);
-      }).error((err) => {
-        console.log(err)
-        console.log('error')
-      });
+      })
     } else{
       this._doing(param);
     }
@@ -283,6 +280,7 @@ export default class TaskPipe {
         this.waitingEventData = {};
       }
     }).catch(error => {
+      console.log('qqqqq')
       this.pushing = false;
       this._clearInterval();
     });

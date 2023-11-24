@@ -137,6 +137,7 @@ class Live {
         this.MonitoringEvents.triggerEvent('reject_current');
       }
     }).catch(error => {
+      console.log('wwwww')
       this.pushing = false;
       this._clearInterval();
       cd.message({type: 'danger', message: Translator.trans('task_show.user_login_protect_tip')});
