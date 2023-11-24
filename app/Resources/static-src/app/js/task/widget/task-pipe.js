@@ -107,7 +107,7 @@ export default class TaskPipe {
     };
 
     this._clearInterval();
-    this.intervalId = setInterval(() => this._addPipeCounter(), 3000);
+    this.intervalId = setInterval(() => this._addPipeCounter(), 30000);
   }
 
   _addPipeCounter() {
@@ -177,6 +177,9 @@ export default class TaskPipe {
         this.sign = res.record.flowSign;
         this.record = res.record;
         this._doing(param);
+      }).error((err) => {
+        console.log(err)
+        console.log('error')
       });
     } else{
       this._doing(param);
