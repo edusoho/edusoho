@@ -365,6 +365,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'course_v8.isDefault = :isDefault',
                 'course_v8.canLearn = :canLearn',
                 'course_v8.showable = :showable',
+                'course_v8.display = :display',
             ],
             'wave_cahceable_fields' => ['hitNum'],
         ];
