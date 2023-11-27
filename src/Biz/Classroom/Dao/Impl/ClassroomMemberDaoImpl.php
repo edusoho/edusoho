@@ -249,6 +249,7 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
                 'id in (:ids)',
                 'userId = :userId',
                 'classroomId = :classroomId',
+                'classroomId IN (:classroomIds)',
                 'noteNum > :noteNumGreaterThan',
                 'role LIKE :role',
                 'role IN (:roles)',

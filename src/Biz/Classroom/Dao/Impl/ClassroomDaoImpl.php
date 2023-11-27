@@ -175,6 +175,7 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
                 'id in (:ids)',
                 'recommended = :recommended',
                 'showable = :showable',
+                'display = :display',
                 'buyable = :buyable',
                 'orgCode = :orgCode',
                 'orgCode PRE_LIKE :likeOrgCode',
