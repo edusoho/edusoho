@@ -59,7 +59,7 @@
         {# 常用入口 #}
         <div class="admin-v2-section relative">
           <div class="admin-v2-section__header ">{{ 'admin_v2.homepage.quick_entrance'|trans }}
-           <a class="admin-v2-section__more" data-toggle="modal" data-target="#functionModal">{{ 'admin_v2.homepage.quick_custom'|trans }}<i
+           <a class="admin-v2-section__more flex items-center" data-toggle="modal" data-target="#functionModal">{{ 'admin_v2.homepage.quick_custom'|trans }}<i
                 class="es-icon es-icon-edit-line ml4"></i>
               </a>
           </div>
@@ -97,8 +97,8 @@
         {% if not setting('copyright.thirdCopyright', false) == 1 %}
           <div class="admin-v2-section cd-mb0">
             <div class="admin-v2-section__header ">{{ 'admin_v2.business_advice.title'|trans }}<a
-                {% if is_without_network() %}class="admin-v2-section__more js-no-network" href="javascript:;"
-                {% else %}class="admin-v2-section__more" href="http://www.qiqiuyu.com"
+                {% if is_without_network() %}class="admin-v2-section__more js-no-network flex items-center" href="javascript:;"
+                {% else %}class="admin-v2-section__more flex items-center" href="http://www.qiqiuyu.com"
                 target="_blank"{% endif %}>{{ 'admin_v2.buiness_advice.goto_qiqiuyu'|trans }}<i
                 class="es-icon es-icon-school-line ml4"></i></a></div>
             <div class="admin-v2-section__body admin-advice js-admin-advice"
