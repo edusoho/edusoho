@@ -49,15 +49,15 @@ class MeCourse extends AbstractResource
         $courses = $this->getCourseService()->searchCourses(
             $courseConditions,
             [],
-            $offset,
-            $limit
+            0,
+            PHP_INT_MAX
         );
 
         $courses = $this->appendAttrAndOrder($courses, $members);
         $courses = $this->getCourseService()->appendSpecsInfo($courses);
 
         $total = $this->getCourseService()->countCourses($courseConditions);
-
+        $total = count($courses);
         $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
 
         $members = ArrayToolkit::index($members, 'courseId');
@@ -69,7 +69,7 @@ class MeCourse extends AbstractResource
         }
         array_multisort(ArrayToolkit::column($courses, 'lastLearnTime'), SORT_DESC, $courses);
 
-        return $this->makePagingObject($courses, $total, $offset, $limit);
+        return $this->makePagingObject(array_slice($courses, $offset, $limit), $total, $offset, $limit);
     }
 
     private function buildSearchConditions($request)
