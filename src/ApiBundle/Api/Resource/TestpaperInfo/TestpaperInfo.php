@@ -12,6 +12,7 @@ use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -73,7 +74,7 @@ class TestpaperInfo extends AbstractResource
         $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
 
-        if (empty($testpaperRecord) && $scene['endTime'] && $scene['endTime'] < time()) {
+        if (empty($testpaperRecord) && $scene['end_time'] && $scene['end_time'] < time()) {
             $this->getAnswerService()->batchAutoSubmit($scene['id'], $activity['ext']['mediaId'], [$user['id']]);
 
             $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
@@ -84,7 +85,7 @@ class TestpaperInfo extends AbstractResource
         $activity['ext']['remainderDoTimes'] = max($activity['ext']['doTimes'] - ($countTestpaperRecord ?: 0), 0);
 
         if (!empty($testpaperRecord)) {
-            if ($testpaperRecord['assessment_id'] != $assessment['id']) {
+            if ($testpaperRecord['assessment_id'] != $assessment['id'] && AnswerRecordStatus::DOING == $testpaperRecord['status']) {
                 $assessment = $this->getAssessmentService()->showAssessment($testpaperRecord['assessment_id']);
                 $results = $this->wrapTeatpaper($assessment);
             }

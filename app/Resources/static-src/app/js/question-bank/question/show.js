@@ -1,5 +1,6 @@
 import {shortLongText} from 'app/common/widget/short-long-text';
 import Selector from '../common/selector';
+import 'store';
 
 class QuestionsShow {
   constructor() {
@@ -9,31 +10,28 @@ class QuestionsShow {
     this.categoryContainer = $('.js-category-content');
     this.categoryModal = $('.js-category-modal');
     this.selector = new Selector(this.table);
+    this.nextBtn = $('.js-next-btn')
+    this.modal = $('#modal')
+    this.modalUrl = $('[name="introModalUrl"]').val()
+    this.accessCloud = $('[name="accessCloud"]').val()
+    this.canManageCloud = $('[name="canManageCloud"]').val()
     this.init();
   }
+
   init() {
     this.initEvent();
     this.initSelect();
     this.initShortLongText();
+
+    if (!store.get('QUESTION_IMPORT_INTRO') && this.accessCloud != 1) {
+      store.set('QUESTION_IMPORT_INTRO', true);
+      this.modal.load(this.modalUrl);
+      this.modal.modal('show')
+    }
   }
   initEvent() {
     this.element.on('click', '.js-search-btn', (event) => {
       this.onClickSearchBtn(event);
-    });
-
-    this.element.on('click', '.pagination li', (event) => {
-      this.onClickPagination(event);
-    });
-		this.element.on('change', '.js-current-perpage-count', (event) => {
-      this.onChangePagination(event);
-    });
-
-    this.element.on('click', '.js-category-search', (event) => {
-      this.onClickCategorySearch(event);
-    });
-
-    this.element.on('click', '.js-all-category-search', (event) => {
-      this.onClickAllCategorySearch(event);
     });
 
     this.element.on('click', '.js-batch-delete', (event) => {
@@ -59,8 +57,63 @@ class QuestionsShow {
     this.element.on('click','.js-update-btn', (event) => {
       this.onUpdateQuestion(event);
     });
+
+    $('.js-item-create').click(event => {
+      let categoryId = $('#select_category').val();
+      let importUrl = $(event.currentTarget).data('url');
+      location.href = importUrl + '&categoryId=' + categoryId;
+    });
+
+    this.modal.on('click', '.js-next-btn' , (event) => { 
+      this.modal.modal('hide');
+      if(this.canManageCloud != 1) {
+        this.skipCanManageCloud()
+      } else {
+        this.skipAccessCloud()
+      }
+    })
+    
   }
 
+  skipAccessCloud() {
+    introJs().setOptions({
+      steps: [{
+        element: '.js-import-btn',
+        intro: Translator.trans('upgrade.cloud.capabilities.to.experience'),
+        position: 'left',
+      }],
+      doneLabel: Translator.trans('skip.upgrade.btn'),
+      showBullets: false,
+      showStepNumbers: false,
+      exitOnEsc: false,
+      exitOnOverlayClick: false,
+      tooltipClass: 'question-bank-intro-skip',
+    }).start()
+
+    $('.introjs-skipbutton').click((event) => {
+      const a = document.createElement('a')
+      a.target = '_blank'
+      a.href = $('.js-skip-btn').attr('href')
+      a.click()
+    })
+  }
+
+  skipCanManageCloud() {
+    introJs().setOptions({
+      steps: [{
+        element: '.js-import-btn',
+        intro: Translator.trans('next.skip.intro.text'),
+        position: 'left'
+      }],
+      doneLabel: Translator.trans('skip.i.know'),
+      showBullets: false,
+      showStepNumbers: false,
+      exitOnEsc: false,
+      exitOnOverlayClick: false,
+      tooltipClass: 'question-bank-intro-skip',
+    }).start();
+  }
+  
   initSelect() {
     $('#question_categoryId').select2({
       treeview: true,
@@ -197,10 +250,10 @@ class QuestionsShow {
     event.preventDefault();
   }
 
-	onChangePagination(){
-		let self = this;
-		const currentPerpage = $('.js-current-perpage-count').children('option:selected').val()
-		const serialize = this.element.find('[data-role="search-conditions"]').serialize()
+  onChangePagination(){
+    let self = this;
+    const currentPerpage = $('.js-current-perpage-count').children('option:selected').val()
+    const serialize = this.element.find('[data-role="search-conditions"]').serialize()
     const conditions = `${serialize}&page=1&perpage=${currentPerpage}`;
     this._loading();
     $.ajax({
@@ -213,14 +266,14 @@ class QuestionsShow {
     }).fail(function(){
       self._loaded_error();
     });
-	}
+  }
 
   onClickCategorySearch(event) {
     let $target = $(event.currentTarget);
     this.categoryContainer.find('.js-active-set.active').removeClass('active');
     $target.addClass('active');
     $('.js-category-choose').val($target.data('id'));
-		const defaultPages = 10
+    const defaultPages = 10
     this.renderTable( '',defaultPages);
   }
 
@@ -229,22 +282,34 @@ class QuestionsShow {
     this.categoryContainer.find('.js-active-set.active').removeClass('active');
     $target.addClass('active');
     $('.js-category-choose').val('');
-		const defaultPages = 10
+    const defaultPages = 10
     this.renderTable( '',defaultPages);
   }
 
   renderTable(isPaginator, defaultPages) {
     isPaginator || this._resetPage();
     let self = this;
-		const currentPerpage = defaultPages ? defaultPages : $('.js-current-perpage-count').children('option:selected').val()
-		const serialize = this.element.find('[data-role="search-conditions"]').serialize()
-		const pages = this.element.find('.js-page').val()
-    const conditions = `${serialize}&page=${pages}&perpage=${currentPerpage}`;
+    const perpage = defaultPages ? defaultPages : $('.js-current-perpage-count').children('option:selected').val()
+    const page = this.element.find('.js-page').val()
+    const category_id = $('.js-category-choose').val()
+    const difficulty = $('.js-list-header-difficulty').val() === 'default' ? '' : $('.js-list-header-difficulty').val()
+    const type = $('.js-list-header-type').val() === 'default' ? '' : $('.js-list-header-type').val()
+    const keyword = $('.js-list-header-keyword').val() === 'default' ? '' : $('.js-list-header-keyword').val()
+    
+    const data = {
+      category_id,
+      difficulty,
+      type,
+      keyword,
+      perpage,
+      page
+    }
+
     this._loading();
     $.ajax({
       type: 'GET',
       url: this.renderUrl,
-      data: conditions
+      data
     }).done(function(resp){
       self.table.html(resp);
       self.selector.updateTable();

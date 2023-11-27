@@ -92,10 +92,11 @@ abstract class Item
     {
         $item = $this->validate($item);
 
-        $item['analysis'] = $this->purifyHtml($item['analysis']);
+        $item['analysis'] = $this->purifyHtml(trim($item['analysis']));
         $item['question_num'] = count($item['questions']);
         $item['material'] = $this->purifyHtml($this->getMaterial($item));
         $item['material'] = preg_replace('/\[\[.+?\]\]/', '[[]]', $item['material']);
+        $item['material_hash'] = md5($item['material']);
         if (isset($item['category_id']) && $item['category_id'] === '') {
             unset($item['category_id']);
         }
@@ -156,7 +157,7 @@ abstract class Item
 
     protected function getMaterial($item)
     {
-        return $item['questions'][0]['stem'];
+        return trim($item['questions'][0]['stem']);
     }
 
     protected function getItemReviewResult($questionReviewResult)

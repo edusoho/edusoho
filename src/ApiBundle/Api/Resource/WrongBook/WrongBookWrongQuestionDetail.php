@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\WrongBook;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Question\Traits\QuestionFormulaImgTrait;
 use Biz\User\Service\UserService;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
@@ -13,6 +14,8 @@ use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class WrongBookWrongQuestionDetail extends AbstractResource
 {
+    use QuestionFormulaImgTrait;
+
     public function search(ApiRequest $request, $targetType, $itemId)
     {
         if (!in_array($targetType, ['course', 'classroom', 'exercise'])) {
@@ -27,6 +30,7 @@ class WrongBookWrongQuestionDetail extends AbstractResource
         $questionsCount = $this->getWrongQuestionService()->countWrongQuestionsWithDistinctUserId($conditions);
 
         $itemInfo = $this->getItemService()->getItemWithQuestions($itemId, true);
+        $itemInfo = $this->convertFormulaToImg($itemInfo);
 
         return array_merge(['item' => $itemInfo], $this->makePagingObject($wrongQuestionsByUser, $questionsCount, $offset, $limit));
     }

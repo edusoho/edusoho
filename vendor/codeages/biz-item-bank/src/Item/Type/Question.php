@@ -49,9 +49,9 @@ class Question
             unset($question['id']);
         }
 
-        $question['stem'] = $this->purifyHtml($question['stem']);
+        $question['stem'] = $this->purifyHtml(trim($question['stem']));
         $question['stem'] = preg_replace('/\[\[.+?\]\]/', '[[]]', $question['stem']);
-        $question['analysis'] = $this->purifyHtml($question['analysis']);
+        $question['analysis'] = $this->purifyHtml(trim($question['analysis']));
         $question['response_points'] = $this->getAnswerMode($question['answer_mode'])->filter($question['response_points']);
 
         return $question;

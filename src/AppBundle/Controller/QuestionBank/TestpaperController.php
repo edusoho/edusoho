@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\TestpaperException;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController
 {
+    use QuestionImportTrait;
+
     public function indexAction(Request $request, $id)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
@@ -236,24 +239,24 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        if ('draft' != $assessment['status']) {
-            return $this->createMessageResponse('error', '已发布或已关闭的试卷不能再修改题目');
-        }
-
         if ($request->isMethod('POST')) {
             $assessment = $request->request->get('baseInfo', []);
-            $sections = $request->request->get('sections', []);
+            $sections = $request->request->get('sections', '');
 
+            $sections = json_decode($sections, true);
             if (empty($sections)) {
-                return $this->createMessageResponse('error', '试卷模块不能为空！');
+                return $this->createJsonResponse(['error' => '试卷模块不能为空!']);
             }
-            $assessment['sections'] = json_decode($sections, true);
+
+            $assessment['sections'] = $sections;
 
             if ($this->calculateItemCount($assessment['sections']) > 2000) {
-                return $this->createMessageResponse('error', '试卷题目数量不能超过2000！');
+                return $this->createJsonResponse(['error' => '试卷题目数量不能超过2000!']);
             }
             $assessment['sections'] = $this->processAssessmentSections($assessment['sections']);
             $this->getAssessmentService()->updateAssessment($assessmentId, $assessment);
+
+            $this->getLogService()->info('question_bank', 'edit_testpaper', "用户{$this->getCurrentUser()->nickname}修改了{$questionBank['name']}名为{$assessment['name']}的试卷");
 
             return $this->createJsonResponse([
                 'goto' => $this->generateUrl('question_bank_manage_testpaper_list', ['id' => $id]),
@@ -371,7 +374,7 @@ class TestpaperController extends BaseController
         }
 
         return $this->render('testpaper/manage/preview.html.twig', [
-            'assessment' => $assessment,
+            'assessment' => $this->addItemEmphasisStyle($assessment),
         ]);
     }
 

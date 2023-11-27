@@ -19,6 +19,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\IM\Service\ConversationService;
 use Biz\Search\Constant\CloudSearchType;
 use Biz\Search\Service\SearchService;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
 use Biz\User\UserException;
@@ -102,8 +103,8 @@ class EduCloudController extends BaseController
         return $this->render('admin-v2/cloud-center/edu-cloud/overview/index.html.twig', [
             'isBinded' => $isBinded,
             'overview' => $overview,
-            'paidService' => isset($paidService) ? $paidService : false,
-            'unPaidService' => isset($unPaidService) ? $unPaidService : false,
+            'paidService' => $paidService ?? false,
+            'unPaidService' => $unPaidService ?? false,
         ]);
     }
 
@@ -1011,7 +1012,7 @@ class EduCloudController extends BaseController
             $settings['cloud_key_applied'] = 1;
 
             $this->getSettingService()->set('storage', $settings);
-
+            $this->getCacheService()->clear('cloud_status');
             $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect($this->generateUrl('admin_v2_setting_cloud_key'));

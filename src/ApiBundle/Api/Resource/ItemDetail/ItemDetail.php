@@ -6,19 +6,13 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\CloudFile\Service\CloudFileService;
 use Biz\CloudPlatform\Service\ResourceFacadeService;
-use Biz\ItemBankExercise\ItemBankExerciseMemberException;
-use Biz\ItemBankExercise\Service\ExerciseMemberService;
-use Biz\QuestionBank\Service\QuestionBankService;
-use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
-use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class ItemDetail extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
         $req = $request->query->all();
-        $user = $this->getCurrentUser();
 
         $attachment = $this->getAttachmentService()->getAttachmentByGlobalId($req['globalId']);
         if (empty($attachment)) {
@@ -72,45 +66,5 @@ class ItemDetail extends AbstractResource
     protected function getCloudFileService()
     {
         return $this->service('CloudFile:CloudFileService');
-    }
-
-    /**
-     * @return QuestionDao
-     */
-    protected function getQuestionDao()
-    {
-        return $this->biz->dao('ItemBank:Item:QuestionDao');
-    }
-
-    /**
-     * @return ItemService
-     */
-    protected function getItemService()
-    {
-        return $this->service('ItemBank:Item:ItemService');
-    }
-
-    /**
-     * @return \Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService
-     */
-    protected function getItemBankService()
-    {
-        return $this->service('ItemBank:ItemBank:ItemBankService');
-    }
-
-    /**
-     * @return ExerciseMemberService
-     */
-    protected function getExerciseMemberService()
-    {
-        return $this->biz->service('ItemBankExercise:ExerciseMemberService');
-    }
-
-    /**
-     * @return QuestionBankService
-     */
-    protected function getQuestionBankService()
-    {
-        return $this->service('QuestionBank:QuestionBankService');
     }
 }

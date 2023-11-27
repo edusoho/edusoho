@@ -15,6 +15,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionTagService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService;
@@ -89,6 +90,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
             }
 
+            $this->saveAnswerQuestionTag($assessmentResponse, $answerRecord);
             $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
             $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
@@ -964,6 +966,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'section_responses' => [],
         ];
 
+        $tagQuestionIds = $answerRecord['isTag']
+            ? $this->getAnswerQuestionTagService()->getTagQuestionIdsByAnswerRecordId($answerRecord['id'])
+            : [];
         $sectionResponses = ArrayToolkit::group($answerQuestionReports, 'section_id');
         $attachments = ArrayToolkit::group($attachments, 'target_id');
         foreach ($sectionResponses as $sectionId => $sectionResponse) {
@@ -974,6 +979,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                         'question_id' => intval($questionResponse['question_id']),
                         'response' => $questionResponse['response'],
                         'attachments' => empty($attachments[$questionResponse['id']]) ? [] : $attachments[$questionResponse['id']],
+                        'isTag' => in_array($questionResponse['question_id'], $tagQuestionIds),
                     ];
                 }
                 $itemResponse = [
@@ -1072,6 +1078,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
             }
 
+            $this->saveAnswerQuestionTag($assessmentResponse, $answerRecord);
+
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
 
             //判断模拟考试应该取当前时间减去开始时间
@@ -1113,6 +1121,35 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         return $assessmentResponse;
+    }
+
+    protected function saveAnswerQuestionTag(array $assessmentResponse, $answerRecord)
+    {
+        $questionIds = [];
+        foreach ($assessmentResponse['section_responses'] as $sectionResponse) {
+            foreach ($sectionResponse['item_responses'] as $itemResponse) {
+                foreach ($itemResponse['question_responses'] as $questionResponse) {
+                    if ($questionResponse['isTag']) {
+                        $questionIds[] = $questionResponse['question_id'];
+                    }
+                }
+            }
+        }
+
+        if (empty($questionIds)) {
+            if ($answerRecord['isTag']) {
+                $this->getAnswerRecordService()->update($answerRecord['id'], ['isTag' => 0]);
+                $this->getAnswerQuestionTagService()->deleteByAnswerRecordId($answerRecord['id']);
+            }
+
+            return;
+        }
+        if ($answerRecord['isTag']) {
+            $this->getAnswerQuestionTagService()->updateByAnswerRecordId($answerRecord['id'], $questionIds);
+        } else {
+            $this->getAnswerQuestionTagService()->createAnswerQuestionTag($answerRecord['id'], $questionIds);
+            $this->getAnswerRecordService()->update($answerRecord['id'], ['isTag' => 1]);
+        }
     }
 
     protected function updateAttachmentsTarget($answerRecordId, $attachments)
@@ -1305,5 +1342,13 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getAnswerReviewedQuestionService()
     {
         return $this->biz->service('ItemBank:Answer:AnswerReviewedQuestionService');
+    }
+
+    /**
+     * @return AnswerQuestionTagService
+     */
+    protected function getAnswerQuestionTagService()
+    {
+        return $this->biz->service('ItemBank:Answer:AnswerQuestionTagService');
     }
 }

@@ -454,6 +454,13 @@ course.unit: '%part_name% %number% %colon% %title%'
 course.lesson: '%part_name% %number% : %title%'
 course.catalogue.task_status.task: '%taskName%.%taskNumber%:%taskTitle%'
 
+created.question.confirm.ok.btn: Continue editing
+created.question.confirm.close.btn: Direct creation
+created.question.confirm.import.close.btn: Direct import
+created.question.confirm.title: The same topic already exists. Do you want to create another one?
+created.question.confirm.import.title: If the same topic already exists, determine whether to continue importing?
+
+
 course.thread_replay_failed_hint: Posted reply failed, please try again
 course.thread_delete_hint: Do you really want to delete this reply?
 
@@ -622,8 +629,10 @@ course.question.create.choose_min_num_hint: Maximum %minNum% options
 course.question.create_hint: Added options
 course.question.right_answer_hint: Correct answer
 course.question.right_answer_content_hint: Please enter the option content
+course.question.by.question.type: By question type
 course.question.type.single_choice: single choice
 course.question.type.uncertain_choice: uncertain choice
+course.question.type.uncertain_choices: uncertain choice
 course.question.type.choice: choice
 course.question.type.determine: determine
 course.question.type.essay: essay
@@ -1968,6 +1977,8 @@ form.label.share: Share
 
 placeholder.playback_label: Playback labe
 placeholder.enter_keyword: Please enter keyword
+placeholder.task.name: Please enter a task name
+placeholder.class.name: Class name
 placeholder.course_category: Course category
 
 radio.share_to_live_playback: Share to live playback (other teachers can view, preview and reference this playback)
@@ -2252,3 +2263,18 @@ admin_v2.homepage.wechat_come: Welcome to EduSoho enterprise products
 admin_v2.homepage.wechat_code.m: Join the open source product use learning exchange group, small partners are waiting for you
 
 del.role.theater.hover.title: This user does not have instructor rights. After removal, it will not be displayed on mobile
+upgrade.cloud.capabilities.to.experience: >
+  <p class="title cd-dark-major">Topic introduction</p><div class="cd-dark-minor cd-text-md">Upgrade cloud capabilities to experience more powerful import capabilities</div>
+next.skip.intro.text: >
+  <p class="title cd-dark-major">Topic introduction</p><div class="cd-dark-minor cd-text-md">To upgrade the cloud capability and experience more powerful import functions, contact the super administrator</div>
+skip.i.know: I know(2/2)
+skip.upgrade.btn: Upgrade now(2/2)
+question.bank.name: Question bank name
+question.bank.expoet: Derived problem
+question.bank.add: Add topic
+question.bank.import: Lead-in topic
+question.bank.difficulty.default: Difficulty
+question.bank.difficulty.simple: Simple
+question.bank.difficulty.normal: Normal
+question.bank.difficulty: Hard
+question.bank.reset.btn: Reset
