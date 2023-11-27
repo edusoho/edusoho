@@ -43,6 +43,10 @@ body {
     }
   }
 
+  .cd-tabs > li.active > a:before {
+    background: rgba(0, 0, 0, 0) !important;
+  }
+
   .cd-tabs {
     height: 60px;
     > li + li {
@@ -149,6 +153,8 @@ body {
           }
         }
       }
+    }
+    li:not(:last-child) {
       &.active {
         .es-transition;
         a {
