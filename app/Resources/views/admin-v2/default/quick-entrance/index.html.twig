@@ -4,7 +4,7 @@
     {% if tabMenu.mode|default('') == 'capsules' %}
       {% set tabMenu = first_child_permission(tabMenu) %}
     {% endif %}
-    <div class="col-md-3">
+    <div class="col-md-3 {% if loop.index > 4 %} quick_entrance-item{% endif %}">
       <a class="{{ 'text-center admin-function ' ~ entrance.class }}" href="{{ permission_path(tabMenu) }}"
          target="{{ entrance.target|default('_self') }}">
         <div class="admin-function__icon"><i class="{{ 'es-icon es-icon-entry-' ~ entrance.icon }}"></i></div>

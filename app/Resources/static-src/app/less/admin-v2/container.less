@@ -63,11 +63,12 @@
 }
 
 .admin-v2-section {
-  margin-bottom: 24px;
-  padding: 16px 16px 32px 16px;
+  margin-bottom: 16px;
+  padding: 20px;
+  border-radius: 8px;
   @media (min-width: 1400px) {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
   a {
     text-decoration: none;
@@ -78,10 +79,13 @@
   }
   background-color: @cdv2-white;
   .admin-v2-section__header {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     .cdv2-text-xlg;
     color: @cdv2-dark-minor;
     .cdv2-text-medium;
+  }
+  .admin-v2-section__body .row .quick_entrance-item {
+    margin-top: 28px;
   }
   .admin-v2-section__tip {
     display: inline-block;
@@ -102,7 +106,7 @@
     }
   }
   &.admin-v2-section--step {
-    padding-bottom: 14px;
+    padding-bottom: 20px;
     .admin-v2-section__header {
       margin-bottom: 6px;
     }
@@ -249,8 +253,6 @@
 }
 
 .admin-data {
-  padding-top: 16px;
-  padding-bottom: 16px;
   border-radius: 4px;
   .admin-data__value {
     color: #919399;
@@ -306,9 +308,6 @@
 .admin-function {
   position: relative;
   display: table;
-  margin: auto;
-  margin-bottom: 16px;
-  padding: 16px;
   .es-transition;
   &:hover,
   &:focus {
@@ -323,6 +322,9 @@
     .admin-function__tag {
       display: block;
     }
+  }
+  &:nth-child(n+4) {
+    margin-top: 28px !important;
   }
   .admin-function__tag {
     display: inline-block;
@@ -441,10 +443,9 @@
 
 
 .admin-info-section {
-  padding: 20px 16px;
+  border-radius: 8px;
   @media (min-width: 1400px) {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding: 20px;
   }
   background-color: @cdv2-white;
 }
@@ -684,13 +685,11 @@
 }
 
 .admin-sidebar-section {
-  margin-top: 24px;
+  border-radius: 8px;
+  margin-top: 16px;
   background-color: @cdv2-white;
-  padding: 16px;
-  padding-bottom: 28px;
   @media (min-width: 1400px) {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding: 20px;
   }
   .admin-sidebar-section__header {
     .cdv2-text-xlg;
@@ -724,10 +723,10 @@
   }
   img {
     height: auto;
-    margin-top: 8px;
+    margin-top: 20px;
     margin-bottom: 8px;
     max-width: 100%;
-    border-radius: 4px;
+    border-radius: 8px;
   }
   .admin-notice__text {
     .cdv2-text-md;
