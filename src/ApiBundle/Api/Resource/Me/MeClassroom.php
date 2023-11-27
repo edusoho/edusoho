@@ -38,7 +38,9 @@ class MeClassroom extends AbstractResource
             $indexClassroom = ArrayToolkit::index($classrooms, 'id');
             $orderedClassroom = [];
             foreach ($orderedClassroomIds as $orderedClassroomId) {
-                $orderedClassroom[] = $indexClassroom[$orderedClassroomId];
+                if (!empty($indexClassroom[$orderedClassroomId])) {
+                    $orderedClassroom[] = $indexClassroom[$orderedClassroomId];
+                }
             }
             $classrooms = array_slice($orderedClassroom, $offset, $limit);
             $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
