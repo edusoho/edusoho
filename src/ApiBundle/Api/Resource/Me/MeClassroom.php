@@ -34,6 +34,15 @@ class MeClassroom extends AbstractResource
                 return $this->makePagingObject([], 0, $offset, $limit);
             }
             $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions, [], $offset, $limit);
+            $ids = array_column($classrooms, 'id');
+            $orderedMembers = $this->getClassroomService()->searchMembers(['classroomIds' => $ids, 'userId' => $this->getCurrentUser()->getId(), 'role' => 'student'], $orderBy, 0, PHP_INT_MAX);
+            $orderedClassroomIds = array_column($orderedMembers, 'classroomId');
+            $indexClassroom = ArrayToolkit::index($classrooms, 'id');
+            $orderedClassroom = [];
+            foreach ($orderedClassroomIds as $orderedClassroomId) {
+                $orderedClassroom[] = $indexClassroom[$orderedClassroomId];
+            }
+            $classrooms = $orderedClassroom;
             $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
 
             foreach ($classrooms as &$classroom) {
