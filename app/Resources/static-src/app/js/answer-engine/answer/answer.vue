@@ -20,6 +20,7 @@
       :courseId="courseId"
       :exerciseId="exerciseId"
       :type="type"
+      :assessmentResponses="assessmentResponses"
       @getAnswerData="getAnswerData"
       @saveAnswerData="saveAnswerData"
       @exitAnswer="returnToCourseDetail"
@@ -103,7 +104,8 @@
         },
         ajaxTimeOut: null,
         isReachTime: false,
-        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1',
+        assessmentResponses: {}
       };
     },
     provide() {
@@ -147,6 +149,7 @@
         this.answerRecord = res.answer_record;
         this.answerScene = res.answer_scene;
         this.assessmentResponse = res.assessment_response;
+        this.assessmentResponses = res.assessment_response;
       }).error((err) => {
         if(this.exerciseId) {
           window.location.href = `/my/item_bank_exercise/${this.exerciseId}/assessment/${$('[name=answer_record]').val()}?previewAs=member`;
@@ -157,20 +160,20 @@
       getCourseId(path) {
           const match = path.match(/\/course\/\d+/);
 
-          if (match) {  
-              return match[0].split('/').pop();  
+          if (match) {
+              return match[0].split('/').pop();
           }
 
-          return null;  
+          return null;
       },
       getExerciseId(path) {
           const match = path.match(/\/item_bank_exercise\/\d+/);
 
-          if (match) {  
-              return match[0].split('/').pop();  
+          if (match) {
+              return match[0].split('/').pop();
           }
 
-          return null;  
+          return null;
       },
       getAnswerData(assessmentResponse) {
         const that = this;
@@ -394,7 +397,7 @@
       },
       deleteAttachmentCallback() {
         let self = this;
-        
+
         return new Promise(resolve => {
           $.ajax({
             url: $('[name=delete-attachment-url]').val(),

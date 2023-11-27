@@ -6,7 +6,6 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use AppBundle\Common\ArrayToolkit;
-use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
@@ -188,14 +187,6 @@ class WrongBookStartAnswer extends AbstractResource
     protected function getWrongQuestionService()
     {
         return $this->getBiz()->service('WrongBook:WrongQuestionService');
-    }
-
-    /**
-     * @return WrongQuestionCollectDao
-     */
-    protected function getCollectDao()
-    {
-        return $this->getBiz()->dao('WrongBook:WrongQuestionCollectDao');
     }
 
     /**

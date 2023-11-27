@@ -29,4 +29,6 @@ interface AnswerRecordService
     public function replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots);
 
     public function findByIds($ids);
+
+    public function countByAssessmentId($assessmentId);
 }

@@ -74,36 +74,8 @@ class AnswerRecordComment extends AbstractResource
         return $this->service('ItemBank:Answer:AnswerReportService');
     }
 
-    protected function getAnswerService()
-    {
-        return $this->service('ItemBank:Answer:AnswerService');
-    }
-
     protected function getAnswerRecordService()
     {
         return $this->service('ItemBank:Answer:AnswerRecordService');
-    }
-
-    protected function getAnswerSceneService()
-    {
-        return $this->service('ItemBank:Answer:AnswerSceneService');
-    }
-
-    protected function getAssessmentService()
-    {
-        return $this->service('ItemBank:Assessment:AssessmentService');
-    }
-
-    /**
-     * @return TestpaperActivityService
-     */
-    protected function getTestpaperActivityService()
-    {
-        return $this->service('Activity:TestpaperActivityService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->service('User:UserService');
     }
 }

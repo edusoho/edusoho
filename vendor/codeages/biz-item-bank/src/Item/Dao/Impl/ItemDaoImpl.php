@@ -45,6 +45,15 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
         return $this->db()->fetchColumn($sql, [$categoryId]);
     }
 
+    public function findDuplicatedMaterial($bankId, $materialHashes)
+    {
+        $marks = str_repeat('?,', count($materialHashes) - 1).'?';
+
+        $sql = "SELECT material FROM {$this->table} WHERE bank_id = ? AND material_hash IN ({$marks}) AND is_deleted = 0;";
+
+        return $this->db()->fetchAll($sql, array_merge([$bankId], $materialHashes)) ?: [];
+    }
+
     public function declares()
     {
         return [
@@ -66,7 +75,9 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
                 'category_id in (:category_ids)',
                 'material LIKE :material',
                 'type in (:types)',
+                'material_hash in (:material_hashs)',
                 'id not in (:exclude_ids)',
+                'material_hash = :material_hash',
             ],
         ];
     }

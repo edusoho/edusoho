@@ -3,6 +3,7 @@
 namespace Biz\Testpaper\Wrapper;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Question\Traits\QuestionFormulaImgTrait;
 use Codeages\Biz\ItemBank\Item\AnswerMode\ChoiceAnswerMode;
 use Codeages\Biz\ItemBank\Item\AnswerMode\RichTextAnswerMode;
 use Codeages\Biz\ItemBank\Item\AnswerMode\SingleChoiceAnswerMode;
@@ -14,6 +15,8 @@ use Topxia\Service\Common\ServiceKernel;
 
 class TestpaperWrapper
 {
+    use QuestionFormulaImgTrait;
+
     protected $modeToType = [
         SingleChoiceAnswerMode::NAME => 'single_choice',
         ChoiceAnswerMode::NAME => 'choice',
@@ -135,6 +138,8 @@ class TestpaperWrapper
 
     protected function wrapItem($item)
     {
+        $item = $this->convertFormulaToImg($item);
+        $item = $this->addItemEmphasisStyle($item);
         if ('material' == $item['type']) {
             $question = [
                 'id' => $item['id'],

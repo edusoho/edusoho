@@ -73,10 +73,10 @@ class TrueFalseAnswerMode extends AnswerMode
             ],
         ];
 
-        if ($question['answer']) {
-            $parsedQuestion['answer'] = [$this->truePoint['val']];
+        if (is_null($question['answer'])) {
+            $parsedQuestion['answer'] = [];
         } else {
-            $parsedQuestion['answer'] = [$this->falsePoint['val']];
+            $parsedQuestion['answer'] = $question['answer'] ? [$this->truePoint['val']] : [$this->falsePoint['val']];
         }
 
         return $parsedQuestion;

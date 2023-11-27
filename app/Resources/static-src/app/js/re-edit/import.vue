@@ -9,6 +9,9 @@
             :importType="importType"
             :showAttachment="showAttachment"
             :cdnHost="cdnHost"
+            :repeatList="repeatList"
+            :loading="loading"
+            :isVisiblePopconfim= "isVisiblePopconfim"
             :uploadSDKInitData="uploadSDKInitData"
             :deleteAttachmentCallback="deleteAttachmentCallback"
             :previewAttachmentCallback="previewAttachmentCallback"
@@ -16,12 +19,21 @@
             @deleteAttachment="deleteAttachment"
             @previewAttachment="previewAttachment"
             @downloadAttachment="downloadAttachment"
+            @getRepeatQuestion="getRepeatQuestion"
             @getImportData="getImportData"
+            @renderFormula="renderFormula"
+            @editQuestion="editQuestion"
+            @changeEditor="changeEditor"
+            @getInitRepeatQuestion="getInitRepeatQuestion"
+            @getEditRepeatQuestion="getEditRepeatQuestion"
         ></item-import>
     </div>
 </template>
 
 <script>
+  import axios from 'axios';
+  import {renderKatex} from 'app/common/katex-render';
+
   export default {
     data() {
       return {
@@ -56,7 +68,14 @@
           locale: document.documentElement.lang
         },
         fileId: 0,
-        redirect: true
+        redirect: true,
+        token: $('[name="import_token"]').val(),
+        repeatList: [],
+        loading: false,
+        isVisiblePopconfim: false,
+        isWrong: false,
+        duplicatedIds: [],
+        ids: null,
       }
     },
     created() {
@@ -69,10 +88,80 @@
     },
     provide() {
       return {
-        modeOrigin: 'create'
+        modeOrigin: 'create',
+        self: this
       }
     },
     methods: {
+      getRepeatQuestion(subject) {
+        const that = this
+        that.loading = true
+        $.ajax({
+          url: `/questions/${this.token}/checkDuplicatedQuestions`,
+          contentType: 'application/json;charset=utf-8',
+          type: 'post',
+          data: JSON.stringify(subject),
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+          }
+        }).done(function (res) {
+          that.duplicatedIds = res.duplicatedIds
+
+          for (const key in res.duplicatedIds) {
+            that.repeatList.push(Number(key));
+          }
+          if(that.repeatList.length > 0) {
+            that.$confirm({
+              title: Translator.trans('created.question.confirm.import.title'),
+              okText: Translator.trans('created.question.confirm.ok.btn'),
+              cancelText: Translator.trans('created.question.confirm.import.close.btn'),
+              icon: 'exclamation-circle',
+              onOk() {
+                that.loading = false;
+                that.forceRemoveModalDom()
+              },
+              onCancel() {
+                that.getImportData(subject)
+                that.forceRemoveModalDom()
+              },
+            });
+          } else {
+            that.getImportData(subject)
+          }
+        })
+      },
+      forceRemoveModalDom() {
+        const modal = document.querySelector(".ant-modal-root");
+
+        if (modal) {
+          modal.remove();
+        }
+
+        document.body.style = "";
+      },
+      editQuestion(data, items) {
+        this.ids = data.ids
+
+        items = items.filter((item)=> {
+          return item.ids !== data.ids
+        })
+
+        const material = data.type === 'material' ? data.material : data.questions[0].stem
+        return new Promise(resolve => {
+          $.ajax({
+            url: `/question_bank/${this.bank_id}/checkQuestionDuplicative`,
+            contentType: 'application/json;charset=utf-8',
+            type: 'post',
+            data: JSON.stringify({material:material, items:items}),
+            beforeSend(request) {
+              request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            }
+          }).done((res) => {
+            this.isWrong = res;
+            resolve(res);
+          })
+        });
+      },
       getImportData(subject) {
         this.redirect = false;
         $.ajax({
@@ -148,6 +237,59 @@
             self.fileId = 0;
           })
         });
+      },
+      changeEditor(material, items) {
+        const that = this;
+      
+        items = items.filter((item)=> {
+          return item.ids !== that.ids
+        })
+        return new Promise(resolve => {
+          $.ajax({
+            url: `/question_bank/${this.bank_id}/checkQuestionDuplicative`,
+            contentType: 'application/json;charset=utf-8',
+            type: 'post',
+            data: JSON.stringify({material:material, items:items}),
+            beforeSend(request) {
+              request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            }
+          }).done(function (res) {
+            if (!res) {
+              that.isWrong = false;
+              resolve(res);
+            } else {
+              that.isWrong = true;
+            }
+          })
+        });
+      },
+      getInitRepeatQuestion(subject) {
+        axios({
+          url: `/questions/${this.token}/checkDuplicatedQuestions`,
+          method: "POST",
+          data: subject,
+          headers: {
+            'Accept': 'application/vnd.edusoho.v2+json',
+            'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'),
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        }).then(res => {
+          this.repeatList = []
+          this.duplicatedIds = res.data.duplicatedIds
+
+          for (const key in res.data.duplicatedIds) {	
+            this.repeatList.push(Number(key));
+          }
+        });
+      
+      },
+      getEditRepeatQuestion(subject) {
+        this.getInitRepeatQuestion(subject)
+      },
+      renderFormula() {
+        this.$nextTick(()=> {
+          renderKatex()
+        })
       }
     }
   }
