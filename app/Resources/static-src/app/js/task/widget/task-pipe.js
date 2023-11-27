@@ -100,7 +100,7 @@ export default class TaskPipe {
 
     window.onbeforeunload = () => {
       this._clearInterval();
-      this._flush();
+      // this._flush();
       if (this.sign.length > 0) {
         localStorage.setItem('flowSign', this.sign);
       }
@@ -179,7 +179,6 @@ export default class TaskPipe {
         this._doing(param);
       }).catch((error) => {
         if(JSON.parse(error.responseText).error.code == '5001620') {
-          this._clearInterval();
           window.location.href = `/my/course/${this.courseId}`
           return
         }
