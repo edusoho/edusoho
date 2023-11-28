@@ -14,7 +14,7 @@
                 <question-item />
             </div>
             <div class="question-foot">
-                <a-button class="mr10">编辑</a-button>
+                <a-button @click="onEdit" class="mr10">编辑</a-button>
                 <a-button @click="confirm">删除</a-button>
             </div>
 
@@ -61,6 +61,9 @@ export default {
                 onCancel() {console.log("取消")}
             });
          },
+         onEdit() {
+            window.location.href = `/question_bank/${$("[name=questionBankId]").val()}/duplicative_question/1/update`
+         }
     }
 }
 </script>

@@ -11,19 +11,21 @@
        <div class="duplicate-body flex">
         <div class="duplicate-question">
             <div class="duplicate-question-head">
-                共有重复题目:<label class="duplicate-question-count">4</label>道
+                共有重复题目:<label class="duplicate-question-count">{{ questionData.length }}</label>道
                 <div v-show="isShowGuide" class="duplicate-question-item duplicate-question-active">
                     <div class="duplicate-question-title">
-                        《诗经》的表现手法归纳为赋、比、兴，其中（ ）的手法是铺
+                        {{ questionData[0].material }}
                     </div>
-                    <span class="duplicate-question-check-count">10次</span>
+                    <span class="duplicate-question-check-count">{{ questionData[0].frequency }}次</span>
                 </div>
             </div>
             <duplicate-question-item 
-                v-for="(item, index) in 5" 
+                v-for="(item, index) in questionData" 
                 :active="index == activeKey"
                 :id="index"
                 :key="index"
+                :count="item.frequency"
+                :title="item.material"
                 @changeOption="changeOption" />
         </div>
         <div class="duplicate-content">
@@ -64,20 +66,27 @@ export default {
           },
           isHaveRepeat: true,
           isShowGuide: false,
+          questionData:[
+            {
+                material: '',
+                frequency: ''
+            }
+          ]
         }
     },
     components:{
         DuplicateQuestionItem,
         DuplicateQuestionContent
     },
-    mounted() {
-        console.log(this.$route)
+    async mounted() {
+        await this.getData()
+        await this.changeOption()
         if(!store.get('QUESTION_IMPORT_INTRO')) { 
             this.isShowGuide = true
 
             this.$nextTick(() => {
                 this.initGuide()
-        })
+            })
         }
     },
     methods:{
@@ -104,14 +113,20 @@ export default {
                         store.set('DUPLICATE_IMPORT_INTRO', true);
                     })
         },
-        changeOption(activeKey){
+        async changeOption(activeKey=0){
             this.activeKey = activeKey;
+            let formData = new FormData();
+            formData.append('material', this.questionData[activeKey].material);
+            await Repeat.getRepeatQuestionInfo($("[name=questionBankId]").val(), formData).then(res => {
+                console.log(res)
+            })
         },
         goBack() {
             window.history.back();
         },
-        getData() {
-            Repeat.getRepeatQuestion(this.courseId, { }).then(res => {
+        async getData() {
+            await Repeat.getRepeatQuestion($("[name=questionBankId]").val(), { categoryId: $("[name=categoryId]").val() }).then(res => {
+                this.questionData = res
       });
         }
     }

@@ -1,9 +1,9 @@
 <template>
     <div class="duplicate-question-item" @click="changeOption" :class="active ? 'duplicate-question-active' : ''">
         <div class="duplicate-question-title">
-            《诗经》的表现手法归纳为赋、比、兴，其中（ ）的手法是铺
+            {{ title }}
         </div>
-        <span class="duplicate-question-check-count">10次</span>
+        <span class="duplicate-question-check-count">{{count}}次</span>
     </div>
 </template>
 <script>
@@ -18,6 +18,14 @@ export default {
             type: Number,
             default: 0
         },
+        count: {
+            type: String,
+            default: ''
+        },
+        title: {
+            type: String,
+            default: ''
+        }
     },
     methods: {
         // 切换课程选项
