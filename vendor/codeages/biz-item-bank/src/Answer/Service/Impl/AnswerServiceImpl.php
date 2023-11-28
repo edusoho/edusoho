@@ -387,7 +387,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $answerRecord['id'],
             [
                 'answer_report_id' => $answerReport['id'],
-                'status' => $isFinished ? AnswerService::ANSWER_RECORD_STATUS_FINISHED : AnswerService::ANSWER_RECORD_STATUS_REVIEWING,
+                'status' => $isFinished ? AnswerRecordStatus::FINISHED : AnswerRecordStatus::REVIEWING,
                 'end_time' => time(),
                 'used_time' => $usedTime ?: time() - $answerRecord['created_time'],
             ]
