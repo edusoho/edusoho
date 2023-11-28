@@ -26,6 +26,7 @@ class ItemFilter extends Filter
         'includeImg',
         'attachments',
         'questions',
+        'updated_time',
     ];
 
     protected function publicFields(&$item)
