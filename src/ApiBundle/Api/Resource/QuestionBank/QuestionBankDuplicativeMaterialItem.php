@@ -7,11 +7,12 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
-class QuestionBankDuplicativeMaterial extends AbstractResource
+class QuestionBankDuplicativeMaterialItem extends AbstractResource
 {
-    public function search(ApiRequest $request, $id)
+    public function add(ApiRequest $request, $id)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw UserException::PERMISSION_DENIED();
@@ -20,8 +21,13 @@ class QuestionBankDuplicativeMaterial extends AbstractResource
         if (empty($questionBank['itemBank'])) {
             throw QuestionBankException::NOT_FOUND_BANK();
         }
+        $items = $this->getItemService()->findDuplicatedMaterialItems($questionBank['itemBankId'], $request->request->get('material'));
+        $categories = $this->getItemCategoryService()->findItemCategoriesByIds(array_column($items, 'category_id'));
+        foreach ($items as &$item) {
+            $item['category_name'] = empty($categories[$item['category_id']]) ? '' : $categories[$item['category_id']]['name'];
+        }
 
-        return $this->getItemService()->findDuplicatedMaterials($questionBank['itemBankId'], $request->query->get('categoryId', ''));
+        return $items;
     }
 
     /**
@@ -38,5 +44,13 @@ class QuestionBankDuplicativeMaterial extends AbstractResource
     private function getItemService()
     {
         return $this->service('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return ItemCategoryService
+     */
+    private function getItemCategoryService()
+    {
+        return $this->service('ItemBank:Item:ItemCategoryService');
     }
 }

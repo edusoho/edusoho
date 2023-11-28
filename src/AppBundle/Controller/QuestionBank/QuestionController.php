@@ -305,7 +305,44 @@ class QuestionController extends BaseController
 
     public function checkDuplicativeQuestionsAction(Request $request, $id)
     {
-        return $this->render('question-manage/duplicative-questions.html.twig');
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+        $categoryId = $request->query->get('categoryId', '');
+        if ($categoryId) {
+            $category = $this->getItemCategoryService()->getItemCategory($categoryId);
+        }
+
+        return $this->render('question-manage/duplicative-questions.html.twig', [
+            'questionBankId' => $id,
+            'categoryId' => $categoryId,
+            'categoryName' => $category['name'] ?? '',
+        ]);
+    }
+
+    public function updateDuplicativeQuestionAction(Request $request, $id, $questionId)
+    {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
+        $item = $this->getItemService()->getItemWithQuestions($questionId, true);
+        if (empty($item) || $item['bank_id'] != $questionBank['itemBankId']) {
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
+        }
+        $item = $this->wrapperItem($item);
+
+        return $this->render('question-manage/update-duplicative-question.html.twig', [
+            'questionBank' => $questionBank,
+            'item' => $this->addItemEmphasisStyle($item),
+            'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($item['bank_id']),
+            'goto' => $this->generateUrl('question_bank_manage_check_duplicative_questions', ['id' => $id]),
+        ]);
     }
 
     public function deleteQuestionsAction(Request $request, $id)

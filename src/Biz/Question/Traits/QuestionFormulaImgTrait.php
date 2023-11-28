@@ -6,7 +6,7 @@ trait QuestionFormulaImgTrait
 {
     private function convertFormulaToImg($question)
     {
-        $question = preg_replace_callback('/<span( data-display)?(.*?) data-tex=\\\\"(.*?)\\\\"( data-display)? data-img=\\\\"(.*?)\\\\"><\\\\\/span>/', function ($match) {
+        $question = preg_replace_callback('/<span( data-display)?([^>]*?) data-tex=\\\\"(.*?)\\\\"( data-display)? data-img=\\\\"(.*?)\\\\"><\\\\\/span>/', function ($match) {
             return "<img src=\\\"$match[5]\\\">";
         }, json_encode($question));
 
