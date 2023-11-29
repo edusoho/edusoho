@@ -638,35 +638,6 @@ class CourseManageController extends BaseController
         );
     }
 
-    protected function hideCourse($courseId, $courseSetId)
-    {
-        $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $displayCourses = $this->getCourseService()->findDisplayCoursesByCourseSetId($courseSetId, '1');
-        if (1 == count($displayCourses)) {
-            $this->getCourseSetService()->hideCourseSet($courseSet['id']);
-        } else {
-            $displayIds = array_column(array_filter($displayCourses, function ($item) {
-                return 1 == $item['display'];
-            }), 'id');
-            $filteredIds = array_diff($displayIds, [$courseId]);
-            if (!empty($filteredIds)) {
-                $this->getCourseSetService()->updateDefaultCourse($courseSet['id'], reset($filteredIds));
-            }
-        }
-        $this->getCourseService()->hideCourse($courseId, 'published' == $courseSet['status']);
-    }
-
-    protected function showCourse($courseId, $courseSetId)
-    {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $displayCourses = $this->getCourseService()->findDisplayCoursesByCourseSetId($courseSetId, '0');
-        if (1 == count($displayCourses)) {
-            $this->getCourseSetService()->showCourseSet($courseSet['id']);
-        }
-        $this->getCourseService()->showCourse($courseId, 'published' == $courseSet['status']);
-    }
-
     protected function setVipRight($course, $data)
     {
         $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $course['id']);
@@ -925,39 +896,6 @@ class CourseManageController extends BaseController
         }
 
         return $this->createJsonResponse(['warn' => false]);
-    }
-
-    public function showAction(Request $request, $courseSetId, $courseId)
-    {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $displayCourses = $this->getCourseService()->findDisplayCoursesByCourseSetId($courseSetId, '1');
-        if (1 == count($displayCourses)) {
-            $this->getCourseSetService()->showCourseSet($courseSet['id']);
-        }
-        $this->getCourseService()->showCourse($courseId, 'published' == $courseSet['status']);
-
-        return $this->createJsonResponse(['success' => true]);
-    }
-
-    public function hideAction(Request $request, $courseSetId, $courseId)
-    {
-        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $displayCourses = $this->getCourseService()->findDisplayCoursesByCourseSetId($courseSetId, '1');
-        if (1 == count($displayCourses)) {
-            $this->getCourseSetService()->hideCourseSet($courseSet['id']);
-        } else {
-            $displayIds = array_column(array_filter($displayCourses, function ($item) {
-                return 1 == $item['display'];
-            }), 'id');
-            $filteredIds = array_diff($displayIds, [$courseId]);
-            if (!empty($filteredIds)) {
-                $this->getCourseSetService()->updateDefaultCourse($courseSet['id'], reset($filteredIds));
-            }
-        }
-        $this->getCourseService()->hideCourse($courseId, 'published' == $courseSet['status']);
-
-        return $this->createJsonResponse(['success' => true]);
     }
 
     public function closeAction(Request $request, $courseSetId, $courseId)

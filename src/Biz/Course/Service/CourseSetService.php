@@ -298,17 +298,9 @@ interface CourseSetService
 
     public function updateCourseSetRatingNum($id, $fields);
 
-    public function showCourseSet($id);
-
-    public function hideCourseSet($id);
-
     public function banLearningByIds($ids);
 
-    public function hideByIds($ids);
-
     public function canLearningByIds($ids);
-
-    public function showByIds($ids);
 
     public function updateDefaultCourse($courseSetId, $courseId);
 }

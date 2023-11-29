@@ -44,20 +44,6 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $this->db()->fetchAll($sql, [$courseSetTitle]);
     }
 
-    public function showByCourseSetIds($courseSetIds)
-    {
-        $courseSetIds = implode(',', $courseSetIds);
-        $sql = "UPDATE {$this->table} set display = '1' where courseSetId in ({$courseSetIds}) and showable = '1';";
-        $this->db()->executeQuery($sql);
-    }
-
-    public function hideByCourseSetIds($courseSetIds)
-    {
-        $courseSetIds = implode(',', $courseSetIds);
-        $sql = "UPDATE {$this->table} set display = '0' where courseSetId in ({$courseSetIds});";
-        $this->db()->executeQuery($sql);
-    }
-
     public function canLearningByCourseSetIds($courseSetIds)
     {
         $sql = "UPDATE {$this->table} set canLearn = '1' where courseSetId in ({$courseSetIds}) and status = 'published';";
@@ -78,11 +64,6 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         }
 
         return $this->findByFields(['courseSetId' => $courseSetId, 'status' => $status]);
-    }
-
-    public function findCoursesByCourseSetIdAndDisplay($courseSetId, $display = 1)
-    {
-        return $this->findByFields(['courseSetId' => $courseSetId, 'display' => $display]);
     }
 
     public function getDefaultCourseByCourseSetId($courseSetId)
@@ -227,12 +208,6 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         $this->db()->update($this->table, $fields, ['courseSetId' => $courseSetId]);
     }
 
-    public function showByCourseSetId($courseSetIds)
-    {
-        $sql = "UPDATE {$this->table} set display = '1' where courseSetId in ({$courseSetIds}) and showable = '1';";
-        $this->db()->executeQuery($sql);
-    }
-
     public function canLearningByCourseSetId($courseSetIds)
     {
         $courseSetIds = implode(',', $courseSetIds);
@@ -364,8 +339,6 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'course_v8.courseType = :courseType',
                 'course_v8.isDefault = :isDefault',
                 'course_v8.canLearn = :canLearn',
-                'course_v8.showable = :showable',
-                'course_v8.display = :display',
             ],
             'wave_cahceable_fields' => ['hitNum'],
         ];

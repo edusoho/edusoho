@@ -93,20 +93,6 @@ class CourseSetController extends BaseController
         return $this->renderCourseTr($id, $request);
     }
 
-    public function showAction(Request $request, $id)
-    {
-        $this->getCourseSetService()->showCourseSet($id);
-
-        return $this->renderCourseTr($id, $request);
-    }
-
-    public function hideAction(Request $request, $id)
-    {
-        $this->getCourseSetService()->hideCourseSet($id);
-
-        return $this->renderCourseTr($id, $request);
-    }
-
     /*
     code 状态编号
     1:　删除班级课程
