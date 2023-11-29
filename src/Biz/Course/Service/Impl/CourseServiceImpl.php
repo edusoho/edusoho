@@ -313,26 +313,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $goodsSpecs;
     }
 
-    private function hideGoodsSpecs($course)
-    {
-        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
-        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
-        $goodsSpecs = $this->getGoodsService()->updateGoodsSpecsDisplay($goodsSpecs['id'], '0');
-
-        return $goodsSpecs;
-    }
-
-    private function showGoodsSpecs($course)
-    {
-        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
-        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
-        $goodsSpecs = $this->getGoodsService()->updateGoodsSpecsDisplay($goodsSpecs['id'], '1');
-
-        return $goodsSpecs;
-    }
-
     public function copyCourse($newCourse)
     {
         $sourceCourse = $this->tryManageCourse($newCourse['copyCourseId']);
@@ -380,7 +360,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'buyExpiryTime',
                 'learnMode',
                 'buyable',
-                'showable',
                 'expiryStartDate',
                 'expiryEndDate',
                 'expiryMode',

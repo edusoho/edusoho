@@ -2026,14 +2026,14 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 if ('draft' == $classroom['status']) {
                     return;
                 }
-                if ('published' == $classroom['status'] && '1' == $classroom['display']) {
+                if ('published' == $classroom['status']) {
                     $args = [
                         'category' => 'classroom',
                     ];
                     $this->createSearchJob('update', $args);
                 }
 
-                if ('closed' == $classroom['status'] || '0' == $classroom['display']) {
+                if ('closed' == $classroom['status']) {
                     $args = [
                         'category' => 'classroom',
                         'id' => $classroom['id'],

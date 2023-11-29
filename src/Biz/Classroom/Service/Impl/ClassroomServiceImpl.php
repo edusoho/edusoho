@@ -555,7 +555,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'maxRate',
             'buyable',
             'showable',
-            'display',
             'canLearn',
             'orgCode',
             'orgId',

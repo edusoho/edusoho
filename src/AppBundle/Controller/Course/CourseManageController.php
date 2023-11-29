@@ -552,11 +552,6 @@ class CourseManageController extends BaseController
                 'text' => empty($data['drainageText']) ? '' : $data['drainageText'],
             ];
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-            if ('0' == $data['showable']) {
-                $this->hideCourse($courseId, $courseSetId);
-            } else {
-                $this->showCourse($courseId, $courseSetId);
-            }
             if (in_array($courseSet['type'], ['live', 'reservation']) || !empty($courseSet['parentId'])) {
                 $this->getCourseSetService()->updateCourseSet($courseSetId, $data);
                 unset($data['title']);
