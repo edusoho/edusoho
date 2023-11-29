@@ -35,7 +35,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
         if ($reviewedCount >= $assessment['question_count']) {
             $this->getAnswerService()->finishAllSingleAnswer($answerRecord, 'submit');
         }
-
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecord['id']);
         $item = $this->getItemService()->getItemIncludeDeleted($questionReport['item_id']);
         $question = $this->getItemService()->getQuestionIncludeDeleted($questionReport['question_id']);
 

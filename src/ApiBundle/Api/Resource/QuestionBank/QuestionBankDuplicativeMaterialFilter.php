@@ -13,6 +13,6 @@ class QuestionBankDuplicativeMaterialFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        $data['material'] = html_entity_decode($data['material']);
+        $data['displayMaterial'] = str_replace('[[]]', '___', html_entity_decode($data['material']));
     }
 }
