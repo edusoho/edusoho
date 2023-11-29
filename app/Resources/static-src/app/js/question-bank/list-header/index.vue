@@ -69,6 +69,7 @@
 
 <script>
 import Selector from '../common/selector';
+import { Repeat } from 'common/vue/service';
 
 export default {
   data () {
@@ -135,9 +136,20 @@ export default {
   },
 
   methods: {
-    duplicateChecking() {
-      window.location.href = `/question_bank/${$('.js-questionBank-id').val()}/check_duplicative_questions?categoryId=${this.categoryId}`
-      // this.isLoading = !this.isLoading;
+    async duplicateChecking() {
+      this.isLoading = true
+      await Repeat.getRepeatQuestion($("[name=questionBankId]").val(), { categoryId: $("[name=category_id]").val() }).then(res => {
+        this.isLoading = false
+        
+        if(res.length > 0) {
+          window.location.href = `/question_bank/${$('.js-questionBank-id').val()}/check_duplicative_questions?categoryId=${this.categoryId}`
+        } else {
+          this.$message.warning('无重复题目');
+        }
+      }).catch(err => {
+        this.isLoading = false
+        this.$message.warning(err.message);
+      });
     },
     userNameError() {
       const { getFieldError, isFieldTouched } = this.form;

@@ -1,12 +1,13 @@
 <template>
     <div id="duplicate-check">
-       <div class="duplicate-head">
+       <div class="duplicate-head flex items-center">
         <span class="duplicate-back" @click="goBack">
             <a-icon type="left" />
+            <a-icon type="swap-left" />
             返回
         </span>
         <span class="duplicate-divider"></span>
-        <span class="duplicate-title">【全部题目】试题查重</span>
+        <span class="duplicate-title flex items-center"><span class="bankName flex items-center">【<span class="msg">{{ categoryName }}</span>】</span>试题查重</span>
        </div>
        <div class="duplicate-body flex">
         <div class="duplicate-question">
@@ -25,17 +26,42 @@
                 :id="index"
                 :key="index"
                 :count="item.frequency"
-                :title="item.material"
+                :title="item.displayMaterial"
                 @changeOption="changeOption" />
         </div>
         <div class="duplicate-content">
             <div class="duplicate-content-title">题目对比</div>
             <div v-if="isHaveRepeat" class="mt16 flex flex-nowrap">
-                <duplicate-question-content class="mr16" />
-                <duplicate-question-content />
+                <duplicate-question-content
+                    v-if="questionContentList[oneIndex]"
+                    @changeOption="changeOption"
+                    @getData="getData"
+                    @changeQuestion="changeQuestion"
+                    @startQuestion="startQuestion"
+                    type="one"
+                    :activeIndex="oneIndex"
+                    :activeKey="activeKey"
+                    :nextIndex="twoIndex"
+                    :questionContent="questionContentList[oneIndex]" 
+                    :count="questionContentList.length"
+                    class="mr16" />
+                <duplicate-question-content
+                    v-if="questionContentList[twoIndex]"
+                    @changeOption="changeOption"
+                    @getData="getData"
+                    @changeQuestion="changeQuestion"
+                    @startQuestion="startQuestion"
+                    type="two"
+                    :activeIndex="twoIndex"
+                    :activeKey="activeKey"
+                    :nextIndex="oneIndex"
+                    :questionContent="questionContentList[twoIndex]" 
+                    :count="questionContentList.length" />
             </div>
-            <div v-else>
-                数据为空
+            <div v-else class="no-data text-center">
+                <img class="no-data-img" src="/static-dist/app/img/question-bank/noduplicative.png" />
+                <div class="no-data-content">暂无重复题目</div>
+                <button class="return-btn">返回列表</button>
             </div>
         </div>
        </div>
@@ -64,12 +90,22 @@ export default {
                 tooltipClass: 'duplicate-intro',
                 steps: [],
           },
+          oneIndex: 0,
+          twoIndex: 1,
           isHaveRepeat: true,
           isShowGuide: false,
-          questionData:[
+          questionData: [
             {
                 material: '',
-                frequency: ''
+                frequency: '',
+                displayMaterial: ''
+            }
+          ],
+          questionContentList: [
+            {
+                analysis: '',
+                category_name: '',
+                type: '',
             }
           ]
         }
@@ -77,6 +113,21 @@ export default {
     components:{
         DuplicateQuestionItem,
         DuplicateQuestionContent
+    },
+    watch:{
+    },
+    computed:{
+        categoryName() {
+            if ($("[name=categoryName]").val()) {
+                return $("[name=categoryName]").val()
+            }
+
+            if ($("[name=categoryId]").val() === '') {
+                return '全部题目'
+            }
+
+            return '未分类'
+        }
     },
     async mounted() {
         await this.getData()
@@ -113,12 +164,29 @@ export default {
                         store.set('DUPLICATE_IMPORT_INTRO', true);
                     })
         },
+        changeQuestion(type, index) {
+            this[`${type}Index`] = index;
+        }, 
         async changeOption(activeKey=0){
-            this.activeKey = activeKey;
+            const that = this;
+            that.activeKey = activeKey;
             let formData = new FormData();
-            formData.append('material', this.questionData[activeKey].material);
-            await Repeat.getRepeatQuestionInfo($("[name=questionBankId]").val(), formData).then(res => {
-                console.log(res)
+            formData.append('material', that.questionData[activeKey].material);
+            await Repeat.getRepeatQuestionInfo($("[name=questionBankId]").val(), formData).then(async res => {
+                // if(res) {
+                //     that.$error({
+                //         title: '题目不存在',
+                //         content: '该题目可能在题目管理页进行了编辑',
+                //         okText: '确认',
+                //         async onOk() {
+                //             await that.getData()
+                //             await that.changeOption()
+                //         }
+                //     });        
+                // }
+
+                that.questionContentList = res;
+                that.questionData[activeKey].frequency = res.length.toString();
             })
         },
         goBack() {
@@ -127,7 +195,10 @@ export default {
         async getData() {
             await Repeat.getRepeatQuestion($("[name=questionBankId]").val(), { categoryId: $("[name=categoryId]").val() }).then(res => {
                 this.questionData = res
-      });
+            });
+        },
+        startQuestion() {
+            this.activeKey = 0
         }
     }
 }

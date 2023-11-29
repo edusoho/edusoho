@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="ibs-vue">
     <item-preview
-      :item="item"
+      :item="info"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
       :isDownload="isDownload"
@@ -16,6 +16,12 @@
 
 <script>
 export default {
+  props: {
+    info: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {
       item: {

@@ -77,12 +77,20 @@
             height: 12px;
             background-color: #D6D8DA;
             margin: 0 16px;
-            display: inline-block;
         }
 
         .duplicate-title {
             color: #333D47;
             font-weight: 400;
+            .bankName {
+                max-width: 336px;
+                .msg {
+                    width: 100%;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+            }
         }
     }
 
@@ -192,6 +200,11 @@
         background-color: #fff;
     }
 
+    .numbering-active {
+        border: 1px solid #46C37B;
+        background: rgba(70, 195, 123, 0.05);
+    }
+
     .question-content {
         min-height: 570px;
         border: 1px solid #DCDEE0;
@@ -245,7 +258,38 @@
         width: 100%;
     }
 
+    .no-data {
+        margin-top: 242px;
+    }
+
+    .no-data-img {
+        width: 121px;
+        height: 99px;
+    }
+
+    .no-data-content {
+        margin: 8px 0;
+        color: #37393D;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 22px;
+    }
+
+    .return-btn {
+        margin-top: 8px;
+        padding: 4px 15px;
+        border-radius: 4px;
+        background: #46C37B;
+        color: #fff;
+        border: none;
+        &:hover {
+            box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.04);
+        }
+    }
+
     button[disabled] {
         cursor: not-allowed;
+        color: #D2D3D4;
     }
 }

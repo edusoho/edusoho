@@ -10,6 +10,10 @@ Vue.filter('trans', function (value, params) {
   return Translator.trans(value, params);
 });
 
+Vue.filter('stripTags', function(text) {
+  return text.replace(/<[^>]*>/g, '');
+});
+
 new Vue({
   el: '#app',
   render: createElement => createElement(DuplicativeQuestions)

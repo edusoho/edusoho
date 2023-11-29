@@ -1,13 +1,17 @@
 import Vue from 'vue/dist/vue.esm.js';
-import { Button, Message, Modal, Icon } from '@codeages/design-vue';
+import { Icon, Button, Message, Modal } from '@codeages/design-vue';
 
+Vue.use(Icon)
 Vue.use(Button)
 Vue.use(Modal)
-Vue.use(Icon)
 
-
-Vue.prototype.$confirm = Modal.confirm;
 Vue.prototype.$message = Message;
+Vue.prototype.$info = Modal.info;
+Vue.prototype.$success = Modal.success;
+Vue.prototype.$error = Modal.error;
+Vue.prototype.$warning = Modal.warning;
+Vue.prototype.$confirm = Modal.confirm;
+Vue.prototype.$destroyAll = Modal.destroyAll;
 
 
 window.Vue = Vue;
