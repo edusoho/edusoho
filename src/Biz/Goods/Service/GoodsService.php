@@ -50,8 +50,6 @@ interface GoodsService
 
     public function unpublishGoodsSpecs($id);
 
-    public function updateGoodsSpecsDisplay($id, $display);
-
     public function countGoodsSpecs($conditions);
 
     public function searchGoodsSpecs($conditions, $orderBys, $start, $limit, $columns = []);

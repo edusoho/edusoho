@@ -31,7 +31,6 @@ class AppChannel extends AbstractResource
         $conditions = [
             'status' => 'published',
             'parentId' => 0,
-            'display' => 1,
             'type' => 'normal',
         ];
         $latestCourseSets = $courseSets = $this->getCourseSetService()->searchCourseSets(

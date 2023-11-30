@@ -109,11 +109,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, 'published');
     }
 
-    public function findDisplayCoursesByCourseSetId($courseSetId, $display)
-    {
-        return $this->getCourseDao()->findCoursesByCourseSetIdAndDisplay($courseSetId, $display);
-    }
-
     public function getDefaultCourseByCourseSetId($courseSetId)
     {
         return $this->getCourseDao()->getDefaultCourseByCourseSetId($courseSetId);
@@ -318,26 +313,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $goodsSpecs;
     }
 
-    private function hideGoodsSpecs($course)
-    {
-        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
-        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
-        $goodsSpecs = $this->getGoodsService()->updateGoodsSpecsDisplay($goodsSpecs['id'], '0');
-
-        return $goodsSpecs;
-    }
-
-    private function showGoodsSpecs($course)
-    {
-        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
-        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
-        $goodsSpecs = $this->getGoodsService()->updateGoodsSpecsDisplay($goodsSpecs['id'], '1');
-
-        return $goodsSpecs;
-    }
-
     public function copyCourse($newCourse)
     {
         $sourceCourse = $this->tryManageCourse($newCourse['copyCourseId']);
@@ -385,7 +360,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'buyExpiryTime',
                 'learnMode',
                 'buyable',
-                'showable',
                 'expiryStartDate',
                 'expiryEndDate',
                 'expiryMode',
@@ -826,8 +800,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::UNPUBLISHED_COURSE());
         }
         $course['status'] = 'closed';
-        $course['showable'] = '0';
-        $course['display'] = '0';
         $course['canLearn'] = '0';
 
         try {
@@ -842,11 +814,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 if ('published' === $courseSet['status']) {
                     $this->getCourseSetService()->closeCourseSet($course['courseSetId']);
                 }
-            }
-            // 如果课程下没有已展示的教学计划，关闭此课程页面展示
-            $displayCourses = $this->findDisplayCoursesByCourseSetId($course['courseSetId'], '1');
-            if (empty($displayCourses)) {
-                $this->getCourseSetService()->hideCourseSet($course['courseSetId']);
             }
             $this->commit();
             $this->dispatchEvent('course.close', new Event($course));
@@ -864,8 +831,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $id,
             [
                 'status' => 'published',
-                'showable' => '1',
-                'display' => '1',
                 'canLearn' => '1',
             ]
         );
@@ -3119,36 +3084,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->tryManageCourse($courseId, $courseSetId);
     }
 
-    public function showCourse($id, $courseSetIsPublished)
-    {
-        $course = $this->tryManageCourse($id);
-        if ('published' != $course['status']) {
-            $this->createNewException(CourseException::UNPUBLISHED_COURSE());
-        }
-        if ($courseSetIsPublished) {
-            $course['display'] = '1';
-        }
-        $course['showable'] = '1';
-
-        $this->getCourseDao()->update($id, $course);
-        $this->showGoodsSpecs($course);
-    }
-
-    public function hideCourse($id, $courseSetIsPublished)
-    {
-        $course = $this->tryManageCourse($id);
-        if ('published' != $course['status']) {
-            $this->createNewException(CourseException::UNPUBLISHED_COURSE());
-        }
-        if ($courseSetIsPublished) {
-            $course['display'] = '0';
-        }
-        $course['showable'] = '0';
-
-        $this->getCourseDao()->update($id, $course);
-        $this->hideGoodsSpecs($course);
-    }
-
     public function banLearningByCourseSetId($courseSetId)
     {
         $this->getCourseDao()->updateByCourseSetId($courseSetId, ['canLearn' => '0']);
@@ -3157,26 +3092,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function canLearningByCourseSetId($courseSetId)
     {
         $this->getCourseDao()->canLearningByCourseSetId($courseSetId);
-    }
-
-    public function hideByCourseSetId($courseSetId)
-    {
-        $this->getCourseDao()->updateByCourseSetId($courseSetId, ['display' => '0']);
-    }
-
-    public function showByCourseSetId($courseSetId)
-    {
-        $this->getCourseDao()->showByCourseSetId($courseSetId);
-    }
-
-    public function hideByCourseSetIds($courseSetIds)
-    {
-        $this->getCourseDao()->hideByCourseSetIds($courseSetIds);
-    }
-
-    public function showByCourseSetIds($courseSetIds)
-    {
-        $this->getCourseDao()->showByCourseSetIds($courseSetIds);
     }
 
     public function banLearningByCourseSetIds($courseSetIds)

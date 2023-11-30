@@ -5242,7 +5242,6 @@ admin.course_manage.manage.price: 价格
 admin.course_manage.manage.serialize_mode: 连载状态
 admin.course_manage.manage.status: 课程状态
 admin.course_manage.manage.creator: 创建者/时间
-admin.course_manage.manage.showable: 前台展示
 admin.course_manage.manage.manage_btn: 管理
 admin.course_manage.manage.empty: 暂无课程记录
 admin.course_manage.manage.category: 分类

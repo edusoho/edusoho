@@ -29,8 +29,6 @@ interface CourseService
 
     public function findPublishedCoursesByCourseSetId($courseSetId);
 
-    public function findDisplayCoursesByCourseSetId($courseSetId, $display);
-
     public function findCoursesByCourseSetId($courseSetId);
 
     public function findCoursesByCategoryIds($categoryIds);
@@ -382,21 +380,9 @@ interface CourseService
 
     public function findLessonIds($courseId, $type, $chapterId);
 
-    public function showCourse($id, $courseSetIsPublished);
-
-    public function hideCourse($id, $courseSetIsPublished);
-
     public function banLearningByCourseSetId($courseSetId);
 
     public function canLearningByCourseSetId($courseSetId);
-
-    public function hideByCourseSetId($courseSetId);
-
-    public function showByCourseSetId($courseSetId);
-
-    public function hideByCourseSetIds($courseSetIds);
-
-    public function showByCourseSetIds($courseSetIds);
 
     public function banLearningByCourseSetIds($courseSetIds);
 

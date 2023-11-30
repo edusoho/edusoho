@@ -21,7 +21,6 @@ class Classrooms extends BaseProvider
         $conditions['status'] = 'published';
         $conditions['parentId'] = 0;
         $conditions['updatedTime_GE'] = $cursor;
-        $conditions['display'] = '1';
         $classrooms = $this->getClassroomService()->searchClassrooms($conditions, ['updatedTime' => 'ASC'], $start, $limit);
         $classrooms = $this->build($classrooms);
         $next = $this->nextCursorPaging($cursor, $start, $limit, $classrooms);

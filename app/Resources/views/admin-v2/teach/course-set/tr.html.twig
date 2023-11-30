@@ -88,17 +88,6 @@
     <br>
     <span class="text-muted text-sm">{{ courseSet.createdTime|date('Y-n-d H:i') }}</span>
   </td>
-  <td>
-    {% if courseSet.status=='published' %}
-      {% if courseSet.showable == 1 %}
-        {{ 'common.course.showable.show'|trans }}
-      {% else %}
-        {{ 'common.course.showable.hide'|trans }}
-      {% endif %}
-    {% else %}
-      <span class="color-gray"> -- </span>
-    {% endif %}
-  </td>
   <td>{{ dict_macro.courseStatus( courseSet.status) }}<br>
     {% if filter != 'open' and filter != 'liveOpen' %}
       <span class="text-muted text-sm">{{ dict_text('courseSerializeMode',courseSet.serializeMode) }}</span>

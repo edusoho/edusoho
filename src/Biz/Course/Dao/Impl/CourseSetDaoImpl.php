@@ -83,24 +83,10 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
         $this->db()->executeQuery($sql);
     }
 
-    public function hideByIds($ids)
-    {
-        $ids = implode(',', $ids);
-        $sql = "UPDATE {$this->table} set display = '0' where id in ({$ids})";
-        $this->db()->executeQuery($sql);
-    }
-
     public function canLearningByIds($ids)
     {
         $ids = implode(',', $ids);
         $sql = "UPDATE {$this->table} set canLearn = '1' where id in ({$ids}) and status = 'published'";
-        $this->db()->executeQuery($sql);
-    }
-
-    public function showByIds($ids)
-    {
-        $ids = implode(',', $ids);
-        $sql = "UPDATE {$this->table} set display = '1' where id in ({$ids}) and showable = '1'";
         $this->db()->executeQuery($sql);
     }
 
@@ -158,7 +144,6 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
                 'locked = :locked',
                 'platform = :platform',
                 'isClassroomRef = :isClassroomRef',
-                'display = :display',
             ],
             'serializes' => [
                 'goals' => 'delimiter',

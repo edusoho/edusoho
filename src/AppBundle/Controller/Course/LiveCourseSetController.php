@@ -280,7 +280,6 @@ class LiveCourseSetController extends CourseBaseController
         $vipCourseConditions = [
             'status' => 'published',
             'parentId' => 0,
-            'display' => '1',
         ];
 
         if (!empty($vipLevelId)) {
@@ -312,7 +311,6 @@ class LiveCourseSetController extends CourseBaseController
             'type' => 'live',
             'ids' => $futureLiveCourseSetIds,
             'categoryId' => $categoryId,
-            'display' => '1',
         ];
         $futureLiveCourseSets = $this->getCourseSetService()->searchCourseSets(
             $condition,
@@ -366,7 +364,6 @@ class LiveCourseSetController extends CourseBaseController
             'status' => 'published',
             'type' => 'live',
             'parentId' => 0,
-            'display' => '1',
         ];
         $publishedCourseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
