@@ -874,6 +874,8 @@ t.add("admin.index.finished_task_count", "\u5b66\u4e60\u4efb\u52a1\u6570", "js",
 t.add("admin.index.notify_teacher_success", "\u63d0\u9192\u6559\u5e08\u7684\u901a\u77e5\uff0c\u53d1\u9001\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.index.upgrade_acceptance_hint", "\u5347\u7ea7\u53d7\u7406\u4e2d", "js", "zh_CN");
 t.add("admin.user.cloude_sms_enable_hint", "\u8bf7\u5148\u5230\u3010\u7ba1\u7406\u540e\u53f0\u3011-\u3010\u4e91\u5e02\u573a\u3011-\u3010\u4e91\u670d\u52a1\u3011-\u3010\u4e91\u77ed\u4fe1\u8bbe\u7f6e\u3011\u4e2d\u5f00\u542f\u4e91\u77ed\u4fe1\u54e6~", "js", "zh_CN");
+t.add("admin.courseSet.delist.success_hint", "\u8ba1\u5212\u4e0b\u67b6\u6210\u529f", "js", "zh_CN");
+t.add("admin.courseSet.delist.fail_hint", "\u8ba1\u5212\u4e0b\u67b6\u5931\u8d25", "js", "zh_CN");
 t.add("admin.account_center.cash_income", "\u73b0\u91d1\u6536\u5165", "js", "zh_CN");
 t.add("admin.account_center.coin_income", "\u865a\u62df\u5e01\u6536\u5165", "js", "zh_CN");
 t.add("admin.analysis.classroom_income", "\u73ed\u7ea7\u8425\u6536\u989d", "js", "zh_CN");

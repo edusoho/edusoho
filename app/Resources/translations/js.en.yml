@@ -1085,7 +1085,8 @@ admin.index.finished_task_count: finished task count
 admin.index.notify_teacher_success: remind the teacher's notice and send it successfully!
 admin.index.upgrade_acceptance_hint: Upgrade acceptance
 admin.user.cloude_sms_enable_hint: please go to【Admin】-【App Cente】-【Cloud service】-【Cloud Sms Setting】open cloud sms first.
-
+admin.courseSet.delist.success_hint: The plan was removed successfully
+admin.courseSet.delist.fail_hint: The plan was not removed successfully
 admin.account_center.cash_income: cash income
 admin.account_center.coin_income: coin income
 admin.analysis.classroom_income: classroom income

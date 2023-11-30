@@ -1025,7 +1025,8 @@ admin.index.finished_task_count: 学习任务数
 admin.index.notify_teacher_success: 提醒教师的通知，发送成功！
 admin.index.upgrade_acceptance_hint: 升级受理中
 admin.user.cloude_sms_enable_hint: 请先到【管理后台】-【云市场】-【云服务】-【云短信设置】中开启云短信哦~
-
+admin.courseSet.delist.success_hint: 计划下架成功
+admin.courseSet.delist.fail_hint: 计划下架失败
 admin.account_center.cash_income: 现金收入
 admin.account_center.coin_income: 虚拟币收入
 admin.analysis.classroom_income: 班级营收额

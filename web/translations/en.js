@@ -933,6 +933,8 @@ t.add("admin.index.finished_task_count", "finished task count", "js", "en");
 t.add("admin.index.notify_teacher_success", "remind the teacher's notice and send it successfully!", "js", "en");
 t.add("admin.index.upgrade_acceptance_hint", "Upgrade acceptance", "js", "en");
 t.add("admin.user.cloude_sms_enable_hint", "please go to\u3010Admin\u3011-\u3010App Cente\u3011-\u3010Cloud service\u3011-\u3010Cloud Sms Setting\u3011open cloud sms first.", "js", "en");
+t.add("admin.courseSet.delist.success_hint", "The plan was removed successfully", "js", "en");
+t.add("admin.courseSet.delist.fail_hint", "The plan was not removed successfully", "js", "en");
 t.add("admin.account_center.cash_income", "cash income", "js", "en");
 t.add("admin.account_center.coin_income", "coin income", "js", "en");
 t.add("admin.analysis.classroom_income", "classroom income", "js", "en");
