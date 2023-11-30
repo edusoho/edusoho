@@ -289,8 +289,8 @@ admin_v2:
                                         admin_v2_classroom_unpublished:
                                             name: admin_v2.course.classroom.basic_tab.unpublished_btn
                                             mode: none
-                                            class: hide-classroom
-                                            icon: 'es-icon es-icon-show-page'
+                                            class: delist-classroom
+                                            icon: 'es-icon es-icon-delist'
                                             group: groupButton
                                             router_params:
                                                 id: (classroom.id)
