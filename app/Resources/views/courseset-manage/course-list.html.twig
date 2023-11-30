@@ -40,23 +40,13 @@
             </li>
             {% if course.status|default('') == 'published' %}
               {% if courseSet.platform|default('self') == 'self' %}
-              {% if course.showable == '0' %}
-                  <li>
-                    <a href="javascript:;"
-                      class="js-show-course"
-                      data-url="{{ path('course_set_manage_course_show', {courseSetId: courseSet.id, courseId: course.id}) }}">
-                     {{'course.teaching_plan.show_page'|trans}}
-                    </a>
-                  </li>
-                  {% else %}
                   <li>
                     <a href="javascript:;"
                       class="js-hide-course"
-                      data-url="{{ path('course_set_manage_course_hide', {courseSetId: courseSet.id, courseId: course.id}) }}">
+                      data-url="{{ path('course_set_manage_course_unpublished', {courseSetId: courseSet.id, courseId: course.id}) }}">
                         {{'course.teaching_plan.hide_page'|trans}}
                     </a>
                   </li>
-              {% endif %}
               
               
                 <li>

@@ -170,9 +170,9 @@ admin_v2:
                                                 id: (courseSet.id)
                                                 filter: (filter)
                                             group: groupButton
-                                            icon: 'es-icon es-icon-show-page'
+                                            icon: 'es-icon es-icon-delist'
                                             mode: none
-                                            class: show-course
+                                            class: delist-course
                                             visible: (courseSet.status == 'published')
                                         admin_v2_course_set_clone:
                                             name: admin_v2.course.basic.basic_tab.clone_btn
@@ -394,8 +394,8 @@ admin_v2:
                                             router_params:
                                                 id: (exercise.id)
                                             group: groupButton
-                                            class: show-exercise
-                                            icon: 'es-icon es-icon-show-page'
+                                            class: delist-exercise
+                                            icon: 'es-icon es-icon-delist'
                                             mode: none
                                             visible: (exercise.status == 'published')
                                         admin_v2_item_bank_exercise_publish:

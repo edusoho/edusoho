@@ -40,7 +40,8 @@ site.video.quality.quota: Video
 site.video.quality.low: Smooth
 site.video.quality.normal: Standard
 site.video.quality.high: High Definition
-
+site.tips: Tips
+site.tips.delist: Confirm removal?
 site.incorrect.password: Incorrect password
 user.settings.security.mobile_bind.success: Bind mobile successfully
 user.settings.security.mobile_bind.fail: Bind mobile fail
@@ -551,11 +552,11 @@ course.manage.max_student_num_error_hint: Please enter the number of courses
 course.manage.max_year_error_hint: Please enter a value less than 7300 (20 years)
 course.manage.max_capacity_hint: The site can support up to %capacity% people to participate in the live at the same time, you can set a larger value, but then may lead to students can not enter the live.
 course.manage.publish_hint: Are you sure you want to publish the program?
-course.manage.publish_title: Publish teaching plan
+course.manage.publish_title: Confirm the release?
 course.manage.publish_success_hint: The program was published successfully
 course.manage.publish_fail_hint: Publish program failed
 course.manage.close_hint: Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation
-course.manage.hide_hint: After closing, the course plan will be completely hidden and students will not be able to view it on the front-end.
+course.manage.hide_hint: The program will not be displayed at the front desk after it is removed, and students will not be able to view it
 course.manage.close_success_hint: closed successfully
 course.manage.close_fail_hint: Close failed
 course.manage.show_success_hint: Enabled successfully
@@ -1212,9 +1213,11 @@ admin.course.cancel_recommend_success_hint: Course recommendation has been cance
 admin.course.close_course_hint: Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation.
 admin.course.close_success_hint: Course was closed successfully!
 admin.course.hide_course_hint: After hiding, the course will be completely hidden and students will not be able to view it on the front-end.
+admin.course.delist_course_hint: After the course is removed, it will not be displayed at the front desk and students will not be able to view it
 admin.course.hide_success_hint: Course hidden successfully!
 admin.course.show_success_hint: Page enabled!
-admin.course.publish_hint: Are you sure you want to publish this course?
+admin.course.delist_success_hint: Course removed successfully!
+admin.course.publish_hint: Confirm the release?
 admin.course.publish_success_hint: The course was published successfully!
 admin.course.unknow_error_hint: unknown mistake
 admin.course.delete_hint: Delete a course will delete the chapters, class hours, students, etc. of the course. Really want to delete the course?
@@ -1510,12 +1513,13 @@ admin.shortcut_delete_success_hint: Delete frequently used links successfully!
 admin.item_bank_exercise.exercise.close_hint: After the itembank exercise is closed, students who are still in the validity period will be able to continue their studies.
 admin.item_bank_exercise.exercise.close_success_hint: Close successfully
 admin.item_bank_exercise.exercise.hide_hint: After hiding, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.
+admin.item_bank_exercise.exercise.delist_hint: After the question bank contact is removed from the shelves, it will not be displayed at the front desk, and students can not view it.
 admin.item_bank_exercise.exercise.hide_success_hint: Item bank exercise display hidden successfully.
 admin.item_bank_exercise.exercise.show_success_hint: Item bank exercise display enabled successfully.
 admin.item_bank_exercise.exercise.recommend_success_hint: Successfully set recommended item bank!
 admin.item_bank_exercise.exercise.recommend_fail_hint: Failed to set recommended item bank!
 admin.item_bank_exercise.exercise.cancel_recommend_success_hint: The item bank exercise recommendation has been cancelled!
-admin.item_bank_exercise.exercise.publish_hint: Are you sure you want to publish the current exercise?
+admin.item_bank_exercise.exercise.publish_hint: Confirm the release?
 admin.item_bank_exercise.exercise.publish_success_hint: The item bank exercise recommendation has been published!
 admin.item_bank_exercise.exercise.delete_hint: Delete item bank exercises, delete module settings, trainees and other information. Do you really want to delete this exercise bank?
 

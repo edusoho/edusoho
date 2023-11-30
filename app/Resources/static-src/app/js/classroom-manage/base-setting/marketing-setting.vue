@@ -23,7 +23,7 @@
                 <el-col span="4" class="mlm">{{ 'site.currency.CNY'|trans }}</el-col>
             </el-form-item>
 
-            <el-form-item :label="'classroom.show_page_label'|trans()">
+            <!-- <el-form-item :label="'classroom.show_page_label'|trans()">
                 <el-radio v-model="form.showable"
                           v-for="item in isShowStatusRadios"
                           :key="item.value"
@@ -33,7 +33,7 @@
                 <div class="help-block">
                     {{ 'classroom.show_page_tips'|trans }}
                 </div>
-            </el-form-item>
+            </el-form-item> -->
 
             <el-form-item :label="'classroom.buy_label'|trans({'name':classroomLabel})">
                 <el-radio v-model="form.buyable"

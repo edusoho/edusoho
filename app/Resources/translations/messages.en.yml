@@ -82,6 +82,7 @@ site.default.mobile: mobile
 site.org.belongs_to_org_th: Organiztion
 site.org.code: Code
 site.tips: Tips
+site.tips.delist: Confirm removal?
 site.qrcode_tips: Scan
 site.tips.scan_qrcode_tips: 'Scan the QR code to continue, the code will be expired in half an hour'
 site.tips.exercise_qrcode_tips: 'Scan the QR code on the right and go to the mobile terminal to learn'

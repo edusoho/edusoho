@@ -2292,10 +2292,10 @@ course_set_manage_course_close:
         _controller: 'AppBundle:Course/CourseManage:close'
     methods:
         - POST
-course_set_manage_course_hide:
-    path: '/course_set/{courseSetId}/course/{courseId}/hide'
+course_set_manage_course_unpublished:
+    path: '/course_set/{courseSetId}/course/{courseId}/unpublished'
     defaults:
-        _controller: 'AppBundle:Course/CourseManage:hide'
+        _controller: 'AppBundle:Course/CourseManage:unpublished'
     methods:
         - POST
 course_set_manage_course_show:

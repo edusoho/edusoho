@@ -4,8 +4,7 @@ export const publish = (element, info) => {
 
     let confirmPublish = function() {
       cd.confirm({
-        title: Translator.trans(info.title),
-        content: Translator.trans(info.hint),
+        title: '<span class="es-icon es-icon-infooutline" style="color: #FAAD14; margin-right: 16px; font-size: 22px; line-height: 22px;"></span>' + Translator.trans(info.title),
         okText: Translator.trans('site.confirm'),
         cancelText: Translator.trans('site.cancel')
       }).on('ok', () => {

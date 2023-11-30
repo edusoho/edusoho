@@ -31,7 +31,7 @@ export const hideCourse = () => {
   $('body').on('click', '.js-hide-course', (evt) => {
     let $target = $(evt.currentTarget);
     cd.confirm({
-      title: Translator.trans('site.tips'),
+      title: Translator.trans('site.tips.delist'),
       content: Translator.trans('course.manage.hide_hint'),
       okText: Translator.trans('site.confirm'),
       cancelText: Translator.trans('site.cancel')
