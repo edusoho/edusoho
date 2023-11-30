@@ -1025,7 +1025,8 @@ admin.index.finished_task_count: 学习任务数
 admin.index.notify_teacher_success: 提醒教师的通知，发送成功！
 admin.index.upgrade_acceptance_hint: 升级受理中
 admin.user.cloude_sms_enable_hint: 请先到【管理后台】-【云市场】-【云服务】-【云短信设置】中开启云短信哦~
-
+admin.courseSet.delist.success_hint: 计划下架成功
+admin.courseSet.delist.fail_hint: 计划下架失败
 admin.account_center.cash_income: 现金收入
 admin.account_center.coin_income: 虚拟币收入
 admin.analysis.classroom_income: 班级营收额
@@ -1105,9 +1106,12 @@ admin.classroom.choose_success_hint: 指定班级成功
 admin.classroom.operation_success_hint: 成功！
 admin.classroom.operation_fail_hint: 失败
 admin.classroom.operation_hint: 吗？
+admin.classroom.confirm_publish_hint: 确认发布？
 admin.classroom.hide_hint: 关闭后班级将彻底隐藏，学员无法在前台查看
+admin.classroom.delist_hint: 班级下架后将不在前台展示，学员无法查看
 admin.classroom.close_hint: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
 admin.classroom.hide_success_hint: 已关闭页面显示
+admin.classroom.delist_success_hint: 班级下架成功！
 admin.classroom.show_success_hint: 已开启页面显示
 admin.classroom.delete_hint: 删除班级，将删除班级中所有课程的章节、课时、学员等信息。确认要删除该班级吗？
 admin.classroom.mall_goods_exist.delete_hint: 删除班级，将删除班级中所有课程的章节、课时、学员等信息。并且该产品已在营销商城中有对应商品，将同时删除已在营销商城中的对应商品，确认要删除该班级吗？
@@ -1464,6 +1468,7 @@ admin.item_bank_exercise.exercise.hide_hint: 关闭后题库练习将彻底隐�
 admin.item_bank_exercise.exercise.delist_hint: 题库联系下架后将不在前台展示，学员无法查看
 admin.item_bank_exercise.exercise.hide_success_hint: 已关闭页面显示
 admin.item_bank_exercise.exercise.show_success_hint: 已开启页面显示
+admin.item_bank_exercise.exercise.delist_success_hint: 题库已下架
 admin.item_bank_exercise.exercise.recommend_success_hint: 设置推荐题库操作成功!
 admin.item_bank_exercise.exercise.recommend_fail_hint: 设置推荐题库操作失败!
 admin.item_bank_exercise.exercise.cancel_recommend_success_hint: 题库练习推荐已取消!

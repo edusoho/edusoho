@@ -48,7 +48,7 @@ define(function(require, exports, module) {
     $table.on('click', '.delist-exercise', function() {
       if (!confirm(Translator.trans('admin.item_bank_exercise.exercise.delist_hint'))) return false;
       $.post($(this).data('url'), function(response) {
-        Notify.success(Translator.trans('admin.item_bank_exercise.exercise.show_success_hint'));
+        Notify.success(Translator.trans('admin.item_bank_exercise.exercise.delist_success_hint'));
         window.location.reload();
       }).error(function(e) {
         var res = e.responseJSON.error.message || Translator.trans('admin.course.unknow_error_hint');

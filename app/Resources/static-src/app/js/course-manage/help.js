@@ -44,10 +44,10 @@ export const hideCourse = () => {
 const hideCourseAction = ($target) => {
     $.post($target.data('url'), (data) => {
       if (data.success) {
-        cd.message({type: 'success', message: Translator.trans('course.manage.close_success_hint')});
+        cd.message({type: 'success', message: Translator.trans('admin.courseSet.delist.success_hint')});
         window.location.reload();
       } else {
-        cd.message({type: 'danger', message: Translator.trans('course.manage.close_fail_hint') + ':' + data.message});
+        cd.message({type: 'danger', message: Translator.trans('admin.courseSet.delist.fail_hint') + ':' + data.message});
       }
     });
 }

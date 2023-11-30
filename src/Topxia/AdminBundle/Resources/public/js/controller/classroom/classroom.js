@@ -6,9 +6,23 @@ define(function (require, exports, module) {
   exports.run = function () {
     var $table = $('#classroom-table');
 
-    $table.on('click', '.open-classroom,.cancel-recommend-classroom', function () {
+    $table.on('click', '.cancel-recommend-classroom', function () {
       var $trigger = $(this);
       if (!confirm($trigger.attr('title') + Translator.trans('admin.classroom.operation_hint'))) {
+        return;
+      }
+      $.post($(this).data('url'), function (html) {
+        Notify.success($trigger.attr('title') + Translator.trans('admin.classroom.operation_success_hint'));
+        var $tr = $(html);
+        $('#' + $tr.attr('id')).replaceWith($tr);
+      }).error(function () {
+        Notify.danger($trigger.attr('title') + Translator.trans('admin.classroom.operation_fail_hint'));
+      });
+    });
+
+    $table.on('click', '.open-classroom', function () {
+      var $trigger = $(this);
+      if (!confirm(Translator.trans('admin.classroom.confirm_publish_hint'))) {
         return;
       }
       $.post($(this).data('url'), function (html) {
@@ -34,13 +48,13 @@ define(function (require, exports, module) {
       });
     });
 
-    $table.on('click', '.hide-classroom', function () {
+    $table.on('click', '.delist-classroom', function () {
       var $trigger = $(this);
-      if (!confirm(Translator.trans('admin.classroom.hide_hint'))) {
+      if (!confirm(Translator.trans('admin.classroom.delist_hint'))) {
         return;
       }
       $.post($(this).data('url'), function (html) {
-        Notify.success(Translator.trans('admin.classroom.hide_success_hint'));
+        Notify.success(Translator.trans('admin.classroom.delist_success_hint'));
         var $tr = $(html);
         $('#' + $tr.attr('id')).replaceWith($tr);
       }).error(function () {

@@ -874,6 +874,8 @@ t.add("admin.index.finished_task_count", "\u5b66\u4e60\u4efb\u52a1\u6570", "js",
 t.add("admin.index.notify_teacher_success", "\u63d0\u9192\u6559\u5e08\u7684\u901a\u77e5\uff0c\u53d1\u9001\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.index.upgrade_acceptance_hint", "\u5347\u7ea7\u53d7\u7406\u4e2d", "js", "zh_CN");
 t.add("admin.user.cloude_sms_enable_hint", "\u8bf7\u5148\u5230\u3010\u7ba1\u7406\u540e\u53f0\u3011-\u3010\u4e91\u5e02\u573a\u3011-\u3010\u4e91\u670d\u52a1\u3011-\u3010\u4e91\u77ed\u4fe1\u8bbe\u7f6e\u3011\u4e2d\u5f00\u542f\u4e91\u77ed\u4fe1\u54e6~", "js", "zh_CN");
+t.add("admin.courseSet.delist.success_hint", "\u8ba1\u5212\u4e0b\u67b6\u6210\u529f", "js", "zh_CN");
+t.add("admin.courseSet.delist.fail_hint", "\u8ba1\u5212\u4e0b\u67b6\u5931\u8d25", "js", "zh_CN");
 t.add("admin.account_center.cash_income", "\u73b0\u91d1\u6536\u5165", "js", "zh_CN");
 t.add("admin.account_center.coin_income", "\u865a\u62df\u5e01\u6536\u5165", "js", "zh_CN");
 t.add("admin.analysis.classroom_income", "\u73ed\u7ea7\u8425\u6536\u989d", "js", "zh_CN");
@@ -953,9 +955,12 @@ t.add("admin.classroom.choose_success_hint", "\u6307\u5b9a\u73ed\u7ea7\u6210\u52
 t.add("admin.classroom.operation_success_hint", "\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.classroom.operation_fail_hint", "\u5931\u8d25", "js", "zh_CN");
 t.add("admin.classroom.operation_hint", "\u5417\uff1f", "js", "zh_CN");
+t.add("admin.classroom.confirm_publish_hint", "\u786e\u8ba4\u53d1\u5e03\uff1f", "js", "zh_CN");
 t.add("admin.classroom.hide_hint", "\u5173\u95ed\u540e\u73ed\u7ea7\u5c06\u5f7b\u5e95\u9690\u85cf\uff0c\u5b66\u5458\u65e0\u6cd5\u5728\u524d\u53f0\u67e5\u770b", "js", "zh_CN");
+t.add("admin.classroom.delist_hint", "\u73ed\u7ea7\u4e0b\u67b6\u540e\u5c06\u4e0d\u5728\u524d\u53f0\u5c55\u793a\uff0c\u5b66\u5458\u65e0\u6cd5\u67e5\u770b", "js", "zh_CN");
 t.add("admin.classroom.close_hint", "\u5173\u95ed\u540e\u4ecd\u5728\u6709\u6548\u671f\u7684\u5b66\u5458\u65e0\u6cd5\u7ee7\u7eed\u5b66\u4e60\uff0c\u8bf7\u8c28\u614e\u64cd\u4f5c", "js", "zh_CN");
 t.add("admin.classroom.hide_success_hint", "\u5df2\u5173\u95ed\u9875\u9762\u663e\u793a", "js", "zh_CN");
+t.add("admin.classroom.delist_success_hint", "\u73ed\u7ea7\u4e0b\u67b6\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.classroom.show_success_hint", "\u5df2\u5f00\u542f\u9875\u9762\u663e\u793a", "js", "zh_CN");
 t.add("admin.classroom.delete_hint", "\u5220\u9664\u73ed\u7ea7\uff0c\u5c06\u5220\u9664\u73ed\u7ea7\u4e2d\u6240\u6709\u8bfe\u7a0b\u7684\u7ae0\u8282\u3001\u8bfe\u65f6\u3001\u5b66\u5458\u7b49\u4fe1\u606f\u3002\u786e\u8ba4\u8981\u5220\u9664\u8be5\u73ed\u7ea7\u5417\uff1f", "js", "zh_CN");
 t.add("admin.classroom.mall_goods_exist.delete_hint", "\u5220\u9664\u73ed\u7ea7\uff0c\u5c06\u5220\u9664\u73ed\u7ea7\u4e2d\u6240\u6709\u8bfe\u7a0b\u7684\u7ae0\u8282\u3001\u8bfe\u65f6\u3001\u5b66\u5458\u7b49\u4fe1\u606f\u3002\u5e76\u4e14\u8be5\u4ea7\u54c1\u5df2\u5728\u8425\u9500\u5546\u57ce\u4e2d\u6709\u5bf9\u5e94\u5546\u54c1\uff0c\u5c06\u540c\u65f6\u5220\u9664\u5df2\u5728\u8425\u9500\u5546\u57ce\u4e2d\u7684\u5bf9\u5e94\u5546\u54c1\uff0c\u786e\u8ba4\u8981\u5220\u9664\u8be5\u73ed\u7ea7\u5417\uff1f", "js", "zh_CN");
@@ -1309,6 +1314,7 @@ t.add("admin.item_bank_exercise.exercise.hide_hint", "\u5173\u95ed\u540e\u9898\u
 t.add("admin.item_bank_exercise.exercise.delist_hint", "\u9898\u5e93\u8054\u7cfb\u4e0b\u67b6\u540e\u5c06\u4e0d\u5728\u524d\u53f0\u5c55\u793a\uff0c\u5b66\u5458\u65e0\u6cd5\u67e5\u770b", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.hide_success_hint", "\u5df2\u5173\u95ed\u9875\u9762\u663e\u793a", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.show_success_hint", "\u5df2\u5f00\u542f\u9875\u9762\u663e\u793a", "js", "zh_CN");
+t.add("admin.item_bank_exercise.exercise.delist_success_hint", "\u9898\u5e93\u5df2\u4e0b\u67b6", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.recommend_success_hint", "\u8bbe\u7f6e\u63a8\u8350\u9898\u5e93\u64cd\u4f5c\u6210\u529f!", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.recommend_fail_hint", "\u8bbe\u7f6e\u63a8\u8350\u9898\u5e93\u64cd\u4f5c\u5931\u8d25!", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.cancel_recommend_success_hint", "\u9898\u5e93\u7ec3\u4e60\u63a8\u8350\u5df2\u53d6\u6d88!", "js", "zh_CN");
