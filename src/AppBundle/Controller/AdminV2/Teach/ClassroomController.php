@@ -196,18 +196,9 @@ class ClassroomController extends BaseController
         return $this->createJsonResponse(['code' => 0, 'message' => '删除成功']);
     }
 
-    public function showAction($id)
+    public function unpublishedAction($id)
     {
-        $this->getClassroomService()->showClassroom($id);
-
-        $classroom = $this->getClassroomService()->getClassroom($id);
-
-        return $this->renderClassroomTr($id, $classroom);
-    }
-
-    public function hideAction($id)
-    {
-        $this->getClassroomService()->hideClassroom($id);
+        $this->getClassroomService()->unpublishedClassroom($id);
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 

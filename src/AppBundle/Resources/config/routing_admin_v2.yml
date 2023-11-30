@@ -266,16 +266,10 @@ admin_v2_classroom_delete:
         _controller: 'AppBundle:AdminV2/Teach/Classroom:delete'
     methods:
         - POST
-admin_v2_classroom_hide:
-    path: '/classroom/{id}/hide'
+admin_v2_classroom_unpublished:
+    path: '/classroom/{id}/unpublished'
     defaults:
-        _controller: 'AppBundle:AdminV2/Teach/Classroom:hide'
-    methods:
-        - POST
-admin_v2_classroom_show:
-    path: '/classroom/{id}/show'
-    defaults:
-        _controller: 'AppBundle:AdminV2/Teach/Classroom:show'
+        _controller: 'AppBundle:AdminV2/Teach/Classroom:unpublished'
     methods:
         - POST
 admin_v2_classroom_check_mall_goods:

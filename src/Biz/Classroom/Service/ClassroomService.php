@@ -128,6 +128,14 @@ interface ClassroomService
      * @param $id
      *
      * @return mixed
+     * @Log(module="classroom",action="close",funcName="getClassroom")
+     */
+    public function unpublishedClassroom($id);
+
+    /**
+     * @param $id
+     *
+     * @return mixed
      * @Log(module="classroom",action="publish",funcName="getClassroom")
      */
     public function publishClassroom($id);

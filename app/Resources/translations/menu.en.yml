@@ -519,8 +519,7 @@ admin_v2.course.classroom.basic_tab.create_btn: Add
 admin_v2.course.classroom.basic_tab.recommend_btn: Recommend
 admin_v2.course.classroom.basic_tab.close_btn: Close
 admin_v2.course.classroom.basic_tab.publish_submit_btn: Publish
-admin_v2.course.classroom.basic_tab.show_btn: show
-admin_v2.course.classroom.basic_tab.hide_btn: hide
+admin_v2.course.classroom.basic_tab.unpublished_btn: unpublished
 admin_v2.course.classroom.basic_tab.delete_submit_btn: Delete
 
 # 教学-课程管理-直播模块

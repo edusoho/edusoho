@@ -267,7 +267,7 @@ admin_v2:
                                             group: groupButton
                                             router_params:
                                                 id: (classroom.id)
-                                            visible: ( classroom.status == 'published' )
+                                            visible: ( classroom.status == 'published' or classroom.status == 'unpublished')
                                         admin_v2_classroom_open:
                                             name: admin_v2.course.classroom.basic_tab.publish_submit_btn
                                             mode: none
@@ -286,24 +286,15 @@ admin_v2:
                                             router_params:
                                                 id: (classroom.id)
                                             visible: ( classroom.status=='draft' or classroom.status=='closed' )
-                                        admin_v2_classroom_hide:
-                                            name: admin_v2.course.classroom.basic_tab.hide_btn
+                                        admin_v2_classroom_unpublished:
+                                            name: admin_v2.course.classroom.basic_tab.unpublished_btn
                                             mode: none
                                             class: hide-classroom
                                             icon: 'es-icon es-icon-show-page'
                                             group: groupButton
                                             router_params:
                                                 id: (classroom.id)
-                                            visible: ( classroom.status == 'published' and classroom.showable == '1' )
-                                        admin_v2_classroom_show:
-                                            name: admin_v2.course.classroom.basic_tab.show_btn
-                                            mode: none
-                                            icon: 'es-icon es-icon-show-page'
-                                            group: groupButton
-                                            class: show-classroom
-                                            router_params:
-                                                id: (classroom.id)
-                                            visible: ( classroom.status == 'published' and classroom.showable != '1' )
+                                            visible: ( classroom.status == 'published')
                                         admin_v2_sms_prepare:
                                             name: admin_v2.btn.sms_send_btn
                                             router_name: admin_v2_sms_prepare

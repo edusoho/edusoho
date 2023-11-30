@@ -58,22 +58,11 @@
     {% if classroom.status=='published' %}
       <span class="text-success">{{ 'admin.classroom_manage.manage.published'|trans }}</span>
     {% elseif classroom.status=='closed' %}
-
       <span class="text-danger">{{ 'admin.classroom_manage.manage.closed'|trans }}</span>
+    {% elseif classroom.status=='unpublished' %}
+      <span class="text-danger">{{ 'admin.classroom_manage.manage.unpublished'|trans }}</span>
     {% else %}
-      {{ 'admin.classroom_manage.manage.unpublished'|trans }}
-    {% endif %}
-  </td>
-
-  <td>
-    {% if classroom.status=='published' %}
-      {% if classroom.showable == 1 %}
-        {{ 'common.classroom.showable.show'|trans }}
-      {% else %}
-        {{ 'common.classroom.showable.hide'|trans }}
-      {% endif %}
-    {% else %}
-      <span class="color-gray"> -- </span>
+      {{ 'admin.classroom_manage.manage.draft'|trans }}
     {% endif %}
   </td>
 
