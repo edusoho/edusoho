@@ -1011,9 +1011,12 @@ t.add("admin.classroom.choose_success_hint", "Choose classroom success", "js", "
 t.add("admin.classroom.operation_success_hint", "successfully\uff01", "js", "en");
 t.add("admin.classroom.operation_fail_hint", "failure", "js", "en");
 t.add("admin.classroom.operation_hint", "\uff1f", "js", "en");
+t.add("admin.classroom.confirm_publish_hint", "Confirm release\uff1f", "js", "en");
 t.add("admin.classroom.hide_hint", "Closing the classroom will completely hide it, and students will not be able to view it on the front desk.", "js", "en");
+t.add("admin.classroom.delist_hint", "After the class is removed, it will not be displayed at the front desk and students will not be able to view it.", "js", "en");
 t.add("admin.classroom.close_hint", "After closing, students who are still within the validity period will not be able to continue learning. Please operate with caution.", "js", "en");
 t.add("admin.classroom.hide_success_hint", "The page display has been closed.", "js", "en");
+t.add("admin.classroom.delist_success_hint", "The class has been removed from the front desk.", "js", "en");
 t.add("admin.classroom.show_success_hint", "The page display has been turned on.", "js", "en");
 t.add("admin.classroom.delete_hint", "Deleting a class will delete the chapters, class hours, students and other information of all courses in the class. Are you sure you want to delete this class?", "js", "en");
 t.add("admin.classroom.delete_success_hint", "successfully deleted!", "js", "en");
@@ -1360,6 +1363,7 @@ t.add("admin.item_bank_exercise.exercise.hide_hint", "After hiding, the item ban
 t.add("admin.item_bank_exercise.exercise.delist_hint", "After the question bank contact is removed from the shelves, it will not be displayed at the front desk, and students can not view it.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.hide_success_hint", "Item bank exercise display hidden successfully.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.show_success_hint", "Item bank exercise display enabled successfully.", "js", "en");
+t.add("admin.item_bank_exercise.exercise.delist_success_hint", "The question bank has been removed.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.recommend_success_hint", "Successfully set recommended item bank!", "js", "en");
 t.add("admin.item_bank_exercise.exercise.recommend_fail_hint", "Failed to set recommended item bank!", "js", "en");
 t.add("admin.item_bank_exercise.exercise.cancel_recommend_success_hint", "The item bank exercise recommendation has been cancelled!", "js", "en");
