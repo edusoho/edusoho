@@ -869,6 +869,18 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classroom;
     }
 
+    public function unpublishedClassroom($id)
+    {
+        $this->tryManageClassroom($id, 'admin_classroom_close');
+
+        $classroom = $this->updateClassroom($id, ['status' => 'unpublished']);
+        $this->getClassroomGoodsMediator()->onClose($classroom);
+        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
+        $this->dispatchEvent('classroom.close', new Event($classroom));
+
+        return $classroom;
+    }
+
     public function changePicture($id, $data)
     {
         $classroom = $this->getClassroomDao()->get($id);

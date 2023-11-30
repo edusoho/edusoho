@@ -4918,8 +4918,7 @@ common.courseStatus.closed: 已关闭
 common.courseStatus.unpublished: 已下架
 common.classroomStatus.draft: 未发布
 common.classroomStatus.published: 已发布
-common.classroom.showable.show: 展示
-common.classroom.showable.hide: 隐藏
+common.classroomStatus.unpublished: 已下架
 common.classroomStatus.closed: 已关闭
 common.fileType.video: 视频
 common.fileType.audio: 音频

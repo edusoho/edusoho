@@ -4191,12 +4191,11 @@ change_log: Changelog
 common.courseStatus.draft: Draft
 common.courseStatus.published: Published
 common.courseStatus.closed: Closed
-common.courseStatus.unpublished: unpublished
+common.courseStatus.unpublished: Unpublished
 common.classroomStatus.draft: Draft
 common.classroomStatus.published: Published
+common.classroomStatus.unpublished: Unpublished
 common.classroomStatus.closed: Closed
-common.classroom.showable.show: show
-common.classroom.showable.hide: hide
 common.fileType.video: Video
 common.fileType.audio: Audio
 common.fileType.document: Document
