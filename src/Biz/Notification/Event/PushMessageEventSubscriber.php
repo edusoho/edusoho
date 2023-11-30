@@ -94,10 +94,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             //兼容模式，courseSet映射到course
             'course-set.publish' => 'onCourseCreate',
             'course-set.update' => 'onCourseUpdate',
-            'course-set.show' => 'onCourseCreate',
             'course-set.delete' => 'onCourseDelete',
             'course-set.closed' => 'onCourseDelete',
-            'course-set.hide' => 'onCourseDelete',
 
             'open.course.publish' => 'onOpenCourseCreate',
             'open.course.delete' => 'onOpenCourseDelete',

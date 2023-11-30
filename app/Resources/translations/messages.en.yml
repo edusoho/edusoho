@@ -4191,9 +4191,8 @@ change_log.edusoho_title: 'EduSoho changelog'
 change_log: Changelog
 common.courseStatus.draft: Draft
 common.courseStatus.published: Published
-common.course.showable.show: show
-common.course.showable.hide: hide
 common.courseStatus.closed: Closed
+common.courseStatus.unpublished: unpublished
 common.classroomStatus.draft: Draft
 common.classroomStatus.published: Published
 common.classroomStatus.closed: Closed

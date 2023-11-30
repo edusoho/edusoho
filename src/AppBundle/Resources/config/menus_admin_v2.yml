@@ -153,7 +153,7 @@ admin_v2:
                                             icon: 'glyphicon glyphicon-ban-circle'
                                             mode: none
                                             class: close-course
-                                            visible: (courseSet.status == 'published')
+                                            visible: (courseSet.status == 'published' or courseSet.status == 'unpublished')
                                         admin_v2_course_sms_prepare:
                                             name: admin_v2.btn.sms_send_btn
                                             router_name: admin_v2_sms_prepare
@@ -164,8 +164,8 @@ admin_v2:
                                             icon: 'glyphicon glyphicon-envelope'
                                             mode: modal
                                             visible: (courseSet.status == 'published')
-                                        admin_v2_course_set_show:
-                                            name: admin_v2.course.basic_tab.show_btn
+                                        admin_v2_course_set_unpublished:
+                                            name: admin_v2.course.basic_tab.unpublished_btn
                                             router_params:
                                                 id: (courseSet.id)
                                                 filter: (filter)
@@ -173,17 +173,7 @@ admin_v2:
                                             icon: 'es-icon es-icon-show-page'
                                             mode: none
                                             class: show-course
-                                            visible: (courseSet.status == 'published' and courseSet.showable == '0')
-                                        admin_v2_course_set_hide:
-                                            name: admin_v2.course.basic_tab.hide_btn
-                                            router_params:
-                                                id: (courseSet.id)
-                                                filter: (filter)
-                                            group: groupButton
-                                            icon: 'es-icon es-icon-show-page'
-                                            mode: none
-                                            class: hide-course
-                                            visible: (courseSet.status == 'published' and courseSet.showable == '1')
+                                            visible: (courseSet.status == 'published')
                                         admin_v2_course_set_clone:
                                             name: admin_v2.course.basic.basic_tab.clone_btn
                                             router_params:
@@ -399,24 +389,15 @@ admin_v2:
                                             group: groupButton
                                             icon: 'glyphicon glyphicon-eye-open'
                                             blank: 1
-                                        admin_v2_item_bank_exercise_show:
-                                            name: admin_v2.course.item_bank_exercise.basic_tab.show_btn
+                                        admin_v2_item_bank_exercise_unpublished:
+                                            name: admin_v2.course.item_bank_exercise.basic_tab.unpublished_btn
                                             router_params:
                                                 id: (exercise.id)
                                             group: groupButton
                                             class: show-exercise
                                             icon: 'es-icon es-icon-show-page'
                                             mode: none
-                                            visible: (exercise.status == 'published' and exercise.showable == '0')
-                                        admin_v2_item_bank_exercise_hide:
-                                            name: admin_v2.course.item_bank_exercise.basic_tab.hide_btn
-                                            router_params:
-                                                id: (exercise.id)
-                                            group: groupButton
-                                            class: hide-exercise
-                                            icon: 'es-icon es-icon-show-page'
-                                            mode: none
-                                            visible: (exercise.status == 'published' and exercise.showable == '1')
+                                            visible: (exercise.status == 'published')
                                         admin_v2_item_bank_exercise_publish:
                                             name: admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn
                                             router_params:
@@ -434,7 +415,7 @@ admin_v2:
                                           class: close-exercise
                                           icon: 'glyphicon glyphicon-ok-circle'
                                           mode: none
-                                          visible: (exercise.status == 'published')
+                                          visible: (exercise.status == 'published' or exercise.status == 'unpublished')
                                         admin_v2_item_bank_exercise_delete:
                                             name: admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn
                                             class: delete-exercise

@@ -378,6 +378,18 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $exercise;
     }
 
+    public function unpublishedExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+
+        $exercise = $this->getExerciseDao()->update($exerciseId, ['status' => 'unpublished']);
+
+        $user = $this->getCurrentUser();
+        $this->getLogService()->info('item_bank_exercise', 'close_exercise', "下架练习{$user['nickname']}(#{$user['id']})");
+
+        return $exercise;
+    }
+
     public function canTakeItemBankExercise($exerciseId)
     {
         $exercise = $this->get($exerciseId);

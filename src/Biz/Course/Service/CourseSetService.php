@@ -199,6 +199,14 @@ interface CourseSetService
      * @return mixed
      * @Log(module="course",action="close",funcName="getCourseSet")
      */
+    public function unpublishedCourseSet($id);
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="close",funcName="getCourseSet")
+     */
     public function closeCourseSet($id);
 
     public function findProductIdAndGoodsIdsByIds($ids);
