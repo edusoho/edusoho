@@ -43,6 +43,8 @@ t.add("site.video.quality.quota", "Video", "js", "en");
 t.add("site.video.quality.low", "Smooth", "js", "en");
 t.add("site.video.quality.normal", "Standard", "js", "en");
 t.add("site.video.quality.high", "High Definition", "js", "en");
+t.add("site.tips", "Tips", "js", "en");
+t.add("site.tips.delist", "Confirm removal?", "js", "en");
 t.add("site.incorrect.password", "Incorrect password", "js", "en");
 t.add("user.settings.security.mobile_bind.success", "Bind mobile successfully", "js", "en");
 t.add("user.settings.security.mobile_bind.fail", "Bind mobile fail", "js", "en");
@@ -458,11 +460,11 @@ t.add("course.manage.max_student_num_error_hint", "Please enter the number of co
 t.add("course.manage.max_year_error_hint", "Please enter a value less than 7300 (20 years)", "js", "en");
 t.add("course.manage.max_capacity_hint", "The site can support up to %capacity% people to participate in the live at the same time, you can set a larger value, but then may lead to students can not enter the live.", "js", "en");
 t.add("course.manage.publish_hint", "Are you sure you want to publish the program?", "js", "en");
-t.add("course.manage.publish_title", "Publish teaching plan", "js", "en");
+t.add("course.manage.publish_title", "Confirm the release?", "js", "en");
 t.add("course.manage.publish_success_hint", "The program was published successfully", "js", "en");
 t.add("course.manage.publish_fail_hint", "Publish program failed", "js", "en");
 t.add("course.manage.close_hint", "Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation", "js", "en");
-t.add("course.manage.hide_hint", "After closing, the course plan will be completely hidden and students will not be able to view it on the front-end.", "js", "en");
+t.add("course.manage.hide_hint", "The program will not be displayed at the front desk after it is removed, and students will not be able to view it", "js", "en");
 t.add("course.manage.close_success_hint", "closed successfully", "js", "en");
 t.add("course.manage.close_fail_hint", "Close failed", "js", "en");
 t.add("course.manage.show_success_hint", "Enabled successfully", "js", "en");
@@ -1057,6 +1059,7 @@ t.add("admin.course.validate_old.password_required_hint", "password", "js", "en"
 t.add("admin.course.cancel_recommend_success_hint", "Course recommendation has been cancelled!", "js", "en");
 t.add("admin.course.close_course_hint", "Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation.", "js", "en");
 t.add("admin.course.hide_course_hint", "After hiding, the course will be completely hidden and students will not be able to view it on the front-end.", "js", "en");
+t.add("admin.course.delist_course_hint", "After the course is removed, it will not be displayed at the front desk and students will not be able to view it", "js", "en");
 t.add("admin.course.hide_success_hint", "Course hidden successfully!", "js", "en");
 t.add("admin.course.show_success_hint", "Page enabled!", "js", "en");
 t.add("admin.course.publish_hint", "Are you sure you want to publish this course?", "js", "en");
@@ -1353,6 +1356,7 @@ t.add("admin.shortcut_delete_success_hint", "Delete frequently used links succes
 t.add("admin.item_bank_exercise.exercise.close_hint", "After the itembank exercise is closed, students who are still in the validity period will be able to continue their studies.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.close_success_hint", "Close successfully", "js", "en");
 t.add("admin.item_bank_exercise.exercise.hide_hint", "After hiding, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.", "js", "en");
+t.add("admin.item_bank_exercise.exercise.delist_hint", "After the question bank contact is removed from the shelves, it will not be displayed at the front desk, and students can not view it.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.hide_success_hint", "Item bank exercise display hidden successfully.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.show_success_hint", "Item bank exercise display enabled successfully.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.recommend_success_hint", "Successfully set recommended item bank!", "js", "en");

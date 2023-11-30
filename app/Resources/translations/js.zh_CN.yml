@@ -1155,6 +1155,7 @@ admin.course.cancel_recommend_success_hint: 课程推荐已取消！
 admin.course.close_course_hint: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
 admin.course.close_success_hint: 已关闭页面显示
 admin.course.hide_course_hint: 关闭后课程将彻底隐藏，学员无法在前台查看
+admin.course.delist_course_hint: 课程下架后将不在前台展示，学员无法查看
 admin.course.hide_success_hint: 课程关闭成功！
 admin.course.show_success_hint: 已开启页面
 admin.course.publish_hint: 您确认要发布此课程吗？
@@ -1459,6 +1460,7 @@ admin.shortcut_delete_success_hint: 删除常用链接成功！
 admin.item_bank_exercise.exercise.close_hint: 题库练习关闭后，仍然还在有效期内的学员将可以继续学习。
 admin.item_bank_exercise.exercise.close_success_hint: 题库练习关闭成功!
 admin.item_bank_exercise.exercise.hide_hint: 关闭后题库练习将彻底隐藏，学员无法在前台查看
+admin.item_bank_exercise.exercise.delist_hint: 题库联系下架后将不在前台展示，学员无法查看
 admin.item_bank_exercise.exercise.hide_success_hint: 已关闭页面显示
 admin.item_bank_exercise.exercise.show_success_hint: 已开启页面显示
 admin.item_bank_exercise.exercise.recommend_success_hint: 设置推荐题库操作成功!

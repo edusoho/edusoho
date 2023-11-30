@@ -40,7 +40,6 @@ define(function (require, exports, module) {
     });
 
     $table.on('click', '.hide-course', function () {
-      var user_name = $(this).data('user');
       if (!confirm(Translator.trans('admin.course.hide_course_hint'))) return false;
       $.post($(this).data('url'), function (html) {
         var $tr = $(html);
@@ -49,8 +48,8 @@ define(function (require, exports, module) {
       });
     });
 
-    $table.on('click', '.show-course', function () {
-      var user_name = $(this).data('user');
+    $table.on('click', '.delist-course', function () {
+      if (!confirm(Translator.trans('admin.course.hide_course_hint'))) return false;
       $.post($(this).data('url'), function (html) {
         var $tr = $(html);
         $table.find('#' + $tr.attr('id')).replaceWith(html);
