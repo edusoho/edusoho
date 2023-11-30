@@ -87,6 +87,7 @@ site.default.mobile: 手机号
 site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.tips: 提示
+site.tips.delist: 确认下架？
 site.qrcode_tips: 扫一扫
 site.tips.scan_qrcode_tips: 扫二维码继续学习 二维码时效为半小时
 site.tips.exercise_qrcode_tips: 扫描右侧二维码 前往移动端学习
@@ -1035,7 +1036,7 @@ course.teaching_plan.expiry_date.days_mode: 按有效天数
 course.teaching_plan.publish_btn: 发布计划
 course.teaching_plan.manage: 计划管理
 course.teaching_plan.show_page: 开启前台展示
-course.teaching_plan.hide_page: 隐藏前台展示
+course.teaching_plan.hide_page: 下架
 course.teaching_plan.delete_btn: 删除
 course.teaching_plan.copy_btn: 复制
 course.teaching_plan.preview_btn: 预览

@@ -56,6 +56,7 @@ site.step_two: 步骤2
 site.step_one: 步骤1
 site.information: 信息
 site.tips: 提示
+site.tips.delist: 确认下架？
 site.unknow_server_error: 发生未知错误
 
 site.incorrect.password: 密码错误
@@ -494,11 +495,11 @@ course.manage.max_student_num_error_hint: 请输入课程人数
 course.manage.max_year_error_hint: 请输入不大于 7300（20年）的数值
 course.manage.max_capacity_hint: 网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。
 course.manage.publish_hint: 是否确定发布该教学计划？
-course.manage.publish_title: 发布教学计划
+course.manage.publish_title: 确认发布？
 course.manage.publish_success_hint: 教学计划发布成功
 course.manage.publish_fail_hint: 教学计划发布失败
 course.manage.close_hint: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
-course.manage.hide_hint: 隐藏后前台不可见，不可见范围：首页、列表页、搜索结果页、班级中添加课程列表页
+course.manage.hide_hint: 计划下架后将不在前台展示，学员无法查看
 course.manage.close_success_hint: 关闭成功
 course.manage.close_fail_hint: 关闭失败
 course.manage.show_success_hint: 开启成功

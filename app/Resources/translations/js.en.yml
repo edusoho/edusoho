@@ -40,7 +40,8 @@ site.video.quality.quota: Video
 site.video.quality.low: Smooth
 site.video.quality.normal: Standard
 site.video.quality.high: High Definition
-
+site.tips: Tips
+site.tips.delist: Confirm removal?
 site.incorrect.password: Incorrect password
 user.settings.security.mobile_bind.success: Bind mobile successfully
 user.settings.security.mobile_bind.fail: Bind mobile fail
@@ -551,11 +552,11 @@ course.manage.max_student_num_error_hint: Please enter the number of courses
 course.manage.max_year_error_hint: Please enter a value less than 7300 (20 years)
 course.manage.max_capacity_hint: The site can support up to %capacity% people to participate in the live at the same time, you can set a larger value, but then may lead to students can not enter the live.
 course.manage.publish_hint: Are you sure you want to publish the program?
-course.manage.publish_title: Publish teaching plan
+course.manage.publish_title: Confirm the release?
 course.manage.publish_success_hint: The program was published successfully
 course.manage.publish_fail_hint: Publish program failed
 course.manage.close_hint: Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation
-course.manage.hide_hint: After closing, the course plan will be completely hidden and students will not be able to view it on the front-end.
+course.manage.hide_hint: The program will not be displayed at the front desk after it is removed, and students will not be able to view it
 course.manage.close_success_hint: closed successfully
 course.manage.close_fail_hint: Close failed
 course.manage.show_success_hint: Enabled successfully

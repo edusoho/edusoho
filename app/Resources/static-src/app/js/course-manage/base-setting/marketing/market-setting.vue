@@ -48,7 +48,7 @@
                 <el-col :span="8" class="mlm">{{ 'site.currency.CNY'|trans }}</el-col>
             </el-form-item>
 
-            <el-form-item>
+            <!-- <el-form-item>
                 <label slot="label">
                     {{ 'course.marketing_setup.setup.is_show_label'|trans }}
                 </label>
@@ -63,7 +63,7 @@
                     </el-radio>
              <div class="course-mangae-info__tip js-expiry-tip ml0">{{ 'course.marketing_setup.rule.show'|trans }}</div>
                 </el-col>
-            </el-form-item>
+            </el-form-item> -->
 
             
             <el-form-item>
