@@ -137,10 +137,13 @@ export default {
 
   methods: {
     async duplicateChecking() {
+      if($("[name=question_count]").val() == 0) {
+        return this.$message.warning('该分类暂无题目');
+      }
       this.isLoading = true
       await Repeat.getRepeatQuestion($("[name=questionBankId]").val(), { categoryId: $("[name=category_id]").val() }).then(res => {
         this.isLoading = false
-        
+
         if(res.length > 0) {
           window.location.href = `/question_bank/${$('.js-questionBank-id').val()}/check_duplicative_questions?categoryId=${this.categoryId}`
         } else {

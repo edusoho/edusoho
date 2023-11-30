@@ -1,4 +1,5 @@
 import Vue from 'vue/dist/vue.esm.js';
+import 'moment';
 import { Icon, Button, Message, Modal } from '@codeages/design-vue';
 
 Vue.use(Icon)
@@ -13,6 +14,12 @@ Vue.prototype.$warning = Modal.warning;
 Vue.prototype.$confirm = Modal.confirm;
 Vue.prototype.$destroyAll = Modal.destroyAll;
 
+Vue.prototype.$dateFormat = function(value, format = 'YYYY-MM-DD') {
+    if (value == 0) {
+      return '';
+    }
+    return moment(value * 1000).format(format)
+  }
 
 window.Vue = Vue;
 
