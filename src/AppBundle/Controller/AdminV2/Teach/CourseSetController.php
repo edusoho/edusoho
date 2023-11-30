@@ -93,6 +93,13 @@ class CourseSetController extends BaseController
         return $this->renderCourseTr($id, $request);
     }
 
+    public function unpublishedAction(Request $request, $id)
+    {
+        $this->getCourseSetService()->unpublishedCourseSet($id);
+
+        return $this->renderCourseTr($id, $request);
+    }
+
     /*
     code 状态编号
     1:　删除班级课程

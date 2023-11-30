@@ -695,10 +695,37 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
-    public function closeCourseSet($id)
+    public function unpublishedCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
         if ('published' !== $courseSet['status']) {
+            $this->createNewException(CourseSetException::UNPUBLISHED_COURSESET());
+        }
+
+        $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
+
+        try {
+            $this->beginTransaction();
+
+            if (!empty($classroomRef)) {
+                $this->getCourseService()->unpublishedCourse($classroomRef['courseId']);
+            }
+            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'unpublished']);
+            $this->getCourseSetGoodsMediator()->onClose($courseSet);
+            $this->getCourseService()->banLearningByCourseSetIds([$courseSet['id']]);
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
+
+        $this->dispatchEvent('course-set.closed', new Event($courseSet));
+    }
+
+    public function closeCourseSet($id)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        if (!in_array($courseSet['status'], ['published', 'unpublished'])) {
             $this->createNewException(CourseSetException::UNPUBLISHED_COURSESET());
         }
 
