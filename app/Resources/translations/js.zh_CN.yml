@@ -1158,7 +1158,8 @@ admin.course.hide_course_hint: 关闭后课程将彻底隐藏，学员无法在�
 admin.course.delist_course_hint: 课程下架后将不在前台展示，学员无法查看
 admin.course.hide_success_hint: 课程关闭成功！
 admin.course.show_success_hint: 已开启页面
-admin.course.publish_hint: 您确认要发布此课程吗？
+admin.course.delist_success_hint: 课程下架成功！
+admin.course.publish_hint: 确认发布？
 admin.course.publish_success_hint: 课程发布成功！
 admin.course.unknow_error_hint: 未知错误
 admin.course.delete_hint: 删除课程，将删除课程的章节、课时、学员等信息。真的要删除该课程吗？
@@ -1466,7 +1467,7 @@ admin.item_bank_exercise.exercise.show_success_hint: 已开启页面显示
 admin.item_bank_exercise.exercise.recommend_success_hint: 设置推荐题库操作成功!
 admin.item_bank_exercise.exercise.recommend_fail_hint: 设置推荐题库操作失败!
 admin.item_bank_exercise.exercise.cancel_recommend_success_hint: 题库练习推荐已取消!
-admin.item_bank_exercise.exercise.publish_hint: 确定要发布当前题库练习吗？
+admin.item_bank_exercise.exercise.publish_hint: 确认发布？
 admin.item_bank_exercise.exercise.publish_success_hint: 题库练习发布成功!
 admin.item_bank_exercise.exercise.delete_hint: 删除题库练习，将删除模块设置、学员等信息。真的要删除该题库练习吗？
 admin.item_bank_exercise.exercise.mall_goods_exist.delete_hint: 删除题库练习，将删除模块设置、学员等信息。并且该产品已在营销商城中有对应商品，将同时删除已在营销商城中的对应商品，真的要删除该题库练习吗？

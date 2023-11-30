@@ -1062,7 +1062,8 @@ t.add("admin.course.hide_course_hint", "After hiding, the course will be complet
 t.add("admin.course.delist_course_hint", "After the course is removed, it will not be displayed at the front desk and students will not be able to view it", "js", "en");
 t.add("admin.course.hide_success_hint", "Course hidden successfully!", "js", "en");
 t.add("admin.course.show_success_hint", "Page enabled!", "js", "en");
-t.add("admin.course.publish_hint", "Are you sure you want to publish this course?", "js", "en");
+t.add("admin.course.delist_success_hint", "Course removed successfully!", "js", "en");
+t.add("admin.course.publish_hint", "Confirm the release?", "js", "en");
 t.add("admin.course.unknow_error_hint", "unknown mistake", "js", "en");
 t.add("admin.course.delete_hint", "Delete a course will delete the chapters, class hours, students, etc. of the course. Really want to delete the course?", "js", "en");
 t.add("admin.course.remove_hint", "Removal of the course will delete all student information and student data, and cannot be restored after removal! Are you sure you want to remove this course?", "js", "en");
@@ -1362,7 +1363,7 @@ t.add("admin.item_bank_exercise.exercise.show_success_hint", "Item bank exercise
 t.add("admin.item_bank_exercise.exercise.recommend_success_hint", "Successfully set recommended item bank!", "js", "en");
 t.add("admin.item_bank_exercise.exercise.recommend_fail_hint", "Failed to set recommended item bank!", "js", "en");
 t.add("admin.item_bank_exercise.exercise.cancel_recommend_success_hint", "The item bank exercise recommendation has been cancelled!", "js", "en");
-t.add("admin.item_bank_exercise.exercise.publish_hint", "Are you sure you want to publish the current exercise?", "js", "en");
+t.add("admin.item_bank_exercise.exercise.publish_hint", "Confirm the release?", "js", "en");
 t.add("admin.item_bank_exercise.exercise.publish_success_hint", "The item bank exercise recommendation has been published!", "js", "en");
 t.add("admin.item_bank_exercise.exercise.delete_hint", "Delete item bank exercises, delete module settings, trainees and other information. Do you really want to delete this exercise bank?", "js", "en");
 t.add("exercise.manage.student_delete_hint", "Are you sure you want to delete the student.", "js", "en");

@@ -1005,7 +1005,8 @@ t.add("admin.course.hide_course_hint", "\u5173\u95ed\u540e\u8bfe\u7a0b\u5c06\u5f
 t.add("admin.course.delist_course_hint", "\u8bfe\u7a0b\u4e0b\u67b6\u540e\u5c06\u4e0d\u5728\u524d\u53f0\u5c55\u793a\uff0c\u5b66\u5458\u65e0\u6cd5\u67e5\u770b", "js", "zh_CN");
 t.add("admin.course.hide_success_hint", "\u8bfe\u7a0b\u5173\u95ed\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.course.show_success_hint", "\u5df2\u5f00\u542f\u9875\u9762", "js", "zh_CN");
-t.add("admin.course.publish_hint", "\u60a8\u786e\u8ba4\u8981\u53d1\u5e03\u6b64\u8bfe\u7a0b\u5417\uff1f", "js", "zh_CN");
+t.add("admin.course.delist_success_hint", "\u8bfe\u7a0b\u4e0b\u67b6\u6210\u529f\uff01", "js", "zh_CN");
+t.add("admin.course.publish_hint", "\u786e\u8ba4\u53d1\u5e03\uff1f", "js", "zh_CN");
 t.add("admin.course.unknow_error_hint", "\u672a\u77e5\u9519\u8bef", "js", "zh_CN");
 t.add("admin.course.delete_hint", "\u5220\u9664\u8bfe\u7a0b\uff0c\u5c06\u5220\u9664\u8bfe\u7a0b\u7684\u7ae0\u8282\u3001\u8bfe\u65f6\u3001\u5b66\u5458\u7b49\u4fe1\u606f\u3002\u771f\u7684\u8981\u5220\u9664\u8be5\u8bfe\u7a0b\u5417\uff1f", "js", "zh_CN");
 t.add("admin.course.mall_goods_exist.delete_hint", "\u5220\u9664\u8bfe\u7a0b\uff0c\u5c06\u5220\u9664\u8bfe\u7a0b\u7684\u7ae0\u8282\u3001\u8bfe\u65f6\u3001\u5b66\u5458\u7b49\u4fe1\u606f\u3002\u5e76\u4e14\u8be5\u4ea7\u54c1\u5df2\u5728\u8425\u9500\u5546\u57ce\u4e2d\u6709\u5bf9\u5e94\u7684\u5546\u54c1\uff0c\u5c06\u540c\u65f6\u5220\u9664\u5df2\u5728\u8425\u9500\u5546\u57ce\u4e2d\u7684\u5bf9\u5e94\u5546\u54c1\uff0c\u771f\u7684\u8981\u5220\u9664\u8be5\u8bfe\u7a0b\u5417\uff1f", "js", "zh_CN");
@@ -1311,7 +1312,7 @@ t.add("admin.item_bank_exercise.exercise.show_success_hint", "\u5df2\u5f00\u542f
 t.add("admin.item_bank_exercise.exercise.recommend_success_hint", "\u8bbe\u7f6e\u63a8\u8350\u9898\u5e93\u64cd\u4f5c\u6210\u529f!", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.recommend_fail_hint", "\u8bbe\u7f6e\u63a8\u8350\u9898\u5e93\u64cd\u4f5c\u5931\u8d25!", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.cancel_recommend_success_hint", "\u9898\u5e93\u7ec3\u4e60\u63a8\u8350\u5df2\u53d6\u6d88!", "js", "zh_CN");
-t.add("admin.item_bank_exercise.exercise.publish_hint", "\u786e\u5b9a\u8981\u53d1\u5e03\u5f53\u524d\u9898\u5e93\u7ec3\u4e60\u5417\uff1f", "js", "zh_CN");
+t.add("admin.item_bank_exercise.exercise.publish_hint", "\u786e\u8ba4\u53d1\u5e03\uff1f", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.publish_success_hint", "\u9898\u5e93\u7ec3\u4e60\u53d1\u5e03\u6210\u529f!", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.delete_hint", "\u5220\u9664\u9898\u5e93\u7ec3\u4e60\uff0c\u5c06\u5220\u9664\u6a21\u5757\u8bbe\u7f6e\u3001\u5b66\u5458\u7b49\u4fe1\u606f\u3002\u771f\u7684\u8981\u5220\u9664\u8be5\u9898\u5e93\u7ec3\u4e60\u5417\uff1f", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.mall_goods_exist.delete_hint", "\u5220\u9664\u9898\u5e93\u7ec3\u4e60\uff0c\u5c06\u5220\u9664\u6a21\u5757\u8bbe\u7f6e\u3001\u5b66\u5458\u7b49\u4fe1\u606f\u3002\u5e76\u4e14\u8be5\u4ea7\u54c1\u5df2\u5728\u8425\u9500\u5546\u57ce\u4e2d\u6709\u5bf9\u5e94\u5546\u54c1\uff0c\u5c06\u540c\u65f6\u5220\u9664\u5df2\u5728\u8425\u9500\u5546\u57ce\u4e2d\u7684\u5bf9\u5e94\u5546\u54c1\uff0c\u771f\u7684\u8981\u5220\u9664\u8be5\u9898\u5e93\u7ec3\u4e60\u5417\uff1f", "js", "zh_CN");
