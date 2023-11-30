@@ -4772,7 +4772,8 @@ admin.classroom_manage.manage.price: '%price%(CNY)'
 admin.classroom_manage.manage.origin_price: 'Original %priceAll% (CNY)'
 admin.classroom_manage.manage.published: Published
 admin.classroom_manage.manage.closed: Closed
-admin.classroom_manage.manage.unpublished: Unpublished
+admin.classroom_manage.manage.unpublished: unpublished
+admin.classroom_manage.manage.draft: Draft
 admin.classroom_manage.manage.manage_btn: Manage
 admin.classroom_manage.recommend.seq_th: Sequence
 admin.classroom_manage.recommend.name_th: '%name% Title'

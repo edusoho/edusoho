@@ -5650,7 +5650,8 @@ admin.classroom_manage.manage.price: %price%元
 admin.classroom_manage.manage.origin_price: 原价 %priceAll%元
 admin.classroom_manage.manage.published: 已发布
 admin.classroom_manage.manage.closed: 已关闭
-admin.classroom_manage.manage.unpublished: 未发布
+admin.classroom_manage.manage.unpublished: 已下架
+admin.classroom_manage.manage.draft: 未发布
 admin.classroom_manage.manage.manage_btn: 管理
 admin.classroom_manage.manage.coin_price: 原价 %coinPriceAll% %coinname%
 
