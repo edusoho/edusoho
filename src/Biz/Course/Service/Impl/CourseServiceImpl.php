@@ -824,6 +824,36 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
+    public function unpublishedCourse($id)
+    {
+        $course = $this->tryManageCourse($id);
+        if ('published' != $course['status']) {
+            $this->createNewException(CourseException::UNPUBLISHED_COURSE());
+        }
+        $course['status'] = 'unpublished';
+
+        try {
+            $this->beginTransaction();
+            $course = $this->getCourseDao()->update($id, $course);
+
+            $publishedCourses = $this->findPublishedCoursesByCourseSetId($course['courseSetId']);
+            $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($course['courseSetId']);
+            //如果课程下没有了已发布的教学计划，则关闭此课程
+            if (empty($publishedCourses) && empty($classroomRef)) {
+                $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+                if ('published' === $courseSet['status']) {
+                    $this->getCourseSetService()->unpublishedCourseSet($course['courseSetId']);
+                }
+            }
+            $this->commit();
+            $this->dispatchEvent('course.close', new Event($course));
+            $this->unpublishGoodsSpecs($course);
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
+    }
+
     public function publishCourse($id, $withTasks = false)
     {
         $this->tryManageCourse($id);

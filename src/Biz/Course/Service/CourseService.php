@@ -120,6 +120,14 @@ interface CourseService
 
     /**
      * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="close_course",funcName="getCourse")
+     */
+    public function unpublishedCourse($id);
+
+    /**
+     * @param $id
      * @param bool $withTasks
      *
      * @return mixed
