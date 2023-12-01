@@ -607,6 +607,7 @@ class ItemServiceImpl extends BaseService implements ItemService
 
     public function findDuplicatedMaterialItems($bankId, $material)
     {
+        $material = str_replace('\n', PHP_EOL, $material);
         $items = $this->getItemDao()->search(['bank_id' => $bankId, 'material_hash' => md5($material)], [], 0, PHP_INT_MAX, ['id', 'material']);
         $items = array_filter($items, function ($item) use ($material) {
             return $item['material'] == $material;
