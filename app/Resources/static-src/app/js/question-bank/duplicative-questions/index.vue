@@ -4,23 +4,23 @@
       <span class="duplicate-back" @click="goBack">
         <a-icon type="left" />
         <a-icon type="swap-left" />
-        返回
+        {{ 'importer.import_back_btn'|trans }}
       </span>
       <span class="duplicate-divider"></span>
       <span class="duplicate-title flex items-center"
         ><span class="bankName flex items-center"
           >【<span class="msg">{{ categoryName }}</span
           >】</span
-        >试题查重</span
+        >{{ 'question.bank.check'|trans }}</span
       >
     </div>
     <div class="duplicate-body flex">
       <div class="duplicate-question">
         <div class="duplicate-question-head">
-          共有重复题目:<label class="duplicate-question-count">{{
+          {{ 'question.bank.common.repeated'|trans }}:<label class="duplicate-question-count">{{
             questionData.length
           }}</label
-          >道
+          >{{ 'subject.question_unit'|trans }}
           <div
             v-show="isShowGuide"
             class="duplicate-question-item duplicate-question-active"
@@ -29,7 +29,7 @@
               {{ questionData[0].material }}
             </div>
             <span class="duplicate-question-check-count"
-              >{{ questionData[0].frequency }}次</span
+              >{{ questionData[0].frequency }}{{ 'question.bank.unit'|trans }}</span
             >
           </div>
         </div>
@@ -44,7 +44,7 @@
         />
       </div>
       <div class="duplicate-content">
-        <div class="duplicate-content-title">题目对比</div>
+        <div class="duplicate-content-title">{{ 'question.bank.topic.comparison'|trans }}</div>
         <div v-if="isHaveRepeat" class="mt16 flex flex-nowrap">
           <duplicate-question-content
             v-if="questionContentList[oneIndex]"
@@ -79,8 +79,8 @@
             class="no-data-img"
             src="/static-dist/app/img/question-bank/noduplicative.png"
           />
-          <div class="no-data-content">暂无重复题目</div>
-          <button class="return-btn">返回列表</button>
+          <div class="no-data-content">{{ 'question.bank.check.result.noData.title'|trans }}</div>
+          <button class="return-btn">{{ 'question.bank.check.result.noData.btn'|trans }}</button>
         </div>
       </div>
     </div>
@@ -97,10 +97,10 @@ export default {
     return {
       activeKey: 0,
       introOption: {
-        prevLabel: "上一步",
-        nextLabel: "下一步(1/2)",
-        skipLabel: "跳过",
-        doneLabel: "我知道了(2/2)",
+        prevLabel: Translator.trans("course_set.manage.prev_label"),
+        nextLabel: Translator.trans("question.bank.next_label"),
+        skipLabel: Translator.trans("question.bank.skip_label"),
+        doneLabel: Translator.trans("question.bank.finish_label"),
         showBullets: false,
         showStepNumbers: false,
         exitOnEsc: false,
@@ -140,10 +140,10 @@ export default {
       }
 
       if ($("[name=categoryId]").val() === "") {
-        return "全部题目";
+        return Translator.trans("question.bank.all_question");
       }
 
-      return "未分类";
+      return Translator.trans("question.bank.no_category");
     },
   },
   async mounted() {
@@ -164,12 +164,12 @@ export default {
       (that.introOption.steps = [
         {
           element: ".duplicate-question-head",
-          intro: Translator.trans("upgrade.cloud.capabilities.to.experience"),
+          intro: Translator.trans("question.bank.check.guide.one"),
           position: "bottom",
         },
         {
           element: ".question-num",
-          intro: Translator.trans("upgrade.cloud.capabilities.to.experience"),
+          intro: Translator.trans("question.bank.check.guide.two"),
           position: "bottom",
         },
       ]),
@@ -201,9 +201,9 @@ export default {
       ).then(async (res) => {
         // if(res) {
         //     that.$error({
-        //         title: '题目不存在',
-        //         content: '该题目可能在题目管理页进行了编辑',
-        //         okText: '确认',
+        //         title: Translator.trans("question.bank.error.tip.title"),
+        //         content: Translator.trans("question.bank.error.tip.content"),
+        //         okText: Translator.trans("site.btn.confirm"),
         //         async onOk() {
         //             await that.getData()
         //             await that.changeOption()

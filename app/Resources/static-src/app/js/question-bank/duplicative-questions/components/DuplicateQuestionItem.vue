@@ -7,7 +7,7 @@
     <div class="duplicate-question-title">
       {{ title | stripTags }}
     </div>
-    <span class="duplicate-question-check-count">{{ count }}次</span>
+    <span class="duplicate-question-check-count">{{ count }}{{ 'question.bank.unit'|trans }}</span>
   </div>
 </template>
 <script>

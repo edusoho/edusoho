@@ -3,10 +3,10 @@
     <div class="duplicate-head">
       <span class="duplicate-back" @click="goLast">
         <a-icon type="left" />
-        返回
+        {{ 'importer.import_back_btn'|trans }}
       </span>
       <span class="duplicate-divider"></span>
-      <span class="duplicate-title">题目编辑</span>
+      <span class="duplicate-title">{{ 'question.bank.head.edit'|trans }}</span>
     </div>
     <div class="duplicate-body flex">
       <item-manage
@@ -105,6 +105,7 @@ export default {
         })
         .catch((res) => {
           console.log(res);
+          that.$message.error(res.message);
         });
     },
     goBack() {
@@ -118,6 +119,101 @@ export default {
     },
     downloadAttachment(fileId) {
       this.fileId = fileId;
+    },
+    previewAttachmentCallback() {
+        let that = this;
+        return new Promise(resolve => {
+          $.ajax({
+            url: $('[name=preview-attachment-url]').val(),
+            type: 'post',
+            data: {id: this.fileId},
+            beforeSend(request) {
+              request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            }
+          }).done(function (resp) {
+            resp.data['sdkBaseUri'] = app.cloudSdkBaseUri;
+            resp.data['disableDataUpload'] = app.cloudDisableLogReport;
+            resp.data['disableSentry'] = app.cloudDisableLogReport;
+            resolve(resp);
+            that.fileId = 0;
+          })
+        });
+    },
+    downloadAttachmentCallback() {
+      let that = this;
+      return new Promise(resolve => {
+        $.ajax({
+          url: $('[name=download-attachment-url]').val(),
+          type: 'post',
+          data: {id: this.fileId},
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+          }
+        }).done(function (resp) {
+          resolve(resp);
+          that.fileId = 0;
+        })
+      });
+    },
+    deleteAttachmentCallback() {
+      let that = this;
+      return new Promise(resolve => {
+        $.ajax({
+          url: $('[name=delete-attachment-url]').val(),
+          type: 'post',
+          data: {id: this.fileId},
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+          }
+        }).done(function (resp) {
+          resolve(resp);
+          that.fileId = 0;
+        })
+      });
+    },
+    getRepeatStem(data) {
+      const stem = data.data.material !== '' ? data.data.material : data.data.questions[0].stem
+      return new Promise(resolve => {
+        $.ajax({
+          url: $('[name=check_duplicative_url]').val(),
+          contentType: 'application/json;charset=utf-8',
+          type: 'post',
+          data: JSON.stringify({material:stem}),
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+          }
+        }).done(function (res) {
+          resolve(res);
+        })
+      });
+    },
+    forceRemoveModalDom() {
+      const modal = document.querySelector(".ant-modal-root");
+
+      if (modal) {
+        modal.remove();
+      }
+
+      document.body.style = "";
+    },
+    createdItemQuestion(data) {
+      console.log(data);
+      let submission = data.isAgain ? 'continue' : '';
+      data = data.data;
+      data['submission'] = submission;
+      data['type'] = $('[name=type]').val();
+      let mode = 'edit';
+      $.ajax({
+        url: $('[name=update_url]').val(),
+        contentType: 'application/json;charset=utf-8',
+        type: 'post',
+        data: JSON.stringify(data),
+        beforeSend(request) {
+          request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+        }
+      }).done((res) => {
+          window.location.href = $('[name=back_url]').val();
+      })
     },
   },
 };

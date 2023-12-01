@@ -22,7 +22,6 @@
           <div class="question-small-title">{{ item.title }}</div>
           <div class="question-small-content">
             {{ item.content }}
-            <!-- {{ questionContent[item.content] ? questionContent[item.content] : '暂无' }} -->
           </div>
         </div>
       </div>
@@ -30,8 +29,8 @@
         <question-item :info="questionContent" />
       </div>
       <div class="question-foot">
-        <a-button @click="onEdit" class="mr10">编辑</a-button>
-        <a-button @click="confirm">删除</a-button>
+        <a-button @click="onEdit" class="mr10">{{ 'site.btn.edit'|trans }}</a-button>
+        <a-button @click="confirm">{{ 'site.delete'|trans }}</a-button>
       </div>
     </div>
   </div>
@@ -90,20 +89,20 @@ export default {
     headInfo() {
       return [
         {
-          title: "分类",
-          content: this.questionContent["category_name"] || "暂无",
+          title: Translator.trans("category"),
+          content: this.questionContent["category_name"] || Translator.trans("question.bank.none"),
         },
         {
-          title: "类型",
-          content: this.typeList[this.questionContent["type"]] || "暂无",
+          title: Translator.trans("question.bank.type"),
+          content: this.typeList[this.questionContent["type"]] || Translator.trans("question.bank.none"),
         },
         {
-          title: "难度",
-          content: this.difficultyList[this.questionContent["difficulty"]] || "暂无"
+          title: Translator.trans("question.bank.difficulty.default"),
+          content: this.difficultyList[this.questionContent["difficulty"]] || Translator.trans("question.bank.none")
         },
         {
-          title: "更新日期",
-          content: this.$dateFormat(this.questionContent["updated_time"]) || "暂无",
+          title: Translator.trans("question.bank.update_time"),
+          content: this.$dateFormat(this.questionContent["updated_time"]) || Translator.trans("question.bank.none"),
         },
       ];
     }
@@ -129,11 +128,11 @@ export default {
     confirm() {
       const that = this;
       this.$confirm({
-        title: "真的要删除该题目吗？",
-        content: "删除题目，可能会影响课时的练习，请谨慎操作！",
+        title: Translator.trans("question.bank.delete.tip.title"),
+        content: Translator.trans("question.bank.delete.tip.content"),
         icon: "exclamation-circle",
-        okText: "确认",
-        cancelText: "取消",
+        okText: Translator.trans("site.confirm"),
+        cancelText: Translator.trans("site.cancel"),
         async onOk() {
           await Repeat.delQuestion(
             $("[name=questionBankId]").val(),
@@ -141,7 +140,7 @@ export default {
           )
             .then(async (res) => {
               if (res) {
-                that.$message.success("删除成功");
+                that.$message.success(Translator.trans("site.delete_success_hint"));
                 await that.$emit("changeOption", that.activeKey);
               }
             })

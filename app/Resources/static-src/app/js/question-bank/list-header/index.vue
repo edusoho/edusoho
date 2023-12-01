@@ -60,7 +60,7 @@
         </a-form-model-item>
       </a-form-model>
     </div>
-    <a-spin class="spin-fixed" :spinning="isLoading" :indicator="indicator" tip="正在查重..." />
+    <a-spin class="spin-fixed" :spinning="isLoading" :indicator="indicator" :tip="'question.bank.check_tip'|trans" />
     <input type="hidden" class="js-list-header-difficulty" :value=difficulty>
     <input type="hidden" class="js-list-header-type" :value=type>
     <input type="hidden" class="js-list-header-keyword" :value=keyword>
@@ -138,7 +138,7 @@ export default {
   methods: {
     async duplicateChecking() {
       if($("[name=question_count]").val() == 0) {
-        return this.$message.warning('该分类暂无题目');
+        return this.$message.warning(Translator.trans('question.bank.check.result.category.noData'));
       }
       this.isLoading = true
       await Repeat.getRepeatQuestion($("[name=questionBankId]").val(), { categoryId: $("[name=category_id]").val() }).then(res => {
@@ -147,7 +147,7 @@ export default {
         if(res.length > 0) {
           window.location.href = `/question_bank/${$('.js-questionBank-id').val()}/check_duplicative_questions?categoryId=${this.categoryId}`
         } else {
-          this.$message.warning('无重复题目');
+          this.$message.warning(Translator.trans('question.bank.check.result.noData'));
         }
       }).catch(err => {
         this.isLoading = false
