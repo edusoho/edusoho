@@ -81,7 +81,8 @@ class QuestionParserController extends BaseController
         return $this->render($templateInfo['reEditTemplate'], [
             'filename' => mb_substr(str_replace('.docx', '', $data['filename']), 0, 50, 'utf-8'),
             'items' => $items,
-            'questionBankId' => $questionBank['itemBankId'],
+            'questionBankId' => $questionBank['id'],
+            'itemBankId' => $questionBank['itemBankId'],
             'categoryTree' => $categoryTree,
             'type' => $type,
             'categoryId' => $categoryId,
