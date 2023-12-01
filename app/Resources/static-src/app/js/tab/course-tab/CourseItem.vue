@@ -83,9 +83,6 @@ export default {
         width: `${this.course?.progress?.percent}%`
       }
     }
-  },
-  mounted() {
-    console.log('course', this.course)
   }
 }
 </script>
