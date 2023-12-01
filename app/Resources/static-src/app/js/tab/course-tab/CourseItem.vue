@@ -13,6 +13,9 @@
           {{ course.courseSetTitle }}
         </a>
       </div>
+      <div class="my-course-item__classroom text-overflow">
+        <span><a class="cd-link-assist" href="/classroom/883">{{ course.title }}</a></span>
+      </div>
 
       <div class="my-course-item__progress cd-mt32 cd-clearfix">
         <span class="my-course-item__progress__text">学习进度</span>
@@ -80,6 +83,9 @@ export default {
         width: `${this.course?.progress?.percent}%`
       }
     }
+  },
+  mounted() {
+    console.log('course', this.course)
   }
 }
 </script>
