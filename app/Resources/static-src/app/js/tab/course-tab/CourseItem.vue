@@ -13,8 +13,8 @@
           {{ course.courseSetTitle }}
         </a>
       </div>
-      <div class="my-course-item__classroom text-overflow">
-        <span><a class="cd-link-assist" href="/classroom/883">{{ course.title }}</a></span>
+      <div class="mt8 text-overflow">
+        <a class="cd-link-assist" href="/classroom/883">{{ course.title }}</a>
       </div>
 
       <div class="my-course-item__progress cd-mt32 cd-clearfix">
