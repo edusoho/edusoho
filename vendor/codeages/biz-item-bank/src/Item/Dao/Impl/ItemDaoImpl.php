@@ -80,10 +80,11 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
             'material_hashs' => $materialHashes,
         ];
         $builder = $this->createQueryBuilder($conditions)
-            ->select('material, count(*) as frequency')
+            ->select('material, count(*) as frequency, max(updated_time) as latest_updated_time')
             ->groupBy('material')
             ->having('frequency > 1')
-            ->orderBy('frequency', 'DESC');
+            ->orderBy('latest_updated_time', 'DESC')
+            ->addOrderBy('material');
 
         return $builder->execute()->fetchAll() ?: [];
     }
