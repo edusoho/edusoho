@@ -1220,6 +1220,7 @@ course.status.followed: Bookmarked
 course.status.follow: Bookmark
 course.status.closed: Closed
 course.status.unpublished: Unpublished
+course.status.delist: No longer available
 course.status.serialized: Updating
 course.status.finished: Finished
 course.status.published: Published
