@@ -7,13 +7,14 @@
 {% set basepath = path('course_show', {id: course.id}) %}
 
 <div class="course-manage-header clearfix">
-
   {% if course.status=='closed' %}
     <span class="course-publish-status course-publish-status--closed">{{'course.status.closed'|trans}}</span>
   {% elseif course.status=='draft' %}
     <span class="course-publish-status course-publish-status--unpublished">{{'course.status.unpublished'|trans}}</span>
   {% elseif course.status=='published' %}
     <span class="course-publish-status course-publish-status--published">{{'course.status.published'|trans}}</span>
+  {% elseif course.status=='unpublished' %}
+    <span class="course-publish-status course-publish-status--unpublished">{{'course.status.delist'|trans}}</span>
   {% endif %}
 
   <div class="course-manage-header-info">

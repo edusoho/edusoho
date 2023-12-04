@@ -1466,6 +1466,7 @@ course.status.followed: 已收藏
 course.status.follow: 收藏
 course.status.closed: 已关闭
 course.status.unpublished: 未发布
+course.status.delist: 已下架
 course.status.serialized: 更新中
 course.status.finished: 已完结
 course.status.published: 已发布
