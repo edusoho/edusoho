@@ -288,7 +288,7 @@ class ThreadController extends BaseController
                 unset($fields['id']);
             }
             if (!empty($target['type'] && !empty($target['id']))) {
-                $this->checkoutStatus($target);
+                $this->checkStatus($target);
             }
             $fields['threadId'] = $threadId;
             unset($fields['attachment']);
@@ -348,7 +348,7 @@ class ThreadController extends BaseController
         }
     }
 
-    protected function checkoutStatus($target)
+    protected function checkStatus($target)
     {
         if (!empty($target['type']) && 'course' == $target['type']) {
             $course = $this->getCourseService()->getCourse($target['id']);
@@ -385,7 +385,7 @@ class ThreadController extends BaseController
             unset($fields['id']);
         }
         if (!empty($target)) {
-            $this->checkoutStatus($target);
+            $this->checkStatus($target);
         }
         $fields['content'] = $this->autoParagraph($fields['content']);
         $fields['threadId'] = $threadId;
