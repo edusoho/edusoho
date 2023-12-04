@@ -367,10 +367,12 @@ class ThreadController extends BaseController
         }
     }
 
-    public function postReplyAction(Request $request, $threadId, $postId, $targetType = 'classroom')
+    public function postReplyAction(Request $request, $threadId, $postId, $targetType = 'classroom', $targetId = '')
     {
         $fields = $request->request->all();
-
+        if (!empty($targetId)) {
+            $this->checkoutStatus(['type' => 'classroom', 'id' => $targetId]);
+        }
         $fields['content'] = $this->autoParagraph($fields['content']);
         $fields['threadId'] = $threadId;
         $fields['parentId'] = $postId;
