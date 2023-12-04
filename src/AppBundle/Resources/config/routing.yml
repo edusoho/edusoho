@@ -2298,12 +2298,6 @@ course_set_manage_course_unpublished:
         _controller: 'AppBundle:Course/CourseManage:unpublished'
     methods:
         - POST
-course_set_manage_course_show:
-    path: '/course_set/{courseSetId}/course/{courseId}/show'
-    defaults:
-        _controller: 'AppBundle:Course/CourseManage:show'
-    methods:
-        - POST
 course_set_manage_course_delete:
     path: '/course_set/{courseSetId}/course/{courseId}/delete'
     defaults:

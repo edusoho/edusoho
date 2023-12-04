@@ -900,6 +900,13 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(['success' => true]);
     }
 
+    public function unpublishedAction(Request $request, $courseSetId, $courseId)
+    {
+        $this->getCourseService()->unpublishedCourse($courseId);
+
+        return $this->createJsonResponse(['success' => true]);
+    }
+
     public function deleteAction(Request $request, $courseSetId, $courseId)
     {
         $this->getCourseService()->deleteCourse($courseId);
