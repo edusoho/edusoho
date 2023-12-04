@@ -282,7 +282,12 @@ class ThreadController extends BaseController
 
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
-            if (!empty($target)) {
+            if (!empty($fields['type'] && !empty($fields['id']))) {
+                $target = ['type' => $fields['type'], 'id' => $fields['id']];
+                unset($fields['type']);
+                unset($fields['id']);
+            }
+            if (!empty($target['type'] && !empty($target['id']))) {
                 $this->checkoutStatus($target);
             }
             $fields['threadId'] = $threadId;
@@ -317,7 +322,6 @@ class ThreadController extends BaseController
 
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
-            $this->checkoutStatus($fields);
             if (!$this->checkDragCaptchaToken($request, $fields['_dragCaptchaToken'])) {
                 return $this->createJsonResponse(['error' => ['code' => 403, 'message' => $this->trans('exception.form..drag.expire')]], 403);
             }
@@ -370,8 +374,18 @@ class ThreadController extends BaseController
     public function postReplyAction(Request $request, $threadId, $postId, $targetType = 'classroom', $targetId = '')
     {
         $fields = $request->request->all();
+        $target = [];
         if (!empty($targetId)) {
-            $this->checkoutStatus(['type' => 'classroom', 'id' => $targetId]);
+            $target = ['type' => 'classroom', 'id' => $targetId];
+        }
+
+        if (!empty($fields['type'] && !empty($fields['id']))) {
+            $target = ['type' => $fields['type'], 'id' => $fields['id']];
+            unset($fields['type']);
+            unset($fields['id']);
+        }
+        if (!empty($target)) {
+            $this->checkoutStatus($target);
         }
         $fields['content'] = $this->autoParagraph($fields['content']);
         $fields['threadId'] = $threadId;
