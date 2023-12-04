@@ -364,7 +364,7 @@ class ThreadController extends BaseController
         }
 
         if (!empty($target['type']) && 'classroom' == $target['type']) {
-            $classroom = $this->getExerciseService()->get($target['id']);
+            $classroom = $this->getClassroomService()->getClassroom($target['id']);
             if ('closed' == $classroom['status']) {
                 throw ClassroomException::CLOSED_CLASSROOM();
             }
