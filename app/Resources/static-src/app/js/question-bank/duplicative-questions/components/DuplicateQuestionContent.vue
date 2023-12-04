@@ -4,15 +4,16 @@
       <button
         v-for="(item, index) in count"
         :key="index"
-        class="numbering"
+        class="numbering relative"
         :class="activeIndex == index ? 'numbering-active' : ''"
         :disabled="nextIndex == index"
         @click="changeQuestion(index)"
       >
-        {{ item }}
+      <img v-if="activeIndex == index" class="numbering-active-img" src="/static-dist/app/img/duplicate-active.png" />
+      {{ item }}
       </button>
     </div>
-    <div class="question-content mt8">
+    <div ref="container" @scroll="onScroll" class="question-content mt8">
       <div class="question-head">
         <div
           class="question-head-item"
@@ -25,10 +26,11 @@
           </div>
         </div>
       </div>
-      <div class="question-body">
+      <div class="question-body relative">
+        <div class="question-index">{{ activeIndex+1 }}.</div>
         <question-item :info="questionContent" />
       </div>
-      <div class="question-foot">
+      <div :class="isSticky ? 'sticky-button': ''"  ref="stickyButton" class="question-foot">
         <a-button @click="onEdit" class="mr10">{{ 'site.btn.edit'|trans }}</a-button>
         <a-button @click="confirm">{{ 'site.delete'|trans }}</a-button>
       </div>
@@ -38,11 +40,17 @@
 <script>
 import QuestionItem from "./Item";
 import { Repeat } from "common/vue/service";
+import "store";
+
 export default {
   props: {
     questionContent: {
       type: Object,
       default: () => {},
+    },
+    title: {
+      type: String,
+      default: "",
     },
     count: {
       type: Number,
@@ -67,6 +75,7 @@ export default {
   },
   data() {
     return {
+      isSticky: false,
       difficultyList: {
         default: Translator.trans("question.bank.difficulty.default"),
         simple: Translator.trans("question.bank.difficulty.simple"),
@@ -117,11 +126,26 @@ export default {
       await this.$emit("getData");
       await this.$emit("changeOption");
     },
+    async activeIndex() {
+      await Repeat.getQuestionInfo(this.questionContent.id).then((res) => {
+        this.$emit("changeQuestionContent", `${this.type}Index`, res);
+      })
+    }
   },
   components: {
     QuestionItem,
   },
   methods: {
+    onScroll(e) {
+      const container = this.$refs.container;
+      const stickyButton = this.$refs.stickyButton;
+
+      if (!this.isSticky && container.scrollTop > container.clientHeight - stickyButton.offsetHeight - 20) {
+        this.isSticky = true;
+      } else if (this.isSticky && container.scrollTop <= container.clientHeight - stickyButton.offsetHeight - 20) {
+        this.isSticky = false;
+      }
+    },
     getDifficulty(str) {
       return this.difficultyList(str)
     },
@@ -152,12 +176,14 @@ export default {
       });
     },
     onEdit() {
+      store.set("DUPLICATE_MATERIAL", this.title);
       window.location.href = `/question_bank/${$(
         "[name=questionBankId]"
       ).val()}/duplicative_question/${this.questionContent.id}/update`;
     },
     changeQuestion(index) {
       this.$emit("changeQuestion", this.type, index);
+      
     },
   },
 };

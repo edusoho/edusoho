@@ -18,7 +18,7 @@ export const Repeat = {
 
     // 获取一道题目信息
     async getQuestionInfo(id) {
-      return apiClient.post(`/api/item/${id}`)
+      return apiClient.get(`/api/item/${id}`)
     }
   }
   

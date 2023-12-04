@@ -1,9 +1,8 @@
 <template>
   <div id="duplicate-check">
     <div class="duplicate-head flex items-center">
-      <span class="duplicate-back" @click="goBack">
-        <a-icon type="left" />
-        <a-icon type="swap-left" />
+      <span class="duplicate-back flex items-center" @click="goBack">
+        <span class="es-icon es-icon-fanhui mr4"></span>
         {{ 'importer.import_back_btn'|trans }}
       </span>
       <span class="duplicate-divider"></span>
@@ -14,7 +13,7 @@
         >{{ 'question.bank.check'|trans }}</span
       >
     </div>
-    <div class="duplicate-body flex">
+    <div class="duplicate-body">
       <div class="duplicate-question">
         <div class="duplicate-question-head">
           {{ 'question.bank.common.repeated'|trans }}:<label class="duplicate-question-count">{{
@@ -26,7 +25,7 @@
             class="duplicate-question-item duplicate-question-active"
           >
             <div class="duplicate-question-title">
-              {{ questionData[0].material }}
+              {{ questionData[0].displayMaterial | stripTags }}
             </div>
             <span class="duplicate-question-check-count"
               >{{ questionData[0].frequency }}{{ 'question.bank.unit'|trans }}</span
@@ -52,12 +51,14 @@
             @getData="getData"
             @changeQuestion="changeQuestion"
             @startQuestion="startQuestion"
+            @changeQuestionContent="changeQuestionContent"
             type="one"
             :activeIndex="oneIndex"
             :activeKey="activeKey"
             :nextIndex="twoIndex"
             :questionContent="questionContentList[oneIndex]"
             :count="questionContentList.length"
+            :title="questionData[activeKey].material"
             class="mr16"
           />
           <duplicate-question-content
@@ -66,12 +67,14 @@
             @getData="getData"
             @changeQuestion="changeQuestion"
             @startQuestion="startQuestion"
+            @changeQuestionContent="changeQuestionContent"
             type="two"
             :activeIndex="twoIndex"
             :activeKey="activeKey"
             :nextIndex="oneIndex"
             :questionContent="questionContentList[twoIndex]"
             :count="questionContentList.length"
+            :title="questionData[activeKey].material"
           />
         </div>
         <div v-else class="no-data text-center">
@@ -132,7 +135,11 @@ export default {
     DuplicateQuestionItem,
     DuplicateQuestionContent,
   },
-  watch: {},
+  watch: {
+    activeKey() {
+      this.changeOption(this.activeKey)
+    },
+  },
   computed: {
     categoryName() {
       if ($("[name=categoryName]").val()) {
@@ -149,19 +156,23 @@ export default {
   async mounted() {
     await this.getData();
     await this.changeOption();
-    if (!store.get("QUESTION_IMPORT_INTRO")) {
+    if (!store.get("QUESTION_DUPLICATE_INTRO")) {
       this.isShowGuide = true;
 
       this.$nextTick(() => {
         this.initGuide();
       });
     }
+
+    if($("[name=page_type]").val() && store.get("DUPLICATE_MATERIAL")) {
+      this.matchActive(store.get("DUPLICATE_MATERIAL"))
+    }
   },
   methods: {
     initGuide() {
       let that = this;
-      this.isShowGuide = true;
-      (that.introOption.steps = [
+      that.isShowGuide = true;
+      that.introOption.steps = [
         {
           element: ".duplicate-question-head",
           intro: Translator.trans("question.bank.check.guide.one"),
@@ -172,20 +183,20 @@ export default {
           intro: Translator.trans("question.bank.check.guide.two"),
           position: "bottom",
         },
-      ]),
-        introJs()
-          .setOptions(that.introOption)
-          .start()
-          .onchange(function () {
-            that.isShowGuide = false;
-            document.querySelectorAll(".introjs-skipbutton")[0].style.display =
-              "inline-block";
-            document.querySelectorAll(".introjs-prevbutton")[0].style.display =
-              "none";
-          })
-          .oncomplete(function () {
-            store.set("DUPLICATE_IMPORT_INTRO", true);
-          });
+      ]
+      introJs()
+        .setOptions(that.introOption)
+        .start()
+        .onchange(function () {
+          that.isShowGuide = false;
+          document.querySelectorAll(".introjs-skipbutton")[0].style.display =
+            "inline-block";
+          document.querySelectorAll(".introjs-prevbutton")[0].style.display =
+            "none";
+        })
+        .oncomplete(function () {
+          store.set("QUESTION_DUPLICATE_INTRO", true);
+        });
     },
     changeQuestion(type, index) {
       this[`${type}Index`] = index;
@@ -218,7 +229,7 @@ export default {
       });
     },
     goBack() {
-      window.history.back();
+      window.location.href = `/question_bank/${$("[name=questionBankId]").val()}/questions`;
     },
     async getData() {
       await Repeat.getRepeatQuestion($("[name=questionBankId]").val(), {
@@ -232,6 +243,17 @@ export default {
     startQuestion() {
       this.activeKey = 0;
     },
+    matchActive(title) {
+      for(let i = 0; i < this.questionData.length; i++) {
+        if(this.questionData[i].material == title) {
+          this.activeKey = i;
+          break;
+        }
+      }
+    },
+    changeQuestionContent(index, content) {
+      this.questionContentList[index] = content;
+    }
   },
 };
 </script>

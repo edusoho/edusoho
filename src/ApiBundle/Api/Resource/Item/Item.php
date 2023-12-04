@@ -20,6 +20,8 @@ class Item extends AbstractResource
             $category = $this->getItemCategoryService()->getItemCategory($item['category_id']);
             $item['category_name'] = $category['name'];
         }
+
+        return $item;
     }
 
     /**

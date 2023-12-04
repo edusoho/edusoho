@@ -19,9 +19,10 @@
     </div>
   {% endverbatim %}
 
+  <input type="hidden" name="page_type" value="{{ app.request.query.get('type')|default('') }}">
   <input type="hidden" name="question_bank_attachment_setting" value="{{ setting('question_bank_attachment_setting')|json_encode }}">
   <input type="hidden" name="questionBankId" value="{{ questionBankId }}">
   <input type="hidden" name="categoryId" value="{{ categoryId }}">
   <input type="hidden" name="categoryName" value="{{ categoryName }}">
-  {% include 'attachment-upload/upload-data.html.twig'  %}
+  {% include 'attachment-upload/upload-data.html.twig' %}
 {% endblock %}

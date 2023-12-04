@@ -1,8 +1,8 @@
 <template>
   <div id="update-duplicate-check" class="ibs-vue">
-    <div class="duplicate-head">
-      <span class="duplicate-back" @click="goLast">
-        <a-icon type="left" />
+    <div class="duplicate-head flex items-center">
+      <span class="duplicate-back flex items-center" @click="goLast">
+        <span class="es-icon es-icon-fanhui mr4"></span>
         {{ 'importer.import_back_btn'|trans }}
       </span>
       <span class="duplicate-divider"></span>
@@ -212,7 +212,7 @@ export default {
           request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
         }
       }).done((res) => {
-          window.location.href = $('[name=back_url]').val();
+          window.location.href = $('[name=back_url]').val() + '?type=afterEdit';
       })
     },
   },
