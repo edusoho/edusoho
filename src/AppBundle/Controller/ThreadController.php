@@ -275,14 +275,16 @@ class ThreadController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function postAction(Request $request, $threadId)
+    public function postAction(Request $request, $threadId, $target = [])
     {
         $user = $this->getCurrentUser();
         $thread = $this->getThreadService()->getThread($threadId);
 
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
-            $this->checkoutStatus($fields);
+            if (!empty($target)) {
+                $this->checkoutStatus($target);
+            }
             $fields['threadId'] = $threadId;
             unset($fields['attachment']);
             $post = $this->getThreadService()->createPost($fields);
@@ -291,7 +293,7 @@ class ThreadController extends BaseController
             $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $post['id'], $attachment['targetType'], $attachment['type']);
 
             return $this->render('thread/part/post-item.html.twig', [
-                'target' => $fields['target'],
+                'target' => $target,
                 'post' => $post,
                 'author' => $user,
                 'service' => $this->getThreadService(),
@@ -299,6 +301,7 @@ class ThreadController extends BaseController
         }
 
         return $this->render('thread/post.html.twig', [
+            'target' => $target,
             'thread' => $thread,
             'service' => $this->getThreadService(),
         ]);
@@ -341,23 +344,23 @@ class ThreadController extends BaseController
         }
     }
 
-    protected function checkoutStatus($files)
+    protected function checkoutStatus($target)
     {
-        if (!empty($files['courseId'])) {
-            $course = $this->getCourseService()->getCourse($files['courseId']);
+        if (!empty($target['type']) && 'course' == $target['type']) {
+            $course = $this->getCourseService()->getCourse($target['id']);
             if ('0' == $course['canLearn']) {
                 throw CourseException::CLOSED_COURSE();
             }
         }
-        if (!empty($files['exerciseId'])) {
-            $exercise = $this->getExerciseService()->get($files['exerciseId']);
+        if (!empty($target['type']) && 'exercise' == $target['type']) {
+            $exercise = $this->getExerciseService()->get($target['id']);
             if ('closed' == $exercise['status']) {
                 throw ExerciseException::CLOSED_EXERCISE();
             }
         }
 
-        if (!empty($files['classroomId'])) {
-            $classroom = $this->getExerciseService()->get($files['classroomId']);
+        if (!empty($target['type']) && 'classroom' == $target['type']) {
+            $classroom = $this->getExerciseService()->get($target['id']);
             if ('closed' == $classroom['status']) {
                 throw ClassroomException::CLOSED_CLASSROOM();
             }
