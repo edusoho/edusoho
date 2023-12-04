@@ -4,9 +4,15 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Classroom\ClassroomException;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\CourseException;
+use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\PostFilter\Service\TokenBucketService;
 use Biz\System\Service\SettingService;
+use Biz\Testpaper\ExerciseException;
 use Biz\Thread\Service\ThreadService;
 use Biz\Thread\ThreadException;
 use Biz\User\Service\NotificationService;
@@ -276,6 +282,7 @@ class ThreadController extends BaseController
 
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
+            $this->checkoutStatus($fields);
             $fields['threadId'] = $threadId;
             unset($fields['attachment']);
             $post = $this->getThreadService()->createPost($fields);
@@ -284,6 +291,7 @@ class ThreadController extends BaseController
             $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $post['id'], $attachment['targetType'], $attachment['type']);
 
             return $this->render('thread/part/post-item.html.twig', [
+                'target' => $fields['target'],
                 'post' => $post,
                 'author' => $user,
                 'service' => $this->getThreadService(),
@@ -306,7 +314,7 @@ class ThreadController extends BaseController
 
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
-
+            $this->checkoutStatus($fields);
             if (!$this->checkDragCaptchaToken($request, $fields['_dragCaptchaToken'])) {
                 return $this->createJsonResponse(['error' => ['code' => 403, 'message' => $this->trans('exception.form..drag.expire')]], 403);
             }
@@ -333,9 +341,33 @@ class ThreadController extends BaseController
         }
     }
 
+    protected function checkoutStatus($files)
+    {
+        if (!empty($files['courseId'])) {
+            $course = $this->getCourseService()->getCourse($files['courseId']);
+            if ('0' == $course['canLearn']) {
+                throw CourseException::CLOSED_COURSE();
+            }
+        }
+        if (!empty($files['exerciseId'])) {
+            $exercise = $this->getExerciseService()->get($files['exerciseId']);
+            if ('closed' == $exercise['status']) {
+                throw ExerciseException::CLOSED_EXERCISE();
+            }
+        }
+
+        if (!empty($files['classroomId'])) {
+            $classroom = $this->getExerciseService()->get($files['classroomId']);
+            if ('closed' == $classroom['status']) {
+                throw ClassroomException::CLOSED_CLASSROOM();
+            }
+        }
+    }
+
     public function postReplyAction(Request $request, $threadId, $postId, $targetType = 'classroom')
     {
         $fields = $request->request->all();
+
         $fields['content'] = $this->autoParagraph($fields['content']);
         $fields['threadId'] = $threadId;
         $fields['parentId'] = $postId;
@@ -527,5 +559,29 @@ class ThreadController extends BaseController
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getExerciseService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 }
