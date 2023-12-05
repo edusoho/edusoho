@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\CourseException;
 use Biz\Course\MemberException;
 use Biz\Course\Service\ThreadService;
 use Biz\File\Service\UploadFileService;
@@ -182,7 +183,9 @@ class ThreadController extends CourseBaseController
     public function createAction(Request $request, $courseId)
     {
         list($course, $member, $response) = $this->tryBuildCourseLayoutData($request, $courseId);
-
+        if ('0' == $course['canLearn']) {
+            throw CourseException::CLOSED_COURSE();
+        }
         if ($response) {
             return $response;
         }
@@ -422,7 +425,9 @@ class ThreadController extends CourseBaseController
     public function postAction(Request $request, $courseId, $threadId)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-
+        if ('0' == $course['canLearn']) {
+            throw CourseException::CLOSED_COURSE();
+        }
         if ($course['parentId']) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroomSetting = $this->getSettingService()->get('classroom');

@@ -69,7 +69,9 @@ class ClassroomThreadController extends BaseController
         }
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-
+        if ('closed' == $classroom['status']) {
+            throw ClassroomException::CLOSED_CLASSROOM();
+        }
         if ('event' == $type && !$this->getClassroomService()->canCreateThreadEvent(['targetId' => $classroomId])) {
             $this->createNewException(ClassroomException::FORBIDDEN_CREATE_THREAD_EVENT());
         } elseif (in_array($type, ['discussion', 'question']) && !$this->getClassroomService()->canTakeClassroom($classroomId, true)) {
