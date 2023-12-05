@@ -160,12 +160,11 @@ class PagedCourseLesson {
         },
 
         'taskItemClass': function(data, context) {
-          console.log(context)
           const canLearn = context.course.canLearn
           const allowedTaskTypes = ['testpaper', 'homework', 'exercise'];
           const isTaskTypeAllowed = allowedTaskTypes.includes(data.type);
           const isTaskResultIncomplete = data.resultStatus != 'finish';
-console.log(canLearn)
+          
           if(canLearn == '1') {
             return 'title'
           }
