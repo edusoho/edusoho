@@ -1715,6 +1715,7 @@ t.add("goods.show_page.vip_free_learn_new", "Free exchange for vip", "js", "en")
 t.add("goods.show_page.vip_buy", "%vipName% free learn", "js", "en");
 t.add("goods.show_page.vip_upgrade", "Upgrade to %vipName% free learn", "js", "en");
 t.add("goods.show_page.unpublished_tips", "The product has not been released. It is not allowed to join or purchase", "js", "en");
+t.add("goods.show_page.closed_tips", "The product is closed, not allowed to join and purchase", "js", "en");
 t.add("goods.show_page.course_not_buyable_tips", "Sorry, this course cannot be learned, please contact the study teacher", "js", "en");
 t.add("goods.show_page.classroom_not_buyable_tips", "Sorry, this classroom cannot be learned, please contact  the study teacher", "js", "en");
 t.add("goods.show_page.join_expiry_tips", "Sorry, this product has expired. Please contact customer service", "js", "en");

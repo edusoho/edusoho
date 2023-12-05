@@ -285,7 +285,7 @@
                     return 'detail-left__text-share js-handleLearnOnMessage'
                 }
                 
-                if(this.goods.type == 'classroom' && goods.product.target.status == 'closed'){
+                if(this.goods.type == 'classroom' && this.goods.product.target.status == 'closed'){
                     return 'detail-left__text-share js-handleClassroomOnMessage'
                 }
 
@@ -293,6 +293,7 @@
             }
         },
         mounted() {
+            console.log(this.goods)
             this.remainTime();
             this.getDrpInfo();
         },

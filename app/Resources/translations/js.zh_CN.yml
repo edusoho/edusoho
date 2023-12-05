@@ -1888,6 +1888,7 @@ goods.show_page.vip_free_learn_new: 会员免费兑换
 goods.show_page.vip_buy: %vipName%免费
 goods.show_page.vip_upgrade: 升级为%vipName%免费
 goods.show_page.unpublished_tips: 商品还未发布，不允许加入和购买
+goods.show_page.closed_tips: 商品已关闭，不允许加入和购买
 goods.show_page.course_not_buyable_tips: 抱歉，该课程无法学习，请联系学校老师
 goods.show_page.classroom_not_buyable_tips: 抱歉，该班级无法学习，请联系学校老师
 goods.show_page.join_expiry_tips: 抱歉，该商品已超过加入有效期，请联系客服

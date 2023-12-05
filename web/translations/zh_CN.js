@@ -1671,6 +1671,7 @@ t.add("goods.show_page.vip_free_learn_new", "\u4f1a\u5458\u514d\u8d39\u5151\u636
 t.add("goods.show_page.vip_buy", "%vipName%\u514d\u8d39", "js", "zh_CN");
 t.add("goods.show_page.vip_upgrade", "\u5347\u7ea7\u4e3a%vipName%\u514d\u8d39", "js", "zh_CN");
 t.add("goods.show_page.unpublished_tips", "\u5546\u54c1\u8fd8\u672a\u53d1\u5e03\uff0c\u4e0d\u5141\u8bb8\u52a0\u5165\u548c\u8d2d\u4e70", "js", "zh_CN");
+t.add("goods.show_page.closed_tips", "\u5546\u54c1\u5df2\u5173\u95ed\uff0c\u4e0d\u5141\u8bb8\u52a0\u5165\u548c\u8d2d\u4e70", "js", "zh_CN");
 t.add("goods.show_page.course_not_buyable_tips", "\u62b1\u6b49\uff0c\u8be5\u8bfe\u7a0b\u65e0\u6cd5\u5b66\u4e60\uff0c\u8bf7\u8054\u7cfb\u5b66\u6821\u8001\u5e08", "js", "zh_CN");
 t.add("goods.show_page.classroom_not_buyable_tips", "\u62b1\u6b49\uff0c\u8be5\u73ed\u7ea7\u65e0\u6cd5\u5b66\u4e60\uff0c\u8bf7\u8054\u7cfb\u5b66\u6821\u8001\u5e08", "js", "zh_CN");
 t.add("goods.show_page.join_expiry_tips", "\u62b1\u6b49\uff0c\u8be5\u5546\u54c1\u5df2\u8d85\u8fc7\u52a0\u5165\u6709\u6548\u671f\uff0c\u8bf7\u8054\u7cfb\u5ba2\u670d", "js", "zh_CN");
