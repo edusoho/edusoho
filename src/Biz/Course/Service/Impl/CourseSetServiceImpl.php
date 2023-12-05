@@ -712,7 +712,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             }
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'unpublished']);
             $this->getCourseSetGoodsMediator()->onClose($courseSet);
-            $this->getCourseService()->banLearningByCourseSetIds([$courseSet['id']]);
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();

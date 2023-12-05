@@ -1174,7 +1174,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
-        if (!in_array($classroom['status'], ['published', 'closed'])) {
+        if (!in_array($classroom['status'], ['published', 'closed', 'unpublished'])) {
             $this->createNewException(ClassroomException::UNPUBLISHED_CLASSROOM());
         }
 
