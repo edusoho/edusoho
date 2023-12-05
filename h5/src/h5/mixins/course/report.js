@@ -138,8 +138,6 @@ export default {
     },
 
     start(param, data) {
-      console.log(param)
-      console.log(this.isFinish)
       Api.reportTaskEvent({
         query: {
           courseId: this.reportData.courseId,
