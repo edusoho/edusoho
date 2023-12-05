@@ -62,6 +62,7 @@
           </div>
 
           <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" :course-set="details.courseSet" />
+          <div class="white-space" v-if="isShowClosedFooter"></div>
         </div>
 
         <!-- 问答、话题、笔记、评价 通过动态组件实现 -->
@@ -221,9 +222,8 @@ export default {
 
     isShowClosedFooter() {
       const { status: courseSetStatus } = this.details.courseSet;
-      const activeNotInArray = [1, 2, 4].includes(this.active);
       
-      return courseSetStatus == 'closed' && !activeNotInArray
+      return courseSetStatus == 'closed'
     },
 
     summary() {
@@ -577,6 +577,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.white-space {
+  height: 60px;
+}
 .tabs {
   box-shadow: 0px 2px 6px 0px rgba(49, 49, 49, 0.1);
 

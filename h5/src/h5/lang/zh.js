@@ -300,6 +300,7 @@ export default {
     noCourses: '暂无课程',
     noClass: '暂无班级',
     noQuestionBank: '暂无题库',
+    expired: '该课程已过期，无法继续学习'
   },
   more: {
     membersClass: '会员班级',

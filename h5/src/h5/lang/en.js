@@ -310,6 +310,7 @@ export default {
     noCourses: 'No courses',
     noClass: 'No class',
     noQuestionBank: 'No question bank',
+    expired: 'The course has expired and cannot be continued'
   },
   more: {
     membersClass: 'Members class',
