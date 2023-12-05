@@ -164,7 +164,7 @@ class PagedCourseLesson {
           const allowedTaskTypes = ['testpaper', 'homework', 'exercise'];
           const isTaskTypeAllowed = allowedTaskTypes.includes(data.type);
           const isTaskResultIncomplete = data.resultStatus != 'finish';
-
+          
           if(canLearn == '1') {
             return 'title'
           }

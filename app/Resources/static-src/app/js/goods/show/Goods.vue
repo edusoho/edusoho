@@ -2,7 +2,7 @@
     <div class="cd-container">
         <div class="product-breadcrumb"><a href="/">{{ 'homepage'|trans }}</a> / {{goods.title|removeHtml}}</div>
         <a-alert
-            v-if="goods.status == 'unpublished'"
+            v-if="goods.product.target.status == 'closed'"
             class="mt16"
             :message="alertMessage"
             type="warning"
@@ -27,7 +27,7 @@
                             </li>
                         </ul>
                         <div class="buy__btn pull-right">
-                            <buy-sku :sku="currentSku" :btn-class="goods.status == 'unpublished' ? 'product-detail__btn js-handleLearnOnMessage' : 'product-detail__btn'" :isShow="false" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
+                            <buy-sku :sku="currentSku" :btn-class="goods.product.target.status == 'closed' ? 'product-detail__btn js-handleLearnOnMessage' : 'product-detail__btn'" :isShow="false" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
                         </div>
                     </div>
                 </div>

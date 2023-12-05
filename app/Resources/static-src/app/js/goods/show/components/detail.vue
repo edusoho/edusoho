@@ -99,7 +99,7 @@
             </div>
 
             <!-- 立即购买 -->
-            <buy-sku :sku="currentSku" :btn-class="goods.status == 'unpublished' ? 'product-detail__btn js-handleLearnOnMessage' : 'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods" :vip-enabled="vipEnabled"></buy-sku>
+            <buy-sku :sku="currentSku" :btn-class="goods.product.target.status == 'closed' ? 'product-detail__btn js-handleLearnOnMessage' : 'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods" :vip-enabled="vipEnabled"></buy-sku>
         </div>
     </div>
 </template>
@@ -272,20 +272,20 @@
             goodsClass() {
                 if (!this.goods.isMember) {
                     
-                    if(this.goods.type == 'course' && this.goods.status == 'unpublished') {
+                    if(this.goods.type == 'course' && this.goods.product.target.status == 'closed') {
                         return 'detail-left__text-share js-handleCoursePage'
                     }
                     
-                    if(this.goods.type == 'classroom' && this.goods.status == 'unpublished'){
+                    if(this.goods.type == 'classroom' && this.goods.product.target.status == 'closed'){
                         return 'detail-left__text-share js-handleClassroomPage'
                     }
                 }
 
-                if(this.goods.type == 'course' && this.goods.status == 'unpublished') {
+                if(this.goods.type == 'course' && this.goods.product.target.status == 'closed') {
                     return 'detail-left__text-share js-handleLearnOnMessage'
                 }
                 
-                if(this.goods.type == 'classroom' && this.goods.status == 'unpublished'){
+                if(this.goods.type == 'classroom' && this.goods.product.target.status == 'closed'){
                     return 'detail-left__text-share js-handleClassroomOnMessage'
                 }
 
@@ -293,6 +293,7 @@
             }
         },
         mounted() {
+            console.log(this.goods)
             this.remainTime();
             this.getDrpInfo();
         },
