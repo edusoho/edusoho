@@ -89,7 +89,7 @@
                 });
             },
             buySku() {
-                if(this.goods.status == 'unpublished') {
+                if(this.goods.product.target.status == 'closed') {
                     return
                 }
 
@@ -133,7 +133,7 @@
             },
             mainBtnView(sku) {
                 this.needBuyVip = 0;
-                if (sku.status !== 'published' || this.goods.status == 'unpublished') { //如果商品未发布
+                if (sku.status !== 'published' || this.goods.product.target.status == 'closed') { //如果商品未发布
                     this.buyViewMode = 'text';
                     this.buyViewText = Translator.trans('goods.show_page.unpublished_tips');
                 }  else if (sku.buyable == 1

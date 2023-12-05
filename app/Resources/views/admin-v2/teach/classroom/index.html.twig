@@ -3,6 +3,11 @@
 {% set script_controller='topxiaadminbundle/controller/classroom/classroom' %}
 
 {% block main %}
+<style>
+.tooltip {
+  width: 282px !important;
+}
+</style>
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
 
@@ -53,7 +58,11 @@
         <th>{{ 'admin.classroom_manage.manage.course_number_th'|trans }}</th>
         <th>{{ 'admin.classroom_manage.manage.student_number_th'|trans }}</th>
         <th width="12%">{{ 'admin.classroom_manage.manage.price_th'|trans }}</th>
-        <th>{{ 'admin.classroom_manage.manage.status_th'|trans }}</th>
+        <th>{{ 'admin.classroom_manage.manage.status_th'|trans }}
+        <span class="es-icon es-icon-wenhaotishi" 
+          style="color: #919399;font-size: 14px;" 
+          data-toggle="tooltip" 
+          title="{{ 'admin.setting.table.status.tooltip'|trans }}"></span></th>
         <th>{{ 'admin.classroom_manage.manage.creator'|trans }}</th>
         <th>{{ 'admin.classroom_manage.manage.operate_th'|trans }}</th>
       </tr>

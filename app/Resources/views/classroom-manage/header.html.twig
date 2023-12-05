@@ -22,6 +22,8 @@
       <span class="classroom-publish-status label-warning ">{{ 'classroom.unpublish'|trans }}</span>
     {% elseif classroom.status == "closed" %}
       <span class="classroom-publish-status label-danger">{{ 'classroom.closed'|trans }}</span>
+          {% elseif classroom.status == "unpublished" %}
+      <span class="classroom-publish-status course-publish-status--unpublished">{{ 'admin.classroom_manage.manage.unpublished'|trans }}</span>
     {% endif %}
     {% if classroom.status == "published" %}
       <span class="classroom-publish-status label-success"> {{ 'classroom.published'|trans }}</span>

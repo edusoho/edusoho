@@ -5935,6 +5935,11 @@ admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo
 admin.setting.site.icp.help_block: 根据《非经营性互联网信息服务备案管理办法》（原信息产业部令第33号令）规定，备案成功后需将工信部下发的主体备案号放置在网页底部并链接至工信部网址:<a href="http://beian.miit.gov.cn" target=_blank>beian.miit.gov.cn</a>供公众查询核对。若违反相关部门规定，会存在违法风险。
 admin.setting.site.public_security.help_block: 依据 《计算机信息网络国际联网安全保护管理办法》相关规定，各网站在工信部备案成功后，需在网站开通之日起30日内登录<a href="http://www.beian.gov.cn/" target=_blank>全国互联网安全管理服务平台</a>提交公安联网备案申请。公安联网备案审核通过后，您需在30日内登录<a href="http://www.beian.gov.cn/" target=_blank>全国互联网安全管理服务平台</a>，在您的已备案网站详情中，将网站公安机关备案号及图标信息编辑放置在网页底部。
 admin.setting.site.logo.view_btn: 点击查看
+admin.setting.table.status.tooltip:
+  <div style="text-align:left;">未发布：学员不可加入</div>
+  <div style="text-align:left;">已发布：学员可加入、可学习</div>
+  <div style="text-align:left;">已下架：学员前台不可见、可加入、可学习</div>
+  <div style="text-align:left;">已关闭：学员前台不可见、不可学习</div>
 admin.setting.site.favicon: 浏览器图标
 admin.setting.site.favicon.help_block: 建议上传ico格式的图标文件，支持 ico, jpg, gif, png等格式, 建议尺寸 32×32px。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.setting.site.seo_keywords: SEO关键词
