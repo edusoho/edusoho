@@ -178,7 +178,12 @@ export default class TaskPipe {
         this.record = res.record;
         this._doing(param);
       }).catch((error) => {
+    
         if(JSON.parse(error.responseText).error.code == '5001620') {
+          if($("[name=task-result-status]").val() == 'finish' && ['testpaper', 'homework', 'exercise'].includes(this.taskType)) {
+            return
+          }
+
           window.location.href = `/my/course/${this.courseId}`
           return
         }
