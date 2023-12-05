@@ -98,7 +98,7 @@ class MeClassroom extends AbstractResource
             case 'learning':
             case 'learned':
                 $classroomConditions['ids'] = 'learning' === $querys['type'] ? $learningIds : $learnedIds;
-                $classroomConditions['status'] = 'published';
+                $classroomConditions['excludeStatus'] = 'closed';
                 break;
             default:
                 $closedClassroomIds = $this->getClassroomService()->searchClassrooms(['status' => 'closed', 'ids' => array_merge($learningIds, $learnedIds)], [], 0, PHP_INT_MAX, ['id']);
