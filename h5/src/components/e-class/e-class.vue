@@ -1,5 +1,6 @@
 <template>
-  <div class="flex mx-16 mb-12 bg-text-1 text-12" style="height: 94px;border-radius: 6px;" @click="onClick(course.hasCertificate, $event)">
+  <div class="flex mx-16 mb-12 bg-text-1 text-12 relative" style="height: 94px;border-radius: 6px;" @click="onClick(course.hasCertificate, $event)">
+    <div :class="errImgUrl ? 'afterBack' : ''"></div>
     <div class="relative" style="width: 170px;height: 100%;border-radius: 6px 0 0 6px;">
       <img class="h-full course-img" v-lazy="course.imgSrc.url" style="border-radius: 6px 0 0 6px;" />
       <span v-if="normalTagShow && courseType === 'live'" class="tag-live">{{ $t('e.live') }}</span>
@@ -123,15 +124,15 @@ export default {
     },
     errImgUrl() {
       if(this.course?.bottom?.data?.courseSet?.status == 'closed') {
-        return '/static/images/closed.png';
+        return 'static/images/closed.png';
       } 
 
       if(this.course?.bottom?.data?.status == 'closed') {
-        return '/static/images/closed.png';
+        return 'static/images/closed.png';
       } 
 
       if(this.course?.bottom?.data?.isExpired) {
-        return '/static/images/expired.png';
+        return 'static/images/expired.png';
       } 
 
       return '';
@@ -208,6 +209,13 @@ export default {
 
 <style lang="scss" scoped>
 
+.afterBack {
+  background: rgba(255, 255, 255, 0.60);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
   .tag-live {
     position: absolute;
     left: -3px;
@@ -241,5 +249,6 @@ export default {
     height: 40px;
     top: 0;
     right: 0;
+    z-index: 2;
   }
 </style>

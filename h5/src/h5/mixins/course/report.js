@@ -1,6 +1,8 @@
 /* eslint-disable */
 import Api from '@/api/index';
 import * as types from '@/store/mutation-types';
+import { closedToast } from '@/utils/on-status.js';
+
 
 export default {
   data() {
@@ -136,6 +138,8 @@ export default {
     },
 
     start(param, data) {
+      console.log(param)
+      console.log(this.isFinish)
       Api.reportTaskEvent({
         query: {
           courseId: this.reportData.courseId,
@@ -155,7 +159,7 @@ export default {
         this.sign = res.record.flowSign;
         this.record = res.record;
         this.reportTaskEvent(param);
-      });
+      })
     },
 
     reportTaskEvent(param) {

@@ -344,3 +344,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.mb-60 {
+  margin-bottom: 60px;
+}
+</style>

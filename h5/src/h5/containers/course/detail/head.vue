@@ -128,6 +128,8 @@ import WechatSubscribe from '../components/wechat-subscribe';
 import * as types from '@/store/mutation-types.js';
 import copyUrl from '@/mixins/copyUrl';
 import { getLanguage } from '@/lang/index.js'
+import { closedToast } from '@/utils/on-status.js';
+
 
 export default {
   components: {
@@ -179,9 +181,11 @@ export default {
       activity: {}
     };
   },
+  inject: ['getDetailsContent'],
   computed: {
     ...mapState(['DrpSwitch', 'cloudSdkCdn']),
     ...mapState('course', {
+      course: state => state,
       sourceType: state => state.sourceType,
       selectedPlanId: state => state.selectedPlanId,
       taskId: state => state.taskId,
@@ -659,7 +663,17 @@ export default {
       this.finishDialog = false;
     },
 
-    handleClickContinueLearning() {
+    async handleClickContinueLearning() {
+      await this.getDetailsContent()
+
+      if(this.courseSet.status == 'closed') {
+        return closedToast('course');
+      }
+
+      if (this.course?.details?.learningExpiryDate?.expired) {
+        return Toast(this.$t('learning.expired'));
+      }
+      
       const { id } = this.nextStudy.nextTask;
       const params = {
         courseId: this.selectedPlanId,

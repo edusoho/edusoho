@@ -60,11 +60,11 @@ export default {
     },
     errImgUrl() {
       if(this.course?.bottom?.data?.itemBankExercise?.status == 'closed') {
-        return '/static/images/closed.png';
+        return 'static/images/closed.png';
       } 
 
       if(this.course?.bottom?.data?.isExpired) {
-        return '/static/images/expired.png';
+        return 'static/images/expired.png';
       } 
 
       return '';
