@@ -83,7 +83,6 @@ export default class TaskShow extends Emitter {
 
   initTaskPipe() {
     this.eventEmitter = new TaskPipe(this.element.find('#task-content-iframe'));
-    console.log(this.eventEmitter);
     this.eventEmitter.addListener('finish', response => {
       this._receiveFinish(response);
     });

@@ -122,7 +122,6 @@ export default class TaskPipe {
   }
 
   _flush(param = {}) {
-    console.log(this)
     if (this.pushing) {
       //同时出现的doing需要忽略，比如播放行为
       return ;
