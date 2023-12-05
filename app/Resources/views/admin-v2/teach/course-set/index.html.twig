@@ -5,7 +5,13 @@
 {% set script_controller = 'course/manage' %}
 
 {% block main %}
-
+<style>
+.status_tooptip_intro {
+  .tooltip-inner {
+    max-width: max-content !important;
+  }
+}
+</style>
   {% include 'admin-v2/teach/course-set/tab-filter.html.twig' %}
   <div class="well well-sm mtl">
     <form id="message-search-form" class="form-inline" action="" method="get" novalidate>
@@ -89,7 +95,7 @@
 
       
       <th>{{ 'admin.course_manage.manage.creator'|trans }}</th>
-      <th>{{ 'admin.course_manage.manage.status'|trans }}
+      <th class="status_tooptip_intro">{{ 'admin.course_manage.manage.status'|trans }}
       <span class="es-icon es-icon-wenhaotishi" 
           style="color: #919399;font-size: 14px;" 
           data-toggle="tooltip" 
