@@ -119,6 +119,7 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
                 'id IN ( :ids )',
                 'id = :id',
                 'status = :status',
+                'status In (:includeStatus)',
                 'isVip = :isVip',
                 'categoryId = :categoryId',
                 'categoryId IN (:categoryIds)',
