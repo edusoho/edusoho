@@ -43,6 +43,9 @@
                 default: () => [],
             },
         },
+        mounted() { 
+          console.log(this.classroomCourses);
+        },
         methods: {
             loadMore: function() {
                 const start = this.page * PAGE_NUM;
