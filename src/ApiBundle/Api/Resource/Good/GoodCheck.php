@@ -53,7 +53,7 @@ class GoodCheck extends AbstractResource
         }
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
 
-        if ('published' !== $goodsSpecs['status']) {
+        if ('published' !== $goodsSpecs['status'] && empty($target)) {
             throw GoodsException::FORBIDDEN_JOIN_UNPUBLISHED_SPECS();
         }
 
