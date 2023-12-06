@@ -966,7 +966,7 @@ buy.payments_disabled_tips: 由于网校未开通任一支付功能，当前商�
 course.buy_failed_tips: 真不巧，已经有人抢在你前面下单了，请继续关注
 course.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br/>拥有一个独有的头像，老师和同学们能更容易关注到你哦～～
-course.remove_students_tips: 课程已关闭无法学习，若希望课程不对外展示但学员仍可继续学习，可将课程发布后在【基础设置】内设置“隐藏前台展示”。
+course.remove_students_tips: 课程已关闭无法学习，若希望课程不对外展示但学员仍可继续学习，可将课程发布后设置“下架”
 course.name: 课程名称
 course.price: 价格
 course.price.RMB: %price%元

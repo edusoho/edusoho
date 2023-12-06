@@ -5756,10 +5756,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@^1.0.58:
-  version "1.0.58"
-  resolved "https://registry.npmjs.org/item-bank/-/item-bank-1.0.58.tgz#b2da8f4f86dfd29f68d461dcf294f05c7d7ef8ec"
-  integrity sha512-eKzuJreJyRilWnyMlAL0j4BIyrWS6y68CIuy935hH/rEXRSIFUYSj4ZRvRs6Vt6oCezDFSq8x9+uT2lvMFvrRw==
+item-bank@^1.0.59:
+  version "1.0.59"
+  resolved "https://registry.npmjs.org/item-bank/-/item-bank-1.0.59.tgz#ff66840b196fc3c947d39a362b276f84ed9760ca"
+  integrity sha512-KKVG2zjWQ8mmD2i1SrOgs7p/uVec9By7Y3r9l6FhDSPv4d52lIYoA7ewmPOfHNCz6Dgv/50vMMSZk+OLhQFQ+A==
   dependencies:
     ant-design-vue "^1.5.0"
     caniuse-lite "^1.0.30001390"
