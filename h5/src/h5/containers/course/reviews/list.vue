@@ -14,7 +14,7 @@
       :text="$t('courseLearning.noContent')"
     />
 
-    <div v-if="details?.courseSet?.status != 'closed'" class="create-btn">
+    <div v-if="details.courseSet.status != 'closed'" class="create-btn">
       <van-button
         type="primary"
         block
