@@ -35,7 +35,7 @@ class TaskLiveReplay extends AbstractResource
         $device = $request->request->get('device');
         $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
 
-        $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
+        $replays = $this->_getLiveReplays($activity);
         if (!$replays) {
             throw TaskException::LIVE_REPLAY_NOT_FOUND();
         }
@@ -105,6 +105,35 @@ class TaskLiveReplay extends AbstractResource
         }
 
         return false;
+    }
+
+    protected function _getLiveReplays($activity)
+    {
+        if (LiveReplayService::REPLAY_GENERATE_STATUS === $activity['ext']['replayStatus']) {
+            $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+
+            $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
+
+            $replays = array_filter($replays, function ($replay) {
+                // 过滤掉被隐藏的录播回放
+                return !empty($replay) && !(bool) $replay['hidden'];
+            });
+
+            $self = $this;
+            $replays = array_map(function ($replay) use ($activity, $self) {
+                $replay['url'] = $self->generateUrl('custom_live_activity_replay_entry', [
+                    'courseId' => $activity['fromCourseId'],
+                    'activityId' => $activity['id'],
+                    'replayId' => $replay['id'],
+                ]);
+
+                return $replay;
+            }, $replays);
+        } else {
+            $replays = [];
+        }
+
+        return $replays;
     }
 
     protected function getEsLiveReplayUrl($globalId, $options)
