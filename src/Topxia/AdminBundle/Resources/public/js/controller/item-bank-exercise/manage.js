@@ -13,36 +13,58 @@ define(function(require, exports, module) {
     });
 
     $table.on('click', '.publish-exercise', function() {
-      if (!confirm(Translator.trans('admin.item_bank_exercise.exercise.publish_hint'))) return false;
-      $.post($(this).data('url'), function(response) {
-        Notify.success(Translator.trans('admin.item_bank_exercise.exercise.publish_success_hint'));
-        window.location.reload();
-      }).error(function(e) {
-        var res = e.responseJSON.error.message || Translator.trans('admin.course.unknow_error_hint');
-        Notify.danger(res);
+      // if (!confirm(Translator.trans('admin.item_bank_exercise.exercise.publish_hint'))) return false;
+      cd.confirm({
+        title: '<span class="es-icon es-icon-infooutline" style="color: #FAAD14; margin-right: 16px; font-size: 22px; line-height: 22px;"></span>' + Translator.trans('admin.close.btn.confirm_publish'),
+        okText: Translator.trans('site.confirm'),
+        cancelText: Translator.trans('site.close')
+      }).on('ok', () => {
+        $.post($(this).data('url'), function(response) {
+          Notify.success(Translator.trans('admin.item_bank_exercise.exercise.publish_success_hint'));
+          window.location.reload();
+        }).error(function(e) {
+          var res = e.responseJSON.error.message || Translator.trans('admin.course.unknow_error_hint');
+          Notify.danger(res);
+        });
       });
+      
     });
 
     $table.on('click', '.close-exercise', function() {
-      if (!confirm(Translator.trans('admin.item_bank_exercise.exercise.close_hint'))) return false;
-      $.post($(this).data('url'), function(response) {
-        Notify.success(Translator.trans('admin.item_bank_exercise.exercise.close_success_hint'));
-        window.location.reload();
-      }).error(function(e) {
-        var res = e.responseJSON.error.message || Translator.trans('admin.course.unknow_error_hint');
-        Notify.danger(res);
+      cd.confirm({
+        title: '<span class="es-icon es-icon-infooutline" style="color: #FAAD14; margin-right: 16px; font-size: 22px; line-height: 22px;"></span>' + Translator.trans('admin.close.btn.confirm_close'),
+        content: Translator.trans('admin.item_bank_exercise.exercise.close_hint'),
+        okText: Translator.trans('site.confirm'),
+        cancelText: Translator.trans('site.close')
+      }).on('ok', () => {
+        $.post($(this).data('url'), function(response) {
+          Notify.success(Translator.trans('admin.item_bank_exercise.exercise.close_success_hint'));
+          window.location.reload();
+        }).error(function(e) {
+          var res = e.responseJSON.error.message || Translator.trans('admin.course.unknow_error_hint');
+          Notify.danger(res);
+        });
       });
+      
     });
 
     $table.on('click', '.hide-exercise', function() {
-      if (!confirm(Translator.trans('admin.item_bank_exercise.exercise.hide_hint'))) return false;
-      $.post($(this).data('url'), function(response) {
-        Notify.success(Translator.trans('admin.item_bank_exercise.exercise.hide_success_hint'));
-        window.location.reload();
-      }).error(function(e) {
-        var res = e.responseJSON.error.message || Translator.trans('admin.course.unknow_error_hint');
-        Notify.danger(res);
+      // if (!confirm(Translator.trans('admin.item_bank_exercise.exercise.hide_hint'))) return false;
+      cd.confirm({
+        title: '<span class="es-icon es-icon-infooutline" style="color: #FAAD14; margin-right: 16px; font-size: 22px; line-height: 22px;"></span>' + Translator.trans('admin.close.btn.confirm_hide'),
+        content: Translator.trans('admin.item_bank_exercise.exercise.hide_hint'),
+        okText: Translator.trans('site.confirm'),
+        cancelText: Translator.trans('site.close')
+      }).on('ok', () => {
+        $.post($(this).data('url'), function(response) {
+          Notify.success(Translator.trans('admin.item_bank_exercise.exercise.hide_success_hint'));
+          window.location.reload();
+        }).error(function(e) {
+          var res = e.responseJSON.error.message || Translator.trans('admin.course.unknow_error_hint');
+          Notify.danger(res);
+        });
       });
+      
     });
     
     $table.on('click', '.delist-exercise', function() {

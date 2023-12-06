@@ -449,7 +449,7 @@ course_set.title_required_error_hint: 请输入标题
 course_set.learn_progress: 学习进度
 course_set.manage.tag_required_hint: 请输入标签
 course_set.manage.publish_hint: 是否确定发布该课程？
-course_set.manage.publish_title: 发布课程
+course_set.manage.publish_title: 发布课程？
 course_set.manage.publish_success_hint: 课程发布成功
 course_set.manage.publish_fail_hint: 课程发布失败
 course_set.manage.next_label: 继续了解
@@ -1157,6 +1157,9 @@ admin.course.delete_course.check_password_fail_hint: 验证密码错误
 admin.course.validate_old.password_required_hint: 密码
 admin.course.cancel_recommend_success_hint: 课程推荐已取消！
 admin.course.close_course_hint: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
+admin.close.btn.confirm_close: 确认关闭？
+admin.close.btn.confirm_hide: 确认下架？
+admin.close.btn.confirm_publish: 确认发布？
 admin.course.close_success_hint: 已关闭页面显示
 admin.course.hide_course_hint: 关闭后课程将彻底隐藏，学员无法在前台查看
 admin.course.delist_course_hint: 课程下架后将不在前台展示，学员无法查看

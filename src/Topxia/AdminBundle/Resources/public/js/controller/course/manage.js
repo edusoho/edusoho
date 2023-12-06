@@ -30,22 +30,34 @@ define(function (require, exports, module) {
     });
 
     $table.on('click', '.close-course', function () {
-      var user_name = $(this).data('user');
-      if (!confirm(Translator.trans('admin.course.close_course_hint'))) return false;
-      $.post($(this).data('url'), function (html) {
-        var $tr = $(html);
-        $table.find('#' + $tr.attr('id')).replaceWith(html);
-        Notify.success(Translator.trans('admin.course.close_success_hint'));
+      cd.confirm({
+        title: '<span class="es-icon es-icon-infooutline" style="color: #FAAD14; margin-right: 16px; font-size: 22px; line-height: 22px;"></span>' + Translator.trans('admin.close.btn.confirm_close'),
+        content: Translator.trans('admin.course.close_course_hint'),
+        okText: Translator.trans('site.confirm'),
+        cancelText: Translator.trans('site.close')
+      }).on('ok', () => {
+        $.post($(this).data('url'), function (html) {
+          var $tr = $(html);
+          $table.find('#' + $tr.attr('id')).replaceWith(html);
+          Notify.success(Translator.trans('admin.course.close_success_hint'));
+        });
       });
+      
     });
 
     $table.on('click', '.hide-course', function () {
-      if (!confirm(Translator.trans('admin.course.hide_course_hint'))) return false;
-      $.post($(this).data('url'), function (html) {
-        var $tr = $(html);
-        $table.find('#' + $tr.attr('id')).replaceWith(html);
-        Notify.success(Translator.trans('admin.course.hide_success_hint'));
-      });
+      cd.confirm({
+        title: '<span class="es-icon es-icon-infooutline" style="color: #FAAD14; margin-right: 16px; font-size: 22px; line-height: 22px;"></span>' + Translator.trans('admin.close.btn.confirm_hide'),
+        content: Translator.trans('admin.course.hide_course_hint'),
+        okText: Translator.trans('site.confirm'),
+        cancelText: Translator.trans('site.close')
+      }).on('ok', () => {
+        $.post($(this).data('url'), function (html) {
+          var $tr = $(html);
+          $table.find('#' + $tr.attr('id')).replaceWith(html);
+          Notify.success(Translator.trans('admin.course.hide_success_hint'));
+        });
+      });      
     });
 
     $table.on('click', '.delist-course', function () {
@@ -59,19 +71,24 @@ define(function (require, exports, module) {
 
     $table.on('click', '.publish-course', function () {
       var studentNum = $(this).closest('tr').next().val();
-      if (!confirm(Translator.trans('admin.course.publish_hint'))) return false;
-      $.post($(this).data('url'), function (response) {
-        if (!response['success'] && response['message']) {
-          Notify.danger(response['message']);
-        } else {
-          var $tr = $(response);
-          $table.find('#' + $tr.attr('id')).replaceWith($tr);
-          Notify.success(Translator.trans('admin.course.publish_success_hint'));
-        }
-      }).error(function (e) {
-        var res = e.responseJSON.error.message || Translator.trans('admin.course.unknow_error_hint');
-        Notify.danger(res);
-      });
+      cd.confirm({
+        title: '<span class="es-icon es-icon-infooutline" style="color: #FAAD14; margin-right: 16px; font-size: 22px; line-height: 22px;"></span>' + Translator.trans('admin.course.publish_hint'),
+        okText: Translator.trans('site.confirm'),
+        cancelText: Translator.trans('site.close')
+      }).on('ok', () => {
+        $.post($(this).data('url'), function (response) {
+          if (!response['success'] && response['message']) {
+            Notify.danger(response['message']);
+          } else {
+            var $tr = $(response);
+            $table.find('#' + $tr.attr('id')).replaceWith($tr);
+            Notify.success(Translator.trans('admin.course.publish_success_hint'));
+          }
+        }).error(function (e) {
+          var res = e.responseJSON.error.message || Translator.trans('admin.course.unknow_error_hint');
+          Notify.danger(res);
+        });
+      });   
     });
 
     $table.on('click', '.delete-course', function () {

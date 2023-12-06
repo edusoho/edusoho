@@ -1063,6 +1063,9 @@ t.add("admin.course.delete_course.check_password_fail_hint", "Verify password er
 t.add("admin.course.validate_old.password_required_hint", "password", "js", "en");
 t.add("admin.course.cancel_recommend_success_hint", "Course recommendation has been cancelled!", "js", "en");
 t.add("admin.course.close_course_hint", "Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation.", "js", "en");
+t.add("admin.close.btn.confirm_close", "Confirm close?", "js", "en");
+t.add("admin.close.btn.confirm_hide", "Confirm removal?", "js", "en");
+t.add("admin.close.btn.confirm_publish", "Confirm release?", "js", "en");
 t.add("admin.course.hide_course_hint", "After hiding, the course will be completely hidden and students will not be able to view it on the front-end.", "js", "en");
 t.add("admin.course.delist_course_hint", "After the course is removed, it will not be displayed at the front desk and students will not be able to view it", "js", "en");
 t.add("admin.course.hide_success_hint", "Course hidden successfully!", "js", "en");

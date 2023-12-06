@@ -1215,6 +1215,9 @@ admin.course.delete_course.check_password_fail_hint: Verify password error
 admin.course.validate_old.password_required_hint: password
 admin.course.cancel_recommend_success_hint: Course recommendation has been cancelled!
 admin.course.close_course_hint: Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation.
+admin.close.btn.confirm_close: Confirm close?
+admin.close.btn.confirm_hide: Confirm removal?
+admin.close.btn.confirm_publish: Confirm release?
 admin.course.close_success_hint: Course was closed successfully!
 admin.course.hide_course_hint: After hiding, the course will be completely hidden and students will not be able to view it on the front-end.
 admin.course.delist_course_hint: After the course is removed, it will not be displayed at the front desk and students will not be able to view it

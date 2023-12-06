@@ -368,7 +368,7 @@ t.add("course_set.title_required_error_hint", "\u8bf7\u8f93\u5165\u6807\u9898", 
 t.add("course_set.learn_progress", "\u5b66\u4e60\u8fdb\u5ea6", "js", "zh_CN");
 t.add("course_set.manage.tag_required_hint", "\u8bf7\u8f93\u5165\u6807\u7b7e", "js", "zh_CN");
 t.add("course_set.manage.publish_hint", "\u662f\u5426\u786e\u5b9a\u53d1\u5e03\u8be5\u8bfe\u7a0b\uff1f", "js", "zh_CN");
-t.add("course_set.manage.publish_title", "\u53d1\u5e03\u8bfe\u7a0b", "js", "zh_CN");
+t.add("course_set.manage.publish_title", "\u53d1\u5e03\u8bfe\u7a0b\uff1f", "js", "zh_CN");
 t.add("course_set.manage.publish_success_hint", "\u8bfe\u7a0b\u53d1\u5e03\u6210\u529f", "js", "zh_CN");
 t.add("course_set.manage.publish_fail_hint", "\u8bfe\u7a0b\u53d1\u5e03\u5931\u8d25", "js", "zh_CN");
 t.add("course_set.manage.next_label", "\u7ee7\u7eed\u4e86\u89e3", "js", "zh_CN");
@@ -1006,6 +1006,9 @@ t.add("admin.course.delete_course.check_password_fail_hint", "\u9a8c\u8bc1\u5bc6
 t.add("admin.course.validate_old.password_required_hint", "\u5bc6\u7801", "js", "zh_CN");
 t.add("admin.course.cancel_recommend_success_hint", "\u8bfe\u7a0b\u63a8\u8350\u5df2\u53d6\u6d88\uff01", "js", "zh_CN");
 t.add("admin.course.close_course_hint", "\u5173\u95ed\u540e\u4ecd\u5728\u6709\u6548\u671f\u7684\u5b66\u5458\u65e0\u6cd5\u7ee7\u7eed\u5b66\u4e60\uff0c\u8bf7\u8c28\u614e\u64cd\u4f5c", "js", "zh_CN");
+t.add("admin.close.btn.confirm_close", "\u786e\u8ba4\u5173\u95ed\uff1f", "js", "zh_CN");
+t.add("admin.close.btn.confirm_hide", "\u786e\u8ba4\u4e0b\u67b6\uff1f", "js", "zh_CN");
+t.add("admin.close.btn.confirm_publish", "\u786e\u8ba4\u53d1\u5e03\uff1f", "js", "zh_CN");
 t.add("admin.course.hide_course_hint", "\u5173\u95ed\u540e\u8bfe\u7a0b\u5c06\u5f7b\u5e95\u9690\u85cf\uff0c\u5b66\u5458\u65e0\u6cd5\u5728\u524d\u53f0\u67e5\u770b", "js", "zh_CN");
 t.add("admin.course.delist_course_hint", "\u8bfe\u7a0b\u4e0b\u67b6\u540e\u5c06\u4e0d\u5728\u524d\u53f0\u5c55\u793a\uff0c\u5b66\u5458\u65e0\u6cd5\u67e5\u770b", "js", "zh_CN");
 t.add("admin.course.hide_success_hint", "\u8bfe\u7a0b\u5173\u95ed\u6210\u529f\uff01", "js", "zh_CN");
