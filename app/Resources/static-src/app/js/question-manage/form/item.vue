@@ -123,7 +123,7 @@
               okText: Translator.trans('created.question.confirm.ok.btn'),
               cancelText: Translator.trans('created.question.confirm.close.btn'),
               icon: 'exclamation-circle',
-							class: "repeat-stem-text",
+              class: "repeat-stem-text",
               onOk() {
                 that.isDisable = false;
                 that.forceRemoveModalDom()

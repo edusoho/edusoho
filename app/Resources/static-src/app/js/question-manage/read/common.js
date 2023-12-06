@@ -238,7 +238,6 @@ const registerEvent = function ($importBox) {
   });
 
   $('[data-toggle="popover"]').popover();
-  console.log(store);
   if (!store.get('QUESTION_IMPORT_DUIDE')) {
     $modalGuideTitle.removeClass('hidden')
     $modalTitle.addClass('hidden')
