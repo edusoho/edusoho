@@ -292,7 +292,7 @@ export default {
       if (this.goods?.product?.target?.status == 'closed') {
         cd.message({
           'type': 'danger',
-          'message': Translator.trans('validate.course.closed')
+          'message': Translator.trans(`validate.${this.goods.type}.closed`)
         });
         return
       }
