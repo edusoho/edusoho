@@ -56,7 +56,7 @@
             },
             clickCourse: function(course) {
               if(course.canLearn == '0') {
-                return this.$message.error('goods.show_page.tab.classroom.closed_tip');
+                return this.$message.error(Translator.trans('goods.show_page.tab.classroom.closed_tip'));
               }
                 
               return window.open('/course/'+course.id);
