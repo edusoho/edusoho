@@ -8,6 +8,7 @@ use AppBundle\Common\LiveWatermarkToolkit;
 use AppBundle\Common\SettingToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\MemberException;
+use Biz\Course\Service\LiveReplayService;
 use Biz\Task\TaskException;
 
 class TaskLiveReplay extends AbstractResource
@@ -33,9 +34,10 @@ class TaskLiveReplay extends AbstractResource
         }
 
         $device = $request->request->get('device');
+        $activity = $this->getOriginActivity($activity);
         $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
 
-        $replays = $this->_getLiveReplays($activity);
+        $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
         if (!$replays) {
             throw TaskException::LIVE_REPLAY_NOT_FOUND();
         }
@@ -85,6 +87,16 @@ class TaskLiveReplay extends AbstractResource
         return $response;
     }
 
+    protected function getOriginActivity($activity)
+    {
+        if (empty($activity['copyId'])) {
+            return $activity;
+        }
+        $copyActivity = $this->getActivityService()->getActivity($activity['copyId']);
+
+        return $this->getOriginActivity($copyActivity);
+    }
+
     protected function addLiveCloudParams($replay)
     {
         if (!empty($replay['liveCloudSdk']['enable'])) {
@@ -105,35 +117,6 @@ class TaskLiveReplay extends AbstractResource
         }
 
         return false;
-    }
-
-    protected function _getLiveReplays($activity)
-    {
-        if (LiveReplayService::REPLAY_GENERATE_STATUS === $activity['ext']['replayStatus']) {
-            $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
-
-            $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
-
-            $replays = array_filter($replays, function ($replay) {
-                // 过滤掉被隐藏的录播回放
-                return !empty($replay) && !(bool) $replay['hidden'];
-            });
-
-            $self = $this;
-            $replays = array_map(function ($replay) use ($activity, $self) {
-                $replay['url'] = $self->generateUrl('custom_live_activity_replay_entry', [
-                    'courseId' => $activity['fromCourseId'],
-                    'activityId' => $activity['id'],
-                    'replayId' => $replay['id'],
-                ]);
-
-                return $replay;
-            }, $replays);
-        } else {
-            $replays = [];
-        }
-
-        return $replays;
     }
 
     protected function getEsLiveReplayUrl($globalId, $options)
@@ -197,6 +180,9 @@ class TaskLiveReplay extends AbstractResource
         return $this->service('Activity:ActivityService');
     }
 
+    /**
+     * @return LiveReplayService
+     */
     protected function getLiveReplayService()
     {
         return $this->service('Course:LiveReplayService');
