@@ -161,7 +161,7 @@
         })
       },
       forceRemoveModalDom() {
-        const modal = $('.js-repeat-stem-text').parent().parent('.ant-modal-root')
+        const modal = $('.js-repeat-stem-text').closest('.ant-modal-root')
 
         if (modal) {
           modal.remove();
