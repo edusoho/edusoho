@@ -70,7 +70,7 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
             $status['user'] = $users[$status['userId']];
             $status['message'] = $manager->renderStatus($status, $arguments['mode']);
             if (!empty($courses) && 0 == $courses[$status['courseId']]['canLearn']) {
-                $status['message'] = str_replace('link-dark', 'link-dark js-handleLearnOnMessage', $status['message']);
+                $status['message'] = str_replace('link-dark', 'link-dark js-handleLearnContentOnMessage', $status['message']);
             }
             unset($status);
         }
