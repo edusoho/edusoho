@@ -123,7 +123,7 @@
               okText: Translator.trans('created.question.confirm.ok.btn'),
               cancelText: Translator.trans('created.question.confirm.close.btn'),
               icon: 'exclamation-circle',
-              class: "repeat-stem-text",
+              class: "js-repeat-stem-text",
               onOk() {
                 that.isDisable = false;
                 that.forceRemoveModalDom()
@@ -161,7 +161,7 @@
         })
       },
       forceRemoveModalDom() {
-        const modal = document.querySelector(".repeat-stem-text").parentNode.parentNode;
+        const modal = $('.js-repeat-stem-text').parent().parent('.ant-modal-root')
 
         if (modal) {
           modal.remove();
