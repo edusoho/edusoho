@@ -99,7 +99,7 @@
             </div>
 
             <!-- 立即购买 -->
-            <buy-sku :sku="currentSku" :btn-class="goods.product.target.status == 'closed' ? 'product-detail__btn js-handleLearnOnMessage' : 'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods" :vip-enabled="vipEnabled"></buy-sku>
+            <buy-sku :sku="currentSku" :btn-class="goods.product.target.status == 'closed' ? `product-detail__btn ${buySkuClass}` : 'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods" :vip-enabled="vipEnabled"></buy-sku>
         </div>
     </div>
 </template>
@@ -269,6 +269,20 @@
             }
         },
         computed: {
+            buySkuClass() {
+                if(this.goods.type == 'course') {
+                    return 'js-handleLearnOnMessage'
+                }
+
+                if(this.goods.type == 'classroom') {
+                    return 'js-handleClassroomOnMessage'
+                }
+
+                if(this.goods.type == 'exercise') {
+                    return 'js-handleExerciseOnMessage'
+                }
+                
+            },
             goodsClass() {
                 if (!this.goods.isMember) {
                     
