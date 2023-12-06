@@ -1,4 +1,5 @@
 {% do script(['app/js/course/header-top/index.js']) %}
+  {{courseSet.status}}
 
 {% for toLearnTask in toLearnTasks %}
   {% if loop.index == 1%}
