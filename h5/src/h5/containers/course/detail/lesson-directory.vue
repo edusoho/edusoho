@@ -197,7 +197,6 @@ export default {
       default: () => {},
     }
   },
-  inject: ['getDetailsContent'],
   data() {
     return {
       currentTask: '',
