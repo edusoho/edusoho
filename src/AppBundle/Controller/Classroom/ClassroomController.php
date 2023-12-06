@@ -390,6 +390,9 @@ class ClassroomController extends BaseController
             foreach ($learns as $key => $learn) {
                 $learns[$key]['user'] = $owners[$learn['userId']];
                 $learns[$key]['message'] = $manager->renderStatus($learn, 'simple');
+                if ('closed' == $classroom['status']) {
+                    $learns[$key]['message'] = str_replace('link-dark', 'link-dark js-handleClassroomOnMessage', $learns[$key]['message']);
+                }
                 unset($learn);
             }
         }
