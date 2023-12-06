@@ -1,9 +1,10 @@
 {% do script(['app/js/course/header-top/index.js']) %}
   {{courseSet.status}}
+  {{courseSet.canLearn}}
 
 {% for toLearnTask in toLearnTasks %}
   {% if loop.index == 1%}
-    <a class="btn btn-primary btn-lg 
+    <a class="btn btn-primary btn-lg
     {% if courseSet.status == 'closed'%}js-handleLearnOnMessage{% endif %}"
       href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">
       {% if taskResultCount < 1 %}
