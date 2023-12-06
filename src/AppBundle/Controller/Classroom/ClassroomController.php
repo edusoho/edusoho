@@ -391,7 +391,7 @@ class ClassroomController extends BaseController
                 $learns[$key]['user'] = $owners[$learn['userId']];
                 $learns[$key]['message'] = $manager->renderStatus($learn, 'simple');
                 if ('closed' == $classroom['status']) {
-                    $learns[$key]['message'] = str_replace('link-dark', 'link-dark js-handleClassroomOnMessage', $learns[$key]['message']);
+                    $learns[$key]['message'] = str_replace('link-dark', 'link-dark js-handleLearnContentOnMessage', $learns[$key]['message']);
                 }
                 unset($learn);
             }

@@ -61,10 +61,10 @@ class TaskController extends BaseController
             if (in_array($activity['mediaType'], ['homework', 'testpaper', 'exercise'])) {
                 $answerReports = $this->getAnswerReportService()->search(['user_id' => $user['id'], 'answer_scene_id' => $activity['ext']['answerSceneId']], [], 0, PHP_INT_MAX);
                 if (empty($answerReports)) {
-                    return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
+                    return $this->createMessageResponse('info', '课程已关闭，无法学习', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
                 }
             } else {
-                return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
+                return $this->createMessageResponse('info', '课程已关闭，无法学习', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
             }
         }
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
