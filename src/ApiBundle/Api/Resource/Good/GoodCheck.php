@@ -9,12 +9,13 @@ use AppBundle\Util\AvatarAlert;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Goods\GoodsException;
 use Biz\Goods\Service\GoodsService;
 use Biz\InformationCollect\Service\EventService;
 use Biz\MultiClass\Service\MultiClassService;
-use Biz\System\Service\SettingService;
+use Biz\Product\Service\ProductService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\Service\UserService;
 
@@ -45,7 +46,9 @@ class GoodCheck extends AbstractResource
         }
 
         $goods = $this->getGoodsService()->getGoods($id);
-        if ('published' !== $goods['status']) {
+        $goods['product'] = $this->getProduct($goods);
+        $target = $this->getProductTarget($goods['product']);
+        if ('published' !== $goods['status'] && empty($target)) {
             throw GoodsException::FORBIDDEN_JOIN_UNPUBLISHED_GOODS();
         }
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
@@ -92,6 +95,28 @@ class GoodCheck extends AbstractResource
             'success' => true,
             'code' => self::SUCCESS,
         ];
+    }
+
+    private function getProduct($goods)
+    {
+        $product = $this->getProductService()->getProduct($goods['productId']);
+        //获取状态中的组件
+        $this->getOCUtil()->single($product, ['targetId'], 'course' == $product['targetType'] ? 'courseSet' : $product['targetType']);
+
+        return $product;
+    }
+
+    private function getProductTarget($product)
+    {
+        $target = '';
+        if ('course' == $product['targetType']) {
+            $target = $this->getCourseSetService()->getCourseSet($product['targetId']);
+        }
+        if ('classroom' == $product['targetType']) {
+            $target = $this->getClassroomService()->getClassroom($product['targetId']);
+        }
+
+        return !empty($target) && 'unpublished' == $target['status'] ? $target : '';
     }
 
     protected function needNoStudentNumTip($type, $id)
@@ -257,6 +282,14 @@ class GoodCheck extends AbstractResource
     }
 
     /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->service('Course:CourseSetService');
+    }
+
+    /**
      * @return MemberService
      */
     private function getCourseMemberService()
@@ -302,5 +335,13 @@ class GoodCheck extends AbstractResource
     protected function getMultiClassService()
     {
         return $this->service('MultiClass:MultiClassService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    private function getProductService()
+    {
+        return $this->service('Product:ProductService');
     }
 }
