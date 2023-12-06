@@ -666,7 +666,7 @@ export default {
     async handleClickContinueLearning() {
       await this.getDetailsContent()
 
-      if(this.courseSet?.status == 'closed') {
+      if(this.courseSet.status == 'closed') {
         return closedToast('course');
       }
 

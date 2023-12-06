@@ -197,9 +197,11 @@ export default {
       default: () => {},
     }
   },
+  inject: ['getDetailsContent'],
   data() {
     return {
       currentTask: '',
+      getAgainCourse: {}
     };
   },
   watch: {
@@ -275,7 +277,7 @@ export default {
       const isTaskTypeAllowed = allowedTaskTypes.includes(task.type);
       const isTaskResultIncomplete = !task.result || task.result.status != 'finish';
 
-      if(this.courseSet?.status !== 'closed') {
+      if(this.getAgainCourse?.courseSet?.status !== 'closed') {
         return true
       }
 
@@ -289,7 +291,15 @@ export default {
 
       return true
     },
-    lessonCellClick(task, lessonIndex, taskIndex) {
+    async getCourse() {
+      const query = { courseId: this.selectedPlanId };
+      await Api.getCourseDetail({ query }).then((res) => {
+        this.getAgainCourse = res;
+      })
+    },
+    async lessonCellClick(task, lessonIndex, taskIndex) {
+      await this.getCourse()
+
       if(!this.isCanLearn(task)) {
         return closedToast('course');
       }

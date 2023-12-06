@@ -308,7 +308,7 @@ export default {
     },
     // 判断课程关闭后是否可以学习
     isCanLearn(task) {
-      if(this.goods?.status == 'unpublished' && !this.goods.isMember) {
+      if(this.goods?.product?.target?.status == 'closed' && !this.goods.isMember) {
         this.$router.push(`/goods/closed?type=${this.goods.type}`)
         return true
       }
@@ -317,7 +317,7 @@ export default {
       const isTaskTypeAllowed = allowedTaskTypes.includes(task.type);
       const isTaskResultIncomplete = !task.result || task.result.status != 'finish';
 
-      if(this.goods?.status !== 'unpublished') {
+      if(this.goods?.product?.target?.status !== 'unpublished') {
         return true
       }
 
