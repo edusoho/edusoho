@@ -1,4 +1,6 @@
 import { initTooltips } from 'common/utils';
+import 'store';
+
 const registerEvent = function ($importBox) {
   let fileName;
   let $form = $('#import-step-form');
@@ -23,6 +25,11 @@ const registerEvent = function ($importBox) {
   const $uploadImg = $('.js-uploda-img')
   const $uploadSuccessfulImg = $('.js-upload-successful-img')
   const $uploadSuccessfulText = $('.js-upload-successful-text')
+  const $modalGuideTitle = $('.js-import-modal-guide-title')
+  const $modalTitle = $('.js-import-modal-title')
+  const $modalGuideInfo = $('.js-guide-import-info')
+  const $modalContent = $('.js-content')
+  const $modalGuideBtn = $('.js-next-tip-btn')
 
   $jsUploadHotSpot.on('click', () => {
     $inputFile.click()
@@ -231,6 +238,26 @@ const registerEvent = function ($importBox) {
   });
 
   $('[data-toggle="popover"]').popover();
+  console.log(store);
+  if (!store.get('QUESTION_IMPORT_DUIDE')) {
+    $modalGuideTitle.removeClass('hidden')
+    $modalTitle.addClass('hidden')
+    $modalGuideInfo.removeClass('hidden')
+    $modalContent.addClass('hidden')
+    $modalGuideBtn.removeClass('hidden')
+    $importRuleBtn.addClass('hidden')
+
+    store.set('QUESTION_IMPORT_DUIDE', true);
+  }
+
+  $modalGuideBtn.on('click', ()=> {
+    $modalGuideTitle.addClass('hidden')
+    $modalTitle.removeClass('hidden')
+    $modalGuideInfo.addClass('hidden')
+    $modalContent.removeClass('hidden')
+    $modalGuideBtn.addClass('hidden')
+    $importRuleBtn.removeClass('hidden')
+  })
 };
 initTooltips()
 export {
