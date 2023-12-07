@@ -1362,9 +1362,9 @@ t.add("admin.util.item_delete.delete_hint", "Really want to delete the %name%?",
 t.add("admin.util.item_delete.delete_success_hint", "Delete %name% successfully", "js", "en");
 t.add("admin.shortcut_add_success_hint", "The current page has been added as a popular link!", "js", "en");
 t.add("admin.shortcut_delete_success_hint", "Delete frequently used links successfully!", "js", "en");
-t.add("admin.item_bank_exercise.exercise.close_hint", "After the itembank exercise is closed, students who are still in the validity period will be able to continue their studies.", "js", "en");
+t.add("admin.item_bank_exercise.exercise.hide_hint", "After the itembank exercise is closed, students who are still in the validity period will be able to continue their studies.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.close_success_hint", "Close successfully", "js", "en");
-t.add("admin.item_bank_exercise.exercise.hide_hint", "After hiding, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.", "js", "en");
+t.add("admin.item_bank_exercise.exercise.close_hint", "After hiding, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.delist_hint", "After the question bank contact is removed from the shelves, it will not be displayed at the front desk, and students can not view it.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.hide_success_hint", "Item bank exercise display hidden successfully.", "js", "en");
 t.add("admin.item_bank_exercise.exercise.show_success_hint", "Item bank exercise display enabled successfully.", "js", "en");
