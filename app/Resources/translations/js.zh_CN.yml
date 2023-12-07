@@ -499,7 +499,7 @@ course.manage.publish_title: 确认发布？
 course.manage.publish_success_hint: 教学计划发布成功
 course.manage.publish_fail_hint: 教学计划发布失败
 course.manage.close_hint: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
-course.manage.hide_hint: 计划下架后将不在前台展示，学员无法查看
+course.manage.hide_hint: 计划下架后将不在前台展示，学员无法在首页和列表页查看
 course.manage.close_success_hint: 关闭成功
 course.manage.close_fail_hint: 关闭失败
 course.manage.show_success_hint: 开启成功
