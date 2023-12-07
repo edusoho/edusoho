@@ -499,7 +499,7 @@ course.manage.publish_title: 确认发布？
 course.manage.publish_success_hint: 教学计划发布成功
 course.manage.publish_fail_hint: 教学计划发布失败
 course.manage.close_hint: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
-course.manage.hide_hint: 计划下架后将不在前台展示，学员无法查看
+course.manage.hide_hint: 计划下架后将不在前台展示，学员无法在首页和列表页查看
 course.manage.close_success_hint: 关闭成功
 course.manage.close_fail_hint: 关闭失败
 course.manage.show_success_hint: 开启成功
@@ -1108,7 +1108,7 @@ admin.classroom.operation_fail_hint: 失败
 admin.classroom.operation_hint: 吗？
 admin.classroom.confirm_publish_hint: 确认发布？
 admin.classroom.hide_hint: 关闭后班级将彻底隐藏，学员无法在前台查看
-admin.classroom.delist_hint: 班级下架后将不在前台展示，学员无法查看
+admin.classroom.delist_hint: 班级下架后将不在前台展示，学员无法在首页和列表页查看
 admin.classroom.close_hint: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
 admin.classroom.hide_success_hint: 已关闭页面显示
 admin.classroom.delist_success_hint: 班级下架成功！
@@ -1161,7 +1161,7 @@ admin.close.btn.confirm_close: 确认关闭？
 admin.close.btn.confirm_hide: 确认下架？
 admin.close.btn.confirm_publish: 确认发布？
 admin.course.close_success_hint: 已关闭页面显示
-admin.course.hide_course_hint: 关闭后课程将彻底隐藏，学员无法在前台查看
+admin.course.hide_course_hint: 课程下架后将不在前台展示，学员无法在首页和列表页查看
 admin.course.delist_course_hint: 课程下架后将不在前台展示，学员无法查看
 admin.course.hide_success_hint: 课程关闭成功！
 admin.course.show_success_hint: 已开启页面
@@ -1465,9 +1465,9 @@ admin.util.item_delete.delete_success_hint: 删除%name%成功
 admin.shortcut_add_success_hint: 已添加当前页面为常用链接！
 admin.shortcut_delete_success_hint: 删除常用链接成功！
 
-admin.item_bank_exercise.exercise.close_hint: 题库练习关闭后，仍然还在有效期内的学员将可以继续学习。
+admin.item_bank_exercise.exercise.hide_hint: 题库练习下架后将不在前台展示，学员无法在首页和列表页查看
 admin.item_bank_exercise.exercise.close_success_hint: 题库练习关闭成功!
-admin.item_bank_exercise.exercise.hide_hint: 关闭后题库练习将彻底隐藏，学员无法在前台查看
+admin.item_bank_exercise.exercise.close_hint: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
 admin.item_bank_exercise.exercise.delist_hint: 题库联系下架后将不在前台展示，学员无法查看
 admin.item_bank_exercise.exercise.hide_success_hint: 已关闭页面显示
 admin.item_bank_exercise.exercise.show_success_hint: 已开启页面显示

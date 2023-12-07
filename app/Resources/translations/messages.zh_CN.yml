@@ -1488,6 +1488,7 @@ course.belong_to_classroom_tips: >
   <div>请加入后再学习</div>
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
 item_bank_exercise.course_limited_tips: 抱歉，该题库练习为限制题库练习，请联系客服
+goods.show_page.closed_tips: 商品已关闭，不允许加入和购买
 course.course_closed_tips: 抱歉，教学计划%title%已关闭！
 course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
@@ -8673,7 +8674,7 @@ admin.payment_setting.alipay_api_type.direct.hint: >
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
 admin.payment_setting.alipay_api_type.mobile: 手机网站支付接口
 admin.payment_setting.alipay_api_type.mobile.hint: >
-  开通此接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">阔知学堂</span>支付，需前往支付宝开通，查看
+  开通此接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">知享学堂</span>支付，需前往支付宝开通，查看
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
 admin.payment_setting.alipay_md5_secret: MD5密钥
 admin.payment_setting.alipay_secret: 支付宝公钥
