@@ -7863,6 +7863,7 @@ admin.cloud.license.edition_mismatching: Edition is mismathing with current lice
 admin.cloud.license.activate_fail: Activate fail
 admin.cloud.license.activate_success: Activate successfully
 admin.cloud.license.has_no_license: Please activate your license first.
+goods.show_page.closed_tips: The product is closed, not allowed to join and purchase
 
 # 通知
 notification.cash_account.recharge: You have successfully recharged %value% %coin_name%, <a href="%url%">check now</a>.

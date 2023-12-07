@@ -1488,6 +1488,7 @@ course.belong_to_classroom_tips: >
   <div>请加入后再学习</div>
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
 item_bank_exercise.course_limited_tips: 抱歉，该题库练习为限制题库练习，请联系客服
+goods.show_page.closed_tips: 商品已关闭，不允许加入和购买
 course.course_closed_tips: 抱歉，教学计划%title%已关闭！
 course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
