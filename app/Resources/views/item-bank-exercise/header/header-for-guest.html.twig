@@ -133,6 +133,8 @@
           {% else %}
             {% if exercise.joinEnable|default(true) == false %}
               {{ 'item_bank_exercise.course_limited_tips'|trans }}
+            {% elseif exercise.status == 'closed'%}
+              {{'goods.show_page.closed_tips'|trans}}
             {% elseif exercise.status != 'published' and exercise.status != 'unpublished' %}
               {{ 'item_bank_exercise.unbuyable.unpublished_tips'|trans }}
             {% elseif (exercise.expiryMode in ['end_date', 'date'] and exercise.expiryEndDate < 'now'|date('U')) %}
