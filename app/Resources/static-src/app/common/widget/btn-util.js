@@ -6,7 +6,8 @@ export const buyBtn  = ($element) => {
       } else {
         $('#modal').modal('show').html(resp);
       }
-
+    }).catch(error => {
+      window.location.reload();
     });
   });
 };
