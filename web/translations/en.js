@@ -464,7 +464,7 @@ t.add("course.manage.publish_title", "Confirm the release?", "js", "en");
 t.add("course.manage.publish_success_hint", "The program was published successfully", "js", "en");
 t.add("course.manage.publish_fail_hint", "Publish program failed", "js", "en");
 t.add("course.manage.close_hint", "Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation", "js", "en");
-t.add("course.manage.hide_hint", "The program will not be displayed at the front desk after it is removed, and students will not be able to view it", "js", "en");
+t.add("course.manage.hide_hint", "After the program is removed, it will not be displayed at the front desk, and students will not be able to view it on the home page and list page", "js", "en");
 t.add("course.manage.close_success_hint", "closed successfully", "js", "en");
 t.add("course.manage.close_fail_hint", "Close failed", "js", "en");
 t.add("course.manage.show_success_hint", "Enabled successfully", "js", "en");

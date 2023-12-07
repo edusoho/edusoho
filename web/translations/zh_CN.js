@@ -404,7 +404,7 @@ t.add("course.manage.publish_title", "\u786e\u8ba4\u53d1\u5e03\uff1f", "js", "zh
 t.add("course.manage.publish_success_hint", "\u6559\u5b66\u8ba1\u5212\u53d1\u5e03\u6210\u529f", "js", "zh_CN");
 t.add("course.manage.publish_fail_hint", "\u6559\u5b66\u8ba1\u5212\u53d1\u5e03\u5931\u8d25", "js", "zh_CN");
 t.add("course.manage.close_hint", "\u5173\u95ed\u540e\u4ecd\u5728\u6709\u6548\u671f\u7684\u5b66\u5458\u65e0\u6cd5\u7ee7\u7eed\u5b66\u4e60\uff0c\u8bf7\u8c28\u614e\u64cd\u4f5c", "js", "zh_CN");
-t.add("course.manage.hide_hint", "\u8ba1\u5212\u4e0b\u67b6\u540e\u5c06\u4e0d\u5728\u524d\u53f0\u5c55\u793a\uff0c\u5b66\u5458\u65e0\u6cd5\u67e5\u770b", "js", "zh_CN");
+t.add("course.manage.hide_hint", "\u8ba1\u5212\u4e0b\u67b6\u540e\u5c06\u4e0d\u5728\u524d\u53f0\u5c55\u793a\uff0c\u5b66\u5458\u65e0\u6cd5\u5728\u9996\u9875\u548c\u5217\u8868\u9875\u67e5\u770b", "js", "zh_CN");
 t.add("course.manage.close_success_hint", "\u5173\u95ed\u6210\u529f", "js", "zh_CN");
 t.add("course.manage.close_fail_hint", "\u5173\u95ed\u5931\u8d25", "js", "zh_CN");
 t.add("course.manage.show_success_hint", "\u5f00\u542f\u6210\u529f", "js", "zh_CN");
