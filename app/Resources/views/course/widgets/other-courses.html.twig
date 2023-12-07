@@ -10,14 +10,29 @@
             <ul class="list-group">
                 {% for course in otherCourses %}
                     <li class="pvs text-overflow">
-                        <a class="link-gray"
+                        <a class="link-gray {% if course.canLearn == '0' %} js-handleLearnContentOnMessage{% endif %}"
                             {% if course.id in purchasedCourseIds %}
                                 href="{{ path('my_course_show', {id: course.id}) }}"
                             {% else %}
                                 href="{{ path('course_show', {id: course.id}) }}"
                             {% endif %}
                         >
-                            {% if course.status  != 'published'%}<span class="text-sm">({{ 'course.status.unpublished'|trans }})</span>{% endif %} {{ course.title }}
+                            {% if course.status == 'draft'%}
+                            <span class="text-sm">
+                                ({{ 'course.status.unpublished'|trans }})
+                            </span>
+                            {% endif %}
+                            {% if course.status == 'unpublished'%}
+                            <span class="text-sm">
+                                ({{ 'course.status.delist'|trans }})
+                            </span>
+                            {% endif %}
+                            {% if course.status == 'closed'%}
+                            <span class="text-sm">
+                                ({{ 'course.status.closed'|trans }})
+                            </span>
+                            {% endif %} 
+                            {{ course.title }}
                         </a>
                         {% if course.id in purchasedCourseIds %}
                             <span class="label label-primary color-white text-sm">{{ 'course.joined'|trans }}</span>
