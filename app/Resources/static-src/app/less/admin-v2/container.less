@@ -447,6 +447,9 @@
   @media (min-width: 1400px) {
     padding: 20px;
   }
+  @media(max-width: 1400px) {
+    padding: 5px;
+  }
   background-color: @cdv2-white;
 }
 
@@ -607,9 +610,16 @@
 }
 
 .admin-link {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 将容器分为三列，每列的宽度平均分配 */
-  grid-gap: 12px;
+  @media (min-width: 1400px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 将容器分为三列，每列的宽度平均分配 */
+    grid-gap: 12px;
+  }
+  @media (max-width: 1400px) {
+    display: flex;
+    justify-content: space-between;
+    width: 33.33%;
+  }
 }
 
 .school-share-link {
@@ -690,6 +700,9 @@
   background-color: @cdv2-white;
   @media (min-width: 1400px) {
     padding: 20px;
+  }
+  @media (max-width: 1400px) {
+    padding: 5px;
   }
   .admin-sidebar-section__header {
     .cdv2-text-xlg;
