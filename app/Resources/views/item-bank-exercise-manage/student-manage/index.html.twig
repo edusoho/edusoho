@@ -29,6 +29,7 @@
           <tr>
             <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
             <th>{{'site.default.student'|trans}}</th>
+            <th>{{'site.default.mobile'|trans}}</th>
             <th>{{'join.time'|trans}}</th>
             <th>{{'course.expiry_date'|trans}}</th>
             <th width="25%">{{'course.members_manage.official_student.operation'|trans}}</th>
@@ -37,6 +38,7 @@
         <tbody>
           {% for student in students if student %}
             {% set user = users[student.userId]|default(null) %}
+            {% set userProfile = userProfiles[student.userId]|default(null) %}
             {% include 'item-bank-exercise-manage/student-manage/tr-v2.html.twig' %}
           {% else %}
             <tr class="empty"><td colspan="20">{{'course.members_manage.official_student.empty'|trans}}</td></tr>
@@ -49,3 +51,4 @@
       </nav>
     </div>
 {% endblock %}
+

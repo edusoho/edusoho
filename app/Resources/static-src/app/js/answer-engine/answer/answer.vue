@@ -17,6 +17,9 @@
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
       :getCurrentTime="getCurrentTime"
+      :courseId="courseId"
+      :exerciseId="exerciseId"
+      :type="type"
       :assessmentResponses="assessmentResponses"
       @getAnswerData="getAnswerData"
       @saveAnswerData="saveAnswerData"
@@ -48,6 +51,9 @@
       let inspectionOpen = $('[name=token]').length > 0 && $('[name=token]').val() !== '';
       let comp = checkBrowserCompatibility();
       return {
+        courseId: '',
+        exerciseId: '',
+        type: '',
         showCKEditorData: {
           publicPath: $('[name=ckeditor_path]').val(),
           filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
@@ -108,6 +114,16 @@
       }
     },
     created() {
+      if(this.getCourseId(window.top.location.href)) {
+        this.courseId = this.getCourseId(window.top.location.href);
+        this.type = 'course';
+      }
+
+      if(this.getExerciseId(window.top.location.href)) {
+        this.exerciseId = this.getExerciseId(window.top.location.href);
+        this.type = 'exercise';
+      }
+
       this.emitter = new ActivityEmitter();
       this.emitter.emit('doing', {data: ''});
 
@@ -119,7 +135,11 @@
         headers: {
           'Accept':'application/vnd.edusoho.v2+json'
         },
-        data: {answer_record_id: $("[name='answer_record_id']").val()},
+        data: {
+          answer_record_id: $("[name='answer_record_id']").val(),
+          exerciseId: this.exerciseId,
+          courseId: this.courseId
+      },
         beforeSend(request) {
           request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
         },
@@ -130,9 +150,31 @@
         this.answerScene = res.answer_scene;
         this.assessmentResponse = res.assessment_response;
         this.assessmentResponses = res.assessment_response;
+      }).error((err) => {
+        if(this.exerciseId) {
+          window.location.href = `/my/item_bank_exercise/${this.exerciseId}/assessment/${$('[name=answer_record]').val()}?previewAs=member`;
+        }
       })
     },
     methods: {
+      getCourseId(path) {
+          const match = path.match(/\/course\/\d+/);
+
+          if (match) {
+              return match[0].split('/').pop();
+          }
+
+          return null;
+      },
+      getExerciseId(path) {
+          const match = path.match(/\/item_bank_exercise\/\d+/);
+
+          if (match) {
+              return match[0].split('/').pop();
+          }
+
+          return null;
+      },
       getAnswerData(assessmentResponse) {
         const that = this;
         $.ajax({
@@ -154,6 +196,12 @@
           }
 
           const { code: errorCode } = result.responseJSON.error;
+
+          if (errorCode == '5001620') {
+            this.$message.error('课程已关闭，无法继续学习')
+            this.returnToCourseDetail()
+            return
+          }
 
           if (errorCode == '50095204') {
             // 试卷已提交 -- 退出答题
@@ -217,7 +265,8 @@
             this.ajaxTimeOut = null
           }, 10 * 1000)
         }
-
+        assessmentResponse.courseId = this.courseId;
+        assessmentResponse.exerciseId = this.exerciseId;
         assessmentResponse.admission_ticket = this.answerRecord.admission_ticket;
         return $.ajax({
           url: '/api/save_answer',
@@ -254,6 +303,12 @@
               okText: '退出答题',
               onOk: () => this.returnToCourseDetail()
             })
+            return
+          }
+
+          if (errorCode == '5001620') {
+            this.$message.error('课程已关闭，无法继续学习')
+            this.returnToCourseDetail()
             return
           }
 
@@ -342,7 +397,7 @@
       },
       deleteAttachmentCallback() {
         let self = this;
-        
+
         return new Promise(resolve => {
           $.ajax({
             url: $('[name=delete-attachment-url]').val(),

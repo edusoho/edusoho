@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\FileToolkit;
 use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
@@ -64,11 +65,42 @@ class CourseTaskMedia extends AbstractResource
         }
         $media = $this->$method($course, $task, $activity, $request->getHttpRequest(), $ssl);
 
+        list($watermarkSetting, $fingerPrintSetting) = $this->fingerPrintWatermark();
+
         return [
             'mediaType' => $activity['mediaType'],
             'media' => $media,
             'format' => $request->query->get('format', 'common'),
+            'watermarkSetting' => $watermarkSetting,
+            'fingerPrintSetting' => $fingerPrintSetting,
         ];
+    }
+
+    protected function fingerPrintWatermark()
+    {
+        $storageSetting = $this->getSettingService()->get('storage');
+        $fingerPrintSetting = [
+            'video_fingerprint' => '0',
+        ];
+        $watermarkSetting = [
+            'video_watermark' => '0',
+        ];
+
+        if (!empty($storageSetting)) {
+            $fingerPrintSetting = ArrayToolkit::parts($storageSetting, [
+                'video_fingerprint',
+                'video_fingerprint_time',
+            ]);
+
+            $watermarkSetting = ArrayToolkit::parts($storageSetting, [
+                'video_watermark',
+                'video_watermark_image',
+                'video_embed_watermark_image',
+                'video_watermark_position',
+            ]);
+        }
+
+        return [$watermarkSetting, $fingerPrintSetting];
     }
 
     protected function checkPreview($course, $task)

@@ -58,10 +58,11 @@
     {% if classroom.status=='published' %}
       <span class="text-success">{{ 'admin.classroom_manage.manage.published'|trans }}</span>
     {% elseif classroom.status=='closed' %}
-
       <span class="text-danger">{{ 'admin.classroom_manage.manage.closed'|trans }}</span>
+    {% elseif classroom.status=='unpublished' %}
+      <span class="color-black-title">{{ 'admin.classroom_manage.manage.unpublished'|trans }}</span>
     {% else %}
-      {{ 'admin.classroom_manage.manage.unpublished'|trans }}
+      {{ 'admin.classroom_manage.manage.draft'|trans }}
     {% endif %}
   </td>
 

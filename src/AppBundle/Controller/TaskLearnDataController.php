@@ -74,7 +74,7 @@ class TaskLearnDataController extends BaseController
 
         $userIds = ArrayToolkit::column($members, 'userId');
 
-        list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($courseId, $userIds);
+        list($users, $tasks, $taskResults, $userProfiles) = $this->getReportService()->getStudentDetail($courseId, $userIds);
 
         $taskCount = $this->getTaskService()->countTasks(
             [
@@ -92,6 +92,7 @@ class TaskLearnDataController extends BaseController
             'taskResults' => $taskResults,
             'course' => $course,
             'taskCount' => $taskCount,
+            'userProfiles' => $userProfiles,
         ]);
     }
 

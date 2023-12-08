@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
-use AppBundle\Controller\Callback\CloudSearch\BaseProvider;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Controller\Callback\CloudSearch\BaseProvider;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -21,8 +21,7 @@ class Classrooms extends BaseProvider
         $conditions['status'] = 'published';
         $conditions['parentId'] = 0;
         $conditions['updatedTime_GE'] = $cursor;
-
-        $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array('updatedTime' => 'ASC'), $start, $limit);
+        $classrooms = $this->getClassroomService()->searchClassrooms($conditions, ['updatedTime' => 'ASC'], $start, $limit);
         $classrooms = $this->build($classrooms);
         $next = $this->nextCursorPaging($cursor, $start, $limit, $classrooms);
 
@@ -48,12 +47,12 @@ class Classrooms extends BaseProvider
 
         $tagIds = array_reduce($tagRelationsGroupByClassroomId, function ($carry, $tagIds) {
             return array_merge($carry, $tagIds);
-        }, array());
+        }, []);
         $tagIds = array_unique($tagIds);
         $tagIds = array_values($tagIds);
         $tags = $this->getTagService()->findTagsByIds($tagIds);
         foreach ($classrooms as &$classroom) {
-            $classroom['tags'] = array();
+            $classroom['tags'] = [];
             if (!empty($tagRelationsGroupByClassroomId[$classroom['id']])) {
                 $classroomCorreTagIds = $tagRelationsGroupByClassroomId[$classroom['id']];
                 foreach ($classroomCorreTagIds as $tagId) {
@@ -75,12 +74,12 @@ class Classrooms extends BaseProvider
 
         foreach ($classrooms as &$classroom) {
             if (isset($categories[$classroom['categoryId']])) {
-                $classroom['category'] = array(
+                $classroom['category'] = [
                     'id' => $categories[$classroom['categoryId']]['id'],
                     'name' => $categories[$classroom['categoryId']]['name'],
-                );
+                ];
             } else {
-                $classroom['category'] = array();
+                $classroom['category'] = [];
             }
         }
 

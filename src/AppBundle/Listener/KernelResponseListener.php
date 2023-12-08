@@ -76,6 +76,7 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
             '/edu_cloud/sms_check/sms_bind', '/settings/check_login_password',
             '/register/email_or_mobile/check', '/settings/bind_mobile', '/scrm/buy/goods/callback',
             '/settings/mobile_bind', '/edu_cloud/sms_send_check_captcha', '/file/upload', '/file/img/crop', '/online/sample',
+            '/settings/setup_password',
         ];
     }
 

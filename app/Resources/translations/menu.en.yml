@@ -507,6 +507,7 @@ admin_v2.course.basic.basic_tab.close_btn: Close
 admin_v2.course.basic.basic_tab.publish_submit_btn: Publish
 admin_v2.course.basic.basic_tab.clone_btn: Clone
 admin_v2.course.basic.basic_tab.delete_submit_btn: Delete
+admin_v2.course.basic_tab.unpublished_btn: unpublished
 admin_v2.course.basic.basic_tab.s2b2c_submit_btn: Remove
 
 # 教学模块-课程管理-班级管理
@@ -518,6 +519,7 @@ admin_v2.course.classroom.basic_tab.create_btn: Add
 admin_v2.course.classroom.basic_tab.recommend_btn: Recommend
 admin_v2.course.classroom.basic_tab.close_btn: Close
 admin_v2.course.classroom.basic_tab.publish_submit_btn: Publish
+admin_v2.course.classroom.basic_tab.unpublished_btn: unpublished
 admin_v2.course.classroom.basic_tab.delete_submit_btn: Delete
 
 # 教学-课程管理-直播模块
@@ -536,6 +538,7 @@ admin_v2.course.item_bank_exercise.basic_tab.manage_btn: Manage
 admin_v2.course.item_bank_exercise.basic_tab.recommend_btn: Recommend
 admin_v2.course.item_bank_exercise.basic_tab.close_btn: Close
 admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn: Publish
+admin_v2.course.item_bank_exercise.basic_tab.unpublished_btn: unpublished
 admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn: Delete
 
 #公开课模块

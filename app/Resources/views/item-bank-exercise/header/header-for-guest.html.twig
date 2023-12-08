@@ -90,15 +90,31 @@
       <div class="course-detail-info__btn js-course-header-operation">
         <ul class="course-operation course-operation--market hidden-xs hidden-sm clearfix mb0">
           <li class="es-qrcode top hidden-xs mrl" data-url="{{ path('item_bank_exercise_qrcode', { id: exercise.id }) }}">
-            <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-saoyisao course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'site.qrcode_tips'|trans }}</span></a>
-            <span class="qrcode-popover">
-              <img class="mb0" src="" alt="">{{ 'site.tips.scan_qrcode_tips'|trans }}
-            </span>
+            <a class="cd-link-assist 
+            {% if exercise.status == 'closed' %}
+              {% if member | default(false) %}
+                js-handleExerciseOnMessage
+              {% else %}
+                js-handleExerciseClosed
+              {% endif %}
+            {% endif %}" href="javascript:;"><i class="es-icon es-icon-saoyisao course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'site.qrcode_tips'|trans }}</span></a>
+            {% if exercise.status != 'closed' %}
+              <span class="qrcode-popover">
+                <img class="mb0" src="" alt="">{{ 'site.tips.scan_qrcode_tips'|trans }}
+              </span>
+            {% endif %}
           </li>
 
           {# 分享图标功能设置 #}
           <li class="es-share es-share-item top mrl js-es-share">
-            <a class="dropdown-toggle cd-link-assist" href="javascript:;" data-toggle="dropdown">
+            <a class="dropdown-toggle cd-link-assist 
+            {% if exercise.status == 'closed' %}
+              {% if member | default(false) %}
+                js-handleExerciseOnMessage
+              {% else %}
+                js-handleExerciseClosed
+              {% endif %}
+            {% endif %}" href="javascript:;" {% if exercise.status != 'closed' %}data-toggle="dropdown"{% endif %}>
               <i class="es-icon es-icon-share course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.share'|trans }}</span>
             </a>
             {% include 'common/share-dropdown.html.twig' with {type:'item_bank_exercise'} %}
@@ -110,14 +126,16 @@
             {% if exercise.expiryMode == 'date' and exercise.expiryStartDate >= timestamp() %}
               {{ 'item_bank_exercise.expiry_date.expiryStartDate'|trans({'%expiryStartDate%':exercise.expiryStartDate|date('date.format'|trans)})|raw }}
             {% else %}
-              <a class="cd-btn cd-btn-primary" href="{{ path('my_item_bank_exercise_show', {id: exercise.id, tab: tab|default('reviews'), moduleId:moduleId|default(0)}) }}">
+              <a class="cd-btn cd-btn-primary {% if exercise.status == 'closed' %}js-handleExerciseOnMessage{% endif %}" href="{{ path('my_item_bank_exercise_show', {id: exercise.id, tab: tab|default('reviews'), moduleId:moduleId|default(0)}) }}">
                 {{ 'course.btn.learn'|trans }}
               </a>
             {% endif %}
           {% else %}
             {% if exercise.joinEnable|default(true) == false %}
               {{ 'item_bank_exercise.course_limited_tips'|trans }}
-            {% elseif exercise.status != 'published' %}
+            {% elseif exercise.status == 'closed'%}
+              {{'goods.show_page.closed_tips'|trans}}
+            {% elseif exercise.status != 'published' and exercise.status != 'unpublished' %}
               {{ 'item_bank_exercise.unbuyable.unpublished_tips'|trans }}
             {% elseif (exercise.expiryMode in ['end_date', 'date'] and exercise.expiryEndDate < 'now'|date('U')) %}
               {{ 'course.unbuyable.over_expiry_end_date_tips'|trans }}
@@ -127,7 +145,7 @@
               {% else  %}
                 {% set btnText = 'course.btn.buy' %}
               {% endif %}
-              <a class="cd-btn cd-btn-primary js-buy-btn" href="javascript:" data-url="{{ path('item_bank_exercise_buy', {id: exercise.id}) }}">
+              <a class="cd-btn cd-btn-primary js-buy-btn {% if exercise.status == 'closed' %}js-handleExerciseOnMessage{% endif %}" href="javascript:" data-url="{{ path('item_bank_exercise_buy', {id: exercise.id}) }}">
                 {{ btnText|trans }}
               </a>
             {% endif %}

@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
+use Biz\Course\CourseException;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -24,6 +25,7 @@ class CourseTaskEventV2 extends AbstractResource
 
     public function update(ApiRequest $request, $courseId, $taskId, $event)
     {
+        $this->checkCourseCanLearn($courseId);
         $this->checkEvents($request, $event, $taskId, $courseId);
         $data = $request->request->all();
 
@@ -42,6 +44,7 @@ class CourseTaskEventV2 extends AbstractResource
 
     protected function start(ApiRequest $request, $courseId, $taskId, $data)
     {
+        $this->checkCourseCanLearn($courseId);
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
@@ -113,6 +116,7 @@ class CourseTaskEventV2 extends AbstractResource
 
     protected function doing(ApiRequest $request, $courseId, $taskId, $data)
     {
+        $this->checkCourseCanLearn($courseId);
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
@@ -194,6 +198,7 @@ class CourseTaskEventV2 extends AbstractResource
 
     protected function finish(ApiRequest $request, $courseId, $taskId, $data)
     {
+        $this->checkCourseCanLearn($courseId);
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $course = $this->getCourseService()->getCourse($courseId);
@@ -274,6 +279,7 @@ class CourseTaskEventV2 extends AbstractResource
 
     protected function watching(ApiRequest $request, $courseId, $taskId, $data, $record)
     {
+        $this->checkCourseCanLearn($courseId);
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         if ('video' !== $task['type']) {
@@ -318,6 +324,14 @@ class CourseTaskEventV2 extends AbstractResource
     private function needLearnControl($type)
     {
         return !in_array($type, ['live', 'testpaper', 'homework']);
+    }
+
+    protected function checkCourseCanLearn($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if ('0' == $course['canLearn']) {
+            throw CourseException::CLOSED_COURSE();
+        }
     }
 
     protected function checkEvents(ApiRequest $request, $eventName, $taskId, $courseId)

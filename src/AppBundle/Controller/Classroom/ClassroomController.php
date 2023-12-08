@@ -390,6 +390,9 @@ class ClassroomController extends BaseController
             foreach ($learns as $key => $learn) {
                 $learns[$key]['user'] = $owners[$learn['userId']];
                 $learns[$key]['message'] = $manager->renderStatus($learn, 'simple');
+                if ('closed' == $classroom['status']) {
+                    $learns[$key]['message'] = str_replace('link-dark', 'link-dark js-handleLearnContentOnMessage', $learns[$key]['message']);
+                }
                 unset($learn);
             }
         }
@@ -677,6 +680,10 @@ class ClassroomController extends BaseController
 
         if (!$classroom) {
             $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
+        }
+
+        if ('closed' == $classroom['status']) {
+            $this->createNewException(ClassroomException::CLOSED_CLASSROOM());
         }
 
         if ('published' != $classroom['status']) {

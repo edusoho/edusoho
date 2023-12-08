@@ -58,6 +58,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'classroom.quit' => 'onClassroomQuit',
 
             'classroom.update' => 'onClassroomUpdate',
+            'classroom.hide' => 'onClassroomUpdate',
 
             //小组开启/关闭（云搜索支持小组话题搜索）
             'group.open' => 'onGroupOpen',

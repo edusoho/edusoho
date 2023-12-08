@@ -58,6 +58,7 @@ export default  class Sing {
         // window.location.reload();
       },
       error:  (xhr)=> {
+        window.location.reload()
       }
     });
   }
