@@ -34,7 +34,6 @@ class TaskLiveReplay extends AbstractResource
         }
 
         $device = $request->request->get('device');
-        $activity = $this->getOriginActivity($activity);
         $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
 
         $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
