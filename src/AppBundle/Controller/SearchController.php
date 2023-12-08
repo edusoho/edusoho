@@ -118,8 +118,6 @@ class SearchController extends BaseController
 
         try {
             list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
-
-            $resultSet = $this->filterCloudSearchResults($resultSet);
         } catch (\Exception $e) {
             return $this->redirectToRoute(
                 'search',
@@ -142,19 +140,6 @@ class SearchController extends BaseController
                 'paginator' => $paginator,
             ]
         );
-    }
-
-    private function filterCloudSearchResults($resultSet)
-    {
-        return array_map(function ($items) {
-            if ($items['about']) {
-                if (mb_strlen($items['about']) > 150) {
-                    $items['about'] = mb_substr($items['about'], 0, 150).'...';
-                }
-            }
-
-            return $items;
-        }, $resultSet);
     }
 
     protected function isTypeUsable($type)
