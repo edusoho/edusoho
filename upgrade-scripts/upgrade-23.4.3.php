@@ -55,6 +55,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'addCanLearn',
             'changeClassroomStatus',
             'updateStatus',
+            'changeArticleCharacter'
         ];
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -134,7 +135,7 @@ class EduSohoUpgrade extends AbstractUpdater
             ],
             [
                 'Vip',
-                1135
+                2665
             ]
 
         );
