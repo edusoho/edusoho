@@ -107,7 +107,6 @@
                         'targetId': this.sku.id,
                     }
                 }).then(res => {
-                    console.log(res)
                      if (res.data.success) {
                         window.location.href = '/order/show?' + qs.stringify({
                             targetId: this.sku.id,
@@ -126,6 +125,8 @@
                         return;
                     }
                     this.renderModal(res.data.code);
+                }).catch(err => {
+                    window.location.reload()
                 })
             },
             vipBtnTips(sku) {
