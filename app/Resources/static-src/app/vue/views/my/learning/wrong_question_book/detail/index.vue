@@ -184,7 +184,7 @@ export default {
       this.pagination.total = Number(paging.total);
       this.loading = false;
       this.questionList = data;
-			this.wrongNumCount = Number(paging.total)
+      this.wrongNumCount = Number(paging.total)
     },
 
     currentQuestionComponent(answerMode) {
