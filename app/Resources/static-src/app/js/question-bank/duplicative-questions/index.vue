@@ -210,17 +210,17 @@ export default {
         $("[name=questionBankId]").val(),
         formData
       ).then(async (res) => {
-        // if(res) {
-        //     that.$error({
-        //         title: Translator.trans("question.bank.error.tip.title"),
-        //         content: Translator.trans("question.bank.error.tip.content"),
-        //         okText: Translator.trans("site.btn.confirm"),
-        //         async onOk() {
-        //             await that.getData()
-        //             await that.changeOption()
-        //         }
-        //     });
-        // }
+        if(res) {
+            that.$error({
+                title: Translator.trans("question.bank.error.tip.title"),
+                content: Translator.trans("question.bank.error.tip.content"),
+                okText: Translator.trans("site.btn.confirm"),
+                async onOk() {
+                    await that.getData()
+                    await that.changeOption()
+                }
+            });
+        }
 
         that.questionContentList = res;
         that.questionData[activeKey].frequency = res.length.toString();
