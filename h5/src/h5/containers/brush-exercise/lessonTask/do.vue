@@ -8,7 +8,7 @@
         :assessmentResponse="assessmentResponse"
         :assessment="assessment"
         :answerScene="answerScene"
-				:exerciseInfo="exerciseInfo"
+				:exerciseId="exerciseId"
         @saveAnswerData="saveAnswerData"
         @getAnswerData="getAnswerData"
         @timeSaveAnswerData="timeSaveAnswerData"
@@ -39,6 +39,7 @@ export default {
   components: {itemEngine},
   data() {
     return {
+      exerciseId: '',
       isLoading: true,
       assessment: {},
       answerScene: {},
@@ -77,16 +78,9 @@ export default {
       brushDo:this
     }
   },
-  mounted() {},
-  beforeRouteEnter(to, from, next) {
-    document.getElementById('app').style.background = '#f6f6f6';
-    if (from.fullPath === '/') {
-      backUrl = '/';
-    } else {
-      backUrl = '';
-    }
-    next();
-  },
+  mounted() {
+		this.exerciseId = this.$route.query.exerciseId
+	},
   beforeRouteLeave(to, from, next) {
     document.getElementById('app').style.background = '';
     if (this.canLeave || to.query.isLeave) {

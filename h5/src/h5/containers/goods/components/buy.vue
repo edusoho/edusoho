@@ -1,5 +1,6 @@
 <template>
   <div class="info-buy">
+    <closedFixed v-if="goods.product.target.status == 'closed'" :isJoin="false" :title="goods.type == 'classroom' ? $t('closed.classroomTitle') : $t('closed.courseTitle')" />
     <van-action-sheet
       v-model="isShowForm"
       class="minHeight50"
@@ -65,10 +66,13 @@ import { Toast } from 'vant';
 import collectUserInfo from '@/mixins/collectUserInfo';
 import infoCollection from '@/components/info-collection.vue';
 import * as types from '@/store/mutation-types';
+import closedFixed from '@/components/closed-fixed.vue'
+
 
 export default {
   components: {
     infoCollection,
+    closedFixed
   },
   mixins: [collectUserInfo],
   props: {
@@ -159,7 +163,8 @@ export default {
 
     // 购买按钮样式展示
     classDisabled() {
-      const code = this.currentSku.access.code;
+      let code = this.currentSku?.access?.code;
+
       const status = [
         'user.locked',
         'course.reach_max_student_num',
@@ -193,6 +198,14 @@ export default {
         access: { code },
         vipLevelInfo,
       } = this.currentSku;
+
+      // 会员免费学
+      if (code === 'user.vip_free_learn') {
+        return {
+          disabled: false,
+          class: 'member-free',
+        };
+      }
 
       // 已加入, 去学习
       if (isMember) {

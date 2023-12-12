@@ -58,6 +58,8 @@ import Api from '@/api';
 import _ from 'lodash';
 import ReplyItem from './components/ReplyItem.vue';
 import { ImagePreview } from 'vant';
+import { closedToast } from '@/utils/on-status.js';
+
 
 export default {
   name: 'DiscussionDetail',
@@ -71,7 +73,10 @@ export default {
       type: Object,
       required: true,
     },
-
+    details: {
+      type: Object,
+      default: () => {}
+    },
     type: {
       type: String,
       required: true,
@@ -142,6 +147,10 @@ export default {
     },
 
     async handleClickEnter() {
+      if(this.details.courseSet.status == 'closed') {
+        return closedToast('course')
+      }
+
       const content = _.trim(this.content);
 
       if (!content) {

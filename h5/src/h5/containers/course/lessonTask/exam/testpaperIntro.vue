@@ -262,6 +262,7 @@ export default {
         userId: this.user.id,
         beginTime: Number(this.result.beginTime),
         endTime,
+        courseId: this.courseId
       };
       // 交卷+跳转到结果页
       this.handExamdo(datas)
@@ -327,6 +328,7 @@ export default {
           targetId: this.targetId,
           title: this.testpaperTitle,
           action: reDo ? 'redo' : 'do',
+          courseId: this.courseId
         },
         params: {
           KeepDoing,

@@ -33,6 +33,8 @@
 import empty from '&/components/e-empty/e-empty.vue';
 import { getBtnText } from '@/utils/itemBank-status.js';
 import { mapState } from 'vuex';
+import { closedToast } from '@/utils/on-status.js';
+
 export default {
   components: {
     empty,
@@ -64,6 +66,7 @@ export default {
     },
     ...mapState('ItemBank', {
       isMember: state => state.ItemBankExercise.isMember,
+      ItemBankExercise: state => state.ItemBankExercise,
     }),
   },
   watch: {
@@ -83,6 +86,11 @@ export default {
       return getBtnText(item.latestAnswerRecord?.status || '');
     },
     startDo(item) {
+      if (this.ItemBankExercise?.status == 'closed') {
+        closedToast('exercise')
+        return 
+      }
+
       const query = {
         mode: 'start',
         type: 'assessment',
@@ -94,6 +102,11 @@ export default {
       this.$router.push({ path: '/brushDo', query });
     },
     continueDo(item) {
+      if (this.ItemBankExercise?.status == 'closed') {
+        closedToast('exercise')
+        return 
+      }
+
       const query = {
         mode: 'continue',
         type: 'assessment',

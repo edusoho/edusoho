@@ -180,6 +180,8 @@ import copyUrl from '@/mixins/copyUrl';
 import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import { Toast } from 'vant';
+import { closedToast } from '@/utils/on-status.js';
+
 export default {
   name: 'LessonDirectory',
   mixins: [redirectMixin, copyUrl],
@@ -204,6 +206,10 @@ export default {
       type: Number,
       default: -1,
     },
+    goods: {
+      type: Object,
+      default: () => {}
+    }
   },
   data() {
     return {
@@ -300,7 +306,36 @@ export default {
       }
       return result;
     },
+    // 判断课程关闭后是否可以学习
+    isCanLearn(task) {
+      if(this.goods?.product?.target?.status == 'closed' && !this.goods.isMember) {
+        this.$router.push(`/goods/closed?type=${this.goods.type}`)
+        return true
+      }
+
+      const allowedTaskTypes = ['testpaper', 'homework', 'exercise'];
+      const isTaskTypeAllowed = allowedTaskTypes.includes(task.type);
+      const isTaskResultIncomplete = !task.result || task.result.status != 'finish';
+
+      if(this.goods?.product?.target?.status !== 'unpublished') {
+        return true
+      }
+
+      if(!isTaskTypeAllowed) {
+        return false
+      }
+
+      if(isTaskTypeAllowed && isTaskResultIncomplete) {
+        return false
+      }
+
+      return true
+    },
     lessonCellClick(task) {
+      if(!this.isCanLearn(task)) {
+        return closedToast('course');
+      }
+
       // 课程错误和未发布状态，不允许学习任务
       if (this.errorMsg || task.status === 'create') {
         this.$emit('showDialog');

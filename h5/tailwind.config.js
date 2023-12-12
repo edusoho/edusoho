@@ -7,7 +7,7 @@ module.exports = {
     spacing: () => {
       const obj = {};
       const baseSpacing = 4;
-      for (let i = 0; i <= 25; i++) {
+      for (let i = 0; i <= 50; i++) {
         const key = i * baseSpacing;
         const value = key + 'px';
         obj[key] = value;
@@ -37,6 +37,7 @@ module.exports = {
         'text-4': '#4e5969',
         'text-5': '#1d2129',
         'text-6': '#919399',
+        'text-7': '#37393D',
         'fill-1': '#ffffff',
         'fill-2': '#f7f8fa',
         'fill-3': '#f2f3f5',

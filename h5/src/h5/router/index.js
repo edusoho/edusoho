@@ -748,6 +748,17 @@ const routes = [
       ),
   },
   {
+    path: '/goods/closed',
+    name: 'goods_closed',
+    meta: {
+      i18n: true
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "goods-closed" */ '@/containers/goods/closed.vue'
+      ),
+  },
+  {
     path:
       '/goods/:id/classroom' /* 不要采用此路由，入口统一为/goods/:id/show */,
     name: 'goods_classroom',
@@ -780,6 +791,17 @@ const routes = [
     },
     component: () =>
       import(/* webpackChunkName: "goods" */ '@/containers/goods/qr.vue'),
+  },
+  {
+    path: '/empty',
+    name: 'empty',
+    meta: {
+      i18n: true,
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "empty" */ '@/containers/empty/index.vue'
+      ),
   },
   {
     path: '/goods/reviews',

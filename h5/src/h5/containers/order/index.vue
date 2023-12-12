@@ -368,7 +368,7 @@ export default {
   },
   methods: {
     shouldCollectUserInfo() {
-      if (!this.isAgree) {
+      if (!this.isAgree && this.purchaseAgreement.enabled == 1) {
         Toast('请先勾选协议');
         return;
       }

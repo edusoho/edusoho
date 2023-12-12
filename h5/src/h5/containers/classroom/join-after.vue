@@ -81,12 +81,16 @@
     </van-action-sheet>
     <e-footer
       @click.native="gotoGoodsPage"
-      v-if="active == 0 && this.details.goodsId && this.details.status !== 'closed'"
+      v-if="active == 0 && details.goodsId && details.status !== 'closed'"
     >
       {{ $t('classLearning.viewDetails') }}
     </e-footer>
 
     <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
+
+    <div class="footer">
+    <closedFixed v-if="details.status == 'closed'" :isJoin="true" :title="$t('closed.classroomTitle')" :content="$t('closed.classroomContent')" />
+  </div>
   </div>
 </template>
 
@@ -103,6 +107,8 @@ import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
+import closedFixed from '@/components/closed-fixed.vue'
+
 // eslint-disable-next-line no-unused-vars
 const TAB_HEIGHT = 44;
 
@@ -116,6 +122,7 @@ export default {
     courseSetList,
     infoCollection,
     Reviews,
+    closedFixed
   },
   props: ['details', 'planDetails'],
   data() {
@@ -413,3 +420,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+</style>

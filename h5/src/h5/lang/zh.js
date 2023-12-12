@@ -303,6 +303,7 @@ export default {
     noCourses: '暂无课程',
     noClass: '暂无班级',
     noQuestionBank: '暂无题库',
+    expired: '该课程已过期，无法继续学习'
   },
   more: {
     membersClass: '会员班级',
@@ -363,6 +364,9 @@ export default {
     preview: '试看',
     pleaseJoinFirst: '请先加入',
     pleaseJoinTheCourses: '请先加入课程',
+    courseClosedToast: '课程已关闭，无法继续学习',
+    classroomClosedToast: '班级已关闭，无法继续学习',
+    exerciseClosedToast: '题库已关闭，无法继续学习',
     needToUnlockThePreviousTask: '需要解锁上一个任务',
     stayTuned: '敬请期待',
     doesNotSupportThisType: '暂不支持此类型',
@@ -403,6 +407,12 @@ export default {
     night: '晚上',
     toLearn: '去学习',
     buy: '立即购买',
+    goHome: '回到首页',
+    closed_title: '当前内容已关闭',
+    closed_course: '当前课程已关闭',
+    closed_classroom: '当前班级已关闭',
+    closed_exercise: '当前题库已关闭',
+    closed_content: '无法继续查看'
   },
   courseLearning: {
 		selfJudging: '答题自判',
@@ -649,6 +659,19 @@ export default {
     personStudying: '{number}人在学',
     viewReport: '查看报告',
     continue: '继续做题',
+  },
+  closed: {
+    exerciseTitle: '题库练习已关闭，无法学习',
+    exerciseContent: '题库练习结果可查看',
+    courseTitle: '课程已关闭，无法学习',
+    courseContent: '考试与作业结果可查看',
+    classroomTitle: '班级已关闭，无法学习',
+    classroomContent: '课程中的考试与作业结果可查看',
+    cannotLearn: '无法继续学习',
+    goLearnPage: '回到学习页',
+    course: '当前课程已关闭',
+    classroom: '当前班级已关闭',
+    exercise: '当前题库已关闭',
   },
   filters: {
     free: '免费',

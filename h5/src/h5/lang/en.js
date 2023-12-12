@@ -313,6 +313,7 @@ export default {
     noCourses: 'No courses',
     noClass: 'No class',
     noQuestionBank: 'No question bank',
+    expired: 'The course has expired and cannot be continued'
   },
   more: {
     membersClass: 'Members class',
@@ -413,6 +414,12 @@ export default {
     night: 'Night',
     toLearn: 'To learn',
     buy: 'Buy now',
+    goHome: "Go back to home page",
+    closed_title: "The current content is closed",
+    closed_course: "The current course is closed",
+    closed_classroom: "The current classroom is closed",
+    closed_exercise: "The current question bank is closed",
+    closed_content: "Cannot continue viewing",
   },
   courseLearning: {
 		selfJudging: 'Self judging',
@@ -497,6 +504,9 @@ export default {
     preview: 'Preview',
     pleaseJoinFirst: 'Please join first',
     pleaseJoinTheCourses: 'Please join the courses',
+    courseClosedToast: 'The current course has been closed and cannot continue learning',
+    classroomClosedToast: 'The current classroom is closed, so you cannot continue studying',
+    exerciseClosedToast: 'The current exercise is closed, so you cannot continue working on it',
     needToUnlockThePreviousTask: 'Need to unlock the previous task',
     stayTuned: 'Stay tuned',
     doesNotSupportThisType: 'Does not support this type',
@@ -663,6 +673,19 @@ export default {
     personStudying: '{number} person studying',
     viewReport: 'View report',
     continue: 'Continue',
+  },
+  closed: {  
+    exerciseTitle: 'Question bank exercise closed, unable to learn',  
+    exerciseContent: 'Exercise results can be viewed',  
+    courseTitle: 'Course closed, unable to learn',  
+    courseContent: 'Exam and homework results can be viewed',  
+    classroomTitle: 'Class closed, unable to learn',  
+    classroomContent: 'Exam and homework results in the course can be viewed',
+    cannotLearn: 'Cannot continue learning',  
+    goLearnPage: 'Go to learning page',  
+    course: 'Current course is closed',  
+    classroom: 'Current classroom is closed',  
+    exercise: 'Current exercise library is closed'  
   },
   filters: {
     free: 'Free',

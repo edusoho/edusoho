@@ -43,15 +43,18 @@
       </van-button>
     </van-field>
 
-    <van-button
+    <div class="binding-btn w-full">
+      <van-button
       :disabled="btnDisable"
       type="primary"
-      class="primary-btn mb32"
+      class="primary-btn mb32 w-full"
       :loading="submitLoading"
       loading-text="绑定中..."
       @click="handleSubmit"
       >确认绑定</van-button
     >
+    </div>
+    
 
     <div
       v-if="mobileBind.mobile_bind_mode === 'option'"
@@ -271,6 +274,25 @@ export default {
 </script>
 
 <style scoped>
+
+.binding-btn {
+  /* 小于 600px 的分辨率 */
+@media (max-width: 600px) {
+  .van-button {
+    height: 44px !important;
+  }
+}
+
+/* 大于等于 600px 的分辨率 */
+@media (min-width: 600px) {
+  .van-button {
+    height: 4rem !important;
+  }
+}
+}
+
+
+
 .mobile-binding {
   position: relative;
   z-index: 1002;

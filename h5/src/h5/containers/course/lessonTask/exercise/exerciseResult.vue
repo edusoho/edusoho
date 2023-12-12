@@ -235,6 +235,7 @@ export default {
         exerciseId: this.$route.query.exerciseId,
         userId: this.user.id,
         exerciseResultId: this.$route.query.exerciseResultId,
+        courseId: this.$route.query.courseId,
       };
       // 提交练习+跳转到结果页
       this.handExercisedo(datas)

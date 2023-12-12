@@ -124,6 +124,7 @@ export default {
   mixins: [examMixin, report],
   data() {
     return {
+      courseId: '',
       enable_facein: '', // 是否开启云监考
       isReadOver: false, // 是否已批阅
       resultId: null, // 考试结果ID
@@ -325,6 +326,7 @@ export default {
               resultId: this.$route.query.resultId,
               testId: this.$route.query.testId,
               targetId: this.$route.query.targetId,
+              courseId: this.courseId
             },
           });
         })
@@ -369,6 +371,7 @@ export default {
           testId: this.testId,
         },
       }).then(res => {
+        this.courseId = res.testpaperResult.courseId
         const { canDoAgain  } = res.task.activity.testpaperInfo;
 
         this.testpaperTitle = res.task.title;

@@ -25,6 +25,7 @@
               :unit-num="item[slideIndex].unitNum"
               v-bind="$attrs"
               v-on="$listeners"
+              :goods="goods"
             />
           </div>
         </template>
@@ -36,6 +37,7 @@
             :unit-num="item[slideIndex].unitNum"
             v-bind="$attrs"
             v-on="$listeners"
+            :goods="goods"
           />
         </div>
       </div>
@@ -60,6 +62,12 @@ export default {
     swiperDirectory,
     utilDirectory,
     lessonDirectory,
+  },
+  props: {
+    goods: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {

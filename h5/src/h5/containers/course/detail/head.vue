@@ -128,6 +128,8 @@ import WechatSubscribe from '../components/wechat-subscribe';
 import * as types from '@/store/mutation-types.js';
 import copyUrl from '@/mixins/copyUrl';
 import { getLanguage } from '@/lang/index.js'
+import { closedToast } from '@/utils/on-status.js';
+
 
 export default {
   components: {
@@ -179,9 +181,11 @@ export default {
       activity: {}
     };
   },
+  inject: ['getDetailsContent'],
   computed: {
     ...mapState(['DrpSwitch', 'cloudSdkCdn']),
     ...mapState('course', {
+      course: state => state,
       sourceType: state => state.sourceType,
       selectedPlanId: state => state.selectedPlanId,
       taskId: state => state.taskId,
@@ -346,6 +350,7 @@ export default {
             mediaType,
           } = res;
 
+
           if (resNo === '0') {
             const media = await Api.getLocalMediaLive({
               query: {
@@ -455,6 +460,10 @@ export default {
         pluck: {
           timelimit: timelimit,
         },
+        fingerprint: {
+          html: player.fingerPrintSetting?.video_fingerprint,
+          duration: player.fingerPrintSetting?.video_fingerprint_time * 100
+        },
         playbackRates: [0.75, 1, 1.25, 1.5, 2, 3],
         resNo: media.resNo,
         disableDataUpload: true,
@@ -462,6 +471,7 @@ export default {
           pos: 'top.right',
           width: 30,
           height: 30,
+          file: player.watermarkSetting?.video_watermark_image
         },
         language: getLanguage(),
         token: media.token,
@@ -542,7 +552,7 @@ export default {
         if (options.language === 'zh-cn' || !options.language) {
           options.language = 'zh-CN'
         }
-        
+
         const player = new window.QiQiuYun.Player(options);
         this.player = player;
         player.on('unablePlay', () => {
@@ -653,7 +663,17 @@ export default {
       this.finishDialog = false;
     },
 
-    handleClickContinueLearning() {
+    async handleClickContinueLearning() {
+      await this.getDetailsContent()
+
+      if(this.courseSet?.status == 'closed') {
+        return closedToast('course');
+      }
+
+      if (this.course?.details?.learningExpiryDate?.expired) {
+        return Toast(this.$t('learning.expired'));
+      }
+      
       const { id } = this.nextStudy.nextTask;
       const params = {
         courseId: this.selectedPlanId,
