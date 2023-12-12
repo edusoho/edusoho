@@ -156,7 +156,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $answerRecords = $this->batchCreateAnswerRecords($answerScene, $assessmentId, $userIds);
-        $answerReports = $this->batchCreateAnswerReports($assessmentId, $answerRecords);
+        $answerReports = $this->batchCreateAnswerReports($assessment, $answerRecords);
 
         $updateAnswerRecords = [];
         $answerReports = array_column($answerReports, null, 'answer_record_id');
@@ -194,12 +194,12 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $this->getAnswerRecordService()->search(['answer_scene_id' => $answerScene['id'], 'user_ids' => $userIds], [], 0, count($userIds), ['id', 'user_id', 'answer_scene_id']);
     }
 
-    protected function batchCreateAnswerReports($assessmentId, $answerRecords)
+    protected function batchCreateAnswerReports($assessment, $answerRecords)
     {
         $newAnswerReports = [];
         $newAnswerReport = [
-            'assessment_id' => $assessmentId,
-            'total_score' => 0,
+            'assessment_id' => $assessment['id'],
+            'total_score' => $assessment['total_score'],
             'score' => 0,
             'subjective_score' => 0,
             'objective_score' => 0,
