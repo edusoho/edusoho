@@ -159,6 +159,27 @@ class PagedCourseLesson {
           return classNames;
         },
 
+        'taskItemClass': function(data, context) {
+          const canLearn = context.course.canLearn
+          const allowedTaskTypes = ['testpaper', 'homework', 'exercise'];
+          const isTaskTypeAllowed = allowedTaskTypes.includes(data.type);
+          const isTaskResultIncomplete = data.resultStatus != 'finish';
+          
+          if(canLearn == '1') {
+            return 'title'
+          }
+
+          if(!isTaskTypeAllowed) {
+            return 'title js-handleLearnContentOnMessage'
+          }
+
+          if(isTaskResultIncomplete) {
+            return 'title js-handleLearnContentOnMessage'
+          }
+
+          return 'title';
+        },
+
         'lessonContainerClass': function(data, context) {
           let containerClass = 'color-gray';
           if (context.isTask(data, context)) {

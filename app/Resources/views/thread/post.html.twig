@@ -15,6 +15,8 @@
      {% endif %}
       <div class="form-group clearfix">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <input type="hidden" name="type" value="{{ target.type }}">
+        <input type="hidden" name="id" value="{{ target.id }}">
         <button class="btn btn-primary pull-right" data-loading-text="{{'thread.replying'|trans}}">{{'form.btn.reply'|trans}}</button>
       </div>  
     </form>

@@ -48,6 +48,7 @@ class StudentManageController extends BaseController
             'students' => $students,
             'followings' => $this->findCurrentUserFollowings(),
             'users' => $this->getUserService()->findUsersByIds(array_column($students, 'userId')),
+            'userProfiles' => $this->getUserService()->findUserProfilesByIds(array_column($students, 'userId')),
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
             'paginator' => $paginator,
         ]);
@@ -95,9 +96,9 @@ class StudentManageController extends BaseController
             try {
                 $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
                 $this->setFlashMessage('success', 'site.add.success');
-            }catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $this->setFlashMessage('danger', $e->getMessage());
-            }finally {
+            } finally {
                 return $this->redirect(
                     $this->generateUrl(
                         'item_bank_exercise_manage_students',

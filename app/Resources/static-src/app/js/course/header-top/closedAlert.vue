@@ -1,0 +1,11 @@
+<template>
+    <div>
+        <a-alert
+            message="课程已关闭，无法学习"
+            class="mb16"
+            description="考试与作业结果可查看"
+            type="warning"
+            show-icon
+            />
+    </div>
+</template>

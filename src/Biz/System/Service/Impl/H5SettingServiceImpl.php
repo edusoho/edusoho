@@ -109,10 +109,12 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    protected function appendLiveStatus($courses) {
+    protected function appendLiveStatus($courses)
+    {
         foreach ($courses as $key => &$course) {
             $course['liveStatus'] = $this->getCourseTaskService()->getRecentLiveTaskStatus($course['id']);
         }
+
         return $courses;
     }
 
@@ -374,7 +376,8 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function announcementFilter($discoverySetting, $portal, $usage = 'show'){
+    public function announcementFilter($discoverySetting, $portal, $usage = 'show')
+    {
         return $discoverySetting;
     }
 

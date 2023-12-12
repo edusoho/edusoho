@@ -53,6 +53,67 @@ html.nav-active body {
 #content-container {
   margin: 30px auto;
   min-height: 400px;
+  .live-course-btn {
+    padding: 6px 16px;
+    color: @brand-primary !important;
+    border: 1px @brand-primary solid !important;
+    border-radius: 2px;
+  }
+  .search-form {
+    display: inline-block;
+    position: relative;
+  }
+
+  .search-input-content {
+    width: 260px;
+    padding: 4px 12px;
+    height: 32px;
+    border: 1px solid #E1E3E5;
+    border-right: none;
+    border-top-left-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
+    font-size: 14px;
+  }
+
+  .search-input-content::placeholder {  
+    color: #D2D3D4;
+   }
+
+  .search-input-content:focus {
+    outline: none !important;
+  }
+
+  .searchCourseBtn {
+    position: absolute;
+    left: 260px;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    height: 32px;
+    padding: 8px !important;
+    color: #919399;
+    background: white;
+    border-top-right-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+    border: 1px solid #E1E3E5;
+  }
+
+  .searchEmptyCourse {
+    margin-top: 10px;
+    height: 705px;
+    text-align: center;
+
+    .searchEmptyCourseImg {
+      width: 142px;
+      height: 116px;
+    }
+
+    .searchEmptyCourseContent {
+      margin-top: 12px;
+      color: #919399;
+      line-height: 22px;
+    }
+  }
+
   @media(max-width:@screen-xs-max) {
     min-height: 250px;
   }

@@ -15,15 +15,17 @@
                     </span>
                 </li>
                 <li class="pull-right">
-                    <share :customized-class="'detail-left__text-share'"
+                    <share :customized-class="goodsClass"
                            :title="goods.title|removeHtml"
                            :summary="goods.summary|removeHtml"
                            :message="`我正在学习《${goods.title|removeHtml}》，收获巨大哦，一起来学习吧！`"
                            :picture="goods.images.large"
                            :url="currentUrl"
-                           :type="'courseSet'">{{ 'site.share'|trans }}
+                           :type="'courseSet'"
+                           :goods="goods">{{ 'site.share'|trans }}
+                           
                     </share>
-                    <favorite :is-favorite="goods.isFavorite" :target-type="'goods'"
+                    <favorite :is-favorite="goods.isFavorite" :target-type="'goods'" :goods="goods"
                               :target-id="goods.id"></favorite>
                 </li>
             </ul>
@@ -95,8 +97,9 @@
                     </div>
                 </div>
             </div>
+
             <!-- 立即购买 -->
-            <buy-sku :sku="currentSku" :btn-class="'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods" :vip-enabled="vipEnabled"></buy-sku>
+            <buy-sku :sku="currentSku" :btn-class="goods.product.target.status == 'closed' ? `product-detail__btn ${buySkuClass}` : 'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods" :vip-enabled="vipEnabled"></buy-sku>
         </div>
     </div>
 </template>
@@ -265,7 +268,46 @@
                 drpInfo: [],
             }
         },
+        computed: {
+            buySkuClass() {
+                if(this.goods.type == 'course') {
+                    return 'js-handleLearnOnMessage'
+                }
+
+                if(this.goods.type == 'classroom') {
+                    return 'js-handleClassroomOnMessage'
+                }
+
+                if(this.goods.type == 'exercise') {
+                    return 'js-handleExerciseOnMessage'
+                }
+                
+            },
+            goodsClass() {
+                if (!this.goods.isMember) {
+                    
+                    if(this.goods.type == 'course' && this.goods.product.target.status == 'closed') {
+                        return 'detail-left__text-share js-handleCoursePage'
+                    }
+                    
+                    if(this.goods.type == 'classroom' && this.goods.product.target.status == 'closed'){
+                        return 'detail-left__text-share js-handleClassroomPage'
+                    }
+                }
+
+                if(this.goods.type == 'course' && this.goods.product.target.status == 'closed') {
+                    return 'detail-left__text-share js-handleLearnOnMessage'
+                }
+                
+                if(this.goods.type == 'classroom' && this.goods.product.target.status == 'closed'){
+                    return 'detail-left__text-share js-handleClassroomOnMessage'
+                }
+
+                return 'detail-left__text-share'
+            }
+        },
         mounted() {
+            console.log(this.goods)
             this.remainTime();
             this.getDrpInfo();
         },

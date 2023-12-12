@@ -23,6 +23,11 @@
                 required: true
             },
 
+            goods: {
+                type: Object,
+                default: () => {}
+            },
+
             targetType: {
                 type: String,
                 required: true
@@ -67,6 +72,16 @@
             },
 
             onFavorite() {
+                if (this.goods.product.target.status == 'closed' && !this.goods.isMember) {
+                    window.location.href = `/course/closed?type=${this.goods.type}`
+                    return
+                }
+
+                if (this.goods.product.target.status == 'closed' && this.goods.isMember) {
+                    this.$message.error(Translator.trans(`validate.${this.goods.type}.closed`));
+                    return
+                }
+
                 if (this.favorite) {
                     this.removeFavorite(this.targetType, this.targetId);
                 } else {

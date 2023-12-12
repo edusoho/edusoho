@@ -9,7 +9,7 @@ use ApiBundle\Api\Util\Money;
 class ItemBankExerciseFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'cover',
+        'id', 'title', 'cover', 'status', 'canLearn',
     ];
 
     protected $publicFields = [

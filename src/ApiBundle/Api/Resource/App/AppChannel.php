@@ -2,12 +2,11 @@
 
 namespace ApiBundle\Api\Resource\App;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Resource\Course\Course;
 use Biz\Course\Service\CourseSetService;
 use Biz\DiscoveryColumn\Service\DiscoveryColumnService;
-use ApiBundle\Api\Annotation\ApiConf;
 
 class AppChannel extends AbstractResource
 {
@@ -29,21 +28,20 @@ class AppChannel extends AbstractResource
 
     private function getDefaultChannel()
     {
-        $conditions = array(
+        $conditions = [
             'status' => 'published',
             'parentId' => 0,
-            'showable' => 1,
             'type' => 'normal',
-        );
+        ];
         $latestCourseSets = $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             0,
             self::DEFAULT_DISPLAY_COUNT
         );
 
-        $defaultChannel = array(
-            array(
+        $defaultChannel = [
+            [
                 'title' => '最新课程',
                 'type' => 'course',
                 'categoryId' => 0,
@@ -51,8 +49,8 @@ class AppChannel extends AbstractResource
                 'showCount' => self::DEFAULT_DISPLAY_COUNT,
                 'data' => $latestCourseSets,
                 'actualCount' => self::DEFAULT_DISPLAY_COUNT,
-            ),
-        );
+            ],
+        ];
 
         return $defaultChannel;
     }

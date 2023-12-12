@@ -13,6 +13,7 @@ class ClassroomStatisticsStudentsLearnExporter extends Exporter
     {
         return [
             '用户名',
+            '手机号',
             '加入班级时间',
             '课程累加学习时长（分）',
             '完课率',
@@ -29,8 +30,10 @@ class ClassroomStatisticsStudentsLearnExporter extends Exporter
         foreach ($membersResult as $memberResult) {
             $user = empty($users[$memberResult['userId']]) ? [] : $users[$memberResult['userId']];
             $nickname = empty($user) ? '--' : $user['nickname'];
+            $phone = empty($user) ? '--' : $user['verifiedMobile'];
             $content[] = [
                 is_numeric($nickname) ? $nickname."\t" : $nickname,
+                $phone,
                 date('Y-m-d H:i', $memberResult['createdTime']),
                 empty($memberResult['learnedTime']) ? 0 : round($memberResult['learnedTime'] / 60),
                 $memberResult['rate'].'%',

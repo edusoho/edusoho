@@ -4,10 +4,11 @@ $('html').on('shown.bs.modal', '#functionModal', (e) => {
   $('html').css('overflow', 'scroll');
 });
 
+
 $('.js-quick-entrance').on('click', '.js-function-choose', (event) => {
   const $target = $(event.currentTarget);
 
-  if (!$target.hasClass('active') && $('.js-function-choose.active').length >= 7) {
+  if (!$target.hasClass('active') && $('.js-function-choose.active').length >= 8) {
     cd.message({type: 'warning', message: Translator.trans('admin_v2.homepage.quick_entrance.hint')});
     return;
   }
@@ -16,7 +17,7 @@ $('.js-quick-entrance').on('click', '.js-function-choose', (event) => {
 });
 
 $('.js-quick-entrance').on('click', '.js-save-btn', (event) => {
-  if ($('.js-function-choose.active').length > 7) {
+  if ($('.js-function-choose.active').length > 8) {
     cd.message({type: 'warning', message: Translator.trans('admin_v2.homepage.quick_entrance.hint')});
     return;
   }

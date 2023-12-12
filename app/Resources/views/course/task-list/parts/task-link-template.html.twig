@@ -3,10 +3,9 @@
 {% set canBuy = can_buy_course(course) %}
 <tmp hide-if="{isItemDisplayedAsUnpublished}">
   {% if member %}
-    <a hide-if="{isTaskLocked}" class="title" href="{{ path('course_task_show',{courseId:course.id, id: '{taskId}'}) }}">
+    <a hide-if="{isTaskLocked}" class="{taskItemClass}" href="{{ path('course_task_show',{courseId:course.id, id: '{taskId}'}) }}">
       {% include 'course/task-list/parts/list-li-title-template.html.twig' %}
     </a>
-
     <span display-if="{isTaskLocked}" class="title">
       {% include 'course/task-list/parts/list-li-title-template.html.twig' %}
     </span>

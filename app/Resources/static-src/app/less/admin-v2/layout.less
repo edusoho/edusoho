@@ -19,7 +19,9 @@ body {
   }
 
   .admin-navbar-brand {
-    .cdv2-text-lg;
+    font-size: 18px;
+    font-weight: 900 !important;
+    line-height: 24px;
     color: #fff !important;
     &:hover,
     &:focus {
@@ -31,7 +33,9 @@ body {
     padding-top: 20px !important;
     padding-bottom: 20px !important;
     color: #bebebe;
-    .cdv2-text-md;
+    // .cdv2-text-md;
+    font-size: 14px;
+    line-height: 100%;
     text-decoration: none;
     &:hover,
     &:focus {
@@ -39,10 +43,14 @@ body {
     }
   }
 
+  .cd-tabs > li.active > a:before {
+    background: rgba(0, 0, 0, 0) !important;
+  }
+
   .cd-tabs {
     height: 60px;
     > li + li {
-      margin-left: 20px;
+      margin-left: 16px;
       @media (max-width: @screen-md-max) {
         margin-left: 8px !important;
       }
@@ -54,14 +62,22 @@ body {
   }
 
   .ct-layout-navbar_ul {
+    .divider-col {
+      margin-top: 24px;
+      margin-bottom: 25px;
+      width: 1px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.50);      ;
+    }
     li {
       position: relative;
       > a {
         .es-transition;
         margin-top: 20px;
         margin-bottom: 20px;
-        padding: 0 16px !important;
+        padding: 0 12px !important;
         font-weight: normal !important;
+        line-height: 20px;
         @media (max-width: @screen-md-max) {
           padding: 0 6px !important;
         }
@@ -98,33 +114,30 @@ body {
       }
       .es-transition;
       &.application-icon {
-        margin-left: 80px;
-        &.en-application-icon {
-          margin-left: 30px;
-        }
         a {
           height: auto !important;
           margin-top: 16px;
           margin-bottom: 16px;
-          padding: 4px 16px !important;
+          // padding: 4px 16px !important;
           @media (max-width: @screen-md-max) {
-            padding: 4px 8px !important;
+            // padding: 4px 8px !important;
           }
-          .cdv2-text-md;
+          font-size: 14px;
+          line-height: 24px;
+          // .cdv2-text-md;
           border-radius: 16px;
-          background-color: rgba(255,255, 255, 0.2);
           color: #fff !important;
           .es-transition;
           &:hover,
           &:focus {
             .es-transition;
-            background-color: #fff !important;
-            color: #333 !important;
-            opacity: 1 !important;
+            opacity: 0.8 !important;
           }
           img {
             display: inline-block;
             margin-right: 8px;
+            width: 20px;
+            height: 20px;
           }
           span {
             display: inline-block;
@@ -140,12 +153,14 @@ body {
           }
         }
       }
+    }
+    li:not(:last-child) {
       &.active {
         .es-transition;
         a {
           margin-top: 16px;
           margin-bottom: 16px !important;
-          padding: 4px 16px !important;
+          padding: 4px 12px !important;
           @media (max-width: @screen-md-max) {
             padding: 4px 8px !important;
           }
@@ -175,7 +190,7 @@ body {
 
   .cd-fixed-top .ct-layout-navbar {
     position: absolute;
-    left: 190px;
+    left: 140px;
     padding-left: 0;
     padding-right: 0;
     transform: none;

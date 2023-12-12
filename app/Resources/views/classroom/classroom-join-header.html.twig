@@ -1,6 +1,8 @@
 {% import 'macro.html.twig' as web_macro %}
+{% do script(['app/js/classroom/closed/index.js']) %}
 {% set memberDeadline = member.deadline|default(0) %}
 {% set isNewCoverSize = is_new_classroom_cover_size(classroom) %}
+
 
 {# 区分角色 #}
 <section class="class-header after {% if 'auditor' in member.role %} auditor{% endif %}">
@@ -22,11 +24,13 @@
         </button>
       </div>
     {% endif %}
-
     <div class="class-header-mian {% if isNewCoverSize %} class-header-main--new {% endif %}">
       {# 背景层即将舍弃 #}
       <div class="class-bg-layer"></div>
-      <div class="class-header-bg clearfix">
+      {% if classroom.status == 'closed' %}
+      <div id="classroomClosed"></div>
+      {% endif %}
+      <div class="class-header-bg clearfix relative">
         <div class="class-img">
           {# 分销标签 #}
           {{ slot('drp.product_tags.extension', {'type':'classroom','targetId':classroom.id}) }}
@@ -38,7 +42,7 @@
           <h2 class="title class-info__title">
             <span class="hidden-xs">{{ classroom.title|sub_text(20) }}</span>
             <span class="visible-xs">{{ classroom.title }}</span>
-            <span class="es-qrcode top" data-url="{{ path('classroom_qrcode',{id: classroom.id}) }}">
+            <span class="es-qrcode top {% if classroom.status == 'closed' %}js-handleClassroomOnMessage{% endif %}" {% if classroom.status != 'closed' %} data-url="{{ path('classroom_qrcode',{id: classroom.id}) }}"{% endif %}>
               <i class="es-icon es-icon-qrcode"></i>
               <span class="qrcode-popover">
                 <img src="" alt="">
@@ -125,7 +129,7 @@
             {% endif %}
             <li>
               <span class="es-share top js-es-share">
-                <a class="dropdown-toggle" href="javascript:;" data-toggle="dropdown" aria-labelledby="dropdownMenu1">
+                <a class="dropdown-toggle {% if classroom.status == 'closed' %}js-handleClassroomOnMessage{% endif %}" href="javascript:;" {% if classroom.status != 'closed' %}data-toggle="dropdown"{% endif %} aria-labelledby="dropdownMenu1">
                   <p><i class="es-icon es-icon-share"></i></p>
                   <p>{{ 'site.btn.share'|trans }}</p>
                 </a>

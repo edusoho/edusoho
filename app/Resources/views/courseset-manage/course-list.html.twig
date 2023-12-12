@@ -1,7 +1,6 @@
 {% extends 'course-manage/header.html.twig' %}
 {% block js %}
 {% endblock %}
-
 {% block title %}
   <a class="cd-link-major"
      href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}"
@@ -41,6 +40,15 @@
             </li>
             {% if course.status|default('') == 'published' %}
               {% if courseSet.platform|default('self') == 'self' %}
+                  <li>
+                    <a href="javascript:;"
+                      class="js-hide-course"
+                      data-url="{{ path('course_set_manage_course_unpublished', {courseSetId: courseSet.id, courseId: course.id}) }}">
+                        {{'course.teaching_plan.hide_page'|trans}}
+                    </a>
+                  </li>
+              
+              
                 <li>
                   <a class="js-copy-plan" href="javascript:;"
                      data-url="{{ path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id}) }}">
