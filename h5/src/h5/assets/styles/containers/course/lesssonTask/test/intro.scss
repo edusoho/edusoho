@@ -129,9 +129,9 @@
 			display: flex;
 			flex-direction: column;
 
-			// &:nth-child(1) {
-			// 	margin-right: vw(64);
-			// }
+			&:nth-child(1) {
+				margin-right: vw(64);
+			}
 		}
 	}
 

@@ -1,50 +1,90 @@
 .ibs-review{
-  margin: 0 vw(16);
+  // margin: 0 vw(16);
   font-size: vw(14);
-  margin-top: vw(24);
+  // margin-top: vw(24);
   overflow: hidden;
-  border-top: vw(1) solid #f5f5f5;
+  // border-top: vw(1) solid #f5f5f5;
+  border-radius: vw(12);
+  // background: #FFF;
+  // box-shadow: 0 vw(4) vw(24) 0 rgba(0, 0, 0, 0.05);
   .ibs-review-title {
-    padding: vw(20) 0 0 0;
+    // padding: vw(20) vw(16) 0;
     color: #333333;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     span{
       font-size: vw(12);
       color:#999999;
       font-weight: 400;
     }
   }
-  .ibs-review-item{
-    display: flex;
-    justify-content:space-between;
-    align-items:center;
-  }
-  .wap-icon{
-    font-size: vw(24);
-    color:#999999;
-    margin-left: vw(7);
-  }
-  .wap-icon-budong1,.wap-icon-zhangwo1{
-    color:$primary-color;
-  }
-  .van-radio-group{
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-  }
-  .van-radio{
-    flex-direction: column;
-    justify-content: center;
-    padding: vw(4);
-  }
-  .van-radio__label{
-    color:#999999;
-    margin-top: vw(8);
-  }
-  .ibs-review-check{
-    .van-radio__label{
-      color:$primary-color;
-    }
-  }
+	.ibs-self-judging {
+    margin: vw(4) vw(16) 0;
+    padding: vw(12) vw(16) vw(32) vw(16);
+		border-radius: vw(12);
+    background: #FFF;
+    box-shadow: 0 vw(4) vw(24) 0 rgba(0, 0, 0, 0.05);
+
+		.ibs-self-judging-title {
+			color: #37393D;
+			font-size: 14px;
+			font-weight: 500;
+			line-height: 22px;
+		}
+
+		.ibs-self-judging-change-radio {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: vw(94);
+			margin: vw(16) 0 0 0;
+	
+			.ibs-self-judging-group-radio {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+	
+			.ibs-self-judging-radio {
+				display: flex;
+				flex-direction: column;
+	
+				&:nth-child(1) {
+					margin-right: vw(64);
+				}
+			}
+		}
+	}
+  // .ibs-review-item{
+  //   display: flex;
+  //   justify-content:space-between;
+  //   align-items:center;
+  // }
+  // .wap-icon{
+  //   font-size: vw(24);
+  //   color:#999999;
+  //   margin-left: vw(7);
+  // }
+  // .wap-icon-budong1,.wap-icon-zhangwo1{
+  //   color:$primary-color;
+  // }
+  // .van-radio-group{
+  //   width: 100%;
+  //   display: flex;
+  //   justify-content: space-around;
+  // }
+  // .van-radio{
+  //   flex-direction: column;
+  //   justify-content: center;
+  //   padding: vw(4);
+  // }
+  // .van-radio__label{
+  //   color:#999999;
+  //   margin-top: vw(8);
+  // }
+  // .ibs-review-check{
+  //   .van-radio__label{
+  //     color:$primary-color;
+  //   }
+  // }
 }

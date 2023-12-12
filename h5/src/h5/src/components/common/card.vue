@@ -43,11 +43,18 @@
       </div>
     </div>
     <van-button
-      v-if="brushDo.exerciseModes === '1' && brushDo.status === 'doing'"
+      v-if="(brushDo.exerciseModes === '1' && brushDo.status === 'doing') && reviewedCount != all"
       class="end-answer__btn"
       type="primary"
       @click="endAnswer"
       >{{ $t('courseLearning.endAnswer') }}</van-button
+    >
+		<van-button
+      v-if="reviewedCount === all && brushDo.status === 'doing'"
+      class="end-answer__btn"
+      type="primary"
+      @click="goResult"
+      >{{ $t('courseLearning.viewResult2') }}</van-button
     >
   </van-popup>
 </template>
@@ -59,8 +66,8 @@ export default {
   name: "ibs-card",
   data() {
     return {
-			isLeave: false,
-		};
+      isLeave: false,
+    };
   },
   props: {
     mode: {
@@ -92,10 +99,19 @@ export default {
       default: false
     },
     value: Boolean,
-		assessmentResponse: {
-			type: Object,
-			default: () => {}
+    assessmentResponse: {
+      type: Object,
+      default: () => {}
+    },
+		reviewedCount: {
+			type: Number,	
+			default: 0
 		},
+		all: {
+      //题目总数
+      type: Number,
+      default: 0
+    },
   },
   model: {
     prop: "value",
@@ -217,41 +233,53 @@ export default {
       return true;
     },
     // 结束答题
-		endAnswer() {
-			const that = this;
-			Dialog.confirm({
-				title: `是否结束本次答题`,
-				confirmButtonText: '是',
-				cancelButtonText: '否',
-				className: 'backDialog'
-			})
-			.then(() => {
-				Api.finishAnswer({
-					query: {
-						id: that.brushDo.recordId
+    endAnswer() {
+      Dialog.confirm({
+        title: `是否结束本次答题`,
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        className: 'backDialog'
+      })
+      .then(() => {
+        Api.finishAnswer({
+          query: {
+            id: this.brushDo.recordId
+          }
+        }).then(() =>{
+					if (this.brushDo.type === "wrongQuestionBook") {
+						this.brushDo.goResult()
+					} else {
+						this.goResult()
 					}
-				}).then(res =>{
-					that.isLeave = true;
-					const query = {
-						type: 'chapter',
-						title: that.$route.query.title,
-						exerciseId: that.$route.query.exerciseId,
-						categoryId: that.$route.query.categoryId,
-						moduleId: that.$route.query.moduleId,
-						isLeave: that.isLeave,
-					};
-					const answerRecordId = that.assessmentResponse.answer_record_id;
-					that.$router.replace({
-						path: `/brushResult/${answerRecordId}`,
-						query,
-					});
-				}).catch(err =>{
-					Toast.fail(err.message)
-					})
-				})
-			.catch((err) => {
-			});
-		}
+        }).catch(err =>{
+          Toast.fail(err.message)
+          })
+        })
+      .catch((err) => {
+				Toast.fail(err.message)
+      });
+    },
+		goResult() {
+			if (this.brushDo.type === "wrongQuestionBook") {
+				this.brushDo.goResult()
+			} else {
+				this.isLeave = true;
+				const query = {
+					type: 'chapter',
+					title: this.$route.query.title,
+					exerciseId: this.$route.query.exerciseId,
+					categoryId: this.$route.query.categoryId,
+					moduleId: this.$route.query.moduleId,
+					isLeave: this.isLeave,
+				};
+				const answerRecordId = this.assessmentResponse.answer_record_id;
+				this.$router.replace({
+					path: `/brushResult/${answerRecordId}`,
+					query,
+				});
+			}
+		},
+
   }
 };
 </script>

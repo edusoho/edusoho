@@ -29,6 +29,7 @@
               :showAnalysis="true"
               :showReport="true"
               :current="current"
+							:wrong="wrong"
               :itemLength="items.length"
               @itemSlideNext="itemSlideNext"
               @itemSlidePrev="itemSlidePrev"
@@ -105,7 +106,11 @@ export default {
     assessmentResponse: {
       type: Object,
       default: () => {}
-    }
+    },
+		wrong: {
+			type: Boolean,
+			default: false
+		}
   },
   data() {
     return {

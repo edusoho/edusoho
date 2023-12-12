@@ -8,15 +8,17 @@
         :speed="500"
         @slideNextTransitionEnd="slideNextTransitionEnd"
         @slidePrevTransitionEnd="slidePrevTransitionEnd"
+				:class="{'swiper-no-swiping': !touchable}"
       >
         <template v-for="item in renderItmes">
           <swiper-slide
             :key="`paper${item.id}`"
             :ref="`paper${item.id}`"
             :style="{ height: height + 'px' }"
+						style="overflow-x: hidden;"
             class="ibs-paper-item"
           >
-            <ibs-item
+            <ibs-item 
               :ref="`item${item.id}`"
               :item="item"
               :mode="mode"
@@ -28,9 +30,27 @@
               :current="current"
               :itemLength="items.length"
               :showAnalysis="doLookAnalysis"
+              :reviewedCount="reviewedCount"
+							:isAnswerFinished="isAnswerFinished"
+							:items="items"
+							:wrong="wrong"
+							:exerciseInfo="exerciseInfo"
+							:iscando="iscando"
+							:fillStatus="fillStatus"
+							:choiceIsCando="choiceIsCando"
+							:reviewedQuestion="reviewedQuestion"
+							:EssayRadio="EssayRadio"
+							@changeIsCando="changeIsCando"
+							@changeChoiceCando="changeChoiceCando"
+							@changeTouch="changeTouch"
+							@noChangeTouch="noChangeTouch"
+							@updataIsAnswerFinished="updataIsAnswerFinished"
               @changeAnswer="changeAnswer"
               @itemSlideNext="itemSlideNext"
               @itemSlidePrev="itemSlidePrev"
+							@changeEssayRadio="changeEssayRadio"
+              @changeReviewedCount="changeReviewedCount"
+							@submitedQuestionStatus="submitedQuestionStatus"
             />
           </swiper-slide>
         </template>
@@ -38,15 +58,17 @@
 
       <!-- 答题卡 -->
       <card
-				ref="card"
+        ref="card"
         v-model="cardShow"
         :mode="mode"
         :sections="assessment.sections"
         :section_responses="section_responses"
-				:assessmentResponse="assessmentResponse"
+        :assessmentResponse="assessmentResponse"
+        :all="Number(assessment.question_count)"
+        :reviewedCount="reviewedCount"
         @slideTo="slideTo"
       ></card>
-      {{ brushDo.status }}
+
       <ibs-footer
         v-if="brushDo.exerciseModes === '0'"
         :mode="mode"
@@ -73,6 +95,8 @@ import ibsFooter from "@/src/components/common/footer.vue";
 import { compareNowTime, timeStampFormatTime } from "@/src/utils/date-toolkit";
 import { Dialog, Toast } from "vant";
 import itemBankMixins from "@/src/mixins/itemBankMixins.js"
+import Api from '@/api';
+
 export default {
   name: "item-engine",
   mixins: [itemBankMixins],
@@ -80,7 +104,7 @@ export default {
     ibsItem,
     card,
     countDown,
-    ibsFooter
+    ibsFooter,
   },
   props: {
     mode: {
@@ -111,7 +135,15 @@ export default {
     showSaveProcessBtn: {
       type: Boolean,
       default: true
-    }
+    },
+		exerciseInfo: {
+			type: Array,
+      default: () => []
+		},
+		wrong: {
+			type: Boolean,
+			default: false
+		}
   },
   provide() {
     return {
@@ -132,11 +164,24 @@ export default {
       items: [],
       renderItmes: [],
       hasResponses: false,
-      continueDo: null
+      continueDo: null,
+      reviewedCount: null,
+      isAnswerFinished: null,
+			touchable: true,
+			allItems: [],
+			iscando: [],
+			choiceIsCando: [],
+			reviewedQuestion: [],
+			fillStatus: [],
+			EssayRadio: [],
     };
   },
   beforeDestroy() {
     this.clearTime();
+  },
+  // 离开页面守卫
+  beforeRouteLeave(to, from, next) {
+    next();
   },
   computed: {
     needScore() {
@@ -147,6 +192,24 @@ export default {
     }
   },
   mounted() {
+		this.$nextTick(()=> {
+			this.items.forEach((item,index) => {
+				item.questions.forEach((sub)=> {
+					this.allItems.push(sub);
+				})
+				this.choiceIsCando[index] = false
+			})
+			this.allItems.forEach((item, index) => {
+				// if (this.exerciseInfo.length > 0 ) {
+					if (this.exerciseInfo.filter(subItem => subItem.questionId + '' === item.id).length > 0) {
+						this.iscando[index] = false
+					} else {
+						this.iscando[index] = true
+					}
+				// }
+			});
+
+		})
     if (compareNowTime(Number(this.answerScene.start_time) * 1000)) {
       this.noStartTool();
       return;
@@ -161,6 +224,12 @@ export default {
     });
   },
   methods: {
+		changeIsCando(index, flag) {
+			this.iscando[index] = flag
+		},
+		changeChoiceCando(index, flag) {
+			this.choiceIsCando[index] = flag
+		},
     //题卡定位
     slideTo(keys) {
       const itemKey = `item${keys.itemId}`;
@@ -359,22 +428,47 @@ export default {
       return new Promise((resolve, reject) => {
         Dialog.confirm({
           title: title,
-          cancelButtonText: "确认",
-          confirmButtonText: "继续答题",
-          message: message,
+          cancelButtonText: this.isAnswerFinished == 1 ? '取消' : "确认",
+          confirmButtonText: this.isAnswerFinished == 1 ? '退出答题' : "继续答题",
+          message: this.isAnswerFinished == 1 ? '题目已经做完，是否返回列表？' : message,
           getContainer: "#ibs-item-bank",
-					className: 'backDialog'
+          className: 'backDialog'
         })
           .then(() => {
             // 显示答题卡
             //this.cardShow = true;
-						document.getElementsByClassName('backDialog')[0].remove();
-            reject();
+            // const isLeave = true;
+            if (this.isAnswerFinished == 1) {
+              this.goResult()
+              // this.$router.replace({
+              //   path: `/item_bank_exercise/${this.$route.query.exerciseId}`,
+              //   query: {
+              //     targetId: this.$route.query.exerciseId,
+              //     type: 'item_bank_exercise',
+              //     hasCertificate: '',
+              //     isLeave
+              //   },
+              // })
+              document.getElementsByClassName('backDialog')[0].remove();
+              reject();
+            } else {
+              document.getElementsByClassName('backDialog')[0].remove();
+              reject();
+            }
           })
           .catch(() => {
-            flge ? this.answerData() : this.saveAnswerData();
-						document.getElementsByClassName('backDialog')[0].remove();
-            resolve();
+            if (this.isAnswerFinished == 1) {
+              document.getElementsByClassName('backDialog')[0].remove();
+            } else {
+              if (this.brushDo.exerciseModes == '1') {
+                this.finishAnswer()
+              } else {
+                flge ? this.answerData() : this.saveAnswerData();
+                document.getElementsByClassName('backDialog')[0].remove();
+                resolve();
+              }
+            }
+
           });
       });
     },
@@ -422,7 +516,62 @@ export default {
       finalData.answer_record_id = this.answerRecord.id;
       finalData.section_responses = this.section_responses;
       return finalData;
-    }
+    },
+    changeReviewedCount(reviewedCount, isAnswerFinished) {
+      this.reviewedCount = reviewedCount;
+      this.isAnswerFinished = isAnswerFinished
+    },
+    finishAnswer() {
+      Api.finishAnswer({
+        query: {
+          id: this.brushDo.recordId
+        }
+      }).then(() =>{
+        this.goResult()
+      }).catch(err =>{
+        Toast.fail(err.message)
+      })
+    },
+    goResult() {
+      const isLeave = true;
+      const query = {
+        type: 'chapter',
+        title: this.$route.query.title,
+        exerciseId: this.$route.query.exerciseId,
+        categoryId: this.$route.query.categoryId,
+        moduleId: this.$route.query.moduleId,
+        isLeave,
+      };
+      const answerRecordId = this.assessmentResponse.answer_record_id;
+      this.$router.replace({
+        path: `/brushResult/${answerRecordId}`,
+        query,
+      });
+    },
+		changeTouch(val) {
+			this.touchable = val
+		},
+		noChangeTouch(val) {
+			this.touchable = val
+		},
+		updataIsAnswerFinished(val, flag, data, questionId) {
+			if (!this.reviewedQuestion.includes(questionId)) {
+				this.reviewedQuestion.push(data)
+			} 
+			this.isAnswerFinished = val
+			if (flag) {
+				this.reviewedCount = this.reviewedCount + 1
+			}
+		},
+		submitedQuestionStatus(data) {
+			this.fillStatus.push(data)
+		},
+		changeEssayRadio(data) {
+			const repeatRadio =  this.EssayRadio.filter(item => item.questionId === data.questionId)
+			if (repeatRadio.length === 0) {
+				this.EssayRadio.push(data)
+			}
+		}
   }
 };
 </script>

@@ -227,6 +227,9 @@ export default {
     longPressToSaveThePicture: 'Long press to save the picture',
   },
   wrongQuestion: {
+		questionNotReviewed: 'The current question has not been reviewed',
+		completeReview: 'Complete review',
+		topicList: 'Topic List',
     title: 'Mistakes collection',
     fromCourse: 'From course',
     fromClass: 'From class',
@@ -412,6 +415,9 @@ export default {
     buy: 'Buy now',
   },
   courseLearning: {
+		selfJudging: 'Self judging',
+		haveMastered: 'Have mastered',
+		notQuiteUnderstand: 'Not quite understand',
     yourAreAnswer: 'Your answer',
     analyze: 'analyze',
     selectedAnswer: 'Selected answer',

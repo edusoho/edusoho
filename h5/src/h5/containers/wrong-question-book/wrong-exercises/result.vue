@@ -74,7 +74,8 @@ export default {
   provide() {
     return {
       getResourceToken: this.getResourceToken,
-      settings: this.storageSetting
+      settings: this.storageSetting,
+			brushDo: this
     }
   },
   computed: {

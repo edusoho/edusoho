@@ -1,5 +1,5 @@
 <template>
-  <div style="margin: 8px 16px 0;">
+  <div style="margin: 12px 0 0;">
     <div v-if="disableVideo && isMedia" class="ibs-attachment-preview">
       <img :src="disableVideoIcon" style="width: 24px;margin-right: 8px;" />
       <div class="text-overflow text-12" style="flex: 1;color: #999;">
@@ -51,6 +51,7 @@
         style="margin-left: 8px;"
         @click="previewFile"
         :src="icons.preview"
+        class="review-img"
       />
     </div>
 
@@ -232,3 +233,17 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+  .ibs-attachment-preview {
+    .ibs-attachment-preview__icon {
+      margin-bottom: 0 !important;
+      width: vw(24) !important;
+      height: vw(24) !important;
+    }
+    .review-img {
+      margin-bottom: 0 !important;
+      width: vw(24) !important;
+      height: vw(24) !important;
+    }
+  }
+</style>

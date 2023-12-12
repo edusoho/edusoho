@@ -8,6 +8,7 @@
         :assessmentResponse="assessmentResponse"
         :assessment="assessment"
         :answerScene="answerScene"
+				:exerciseInfo="exerciseInfo"
         @saveAnswerData="saveAnswerData"
         @getAnswerData="getAnswerData"
         @timeSaveAnswerData="timeSaveAnswerData"
@@ -49,7 +50,9 @@ export default {
       status: '',
       reviewedCount: 0,
       recordId: '',
-      backUrl: ''
+      backUrl: '',
+			type: 'lessonTask',
+			exerciseInfo: []
     };
   },
   computed: {
@@ -60,7 +63,12 @@ export default {
   watch: {},
   created() {
     const mode = this.$route.query.mode;
-    mode === 'start' ? this.getStart() : this.getContinue();
+		
+		if (mode === 'start' && !localStorage.getItem('exerciseId_'+this.$route.query.exerciseId)) {
+			this.getStart()
+		} else {
+			this.getContinue()
+		}
   },
   provide() {
     return {
@@ -90,7 +98,7 @@ export default {
   methods: {
     getContinue() {
       this.isLoading = true;
-      const data = { answer_record_id: this.$route.query.answer_record_id };
+      const data = { answer_record_id: this.$route.query.answer_record_id ? this.$route.query.answer_record_id : localStorage.getItem('exerciseId_'+this.$route.query.exerciseId) };
       Api.continueAnswer({ data })
         .then(res => {
           this.recordId = res.answer_record.id
@@ -99,6 +107,7 @@ export default {
           this.status = res.answer_record.status;
           this.assignData(res);
           this.isLoading = false;
+					this.exerciseInfo = res.submittedQuestions
         })
         .catch(err => {
           this.handleError(err);
@@ -126,6 +135,7 @@ export default {
           this.status = res.answer_record.status;
           this.isLoading = false;
           this.assignData(res);
+					localStorage.setItem('exerciseId_'+this.$route.query.exerciseId,res.answer_record.id)
         })
         .catch(err => {
           this.handleError(err);
@@ -239,5 +249,8 @@ export default {
       this.$router.replace(`/my/courses/learning?active=2`)
     }
   },
+	destroyed(){
+		localStorage.removeItem('exerciseId_'+this.$route.query.exerciseId)
+	},
 };
 </script>

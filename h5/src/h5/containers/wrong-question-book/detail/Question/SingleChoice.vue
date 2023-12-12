@@ -3,15 +3,20 @@
     <van-radio
       v-for="(answer, index) in questions.response_points"
       :key="index"
-      class="question-option"
-      :name="answer.radio.val"
+			:name="answer.radio.val"
+      :class="['question-option',
+				{'van-checkbox__right': RadioRight(answer.radio.val)},
+      	{'van-checkbox__wrong': RadioWrong(answer.radio.val)},
+			]"
     >
+			<i class="iconfont icon-zhengque1"></i>
+			<i class="iconfont icon-cuowu2"></i>
       <div class="question-option__content" v-html="answer.radio.text" />
       <template slot="icon">
         <span
-          :class="['question-option__order', checkAnswer(answer.radio.val)]"
+          :class="['question-option__order']"
         >
-          {{ answer.radio.val }}
+          {{ answer.radio.val + "."}}
         </span>
       </template>
     </van-radio>
@@ -28,7 +33,6 @@ export default {
       required: true,
     },
   },
-
   computed: {
     questions() {
       return this.question.questions[0];
@@ -36,20 +40,27 @@ export default {
   },
 
   methods: {
-    checkAnswer(value) {
-      const {
-        answer,
-        report: { response },
-      } = this.questions;
+		RadioWrong(radioItem) {
+			const answer = this.question.questions[0].answer
+			const response = this.question.questions[0].report.response
 
-      // 正确答案
-      if (_.includes(answer, value)) {
-        return 'question-option__order_right';
+			// 选择项等于当前项，并且选择项不等于正确答案
+      if(response[0] === radioItem && response[0] !== answer[0]){
+        return true;
       }
+    },
+    RadioRight(radioItem) {
+			const answer = this.question.questions[0].answer
+			const response = this.question.questions[0].report.response
 
-      // 用户选择的错误答案
-      if (_.includes(_.difference(response, answer), value)) {
-        return 'question-option__order_wrong';
+      // 没有答题显示选中正确答案 || 选中错误，正确答案显示
+			if(response.length === 0 && radioItem === answer[0] || radioItem === answer[0]) {
+        return true;
+      }
+      
+      // 选中项与正确答案一致
+      if (radioItem === response[0] && response[0] === answer[0]) {
+        return true;
       }
     },
   },

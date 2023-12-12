@@ -168,6 +168,7 @@ export default {
     doAnalysis() {
       const query = {
         title: this.$route.query.title,
+        type: this.$route.query.type,
       };
       const answerRecordId = this.$route.params.answerRecordId;
       this.$router.push({

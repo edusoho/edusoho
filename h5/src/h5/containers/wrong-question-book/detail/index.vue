@@ -11,11 +11,11 @@
       :lazy-render="true"
       :initial-swipe="currentIndex"
       @change="onChange"
-      style="overflow-y: auto;"
-    >
+			>
       <van-swipe-item
         v-for="(question, index) in questionList"
         :key="question.id + index"
+				style="overflow-y: auto;"
       >
         <question
           :total="pagination.total"
@@ -65,13 +65,21 @@
       @on-search="onSearch"
     />
 
-    <div
+		<div v-if="questionList.length" class="intro-footer">
+      <van-button
+        class="intro-footer__btn"
+        type="primary"
+        @click="onClickWrongExercise"
+        >{{ $t('wrongQuestion.exercise') }}</van-button
+      >
+    </div>
+    <!-- <div
       v-if="questionList.length"
       class="question-foot"
       @click="onClickWrongExercise"
     >
       {{ $t('wrongQuestion.exercise') }}
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -135,7 +143,14 @@ export default {
       return this.searchComponents[this.targetType];
     },
   },
-
+  beforeRouteEnter(to, from, next) {
+    document.getElementById('app').style.background = '#f6f6f6';
+    next();
+  },
+  beforeRouteLeave(to, from, next) {
+    document.getElementById('app').style.background = '';
+    next();
+  },
   created() {
     this.setNavbarTitle(this.$route.query.title);
     this.fetchWrongQuestion();

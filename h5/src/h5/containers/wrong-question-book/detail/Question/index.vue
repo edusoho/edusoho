@@ -1,7 +1,7 @@
 <template>
   <div class="question">
     <div class="question-head">
-      <div class="head-left">{{ $t(currentQuestionComponent.name) }}</div>
+      <div class="head-left">{{ $t('wrongQuestion.topicList') }}</div>
       <div class="head-right">
         <span class="right-color">{{ order }}</span>
         /{{ total }}
@@ -9,67 +9,52 @@
     </div>
 
     <div class="question-body">
+      <span class="ibs-tags">
+        {{ $t(currentQuestionComponent.name) }}
+      </span>
       <div class="clearfix question-stem">
         <div class="pull-left">{{ order }}、</div>
-        <div v-html="formateQuestionStem" />
+        <div v-html="formateQuestionStem" @click="handleClickImage($event.target.src)" />
         <attachement-preview 
           v-for="item in getAttachementByType('stem')"
           :attachment="item"
           :key="item.id" />
       </div>
-
-      <div class="question-answer">
+      <div v-if="question.type !== 'fill'" class="question-answer">
         <component
           :is="currentQuestionComponent.component"
           :question="question"
         />
       </div>
-    </div>
-
-    <div class="analysis">
-      <div class="mt10 analysis-result">
-        <div class="analysis-title">{{ $t('wrongQuestion.answerResult') }}</div>
-        <div class="analysis-content">
-          <div class="analysis-content__item mt10">
-            <div class="analysis-item__title">{{ $t('wrongQuestion.answerResult') }}</div>
-            <div :class="[status.color]">{{ status.text }}</div>
+      <div class="questions-analysis">
+        <div :class="[{'flex': questions.answer_mode !== 'text'}, {'justify-between': questions.answer_mode !== 'text'}, 'analysis-answer']">
+          <div v-if="questions.answer_mode !== 'text'" class="flex items-center">
+            <span class="answer">{{ $t('wrongQuestion.correctAnswer') }}：</span>
+            <span class="options" style="color: #00B42A;" v-html="rightAnswer"></span>
           </div>
-          <div class="analysis-content__item mt10">
-            <div class="analysis-item__title">{{ $t('wrongQuestion.correctAnswer') }}</div>
-            <div
-              class="analysis-item_right analysis-content__item--column"
-              v-html="rightAnswer"
-            ></div>
+          <div v-if="yourAnswerShow()" :class="[{'flex': questions.answer_mode !== 'text'}, {'items-center': questions.answer_mode !== 'text'}]">
+            <div class="answer">{{ $t('wrongQuestion.yourAnswer') }}：</div>
+            <div :class="[status ? status.color : '', {options: questions.answer_mode !== 'text'}]" v-html="yourAnswer"></div>
           </div>
-          <div class="analysis-content__item mt10">
-            <div class="analysis-item__title">{{ $t('wrongQuestion.yourAnswer') }}</div>
-            <div
-              class="analysis-item_right analysis-content__item--column"
-              :class="[status.color]"
-              v-html="yourAnswer"
-            ></div>
+          <div v-if="questions.answer_mode === 'text'" class="correct-answer">
+            <div class="answer">{{ $t('wrongQuestion.correctAnswer') }}：</div>
+            <div :class="[{'options': questions.answer_mode !== 'text'}]" style="color: #00B42A;" v-html="rightAnswer"></div>
           </div>
-
-          <attachement-preview 
-            v-for="item in getAttachementByType('answer')"
-            :attachment="item"
-            :key="item.id" />
         </div>
-      </div>
-
-      <div class="mt10 analysis-result">
-        <div class="analysis-title">{{ $t('wrongQuestion.parsing') }}</div>
-        <div class="analysis-content mt10" v-html="questions.analysis || $t('wrongQuestion.noParsing')"></div>
-        <div class="analysis-content">
-          <attachement-preview 
-            v-for="item in getAttachementByType('analysis')"
-            :attachment="item"
-            :key="item.id" />
+        <attachement-preview 
+          v-for="item in getAttachementByType('answer')"
+          :attachment="item"
+          :key="item.id" />
+        <div class="analysis-color">
+          <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
+          <span class="analysis-content mt10" v-html="questions.analysis || $t('wrongQuestion.noParsing')"></span>
+          <div class="analysis-content">
+            <attachement-preview 
+              v-for="item in getAttachementByType('analysis')"
+              :attachment="item"
+              :key="item.id" />
+          </div>
         </div>
-        
-      </div>
-
-      <div class="mt10 analysis-result">
         <div class="question-situation">
           <div class="situation-top">{{ $t('wrongQuestion.source') }}：{{ sourcesStr }}</div>
           <div class="situation-bottom">
@@ -85,6 +70,8 @@
         </div>
       </div>
     </div>
+		<div v-if="!(order === total)" class="question-footer-shardow">
+		</div>
   </div>
 </template>
 
@@ -96,6 +83,7 @@ import Choice from './Choice.vue';
 import SingleChoice from './SingleChoice.vue';
 import Judge from './Judge.vue';
 import attachementPreview from '@/containers/course/lessonTask/component/attachement-preview.vue';
+import { ImagePreview } from 'vant'
 
 export default {
   components: {
@@ -149,6 +137,7 @@ export default {
           component: 'Judge',
         },
       },
+      wrong: 'static/images/exercise/wrong.png',
     };
   },
 
@@ -177,9 +166,8 @@ export default {
       if (!text.match(reg)) {
         return text;
       }
-      let index = 1;
       return text.replace(reg, function() {
-        return `<span class="stem-fill-blank">(${index++})</span>`;
+        return ``;
       });
     },
 
@@ -227,13 +215,12 @@ export default {
       if (answer_mode === 'text') {
         let result = '';
         _.forEach(answer, (item, index) => {
-          result += `<div style="margin-bottom: 2vw"> (${index +
-            1}) ${item} </div>`;
+          result += `<div>${item}</div>`;
         });
         return result;
       }
 
-      return _.join(answer, '、');
+      return _.join(answer, '');
     },
 
     yourAnswer() {
@@ -241,30 +228,31 @@ export default {
         answer_mode,
         report: { response },
       } = this.questions;
+      const that = this
 
       if (!_.size(response)) {
         if (answer_mode === 'text') {
-          return `<div class="fill-answer">（1）${this.$t('wrongQuestion.unanswered')}</div>`;
+          return `<img src="${this.wrong}" alt="" class="fill-status"><span class="wrong-answer"> ${this.$t('wrongQuestion.unanswered')}</span>`;
         }
         return this.$t('wrongQuestion.unanswered');
       }
 
       if (answer_mode === 'true_false') {
         response = _.map(response, function(item) {
-          return item === 'T' ? this.$t('wrongQuestion.right2') : this.$t('wrongQuestion.wrong2');
+          return item === 'T' ? that.$t('wrongQuestion.right2') : that.$t('wrongQuestion.wrong2');
         });
       }
 
       if (answer_mode === 'text') {
         let result = '';
         _.forEach(response, (item, index) => {
-          result += `<div style="margin-bottom: 2vw"> (${index + 1}) ${item ||
-            this.$t('wrongQuestion.unanswered')}</div>`;
+          result += `<img src="${this.wrong}" alt="" class="fill-status"><span class="wrong-answer"> ${item ||
+            this.$t('wrongQuestion.unanswered')}</span>`;
         });
         return result;
       }
 
-      return _.join(response, '、');
+      return _.join(response, '');
     },
   },
 
@@ -277,6 +265,22 @@ export default {
         params: { globalId } 
       })
     },
+    yourAnswerShow() {
+      if(this.question.questions[0].report.response.length > 0 && this.question.questions[0].report.response[0] !== '') {
+        return true;
+      }
+      if(this.questions.answer_mode === 'text') {
+        return true;
+      }
+    },
+		handleClickImage (imagesUrl) {
+      if (imagesUrl === undefined) return;
+      event.stopPropagation();//  阻止冒泡
+      const images = [imagesUrl]
+      ImagePreview({
+        images
+      })
+    }
   }
 };
 </script>
