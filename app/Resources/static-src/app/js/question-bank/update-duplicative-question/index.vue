@@ -75,7 +75,7 @@ export default {
   },
   methods: {
     goLast() {
-      this.$router.go(-1);
+      window.history.back();
     },
     getData(data) {
       const that = this;

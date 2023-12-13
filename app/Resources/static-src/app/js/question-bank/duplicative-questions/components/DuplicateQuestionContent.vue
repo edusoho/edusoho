@@ -13,7 +13,7 @@
       {{ item }}
       </button>
     </div>
-    <div ref="container" @scroll="onScroll" class="question-content mt8">
+    <div ref="container" class="question-content mt8">
       <div class="question-head">
         <div
           class="question-head-item"
@@ -30,9 +30,9 @@
         <div class="question-index">{{ activeIndex+1 }}.</div>
         <question-item :info="questionContent" />
       </div>
-      <div :class="isSticky ? 'sticky-button': ''"  ref="stickyButton" class="question-foot">
+      <div class="question-foot">
         <a-button @click="onEdit" class="mr10">{{ 'site.btn.edit'|trans }}</a-button>
-        <a-button @click="confirm">{{ 'site.delete'|trans }}</a-button>
+        <a-button @click="onDelete">{{ 'site.delete'|trans }}</a-button>
       </div>
     </div>
   </div>
@@ -75,7 +75,6 @@ export default {
   },
   data() {
     return {
-      isSticky: false,
       difficultyList: {
         default: Translator.trans("question.bank.difficulty.default"),
         simple: Translator.trans("question.bank.difficulty.simple"),
@@ -127,7 +126,24 @@ export default {
       await this.$emit("changeOption");
     },
     async activeIndex() {
+      let that = this
       await Repeat.getQuestionInfo(this.questionContent.id).then((res) => {
+        if(res.length == []) {
+            this.$error({
+                title: Translator.trans("question.bank.error.tip.title"),
+                content: Translator.trans("question.bank.error.tip.content"),
+                okText: Translator.trans("site.btn.confirm"),
+                async onOk() {
+                    await that.$emit("getData")
+                    await that.$emit("changeOption");
+                    that.$emit("changeQuestion", 'one', 0);
+                    that.$emit("changeQuestion", 'two', 1);
+                }
+            });
+            
+            return 
+        }
+
         this.$emit("changeQuestionContent", `${this.type}Index`, res);
       })
     }
@@ -136,20 +152,10 @@ export default {
     QuestionItem,
   },
   methods: {
-    onScroll(e) {
-      const container = this.$refs.container;
-      const stickyButton = this.$refs.stickyButton;
-
-      if (!this.isSticky && container.scrollTop > container.clientHeight - stickyButton.offsetHeight - 20) {
-        this.isSticky = true;
-      } else if (this.isSticky && container.scrollTop <= container.clientHeight - stickyButton.offsetHeight - 20) {
-        this.isSticky = false;
-      }
-    },
     getDifficulty(str) {
       return this.difficultyList(str)
     },
-    confirm() {
+    onDelete() {
       const that = this;
       this.$confirm({
         title: Translator.trans("question.bank.delete.tip.title"),
@@ -168,22 +174,48 @@ export default {
                 await that.$emit("changeOption", that.activeKey);
               }
             })
-            .catch((err) => {
-              that.$message.error(err.message);
+            .catch(err => {
+              that.$error({
+                title: Translator.trans("question.bank.error.tip.title"),
+                content: Translator.trans("question.bank.error.tip.content"),
+                okText: Translator.trans("site.btn.confirm"),
+                async onOk() {
+                  await that.$emit("getData");
+                  await that.$emit("changeOption", that.activeKey);
+                }
+              });
             });
         },
         onCancel() {},
       });
     },
-    onEdit() {
-      store.set("DUPLICATE_MATERIAL", this.title);
-      window.location.href = `/question_bank/${$(
-        "[name=questionBankId]"
-      ).val()}/duplicative_question/${this.questionContent.id}/update`;
+    async onEdit() {
+      let that = this
+      await Repeat.getQuestionInfo(that.questionContent.id).then((res) => {
+        if(res.length == []) {
+          that.$error({
+                title: Translator.trans("question.bank.error.tip.title"),
+                content: Translator.trans("question.bank.error.tip.content"),
+                okText: Translator.trans("site.btn.confirm"),
+                async onOk() {
+                    await that.$emit("getData")
+                    await that.$emit("changeOption");
+                    that.$emit("changeQuestion", 'one', 0);
+                    that.$emit("changeQuestion", 'two', 1);
+                }
+            })
+            return 
+        }
+
+        store.set("DUPLICATE_MATERIAL", that.title);
+        window.location.href = `/question_bank/${$(
+          "[name=questionBankId]"
+        ).val()}/duplicative_question/${that.questionContent.id}/update`;
+      })
+
     },
     changeQuestion(index) {
       this.$emit("changeQuestion", this.type, index);
-      
     },
   },
 };

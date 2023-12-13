@@ -20,17 +20,19 @@
             questionData.length
           }}</label
           >{{ 'subject.question_unit'|trans }}
+
           <div
             v-show="isShowGuide"
             class="duplicate-question-item duplicate-question-active"
           >
-            <div class="duplicate-question-title">
+            <div class="duplicate-question-title" v-if="questionData.length">
               {{ questionData[0].displayMaterial | stripTags }}
             </div>
-            <span class="duplicate-question-check-count"
+            <span class="duplicate-question-check-count" v-if="questionData.length"
               >{{ questionData[0].frequency }}{{ 'question.bank.unit'|trans }}</span
             >
           </div>
+
         </div>
         <duplicate-question-item
           v-for="(item, index) in questionData"
@@ -44,7 +46,7 @@
       </div>
       <div class="duplicate-content">
         <div class="duplicate-content-title">{{ 'question.bank.topic.comparison'|trans }}</div>
-        <div v-if="isHaveRepeat" class="mt16 flex flex-nowrap">
+        <div v-if="questionContentList.length" class="mt16 flex flex-nowrap">
           <duplicate-question-content
             v-if="questionContentList[oneIndex]"
             @changeOption="changeOption"
@@ -83,7 +85,7 @@
             src="/static-dist/app/img/question-bank/noduplicative.png"
           />
           <div class="no-data-content">{{ 'question.bank.check.result.noData.title'|trans }}</div>
-          <button class="return-btn">{{ 'question.bank.check.result.noData.btn'|trans }}</button>
+          <button class="return-btn" @click="goBack">{{ 'question.bank.check.result.noData.btn'|trans }}</button>
         </div>
       </div>
     </div>
@@ -113,7 +115,6 @@ export default {
       },
       oneIndex: 0,
       twoIndex: 1,
-      isHaveRepeat: true,
       isShowGuide: false,
       questionData: [
         {
@@ -155,7 +156,11 @@ export default {
   },
   async mounted() {
     await this.getData();
-    await this.changeOption();
+
+    if(this.questionData.length) {
+      await this.changeOption();
+    }
+
     if (!store.get("QUESTION_DUPLICATE_INTRO")) {
       this.isShowGuide = true;
 
@@ -204,13 +209,11 @@ export default {
     async changeOption(activeKey = 0) {
       const that = this;
       that.activeKey = activeKey;
-      let formData = new FormData();
-      formData.append("material", that.questionData[activeKey].material);
       await Repeat.getRepeatQuestionInfo(
         $("[name=questionBankId]").val(),
-        formData
+        {material: that.questionData[activeKey].material}
       ).then(async (res) => {
-        if(res) {
+        if(!res.length) {
             that.$error({
                 title: Translator.trans("question.bank.error.tip.title"),
                 content: Translator.trans("question.bank.error.tip.content"),
@@ -221,7 +224,6 @@ export default {
                 }
             });
         }
-
         that.questionContentList = res;
         that.questionData[activeKey].frequency = res.length.toString();
       }).catch((err) => {
@@ -236,6 +238,10 @@ export default {
         categoryId: $("[name=categoryId]").val(),
       }).then((res) => {
         this.questionData = res;
+
+        if (!res.length) {
+          this.questionContentList = [];
+        }
       }).catch((err) => {
         this.$message.error(err.message);
       });

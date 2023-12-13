@@ -2217,7 +2217,7 @@ question.bank.finish_label: 我知道了(2/2)
 question.bank.check.guide.one: <p class="title cd-dark-major">题目概览区</p><div class="cd-dark-minor cd-text-md">展示重复题目数量及对应每道题目的重复次数</div>
 question.bank.check.guide.two: <p class="title cd-dark-major">题目对比区</p><div class="cd-dark-minor cd-text-md">可点击数字按钮进行题目切换，并展示在下方预览区</div>
 question.bank.error.tip.title: 题目不存在
-question.bank.error.tip.content: 该题目可能在题目管理页进行了编辑
+question.bank.error.tip.content: 该题目可能在题目管理页进行了编辑/删除操作
 question.bank.type: 类型
 question.bank.update_time: 更新日期
 question.bank.none: 暂无
