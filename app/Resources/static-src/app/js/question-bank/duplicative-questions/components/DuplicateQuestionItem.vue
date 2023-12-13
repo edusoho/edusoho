@@ -5,9 +5,9 @@
     :class="active ? 'duplicate-question-active' : ''"
   >
     <div class="duplicate-question-title">
-      {{ title | stripTags }}
+      {{ question.displayMaterial | stripTags }}
     </div>
-    <span class="duplicate-question-check-count">{{ count }}{{ 'question.bank.unit'|trans }}</span>
+    <span class="duplicate-question-check-count">{{ question.frequency }}{{ 'question.bank.unit'|trans }}</span>
   </div>
 </template>
 <script>
@@ -22,14 +22,10 @@ export default {
       type: Number,
       default: 0,
     },
-    count: {
-      type: String,
-      default: "",
-    },
-    title: {
-      type: String,
-      default: "",
-    },
+    question: {
+      type: Object,
+      default: () => {}
+    }
   },
   methods: {
     // 切换课程选项

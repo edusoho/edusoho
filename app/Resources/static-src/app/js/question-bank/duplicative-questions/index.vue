@@ -39,8 +39,7 @@
           :active="index == activeKey"
           :id="index"
           :key="index"
-          :count="item.frequency"
-          :title="item.displayMaterial"
+          :question="item"
           @changeOption="changeOption"
         />
       </div>
@@ -231,8 +230,10 @@ export default {
         }
 
         this.questionContentList = res;
-        this.questionData[activeKey].frequency = res.length.toString();
         
+        if(this.questionData[activeKey]) {
+          this.questionData[activeKey].frequency = res.length.toString();
+        }
       } catch (err) {
         this.$message.error(err.message);
       }
