@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:web/h5/static/js/vendors~brush~course~exerciseAnalysis~exerciseDo~homeworkAnalysis~homeworkDo~more~order~testpaperAna~5a3f18d9.fb266fc8.js
 (window.webpackJsonp=window.webpackJsonp||[]).push([["vendors~brush~course~exerciseAnalysis~exerciseDo~homeworkAnalysis~homeworkDo~more~order~testpaperAna~5a3f18d9"],{"2ef0":function(n,t,r){(function(n,e){var u;
-========
-(window.webpackJsonp=window.webpackJsonp||[]).push([["vendors~course~exerciseAnalysis~exerciseDo~homeworkAnalysis~homeworkDo~more~order~testpaperAnalysis~~3aee322f"],{"2ef0":function(n,t,r){(function(n,e){var u;
->>>>>>>> master:web/h5/static/js/vendors~course~exerciseAnalysis~exerciseDo~homeworkAnalysis~homeworkDo~more~order~testpaperAnalysis~~3aee322f.53f6d806.js
 /**
  * @license
  * Lodash <https://lodash.com/>
