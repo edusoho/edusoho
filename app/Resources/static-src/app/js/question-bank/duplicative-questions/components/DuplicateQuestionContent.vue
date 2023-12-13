@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import QuestionItem from "./Item";
+import QuestionItem from "./item";
 import { Repeat } from "common/vue/service";
 import "store";
 
