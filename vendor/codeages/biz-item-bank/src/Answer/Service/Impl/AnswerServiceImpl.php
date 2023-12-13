@@ -114,6 +114,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $assessmentResponse = ['answer_record_id' => $answerRecordId, 'assessment_id' => $answerRecord['assessment_id']];
         $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
+        if (empty($answerQuestionReports)) {
+            $this->batchCreateAnswerQuestionReports($answerRecord['assessment_id'], [$answerRecord]);
+            $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
+        }
         $answerQuestionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($answerQuestionReports, $answerRecordId);
         $sectionResponses = ArrayToolkit::group($answerQuestionReports, 'section_id');
         foreach ($sectionResponses as $sectionId => &$sectionResponse) {
@@ -167,7 +171,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
         $this->getAnswerRecordService()->batchUpdateAnswerRecord(array_column($answerRecords, 'id'), $updateAnswerRecords);
 
-        $this->batchCreateAnswerQuestionReports($assessmentId, $answerReports);
+        $this->batchCreateAnswerQuestionReports($assessmentId, $answerRecords);
     }
 
     protected function batchCreateAnswerRecords($answerScene, $assessmentId, $userIds)
@@ -221,7 +225,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $this->getAnswerReportService()->search(['answer_record_ids' => $answerRecordIds], [], 0, count($answerRecordIds), ['id', 'answer_record_id']);
     }
 
-    protected function batchCreateAnswerQuestionReports($assessmentId, $answerReports)
+    protected function batchCreateAnswerQuestionReports($assessmentId, $answerRecords)
     {
         if ($this->getAssessmentService()->isEmptyAssessment($assessmentId)) {
             return;
@@ -234,15 +238,15 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'status' => AnswerQuestionReportService::STATUS_NOANSWER,
         ];
 
-        foreach ($answerReports as $answerReport) {
-            $newAnswerQuestionReport['answer_record_id'] = $answerReport['answer_record_id'];
+        foreach ($answerRecords as $answerRecord) {
+            $newAnswerQuestionReport['answer_record_id'] = $answerRecord['id'];
             foreach ($sections as $section) {
                 $newAnswerQuestionReport['section_id'] = $section['id'];
                 foreach ($section['items'] as $item) {
                     $newAnswerQuestionReport['item_id'] = $item['id'];
                     foreach ($item['questions'] as $question) {
                         $newAnswerQuestionReport['question_id'] = $question['id'];
-                        $newAnswerQuestionReport['identify'] = $answerReport['answer_record_id'] . '_' . $question['id'];
+                        $newAnswerQuestionReport['identify'] = $answerRecord['id'] . '_' . $question['id'];
                         $answerQuestionReports[] = $newAnswerQuestionReport;
                     }
                 }
