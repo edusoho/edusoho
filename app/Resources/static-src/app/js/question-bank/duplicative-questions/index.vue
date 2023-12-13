@@ -138,7 +138,9 @@ export default {
   },
   watch: {
     activeKey() {
-      this.changeOption(this.activeKey)
+      this.changeOption(this.activeKey);
+      this.oneIndex = 0;
+      this.twoIndex = 1;
     },
   },
   computed: {
@@ -206,45 +208,51 @@ export default {
     changeQuestion(type, index) {
       this[`${type}Index`] = index;
     },
-    async changeOption(activeKey = 0) {
-      const that = this;
-      that.activeKey = activeKey;
-      await Repeat.getRepeatQuestionInfo(
-        $("[name=questionBankId]").val(),
-        {material: that.questionData[activeKey].material}
-      ).then(async (res) => {
-        if(!res.length) {
-            that.$error({
-                title: Translator.trans("question.bank.error.tip.title"),
-                content: Translator.trans("question.bank.error.tip.content"),
-                okText: Translator.trans("site.btn.confirm"),
-                async onOk() {
-                    await that.getData()
-                    await that.changeOption()
-                }
-            });
+    showChangeOptionErr() {
+      this.$error({
+        title: Translator.trans("question.bank.error.tip.title"),
+        content: Translator.trans("question.bank.error.tip.content"),
+        okText: Translator.trans("site.btn.confirm"),
+        async onOk() {
+            await this.getData()
+            await this.changeOption()
         }
-        that.questionContentList = res;
-        that.questionData[activeKey].frequency = res.length.toString();
-      }).catch((err) => {
-        that.$message.error(err.message);
       });
+    },
+    async changeOption(activeKey = 0) {
+      this.activeKey = activeKey;
+      try {
+        const res = await Repeat.getRepeatQuestionInfo(
+          $("[name=questionBankId]").val(),
+          {material: this.questionData[activeKey].material})
+
+        if(!res.length) {
+            this.showChangeOptionErr()
+        }
+
+        this.questionContentList = res;
+        this.questionData[activeKey].frequency = res.length.toString();
+        
+      } catch (err) {
+        this.$message.error(err.message);
+      }
     },
     goBack() {
       window.location.href = `/question_bank/${$("[name=questionBankId]").val()}/questions`;
     },
     async getData() {
-      await Repeat.getRepeatQuestion($("[name=questionBankId]").val(), {
-        categoryId: $("[name=categoryId]").val(),
-      }).then((res) => {
+      try {
+        const res = await Repeat.getRepeatQuestion($("[name=questionBankId]").val(), {
+          categoryId: $("[name=categoryId]").val(),
+        })
         this.questionData = res;
 
         if (!res.length) {
           this.questionContentList = [];
         }
-      }).catch((err) => {
+      } catch (err) {
         this.$message.error(err.message);
-      });
+      }
     },
     startQuestion() {
       this.activeKey = 0;

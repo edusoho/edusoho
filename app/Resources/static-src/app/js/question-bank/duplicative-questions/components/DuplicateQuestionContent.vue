@@ -126,26 +126,13 @@ export default {
       await this.$emit("changeOption");
     },
     async activeIndex() {
-      let that = this
-      await Repeat.getQuestionInfo(this.questionContent.id).then((res) => {
-        if(res.length == []) {
-            this.$error({
-                title: Translator.trans("question.bank.error.tip.title"),
-                content: Translator.trans("question.bank.error.tip.content"),
-                okText: Translator.trans("site.btn.confirm"),
-                async onOk() {
-                    await that.$emit("getData")
-                    await that.$emit("changeOption");
-                    that.$emit("changeQuestion", 'one', 0);
-                    that.$emit("changeQuestion", 'two', 1);
-                }
-            });
-            
-            return 
+      const res = await Repeat.getQuestionInfo(this.questionContent.id)
+        if(res.length === 0) {
+          this.showErrorTip()
+          return 
         }
 
         this.$emit("changeQuestionContent", `${this.type}Index`, res);
-      })
     }
   },
   components: {
@@ -155,63 +142,59 @@ export default {
     getDifficulty(str) {
       return this.difficultyList(str)
     },
+    async goPreviousQuestion() {
+      if (this.count > 2 && this.activeIndex === this.count - 1) {
+        const previousIndex = this.nextIndex !== this.activeIndex - 1 ? this.activeIndex - 1 : this.activeIndex - 2;
+        await this.$emit("changeQuestion", this.type, previousIndex);
+      }
+    },
     onDelete() {
-      const that = this;
       this.$confirm({
         title: Translator.trans("question.bank.delete.tip.title"),
         content: Translator.trans("question.bank.delete.tip.content"),
         icon: "exclamation-circle",
         okText: Translator.trans("site.confirm"),
         cancelText: Translator.trans("site.cancel"),
-        async onOk() {
-          await Repeat.delQuestion(
-            $("[name=questionBankId]").val(),
-            that.questionContent.id
-          )
-            .then(async (res) => {
-              if (res) {
-                that.$message.success(Translator.trans("site.delete_success_hint"));
-                await that.$emit("changeOption", that.activeKey);
-              }
-            })
-            .catch(err => {
-              that.$error({
-                title: Translator.trans("question.bank.error.tip.title"),
-                content: Translator.trans("question.bank.error.tip.content"),
-                okText: Translator.trans("site.btn.confirm"),
-                async onOk() {
-                  await that.$emit("getData");
-                  await that.$emit("changeOption", that.activeKey);
-                }
-              });
-            });
-        },
-        onCancel() {},
+        onOk: async() => {
+          try {
+            const res = await Repeat.delQuestion(
+              $("[name=questionBankId]").val(),
+              this.questionContent.id
+            )
+
+            if (res) {
+              this.$message.success(Translator.trans("site.delete_success_hint"));
+              await this.$emit("changeOption", this.activeKey);
+              this.goPreviousQuestion()
+            }
+          } catch (err) {
+            this.showErrorTip()
+          };
+        }
       });
     },
-    async onEdit() {
-      let that = this
-      await Repeat.getQuestionInfo(that.questionContent.id).then((res) => {
-        if(res.length == []) {
-          that.$error({
-                title: Translator.trans("question.bank.error.tip.title"),
-                content: Translator.trans("question.bank.error.tip.content"),
-                okText: Translator.trans("site.btn.confirm"),
-                async onOk() {
-                    await that.$emit("getData")
-                    await that.$emit("changeOption");
-                    that.$emit("changeQuestion", 'one', 0);
-                    that.$emit("changeQuestion", 'two', 1);
-                }
-            })
-            return 
-        }
-
-        store.set("DUPLICATE_MATERIAL", that.title);
-        window.location.href = `/question_bank/${$(
-          "[name=questionBankId]"
-        ).val()}/duplicative_question/${that.questionContent.id}/update`;
+    showErrorTip() {
+      this.$error({
+          title: Translator.trans("question.bank.error.tip.title"),
+          content: Translator.trans("question.bank.error.tip.content"),
+          okText: Translator.trans("site.btn.confirm"),
+          onOk: async() => {
+              await this.$emit("getData")
+              await this.$emit("changeOption");
+              this.goPreviousQuestion()
+          }
       })
+    },
+    async onEdit() {
+      const res = await Repeat.getQuestionInfo(this.questionContent.id)
+
+      if(res.length === 0) {
+        this.showErrorTip()
+        return 
+      }
+
+      store.set("DUPLICATE_MATERIAL", this.title);
+      window.location.href = `/question_bank/${$("[name=questionBankId]").val()}/duplicative_question/${this.questionContent.id}/update`;
 
     },
     changeQuestion(index) {
