@@ -3,6 +3,7 @@
     <div class="header-btn-list">
       <div class="question-name">{{ 'question.bank.name'|trans }}</div>
       <div class="">
+        <a-button class="duplicate-checking" type="default" @click="duplicateChecking">{{ 'question.bank.check'|trans }}</a-button>
         <a-button class="report" type="default" @click="exportQuestion">{{ 'question.bank.expoet'|trans }}</a-button>
         <a-dropdown>
           <a-button class="add-question" type="default">{{ 'question.bank.add'|trans }}</a-button>
@@ -59,6 +60,7 @@
         </a-form-model-item>
       </a-form-model>
     </div>
+    <a-spin class="spin-fixed" :spinning="isLoading" :indicator="indicator" :tip="'question.bank.check_tip'|trans" />
     <input type="hidden" class="js-list-header-difficulty" :value=difficulty>
     <input type="hidden" class="js-list-header-type" :value=type>
     <input type="hidden" class="js-list-header-keyword" :value=keyword>
@@ -67,10 +69,13 @@
 
 <script>
 import Selector from '../common/selector';
+import { Repeat } from 'common/vue/service';
 
 export default {
   data () {
     return {
+      isLoading: false,
+      indicator: '<a-icon type="loading" style="font-size: 24px" spin />',
       exportUrl: $('.js-export-value').val(),
       selector: new Selector($('.js-question-html')),
       difficulty: 'default',
@@ -131,6 +136,24 @@ export default {
   },
 
   methods: {
+    async duplicateChecking() {
+      if($("[name=question_count]").val() == 0) {
+        return this.$message.warning(Translator.trans('question.bank.check.result.category.noData'));
+      }
+      this.isLoading = true
+      await Repeat.getRepeatQuestion($("[name=questionBankId]").val(), { categoryId: $("[name=category_id]").val() }).then(res => {
+        this.isLoading = false
+
+        if(res.length > 0) {
+          window.location.href = `/question_bank/${$('.js-questionBank-id').val()}/check_duplicative_questions?categoryId=${this.categoryId}`
+        } else {
+          this.$message.warning(Translator.trans('question.bank.check.result.noData'));
+        }
+      }).catch(err => {
+        this.isLoading = false
+        this.$message.warning(err.message);
+      });
+    },
     userNameError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('userName') && getFieldError('userName');

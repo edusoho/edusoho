@@ -2046,6 +2046,7 @@ t.add("skip.i.know", "I know(2\/2)", "js", "en");
 t.add("skip.upgrade.btn", "Upgrade now(2\/2)", "js", "en");
 t.add("question.bank.name", "Question bank name", "js", "en");
 t.add("question.bank.expoet", "Derived problem", "js", "en");
+t.add("question.bank.check", "Item reexamination", "js", "en");
 t.add("question.bank.add", "Add topic", "js", "en");
 t.add("question.bank.import", "Lead-in topic", "js", "en");
 t.add("question.bank.difficulty.default", "Difficulty", "js", "en");

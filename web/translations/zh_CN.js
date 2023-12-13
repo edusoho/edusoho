@@ -2006,6 +2006,7 @@ t.add("skip.i.know", "\u6211\u77e5\u9053\u4e86\uff082\/2\uff09", "js", "zh_CN");
 t.add("skip.upgrade.btn", "\u7acb\u5373\u5347\u7ea7 (2\/2)", "js", "zh_CN");
 t.add("question.bank.name", "\u9898\u5e93\u540d\u79f0", "js", "zh_CN");
 t.add("question.bank.expoet", "\u5bfc\u51fa\u9898\u76ee", "js", "zh_CN");
+t.add("question.bank.check", "\u8bd5\u9898\u67e5\u91cd", "js", "zh_CN");
 t.add("question.bank.add", "\u6dfb\u52a0\u9898\u76ee", "js", "zh_CN");
 t.add("question.bank.import", "\u5bfc\u5165\u9898\u76ee", "js", "zh_CN");
 t.add("question.bank.difficulty.default", "\u96be\u5ea6", "js", "zh_CN");
