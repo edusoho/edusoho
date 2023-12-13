@@ -19,6 +19,9 @@ class CourseTaskResult extends AbstractResource
         if (!$course) {
             throw CourseException::NOTFOUND_COURSE();
         }
+        if ('0' == $course['canLearn']) {
+            throw CourseException::CLOSED_COURSE();
+        }
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
 
         if (!empty($taskResult)) {
@@ -42,6 +45,9 @@ class CourseTaskResult extends AbstractResource
 
         if (!$course) {
             throw CourseException::NOTFOUND_COURSE();
+        }
+        if ('0' == $course['canLearn']) {
+            throw CourseException::CLOSED_COURSE();
         }
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
         if (!$taskResult) {

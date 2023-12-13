@@ -23,6 +23,8 @@
       <span class="course-publish-status course-publish-status--closed">{{'course.status.closed'|trans}}</span>
     {% elseif courseSet.status=='draft' %}
       <span class="course-publish-status course-publish-status--unpublished">{{'course.status.unpublished'|trans}}</span>
+    {% elseif courseSet.status=='unpublished' %}
+        <span class="course-publish-status course-publish-status--unpublished">{{'course.status.delist'|trans}}</span>
     {% elseif courseSet.status=='published' %}
       {% if courseSet.serializeMode=='serialized' %}
         <span class="course-publish-status course-publish-status--published">{{'course.status.serialized'|trans}}</span>

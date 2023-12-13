@@ -2292,6 +2292,12 @@ course_set_manage_course_close:
         _controller: 'AppBundle:Course/CourseManage:close'
     methods:
         - POST
+course_set_manage_course_unpublished:
+    path: '/course_set/{courseSetId}/course/{courseId}/unpublished'
+    defaults:
+        _controller: 'AppBundle:Course/CourseManage:unpublished'
+    methods:
+        - POST
 course_set_manage_course_delete:
     path: '/course_set/{courseSetId}/course/{courseId}/delete'
     defaults:
@@ -3328,6 +3334,12 @@ my_course_show:
         _controller: 'AppBundle:My/Course:show'
         tab: tasks
     h5: true
+course_closed:
+  path: '/course/closed'
+  defaults:
+    _controller: 'AppBundle:Course/Course:closed'
+    tab: tasks
+  h5: true
 course_member_expired:
     path: '/course/{id}/member/expired'
     defaults:
@@ -4004,6 +4016,18 @@ item_bank_exercise_manage_chapter_exercise_unpublish:
     path: '/item_bank_exercise/{exerciseId}/manage/chapter/unpublish'
     defaults:
         _controller: 'AppBundle:ItemBankExercise/ChapterExercise:unpublish'
+    methods:
+        - POST
+item_bank_exercise_manage_marketing_open_display:
+    path: '/item_bank_exercise/{exerciseId}/manage/marketing/open_display'
+    defaults:
+        _controller: 'AppBundle:ItemBankExercise/ExerciseManage:openDisplay'
+    methods:
+        - POST
+item_bank_exercise_manage_marketing_close_display:
+    path: '/item_bank_exercise/{exerciseId}/manage/marketing/close_display'
+    defaults:
+        _controller: 'AppBundle:ItemBankExercise/ExerciseManage:closeDisplay'
     methods:
         - POST
 item_bank_exercise_manage_marketing_info:

@@ -1,7 +1,7 @@
 <div class="nav-filter clearfix">
 
   <div class="btn-group">
-    <a class="btn btn-default btn-sm" href="{{ path('course_thread_create', {courseId:course.id, type:type}) }}">{% if type == 'discussion' %}{{'thread.create_discussion_btn'|trans}}{% else %}{{'thread.create_question_btn'|trans}}{% endif %}</a>
+    <a class="btn btn-default btn-sm {% if courseSet.status == 'closed'%} js-handleLearnOnMessage {% endif %}" href="{{ path('course_thread_create', {courseId:course.id, type:type}) }}">{% if type == 'discussion' %}{{'thread.create_discussion_btn'|trans}}{% else %}{{'thread.create_question_btn'|trans}}{% endif %}</a>
   </div>
 
 

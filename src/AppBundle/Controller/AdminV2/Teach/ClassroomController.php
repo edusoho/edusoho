@@ -196,9 +196,19 @@ class ClassroomController extends BaseController
         return $this->createJsonResponse(['code' => 0, 'message' => '删除成功']);
     }
 
+    public function unpublishedAction($id)
+    {
+        $this->getClassroomService()->unpublishedClassroom($id);
+
+        $classroom = $this->getClassroomService()->getClassroom($id);
+
+        return $this->renderClassroomTr($id, $classroom);
+    }
+
     public function checkEsProductCanDeleteAction(Request $request, $id)
     {
         $status = $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'classroom');
+
         return $this->createJsonResponse(['status' => $status]);
     }
 
@@ -367,7 +377,7 @@ class ClassroomController extends BaseController
         $usersProfile = empty($members) ? [] : $this->getUserService()->findUserProfilesByIds($userIds);
         $usersApproval = $this->getUserService()->searchApprovals([
             'userIds' => $userIds,
-            'status' => 'approved',], [], 0, count($userIds));
+            'status' => 'approved', ], [], 0, count($userIds));
         $usersApproval = ArrayToolkit::index($usersApproval, 'userId');
 
         foreach ($users as $key => &$user) {

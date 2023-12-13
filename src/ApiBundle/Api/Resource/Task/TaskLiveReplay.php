@@ -8,6 +8,7 @@ use AppBundle\Common\LiveWatermarkToolkit;
 use AppBundle\Common\SettingToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\MemberException;
+use Biz\Course\Service\LiveReplayService;
 use Biz\Task\TaskException;
 
 class TaskLiveReplay extends AbstractResource
@@ -83,6 +84,16 @@ class TaskLiveReplay extends AbstractResource
         $response['replays'] = $replays;
 
         return $response;
+    }
+
+    protected function getOriginActivity($activity)
+    {
+        if (empty($activity['copyId'])) {
+            return $activity;
+        }
+        $copyActivity = $this->getActivityService()->getActivity($activity['copyId']);
+
+        return $this->getOriginActivity($copyActivity);
     }
 
     protected function addLiveCloudParams($replay)
@@ -168,6 +179,9 @@ class TaskLiveReplay extends AbstractResource
         return $this->service('Activity:ActivityService');
     }
 
+    /**
+     * @return LiveReplayService
+     */
     protected function getLiveReplayService()
     {
         return $this->service('Course:LiveReplayService');

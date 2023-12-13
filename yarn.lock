@@ -5758,7 +5758,7 @@ istanbul@^0.4.5:
 
 item-bank@^1.0.59:
   version "1.0.59"
-  resolved "https://registry.npmjs.org/item-bank/-/item-bank-1.0.59.tgz#ff66840b196fc3c947d39a362b276f84ed9760ca"
+  resolved "https://registry.npmmirror.com/item-bank/-/item-bank-1.0.59.tgz#ff66840b196fc3c947d39a362b276f84ed9760ca"
   integrity sha512-KKVG2zjWQ8mmD2i1SrOgs7p/uVec9By7Y3r9l6FhDSPv4d52lIYoA7ewmPOfHNCz6Dgv/50vMMSZk+OLhQFQ+A==
   dependencies:
     ant-design-vue "^1.5.0"

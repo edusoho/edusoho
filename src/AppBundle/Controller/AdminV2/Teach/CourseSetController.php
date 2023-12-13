@@ -93,6 +93,13 @@ class CourseSetController extends BaseController
         return $this->renderCourseTr($id, $request);
     }
 
+    public function unpublishedAction(Request $request, $id)
+    {
+        $this->getCourseSetService()->unpublishedCourseSet($id);
+
+        return $this->renderCourseTr($id, $request);
+    }
+
     /*
     code 状态编号
     1:　删除班级课程
@@ -137,9 +144,8 @@ class CourseSetController extends BaseController
     {
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByCourseSetId($id), 'id');
         $status = $this->getProductMallGoodsRelationService()->checkEsProductCanDelete($courseIds, 'course');
+
         return $this->createJsonResponse(['status' => $status]);
-
-
     }
 
     //todo 和CourseController 有一样的
@@ -407,7 +413,7 @@ class CourseSetController extends BaseController
 
     public function cloneByCrontabAction(Request $request, $courseSetId)
     {
-        $jobName = 'clone_course_set_' . $courseSetId;
+        $jobName = 'clone_course_set_'.$courseSetId;
         $jobs = $this->getSchedulerService()->countJobs(['name' => $jobName, 'deleted' => 0]);
         $title = $request->request->get('title');
         $user = $this->getCurrentUser();
@@ -563,20 +569,20 @@ class CourseSetController extends BaseController
         ];
 
         if ($result > 0) {
-            $message = $dataDictionary[$type] . '数据删除';
+            $message = $dataDictionary[$type].'数据删除';
 
             return ['success' => true, 'message' => $message];
         } else {
             if ('homeworks' == $type || 'exercises' == $type) {
-                $message = $dataDictionary[$type] . '数据删除失败或插件未安装或插件未升级';
+                $message = $dataDictionary[$type].'数据删除失败或插件未安装或插件未升级';
 
                 return ['success' => false, 'message' => $message];
             } elseif ('course' == $type) {
-                $message = $dataDictionary[$type] . '数据删除';
+                $message = $dataDictionary[$type].'数据删除';
 
                 return ['success' => false, 'message' => $message];
             } else {
-                $message = $dataDictionary[$type] . '数据删除失败';
+                $message = $dataDictionary[$type].'数据删除失败';
 
                 return ['success' => false, 'message' => $message];
             }
@@ -755,7 +761,7 @@ class CourseSetController extends BaseController
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        $courseTitle = 1 == $course['isDefault'] ? $courseSet['title'] : $courseSet['title'] . '-' . $course['title'];
+        $courseTitle = 1 == $course['isDefault'] ? $courseSet['title'] : $courseSet['title'].'-'.$course['title'];
         $fileName = sprintf('%s-(%s).csv', $courseTitle, date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);
@@ -786,9 +792,9 @@ class CourseSetController extends BaseController
         foreach ($students as $key => $student) {
             $exportMember = [];
             $user = $this->getUserService()->getUser($student['userId']);
-            $exportMember['nickname'] = is_numeric($user['nickname']) ? $user['nickname'] . "\t" : $user['nickname'];
-            $exportMember['mobile'] = empty($userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile']) ? '--' : $userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile'] . "\t";
-            $exportMember['idcard'] = empty($userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard']) ? '--' : $userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard'] . "\t";
+            $exportMember['nickname'] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
+            $exportMember['mobile'] = empty($userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile']) ? '--' : $userProfilesAndApprovedApprovals['usersProfile'][$key]['mobile']."\t";
+            $exportMember['idcard'] = empty($userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard']) ? '--' : $userProfilesAndApprovedApprovals['usersApproval'][$key]['idcard']."\t";
             $exportMember['joinTime'] = date('Y-m-d H:i:s', $student['createdTime']);
 
             if ($student['finishedTime'] > 0) {
@@ -1002,7 +1008,7 @@ class CourseSetController extends BaseController
 
         foreach ($tagIds as $tagId) {
             if (!empty($tags[$tagId])) {
-                $tagsNames = $tagsNames . $delimiter . $tags[$tagId]['name'];
+                $tagsNames = $tagsNames.$delimiter.$tags[$tagId]['name'];
             }
         }
 

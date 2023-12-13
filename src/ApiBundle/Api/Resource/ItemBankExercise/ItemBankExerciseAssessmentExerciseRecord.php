@@ -5,13 +5,18 @@ namespace ApiBundle\Api\Resource\ItemBankExercise;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
+use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\Testpaper\ExerciseException;
 
 class ItemBankExerciseAssessmentExerciseRecord extends AbstractResource
 {
     public function add(ApiRequest $request, $exerciseId)
     {
         $user = $this->getCurrentUser();
-
+        $exercise = $this->getExerciseService()->get($exerciseId);
+        if ('closed' == $exercise['status']) {
+            throw ExerciseException::CLOSED_EXERCISE();
+        }
         $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseService()->startAnswer(
             $request->request->get('moduleId', ''),
             $request->request->get('assessmentId', ''),
@@ -69,5 +74,13 @@ class ItemBankExerciseAssessmentExerciseRecord extends AbstractResource
     protected function getAssessmentService()
     {
         return $this->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getExerciseService()
+    {
+        return $this->service('ItemBankExercise:ExerciseService');
     }
 }

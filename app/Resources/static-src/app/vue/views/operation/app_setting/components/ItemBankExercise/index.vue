@@ -6,8 +6,9 @@
     :preview="preview"
     :validator-result="validatorResult"
     @event-actions="handleClickAction"
+    v-show="currentItemBank"
   >
-    <div class="item-bank-list" v-if="currentItemBank">
+    <div v-if="currentItemBank" class="item-bank-list">
       <div class="clearfix">
         <div class="item-bank-list__title pull-left text-overflow">{{ moduleData.title }}</div>
         <div class="item-bank-list__more pull-right">{{ 'site.btn.see_more' | trans }}<a-icon type="right" /></div>

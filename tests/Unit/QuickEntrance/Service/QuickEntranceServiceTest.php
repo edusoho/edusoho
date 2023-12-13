@@ -36,7 +36,7 @@ class QuickEntranceServiceTest extends BaseTestCase
         $result = $this->getQuickEntranceService()->findEntrancesByUserId(0);
         $result = ArrayToolkit::index($result, 'code');
 
-        $this->assertCount(7, $result);
+        $this->assertCount(8, $result);
         $this->assertArrayHasKey('admin_v2_course_show', $result);
         $this->assertArrayHasKey('admin_v2_block_manage', $result);
         $this->assertArrayHasKey('admin_v2_classroom', $result);
@@ -44,6 +44,7 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->assertArrayHasKey('admin_v2_marketing_coupon', $result);
         $this->assertArrayHasKey('admin_v2_user_show', $result);
         $this->assertArrayHasKey('admin_v2_user_coin', $result);
+        $this->assertArrayHasKey('admin_v2_setting_operation', $result);
     }
 
     public function testFindEntrancesByUserId()
@@ -75,7 +76,7 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->assertCount(9, $result['admin_v2_teach']['data']);
         $this->assertCount(5, $result['admin_v2_marketing']['data']);
         $this->assertCount(8, $result['admin_v2_operating']['data']);
-        $this->assertCount(2, $result['admin_v2_user']['data']);
+        $this->assertCount(3, $result['admin_v2_user']['data']);
         $this->assertCount(4, $result['admin_v2_trade']['data']);
         $this->assertCount(5, $result['admin_v2_system']['data']);
     }
@@ -100,7 +101,7 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->assertCount(9, $result['admin_v2_teach']['data']);
         $this->assertCount(5, $result['admin_v2_marketing']['data']);
         $this->assertCount(8, $result['admin_v2_operating']['data']);
-        $this->assertCount(2, $result['admin_v2_user']['data']);
+        $this->assertCount(3, $result['admin_v2_user']['data']);
         $this->assertCount(4, $result['admin_v2_trade']['data']);
         $this->assertCount(5, $result['admin_v2_system']['data']);
     }
@@ -108,7 +109,7 @@ class QuickEntranceServiceTest extends BaseTestCase
     public function testFindSelectedEntrancesCodeByUserIdWithEmpty()
     {
         $result = $this->getQuickEntranceService()->findSelectedEntrancesCodeByUserId($this->getCurrentUser()->getId());
-        $this->assertCount(7, $result);
+        $this->assertCount(8, $result);
         $this->assertTrue(in_array('admin_v2_course_show', $result));
         $this->assertTrue(in_array('admin_v2_block_manage', $result));
         $this->assertTrue(in_array('admin_v2_classroom', $result));
@@ -133,6 +134,7 @@ class QuickEntranceServiceTest extends BaseTestCase
             'test_data_6',
             'test_data_7',
             'test_data_8',
+            'test_data_9',
         ];
 
         $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), $entrances);
@@ -151,7 +153,7 @@ class QuickEntranceServiceTest extends BaseTestCase
                 'code' => 'admin_v2_operation_invite',
                 'text' => '邀请管理',
                 'icon' => 'invite',
-                'class' => 'icon-color-yellow',
+                'class' => 'icon-color-orange',
                 'target' => '',
             ],
         ];
@@ -176,6 +178,7 @@ class QuickEntranceServiceTest extends BaseTestCase
                 'test_data_6',
                 'test_data_7',
                 'test_data_8',
+                'test_data_9',
         ];
 
         $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $entrances);

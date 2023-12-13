@@ -80,8 +80,11 @@ class ClassroomController extends BaseController
         $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
 
         $status = ['publish' => 'published', 'unPublish' => 'draft', 'closed' => 'closed'];
-
-        return ['classroomIds' => $classroomIds, 'status' => $status[$tab]];
+        if ('closed' == $tab) {
+            return ['classroomIds' => $classroomIds, 'includeStatus' => ['closed', 'unpublished']];
+        } else {
+            return ['classroomIds' => $classroomIds, 'status' => $status[$tab]];
+        }
     }
 
     public function classroomAction()

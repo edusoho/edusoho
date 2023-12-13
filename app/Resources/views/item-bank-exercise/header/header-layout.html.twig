@@ -1,6 +1,39 @@
 {% import "macro.html.twig" as web_macro %}
 {% do script('app/js/item-bank-exercise/header-top/index.js') %}
 
+<style>
+.exercise-closed-tip {
+  padding: 12px 16px;
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #FFCF8B;
+  background: #FFF7E8;
+  margin-bottom: 20px;
+  color: #37393D;
+  line-height: 24px;
+}
+.font-500 {
+  font-weight: 500;
+}
+.exercise-closed-icon {
+  vertical-align: top;
+  position: relative;
+  top: -2px;
+  color: #FF7D00; 
+  font-size: 24px;
+}
+.exercise-closed-content {
+  vertical-align: top;
+  font-size: 16px;
+}
+.exercise-closed-result {
+  color: #37393D;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  margin-top: 6px;
+}
+</style>
 <!-- 3、加入后：任务式学习 -->
 <div class="container cd-container">
   <ol class="breadcrumb breadcrumb-o">
@@ -11,7 +44,17 @@
       <li class="active">{{ exercise.title }} </li>
     {% endif %}
   </ol>
-
+  {% if exercise.status == 'closed' %}
+    <div class="exercise-closed-tip">
+      <span class="es-icon es-icon-infooutline exercise-closed-icon"></span>
+      <div class="ml12 font-500 inline-block exercise-closed-content">
+        {{'exception.exercise.closed.tips.title'|trans}}
+        {% if page_type|default('guest') == 'member' %}
+          <div class="exercise-closed-result">{{'exception.exercise.closed.tips.content'|trans}}</div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
   {% block course_header_info %}{% endblock %}
   <div class="es-section course-detail-section course-detail-section--normal clearfix">
     {% block course_heard_content %}{% endblock %}

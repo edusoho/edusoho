@@ -555,6 +555,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'maxRate',
             'buyable',
             'showable',
+            'canLearn',
             'orgCode',
             'orgId',
             'expiryMode',
@@ -845,9 +846,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (0 == $classroom['courseNum']) {
             $this->createNewException(ClassroomException::AT_LEAST_ONE_COURSE());
         }
-        $classroom = $this->updateClassroom($id, ['status' => 'published']);
+        $classroom = $this->updateClassroom($id, ['status' => 'published', 'canLearn' => '1']);
 
         $this->getClassroomGoodsMediator()->onPublish($classroom);
+        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
+        $this->getCourseSetService()->canLearningByIds($courseIds);
         $this->dispatchEvent('classroom.publish', new Event($classroom));
 
         return $classroom;
@@ -857,8 +860,22 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $this->tryManageClassroom($id, 'admin_classroom_close');
 
-        $classroom = $this->updateClassroom($id, ['status' => 'closed']);
+        $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0']);
         $this->getClassroomGoodsMediator()->onClose($classroom);
+        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
+        $this->getCourseSetService()->banLearningByIds($courseIds);
+        $this->dispatchEvent('classroom.close', new Event($classroom));
+
+        return $classroom;
+    }
+
+    public function unpublishedClassroom($id)
+    {
+        $this->tryManageClassroom($id, 'admin_classroom_close');
+
+        $classroom = $this->updateClassroom($id, ['status' => 'unpublished']);
+        $this->getClassroomGoodsMediator()->onClose($classroom);
+        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->dispatchEvent('classroom.close', new Event($classroom));
 
         return $classroom;
@@ -1157,7 +1174,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
-        if (!in_array($classroom['status'], ['published', 'closed'])) {
+        if (!in_array($classroom['status'], ['published', 'closed', 'unpublished'])) {
             $this->createNewException(ClassroomException::UNPUBLISHED_CLASSROOM());
         }
 
