@@ -116,15 +116,6 @@ export default {
     }
   },
   watch: {
-    async count() {
-      if (this.count > 1) {
-        return;
-      }
-
-      await this.$emit("startQuestion");
-      await this.$emit("getData");
-      await this.$emit("changeOption");
-    },
     async activeIndex() {
       const res = await Repeat.getQuestionInfo(this.questionContent.id)
         if(res.length === 0) {
