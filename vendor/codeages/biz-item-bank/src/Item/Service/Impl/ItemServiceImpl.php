@@ -587,8 +587,11 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
         }
 
-        $count = $this->getItemDao()->count(['bank_id' => $itemBankId, 'material_hash' => $materialHash, 'material' => $material]);
-        if ($count) {
+        $items = $this->getItemDao()->search(['bank_id' => $itemBankId, 'material_hash' => $materialHash], [], 0, PHP_INT_MAX, ['material']);
+        $items = array_filter($items, function ($item) use ($material) {
+            return $material == $item['material'];
+        });
+        if ($items) {
             return true;
         }
 
