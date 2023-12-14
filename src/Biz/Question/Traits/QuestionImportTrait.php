@@ -105,9 +105,9 @@ trait QuestionImportTrait
         }, $text);
     }
 
-    private function addItemEmphasisStyle($item)
+    private function addArrayEmphasisStyle($array)
     {
-        $text = $this->addEmphasisStyle(json_encode($item));
+        $text = $this->addEmphasisStyle(json_encode($array));
 
         return json_decode($text, true);
     }
