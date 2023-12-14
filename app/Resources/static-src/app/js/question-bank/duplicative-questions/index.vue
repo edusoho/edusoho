@@ -45,7 +45,7 @@
       </div>
       <div class="duplicate-content">
         <div class="duplicate-content-title">{{ 'question.bank.topic.comparison'|trans }}</div>
-        <div v-if="questionContentList.length" class="mt16 flex flex-nowrap">
+        <div v-if="questionContentList.length>1" class="mt16 flex flex-nowrap">
           <duplicate-question-content
             v-if="questionContentList[oneIndex]"
             @changeOption="changeOption"
@@ -230,7 +230,7 @@ export default {
         }
 
         this.questionContentList = res;
-        
+
         if(this.questionData[activeKey]) {
           this.questionData[activeKey].frequency = res.length.toString();
         }
@@ -243,9 +243,7 @@ export default {
     },
     async getData() {
       try {
-        const res = await Repeat.getRepeatQuestion($("[name=questionBankId]").val(), {
-          categoryId: $("[name=categoryId]").val(),
-        })
+        const res = await Repeat.getRepeatQuestion($("[name=questionBankId]").val(), $("[name=categoryId]").val(),)
         this.questionData = res;
 
         if (!res.length) {

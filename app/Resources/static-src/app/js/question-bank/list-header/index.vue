@@ -137,11 +137,12 @@ export default {
 
   methods: {
     async duplicateChecking() {
+
       if($("[name=question_count]").val() == 0) {
         return this.$message.warning(Translator.trans('question.bank.check.result.category.noData'));
       }
       this.isLoading = true
-      await Repeat.getRepeatQuestion($("[name=questionBankId]").val(), { categoryId: $("[name=category_id]").val() }).then(res => {
+      await Repeat.getRepeatQuestion($("[name=questionBankId]").val(), $("[name=category_id]").val()).then(res => {
         this.isLoading = false
 
         if(res.length > 0) {
