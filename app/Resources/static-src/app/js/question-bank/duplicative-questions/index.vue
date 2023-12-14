@@ -51,7 +51,6 @@
             @changeOption="changeOption"
             @getData="getData"
             @changeQuestion="changeQuestion"
-            @startQuestion="startQuestion"
             @changeQuestionContent="changeQuestionContent"
             type="one"
             :activeIndex="oneIndex"
@@ -67,7 +66,6 @@
             @changeOption="changeOption"
             @getData="getData"
             @changeQuestion="changeQuestion"
-            @startQuestion="startQuestion"
             @changeQuestionContent="changeQuestionContent"
             type="two"
             :activeIndex="twoIndex"
@@ -140,11 +138,13 @@ export default {
       if (this.questionContentList.length > 1) {
         return;
       }
-      window.location.reload();
 
-      // await this.startQuestion();
-      // await this.getData();
-      // await this.changeOption();
+      if (this.activeKey == this.questionData.length-1) {
+        this.activeKey -= 1;
+      }
+
+      await this.getData();
+      await this.changeOption(this.activeKey);
     },
     activeKey() {
       this.changeOption(this.activeKey);
@@ -262,9 +262,6 @@ export default {
       } catch (err) {
         this.$message.error(err.message);
       }
-    },
-    startQuestion() {
-      this.activeKey = 0;
     },
     matchActive(title) {
       for(let i = 0; i < this.questionData.length; i++) {
