@@ -136,6 +136,15 @@ export default {
     DuplicateQuestionContent,
   },
   watch: {
+    async questionContentList() {
+      if (this.questionContentList.length > 1) {
+        return;
+      }
+
+      await this.startQuestion();
+      await this.getData();
+      await this.changeOption();
+    },
     activeKey() {
       this.changeOption(this.activeKey);
       this.oneIndex = 0;
