@@ -2,8 +2,8 @@ import { apiClient } from 'common/vue/service/api-client.js';
 
 export const Repeat = {
     // 获取查重题目数量
-    async getRepeatQuestion(bank_id, query={}) {
-      return apiClient.get(`/api/question_bank/${bank_id}/duplicative_material`, { query })
+    async getRepeatQuestion(bank_id, categoryId='') {
+      return apiClient.get(`/api/question_bank/${bank_id}/duplicative_material?categoryId=${categoryId}`)
     },
 
     // 获取查重题目信息
