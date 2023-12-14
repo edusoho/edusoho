@@ -140,10 +140,11 @@ export default {
       if (this.questionContentList.length > 1) {
         return;
       }
+      window.location.reload();
 
-      await this.startQuestion();
-      await this.getData();
-      await this.changeOption();
+      // await this.startQuestion();
+      // await this.getData();
+      // await this.changeOption();
     },
     activeKey() {
       this.changeOption(this.activeKey);
