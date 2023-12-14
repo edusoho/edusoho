@@ -245,8 +245,6 @@ const registerEvent = function ($importBox) {
     $modalContent.addClass('hidden')
     $modalGuideBtn.removeClass('hidden')
     $importRuleBtn.addClass('hidden')
-
-    store.set('QUESTION_IMPORT_DUIDE', true);
   }
 
   $modalGuideBtn.on('click', ()=> {
@@ -256,6 +254,7 @@ const registerEvent = function ($importBox) {
     $modalContent.removeClass('hidden')
     $modalGuideBtn.addClass('hidden')
     $importRuleBtn.removeClass('hidden')
+    store.set('QUESTION_IMPORT_DUIDE', true);
   })
 };
 initTooltips()
