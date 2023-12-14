@@ -134,9 +134,19 @@ export default {
       return this.difficultyList(str)
     },
     async goPreviousQuestion() {
-      if (this.count > 2 && this.activeIndex === this.count - 1) {
+      if(this.count<3) {
+        return
+      }
+
+      if (this.activeIndex === this.count - 1) {
         const previousIndex = this.nextIndex !== this.activeIndex - 1 ? this.activeIndex - 1 : this.activeIndex - 2;
         await this.$emit("changeQuestion", this.type, previousIndex);
+      }
+
+      if(this.nextIndex === this.count - 1) {
+        const previousIndex = this.activeIndex !== this.activeIndex - 1 ? this.nextIndex - 1 : this.nextIndex - 2;
+        const typeIndex = this.type === 'one' ? 'two' : 'one';
+        await this.$emit("changeQuestion", typeIndex, previousIndex);
       }
     },
     onDelete() {
