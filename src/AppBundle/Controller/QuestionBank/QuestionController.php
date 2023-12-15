@@ -176,7 +176,7 @@ class QuestionController extends BaseController
         return $this->render('question-manage/question-form-layout.html.twig', [
             'mode' => 'edit',
             'questionBank' => $questionBank,
-            'item' => $this->addItemEmphasisStyle($item),
+            'item' => $this->addArrayEmphasisStyle($item),
             'type' => $item['type'],
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($item['bank_id']),
             'goto' => $goto,
@@ -339,7 +339,7 @@ class QuestionController extends BaseController
 
         return $this->render('question-manage/update-duplicative-question.html.twig', [
             'questionBank' => $questionBank,
-            'item' => $this->addItemEmphasisStyle($item),
+            'item' => $this->addArrayEmphasisStyle($item),
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($item['bank_id']),
             'goto' => $this->generateUrl('question_bank_manage_check_duplicative_questions', ['id' => $id]),
         ]);
@@ -407,7 +407,7 @@ class QuestionController extends BaseController
         if (!$item || $item['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
-        $item = $this->addItemEmphasisStyle($item);
+        $item = $this->addArrayEmphasisStyle($item);
 
         $template = $request->query->get(
             'isNew'

@@ -587,8 +587,11 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
         }
 
-        $count = $this->getItemDao()->count(['bank_id' => $itemBankId, 'material_hash' => $materialHash, 'material' => $material]);
-        if ($count) {
+        $items = $this->getItemDao()->search(['bank_id' => $itemBankId, 'material_hash' => $materialHash], [], 0, PHP_INT_MAX, ['material']);
+        $items = array_filter($items, function ($item) use ($material) {
+            return $material == $item['material'];
+        });
+        if ($items) {
             return true;
         }
 
@@ -597,18 +600,29 @@ class ItemServiceImpl extends BaseService implements ItemService
 
     public function findDuplicatedMaterials($bankId, $categoryId = 0)
     {
-        $duplicatedMaterialHashes = $this->getItemDao()->findDuplicatedMaterialHashes($bankId, $categoryId);
+        $categoryIds = [];
+        if ('' != $categoryId) {
+            $categoryIds = $this->getItemCategoryService()->findCategoryChildrenIds($categoryId);
+            $categoryIds[] = $categoryId;
+        }
+        $duplicatedMaterialHashes = $this->getItemDao()->findDuplicatedMaterialHashes($bankId, $categoryIds);
         if (empty($duplicatedMaterialHashes)) {
             return [];
         }
 
-        return $this->getItemDao()->findDuplicatedMaterials($bankId, array_column($duplicatedMaterialHashes, 'material_hash'));
+        return $this->getItemDao()->findDuplicatedMaterials($bankId, $categoryIds, array_column($duplicatedMaterialHashes, 'material_hash'));
     }
 
-    public function findDuplicatedMaterialItems($bankId, $material)
+    public function findDuplicatedMaterialItems($bankId, $categoryId, $material)
     {
         $material = str_replace('\n', PHP_EOL, $material);
-        $items = $this->getItemDao()->search(['bank_id' => $bankId, 'material_hash' => md5($material)], [], 0, PHP_INT_MAX, ['id', 'material']);
+        $conditions = ['bank_id' => $bankId, 'material_hash' => md5($material)];
+        if ('' != $categoryId) {
+            $categoryIds = $this->getItemCategoryService()->findCategoryChildrenIds($categoryId);
+            $categoryIds[] = $categoryId;
+            $conditions['category_ids'] = $categoryIds;
+        }
+        $items = $this->getItemDao()->search($conditions, [], 0, PHP_INT_MAX, ['id', 'material']);
         $items = array_filter($items, function ($item) use ($material) {
             return $item['material'] == $material;
         });

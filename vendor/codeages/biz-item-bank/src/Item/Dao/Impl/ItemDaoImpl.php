@@ -54,13 +54,13 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
         return $this->db()->fetchAll($sql, array_merge([$bankId], $materialHashes)) ?: [];
     }
 
-    public function findDuplicatedMaterialHashes($bankId, $categoryId = 0)
+    public function findDuplicatedMaterialHashes($bankId, array $categoryIds)
     {
         $conditions = [
             'bank_id' => $bankId,
         ];
-        if ('' != $categoryId) {
-            $conditions['category_id'] = $categoryId;
+        if ($categoryIds) {
+            $conditions['category_ids'] = $categoryIds;
         }
         $builder = $this->createQueryBuilder($conditions)
             ->select('material_hash, count(*) as frequency')
@@ -70,7 +70,7 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
         return $builder->execute()->fetchAll() ?: [];
     }
 
-    public function findDuplicatedMaterials($bankId, array $materialHashes)
+    public function findDuplicatedMaterials($bankId, array $categoryIds, array $materialHashes)
     {
         if (empty($materialHashes)) {
             return [];
@@ -79,6 +79,9 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
             'bank_id' => $bankId,
             'material_hashs' => $materialHashes,
         ];
+        if ($categoryIds) {
+            $conditions['category_ids'] = $categoryIds;
+        }
         $builder = $this->createQueryBuilder($conditions)
             ->select('material, count(*) as frequency, max(updated_time) as latest_updated_time')
             ->groupBy('material')
