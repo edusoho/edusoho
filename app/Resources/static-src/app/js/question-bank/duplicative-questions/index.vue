@@ -231,10 +231,14 @@ export default {
     async changeOption(activeKey = 0) {
       this.activeKey = activeKey;
       try {
+        if(!this.questionData.length) {
+          return 
+        }
+        
         const res = await Repeat.getRepeatQuestionInfo(
           $("[name=questionBankId]").val(),
           {
-            material: this.questionData[activeKey].material,
+            material: this.questionData[activeKey]?.material,
             categoryId: $("[name=categoryId]").val()
           })
 
