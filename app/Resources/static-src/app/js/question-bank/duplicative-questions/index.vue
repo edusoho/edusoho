@@ -233,7 +233,10 @@ export default {
       try {
         const res = await Repeat.getRepeatQuestionInfo(
           $("[name=questionBankId]").val(),
-          {material: this.questionData[activeKey].material})
+          {
+            material: this.questionData[activeKey].material,
+            categoryId: $("[name=categoryId]").val()
+          })
 
         if(!res.length) {
             this.showChangeOptionErr()
