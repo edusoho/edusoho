@@ -168,6 +168,7 @@ export default {
         this.$emit('set-title', result.title);
         this.conditions = result;
       } catch (error) {
+        let result = {}
         result.chapter = [{"id": "default", "name": "全部章节"}]
         this.conditions = result;
       }
