@@ -104,7 +104,7 @@
             url: $('[name=check_duplicative_url]').val(),
             contentType: 'application/json;charset=utf-8',
             type: 'post',
-            data: JSON.stringify({material:stem}),
+            data: JSON.stringify({material: stem, itemId: data.data.id}),
             beforeSend(request) {
               request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
             }
