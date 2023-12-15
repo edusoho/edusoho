@@ -161,16 +161,16 @@ export default {
     async fetchWrongBookCondition(type) {
       const params = this.getParams(type);
 
-      const result = await WrongBookCondition.get(params);
-      if (result) {
-				result.chapter = [{"id": "default", "name": "全部章节"}].concat(result.chapter);
-				result.testpapers = result.testpaper;
-				this.$emit('set-title', result.title);
-				this.conditions = result;
-			} else {
-				result.chapter = [{"id": "default", "name": "全部章节"}]
-				this.conditions = result;
-			}
+      try {
+        const result = await WrongBookCondition.get(params);
+        result.chapter = [{"id": "default", "name": "全部章节"}].concat(result.chapter);
+        result.testpapers = result.testpaper;
+        this.$emit('set-title', result.title);
+        this.conditions = result;
+      } catch (error) {
+        result.chapter = [{"id": "default", "name": "全部章节"}]
+        this.conditions = result;
+      }
     },
 
     handleChange(value, type) {
