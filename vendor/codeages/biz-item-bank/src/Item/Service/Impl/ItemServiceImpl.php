@@ -571,7 +571,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $allDuplicatedIds;
     }
 
-    public function isMaterialDuplicative($itemBankId, $material, $items = [])
+    public function isMaterialDuplicative($itemBankId, $material, $items = [], $itemId = 0)
     {
         $material = $this->purifyHtml(trim($material));
         $material = preg_replace('/\[\[.*?\]\]/', '[[]]', $material);
@@ -587,9 +587,9 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
         }
 
-        $items = $this->getItemDao()->search(['bank_id' => $itemBankId, 'material_hash' => $materialHash], [], 0, PHP_INT_MAX, ['material']);
-        $items = array_filter($items, function ($item) use ($material) {
-            return $material == $item['material'];
+        $items = $this->getItemDao()->search(['bank_id' => $itemBankId, 'material_hash' => $materialHash], [], 0, PHP_INT_MAX, ['id', 'material']);
+        $items = array_filter($items, function ($item) use ($material, $itemId) {
+            return $material == $item['material'] && $item['id'] != $itemId;
         });
         if ($items) {
             return true;
