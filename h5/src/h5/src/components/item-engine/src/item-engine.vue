@@ -15,7 +15,7 @@
             :key="`paper${item.id}`"
             :ref="`paper${item.id}`"
             :style="{ height: height + 'px' }"
-						style="overflow-x: hidden;"
+						style="overflow-x: hidden; z-index: 1 !important;"
             class="ibs-paper-item"
           >
             <ibs-item 

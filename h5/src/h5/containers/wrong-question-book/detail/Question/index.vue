@@ -70,8 +70,8 @@
         </div>
       </div>
     </div>
-		<div v-if="!(order === total)" class="question-footer-shardow">
-		</div>
+    <div v-if="!(order === total)" class="question-footer-shardow">
+    </div>
   </div>
 </template>
 
@@ -273,7 +273,7 @@ export default {
         return true;
       }
     },
-		handleClickImage (imagesUrl) {
+    handleClickImage (imagesUrl) {
       if (imagesUrl === undefined) return;
       event.stopPropagation();//  阻止冒泡
       const images = [imagesUrl]

@@ -1,9 +1,10 @@
 <template>
-  <div v-if="item">
+  <div v-if="item" style="height: 100% !important;">
     <swiper
       :ref="`childSwiper${item.id}`"
       :height="height"
       :nested="true"
+      :speed="500"
       :resistanceRatio="0"
       :touchable="touchable"
       :show-indicators="false"
@@ -14,17 +15,17 @@
         <swiper-slide
           v-if="getShow(questionIndex, question) && !wrong"
           :key="question.id"
-					:class="mode == 'do' && iscando[Number(question.seq) -1] ? 'ibs-exercise-do' : 'ibs-exercise-analysis'"
+          :class="mode == 'do' && iscando[Number(question.seq) -1] ? 'ibs-exercise-do' : 'ibs-exercise-analysis'"
         >
           <template>
-						<sectionTitle
-							:questionsType="getAnswerModeProps(question, questionIndex).questionsType"
-							:score="getAnswerModeProps(question, questionIndex).score"
-							:current="getAnswerModeProps(question, questionIndex).current"
-							:showScore="getAnswerModeProps(question, questionIndex).showScore"
-							:all="getAnswerModeProps(question, questionIndex).all"
-							:reviewedCount= 'reviewedCount'
-						/>
+            <sectionTitle
+              :questionsType="getAnswerModeProps(question, questionIndex).questionsType"
+              :score="getAnswerModeProps(question, questionIndex).score"
+              :current="getAnswerModeProps(question, questionIndex).current"
+              :showScore="getAnswerModeProps(question, questionIndex).showScore"
+              :all="getAnswerModeProps(question, questionIndex).all"
+              :reviewedCount= 'reviewedCount'
+            />
             <answer-model
               :mode="mode"
               :activeIndex="swiperActiveIndex"
@@ -32,148 +33,148 @@
               :attachements="
                 getItemProps(question, questionIndex).question.attachments
               "
-							:reviewStatus="question_reports[current]"
-							@changeReviewList="changeReviewList"
+              :reviewStatus="question_reports[current]"
+              @changeReviewList="changeReviewList"
               @showMaterialAnalysis="showMaterialAnalysis"
               v-bind="$attrs"
             >
               <!-- 答题区 -->
               <singleChoice
                 v-if="question.answer_mode === 'single_choice'"
-								:ref="'submit'+(Number(question.seq) - 1)"
-              	:mode="mode"
+                :ref="'submit'+(Number(question.seq) - 1)"
+                :mode="mode"
                 :itemData="getItemProps(question, questionIndex)"
                 :commonData="getAnswerModeProps(question, questionIndex)"
                 :attachements="
                   getItemProps(question, questionIndex).question.attachments
                 "
-								:wrong="wrong"
+                :wrong="wrong"
                 :currentItem="item"
-								:totalCount="all"
-								:showShadow="showShadow"
-								:reviewedCount="reviewedCount"
-								:disabledData="(mode === 'report' ? false : iscando.length === 0 ? true : mode === 'do' && iscando[Number(question.seq) -1]) && mode !== 'review'"
-								:exerciseInfo="exerciseInfo"
-								:isAnswerFinished="isAnswerFinished"
+                :totalCount="all"
+                :showShadow="showShadow"
+                :reviewedCount="reviewedCount"
+                :disabledData="(mode === 'report' ? false : iscando.length === 0 ? true : mode === 'do' && iscando[Number(question.seq) -1]) && mode !== 'review'"
+                :exerciseInfo="exerciseInfo"
+                :isAnswerFinished="isAnswerFinished"
                 @changeAnswer="changeAnswer"
-								@goBrushResult="goBrushResult"
+                @goBrushResult="goBrushResult"
               />
               <judge
                 v-if="question.answer_mode === 'true_false'"
-								:ref="'submit'+(Number(question.seq) - 1)"
-								:mode="mode"
+                :ref="'submit'+(Number(question.seq) - 1)"
+                :mode="mode"
                 :itemData="getItemProps(question, questionIndex)"
                 :commonData="getAnswerModeProps(question, questionIndex)"
                 :attachements="
                   getItemProps(question, questionIndex).question.attachments
                 "
                 :currentItem="item"
-								:wrong="wrong"
-								:totalCount="all"
-								:showShadow="showShadow"
-								:disabledData="(mode === 'report' ? false : iscando.length === 0 ? true : mode === 'do' && iscando[Number(question.seq) -1]) && mode !== 'review'"
-								:exerciseInfo="exerciseInfo"
-								:reviewedCount="reviewedCount"
-								:isAnswerFinished="isAnswerFinished"
+                :wrong="wrong"
+                :totalCount="all"
+                :showShadow="showShadow"
+                :disabledData="(mode === 'report' ? false : iscando.length === 0 ? true : mode === 'do' && iscando[Number(question.seq) -1]) && mode !== 'review'"
+                :exerciseInfo="exerciseInfo"
+                :reviewedCount="reviewedCount"
+                :isAnswerFinished="isAnswerFinished"
                 @changeAnswer="changeAnswer"
-								@goBrushResult="goBrushResult"
+                @goBrushResult="goBrushResult"
               />
               <choice
                 v-if="
                   question.answer_mode === 'choice' ||
                     question.answer_mode === 'uncertain_choice'
                 "
-								:ref="'submit'+(Number(question.seq) - 1)"
-								:mode="mode"
+                :ref="'submit'+(Number(question.seq) - 1)"
+                :mode="mode"
                 :itemData="getItemProps(question, questionIndex)"
                 :commonData="getAnswerModeProps(question, questionIndex)"
                 :attachements="
                   getItemProps(question, questionIndex).question.attachments
                 "
                 :currentItem="item"
-								:totalCount="all"
-								:wrong="wrong"
-								:showShadow="showShadow"
-								:exerciseInfo="exerciseInfo"
-								:reviewedCount="reviewedCount"
-								:isAnswerFinished="isAnswerFinished"
-								:disabledData="(mode === 'report' ? false : iscando.length === 0 ? true : mode === 'do' && iscando[Number(question.seq) -1]) && mode !== 'review'"
+                :totalCount="all"
+                :wrong="wrong"
+                :showShadow="showShadow"
+                :exerciseInfo="exerciseInfo"
+                :reviewedCount="reviewedCount"
+                :isAnswerFinished="isAnswerFinished"
+                :disabledData="(mode === 'report' ? false : iscando.length === 0 ? true : mode === 'do' && iscando[Number(question.seq) -1]) && mode !== 'review'"
                 @submitSingleAnswer="submitSingleAnswer"
                 @changeAnswer="changeAnswerArray"
-								@goBrushResult="goBrushResult"
+                @goBrushResult="goBrushResult"
               />
 
               <essay
                 v-if="question.answer_mode === 'rich_text'"
-								:ref="'submit'+(Number(question.seq) - 1)"
-								:mode="mode"
+                :ref="'submit'+(Number(question.seq) - 1)"
+                :mode="mode"
                 :itemData="getItemProps(question, questionIndex)"
                 :commonData="getAnswerModeProps(question, questionIndex)"
                 :attachements="
                   getItemProps(question, questionIndex).question.attachments
                 "
                 :currentItem="item"
-								:totalCount="all"
-								:wrong="wrong"
-								:questionStatus="status"
-								:showShadow="showShadow"
-								:exerciseInfo="exerciseInfo"
-								:reviewedCount="reviewedCount"
-								:isAnswerFinished="isAnswerFinished"
-								:reviewedQuestion="reviewedQuestion"
-								:EssayRadio="EssayRadio"
-								:disabledData="(mode === 'report' ? false : iscando.length === 0 ? true : mode === 'do' && iscando[Number(question.seq) -1]) && mode !== 'review'"
-								@nextSkipQuestion="nextSkipQuestion"
-								@updataIsAnswerFinished="updataIsAnswerFinished"
+                :totalCount="all"
+                :wrong="wrong"
+                :questionStatus="status"
+                :showShadow="showShadow"
+                :exerciseInfo="exerciseInfo"
+                :reviewedCount="reviewedCount"
+                :isAnswerFinished="isAnswerFinished"
+                :reviewedQuestion="reviewedQuestion"
+                :EssayRadio="EssayRadio"
+                :disabledData="(mode === 'report' ? false : iscando.length === 0 ? true : mode === 'do' && iscando[Number(question.seq) -1]) && mode !== 'review'"
+                @nextSkipQuestion="nextSkipQuestion"
+                @updataIsAnswerFinished="updataIsAnswerFinished"
                 @submitSingleAnswer="submitSingleAnswer"
                 @changeAnswer="changeAnswer"
-								@goBrushResult="goBrushResult"
-								@changeEssayRadio="changeEssayRadio"
+                @goBrushResult="goBrushResult"
+                @changeEssayRadio="changeEssayRadio"
               />
 
               <fill
                 v-if="question.answer_mode === 'text'"
-								:ref="'submit'+(Number(question.seq) - 1)"
-								:mode="mode"
+                :ref="'submit'+(Number(question.seq) - 1)"
+                :mode="mode"
                 :itemData="getItemProps(question, questionIndex)"
                 :commonData="getAnswerModeProps(question, questionIndex)"
                 :attachements="
                   getItemProps(question, questionIndex).question.attachments
                 "
                 :currentItem="item"
-								:totalCount="all"
-								:wrong="wrong"
-								:questionStatus="status"
-								:showShadow="showShadow"
-								:fillStatus="fillStatus"
-								:exerciseInfo="exerciseInfo"
-								:disabledData="(mode === 'report' ? false : iscando.length === 0 ? true : mode === 'do' && iscando[Number(question.seq) -1]) && mode !== 'review'"
-								:reviewedCount="reviewedCount"
-								:isAnswerFinished="isAnswerFinished"
+                :totalCount="all"
+                :wrong="wrong"
+                :questionStatus="status"
+                :showShadow="showShadow"
+                :fillStatus="fillStatus"
+                :exerciseInfo="exerciseInfo"
+                :disabledData="(mode === 'report' ? false : iscando.length === 0 ? true : mode === 'do' && iscando[Number(question.seq) -1]) && mode !== 'review'"
+                :reviewedCount="reviewedCount"
+                :isAnswerFinished="isAnswerFinished"
                 @submitSingleAnswer="submitSingleAnswer"
                 @changeAnswer="changeAnswerArray"
-								@goBrushResult="goBrushResult"
+                @goBrushResult="goBrushResult"
               />
             </answer-model>
-						
+            
           </template>
-					
+          
         </swiper-slide>
-				
-				<swiper-slide
+        
+        <swiper-slide
           v-if="getShow(questionIndex, question) && wrong"
           :key="question.id"
-					:class="mode == 'do' && !choiceIsCando[Number(question.seq) - 1]  ? 'ibs-exercise-do' : 'ibs-exercise-analysis'"
+          :class="mode == 'do' && !choiceIsCando[Number(question.seq) - 1]  ? 'ibs-exercise-do' : 'ibs-exercise-analysis'"
         >
           <template>
-						<sectionTitle
-							:questionsType="getAnswerModeProps(question, questionIndex).questionsType"
-							:score="getAnswerModeProps(question, questionIndex).score"
-							:current="getAnswerModeProps(question, questionIndex).current"
-							:showScore="getAnswerModeProps(question, questionIndex).showScore"
-							:all="getAnswerModeProps(question, questionIndex).all"
-							:reviewedCount= 'reviewedCount'
-						/>
+            <sectionTitle
+              :questionsType="getAnswerModeProps(question, questionIndex).questionsType"
+              :score="getAnswerModeProps(question, questionIndex).score"
+              :current="getAnswerModeProps(question, questionIndex).current"
+              :showScore="getAnswerModeProps(question, questionIndex).showScore"
+              :all="getAnswerModeProps(question, questionIndex).all"
+              :reviewedCount= 'reviewedCount'
+            />
             <answer-model
               :mode="mode"
               :activeIndex="swiperActiveIndex"
@@ -181,134 +182,134 @@
               :attachements="
                 getItemProps(question, questionIndex).question.attachments
               "
-							:reviewStatus="question_reports[current]"
-							@changeReviewList="changeReviewList"
+              :reviewStatus="question_reports[current]"
+              @changeReviewList="changeReviewList"
               @showMaterialAnalysis="showMaterialAnalysis"
               v-bind="$attrs"
             >
               <!-- 答题区 -->
               <singleChoice
                 v-if="question.answer_mode === 'single_choice'"
-								:ref="'submit'+(Number(question.seq) - 1)"
-								:mode="mode"
+                :ref="'submit'+(Number(question.seq) - 1)"
+                :mode="mode"
                 :itemData="getItemProps(question, questionIndex)"
                 :commonData="getAnswerModeProps(question, questionIndex)"
                 :attachements="
                   getItemProps(question, questionIndex).question.attachments
                 "
-								:wrong="wrong"
+                :wrong="wrong"
                 :currentItem="item"
-								:totalCount="all"
-								:showShadow="showShadow"
-								:reviewedCount="reviewedCount"
-								:isAnswerFinished="isAnswerFinished"
-								:disabledData="mode === 'report' ? false : choiceIsCando.length === 0 ? true : mode === 'do' && !choiceIsCando[Number(question.seq) - 1]"
-								:exerciseInfo="exerciseInfo"
-								@changeChoiceCando="changeChoiceCando"
+                :totalCount="all"
+                :showShadow="showShadow"
+                :reviewedCount="reviewedCount"
+                :isAnswerFinished="isAnswerFinished"
+                :disabledData="mode === 'report' ? false : choiceIsCando.length === 0 ? true : mode === 'do' && !choiceIsCando[Number(question.seq) - 1]"
+                :exerciseInfo="exerciseInfo"
+                @changeChoiceCando="changeChoiceCando"
                 @changeAnswer="changeAnswer"
-								@goBrushResult="goBrushResult"
+                @goBrushResult="goBrushResult"
               />
 
               <judge
                 v-if="question.answer_mode === 'true_false'"
-								:ref="'submit'+(Number(question.seq) - 1)"
-								:mode="mode"
+                :ref="'submit'+(Number(question.seq) - 1)"
+                :mode="mode"
                 :itemData="getItemProps(question, questionIndex)"
                 :commonData="getAnswerModeProps(question, questionIndex)"
                 :attachements="
                   getItemProps(question, questionIndex).question.attachments
                 "
                 :currentItem="item"
-								:wrong="wrong"
-								:totalCount="all"
-								:showShadow="showShadow"
-								:disabledData="mode === 'report' ? false : choiceIsCando.length === 0 ? true : mode === 'do' && !choiceIsCando[Number(question.seq) - 1]"
-								:exerciseInfo="exerciseInfo"
-								:reviewedCount="reviewedCount"
-								:isAnswerFinished="isAnswerFinished"
-								@changeChoiceCando="changeChoiceCando"
+                :wrong="wrong"
+                :totalCount="all"
+                :showShadow="showShadow"
+                :disabledData="mode === 'report' ? false : choiceIsCando.length === 0 ? true : mode === 'do' && !choiceIsCando[Number(question.seq) - 1]"
+                :exerciseInfo="exerciseInfo"
+                :reviewedCount="reviewedCount"
+                :isAnswerFinished="isAnswerFinished"
+                @changeChoiceCando="changeChoiceCando"
                 @changeAnswer="changeAnswer"
-								@goBrushResult="goBrushResult"
+                @goBrushResult="goBrushResult"
               />
               <choice
                 v-if="
                   question.answer_mode === 'choice' ||
                     question.answer_mode === 'uncertain_choice'
                 "
-								:ref="'submit'+(Number(question.seq) - 1)"
-								:mode="mode"
+                :ref="'submit'+(Number(question.seq) - 1)"
+                :mode="mode"
                 :itemData="getItemProps(question, questionIndex)"
                 :commonData="getAnswerModeProps(question, questionIndex)"
                 :attachements="
                   getItemProps(question, questionIndex).question.attachments
                 "
-								@changeChoiceCando="changeChoiceCando"
+                @changeChoiceCando="changeChoiceCando"
                 :currentItem="item"
-								:totalCount="all"
-								:wrong="wrong"
-								:showShadow="showShadow"
-								:exerciseInfo="exerciseInfo"
-								:reviewedCount="reviewedCount"
-								:isAnswerFinished="isAnswerFinished"
-								:disabledData="mode === 'report' ? false : choiceIsCando.length === 0 ? true : mode === 'do' && !choiceIsCando[Number(question.seq) - 1]"
+                :totalCount="all"
+                :wrong="wrong"
+                :showShadow="showShadow"
+                :exerciseInfo="exerciseInfo"
+                :reviewedCount="reviewedCount"
+                :isAnswerFinished="isAnswerFinished"
+                :disabledData="mode === 'report' ? false : choiceIsCando.length === 0 ? true : mode === 'do' && !choiceIsCando[Number(question.seq) - 1]"
                 @submitSingleAnswer="submitSingleAnswer"
-								@changeTouch="changeTouch"
+                @changeTouch="changeTouch"
                 @changeAnswer="changeAnswerArray"
-								@goBrushResult="goBrushResult"
+                @goBrushResult="goBrushResult"
               />
 
               <essay
                 v-if="question.answer_mode === 'rich_text'"
-								:ref="'submit'+(Number(question.seq) - 1)"
-								:mode="mode"
+                :ref="'submit'+(Number(question.seq) - 1)"
+                :mode="mode"
                 :itemData="getItemProps(question, questionIndex)"
                 :commonData="getAnswerModeProps(question, questionIndex)"
                 :attachements="
                   getItemProps(question, questionIndex).question.attachments
                 "
                 :currentItem="item"
-								:totalCount="all"
-								:wrong="wrong"
-								:questionStatus="status"
-								:showShadow="showShadow"
-								:exerciseInfo="exerciseInfo"
-								:reviewedCount="reviewedCount"
-								:isAnswerFinished="isAnswerFinished"
-								:disabledData="iscando.length === 0 ? true : mode === 'do' && !choiceIsCando[Number(question.seq) - 1]"
-								@changeTouch="changeTouch"
+                :totalCount="all"
+                :wrong="wrong"
+                :questionStatus="status"
+                :showShadow="showShadow"
+                :exerciseInfo="exerciseInfo"
+                :reviewedCount="reviewedCount"
+                :isAnswerFinished="isAnswerFinished"
+                :disabledData="iscando.length === 0 ? true : mode === 'do' && !choiceIsCando[Number(question.seq) - 1]"
+                @changeTouch="changeTouch"
                 @submitSingleAnswer="submitSingleAnswer"
                 @changeAnswer="changeAnswer"
-								@goBrushResult="goBrushResult"
+                @goBrushResult="goBrushResult"
               />
 
               <fill
                 v-if="question.answer_mode === 'text'"
-								:ref="'submit'+(Number(question.seq) - 1)"
-								:mode="mode"
+                :ref="'submit'+(Number(question.seq) - 1)"
+                :mode="mode"
                 :itemData="getItemProps(question, questionIndex)"
                 :commonData="getAnswerModeProps(question, questionIndex)"
                 :attachements="
                   getItemProps(question, questionIndex).question.attachments
                 "
                 :currentItem="item"
-								:totalCount="all"
-								:wrong="wrong"
-								:showShadow="showShadow"
-								:exerciseInfo="exerciseInfo"
-								:questionStatus="status"
-								:fillStatus="fillStatus"
-								:disabledData="iscando.length === 0 ? true : mode === 'do' && !choiceIsCando[Number(question.seq) - 1]"
-								:reviewedCount="reviewedCount"
-								:isAnswerFinished="isAnswerFinished"
-								@changeTouch="changeTouch"
+                :totalCount="all"
+                :wrong="wrong"
+                :showShadow="showShadow"
+                :exerciseInfo="exerciseInfo"
+                :questionStatus="status"
+                :fillStatus="fillStatus"
+                :disabledData="iscando.length === 0 ? true : mode === 'do' && !choiceIsCando[Number(question.seq) - 1]"
+                :reviewedCount="reviewedCount"
+                :isAnswerFinished="isAnswerFinished"
+                @changeTouch="changeTouch"
                 @submitSingleAnswer="submitSingleAnswer"
                 @changeAnswer="changeAnswerArray"
-								@goBrushResult="goBrushResult"
+                @goBrushResult="goBrushResult"
               />
             </answer-model>
           </template>
         </swiper-slide>
-				
+        
       </template>
     </swiper>
     <ibs-slide
@@ -352,11 +353,11 @@ export default {
       height: 0,
       swiperActiveIndex: 0,
       materialAnalysis: false,
-			isLeave: false,
-			status: '',
-			reviewList: [],
-			touchable: true,
-			showShadow: '',
+      isLeave: false,
+      status: '',
+      reviewList: [],
+      touchable: true,
+      showShadow: '',
       width: WINDOWWIDTH,
     };
   },
@@ -429,38 +430,38 @@ export default {
       type: Number,
       default: 0
     },
-		reviewedCount: {
-			type: Number,
-			default: 0
-		},
-		exerciseInfo: {
-			type: Array,
+    reviewedCount: {
+      type: Number,
+      default: 0
+    },
+    exerciseInfo: {
+      type: Array,
       default: () => []
-		},
-		items: {
-			type: Array,
+    },
+    items: {
+      type: Array,
       default: () => []
-		},
-		wrong: {
-			type: Boolean,
+    },
+    wrong: {
+      type: Boolean,
       default: false
-		},
-		isAnswerFinished: {
-			type: Number,
-			default: 0
-		},
-		reviewedQuestion: {
-			type: Array,
+    },
+    isAnswerFinished: {
+      type: Number,
+      default: 0
+    },
+    reviewedQuestion: {
+      type: Array,
       default: () => []
-		},
-		fillStatus: {
-			type: Array,
+    },
+    fillStatus: {
+      type: Array,
       default: () => []
-		},
-		EssayRadio: {
-			type: Array,
-			default: () => []
-		}
+    },
+    EssayRadio: {
+      type: Array,
+      default: () => []
+    }
   },
   inject: ["brushDo"],
   computed: {
@@ -494,24 +495,24 @@ export default {
     }
   },
   mounted() {
-		this.$nextTick(() => {
-			if (this.mode === 'do') {
-				const allItem = []
-				this.items.forEach((item, index) => {
-					item.questions.forEach((subItem, subIndex) => {
-						allItem.push(subItem)
-					})
-					this.showShadow = allItem[allItem.length - 1].id
-				});
-			}
-		})
+    this.$nextTick(() => {
+      if (this.mode === 'do') {
+        const allItem = []
+        this.items.forEach((item, index) => {
+          item.questions.forEach((subItem, subIndex) => {
+            allItem.push(subItem)
+          })
+          this.showShadow = allItem[allItem.length - 1].id
+        });
+      }
+    })
     this.setSwiperHeight();
   },
   methods: {
-		changeReviewList(status) {
-			this.$emit('changeStatus', status)
-		},
-		
+    changeReviewList(status) {
+      this.$emit('changeStatus', status)
+    },
+    
     slideChange() {
       const swiperName = `childSwiper${this.item.id}`;
       this.swiperActiveIndex = this.$refs[swiperName].$swiper.activeIndex;
@@ -537,10 +538,10 @@ export default {
     changeAnswer(value, keys, data) {
       this.itemUserAnswer.question_responses[keys].response = [value];
       this.$emit("changeAnswer", this.itemUserAnswer, this.keys);
-			
+      
       if(this.brushDo.answerRecord.exercise_mode === '1' && data.type !== 'essay') {
-				this.notSwiperChangeTouch(false);
-				this.touchable = false;
+        this.notSwiperChangeTouch(false);
+        this.touchable = false;
         this.submitSingleAnswer(value.split(''), data)
       }
     },
@@ -563,37 +564,37 @@ export default {
         const idx = data.seq - 1 
         this.$refs['submit'+idx][0].refreshChoice(res)
         this.status = res.status
-				if (this.wrong) {
-					this.changeChoiceCando()
-					if (res.status === 'right') {
-						setTimeout(() => {
-							this.slideNext(true)
-						}, 1000);
-					}
-				} else {
-					if (res.status === 'right') {
-						setTimeout(() => {
-							this.slideNext(true)
-						}, 1000);
-						this.$emit('changeIsCando', idx, false)
-					} else {
-						this.$emit('changeIsCando', idx, false)
-					}
-				}
+        if (this.wrong) {
+          this.changeChoiceCando()
+          if (res.status === 'right') {
+            setTimeout(() => {
+              this.slideNext(true)
+            }, 1000);
+          }
+        } else {
+          if (res.status === 'right') {
+            setTimeout(() => {
+              this.slideNext(true)
+            }, 1000);
+            this.$emit('changeIsCando', idx, false)
+          } else {
+            this.$emit('changeIsCando', idx, false)
+          }
+        }
         this.swiperChangeTouch(true)
-				this.touchable = true
-				if (type === 'fill') {
-					const questionData = {
-						status: res.status,
-						question_id: data.question_id
-					}
-					this.$emit('submitedQuestionStatus', questionData)
-				}
-				this.$emit('changeReviewedCount', res.reviewedCount, res.isAnswerFinished)
+        this.touchable = true
+        if (type === 'fill') {
+          const questionData = {
+            status: res.status,
+            question_id: data.question_id
+          }
+          this.$emit('submitedQuestionStatus', questionData)
+        }
+        this.$emit('changeReviewedCount', res.reviewedCount, res.isAnswerFinished)
 
       }).catch(err=> {
-				this.touchable = true
-				this.swiperChangeTouch(true)
+        this.touchable = true
+        this.swiperChangeTouch(true)
         Toast.fail(err.message)
       })
     }, 1000),
@@ -642,13 +643,13 @@ export default {
       }
       this.materialAnalysis = data;
     },
-		changeChoiceCando() {
-			this.$emit('changeChoiceCando', this.current, true)
-		},
+    changeChoiceCando() {
+      this.$emit('changeChoiceCando', this.current, true)
+    },
     slidePrev() {
-			if (!this.touchable) {
-				return
-			}
+      if (!this.touchable) {
+        return
+      }
       const swiperName = `childSwiper${this.item.id}`;
       const slide = this.$refs[swiperName].$swiper.slidePrev();
       if (!slide) {
@@ -656,52 +657,52 @@ export default {
       }
     },
     slideNext(flag) {
-			if (!this.touchable && !flag) {
-				return
-			}
+      if (!this.touchable && !flag) {
+        return
+      }
       const swiperName = `childSwiper${this.item.id}`;
       const slide = this.$refs[swiperName].$swiper.slideNext();
       if (!slide || flag) {
         this.$emit("itemSlideNext");
       }
     },
-		goBrushResult() {
-			this.isLeave = true;
-			const query = {
-				type: 'chapter',
-				title: this.$route.query.title,
-				exerciseId: this.$route.query.exerciseId,
-				categoryId: this.$route.query.categoryId,
-				moduleId: this.$route.query.moduleId,
-				isLeave: this.isLeave,
-			};
-			const answerRecordId = this.brushDo.recordId;
-			this.$router.replace({
-				path: `/brushResult/${answerRecordId}`,
-				query,
-			});
-		},
-		nextSkipQuestion() {
-			setTimeout(() => {
-				this.slideNext(true);
-			}, 2000)
-		},
-		changeTouch() {
-			this.touchable = false;
+    goBrushResult() {
+      this.isLeave = true;
+      const query = {
+        type: 'chapter',
+        title: this.$route.query.title,
+        exerciseId: this.$route.query.exerciseId,
+        categoryId: this.$route.query.categoryId,
+        moduleId: this.$route.query.moduleId,
+        isLeave: this.isLeave,
+      };
+      const answerRecordId = this.brushDo.recordId;
+      this.$router.replace({
+        path: `/brushResult/${answerRecordId}`,
+        query,
+      });
+    },
+    nextSkipQuestion() {
+      setTimeout(() => {
+        this.slideNext(true);
+      }, 2000)
+    },
+    changeTouch() {
+      this.touchable = false;
       this.notSwiperChangeTouch(false);
     },
-		swiperChangeTouch(val) {
-			this.$emit('changeTouch', val)
-		},
-		notSwiperChangeTouch(val) {
-			this.$emit('noChangeTouch', val)
-		},
-		updataIsAnswerFinished(val, flag, data, questionId) {
-			this.$emit('updataIsAnswerFinished', val, flag, data, questionId)
-		},
-		changeEssayRadio(data) {
-			this.$emit('changeEssayRadio', data)
-		}
+    swiperChangeTouch(val) {
+      this.$emit('changeTouch', val)
+    },
+    notSwiperChangeTouch(val) {
+      this.$emit('noChangeTouch', val)
+    },
+    updataIsAnswerFinished(val, flag, data, questionId) {
+      this.$emit('updataIsAnswerFinished', val, flag, data, questionId)
+    },
+    changeEssayRadio(data) {
+      this.$emit('changeEssayRadio', data)
+    }
   }
 };
 </script>

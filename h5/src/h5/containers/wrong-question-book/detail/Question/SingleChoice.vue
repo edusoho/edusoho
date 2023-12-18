@@ -3,14 +3,14 @@
     <van-radio
       v-for="(answer, index) in questions.response_points"
       :key="index"
-			:name="answer.radio.val"
+      :name="answer.radio.val"
       :class="['question-option',
-				{'van-checkbox__right': RadioRight(answer.radio.val)},
-      	{'van-checkbox__wrong': RadioWrong(answer.radio.val)},
-			]"
+        {'van-checkbox__right': RadioRight(answer.radio.val)},
+        {'van-checkbox__wrong': RadioWrong(answer.radio.val)},
+      ]"
     >
-			<i class="iconfont icon-zhengque1"></i>
-			<i class="iconfont icon-cuowu2"></i>
+      <i class="iconfont icon-zhengque1"></i>
+      <i class="iconfont icon-cuowu2"></i>
       <div class="question-option__content" v-html="answer.radio.text" />
       <template slot="icon">
         <span
@@ -40,21 +40,21 @@ export default {
   },
 
   methods: {
-		RadioWrong(radioItem) {
-			const answer = this.question.questions[0].answer
-			const response = this.question.questions[0].report.response
+    RadioWrong(radioItem) {
+      const answer = this.question.questions[0].answer
+      const response = this.question.questions[0].report.response
 
-			// 选择项等于当前项，并且选择项不等于正确答案
+      // 选择项等于当前项，并且选择项不等于正确答案
       if(response[0] === radioItem && response[0] !== answer[0]){
         return true;
       }
     },
     RadioRight(radioItem) {
-			const answer = this.question.questions[0].answer
-			const response = this.question.questions[0].report.response
+      const answer = this.question.questions[0].answer
+      const response = this.question.questions[0].report.response
 
       // 没有答题显示选中正确答案 || 选中错误，正确答案显示
-			if(response.length === 0 && radioItem === answer[0] || radioItem === answer[0]) {
+      if(response.length === 0 && radioItem === answer[0] || radioItem === answer[0]) {
         return true;
       }
       

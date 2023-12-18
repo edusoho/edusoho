@@ -39,19 +39,6 @@ export default {
       this.fastSlide();
     },
     changeRenderItems(current) {
-			// const a = []
-			// this.items.forEach((item) => {
-			// 	item.questions.forEach((value) => {
-			// 		const newObj = {};
-			// 		Object.assign(newObj, item);
-			// 		newObj.questions = [value];
-			// 		newObj.seq = value.seq;
-			// 		a.push(newObj);
-			// 	});
-			// });
-			// this.items = a
-			// console.log(a);
-
       let renderItmes = [];
       if (this.items[current - 1]) {
         renderItmes.push(this.items[current - 1]);
@@ -81,7 +68,7 @@ export default {
       const WINDOWHEIGHT = document.documentElement.clientHeight;
       this.height = WINDOWHEIGHT - offsetTopHeight;
     },
-		getStem() {
+    getStem() {
       if (this.commonData.questionsType === "text") {
         return this.filterFillHtml(this.commonData.questionStem);
       }
@@ -97,47 +84,20 @@ export default {
         return `<span class="ibs-fill-bank">(${index++}）</span>`;
       });
     },
-		isShowFooterShadow() {
-			// 模式不为练习 并且不是最后一题,并且为答题模式
-			const id = this.currentItem.questions[this.currentItem.questions.length - 1].id
-			const lastQuestion = this.showShadow !== id
-			if (this.mode === 'do' && lastQuestion && this.currentItem.type !== 'material' ) {
-				// 模式不为练习，不是最后一题，是解析模式，并且题型不为材料题
-				return true;
-			}
-			if (this.mode === 'report' && lastQuestion && this.currentItem.type !== 'material' ) {
-				// 模式不为练习，不是最后一题，是解析模式，并且题型不为材料题
-				return true;
-			}
-			
-			// // 只有练习才有 isExercise --- 是不是练习解析页
-			// if (this.isExercise) {
-			// 	// 不是最后一题，练习模式为测验。并且不是材料题
-			// 	if (this.mode === 'exercise' && lastQuestion && this.parentType !== 'material') {
-			// 		return true;
-			// 	} else if (this.mode === 'exercise' && lastQuestion && this.parentType === 'material') {
-			// 		// 是练习解析页，不是最后一题，是材料题返回false
-			// 		return false;
-			// 	}
-			// } 
-
-			// // 是练习模式 并且为答题模式
-			// if (this.mode === 'exercise' && this.canDo) {
-			// 	// 为一题一答模式，不是最后一题，一题一答做题（true为可以选择，false为不可选，表示已提交）有没有提交
-			// 	if (this.exerciseMode === '1' && lastQuestion && this.disabledData) {
-			// 		return true
-			// 	} 
-			// 	// 一题一答，不是材料题，不是最后一题
-			// 	if (this.exerciseMode === '1' && lastQuestion && this.parentType !== 'material') {
-			// 		return true
-			// 	}
-
-			// 	if ( this.exerciseMode === '0' && lastQuestion && this.canDo ) {
-			// 		return true
-			// 	}
-			// }
-		},
-		handleClickImage (imagesUrl) {
+    isShowFooterShadow() {
+      // 模式不为练习 并且不是最后一题,并且为答题模式
+      const id = this.currentItem.questions[this.currentItem.questions.length - 1].id
+      const lastQuestion = this.showShadow !== id
+      if (this.mode === 'do' && lastQuestion && this.currentItem.type !== 'material' ) {
+        // 模式不为练习，不是最后一题，是解析模式，并且题型不为材料题
+        return true;
+      }
+      if (this.mode === 'report' && lastQuestion && this.currentItem.type !== 'material' ) {
+        // 模式不为练习，不是最后一题，是解析模式，并且题型不为材料题
+        return true;
+      }
+    },
+    handleClickImage (imagesUrl) {
       if (imagesUrl === undefined) return;
       event.stopPropagation();//  阻止冒泡
       const images = [imagesUrl]
@@ -145,7 +105,7 @@ export default {
         images
       })
     },
-		refreshChoice(res) {
+    refreshChoice(res) {
       if (res) {
         this.$nextTick(() => {
           this.question[0] = res

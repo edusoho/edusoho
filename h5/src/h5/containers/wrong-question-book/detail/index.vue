@@ -11,11 +11,11 @@
       :lazy-render="true"
       :initial-swipe="currentIndex"
       @change="onChange"
-			>
+      >
       <van-swipe-item
         v-for="(question, index) in questionList"
         :key="question.id + index"
-				style="overflow-y: auto;"
+        style="overflow-y: auto;"
       >
         <question
           :total="pagination.total"
@@ -65,7 +65,7 @@
       @on-search="onSearch"
     />
 
-		<div v-if="questionList.length" class="intro-footer">
+    <div v-if="questionList.length" class="intro-footer">
       <van-button
         class="intro-footer__btn"
         type="primary"

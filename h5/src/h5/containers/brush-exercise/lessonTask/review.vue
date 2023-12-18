@@ -29,15 +29,15 @@ export default {
       answerReport: {},
       answerRecord: {},
       assessmentResponse: {},
-			exerciseModes: '',
-			status: ''
+      exerciseModes: '',
+      status: ''
     };
   },
-	beforeRouteEnter(to, from, next) {
+  beforeRouteEnter(to, from, next) {
     document.getElementById('app').style.background = '#f6f6f6';
     next();
   },
-	beforeRouteLeave(to, from, next) {
+  beforeRouteLeave(to, from, next) {
     document.getElementById('app').style.background = '';
     next();
   },
@@ -54,7 +54,7 @@ export default {
     return {
       getResourceToken: this.getResourceToken,
       settings: this.storageSetting,
-			brushDo:this
+      brushDo:this
     }
   },
   methods: {
@@ -71,8 +71,8 @@ export default {
         query,
       })
         .then(res => {
-					this.exerciseModes = res.answer_record.exercise_mode;
-					this.status = res.answer_record.status;
+          this.exerciseModes = res.answer_record.exercise_mode;
+          this.status = res.answer_record.status;
           this.assessment = res.assessment;
           this.answerScene = res.answer_scene;
           this.answerReport = res.answer_report;

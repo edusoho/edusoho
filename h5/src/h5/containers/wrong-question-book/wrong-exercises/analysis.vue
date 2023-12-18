@@ -4,7 +4,7 @@
     <template v-else>
       <div class="ibs-wap-vue">
         <item-report
-					:wrong="true"
+          :wrong="true"
           :answerRecord="answerRecord"
           :answerReport="answerReport"
           :assessment="assessment"
@@ -41,7 +41,7 @@ export default {
   created() {
     this.fetchData();
   },
-	beforeRouteEnter(to, from, next) {
+  beforeRouteEnter(to, from, next) {
     document.getElementById('app').style.background = '#f6f6f6';
     next();
   },
@@ -59,7 +59,7 @@ export default {
     return {
       getResourceToken: this.getResourceToken,
       settings: this.storageSetting,
-			brushDo: this
+      brushDo: this
     }
   },
 

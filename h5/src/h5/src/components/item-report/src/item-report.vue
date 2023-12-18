@@ -29,7 +29,7 @@
               :showAnalysis="true"
               :showReport="true"
               :current="current"
-							:wrong="wrong"
+              :wrong="wrong"
               :itemLength="items.length"
               @itemSlideNext="itemSlideNext"
               @itemSlidePrev="itemSlidePrev"
@@ -107,10 +107,10 @@ export default {
       type: Object,
       default: () => {}
     },
-		wrong: {
-			type: Boolean,
-			default: false
-		}
+    wrong: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {

@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="ibs-subject-material" v-if="currentItem.type === 'material'" >
-			<div :class="['ibs-material-stem-nowrap', isShowDownIcon ? 'ibs-material-stem' : '']">
-				<span class="ibs-material-tags">
-					{{ $t('courseLearning.material') }}
-				</span>
-				<span :id="`current${currentItem.id}`" class="ibs-material-text" v-html="currentItem.material" @click="handleClickImage($event.target.src)"></span>
-			</div>
-			<i @click="changeUpIcon" :class="['iconfont', 'icon-arrow-up', {'ibs-show-up-icon': isShowDownIcon }]"></i>
+      <div :class="['ibs-material-stem-nowrap', isShowDownIcon ? 'ibs-material-stem' : '']">
+        <span class="ibs-material-tags">
+          {{ $t('courseLearning.material') }}
+        </span>
+        <span :id="`current${currentItem.id}`" class="ibs-material-text" v-html="currentItem.material" @click="handleClickImage($event.target.src)"></span>
+      </div>
+      <i @click="changeUpIcon" :class="['iconfont', 'icon-arrow-up', {'ibs-show-up-icon': isShowDownIcon }]"></i>
       <i @click="changeDownIcon" :class="['iconfont', 'icon-arrow-down', {'ibs-show-down-icon': isShowUpIcon}]"></i>
       <attachement-preview
         v-for="item in getAttachementByType('material')"
@@ -20,11 +20,11 @@
         <span v-if="currentItem.type !== 'material'" class="ibs-tags">
           {{ subject }}
         </span>
-				<div>
-					<span v-if="currentItem.type === 'material'" class="ibs-serial-number"><span class="ibs-material-type">[{{ subject }}] </span> {{ Number(commonData.current) }}、</span>
-					<span v-else class="ibs-serial-number">{{ Number(commonData.current) }}、</span>
-					<div class="ibs-rich-text" v-html="getStem()" @click="handleClickImage($event.target.src)"/>
-				</div>
+        <div>
+          <span v-if="currentItem.type === 'material'" class="ibs-serial-number"><span class="ibs-material-type">[{{ subject }}] </span> {{ Number(commonData.current) }}、</span>
+          <span v-else class="ibs-serial-number">{{ Number(commonData.current) }}、</span>
+          <div class="ibs-rich-text" v-html="getStem()" @click="handleClickImage($event.target.src)"/>
+        </div>
       </div>
       <attachement-preview
         v-for="item in getAttachmentTypeData('stem')"
@@ -37,7 +37,7 @@
           class="ibs-answer-paper"
           @change="changeAnswer"
           :disabled="!disabledData"
-					:refreshKey="refreshKey"
+          :refreshKey="refreshKey"
         >
           <van-radio
             v-for="(item, index) in itemData.question.response_points"
@@ -69,11 +69,11 @@
           </div>
         </div>
         <div v-if="$route.query.type == 'assessment'" class="ibs-analysis-color mb-8">
-						{{ $t('courseLearning.score') }}：{{ commonData.report ? commonData.report.score : 0.0 }}
-					</div>
-					<div v-if="$route.query.type == 'assessment'" class="ibs-analysis-color mb-8">
-						{{ $t('courseLearning.comment') }}：{{ commonData.report ? commonData.report.comment === '' ? '--' : commonData.report.comment : '' }}
-					</div>
+            {{ $t('courseLearning.score') }}：{{ commonData.report ? commonData.report.score : 0.0 }}
+          </div>
+          <div v-if="$route.query.type == 'assessment'" class="ibs-analysis-color mb-8">
+            {{ $t('courseLearning.comment') }}：{{ commonData.report ? commonData.report.comment === '' ? '--' : commonData.report.comment : '' }}
+          </div>
         <div class="ibs-analysis-color">
           <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
           <span v-if="commonData.analysis" v-html="commonData.analysis" @click="handleClickImage($event.target.src)"/>
@@ -85,7 +85,7 @@
           :key="item.id" />
       </div>
     </div>
-		<div v-if="isShowFooterShadow()" class="ibs-footer-shadow">
+    <div v-if="isShowFooterShadow()" class="ibs-footer-shadow">
     </div>
     <div v-if="!disabledData && currentItem.type === 'material'" class="ibs-subject-footer">
       <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
@@ -96,7 +96,7 @@
         :attachment="item"
         :key="item.id" />
     </div>
-		<div v-if="isAnswerFinished == 1" class="ibs-submit-footer" :style="{width:width+ 'px'}">
+    <div v-if="isAnswerFinished == 1" class="ibs-submit-footer" :style="{width:width+ 'px'}">
       <van-button
         class="ibs-submit-footer-btn"
         :style="{width:width - 20 + 'px'}"
@@ -114,15 +114,18 @@ import answerMode from "@/src/utils/filterAnswerMode";
 import itemBankMixins from "@/src/mixins/itemBankMixins.js"
 import attachementPreview from "./attachement-preview.vue";
 
+const WINDOWWIDTH = document.documentElement.clientWidth
+
 export default {
   name: "judge",
   mixins: [questionMixins, reportAnswer, itemBankMixins],
   data() {
     return {
+      width: WINDOWWIDTH,
       answer: this.itemData.userAnwer,
-			isShowDownIcon: null,
+      isShowDownIcon: null,
       isShowUpIcon: false,
-			question: [],
+      question: [],
       refreshKey: true,
     };
   },
@@ -135,20 +138,20 @@ export default {
       return `${answerMode(this.commonData.questionsType)}`;
     }
   },
-	mounted() {
+  mounted() {
     this.isShowDownIcon = document.getElementById(`current${this.currentItem.id}`)?.childNodes[0].offsetWidth > 234
-	},
+  },
   methods: {
     changeAnswer(e) {
       if (this.itemData.mode !== "do") {
         return;
       }
-			const data = {
-				item_id: this.commonData.item_id,
-				question_id: this.commonData.questionId,
-				type: 'judge',
-				seq: Number(this.commonData.current)
-			}
+      const data = {
+        item_id: this.commonData.item_id,
+        question_id: this.commonData.questionId,
+        type: 'judge',
+        seq: Number(this.commonData.current)
+      }
       this.$emit("changeAnswer", e, this.itemData.keys, data);
     },
     getIcons(types) {
@@ -161,8 +164,8 @@ export default {
     },
     RadioWrong(radioItem) {
       if (!this.wrong) {
-				if(this.disabledData) return false;
-			}
+        if(this.disabledData) return false;
+      }
 
       // 选择项等于当前项，并且选择项不等于正确答案
       if(this.answer[0] === radioItem && this.answer[0] !== this.commonData.answer[0]){
@@ -171,8 +174,8 @@ export default {
     },
     RadioRight(radioItem) {
       if (!this.wrong) {
-				if(this.disabledData) return false;
-			}
+        if(this.disabledData) return false;
+      }
       
       // 未填写答案显示正确答案 || 选中错误，正确答案显示
       if(this.answer.length === 0 && this.commonData.answer[0] === radioItem || radioItem === this.commonData.answer[0]) {
@@ -190,14 +193,14 @@ export default {
     getAttachementByType(type) {
       return this.currentItem.attachments.filter(item => item.module === type);
     },
-		goBrushResult() {
+    goBrushResult() {
       if(this.brushDo.type === "wrongQuestionBook") {
-				this.brushDo.goResult()
-			} else {
-				this.$emit('goBrushResult')
-			}
+        this.brushDo.goResult()
+      } else {
+        this.$emit('goBrushResult')
+      }
     },
-		changeUpIcon() {
+    changeUpIcon() {
       this.isShowUpIcon = true
       this.isShowDownIcon = false
     },
@@ -209,7 +212,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-	.icon-arrow-up {
+  .icon-arrow-up {
     display: none;
     position: absolute;
     top: vw(26);
@@ -225,7 +228,7 @@ export default {
     margin-top: vw(-12);
     color: #D2D3D4;
   }
-	.ibs-show-down-icon {
+  .ibs-show-down-icon {
     display: block;
     cursor: pointer;
   }

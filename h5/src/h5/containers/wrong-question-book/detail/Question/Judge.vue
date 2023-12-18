@@ -5,12 +5,12 @@
       :key="index"
       :name="answer.radio.val"
       :class="['question-option',
-				{'van-checkbox__right': RadioRight(answer.radio.val)},
-      	{'van-checkbox__wrong': RadioWrong(answer.radio.val)},
-			]"
+        {'van-checkbox__right': RadioRight(answer.radio.val)},
+        {'van-checkbox__wrong': RadioWrong(answer.radio.val)},
+      ]"
     >
-			<i class="iconfont icon-zhengque1"></i>
-			<i class="iconfont icon-cuowu2"></i>
+      <i class="iconfont icon-zhengque1"></i>
+      <i class="iconfont icon-cuowu2"></i>
       <div class="question-option__content">
         {{ answer.radio.val === 'T' ? $t('wrongQuestion.right2') : $t('wrongQuestion.wrong2') }}
       </div>
@@ -44,7 +44,7 @@ export default {
   methods: {
     RadioWrong(radioItem) {
       const answer = this.question.questions[0].answer
-			const response = this.question.questions[0].report.response
+      const response = this.question.questions[0].report.response
 
       // 选择项等于当前项，并且选择项不等于正确答案
       if(response[0] === radioItem && response[0] !== answer[0]){
@@ -53,7 +53,7 @@ export default {
     },
     RadioRight(radioItem) {
       const answer = this.question.questions[0].answer
-			const response = this.question.questions[0].report.response
+      const response = this.question.questions[0].report.response
       
       // 未填写答案显示正确答案 || 选中错误，正确答案显示
       if(response.length === 0 && answer[0] === radioItem || radioItem === answer[0]) {

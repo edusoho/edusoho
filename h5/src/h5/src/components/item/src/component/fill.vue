@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="ibs-subject-material" v-if="currentItem.type === 'material'" >
-			<div :class="['ibs-material-stem-nowrap', isShowDownIcon ? 'ibs-material-stem' : '']">
-				<span class="ibs-material-tags">
-					{{ $t('courseLearning.material') }}
-				</span>
-				<span :id="`current${currentItem.id}`" class="ibs-material-text" v-html="currentItem.material" @click="handleClickImage($event.target.src)"></span>
-			</div>
-			<i @click="changeUpIcon" :class="['iconfont', 'icon-arrow-up', {'ibs-show-up-icon': isShowDownIcon }]"></i>
+      <div :class="['ibs-material-stem-nowrap', isShowDownIcon ? 'ibs-material-stem' : '']">
+        <span class="ibs-material-tags">
+          {{ $t('courseLearning.material') }}
+        </span>
+        <span :id="`current${currentItem.id}`" class="ibs-material-text" v-html="currentItem.material" @click="handleClickImage($event.target.src)"></span>
+      </div>
+      <i @click="changeUpIcon" :class="['iconfont', 'icon-arrow-up', {'ibs-show-up-icon': isShowDownIcon }]"></i>
       <i @click="changeDownIcon" :class="['iconfont', 'icon-arrow-down', {'ibs-show-down-icon': isShowUpIcon}]"></i>
       <attachement-preview
         v-for="item in getAttachementByType('material')"
@@ -20,11 +20,11 @@
         <span v-if="currentItem.type !== 'material'" class="ibs-tags">
           {{ subject }}
         </span>
-				<div>
-					<span v-if="currentItem.type === 'material'" class="ibs-serial-number"><span class="ibs-material-type">[{{ subject }}] </span> {{ Number(commonData.current) }}、</span>
-					<span v-else class="ibs-serial-number">{{ Number(commonData.current) }}、</span>
-					<div class="ibs-rich-text" v-html="getStem()" @click="handleClickImage($event.target.src)"/>
-				</div>
+        <div>
+          <span v-if="currentItem.type === 'material'" class="ibs-serial-number"><span class="ibs-material-type">[{{ subject }}] </span> {{ Number(commonData.current) }}、</span>
+          <span v-else class="ibs-serial-number">{{ Number(commonData.current) }}、</span>
+          <div class="ibs-rich-text" v-html="getStem()" @click="handleClickImage($event.target.src)"/>
+        </div>
       </div>
       <attachement-preview
         v-for="item in getAttachmentTypeData('stem')"
@@ -63,11 +63,11 @@
             <span v-for="(i, index) in commonData.answer" :key="index" class="ibs-is-right-answer"> {{  commonData.answer.length - 1 === index ? i : i + ';' }}</span>
           </div>
           <div v-if="$route.query.type == 'assessment'" class="ibs-analysis-color mb-8">
-						{{ $t('courseLearning.score') }}：<div>{{ commonData.report ? commonData.report.score : 0.0 }}</div>
-					</div>
-					<div v-if="$route.query.type == 'assessment'" class="ibs-analysis-color mb-8">
-						{{ $t('courseLearning.comment') }}：<div>{{ commonData.report ? commonData.report.comment === '' ? '--' : commonData.report.comment : '' }}</div>
-					</div>
+            {{ $t('courseLearning.score') }}：<div>{{ commonData.report ? commonData.report.score : 0.0 }}</div>
+          </div>
+          <div v-if="$route.query.type == 'assessment'" class="ibs-analysis-color mb-8">
+            {{ $t('courseLearning.comment') }}：<div>{{ commonData.report ? commonData.report.comment === '' ? '--' : commonData.report.comment : '' }}</div>
+          </div>
           <div class="ibs-analysis-color">
             {{ $t('courseLearning.analyze') }}：
             <span v-if="commonData.analysis" v-html="commonData.analysis" @click="handleClickImage($event.target.src)"/>
@@ -79,7 +79,7 @@
             :key="item.id" />
         </div>
     </div>
-		<div v-if="isShowFooterShadow()" class="ibs-footer-shadow">
+    <div v-if="isShowFooterShadow()" class="ibs-footer-shadow">
     </div>
     <div v-if="!disabledData && currentItem.type === 'material'" class="ibs-subject-footer">
       {{ $t('courseLearning.analyze') }}：
@@ -90,24 +90,24 @@
         :attachment="item"
         :key="item.id" />
     </div>
-		<div v-if="disabledData && brushDo.exerciseModes === '1'" class="ibs-submit-footer" :style="{width:width+ 'px'}">
-			<van-button
-				class="ibs-submit-footer-btn"
-				:style="{width:width - 20 + 'px'}"
-				type="primary"
-				@click="submitTopic"
-				>{{ $t('courseLearning.submitATopic') }}</van-button
-			>
-		</div>
-		<div v-if="isAnswerFinished == 1" class="ibs-submit-footer" :style="{width:width+ 'px'}">
-			<van-button
-				class="ibs-submit-footer-btn"
-				:style="{width:width - 20 + 'px'}"
-				type="primary"
-				@click="goBrushResult()"
-				>{{ $t('courseLearning.viewResult2') }}</van-button
-			>
-		</div>
+    <div v-if="disabledData && brushDo.exerciseModes === '1'" class="ibs-submit-footer" :style="{width:width+ 'px'}">
+      <van-button
+        class="ibs-submit-footer-btn"
+        :style="{width:width - 20 + 'px'}"
+        type="primary"
+        @click="submitTopic"
+        >{{ $t('courseLearning.submitATopic') }}</van-button
+      >
+    </div>
+    <div v-if="isAnswerFinished == 1" class="ibs-submit-footer" :style="{width:width+ 'px'}">
+      <van-button
+        class="ibs-submit-footer-btn"
+        :style="{width:width - 20 + 'px'}"
+        type="primary"
+        @click="goBrushResult()"
+        >{{ $t('courseLearning.viewResult2') }}</van-button
+      >
+    </div>
   </div>
 </template>
 <script>
@@ -128,11 +128,11 @@ export default {
       answer: this.itemData.userAnwer,
       rigth: 'static/images/exercise/rigth.png',
       wrongImg: 'static/images/exercise/wrong.png',
-			isShowDownIcon: null,
+      isShowDownIcon: null,
       isShowUpIcon: false,
-			question: [],
+      question: [],
       refreshKey: true,
-			status: ''
+      status: ''
     };
   },
   components: {
@@ -153,23 +153,23 @@ export default {
       return `${answerMode(this.commonData.questionsType)}`;
     }
   },
-	watch: {
-		questionStatus: {
-			handler(newVal, oldVal) {
-				if (newVal.length > 0) {
-					this.status = newVal
-				}
-			}
+  watch: {
+    questionStatus: {
+      handler(newVal, oldVal) {
+        if (newVal.length > 0) {
+          this.status = newVal
+        }
+      }
     }
-	},
-	mounted() {
-		const questionStatus = this.fillStatus.filter(item => item.question_id + '' === this.commonData.questionId)
-		if (questionStatus.length > 0) {
-			this.status = questionStatus[0].status
-		}
-	
+  },
+  mounted() {
+    const questionStatus = this.fillStatus.filter(item => item.question_id + '' === this.commonData.questionId)
+    if (questionStatus.length > 0) {
+      this.status = questionStatus[0].status
+    }
+  
     this.isShowDownIcon = document.getElementById(`current${this.currentItem.id}`)?.childNodes[0].offsetWidth > 234
-	},
+  },
   methods: {
     filterFillHtml(text) {
       const reg = /\[\[\]\]/g;
@@ -190,15 +190,15 @@ export default {
     getAttachementByType(type) {
       return this.currentItem.attachments.filter(item => item.module === type);
     },
-		submitTopic() {
-			const thereNoAnswer = this.answer.some(item => {
+    submitTopic() {
+      const thereNoAnswer = this.answer.some(item => {
         return item === '' 
       })
-			const data = {
-				item_id: this.commonData.item_id,
-				question_id: this.commonData.questionId,
-				seq: Number(this.commonData.current)
-			}
+      const data = {
+        item_id: this.commonData.item_id,
+        question_id: this.commonData.questionId,
+        seq: Number(this.commonData.current)
+      }
       if (thereNoAnswer) {
         Dialog.confirm({
           message: this.$t('courseLearning.questionNotAnswer'),
@@ -213,20 +213,19 @@ export default {
           this.$emit('changeTouch')
         });
       } 
-			else {
+      else {
         this.$emit('changeTouch')
-        // this.radioDisabled = true
         this.$emit('submitSingleAnswer', this.answer, data, 'fill');
       }
     },
-		goBrushResult() {
+    goBrushResult() {
       if(this.brushDo.type === "wrongQuestionBook") {
-				this.brushDo.goResult()
-			} else {
-				this.$emit('goBrushResult')
-			}
+        this.brushDo.goResult()
+      } else {
+        this.$emit('goBrushResult')
+      }
     },
-		changeUpIcon() {
+    changeUpIcon() {
       this.isShowUpIcon = true
       this.isShowDownIcon = false
     },
@@ -243,7 +242,7 @@ export default {
     font-size: vw(14);
   }
 
-	.icon-arrow-up {
+  .icon-arrow-up {
     display: none;
     position: absolute;
     top: vw(26);
@@ -259,7 +258,7 @@ export default {
     margin-top: vw(-12);
     color: #D2D3D4;
   }
-	.ibs-show-down-icon {
+  .ibs-show-down-icon {
     display: block;
     cursor: pointer;
   }

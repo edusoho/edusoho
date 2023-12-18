@@ -48,10 +48,10 @@ export default {
       type: Boolean,
       default: true
     },
-		reviewedCount: {
-			type: Number,
-			default: 0
-		}
+    reviewedCount: {
+      type: Number,
+      default: 0
+    }
   },
   inject: ['brushDo','itemEngine'],
   computed: {

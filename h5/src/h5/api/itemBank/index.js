@@ -42,11 +42,11 @@ export default [
     disableLoading: true,
     method: 'POST',
   },
-	{
-		// 单题提交
-		name: 'singleQuestionSubmission',
-		url: '/answer_record/{id}/review_single_answer',
-		disableLoading: true,
+  {
+    // 单题提交
+    name: 'singleQuestionSubmission',
+    url: '/answer_record/{id}/review_single_answer',
+    disableLoading: true,
     method: 'POST',
-	}
+  }
 ];

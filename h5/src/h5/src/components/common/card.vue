@@ -49,7 +49,7 @@
       @click="endAnswer"
       >{{ $t('courseLearning.endAnswer') }}</van-button
     >
-		<van-button
+    <van-button
       v-if="reviewedCount === all && brushDo.status === 'doing'"
       class="end-answer__btn"
       type="primary"
@@ -103,11 +103,11 @@ export default {
       type: Object,
       default: () => {}
     },
-		reviewedCount: {
-			type: Number,	
-			default: 0
-		},
-		all: {
+    reviewedCount: {
+      type: Number,	
+      default: 0
+    },
+    all: {
       //题目总数
       type: Number,
       default: 0
@@ -246,39 +246,38 @@ export default {
             id: this.brushDo.recordId
           }
         }).then(() =>{
-					if (this.brushDo.type === "wrongQuestionBook") {
-						this.brushDo.goResult()
-					} else {
-						this.goResult()
-					}
+          if (this.brushDo.type === "wrongQuestionBook") {
+            this.brushDo.goResult()
+          } else {
+            this.goResult()
+          }
         }).catch(err =>{
           Toast.fail(err.message)
           })
         })
-      .catch((err) => {
-				Toast.fail(err.message)
+      .catch(() => {
       });
     },
-		goResult() {
-			if (this.brushDo.type === "wrongQuestionBook") {
-				this.brushDo.goResult()
-			} else {
-				this.isLeave = true;
-				const query = {
-					type: 'chapter',
-					title: this.$route.query.title,
-					exerciseId: this.$route.query.exerciseId,
-					categoryId: this.$route.query.categoryId,
-					moduleId: this.$route.query.moduleId,
-					isLeave: this.isLeave,
-				};
-				const answerRecordId = this.assessmentResponse.answer_record_id;
-				this.$router.replace({
-					path: `/brushResult/${answerRecordId}`,
-					query,
-				});
-			}
-		},
+    goResult() {
+      if (this.brushDo.type === "wrongQuestionBook") {
+        this.brushDo.goResult()
+      } else {
+        this.isLeave = true;
+        const query = {
+          type: 'chapter',
+          title: this.$route.query.title,
+          exerciseId: this.$route.query.exerciseId,
+          categoryId: this.$route.query.categoryId,
+          moduleId: this.$route.query.moduleId,
+          isLeave: this.isLeave,
+        };
+        const answerRecordId = this.assessmentResponse.answer_record_id;
+        this.$router.replace({
+          path: `/brushResult/${answerRecordId}`,
+          query,
+        });
+      }
+    },
 
   }
 };

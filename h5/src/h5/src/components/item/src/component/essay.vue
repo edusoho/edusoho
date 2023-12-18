@@ -59,12 +59,6 @@
           <div v-if="!disabledData" class="ibs-answer-paper">
             <div class="ibs-your-answer">{{ $t('courseLearning.yourAreAnswer') }}：</div>
             <div>
-              <!-- <div>
-                <span class="is-right-answer" v-if="(exerciseMode == '' &&  question.length > 0 && question[0].status === 'right') || (itemdata.testResult.status === 'right' && itemdata.testResult.status !== 'none')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
-                <span class="is-wrong-answer" v-else-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'partRight')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
-                <span v-if="itemdata.testResult.status === 'none'" class="your-answer" style="color: #37393D;" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
-                <span v-if="answer[0] === '' || itemdata.testResult.answer && itemdata.testResult.answer.length === 0" class="your-answer is-wrong-answer"> {{ $t('courseLearning.unanswered') }}</span>
-              </div> -->
               <div>
                 <img v-if="status === 'right' || commonData.report.status === 'right'" :src="rigth" alt="" class="ibs-fill-status">
                 <img v-if="status === 'wrong' || commonData.report.status === 'wrong' || commonData.report.status === 'no_answer'" :src="wrongImg" alt="" class="ibs-fill-status">
@@ -274,12 +268,7 @@ export default {
       const arr = this.exerciseInfo.filter(item => item.questionId + '' === this.itemData.question.id)
       if (arr.length > 0) {
         this.status = arr[0].status
-        // const reviewQuestioned = this.reviewedQuestion.filter(item => item.questionId + '' === this.itemData.question.id)
-        // if (reviewQuestioned.length === 0 && this.reviewedQuestion.length !== 0) {
-          this.reviewDisabled = true
-        //   return
-        // }
-        // this.reviewDisabled = true
+        this.reviewDisabled = true
       }
     },
     changeAnswer(data) {
@@ -346,7 +335,6 @@ export default {
       } 
       else {
         this.$emit('changeTouch')
-        // this.radioDisabled = true
         this.$emit('submitSingleAnswer', currentAnswer, data);
       }
     },
@@ -398,9 +386,9 @@ export default {
           status: res.status,
           questionId: res.questionId
         }
-				if (res.status === 'right') {
-					this.$emit('nextSkipQuestion')
-				}
+        if (res.status === 'right') {
+          this.$emit('nextSkipQuestion')
+        }
         this.$emit("updataIsAnswerFinished", res.isAnswerFinished, true, data, res.questionId)
       }).catch((err)=>{
         Toast.fail(err.message)

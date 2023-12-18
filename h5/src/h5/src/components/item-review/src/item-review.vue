@@ -22,7 +22,7 @@
               :mode="mode"
               :itemUserAnswer="getUserAnwer(item.sectionIndex, item.itemIndex)"
               :needScore="needScore"
-							:question_reports="question_reports"
+              :question_reports="question_reports"
               :all="Number(assessment.question_count)"
               :keys="[item.sectionIndex, item.itemIndex]"
               :itemUserReport="getUserReport(item.sectionIndex, item.itemIndex)"
@@ -34,7 +34,7 @@
               :itemLength="items.length"
               @itemSlideNext="itemSlideNext"
               @itemSlidePrev="itemSlidePrev"
-							@changeStatus="changeStatus"
+              @changeStatus="changeStatus"
             />
           </swiper-slide>
         </template>

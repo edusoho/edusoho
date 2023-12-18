@@ -77,7 +77,7 @@ export default {
       answerReport: {},
       answerRecord: {},
       height: 0,
-			exerciseModes: ''
+      exerciseModes: ''
     };
   },
   computed: {
@@ -114,7 +114,7 @@ export default {
         query,
       })
         .then(res => {
-					this.exerciseModes = res.answer_record.exercise_mode
+          this.exerciseModes = res.answer_record.exercise_mode
           this.assessment = res.assessment;
           this.answerScene = res.answer_scene;
           this.answerReport = res.answer_report;

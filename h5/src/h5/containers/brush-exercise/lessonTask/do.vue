@@ -8,7 +8,8 @@
         :assessmentResponse="assessmentResponse"
         :assessment="assessment"
         :answerScene="answerScene"
-				:exerciseId="exerciseId"
+        :exerciseId="exerciseId"
+        :exerciseInfo="exerciseInfo"
         @saveAnswerData="saveAnswerData"
         @getAnswerData="getAnswerData"
         @timeSaveAnswerData="timeSaveAnswerData"
@@ -52,8 +53,8 @@ export default {
       reviewedCount: 0,
       recordId: '',
       backUrl: '',
-			type: 'lessonTask',
-			exerciseInfo: []
+      type: 'lessonTask',
+      exerciseInfo: []
     };
   },
   computed: {
@@ -64,12 +65,12 @@ export default {
   watch: {},
   created() {
     const mode = this.$route.query.mode;
-		
-		if (mode === 'start' && !localStorage.getItem('exerciseId_'+this.$route.query.exerciseId)) {
-			this.getStart()
-		} else {
-			this.getContinue()
-		}
+    
+    if (mode === 'start' && !localStorage.getItem('exerciseId_'+this.$route.query.exerciseId)) {
+      this.getStart()
+    } else {
+      this.getContinue()
+    }
   },
   provide() {
     return {
@@ -79,8 +80,12 @@ export default {
     }
   },
   mounted() {
-		this.exerciseId = this.$route.query.exerciseId
-	},
+    this.exerciseId = this.$route.query.exerciseId
+  },
+  beforeRouteEnter(to, from, next) {
+    document.getElementById('app').style.background = '#f6f6f6';
+    next();
+  },
   beforeRouteLeave(to, from, next) {
     document.getElementById('app').style.background = '';
     if (this.canLeave || to.query.isLeave) {
@@ -101,7 +106,7 @@ export default {
           this.status = res.answer_record.status;
           this.assignData(res);
           this.isLoading = false;
-					this.exerciseInfo = res.submittedQuestions
+          this.exerciseInfo = res.submittedQuestions
         })
         .catch(err => {
           this.handleError(err);
@@ -129,7 +134,7 @@ export default {
           this.status = res.answer_record.status;
           this.isLoading = false;
           this.assignData(res);
-					localStorage.setItem('exerciseId_'+this.$route.query.exerciseId,res.answer_record.id)
+          localStorage.setItem('exerciseId_'+this.$route.query.exerciseId,res.answer_record.id)
         })
         .catch(err => {
           this.handleError(err);
@@ -243,8 +248,8 @@ export default {
       this.$router.replace(`/my/courses/learning?active=2`)
     }
   },
-	destroyed(){
-		localStorage.removeItem('exerciseId_'+this.$route.query.exerciseId)
-	},
+  destroyed(){
+    localStorage.removeItem('exerciseId_'+this.$route.query.exerciseId)
+  },
 };
 </script>
