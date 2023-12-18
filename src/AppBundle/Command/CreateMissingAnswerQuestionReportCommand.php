@@ -46,7 +46,7 @@ class CreateMissingAnswerQuestionReportCommand extends BaseCommand
                 $newAnswerQuestionReport['item_id'] = $item['id'];
                 foreach ($item['questions'] as $question) {
                     $newAnswerQuestionReport['question_id'] = $question['id'];
-                    $newAnswerQuestionReport['identify'] = $answerRecord['id'] . '_' . $question['id'];
+                    $newAnswerQuestionReport['identify'] = $answerRecord['id'].'_'.$question['id'];
                     $answerQuestionReports[] = $newAnswerQuestionReport;
                 }
             }
