@@ -45,7 +45,7 @@
       </div>
       <div class="duplicate-content">
         <div class="duplicate-content-title">{{ 'question.bank.topic.comparison'|trans }}</div>
-        <div v-if="questionContentList.length>1" class="mt16 flex flex-nowrap">
+        <div v-if="questionContentList.length>1" class="mt16 flex flex-nowrap" style="flex: 1;">
           <duplicate-question-content
             v-if="questionContentList[oneIndex]"
             @changeOption="changeOption"
@@ -234,7 +234,7 @@ export default {
         if(!this.questionData.length) {
           return 
         }
-        
+
         const res = await Repeat.getRepeatQuestionInfo(
           $("[name=questionBankId]").val(),
           {

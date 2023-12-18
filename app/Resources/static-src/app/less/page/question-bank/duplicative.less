@@ -53,10 +53,11 @@
 
 #duplicate-check {
     height: 100%;
-
-    
+    display: flex;
+    flex-direction: column;
 
     .duplicate-head {
+        height: 58px;
         padding: 16px 20px;
         border-bottom: 1px solid #F2F3F5;
         line-height: 24px;
@@ -96,10 +97,10 @@
 
     .duplicate-body {
         background-color: #fff;
-        max-height: calc(100% - 57px);
-        height: calc(100% - 57px);
         display: flex;
         align-items: stretch;
+        height: calc(100vh - 58px);
+        overflow: scroll;
 
         .duplicate-question {
             width: 300px;
@@ -110,8 +111,10 @@
         }
 
         .duplicate-content {
-            width: calc(100% - 304px);
-            max-height: calc(100% - 57px);
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-height: 100%;
             overflow: scroll;
             padding: 20px;
         }
@@ -182,14 +185,18 @@
         line-height: 22px;
     }
 
+    .h-full {
+        height: 100%;
+    }
+
     .duplicate-question-content {
-        display: inline-block;
-        vertical-align: top;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
         width: 49%;
         padding: 12px;
         border-radius: 6px;
         border: 1px solid #E5E6EB;
-        position: relative;
     }
 
     .numbering {
@@ -223,7 +230,7 @@
     }
 
     .question-content {
-        min-height: 570px;
+        height: 100%;
         border: 1px solid #DCDEE0;
         border-radius: 6px;
         position: relative;
@@ -257,7 +264,8 @@
     }
 
     .question-body {
-        padding: 16px 0;
+        min-height: 548px;
+        padding-bottom: 16px;
         font-size: 14px;
         font-weight: 400;
         line-height: 22px;
@@ -268,7 +276,7 @@
         width: 7%;
         position: absolute;
         left: 16px;
-        top: 48px;
+        top: 32px;
         text-align: right;
         z-index: 1;
         background-color: #fff;
