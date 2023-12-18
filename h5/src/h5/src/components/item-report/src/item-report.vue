@@ -29,6 +29,7 @@
               :showAnalysis="true"
               :showReport="true"
               :current="current"
+              :wrong="wrong"
               :itemLength="items.length"
               @itemSlideNext="itemSlideNext"
               @itemSlidePrev="itemSlidePrev"
@@ -75,6 +76,12 @@ export default {
     card,
     ibsFooter
   },
+  provide() {
+    return {
+      itemEngine:this
+    }
+  },
+  inject: ["brushDo"],
   props: {
     mode: {
       type: String,
@@ -99,6 +106,10 @@ export default {
     assessmentResponse: {
       type: Object,
       default: () => {}
+    },
+    wrong: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

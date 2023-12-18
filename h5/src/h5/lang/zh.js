@@ -224,6 +224,9 @@ export default {
     longPressToSaveThePicture: '长按图片保存',
   },
   wrongQuestion: {
+    completeReview: '完成批阅',
+    questionNotReviewed: '当前题目未批阅',
+    topicList: '题目列表',
     title: '我的错题本',
     fromCourse: '课程错题',
     fromClass: '班级错题',
@@ -412,6 +415,9 @@ export default {
     closed_content: '无法继续查看'
   },
   courseLearning: {
+    selfJudging: '答题自判',
+    haveMastered: '已掌握',
+    notQuiteUnderstand: '不太懂',
     yourAreAnswer: '你的回答',
     analyze: '解析',
     selectedAnswer: '已选答案',

@@ -1,6 +1,6 @@
 <template>
   <!-- 答题卡 -->
-  <van-popup v-model="cardShow" position="bottom">
+  <van-popup class="ibs-popup-card" v-model="cardShow" position="bottom" :style="{ height: '100%' }">
     <div class="ibs-card">
       <div class="ibs-card-title">
         <div>
@@ -42,14 +42,32 @@
         </div>
       </div>
     </div>
+    <van-button
+      v-if="(brushDo.exerciseModes === '1' && brushDo.status === 'doing') && reviewedCount != all"
+      class="end-answer__btn"
+      type="primary"
+      @click="endAnswer"
+      >{{ $t('courseLearning.endAnswer') }}</van-button
+    >
+    <van-button
+      v-if="reviewedCount === all && brushDo.status === 'doing'"
+      class="end-answer__btn"
+      type="primary"
+      @click="goResult"
+      >{{ $t('courseLearning.viewResult2') }}</van-button
+    >
   </van-popup>
 </template>
 <script>
+import Api from '@/api';
 import { do_card, report_card, review_card } from "@/src/utils/cradConfig.js";
+import { Dialog, Toast } from 'vant';
 export default {
   name: "ibs-card",
   data() {
-    return {};
+    return {
+      isLeave: false,
+    };
   },
   props: {
     mode: {
@@ -80,12 +98,26 @@ export default {
       type: Boolean,
       default: false
     },
-    value: Boolean
+    value: Boolean,
+    assessmentResponse: {
+      type: Object,
+      default: () => {}
+    },
+    reviewedCount: {
+      type: Number,	
+      default: 0
+    },
+    all: {
+      //题目总数
+      type: Number,
+      default: 0
+    },
   },
   model: {
     prop: "value",
     event: "update"
   },
+  inject: ['brushDo'],
   computed: {
     cardShow: {
       get: function() {
@@ -199,7 +231,54 @@ export default {
         return section.richTextNum && section.richTextNum > 0;
       }
       return true;
-    }
+    },
+    // 结束答题
+    endAnswer() {
+      Dialog.confirm({
+        title: `是否结束本次答题`,
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        className: 'backDialog'
+      })
+      .then(() => {
+        Api.finishAnswer({
+          query: {
+            id: this.brushDo.recordId
+          }
+        }).then(() =>{
+          if (this.brushDo.type === "wrongQuestionBook") {
+            this.brushDo.goResult()
+          } else {
+            this.goResult()
+          }
+        }).catch(err =>{
+          Toast.fail(err.message)
+          })
+        })
+      .catch(() => {
+      });
+    },
+    goResult() {
+      if (this.brushDo.type === "wrongQuestionBook") {
+        this.brushDo.goResult()
+      } else {
+        this.isLeave = true;
+        const query = {
+          type: 'chapter',
+          title: this.$route.query.title,
+          exerciseId: this.$route.query.exerciseId,
+          categoryId: this.$route.query.categoryId,
+          moduleId: this.$route.query.moduleId,
+          isLeave: this.isLeave,
+        };
+        const answerRecordId = this.assessmentResponse.answer_record_id;
+        this.$router.replace({
+          path: `/brushResult/${answerRecordId}`,
+          query,
+        });
+      }
+    },
+
   }
 };
 </script>

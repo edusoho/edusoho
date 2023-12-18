@@ -1,6 +1,6 @@
 <template>
-  <div style="margin: 8px 16px 0;">
-    <div v-if="disableVideo && isMedia" class="attachment-preview">
+  <div style="margin: 12px 0 0;">
+    <div v-if="disableVideo && isMedia" class="ibs-attachment-preview">
       <img :src="disableVideoIcon" style="width: 24px;margin-right: 8px;" />
       <div class="text-overflow text-12" style="flex: 1;color: #999;">
         <template v-if="settings.securityVideoPlayer && !this.isWechat()">
@@ -14,9 +14,9 @@
 
     <div
       v-else-if="!isMedia || (isMedia && !isLoaded)"
-      class="attachment-preview"
+      class="ibs-attachment-preview"
     >
-      <img :src="iconSrc" class="attachment-preview__icon" />
+      <img :src="iconSrc" class="ibs-attachment-preview__icon" />
 
       <div class="text-overflow" style="flex: 1;">
         {{ this.attachment.file_name }}
@@ -28,14 +28,14 @@
             attachment.file_type !== 'audio' &&
             attachment.convert_status !== 'success'
         "
-        class="attachment-preview__status"
+        class="ibs-attachment-preview__status"
       >
         {{ resourceStatus[attachment.convert_status] }}
       </div>
 
       <div
         v-if="attachment.file_type == 'other'"
-        class="attachment-preview__status"
+        class="ibs-attachment-preview__status"
       >
         请前往PC网校下载!
       </div>
@@ -51,6 +51,7 @@
         style="margin-left: 8px;"
         @click="previewFile"
         :src="icons.preview"
+        class="review-img"
       />
     </div>
 
@@ -232,3 +233,17 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+  .ibs-attachment-preview {
+    .ibs-attachment-preview__icon {
+      margin-bottom: 0 !important;
+      width: vw(24) !important;
+      height: vw(24) !important;
+    }
+    .review-img {
+      margin-bottom: 0 !important;
+      width: vw(24) !important;
+      height: vw(24) !important;
+    }
+  }
+</style>

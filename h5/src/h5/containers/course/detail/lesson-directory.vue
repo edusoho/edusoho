@@ -423,7 +423,7 @@ export default {
             .then(res => {
               const { endTime } = res.task.activity.testpaperInfo
 							const result = res.testpaperResult
-              if ((result?.status == 'finished' || result?.status == 'reviewing') && (endTime * 1000 > Date.now() || endTime == 0) ) {
+              if ((result?.status == 'finished' || result?.status == 'reviewing') && (endTime * 1000 > Date.now() || endTime == 0 || endTime == null) ) {
                 this.$router.push({
                   name: 'testpaperResult',
                   query: {

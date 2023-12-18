@@ -1,16 +1,16 @@
 <template>
   <div class="ibs-analysis">
     <div class="analysis-result">
-      <div class="ibs-analysis-title">做题结果</div>
+      <div class="ibs-analysis-title">{{ $t('wrongQuestion.answerResult') }}</div>
       <div class="ibs-analysis-content">
         <div class="ibs-analysis-content__item  ibs-mt10 " v-if="showResult">
-          <div class="ibs-analysis-item__title">做题结果</div>
+          <div class="ibs-analysis-item__title">{{ $t('wrongQuestion.answerResult') }}</div>
           <div :class="[statusColor.className]">{{ statusColor.text }}</div>
         </div>
 
         <div v-if="answer_mode === 'text'">
           <div class="ibs-analysis-content__item  ibs-mt10">
-            <div class="ibs-analysis-item__title">正确答案</div>
+            <div class="ibs-analysis-item__title">{{ $t('wrongQuestion.correctAnswer') }}</div>
             <div
               class="ibs-analysis-item_right ibs-analysis-content__item--column"
             >
@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="ibs-analysis-content__item ">
-            <div class="ibs-analysis-item__title">你的答案</div>
+            <div class="ibs-analysis-item__title">{{ $t('wrongQuestion.yourAnswer') }}</div>
             <div class="ibs-analysis-content__item--column">
               <div v-for="(item, index) in answer" :key="index">
                 <div :class="[statusColor.className, 'fill-answer']">
@@ -41,11 +41,11 @@
 
         <div v-else>
           <div class="ibs-analysis-content__item  ibs-mt10">
-            <div class="ibs-analysis-item__title">正确答案</div>
+            <div class="ibs-analysis-item__title">{{ $t('wrongQuestion.correctAnswer') }}</div>
             <div class="ibs-analysis-item_right" v-html="formateAnswer()"></div>
           </div>
           <div class="ibs-analysis-content__item  ibs-mt10">
-            <div class="ibs-analysis-item__title">你的答案</div>
+            <div class="ibs-analysis-item__title">{{ $t('wrongQuestion.yourAnswer') }}</div>
             <div :class="[statusColor.className]" v-html="formateResponse()" />
           </div>
         </div>
@@ -103,14 +103,14 @@ export default {
       const status = this.report.status;
       switch (status) {
         case "right":
-          return { className: "ibs-analysis-item_right", text: "回答正确" };
+          return { className: "ibs-analysis-item_right", text: this.$t('wrongQuestion.correctAnswer2') };
         case "reviewing":
-          return { className: "ibs-analysis-item_none", text: "待批阅" };
+          return { className: "ibs-analysis-item_none", text: this.$t('courseLearning.toBeReviewed') };
         case "wrong":
         case "part_right":
-          return { className: "ibs-analysis-item_worng", text: "回答错误" };
+          return { className: "ibs-analysis-item_worng", text: this.$t('wrongQuestion.wrongAnswer') };
         case "no_answer":
-          return { className: "ibs-analysis-item_noAnswer", text: "未回答" };
+          return { className: "ibs-analysis-item_noAnswer", text: this.$t('wrongQuestion.unanswered') };
         default:
           return "";
       }

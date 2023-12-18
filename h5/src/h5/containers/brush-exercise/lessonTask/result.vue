@@ -4,17 +4,17 @@
     :style="{ height: height + 'px' }"
   >
     <e-loading v-if="isLoading" />
-    <div class="notify" v-if="isReadOver">
+    <div class="notify" v-if="isReadOver && exerciseModes === '0'">
       ※请参考题目解析，对主观题自行估分批阅。
     </div>
     <div class="item-bank-result_content">
-      <div v-if="isReadOver" class="exercise-report-status">
+      <div v-if="isReadOver && exerciseModes === '0'" class="exercise-report-status">
         <img src="static/images/report-review.png" />
         <p class="result-text result-status_fail mt20">正在批阅中</p>
       </div>
       <div v-show="needScore" class="result-score">
         分数：
-        <span class="result-status_fail" v-if="isReadOver">?</span>
+        <span class="result-status_fail" v-if="isReadOver && exerciseModes === '0'">?</span>
         <span v-else>{{ answerReport.score }}分</span>
       </div>
       <div class="result-content">
@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="result-footer">
-        <div v-if="isReadOver" class="result-footer__btn" @click="doReview">
+        <div v-if="isReadOver && exerciseModes === '0'" class="result-footer__btn" @click="doReview">
           开始批阅
         </div>
         <template v-else>
@@ -77,6 +77,7 @@ export default {
       answerReport: {},
       answerRecord: {},
       height: 0,
+      exerciseModes: ''
     };
   },
   computed: {
@@ -113,6 +114,7 @@ export default {
         query,
       })
         .then(res => {
+          this.exerciseModes = res.answer_record.exercise_mode
           this.assessment = res.assessment;
           this.answerScene = res.answer_scene;
           this.answerReport = res.answer_report;
@@ -177,6 +179,7 @@ export default {
     doAnalysis() {
       const query = {
         title: this.$route.query.title,
+        type: this.$route.query.type,
       };
       const answerRecordId = this.$route.params.answerRecordId;
       this.$router.push({

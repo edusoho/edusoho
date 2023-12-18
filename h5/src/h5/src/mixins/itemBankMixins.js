@@ -1,3 +1,5 @@
+import { ImagePreview } from 'vant'
+
 export default {
   computed: {
     needScore() {
@@ -65,6 +67,57 @@ export default {
         .offsetTop;
       const WINDOWHEIGHT = document.documentElement.clientHeight;
       this.height = WINDOWHEIGHT - offsetTopHeight;
-    }
+    },
+    getStem() {
+      if (this.commonData.questionsType === "text") {
+        return this.filterFillHtml(this.commonData.questionStem);
+      }
+      return this.commonData.questionStem;
+    },
+    filterFillHtml(text) {
+      const reg = /\[\[\]\]/g;
+      if (!text.match(reg)) {
+        return text;
+      }
+      let index = 1;
+      return text.replace(reg, function() {
+        return `<span class="ibs-fill-bank">(${index++}）</span>`;
+      });
+    },
+    isShowFooterShadow() {
+      // 模式不为练习 并且不是最后一题,并且为答题模式
+      const id = this.currentItem.questions[this.currentItem.questions.length - 1].id
+      const lastQuestion = this.showShadow !== id
+      if (this.mode === 'do' && lastQuestion && this.currentItem.type !== 'material' ) {
+        // 模式不为练习，不是最后一题，是解析模式，并且题型不为材料题
+        return true;
+      }
+      if (this.mode === 'report' && lastQuestion && this.currentItem.type !== 'material' ) {
+        // 模式不为练习，不是最后一题，是解析模式，并且题型不为材料题
+        return true;
+      }
+    },
+    handleClickImage (imagesUrl) {
+      if (imagesUrl === undefined) return;
+      event.stopPropagation();//  阻止冒泡
+      const images = [imagesUrl]
+      ImagePreview({
+        images
+      })
+    },
+    refreshChoice(res) {
+      if (res) {
+        this.$nextTick(() => {
+          this.question[0] = res
+          this.refreshKey = !this.refreshKey
+        })
+        return
+      }
+      const obj = this.exerciseInfo
+      this.$nextTick(() => {
+        this.question = obj.filter(item => item.questionId+'' === this.itemdata.question.id)
+        this.refreshKey = !this.refreshKey
+      })
+    },
   }
 };

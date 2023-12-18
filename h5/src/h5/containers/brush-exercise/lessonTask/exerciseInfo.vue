@@ -78,7 +78,7 @@
               <i v-show="props.checked" class="iconfont icon-check"></i>
             </template>
           </van-radio>
-          <!-- <van-radio name="1" class="choose-mode-radio" disabled>
+          <van-radio name="1" class="choose-mode-radio">
             {{ $t('courseLearning.answerOneQuestionAtTime') }}
             <template #icon="props">
               <img
@@ -87,7 +87,7 @@
               />
               <i v-show="props.checked" class="iconfont icon-check"></i>
             </template>
-          </van-radio> -->
+          </van-radio>
         </van-radio-group>
       </div>
       <van-button

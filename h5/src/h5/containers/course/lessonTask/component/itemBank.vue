@@ -461,7 +461,9 @@ export default {
 
         this.touchable = true
         if (res.status === 'right') {
-          this.next()
+          setTimeout(() => {
+            this.next()
+          }, 1000);
           this.iscando[idx] = false
         } else {
           this.iscando[idx] = false

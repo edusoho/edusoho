@@ -4,18 +4,21 @@
       v-for="(answer, index) in questions.response_points"
       :key="index"
       :name="answer.checkbox.val"
-      class="question-option"
+      :class="['question-option',
+        {'van-checkbox__right': RadioRight(answer.checkbox.val)},
+        {'van-checkbox__wrong': RadioWrong(answer.checkbox.val)},
+      ]"
     >
+      <i class="iconfont icon-zhengque1"></i>
+      <i class="iconfont icon-cuowu2"></i>
       <div class="question-option__content" v-html="answer.checkbox.text" />
       <span
         slot="icon"
         :class="[
           'question-option__order',
-          'question-option__order--square',
-          checkAnswer(answer.checkbox.val),
         ]"
       >
-        {{ answer.checkbox.val }}
+        {{ answer.checkbox.val + '.'}}
       </span>
     </van-checkbox>
   </van-checkbox-group>
@@ -39,20 +42,19 @@ export default {
   },
 
   methods: {
-    checkAnswer(value) {
-      const {
-        answer,
-        report: { response },
-      } = this.questions;
-
-      // 正确答案
-      if (_.includes(answer, value)) {
-        return 'question-option__order_right';
+    RadioWrong(radioItem) {
+      const answer = this.question.questions[0].answer
+      const response = this.question.questions[0].report.response
+      if (answer.includes(radioItem)) return false
+      if((answer.includes(radioItem)) && response.includes(radioItem) || (!answer.includes(radioItem) && response.includes(radioItem))) {
+        return true;
       }
-
-      // 用户选择的错误答案
-      if (_.includes(_.difference(response, answer), value)) {
-        return 'question-option__order_wrong';
+    },
+    RadioRight(radioItem) {
+      const answer = this.question.questions[0].answer
+      const response = this.question.questions[0].report.response
+      if(response.length === 0 && answer.includes(radioItem) || answer.includes(radioItem)) {
+        return true;
       }
     },
   },

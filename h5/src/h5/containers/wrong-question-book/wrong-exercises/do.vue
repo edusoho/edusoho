@@ -4,6 +4,7 @@
     <div v-else class="ibs-wap-vue">
       <item-engine
         ref="itemEngine"
+        :wrong="true"
         :answerRecord="answerRecord"
         :assessmentResponse="assessmentResponse"
         :assessment="assessment"
@@ -35,6 +36,11 @@ export default {
       answerScene: {},
       answerRecord: {},
       assessmentResponse: {},
+      status: '',
+      reviewedCount: 0,
+      recordId: '',
+      exerciseModes: this.$route.query.exerciseMode,
+      type: 'wrongQuestionBook',
     };
   },
 
@@ -43,11 +49,19 @@ export default {
       storageSetting: state => state.storageSetting
     }),
   },
-
+  beforeRouteEnter(to, from, next) {
+    document.getElementById('app').style.background = '#f6f6f6';
+    next();
+  },
+  beforeRouteLeave(to, from, next) {
+    document.getElementById('app').style.background = '';
+    next();
+  },
   provide() {
     return {
       getResourceToken: this.getResourceToken,
-      settings: this.storageSetting
+      settings: this.storageSetting,
+      brushDo: this
     }
   },
 
@@ -77,7 +91,9 @@ export default {
           answerScene: answer_scene,
           answerRecord: answer_record,
           assessmentResponse: assessment_response,
+          status: answer_record.status
         });
+        this.recordId = answer_record.id
         this.isLoading = false;
       });
     },

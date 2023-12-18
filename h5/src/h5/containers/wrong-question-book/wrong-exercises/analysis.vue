@@ -4,6 +4,7 @@
     <template v-else>
       <div class="ibs-wap-vue">
         <item-report
+          :wrong="true"
           :answerRecord="answerRecord"
           :answerReport="answerReport"
           :assessment="assessment"
@@ -40,7 +41,14 @@ export default {
   created() {
     this.fetchData();
   },
-
+  beforeRouteEnter(to, from, next) {
+    document.getElementById('app').style.background = '#f6f6f6';
+    next();
+  },
+  beforeRouteLeave(to, from, next) {
+    document.getElementById('app').style.background = '';
+    next();
+  },
   computed: {
     ...mapState({
       storageSetting: state => state.storageSetting
@@ -50,7 +58,8 @@ export default {
   provide() {
     return {
       getResourceToken: this.getResourceToken,
-      settings: this.storageSetting
+      settings: this.storageSetting,
+      brushDo: this
     }
   },
 
