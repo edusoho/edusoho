@@ -139,7 +139,10 @@ export default {
     }
   },
   mounted() {
-    this.isShowDownIcon = document.getElementById(`current${this.currentItem.id}`)?.childNodes[0].offsetWidth > 234
+    const stemDom = document.getElementById(`current${this.currentItem.id}`)
+    if (stemDom) {
+      this.isShowDownIcon = stemDom.childNodes[0].offsetWidth > 234
+    }
   },
   methods: {
     changeAnswer(e) {
@@ -196,7 +199,7 @@ export default {
     goBrushResult() {
       if(this.brushDo.type === "wrongQuestionBook") {
         this.brushDo.goResult()
-      } else {
+      } else if (this.brushDo.type === "lessonTask") {
         this.$emit('goBrushResult')
       }
     },

@@ -158,7 +158,10 @@ export default {
     }
   },
   mounted() {
-    this.isShowDownIcon = document.getElementById(`current${this.currentItem.id}`)?.childNodes[0].offsetWidth > 234
+    const stemDom = document.getElementById(`current${this.currentItem.id}`)
+    if (stemDom) {
+      this.isShowDownIcon = stemDom.childNodes[0].offsetWidth > 234
+    }
   },
   methods: {
     filterAnswerOrders(answer = []) {
@@ -202,8 +205,12 @@ export default {
         return false
       }
       
-      // 选择的部分答案正确 
-      if((this.commonData.answer.includes(radioItem) && !this.answer.includes(radioItem)) || (!this.commonData.answer.includes(radioItem) && this.answer.includes(radioItem))) {
+      // 正确答案包含当前选项 && 输入答案不包含当前选项
+      const isCommonDataRight = this.commonData.answer.includes(radioItem) && !this.answer.includes(radioItem)
+      // 正确答案不包含当前选项 && 输入答案包含当前选项
+      const isCommonDataNotRight = !this.commonData.answer.includes(radioItem) && this.answer.includes(radioItem)
+
+      if(isCommonDataRight || isCommonDataNotRight) {
         return true;
       }
 
@@ -224,29 +231,29 @@ export default {
         seq: Number(this.commonData.current)
       }
 
-      if (this.answer.length === 0) {
-        Dialog.confirm({
-          message: this.$t('courseLearning.questionNotAnswer'),
-          confirmButtonText: this.$t('courseLearning.continueAnswer'),
-          cancelButtonText: this.$t('btn.confirm')
-        })
-        .then(() => {
-          // on confirm
-        })
-        .catch(() => {
-          this.$emit('submitSingleAnswer', this.answer, data);
-          this.$emit('changeTouch')
-        });
-      } 
-      else {
+      if (this.answer.length !== 0) {
         this.$emit('changeTouch')
         this.$emit('submitSingleAnswer', this.answer, data);
+        return 
       }
+
+      Dialog.confirm({
+        message: this.$t('courseLearning.questionNotAnswer'),
+        confirmButtonText: this.$t('courseLearning.continueAnswer'),
+        cancelButtonText: this.$t('btn.confirm')
+      })
+      .then(() => {
+        // on confirm
+      })
+      .catch(() => {
+        this.$emit('submitSingleAnswer', this.answer, data);
+        this.$emit('changeTouch')
+      });
     },
     goBrushResult() {
       if(this.brushDo.type === "wrongQuestionBook") {
         this.brushDo.goResult()
-      } else {
+      } else if (this.brushDo.type === "lessonTask") {
         this.$emit('goBrushResult')
       }
     },

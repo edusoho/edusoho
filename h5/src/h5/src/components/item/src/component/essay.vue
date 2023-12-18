@@ -173,9 +173,9 @@ import attachementPreview from "./attachement-preview.vue";
 import Api from '@/api';
 import { Dialog, Toast } from 'vant'
 
-const WINDOWWIDTH = document.documentElement.clientWidth
-
 import { debounce } from "@/src/utils/debounce.js";
+
+const WINDOWWIDTH = document.documentElement.clientWidth
 export default {
   name: "essay",
   mixins: [questionMixins, itemBankMixins],
@@ -241,7 +241,11 @@ export default {
     this.initReviewQuestion()
     this.refreshReviewStatus()
     this.initEssayRadio()
-    this.isShowDownIcon = document.getElementById(`current${this.currentItem.id}`)?.childNodes[0].offsetWidth > 234
+    
+    const stemDom = document.getElementById(`current${this.currentItem.id}`)
+    if (stemDom) {
+      this.isShowDownIcon = stemDom.childNodes[0].offsetWidth > 234
+    }
   },
   methods: {
     // 批阅按钮变化状态保留
@@ -319,29 +323,29 @@ export default {
       }
       const currentAnswer = new Array(this.answer)
 
-      if (!this.answer) {
-        Dialog.confirm({
-          message: this.$t('courseLearning.questionNotAnswer'),
-          confirmButtonText: this.$t('courseLearning.continueAnswer'),
-          cancelButtonText: this.$t('btn.confirm')
-        })
-        .then(() => {
-          // on confirm
-        })
-        .catch(() => {
-          this.$emit('submitSingleAnswer', currentAnswer, data);
-          this.$emit('changeTouch')
-        });
-      } 
-      else {
+      if (this.answer) {
         this.$emit('changeTouch')
         this.$emit('submitSingleAnswer', currentAnswer, data);
+        return
       }
+      
+      Dialog.confirm({
+        message: this.$t('courseLearning.questionNotAnswer'),
+        confirmButtonText: this.$t('courseLearning.continueAnswer'),
+        cancelButtonText: this.$t('btn.confirm')
+      })
+      .then(() => {
+        // on confirm
+      })
+      .catch(() => {
+        this.$emit('submitSingleAnswer', currentAnswer, data);
+        this.$emit('changeTouch')
+      });
     },
     goBrushResult() {
       if(this.brushDo.type === "wrongQuestionBook") {
         this.brushDo.goResult()
-      } else {
+      } else if (this.brushDo.type === "lessonTask") {
         this.$emit('goBrushResult')
       }
     },

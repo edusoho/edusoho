@@ -168,7 +168,10 @@ export default {
       this.status = questionStatus[0].status
     }
   
-    this.isShowDownIcon = document.getElementById(`current${this.currentItem.id}`)?.childNodes[0].offsetWidth > 234
+    const stemDom = document.getElementById(`current${this.currentItem.id}`)
+    if (stemDom) {
+      this.isShowDownIcon = stemDom.childNodes[0].offsetWidth > 234
+    }
   },
   methods: {
     filterFillHtml(text) {
@@ -199,29 +202,30 @@ export default {
         question_id: this.commonData.questionId,
         seq: Number(this.commonData.current)
       }
-      if (thereNoAnswer) {
-        Dialog.confirm({
-          message: this.$t('courseLearning.questionNotAnswer'),
-          confirmButtonText: this.$t('courseLearning.continueAnswer'),
-          cancelButtonText: this.$t('btn.confirm')
-        })
-        .then(() => {
-          // on confirm
-        })
-        .catch(() => {
-          this.$emit('submitSingleAnswer', this.answer, data, 'fill');
-          this.$emit('changeTouch')
-        });
-      } 
-      else {
+      
+      if (!thereNoAnswer) {
         this.$emit('changeTouch')
         this.$emit('submitSingleAnswer', this.answer, data, 'fill');
+        return
       }
+
+      Dialog.confirm({
+        message: this.$t('courseLearning.questionNotAnswer'),
+        confirmButtonText: this.$t('courseLearning.continueAnswer'),
+        cancelButtonText: this.$t('btn.confirm')
+      })
+      .then(() => {
+        // on confirm
+      })
+      .catch(() => {
+        this.$emit('submitSingleAnswer', this.answer, data, 'fill');
+        this.$emit('changeTouch')
+      });
     },
     goBrushResult() {
       if(this.brushDo.type === "wrongQuestionBook") {
         this.brushDo.goResult()
-      } else {
+      } else if (this.brushDo.type === "lessonTask") {
         this.$emit('goBrushResult')
       }
     },
