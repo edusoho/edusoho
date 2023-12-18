@@ -135,6 +135,10 @@ export default {
   },
   watch: {
     async questionContentList() {
+      if (this.questionContentList.length == 0) {
+        return 
+      }
+
       if (this.questionContentList.length > 1) {
         return;
       }
@@ -222,7 +226,7 @@ export default {
         title: Translator.trans("question.bank.error.tip.title"),
         content: Translator.trans("question.bank.error.tip.content"),
         okText: Translator.trans("site.btn.confirm"),
-        async onOk() {
+        onOk: async() => {
             await this.getData()
             await this.changeOption()
         }
@@ -244,6 +248,7 @@ export default {
 
         if(!res.length) {
             this.showChangeOptionErr()
+            return
         }
 
         this.questionContentList = res;
