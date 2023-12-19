@@ -1507,6 +1507,11 @@ course.question_manage.manage.material: Material
 course.question_manage.manage.belong_change_tips: If this question is cited, changing the subordinate is likely to affect the practice of the class, please be cautious!
 course.question_manage.edit: Edit
 course.question_manage.import.btn: Import question
+course.question_manage.start.import: Start import
+course.question_manage.new.import.instructions: New version import instructions
+course.question_manage.guide.message: A new way of topic import, support formula, form, special character batch recognition import, improve management and operation efficiency. The new version of the topic import is divided into 【 simple version 】 and 【 complete version 】.
+course.question_manage.guide.message.tip1: 1. [Simple version] can add import mode and description on the previous word template (copy the copy on the new template and paste it on the old template), automatically identify the question type, "simple version" only supports single choice, multiple choice, fill-in, judgment, question and answer.
+course.question_manage.guide.message.tip2: 2. [Full version] Add optional multiple choice questions and material questions on the basis of the "simple version", and you need to download a new template to use.
 course.question_manage.import.modal_title: Import question
 course.question_manage.import.new_hint: Read before upload
 course.question_manage.import.drag_document_hint: Drag document to here

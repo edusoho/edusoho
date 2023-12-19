@@ -107,7 +107,7 @@ check env:
 
 7.4 For main with MySQL80:
   stage: test
-  image: dockerhub.codeages.work/codeages-proxy/codeages/ci-php74
+  image: codeages/ci-php74
   services:
     - name: mysql:8.0
       alias: mysql

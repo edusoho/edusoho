@@ -3711,6 +3711,14 @@ question_bank_manage_check_question_duplicative:
         _controller: 'AppBundle:QuestionBank/Question:checkQuestionDuplicative'
     methods:
         - POST
+question_bank_manage_check_duplicative_questions:
+    path: '/question_bank/{id}/check_duplicative_questions'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/Question:checkDuplicativeQuestions'
+question_bank_manage_update_duplicative_question:
+    path: '/question_bank/{id}/duplicative_question/{questionId}/update'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/Question:updateDuplicativeQuestion'
 question_bank_manage_question_export:
     path: '/question_bank/{id}/questions/export'
     defaults:

@@ -21,17 +21,19 @@ class MeWrongBookCertainType extends AbstractResource
         $conditions['user_id'] = $this->getCurrentUser()->getId();
         $conditions['target_type'] = $type;
         $conditions['item_num_GT'] = 0;
-        $conditions['target_ids'] = ArrayToolkit::column($this->getExerciseMemberService()->findByUserIdAndRole($this->getCurrentUser()->getId(), 'student'), 'questionBankId');
+        if ('exercise' == $type) {
+            $conditions['target_ids'] = ArrayToolkit::column($this->getExerciseMemberService()->findByUserIdAndRole($this->getCurrentUser()->getId(), 'student'), 'questionBankId');
+        }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
-        $wrongBookPools = $this->service('WrongBook:WrongQuestionService')->searchWrongBookPool(
+        $wrongBookPools = $this->getWrongQuestionService()->searchWrongBookPool(
             $conditions,
             ['created_time' => 'DESC'],
             $offset,
             $limit
         );
-        $total = $this->service('WrongBook:WrongQuestionService')->countWrongBookPool($conditions);
+        $total = $this->getWrongQuestionService()->countWrongBookPool($conditions);
 
         $relationField = 'target_id';
         if ('exercise' == $type) {

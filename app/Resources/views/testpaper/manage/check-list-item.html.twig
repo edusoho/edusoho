@@ -23,13 +23,19 @@
         </div>
         <div class="testpaper-mark-info__name">
           <span>
-              {% if 'testpaper' == type|default('') %}
-                {% if testpaper %}{{ 'course.testpaper_manage.create.name'|trans }}： <div style="display: inline-flex; width: 300px; align-items: flex-start;">
-                  {{ testpaper.name|default('') }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}</div>
-              {% elseif 'homework' == type|default('') %}
-                {% if testpaper %}{{ 'course.homework_check.create.name'|trans }}： <div style="display: inline-flex; width: 300px; align-items: flex-start;">
-                  {{ testpaper.name|default('') }}{% else %}{{ 'course.homework_check.homework_delete'|trans }}{% endif %}</div>
+            {% if 'testpaper' == type|default('') %}
+              {% if testpaper %}
+                {{ 'course.testpaper_manage.create.name'|trans }}： <div style="display: inline-flex; width: 300px; align-items: flex-start;">{{ testpaper.name|default('') }}</div>
+              {% else %}
+                {{ 'course.testpaper_check.testpaper_delete'|trans }}
               {% endif %}
+            {% elseif 'homework' == type|default('') %}
+              {% if testpaper %}
+                {{ 'course.homework_check.create.name'|trans }}： <div style="display: inline-flex; width: 300px; align-items: flex-start;">{{ testpaper.name|default('') }}</div>
+              {% else %}
+                {{ 'course.homework_check.homework_delete'|trans }}
+              {% endif %}
+            {% endif %}
           </span>
           {% if courseSets[task.fromCourseSetId] is defined and courseSets[task.fromCourseSetId].parentId|default(0) %}
             <div class="mbm mtm color-gray">
@@ -57,7 +63,7 @@
               <a class="testpaper-mark-operation__link" href="#modal" data-toggle="modal" data-url="{{ graphUrl }}" data-tooltip="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_score_distribution'|trans }}"><i class="es-icon es-icon-chart"></i></a>
             </div>
             <div class="col-xs-3 text-center mt10"><a class="testpaper-mark-operation__link" href="{{ analysisUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_question_distribution'|trans }}"><i class="es-icon es-icon-list"></i></a></div>
-            
+
             <div class="col-xs-3 text-center mt10">
               {% if targetResultInfo.reviewing|default(0) > 0 %}
                 <a class="testpaper-mark-operation__link" href="{{ checkUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-double-check"></i></a>

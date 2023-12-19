@@ -562,7 +562,7 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
         }
 
-        $duplicatedMaterials = array_column($this->getItemDao()->findDuplicatedMaterial($itemBankId, $materialHashes), 'material');
+        $duplicatedMaterials = array_column($this->getItemDao()->findMaterialByMaterialHashes($itemBankId, $materialHashes), 'material');
         $duplicatedIds = array_keys(array_intersect($materials, $duplicatedMaterials));
         foreach ($duplicatedIds as $duplicatedId) {
             $allDuplicatedIds[$duplicatedId]['remote'] = true;
@@ -571,7 +571,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $allDuplicatedIds;
     }
 
-    public function isMaterialDuplicative($itemBankId, $material, $items = [])
+    public function isMaterialDuplicative($itemBankId, $material, $items = [], $itemId = 0)
     {
         $material = $this->purifyHtml(trim($material));
         $material = preg_replace('/\[\[.*?\]\]/', '[[]]', $material);
@@ -587,12 +587,47 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
         }
 
-        $count = $this->getItemDao()->count(['bank_id' => $itemBankId, 'material_hash' => $materialHash, 'material' => $material]);
-        if ($count) {
+        $items = $this->getItemDao()->search(['bank_id' => $itemBankId, 'material_hash' => $materialHash], [], 0, PHP_INT_MAX, ['id', 'material']);
+        $items = array_filter($items, function ($item) use ($material, $itemId) {
+            return $material == $item['material'] && $item['id'] != $itemId;
+        });
+        if ($items) {
             return true;
         }
 
         return false;
+    }
+
+    public function findDuplicatedMaterials($bankId, $categoryId = 0)
+    {
+        $categoryIds = [];
+        if ('' != $categoryId) {
+            $categoryIds = $this->getItemCategoryService()->findCategoryChildrenIds($categoryId);
+            $categoryIds[] = $categoryId;
+        }
+        $duplicatedMaterialHashes = $this->getItemDao()->findDuplicatedMaterialHashes($bankId, $categoryIds);
+        if (empty($duplicatedMaterialHashes)) {
+            return [];
+        }
+
+        return $this->getItemDao()->findDuplicatedMaterials($bankId, $categoryIds, array_column($duplicatedMaterialHashes, 'material_hash'));
+    }
+
+    public function findDuplicatedMaterialItems($bankId, $categoryId, $material)
+    {
+        $material = str_replace('\n', PHP_EOL, $material);
+        $conditions = ['bank_id' => $bankId, 'material_hash' => md5($material)];
+        if ('' != $categoryId) {
+            $categoryIds = $this->getItemCategoryService()->findCategoryChildrenIds($categoryId);
+            $categoryIds[] = $categoryId;
+            $conditions['category_ids'] = $categoryIds;
+        }
+        $items = $this->getItemDao()->search($conditions, [], 0, PHP_INT_MAX, ['id', 'material']);
+        $items = array_filter($items, function ($item) use ($material) {
+            return $item['material'] == $material;
+        });
+
+        return array_values($this->findItemsByIds(array_column($items, 'id'), true));
     }
 
     protected function findQuestionsByItemId($itemId)

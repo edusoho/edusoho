@@ -16,6 +16,7 @@ class ItemFilter extends Filter
         'material',
         'analysis',
         'category_id',
+        'category_name',
         'difficulty',
         'question_num',
         'isDelete',
@@ -25,6 +26,7 @@ class ItemFilter extends Filter
         'includeImg',
         'attachments',
         'questions',
+        'updated_time',
     ];
 
     protected function publicFields(&$item)

@@ -2251,6 +2251,32 @@ skip.i.know: 我知道了（2/2）
 skip.upgrade.btn: 立即升级 (2/2)
 question.bank.name: 题库名称
 question.bank.expoet: 导出题目
+question.bank.check: 试题查重
+
+question.bank.check_tip: 正在查重...
+question.bank.check.result.category.noData: 该分类下暂无题目
+question.bank.check.result.noData: 无重复题目
+question.bank.check.result.noData.title: 暂无重复题目
+question.bank.check.result.noData.btn: 返回列表
+question.bank.all_question: 全部题目
+question.bank.no_category: 未分类
+question.bank.common.repeated: 共有重复题目
+question.bank.unit: 次
+question.bank.topic.comparison: 题目对比
+question.bank.next_label: 下一步(1/2)
+question.bank.skip_label: 跳过
+question.bank.finish_label: 我知道了(2/2)
+question.bank.check.guide.one: <p class="title cd-dark-major">题目概览区</p><div class="cd-dark-minor cd-text-md">展示重复题目数量及对应每道题目的重复次数</div>
+question.bank.check.guide.two: <p class="title cd-dark-major">题目对比区</p><div class="cd-dark-minor cd-text-md">可点击数字按钮进行题目切换，并展示在下方预览区</div>
+question.bank.error.tip.title: 题目不存在
+question.bank.error.tip.content: 该题目可能在题目管理页进行了编辑/删除操作
+question.bank.type: 类型
+question.bank.update_time: 更新日期
+question.bank.none: 暂无
+question.bank.delete.tip.title: 真的要删除该题目吗？
+question.bank.delete.tip.content: 删除题目，可能会影响课时的练习，请谨慎操作！
+question.bank.head.edit: 题目编辑
+
 question.bank.add: 添加题目
 question.bank.import: 导入题目
 question.bank.difficulty.default: 难度

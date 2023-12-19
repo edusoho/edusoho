@@ -1766,6 +1766,11 @@ course.question_manage.manage.material: 材料
 course.question_manage.manage.belong_change_tips: 此题目若被引用，更改从属是可能会影响会课时的练习，请谨慎操作！
 course.question_manage.edit: 编辑题目
 course.question_manage.import.btn: 导入题目
+course.question_manage.start.import: 开始导入
+course.question_manage.new.import.instructions: 新版导入说明
+course.question_manage.guide.message: 一种全新的题目导入方式，支持公式、表格、特殊字符批量识别导入，提高管理运营效率。新版题目导入分为【简单版】和【完整版】。
+course.question_manage.guide.message.tip1: 1.【简单版】可在之前的word模板上增加导入模式和说明（复制新模板上的文案粘贴到旧模板上），自动识别题型，“简单版”仅支持单选题、多选题、填空题、判断题、问答题。
+course.question_manage.guide.message.tip2: 2.【完整版】在“简单版”基础上增加不定项选择题、材料题，需下载新模板使用。
 course.question_manage.import.modal_title: 题目导入
 course.question_manage.import.new_hint: 上传文档前， 请先仔细阅读
 course.question_manage.import.drag_document_hint: 或将文档拖拽至此
