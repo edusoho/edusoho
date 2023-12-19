@@ -76,6 +76,20 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
         return $builder->execute()->fetchAll();
     }
 
+    public function banLearningByIds($ids)
+    {
+        $ids = implode(',', $ids);
+        $sql = "UPDATE {$this->table} set canLearn = '0' where id in ({$ids})";
+        $this->db()->executeQuery($sql);
+    }
+
+    public function canLearningByIds($ids)
+    {
+        $ids = implode(',', $ids);
+        $sql = "UPDATE {$this->table} set canLearn = '1' where id in ({$ids}) and status = 'published'";
+        $this->db()->executeQuery($sql);
+    }
+
     public function analysisCourseSetDataByTime($startTime, $endTime)
     {
         $conditions = [
@@ -105,6 +119,7 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
                 'id IN ( :ids )',
                 'id = :id',
                 'status = :status',
+                'status In (:includeStatus)',
                 'isVip = :isVip',
                 'categoryId = :categoryId',
                 'categoryId IN (:categoryIds)',

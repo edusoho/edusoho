@@ -217,7 +217,7 @@ class CourseSetController extends CourseBaseController
                 $conditions['serializeMode'] = 'serialized';
                 break;
             case 'closed':
-                $conditions['status'] = 'closed';
+                $conditions['includeStatus'] = ['closed', 'unpublished'];
                 break;
             default:
                 $conditions['serializeMode'] = 'finished';

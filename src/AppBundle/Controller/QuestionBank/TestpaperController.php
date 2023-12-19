@@ -374,7 +374,7 @@ class TestpaperController extends BaseController
         }
 
         return $this->render('testpaper/manage/preview.html.twig', [
-            'assessment' => $this->addItemEmphasisStyle($assessment),
+            'assessment' => $this->addArrayEmphasisStyle($assessment),
         ]);
     }
 

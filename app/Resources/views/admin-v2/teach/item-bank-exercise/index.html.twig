@@ -5,6 +5,13 @@
 {% set script_controller = 'item-bank-exercise/manage' %}
 
 {% block main %}
+<style>
+.status_tooptip_intro {
+  .tooltip-inner {
+      max-width: max-content !important;
+    }
+}
+</style>
   <div class="well well-sm mtl">
     <form id="exercise-search-form" class="form-inline" action="" method="get" novalidate>
       <div class="mbm">
@@ -51,7 +58,11 @@
       </th>
 
       <th>{{ 'admin.course_manage.manage.creator'|trans }}</th>
-      <th>{{ 'admin.item_bank_exercise.exercise.manage.status'|trans }}</th>
+      <th class="status_tooptip_intro">{{ 'admin.item_bank_exercise.exercise.manage.status'|trans }}
+      <span class="es-icon es-icon-wenhaotishi" 
+          style="color: #919399;font-size: 14px;" 
+          data-toggle="tooltip" 
+          title="{{ 'admin.setting.table.status.tooltip'|trans }}"></span></th>
       <th width="10%">{{'admin.course_manage.operater'|trans}}</th>
     </tr>
     </thead>

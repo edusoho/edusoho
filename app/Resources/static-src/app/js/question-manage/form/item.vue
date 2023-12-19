@@ -104,7 +104,7 @@
             url: $('[name=check_duplicative_url]').val(),
             contentType: 'application/json;charset=utf-8',
             type: 'post',
-            data: JSON.stringify({material:stem}),
+            data: JSON.stringify({material: stem, itemId: data.data.id}),
             beforeSend(request) {
               request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
             }
@@ -123,6 +123,7 @@
               okText: Translator.trans('created.question.confirm.ok.btn'),
               cancelText: Translator.trans('created.question.confirm.close.btn'),
               icon: 'exclamation-circle',
+              class: "js-repeat-stem-text",
               onOk() {
                 that.isDisable = false;
                 that.forceRemoveModalDom()
@@ -160,7 +161,7 @@
         })
       },
       forceRemoveModalDom() {
-        const modal = document.querySelector(".ant-modal-root");
+        const modal = $('.js-repeat-stem-text').closest('.ant-modal-root')
 
         if (modal) {
           modal.remove();

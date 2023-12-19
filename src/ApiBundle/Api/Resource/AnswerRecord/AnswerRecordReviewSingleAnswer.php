@@ -33,8 +33,10 @@ class AnswerRecordReviewSingleAnswer extends AbstractResource
         if ($reviewedCount >= $assessment['question_count']) {
             $this->getAnswerService()->finishAllSingleAnswer($answerRecord, 'review');
         }
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecord['id']);
 
         return [
+            'questionId' => $questionReport['question_id'],
             'status' => $questionReport['status'],
             'reviewedCount' => $reviewedCount,
             'totalCount' => $assessment['question_count'],

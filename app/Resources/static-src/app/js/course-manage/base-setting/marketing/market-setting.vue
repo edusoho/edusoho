@@ -48,6 +48,24 @@
                 <el-col :span="8" class="mlm">{{ 'site.currency.CNY'|trans }}</el-col>
             </el-form-item>
 
+            <!-- <el-form-item>
+                <label slot="label">
+                    {{ 'course.marketing_setup.setup.is_show_label'|trans }}
+                </label>
+                <el-col :span="18">
+                    <el-radio v-for="showableRadio in showableRadios"
+                              v-model="marketingForm.showable"
+                              :key="showableRadio.value"
+                              :value="showableRadio.value"
+                              :label="showableRadio.value"
+                              class="cd-radio">
+                        {{ showableRadio.label }}
+                    </el-radio>
+             <div class="course-mangae-info__tip js-expiry-tip ml0">{{ 'course.marketing_setup.rule.show'|trans }}</div>
+                </el-col>
+            </el-form-item> -->
+
+            
             <el-form-item>
                 <label slot="label">
                     {{ 'course.marketing_setup.setup.can_join'|trans }}
@@ -425,6 +443,7 @@
                 maxStudentNum: this.course.maxStudentNum,
                 originPrice: this.course.originPrice,
                 buyable: this.course.buyable,
+                showable: this.course.showable,
                 enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? '1' : '0',
                 buyExpiryTime: this.course.buyExpiryTime,
                 approval: this.course.approval,
@@ -450,6 +469,16 @@
             });
             return {
                 liveCapacity: liveCapacity,
+                showableRadios: [
+                    {
+                        value: '1',
+                        label: Translator.trans('site.show'),
+                    },
+                    {
+                        value: '0',
+                        label: Translator.trans('site.hide'),
+                    }
+                ],
                 buyableRadios: [
                     {
                         value: '1',

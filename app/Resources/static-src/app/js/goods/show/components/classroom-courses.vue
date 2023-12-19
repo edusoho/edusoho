@@ -52,7 +52,11 @@
                 this.page += 1;
             },
             clickCourse: function(course) {
-                window.open('/course/'+course.id);
+              if(course.canLearn == '0') {
+                return this.$message.error(Translator.trans('goods.show_page.tab.classroom.closed_tip'));
+              }
+                
+              return window.open('/course/'+course.id);
             }
         },
         filters: {

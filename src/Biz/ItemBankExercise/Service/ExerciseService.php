@@ -50,6 +50,8 @@ interface ExerciseService
 
     public function closeExercise($exerciseId);
 
+    public function unpublishedExercise($exerciseId);
+
     public function searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit);
 
     public function searchOrderByRatingAndLastDays($conditions, $lastDays, $start, $limit);

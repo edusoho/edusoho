@@ -27,11 +27,50 @@ export const closeCourse = () => {
   });
 };
 
+export const hideCourse = () => {
+  $('body').on('click', '.js-hide-course', (evt) => {
+    let $target = $(evt.currentTarget);
+    cd.confirm({
+      title: '<span class="es-icon es-icon-infooutline" style="color: #FAAD14; margin-right: 16px; font-size: 22px; line-height: 22px;"></span>' + Translator.trans('site.tips.delist'),
+      content: Translator.trans('course.manage.hide_hint'),
+      okText: Translator.trans('site.confirm'),
+      cancelText: Translator.trans('site.cancel')
+    }).on('ok', () => {
+      hideCourseAction($target);
+    });
+  });
+};
+
+const hideCourseAction = ($target) => {
+    $.post($target.data('url'), (data) => {
+      if (data.success) {
+        cd.message({type: 'success', message: Translator.trans('admin.courseSet.delist.success_hint')});
+        window.location.reload();
+      } else {
+        cd.message({type: 'danger', message: Translator.trans('admin.courseSet.delist.fail_hint') + ':' + data.message});
+      }
+    });
+}
+
+export const showCourse = () => {
+  $('body').on('click', '.js-show-course', (evt) => {
+    let $target = $(evt.currentTarget);
+    $.post($target.data('url'), (data) => {
+      if (data.success) {
+        cd.message({type: 'success', message: Translator.trans('course.manage.show_success_hint')});
+        window.location.reload();
+      } else {
+        cd.message({type: 'danger', message: Translator.trans('course.manage.show_fail_hint') + ':' + data.message});
+      }
+    });
+  });
+};
+
 const closeCourseAction = ($target) => {
   $.post($target.data('url'), (data) => {
     if (data.success) {
       cd.message({type: 'success', message: Translator.trans('course.manage.close_success_hint')});
-      location.reload();
+      window.location.reload();
     } else {
       cd.message({type: 'danger', message: Translator.trans('course.manage.close_fail_hint') + ':' + data.message});
     }
@@ -74,7 +113,7 @@ export const deleteCourse = () => {
           if (data.redirect) {
             window.location.href = data.redirect;
           } else {
-            location.reload();
+            window.location.reload();
           }
         } else {
           cd.message({type: 'danger', message: Translator.trans('site.delete_fail_hint') + ':' + data.message});

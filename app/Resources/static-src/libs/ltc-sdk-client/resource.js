@@ -9,7 +9,7 @@ let validate = function() {
     number: '请输入有效的数字',
     digits: '只能输入整数',
     equalTo: '你的输入不相同',
-    maxlength: '最多只能输入 {0} 个字符',
+    maxlength: '最多支持 {0} 个字符',
     minlength: '最少需要输入 {0} 个字符',
     rangelength: '请输入长度在 {0} 到 {1} 之间的字符串',
     range: '请输入范围在 {0} 到 {1} 之间的数值',
@@ -69,7 +69,7 @@ let validate = function() {
     let l = calculateByteLength(value);
     let bool = l <= Number(params);
     if (!bool) {
-      $.validator.messages.byte_maxlength = `最多只能输入${params}个字符`;
+      $.validator.messages.byte_maxlength = `最多支持${params}个字符，一个中文字算2个字符`;
     }
     return this.optional(element) || l <= Number(params);
   });

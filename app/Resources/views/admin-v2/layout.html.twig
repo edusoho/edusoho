@@ -58,7 +58,7 @@
     <div class="ct-layout-container admin-layout-container">
       <div class="cd-fixed-top">
         <div class="ct-top-logo hidden-xs">
-          <a class="admin-navbar-brand" href="{{ url('admin_v2') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'admin.navbar.header.console_btn'|trans}}</a>
+          <a class="admin-navbar-brand" href="{{ url('admin_v2') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}</a>
         </div>
         <div class="navbar-header navbar-header--mobile visible-xs">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -73,7 +73,7 @@
           <ul class="cd-clearfix ct-layout-person__ul mb0">
             <li class="ct-layout-person_center cd-dropdown" data-toggle="cd-dropdown">
                 <a class="user-avatar-toggle" href="javascript:;">
-                  <img class="cd-avatar cd-avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+                  <img class="cd-avatar cd-avatar-xs" style="padding: 1px;" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
                   <span class="cd-ml8">{{ app.user.nickname }}</span>
                 </a>
                 <div class="dropdown-menu user-dropdown">

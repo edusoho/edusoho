@@ -102,7 +102,7 @@ export default {
   data() {
     return {
       form: {
-        chapterId: 'default',
+        chapterId: '',
         exerciseMediaType: 'chapter',
         testpaperId: 'default',
         wrongTimesSort: 'default'
@@ -161,12 +161,20 @@ export default {
     async fetchWrongBookCondition(type) {
       const params = this.getParams(type);
 
-      const result = await WrongBookCondition.get(params);
-
-      result.chapter = [{"id": "default", "name": "全部章节"}].concat(result.chapter);
-      result.testpapers = result.testpaper;
-      this.$emit('set-title', result.title);
-      this.conditions = result;
+      try {
+        const result = await WrongBookCondition.get(params);
+        result.chapter = [{"id": "default", "name": "全部章节"}].concat(result.chapter);
+        result.testpapers = result.testpaper;
+        this.$emit('set-title', result.title);
+        this.conditions = result;
+        if (this.form.chapterId === '') {
+          this.form.chapterId = 'default'
+        }
+      } catch (error) {
+        let result = {}
+        result.chapter = [{"id": "default", "name": "全部章节"}]
+        this.conditions = result;
+      }
     },
 
     handleChange(value, type) {

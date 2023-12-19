@@ -15,7 +15,9 @@
       <li class="active">{{ courseSet.title|raw }} </li>
     {% endif %}
   </ol>
-
+  {% if courseSet.status == 'closed' %}
+    <div id="closedAlert"></div>
+  {% endif %}
   {% block course_header_info %}{% endblock %}
   <div class="es-section course-detail-section {% if not marketingPage %}course-detail-section--normal {% endif %} clearfix">
     {% block course_header_top %}
@@ -79,7 +81,7 @@
           {% endif %}
 
           <li class="es-share top js-es-share">
-            <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown" title="{{ 'course.share'|trans }}">
+            <a class="btn btn-default btn-xs dropdown-toggle {% if courseSet.canLearn == '0' %}js-handleLearnOnMessage {% endif %}" href="" {% if courseSet.canLearn != '0'%} data-toggle="dropdown" {% endif %} title="{{ 'course.share'|trans }}">
               <i class="es-icon es-icon-share"></i>
             </a>
             {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}

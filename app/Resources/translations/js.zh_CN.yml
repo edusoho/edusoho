@@ -56,6 +56,7 @@ site.step_two: 步骤2
 site.step_one: 步骤1
 site.information: 信息
 site.tips: 提示
+site.tips.delist: 确认下架？
 site.unknow_server_error: 发生未知错误
 
 site.incorrect.password: 密码错误
@@ -72,7 +73,7 @@ site.audio.quality.low: 流畅
 site.audio.quality.normal: 标准
 site.audio.quality.high: 精细
 
-site.maxlength_hint: 最多只能输入%length%个字符
+site.maxlength_hint: 最多支持%length%个字符
 site.browser_useless_play_video_hint: 您的浏览器不能播放当前视频。
 site.choose_hint: 请选择
 site.service_error_hint: 服务器错误!
@@ -448,7 +449,7 @@ course_set.title_required_error_hint: 请输入标题
 course_set.learn_progress: 学习进度
 course_set.manage.tag_required_hint: 请输入标签
 course_set.manage.publish_hint: 是否确定发布该课程？
-course_set.manage.publish_title: 发布课程
+course_set.manage.publish_title: 发布课程？
 course_set.manage.publish_success_hint: 课程发布成功
 course_set.manage.publish_fail_hint: 课程发布失败
 course_set.manage.next_label: 继续了解
@@ -494,12 +495,15 @@ course.manage.max_student_num_error_hint: 请输入课程人数
 course.manage.max_year_error_hint: 请输入不大于 7300（20年）的数值
 course.manage.max_capacity_hint: 网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。
 course.manage.publish_hint: 是否确定发布该教学计划？
-course.manage.publish_title: 发布教学计划
+course.manage.publish_title: 确认发布？
 course.manage.publish_success_hint: 教学计划发布成功
 course.manage.publish_fail_hint: 教学计划发布失败
-course.manage.close_hint: 是否确定关闭该教学计划？
+course.manage.close_hint: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
+course.manage.hide_hint: 计划下架后将不在前台展示，学员无法在首页和列表页查看
 course.manage.close_success_hint: 关闭成功
 course.manage.close_fail_hint: 关闭失败
+course.manage.show_success_hint: 开启成功
+course.manage.show_fail_hint: 开启失败
 course.manage.copy_title: 复制计划
 course.manage.max_course_number_tip: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.manage.delete_hint: 是否确定删除该教学计划？
@@ -605,6 +609,8 @@ item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或
 classroom.manage.tag_required_hint: 请输入标签
 classroom.manage.delete_course_hint: 是否要从班级移除该课程？
 classroom.manage.delete_course_hint_title: 移除课程
+classroom.manage.close_course_hint_title: 关闭课程
+classroom.manage.close_course_hint_content: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
 classroom.manage.delete_course_success_hint: 课程移除成功
 classroom.manage.delete_course_fail_hint: 课程移除失败
 classroom.manage.expiry_mode_days_error_hint: 请输入有效期天数
@@ -747,7 +753,7 @@ validate.valid_creditcard_input.message: 请输入有效的信用卡号码
 validate.valid_equal_to_input.message: 你的输入不相同
 validate.valid_extension_input.message: 请输入有效的后缀
 validate.valid_policy_input.message: 请先同意相关条款
-validate.max_length.message: 最多只能输入 {0} 个字符
+validate.max_length.message: 最多支持 {0} 个字符
 validate.min_length.message: 最少需要输入 {0} 个字符
 validate.range_length.message: 请输入长度在 {0} 到 {1} 之间的字符串
 validate.range.message: 请输入范围在 {0} 到 {1} 之间的数值
@@ -816,6 +822,10 @@ validate.modify_days: 请输入修改天数
 validate.modify_day_number: 请输入不大于 7300（20年）的数值
 validate.success: 验证成功
 validate.fail: 验证失败
+validate.course.closed: 课程已关闭，无法继续学习
+validate.classroom.closed: 班级已关闭，无法继续学习
+validate.exercise.closed: 题库已关闭，无法继续学习
+validate.learn_content.closed: 学习内容已关闭，无法继续学习
 validate.expiry_days_required_hint: 请输入有效期
 validate.empty_content_hint: 请输入内容!
 validate.no_number_first_hint: URL路径只能包含字母和数字,请以字母开头!长度大于2位
@@ -921,7 +931,7 @@ validate_old.alphanumeric.message: %display%必须是英文字母、数字及下
 validate_old.alphabet_underline.message: %display%必须以英文字母或下划线开头
 validate_old.byte_minlength.message: %display%的长度必须大于等于%min%，一个中文字算2个字符
 validate_old.currency_check.message: 请输入合法的%display%,如:200, 221.99, 0.99, 0等
-validate_old.currency.message: 最多只能输入%max%个字符
+validate_old.currency.message: 最多支持%max%个字符，一个中文算2个字符
 validate_old.idcard.message: %display%格式不正确
 validate_old.password.message: %display%只能由4-20个字符组成
 validate_old.second_range.message: 秒数只能在0-59之间
@@ -1015,7 +1025,8 @@ admin.index.finished_task_count: 学习任务数
 admin.index.notify_teacher_success: 提醒教师的通知，发送成功！
 admin.index.upgrade_acceptance_hint: 升级受理中
 admin.user.cloude_sms_enable_hint: 请先到【管理后台】-【云市场】-【云服务】-【云短信设置】中开启云短信哦~
-
+admin.courseSet.delist.success_hint: 计划下架成功
+admin.courseSet.delist.fail_hint: 计划下架失败
 admin.account_center.cash_income: 现金收入
 admin.account_center.coin_income: 虚拟币收入
 admin.analysis.classroom_income: 班级营收额
@@ -1095,6 +1106,13 @@ admin.classroom.choose_success_hint: 指定班级成功
 admin.classroom.operation_success_hint: 成功！
 admin.classroom.operation_fail_hint: 失败
 admin.classroom.operation_hint: 吗？
+admin.classroom.confirm_publish_hint: 确认发布？
+admin.classroom.hide_hint: 关闭后班级将彻底隐藏，学员无法在前台查看
+admin.classroom.delist_hint: 班级下架后将不在前台展示，学员无法在首页和列表页查看
+admin.classroom.close_hint: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
+admin.classroom.hide_success_hint: 已关闭页面显示
+admin.classroom.delist_success_hint: 班级下架成功！
+admin.classroom.show_success_hint: 已开启页面显示
 admin.classroom.delete_hint: 删除班级，将删除班级中所有课程的章节、课时、学员等信息。确认要删除该班级吗？
 admin.classroom.mall_goods_exist.delete_hint: 删除班级，将删除班级中所有课程的章节、课时、学员等信息。并且该产品已在营销商城中有对应商品，将同时删除已在营销商城中的对应商品，确认要删除该班级吗？
 admin.classroom.delete_success_hint: 删除成功！
@@ -1131,12 +1149,24 @@ admin.course.copy_success_hint: 复制课程成功
 admin.course.copy_fail_hint: 复制课程失败
 admin.course.delete_success_hint: 删除课程成功
 admin.course.delete_failed_hint: 删除课程失败
+admin.course.publish_success_hint: 发布课程成功
+admin.course.publish_failed_hint: 发布课程失败
+admin.course.close_success_hint: 关闭课程成功
+admin.course.close_failed_hint: 关闭课程失败
 admin.course.delete_course.check_password_fail_hint: 验证密码错误
 admin.course.validate_old.password_required_hint: 密码
 admin.course.cancel_recommend_success_hint: 课程推荐已取消！
-admin.course.close_course_hint: 您确认要关闭此课程吗？课程关闭后，仍然还在有效期内的学员将可以继续学习。
-admin.course.close_success_hint: 课程关闭成功！
-admin.course.publish_hint: 您确认要发布此课程吗？
+admin.course.close_course_hint: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
+admin.close.btn.confirm_close: 确认关闭？
+admin.close.btn.confirm_hide: 确认下架？
+admin.close.btn.confirm_publish: 确认发布？
+admin.course.close_success_hint: 已关闭页面显示
+admin.course.hide_course_hint: 课程下架后将不在前台展示，学员无法在首页和列表页查看
+admin.course.delist_course_hint: 课程下架后将不在前台展示，学员无法查看
+admin.course.hide_success_hint: 课程关闭成功！
+admin.course.show_success_hint: 已开启页面
+admin.course.delist_success_hint: 课程下架成功！
+admin.course.publish_hint: 确认发布？
 admin.course.publish_success_hint: 课程发布成功！
 admin.course.unknow_error_hint: 未知错误
 admin.course.delete_hint: 删除课程，将删除课程的章节、课时、学员等信息。真的要删除该课程吗？
@@ -1435,12 +1465,17 @@ admin.util.item_delete.delete_success_hint: 删除%name%成功
 admin.shortcut_add_success_hint: 已添加当前页面为常用链接！
 admin.shortcut_delete_success_hint: 删除常用链接成功！
 
-admin.item_bank_exercise.exercise.close_hint: 确定要关闭当前题库练习吗？题库练习关闭后，仍然还在有效期内的学员将可以继续学习。
+admin.item_bank_exercise.exercise.hide_hint: 题库练习下架后将不在前台展示，学员无法在首页和列表页查看
 admin.item_bank_exercise.exercise.close_success_hint: 题库练习关闭成功!
+admin.item_bank_exercise.exercise.close_hint: 关闭后仍在有效期的学员无法继续学习，请谨慎操作
+admin.item_bank_exercise.exercise.delist_hint: 题库联系下架后将不在前台展示，学员无法查看
+admin.item_bank_exercise.exercise.hide_success_hint: 已关闭页面显示
+admin.item_bank_exercise.exercise.show_success_hint: 已开启页面显示
+admin.item_bank_exercise.exercise.delist_success_hint: 题库已下架
 admin.item_bank_exercise.exercise.recommend_success_hint: 设置推荐题库操作成功!
 admin.item_bank_exercise.exercise.recommend_fail_hint: 设置推荐题库操作失败!
 admin.item_bank_exercise.exercise.cancel_recommend_success_hint: 题库练习推荐已取消!
-admin.item_bank_exercise.exercise.publish_hint: 确定要发布当前题库练习吗？
+admin.item_bank_exercise.exercise.publish_hint: 确认发布？
 admin.item_bank_exercise.exercise.publish_success_hint: 题库练习发布成功!
 admin.item_bank_exercise.exercise.delete_hint: 删除题库练习，将删除模块设置、学员等信息。真的要删除该题库练习吗？
 admin.item_bank_exercise.exercise.mall_goods_exist.delete_hint: 删除题库练习，将删除模块设置、学员等信息。并且该产品已在营销商城中有对应商品，将同时删除已在营销商城中的对应商品，真的要删除该题库练习吗？
@@ -1580,7 +1615,7 @@ queston_bank.testpaper.empty_tips: 此题库还没有试卷
 
 #新后台
 admin_v2.user.cloude_sms_enable_hint: 请先到【管理后台】-【云市场】-【云服务】-【云短信】中开启云短信哦~
-admin_v2.homepage.quick_entrance.hint: 最多设置7个快捷入口位
+admin_v2.homepage.quick_entrance.hint: 最多设置8个快捷入口位
 admin_v2.homepage.mini_program.title: 扫码打开小程序
 admin.switch_old_version.permission_error: 请联系超级管理员或管理员操作
 admin.switch_old_version.title: 切换后台
@@ -1609,7 +1644,7 @@ course_manage.positive_currency.message: 请输入大于0的有效价格，最�
 merchant.resource.product_version.update_success_hint: 更新成功
 merchant.resource.product_version.update_failed_hint: 更新失败
 
-validate.length_max.message: 最多只能输入 %length% 个字符
+validate.length_max.message: 最多支持 %length% 个字符
 validate.length_min.message: 至少输入 %length% 个字符
 course.manage.expiry_date.error_hint: 请输入时间范围
 
@@ -1630,6 +1665,8 @@ classroom.upload_picture_btn: 修改封面图片
 classroom.marketing_setting: 营销设置
 classroom.price_label: 价格
 classroom.show_label: %name%展示
+classroom.show_page_label: 前台展示
+classroom.show_page_tips: 隐藏后前台不可见，不可见范围：首页、列表页、搜索结果页、班级中添加课程列表页。
 classroom.buy_label: %name%购买
 classroom.expiry_mode_label: 班级有效期
 classroom.watch_expiry_mode_rule: 查看有效期规则
@@ -1645,6 +1682,8 @@ classroom.amount: 相当于
 
 
 site.open: 开启
+site.show: 展示
+site.hide: 隐藏
 site.date.day: 天
 course.marketing_setup.services.provide_services: 承诺提供服务
 course.marketing_setup.services.course_list_display: 商品页目录展示
@@ -1737,6 +1776,11 @@ s2b2c.resource.sync.prev_price.notify: 上个版本价格为
 site.price: 价格
 course.marketing_setup.setup.can_join: 可加入
 course.marketing_setup.setup.can_not_join: 不可加入
+course.marketing_setup.setup.is_show_label: 前台展示
+course.marketing_setup.setup.can_show: 开启
+course.marketing_setup.setup.can_hide: 关闭
+item_bank_exercise.marketing_setup.rule.show: 隐藏后前台不可见，不可见范围：首页、列表页、搜索结果页、班级中添加课程列表页
+course.marketing_setup.rule.show: 隐藏后前台不可见，不可见范围：首页、列表页、搜索结果页、班级中添加课程列表页
 course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
 course.marketing_setup.expiry_date: 加入截止日期
 course.marketing_setup.rule.expiry_date: 学习有效期
@@ -1820,6 +1864,9 @@ goods.show_page.tab.catalogue.empty: 购买完成后即可查看课程目录～
 goods.show_page.tab.reviews: 学员评价
 goods.show_page.tab.reviews_empty_tips: 暂无评价哦~
 goods.show_page.tab.summary_empty_tips: 暂无简介哦～
+goods.show_page.tab.course.closed_tip: 课程已关闭，无法购买/学习
+goods.show_page.tab.classroom.closed_tip: 班级已关闭，无法购买/学习
+goods.show_page.tab.exercise.closed_tip: 题库已关闭，无法购买/学习
 goods.show_page.authentication_certificate: 认证证书
 site.favorited: 已收藏
 site.favorite: 收藏
@@ -1844,6 +1891,7 @@ goods.show_page.vip_free_learn_new: 会员免费兑换
 goods.show_page.vip_buy: %vipName%免费
 goods.show_page.vip_upgrade: 升级为%vipName%免费
 goods.show_page.unpublished_tips: 商品还未发布，不允许加入和购买
+goods.show_page.closed_tips: 商品已关闭，不允许加入和购买
 goods.show_page.course_not_buyable_tips: 抱歉，该课程无法学习，请联系学校老师
 goods.show_page.classroom_not_buyable_tips: 抱歉，该班级无法学习，请联系学校老师
 goods.show_page.join_expiry_tips: 抱歉，该商品已超过加入有效期，请联系客服
@@ -1927,6 +1975,10 @@ message.go_to_open: 去开通
 message.coupon_function_is_not_activated: 优惠券功能未开通
 message.membership_function_is_not_activated: 会员功能未开通
 message.add_up_to: 同一类型组件最多添加 5 个
+
+exception.course.closed.content:  当前课程已关闭
+exception.classroom.closed.content: 当前班级已关闭
+exception.exercise.closed.content: 当前题库已关闭
 
 live.playback.tip.remove_association: 直播回放将从该课程中移除关联
 live.playback.tip.cannot_be_used_normally: 直播回放若被引用，移除会引起引用任务无法正常使用
@@ -2199,6 +2251,32 @@ skip.i.know: 我知道了（2/2）
 skip.upgrade.btn: 立即升级 (2/2)
 question.bank.name: 题库名称
 question.bank.expoet: 导出题目
+question.bank.check: 试题查重
+
+question.bank.check_tip: 正在查重...
+question.bank.check.result.category.noData: 该分类下暂无题目
+question.bank.check.result.noData: 无重复题目
+question.bank.check.result.noData.title: 暂无重复题目
+question.bank.check.result.noData.btn: 返回列表
+question.bank.all_question: 全部题目
+question.bank.no_category: 未分类
+question.bank.common.repeated: 共有重复题目
+question.bank.unit: 次
+question.bank.topic.comparison: 题目对比
+question.bank.next_label: 下一步(1/2)
+question.bank.skip_label: 跳过
+question.bank.finish_label: 我知道了(2/2)
+question.bank.check.guide.one: <p class="title cd-dark-major">题目概览区</p><div class="cd-dark-minor cd-text-md">展示重复题目数量及对应每道题目的重复次数</div>
+question.bank.check.guide.two: <p class="title cd-dark-major">题目对比区</p><div class="cd-dark-minor cd-text-md">可点击数字按钮进行题目切换，并展示在下方预览区</div>
+question.bank.error.tip.title: 题目不存在
+question.bank.error.tip.content: 该题目可能在题目管理页进行了编辑/删除操作
+question.bank.type: 类型
+question.bank.update_time: 更新日期
+question.bank.none: 暂无
+question.bank.delete.tip.title: 真的要删除该题目吗？
+question.bank.delete.tip.content: 删除题目，可能会影响课时的练习，请谨慎操作！
+question.bank.head.edit: 题目编辑
+
 question.bank.add: 添加题目
 question.bank.import: 导入题目
 question.bank.difficulty.default: 难度

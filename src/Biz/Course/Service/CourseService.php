@@ -120,6 +120,14 @@ interface CourseService
 
     /**
      * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="close_course",funcName="getCourse")
+     */
+    public function unpublishedCourse($id);
+
+    /**
+     * @param $id
      * @param bool $withTasks
      *
      * @return mixed
@@ -379,4 +387,12 @@ interface CourseService
     public function getLessonTree($courseIds, $type);
 
     public function findLessonIds($courseId, $type, $chapterId);
+
+    public function banLearningByCourseSetId($courseSetId);
+
+    public function canLearningByCourseSetId($courseSetId);
+
+    public function banLearningByCourseSetIds($courseSetIds);
+
+    public function canLearningByCourseSetIds($courseSetIds);
 }

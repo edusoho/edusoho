@@ -71,7 +71,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
         $assessment = $this->getAssessmentService()->showAssessment($testpaperActivity['mediaId']);
 
         return $this->render('activity/testpaper/preview.html.twig', [
-            'assessment' => $this->addItemEmphasisStyle($assessment),
+            'assessment' => $this->addArrayEmphasisStyle($assessment),
         ]);
     }
 
