@@ -83,9 +83,11 @@ site.default.times: 次
 site.default.detail: 明细
 site.default.program_name: 默认教学计划
 site.default.plan_setting: 默认计划设置
+site.default.mobile: 手机号
 site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.tips: 提示
+site.tips.delist: 确认下架？
 site.qrcode_tips: 扫一扫
 site.tips.scan_qrcode_tips: 扫二维码继续学习 二维码时效为半小时
 site.tips.exercise_qrcode_tips: 扫描右侧二维码 前往移动端学习
@@ -964,7 +966,7 @@ buy.payments_disabled_tips: 由于网校未开通任一支付功能，当前商�
 course.buy_failed_tips: 真不巧，已经有人抢在你前面下单了，请继续关注
 course.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br/>拥有一个独有的头像，老师和同学们能更容易关注到你哦～～
-course.remove_students_tips: 课程已关闭，在有效期内的学员仍可正常学习，若不希望学员继续学习，需在【学员管理】中移除学员。
+course.remove_students_tips: 课程已关闭无法学习，若希望课程不对外展示但学员仍可继续学习，可将课程发布后设置“下架”
 course.name: 课程名称
 course.price: 价格
 course.price.RMB: %price%元
@@ -1033,6 +1035,8 @@ course.teaching_plan.expiry_date.end_date_mode: 按截止日期
 course.teaching_plan.expiry_date.days_mode: 按有效天数
 course.teaching_plan.publish_btn: 发布计划
 course.teaching_plan.manage: 计划管理
+course.teaching_plan.show_page: 开启前台展示
+course.teaching_plan.hide_page: 下架
 course.teaching_plan.delete_btn: 删除
 course.teaching_plan.copy_btn: 复制
 course.teaching_plan.preview_btn: 预览
@@ -1070,6 +1074,9 @@ course.student_manage: '学员管理'
 course.marketing_setup.setup: 加入设置
 course.marketing_setup.setup.can_join: 可加入
 course.marketing_setup.setup.can_not_join: 不可加入
+course.marketing_setup.setup.is_show_label: 前台展示
+course.marketing_setup.setup.can_show: 开启
+course.marketing_setup.setup.can_hide: 关闭
 course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
 course.marketing_setup.price.free: 免费
 course.marketing_setup.price.not_free: 收费
@@ -1245,6 +1252,7 @@ item_bank_exercise.chapter_exercise.info: 章节练习依据“题目分类管�
 item_bank_exercise.marketing_setup.no_permission_tips: 抱歉，您无权管理题库练习基础设置，如有需要请联系网站管理员！
 item_bank_exercise.marketing_setup.setup.can_join.tips: 关闭后，学员自己无法加入，需要由老师手动添加学员。
 item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: 变更学习有效期，仅对修改后新增的学员有效
+item_bank_exercise.marketing_setup.rule.show: 隐藏后前台不可见，不可见范围：首页、列表页、搜索结果页、班级中添加课程列表页
 item_bank_exercise.assessment_exercise.add_module: 添加模块
 item_bank_exercise.assessment_exercise.edit_module: 修改模块
 item_bank_exercise.assessment_exercise.module.name: 模块名称
@@ -1458,6 +1466,7 @@ course.status.followed: 已收藏
 course.status.follow: 收藏
 course.status.closed: 已关闭
 course.status.unpublished: 未发布
+course.status.delist: 已下架
 course.status.serialized: 更新中
 course.status.finished: 已完结
 course.status.published: 已发布
@@ -1479,6 +1488,7 @@ course.belong_to_classroom_tips: >
   <div>请加入后再学习</div>
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
 item_bank_exercise.course_limited_tips: 抱歉，该题库练习为限制题库练习，请联系客服
+goods.show_page.closed_tips: 商品已关闭，不允许加入和购买
 course.course_closed_tips: 抱歉，教学计划%title%已关闭！
 course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
@@ -1756,6 +1766,11 @@ course.question_manage.manage.material: 材料
 course.question_manage.manage.belong_change_tips: 此题目若被引用，更改从属是可能会影响会课时的练习，请谨慎操作！
 course.question_manage.edit: 编辑题目
 course.question_manage.import.btn: 导入题目
+course.question_manage.start.import: 开始导入
+course.question_manage.new.import.instructions: 新版导入说明
+course.question_manage.guide.message: 一种全新的题目导入方式，支持公式、表格、特殊字符批量识别导入，提高管理运营效率。新版题目导入分为【简单版】和【完整版】。
+course.question_manage.guide.message.tip1: 1.【简单版】可在之前的word模板上增加导入模式和说明（复制新模板上的文案粘贴到旧模板上），自动识别题型，“简单版”仅支持单选题、多选题、填空题、判断题、问答题。
+course.question_manage.guide.message.tip2: 2.【完整版】在“简单版”基础上增加不定项选择题、材料题，需下载新模板使用。
 course.question_manage.import.modal_title: 题目导入
 course.question_manage.import.new_hint: 上传文档前， 请先仔细阅读
 course.question_manage.import.drag_document_hint: 或将文档拖拽至此
@@ -2906,6 +2921,8 @@ classroom.add_course_tips: 班级数据处理中，请耐心等待。
 classroom.delete_btn: 删除
 classroom.free_course: 免费
 classroom.teach_plan: 教学计划
+classroom.closed.course: 关闭课程
+classroom.open.course: 发布课程
 classroom.live_course_playing: 正在直播中
 classroom.live: 直播
 classroom.task_num: >
@@ -4684,6 +4701,7 @@ my.learning.thread.target_course_deleted: 课程已删除
 my.learning.course: 我的课程
 my.learning.course.learning: 学习中
 my.learning.course.learned: 已学完
+my.learning.course.expired: 已过期
 my.learning.course.favorite: 收藏
 my.learning.course.favorited: 已收藏
 my.learning.course.favorite_empty: 暂无已收藏的课程
@@ -4905,8 +4923,10 @@ change_log: 更新日志
 common.courseStatus.draft: 未发布
 common.courseStatus.published: 已发布
 common.courseStatus.closed: 已关闭
+common.courseStatus.unpublished: 已下架
 common.classroomStatus.draft: 未发布
 common.classroomStatus.published: 已发布
+common.classroomStatus.unpublished: 已下架
 common.classroomStatus.closed: 已关闭
 common.fileType.video: 视频
 common.fileType.audio: 音频
@@ -5628,6 +5648,7 @@ admin.classroom_manage.manage.student_number_th: 学员数
 admin.classroom_manage.manage.price_th: 价格
 admin.classroom_manage.manage.creator: 创建者/时间
 admin.classroom_manage.manage.status_th: 状态
+admin.classroom_manage.manage.showable: 前台展示
 admin.classroom_manage.manage.operate_th: 操作
 admin.classroom_manage.manage.empty: 暂无%name%信息!
 admin.classroom_manage.manage.category: 分类
@@ -5637,7 +5658,8 @@ admin.classroom_manage.manage.price: %price%元
 admin.classroom_manage.manage.origin_price: 原价 %priceAll%元
 admin.classroom_manage.manage.published: 已发布
 admin.classroom_manage.manage.closed: 已关闭
-admin.classroom_manage.manage.unpublished: 未发布
+admin.classroom_manage.manage.unpublished: 已下架
+admin.classroom_manage.manage.draft: 未发布
 admin.classroom_manage.manage.manage_btn: 管理
 admin.classroom_manage.manage.coin_price: 原价 %coinPriceAll% %coinname%
 
@@ -5919,6 +5941,11 @@ admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo
 admin.setting.site.icp.help_block: 根据《非经营性互联网信息服务备案管理办法》（原信息产业部令第33号令）规定，备案成功后需将工信部下发的主体备案号放置在网页底部并链接至工信部网址:<a href="http://beian.miit.gov.cn" target=_blank>beian.miit.gov.cn</a>供公众查询核对。若违反相关部门规定，会存在违法风险。
 admin.setting.site.public_security.help_block: 依据 《计算机信息网络国际联网安全保护管理办法》相关规定，各网站在工信部备案成功后，需在网站开通之日起30日内登录<a href="http://www.beian.gov.cn/" target=_blank>全国互联网安全管理服务平台</a>提交公安联网备案申请。公安联网备案审核通过后，您需在30日内登录<a href="http://www.beian.gov.cn/" target=_blank>全国互联网安全管理服务平台</a>，在您的已备案网站详情中，将网站公安机关备案号及图标信息编辑放置在网页底部。
 admin.setting.site.logo.view_btn: 点击查看
+admin.setting.table.status.tooltip:
+  <div style="text-align:left;">未发布：学员不可加入</div>
+  <div style="text-align:left;">已发布：学员可加入、可学习</div>
+  <div style="text-align:left;">已下架：学员前台不可见、可加入、可学习</div>
+  <div style="text-align:left;">已关闭：学员前台不可见、不可学习</div>
 admin.setting.site.favicon: 浏览器图标
 admin.setting.site.favicon.help_block: 建议上传ico格式的图标文件，支持 ico, jpg, gif, png等格式, 建议尺寸 32×32px。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.setting.site.seo_keywords: SEO关键词
@@ -8652,7 +8679,7 @@ admin.payment_setting.alipay_api_type.direct.hint: >
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
 admin.payment_setting.alipay_api_type.mobile: 手机网站支付接口
 admin.payment_setting.alipay_api_type.mobile.hint: >
-  开通此接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">阔知学堂</span>支付，需前往支付宝开通，查看
+  开通此接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">知享学堂</span>支付，需前往支付宝开通，查看
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
 admin.payment_setting.alipay_md5_secret: MD5密钥
 admin.payment_setting.alipay_secret: 支付宝公钥
@@ -9436,6 +9463,7 @@ my.reward_points_message: ￥%num%现金，%reward%使用后，申请退款时�
 my.reward_points_instructions: %reward%说明
 
 task.learn_data_detail.nickname: 用户名
+task.learn_data_detail.mobile: 手机号
 task.learn_data_detail.createdTime: 任务开始时间
 task.learn_data_detail.join_time: 任务开始时间
 task.learn_data_detail.finishedTime: 任务完成时间
@@ -11136,7 +11164,8 @@ exception.item_bank_exercise.answer_unpublish_chapter: 当前章节已取消发�
 exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
 exception.item_bank.assessment.not.exist: 试卷不存在
 exception.item_bank.assessment.is_empty: 试卷全部题目已被删除，请联系教师或管理员
-
+exception.exercise.closed.tips.title: 题库练习已关闭，无法购买/学习
+exception.exercise.closed.tips.content: 题库练习结果可查看
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
 exception.wechat.template_conflict_industry_hint: 服务号行业设置错误
@@ -11157,6 +11186,9 @@ exception.certificate.reject.forbidden_audit: 审核驳回失败
 
 exception.information_collect.not_found: 用户信息采集记录不存在
 exception.information_collect.closed: 用户信息采集已关闭
+exception.not_continue.look: 无法继续查看
+exception.go_home: 回到首页
+
 
 course.unname_title: 未命名计划
 
@@ -11560,7 +11592,7 @@ admin_v2.homepage.cloud_notice: '欢迎使用,试用将于<strong> %endTime% </s
 admin_v2.homepage.quick_entrance: 常用入口
 admin_v2.edit_quick_entrance.btn: 编辑入口
 admin_v2.quick_entrance_setting: 设置常用入口
-admin_v2.quick_entrance_setting.tips: (最多设置7个快捷入口位）
+admin_v2.quick_entrance_setting.tips: (最多设置8个快捷入口位）
 
 ##分类标签
 admin_v2.course.tag: 标签管理
@@ -11582,8 +11614,10 @@ admin_v2.homepage.school_info.system_status.has_upgrade: 有更新
 admin_v2.homepage.school_info.system_status.upgraded: 已更新
 admin_v2.homepage.school_info.system_version: 系统版本
 admin_v2.homepage.school_info.access_web: 访问首页
-admin_v2.homepage.school_info.access_mobile_app: 访问App
-admin_v2.homepage.school_info.access_wechat_app: 访问小程序
+admin_v2.homepage.school_info.access_mobile_web: 微网校
+admin_v2.homepage.school_info.access_mobile_app: App
+admin_v2.homepage.school_info.access_wechat_app: 小程序
+admin_v2.homepage.school_info.no_access: 未开通
 admin_v2.homepage.school_info.level.none: 开源版
 admin_v2.homepage.school_info.level.saas: SaaS版
 admin_v2.homepage.school_info.level.license: 商业授权
@@ -11657,9 +11691,10 @@ admin_v2.wechat_official_account.title: 公众号
 admin_v2.wechat_official_account.text: 关注EduSoho公众号 获取最新教育资讯
 admin_v2.homepage.announcement_from_platform: 站长公告
 admin_v2.homepage.application_intro: 应用推荐
-admin_v2.homepage.application_intro.more_btn: 逛逛营销应用
+admin_v2.homepage.quick_custom: 自定义
+admin_v2.homepage.application_intro.more_btn: 营销应用
 admin_v2.business_advice.title: 经营建议
-admin_v2.buiness_advice.goto_qiqiuyu: 前去EduSoho商学院
+admin_v2.buiness_advice.goto_qiqiuyu: 商学院
 
 admin_v2.notice.upgrade_notice: 新后台对插件进行了全新适配，为了便于您的后台管理，需要手动升级全部已安装插件
 admin_v2.notice.go_to_upgrade: 前往升级

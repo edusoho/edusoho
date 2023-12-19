@@ -5,7 +5,12 @@
 {% do script(['libs/jquery-validation.js', 'app/js/testpaper-manage/read/index.js']) %}
 
 {% block title %}
-  {{ 'course.testpaper_manage.import'|trans }}
+  <div class="js-import-modal-title">
+    {{ 'course.testpaper_manage.import'|trans }}
+  </div>
+  <div class="hidden js-import-modal-guide-title">
+    {{ 'course.question_manage.new.import.instructions'|trans }}
+  </div>
 {% endblock %}
 
 {% block body %}
@@ -63,9 +68,26 @@
       <div class="tab-pane js-course-tasks-pane active hidden js-step3-view"></div>
     </div>
   </div>
+  <div class="js-guide-import-info hidden">
+    <div class="guided-missile-frame">
+      <div class="guide-info-message-block">
+        {{ 'course.question_manage.guide.message'|trans }}
+      </div>
+      <img class="guide-picture" src="{{ asset('static-dist/app/img/question-manage/guide-picture.png') }}" alt="guide">
+    </div>
+    <div class="guide-message-esay-integrity">
+      <div>
+        {{ 'course.question_manage.guide.message.tip1'|trans }}
+      </div>
+      <div>
+        {{ 'course.question_manage.guide.message.tip2'|trans }}
+      </div>
+    </div>
+  </div>
 {% endblock %}
 
 {% block footer %}
+  <a class="js-next-tip-btn cd-btn cd-btn-primary hidden" href="#">{{ 'course.question_manage.start.import'|trans }}</a>
   <a class="close-btn footer-import-rule js-import-rule-btn" href="http://www.qiqiuyu.com/page/30" target="_blank">{{ 'course.question_manage.import.rule'|trans }}</a>
 
   <button class="btn hidden"></button>

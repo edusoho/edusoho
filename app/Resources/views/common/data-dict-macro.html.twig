@@ -5,6 +5,8 @@
         <span class="color-success">{{ 'common.courseStatus.published'|trans }}</span>
     {% elseif status == 'closed' %}
         <span class="color-danger">{{ 'common.courseStatus.closed'|trans }}</span>
+    {% elseif status == 'unpublished' %}
+      <span class="color-black-title">{{ 'common.courseStatus.unpublished'|trans }}</span>
     {% endif %}
 {% endmacro %}
 {% macro goodsStatus(status) %}

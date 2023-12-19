@@ -6,13 +6,80 @@ define(function (require, exports, module) {
   exports.run = function () {
     var $table = $('#classroom-table');
 
-    $table.on('click', '.close-classroom,.open-classroom,.cancel-recommend-classroom', function () {
+    $table.on('click', '.cancel-recommend-classroom', function () {
       var $trigger = $(this);
       if (!confirm($trigger.attr('title') + Translator.trans('admin.classroom.operation_hint'))) {
         return;
       }
       $.post($(this).data('url'), function (html) {
         Notify.success($trigger.attr('title') + Translator.trans('admin.classroom.operation_success_hint'));
+        var $tr = $(html);
+        $('#' + $tr.attr('id')).replaceWith($tr);
+      }).error(function () {
+        Notify.danger($trigger.attr('title') + Translator.trans('admin.classroom.operation_fail_hint'));
+      });
+    });
+
+    $table.on('click', '.open-classroom', function () {
+      var $trigger = $(this);
+      cd.confirm({
+        title: '<span class="es-icon es-icon-infooutline" style="color: #FAAD14; margin-right: 16px; font-size: 22px; line-height: 22px;"></span>' + Translator.trans('admin.close.btn.confirm_publish'),
+        okText: Translator.trans('site.confirm'),
+        cancelText: Translator.trans('site.close')
+      }).on('ok', () => {
+        $.post($(this).data('url'), function (html) {
+          Notify.success($trigger.attr('title') + Translator.trans('admin.classroom.operation_success_hint'));
+          var $tr = $(html);
+          $('#' + $tr.attr('id')).replaceWith($tr);
+        }).error(function () {
+          Notify.danger($trigger.attr('title') + Translator.trans('admin.classroom.operation_fail_hint'));
+        });
+      });
+      
+    });
+
+    $table.on('click', '.close-classroom', function () {
+      var $trigger = $(this);
+      cd.confirm({
+        title: '<span class="es-icon es-icon-infooutline" style="color: #FAAD14; margin-right: 16px; font-size: 22px; line-height: 22px;"></span>' + Translator.trans('admin.close.btn.confirm_close'),
+        content: Translator.trans('admin.classroom.close_hint'),
+        okText: Translator.trans('site.confirm'),
+        cancelText: Translator.trans('site.close')
+      }).on('ok', () => {
+        $.post($(this).data('url'), function (html) {
+          Notify.success($trigger.attr('title') + Translator.trans('admin.classroom.operation_success_hint'));
+          var $tr = $(html);
+          $('#' + $tr.attr('id')).replaceWith($tr);
+        }).error(function () {
+          Notify.danger($trigger.attr('title') + Translator.trans('admin.classroom.operation_fail_hint'));
+        });
+      });
+     
+    });
+
+    $table.on('click', '.delist-classroom', function () {
+      var $trigger = $(this);
+      cd.confirm({
+        title: '<span class="es-icon es-icon-infooutline" style="color: #FAAD14; margin-right: 16px; font-size: 22px; line-height: 22px;"></span>' + Translator.trans('admin.close.btn.confirm_hide'),
+        content: Translator.trans('admin.classroom.delist_hint'),
+        okText: Translator.trans('site.confirm'),
+        cancelText: Translator.trans('site.close')
+      }).on('ok', () => {
+        $.post($(this).data('url'), function (html) {
+          Notify.success(Translator.trans('admin.classroom.delist_success_hint'));
+          var $tr = $(html);
+          $('#' + $tr.attr('id')).replaceWith($tr);
+        }).error(function () {
+          Notify.danger($trigger.attr('title') + Translator.trans('admin.classroom.operation_fail_hint'));
+        });
+      });
+      
+    });
+
+    $table.on('click', '.show-classroom', function () {
+      var $trigger = $(this);
+      $.post($(this).data('url'), function (html) {
+        Notify.success(Translator.trans('admin.classroom.show_success_hint'));
         var $tr = $(html);
         $('#' + $tr.attr('id')).replaceWith($tr);
       }).error(function () {

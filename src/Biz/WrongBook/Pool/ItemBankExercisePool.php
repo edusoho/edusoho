@@ -43,7 +43,7 @@ class ItemBankExercisePool extends AbstractPool
         }
 
         $collects = $this->getWrongQuestionCollectDao()->findCollectBYPoolId($pool['id']);
-        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion(['collect_ids' => ArrayToolkit::column($collects, 'id')], [], 0, PHP_INT_MAX);
+        $wrongQuestions = empty($collects) ? [] : $this->getWrongQuestionService()->searchWrongQuestion(['collect_ids' => ArrayToolkit::column($collects, 'id')], [], 0, PHP_INT_MAX);
 
         $searchConditions['chapter'] = $this->exerciseChapterSearch($pool['target_id'], $conditions);
         $searchConditions['testpaper'] = $this->exerciseAssessmentSearch($pool['target_id'], $conditions, $wrongQuestions);

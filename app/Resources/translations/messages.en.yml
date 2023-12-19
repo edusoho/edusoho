@@ -78,9 +78,11 @@ site.default.times: Times
 site.default.detail: Detail
 site.default.program_name: Default Program
 site.default.plan_setting: Default plan settings
+site.default.mobile: mobile
 site.org.belongs_to_org_th: Organiztion
 site.org.code: Code
 site.tips: Tips
+site.tips.delist: Confirm removal?
 site.qrcode_tips: Scan
 site.tips.scan_qrcode_tips: 'Scan the QR code to continue, the code will be expired in half an hour'
 site.tips.exercise_qrcode_tips: 'Scan the QR code on the right and go to the mobile terminal to learn'
@@ -837,7 +839,7 @@ buy.payments_disabled_title: Open payment function reminder
 buy.payments_disabled_tips: Since the online school does not open any payment function, the current product does not support purchase. Please contact the online school to open the payment function before purchasing.
 course.buy_failed_tips: 'Soory, the course is bought by someone earlier. Please check next time.'
 course.no_avatar_tips: 'You don''t have an avatar yet, please upload your avatar before enroll the course.<br/> It is more polite to have an avatar.'
-course.remove_students_tips: 'The course is closed. But students of the course can continue to study during course expiry date. Or you can remove students in student manage panel.'
+course.remove_students_tips: 'The course has been closed and cannot be studied. If you want the course not to be displayed but students can continue to study, you can set "remove" after the course is published.'
 course.name: 'Course title'
 course.price: Price
 course.price.RMB: '%price% CNY'
@@ -899,6 +901,8 @@ course.teaching_plan.expiry_date.end_date_mode: 'Expiration date mode'
 course.teaching_plan.expiry_date.days_mode: 'Valid days mode'
 course.teaching_plan.publish_btn: 'Publish'
 course.teaching_plan.manage: Teaching plan manage
+course.teaching_plan.show_page: Enable page display
+course.teaching_plan.hide_page: Disable page display
 course.teaching_plan.delete_btn: Delete
 course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
@@ -935,6 +939,9 @@ course.student_manage: 'Student config'
 course.marketing_setup.setup: 'Enrollment settings'
 course.marketing_setup.setup.can_join: 'Enrollment'
 course.marketing_setup.setup.can_not_join: Not joinable
+course.marketing_setup.setup.is_show_label: Page display
+course.marketing_setup.setup.can_show: Enable
+course.marketing_setup.setup.can_hide: Disable
 course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not enroll the course except added by teahcers. It is used for closed teaching.'
 course.marketing_setup.price.free: Free
 course.marketing_setup.price.not_free: Paid
@@ -1213,6 +1220,7 @@ course.status.followed: Bookmarked
 course.status.follow: Bookmark
 course.status.closed: Closed
 course.status.unpublished: Unpublished
+course.status.delist: No longer available
 course.status.serialized: Updating
 course.status.finished: Finished
 course.status.published: Published
@@ -1499,6 +1507,11 @@ course.question_manage.manage.material: Material
 course.question_manage.manage.belong_change_tips: If this question is cited, changing the subordinate is likely to affect the practice of the class, please be cautious!
 course.question_manage.edit: Edit
 course.question_manage.import.btn: Import question
+course.question_manage.start.import: Start import
+course.question_manage.new.import.instructions: New version import instructions
+course.question_manage.guide.message: A new way of topic import, support formula, form, special character batch recognition import, improve management and operation efficiency. The new version of the topic import is divided into 【 simple version 】 and 【 complete version 】.
+course.question_manage.guide.message.tip1: 1. [Simple version] can add import mode and description on the previous word template (copy the copy on the new template and paste it on the old template), automatically identify the question type, "simple version" only supports single choice, multiple choice, fill-in, judgment, question and answer.
+course.question_manage.guide.message.tip2: 2. [Full version] Add optional multiple choice questions and material questions on the basis of the "simple version", and you need to download a new template to use.
 course.question_manage.import.modal_title: Import question
 course.question_manage.import.new_hint: Read before upload
 course.question_manage.import.drag_document_hint: Drag document to here
@@ -2094,6 +2107,7 @@ item_bank_exercise.chapter_exercise.info: Chapter exercises are based on the set
 item_bank_exercise.marketing_setup.no_permission_tips: 'Sorry, you can not edit base settings. Contact site administrator for help.'
 item_bank_exercise.marketing_setup.setup.can_join.tips: After it is closed, students cannot join by themselves. Teachers need to add students manually.
 item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: The change of validity period is only valid for new students after the change
+item_bank_exercise.marketing_setup.rule.show: After disabling, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.
 item_bank_exercise.assessment_exercise.add_module: Create
 item_bank_exercise.assessment_exercise.edit_module: Edit
 item_bank_exercise.assessment_exercise.module.name: Module Name
@@ -2531,6 +2545,8 @@ classroom.add_course_tips: 'Inprogress, please wait.'
 classroom.delete_btn: Delete
 classroom.free_course: Free
 classroom.teach_plan: 'Program'
+classroom.closed.course: Close the course
+classroom.open.course: Publish course
 classroom.live_course_playing: 'On live'
 classroom.live: Live
 classroom.task_num: "%taskName% number: %number%\n"
@@ -4021,6 +4037,7 @@ my.learning.thread.target_course_deleted: 'Course has been deleted'
 my.learning.course: 'My Course'
 my.learning.course.learning: Learning
 my.learning.course.learned: Learned
+my.learning.course.expired: Expired
 my.learning.course.favorite: Favorite
 my.learning.course.favorited: Favorited
 my.learning.course.favorite_empty: 'No record'
@@ -4181,8 +4198,10 @@ change_log: Changelog
 common.courseStatus.draft: Draft
 common.courseStatus.published: Published
 common.courseStatus.closed: Closed
+common.courseStatus.unpublished: Unpublished
 common.classroomStatus.draft: Draft
 common.classroomStatus.published: Published
+common.classroomStatus.unpublished: Unpublished
 common.classroomStatus.closed: Closed
 common.fileType.video: Video
 common.fileType.audio: Audio
@@ -4750,6 +4769,7 @@ admin.classroom_manage.manage.student_number_th: 'Student Number'
 admin.classroom_manage.manage.price_th: Price
 admin.classroom_manage.manage.creator: Creator/Date
 admin.classroom_manage.manage.status_th: Status
+admin.classroom_manage.manage.showable: isShow
 admin.classroom_manage.manage.operate_th: Action
 admin.classroom_manage.manage.empty: 'No %name% Record!'
 admin.classroom_manage.manage.category: Category
@@ -4759,7 +4779,8 @@ admin.classroom_manage.manage.price: '%price%(CNY)'
 admin.classroom_manage.manage.origin_price: 'Original %priceAll% (CNY)'
 admin.classroom_manage.manage.published: Published
 admin.classroom_manage.manage.closed: Closed
-admin.classroom_manage.manage.unpublished: Unpublished
+admin.classroom_manage.manage.unpublished: unpublished
+admin.classroom_manage.manage.draft: Draft
 admin.classroom_manage.manage.manage_btn: Manage
 admin.classroom_manage.recommend.seq_th: Sequence
 admin.classroom_manage.recommend.name_th: '%name% Title'
@@ -4995,6 +5016,10 @@ admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF
 admin.setting.site.icp.help_block: 'According to the Measures for the Administration of Record of Non-operational Internet Information Services (Order No. 33 of the former Ministry of Information Industry), the main record number issued by the Ministry of Industry and Information Technology shall be placed at the bottom of the webpage and linked to the website of the Ministry of Industry and Information Technology after the success of the record:<a href="http://beian.miit.gov.cn" target=_blank>beian.miit.gov.cn</a>For public enquiries and verification. If you violate the regulations of relevant departments, there will be a risk of violation'
 admin.setting.site.public_security.help_block: 'According to the relevant provisions of "Computer Information Network and International Networking Security Protection Management Measures", after the successful filing by the Ministry of Industry and Information Technology, the website shall be logged in within 30 days from the date of the website opening<a href="http://www.beian.gov.cn/" target=_blank>National Internet security management service platform</a>Submit the application for public security network filing. After the verification and approval of the public security network filing，You need to log in within 30 days<a href="http://www.beian.gov.cn/" target=_blank>National Internet security management service platform</a>，In your record website details, the website public security organs record number and icon information editing placed at the bottom of the page'
 admin.setting.site.logo.view_btn: 'Click To View'
+admin.setting.table.status.tooltip: "<div style='text-align:left;'>Unpublished: Students cannot join</div>"
+"<div style='text-align:left;'>Published: Students can join and study</div>"
+"<div style='text-align:left;'>Withdrawn: Not visible to students on the front-end, but they can still join and study</div>"
+"<div style='text-align:left;'>Closed: Student reception is not visible and cannot be studied</div>"
 admin.setting.site.favicon: 'Browser Icon'
 admin.setting.site.favicon.help_block: 'Recommend uploading images with format of ICO, support ICO, JPG, GIF, PNG, etc. Recommended image size is 32×32px. Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
 admin.setting.site.seo_keywords: 'SEO Keyword'
@@ -7256,7 +7281,7 @@ admin.payment_setting.alipay_api_type.direct.hint: >
   <span class="warning-state">Computer Browser</span> Supported Pay after opening this interface, Need to go to Alipay to open and view <a href="%aliApiHelpUrl%" target="_blank">Open tutorial</a>
 admin.payment_setting.alipay_api_type.mobile: Mobile Website Payment Interface
 admin.payment_setting.alipay_api_type.mobile.hint: >
-  <span class="warning-state">Mobile browser</span> and <span class="warning-state">KuoZhi School</span> Supported Pay after opening this interface, Need to go to Alipay to open and view <a href="%aliApiHelpUrl%" target="_blank">Open tutorial</a>
+  <span class="warning-state">Mobile browser</span> and <span class="warning-state">ZhiXiang School</span> Supported Pay after opening this interface, Need to go to Alipay to open and view <a href="%aliApiHelpUrl%" target="_blank">Open tutorial</a>
 admin.payment_setting.alipay_api_type.escow: 'Secured transaction interface'
 admin.payment_setting.alipay_api_type.dualfun: 'Standard dual-interface'
 admin.payment_setting.alipay_api_hint: 'You can get the PID and KEY after applying the Alipay interface access successfully<a href="%alipayApplication%" target="_blank"> How to apply? </a><br>If you need to use "immediate payment interface" in moblie app, please access the <a href="%mobileAlipayApplication%" target="blank"> Mobile Web payment </a><br>'
@@ -7843,6 +7868,7 @@ admin.cloud.license.edition_mismatching: Edition is mismathing with current lice
 admin.cloud.license.activate_fail: Activate fail
 admin.cloud.license.activate_success: Activate successfully
 admin.cloud.license.has_no_license: Please activate your license first.
+goods.show_page.closed_tips: The product is closed, not allowed to join and purchase
 
 # 通知
 notification.cash_account.recharge: You have successfully recharged %value% %coin_name%, <a href="%url%">check now</a>.
@@ -8139,6 +8165,7 @@ my.reward_points_message: '$ %num% in cash, the credits will not be refunded whe
 my.reward_points_instructions: 'Points instructions'
 
 task.learn_data_detail.nickname: name
+task.learn_data_detail.mobile: mobile
 task.learn_data_detail.createdTime: Join Time
 task.learn_data_detail.join_time: Join Time
 task.learn_data_detail.finishedTime: Finished Time
@@ -9814,10 +9841,13 @@ exception.item_bank_exercise.answer_unpublish_chapter: The current chapter has b
 exception.item_bank.assessment.not.open: The test paper is closed, please contact the teacher
 exception.item_bank.assessment.not.exist: Test paper does not exist
 exception.item_bank.assessment.is_empty: All questions have been removed from the paper. Please contact the teacher or administrator
-
+exception.exercise.closed.tips.title: Question bank exercises have been closed and cannot be purchased/studied
+exception.exercise.closed.tips.content: The results of the question bank exercises can be viewed
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
 exception.wechat.template_conflict_industry_hint: Service number industry setting error.
+exception.not_continue.look: Cannot continue viewing.
+exception.go_home: Go back home.
 
 exception.destroy_account.reason_too_long: Write off reason limit 200 words
 exception.destroy_account.not_found_record: Record Not Found
@@ -10229,7 +10259,7 @@ admin_v2.homepage.cloud_notice: "Welcome, your trail will be expired on<strong> 
 admin_v2.homepage.quick_entrance: Quick Entrance
 admin_v2.edit_quick_entrance.btn: Edit Entrance
 admin_v2.quick_entrance_setting: Set Quick Entrance
-admin_v2.quick_entrance_setting.tips: (Set up to 7 quick entries）
+admin_v2.quick_entrance_setting.tips: (Set up to 8 quick entries）
 
 ##分类标签
 admin_v2.course.tag: Tag
@@ -10251,8 +10281,10 @@ admin_v2.homepage.school_info.system_status.has_upgrade: New upgrade
 admin_v2.homepage.school_info.system_status.upgraded: Latest
 admin_v2.homepage.school_info.system_version: System version
 admin_v2.homepage.school_info.access_web: Home
-admin_v2.homepage.school_info.access_mobile_app: Access App
-admin_v2.homepage.school_info.access_wechat_app: Access wechat app
+admin_v2.homepage.school_info.access_mobile_web: Micronetwork school
+admin_v2.homepage.school_info.access_mobile_app: App
+admin_v2.homepage.school_info.access_wechat_app: Wechat app
+admin_v2.homepage.school_info.no_access: Have not opened
 admin_v2.homepage.school_info.level.none: Open source
 admin_v2.homepage.school_info.level.saas: SaaS
 admin_v2.homepage.school_info.level.license: License
@@ -10321,9 +10353,10 @@ admin_v2.wechat_official_account.title: Official Account
 admin_v2.wechat_official_account.text: Follow the EduSoho official account to get the latest education information
 admin_v2.homepage.announcement_from_platform: Announcement From Platform
 admin_v2.homepage.application_intro: Application Introduction
-admin_v2.homepage.application_intro.more_btn: View more marketing cloud application
+admin_v2.homepage.quick_custom: Custom
+admin_v2.homepage.application_intro.more_btn: Marketing cloud application
 admin_v2.business_advice.title: Business advice
-admin_v2.buiness_advice.goto_qiqiuyu: EduSoho Business School
+admin_v2.buiness_advice.goto_qiqiuyu: Business School
 
 admin_v2.notice.upgrade_notice: The new background for the plugin for a new adaptation, in order to facilitate your background management, need to manually upgrade all installed plugins
 admin_v2.notice.go_to_upgrade: Go to upgrade

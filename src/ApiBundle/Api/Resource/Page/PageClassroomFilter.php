@@ -14,7 +14,7 @@ use AppBundle\Common\ServiceToolkit;
 class PageClassroomFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'about', 'goodsId', 'specsId', 'spec',
+        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'about', 'goodsId', 'specsId', 'spec','canLearn'
     ];
 
     protected $publicFields = [

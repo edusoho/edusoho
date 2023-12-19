@@ -500,6 +500,7 @@ admin_v2.course.basic.basic_tab.close_btn: 关闭课程
 admin_v2.course.basic.basic_tab.publish_submit_btn: 发布课程
 admin_v2.course.basic.basic_tab.clone_btn: 复制课程
 admin_v2.course.basic.basic_tab.delete_submit_btn: 删除课程
+admin_v2.course.basic_tab.unpublished_btn: 下架课程
 admin_v2.course.basic.basic_tab.remove_submit_btn: 移除课程
 
 # 教学-课程管理-班级管理
@@ -512,6 +513,7 @@ admin_v2.course.classroom.basic_tab.create_btn: 创建班级
 admin_v2.course.classroom.basic_tab.recommend_btn: 推荐班级
 admin_v2.course.classroom.basic_tab.close_btn: 关闭班级
 admin_v2.course.classroom.basic_tab.publish_submit_btn: 发布班级
+admin_v2.course.classroom.basic_tab.unpublished_btn: 下架班级
 admin_v2.course.classroom.basic_tab.delete_submit_btn: 删除班级
 
 # 教学-课程管理-直播模块
@@ -530,6 +532,7 @@ admin_v2.course.item_bank_exercise.basic_tab.manage_btn: 管理题库练习
 admin_v2.course.item_bank_exercise.basic_tab.recommend_btn: 推荐题库练习
 admin_v2.course.item_bank_exercise.basic_tab.close_btn: 关闭题库练习
 admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn: 发布题库练习
+admin_v2.course.item_bank_exercise.basic_tab.unpublished_btn: 下架题库练习
 admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn: 删除题库练习
 
 # 教学-课程管理-公开课模块

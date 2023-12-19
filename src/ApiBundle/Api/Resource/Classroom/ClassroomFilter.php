@@ -9,7 +9,6 @@ use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
-use Biz\System\Service\SettingService;
 use Topxia\Service\Common\ServiceKernel;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
@@ -17,7 +16,7 @@ use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 class ClassroomFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'courseNum', 'about', 'productId', 'goodsId', 'specsId', 'spec', 'learningProgressPercent'
+        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'courseNum', 'about', 'productId', 'goodsId', 'specsId', 'spec', 'learningProgressPercent', 'isExpired', 'status', 'canLearn',
     ];
 
     protected $publicFields = [

@@ -5,14 +5,13 @@ namespace ApiBundle\Api\Resource\Good;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\GoodsException;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
-use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -30,7 +29,7 @@ class Good extends AbstractResource
     public function get(ApiRequest $request, $id)
     {
         $goods = $this->getGoodsService()->getGoods($id);
-        if (empty($goods)){
+        if (empty($goods)) {
             throw GoodsException::GOODS_NOT_FOUND();
         }
         $this->getOCUtil()->single($goods, ['creator']);
@@ -43,8 +42,7 @@ class Good extends AbstractResource
         $goods['peopleShowNum'] = $this->getPeopleShowNum($goods);
         $goods['extensions'] = $this->collectGoodsExtensions($goods['product']);
 
-        $this->fetchSpecs($goods, $goodsEntity, $request);
-
+        $this->fetchSpecs($goods, $goodsEntity, $request, $this->getProductTarget($goods['product']));
         if ($this->getCurrentUser()->isLogin()) {
             $goods['isFavorite'] = !empty($this->getFavoriteService()->getUserFavorite($this->getCurrentUser()->getId(), 'goods', $goods['id']));
         }
@@ -57,6 +55,19 @@ class Good extends AbstractResource
         }
 
         return $goods;
+    }
+
+    private function getProductTarget($product)
+    {
+        $target = '';
+        if ('course' == $product['targetType']) {
+            $target = $this->getCourseService()->getCourse($product['targetId']);
+        }
+        if ('classroom' == $product['targetType']) {
+            $target = $this->getClassroomService()->getClassroom($product['targetId']);
+        }
+
+        return !empty($target) && 'unpublished' == $target['status'] ? $target : '';
     }
 
     private function collectGoodsExtensions($product)
@@ -88,13 +99,16 @@ class Good extends AbstractResource
         return $product;
     }
 
-    private function fetchSpecs(&$goods, $goodsEntity, $request)
+    private function fetchSpecs(&$goods, $goodsEntity, $request, $target)
     {
         $user = $this->getCurrentUser();
         if (1 == $request->query->get('preview')) {
             $goods['specs'] = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
         } else {
             $goods['specs'] = $this->getGoodsService()->findPublishedGoodsSpecsByGoodsId($goods['id']);
+        }
+        if (!empty($target)) {
+            $goods['specs'] = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
         }
         $goods['isMember'] = false;
         foreach ($goods['specs'] as &$spec) {
@@ -184,5 +198,13 @@ class Good extends AbstractResource
     protected function getCourseMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->service('Classroom:ClassroomService');
     }
 }

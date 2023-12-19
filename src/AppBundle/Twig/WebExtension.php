@@ -93,6 +93,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('plain_text_with_p_tag', [$this, 'plainTextWithPTagFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('sub_text', [$this, 'subTextFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('wrap_text', [$this, 'wrapTextFilter'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('sub_html_text', [$this, 'subHtmlTextFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('duration', [$this, 'durationFilter']),
             new \Twig_SimpleFilter('duration_text', [$this, 'durationTextFilter']),
             new \Twig_SimpleFilter('tags_join', [$this, 'tagsJoinFilter']),
@@ -1818,6 +1819,33 @@ class WebExtension extends \Twig_Extension
         }
 
         return $text;
+    }
+
+    public function subHtmlTextFilter($text, $length)
+    {
+        if (mb_strlen($text) <= $length) {
+            return $text;
+        }
+        $textLength = 0;
+
+        return preg_replace_callback('/(<[a-z]+>)(.+?)(<\/[a-z]+>)|([^<>]+)/', function ($matches) use (&$textLength, $length) {
+            if ($textLength >= $length) {
+                return '';
+            }
+            if (!empty($matches[2])) {
+                $textLength += mb_strlen($matches[2]);
+
+                return $matches[1].$matches[2].$matches[3];
+            }
+            if (!empty($matches[4])) {
+                $subText = mb_substr($matches[4], 0, $length - $textLength);
+                $textLength += mb_strlen($subText);
+
+                return $subText;
+            }
+
+            return '';
+        }, $text).'...';
     }
 
     public function getFileType($fileName, $string = null)

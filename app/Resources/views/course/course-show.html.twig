@@ -16,6 +16,7 @@
 {% block format_detection %}{{ 'telephone=no' }}{% endblock %}
 {% block full_content %}
     {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
+
     {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
 
   {% set previewAs = app.request.query.get('previewAs') %}

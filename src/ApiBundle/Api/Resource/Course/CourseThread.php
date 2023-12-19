@@ -7,14 +7,17 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ContentToolkit;
 use Biz\Common\CommonException;
+use Biz\Course\CourseException;
 use Biz\File\UploadFileException;
 
 class CourseThread extends AbstractResource
 {
     public function get(ApiRequest $request, $courseId, $threadId)
     {
-        $this->getCourseService()->tryTakeCourse($courseId);
-
+        list($course, $memeber) = $this->getCourseService()->tryTakeCourse($courseId);
+        if ('0' == $course['canLearn']) {
+            throw CourseException::CLOSED_COURSE();
+        }
         $thread = $this->getCourseThreadService()->getThreadByThreadId($threadId);
         $this->extractImgs($thread);
         $this->handleAttachments($thread);

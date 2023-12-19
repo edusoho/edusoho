@@ -1,6 +1,13 @@
 <div class="admin-sidebar-section__header">{{ 'admin_v2.default_page.changelog_title'|trans }}<a class="admin-sidebar-section__more" href="{{ path('changelog_list') }}" target="_blank">{{ 'site.datagrid.filter.category_more'|trans }}<i class="es-icon es-icon-chevronright"></i></a></div>
 <div class="admin-sidebar-section__body">
   <div class="admin-log">
+    {# <div class="admin-log__cell text-overflow" style="display: inline;">
+      <span class="admin-log__date cd-mr16" style="border: #e9e9e9 1px solid; padding:1px; padding: 2px 5px;border-radius: 2px;">{{ currentChangelog.version }}</span>
+    </div> #}
+
+    <div class="admin-log__cell text-overflow">
+      <span class="admin-log__date cd-mr16">{{ currentChangelog.tips }}</span>
+    </div>
     {% for item in currentChangelog.items %}
       {% if loop.index <= 5 %}
         <div class="admin-log__cell text-overflow">

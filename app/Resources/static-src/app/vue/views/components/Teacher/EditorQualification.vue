@@ -69,7 +69,7 @@ export default {
         truename: [
           { required: true, message: '请输入姓名', trigger: 'blur' },
           { min: 2, message: '最少需要输入 2 个字符', trigger: 'blur' },
-          { max: 36, message: '最多只能输入 36 个字符', trigger: 'blur' },
+          { max: 36, message: '最多支持 36 个字符', trigger: 'blur' },
           { pattern: /^[\u4E00-\u9FA5A-Za-z0-9_]+$/, message: '只支持中文字、英文字母、数字及_', trigger: 'blur' }
         ],
         avatarFileId: [{ required: true, message: '请上传图片' }],

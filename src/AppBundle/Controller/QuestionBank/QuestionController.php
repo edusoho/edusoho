@@ -176,7 +176,7 @@ class QuestionController extends BaseController
         return $this->render('question-manage/question-form-layout.html.twig', [
             'mode' => 'edit',
             'questionBank' => $questionBank,
-            'item' => $this->addItemEmphasisStyle($item),
+            'item' => $this->addArrayEmphasisStyle($item),
             'type' => $item['type'],
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($item['bank_id']),
             'goto' => $goto,
@@ -296,11 +296,53 @@ class QuestionController extends BaseController
         }
         $data = json_decode($request->getContent(), true);
 
-        if ($this->getItemService()->isMaterialDuplicative($questionBank['itemBankId'], $data['material'], $data['items'])) {
+        if ($this->getItemService()->isMaterialDuplicative($questionBank['itemBankId'], $data['material'], $data['items'] ?? [], $data['itemId'] ?? 0)) {
             return $this->createJsonResponse(true);
         } else {
             return $this->createJsonResponse(false);
         }
+    }
+
+    public function checkDuplicativeQuestionsAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+        $categoryId = $request->query->get('categoryId', '');
+        if ($categoryId) {
+            $category = $this->getItemCategoryService()->getItemCategory($categoryId);
+        }
+
+        return $this->render('question-manage/duplicative-questions.html.twig', [
+            'questionBankId' => $id,
+            'categoryId' => $categoryId,
+            'categoryName' => $category['name'] ?? '',
+        ]);
+    }
+
+    public function updateDuplicativeQuestionAction(Request $request, $id, $questionId)
+    {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
+        $item = $this->getItemService()->getItemWithQuestions($questionId, true);
+        if (empty($item) || $item['bank_id'] != $questionBank['itemBankId']) {
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
+        }
+        $item = $this->wrapperItem($item);
+
+        return $this->render('question-manage/update-duplicative-question.html.twig', [
+            'questionBank' => $questionBank,
+            'item' => $this->addArrayEmphasisStyle($item),
+            'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($item['bank_id']),
+            'goto' => $this->generateUrl('question_bank_manage_check_duplicative_questions', ['id' => $id]),
+        ]);
     }
 
     public function deleteQuestionsAction(Request $request, $id)
@@ -365,7 +407,7 @@ class QuestionController extends BaseController
         if (!$item || $item['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
-        $item = $this->addItemEmphasisStyle($item);
+        $item = $this->addArrayEmphasisStyle($item);
 
         $template = $request->query->get(
             'isNew'

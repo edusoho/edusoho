@@ -16,5 +16,9 @@ interface ItemDao extends AdvancedDaoInterface
 
     public function countItemQuestionNumByCategoryId($categoryId);
 
-    public function findDuplicatedMaterial($bankId, $materialHashes);
+    public function findMaterialByMaterialHashes($bankId, $materialHashes);
+
+    public function findDuplicatedMaterialHashes($bankId, array $categoryIds);
+
+    public function findDuplicatedMaterials($bankId, array $categoryIds, array $materialHashes);
 }

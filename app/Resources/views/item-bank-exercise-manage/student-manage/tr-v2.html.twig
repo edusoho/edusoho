@@ -13,6 +13,15 @@
       <span class="color-gray text-sm js-remark" title="{{ student.remark|trans }}">({{ student.remark|trans|plain_text(16) }})</span>
     {% endif %}
   </td>
+  <td style="vertical-align: middle;" class="vertical-middle">
+    {% if user.verifiedMobile %}
+      {% include 'user-mobile-mask.html.twig' with { mobile: user.verifiedMobile } %}
+    {% elseif userProfiles[user.id].mobile %}
+      {% include 'user-mobile-mask.html.twig' with { mobile: userProfiles[user.id].mobile } %}
+    {% else %}
+      --
+    {% endif %}
+  </td>
   <td style="vertical-align: middle;">{{student.createdTime|date('Y-n-d H:i')}}</td>
   <td style="vertical-align: middle;">{% if student.deadline|default(0) %}{{student.deadline|date('Y-n-d H:i')}}{% else %}{{'course.expiry_date.forever_mode'|trans}}{% endif %}</td>
   <td style="vertical-align: middle;">

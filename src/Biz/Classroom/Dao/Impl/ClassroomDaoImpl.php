@@ -164,6 +164,7 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
                 'title = :title',
                 'status = :status',
                 'status != :excludeStatus',
+                'status in (:includeStatus)',
                 'title like :titleLike',
                 'price > :price_GT',
                 'price >= :price_GE',

@@ -1,5 +1,4 @@
 <div class="nav-filter clearfix">
-
   {% if service.canAccess('thread.create', {targetType:'classroom', targetId:classroom.id}) %}
     {% if member %}
       {% if member.deadline == 0 or member.deadline > 'now'|date('U') %}
@@ -8,13 +7,13 @@
           " data-toggle="dropdown" aria-expanded="false">{{'发布内容'|trans}} <span class="caret"></span></button>
           <ul class="dropdown-menu" role="menu">
             {% if setting('ugc_thread.enable_thread')|default('1') == '1' and setting('ugc_thread.enable_classroom_thread')|default('1') == '1' %}
-              <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'discussion'}) }}">{{'classroom.thread.send_btn'|trans}}</a></li>
+              <li><a class="{% if classroom.status == 'closed' %}js-handleClassroomOnMessage{% endif %}" href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'discussion'}) }}">{{'classroom.thread.send_btn'|trans}}</a></li>
             {% endif %}
             {% if setting('ugc_thread.enable_thread')|default('1') == '1' and setting('ugc_thread.enable_classroom_question')|default('1') == '1' %}
-              <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'question'}) }}">{{'classroom.thread.question_btn'|trans}}</a></li>
+              <li><a class="{% if classroom.status == 'closed' %}js-handleClassroomOnMessage{% endif %}" href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'question'}) }}">{{'classroom.thread.question_btn'|trans}}</a></li>
             {% endif %}
             {% if service.canAccess('thread.event.create', {targetType:'classroom', targetId:classroom.id}) %}
-              <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'event'}) }}">{{'classroom.thread.event_btn'|trans}}</a></li>
+              <li><a class="{% if classroom.status == 'closed' %}js-handleClassroomOnMessage{% endif %}" href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'event'}) }}">{{'classroom.thread.event_btn'|trans}}</a></li>
             {% endif %}
           </ul>
         </div>
