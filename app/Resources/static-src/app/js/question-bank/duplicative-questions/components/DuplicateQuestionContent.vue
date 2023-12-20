@@ -116,14 +116,17 @@ export default {
     }
   },
   watch: {
-    async activeIndex() {
-      const res = await Repeat.getQuestionInfo(this.questionContent.id)
+   async activeIndex() {
+      setTimeout(async() => {
+        const res = await Repeat.getQuestionInfo(this.questionContent.id)
         if(res.length === 0) {
           this.showErrorTip()
           return 
         }
 
         this.$emit("changeQuestionContent", `${this.type}Index`, res);
+      },1000)
+      
     }
   },
   components: {
@@ -138,15 +141,26 @@ export default {
         return
       }
 
-      if (this.activeIndex === this.count - 1) {
+      const typeIndex = this.type === 'one' ? 'two' : 'one';
+
+      if(this.activeIndex == 0 && this.nextIndex == this.count - 1) {
+        const previousIndexByOne = this.nextIndex - 1
+        await this.$emit("changeQuestion", typeIndex, previousIndexByOne);
+        return
+      }
+
+      if(this.activeIndex === this.count - 1) {
         const previousIndex = this.nextIndex !== this.activeIndex - 1 ? this.activeIndex - 1 : this.activeIndex - 2;
         await this.$emit("changeQuestion", this.type, previousIndex);
+        return
       }
 
       if(this.nextIndex === this.count - 1) {
-        const previousIndex = this.activeIndex !== this.activeIndex - 1 ? this.nextIndex - 1 : this.nextIndex - 2;
-        const typeIndex = this.type === 'one' ? 'two' : 'one';
-        await this.$emit("changeQuestion", typeIndex, previousIndex);
+        const previousIndex = this.nextIndex !== this.activeIndex - 1 ? this.activeIndex - 1 : this.activeIndex - 2;
+        await this.$emit("changeQuestion", this.type, previousIndex);
+        const previousIndexByOne = this.activeIndex !== this.activeIndex - 1 ? this.nextIndex - 1 : this.nextIndex - 2;
+        await this.$emit("changeQuestion", typeIndex, previousIndexByOne);
+        return
       }
     },
     onDelete() {
@@ -166,7 +180,7 @@ export default {
             if (res) {
               this.$message.success(Translator.trans("site.delete_success_hint"));
               await this.$emit("changeOption", this.activeKey);
-              this.goPreviousQuestion()
+              await this.goPreviousQuestion()
             }
           } catch (err) {
             this.showErrorTip()
@@ -182,7 +196,7 @@ export default {
           onOk: async() => {
               await this.$emit("getData")
               await this.$emit("changeOption");
-              this.goPreviousQuestion()
+              await this.goPreviousQuestion()
           }
       })
     },
