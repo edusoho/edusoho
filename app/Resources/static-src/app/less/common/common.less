@@ -60,8 +60,14 @@ html.nav-active body {
     border-radius: 2px;
   }
   .search-form {
-    display: inline-block;
-    position: relative;
+
+    @media (min-width: @screen-sm-min) {
+      display: inline-block;
+      position: relative;
+    }
+    @media (max-width: @screen-xs-max) {
+      display: none;
+    }
   }
 
   .search-input-content {
@@ -73,6 +79,7 @@ html.nav-active body {
     border-top-left-radius: 4px !important;
     border-bottom-left-radius: 4px !important;
     font-size: 14px;
+
   }
 
   .search-input-content::placeholder {  
