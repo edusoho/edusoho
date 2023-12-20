@@ -79,7 +79,11 @@
                     return;
                 }
 
-                let formData = {'_csrf_token': $('meta[name=csrf-token]').attr('content')};
+                let formData = {
+                    '_csrf_token': $('meta[name=csrf-token]').attr('content'),
+                    'crop_Image_attr': $("[name=cropImageAttr]").val() ? $("[name=cropImageAttr]").val() : $('.classroom-manage-cover').eq(0).attr('src')
+                };
+
                 Object.assign(
                     formData,
                     this.$refs.baseInfo.getFormData(),
