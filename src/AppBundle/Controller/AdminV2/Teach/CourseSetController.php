@@ -839,12 +839,14 @@ class CourseSetController extends BaseController
         $published = $this->getCourseSetService()->countCourseSets(array_merge($conditions, ['status' => 'published']));
         $closed = $this->getCourseSetService()->countCourseSets(array_merge($conditions, ['status' => 'closed']));
         $draft = $this->getCourseSetService()->countCourseSets(array_merge($conditions, ['status' => 'draft']));
+        $unpublished = $this->getCourseSetService()->countCourseSets(array_merge($conditions, ['status' => 'unpublished']));
 
         return [
             'total' => empty($total) ? 0 : $total,
             'published' => empty($published) ? 0 : $published,
             'closed' => empty($closed) ? 0 : $closed,
             'draft' => empty($draft) ? 0 : $draft,
+            'unpublished' => empty($unpublished) ? 0 : $unpublished,
         ];
     }
 
