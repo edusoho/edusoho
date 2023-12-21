@@ -21,6 +21,10 @@ class ExerciseManageController extends BaseController
         }
 
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+        if ('POST' == $request->getMethod()) {
+            $data = $request->request->all();
+            $exercise = $this->getExerciseService()->changeExerciseCover($exercise['id'], $data['covers']);
+        }
 
         return $this->render(
             'item-bank-exercise-manage/exercise-set/info.html.twig',
