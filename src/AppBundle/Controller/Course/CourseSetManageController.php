@@ -163,6 +163,7 @@ class CourseSetManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $this->getCourseSetService()->updateCourseSet($id, $data);
+            $this->getCourseSetService()->changeCourseSetCover($id, $data['covers']);
 
             return $this->createJsonResponse(true);
         }
