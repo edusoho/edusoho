@@ -12,6 +12,7 @@ use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\System\Constant\LogModule;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Dao\TaskDao;
@@ -87,8 +88,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $fields['content'] = $this->purifyHtml($fields['content'], true);
             }
             $fields = $this->createActivity($fields);
-            $strategy = $this->createCourseStrategy($fields['courseId']);
-            $task = $strategy->createTask($fields);
+            $task = $this->createCourseStrategy($fields['courseId'])->createTask($fields);
             $task = array_merge($fields, $task);
             $this->dispatchEvent('course.task.create', new Event($task));
             $this->commit();
@@ -96,9 +96,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             return $task;
         } catch (\Exception $exception) {
             $this->rollback();
-
-            //监控此处是否存在报错问题
-            $this->getLogService()->info('task', 'createTask', $exception->getMessage(), $fields);
+            $this->getLogService()->error(LogModule::COURSE, 'add_task', $exception->getMessage(), $fields);
             throw $exception;
         }
     }
@@ -258,59 +256,13 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         if ('published' === $task['status']) {
-            return;
+            return $task;
         }
 
-        if (!$this->canPublish($task['id'])) {
-            $this->createNewException(TaskException::FORBIDDEN_PUBLISH_SYNC_TASK());
-        }
-
-        $strategy = $this->createCourseStrategy($task['courseId']);
-
-        $task = $strategy->publishTask($task);
+        $task = $this->createCourseStrategy($task['courseId'])->publishTask($task);
         $this->dispatchEvent('course.task.publish', new Event($task));
 
         return $task;
-    }
-
-    public function publishTasksByCourseId($courseId)
-    {
-        $this->getCourseService()->tryManageCourse($courseId);
-        $tasks = $this->findTasksByCourseId($courseId);
-
-        if (!empty($tasks)) {
-            foreach ($tasks as $task) {
-                if ('published' !== $task['status']) {
-                    //mode存在且不等于lesson的任务会随着mode=lesson的任务发布，这里不应重复发布
-                    if (!empty($task['mode']) && 'lesson' !== $task['mode']) {
-                        continue;
-                    }
-                    if (!$this->canPublish($task['id'])) {
-                        continue;
-                    }
-                    $this->publishTask($task['id']);
-                }
-            }
-        }
-    }
-
-    protected function canPublish($taskId)
-    {
-        $jobName = 'course_task_create_sync_job_'.$taskId;
-
-        $fireJobs = $this->getSchedulerService()->searchJobFires(
-            ['job_name' => $jobName],
-            ['id' => 'desc'],
-            0,
-            1
-        );
-        $syncCreateTaskFireJob = reset($fireJobs);
-
-        if (!empty($syncCreateTaskFireJob) && in_array($syncCreateTaskFireJob['status'], ['executing', 'acquired'])) {
-            return false;
-        }
-
-        return true;
     }
 
     public function unpublishTask($id)
@@ -325,8 +277,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             $this->createNewException(TaskException::UNPUBLISHED_TASK());
         }
 
-        $strategy = $this->createCourseStrategy($task['courseId']);
-        $task = $strategy->unpublishTask($task);
+        $task = $this->createCourseStrategy($task['courseId'])->unpublishTask($task);
         $this->dispatchEvent('course.task.unpublish', new Event($task));
 
         return $task;

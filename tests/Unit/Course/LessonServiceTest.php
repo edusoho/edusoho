@@ -224,7 +224,7 @@ class LessonServiceTest extends BaseTestCase
             ],
         ]);
 
-        $result = $this->getCourseLessonService()->batchUpdateLessonsStatus(1, ['1', '2'], 'published');
+        $result = $this->getCourseLessonService()->batchPublishLesson(1, ['1', '2']);
 
         $this->assertCount(2, $result);
     }

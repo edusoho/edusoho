@@ -130,6 +130,7 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
                 'type = :type',
                 'type in (:types)',
                 'status = :status',
+                'status in (:statuses)',
                 'syncId = :syncId',
                 'syncId in (:syncIds)',
                 'syncId > :syncIdGT',

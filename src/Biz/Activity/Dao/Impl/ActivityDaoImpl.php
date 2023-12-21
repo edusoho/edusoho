@@ -26,6 +26,11 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         return $this->getByFields(['copyId' => $copyId, 'fromCourseSetId' => $courseSetId]);
     }
 
+    public function findByCopyIdAndCourseIds($copyId, $courseIds)
+    {
+        // TODO: Implement findByCopyIdAndCourseIds() method.
+    }
+
     public function findActivitiesByCourseSetId($courseSetId)
     {
         return $this->findByFields(['fromCourseSetId' => $courseSetId]);

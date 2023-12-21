@@ -284,18 +284,6 @@ class TaskServiceTest extends BaseTestCase
         $this->getTaskService()->publishTask($task['id']);
     }
 
-    public function testPublishTasksByCourseId()
-    {
-        $courseSet = $this->createNewCourseSet();
-        $course = $this->createNewCourse($courseSet['id']);
-
-        $task = $this->getTaskService()->createTask($this->mockSimpleTask($course['id'], $courseSet['id']));
-        $this->getTaskService()->publishTasksByCourseId($course['id']);
-        $newTask = $this->getTaskService()->getTask($task['id']);
-
-        $this->assertEquals('published', $newTask['status']);
-    }
-
     public function testUnpublishTask()
     {
         $courseSet = $this->createNewCourseSet();

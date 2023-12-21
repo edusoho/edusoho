@@ -12,6 +12,8 @@ interface ActivityDao extends AdvancedDaoInterface
 
     public function getByCopyIdAndCourseSetId($copyId, $courseSetId);
 
+    public function findByCopyIdAndCourseIds($copyId, $courseIds);
+
     public function findSelfVideoActivityByCourseIds($courseIds);
 
     public function findOverlapTimeActivitiesByCourseId($courseId, $newStartTime, $newEndTime, $excludeId = null);
