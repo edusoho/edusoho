@@ -61,10 +61,15 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if ($task['copyId'] > 0) {
             return;
         }
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
-        if (empty($copiedCourses)) {
+        $syncCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        if (empty($syncCourses)) {
             return;
         }
+        $syncTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], array_column($syncCourses, 'id'));
+        if (empty($syncTasks)) {
+            return;
+        }
+        $this->syncForUpdateTask($task, $syncTasks);
 
         //task 更新同步任务，永久有效
         $this->getSchedulerService()->register([
@@ -140,7 +145,19 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             $this->createSyncTasks($task, $syncActivities);
             $this->getLogService()->info(LogModule::COURSE, 'sync_when_task_create', '课时同步创建成功', ['taskId' => $task['id']]);
         } catch (\Exception $e) {
-            $this->getLogService()->error(LogModule::COURSE, 'sync_when_task_create', '课时同步创建失败', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            $this->getLogService()->error(LogModule::COURSE, 'sync_when_task_create', '课时同步创建失败', ['taskId' => $task['id'], 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            throw $e;
+        }
+    }
+
+    private function syncForUpdateTask($task, $syncTasks)
+    {
+        try {
+            $this->updateSyncActivities($task, $syncTasks);
+            $this->updateSyncTasks($task, $syncTasks);
+            $this->getLogService()->info(LogModule::COURSE, 'sync_when_task_update', '课时同步更新成功', ['taskId' => $task['id']]);
+        } catch (\Exception $e) {
+            $this->getLogService()->error(LogModule::COURSE, 'sync_when_task_update', '课时同步更新失败', ['taskId' => $task['id'], 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             throw $e;
         }
     }
@@ -224,6 +241,45 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             $syncTasks[] = $syncTask;
         }
         $this->getTaskDao()->batchCreate($syncTasks);
+    }
+
+    private function updateSyncActivities($task, $syncTasks)
+    {
+        $activity = $this->getActivityDao()->get($task['activityId']);
+        $syncActivityIds = array_column($syncTasks, 'activityId');
+        $syncActivities = $this->getActivityDao()->findByIds($syncActivityIds);
+        $syncActivities = array_column($syncActivities, null, 'id');
+        foreach ($syncTasks as $syncTask) {
+            $this->getActivityConfig($activity['mediaType'])->sync($activity, $syncActivities[$syncTask['activityId']]);
+        }
+        $this->getActivityDao()->update(['ids' => $syncActivityIds], ArrayToolkit::parts($activity, [
+            'title',
+            'remark',
+            'content',
+            'length',
+            'startTime',
+            'endTime',
+            'finishType',
+            'finishData',
+        ]));
+    }
+
+    private function updateSyncTasks($task, $syncTasks)
+    {
+        $this->getTaskDao()->update(['ids' => array_column($syncTasks, 'id')], ArrayToolkit::parts($task, [
+            'seq',
+            'title',
+            'isFree',
+            'isOptional',
+            'isLesson',
+            'startTime',
+            'endTime',
+            'number',
+            'mediaSource',
+            'maxOnlineNum',
+            'status',
+            'length',
+        ]));
     }
 
     /**

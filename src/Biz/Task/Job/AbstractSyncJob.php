@@ -3,7 +3,6 @@
 namespace Biz\Task\Job;
 
 use Biz\Course\Dao\CourseDao;
-use Biz\Lock;
 use Biz\System\Service\LogService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
@@ -16,8 +15,6 @@ use Topxia\Service\Common\ServiceKernel;
 
 class AbstractSyncJob extends AbstractJob
 {
-    private $lock;
-
     public function execute()
     {
     }
@@ -26,7 +23,7 @@ class AbstractSyncJob extends AbstractJob
     {
         $trx = $this->biz['db']->fetchAll('select * from information_schema.innodb_trx where TIME_TO_SEC(timediff(now(),trx_started))>30');
         $processlist = $this->biz['db']->fetchAll('show processlist');
-        $this->getLogger()->error($error->getMessage(),['trace'=>$error->getTrace(),'trx'=> $trx, 'process' => $processlist]);
+        $this->getLogger()->error($error->getMessage(), ['trace' => $error->getTrace(), 'trx' => $trx, 'process' => $processlist]);
     }
 
     protected function dispatchEvent($eventName, $subject, $arguments = [])
@@ -40,19 +37,11 @@ class AbstractSyncJob extends AbstractJob
         return $this->biz['dispatcher']->dispatch($eventName, $event);
     }
 
-    protected function getLock()
-    {
-        if (!$this->lock) {
-            $this->lock = new Lock($this->biz);
-        }
-
-        return $this->lock;
-    }
-
     protected function getLogger()
     {
         $logger = new Logger('SyncTaskError');
         $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/sync-task-error.log', Logger::DEBUG));
+
         return $logger;
     }
 

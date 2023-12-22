@@ -16,9 +16,9 @@ class CourseTaskCreateSyncJob extends AbstractSyncJob
         }
         try {
             $this->dispatchEvent('course.task.create.sync', new Event($task));
-            $this->getLogService()->info(LogModule::COURSE, 'async_when_task_create', 'course.log.task.create.sync.success_tips', ['taskId' => $task['id']]);
+            $this->getLogService()->info(LogModule::COURSE, 'async_when_task_create', '课时创建异步任务执行成功', ['taskId' => $task['id']]);
         } catch (\Exception $e) {
-            $this->getLogService()->error(LogModule::COURSE, 'async_when_task_create', 'course.log.task.create.sync.fail_tips', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            $this->getLogService()->error(LogModule::COURSE, 'async_when_task_create', '课时创建异步任务执行失败', ['taskId' => $task['id'], 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             $this->innodbTrxLog($e);
             $retry = $this->args['retry'] ?? 0;
             if ($retry < 5) {

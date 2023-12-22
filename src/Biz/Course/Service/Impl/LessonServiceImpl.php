@@ -60,9 +60,7 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
-
-            //监控此处是否存在报错问题
-            $this->getLogService()->info('lesson', 'createLesson', $exception->getMessage(), $fields);
+            $this->getLogService()->error(LogModule::COURSE, 'create_lesson', $exception->getMessage(), $fields);
             throw $exception;
         }
 
@@ -78,7 +76,7 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $fields = ArrayToolkit::parts($fields, ['title', 'number', 'seq', 'parentId']);
+        $fields = ArrayToolkit::parts($fields, ['title', 'number', 'seq']);
 
         $lesson = $this->getCourseChapterDao()->update($chapter['id'], $fields);
         $this->dispatchEvent('course.lesson.update', new Event($lesson));
