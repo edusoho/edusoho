@@ -32,6 +32,7 @@ openCourseCategory:
 
 classroomStatus:
     draft: Unpublished
+    unpublished: Unpublished
     published: Published
     closed: Closed
 
