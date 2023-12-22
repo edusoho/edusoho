@@ -101,8 +101,16 @@ class LocalImageCrop {
     let cropImage = function(res) {
       return new Promise(function(resolve, reject) {
         $.post($input.data('crop'), cropOptions, function(data) {
+          if(data) {
+            $($input.data('targetImg')).attr('src', data[2].url)
+            addInputVal(JSON.stringify(data),'cropImageAttr')
+            $('input[name=covers]').val(JSON.stringify(data))
+          }
           resolve(data);
-        });
+        }).always(function() {
+          $input.val('');
+          $modal.modal('hide');
+        });;
       });
     };
 
@@ -145,7 +153,7 @@ class LocalImageCrop {
     uploadImage().then(function(res) {
       return cropImage(res);
     }).then(function(res) {
-      return saveImage(res);
+      // return saveImage(res);
     }).catch(function(res) {
       console.log(res);
     });

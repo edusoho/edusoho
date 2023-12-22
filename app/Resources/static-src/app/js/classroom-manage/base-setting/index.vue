@@ -81,7 +81,7 @@
 
                 let formData = {
                     '_csrf_token': $('meta[name=csrf-token]').attr('content'),
-                    'crop_Image_attr': $("[name=cropImageAttr]").val() ? $("[name=cropImageAttr]").val() : $('.classroom-manage-cover').eq(0).attr('src')
+                    'covers': $("[name=cropImageAttr]").val() ? JSON.parse($("[name=cropImageAttr]").val()) : null
                 };
 
                 Object.assign(
