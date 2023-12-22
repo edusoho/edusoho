@@ -4436,6 +4436,7 @@ admin.course_manage.manage.course_tips: "<div style='width:250px;'>\n  <span sty
 admin.course_manage.manage.count: "Courses：<strong class=\"inflow-num\">%courseNum%</strong>\n"
 admin.course_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>(s) \n"
 admin.course_manage.manage.closed_count: "Closed：<strong class=\"inflow-num\">%closedNum%</strong> \n"
+admin.course_manage.manage.draft_count: "draft：<strong class=\"inflow-num\">%draftNum%</strong>\n"
 admin.course_manage.manage.unpublish_count: "Unpublished：<strong class=\"inflow-num\">%unPublishedNum%</strong>\n"
 admin.course_set_manage.recommend.tips: Priority shall be given to the recommended serial number from small to large, and those not recommended shall be in reverse order according to the creation time
 admin.course_set_manage.manage.number: Id

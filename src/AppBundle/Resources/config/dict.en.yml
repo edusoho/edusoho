@@ -7,7 +7,8 @@ searchResultType:
     article: Article
 
 courseStatus:
-    draft: Unpublished
+    draft: draft
+    unpublished: Unpublished
     published: Published
     closed: Closed
 goodsStatus:
