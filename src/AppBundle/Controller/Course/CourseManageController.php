@@ -548,8 +548,8 @@ class CourseManageController extends BaseController
             $data['services'] = empty($data['services']) ? [] : $data['services'];
             $data['drainage'] = [
                 'enabled' => empty($data['drainageEnabled']) ? 0 : $data['drainageEnabled'],
-                'image' => empty($data['drainageImage']) ? '' : $data['drainageImage'],
-                'text' => empty($data['drainageText']) ? '' : $data['drainageText'],
+                'image' => empty($data['drainageImage']) ? '' : preg_replace('/^.+\/files\//', '/files/', $data['drainageImage']),
+            'text' => empty($data['drainageText']) ? '' : $data['drainageText'],
             ];
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
             if (in_array($courseSet['type'], ['live', 'reservation']) || !empty($courseSet['parentId'])) {
