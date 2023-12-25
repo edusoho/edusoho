@@ -117,12 +117,14 @@ class ClassroomController extends BaseController
         $published = $this->getClassroomService()->countClassrooms(array_merge($conditions, ['status' => 'published']));
         $closed = $this->getClassroomService()->countClassrooms(array_merge($conditions, ['status' => 'closed']));
         $draft = $this->getClassroomService()->countClassrooms(array_merge($conditions, ['status' => 'draft']));
+        $unpublished = $this->getClassroomService()->countClassrooms(array_merge($conditions, ['status' => 'unpublished']));
 
         return [
             'total' => empty($total) ? 0 : $total,
             'published' => empty($published) ? 0 : $published,
             'closed' => empty($closed) ? 0 : $closed,
             'draft' => empty($draft) ? 0 : $draft,
+            'unpublished' => empty($unpublished) ? 0 : $unpublished,
         ];
     }
 
