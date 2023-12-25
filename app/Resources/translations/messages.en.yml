@@ -5017,10 +5017,11 @@ admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF
 admin.setting.site.icp.help_block: 'According to the Measures for the Administration of Record of Non-operational Internet Information Services (Order No. 33 of the former Ministry of Information Industry), the main record number issued by the Ministry of Industry and Information Technology shall be placed at the bottom of the webpage and linked to the website of the Ministry of Industry and Information Technology after the success of the record:<a href="http://beian.miit.gov.cn" target=_blank>beian.miit.gov.cn</a>For public enquiries and verification. If you violate the regulations of relevant departments, there will be a risk of violation'
 admin.setting.site.public_security.help_block: 'According to the relevant provisions of "Computer Information Network and International Networking Security Protection Management Measures", after the successful filing by the Ministry of Industry and Information Technology, the website shall be logged in within 30 days from the date of the website opening<a href="http://www.beian.gov.cn/" target=_blank>National Internet security management service platform</a>Submit the application for public security network filing. After the verification and approval of the public security network filing，You need to log in within 30 days<a href="http://www.beian.gov.cn/" target=_blank>National Internet security management service platform</a>，In your record website details, the website public security organs record number and icon information editing placed at the bottom of the page'
 admin.setting.site.logo.view_btn: 'Click To View'
-admin.setting.table.status.tooltip: "<div style='text-align:left;'>Unpublished: Students cannot join</div>"
-"<div style='text-align:left;'>Published: Students can join and study</div>"
-"<div style='text-align:left;'>Withdrawn: Not visible to students on the front-end, but they can still join and study</div>"
-"<div style='text-align:left;'>Closed: Student reception is not visible and cannot be studied</div>"
+admin.setting.table.status.tooltip: |
+  "<div style='text-align:left;'>Unpublished: Students cannot join</div>"
+  "<div style='text-align:left;'>Published: Students can join and study</div>"
+  "<div style='text-align:left;'>Withdrawn: Not visible to students on the front-end, but they can still join and study</div>"
+  "<div style='text-align:left;'>Closed: Student reception is not visible and cannot be studied</div>"
 admin.setting.site.favicon: 'Browser Icon'
 admin.setting.site.favicon.help_block: 'Recommend uploading images with format of ICO, support ICO, JPG, GIF, PNG, etc. Recommended image size is 32×32px. Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
 admin.setting.site.seo_keywords: 'SEO Keyword'
