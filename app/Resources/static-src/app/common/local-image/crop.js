@@ -102,7 +102,7 @@ class LocalImageCrop {
       return new Promise(function(resolve, reject) {
         $.post($input.data('crop'), cropOptions, function(data) {
           if(data) {
-            $($input.data('targetImg')).attr('src', data[2].url)
+            $($input.data('targetImg')).attr('src', data[0].url)
             addInputVal(JSON.stringify(data),'cropImageAttr')
             $('input[name=covers]').val(JSON.stringify(data))
           }
