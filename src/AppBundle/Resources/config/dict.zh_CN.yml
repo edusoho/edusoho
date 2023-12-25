@@ -33,6 +33,7 @@ openCourseCategory:
 
 classroomStatus:
     draft: 未发布
+    unpublished: 已下架
     published: 已发布
     closed: 已关闭
 

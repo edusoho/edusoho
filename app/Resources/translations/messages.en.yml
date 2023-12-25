@@ -4762,6 +4762,7 @@ admin.classroom_manage.manage.describe_tips: "<div style='width:250px;'>\n  <spa
 admin.classroom_manage.manage.count: "Classrooms：<strong class=\"inflow-num\">%courseNum%</strong>\n"
 admin.classroom_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>(s) \n"
 admin.classroom_manage.manage.closed_count: "Closed：<strong class=\"inflow-num\">%closedNum%</strong> \n"
+admin.classroom_manage.manage.draft_count: "draft：<strong class=\"inflow-num\">%draftNum%</strong>\n"
 admin.classroom_manage.manage.unpublish_count: "Unpublished：<strong class=\"inflow-num\">%unPublishedNum%</strong>\n"
 admin.classroom_manage.manage.number_th: '%title% ID'
 admin.classroom_manage.manage.name_th: '%name% Title'
