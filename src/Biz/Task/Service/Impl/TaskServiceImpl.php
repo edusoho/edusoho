@@ -12,6 +12,8 @@ use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\Crontab\SystemCrontabInitializer;
+use Biz\System\Constant\LogAction;
 use Biz\System\Constant\LogModule;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -22,6 +24,7 @@ use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\TaskException;
 use Biz\Visualization\Service\ActivityLearnDataService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
@@ -96,7 +99,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             return $task;
         } catch (\Exception $exception) {
             $this->rollback();
-            $this->getLogService()->error(LogModule::COURSE, 'add_task', $exception->getMessage(), $fields);
+            $this->getLogService()->error(LogModule::COURSE, LogAction::ADD_TASK, $exception->getMessage(), $fields);
             throw $exception;
         }
     }
@@ -315,41 +318,64 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function deleteTask($id)
     {
         $task = $this->getTask($id);
+        if (empty($task)) {
+            return;
+        }
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             $this->createNewException(TaskException::FORBIDDEN_DELETE_TASK());
         }
         $this->dispatchEvent('course.task.delete.before', new Event($task));
         $this->beginTransaction();
         try {
-            $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
+            $this->getTaskDao()->delete($task['id']);
+            $tasks = $this->getTaskDao()->findByCourseIdAndCategoryId($task['courseId'], $task['categoryId']);
+            if (empty($tasks)) {
+                $this->getCourseChapterDao()->delete($task['categoryId']);
+            }
+            $this->getActivityService()->deleteActivity($task['activityId']);
             $this->updateTaskName($task);
             $this->dispatchEvent('course.task.delete', new Event($task, ['user' => $this->getCurrentUser()]));
             $this->commit();
-
-            return $result;
         } catch (\Exception $exception) {
             $this->rollback();
+            $this->getLogService()->error(LogModule::COURSE, LogAction::DELETE_TASK, '删除课时任务失败', ['taskId' => $id, 'error' => $exception->getMessage(), 'trace' => $exception->getTraceAsString()]);
             throw $exception;
         }
     }
 
     public function deleteTasksByCategoryId($courseId, $categoryId)
     {
+        if (!$this->getCourseService()->tryManageCourse($courseId)) {
+            $this->createNewException(TaskException::FORBIDDEN_DELETE_TASK());
+        }
         $lessonTasks = $this->getTaskDao()->findByCourseIdAndCategoryId($courseId, $categoryId);
         if (empty($lessonTasks)) {
             return;
         }
+        $this->deleteTasks(array_column($lessonTasks, 'id'));
+    }
 
+    public function deleteTasks(array $ids)
+    {
+        $tasks = $this->getTaskDao()->findByIds($ids);
+        if (empty($tasks)) {
+            return;
+        }
         try {
-            $this->biz['db']->beginTransaction();
-
-            foreach ($lessonTasks as $task) {
-                $this->deleteTask($task['id']);
+            $this->beginTransaction();
+            $this->getTaskDao()->batchDelete(['ids' => $ids]);
+            $remainingTasks = $this->getTaskDao()->search(['courseIds' => array_column($tasks, 'courseId'), 'categoryIds' => array_column($tasks, 'categoryId')], [], 0, PHP_INT_MAX, ['categoryId']);
+            $deleteChapterIds = array_diff(array_column($tasks, 'categoryId'), array_column($remainingTasks, 'categoryId'));
+            if ($deleteChapterIds) {
+                $this->getCourseChapterDao()->batchDelete(['ids' => array_values($deleteChapterIds)]);
             }
-
-            $this->biz['db']->commit();
+            $this->registerDeleteActivityJob(array_column($tasks, 'activityId'));
+            $this->dispatchDeleteTaskEvent($tasks);
+            $this->getLogService()->info(LogModule::COURSE, LogAction::BATCH_DELETE_TASK, '批量删除课时任务成功', ['ids' => $ids]);
+            $this->commit();
         } catch (\Exception $e) {
-            $this->biz['db']->rollback();
+            $this->rollback();
+            $this->getLogService()->error(LogModule::COURSE, LogAction::BATCH_DELETE_TASK, '批量删除课时任务失败', ['ids' => $ids, 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             throw $e;
         }
     }
@@ -1351,6 +1377,38 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $output;
     }
 
+    private function registerDeleteActivityJob(array $ids)
+    {
+        $this->getSchedulerService()->register([
+            'name' => "activity_delete_job_{$ids[0]}",
+            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+            'expression' => time(),
+            'misfire_policy' => 'executing',
+            'class' => 'Biz\Activity\Job\DeleteActivityJob',
+            'args' => ['ids' => $ids],
+        ]);
+    }
+
+    private function dispatchDeleteTaskEvent($tasks)
+    {
+        if (count($tasks) > 5) {
+            $tasks = ArrayToolkit::thin($tasks, ['id', 'courseId', 'copyId', 'type']);
+            $this->getSchedulerService()->register([
+                'name' => "task_delete_event_job_{$tasks[0]['id']}",
+                'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                'expression' => time(),
+                'misfire_policy' => 'executing',
+                'class' => 'Biz\Task\Job\CourseTaskDeleteEventJob',
+                'args' => ['tasks' => $tasks, 'user' => $this->getCurrentUser()],
+            ]);
+
+            return;
+        }
+        foreach ($tasks as $task) {
+            $this->dispatchEvent('course.task.delete', new Event($task, ['user' => $this->getCurrentUser()]));
+        }
+    }
+
     public function isTaskLocked($taskId)
     {
         $task = $this->getTask($taskId);
@@ -1410,14 +1468,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getTaskResultService()
     {
         return $this->biz->service('Task:TaskResultService');
-    }
-
-    /**
-     * @return MemberService
-     */
-    protected function getCourseMemberService()
-    {
-        return $this->biz->service('Course:MemberService');
     }
 
     /**

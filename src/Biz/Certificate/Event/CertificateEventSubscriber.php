@@ -137,7 +137,6 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
         $task = $event->getSubject();
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
-        $certificates = [];
         if (empty($course['parentId'])) {
             $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($task['courseId'], 'course');
         } else {

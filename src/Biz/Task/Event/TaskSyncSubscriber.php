@@ -122,18 +122,12 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if ($task['copyId'] > 0) {
             return;
         }
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
-        if (empty($copiedCourses)) {
+        $syncCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        if (empty($syncCourses)) {
             return;
         }
-        $this->getSchedulerService()->register([
-            'name' => 'course_task_delete_sync_job_'.$task['id'],
-            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-            'expression' => time(),
-            'misfire_policy' => 'executing',
-            'class' => 'Biz\Task\Job\CourseTaskDeleteSyncJob',
-            'args' => ['taskId' => $task['id'], 'courseId' => $task['courseId']],
-        ]);
+        $syncTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], array_column($syncCourses, 'id'));
+        $this->getTaskService()->deleteTasks(array_column($syncTasks, 'id'));
     }
 
     private function syncForCreateTask($task, $syncCourses)

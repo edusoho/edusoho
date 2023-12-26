@@ -57,6 +57,8 @@ interface TaskService
 
     public function deleteTasksByCategoryId($courseId, $categoryId);
 
+    public function deleteTasks(array $ids);
+
     public function findTasksByCourseId($courseId);
 
     public function findTasksByCourseSetId($courseSetId);

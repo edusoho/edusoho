@@ -4,14 +4,14 @@ namespace Tests\Unit\Task\Job;
 
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
-use Biz\Task\Job\CourseTaskDeleteSyncJob;
+use Biz\Task\Job\CourseTaskDeleteEventJob;
 use Tests\Unit\Task\Job\Tools\MockedNormalStrategy;
 
 class CourseTaskDeleteSyncJobTest extends BaseTestCase
 {
     public function testExecute()
     {
-        $job = new CourseTaskDeleteSyncJob();
+        $job = new CourseTaskDeleteEventJob();
         ReflectionUtils::setProperty($job, 'biz', $this->biz);
         $job->args = ['taskId' => 110, 'courseId' => 220];
 

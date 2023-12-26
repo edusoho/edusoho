@@ -20,6 +20,9 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
+use Biz\System\Constant\LogAction;
+use Biz\System\Constant\LogModule;
+use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\Util\EdusohoLiveClient;
@@ -277,23 +280,23 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function deleteActivity($id)
     {
         $activity = $this->getActivity($id);
+        $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
 
         try {
             $this->beginTransaction();
 
-            $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
+            $this->getMaterialService()->deleteMaterialsByLessonId($activity['id']);
 
-            $this->syncActivityMaterials($activity, [], 'delete');
-
-            $activityConfig = $this->getActivityConfig($activity['mediaType']);
-            $activityConfig->delete($activity['mediaId']);
+            $this->getActivityConfig($activity['mediaType'])->delete($activity['mediaId']);
             $this->getActivityLearnLogService()->deleteLearnLogsByActivityId($id);
             $result = $this->getActivityDao()->delete($id);
+            $this->getLogService()->info(LogModule::COURSE, LogAction::DELETE_ACTIVITY, '删除教学活动成功', ['id' => $id]);
             $this->commit();
 
             return $result;
         } catch (\Exception $e) {
             $this->rollback();
+            $this->getLogService()->error(LogModule::COURSE, LogAction::DELETE_ACTIVITY, '删除教学活动失败', ['id' => $id, 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             throw $e;
         }
     }
@@ -446,19 +449,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     protected function syncActivityMaterials($activity, $materials, $mode = 'create')
     {
-        if ('delete' === $mode) {
-            $this->getMaterialService()->deleteMaterialsByLessonId($activity['id']);
-
-            return;
-        }
-
         if (empty($materials)) {
             return;
         }
 
         switch ($mode) {
             case 'create':
-                foreach ($materials as $id => $material) {
+                foreach ($materials as $material) {
                     $this->getMaterialService()->uploadMaterial($this->buildMaterial($material, $activity));
                 }
                 break;
@@ -473,7 +470,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                     PHP_INT_MAX
                 );
                 $currents = [];
-                foreach ($materials as $id => $material) {
+                foreach ($materials as $material) {
                     $currents[] = $this->buildMaterial($material, $activity);
                 }
 
@@ -876,7 +873,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     }
 
     /**
-     * @param $activity
      * @param $eventName
      * @param $data
      *
@@ -894,7 +890,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     /**
      * @param $fetchMedia
      * @param $activities
-     * @param $sortedActivities
+     * @param $showCloud
      *
      * @return mixed
      */
@@ -938,9 +934,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $cloudFiles = array_filter($files, function ($file) {
             return 'cloud' === $file['storage'];
         });
-        $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
 
-        return $cloudFiles;
+        return ArrayToolkit::index($cloudFiles, 'id');
     }
 
     /**
@@ -997,5 +992,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }

@@ -97,14 +97,14 @@ class LessonServiceImpl extends BaseService implements LessonService
             $lesson = $this->getCourseChapterDao()->update($lessonId, ['status' => 'published']);
             $this->publishTasks([$lessonId]);
             $this->dispatchEvent('course.lesson.publish', new Event($lesson));
-            $this->getLogService()->info(LogModule::COURSE, 'publish_lesson', '发布课时', $lesson);
+            $this->getLogService()->info(LogModule::COURSE, LogAction::PUBLISH_LESSON, '发布课时', $lesson);
             $this->updateLessonNumbers($courseId);
             $this->dispatchEvent('course.lesson.update_status', new Event($lesson));
 
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
-            $this->getLogService()->error(LogModule::COURSE, 'publish_lesson', '发布课时失败', $e->getMessage());
+            $this->getLogService()->error(LogModule::COURSE, LogAction::PUBLISH_LESSON, '发布课时失败', ['lessonId' => $lessonId, 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             throw $e;
         }
 
