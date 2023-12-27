@@ -96,6 +96,7 @@ export default {
       color: #666;
 
       .choose-answer-text {
+        width: 100%;
         display: table-cell;
 
         p {
