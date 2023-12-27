@@ -578,6 +578,10 @@ class CourseManageController extends BaseController
                 $this->setVipRight($course, $data);
             }
 
+            if (!empty($data['covers'])) {
+                $this->getCourseSetService()->changeCourseSetCover($courseSetId, $data['covers']);
+            }
+
             return $this->createJsonResponse(true);
         }
 
