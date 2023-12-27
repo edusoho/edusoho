@@ -615,6 +615,10 @@ class CourseManageController extends BaseController
         $course['title'] = empty(trim($course['title'])) ? '默认计划' : $course['title'];
         $course['drainageEnabled'] = empty($course['drainage']['enabled']) ? 0 : 1;
         $course['drainageImage'] = empty($course['drainage']['image']) ? '' : $course['drainage']['image'];
+        if (!empty($course['drainageImage'])) {
+            $course['drainageImage'] = preg_replace('/^.+\/files\//', '/files/', $course['drainageImage']);
+            $course['drainageImage'] = $this->getWebExtension()->getFurl($course['drainageImage']);
+        }
         $course['drainageText'] = empty($course['drainage']['text']) ? '' : $course['drainage']['text'];
 
         return $this->render(
