@@ -43,7 +43,14 @@ class Review extends AbstractResource
 
     public function add(ApiRequest $request)
     {
-        if (!$this->checkDragCaptchaToken($request->getHttpRequest(), $request->request->get('_dragCaptchaToken'))) {
+        $needDragCaptcha = $request->request->get('needDragCaptcha', true);
+        if ($needDragCaptcha) {
+            $userAgent = $request->headers->get('User-Agent');
+            if (!empty($userAgent)) {
+                $needDragCaptcha = false === strpos($userAgent, 'ZhiXiang-App') && false === strpos($userAgent, 'EduSoho');
+            }
+        }
+        if ($needDragCaptcha && !$this->checkDragCaptchaToken($request->getHttpRequest(), $request->request->get('_dragCaptchaToken'))) {
             throw CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR();
         }
 
