@@ -20,7 +20,7 @@
     "husky": "^0.14.3",
     "istanbul": "^0.4.5",
     "jsdom": "^11.6.2",
-    "mocha": "^5.0.4",
+    "mocha": "^10.2.0",
     "mochawesome": "^3.0.2",
     "opn": "^5.3.0",
     "sinon": "^4.4.6"
@@ -64,7 +64,7 @@
     "es5-shim": "4.5.9",
     "es6-promise": "4.0.5",
     "font-awesome": "4.6.3",
-    "handlebars": "4.0.11",
+    "handlebars": "4.7.7",
     "html2canvas": "^1.4.1",
     "html5shiv": "3.7.3",
     "iframe-resizer": "3.5.5",
