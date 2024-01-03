@@ -2,16 +2,14 @@
 
 namespace Biz\Distributor\Service\Impl;
 
-use Biz\OrderFacade\Service\ProductDealerService;
-use Biz\OrderFacade\Product\Product;
-use Biz\Distributor\Util\DistributorCookieToolkit;
 use Biz\BaseService;
-use Codeages\PluginBundle\System\PluginConfigurationManager;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\Distributor\Util\DistributorCookieToolkit;
+use Biz\OrderFacade\Product\Product;
+use Biz\OrderFacade\Service\ProductDealerService;
 
 class DistributorProductDealerServiceImpl extends BaseService implements ProductDealerService
 {
-    public function setParams($cookies = array())
+    public function setParams($cookies = [])
     {
         $this->cookies = $cookies;
     }
@@ -24,31 +22,24 @@ class DistributorProductDealerServiceImpl extends BaseService implements Product
         if (empty($distributorToken) || !$this->isPluginInstalled('Drp')) {
             return $product;
         }
-        $this->getLogger()->info('distributor start order sign valid DistributorProductDealerServiceImpl::dealBeforeCreateProduct', array(
+        $this->getLogger()->info('distributor start order sign valid DistributorProductDealerServiceImpl::dealBeforeCreateProduct', [
             'distributorToken' => $distributorToken,
-        ));
+        ]);
         $tokenInfo['valid'] = true;
         if (!empty($this->cookies[$cookieName])) {
             $tokenInfo = $this->getDistributorUserService()->decodeToken($distributorToken);
         }
         if ($tokenInfo['valid']) {
-            $this->getLogger()->info('distributor order sign valid success DistributorProductDealerServiceImpl::dealBeforeCreateProduct', array(
+            $this->getLogger()->info('distributor order sign valid success DistributorProductDealerServiceImpl::dealBeforeCreateProduct', [
                 'distributorToken' => $distributorToken,
-            ));
+            ]);
             $product->setCreateExtra(
-                array('distributorToken' => $distributorToken)
+                ['distributorToken' => $distributorToken]
             );
             $this->getDrpUserService()->trySaveUserDistributorToken($user['id'], $distributorToken);
         }
 
         return $product;
-    }
-
-    protected function isPluginInstalled($code)
-    {
-        $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
-
-        return $pluginManager->isPluginInstalled($code);
     }
 
     protected function getLogger()

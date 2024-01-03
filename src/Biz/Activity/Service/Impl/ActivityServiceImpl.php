@@ -16,7 +16,6 @@ use Biz\Activity\Type\Testpaper;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
@@ -48,7 +47,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function getActivityFinishCondition($activity)
     {
         if (ArrayToolkit::requireds($activity, ['mediaType', 'finishType', 'finishData'])) {
-            $this->createInvalidArgumentException('params missed');
+            throw $this->createInvalidArgumentException('params missed');
         }
 
         $type = $activity['mediaType'];
@@ -78,11 +77,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         ];
     }
 
-    public function getActivityByCopyIdAndCourseSetId($copyId, $courseSetId)
-    {
-        return $this->getActivityDao()->getByCopyIdAndCourseSetId($copyId, $courseSetId);
-    }
-
     public function findActivities($ids, $fetchMedia = false, $showCloud = 1)
     {
         $activities = $this->getActivityDao()->findByIds($ids);
@@ -109,11 +103,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activities = $this->getActivityDao()->findActivitiesByCourseIdsAndTypes($courseIds, $types);
 
         return $this->prepareActivities($fetchMedia, $activities);
-    }
-
-    public function findActivitiesByCourseSetId($courseSetId)
-    {
-        return $this->getActivityDao()->findActivitiesByCourseSetId($courseSetId);
     }
 
     public function findActivitiesByCourseSetIdAndType($courseSetId, $type, $fetchMedia = false)
@@ -156,12 +145,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         if ('start' == $eventName) {
-            $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
+            $this->dispatchEvent("activity.{$eventName}", new Event($activity, $data));
         }
 
         if (isset($data['events']) && array_key_exists('finish', $data['events'])) {
-            $tempData['taskId'] = empty($data['taskId']) ? 0 : $data['taskId'];
-            $data = $tempData;
+            $data['taskId'] = empty($data['taskId']) ? 0 : $data['taskId'];
             $eventName = 'finish';
         }
         $this->triggerActivityLearnLogListener($activity, $eventName, $data);
@@ -178,7 +166,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $this->triggerExtendListener($activity, $key, $data);
         }
         if ('doing' == $eventName || 'finish' == $eventName) {
-            $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
+            $this->dispatchEvent("activity.{$eventName}", new Event($activity, $data));
         }
 
         return true;
@@ -234,7 +222,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $materials = $this->getMaterialsFromActivity($fields);
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
         $fields = $this->filterFields($fields);
-        $fields['createdTime'] = time();
         $activity = $this->getActivityDao()->create($fields);
 
         if (!empty($materials)) {
@@ -501,11 +488,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'lessonId' => $activity['id'],
             'title' => $material['title'],
             'description' => empty($material['summary']) ? '' : $material['summary'],
-            'userId' => $this->getCurrentUser()->offsetGet('id'),
+            'userId' => $this->getCurrentUser()->getId(),
             'type' => 'course',
             'source' => 'download' == $activity['mediaType'] ? 'coursematerial' : 'courseactivity',
             'link' => empty($material['link']) ? '' : $material['link'],
-            'copyId' => 0, //$fields
+            'copyId' => 0,
         ];
     }
 
@@ -854,14 +841,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
-    }
-
-    /**
-     * @return CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->createService('Course:CourseSetService');
     }
 
     /**

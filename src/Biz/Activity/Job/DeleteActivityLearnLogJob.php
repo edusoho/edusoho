@@ -15,7 +15,7 @@ class DeleteActivityLearnLogJob extends AbstractJob
     public function execute()
     {
         $activityId = $this->args['activityId'];
-        $limit = 5000;
+        $limit = 10000;
         try {
             $deletedCount = $this->getActivityLearnLogDao()->deleteLimitByActivityId($activityId, $limit);
             if ($deletedCount == $limit) {

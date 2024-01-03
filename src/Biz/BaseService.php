@@ -7,11 +7,7 @@ use Biz\Org\OrgException;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Monolog\Logger;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Topxia\Service\Common\ServiceKernel;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
@@ -37,14 +33,6 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @return EventDispatcherInterface
-     */
-    private function getDispatcher()
-    {
-        return $this->biz['dispatcher'];
-    }
-
-    /**
      * @param string      $eventName
      * @param Event|mixed $subject
      *
@@ -52,28 +40,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
      */
     protected function dispatchEvent($eventName, $subject, $arguments = [])
     {
-        if ($subject instanceof Event) {
-            $event = $subject;
-        } else {
-            $event = new Event($subject, $arguments);
-        }
-
-        return $this->getDispatcher()->dispatch($eventName, $event);
-    }
-
-    protected function beginTransaction()
-    {
-        $this->biz['db']->beginTransaction();
-    }
-
-    protected function commit()
-    {
-        $this->biz['db']->commit();
-    }
-
-    protected function rollback()
-    {
-        $this->biz['db']->rollback();
+        return $this->dispatch($eventName, $subject, $arguments);
     }
 
     /**
@@ -91,27 +58,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
      */
     protected function createAccessDeniedException($message = 'Access Denied')
     {
-        return new AccessDeniedException($message);
-    }
-
-    /**
-     * @param string $message
-     *
-     * @return InvalidArgumentException
-     */
-    protected function createInvalidArgumentException($message = '')
-    {
-        return new InvalidArgumentException($message);
-    }
-
-    /**
-     * @param string $message
-     *
-     * @return NotFoundException
-     */
-    protected function createNotFoundException($message = '')
-    {
-        return new NotFoundException($message);
+        return parent::createAccessDeniedException($message);
     }
 
     protected function createNewException($e)
@@ -121,16 +68,6 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         }
 
         throw new \Exception();
-    }
-
-    /**
-     * @param string $message
-     *
-     * @return ServiceException
-     */
-    protected function createServiceException($message = '', $code = 0)
-    {
-        return new ServiceException($message, $code);
     }
 
     protected function fillOrgId($fields)
@@ -156,9 +93,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
     protected function purifyHtml($html, $trusted = false)
     {
-        $htmlHelper = $this->biz['html_helper'];
-
-        return $htmlHelper->purify($html, $trusted);
+        return $this->biz['html_helper']->purify($html, $trusted);
     }
 
     protected function getLock()
@@ -199,20 +134,5 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         global $kernel;
 
         return $kernel->getPluginConfigurationManager()->isPluginInstalled($pluginCode);
-    }
-
-    public function getPluginVersion($pluginName)
-    {
-        global $kernel;
-
-        $plugins = $kernel->getPluginConfigurationManager()->getInstalledPlugins();
-
-        foreach ($plugins as $plugin) {
-            if (strtolower($plugin['code']) == strtolower($pluginName)) {
-                return $plugin['version'];
-            }
-        }
-
-        return null;
     }
 }

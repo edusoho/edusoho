@@ -4,7 +4,7 @@ namespace Biz\Activity\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
-use Biz\Activity\Dao\Impl\ActivityLearnLogDaoImpl;
+use Biz\Activity\Dao\ActivityLearnLogDao;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\BaseService;
 use Biz\Crontab\SystemCrontabInitializer;
@@ -97,24 +97,6 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
         ]);
     }
 
-    public function getLastestLearnLogByActivityIdAndUserId($activityId, $userId)
-    {
-        return $this->getActivityLearnLogDao()->getLastestByActivityIdAndUserId($activityId, $userId);
-    }
-
-    public function sumLearnTimeGroupByUserId($conditions)
-    {
-        $results = $this->getActivityLearnLogDao()->sumLearnTimeGroupByUserId($conditions);
-        $results = ArrayToolkit::index($results, 'userId');
-
-        return $results;
-    }
-
-    public function search($conditions, $orderBy, $start, $limit)
-    {
-        return $this->getActivityLearnLogDao()->search($conditions, $orderBy, $start, $limit);
-    }
-
     /**
      * @return SchedulerService
      */
@@ -124,7 +106,7 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
     }
 
     /**
-     * @return ActivityLearnLogDaoImpl
+     * @return ActivityLearnLogDao
      */
     protected function getActivityLearnLogDao()
     {

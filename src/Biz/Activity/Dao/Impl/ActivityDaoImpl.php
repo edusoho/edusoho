@@ -28,12 +28,17 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
 
     public function findByCopyIdAndCourseIds($copyId, $courseIds)
     {
-        // TODO: Implement findByCopyIdAndCourseIds() method.
-    }
+        if (empty($courseIds)) {
+            return [];
+        }
 
-    public function findActivitiesByCourseSetId($courseSetId)
-    {
-        return $this->findByFields(['fromCourseSetId' => $courseSetId]);
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $params = array_merge([$copyId], $courseIds);
+
+        $sql = "SELECT * FROM {$this->table()} WHERE copyId= ? AND courseId IN ({$marks})";
+
+        return $this->db()->fetchAll($sql, $params) ?: [];
     }
 
     public function findSelfVideoActivityByCourseIds($courseIds)
@@ -120,33 +125,34 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
 
     public function declares()
     {
-        $declares['orderbys'] = ['endTime', 'startTime', 'createdTime'];
-        $declares['conditions'] = [
-            'id IN (:ids)',
-            'fromCourseId = :fromCourseId',
-            'mediaType = :mediaType',
-            'fromCourseId IN (:courseIds)',
-            'title like :title',
-            'mediaType <> :excludeMediaType',
-            'fromCourseId NOT IN (:excludeCourseIds)',
-            'mediaType IN (:mediaTypes)',
-            'mediaId IN (:mediaIds)',
-            'mediaId = :mediaId',
-            'fromCourseSetId = :fromCourseSetId',
-            'fromCourseSetId IN (:courseSetIds)',
-            'startTime >= :startTime_GT',
-            'startTime <= :startTime_LT',
-            'endTime <= :endTime_LT',
-            'endTime > :endTime_GT',
-            'createdTime = :createdTime',
-            'updatedTime = :updatedTime',
-            'copyId = :copyId',
-            'copyId IN (:copyIds)',
-            'finishType = :finishType',
-            'finishData = :finishData',
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'orderbys' => ['endTime', 'startTime', 'createdTime'],
+            'conditions' => [
+                'id IN (:ids)',
+                'fromCourseId = :fromCourseId',
+                'mediaType = :mediaType',
+                'fromCourseId IN (:courseIds)',
+                'title like :title',
+                'mediaType <> :excludeMediaType',
+                'fromCourseId NOT IN (:excludeCourseIds)',
+                'mediaType IN (:mediaTypes)',
+                'mediaId IN (:mediaIds)',
+                'mediaId = :mediaId',
+                'fromCourseSetId = :fromCourseSetId',
+                'fromCourseSetId IN (:courseSetIds)',
+                'startTime >= :startTime_GT',
+                'startTime <= :startTime_LT',
+                'endTime <= :endTime_LT',
+                'endTime > :endTime_GT',
+                'createdTime = :createdTime',
+                'updatedTime = :updatedTime',
+                'copyId = :copyId',
+                'copyId IN (:copyIds)',
+                'finishType = :finishType',
+                'finishData = :finishData',
+            ],
         ];
-
-        return $declares;
     }
 
     public function findOverlapTimeActivitiesByCourseId($courseId, $newStartTime, $newEndTime, $excludeId = null)

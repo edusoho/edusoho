@@ -53,15 +53,18 @@ trait QuestionImportTrait
 
     private function replaceFormulaToLocalImg($text)
     {
-        preg_match_all('/data-tex=\\\\"([^"]*)\\\\"/', html_entity_decode($text), $matches);
+        preg_match_all('/data-tex=\\\\"([^"]*)\\\\"/', $text, $matches);
         $formulas = $matches[1] ?? [];
         if (empty($formulas)) {
             return $text;
         }
+        foreach ($formulas as &$formula) {
+            $formula = html_entity_decode($formula, ENT_QUOTES);
+        }
         $unescapeFormulas = str_replace('\\\\', '\\', $formulas);
         $replaceImgs = array_combine($formulas, $this->convertFormulaToImg($unescapeFormulas));
         $replaceFunc = function ($match) use ($replaceImgs) {
-            return "<span$match[1] data-tex=\\\"$match[3]\\\"$match[4] data-img=\\\"{$replaceImgs[html_entity_decode($match[3])]}\\\"></span>";
+            return "<span$match[1] data-tex=\\\"$match[3]\\\"$match[4] data-img=\\\"{$replaceImgs[html_entity_decode($match[3], ENT_QUOTES)]}\\\"></span>";
         };
 
         return preg_replace_callback('/<span( data-display)?([^>]*?) data-tex=\\\\"(.*?)\\\\"( data-display)?(.*?)><\/span>/', $replaceFunc, $text);
