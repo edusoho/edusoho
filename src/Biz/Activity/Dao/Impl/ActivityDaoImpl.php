@@ -41,6 +41,22 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         return $this->db()->fetchAll($sql, $params) ?: [];
     }
 
+    public function findByCopyIdsAndCourseIds($copyIds, $courseIds)
+    {
+        if (empty($copyIds) || empty($courseIds)) {
+            return [];
+        }
+
+        $copyIdMarks = str_repeat('?,', count($copyIds) - 1).'?';
+        $courseIdMarks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $parameters = array_merge($copyIds, $courseIds);
+
+        $sql = "SELECT * FROM {$this->table()} WHERE copyId IN ({$copyIdMarks}) AND courseId IN ({$courseIdMarks})";
+
+        return $this->db()->fetchAll($sql, $parameters) ?: [];
+    }
+
     public function findSelfVideoActivityByCourseIds($courseIds)
     {
         if (empty($courseIds)) {

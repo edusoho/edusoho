@@ -189,6 +189,8 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if (empty($materials)) {
             return;
         }
+        $createdMaterials = $this->getMaterialDao()->search(['lessonIds' => array_column($syncActivities, 'id'), 'copyIds' => array_column($materials, 'id')], [], 0, PHP_INT_MAX, ['copyId', 'lessonId']);
+        $createdMaterials = ArrayToolkit::groupIndex($createdMaterials, 'copyId', 'lessonId');
         $syncMaterials = [];
         foreach ($materials as $material) {
             $syncMaterial = ArrayToolkit::parts($material, [
@@ -205,6 +207,9 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             ]);
             $syncMaterial['copyId'] = $material['id'];
             foreach ($syncActivities as $syncActivity) {
+                if (!empty($createdMaterials[$material['id']][$syncActivity['id']])) {
+                    continue;
+                }
                 $syncMaterial['courseSetId'] = $syncActivity['fromCourseSetId'];
                 $syncMaterial['courseId'] = $syncActivity['fromCourseId'];
                 $syncMaterial['lessonId'] = $syncActivity['id'];
@@ -222,16 +227,16 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         $syncChapters = $this->getChapterDao()->findChaptersByCopyIdAndLockedCourseIds($task['categoryId'], $syncCourseIds);
         $syncChapters = array_column($syncChapters, null, 'courseId');
         $syncTasks = [];
+        $syncTask = ArrayToolkit::parts($task, ['createdUserId', 'seq', 'title', 'isFree', 'isOptional', 'isLesson', 'startTime', 'endTime', 'number', 'mode', 'type', 'mediaSource', 'maxOnlineNum', 'status', 'length']);
+        $syncTask['copyId'] = $task['id'];
         foreach ($syncActivities as $syncActivity) {
             if (!empty($createdTasks[$syncActivity['fromCourseId']])) {
                 continue;
             }
-            $syncTask = ArrayToolkit::parts($task, ['createdUserId', 'seq', 'title', 'isFree', 'isOptional', 'isLesson', 'startTime', 'endTime', 'number', 'mode', 'type', 'mediaSource', 'maxOnlineNum', 'status', 'length']);
             $syncTask['courseId'] = $syncActivity['fromCourseId'];
             $syncTask['fromCourseSetId'] = $syncActivity['fromCourseSetId'];
             $syncTask['activityId'] = $syncActivity['id'];
             $syncTask['categoryId'] = $syncChapters[$syncActivity['fromCourseId']]['id'];
-            $syncTask['copyId'] = $task['id'];
             $syncTasks[] = $syncTask;
         }
         $this->getTaskDao()->batchCreate($syncTasks);

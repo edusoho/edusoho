@@ -6,7 +6,6 @@ use Biz\Activity\Dao\ActivityLearnLogDao;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Traits\SyncJobErrorTrait;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
 class DeleteActivityLearnLogJob extends AbstractJob
 {
@@ -37,14 +36,6 @@ class DeleteActivityLearnLogJob extends AbstractJob
             'class' => 'Biz\Activity\Job\DeleteActivityLearnLogJob',
             'args' => ['activityId' => $activityId],
         ]);
-    }
-
-    /**
-     * @return SchedulerService
-     */
-    protected function getSchedulerService()
-    {
-        return $this->biz->service('Scheduler:SchedulerService');
     }
 
     /**
