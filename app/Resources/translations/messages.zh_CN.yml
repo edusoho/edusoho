@@ -5237,8 +5237,10 @@ admin.course_manage.manage.published_count: >
   已发布：<strong class="inflow-num">%publishedNum%</strong>个
 admin.course_manage.manage.closed_count: >
   已关闭：<strong class="inflow-num">%closedNum%</strong>个
+admin.course_manage.manage.draft_count: >
+  未发布：<strong class="inflow-num">%draftNum%</strong>个
 admin.course_manage.manage.unpublish_count: >
-  未发布：<strong class="inflow-num">%unPublishedNum%</strong>个
+  已下架：<strong class="inflow-num">%unPublishedNum%</strong>个
 admin.course_set_manage.recommend.tips: 优先按推荐序号由小至大排序，未推荐的按创建时间倒序
 admin.course_set_manage.manage.number: 课程编号
 admin.course_manage_modal.manage.number: 计划编号
@@ -5639,8 +5641,10 @@ admin.classroom_manage.manage.published_count: >
   已发布：<strong class="inflow-num">%publishedNum%</strong>个
 admin.classroom_manage.manage.closed_count: >
   已关闭：<strong class="inflow-num">%closedNum%</strong>个
+admin.classroom_manage.manage.draft_count: >
+  未发布：<strong class="inflow-num">%draftNum%</strong>个
 admin.classroom_manage.manage.unpublish_count: >
-  未发布：<strong class="inflow-num">%unPublishedNum%</strong>个
+  已下架：<strong class="inflow-num">%unPublishedNum%</strong>个
 admin.classroom_manage.manage.number_th: %title%编号
 admin.classroom_manage.manage.name_th: %name%名称
 admin.classroom_manage.manage.course_number_th: 课程数

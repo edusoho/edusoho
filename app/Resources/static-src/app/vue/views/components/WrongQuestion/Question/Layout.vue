@@ -51,6 +51,20 @@ export default {
   padding: 16px 0 24px 54px;
   border-bottom: 1px solid #ebebeb;
 
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+
+    td {
+      border: 1px solid #333;
+    }
+
+    th {
+      border: 1px solid #333;
+    }
+  }
+
   .answer-content {
     margin-top: 16px;
   }
@@ -82,6 +96,7 @@ export default {
       color: #666;
 
       .choose-answer-text {
+        width: 100%;
         display: table-cell;
 
         p {
@@ -90,6 +105,20 @@ export default {
 
         img {
           max-width: 100%!important;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          text-align: center;
+
+          td {
+            border: 1px solid #333;
+          }
+
+          th {
+            border: 1px solid #333;
+          }
         }
       }
     }
