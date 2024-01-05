@@ -101,16 +101,44 @@ class LocalImageCrop {
     let cropImage = function(res) {
       return new Promise(function(resolve, reject) {
         $.post($input.data('crop'), cropOptions, function(data) {
+          if(data) {
+            $($input.data('targetImg')).attr('src', data[0].url)
+            addInputVal(JSON.stringify(data),'cropImageAttr')
+            $('input[name=covers]').val(JSON.stringify(data))
+          }
           resolve(data);
-        });
+        }).always(function() {
+          $input.val('');
+          $modal.modal('hide');
+        });;
       });
     };
+
+    let addInputVal = (res, name='') => {
+      $(document).ready(function() {
+        let newInput = $('<input>');
+
+        newInput.attr({
+            'type': 'hidden',
+            'name': name,
+            'value': res
+        });
+
+        $('body').append(newInput);
+      });
+    }
 
     let saveImage = function(res) {
       return new Promise(function(resolve, reject) {
         $.post($input.data('saveUrl'), { images: res }, function(data) {
           if (data.image) {
-            $($input.data('targetImg')).attr('src', data.image);
+            $($input.data('targetImg')).attr('src', data.image)
+
+            if($('input[name="crop_image_attr"]')) {
+              $('input[name="crop_image_attr"]').val(data.image);
+            }
+            
+            addInputVal(data.image,'cropImageAttr')
             cd.message({ type: 'success', message: Translator.trans('site.upload_success_hint') });
           }
         }).error(function() {
@@ -124,14 +152,12 @@ class LocalImageCrop {
 
     uploadImage().then(function(res) {
       return cropImage(res);
-
     }).then(function(res) {
-      return saveImage(res);
-
+      // return saveImage(res);
     }).catch(function(res) {
       console.log(res);
     });
-
+   
   }
 }
 

@@ -284,7 +284,7 @@ export default {
       }
     },
     changeQuestionContent(index, content) {
-      this.questionContentList[index] = content;
+      this.questionContentList.splice(this[index],1,content)
     }
   },
 };

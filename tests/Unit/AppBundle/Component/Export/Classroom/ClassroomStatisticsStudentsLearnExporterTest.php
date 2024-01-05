@@ -13,6 +13,7 @@ class ClassroomStatisticsStudentsLearnExporterTest extends BaseTestCase
         $exporter = new ClassroomStatisticsStudentsLearnExporter(self::getContainer(), []);
         self::assertEquals([
             '用户名',
+            '手机号',
             '加入班级时间',
             '课程累加学习时长（分）',
             '完课率',

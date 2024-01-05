@@ -9,8 +9,8 @@
         <div class="coupon-item__range">{{ 'available_range' | trans }}：{{ availableRange }}</div>
       </div>
       
-      <div class="coupon-item__info y-center pull-left" v-if="!isMore">
-        <p>{{ coupon.name }}</p>
+      <div class="coupon-item__info y-center pull-left text-overflow" style="width: 140px;" v-if="!isMore">
+        <p class="text-overflow">{{ coupon.name }}</p>
         <p class="time">{{ validPeriod  }}</p>
       </div>
 

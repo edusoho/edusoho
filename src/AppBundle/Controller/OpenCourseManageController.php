@@ -25,6 +25,11 @@ class OpenCourseManageController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
+        $data = $request->request->all();
+        if (!empty($data['covers'])) {
+            $this->getOpenCourseService()->changeCoursePicture($id, json_decode($data['covers'], true));
+        }
+
         return $this->forward('AppBundle:OpenCourseManage:base', ['id' => $id]);
     }
 

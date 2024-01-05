@@ -44,7 +44,9 @@
     <span
         class="mrl">{{ 'admin.classroom_manage.manage.closed_count'|trans({'%closedNum%':classroomStatusNum.closed})|raw }}</span>
     <span
-        class="mrl">{{ 'admin.classroom_manage.manage.unpublish_count'|trans({'%unPublishedNum%':classroomStatusNum.draft})|raw }}</span>
+        class="mrl">{{ 'admin.classroom_manage.manage.draft_count'|trans({'%draftNum%':classroomStatusNum.draft})|raw }}</span>
+    <span
+      class="mrl">{{ 'admin.classroom_manage.manage.unpublish_count'|trans({'%unPublishedNum%':classroomStatusNum.unpublished})|raw }}</span>
   </p>
 
   {% if classroomInfo %}

@@ -118,7 +118,7 @@ export default {
       this.form.content = this.$refs.ckeditor.getData();
 
       this.$refs.ruleForm.validate(async valid => {
-        if (!valid) return false;
+        if (!valid && this.form.enabled == '1') return false;
 
         try {
           await PurchaseAgreement.update({ data: this.form });
