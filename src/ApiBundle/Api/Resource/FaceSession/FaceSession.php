@@ -6,9 +6,11 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
+use Biz\Face\Service\FaceService;
+use Biz\System\Service\LogService;
+use Biz\User\CurrentUser;
 use Biz\User\TokenException;
 use Biz\User\UserException;
-use Biz\Face\Service\FaceService;
 use Codeages\Biz\Pay\Service\AccountService;
 
 class FaceSession extends AbstractResource
@@ -21,7 +23,7 @@ class FaceSession extends AbstractResource
         $session = $this->getFaceService()->getAiFaceSdk()->getFaceSession($sessionId);
         $loginToken = $request->query->get('loginToken');
 
-        if (!empty($session['status']) && in_array($session['status'], array(FaceService::FACE_STATUS_FAIL, FaceService::FACE_STATUS_SUCCESS))) {
+        if (!empty($session['status']) && in_array($session['status'], [FaceService::FACE_STATUS_FAIL, FaceService::FACE_STATUS_SUCCESS])) {
             $user = $this->getUserService()->getUser($session['user']['id']);
             $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
 
@@ -29,18 +31,18 @@ class FaceSession extends AbstractResource
                 throw UserException::NOTFOUND_USER();
             }
 
-            $log = array(
+            $log = [
                 'status' => $session['status'],
                 'userId' => $user['id'],
                 'sessionId' => $session['id'],
-            );
+            ];
             $this->getFaceService()->createFaceLog($log);
 
             if (FaceService::FACE_STATUS_SUCCESS == $session['status']) {
-                $session['login'] = array(
+                $session['login'] = [
                     'token' => $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30),
                     'user' => $user,
-                );
+                ];
 
                 if ('register' == $session['type'] && empty($user['faceRegistered'])) {
                     $this->getUserService()->setFaceRegistered($user['id']);
@@ -48,11 +50,11 @@ class FaceSession extends AbstractResource
             }
 
             if (FaceService::FACE_STATUS_FAIL == $session['status']) {
-                $conditions = array(
+                $conditions = [
                     'userId' => $session['user']['id'],
                     'createdTime_GT' => time() - FaceService::FACE_FIAL_TIME_INTERVAL,
                     'status' => FaceService::FACE_STATUS_FAIL,
-                );
+                ];
                 $count = $this->getFaceService()->countFaceLog($conditions);
 
                 if ($count >= FaceService::FACE_FIAL_TIMES) {
@@ -106,13 +108,17 @@ class FaceSession extends AbstractResource
         }
 
         $user = $this->getUserService()->getUser($session['user']['id']);
-        $this->getLogService()->info('mobile', 'face_login', "{$user['nickname']}通过人脸识别登录", array('loginUser' => $user));
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $currentUser['currentIp'] = $request->getHttpRequest()->getClientIp();
+        $this->biz['user'] = $currentUser;
+        $this->getLogService()->info('mobile', 'face_login', "{$user['nickname']}通过人脸识别登录");
 
         return $session;
     }
 
     /**
-     * @return \Biz\System\Service\Impl\LogServiceImpl
+     * @return LogService
      */
     private function getLogService()
     {
