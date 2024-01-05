@@ -39,6 +39,20 @@ export default {
 .stem {
   position: relative;
 
+  /deep/ table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+
+    td {
+      border: 1px solid #333;
+    }
+
+    th {
+      border: 1px solid #333;
+    }
+  }
+
   .stem-order {
     position: absolute;
     left: -30px;

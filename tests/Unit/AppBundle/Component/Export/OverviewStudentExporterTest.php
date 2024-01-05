@@ -20,6 +20,7 @@ class OverviewStudentExporterTest extends BaseTestCase
         $title = $expoter->getTitles();
         $result = [
             'task.learn_data_detail.nickname',
+            'task.learn_data_detail.mobile',
             'task.learn_data_detail.finished_rate',
             'test0',
             'test1',
@@ -233,10 +234,12 @@ class OverviewStudentExporterTest extends BaseTestCase
                             1 => [
                                 'id' => 1,
                                 'nickname' => 'test1',
+                                'mobile' => '11111111111',
                             ],
                             2 => [
                                 'id' => 2,
                                 'nickname' => 'test2',
+                                'mobile' => '12222222222',
                             ],
                         ],
                         [
@@ -306,12 +309,12 @@ class OverviewStudentExporterTest extends BaseTestCase
 
         $this->assertArrayEquals(
             [
-                'test1', '50%', '学习中', '未开始',
+                'test1', '11111111111', '50%', '学习中', '未开始',
             ], $data[0]
         );
         $this->assertArrayEquals(
             [
-                'test2', '100%', '未开始', '已完成',
+                'test2', '12222222222', '100%', '未开始', '已完成',
             ], $data[1]
         );
     }

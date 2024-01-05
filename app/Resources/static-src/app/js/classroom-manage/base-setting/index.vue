@@ -79,7 +79,11 @@
                     return;
                 }
 
-                let formData = {'_csrf_token': $('meta[name=csrf-token]').attr('content')};
+                let formData = {
+                    '_csrf_token': $('meta[name=csrf-token]').attr('content'),
+                    'covers': $("[name=cropImageAttr]").val() ? JSON.parse($("[name=cropImageAttr]").val()) : null
+                };
+
                 Object.assign(
                     formData,
                     this.$refs.baseInfo.getFormData(),

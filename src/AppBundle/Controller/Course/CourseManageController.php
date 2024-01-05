@@ -548,8 +548,8 @@ class CourseManageController extends BaseController
             $data['services'] = empty($data['services']) ? [] : $data['services'];
             $data['drainage'] = [
                 'enabled' => empty($data['drainageEnabled']) ? 0 : $data['drainageEnabled'],
-                'image' => empty($data['drainageImage']) ? '' : $data['drainageImage'],
-                'text' => empty($data['drainageText']) ? '' : $data['drainageText'],
+                'image' => empty($data['drainageImage']) ? '' : preg_replace('/^.+\/files\//', '/files/', $data['drainageImage']),
+            'text' => empty($data['drainageText']) ? '' : $data['drainageText'],
             ];
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
             if (in_array($courseSet['type'], ['live', 'reservation']) || !empty($courseSet['parentId'])) {
@@ -576,6 +576,10 @@ class CourseManageController extends BaseController
 
             if ($this->isPluginInstalled('Vip')) {
                 $this->setVipRight($course, $data);
+            }
+
+            if (!empty($data['covers'])) {
+                $this->getCourseSetService()->changeCourseSetCover($courseSetId, $data['covers']);
             }
 
             return $this->createJsonResponse(true);
@@ -615,6 +619,10 @@ class CourseManageController extends BaseController
         $course['title'] = empty(trim($course['title'])) ? '默认计划' : $course['title'];
         $course['drainageEnabled'] = empty($course['drainage']['enabled']) ? 0 : 1;
         $course['drainageImage'] = empty($course['drainage']['image']) ? '' : $course['drainage']['image'];
+        if (!empty($course['drainageImage'])) {
+            $course['drainageImage'] = preg_replace('/^.+\/files\//', '/files/', $course['drainageImage']);
+            $course['drainageImage'] = $this->getWebExtension()->getFurl($course['drainageImage']);
+        }
         $course['drainageText'] = empty($course['drainage']['text']) ? '' : $course['drainage']['text'];
 
         return $this->render(
