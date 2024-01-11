@@ -1,8 +1,5 @@
 <?php
 
-use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\HomeworkActivityService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Symfony\Component\Filesystem\Filesystem;
 
 class EduSohoUpgrade extends AbstractUpdater
