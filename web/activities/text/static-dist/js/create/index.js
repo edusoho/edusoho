@@ -52,7 +52,6 @@ load.then(function(){
     });
 
     if (context.activityId) {
-      console.log(123);
       window.ltc.api({
         name: 'getActivity',
         pathParams: {

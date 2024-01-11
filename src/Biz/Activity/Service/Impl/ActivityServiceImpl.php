@@ -225,7 +225,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity = $this->getActivityDao()->create($fields);
 
         if (!empty($materials)) {
-            $this->syncActivityMaterials($activity, $materials, 'create');
+            $this->createActivityMaterials($activity, $materials);
         }
         $listener = $activityConfig->getListener('activity.created');
         if (!empty($listener)) {
@@ -245,7 +245,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $materials = $this->getMaterialsFromActivity($fields);
         if (!empty($materials)) {
-            $this->syncActivityMaterials($savedActivity, $materials, 'update');
+            $this->syncActivityMaterials($savedActivity, $materials);
         }
 
         if (!empty($savedActivity['mediaId'])) {
@@ -434,48 +434,46 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return array_values(array_unique($activityIds));
     }
 
-    protected function syncActivityMaterials($activity, $materials, $mode = 'create')
+    private function createActivityMaterials($activity, $materials)
     {
         if (empty($materials)) {
             return;
         }
+        foreach ($materials as $material) {
+            $this->getMaterialService()->uploadMaterial($this->buildMaterial($material, $activity));
+        }
+    }
 
-        switch ($mode) {
-            case 'create':
-                foreach ($materials as $material) {
-                    $this->getMaterialService()->uploadMaterial($this->buildMaterial($material, $activity));
-                }
-                break;
-            case 'update':
-                $exists = $this->getMaterialService()->searchMaterials(
-                    [
-                        'lessonId' => $activity['id'],
-                        'type' => 'course',
-                    ],
-                    ['createdTime' => 'DESC'],
-                    0,
-                    PHP_INT_MAX
-                );
-                $currents = [];
-                foreach ($materials as $material) {
-                    $currents[] = $this->buildMaterial($material, $activity);
-                }
+    private function syncActivityMaterials($activity, $materials)
+    {
+        if (empty($materials)) {
+            return;
+        }
+        $exists = $this->getMaterialService()->searchMaterials(
+            [
+                'lessonId' => $activity['id'],
+                'type' => 'course',
+            ],
+            ['createdTime' => 'DESC'],
+            0,
+            PHP_INT_MAX
+        );
+        $currents = [];
+        foreach ($materials as $material) {
+            $currents[] = $this->buildMaterial($material, $activity);
+        }
 
-                $dropMaterials = $this->diffMaterials($exists, $currents);
-                $addMaterials = $this->diffMaterials($currents, $exists);
-                $updateMaterials = $this->dirtyMaterials($exists, $currents);
-                foreach ($dropMaterials as $material) {
-                    $this->getMaterialService()->deleteMaterial($activity['fromCourseSetId'], $material['id']);
-                }
-                foreach ($addMaterials as $material) {
-                    $this->getMaterialService()->uploadMaterial($material);
-                }
-                foreach ($updateMaterials as $material) {
-                    $this->getMaterialService()->updateMaterial($material['id'], $material, $material);
-                }
-                break;
-            default:
-                break;
+        $dropMaterials = $this->diffMaterials($exists, $currents);
+        $addMaterials = $this->diffMaterials($currents, $exists);
+        $updateMaterials = $this->dirtyMaterials($exists, $currents);
+        foreach ($dropMaterials as $material) {
+            $this->getMaterialService()->deleteMaterial($activity['fromCourseSetId'], $material['id']);
+        }
+        foreach ($addMaterials as $material) {
+            $this->getMaterialService()->uploadMaterial($material);
+        }
+        foreach ($updateMaterials as $material) {
+            $this->getMaterialService()->updateMaterial($material['id'], $material, $material);
         }
     }
 
@@ -633,6 +631,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 return [$media];
             }
         }
+
+        return [];
     }
 
     /**

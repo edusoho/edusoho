@@ -54,7 +54,7 @@ trait ChoiceAdapterTrait
             $options[] = '';
         }
 
-        return $options;
+        return array_splice($options, 0, 10);
     }
 
     private function adaptChoiceAnswer($question)
