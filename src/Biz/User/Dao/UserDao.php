@@ -10,6 +10,8 @@ interface UserDao extends GeneralDaoInterface
 
     public function getUserByType($type);
 
+    public function findUserByType($type);
+
     public function getByNickname($nickname);
 
     public function getUnDestroyedUserByNickname($nickname);

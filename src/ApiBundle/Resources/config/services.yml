@@ -23,6 +23,10 @@ services:
         class: ApiBundle\Security\Firewall\XAuthTokenAuthenticationListener
         arguments:
             - '@service_container'
+    api_new_token_header_listener:
+        class: ApiBundle\Security\Firewall\NewTokenAuthenticationListener
+        arguments:
+            - '@service_container'
     api_old_token_header_listener:
         class: ApiBundle\Security\Firewall\OldTokenAuthenticationListener
         arguments:
@@ -56,6 +60,7 @@ services:
                 - '@api_security_authentication'
                 - '@api_basic_authentication_listener'
                 - '@api_token_header_listener'
+                - '@api_new_token_header_listener'
                 - '@api_old_token_header_listener'
                 - '@api_h5_third_party_oauth2_authentication_listener'
                 - '@api_third_party_oauth2_authentication_listener'
