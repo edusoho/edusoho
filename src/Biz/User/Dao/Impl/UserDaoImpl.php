@@ -19,6 +19,11 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
         return $this->getByFields(['type' => $type]);
     }
 
+    public function findUserByType($type)
+    {
+        return $this->findByFields(['type' => $type]);
+    }
+
     public function getByNickname($nickname)
     {
         return $this->getByFields(['nickname' => $nickname]);

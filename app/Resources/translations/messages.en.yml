@@ -11201,3 +11201,13 @@ sms.defence.request.log.disable_type.none: none
 course.start_answer.all_question_deleted: 'All questions have been deleted, please contact the teacher or administrator'
 item_bank.access_cloud: Upgrade now
 next.skip: 'Next Step (1/2)'
+
+external.application.ip_white_list.title: External Application IP white list
+external.application.ip_white_list.tips: External application server exit IP needs to be added, and multiple line breaks can be supported
+external.application.top.one.tips: Through external application docking, EduSoho business data can be obtained and EduSoho can be exempted from external application account registration
+external.application.top.two.tips: More relevant docking instructions
+external.application.login.status: API setting switch
+external.application.login.open: Turned on
+external.application.login.closed: Close
+admin.system.api_setting.tips: AppKey And SecretKey Shoud Be Used EduSoho API Auth
+admin.setting.api_secret.reset_confirm_message: The old SecretKey will become invalid after being res

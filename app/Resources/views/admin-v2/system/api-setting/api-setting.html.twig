@@ -1,0 +1,69 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_API_setting' %}
+
+{% do script(['app/js/admin-v2/system/api-setting/index.js']) %}
+
+{% block main %}
+  {{ web_macro.flash_messages() }}
+  <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'external.application.login.status'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios ">
+        {{ radios('external_switch', {1:'external.application.login.open'|trans, 0:'external.application.login.closed'|trans}, setting('api.external_switch')) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="control-label col-md-3">
+      </div>
+      <div class="controls col-md-6">
+        <p>{{ 'external.application.top.one.tips'|trans }}</p>
+{#        <p>{{ 'external.application.top.two.tips'|trans }}<a href="http://developer-ct.edusoho.com/api/" target="_blank">{{ 'admin.system.api_setting.api_doc'|trans }}</a></p>#}
+
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'external.application.ip_white_list.title'|trans}}</label>
+      </div>
+      <div class="controls col-md-6">
+        <textarea id="whiteListIps" name="whiteListIps" rows="8" class="form-control">{{ whiteListIps.ips|default('') }}</textarea>
+        <div class="help-block">{{'external.application.ip_white_list.tips'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label">AppKey</label>
+      <div class="col-md-6">
+        <p class="form-control-static">{{ setting('api.api_app_id')|default('') }}</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label">SecretKey</label>
+      <div class="col-md-6">
+        <p class="form-control-static pts">
+          {{ setting('api.api_app_secret_key')|default('') }}
+          <a data-url="{{ path('admin_setting_api_key_update') }}" class="btn btn-sm btn-default js-reset-secret">{{ 'form.btn.reset'|trans }}
+          </a>
+        </p>
+        <p>{{ 'admin.system.api_setting.tips'|trans }}</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-6">
+        <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </div>
+    </div>
+
+  </form>
+
+{% endblock %}
