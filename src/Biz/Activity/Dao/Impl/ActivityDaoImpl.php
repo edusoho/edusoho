@@ -52,7 +52,7 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
 
         $parameters = array_merge($copyIds, $courseIds);
 
-        $sql = "SELECT * FROM {$this->table()} WHERE copyId IN ({$copyIdMarks}) AND courseId IN ({$courseIdMarks})";
+        $sql = "SELECT * FROM {$this->table()} WHERE copyId IN ({$copyIdMarks}) AND fromCourseId IN ({$courseIdMarks})";
 
         return $this->db()->fetchAll($sql, $parameters) ?: [];
     }

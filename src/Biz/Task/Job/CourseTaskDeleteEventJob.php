@@ -16,7 +16,7 @@ class CourseTaskDeleteEventJob extends AbstractSyncJob
                 $this->dispatchEvent('course.task.delete', new Event($task, ['user' => $this->args['user']]));
                 unset($tasks[$key]);
             }
-            $this->getLogService()->info(LogModule::COURSE, 'task_delete_event', '执行删除课时任务订阅事件成功', ['tasks' => $tasks]);
+            $this->getLogService()->info(LogModule::COURSE, 'task_delete_event', '执行删除课时任务订阅事件成功', ['tasks' => $this->args['tasks']]);
         } catch (\Exception $e) {
             $this->getLogService()->error(LogModule::COURSE, 'task_delete_event', '执行删除课时任务订阅事件失败', ['tasks' => $tasks, 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             $this->innodbTrxLog($e);

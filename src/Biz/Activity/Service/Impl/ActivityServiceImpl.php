@@ -277,7 +277,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $this->getActivityConfig($activity['mediaType'])->delete($activity['mediaId']);
             $this->getActivityLearnLogService()->deleteLearnLogsByActivityId($id);
             $result = $this->getActivityDao()->delete($id);
-            $this->getLogService()->info(LogModule::COURSE, LogAction::DELETE_ACTIVITY, '删除教学活动成功', ['id' => $id]);
+            if (empty($activity['copyId'])) {
+                $this->getLogService()->info(LogModule::COURSE, LogAction::DELETE_ACTIVITY, '删除教学活动成功', ['id' => $id]);
+            }
             $this->commit();
 
             return $result;

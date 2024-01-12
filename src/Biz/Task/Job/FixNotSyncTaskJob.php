@@ -32,6 +32,7 @@ class FixNotSyncTaskJob extends AbstractSyncJob
            JOIN (SELECT courseId, count(*) num FROM course_task GROUP BY courseId) origin ON c.parentId=origin.courseId
            WHERE sync.num!=origin.num AND c.locked=1 limit 1;
         ');
+        $courseIds = array_column($courseIds, 'parentId');
 
         return empty($courseIds) ? false : reset($courseIds);
     }
@@ -53,6 +54,7 @@ class FixNotSyncTaskJob extends AbstractSyncJob
         $taskIdsStr = implode(',', array_column($tasks, 'id'));
         $syncCourseIdsStr = implode(',', array_column($syncCourses, 'id'));
         $toDeleteSyncTaskIds = $this->biz['db']->fetchAll("SELECT id FROM `course_task` WHERE courseId IN ({$syncCourseIdsStr}) AND copyId!=0 AND copyId NOT IN ({$taskIdsStr})");
+        $toDeleteSyncTaskIds = array_column($toDeleteSyncTaskIds, 'id');
         $this->getTaskService()->deleteTasks($toDeleteSyncTaskIds);
         $this->getLogService()->info(LogModule::COURSE, 'fix_delete_sync_task', '删除历史未同步删除课时成功', ['taskIds' => $toDeleteSyncTaskIds]);
     }
@@ -79,9 +81,9 @@ class FixNotSyncTaskJob extends AbstractSyncJob
         if (empty($toFixTasks)) {
             return;
         }
-        $tasks = array_map(function ($task) use ($toFixTasks) {
+        $tasks = array_filter($tasks, function ($task) use ($toFixTasks) {
             return !empty($toFixTasks[$task['id']]);
-        }, $tasks);
+        });
         $this->syncCreate($toFixTasks, $tasks, $syncCourses);
         $this->getLogService()->info(LogModule::COURSE, 'fix_create_sync_task', '创建历史未同步创建课时成功', ['fixTasks' => $toFixTasks]);
     }
@@ -179,7 +181,7 @@ class FixNotSyncTaskJob extends AbstractSyncJob
         $syncChapters = $this->getChapterDao()->findByCopyIdsAndLockedCourseIds(array_column($tasks, 'categoryId'), $syncCourseIds);
         $syncChapters = ArrayToolkit::groupIndex($syncChapters, 'copyId', 'courseId');
         $syncCourses = array_column($syncCourses, null, 'id');
-        $syncActivities = ArrayToolkit::groupIndex($syncActivities, 'copyId', 'courseId');
+        $syncActivities = ArrayToolkit::groupIndex($syncActivities, 'copyId', 'fromCourseId');
         $syncTasks = [];
         foreach ($toFixTasks as $taskId => $toFixCourseIds) {
             $syncTask = ArrayToolkit::parts($tasks[$taskId], ['createdUserId', 'seq', 'title', 'isFree', 'isOptional', 'isLesson', 'startTime', 'endTime', 'number', 'mode', 'type', 'mediaSource', 'maxOnlineNum', 'status', 'length']);
@@ -190,7 +192,7 @@ class FixNotSyncTaskJob extends AbstractSyncJob
                 }
                 $syncTask['courseId'] = $toFixCourseId;
                 $syncTask['fromCourseSetId'] = $syncCourses[$toFixCourseId]['courseSetId'];
-                $syncTask['activityId'] = $syncActivities[$tasks[$taskId]['activityId']][$toFixCourseId];
+                $syncTask['activityId'] = $syncActivities[$tasks[$taskId]['activityId']][$toFixCourseId]['id'];
                 $syncTask['categoryId'] = $syncChapters[$tasks[$taskId]['categoryId']][$toFixCourseId]['id'];
                 $syncTasks[] = $syncTask;
             }
