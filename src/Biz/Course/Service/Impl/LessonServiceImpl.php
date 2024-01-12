@@ -127,9 +127,7 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->getCourseChapterDao()->update(['ids' => array_column($lessons, 'id')], ['status' => 'published']);
             $lessons = $this->getCourseChapterDao()->findChaptersByCourseIdAndLessonIds($courseId, array_column($lessons, 'id'));
             $this->publishTasks(array_column($lessons, 'id'));
-            foreach ($lessons as $lesson) {
-                $this->dispatchEvent('course.lesson.publish', $lesson);
-            }
+            $this->dispatchEvent('course.lesson.batch_publish', $lessons, ['courseId' => $courseId]);
             $this->updateLessonNumbers($courseId);
             $this->getLogService()->info(LogModule::COURSE, LogAction::BATCH_PUBLISH_LESSON, '批量发布课时', $lessons);
 
@@ -156,12 +154,10 @@ class LessonServiceImpl extends BaseService implements LessonService
         try {
             $this->beginTransaction();
 
-            $this->getCourseChapterDao()->update(array_column($lessons, 'id'), ['status' => 'unpublished']);
+            $this->getCourseChapterDao()->update(['ids' => array_column($lessons, 'id')], ['status' => 'unpublished']);
             $lessons = $this->getCourseChapterDao()->findChaptersByCourseIdAndLessonIds($courseId, array_column($lessons, 'id'));
             $this->unpublishTasks(array_column($lessons, 'id'));
-            foreach ($lessons as $lesson) {
-                $this->dispatchEvent('course.lesson.unpublish', $lesson);
-            }
+            $this->dispatchEvent('course.lesson.batch_unpublish', $lessons, ['courseId' => $courseId]);
             $this->updateLessonNumbers($courseId);
             $this->getLogService()->info(LogModule::COURSE, LogAction::BATCH_UNPUBLISH_LESSON, '批量取消发布课时', $lessons);
 
