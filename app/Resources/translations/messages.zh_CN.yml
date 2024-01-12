@@ -12501,3 +12501,14 @@ sms.defence.request.log.disable_type.none: 无
 course.start_answer.all_question_deleted: 全部题目已被删除，请联系教师或管理员
 item_bank.access_cloud: 立即升级
 next.skip: '下一步 (1/2)'
+
+#外部应用
+external.application.ip_white_list.title: 外部应用IP白名单
+external.application.ip_white_list.tips: 需添加外部应用服务器出口IP，可换行支持多个
+external.application.top.one.tips: 通过外部应用对接可以实现获取EduSoho各业务数据以及实现外部应用账号对EduSoho免登。
+external.application.top.two.tips: 更多相关对接说明
+external.application.login.status: API设置开关
+external.application.login.open: 开启
+external.application.login.closed: 关闭
+admin.system.api_setting.tips: AppKey与SecretKey 用于外部应用调用 EduSoho 教培系统 API接口鉴权
+admin.setting.api_secret.reset_confirm_message: 重置后旧SecretKey将失效
