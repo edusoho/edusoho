@@ -1672,7 +1672,6 @@ admin_v2:
                                     name: admin_v2.system.post_num_tab
                                 admin_v2_anti_fraud_reminder_setting:
                                     name: admin_v2.system.anti_fraud_reminder_tab
-
                         admin_v2_sms_defence:
                             name: admin_v2.system.sms_defence_menu
                             visible: false
