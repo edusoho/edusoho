@@ -234,6 +234,7 @@ class UserDaoTest extends BaseDaoTestCase
             'email' => '80@qq.com',
             'type' => 'system',
             'inviteCode' => 'test-code',
+            'uuid' => '439c25e94b7833262d7aa4f1f19b4f93a89e6aed',
         ];
     }
 
