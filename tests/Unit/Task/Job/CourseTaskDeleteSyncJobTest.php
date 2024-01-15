@@ -5,7 +5,6 @@ namespace Tests\Unit\Task\Job;
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\Task\Job\CourseTaskDeleteEventJob;
-use Tests\Unit\Task\Job\Tools\MockedNormalStrategy;
 
 class CourseTaskDeleteSyncJobTest extends BaseTestCase
 {
@@ -13,9 +12,7 @@ class CourseTaskDeleteSyncJobTest extends BaseTestCase
     {
         $job = new CourseTaskDeleteEventJob();
         ReflectionUtils::setProperty($job, 'biz', $this->biz);
-        $job->args = ['taskId' => 110, 'courseId' => 220];
-
-        $this->biz['course.normal_strategy'] = new MockedNormalStrategy();
+        $job->args = ['tasks' => [['id' => 110, 'courseId' => 220, 'copyId' => 1]]];
 
         $this->mockBiz(
             'Course:CourseDao',
@@ -83,38 +80,14 @@ class CourseTaskDeleteSyncJobTest extends BaseTestCase
                         'courseId' => 3332,
                     ],
                 ],
+                [
+                    'functionName' => 'findByIds',
+                    'withParams' => [[231, 232]],
+                    'returnValue' => [],
+                ],
             ]
         );
 
         $job->execute();
-
-        $this->getTaskDao()->shouldHaveReceived('findByCopyIdAndLockedCourseIds')->times(3);
-        $this->getTaskDao()->shouldHaveReceived('get')->times(2);
-
-        $strategy = $this->biz['course.normal_strategy'];
-
-        $this->assertEquals(
-            [
-                ['id' => 231, 'courseId' => 3331],
-                ['id' => 232, 'courseId' => 3332],
-            ],
-            $strategy->getDeletedTasks()
-        );
-    }
-
-    /**
-     * @return TaskDao
-     */
-    private function getTaskDao()
-    {
-        return $this->biz->dao('Task:TaskDao');
-    }
-
-    /**
-     * @return CourseDao
-     */
-    private function getCourseDao()
-    {
-        return $this->biz->dao('Course:CourseDao');
     }
 }

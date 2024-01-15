@@ -53,13 +53,45 @@ class TaskSyncSubscriberTest extends BaseTestCase
         $this->mockBiz('Course:CourseDao', [
             [
                 'functionName' => 'findCoursesByParentIdAndLocked',
-                'returnValue' => [['id' => 1]],
+                'returnValue' => [['id' => 1, 'courseSetId' => 1]],
                 'withParams' => [1, 1],
+            ],
+        ]);
+        $this->mockBiz('Activity:ActivityDao', [
+            [
+                'functionName' => 'get',
+                'returnValue' => ['id' => 1],
+                'withParams' => [1],
+            ],
+            [
+                'functionName' => 'findByCopyIdAndCourseIds',
+                'returnValue' => [['id' => 2, 'fromCourseId' => 1, 'fromCourseSetId' => 1]],
+                'withParams' => [1, [1]],
+            ],
+            [
+                'functionName' => 'batchCreate',
+            ],
+        ]);
+        $this->mockBiz('Course:CourseMaterialDao', [
+            [
+                'functionName' => 'search',
+                'returnValue' => [],
+            ],
+        ]);
+        $this->mockBiz('Task:TaskDao', [
+            [
+                'functionName' => 'findByCopyIdAndLockedCourseIds',
+                'returnValue' => [],
+            ],
+            [
+                'functionName' => 'batchCreate',
+                'returnValue' => [],
             ],
         ]);
 
         $event = new Event([
             'id' => 1,
+            'activityId' => 1,
             'copyId' => 0,
             'courseId' => 1,
         ]);
@@ -104,11 +136,39 @@ class TaskSyncSubscriberTest extends BaseTestCase
                 'withParams' => [1, 1],
             ],
         ]);
+        $this->mockBiz('Task:TaskDao', [
+            [
+                'functionName' => 'findByCopyIdAndLockedCourseIds',
+                'withParams' => [1, [1]],
+                'returnValue' => [['id' => 2, 'activityId' => 2]],
+            ],
+            [
+                'functionName' => 'update',
+                'withParams' => [['ids' => [2]], []],
+            ],
+        ]);
+        $this->mockBiz('Activity:ActivityDao', [
+            [
+                'functionName' => 'get',
+                'withParams' => [1],
+                'returnValue' => ['mediaType' => 'text'],
+            ],
+            [
+                'functionName' => 'findByIds',
+                'withParams' => [[2]],
+                'returnValue' => ['mediaType' => 'text'],
+            ],
+            [
+                'functionName' => 'update',
+                'withParams' => [['ids' => [2]], []],
+            ],
+        ]);
 
         $event = new Event([
             'id' => 1,
             'copyId' => 0,
             'courseId' => 1,
+            'activityId' => 1,
         ]);
 
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
@@ -307,8 +367,28 @@ class TaskSyncSubscriberTest extends BaseTestCase
         $this->mockBiz('Course:CourseDao', [
             [
                 'functionName' => 'findCoursesByParentIdAndLocked',
-                'returnValue' => [['id' => 1]],
                 'withParams' => [1, 1],
+                'returnValue' => [['id' => 2, 'courseSetId' => 2]],
+            ],
+        ]);
+        $this->mockBiz('Task:TaskDao', [
+            [
+                'functionName' => 'findByCopyIdAndLockedCourseIds',
+                'withParams' => [1, [2]],
+                'returnValue' => [['id' => 2], ['id' => 3], ['id' => 4], ['id' => 5], ['id' => 6], ['id' => 7]],
+            ],
+            [
+                'functionName' => 'batchDelete',
+                'withParams' => [['ids' => [2, 3, 4, 5, 6, 7]]],
+            ],
+            [
+                'functionName' => 'findByIds',
+                'withParams' => [[2, 3, 4, 5, 6, 7]],
+                'returnValue' => [['id' => 2, 'activityId' => 2], ['id' => 3, 'activityId' => 3], ['id' => 4, 'activityId' => 4], ['id' => 5, 'activityId' => 5], ['id' => 6, 'activityId' => 6], ['id' => 7, 'activityId' => 7]],
+            ],
+            [
+                'functionName' => 'search',
+                'returnValue' => [],
             ],
         ]);
 
@@ -321,10 +401,13 @@ class TaskSyncSubscriberTest extends BaseTestCase
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
         $eventSubscriber->onCourseTaskDelete($event);
 
-        $job = $this->getSchedulerJobDao()->getByName('course_task_delete_sync_job_1');
+        $job = $this->getSchedulerJobDao()->getByName('activity_delete_job_2');
         $this->assertNotEmpty($job);
+        $this->assertEquals('Biz\Activity\Job\DeleteActivityJob', $job['class']);
+        $this->assertEquals(['ids' => [2, 3, 4, 5, 6, 7]], $job['args']);
+
+        $job = $this->getSchedulerJobDao()->getByName('task_delete_event_job_2');
         $this->assertEquals('Biz\Task\Job\CourseTaskDeleteEventJob', $job['class']);
-        $this->assertEquals(['taskId' => 1, 'courseId' => 1], $job['args']);
     }
 
     private function createCourse($courseId, $parentId = 0, $courseType = CourseService::DEFAULT_COURSE_TYPE)

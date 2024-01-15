@@ -260,8 +260,8 @@ class ActivityServiceTest extends BaseTestCase
 
         $this->getActivityService()->trigger($savedTask['activityId'], 'doing', $data);
         $activity = $this->getActivityLearnLogDao()->getLastestByActivityIdAndUserId($savedTask['activityId'], 1);
-        $this->assertEquals($activity['event'], 'finish');
-        $this->assertEquals($activity['learnedTime'], 0);
+        $this->assertEquals('finish', $activity['event']);
+        $this->assertEquals(0, $activity['learnedTime']);
     }
 
     protected function handleTriggerData()
@@ -319,9 +319,8 @@ class ActivityServiceTest extends BaseTestCase
             'fromCourseSetId' => 1,
             'categoryId' => 1,
         ];
-        $savedTask = $this->getTaskService()->createTask($task);
 
-        return $savedTask;
+        return $this->getTaskService()->createTask($task);
     }
 
     public function testSearch()

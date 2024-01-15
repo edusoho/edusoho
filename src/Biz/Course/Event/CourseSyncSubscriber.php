@@ -214,7 +214,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             if ($chapter['copyId'] > 0) {
                 continue;
             }
-            $this->getSyncService()->sync('Course:CourseChapter.'.AbstractSychronizer::SYNC_WHEN_DELETE, $chapter['id']);
+            $this->getSyncService()->sync('Course:CourseChapter.'.AbstractSychronizer::SYNC_WHEN_UPDATE, $chapter['id']);
         }
     }
 

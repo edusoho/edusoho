@@ -77,6 +77,11 @@ class ActivityLearnLogServiceTest extends BaseTestCase
                     'returnValue' => ['id' => 111, 'event' => 'finish'],
                     'withParams' => [33],
                 ],
+                [
+                    'functionName' => 'count',
+                    'returnValue' => 500,
+                    'withParams' => [['activityId' => 33]],
+                ],
             ]
         );
 

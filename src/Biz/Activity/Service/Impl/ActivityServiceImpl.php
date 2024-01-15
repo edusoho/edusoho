@@ -149,7 +149,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         if (isset($data['events']) && array_key_exists('finish', $data['events'])) {
-            $data['taskId'] = empty($data['taskId']) ? 0 : $data['taskId'];
+            $data = ['taskId' => empty($data['taskId']) ? 0 : $data['taskId']];
             $eventName = 'finish';
         }
         $this->triggerActivityLearnLogListener($activity, $eventName, $data);
