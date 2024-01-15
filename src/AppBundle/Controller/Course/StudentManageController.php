@@ -60,9 +60,9 @@ class StudentManageController extends BaseController
         $members = $this->getLearningDataAnalysisService()->fillCourseProgress($members);
 
         $isEnableAddAndRemove = 1;
-        if (!$this->getCurrentUser()->hasPermission("admin_v2_course_content_manage") && !$this->getCurrentUser()->isSuperAdmin() && in_array("ROLE_TEACHER", $this->getCurrentUser()['roles'])) {
+        if (!$this->getCurrentUser()->hasPermission('admin_v2_course_content_manage') && !$this->getCurrentUser()->isSuperAdmin() && in_array('ROLE_TEACHER', $this->getCurrentUser()['roles'])) {
             $teacherManageStudent = $this->getSettingService()->node('course.teacher_manage_student');
-            if(empty($teacherManageStudent)){
+            if (empty($teacherManageStudent)) {
                 $isEnableAddAndRemove = 0;
             }
         }
@@ -321,8 +321,7 @@ class StudentManageController extends BaseController
         $postCount = $this->getCourseMemberService()->countPostsByCourseIdAndUserId($courseId, $userId);
 
         //@todo 统计学习XX天应换种方法
-        list($daysCount, $learnedTime, $learnedTimePerDay) = $this
-            ->getActivityLearnLogService()
+        list($daysCount, $learnedTime, $learnedTimePerDay) = $this->getActivityLearnLogService()
             ->calcLearnProcessByCourseIdAndUserId($courseId, $userId);
 
         return $this->render(

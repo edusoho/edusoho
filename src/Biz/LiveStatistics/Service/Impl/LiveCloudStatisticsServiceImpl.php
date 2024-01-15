@@ -3,6 +3,7 @@
 namespace Biz\LiveStatistics\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\DateToolkit;
 use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\LiveActivityException;
 use Biz\Activity\Service\ActivityService;
@@ -256,7 +257,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
      */
     protected function getGeneralLiveMemberStatistics($activity)
     {
-        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider'] || $activity['endTime'] > time() || date('Y-m-d', time()) == date('Y-m-d', $activity['endTime'])) {
+        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider'] || $activity['endTime'] > time() || DateToolkit::isToday($activity['endTime'])) {
             return;
         }
         try {
@@ -309,7 +310,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
      */
     protected function getGeneralLiveStatistics($activity, $task, &$data)
     {
-        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider'] || $activity['startTime'] > time() || date('Y-m-d', time()) == date('Y-m-d', $activity['endTime'])) {
+        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider'] || $activity['startTime'] > time() || DateToolkit::isToday($activity['endTime'])) {
             return;
         }
         try {

@@ -2,9 +2,9 @@
 
 namespace Biz\Course\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface CourseMaterialDao extends GeneralDaoInterface
+interface CourseMaterialDao extends AdvancedDaoInterface
 {
     public function findByCopyIdAndLockedCourseIds($copyId, $courseIds);
 

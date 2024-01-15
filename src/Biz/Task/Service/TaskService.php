@@ -45,8 +45,6 @@ interface TaskService
 
     public function publishTask($id);
 
-    public function publishTasksByCourseId($courseId);
-
     public function unpublishTask($id);
 
     /**
@@ -58,6 +56,8 @@ interface TaskService
     public function deleteTask($id);
 
     public function deleteTasksByCategoryId($courseId, $categoryId);
+
+    public function deleteTasks(array $ids);
 
     public function findTasksByCourseId($courseId);
 

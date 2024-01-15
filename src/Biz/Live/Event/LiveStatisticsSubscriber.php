@@ -2,21 +2,19 @@
 
 namespace Biz\Live\Event;
 
-use Biz\Activity\Service\ActivityService;
-use Biz\Task\Service\TaskService;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Event\CourseSyncSubscriber;
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
 class LiveStatisticsSubscriber extends CourseSyncSubscriber
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'live.activity.create' => 'onLiveActivityCreate',
             'live.activity.update' => 'onLiveActivityUpdate',
             'live.activity.delete' => 'onLiveActivityDelete',
-        );
+        ];
     }
 
     public function onLiveActivityCreate(Event $event)
@@ -38,15 +36,15 @@ class LiveStatisticsSubscriber extends CourseSyncSubscriber
     {
         $this->deleteLiveStatisticsJob($liveId);
 
-        $job = array(
+        $job = [
             'name' => 'LiveStatisticsNextDay_'.$liveId,
             'expression' => intval($activity['startTime'] + $activity['length'] * 60 + 86400),
             'class' => 'Biz\Live\Job\LiveStatisticsJob',
             'misfire_policy' => 'executing',
-            'args' => array(
+            'args' => [
                 'liveId' => $liveId,
-            ),
-        );
+            ],
+        ];
         $this->getSchedulerService()->register($job);
     }
 
@@ -59,39 +57,10 @@ class LiveStatisticsSubscriber extends CourseSyncSubscriber
     }
 
     /**
-     * @return TaskService
-     */
-    protected function getTaskService()
-    {
-        return $this->getBiz()->service('Task:TaskService');
-    }
-
-    /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->getBiz()->dao('Activity:ActivityService');
-    }
-
-    /**
      * @return SchedulerService
      */
     private function getSchedulerService()
     {
         return $this->getBiz()->service('Scheduler:SchedulerService');
-    }
-
-    protected function dispatchEvent($eventName, $subject, $arguments = array())
-    {
-        if ($subject instanceof Event) {
-            $event = $subject;
-        } else {
-            $event = new Event($subject, $arguments);
-        }
-
-        $biz = $this->getBiz();
-
-        return $biz['dispatcher']->dispatch($eventName, $event);
     }
 }
