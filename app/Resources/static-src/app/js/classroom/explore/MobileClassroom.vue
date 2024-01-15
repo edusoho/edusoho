@@ -1,0 +1,249 @@
+<template>
+  <div class="mobile-category">
+    <van-dropdown-menu>
+      <van-dropdown-item :title="categoryTitle" @open="show = true" />
+      <template v-for="(item, index) in dropdownData">
+        <van-dropdown-item
+          :key="index"
+          v-model="item.value"
+          :options="item.options"
+          @change="search(1)"
+        />
+      </template>
+    </van-dropdown-menu>
+    <div class="class-list-mobile row">
+      <div class="col-md-4 col-sm-6">
+        <div v-for="(item, index) in classroomList" :key="index" class="class-item class-item--tag">
+          <div class="class-img">
+            <a :href="'/classroom/'+item.id" target="_blank">
+              <img
+                :src="item.cover.large"
+                :alt="item.title"
+                class="img-responsive"
+              />
+              <h3>{{ item.title }}</h3>
+              <div class="image-overlay"></div>
+            </a>
+          </div>
+          <div class="class-serve">
+            <ul class="list-unstyled clearfix">
+              <li class="" v-for="(item, index) in services" :key="index">
+                <a
+                  tabindex="0"
+                  role="button"
+                  data-container="body"
+                  data-toggle="popover"
+                  data-trigger="hover"
+                  data-placement="top"
+                  data-html="true"
+                  title=""
+                  data-content="24小时内完成作业批阅，即时反馈并巩固您的学习效果"
+                  data-original-title="24小时作业批阅 <small class='color-gray'>(暂未提供)</span>"
+                >
+                  {{ item }}
+                </a>
+              </li>
+            </ul>
+          </div>
+          <span class="class-price">
+            <span class="color-success"> 免费 </span>
+          </span>
+          <ul class="class-data clearfix">
+            <li><i class="es-icon es-icon-book"></i>{{ item.courseNum }}</li>
+            <li><i class="es-icon es-icon-people"></i>{{ Number(item.studentNum) + Number(item.auditorNum) }}</li>
+            <li><i class="es-icon es-icon-textsms"></i>{{ item.threadNum }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <van-pagination
+      v-if="total > 10"
+      v-model="pageNum"
+      @change="changePage"
+      force-ellipses
+      style="width: 200px; margin: 0 auto"
+      :total-items="total"
+      :show-page-size="5"
+    >
+      <template #prev-text>
+        <van-icon name="arrow-left" />
+      </template>
+      <template #next-text>
+        <van-icon name="arrow" />
+      </template>
+    </van-pagination>
+    <van-popup v-model="show" round position="bottom">
+      <van-cascader
+        v-model="courseCategoriesValue"
+        title="请选择课程分类"
+        :options="courseCategories"
+        @close="show = false"
+        @finish="onFinish"
+      />
+    </van-popup>
+  </div>
+</template>
+<script>
+import CATEGORY_DEFAULT from "../../course/explore/category-default-config.js";
+import { More } from "common/vue/service";
+export default {
+  data() {
+    return {
+      services: ['练', '试', '问', '疑', '动', '业'],
+      total: 0,
+      pageNum: 1,
+      show: false,
+      categoryValue: "",
+      courseCategoriesValue: "",
+      categoryTitle: "分类",
+      vipLevels: [],
+      courseCategories: [],
+      dropdownData: [],
+      dataDefault: CATEGORY_DEFAULT.new_classroom_list,
+      classroomList: [],
+    };
+  },
+  async created() {
+    await this.getLevelInfo();
+
+    // 初始化课程分类
+    this.initCourseCategories();
+
+    // 初始化下拉筛选数据
+    this.initDropdownData();
+  },
+  watch: {},
+  computed: {},
+  methods: {
+    isShowTag(item) {
+      if (item.courseSet.type == "live") {
+        return true;
+      }
+
+      if (item.courseSet.type == "reservation") {
+        return true;
+      }
+
+      if (item.tryLookable == "1") {
+        return true;
+      }
+      return false;
+    },
+    onFinish({ selectedOptions }) {
+      this.show = false;
+      this.categoryTitle = selectedOptions
+        .map((option) => option.text)
+        .join("/");
+      this.categoryValue = selectedOptions[0].value;
+      this.search(1);
+    },
+    changePage(page) {
+      window.location.href =
+        window.location.pathname +
+        `?sort=${this.dataDefault[1].value}&vipLevelId=${this.dataDefault[0].value}&categoryId=${this.categoryValue}&page=${page}`;
+    },
+    getCategoryDescById(categories, categoryId) {
+      if (!categories || categories.length === 0) return null;
+
+      for (let i = 0; i < categories.length; i++) {
+        const currentCategory = categories[i];
+
+        if (currentCategory.value === categoryId) {
+          return currentCategory.text;
+        }
+
+        const categoryText = this.getCategoryDescById(
+          currentCategory.children,
+          categoryId
+        );
+
+        if (categoryText) return categoryText;
+      }
+
+      return null;
+    },
+    async search(page) {
+      if (page) {
+        this.changePage(page);
+      }
+
+      let query = {
+        sort: $('[name="sort"]').val(),
+        categoryId: $('[name="categoryId"]').val(),
+        offset: 10 * (parseInt($('[name="page"]').val()) - 1),
+        limit: 10,
+      };
+
+      if (
+        $('[name="vipLevelId"]').val() &&
+        $('[name="vipLevelId"]').val() != "0"
+      ) {
+        query.vipLevelId = $('[name="vipLevelId"]').val();
+      }
+
+      const { data, paging } = await More.searchClassroom(query);
+      this.classroomList = data;
+      this.total = paging.total;
+
+      this.pageNum = Number($('[name="page"]').val());
+      console.log(data);
+    },
+    async getLevelInfo() {
+      const data = await More.getVipLevels();
+      this.vipLevels = data;
+    },
+    async initCourseCategories() {
+      // 获取课程分类数据
+      const res = await More.getClassroomCategories();
+      this.courseCategories = this.initOptions({
+        text: "全部",
+        value: "0",
+        data: res,
+      });
+      const categoryId = $('[name="categoryId"]').val();
+
+      if (categoryId && categoryId !== "0") {
+        this.categoryTitle = this.getCategoryDescById(
+          this.courseCategories,
+          $('[name="categoryId"]').val()
+        );
+      }
+
+      this.search();
+    },
+    async initDropdownData() {
+      this.dataDefault[0].options = this.initOptions({
+        text: "会员班级",
+        data: this.vipLevels,
+      });
+
+      if($('[name="vipLevelId"]').val()) {
+        this.dataDefault[0].value = $('[name="vipLevelId"]').val()
+      }
+      this.dataDefault[1].value = $('[name="sort"]').val()
+      this.dropdownData = this.dataDefault;
+    },
+    initOptions({ text, value = "0", data }) {
+      const options = text ? [{ text, value }] : [];
+      data.forEach((item) => {
+        const optionItem = {
+          text: item.name,
+          value: item.id,
+        };
+
+        if (item.children && item.children.length > 0) {
+          optionItem.children = this.initOptions({
+            text: "全部",
+            value: item.id,
+            data: item.children,
+          });
+        }
+
+        options.push(optionItem);
+      });
+
+      return options;
+    },
+  },
+};
+</script>

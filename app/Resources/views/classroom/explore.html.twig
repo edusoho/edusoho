@@ -16,6 +16,13 @@
 {% do script(['app/js/classroom/explore/index.js']) %}
 
 {% block top_content %}
+  {# {% if mobile %} #}
+    <div id="app"></div>
+  {# {% endif %} #}
+  <input type="hidden" name="categoryId" id="categoryId" value="{{ app.request.query.get('categoryId') }}">
+  <input type="hidden" name="sort" id="sort" value="{{ app.request.query.get('sort', 'recommendedSeq') }}">
+  <input type="hidden" name="vipLevelId" id="vipLevelId" value="{{ app.request.query.get('vipLevelId') }}">
+  <input type="hidden" name="page" id="page" value="{{ app.request.query.get('page', 1)}}">
 
   <div class="es-banner">
     <div class="container">

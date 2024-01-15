@@ -3,8 +3,18 @@
 {% set mobile = is_show_mobile_page() %}
 {% set siteNav = 'open/course/explore' %}
 
+{% do script(['app/js/open-course/explore/index.js']) %}
+
 {% block title %} {{'explore.open_course.title'|trans}} - {{ parent() }}{% endblock %}
 {% block top_content %}
+  {# {% if mobile %} #}
+    <div id="app"></div>
+  {# {% endif %} #}
+  <input type="hidden" name="categoryId" id="categoryId" value="{{ app.request.query.get('categoryId') }}">
+  <input type="hidden" name="type" id="type" value="{{ app.request.query.get('type', 'all') }}">
+  <input type="hidden" name="sort" id="sort" value="{{ app.request.query.get('sort', 'recommendedSeq') }}">
+  <input type="hidden" name="vipLevelId" id="vipLevelId" value="{{ app.request.query.get('vipLevelId') }}">
+  <input type="hidden" name="page" id="page" value="{{ app.request.query.get('page', 1)}}">
   <div class="es-banner">
     <div class="container">
       <div class="title">
