@@ -22,7 +22,7 @@ class Setting extends AbstractResource
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
         'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification', 'openStudentInfo', 'course_purchase_agreement', 'auth',
-        'question_bank_attachment_setting', 'cloud_attachment', 'storage',
+        'question_bank_attachment_setting', 'cloud_attachment', 'storage', 'enable_anti_brush_captcha',
     ];
 
     public static function convertUnderline($str)
@@ -426,6 +426,13 @@ class Setting extends AbstractResource
         ];
     }
 
+    public function getEnableAntiBrushCaptcha()
+    {
+        $enableAntiBrushCaptchaSetting = $this->getSettingService()->get('ugc_content_audit');
+
+        return empty($enableAntiBrushCaptchaSetting) ? [] : $enableAntiBrushCaptchaSetting;
+    }
+
     public function getWeChat($request)
     {
         $weChatSetting = $this->getSettingService()->get('wechat', []);
@@ -569,6 +576,8 @@ class Setting extends AbstractResource
             'show_discussion' => isset($courseSetting['show_discussion']) ? intval($courseSetting['show_discussion']) : 1,
             'show_note' => isset($courseSetting['show_note']) ? intval($courseSetting['show_note']) : 1,
             'allow_anonymous_preview' => isset($courseSetting['allowAnonymousPreview']) ? intval($courseSetting['allowAnonymousPreview']) : 1,
+            'only_learning_on_APP' => isset($courseSetting['only_learning_on_APP']) ? intval($courseSetting['only_learning_on_APP']) : 0,
+            'android_APP_content_theft_prevention' => isset($courseSetting['android_APP_content_theft_prevention']) ? intval($courseSetting['android_APP_content_theft_prevention']) : 0,
         ];
     }
 
