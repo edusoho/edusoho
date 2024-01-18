@@ -31,6 +31,10 @@ class SettingsController extends BaseController
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
         if ('POST' === $request->getMethod()) {
+            $avatars = $request->request->get('covers');
+            if (!empty($avatars)) {
+                $this->getUserService()->changeAvatar($user['id'], json_decode($avatars, true));
+            }
             $profile = $request->request->get('profile');
             if (!((strlen($user['verifiedMobile']) > 0) && (isset($profile['mobile'])))) {
                 $this->getUserService()->updateUserProfile($user['id'], $profile, false);
