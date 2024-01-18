@@ -39,10 +39,6 @@ class CourseReview extends AbstractResource
 
     public function add(ApiRequest $request, $courseId)
     {
-        if (!$this->checkDragCaptchaToken($request->getHttpRequest(), $request->request->get('_dragCaptchaToken'))) {
-            throw CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR();
-        }
-
         $rating = $request->request->get('rating');
         $content = $request->request->get('content');
 
@@ -60,6 +56,7 @@ class CourseReview extends AbstractResource
                 'userId' => $this->getCurrentUser()->getId(),
                 'rating' => $request->request->get('rating'),
                 'content' => $request->request->get('content'),
+                '_dragCaptchaToken' => $request->request->get('_dragCaptchaToken'),
             ]
         ));
     }
