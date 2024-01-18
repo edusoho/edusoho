@@ -10,7 +10,7 @@
         src="static/images/classroom/classroom-icon.png" 
         srcset="static/images/classroom/classroom-icon@2x.png" />
 
-      <img class="relative z-10 cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
+      <img class="relative z-1 cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
       
       <div v-if="Number(isVip)" class="row-class-left__member">{{ $t('e.freeForMembers') }}</div>
     </div>

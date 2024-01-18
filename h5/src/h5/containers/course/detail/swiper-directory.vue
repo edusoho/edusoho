@@ -26,7 +26,7 @@
           @click="handleChapter(index)"
         >
           <p class="chapter-title text-overflow">
-            第{{ items.number }}{{ hasChapter ? $t('courseLearning.chapter') : $t('courseLearning.section2') }}：{{
+            第{{ items.number }}{{ courseSettings.chapter_name ? courseSettings.chapter_name : $t('courseLearning.chapter') }}：{{
               items.title
             }}
           </p>
@@ -41,6 +41,7 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
 export default {
   name: 'SwiperDirectory',
   props: {
@@ -70,6 +71,7 @@ export default {
     },
   },
   computed: {
+    ...mapState(['courseSettings']),
     swiperWidth() {
       const w = window.innerWidth;
       if (w <= 500) {
@@ -78,6 +80,9 @@ export default {
         return w / 1.5;
       }
     },
+  },
+  mounted() {
+    console.log(this.courseSettings);
   },
   methods: {
     changeChapter(index) {

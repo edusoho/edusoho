@@ -28,6 +28,9 @@ module.exports = {
       48: ['48px', { lineHeight: '60px' }]
     },
     extend: {
+      zIndex: {
+        '1': '1',
+      },
       colors: {
         'primary': '#165dff',
         'primary-disabled': '#94bfff',
