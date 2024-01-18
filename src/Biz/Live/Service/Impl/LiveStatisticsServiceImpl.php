@@ -124,7 +124,7 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
     protected function generateStatisticsByLiveIdAndType($liveId, $type)
     {
         if (!in_array($type, [self::STATISTICS_TYPE_CHECKIN, self::STATISTICS_TYPE_VISITOR])) {
-            throw $this->createService(CommonException::ERROR_PARAMETER());
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $liveActivity = $this->getLiveActivityService()->getBySyncIdGTAndLiveId($liveId);

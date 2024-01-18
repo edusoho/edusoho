@@ -220,11 +220,18 @@ class LessonServiceTest extends BaseTestCase
             ],
             [
                 'functionName' => 'search',
+                'returnValue' => [
+                    ['id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'created', 'copyId' => 0],
+                    ['id' => 2, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0],
+                ],
+            ],
+            [
+                'functionName' => 'batchUpdate',
                 'returnValue' => [],
             ],
         ]);
 
-        $result = $this->getCourseLessonService()->batchUpdateLessonsStatus(1, ['1', '2'], 'published');
+        $result = $this->getCourseLessonService()->batchPublishLesson(1, ['1', '2']);
 
         $this->assertCount(2, $result);
     }
@@ -289,6 +296,10 @@ class LessonServiceTest extends BaseTestCase
             ],
             [
                 'functionName' => 'findLessonsByCourseId',
+                'returnValue' => [['id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0]],
+            ],
+            [
+                'functionName' => 'findChaptersByCourseIdAndLessonIds',
                 'returnValue' => [['id' => 1, 'type' => 'lesson', 'courseId' => 1, 'status' => 'unpublished', 'copyId' => 0]],
             ],
             [

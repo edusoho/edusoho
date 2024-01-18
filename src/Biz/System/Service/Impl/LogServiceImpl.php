@@ -2,14 +2,14 @@
 
 namespace Biz\System\Service\Impl;
 
+use AppBundle\Common\DeviceToolkit;
 use Biz\AppLoggerConstant;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\LoggerConstantInterface;
 use Biz\System\Dao\LogDao;
-use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
-use AppBundle\Common\DeviceToolkit;
+use Biz\User\Service\UserService;
 
 class LogServiceImpl extends BaseService implements LogService
 {
@@ -37,21 +37,20 @@ class LogServiceImpl extends BaseService implements LogService
         if (!is_array($sort)) {
             switch ($sort) {
                 case 'created':
-                    $sort = array('id' => 'DESC');
+                    $sort = ['id' => 'DESC'];
                     break;
                 case 'createdByAsc':
-                    $sort = array('id' => 'ASC');
+                    $sort = ['id' => 'ASC'];
                     break;
                 default:
                     $this->createNewException(CommonException::ERROR_PARAMETER());
-                    break;
             }
         }
 
         $logs = $this->getLogDao()->search($conditions, $sort, $start, $limit);
 
         foreach ($logs as &$log) {
-            $log['data'] = empty($log['data']) ? array() : json_decode($log['data'], true);
+            $log['data'] = empty($log['data']) ? [] : json_decode($log['data'], true);
             unset($log);
         }
 
@@ -65,21 +64,20 @@ class LogServiceImpl extends BaseService implements LogService
         if (!is_array($sort)) {
             switch ($sort) {
                 case 'created':
-                    $sort = array('id' => 'DESC');
+                    $sort = ['id' => 'DESC'];
                     break;
                 case 'createdByAsc':
-                    $sort = array('id' => 'ASC');
+                    $sort = ['id' => 'ASC'];
                     break;
                 default:
                     $this->createNewException(CommonException::ERROR_PARAMETER());
-                    break;
             }
         }
 
         $logs = $this->getLogOldDao()->search($conditions, $sort, $start, $limit);
 
         foreach ($logs as &$log) {
-            $log['data'] = empty($log['data']) ? array() : json_decode($log['data'], true);
+            $log['data'] = empty($log['data']) ? [] : json_decode($log['data'], true);
             unset($log);
         }
 
@@ -104,26 +102,18 @@ class LogServiceImpl extends BaseService implements LogService
     {
         $user = $this->getCurrentUser();
 
-        if (!$user->isLogin() && is_array($data) && !empty($data['loginUser'])) {
-            $user['id'] = $data['loginUser']['id'];
-        }
-
         if (is_array($data)) {
-            if (isset($data['loginUser'])) {
-                unset($data['loginUser']);
-            }
-
             foreach ($data as &$value) {
                 if (is_string($value) && mb_strlen($value, 'UTF-8') > self::LOG_DATA_LENGTH_LIMIT) {
                     $value = mb_substr($value, 0, self::LOG_DATA_LENGTH_LIMIT, 'UTF-8');
                 }
             }
 
-            $data = json_encode($data);
+            $data = json_encode($data, JSON_UNESCAPED_UNICODE);
         }
 
         return $this->getLogDao()->create(
-            array(
+            [
                 'module' => $module,
                 'action' => $action,
                 'message' => $message,
@@ -133,10 +123,10 @@ class LogServiceImpl extends BaseService implements LogService
                 'browser' => DeviceToolkit::getBrowse(),
                 'operatingSystem' => DeviceToolkit::getOperatingSystem(),
                 'device' => DeviceToolkit::isMobileClient() ? 'mobile' : 'computer',
-                'userAgent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
+                'userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
                 'createdTime' => time(),
                 'level' => $level,
-            )
+            ]
         );
     }
 
@@ -153,7 +143,7 @@ class LogServiceImpl extends BaseService implements LogService
     public function getModules()
     {
         $loggerConstantList = $this->getLoggerConstantList();
-        $modules = array();
+        $modules = [];
         foreach ($loggerConstantList as $loggerConstant) {
             $modules = array_merge($modules, $loggerConstant->getModules());
         }
@@ -164,16 +154,12 @@ class LogServiceImpl extends BaseService implements LogService
     public function getActionsByModule($module)
     {
         $loggerConstantList = $this->getLoggerConstantList();
-        $actions = array();
+        $actions = [];
         foreach ($loggerConstantList as $loggerConstant) {
             $actions = array_merge($actions, $loggerConstant->getActions());
         }
 
-        if (isset($actions[$module])) {
-            return $actions[$module];
-        } else {
-            return array();
-        }
+        return $actions[$module] ?? [];
     }
 
     /**
@@ -181,7 +167,7 @@ class LogServiceImpl extends BaseService implements LogService
      */
     protected function getLoggerConstantList()
     {
-        $loggerList = array();
+        $loggerList = [];
         $loggerList[] = new AppLoggerConstant();
 
         $customLoggerClass = 'CustomBundle\Biz\LoggerConstant';
@@ -252,7 +238,7 @@ class LogServiceImpl extends BaseService implements LogService
             $conditions['endDateTime'] = strtotime($conditions['endDateTime']);
         }
 
-        if (empty($conditions['level']) || !in_array($conditions['level'], array('info', 'warning', 'error'))) {
+        if (empty($conditions['level']) || !in_array($conditions['level'], ['info', 'warning', 'error'])) {
             unset($conditions['level']);
         }
 

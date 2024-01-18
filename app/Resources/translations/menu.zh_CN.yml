@@ -991,6 +991,10 @@ admin_v2.system.logs_menu: 系统日志
 admin_v2.system.logs.logs_query_tab: 系统操作日志
 admin_v2.system.logs.logs_prod_tab: 程序运行日志
 
+# 系统-系统管理-系统API设置
+admin_v2.system.api_setting_menu: API设置
+admin_v2.system.api_setting_basic_tab: API设置
+
 # 系统-系统管理-安全设置
 admin_v2.system.security_menu: 安全设置
 admin_v2.system.blacklist_tab: IP黑名单

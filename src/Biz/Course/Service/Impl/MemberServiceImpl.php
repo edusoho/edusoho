@@ -1599,7 +1599,6 @@ class MemberServiceImpl extends BaseService implements MemberService
             $learnedNum = empty($finishedTaskNums[$member['userId']]) ? 0 : $finishedTaskNums[$member['userId']]['count'];
             $learnedCompulsoryTaskNum = empty($finishedCompulsoryTaskNums[$member['userId']]) ? 0 : $finishedCompulsoryTaskNums[$member['userId']]['count'];
             $updateMember = [
-                'id' => $member['id'],
                 'learnedNum' => $learnedNum,
                 'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum,
                 'isLearned' => $course['compulsoryTaskNum'] > 0 && $course['compulsoryTaskNum'] <= $learnedCompulsoryTaskNum ? '1' : '0',
@@ -1609,9 +1608,9 @@ class MemberServiceImpl extends BaseService implements MemberService
             if ($isFieldExist) {
                 $updateMember['learnedElectiveTaskNum'] = $learnedNum - $learnedCompulsoryTaskNum;
             }
-            $updateMembers[] = $updateMember;
+            $updateMembers[$member['id']] = $updateMember;
         }
-        $this->getMemberDao()->batchUpdate(ArrayToolkit::column($updateMembers, 'id'), $updateMembers);
+        $this->getMemberDao()->batchUpdate(array_keys($updateMembers), $updateMembers);
         $this->dispatchEvent('course.members.finish_data_refresh', new Event($course, ['updatedMembers' => $updateMembers]));
     }
 

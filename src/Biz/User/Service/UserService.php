@@ -27,6 +27,8 @@ interface UserService
 
     public function getUserByType($type);
 
+    public function findUserByType($type);
+
     public function getUserByUUID($uuid);
 
     public function updateUserUpdatedTime($id);

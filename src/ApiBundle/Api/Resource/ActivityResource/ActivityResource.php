@@ -7,7 +7,6 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\ActivityException;
-use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 
@@ -28,7 +27,7 @@ class ActivityResource extends AbstractResource
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        $activityConfig = $this->getActivityConfig($params['resourceType']);
+        $activityConfig = $this->getActivityService()->getActivityConfig($params['resourceType']);
 
         return $activityConfig->get($resourceId);
     }
@@ -45,7 +44,7 @@ class ActivityResource extends AbstractResource
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        $activityConfig = $this->getActivityConfig($params['resourceType']);
+        $activityConfig = $this->getActivityService()->getActivityConfig($params['resourceType']);
 
         return $activityConfig->create($params);
     }
@@ -68,19 +67,9 @@ class ActivityResource extends AbstractResource
             throw ActivityException::ACTIVITY_NOT_MATCH_MEDIA();
         }
 
-        $activityConfig = $this->getActivityConfig($params['resourceType']);
+        $activityConfig = $this->getActivityService()->getActivityConfig($params['resourceType']);
 
         return $activityConfig->update($resourceId, $params, $activity);
-    }
-
-    /**
-     * @param  $type
-     *
-     * @return Activity
-     */
-    private function getActivityConfig($type)
-    {
-        return $this->biz["activity_type.{$type}"];
     }
 
     /**

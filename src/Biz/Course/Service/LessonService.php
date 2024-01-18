@@ -20,13 +20,15 @@ interface LessonService
 
     public function updateLesson($lessonId, $fields);
 
-    public function publishLesson($courseId, $lessonId, $updateLessonNum = true, $isBatch = false);
+    public function publishLesson($courseId, $lessonId);
 
     public function publishLessonByCourseId($courseId);
 
-    public function batchUpdateLessonsStatus($courseId, $lessonIds, $updateStatus);
+    public function batchPublishLesson($courseId, $lessonIds);
 
-    public function unpublishLesson($courseId, $lessonId, $isBatch = false);
+    public function batchUnpublishLesson($courseId, $lessonIds);
+
+    public function unpublishLesson($courseId, $lessonId);
 
     /**
      * @param $courseId

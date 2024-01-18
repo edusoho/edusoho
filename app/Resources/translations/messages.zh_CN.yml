@@ -8001,6 +8001,10 @@ admin.setting_course.doc_task_water_mark: 文档任务水印
 admin.setting_course.doc_task_water_mark_info: 文档水印信息
 admin.setting_course.doc_task_water_mark_info_tips: 为了用户体验效果更佳,建议最多组合2项信息显示.注意:若用户的真实姓名和手机号没有则显示为-
 admin.setting_course.Prevent_copying_test_paper: 试卷防复制
+admin.setting_course.Only_available_for_learning_on_APP: 仅限在APP学习
+admin.setting_course.Only_available_for_learning_on_APP_tips: 开启后用户仅限在APP观看音视频、直播、直播回放、只能直播任务。
+admin.setting_course.Android_APP_content_theft_prevention: 安卓APP内容防盗
+admin.setting_course.Android_APP_content_theft_prevention_tips: 开启后，用户在安卓APP观看音视频任务时无法截屏和录屏。IOS不受此按钮控制，始终禁止录屏。
 admin.setting_course.course_operation_mode: 课程运营模式
 admin.setting_course.course_comments_manage: 课程学习页内容管理
 admin.setting_course.course_review: 评价
@@ -12501,3 +12505,14 @@ sms.defence.request.log.disable_type.none: 无
 course.start_answer.all_question_deleted: 全部题目已被删除，请联系教师或管理员
 item_bank.access_cloud: 立即升级
 next.skip: '下一步 (1/2)'
+
+#外部应用
+external.application.ip_white_list.title: 外部应用IP白名单
+external.application.ip_white_list.tips: 需添加外部应用服务器出口IP，可换行支持多个
+external.application.top.one.tips: 通过外部应用对接可以实现获取EduSoho各业务数据以及实现外部应用账号对EduSoho免登。
+external.application.top.two.tips: 更多相关对接说明
+external.application.login.status: API设置开关
+external.application.login.open: 开启
+external.application.login.closed: 关闭
+admin.system.api_setting.tips: AppKey与SecretKey 用于外部应用调用 EduSoho 教培系统 API接口鉴权
+admin.setting.api_secret.reset_confirm_message: 重置后旧SecretKey将失效
