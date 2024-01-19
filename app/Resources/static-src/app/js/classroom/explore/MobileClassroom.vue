@@ -30,7 +30,7 @@
           </div>
           <div class="class-serve">
             <ul class="list-unstyled clearfix">
-              <li v-for="(itm, index) in services" :key="index" :class="getCodeToArr(item.services).include(itm.value) ? 'active' : ''">
+              <li v-for="(itm, index) in services" :key="index" :class="getCodeToArr(item.services, itm.value) ? 'active' : ''">
                 <a
                   tabindex="0"
                   role="button"
@@ -124,14 +124,14 @@ export default {
   watch: {},
   computed: {},
   methods: {
-    getCodeToArr(arr=[]) {
+    getCodeToArr(services=[], item='') {
       let codesArray = [];
 
-      for(let i = 0; i < arr.length; i++) {
-        codesArray.push(arr[i].code);
+      for(let i = 0; i < services.length; i++) {
+        codesArray.push(services[i].code);
       }
 
-      return codesArray;
+      return codesArray.includes(item);
     },
     async getVipSetting() {
       const data = await More.getVip()
