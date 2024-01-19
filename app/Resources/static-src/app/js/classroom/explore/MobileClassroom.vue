@@ -30,7 +30,7 @@
           </div>
           <div class="class-serve">
             <ul class="list-unstyled clearfix">
-              <li class="" v-for="(item, index) in services" :key="index">
+              <li v-for="(itm, index) in services" :key="index" :class="getCodeToArr(item.services).include(itm.value) ? 'active' : ''">
                 <a
                   tabindex="0"
                   role="button"
@@ -38,7 +38,7 @@
                   data-html="true"
                   title=""
                 >
-                  {{ item.text }}
+                  {{ itm.text }}
                 </a>
               </li>
             </ul>
@@ -89,12 +89,12 @@ export default {
   data() {
     return {
       services: [
-        {text: '练', value: ''},
-        {text: '试', value: ''},
-        {text: '问', value: ''},
-        {text: '疑', value: ''},
-        {text: '动', value: ''},
-        {text: '业', value: ''},
+        {text: '练', value: 'homeworkReview'},
+        {text: '试', value: 'testpaperReview'},
+        {text: '问', value: 'teacherAnswer'},
+        {text: '疑', value: 'liveAnswer'},
+        {text: '动', value: 'event'},
+        {text: '业', value: 'workAdvise'},
       ],
       total: 0,
       pageNum: 1,
@@ -124,6 +124,15 @@ export default {
   watch: {},
   computed: {},
   methods: {
+    getCodeToArr(arr) {
+      let codesArray = [];
+
+      for(let item of arr) {
+        codesArray.push(item.code);
+      }
+
+      return codesArray;
+    },
     async getVipSetting() {
       const data = await More.getVip()
       this.vipSetting = data
