@@ -19,7 +19,7 @@
           class="col-lg-3 col-md-4 col-xs-6 course-item-wrap"
         >
           <div class="course-item">
-            <span v-if="vipSetting.enabled && Number(item.vipLevelId)" class="tag-vip-free"></span>
+            <span v-if="Number(item.vipLevelId)" class="tag-vip-free"></span>
             <div class="course-img">
               <a :href="'/course/'+item.id" target="_blank">
                 <span v-if="item.courseSet.discountId > 0 && item.courseSet.discount == 0" class="tag-discount free"></span>
@@ -228,6 +228,7 @@ export default {
 
       if (categoryId && categoryId !== '0') {
         this.categoryTitle = this.getCategoryDescById(this.courseCategories, $('[name="categoryId"]').val())
+        this.categoryValue = categoryId
       }
 
       this.search()

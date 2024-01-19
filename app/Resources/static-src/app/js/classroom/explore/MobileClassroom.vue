@@ -38,7 +38,7 @@
                   data-html="true"
                   title=""
                 >
-                  {{ item }}
+                  {{ item.text }}
                 </a>
               </li>
             </ul>
@@ -88,7 +88,14 @@ import { More } from "common/vue/service";
 export default {
   data() {
     return {
-      services: ['练', '试', '问', '疑', '动', '业'],
+      services: [
+        {text: '练', value: ''},
+        {text: '试', value: ''},
+        {text: '问', value: ''},
+        {text: '疑', value: ''},
+        {text: '动', value: ''},
+        {text: '业', value: ''},
+      ],
       total: 0,
       pageNum: 1,
       show: false,
@@ -213,6 +220,7 @@ export default {
           this.courseCategories,
           $('[name="categoryId"]').val()
         );
+        this.categoryValue = categoryId
       }
 
       this.search();
