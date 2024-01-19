@@ -1,9 +1,11 @@
 import { apiClient } from 'common/vue/service/api-client.js';
 
 export const More = {
-  // 获取课程教师
   async getVipLevels() {
     return apiClient.get('/api/plugins/vip/vip_levels')
+  },
+  async getVip() {
+    return apiClient.get('/api/settings/vip')
   },
   async getCourseCategories() {
     return apiClient.get('/api/categories/course')

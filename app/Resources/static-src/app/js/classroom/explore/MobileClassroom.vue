@@ -11,17 +11,20 @@
         />
       </template>
     </van-dropdown-menu>
-    <div class="class-list-mobile row">
+    <div class="class-list-mobile row" style="padding-left: 12px; padding-right: 12px;">
       <div class="col-md-4 col-sm-6">
         <div v-for="(item, index) in classroomList" :key="index" class="class-item class-item--tag">
           <div class="class-img">
+            <span v-if="vipSetting.enabled && Number(item.vipLevelId)" class="tag-vip-free"></span>
             <a :href="'/classroom/'+item.id" target="_blank">
               <img
                 :src="item.cover.large"
                 :alt="item.title"
                 class="img-responsive"
               />
-              <h3>{{ item.title }}</h3>
+              <h3>
+                <span v-if="item.hasCertificate" class="certificate-tag" tabindex="0" role="button" data-container="body">证</span>
+                {{ item.title }}</h3>
               <div class="image-overlay"></div>
             </a>
           </div>
@@ -32,13 +35,8 @@
                   tabindex="0"
                   role="button"
                   data-container="body"
-                  data-toggle="popover"
-                  data-trigger="hover"
-                  data-placement="top"
                   data-html="true"
                   title=""
-                  data-content="24小时内完成作业批阅，即时反馈并巩固您的学习效果"
-                  data-original-title="24小时作业批阅 <small class='color-gray'>(暂未提供)</span>"
                 >
                   {{ item }}
                 </a>
@@ -46,7 +44,8 @@
             </ul>
           </div>
           <span class="class-price">
-            <span class="color-success"> 免费 </span>
+            <span v-if="Number(item.price)" class="price"> {{ item.price }}元 </span>
+            <span v-else class="color-success"> 免费 </span>
           </span>
           <ul class="class-data clearfix">
             <li><i class="es-icon es-icon-book"></i>{{ item.courseNum }}</li>
@@ -75,7 +74,7 @@
     <van-popup v-model="show" round position="bottom">
       <van-cascader
         v-model="courseCategoriesValue"
-        title="请选择课程分类"
+        title="请选择班级分类"
         :options="courseCategories"
         @close="show = false"
         @finish="onFinish"
@@ -101,9 +100,12 @@ export default {
       dropdownData: [],
       dataDefault: CATEGORY_DEFAULT.new_classroom_list,
       classroomList: [],
+      vipSetting: {}
     };
   },
   async created() {
+    await this.getVipSetting();
+
     await this.getLevelInfo();
 
     // 初始化课程分类
@@ -115,6 +117,10 @@ export default {
   watch: {},
   computed: {},
   methods: {
+    async getVipSetting() {
+      const data = await More.getVip()
+      this.vipSetting = data
+    },
     isShowTag(item) {
       if (item.courseSet.type == "live") {
         return true;

@@ -19,9 +19,11 @@
           class="col-lg-3 col-md-4 col-xs-6 course-item-wrap"
         >
           <div class="course-item">
-            <span v-if="Number(item.vipLevelId)" class="tag-vip-free"></span>
+            <span v-if="vipSetting.enabled && Number(item.vipLevelId)" class="tag-vip-free"></span>
             <div class="course-img">
               <a :href="'/course/'+item.id" target="_blank">
+                <span v-if="item.courseSet.discountId > 0 && item.courseSet.discount == 0" class="tag-discount free"></span>
+                <span v-if="item.courseSet.discountId > 0 && item.courseSet.discount != 0" class="tag-discount"></span>
                 <div v-if="isShowTag(item)" class="course-tag clearfix">
                   <span v-if="item.courseSet.type == 'live'" class="pull-right">
                     <span class="cd-mr8">
@@ -38,15 +40,15 @@
                 </div>
 
                 <img
-                  src="/assets/img/default/courseSet.png"
-                  alt="自研直播回放下载测试"
+                  :src="item.courseSet.cover.large"
+                  :alt="item.courseSetTitle"
                   class="img-responsive"
                 />
               </a>
             </div>
             <div class="course-info">
               <div class="title">
-                <a
+                <a v-if="item.hasCertificate"
                   class="certificate-tag"
                   >证</a
                 >
@@ -69,7 +71,8 @@
                 </span>
 
                 <span class="course-price-widget">
-                  <span class="price"> {{ item.price }}元 </span>
+                  <span v-if="Number(item.price)" class="price"> {{ item.price }}元 </span>
+                  <span v-else class="free">免费</span>
                 </span>
               </div>
             </div>
@@ -119,10 +122,13 @@ export default {
       courseCategories: [],
       dropdownData: [],
       dataDefault: CATEGORY_DEFAULT.new_course_list,
-      courseList: []
+      courseList: [],
+      vipSetting: {}
     }
   },
   async created() {
+
+    await this.getVipSetting();
 
     await this.getLevelInfo();
 
@@ -138,6 +144,10 @@ export default {
   computed: {
   },
   methods: {
+    async getVipSetting() {
+      const data = await More.getVip()
+      this.vipSetting = data
+    },
     isShowTag(item) {
       if (item.courseSet.type == 'live') {
         return true
