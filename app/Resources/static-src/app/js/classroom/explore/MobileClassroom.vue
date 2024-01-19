@@ -127,8 +127,8 @@ export default {
     getCodeToArr(arr) {
       let codesArray = [];
 
-      for(let item of arr) {
-        codesArray.push(item.code);
+      for(let i = 0; i < arr.length; i++) {
+        codesArray.push(arr[i].code);
       }
 
       return codesArray;
