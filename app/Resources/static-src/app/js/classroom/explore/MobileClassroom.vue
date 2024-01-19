@@ -124,7 +124,7 @@ export default {
   watch: {},
   computed: {},
   methods: {
-    getCodeToArr(arr) {
+    getCodeToArr(arr=[]) {
       let codesArray = [];
 
       for(let i = 0; i < arr.length; i++) {
