@@ -30,8 +30,6 @@
           </div>
           <div class="class-serve">
             <ul class="list-unstyled clearfix">
-              {{ getCodeToArr(item.services).includes(itm.value) }}
-              {{ getCodeToArr(item.services) }}
               <li v-for="(itm, index) in services" :key="index" :class="getCodeToArr(item.service).includes(itm.value) ? 'active' : ''">
                 <a
                   tabindex="0"
