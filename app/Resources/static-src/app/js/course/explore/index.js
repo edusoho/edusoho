@@ -8,6 +8,11 @@ if (app.lang == 'en') {
 }
 Vue.use(Vant);
 
+Vue.filter('trans', function (value, params) {
+  if (!value) return '';
+  return Translator.trans(value, params);
+});
+
 new Vue({
   render: createElement => createElement(MobileCourse)
 }).$mount('#app');

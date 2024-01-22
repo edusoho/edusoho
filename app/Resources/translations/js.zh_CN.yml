@@ -2284,3 +2284,18 @@ question.bank.difficulty.simple: 简单
 question.bank.difficulty.normal: 一般
 question.bank.difficulty: 困难
 question.bank.reset.btn: 重置
+
+classroom.category.choose.text: 请选择班级分类
+course.category.choose.text: 请选择课程分类
+classroom.services.choose.train: 练
+classroom.services.choose.try: 试
+classroom.services.choose.ask: 问
+classroom.services.choose.suspected: 疑
+classroom.services.choose.dynamic: 动
+classroom.services.choose.industry: 业
+classroom.vip.category.text: 会员班级
+course.vip.category.text: 会员课程
+course.live: 直播课程
+course.appointment: 预约课程
+course.try.look: 试看
+certificate: 证

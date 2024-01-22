@@ -2316,3 +2316,18 @@ question.bank.none: None
 question.bank.delete.tip.title: Are you sure you want to delete this question?
 question.bank.delete.tip.content: Deleting a question may affect the practice session of a lesson. Please proceed with caution!
 question.bank.head.edit: Title editing
+
+classroom.category.choose.text: Please select a classroom category,
+course.category.choose.text: Please select a course category,
+classroom.services.choose.train: Practice,
+classroom.services.choose.try: Tryout,
+classroom.services.choose.ask: Ask,
+classroom.services.choose.suspected: Inquiry,
+classroom.services.choose.dynamic: Activity,
+classroom.services.choose.industry: Industry,
+classroom.vip.category.text: VIP Classroom,
+course.vip.category.text: VIP Course,
+course.live: Live Course,
+course.appointment: Appointment Course,
+course.try.look: Preview,
+certificate: Certificate

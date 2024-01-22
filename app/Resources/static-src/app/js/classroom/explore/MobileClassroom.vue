@@ -23,7 +23,7 @@
                 class="img-responsive"
               />
               <h3>
-                <span v-if="item.hasCertificate" class="certificate-tag" tabindex="0" role="button" data-container="body">证</span>
+                <span v-if="item.hasCertificate" class="certificate-tag" tabindex="0" role="button" data-container="body">{{ 'certificate'|trans }}</span>
                 {{ item.title }}</h3>
               <div class="image-overlay"></div>
             </a>
@@ -44,8 +44,8 @@
             </ul>
           </div>
           <span class="class-price">
-            <span v-if="Number(item.price)" class="price"> {{ item.price }}元 </span>
-            <span v-else class="color-success"> 免费 </span>
+            <span v-if="Number(item.price)" class="price"> {{ item.price }}{{ 'cny'|trans }} </span>
+            <span v-else class="color-success"> {{ 'course.marketing_setup.preview.set_task.free'|trans }} </span>
           </span>
           <ul class="class-data clearfix">
             <li><i class="es-icon es-icon-book"></i>{{ item.courseNum }}</li>
@@ -74,7 +74,7 @@
     <van-popup v-model="show" round position="bottom">
       <van-cascader
         v-model="courseCategoriesValue"
-        title="请选择班级分类"
+        :title="'classroom.category.choose.text'|trans "
         :options="courseCategories"
         @close="show = false"
         @finish="onFinish"
@@ -89,19 +89,19 @@ export default {
   data() {
     return {
       services: [
-        {text: '练', value: 'homeworkReview'},
-        {text: '试', value: 'testpaperReview'},
-        {text: '问', value: 'teacherAnswer'},
-        {text: '疑', value: 'liveAnswer'},
-        {text: '动', value: 'event'},
-        {text: '业', value: 'workAdvise'},
+        {text: Translator.trans("classroom.services.choose.train"), value: 'homeworkReview'},
+        {text: Translator.trans("classroom.services.choose.try"), value: 'testpaperReview'},
+        {text: Translator.trans("classroom.services.choose.ask"), value: 'teacherAnswer'},
+        {text: Translator.trans("classroom.services.choose.suspected"), value: 'liveAnswer'},
+        {text: Translator.trans("classroom.services.choose.dynamic"), value: 'event'},
+        {text: Translator.trans("classroom.services.choose.industry"), value: 'workAdvise'},
       ],
       total: 0,
       pageNum: 1,
       show: false,
       categoryValue: "",
       courseCategoriesValue: "",
-      categoryTitle: "分类",
+      categoryTitle: Translator.trans("category"),
       vipLevels: [],
       courseCategories: [],
       dropdownData: [],
@@ -115,7 +115,7 @@ export default {
 
     await this.getLevelInfo();
 
-    // 初始化课程分类
+    // 初始化班级分类
     this.initCourseCategories();
 
     // 初始化下拉筛选数据
@@ -209,10 +209,10 @@ export default {
       this.vipLevels = data;
     },
     async initCourseCategories() {
-      // 获取课程分类数据
+      // 获取班级分类数据
       const res = await More.getClassroomCategories();
       this.courseCategories = this.initOptions({
-        text: "全部",
+        text: Translator.trans("site.btn.see_more"),
         value: "0",
         data: res,
       });
@@ -230,7 +230,7 @@ export default {
     },
     async initDropdownData() {
       this.dataDefault[0].options = this.initOptions({
-        text: "会员班级",
+        text: Translator.trans("classroom.vip.category.text"),
         data: this.vipLevels,
       });
 
@@ -250,7 +250,7 @@ export default {
 
         if (item.children && item.children.length > 0) {
           optionItem.children = this.initOptions({
-            text: "全部",
+            text: Translator.trans("site.btn.see_more"),
             value: item.id,
             data: item.children,
           });
