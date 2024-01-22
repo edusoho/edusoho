@@ -30,7 +30,9 @@
           </div>
           <div class="class-serve">
             <ul class="list-unstyled clearfix">
-              <li v-for="(itm, index) in services" :key="index" :class="{active: getCodeToArr(item.services).includes(itm.value)}">
+              {{ getCodeToArr(item.services).includes(itm.value) }}
+              {{ getCodeToArr(item.services) }}
+              <li v-for="(itm, index) in services" :key="index" :class="getCodeToArr(item.services).includes(itm.value) ? 'active' : ''">
                 <a
                   tabindex="0"
                   role="button"
