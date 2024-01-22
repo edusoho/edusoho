@@ -125,13 +125,7 @@ export default {
   computed: {},
   methods: {
     getCodeToArr(activeServices=[]) {
-      let codesArray = [];
-
-      for(let i=0; i<activeServices.length; i++) {
-        codesArray.push(activeServices[i].code);
-      }
-
-      return codesArray;
+      return activeServices.map(service => service.code);
     },
     async getVipSetting() {
       const data = await More.getVip()
