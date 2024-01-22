@@ -27,15 +27,15 @@
                 <div v-if="isShowTag(item)" class="course-tag clearfix">
                   <span v-if="item.courseSet.type == 'live'" class="pull-right">
                     <span class="cd-mr8">
-                      直播课程<span class="course-tag__dot"></span>
+                      {{ 'course.live'|trans }}<span class="course-tag__dot"></span>
                     </span>
                   </span>
                   <span v-if="item.courseSet.type == 'reservation'" class="pull-right">
                     <span class="cd-mr8">
-                      预约课程<span class="course-tag__dot"></span>
+                      {{ 'course.appointment'|trans }}<span class="course-tag__dot"></span>
                     </span>
                   </span>
-                  <span v-if="item.tryLookable == '1'"><i class="es-icon es-icon-video color-white"></i>试看</span>
+                  <span v-if="item.tryLookable == '1'"><i class="es-icon es-icon-video color-white"></i>{{ 'course.try.look'|trans }}</span>
 
                 </div>
 
@@ -50,7 +50,7 @@
               <div class="title">
                 <a v-if="item.hasCertificate"
                   class="certificate-tag"
-                  >证</a
+                  >{{ 'certificate'|trans }}</a
                 >
                 <a
                   class="link-darker"
@@ -71,8 +71,8 @@
                 </span>
 
                 <span class="course-price-widget">
-                  <span v-if="Number(item.price)" class="price"> {{ item.price }}元 </span>
-                  <span v-else class="free">免费</span>
+                  <span v-if="Number(item.price)" class="price"> {{ item.price }}{{ 'cny'|trans }} </span>
+                  <span v-else class="free">{{ 'course.marketing_setup.preview.set_task.free'|trans }} </span>
                 </span>
               </div>
             </div>
@@ -98,7 +98,7 @@
     <van-popup v-model="show" round position="bottom">
       <van-cascader
         v-model="courseCategoriesValue"
-        title="请选择课程分类"
+        :title="'course.category.choose.text'|trans"
         :options="courseCategories"
         @close="show = false"
         @finish="onFinish"
@@ -117,7 +117,7 @@ export default {
       show: false,
       categoryValue: '',
       courseCategoriesValue: "",
-      categoryTitle: "分类",
+      categoryTitle: Translator.trans('category'),
       vipLevels: [],
       courseCategories: [],
       dropdownData: [],
@@ -220,7 +220,7 @@ export default {
       // 获取课程分类数据
       const res = await More.getCourseCategories();
       this.courseCategories = this.initOptions({
-        text: "全部",
+        text: Translator.trans('site.btn.see_more'),
         value: "0",
         data: res,
       });
@@ -235,7 +235,7 @@ export default {
     },
     async initDropdownData() {
       this.dataDefault[1].options = this.initOptions({
-        text: "会员课程",
+        text: Translator.trans('course.vip.category.text'),
         data: this.vipLevels,
       });
 
@@ -257,7 +257,7 @@ export default {
 
         if (item.children && item.children.length > 0) {
           optionItem.children = this.initOptions({
-            text: "全部",
+            text: Translator.trans('site.btn.see_more'),
             value: item.id,
             data: item.children,
           });
