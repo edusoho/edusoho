@@ -124,7 +124,7 @@ export default {
   watch: {},
   computed: {},
   methods: {
-    getCodeToArr(activeServices) {
+    getCodeToArr(activeServices=[]) {
       let codesArray = [];
 
       for(let i=0; i<activeServices.length; i++) {
