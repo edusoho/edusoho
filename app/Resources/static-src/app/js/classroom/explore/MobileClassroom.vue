@@ -13,7 +13,7 @@
     </van-dropdown-menu>
     <div class="class-list-mobile row" style="padding-left: 12px; padding-right: 12px;">
       <div class="col-md-4 col-sm-6">
-        <div v-for="(item, index) in classroomList" :key="index" class="class-item class-item--tag">
+        <div v-for="(item, index) in classroomList" :key="index" class="class-item class-item--tag" style="position: relative;">
           <div class="class-img">
             <span v-if="vipSetting.enabled && Number(item.vipLevelId)" class="tag-vip-free"></span>
             <a :href="'/classroom/'+item.id" target="_blank">
