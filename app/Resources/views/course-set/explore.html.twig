@@ -4,7 +4,7 @@
 {% set bodyClass = 'course-list-page ' %}
 {% set siteNav = 'course/explore' %}
 
-{% do script(['app/js/course/explore/index.js']) %}
+{% do script(['libs/vue.js','app/js/course/explore/index.js']) %}
 
 {% block keywords %}
   {{ categoryArray.name|default('category.all_category'|trans) }}
@@ -19,6 +19,15 @@
 {% endblock %}
 
 {% block top_content %}
+  {# {% if mobile %} #}
+    <div id="app"></div>
+  {# {% endif %} #}
+  <input type="hidden" name="categoryId" id="categoryId" value="{{ app.request.query.get('categoryId') }}">
+  <input type="hidden" name="type" id="type" value="{{ app.request.query.get('type', 'all') }}">
+  <input type="hidden" name="sort" id="sort" value="{{ app.request.query.get('sort', 'recommendedSeq') }}">
+  <input type="hidden" name="vipLevelId" id="vipLevelId" value="{{ app.request.query.get('vipLevelId') }}">
+  <input type="hidden" name="page" id="page" value="{{ app.request.query.get('page', 1)}}">
+
   <div class="es-banner">
     <div class="container">
       <div class="title">
@@ -53,7 +62,6 @@
   {% set path = app.request.get('_route') %}
   {% set subCategory = app.request.query.get('subCategory', '') %}
   {% set thirdLevelCategory = app.request.query.get('selectedthirdLevelCategory', '') %}
-
   {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'course'})) }}
 
   <div class="es-filter">
@@ -123,7 +131,7 @@
     </div>
   </div>
 
-  <div class="course-list course-list-new">
+  <div class="course-list course-list-new pc-course-list">
     <div class="row">
       {% if courseSets %}
         {% for courseSet in courseSets %}

@@ -3,6 +3,33 @@ define(function(require, exports, module) {
     var ImageCrop = require('edusoho.imagecrop');
 
     exports.run = function() {
+
+        function afterCrops(crops) {
+            crops.on("afterCrop", function(response) {
+                var url = $("#upload-avatar-btn").data("url");
+                $.post(url, {
+                    images: response
+                }, function() {
+                    Notify.success(Translator.trans('admin.user.update_avatar_success_hint'), 1);
+                    $('#modal').load($("#upload-avatar-btn").data("gotoUrl"));
+                });
+            });
+    
+            $("#upload-avatar-btn").click(function(e) {
+                e.stopPropagation();
+    
+                crops.crop({
+                    imgs: {
+                        large: [$("#upload-avatar-btn").data("largeWidth"), $("#upload-avatar-btn").data("largeHeight")],
+                        medium: [$("#upload-avatar-btn").data("largeWidth"), $("#upload-avatar-btn").data("largeHeight")],
+                        small: [$("#upload-avatar-btn").data("largeWidth"), $("#upload-avatar-btn").data("largeHeight")]
+                    }
+                });
+    
+            })
+    
+        };
+
         //创建一个副本
         var imagecopy = $('#avatar-crop').clone();
         var $form = $("#avatar-crop-form"),
@@ -24,54 +51,11 @@ define(function(require, exports, module) {
                 cropedWidth: 200,
                 cropedHeight: 200
             });
-            newimageCrop.on("afterCrop", function(response) {
-                var url = $("#upload-avatar-btn").data("url");
-                $.post(url, {
-                    images: response
-                }, function() {
-                    Notify.success('admin.user.update_avatar_success_hint', 1);
-                    $('#modal').load($("#upload-avatar-btn").data("gotoUrl"));
-                });
-            });
-            $("#upload-avatar-btn").click(function(e) {
-                e.stopPropagation();
-
-                newimageCrop.crop({
-                    imgs: {
-                        large: [200, 200],
-                        medium: [120, 120],
-                        small: [48, 48]
-                    }
-                });
-
-            })
+            afterCrops(newimageCrop)
         });
-        imageCrop.on("afterCrop", function(response) {
-            var url = $("#upload-avatar-btn").data("url");
-            $.post(url, {
-                images: response
-            }, function() {
-                Notify.success(Translator.trans('admin.user.update_avatar_success_hint'), 1);
-                $('#modal').load($("#upload-avatar-btn").data("gotoUrl"));
-            });
-        });
-
-        $("#upload-avatar-btn").click(function(e) {
-            e.stopPropagation();
-
-            imageCrop.crop({
-                imgs: {
-                    large: [200, 200],
-                    medium: [120, 120],
-                    small: [48, 48]
-                }
-            });
-
-        })
-
+        afterCrops(imageCrop)
         $('.go-back').click(function() {
             history.go(-1);
         });
     };
-
 });

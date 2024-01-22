@@ -35,3 +35,4 @@ export * from './PurchaseAgreement';
 export * from './Announcement';
 export * from './Information';
 export * from './DuplicativeQuestions';
+export * from './More';
