@@ -85,7 +85,7 @@
       v-model="pageNum" 
       @change="changePage"
       force-ellipses 
-      style="width: 200px; justify-content: center;" 
+      style="width: 200px; margin: 0 auto; justify-content: center;" 
       :total-items="total" 
       :show-page-size="5">
       <template #prev-text>

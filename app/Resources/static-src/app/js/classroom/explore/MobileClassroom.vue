@@ -60,7 +60,7 @@
       v-model="pageNum"
       @change="changePage"
       force-ellipses
-      style="width: 200px; margin: 0 auto"
+      style="width: 200px; margin: 0 auto; justify-content: center;"
       :total-items="total"
       :show-page-size="5"
     >
