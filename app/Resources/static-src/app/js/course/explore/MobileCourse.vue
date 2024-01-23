@@ -11,8 +11,8 @@
         />
       </template>
     </van-dropdown-menu>
-    <div class="course-list course-list-new">
-      <div class="row" style="padding: 10px;">
+    <div class="course-list course-list-new" style="min-height: 250px;">
+      <div v-if="courseList.length" class="row" style="padding: 10px;">
         <div
           v-for="(item, index) in courseList"
           :key="index"
@@ -79,6 +79,7 @@
           </div>
         </div>
       </div>
+      <div class="empty" v-else>暂无数据</div>
     </div>
     <van-pagination 
       v-if="total>10"
@@ -164,8 +165,8 @@ export default {
     },
     onFinish({ selectedOptions }) {
       this.show = false;
-      this.categoryTitle = selectedOptions.map((option) => option.text).join("/");
-      this.categoryValue = selectedOptions[0].value
+      this.categoryTitle = selectedOptions[selectedOptions.length - 1].text;
+      this.categoryValue = selectedOptions[selectedOptions.length - 1].value
       this.search(1)
     },
     changePage (page) {
