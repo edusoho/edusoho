@@ -19,6 +19,12 @@
 {% endblock %}
 
 {% block top_content %}
+<style>
+#content-container {
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+</style>
   {# {% if mobile %} #}
     <div id="app"></div>
   {# {% endif %} #}
@@ -64,7 +70,7 @@
   {% set thirdLevelCategory = app.request.query.get('selectedthirdLevelCategory', '') %}
   {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'course'})) }}
 
-  <div class="es-filter">
+  <div class="es-filter pc-es-filter">
     <ul class="nav nav-sort clearfix">
       <li>
         <a

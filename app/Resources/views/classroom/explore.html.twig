@@ -16,6 +16,12 @@
 {% do script(['app/js/classroom/explore/index.js']) %}
 
 {% block top_content %}
+<style>
+#content-container {
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+</style>
   {# {% if mobile %} #}
     <div id="app"></div>
   {# {% endif %} #}
@@ -51,7 +57,7 @@
 
   {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'classroom'})) }}
 
-  <div class="es-filter">
+  <div class="es-filter pc-es-filter">
     <ul class="nav nav-sort">
       <li><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'createdTime'}) }}" class="{% if (orderBy == 'createdTime') %} active {% endif %}">{{'site.datagrid.filter.latest'|trans}}</a></li>
       <li><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'hotSeq'}) }}" class="{% if (orderBy == 'hotSeq') %} active {% endif %}">{{'site.datagrid.filter.hotest'|trans}}</a></li>
