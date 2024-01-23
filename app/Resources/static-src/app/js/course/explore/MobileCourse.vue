@@ -11,7 +11,7 @@
         />
       </template>
     </van-dropdown-menu>
-    <div class="course-list course-list-new" style="min-height: 250px;">
+    <div class="course-list course-list-new" style="min-height: 350px;">
       <div v-if="courseList.length" class="row" style="padding: 10px;">
         <div
           v-for="(item, index) in courseList"
@@ -166,7 +166,8 @@ export default {
     onFinish({ selectedOptions }) {
       this.show = false;
       this.categoryTitle = selectedOptions[selectedOptions.length - 1].text;
-      this.categoryValue = selectedOptions[selectedOptions.length - 1].value
+      this.categoryValue = selectedOptions[selectedOptions.length - 1].value;
+      this.courseCategoriesValue = selectedOptions[selectedOptions.length - 1].value;
       this.search(1)
     },
     changePage (page) {
@@ -228,8 +229,9 @@ export default {
       const categoryId = $('[name="categoryId"]').val();
 
       if (categoryId && categoryId !== '0') {
-        this.categoryTitle = this.getCategoryDescById(this.courseCategories, $('[name="categoryId"]').val())
+        this.categoryTitle = this.getCategoryDescById(this.courseCategories, categoryId)
         this.categoryValue = categoryId
+        this.courseCategoriesValue = categoryId
       }
 
       this.search()
