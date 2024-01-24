@@ -43,6 +43,12 @@ html.nav-active body {
     }
   }
 
+  .mobile-pagination-hide {
+    @media (max-width: @screen-xs-max) {
+      display: none !important;
+    }
+  }
+
   .pc-es-filter {
     @media (max-width: @screen-xs-max) {
       display: none !important;
@@ -70,8 +76,11 @@ html.nav-active body {
 }
 
 #content-container {
-  margin: 30px auto;
-  min-height: 400px;
+  min-height: 0 !important;
+  margin: 0 !important;
+  @media (max-width: @screen-xs-max) {
+    display: none;
+  }
   .live-course-btn {
     padding: 6px 16px;
     color: @brand-primary !important;
