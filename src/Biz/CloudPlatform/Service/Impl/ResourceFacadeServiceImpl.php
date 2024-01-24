@@ -45,7 +45,7 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             }
         }
         if (!DeviceToolkit::isMobileClient()) {
-            $payload['hlsClefEncryptVersion'] = 3;
+            $payload['hlsClefEncryptVersion'] = rand(4, 10);
         }
 
         $client = DeviceToolkit::getClient($userAgent);
