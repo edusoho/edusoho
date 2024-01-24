@@ -16,12 +16,7 @@
 {% do script(['app/js/classroom/explore/index.js']) %}
 
 {% block top_content %}
-<style>
-#content-container {
-  min-height: 0 !important;
-  margin: 0 !important;
-}
-</style>
+
   {# {% if mobile %} #}
     <div id="app"></div>
   {# {% endif %} #}
@@ -140,7 +135,7 @@
       <div class="empty">{{'explore.classroom.empty'|trans({'%name%':setting('classroom.name')|default('site.default.classroom'|trans)})}}</div>
     {% endif %}
   </div>
-  <nav class="text-center">
+  <nav class="text-center mobile-pagination-hide">
     {{ web_macro.paginator(paginator) }}
   </nav>
 {% endblock %}
