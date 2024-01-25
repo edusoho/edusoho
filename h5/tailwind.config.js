@@ -28,9 +28,7 @@ module.exports = {
       48: ['48px', { lineHeight: '60px' }]
     },
     extend: {
-      zIndex: {
-        '1': '1',
-      },
+      zIndex: Object.fromEntries(Array.from({length: 100}, (_, index) => [(index + 1).toString(), (index + 1).toString()])),
       colors: {
         'primary': '#165dff',
         'primary-disabled': '#94bfff',
