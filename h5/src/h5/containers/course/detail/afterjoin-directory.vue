@@ -98,9 +98,6 @@ export default {
       return this.chapterNum > 0;
     },
   },
-  mounted() {
-    console.log(this.courseSet);
-  },
   watch: {
     nextStudy: {
       handler: 'getNextStudy',
