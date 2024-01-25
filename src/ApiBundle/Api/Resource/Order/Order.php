@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Order;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\Service\GoodsService;
@@ -12,6 +13,8 @@ use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\Product\Service\ProductService;
+use Biz\User\Service\UserService;
+use Biz\User\UserException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -76,6 +79,85 @@ class Order extends AbstractResource
         } elseif ($userId == $order['user_id']) {
             return $order;
         }
+    }
+
+    public function search(ApiRequest $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        if (!$currentUser->isSuperAdmin()) {
+            throw UserException::PERMISSION_DENIED();
+        }
+        $conditions = $request->query->all();
+        $conditions = $this->prepareConditions($conditions);
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+
+        $orders = $this->getOrderService()->searchOrders(
+            $conditions,
+            ['created_time' => 'DESC'],
+            $offset,
+            $limit
+        );
+
+        $orderIds = ArrayToolkit::column($orders, 'id');
+        $orderSns = ArrayToolkit::column($orders, 'sn');
+
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
+        $orderItems = ArrayToolkit::index($orderItems, 'order_id');
+        $goodsSpecsIds = ArrayToolkit::column($orderItems, 'target_id');
+        $goodsSpecs = $this->getGoodsService()->findGoodsSpecsByIds($goodsSpecsIds);
+        $goodsSpecs = ArrayToolkit::index($goodsSpecs, 'id');
+        foreach ($orderItems as &$orderItem) {
+            $orderItem['goodsSpecs'] = $goodsSpecs[$orderItem['target_id']];
+        }
+        $paymentTrades = $this->getPayService()->findTradesByOrderSns($orderSns);
+        $paymentTrades = ArrayToolkit::index($paymentTrades, 'order_sn');
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
+        $users = ArrayToolkit::index($users, 'id');
+        foreach ($orders as &$order) {
+            $order['item'] = empty($orderItems[$order['id']]) ? [] : $orderItems[$order['id']];
+            $order['trade'] = empty($paymentTrades[$order['sn']]) ? [] : $paymentTrades[$order['sn']];
+            $order['user'] = empty($users) ? [] : $users[$order['userid']];
+        }
+
+        $total = $this->getOrderService()->countOrders($conditions);
+
+        return $this->makePagingObject($orders, $total, $offset, $limit);
+    }
+
+    protected function prepareConditions($conditions)
+    {
+        if (!empty($conditions['orderItemType'])) {
+            $conditions['order_item_target_type'] = $conditions['orderItemType'];
+        }
+
+        if (isset($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+        }
+
+        if (!empty($conditions['startDateTime'])) {
+            $conditions['start_time'] = strtotime($conditions['startDateTime']);
+        }
+
+        if (!empty($conditions['endDateTime'])) {
+            $conditions['end_time'] = strtotime($conditions['endDateTime']);
+        }
+
+        if (isset($conditions['buyer'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['buyer']);
+            $conditions['user_id'] = $user ? $user['id'] : -1;
+        }
+
+        if (isset($conditions['mobile'])) {
+            $user = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
+            $conditions['user_id'] = $user ? $user['id'] : -1;
+        }
+
+        if (!empty($conditions['displayStatus'])) {
+            $conditions['statuses'] = $this->container->get('web.twig.order_extension')->getOrderStatusFromDisplayStatus($conditions['displayStatus'], 1);
+        }
+        unset($conditions['page']);
+
+        return $conditions;
     }
 
     public function filterParams(&$params)
@@ -173,6 +255,14 @@ class Order extends AbstractResource
         $biz = $this->getBiz();
 
         return $biz['goods.entity.factory'];
+    }
+
+    /**
+     * @return UserService
+     */
+    private function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 
     private function convertOrderParams(&$params)
