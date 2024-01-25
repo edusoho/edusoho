@@ -531,12 +531,13 @@ class Testpaper {
     $('.js-score-total').text(score);
     let passScore = score * $('#score-condition').data('pass');
 
+
     if (passScore % 1 != 0) {
-      passScore = parseFloat(passScore.toFixed(1));
+      passScore = Number(passScore.toFixed(1));
     }
 
     if (score % 1 != 0) {
-      score = parseFloat(score.toFixed(1));
+      score = Number(score.toFixed(1));
     }
 
     let scoreSlider = document.getElementById('score-slider');
@@ -561,7 +562,13 @@ class Testpaper {
       let percentage = (rate * 100).toFixed(0);
       $('.noUi-tooltip').text(`${percentage}%`);
       $('.js-score-tooltip').css('left', `${percentage}%`);
-      $('.js-passScore').text(Math.round(percentage / 100 * score));
+      let jsPassScore = percentage / 100 * score
+
+      if (jsPassScore % 1 != 0) {
+        jsPassScore = Number(jsPassScore.toFixed(1));
+      }
+
+      $('.js-passScore').text(jsPassScore);
       $('#finishData').val(percentage / 100);
     });
 
