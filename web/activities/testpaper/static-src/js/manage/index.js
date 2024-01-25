@@ -530,7 +530,14 @@ class Testpaper {
     }
     $('.js-score-total').text(score);
     let passScore = score * $('#score-condition').data('pass');
-    passScore = passScore.toFixed(1)
+
+    if (passScore % 1 != 0) {
+      passScore = parseFloat(passScore.toFixed(1));
+    }
+
+    if (score % 1 != 0) {
+      score = parseFloat(score.toFixed(1));
+    }
 
     let scoreSlider = document.getElementById('score-slider');
     let option = {
