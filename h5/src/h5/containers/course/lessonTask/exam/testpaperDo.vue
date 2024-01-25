@@ -481,6 +481,9 @@ export default {
       if (index > 0) {
         message = this.$t('courseLearning.notSureSubmit', { number: index });
       }
+
+      this.saveAnswerInterval();
+
       return new Promise((resolve, reject) => {
         Dialog.confirm({
           title: this.$t('courseLearning.handInThePaper'),
@@ -559,7 +562,7 @@ export default {
     },
     saveAnswerInterval() {
       this.interval = setInterval(() => {
-        this.saveAnswerAjax()
+        this.saveAnswerAjax();
       }, 30 * 1000)
     },
     saveAnswerAjax() {

@@ -646,8 +646,8 @@ export default {
     free: '免费',
   },
   questionBank: {
-    intro: '课程简介',
-    catalogue: '课程目录',
+    intro: '题库简介',
+    catalogue: '题库目录',
     comment: '学员评价',
     noContent: '暂无评价~',
     exercises: '章节练习',

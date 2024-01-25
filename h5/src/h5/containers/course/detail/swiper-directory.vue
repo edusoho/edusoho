@@ -82,7 +82,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.courseSettings);
   },
   methods: {
     changeChapter(index) {

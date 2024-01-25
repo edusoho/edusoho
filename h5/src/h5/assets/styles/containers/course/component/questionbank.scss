@@ -217,8 +217,8 @@ $common-padding: 35;
 
 			img {
 				display: block;
-				width: vw(156);
-				height: vw(88);
+				max-width: 100%;
+				max-height: vw(88);
 				margin-bottom: vw(8);
 				border-radius: vw(6);
 			}
@@ -229,7 +229,6 @@ $common-padding: 35;
 			color: #37393d;
 			font-size: vw(14);
 		}
-
 
 		&.subject-option--determine {
 			.van-radio__icon {
