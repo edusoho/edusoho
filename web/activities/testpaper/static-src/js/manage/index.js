@@ -529,8 +529,8 @@ class Testpaper {
       score = $('#score-condition').data('score');
     }
     $('.js-score-total').text(score);
-    let passScore = Math.round(score * $('#score-condition').data('pass'));
-    score = parseInt(score);
+    let passScore = score * $('#score-condition').data('pass');
+    passScore = passScore.toFixed(1)
 
     let scoreSlider = document.getElementById('score-slider');
     let option = {
