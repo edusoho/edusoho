@@ -371,6 +371,8 @@ export default {
       const confirmButtonText = this.revieweNumLast ? this.$t('courseLearning.viewResult2'): this.$t('courseLearning.check')
       const cancelButtonText = this.revieweNumLast ? this.$t('courseLearning.returnList') : this.$t('courseLearning.submitNow')
 
+      this.saveAnswerInterval();
+
       Dialog.confirm({
         title: this.revieweNumLast ? '' : this.$t('courseLearning.submit2'),
         cancelButtonText: cancelButtonText,

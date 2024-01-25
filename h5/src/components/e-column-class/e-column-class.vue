@@ -10,7 +10,7 @@
         class="absolute z-1"
         src="static/images/classroom/classroom-icon2.png" 
         srcset="static/images/classroom/classroom-icon2@2x.png" />
-      <img class="relative z-10 cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
+      <img class="relative z-1 cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
       <div v-if="Number(isVip)" class="column-class-left__member">{{ $t('e.freeForMembers') }}</div>
       <div v-show="courseType === 'live'" class="column-class-left__live">{{ $t('e.live') }}</div>
     </div>
@@ -24,8 +24,8 @@
         </div>
         <div class="text-overflow course-title">{{ course.header }}</div>
       </div>
-      <div class="column-class-right__center text-overflow">
-        <div v-if="course.middle.value" v-html="course.middle.html" />
+      <div class="column-class-right__center">
+        <div class="text-overflow" v-if="course.middle.value" v-html="course.middle.html" />
       </div>
       <div class="px-12 column-class-right__bottom text-overflow">
         <div v-html="course.bottom.html"></div>

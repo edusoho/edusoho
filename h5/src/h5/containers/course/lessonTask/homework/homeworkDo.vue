@@ -332,6 +332,9 @@ export default {
       if (index > 0) {
         message = `还有${index}题未做，确认提交吗？`;
       }
+
+      this.saveAnswerInterval();
+
       return new Promise((resolve, reject) => {
         Dialog.confirm({
           title: '提交',

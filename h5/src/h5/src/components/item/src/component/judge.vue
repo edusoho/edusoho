@@ -22,7 +22,7 @@
         </span>
         <div>
           <span v-if="currentItem.type === 'material'" class="ibs-serial-number"><span class="ibs-material-type">[{{ subject }}] </span> {{ Number(commonData.current) }}、</span>
-          <span v-else class="ibs-serial-number">{{ Number(commonData.current) }}、</span>
+          <span v-else class="ibs-serial-number">{{ Number(commonData.current) }}.</span>
           <div class="ibs-rich-text" v-html="getStem()" @click="handleClickImage($event.target.src)"/>
         </div>
       </div>
