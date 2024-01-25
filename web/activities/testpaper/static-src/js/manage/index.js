@@ -524,9 +524,9 @@ class Testpaper {
   initScoreSlider() {
     let score = 0;
     if (this.$testpaperSelector.select2('data').score) {
-      score = this.$testpaperSelector.select2('data').score;
+      score = Number(this.$testpaperSelector.select2('data').score);
     } else {
-      score = $('#score-condition').data('score');
+      score = Number($('#score-condition').data('score'));
     }
     $('.js-score-total').text(score);
     let passScore = score * $('#score-condition').data('pass');
