@@ -16,13 +16,20 @@ class LiveActivityServiceTest extends BaseTestCase
             'mediaType' => 'live',
             'fromCourseId' => 1,
             'fromCourseSetId' => 1,
-            'fromUserId' => '1',
+            'fromUserId' => 1,
             'startTime' => time() + 1000,
             'endTime' => time() + 3000,
             'length' => 2000,
             '_base_url' => 'url...',
             'roomType' => 'small',
         ];
+        $this->mockBiz('User:UserService', [
+            [
+                'functionName' => 'getUser',
+                'withParams' => [1],
+                'returnValue' => ['nickname' => 'speaker'],
+            ],
+        ]);
         $savedActivity = $this->getLiveActivityService()->createLiveActivity($live);
         $this->assertNotNull($savedActivity['id']);
         $this->assertNotNull($savedActivity['liveId']);
