@@ -28,6 +28,7 @@ class UserRegister extends AbstractResource
             'mobile' => !empty($fields['mobile']) ? $fields['mobile'] : '',
             'verifiedMobile' => !empty($fields['mobile']) ? $fields['mobile'] : '',
             'email' => !empty($fields['email']) ? $fields['email'] : '',
+            'emailOrMobile' => !empty($fields['mobile']) ? $fields['mobile'] : $fields['email'],
             'nickname' => $fields['nickname'],
             'password' => $this->getPassword($fields['encrypt_password'], $request->getHttpRequest()->getHost()),
             'registeredWay' => '',
