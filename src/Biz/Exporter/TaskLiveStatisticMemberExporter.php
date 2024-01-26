@@ -86,7 +86,7 @@ class TaskLiveStatisticMemberExporter extends BaseSheetAddStyleExporter
     public function buildResult()
     {
         $activity = $this->getActivityService()->getActivity($this->task['activityId'], true);
-        $result = $this->getLiveStatisticsService()->getLiveData($this->task);
+        $result = $this->getLiveStatisticsService()->getLiveData($this->task['activityId']);
         $result['teacherId'] = empty($result['teacherId']) ? 0 : $result['teacherId'];
         $user = empty($result['teacherId']) ? ['nickname' => '--'] : $this->getUserService()->getUser($result['teacherId']);
         $result['teacher'] = $user['nickname'];

@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\LiveWatermarkToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Live\Constant\LiveProvider;
 use Biz\Live\Dao\LiveProviderTeacherDao;
 use Biz\Live\Service\LiveService;
 use Biz\System\Service\SettingService;
@@ -28,23 +29,6 @@ class LiveServiceImpl extends BaseService implements LiveService
     public function canExecuteLiveStatusJob($liveStatus, $jobType)
     {
         return 'startJob' === $jobType ? 'created' === $liveStatus : 'closed' !== $liveStatus;
-    }
-
-    protected function handleLiveStatus($liveStatus, $confirmStatus)
-    {
-        switch ($liveStatus) {
-            case 'created':
-                $status = 'start' === $confirmStatus ? 'start' : 'created';
-                break;
-            case 'start':
-                $status = 'close' === $confirmStatus ? 'close' : 'start';
-                break;
-            default:
-                $status = $liveStatus;
-                break;
-        }
-
-        return $status;
     }
 
     public function createLiveRoom($params)
@@ -70,9 +54,7 @@ class LiveServiceImpl extends BaseService implements LiveService
         $liveParams = $this->filterUpdateParams($params);
 
         try {
-            $live = $this->getLiveClient()->updateLive($liveParams);
-
-            return $live;
+            return $this->getLiveClient()->updateLive($liveParams);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -143,7 +125,7 @@ class LiveServiceImpl extends BaseService implements LiveService
 
         $baseUrl = $this->getBaseUrl();
         if (!empty($liveLogo) && !empty($liveLogo['live_logo'])) {
-            $liveLogoUrl = $baseUrl . '/' . $liveLogo['live_logo'];
+            $liveLogoUrl = $baseUrl.'/'.$liveLogo['live_logo'];
         }
 
         return $liveLogoUrl;
@@ -163,7 +145,7 @@ class LiveServiceImpl extends BaseService implements LiveService
 
     public function isLiveProviderTeacherRequired($provider)
     {
-        return EdusohoLiveClient::LIVE_PROVIDER_QUANSHI == $provider;
+        return LiveProvider::QUANSHI == $provider;
     }
 
     public function getLiveProviderTeacherId($userId, $provider)
@@ -214,11 +196,16 @@ class LiveServiceImpl extends BaseService implements LiveService
     public function isESLive($provider)
     {
         if ($provider) {
-            return EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $provider;
+            return LiveProvider::LIVE_CLOUD == $provider;
         }
         $liveAccount = $this->getLiveClient()->getLiveAccount();
 
         return 'liveCloud' == $liveAccount['provider'];
+    }
+
+    public function isProviderStatisticInRealTime($provider)
+    {
+        return in_array($provider, [LiveProvider::GENSEE, LiveProvider::GENSEE_TRAINING, LiveProvider::GENSEE_SUB, LiveProvider::LIVE_CLOUD]);
     }
 
     protected function createLiveProviderTeacher($liveProviderTeacher)
@@ -238,13 +225,10 @@ class LiveServiceImpl extends BaseService implements LiveService
 
     protected function getSpeakerName($speakerId)
     {
-        $user = $this->getUserService()->getUser($speakerId);
+        $user = $this->getUserService()->getUser($speakerId) ?: $this->getUserService()->getUserByUUID($speakerId);
 
         if (empty($user)) {
-            $user = $this->getUserService()->getUserByUUID($speakerId);
-            if(empty($user)) {
-                $this->createNewException(UserException::NOTFOUND_USER());
-            }
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         return $user['nickname'];

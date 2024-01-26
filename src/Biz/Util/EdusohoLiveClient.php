@@ -11,22 +11,10 @@ class EdusohoLiveClient
     const LIVE_STATUS_LIVING = 'live';
     const LIVE_STATUS_PAUSE = 'pause';
     const LIVE_STATUS_CLOSED = 'closed';
-    const OLD_ES_LIVE_PROVIDER = 8;
-    const NEW_ES_LIVE_PROVIDER = 9;
     const SELF_ES_LIVE_PROVIDER = 13;
     const LIVE_ROOM_LARGE = 'large';
     const LIVE_ROOM_SMALL = 'small';
     const LIVE_ROOM_PSEUDO = 'pseudo';
-
-    const LIVE_REPLAY_STATUS_UNSTART = 'unstart';
-
-    const LIVE_REPLAY_STATUS_GENERATING = 'generating';
-
-    const LIVE_REPLAY_STATUS_FINISHED = 'finished';
-
-    const LIVE_REPLAY_STATUS_NONE = 'finished';
-
-    const LIVE_REPLAY_STATUS_ERROR = 'error';
 
     const LIVE_PROVIDER_QUANSHI = 'quanshi';
 
@@ -185,11 +173,6 @@ class EdusohoLiveClient
         return $this->createCloudApi('root')->get('/me/live/overview');
     }
 
-    public static function isEsLive($liveProvider)
-    {
-        return in_array($liveProvider, [self::OLD_ES_LIVE_PROVIDER, self::NEW_ES_LIVE_PROVIDER]);
-    }
-
     public function getLiveRoomCheckinList($liveId)
     {
         return $this->createCloudApi('leaf')->get("/lives/{$liveId}/checkin_list");
@@ -224,7 +207,7 @@ class EdusohoLiveClient
 
     public function getEsLiveInfos($liveIds)
     {
-        return $this->createCloudApi('root')->get("/liveCloud/room/infos?ids=".implode(",", $liveIds));
+        return $this->createCloudApi('root')->get('/liveCloud/room/infos?ids='.implode(',', $liveIds));
     }
 
     public function updatePseudoLiveVideo($liveId, $videoUrl)
@@ -296,8 +279,6 @@ class EdusohoLiveClient
     }
 
     /**
-     * @param array $args
-     *
      * @return mixed|string[]
      */
     public function createLiveTeacher(array $args)

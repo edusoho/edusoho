@@ -113,7 +113,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'anchorId' => $this->getCurrentUser()->getId(),
             'coursewareIds' => empty($live['coursewareIds']) ? [] : $live['coursewareIds'],
         ];
-        if (EdusohoLiveClient::SELF_ES_LIVE_PROVIDER == $live['provider']) {
+        if ($this->getLiveService()->isESLive($live['provider'])) {
             $liveActivity['roomId'] = $live['roomId'] ?? 0;
         }
 
@@ -122,7 +122,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
     public function updateLiveActivity($id, $fields, $activity)
     {
-        $preLiveActivity = $liveActivity = $this->getLiveActivityDao()->get($id);
+        $liveActivity = $this->getLiveActivityDao()->get($id);
 
         if (empty($liveActivity)) {
             return [];

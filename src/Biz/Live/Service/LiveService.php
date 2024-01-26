@@ -25,4 +25,6 @@ interface LiveService
     public function getLiveTicket($roomId, $ticketNo);
 
     public function isESLive($provider);
+
+    public function isProviderStatisticInRealTime($provider);
 }

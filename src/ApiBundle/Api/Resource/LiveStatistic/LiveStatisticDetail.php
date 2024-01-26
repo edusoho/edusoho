@@ -7,7 +7,6 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Live\LiveStatisticsException;
 use Biz\Live\Service\LiveStatisticsService;
@@ -25,7 +24,7 @@ class LiveStatisticDetail extends AbstractResource
             TaskException::NOTFOUND_TASK();
         }
 
-        $result = $this->getLiveStatisticsService()->getLiveData($task);
+        $result = $this->getLiveStatisticsService()->getLiveData($task['activityId']);
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $this->processJsonData($activity);
 
@@ -84,14 +83,6 @@ class LiveStatisticDetail extends AbstractResource
     protected function getActivityService()
     {
         return $this->service('Activity:ActivityService');
-    }
-
-    /**
-     * @return CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->service('Course:CourseSetService');
     }
 
     /**

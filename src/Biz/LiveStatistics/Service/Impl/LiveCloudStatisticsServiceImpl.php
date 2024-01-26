@@ -10,25 +10,16 @@ use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MemberService;
+use Biz\Live\Constant\LiveStatus;
+use Biz\Live\Service\LiveService;
 use Biz\LiveStatistics\Dao\LiveMemberStatisticsDao;
 use Biz\LiveStatistics\Service\LiveCloudStatisticsService;
-use Biz\System\Service\CacheService;
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\UserService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
 class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudStatisticsService
 {
-    const ES_CLOUD_LIVE_PROVIDER = 13;
-
     const LIMIT = 300;
-
-    /**
-     * @var EdusohoLiveClient
-     */
-    protected $EdusohoLiveClient = null;
 
     /**
      * @param $conditions
@@ -61,11 +52,6 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         return $sumWatchDurations;
     }
 
-    public function countLiveMembersByLiveId($liveId)
-    {
-        return $this->getLiveMemberStatisticsDao()->count(['liveId' => $liveId]);
-    }
-
     public function countLiveMembers($conditions)
     {
         return $this->getLiveMemberStatisticsDao()->count($conditions);
@@ -86,10 +72,10 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         return empty($result) ? 0 : $result;
     }
 
-    public function getLiveData($task)
+    public function getLiveData($activityId)
     {
-        $course = $this->getCourseService()->tryManageCourse($task['courseId']);
-        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+        $course = $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
         $cloudStatisticData = $activity['ext']['cloudStatisticData'];
         if (empty($activity['ext']['liveId'])) {
             LiveActivityException::NOTFOUND_LIVE();
@@ -99,12 +85,10 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
             return $cloudStatisticData;
         }
         //频次控制， 直播已结束允许最多30分钟请求云平台
-        if (($activity['ext']['liveEndTime'] < time() || 'closed' == $activity['ext']['progressStatus']) && !empty($cloudStatisticData['requestTime']) && time() - $cloudStatisticData['requestTime'] < 1800) {
+        if (($activity['ext']['liveEndTime'] < time() || LiveStatus::CLOSED == $activity['ext']['progressStatus']) && !empty($cloudStatisticData['requestTime']) && time() - $cloudStatisticData['requestTime'] < 1800) {
             return $cloudStatisticData;
         }
 
-        $client = new EdusohoLiveClient();
-        $this->EdusohoLiveClient = $client;
         $data = [
             'teacherId' => empty($activity['ext']['anchorId']) ? (empty($course['teacherIds']) ? 0 : $course['teacherIds'][0]) : $activity['ext']['anchorId'],
             'startTime' => empty($activity['ext']['liveStartTime']) ? $activity['startTime'] : $activity['ext']['liveStartTime'],
@@ -112,16 +96,19 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
             'length' => empty($activity['ext']['liveEndTime']) ? $activity['length'] : round(($activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime']) / 60, 1),
             'requestTime' => time(),
         ];
-        $this->getGeneralLiveStatistics($activity, $task, $data);
-        $this->getESLiveStatistics($activity, $task, $data);
+        if ($this->getLiveService()->isESLive($activity['ext']['liveProvider'])) {
+            $this->getESLiveStatistics($activity, $data);
+        } else {
+            $this->getThirdPartyLiveStatistics($activity, $data);
+        }
         $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($cloudStatisticData, $data)]);
 
         return $data;
     }
 
-    public function getLiveMemberData($task)
+    public function syncLiveMemberData($activityId)
     {
-        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        $activity = $this->getActivityService()->getActivity($activityId, true);
 
         $cloudStatisticData = $activity['ext']['cloudStatisticData'];
         //频次控制， 直播未结束 允许最多3分钟请求云平台
@@ -129,17 +116,18 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
             return;
         }
         //频次控制， 直播已结束且未超过24小时 允许最多30分钟请求云平台
-        if (($activity['ext']['liveEndTime'] < time() || 'closed' == $activity['ext']['progressStatus']) && !empty($cloudStatisticData['memberRequestTime']) && time() - $cloudStatisticData['memberRequestTime'] < 1800) {
+        if (($activity['ext']['liveEndTime'] < time() || LiveStatus::CLOSED == $activity['ext']['progressStatus']) && !empty($cloudStatisticData['memberRequestTime']) && time() - $cloudStatisticData['memberRequestTime'] < 1800) {
             return;
         }
-        $client = new EdusohoLiveClient();
-        $this->EdusohoLiveClient = $client;
-        $this->getGeneralLiveMemberStatistics($activity);
-        $this->getESLiveMemberStatistics($activity);
+        if ($this->getLiveService()->isESLive($activity['ext']['liveProvider'])) {
+            $this->syncESLiveMemberStatistics($activity);
+        } else {
+            $this->syncThirdPartyLiveMemberStatistics($activity);
+        }
         $this->getLiveActivityDao()->update($activity['ext']['id'], ['cloudStatisticData' => array_merge($activity['ext']['cloudStatisticData'], ['memberRequestTime' => time()])]);
     }
 
-    public function batchCreateLiveMemberData($data)
+    protected function batchCreateLiveMemberData($data)
     {
         if (empty($data)) {
             return;
@@ -151,7 +139,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         }
     }
 
-    public function batchUpdateLiveMemberData($data)
+    protected function batchUpdateLiveMemberData($data)
     {
         if (empty($data)) {
             return;
@@ -164,11 +152,11 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
     }
 
     /**
-     * @param $activity
+     * @param $liveActivity
      * @param $memberData //云接口数据
      * //处理自研直播
      */
-    public function processEsLiveMemberData($activity, $memberData)
+    public function processEsLiveMemberData($liveActivity, $memberData)
     {
         if (empty($memberData['data'])) {
             return;
@@ -176,12 +164,12 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $createData = [];
         $updateData = [];
         $userIds = ArrayToolkit::column($memberData['data'], 'userId');
-        $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId']], [], 0, count($userIds), ['id', 'userId']);
+        $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $liveActivity['liveId']], [], 0, count($userIds), ['id', 'userId']);
         $members = ArrayToolkit::index($members, 'userId');
         $count = $this->getUserDao()->count([]);
         foreach ($memberData['data'] as $member) {
             $userId = $member['userId'];
-            if ($userId == $activity['ext']['anchorId']) {
+            if ($userId == $liveActivity['anchorId']) {
                 continue;
             }
             if ($userId > $count && !empty($member['userName'])) {
@@ -194,7 +182,7 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
 
             $data = [
                 'userId' => $userId,
-                'liveId' => $activity['ext']['liveId'],
+                'liveId' => $liveActivity['liveId'],
                 'firstEnterTime' => $member['firstEnterTime'],
                 'watchDuration' => $member['watchDuration'],
                 'checkinNum' => $member['checkinNum'],
@@ -213,11 +201,11 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
     }
 
     /**
-     * @param $activity
+     * @param $liveActivity
      * @param $memberData //云接口数据
      * //处理非自研直播
      */
-    public function processGeneralLiveMemberData($activity, $memberData)
+    public function processThirdPartyLiveMemberData($liveActivity, $memberData)
     {
         if (empty($memberData['list'])) {
             return;
@@ -225,16 +213,16 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $createData = [];
         $updateData = [];
         $userIds = ArrayToolkit::column($memberData['list'], 'studentId');
-        $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => empty($userIds) ? [-1] : $userIds, 'liveId' => $activity['ext']['liveId']], [], 0, count($userIds), ['id', 'userId']);
+        $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => $userIds ?: [-1], 'liveId' => $liveActivity['liveId']], [], 0, count($userIds), ['id', 'userId']);
         $members = ArrayToolkit::index($members, 'userId');
         $count = $this->getUserDao()->count([]);
         foreach ($memberData['list'] as $member) {
-            if ($member['studentId'] == $activity['ext']['anchorId'] || $member['studentId'] > $count) {
+            if ($member['studentId'] == $liveActivity['anchorId'] || $member['studentId'] > $count) {
                 continue;
             }
             $data = [
                 'userId' => $member['studentId'],
-                'liveId' => $activity['ext']['liveId'],
+                'liveId' => $liveActivity['liveId'],
                 'firstEnterTime' => $member['joinTime'],
                 'watchDuration' => $member['onlineDuration'],
                 'checkinNum' => $member['checkinNumber'],
@@ -255,41 +243,44 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
     /**
      * @param $activity //其他直播数据 ，隔天；用于定时任务
      */
-    protected function getGeneralLiveMemberStatistics($activity)
+    protected function syncThirdPartyLiveMemberStatistics($activity)
     {
-        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider'] || $activity['endTime'] > time() || DateToolkit::isToday($activity['endTime'])) {
+        if ($activity['startTime'] > time()) {
+            return;
+        }
+        if (($activity['endTime'] > time() || DateToolkit::isToday($activity['endTime'])) && !$this->getLiveService()->isProviderStatisticInRealTime($activity['ext']['liveProvider'])) {
             return;
         }
         try {
-            $memberData = $this->EdusohoLiveClient->getLiveStudentStatistics($activity['ext']['liveId'], ['start' => 0, 'limit' => self::LIMIT]);
+            $memberData = $this->getCloudLiveClient()->getLiveStudentStatistics($activity['ext']['liveId'], ['start' => 0, 'limit' => self::LIMIT]);
         } catch (CloudAPIIOException $cloudAPIIOException) {
         }
-        $this->processGeneralLiveMemberData($activity, $memberData);
+        $this->processThirdPartyLiveMemberData($activity['ext'], $memberData);
         $this->createdSyncMemberDataJob($activity, $memberData);
     }
 
     /**
      * @param $activity //自研直播数据单独处理，实时
      */
-    protected function getESLiveMemberStatistics($activity)
+    protected function syncESLiveMemberStatistics($activity)
     {
-        if (self::ES_CLOUD_LIVE_PROVIDER != $activity['ext']['liveProvider'] || $activity['startTime'] > time()) {
+        if ($activity['startTime'] > time()) {
             return;
         }
         try {
-            $memberData = $this->EdusohoLiveClient->getEsLiveMembers($activity['ext']['liveId'], ['start' => 0, 'limit' => self::LIMIT]);
+            $memberData = $this->getCloudLiveClient()->getEsLiveMembers($activity['ext']['liveId'], ['start' => 0, 'limit' => self::LIMIT]);
         } catch (CloudAPIIOException $cloudAPIIOException) {
         }
-        $this->processEsLiveMemberData($activity, $memberData);
+        $this->processEsLiveMemberData($activity['ext'], $memberData);
         $this->createdSyncMemberDataJob($activity, $memberData);
     }
 
     protected function createdSyncMemberDataJob($activity, $memberData)
     {
         if ($memberData['total'] <= self::LIMIT) {
-            return [];
+            return;
         }
-        $startJob = [
+        $job = [
             'name' => 'SyncLiveMemberDataJob'.$activity['id'].'_'.time(),
             'expression' => time() - 100,
             'class' => 'Biz\LiveStatistics\Job\SyncLiveMemberDataJob',
@@ -299,23 +290,25 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
                 'start' => self::LIMIT,
             ],
         ];
-        $this->getSchedulerService()->register($startJob);
+        $this->getSchedulerService()->register($job);
     }
 
     /**
      * @param $activity
-     * @param $task
      * @param $data
      * //其他数据 隔天
      */
-    protected function getGeneralLiveStatistics($activity, $task, &$data)
+    protected function getThirdPartyLiveStatistics($activity, &$data)
     {
-        if (self::ES_CLOUD_LIVE_PROVIDER == $activity['ext']['liveProvider'] || $activity['startTime'] > time() || DateToolkit::isToday($activity['endTime'])) {
+        if ($activity['startTime'] > time()) {
+            return;
+        }
+        if (($activity['endTime'] > time() || DateToolkit::isToday($activity['endTime'])) && !$this->getLiveService()->isProviderStatisticInRealTime($activity['ext']['liveProvider'])) {
             return;
         }
         try {
-            $cloudData = $this->EdusohoLiveClient->getLiveStatistics($activity['ext']['liveId']);
-            $onlineData = $this->EdusohoLiveClient->getMaxOnline($activity['ext']['liveId']);
+            $cloudData = $this->getCloudLiveClient()->getLiveStatistics($activity['ext']['liveId']);
+            $onlineData = $this->getCloudLiveClient()->getMaxOnline($activity['ext']['liveId']);
         } catch (CloudAPIIOException $cloudAPIIOException) {
         }
         $data['chatNumber'] = empty($cloudData['chatNumber']) ? 0 : $cloudData['chatNumber'];
@@ -325,20 +318,17 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
 
     /**
      * @param $activity
-     * @param $task
      * @param $data
      * //自研直播数据 ，实时
      */
-    protected function getESLiveStatistics($activity, $task, &$data)
+    protected function getESLiveStatistics($activity, &$data)
     {
-        if (self::ES_CLOUD_LIVE_PROVIDER != $activity['ext']['liveProvider'] || $activity['startTime'] > time()) {
+        if ($activity['startTime'] > time()) {
             return;
         }
         try {
-            $cloudData = $this->EdusohoLiveClient->getEsLiveInfo($activity['ext']['liveId']);
-
-            $memberData = $this->EdusohoLiveClient->getEsLiveMembers($activity['ext']['liveId'], ['start' => 0, 'limit' => 1]);
-            $liveBatch = $this->EdusohoLiveClient->getLiveCheckBatchData($activity['ext']['liveId'], []);
+            $cloudData = $this->getCloudLiveClient()->getEsLiveInfo($activity['ext']['liveId']);
+            $liveBatch = $this->getCloudLiveClient()->getLiveCheckBatchData($activity['ext']['liveId'], []);
         } catch (CloudAPIIOException $cloudAPIIOException) {
         }
         $data['startTime'] = empty($cloudData['actualStartTime']) ? $data['startTime'] : $cloudData['actualStartTime'];
@@ -348,19 +338,11 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
     }
 
     /**
-     * @return UserService
+     * @return EdusohoLiveClient
      */
-    protected function getUserService()
+    protected function getCloudLiveClient()
     {
-        return $this->createService('User:UserService');
-    }
-
-    /**
-     * @return CacheService
-     */
-    protected function getCacheService()
-    {
-        return $this->createService('System:CacheService');
+        return $this->biz['educloud.live_client'];
     }
 
     /**
@@ -369,14 +351,6 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
-    }
-
-    /**
-     * @return TaskService
-     */
-    protected function getTaskService()
-    {
-        return $this->createService('Task:TaskService');
     }
 
     /**
@@ -412,11 +386,11 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
     }
 
     /**
-     * @return MemberService
+     * @return LiveService
      */
-    protected function getMemberService()
+    protected function getLiveService()
     {
-        return $this->createService('Course:MemberService');
+        return $this->createService('Live:LiveService');
     }
 
     protected function getUserDao()
