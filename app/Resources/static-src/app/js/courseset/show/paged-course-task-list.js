@@ -47,6 +47,18 @@ export default class PagedCourseTaskList extends PagedCourseLesson {
         let $this = $(this);
         cd.message({type: 'warning', message: $this.data('notifyMessage')});
       });
+
+      $(document).on('click', '.js-modal-only-app', function (event) {
+        const $this = $(this);
+        
+        event.preventDefault();
+
+        $this.attr('href', '#modal');
+        $this.attr('data-toggle', 'modal');
+
+        $('#modal').load('/course/task/downloadAppShowAction');
+        $('#modal').modal('show');
+      });
     }
   }
 

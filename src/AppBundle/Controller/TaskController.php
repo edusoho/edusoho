@@ -188,7 +188,7 @@ class TaskController extends BaseController
     public function downloadAppShowAction()
     {
         return $this->render(
-            'task/show.html.twig',
+            'task/app-modal.html.twig',
             [
                 'downloadUrl' => 'url',
             ]

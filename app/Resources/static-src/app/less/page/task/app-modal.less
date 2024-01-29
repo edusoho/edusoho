@@ -1,0 +1,83 @@
+.task-only-app-modal {
+  .modal-content {
+    width: 420px !important;
+    height: 400px !important;
+    background-image: url("@{img-src}task/app-modal-back.png");
+    background-size: cover;
+    background-attachment: fixed;
+    border-radius: 12px !important;
+
+    .modal-header {
+
+      .close {
+        opacity: 1;
+        color: white !important;
+      }
+
+      .modal-title {
+        text-align: center;
+        color: white !important;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 32px;
+      }
+    }
+
+    .modal-body {
+      padding: 0 !important;
+      .modal-intro {
+        text-align: center;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+        color: white;
+
+        .modal-app {
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: 20px;
+        }
+      }
+      .download-app {
+        width: 224px;
+        height: 224px;
+        position: relative;
+        z-index: 1;
+        padding: 12px;
+        margin: 12px auto;
+        border-radius: 12px;
+        background-color: white;
+        border: 1px solid #F0F0F2;
+        box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.05);
+
+        .download-app-qrcode {
+          padding: 6px;
+          border: 1px solid #F0F0F2;
+          border-radius: 12px;
+        }
+      }
+    }
+
+    .modal-footer {
+      .modal-guide {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 108px;
+        width: 100%;
+        border-radius: 0px 0px 12px 12px;
+        background-color: #FAFAFA;
+        padding-top: 48px;
+        padding-bottom: 20px;
+
+        .mobile-wechat-qrcode {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+  }
+}
