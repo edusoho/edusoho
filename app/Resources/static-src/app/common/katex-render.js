@@ -12,6 +12,7 @@ const renderKatex = () => {
     mathEl.style.display = isDisplay ? '' : 'inline-block';
 
     katex.render(mathEl.getAttribute('data-tex'), mathEl, {
+      throwOnError: false,
       output: 'html',
       displayMode: true,
     });

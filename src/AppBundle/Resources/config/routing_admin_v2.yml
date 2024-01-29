@@ -3613,3 +3613,15 @@ admin_v2_sms_black_ip_unlock:
     _controller: 'AppBundle:AdminV2/System/SmsDefence:unlock'
   permissions:
     - admin_v2_sms_request
+admin_v2_api_setting:
+  path: '/system/api/setting'
+  defaults:
+    _controller: 'AppBundle:AdminV2/System/ApiSetting:apiKey'
+  permissions:
+    - admin_v2_API_setting
+admin_setting_api_key_update:
+  path: '/system/api/updateSetting'
+  defaults:
+    _controller: 'AppBundle:AdminV2/System/ApiSetting:apiKeyUpdate'
+  permissions:
+    - admin_v2_API_setting

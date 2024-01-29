@@ -93,10 +93,14 @@ export default {
     }
   },
   methods: {
-    getRepeatQuestion(subject) {
+    async getRepeatQuestion(subject, test=0) {
       const that = this
-      that.loading = true
-      $.ajax({
+
+      if(!test) {
+        that.loading = true
+      }
+
+      await $.ajax({
         url: $('[name=check_duplicated_questions_url]').val(),
         contentType: 'application/json;charset=utf-8',
         type: 'post',
@@ -106,10 +110,16 @@ export default {
         }
       }).done(function (res) {
         that.duplicatedIds = res.duplicatedIds
+        that.repeatList = []
 
         for (const key in res.duplicatedIds) {
           that.repeatList.push(Number(key));
         }
+
+        if(test) {
+          return
+        }
+
         if (that.repeatList.length > 0) {
           that.$confirm({
             title: Translator.trans('created.question.confirm.import.title'),

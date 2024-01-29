@@ -16,20 +16,25 @@ class HTMLHelperTest extends BaseTestCase
 
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array('security'),
-                    'returnValue' => array(
-                        'safe_iframe_domains' => array('www.baidu.com'),
-                    ),
-                ),
-                array(
+                    'withParams' => ['site', []],
+                    'returnValue' => ['url' => 'http://www.test.edu.cn'],
+                ],
+            ]
+        );
+        $this->mockBiz(
+            'System:CacheService',
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array('site', array()),
-                    'returnValue' => array('url' => 'http://www.test.edu.cn'),
-                ),
-            )
+                    'withParams' => ['safe_iframe_domains'],
+                    'returnValue' => [
+                        'www.baidu.com',
+                    ],
+                ],
+            ]
         );
         //2.传入不带任何需要过滤的字符串
         $result = $htmlHelper->purify('HTMLHelperTest', false);
@@ -56,6 +61,6 @@ HTMLHelperTest', $result);
         //4.不符合链接地址的src(这块为自带的purify方法处理)、外链但不在白名单内的链接，自动过滤（这块为正则表达式处理）
         $html = '=<img alt="" src="/file/test.jpg" />=<img alt="" src="httpsss://httpbin.org/basic-auth/user/passwd" />=<img alt="" src="https://httpbin.org/basic-auth/user/passwd" />=<img alt="" src="http://www.baidu.com/basic-auth/user/passwd" />=';
         $result = $htmlHelper->purify($html, false);
-        $this->assertEquals('=<img alt="" src="/file/test.jpg" />===<img alt="" src="http://www.baidu.com/basic-auth/user/passwd" />=', $result);
+        $this->assertEquals('====<img alt="" src="http://www.baidu.com/basic-auth/user/passwd" />=', $result);
     }
 }

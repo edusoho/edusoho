@@ -9,8 +9,6 @@ use Biz\Coupon\Service\CouponBatchService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Goods\Service\GoodsService;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
-use Codeages\PluginBundle\System\PluginConfigurationManager;
-use Topxia\Service\Common\ServiceKernel;
 
 class CouponBatchServiceImpl extends BaseService implements CouponBatchService
 {
@@ -599,13 +597,6 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
-    }
-
-    protected function isPluginInstalled($code)
-    {
-        $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
-
-        return $pluginManager->isPluginInstalled($code);
     }
 
     /**

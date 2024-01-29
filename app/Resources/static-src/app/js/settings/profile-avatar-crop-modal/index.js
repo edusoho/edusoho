@@ -6,7 +6,7 @@ new LocalImageCrop({
   selectBtn: '#select-btn',
   group: 'user',
   imgs: {
-    large: [200, 200],
+    large: [400, 400],
     medium: [120, 120],
     small: [48, 48]
   }

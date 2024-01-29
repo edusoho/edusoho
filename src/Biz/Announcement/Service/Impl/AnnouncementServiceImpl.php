@@ -2,13 +2,13 @@
 
 namespace Biz\Announcement\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Announcement\AnnouncementException;
+use Biz\Announcement\Dao\AnnouncementDao;
+use Biz\Announcement\Service\AnnouncementService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\System\Service\LogService;
-use Biz\Announcement\Dao\AnnouncementDao;
-use Biz\Announcement\Service\AnnouncementService;
-use AppBundle\Common\ArrayToolkit;
 
 class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 {
@@ -33,7 +33,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     public function createAnnouncement($announcement)
     {
-        if (!ArrayToolkit::requireds($announcement, array('content', 'startTime', 'endTime'), true)) {
+        if (!ArrayToolkit::requireds($announcement, ['content', 'startTime', 'endTime'], true)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -41,7 +41,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
             unset($announcement['notify']);
         }
 
-        $announcement['content'] = $this->biz['html_helper']->purify(empty($announcement['content']) ? '' : $announcement['content']);
+        $announcement['content'] = $this->purifyHtml(empty($announcement['content']) ? '' : $announcement['content']);
 
         $announcement['userId'] = $this->getCurrentUser()->id;
         $announcement['createdTime'] = time();
@@ -56,7 +56,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     public function updateAnnouncement($id, $announcement)
     {
-        if (!ArrayToolkit::requireds($announcement, array('content', 'startTime', 'endTime'), true)) {
+        if (!ArrayToolkit::requireds($announcement, ['content', 'startTime', 'endTime'], true)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -89,9 +89,9 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     public function batchUpdateOrg($ids, $orgCode)
     {
         if (!is_array($ids)) {
-            $ids = array($ids);
+            $ids = [$ids];
         }
-        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+        $fields = $this->fillOrgId(['orgCode' => $orgCode]);
 
         foreach ($ids as $id) {
             $this->getAnnouncementDao()->update($id, $fields);
@@ -108,7 +108,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     protected function _prepareSearchConditions($conditions)
     {
-        $targetType = array('course', 'classroom', 'global');
+        $targetType = ['course', 'classroom', 'global'];
         if (!empty($conditions['targetType']) && !in_array($conditions['targetType'], $targetType)) {
             $this->createNewException(AnnouncementException::TYPE_INVALID());
         }

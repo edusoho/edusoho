@@ -24,11 +24,11 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.task.delete' => 'onTaskDelete',
             'course.task.create.sync' => 'onTaskCreateSync',
             'course.task.update.sync' => 'onTaskUpdateSync',
-            //'course.task.publish' => 'onPublishTaskNumberChange',
-            //'course.task.unpublish' => 'onPublishTaskNumberChange',
 
             'course.lesson.publish' => ['onPublishLessonNumberChange', -100],
             'course.lesson.unpublish' => ['onPublishLessonNumberChange', -100],
+            'course.lesson.batch_publish' => ['onPublishLessonNumberChangeForBatch', -100],
+            'course.lesson.batch_unpublish' => ['onPublishLessonNumberChangeForBatch', -100],
             'course.lesson.create' => ['onLessonNumberChange', -100],
             'course.lesson.delete' => ['onLessonNumberChange', -100],
             'course.lesson.setOptional' => ['onLessonOptionalChange', -100],
@@ -113,18 +113,17 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $this->onTaskNumberChange($event, ['taskNum', 'lessonNum', 'compulsoryTaskNum', 'electiveTaskNum']);
     }
 
-    public function onPublishTaskNumberChange(Event $event)
-    {
-        $task = $event->getSubject();
-        $this->getCourseService()->updateCourseStatistics($task['courseId'], [
-            'compulsoryTaskNum',
-        ]);
-    }
-
     public function onPublishLessonNumberChange(Event $event)
     {
         $lesson = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($lesson['courseId'], [
+            'compulsoryTaskNum', 'publishLessonNum', 'electiveTaskNum',
+        ]);
+    }
+
+    public function onPublishLessonNumberChangeForBatch(Event $event)
+    {
+        $this->getCourseService()->updateCourseStatistics($event->getArgument('courseId'), [
             'compulsoryTaskNum', 'publishLessonNum', 'electiveTaskNum',
         ]);
     }

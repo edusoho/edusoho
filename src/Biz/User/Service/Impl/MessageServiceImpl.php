@@ -191,7 +191,7 @@ class MessageServiceImpl extends BaseService implements MessageService
 
     protected function addMessage($fromId, $toId, $content, $type, $createdTime)
     {
-        $content = $this->biz['html_helper']->purify($content);
+        $content = $this->purifyHtml($content);
         $message = [
             'fromId' => $fromId,
             'toId' => $toId,

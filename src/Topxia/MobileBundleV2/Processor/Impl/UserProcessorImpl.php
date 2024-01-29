@@ -672,7 +672,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             if ($user['locked']) {
                 return $this->createErrorResponse('user_locked', '用户已锁定，请联系网校管理员');
             }
-            $userProfile = $this->controller->getUserService()->getUserProfile($oldToken['userId']);
+            $userProfile = $this->controller->getUserService()->getUserProfile($user['id']);
             $userProfile = $this->filterUserProfile($userProfile);
             $user = array_merge($user, $userProfile);
             $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
@@ -697,7 +697,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'site' => $this->getSiteInfo($this->request, $version),
         ];
 
-        $this->getLogService()->info('mobile', 'user_login', "{$user['nickname']}使用二维码登录", ['qrCodeToken' => $oldToken, 'loginToken' => $newToken, 'loginUser' => $user]);
+        $this->getLogService()->info('mobile', 'user_login', "{$user['nickname']}使用二维码登录", ['qrCodeToken' => $oldToken, 'loginToken' => $newToken]);
 
         return $result;
     }

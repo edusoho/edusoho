@@ -1652,6 +1652,14 @@ admin_v2:
                                 admin_v2_logs_prod:
                                     name: admin_v2.system.logs.logs_prod_tab
                                     disable: true
+                        # 系统API设置
+                        admin_v2_api_settings:
+                            name: admin_v2.system.api_setting_menu
+                            children:
+                                admin_v2_API_setting:
+                                    name: admin_v2.system.api_setting_basic_tab
+                                    disable: true
+                                    router_name: admin_v2_api_setting
                         # 安全设置
                         admin_v2_security:
                             name: admin_v2.system.security_menu

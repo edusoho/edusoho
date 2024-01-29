@@ -5,7 +5,6 @@ namespace Biz\Activity\Copy;
 use Biz\AbstractCopy;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
-use Biz\Activity\Service\LiveActivityService;
 
 class ActivityCopy extends AbstractCopy
 {
@@ -107,13 +106,5 @@ class ActivityCopy extends AbstractCopy
     private function getActivityConfig($type)
     {
         return $this->biz["activity_type.{$type}"];
-    }
-
-    /**
-     * @return LiveActivityService
-     */
-    private function getLiveActivityService()
-    {
-        return $this->biz->service('Activity:LiveActivityService');
     }
 }

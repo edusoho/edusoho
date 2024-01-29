@@ -16,10 +16,12 @@ use Biz\Activity\Type\Testpaper;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
+use Biz\System\Constant\LogAction;
+use Biz\System\Constant\LogModule;
+use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\Util\EdusohoLiveClient;
@@ -45,7 +47,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function getActivityFinishCondition($activity)
     {
         if (ArrayToolkit::requireds($activity, ['mediaType', 'finishType', 'finishData'])) {
-            $this->createInvalidArgumentException('params missed');
+            throw $this->createInvalidArgumentException('params missed');
         }
 
         $type = $activity['mediaType'];
@@ -75,11 +77,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         ];
     }
 
-    public function getActivityByCopyIdAndCourseSetId($copyId, $courseSetId)
-    {
-        return $this->getActivityDao()->getByCopyIdAndCourseSetId($copyId, $courseSetId);
-    }
-
     public function findActivities($ids, $fetchMedia = false, $showCloud = 1)
     {
         $activities = $this->getActivityDao()->findByIds($ids);
@@ -106,11 +103,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activities = $this->getActivityDao()->findActivitiesByCourseIdsAndTypes($courseIds, $types);
 
         return $this->prepareActivities($fetchMedia, $activities);
-    }
-
-    public function findActivitiesByCourseSetId($courseSetId)
-    {
-        return $this->getActivityDao()->findActivitiesByCourseSetId($courseSetId);
     }
 
     public function findActivitiesByCourseSetIdAndType($courseSetId, $type, $fetchMedia = false)
@@ -153,12 +145,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         if ('start' == $eventName) {
-            $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
+            $this->dispatchEvent("activity.{$eventName}", new Event($activity, $data));
         }
 
         if (isset($data['events']) && array_key_exists('finish', $data['events'])) {
-            $tempData['taskId'] = empty($data['taskId']) ? 0 : $data['taskId'];
-            $data = $tempData;
+            $data = ['taskId' => empty($data['taskId']) ? 0 : $data['taskId']];
             $eventName = 'finish';
         }
         $this->triggerActivityLearnLogListener($activity, $eventName, $data);
@@ -175,7 +166,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $this->triggerExtendListener($activity, $key, $data);
         }
         if ('doing' == $eventName || 'finish' == $eventName) {
-            $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
+            $this->dispatchEvent("activity.{$eventName}", new Event($activity, $data));
         }
 
         return true;
@@ -231,11 +222,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $materials = $this->getMaterialsFromActivity($fields);
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
         $fields = $this->filterFields($fields);
-        $fields['createdTime'] = time();
         $activity = $this->getActivityDao()->create($fields);
 
         if (!empty($materials)) {
-            $this->syncActivityMaterials($activity, $materials, 'create');
+            $this->createActivityMaterials($activity, $materials);
         }
         $listener = $activityConfig->getListener('activity.created');
         if (!empty($listener)) {
@@ -255,7 +245,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $materials = $this->getMaterialsFromActivity($fields);
         if (!empty($materials)) {
-            $this->syncActivityMaterials($savedActivity, $materials, 'update');
+            $this->syncActivityMaterials($savedActivity, $materials);
         }
 
         if (!empty($savedActivity['mediaId'])) {
@@ -277,23 +267,25 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function deleteActivity($id)
     {
         $activity = $this->getActivity($id);
+        $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
 
         try {
             $this->beginTransaction();
 
-            $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
+            $this->getMaterialService()->deleteMaterialsByLessonId($activity['id']);
 
-            $this->syncActivityMaterials($activity, [], 'delete');
-
-            $activityConfig = $this->getActivityConfig($activity['mediaType']);
-            $activityConfig->delete($activity['mediaId']);
+            $this->getActivityConfig($activity['mediaType'])->delete($activity['mediaId']);
             $this->getActivityLearnLogService()->deleteLearnLogsByActivityId($id);
             $result = $this->getActivityDao()->delete($id);
+            if (empty($activity['copyId'])) {
+                $this->getLogService()->info(LogModule::COURSE, LogAction::DELETE_ACTIVITY, '删除教学活动成功', ['id' => $id]);
+            }
             $this->commit();
 
             return $result;
         } catch (\Exception $e) {
             $this->rollback();
+            $this->getLogService()->error(LogModule::COURSE, LogAction::DELETE_ACTIVITY, '删除教学活动失败', ['id' => $id, 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             throw $e;
         }
     }
@@ -444,54 +436,46 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return array_values(array_unique($activityIds));
     }
 
-    protected function syncActivityMaterials($activity, $materials, $mode = 'create')
+    private function createActivityMaterials($activity, $materials)
     {
-        if ('delete' === $mode) {
-            $this->getMaterialService()->deleteMaterialsByLessonId($activity['id']);
-
-            return;
-        }
-
         if (empty($materials)) {
             return;
         }
+        foreach ($materials as $material) {
+            $this->getMaterialService()->uploadMaterial($this->buildMaterial($material, $activity));
+        }
+    }
 
-        switch ($mode) {
-            case 'create':
-                foreach ($materials as $id => $material) {
-                    $this->getMaterialService()->uploadMaterial($this->buildMaterial($material, $activity));
-                }
-                break;
-            case 'update':
-                $exists = $this->getMaterialService()->searchMaterials(
-                    [
-                        'lessonId' => $activity['id'],
-                        'type' => 'course',
-                    ],
-                    ['createdTime' => 'DESC'],
-                    0,
-                    PHP_INT_MAX
-                );
-                $currents = [];
-                foreach ($materials as $id => $material) {
-                    $currents[] = $this->buildMaterial($material, $activity);
-                }
+    private function syncActivityMaterials($activity, $materials)
+    {
+        if (empty($materials)) {
+            return;
+        }
+        $exists = $this->getMaterialService()->searchMaterials(
+            [
+                'lessonId' => $activity['id'],
+                'type' => 'course',
+            ],
+            ['createdTime' => 'DESC'],
+            0,
+            PHP_INT_MAX
+        );
+        $currents = [];
+        foreach ($materials as $material) {
+            $currents[] = $this->buildMaterial($material, $activity);
+        }
 
-                $dropMaterials = $this->diffMaterials($exists, $currents);
-                $addMaterials = $this->diffMaterials($currents, $exists);
-                $updateMaterials = $this->dirtyMaterials($exists, $currents);
-                foreach ($dropMaterials as $material) {
-                    $this->getMaterialService()->deleteMaterial($activity['fromCourseSetId'], $material['id']);
-                }
-                foreach ($addMaterials as $material) {
-                    $this->getMaterialService()->uploadMaterial($material);
-                }
-                foreach ($updateMaterials as $material) {
-                    $this->getMaterialService()->updateMaterial($material['id'], $material, $material);
-                }
-                break;
-            default:
-                break;
+        $dropMaterials = $this->diffMaterials($exists, $currents);
+        $addMaterials = $this->diffMaterials($currents, $exists);
+        $updateMaterials = $this->dirtyMaterials($exists, $currents);
+        foreach ($dropMaterials as $material) {
+            $this->getMaterialService()->deleteMaterial($activity['fromCourseSetId'], $material['id']);
+        }
+        foreach ($addMaterials as $material) {
+            $this->getMaterialService()->uploadMaterial($material);
+        }
+        foreach ($updateMaterials as $material) {
+            $this->getMaterialService()->updateMaterial($material['id'], $material, $material);
         }
     }
 
@@ -504,11 +488,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'lessonId' => $activity['id'],
             'title' => $material['title'],
             'description' => empty($material['summary']) ? '' : $material['summary'],
-            'userId' => $this->getCurrentUser()->offsetGet('id'),
+            'userId' => $this->getCurrentUser()->getId(),
             'type' => 'course',
             'source' => 'download' == $activity['mediaType'] ? 'coursematerial' : 'courseactivity',
             'link' => empty($material['link']) ? '' : $material['link'],
-            'copyId' => 0, //$fields
+            'copyId' => 0,
         ];
     }
 
@@ -649,6 +633,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 return [$media];
             }
         }
+
+        return [];
     }
 
     /**
@@ -860,14 +846,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     }
 
     /**
-     * @return CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->createService('Course:CourseSetService');
-    }
-
-    /**
      * @return UploadFileService
      */
     protected function getUploadFileService()
@@ -876,7 +854,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     }
 
     /**
-     * @param $activity
      * @param $eventName
      * @param $data
      *
@@ -894,7 +871,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     /**
      * @param $fetchMedia
      * @param $activities
-     * @param $sortedActivities
+     * @param $showCloud
      *
      * @return mixed
      */
@@ -938,9 +915,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $cloudFiles = array_filter($files, function ($file) {
             return 'cloud' === $file['storage'];
         });
-        $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
 
-        return $cloudFiles;
+        return ArrayToolkit::index($cloudFiles, 'id');
     }
 
     /**
@@ -997,5 +973,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }

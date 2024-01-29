@@ -5,7 +5,6 @@ namespace AppBundle\Controller\Question;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\TimeMachine;
 use AppBundle\Controller\BaseController;
-use Biz\Content\Service\FileService;
 use Biz\Question\QuestionParseClient;
 use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\Service\QuestionBankService;
@@ -198,13 +197,5 @@ class QuestionParserController extends BaseController
     protected function getItemCategoryService()
     {
         return $this->createService('ItemBank:Item:ItemCategoryService');
-    }
-
-    /**
-     * @return FileService
-     */
-    protected function getFileService()
-    {
-        return $this->createService('Content:FileService');
     }
 }

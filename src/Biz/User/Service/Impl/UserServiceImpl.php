@@ -989,6 +989,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->getUserByType($type);
     }
 
+    public function findUserByType($type)
+    {
+        return $this->getUserDao()->findUserByType($type);
+    }
+
     public function getUserByUUID($uuid)
     {
         return $this->getUserDao()->getByUUID($uuid);

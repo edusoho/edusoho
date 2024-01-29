@@ -180,6 +180,9 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         if (empty($task)) {
             return [];
         }
+        if ($task['copyId'] > 0) {
+            return [];
+        }
 
         $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
 

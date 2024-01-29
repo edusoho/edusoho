@@ -165,7 +165,7 @@ abstract class Type extends BizAware
         $activityGroups = ArrayToolkit::group($activities, 'mediaType');
 
         foreach ($activityGroups as $mediaType => $activityGroup) {
-            $activityConfig = $this->getActivityConfig($mediaType);
+            $activityConfig = $this->getActivityService()->getActivityConfig($mediaType);
             $mediaIds = ArrayToolkit::column($activityGroup, 'mediaId');
             $medias = $activityConfig->findWithoutCloudFiles($mediaIds);
             $medias = ArrayToolkit::index($medias, 'id');
@@ -329,11 +329,6 @@ abstract class Type extends BizAware
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
-    }
-
-    protected function getActivityConfig($type)
-    {
-        return $this->biz["activity_type.{$type}"];
     }
 
     protected function getActor($userId)

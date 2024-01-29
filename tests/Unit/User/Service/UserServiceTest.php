@@ -1285,6 +1285,10 @@ class UserServiceTest extends BaseTestCase
                 'functionName' => 'get',
                 'returnValue' => null,
             ],
+            [
+                'functionName' => 'getByUUID',
+                'returnValue' => null,
+            ],
         ]);
 
         $this->getUserService()->changeAvatar(222, []);
@@ -3071,7 +3075,7 @@ class UserServiceTest extends BaseTestCase
         $this->getUserService()->unBindUserByTypeAndToId('douban', $registeredUser['id']);
     }
 
-    public function testGenerateNickname_prefix()
+    public function testGenerateNicknamePrefix()
     {
         $user = $this->createUser('adminabc');
         $user['nickname'] = 'admin';
@@ -3079,7 +3083,7 @@ class UserServiceTest extends BaseTestCase
         $this->assertEquals(stripos($nickname, 'admin'), 0);
     }
 
-    public function testGenerateNickname_specialChar()
+    public function testGenerateNicknameSpecialChar()
     {
         $this->createUser('abcefg');
         $user['nickname'] = '🐎abcefg✈🐯️';
@@ -3087,7 +3091,7 @@ class UserServiceTest extends BaseTestCase
         $this->assertEquals(stripos($nickname, 'abcefg'), 0);
     }
 
-    public function testGenerateNickname_emptyRaw()
+    public function testGenerateNicknameEmptyRaw()
     {
         $user = [];
         $nickname = $this->getUserService()->generateNickname($user);

@@ -10,7 +10,7 @@ use ApiBundle\Api\Util\Money;
 class CourseSetFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'subtitle', 'summary', 'type', 'cover', 'studentNum', 'maxCoursePrice', 'minCoursePrice', 'discount', 'discountType', 'maxOriginPrice', 'minOriginPrice', 'status', 'defaultCourseId', 'goodsId', 'productId', 'course', 'canLearn',
+        'id', 'title', 'subtitle', 'summary', 'type', 'cover', 'studentNum', 'maxCoursePrice', 'minCoursePrice', 'discount', 'discountType', 'maxOriginPrice', 'minOriginPrice', 'status', 'defaultCourseId', 'goodsId', 'productId', 'course', 'canLearn', 'discountId',
     ];
 
     protected $publicFields = [
