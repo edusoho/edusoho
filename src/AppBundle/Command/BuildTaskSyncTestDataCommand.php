@@ -21,10 +21,10 @@ class BuildTaskSyncTestDataCommand extends BaseCommand
         $this->initServiceKernel();
         $counter = 0;
         while ($counter < $input->getArgument('count')) {
-            $classroom = $this->getClassroomService()->addClassroom(['title' => '测试同步' . $counter]);
+            $classroom = $this->getClassroomService()->addClassroom(['title' => '测试同步'.$counter]);
             $this->getClassroomService()->addCoursesToClassroom($classroom['id'], [$input->getArgument('courseId')]);
             $output->writeln("<info>创建班级《{$classroom['title']}》成功</info>");
-            $counter++;
+            ++$counter;
         }
     }
 
