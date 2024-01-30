@@ -64,7 +64,7 @@
   {% set thirdLevelCategory = app.request.query.get('selectedthirdLevelCategory', '') %}
   {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'course'})) }}
 
-  <div class="es-filter">
+  <div class="es-filter pc-es-filter">
     <ul class="nav nav-sort clearfix">
       <li>
         <a
@@ -144,7 +144,7 @@
       {% endif %}
     </div>
   </div>
-  <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
+  <nav class="text-center mobile-pagination-hide">{{ web_macro.paginator(paginator) }}</nav>
 {% endblock %}
 
 {% block bottom %}

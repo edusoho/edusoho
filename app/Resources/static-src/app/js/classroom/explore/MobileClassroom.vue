@@ -11,8 +11,8 @@
         />
       </template>
     </van-dropdown-menu>
-    <div class="class-list-mobile row" style="padding-left: 12px; padding-right: 12px;">
-      <div class="col-md-4 col-sm-6">
+    <div class="class-list-mobile row" style="padding-left: 12px; padding-right: 12px; min-height: 350px;">
+      <div v-if="classroomList.length" class="col-md-4 col-sm-6">
         <div v-for="(item, index) in classroomList" :key="index" class="class-item class-item--tag" style="position: relative;">
           <div class="class-img">
             <span v-if="vipSetting.enabled && Number(item.vipLevelId)" class="tag-vip-free"></span>
@@ -54,6 +54,7 @@
           </ul>
         </div>
       </div>
+      <div class="empty" v-else>暂无数据</div>
     </div>
     <van-pagination
       v-if="total > 10"
@@ -147,10 +148,9 @@ export default {
     },
     onFinish({ selectedOptions }) {
       this.show = false;
-      this.categoryTitle = selectedOptions
-        .map((option) => option.text)
-        .join("/");
-      this.categoryValue = selectedOptions[0].value;
+      this.categoryTitle = selectedOptions[selectedOptions.length - 1].text;
+      this.categoryValue = selectedOptions[selectedOptions.length - 1].value;
+      this.courseCategoriesValue = selectedOptions[selectedOptions.length - 1].value;
       this.search(1);
     },
     changePage(page) {
@@ -224,6 +224,7 @@ export default {
           $('[name="categoryId"]').val()
         );
         this.categoryValue = categoryId
+        this.courseCategoriesValue = categoryId;
       }
 
       this.search();
