@@ -14,6 +14,7 @@ use Biz\Live\Constant\LiveStatus;
 use Biz\Live\Service\LiveService;
 use Biz\LiveStatistics\Dao\LiveMemberStatisticsDao;
 use Biz\LiveStatistics\Service\LiveCloudStatisticsService;
+use Biz\User\Service\UserService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
@@ -215,9 +216,9 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $userIds = ArrayToolkit::column($memberData['list'], 'studentId');
         $members = $this->getLiveMemberStatisticsDao()->search(['userIds' => $userIds ?: [-1], 'liveId' => $liveActivity['liveId']], [], 0, count($userIds), ['id', 'userId']);
         $members = ArrayToolkit::index($members, 'userId');
-        $count = $this->getUserDao()->count([]);
+        $users = $this->getUserService()->findUsersByIds($userIds);
         foreach ($memberData['list'] as $member) {
-            if ($member['studentId'] == $liveActivity['anchorId'] || $member['studentId'] > $count) {
+            if ($member['studentId'] == $liveActivity['anchorId'] || empty($users[$member['studentId']])) {
                 continue;
             }
             $data = [
@@ -391,6 +392,14 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
     protected function getLiveService()
     {
         return $this->createService('Live:LiveService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 
     protected function getUserDao()
