@@ -26,11 +26,6 @@ class LiveServiceImpl extends BaseService implements LiveService
         return $liveStatus;
     }
 
-    public function canExecuteLiveStatusJob($liveStatus, $jobType)
-    {
-        return 'startJob' === $jobType ? 'created' === $liveStatus : 'closed' !== $liveStatus;
-    }
-
     public function createLiveRoom($params)
     {
         $liveParams = $this->filterCreateParams($params);

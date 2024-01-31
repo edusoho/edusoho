@@ -171,7 +171,6 @@ class SystemInitializerTest extends BaseTestCase
             'DeleteFiredLogJob',
             'CheckConvertStatusJob',
             'updateCourseSetHotSeq',
-            'UpdateLiveStatusJob',
             'CloudConsultFreshJob',
             'DeleteUserFootprintJob',
             'WechatSubscribeRecordSynJob',

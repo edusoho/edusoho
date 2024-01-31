@@ -314,7 +314,11 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         }
         $data['chatNumber'] = empty($cloudData['chatNumber']) ? 0 : $cloudData['chatNumber'];
         $data['checkinNum'] = empty($cloudData['checkinBatchNumber']) ? 0 : $cloudData['checkinBatchNumber'];
-        $data['maxOnlineNumber'] = empty($onlineData['onLineNum']) ? 0 : $onlineData['onLineNum'];
+        if (!empty($cloudData['maxOnline'])) {
+            $data['maxOnlineNumber'] = $cloudData['maxOnline'];
+        } else {
+            $data['maxOnlineNumber'] = empty($onlineData['onLineNum']) ? 0 : $onlineData['onLineNum'];
+        }
     }
 
     /**

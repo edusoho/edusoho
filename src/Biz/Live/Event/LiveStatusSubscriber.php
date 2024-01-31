@@ -4,6 +4,7 @@ namespace Biz\Live\Event;
 
 use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\ActivityService;
+use Biz\Live\Constant\LiveProvider;
 use Biz\LiveStatistics\Service\Impl\LiveCloudStatisticsServiceImpl;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
@@ -13,8 +14,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class LiveStatusSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
-    const ES_LIVE_PROVIDER = 13;
-
     public static function getSubscribedEvents()
     {
         return [
@@ -51,7 +50,7 @@ class LiveStatusSubscriber extends EventSubscriber implements EventSubscriberInt
             return;
         }
         $time = time();
-        if (self::ES_LIVE_PROVIDER != $liveActivity['liveProvider']) {
+        if (LiveProvider::LIVE_CLOUD != $liveActivity['liveProvider']) {
             $time = strtotime(date('Y-m-d', strtotime('+1 day'))) + rand(18000, 21600);
         }
         $startJob = [
@@ -93,10 +92,10 @@ class LiveStatusSubscriber extends EventSubscriber implements EventSubscriberInt
 
     private function createLiveStatusJobs($liveId, $activity)
     {
-        $startExecuteTime = (int)$activity['startTime'];
-        $closeExecuteTime = (int)($activity['startTime'] + $activity['length'] * 60); //预定结束时间询问更新状态
-        $closeExecuteAgainTime = (int)($activity['startTime'] + $activity['length'] * 60 + 3600); //预定结束时间一个小时后询问更新状态
-        $closeExecuteSecondTime = (int)($activity['startTime'] + $activity['length'] * 60 + 7200); //预定结束时间两个小时 强制结束直播
+        $startExecuteTime = (int) $activity['startTime'];
+        $closeExecuteTime = (int) ($activity['startTime'] + $activity['length'] * 60); //预定结束时间询问更新状态
+        $closeExecuteAgainTime = (int) ($activity['startTime'] + $activity['length'] * 60 + 3600); //预定结束时间一个小时后询问更新状态
+        $closeExecuteSecondTime = (int) ($activity['startTime'] + $activity['length'] * 60 + 7200); //预定结束时间两个小时 强制结束直播
         $this->registerLiveStatusJob($liveId, 'startJob', $startExecuteTime);
         $this->registerLiveStatusJob($liveId, 'closeJob', $closeExecuteTime);
         $this->registerLiveStatusJob($liveId, 'closeAgainJob', $closeExecuteAgainTime);

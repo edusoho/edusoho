@@ -184,11 +184,6 @@ class SystemCrontabInitializer
                 'class' => 'Biz\Course\Job\UpdateCourseSetHotSeqJob',
                 'misfire_threshold' => 0,
             ],
-            'UpdateLiveStatusJob' => [
-                'expression' => '*/10 * * * *',
-                'class' => 'Biz\Live\Job\UpdateLiveStatusJob',
-                'misfire_threshold' => 300,
-            ],
             'CloudConsultFreshJob' => [
                 'expression' => "{$consultRandNum} {$consultHourRandNum} * * *",
                 'class' => 'Biz\CloudPlatform\Job\CloudConsultFreshJob',
@@ -208,7 +203,7 @@ class SystemCrontabInitializer
                 'class' => 'Biz\LiveStatistics\Job\DaySyncLiveDataJob',
             ],
             'DeleteDevLockJob' => [
-                'expression' => "0 2 * * *",
+                'expression' => '0 2 * * *',
                 'class' => 'Biz\System\Job\DeleteDevLockJob',
             ],
 //            'StatisticsPageStayDailyDataJob' => [

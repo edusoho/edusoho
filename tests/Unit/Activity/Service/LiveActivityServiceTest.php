@@ -167,41 +167,6 @@ class LiveActivityServiceTest extends BaseTestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @expectedException \Biz\Activity\LiveActivityException
-     * @expectedExceptionMessage exception.live_activity.live_status_invalid
-     */
-    public function testUpdateLiveStatusActivityEmpty()
-    {
-        $result = $this->getLiveActivityService()->updateLiveStatus(1, 'closed');
-        $this->assertNull($result);
-
-        $this->mockBiz('Activity:LiveActivityDao', [
-            [
-                'functionName' => 'get',
-                'returnValue' => ['id' => 1],
-            ],
-        ]);
-        $result = $this->getLiveActivityService()->updateLiveStatus(1, 'created');
-    }
-
-    public function testUpdateLiveStatus()
-    {
-        $this->mockBiz('Activity:LiveActivityDao', [
-            [
-                'functionName' => 'get',
-                'returnValue' => ['id' => 1, 'progressStatus' => 'created'],
-            ],
-            [
-                'functionName' => 'update',
-                'returnValue' => ['id' => 1, 'progressStatus' => 'closed'],
-            ],
-        ]);
-        $result = $this->getLiveActivityService()->updateLiveStatus(1, 'closed');
-
-        $this->assertEquals('closed', $result['progressStatus']);
-    }
-
     public function testSearch()
     {
         $this->mockBiz('Activity:LiveActivityDao', [
