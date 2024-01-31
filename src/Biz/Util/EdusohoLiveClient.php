@@ -7,9 +7,7 @@ use Biz\CloudPlatform\CloudAPIFactory;
 
 class EdusohoLiveClient
 {
-    const LIVE_STATUS_UNSTART = 'unstart';
     const LIVE_STATUS_LIVING = 'live';
-    const LIVE_STATUS_PAUSE = 'pause';
     const LIVE_STATUS_CLOSED = 'closed';
     const SELF_ES_LIVE_PROVIDER = 13;
     const LIVE_ROOM_LARGE = 'large';
@@ -137,20 +135,6 @@ class EdusohoLiveClient
         $logoData = ArrayToolkit::parts($logoData, $filter);
 
         return $this->createCloudApi('root')->post('/liveaccount/logo/set', $logoData);
-    }
-
-    /**
-     * check live status
-     *
-     * @param [type] $lives array(liveProvider => array(liveId,liveId,...),...)
-     *
-     * @return array array(liveId => 'status',...) status：unstart|live|pause|closed
-     */
-    public function checkLiveStatus($lives)
-    {
-        $args = ['liveIds' => $lives];
-
-        return $this->createCloudApi('leaf')->get('/lives/rooms_status', $args);
     }
 
     public function getLiveAccount()
