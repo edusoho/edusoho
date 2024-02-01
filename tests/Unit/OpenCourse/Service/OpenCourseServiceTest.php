@@ -1244,13 +1244,13 @@ class OpenCourseServiceTest extends BaseTestCase
                 [
                     'functionName' => 'search',
                     'returnValue' => [[]],
-                    'withParams' => [['courseId' => 2, 'role' => 'teacher'], [], 0, PHP_INT_MAX],
+                    'withParams' => [['courseId' => 2, 'role' => 'teacher'], [], 0, PHP_INT_MAX, []],
                     'runTimes' => 1,
                 ],
                 [
                     'functionName' => 'search',
                     'returnValue' => [['id' => 2, 'userId' => 1]],
-                    'withParams' => [['courseId' => 3, 'role' => 'teacher'], [], 0, PHP_INT_MAX],
+                    'withParams' => [['courseId' => 3, 'role' => 'teacher'], [], 0, PHP_INT_MAX, []],
                     'runTimes' => 1,
                 ],
             ]
@@ -1296,13 +1296,13 @@ class OpenCourseServiceTest extends BaseTestCase
                 [
                     'functionName' => 'search',
                     'returnValue' => [[]],
-                    'withParams' => [['courseId' => 2, 'role' => 'teacher'], [], 0, PHP_INT_MAX],
+                    'withParams' => [['courseId' => 2, 'role' => 'teacher'], [], 0, PHP_INT_MAX, []],
                     'runTimes' => 1,
                 ],
                 [
                     'functionName' => 'search',
                     'returnValue' => [['id' => 2, 'userId' => 2]],
-                    'withParams' => [['courseId' => 3, 'role' => 'teacher'], [], 0, PHP_INT_MAX],
+                    'withParams' => [['courseId' => 3, 'role' => 'teacher'], [], 0, PHP_INT_MAX, []],
                     'runTimes' => 1,
                 ],
             ]

@@ -154,7 +154,7 @@ class LiveCourseServiceTest extends BaseTestCase
         ]);
 
         $course = ['id' => 1, 'teacherIds' => [$user['id'], 3]];
-        $lesson = ['id' => 2, 'courseId' => 1, 'type' => 'live'];
+        $lesson = ['id' => 2, 'courseId' => 1, 'type' => 'open'];
 
         $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
     }

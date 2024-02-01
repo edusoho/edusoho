@@ -32,42 +32,42 @@ abstract class Type extends BizAware
      *
      * @return array array('id' => 1, 'column1' => 2)
      */
-    protected function find($subject, $dao, $columns, $conditions = array())
+    protected function find($subject, $dao, $columns, $conditions = [])
     {
         $ids = ArrayToolkit::column($subject[0], $subject[1]);
 
         if (!$ids) {
-            return array();
+            return [];
         }
 
-        $conditions = array_merge(array('ids' => $ids), $conditions);
-        $columns = array_unique(array_merge(array('id'), $columns));
-        $results = $this->createDao($dao)->search($conditions, array(), 0, PHP_INT_MAX, $columns);
+        $conditions = array_merge(['ids' => $ids], $conditions);
+        $columns = array_unique(array_merge(['id'], $columns));
+        $results = $this->createDao($dao)->search($conditions, [], 0, PHP_INT_MAX, $columns);
 
         return ArrayToolkit::index($results, 'id');
     }
 
-    protected function findTasks($subject, $conditions = array())
+    protected function findTasks($subject, $conditions = [])
     {
         return $this->find(
             $subject,
             'Task:TaskDao',
-            array('activityId', 'type', 'courseId', 'title'),
+            ['activityId', 'type', 'courseId', 'title'],
             $conditions
         );
     }
 
-    protected function findCourses($subject, $conditions = array())
+    protected function findCourses($subject, $conditions = [])
     {
         $courses = $this->find(
             $subject,
             'Course:CourseDao',
-            array('courseSetId', 'title', 'price'),
+            ['courseSetId', 'title', 'price'],
             $conditions
         );
 
         $courseSets = $this->findCourseSets(
-            array($courses, 'courseSetId')
+            [$courses, 'courseSetId']
         );
 
         $this->appendTags($courseSets);
@@ -96,7 +96,7 @@ abstract class Type extends BizAware
         $tags = $this->getTagService()->findTagsByIds($tagIds);
 
         array_walk($courseSets, function (&$courseSet) use ($tags) {
-            $courseSetTags = array();
+            $courseSetTags = [];
 
             foreach ($courseSet['tags'] as $tagId) {
                 if (isset($tags[$tagId])) {
@@ -108,32 +108,32 @@ abstract class Type extends BizAware
         });
     }
 
-    protected function findCourseSets($subject, $conditions = array())
+    protected function findCourseSets($subject, $conditions = [])
     {
         return $this->find(
             $subject,
             'Course:CourseSetDao',
-            array('title', 'subtitle', 'tags'),
+            ['title', 'subtitle', 'tags'],
             $conditions
         );
     }
 
-    protected function findCourseThreads($subject, $conditions = array())
+    protected function findCourseThreads($subject, $conditions = [])
     {
         return $this->find(
             $subject,
             'Course:ThreadDao',
-            array('taskId', 'courseId', 'courseSetId', 'title', 'content'),
+            ['taskId', 'courseId', 'courseSetId', 'title', 'content'],
             $conditions
         );
     }
 
-    protected function findActivityWatchLogs($subject, $conditions = array())
+    protected function findActivityWatchLogs($subject, $conditions = [])
     {
         return $this->find(
             $subject,
             'Xapi:ActivityWatchLogDao',
-            array('course_id', 'task_id', 'watched_time'),
+            ['course_id', 'task_id', 'watched_time'],
             $conditions
         );
     }
@@ -143,10 +143,10 @@ abstract class Type extends BizAware
         $activityIds = ArrayToolkit::column($subject[0], $subject[1]);
         $activities = $this->getActivityMedia($activityIds);
 
-        $resourceIds = array();
+        $resourceIds = [];
 
         foreach ($activities as $activity) {
-            if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
+            if (in_array($activity['mediaType'], ['video', 'audio', 'doc', 'ppt', 'flash'])) {
                 if (!empty($activity['ext']['mediaId'])) {
                     $resourceIds[] = $activity['ext']['mediaId'];
                 }
@@ -156,7 +156,7 @@ abstract class Type extends BizAware
         $resources = $this->getUploadFileService()->findFilesByIds($resourceIds);
         $resources = ArrayToolkit::index($resources, 'id');
 
-        return array($activities, $resources);
+        return [$activities, $resources];
     }
 
     private function getActivityMedia($activityIds)
@@ -173,7 +173,7 @@ abstract class Type extends BizAware
             array_walk(
                 $activities,
                 function (&$activity) use ($medias) {
-                    $activity['ext'] = empty($medias[$activity['mediaId']]) ? array() : $medias[$activity['mediaId']];
+                    $activity['ext'] = empty($medias[$activity['mediaId']]) ? [] : $medias[$activity['mediaId']];
                 }
             );
         }
@@ -334,19 +334,19 @@ abstract class Type extends BizAware
     protected function getActor($userId)
     {
         $currentUser = $this->getUserService()->getUser($userId);
-        $siteSettings = $this->getSettingService()->get('site', array());
+        $siteSettings = $this->getSettingService()->get('site', []);
 
         $host = empty($siteSettings['url']) ? '' : $siteSettings['url'];
 
-        return array(
-            'account' => array(
+        return [
+            'account' => [
                 'id' => $currentUser['id'],
                 'name' => $currentUser['nickname'],
                 'email' => empty($currentUser['email']) ? '' : md5($currentUser['email']),
                 'phone' => empty($currentUser['verifiedMobile']) ? '' : md5($currentUser['verifiedMobile']),
                 'homePage' => $host,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -366,7 +366,7 @@ abstract class Type extends BizAware
 
     protected function convertMediaType($mediaType)
     {
-        $list = array(
+        $list = [
             'audio' => 'audio',
             'video' => 'video',
             'doc' => 'document',
@@ -379,20 +379,20 @@ abstract class Type extends BizAware
             'live' => 'live',
             'text' => 'document',
             'flash' => 'document',
-        );
+        ];
 
         return empty($list[$mediaType]) ? $mediaType : $list[$mediaType];
     }
 
     protected function convertActivityType($esType)
     {
-        static $map = array(
+        static $map = [
             'article' => XAPIActivityTypes::MESSAGE,
             'thread' => XAPIActivityTypes::QUESTION,
             'course' => XAPIActivityTypes::COURSE,
             'classroom' => XAPIActivityTypes::CLASS_ONLINE,
             'teacher' => XAPIActivityTypes::USER_PROFILE,
-        );
+        ];
 
         return $map[$esType];
     }
