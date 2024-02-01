@@ -397,30 +397,28 @@ class CloudFileImplementorTest extends BaseTestCase
 
     public function testDownload()
     {
-        $api = CloudAPIFactory::create('leaf');
-        $mockObject = \Mockery::mock($api);
-        $mockObject->shouldReceive('get')->times(1)->andReturn([
-            'url' => 'http://download',
+        $this->mockPureBiz('ESCloudSdk.play', [
+            [
+                'functionName' => 'makeDownloadUrl',
+                'returnValue' => 'https://download',
+            ],
         ]);
 
-        $this->getCloudFileImplementor()->setApi('leaf', $mockObject);
-
         $result = $this->getCloudFileImplementor()->download(1);
-        $this->assertEquals('http://download', $result['url']);
+        $this->assertEquals('https://download', $result['url']);
     }
 
     public function testGetDownloadFile()
     {
-        $api = CloudAPIFactory::create('leaf');
-        $mockObject = \Mockery::mock($api);
-        $mockObject->shouldReceive('get')->times(1)->andReturn([
-            'url' => 'http://download',
+        $this->mockPureBiz('ESCloudSdk.play', [
+            [
+                'functionName' => 'makeDownloadUrl',
+                'returnValue' => 'https://download',
+            ],
         ]);
 
-        $this->getCloudFileImplementor()->setApi('leaf', $mockObject);
-
         $result = $this->getCloudFileImplementor()->getDownloadFile(1, true);
-        $this->assertEquals('http://download', $result['url']);
+        $this->assertEquals('https://download', $result['url']);
         $this->assertEquals('url', $result['type']);
     }
 
