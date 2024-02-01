@@ -231,14 +231,8 @@ class MultiClassGroupServiceImpl extends BaseService implements MultiClassGroupS
 
         $roleGroupMemberUserIds = $this->getCourseMemberService()->findGroupUserIdsByCourseIdAndRoles($courseId, ['student', 'assistant']);
         $studentIds = empty($roleGroupMemberUserIds['student']) ? [] : ArrayToolkit::column($roleGroupMemberUserIds['student'], 'userId');
-        $groupNum = ceil(count($studentIds) / $multiClass['group_limit_num']);
 
-        $groupAssignStudentIds = [];
-        $assignedNum = 0;
-        for ($assignedTimes = 0; $assignedTimes < $groupNum; ++$assignedTimes) {
-            $groupAssignStudentIds[$assignedNum] = array_slice($studentIds, $assignedNum, $multiClass['group_limit_num']);
-            $assignedNum += count($groupAssignStudentIds[$assignedNum]);
-        }
+        $groupAssignStudentIds = array_chunk($studentIds, $multiClass['group_limit_num']);
 
         $groupSeqNum = 0;
         $groups = [];

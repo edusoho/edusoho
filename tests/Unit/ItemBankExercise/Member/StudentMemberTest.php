@@ -26,7 +26,7 @@ class StudentMemberTest extends BaseTestCase
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $studentMember = new StudentMember($this->biz);
-        $studentMember->join($exercise['id'], $currentUser->getId(), ['remark' => 'test']);
+        $studentMember->join($exercise['id'], $currentUser->getId(), ['remark' => 'test', 'reason' => 'test', 'reasonType' => 'test']);
         $res = $this->getExerciseMemberService()->isExerciseMember($exercise['id'], $currentUser->getId());
         $this->assertEquals(true, $res);
     }
