@@ -7,7 +7,6 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\MemberOperation\Dao\MemberOperationRecordDao;
 use Biz\MemberOperation\Service\MemberOperationService;
-use Biz\Theme\Dao\Impl\ThemeConfigDaoImpl;
 
 class MemberOperationServiceImpl extends BaseService implements MemberOperationService
 {
@@ -18,7 +17,7 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
 
     public function createRecord($record)
     {
-        if (!ArrayToolkit::requireds($record, array('member_id', 'target_type', 'operate_type'))) {
+        if (!ArrayToolkit::requireds($record, ['member_id', 'target_type', 'operate_type'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -36,25 +35,25 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
     {
         $records = $this->getRecordByOrderIdAndType($orderId, 'exit');
 
-        foreach ($records as &$record)
-        {
-            $field = ArrayToolkit::parts($info, array('refund_id', 'reason', 'reason_type'));
+        $updateRecords = [];
+        $field = ArrayToolkit::parts($info, ['refund_id', 'reason', 'reason_type']);
+        foreach ($records as $record) {
+            $updateRecords[$record['id']] = $field;
             if (!empty($record['reason'])) {
-                unset($field['reason']);
-                unset($field['reason_type']);
+                unset($updateRecords[$record['id']]['reason']);
+                unset($updateRecords[$record['id']]['reason_type']);
             }
-            $record = array_merge($record, $field);
         }
 
-        return $this->getRecordDao()->batchUpdate(ArrayToolkit::column($records, "id"), $records, 'id');
+        $this->getRecordDao()->batchUpdate(array_keys($updateRecords), $updateRecords);
     }
 
     public function getJoinReasonByOrderId($orderId = 0)
     {
-        $reason = array(
+        $reason = [
                 'reason' => 'site.join_by_free',
                 'reason_type' => 'free_join',
-        );
+        ];
         if (empty($orderId)) {
             return $reason;
         }
@@ -65,24 +64,24 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
         }
 
         if ('markting' === $order['source']) {
-            return array(
+            return [
                 'reason' => 'site.join_by_markting',
                 'reason_type' => 'markting_join',
-            );
+            ];
         }
 
         if ('outside' === $order['source']) {
-            return array(
+            return [
                 'reason' => 'site.join_by_import',
                 'reason_type' => 'import_join',
-            );
+            ];
         }
 
         if ($order['price_amount'] > 0) {
-            return array(
+            return [
                 'reason' => 'site.join_by_purchase',
                 'reason_type' => 'buy_join',
-            );
+            ];
         }
 
         return $reason;

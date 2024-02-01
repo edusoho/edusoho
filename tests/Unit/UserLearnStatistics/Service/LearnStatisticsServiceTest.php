@@ -39,18 +39,6 @@ class LearnStatisticsServiceTest extends BaseTestCase
 
     private function mockData()
     {
-        $this->mockBiz('Activity:ActivityLearnLogService', [
-            [
-                'functionName' => 'sumLearnTimeGroupByUserId',
-                'returnValue' => [
-                    2 => [
-                        'userId' => 2,
-                        'learnedTime' => 3,
-                    ],
-                ],
-            ],
-        ]);
-
         $this->mockBiz('Pay:AccountService', [
             [
                 'functionName' => 'sumAmountGroupByUserId',

@@ -26,6 +26,7 @@ class ExportItemsWrapper
         foreach ($items as &$item) {
             $item['num'] = $num++;
             $item = ('material' == $item['type']) ? $this->wrapMaterialItem($item) : $this->wrapNotMaterialItem($item);
+            $item = $this->convertFormulaToImg($item);
             $item = $this->num($item);
             $item = $this->stem($item);
             $item = $this->options($item);
@@ -66,6 +67,15 @@ class ExportItemsWrapper
         $item['answer_mode'] = $question['answer_mode'];
 
         return $item;
+    }
+
+    protected function convertFormulaToImg($item)
+    {
+        $item = preg_replace_callback('/<span( data-display)?([^>]*?) data-tex=\\\\"(.*?)\\\\"( data-display)? data-img=\\\\"(.*?)\\\\"><\\\\\/span>/', function ($match) {
+            return "<img src=\\\"$match[5]\\\">";
+        }, json_encode($item));
+
+        return json_decode($item, true);
     }
 
     protected function num($item)

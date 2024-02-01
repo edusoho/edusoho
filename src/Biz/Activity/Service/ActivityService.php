@@ -8,13 +8,9 @@ interface ActivityService
 {
     public function getActivity($id, $fetchMedia = false);
 
-    public function getActivityByCopyIdAndCourseSetId($copyId, $courseSetId);
-
     public function findActivities($ids, $fetchMedia = false, $showCloud = 1);
 
     public function findActivitiesByCourseIdAndType($courseId, $type, $fetchMedia = false);
-
-    public function findActivitiesByCourseSetId($courseSetId);
 
     public function findActivitiesByCourseIdsAndType($courseIds, $type, $fetchMedia = false);
 

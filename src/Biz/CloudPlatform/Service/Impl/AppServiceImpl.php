@@ -710,9 +710,8 @@ class AppServiceImpl extends BaseService implements AppService
                 'isSecure' => $isSecure,
             ]
         );
-        $result = $appClient->getTokenLoginUrl($routingName, $params);
 
-        return $result;
+        return $appClient->getTokenLoginUrl($routingName, $params);
     }
 
     public function getAppStatusByCode($code)
@@ -738,7 +737,7 @@ class AppServiceImpl extends BaseService implements AppService
             include_once $packageDir.'/Upgrade.php';
             $upgrade = new \EduSohoUpgrade($this->biz);
         } else {
-            return;
+            return [];
         }
 
         if (method_exists($upgrade, 'setUpgradeType')) {
@@ -986,8 +985,8 @@ class AppServiceImpl extends BaseService implements AppService
                 'accessKey' => empty($cloud['cloud_access_key']) ? null : $cloud['cloud_access_key'],
                 'secretKey' => empty($cloud['cloud_secret_key']) ? null : $cloud['cloud_secret_key'],
                 'apiUrl' => empty($developer['app_api_url']) ? null : $developer['app_api_url'],
-                'debug' => empty($developer['debug']) ? false : true,
-                'isSecure' => empty($params['isSecure']) ? false : true,
+                'debug' => !empty($developer['debug']),
+                'isSecure' => !empty($params['isSecure']),
             ];
 
             $this->client = new EduSohoAppClient($options);

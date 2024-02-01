@@ -98,6 +98,8 @@ class UpdateMemberMasteryRateJobTest extends BaseTestCase
                     'returnValue' => [
                         'id' => 1,
                         'questionBankId' => 1,
+                        'chapterEnable' => 1,
+                        'assessmentEnable' => 0,
                     ],
                 ],
             ]
@@ -115,22 +117,48 @@ class UpdateMemberMasteryRateJobTest extends BaseTestCase
             ]
         );
 
+        $this->mockBiz(
+            'ItemBankExercise:ChapterExerciseService',
+            [
+                [
+                    'functionName' => 'getPublishChapterTreeList',
+                    'runTimes' => 1,
+                    'returnValue' => [
+                        ['id' => 1],
+                    ],
+                ],
+            ]
+        );
+
+        $this->mockBiz(
+            'ItemBank:Item:ItemService',
+            [
+                [
+                    'functionName' => 'findItemsByCategoryIds',
+                    'runTimes' => 1,
+                    'returnValue' => [
+                        ['id' => 1, 'question_num' => 5],
+                    ],
+                ],
+            ]
+        );
+
         $job = new UpdateMemberMasteryRateJob(['args' => ['itemBankExericseId' => 1]], $this->biz);
         $job->execute();
 
         $members = $this->getItemBankExerciseMemberDao()->search(['exerciseId' => 1], [], 0, PHP_INT_MAX);
-        $this->assertEquals($members[0]['doneQuestionNum'], 2);
-        $this->assertEquals($members[0]['rightQuestionNum'], 1);
-        $this->assertEquals($members[0]['masteryRate'], 10.0);
-        $this->assertEquals($members[0]['completionRate'], 20.0);
-        $this->assertEquals($members[1]['doneQuestionNum'], 2);
-        $this->assertEquals($members[1]['rightQuestionNum'], 1);
-        $this->assertEquals($members[1]['masteryRate'], 10.0);
-        $this->assertEquals($members[1]['completionRate'], 20.0);
-        $this->assertEquals($members[2]['doneQuestionNum'], 1);
-        $this->assertEquals($members[2]['rightQuestionNum'], 1);
-        $this->assertEquals($members[2]['masteryRate'], 10.0);
-        $this->assertEquals($members[2]['completionRate'], 10.0);
+        $this->assertEquals(2, $members[0]['doneQuestionNum']);
+        $this->assertEquals(1, $members[0]['rightQuestionNum']);
+        $this->assertEquals(20.0, $members[0]['masteryRate']);
+        $this->assertEquals(40.0, $members[0]['completionRate']);
+        $this->assertEquals(2, $members[1]['doneQuestionNum']);
+        $this->assertEquals(1, $members[1]['rightQuestionNum']);
+        $this->assertEquals(20.0, $members[1]['masteryRate']);
+        $this->assertEquals(40.0, $members[1]['completionRate']);
+        $this->assertEquals(1, $members[2]['doneQuestionNum']);
+        $this->assertEquals(1, $members[2]['rightQuestionNum']);
+        $this->assertEquals(20.0, $members[2]['masteryRate']);
+        $this->assertEquals(20.0, $members[2]['completionRate']);
     }
 
     protected function getItemBankExerciseQuestionRecordDao()

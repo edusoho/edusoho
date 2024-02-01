@@ -1125,7 +1125,7 @@ class MemberServiceTest extends BaseTestCase
         $this->getMemberService()->becomeStudent(1, 1);
     }
 
-    public function testBecomeStudent_whenTeacherExist_thenReturnMember()
+    public function testBecomeStudentWhenTeacherExistThenReturnMember()
     {
         $this->mockBiz('Course:CourseService', [
             ['functionName' => 'getCourse', 'returnValue' => ['status' => 'published']],
@@ -1334,11 +1334,11 @@ class MemberServiceTest extends BaseTestCase
         ];
         $this->getMemberDao()->create($member);
 
-        $this->getMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], [0 => $user['id']], time() - 86400);
+        $this->getMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], [0 => $user['id']], $member['deadline'] - 86400);
         $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
         $this->assertEquals($member['deadline'], (int) $result['deadline']);
 
-        $this->getMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], [0 => $user['id']], time() + 86400);
+        $this->getMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], [0 => $user['id']], $member['deadline'] + 86400);
         $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
         $this->assertEquals($member['deadline'] + 24 * 60 * 60, $result['deadline']);
     }

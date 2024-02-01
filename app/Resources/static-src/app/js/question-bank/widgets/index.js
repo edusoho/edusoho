@@ -115,7 +115,8 @@ class QuestionSelect {
       let url = this.$questionBankSelector.data('url');
       url = url.replace(/[0-9]/, bankId);
       $.post(url, {isSelectBank:1}, function(html) {
-        $('#attachment-modal').html(html);
+        $('.tooltip').remove();
+        $('#attachment-modal').html(html)
       }).error(function(e) {
         cd.message({type: 'danger', message: e.responseJson.error.message});
       })

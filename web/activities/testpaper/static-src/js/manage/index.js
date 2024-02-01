@@ -524,13 +524,21 @@ class Testpaper {
   initScoreSlider() {
     let score = 0;
     if (this.$testpaperSelector.select2('data').score) {
-      score = this.$testpaperSelector.select2('data').score;
+      score = Number(this.$testpaperSelector.select2('data').score);
     } else {
-      score = $('#score-condition').data('score');
+      score = Number($('#score-condition').data('score'));
     }
     $('.js-score-total').text(score);
-    let passScore = Math.round(score * $('#score-condition').data('pass'));
-    score = parseInt(score);
+    let passScore = score * $('#score-condition').data('pass');
+
+
+    if (passScore % 1 != 0) {
+      passScore = Number(passScore.toFixed(1));
+    }
+
+    if (score % 1 != 0) {
+      score = Number(score.toFixed(1));
+    }
 
     let scoreSlider = document.getElementById('score-slider');
     let option = {
@@ -554,7 +562,13 @@ class Testpaper {
       let percentage = (rate * 100).toFixed(0);
       $('.noUi-tooltip').text(`${percentage}%`);
       $('.js-score-tooltip').css('left', `${percentage}%`);
-      $('.js-passScore').text(Math.round(percentage / 100 * score));
+      let jsPassScore = percentage / 100 * score
+
+      if (jsPassScore % 1 != 0) {
+        jsPassScore = Number(jsPassScore.toFixed(1));
+      }
+
+      $('.js-passScore').text(jsPassScore);
       $('#finishData').val(percentage / 100);
     });
 

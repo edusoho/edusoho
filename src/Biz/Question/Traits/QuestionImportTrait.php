@@ -53,15 +53,20 @@ trait QuestionImportTrait
 
     private function replaceFormulaToLocalImg($text)
     {
-        preg_match_all('/data-tex=\\\\"([^"]*)\\\\"/', html_entity_decode($text), $matches);
+        preg_match_all('/data-tex=\\\\"([^"]*)\\\\"/', $text, $matches);
         $formulas = $matches[1] ?? [];
         if (empty($formulas)) {
             return $text;
         }
+        foreach ($formulas as &$formula) {
+            $formula = html_entity_decode($formula, ENT_QUOTES);
+        }
         $unescapeFormulas = str_replace('\\\\', '\\', $formulas);
         $replaceImgs = array_combine($formulas, $this->convertFormulaToImg($unescapeFormulas));
         $replaceFunc = function ($match) use ($replaceImgs) {
-            return "<span$match[1] data-tex=\\\"$match[3]\\\"$match[4] data-img=\\\"{$replaceImgs[html_entity_decode($match[3])]}\\\"></span>";
+            $tex = str_replace('\\\ ', '', $match[3]);
+
+            return "<span$match[1] data-tex=\\\"$tex\\\"$match[4] data-img=\\\"{$replaceImgs[html_entity_decode($match[3], ENT_QUOTES)]}\\\"></span>";
         };
 
         return preg_replace_callback('/<span( data-display)?([^>]*?) data-tex=\\\\"(.*?)\\\\"( data-display)?(.*?)><\/span>/', $replaceFunc, $text);
@@ -70,7 +75,7 @@ trait QuestionImportTrait
     private function convertFormulaToImg(array $formulas)
     {
         $convertedFormulas = $this->getQuestionService()->findQuestionFormulaImgRecordsByFormulas($formulas);
-        $needConvertFormulas = array_values(array_diff($formulas, array_column($convertedFormulas, 'formula')));
+        $needConvertFormulas = array_values(array_unique(array_diff($formulas, array_column($convertedFormulas, 'formula'))));
         if ($needConvertFormulas) {
             $this->downloadFormulaImgToLocal($needConvertFormulas);
             $convertedFormulas = $this->getQuestionService()->findQuestionFormulaImgRecordsByFormulas($formulas);

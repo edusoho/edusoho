@@ -36,6 +36,31 @@ html.nav-active body {
     -o-transform: translate3d(250px, 0, 0);
     -moz-transform: translate3d(250px, 0, 0);
   }
+
+  .pc-course-list {
+    @media (max-width: @screen-xs-max) {
+      display: none !important;
+    }
+  }
+
+  .mobile-pagination-hide {
+    @media (max-width: @screen-xs-max) {
+      display: none !important;
+    }
+  }
+
+  .pc-es-filter {
+    @media (max-width: @screen-xs-max) {
+      display: none !important;
+    }
+  }
+
+  .mobile-category {
+    padding-bottom: 20px;
+    @media (min-width: @screen-sm-min) {
+      display: none !important;
+    }
+  }
 }
 
 .html-mask.active {
@@ -53,6 +78,10 @@ html.nav-active body {
 #content-container {
   margin: 30px auto;
   min-height: 400px;
+  @media (max-width: @screen-xs-max) {
+    min-height: 0 !important;
+    margin: 0 !important;
+  }
   .live-course-btn {
     padding: 6px 16px;
     color: @brand-primary !important;

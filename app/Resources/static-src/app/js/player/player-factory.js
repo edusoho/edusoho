@@ -1,4 +1,3 @@
-import LocalVideoPlayer from './local-video-player';
 import BalloonVideoPlayer from './balloon-cloud-video-player';
 import AudioPlayer from './audio-player';
 
