@@ -77,26 +77,29 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
     {
         $activity = $this->getActivityService()->getActivity($activityId, true);
         $course = $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
-        $cloudStatisticData = $activity['ext']['cloudStatisticData'];
         if (empty($activity['ext']['liveId'])) {
             LiveActivityException::NOTFOUND_LIVE();
         }
+        $cloudStatisticData = $activity['ext']['cloudStatisticData'];
+        $data = [
+            'teacherId' => empty($activity['ext']['anchorId']) ? (empty($course['teacherIds']) ? 0 : $course['teacherIds'][0]) : $activity['ext']['anchorId'],
+            'startTime' => empty($activity['ext']['liveStartTime']) ? $activity['startTime'] : $activity['ext']['liveStartTime'],
+            'endTime' => empty($activity['ext']['liveEndTime']) ? $activity['endTime'] : $activity['ext']['liveEndTime'],
+            'length' => $this->calculateLiveLength($activity['ext']),
+        ];
+        $cloudStatisticData = array_merge($cloudStatisticData, $data);
         //频次控制， 直播未结束 允许最多3分钟请求云平台
         if (!empty($cloudStatisticData['requestTime']) && time() - $cloudStatisticData['requestTime'] < 180) {
             return $cloudStatisticData;
         }
         //频次控制， 直播已结束允许最多30分钟请求云平台
         if (($activity['ext']['liveEndTime'] < time() || LiveStatus::CLOSED == $activity['ext']['progressStatus']) && !empty($cloudStatisticData['requestTime']) && time() - $cloudStatisticData['requestTime'] < 1800) {
-            return $cloudStatisticData;
+            if (!empty($cloudStatisticData['maxOnlineNumber'])) {
+                return $cloudStatisticData;
+            }
         }
 
-        $data = [
-            'teacherId' => empty($activity['ext']['anchorId']) ? (empty($course['teacherIds']) ? 0 : $course['teacherIds'][0]) : $activity['ext']['anchorId'],
-            'startTime' => empty($activity['ext']['liveStartTime']) ? $activity['startTime'] : $activity['ext']['liveStartTime'],
-            'endTime' => empty($activity['ext']['liveEndTime']) ? $activity['endTime'] : $activity['ext']['liveEndTime'],
-            'length' => empty($activity['ext']['liveEndTime']) ? $activity['length'] : round(($activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime']) / 60, 1),
-            'requestTime' => time(),
-        ];
+        $data['requestTime'] = time();
         if ($this->getLiveService()->isESLive($activity['ext']['liveProvider'])) {
             $this->getESLiveStatistics($activity, $data);
         } else {
@@ -118,7 +121,9 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         }
         //频次控制， 直播已结束且未超过24小时 允许最多30分钟请求云平台
         if (($activity['ext']['liveEndTime'] < time() || LiveStatus::CLOSED == $activity['ext']['progressStatus']) && !empty($cloudStatisticData['memberRequestTime']) && time() - $cloudStatisticData['memberRequestTime'] < 1800) {
-            return;
+            if (!empty($cloudStatisticData['maxOnlineNumber'])) {
+                return;
+            }
         }
         if ($this->getLiveService()->isESLive($activity['ext']['liveProvider'])) {
             $this->syncESLiveMemberStatistics($activity);
@@ -340,6 +345,18 @@ class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudSta
         $data['endTime'] = empty($cloudData['actualEndTime']) ? $data['endTime'] : $cloudData['actualEndTime'];
         $data['maxOnlineNumber'] = empty($cloudData['maxOnlineNum']) ? 0 : $cloudData['maxOnlineNum'];
         $data['checkinNum'] = empty($liveBatch) ? 0 : count($liveBatch);
+    }
+
+    private function calculateLiveLength($liveActivity)
+    {
+        if (LiveStatus::CREATED == $liveActivity['progressStatus']) {
+            return 0;
+        }
+        if (LiveStatus::LIVING == $liveActivity['progressStatus']) {
+            return round((time() - $liveActivity['liveStartTime']) / 60, 1);
+        }
+
+        return round(($liveActivity['liveEndTime'] - $liveActivity['liveStartTime']) / 60, 1);
     }
 
     /**

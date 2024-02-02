@@ -5,10 +5,12 @@ namespace ApiBundle\Api\Resource\LiveStatistic;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\DateToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Live\LiveStatisticsException;
+use Biz\Live\Service\LiveService;
 use Biz\Live\Service\LiveStatisticsService;
 use Biz\LiveStatistics\Service\Impl\LiveCloudStatisticsServiceImpl;
 use Biz\Task\Service\TaskService;
@@ -43,24 +45,28 @@ class LiveStatisticDetail extends AbstractResource
         $result['teacher'] = $user['nickname'];
 
         $members = $this->getMemberService()->searchMembers(['courseId' => $activity['fromCourseId']], [], 0, PHP_INT_MAX, ['userId']);
-        $userIds = ArrayToolkit::column($members, 'userId');
-        $userIds = array_diff($userIds, [$result['teacherId']]);
+        $userIds = array_diff(array_column($members, 'userId'), [$result['teacherId']]);
         $data = [
-              'startTime' => $activity['startTime'],
-              'endTime' => $activity['endTime'],
-              'length' => round(($activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime']) / 60, 1),
-              'chatNumber' => $this->getLiveStatisticsService()->sumChatNumByLiveId($activity['ext']['liveId'], $userIds),
-              'memberNumber' => empty($userIds) ? 0 : $this->getLiveStatisticsService()->countLiveMembers(['liveId' => $activity['ext']['liveId'], 'userIds' => $userIds]),
-              'avgWatchTime' => empty($userIds) ? 0 : $this->getLiveStatisticsService()->getAvgWatchDurationByLiveId($activity['ext']['liveId'], $userIds),
-       ];
+            'startTime' => $result['startTime'],
+            'endTime' => $result['endTime'],
+            'length' => $result['length'],
+            'chatNumber' => $this->getLiveStatisticsService()->sumChatNumByLiveId($activity['ext']['liveId'], $userIds),
+            'memberNumber' => empty($userIds) ? 0 : $this->getLiveStatisticsService()->countLiveMembers(['liveId' => $activity['ext']['liveId'], 'userIds' => $userIds]),
+            'avgWatchTime' => empty($userIds) ? 0 : $this->getLiveStatisticsService()->getAvgWatchDurationByLiveId($activity['ext']['liveId'], $userIds),
+        ];
 
         return array_merge($result, $data);
     }
 
     public function processJsonData($activity)
     {
-        if ($activity['endTime'] > time() || date('Y-m-d', time()) == date('Y-m-d', $activity['endTime'])) {
+        if ($activity['startTime'] > time()) {
             return;
+        }
+        if ($activity['endTime'] > time() || DateToolkit::isToday($activity['endTime'])) {
+            if (!$this->getLiveService()->isProviderStatisticInRealTime($activity['ext']['liveProvider'])) {
+                return;
+            }
         }
         try {
             $checkin = $this->getLiveStatisticsRollService()->updateCheckinStatistics($activity['ext']['liveId']);
@@ -123,5 +129,13 @@ class LiveStatisticDetail extends AbstractResource
     protected function getMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return LiveService
+     */
+    private function getLiveService()
+    {
+        return $this->service('Live:LiveService');
     }
 }
