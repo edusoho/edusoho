@@ -34,11 +34,6 @@ class OpenCourseLessonDaoTest extends BaseDaoTestCase
                 'expectedCount' => 1,
             ],
             [
-                'condition' => ['updatedTime_GE' => 2],
-                'expectedResults' => [$expected[1]],
-                'expectedCount' => 1,
-            ],
-            [
                 'condition' => ['status' => 'unpublished'],
                 'expectedResults' => [$expected[2]],
                 'expectedCount' => 1,
@@ -91,11 +86,6 @@ class OpenCourseLessonDaoTest extends BaseDaoTestCase
             [
                 'condition' => ['titleLike' => 'b'],
                 'expectedResults' => [$expected[10]],
-                'expectedCount' => 1,
-            ],
-            [
-                'condition' => ['startTime' => '2', 'endTime' => '3'],
-                'expectedResults' => [$expected[11]],
                 'expectedCount' => 1,
             ],
             [

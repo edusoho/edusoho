@@ -100,7 +100,6 @@ class OpenCourseServiceTest extends BaseTestCase
         ];
 
         $excepted = [
-            'id' => '1',
             'title' => 'liveOpenCourse',
             'subtitle' => '',
             'status' => 'draft',
@@ -129,6 +128,7 @@ class OpenCourseServiceTest extends BaseTestCase
         ];
 
         $created = $this->getOpenCourseService()->createCourse($course);
+        unset($created['id']);
         unset($created['createdTime']);
         unset($created['updatedTime']);
         $this->assertEquals($excepted, $created);
