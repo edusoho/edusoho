@@ -163,7 +163,7 @@ import redirectMixin from '@/mixins/saveRedirect';
 import copyUrl from '@/mixins/copyUrl';
 import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
-import { Toast } from 'vant';
+import { Toast, Dialog } from 'vant';
 import Api from '@/api';
 import { closedToast } from '@/utils/on-status.js';
 
@@ -200,7 +200,12 @@ export default {
   data() {
     return {
       currentTask: '',
-      getAgainCourse: {}
+      getAgainCourse: {},
+      CONFIG: {
+        android: 'https://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.zhixiang',
+        ios: 'https://apps.apple.com/cn/app/知享学堂/id887301045',
+        scheme: 'com.qdxxzy.user://'
+      }
     };
   },
   watch: {
@@ -214,6 +219,9 @@ export default {
       details: state => state.details,
       joinStatus: state => state.joinStatus,
       selectedPlanId: state => state.selectedPlanId,
+    }),
+    ...mapState({
+      isOnlyApp: state => state.courseSettings?.only_learning_on_APP
     }),
     hasLesson() {
       return this.lesson.length > 0;
@@ -296,11 +304,100 @@ export default {
         this.getAgainCourse = res;
       })
     },
+    // 判断手机类型
+    judgePhoneType() {
+        let isAndroid = false, isIOS = false, isIOS9 = false, version,
+            u = navigator.userAgent,
+            ua = u.toLowerCase();
+        //Android系统
+        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {   //android终端或者uc浏览器
+            isAndroid = true
+        }
+        //ios
+        if (ua.indexOf("like mac os x") > 0) {
+            let regStr_saf = /os [\d._]*/gi;
+            let verinfo = ua.match(regStr_saf);
+            version = (verinfo + "").replace(/[^0-9|_.]/ig, "").replace(/_/ig, ".");
+        }
+        let version_str = version + "";
+        // ios9以上
+        if (version_str !== "undefined" && version_str.length > 0) {
+            version = parseInt(version);
+            if (version >= 8) {
+                isIOS9 = true
+            } else {
+                isIOS = true
+            }
+        }
+        return {isAndroid, isIOS, isIOS9};
+    },
+    // 判断是否在微信中
+    isWeiXin() {
+        return /micromessenger/i.test(navigator.userAgent.toLowerCase()) || typeof navigator.wxuserAgent !== 'undefined'
+    },
+    goConfirmAddr() {
+        let { isAndroid } = this.judgePhoneType();
+        window.location.href =  !isAndroid  ? this.CONFIG.ios : this.CONFIG.android ;
+    },
+    openApp(url, callback={}) {
+        let {isAndroid, isIOS, isIOS9} = this.judgePhoneType();
+        console.log(isAndroid, isIOS, isIOS9);
+        if(this.isWeiXin()){
+            alert("请您在浏览器中打开,即可下载") ;
+            return ;
+        }
+
+        if (isAndroid || isIOS) {
+            let hasApp = true, t = 1000,
+                t1 = Date.now(),
+                ifr = document.createElement("iframe");
+            setTimeout(function () {
+                if (!hasApp) {
+                    callback && callback()
+                }
+                document.body.removeChild(ifr);
+            }, 2000);
+
+            ifr.setAttribute('src', url);
+            ifr.setAttribute('style', 'display:none');
+            document.body.appendChild(ifr);
+
+            setTimeout(function () { //启动app时间较长处理
+                let t2 = Date.now();
+                if (t2 - t1 < t + 100) {
+                    hasApp = false;
+                }
+            }, t);
+        }
+        if (isIOS9) {
+            //  window.location.href = url;
+            setTimeout(function () {
+                callback && callback()
+            }, 250);
+            setTimeout(function () {
+            //  window.location.reload();
+            }, 1000);
+        }
+    },
     async lessonCellClick(task, lessonIndex, taskIndex) {
+      const onlyAppType = ['video', 'audio', 'live']
       await this.getCourse()
 
       if(!this.isCanLearn(task)) {
         return closedToast('course');
+      }
+
+      if(Number(this.isOnlyApp) && onlyAppType.includes(task.type)) {
+        Dialog.confirm({
+          message: '将为您跳转至App进行学习',
+          confirmButtonText: '继续',
+          className: 'only-app-dialog'
+        }).then(() => {
+          this.openApp('com.edusoho.zhixiang://', this.goConfirmAddr())
+        }).catch(() => {
+          // on cancel
+        });
+        return;
       }
 
       this.$store.commit(types.SET_TASK_SATUS, '');
@@ -567,3 +664,5 @@ export default {
   },
 };
 </script>
+<style scoped>
+</style>

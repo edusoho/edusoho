@@ -92,7 +92,7 @@ export default {
       OptimizationCourseLessons: state => state.OptimizationCourseLessons,
       details: state => state.details,
       // allTask: state => state.allTask,
-      taskStatus: state => state.taskStatus,
+      taskStatus: state => state.taskStatus
     }),
     hasChapter: function() {
       return this.chapterNum > 0;
