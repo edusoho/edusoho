@@ -20,7 +20,6 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\Impl\TagServiceImpl;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -938,14 +937,6 @@ class CourseSetController extends BaseController
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**

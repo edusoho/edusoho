@@ -204,11 +204,6 @@ class HomeworkController extends BaseController
         return $homeworkResults;
     }
 
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
-    }
-
     /**
      * @return CourseService
      */

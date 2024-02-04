@@ -2637,10 +2637,6 @@ course_manage_testpaper_result_graph:
     path: '/course/{id}/activity/{activityId}/testpaper/graph'
     defaults:
         _controller: 'AppBundle:Course/TestpaperManage:resultGraph'
-testpaper_check:
-    path: '/testpaper/{resultId}/check'
-    defaults:
-        _controller: 'AppBundle:Course/TestpaperManage:checkForword'
 course_manage_testpaper_check_list:
     path: '/course/{id}/manage/testpaper/check'
     defaults:
@@ -2717,10 +2713,6 @@ homework_start_do:
     path: '/lesson/{lessonId}/homework/{homeworkId}/startDo'
     defaults:
         _controller: 'AppBundle:Homework:startDo'
-homework_show:
-    path: '/homework/{resultId}/show'
-    defaults:
-        _controller: 'AppBundle:Homework:doTest'
 homework_result_show:
     path: '/homework/result/{answerRecordId}/show'
     defaults:

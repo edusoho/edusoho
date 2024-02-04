@@ -30,7 +30,6 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Pay\Service\PayService;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
@@ -1070,55 +1069,6 @@ class CourseManageController extends BaseController
         );
     }
 
-    public function taskLearnDetailAction(Request $request, $courseSetId, $courseId, $taskId)
-    {
-        $students = [];
-        $task = $this->getTaskService()->getTask($taskId);
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
-
-        $count = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($taskId, 'all');
-        $paginator = new Paginator($request, $count, 20);
-
-        $results = $this->getTaskResultService()->searchTaskResults(
-            ['courseId' => $courseId, 'activityId' => $task['activityId']],
-            ['createdTime' => 'ASC'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        foreach ($results as $key => $result) {
-            $user = $this->getUserService()->getUser($result['userId']);
-            $students[$key]['nickname'] = $user['nickname'];
-            $students[$key]['startTime'] = $result['createdTime'];
-            $students[$key]['finishedTime'] = $result['finishedTime'];
-            $students[$key]['learnTime'] = round($result['time'] / 60);
-            $students[$key]['watchTime'] = round($result['watchTime'] / 60);
-
-            if ('testpaper' == $activity['mediaType']) {
-                $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-                $paperResult = $this->getTestpaperService()->getUserFinishedResult(
-                    $testpaperActivity['mediaId'],
-                    $courseId,
-                    $activity['id'],
-                    'testpaper',
-                    $user['id']
-                );
-                $students[$key]['result'] = empty($paperResult) ? 0 : $paperResult['score'];
-            }
-        }
-
-        $task['length'] = intval($activity['length']);
-
-        return $this->render(
-            'course-manage/dashboard/task-detail-modal.html.twig',
-            [
-                'task' => $task,
-                'paginator' => $paginator,
-                'students' => $students,
-            ]
-        );
-    }
-
     public function questionMarkerStatsAction(Request $request, $courseSetId, $courseId)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
@@ -1293,14 +1243,6 @@ class CourseManageController extends BaseController
     }
 
     /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
-    }
-
-    /**
      * @return UploadFileService
      */
     protected function getUploadFileService()
@@ -1322,11 +1264,6 @@ class CourseManageController extends BaseController
     protected function getLiveReplayService()
     {
         return $this->createService('Course:LiveReplayService');
-    }
-
-    protected function getTestpaperActivityService()
-    {
-        return $this->createService('Activity:TestpaperActivityService');
     }
 
     /**

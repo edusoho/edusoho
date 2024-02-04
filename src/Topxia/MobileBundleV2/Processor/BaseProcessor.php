@@ -18,7 +18,6 @@ use Biz\System\Service\H5SettingService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\MessageService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\TokenService;

@@ -15,7 +15,6 @@ use Biz\Course\Service\ThreadService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Service\TryViewLogService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 
 class ReportServiceImpl extends BaseService implements ReportService
@@ -403,14 +402,6 @@ class ReportServiceImpl extends BaseService implements ReportService
     protected function getTaskTryViewService()
     {
         return $this->createService('Task:TryViewLogService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**
