@@ -2332,12 +2332,6 @@ admin_v2_setting_login_bind:
     path: '/setting/login-connect'
     defaults:
         _controller: 'AppBundle:AdminV2/System/UserSetting:loginConnect'
-admin_v2_setting_admin_sync:
-    path: '/setting/admin_sync'
-    defaults:
-        _controller: 'AppBundle:AdminV2/System/Setting:adminSync'
-    permissions:
-        - admin_v2_setting_user_center
 admin_v2_setting_user_fields:
     path: '/setting/user-fields'
     defaults:
@@ -2372,10 +2366,6 @@ admin_v2_setting_default_avatar_crop:
         _controller: 'AppBundle:AdminV2/System/SystemDefaultSetting:defaultAvatarCrop'
     permissions:
         - admin_v2_setting_avatar
-admin_v2_setting_user_center:
-    path: '/setting/user-center'
-    defaults:
-        _controller: 'AppBundle:AdminV2/System/UserSetting:userCenter'
 admin_v2_setting_wechat_auth:
     path: '/wechat/auth/setting'
     defaults:
@@ -2698,12 +2688,6 @@ admin_v2_report_status_directory:
     path: '/reports/status/directory'
     defaults:
         _controller: 'AppBundle:AdminV2/System/System:checkDir'
-    permissions:
-        - admin_v2_report_status_list
-admin_v2_report_status_ucenter:
-    path: '/reports/status/ucenter'
-    defaults:
-        _controller: 'AppBundle:AdminV2/System/System:ucenter'
     permissions:
         - admin_v2_report_status_list
 admin_v2_report_status_email_send:

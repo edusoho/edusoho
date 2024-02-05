@@ -1023,10 +1023,6 @@ admin_themes_config_edit:
         _controller: 'AppBundle:Admin/Theme:themeConfigEdit'
     permissions:
         - admin_setting_theme
-admin_setting_user_center:
-    path: '/setting/user-center'
-    defaults:
-        _controller: 'AppBundle:Admin/UserSetting:userCenter'
 admin_setting_avatar:
     path: '/setting/user-avatar'
     defaults:
@@ -1097,12 +1093,6 @@ admin_setting_consult_webchat_delete:
         - POST
     permissions:
         - admin_setting_consult_setting
-admin_setting_admin_sync:
-    path: '/setting/admin_sync'
-    defaults:
-        _controller: 'AppBundle:Admin/Setting:adminSync'
-    permissions:
-        - admin_setting_user_center
 admin_setting_developer:
     path: '/setting/developer'
     defaults:
@@ -2352,12 +2342,6 @@ admin_report_status_directory:
     path: '/reports/status/directory'
     defaults:
         _controller: 'AppBundle:Admin/System:checkDir'
-    permissions:
-        - admin_report_status_list
-admin_report_status_ucenter:
-    path: '/reports/status/ucenter'
-    defaults:
-        _controller: 'AppBundle:Admin/System:ucenter'
     permissions:
         - admin_report_status_list
 admin_report_status_email_send:

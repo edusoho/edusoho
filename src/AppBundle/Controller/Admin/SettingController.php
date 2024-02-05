@@ -655,51 +655,6 @@ class SettingController extends BaseController
         return $this->render('admin/system/questions-setting.html.twig');
     }
 
-    public function adminSyncAction(Request $request)
-    {
-        $currentUser = $this->getUser();
-        $setting = $this->getSettingService()->get('user_partner', []);
-
-        if (empty($setting['mode']) || !in_array($setting['mode'], ['phpwind', 'discuz'])) {
-            return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员帐号！');
-        }
-
-        $bind = $this->getUserService()->getUserBindByTypeAndUserId($setting['mode'], $currentUser['id']);
-
-        if ($bind) {
-            goto response;
-        } else {
-            $bind = null;
-        }
-
-        if ('POST' === $request->getMethod()) {
-            $data = $request->request->all();
-            $partnerUser = $this->getAuthService()->checkPartnerLoginByNickname($data['nickname'], $data['password']);
-
-            if (empty($partnerUser)) {
-                $this->setFlashMessage('danger', 'site.incorrect.username_or_password');
-                goto response;
-            } else {
-                $this->getUserService()->changeEmail($currentUser['id'], $partnerUser['email']);
-                $this->getUserService()->changeNickname($currentUser['id'], $partnerUser['nickname']);
-                $this->getUserService()->changePassword($currentUser['id'], $data['password']);
-                $this->getUserService()->bindUser($setting['mode'], $partnerUser['id'], $currentUser['id'], null);
-                $user = $this->getUserService()->getUser($currentUser['id']);
-                $this->authenticateUser($user);
-
-                $this->setFlashMessage('success', 'site.save.success');
-
-                return $this->redirect($this->generateUrl('admin_setting_user_center'));
-            }
-        }
-
-        response:
-        return $this->render('admin/system/admin-sync.html.twig', [
-            'mode' => $setting['mode'],
-            'bind' => $bind,
-        ]);
-    }
-
     public function performanceAction(Request $request)
     {
         if ('POST' === $request->getMethod()) {

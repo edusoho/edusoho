@@ -6422,8 +6422,6 @@ admin.operation_analysis.register.web_mobile: 网站手机注册
 admin.operation_analysis.register.web_email: 网站邮箱注册
 admin.operation_analysis.register.weibo: 新浪微博
 admin.operation_analysis.register.qq: QQ
-admin.operation_analysis.register.discuz: discuz
-admin.operation_analysis.register.phpwind: phpwind
 admin.operation_analysis.register.weixin: 微信
 admin.operation_analysis.register.import: 手动导入
 admin.operation_analysis.register.other: 其他
@@ -7866,21 +7864,6 @@ admin.login_connect.verifcation_loging_interface: 登录接口验证代码
 admin.login_connect.verifcation_code: 验证代码
 admin.login_connect.verifcation_code.help_block: 在申请第三方登录接口时，会要求验证您的网站域名。请把相关验证代码粘到此处，然后提交保存。
 admin.user_center.admin_sync_btn: 管理员帐号同步
-admin.user_center.user_center.title: 用户中心
-admin.user_center.user_center.help_block: 支持Discuz X2.5/X3.0/X3.1/X3.2的用户中心
-admin.user_center.user_center.uc_connect.help_block: 提示：由于discuz使用mysql_connect连接，高版本php已废弃，建议不要填写mysql，留空即可
-admin.user_center.user_center.config_error: '配置文件%path%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。'
-admin.user_center.Configration: 配置
-admin.user_center.Configration.help_block: 如何配置？
-admin.user_center.WindId_Configration: WindId配置
-admin.user_center.WindId_Configration.help_block: 如使用phpwind (WindID)的用户中心，请填写此项配置。
-admin.user_center.filtr_email_list: 过滤邮箱地址清单
-admin.user_center.filtr_email_list.help_block: 每行输入一个邮箱地址。名单中的邮箱地址如果出现在第三方登录的过程中，则会给该用户随机生成一个邮箱
-admin.user_center.tips: >
-  <p>1.若通讯失败，注册和登录将提示<strong class="user-center-copys-darken">输入不合法</strong>或通讯失败需管理员配置。</p>
-  <p>2.通讯成功，Discuz<strong class="user-center-copys-darken">所有注册用户</strong>，用户的用户名（需满足ES注册规则，否则无法同步）、密码、邮箱信息，无论通讯前还是通讯后注册都可以登录并同步到网站。</p>
-  <p>3.通讯成功，只有<strong class="user-center-copys-darken">通讯之后</strong>在ES注册的新用户，<strong class="user-center-copys-darken">才能</strong>登录并同步到Discuz，<strong class="user-center-copys-darken">通讯之前</strong>的注册用户，<strong class="user-center-copys-darken">不能</strong>登录和同步。</p>
-  <p>4.由于<strong class="user-center-copys-darken">密码加密机制</strong>不同，Discuz的注册用户，无法批量导入到网站；网站的注册用户，也无法批量导入到Discuz。</p>
 admin.user_fields.add_field_btn: 添加字段
 admin.user_fields.customer_fields_setting: 自定义字段设置
 admin.user_fields.fields_title: 字段名称
@@ -8203,7 +8186,6 @@ admin.magic_setting.export_limit: 订单单次导出数量
 admin.magic_setting.export_allow_count: 订单导出允许的最大数量
 admin.magic_setting.enable_org: 是否开启组织机构
 admin.magic_setting.quick_pay: 是否显示快捷支付
-admin.magic_setting.uc_phpwind: 是否开启phpwind设置
 admin.magic_setting.login_limit: 帐号同时登录下线设置
 admin.magic_setting.file_single_size_limit: 单个文件设置上传大小
 admin.magic_setting.file_single_size_limit_tip: M为单位，目前仅用于富文本文件上传
@@ -8391,7 +8373,6 @@ admin.reports_status.php__curl_extend_tips: 该扩展用于远程读取文件
 admin.reports_status.php__gd_extend_tips: 该扩展用于处理图片
 admin.reports_status.system_communication: 通信情况
 admin.reports_status.system_status: 状态
-admin.reports_status.system_communication_with_discuz: 与Discuz Ucenter的连接
 admin.reports_status.system_checking: 正在检测.....
 admin.reports_status.system_email_send: 邮件发送
 admin.reports_status.system_email_send_detection: 立即检测
@@ -10700,7 +10681,6 @@ exception.article.category_code_invalid: 编码含有非法字符，保存栏目
 exception.article.category_numeric_code: 编码不能全为数字，保存栏目失败
 exception.user.unlogin: 未登陆，请登陆后操作!
 exception.user.message_forbidden: 不支持向该用户发送私信!
-exception.user.discuz_user_reset_password: 请通过论坛找回密码！
 exception.user.not_found: 找不到该用户！
 exception.form.expire: 页面已过期，请重新提交数据！
 exception.form..drag.expire: 验证码已过期，请刷新页面重新提交！

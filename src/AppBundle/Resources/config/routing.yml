@@ -958,14 +958,6 @@ partner_logout:
     path: '/partner/logout'
     defaults:
         _controller: 'AppBundle:Partner:logout'
-partner_discuz_notify:
-    path: '/partner/discuz/api/notify'
-    defaults:
-        _controller: 'AppBundle:PartnerDiscuz:notify'
-partner_phpwind_notify:
-    path: '/partner/phpwind/api/notify'
-    defaults:
-        _controller: 'AppBundle:PartnerPhpwind:notify'
 cloud_set_server:
     path: '/cloud/set-server'
     defaults:

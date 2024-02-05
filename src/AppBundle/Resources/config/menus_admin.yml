@@ -971,8 +971,6 @@ admin:
                             router_name: admin_setting_auth
                         admin_setting_login_bind:
                             name: admin.system.user.login_bind_tab
-                        admin_setting_user_center:
-                            name: admin.system.user.user_center_tab
                         admin_setting_user_fields:
                             name: admin.system.user.user_fields_tab
                         admin_setting_avatar:
