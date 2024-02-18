@@ -53,7 +53,7 @@ CKEDITOR.dialog.add("uploadpictures", function(editor) {
         );
       } else if (errorCode == "F_EXCEED_SIZE") {
         alert(
-          "单个包大小不能超过：" + filesize(uploader.get("fileSingleSizeLimit"))
+          "单个文件大小不能超过：" + filesize(uploader.options.fileSingleSizeLimit)
         );
       }
     });
