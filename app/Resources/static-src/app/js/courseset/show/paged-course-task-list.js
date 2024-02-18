@@ -58,10 +58,8 @@ export default class PagedCourseTaskList extends PagedCourseLesson {
         $this.attr('data-toggle', 'modal');
 
         $('#modal').load('/course/task/downloadAppShowAction', () => {
-          // 在这里写你的回调函数内容
           console.log('Load completed');
-          Qrcode.toCanvas($('.js-download-app-qrcode')[0], '123', { width: 174, quality: 1, margin: 0 })
-          // 或者执行其他操作...
+          // Qrcode.toCanvas($('.js-download-app-qrcode')[0], `/mapi_v2/School/getDownloadUrl?from=qrcode&code=zhixiang`, { width: 174, quality: 1, margin: 0 })
         });
         $('#modal').modal('show');
       });
