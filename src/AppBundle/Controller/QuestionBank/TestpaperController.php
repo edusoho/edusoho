@@ -148,7 +148,6 @@ class TestpaperController extends BaseController
         }
 
         return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', [
-            'types' => $this->getQuestionTypes(),
             'questionBank' => $questionBank,
             'showBaseInfo' => '1',
         ]);
@@ -622,7 +621,6 @@ class TestpaperController extends BaseController
             $types[$type] = [
                 'name' => $typeConfig['name'],
                 'hasMissScore' => $typeConfig['hasMissScore'],
-                'seqNum' => $typeConfig['seqNum'],
             ];
         }
 
