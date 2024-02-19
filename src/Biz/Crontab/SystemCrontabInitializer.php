@@ -89,9 +89,7 @@ class SystemCrontabInitializer
 
     private static function registerDefaultJobs()
     {
-        $xapiRandNum1 = rand(1, 59);
-        $xapiRandNum2 = rand(1, 59);
-        $xapiRandNum3 = rand(1, 59);
+        $randNum1 = rand(1, 59);
         $consultRandNum = rand(1, 59);
         $consultHourRandNum = rand(0, 6);
         $convertStatusRandNum = rand(0, 15);
@@ -129,22 +127,6 @@ class SystemCrontabInitializer
             'UpdateInviteRecordOrderInfoJob' => [
                 'expression' => '0 * * * *',
                 'class' => 'Biz\User\Job\UpdateInviteRecordOrderInfoJob',
-            ],
-            'Xapi_PushStatementsJob' => [
-                'expression' => "{$xapiRandNum1} 1-6 * * *",
-                'class' => 'Biz\Xapi\Job\PushStatementJob',
-            ],
-            'Xapi_AddActivityWatchToStatementJob' => [
-                'expression' => "{$xapiRandNum2} 1-6 * * *",
-                'class' => 'Biz\Xapi\Job\AddActivityWatchToStatementJob',
-            ],
-            'Xapi_ArchiveStatementJob' => [
-                'expression' => "{$xapiRandNum3} 1-6 * * *",
-                'class' => 'Biz\Xapi\Job\ArchiveStatementJob',
-            ],
-            'Xapi_ConvertStatementsJob' => [
-                'expression' => '*/10 1-6 * * *',
-                'class' => 'Biz\Xapi\Job\ConvertStatementJob',
             ],
             'SyncUserTotalLearnStatisticsJob' => [
                 'expression' => '*/3 1-6 * * *',
@@ -204,11 +186,11 @@ class SystemCrontabInitializer
                 'class' => 'Biz\WeChat\Job\WechatSubscribeRecordSynJob',
             ],
             'DaySyncLiveDataJob' => [
-                'expression' => "{$xapiRandNum1} 5 * * *",
+                'expression' => "{$randNum1} 5 * * *",
                 'class' => 'Biz\LiveStatistics\Job\DaySyncLiveDataJob',
             ],
             'DeleteDevLockJob' => [
-                'expression' => "0 2 * * *",
+                'expression' => '0 2 * * *',
                 'class' => 'Biz\System\Job\DeleteDevLockJob',
             ],
 //            'StatisticsPageStayDailyDataJob' => [

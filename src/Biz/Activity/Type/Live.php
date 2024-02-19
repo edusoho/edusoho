@@ -14,7 +14,6 @@ class Live extends Activity
     protected function registerListeners()
     {
         return [
-            'watching' => 'Biz\Activity\Listener\LiveActivityWatchListener',
         ];
     }
 

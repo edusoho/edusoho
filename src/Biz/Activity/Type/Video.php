@@ -17,7 +17,7 @@ class Video extends Activity
 {
     protected function registerListeners()
     {
-        return ['watching' => 'Biz\Activity\Listener\VideoActivityWatchListener'];
+        return [];
     }
 
     /**
