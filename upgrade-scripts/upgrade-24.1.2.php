@@ -26,15 +26,6 @@ class EduSohoUpgrade extends AbstractUpdater
             throw $e;
         }
 
-        try {
-            $dir = realpath($this->biz['kernel.root_dir'] . '/../web/install');
-            $filesystem = new Filesystem();
-            if (!empty($dir)) {
-                $filesystem->remove($dir);
-            }
-        } catch (\Exception $e) {
-            $this->logger('error', $e->getTraceAsString());
-        }
         $developerSetting = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
         $this->getSettingService()->set('developer', $developerSetting);
@@ -45,8 +36,9 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = [
             'alterTableCourseChapterAddIndex',
-            'deleteUpdateLiveStatusJob',
+            'deleteUselessJob',
             'registerFixNotSyncTaskJob',
+            'fixLiveProgressStatus',
         ];
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -91,10 +83,22 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    protected function deleteUpdateLiveStatusJob()
+    protected function deleteUselessJob()
     {
         $this->getSchedulerService()->deleteJobByName('UpdateLiveStatusJob');
         $this->logger('info', 'UpdateLiveStatusJob删除成功');
+
+        $this->getSchedulerService()->deleteJobByName('Xapi_PushStatementsJob');
+        $this->logger('info', 'Xapi_PushStatementsJob删除成功');
+
+        $this->getSchedulerService()->deleteJobByName('Xapi_AddActivityWatchToStatementJob');
+        $this->logger('info', 'Xapi_AddActivityWatchToStatementJob删除成功');
+
+        $this->getSchedulerService()->deleteJobByName('Xapi_ArchiveStatementJob');
+        $this->logger('info', 'Xapi_ArchiveStatementJob删除成功');
+
+        $this->getSchedulerService()->deleteJobByName('Xapi_ConvertStatementsJob');
+        $this->logger('info', 'Xapi_ConvertStatementsJob删除成功');
 
         return 1;
     }
@@ -113,6 +117,15 @@ class EduSohoUpgrade extends AbstractUpdater
             ]);
         }
         $this->logger('info', 'FixNotSyncTaskJob注册成功');
+
+        return 1;
+    }
+
+    protected function fixLiveProgressStatus()
+    {
+        $time = time() - 3600;
+        $this->getConnection()->exec("UPDATE `activity_live` SET `progressStatus`='closed' WHERE `progressStatus`='created' AND `liveEndTime`!=0 AND `liveEndTime`<{$time}");
+        $this->logger('info', '直播状态修改成功');
 
         return 1;
     }
