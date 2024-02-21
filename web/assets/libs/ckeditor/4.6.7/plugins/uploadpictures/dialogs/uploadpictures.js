@@ -49,7 +49,7 @@ CKEDITOR.dialog.add("uploadpictures", function(editor) {
     uploader.on("error", function(errorCode) {
       if (errorCode == "Q_TYPE_DENIED") {
         alert(
-          "文件类型只支持：" + uploader.get("accept")["extensions"].join(",")
+          "文件类型只支持：" + uploader.option("accept")[0]["extensions"]
         );
       } else if (errorCode == "F_EXCEED_SIZE") {
         alert(
