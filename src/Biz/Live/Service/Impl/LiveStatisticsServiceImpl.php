@@ -36,6 +36,9 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
         if (empty($exist)) {
             return $this->createLiveCheckinStatistics($liveId);
         }
+        if (time() - $exist['updatedTime'] < 180) {
+            return $exist;
+        }
 
         $statistics = $this->generateStatisticsByLiveIdAndType($liveId, self::STATISTICS_TYPE_CHECKIN);
 
@@ -45,6 +48,9 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
     public function updateVisitorStatistics($liveId)
     {
         $exist = $this->getVisitorStatisticsByLiveId($liveId);
+        if (!empty($exist) && (time() - $exist['updatedTime'] < 180)) {
+            return $exist;
+        }
 
         if (empty($exist)) {
             $exist = $this->createLiveVisitorStatistics($liveId);

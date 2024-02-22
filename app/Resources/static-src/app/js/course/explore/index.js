@@ -13,9 +13,11 @@ Vue.filter('trans', function (value, params) {
   return Translator.trans(value, params);
 });
 
-new Vue({
-  render: createElement => createElement(MobileCourse)
-}).$mount('#app');
+if($('[name="isWeixin"]').val() || $('[name="isMobile"]').val()) {
+  new Vue({
+    render: createElement => createElement(MobileCourse)
+  }).$mount('#app');
+}
 
 $('.js-search-type').on('click', event => {
   const $this = $(event.currentTarget);

@@ -118,7 +118,7 @@ trait SoftDelete
     protected function createQueryBuilder($conditions)
     {
         if (!$this->includeDeleted) {
-            $conditions[$this->deleteFlagField] = 0;
+            $conditions['isDeleted'] = 0;
         }
         $conditions = array_filter(
             $conditions,
@@ -140,7 +140,7 @@ trait SoftDelete
 
         $declares = $this->declares();
         $declares['conditions'] = isset($declares['conditions']) ? $declares['conditions'] : [];
-        $declares['conditions'][] = "$this->deleteFlagField = :$this->deleteFlagField";
+        $declares['conditions'][] = "$this->deleteFlagField = :isDeleted";
 
         foreach ($declares['conditions'] as $condition) {
             $builder->andWhere($condition);

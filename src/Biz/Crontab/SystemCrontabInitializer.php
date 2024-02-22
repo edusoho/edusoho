@@ -166,11 +166,6 @@ class SystemCrontabInitializer
                 'class' => 'Biz\Course\Job\UpdateCourseSetHotSeqJob',
                 'misfire_threshold' => 0,
             ],
-            'UpdateLiveStatusJob' => [
-                'expression' => '*/10 * * * *',
-                'class' => 'Biz\Live\Job\UpdateLiveStatusJob',
-                'misfire_threshold' => 300,
-            ],
             'CloudConsultFreshJob' => [
                 'expression' => "{$consultRandNum} {$consultHourRandNum} * * *",
                 'class' => 'Biz\CloudPlatform\Job\CloudConsultFreshJob',

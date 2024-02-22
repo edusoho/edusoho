@@ -34,7 +34,7 @@ trait QuestionImportTrait
         $localImgs = [];
         foreach ($imgs as $img) {
             preg_match('/https?:\/\/(.*?)\/(.*?)\.(.*)/', $img, $match);
-            $localPath = $this->container->getParameter('topxia.upload.public_directory').'/tmp/'.Uuid::uuid4().'.'.$match[3];
+            $localPath = $this->container->getParameter('topxia.upload.public_directory').'/'.Uuid::uuid4().'.'.$match[3];
             file_put_contents($localPath, file_get_contents($img));
             $localImgs[] = $localPath;
         }

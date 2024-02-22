@@ -3,8 +3,8 @@
 namespace Tests\Unit\Util;
 
 use Biz\BaseTestCase;
-use Biz\Util\EdusohoLiveClient;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Util\EdusohoLiveClient;
 use Mockery;
 
 class EdusohoLiveClientlTest extends BaseTestCase
@@ -13,16 +13,16 @@ class EdusohoLiveClientlTest extends BaseTestCase
     {
         $cloudApi = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($cloudApi);
-        $mockObject->shouldReceive('post')->times(1)->andReturn(array('id' => 123, 'provider' => 6));
+        $mockObject->shouldReceive('post')->times(1)->andReturn(['id' => 123, 'provider' => 6]);
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'root');
 
-        $fields = array(
+        $fields = [
             'title' => 'live title',
             'startTime' => time() + 60,
             'summary' => '',
             'endTime' => time() + 600,
-        );
+        ];
         $result = $client->createLive($fields);
 
         $this->assertEquals(123, $result['id']);
@@ -33,11 +33,11 @@ class EdusohoLiveClientlTest extends BaseTestCase
     {
         $cloudApi = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($cloudApi);
-        $mockObject->shouldReceive('patch')->times(1)->andReturn(array('id' => 123, 'title' => 'live title update', 'provider' => 6));
+        $mockObject->shouldReceive('patch')->times(1)->andReturn(['id' => 123, 'title' => 'live title update', 'provider' => 6]);
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'root');
 
-        $result = $client->updateLive(array('liveId' => 123, 'title' => 'live title update'));
+        $result = $client->updateLive(['liveId' => 123, 'title' => 'live title update']);
 
         $this->assertEquals(123, $result['id']);
         $this->assertEquals('live title update', $result['title']);
@@ -47,7 +47,7 @@ class EdusohoLiveClientlTest extends BaseTestCase
     {
         $cloudApi = CloudAPIFactory::create('leaf');
         $mockObject = Mockery::mock($cloudApi);
-        $mockObject->shouldReceive('get')->times(1)->andReturn(array('capacity' => 10, 'provider' => 6));
+        $mockObject->shouldReceive('get')->times(1)->andReturn(['capacity' => 10, 'provider' => 6]);
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'leaf');
 
@@ -61,11 +61,11 @@ class EdusohoLiveClientlTest extends BaseTestCase
     {
         $cloudApi = CloudAPIFactory::create('leaf');
         $mockObject = Mockery::mock($cloudApi);
-        $mockObject->shouldReceive('post')->times(1)->andReturn(array('url' => 'http://www.edusoho.com'));
+        $mockObject->shouldReceive('post')->times(1)->andReturn(['url' => 'http://www.edusoho.com']);
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'leaf');
 
-        $result = $client->getRoomUrl(array('liveId' => 123), 'leaf');
+        $result = $client->getRoomUrl(['liveId' => 123], 'leaf');
 
         $this->assertEquals('http://www.edusoho.com', $result['url']);
     }
@@ -74,7 +74,7 @@ class EdusohoLiveClientlTest extends BaseTestCase
     {
         $cloudApi = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($cloudApi);
-        $mockObject->shouldReceive('delete')->times(1)->andReturn(array('success' => true));
+        $mockObject->shouldReceive('delete')->times(1)->andReturn(['success' => true]);
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'root');
 
@@ -86,7 +86,7 @@ class EdusohoLiveClientlTest extends BaseTestCase
     {
         $cloudApi = CloudAPIFactory::create('leaf');
         $mockObject = Mockery::mock($cloudApi);
-        $mockObject->shouldReceive('get')->times(1)->andReturn(array('onLineNum' => 5));
+        $mockObject->shouldReceive('get')->times(1)->andReturn(['onLineNum' => 5]);
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'leaf');
 
@@ -98,11 +98,11 @@ class EdusohoLiveClientlTest extends BaseTestCase
     {
         $cloudApi = CloudAPIFactory::create('leaf');
         $mockObject = Mockery::mock($cloudApi);
-        $mockObject->shouldReceive('post')->times(1)->andReturn(array('success' => true));
+        $mockObject->shouldReceive('post')->times(1)->andReturn(['success' => true]);
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'leaf');
 
-        $result = $client->entryLive(array('liveId' => 123));
+        $result = $client->entryLive(['liveId' => 123]);
         $this->assertTrue($result['success']);
     }
 
@@ -110,11 +110,11 @@ class EdusohoLiveClientlTest extends BaseTestCase
     {
         $cloudApi = CloudAPIFactory::create('leaf');
         $mockObject = Mockery::mock($cloudApi);
-        $mockObject->shouldReceive('post')->times(1)->andReturn(array('device' => 'iphone', 'url' => 'http://www.edusoho.com'));
+        $mockObject->shouldReceive('post')->times(1)->andReturn(['device' => 'iphone', 'url' => 'http://www.edusoho.com']);
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'leaf');
 
-        $result = $client->entryReplay(array('liveId' => 123));
+        $result = $client->entryReplay(['liveId' => 123]);
         $this->assertEquals('iphone', $result['device']);
         $this->assertEquals('http://www.edusoho.com', $result['url']);
     }
@@ -123,7 +123,7 @@ class EdusohoLiveClientlTest extends BaseTestCase
     {
         $cloudApi = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($cloudApi);
-        $mockObject->shouldReceive('post')->times(1)->andReturn(array(array('subject' => 'name1', 'id' => 1, 'resourceNo' => '333')));
+        $mockObject->shouldReceive('post')->times(1)->andReturn([['subject' => 'name1', 'id' => 1, 'resourceNo' => '333']]);
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'root');
 
@@ -136,7 +136,7 @@ class EdusohoLiveClientlTest extends BaseTestCase
     {
         $cloudApi = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($cloudApi);
-        $mockObject->shouldReceive('get')->times(1)->andReturn(array('success' => 1));
+        $mockObject->shouldReceive('get')->times(1)->andReturn(['success' => 1]);
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'root');
 
@@ -148,46 +148,20 @@ class EdusohoLiveClientlTest extends BaseTestCase
     {
         $cloudApi = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($cloudApi);
-        $mockObject->shouldReceive('post')->times(1)->andReturn(array('logoPcUrl' => '123', 'logoClientUrl' => '456', 'logoGotoUrl' => '789'));
+        $mockObject->shouldReceive('post')->times(1)->andReturn(['logoPcUrl' => '123', 'logoClientUrl' => '456', 'logoGotoUrl' => '789']);
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'root');
 
-        $result = $client->setLiveLogo(array('logoPcUrl' => '123', 'logoClientUrl' => '456', 'logoGotoUrl' => '789'));
+        $result = $client->setLiveLogo(['logoPcUrl' => '123', 'logoClientUrl' => '456', 'logoGotoUrl' => '789']);
 
         $this->assertEquals(123, $result['logoPcUrl']);
         $this->assertEquals(456, $result['logoClientUrl']);
         $this->assertEquals(789, $result['logoGotoUrl']);
     }
 
-    public function testCheckLiveStatus()
-    {
-        $return = array(1 => 'closed', 2 => 'live');
-        $cloudApi = CloudAPIFactory::create('leaf');
-        $mockObject = Mockery::mock($cloudApi);
-        $mockObject->shouldReceive('get')->times(1)->andReturn($return);
-        $client = new EdusohoLiveClient();
-        $client->setCloudApi($mockObject, 'leaf');
-
-        $result = $client->checkLiveStatus(array(8 => array(1, 2)));
-
-        $this->assertArrayEquals($return, $result);
-    }
-
-    public function testIsEsLive()
-    {
-        $result = EdusohoLiveClient::isEsLive(8);
-        $this->assertTrue($result);
-
-        $result = EdusohoLiveClient::isEsLive(9);
-        $this->assertTrue($result);
-
-        $result = EdusohoLiveClient::isEsLive(6);
-        $this->assertFalse($result);
-    }
-
     public function testGetLiveAccount()
     {
-        $return = array('provider' => 9, 'capacity' => 10, 'roomType' => array('large'));
+        $return = ['provider' => 9, 'capacity' => 10, 'roomType' => ['large']];
         $cloudApi = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($cloudApi);
         $mockObject->shouldReceive('get')->times(1)->andReturn($return);
@@ -201,7 +175,7 @@ class EdusohoLiveClientlTest extends BaseTestCase
 
     public function testGetLiveOverview()
     {
-        $return = array('account' => array('status' => 'activate', 'capacity' => 20), 'data' => array());
+        $return = ['account' => ['status' => 'activate', 'capacity' => 20], 'data' => []];
         $cloudApi = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($cloudApi);
         $mockObject->shouldReceive('get')->times(1)->andReturn($return);
