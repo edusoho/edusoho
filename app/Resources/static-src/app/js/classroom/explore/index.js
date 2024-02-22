@@ -13,9 +13,11 @@ Vue.filter('trans', function (value, params) {
   return Translator.trans(value, params);
 });
 
-new Vue({
-  render: createElement => createElement(MobileClassroom)
-}).$mount('#app');
+if($('[name="isWeixin"]').val() || $('[name="isMobile"]').val()) {
+  new Vue({
+    render: createElement => createElement(MobileClassroom)
+  }).$mount('#app');
+}
 
 $('#free').on('click', function(event) {
   window.location.href = $(this).val();
