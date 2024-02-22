@@ -180,11 +180,11 @@ class ExportItemsWrapper
         $elements = [];
         $result = preg_split('/(<img [^>]*?>)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
         foreach ($result as $content) {
-            if (preg_match('/<img .*src=[\'\"](.*?)[\'\"].*>/', $content, $matches)) {
+            if (preg_match('/<img .*src=[\'\"](https?:\/\/[^\/]+)?(.*?)[\'\"].*>/', $content, $matches)) {
                 if (empty($this->imgRootDir)) {
                     continue;
                 }
-                $imgSrc = $this->imgRootDir.$matches[1];
+                $imgSrc = $this->imgRootDir.$matches[2];
                 if (!is_file($imgSrc) || false !== strpos($imgSrc, '.emf')) {
                     continue;
                 }
