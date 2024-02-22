@@ -3,9 +3,9 @@
 namespace Tests\Unit\OpenCourse\Service;
 
 use Biz\BaseTestCase;
-use Mockery;
-use Biz\Util\EdusohoLiveClient;
 use Biz\User\CurrentUser;
+use Biz\Util\EdusohoLiveClient;
+use Mockery;
 
 class LiveCourseServiceTest extends BaseTestCase
 {
@@ -15,22 +15,22 @@ class LiveCourseServiceTest extends BaseTestCase
      */
     public function testCreateLiveRoomEmpty()
     {
-        $this->mockBiz('System:SettingService', array(
-            array(
+        $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('live_logo' => 'http://www.edusoho.com'),
-            ),
-        ));
+                'returnValue' => ['live_logo' => 'http://www.edusoho.com'],
+            ],
+        ]);
 
         $mockObject = $this->_mockLiveCient();
-        $mockObject->shouldReceive('createLive')->times(1)->andReturn(array());
+        $mockObject->shouldReceive('createLive')->times(1)->andReturn([]);
         $this->getLiveCourseService()->setLiveClient($mockObject);
 
         $user = $this->getCurrentuser();
-        $lesson = array('id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'userId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30);
-        $routes = array('authUrl' => 'http://www.edusoho.com', 'jumpUrl' => 'http://www.qiqiuyu.com');
+        $lesson = ['id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'userId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30];
+        $routes = ['authUrl' => 'http://www.edusoho.com', 'jumpUrl' => 'http://www.qiqiuyu.com'];
 
-        $this->getLiveCourseService()->createLiveRoom(array('teacherIds' => array($user['id'])), $lesson, $routes);
+        $this->getLiveCourseService()->createLiveRoom(['teacherIds' => [$user['id']]], $lesson, $routes);
     }
 
     /**
@@ -39,43 +39,43 @@ class LiveCourseServiceTest extends BaseTestCase
      */
     public function testCreateLiveRoomError()
     {
-        $this->mockBiz('System:SettingService', array(
-            array(
+        $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('live_logo' => 'http://www.edusoho.com'),
-            ),
-        ));
+                'returnValue' => ['live_logo' => 'http://www.edusoho.com'],
+            ],
+        ]);
 
         $mockObject = $this->_mockLiveCient();
-        $mockObject->shouldReceive('createLive')->times(1)->andReturn(array('error' => 'create liveroom error'));
+        $mockObject->shouldReceive('createLive')->times(1)->andReturn(['error' => 'create liveroom error']);
         $this->getLiveCourseService()->setLiveClient($mockObject);
 
         $user = $this->getCurrentuser();
-        $lesson = array('id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'userId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30);
-        $routes = array('authUrl' => 'http://www.edusoho.com', 'jumpUrl' => 'http://www.qiqiuyu.com');
+        $lesson = ['id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'userId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30];
+        $routes = ['authUrl' => 'http://www.edusoho.com', 'jumpUrl' => 'http://www.qiqiuyu.com'];
 
-        $this->getLiveCourseService()->createLiveRoom(array('teacherIds' => array($user['id'])), $lesson, $routes);
+        $this->getLiveCourseService()->createLiveRoom(['teacherIds' => [$user['id']]], $lesson, $routes);
     }
 
     public function testCreateLiveRoom()
     {
-        $this->mockBiz('System:SettingService', array(
-            array(
+        $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('live_logo' => 'http://www.edusoho.com'),
-            ),
-        ));
+                'returnValue' => ['live_logo' => 'http://www.edusoho.com'],
+            ],
+        ]);
 
-        $mockValue = array('id' => 1, 'provider' => 'kuozhi');
+        $mockValue = ['id' => 1, 'provider' => 'kuozhi'];
         $mockObject = $this->_mockLiveCient();
         $mockObject->shouldReceive('createLive')->times(1)->andReturn($mockValue);
         $this->getLiveCourseService()->setLiveClient($mockObject);
 
         $user = $this->getCurrentuser();
-        $lesson = array('id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'userId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30);
-        $routes = array('authUrl' => 'http://www.edusoho.com', 'jumpUrl' => 'http://www.qiqiuyu.com');
+        $lesson = ['id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'userId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30];
+        $routes = ['authUrl' => 'http://www.edusoho.com', 'jumpUrl' => 'http://www.qiqiuyu.com'];
 
-        $result = $this->getLiveCourseService()->createLiveRoom(array('teacherIds' => array($user['id'])), $lesson, $routes);
+        $result = $this->getLiveCourseService()->createLiveRoom(['teacherIds' => [$user['id']]], $lesson, $routes);
 
         $this->assertEquals($mockValue['id'], $result['id']);
         $this->assertEquals($mockValue['provider'], $result['provider']);
@@ -83,16 +83,16 @@ class LiveCourseServiceTest extends BaseTestCase
 
     public function testEditLiveRoom()
     {
-        $mockValue = array('id' => 1, 'title' => 'live title', 'provider' => 'kuozhi');
+        $mockValue = ['id' => 1, 'title' => 'live title', 'provider' => 'kuozhi'];
         $mockObject = $this->_mockLiveCient();
         $mockObject->shouldReceive('updateLive')->times(1)->andReturn($mockValue);
         $this->getLiveCourseService()->setLiveClient($mockObject);
 
         $user = $this->getCurrentuser();
-        $lesson = array('id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'userId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30, 'mediaId' => 10, 'liveProvider' => 'kuozhi');
-        $routes = array('authUrl' => 'http://www.edusoho.com', 'jumpUrl' => 'http://www.qiqiuyu.com');
+        $lesson = ['id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'userId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30, 'mediaId' => 10, 'liveProvider' => 'kuozhi'];
+        $routes = ['authUrl' => 'http://www.edusoho.com', 'jumpUrl' => 'http://www.qiqiuyu.com'];
 
-        $result = $this->getLiveCourseService()->editLiveRoom(array('teacherIds' => array($user['id'])), $lesson, $routes);
+        $result = $this->getLiveCourseService()->editLiveRoom(['teacherIds' => [$user['id']]], $lesson, $routes);
 
         $this->assertEquals($mockValue['id'], $result['id']);
         $this->assertEquals($mockValue['provider'], $result['provider']);
@@ -101,39 +101,39 @@ class LiveCourseServiceTest extends BaseTestCase
 
     public function testEntryLive()
     {
-        $mockValue = array('success' => true);
+        $mockValue = ['success' => true];
         $mockObject = $this->_mockLiveCient();
         $mockObject->shouldReceive('entryLive')->times(1)->andReturn($mockValue);
         $this->getLiveCourseService()->setLiveClient($mockObject);
 
-        $result = $this->getLiveCourseService()->entryLive(array('userId' => 1));
+        $result = $this->getLiveCourseService()->entryLive(['userId' => 1]);
 
         $this->assertTrue($result['success']);
     }
 
     public function testCheckLessonStatus()
     {
-        $result = $this->getLiveCourseService()->checkLessonStatus(array());
+        $result = $this->getLiveCourseService()->checkLessonStatus([]);
         $this->assertFalse($result['result']);
         $this->assertEquals('课时不存在！', $result['message']);
 
-        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 0));
+        $result = $this->getLiveCourseService()->checkLessonStatus(['id' => 1, 'mediaId' => 0]);
         $this->assertFalse($result['result']);
         $this->assertEquals('直播教室不存在！', $result['message']);
 
-        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 10, 'startTime' => strtotime('+5 days')));
+        $result = $this->getLiveCourseService()->checkLessonStatus(['id' => 1, 'mediaId' => 10, 'startTime' => strtotime('+5 days')]);
         $this->assertFalse($result['result']);
         $this->assertEquals('直播还没开始!', $result['message']);
 
-        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 10, 'startTime' => (time() - 3600), 'endTime' => (time() - 1000), 'liveProvider' => 4));
+        $result = $this->getLiveCourseService()->checkLessonStatus(['id' => 1, 'mediaId' => 10, 'startTime' => (time() - 3600), 'endTime' => (time() - 1000), 'progressStatus' => 'closed', 'liveProvider' => 4]);
         $this->assertFalse($result['result']);
         $this->assertEquals('直播已结束!', $result['message']);
 
-        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 10, 'startTime' => (time() - 3600 * 4), 'endTime' => (time() - 3600 * 3), 'liveProvider' => 8));
+        $result = $this->getLiveCourseService()->checkLessonStatus(['id' => 1, 'mediaId' => 10, 'startTime' => (time() - 3600 * 4), 'endTime' => (time() - 3600 * 3), 'progressStatus' => 'closed', 'liveProvider' => 8]);
         $this->assertFalse($result['result']);
         $this->assertEquals('直播已结束!', $result['message']);
 
-        $result = $this->getLiveCourseService()->checkLessonStatus(array('id' => 1, 'mediaId' => 10, 'startTime' => (time() + 30), 'endTime' => (time() + 3600), 'liveProvider' => 4));
+        $result = $this->getLiveCourseService()->checkLessonStatus(['id' => 1, 'mediaId' => 10, 'startTime' => (time() + 30), 'endTime' => (time() + 3600), 'liveProvider' => 4]);
         $this->assertTrue($result['result']);
         $this->assertEmpty($result['message']);
     }
@@ -145,15 +145,15 @@ class LiveCourseServiceTest extends BaseTestCase
     public function testCheckCourseUserRoleMemberEmpty()
     {
         $user = $this->getCurrentuser();
-        $this->mockBiz('OpenCourse:OpenCourseService', array(
-            array(
+        $this->mockBiz('OpenCourse:OpenCourseService', [
+            [
                 'functionName' => 'getCourseMember',
-                'returnValue' => array(),
-            ),
-        ));
+                'returnValue' => [],
+            ],
+        ]);
 
-        $course = array('id' => 1, 'teacherIds' => array($user['id'], 3));
-        $lesson = array('id' => 2, 'courseId' => 1, 'type' => 'liveOpen');
+        $course = ['id' => 1, 'teacherIds' => [$user['id'], 3]];
+        $lesson = ['id' => 2, 'courseId' => 1, 'type' => 'open'];
 
         $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
     }
@@ -161,19 +161,19 @@ class LiveCourseServiceTest extends BaseTestCase
     public function testCheckCourseUserRole()
     {
         $user = $this->getCurrentuser();
-        $this->mockBiz('OpenCourse:OpenCourseService', array(
-            array(
+        $this->mockBiz('OpenCourse:OpenCourseService', [
+            [
                 'functionName' => 'getCourseMember',
-                'returnValue' => array('id' => 1, 'courseId' => 1, 'userId' => $user['id']),
-            ),
-            array(
+                'returnValue' => ['id' => 1, 'courseId' => 1, 'userId' => $user['id']],
+            ],
+            [
                 'functionName' => 'findCourseTeachers',
-                'returnValue' => array(array('id' => 1, 'userId' => $user['id']), array('id' => 2, 'userId' => 3)),
-            ),
-        ));
+                'returnValue' => [['id' => 1, 'userId' => $user['id']], ['id' => 2, 'userId' => 3]],
+            ],
+        ]);
 
-        $course = array('id' => 1, 'teacherIds' => array($user['id'], 3));
-        $lesson = array('id' => 2, 'courseId' => 1, 'type' => 'liveOpen');
+        $course = ['id' => 1, 'teacherIds' => [$user['id'], 3]];
+        $lesson = ['id' => 2, 'courseId' => 1, 'type' => 'liveOpen'];
         $role = $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
 
         $this->assertEquals('teacher', $role);
@@ -182,19 +182,19 @@ class LiveCourseServiceTest extends BaseTestCase
     public function testCheckCourseUserRoleSpeaker()
     {
         $user = $this->getCurrentuser();
-        $this->mockBiz('OpenCourse:OpenCourseService', array(
-            array(
+        $this->mockBiz('OpenCourse:OpenCourseService', [
+            [
                 'functionName' => 'getCourseMember',
-                'returnValue' => array('id' => 1, 'courseId' => 1, 'userId' => $user['id']),
-            ),
-            array(
+                'returnValue' => ['id' => 1, 'courseId' => 1, 'userId' => $user['id']],
+            ],
+            [
                 'functionName' => 'findCourseTeachers',
-                'returnValue' => array(array('id' => 1, 'userId' => $user['id']), array('id' => 2, 'userId' => 3)),
-            ),
-        ));
+                'returnValue' => [['id' => 1, 'userId' => $user['id']], ['id' => 2, 'userId' => 3]],
+            ],
+        ]);
 
-        $course = array('id' => 1, 'teacherIds' => array(3, $user['id']));
-        $lesson = array('id' => 2, 'courseId' => 1, 'type' => 'liveOpen');
+        $course = ['id' => 1, 'teacherIds' => [3, $user['id']]];
+        $lesson = ['id' => 2, 'courseId' => 1, 'type' => 'liveOpen'];
         $role = $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
 
         $this->assertEquals('speaker', $role);
@@ -203,19 +203,19 @@ class LiveCourseServiceTest extends BaseTestCase
     public function testCheckCourseUserRoleStudent()
     {
         $user = $this->getCurrentuser();
-        $this->mockBiz('OpenCourse:OpenCourseService', array(
-            array(
+        $this->mockBiz('OpenCourse:OpenCourseService', [
+            [
                 'functionName' => 'getCourseMember',
-                'returnValue' => array('id' => 1, 'courseId' => 1, 'userId' => $user['id']),
-            ),
-            array(
+                'returnValue' => ['id' => 1, 'courseId' => 1, 'userId' => $user['id']],
+            ],
+            [
                 'functionName' => 'findCourseTeachers',
-                'returnValue' => array(array('id' => 1, 'userId' => 3), array('id' => 2, 'userId' => 5)),
-            ),
-        ));
+                'returnValue' => [['id' => 1, 'userId' => 3], ['id' => 2, 'userId' => 5]],
+            ],
+        ]);
 
-        $course = array('id' => 1, 'teacherIds' => array(3, 5));
-        $lesson = array('id' => 2, 'courseId' => 1, 'type' => 'liveOpen');
+        $course = ['id' => 1, 'teacherIds' => [3, 5]];
+        $lesson = ['id' => 2, 'courseId' => 1, 'type' => 'liveOpen'];
         $role = $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
 
         $this->assertEquals('student', $role);
@@ -229,13 +229,13 @@ class LiveCourseServiceTest extends BaseTestCase
     {
         $this->setAnonymousUser();
 
-        $course = array('id' => 1, 'teacherIds' => array(3, 5));
-        $lesson = array('id' => 2, 'courseId' => 1, 'type' => 'liveOpen');
+        $course = ['id' => 1, 'teacherIds' => [3, 5]];
+        $lesson = ['id' => 2, 'courseId' => 1, 'type' => 'liveOpen'];
         $role = $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
 
         $this->assertEquals('student', $role);
 
-        $lesson = array('id' => 2, 'courseId' => 1, 'type' => 'video');
+        $lesson = ['id' => 2, 'courseId' => 1, 'type' => 'video'];
         $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
     }
 
@@ -244,12 +244,12 @@ class LiveCourseServiceTest extends BaseTestCase
         $result = $this->getLiveCourseService()->isLiveFinished(1);
         $this->assertTrue($result);
 
-        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
-            array(
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'type' => 'video'),
-            ),
-        ));
+                'returnValue' => ['id' => 1, 'type' => 'video'],
+            ],
+        ]);
         $result = $this->getLiveCourseService()->isLiveFinished(1);
         $this->assertTrue($result);
     }
@@ -258,13 +258,13 @@ class LiveCourseServiceTest extends BaseTestCase
     {
         $startTime = time() - 3600;
         $endTime = time() - 1800;
-        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
-            array(
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', [
+            [
                 'functionName' => 'get',
-                'withParams' => array(1),
-                'returnValue' => array('id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => $startTime, 'endTime' => $endTime, 'liveProvider' => 1, 'progressStatus' => 'created'),
-            ),
-        ));
+                'withParams' => [1],
+                'returnValue' => ['id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => $startTime, 'endTime' => $endTime, 'liveProvider' => 1, 'progressStatus' => 'closed'],
+            ],
+        ]);
 
         $result = $this->getLiveCourseService()->isLiveFinished(1);
 
@@ -278,23 +278,23 @@ class LiveCourseServiceTest extends BaseTestCase
 
         $startTime2 = time() - 3600;
         $endTime2 = time() - 1800;
-        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
-            array(
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', [
+            [
                 'functionName' => 'get',
-                'withParams' => array(1),
-                'returnValue' => array('id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => $startTime1, 'endTime' => $endTime1, 'liveProvider' => 9, 'progressStatus' => 'created'),
-            ),
-            array(
+                'withParams' => [1],
+                'returnValue' => ['id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => $startTime1, 'endTime' => $endTime1, 'liveProvider' => 9, 'progressStatus' => 'closed'],
+            ],
+            [
                 'functionName' => 'get',
-                'withParams' => array(2),
-                'returnValue' => array('id' => 2, 'mediaId' => 2, 'type' => 'liveOpen', 'startTime' => $startTime2, 'endTime' => $endTime2, 'liveProvider' => 8, 'progressStatus' => 'created'),
-            ),
-            array(
+                'withParams' => [2],
+                'returnValue' => ['id' => 2, 'mediaId' => 2, 'type' => 'liveOpen', 'startTime' => $startTime2, 'endTime' => $endTime2, 'liveProvider' => 8, 'progressStatus' => 'created'],
+            ],
+            [
                 'functionName' => 'get',
-                'withParams' => array(3),
-                'returnValue' => array('id' => 3, 'mediaId' => 3, 'type' => 'liveOpen', 'startTime' => $startTime2, 'endTime' => $endTime2, 'liveProvider' => 9, 'progressStatus' => 'closed'),
-            ),
-        ));
+                'withParams' => [3],
+                'returnValue' => ['id' => 3, 'mediaId' => 3, 'type' => 'liveOpen', 'startTime' => $startTime2, 'endTime' => $endTime2, 'liveProvider' => 9, 'progressStatus' => 'closed'],
+            ],
+        ]);
 
         $result = $this->getLiveCourseService()->isLiveFinished(1);
         $this->assertTrue($result);
@@ -317,13 +317,13 @@ class LiveCourseServiceTest extends BaseTestCase
     protected function setAnonymousUser()
     {
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
+        $currentUser->fromArray([
             'id' => 0,
             'nickname' => '游客',
             'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
-            'org' => array('id' => 1),
-        ));
+            'roles' => ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'],
+            'org' => ['id' => 1],
+        ]);
         $biz = $this->getBiz();
         $biz['user'] = $currentUser;
     }

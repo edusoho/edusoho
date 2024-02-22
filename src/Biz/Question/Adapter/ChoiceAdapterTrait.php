@@ -52,7 +52,7 @@ trait ChoiceAdapterTrait
         ksort($options);
 
         $options = array_column($options, 'content');
-        if (count($options) == 1) {
+        if (1 == count($options)) {
             $options[] = '';
         }
 
