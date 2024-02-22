@@ -220,7 +220,7 @@ class DefaultServiceProvider implements ServiceProviderInterface
         ];
 
         $biz['educloud.live_client'] = function ($biz) {
-            return new EdusohoLiveClient($biz);
+            return new EdusohoLiveClient();
         };
 
         $biz['course.show_redirect'] = [

@@ -6,8 +6,6 @@ interface LiveService
 {
     public function confirmLiveStatus($liveId);
 
-    public function canExecuteLiveStatusJob($liveStatus, $jobType);
-
     public function createLiveRoom($params);
 
     public function updateLiveRoom($liveId, $params);
@@ -25,4 +23,6 @@ interface LiveService
     public function getLiveTicket($roomId, $ticketNo);
 
     public function isESLive($provider);
+
+    public function isProviderStatisticInRealTime($provider);
 }
