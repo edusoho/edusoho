@@ -131,7 +131,7 @@ class ExploreController extends BaseController
                 'levels' => $this->findEnabledVipLevels(),
                 'tags' => $tags,
                 'isWxClient' => $this->isWxClient(),
-                'isMobileClient' => $this->isMobileClient()
+                'isMobileClient' => $this->isMobileClient(),
             ]
         );
     }
@@ -288,7 +288,7 @@ class ExploreController extends BaseController
                 'levels' => $this->findEnabledVipLevels(),
                 'tags' => $tags,
                 'isWxClient' => $this->isWxClient(),
-                'isMobileClient' => $this->isMobileClient()
+                'isMobileClient' => $this->isMobileClient(),
             ]
         );
     }
