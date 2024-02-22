@@ -97,22 +97,21 @@ class QuestionParserController extends BaseController
 
     protected function parseQuestionThenMakeToken($questionBankId, $file)
     {
-        $result = $this->getFileService()->uploadFile('course_private', $file);
-        $uploadFile = $this->getFileService()->parseFileUri($result['uri']);
+        $uploadFile = $this->getFileService()->uploadFile('tmp', $file);
         $client = new QuestionParseClient();
-        $jobId = $client->parse($uploadFile['fullpath']);
+        $jobId = $client->parse($uploadFile['file']->getRealPath());
 
         $token = $this->getTokenService()->makeToken('upload.course_private_file', [
             'data' => [
-                'id' => $result['id'],
                 'filename' => $file->getClientOriginalName(),
                 'questionBankId' => $questionBankId,
                 'jobId' => $jobId,
-                'cacheFilePath' => $uploadFile['fullpath'].'json',
+                'cacheFilePath' => $uploadFile['file']->getRealPath().'json',
             ],
             'duration' => TimeMachine::ONE_DAY,
             'userId' => $this->getCurrentUser()->getId(),
         ]);
+        $this->getFileService()->deleteFile($uploadFile['id']);
 
         return $token['token'];
     }
