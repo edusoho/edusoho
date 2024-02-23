@@ -48,9 +48,11 @@ trait ChoiceAdapterTrait
         if (empty($question['body']['options'])) {
             return ['', ''];
         }
+        $options = array_column($question['body']['options'], null, 'id');
+        ksort($options);
 
-        $options = array_column($question['body']['options'], 'content');
-        if (count($options) == 1) {
+        $options = array_column($options, 'content');
+        if (1 == count($options)) {
             $options[] = '';
         }
 

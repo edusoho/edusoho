@@ -90,7 +90,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $this->beginTransaction();
         try {
-            if ($this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$courseId], 'course') === 'error') {
+            if ('error' === $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$courseId], 'course')) {
                 throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
             }
 
@@ -107,7 +107,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->getCourseDao()->delete($courseId);
 
             $this->getSchedulerService()->register([
-                'name' => 'delete_course_job' . $courseId,
+                'name' => 'delete_course_job'.$courseId,
                 'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
                 'expression' => intval(time()),
                 'misfire_policy' => 'executing',
@@ -187,10 +187,10 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             return;
         }
         //当前系统已不存在这个job PushNotificationOneHourJob_lesson_taskId
-        $this->getSchedulerService()->deleteJobByName('PushNotificationOneHourJob_lesson_' . $task['id']);
-        $this->getSchedulerService()->deleteJobByName('LiveCourseStartNotifyJob_liveLesson_' . $task['id']);
-        $this->getSchedulerService()->deleteJobByName('SmsSendOneDayJob_task_' . $task['id']);
-        $this->getSchedulerService()->deleteJobByName('SmsSendOneHourJob_task_' . $task['id']);
+        $this->getSchedulerService()->deleteJobByName('PushNotificationOneHourJob_lesson_'.$task['id']);
+        $this->getSchedulerService()->deleteJobByName('LiveCourseStartNotifyJob_liveLesson_'.$task['id']);
+        $this->getSchedulerService()->deleteJobByName('SmsSendOneDayJob_task_'.$task['id']);
+        $this->getSchedulerService()->deleteJobByName('SmsSendOneHourJob_task_'.$task['id']);
     }
 
     protected function deleteCourseJob($courseId)
@@ -277,14 +277,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getMaterialService()
     {
         return $this->createService('Course:MaterialService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**

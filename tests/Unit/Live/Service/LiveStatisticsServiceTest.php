@@ -26,10 +26,7 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_CHECKIN, $result['type']);
-        $this->assertEquals(['data' => [
-            'success' => 1,
-            'detail' => 'test detail',
-        ]], $result['data']);
+        $this->assertEquals(['success' => 1, 'detail' => [['userId' => 1, 'nickname' => 'test']]], $result['data']);
     }
 
     public function testCreateLiveVisitorStatistics()
@@ -46,8 +43,7 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $result['type']);
-        $this->assertEquals(['data' => ['success' => 1,
-            'detail' => 'test detail', ]], $result['data']);
+        $this->assertEquals(['success' => 1, 'detail' => [['userId' => 1, 'nickname' => 'test']]], $result['data']);
     }
 
     public function testGetCheckinStatisticsByLiveId()
@@ -92,8 +88,7 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_CHECKIN, $result['type']);
-        $this->assertEquals(['data' => ['success' => 1,
-            'detail' => 'test detail', ]], $result['data']);
+        $this->assertEquals(['success' => 1, 'detail' => [['userId' => 1, 'nickname' => 'test']]], $result['data']);
     }
 
     public function testUpdateCheckinStatisticsWithExistedStatistics()
@@ -105,14 +100,37 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $liveId = 1;
 
-        $existed = $this->createCheckinStatistics($liveId);
+        $this->mockBiz('Live:LiveStatisticsDao', [
+            [
+                'functionName' => 'getByLiveIdAndType',
+                'runTimes' => 1,
+                'withParams' => [$liveId, LiveStatisticsService::STATISTICS_TYPE_CHECKIN],
+                'returnValue' => [
+                    'id' => 3,
+                    'updatedTime' => time() - 360,
+                ],
+            ],
+            [
+                'functionName' => 'update',
+                'runTimes' => 1,
+                'withParams' => [3, [
+                    'liveId' => $liveId,
+                    'type' => LiveStatisticsService::STATISTICS_TYPE_CHECKIN,
+                    'data' => [
+                        'success' => 1,
+                        'detail' => [['userId' => 1, 'nickname' => 'test']],
+                    ],
+                ]],
+                'returnValue' => [
+                    'liveId' => $liveId,
+                    'type' => LiveStatisticsService::STATISTICS_TYPE_CHECKIN,
+                    'data' => [],
+                ],
+            ],
+        ]);
         $result = $this->getLiveStatisticsService()->updateCheckinStatistics($liveId);
 
         $mockedProcessor->shouldHaveReceived('handlerResult')->times(1);
-
-        $this->assertEquals($liveId, $existed['liveId']);
-        $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_CHECKIN, $existed['type']);
-        $this->assertEmpty($existed['data']);
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_CHECKIN, $result['type']);
@@ -133,8 +151,7 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $result['type']);
-        $this->assertEquals(['data' => ['success' => 1,
-            'detail' => 'test detail', ]], $result['data']);
+        $this->assertEquals(['success' => 1, 'detail' => [['userId' => 1, 'nickname' => 'test']]], $result['data']);
     }
 
     public function testUpdateVisitorStatisticsWithExistedStatistics()
@@ -146,13 +163,37 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $liveId = 1;
 
-        $existed = $this->createVisitorStatistics($liveId);
+        $this->mockBiz('Live:LiveStatisticsDao', [
+            [
+                'functionName' => 'getByLiveIdAndType',
+                'runTimes' => 1,
+                'withParams' => [$liveId, LiveStatisticsService::STATISTICS_TYPE_VISITOR],
+                'returnValue' => [
+                    'id' => 3,
+                    'updatedTime' => time() - 360,
+                ],
+            ],
+            [
+                'functionName' => 'update',
+                'runTimes' => 1,
+                'withParams' => [3, [
+                    'liveId' => $liveId,
+                    'type' => LiveStatisticsService::STATISTICS_TYPE_VISITOR,
+                    'data' => [
+                        'success' => 1,
+                        'detail' => [['userId' => 1, 'nickname' => 'test']],
+                    ],
+                ]],
+                'returnValue' => [
+                    'liveId' => $liveId,
+                    'type' => LiveStatisticsService::STATISTICS_TYPE_VISITOR,
+                    'data' => [],
+                ],
+            ],
+        ]);
         $result = $this->getLiveStatisticsService()->updateVisitorStatistics($liveId);
 
         $mockedProcessor->shouldHaveReceived('handlerResult')->times(1);
-
-        $this->assertEquals($liveId, $existed['liveId']);
-        $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $existed['type']);
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $result['type']);
@@ -286,9 +327,12 @@ class LiveStatisticsServiceTest extends BaseTestCase
                 [
                     'functionName' => 'handlerResult',
                     'returnValue' => [
-                        'data' => [
-                            'success' => 1,
-                            'detail' => 'test detail',
+                        'success' => 1,
+                        'detail' => [
+                            [
+                                'userId' => 1,
+                                'nickname' => 'test',
+                            ],
                         ],
                     ],
                 ],

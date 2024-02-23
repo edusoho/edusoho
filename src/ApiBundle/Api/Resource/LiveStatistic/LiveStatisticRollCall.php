@@ -8,7 +8,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\LiveActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\InfoSecurity\Service\MobileMaskService;
-use Biz\Live\LiveStatisticsException;
 use Biz\Live\Service\LiveStatisticsService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
@@ -30,10 +29,8 @@ class LiveStatisticRollCall extends AbstractResource
         $statistics = $this->getLiveStatisticsService()->getCheckinStatisticsByLiveId($activity['ext']['liveId']);
         if ($status && !empty($statistics['data']['detail'])) {
             $groupedStatistics = ArrayToolkit::group($statistics['data']['detail'], 'checkin');
-            $groupedStatistics = [
-                empty($groupedStatistics[0]) ? [] : $groupedStatistics[0],
-                empty($groupedStatistics[1]) ? [] : $groupedStatistics[1],
-            ];
+            $groupedStatistics[0] = empty($groupedStatistics[0]) ? [] : $groupedStatistics[0];
+            $groupedStatistics[1] = empty($groupedStatistics[1]) ? [] : $groupedStatistics[1];
             $statistics['data']['detail'] = 'checked' == $status ? $groupedStatistics[1] : $groupedStatistics[0];
         }
 
@@ -58,15 +55,6 @@ class LiveStatisticRollCall extends AbstractResource
         }
 
         return $statistics;
-    }
-
-    public function processJsonData($liveId)
-    {
-        try {
-            $checkin = $this->getLiveStatisticsService()->updateCheckinStatistics($liveId);
-            $visitor = $this->getLiveStatisticsService()->updateVisitorStatistics($liveId);
-        } catch (LiveStatisticsException $e) {
-        }
     }
 
     /**

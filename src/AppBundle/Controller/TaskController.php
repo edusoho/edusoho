@@ -185,6 +185,16 @@ class TaskController extends BaseController
         return $this->getActivityService()->getActivityConfig($activity['mediaType']);
     }
 
+    public function downloadAppShowAction()
+    {
+        return $this->render(
+            'task/app-modal.html.twig',
+            [
+                'downloadUrl' => 'url',
+            ]
+        );
+    }
+
     public function previewAction($courseId, $id)
     {
         $course = $this->getCourseService()->getCourse($courseId);

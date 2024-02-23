@@ -147,9 +147,9 @@ interface OpenCourseService
 
     public function generateLessonVideoReplay($courseId, $lessonId, $fileId);
 
-    public function findFinishedLivesWithinOneDay();
+    public function startLive($liveId, $startTime);
 
-    public function updateLiveStatus($id, $status);
+    public function closeLive($liveId, $closeTime);
 
     /**
      * open_course_member.

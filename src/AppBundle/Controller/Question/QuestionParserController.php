@@ -10,8 +10,6 @@ use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\User\Service\TokenService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
-use Codeages\Biz\ItemBank\Item\Service\ItemService;
-use Symfony\Component\HttpFoundation\File\File as FileObject;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionParserController extends BaseController
@@ -97,45 +95,23 @@ class QuestionParserController extends BaseController
 
     protected function parseQuestionThenMakeToken($questionBankId, $file)
     {
-        $result = $this->getFileService()->uploadFile('course_private', $file);
-        $uploadFile = $this->getFileService()->parseFileUri($result['uri']);
+        $uploadFile = $this->getFileService()->uploadFile('tmp', $file);
         $client = new QuestionParseClient();
-        $jobId = $client->parse($uploadFile['fullpath']);
+        $jobId = $client->parse($uploadFile['file']->getRealPath());
 
         $token = $this->getTokenService()->makeToken('upload.course_private_file', [
             'data' => [
-                'id' => $result['id'],
                 'filename' => $file->getClientOriginalName(),
                 'questionBankId' => $questionBankId,
                 'jobId' => $jobId,
-                'cacheFilePath' => $uploadFile['fullpath'].'json',
+                'cacheFilePath' => $uploadFile['file']->getRealPath().'json',
             ],
             'duration' => TimeMachine::ONE_DAY,
             'userId' => $this->getCurrentUser()->getId(),
         ]);
+        $this->getFileService()->deleteFile($uploadFile['id']);
 
         return $token['token'];
-    }
-
-    protected function parseQuestions($fullpath)
-    {
-        $tmpPath = $this->get('kernel')->getContainer()->getParameter('topxia.upload.public_directory').'/tmp';
-        $text = $this->getItemService()->readWordFile($fullpath, $tmpPath);
-        $self = $this;
-        $fileService = $this->getFileService();
-        $text = preg_replace_callback(
-            '/<img src=[\'\"](.*?)[\'\"]/',
-            function ($matches) use ($self, $fileService) {
-                $file = new FileObject($matches[1]);
-                $result = $fileService->uploadFile('course', $file);
-                $url = $self->get('web.twig.extension')->getFpath($result['uri']);
-
-                return "<img src=\"{$url}\"";
-            },
-            $text
-        );
-
-        return $this->getItemService()->parseItems($text);
     }
 
     protected function getTemplateInfo($type)
@@ -181,14 +157,6 @@ class QuestionParserController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
-    }
-
-    /**
-     * @return ItemService
-     */
-    protected function getItemService()
-    {
-        return $this->createService('ItemBank:Item:ItemService');
     }
 
     /**

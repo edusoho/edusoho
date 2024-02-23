@@ -3,18 +3,18 @@
 namespace Biz\OpenCourse\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\AppLoggerConstant;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\File\UploadFileException;
+use Biz\Live\Constant\LiveStatus;
 use Biz\OpenCourse\Dao\OpenCourseDao;
 use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\System\Constant\LogModule;
 use Biz\System\Service\LogService;
 use Biz\User\UserException;
-use Biz\Util\EdusohoLiveClient;
 
 class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 {
@@ -463,7 +463,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $lesson['number'] = $this->_getNextLessonNumber($lesson['courseId']);
         $lesson['seq'] = $this->_getNextCourseItemSeq($lesson['courseId']);
         $lesson['userId'] = $this->getCurrentUser()->id;
-        $lesson['createdTime'] = time();
 
         if ('liveOpen' == $lesson['type']) {
             $lesson['endTime'] = $lesson['startTime'] + $lesson['length'] * 60;
@@ -700,23 +699,14 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
-        $thisStartTime = $thisEndTime = 0;
-
-        $conditions = [];
-
         if ($lessonId) {
             $liveLesson = $this->getCourseLesson($course['id'], $lessonId);
-            $conditions['lessonIdNotIn'] = [$lessonId];
         } else {
             $lessonId = '';
         }
 
         $startTime = is_numeric($startTime) ? $startTime : strtotime($startTime);
         $endTime = $startTime + $length * 60;
-
-        $conditions['courseId'] = $courseId;
-        $conditions['startTimeGreaterThan'] = $startTime;
-        $conditions['endTimeLessThan'] = $endTime;
 
         $thisLessons = $this->getOpenCourseLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId, $startTime, $endTime, $lessonId);
 
@@ -731,26 +721,30 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return ['success', ''];
     }
 
-    public function findFinishedLivesWithinOneDay()
+    public function startLive($liveId, $startTime)
     {
-        return $this->getOpenCourseLessonDao()->findFinishedLivesWithinOneDay();
-    }
-
-    public function updateLiveStatus($id, $status)
-    {
-        $lesson = $this->getLesson($id);
-        if (empty($lesson)) {
+        $lesson = $this->getOpenCourseLessonDao()->getLiveOpenLessonByMediaId($liveId);
+        if (empty($lesson) || empty($startTime)) {
             return;
         }
-
-        if (!in_array($status, [EdusohoLiveClient::LIVE_STATUS_LIVING, EdusohoLiveClient::LIVE_STATUS_CLOSED, EdusohoLiveClient::LIVE_STATUS_PAUSE])) {
-            $this->createNewException(OpenCourseException::STATUS_INVALID());
+        if (LiveStatus::CREATED != $lesson['progressStatus']) {
+            return;
         }
+        $this->getOpenCourseLessonDao()->update($lesson['id'], ['progressStatus' => LiveStatus::LIVING, 'startTime' => $startTime]);
+        $this->getLogService()->info(LogModule::OPEN_COURSE, 'update_live_status', '公开课开始直播', ['pre' => $lesson]);
+    }
 
-        $updateLesson = $this->getOpenCourseLessonDao()->update($lesson['id'], ['progressStatus' => $status]);
-        $this->getLogService()->info(AppLoggerConstant::OPEN_COURSE, 'update_live_status', "公开课修改直播进行状态，由‘{$lesson['progressStatus']}’改为‘{$status}’", ['preLesson' => $lesson, 'newLesson' => $updateLesson]);
-
-        return $updateLesson;
+    public function closeLive($liveId, $closeTime)
+    {
+        $lesson = $this->getOpenCourseLessonDao()->getLiveOpenLessonByMediaId($liveId);
+        if (empty($lesson) || empty($closeTime)) {
+            return;
+        }
+        if (LiveStatus::CLOSED == $lesson['progressStatus']) {
+            return;
+        }
+        $this->getOpenCourseLessonDao()->update($lesson['id'], ['progressStatus' => LiveStatus::CLOSED, 'endTime' => $closeTime]);
+        $this->getLogService()->info(LogModule::OPEN_COURSE, 'update_live_status', '公开课结束直播', ['pre' => $lesson]);
     }
 
     /**
@@ -804,7 +798,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
             if (empty($user)) {
                 $user = $this->getUserService()->getUserByUUID($teacher['id']);
-                if(empty($user)) {
+                if (empty($user)) {
                     $this->createNewException(UserException::NOTFOUND_USER());
                 }
             }
@@ -993,7 +987,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $courses = ArrayToolkit::index($courses, 'id');
 
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
-        } else if ($conditions['isHomePage']) {
+        } elseif ($conditions['isHomePage']) {
             return $this->getLatestCourse($conditions);
         }
 
@@ -1051,7 +1045,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return [$course];
     }
 
-
     protected function getLatestLesson($conditions)
     {
         /**
@@ -1065,7 +1058,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $latestLivingLesson = $this->searchLessons(
             array_merge($conditions, [
                 'startTimeLessThan' => time(),
-                'endTimeGreaterThan' => time()
+                'endTimeGreaterThan' => time(),
             ]),
             ['startTime' => 'DESC'], 0, 1)[0];
         if (!empty($latestLivingLesson)) {
@@ -1074,7 +1067,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $latestAheadLesson = $this->searchLessons(
             array_merge($conditions, [
-                'startTimeGreaterThan' => time()
+                'startTimeGreaterThan' => time(),
             ]),
             ['startTime' => 'ASC'], 0, 1)[0];
         if (!empty($latestAheadLesson)) {
@@ -1084,15 +1077,16 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $latestReplayLesson = $this->searchLessons(
             array_merge($conditions, [
                 'replayStatusList' => ['generated', 'videoGenerated'],
-                'endTimeLessThan' => time()
+                'endTimeLessThan' => time(),
             ]),
             ['endTime' => 'DESC'], 0, 1)[0];
         if (!empty($latestReplayLesson)) {
             return $latestReplayLesson;
         }
+
         return $this->searchLessons(
             array_merge($conditions, [
-                'endTimeLessThan' => time()
+                'endTimeLessThan' => time(),
             ]),
             ['endTime' => 'DESC'], 0, 1)[0];
     }

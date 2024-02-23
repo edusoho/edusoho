@@ -13,8 +13,8 @@ class StatusServiceImpl extends BaseService implements StatusService
         if (!isset($status['userId'])) {
             $user = $this->getCurrentUser();
 
-            if ($user['id'] == 0) {
-                return array();
+            if (0 == $user['id']) {
+                return [];
             }
 
             $status['userId'] = $user['id'];
@@ -31,11 +31,22 @@ class StatusServiceImpl extends BaseService implements StatusService
 
     protected function deleteOldStatus($status)
     {
+        if (empty($status['classroomId'])) {
+            $conditions = ['courseId' => $status['courseId']];
+            $recentStatuses = $this->searchStatuses($conditions, ['createdTime' => 'desc'], 0, 5);
+        } else {
+            $conditions = ['onlyClassroomId' => $status['classroomId']];
+            $recentStatuses = $this->searchStatuses($conditions, ['createdTime' => 'desc'], 0, 10);
+        }
+        if ($recentStatuses) {
+            $conditions['createdTime_LT'] = end($recentStatuses)['createdTime'];
+            $this->getStatusDao()->batchDelete($conditions);
+        }
         if (!empty($status['userId']) && !empty($status['type']) && !empty($status['objectType']) && !empty($status['objectId'])) {
             return $this->getStatusDao()->deleteByUserIdAndTypeAndObject($status['userId'], $status['type'], $status['objectType'], $status['objectId']);
         }
 
-        return array();
+        return [];
     }
 
     public function searchStatuses($conditions, $sort, $start, $limit)
@@ -51,10 +62,10 @@ class StatusServiceImpl extends BaseService implements StatusService
     public function searchStatusesByUserIds($userIds, $start, $limit)
     {
         return $this->getStatusDao()->search(
-            array(
+            [
                 'userIds' => $userIds,
-            ),
-            array('createdTime' => 'DESC'),
+            ],
+            ['createdTime' => 'DESC'],
             $start,
             $limit
         );

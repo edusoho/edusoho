@@ -1021,22 +1021,6 @@ class ActivityServiceTest extends BaseTestCase
         $this->assertEquals($result[0]['link'], 'www.edusoho.com1');
     }
 
-    public function testfindFinishedLivesWithinOneDay()
-    {
-        $this->mockBiz('Activity:ActivityDao', [
-            [
-                'functionName' => 'findFinishedLivesWithinOneDay',
-                'returnValue' => [['id' => 1, 'mediaId' => 1, 'mediaType' => 'live', 'startTime' => time() - 3600, 'endTime' => time() - 1800]],
-            ],
-        ]);
-
-        $results = $this->getActivityService()->findFinishedLivesWithinOneDay();
-
-        $this->assertEquals(1, count($results));
-        $this->assertEquals('live', $results[0]['mediaType']);
-        $this->assertLessThan(7200, time() - $results[0]['endTime']);
-    }
-
     /**
      * @return ActivityService
      */

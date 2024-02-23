@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\AdminV2\System;
 
-use Biz\System\Service\SettingService;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ApiSettingController extends BaseController
@@ -63,7 +63,6 @@ class ApiSettingController extends BaseController
     {
         $settings = $this->getSettingService()->get('api', []);
         $settings['api_app_secret_key'] = $this->randomkeys('32');
-        file_put_contents("/tmp/jc123", json_encode($settings), 8);
         $this->getSettingService()->set('api', $settings);
 
         return $this->redirect($this->generateUrl('admin_v2_api_setting', [], 0));
