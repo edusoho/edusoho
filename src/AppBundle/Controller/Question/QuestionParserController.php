@@ -10,8 +10,6 @@ use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\User\Service\TokenService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
-use Codeages\Biz\ItemBank\Item\Service\ItemService;
-use Symfony\Component\HttpFoundation\File\File as FileObject;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionParserController extends BaseController
@@ -116,27 +114,6 @@ class QuestionParserController extends BaseController
         return $token['token'];
     }
 
-    protected function parseQuestions($fullpath)
-    {
-        $tmpPath = $this->get('kernel')->getContainer()->getParameter('topxia.upload.public_directory').'/tmp';
-        $text = $this->getItemService()->readWordFile($fullpath, $tmpPath);
-        $self = $this;
-        $fileService = $this->getFileService();
-        $text = preg_replace_callback(
-            '/<img src=[\'\"](.*?)[\'\"]/',
-            function ($matches) use ($self, $fileService) {
-                $file = new FileObject($matches[1]);
-                $result = $fileService->uploadFile('course', $file);
-                $url = $self->get('web.twig.extension')->getFpath($result['uri']);
-
-                return "<img src=\"{$url}\"";
-            },
-            $text
-        );
-
-        return $this->getItemService()->parseItems($text);
-    }
-
     protected function getTemplateInfo($type)
     {
         if (!in_array($type, ['testpaper', 'item'])) {
@@ -180,14 +157,6 @@ class QuestionParserController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
-    }
-
-    /**
-     * @return ItemService
-     */
-    protected function getItemService()
-    {
-        return $this->createService('ItemBank:Item:ItemService');
     }
 
     /**

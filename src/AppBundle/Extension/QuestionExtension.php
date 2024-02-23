@@ -2,14 +2,6 @@
 
 namespace AppBundle\Extension;
 
-use Biz\Question\Type\Choice;
-use Biz\Question\Type\Determine;
-use Biz\Question\Type\Essay;
-use Biz\Question\Type\Fill;
-use Biz\Question\Type\Material;
-use Biz\Question\Type\SingleChoice;
-use Biz\Question\Type\UncertainChoice;
-use Biz\Testpaper\Pattern\QuestionTypePattern;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -17,106 +9,71 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
 {
     public function getQuestionTypes()
     {
-        return array(
-            'single_choice' => array(
+        return [
+            'single_choice' => [
                 'name' => 'question.type.single_choice',
-                'actions' => array(
-                    'create' => 'AppBundle:Question/SingleChoiceQuestion:create',
-                    'edit' => 'AppBundle:Question/SingleChoiceQuestion:edit',
-                    'show' => 'AppBundle:Question/SingleChoiceQuestion:show',
-                ),
-                'templates' => array(
+                'templates' => [
                     'do' => 'question/single-choice-do.html.twig',
                     'analysis' => 'question/analysis/single-choice.html.twig',
-                ),
+                ],
                 'hasMissScore' => 0,
                 'seqNum' => 1,
-            ),
-            'choice' => array(
+            ],
+            'choice' => [
                 'name' => 'question.type.multiple_choice',
-                'actions' => array(
-                    'create' => 'AppBundle:Question/ChoiceQuestion:create',
-                    'edit' => 'AppBundle:Question/ChoiceQuestion:edit',
-                    'show' => 'AppBundle:Question/ChoiceQuestion:show',
-                ),
-                'templates' => array(
+                'templates' => [
                     'do' => 'question/choice-do.html.twig',
                     'analysis' => 'question/analysis/choice.html.twig',
-                ),
+                ],
                 'hasMissScore' => 1,
                 'seqNum' => 2,
-            ),
-            'essay' => array(
+            ],
+            'essay' => [
                 'name' => 'question.type.essay',
-                'actions' => array(
-                    'create' => 'AppBundle:Question/EssayQuestion:create',
-                    'edit' => 'AppBundle:Question/EssayQuestion:edit',
-                    'show' => 'AppBundle:Question/EssayQuestion:show',
-                ),
-                'templates' => array(
+                'templates' => [
                     'do' => 'question/essay-do.html.twig',
                     'analysis' => 'question/analysis/essay.html.twig',
-                ),
+                ],
                 'hasMissScore' => 0,
                 'seqNum' => 3,
-            ),
-            'uncertain_choice' => array(
+            ],
+            'uncertain_choice' => [
                 'name' => 'question.type.uncertain_choice',
-                'actions' => array(
-                    'create' => 'AppBundle:Question/UncertainChoiceQuesiton:create',
-                    'edit' => 'AppBundle:Question/UncertainChoiceQuesiton:edit',
-                    'show' => 'AppBundle:Question/UncertainChoiceQuesiton:show',
-                ),
-                'templates' => array(
+                'templates' => [
                     'do' => 'question/uncertain-choice-do.html.twig',
                     'analysis' => 'question/analysis/uncertain_choice.html.twig',
-                ),
+                ],
                 'hasMissScore' => 1,
                 'seqNum' => 4,
-            ),
-            'determine' => array(
+            ],
+            'determine' => [
                 'name' => 'question.type.determine',
-                'actions' => array(
-                    'create' => 'AppBundle:Question/DetermineQuestion:create',
-                    'edit' => 'AppBundle:Question/DetermineQuestion:edit',
-                    'show' => 'AppBundle:Question/DetermineQuestion:show',
-                ),
-                'templates' => array(
+                'templates' => [
                     'do' => 'question/determine-do.html.twig',
                     'analysis' => 'question/analysis/determine.html.twig',
-                ),
+                ],
                 'hasMissScore' => 0,
                 'seqNum' => 5,
-            ),
-            'fill' => array(
+            ],
+            'fill' => [
                 'name' => 'question.type.fill',
-                'actions' => array(
-                    'create' => 'AppBundle:Question/FillQuestion:create',
-                    'edit' => 'AppBundle:Question/FillQuestion:edit',
-                    'show' => 'AppBundle:Question/FillQuestion:show',
-                ),
-                'templates' => array(
+                'templates' => [
                     'do' => 'question/fill-do.html.twig',
                     'analysis' => 'question/analysis/fill.html.twig',
-                ),
+                ],
                 'hasMissScore' => 0,
                 'seqNum' => 6,
-            ),
-            'material' => array(
+            ],
+            'material' => [
                 'name' => 'question.type.material',
-                'actions' => array(
-                    'create' => 'AppBundle:Question/MaterialQuestion:create',
-                    'edit' => 'AppBundle:Question/MaterialQuestion:edit',
-                    'show' => 'AppBundle:Question/MaterialQuestion:show',
-                ),
-                'templates' => array(
+                'templates' => [
                     'do' => 'question/material-do.html.twig',
                     'analysis' => 'question/analysis/material.html.twig',
-                ),
+                ],
                 'hasMissScore' => 0,
                 'seqNum' => 7,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -124,51 +81,5 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
-        $container['question_type.choice'] = function ($biz) {
-            $obj = new Choice();
-            $obj->setBiz($biz);
-
-            return $obj;
-        };
-        $container['question_type.single_choice'] = function ($biz) {
-            $obj = new SingleChoice();
-            $obj->setBiz($biz);
-
-            return $obj;
-        };
-        $container['question_type.uncertain_choice'] = function ($biz) {
-            $obj = new UncertainChoice();
-            $obj->setBiz($biz);
-
-            return $obj;
-        };
-        $container['question_type.determine'] = function ($biz) {
-            $obj = new Determine();
-            $obj->setBiz($biz);
-
-            return $obj;
-        };
-        $container['question_type.essay'] = function ($biz) {
-            $obj = new Essay();
-            $obj->setBiz($biz);
-
-            return $obj;
-        };
-        $container['question_type.fill'] = function ($biz) {
-            $obj = new Fill();
-            $obj->setBiz($biz);
-
-            return $obj;
-        };
-        $container['question_type.material'] = function ($biz) {
-            $obj = new Material();
-            $obj->setBiz($biz);
-
-            return $obj;
-        };
-
-        $container['testpaper_pattern.questionType'] = function ($container) {
-            return new QuestionTypePattern($container);
-        };
     }
 }

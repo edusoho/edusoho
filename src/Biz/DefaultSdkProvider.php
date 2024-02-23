@@ -2,7 +2,6 @@
 
 namespace Biz;
 
-use AppBundle\System;
 use Codeages\Biz\Framework\Context\Biz;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -17,16 +16,6 @@ class DefaultSdkProvider implements ServiceProviderInterface
             $sdk = $that->generateSdk($biz, $that->getDrpConfig($biz));
             if (!empty($sdk)) {
                 $service = $sdk->getDrpService();
-            }
-
-            return $service;
-        };
-
-        $biz['qiQiuYunSdk.xapi'] = function ($biz) use ($that) {
-            $service = null;
-            $sdk = $that->generateSdk($biz, $that->getXAPIConfig($biz));
-            if (!empty($sdk)) {
-                $service = $sdk->getXAPIService();
             }
 
             return $service;
@@ -354,29 +343,6 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         return ['esop' => ['host' => $hostUrl]];
-    }
-
-    public function getXAPIConfig(Biz $biz)
-    {
-        $settingService = $biz->service('System:SettingService');
-        $siteSettings = $settingService->get('site', []);
-        $xapiSetting = $settingService->get('xapi', []);
-        $pushUrl = !empty($xapiSetting['push_url']) ? $xapiSetting['push_url'] : 'lrs.qiqiuyun.net/v1/xapi/';
-        $pushUrl = ltrim($pushUrl, ' ');
-        $pushUrl = rtrim($pushUrl, '/');
-        $pushUrl = ltrim($pushUrl, 'http://');
-        $pushUrl = ltrim($pushUrl, 'https://');
-        $siteName = empty($siteSettings['name']) ? 'none' : $siteSettings['name'];
-        $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
-
-        return [
-            'xapi' => [
-                'host' => $pushUrl,
-                'school_name' => $siteName,
-                'school_url' => $siteUrl,
-                'school_version' => System::VERSION,
-            ],
-        ];
     }
 
     public function getMpConfig(Biz $biz)

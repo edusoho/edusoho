@@ -11,8 +11,8 @@ class DefaultSdkProviderTest extends BaseTestCase
     {
         $biz = ServiceKernel::instance()->getBiz();
         $setting = $biz->service('System:SettingService');
-        $setting->set('storage', array('cloud_access_key' => 'test_cloud_access_key', 'cloud_secret_key' => 'test_cloud_secret_key'));
-        $setting->set('developer', array(
+        $setting->set('storage', ['cloud_access_key' => 'test_cloud_access_key', 'cloud_secret_key' => 'test_cloud_secret_key']);
+        $setting->set('developer', [
             'distributor_server' => 'http://test.eduoshotest.com',
             'cloud_api_es_op_server' => 'http://test.eduoshotest.com',
             'mp_service_url' => 'http://test.eduoshotest.com',
@@ -21,11 +21,10 @@ class DefaultSdkProviderTest extends BaseTestCase
             'cloud_play_server' => 'http://test.eduoshotest.com',
             'cloud_api_notification_server' => 'http://test.eduoshotest.com',
             'cloud_api_wechat_server' => 'http://test.eduoshotest.com',
-        ));
+        ]);
 
-        $sdkArray = array(
+        $sdkArray = [
             'drp' => '\QiQiuYun\SDK\Service\DrpService',
-            'xapi' => '\QiQiuYun\SDK\Service\XAPIService',
             'play' => '\QiQiuYun\SDK\Service\PlayService',
             'playv2' => '\QiQiuYun\SDK\Service\PlayV2Service',
             'esOp' => '\QiQiuYun\SDK\Service\ESopService',
@@ -35,7 +34,7 @@ class DefaultSdkProviderTest extends BaseTestCase
             'notification' => '\QiQiuYun\SDK\Service\NotificationService',
             'wechat' => '\QiQiuYun\SDK\Service\WeChatService',
             'sms' => '\QiQiuYun\SDK\Service\SmsService',
-        );
+        ];
         foreach ($sdkArray as $key => $value) {
             $this->assertTrue($biz['qiQiuYunSdk.'.$key] instanceof $value);
         }

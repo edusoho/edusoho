@@ -170,11 +170,6 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         return $this->getBiz()->service('Activity:ActivityService');
     }
 
-    public function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
-    }
-
     public function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
