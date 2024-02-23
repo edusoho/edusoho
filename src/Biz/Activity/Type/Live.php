@@ -97,8 +97,10 @@ class Live extends Activity
 
     public function update($id, &$fields, $activity)
     {
-        $files = json_decode($fields['materials'], true);
-        $fields['fileIds'] = empty($files) ? [] : ArrayToolkit::column($files, 'fileId');
+        if (isset($fields['materials'])) {
+            $files = json_decode($fields['materials'], true);
+            $fields['fileIds'] = empty($files) ? [] : ArrayToolkit::column($files, 'fileId');
+        }
 
         list($liveActivity, $fields) = $this->getLiveActivityService()->updateLiveActivity($id, $fields, $activity);
 
