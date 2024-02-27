@@ -97,7 +97,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
 
     public function deleteLimitByActivityId($activityId, $limit)
     {
-        return $this->db()->executeStatement("DELETE FROM {$this->table()} WHERE activityId = ? LIMIT ?", [$activityId, $limit]);
+        return $this->db()->executeUpdate("DELETE FROM {$this->table()} WHERE activityId = ? LIMIT {$limit};", [$activityId]);
     }
 
     public function declares()
