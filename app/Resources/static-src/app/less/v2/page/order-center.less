@@ -58,6 +58,7 @@
     height: 22px;
     margin-bottom: 4px;
     display: flex;
+    flex-wrap: nowrap;
     &__title {
       width: 58px;
       text-align: right;
@@ -68,7 +69,7 @@
     &__content {
       margin-left: 4px;
       color: @cd-dark-major;
-      max-width: 250px;
+      max-width: 210px;
       .cd-text-overflow(inline-block);
       @media(max-width: @screen-xs-max) {
         max-width: 160px;
