@@ -39,6 +39,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'deleteUselessJob',
             'registerFixNotSyncTaskJob',
             'fixLiveProgressStatus',
+            'addFileGroupQuestion',
         ];
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -130,6 +131,21 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    protected function addFileGroupQuestion()
+    {
+        $fileGroup = $this->getFileService()->getFileGroupByCode('question');
+        if (empty($fileGroup)) {
+            $this->getFileService()->addFileGroup([
+                'name' => '题目',
+                'code' => 'question',
+                'public' => 1,
+            ]);
+        }
+        $this->logger('info', '添加文件组question成功');
+
+        return 1;
+    }
+
     protected function generateIndex($step, $page)
     {
         return $step * 1000000 + $page;
@@ -163,6 +179,11 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "show index from `{$table}` where key_name='{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
         return !empty($result);
+    }
+
+    protected function getFileService()
+    {
+        return $this->createService('Content:FileService');
     }
 
     protected function getSchedulerService()
