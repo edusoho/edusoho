@@ -333,6 +333,11 @@ class SystemInitializerTest extends BaseTestCase
                 'code' => 'classroom',
                 'public' => 1,
             ],
+            [
+                'name' => '题目',
+                'code' => 'question',
+                'public' => 1,
+            ],
         ], $result);
     }
 
