@@ -799,6 +799,7 @@ validate.valid_rangetime.required: Please select a date range
 validate.valid_starttime.required: Please select a start time
 validate.valid_endtime.required: Please select an end time
 validate.valid_email_input.message: Please enter a valid email address.
+validate.valid_idcard_formate.message: Please enter a valid ID card number.
 validate.valid_url_input.message: Please enter a valid URL.
 validate.valid_date_input.message: Please enter a valid date.
 validate.valid_date_iso_input.message: Please enter a valid date  (ISO)
