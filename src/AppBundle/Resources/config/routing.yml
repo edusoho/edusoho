@@ -1839,7 +1839,7 @@ course_task_show:
     defaults:
         _controller: 'AppBundle:Task:show'
 course_task_download_app_show:
-  path: '/course/task/downloadAppShowAction'
+  path: '/course/task/downloadAppShow'
   defaults:
     _controller: 'AppBundle:Task:downloadAppShow'
 course_task_preview:

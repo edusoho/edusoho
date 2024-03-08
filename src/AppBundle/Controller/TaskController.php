@@ -187,10 +187,12 @@ class TaskController extends BaseController
 
     public function downloadAppShowAction()
     {
+        $meCount = $this->setting('meCount', []);
+
         return $this->render(
             'task/app-modal.html.twig',
             [
-                'downloadUrl' => 'url',
+                'mobileCode' => empty($meCount['mobileCode']) ? 'zhixiang' : $meCount['mobileCode'],
             ]
         );
     }
