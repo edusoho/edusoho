@@ -164,8 +164,11 @@ class PagedCourseLesson {
           const allowedTaskTypes = ['testpaper', 'homework', 'exercise'];
           const isTaskTypeAllowed = allowedTaskTypes.includes(data.type);
           const isTaskResultIncomplete = data.resultStatus != 'finish';
-          console.log(data.type);
-          // return 'title js-modal-only-app'
+          const onlyAppType = ['video', 'audio', 'live']
+
+          if(onlyAppType.includes(data.type)) {
+            return 'title js-modal-only-app'
+          }
           
           if(canLearn == '1') {
             return 'title'
