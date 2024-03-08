@@ -8,9 +8,7 @@ stages:
 variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-  FROM_VERSION: 23.4.5
-  VERSION: 23.4.6
-  H5VERSION: release/22.2.3
+  H5_VERSION: release/22.2.3
   STOPPED: "false"
 
 before_script:
@@ -307,9 +305,12 @@ Api Test With 7.1:
     - yarn config set registry https://registry.npm.taobao.org
     - rm -rf app/cache
     - git clone -b master --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/upgradescripts.git scripts
-    - git checkout release/${VERSION}
     - git pull
     - cp app/config/parameters.yml.dist app/config/parameters.yml
+    - export VERSION=$(git branch | grep '*' | cut -c 11-)
+    - echo $VERSION
+    - export FROM_VERSION=$(git branch -r | grep -B 1 release/$VERSION | head -1 | cut -c 18-)
+    - echo $FROM_VERSION
   artifacts:
     paths:
       - build/
@@ -323,7 +324,7 @@ Build h5, compile and build upgrade package:
   script:
     - git clone http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/edusoho-h5.git
     - cd edusoho-h5
-    - git checkout ${H5VERSION}
+    - git checkout ${H5_VERSION}
     - git pull
     - cp build/env.js.example build/env.js
     - rm -rf node_modules
@@ -342,7 +343,7 @@ Build h5, compile and build upgrade package:
     # 生成js语言包
     - app/console trans:dump-js
     - if [[ `git status --porcelain` ]]; then git config user.email "builder@edusoho.com"; git config user.name "builder"; git add .; git commit -m 'compile'; fi;
-    - app/console build:upgrade-package ${FROM_VERSION} ${VERSION}
+    - app/console build:upgrade-package $FROM_VERSION $VERSION
 
 Compile and build upgrade package:
   extends: '.Build upgrade package'
@@ -353,11 +354,15 @@ Compile and build upgrade package:
     - app/console assets:install
     - app/console trans:dump-js
     - if [[ `git status --porcelain` ]]; then git config user.email "builder@edusoho.com"; git config user.name "builder"; git add .; git commit -m 'compile'; fi;
-    - app/console build:upgrade-package ${FROM_VERSION} ${VERSION}
+    - app/console build:upgrade-package $FROM_VERSION $VERSION
 
 Build upgrade package:
   extends: '.Build upgrade package'
   before_script:
     - git clone -b master --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/upgradescripts.git scripts
     - cp app/config/parameters.yml.dist app/config/parameters.yml
-  script: app/console build:upgrade-package ${FROM_VERSION} ${VERSION}
+    - export VERSION=$(git branch | grep '*' | cut -c 11-)
+    - echo $VERSION
+    - export FROM_VERSION=$(git branch -r | grep -B 1 release/$VERSION | head -1 | cut -c 18-)
+    - echo $FROM_VERSION
+  script: app/console build:upgrade-package $FROM_VERSION $VERSION

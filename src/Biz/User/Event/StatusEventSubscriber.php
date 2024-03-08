@@ -283,11 +283,6 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
-    public function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
-    }
-
     public function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');

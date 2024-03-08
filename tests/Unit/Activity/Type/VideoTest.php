@@ -144,7 +144,7 @@ class VideoTest extends BaseTypeTestCase
         $type = $this->getActivityConfig(self::TYPE);
         $audioActivity = $type->create($field);
 
-        $results = $type->find(array($audioActivity['id']));
+        $results = $type->find([$audioActivity['id']]);
 
         $this->assertEquals(1, count($results));
     }
@@ -169,7 +169,7 @@ class VideoTest extends BaseTypeTestCase
         $type = $this->getActivityConfig(self::TYPE);
         $return = ReflectionUtils::invokeMethod($type, 'registerListeners');
 
-        $this->assertEquals(array('watching' => 'Biz\Activity\Listener\VideoActivityWatchListener'), $return);
+        $this->assertEquals([], $return);
     }
 
     public function testMaterialSupported()
@@ -190,15 +190,15 @@ class VideoTest extends BaseTypeTestCase
      */
     private function mockField($finishType = 'end', $finishDetail = 0, $source = 'self', $uri = '', $mediaId = 1)
     {
-        return array(
+        return [
             'finishType' => $finishType,
             'finishDetail' => $finishDetail,
-            'media' => json_encode(array(
+            'media' => json_encode([
                 'source' => $source,
                 'uri' => $uri,
                 'id' => $mediaId,
-            )),
-        );
+            ]),
+        ];
     }
 
     /**
@@ -208,9 +208,9 @@ class VideoTest extends BaseTypeTestCase
      */
     private function mockSimpleActivity($mediaId = 1)
     {
-        return array(
+        return [
             'id' => 1,
             'mediaId' => $mediaId,
-        );
+        ];
     }
 }

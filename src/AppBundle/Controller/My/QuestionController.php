@@ -125,11 +125,6 @@ class QuestionController extends BaseController
         return $this->createService('Question:QuestionService');
     }
 
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
-    }
-
     /**
      * @return QuestionFavoriteService
      */

@@ -78,7 +78,7 @@ class AudioTest extends BaseTypeTestCase
         $type = $this->getActivityConfig(self::TYPE);
         $return = ReflectionUtils::invokeMethod($type, 'registerListeners');
 
-        $this->assertEquals(array('watching' => 'Biz\Activity\Listener\VideoActivityWatchListener'), $return);
+        $this->assertEquals([], $return);
     }
 
     /**
@@ -168,7 +168,7 @@ class AudioTest extends BaseTypeTestCase
         $type = $this->getActivityConfig(self::TYPE);
         $audioActivity = $type->create($field);
 
-        $results = $type->find(array($audioActivity['id']));
+        $results = $type->find([$audioActivity['id']]);
 
         $this->assertEquals(1, count($results));
     }
@@ -198,13 +198,13 @@ class AudioTest extends BaseTypeTestCase
      */
     private function mockField($mediaId = 1)
     {
-        return array(
-            'media' => json_encode(array(
+        return [
+            'media' => json_encode([
                 'id' => $mediaId,
-            )),
+            ]),
             'content' => 'test content',
             'hasText' => 1,
-        );
+        ];
     }
 
     /**
@@ -214,9 +214,9 @@ class AudioTest extends BaseTypeTestCase
      */
     private function mockSimpleActivity($mediaId = 1)
     {
-        return array(
+        return [
             'id' => 1,
             'mediaId' => $mediaId,
-        );
+        ];
     }
 }

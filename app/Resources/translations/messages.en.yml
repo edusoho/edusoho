@@ -5431,8 +5431,6 @@ admin.operation_analysis.register.web_email: Email
 admin.operation_analysis.register.weibo: Weibo
 admin.operation_analysis.register.qq: QQ
 admin.operation_analysis.register.renren: Renren
-admin.operation_analysis.register.discuz: Discuz
-admin.operation_analysis.register.phpwind: Phpwind
 admin.operation_analysis.register.weixin: Wechat
 admin.operation_analysis.register.import: Imported
 admin.operation_analysis.register.other: Other
@@ -6577,18 +6575,6 @@ admin.login_connect.type.weibo.help_block: 'The final step , please enter the lo
 admin.login_connect.verifcation_loging_interface: 'Login interface validation code'
 admin.login_connect.verifcation_code: 'Validation code'
 admin.login_connect.verifcation_code.help_block: 'When applying for third-party logon interface, you will be asked to verify your site domain name. Please copy and paste the validation code here, then submit.'
-admin.user_center.admin_sync_btn: 'Administrator account synchronization'
-admin.user_center.user_center.title: 'User Center'
-admin.user_center.user_center.help_block: 'Support Discuz User Center X2.5/X3.0/X3.1/X3.2'
-admin.user_center.user_center.uc_connect.help_block: 'Tip: Due to discuz use mysql_connect connection, high version php has been abandoned, it is recommended not to fill in mysql, Leave it blank'
-admin.user_center.user_center.config_error: 'The configuration file <strong>%path%</strong> not be writable，please open this file and correct it.'
-admin.user_center.Configration: Configuration
-admin.user_center.Configration.help_block: 'How to configure?'
-admin.user_center.WindId_Configration: 'WindId configuration'
-admin.user_center.WindId_Configration.help_block: 'If you use phpwind (WindID) user Center, please fill in this configuration.'
-admin.user_center.filtr_email_list: 'Filtered email address list'
-admin.user_center.filtr_email_list.help_block: 'Enter one email address per line. If the email on the list appeared in the third party login process, then the system will generates a random email address for the user.'
-admin.user_center.tips: "<p>1. If communication fails,  usurers will be prompted  <strong class=\"user-center-copys-darken\"> “Input is not valid” </strong>or “communications failed, please contact the administrator to configure” </p> while register or login. <p>2. If communication successfully, all Discuz<strong class=\"user-center-copys-darken\"> registered users </strong> username (required to meet EduSoho registration rules, or synchronization will failed), password , Email, can sync to the site before or after the communication. </p> <p>3. If communication successfully, only the <strong class=\"user-center-copys-darken\"> new users register after the commnication </strong> can login and synchronize to Discuz. <p>4. Because of different <strong class=\"user-center-copys-darken\">password encryption mechanism </strong>, Discuz Registered users cannot batch import to the site, neither the registered user of the site bacht import to Discuz 。 </p>\n"
 admin.user_fields.add_field_btn: 'Add a field'
 admin.user_fields.customer_fields_setting: 'Custom field settings'
 admin.user_fields.fields_title: 'Field name'
@@ -6813,7 +6799,6 @@ admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
 admin.developer_setting.es_live_api_server: ES Live API
 admin.developer_setting.question_parse_api_server: Question Parse API
-admin.developer_xapi_address: XAPI address
 admin.developer_face_address: AI Face API address
 admin.developer_push_address: Push API address
 admin.developer_setting.cloud_api_server_address: 'Cloud services API address'
@@ -6847,7 +6832,6 @@ admin.magic_setting.export_limit: 'Export order limit in single time'
 admin.magic_setting.export_allow_count: 'Maximum order export quantity'
 admin.magic_setting.enable_org: 'Turn on organization settings'
 admin.magic_setting.quick_pay: 'Turn on quick pay'
-admin.magic_setting.uc_phpwind: 'Turn on phpwind settings'
 admin.magic_setting.login_limit: 'Account and log off the set'
 admin.magic_setting.file_single_size_limit: Single file set upload size
 admin.magic_setting.file_single_size_limit_tip: MByte,be used by editor upload only
@@ -7017,7 +7001,6 @@ admin.reports_status.php__curl_extend_tips: 'This extension is used to remotely 
 admin.reports_status.php__gd_extend_tips: 'This extension is used to process the image'
 admin.reports_status.system_communication: 'Communication situations'
 admin.reports_status.system_status: Status
-admin.reports_status.system_communication_with_discuz: 'Connection with Discuz Ucenter'
 admin.reports_status.system_checking: Detecting.....
 admin.reports_status.system_email_send: 'Send email'
 admin.reports_status.system_email_send_detection: 'Immediate detection'
@@ -7621,19 +7604,6 @@ admin.wechat_app.flow_entrance_introduction_title: Self-contained traffic
 admin.wechat_app.flow_entrance_introduction_content: WeChat's 900 million monthly active users, nearby WeApp, WeChat search and other functions, let you easily get customers.
 admin.wechat_app.easy_promotion_introduction_title: Ultralight promotion
 admin.wechat_app.easy_promotion_introduction_content: Streamlined experience, lowering user thresholds, and facilitating users to quickly spread on WeChat, promoting low-cost and high-transformation
-admin.xapi.title: Push details
-admin.xapi.id: Push id
-admin.xapi.version: xAPI version
-admin.xapi.body: Push body
-admin.xapi.status: Push status
-admin.xapi.verb: Push behavior
-admin.xapi.target_type: Push type
-admin.xapi.time: Push time
-admin.xapi.created_time: Created Time
-admin.xapi.operation: Operation
-admin.xapi.enable_label: Turn on xAPI
-admin.xapi.push_url_label: Set the xAPI address
-admin.xapi.default_url: Default address ：https://lrs.qiqiuyun.net/v1/xapi/
 site.data.num: ''
 site.date_format: 'F j, Y h:i'
 site.date_coupon: 'F j, Y'
@@ -9380,7 +9350,6 @@ exception.article.category_code_invalid: code is invalid
 exception.article.category_numeric_code: code is all number
 exception.user.unlogin: 'Please login.'
 exception.user.message_forbidden: 'Does''t support sending message to this user.'
-exception.user.discuz_user_reset_password: Please retrieve your password through the forum！
 exception.user.not_found: 'Cannot find this user!'
 exception.form.expire: 'Timeout, please commit again!'
 exception.form..drag.expire: 'The verification code has expired, please refresh the page and resubmit！'

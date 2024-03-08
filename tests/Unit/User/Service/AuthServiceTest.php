@@ -25,21 +25,6 @@ class AuthServiceTest extends BaseTestCase
         $this->assertEquals($user['email'], 'test@edusoho.com');
     }
 
-    public function testRegisterWithOtherType()
-    {
-        $user = $this->getCurrentuser();
-        $makeToken = $this->getUserService()->makeToken('discuz', $user['id']);
-        $getToken = $this->getUserService()->getToken('discuz', $makeToken);
-
-        $user = $this->getAuthService()->register([
-            'email' => 'test@edusoho.com',
-            'nickname' => 'test',
-            'password' => '123456',
-            'token' => $getToken,
-        ], 'discuz');
-        $this->assertEquals($user['email'], 'test@edusoho.com');
-    }
-
     public function testRegisterLimitValidator()
     {
         $currentUser = new CurrentUser();
@@ -80,23 +65,6 @@ class AuthServiceTest extends BaseTestCase
         $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', ['high', '127.0.0.1']);
         $this->assertFalse($result);
     }
-
-    //同步功能需要Discuz的安装支持，暂时不能测
-    // public function testSyncLogin()
-    // {
-    //     $this->getSettingService()->set('user_partner',array('mode' => 'discuz'));
-    //     $makeToken = $this->getUserService()->makeToken('discuz');
-    //     $getToken = $this->getUserService()->getToken('discuz',$makeToken);
-    //     $user = $this->getAuthService()->register(array(
-    //         'email' => 'test@edusoho.com',
-    //         'nickname' => 'test',
-    //         'password' => '123456',
-    //         'token' => $getToken,
-    //     ),'discuz');
-
-    //     $this->getAuthService()->syncLogin($user['id']);
-    //     $this->getSettingService()->delete('user_partner');
-    // }
 
     public function testSyncLoginWithDefaultAuthProvider()
     {

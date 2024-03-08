@@ -42,13 +42,6 @@ class UserExceptionTest extends BaseTestCase
         $this->assertEquals('exception.user.reset_password_email_send', $exception->getMessage());
     }
 
-    public function testDiscuzUserResetPassword()
-    {
-        $exception = UserException::FORBIDDEN_DISCUZ_USER_RESET_PASSWORD();
-
-        $this->assertEquals('exception.user.discuz_user_reset_password', $exception->getMessage());
-    }
-
     public function testErrorMobileRegistered()
     {
         $exception = UserException::ERROR_MOBILE_REGISTERED();

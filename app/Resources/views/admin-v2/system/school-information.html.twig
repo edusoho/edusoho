@@ -5,6 +5,17 @@
 {% set script_controller = 'setting/site' %}
 
 {% block main %}
+<style>
+#site-favicon-container > img {
+  max-width: 250px;
+  margin-bottom: 10px;
+}
+
+#site-logo-container > img {
+  max-width: 250px;
+  margin-bottom: 10px;
+}
+</style>
 
   {{ web_macro.flash_messages() }}
 

@@ -6,7 +6,6 @@ use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
-use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 
@@ -102,14 +101,6 @@ class Activity
     protected function getUploadFileService()
     {
         return $this->getBiz()->service('File:UploadFileService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 
     /**

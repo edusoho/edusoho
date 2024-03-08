@@ -6,7 +6,6 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Task\Service\TaskService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -304,14 +303,6 @@ class EsBarController extends BaseController
     protected function getNotificationService()
     {
         return $this->getBiz()->service('User:NotificationService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 
     protected function getCourseMemberService()

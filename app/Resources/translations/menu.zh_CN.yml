@@ -316,7 +316,6 @@ admin.system.site.security_tab: 安全
 ##用户设置模块
 admin.system.user.auth_tab: 注册
 admin.system.user.login_bind_tab: 登录
-admin.system.user.user_center_tab: 用户中心
 admin.system.user.user_fields_tab: 用户信息设置
 admin.system.user.avatar_tab: 默认头像
 admin.system.user.message: 私信
@@ -950,7 +949,6 @@ admin_v2.system.asset.refund_tab: 退款
 
 #系统-通用管理-用户设置
 admin_v2.system.user_menu: 用户设置
-admin_v2.system.user.user_center_tab: 用户中心
 admin_v2.system.user.login_bind_tab: 登录
 admin_v2.system.user.user_fields_tab: 用户信息设置
 admin_v2.system.user.avatar_tab: 默认头像
@@ -1022,9 +1020,6 @@ admin_v2.system.queue_failed_tab: 队列错误日志
 # 隐藏模块
 admin_v2.nav.developer_module: 开发者
 admin_v2.nav.developer_module.basic_group: 开发者设置
-admin_v2.developer.xapi_manage: xAPI管理
-admin_v2.developer.xapi_setting: xAPI设置
-admin_v2.developer.xapi_statement: xAPI报表
 
 admin_v2.developer.cdn_manage: CDN管理
 admin_v2.developer.cdn_setting: CDN设置

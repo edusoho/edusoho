@@ -8,15 +8,15 @@ interface LiveCloudStatisticsService
 
     public function sumWatchDurationByCourseIdGroupByUserId($courseId);
 
-    public function countLiveMembersByLiveId($liveId);
-
     public function countLiveMembers($conditions);
 
     public function getAvgWatchDurationByLiveId($liveId, $userIds);
 
-    public function getLiveData($task);
+    public function getLiveData($activityId);
 
-    public function processEsLiveMemberData($activity, $memberData);
+    public function syncLiveMemberData($activityId);
 
-    public function processGeneralLiveMemberData($activity, $memberData);
+    public function processEsLiveMemberData($liveActivity, $memberData);
+
+    public function processThirdPartyLiveMemberData($liveActivity, $memberData);
 }

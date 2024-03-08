@@ -80,7 +80,7 @@ module.exports = {
       ],
     },
     {
-      name: "swagger-ui/dist/swagger-ui.css",
+      name: 'swagger-ui/dist/swagger-ui.css',
     },
     // 纯拷贝item-bank/lib/itemBank.umd.min.js
     {

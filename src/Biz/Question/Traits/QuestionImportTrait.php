@@ -17,7 +17,7 @@ trait QuestionImportTrait
         if (empty($imgs)) {
             return $text;
         }
-        $localImgs = $this->getFileService()->addFiles('course', $this->downloadRemoteImgToLocal($imgs));
+        $localImgs = $this->downloadRemoteImgToLocal($imgs);
         $replaceImgs = array_combine($imgs, $this->convertImgUri(array_column($localImgs, 'uri')));
 
         return preg_replace_callback(
@@ -34,12 +34,12 @@ trait QuestionImportTrait
         $localImgs = [];
         foreach ($imgs as $img) {
             preg_match('/https?:\/\/(.*?)\/(.*?)\.(.*)/', $img, $match);
-            $localPath = $this->container->getParameter('topxia.upload.public_directory').'/tmp/'.Uuid::uuid4().'.'.$match[3];
+            $localPath = $this->container->getParameter('topxia.upload.public_directory').'/'.Uuid::uuid4().'.'.$match[3];
             file_put_contents($localPath, file_get_contents($img));
             $localImgs[] = $localPath;
         }
 
-        return $localImgs;
+        return $this->getFileService()->addFiles('question', $localImgs);
     }
 
     private function convertImgUri(array $uris)
@@ -91,7 +91,7 @@ trait QuestionImportTrait
             $imgChunk = $this->getQuestionParseClient()->convertLatex2Img($formulaChunk);
             $imgs = array_merge($imgs, $imgChunk);
         }
-        $localImgs = $this->getFileService()->addFiles('course', $this->downloadRemoteImgToLocal($imgs));
+        $localImgs = $this->downloadRemoteImgToLocal($imgs);
         $records = [];
         foreach ($formulas as $key => $formula) {
             $records[] = [

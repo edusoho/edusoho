@@ -147,7 +147,7 @@ class SystemInitializerTest extends BaseTestCase
 
         $result = $this->getSchedulerService()->searchJobs([], [], 0, \PHP_INT_MAX);
 
-        $this->assertEquals(27, count($result));
+        $this->assertEquals(22, count($result));
 
         $this->assertArrayEquals([
             'Order_FinishSuccessOrdersJob',
@@ -158,10 +158,6 @@ class SystemInitializerTest extends BaseTestCase
             'Scheduler_MarkExecutingTimeoutJob',
             'RefreshLearningProgressJob',
             'UpdateInviteRecordOrderInfoJob',
-            'Xapi_PushStatementsJob',
-            'Xapi_AddActivityWatchToStatementJob',
-            'Xapi_ArchiveStatementJob',
-            'Xapi_ConvertStatementsJob',
             'SyncUserTotalLearnStatisticsJob',
             'SyncUserLearnDailyPastLearnStatisticsJob',
             'DeleteUserLearnDailyPastLearnStatisticsJob',
@@ -171,7 +167,6 @@ class SystemInitializerTest extends BaseTestCase
             'DeleteFiredLogJob',
             'CheckConvertStatusJob',
             'updateCourseSetHotSeq',
-            'UpdateLiveStatusJob',
             'CloudConsultFreshJob',
             'DeleteUserFootprintJob',
             'WechatSubscribeRecordSynJob',
@@ -336,6 +331,11 @@ class SystemInitializerTest extends BaseTestCase
             [
                 'name' => '班级',
                 'code' => 'classroom',
+                'public' => 1,
+            ],
+            [
+                'name' => '题目',
+                'code' => 'question',
                 'public' => 1,
             ],
         ], $result);

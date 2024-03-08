@@ -123,15 +123,6 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         return $this->db()->fetchAll($sql, array_merge($courseIds, $mediaTypes));
     }
 
-    public function findFinishedLivesWithinOneDay()
-    {
-        $currentTime = time();
-        $expiredTime = 3600 * 24;
-        $sql = "SELECT * FROM {$this->table} WHERE mediaType = 'live' AND {$currentTime} > endTime AND ({$currentTime} - endTime) < {$expiredTime};";
-
-        return $this->db()->fetchAll($sql, []);
-    }
-
     public function findActivitiesByTypeAndCreatedTimeAndUpdatedTimeFinishType($type, $createdTime, $updatedTime, $finishType)
     {
         $sql = "SELECT * FROM {$this->table} WHERE mediaType = ? AND createdTime <= ? AND finishType = ? AND updatedTime <= ?;";

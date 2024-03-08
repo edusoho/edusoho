@@ -7,7 +7,6 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Question\Service\QuestionService;
-use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;

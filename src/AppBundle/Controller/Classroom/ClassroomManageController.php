@@ -25,7 +25,6 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\TagService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\NotificationService;
@@ -572,7 +571,7 @@ class ClassroomManageController extends BaseController
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
                 'avatar' => $this->getWebExtension()->avatarPath($user, 'small'),
-                'isCanceledTeacherRoles' => !in_array('ROLE_TEACHER',$user['roles']),
+                'isCanceledTeacherRoles' => !in_array('ROLE_TEACHER', $user['roles']),
             ];
         }
         $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
@@ -606,7 +605,7 @@ class ClassroomManageController extends BaseController
                 'id' => $headTeacher['id'],
                 'nickname' => $headTeacher['nickname'],
                 'avatar' => $this->getWebExtension()->avatarPath($headTeacher, 'small'),
-                'isCanceledTeacherRoles' => !in_array('ROLE_TEACHER',$headTeacher['roles']),
+                'isCanceledTeacherRoles' => !in_array('ROLE_TEACHER', $headTeacher['roles']),
             ];
         }
 
@@ -1392,14 +1391,6 @@ class ClassroomManageController extends BaseController
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**

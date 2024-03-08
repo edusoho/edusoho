@@ -1061,14 +1061,6 @@ class CourseSetController extends BaseController
     }
 
     /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
-    }
-
-    /**
      * @return AppService
      */
     protected function getAppService()
