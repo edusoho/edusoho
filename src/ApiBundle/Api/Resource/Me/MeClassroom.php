@@ -27,6 +27,7 @@ class MeClassroom extends AbstractResource
             'createdTime' => 'desc',
         ];
         $members = $this->getClassroomService()->searchMembers($conditions, $orderBy, 0, PHP_INT_MAX);
+        $members = ArrayToolkit::index($members, 'classroomId');
         if (isset($querys['format']) && 'pagelist' == $querys['format']) {
             list($offset, $limit) = $this->getOffsetAndLimit($request);
             $classroomConditions = $this->buildClassroomConditions($members, $querys);
@@ -48,7 +49,7 @@ class MeClassroom extends AbstractResource
             foreach ($classrooms as &$classroom) {
                 $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
                 $classroom['learningProgressPercent'] = $progress['percent'];
-                $classroom['isExpired'] = $this->isExpired($classroom['deadline']);
+                $classroom['isExpired'] = empty($members[$classroom['id']]) || $this->isExpired($members[$classroom['id']]['deadline']);
             }
 
             return $this->makePagingObject($classrooms, $this->getClassroomService()->countClassrooms($classroomConditions), $offset, $limit);
@@ -57,13 +58,12 @@ class MeClassroom extends AbstractResource
 
             $classrooms = array_values($this->getClassroomService()->findClassroomsByIds($classroomIds));
             $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
-            $members = ArrayToolkit::index($members, 'classroomId');
 
             foreach ($classrooms as &$classroom) {
                 $classroom['lastLearnTime'] = $members[$classroom['id']]['createdTime'];
                 $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
                 $classroom['learningProgressPercent'] = $progress['percent'];
-                $classroom['isExpired'] = $this->isExpired($classroom['deadline']);
+                $classroom['isExpired'] = empty($members[$classroom['id']]) || $this->isExpired($members[$classroom['id']]['deadline']);
             }
 
             array_multisort(ArrayToolkit::column($classrooms, 'lastLearnTime'), SORT_DESC, $classrooms);
