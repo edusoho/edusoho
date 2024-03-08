@@ -5,7 +5,6 @@ namespace AppBundle\Controller\AdminV2\System;
 use AppBundle\Common\StringToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\System\Service\SettingService;
-use Biz\User\AuthProvider\DiscuzAuthProvider;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,23 +23,6 @@ class SystemController extends BaseController
         phpinfo();
 
         return new Response();
-    }
-
-    public function ucenterAction()
-    {
-        $setting = $this->getSettingService()->get('user_partner', []);
-
-        if (!empty($setting['mode']) && 'discuz' === $setting['mode']) {
-            $discuzProvider = new DiscuzAuthProvider($this->getBiz());
-
-            if ($discuzProvider->checkConnect()) {
-                return $this->createJsonResponse(['status' => true, 'message' => '通信成功']);
-            }
-
-            return $this->createJsonResponse(['status' => false, 'message' => '通信失败']);
-        } else {
-            return $this->createJsonResponse(['status' => true, 'message' => '未开通Ucenter']);
-        }
     }
 
     public function emailSendCheckAction()

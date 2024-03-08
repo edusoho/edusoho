@@ -12,7 +12,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
     public function declares()
     {
         return [
-            'timestamps' => [],
+            'timestamps' => ['createdTime', 'updatedTime'],
             'serializes' => [],
             'orderbys' => ['createdTime', 'startTime', 'endTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq', 'updatedTime'],
             'conditions' => [
@@ -95,13 +95,9 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
         return $this->db()->fetchColumn($sql, [$courseId]);
     }
 
-    public function findFinishedLivesWithinOneDay()
+    public function getLiveOpenLessonByMediaId($mediaId)
     {
-        $currentTime = time();
-        $expiredTime = 3600 * 24;
-        $sql = "SELECT * FROM {$this->table} WHERE type = 'liveOpen' AND {$currentTime} > endTime AND ({$currentTime} - endTime) < {$expiredTime} AND replayStatus = 'ungenerated' AND progressStatus != 'closed';";
-
-        return $this->db()->fetchAll($sql, []);
+        return $this->getByFields(['type' => 'liveOpen', 'mediaId' => $mediaId]);
     }
 
     protected function createQueryBuilder($conditions)

@@ -1371,7 +1371,7 @@ class UserServiceImpl extends BaseService implements UserService
     protected function typeInOAuthClient($type)
     {
         $types = array_keys(OAuthClientFactory::clients());
-        $types = array_merge($types, ['discuz', 'phpwind', 'marketing', 'wechat_app', 'weixin']);
+        $types = array_merge($types, ['marketing', 'wechat_app', 'weixin']);
 
         return in_array($type, $types);
     }
@@ -2827,7 +2827,7 @@ class UserServiceImpl extends BaseService implements UserService
     private function isValidOAuthClient($type)
     {
         $types = array_keys(OAuthClientFactory::clients());
-        $types = array_merge($types, ['discuz', 'phpwind', 'marketing', 'wechat_app', 'weixin']);
+        $types = array_merge($types, ['marketing', 'wechat_app', 'weixin']);
 
         return in_array($type, $types);
     }

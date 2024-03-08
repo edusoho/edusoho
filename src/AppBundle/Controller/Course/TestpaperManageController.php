@@ -9,7 +9,6 @@ use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -27,21 +26,6 @@ class TestpaperManageController extends BaseController
             'answerRecordId' => $answerRecordId,
             'source' => 'course',
             'targetId' => $course['id'],
-        ]);
-    }
-
-    /**
-     * 仅作为8.0之前版本通知使用.
-     */
-    public function checkForwordAction(Request $request, $resultId)
-    {
-        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
-
-        return $this->forward('AppBundle:Course/TestpaperManage:check', [
-            'request' => $request,
-            'resultId' => $result['id'],
-            'source' => 'course',
-            'targetId' => $result['courseId'],
         ]);
     }
 
@@ -235,14 +219,6 @@ class TestpaperManageController extends BaseController
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     protected function getCourseMemberService()

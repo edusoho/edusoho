@@ -8,11 +8,7 @@ use Codeages\Biz\Framework\Scheduler\AbstractJob;
 class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
 {
     protected $indexArr = [
-        ['type' => 'add', 'table' => 'xapi_statement', 'key' => 'status_createdTime', 'value' => '`status`,`created_time`'],
-        ['type' => 'add', 'table' => 'xapi_statement', 'key' => 'status_pushTime', 'value' => '`status`,`push_time`'],
         ['type' => 'add', 'table' => 'log_v8', 'key' => 'module_action_createdTime', 'value' => '`module`,`action`,`createdTime`'],
-        ['type' => 'add', 'table' => 'xapi_activity_watch_log', 'key' => 'is_push', 'value' => '`is_push`'],
-        ['type' => 'add', 'table' => 'xapi_activity_watch_log', 'key' => 'userId_activityId', 'value' => '`userId_activityId`'],
         ['type' => 'add', 'table' => 'course_task_result', 'key' => 'courseId', 'value' => '`courseId`'],
         ['type' => 'add', 'table' => 'course_task_result', 'key' => 'courseTaskId_userId', 'value' => '`courseTaskId`,`userId`'],
         ['type' => 'add', 'table' => 'course_task_result', 'key' => 'courseId_status', 'value' => '`courseId`,`status`'],

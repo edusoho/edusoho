@@ -8,7 +8,6 @@ use Biz\Common\CommonException;
 use Biz\Course\Exception\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
@@ -45,36 +44,6 @@ class HomeworkController extends BaseController
             'answerRecordId' => $latestAnswerRecord['id'],
             'submitGotoUrl' => $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]),
             'saveGotoUrl' => $this->generateUrl('my_course_show', ['id' => $activity['fromCourseId']]),
-        ]);
-    }
-
-    public function doTestAction(Request $request, $resultId)
-    {
-        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
-        if (!$result) {
-            return $this->createMessageResponse('info', 'homework result not found');
-        }
-
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($result['courseId']);
-
-        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($result['testId'], $result['type']);
-        if (!$homework) {
-            return $this->createMessageResponse('info', 'homework not found');
-        }
-
-        $questions = $this->getTestpaperService()->showTestpaperItems($homework['id'], $result['id']);
-
-        $activity = $this->getActivityService()->getActivity($result['lessonId']);
-
-        return $this->render('homework/do.html.twig', [
-            'paper' => $homework,
-            'questions' => $questions,
-            'course' => $course,
-            'paperResult' => $result,
-            'activity' => $activity,
-            'showTypeBar' => 0,
-            'showHeader' => 0,
-            'isDone' => true,
         ]);
     }
 
@@ -168,14 +137,6 @@ class HomeworkController extends BaseController
         }
 
         return false;
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**

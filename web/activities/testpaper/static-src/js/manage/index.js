@@ -545,7 +545,7 @@ class Testpaper {
       start: passScore,
       connect: [true, false],
       tooltips: [true],
-      step: 1,
+      step: 0.1,
       range: {
         'min': 0,
         'max': score

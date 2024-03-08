@@ -68,7 +68,7 @@ class KernelControllerListener
             '/login/bind/weixinmob/choose', '/login/bind/weixinmob/changetoexist',
             '/login/bind/qq/new', '/login/bind/weibo/new', '/login/bind/renren/new',
             '/login/bind/weixinmob/new', '/login/bind/weixinweb/new',
-            '/partner/discuz/api/notify', '/partner/phpwind/api/notify', '/partner/login', '/partner/logout',
+            '/partner/login', '/partner/logout',
             '/login/weixinmob', '/login/bind/weixinmob/existbind',
             '/captcha_num', '/register/captcha/check', '/edu_cloud/sms_send',
             '/edu_cloud/sms_check/sms_bind', '/settings/check_login_password',

@@ -7,7 +7,6 @@
 /app/config/parameters.yml
 /app/config/parameters_test.yml
 /app/config/menu_blacklist.yml
-/app/config/uc_client_config.php
 /app/config/routing_plugins.yml
 /app/config/sentry.yml
 /app/config/session_redis.yml
@@ -59,7 +58,6 @@ chunk-manifest.json
 !/web/static-dist/autumntheme
 !/web/static-dist/custombundle
 !/web/static-dist/marketingmallbundle
-!/web/static-dist/turingtheme
 !/web/static-dist/*activity
 /web/static-dist/**/css/*.js
 deployment-config.json

@@ -472,6 +472,12 @@ EOD;
             'public' => 1,
         ]);
 
+        $this->getFileService()->addFileGroup([
+            'name' => '题目',
+            'code' => 'question',
+            'public' => 1,
+        ]);
+
         $this->output->writeln(' ...<info>成功</info>');
     }
 

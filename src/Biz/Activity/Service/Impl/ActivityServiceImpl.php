@@ -31,7 +31,6 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 class ActivityServiceImpl extends BaseService implements ActivityService
 {
     const LIVE_STARTTIME_DIFF_SECONDS = 7200;
-    const LIVE_ENDTIME_DIFF_SECONDS = 7200;
 
     public function getActivity($id, $fetchMedia = false)
     {
@@ -46,7 +45,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     public function getActivityFinishCondition($activity)
     {
-        if (ArrayToolkit::requireds($activity, ['mediaType', 'finishType', 'finishData'])) {
+        if (!ArrayToolkit::requireds($activity, ['mediaType', 'finishType', 'finishData'])) {
             throw $this->createInvalidArgumentException('params missed');
         }
 
@@ -267,7 +266,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function deleteActivity($id)
     {
         $activity = $this->getActivity($id);
-        $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
+        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+        if ($course) {
+            $this->getCourseService()->tryManageCourse($course['id']);
+        }
 
         try {
             $this->beginTransaction();
@@ -735,11 +737,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         return false;
-    }
-
-    public function findFinishedLivesWithinOneDay()
-    {
-        return $this->getActivityDao()->findFinishedLivesWithinOneDay();
     }
 
     public function findActivitiesByMediaIdsAndMediaType($mediaIds, $mediaType)

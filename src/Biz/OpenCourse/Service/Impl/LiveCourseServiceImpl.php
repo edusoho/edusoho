@@ -5,6 +5,7 @@ namespace Biz\OpenCourse\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\LiveActivityException;
 use Biz\BaseService;
+use Biz\Live\Constant\LiveStatus;
 use Biz\Live\Service\LiveService;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\LiveCourseService;
@@ -16,7 +17,6 @@ use Topxia\Service\Common\ServiceKernel;
 class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 {
     const LIVE_STARTTIME_DIFF_SECONDS = 7200;
-    const LIVE_ENDTIME_DIFF_SECONDS = 7200;
 
     private $liveClient = null;
 
@@ -41,7 +41,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     {
         $courseTeacherIds = $course['teacherIds'];
         $params = [
-            'summary' => isset($lesson['summary']) ? $lesson['summary'] : '',
+            'summary' => $lesson['summary'] ?? '',
             'title' => $lesson['title'],
             'type' => $lesson['type'],
             'speaker' => $this->_getSpeaker($courseTeacherIds),
@@ -148,32 +148,11 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             return ['result' => false, 'message' => '直播还没开始!'];
         }
 
-        if ($this->checkLiveStatus($lesson)) {
+        if (LiveStatus::CLOSED == $lesson['progressStatus']) {
             return ['result' => false, 'message' => '直播已结束!'];
         }
 
         return ['result' => true, 'message' => ''];
-    }
-
-    protected function checkLiveFinished($lesson)
-    {
-        $isEsLive = EdusohoLiveClient::isEsLive($lesson['liveProvider']);
-        $endLeftSeconds = time() - $lesson['endTime'];
-
-        //ES直播结束时间2小时后就自动结束，第三方直播以直播结束时间为准
-        $thirdLiveFinished = $endLeftSeconds > 0 && !$isEsLive;
-        $esLiveFinished = $isEsLive && $endLeftSeconds > self::LIVE_ENDTIME_DIFF_SECONDS;
-
-        return $thirdLiveFinished || $esLiveFinished;
-    }
-
-    protected function checkLiveStatus($lesson)
-    {
-        if (EdusohoLiveClient::LIVE_STATUS_CLOSED == $lesson['progressStatus']) {
-            $LiveFinished = true;
-        }
-
-        return $LiveFinished;
     }
 
     public function checkCourseUserRole($course, $lesson)
@@ -225,11 +204,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             return true;
         }
 
-//        if ($this->checkLiveFinished($lesson)) {
-//            return true;
-//        }
-
-        if (EdusohoLiveClient::LIVE_STATUS_CLOSED == $lesson['progressStatus']) {
+        if (LiveStatus::CLOSED == $lesson['progressStatus']) {
             return true;
         }
 

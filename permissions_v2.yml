@@ -393,8 +393,6 @@ admin_v2_user_auth:
     - admin_user_auth
 admin_v2_setting_login_bind:
     - admin_setting_login_bind
-admin_v2_setting_user_center:
-    - admin_setting_user_center
 admin_v2_setting_user_fields:
     - admin_setting_user_fields
 admin_v2_setting_avatar:

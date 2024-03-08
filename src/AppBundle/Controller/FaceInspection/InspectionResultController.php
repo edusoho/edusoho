@@ -10,7 +10,6 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\FaceInspection\Service\FaceInspectionService;
 use Biz\System\Service\Impl\SettingServiceImpl;
-use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -120,14 +119,6 @@ class InspectionResultController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**

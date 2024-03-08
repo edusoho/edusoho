@@ -35,7 +35,6 @@ parameters:
         - '/file/upload'
         - '/editor/upload'
         - '/disk/convert/callback'
-        - '/partner/discuz/api/notify'
         - '/live/auth'
         - '/edu_cloud/sms_callback'
         - '/bddServer/callback'

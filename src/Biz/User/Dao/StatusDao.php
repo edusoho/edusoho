@@ -2,13 +2,11 @@
 
 namespace Biz\User\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface StatusDao extends GeneralDaoInterface
+interface StatusDao extends AdvancedDaoInterface
 {
     public function deleteByUserIdAndTypeAndObject($userId, $type, $objectType, $objectId);
-
-    public function deleteByCourseIdAndTypeAndObject($courseId, $type, $objectType, $objectId);
 
     public function deleteByCourseId($courseId);
 

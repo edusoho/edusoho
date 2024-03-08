@@ -43,10 +43,10 @@ function filterClassName() {
 			do
 				[ "$testClassName" == "$value" ] && flag=1 #in
 			done
-			if [[  $flag = 0  ]]; then
+			if [[  $flag = 0 && ! "${phpunitArray[*]}" =~ "$className" ]]; then
 				phpunitArray[$index]=$testClassName
 			fi
-		elif [[  $className = *Test\.php* ]]; then
+		elif [[  $className = *Test\.php* && ! "${phpunitArray[*]}" =~ "$className" ]]; then
 			phpunitArray[$index]=$className
 		fi
 	fi

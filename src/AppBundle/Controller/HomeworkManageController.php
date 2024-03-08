@@ -236,21 +236,6 @@ class HomeworkManageController extends BaseTestpaperController
         return $grades[0];
     }
 
-    protected function findRelatedData($activity, $paper)
-    {
-        $relatedData = [];
-        $userFirstResults = $this->getTestpaperService()->findExamFirstResults($paper['id'], $paper['type'], $activity['id']);
-
-        $relatedData['total'] = count($userFirstResults);
-
-        $userFirstResults = ArrayToolkit::group($userFirstResults, 'status');
-        $finishedResults = empty($userFirstResults['finished']) ? [] : $userFirstResults['finished'];
-
-        $relatedData['finished'] = count($finishedResults);
-
-        return $relatedData;
-    }
-
     protected function fillGraphData($firstAndMaxGrade)
     {
         $data = ['xScore' => [], 'yFirstNum' => [], 'yMaxNum' => []];
@@ -285,26 +270,6 @@ class HomeworkManageController extends BaseTestpaperController
         $data['passPercent'] = round($count / count($firstAndMaxGrade) * 100, 1);
 
         return $data;
-    }
-
-    protected function getRedirectRoute($mode, $type)
-    {
-        $routes = [
-            'nextCheck' => [
-                'course' => 'course_manage_exam_next_result_check',
-                'classroom' => 'classroom_manage_exam_next_result_check',
-            ],
-        ];
-
-        return $routes[$mode][$type];
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**
