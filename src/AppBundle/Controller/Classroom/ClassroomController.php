@@ -373,9 +373,8 @@ class ClassroomController extends BaseController
 
     public function classroomStatusBlockAction($classroom, $count = 10)
     {
-        $conditions['onlyClassroomId'] = $classroom['id'];
         $learns = $this->getStatusService()->searchStatuses(
-            $conditions,
+            ['onlyClassroomId' => $classroom['id']],
             ['createdTime' => 'DESC'],
             0,
             $count

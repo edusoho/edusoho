@@ -280,7 +280,6 @@ class Logger
                 'update_settings' => '更新设置',
                 'questions_settings' => '题库设置',
                 'customerServiceSetting' => '客服管理',
-                'setting_userCenter' => '用户中心设置',
                 'update_block' => '更新编辑区',
                 'update_app_version' => '更新版本', ],
             self::CLASSROOM => [

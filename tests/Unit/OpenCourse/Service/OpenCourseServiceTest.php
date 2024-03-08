@@ -100,7 +100,6 @@ class OpenCourseServiceTest extends BaseTestCase
         ];
 
         $excepted = [
-            'id' => '1',
             'title' => 'liveOpenCourse',
             'subtitle' => '',
             'status' => 'draft',
@@ -129,6 +128,7 @@ class OpenCourseServiceTest extends BaseTestCase
         ];
 
         $created = $this->getOpenCourseService()->createCourse($course);
+        unset($created['id']);
         unset($created['createdTime']);
         unset($created['updatedTime']);
         $this->assertEquals($excepted, $created);
@@ -986,57 +986,6 @@ class OpenCourseServiceTest extends BaseTestCase
     public function testLiveLessonTimeCheckWithExistCourse()
     {
         $this->getOpenCourseService()->liveLessonTimeCheck(1, '', strtotime('+1 day') + 10, 540);
-    }
-
-    public function testfindFinishedLivesWithinOneDay()
-    {
-        $this->mockBiz('OpenCourse:OpenCourseLessonDao', [
-            [
-                'functionName' => 'findFinishedLivesWithinOneDay',
-                'returnValue' => [['id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => time() - 3600, 'endTime' => time() - 1800]],
-            ],
-        ]);
-
-        $results = $this->getOpenCourseService()->findFinishedLivesWithinOneDay();
-
-        $this->assertEquals(1, count($results));
-        $this->assertEquals('liveOpen', $results[0]['type']);
-        $this->assertLessThan(7200, time() - $results[0]['endTime']);
-    }
-
-    public function testUpdateLiveStatus()
-    {
-        $result = $this->getOpenCourseService()->updateLiveStatus(1, 'closed');
-        $this->assertEmpty($result);
-
-        $this->mockBiz('OpenCourse:OpenCourseLessonDao', [
-            [
-                'functionName' => 'get',
-                'returnValue' => ['id' => 1, 'progressStatus' => 'created'],
-            ],
-            [
-                'functionName' => 'update',
-                'returnValue' => ['id' => 1, 'progressStatus' => 'closed'],
-            ],
-        ]);
-        $result = $this->getOpenCourseService()->updateLiveStatus(1, 'closed');
-
-        $this->assertEquals('closed', $result['progressStatus']);
-    }
-
-    /**
-     * @expectedException \Biz\OpenCourse\OpenCourseException
-     */
-    public function testUpdateLiveStatusException()
-    {
-        $this->mockBiz('OpenCourse:OpenCourseLessonDao', [
-            [
-                'functionName' => 'get',
-                'returnValue' => ['id' => 1, 'progressStatus' => 'created'],
-            ],
-        ]);
-
-        $result = $this->getOpenCourseService()->updateLiveStatus(1, 'created');
     }
 
     public function testCreateMember()

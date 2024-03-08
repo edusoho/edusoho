@@ -11,7 +11,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\InfoSecurity\Service\MobileMaskService;
-use Biz\LiveStatistics\Service\Impl\LiveCloudStatisticsServiceImpl;
+use Biz\LiveStatistics\Service\LiveCloudStatisticsService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Biz\User\Service\UserService;
@@ -29,7 +29,7 @@ class LiveStatisticMember extends AbstractResource
         if (empty($activity['ext']['liveId'])) {
             LiveActivityException::NOTFOUND_LIVE();
         }
-        $this->getLiveStatisticsService()->getLiveMemberData($task);
+        $this->getLiveStatisticsService()->syncLiveMemberData($task['activityId']);
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions = ['courseId' => $task['courseId'], 'liveId' => $activity['ext']['liveId'], 'excludeUserIds' => [$activity['ext']['anchorId']]];
@@ -43,26 +43,25 @@ class LiveStatisticMember extends AbstractResource
     protected function buildUserConditions(ApiRequest $request, &$conditions)
     {
         $nameOrMobile = $request->query->get('nameOrMobile', '');
-        if (!empty($nameOrMobile)) {
-            $mobile = SimpleValidator::mobile($nameOrMobile);
-            if ($mobile) {
-                $user = $this->getUserService()->getUserByVerifiedMobile($nameOrMobile);
-                $users = empty($user) ? [] : [$user];
-            } else {
-                $users = $this->getUserService()->searchUsers(
-                    ['nickname' => $nameOrMobile],
-                    [],
-                    0,
-                    PHP_INT_MAX,
-                    ['id']
-                );
-            }
-            $userIds = ArrayToolkit::column($users, 'id');
-            $conditions['userIds'] = empty($userIds) ? [-1] : $userIds;
+        if (empty($nameOrMobile)) {
+            return;
         }
+        if (SimpleValidator::mobile($nameOrMobile)) {
+            $user = $this->getUserService()->getUserByVerifiedMobile($nameOrMobile);
+            $users = empty($user) ? [] : [$user];
+        } else {
+            $users = $this->getUserService()->searchUsers(
+                ['nickname' => $nameOrMobile],
+                [],
+                0,
+                PHP_INT_MAX,
+                ['id']
+            );
+        }
+        $conditions['userIds'] = array_column($users, 'id') ?: [-1];
     }
 
-    public function processMemberData($activity, $members)
+    protected function processMemberData($activity, $members)
     {
         $cloudStatisticData = $activity['ext']['cloudStatisticData'];
         $userIds = ArrayToolkit::column($members, 'userId');
@@ -94,7 +93,7 @@ class LiveStatisticMember extends AbstractResource
     }
 
     /**
-     * @return LiveCloudStatisticsServiceImpl
+     * @return LiveCloudStatisticsService
      */
     protected function getLiveStatisticsService()
     {

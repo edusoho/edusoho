@@ -97,8 +97,6 @@ abstract class BaseRegister
 
     protected function beforeSave($registration, $user = [])
     {
-        $registration = $this->generatePartnerAuthUser($registration);
-
         foreach ($this->getCreatedUserFields() as $attr => $defaultValue) {
             if (isset($registration[$attr])) {
                 $user[$attr] = $registration[$attr];
@@ -112,7 +110,7 @@ abstract class BaseRegister
         $user['createdTime'] = time();
 
         $type = empty($registration['providerType']) ? $registration['type'] : $registration['providerType'];
-        if (in_array($type, ['default', 'phpwind', 'discuz', 'marketing'])) {
+        if (in_array($type, ['default', 'marketing'])) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
         } else {
@@ -135,15 +133,6 @@ abstract class BaseRegister
 
     protected function afterSave($registration, $user)
     {
-        //　绑定 discuz　用户
-        if (!empty($registration['partnerAuthUser']['id'])) {
-            $this->getUserService()->bindUser(
-                $this->getAuthService()->getPartnerName(),
-                $registration['partnerAuthUser']['id'],
-                $user['id'],
-                null
-            );
-        }
     }
 
     /**
@@ -260,23 +249,5 @@ abstract class BaseRegister
         }
 
         return $inviteUser;
-    }
-
-    private function generatePartnerAuthUser($registration)
-    {
-        if ($this->getAuthService()->hasPartnerAuth()) {
-            // 从discuz中注册过来
-            if (!empty($registration['token']['userId'])) {
-                $registration['type'] = 'discuz';
-                $registration['partnerAuthUser'] = [
-                    'id' => $registration['token']['userId'],
-                ];
-            } else { // 非discuz注册
-                $provider = $this->getAuthService()->getAuthProvider();
-                $registration['partnerAuthUser'] = $provider->register($registration);
-            }
-        }
-
-        return $registration;
     }
 }

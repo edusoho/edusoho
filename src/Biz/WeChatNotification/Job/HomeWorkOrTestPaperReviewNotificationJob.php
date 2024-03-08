@@ -8,7 +8,6 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\Service\CourseService;
-use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
 class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
@@ -154,14 +153,6 @@ class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
     protected function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestPaperService()
-    {
-        return $this->biz->service('Testpaper:TestpaperService');
     }
 
     /**

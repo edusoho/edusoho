@@ -372,7 +372,7 @@ class AuthServiceImpl extends BaseService implements AuthService
                 $partner = $setting['mode'];
             }
 
-            if (!in_array($partner, ['discuz', 'phpwind', 'default'])) {
+            if ('default' != $partner) {
                 throw $this->createInvalidArgumentException('Invalid partner');
             }
 

@@ -178,10 +178,6 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-      <td>{{ 'admin.reports_status.system_communication_with_discuz'|trans }}</td>
-      <td><span class="text-muted js-ucenter-check" data-url="{{ path('admin_report_status_ucenter') }}">{{ 'admin.reports_status.system_checking'|trans }}</span></td>
-    </tr>
     {% if setting("cloud_email.status")|default("disable") == "disable" %}
       <tr>
         <td>{{ 'admin.reports_status.system_email_send'|trans }} <i class="glyphicon glyphicon-info-sign text-info" data-toggle="tooltip" data-placement="top" title="{{ 'admin.reports_status.system_email_send_tips'|trans }}"></i></td>

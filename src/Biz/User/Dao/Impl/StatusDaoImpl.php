@@ -3,9 +3,9 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\StatusDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
+class StatusDaoImpl extends AdvancedDaoImpl implements StatusDao
 {
     protected $table = 'status';
 
@@ -13,16 +13,6 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
     {
         return $this->db()->delete($this->table, [
             'userId' => $userId,
-            'type' => $type,
-            'objectType' => $objectType,
-            'objectId' => $objectId,
-        ]);
-    }
-
-    public function deleteByCourseIdAndTypeAndObject($courseId, $type, $objectType, $objectId)
-    {
-        return $this->db()->delete($this->table, [
-            'courseId' => $courseId,
             'type' => $type,
             'objectType' => $objectType,
             'objectId' => $objectId,
@@ -56,6 +46,7 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
                 'userId = :userId',
                 'userId IN ( :userIds )',
                 'private = :private',
+                'createdTime < :createdTime_LT',
             ],
         ];
     }

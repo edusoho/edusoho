@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\BizDragCaptcha;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DragCaptcha extends AbstractResource
@@ -50,7 +51,7 @@ class DragCaptcha extends AbstractResource
     }
 
     /**
-     * @return \Biz\Common\BizCaptcha
+     * @return BizDragCaptcha
      */
     private function getBizDragCaptcha()
     {
@@ -63,11 +64,11 @@ class DragCaptcha extends AbstractResource
     public function get(ApiRequest $request, $token)
     {
         $flag = $this->getBizDragCaptcha()->check($token);
-        if($flag){
-            $dragTokens = empty($_SESSION["dragTokens"]) ? array() : $_SESSION["dragTokens"];
+        if ($flag) {
+            $dragTokens = empty($_SESSION['dragTokens']) ? [] : $_SESSION['dragTokens'];
             $dragTokens[] = $token;
             $session = $request->getHttpRequest()->getSession();
-            $session->set("dragTokens", $dragTokens);
+            $session->set('dragTokens', $dragTokens);
         }
 
         return [

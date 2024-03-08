@@ -37,7 +37,6 @@ use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Testpaper\Builder\RandomTestpaperBuilder;
-use Biz\Testpaper\Pattern\QuestionTypePattern;
 use Biz\Thread\Firewall\ArticleThreadFirewall;
 use Biz\Thread\Firewall\ClassroomThreadFirewall;
 use Biz\Thread\Firewall\OpenCourseThreadFirewall;
@@ -91,10 +90,6 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['thread_firewall.openCourse'] = function ($biz) {
             return new OpenCourseThreadFirewall();
-        };
-
-        $biz['testpaper_pattern.questionType'] = function ($biz) {
-            return new QuestionTypePattern($biz);
         };
 
         $biz['thread_event_processor.classroom'] = function ($biz) {
@@ -220,7 +215,7 @@ class DefaultServiceProvider implements ServiceProviderInterface
         ];
 
         $biz['educloud.live_client'] = function ($biz) {
-            return new EdusohoLiveClient($biz);
+            return new EdusohoLiveClient();
         };
 
         $biz['course.show_redirect'] = [

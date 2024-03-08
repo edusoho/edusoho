@@ -1,0 +1,36 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog task-only-app-modal' %}
+
+{% block title %}
+  扫码下载
+{% endblock %}
+
+{% block body %}
+  <div>
+  <div class="modal-intro">
+    <span>
+      请下载
+    </span>
+    <span class="modal-app">知享学堂App</span>
+    <span>后学习</span>
+  </div>
+  <div class="download-app">
+    <div class="download-app-qrcode">
+    {# <img class="js-download-app-qrcode" style="width: 100%;border-radius: 12px;" src="{{ path('mobile_download_qrcode',{code:mobileCode}) }}" alt=""> #}
+    <img class="js-download-app-qrcode" style="width: 100%;border-radius: 12px;" src="/mobile/downloadQrcode?code=zhixiang" alt="">
+      {# <canvas class="js-download-app-qrcode"></canvas> #}
+    </div>
+  </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+<div class="modal-guide flex justify-center items-center">
+  <img class="mobile-wechat-qrcode" src="{{ asset('static-dist/app/img/task/wechat-qrcode.png') }}" />
+  <div class="flex flex-col items-start ml8">
+  <span>打开微信</span>
+  <span>扫一扫</span>
+  </div>
+</div>
+{% endblock %}

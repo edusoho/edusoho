@@ -1286,7 +1286,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $lessonTree = [];
             $lessonIds = array_flip(array_column($taskGroup, 'categoryId'));
             $stack = [];
-            foreach ($chapters[$courseId] as $chapter) {
+            foreach ($chapters[$courseId] ?? [] as $chapter) {
                 if ('lesson' == $chapter['type'] && isset($lessonIds[$chapter['id']])) {
                     $stack[] = [
                         'id' => $chapter['id'],

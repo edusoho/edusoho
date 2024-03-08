@@ -71,8 +71,6 @@ interface ActivityService
 
     public function checkLiveStatus($courseId, $activityId);
 
-    public function findFinishedLivesWithinOneDay();
-
     public function getActivityFinishCondition($activity);
 
     public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId);

@@ -3,6 +3,7 @@
 namespace Tests\Unit\OpenCourse\Service;
 
 use Biz\BaseTestCase;
+use Biz\Live\Constant\LiveStatus;
 use Biz\User\CurrentUser;
 use Biz\Util\EdusohoLiveClient;
 use Mockery;
@@ -125,11 +126,11 @@ class LiveCourseServiceTest extends BaseTestCase
         $this->assertFalse($result['result']);
         $this->assertEquals('直播还没开始!', $result['message']);
 
-        $result = $this->getLiveCourseService()->checkLessonStatus(['id' => 1, 'mediaId' => 10, 'startTime' => (time() - 3600), 'endTime' => (time() - 1000), 'progressStatus' => 'closed', 'liveProvider' => 4]);
+        $result = $this->getLiveCourseService()->checkLessonStatus(['id' => 1, 'mediaId' => 10, 'startTime' => (time() - 3600), 'endTime' => (time() - 1000), 'progressStatus' => LiveStatus::CLOSED, 'liveProvider' => 4]);
         $this->assertFalse($result['result']);
         $this->assertEquals('直播已结束!', $result['message']);
 
-        $result = $this->getLiveCourseService()->checkLessonStatus(['id' => 1, 'mediaId' => 10, 'startTime' => (time() - 3600 * 4), 'endTime' => (time() - 3600 * 3), 'progressStatus' => 'closed', 'liveProvider' => 8]);
+        $result = $this->getLiveCourseService()->checkLessonStatus(['id' => 1, 'mediaId' => 10, 'startTime' => (time() - 3600 * 4), 'endTime' => (time() - 3600 * 3), 'progressStatus' => LiveStatus::CLOSED, 'liveProvider' => 8]);
         $this->assertFalse($result['result']);
         $this->assertEquals('直播已结束!', $result['message']);
 
@@ -262,7 +263,7 @@ class LiveCourseServiceTest extends BaseTestCase
             [
                 'functionName' => 'get',
                 'withParams' => [1],
-                'returnValue' => ['id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => $startTime, 'endTime' => $endTime, 'liveProvider' => 1, 'progressStatus' => 'closed'],
+                'returnValue' => ['id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => $startTime, 'endTime' => $endTime, 'liveProvider' => 1, 'progressStatus' => LiveStatus::CLOSED],
             ],
         ]);
 
@@ -282,7 +283,7 @@ class LiveCourseServiceTest extends BaseTestCase
             [
                 'functionName' => 'get',
                 'withParams' => [1],
-                'returnValue' => ['id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => $startTime1, 'endTime' => $endTime1, 'liveProvider' => 9, 'progressStatus' => 'closed'],
+                'returnValue' => ['id' => 1, 'mediaId' => 1, 'type' => 'liveOpen', 'startTime' => $startTime1, 'endTime' => $endTime1, 'liveProvider' => 9, 'progressStatus' => LiveStatus::CLOSED],
             ],
             [
                 'functionName' => 'get',
