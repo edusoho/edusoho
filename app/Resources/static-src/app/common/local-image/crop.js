@@ -102,7 +102,6 @@ class LocalImageCrop {
       return new Promise(function(resolve, reject) {
         $.post($input.data('crop'), cropOptions, function(data) {
           if(data) {
-            console.log("进来了");
             const name = $input.attr('id');
             $($input.data('targetImg')).attr('src', data[0].url)
             addInputVal(JSON.stringify(data),'cropImageAttr')

@@ -204,9 +204,6 @@
             BuySku,
             Certificate,
         },
-        mounted () {
-            console.log(this.goods);
-        },
         computed: {
             alertMessage() {
                 if (this.goods.type === 'classroom') {
