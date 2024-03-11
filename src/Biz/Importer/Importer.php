@@ -147,12 +147,12 @@ abstract class Importer
 
         foreach ($repeatArrayCount as $key => $value) {
             if ($value > 1 && !empty($key)) {
-                $repeatRow .= sprintf('第%s列重复:', ($nickNameCol + 1)).'<br>';
+                $repeatRow .= sprintf('第%s列重复，重复内容如下:', ($nickNameCol + 1)).'<br>';
 
                 for ($i = 1; $i <= $value; ++$i) {
                     $row = array_search($key, $array) + 3;
 
-                    $repeatRow .= sprintf('第%s行    %s', $row, $key).'<br>';
+                    $repeatRow .= sprintf('第%s行：%s', $row, $key).'<br>';
 
                     unset($array[$row - 3]);
                 }
