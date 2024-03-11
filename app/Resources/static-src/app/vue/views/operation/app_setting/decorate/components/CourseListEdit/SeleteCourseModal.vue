@@ -92,7 +92,10 @@ export default {
       columns
     }
   },
-
+  mounted() {
+    console.log(11);
+    console.log(this.data);
+  },
   methods: {
     showModal() {
       this.visible = true;
