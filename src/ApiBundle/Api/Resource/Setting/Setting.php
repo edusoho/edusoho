@@ -296,6 +296,7 @@ class Setting extends AbstractResource
     public function getMobile($request)
     {
         $mobileSetting = $this->getSettingService()->get('mobile', []);
+        $meCount = $this->getSettingService()->get('meCount', []);
 
         $splashs = [];
         for ($i = 1; $i < 6; ++$i) {
@@ -312,11 +313,12 @@ class Setting extends AbstractResource
         ];
 
         return [
-            'enabled' => isset($mobileSetting['enabled']) ? (bool) $mobileSetting['enabled'] : true,
+            'enabled' => !isset($mobileSetting['enabled']) || (bool) $mobileSetting['enabled'],
             'logo' => empty($mobileSetting['logo']) ? '' : AssetHelper::uriForPath('/'.$mobileSetting['logo']),
             'splashs' => $splashs,
             'appDiscoveryVersion' => $this->getH5SettingService()->getAppDiscoveryVersion(),
             'studyCenter' => empty($mobileSetting['studyCenter']) ? $defaultStudyCenter : array_merge($defaultStudyCenter, $mobileSetting['studyCenter']),
+            'code' => empty($meCount['mobileCode']) ? 'zhixiang' : $meCount['mobileCode'],
         ];
     }
 

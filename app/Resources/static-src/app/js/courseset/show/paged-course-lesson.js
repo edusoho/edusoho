@@ -56,6 +56,7 @@ class PagedCourseLesson {
     const $hiddenI18n = this._wrapTarget(options.wrapTarget, '.js-hidden-i18n');
     const $hiddenActivityMetas = this._wrapTarget(options.wrapTarget, '.js-hidden-activity-metas');
     const $hiddenCurrentTimestamp = this._wrapTarget(options.wrapTarget, '.js-hidden-current-timestamp');
+    const $hiddenSetting = this._wrapTarget(options.wrapTarget, '.js-hidden-setting');
     return {
       'data': this._toJson($hiddenCachedData.html()),
 
@@ -67,6 +68,8 @@ class PagedCourseLesson {
         'metas': this._toJson($hiddenActivityMetas.html()),
 
         'currentTimeStamp': parseInt($hiddenCurrentTimestamp.html(), 10),
+
+        'setting': this._toJson($hiddenSetting.html()),
 
         'isChapter': function(data, context) {
           return 'chapter' == data.itemType;
@@ -160,23 +163,26 @@ class PagedCourseLesson {
         },
 
         'taskItemClass': function(data, context) {
-          const canLearn = context.course.canLearn
+          const canLearn = context.course.canLearn;
           const allowedTaskTypes = ['testpaper', 'homework', 'exercise'];
           const isTaskTypeAllowed = allowedTaskTypes.includes(data.type);
           const isTaskResultIncomplete = data.resultStatus != 'finish';
-          console.log(data.type);
-          // return 'title js-modal-only-app'
-          
-          if(canLearn == '1') {
-            return 'title'
+          const onlyAppType = ['video', 'audio', 'live', 'replay'];
+
+          if (context.setting.onlyLearnInApp == 1 && onlyAppType.includes(data.type)) {
+            return 'title js-modal-only-app';
           }
 
-          if(!isTaskTypeAllowed) {
-            return 'title js-handleLearnContentOnMessage'
+          if (canLearn == '1') {
+            return 'title';
           }
 
-          if(isTaskResultIncomplete) {
-            return 'title js-handleLearnContentOnMessage'
+          if (!isTaskTypeAllowed) {
+            return 'title js-handleLearnContentOnMessage';
+          }
+
+          if (isTaskResultIncomplete) {
+            return 'title js-handleLearnContentOnMessage';
           }
 
           return 'title';
@@ -272,6 +278,7 @@ class PagedCourseLesson {
       'js-hidden-i18n',
       'js-hidden-activity-metas',
       'js-hidden-current-timestamp',
+      'js-hidden-setting',
       'infinite-container',
       'js-down-loading-more'
     ];

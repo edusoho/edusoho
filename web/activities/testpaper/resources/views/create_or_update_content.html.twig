@@ -257,7 +257,7 @@
 					</div>
         <div class="col-sm-10 controls switch-content">
 					<label class="form-switch setting-switch {% if activity.ext.answerScene.is_items_seq_random|default(0) %}checked{% endif %}">
-						<input type="checkbox" name="abandonIsItemsSeqRandom" value="{{ activity.ext.answerScene.is_options_seq_random|default(0) }}" id="weixinweb_enabled" data-toggle="switch">
+						<input type="checkbox" name="abandonIsItemsSeqRandom" value="{{ activity.ext.answerScene.is_items_seq_random|default(0) }}" id="weixinweb_enabled" data-toggle="switch">
 						<input type="hidden" name="isItemsSeqRandom" value="{{ activity.ext.answerScene.is_items_seq_random|default(0) }}">
 					</label>
 				</div>

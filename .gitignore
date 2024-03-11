@@ -58,7 +58,6 @@ chunk-manifest.json
 !/web/static-dist/autumntheme
 !/web/static-dist/custombundle
 !/web/static-dist/marketingmallbundle
-!/web/static-dist/turingtheme
 !/web/static-dist/*activity
 /web/static-dist/**/css/*.js
 deployment-config.json

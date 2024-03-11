@@ -266,7 +266,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function deleteActivity($id)
     {
         $activity = $this->getActivity($id);
-        $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
+        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+        if ($course) {
+            $this->getCourseService()->tryManageCourse($course['id']);
+        }
 
         try {
             $this->beginTransaction();
