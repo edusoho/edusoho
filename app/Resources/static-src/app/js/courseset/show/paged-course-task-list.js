@@ -1,6 +1,5 @@
 import PagedCourseLesson from 'app/js/courseset/show/paged-course-lesson';
 import ESInfiniteCachedScroll from 'common/es-infinite-cached-scroll';
-import Qrcode from 'qrcode'
 
 /**
  * render task list by js
@@ -57,9 +56,8 @@ export default class PagedCourseTaskList extends PagedCourseLesson {
         $this.attr('href', '#modal');
         $this.attr('data-toggle', 'modal');
 
-        $('#modal').load('/course/task/downloadAppShowAction', () => {
+        $('#modal').load('/course/task/downloadAppShow', () => {
           console.log('Load completed');
-          // Qrcode.toCanvas($('.js-download-app-qrcode')[0], `/mapi_v2/School/getDownloadUrl?from=qrcode&code=zhixiang`, { width: 174, quality: 1, margin: 0 })
         });
         $('#modal').modal('show');
       });
