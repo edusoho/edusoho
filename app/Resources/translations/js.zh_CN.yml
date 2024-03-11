@@ -1789,7 +1789,7 @@ course.marketing_setup.rule.expiry_date_tips: 在此日期前，学员可进行�
 course.marketing_setup.rule.expiry_date.publish_tips: 从加入当天起，在几天内可进行学习。
 course.plan_task.start_time: 开始日期
 course.plan_task.end_time: 结束日期
-course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划关闭后，可以修改日期，新的学习有效期仅对修改后加入的学员生效。
+course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划下架后，可以修改日期，新的学习有效期仅对修改后加入的学员生效。
 course.marketing_setup.approval: 实名认证
 course.marketing_setup.approval_tips: 设置该值后，学员购买课程前，必须先去申请实名认证。
 course.marketing_setup.expiry_date.anytime: 不限时间
