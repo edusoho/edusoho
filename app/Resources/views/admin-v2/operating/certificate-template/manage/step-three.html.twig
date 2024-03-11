@@ -36,7 +36,7 @@
           imageClass: isHorizontal ? 'certificate-horizontal-basemap' : 'certificate-vertical-basemap',
           imageText: 'admin.operation_certificate.template.basemap.upload'|trans,
           imageSrc: basemap,
-          coversName: 'bigCovers'
+          coversName: 'basemap'
         } %}
         <p class="help-block">{{ hint|trans }}</p>
       </div>
@@ -55,7 +55,8 @@
           cropHeight: '650',
           uploadToken: 'tmp',
           imageClass: 'certificate-stamp',
-          imageText: 'admin.operation_certificate.template.stamp.upload'|trans
+          imageText: 'admin.operation_certificate.template.stamp.upload'|trans,
+          coversName: 'stamp'
         } %}
         <p class="help-block">{{ 'admin.operation_certificate.template.stamp.upload_hint'|trans }}</p>
       </div>
