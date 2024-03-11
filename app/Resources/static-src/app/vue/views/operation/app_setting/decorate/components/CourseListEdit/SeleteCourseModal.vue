@@ -26,7 +26,7 @@
         @change="handleChange"
       >
         <a-select-option v-for="course in data" :key="course.id">
-          {{ course.title || course.courseSetTitle }}
+          {{ course.courseSetTitle || course.title }}
         </a-select-option>
       </a-select>
     </div>
@@ -91,10 +91,6 @@ export default {
       keyword: '',
       columns
     }
-  },
-  mounted() {
-    console.log(11);
-    console.log(this.data);
   },
   methods: {
     showModal() {
