@@ -674,6 +674,7 @@ t.add("validate.valid_rangetime.required", "Please select a date range", "js", "
 t.add("validate.valid_starttime.required", "Please select a start time", "js", "en");
 t.add("validate.valid_endtime.required", "Please select an end time", "js", "en");
 t.add("validate.valid_email_input.message", "Please enter a valid email address.", "js", "en");
+t.add("validate.valid_idcard_formate.message", "Please enter a valid ID card number.", "js", "en");
 t.add("validate.valid_url_input.message", "Please enter a valid URL.", "js", "en");
 t.add("validate.valid_date_input.message", "Please enter a valid date.", "js", "en");
 t.add("validate.valid_date_iso_input.message", "Please enter a valid date  (ISO)", "js", "en");

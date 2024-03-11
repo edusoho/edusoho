@@ -3,7 +3,8 @@ $('#approval-form').validate({
     idcard: {
       required: true,
       maxlength: 50,
-      only_alphanumeric: true
+      only_alphanumeric: true,
+      idcard_format: true
     },
     truename: {
       required: true,
