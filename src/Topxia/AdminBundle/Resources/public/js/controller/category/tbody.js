@@ -41,7 +41,6 @@ define(function(require, exports, module) {
                 });
 
                 $.post($('#category-table-body').data('sortUrl'), {ids:ids}, function(response){
-                    
                 });
                 _super($item, container);
             }//,
