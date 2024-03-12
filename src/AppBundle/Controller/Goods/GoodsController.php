@@ -25,8 +25,7 @@ class GoodsController extends BaseController
         $goodsComponents = $this->container->get('api_resource_kernel')->handleApiRequest($goodsComponentsApiRequest);
         $goods['showPlan'] = 1 == count($goods['specs']) || empty($goods['specs'][0]['title']) ? 0 : 1;
         if (!empty($goods['product']['target']['categoryId'])) {
-            $category = $this->getCategoryService()->getCategory($goods['product']['target']['categoryId']);
-            $goods['category'] = $category['name'] ?? '';
+            $goods['breadcrumbs'] = $this->getCategoryService()->findCategoryBreadcrumbs($goods['product']['target']['categoryId']);
         }
 
         return $this->render(
