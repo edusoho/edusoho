@@ -6,8 +6,8 @@ use ApiBundle\Api\ApiRequest;
 use AppBundle\Controller\BaseController;
 use Biz\Common\CommonException;
 use Biz\Goods\Service\GoodsService;
+use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserFieldService;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 
 class GoodsController extends BaseController
@@ -24,6 +24,10 @@ class GoodsController extends BaseController
         $goodsComponentsApiRequest = new ApiRequest("/api/goods/{$id}/components", 'GET');
         $goodsComponents = $this->container->get('api_resource_kernel')->handleApiRequest($goodsComponentsApiRequest);
         $goods['showPlan'] = 1 == count($goods['specs']) || empty($goods['specs'][0]['title']) ? 0 : 1;
+        if (!empty($goods['product']['target']['categoryId'])) {
+            $category = $this->getCategoryService()->getCategory($goods['product']['target']['categoryId']);
+            $goods['category'] = $category['name'] ?? '';
+        }
 
         return $this->render(
             'goods/show.html.twig',
@@ -69,5 +73,13 @@ class GoodsController extends BaseController
     protected function getGoodsService()
     {
         return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 }
