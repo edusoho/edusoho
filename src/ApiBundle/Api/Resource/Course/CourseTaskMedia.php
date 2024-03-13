@@ -91,9 +91,7 @@ class CourseTaskMedia extends AbstractResource
                 'video_fingerprint',
                 'video_fingerprint_time',
             ]);
-            if (!empty($fingerPrintSetting['video_fingerprint'])) {
-                $fingerPrintSetting['video_fingerprint'] = $this->getWebExtension()->getFingerprint();
-            }
+            $fingerPrintSetting['video_fingerprint'] = empty($fingerPrintSetting['video_fingerprint']) ? '' : $this->getWebExtension()->getFingerprint();
 
             $watermarkSetting = ArrayToolkit::parts($storageSetting, [
                 'video_watermark',
