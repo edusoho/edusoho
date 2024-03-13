@@ -5,7 +5,7 @@
         <div
           :id="lessonItem.tasks[lessonItem.index].id"
           :class="{ 'zb-ks': doubleLine(lessonItem.tasks[lessonItem.index]) }"
-          class="lesson-title"
+          class="lesson-title flex justify-between items-center"
           @click="
             lessonCellClick(
               lessonItem.tasks[lessonItem.index],
@@ -379,33 +379,89 @@ export default {
             }, 1000);
         }
     },
+    async getData(id) {
+      let data = {}
+      try {
+        await Api.getMedia({
+            query: {
+              courseId: this.selectedPlanId,
+              taskId: id,
+            },
+            params: {
+              version: 'escloud',
+            },
+          }).then((res) => {
+            if(res.media) {
+              data = res.media
+            }
+        })
+      } catch (error) {
+        console.log(error)
+      }  
+
+      return data
+    },
+    detectBrowserInfo() {
+      const userAgent = navigator.userAgent.toLowerCase();
+
+      // 判断是否为微信浏览器
+      const isWechat = /micromessenger/i.test(userAgent);
+      // 判断是否为企业微信（即微信工作版）
+      const isWechatWork = /wxwork/i.test(userAgent);
+
+      // 判断是否为钉钉内置浏览器
+      const isDingTalk = /dingtalk/i.test(userAgent);
+
+      // 飞书内置浏览器可能包含 "lark" 关键字，但请核实最新版本 UA 以确保准确性
+      const isFeishu = /lark/i.test(userAgent);
+
+      if(isWechat || isWechatWork || isDingTalk || isFeishu) {
+        return true;
+      }
+
+      return false;
+    },
     async lessonCellClick(task, lessonIndex, taskIndex) {
       const onlyAppType = ['video', 'audio', 'live']
       await this.getCourse()
-
       if(!this.isCanLearn(task)) {
         return closedToast('course');
       }
 
-      if(Number(this.isOnlyApp) && onlyAppType.includes(task.type)) {
-        Dialog.confirm({
-          message: '将为您跳转至App进行学习',
-          confirmButtonText: '继续',
-          className: 'only-app-dialog'
-        }).then(() => {
-          this.openApp('com.edusoho.zhixiang://', this.goConfirmAddr())
-        }).catch(() => {
-          // on cancel
-        });
-        return;
+      if(task.type === 'live' || task.type === 'video') {
+        const media = await this.getData(task.id)
+        
+        if (media.isEncryptionPlus && media.securityVideoPlayer) {
+          Toast('请在APP学习');
+          return;
+        }
+        
+        if (media.isEncryptionPlus && !media.securityVideoPlayer && !this.detectBrowserInfo()) {
+          Toast('请在APP学习或使用钉钉/飞书/微信/企业微信内置浏览器打开');
+          return;
+        }
       }
 
+      // if(Number(this.isOnlyApp) && onlyAppType.includes(task.type)) {
+      //   Dialog.confirm({
+      //     message: '将为您跳转至App进行学习',
+      //     confirmButtonText: '继续',
+      //     className: 'only-app-dialog'
+      //   }).then(() => {
+      //     this.openApp('com.edusoho.zhixiang://', this.goConfirmAddr())
+      //   }).catch(() => {
+      //   });
+      //   return;
+      // }
+
       this.$store.commit(types.SET_TASK_SATUS, '');
+
       // 课程错误和未发布状态，不允许学习任务
       if (this.errorMsg && !Number(task.isFree)) {
         this.$emit('showDialog');
         return;
       }
+
       if (task.lock) {
         Toast(this.$t('courseLearning.needToUnlockThePreviousTask'));
         return;
@@ -418,6 +474,7 @@ export default {
       const nextTask = {
         id: task.id,
       };
+
       // 更改store中的当前学习
       this.$store.commit(`course/${types.GET_NEXT_STUDY}`, { nextTask });
 
@@ -433,6 +490,7 @@ export default {
       if (this.joinStatus) {
         this.showTypeDetail(task);
       }
+
     },
     showTypeDetail(task) {
       if (task.status !== 'published') {

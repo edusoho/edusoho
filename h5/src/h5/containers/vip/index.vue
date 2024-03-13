@@ -22,7 +22,7 @@
           </div>
           <div class="absolute flex items-center justify-center font-normal text-12"
             @click="$router.push(`/vip/${item.id}/desc`)"
-            style="width: 74px;height: 24px;color: #fff;border: 1px solid #fff;border-radius: 16px;right: 16px;bottom: 30px;">
+            style="width: 74px;height: 24px;mix-blend-mode: screen;border: 1px solid #fff;border-radius: 16px;right: 16px;bottom: 30px;background-color: white;font-weight: 600;">
             {{ $t('vip.exclusiveIntroduction') }} >
           </div>
         </swiper-slide>
@@ -68,14 +68,32 @@
       </div>
     </div>
 
-    <e-row-class v-show="typeList === 'course_list'" v-for="item in courseData.items" :key="item.id"
+    <van-list
+        v-if="typeList === 'course_list'"
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad('course_list')"
+        ref="courseList"
+      >
+      <e-row-class v-show="typeList === 'course_list'" v-for="item in courseData.items" :key="item.id"
       :course="item | courseListData({ ...config, typeList: 'course_list' }, 'new')"
       :discountType="item.courseSet.discountType" :discount="item.courseSet.discount" :course-type="item.courseSet.type"
       type-list="course_list" type="price" :showNumberData="showNumberData" />
+    </van-list>
 
-    <e-row-class v-show="typeList === 'classroom_list'" v-for="item in classroomData.items" :key="item.id"
+    <van-list
+        v-if="typeList === 'classroom_list'"
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad('classroom_list')"
+        ref="classroomList"
+      >
+      <e-row-class v-show="typeList === 'classroom_list'" v-for="item in classroomData.items" :key="item.id"
       :course="item | courseListData({ ...config, typeList: 'classroom_list' }, 'new')" type-list="classroom_list"
       type="price" :showNumberData="showNumberData" />
+    </van-list>
+
+    
   </div>
 </template>
 
@@ -83,10 +101,8 @@
 import Api from '@/api';
 import { mapState, mapActions } from 'vuex';
 import * as types from '@/store/mutation-types';
-
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import 'swiper/css/swiper.css';
-
 import PriceItem from './price-item';
 import courseListData from '@/utils/filter-course.js';
 import eRowClass from '&/components/e-row-class/e-row-class';
@@ -100,6 +116,9 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      finished: false,
+      isShowLoading: false,
       swiperOption: {
         loop: false,
         centeredSlides: true,
@@ -231,7 +250,7 @@ export default {
         limit: 4,
         vipCenter: true,
       };
-      dataFormat.items = data.slice(0, 3);
+      dataFormat.items = data;
       return dataFormat;
     },
 
@@ -247,7 +266,7 @@ export default {
         limit: 4,
         vipCenter: true,
       };
-      dataFormat.items = data.slice(0, 3);
+      dataFormat.items = data;
       return dataFormat;
     },
 
@@ -289,7 +308,22 @@ export default {
   },
   methods: {
     ...mapActions('vip', ['getVipOpenStatus']),
+    onLoad(type) {
+      console.log(type);
+      this.loading = true;
+      console.log('执行了');
+      setTimeout(() => {
+        console.log("进来了");
+        // 加载状态结束
+        this.loading = false;
 
+        // 数据全部加载完成
+        // if () {
+        //   console.log("到底了");
+          this.finished = true;
+        // }
+      }, 2000);
+    },
     getVipDetail() {
       const queryId = this.$route.query.id;
       Api.getVipDetail().then(res => {
