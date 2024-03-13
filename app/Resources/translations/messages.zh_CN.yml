@@ -7986,8 +7986,8 @@ admin.setting_course.doc_task_water_mark_info_tips: 为了用户体验效果更�
 admin.setting_course.Prevent_copying_test_paper: 试卷防复制
 admin.setting_course.Only_available_for_learning_on_APP: 仅限在APP学习
 admin.setting_course.Only_available_for_learning_on_APP_tips: 开启后用户仅限在APP观看音视频、直播、直播回放、智能直播任务。
-admin.setting_course.Android_APP_content_theft_prevention: 安卓APP内容防盗
-admin.setting_course.Android_APP_content_theft_prevention_tips: 开启后，用户在安卓APP观看音视频任务时无法截屏和录屏。IOS不受此按钮控制，始终禁止录屏。
+admin.setting_course.app_content_theft_prevention: APP内容防盗
+admin.setting_course.app_content_theft_prevention_tips: 开启后，用户在APP观看音视频任务时无法录屏，另外安卓系统无法截屏，IOS系统无法投屏。
 admin.setting_course.course_operation_mode: 课程运营模式
 admin.setting_course.course_comments_manage: 课程学习页内容管理
 admin.setting_course.course_review: 评价

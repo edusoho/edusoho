@@ -579,7 +579,8 @@ class Setting extends AbstractResource
             'show_note' => isset($courseSetting['show_note']) ? intval($courseSetting['show_note']) : 1,
             'allow_anonymous_preview' => isset($courseSetting['allowAnonymousPreview']) ? intval($courseSetting['allowAnonymousPreview']) : 1,
             'only_learning_on_APP' => isset($courseSetting['only_learning_on_APP']) ? intval($courseSetting['only_learning_on_APP']) : 0,
-            'android_APP_content_theft_prevention' => isset($courseSetting['android_APP_content_theft_prevention']) ? intval($courseSetting['android_APP_content_theft_prevention']) : 0,
+            'android_APP_content_theft_prevention' => isset($courseSetting['app_content_theft_prevention']) ? intval($courseSetting['app_content_theft_prevention']) : 0,
+            'app_content_theft_prevention' => isset($courseSetting['app_content_theft_prevention']) ? intval($courseSetting['app_content_theft_prevention']) : 0,
         ];
     }
 
