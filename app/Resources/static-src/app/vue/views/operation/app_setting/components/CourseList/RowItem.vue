@@ -4,7 +4,8 @@
       <img :src="item.courseSet.cover.middle" alt="">
     </div>
     <div class="row-item__info pull-left">
-      <div class="row-item__title text-overflow">{{ item.title || item.courseSetTitle }}</div>
+      <div class="row-item__title text-overflow">{{ item.courseSetTitle }}</div>
+      <div class="row-item__subtitle text-overflow">{{ item.title }}</div>
       <div class="row-item__price">{{ item.price }} {{ 'cny' | trans }}</div>
     </div>
   </div>
@@ -58,6 +59,14 @@ export default {
     font-weight: 500;
     color: #333;
     line-height: 20px;
+  }
+
+  &__subtitle {
+    height: 20px;
+    margin-top: -2px;
+    padding: 4px 0;
+    color: #86909c;
+    font-size: 12px;
   }
 
   &__price {
