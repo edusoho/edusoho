@@ -70,7 +70,7 @@
           </div>
         </div>
 
-        <attachement-preview 
+        <attachement-preview
           v-for="item in getAttachementByType('answer')"
           :canLoadPlayer="isCurrent"
           :attachment="item"
@@ -81,9 +81,9 @@
       <div class="analysis-title">{{ $t('courseLearning.parsing') }}</div>
       <div v-if="analysis" class="analysis-content mt10" v-html="analysis" />
       <div v-else class="analysis-content mt10">{{ $t('courseLearning.noParsing') }}</div>
-      
+
       <div class="analysis-content">
-        <attachement-preview 
+        <attachement-preview
           v-for="item in getAttachementByType('analysis')"
           :canLoadPlayer="isCurrent"
           :attachment="item"
@@ -184,7 +184,7 @@ export default {
           return answer.length > 0 ? answer.toString() : this.$t('courseLearning.unanswered');
         }
       } else {
-        let arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+        let arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
         if (this.subject == 'determine') {
           arr = ['错', '对'];
         }

@@ -10,7 +10,7 @@
       </div>
       <i @click="changeUpIcon" :class="['iconfont', 'icon-arrow-up', {'show-up-icon': isShowDownIcon }]"></i>
       <i @click="changeDownIcon" :class="['iconfont', 'icon-arrow-down', {'show-down-icon': isShowUpIcon}]"></i>
-      <attachement-preview 
+      <attachement-preview
         v-for="item in getAttachementMaterialType('material')"
         :canLoadPlayer="isCurrent"
         :attachment="item"
@@ -24,12 +24,12 @@
         <span class="serial-number">{{ itemdata.seq }}、</span>
         <div class="rich-text" v-html="stem" @click="handleClickImage($event.target.src)" />
       </div>
-      
+
       <div v-if="itemdata.parentTitle" :class="['material-title',{'material-title-weight': itemdata.parentTitle}]">
         <span class="serial-number"><span class="material-type">[{{ $t('courseLearning.singleChoice') }}] </span> {{ itemdata.materialIndex }}、</span>
         <div class="rich-text" v-html="itemdata.stem" @click="handleClickImage($event.target.src)" />
       </div>
-      <attachement-preview 
+      <attachement-preview
         v-for="item in getAttachementByType('stem')"
         :canLoadPlayer="isCurrent"
         :attachment="item"
@@ -40,7 +40,7 @@
           :key="index"
           :name="index"
           :disabled="!disabledData"
-          :class="['subject-option', 
+          :class="['subject-option',
                     !canDo ? checkAnswer(index, itemdata) : '',
                     { active: index === currentItem },
                     { 'van-checked__right' : itemdata.answer ? itemdata.answer[0] === index : ''},
@@ -80,7 +80,7 @@
           <span v-if="analysis" v-html="analysis" @click="handleClickImage($event.target.src)" />
           <span v-else>{{ $t('courseLearning.noParsing') }}</span>
         </div>
-        <attachement-preview 
+        <attachement-preview
           v-for="item in getAttachementByType('analysis')"
           :canLoadPlayer="isCurrent"
           :attachment="item"
@@ -93,7 +93,7 @@
       <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
       <span v-if="parentTitleAnalysis !== ''" v-html="parentTitleAnalysis" @click="handleClickImage($event.target.src)" />
       <span v-else>{{ $t('courseLearning.noParsing') }}</span>
-      <attachement-preview 
+      <attachement-preview
         v-for="item in getAttachementMaterialType('analysis')"
         :canLoadPlayer="isCurrent"
         :attachment="item"
@@ -109,7 +109,7 @@
       >
     </div>
   </div>
-  
+
 </template>
 
 <script>
@@ -125,11 +125,11 @@ export default {
   name: 'SingleChoice',
   filters: {
     filterOrder(index) {
-      const arr = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.', 'G.', 'H.', 'I.', 'J.'];
+      const arr = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.', 'G.', 'H.', 'I.', 'J.', 'K.', 'L.', 'M.', 'N.', 'O.', 'P.', 'Q.', 'R.', 'S.', 'T.', 'U.', 'V.', 'W.', 'X.', 'Y.', 'Z.'];
       return arr[index];
     },
     filterAnswer(index) {
-      const arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+      const arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
       return arr[index];
     },
   },
@@ -242,14 +242,12 @@ export default {
   },
   methods: {
     filterOrder(index) {
-      const arr = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.', 'G.', 'H.', 'I.', 'J.'];
-      return arr[index];
+      return this.$options.filters.filterOrder(index);
     },
     filterAnswer(index) {
-      const arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-      return arr[index];
+      return this.$options.filters.filterAnswer(index);
     },
-    
+
     // 向父级提交数据
     choose(name) {
       this.currentItem = name

@@ -10,7 +10,7 @@
       </div>
       <i @click="changeUpIcon" :class="['iconfont', 'icon-arrow-up', {'show-up-icon': isShowDownIcon }]"></i>
       <i @click="changeDownIcon" :class="['iconfont', 'icon-arrow-down', {'show-down-icon': isShowUpIcon}]"></i>
-      <attachement-preview 
+      <attachement-preview
         v-for="item in getAttachementMaterialType('material')"
         :canLoadPlayer="isCurrent"
         :attachment="item"
@@ -28,8 +28,8 @@
         <span class="serial-number"><span class="material-type">[{{ itemdata.type === "uncertain_choice" ? $t('courseLearning.uncertainChoice') : $t('courseLearning.choice') }}] </span> {{ itemdata.materialIndex }}、</span>
         <div class="rich-text" v-html="itemdata.stem" @click="handleClickImage($event.target.src)" />
       </div>
-  
-      <attachement-preview 
+
+      <attachement-preview
         v-for="item in getAttachementByType('stem')"
         :canLoadPlayer="isCurrent"
         :attachment="item"
@@ -46,8 +46,8 @@
           :name="index"
           :disabled="!disabledData"
           :class="
-            ['subject-option', !canDo ? checkAnswer(index, itemdata) : '' , 
-            { active: currentItem ? currentItem.includes(index) : '' } , 
+            ['subject-option', !canDo ? checkAnswer(index, itemdata) : '' ,
+            { active: currentItem ? currentItem.includes(index) : '' } ,
             { 'van-checked__right' : itemdata.answer ? itemdata.answer.includes(index) : '' },
             {isRight: question.length > 0 && question[0].answer.includes(filterOrder(index).replace('.',''))},
             {isWrong: isWrong(index)}]"
@@ -72,7 +72,7 @@
             </span>
             <span v-if="!canDo" class="options" style="color:#00B42A;" >{{ filterOrders(itemdata.answer, 'standard') }}</span>
           </div>
-          
+
           <div v-if="itemdata.testResult.answer && itemdata.testResult.answer.length !== 0 || question.length !== 0" class="flex items-center">
             <span class="answer">{{ $t('courseLearning.selectedAnswer') }}：</span>
             <span v-if="question.length > 0" class="options">
@@ -94,21 +94,21 @@
           <span v-if="analysis" v-html="analysis" @click="handleClickImage($event.target.src)" />
           <span v-else>{{ $t('courseLearning.noParsing') }}</span>
         </div>
-        <attachement-preview 
+        <attachement-preview
           v-for="item in getAttachementByType('analysis')"
           :canLoadPlayer="isCurrent"
           :attachment="item"
           :key="item.id" />
       </div>
     </div>
-    
+
     <div v-if="isShowFooterShardow()" class="footer-shadow">
     </div>
     <div v-if="parentType && parentType === 'material' && !disabledData" class="subject-footer">
       <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
       <span v-if="parentTitleAnalysis !== ''" v-html="parentTitleAnalysis" @click="handleClickImage($event.target.src)" />
       <span v-else>{{ $t('courseLearning.noParsing') }}</span>
-      <attachement-preview 
+      <attachement-preview
         v-for="item in getAttachementMaterialType('analysis')"
         :canLoadPlayer="isCurrent"
         :attachment="item"
@@ -149,7 +149,7 @@ export default {
   name: 'ChoiceType',
   filters: {
     filterOrder(index) {
-      const arr = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.', 'G.', 'H.', 'I.', 'J.'];
+      const arr = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.', 'G.', 'H.', 'I.', 'J.', 'K.', 'L.', 'M.', 'N.', 'O.', 'P.', 'Q.', 'R.', 'S.', 'T.', 'U.', 'V.', 'W.', 'X.', 'Y.', 'Z.'];
       return arr[index];
     },
   },
@@ -252,22 +252,21 @@ export default {
   methods: {
     filterOrders: function(answer = [], mode = 'do') {
       // standard表示标砖答案过滤
-      const arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+      const arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
       const formateAnswer = answer.map(element => arr[element]);
       if (mode == 'standard') {
         return formateAnswer.length > 0 ? formateAnswer.join('') : '';
       }
     },
     filterOrder(index) {
-      const arr = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.', 'G.', 'H.', 'I.', 'J.'];
-      return arr[index];
+      return this.$options.filters.filterOrder(index);
     },
     isWrong(index) {
       let flag = false
       if (this.question[0]?.response?.includes(this.filterOrder(index).replace('.','')) && this.question.length >0 && !this.question[0].answer.includes(this.filterOrder(index).replace('.',''))) {
         flag = true
       }
-      return flag && this.question[0]?.response?.includes(this.filterOrder(index).replace('.','')) 
+      return flag && this.question[0]?.response?.includes(this.filterOrder(index).replace('.',''))
     },
 
     choose(name) {
