@@ -561,6 +561,7 @@ export default {
       });
     },
     saveAnswerInterval() {
+      clearInterval(this.interval);
       this.interval = setInterval(() => {
         this.saveAnswerAjax();
       }, 30 * 1000)
