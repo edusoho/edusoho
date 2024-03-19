@@ -284,7 +284,7 @@ Api Test With 7.1:
     # 执行newman的 API 单元测试
     - npm install -g n
     - n stable
-    - npm config set registry https://registry.npm.taobao.org
+    - npm config set registry https://registry.npmmirror.com
     - npm install -g newman
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json --verbose
   interruptible: true
@@ -302,7 +302,7 @@ Api Test With 7.1:
     - npm install -g n
     - n 12.22.12
     - node -v
-    - yarn config set registry https://registry.npm.taobao.org
+    - yarn config set registry https://registry.npmmirror.com
     - rm -rf app/cache
     - git clone -b master --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/upgradescripts.git scripts
     - git pull

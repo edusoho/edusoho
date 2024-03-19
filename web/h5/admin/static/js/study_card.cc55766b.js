@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([["study_card"],{ed8c:function(e,t,c){"use strict";c.r(t),c("3ce7");var n={name:"Index",created:function(){document.title="学习卡充值"}},s=c("0c7c"),u=Object(s.a)(n,(function(){var e=this._self._c;return e("div",{staticClass:"e-study-card"},[e("router-view")],1)}),[],!1,null,"391f1622",null);t.default=u.exports}}]);
