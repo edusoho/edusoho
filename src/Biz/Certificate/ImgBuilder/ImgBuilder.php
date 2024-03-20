@@ -262,7 +262,7 @@ abstract class ImgBuilder
         if (false !== stripos($stampIconUri, '.jpg') || false !== stripos($stampIconUri, '.jpeg')) {
             imagecopymerge($this->image, $stamp, $setting['dst_x'], $setting['dst_y'], $setting['src_x'], $setting['src_y'], $setting['src_w'], $setting['src_h'], $setting['pct']);
         } else {
-            $black = imagecolorallocate($stamp, 0, 0, 0);
+            $black = imagecolorallocate($stamp, 255, 255, 255);
             imagecolortransparent($stamp, $black);
             imagecopy($this->image, $stamp, $setting['dst_x'], $setting['dst_y'], $setting['src_x'], $setting['src_y'], $setting['src_w'], $setting['src_h']);
         }
