@@ -61,7 +61,7 @@ class Question
 
     public function review($questionId, $response)
     {
-        $question = $this->getQuestionDao()->get($questionId);
+        $question = $this->getQuestionDao()->getIncludeDeleted($questionId);
         if (empty($question)) {
             return $this->getDeleteQuestionReviewResult($questionId, $response);
         }
