@@ -10788,6 +10788,7 @@ exception.exercise.forbidden_duplicate_commit_exercise: Exercises have been comp
 exception.exercise.not_found_result: The result of the exercise does not exist
 exception.exercise.exercise_is_doing: 'Exercise record already exists, please start answering again'
 exception.exercise.exercise_not_do: 'This exercise cannot be answered. Please exit and start again'
+exception.exercise.lack_question: "The number of questions is inconsistent with the teacher's settings, please contact the teacher!"
 
 exception.homework.not_found: Homework does not exist
 exception.homework.draft: This homework has not been published. If you have any questions, please contact the teacher!
