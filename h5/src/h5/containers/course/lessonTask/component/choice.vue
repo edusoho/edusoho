@@ -64,24 +64,22 @@
         </van-checkbox>
       </van-checkbox-group>
       <div v-if="!disabledData" class="one-questions-analysis">
-        <div class="flex justify-between analysis-answer">
-          <div class="flex items-center">
-            <span class="answer">{{ $t('courseLearning.referenceAnswer') }}：</span>
-            <span v-if="question.length > 0 && canDo" class="options" style="color:#00B42A;">
-              <span v-for="(item , index) in question[0].answer" :key="index">{{ item }}</span>
-            </span>
-            <span v-if="!canDo" class="options" style="color:#00B42A;" >{{ filterOrders(itemdata.answer, 'standard') }}</span>
-          </div>
-          
-          <div v-if="itemdata.testResult.answer && itemdata.testResult.answer.length !== 0 || question.length !== 0" class="flex items-center">
-            <span class="answer">{{ $t('courseLearning.selectedAnswer') }}：</span>
-            <span v-if="question.length > 0" class="options">
-              <span v-for="(item, index) in question[0].response" :key="index">{{ item }}</span>
-            </span>
-            <span v-if="!canDo" class="options">
-              <span>{{ filterOrders(itemdata.testResult.answer, 'standard') }}</span>
-            </span>
-          </div>
+        <div class="flex mb-8">
+          <span class="flex-none font-14 leading-28">{{ $t('courseLearning.referenceAnswer') }}：</span>
+          <span v-if="question.length > 0 && canDo" class="font-20 break-all" style="color:#00B42A;">
+            <span v-for="(item , index) in question[0].answer" :key="index">{{ item }}</span>
+          </span>
+          <span v-if="!canDo" class="font-20 break-all" style="color:#00B42A;" >{{ filterOrders(itemdata.answer, 'standard') }}</span>
+        </div>
+        
+        <div v-if="itemdata.testResult.answer && itemdata.testResult.answer.length !== 0 || question.length !== 0" class="flex mb-8">
+          <span class="flex-none font-14 leading-28">{{ $t('courseLearning.selectedAnswer') }}：</span>
+          <span v-if="question.length > 0" class="font-20 break-all">
+            <span v-for="(item, index) in question[0].response" :key="index">{{ item }}</span>
+          </span>
+          <span v-if="!canDo" class="font-20 break-all">
+            <span>{{ filterOrders(itemdata.testResult.answer, 'standard') }}</span>
+          </span>
         </div>
         <div v-if="mode === 'exam'" class="analysis-color mb-8">
           {{ $t('courseLearning.score') }}：{{ itemdata.testResult ? itemdata.testResult.score : 0.0 }}
@@ -393,5 +391,21 @@ export default {
   .show-up-icon {
     display: block;
     cursor: pointer;
+  }
+
+  .font-14 {
+    font-size: vw(14);
+  }
+
+  .font-20 {
+    font-size: vw(20);
+  }
+
+  .leading-28 {
+    line-height: vw(28);
+  }
+
+  .break-all{
+    word-break: break-all;
   }
 </style>

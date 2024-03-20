@@ -66,15 +66,13 @@
           </van-checkbox-group>
         </div>
         <div v-if="!disabledData" class="ibs-one-questions-analysis">
-          <div class="flex justify-between ibs-analysis-answer">
-            <div class="flex items-center">
-              <span class="ibs-answer">{{ $t('courseLearning.referenceAnswer') }}：</span>
-              <span class="ibs-options" style="color:#00B42A;">{{ filterOrders() }}</span>
-            </div>
-            <div v-if="answer.length > 0" class="flex items-center">
-              <span class="ibs-answer">{{ $t('courseLearning.selectedAnswer') }}：</span>
-              <span class="ibs-options">{{ filterAnswerOrders(answer) }}</span>
-            </div>
+          <div class="flex">
+            <span class="flex-none font-14 leading-28">{{ $t('courseLearning.referenceAnswer') }}：</span>
+            <span class="font-20 break-all" style="color:#00B42A;">{{ filterOrders() }}</span>
+          </div>
+          <div v-if="answer.length > 0" class="flex">
+            <span class="flex-none font-14 leading-28">{{ $t('courseLearning.selectedAnswer') }}：</span>
+            <span class="font-20 break-all">{{ filterAnswerOrders(answer) }}</span>
           </div>
           <div v-if="$route.query.type == 'assessment'" class="ibs-analysis-color mb-8">
             {{ $t('courseLearning.score') }}：{{ commonData.report ? commonData.report.score : 0.0 }}
@@ -292,5 +290,21 @@ export default {
   .ibs-show-up-icon {
     display: block;
     cursor: pointer;
+  }
+
+  .font-14 {
+    font-size: vw(14);
+  }
+
+  .font-20 {
+    font-size: vw(20);
+  }
+
+  .leading-28 {
+    line-height: vw(28);
+  }
+
+  .break-all{
+    word-break: break-all;
   }
 </style>
