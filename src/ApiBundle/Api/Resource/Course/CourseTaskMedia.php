@@ -32,6 +32,8 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\ErrorCode;
+use Codeages\Biz\ItemBank\Item\Exception\ItemException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -303,8 +305,14 @@ class CourseTaskMedia extends AbstractResource
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
         $testpaperWrapper = new TestpaperWrapper();
         if (empty($answerRecord) || AnswerRecordStatus::FINISHED == $answerRecord['status']) {
-            $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
-            $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+            try {
+                $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
+                $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+            } catch (ItemException $e) {
+                if (ErrorCode::ITEM_NOT_ENOUGH == $e->getCode()) {
+                    $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
+                }
+            }
             $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
             $activity['ext']['latestExerciseResult'] = null;
         } else {
