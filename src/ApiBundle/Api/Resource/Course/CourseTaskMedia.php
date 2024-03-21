@@ -23,6 +23,7 @@ use Biz\File\UploadFileException;
 use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
 use Biz\Task\Service\TaskService;
+use Biz\Testpaper\ExerciseException;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
@@ -310,6 +311,9 @@ class CourseTaskMedia extends AbstractResource
                 $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             } catch (ItemException $e) {
                 if (ErrorCode::ITEM_NOT_ENOUGH == $e->getCode()) {
+                    if (empty($answerRecord)) {
+                        throw ExerciseException::LACK_QUESTION();
+                    }
                     $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
                 }
             }
