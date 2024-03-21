@@ -24,6 +24,8 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerReviewedQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\ErrorCode;
+use Codeages\Biz\ItemBank\Item\Exception\ItemException;
 
 class ExerciseResult extends AbstractResource
 {
@@ -58,17 +60,27 @@ class ExerciseResult extends AbstractResource
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
         $testpaperWrapper = new TestpaperWrapper();
 
-        if (empty($answerRecord) || 'finished' == $answerRecord['status']) {
+        if (empty($answerRecord) || AnswerRecordStatus::FINISHED == $answerRecord['status']) {
             if ('draft' == $assessment['status']) {
                 throw ExerciseException::DRAFT_EXERCISE();
             }
             if ('closed' == $assessment['status']) {
                 throw ExerciseException::CLOSED_EXERCISE();
             }
+            if ($assessment['id'] == $answerRecord['assessment_id']) {
+                try {
+                    $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
+                    $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+                } catch (ItemException $e) {
+                    if (ErrorCode::ITEM_NOT_ENOUGH == $e->getCode()) {
+                        throw ExerciseException::LACK_QUESTION();
+                    }
+                }
+            }
 
             $answerRecord = $this->getAnswerService()->startAnswer($answerScene['id'], $assessment['id'], $user['id']);
             $answerRecord = $this->getAnswerRecordService()->update($answerRecord['id'], ['exercise_mode' => $request->request->get('exerciseMode', ExerciseMode::SUBMIT_ALL)]);
-        } elseif ('reviewing' != $answerRecord['status']) {
+        } elseif (AnswerRecordStatus::REVIEWING != $answerRecord['status']) {
             $answerRecord = $this->getAnswerService()->continueAnswer($answerRecord['id']);
         }
 
