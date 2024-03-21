@@ -15,7 +15,7 @@
 {% elseif activity.ext.mediaSource == 'iframe' %}
   <div id="task-preview-iframe">
     <iframe src="{{ activity.ext.mediaUri }}" style="height:400px; width:100%; border:0px; overflow: hidden"
-            scrolling="no"></iframe>
+            scrolling="no" allowfullscreen></iframe>
   </div>
 {% else %}
   <div class="task-preview-modal-content">
