@@ -281,6 +281,7 @@ export default {
     },
 
     details(newDetails, oldDetails) {
+      this.showDialog();
       const drainage = newDetails.drainage;
 
       if (drainage && drainage.enabled == '1' && !localStorage.getItem('first_drainage')) {
