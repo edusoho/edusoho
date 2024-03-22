@@ -80,7 +80,7 @@ class SensitiveImporterTest extends BaseTestCase
 
         $result = $importer->check($request);
 
-        $this->assertEquals(['第1列重复:<br>第4行    屏蔽敏感词<br>第5行    屏蔽敏感词<br>'], $result['errorInfo']);
+        $this->assertEquals(['第1列重复，重复内容如下:<br>第4行：屏蔽敏感词<br>第5行：屏蔽敏感词<br>'], $result['errorInfo']);
     }
 
     public function testCheck_whenImportDataError_thenReturnErrorResponse()

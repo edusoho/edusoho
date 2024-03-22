@@ -320,7 +320,7 @@ class ClassroomMemberImporterTest extends BaseTestCase
         $importer = new ClassroomMemberImporter($this->getBiz());
         $repeatArray = array('test', 'test', '', '', '');
         $result = ReflectionUtils::invokeMethod($importer, 'arrayRepeat', array($repeatArray, 2));
-        $this->assertEquals('第3列重复:<br>第3行    test<br>第4行    test<br>', $result);
+        $this->assertEquals('第3列重复，重复内容如下:<br>第3行：test<br>第4行：test<br>', $result);
     }
 
     public function testGetFieldSort()
