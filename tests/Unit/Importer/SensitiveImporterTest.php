@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SensitiveImporterTest extends BaseTestCase
 {
-    public function testImport_whenEmptyImportData_thenReturn0()
+    public function testImportWhenEmptyImportDataThenReturn0()
     {
         $request = new Request([], [
             'importData' => [],
@@ -45,7 +45,7 @@ class SensitiveImporterTest extends BaseTestCase
         $this->assertTrue(true);
     }
 
-    public function testTryImport_returnTrue()
+    public function testTryImportReturnTrue()
     {
         $request = new Request([], []);
         $import = new SensitiveImporter($this->getBiz());
@@ -53,7 +53,7 @@ class SensitiveImporterTest extends BaseTestCase
         $this->assertTrue($import->tryImport($request));
     }
 
-    public function testTryImport_returnFalse()
+    public function testTryImportReturnFalse()
     {
         $request = new Request([], []);
         $currentUser = new CurrentUser();
@@ -71,7 +71,7 @@ class SensitiveImporterTest extends BaseTestCase
         $this->assertFalse($import->tryImport($request));
     }
 
-    public function testCheck_whenDataRepeat_thenReturnErrorResponse()
+    public function testCheckWhenDataRepeatThenReturnErrorResponse()
     {
         $importer = new SensitiveImporter($this->getBiz());
         $request = new Request([], [], [], [], [
@@ -83,7 +83,7 @@ class SensitiveImporterTest extends BaseTestCase
         $this->assertEquals(['第1列重复，重复内容如下:<br>第4行：屏蔽敏感词<br>第5行：屏蔽敏感词<br>'], $result['errorInfo']);
     }
 
-    public function testCheck_whenImportDataError_thenReturnErrorResponse()
+    public function testCheckWhenImportDataErrorThenReturnErrorResponse()
     {
         $importer = new SensitiveImporter($this->getBiz());
         $request = new Request([], [], [], [], [
