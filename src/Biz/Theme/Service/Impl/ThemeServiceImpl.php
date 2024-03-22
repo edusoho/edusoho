@@ -19,7 +19,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         parent::__construct(ServiceKernel::instance()->getBiz());
         $currentTheme = $this->getSettingService()->get('theme');
         try {
-            $uri = $currentTheme['uri'] ?? "jianmo";
+            $uri = $currentTheme['uri'] ?? 'jianmo';
             $this->defaultConfig = $this->getKernel()->getParameter("theme_{$uri}_default");
             $this->allConfig = $this->getKernel()->getParameter("theme_{$uri}_all");
 

@@ -59,7 +59,7 @@ class CourseTaskCopyTest extends BaseTestCase
                                 'courseId' => $newCourseId,
                                 'fromCourseSetId' => 123,
                                 'multiClassId' => 0,
-                                'createdUserId' => 1,
+                                'createdUserId' => $this->biz['user']['id'],
                                 'copyId' => 11221,
                             ],
                         ],
