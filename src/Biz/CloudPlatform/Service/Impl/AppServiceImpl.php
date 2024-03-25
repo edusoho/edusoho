@@ -580,7 +580,7 @@ class AppServiceImpl extends BaseService implements AppService
                 $errors[] = sprintf('当前应用版本 (%s) 与主系统版本不匹配, 无法安装。', $package['toVersion']);
                 goto last;
             }
-            $this->_submitSystemInfo($package);
+//            $this->_submitSystemInfo($package);
             $info = $this->_execScriptForPackageUpdate($package, $packageDir, $type, $index);
 
             if (isset($info['index'])) {

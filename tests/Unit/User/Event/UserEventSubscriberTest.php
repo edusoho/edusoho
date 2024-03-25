@@ -17,6 +17,7 @@ class UserEventSubscriberTest extends BaseTestCase
             'user.bind' => 'onUserBind',
             'user.unbind' => 'onUserUnbind',
             'user.change_password' => 'onUserChangePassword',
+            'user.lock' => 'onUserLock',
         ], UserEventSubscriber::getSubscribedEvents());
     }
 
@@ -64,7 +65,7 @@ class UserEventSubscriberTest extends BaseTestCase
     {
         $service = $this->mockBiz('WeChat:WeChatService', [
             [
-                'functionName' => 'getWeChatUserByTypeAndUnionId',
+                'functionName' => 'findWeChatUsersByUserId',
                 'returnValue' => [],
             ],
             [
@@ -78,7 +79,7 @@ class UserEventSubscriberTest extends BaseTestCase
         $eventSubscriber = new UserEventSubscriber($this->biz);
         $eventSubscriber->onUserUnbind($event);
 
-        $service->shouldHaveReceived('getWeChatUserByTypeAndUnionId')->times(1);
+        $service->shouldHaveReceived('findWeChatUsersByUserId')->times(1);
         $service->shouldNotHaveReceived('updateWeChatUser');
     }
 
@@ -86,8 +87,8 @@ class UserEventSubscriberTest extends BaseTestCase
     {
         $service = $this->mockBiz('WeChat:WeChatService', [
             [
-                'functionName' => 'getWeChatUserByTypeAndUnionId',
-                'returnValue' => ['id' => 1],
+                'functionName' => 'findWeChatUsersByUserId',
+                'returnValue' => [['id' => 1, 'unionId' => 1]],
             ],
             [
                 'functionName' => 'updateWeChatUser',
@@ -100,7 +101,7 @@ class UserEventSubscriberTest extends BaseTestCase
         $eventSubscriber = new UserEventSubscriber($this->biz);
         $eventSubscriber->onUserUnbind($event);
 
-        $service->shouldHaveReceived('getWeChatUserByTypeAndUnionId')->times(1);
+        $service->shouldHaveReceived('findWeChatUsersByUserId')->times(1);
         $service->shouldHaveReceived('updateWeChatUser')->times(1);
     }
 

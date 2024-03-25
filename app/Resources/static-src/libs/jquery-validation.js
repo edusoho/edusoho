@@ -536,6 +536,11 @@ $.validator.addMethod('optional_range', function (value, element, params) {
 	return this.optional(element) || params.optional() || (Number(value) >= params.range[0] && Number(value) <= params.range[1])
 }, Translator.trans('validate.valid_enter_a_positive.integer'));
 
+$.validator.addMethod("idcard_format", function(value, element) {
+  const reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+  return this.optional(element) || reg.test(value);
+}, Translator.trans('validate.valid_idcard_formate.message'));
+
 $.validator.addMethod('es_email', function (value, element, params) {
   return this.optional(element) || /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(value);
 }, Translator.trans('validate.valid_email_input.message'));
