@@ -71,7 +71,7 @@ class OpenCoursePlayer {
     let $ifrimeContent = $('#lesson-preview-iframe');
     $ifrimeContent.empty();
 
-    var html = `<iframe class="embed-responsive-item" src="${this.lesson.mediaUri}" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>`;
+    const html = `<iframe class="embed-responsive-item" src="${this.lesson.mediaUri}" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no" allowfullscreen></iframe>`;
 
     $ifrimeContent.html(html);
     $ifrimeContent.show();

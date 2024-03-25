@@ -14,8 +14,9 @@ use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
+use Codeages\Biz\ItemBank\ErrorCode;
+use Codeages\Biz\ItemBank\Item\Exception\ItemException;
 
 class TaskStartAnswer extends AbstractResource
 {
@@ -98,6 +99,16 @@ class TaskStartAnswer extends AbstractResource
                 return $latestAnswerRecord;
             }
             throw ExerciseException::EXERCISE_IS_DOING();
+        }
+        if (!empty($latestAnswerRecord) && $assessmentId == $latestAnswerRecord['assessment_id']) {
+            try {
+                $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
+                $assessmentId = $assessment['id'];
+            } catch (ItemException $e) {
+                if (ErrorCode::ITEM_NOT_ENOUGH == $e->getCode()) {
+                    throw ExerciseException::LACK_QUESTION();
+                }
+            }
         }
 
         if (empty($assessmentId)) {

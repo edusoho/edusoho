@@ -4,6 +4,8 @@ namespace Biz\Testpaper\Event;
 
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
@@ -65,10 +67,12 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         }
         $this->processAnswerReportPassed($activity, $answerRecord);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
         $user = $this->getBiz()['user'];
         $message = [
             'id' => $answerRecord['id'],
             'courseId' => $activity['fromCourseId'],
+            'taskId' => $task['id'],
             'name' => $assessment['name'],
             'userId' => $user['id'],
             'userName' => $user['nickname'],
@@ -170,24 +174,22 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         return $this->getBiz()->service('Activity:ActivityService');
     }
 
-    public function getCourseService()
+    protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
     }
 
-    public function getNotificationService()
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
+    }
+
+    protected function getNotificationService()
     {
         return $this->getBiz()->service('User:NotificationService');
-    }
-
-    public function getClassroomService()
-    {
-        return $this->getBiz()->service('Classroom:ClassroomService');
-    }
-
-    public function getStatusService()
-    {
-        return $this->getBiz()->service('User:StatusService');
     }
 
     /**
@@ -209,7 +211,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     /**
      * @return AnswerRecordService
      */
-    public function getAnswerRecordService()
+    protected function getAnswerRecordService()
     {
         return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
     }

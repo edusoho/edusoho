@@ -296,6 +296,7 @@ class Setting extends AbstractResource
     public function getMobile($request)
     {
         $mobileSetting = $this->getSettingService()->get('mobile', []);
+        $meCount = $this->getSettingService()->get('meCount', []);
 
         $splashs = [];
         for ($i = 1; $i < 6; ++$i) {
@@ -312,11 +313,12 @@ class Setting extends AbstractResource
         ];
 
         return [
-            'enabled' => isset($mobileSetting['enabled']) ? (bool) $mobileSetting['enabled'] : true,
+            'enabled' => !isset($mobileSetting['enabled']) || (bool) $mobileSetting['enabled'],
             'logo' => empty($mobileSetting['logo']) ? '' : AssetHelper::uriForPath('/'.$mobileSetting['logo']),
             'splashs' => $splashs,
             'appDiscoveryVersion' => $this->getH5SettingService()->getAppDiscoveryVersion(),
             'studyCenter' => empty($mobileSetting['studyCenter']) ? $defaultStudyCenter : array_merge($defaultStudyCenter, $mobileSetting['studyCenter']),
+            'code' => empty($meCount['mobileCode']) ? 'zhixiang' : $meCount['mobileCode'],
         ];
     }
 
@@ -576,8 +578,10 @@ class Setting extends AbstractResource
             'show_discussion' => isset($courseSetting['show_discussion']) ? intval($courseSetting['show_discussion']) : 1,
             'show_note' => isset($courseSetting['show_note']) ? intval($courseSetting['show_note']) : 1,
             'allow_anonymous_preview' => isset($courseSetting['allowAnonymousPreview']) ? intval($courseSetting['allowAnonymousPreview']) : 1,
-            'only_learning_on_APP' => isset($courseSetting['only_learning_on_APP']) ? intval($courseSetting['only_learning_on_APP']) : 0,
-            'android_APP_content_theft_prevention' => isset($courseSetting['android_APP_content_theft_prevention']) ? intval($courseSetting['android_APP_content_theft_prevention']) : 0,
+//            'only_learning_on_APP' => isset($courseSetting['only_learning_on_APP']) ? intval($courseSetting['only_learning_on_APP']) : 0,
+            'only_learning_on_APP' => 0,
+            'android_APP_content_theft_prevention' => isset($courseSetting['app_content_theft_prevention']) ? intval($courseSetting['app_content_theft_prevention']) : 0,
+            'app_content_theft_prevention' => isset($courseSetting['app_content_theft_prevention']) ? intval($courseSetting['app_content_theft_prevention']) : 0,
         ];
     }
 

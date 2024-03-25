@@ -1,6 +1,9 @@
 <template>
     <div class="cd-container">
-        <div class="product-breadcrumb"><a href="/">{{ 'homepage'|trans }}</a> / {{goods.title|removeHtml}}</div>
+        <div class="product-breadcrumb"><a href="/">{{ 'homepage'|trans }}</a>
+            <span v-for="(item, index) in goods.breadcrumbs" :key="index">/ <a :href="'/' + goods.type + '/explore/' + item.code">{{item.name}}</a></span>
+             / {{goods.title|removeHtml}}
+        </div>
         <a-alert
             v-if="goods.product.target.status == 'closed'"
             class="mt16"
@@ -384,4 +387,3 @@
         }
     }
 </script>
-

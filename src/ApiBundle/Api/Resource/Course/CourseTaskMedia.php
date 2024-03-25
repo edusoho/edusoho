@@ -23,6 +23,7 @@ use Biz\File\UploadFileException;
 use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
 use Biz\Task\Service\TaskService;
+use Biz\Testpaper\ExerciseException;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
@@ -32,6 +33,8 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\ErrorCode;
+use Codeages\Biz\ItemBank\Item\Exception\ItemException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -80,7 +83,7 @@ class CourseTaskMedia extends AbstractResource
     {
         $storageSetting = $this->getSettingService()->get('storage');
         $fingerPrintSetting = [
-            'video_fingerprint' => '0',
+            'video_fingerprint' => '',
         ];
         $watermarkSetting = [
             'video_watermark' => '0',
@@ -91,6 +94,7 @@ class CourseTaskMedia extends AbstractResource
                 'video_fingerprint',
                 'video_fingerprint_time',
             ]);
+            $fingerPrintSetting['video_fingerprint'] = empty($fingerPrintSetting['video_fingerprint']) ? '' : $this->getWebExtension()->getFingerprint();
 
             $watermarkSetting = ArrayToolkit::parts($storageSetting, [
                 'video_watermark',
@@ -302,8 +306,17 @@ class CourseTaskMedia extends AbstractResource
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
         $testpaperWrapper = new TestpaperWrapper();
         if (empty($answerRecord) || AnswerRecordStatus::FINISHED == $answerRecord['status']) {
-            $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
-            $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+            try {
+                $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
+                $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+            } catch (ItemException $e) {
+                if (ErrorCode::ITEM_NOT_ENOUGH == $e->getCode()) {
+                    if (empty($answerRecord)) {
+                        throw ExerciseException::LACK_QUESTION();
+                    }
+                    $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
+                }
+            }
             $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
             $activity['ext']['latestExerciseResult'] = null;
         } else {
