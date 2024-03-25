@@ -16,6 +16,8 @@ use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\ErrorCode;
+use Codeages\Biz\ItemBank\Item\Exception\ItemException;
 use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseController extends BaseController
@@ -27,7 +29,13 @@ class ExerciseController extends BaseController
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
 
-        $latestAnswerRecord = $this->getCurrentAnswerRecordOrStartNew($activity, $request->get('assessmentId'), $this->getCurrentUser()->getId());
+        try {
+            $latestAnswerRecord = $this->getCurrentAnswerRecordOrStartNew($activity, $request->get('assessmentId'), $this->getCurrentUser()->getId());
+        } catch (ItemException $e) {
+            if (ErrorCode::ITEM_NOT_ENOUGH == $e->getCode()) {
+                return $this->render('@activity/exercise/resources/views/show/index.html.twig', ['activity' => $activity, 'questionLack' => true]);
+            }
+        }
         if (ExerciseMode::SUBMIT_SINGLE == $latestAnswerRecord['exercise_mode']) {
             return $this->render('@activity/exercise/resources/views/show/not-support-submit-single-modal.html.twig', ['activity' => $activity]);
         }

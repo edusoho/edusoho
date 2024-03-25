@@ -17,7 +17,7 @@ class SupplierNotifyServiceTest extends BaseTestCase
         $this->assertNull($this->getSupplierNotifyService()->onSiteStatusChange([]));
     }
 
-    public function testOnCoopModeChange_whenMeError()
+    public function testOnCoopModeChangeWhenMeError()
     {
         $this->createParameter();
         $this->mockGetMe(['error' => 'Service Error']);
@@ -67,7 +67,10 @@ class SupplierNotifyServiceTest extends BaseTestCase
             'logo' => 'test.com/testlogo.png',
             'favicon' => 'test.com/testfavicon.png',
         ]);
-        $result = $this->getSupplierNotifyService()->onSupplierSiteLogoAndFaviconChange([]);
+        $result = $this->getSupplierNotifyService()->onSupplierSiteLogoAndFaviconChange([
+            'logo' => 'test.com/testlogo.png',
+            'favicon' => 'test.com/testfavicon.png',
+        ]);
         $this->assertEquals(['success' => true], $result);
         $setting = $this->getSettingService()->get('site');
         $this->assertContains('test.com/testlogo.png', $setting['logo']);

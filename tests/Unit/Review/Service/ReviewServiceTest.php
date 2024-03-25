@@ -14,7 +14,6 @@ use Biz\Review\ReviewException;
 use Biz\Review\Service\ReviewService;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
-use Mockery;
 use Topxia\Service\Common\ServiceKernel;
 
 class ReviewServiceTest extends BaseTestCase
@@ -177,7 +176,6 @@ class ReviewServiceTest extends BaseTestCase
         $result = $this->getReviewService()->createReview($this->mockDefaultReview());
         $expected = $this->getReviewService()->getReview(1);
         $this->assertEquals($expected, $result);
-        Mockery::close();
     }
 
     public function testGetByUserIdAndTargetTypeAndTargetId()

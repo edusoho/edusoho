@@ -1,6 +1,8 @@
 {% extends 'layout.html.twig' %}
 {% set exercise = activity.ext|default(null) %}
-{% set assessment = create_exercise_assessment(activity) %}
+{% if not questionLack|default(false) %}
+  {% set assessment = create_exercise_assessment(activity) %}
+{% endif %}
 {% do script(['exerciseactivity/js/exercise_info_modal/index.js'],300) %}
 
 {% block body %}
@@ -10,9 +12,11 @@
         <div class="modal-body task-state-modal">
           <div class="title font-blod text-37393D">
             {{ 'course.plan_task.activity_manage.exercise.info'|trans }}
-            <span>
-              <span class="text-20 font-normal js-exercise-schedule">1</span><span class="text-20 font-normal text-919399">/</span><span class="text-14 font-normal text-919399">2</span>
-            </span>
+            {% if not questionLack|default(false) %}
+              <span>
+                <span class="text-20 font-normal js-exercise-schedule">1</span><span class="text-20 font-normal text-919399">/</span><span class="text-14 font-normal text-919399">2</span>
+              </span>
+            {% endif %}
           </div>
           <div class="content">
             <div class="text-14 js-show-exercise-create">
@@ -105,10 +109,10 @@
               </span>
             </div>
           </div>
-          <div class="text-right mt20">
-            <a class="btn btn-primary js-show-exercise-create-btn" href="javascript:;">{{ 'course.plan_task.activity_manage.exercise.selective.answer.mode'|trans }}</a>
-          </div>
           {% if not questionLack %}
+            <div class="text-right mt20">
+              <a class="btn btn-primary js-show-exercise-create-btn" href="javascript:;">{{ 'course.plan_task.activity_manage.exercise.selective.answer.mode'|trans }}</a>
+            </div>
             <div class="text-right mt20 hidden js-exercise-create-btn">
               <a class="btn btn-primary" href="{{ path('exercise_start_do', {lessonId: activity.id, exerciseId: exercise.id, assessmentId: assessment.id}) }}">{{ 'course.plan_task.activity_manage.exercise.start_btn'|trans }}</a>
             </div>

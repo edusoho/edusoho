@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Question;
+namespace Tests\Unit\QiQiuYun;
 
 use Biz\BaseTestCase;
 use Biz\QiQiuYun\Service\QiQiuYunSdkProxyService;

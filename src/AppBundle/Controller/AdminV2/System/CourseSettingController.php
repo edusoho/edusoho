@@ -43,7 +43,7 @@ class CourseSettingController extends BaseController
             'show_cover_num_mode' => 'studentNum',
             'show_review' => '1',
             'only_learning_on_APP' => '0',
-            'android_APP_content_theft_prevention' => '0',
+            'app_content_theft_prevention' => $courseSetting['android_APP_content_theft_prevention'] ?? '0',
         ];
 
         $this->getSettingService()->set('course', $courseSetting);

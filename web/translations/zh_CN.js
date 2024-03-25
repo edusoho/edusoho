@@ -616,6 +616,7 @@ t.add("validate.valid_rangetime.required", "\u8bf7\u9009\u62e9\u65e5\u671f\u533a
 t.add("validate.valid_starttime.required", "\u8bf7\u9009\u62e9\u5f00\u59cb\u65f6\u95f4", "js", "zh_CN");
 t.add("validate.valid_endtime.required", "\u8bf7\u9009\u62e9\u7ed3\u675f\u65f6\u95f4", "js", "zh_CN");
 t.add("validate.valid_email_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u7535\u5b50\u90ae\u4ef6\u5730\u5740", "js", "zh_CN");
+t.add("validate.valid_idcard_formate.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u8eab\u4efd\u8bc1\u53f7\u7801", "js", "zh_CN");
 t.add("validate.valid_url_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u7f51\u5740", "js", "zh_CN");
 t.add("activity.testpaper_manage.required.number", "\u8bf7\u81f3\u5c11\u8f93\u5165\u4e00\u4f4d\u6570\u5b57", "js", "zh_CN");
 t.add("validate.valid_date_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u65e5\u671f", "js", "zh_CN");
@@ -1577,7 +1578,7 @@ t.add("course.marketing_setup.rule.expiry_date_tips", "\u5728\u6b64\u65e5\u671f\
 t.add("course.marketing_setup.rule.expiry_date.publish_tips", "\u4ece\u52a0\u5165\u5f53\u5929\u8d77\uff0c\u5728\u51e0\u5929\u5185\u53ef\u8fdb\u884c\u5b66\u4e60\u3002", "js", "zh_CN");
 t.add("course.plan_task.start_time", "\u5f00\u59cb\u65e5\u671f", "js", "zh_CN");
 t.add("course.plan_task.end_time", "\u7ed3\u675f\u65e5\u671f", "js", "zh_CN");
-t.add("course.marketing_setup.rule.expiry_date.first_publish_tips", "\u6559\u5b66\u8ba1\u5212\u4e00\u65e6\u53d1\u5e03\uff0c\u6709\u6548\u671f\u7c7b\u578b\u4e0d\u80fd\u4fee\u6539\uff1b\u8bfe\u7a0b\u6216\u6559\u5b66\u8ba1\u5212\u5173\u95ed\u540e\uff0c\u53ef\u4ee5\u4fee\u6539\u65e5\u671f\uff0c\u65b0\u7684\u5b66\u4e60\u6709\u6548\u671f\u4ec5\u5bf9\u4fee\u6539\u540e\u52a0\u5165\u7684\u5b66\u5458\u751f\u6548\u3002", "js", "zh_CN");
+t.add("course.marketing_setup.rule.expiry_date.first_publish_tips", "\u6559\u5b66\u8ba1\u5212\u4e00\u65e6\u53d1\u5e03\uff0c\u6709\u6548\u671f\u7c7b\u578b\u4e0d\u80fd\u4fee\u6539\uff1b\u8bfe\u7a0b\u6216\u6559\u5b66\u8ba1\u5212\u4e0b\u67b6\u540e\uff0c\u53ef\u4ee5\u4fee\u6539\u65e5\u671f\uff0c\u65b0\u7684\u5b66\u4e60\u6709\u6548\u671f\u4ec5\u5bf9\u4fee\u6539\u540e\u52a0\u5165\u7684\u5b66\u5458\u751f\u6548\u3002", "js", "zh_CN");
 t.add("course.marketing_setup.approval", "\u5b9e\u540d\u8ba4\u8bc1", "js", "zh_CN");
 t.add("course.marketing_setup.approval_tips", "\u8bbe\u7f6e\u8be5\u503c\u540e\uff0c\u5b66\u5458\u8d2d\u4e70\u8bfe\u7a0b\u524d\uff0c\u5fc5\u987b\u5148\u53bb\u7533\u8bf7\u5b9e\u540d\u8ba4\u8bc1\u3002", "js", "zh_CN");
 t.add("course.marketing_setup.expiry_date.anytime", "\u4e0d\u9650\u65f6\u95f4", "js", "zh_CN");

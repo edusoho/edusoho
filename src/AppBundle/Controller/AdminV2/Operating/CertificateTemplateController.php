@@ -102,12 +102,14 @@ class CertificateTemplateController extends BaseController
 
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
+            $basemap = json_decode($fields['basemap'] ?? '', true);
+            $stamp = json_decode($fields['stamp'] ?? '', true);
 
-            if (!empty($fields['basemapFileId'])) {
-                $this->getCertificateTemplateService()->updateBaseMap($id, $fields['basemapFileId']);
+            if ($basemap) {
+                $this->getCertificateTemplateService()->updateBaseMap($id, $basemap[0]['uri']);
             }
-            if (!empty($fields['stampFileId'])) {
-                $this->getCertificateTemplateService()->updateStamp($id, $fields['stampFileId']);
+            if ($stamp) {
+                $this->getCertificateTemplateService()->updateStamp($id, $stamp[0]['uri']);
             }
 
             return $this->redirect($this->generateUrl('admin_v2_certificate_template_creat_step_four', ['id' => $template['id']]));
