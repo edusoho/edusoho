@@ -1135,7 +1135,7 @@ admin_v2:
                                             class: delete-user
                                             group: groupButton
                                             mode: none
-                                            visible: (user.type != 'system' and is_super_admin())
+                                            visible: (user.type != 'system' and is_super_admin() or has_permission('admin_v2_user_delete'))
                                             router_params:
                                                 id: (user.id)
                                         admin_v2_user_org_update:
@@ -1256,7 +1256,7 @@ admin_v2:
                                             class: delete-user
                                             group: groupButton
                                             mode: none
-                                            visible: (user.type != 'system' and is_super_admin())
+                                            visible: (user.type != 'system' and is_super_admin() or has_permission('admin_v2_staff_delete'))
                                             router_params:
                                                 id: (user.id)
                                         admin_v2_staff_org_update:
