@@ -192,6 +192,9 @@ export default {
         }
         this.formatItem();
         this.interruption();
+      })
+      .catch(err => {
+        Toast.fail(err.message);
       });
     },
 

@@ -66,15 +66,13 @@
           </van-checkbox-group>
         </div>
         <div v-if="!disabledData" class="ibs-one-questions-analysis">
-          <div class="flex justify-between ibs-analysis-answer">
-            <div class="flex items-center">
-              <span class="ibs-answer">{{ $t('courseLearning.referenceAnswer') }}：</span>
-              <span class="ibs-options" style="color:#00B42A;">{{ filterOrders() }}</span>
-            </div>
-            <div v-if="answer.length > 0" class="flex items-center">
-              <span class="ibs-answer">{{ $t('courseLearning.selectedAnswer') }}：</span>
-              <span class="ibs-options">{{ filterAnswerOrders(answer) }}</span>
-            </div>
+          <div class="flex">
+            <span class="flex-none font-14 leading-28">{{ $t('courseLearning.referenceAnswer') }}：</span>
+            <span class="font-20 break-all" style="color:#00B42A;">{{ filterOrders() }}</span>
+          </div>
+          <div v-if="answer.length > 0" class="flex">
+            <span class="flex-none font-14 leading-28">{{ $t('courseLearning.selectedAnswer') }}：</span>
+            <span class="font-20 break-all">{{ filterAnswerOrders(answer) }}</span>
           </div>
           <div v-if="$route.query.type == 'assessment'" class="ibs-analysis-color mb-8">
             {{ $t('courseLearning.score') }}：{{ commonData.report ? commonData.report.score : 0.0 }}
@@ -87,7 +85,7 @@
             <span v-if="commonData.analysis" v-html="commonData.analysis" @click="handleClickImage($event.target.src)"/>
             <span v-else>{{ $t('courseLearning.noParsing') }}</span>
           </div>
-          <attachement-preview 
+          <attachement-preview
             v-for="item in getAttachmentTypeData('analysis')"
             :attachment="item"
             :key="item.id" />
@@ -99,12 +97,12 @@
         <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
         <span v-if="currentItem.analysis !== ''" v-html="currentItem.analysis" @click="handleClickImage($event.target.src)"/>
         <span v-else>{{ $t('courseLearning.noParsing') }}</span>
-        <attachement-preview 
+        <attachement-preview
           v-for="item in getAttachementByType('analysis')"
           :attachment="item"
           :key="item.id" />
       </div>
-      
+
     </div>
       <div v-if="disabledData && brushDo.exerciseModes === '1'" class="ibs-submit-footer" :style="{width:width+ 'px'}">
       <van-button
@@ -165,7 +163,7 @@ export default {
   },
   methods: {
     filterAnswerOrders(answer = []) {
-      const arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+      const arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
       const formateAnswer = answer.map((element,index) => {
         if (arr.indexOf(answer[index]) != -1) {
           return arr[arr.indexOf(answer[index])]
@@ -188,7 +186,7 @@ export default {
       if(this.answer.length === 0 && this.commonData.answer.includes(radioItem)) {
         return true;
       }
-      
+
       // 答案部分正确
       if (this.commonData.answer.includes(radioItem) && !this.answer.includes(radioItem)) {
         return true;
@@ -204,7 +202,7 @@ export default {
       if (this.commonData.answer.includes(radioItem)) {
         return false
       }
-      
+
       // 正确答案包含当前选项 && 输入答案不包含当前选项
       const isCommonDataRight = this.commonData.answer.includes(radioItem) && !this.answer.includes(radioItem)
       // 正确答案不包含当前选项 && 输入答案包含当前选项
@@ -234,7 +232,7 @@ export default {
       if (this.answer.length !== 0) {
         this.$emit('changeTouch')
         this.$emit('submitSingleAnswer', this.answer, data);
-        return 
+        return
       }
 
       Dialog.confirm({
@@ -292,5 +290,21 @@ export default {
   .ibs-show-up-icon {
     display: block;
     cursor: pointer;
+  }
+
+  .font-14 {
+    font-size: vw(14);
+  }
+
+  .font-20 {
+    font-size: vw(20);
+  }
+
+  .leading-28 {
+    line-height: vw(28);
+  }
+
+  .break-all{
+    word-break: break-all;
   }
 </style>

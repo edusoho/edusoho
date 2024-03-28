@@ -1,7 +1,7 @@
 <template>
   <div class="vip-detail">
     <e-loading v-if="isLoading" />
-    
+
     <div class="flex px-16 pt-12" v-if="user">
       <img v-if="user.avatar" :src="user.avatar.large" style="width: 40px;height: 40px;border-radius: 50%;" />
       <div class="ml-8 text-text-1" style="color: #464244;">
@@ -93,7 +93,7 @@
       type="price" :showNumberData="showNumberData" />
     </van-list>
 
-    
+
   </div>
 </template>
 
@@ -240,7 +240,7 @@ export default {
 
     courseData() {
       if (!this.currentLevel.courses) return {}
-      
+
       const { data, paging } = this.currentLevel.courses;
       if (data.length == 0) return false;
       const dataFormat = {
@@ -256,7 +256,7 @@ export default {
 
     classroomData() {
       if (!this.currentLevel.classrooms) return {}
-      
+
       const { data, paging } = this.currentLevel.classrooms;
       if (data.length == 0) return false;
       const dataFormat = {
@@ -311,17 +311,12 @@ export default {
     onLoad(type) {
       console.log(type);
       this.loading = true;
-      console.log('执行了');
       setTimeout(() => {
-        console.log("进来了");
         // 加载状态结束
         this.loading = false;
 
         // 数据全部加载完成
-        // if () {
-        //   console.log("到底了");
-          this.finished = true;
-        // }
+        this.finished = true;
       }, 2000);
     },
     getVipDetail() {
