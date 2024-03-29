@@ -9,7 +9,7 @@
       <div
         :id="lessonItem.tasks[lessonItem.index].id"
         :class="{ 'zb-ks': doubleLine(lessonItem.tasks[lessonItem.index]) }"
-        class="lesson-title"
+        class="lesson-title flex justify-between items-center"
         @click="
           lessonCellClick(
             lessonItem.tasks[lessonItem.index],

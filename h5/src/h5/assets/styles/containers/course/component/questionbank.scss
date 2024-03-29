@@ -308,10 +308,11 @@ $common-padding: 35;
 	}
 
 	.material-text {
-		display: contents;
-		height: vw(20);
+		// display: contents;
+		height: max-content;
 		font-weight: 500;
 		line-height: vw(22);
+		white-space: break-spaces;
 	}
 
 	.fill {
@@ -416,13 +417,13 @@ $common-padding: 35;
 	}
 
 	.material-stem-nowrap {
+		display: flex;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
 
 	.material-stem {
-		display: flex;
 		white-space: normal;
 		word-wrap: break-word;
 

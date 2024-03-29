@@ -7,6 +7,10 @@
 	}
 }
 
+.only-app-dialog > .van-dialog__content--isolated {
+	min-height: 70px !important;
+}
+
 .van-hairline--bottom::after {
 	border-bottom-width: 0;
 }

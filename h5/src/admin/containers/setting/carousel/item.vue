@@ -133,9 +133,9 @@ export default {
       option: {
         img: '',
         autoCrop: true,
-        autoCropWidth: 343,
-        autoCropHeight: 136,
-        fixedNumber: [343, 136],
+        autoCropWidth: 686,
+        autoCropHeight: 272,
+        fixedNumber: [686, 272],
         fixed: true,
         high: false,
         enlarge: 2,
