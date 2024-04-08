@@ -119,6 +119,9 @@ class MeCourse extends AbstractResource
         $learnedCourseIds = [];
         $learningCourseIds = [];
         foreach ($members as $member) {
+            if (empty($courses[$member['courseId']])) {
+                continue;
+            }
             $course = $courses[$member['courseId']];
             $isLearned = 1;
             if ($member['learnedCompulsoryTaskNum'] < $course['compulsoryTaskNum'] or 0 == $course['compulsoryTaskNum']) {
