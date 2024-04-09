@@ -103,6 +103,7 @@
 import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
 import emptyCourse from '@/containers/learning/emptyCourse/emptyCourse.vue';
 import Api from '@/api';
+import {mapState} from "vuex";
 export default {
   nama: 'search',
   components: {
@@ -140,12 +141,13 @@ export default {
         isRequestCompile: false,
         offset: 0,
         limit: 10,
-      },
-      showNumberData: {
-        type: String,
-        default: '',
-      },
+      }
     };
+  },
+  computed: {
+    ...mapState({
+      showNumberData: state => state.goodsSettings.show_number_data
+    })
   },
   methods: {
     onSearch() {
@@ -163,7 +165,6 @@ export default {
 
       this.initItemBankList();
       this.requestItemBanks();
-      this.getGoodSettings();
     },
     onCancel() {
       this.isSearch = false;
@@ -244,7 +245,7 @@ export default {
               console.log(err, 'error');
             });
       }
-      
+
       return Api.getCourseList({
         params: config,
       })
@@ -315,16 +316,7 @@ export default {
 
     sendRequestItemBank() {
       if (!this.isAllItemBank) this.requestItemBanks();
-    },
-    getGoodSettings() {
-      Api.getSettings({
-        query: {
-          type: 'goods',
-        },
-      }).then(res => {
-        this.showNumberData = res.show_number_data;
-      });
-    },
+    }
   },
 };
 </script>

@@ -49,7 +49,7 @@ export default {
         this.$router.push({ path: '/' });
         return;
       }
-      
+
       this.$router.go(-1);
     },
     reload() {

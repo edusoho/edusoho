@@ -22,13 +22,14 @@ const state = {
   token: null,
   user: {},
   smsToken: '',
-  settings: {},
+  settings: null,
   courseSettings: {},
   title: '',
   vipSettings: {},
   wechatSwitch: false,
   vipSwitch: false,
   storageSetting: {},
+  goodsSettings: {},
   couponSwitch: null,
   socialBinded: {
     wx: true,
@@ -40,6 +41,8 @@ const state = {
   mobile_bind: {}, // 用户是否绑定了手机号
   settingUgc: {}
 };
+
+window.state = state
 
 export default new Vuex.Store({
   state,

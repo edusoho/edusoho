@@ -140,7 +140,6 @@ export default {
         targetType: 'classroom',
         targetId: this.details.classId,
       },
-      showNumberData: '',
       show: false,
       show_classroom_review: this.$store.state.goods.show_classroom_review,
     };
@@ -150,6 +149,9 @@ export default {
     ...mapState('classroom', {
       currentJoin: state => state.currentJoin,
     }),
+    ...mapState({
+      showNumberData: state => state.goodsSettings.show_number_data
+    })
   },
   async created() {
     this.classroomSettings = await Api.getSettings({
@@ -159,7 +161,6 @@ export default {
     }).catch(err => {
       console.error(err);
     });
-    this.getGoodSettings();
   },
   watch: {
     currentJoin: {
@@ -407,16 +408,7 @@ export default {
     onCancelForm() {
       this.setCurrentJoin(false);
       this.isShowForm = false;
-    },
-    getGoodSettings() {
-      Api.getSettings({
-        query: {
-          type: 'goods',
-        },
-      }).then(res => {
-        this.showNumberData = res.show_number_data;
-      });
-    },
+    }
   },
 };
 </script>

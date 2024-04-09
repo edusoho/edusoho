@@ -202,7 +202,6 @@ export default {
       backToTopShow: false, // 是否显示回到顶部
       componentsInfo: {}, // 组件数据
       isLoading: true,
-      goodsSetting: {},
       show_review: this.$store.state.goods.show_review,
       show_course_review: this.$store.state.goods.show_course_review,
       show_classroom_review: this.$store.state.goods.show_classroom_review,
@@ -226,7 +225,9 @@ export default {
   },
   computed: {
     ...mapState(['vipSwitch']),
-
+    ...mapState({
+      goodsSetting: state => state.goodsSettings
+    }),
     summary() {
       if (!this.goods.summary) return this.$t('goods.noIntrodution');
       return this.goods.summary;
@@ -362,18 +363,6 @@ export default {
     },
     init() {
       this.getGoodsCourse();
-      Api.getSettings({
-        query: {
-          type: 'goods',
-        },
-      })
-        .then(resp => {
-          this.goodsSetting = resp;
-          console.log(resp.show_review);
-        })
-        .catch(err => {
-          console.error(err);
-        });
     },
   },
   created() {
