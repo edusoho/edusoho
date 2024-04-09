@@ -43,7 +43,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.marketing.update' => 'onCourseMarketingChange',
             'course.publish' => 'onCourseStatusChange',
             'course.close' => 'onCourseStatusChange',
-            'course.delete' => 'onCourseDelete',
+            'course.delete' => ['onCourseDelete', -200],
             'course.task.updateOptional' => 'onCourseTaskUpdateOptional',
 
             'review.create' => 'onReviewChange',
