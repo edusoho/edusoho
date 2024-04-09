@@ -196,6 +196,7 @@ class StudentManageController extends BaseController
     public function batchUpdateMemberDeadlinesAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
+        $all = $request->query->get('all');
         $ids = $request->query->get('ids');
         $ids = is_array($ids) ? $ids : explode(',', $ids);
         if ('POST' === $request->getMethod()) {
@@ -218,6 +219,7 @@ class StudentManageController extends BaseController
             [
                 'course' => $course,
                 'users' => $users,
+                'all' => $all,
                 'ids' => implode(',', ArrayToolkit::column($users, 'id')),
                 'default' => $this->getSettingService()->get('default', []),
             ]

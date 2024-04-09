@@ -63,11 +63,17 @@ class Students {
 
     $('#student-table-container').on('click', '#batch-update-expiry-day', function () {
       let ids = getSelectIds();
-      if (ids.length === 0) {
+      const isAll = $('.js-select-all').is(':checked');
+
+      if (ids.length === 0 && !isAll) {
         cd.message({type: 'danger', message: Translator.trans('course.manage.student.add_expiry_day.select_tips')});
+
         return;
       }
-      $.get($(this).data('url'), {ids: ids}, function (html) {
+
+      const data = isAll ? { all: 1 } : { ids };
+
+      $.get($(this).data('url'), data, function (html) {
         $('#modal').html(html).modal('show');
       });
     }).on('click', '#batch-remove', function () {

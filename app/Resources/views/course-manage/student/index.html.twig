@@ -22,10 +22,15 @@
     </form>
     {% if students|length > 0 %}
       {% if courseSet.parentId == 0 %}
-        <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id}) }}">{{ 'course.members_manage.official_student.batch_upload_deadline'|trans }}</button>
-        {% if isEnableAddAndRemove %}
-          <button id="batch-remove" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('course_set_manage_course_students_remove_students', {courseSetId: course.courseSetId, courseId: course.id}) }}">{{ 'course.members_manage.official_student.batch_remove'|trans }}</button>
-        {% endif %}
+        <div class="flex items-center mb16">
+          <label class="mr8 mb0 cursor-pointer">
+            <input type="checkbox" class="js-select-all mr8" style="position: relative;top: 2px;"> 选择全部
+          </label>
+          <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary mr8" data-url="{{ path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id}) }}">{{ 'course.members_manage.official_student.batch_upload_deadline'|trans }}</button>
+          {% if isEnableAddAndRemove %}
+            <button id="batch-remove" type="button" class="cd-btn cd-btn-primary" data-url="{{ path('course_set_manage_course_students_remove_students', {courseSetId: course.courseSetId, courseId: course.id}) }}">{{ 'course.members_manage.official_student.batch_remove'|trans }}</button>
+          {% endif %}
+        </div>
       {% endif %}
     {% endif %}
     <table class="table table-striped" id="course-student-list">
