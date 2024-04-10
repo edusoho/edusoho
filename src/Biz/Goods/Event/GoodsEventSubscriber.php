@@ -22,6 +22,7 @@ class GoodsEventSubscriber extends EventSubscriber implements EventSubscriberInt
             'classroom.courses.delete' => 'onClassroomCoursesDelete',
             'review.create' => 'onReviewChanged',
             'review.delete' => 'onReviewChanged',
+            'goods.delete' => 'onGoodsDelete',
         ];
     }
 
@@ -81,6 +82,12 @@ class GoodsEventSubscriber extends EventSubscriber implements EventSubscriberInt
             $this->getCourseSpecsMediator()->onCreate($course);
             $this->getCourseSpecsMediator()->onUpdateNormalData($course);
         }
+    }
+
+    public function onGoodsDelete(Event $event)
+    {
+        $goodsId = $event->getSubject();
+        $this->getReviewService()->deleteReviewsByTargetTypeAndTargetId('goods', $goodsId);
     }
 
     /**

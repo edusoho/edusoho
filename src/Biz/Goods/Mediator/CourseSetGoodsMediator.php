@@ -5,7 +5,6 @@ namespace Biz\Goods\Mediator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\GoodsException;
-use Biz\Review\Service\ReviewService;
 
 class CourseSetGoodsMediator extends AbstractGoodsMediator
 {
@@ -105,7 +104,6 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
         }
 
         $this->getGoodsService()->deleteGoods($existGoods['id']);
-        $this->getReviewService()->deleteReviewsByTargetTypeAndTargetId('goods', $existGoods['id']);
     }
 
     public function onSortGoodsSpecs($courseSet)
@@ -180,13 +178,5 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
-    }
-
-    /**
-     * @return ReviewService
-     */
-    protected function getReviewService()
-    {
-        return $this->biz->service('Review:ReviewService');
     }
 }
