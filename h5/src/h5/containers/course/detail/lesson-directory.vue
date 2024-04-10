@@ -297,6 +297,7 @@ export default {
       })
     },
     async lessonCellClick(task, lessonIndex, taskIndex) {
+      
       await this.getCourse()
 
       if(!this.isCanLearn(task)) {

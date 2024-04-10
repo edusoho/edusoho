@@ -183,7 +183,7 @@ export default {
   },
   inject: ['getDetailsContent'],
   computed: {
-    ...mapState(['DrpSwitch', 'cloudSdkCdn']),
+    ...mapState(['DrpSwitch', 'cloudSdkCdn', 'courseSettings']),
     ...mapState('course', {
       course: state => state,
       sourceType: state => state.sourceType,
@@ -429,6 +429,7 @@ export default {
     },
 
     formateVedioData(player) {
+      console.log(player);
       const media = player.media;
       const timelimit = media.timeLimit;
       const securityVideoPlayer = media.securityVideoPlayer;
@@ -451,7 +452,12 @@ export default {
         return;
       }
 
-      const options = {
+      // if (this.courseSettings.only_learning_on_APP) {
+           console.log(111);
+        // window.location.href = URL Scheme;
+      // }
+
+      const options = { 
         id: 'course-detail__head--video',
         user: this.user,
         autoplay: true,

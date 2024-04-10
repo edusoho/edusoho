@@ -218,29 +218,35 @@ export default {
 }
   .tag-live {
     position: absolute;
-    left: -3px;
-    top: -1px;
+    // left: -3px;
+    // top: -1px;
+    right: 0px;
+    bottom: -1px;
     padding: 2px 8px;
     color: #fff;
     font-weight: 500;
     line-height: 14px;
     font-size: 12px;
     background-color: #FF900E;
-    border-radius: 6px 0;
+    // border-radius: 6px 0;
+    border-radius: 6px 0 0;
     transform: scale(0.83);
   }
 
   .tag-vip {
     position: absolute;
-    right: -1px;
-    top: -1px;
+    // right: -1px;
+    // top: -1px;
+    left: -5px;
+    bottom: -1px;
     padding: 2px 8px;
     color: #fff;
     font-weight: 500;
     line-height: 14px;
     font-size: 12px;
     background-color: #162923;
-    border-radius: 0 0 0 6px;
+    // border-radius: 0 0 0 6px;
+    border-radius: 0 6px;
     transform: scale(0.83);
   }
 
