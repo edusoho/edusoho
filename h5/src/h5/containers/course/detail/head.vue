@@ -442,7 +442,7 @@ export default {
       }
 
       if (this.courseSettings.only_learning_on_APP==0) {
-        const { goodsId, courseId } = this.course.details;
+        const { goodsId, id } = this.course.details;
 
         window.location.href = `kuozhi://${window.location.host}?courseId=${courseId}&goodsId=${goodsId}`; 
 
