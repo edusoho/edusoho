@@ -195,6 +195,15 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
         $seq = 1;
         $taskNumber = 1;
         $categoryId = 0;
+        if (0 != sizeof($this->itemIds) % 2) {
+            $lastItem = array_pop($this->itemIds);
+            list($type, $chapterIdOrTaskId) = explode('-', $lastItem);
+            if ('task' == $type) {
+                $task = $this->getTask($chapterIdOrTaskId);
+                $this->itemIds[] = 'chapter-'.$task['categoryId'];
+                $this->itemIds[] = $lastItem;
+            }
+        }
         foreach ($this->itemIds as $itemId) {
             list($type, $chapterIdOrTaskId) = explode('-', $itemId);
 
