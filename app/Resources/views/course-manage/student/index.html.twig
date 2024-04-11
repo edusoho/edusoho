@@ -23,13 +23,37 @@
     {% if students|length > 0 %}
       {% if courseSet.parentId == 0 %}
         <div class="flex items-center mb16">
-          <label class="mr8 mb0 cursor-pointer">
-            <input type="checkbox" class="js-select-all mr8" style="position: relative;top: 2px;"> 选择全部
-          </label>
-          <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary mr8" data-url="{{ path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id}) }}">{{ 'course.members_manage.official_student.batch_upload_deadline'|trans }}</button>
           {% if isEnableAddAndRemove %}
-            <button id="batch-remove" type="button" class="cd-btn cd-btn-primary" data-url="{{ path('course_set_manage_course_students_remove_students', {courseSetId: course.courseSetId, courseId: course.id}) }}">{{ 'course.members_manage.official_student.batch_remove'|trans }}</button>
+            <button id="batch-remove" type="button" class="cd-btn cd-btn-default mr8"
+                    data-url="{{ path('course_set_manage_course_students_remove_students', {courseSetId: course.courseSetId, courseId: course.id}) }}">
+              {{ 'course.members_manage.official_student.batch_remove'|trans }}
+            </button>
           {% endif %}
+
+          <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
+            <button type="button" class="cd-btn cd-btn-default dropdown-toggle">
+              {{ 'course.members_manage.official_student.batch_upload_deadline'|trans }}
+              <i class="cd-icon cd-icon-arrow-down cd-text-sm"></i>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <a id="batch-update-expiry-day"
+                   class="clearfix"
+                   href="javascript:;"
+                   data-url="{{ path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id}) }}">
+                  {{ 'course.members_manage.official_student.batch_upload_deadline'|trans }}
+                </a>
+              </li>
+              <li>
+                <a id="all-update-expiry-day"
+                   class="clearfix"
+                   href="javascript:;"
+                   data-url="{{ path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id}) }}">
+                  {{ 'course.members_manage.official_student.all_update_deadline'|trans }}
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       {% endif %}
     {% endif %}

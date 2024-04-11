@@ -1124,6 +1124,7 @@ course.members_manage.export.field_learn_time: 累加学习时长
 course.members_manage.official_student: 正式学员
 course.members_manage.official_student.search: 搜索
 course.members_manage.official_student.batch_upload_deadline: 批量修改有效期
+course.members_manage.official_student.all_update_deadline: 全员修改有效期
 course.members_manage.official_student.batch_remove: 批量移除
 course.members_manage.official_student.input_placeholder: 请输入用户名/邮箱/手机号
 course.members_manage.official_student.seq: 序号
@@ -2251,8 +2252,8 @@ course.plan_task.activity_manage.testpaper.times.always: 不限
 course.plan_task.activity_manage.testpaper.show_answer: 合格之后显示答案和解析
 course.plan_task.activity_manage.testpaper.show_answer_tips: 考试次数不限时，设置生效。
 course.plan_task.activity_manage.testpaper.redo_interval: 重考间隔
-course.plan_task.activity_manage.testpaper.topic.out.of.order: 题目乱序  
-course.plan_task.activity_manage.testpaper.option.out.of.order: 选项乱序  
+course.plan_task.activity_manage.testpaper.topic.out.of.order: 题目乱序
+course.plan_task.activity_manage.testpaper.option.out.of.order: 选项乱序
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。
 course.plan_task.activity_manage.testpaper.question.disorder: 开启后，学员进入考试时，对应大题内所有小题将随机排序
 course.plan_task.activity_manage.testpaper.option.disorder: 开启后，学员进入考试时，所有选择题选项将随机排序
@@ -2283,14 +2284,14 @@ course.plan_task.activity_manage.testpaper.answer: >
   请在<span class="color-primary">%limitedTime%分钟</span>内作答。
 course.plan_task.activity_manage.testpaper.once_trance: >
   仅有<span class="color-danger">一次</span>考试机会。
-course.plan_task.activity_manage.testpaper.limit_tips: 
+course.plan_task.activity_manage.testpaper.limit_tips:
   温馨提示：考试一旦开始，倒计时结束后将自动交卷。
 course.plan_task.activity_manage.testpaper.enddate.limit_tips: 温馨提示：当前考试已结束，请点击按钮查看考试结果
-course.plan_task.activity_manage.testpaper.limit_tips1: 
+course.plan_task.activity_manage.testpaper.limit_tips1:
   <span class="color-gray">温馨提示：本次考试不自动交卷，实时显示考试用时，中途离开不计时。</span>
-course.plan_task.activity_manage.testpaper.one_limit_tips: 
+course.plan_task.activity_manage.testpaper.one_limit_tips:
   <span class="color-gray">温馨提示：仅有一次考试机会，考试一旦开始，倒计时结束后将自动交卷。</span>
-course.plan_task.activity_manage.testpaper.one_limit_tips1: 
+course.plan_task.activity_manage.testpaper.one_limit_tips1:
   <span class="color-gray">温馨提示：仅有一次考试机会，本次考试不自动交卷，实时显示考试用时，中途离开不计时。</span>
 course.plan_task.activity_manage.testpaper.questionNum: 题目数
 course.plan_task.activity_manage.testpaper.questionCount: 题

@@ -61,7 +61,7 @@ class Students {
       return ids;
     };
 
-    $('#student-table-container').on('click', '#batch-update-expiry-day', function () {
+    $('#batch-update-expiry-day').on('click', function () {
       let ids = getSelectIds();
       const isAll = $('.js-select-all').is(':checked');
 
@@ -76,15 +76,26 @@ class Students {
       $.get($(this).data('url'), data, function (html) {
         $('#modal').html(html).modal('show');
       });
-    }).on('click', '#batch-remove', function () {
-      let ids = getSelectIds();
+    });
+
+    $('#all-update-expiry-day').on('click', function () {
+      $.get($(this).data('url'), { all: 1 }, function (html) {
+        $('#modal').html(html).modal('show');
+      });
+    });
+
+    $('#batch-remove').on('click', function () {
+      const ids = getSelectIds();
+
       if (ids.length === 0) {
         cd.message({type: 'danger', message: Translator.trans('course.manage.student.batch_remove.select_tips')});
         return;
       }
+
       if (!confirm(Translator.trans('course.manage.students_delete_hint'))) {
         return;
       }
+
       $.post($(this).data('url'), {studentIds: ids}, function (resp) {
         if (resp.success) {
           cd.message({ type: 'success', message: Translator.trans('member.delete_success_hint') });

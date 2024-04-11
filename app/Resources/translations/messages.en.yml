@@ -986,6 +986,7 @@ course.members_manage.export.field_learn_time: The cumulative learning time
 course.members_manage.official_student: Students
 course.members_manage.official_student.search: Search
 course.members_manage.official_student.batch_upload_deadline: Batch modification validity period
+course.members_manage.official_student.all_update_deadline: All modification validity period
 course.members_manage.official_student.batch_remove: Batch remove
 course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
 course.members_manage.official_student.seq: Seq
@@ -1942,8 +1943,8 @@ course.plan_task.activity_manage.testpaper.times.always: 'No limitation'
 course.plan_task.activity_manage.testpaper.show_answer: Show the answer and analysis after passing
 course.plan_task.activity_manage.testpaper.show_answer_tips: The setting takes effect when the number of exams is not limited.
 course.plan_task.activity_manage.testpaper.redo_interval: 'Retry interval'
-course.plan_task.activity_manage.testpaper.topic.out.of.order: Topic out of order  
-course.plan_task.activity_manage.testpaper.option.out.of.order: Option out of order  
+course.plan_task.activity_manage.testpaper.topic.out.of.order: Topic out of order
+course.plan_task.activity_manage.testpaper.option.out.of.order: Option out of order
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 'Retry Time Interval: Start time after completion of approval. '
 course.plan_task.activity_manage.testpaper.question.disorder: After this is enabled, when students enter the exam, all the small questions within the corresponding big question will be randomly sorted
 course.plan_task.activity_manage.testpaper.option.disorder: When turned on, all multiple choice options will be randomly ordered when students enter the exam
@@ -1967,14 +1968,14 @@ course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not s
 course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points</span>.'
 course.plan_task.activity_manage.testpaper.pass_score: "pass score is <span class=\"color-primary\">%finishScore% points</span>.\n"
 course.plan_task.activity_manage.testpaper.answer: 'Please answer within <span class = "color-primary">%limitedTime% minutes</span>.'
-course.plan_task.activity_manage.testpaper.limit_tips: 
+course.plan_task.activity_manage.testpaper.limit_tips:
   'Reminder: Once the test starts, the test will be handed in automatically after the countdown is over.'
 course.plan_task.activity_manage.testpaper.enddate.limit_tips: 'Reminder: The current exam has ended, please click the button to view the test results'
-course.plan_task.activity_manage.testpaper.limit_tips1: 
+course.plan_task.activity_manage.testpaper.limit_tips1:
   '<span class="color-gray">Reminder: This test will not be handed in automatically, and the time spent on the exam will be displayed in real time, and the time will not be counted if you leave halfway.</span>'
-course.plan_task.activity_manage.testpaper.one_limit_tips: 
+course.plan_task.activity_manage.testpaper.one_limit_tips:
   '<span class="color-gray">Reminder: There is only one chance to test. Once the test starts, the test will be handed in automatically after the countdown is over.</span>'
-course.plan_task.activity_manage.testpaper.one_limit_tips1: 
+course.plan_task.activity_manage.testpaper.one_limit_tips1:
   '<span class="color-gray">Reminder: There is only one chance to take the test, and the test will not be handed in automatically, and the test time will be displayed in real time, and the time will not be counted if you leave halfway.</span>'
 course.plan_task.activity_manage.testpaper.questionNum: 'Number of questions'
 course.plan_task.activity_manage.testpaper.questionCount: 'questions'
