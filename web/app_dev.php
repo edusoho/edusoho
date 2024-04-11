@@ -41,7 +41,7 @@ $kernel->terminate($request, $response);
 
 function fix_gpc_magic()
 {
-    if (define('MAGIC_QUOTES_GPC',ini_set("magic_quotes_runtime",0)?True:False)) {
+    if (get_magic_quotes_gpc()) {
         array_walk($_GET, '_fix_gpc_magic');
         array_walk($_POST, '_fix_gpc_magic');
         array_walk($_COOKIE, '_fix_gpc_magic');
