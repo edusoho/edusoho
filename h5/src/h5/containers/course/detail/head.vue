@@ -183,7 +183,7 @@ export default {
   },
   inject: ['getDetailsContent'],
   computed: {
-    ...mapState(['DrpSwitch', 'cloudSdkCdn', 'courseSettings']),
+    ...mapState(['DrpSwitch', 'cloudSdkCdn', 'courseSettings','course']),
     ...mapState('course', {
       course: state => state,
       sourceType: state => state.sourceType,
@@ -429,7 +429,6 @@ export default {
     },
 
     formateVedioData(player) {
-      console.log(player);
       const media = player.media;
       const timelimit = media.timeLimit;
       const securityVideoPlayer = media.securityVideoPlayer;
@@ -441,6 +440,15 @@ export default {
         Toast('课程内容准备中，请稍候查看');
         return;
       }
+
+      if (this.courseSettings.only_learning_on_APP==0) {
+        const { goodsId, courseId } = this.course.details;
+
+        window.location.href = `kuozhi://${window.location.host}?courseId=${courseId}&goodsId=${goodsId}`; 
+
+        return
+      }
+
       this.isEncryptionPlus = media.isEncryptionPlus;
       if (media.isEncryptionPlus && !this.isWechat() && securityVideoPlayer) {
         Toast('该浏览器不支持云视频播放，请用微信打开或下载App');
@@ -451,11 +459,6 @@ export default {
         // Toast('该浏览器不支持云视频播放，请下载App，安卓端仅允许在微信App内置浏览器中观看');
         return;
       }
-
-      // if (this.courseSettings.only_learning_on_APP) {
-           console.log(111);
-        // window.location.href = URL Scheme;
-      // }
 
       const options = { 
         id: 'course-detail__head--video',
