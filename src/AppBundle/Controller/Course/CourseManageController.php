@@ -984,17 +984,6 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(['result' => true]);
     }
 
-    private function checkSortAble($ids, $courseId)
-    {
-        $taskCount = $this->getTaskService()->countTasks(['courseId' => $courseId]);
-        $filteredIds = array_filter($ids, function ($id) {
-            return false !== strpos($id, 'chapter');
-        });
-        $count = count($filteredIds);
-
-        return $count != $taskCount;
-    }
-
     public function ordersAction(Request $request, $courseSetId, $courseId)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
@@ -1118,6 +1107,16 @@ class CourseManageController extends BaseController
         $this->getCourseService()->changeHidePublishLesson($courseId, $status);
 
         return $this->createJsonResponse(true);
+    }
+
+    private function checkSortAble($ids, $courseId)
+    {
+        $taskCount = $this->getTaskService()->countTasks(['courseId' => $courseId]);
+        $filteredIds = array_filter($ids, function ($id) {
+            return false !== strpos($id, 'chapter');
+        });
+
+        return count($filteredIds) != $taskCount;
     }
 
     private function sortMarkerStats(&$stats, $request)
