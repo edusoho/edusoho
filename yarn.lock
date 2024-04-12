@@ -5778,10 +5778,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@^1.0.63:
-  version "1.0.63"
-  resolved "https://registry.npmmirror.com/item-bank/-/item-bank-1.0.63.tgz#4dbb4d59c78cb549fd468044cf3111fc9fac7c8c"
-  integrity sha512-fDm4INT7w1FPcN7MLv6XVrsyhL6HOYI4LwoQ7on9QIXO0wNUTuvrt1YbibpKSqFwh1VgTCBehOXknpvYmihYZw==
+item-bank@1.0.64:
+  version "1.0.64"
+  resolved "https://registry.npmmirror.com/item-bank/-/item-bank-1.0.64.tgz#412a376cd25741e38b201f79703b91719a8b05bd"
+  integrity sha512-TGCcLiTmzmvQpghhFeTy2pO0v6f3U3lqj5KL58tjmhqdUxMVtzo4BoI65AtVAxAlwRM9lR6eqhaBt8++ZKpGpg==
   dependencies:
     ant-design-vue "^1.5.0"
     caniuse-lite "^1.0.30001390"
@@ -10020,9 +10020,10 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
 
-vue@^2.6.11:
+vue@2.6.11, vue@^2.6.11:
   version "2.6.11"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
+  resolved "https://registry.npmmirror.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
+  integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
 
 vuedraggable@^2.24.3:
   version "2.24.3"
