@@ -441,15 +441,21 @@ export default {
         return;
       }
 
-      if (this.courseSettings.only_learning_on_APP==0) {
+      if (this.courseSettings.only_learning_on_APP == 0) {
         const { goodsId, id } = this.course.details;
+        const { host,protocol } = window.location;
 
-        window.location.href = `kuozhi://${window.location.host}?courseId=${id}&goodsId=${goodsId}`; 
+       if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+          window.location.href = `kuozhi://${host}?courseId=${id}&goodsId=${goodsId}`; 
+        } else {
+          window.location.href = `kuozhi://${host}?protocol=${protocol.replace(":","")}&courseId=${id}&goodsId=${goodsId}`; 
+        } 
 
-        return
+        return;
       }
 
       this.isEncryptionPlus = media.isEncryptionPlus;
+      
       if (media.isEncryptionPlus && !this.isWechat() && securityVideoPlayer) {
         Toast('该浏览器不支持云视频播放，请用微信打开或下载App');
         return;
