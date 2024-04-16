@@ -1,5 +1,6 @@
 <template>
   <div id="course-detail__head" class="course-detail__head pos-rl">
+
     <video-report-mask
       :type="outFocusMaskType"
       :isShow="isShowOutFocusMask"
@@ -111,7 +112,11 @@
       :courseId="selectedPlanId"
       @closeFinishDialog="closeFinishDialog"
     ></finishDialog>
-  </div>
+
+    <div class="dialog" v-if="appShow">
+      <my-dialog :openAppUrl="openAppUrl" @cancel="cancel()" ></my-dialog>
+    </div>
+  </div> 
 </template>
 <script>
 import loadScript from 'load-script';
@@ -129,7 +134,7 @@ import * as types from '@/store/mutation-types.js';
 import copyUrl from '@/mixins/copyUrl';
 import { getLanguage } from '@/lang/index.js'
 import { closedToast } from '@/utils/on-status.js';
-
+import myDialog from '../components/myDialog'
 
 export default {
   components: {
@@ -138,6 +143,7 @@ export default {
     finishDialog,
     VideoReportMask,
     WechatSubscribe,
+    myDialog
   },
   mixins: [report, copyUrl],
   props: {
@@ -178,7 +184,9 @@ export default {
       finishDialog: false, // 下一课时弹出模态框
       lastWatchTime: 0, // 上一次暂停上报的视频时间
       nowWatchTime: 0, // 当前刚看时间计时
-      activity: {}
+      activity: {},
+      openAppUrl: '',
+      appShow: false
     };
   },
   inject: ['getDetailsContent'],
@@ -241,6 +249,9 @@ export default {
    */
   methods: {
     ...mapActions(['setCloudAddress']),
+    ...mapMutations('course', {
+      setSourceType: types.SET_SOURCETYPE,
+    }),
 
     ...mapMutations('course', {
       setSourceType: types.SET_SOURCETYPE
@@ -428,6 +439,14 @@ export default {
       return android;
     },
 
+    cancel() {
+      this.setSourceType({
+        sourceType: '',
+        taskId: ''
+      })
+      this.appShow = false;
+     },
+
     formateVedioData(player) {
       const media = player.media;
       const timelimit = media.timeLimit;
@@ -444,12 +463,14 @@ export default {
       if (this.courseSettings.only_learning_on_APP == 0) {
         const { goodsId, id } = this.course.details;
         const { host,protocol } = window.location;
-
+     
        if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
-          window.location.href = `kuozhi://${host}?courseId=${id}&goodsId=${goodsId}`; 
+          this.openAppUrl = `kuozhi://${host}?courseId=${id}&goodsId=${goodsId}`; 
         } else {
-          window.location.href = `kuozhi://${host}?protocol=${protocol.replace(":","")}&courseId=${id}&goodsId=${goodsId}`; 
-        } 
+          this.openAppUrl = `kuozhi://${host}?protocol=${protocol.replace(":","")}&courseId=${id}&goodsId=${goodsId}`; 
+        }
+
+        this.appShow = true;
 
         return;
       }
@@ -859,7 +880,24 @@ export default {
           },
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>
+<style scoped>
+html,body{
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+#app{
+  width: 100%;
+  height: 100%;
+}
+.dialog{
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+</style>
