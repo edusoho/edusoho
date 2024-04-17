@@ -113,10 +113,8 @@
       @closeFinishDialog="closeFinishDialog"
     ></finishDialog>
 
-    <div class="dialog" v-if="appShow">
-      <my-dialog :openAppUrl="openAppUrl" @cancel="cancel()" ></my-dialog>
-    </div>
-  </div> 
+    <open-app-dialog v-if="appShow" :openAppUrl="openAppUrl" @cancel="cancel()" ></open-app-dialog>
+  </div>
 </template>
 <script>
 import loadScript from 'load-script';
@@ -134,7 +132,7 @@ import * as types from '@/store/mutation-types.js';
 import copyUrl from '@/mixins/copyUrl';
 import { getLanguage } from '@/lang/index.js'
 import { closedToast } from '@/utils/on-status.js';
-import myDialog from '../components/myDialog'
+import openAppDialog from '../components/openAppDialog.vue'
 
 export default {
   components: {
@@ -143,7 +141,7 @@ export default {
     finishDialog,
     VideoReportMask,
     WechatSubscribe,
-    myDialog
+    openAppDialog
   },
   mixins: [report, copyUrl],
   props: {
@@ -463,11 +461,11 @@ export default {
       if (this.courseSettings.only_learning_on_APP == 0) {
         const { goodsId, id } = this.course.details;
         const { host,protocol } = window.location;
-     
+
        if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
-          this.openAppUrl = `kuozhi://${host}?courseId=${id}&goodsId=${goodsId}`; 
+          this.openAppUrl = `kuozhi://${host}?courseId=${id}&goodsId=${goodsId}`;
         } else {
-          this.openAppUrl = `kuozhi://${host}?protocol=${protocol.replace(":","")}&courseId=${id}&goodsId=${goodsId}`; 
+          this.openAppUrl = `kuozhi://${host}?protocol=${protocol.replace(":","")}&courseId=${id}&goodsId=${goodsId}`;
         }
 
         this.appShow = true;
@@ -476,7 +474,7 @@ export default {
       }
 
       this.isEncryptionPlus = media.isEncryptionPlus;
-      
+
       if (media.isEncryptionPlus && !this.isWechat() && securityVideoPlayer) {
         Toast('该浏览器不支持云视频播放，请用微信打开或下载App');
         return;
@@ -487,7 +485,7 @@ export default {
         return;
       }
 
-      const options = { 
+      const options = {
         id: 'course-detail__head--video',
         user: this.user,
         autoplay: true,
@@ -709,7 +707,7 @@ export default {
       if (this.course?.details?.learningExpiryDate?.expired) {
         return Toast(this.$t('learning.expired'));
       }
-      
+
       const { id } = this.nextStudy.nextTask;
       const params = {
         courseId: this.selectedPlanId,
@@ -884,20 +882,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-html,body{
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-#app{
-  width: 100%;
-  height: 100%;
-}
-.dialog{
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
-}
-</style>

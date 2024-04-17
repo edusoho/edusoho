@@ -5,7 +5,7 @@
         <div
           :id="lessonItem.tasks[lessonItem.index].id"
           :class="{ 'zb-ks': doubleLine(lessonItem.tasks[lessonItem.index]) }"
-          class="lesson-title t1"
+          class="lesson-title"
           @click="
             lessonCellClick(
               lessonItem.tasks[lessonItem.index],
@@ -214,7 +214,6 @@ export default {
       details: state => state.details,
       joinStatus: state => state.joinStatus,
       selectedPlanId: state => state.selectedPlanId,
-      taskId: state => state.taskId,
     }),
     hasLesson() {
       return this.lesson.length > 0;
