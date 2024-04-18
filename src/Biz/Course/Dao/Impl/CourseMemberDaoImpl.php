@@ -399,7 +399,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->update($this->table, $updateFields, $conditions);
     }
 
-    public function changeAllMembersDeadlineByCourseId($courseId, $day)
+    public function changeMembersDeadlineByCourseId($courseId, $day)
     {
         $sql = "UPDATE course_member SET deadline = deadline {$day} WHERE courseId = {$courseId};";
 

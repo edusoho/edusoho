@@ -203,7 +203,7 @@ class StudentManageController extends BaseController
             $fields = $request->request->all();
             if ($fields['all']) {
                 if ('day' == $fields['updateType']) {
-                    $this->getCourseMemberService()->changeAllMembersDeadlineByCourseId($courseId, $fields['day'], $fields['waveType']);
+                    $this->getCourseMemberService()->changeMembersDeadlineByCourseId($courseId, $fields['day'], $fields['waveType']);
 
                     return $this->createJsonResponse(true);
                 }

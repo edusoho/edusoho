@@ -169,7 +169,7 @@ interface MemberService
 
     public function countPostsByCourseIdAndUserId($courseId, $userId);
 
-    public function changeAllMembersDeadlineByCourseId($courseId, $day, $waveType);
+    public function changeMembersDeadlineByCourseId($courseId, $day, $waveType);
 
     public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus');
 
