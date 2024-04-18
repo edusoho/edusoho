@@ -22,7 +22,7 @@
           </div>
           <div class="absolute flex items-center justify-center font-normal text-12"
             @click="$router.push(`/vip/${item.id}/desc`)"
-            style="width: 74px;height: 24px;color: #fff;border: 1px solid #fff;border-radius: 16px;right: 16px;bottom: 30px;">
+            style="width: 74px;height: 24px;mix-blend-mode: screen;border: 1px solid #fff;border-radius: 16px;right: 16px;bottom: 30px;background-color: white;font-weight: 600;">
             {{ $t('vip.exclusiveIntroduction') }} >
           </div>
         </swiper-slide>
@@ -97,10 +97,8 @@
 import Api from '@/api';
 import { mapState, mapActions } from 'vuex';
 import * as types from '@/store/mutation-types';
-
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import 'swiper/css/swiper.css';
-
 import PriceItem from './price-item';
 import courseListData from '@/utils/filter-course.js';
 import eRowClass from '&/components/e-row-class/e-row-class';
