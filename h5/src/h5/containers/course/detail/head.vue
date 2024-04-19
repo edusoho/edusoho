@@ -400,10 +400,16 @@ export default {
     },
     formateAudioData(player) {
       const media = player.media;
+
       if (!media.isFinishConvert) {
         Toast('课程内容准备中，请稍候查看');
         return;
       }
+
+      if (this.handleOnlyLearnOnApp()) {
+        return;
+      }
+
       // 不支持浏览器判断
       this.isEncryptionPlus = media.isEncryptionPlus;
       if (media.isEncryptionPlus) {
@@ -445,6 +451,23 @@ export default {
       this.appShow = false;
      },
 
+    handleOnlyLearnOnApp() {
+      if (this.courseSettings.only_learning_on_APP == 0) return false
+
+      const { goodsId, id } = this.course.details;
+      const { host, protocol } = window.location;
+
+      if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+        this.openAppUrl = `kuozhi://${host}?courseId=${id}&goodsId=${goodsId}`;
+      } else {
+        this.openAppUrl = `kuozhi://${host}?protocol=${protocol.replace(":","")}&courseId=${id}&goodsId=${goodsId}`;
+      }
+
+      this.appShow = true;
+
+      return true;
+    },
+
     formateVedioData(player) {
       const media = player.media;
       const timelimit = media.timeLimit;
@@ -458,18 +481,7 @@ export default {
         return;
       }
 
-      if (this.courseSettings.only_learning_on_APP == 0) {
-        const { goodsId, id } = this.course.details;
-        const { host,protocol } = window.location;
-
-       if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
-          this.openAppUrl = `kuozhi://${host}?courseId=${id}&goodsId=${goodsId}`;
-        } else {
-          this.openAppUrl = `kuozhi://${host}?protocol=${protocol.replace(":","")}&courseId=${id}&goodsId=${goodsId}`;
-        }
-
-        this.appShow = true;
-
+      if (this.handleOnlyLearnOnApp()) {
         return;
       }
 
@@ -480,8 +492,6 @@ export default {
         return;
       } else if (media.isEncryptionPlus && !securityVideoPlayer) {
         Toast('该浏览器不支持云视频播放，请下载App');
-        // else if (media.isEncryptionPlus && !securityVideoPlayer && (!this.isWechat() || !this.isAndroid()))
-        // Toast('该浏览器不支持云视频播放，请下载App，安卓端仅允许在微信App内置浏览器中观看');
         return;
       }
 
