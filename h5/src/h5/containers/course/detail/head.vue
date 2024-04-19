@@ -39,7 +39,7 @@
       </div>
     </div>
     <div
-      v-show="sourceType === 'img' || isEncryptionPlus || finishDialog"
+      v-show="sourceType === 'img' || finishDialog || isShowVedioIframe"
       id="course-detail__head--img"
       class="course-detail__head--img"
     >
@@ -69,8 +69,8 @@
       <div
         v-show="
           ['video', 'audio', 'ppt'].includes(sourceType) &&
-            !isEncryptionPlus &&
-            !finishDialog
+          !isShowVedioIframe &&
+          !finishDialog
         "
         id="course-detail__head--video"
         ref="video"
@@ -158,6 +158,8 @@ export default {
   },
   data() {
     return {
+      media: {},
+      isShowVedioIframe: false,
       finishCondition: undefined,
       learnMode: false,
       enableFinish: false,
@@ -290,10 +292,10 @@ export default {
       this.IsLivePlayback();
     },
     getFinishCondition() {
-      this.getCourseData(this.selectedPlanId, this.taskId).then(res => {
-        this.activity = res.activity;
-        this.finishCondition = res.activity && res.activity.finishCondition;
-      });
+        this.getCourseData(this.selectedPlanId, this.taskId).then(res => {
+          this.activity = res.activity;
+          this.finishCondition = res.activity && res.activity.finishCondition;
+        });
     },
     // 直播视频回放刚进入课程就算学习完成
     IsLivePlayback() {
@@ -359,6 +361,7 @@ export default {
             mediaType,
           } = res;
 
+          this.media = res.media
 
           if (resNo === '0') {
             const media = await Api.getLocalMediaLive({
@@ -487,11 +490,15 @@ export default {
 
       this.isEncryptionPlus = media.isEncryptionPlus;
 
-      if (media.isEncryptionPlus && !this.isWechat() && securityVideoPlayer) {
-        Toast('该浏览器不支持云视频播放，请用微信打开或下载App');
+      if (media.isEncryptionPlus && securityVideoPlayer) {
+        Toast('请在APP学习');
+        this.isShowVedioIframe = true
         return;
-      } else if (media.isEncryptionPlus && !securityVideoPlayer) {
-        Toast('该浏览器不支持云视频播放，请下载App');
+      }
+
+      if (media.isEncryptionPlus && !securityVideoPlayer && !this.detectBrowserInfo()) {
+        Toast('请在APP学习或使用钉钉/飞书/微信/企业微信内置浏览器打开');
+        this.isShowVedioIframe = true
         return;
       }
 
@@ -643,6 +650,26 @@ export default {
         return false;
       }
     },
+    detectBrowserInfo() {
+      const userAgent = navigator.userAgent.toLowerCase();
+
+      // 判断是否为微信浏览器
+      const isWechat = /micromessenger/i.test(userAgent);
+      // 判断是否为企业微信（即微信工作版）
+      const isWechatWork = /wxwork/i.test(userAgent);
+
+      // 判断是否为钉钉内置浏览器
+      const isDingTalk = /dingtalk/i.test(userAgent);
+
+      // 飞书内置浏览器可能包含 "lark" 关键字，但请核实最新版本 UA 以确保准确性
+      const isFeishu = /lark/i.test(userAgent);
+
+      if (isWechat || isWechatWork || isDingTalk || isFeishu) {
+        return true;
+      }
+
+      return false;
+    },
     expire() {
       this.counting = false;
     },
@@ -719,14 +746,19 @@ export default {
       }
 
       const { id } = this.nextStudy.nextTask;
+
       const params = {
         courseId: this.selectedPlanId,
         taskId: id
       };
 
-      Api.getCourseData({ query: params }).then(res => {
-        this.toLearnTask(res);
-      });
+      try {
+        Api.getCourseData({ query: params }).then(res => {
+          this.toLearnTask(res);
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
 
      // 跳转到task

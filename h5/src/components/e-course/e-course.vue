@@ -141,7 +141,8 @@ export default {
   },
   methods: {
     onClick(e) {
-      if(!parseInt(this.course?.canLearn)) {
+      const isOrder = this.type === 'order';
+      if(!isOrder && !parseInt(this.course?.canLearn)) {
         return closedToast('course');
       }
 
@@ -149,7 +150,6 @@ export default {
         return;
       }
       if (this.typeList === 'vip') return;
-      const isOrder = this.type === 'order';
       const id = this.course.id || this.order.targetId;
       if (e.target.tagName === 'SPAN') {
         console.log(e.target.tagName);
