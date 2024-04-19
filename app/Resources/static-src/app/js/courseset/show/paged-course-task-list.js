@@ -23,10 +23,13 @@ export default class PagedCourseTaskList extends PagedCourseLesson {
     if ($target.length) {
       let query = ($('input[name="showOptional"]').length > 0) ? {showOptional: window.localStorage.getItem('showOptional')} : {};
       $.get($target.data('url'), query, (html) => {
+        if (this.destroyed) {
+          return;
+        }
         $target.html(html);
         let finalOptions = $.extend(this._getDefaultOptions(options), options);
         finalOptions.wrapDom = options.wrapTarget;
-        finalOptions.pageSize = this._getPageSizeByMaxLessonsNumOfChapter(finalOptions)
+        finalOptions.pageSize = this._getPageSizeByMaxLessonsNumOfChapter(finalOptions);
 
         this.cachedScroll = new ESInfiniteCachedScroll(finalOptions);
 
@@ -65,8 +68,7 @@ export default class PagedCourseTaskList extends PagedCourseLesson {
   }
 
   _destroy() {
-    this.cachedScroll._destroy();
+    this.destroyed = true;
+    this.cachedScroll && this.cachedScroll._destroy();
   }
-
-
 }

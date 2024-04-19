@@ -70,7 +70,7 @@ export default {
       default: '',
     },
     customizedClass: {
-      type: Object,
+      type: String,
       default: null
     }
 
