@@ -1043,6 +1043,10 @@ mobile_download_qrcode:
     path: '/mobile/downloadQrcode'
     defaults:
         _controller: 'AppBundle:Mobile:downloadQrcode'
+mobile_download_middle_page:
+    path: '/mobile/downloadMiddlePage'
+    defaults:
+        _controller: 'AppBundle:Mobile:downloadMiddlePage'
 mobile_download:
     path: '/mobile/download'
     defaults:
