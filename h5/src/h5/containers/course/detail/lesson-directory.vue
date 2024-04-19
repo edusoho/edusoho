@@ -422,7 +422,6 @@ export default {
       return false;
     },
     async lessonCellClick(task, lessonIndex, taskIndex) {
-
       await this.getCourse()
       if(!this.isCanLearn(task)) {
         return closedToast('course');
