@@ -201,6 +201,17 @@ class StudentManageController extends BaseController
         $ids = is_array($ids) ? $ids : explode(',', $ids);
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
+            if ($fields['all']) {
+                if ('day' == $fields['updateType']) {
+                    $this->getCourseMemberService()->changeMembersDeadlineByCourseId($courseId, $fields['day'], $fields['waveType']);
+
+                    return $this->createJsonResponse(true);
+                }
+                $date = TimeMachine::isTimestamp($fields['deadline']) ? $fields['deadline'] : strtotime($fields['deadline'].' 23:59:59');
+                $this->getCourseMemberService()->updateMembers(['courseId' => $courseId], ['deadline' => $date]);
+
+                return $this->createJsonResponse(true);
+            }
             if ('day' == $fields['updateType']) {
                 $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDay($courseId, $ids, $fields['day'], $fields['waveType']);
 
