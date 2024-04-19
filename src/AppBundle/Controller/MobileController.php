@@ -64,6 +64,11 @@ class MobileController extends BaseController
         return new Response($img, 200, $headers);
     }
 
+    public function downloadMiddlePageAction(Request $request)
+    {
+        return $this->render('/mobile/download-middle-page.html.twig');
+    }
+
     public function downloadAction(Request $request)
     {
         $params = $request->query->all();
