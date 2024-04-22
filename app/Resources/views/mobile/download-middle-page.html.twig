@@ -1,11 +1,99 @@
-<% do script(['/app/mobile/download-middle-page/index.js'])%>
-<div class="download-middle-page">
-   <div class="middle-page-top">
-     <h1>知享学堂</h1>
-     <p>把学校装进口袋</p>
-   </div>
-   <div class="middle-page-footer">
-    <a href="" class="middle-open-app">点击打开</button>
-    <a href="" class="middle-download-app">下载App</button>
-   </div>
- </div>
+<!DOCTYPE html>
+<html>
+ <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+		<meta name='viewport' content='width=device-width,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0'>
+    <style>
+      *{
+        margin:0;
+        padding:0;
+      }
+      .download-middle-page{
+        width: 100vw;
+        height: 100vh;
+        background-image:url("/static-dist/app/img/task/app-middle-page-background.png ");
+        background-size: contain;
+        background-repeat: no-repeat;
+       }
+       .middle-page-top{
+            position: relative;
+        width: 100%;
+        height: 70%;
+        color: #00BE63;
+        text-align: center;
+        line-height: 50px;
+       }
+       .middle-page-top .middle-page-top-name{
+        position: absolute;
+        top:60px;
+        left: 50%;
+        transform: translate(-50%);
+        margin: 0;
+        width:400px;
+        font-size: 42px;
+        font-weight: 500;
+        line-height: 47px;
+       }
+       .middle-page-top .middle-page-top-message{
+        position: absolute;
+        top:115px;
+        left: 50%;
+        transform: translate(-50%);
+        margin: 0;
+       }
+      
+       .middle-page-top .middle-page-logo{
+        position:absolute;
+        top:52%;
+        left:47%;
+        transform: rotate(30deg);
+        width:40px;
+        height:40px;
+       }
+        .middle-page-footer{
+        display: flex;
+        justify-content: center;
+        align-items:center;
+        width: 100%;
+        height: 30%;
+       }
+       .middle-page-footer .middle-open-app{
+        width: 140px;
+        height: 48px;
+        background-color: #fff;
+        border: 1px solid #00BE63; 
+        color: #00BE63;
+        text-decoration:none;
+        text-align:center;
+        line-height:48px;
+        border-radius: 8px;
+       }
+       .middle-page-footer .middle-download-app{
+        width: 140px;
+        height: 48px;
+        margin-left:15px;
+        background-color: #00BE63;      
+        border: none;
+        color: #fff;
+        text-decoration:none;
+        text-align:center;
+        line-height:48px;
+        border-radius: 8px;
+       }
+    </style>
+</head>
+<body>
+ {# {{dump(goodsId)}} #}
+    <div class="download-middle-page">
+       <div class="middle-page-top">    
+         <h1 class="middle-page-top-name">{{site.name}}</h1>
+         <p class="middle-page-top-message">把学校装进口袋</p>
+         <img src="{{ asset('/static-dist/app/img/mobile/app_logo.png') }}" class="middle-page-logo">       
+       </div>
+       <div class="middle-page-footer">
+        <a href="{{ site.url }}/courseId={{courseId}}&goodsId={{goodsId}}" class="middle-open-app">点击打开</a> 
+        <a href="{{ site.url }}/mapi_v2/School/getDownloadUrl?from=qrcode&code=zhixiang" class="middle-download-app">下载App</a>
+       </div>
+    </div>
+ </body>
+</html>
