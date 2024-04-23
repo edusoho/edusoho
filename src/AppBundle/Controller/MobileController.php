@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Biz\CloudPlatform\Client\CloudAPI;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\System\Service\SettingService;
+use Biz\Theme\Service\ThemeService;
 use Endroid\QrCode\QrCode;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,6 +65,30 @@ class MobileController extends BaseController
         return new Response($img, 200, $headers);
     }
 
+    public function downloadMiddlePageAction(Request $request)
+    {
+        $mobile = $this->setting('mobile', []);
+        $site = $this->setting('site', []);
+
+        $courseId = $request->get('courseId', []);
+        $goodsId = $request->get('goodsId', []);
+        if (empty($mobile['enabled'])) {
+            return $this->createMessageResponse('info', '客户端尚未开启！');
+        }
+        $result = CloudAPIFactory::create('leaf')->get('/me');
+        $mobileCode = ((array_key_exists('mobileCode', $result) && !empty($result['mobileCode'])) ? $result['mobileCode'] : 'zhixiang');
+        $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
+
+        return $this->render('/mobile/download-middle-page.html.twig', [
+            'mobileCode'=> $mobileCode,
+            'mobile'=> $mobile,
+            'site'=> $site,
+            'maincolor'=> $themeConfig['config']['maincolor'],
+            'courseId'=> $courseId,
+            'goodsId'=> $goodsId,
+        ]);
+    }
+
     public function downloadAction(Request $request)
     {
         $params = $request->query->all();
@@ -96,5 +121,13 @@ class MobileController extends BaseController
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return ThemeService
+     */
+    protected function getThemeService()
+    {
+        return $this->getBiz()->service('Theme:ThemeService');
     }
 }

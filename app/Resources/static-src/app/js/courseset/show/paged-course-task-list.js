@@ -56,7 +56,9 @@ export default class PagedCourseTaskList extends PagedCourseLesson {
         $this.attr('href', '#modal');
         $this.attr('data-toggle', 'modal');
 
-        $('#modal').load('/course/task/downloadAppShow', () => {
+        var currentURL = window.location.href;
+        var courseId = currentURL.substring(currentURL.lastIndexOf('/') + 1);
+        $('#modal').load('/course/task/downloadAppShow?courseId='+courseId , () => {
           console.log('Load completed');
         });
         $('#modal').modal('show');
