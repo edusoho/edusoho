@@ -86,6 +86,7 @@ class MobileController extends BaseController
             'maincolor'=> $themeConfig['config']['maincolor'],
             'courseId'=> $courseId,
             'goodsId'=> $goodsId,
+            'userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
         ]);
     }
 
