@@ -36,7 +36,7 @@ class MeCourse extends AbstractResource
             'excludeTypes' => ['reservation'],
             'courseSetTitleLike' => $conditions['title'],
         ];
-        $courses = $this->getCourseService()->findCoursesByIds($validCourseIds);
+        $courses = $this->getCourseService()->searchCourses(['ids' => $validCourseIds, 'courseSetTitleLike' => $conditions['title']], [], 0, PHP_INT_MAX);
         $this->filterCourseIdsByConditions($conditions, $courses, $members, $validCourseIds, $invalidCourseIds, $courseConditions);
         if (isset($conditions['type']) && empty($courseConditions['ids'])) {
             return $this->makePagingObject([], 0, $offset, $limit);
