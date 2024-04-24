@@ -73,7 +73,7 @@ class MobileController extends BaseController
         $courseId = $request->get('courseId', []);
         $goodsId = $request->get('goodsId', []);
         if (empty($mobile['enabled'])) {
-            return $this->createMessageResponse('info', '客户端尚未开启！');
+            // return $this->createMessageResponse('info', '客户端尚未开启！');
         }
         $result = CloudAPIFactory::create('leaf')->get('/me');
         $mobileCode = ((array_key_exists('mobileCode', $result) && !empty($result['mobileCode'])) ? $result['mobileCode'] : 'zhixiang');
@@ -86,6 +86,7 @@ class MobileController extends BaseController
             'maincolor'=> $themeConfig['config']['maincolor'],
             'courseId'=> $courseId,
             'goodsId'=> $goodsId,
+            'userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
         ]);
     }
 
