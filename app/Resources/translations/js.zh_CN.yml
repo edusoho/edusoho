@@ -324,6 +324,8 @@ activity.video_manage.other_finish_detail: 学习到最后(不支持网络视频
 activity.video_manage.length_required_error_hint: 请输入非负整数，其中秒数只能在0-59之间
 activity.video_manage.media_error_hint: 请上传或选择视频文件
 activity.video.try_watch_finish_hint: 免费试看结束，购买后可完整观看
+activity.video.only_can_app_title: 后台配置已更改，该课程无法播放
+activity.video.only_can_app_desc: 请前往App继续进行学习
 activity.video.file_limit_size: 文件大小不能超过%size%
 
 activity.manage.choose_teacher_hint: 请选择老师
@@ -534,7 +536,7 @@ course.manage.reward_point_required_hint: 请输入教学计划奖励积分
 course.manage.task_reward_point_required_hint: 请输入计划任务奖励积分
 course.manage.max_point_error_hint: 请输入0-100000的整数
 course.manage.student_expiry_day_hint: 只有按天数设置的学习有效期，才可手动增加有效期。
-course.plan_task.activity_manage.testpaper.mock_tips4: 时长必须>0 
+course.plan_task.activity_manage.testpaper.mock_tips4: 时长必须>0
 member.delete_success_hint: 移除成功
 member.delete_fail_hint: 移除失败
 
