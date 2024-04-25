@@ -335,6 +335,8 @@ t.add("activity.video_manage.other_finish_detail", "Learn till the last (do not 
 t.add("activity.video_manage.length_required_error_hint", "Please enter a non negative integer, where seconds can only be between 0-59", "js", "en");
 t.add("activity.video_manage.media_error_hint", "Please upload or select a video file", "js", "en");
 t.add("activity.video.try_watch_finish_hint", "Free trial end, purchase and watch the complete video", "js", "en");
+t.add("activity.video.only_can_app_title", "The configuration has changed and the course cannot be played", "js", "en");
+t.add("activity.video.only_can_app_desc", "Please go to the App to continue learning", "js", "en");
 t.add("activity.video.file_limit_size", "File size cannot exceed %size%", "js", "en");
 t.add("activity.manage.choose_teacher_hint", "Please choose a teacher", "js", "en");
 t.add("activity.manage.finished_tips", "<span class=\"color-primary\">Congratulations! You have completed this task<\/span>\n", "js", "en");
