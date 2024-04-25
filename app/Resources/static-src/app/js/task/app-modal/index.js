@@ -3,7 +3,8 @@ const appQrcode = document.querySelector(".qrcode-canvas");
 const { origin } = window.location;
 
 const currentURL = window.location.href;
-const courseId = currentURL.substring(currentURL.lastIndexOf('/') + 1);
+
+const courseId = $('input[name=courseId]').val();
 
 $.get({
     url: "/api/pages/h5/courses/"+courseId,
