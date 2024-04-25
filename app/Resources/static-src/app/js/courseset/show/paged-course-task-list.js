@@ -57,7 +57,26 @@ export default class PagedCourseTaskList extends PagedCourseLesson {
         $this.attr('data-toggle', 'modal');
 
         var currentURL = window.location.href;
-        var courseId = currentURL.substring(currentURL.lastIndexOf('/') + 1);
+        var matchIndex = currentURL.lastIndexOf('course/');
+        var courseId = currentURL.substring(matchIndex + 7);
+        console.log(courseId);
+        if (matchIndex < 0) {
+          var parentElement = $(this).closest('.js-tasks-show');
+
+          // 检查是否找到了父级元素
+          if (parentElement.length > 0) {
+            // 获取父级元素的 data-url 属性的值
+            var dataUrl = parentElement.data('url');
+            console.log(dataUrl);
+            var match = dataUrl.match(/\/course\/(\d+)\/task\/list\/render\/default/);
+
+            // 检查是否找到匹配的数字部分
+            if (match !== null && match.length > 1) {
+              courseId = match[1];
+            }
+          }
+        }
+
         $('#modal').load('/course/task/downloadAppShow?courseId='+courseId , () => {
           console.log('Load completed');
         });
