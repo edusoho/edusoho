@@ -239,12 +239,15 @@ class StudentManageController extends BaseController
 
     public function checkDayAction(Request $request, $courseId)
     {
-        $waveType = $request->query->get('waveType');
+        $waveType = $request->query->get('waveType', 'plus');
         $day = $request->query->get('day');
         $ids = $request->query->get('ids');
         $all = $request->query->get('all', 0);
         $ids = is_array($ids) ? $ids : explode(',', $ids);
-        if ($all) {
+        if ($all && 'plus' == $waveType) {
+            return $this->createJsonResponse(true);
+        }
+        if ($all && 'minus' == $waveType) {
             $courseMember = $this->getCourseMemberService()->searchMembers(['courseId' => $courseId, 'deadlineGreaterThan' => '1'], ['deadline' => 'ASC'], 0, 1);
 
             return $this->createJsonResponse($courseMember[0]['deadline'] - $day * 24 * 60 * 60 > time());
