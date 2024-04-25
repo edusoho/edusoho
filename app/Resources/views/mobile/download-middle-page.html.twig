@@ -51,7 +51,7 @@
         width: 140px;
         height: 48px;
         background-color: #fff;
-        border: 1px solid #00BE63; 
+        border: 1px solid #00BE63;
         color: #00BE63;
         text-decoration:none;
         text-align:center;
@@ -62,7 +62,7 @@
         width: 140px;
         height: 48px;
         margin-left:15px;
-        background-color: #00BE63;      
+        background-color: #00BE63;
         border: none;
         color: #fff;
         text-decoration:none;
@@ -70,7 +70,7 @@
         line-height:48px;
         border-radius: 8px;
        }
-       
+
       .open-browser-container {
         display:none;
         position: fixed;
@@ -98,7 +98,7 @@
          z-index: 10;
          display: flex;
         }
-      .open-browser-message {         
+      .open-browser-message {
          width: 126px;
          height: 50px;
          flex: 1;
@@ -112,19 +112,21 @@
 </head>
 <body>
     <div class="download-middle-page">
-       <div class="middle-page-top">    
+       <div class="middle-page-top">
          <h1 class="middle-page-top-name">{{site.name}}</h1>
-         <div class="middle-page-top-message">把学校装进口袋</div>    
+         <div class="middle-page-top-message">把学校装进口袋</div>
        </div>
        <div class="middle-page-footer">
-        {% set domain_without_protocol = site.url|split('://')|last %}       
+        {% set domain_without_protocol = site.url|split('://')|last %}
         {% set domain_protocol = site.url|split('://')|first %}
-        
-        <a href="kuozhi://{{ domain_without_protocol }}?protocol={{domain_protocol}}&courseId={{ courseId }}&goodsId={{ goodsId }}" class="middle-open-app">点击打开</a>
+
+        <a href="kuozhi://{{ domain_without_protocol }}?protocol={{domain_protocol}}&courseId={{ courseId }}&goodsId={{ goodsId }}" class="middle-open-app js-open-app">点击打开</a>
+        <a href="javascript:;" class="middle-open-app js-open-app2">点击打开</a>
+
         <a href="{{ site.url }}/mapi_v2/School/getDownloadUrl?from=qrcode&code=zhixiang" class="middle-download-app">下载APP</a>
        </div>
     </div>
-    <div class="open-browser-container"> 
+    <div class="open-browser-container js-open-app-container">
         <div class="open-browser-overlay"></div>
         <div class="open-browser-dialog">
             <div class="open-browser-message">
@@ -132,23 +134,29 @@
                 在"浏览器中打开"
                 继续跳转
             </div>
-           <img class="mobile-wechat-qrcode" src="{{ asset('/static-dist/app/img/mobile/open-browse.png') }}" alt="" class="open-browser-image"/>            
+           <img class="mobile-wechat-qrcode" src="{{ asset('/static-dist/app/img/mobile/open-browse.png') }}" alt="" class="open-browser-image"/>
         </div>
     </div>
 
    <script>
-       document.querySelector(".middle-open-app").addEventListener("click", function() {
-          event.preventDefault();
+     var isWeixinBrowser = /micromessenger/.test(navigator.userAgent.toLowerCase())
+     var isDingTalkBrowser = /ding\s?talk/i.test(navigator.userAgent.toLowerCase())
+     var $openApp = document.querySelector('.js-open-app')
+     var $openApp2 = document.querySelector('.js-open-app2')
 
-          var ua = window.navigator.userAgent.toLowerCase();
-          var openBrowserDialog = document.querySelector('.open-app-container');
-    
-          if (ua.match(/MicroMessenger/i) == 'micromessenger' ||  ua.match(/ding\s?talk/i)) {
-            openBrowserDialog.style.display = 'block';
-          } else {
-            window.location.href = this.href;
-          }
-        })
-    </script>
+     if (isWeixinBrowser ||isDingTalkBrowser) {
+       $openApp2.style.display = 'block';
+       $openApp.style.display = 'none';
+     } else {
+       $openApp2.style.display = 'none';
+       $openApp.style.display = 'block';
+     }
+
+     document.querySelector(".js-open-app2").addEventListener("click", function() {
+       var openBrowserDialog = document.querySelector('.js-open-app-container');
+
+       openBrowserDialog.style.display = 'block';
+    })
+  </script>
  </body>
 </html>
