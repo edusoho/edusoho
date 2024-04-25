@@ -2,7 +2,7 @@
   <div class="open-app-container">
     <div class="open-app-overlay"></div>
     <div class="open-app-dialog">
-      <div class="message">将为您跳转至App进行学习</div>
+      <div class="message">将为您跳转至APP进行学习</div>
       <div class="footer">
         <button @click="cancel()">取消</button>
         <a :href="openAppUrl">继续</a>
