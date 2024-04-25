@@ -244,9 +244,6 @@ class StudentManageController extends BaseController
         $ids = $request->query->get('ids');
         $all = $request->query->get('all', 0);
         $ids = is_array($ids) ? $ids : explode(',', $ids);
-        if ($all && 'plus' == $waveType) {
-            return $this->createJsonResponse(true);
-        }
         if ($all && 'minus' == $waveType) {
             $courseMember = $this->getCourseMemberService()->searchMembers(['courseId' => $courseId, 'deadlineGreaterThan' => '1'], ['deadline' => 'ASC'], 0, 1);
 
