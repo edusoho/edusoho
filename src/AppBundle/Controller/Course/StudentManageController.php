@@ -242,7 +242,13 @@ class StudentManageController extends BaseController
         $waveType = $request->query->get('waveType');
         $day = $request->query->get('day');
         $ids = $request->query->get('ids');
+        $all = $request->query->get('all', 0);
         $ids = is_array($ids) ? $ids : explode(',', $ids);
+        if ($all) {
+            $courseMember = $this->getCourseMemberService()->searchMembers(['courseId' => $courseId, 'deadlineGreaterThan' => '1'], ['deadline' => 'ASC'], 0, 1);
+
+            return $this->createJsonResponse($courseMember[0]['deadline'] - $day * 24 * 60 * 60 > time());
+        }
         if ($this->getCourseMemberService()->checkDayAndWaveTypeForUpdateDeadline($courseId, $ids, $day, $waveType)) {
             return $this->createJsonResponse(true);
         }

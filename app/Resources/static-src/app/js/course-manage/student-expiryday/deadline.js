@@ -141,6 +141,9 @@ export default class Deadline {
           day: function () {
             return $('[name=day]').val();
           },
+          all:function () {
+            return $('[name=all]').val();
+          }
         }
       },
       messages: {
