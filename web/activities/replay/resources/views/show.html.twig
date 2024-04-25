@@ -1,7 +1,7 @@
 {% extends 'activity/content-layout.html.twig' %}
 {% set replays = get_live_activity_replays(activity.id)|default() %}
 
-{% do script(['replayactivity/js/live/index.js']) %}
+{% do script(['replayactivity/js/replay/index.js']) %}
 
 
 {% block body %}
