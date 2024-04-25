@@ -13,7 +13,7 @@ $.get({
   }).then(function(data) {
     const goodsId = data.goodsId;
     QRCode.toCanvas(
-        appQrcode, `${origin}/mobile/downloadMiddlePage?courseId=${courseId}&goodsId=${goodsId}?`,
+        appQrcode, `${origin}/mobile/downloadMiddlePage?courseId=${courseId}&goodsId=${goodsId}`,
         {
          width:190,
          height:190,
