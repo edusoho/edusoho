@@ -1,6 +1,9 @@
 {% extends 'activity/content-layout.html.twig' %}
 {% set replays = get_live_activity_replays(activity.id)|default() %}
 
+{% do script(['replayactivity/js/live/index.js']) %}
+
+
 {% block body %}
   <div class="iframe-parent-content ph20 pv20">
     <div class="lesson-content lesson-content-text" data-role="lesson-content"
