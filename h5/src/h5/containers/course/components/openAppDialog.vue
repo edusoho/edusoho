@@ -5,14 +5,22 @@
       <div class="message">将为您跳转至APP进行学习</div>
       <div class="footer">
         <button @click="cancel()">取消</button>
-        <a :href="openAppUrl">继续</a>
+        <a href="/mobile/downloadMiddlePage" v-if="isWeixinBrowser || isDingTalkBrowser">继续</a>
+        <a :href="openAppUrl" v-else>继续</a>
       </div>
     </div>
   </div>
 </template>
 <script>
+const ua =  window.navigator.userAgent.toLowerCase()
 export default {
   props: ['openAppUrl'],
+  data() {
+    return {
+      isWeixinBrowser: ua.match(/MicroMessenger/i) == 'micromessenger',
+      isDingTalkBrowser: ua.match(/ding\s?talk/i)
+    }
+  },
   methods: {
     cancel() {
       this.$emit("cancel")
