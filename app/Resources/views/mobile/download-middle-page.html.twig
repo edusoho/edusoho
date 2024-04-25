@@ -70,6 +70,44 @@
         line-height:48px;
         border-radius: 8px;
        }
+       
+      .open-browser-container {
+        display:none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 999999;
+        }
+
+      .open-browser-overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.3);
+        z-index: 1;
+        }
+
+      .open-browser-dialog{
+         position: absolute;
+         top: 5%;
+         right: 5%;
+         z-index: 10;
+         display: flex;
+        }
+      .open-browser-message {         
+         width: 126px;
+         height: 50px;
+         flex: 1;
+         color: #fff;
+        }
+      .open-browser-image{
+         width: 30px;
+         height: 30px;
+        }
     </style>
 </head>
 <body>
@@ -81,10 +119,36 @@
        <div class="middle-page-footer">
         {% set domain_without_protocol = site.url|split('://')|last %}       
         {% set domain_protocol = site.url|split('://')|first %}
-
+        
         <a href="kuozhi://{{ domain_without_protocol }}?protocol={{domain_protocol}}&courseId={{ courseId }}&goodsId={{ goodsId }}" class="middle-open-app">点击打开</a>
-        <a href="{{ site.url }}/mapi_v2/School/getDownloadUrl?from=qrcode&code=zhixiang" class="middle-download-app">下载App</a>
+        <a href="{{ site.url }}/mapi_v2/School/getDownloadUrl?from=qrcode&code=zhixiang" class="middle-download-app">下载APP</a>
        </div>
     </div>
+    <div class="open-browser-container"> 
+        <div class="open-browser-overlay"></div>
+        <div class="open-browser-dialog">
+            <div class="open-browser-message">
+                点击右上角...
+                在"浏览器中打开"
+                继续跳转
+            </div>
+           <img class="mobile-wechat-qrcode" src="{{ asset('/static-dist/app/img/mobile/open-browse.png') }}" alt="" class="open-browser-image"/>            
+        </div>
+    </div>
+
+   <script>
+       document.querySelector(".middle-open-app").addEventListener("click", function() {
+          event.preventDefault();
+
+          var ua = window.navigator.userAgent.toLowerCase();
+          var openBrowserDialog = document.querySelector('.open-app-container');
+    
+          if (ua.match(/MicroMessenger/i) == 'micromessenger' ||  ua.match(/ding\s?talk/i)) {
+            openBrowserDialog.style.display = 'block';
+          } else {
+            window.location.href = this.href;
+          }
+        })
+    </script>
  </body>
 </html>
