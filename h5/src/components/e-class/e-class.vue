@@ -110,30 +110,30 @@ export default {
     isShowErrImg() {
       if(this.course?.bottom?.data?.courseSet?.status == 'closed') {
         return true;
-      } 
+      }
 
       if(this.course?.bottom?.data?.status == 'closed') {
         return true;
-      } 
+      }
 
       if(this.course?.bottom?.data?.isExpired) {
         return true;
-      } 
+      }
 
       return false;
     },
     errImgUrl() {
       if(this.course?.bottom?.data?.courseSet?.status == 'closed') {
         return 'static/images/closed.png';
-      } 
+      }
 
       if(this.course?.bottom?.data?.status == 'closed') {
         return 'static/images/closed.png';
-      } 
+      }
 
       if(this.course?.bottom?.data?.isExpired) {
         return 'static/images/expired.png';
-      } 
+      }
 
       return '';
     }
