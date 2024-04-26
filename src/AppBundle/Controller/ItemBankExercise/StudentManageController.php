@@ -195,14 +195,14 @@ class StudentManageController extends BaseController
         $ids = is_array($ids) ? $ids : explode(',', $ids);
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
-            if ($fields['all']) {
+            if ($all) {
                 if ('day' == $fields['updateType']) {
-                    $this->getExerciseMemberService()->changeMembersDeadlineByCourseId($exerciseId, $fields['day'], $fields['waveType']);
+                    $this->getExerciseMemberService()->changeMembersDeadlineByExerciseId($exerciseId, $fields['day'], $fields['waveType']);
 
                     return $this->createJsonResponse(true);
                 }
                 $date = TimeMachine::isTimestamp($fields['deadline']) ? $fields['deadline'] : strtotime($fields['deadline'].' 23:59:59');
-                $this->getExerciseMemberService()->updateMembers(['courseId' => $exerciseId], ['deadline' => $date]);
+                $this->getExerciseMemberService()->updateMembers(['exerciseId' => $exerciseId], ['deadline' => $date]);
 
                 return $this->createJsonResponse(true);
             }
@@ -230,7 +230,7 @@ class StudentManageController extends BaseController
         $all = $request->query->get('all');
         $ids = is_array($ids) ? $ids : explode(',', $ids);
         if ($all && 'minus' == $fields['waveType']) {
-            $exerciseMember = $this->getExerciseMemberService()->search(['courseId' => $exerciseId, 'deadlineGreaterThan' => '1'], ['deadline' => 'ASC'], 0, 1);
+            $exerciseMember = $this->getExerciseMemberService()->search(['exerciseId' => $exerciseId, 'deadlineGreaterThan' => '1', 'role' => 'student'], ['deadline' => 'ASC'], 0, 1);
 
             return $this->createJsonResponse($exerciseMember[0]['deadline'] - $fields['day'] * 24 * 60 * 60 > time());
         }

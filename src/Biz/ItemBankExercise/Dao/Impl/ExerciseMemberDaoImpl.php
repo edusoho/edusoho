@@ -34,7 +34,7 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
 
     public function changeMembersDeadlineByExerciseId($exerciseId, $day)
     {
-        $sql = "UPDATE item_bank_exercise_member SET deadline = deadline {$day} WHERE courseId = {$exerciseId};";
+        $sql = "UPDATE item_bank_exercise_member SET deadline = deadline {$day} WHERE exerciseId = {$exerciseId};";
 
         return $this->db()->executeUpdate($sql, [$exerciseId, $day]);
     }

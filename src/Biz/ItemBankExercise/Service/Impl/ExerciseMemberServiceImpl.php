@@ -323,14 +323,14 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
 
     public function updateMembers($conditions, $updateFields)
     {
-        return  $this->getExerciseMemberDao()->updateMembers($conditions, $updateFields);
+        return $this->getExerciseMemberDao()->updateMembers($conditions, $updateFields);
     }
 
-    public function changeMembersDeadlineByCourseId($courseId, $day, $waveType)
+    public function changeMembersDeadlineByExerciseId($exerciseId, $day, $waveType)
     {
         $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
 
-        return $this->getExerciseMember()->changeMembersDeadlineByCourseId($courseId, $updateDate);
+        return $this->getExerciseMemberDao()->changeMembersDeadlineByExerciseId($exerciseId, $updateDate);
     }
 
     public function updateMasteryRate($exerciseId, $userId)

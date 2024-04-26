@@ -188,7 +188,7 @@ interface ClassroomService
 
     public function updateMembers($conditions, $updateFields);
 
-    public function changeMembersDeadlineByClassroomId($classroomId, $day);
+    public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType);
 
     public function updateMember($id, $member);
 
