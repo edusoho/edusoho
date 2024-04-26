@@ -2,8 +2,8 @@
   <div :class="{ more__still: selecting }" class="more">
     <div class="flex bg-text-1" style="box-shadow: 0 2px 12px rgb(100 101 102 / 12%);">
       <div
-        v-if="dropdownData && dropdownData.length > 0" 
-        class="course-category text-overflow" 
+        v-if="dropdownData && dropdownData.length > 0"
+        class="course-category text-overflow"
         @click="showCourseCategoryPopup = true"
       >
         <span class="course-category__title">{{ currentCourseCategoryText }}</span>
@@ -22,7 +22,7 @@
         </van-dropdown-menu>
       </div>
     </div>
-    
+
     <van-popup v-model="showCourseCategoryPopup" position="bottom">
       <van-cascader
         v-model="currentCourseCategoryId"
@@ -76,7 +76,6 @@ export default {
       offset: 0,
       limit: 10,
       selecting: false,
-      showNumberData: '',
       dataDefault: CATEGORY_DEFAULT.new_course_list,
       dropdownData: [],
       courseCategories: [],
@@ -91,6 +90,7 @@ export default {
       vipLevels: state => state.vip.vipLevels,
       vipSwitch: state => state.vipSwitch,
       vipOpenStatus: state => state.vip.vipOpenStatus,
+      showNumberData: state => state.goodsSettings.show_number_data
     }),
   },
   watch: {
@@ -130,8 +130,6 @@ export default {
 
     // 初始化下拉筛选数据
     this.initDropdownData();
-
-    this.getGoodSettings();
   },
   methods: {
     ...mapActions('course', ['setCourseList']),
@@ -154,7 +152,7 @@ export default {
         value: '0',
         data: res
       });
-      
+
       const categoryId = this.$route.query.categoryId
       if (categoryId && categoryId !== '0') {
         this.currentCourseCategoryText = this.getCategoryDescById(this.courseCategories, categoryId)
@@ -195,7 +193,7 @@ export default {
         }
 
         if (item.children && item.children.length > 0) {
-          optionItem.children = this.initOptions({ 
+          optionItem.children = this.initOptions({
             text: this.$t('more.all'),
             value: item.id,
             data: item.children
@@ -293,7 +291,7 @@ export default {
     toggleHandler(value) {
       this.selecting = value;
     },
-    
+
     isSelectedDataSame(selectedData) {
       const oldLength = Object.keys(selectedData).length;
       const newLength = Object.keys(this.selectedData).length;
@@ -307,15 +305,6 @@ export default {
       }
 
       return true;
-    },
-    getGoodSettings() {
-      Api.getSettings({
-        query: {
-          type: 'goods',
-        },
-      }).then(res => {
-        this.showNumberData = res.show_number_data;
-      });
     },
     getCategoryDescById(categories, categoryId) {
       if (!categories || categories.length === 0) return null

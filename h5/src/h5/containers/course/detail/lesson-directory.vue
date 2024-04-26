@@ -397,7 +397,7 @@ export default {
         })
       } catch (error) {
         console.log(error)
-      }  
+      }
 
       return data
     },
@@ -422,7 +422,6 @@ export default {
       return false;
     },
     async lessonCellClick(task, lessonIndex, taskIndex) {
-      const onlyAppType = ['video', 'audio', 'live']
       await this.getCourse()
       if(!this.isCanLearn(task)) {
         return closedToast('course');
@@ -430,12 +429,12 @@ export default {
 
       if(task.type === 'live' || task.type === 'video') {
         const media = await this.getData(task.id)
-        
+
         if (media.isEncryptionPlus && media.securityVideoPlayer) {
           Toast('请在APP学习');
           return;
         }
-        
+
         if (media.isEncryptionPlus && !media.securityVideoPlayer && !this.detectBrowserInfo()) {
           Toast('请在APP学习或使用钉钉/飞书/微信/企业微信内置浏览器打开');
           return;

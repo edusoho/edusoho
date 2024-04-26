@@ -63,7 +63,6 @@ export default {
       selecting: false,
       dataDefault: CATEGORY_DEFAULT.new_classroom_list,
       dropdownData: [],
-      showNumberData: '',
     };
   },
   computed: {
@@ -72,6 +71,7 @@ export default {
       vipLevels: state => state.vip.vipLevels,
       vipSwitch: state => state.vipSwitch,
       vipOpenStatus: state => state.vip.vipOpenStatus,
+      showNumberData: state => state.goodsSettings.show_number_data
     }),
   },
   watch: {
@@ -110,8 +110,6 @@ export default {
 
     // 初始化下拉筛选数据
     this.initDropdownData();
-
-    this.getGoodSettings();
   },
   methods: {
     ...mapActions('classroom', ['setClassRoomList']),
@@ -265,16 +263,7 @@ export default {
       }
 
       return true;
-    },
-    getGoodSettings() {
-      Api.getSettings({
-        query: {
-          type: 'goods',
-        },
-      }).then(res => {
-        this.showNumberData = res.show_number_data;
-      });
-    },
+    }
   },
 };
 </script>

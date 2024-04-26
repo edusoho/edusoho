@@ -69,7 +69,7 @@ export default {
         },
       });
     }
-  },
+   },
   methods: {
     onChange(index) {
       this.firstVisit = 0;

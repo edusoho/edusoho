@@ -17,7 +17,7 @@ axios.interceptors.request.use(
     if (config.name.indexOf('Live') === -1) {
       config.headers.Accept = 'application/vnd.edusoho.v2+json';
     }
-    
+
     if (["/api/pages/h5/settings"].includes(config.url) === false) {
       // config.headers.SessionIgnore = 1;
     }
@@ -30,7 +30,7 @@ axios.interceptors.request.use(
     if (config.disableLoading) {
       return config;
     }
-    
+
     if (!config.hideLoading) {
       store.commit('UPDATE_LOADING_STATUS', true);
     }
@@ -80,6 +80,8 @@ axios.interceptors.response.use(
       default:
         break;
     }
+
+    console.error(error.response.data.error.message)
 
     return Promise.reject(error.response.data.error);
   },

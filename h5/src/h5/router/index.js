@@ -900,8 +900,8 @@ const routes = [
     },
     beforeEnter: (to, from, next) => {
       Api.myStudyBanks().then(res => {
-        const itemIotro = res.data.filter(item => { 
-          return item.exerciseId == to.query.exerciseId 
+        const itemIotro = res.data.filter(item => {
+          return item.exerciseId == to.query.exerciseId
         })
         to.meta.title = itemIotro[0].itemBankExercise.title
         next();
@@ -1062,28 +1062,6 @@ const isWeixinBrowser = /micromessenger/.test(
   navigator.userAgent.toLowerCase(),
 );
 
-// 检查会员开关配置（会员页面需要有限判断，其他页面异步滞后判断减少页面等待时间）
-const setVipSwitch = () => {
-  return new Promise((resolve, reject) => {
-    if (!Object.keys(store.state.vipSettings).length) {
-      return store
-        .dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' })
-        .then(vipRes => {
-          // vip 前端元素判断（vip 插件已安装(升级) && vip 插件已开启 && vip 等级已设置）
-          if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
-            return store.dispatch('setVipSwitch', true).then(() => resolve());
-          }
-          return resolve(vipRes);
-        })
-        .catch(err => {
-          Toast.fail(err.message);
-          return reject(err);
-        });
-    }
-    return resolve();
-  });
-};
-
 // 校验是否有绑定手机号
 const mobileBindCheck = (to, from, next) => {
   return new Promise((resolve, reject) => {
@@ -1119,7 +1097,7 @@ const mobileBindCheck = (to, from, next) => {
 
       resolve()
     }).catch(() => {
-      resolve() 
+      resolve()
     })
   })
 };
@@ -1160,16 +1138,16 @@ router.beforeEach(async (to, from, next) => {
     'find',
   ].includes(to.name);
 
-  // 已登录用户不进入 prelogin/login/register 路由
-  // 已登录用户进入 auth_social 路由，返回到首页，解决反复进入微信授权页面的问题
   if (['prelogin', 'register'].includes(to.name) && store.state.token) {
     next(to.query.redirect || '/');
+
     return;
   }
 
   // 未登录用户 信息设置页 跳转到首页
   if (['settings', 'couponCovert'].includes(to.name) && !store.state.token) {
     next('/');
+
     return;
   }
 
@@ -1177,68 +1155,20 @@ router.beforeEach(async (to, from, next) => {
     await mobileBindCheck(to, from, next);
   }
 
-  if (store.state.settingUgc) {
-    const result = await Api.getSettings({ query: { type: 'ugc' }});
-    store.commit('SET_SETTING_UGC', result);
-  }
-
-  if (!Object.keys(store.state.storageSetting).length) {
-    store.dispatch('getGlobalSettings', { type: 'storage', key: 'storageSetting' })
-  }
-
-  // 站点后台设置、会员后台配置
-  if (!Object.keys(store.state.settings).length) {
-    store
-      .dispatch('getGlobalSettings', { type: 'site', key: 'settings' })
-      .then(siteRes => {
-        // 动态更新 navbar title
-        if (shouldUpdateMetaTitle) {
-          to.meta.title = siteRes.name;
-        }
-        store.dispatch('setDrpSwitch');
-        if (to.name === 'vip') {
-          setVipSwitch().then(() => next());
-        } else {
-          next();
-        }
-      })
-      .catch(err => {
-        Toast.fail(err.message);
-      });
-  } else if (shouldUpdateMetaTitle) {
-    to.meta.title = store.state.settings.name;
-    next();
-  } else {
-    next();
-  }
-
   if (store.state.token) {
     setWeChatSwitch();
   }
 
-  if (store.state.couponSwitch === null) {
-    store.dispatch('setCouponSwitch').then(res => {
-      console.log(res);
-    });
+  if (shouldUpdateMetaTitle) {
+    to.meta.title = store.state.settings.name;
   }
-});
 
-// 异步加载配置
-router.afterEach(to => {
-  // 课程后台配置数据
-  if (!Object.keys(store.state.courseSettings).length) {
-    store
-      .dispatch('getGlobalSettings', {
-        type: 'course',
-        key: 'courseSettings',
-      })
-      .catch(err => {
-        Toast.fail(err.message);
-      });
+    const { h5Enabled, enabled } = store.state.vipSettings
+  if (to.name === 'vip' && h5Enabled && enabled && !store.state.vipSwitch) {
+    await store.dispatch('setVipSwitch', true)
   }
-  if (to.name !== 'vip') {
-    setVipSwitch();
-  }
+
+  next()
 });
 
 export default router;
