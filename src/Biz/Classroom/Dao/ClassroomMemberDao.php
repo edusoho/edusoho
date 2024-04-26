@@ -32,6 +32,8 @@ interface ClassroomMemberDao extends AdvancedDaoInterface
 
     public function countMobileFilledMembersByClassroomId($classroomId, $userLocked = 0);
 
+    public function changeMembersDeadlineByClassroomId($classroomId, $day);
+
     public function updateByClassroomIdAndRole($classroomId, $role, array $fields);
 
     public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds);
