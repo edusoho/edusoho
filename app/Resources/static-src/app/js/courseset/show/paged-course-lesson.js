@@ -169,10 +169,6 @@ class PagedCourseLesson {
           const isTaskResultIncomplete = data.resultStatus != 'finish';
           const onlyAppType = ['video', 'audio', 'live', 'replay'];
 
-          if (context.setting.onlyLearnInApp == 1 && onlyAppType.includes(data.type)) {
-            return 'title js-modal-only-app';
-          }
-
           if (canLearn == '1') {
             return 'title';
           }
@@ -183,6 +179,10 @@ class PagedCourseLesson {
 
           if (isTaskResultIncomplete) {
             return 'title js-handleLearnContentOnMessage';
+          }
+
+          if (context.setting.onlyLearnInApp == 1 && onlyAppType.includes(data.type)) {
+            return 'title js-modal-only-app';
           }
 
           return 'title';
