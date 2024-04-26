@@ -66,6 +66,8 @@
 {% endblock %}
 
 {% block footer %}
-  <button class="btn btn-primary pull-right js-save-deadline-set-form" id="submit" type="button" data-loading-text="{{'form.btn.save.submiting'|trans}}" data-user="{{ 'site.default.student'|trans }}">{{'form.btn.save'|trans}}</button>
+  {% if classroom.status == 'published' %}
+    <button class="btn btn-primary pull-right js-save-deadline-set-form" id="submit" type="button" data-loading-text="{{'form.btn.save.submiting'|trans}}" data-user="{{ 'site.default.student'|trans }}">{{'form.btn.save'|trans}}</button>
+  {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
 {% endblock %}
