@@ -113,7 +113,9 @@
       @closeFinishDialog="closeFinishDialog"
     ></finishDialog>
 
-    <open-app-dialog v-if="appShow" :openAppUrl="openAppUrl" @cancel="cancel()" ></open-app-dialog>
+    <open-app-dialog v-if="appShow"
+                     :openAppUrl="openAppUrl" :courseId="course.details.id"
+                     :goodsId="course.details.goodsId" @cancel="cancel()" ></open-app-dialog>
   </div>
 </template>
 <script>

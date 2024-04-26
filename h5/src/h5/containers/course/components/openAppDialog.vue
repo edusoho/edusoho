@@ -5,25 +5,40 @@
       <div class="message">将为您跳转至APP进行学习</div>
       <div class="footer">
         <button @click="cancel()">取消</button>
-        <a href="/mobile/downloadMiddlePage" v-if="isWeixinBrowser || isDingTalkBrowser">继续</a>
-        <a :href="openAppUrl" v-else>继续</a>
+
+        <a v-if="isWeixinBrowser || isDingTalkBrowser" :href="appMiddlePageUrl">继续</a>
+        <a v-else :href="openAppUrl" @click="openMiddlePage">继续</a>
       </div>
     </div>
   </div>
 </template>
 <script>
-const ua =  window.navigator.userAgent.toLowerCase()
 export default {
-  props: ['openAppUrl'],
+  props: ['openAppUrl', 'courseId', 'goodsId'],
   data() {
     return {
-      isWeixinBrowser: ua.match(/MicroMessenger/i) == 'micromessenger',
-      isDingTalkBrowser: ua.match(/ding\s?talk/i)
+      appMiddlePageUrl: `/mobile/downloadMiddlePage?courseId=${this.courseId}&goodsId=${this.goodsId}`,
+      isWeixinBrowser: /micromessenger/.test(navigator.userAgent.toLowerCase()),
+      isDingTalkBrowser: /ding\s?talk/i.test(navigator.userAgent.toLowerCase()),
+      timeout: null
     }
+  },mounted() {
+    document.addEventListener('visibilitychange', function () {
+      // 用户离开了当前页面
+      if (document.visibilityState === 'hidden') {
+        this.timeout && clearTimeout(this.timeout)
+      }
+    });
   },
   methods: {
     cancel() {
       this.$emit("cancel")
+    },
+    openMiddlePage() {
+      this.timeout = setTimeout(() => {
+        window.location.href = this.appMiddlePageUrl
+        this.timeout = null
+      }, 1500)
     }
   }
 }
