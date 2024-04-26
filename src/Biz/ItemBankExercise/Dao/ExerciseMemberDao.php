@@ -10,8 +10,6 @@ interface ExerciseMemberDao extends AdvancedDaoInterface
 
     public function findByUserIdAndRole($userId, $role);
 
-    public function updateMembers($conditions, $updateFields);
-
     public function changeMembersDeadlineByExerciseId($exerciseId, $day);
 
     public function deleteByExerciseId($exerciseId);
