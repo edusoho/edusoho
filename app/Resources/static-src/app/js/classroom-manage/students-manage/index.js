@@ -43,6 +43,12 @@ $('#batch-update-expiry-day').on('click', function () {
   });
 });
 
+$('#all-update-expiry-day').on('click', function () {
+  $.get($(this).data('url'), { all: 1 }, function (html) {
+    $('#modal').html(html).modal('show');
+  });
+});
+
 $('#batch-remove').on('click', function () {
   let ids = getSelectIds();
   if (ids.length === 0) {

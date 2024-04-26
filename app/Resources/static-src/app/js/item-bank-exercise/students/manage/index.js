@@ -70,7 +70,9 @@ class StudentsManage {
       $.get($(this).data('url'), {ids: ids}, function (html) {
         $('#modal').html(html).modal('show');
       });
-    }).on('click', '#batch-remove', function () {
+    })
+
+    $('#student-table-container').on('click', '#batch-remove', function () {
       let ids = getSelectIds();
       if (ids.length === 0) {
         cd.message({type: 'danger', message: Translator.trans('course.manage.student.batch_remove.select_tips')});
@@ -86,6 +88,12 @@ class StudentsManage {
         } else {
           cd.message({ type: 'danger', message: Translator.trans('member.delete_fail_hint') + ':' + resp.message });
         }
+      });
+    });
+
+    $('#all-update-expiry-day').on('click', function () {
+      $.get($(this).data('url'), { all: 1 }, function (html) {
+        $('#modal').html(html).modal('show');
       });
     });
   }
