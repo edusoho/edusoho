@@ -485,6 +485,7 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $userIds = $request->query->get('userIds', '');
+        $all = $request->get('all', '0');
         $userIds = is_array($userIds) ? $userIds : explode(',', $userIds);
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
@@ -519,6 +520,7 @@ class ClassroomManageController extends BaseController
             'classroom' => $this->getClassroomService()->getClassroom($classroomId),
             'users' => $users,
             'userIds' => array_column($users, 'id'),
+            'all' => $all,
         ]);
     }
 
@@ -543,9 +545,9 @@ class ClassroomManageController extends BaseController
         $all = $request->query->get('all', 0);
         $userIds = is_array($userIds) ? $userIds : explode(',', $userIds);
         if ($all && 'minus' == $waveType) {
-            $courseMember = $this->getClassroomService()->searchMembers(['classroomId' => $classroomId, 'deadline_GE' => '1'], ['deadline' => 'ASC'], 0, 1);
+            $classroomMember = $this->getClassroomService()->searchMembers(['classroomId' => $classroomId, 'deadline_GE' => '1'], ['deadline' => 'ASC'], 0, 1);
 
-            return $this->createJsonResponse($courseMember[0]['deadline'] - $day * 24 * 60 * 60 > time());
+            return $this->createJsonResponse($classroomMember[0]['deadline'] - $day * 24 * 60 * 60 > time());
         }
         if ($this->getClassroomService()->checkDayAndWaveTypeForUpdateDeadline(
             $classroomId,
