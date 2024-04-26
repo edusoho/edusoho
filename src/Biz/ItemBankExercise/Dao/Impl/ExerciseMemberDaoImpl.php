@@ -27,6 +27,18 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
         return $this->findByFields(['userId' => $userId, 'role' => $role]);
     }
 
+    public function updateMembers($conditions, $updateFields)
+    {
+        return $this->db()->update($this->table, $updateFields, $conditions);
+    }
+
+    public function changeMembersDeadlineByExerciseId($exerciseId, $day)
+    {
+        $sql = "UPDATE item_bank_exercise_member SET deadline = deadline {$day} WHERE courseId = {$exerciseId};";
+
+        return $this->db()->executeUpdate($sql, [$exerciseId, $day]);
+    }
+
     public function declares()
     {
         return [
@@ -45,6 +57,8 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
                 'doneQuestionNum > :doneQuestionNum',
                 'updatedTime >= :startTimeGreaterThan',
                 'updatedTime < :startTimeLessThan',
+                'deadline <= :deadlineLessThen',
+                'deadline >= :deadlineGreaterThan',
             ],
         ];
     }
