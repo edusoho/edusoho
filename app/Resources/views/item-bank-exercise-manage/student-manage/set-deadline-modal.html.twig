@@ -4,7 +4,7 @@
 {% do script(['libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'app/js/course-manage/student-expiryday/index.js'])%}
 
 {% block body %}
-<form id="deadline-set-form" class="form-horizontal" method="post" action="{{ path('item_bank_exercise_manage_students_deadline_batch', { exerciseId:exercise.id, ids:ids }) }}">
+<form id="deadline-set-form" class="form-horizontal" method="post" action="{{ path('item_bank_exercise_manage_students_deadline_batch', { exerciseId:exercise.id, ids:ids, all: all|default() }) }}">
   {% if exercise.status == 'published' %}
     <div class="row form-group">
       <div class="col-sm-2 control-label">
