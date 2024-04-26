@@ -488,6 +488,17 @@ class ClassroomManageController extends BaseController
         $userIds = is_array($userIds) ? $userIds : explode(',', $userIds);
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
+            if ($fields['all']) {
+                if ('day' == $fields['updateType']) {
+                    $this->getClassroomService()->changeMembersDeadlineByClassroomId($classroomId, $fields['day'], $fields['waveType']);
+
+                    return $this->createJsonResponse(true);
+                }
+                $date = TimeMachine::isTimestamp($fields['deadline']) ? $fields['deadline'] : strtotime($fields['deadline'].' 23:59:59');
+                $this->getClassroomService()->updateMember(['courseId' => $classroomId], ['deadline' => $date]);
+
+                return $this->createJsonResponse(true);
+            }
             if ('day' == $fields['updateType']) {
                 $this->getClassroomService()->updateMembersDeadlineByDay(
                     $classroomId,
@@ -529,7 +540,13 @@ class ClassroomManageController extends BaseController
         $waveType = $request->query->get('waveType');
         $day = $request->query->get('day');
         $userIds = $request->query->get('userIds');
+        $all = $request->query->get('all', 0);
         $userIds = is_array($userIds) ? $userIds : explode(',', $userIds);
+        if ($all && 'minus' == $waveType) {
+            $courseMember = $this->getClassroomService()->searchMembers(['classroomId' => $classroomId, 'deadline_GE' => '1'], ['deadline' => 'ASC'], 0, 1);
+
+            return $this->createJsonResponse($courseMember[0]['deadline'] - $day * 24 * 60 * 60 > time());
+        }
         if ($this->getClassroomService()->checkDayAndWaveTypeForUpdateDeadline(
             $classroomId,
             $userIds,
