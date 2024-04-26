@@ -191,6 +191,7 @@ class StudentManageController extends BaseController
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
         $ids = $request->query->get('ids');
+        $all = $request->query->get('all');
         $ids = is_array($ids) ? $ids : explode(',', $ids);
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
@@ -217,6 +218,7 @@ class StudentManageController extends BaseController
                 'exercise' => $exercise,
                 'users' => $users,
                 'ids' => implode(',', ArrayToolkit::column($users, 'id')),
+                'all' => $all,
             ]
         );
     }
@@ -228,9 +230,9 @@ class StudentManageController extends BaseController
         $all = $request->query->get('all');
         $ids = is_array($ids) ? $ids : explode(',', $ids);
         if ($all && 'minus' == $fields['waveType']) {
-            $courseMember = $this->getExerciseMemberService()->search(['courseId' => $exerciseId, 'deadlineGreaterThan' => '1'], ['deadline' => 'ASC'], 0, 1);
+            $exerciseMember = $this->getExerciseMemberService()->search(['courseId' => $exerciseId, 'deadlineGreaterThan' => '1'], ['deadline' => 'ASC'], 0, 1);
 
-            return $this->createJsonResponse($courseMember[0]['deadline'] - $fields['day'] * 24 * 60 * 60 > time());
+            return $this->createJsonResponse($exerciseMember[0]['deadline'] - $fields['day'] * 24 * 60 * 60 > time());
         }
         if ($this->getExerciseMemberService()->checkUpdateDeadline($exerciseId, $ids, $fields)) {
             return $this->createJsonResponse(true);
