@@ -27,11 +27,6 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
         return $this->findByFields(['userId' => $userId, 'role' => $role]);
     }
 
-    public function updateMembers($conditions, $updateFields)
-    {
-        return $this->db()->update($this->table, $updateFields, $conditions);
-    }
-
     public function changeMembersDeadlineByExerciseId($exerciseId, $day)
     {
         $sql = "UPDATE item_bank_exercise_member SET deadline = deadline {$day} WHERE exerciseId = {$exerciseId};";

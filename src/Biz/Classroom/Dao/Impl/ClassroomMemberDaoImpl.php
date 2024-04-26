@@ -54,16 +54,11 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
         return [$sql, $params];
     }
 
-    public function updateMembers($conditions, $updateFields)
-    {
-        return $this->db()->update($this->table, $updateFields, $conditions);
-    }
-
     public function changeMembersDeadlineByClassroomId($classroomId, $day)
     {
         $sql = "UPDATE classroom_member SET deadline = deadline {$day} WHERE classroomId = {$classroomId};";
 
-        return $this->db()->executeUpdate($sql, [$courseId, $day]);
+        return $this->db()->executeUpdate($sql, [$classroomId, $day]);
     }
 
     public function updateByClassroomIdAndRole($classroomId, $role, array $fields)
