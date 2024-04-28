@@ -1434,6 +1434,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
     }
 
+    public function changeMembersDeadlineByCourseId($courseId, $day, $waveType)
+    {
+        $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
+
+        return $this->getMemberDao()->changeMembersDeadlineByCourseId($courseId, $updateDate);
+    }
+
     public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus')
     {
         $this->getCourseService()->tryManageCourse($courseId);

@@ -2762,10 +2762,10 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codeages-design@^0.1.14:
-  version "0.1.14"
-  resolved "https://registry.yarnpkg.com/codeages-design/-/codeages-design-0.1.14.tgz#ee9307f83565dd0b0df1ea700b1e25707581e3c0"
-  integrity sha512-LfAjH+eXlyHqFAV1873REHElxPY/SeGRGqy9lV4HikCiKXVcqbLxI/Qz/0NPIoYH2VaI3wu+sJ5Dqte/vNDGIg==
+codeages-design@^0.1.16:
+  version "0.1.16"
+  resolved "https://registry.npmmirror.com/codeages-design/-/codeages-design-0.1.16.tgz#01feb1af81de72138ffb30fb7a37862542c656e1"
+  integrity sha512-72BZibWCLUVKOg1KPhIRdVVHfnvazmGb02HrHHQEua3qfsaS5ZLwYhLjmpyW4ENn9lbPbXX0ZrS0u1BaP2L6Eg==
   dependencies:
     jquery "^3.2.1"
 
@@ -5778,10 +5778,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@^1.0.63:
-  version "1.0.63"
-  resolved "https://registry.npmmirror.com/item-bank/-/item-bank-1.0.63.tgz#4dbb4d59c78cb549fd468044cf3111fc9fac7c8c"
-  integrity sha512-fDm4INT7w1FPcN7MLv6XVrsyhL6HOYI4LwoQ7on9QIXO0wNUTuvrt1YbibpKSqFwh1VgTCBehOXknpvYmihYZw==
+item-bank@1.0.64:
+  version "1.0.64"
+  resolved "https://registry.npmmirror.com/item-bank/-/item-bank-1.0.64.tgz#412a376cd25741e38b201f79703b91719a8b05bd"
+  integrity sha512-TGCcLiTmzmvQpghhFeTy2pO0v6f3U3lqj5KL58tjmhqdUxMVtzo4BoI65AtVAxAlwRM9lR6eqhaBt8++ZKpGpg==
   dependencies:
     ant-design-vue "^1.5.0"
     caniuse-lite "^1.0.30001390"
@@ -7483,10 +7483,6 @@ pkg-up@^2.0.0:
 pkginfo@0.3.x:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/pkginfo/-/pkginfo-0.3.1.tgz#5b29f6a81f70717142e09e765bbeab97b4f81e21"
-
-placeholder@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/placeholder/-/placeholder-1.0.2.tgz#17bf1021b33a1347c448a4377dfd44c545ad1a07"
 
 pluralize@^7.0.0:
   version "7.0.0"
@@ -10020,9 +10016,10 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
 
-vue@^2.6.11:
+vue@2.6.11, vue@^2.6.11:
   version "2.6.11"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
+  resolved "https://registry.npmmirror.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
+  integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
 
 vuedraggable@^2.24.3:
   version "2.24.3"

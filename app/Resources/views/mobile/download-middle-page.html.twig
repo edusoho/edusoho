@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+		<meta name='viewport' content='width=device-width,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0'>
+    <style>
+      *{
+        margin:0;
+        padding:0;
+      }
+      .download-middle-page{
+        width: 100vw;
+        height: 100vh;
+        background-image:url("/static-dist/app/img/task/middle-page-image.png ");
+        background-size: contain;
+        background-repeat: no-repeat;
+       }
+       .middle-page-top{
+        width: 100%;
+        height: 70%;
+        color: #00BE63;
+        text-align: center;
+        line-height: 50px;
+       }
+       .middle-page-top .middle-page-top-name{
+        position: absolute;
+        top:60px;
+        left: 50%;
+        transform: translate(-50%);
+        margin: 0;
+        width:400px;
+        font-size: 42px;
+        font-weight: 500;
+        line-height: 47px;
+       }
+       .middle-page-top .middle-page-top-message{
+        position: absolute;
+        top:115px;
+        left: 50%;
+        transform: translate(-50%);
+        margin: 0;
+       }
+        .middle-page-footer{
+        display: flex;
+        justify-content: center;
+        align-items:center;
+        width: 100%;
+        height: 30%;
+       }
+       .middle-page-footer .middle-open-app{
+        width: 140px;
+        height: 48px;
+        background-color: #fff;
+        border: 1px solid #00BE63;
+        color: #00BE63;
+        text-decoration:none;
+        text-align:center;
+        line-height:48px;
+        border-radius: 8px;
+       }
+       .middle-page-footer .middle-download-app{
+        width: 140px;
+        height: 48px;
+        margin-left:15px;
+        background-color: #00BE63;
+        border: none;
+        color: #fff;
+        text-decoration:none;
+        text-align:center;
+        line-height:48px;
+        border-radius: 8px;
+       }
+
+      .open-browser-container {
+        display:none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 999999;
+        }
+
+      .open-browser-overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 1;
+        }
+
+      .open-browser-dialog{
+         position: absolute;
+         top: 5%;
+         right: 5%;
+         z-index: 10;
+         display: flex;
+        }
+      .open-browser-message {
+         width: 126px;
+         height: 50px;
+         flex: 1;
+         color: #fff;
+        }
+      .open-browser-image{
+         width: 30px;
+         height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="download-middle-page">
+       <div class="middle-page-top">
+         <h1 class="middle-page-top-name">{{site.name}}</h1>
+         <div class="middle-page-top-message">把学校装进口袋</div>
+       </div>
+       <div class="middle-page-footer">
+        {% set domain_without_protocol = site.url|split('://')|last %}
+        {% set domain_protocol = site.url|split('://')|first %}
+
+        <a href="kuozhi://{{ domain_without_protocol }}?protocol={{domain_protocol}}&courseId={{ courseId }}&goodsId={{ goodsId }}" class="middle-open-app js-open-app">点击打开</a>
+        <a href="javascript:;" class="middle-open-app js-open-app2">点击打开</a>
+
+        <a href="{{ site.url }}/mapi_v2/School/getDownloadUrl?from=qrcode&code=zhixiang" class="middle-download-app">下载APP</a>
+       </div>
+    </div>
+    <div class="open-browser-container js-open-app-container">
+        <div class="open-browser-overlay"></div>
+        <div class="open-browser-dialog">
+            <div class="open-browser-message">
+                点击右上角...
+                在"浏览器中打开"
+                继续跳转
+            </div>
+           <img class="mobile-wechat-qrcode" src="{{ asset('/static-dist/app/img/mobile/open-browse.png') }}" alt="" class="open-browser-image"/>
+        </div>
+    </div>
+
+   <script>
+     var isWeixinBrowser = /micromessenger/.test(navigator.userAgent.toLowerCase())
+     var isDingTalkBrowser = /ding\s?talk/i.test(navigator.userAgent.toLowerCase())
+     var $openApp = document.querySelector('.js-open-app')
+     var $openApp2 = document.querySelector('.js-open-app2')
+
+     if (isWeixinBrowser ||isDingTalkBrowser) {
+       $openApp2.style.display = 'block';
+       $openApp.style.display = 'none';
+     } else {
+       $openApp2.style.display = 'none';
+       $openApp.style.display = 'block';
+     }
+
+     document.querySelector(".js-open-app2").addEventListener("click", function() {
+       var openBrowserDialog = document.querySelector('.js-open-app-container');
+
+       openBrowserDialog.style.display = 'block';
+    })
+  </script>
+ </body>
+</html>

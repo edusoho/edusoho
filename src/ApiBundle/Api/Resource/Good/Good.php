@@ -7,6 +7,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\GoodsException;
@@ -61,7 +62,7 @@ class Good extends AbstractResource
     {
         $target = '';
         if ('course' == $product['targetType']) {
-            $target = $this->getCourseService()->getCourse($product['targetId']);
+            $target = $this->getCourseSetService()->getCourseSet($product['targetId']);
         }
         if ('classroom' == $product['targetType']) {
             $target = $this->getClassroomService()->getClassroom($product['targetId']);
@@ -102,7 +103,7 @@ class Good extends AbstractResource
     private function fetchSpecs(&$goods, $goodsEntity, $request, $target)
     {
         $user = $this->getCurrentUser();
-        if (1 == $request->query->get('preview')) {
+        if (1 == $request->query->get('preview') && !empty($target)) {
             $goods['specs'] = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
         } else {
             $goods['specs'] = $this->getGoodsService()->findPublishedGoodsSpecsByGoodsId($goods['id']);
@@ -206,5 +207,13 @@ class Good extends AbstractResource
     protected function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->service('Course:CourseSetService');
     }
 }

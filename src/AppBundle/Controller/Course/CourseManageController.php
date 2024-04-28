@@ -973,6 +973,9 @@ class CourseManageController extends BaseController
     public function courseItemsSortAction(Request $request, $courseId)
     {
         $ids = $request->request->get('ids', []);
+        if (!$this->checkSortAble($ids, $courseId)) {
+            return $this->createJsonResponse(['refresh' => true]);
+        }
         $ids = $this->getCourseService()->courseItemIdsHandle($courseId, $ids);
 
         $this->getCourseService()->sortCourseItems($courseId, $ids);
@@ -1104,6 +1107,16 @@ class CourseManageController extends BaseController
         $this->getCourseService()->changeHidePublishLesson($courseId, $status);
 
         return $this->createJsonResponse(true);
+    }
+
+    private function checkSortAble($ids, $courseId)
+    {
+        $taskCount = $this->getTaskService()->countTasks(['courseId' => $courseId]);
+        $filteredIds = array_filter($ids, function ($id) {
+            return false !== strpos($id, 'chapter');
+        });
+
+        return count($filteredIds) != $taskCount;
     }
 
     private function sortMarkerStats(&$stats, $request)

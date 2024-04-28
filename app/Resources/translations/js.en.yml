@@ -379,6 +379,9 @@ activity.video_manage.other_finish_detail: Learn till the last (do not support w
 activity.video_manage.length_required_error_hint: Please enter a non negative integer, where seconds can only be between 0-59
 activity.video_manage.media_error_hint: Please upload or select a video file
 activity.video.try_watch_finish_hint: Free trial end, purchase and watch the complete video
+activity.video.only_can_app_title: The configuration has changed and the course cannot be played
+activity.video.only_can_app_desc: Please go to the App to continue learning
+
 activity.video.file_limit_size: File size cannot exceed %size%
 
 activity.manage.choose_teacher_hint: Please choose a teacher
@@ -1166,7 +1169,7 @@ admin.classroom.choose_success_hint: Choose classroom success
 admin.classroom.operation_success_hint: successfully！
 admin.classroom.operation_fail_hint: failure
 admin.classroom.operation_hint: ？
-admin.classroom.confirm_publish_hint: Confirm release？ 
+admin.classroom.confirm_publish_hint: Confirm release？
 admin.classroom.hide_hint: Closing the classroom will completely hide it, and students will not be able to view it on the front desk.
 admin.classroom.delist_hint: After the class is removed, it will not be displayed at the front desk, and students will not be able to view it on the home page and list page.
 admin.classroom.close_hint: After closing, students who are still within the validity period will not be able to continue learning. Please operate with caution.

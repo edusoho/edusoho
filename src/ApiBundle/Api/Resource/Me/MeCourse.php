@@ -36,7 +36,10 @@ class MeCourse extends AbstractResource
             'excludeTypes' => ['reservation'],
             'courseSetTitleLike' => $conditions['title'],
         ];
-        $courses = $this->getCourseService()->findCoursesByIds($validCourseIds);
+        if (empty($validCourseIds)) {
+            return $this->makePagingObject([], 0, $offset, $limit);
+        }
+        $courses = $this->getCourseService()->searchCourses(['ids' => $validCourseIds, 'courseSetTitleLike' => $conditions['title']], [], 0, PHP_INT_MAX);
         $this->filterCourseIdsByConditions($conditions, $courses, $members, $validCourseIds, $invalidCourseIds, $courseConditions);
         if (isset($conditions['type']) && empty($courseConditions['ids'])) {
             return $this->makePagingObject([], 0, $offset, $limit);
@@ -119,6 +122,9 @@ class MeCourse extends AbstractResource
         $learnedCourseIds = [];
         $learningCourseIds = [];
         foreach ($members as $member) {
+            if (empty($courses[$member['courseId']])) {
+                continue;
+            }
             $course = $courses[$member['courseId']];
             $isLearned = 1;
             if ($member['learnedCompulsoryTaskNum'] < $course['compulsoryTaskNum'] or 0 == $course['compulsoryTaskNum']) {

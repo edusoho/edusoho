@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Vue from 'common/vue'
+import { loginAgain } from 'common/ajaxError';
 
 const apiStore = {
   token: '',
@@ -54,11 +55,19 @@ apiClient.interceptors.request.use(
   }
 );
 
+const unLoginStatus = [401]
+
 apiClient.interceptors.response.use(
-  response => {
+  (response) => {
     return response.data;
   },
-  error => {
+  (error) => {
+    if (unLoginStatus.includes(error.response.status)) {
+      loginAgain()
+
+      return
+    }
+
     try {
       if (![4042701].includes(error.response.data.error.code)) {
         Vue.prototype.$message.error(error.response.data.error.message)
@@ -66,6 +75,7 @@ apiClient.interceptors.response.use(
     } catch (e) {
 
     }
+
     return Promise.reject(error);
 });
 

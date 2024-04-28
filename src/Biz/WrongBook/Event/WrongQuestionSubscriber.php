@@ -56,7 +56,9 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
             $collecIds = $this->getWrongQuestionCollectDao()->getCollectIdsBYPoolIds($wrongPoolIds);
             $this->getWrongQuestionCollectDao()->deleteCollectByPoolIds($wrongPoolIds);
             $collecIds = ArrayToolkit::column($collecIds, 'id');
-            $this->getWrongQuestionDao()->batchDelete(['collect_ids' => $collecIds]);
+            if ($collecIds) {
+                $this->getWrongQuestionDao()->batchDelete(['collect_ids' => $collecIds]);
+            }
             $this->logDeleteWrongQuestionPool($conditions['target_type'], $conditions['target_id']);
 
             $db->commit();
