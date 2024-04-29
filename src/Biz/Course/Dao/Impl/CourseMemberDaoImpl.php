@@ -399,6 +399,13 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->update($this->table, $updateFields, $conditions);
     }
 
+    public function changeMembersDeadlineByCourseId($courseId, $day)
+    {
+        $sql = "UPDATE course_member SET deadline = deadline {$day} WHERE courseId = {$courseId} and deadline != 0;";
+
+        return $this->db()->executeUpdate($sql, [$courseId, $day]);
+    }
+
     public function countThreadsByCourseIdAndUserId($courseId, $userId, $type = 'discussion')
     {
         $sql = "SELECT count(id) FROM course_thread WHERE type='{$type}' AND courseId = ? AND userId = ?";

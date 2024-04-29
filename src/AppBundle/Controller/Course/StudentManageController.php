@@ -196,10 +196,22 @@ class StudentManageController extends BaseController
     public function batchUpdateMemberDeadlinesAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
+        $all = $request->query->get('all');
         $ids = $request->query->get('ids');
         $ids = is_array($ids) ? $ids : explode(',', $ids);
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
+            if ($fields['all']) {
+                if ('day' == $fields['updateType']) {
+                    $this->getCourseMemberService()->changeMembersDeadlineByCourseId($courseId, $fields['day'], $fields['waveType']);
+
+                    return $this->createJsonResponse(true);
+                }
+                $date = TimeMachine::isTimestamp($fields['deadline']) ? $fields['deadline'] : strtotime($fields['deadline'].' 23:59:59');
+                $this->getCourseMemberService()->updateMembers(['courseId' => $courseId], ['deadline' => $date]);
+
+                return $this->createJsonResponse(true);
+            }
             if ('day' == $fields['updateType']) {
                 $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDay($courseId, $ids, $fields['day'], $fields['waveType']);
 
@@ -218,6 +230,7 @@ class StudentManageController extends BaseController
             [
                 'course' => $course,
                 'users' => $users,
+                'all' => $all,
                 'ids' => implode(',', ArrayToolkit::column($users, 'id')),
                 'default' => $this->getSettingService()->get('default', []),
             ]
@@ -226,10 +239,16 @@ class StudentManageController extends BaseController
 
     public function checkDayAction(Request $request, $courseId)
     {
-        $waveType = $request->query->get('waveType');
+        $waveType = $request->query->get('waveType', 'plus');
         $day = $request->query->get('day');
         $ids = $request->query->get('ids');
+        $all = $request->query->get('all', 0);
         $ids = is_array($ids) ? $ids : explode(',', $ids);
+        if ($all && 'minus' == $waveType) {
+            $courseMember = $this->getCourseMemberService()->searchMembers(['courseId' => $courseId, 'deadlineGreaterThan' => '1'], ['deadline' => 'ASC'], 0, 1);
+
+            return $this->createJsonResponse($courseMember[0]['deadline'] - $day * 24 * 60 * 60 > time());
+        }
         if ($this->getCourseMemberService()->checkDayAndWaveTypeForUpdateDeadline($courseId, $ids, $day, $waveType)) {
             return $this->createJsonResponse(true);
         }

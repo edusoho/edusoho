@@ -169,12 +169,12 @@ class PagedCourseLesson {
           const isTaskResultIncomplete = data.resultStatus != 'finish';
           const onlyAppType = ['video', 'audio', 'live', 'replay'];
 
-          if (context.setting.onlyLearnInApp == 1 && onlyAppType.includes(data.type)) {
-            return 'title js-modal-only-app';
-          }
-
           if (canLearn == '1') {
-            return 'title';
+            if (context.setting.onlyLearnInApp == 1 && onlyAppType.includes(data.type)) {
+              return 'title js-modal-only-app';
+            }
+
+            return 'title'
           }
 
           if (!isTaskTypeAllowed) {
@@ -182,6 +182,10 @@ class PagedCourseLesson {
           }
 
           if (isTaskResultIncomplete) {
+            return 'title js-handleLearnContentOnMessage';
+          }
+
+          if (canLearn == '0') {
             return 'title js-handleLearnContentOnMessage';
           }
 

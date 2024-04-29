@@ -128,7 +128,10 @@ class GoodsServiceImpl extends BaseService implements GoodsService
 
     public function deleteGoods($id)
     {
-        return $this->getGoodsDao()->delete($id);
+        $this->getGoodsDao()->delete($id);
+        $this->dispatch('goods.delete', $id);
+
+        return true;
     }
 
     public function countGoods($conditions)
