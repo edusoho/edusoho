@@ -4,6 +4,7 @@ namespace Biz\User\Service\Impl;
 
 use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
+use Biz\User\Dao\TokenDao;
 use Biz\User\Service\TokenService;
 use Ramsey\Uuid\Uuid;
 
@@ -126,6 +127,9 @@ class TokenServiceImpl extends BaseService implements TokenService
         return $uuid->getHex();
     }
 
+    /**
+     * @return TokenDao
+     */
     protected function getTokenDao()
     {
         return $this->createDao('User:TokenDao');

@@ -44,7 +44,7 @@ class BuildPluginAppCommand extends BaseCommand
             $this->output->writeln("<info>    *正在拷贝翻译文件 {$translationsDir} -> {$staticDir}</info>");
             $this->filesystem->mirror($translationsDir, $staticDir, null, array('override' => true, 'delete' => true));
         } else {
-            $this->output->writeln("<warning>    *未检测到翻译文件 {$pluginCode},请查看是否执行app/console trans:dump-js --code=plugin_code</>");
+            $this->output->writeln("<comment>    *未检测到翻译文件 {$pluginCode},请查看是否执行app/console trans:dump-js --code=plugin_code</comment>");
         }
     }
 
@@ -55,6 +55,11 @@ class BuildPluginAppCommand extends BaseCommand
         $originDir = $this->getOriginDir($rootDir, $pluginCode);
         $targetDir = $this->getTargetDir($rootDir, $pluginCode);
         if ($this->filesystem->exists($originDir)) {
+            if (realpath($originDir) == realpath($targetDir)) {
+                $this->output->writeln("<info>    *无需拷贝静态资源文件</info>");
+
+                return;
+            }
             $this->output->writeln("<info>    *正在拷贝静态资源文件 {$originDir} -> {$targetDir}</info>");
             $this->filesystem->mirror($originDir, $targetDir, null, array('override' => true, 'delete' => true));
         } else {
