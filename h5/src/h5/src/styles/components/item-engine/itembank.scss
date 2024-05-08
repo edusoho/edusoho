@@ -7,6 +7,7 @@ $common-padding: 35;
 
 	.swiper-slide {
 		position: relative;
+		overflow: auto;
 	}
 }
 
@@ -142,7 +143,6 @@ $common-padding: 35;
 		p {
 			margin: 0;
 		}
-
 
 		.icon-a-Frame34723 {
 			position: absolute;
@@ -327,7 +327,6 @@ $common-padding: 35;
 		.van-checkbox__label {
 			margin-left: 0;
 		}
-
 
 		.van-checkbox__icon {
 			.ibs-subject-option__order--square {
