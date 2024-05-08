@@ -4,11 +4,11 @@
     @click="onClick(course.hasCertificate, $event)"
   >
     <div class="column-class-left" :style="{ marginTop: typeList === 'classroom_list' ? '24px' : 0 }">
-      <img 
+      <img
         v-if="typeList === 'classroom_list'"
         style="width: 90%;top: -15px;left: 50%;transform: translateX(-50%);"
         class="absolute z-1"
-        src="static/images/classroom/classroom-icon2.png" 
+        src="static/images/classroom/classroom-icon2.png"
         srcset="static/images/classroom/classroom-icon2@2x.png" />
       <img class="relative z-1 cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
       <div v-if="Number(isVip)" class="column-class-left__member">{{ $t('e.freeForMembers') }}</div>

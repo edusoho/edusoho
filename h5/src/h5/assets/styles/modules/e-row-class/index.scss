@@ -17,8 +17,8 @@
 
 		&__member {
 			position: absolute;
-			top: -1px;
-			right: -5px;
+			bottom: -1px;
+			left: -5px;
 			z-index: 11;
 			padding: 2px 8px;
 			color: #fff;
@@ -26,7 +26,7 @@
 			font-size: 12px;
 			text-align: center;
 			background-color: #162923;
-			border-radius: 0 0 0 6px;
+			border-radius: 0 6px;
 			transform: scale(0.83);
 		}
 
