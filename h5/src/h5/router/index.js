@@ -7,6 +7,7 @@ import find from './find';
 import learning from './learning';
 import my from './my';
 import Api from '@/api';
+import initShare from '@/utils/weiixn-share-sdk';
 
 /* eslint-disable no-new */
 Vue.use(Router);
@@ -1167,6 +1168,14 @@ router.beforeEach(async (to, from, next) => {
   if (to.name === 'vip' && h5Enabled && enabled && !store.state.vipSwitch) {
     await store.dispatch('setVipSwitch', true)
   }
+  
+  const shareMessage = {
+    title: store.state.settings.name,
+    link: window.location.href.split('#')[0] + '#' + to.path,
+    imgUrl: store.state.settings.logo,
+    desc: store.state.settings.slogan
+  }
+  initShare({ ...shareMessage });
 
   next()
 });
