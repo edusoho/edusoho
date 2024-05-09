@@ -57,7 +57,7 @@ export default {
       this.$nextTick(() => {
         this.isRouterAlive = true;
       });
-    }, 
+    },
   },
   computed: {
     ...mapState({
@@ -102,7 +102,6 @@ export default {
         this.setNavbarTitle(navbarTitle);
 
         document.title = this.settingsName;
-
       },
     },
   },

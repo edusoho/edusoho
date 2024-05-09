@@ -1164,18 +1164,17 @@ router.beforeEach(async (to, from, next) => {
     to.meta.title = store.state.settings.name;
   }
 
-    const { h5Enabled, enabled } = store.state.vipSettings
+  const { h5Enabled, enabled } = store.state.vipSettings
   if (to.name === 'vip' && h5Enabled && enabled && !store.state.vipSwitch) {
     await store.dispatch('setVipSwitch', true)
   }
-  
-  const shareMessage = {
+
+  initShare({
     title: store.state.settings.name,
-    link: window.location.href.split('#')[0] + '#' + to.path,
+    desc: store.state.settings.slogan,
     imgUrl: store.state.settings.logo,
-    desc: store.state.settings.slogan
-  }
-  initShare({ ...shareMessage });
+    link: window.location.href.split('#')[0] + '#' + to.path
+  });
 
   next()
 });
