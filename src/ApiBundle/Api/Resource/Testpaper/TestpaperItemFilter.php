@@ -9,7 +9,7 @@ class TestpaperItemFilter extends Filter
     protected $publicFields = [
         'id', 'type', 'stem', 'score', 'answer', 'analysis', 'metas', 'categoryId', 'difficulty', 'target',
         'courseId', 'lessonId', 'parentId', 'subCount', 'finishedTimes', 'passedTimes', 'createdUserId', 'updatedUserId', 'courseSetId',
-        'seq', 'missScore', 'missScore', 'subs', 'testResult', 'isDeleted', 'attachments', 'sectionId', 'itemId',
+        'seq', 'missScore', 'missScore', 'subs', 'testResult', 'isDeleted', 'attachments', 'sectionId', 'itemId', 'aiAnalysisEnable', 'aiAnalysisToken',
     ];
 
     protected function publicFields(&$data)

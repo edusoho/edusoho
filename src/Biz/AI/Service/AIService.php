@@ -2,7 +2,7 @@
 
 namespace Biz\AI\Service;
 
-interface AnswerService
+interface AIService
 {
     public function generateAnswer($prompt);
 }

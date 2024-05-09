@@ -3,10 +3,10 @@
 namespace Biz\AI\Service\Impl;
 
 use Biz\AI\DifyClient;
-use Biz\AI\Service\AnswerService;
+use Biz\AI\Service\AIService;
 use Biz\BaseService;
 
-class AnswerServiceImpl extends BaseService implements AnswerService
+class AIServiceImpl extends BaseService implements AIService
 {
     public function generateAnswer($prompt)
     {

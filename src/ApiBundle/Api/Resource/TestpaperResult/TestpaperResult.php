@@ -9,6 +9,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Activity\Type\Testpaper;
 use Biz\Course\Service\CourseService;
+use Biz\Question\Traits\QuestionAIAnalysisTrait;
 use Biz\Testpaper\TestpaperException;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
@@ -23,6 +24,8 @@ use Codeages\Biz\ItemBank\Item\Service\QuestionFavoriteService;
 
 class TestpaperResult extends AbstractResource
 {
+    use QuestionAIAnalysisTrait;
+
     public function add(ApiRequest $request)
     {
         $user = $this->getCurrentUser();
@@ -124,6 +127,9 @@ class TestpaperResult extends AbstractResource
 
         $favorites = $this->findQuestionFavorites($user['id']);
 
+        if ($resultShow) {
+            $items = $this->wrapAIAnalysis($items);
+        }
         $items = ArrayToolkit::groupIndex($items, 'type', 'id');
         $testpaper = $testpaperWrapper->wrapTestpaper($assessment, $scene);
         $testpaper['metas']['question_type_seq'] = array_keys($items);
@@ -213,6 +219,46 @@ class TestpaperResult extends AbstractResource
         }
 
         return $resultStatus;
+    }
+
+    private function wrapAIAnalysis($items)
+    {
+        $aiAnalysisSetting = $this->getQuestionAIAnalysisSetting();
+        $aiAnalysisEnableQuestionIds = [];
+        foreach ($items as &$item) {
+            if ('material' == $item['type']) {
+                foreach ($item['subs'] as &$question) {
+                    $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysis($question, $item);
+                    if ($question['aiAnalysisEnable']) {
+                        $aiAnalysisEnableQuestionIds[] = $question['id'];
+                    }
+                }
+            } else {
+                $item['aiAnalysisEnable'] = $this->canGenerateAIAnalysis($item);
+                if ($item['aiAnalysisEnable']) {
+                    $aiAnalysisEnableQuestionIds[] = $item['id'];
+                }
+            }
+        }
+        if (empty($aiAnalysisSetting['student_enabled'])) {
+            return $items;
+        }
+        $aiAnalysisTokens = $this->generateAIAnalysisTokens($aiAnalysisEnableQuestionIds);
+        foreach ($items as &$item) {
+            if ('material' == $item['type']) {
+                foreach ($item['subs'] as &$question) {
+                    if ($question['aiAnalysisEnable']) {
+                        $question['aiAnalysisToken'] = $aiAnalysisTokens[$question['id']];
+                    }
+                }
+            } else {
+                if ($item['aiAnalysisEnable']) {
+                    $item['aiAnalysisToken'] = $aiAnalysisTokens[$item['id']];
+                }
+            }
+        }
+
+        return $items;
     }
 
     /**

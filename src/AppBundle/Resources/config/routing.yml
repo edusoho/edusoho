@@ -3546,16 +3546,6 @@ question_parse_progress:
     path: '/question/parse_progress/{token}'
     defaults:
       _controller: 'AppBundle:Question/Manage:parseProgress'
-question_teacher_ai_analysis:
-  path: '/question/ai_analysis'
-  defaults:
-    _controller: 'AppBundle:Question/QuestionAIAnalysis:generate'
-  methods:
-    - POST
-question_student_ai_analysis:
-  path: '/question/ai_analysis/{token}'
-  defaults:
-    _controller: 'AppBundle:Question/QuestionAIAnalysis:generateWithToken'
 subject_edit_template:
     path: '/subject/edit/{type}'
     methods:

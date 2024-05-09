@@ -1,56 +1,66 @@
 <?php
 
-namespace AppBundle\Controller\Question;
+namespace ApiBundle\Api\Resource\Ai;
 
-use AppBundle\Controller\BaseController;
-use Biz\AI\DifyClient;
-use Biz\AI\Service\AnswerService;
+use ApiBundle\Api\ApiRequest;
+use ApiBundle\Api\Resource\AbstractResource;
+use Biz\AI\Service\AIService;
 use Biz\Question\QuestionException;
+use Biz\User\Constant\TokenType;
 use Biz\User\Service\TokenService;
 use Biz\User\TokenException;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class QuestionAIAnalysisController extends BaseController
+class AiGenerate extends AbstractResource
 {
-    public function generateAction(Request $request)
+    public function get(ApiRequest $request, $type, $token)
     {
-        $currentUser = $this->getCurrentUser();
-        if (!$currentUser->isLogin()) {
-            $this->createNewException(UserException::UN_LOGIN());
+        if ('question_analysis' == $type) {
+            return $this->generateQuestionAnalysis($token);
         }
+
+        return [];
     }
 
-    public function generateWithTokenAction($token)
+    public function add(ApiRequest $request, $type)
+    {
+        if ('question_analysis' == $type) {
+        }
+
+        return [];
+    }
+
+    private function generateQuestionAnalysis($token)
     {
         $currentUser = $this->getCurrentUser();
         if (!$currentUser->isLogin()) {
-            $this->createNewException(UserException::UN_LOGIN());
+            throw UserException::UN_LOGIN();
         }
-        $token = $this->getTokenService()->verifyToken('question_ai_analysis', $token);
+        $token = $this->getTokenService()->verifyToken(TokenType::QUESTION_AI_ANALYSIS, $token);
         if (empty($token)) {
-            $this->createNewException(TokenException::TOKEN_INVALID());
+            throw TokenException::TOKEN_INVALID();
         }
         if ($currentUser->getId() != $token['userId']) {
-            $this->createNewException(TokenException::NOT_MATCH_USER());
+            throw TokenException::NOT_MATCH_USER();
         }
         $question = $this->getItemService()->getQuestion($token['data']['questionId']);
         if (empty($question)) {
-            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
+            throw QuestionException::NOTFOUND_QUESTION();
         }
-        $item = $this->getItemService()->getItem($question['item_id']);
+        $item = $this->getItemService()->getItemIncludeDeleted($question['item_id']);
 
         return $this->createStreamedResponse($this->makePrompt($item, $question));
     }
 
     private function createStreamedResponse($prompt)
     {
-        $aiAnswerService = $this->getAIAnswerService();
-        $response = new StreamedResponse(
-            function () use ($aiAnswerService, $prompt) {
-                $aiAnswerService->generateAnswer($prompt);
+        $aiService = $this->getAIService();
+
+        return new StreamedResponse(
+            function () use ($aiService, $prompt) {
+                $aiService->generateAnswer($prompt);
             },
             200,
             [
@@ -60,9 +70,6 @@ class QuestionAIAnalysisController extends BaseController
                 'X-Accel-Buffering' => 'no',
             ]
         );
-        $response->send();
-
-        return $response;
     }
 
     private function makePrompt($item, $question)
@@ -71,13 +78,15 @@ class QuestionAIAnalysisController extends BaseController
             $answer = implode($question['answer']);
             $options = '';
             $key = 'single_choice' === $item['type'] ? 'radio' : 'checkbox';
-            foreach (array_column($item['response_points'], $key) as $responsePoint) {
-                $options .= "{$responsePoint['val']}.{$responsePoint['tet']}\n";
+            foreach (array_column($question['response_points'], $key) as $responsePoint) {
+                $options .= "{$responsePoint['val']}.{$responsePoint['text']}\n";
             }
+
             return "有一道选择题，题干内容是： {{$question['stem']}}\n有以下选项：\n{$options}\n正确答案是{$answer}。\n假设你是该题的出题人，请根据以上内容为这道选择题生成解析，解析的长度不要超出500字符，在你的解析中，只有选项{$answer}是正确的，其他选项都是错误的，请不要出现其他选项是正确的这样的表述。";
         }
         if ('determine' == $item['type']) {
             $answer = 'T' == $question['answer'][0] ? '正确' : '错误';
+
             return "有一道判断题，题干内容是：{{$question['stem']}}\n答案是{$answer}。假设你是该题的出题人，请根据以上内容为这道判断题生成解析，解析的长度不要超出500字符。";
         }
         //填空题
@@ -96,7 +105,7 @@ class QuestionAIAnalysisController extends BaseController
      */
     protected function getTokenService()
     {
-        return $this->createService('User:TokenService');
+        return $this->service('User:TokenService');
     }
 
     /**
@@ -104,14 +113,14 @@ class QuestionAIAnalysisController extends BaseController
      */
     protected function getItemService()
     {
-        return $this->createService('ItemBank:Item:ItemService');
+        return $this->service('ItemBank:Item:ItemService');
     }
 
     /**
-     * @return AnswerService
+     * @return AIService
      */
-    protected function getAIAnswerService()
+    protected function getAIService()
     {
-        return $this->createService('AI:AnswerService');
+        return $this->service('AI:AIService');
     }
 }

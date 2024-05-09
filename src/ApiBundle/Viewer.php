@@ -21,14 +21,14 @@ class Viewer
         $isEnvelop = $request->query->get('envelope', false);
 
         if ($isEnvelop) {
-            $result = array(
+            $result = [
                 'status' => $status,
-                'headers' => array(),
+                'headers' => [],
                 'response' => $result,
-            );
+            ];
         }
 
-        $response = new JsonResponse($result, $status);
+        $response = $result instanceof Response ? $result : new JsonResponse($result, $status);
         $response->headers->set('Access-Control-Allow-Origin', '*');
 
         return $response;
