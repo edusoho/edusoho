@@ -17,6 +17,8 @@
 <script>
 import * as types from '@/store/mutation-types';
 import { mapMutations, mapState } from 'vuex';
+import Api from '@/api';
+import initShare from '@/utils/weiixn-share-sdk';
 
 export default {
   data() {
@@ -33,6 +35,9 @@ export default {
       reload: this.reload,
       language: this.language
     };
+  },
+  created() {
+    this.getSetting();
   },
   methods: {
     ...mapMutations({
@@ -57,6 +62,25 @@ export default {
       this.$nextTick(() => {
         this.isRouterAlive = true;
       });
+    },
+
+    async getSetting() {
+      await Api.getSettings({
+        query: {
+          type: 'site',
+        },
+      }).then(res => {
+          const shareMessage = {
+            title: res.name,
+            link: window.location.href.split('#')[0] + '#' + this.$route.path,
+            imgUrl: res.logo,
+            desc: res.slogan
+          }
+          this.share(shareMessage);
+        }) 
+    },
+    share(shareMessage) {
+      initShare({ ...shareMessage });
     },
   },
   computed: {
@@ -102,6 +126,7 @@ export default {
         this.setNavbarTitle(navbarTitle);
 
         document.title = this.settingsName;
+
       },
     },
   },
