@@ -12,7 +12,7 @@
     {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}<span class="number mls">{{ taskNum }}</span>：
 {% endif %}
 
-<div style="width: 510px; display: inline-block; vertical-align: top;">
+<div style="width: 460px; display: inline-block; vertical-align: top;">
 <span class="display-text {% if isShowText %}hidden{% endif %}">
   {% if displayText|default('') != '' %}
     {{displayText|raw}}
