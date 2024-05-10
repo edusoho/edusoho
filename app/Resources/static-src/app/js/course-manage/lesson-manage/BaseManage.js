@@ -279,9 +279,9 @@ export default class Manage {
     });
     $.post(this.$element.data('sortUrl'), { ids: ids }, (response) => {
       if (response.refresh) {
-         window.location.reload();
+        window.location.reload();
       }
-      
+
       if (self.$element.data('multiClass')) {
         window.location.reload();
       }
