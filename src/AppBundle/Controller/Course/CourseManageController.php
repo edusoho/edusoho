@@ -1111,12 +1111,13 @@ class CourseManageController extends BaseController
 
     private function checkSortAble($ids, $courseId)
     {
-        $taskCount = $this->getTaskService()->countTasks(['courseId' => $courseId]);
-        $filteredIds = array_filter($ids, function ($id) {
-            return false !== strpos($id, 'chapter');
-        });
-
-        return count($filteredIds) != $taskCount;
+        return true;
+//        $taskCount = $this->getTaskService()->countTasks(['courseId' => $courseId]);
+//        $filteredIds = array_filter($ids, function ($id) {
+//            return false !== strpos($id, 'chapter');
+//        });
+//
+//        return count($filteredIds) != $taskCount;
     }
 
     private function sortMarkerStats(&$stats, $request)
