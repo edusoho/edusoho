@@ -18,12 +18,12 @@
                     <share :customized-class="goodsClass"
                            :title="goods.title|removeHtml"
                            :summary="goods.summary|removeHtml"
-                           :message="`我正在学习《${goods.title|removeHtml}》，收获巨大哦，一起来学习吧！`"
+                           :message="`我正在学习《${goods.title}》，收获巨大哦，一起来学习吧！`|removeHtml"
                            :picture="goods.images.large"
                            :url="currentUrl"
                            :type="'courseSet'"
                            :goods="goods">{{ 'site.share'|trans }}
-                           
+
                     </share>
                     <favorite :is-favorite="goods.isFavorite" :target-type="'goods'" :goods="goods"
                               :target-id="goods.id"></favorite>
@@ -128,7 +128,7 @@
                 default: () => {},
             },
             goodsSetting: {
-                type: Object,
+                type: [Object, Array],
                 default: () => {},
             },
             isUserLogin: {
@@ -257,7 +257,6 @@
         },
         data() {
             return {
-                goods: this.goods,
                 product: this.goods ? this.goods.product : null,
                 buyableModes: {
                     'date': Translator.trans('classroom.expiry_mode_end_date'),
@@ -281,15 +280,15 @@
                 if(this.goods.type == 'exercise') {
                     return 'js-handleExerciseOnMessage'
                 }
-                
+
             },
             goodsClass() {
                 if (!this.goods.isMember) {
-                    
+
                     if(this.goods.type == 'course' && this.goods.product.target.status == 'closed') {
                         return 'detail-left__text-share js-handleCoursePage'
                     }
-                    
+
                     if(this.goods.type == 'classroom' && this.goods.product.target.status == 'closed'){
                         return 'detail-left__text-share js-handleClassroomPage'
                     }
@@ -298,7 +297,7 @@
                 if(this.goods.type == 'course' && this.goods.product.target.status == 'closed') {
                     return 'detail-left__text-share js-handleLearnOnMessage'
                 }
-                
+
                 if(this.goods.type == 'classroom' && this.goods.product.target.status == 'closed'){
                     return 'detail-left__text-share js-handleClassroomOnMessage'
                 }
@@ -307,7 +306,6 @@
             }
         },
         mounted() {
-            console.log(this.goods)
             this.remainTime();
             this.getDrpInfo();
         },

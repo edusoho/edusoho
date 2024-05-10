@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% do script(['libs/jquery-countdown.js', 'app/js/goods/show/index.js', 'app/js/courseset/show/tasks/index.js']) %}
+{% do script(['libs/jquery-countdown.js', 'app/js/goods/show/index.js']) %}
 
 {% block title %}{{ goods.title|raw }} - {{ parent() }}{% endblock %}
 {% block full_content %}

@@ -11186,3 +11186,13 @@ external.application.login.open: Turned on
 external.application.login.closed: Close
 admin.system.api_setting.tips: AppKey And SecretKey Shoud Be Used EduSoho API Auth
 admin.setting.api_secret.reset_confirm_message: The old SecretKey will become invalid after being res
+
+mobile.middle_page.top: Put the school in your pocket
+mobile.middle_page.open: Click to open
+mobile.middle_page.browser: Click on the top right... In "Open in Browser" continue to jump
+task.app_modal.title: Only learning in App
+task.app_modal.intro: Please download / open 
+task.app_modal.app: APP
+task.app_modal.learning: Continue learning
+task.app_modal.use: Use mobile phone
+task.app_modal.sweep: sweep

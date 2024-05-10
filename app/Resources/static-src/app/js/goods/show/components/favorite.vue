@@ -34,7 +34,7 @@
             },
 
             targetId: {
-                type: Number,
+                type: [Number, String],
                 required: true
 
             },

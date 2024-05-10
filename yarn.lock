@@ -2762,10 +2762,10 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codeages-design@^0.1.14:
-  version "0.1.14"
-  resolved "https://registry.yarnpkg.com/codeages-design/-/codeages-design-0.1.14.tgz#ee9307f83565dd0b0df1ea700b1e25707581e3c0"
-  integrity sha512-LfAjH+eXlyHqFAV1873REHElxPY/SeGRGqy9lV4HikCiKXVcqbLxI/Qz/0NPIoYH2VaI3wu+sJ5Dqte/vNDGIg==
+codeages-design@^0.1.16:
+  version "0.1.16"
+  resolved "https://registry.npmmirror.com/codeages-design/-/codeages-design-0.1.16.tgz#01feb1af81de72138ffb30fb7a37862542c656e1"
+  integrity sha512-72BZibWCLUVKOg1KPhIRdVVHfnvazmGb02HrHHQEua3qfsaS5ZLwYhLjmpyW4ENn9lbPbXX0ZrS0u1BaP2L6Eg==
   dependencies:
     jquery "^3.2.1"
 

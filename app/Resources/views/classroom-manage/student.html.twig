@@ -23,8 +23,32 @@
   </form>
 
   {% if students|length > 0 %}
-    <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('classroom_manage_member_deadline', {classroomId: classroom.id}) }}">{{ 'classroom.student_batch_update_expiry_date'|trans }}</button>
-    <button id="batch-remove" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('classroom_manage_student_batch_remove', {id: classroom.id}) }}">{{ 'classroom.student_batch_remove'|trans }}</button>
+    <button id="batch-remove" type="button" class="cd-btn cd-btn-default mr8" data-url="{{ path('classroom_manage_student_batch_remove', {id: classroom.id}) }}">{{ 'classroom.student_batch_remove'|trans }}</button>
+
+    <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
+      <button type="button" class="cd-btn cd-btn-default dropdown-toggle">
+        {{ 'course.members_manage.official_student.batch_upload_deadline'|trans }}
+        <i class="cd-icon cd-icon-arrow-down cd-text-sm"></i>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a id="batch-update-expiry-day"
+             class="clearfix"
+             href="javascript:;"
+             data-url="{{ path('classroom_manage_member_deadline', {classroomId: classroom.id}) }}">
+            {{ 'classroom.student_batch_update_expiry_date'|trans }}
+          </a>
+        </li>
+        <li>
+          <a id="all-update-expiry-day"
+             class="clearfix"
+             href="javascript:;"
+             data-url="{{ path('classroom_manage_member_deadline', {classroomId: classroom.id}) }}">
+            {{ 'course.members_manage.official_student.all_update_deadline'|trans }}
+          </a>
+        </li>
+      </ul>
+    </div>
   {% endif %}
 
   <table class="table table-striped" id="course-student-list">

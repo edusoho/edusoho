@@ -6,17 +6,18 @@
 {% set modal_class = 'cd-modal-dialog task-only-app-modal' %}
 
 {% block title %}
-  扫码下载
+  {{ 'task.app_modal.title'|trans}}
 {% endblock %}
 
 {% block body %}
+  <input type="hidden" name="courseId" value="{{ courseId }}">
   <div>
   <div class="modal-intro">
     <span>
-      请下载 /
+      {{ 'task.app_modal.intro'|trans }} 
     </span>
-    <span class="modal-app">打开App</span>
-    <span>后学习</span>
+    <span class="modal-app">{{ 'task.app_modal.app'|trans }}</span>
+    <span>{{ 'task.app_modal.learning'|trans }}</span>
   </div>
   <div class="download-app">
     <div class="download-app-qrcode">
@@ -30,8 +31,8 @@
 <div class="modal-guide flex justify-center items-center">
   <img class="mobile-wechat-qrcode" src="{{ asset('static-dist/app/img/task/wechat-qrcode.png') }}" alt="" />
   <div class="flex flex-col items-start ml8">
-  <span>打开微信</span>
-  <span>扫一扫</span>
+  <span>{{ 'task.app_modal.use'|trans }}</span>
+  <span>{{ 'task.app_modal.sweep'|trans }}</span>
   </div>
 </div>
 {% endblock %}

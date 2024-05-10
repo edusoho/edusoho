@@ -185,14 +185,16 @@ class TaskController extends BaseController
         return $this->getActivityService()->getActivityConfig($activity['mediaType']);
     }
 
-    public function downloadAppShowAction()
+    public function downloadAppShowAction(Request $request)
     {
         $meCount = $this->setting('meCount', []);
+        $courseId = $request->get('courseId');
 
         return $this->render(
             'task/app-modal.html.twig',
             [
                 'mobileCode' => empty($meCount['mobileCode']) ? 'zhixiang' : $meCount['mobileCode'],
+                'courseId' => $courseId,
             ]
         );
     }

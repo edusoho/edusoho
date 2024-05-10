@@ -4200,6 +4200,16 @@ mobile.step_two: >
   <span class="member">2</span>第二步: 打开知享学堂APP，扫描网校二维码。
 mobile.vip_free_study: 会员免费买
 
+mobile.middle_page.top: 把学校装进口袋
+mobile.middle_page.open: 点击打开
+mobile.middle_page.browser: 点击右上角...在"浏览器中打开"继续跳转
+task.app_modal.title: 仅支持 APP 学习
+task.app_modal.intro: 请下载 / 打开 
+task.app_modal.app: APP
+task.app_modal.learning: 后继续学习
+task.app_modal.use: 使用手机
+task.app_modal.sweep: 扫一扫
+
 # 客服
 customer_service: 在线客户服务
 customer_service.status: 在线客户服务

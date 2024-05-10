@@ -273,6 +273,8 @@ t.add("activity.video_manage.other_finish_detail", "\u5b66\u4e60\u5230\u6700\u54
 t.add("activity.video_manage.length_required_error_hint", "\u8bf7\u8f93\u5165\u975e\u8d1f\u6574\u6570\uff0c\u5176\u4e2d\u79d2\u6570\u53ea\u80fd\u57280-59\u4e4b\u95f4", "js", "zh_CN");
 t.add("activity.video_manage.media_error_hint", "\u8bf7\u4e0a\u4f20\u6216\u9009\u62e9\u89c6\u9891\u6587\u4ef6", "js", "zh_CN");
 t.add("activity.video.try_watch_finish_hint", "\u514d\u8d39\u8bd5\u770b\u7ed3\u675f\uff0c\u8d2d\u4e70\u540e\u53ef\u5b8c\u6574\u89c2\u770b", "js", "zh_CN");
+t.add("activity.video.only_can_app_title", "\u540e\u53f0\u914d\u7f6e\u5df2\u66f4\u6539\uff0c\u8be5\u8bfe\u7a0b\u65e0\u6cd5\u64ad\u653e", "js", "zh_CN");
+t.add("activity.video.only_can_app_desc", "\u8bf7\u524d\u5f80App\u7ee7\u7eed\u8fdb\u884c\u5b66\u4e60", "js", "zh_CN");
 t.add("activity.video.file_limit_size", "\u6587\u4ef6\u5927\u5c0f\u4e0d\u80fd\u8d85\u8fc7%size%", "js", "zh_CN");
 t.add("activity.manage.choose_teacher_hint", "\u8bf7\u9009\u62e9\u8001\u5e08", "js", "zh_CN");
 t.add("activity.manage.finished_tips", "<span class=\"color-primary\">\u606d\u559c\uff01\u4f60\u5df2\u5b8c\u6210\u8be5\u4efb\u52a1<\/span>\n", "js", "zh_CN");

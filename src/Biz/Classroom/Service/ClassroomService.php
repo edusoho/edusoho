@@ -186,6 +186,10 @@ interface ClassroomService
 
     public function findTeacherCanManagerClassRoomCourseSet($classroomId);
 
+    public function updateMembers($conditions, $updateFields);
+
+    public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType);
+
     public function updateMember($id, $member);
 
     public function searchMemberCount($conditions);

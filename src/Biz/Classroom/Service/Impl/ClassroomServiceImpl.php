@@ -2256,6 +2256,18 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->findByUserId($userId);
     }
 
+    public function updateMembers($conditions, $updateFields)
+    {
+        return $this->getClassroomMemberDao()->update($conditions, $updateFields);
+    }
+
+    public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType)
+    {
+        $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
+
+        return $this->getClassroomMemberDao()->changeMembersDeadlineByClassroomId($classroomId, $updateDate);
+    }
+
     public function updateMember($id, $member)
     {
         return $this->getClassroomMemberDao()->update($id, $member);
