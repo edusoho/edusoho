@@ -254,10 +254,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
         }
 
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
-        $copiedTasks = $this->getTaskDao()->findByCopyIdSAndLockedCourseIds(
-            $this->taskBatchUpdateHelper->findIdentifyKeys('id'),
-            $copiedCourseIds
-        );
+        $copiedTasks = $this->getTaskDao()->search(['copyIds' => $this->taskBatchUpdateHelper->findIdentifyKeys('id') ?: [-1], 'courseIds' => $copiedCourseIds], [], 0, PHP_INT_MAX, ['id', 'copyId', 'categoryId']);
 
         foreach ($copiedTasks as $copiedTask) {
             $newFields = $this->taskBatchUpdateHelper->get('id', $copiedTask['copyId']);
