@@ -3,6 +3,7 @@
 namespace Biz\Question\Traits;
 
 use AppBundle\Common\TimeMachine;
+use Biz\System\Service\SettingService;
 use Biz\User\Constant\TokenType;
 use Biz\User\Service\TokenService;
 
@@ -75,6 +76,14 @@ trait QuestionAIAnalysisTrait
         }
 
         return $tokenMap;
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->service('System:SettingService');
     }
 
     /**
