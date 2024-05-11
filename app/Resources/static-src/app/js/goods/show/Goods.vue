@@ -24,7 +24,7 @@
                             <li :class="howActive == 2 ? 'active' : ''"><a href="#info-left-2">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
                             </li>
                             <li v-if="ugcReviewSetting.enable_review == 1
-                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" 
+                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))"
                                  :class="howActive == 3 ? 'active' : ''">
                                 <a href="#info-left-3">{{ 'goods.show_page.tab.reviews'|trans }}</a>
                             </li>
@@ -135,9 +135,7 @@
                 timerClick: null,
                 timerScroll: null,
                 goodsId: window.location.pathname.replace(/[^0-9]/ig, ""),
-                goods: {},
                 currentSku: {},
-                componentsData: {},
                 searchResult: []
             }
         },
@@ -147,15 +145,15 @@
                 default: null,
             },
             componentsData: {
-                type: Array,
+                type: Object,
                 default: null,
             },
             currentUserId: {
-                type: Number,
+                type: String,
                 default: null
             },
             targetId: {
-                type: Number,
+                type: [Number, String],
                 default: null
             },
             isUserLogin: {
@@ -167,11 +165,11 @@
                 default: null,
             },
             goodsSetting: {
-                type: Object,
+                type: [Object, Array],
                 default: null,
             },
             ugcReviewSetting: {
-                type: Object,
+                type: [Object, Array],
                 default: null,
             },
             activityMetas: {

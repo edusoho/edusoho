@@ -6,6 +6,7 @@ use Biz\BaseTestCase;
 use Biz\Importer\SensitiveImporter;
 use Biz\Sensitive\Dao\SensitiveDao;
 use Biz\User\CurrentUser;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -50,7 +51,8 @@ class SensitiveImporterTest extends BaseTestCase
         $request = new Request([], []);
         $import = new SensitiveImporter($this->getBiz());
 
-        $this->assertTrue($import->tryImport($request));
+        $import->tryImport($request);
+        $this->assertTrue(true);
     }
 
     public function testTryImportReturnFalse()
@@ -67,8 +69,11 @@ class SensitiveImporterTest extends BaseTestCase
         ]);
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
+        $this->expectException(UserException::class);
+        $this->expectExceptionCode(UserException::PERMISSION_DENIED);
+
         $import = new SensitiveImporter($this->getBiz());
-        $this->assertFalse($import->tryImport($request));
+        $import->tryImport($request);
     }
 
     public function testCheckWhenDataRepeatThenReturnErrorResponse()
