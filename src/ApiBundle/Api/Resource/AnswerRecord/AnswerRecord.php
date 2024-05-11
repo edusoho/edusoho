@@ -89,7 +89,7 @@ class AnswerRecord extends AbstractResource
             foreach ($section['items'] as &$item) {
                 foreach ($item['questions'] as &$question) {
                     if ($question['aiAnalysisEnable']) {
-                        $question['aiAnalysisTokens'] = $aiAnalysisTokens[$question['id']];
+                        $question['aiAnalysisToken'] = $aiAnalysisTokens[$question['id']];
                     }
                 }
             }
