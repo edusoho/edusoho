@@ -140,38 +140,13 @@ class TestpaperWrapper
 
     public function wrapAIAnalysis($items)
     {
-        $aiAnalysisSetting = $this->getQuestionAIAnalysisSetting();
-        $aiAnalysisEnableQuestionIds = [];
         foreach ($items as &$item) {
             if ('material' == $item['type']) {
                 foreach ($item['subs'] as &$question) {
                     $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysis($question, $item);
-                    if ($question['aiAnalysisEnable']) {
-                        $aiAnalysisEnableQuestionIds[] = $question['id'];
-                    }
                 }
             } else {
                 $item['aiAnalysisEnable'] = $this->canGenerateAIAnalysis($item);
-                if ($item['aiAnalysisEnable']) {
-                    $aiAnalysisEnableQuestionIds[] = $item['id'];
-                }
-            }
-        }
-        if (empty($aiAnalysisSetting['student_enabled'])) {
-            return $items;
-        }
-        $aiAnalysisTokens = $this->generateAIAnalysisTokens($aiAnalysisEnableQuestionIds);
-        foreach ($items as &$item) {
-            if ('material' == $item['type']) {
-                foreach ($item['subs'] as &$question) {
-                    if ($question['aiAnalysisEnable']) {
-                        $question['aiAnalysisToken'] = $aiAnalysisTokens[$question['id']];
-                    }
-                }
-            } else {
-                if ($item['aiAnalysisEnable']) {
-                    $item['aiAnalysisToken'] = $aiAnalysisTokens[$item['id']];
-                }
             }
         }
 

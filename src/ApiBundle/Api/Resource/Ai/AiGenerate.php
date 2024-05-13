@@ -6,50 +6,46 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\AI\Service\AIService;
 use Biz\Question\QuestionException;
-use Biz\User\Constant\TokenType;
-use Biz\User\Service\TokenService;
-use Biz\User\TokenException;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AiGenerate extends AbstractResource
 {
-    public function get(ApiRequest $request, $type, $token)
-    {
-        if ('question_analysis' == $type) {
-            return $this->generateQuestionAnalysis($token);
-        }
-
-        return [];
-    }
-
     public function add(ApiRequest $request, $type)
     {
         if ('question_analysis' == $type) {
+            return $this->generateQuestionAnalysis($request->request->all());
         }
 
         return [];
     }
 
-    private function generateQuestionAnalysis($token)
+    private function generateQuestionAnalysis($params)
     {
-        $currentUser = $this->getCurrentUser();
-        if (!$currentUser->isLogin()) {
+        if (!$this->getCurrentUser()->isLogin()) {
             throw UserException::UN_LOGIN();
         }
-        $token = $this->getTokenService()->verifyToken(TokenType::QUESTION_AI_ANALYSIS, $token);
-        if (empty($token)) {
-            throw TokenException::TOKEN_INVALID();
+        if ('student' == $params['role']) {
+            return $this->generateQuestionAnalysisForStudent($params);
         }
-        if ($currentUser->getId() != $token['userId']) {
-            throw TokenException::NOT_MATCH_USER();
+
+        return [];
+    }
+
+    private function generateQuestionAnalysisForStudent($params)
+    {
+        $answerRecord = $this->getAnswerRecordService()->get($params['answerRecordId']);
+        if (empty($answerRecord) || $this->getCurrentUser()->getId() != $answerRecord['user_id']) {
+            throw UserException::PERMISSION_DENIED();
         }
-        $question = $this->getItemService()->getQuestion($token['data']['questionId']);
+        $question = $this->getItemService()->getQuestion($params['questionId']);
         if (empty($question)) {
             throw QuestionException::NOTFOUND_QUESTION();
         }
         $item = $this->getItemService()->getItemIncludeDeleted($question['item_id']);
+        //todo 校验answerRecordId和questionId是否匹配
 
         return $this->createStreamedResponse($this->makePrompt($item, $question));
     }
@@ -101,11 +97,11 @@ class AiGenerate extends AbstractResource
     }
 
     /**
-     * @return TokenService
+     * @return AnswerRecordService
      */
-    protected function getTokenService()
+    protected function getAnswerRecordService()
     {
-        return $this->service('User:TokenService');
+        return $this->service('ItemBank:Answer:AnswerRecordService');
     }
 
     /**

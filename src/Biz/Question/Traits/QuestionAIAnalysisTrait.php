@@ -2,10 +2,7 @@
 
 namespace Biz\Question\Traits;
 
-use AppBundle\Common\TimeMachine;
 use Biz\System\Service\SettingService;
-use Biz\User\Constant\TokenType;
-use Biz\User\Service\TokenService;
 
 trait QuestionAIAnalysisTrait
 {
@@ -51,46 +48,11 @@ trait QuestionAIAnalysisTrait
         return true;
     }
 
-    private function generateAIAnalysisTokens($questionIds)
-    {
-        $tokenMap = [];
-        $tokenType = TokenType::QUESTION_AI_ANALYSIS;
-        $tokens = $this->getTokenService()->findTokensByUserIdAndType($this->getCurrentUser()->getId(), $tokenType);
-        foreach ($tokens as $token) {
-            if (in_array($token['data']['questionId'], $questionIds)) {
-                $tokenMap[$token['data']['questionId']] = $token['token'];
-            }
-        }
-        $questionIds = array_diff($questionIds, array_keys($tokenMap));
-        $args = [];
-        foreach ($questionIds as $questionId) {
-            $args[] = [
-                'data' => ['questionId' => $questionId],
-                'userId' => $this->getCurrentUser()->getId(),
-                'duration' => TimeMachine::ONE_DAY,
-            ];
-        }
-        $tokens = $this->getTokenService()->makeTokens($tokenType, $args);
-        foreach ($tokens as $token) {
-            $tokenMap[$token['data']['questionId']] = $token['token'];
-        }
-
-        return $tokenMap;
-    }
-
     /**
      * @return SettingService
      */
     protected function getSettingService()
     {
         return $this->service('System:SettingService');
-    }
-
-    /**
-     * @return TokenService
-     */
-    protected function getTokenService()
-    {
-        return $this->service('User:TokenService');
     }
 }

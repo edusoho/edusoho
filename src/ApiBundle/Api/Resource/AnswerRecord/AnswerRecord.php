@@ -69,28 +69,10 @@ class AnswerRecord extends AbstractResource
 
     private function wrapAIAnalysis($assessment)
     {
-        $aiAnalysisSetting = $this->getQuestionAIAnalysisSetting();
-        $aiAnalysisEnableQuestionIds = [];
         foreach ($assessment['sections'] as &$section) {
             foreach ($section['items'] as &$item) {
                 foreach ($item['questions'] as &$question) {
                     $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysis($question, $item);
-                    if ($question['aiAnalysisEnable']) {
-                        $aiAnalysisEnableQuestionIds[] = $question['id'];
-                    }
-                }
-            }
-        }
-        if (empty($aiAnalysisSetting['student_enabled'])) {
-            return $assessment;
-        }
-        $aiAnalysisTokens = $this->generateAIAnalysisTokens($aiAnalysisEnableQuestionIds);
-        foreach ($assessment['sections'] as &$section) {
-            foreach ($section['items'] as &$item) {
-                foreach ($item['questions'] as &$question) {
-                    if ($question['aiAnalysisEnable']) {
-                        $question['aiAnalysisToken'] = $aiAnalysisTokens[$question['id']];
-                    }
                 }
             }
         }
