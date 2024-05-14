@@ -1,0 +1,41 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% do script(['app/js/admin-v2/teach/question-ai-analysis/index.js']) %}
+
+{% set menu = 'admin_v2_question_ai_analysis' %}
+
+{% block main %}
+  <form class="form-horizontal" method="post" id="form" data-url="{{ path('admin_v2_question_ai_analysis') }}" novalidate>
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label>{{ 'admin_v2.question.ai_analysis.teacher_ebable'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 pts">
+          <label class="form-switch {% if aiAnalysisSetting.teacher_enabled|default(0) %}checked{% endif %}">
+            <input type="checkbox" data-toggle="switch">
+            <input type="hidden" name="teacher_enabled" value="{{ aiAnalysisSetting.teacher_enabled|default(0) }}">
+          </label>
+          <p class="help-block">{{ 'admin_v2.question.ai_analysis.teacher_ebable.tip'|trans }}</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label>{{ 'admin_v2.question.ai_analysis.student_ebable'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 pts">
+          <label class="form-switch {% if aiAnalysisSetting.student_enabled|default(0) %}checked{% endif %}">
+            <input type="checkbox" data-toggle="switch">
+            <input type="hidden" name="student_enabled" value="{{ aiAnalysisSetting.student_enabled|default(0) }}">
+          </label>
+          <p class="help-block">{{ 'admin_v2.question.ai_analysis.student_ebable.tip'|trans }}</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}

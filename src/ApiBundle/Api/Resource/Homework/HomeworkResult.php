@@ -142,6 +142,7 @@ class HomeworkResult extends AbstractResource
         $answerReport = $this->getAnswerReportService()->getSimple($homeworkRecord['answer_report_id']);
         $homeworkResult = $testpaperWrapper->wrapTestpaperResult($homeworkRecord, $homework, $scene, $answerReport);
         $homeworkResult['items'] = array_values($testpaperWrapper->wrapTestpaperItems($homework, $questionReports));
+        $homeworkResult['items'] = $testpaperWrapper->wrapAIAnalysis($homeworkResult['items']);
         $homeworkResult['items'] = $this->fillItems($homeworkResult['items'], $questionReports);
         $homeworkResult['rightRate'] = $this->getRightRate($homeworkResult['items']);
 

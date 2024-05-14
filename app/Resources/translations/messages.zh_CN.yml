@@ -12493,3 +12493,7 @@ external.application.login.open: 开启
 external.application.login.closed: 关闭
 admin.system.api_setting.tips: AppKey与SecretKey 用于外部应用调用 EduSoho 教培系统 API接口鉴权
 admin.setting.api_secret.reset_confirm_message: 重置后旧SecretKey将失效
+admin_v2.question.ai_analysis.teacher_ebable: AI题目解析（教师端）
+admin_v2.question.ai_analysis.teacher_ebable.tip: 开启后，教师创建/导入题目时支持AI生成题目解析，生成的内容支持编辑修改。
+admin_v2.question.ai_analysis.student_ebable: AI题目解析（学员端）
+admin_v2.question.ai_analysis.student_ebable.tip: 开启后，教师未设置解析的题目，学员可自主生成AI解析。

@@ -3,6 +3,7 @@
 namespace Biz\Testpaper\Wrapper;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Question\Traits\QuestionAIAnalysisTrait;
 use Biz\Question\Traits\QuestionFormulaImgTrait;
 use Codeages\Biz\ItemBank\Item\AnswerMode\ChoiceAnswerMode;
 use Codeages\Biz\ItemBank\Item\AnswerMode\RichTextAnswerMode;
@@ -16,6 +17,7 @@ use Topxia\Service\Common\ServiceKernel;
 class TestpaperWrapper
 {
     use QuestionFormulaImgTrait;
+    use QuestionAIAnalysisTrait;
 
     protected $modeToType = [
         SingleChoiceAnswerMode::NAME => 'single_choice',
@@ -130,6 +132,21 @@ class TestpaperWrapper
                 if (1 != $item['isDelete']) {
                     $items[$item['id']] = $this->wrapItem($item);
                 }
+            }
+        }
+
+        return $items;
+    }
+
+    public function wrapAIAnalysis($items)
+    {
+        foreach ($items as &$item) {
+            if ('material' == $item['type']) {
+                foreach ($item['subs'] as &$question) {
+                    $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysis($question, $item);
+                }
+            } else {
+                $item['aiAnalysisEnable'] = $this->canGenerateAIAnalysis($item);
             }
         }
 
@@ -272,11 +289,28 @@ class TestpaperWrapper
         return $metas;
     }
 
+    private function getCurrentUser()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['user'];
+    }
+
     /**
      * @return AttachmentService
      */
-    protected function getAttachmentService()
+    private function getAttachmentService()
     {
-        return ServiceKernel::instance()->createService('ItemBank:Item:AttachmentService');
+        return $this->service('ItemBank:Item:AttachmentService');
+    }
+
+    private function service($alias)
+    {
+        return $this->getBiz()->service($alias);
+    }
+
+    private function getBiz()
+    {
+        return ServiceKernel::instance()->getBiz();
     }
 }
