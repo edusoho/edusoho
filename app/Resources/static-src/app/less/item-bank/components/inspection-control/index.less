@@ -1,0 +1,296 @@
+.ibs-inspection-modal {
+    .ibs-loading-content {
+        min-height: 425px;
+        padding-top: 140px;
+        .ibs-loading-text {
+            margin-top: 33px;
+            color: @ibs-dark-major;
+            > p {
+                width: 190px;
+                margin: 0 auto;
+                font-size:16px;
+                line-height:24px;
+            }
+        }
+        .ibs-loading-btn {
+            margin-top: 16px;
+        }
+    }
+    .ibs-capture-content {
+        min-height: 356px;
+        &.ibs-capture-ready {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            &.actived {
+                position: relative;
+                left: 0px;
+                top: 0px;
+            }
+        }
+        .ibs-capture-area {
+            position: relative;
+            width: 322px;
+            height: 242px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            margin: 0 auto;
+            .inspection-collect-video {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 320px;
+                height: 240px;
+                z-index: 100;
+            }
+            .inspection-collect-outline {
+                position: absolute;
+                top: 40px;
+                left: 80px;
+                z-index: 101;
+                width: 160px;
+                height: 160px;
+            }
+            .inspection-collect-image {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 320px;
+                height: 240px;
+                z-index: 101;
+            }
+            .inspection-collect-starting {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                line-height: 242px;
+                text-align: center;
+                color: #999;
+            }
+        }
+        .ibs-capture-results {
+            margin: 0 auto;
+            width: 93px;
+            height: 242px;
+            .inspection-collect-result {
+                width: 93px;
+                height: 70px;
+                line-height: 70px;
+                text-align: center;
+                border: 1px solid #eee;
+                background: #f8f8f8;
+                .inspection-collect-result-label {
+                    font-size: 14px;
+                    color: #ccc;
+                }
+                img {
+                    width: 93px;
+                    height: 70px;
+                }
+            }
+            .inspection-collect-result--mt {
+                &:first-child {
+                    margin-top: 0;
+                }
+                margin-top: 16px;
+            }
+        }
+        .ibs-capture-hint {
+            margin: 0 auto;
+            padding: 15px;
+            width: 322px;
+            height: 242px;
+            color: #856404;
+            font-size: 14px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            p {
+                margin: 0 0 10px;
+            }
+        }
+        .ibs-capture-title {
+            color: @ibs-dark-major;
+            font-size:16px;
+            margin: 16px 0;
+            font-weight: bolder;
+        }
+        .ibs-capture-tips {
+            padding-left: 32px;
+            margin-top: 12px;
+            .ibs-capture-text {
+                margin: 4px 0;
+                color: @ibs-dark-minor;
+                font-size: 14px;
+                font-weight: bolder;
+            }
+        }
+        .alert-box {
+            margin: 20px 1.5px;
+            height: 70px;
+            .alert {
+                padding: 15px;
+                margin-bottom: 20px;
+                border: 1px solid transparent;
+                border-radius: 4px;
+            }
+            .alert-success {
+                color: #3c763d;
+                background-color: #dff0d8;
+                border-color: #d6e9c6;
+            }
+            .alert-danger {
+                color: #a94442;
+                background-color: #f2dede;
+                border-color: #ebccd1;
+            }
+            .alert-info {
+                color: #31708f;
+                background-color: #d9edf7;
+                border-color: #bce8f1;
+            }
+        }
+        .inspection-collect-actions {
+            margin-bottom: 16px;
+            text-align: center;
+            .btn {
+                display: inline-block;
+                padding: 6px 12px;
+                margin-bottom: 0;
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 1.42857143;
+                text-align: center;
+                white-space: nowrap;
+                vertical-align: middle;
+                -ms-touch-action: manipulation;
+                touch-action: manipulation;
+                cursor: pointer;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                background-image: none;
+                border: 1px solid transparent;
+                border-radius: 4px;
+                outline: none;
+                transition: all 0.3 ease;
+            }
+
+            .btn-primary {
+                color: #fff;
+                background-color: #337ab7;
+                border-color: #2e6da4;
+                &:hover {
+                    background-color: #2e6da4;
+                }
+            }
+            .btn-success {
+                color: #fff;
+                background-color: #5cb85c;
+                border-color: #4cae4c;
+                &:hover {
+                    background-color: #4cae4c;
+                }
+            }
+        }
+    }
+}
+
+.ibs-inspection-loading, .ibs-inspection-error {
+    .ant-modal-footer {
+        display: none;
+    }
+}
+// .ibs-inspection-ready {
+//     &.not-captured {
+//         .ant-modal-footer {
+//             .ant-btn:nth-child(1) {
+//                 display: none;
+//             }
+//         }
+//     }
+// }
+
+
+.ibs-inspection-card {
+    padding: 8px 0px 0;
+    &-tips {
+        display: inline-block;
+        width:146px;
+        height:36px;
+        background:@ibs-brand-success;
+        border-radius:4px;
+        color: #fff;
+        line-height: 34px;
+        font-size:14px;
+    }
+    &-title {
+        font-size:12px;
+        color: @ibs-dark-minor;
+        margin-top: 12px;
+        margin-bottom: 16px;
+    }
+    &-area {
+        position: relative;
+        height: 144px;
+    }
+    &-capture {
+        position: absolute;
+        width: 192px;
+        height: 144px;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        background-color: #eee;
+        &-canvas {
+            position: absolute;
+            width: 192px;
+            height: 144px;
+            left: 0;
+            top: 0;
+        }
+        &-video {
+            width: 192px;
+            height: 144px;
+        }
+    }
+}
+
+// .ibs-card-inspection-show {
+//     & + .ibs-inspection {
+//         .ibs-card--inspection {
+//             position: fixed;
+//             top: 400px;
+//         }
+//     }
+// }
+
+// .ibs-card--inspection {
+//     position: fixed;
+//     top: 156px;
+// }
+
+// 适配倒计时
+// .ibs-assessment-timer--top {
+//     & + .ibs-card {
+//         & + .ibs-inspection {
+//             .ibs-card--inspection {
+//                 position: fixed;
+//                 top: 178px;
+//             }
+//         }
+//     }
+//     & + .ibs-card-inspection-show {
+//         & + .ibs-inspection {
+//             .ibs-card--inspection {
+//                 position: fixed;
+//                 top: 448px;
+//             }
+//         }
+//     }
+
+// }

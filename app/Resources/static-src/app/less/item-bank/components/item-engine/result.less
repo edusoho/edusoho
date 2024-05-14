@@ -1,0 +1,214 @@
+.ibs-result {
+  background-color: #fff;
+  padding: 24px 16px 16px;
+}
+
+.ibs-result-header  {
+  position: relative;
+  width: 80%;
+  &.ibs-result-header--width {
+    width: 100%;
+  }
+  @media (max-width: 480px) {
+    width: 56%;
+  }
+}
+
+.ibs-result-header__title {
+  width: 85%;
+  font-size: 24px;
+  font-weight: 600;
+  color: @ibs-dark-major;
+  line-height: 32px;
+  @media (max-width: 480px) {
+    width: 56%;
+    font-size: 18px;
+  }
+}
+
+.ibs-result-header__info {
+  margin-top: 16px;
+  color: @ibs-dark-minor;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+.ibs-result-header__tag {
+  position: absolute;
+  top: 2px;
+  right: 24px;
+  @media (max-width: 480px) {
+    right: 0;
+  }
+  display: inline-block;
+  padding: 4px 8px;
+  text-align: center;
+  height: 28px;
+  font-weight: 500;
+  line-height: 20px;
+  background-color:rgba(255,136,54,0.1);
+  color: @ibs-brand-warning;
+  border-radius: 4px;
+  font-size: 14px;
+  &.ibs-result-header__tag--success {
+    background-color: rgba(70,195,123,0.1);
+    color: @ibs-brand-success;
+  }
+}
+
+
+.ibs-result-header__score {
+  width: 120px;
+  padding-bottom: 8px;
+  text-align: center;
+  p:first-child {
+    font-size: 32px;
+    font-weight: 600;
+    color: @ibs-brand-warning;
+    line-height: 40px;
+    & + p {
+      color: @ibs-dark-major;
+      font-weight: 600;
+      line-height: 20px;
+      font-size: 14px;
+    }
+  }
+  background: rgba(245,245,245,1);
+  border-radius: 4px;
+}
+
+.ibs-result-tip {
+  margin-top: 16px;
+  padding: 8px 16px;
+  color: @ibs-brand-warning;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  background-color: rgba(255,136,54,0.05);
+}
+
+.ibs-assessment-heading {
+  padding: 16px;
+}
+
+.ibs-assessment-title {
+  padding-bottom: 16px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.ibs-assessment-title__name {
+  width: 85%;
+  font-size: 24px;
+  font-weight: 600;
+  color: @ibs-dark-major;
+  line-height: 32px;
+}
+
+.ibs-assessment-title__tag {
+  display: inline-block;
+  padding: 4px 8px;
+  text-align: center;
+  height: 28px;
+  font-weight: 500;
+  line-height: 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: rgba(70,195,123,0.1);
+  color: @ibs-brand-success;
+}
+
+
+.ibs-assessment-timer {
+  margin-top: 20px;
+  width: 288px;
+  @media (max-width: 1200px) {
+    width: 264px;
+  }
+  padding: 20px 0;
+  font-weight: 400;
+  font-size: 24px;
+  color: #272E3B;
+  background: #fff;
+  margin-bottom: 8px;
+  text-align: center;
+
+  .clock-icon {
+    width: 26px;
+    height: 26px;
+    margin-right: 12px;
+    vertical-align: text-top;
+  }
+
+}
+
+.ibs-assessment-button {
+  background-color: @primary-color;
+  height: 32px;
+  width: 32px;
+  color: #fff;
+  text-align: center;
+  i {
+    line-height: 32px;
+  }
+  &:hover,
+  &.focus {
+    cursor: pointer;
+  }
+}
+
+.ibs-btn-info {
+  border-color: #278bf5;
+  background-color: #278bf5;
+  .ibs-transition;
+  &:hover,
+  &:focus {
+    border-color: lighten(#278bf5, 10%);
+    background-color: lighten(#278bf5, 10%);
+  }
+}
+
+.ibs-review-body__info {
+  width: 50%;
+  padding: 30px;
+  text-align: center;
+  &:last-child {
+    margin-top: 4px;
+    padding-left: 32px;
+    text-align: left;
+  }
+}
+
+.ibs-review-footer {
+  width: 100%;
+  margin-bottom: 0;
+  padding-top: 16px;
+  border-top: 1px solid #ebebeb;
+  text-align: right;
+}
+
+.item-bank-sdk-message {
+  background-color: #f5f5f5;
+}
+
+// .ibs-question-wrap {
+//   .ibs-question-wrap__item {
+//     .ibs-engine {
+//        border-bottom: none;
+//     }
+//   }
+// }
+
+.ibs-analysis-status {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.ibs-table--analysis {
+  padding-right: 48px;
+}
+
+.ibs-scene-report .ibs-assessment-info {
+  margin-top: 0;
+}

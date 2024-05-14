@@ -125,7 +125,7 @@ module.exports = {
       ]
     }
   ],
-  extryCssName: '{main,header,bootstrap,mobile,admin}',
+  extryCssName: '{main,header,bootstrap,mobile,admin,item-bank}',
   isESlint: false,
   baseName: 'libs/base,libs/ltc-sdk',
   activitiesDir: 'web/activities',

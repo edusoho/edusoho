@@ -1,0 +1,38 @@
+.ibs-comment {
+  color: #333333;
+  font-size: 16px;
+  font-weight:500;
+
+  &__title {
+    position: relative;
+    padding: 16px 0 8px 0;
+
+    &::before{
+      position: absolute;
+      content: '';
+      top:20px;
+      left: 0;
+      width: 4px;
+      height: 16px;
+      background: @primary-color;
+    }
+  }
+
+  &__content {
+    padding: 16px 0 24px 0;
+  }
+}
+
+.ibs-footer {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  padding: 16px;
+  color: #333;
+  line-height: 32px;
+  box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.1);
+
+  &--right {
+    text-align: right;
+  }
+}

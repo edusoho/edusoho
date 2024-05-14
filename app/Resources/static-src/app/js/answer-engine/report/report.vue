@@ -61,7 +61,6 @@
         showReturnBtn: $('[name=submit_return_url]').val() === undefined ? 0 : $('[name=submit_return_url]').val().length,
         isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1',
         assessmentResponses: {},
-        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1',
         exercise: {}
       };
     },

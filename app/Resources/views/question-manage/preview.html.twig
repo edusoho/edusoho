@@ -1,12 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% set lang = app.request.getLocale() %}
-
-{% if lang == 'en' %}
-  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js', 'libs/item-bank/lib/locale/en-US.js', 'app/js/question-manage/preview/index.js']) %}
-{% else %}
-  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js','app/js/question-manage/preview/index.js']) %}
-{% endif %}
+{% do script(['libs/vue.js', 'app/js/question-manage/preview/index.js']) %}
 
 {% block title %}{{'course.question_manage.preview'|trans}}{% endblock %}
 

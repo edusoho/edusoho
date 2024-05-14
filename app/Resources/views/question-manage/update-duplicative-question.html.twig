@@ -1,7 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% do script(['libs/vue.js', 'libs/item-bank/lib/itemBank.umd.min.js', 'app/js/question-bank/update-duplicative-question/index.js'])  %}
-{% set lang = app.request.getLocale() %}
-
+{% do script(['libs/vue.js', 'app/js/question-bank/update-duplicative-question/index.js'])  %}
 
 {% set currentTheme = current_theme() %}
 {% set themeConfig = app.request.get('themeEditing')|default(false) ? currentTheme.config  : currentTheme.confirmConfig %}
@@ -12,10 +10,9 @@
   {% do css(['libs/item-bank/lib/styles/item-bank.css']) %}
 {% endif %}
 
-
 {% block body %}
 
-{% verbatim %}
+  {% verbatim %}
     <div id="app">
     </div>
   {% endverbatim %}
@@ -31,8 +28,6 @@
   <input type="hidden" name="type" value="{{ item.type }}">
   <input type="hidden" name="check_duplicative_url" value="{{ path('question_bank_manage_check_question_duplicative', {id: questionBank.id}) }}">
   <input type="hidden" name="update_url" value="{{ path('question_bank_manage_question_update', app.request.query.all|merge({id: questionBank.id, questionId: item.id})) }}">
-
-
 
   {% include 'attachment-upload/upload-data.html.twig'  %}
 {% endblock %}

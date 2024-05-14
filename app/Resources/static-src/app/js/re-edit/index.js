@@ -1,10 +1,9 @@
 import Import from './import';
+import ItemImport from 'common/vue/components/item-bank/item-import';
 
 Vue.config.productionTip = false;
-if (app.lang == 'en') {
-  const locale = local.default;
-  itemBank.default.install(Vue, {locale});
-}
+
+Vue.component(ItemImport.name, ItemImport);
 
 new Vue({
   render: createElement => createElement(Import)
