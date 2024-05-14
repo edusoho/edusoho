@@ -30,6 +30,9 @@ class AiGenerate extends AbstractResource
         if ('student' == $params['role']) {
             return $this->generateQuestionAnalysisForStudent($params);
         }
+        if ('teacher' == $params['role']) {
+            return $this->generateQuestionAnalysisForTeacher($params);
+        }
 
         return [];
     }
@@ -46,8 +49,33 @@ class AiGenerate extends AbstractResource
         }
         $item = $this->getItemService()->getItemIncludeDeleted($question['item_id']);
         //todo 校验answerRecordId和questionId是否匹配
+        $prompt = $this->makePrompt($item, $question);
+        if ('blocking' == $params['responseMode']) {
+            return $this->createBlockedResponse($prompt);
+        }
 
-        return $this->createStreamedResponse($this->makePrompt($item, $question));
+        return $this->createStreamedResponse($prompt);
+    }
+
+    private function generateQuestionAnalysisForTeacher($params)
+    {
+
+    }
+
+    private function createBlockedResponse($prompt)
+    {
+        ob_start();
+        $this->getAIService()->generateAnswer($prompt);
+        $response = ob_get_clean();
+        $answer = '';
+        foreach (array_filter(explode("\n\n", $response)) as $slice) {
+            $data = json_decode(substr($slice, 6), true);
+            if ('message' == $data['event']) {
+                $answer .= $data['answer'];
+            }
+        }
+
+        return ['answer' => $answer];
     }
 
     private function createStreamedResponse($prompt)
