@@ -276,13 +276,6 @@ class TestpaperWrapper
         return $metas;
     }
 
-    private function getCurrentUser()
-    {
-        $biz = $this->getBiz();
-
-        return $biz['user'];
-    }
-
     /**
      * @return AttachmentService
      */
