@@ -5778,7 +5778,7 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@1.0.64:
+item-bank@^1.0.64:
   version "1.0.64"
   resolved "https://registry.npmmirror.com/item-bank/-/item-bank-1.0.64.tgz#412a376cd25741e38b201f79703b91719a8b05bd"
   integrity sha512-TGCcLiTmzmvQpghhFeTy2pO0v6f3U3lqj5KL58tjmhqdUxMVtzo4BoI65AtVAxAlwRM9lR6eqhaBt8++ZKpGpg==
