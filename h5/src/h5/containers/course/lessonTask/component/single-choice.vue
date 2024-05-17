@@ -80,6 +80,29 @@
           <span v-if="analysis" v-html="analysis" @click="handleClickImage($event.target.src)" />
           <span v-else>{{ $t('courseLearning.noParsing') }}</span>
         </div>
+
+        <div class="ai-analysis" >
+          <div class="ibs-ai-top" >
+            <p class="ai-left-tittle">我是你的 Al 题目助手，点击“Al 解析”查看我为你搜寻的题目解析，解析内容仅供参考。</p>
+          </div>
+          <div class="ibs-ai-bottom">
+            <button class="ai-left-btn"  @click="aiGeneration()">
+              <img src="static/images/explain-ai.png" class="ai-left-img" />
+              <span class="ai-left-text">解析</span>
+            </button>
+            <button class="ai-left-stopbtn" >
+              <img src="static/images/explain-stop.png" class="ai-left-img" />
+              <span class="ai-left-text">停止生成</span>
+            </button>
+            <button class="ai-left-stopbtn" >
+              <img src="static/images/explain-anew.png" class="ai-left-img" />
+              <span class="ai-left-text">重新生成</span>
+            </button>
+            <img src="static/images/explain-ai-img.png" class="ai-right-img" />
+          </div>
+          <span class="ai-left-content"> AI解析内容仅供参考</span>
+        </div>
+
         <attachement-preview
           v-for="item in getAttachementByType('analysis')"
           :canLoadPlayer="isCurrent"
@@ -118,6 +141,7 @@ import isShowFooterShardow from '@/mixins/lessonTask/footerShardow';
 import refreshChoice from '@/mixins/lessonTask/swipeRefResh.js';
 import handleClickImage from '@/mixins/lessonTask/handleClickImage.js';
 import attachementPreview from './attachement-preview.vue';
+import store from '@/store';
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
@@ -269,6 +293,24 @@ export default {
     },
     goResults() {
       this.$emit('goResults');
+    },
+   async aiGeneration() {
+      console.log(this.exerciseInfo)
+      const data = {
+        role: "student",
+        questionId: this.itemdata.id,
+        answerRecordId: this.exerciseInfo.id,
+      }
+     const response = await fetch("/api/ai/question_analysis/generate", {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json;charset=utf-8",
+         Accept: "application/vnd.edusoho.v2+json",
+         'X-Auth-Token': store.state.token,
+       },
+       body: JSON.stringify(data),
+     });
+     console.log(response)
     }
   },
 };
@@ -352,5 +394,64 @@ export default {
   .show-up-icon {
     display: block;
     cursor: pointer;
+  }
+
+  .ai-analysis {
+    margin-top: 16px;
+    padding: 16px;
+    background-color: #F5F5F5;
+    border: 1px dashed #428FFA;
+    line-height: 20px;
+    border-radius: 4px;
+
+    .ibs-ai-top {
+      .ai-left-tittle {
+        color: #428FFA;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+      }
+    }
+    .ibs-ai-bottom {
+      margin-bottom: 5px;
+      .ai-left-btn {
+        padding: 4px 15px;
+        font-size: 14px;
+        color: #fff;
+        border-style: none;
+        background-color: #428FFA;
+        border-radius: 4px;
+        .ai-left-img {
+          margin-right: 5px;
+          width: 23px;
+          height: 23px;
+        }
+      }
+      .ai-left-stopbtn {
+        padding: 4px 15px;
+        font-size: 14px;
+        color: #428FFA;
+        border-radius: 4px;
+        border: 1px solid #428FFA;
+        .ai-left-img {
+          margin-right: 5px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+      .ai-right-img {
+        width: 44.8px;
+        height: 56px;
+      }
+    }
+    .ai-left-content {
+      color: #919399;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+    }
+
   }
 </style>
