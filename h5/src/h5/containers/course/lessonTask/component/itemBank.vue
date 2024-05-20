@@ -29,7 +29,7 @@
             :reviewedCount="reviewedCount ? reviewedCount : exerciseInfo ? exerciseInfo.reviewedCount : 0"
           />
 
-          <single-choice 
+          <single-choice
             v-if="paper.type == 'single_choice'"
             :ref="'submit'+index"
             :itemdata="paper"
@@ -123,6 +123,7 @@
             :exerciseMode="exerciseMode"
             :subject="subject(paper)"
             :analysis="paper.analysis"
+            :exerciseInfo="exerciseInfo"
             :disabledData="mode === 'exercise' ? canDo && iscando[index] : canDo"
             @submitSingleAnswer = "submitSingleAnswer"
             @goResults="goResults"
@@ -339,7 +340,7 @@ export default {
 
     this.sdkLoaded = true
     if (this.canDo && this.mode === 'exercise') {
-      
+
       this.info.forEach((item, index) => {
         if (this.exerciseInfo.submittedQuestions.filter(subItem => subItem.questionId + '' === item.id).length > 0) {
           this.iscando[index] = false
@@ -347,9 +348,9 @@ export default {
           this.iscando[index] = true
         }
       });
-      
+
     }
-    
+
   },
   methods: {
     ...mapActions(['setCloudAddress']),
@@ -416,7 +417,7 @@ export default {
       this.touchable = false
         this.submitSingleAnswer(this.numberFormatterCode(response) , data)
       }
-      this.$set(this.testAnswer[data.id], 0, response);	
+      this.$set(this.testAnswer[data.id], 0, response);
     },
     // 多选题和不定项选择
     choiceChoose(response, data) {
@@ -485,7 +486,7 @@ export default {
         return String.fromCharCode(response + 65).split('')
       }
     },
-    
+
     goResults() {
       this.$emit('goResults');
     }

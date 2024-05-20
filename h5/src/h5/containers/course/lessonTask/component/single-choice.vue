@@ -78,31 +78,31 @@
         <div class="analysis-color">
           <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
           <span v-if="analysis" v-html="analysis" @click="handleClickImage($event.target.src)" />
-          <span v-else>{{ $t('courseLearning.noParsing') }}</span>
+          <span v-else ref="aiAnalysis">{{ $t('courseLearning.noParsing') }}</span>
         </div>
-
-        <div class="ai-analysis" >
-          <div class="ibs-ai-top" >
-            <p class="ai-left-tittle">我是你的 Al 题目助手，点击“Al 解析”查看我为你搜寻的题目解析，解析内容仅供参考。</p>
+        <div class="ai-analysis" v-show="!analysis">
+          <p class="ai-tittle">{{$t('courseLearning.aiAssistant')}}</p>
+          <div class="ai-content">
+            <div class="ai-content-left">
+             <button class="ai-btn"  @click="aiGeneration()"  v-show="isShowAiExplain">
+              <img src="static/images/explain-ai.png" class="ai-img" />
+              <span class="ai-left-text">{{$t('courseLearning.analysis')}}</span>
+             </button>
+             <button class="ai-stopbtn" @click="stopAiGeneration()"  v-show="stopAiExplain">
+              <img src="static/images/explain-stop.png" class="ai-img" />
+              <span class="ai-left-text">{{$t('courseLearning.stopGeneration')}}</span>
+             </button>
+             <button class="ai-stopbtn" @click="anewAiGeneration" v-show="anewAiExplain">
+              <img src="static/images/explain-anew.png" class="ai-img" />
+              <span class="ai-left-text">{{$t('courseLearning.reGenerate')}}</span>
+             </button>
+              <p class="ai-left-tittle" v-show="stopAiExplain">{{$t('courseLearning.beGenerating')}}</p>
+            </div>
+            <div ai-content-right>
+              <img src="static/images/explain-ai-img.png" class="ai-right-img" />
+            </div>
           </div>
-          <div class="ibs-ai-bottom">
-            <button class="ai-left-btn"  @click="aiGeneration()">
-              <img src="static/images/explain-ai.png" class="ai-left-img" />
-              <span class="ai-left-text">解析</span>
-            </button>
-            <button class="ai-left-stopbtn" >
-              <img src="static/images/explain-stop.png" class="ai-left-img" />
-              <span class="ai-left-text">停止生成</span>
-            </button>
-            <button class="ai-left-stopbtn" >
-              <img src="static/images/explain-anew.png" class="ai-left-img" />
-              <span class="ai-left-text">重新生成</span>
-            </button>
-            <img src="static/images/explain-ai-img.png" class="ai-right-img" />
-          </div>
-          <span class="ai-left-content"> AI解析内容仅供参考</span>
         </div>
-
         <attachement-preview
           v-for="item in getAttachementByType('analysis')"
           :canLoadPlayer="isCurrent"
@@ -245,6 +245,11 @@ export default {
       refreshKey: true,
       myAnswer:'C',
       width: WINDOWWIDTH,
+      answerData: {},
+      stopAnswer: {},
+      isShowAiExplain: true,
+      stopAiExplain: false,
+      anewAiExplain: false
     };
   },
   mounted() {
@@ -294,23 +299,83 @@ export default {
     goResults() {
       this.$emit('goResults');
     },
-   async aiGeneration() {
-      console.log(this.exerciseInfo)
+    async getAiAnalysis() {
+      const questionId = this.itemdata.id
       const data = {
         role: "student",
-        questionId: this.itemdata.id,
+        questionId,
         answerRecordId: this.exerciseInfo.id,
       }
-     const response = await fetch("/api/ai/question_analysis/generate", {
-       method: "POST",
-       headers: {
-         "Content-Type": "application/json;charset=utf-8",
-         Accept: "application/vnd.edusoho.v2+json",
-         'X-Auth-Token': store.state.token,
-       },
-       body: JSON.stringify(data),
-     });
-     console.log(response)
+      let messageEnd = false;
+      let answers = [];
+      this.answerData[questionId] = '';
+      this.stopAnswer[questionId] = false;
+      const typingTimer = setInterval(() => {
+        if (answers.length === 0) {
+          return;
+        }
+        if (this.stopAnswer[questionId]) {
+          clearInterval(typingTimer);
+        }
+        this.answerData[questionId] += answers.shift();
+        if (answers.length === 0 && messageEnd) {
+          clearInterval(typingTimer);
+          this.stopAiExplain = false;
+          this.anewAiExplain = true;
+        }
+        this.$refs.aiAnalysis.innerHTML = this.answerData[questionId];
+      }, 50);
+      const response = await fetch("/api/ai/question_analysis/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          Accept: "application/vnd.edusoho.v2+json",
+          'X-Auth-Token': store.state.token,
+        },
+        body: JSON.stringify(data),
+      });
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let lastMessgae = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        const messages = (lastMessgae + decoder.decode(value)).split("\n\n");
+        let key = 1;
+        for (let message of messages) {
+          if (key == messages.length) {
+            lastMessgae = message;
+          } else {
+            const parseMessage = JSON.parse(message.slice(6));
+            if (parseMessage.event === "message") {
+              answers.push(parseMessage.answer);
+            }
+            key++;
+          }
+        }
+        if (done) {
+          messageEnd = true;
+          break;
+        }
+      }
+    },
+    stopAiAnalysis() {
+      const questionId = this.itemdata.id;
+      this.stopAnswer[questionId] = true;
+    },
+    aiGeneration() {
+      this.isShowAiExplain = false;
+      this.stopAiExplain = true;
+      this.anewAiExplain = false;
+      this.getAiAnalysis();
+    },
+    stopAiGeneration() {
+      this.stopAiExplain = false;
+      this.isShowAiExplain = false;
+      this.anewAiExplain = true;
+      this.stopAiAnalysis();
+    },
+    anewAiGeneration() {
+      this.getAiAnalysis();
     }
   },
 };
@@ -400,58 +465,60 @@ export default {
     margin-top: 16px;
     padding: 16px;
     background-color: #F5F5F5;
-    border: 1px dashed #428FFA;
+    border: 1px dashed rgba(66, 143, 250, 0.30);
     line-height: 20px;
     border-radius: 4px;
-
-    .ibs-ai-top {
-      .ai-left-tittle {
+    .ai-tittle {
         color: #428FFA;
         font-size: 12px;
         font-style: normal;
         font-weight: 400;
         line-height: 20px;
       }
-    }
-    .ibs-ai-bottom {
-      margin-bottom: 5px;
-      .ai-left-btn {
-        padding: 4px 15px;
-        font-size: 14px;
-        color: #fff;
-        border-style: none;
-        background-color: #428FFA;
-        border-radius: 4px;
-        .ai-left-img {
-          margin-right: 5px;
-          width: 23px;
-          height: 23px;
+    .ai-content {
+      display: flex;
+      justify-content: space-between;
+      .ai-content-left {
+        .ai-btn {
+          margin-top: 16px;
+          padding: 4px 15px;
+          font-size: 14px;
+          color: #fff;
+          border-style: none;
+          background-color: #428FFA;
+          border-radius: 4px;
+          .ai-img {
+            margin-right: 5px;
+            width: 23px;
+            height: 23px;
+          }
+        }
+        .ai-stopbtn {
+          margin-top: 16px;
+          padding: 4px 15px;
+          font-size: 14px;
+          color: #428FFA;
+          border-radius: 4px;
+          border: 1px solid #428FFA;
+          .ai-img {
+            margin-right: 5px;
+            width: 18px;
+            height: 18px;
+          }
+        }
+        .ai-left-tittle {
+          margin-top: 5px;
+          color: #919399;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 20px;
         }
       }
-      .ai-left-stopbtn {
-        padding: 4px 15px;
-        font-size: 14px;
-        color: #428FFA;
-        border-radius: 4px;
-        border: 1px solid #428FFA;
-        .ai-left-img {
-          margin-right: 5px;
-          width: 18px;
-          height: 18px;
-        }
-      }
-      .ai-right-img {
-        width: 44.8px;
-        height: 56px;
-      }
     }
-    .ai-left-content {
-      color: #919399;
-      font-size: 12px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 20px;
+    .ai-right-img {
+      width: 44.8px;
+      height: 56px;
     }
-
   }
 </style>

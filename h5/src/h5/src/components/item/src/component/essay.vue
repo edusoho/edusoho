@@ -64,9 +64,9 @@
                 <img v-if="status === 'wrong' || commonData.report.status === 'wrong' || commonData.report.status === 'no_answer'" :src="wrongImg" alt="" class="ibs-fill-status">
                 <span v-if="!answer" :class="['ibs-your-answer', {'ibs-is-wrong-answer': status === 'wrong'}, {'ibs-is-right-answer': status === 'right'}, {'ibs-is-right-answer' :  commonData.report.status === 'right'}, {'ibs-is-wrong-answer' : commonData.report.status === 'wrong'}]"> {{ $t('courseLearning.unanswered') }}</span>
                 <span v-else :class="[
-                    'ibs-essay-answer', 
-                    {'ibs-is-wrong-answer': status === 'wrong'}, 
-                    {'ibs-is-right-answer': status === 'right'}, 
+                    'ibs-essay-answer',
+                    {'ibs-is-wrong-answer': status === 'wrong'},
+                    {'ibs-is-right-answer': status === 'right'},
                     {'ibs-is-right-answer': commonData.report.status === 'right'},
                     {'ibs-is-wrong-answer': commonData.report.status === 'wrong'},
                   ]" style="color: #37393D;" v-html="answer" @click="handleClickImage($event.target.src)"></span>
@@ -76,7 +76,7 @@
               {{ $t('courseLearning.correctAnswer') }}：
             </div>
             <div class="mb-16">
-              <span class="ibs-is-right-answer" v-html="commonData.answer[0]"/> 
+              <span class="ibs-is-right-answer" v-html="commonData.answer[0]"/>
             </div>
             <div v-if="$route.query.type == 'assessment'" class="ibs-analysis-color mb-8">
               {{ $t('courseLearning.score') }}：<div>{{ commonData.report ? commonData.report.score : 0.0 }}</div>
@@ -87,9 +87,32 @@
             <div class="ibs-analysis-color">
               {{ $t('courseLearning.analyze') }}：
               <span v-if="commonData.analysis" v-html="commonData.analysis" />
-              <div v-else>{{ $t('courseLearning.noParsing') }}</div>
+              <div v-else ref="aiAnalysis">{{ $t('courseLearning.noParsing') }}</div>
             </div>
-            <attachement-preview 
+            <div class="ai-analysis" v-show="!analysis">
+              <p class="ai-tittle">{{$t('courseLearning.aiAssistant')}}</p>
+              <div class="ai-content">
+                <div class="ai-content-left">
+                  <button class="ai-btn"  @click="aiGeneration()"  v-show="isShowAiExplain">
+                    <img src="static/images/explain-ai.png" class="ai-img" />
+                    <span class="ai-left-text">{{$t('courseLearning.analysis')}}</span>
+                  </button>
+                  <button class="ai-stopbtn" @click="stopAiGeneration()"  v-show="stopAiExplain">
+                    <img src="static/images/explain-stop.png" class="ai-img" />
+                    <span class="ai-left-text">{{$t('courseLearning.stopGeneration')}}</span>
+                  </button>
+                  <button class="ai-stopbtn" @click="anewAiGeneration" v-show="anewAiExplain">
+                    <img src="static/images/explain-anew.png" class="ai-img" />
+                    <span class="ai-left-text">{{$t('courseLearning.reGenerate')}}</span>
+                  </button>
+                  <p class="ai-left-tittle" v-show="stopAiExplain">{{$t('courseLearning.beGenerating')}}</p>
+                </div>
+                <div ai-content-right>
+                  <img src="static/images/explain-ai-img.png" class="ai-right-img" />
+                </div>
+              </div>
+            </div>
+            <attachement-preview
               v-for="item in getAttachmentTypeData('analysis')"
               :attachment="item"
               :key="item.id" />
@@ -102,7 +125,7 @@
         {{ $t('courseLearning.analyze') }}：
         <span v-if="currentItem.analysis !== ''" v-html="currentItem.analysis" @click="handleClickImage($event.target.src)"/>
         <span v-else>{{ $t('courseLearning.noParsing') }}</span>
-        <attachement-preview 
+        <attachement-preview
           v-for="item in getAttachementByType('analysis')"
           :attachment="item"
           :key="item.id" />
@@ -161,7 +184,7 @@
         >{{ $t('courseLearning.viewResult2') }}</van-button
       >
     </div>
-    
+
   </div>
 </template>
 
@@ -174,6 +197,7 @@ import Api from '@/api';
 import { Dialog, Toast } from 'vant'
 
 import { debounce } from "@/src/utils/debounce.js";
+import store from "@/store";
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 export default {
@@ -200,10 +224,21 @@ export default {
       reviewDisabled: false,
       rigth: 'static/images/exercise/rigth.png',
       wrongImg: 'static/images/exercise/wrong.png',
+      answerData: {},
+      stopAnswer: {},
+      isShowAiExplain: true,
+      stopAiExplain: false,
+      anewAiExplain: false
     };
   },
   components: {
     attachementPreview
+  },
+  props: {
+    exerciseInfo: {
+      type: Object,
+      default: () => {}
+    },
   },
   computed: {
     placeholder: {
@@ -241,7 +276,7 @@ export default {
     this.initReviewQuestion()
     this.refreshReviewStatus()
     this.initEssayRadio()
-    
+
     const stemDom = document.getElementById(`current${this.currentItem.id}`)
     if (stemDom) {
       this.isShowDownIcon = stemDom.childNodes[0].offsetWidth > 234
@@ -328,7 +363,7 @@ export default {
         this.$emit('submitSingleAnswer', currentAnswer, data);
         return
       }
-      
+
       Dialog.confirm({
         message: this.$t('courseLearning.questionNotAnswer'),
         confirmButtonText: this.$t('courseLearning.continueAnswer'),
@@ -366,7 +401,7 @@ export default {
         });
         return
       }
-      
+
       Api.singleQuestionSubmission({
         query:{
           id: this.brushDo.answerRecord.id
@@ -404,6 +439,84 @@ export default {
         questionId: this.commonData.questionId
       }
       this.$emit('changeEssayRadio', data)
+    },
+    async getAiAnalysis() {
+      const questionId = this.itemdata.id
+      const data = {
+        role: "student",
+        questionId,
+        answerRecordId: this.exerciseInfo.id,
+      }
+      let messageEnd = false;
+      const answers = [];
+      this.answerData[questionId] = '';
+      this.stopAnswer[questionId] = false;
+      const typingTimer = setInterval(() => {
+        if (answers.length === 0) {
+          return;
+        }
+        if (this.stopAnswer[questionId]) {
+          clearInterval(typingTimer);
+        }
+        this.answerData[questionId] += answers.shift();
+        if (answers.length === 0 && messageEnd) {
+          clearInterval(typingTimer);
+          this.stopAiExplain = false;
+          this.anewAiExplain = true;
+        }
+        this.$refs.aiAnalysis.innerHTML = this.answerData[questionId];
+      }, 50);
+      const response = await fetch("/api/ai/question_analysis/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          Accept: "application/vnd.edusoho.v2+json",
+          'X-Auth-Token': store.state.token,
+        },
+        body: JSON.stringify(data),
+      });
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let lastMessgae = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        const messages = (lastMessgae + decoder.decode(value)).split("\n\n");
+        let key = 1;
+        for (const message of messages) {
+          if (key == messages.length) {
+            lastMessgae = message;
+          } else {
+            const parseMessage = JSON.parse(message.slice(6));
+            if (parseMessage.event === "message") {
+              answers.push(parseMessage.answer);
+            }
+            key++;
+          }
+        }
+        if (done) {
+          messageEnd = true;
+          break;
+        }
+      }
+    },
+    stopAiAnalysis() {
+      const questionId = this.itemdata.id;
+      this.stopAnswer[questionId] = true;
+    },
+    aiGeneration() {
+      this.isShowAiExplain = false;
+      this.stopAiExplain = true;
+      this.anewAiExplain = false;
+      this.getAiAnalysis();
+    },
+    stopAiGeneration() {
+      this.stopAiExplain = false;
+      this.isShowAiExplain = false;
+      this.anewAiExplain = true;
+      this.stopAiAnalysis();
+    },
+    anewAiGeneration() {
+      this.getAiAnalysis();
     }
   }
 };
@@ -482,6 +595,67 @@ export default {
       bottom: vw(-10);
       font-size: vw(14);
       color: #00be63;
+    }
+  }
+  .ai-analysis {
+    margin-top: 16px;
+    padding: 16px;
+    background-color: #F5F5F5;
+    border: 1px dashed rgba(66, 143, 250, 0.30);
+    line-height: 20px;
+    border-radius: 4px;
+    .ai-tittle {
+      color: #428FFA;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+    }
+
+    .ai-content {
+      display: flex;
+      justify-content: space-between;
+      .ai-content-left {
+        .ai-btn {
+          margin-top: 16px;
+          padding: 4px 15px;
+          font-size: 14px;
+          color: #fff;
+          border-style: none;
+          background-color: #428FFA;
+          border-radius: 4px;
+          .ai-img {
+            margin-right: 5px;
+            width: 23px;
+            height: 23px;
+          }
+        }
+        .ai-stopbtn {
+          margin-top: 16px;
+          padding: 4px 15px;
+          font-size: 14px;
+          color: #428FFA;
+          border-radius: 4px;
+          border: 1px solid #428FFA;
+          .ai-img {
+            margin-right: 5px;
+            width: 18px;
+            height: 18px;
+          }
+        }
+        .ai-left-tittle {
+          margin-top: 5px;
+          color: #919399;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 20px;
+        }
+      }
+    }
+    .ai-right-img {
+      width: 44.8px;
+      height: 56px;
     }
   }
 </style>
