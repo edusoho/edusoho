@@ -1,0 +1,34 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog administrator-perspective-modal' %}
+
+{% block title %}
+  {{ 'question_manage.ai_analysis.introduction'|trans }}
+{% endblock %}
+
+{% block body %}
+  <div>
+    <div class="">
+      <img class="" src="{{ asset('static-dist/app/img/question-manage/guide-img-1.png') }}" alt="guide"/>
+      <img class="" src="{{ asset('static-dist/app/img/question-manage/free-for-limited-time.png') }}" alt="guide"/>
+    </div>
+    <div class="">
+      <div class="">
+        <span class="anchor-point"></span>
+        <span class="">{{ 'question_manage.ai_analysis.introduction.tip1'|trans|raw }}</span>
+      </div>
+      <div class="">
+        <span class="anchor-point"></span>
+        <span class="">{{ 'question_manage.ai_analysis.introduction.tip2'|trans|raw }}</span>
+      </div>
+      <div class="">
+        <span class="anchor-point"></span>
+        <span class="">{{ 'question_manage.ai_analysis.introduction.tip3'|trans|raw }}</span>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <a class="js-close-btn" href="javascript:;">{{ 'question_manage.ai_analysis.introduction.close'|trans }}</a>
+{% endblock %}

@@ -71,6 +71,11 @@ class QuestionController extends BaseController
         return $this->render('question-bank/question/import-intro-modal.html.twig');
     }
 
+    public function aiAnalysisIntroAction()
+    {
+        return $this->render('question-bank/question/ai-analysis-intro-modal.html.twig');
+    }
+
     public function importAction(Request $request, $id)
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
