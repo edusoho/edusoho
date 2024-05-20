@@ -1792,6 +1792,12 @@ question_manage.import.administrator.tip1: 支持常见公式、表格、特殊�
 question_manage.import.administrator.tip2: 提升导入识别准确率，让题目导入更简单
 question_manage.import.non-administrator-tip: 升级云能力可使用导入功能，需联系超级管理员进行操作
 question_manage.import.non.administrator.close.btn: 我知道了
+question_manage.ai_analysis.introduction: 【AI 题目解析助手】新功能上线！
+question_manage.ai_analysis.introduction.content: 我是您的 AI 题目助手，点击“AI 解析”查看我为您搜寻的题目解析，解析内容仅供参考。
+question_manage.ai_analysis.introduction.tip1: <b>解析能力：</b>仅针对文字的题目内容生成题目解析，含图片和视频类的题目不展示生成AI解析入口。
+question_manage.ai_analysis.introduction.tip2: <b>教师端：</b>创建题目时增加AI解析按钮，导入题目时，无解析的题目增加AI解析按钮，可单独生成题目解析。
+question_manage.ai_analysis.introduction.tip3: <b>学员端：</b>查看解析页面中，无解析的题目将为学员提供AI解析功能。
+question_manage.ai_analysis.introduction.close: 我知道了
 course.question_manage.import.upload_document: 上传文档
 course.question_manage.import.reupload_document: 重新上传
 course.question_manage.import.Successful: 上传成功
