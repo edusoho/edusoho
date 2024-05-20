@@ -4,13 +4,15 @@ namespace ApiBundle\Api\Resource\Ai;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\AI\Constant\AIApp;
 use Biz\AI\Service\AIService;
+use Biz\Common\CommonException;
 use Biz\Question\QuestionException;
 use Biz\Question\Traits\QuestionAnswerModeTrait;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AiGenerate extends AbstractResource
 {
@@ -51,15 +53,31 @@ class AiGenerate extends AbstractResource
             throw QuestionException::NOTFOUND_QUESTION();
         }
         $item = $this->getItemService()->getItemIncludeDeleted($question['item_id']);
-        //todo 校验answerRecordId和questionId是否匹配
+        $sectionItem = $this->getSectionItemService()->getItemByAssessmentIdAndItemId($answerRecord['assessment_id'], $item['id']);
+        if (empty($sectionItem)) {
+            throw CommonException::ERROR_PARAMETER();
+        }
         $question['material'] = $item['material'];
-        $inputs = $this->makeInputsFromQuestion($item['type'], $question);
-        $prompt = $this->makePrompt($item['type'], $inputs);
-        if ('blocking' == $params['responseMode']) {
-            return $this->createBlockedResponse($prompt);
+        $aiParams = $this->makeAIParamsFromQuestion($item['type'], $question);
+
+        if (!$this->getAIService()->needGenerateNewAnswer($aiParams['app'], $aiParams['inputs'])) {
+            $analysis = $this->getAIService()->getAnswerFromLocal($aiParams['app'], $aiParams['inputs']);
+            if ('blocking' == $params['responseMode']) {
+                return ['answer' => $this->parseAnswerFromStreamResponse($analysis)];
+            }
+
+            return $this->createStreamedResponse(function () use ($analysis) {
+                foreach (array_filter(explode("\n\n", $analysis)) as $data) {
+                    echo $data."\n\n";
+                }
+            });
         }
 
-        return $this->createStreamedResponse($prompt);
+        if ('blocking' == $params['responseMode']) {
+            return $this->responseBlocking($aiParams);
+        }
+
+        return $this->responseStreaming($aiParams);
     }
 
     private function generateQuestionAnalysisForTeacher($params)
@@ -67,47 +85,30 @@ class AiGenerate extends AbstractResource
         if (!$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isAdmin()) {
             return [];
         }
-        $inputs = $this->makeInputsFromTeacherInput($params['type'], $params);
-        $prompt = $this->makePrompt($params['type'], $inputs);
+        $aiParams = $this->makeInputsFromTeacherInput($params['type'], $params);
 
-        return $this->createStreamedResponse($prompt);
+        return $this->responseStreaming($aiParams);
     }
 
-    private function createBlockedResponse($prompt)
+    private function responseBlocking($params)
     {
         ob_start();
-        $this->getAIService()->generateAnswer($prompt);
+        $this->getAIService()->generateAnswer($params['app'], $params['inputs']);
         $response = ob_get_clean();
-        $answer = '';
-        foreach (array_filter(explode("\n\n", $response)) as $slice) {
-            $data = json_decode(substr($slice, 6), true);
-            if ('message' == $data['event']) {
-                $answer .= $data['answer'];
-            }
-        }
 
-        return ['answer' => $answer];
+        return ['answer' => $this->parseAnswerFromStreamResponse($response)];
     }
 
-    private function createStreamedResponse($prompt)
+    private function responseStreaming($params)
     {
-        $aiService = $this->getAIService();
+        $that = $this;
 
-        return new StreamedResponse(
-            function () use ($aiService, $prompt) {
-                $aiService->generateAnswer($prompt);
-            },
-            200,
-            [
-                'Content-Type' => 'text/event-stream',
-                'Cache-Control' => 'no-cache',
-                'Connection' => 'keep-alive',
-                'X-Accel-Buffering' => 'no',
-            ]
-        );
+        return $this->createStreamedResponse(function () use ($that, $params) {
+            $that->getAIService()->generateAnswer($params['app'], $params['inputs']);
+        });
     }
 
-    private function makeInputsFromQuestion($type, $question)
+    private function makeAIParamsFromQuestion($type, $question)
     {
         if (in_array($type, ['single_choice', 'uncertain_choice', 'choice'])) {
             $options = '';
@@ -117,15 +118,21 @@ class AiGenerate extends AbstractResource
             }
 
             return [
-                'stem' => $question['stem'],
-                'options' => $options,
-                'answer' => implode($question['answer']),
+                'app' => AIApp::CHOICE_QUESTION_GENERATE_ANALYSIS,
+                'inputs' => [
+                    'stem' => $question['stem'],
+                    'options' => $options,
+                    'answer' => implode($question['answer']),
+                ],
             ];
         }
         if ('determine' == $type) {
             return [
-                'stem' => $question['stem'],
-                'answer' => 'T' == $question['answer'][0] ? '正确' : '错误',
+                'app' => AIApp::DETERMINE_QUESTION_GENERATE_ANALYSIS,
+                'inputs' => [
+                    'stem' => $question['stem'],
+                    'answer' => 'T' == $question['answer'][0] ? '正确' : '错误',
+                ],
             ];
         }
         if ('fill' == $type) {
@@ -137,21 +144,30 @@ class AiGenerate extends AbstractResource
             }
 
             return [
-                'stem' => $question['stem'],
-                'answer' => $answer,
+                'app' => AIApp::FILL_QUESTION_GENERATE_ANALYSIS,
+                'inputs' => [
+                    'stem' => $question['stem'],
+                    'answer' => $answer,
+                ],
             ];
         }
         if ('essay' == $type) {
             return [
-                'stem' => $question['stem'],
-                'answer' => $question['answer'][0],
+                'app' => AIApp::ESSAY_QUESTION_GENERATE_ANALYSIS,
+                'inputs' => [
+                    'stem' => $question['stem'],
+                    'answer' => $question['answer'][0],
+                ],
             ];
         }
         if ('material' == $type) {
-            $inputs = $this->makeInputsFromQuestion($this->modeToType[$question['answer_mode']], $question);
-            $inputs['material'] = $question['material'];
+            $aiParams = $this->makeAIParamsFromQuestion($this->modeToType[$question['answer_mode']], $question);
+            $aiParams['inputs']['material'] = $question['material'];
 
-            return $inputs;
+            return [
+                'app' => $this->convertToMaterialApp($aiParams['app']),
+                'inputs' => $aiParams['inputs'],
+            ];
         }
     }
 
@@ -159,15 +175,21 @@ class AiGenerate extends AbstractResource
     {
         if (in_array($type, ['single_choice', 'uncertain_choice', 'choice'])) {
             return [
-                'stem' => $params['stem'],
-                'options' => implode("\n", $params['options']),
-                'answer' => $params['answer'],
+                'app' => AIApp::CHOICE_QUESTION_GENERATE_ANALYSIS,
+                'inputs' => [
+                    'stem' => $params['stem'],
+                    'options' => implode("\n", $params['options']),
+                    'answer' => $params['answer'],
+                ],
             ];
         }
         if ('determine' == $type) {
             return [
-                'stem' => $params['stem'],
-                'answer' => $params['answer'],
+                'app' => AIApp::DETERMINE_QUESTION_GENERATE_ANALYSIS,
+                'inputs' => [
+                    'stem' => $params['stem'],
+                    'answer' => $params['answer'],
+                ],
             ];
         }
         if ('fill' == $type) {
@@ -179,48 +201,61 @@ class AiGenerate extends AbstractResource
             }
 
             return [
-                'stem' => $params['stem'],
-                'answer' => $answer,
+                'app' => AIApp::FILL_QUESTION_GENERATE_ANALYSIS,
+                'inputs' => [
+                    'stem' => $params['stem'],
+                    'answer' => $answer,
+                ],
             ];
         }
         if ('essay' == $type) {
             return [
-                'stem' => $params['stem'],
-                'answer' => $params['answer'],
+                'app' => AIApp::ESSAY_QUESTION_GENERATE_ANALYSIS,
+                'inputs' => [
+                    'stem' => $params['stem'],
+                    'answer' => $params['answer'],
+                ],
             ];
         }
         list($itemType, $questionType) = explode('-', $type);
         if ('material' == $itemType) {
-            $inputs = $this->makeInputsFromTeacherInput($questionType, $params);
-            $inputs['material'] = $params['material'];
+            $aiParams = $this->makeInputsFromTeacherInput($questionType, $params);
+            $aiParams['inputs']['material'] = $params['material'];
 
-            return $inputs;
+            return [
+                'app' => $this->convertToMaterialApp($aiParams['app']),
+                'inputs' => $aiParams['inputs'],
+            ];
         }
     }
 
-    private function makePrompt($type, $inputs)
+    private function convertToMaterialApp($app)
     {
-        if (in_array($type, ['single_choice', 'uncertain_choice', 'choice'])) {
-            return "有一道选择题，题干内容是： {{$inputs['stem']}}\n有以下选项：\n{$inputs['options']}\n正确答案是{$inputs['answer']}。\n假设你是该题的出题人，请根据以上内容为这道选择题生成解析，解析的长度不要超出500字符，在你的解析中，只有选项{$inputs['answer']}是正确的，其他选项都是错误的，请不要出现其他选项是正确的这样的表述。";
+        return [
+            AIApp::CHOICE_QUESTION_GENERATE_ANALYSIS => AIApp::MATERIAL_CHOICE_QUESTION_GENERATE_ANALYSIS,
+            AIApp::DETERMINE_QUESTION_GENERATE_ANALYSIS => AIApp::MATERIAL_DETERMINE_QUESTION_GENERATE_ANALYSIS,
+            AIApp::FILL_QUESTION_GENERATE_ANALYSIS => AIApp::MATERIAL_FILL_QUESTION_GENERATE_ANALYSIS,
+            AIApp::ESSAY_QUESTION_GENERATE_ANALYSIS => AIApp::MATERIAL_ESSAY_QUESTION_GENERATE_ANALYSIS,
+        ][$app];
+    }
+
+    private function parseAnswerFromStreamResponse($response)
+    {
+        $answer = '';
+        foreach (array_filter(explode("\n\n", $response)) as $slice) {
+            $data = json_decode(substr($slice, 6), true);
+            if ('message' == $data['event']) {
+                $answer .= $data['answer'];
+            }
         }
-        if ('determine' == $type) {
-            return "有一道判断题，题干内容是：{{$inputs['stem']}}\n答案是{$inputs['answer']}。假设你是该题的出题人，请根据以上内容为这道判断题生成解析，解析的长度不要超出500字符。";
-        }
-        //填空题
-        if ('fill' == $type) {
-            return "有一道填空题，题干内容是：{{$inputs['stem']}}\n{$inputs['answer']}。假设你是该题的出题人，请根据以上内容为这道填空题生成解析，解析的长度不要超出500字符。";
-        }
-        //问答题
-        if ('essay' == $type) {
-            return "有一道问答题，题干内容是：{{$inputs['stem']}}\n正确答案是{$inputs['answer']}。假设你是该题的出题人，请根据以上内容为这道判断题生成解析，解析的长度不要超出500字符。";
-        }
-        //材料题
+
+        return $answer;
     }
 
     /**
      * @return AnswerRecordService
      */
-    protected function getAnswerRecordService()
+    private function getAnswerRecordService()
     {
         return $this->service('ItemBank:Answer:AnswerRecordService');
     }
@@ -228,15 +263,23 @@ class AiGenerate extends AbstractResource
     /**
      * @return ItemService
      */
-    protected function getItemService()
+    private function getItemService()
     {
         return $this->service('ItemBank:Item:ItemService');
     }
 
     /**
+     * @return AssessmentSectionItemService
+     */
+    private function getSectionItemService()
+    {
+        return $this->service('ItemBank:Assessment:AssessmentSectionItemService');
+    }
+
+    /**
      * @return AIService
      */
-    protected function getAIService()
+    private function getAIService()
     {
         return $this->service('AI:AIService');
     }
