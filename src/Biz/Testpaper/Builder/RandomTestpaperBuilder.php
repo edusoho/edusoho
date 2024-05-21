@@ -27,6 +27,9 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
             'displayable' => 1,
             'description' => $fields['description'],
             'sections' => $sections,
+            'type' => $fields['type'] ?? 'regular',
+            'parent_id' => $fields['parentId'] ?? '1',
+            'status' => $fields['status'] ?? 'draft',
         ];
 
         return $this->getAssessmentService()->createAssessment($assessment);

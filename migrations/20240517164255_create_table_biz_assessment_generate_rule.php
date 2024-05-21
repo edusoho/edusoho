@@ -13,7 +13,7 @@ class CreateTableBizAssessmentGenerateRule extends Migration
         if (!$this->isTableExist('biz_assessment_generate_rule')) {
             $biz['db']->exec("
             CREATE TABLE `biz_assessment_generate_rule` (
-            `id` int(10) NOT NULL,
+            `id` int(10) NOT NULL AUTO_INCREMENT,
             `num` int(10) NOT NULL COMMENT '试卷份数',
             `type` varchar(255) NOT NULL COMMENT '抽题方式(按题型抽题questionType，题型分类questionTypeCategory)',
             `assessment_id` int(10) NOT NULL COMMENT '试卷编号',

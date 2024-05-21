@@ -67,6 +67,13 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
 
     public function createBasicAssessment($assessment)
     {
+        $defaultAssessment = [
+            'type' => 'regular',
+            'parentId' => '0',
+            'status' => 'draft',
+        ];
+
+        $assessment = array_merge($defaultAssessment, $assessment);
         $assessment = $this->getValidator()->validate($assessment, [
             'bank_id' => ['required', 'integer', ['min', 1]],
             'name' => ['required', ['lengthBetween', 1, 255]],
@@ -75,6 +82,9 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             'item_count' => ['integer', ['min', 0]],
             'question_count' => ['integer', ['min', 0]],
             'displayable' => ['required', ['in', [0, 1]]],
+            'type' => ['required', ['in', ['regular', 'random', 'ai_personality']]],
+            'parent_id' => ['required', ['min', 0], ['max', 200]],
+            'status' => ['required', ['in', ['generating', 'draft', 'generatFail', 'open', 'closed']]],
         ]);
 
         $itemBank = $this->getItemBankService()->getItemBank($assessment['bank_id']);
