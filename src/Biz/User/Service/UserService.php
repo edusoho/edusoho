@@ -36,6 +36,8 @@ interface UserService
     //根据用户名/邮箱/手机号精确查找用户
     public function getUserByLoginField($keyword, $isFilterDestroyed = false);
 
+    public function getUserByLoginTypeAndField($loginType, $loginValue);
+
     public function getUserByVerifiedMobile($mobile);
 
     public function countUsersByMobileNotEmpty();

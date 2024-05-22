@@ -44,6 +44,10 @@ login:
     defaults:
         _controller: 'AppBundle:Login:index'
     h5: true
+external_login:
+  path:  '/login/external'
+  defaults:
+        _controller: 'AppBundle:Login:externalLogin'
 login_check:
     path: '/login_check'
 logout:
