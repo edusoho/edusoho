@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49d09f960863dcc25f2bfbe03910945d",
+    "content-hash": "d7cf038d7b5afbf5d37b88d5c25050d3",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -644,16 +644,16 @@
         },
         {
             "name": "codeages/escloud-php-sdk",
-            "version": "v1.2.2",
+            "version": "v1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/escloud-php-sdk.git",
-                "reference": "037f95ec86d09418e5ec7b27e5f235ef9a867fd0"
+                "reference": "bc2da3ba8cbc447c1a5faddbb14c474eec4ff0dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/037f95ec86d09418e5ec7b27e5f235ef9a867fd0",
-                "reference": "037f95ec86d09418e5ec7b27e5f235ef9a867fd0",
+                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/bc2da3ba8cbc447c1a5faddbb14c474eec4ff0dc",
+                "reference": "bc2da3ba8cbc447c1a5faddbb14c474eec4ff0dc",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -694,9 +694,9 @@
             "description": "ESCloud PHP SDK",
             "support": {
                 "issues": "https://github.com/codeages/escloud-php-sdk/issues",
-                "source": "https://github.com/codeages/escloud-php-sdk/tree/v1.2.2"
+                "source": "https://github.com/codeages/escloud-php-sdk/tree/v1.2.6"
             },
-            "time": "2021-08-24T07:12:49+00:00"
+            "time": "2024-05-20T00:47:47+00:00"
         },
         {
             "name": "codeages/exam-parser",
@@ -10681,5 +10681,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

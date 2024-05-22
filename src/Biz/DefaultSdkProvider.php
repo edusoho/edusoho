@@ -217,6 +217,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return null;
         };
+
+        $biz['ESCloudSdk.ai'] = function ($biz) use ($that) {
+            $sdk = $that->generateEsCloudSdk($biz, [], $biz['logger']);
+
+            if (null !== $sdk) {
+                return $sdk->getAIService();
+            }
+
+            return null;
+        };
     }
 
     /**

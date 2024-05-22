@@ -2,23 +2,26 @@
 
 namespace ESCloud\SDK;
 
-use ESCloud\SDK\Service\AiService;
+use ESCloud\SDK\HttpClient\ClientInterface;
+use ESCloud\SDK\Service\AIFaceService;
+use ESCloud\SDK\Service\AIService;
 use ESCloud\SDK\Service\DrpService;
 use ESCloud\SDK\Service\ESopService;
 use ESCloud\SDK\Service\InspectionService;
 use ESCloud\SDK\Service\MobileService;
 use ESCloud\SDK\Service\MpService;
 use ESCloud\SDK\Service\NotificationService;
+use ESCloud\SDK\Service\PlatformNewsService;
 use ESCloud\SDK\Service\PlayService;
 use ESCloud\SDK\Service\PushService;
 use ESCloud\SDK\Service\ResourceService;
 use ESCloud\SDK\Service\ScrmService;
+use ESCloud\SDK\Service\SearchService;
 use ESCloud\SDK\Service\SmsService;
 use ESCloud\SDK\Service\WeChatService;
 use ESCloud\SDK\Service\XAPIService;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
-use ESCloud\SDK\HttpClient\ClientInterface;
-use ESCloud\SDK\Exception\SDKException;
 
 class ESCloudSDK
 {
@@ -43,7 +46,7 @@ class ESCloudSDK
     public function __construct(array $options, LoggerInterface $logger = null, ClientInterface $httpClient = null)
     {
         if (empty($options['access_key'])) {
-            throw new \InvalidArgumentException('`access_key` param is missing.');
+            throw new InvalidArgumentException('`access_key` param is missing.');
         }
         if (empty($options['secret_key'])) {
             throw new InvalidArgumentException('`secret_key` param is missing.');
@@ -121,11 +124,19 @@ class ESCloudSDK
     }
 
     /**
-     * @return AiService
+     * @return AIService
      */
-    public function getAiService()
+    public function getAIService()
     {
-        return $this->getService('Ai');
+        return $this->getService('AI', true);
+    }
+
+    /**
+     * @return AIFaceService
+     */
+    public function getAIFaceService()
+    {
+        return $this->getService('AIFace');
     }
 
     /**
@@ -177,11 +188,19 @@ class ESCloudSDK
     }
 
     /**
-     * @return \ESCloud\SDK\Service\SearchService
+     * @return SearchService
      */
     public function getSearchService()
     {
         return $this->getService('Search', true);
+    }
+
+    /**
+     * @return PlatformNewsService
+     */
+    public function getPlatformNewsService()
+    {
+        return $this->getService('PlatformNews');
     }
 
     /**

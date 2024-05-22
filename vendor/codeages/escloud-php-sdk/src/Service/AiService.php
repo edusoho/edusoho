@@ -2,57 +2,111 @@
 
 namespace ESCloud\SDK\Service;
 
+use ESCloud\SDK\Exception\ResponseException;
+use ESCloud\SDK\Exception\SDKException;
+use ESCloud\SDK\HttpClient\ClientException;
+
 /**
  * AI服务
  */
-class AiService extends BaseService
+class AIService extends BaseService
 {
-    protected $host = 'ai-service.qiqiuyun.net';
-    protected $service = 'ai';
+    protected $host = 'ai-service.edusoho.net';
+
+    protected $service = 'AI';
 
     /**
-     * 创建人脸识别会话
-     *
-     * @see http://docs.qiqiuyun.com/v2/ai-face.html
-     *
-     * @param $userId int 用户id
-     * @param $userName string 用户名
-     * @param $type string 会话类型 register:注册 compare:对比
-     *
-     * @return array 会话信息
+     * 开通 AI 服务
+     * @return void
+     * @throws ResponseException
+     * @throws SDKException
+     * @throws ClientException
      */
-    public function createFaceSession($userId, $userName, $type)
+    public function enableAccount()
     {
-        return $this->request('POST', '/face/sessions', array('user_id' => $userId, 'username' => $userName, 'type' => $type));
+        $this->request('POST', '/api/open/account/enable');
     }
 
     /**
-     * 获取人脸识别会话信息
-     *
-     * @see http://docs.qiqiuyun.com/v2/ai-face.html
-     *
-     * @param string $sessionId 会话id
-     *
-     * @return array 会话信息
+     * 禁用 AI 服务
+     * @return void
+     * @throws ResponseException
+     * @throws SDKException
+     * @throws ClientException
      */
-    public function getFaceSession($sessionId)
+    public function disableAccount()
     {
-        return $this->request('GET', "/face/sessions/{$sessionId}");
+        $this->request('POST', '/api/open/account/disable');
     }
 
     /**
-     * 完成人脸上传
+     * 审视 AI 服务状态
      *
-     * @see http://docs.qiqiuyun.com/v2/ai-face.html
+     * @return array status: none, ok, disabled
      *
-     * @param string $sessionId    会话id
-     * @param int    $responseCode 上传后返回的http状态码，由存储供应商返回
-     * @param string $responseBody 上传结果，由存储供应商返回
+     * @throws ResponseException
+     * @throws SDKException
+     * @throws ClientException
+     */
+    public function inspectAccount()
+    {
+        return $this->request('GET', '/api/open/account/inspect');
+    }
+
+    /**
+     * 开始AI应用的文本补全输出
      *
+     * @param $app
+     * @param $inputs
      * @return array
+     * @throws ClientException
+     * @throws ResponseException
+     * @throws SDKException
      */
-    public function finishFaceUpload($sessionId, $responseCode, $responseBody)
+    public function startAppCompletion($app, $inputs)
     {
-        return $this->request('POST', "/face/sessions/{$sessionId}/finish_upload", array('response_code' => $responseCode, 'response_body' => $responseBody));
+        $uri = sprintf('/api/open/app/%s/completion', $app);
+
+        return $this->request('POST', $uri, array('inputs' => $inputs, 'responseMode' => 'streaming'), [], 'root', true);
+    }
+
+    /**
+     * 停止AI应用的文本补全输出
+     *
+     * @param $app
+     * @param $messageId
+     * @param $taskId
+     * @return void
+     * @throws ClientException
+     * @throws ResponseException
+     * @throws SDKException
+     */
+    public function stopAppCompletion($app, $messageId, $taskId)
+    {
+        $uri = sprintf('/api/open/app/%s/stopCompletion', $app);
+        $this->request('POST', $uri, array('messageId' => $messageId, 'taskId' => $taskId));
+    }
+
+    /**
+     * 生成AI应用文本补全的客户端URL
+     *
+     * @param $app
+     * @param $lifetime
+     * @return string
+     */
+    public function makeClientAppCompletionUrl($app, $lifetime = 60)
+    {
+        $params = array('token' => $this->makeClientToken($lifetime));
+        return sprintf('https://%s/api/client/app/%s/completion?%s', $this->host, $app, http_build_query($params));
+    }
+
+    private function makeClientToken($lifetime)
+    {
+        $payload = array(
+            'iss' => 'AIClient',
+            'exp' => time() + $lifetime,
+        );
+
+        return $this->auth->makeJwtTokenWithKid($payload);
     }
 }

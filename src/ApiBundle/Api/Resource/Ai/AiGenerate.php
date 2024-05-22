@@ -4,9 +4,11 @@ namespace ApiBundle\Api\Resource\Ai;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Activity\Service\ActivityService;
 use Biz\AI\Constant\AIApp;
 use Biz\AI\Service\AIService;
 use Biz\Common\CommonException;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\Question\QuestionException;
 use Biz\Question\Traits\QuestionAnswerModeTrait;
 use Biz\System\Constant\LogAction;
@@ -51,7 +53,7 @@ class AiGenerate extends AbstractResource
         if (empty($answerRecord) || $this->getCurrentUser()->getId() != $answerRecord['user_id']) {
             throw UserException::PERMISSION_DENIED();
         }
-        $question = $this->getItemService()->getQuestion($params['questionId']);
+        $question = $this->getItemService()->getQuestionIncludeDeleted($params['questionId']);
         if (empty($question)) {
             throw QuestionException::NOTFOUND_QUESTION();
         }
@@ -62,6 +64,7 @@ class AiGenerate extends AbstractResource
         }
         $params['scene'] = $this->getScene($answerRecord['answer_scene_id']);
         $this->getLogService()->info(LogModule::AI, LogAction::STUDENT_GENERATE_QUESTION_ANALYSIS, '学员端生成AI题目解析', $params);
+
         $question['material'] = $item['material'];
         $aiParams = $this->makeAIParamsFromQuestion($item['type'], $question);
         $aiParams['inputs'] = $this->filterHtmlTags($aiParams['inputs']);
@@ -154,7 +157,7 @@ class AiGenerate extends AbstractResource
             return [
                 'app' => AIApp::FILL_QUESTION_GENERATE_ANALYSIS,
                 'inputs' => [
-                    'stem' => $question['stem'],
+                    'stem' => str_replace('[[]]', '___', $question['stem']),
                     'answer' => $answer,
                 ],
             ];
@@ -211,7 +214,7 @@ class AiGenerate extends AbstractResource
             return [
                 'app' => AIApp::FILL_QUESTION_GENERATE_ANALYSIS,
                 'inputs' => [
-                    'stem' => $params['stem'],
+                    'stem' => str_replace('[[]]', '___', $params['stem']),
                     'answer' => $answer,
                 ],
             ];
@@ -262,7 +265,23 @@ class AiGenerate extends AbstractResource
 
     private function getScene($answerSceneId)
     {
-        return $answerSceneId;
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
+        if ($activity) {
+            return [
+                'testpaper' => 'course-testpaper',
+                'homework' => 'course-homework',
+                'exercise' => 'course-exercise',
+            ][$activity['mediaType']];
+        }
+        $module = $this->getItemBankExerciseModuleService()->getByAnswerSceneId($answerSceneId);
+        if ($module) {
+            return [
+                'chapter' => 'itembank-chapter',
+                'assessment' => 'itembank-assessment',
+            ][$module['type']];
+        }
+
+        return 'unknown';
     }
 
     private function filterHtmlTags($inputs)
@@ -296,6 +315,22 @@ class AiGenerate extends AbstractResource
     private function getSectionItemService()
     {
         return $this->service('ItemBank:Assessment:AssessmentSectionItemService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    private function getActivityService()
+    {
+        return $this->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return ExerciseModuleService
+     */
+    private function getItemBankExerciseModuleService()
+    {
+        return $this->service('ItemBankExercise:ExerciseModuleService');
     }
 
     /**

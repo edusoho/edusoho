@@ -3,7 +3,7 @@
 namespace ESCloud\SDK\Tests\Service;
 
 use ESCloud\SDK\Tests\BaseTestCase;
-use ESCloud\SDK\Service\AiService;
+use ESCloud\SDK\Service\AIService;
 
 class AiServiceTest extends BaseTestCase
 {
@@ -12,7 +12,7 @@ class AiServiceTest extends BaseTestCase
         $mockSession = $this->mockSession();
         $httpClient = $this->mockHttpClient($mockSession);
 
-        $service = new AiService($this->auth, array(), null, $httpClient);
+        $service = new AIService($this->auth, array(), null, $httpClient);
 
         $userId = $mockSession['user']['id'];
         $userName = $mockSession['user']['username'];
@@ -31,7 +31,7 @@ class AiServiceTest extends BaseTestCase
 
         $httpClient = $this->mockHttpClient($mockSession);
 
-        $service = new AiService($this->auth, array(), null, $httpClient);
+        $service = new AIService($this->auth, array(), null, $httpClient);
 
         $result = $service->getFaceSession($mockSession['id']);
 
@@ -46,7 +46,7 @@ class AiServiceTest extends BaseTestCase
             'success' => true,
         ));
 
-        $service = new AiService($this->auth, array(), null, $httpClient);
+        $service = new AIService($this->auth, array(), null, $httpClient);
 
         $result = $service->finishFaceUpload($mockSession['id'], 200, '{"hash":"33df3df3df33","key":"33df3df3df33"}');
 
@@ -87,6 +87,6 @@ class AiServiceTest extends BaseTestCase
 
     private function getAiService()
     {
-        return new AiService($this->auth);
+        return new AIService($this->auth);
     }
 }
