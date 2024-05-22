@@ -13,10 +13,13 @@ class RandomAssessmentCreateJob extends AbstractJob
 
     public function execute()
     {
-        file_put_contents("/tmp/jc123", 'ininin', 8);
+        file_put_contents("/tmp/jc123", '1', 8);
         $assessment = $this->getAssessmentService()->getAssessment($this->args['assessmentId']);
+        file_put_contents("/tmp/jc123", '2', 8);
         $assessmentGenerateRule = $this->getAssessmentGenerateRuleService()->getAssessmentGenerateRuleByAssessmentId($assessment['id']);
+        file_put_contents("/tmp/jc123", '3', 8);
         $questionBank = $this->getQuestionBankService()->getQuestionBank($assessment['id']);
+        file_put_contents("/tmp/jc123", '4', 8);
         $assessmentParams = [
             'itemBankId' => $questionBank['itemBankId'],
             'type' => 'random',

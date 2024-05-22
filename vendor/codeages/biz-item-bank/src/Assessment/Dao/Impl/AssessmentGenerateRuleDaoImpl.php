@@ -12,7 +12,8 @@ class AssessmentGenerateRuleDaoImpl extends AdvancedDaoImpl implements Assessmen
 
     public function getByAssessmentId($assessmentId)
     {
-        return $this->getByFields('assessment_id', $assessmentId);
+        file_put_contents("/tmp/jc123", 'ccccccc', 8);
+        return $this->getByFields(['assessment_id' => $assessmentId]);
     }
 
     public function declares()
