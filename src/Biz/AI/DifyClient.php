@@ -4,17 +4,18 @@ namespace Biz\AI;
 
 class DifyClient
 {
-    public function request($query)
+    public function request($apiKey, $inputs)
     {
         $body = json_encode([
-            'inputs' => ['query' => $query],
+            'inputs' => $inputs,
             'response_mode' => 'streaming',
             'user' => 'test',
         ]);
         $headers = [
             'Content-Type: application/json',
-            'Authorization: Bearer app-QuF1x9FZSBQTJvYNsj9zTmBw',
+            "Authorization: Bearer $apiKey",
         ];
+        $response = '';
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, 'https://dify.edusoho.cn/v1/completion-messages');
@@ -26,17 +27,16 @@ class DifyClient
         curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) {
+        curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use (&$response) {
             echo $data;
+            $response .= $data;
             return strlen($data);
         });
 
         curl_exec($ch);
 
-//        if (curl_errno($ch)) {
-//            file_put_contents('./log/curl.error.log', curl_error($ch).PHP_EOL.PHP_EOL, FILE_APPEND);
-//        }
-
         curl_close($ch);
+
+        return $response;
     }
 }
