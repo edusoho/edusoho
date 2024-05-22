@@ -21,7 +21,7 @@ class AIServiceImpl extends BaseService implements AIService
         $this->recordNewAnswer($app, $inputs, $response);
     }
 
-    public function stopGeneratingAnswer($messageId, $taskId)
+    public function stopGeneratingAnswer($app, $messageId, $taskId)
     {
         // TODO: Implement stopGeneratingAnswer() method.
     }
@@ -56,6 +56,8 @@ class AIServiceImpl extends BaseService implements AIService
         $results = $this->getAIAnswerResultDao()->findByAppAndInputsHash($app, $inputsHash);
         foreach ($results as $result) {
             if (!in_array($result['id'], $filterResultIds)) {
+                $this->recordNewAnswer($app, $inputs, $result['answer']);
+
                 return $result['answer'];
             }
         }

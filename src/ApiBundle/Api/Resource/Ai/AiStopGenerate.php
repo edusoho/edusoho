@@ -12,7 +12,7 @@ class AiStopGenerate extends AbstractResource
     {
         $params = $request->request->all();
         if ('question_analysis' == $type) {
-            $this->getAIService()->stopGeneratingAnswer($params['messageId'], $params['taskId']);
+            $this->getAIService()->stopGeneratingAnswer('', $params['messageId'], $params['taskId']);
         }
 
         return ['ok' => true];

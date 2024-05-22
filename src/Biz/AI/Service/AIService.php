@@ -6,7 +6,7 @@ interface AIService
 {
     public function generateAnswer($app, $inputs);
 
-    public function stopGeneratingAnswer($messageId, $taskId);
+    public function stopGeneratingAnswer($app, $messageId, $taskId);
 
     public function needGenerateNewAnswer($app, $inputs);
 

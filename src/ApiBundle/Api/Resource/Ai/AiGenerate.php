@@ -9,6 +9,9 @@ use Biz\AI\Service\AIService;
 use Biz\Common\CommonException;
 use Biz\Question\QuestionException;
 use Biz\Question\Traits\QuestionAnswerModeTrait;
+use Biz\System\Constant\LogAction;
+use Biz\System\Constant\LogModule;
+use Biz\System\Service\LogService;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
@@ -57,8 +60,11 @@ class AiGenerate extends AbstractResource
         if (empty($sectionItem)) {
             throw CommonException::ERROR_PARAMETER();
         }
+        $params['scene'] = $this->getScene($answerRecord['answer_scene_id']);
+        $this->getLogService()->info(LogModule::AI, LogAction::STUDENT_GENERATE_QUESTION_ANALYSIS, '学员端生成AI题目解析', $params);
         $question['material'] = $item['material'];
         $aiParams = $this->makeAIParamsFromQuestion($item['type'], $question);
+        $aiParams['inputs'] = $this->filterHtmlTags($aiParams['inputs']);
 
         if (!$this->getAIService()->needGenerateNewAnswer($aiParams['app'], $aiParams['inputs'])) {
             $analysis = $this->getAIService()->getAnswerFromLocal($aiParams['app'], $aiParams['inputs']);
@@ -68,7 +74,7 @@ class AiGenerate extends AbstractResource
 
             return $this->createStreamedResponse(function () use ($analysis) {
                 foreach (array_filter(explode("\n\n", $analysis)) as $data) {
-                    echo $data."\n\n";
+                    echo $data . "\n\n";
                 }
             });
         }
@@ -85,7 +91,9 @@ class AiGenerate extends AbstractResource
         if (!$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isAdmin()) {
             return [];
         }
+        $this->getLogService()->info(LogModule::AI, LogAction::TEACHER_GENERATE_QUESTION_ANALYSIS, '教师端生成AI题目解析');
         $aiParams = $this->makeInputsFromTeacherInput($params['type'], $params);
+        $aiParams['inputs'] = $this->filterHtmlTags($aiParams['inputs']);
 
         return $this->responseStreaming($aiParams);
     }
@@ -140,7 +148,7 @@ class AiGenerate extends AbstractResource
             foreach ($question['answer'] as $key => $blankAnswer) {
                 $blankAnswers = explode('|', $blankAnswer);
                 $answer .= empty($answer) ? '' : ';';
-                $answer .= 1 == '第'.($key + 1).'空的答案是'.count($blankAnswers) ? $blankAnswers[0] : implode('或', $blankAnswers);
+                $answer .= '第' . ($key + 1) . '空的答案是' . (1 == count($blankAnswers) ? $blankAnswers[0] : implode('或', $blankAnswers));
             }
 
             return [
@@ -197,7 +205,7 @@ class AiGenerate extends AbstractResource
             foreach ($params['answers'] as $key => $blankAnswer) {
                 $blankAnswers = explode('|', $blankAnswer);
                 $answer .= empty($answer) ? '' : ';';
-                $answer .= 1 == '第'.($key + 1).'空的答案是'.count($blankAnswers) ? $blankAnswers[0] : implode('或', $blankAnswers);
+                $answer .= '第' . ($key + 1) . '空的答案是' . (1 == count($blankAnswers) ? $blankAnswers[0] : implode('或', $blankAnswers));
             }
 
             return [
@@ -252,6 +260,20 @@ class AiGenerate extends AbstractResource
         return $answer;
     }
 
+    private function getScene($answerSceneId)
+    {
+        return $answerSceneId;
+    }
+
+    private function filterHtmlTags($inputs)
+    {
+        foreach ($inputs as &$input) {
+            $input = strip_tags($input);
+        }
+
+        return $inputs;
+    }
+
     /**
      * @return AnswerRecordService
      */
@@ -282,5 +304,13 @@ class AiGenerate extends AbstractResource
     private function getAIService()
     {
         return $this->service('AI:AIService');
+    }
+
+    /**
+     * @return LogService
+     */
+    private function getLogService()
+    {
+        return $this->service('System:LogService');
     }
 }

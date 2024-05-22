@@ -17,4 +17,8 @@ final class LogAction
     const BATCH_PUBLISH_LESSON = 'batch_publish_lesson';
 
     const BATCH_UNPUBLISH_LESSON = 'batch_unpublish_lesson';
+
+    const STUDENT_GENERATE_QUESTION_ANALYSIS = 'student_gen_question_analysis';
+
+    const TEACHER_GENERATE_QUESTION_ANALYSIS = 'teacher_gen_question_analysis';
 }
