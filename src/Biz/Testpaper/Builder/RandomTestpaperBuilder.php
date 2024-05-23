@@ -20,7 +20,6 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
 
         $sections = $this->getAssessmentService()->drawItems($range, $sections);
         $sections = $this->setSectionQuestionScore($sections);
-
         $assessment = [
             'bank_id' => $fields['itemBankId'],
             'name' => $fields['name'],
@@ -28,7 +27,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
             'description' => $fields['description'],
             'sections' => $sections,
             'type' => $fields['type'] ?? 'regular',
-            'parent_id' => $fields['parentId'] ?? '1',
+            'parent_id' => $fields['parentId'] ?? '0',
             'status' => $fields['status'] ?? 'draft',
         ];
 

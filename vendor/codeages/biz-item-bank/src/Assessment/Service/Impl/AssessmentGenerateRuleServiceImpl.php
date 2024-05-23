@@ -10,7 +10,6 @@ class AssessmentGenerateRuleServiceImpl extends BaseService implements Assessmen
 {
     public function getAssessmentGenerateRuleByAssessmentId($id)
     {
-        file_put_contents("/tmp/jc123", 'dddd', 8);
         return $this->getAssessmentGenerateRuleDao()->getByAssessmentId($id);
     }
 

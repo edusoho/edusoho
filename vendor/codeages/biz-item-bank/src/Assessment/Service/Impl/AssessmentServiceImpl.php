@@ -83,7 +83,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             'question_count' => ['integer', ['min', 0]],
             'displayable' => ['required', ['in', [0, 1]]],
             'type' => ['required', ['in', ['regular', 'random', 'ai_personality']]],
-            'parent_id' => ['required', ['min', 0], ['max', 200]],
+            'parent_id' => ['required', ['min', 0]],
             'status' => ['required', ['in', ['generating', 'draft', 'generatFail', 'open', 'closed']]],
         ]);
 

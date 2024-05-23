@@ -10,34 +10,30 @@ use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class RandomAssessmentCreateJob extends AbstractJob
 {
-
     public function execute()
     {
-        file_put_contents("/tmp/jc123", '1', 8);
         $assessment = $this->getAssessmentService()->getAssessment($this->args['assessmentId']);
-        file_put_contents("/tmp/jc123", '2', 8);
         $assessmentGenerateRule = $this->getAssessmentGenerateRuleService()->getAssessmentGenerateRuleByAssessmentId($assessment['id']);
-        file_put_contents("/tmp/jc123", '3', 8);
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($assessment['id']);
-        file_put_contents("/tmp/jc123", '4', 8);
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($this->args['questionBankId']);
         $assessmentParams = [
             'itemBankId' => $questionBank['itemBankId'],
             'type' => 'random',
+            'name' => $assessment['name'],
+            'description' => $assessment['description'],
+            'mode' => 'rand',
+            'num' => $assessmentGenerateRule['num'] - 1,
             'status' => 'generating',
-            'parent_id' => $assessment['id'],
-            'sections' => $assessmentGenerateRule['question_setting']['sections'],
-            'scores' => $assessmentGenerateRule['question_setting']['scores'],
-            'scoreType' => $assessmentGenerateRule['question_setting']['scoreType'],
-            'choiceScore' => $assessmentGenerateRule['question_setting']['choiceScore']
+            'parentId' => $assessment['id'],
+            'sections' => $assessmentGenerateRule['question_setting'][0]['sections'],
+            'scores' => $assessmentGenerateRule['question_setting'][0]['scores'],
+            'scoreType' => $assessmentGenerateRule['question_setting'][0]['scoreType'],
+            'choiceScore' => $assessmentGenerateRule['question_setting'][0]['choiceScore'],
         ];
-        file_put_contents("/tmp/jc123", json_encode($assessmentParams), 8);
-        for ($i = 0; $i < $assessmentGenerateRule['num']; $i++) {
-            file_put_contents("/tmp/jc123", '______', 8);
+
+        for ($i = 0; $i < $assessmentGenerateRule['num']; ++$i) {
             $this->biz['testpaper_builder.random_testpaper']->build($assessmentParams);
-            file_put_contents("/tmp/jc123", '(((((______)))))', 8);
         }
-        $this->getAssessmentService()->updateAssessment($assessment['id'], array('status' => 'draft'));
-        $this->getSchedulerService()->deleteJobByName('RandomAssessmentCreateJob_'.$assessment['id']);
+        $this->getAssessmentService()->updateAssessment($assessment['id'], ['status' => 'draft']);
     }
 
     /**

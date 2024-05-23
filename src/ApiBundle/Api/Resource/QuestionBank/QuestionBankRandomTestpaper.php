@@ -10,7 +10,6 @@ use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentGenerateRuleService;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class QuestionBankRandomTestpaper extends AbstractResource
 {
@@ -28,7 +27,7 @@ class QuestionBankRandomTestpaper extends AbstractResource
             [
                 'itemBankId' => $questionBank['itemBankId'],
                 'type' => 'random',
-                'status' => 'generating'
+                'status' => 'generating',
             ]
         );
         $assessment = $this->getBiz()['testpaper_builder.random_testpaper']->build($fields);
@@ -38,7 +37,7 @@ class QuestionBankRandomTestpaper extends AbstractResource
             'sections' => $fields['sections'],
             'scores' => $fields['scores'],
             'scoreType' => $fields['scoreType'],
-            'choiceScore' => $fields['choiceScore']
+            'choiceScore' => $fields['choiceScore'],
         ];
         $assessmentGenerateRule = [
             'num' => $fields['num'],
@@ -53,14 +52,14 @@ class QuestionBankRandomTestpaper extends AbstractResource
         // 保存配置
         $this->getAssessmentGenerateRuleService()->createAssessmentGenerateRule($assessmentGenerateRule);
         // 创建JOB
-        $this->getSchedulerService()->register(array(
+        $this->getSchedulerService()->register([
             'name' => 'RandomAssessmentCreateJob_'.$assessment['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time() + 10),
             'misfire_policy' => 'executing',
             'class' => 'Biz\Testpaper\Job\RandomAssessmentCreateJob',
-            'args' => ["assessmentId" => $assessment['id']],
-        ));
+            'args' => ['assessmentId' => $assessment['id'], 'questionBankId' => $id],
+        ]);
         // 返回成功
         return 'true';
     }
