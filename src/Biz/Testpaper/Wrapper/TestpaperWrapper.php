@@ -281,12 +281,7 @@ class TestpaperWrapper
      */
     private function getAttachmentService()
     {
-        return $this->service('ItemBank:Item:AttachmentService');
-    }
-
-    private function service($alias)
-    {
-        return $this->getBiz()->service($alias);
+        return $this->getBiz()->service('ItemBank:Item:AttachmentService');
     }
 
     private function getBiz()
