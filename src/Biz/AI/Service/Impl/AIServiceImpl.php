@@ -2,7 +2,6 @@
 
 namespace Biz\AI\Service\Impl;
 
-use Biz\AI\Constant\AIApp;
 use Biz\AI\Dao\AIAnswerRecordDao;
 use Biz\AI\Dao\AIAnswerResultDao;
 use Biz\AI\Service\AIService;
