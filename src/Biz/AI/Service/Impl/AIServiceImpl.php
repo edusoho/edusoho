@@ -29,7 +29,7 @@ class AIServiceImpl extends BaseService implements AIService
     public function generateAnswer($app, $inputs)
     {
         $response = $this->getAIService()->startAppCompletion($app, $inputs);
-        $this->recordNewAnswer($app, $inputs, $response);
+        $this->recordNewAnswer($app, $inputs, $this->makeSSE($response));
     }
 
     public function stopGeneratingAnswer($app, $messageId, $taskId)
@@ -90,6 +90,16 @@ class AIServiceImpl extends BaseService implements AIService
             'inputsHash' => $inputsHash,
             'resultId' => $result['id'],
         ]);
+    }
+
+    private function makeSSE($response)
+    {
+        $sse = '';
+        foreach ($response as $data) {
+            $sse .= 'data:'.json_encode($data)."\n\n";
+        }
+
+        return $sse;
     }
 
     private function makeHashForInputs($inputs)
