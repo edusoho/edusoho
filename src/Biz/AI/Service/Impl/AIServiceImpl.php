@@ -63,11 +63,11 @@ class AIServiceImpl extends BaseService implements AIService
 
             return $result['answer'];
         }
-        $filterResultIds = array_column($records, 'resultId');
+        $recordedResultIds = array_column($records, 'resultId');
         $results = $this->getAIAnswerResultDao()->findByAppAndInputsHash($app, $inputsHash);
         foreach ($results as $result) {
-            if (!in_array($result['id'], $filterResultIds)) {
-                $this->recordNewAnswer($app, $inputs, $result['answer']);
+            if (!in_array($result['id'], $recordedResultIds)) {
+                $this->recordAnswerAndUser($app, $inputsHash, $result['id']);
 
                 return $result['answer'];
             }
@@ -84,11 +84,16 @@ class AIServiceImpl extends BaseService implements AIService
             'inputsHash' => $inputsHash,
             'answer' => $response,
         ]);
+        $this->recordAnswerAndUser($app, $inputsHash, $result['id']);
+    }
+
+    private function recordAnswerAndUser($app, $inputsHash, $resultId)
+    {
         $this->getAIAnswerRecordDao()->create([
             'userId' => $this->getCurrentUser()->getId(),
             'app' => $app,
             'inputsHash' => $inputsHash,
-            'resultId' => $result['id'],
+            'resultId' => $resultId,
         ]);
     }
 
