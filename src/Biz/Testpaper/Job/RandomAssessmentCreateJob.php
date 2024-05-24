@@ -21,8 +21,6 @@ class RandomAssessmentCreateJob extends AbstractJob
             'name' => $assessment['name'],
             'description' => $assessment['description'],
             'mode' => 'rand',
-            'num' => $assessmentGenerateRule['num'] - 1,
-            'status' => 'generating',
             'parentId' => $assessment['id'],
             'sections' => $assessmentGenerateRule['question_setting'][0]['sections'],
             'scores' => $assessmentGenerateRule['question_setting'][0]['scores'],
@@ -30,10 +28,17 @@ class RandomAssessmentCreateJob extends AbstractJob
             'choiceScore' => $assessmentGenerateRule['question_setting'][0]['choiceScore'],
         ];
 
-        for ($i = 0; $i < $assessmentGenerateRule['num']; ++$i) {
-            $this->biz['testpaper_builder.random_testpaper']->build($assessmentParams);
+        try {
+            $this->biz['db']->beginTransaction();
+            for ($i = 0; $i < $assessmentGenerateRule['num'] - 1; ++$i) {
+                $this->biz['testpaper_builder.random_testpaper']->build($assessmentParams);
+            }
+            $this->getAssessmentService()->updateAssessment($assessment['id'], ['status' => 'draft']);
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->getAssessmentService()->updateAssessment($assessment['id'], ['status' => 'failure']);
+            throw $e;
         }
-        $this->getAssessmentService()->updateAssessment($assessment['id'], ['status' => 'draft']);
     }
 
     /**

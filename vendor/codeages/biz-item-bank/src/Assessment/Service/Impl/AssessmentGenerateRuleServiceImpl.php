@@ -15,6 +15,11 @@ class AssessmentGenerateRuleServiceImpl extends BaseService implements Assessmen
 
     public function createAssessmentGenerateRule($assessmentGenerateRule)
     {
+        $this->getValidator()->validate($assessmentGenerateRule, [
+            'assessment_id' => 'required',
+            'num' => ['integer', ['min', 0], ['max', 200]],
+            'type' => [['in', ['questionType', 'questionTypeCategory']]],
+        ]);
         return $this->getAssessmentGenerateRuleDao()->create($assessmentGenerateRule);
     }
 

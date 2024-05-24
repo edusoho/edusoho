@@ -30,9 +30,34 @@ class QuestionBankRandomTestpaper extends AbstractResource
                 'status' => 'generating',
             ]
         );
+        $this->biz['db']->beginTransaction();
         $assessment = $this->getBiz()['testpaper_builder.random_testpaper']->build($fields);
-        // 创建试卷，状态为创建中
-//        if ($fields['type'] == 'randomTestpaper') {
+
+        $this->createAssessmentGenerateRule($fields, $assessment);
+
+        // 创建JOB
+        $this->getSchedulerService()->register([
+            'name' => 'RandomAssessmentCreateJob_'.$assessment['id'],
+            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+            'expression' => intval(time() + 10),
+            'misfire_policy' => 'executing',
+            'class' => 'Biz\Testpaper\Job\RandomAssessmentCreateJob',
+            'args' => ['assessmentId' => $assessment['id'], 'questionBankId' => $id],
+        ]);
+        $this->biz['db']->commit();
+
+        return 'true';
+    }
+
+    private function createAssessmentGenerateRule($fields, $assessment)
+    {
+        $methodName = 'buildAssessmentGenerateRuleBy'.ucfirst($fields['generateType']);
+        $assessmentGenerateRule = $this->$methodName($fields, $assessment);
+        $this->getAssessmentGenerateRuleService()->createAssessmentGenerateRule($assessmentGenerateRule);
+    }
+
+    private function buildAssessmentGenerateRuleByQuestionType($fields, $assessment)
+    {
         $question_setting[] = [
             'sections' => $fields['sections'],
             'scores' => $fields['scores'],
@@ -47,21 +72,12 @@ class QuestionBankRandomTestpaper extends AbstractResource
             'difficulty' => $fields['percentages'],
             'wrong_question_rate' => $fields['wrongQuestionRate'],
         ];
-//        }
 
-        // 保存配置
-        $this->getAssessmentGenerateRuleService()->createAssessmentGenerateRule($assessmentGenerateRule);
-        // 创建JOB
-        $this->getSchedulerService()->register([
-            'name' => 'RandomAssessmentCreateJob_'.$assessment['id'],
-            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-            'expression' => intval(time() + 10),
-            'misfire_policy' => 'executing',
-            'class' => 'Biz\Testpaper\Job\RandomAssessmentCreateJob',
-            'args' => ['assessmentId' => $assessment['id'], 'questionBankId' => $id],
-        ]);
-        // 返回成功
-        return 'true';
+        return $assessmentGenerateRule;
+    }
+
+    private function buildAssessmentGenerateRuleByQuestionTypeCategory($fields, $assessment)
+    {
     }
 
     /**
