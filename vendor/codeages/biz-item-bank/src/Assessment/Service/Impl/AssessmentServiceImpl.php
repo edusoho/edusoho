@@ -224,6 +224,28 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         return $this->getAssessmentDao()->update($assessmentId, $assessment);
     }
 
+    public function updateBasicAssessmentByParentId($parentId, $assessment)
+    {
+        $ids = $this->searchAssessments(['parent_id' => $parentId], [] , 0, PHP_INT_MAX, ['id']);
+        if (empty($ids)) {
+            throw new AssessmentException('Assessment not found', ErrorCode::ASSESSMENT_NOTFOUND);
+        }
+        $assessment = $this->getValidator()->validate($assessment, [
+            'bank_id' => ['integer', ['min', 1]],
+            'name' => [['lengthBetween', 1, 255]],
+            'updated_user_id' => ['integer', ['min', 0]],
+            'status' => [['in', [self::DRAFT, self::OPEN, self::CLOSED]]],
+            'item_count' => ['integer', ['min', 0]],
+            'question_count' => ['integer', ['min', 0]],
+            'total_score' => [],
+            'description' => [],
+        ]);
+        $assessment['updated_user_id'] = empty($assessment['updated_user_id']) ? empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'] : $assessment['updated_user_id'];
+        isset($assessment['description']) && $assessment['description'] = $this->biz['item_bank_html_helper']->purify($assessment['description']);
+
+        return $this->getAssessmentDao()->update(['ids' => array_column($ids, 'id')], $assessment);
+    }
+
     protected function createAssessmentSectionsAndItems($assessmentId, $sections)
     {
         $assessmentSections = [];
@@ -290,7 +312,6 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
     public function searchAssessments($conditions, $orderBys, $start, $limit, $columns = array())
     {
         $conditions = $this->filterConditions($conditions);
-
         return $this->getAssessmentDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 

@@ -21,6 +21,7 @@ class RandomAssessmentCreateJob extends AbstractJob
             'name' => $assessment['name'],
             'description' => $assessment['description'],
             'mode' => 'rand',
+            'status' => 'generating',
             'parentId' => $assessment['id'],
             'sections' => $assessmentGenerateRule['question_setting'][0]['sections'],
             'scores' => $assessmentGenerateRule['question_setting'][0]['scores'],
@@ -34,6 +35,7 @@ class RandomAssessmentCreateJob extends AbstractJob
                 $this->biz['testpaper_builder.random_testpaper']->build($assessmentParams);
             }
             $this->getAssessmentService()->updateAssessment($assessment['id'], ['status' => 'draft']);
+            $this->getAssessmentService()->updateBasicAssessmentByParentId($assessment['id'], ['status' => 'draft']);
             $this->biz['db']->commit();
         } catch (\Exception $e) {
             $this->getAssessmentService()->updateAssessment($assessment['id'], ['status' => 'failure']);

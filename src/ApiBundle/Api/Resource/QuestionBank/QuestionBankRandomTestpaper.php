@@ -10,6 +10,7 @@ use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentGenerateRuleService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class QuestionBankRandomTestpaper extends AbstractResource
 {
@@ -86,6 +87,14 @@ class QuestionBankRandomTestpaper extends AbstractResource
     private function getAssessmentGenerateRuleService()
     {
         return $this->service('ItemBank:Assessment:AssessmentGenerateRuleService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    private function getAssessmentService()
+    {
+        return $this->service('ItemBank:Assessment:AssessmentService');
     }
 
     /**

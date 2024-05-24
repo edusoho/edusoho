@@ -26,6 +26,8 @@ interface AssessmentService
 
     public function updateBasicAssessment($assessmentId, $assessment);
 
+    public function updateBasicAssessmentByParentId($parentId, $assessment);
+
     public function deleteAssessment($id);
 
     public function drawItems($range, $sections);
