@@ -69,9 +69,10 @@ class AiGenerate extends AbstractResource
         $aiParams = $this->makeAIParamsFromQuestion($item['type'], $question);
         $aiParams['inputs'] = $this->filterHtmlTags($aiParams['inputs']);
 
+        $responseMode = $params['responseMode'] ?? 'streaming';
         if (!$this->getAIService()->needGenerateNewAnswer($aiParams['app'], $aiParams['inputs'])) {
             $analysis = $this->getAIService()->getAnswerFromLocal($aiParams['app'], $aiParams['inputs']);
-            if ('blocking' == $params['responseMode']) {
+            if ('blocking' == $responseMode) {
                 return ['answer' => $this->parseAnswerFromStreamResponse($analysis)];
             }
 
@@ -82,7 +83,7 @@ class AiGenerate extends AbstractResource
             });
         }
 
-        if ('blocking' == $params['responseMode']) {
+        if ('blocking' == $responseMode) {
             return $this->responseBlocking($aiParams);
         }
 
