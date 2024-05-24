@@ -28,7 +28,7 @@ class AIServiceImpl extends BaseService implements AIService
 
     public function generateAnswer($app, $inputs)
     {
-        $response = $this->getAIService()->startAppCompletion($app, $inputs);
+        $response = $this->getAIService()->startAppCompletionStream($app, $inputs);
         $this->recordNewAnswer($app, $inputs, $this->makeSSE($response));
     }
 

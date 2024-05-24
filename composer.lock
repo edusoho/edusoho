@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d7cf038d7b5afbf5d37b88d5c25050d3",
+    "content-hash": "8858591a7d5bede4b471510738044ce7",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -644,16 +644,16 @@
         },
         {
             "name": "codeages/escloud-php-sdk",
-            "version": "v1.2.6",
+            "version": "v1.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/escloud-php-sdk.git",
-                "reference": "bc2da3ba8cbc447c1a5faddbb14c474eec4ff0dc"
+                "reference": "a61063548fd24a9059e84ccb97385ba598f3226b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/bc2da3ba8cbc447c1a5faddbb14c474eec4ff0dc",
-                "reference": "bc2da3ba8cbc447c1a5faddbb14c474eec4ff0dc",
+                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/a61063548fd24a9059e84ccb97385ba598f3226b",
+                "reference": "a61063548fd24a9059e84ccb97385ba598f3226b",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -694,9 +694,9 @@
             "description": "ESCloud PHP SDK",
             "support": {
                 "issues": "https://github.com/codeages/escloud-php-sdk/issues",
-                "source": "https://github.com/codeages/escloud-php-sdk/tree/v1.2.6"
+                "source": "https://github.com/codeages/escloud-php-sdk/tree/v1.2.8"
             },
-            "time": "2024-05-20T00:47:47+00:00"
+            "time": "2024-05-24T13:48:11+00:00"
         },
         {
             "name": "codeages/exam-parser",

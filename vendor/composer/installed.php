@@ -3,7 +3,7 @@
         'name' => 'topxia/edusoho',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'c408ccf94bf14240faaf767e9e761465dd59501e',
+        'reference' => '9346d7856ce71610b024776940b427bab6272156',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(
@@ -125,9 +125,9 @@
             'dev_requirement' => false,
         ),
         'codeages/escloud-php-sdk' => array(
-            'pretty_version' => 'v1.2.6',
-            'version' => '1.2.6.0',
-            'reference' => 'bc2da3ba8cbc447c1a5faddbb14c474eec4ff0dc',
+            'pretty_version' => 'v1.2.8',
+            'version' => '1.2.8.0',
+            'reference' => 'a61063548fd24a9059e84ccb97385ba598f3226b',
             'type' => 'library',
             'install_path' => __DIR__ . '/../codeages/escloud-php-sdk',
             'aliases' => array(),
@@ -1793,7 +1793,7 @@
         'topxia/edusoho' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'c408ccf94bf14240faaf767e9e761465dd59501e',
+            'reference' => '9346d7856ce71610b024776940b427bab6272156',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(

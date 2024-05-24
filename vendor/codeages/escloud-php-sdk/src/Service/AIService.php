@@ -54,7 +54,7 @@ class AIService extends BaseService
     }
 
     /**
-     * 开始AI应用的文本补全输出
+     * AI应用文本补全（阻塞式）
      *
      * @param $app
      * @param $inputs
@@ -65,9 +65,21 @@ class AIService extends BaseService
      */
     public function startAppCompletion($app, $inputs)
     {
-        $uri = sprintf('/api/open/app/%s/completion', $app);
+        return $this->request('POST', '/api/open/app/completion', array('app' => $app, 'inputs' => $inputs, 'responseMode' => 'blocking'));
+    }
 
-        return $this->request('POST', $uri, array('inputs' => $inputs, 'responseMode' => 'streaming'), [], 'root', true);
+    /**
+     * AI应用文本补全（SSE 流式）
+     * @param $app
+     * @param $inputs
+     * @return array
+     * @throws ClientException
+     * @throws ResponseException
+     * @throws SDKException
+     */
+    public function startAppCompletionStream($app, $inputs)
+    {
+        return $this->request('POST', '/api/open/app/completion', array('app' => $app, 'inputs' => $inputs, 'responseMode' => 'streaming'), [], 'root', true);
     }
 
     /**
@@ -83,21 +95,7 @@ class AIService extends BaseService
      */
     public function stopAppCompletion($app, $messageId, $taskId)
     {
-        $uri = sprintf('/api/open/app/%s/stopCompletion', $app);
-        $this->request('POST', $uri, array('messageId' => $messageId, 'taskId' => $taskId));
-    }
-
-    /**
-     * 生成AI应用文本补全的客户端URL
-     *
-     * @param $app
-     * @param $lifetime
-     * @return string
-     */
-    public function makeClientAppCompletionUrl($app, $lifetime = 60)
-    {
-        $params = array('token' => $this->makeClientToken($lifetime));
-        return sprintf('https://%s/api/client/app/%s/completion?%s', $this->host, $app, http_build_query($params));
+        $this->request('POST', '/api/open/app/stopCompletion', array('app' => $app, 'messageId' => $messageId, 'taskId' => $taskId));
     }
 
     private function makeClientToken($lifetime)
