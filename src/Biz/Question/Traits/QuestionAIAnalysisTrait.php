@@ -53,6 +53,6 @@ trait QuestionAIAnalysisTrait
      */
     protected function getSettingService()
     {
-        return $this->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 }

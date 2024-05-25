@@ -2,10 +2,7 @@
 
 namespace ESCloud\SDK\Service;
 
-/**
- * AI服务
- */
-class AiService extends BaseService
+class AIFaceService extends BaseService
 {
     protected $host = 'ai-service.qiqiuyun.net';
     protected $service = 'ai';

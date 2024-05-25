@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Question;
 
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
+use Biz\Question\Traits\QuestionAIAnalysisTrait;
 use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ManageController extends BaseController
 {
     use QuestionImportTrait;
+    use QuestionAIAnalysisTrait;
 
     public function indexAction(Request $request, $id)
     {
@@ -57,6 +59,7 @@ class ManageController extends BaseController
             try {
                 $questions = $this->getQuestionParseAdapter()->adapt($result['result']);
                 $questions = $this->getItemParser()->formatData($questions);
+                $questions = $this->wrapAIAnalysis($questions);
             } catch (\Exception $e) {
                 return $this->createJsonResponse([
                     'status' => 'failed',
@@ -116,6 +119,17 @@ class ManageController extends BaseController
         $results = array_column($results, null, 'no');
 
         return $results[$jobId];
+    }
+
+    private function wrapAIAnalysis($items)
+    {
+        foreach ($items as &$item) {
+            foreach ($item['questions'] as &$question) {
+                $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysis($question, $item);
+            }
+        }
+
+        return $items;
     }
 
     private function cacheQuestions($cacheFilePath, $questions)

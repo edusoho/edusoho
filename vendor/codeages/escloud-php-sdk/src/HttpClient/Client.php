@@ -40,6 +40,7 @@ class Client implements ClientInterface
             $body = json_encode($options['json']);
             $headers['Content-Type'] = 'application/json';
         }
+        $stream = !empty($options['stream']);
 
         $uri = $this->buildUri($uri);
 
@@ -52,6 +53,16 @@ class Client implements ClientInterface
             CURLOPT_RETURNTRANSFER => true, // Follow 301 redirects
             CURLOPT_HEADER => true, // Enable header processing
         );
+        if ($stream) {
+            $streamRawResponse = '';
+            $options[CURLOPT_WRITEFUNCTION] = function ($curl, $data) use (&$streamRawResponse) {
+                if (false !== strpos($streamRawResponse, "\r\n\r\n")) {
+                    echo $data;
+                }
+                $streamRawResponse .= $data;
+                return strlen($data);
+            };
+        }
 
         if ('GET' !== $method && null !== $body) {
             $options[CURLOPT_POSTFIELDS] = $body;
@@ -68,6 +79,9 @@ class Client implements ClientInterface
         curl_setopt_array($curl, $options);
 
         $rawResponse = curl_exec($curl);
+        if ($stream) {
+            $rawResponse = $streamRawResponse;
+        }
 
         $errorCode = curl_errno($curl);
         if ($errorCode) {

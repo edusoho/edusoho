@@ -4,11 +4,16 @@ namespace ApiBundle\Api\Resource\Ai;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Activity\Service\ActivityService;
 use Biz\AI\Constant\AIApp;
 use Biz\AI\Service\AIService;
 use Biz\Common\CommonException;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\Question\QuestionException;
 use Biz\Question\Traits\QuestionAnswerModeTrait;
+use Biz\System\Constant\LogAction;
+use Biz\System\Constant\LogModule;
+use Biz\System\Service\LogService;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
@@ -48,7 +53,7 @@ class AiGenerate extends AbstractResource
         if (empty($answerRecord) || $this->getCurrentUser()->getId() != $answerRecord['user_id']) {
             throw UserException::PERMISSION_DENIED();
         }
-        $question = $this->getItemService()->getQuestion($params['questionId']);
+        $question = $this->getItemService()->getQuestionIncludeDeleted($params['questionId']);
         if (empty($question)) {
             throw QuestionException::NOTFOUND_QUESTION();
         }
@@ -57,23 +62,28 @@ class AiGenerate extends AbstractResource
         if (empty($sectionItem)) {
             throw CommonException::ERROR_PARAMETER();
         }
+        $params['scene'] = $this->getScene($answerRecord['answer_scene_id']);
+        $this->getLogService()->info(LogModule::AI, LogAction::STUDENT_GENERATE_QUESTION_ANALYSIS, '学员端生成AI题目解析', $params);
+
         $question['material'] = $item['material'];
         $aiParams = $this->makeAIParamsFromQuestion($item['type'], $question);
+        $aiParams['inputs'] = $this->filterHtmlTags($aiParams['inputs']);
 
+        $responseMode = $params['responseMode'] ?? 'streaming';
         if (!$this->getAIService()->needGenerateNewAnswer($aiParams['app'], $aiParams['inputs'])) {
             $analysis = $this->getAIService()->getAnswerFromLocal($aiParams['app'], $aiParams['inputs']);
-            if ('blocking' == $params['responseMode']) {
+            if ('blocking' == $responseMode) {
                 return ['answer' => $this->parseAnswerFromStreamResponse($analysis)];
             }
 
             return $this->createStreamedResponse(function () use ($analysis) {
                 foreach (array_filter(explode("\n\n", $analysis)) as $data) {
-                    echo $data."\n\n";
+                    echo $data . "\n\n";
                 }
             });
         }
 
-        if ('blocking' == $params['responseMode']) {
+        if ('blocking' == $responseMode) {
             return $this->responseBlocking($aiParams);
         }
 
@@ -85,7 +95,9 @@ class AiGenerate extends AbstractResource
         if (!$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->isAdmin()) {
             return [];
         }
+        $this->getLogService()->info(LogModule::AI, LogAction::TEACHER_GENERATE_QUESTION_ANALYSIS, '教师端生成AI题目解析');
         $aiParams = $this->makeInputsFromTeacherInput($params['type'], $params);
+        $aiParams['inputs'] = $this->filterHtmlTags($aiParams['inputs']);
 
         return $this->responseStreaming($aiParams);
     }
@@ -140,13 +152,13 @@ class AiGenerate extends AbstractResource
             foreach ($question['answer'] as $key => $blankAnswer) {
                 $blankAnswers = explode('|', $blankAnswer);
                 $answer .= empty($answer) ? '' : ';';
-                $answer .= 1 == '第'.($key + 1).'空的答案是'.count($blankAnswers) ? $blankAnswers[0] : implode('或', $blankAnswers);
+                $answer .= '第' . ($key + 1) . '空的答案是' . (1 == count($blankAnswers) ? $blankAnswers[0] : implode('或', $blankAnswers));
             }
 
             return [
                 'app' => AIApp::FILL_QUESTION_GENERATE_ANALYSIS,
                 'inputs' => [
-                    'stem' => $question['stem'],
+                    'stem' => str_replace('[[]]', '___', $question['stem']),
                     'answer' => $answer,
                 ],
             ];
@@ -197,13 +209,13 @@ class AiGenerate extends AbstractResource
             foreach ($params['answers'] as $key => $blankAnswer) {
                 $blankAnswers = explode('|', $blankAnswer);
                 $answer .= empty($answer) ? '' : ';';
-                $answer .= 1 == '第'.($key + 1).'空的答案是'.count($blankAnswers) ? $blankAnswers[0] : implode('或', $blankAnswers);
+                $answer .= '第' . ($key + 1) . '空的答案是' . (1 == count($blankAnswers) ? $blankAnswers[0] : implode('或', $blankAnswers));
             }
 
             return [
                 'app' => AIApp::FILL_QUESTION_GENERATE_ANALYSIS,
                 'inputs' => [
-                    'stem' => $params['stem'],
+                    'stem' => str_replace('[[]]', '___', $params['stem']),
                     'answer' => $answer,
                 ],
             ];
@@ -243,13 +255,43 @@ class AiGenerate extends AbstractResource
     {
         $answer = '';
         foreach (array_filter(explode("\n\n", $response)) as $slice) {
-            $data = json_decode(substr($slice, 6), true);
+            $data = json_decode(substr($slice, 5), true);
             if ('message' == $data['event']) {
                 $answer .= $data['answer'];
             }
         }
 
         return $answer;
+    }
+
+    private function getScene($answerSceneId)
+    {
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
+        if ($activity) {
+            return [
+                'testpaper' => 'course-testpaper',
+                'homework' => 'course-homework',
+                'exercise' => 'course-exercise',
+            ][$activity['mediaType']];
+        }
+        $module = $this->getItemBankExerciseModuleService()->getByAnswerSceneId($answerSceneId);
+        if ($module) {
+            return [
+                'chapter' => 'itembank-chapter',
+                'assessment' => 'itembank-assessment',
+            ][$module['type']];
+        }
+
+        return 'unknown';
+    }
+
+    private function filterHtmlTags($inputs)
+    {
+        foreach ($inputs as &$input) {
+            $input = strip_tags($input);
+        }
+
+        return $inputs;
     }
 
     /**
@@ -277,10 +319,34 @@ class AiGenerate extends AbstractResource
     }
 
     /**
+     * @return ActivityService
+     */
+    private function getActivityService()
+    {
+        return $this->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return ExerciseModuleService
+     */
+    private function getItemBankExerciseModuleService()
+    {
+        return $this->service('ItemBankExercise:ExerciseModuleService');
+    }
+
+    /**
      * @return AIService
      */
     private function getAIService()
     {
         return $this->service('AI:AIService');
+    }
+
+    /**
+     * @return LogService
+     */
+    private function getLogService()
+    {
+        return $this->service('System:LogService');
     }
 }

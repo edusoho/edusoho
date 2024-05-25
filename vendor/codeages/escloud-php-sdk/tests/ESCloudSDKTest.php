@@ -19,7 +19,8 @@ class ESCloudSDKTest extends BaseTestCase
             ),
         ));
 
-        $this->assertInstanceOf('ESCloud\\SDK\\Service\\AiService', $sdk->getAiService());
+        $this->assertInstanceOf('ESCloud\\SDK\\Service\\AIService', $sdk->getAIService());
+        $this->assertInstanceOf('ESCloud\\SDK\\Service\\AIFaceService', $sdk->getAIFaceService());
         $this->assertInstanceOf('ESCloud\\SDK\\Service\\SmsService', $sdk->getSmsService());
         $this->assertInstanceOf('ESCloud\\SDK\\Service\\PlayService', $sdk->getPlayService());
         $this->assertInstanceOf('ESCloud\\SDK\\Service\\XAPIService', $sdk->getXAPIService());

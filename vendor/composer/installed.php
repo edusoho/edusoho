@@ -1,12 +1,14 @@
 <?php return array(
     'root' => array(
         'name' => 'topxia/edusoho',
-        'pretty_version' => 'dev-develop',
-        'version' => 'dev-develop',
-        'reference' => '20c75be18a36433f46eba2b821a00e534e2cf73c',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '9346d7856ce71610b024776940b427bab6272156',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
-        'aliases' => array(),
+        'aliases' => array(
+            0 => '2.8.x-dev',
+        ),
         'dev' => true,
     ),
     'versions' => array(
@@ -123,9 +125,9 @@
             'dev_requirement' => false,
         ),
         'codeages/escloud-php-sdk' => array(
-            'pretty_version' => 'v1.2.2',
-            'version' => '1.2.2.0',
-            'reference' => '037f95ec86d09418e5ec7b27e5f235ef9a867fd0',
+            'pretty_version' => 'v1.2.8',
+            'version' => '1.2.8.0',
+            'reference' => 'a61063548fd24a9059e84ccb97385ba598f3226b',
             'type' => 'library',
             'install_path' => __DIR__ . '/../codeages/escloud-php-sdk',
             'aliases' => array(),
@@ -1789,12 +1791,14 @@
             'dev_requirement' => false,
         ),
         'topxia/edusoho' => array(
-            'pretty_version' => 'dev-develop',
-            'version' => 'dev-develop',
-            'reference' => '20c75be18a36433f46eba2b821a00e534e2cf73c',
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '9346d7856ce71610b024776940b427bab6272156',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
-            'aliases' => array(),
+            'aliases' => array(
+                0 => '2.8.x-dev',
+            ),
             'dev_requirement' => false,
         ),
         'twig/twig' => array(
