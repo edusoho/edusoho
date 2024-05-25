@@ -297,7 +297,6 @@ export default {
         if (answers.length === 0 && messageEnd) {
           clearInterval(typingTimer);
         }
-          //  console.log(this.answerText);
       $(`.js-ai-analysis${questionId}`).text(this.answerText[questionId]);
 
       }, 50);

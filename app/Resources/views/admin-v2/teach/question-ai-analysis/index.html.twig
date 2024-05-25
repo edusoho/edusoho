@@ -40,6 +40,18 @@
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
   {% else %}
-    <a href="{{ path('admin_v2_my_cloud_overview') }}">立即升级</a>
+    <div class="ai-problem-analysis">
+      <h2 class="ai-analysis-title">
+       <span class="analysis-title-left">{{ 'admin_v2.question.ai_analysis.Upgrade'|trans }}</span>
+       <span class="analysis-title-right">
+         {{ 'admin_v2.question.ai_analysis.experience'|trans }}
+         <img src="/static-dist/app/img/admin-v2/ai-analysis.png" class="analysis-image">  
+         {{ 'admin_v2.question.ai_analysis.problem'|trans }}
+       </span>
+       
+      </h2>
+      <p class="ai-analysis-text">{{ 'admin_v2.question.ai_analysis.tittle'|trans }}</p>
+      <a href="{{ path('admin_v2_my_cloud_overview') }}" class="upgrades">{{ 'admin_v2.question.ai_analysis.upgrade_now'|trans }}</a>
+    </div>
   {% endif %}
 {% endblock %}
