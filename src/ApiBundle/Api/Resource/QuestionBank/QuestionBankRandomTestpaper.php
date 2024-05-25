@@ -79,6 +79,7 @@ class QuestionBankRandomTestpaper extends AbstractResource
 
     private function buildAssessmentGenerateRuleByQuestionTypeCategory($fields, $assessment)
     {
+        file_put_contents("/tmp/jc123", json_encode("-----"), 8);
     }
 
     /**

@@ -16,9 +16,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
 
     public function build($fields)
     {
-        list($range, $sections) = $this->getRangeAndSections($fields);
-
-        $sections = $this->getAssessmentService()->drawItems($range, $sections);
+        $sections = $this->getSections($fields);
         $sections = $this->setSectionQuestionScore($sections);
         $assessment = [
             'bank_id' => $fields['itemBankId'],
@@ -36,15 +34,34 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
 
     public function canBuild($options)
     {
-        list($range, $sections) = $this->getRangeAndSections($options);
-
         try {
-            $this->getAssessmentService()->drawItems($range, $sections);
+            $this->getSections($options);
 
             return true;
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    private function getSections($fields)
+    {
+        $generateType = $fields['generateType'] ?? 'questionType';
+        $methodName = getSectionsBy.ucfirst($generateType);
+
+        return $this->$methodName($fields);
+    }
+
+    private function getSectionsByQuestionType($fields)
+    {
+        list($range, $sections) = $this->getRangeAndSections($fields);
+        return $this->getAssessmentService()->drawItems($range, $sections);
+    }
+
+    private function getSectionsByQuestionTypeCategory($fields)
+    {
+        // 这里需要重新调用整理数据
+        list($range, $sections) = $this->getRangeAndSectionsByQuestionTypeCategory($fields);
+        return $this->getAssessmentService()->drawItems($range, $sections);
     }
 
     public function showTestItems($testId, $resultId = 0, $options = [])
@@ -72,6 +89,42 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
                 $range['category_ids'] = [$fields['ranges']['categoryId']];
             }
         }
+
+        $sections = [];
+        foreach ($fields['sections'] as $type => $section) {
+            $section = [
+                'conditions' => [
+                    'item_types' => [$type],
+                ],
+                'item_count' => $section['count'],
+                'name' => $section['name'],
+                'score' => empty($fields['scores'][$type]) ? 0 : $fields['scores'][$type],
+            ];
+
+            if (isset($fields['choiceScore'][$type])) {
+                $section['choiceScore'] = $fields['choiceScore'][$type];
+            }
+
+            if (!empty($fields['scoreType'][$type])) {
+                $section['scoreType'] = $fields['scoreType'][$type];
+            }
+
+            if ('difficulty' == $fields['mode']) {
+                $section['conditions']['distribution'] = $fields['percentages'];
+            }
+
+            $sections[] = $section;
+        }
+
+        return [$range, $sections];
+    }
+
+    protected function getRangeAndSectionsByQuestionTypeCategory($fields)
+    {
+        $range = [
+            'bank_id' => $fields['itemBankId'],
+            'category_ids' => [],
+        ];
 
         $sections = [];
         foreach ($fields['sections'] as $type => $section) {
