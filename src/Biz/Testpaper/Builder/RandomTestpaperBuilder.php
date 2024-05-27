@@ -79,13 +79,13 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
             return $itemsMerged;
         }
         $drawItemsMap = array_map(function ($item) {
-            $itemType = $item['conditions']['item_types'][0]; // 假设每个conditions中只有一个item_type
+            $itemType = $item['conditions']['item_types'][0];
 
             return [$itemType => $item];
         }, $drawItems);
         foreach ($itemsMerged as $key => &$item) {
             $itemType = $item['conditions']['item_types'][0];
-            $drawItem = $drawItemsMap[0][$itemType];
+            $drawItem = $drawItemsMap[$key][$itemType];
             if (empty($drawItem['items'])) {
                 continue;
             }
