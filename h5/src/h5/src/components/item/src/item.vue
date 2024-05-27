@@ -634,6 +634,7 @@ export default {
         doLookAnalysis: this.doLookAnalysis,
         questionId: question.id,
         item_id: question.item_id,
+        aiAnalysisEnable: question.aiAnalysisEnable,
       };
       return data;
     },

@@ -18,6 +18,7 @@
       :all="allList.length"
       :result-show="resultShow"
       :mode="mode"
+      :exerciseInfo="result"
     />
     <!-- 底部 -->
     <div class="paper-footer">

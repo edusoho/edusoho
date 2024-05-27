@@ -79,7 +79,7 @@
           <span v-if="commonData.analysis" v-html="commonData.analysis" @click="handleClickImage($event.target.src)"/>
           <span v-else ref="aiAnalysis">{{ $t('courseLearning.noParsing') }}</span>
         </div>
-        <div class="ai-analysis" v-show="!analysis">
+        <div class="ai-analysis" v-show="commonData.aiAnalysisEnable">
           <p class="ai-tittle">{{$t('courseLearning.aiAssistant')}}</p>
           <div class="ai-content">
             <div class="ai-content-left">
@@ -292,7 +292,7 @@ export default {
           if (key == messages.length) {
             lastMessgae = message;
           } else {
-            const parseMessage = JSON.parse(message.slice(6));
+            const parseMessage = JSON.parse(message.slice(5));
             if (parseMessage.event === "message") {
               answers.push(parseMessage.answer);
             }
@@ -306,7 +306,7 @@ export default {
       }
     },
     stopAiAnalysis() {
-      const questionId = this.itemdata.id;
+      const questionId = this.commonData.questionId;
       this.stopAnswer[questionId] = true;
     },
     aiGeneration() {
