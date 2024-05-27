@@ -11207,3 +11207,8 @@ admin_v2.question.ai_analysis.teacher_ebable: AI Question Analysis (Teacher Side
 admin_v2.question.ai_analysis.teacher_ebable.tip: After it is opened, the teacher can generate AI analysis when creating/importing questions, and edit the generated content.
 admin_v2.question.ai_analysis.student_ebable: AI Question Analysis (Student Side)
 admin_v2.question.ai_analysis.student_ebable.tip: After it is opened, the student can generate AI analysis for the question without analysis.
+admin_v2.question.ai_analysis.Upgrade: Upgrade cloud capabilities
+admin_v2.question.ai_analysis.experience: , Experience powerful 
+admin_v2.question.ai_analysis.problem: problem resolution
+admin_v2.question.ai_analysis.tittle: Build new heights of intelligent education, comprehensively upgrade cloud capabilities, lead a new era of deep interaction and accurate analysis of Al question bank, and open unlimited possibilities for personalized learning
+admin_v2.question.ai_analysis.upgrade_now: Upgrade now

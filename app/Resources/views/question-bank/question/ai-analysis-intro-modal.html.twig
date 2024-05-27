@@ -8,23 +8,19 @@
 
 {% block body %}
   <div>
-    <div class="">
-      <img class="" src="{{ asset('static-dist/app/img/question-manage/guide-img-1.png') }}" alt="guide"/>
-      <img class="" src="{{ asset('static-dist/app/img/question-manage/free-for-limited-time.png') }}" alt="guide"/>
+    <div class="ai-analysis-image">
+      <img class="" src="{{ asset('static-dist/app/img/admin-v2/ai-analysis-group.png') }}" alt="guide"/>
     </div>
-    <div class="">
-      <div class="">
-        <span class="anchor-point"></span>
-        <span class="">{{ 'question_manage.ai_analysis.introduction.tip1'|trans|raw }}</span>
-      </div>
-      <div class="">
-        <span class="anchor-point"></span>
-        <span class="">{{ 'question_manage.ai_analysis.introduction.tip2'|trans|raw }}</span>
-      </div>
-      <div class="">
-        <span class="anchor-point"></span>
-        <span class="">{{ 'question_manage.ai_analysis.introduction.tip3'|trans|raw }}</span>
-      </div>
+    <div class="ai-analysis-center">
+      <li class="ai-analysis-text">
+        <span class="li-content">{{ 'question_manage.ai_analysis.introduction.tip1'|trans|raw }}</span>
+      </li>
+      <li class="ai-analysis-text">
+        <span class="li-content">{{ 'question_manage.ai_analysis.introduction.tip2'|trans|raw }}</span>
+      </li>
+      <li class="ai-analysis-text">
+        <span class="li-content">{{ 'question_manage.ai_analysis.introduction.tip3'|trans|raw }}</span>
+      </li>
     </div>
   </div>
 {% endblock %}
