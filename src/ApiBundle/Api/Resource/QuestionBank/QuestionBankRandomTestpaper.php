@@ -37,14 +37,14 @@ class QuestionBankRandomTestpaper extends AbstractResource
         $this->createAssessmentGenerateRule($fields, $assessment);
 
         // 创建JOB
-        $this->getSchedulerService()->register([
-            'name' => 'RandomAssessmentCreateJob_'.$assessment['id'],
-            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-            'expression' => intval(time() + 10),
-            'misfire_policy' => 'executing',
-            'class' => 'Biz\Testpaper\Job\RandomAssessmentCreateJob',
-            'args' => ['assessmentId' => $assessment['id'], 'questionBankId' => $id],
-        ]);
+//        $this->getSchedulerService()->register([
+//            'name' => 'RandomAssessmentCreateJob_'.$assessment['id'],
+//            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+//            'expression' => intval(time() + 10),
+//            'misfire_policy' => 'executing',
+//            'class' => 'Biz\Testpaper\Job\RandomAssessmentCreateJob',
+//            'args' => ['assessmentId' => $assessment['id'], 'questionBankId' => $id],
+//        ]);
         $this->biz['db']->commit();
 
         return 'true';
@@ -79,7 +79,22 @@ class QuestionBankRandomTestpaper extends AbstractResource
 
     private function buildAssessmentGenerateRuleByQuestionTypeCategory($fields, $assessment)
     {
-        file_put_contents("/tmp/jc123", json_encode("-----"), 8);
+        $question_setting[] = [
+            'questionCategoryCounts' => $fields['questionCategoryCounts'],
+            'scores' => $fields['scores'],
+            'scoreType' => $fields['scoreType'],
+            'choiceScore' => $fields['choiceScore'],
+        ];
+        $assessmentGenerateRule = [
+            'num' => $fields['num'],
+            'type' => $fields['generateType'],
+            'assessment_id' => $assessment['id'],
+            'question_setting' => $question_setting,
+            'difficulty' => $fields['percentages'],
+            'wrong_question_rate' => $fields['wrongQuestionRate'],
+        ];
+
+        return $assessmentGenerateRule;
     }
 
     /**

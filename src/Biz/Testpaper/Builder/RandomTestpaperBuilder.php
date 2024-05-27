@@ -46,7 +46,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
     private function getSections($fields)
     {
         $generateType = $fields['generateType'] ?? 'questionType';
-        $methodName = getSectionsBy.ucfirst($generateType);
+        $methodName = 'getSectionsBy'.ucfirst($generateType);
 
         return $this->$methodName($fields);
     }
@@ -54,14 +54,48 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
     private function getSectionsByQuestionType($fields)
     {
         list($range, $sections) = $this->getRangeAndSections($fields);
+
         return $this->getAssessmentService()->drawItems($range, $sections);
     }
 
     private function getSectionsByQuestionTypeCategory($fields)
     {
-        // 这里需要重新调用整理数据
-        list($range, $sections) = $this->getRangeAndSectionsByQuestionTypeCategory($fields);
-        return $this->getAssessmentService()->drawItems($range, $sections);
+        $itemsMerged = [];
+        foreach ($fields['questionCategoryCounts'] as $questionCategoryCount) {
+            list($range, $sections) = $this->getRangeAndSectionsByQuestionTypeCategory($fields, $questionCategoryCount);
+            $drawItems = $this->getAssessmentService()->drawItems($range, $sections);
+            $itemsMerged = $this->mergeItem($itemsMerged, $drawItems);
+        }
+
+        return $itemsMerged;
+    }
+
+    private function mergeItem(&$itemsMerged, $drawItems)
+    {
+        if (empty($itemsMerged)) {
+            return $drawItems;
+        }
+        if (empty($drawItems)) {
+            return $itemsMerged;
+        }
+        $drawItemsMap = array_map(function ($item) {
+            $itemType = $item['conditions']['item_types'][0]; // 假设每个conditions中只有一个item_type
+
+            return [$itemType => $item];
+        }, $drawItems);
+        foreach ($itemsMerged as $key => &$item) {
+            $itemType = $item['conditions']['item_types'][0];
+            $drawItem = $drawItemsMap[0][$itemType];
+            if (empty($drawItem['items'])) {
+                continue;
+            }
+
+            $item['item_count'] += $drawItem['item_count'];
+            $item['items'] = array_merge($item['items'], $drawItem['items']);
+            $item['question_count'] += $drawItem['question_count'];
+        }
+
+        return $itemsMerged;
     }
 
     public function showTestItems($testId, $resultId = 0, $options = [])
@@ -119,7 +153,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         return [$range, $sections];
     }
 
-    protected function getRangeAndSectionsByQuestionTypeCategory($fields)
+    protected function getRangeAndSectionsByQuestionTypeCategory($fields, $questionCategoryCount)
     {
         $range = [
             'bank_id' => $fields['itemBankId'],
@@ -127,7 +161,10 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         ];
 
         $sections = [];
-        foreach ($fields['sections'] as $type => $section) {
+        if ((int) $questionCategoryCount['categoryId']) {
+            $range['category_ids'][] = $questionCategoryCount['categoryId'];
+        }
+        foreach ($questionCategoryCount['sections'] as $type => $section) {
             $section = [
                 'conditions' => [
                     'item_types' => [$type],
