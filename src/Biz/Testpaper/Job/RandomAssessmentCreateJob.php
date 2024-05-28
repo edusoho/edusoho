@@ -23,7 +23,7 @@ class RandomAssessmentCreateJob extends AbstractJob
             'mode' => 'rand',
             'status' => 'generating',
             'parentId' => $assessment['id'],
-            'sections' => $assessmentGenerateRule['question_setting'][0]['sections'],
+            'questionCategoryCounts' => $assessmentGenerateRule['question_setting'][0]['questionCategoryCounts'],
             'scores' => $assessmentGenerateRule['question_setting'][0]['scores'],
             'scoreType' => $assessmentGenerateRule['question_setting'][0]['scoreType'],
             'choiceScore' => $assessmentGenerateRule['question_setting'][0]['choiceScore'],

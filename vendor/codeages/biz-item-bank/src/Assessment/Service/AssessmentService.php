@@ -10,6 +10,8 @@ interface AssessmentService
 
     const CLOSED = 'closed';
 
+    const FAILURE = 'failure';
+
     public function getAssessment($id);
 
     public function findAssessmentsByIds($assessmentIds);

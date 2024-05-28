@@ -17,7 +17,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
     public function build($fields)
     {
         $sections = $this->getSections($fields);
-        $sections = $this->setSectionQuestionScore($sections);
+        $sections = $this->setSectionQuestionScore($sections, $fields['type']);
         $assessment = [
             'bank_id' => $fields['itemBankId'],
             'name' => $fields['name'],
@@ -45,20 +45,32 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
 
     private function getSections($fields)
     {
-        $generateType = $fields['generateType'] ?? 'questionType';
+        $generateType = $fields['type'] ?? 'default';
         $methodName = 'getSectionsBy'.ucfirst($generateType);
 
         return $this->$methodName($fields);
     }
 
-    private function getSectionsByQuestionType($fields)
+    /**
+     * @param $fields
+     *
+     * @return mixed
+     *               原来智能组卷逻辑
+     */
+    private function getSectionsByDefault($fields)
     {
         list($range, $sections) = $this->getRangeAndSections($fields);
 
         return $this->getAssessmentService()->drawItems($range, $sections);
     }
 
-    private function getSectionsByQuestionTypeCategory($fields)
+    /**
+     * @param $fields
+     *
+     * @return array
+     *               随机卷题目组卷逻辑
+     */
+    private function getSectionsByRandom($fields)
     {
         $itemsMerged = [];
         foreach ($fields['questionCategoryCounts'] as $questionCategoryCount) {
@@ -192,7 +204,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         return [$range, $sections];
     }
 
-    protected function setSectionQuestionScore($sections)
+    protected function setSectionQuestionScore($sections, $assessmentType)
     {
         foreach ($sections as &$section) {
             foreach ($section['items'] as &$item) {
@@ -203,11 +215,13 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
                     if ('text' == $question['answer_mode']) {
                         $question['score'] = 'question' == $scoreType ? $otherScore : $otherScore * count($question['answer']);
                     }
-                    $question['score_rule'] = [
-                        'score' => $question['score'],
-                        'scoreType' => $scoreType,
-                        'otherScore' => $otherScore,
-                    ];
+                    if ('material' == $section['conditions']['item_types'][0] && 'regular' != $assessmentType) {
+                        $score = $section['score'] / $item['question_num'];
+                        $question['score_rule']['score'] = ceil($score * 100) / 100;
+                        $question['score'] = $question['score_rule']['score'];
+                    } else {
+                        $question['score_rule']['score'] = $question['score'];
+                    }
                     if (in_array($question['answer_mode'], ['choice', 'uncertain_choice'])) {
                         $question['miss_score'] = $otherScore;
                     }
