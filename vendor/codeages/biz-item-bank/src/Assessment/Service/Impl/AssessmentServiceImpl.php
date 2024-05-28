@@ -312,6 +312,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
     public function searchAssessments($conditions, $orderBys, $start, $limit, $columns = array())
     {
         $conditions = $this->filterConditions($conditions);
+
         return $this->getAssessmentDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 

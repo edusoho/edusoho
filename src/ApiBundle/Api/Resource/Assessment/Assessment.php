@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiBundle\Api\Resource\QuestionBank;
+namespace ApiBundle\Api\Resource\Assessment;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -12,24 +12,24 @@ use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentGenerateRuleService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
-class QuestionBankRandomTestpaper extends AbstractResource
+class Assessment extends AbstractResource
 {
-    public function add(ApiRequest $request, $id)
+    public function add(ApiRequest $request)
     {
-        if (!$this->getQuestionBankService()->canManageBank($id)) {
-            throw UserException::PERMISSION_DENIED();
-        }
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $fields = $request->request->all();
+        $this->validate($fields);
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($fields['questionBankId']);
         if (empty($questionBank['itemBank'])) {
             throw QuestionBankException::NOT_FOUND_BANK();
         }
-        $fields = array_merge(
-            $request->request->all(),
-            [
-                'itemBankId' => $questionBank['itemBankId'],
-                'status' => 'generating',
-            ]
-        );
+        $fields = array_merge($fields, [
+            'itemBankId' => $questionBank['itemBankId'],
+            'status' => 'generating',
+        ]);
+        if (!$this->check($fields)) {
+            throw AssessmentException::CHECK_FAILED();
+        }
         $this->biz['db']->beginTransaction();
         $assessment = $this->getBiz()['testpaper_builder.random_testpaper']->build($fields);
 
@@ -41,11 +41,27 @@ class QuestionBankRandomTestpaper extends AbstractResource
             'expression' => intval(time() + 10),
             'misfire_policy' => 'executing',
             'class' => 'Biz\Testpaper\Job\RandomAssessmentCreateJob',
-            'args' => ['assessmentId' => $assessment['id'], 'questionBankId' => $id],
+            'args' => ['assessmentId' => $assessment['id'], 'questionBankId' => $fields['questionBankId']],
         ]);
         $this->biz['db']->commit();
 
         return 'true';
+    }
+
+    private function validate($fields)
+    {
+        $questionBankId = $fields['questionBankId'] ?? null;
+        if (empty($questionBankId)) {
+            throw QuestionBankException::NOT_FOUND_BANK();
+        }
+        if (!$this->getQuestionBankService()->canManageBank($fields['questionBankId'])) {
+            throw UserException::PERMISSION_DENIED();
+        }
+    }
+
+    private function check($fields)
+    {
+        return $this->getBiz()['testpaper_builder.random_testpaper']->canBuild($fields);
     }
 
     private function createAssessmentGenerateRule($fields, $assessment)
