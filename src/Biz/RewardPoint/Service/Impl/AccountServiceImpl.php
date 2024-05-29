@@ -2,16 +2,16 @@
 
 namespace Biz\RewardPoint\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\RewardPoint\AccountException;
-use Biz\System\Service\LogService;
-use Biz\System\Service\SettingService;
-use Biz\User\Service\UserService;
 use Biz\RewardPoint\Dao\AccountDao;
 use Biz\RewardPoint\Service\AccountFlowService;
 use Biz\RewardPoint\Service\AccountService;
-use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserService;
 use Biz\User\UserException;
 
 class AccountServiceImpl extends BaseService implements AccountService
@@ -46,7 +46,7 @@ class AccountServiceImpl extends BaseService implements AccountService
         $this->checkAccountExist($id);
 
         $result = $this->getAccountDao()->delete($id);
-        $this->getLogService()->info('reward_point_account', 'delete', '积分账户', array('id' => $id, 'result' => $result));
+        $this->getLogService()->info('reward_point_account', 'delete', '积分账户', ['id' => $id, 'result' => $result]);
 
         return $result;
     }
@@ -56,7 +56,7 @@ class AccountServiceImpl extends BaseService implements AccountService
         $this->checkAccountExistByUserId($userId);
 
         $result = $this->getAccountDao()->deleteByUserId($userId);
-        $this->getLogService()->info('reward_point_account', 'delete', '积分账户', array('userId' => $userId, 'result' => $result));
+        $this->getLogService()->info('reward_point_account', 'delete', '积分账户', ['userId' => $userId, 'result' => $result]);
 
         return $result;
     }
@@ -66,7 +66,7 @@ class AccountServiceImpl extends BaseService implements AccountService
         return $this->getAccountDao()->get($id);
     }
 
-    public function getAccountByUserId($userId, $potions = array())
+    public function getAccountByUserId($userId, $potions = [])
     {
         return $this->getAccountDao()->getByUserId($userId, $potions);
     }
@@ -81,6 +81,16 @@ class AccountServiceImpl extends BaseService implements AccountService
         return $this->getAccountDao()->count($conditions);
     }
 
+    public function countJoinUser($conditions)
+    {
+        return $this->getAccountDao()->countJoinUser($conditions);
+    }
+
+    public function searchJoinUser($conditions, $orderBys, $start, $limit)
+    {
+        return $this->getAccountDao()->searchJoinUser($conditions, $orderBys, $start, $limit);
+    }
+
     public function waveBalance($id, $value)
     {
         $this->checkAccountExist($id);
@@ -89,12 +99,12 @@ class AccountServiceImpl extends BaseService implements AccountService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $balanceFields = array(
+        $balanceFields = [
             'balance' => abs($value),
             'inflowAmount' => abs($value),
-        );
+        ];
 
-        return $this->getAccountDao()->wave(array($id), $balanceFields);
+        return $this->getAccountDao()->wave([$id], $balanceFields);
     }
 
     public function waveDownBalance($id, $value)
@@ -105,33 +115,33 @@ class AccountServiceImpl extends BaseService implements AccountService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $balanceFields = array(
+        $balanceFields = [
             'balance' => -abs($value),
             'outflowAmount' => abs($value),
-        );
+        ];
 
-        return $this->getAccountDao()->wave(array($id), $balanceFields);
+        return $this->getAccountDao()->wave([$id], $balanceFields);
     }
 
     public function grantRewardPoint($id, $profile)
     {
         $operator = $this->getCurrentUser();
         $account = $this->getAccountByUserId($id);
-        $flow = array(
+        $flow = [
             'userId' => $id,
             'type' => 'inflow',
             'amount' => $profile['amount'],
             'operator' => $operator['id'],
             'way' => 'admin_grant',
             'note' => $profile['note'],
-        );
+        ];
         try {
             $this->beginTransaction();
             if (empty($account)) {
-                $account = array(
+                $account = [
                     'userId' => $id,
                     'balance' => $profile['amount'],
-                );
+                ];
                 $this->createAccount($account);
             } else {
                 $this->waveBalance($account['id'], $flow['amount']);
@@ -152,21 +162,21 @@ class AccountServiceImpl extends BaseService implements AccountService
     {
         $operator = $this->getCurrentUser();
         $account = $this->getAccountByUserId($id);
-        $flow = array(
+        $flow = [
             'userId' => $id,
             'type' => 'outflow',
             'amount' => $profile['amount'],
             'operator' => $operator['id'],
             'way' => 'admin_deduction',
             'note' => $profile['note'],
-        );
+        ];
         try {
             $this->beginTransaction();
             if (empty($account)) {
-                $account = array(
+                $account = [
                     'userId' => $id,
                     'balance' => $profile['amount'],
-                );
+                ];
                 $this->createAccount($account);
             } else {
                 if ($flow['amount'] > $account['balance']) {
@@ -188,7 +198,7 @@ class AccountServiceImpl extends BaseService implements AccountService
 
     public function hasRewardPointPermission()
     {
-        $settings = $this->getSettingService()->get('reward_point', array());
+        $settings = $this->getSettingService()->get('reward_point', []);
         if (isset($settings['enable']) && 1 == $settings['enable']) {
             return true;
         } else {
@@ -198,12 +208,12 @@ class AccountServiceImpl extends BaseService implements AccountService
 
     protected function filterFields($fields)
     {
-        return ArrayToolkit::parts($fields, array('userId', 'balance'));
+        return ArrayToolkit::parts($fields, ['userId', 'balance']);
     }
 
     protected function validateFields($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('userId'))) {
+        if (!ArrayToolkit::requireds($fields, ['userId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
     }
@@ -214,7 +224,7 @@ class AccountServiceImpl extends BaseService implements AccountService
 
         if (empty($user)) {
             $user = $this->getUserService()->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }

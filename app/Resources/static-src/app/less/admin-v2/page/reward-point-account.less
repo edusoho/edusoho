@@ -1,0 +1,30 @@
+.sorter-wrapper {
+  position: relative;
+
+  .table-column-sorter {
+    position: absolute;
+    left: 54px;
+    top: 0;
+
+    .sorter-up-icon {
+      padding-top: 4px;
+    }
+
+    .sorter-down-icon {
+      position: absolute;
+      top: 14px;
+    }
+
+    .es-icon {
+      position: absolute;
+      color: @gray-medium;
+
+      &:hover {
+        color: @brand-primary;
+      }
+      &.active {
+        color: @brand-primary;
+      }
+    }
+  }
+}
