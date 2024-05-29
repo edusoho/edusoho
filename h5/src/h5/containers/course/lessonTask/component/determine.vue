@@ -462,7 +462,7 @@ export default {
     cursor: pointer;
   }
   .ai-analysis {
-    margin-top: 16px;
+    margin-top: 12px 16px;
     padding: 16px;
     background-color: #F5F5F5;
     border: 1px dashed rgba(66, 143, 250, 0.30);
@@ -482,28 +482,39 @@ export default {
         .ai-btn {
           margin-top: 16px;
           padding: 4px 15px;
-          font-size: 14px;
+          height: 32px;
           color: #fff;
+          border-radius: 4px;
+          border: 1px solid #428FFA;
           border-style: none;
           background-color: #428FFA;
-          border-radius: 4px;
+          .ai-left-text {
+            font-size: 14px;
+            color: #fff;
+            line-height: 16px;
+          }
           .ai-img {
             margin-right: 5px;
-            width: 23px;
-            height: 23px;
+            width: 16px;
+            height: 16px;
           }
         }
         .ai-stopbtn {
           margin-top: 16px;
           padding: 4px 15px;
-          font-size: 14px;
+          height: 32px;
           color: #428FFA;
           border-radius: 4px;
           border: 1px solid #428FFA;
+          .ai-left-text {
+            font-size: 14px;
+            color: #428FFA;
+            line-height: 16px;
+          }
           .ai-img {
-            margin-right: 5px;
-            width: 18px;
-            height: 18px;
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
           }
         }
         .ai-left-tittle {
