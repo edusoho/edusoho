@@ -275,7 +275,7 @@ export default {
         });
       });
     },
-    async getAiAnalysis(questionId) {
+    async getAiAnalysis(questionId,finished) {
       const data = {
         role: "student",
         questionId,
@@ -296,6 +296,7 @@ export default {
         this.answerText[questionId] += answers.shift();
         if (answers.length === 0 && messageEnd) {
           clearInterval(typingTimer);
+          finished();
         }
       $(`.js-ai-analysis${questionId}`).text(this.answerText[questionId]);
 
@@ -319,7 +320,7 @@ export default {
           if (key == messages.length) {
             lastMessgae = message;
           } else {
-            const parseMessage = JSON.parse(message.slice(6));
+            const parseMessage = JSON.parse(message.slice(5));
             if (parseMessage.event === "message") {
               answers.push(parseMessage.answer);
             }
