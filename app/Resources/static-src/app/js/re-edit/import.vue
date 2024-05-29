@@ -27,7 +27,6 @@
       @getInitRepeatQuestion="getInitRepeatQuestion"
       @getEditRepeatQuestion="getEditRepeatQuestion"
       @getAiAnalysis="getAiAnalysis"
-      @stopAiAnalysis="stopAiAnalysis"
     ></item-import>
   </div>
 </template>
@@ -354,7 +353,7 @@ export default {
           if (key == messages.length) {
             lastMessgae = message;
           } else {
-            const parseMessage = JSON.parse(message.slice(6));
+            const parseMessage = JSON.parse(message.slice(5));
             if (parseMessage.event === "message") {
               complete(parseMessage.answer);
             }
