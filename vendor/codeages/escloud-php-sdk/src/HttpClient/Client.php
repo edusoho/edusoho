@@ -55,8 +55,12 @@ class Client implements ClientInterface
         );
         if ($stream) {
             $streamRawResponse = '';
-            $options[CURLOPT_WRITEFUNCTION] = function ($curl, $data) use (&$streamRawResponse) {
-                if (false !== strpos($streamRawResponse, "\r\n\r\n")) {
+            $canEcho = false;
+            $options[CURLOPT_WRITEFUNCTION] = function ($curl, $data) use (&$streamRawResponse, &$canEcho) {
+                if ('data:' === substr($data, 0, 5)) {
+                    $canEcho = true;
+                }
+                if ($canEcho) {
                     echo $data;
                 }
                 $streamRawResponse .= $data;
