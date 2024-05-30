@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Assessment\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\ItemBank\Assessment\Dao\AssessmentGenerateRuleDao;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentGenerateRuleService;
 use Codeages\Biz\ItemBank\BaseService;
@@ -21,6 +22,13 @@ class AssessmentGenerateRuleServiceImpl extends BaseService implements Assessmen
             'type' => [['in', ['questionType', 'questionTypeCategory']]],
         ]);
         return $this->getAssessmentGenerateRuleDao()->create($assessmentGenerateRule);
+    }
+
+    public function findAssessmentGenerateRuleByAssessmentIds($assessmentIds)
+    {
+        $assessmentGenerateRules = $this->getAssessmentGenerateRuleDao()->findByAssessmentId($assessmentIds);
+        
+        return ArrayToolkit::index($assessmentGenerateRules, 'id');
     }
 
     /**
