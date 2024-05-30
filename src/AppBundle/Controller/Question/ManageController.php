@@ -125,7 +125,7 @@ class ManageController extends BaseController
     {
         foreach ($items as &$item) {
             foreach ($item['questions'] as &$question) {
-                $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysis($question, $item);
+                $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForTeacher($question, $item);
             }
         }
 

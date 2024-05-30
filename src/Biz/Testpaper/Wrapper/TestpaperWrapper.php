@@ -130,10 +130,10 @@ class TestpaperWrapper
         foreach ($items as &$item) {
             if ('material' == $item['type']) {
                 foreach ($item['subs'] as &$question) {
-                    $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysis($question, $item);
+                    $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForStudent($question, $item);
                 }
             } else {
-                $item['aiAnalysisEnable'] = $this->canGenerateAIAnalysis($item);
+                $item['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForStudent($item);
             }
         }
 

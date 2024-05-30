@@ -1238,8 +1238,6 @@ module.exports = function (it) {
             hh: '%d horas',
             d: 'un día',
             dd: '%d días',
-            w: 'una semana',
-            ww: '%d semanas',
             M: 'un mes',
             MM: '%d meses',
             y: 'un año',
@@ -1319,8 +1317,8 @@ module.exports = function (it) {
             yy: '%d سنوات',
         },
         week: {
-            dow: 1, // Monday is the first day of the week.
-            doy: 4, // The week that contains Jan 4th is the first week of the year.
+            dow: 6, // Saturday is the first day of the week.
+            doy: 12, // The week that contains Jan 12th is the first week of the year.
         },
     });
 
@@ -1513,8 +1511,8 @@ module.exports = !__webpack_require__("4b8b")(function () {
             }
         },
         week: {
-            dow: 0, // Sunday is the first day of the week
-            doy: 3, // The week that contains Jan 4th is the first week of the year (7 + 0 - 4)
+            dow: 1, // Monday is the first day of the week.
+            doy: 4, // The week that contains Jan 4th is the first week of the year.
         },
         meridiemParse: /rati|sokallim|donparam|sanje/,
         meridiemHour: function (hour, meridiem) {
@@ -1882,8 +1880,6 @@ module.exports = isBuffer;
             hh: '%d saat',
             d: 'bir gün',
             dd: '%d gün',
-            w: 'bir hafta',
-            ww: '%d hafta',
             M: 'bir ay',
             MM: '%d ay',
             y: 'bir yıl',
@@ -2361,8 +2357,6 @@ module.exports = function (bitmap, value) {
             hh: '%d ชั่วโมง',
             d: '1 วัน',
             dd: '%d วัน',
-            w: '1 สัปดาห์',
-            ww: '%d สัปดาห์',
             M: '1 เดือน',
             MM: '%d เดือน',
             y: '1 ปี',
@@ -3848,7 +3842,6 @@ module.exports = isMasked;
 //! moment.js locale configuration
 //! locale : Serbian Cyrillic [sr-cyrl]
 //! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
-//! author : Stefan Crnjaković <stefan@hotmail.rs> : https://github.com/crnjakovic
 
 ;(function (global, factory) {
     true ? factory(__webpack_require__("c1df")) :
@@ -3905,10 +3898,10 @@ module.exports = isMasked;
         longDateFormat: {
             LT: 'H:mm',
             LTS: 'H:mm:ss',
-            L: 'D. M. YYYY.',
-            LL: 'D. MMMM YYYY.',
-            LLL: 'D. MMMM YYYY. H:mm',
-            LLLL: 'dddd, D. MMMM YYYY. H:mm',
+            L: 'DD.MM.YYYY',
+            LL: 'D. MMMM YYYY',
+            LLL: 'D. MMMM YYYY H:mm',
+            LLLL: 'dddd, D. MMMM YYYY H:mm',
         },
         calendar: {
             sameDay: '[данас у] LT',
@@ -3963,7 +3956,7 @@ module.exports = isMasked;
         ordinal: '%d.',
         week: {
             dow: 1, // Monday is the first day of the week.
-            doy: 7, // The week that contains Jan 1st is the first week of the year.
+            doy: 7, // The week that contains Jan 7th is the first week of the year.
         },
     });
 
@@ -4895,16 +4888,16 @@ module.exports = Promise;
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '1',
-            2: '2',
-            3: '3',
-            4: '4',
-            5: '5',
-            6: '6',
-            7: '7',
-            8: '8',
-            9: '9',
-            0: '0',
+            '1': '1',
+            '2': '2',
+            '3': '3',
+            '4': '4',
+            '5': '5',
+            '6': '6',
+            '7': '7',
+            '8': '8',
+            '9': '9',
+            '0': '0',
         },
         pluralForm = function (n) {
             return n === 0
@@ -6515,16 +6508,16 @@ module.exports = __webpack_require__("5524").getIteratorMethod = function (it) {
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '١',
-            2: '٢',
-            3: '٣',
-            4: '٤',
-            5: '٥',
-            6: '٦',
-            7: '٧',
-            8: '٨',
-            9: '٩',
-            0: '٠',
+            '1': '١',
+            '2': '٢',
+            '3': '٣',
+            '4': '٤',
+            '5': '٥',
+            '6': '٦',
+            '7': '٧',
+            '8': '٨',
+            '9': '٩',
+            '0': '٠',
         },
         numberMap = {
             '١': '1',
@@ -7235,8 +7228,6 @@ module.exports = listCacheClear;
             hh: '%d giờ',
             d: 'một ngày',
             dd: '%d ngày',
-            w: 'một tuần',
-            ww: '%d tuần',
             M: 'một tháng',
             MM: '%d tháng',
             y: 'một năm',
@@ -10359,16 +10350,16 @@ module.exports = function (IS_INCLUDES) {
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '१',
-            2: '२',
-            3: '३',
-            4: '४',
-            5: '५',
-            6: '६',
-            7: '७',
-            8: '८',
-            9: '९',
-            0: '०',
+            '1': '१',
+            '2': '२',
+            '3': '३',
+            '4': '४',
+            '5': '५',
+            '6': '६',
+            '7': '७',
+            '8': '८',
+            '9': '९',
+            '0': '०',
         },
         numberMap = {
             '१': '1',
@@ -10590,16 +10581,16 @@ module.exports = WeakMap;
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '१',
-            2: '२',
-            3: '३',
-            4: '४',
-            5: '५',
-            6: '६',
-            7: '७',
-            8: '८',
-            9: '९',
-            0: '०',
+            '1': '१',
+            '2': '२',
+            '3': '३',
+            '4': '४',
+            '5': '५',
+            '6': '६',
+            '7': '७',
+            '8': '८',
+            '9': '९',
+            '0': '०',
         },
         numberMap = {
             '१': '1',
@@ -10867,14 +10858,9 @@ module.exports = WeakMap;
     };
 
     var tg = moment.defineLocale('tg', {
-        months: {
-            format: 'январи_феврали_марти_апрели_майи_июни_июли_августи_сентябри_октябри_ноябри_декабри'.split(
-                '_'
-            ),
-            standalone: 'январ_феврал_март_апрел_май_июн_июл_август_сентябр_октябр_ноябр_декабр'.split(
-                '_'
-            ),
-        },
+        months: 'январ_феврал_март_апрел_май_июн_июл_август_сентябр_октябр_ноябр_декабр'.split(
+            '_'
+        ),
         monthsShort: 'янв_фев_мар_апр_май_июн_июл_авг_сен_окт_ноя_дек'.split('_'),
         weekdays: 'якшанбе_душанбе_сешанбе_чоршанбе_панҷшанбе_ҷумъа_шанбе'.split(
             '_'
@@ -10884,14 +10870,14 @@ module.exports = WeakMap;
         longDateFormat: {
             LT: 'HH:mm',
             LTS: 'HH:mm:ss',
-            L: 'DD.MM.YYYY',
+            L: 'DD/MM/YYYY',
             LL: 'D MMMM YYYY',
             LLL: 'D MMMM YYYY HH:mm',
             LLLL: 'dddd, D MMMM YYYY HH:mm',
         },
         calendar: {
             sameDay: '[Имрӯз соати] LT',
-            nextDay: '[Фардо соати] LT',
+            nextDay: '[Пагоҳ соати] LT',
             lastDay: '[Дирӯз соати] LT',
             nextWeek: 'dddd[и] [ҳафтаи оянда соати] LT',
             lastWeek: 'dddd[и] [ҳафтаи гузашта соати] LT',
@@ -11408,16 +11394,16 @@ ClassList.prototype.contains = function(name){
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '௧',
-            2: '௨',
-            3: '௩',
-            4: '௪',
-            5: '௫',
-            6: '௬',
-            7: '௭',
-            8: '௮',
-            9: '௯',
-            0: '௦',
+            '1': '௧',
+            '2': '௨',
+            '3': '௩',
+            '4': '௪',
+            '5': '௫',
+            '6': '௬',
+            '7': '௭',
+            '8': '௮',
+            '9': '௯',
+            '0': '௦',
         },
         numberMap = {
             '௧': '1',
@@ -11553,16 +11539,16 @@ ClassList.prototype.contains = function(name){
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '೧',
-            2: '೨',
-            3: '೩',
-            4: '೪',
-            5: '೫',
-            6: '೬',
-            7: '೭',
-            8: '೮',
-            9: '೯',
-            0: '೦',
+            '1': '೧',
+            '2': '೨',
+            '3': '೩',
+            '4': '೪',
+            '5': '೫',
+            '6': '೬',
+            '7': '೭',
+            '8': '೮',
+            '9': '೯',
+            '0': '೦',
         },
         numberMap = {
             '೧': '1',
@@ -12429,8 +12415,6 @@ var map = {
 	"./bm": "a7fa",
 	"./bm.js": "a7fa",
 	"./bn": "9043",
-	"./bn-bd": "9686",
-	"./bn-bd.js": "9686",
 	"./bn.js": "9043",
 	"./bo": "d26a",
 	"./bo.js": "d26a",
@@ -12479,8 +12463,6 @@ var map = {
 	"./es": "898b",
 	"./es-do": "0a3c",
 	"./es-do.js": "0a3c",
-	"./es-mx": "b5b7",
-	"./es-mx.js": "b5b7",
 	"./es-us": "55c9",
 	"./es-us.js": "55c9",
 	"./es.js": "898b",
@@ -12854,7 +12836,7 @@ module.exports = { "default": __webpack_require__("3787"), __esModule: true };
         relativeTime: {
             future: '%s sonra',
             past: '%s əvvəl',
-            s: 'bir neçə saniyə',
+            s: 'birneçə saniyə',
             ss: '%d saniyə',
             m: 'bir dəqiqə',
             mm: '%d dəqiqə',
@@ -14764,8 +14746,6 @@ module.exports = stackHas;
             hh: '%d horas',
             d: 'un día',
             dd: '%d días',
-            w: 'una semana',
-            ww: '%d semanas',
             M: 'un mes',
             MM: '%d meses',
             y: 'un año',
@@ -15132,7 +15112,7 @@ module.exports = function (key) {
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
-//! locale : Turkmen [tk]
+//! locale : Turkmen [trk]
 //! author : Atamyrat Abdyrahmanov : https://github.com/atamyratabdy
 
 ;(function (global, factory) {
@@ -15265,7 +15245,6 @@ module.exports = baseAssign;
 //! moment.js locale configuration
 //! locale : Hungarian [hu]
 //! author : Adam Brunner : https://github.com/adambrunner
-//! author : Peter Viszt  : https://github.com/passatgt
 
 ;(function (global, factory) {
     true ? factory(__webpack_require__("c1df")) :
@@ -15324,10 +15303,9 @@ module.exports = baseAssign;
         months: 'január_február_március_április_május_június_július_augusztus_szeptember_október_november_december'.split(
             '_'
         ),
-        monthsShort: 'jan._feb._márc._ápr._máj._jún._júl._aug._szept._okt._nov._dec.'.split(
+        monthsShort: 'jan_feb_márc_ápr_máj_jún_júl_aug_szept_okt_nov_dec'.split(
             '_'
         ),
-        monthsParseExact: true,
         weekdays: 'vasárnap_hétfő_kedd_szerda_csütörtök_péntek_szombat'.split('_'),
         weekdaysShort: 'vas_hét_kedd_sze_csüt_pén_szo'.split('_'),
         weekdaysMin: 'v_h_k_sze_cs_p_szo'.split('_'),
@@ -15565,8 +15543,6 @@ module.exports = matches;
             hh: '%d 小时',
             d: '1 天',
             dd: '%d 天',
-            w: '1 周',
-            ww: '%d 周',
             M: '1 个月',
             MM: '%d 个月',
             y: '1 年',
@@ -16027,7 +16003,7 @@ module.exports = isPlainObject;
 /***/ "6117":
 /***/ (function(module, exports, __webpack_require__) {
 
-//! moment.js locale configuration
+//! moment.js language configuration
 //! locale : Uyghur (China) [ug-cn]
 //! author: boyaq : https://github.com/boyaq
 
@@ -16036,7 +16012,7 @@ module.exports = isPlainObject;
    undefined
 }(this, (function (moment) { 'use strict';
 
-    //! moment.js locale configuration
+    //! moment.js language configuration
 
     var ugCn = moment.defineLocale('ug-cn', {
         months: 'يانۋار_فېۋرال_مارت_ئاپرېل_ماي_ئىيۇن_ئىيۇل_ئاۋغۇست_سېنتەبىر_ئۆكتەبىر_نويابىر_دېكابىر'.split(
@@ -18692,8 +18668,6 @@ module.exports = function (it) {
             hh: '%d timer',
             d: 'en dag',
             dd: '%d dager',
-            w: 'en uke',
-            ww: '%d uker',
             M: 'en måned',
             MM: '%d måneder',
             y: 'ett år',
@@ -19978,8 +19952,6 @@ var index = (function () {
             hh: '%d ore',
             d: 'un giorno',
             dd: '%d giorni',
-            w: 'una settimana',
-            ww: '%d settimane',
             M: 'un mese',
             MM: '%d mesi',
             y: 'un anno',
@@ -22038,16 +22010,16 @@ module.exports = __webpack_require__("5524").Symbol;
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '١',
-            2: '٢',
-            3: '٣',
-            4: '٤',
-            5: '٥',
-            6: '٦',
-            7: '٧',
-            8: '٨',
-            9: '٩',
-            0: '٠',
+            '1': '١',
+            '2': '٢',
+            '3': '٣',
+            '4': '٤',
+            '5': '٥',
+            '6': '٦',
+            '7': '٧',
+            '8': '٨',
+            '9': '٩',
+            '0': '٠',
         },
         numberMap = {
             '١': '1',
@@ -22229,8 +22201,6 @@ module.exports = parent;
             hh: '%d часа',
             d: 'ден',
             dd: '%d дена',
-            w: 'седмица',
-            ww: '%d седмици',
             M: 'месец',
             MM: '%d месеца',
             y: 'година',
@@ -22382,16 +22352,16 @@ module.exports = hasIn;
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '၁',
-            2: '၂',
-            3: '၃',
-            4: '၄',
-            5: '၅',
-            6: '၆',
-            7: '၇',
-            8: '၈',
-            9: '၉',
-            0: '၀',
+            '1': '၁',
+            '2': '၂',
+            '3': '၃',
+            '4': '၄',
+            '5': '၅',
+            '6': '၆',
+            '7': '၇',
+            '8': '၈',
+            '9': '၉',
+            '0': '၀',
         },
         numberMap = {
             '၁': '1',
@@ -22738,8 +22708,6 @@ exports.default = function (instance, Constructor) {
             hh: '%d horas',
             d: 'un día',
             dd: '%d días',
-            w: 'una semana',
-            ww: '%d semanas',
             M: 'un mes',
             MM: '%d meses',
             y: 'un año',
@@ -22751,7 +22719,7 @@ exports.default = function (instance, Constructor) {
             dow: 1, // Monday is the first day of the week.
             doy: 4, // The week that contains Jan 4th is the first week of the year.
         },
-        invalidDate: 'Fecha inválida',
+        invalidDate: 'Fecha invalida',
     });
 
     return es;
@@ -22986,21 +22954,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
         ),
         monthsSubjective = 'stycznia_lutego_marca_kwietnia_maja_czerwca_lipca_sierpnia_września_października_listopada_grudnia'.split(
             '_'
-        ),
-        monthsParse = [
-            /^sty/i,
-            /^lut/i,
-            /^mar/i,
-            /^kwi/i,
-            /^maj/i,
-            /^cze/i,
-            /^lip/i,
-            /^sie/i,
-            /^wrz/i,
-            /^paź/i,
-            /^lis/i,
-            /^gru/i,
-        ];
+        );
     function plural(n) {
         return n % 10 < 5 && n % 10 > 1 && ~~(n / 10) % 10 !== 1;
     }
@@ -23017,8 +22971,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
                 return withoutSuffix ? 'godzina' : 'godzinę';
             case 'hh':
                 return result + (plural(number) ? 'godziny' : 'godzin');
-            case 'ww':
-                return result + (plural(number) ? 'tygodnie' : 'tygodni');
             case 'MM':
                 return result + (plural(number) ? 'miesiące' : 'miesięcy');
             case 'yy':
@@ -23030,6 +22982,17 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
         months: function (momentToFormat, format) {
             if (!momentToFormat) {
                 return monthsNominative;
+            } else if (format === '') {
+                // Hack: if format empty we know this is used to generate
+                // RegExp by moment. Give then back both valid forms of months
+                // in RegExp ready format.
+                return (
+                    '(' +
+                    monthsSubjective[momentToFormat.month()] +
+                    '|' +
+                    monthsNominative[momentToFormat.month()] +
+                    ')'
+                );
             } else if (/D MMMM/.test(format)) {
                 return monthsSubjective[momentToFormat.month()];
             } else {
@@ -23037,9 +23000,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
             }
         },
         monthsShort: 'sty_lut_mar_kwi_maj_cze_lip_sie_wrz_paź_lis_gru'.split('_'),
-        monthsParse: monthsParse,
-        longMonthsParse: monthsParse,
-        shortMonthsParse: monthsParse,
         weekdays: 'niedziela_poniedziałek_wtorek_środa_czwartek_piątek_sobota'.split(
             '_'
         ),
@@ -23100,8 +23060,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
             hh: translate,
             d: '1 dzień',
             dd: '%d dni',
-            w: 'tydzień',
-            ww: translate,
             M: 'miesiąc',
             MM: translate,
             y: 'rok',
@@ -23176,16 +23134,16 @@ module.exports = toPlainObject;
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '۱',
-            2: '۲',
-            3: '۳',
-            4: '۴',
-            5: '۵',
-            6: '۶',
-            7: '۷',
-            8: '۸',
-            9: '۹',
-            0: '۰',
+            '1': '۱',
+            '2': '۲',
+            '3': '۳',
+            '4': '۴',
+            '5': '۵',
+            '6': '۶',
+            '7': '۷',
+            '8': '۸',
+            '9': '۹',
+            '0': '۰',
         },
         numberMap = {
             '۱': '1',
@@ -23347,16 +23305,16 @@ function isMobile (opts) {
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '١',
-            2: '٢',
-            3: '٣',
-            4: '٤',
-            5: '٥',
-            6: '٦',
-            7: '٧',
-            8: '٨',
-            9: '٩',
-            0: '٠',
+            '1': '١',
+            '2': '٢',
+            '3': '٣',
+            '4': '٤',
+            '5': '٥',
+            '6': '٦',
+            '7': '٧',
+            '8': '٨',
+            '9': '٩',
+            '0': '٠',
         },
         numberMap = {
             '١': '1',
@@ -23709,16 +23667,16 @@ module.exports = QueryHandler;
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '১',
-            2: '২',
-            3: '৩',
-            4: '৪',
-            5: '৫',
-            6: '৬',
-            7: '৭',
-            8: '৮',
-            9: '৯',
-            0: '০',
+            '1': '১',
+            '2': '২',
+            '3': '৩',
+            '4': '৪',
+            '5': '৫',
+            '6': '৬',
+            '7': '৭',
+            '8': '৮',
+            '9': '৯',
+            '0': '০',
         },
         numberMap = {
             '১': '1',
@@ -24199,7 +24157,6 @@ module.exports = isFunction;
             mm: withoutSuffix ? 'минута_минуты_минут' : 'минуту_минуты_минут',
             hh: 'час_часа_часов',
             dd: 'день_дня_дней',
-            ww: 'неделя_недели_недель',
             MM: 'месяц_месяца_месяцев',
             yy: 'год_года_лет',
         };
@@ -24340,8 +24297,6 @@ module.exports = isFunction;
             hh: relativeTimeWithPlural,
             d: 'день',
             dd: relativeTimeWithPlural,
-            w: 'неделя',
-            ww: relativeTimeWithPlural,
             M: 'месяц',
             MM: relativeTimeWithPlural,
             y: 'год',
@@ -24715,150 +24670,6 @@ function baseIsMatch(object, source, matchData, customizer) {
 }
 
 module.exports = baseIsMatch;
-
-
-/***/ }),
-
-/***/ "9686":
-/***/ (function(module, exports, __webpack_require__) {
-
-//! moment.js locale configuration
-//! locale : Bengali (Bangladesh) [bn-bd]
-//! author : Asraf Hossain Patoary : https://github.com/ashwoolford
-
-;(function (global, factory) {
-    true ? factory(__webpack_require__("c1df")) :
-   undefined
-}(this, (function (moment) { 'use strict';
-
-    //! moment.js locale configuration
-
-    var symbolMap = {
-            1: '১',
-            2: '২',
-            3: '৩',
-            4: '৪',
-            5: '৫',
-            6: '৬',
-            7: '৭',
-            8: '৮',
-            9: '৯',
-            0: '০',
-        },
-        numberMap = {
-            '১': '1',
-            '২': '2',
-            '৩': '3',
-            '৪': '4',
-            '৫': '5',
-            '৬': '6',
-            '৭': '7',
-            '৮': '8',
-            '৯': '9',
-            '০': '0',
-        };
-
-    var bnBd = moment.defineLocale('bn-bd', {
-        months: 'জানুয়ারি_ফেব্রুয়ারি_মার্চ_এপ্রিল_মে_জুন_জুলাই_আগস্ট_সেপ্টেম্বর_অক্টোবর_নভেম্বর_ডিসেম্বর'.split(
-            '_'
-        ),
-        monthsShort: 'জানু_ফেব্রু_মার্চ_এপ্রিল_মে_জুন_জুলাই_আগস্ট_সেপ্ট_অক্টো_নভে_ডিসে'.split(
-            '_'
-        ),
-        weekdays: 'রবিবার_সোমবার_মঙ্গলবার_বুধবার_বৃহস্পতিবার_শুক্রবার_শনিবার'.split(
-            '_'
-        ),
-        weekdaysShort: 'রবি_সোম_মঙ্গল_বুধ_বৃহস্পতি_শুক্র_শনি'.split('_'),
-        weekdaysMin: 'রবি_সোম_মঙ্গল_বুধ_বৃহ_শুক্র_শনি'.split('_'),
-        longDateFormat: {
-            LT: 'A h:mm সময়',
-            LTS: 'A h:mm:ss সময়',
-            L: 'DD/MM/YYYY',
-            LL: 'D MMMM YYYY',
-            LLL: 'D MMMM YYYY, A h:mm সময়',
-            LLLL: 'dddd, D MMMM YYYY, A h:mm সময়',
-        },
-        calendar: {
-            sameDay: '[আজ] LT',
-            nextDay: '[আগামীকাল] LT',
-            nextWeek: 'dddd, LT',
-            lastDay: '[গতকাল] LT',
-            lastWeek: '[গত] dddd, LT',
-            sameElse: 'L',
-        },
-        relativeTime: {
-            future: '%s পরে',
-            past: '%s আগে',
-            s: 'কয়েক সেকেন্ড',
-            ss: '%d সেকেন্ড',
-            m: 'এক মিনিট',
-            mm: '%d মিনিট',
-            h: 'এক ঘন্টা',
-            hh: '%d ঘন্টা',
-            d: 'এক দিন',
-            dd: '%d দিন',
-            M: 'এক মাস',
-            MM: '%d মাস',
-            y: 'এক বছর',
-            yy: '%d বছর',
-        },
-        preparse: function (string) {
-            return string.replace(/[১২৩৪৫৬৭৮৯০]/g, function (match) {
-                return numberMap[match];
-            });
-        },
-        postformat: function (string) {
-            return string.replace(/\d/g, function (match) {
-                return symbolMap[match];
-            });
-        },
-
-        meridiemParse: /রাত|ভোর|সকাল|দুপুর|বিকাল|সন্ধ্যা|রাত/,
-        meridiemHour: function (hour, meridiem) {
-            if (hour === 12) {
-                hour = 0;
-            }
-            if (meridiem === 'রাত') {
-                return hour < 4 ? hour : hour + 12;
-            } else if (meridiem === 'ভোর') {
-                return hour;
-            } else if (meridiem === 'সকাল') {
-                return hour;
-            } else if (meridiem === 'দুপুর') {
-                return hour >= 3 ? hour : hour + 12;
-            } else if (meridiem === 'বিকাল') {
-                return hour + 12;
-            } else if (meridiem === 'সন্ধ্যা') {
-                return hour + 12;
-            }
-        },
-
-        meridiem: function (hour, minute, isLower) {
-            if (hour < 4) {
-                return 'রাত';
-            } else if (hour < 6) {
-                return 'ভোর';
-            } else if (hour < 12) {
-                return 'সকাল';
-            } else if (hour < 15) {
-                return 'দুপুর';
-            } else if (hour < 18) {
-                return 'বিকাল';
-            } else if (hour < 20) {
-                return 'সন্ধ্যা';
-            } else {
-                return 'রাত';
-            }
-        },
-        week: {
-            dow: 0, // Sunday is the first day of the week.
-            doy: 6, // The week that contains Jan 6th is the first week of the year.
-        },
-    });
-
-    return bnBd;
-
-})));
 
 
 /***/ }),
@@ -25674,7 +25485,6 @@ module.exports = baseHas;
                 mm: 'minute',
                 hh: 'ore',
                 dd: 'zile',
-                ww: 'săptămâni',
                 MM: 'luni',
                 yy: 'ani',
             },
@@ -25723,8 +25533,6 @@ module.exports = baseHas;
             hh: relativeTimeWithPlural,
             d: 'o zi',
             dd: relativeTimeWithPlural,
-            w: 'o săptămână',
-            ww: relativeTimeWithPlural,
             M: 'o lună',
             MM: relativeTimeWithPlural,
             y: 'un an',
@@ -26247,8 +26055,6 @@ module.exports = Symbol;
             hh: '%d heures',
             d: 'un jour',
             dd: '%d jours',
-            w: 'une semaine',
-            ww: '%d semaines',
             M: 'un mois',
             MM: '%d mois',
             y: 'un an',
@@ -26898,8 +26704,8 @@ module.exports = getAllKeys;
             }
         },
         week: {
-            dow: 0, // Sunday is the first day of the week
-            doy: 3, // The week that contains Jan 4th is the first week of the year (7 + 0 - 4)
+            dow: 1, // Monday is the first day of the week.
+            doy: 4, // The week that contains Jan 4th is the first week of the year.
         },
         meridiemParse: /राती|सकाळीं|दनपारां|सांजे/,
         meridiemHour: function (hour, meridiem) {
@@ -28222,128 +28028,6 @@ module.exports = DataView;
 
 /***/ }),
 
-/***/ "b5b7":
-/***/ (function(module, exports, __webpack_require__) {
-
-//! moment.js locale configuration
-//! locale : Spanish (Mexico) [es-mx]
-//! author : JC Franco : https://github.com/jcfranco
-
-;(function (global, factory) {
-    true ? factory(__webpack_require__("c1df")) :
-   undefined
-}(this, (function (moment) { 'use strict';
-
-    //! moment.js locale configuration
-
-    var monthsShortDot = 'ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.'.split(
-            '_'
-        ),
-        monthsShort = 'ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic'.split('_'),
-        monthsParse = [
-            /^ene/i,
-            /^feb/i,
-            /^mar/i,
-            /^abr/i,
-            /^may/i,
-            /^jun/i,
-            /^jul/i,
-            /^ago/i,
-            /^sep/i,
-            /^oct/i,
-            /^nov/i,
-            /^dic/i,
-        ],
-        monthsRegex = /^(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre|ene\.?|feb\.?|mar\.?|abr\.?|may\.?|jun\.?|jul\.?|ago\.?|sep\.?|oct\.?|nov\.?|dic\.?)/i;
-
-    var esMx = moment.defineLocale('es-mx', {
-        months: 'enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre'.split(
-            '_'
-        ),
-        monthsShort: function (m, format) {
-            if (!m) {
-                return monthsShortDot;
-            } else if (/-MMM-/.test(format)) {
-                return monthsShort[m.month()];
-            } else {
-                return monthsShortDot[m.month()];
-            }
-        },
-        monthsRegex: monthsRegex,
-        monthsShortRegex: monthsRegex,
-        monthsStrictRegex: /^(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)/i,
-        monthsShortStrictRegex: /^(ene\.?|feb\.?|mar\.?|abr\.?|may\.?|jun\.?|jul\.?|ago\.?|sep\.?|oct\.?|nov\.?|dic\.?)/i,
-        monthsParse: monthsParse,
-        longMonthsParse: monthsParse,
-        shortMonthsParse: monthsParse,
-        weekdays: 'domingo_lunes_martes_miércoles_jueves_viernes_sábado'.split('_'),
-        weekdaysShort: 'dom._lun._mar._mié._jue._vie._sáb.'.split('_'),
-        weekdaysMin: 'do_lu_ma_mi_ju_vi_sá'.split('_'),
-        weekdaysParseExact: true,
-        longDateFormat: {
-            LT: 'H:mm',
-            LTS: 'H:mm:ss',
-            L: 'DD/MM/YYYY',
-            LL: 'D [de] MMMM [de] YYYY',
-            LLL: 'D [de] MMMM [de] YYYY H:mm',
-            LLLL: 'dddd, D [de] MMMM [de] YYYY H:mm',
-        },
-        calendar: {
-            sameDay: function () {
-                return '[hoy a la' + (this.hours() !== 1 ? 's' : '') + '] LT';
-            },
-            nextDay: function () {
-                return '[mañana a la' + (this.hours() !== 1 ? 's' : '') + '] LT';
-            },
-            nextWeek: function () {
-                return 'dddd [a la' + (this.hours() !== 1 ? 's' : '') + '] LT';
-            },
-            lastDay: function () {
-                return '[ayer a la' + (this.hours() !== 1 ? 's' : '') + '] LT';
-            },
-            lastWeek: function () {
-                return (
-                    '[el] dddd [pasado a la' +
-                    (this.hours() !== 1 ? 's' : '') +
-                    '] LT'
-                );
-            },
-            sameElse: 'L',
-        },
-        relativeTime: {
-            future: 'en %s',
-            past: 'hace %s',
-            s: 'unos segundos',
-            ss: '%d segundos',
-            m: 'un minuto',
-            mm: '%d minutos',
-            h: 'una hora',
-            hh: '%d horas',
-            d: 'un día',
-            dd: '%d días',
-            w: 'una semana',
-            ww: '%d semanas',
-            M: 'un mes',
-            MM: '%d meses',
-            y: 'un año',
-            yy: '%d años',
-        },
-        dayOfMonthOrdinalParse: /\d{1,2}º/,
-        ordinal: '%dº',
-        week: {
-            dow: 0, // Sunday is the first day of the week.
-            doy: 4, // The week that contains Jan 4th is the first week of the year.
-        },
-        invalidDate: 'Fecha inválida',
-    });
-
-    return esMx;
-
-})));
-
-
-/***/ }),
-
 /***/ "b760":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -28509,8 +28193,6 @@ module.exports = assignMergeValue;
             hh: '%d timar',
             d: 'ein dag',
             dd: '%d dagar',
-            w: 'ei veke',
-            ww: '%d veker',
             M: 'ein månad',
             MM: '%d månader',
             y: 'eit år',
@@ -29287,7 +28969,7 @@ module.exports = setToString;
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var require;//! moment.js
-//! version : 2.29.1
+//! version : 2.27.0
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -31827,7 +31509,8 @@ module.exports = setToString;
     hooks.createFromInputFallback = deprecate(
         'value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), ' +
             'which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are ' +
-            'discouraged. Please refer to http://momentjs.com/guides/#/warnings/js-date/ for more info.',
+            'discouraged and will be removed in an upcoming major release. Please refer to ' +
+            'http://momentjs.com/guides/#/warnings/js-date/ for more info.',
         function (config) {
             config._d = new Date(config._i + (config._useUTC ? ' UTC' : ''));
         }
@@ -33012,10 +32695,7 @@ module.exports = setToString;
     function calendar$1(time, formats) {
         // Support for single parameter, formats only overload to the calendar function
         if (arguments.length === 1) {
-            if (!arguments[0]) {
-                time = undefined;
-                formats = undefined;
-            } else if (isMomentInput(arguments[0])) {
+            if (isMomentInput(arguments[0])) {
                 time = arguments[0];
                 formats = undefined;
             } else if (isCalendarSpec(arguments[0])) {
@@ -33693,7 +33373,7 @@ module.exports = setToString;
             eras = this.localeData().eras();
         for (i = 0, l = eras.length; i < l; ++i) {
             // truncate time
-            val = this.clone().startOf('day').valueOf();
+            val = this.startOf('day').valueOf();
 
             if (eras[i].since <= val && val <= eras[i].until) {
                 return eras[i].name;
@@ -33713,7 +33393,7 @@ module.exports = setToString;
             eras = this.localeData().eras();
         for (i = 0, l = eras.length; i < l; ++i) {
             // truncate time
-            val = this.clone().startOf('day').valueOf();
+            val = this.startOf('day').valueOf();
 
             if (eras[i].since <= val && val <= eras[i].until) {
                 return eras[i].narrow;
@@ -33733,7 +33413,7 @@ module.exports = setToString;
             eras = this.localeData().eras();
         for (i = 0, l = eras.length; i < l; ++i) {
             // truncate time
-            val = this.clone().startOf('day').valueOf();
+            val = this.startOf('day').valueOf();
 
             if (eras[i].since <= val && val <= eras[i].until) {
                 return eras[i].abbr;
@@ -33756,7 +33436,7 @@ module.exports = setToString;
             dir = eras[i].since <= eras[i].until ? +1 : -1;
 
             // truncate time
-            val = this.clone().startOf('day').valueOf();
+            val = this.startOf('day').valueOf();
 
             if (
                 (eras[i].since <= val && val <= eras[i].until) ||
@@ -34907,7 +34587,7 @@ module.exports = setToString;
 
     //! moment.js
 
-    hooks.version = '2.29.1';
+    hooks.version = '2.27.0';
 
     setHookCallback(createLocal);
 
@@ -36976,7 +36656,6 @@ module.exports = function(arr, obj){
 //! moment.js locale configuration
 //! locale : Serbian [sr]
 //! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
-//! author : Stefan Crnjaković <stefan@hotmail.rs> : https://github.com/crnjakovic
 
 ;(function (global, factory) {
     true ? factory(__webpack_require__("c1df")) :
@@ -37035,10 +36714,10 @@ module.exports = function(arr, obj){
         longDateFormat: {
             LT: 'H:mm',
             LTS: 'H:mm:ss',
-            L: 'D. M. YYYY.',
-            LL: 'D. MMMM YYYY.',
-            LLL: 'D. MMMM YYYY. H:mm',
-            LLLL: 'dddd, D. MMMM YYYY. H:mm',
+            L: 'DD.MM.YYYY',
+            LL: 'D. MMMM YYYY',
+            LLL: 'D. MMMM YYYY H:mm',
+            LLLL: 'dddd, D. MMMM YYYY H:mm',
         },
         calendar: {
             sameDay: '[danas u] LT',
@@ -37419,16 +37098,16 @@ module.exports = function (it) {
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '༡',
-            2: '༢',
-            3: '༣',
-            4: '༤',
-            5: '༥',
-            6: '༦',
-            7: '༧',
-            8: '༨',
-            9: '༩',
-            0: '༠',
+            '1': '༡',
+            '2': '༢',
+            '3': '༣',
+            '4': '༤',
+            '5': '༥',
+            '6': '༦',
+            '7': '༧',
+            '8': '༨',
+            '9': '༩',
+            '0': '༠',
         },
         numberMap = {
             '༡': '1',
@@ -37612,7 +37291,6 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAMAAADy
         },
         dayOfMonthOrdinalParse: /\d{1,2}º/,
         ordinal: '%dº',
-        invalidDate: 'Data inválida',
     });
 
     return ptBr;
@@ -38894,16 +38572,16 @@ module.exports = setCacheHas;
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '१',
-            2: '२',
-            3: '३',
-            4: '४',
-            5: '५',
-            6: '६',
-            7: '७',
-            8: '८',
-            9: '९',
-            0: '०',
+            '1': '१',
+            '2': '२',
+            '3': '३',
+            '4': '४',
+            '5': '५',
+            '6': '६',
+            '7': '७',
+            '8': '८',
+            '9': '९',
+            '0': '०',
         },
         numberMap = {
             '१': '1',
@@ -38916,48 +38594,16 @@ module.exports = setCacheHas;
             '८': '8',
             '९': '9',
             '०': '0',
-        },
-        monthsParse = [
-            /^जन/i,
-            /^फ़र|फर/i,
-            /^मार्च/i,
-            /^अप्रै/i,
-            /^मई/i,
-            /^जून/i,
-            /^जुल/i,
-            /^अग/i,
-            /^सितं|सित/i,
-            /^अक्टू/i,
-            /^नव|नवं/i,
-            /^दिसं|दिस/i,
-        ],
-        shortMonthsParse = [
-            /^जन/i,
-            /^फ़र/i,
-            /^मार्च/i,
-            /^अप्रै/i,
-            /^मई/i,
-            /^जून/i,
-            /^जुल/i,
-            /^अग/i,
-            /^सित/i,
-            /^अक्टू/i,
-            /^नव/i,
-            /^दिस/i,
-        ];
+        };
 
     var hi = moment.defineLocale('hi', {
-        months: {
-            format: 'जनवरी_फ़रवरी_मार्च_अप्रैल_मई_जून_जुलाई_अगस्त_सितम्बर_अक्टूबर_नवम्बर_दिसम्बर'.split(
-                '_'
-            ),
-            standalone: 'जनवरी_फरवरी_मार्च_अप्रैल_मई_जून_जुलाई_अगस्त_सितंबर_अक्टूबर_नवंबर_दिसंबर'.split(
-                '_'
-            ),
-        },
+        months: 'जनवरी_फ़रवरी_मार्च_अप्रैल_मई_जून_जुलाई_अगस्त_सितम्बर_अक्टूबर_नवम्बर_दिसम्बर'.split(
+            '_'
+        ),
         monthsShort: 'जन._फ़र._मार्च_अप्रै._मई_जून_जुल._अग._सित._अक्टू._नव._दिस.'.split(
             '_'
         ),
+        monthsParseExact: true,
         weekdays: 'रविवार_सोमवार_मंगलवार_बुधवार_गुरूवार_शुक्रवार_शनिवार'.split('_'),
         weekdaysShort: 'रवि_सोम_मंगल_बुध_गुरू_शुक्र_शनि'.split('_'),
         weekdaysMin: 'र_सो_मं_बु_गु_शु_श'.split('_'),
@@ -38969,19 +38615,6 @@ module.exports = setCacheHas;
             LLL: 'D MMMM YYYY, A h:mm बजे',
             LLLL: 'dddd, D MMMM YYYY, A h:mm बजे',
         },
-
-        monthsParse: monthsParse,
-        longMonthsParse: monthsParse,
-        shortMonthsParse: shortMonthsParse,
-
-        monthsRegex: /^(जनवरी|जन\.?|फ़रवरी|फरवरी|फ़र\.?|मार्च?|अप्रैल|अप्रै\.?|मई?|जून?|जुलाई|जुल\.?|अगस्त|अग\.?|सितम्बर|सितंबर|सित\.?|अक्टूबर|अक्टू\.?|नवम्बर|नवंबर|नव\.?|दिसम्बर|दिसंबर|दिस\.?)/i,
-
-        monthsShortRegex: /^(जनवरी|जन\.?|फ़रवरी|फरवरी|फ़र\.?|मार्च?|अप्रैल|अप्रै\.?|मई?|जून?|जुलाई|जुल\.?|अगस्त|अग\.?|सितम्बर|सितंबर|सित\.?|अक्टूबर|अक्टू\.?|नवम्बर|नवंबर|नव\.?|दिसम्बर|दिसंबर|दिस\.?)/i,
-
-        monthsStrictRegex: /^(जनवरी?|फ़रवरी|फरवरी?|मार्च?|अप्रैल?|मई?|जून?|जुलाई?|अगस्त?|सितम्बर|सितंबर|सित?\.?|अक्टूबर|अक्टू\.?|नवम्बर|नवंबर?|दिसम्बर|दिसंबर?)/i,
-
-        monthsShortStrictRegex: /^(जन\.?|फ़र\.?|मार्च?|अप्रै\.?|मई?|जून?|जुल\.?|अग\.?|सित\.?|अक्टू\.?|नव\.?|दिस\.?)/i,
-
         calendar: {
             sameDay: '[आज] LT',
             nextDay: '[कल] LT',
@@ -39464,16 +39097,16 @@ var substr = 'ab'.substr(-1) === 'b'
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '૧',
-            2: '૨',
-            3: '૩',
-            4: '૪',
-            5: '૫',
-            6: '૬',
-            7: '૭',
-            8: '૮',
-            9: '૯',
-            0: '૦',
+            '1': '૧',
+            '2': '૨',
+            '3': '૩',
+            '4': '૪',
+            '5': '૫',
+            '6': '૬',
+            '7': '૭',
+            '8': '૮',
+            '9': '૯',
+            '0': '૦',
         },
         numberMap = {
             '૧': '1',
@@ -40089,16 +39722,16 @@ module.exports = cloneBuffer;
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '១',
-            2: '២',
-            3: '៣',
-            4: '៤',
-            5: '៥',
-            6: '៦',
-            7: '៧',
-            8: '៨',
-            9: '៩',
-            0: '០',
+            '1': '១',
+            '2': '២',
+            '3': '៣',
+            '4': '៤',
+            '5': '៥',
+            '6': '៦',
+            '7': '៧',
+            '8': '៨',
+            '9': '៩',
+            '0': '០',
         },
         numberMap = {
             '១': '1',
@@ -40788,8 +40421,6 @@ module.exports = stackClear;
             hh: '%d horas',
             d: 'um dia',
             dd: '%d dias',
-            w: 'uma semana',
-            ww: '%d semanas',
             M: 'um mês',
             MM: '%d meses',
             y: 'um ano',
@@ -40869,16 +40500,16 @@ module.exports = shortOut;
     //! moment.js locale configuration
 
     var symbolMap = {
-            1: '੧',
-            2: '੨',
-            3: '੩',
-            4: '੪',
-            5: '੫',
-            6: '੬',
-            7: '੭',
-            8: '੮',
-            9: '੯',
-            0: '੦',
+            '1': '੧',
+            '2': '੨',
+            '3': '੩',
+            '4': '੪',
+            '5': '੫',
+            '6': '੬',
+            '7': '੭',
+            '8': '੮',
+            '9': '੯',
+            '0': '੦',
         },
         numberMap = {
             '੧': '1',
@@ -41472,8 +41103,6 @@ module.exports = initCloneObject;
             hh: '%d uur',
             d: 'één dag',
             dd: '%d dagen',
-            w: 'één week',
-            ww: '%d weken',
             M: 'één maand',
             MM: '%d maanden',
             y: 'één jaar',
@@ -41547,12 +41176,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/item.vue?vue&type=template&id=70386ad2&
-var itemvue_type_template_id_70386ad2_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"item-bank-sdk-message ibs-background-color item-bank-create-form",attrs:{"id":"item-bank-create"}},[(_vm.type === 'determine')?_c('judge-type',{attrs:{"mode":_vm.mode,"showModelBtn":_vm.showModelBtn,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"patchData":_vm.patchData,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.type === 'single_choice')?_c('single-choice',{attrs:{"mode":_vm.mode,"showModelBtn":_vm.showModelBtn,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"patchData":_vm.patchData,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.type === 'fill')?_c('fill-type',{attrs:{"mode":_vm.mode,"showModelBtn":_vm.showModelBtn,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"patchData":_vm.patchData,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.type === 'essay')?_c('essay-type',{attrs:{"mode":_vm.mode,"showModelBtn":_vm.showModelBtn,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"patchData":_vm.patchData,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.type === 'material')?_c('material-type',{attrs:{"showMaterial":true,"showAnalysis":true,"mode":_vm.mode,"showModelBtn":_vm.showModelBtn,"errorList":_vm.errorList,"isDisable":_vm.isDisable},on:{"previewMaterialAttachment":_vm.previewAttachment,"patchData":_vm.patchData,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.type === 'choice' || _vm.type === 'uncertain_choice')?_c('choice',{attrs:{"type":_vm.type,"mode":_vm.mode,"showModelBtn":_vm.showModelBtn,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"patchData":_vm.patchData,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e()],1)}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/item.vue?vue&type=template&id=a743ec8c&
+var itemvue_type_template_id_a743ec8c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"item-bank-sdk-message ibs-background-color item-bank-create-form",attrs:{"id":"item-bank-create"}},[(_vm.type === 'determine')?_c('judge-type',{attrs:{"mode":_vm.mode,"showModelBtn":_vm.showModelBtn,"isDisable":_vm.isDisable,"aiAnalysisEnable":_vm.aiAnalysisEnable,"errorList":_vm.errorList},on:{"patchData":_vm.patchData,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.type === 'single_choice')?_c('single-choice',{attrs:{"mode":_vm.mode,"showModelBtn":_vm.showModelBtn,"isDisable":_vm.isDisable,"aiAnalysisEnable":_vm.aiAnalysisEnable,"errorList":_vm.errorList},on:{"patchData":_vm.patchData,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.type === 'fill')?_c('fill-type',{attrs:{"mode":_vm.mode,"showModelBtn":_vm.showModelBtn,"isDisable":_vm.isDisable,"aiAnalysisEnable":_vm.aiAnalysisEnable,"errorList":_vm.errorList},on:{"patchData":_vm.patchData,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.type === 'essay')?_c('essay-type',{attrs:{"mode":_vm.mode,"showModelBtn":_vm.showModelBtn,"isDisable":_vm.isDisable,"aiAnalysisEnable":_vm.aiAnalysisEnable,"errorList":_vm.errorList},on:{"patchData":_vm.patchData,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.type === 'material')?_c('material-type',{attrs:{"showMaterial":true,"showAnalysis":true,"mode":_vm.mode,"showModelBtn":_vm.showModelBtn,"errorList":_vm.errorList,"isDisable":_vm.isDisable,"aiAnalysisEnable":_vm.aiAnalysisEnable},on:{"previewMaterialAttachment":_vm.previewAttachment,"patchData":_vm.patchData,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.type === 'choice' || _vm.type === 'uncertain_choice')?_c('choice',{attrs:{"type":_vm.type,"mode":_vm.mode,"showModelBtn":_vm.showModelBtn,"isDisable":_vm.isDisable,"aiAnalysisEnable":_vm.aiAnalysisEnable,"errorList":_vm.errorList},on:{"patchData":_vm.patchData,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e()],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-manage/src/item.vue?vue&type=template&id=70386ad2&
+// CONCATENATED MODULE: ./src/components/item-manage/src/item.vue?vue&type=template&id=a743ec8c&
 
 // CONCATENATED MODULE: ./src/locale/lang/zh-CN.js
 var lang = {
@@ -42020,8 +41649,8 @@ var i18n = function i18n(fn) {
     }
   }
 });
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/judge.vue?vue&type=template&id=aa582444&
-var judgevue_type_template_id_aa582444_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._b({attrs:{"questions":_vm.questions,"form":_vm.form,"mode":_vm.mode,"isSubItem":_vm.isSubItem,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('a-form-item',{attrs:{"label":_vm.t('Answer'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":""}},[_c('a-radio-group',{directives:[{name:"decorator",rawName:"v-decorator",value:([
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/judge.vue?vue&type=template&id=154dd270&
+var judgevue_type_template_id_154dd270_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._b({attrs:{"questions":_vm.questions,"form":_vm.form,"mode":_vm.mode,"isSubItem":_vm.isSubItem,"isDisable":_vm.isDisable,"aiAnalysisEnable":_vm.aiAnalysisEnable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('a-form-item',{attrs:{"label":_vm.t('Answer'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":""}},[_c('a-radio-group',{directives:[{name:"decorator",rawName:"v-decorator",value:([
             'answer',
             {
               initialValue: _vm.answer,
@@ -42029,13 +41658,13 @@ var judgevue_type_template_id_aa582444_render = function () {var _vm=this;var _h
               trigger: 'blur'
             }
           ]),expression:"[\n            'answer',\n            {\n              initialValue: answer,\n              rules: [{ validator: checkJudge }],\n              trigger: 'blur'\n            }\n          ]"}],attrs:{"name":"radioGroup"},on:{"change":_vm.setAnswer}},_vm._l((_vm.questionsSelect),function(item,index){return _c('a-radio',{key:index,attrs:{"value":item.radio.val}},[_vm._v(_vm._s(item.radio.text)+" ")])}),1)],1)]},proxy:true}])},'answer-model',_vm.$attrs,false))],1)}
-var judgevue_type_template_id_aa582444_staticRenderFns = []
+var judgevue_type_template_id_154dd270_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-manage/src/component/judge.vue?vue&type=template&id=aa582444&
+// CONCATENATED MODULE: ./src/components/item-manage/src/component/judge.vue?vue&type=template&id=154dd270&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/answer-model.vue?vue&type=template&id=b87a5ad0&
-var answer_modelvue_type_template_id_b87a5ad0_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('base-type',_vm._b({attrs:{"form":_vm.form,"mode":_vm.mode,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"clickConfirm":_vm.clickConfirm,"closeConfirm":_vm.closeConfirm,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion},scopedSlots:_vm._u([{key:"questions",fn:function(){return [_vm._t("stem",[_c('a-form-item',{attrs:{"label":_vm.t('Stem'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":"","validate-status":_vm.stem.validateStatus,"help":_vm.stem.errorMsg}},[_c('div',{class:{ 'is-wrong': _vm.isWrong }},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/answer-model.vue?vue&type=template&id=6b016356&
+var answer_modelvue_type_template_id_6b016356_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('base-type',_vm._b({attrs:{"form":_vm.form,"mode":_vm.mode,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"clickConfirm":_vm.clickConfirm,"closeConfirm":_vm.closeConfirm,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion},scopedSlots:_vm._u([{key:"questions",fn:function(){return [_vm._t("stem",[_c('a-form-item',{attrs:{"label":_vm.t('Stem'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":"","validate-status":_vm.stem.validateStatus,"help":_vm.stem.errorMsg}},[_c('div',{class:{ 'is-wrong': _vm.isWrong }},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
               "questions['stem']",
               {
                 initialValue: _vm.questions.stem,
@@ -42044,7 +41673,7 @@ var answer_modelvue_type_template_id_b87a5ad0_render = function () {var _vm=this
             ]),expression:"[\n              `questions['stem']`,\n              {\n                initialValue: questions.stem,\n                rules: [{ required: true }]\n              }\n            ]"}],attrs:{"data-image-download-url":_vm.showCKEditorData.filebrowserImageDownloadUrl,"rows":0}}),(_vm.isWrong)?_c('div',{staticClass:"wrong-text"},[_vm._v(" "+_vm._s(_vm.t("wrongText"))+" ")]):_vm._e()],1)])]),(_vm.showAttachment)?_c('a-form-item',{attrs:{"label":_vm.t('itemManage.StemAttachment'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 }}},[_c('attachment-upload',{attrs:{"bodyDom":"item-bank-create","mode":_vm.mode,"module":"stem","fileShowData":_vm.getAttachmentTypeData('stem'),"cdnHost":_vm.cdnHost,"uploaderData":_vm.uploadSDKInitData},on:{"deleteFile":_vm.deleteFile,"onFileSort":_vm.onFileSort,"getFileInfo":_vm.getFileInfo}})],1):_vm._e(),_vm._t("response_points"),_c('a-collapse',{attrs:{"bordered":false},scopedSlots:_vm._u([{key:"expandIcon",fn:function(props){return [_c('div',{attrs:{"rotate":props.isActive ? 90 : 0}})]}}])},[_c('a-collapse-panel',{key:"1",style:(_vm.customStyle),attrs:{"header":_vm.t('itemManage.ToggleShowChoose'),"forceRender":true}},[_c('a-form-item',{attrs:{"label":_vm.t('Explain'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 }}},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
               "questions['analysis']",
               { initialValue: _vm.questions.analysis }
-            ]),expression:"[\n              `questions['analysis']`,\n              { initialValue: questions.analysis }\n            ]"}],attrs:{"rows":4,"data-image-download-url":_vm.showCKEditorData.filebrowserImageDownloadUrl}}),_c('div',{staticClass:"ibs-ai-explain ibs-mt16"},[_c('div',{staticClass:"ibs-ai-left"},[_c('p',{staticClass:"ai-left-tittle"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.aiProblemAssistant"))+" ")]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.isShowAiExplain),expression:"isShowAiExplain"}],staticClass:"ai-left-btn",on:{"click":function($event){return _vm.aiGeneration()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("84fb")}}),_c('span',{ref:"text",staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.analysis")))])]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.stopAiExplain),expression:"stopAiExplain"}],staticClass:"ai-left-stopbtn",on:{"click":function($event){return _vm.stopAiGeneration()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("d7aa")}}),_c('span',{staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.stopGeneration")))])]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.anewAiExplain),expression:"anewAiExplain"}],staticClass:"ai-left-stopbtn",on:{"click":function($event){return _vm.aiGeneration()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("7ca4")}}),_c('span',{staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.reGenerate")))])]),_c('span',{staticClass:"ai-left-content"},[_vm._v(_vm._s(_vm.t("itemEngine.aiAnalysisRefer")))]),_c('p',{directives:[{name:"show",rawName:"v-show",value:(_vm.unableGenerateTips),expression:"unableGenerateTips"}],staticClass:"ai-left-tips"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.aiUnableGenerate"))+" ")])]),_c('div',{staticClass:"ibs-ai-right"},[_c('img',{staticClass:"ai-right-img",attrs:{"src":__webpack_require__("89fb")}})])])],1),(_vm.showAttachment)?_c('a-form-item',{attrs:{"label":_vm.t('ExplainAttachment'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 }}},[_c('attachment-upload',{attrs:{"bodyDom":"item-bank-create","mode":_vm.mode,"module":"analysis","cdnHost":_vm.cdnHost,"uploaderData":_vm.uploadSDKInitData,"fileShowData":_vm.getAttachmentTypeData('analysis')},on:{"deleteFile":_vm.deleteFile,"onFileSort":_vm.onFileSort,"getFileInfo":_vm.getFileInfo}})],1):_vm._e(),(_vm.itemType === 'fill')?_c('a-form-item',{attrs:{"label":_vm.t('Score'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 }}},[_c('a-input',{directives:[{name:"decorator",rawName:"v-decorator",value:([
+            ]),expression:"[\n              `questions['analysis']`,\n              { initialValue: questions.analysis }\n            ]"}],attrs:{"rows":4,"data-image-download-url":_vm.showCKEditorData.filebrowserImageDownloadUrl}}),(_vm.aiAnalysisEnable && _vm.questions.aiAnalysisEnable !== false)?_c('div',{staticClass:"ibs-ai-explain ibs-mt16"},[_c('div',{staticClass:"ibs-ai-left"},[_c('p',{staticClass:"ai-left-tittle"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.aiProblemAssistant"))+" ")]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.isShowAiExplain),expression:"isShowAiExplain"}],staticClass:"ai-left-btn",on:{"click":function($event){return _vm.aiGeneration()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("84fb")}}),_c('span',{ref:"text",staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.analysis")))])]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.stopAiExplain),expression:"stopAiExplain"}],staticClass:"ai-left-stopbtn",on:{"click":function($event){return _vm.stopAiGeneration()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("d7aa")}}),_c('span',{staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.stopGeneration")))])]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.anewAiExplain),expression:"anewAiExplain"}],staticClass:"ai-left-stopbtn",on:{"click":function($event){return _vm.aiGeneration()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("7ca4")}}),_c('span',{staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.reGenerate")))])]),_c('span',{staticClass:"ai-left-content"},[_vm._v(_vm._s(_vm.t("itemEngine.aiAnalysisRefer")))]),_c('p',{directives:[{name:"show",rawName:"v-show",value:(_vm.unableGenerateTips),expression:"unableGenerateTips"}],staticClass:"ai-left-tips"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.aiUnableGenerate"))+" ")])]),_c('div',{staticClass:"ibs-ai-right"},[_c('img',{staticClass:"ai-right-img",attrs:{"src":__webpack_require__("89fb")}})])]):_vm._e()],1),(_vm.showAttachment)?_c('a-form-item',{attrs:{"label":_vm.t('ExplainAttachment'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 }}},[_c('attachment-upload',{attrs:{"bodyDom":"item-bank-create","mode":_vm.mode,"module":"analysis","cdnHost":_vm.cdnHost,"uploaderData":_vm.uploadSDKInitData,"fileShowData":_vm.getAttachmentTypeData('analysis')},on:{"deleteFile":_vm.deleteFile,"onFileSort":_vm.onFileSort,"getFileInfo":_vm.getFileInfo}})],1):_vm._e(),(_vm.itemType === 'fill')?_c('a-form-item',{attrs:{"label":_vm.t('Score'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 }}},[_c('a-input',{directives:[{name:"decorator",rawName:"v-decorator",value:([
               "questions['otherScore']",
               {
                 rules: [{ validator: _vm.checkScore }],
@@ -42084,10 +41713,10 @@ var answer_modelvue_type_template_id_b87a5ad0_render = function () {var _vm=this
                 initialValue: _vm.questions.scoreType || 'question'
               }
             ]),expression:"[\n              `questions['scoreType']`,\n              {\n                initialValue: questions.scoreType || 'question'\n              }\n            ]"}],attrs:{"name":"scoreType"}},[_c('a-radio',{attrs:{"value":"question"}},[_vm._v(" 每题得分 ")]),_c('a-radio',{attrs:{"value":"option"}},[_vm._v(" 每空得分 ")])],1)],1):_vm._e()],1)],1)]},proxy:true}],null,true)},'base-type',_vm.$attrs,false))}
-var answer_modelvue_type_template_id_b87a5ad0_staticRenderFns = []
+var answer_modelvue_type_template_id_6b016356_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-manage/src/component/answer-model.vue?vue&type=template&id=b87a5ad0&
+// CONCATENATED MODULE: ./src/components/item-manage/src/component/answer-model.vue?vue&type=template&id=6b016356&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/base.vue?vue&type=template&id=df3603d0&
 var basevue_type_template_id_df3603d0_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"item-bank-sdk ibs-base",attrs:{"id":"ib-treeSelect"}},[_c('a-form-item',{attrs:{"label":"","label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":""}},[_c('a-input',{directives:[{name:"decorator",rawName:"v-decorator",value:([
@@ -45826,14 +45455,20 @@ var empty_EmptyProps = function EmptyProps() {
 var Empty = {
   name: 'AEmpty',
   props: extends_default()({}, empty_EmptyProps()),
+  inject: {
+    configProvider: { 'default': function _default() {
+        return ConfigConsumerProps;
+      } }
+  },
   methods: {
     renderEmpty: function renderEmpty(contentLocale) {
       var h = this.$createElement;
       var _$props = this.$props,
           customizePrefixCls = _$props.prefixCls,
           imageStyle = _$props.imageStyle;
+      var getPrefixCls = this.configProvider.getPrefixCls;
 
-      var prefixCls = ConfigConsumerProps.getPrefixCls('empty', customizePrefixCls);
+      var prefixCls = getPrefixCls('empty', customizePrefixCls);
       var image = Object(props_util["g" /* getComponentFromProp */])(this, 'image') || h(empty_empty);
       var description = Object(props_util["g" /* getComponentFromProp */])(this, 'description');
 
@@ -47267,7 +46902,11 @@ function getTwoToneColor() {
 
 
 // Initial setting
-icons_vue_es.add.apply(icons_vue_es, toConsumableArray_default()(Object.keys(antdIcon_namespaceObject).map(function (key) {
+
+// https://github.com/vueComponent/ant-design-vue/issues/2745
+icons_vue_es.add.apply(icons_vue_es, toConsumableArray_default()(Object.keys(antdIcon_namespaceObject).filter(function (key) {
+  return key !== 'default';
+}).map(function (key) {
   return antdIcon_namespaceObject[key];
 })));
 setTwoToneColor('#1890ff');
@@ -49837,6 +49476,9 @@ function answer_modelvue_type_script_lang_js_defineProperty(obj, key, value) { i
 //
 //
 //
+//
+//
+//
 
 
 
@@ -49900,6 +49542,10 @@ var answer_modelvue_type_script_lang_js_base = {
       default: "create"
     },
     isDisable: {
+      type: Boolean,
+      default: false
+    },
+    aiAnalysisEnable: {
       type: Boolean,
       default: false
     },
@@ -50149,8 +49795,8 @@ var answer_modelvue_type_script_lang_js_base = {
 
 var answer_model_component = normalizeComponent(
   component_answer_modelvue_type_script_lang_js_,
-  answer_modelvue_type_template_id_b87a5ad0_render,
-  answer_modelvue_type_template_id_b87a5ad0_staticRenderFns,
+  answer_modelvue_type_template_id_6b016356_render,
+  answer_modelvue_type_template_id_6b016356_staticRenderFns,
   false,
   null,
   null,
@@ -50162,6 +49808,7 @@ var answer_model_component = normalizeComponent(
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/judge.vue?vue&type=script&lang=js&
 function judgevue_type_script_lang_js_extends() { judgevue_type_script_lang_js_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return judgevue_type_script_lang_js_extends.apply(this, arguments); }
 
+//
 //
 //
 //
@@ -50264,6 +49911,10 @@ var judgevue_type_script_lang_js_base = {
       default: "create"
     },
     isDisable: {
+      type: Boolean,
+      default: false
+    },
+    aiAnalysisEnable: {
       type: Boolean,
       default: false
     },
@@ -50388,8 +50039,8 @@ var judgevue_type_script_lang_js_base = {
 
 var judge_component = normalizeComponent(
   component_judgevue_type_script_lang_js_,
-  judgevue_type_template_id_aa582444_render,
-  judgevue_type_template_id_aa582444_staticRenderFns,
+  judgevue_type_template_id_154dd270_render,
+  judgevue_type_template_id_154dd270_staticRenderFns,
   false,
   null,
   null,
@@ -50398,24 +50049,25 @@ var judge_component = normalizeComponent(
 )
 
 /* harmony default export */ var judge = (judge_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/single-choice.vue?vue&type=template&id=1cd0b4f8&
-var single_choicevue_type_template_id_1cd0b4f8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._b({attrs:{"questions":_vm.questions,"mode":_vm.mode,"form":_vm.form,"isSubItem":_vm.isSubItem,"isDisable":_vm.isDisable,"errorList":_vm.errorList,"topicData":_vm.topicData},on:{"getFromInfo":_vm.getFromInfo,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('div',{staticClass:"ibs-choice-wrap"},[_c('a-radio-group',{attrs:{"name":"radioGroup"},on:{"change":_vm.setAnswer},model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.form.getFieldValue('keys')),function(k,index){return _c('a-form-item',{key:k.radio.val,staticClass:"choice-item",attrs:{"label":_vm.getChoiceLabelNum(_vm.optionKey[index]),"required":"","label-col":{ span: 4 },"wrapper-col":{ span: 16 },"validate-status":_vm.optionsEditorRule[k.radio.val].validateStatus || '',"help":_vm.optionsEditorRule[k.radio.val].errorMsg || ''}},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/single-choice.vue?vue&type=template&id=5cf2ddfe&
+var single_choicevue_type_template_id_5cf2ddfe_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._b({attrs:{"questions":_vm.questions,"mode":_vm.mode,"form":_vm.form,"isSubItem":_vm.isSubItem,"isDisable":_vm.isDisable,"aiAnalysisEnable":_vm.aiAnalysisEnable,"errorList":_vm.errorList,"topicData":_vm.topicData},on:{"getFromInfo":_vm.getFromInfo,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('div',{staticClass:"ibs-choice-wrap"},[_c('a-radio-group',{attrs:{"name":"radioGroup"},on:{"change":_vm.setAnswer},model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.form.getFieldValue('keys')),function(k,index){return _c('a-form-item',{key:k.radio.val,staticClass:"choice-item",attrs:{"label":_vm.getChoiceLabelNum(_vm.optionKey[index]),"required":"","label-col":{ span: 4 },"wrapper-col":{ span: 16 },"validate-status":_vm.optionsEditorRule[k.radio.val].validateStatus || '',"help":_vm.optionsEditorRule[k.radio.val].errorMsg || ''}},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
                 ("options[" + (k.radio.val) + "]"),
                 {
                   initialValue: k.radio.text,
                   rules: [{ required: true }]
                 }
               ]),expression:"[\n                `options[${k.radio.val}]`,\n                {\n                  initialValue: k.radio.text,\n                  rules: [{ required: true }]\n                }\n              ]"}],attrs:{"data-image-download-url":_vm.showCKEditorData.filebrowserImageDownloadUrl,"placeholder":"","rows":0}}),_c('a-radio',{attrs:{"value":k.radio.val}},[_vm._v(_vm._s(_vm.t("RightAnswer")))]),_c('a-button',{staticClass:"ibs-delete-btn",attrs:{"size":"small"},on:{"click":function () { return _vm.remove(index, k); }}},[_c('i',{staticClass:"ib-icon ib-icon-delete"})])],1)}),1),_c('a-row',[_c('a-col',{staticClass:"ibs-text-right",attrs:{"offset":4,"span":16}},[_c('a-button',{attrs:{"type":"primary"},on:{"click":_vm.add}},[_vm._v(_vm._s(_vm.t("itemManage.newChoice")))])],1)],1)],1)]},proxy:true}])},'answer-model',_vm.$attrs,false))],1)}
-var single_choicevue_type_template_id_1cd0b4f8_staticRenderFns = []
+var single_choicevue_type_template_id_5cf2ddfe_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-manage/src/component/single-choice.vue?vue&type=template&id=1cd0b4f8&
+// CONCATENATED MODULE: ./src/components/item-manage/src/component/single-choice.vue?vue&type=template&id=5cf2ddfe&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/single-choice.vue?vue&type=script&lang=js&
 function single_choicevue_type_script_lang_js_extends() { single_choicevue_type_script_lang_js_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return single_choicevue_type_script_lang_js_extends.apply(this, arguments); }
 
 function single_choicevue_type_script_lang_js_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -50586,6 +50238,10 @@ var single_choicevue_type_script_lang_js_base = {
       }
     },
     isDisable: {
+      type: Boolean,
+      default: false
+    },
+    aiAnalysisEnable: {
       type: Boolean,
       default: false
     },
@@ -50909,8 +50565,8 @@ var single_choicevue_type_script_lang_js_base = {
 
 var single_choice_component = normalizeComponent(
   component_single_choicevue_type_script_lang_js_,
-  single_choicevue_type_template_id_1cd0b4f8_render,
-  single_choicevue_type_template_id_1cd0b4f8_staticRenderFns,
+  single_choicevue_type_template_id_5cf2ddfe_render,
+  single_choicevue_type_template_id_5cf2ddfe_staticRenderFns,
   false,
   null,
   null,
@@ -50919,31 +50575,32 @@ var single_choice_component = normalizeComponent(
 )
 
 /* harmony default export */ var single_choice = (single_choice_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/material.vue?vue&type=template&id=3864c146&
-var materialvue_type_template_id_3864c146_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form,"id":"item-bank-sdk-material-created"}},[_c('base-type',_vm._b({attrs:{"form":_vm.form,"mode":_vm.mode,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"getMaterialAttachment":_vm.getMaterialAttachment,"onFileSort":_vm.onFileSort,"deleteMaterialAttachment":_vm.deleteMaterialAttachment,"previewMaterialAttachment":_vm.previewMaterialAttachment,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion},scopedSlots:_vm._u([{key:"subQuestions",fn:function(){return [_c('div',{staticClass:"ibs-mt24"},[_c('a-form-item',{attrs:{"wrapper-col":{ span: 16, offset: 4 }}},_vm._l((_vm.newQuestions),function(item,index){return _c('preview-model',{key:index,attrs:{"value":item,"questions":item},on:{"getSeq":_vm.getSeq}})}),1),_c('a-form-item',{attrs:{"label":_vm.t('itemManage.addSubItem'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 }}},[_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","data-type":"single_choice"},on:{"click":_vm.showModal}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("single_choice")))]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","data-type":"choice"},on:{"click":_vm.showModal}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("choice")))]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","data-type":"uncertain_choice"},on:{"click":_vm.showModal}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("uncertain_choice")))]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","data-type":"judge"},on:{"click":_vm.showModal}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("determine")))]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","data-type":"fill"},on:{"click":_vm.showModal}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("fill")))]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","data-type":"essay"},on:{"click":_vm.showModal}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("essay")))]),_c('a-modal',{attrs:{"title":_vm.t('itemManage.addItem'),"width":"800px","cancelText":_vm.t('cancel'),"destroyOnClose":true,"footer":null,"getContainer":_vm.getContainer},on:{"ok":_vm.handleOk},model:{value:(_vm.visible),callback:function ($$v) {_vm.visible=$$v},expression:"visible"}},[(_vm.subType == 'essay')?_c('essay-type',{attrs:{"showCategory":false,"showDifficulty":false,"subQuestions":_vm.subQuestions,"isSubItem":true,"mode":_vm.subMode},on:{"patchData":_vm.patchData,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.subType == 'fill')?_c('fill-type',{attrs:{"showCategory":false,"showDifficulty":false,"isSubItem":true,"subQuestions":_vm.subQuestions,"mode":_vm.subMode},on:{"patchData":_vm.patchData,"initStatus":_vm.initStatus,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.subType == 'judge')?_c('judge-type',{attrs:{"showCategory":false,"showDifficulty":false,"isSubItem":true,"subQuestions":_vm.subQuestions,"mode":_vm.subMode},on:{"patchData":_vm.patchData,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.subType == 'single_choice')?_c('single-type',{attrs:{"showCategory":false,"showDifficulty":false,"isSubItem":true,"subQuestions":_vm.subQuestions,"mode":_vm.subMode},on:{"patchData":_vm.patchData,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.subType == 'choice' || _vm.subType == 'uncertain_choice')?_c('choice-type',{attrs:{"type":_vm.subType,"showCategory":false,"showDifficulty":false,"isSubItem":true,"subQuestions":_vm.subQuestions,"mode":_vm.subMode},on:{"patchData":_vm.patchData,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e()],1)],1)],1)]},proxy:true}])},'base-type',_vm.$attrs,false))],1)}
-var materialvue_type_template_id_3864c146_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/material.vue?vue&type=template&id=0ed1ec16&
+var materialvue_type_template_id_0ed1ec16_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form,"id":"item-bank-sdk-material-created"}},[_c('base-type',_vm._b({attrs:{"form":_vm.form,"mode":_vm.mode,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"getMaterialAttachment":_vm.getMaterialAttachment,"onFileSort":_vm.onFileSort,"deleteMaterialAttachment":_vm.deleteMaterialAttachment,"previewMaterialAttachment":_vm.previewMaterialAttachment,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion},scopedSlots:_vm._u([{key:"subQuestions",fn:function(){return [_c('div',{staticClass:"ibs-mt24"},[_c('a-form-item',{attrs:{"wrapper-col":{ span: 16, offset: 4 }}},_vm._l((_vm.newQuestions),function(item,index){return _c('preview-model',{key:index,attrs:{"value":item,"questions":item},on:{"getSeq":_vm.getSeq}})}),1),_c('a-form-item',{attrs:{"label":_vm.t('itemManage.addSubItem'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 }}},[_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","data-type":"single_choice"},on:{"click":_vm.showModal}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("single_choice")))]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","data-type":"choice"},on:{"click":_vm.showModal}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("choice")))]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","data-type":"uncertain_choice"},on:{"click":_vm.showModal}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("uncertain_choice")))]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","data-type":"judge"},on:{"click":_vm.showModal}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("determine")))]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","data-type":"fill"},on:{"click":_vm.showModal}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("fill")))]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"primary","data-type":"essay"},on:{"click":_vm.showModal}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("essay")))]),_c('a-modal',{attrs:{"title":_vm.t('itemManage.addItem'),"width":"800px","cancelText":_vm.t('cancel'),"destroyOnClose":true,"footer":null,"getContainer":_vm.getContainer},on:{"ok":_vm.handleOk},model:{value:(_vm.visible),callback:function ($$v) {_vm.visible=$$v},expression:"visible"}},[(_vm.subType == 'essay')?_c('essay-type',{attrs:{"showCategory":false,"showDifficulty":false,"subQuestions":_vm.subQuestions,"isSubItem":true,"mode":_vm.subMode,"aiAnalysisEnable":_vm.aiAnalysisEnable},on:{"patchData":_vm.patchData,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.subType == 'fill')?_c('fill-type',{attrs:{"showCategory":false,"showDifficulty":false,"isSubItem":true,"subQuestions":_vm.subQuestions,"mode":_vm.subMode,"aiAnalysisEnable":_vm.aiAnalysisEnable},on:{"patchData":_vm.patchData,"initStatus":_vm.initStatus,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.subType == 'judge')?_c('judge-type',{attrs:{"showCategory":false,"showDifficulty":false,"isSubItem":true,"subQuestions":_vm.subQuestions,"mode":_vm.subMode,"aiAnalysisEnable":_vm.aiAnalysisEnable},on:{"patchData":_vm.patchData,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.subType == 'single_choice')?_c('single-type',{attrs:{"showCategory":false,"showDifficulty":false,"isSubItem":true,"subQuestions":_vm.subQuestions,"mode":_vm.subMode,"aiAnalysisEnable":_vm.aiAnalysisEnable},on:{"patchData":_vm.patchData,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.subType == 'choice' || _vm.subType == 'uncertain_choice')?_c('choice-type',{attrs:{"type":_vm.subType,"showCategory":false,"showDifficulty":false,"isSubItem":true,"subQuestions":_vm.subQuestions,"mode":_vm.subMode,"aiAnalysisEnable":_vm.aiAnalysisEnable},on:{"patchData":_vm.patchData,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e()],1)],1)],1)]},proxy:true}])},'base-type',_vm.$attrs,false))],1)}
+var materialvue_type_template_id_0ed1ec16_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-manage/src/component/material.vue?vue&type=template&id=3864c146&
+// CONCATENATED MODULE: ./src/components/item-manage/src/component/material.vue?vue&type=template&id=0ed1ec16&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/essay.vue?vue&type=template&id=409f0487&
-var essayvue_type_template_id_409f0487_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._b({attrs:{"questions":_vm.questions,"form":_vm.form,"mode":_vm.mode,"isSubItem":_vm.isSubItem,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('a-form-item',{attrs:{"label":_vm.t('Answer'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":"","validate-status":_vm.answerText.validateStatus,"help":_vm.answerText.errorMsg}},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/essay.vue?vue&type=template&id=fe8e449a&
+var essayvue_type_template_id_fe8e449a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._b({attrs:{"questions":_vm.questions,"form":_vm.form,"mode":_vm.mode,"isSubItem":_vm.isSubItem,"isDisable":_vm.isDisable,"aiAnalysisEnable":_vm.aiAnalysisEnable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('a-form-item',{attrs:{"label":_vm.t('Answer'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":"","validate-status":_vm.answerText.validateStatus,"help":_vm.answerText.errorMsg}},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
             "questions['answer']",
             {
               initialValue: _vm.answer,
               rules: [{ required: true }]
             }
           ]),expression:"[\n            `questions['answer']`,\n            {\n              initialValue: answer,\n              rules: [{ required: true }]\n            }\n          ]"}],attrs:{"rows":0,"data-image-download-url":_vm.showCKEditorData.filebrowserImageDownloadUrl}})],1)]},proxy:true}])},'answer-model',_vm.$attrs,false))],1)}
-var essayvue_type_template_id_409f0487_staticRenderFns = []
+var essayvue_type_template_id_fe8e449a_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-manage/src/component/essay.vue?vue&type=template&id=409f0487&
+// CONCATENATED MODULE: ./src/components/item-manage/src/component/essay.vue?vue&type=template&id=fe8e449a&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/essay.vue?vue&type=script&lang=js&
 function essayvue_type_script_lang_js_extends() { essayvue_type_script_lang_js_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return essayvue_type_script_lang_js_extends.apply(this, arguments); }
 
 function essayvue_type_script_lang_js_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -51038,6 +50695,10 @@ var essayvue_type_script_lang_js_base = {
       default: "create"
     },
     isDisable: {
+      type: Boolean,
+      default: false
+    },
+    aiAnalysisEnable: {
       type: Boolean,
       default: false
     },
@@ -51207,8 +50868,8 @@ var essayvue_type_script_lang_js_base = {
 
 var essay_component = normalizeComponent(
   component_essayvue_type_script_lang_js_,
-  essayvue_type_template_id_409f0487_render,
-  essayvue_type_template_id_409f0487_staticRenderFns,
+  essayvue_type_template_id_fe8e449a_render,
+  essayvue_type_template_id_fe8e449a_staticRenderFns,
   false,
   null,
   null,
@@ -51217,8 +50878,8 @@ var essay_component = normalizeComponent(
 )
 
 /* harmony default export */ var essay = (essay_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/fill.vue?vue&type=template&id=e368589e&
-var fillvue_type_template_id_e368589e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._b({attrs:{"questions":_vm.questions,"form":_vm.form,"mode":_vm.mode,"isSubItem":_vm.isSubItem,"itemType":_vm.type,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis},scopedSlots:_vm._u([{key:"stem",fn:function(){return [_c('a-form-item',{attrs:{"label":_vm.t('Stem'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":"","validate-status":_vm.stemText.validateStatus,"help":_vm.stemText.errorMsg}},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/fill.vue?vue&type=template&id=11449196&
+var fillvue_type_template_id_11449196_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._b({attrs:{"questions":_vm.questions,"form":_vm.form,"mode":_vm.mode,"isSubItem":_vm.isSubItem,"itemType":_vm.type,"isDisable":_vm.isDisable,"aiAnalysisEnable":_vm.aiAnalysisEnable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis},scopedSlots:_vm._u([{key:"stem",fn:function(){return [_c('a-form-item',{attrs:{"label":_vm.t('Stem'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":"","validate-status":_vm.stemText.validateStatus,"help":_vm.stemText.errorMsg}},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
             "questions['stem']",
             {
               initialValue: _vm.questions.stem,
@@ -51230,16 +50891,17 @@ var fillvue_type_template_id_e368589e_render = function () {var _vm=this;var _h=
               initialValue: _vm.questions.case_sensitive == 0 ? false : true
             }
           ]),expression:"[\n            `questions['case_sensitive']`,\n            {\n              initialValue: questions.case_sensitive == 0 ? false : true\n            }\n          ]"}],ref:"initMessage",attrs:{"default-checked":_vm.questions.case_sensitive == 0 ? false : true},on:{"click":_vm.checkItem}}),_c('div',{staticClass:"ibs-dark-assist",attrs:{"id":"checkbox"},domProps:{"innerHTML":_vm._s(_vm.message)}})],1)]},proxy:true}])},'answer-model',_vm.$attrs,false))],1)}
-var fillvue_type_template_id_e368589e_staticRenderFns = []
+var fillvue_type_template_id_11449196_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-manage/src/component/fill.vue?vue&type=template&id=e368589e&
+// CONCATENATED MODULE: ./src/components/item-manage/src/component/fill.vue?vue&type=template&id=11449196&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/fill.vue?vue&type=script&lang=js&
 function fillvue_type_script_lang_js_extends() { fillvue_type_script_lang_js_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return fillvue_type_script_lang_js_extends.apply(this, arguments); }
 
 function fillvue_type_script_lang_js_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -51363,6 +51025,10 @@ var fillvue_type_script_lang_js_base = {
       default: "create"
     },
     isDisable: {
+      type: Boolean,
+      default: false
+    },
+    aiAnalysisEnable: {
       type: Boolean,
       default: false
     },
@@ -51606,8 +51272,8 @@ var fillvue_type_script_lang_js_base = {
 
 var fill_component = normalizeComponent(
   component_fillvue_type_script_lang_js_,
-  fillvue_type_template_id_e368589e_render,
-  fillvue_type_template_id_e368589e_staticRenderFns,
+  fillvue_type_template_id_11449196_render,
+  fillvue_type_template_id_11449196_staticRenderFns,
   false,
   null,
   null,
@@ -51616,24 +51282,25 @@ var fill_component = normalizeComponent(
 )
 
 /* harmony default export */ var fill = (fill_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/choice.vue?vue&type=template&id=50a41b41&
-var choicevue_type_template_id_50a41b41_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._b({attrs:{"questions":_vm.questions,"form":_vm.form,"mode":_vm.mode,"isSubItem":_vm.isSubItem,"answer":_vm.answer,"itemType":_vm.type,"isDisable":_vm.isDisable,"errorList":_vm.errorList,"topicData":_vm.topicData},on:{"getFromInfo":_vm.getFromInfo,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('div',{staticClass:"ibs-choice-wrap"},[_c('a-checkbox-group',{model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.form.getFieldValue('keys')),function(k,index){return _c('a-form-item',{key:k.checkbox.val,staticClass:"choice-item",attrs:{"label":_vm.getChoiceLabelNum(_vm.optionKey[index]),"required":"","label-col":{ span: 4 },"wrapper-col":{ span: 16 },"validate-status":_vm.optionsEditorRule[k.checkbox.val].validateStatus || '',"help":_vm.optionsEditorRule[k.checkbox.val].errorMsg || ''}},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/choice.vue?vue&type=template&id=1a7a0b8e&
+var choicevue_type_template_id_1a7a0b8e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._b({attrs:{"questions":_vm.questions,"form":_vm.form,"mode":_vm.mode,"isSubItem":_vm.isSubItem,"answer":_vm.answer,"itemType":_vm.type,"isDisable":_vm.isDisable,"aiAnalysisEnable":_vm.aiAnalysisEnable,"errorList":_vm.errorList,"topicData":_vm.topicData},on:{"getFromInfo":_vm.getFromInfo,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('div',{staticClass:"ibs-choice-wrap"},[_c('a-checkbox-group',{model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.form.getFieldValue('keys')),function(k,index){return _c('a-form-item',{key:k.checkbox.val,staticClass:"choice-item",attrs:{"label":_vm.getChoiceLabelNum(_vm.optionKey[index]),"required":"","label-col":{ span: 4 },"wrapper-col":{ span: 16 },"validate-status":_vm.optionsEditorRule[k.checkbox.val].validateStatus || '',"help":_vm.optionsEditorRule[k.checkbox.val].errorMsg || ''}},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
                 ("options[" + (k.checkbox.val) + "]"),
                 {
                   initialValue: k.checkbox.text,
                   rules: [{ required: true }]
                 }
               ]),expression:"[\n                `options[${k.checkbox.val}]`,\n                {\n                  initialValue: k.checkbox.text,\n                  rules: [{ required: true }]\n                }\n              ]"}],attrs:{"data-image-download-url":_vm.showCKEditorData.filebrowserImageDownloadUrl,"placeholder":"","rows":0}}),_c('a-checkbox',{attrs:{"value":k.checkbox.val}},[_vm._v(_vm._s(_vm.t("RightAnswer")))]),_c('a-button',{staticClass:"ibs-delete-btn",attrs:{"size":"small"},on:{"click":function () { return _vm.remove(index, k); }}},[_c('i',{staticClass:"ib-icon ib-icon-delete"})])],1)}),1),_c('a-row',[_c('a-col',{staticClass:"ibs-text-right",attrs:{"offset":4,"span":16}},[_c('a-button',{attrs:{"type":"primary"},on:{"click":_vm.add}},[_vm._v(_vm._s(_vm.t("itemManage.newChoice")))])],1)],1)],1)]},proxy:true}])},'answer-model',_vm.$attrs,false))],1)}
-var choicevue_type_template_id_50a41b41_staticRenderFns = []
+var choicevue_type_template_id_1a7a0b8e_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-manage/src/component/choice.vue?vue&type=template&id=50a41b41&
+// CONCATENATED MODULE: ./src/components/item-manage/src/component/choice.vue?vue&type=template&id=1a7a0b8e&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/choice.vue?vue&type=script&lang=js&
 function choicevue_type_script_lang_js_extends() { choicevue_type_script_lang_js_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return choicevue_type_script_lang_js_extends.apply(this, arguments); }
 
 function choicevue_type_script_lang_js_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -51813,6 +51480,10 @@ var choicevue_type_script_lang_js_base = {
       default: "create"
     },
     isDisable: {
+      type: Boolean,
+      default: false
+    },
+    aiAnalysisEnable: {
       type: Boolean,
       default: false
     },
@@ -52149,8 +51820,8 @@ var choicevue_type_script_lang_js_base = {
 
 var choice_component = normalizeComponent(
   component_choicevue_type_script_lang_js_,
-  choicevue_type_template_id_50a41b41_render,
-  choicevue_type_template_id_50a41b41_staticRenderFns,
+  choicevue_type_template_id_1a7a0b8e_render,
+  choicevue_type_template_id_1a7a0b8e_staticRenderFns,
   false,
   null,
   null,
@@ -52169,17 +51840,17 @@ var preview_modelvue_type_template_id_004e71e0_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/components/item-manage/src/component/preview/preview-model.vue?vue&type=template&id=004e71e0&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/judge.vue?vue&type=template&id=fedfc43a&
-var judgevue_type_template_id_fedfc43a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._g(_vm._b({attrs:{"question":_vm.question,"questionFavoritesItem":_vm.questionFavoritesItem,"needScore":_vm.needScore,"mode":_vm.mode,"keys":_vm.keys,"seq":_vm.seq,"form":_vm.form,"section_responses":_vm.section_responses},on:{"changeTag":_vm.changeTag,"changeCollect":_vm.changeCollect,"getAiAnalysis1":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('div',{staticClass:"ibs-answer ibs-answer--judge"},[(_vm.mode == 'report')?_c('a-radio-group',{class:{ 'ibs-prevent-click': _vm.mode === 'report' },model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.question.response_points),function(item,index){return _c('a-radio',{key:index,class:_vm.statusClass(item.radio.val),attrs:{"value":item.radio.val}},[(item.radio.val === _vm.question.answer[0])?_c('span',{staticClass:"ibs-success-color ibs-judge-choose ibs-ml16"},[_vm._v(_vm._s(item.radio.text))]):_c('span',{staticClass:"ibs-judge-choose ibs-ml16"},[_vm._v(_vm._s(item.radio.text))])])}),1):_vm._e(),(_vm.mode == 'do')?_c('a-radio-group',{class:{ 'ibs-prevent-click': _vm.mode !== 'do' },on:{"change":_vm.changeAnswer},model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.question.response_points),function(item,index){return _c('a-radio',{key:index,staticClass:"ibs-choose-item ibs-engine-radio",attrs:{"value":item.radio.val}},[_c('span',{staticClass:"ibs-ml16"},[_vm._v(_vm._s(item.radio.text))])])}),1):_vm._e(),(_vm.mode == 'preview' || _vm.mode === 'import')?_c('a-radio-group',{staticClass:"ibs-prevent-click",model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.question.response_points),function(item,index){return _c('a-radio',{key:index,class:_vm.statusClass(item.radio.val),attrs:{"value":item.radio.val}},[_c('span',{staticClass:"ibs-ml16 ibs-judge-choose"},[_vm._v(_vm._s(item.radio.text))])])}),1):_vm._e(),(_vm.mode == 'analysis')?_c('a-radio-group',{class:{
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/judge.vue?vue&type=template&id=17c07bfc&
+var judgevue_type_template_id_17c07bfc_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._g(_vm._b({attrs:{"question":_vm.question,"questionFavoritesItem":_vm.questionFavoritesItem,"needScore":_vm.needScore,"mode":_vm.mode,"keys":_vm.keys,"seq":_vm.seq,"form":_vm.form,"section_responses":_vm.section_responses},on:{"changeTag":_vm.changeTag,"changeCollect":_vm.changeCollect,"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('div',{staticClass:"ibs-answer ibs-answer--judge"},[(_vm.mode == 'report')?_c('a-radio-group',{class:{ 'ibs-prevent-click': _vm.mode === 'report' },model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.question.response_points),function(item,index){return _c('a-radio',{key:index,class:_vm.statusClass(item.radio.val),attrs:{"value":item.radio.val}},[(item.radio.val === _vm.question.answer[0])?_c('span',{staticClass:"ibs-success-color ibs-judge-choose ibs-ml16"},[_vm._v(_vm._s(item.radio.text))]):_c('span',{staticClass:"ibs-judge-choose ibs-ml16"},[_vm._v(_vm._s(item.radio.text))])])}),1):_vm._e(),(_vm.mode == 'do')?_c('a-radio-group',{class:{ 'ibs-prevent-click': _vm.mode !== 'do' },on:{"change":_vm.changeAnswer},model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.question.response_points),function(item,index){return _c('a-radio',{key:index,staticClass:"ibs-choose-item ibs-engine-radio",attrs:{"value":item.radio.val}},[_c('span',{staticClass:"ibs-ml16"},[_vm._v(_vm._s(item.radio.text))])])}),1):_vm._e(),(_vm.mode == 'preview' || _vm.mode === 'import')?_c('a-radio-group',{staticClass:"ibs-prevent-click",model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.question.response_points),function(item,index){return _c('a-radio',{key:index,class:_vm.statusClass(item.radio.val),attrs:{"value":item.radio.val}},[_c('span',{staticClass:"ibs-ml16 ibs-judge-choose"},[_vm._v(_vm._s(item.radio.text))])])}),1):_vm._e(),(_vm.mode == 'analysis')?_c('a-radio-group',{class:{
             'ibs-prevent-click ibs-width-full': _vm.mode !== 'do'
           },on:{"change":_vm.changeAnswer},model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.question.response_points),function(item,index){return _c('a-radio',{key:index,class:_vm.statusClass(item.radio.val),attrs:{"value":item.radio.val}},[(item.radio.val === _vm.question.answer[0])?_c('span',{staticClass:"ibs-ml16 ibs-success-color"},[_vm._v(_vm._s(item.radio.text)+" "),_c('span',{staticClass:"ibs-analysis-status"},[_vm._v(_vm._s(_vm.countNumList[index].num)+_vm._s(_vm.t("itemEngine.manCount")))])]):_c('span',{staticClass:"ibs-ml16"},[_vm._v(_vm._s(item.radio.text)+" "),_c('span',{staticClass:"ibs-analysis-status"},[_vm._v(_vm._s(_vm.countNumList[index].num)+_vm._s(_vm.t("itemEngine.manCount")))])])])}),1):_vm._e(),(_vm.mode == 'preview' || _vm.mode == 'analysis' || _vm.mode === 'import')?_c('div',{staticClass:"ibs-answer ibs-answer-part"},[(_vm.question.errors && _vm.question.errors.answer)?_c('div',{staticClass:"ibs-danger-color"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.answerErrorMessage"))+" ")]):_c('div',[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.rightAnswerShow"))+" "+_vm._s(_vm.judgeAnswer(_vm.question.answer[0]))+" ")])])]):_vm._e(),(_vm.mode == 'report')?_c('div',{staticClass:"ibs-answer ibs-answer-part"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.rightAnswer"))),_c('span',{staticClass:"ibs-success-color"},[_vm._v(_vm._s(_vm.judgeAnswer(_vm.question.answer[0]))+" ")]),_vm._v("， "),(_vm.reportAnswer.status !== 'right')?_c('span',{staticClass:"ibs-mr8"},[_vm._v(_vm._s(_vm.t("itemEngine.memberAnswer"))),_c('span',{staticClass:"ibs-danger-color"},[_vm._v(_vm._s(_vm.judgeAnswer(_vm.reportAnswer.response[0])))])]):_vm._e(),_c('span',[_vm._v(_vm._s(_vm.statusText))])]):_vm._e()],1)]},proxy:true},{key:"analysis_response_points",fn:function(){return [_c('div',{staticClass:"ibs-answer ibs-answer-part"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.rightAnswerShow"))+" "+_vm._s(_vm.judgeAnswer(_vm.question.answer[0]))+" ")])])]},proxy:true}])},'answer-model',_vm.$attrs,false),_vm.$listeners))],1)}
-var judgevue_type_template_id_fedfc43a_staticRenderFns = []
+var judgevue_type_template_id_17c07bfc_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/judge.vue?vue&type=template&id=fedfc43a&
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/judge.vue?vue&type=template&id=17c07bfc&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/answer-model.vue?vue&type=template&id=6548d449&
-var answer_modelvue_type_template_id_6548d449_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-engine"},[_c('div',{staticClass:"ibs-engine-item"},[_c('a-row',[_c('a-col',{directives:[{name:"show",rawName:"v-show",value:(_vm.showScoreAndSeq),expression:"showScoreAndSeq"}],staticClass:"ibs-text-center",attrs:{"sm":2,"xs":3}},[_c('div',{staticClass:"ibs-order"},[_vm._v(_vm._s(_vm.question.seq))]),(_vm.assessmentStatus === 'preview' && Number(!_vm.question.isDelete))?_c('span',{staticClass:"ibs-score-tag",staticStyle:{"display":"inline-block"},domProps:{"innerHTML":_vm._s(_vm.getScoringRules)}}):(_vm.needScore && Number(!_vm.question.isDelete))?_c('span',{staticClass:"ibs-score-tag"},[_vm._v(" "+_vm._s(_vm.question.score)+_vm._s(_vm.t("itemEngine.score"))+" ")]):_vm._e(),_c('a-button',{directives:[{name:"show",rawName:"v-show",value:(_vm.showTag),expression:"showTag"}],staticClass:"ibs-mt8 ibs-toggle-btn",attrs:{"size":"small","type":"primary","ghost":this.isTag ? false : true},on:{"click":_vm.changeTag}},[_c('i',{class:_vm.tagClass}),_vm._v(_vm._s(_vm.tagText))]),_c('a-button',{directives:[{name:"show",rawName:"v-show",value:(_vm.showCollect),expression:"showCollect"}],staticClass:"ibs-mt8 ibs-collect-btn",attrs:{"size":"small","type":"primary","ghost":this.isCollect ? false : true},on:{"click":_vm.changeCollect}},[_c('i',{class:_vm.collectClass}),_vm._v(_vm._s(_vm.collectText))])],1),(Number(!_vm.question.isDelete))?_c('a-col',{attrs:{"xs":_vm.showScoreAndSeq ? 21 : 24,"sm":_vm.showScoreAndSeq ? 22 : 24}},[(
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/answer-model.vue?vue&type=template&id=2324ad4f&
+var answer_modelvue_type_template_id_2324ad4f_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-engine"},[_c('div',{staticClass:"ibs-engine-item"},[_c('a-row',[_c('a-col',{directives:[{name:"show",rawName:"v-show",value:(_vm.showScoreAndSeq),expression:"showScoreAndSeq"}],staticClass:"ibs-text-center",attrs:{"sm":2,"xs":3}},[_c('div',{staticClass:"ibs-order"},[_vm._v(_vm._s(_vm.question.seq))]),(_vm.assessmentStatus === 'preview' && Number(!_vm.question.isDelete))?_c('span',{staticClass:"ibs-score-tag",staticStyle:{"display":"inline-block"},domProps:{"innerHTML":_vm._s(_vm.getScoringRules)}}):(_vm.needScore && Number(!_vm.question.isDelete))?_c('span',{staticClass:"ibs-score-tag"},[_vm._v(" "+_vm._s(_vm.question.score)+_vm._s(_vm.t("itemEngine.score"))+" ")]):_vm._e(),_c('a-button',{directives:[{name:"show",rawName:"v-show",value:(_vm.showTag),expression:"showTag"}],staticClass:"ibs-mt8 ibs-toggle-btn",attrs:{"size":"small","type":"primary","ghost":this.isTag ? false : true},on:{"click":_vm.changeTag}},[_c('i',{class:_vm.tagClass}),_vm._v(_vm._s(_vm.tagText))]),_c('a-button',{directives:[{name:"show",rawName:"v-show",value:(_vm.showCollect),expression:"showCollect"}],staticClass:"ibs-mt8 ibs-collect-btn",attrs:{"size":"small","type":"primary","ghost":this.isCollect ? false : true},on:{"click":_vm.changeCollect}},[_c('i',{class:_vm.collectClass}),_vm._v(_vm._s(_vm.collectText))])],1),(Number(!_vm.question.isDelete))?_c('a-col',{attrs:{"xs":_vm.showScoreAndSeq ? 21 : 24,"sm":_vm.showScoreAndSeq ? 22 : 24}},[(
             (_vm.question.errors &&
               _vm.question.errors.stem &&
               _vm.question.errors.stem.code == 100001) ||
@@ -52188,29 +51859,19 @@ var answer_modelvue_type_template_id_6548d449_render = function () {var _vm=this
             _vm.question.errors &&
               _vm.question.errors.stem &&
               _vm.question.errors.stem.code == 100006
-          )?_c('div',{staticClass:"ibs-stem ibs-danger-color"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.stemAnsweringArea"))+" ")]):_vm._e(),(_vm.getAttachmentTypeData('stem').length > 0)?_c('div',{staticStyle:{"padding":"8px 8px 0","background-color":"#f5f5f5","border":"1px solid #f2f3f5","border-radius":"6px"}},_vm._l((_vm.getAttachmentTypeData('stem')),function(item,index){return _c('attachment-preview',{key:item.no,attrs:{"index":index,"cdnHost":_vm.cdnHost,"fileData":item,"mode":"do"}})}),1):_vm._e(),_vm._t("response_points"),(_vm.showCollectBtn)?_c('div',{staticClass:"ibs-clearfix"},[_c('a-button',{staticClass:"ibs-right ibs-collect-toggle-btn",attrs:{"type":"primary","ghost":""},on:{"click":_vm.lookAnalysis}},[_vm._v(" "+_vm._s(_vm.canShowAnalysis ? _vm.t("itemEngine.closeExplain") : _vm.t("itemEngine.openExplain"))+" ")])],1):_vm._e(),_c('a-form-item',{directives:[{name:"show",rawName:"v-show",value:(this.mode == 'import'),expression:"this.mode == 'import'"}],attrs:{"label":_vm.t('Explain'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 }}},[_c('div',{staticClass:"ibs-ai-explain ibs-mt16"},[_c('div',{staticClass:"ibs-ai-left"},[_c('p',{staticClass:"ai-left-tittle"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.aiProblemAssistant"))+" ")]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.isShowAiExplain),expression:"isShowAiExplain"}],staticClass:"ai-left-btn",on:{"click":function($event){return _vm.aiGenerationBtn()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("84fb")}}),_c('span',{ref:"text",staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.analysis")))])]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.stopAiExplain),expression:"stopAiExplain"}],staticClass:"ai-left-stopbtn",on:{"click":function($event){return _vm.stopAiGenerationBtn()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("d7aa")}}),_c('span',{staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.stopGeneration")))])]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.anewAiExplain),expression:"anewAiExplain"}],staticClass:"ai-left-stopbtn",on:{"click":function($event){return _vm.aiGenerationBtn()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("7ca4")}}),_c('span',{staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.reGenerate")))])]),_c('span',{staticClass:"ai-left-content"},[_vm._v(_vm._s(_vm.t("itemEngine.aiAnalysisRefer")))]),_c('p',{directives:[{name:"show",rawName:"v-show",value:(_vm.unableGenerateTips),expression:"unableGenerateTips"}],staticClass:"ai-left-tips"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.aiUnableGenerate"))+" ")])]),_c('div',{staticClass:"ibs-ai-right"},[_c('img',{staticClass:"ai-right-img",attrs:{"src":__webpack_require__("89fb")}})])]),_c('a-textarea',{attrs:{"rows":4,"data-image-download-url":_vm.showCKEditorData.filebrowserImageDownloadUrl,"name":("analysis" + (this.seq))}})],1),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showAnalysis),expression:"showAnalysis"}]},[(_vm.doingLookAnalysis)?_vm._t("analysis_response_points"):_vm._e(),_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.question.aiAnalysisEnable),expression:"!question.aiAnalysisEnable"}],staticClass:"ibs-explain ibs-mt16",domProps:{"innerHTML":_vm._s(
+          )?_c('div',{staticClass:"ibs-stem ibs-danger-color"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.stemAnsweringArea"))+" ")]):_vm._e(),(_vm.getAttachmentTypeData('stem').length > 0)?_c('div',{staticStyle:{"padding":"8px 8px 0","background-color":"#f5f5f5","border":"1px solid #f2f3f5","border-radius":"6px"}},_vm._l((_vm.getAttachmentTypeData('stem')),function(item,index){return _c('attachment-preview',{key:item.no,attrs:{"index":index,"cdnHost":_vm.cdnHost,"fileData":item,"mode":"do"}})}),1):_vm._e(),_vm._t("response_points"),(_vm.showCollectBtn)?_c('div',{staticClass:"ibs-clearfix"},[_c('a-button',{staticClass:"ibs-right ibs-collect-toggle-btn",attrs:{"type":"primary","ghost":""},on:{"click":_vm.lookAnalysis}},[_vm._v(" "+_vm._s(_vm.canShowAnalysis ? _vm.t("itemEngine.closeExplain") : _vm.t("itemEngine.openExplain"))+" ")])],1):_vm._e(),_c('a-form-item',{directives:[{name:"show",rawName:"v-show",value:(this.mode === 'import' && _vm.question.aiAnalysisEnable),expression:"this.mode === 'import' && question.aiAnalysisEnable"}],attrs:{"label":_vm.t('Explain'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 }}},[_c('div',{staticClass:"ibs-ai-explain ibs-mt16"},[_c('div',{staticClass:"ibs-ai-left"},[_c('p',{staticClass:"ai-left-tittle"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.aiProblemAssistant"))+" ")]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.isShowAiExplain),expression:"isShowAiExplain"}],staticClass:"ai-left-btn",on:{"click":function($event){return _vm.aiGenerationBtn()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("84fb")}}),_c('span',{ref:"text",staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.analysis")))])]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.stopAiExplain),expression:"stopAiExplain"}],staticClass:"ai-left-stopbtn",on:{"click":function($event){return _vm.stopAiGenerationBtn()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("d7aa")}}),_c('span',{staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.stopGeneration")))])]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.anewAiExplain),expression:"anewAiExplain"}],staticClass:"ai-left-stopbtn",on:{"click":function($event){return _vm.aiGenerationBtn()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("7ca4")}}),_c('span',{staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.reGenerate")))])]),_c('span',{staticClass:"ai-left-content"},[_vm._v(_vm._s(_vm.t("itemEngine.aiAnalysisRefer")))]),_c('p',{directives:[{name:"show",rawName:"v-show",value:(_vm.unableGenerateTips),expression:"unableGenerateTips"}],staticClass:"ai-left-tips"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.aiUnableGenerate"))+" ")])]),_c('div',{staticClass:"ibs-ai-right"},[_c('img',{staticClass:"ai-right-img",attrs:{"src":__webpack_require__("89fb")}})])]),_c('a-textarea',{attrs:{"rows":4,"data-image-download-url":_vm.showCKEditorData.filebrowserImageDownloadUrl,"name":("analysis" + (this.seq))}})],1),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showAnalysis),expression:"showAnalysis"}]},[(_vm.doingLookAnalysis)?_vm._t("analysis_response_points"):_vm._e(),_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.question.aiAnalysisEnable),expression:"!question.aiAnalysisEnable"}],staticClass:"ibs-explain ibs-mt16",domProps:{"innerHTML":_vm._s(
               ("<span class='ibs-label'>" + (_vm.t(
                 'itemEngine.Explain'
-              )) + "</span><div class='ibs-content ibs-editor-text ibs-mr8'>" + (_vm.question.analysis ||
-                _vm.t('itemReport.no_analysis')) + "</div>")
-            )}}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.question.aiAnalysisEnable),expression:"question.aiAnalysisEnable"}],staticClass:"ibs-explain ibs-mt16",domProps:{"innerHTML":_vm._s(
-              ("<span class='ibs-label'>AI解析:</span>\n               <div class='ibs-content ibs-editor-text ibs-mr8 js-ai-analysis" + (_vm.question.id) + "'>无解析</div>")
+              )) + "</span><div class='ibs-content ibs-editor-text ibs-mr8 js-ai-analysis" + (_vm.question.id) + "'>" + (_vm.question.analysis || _vm.t('itemReport.no_analysis')) + "</div>")
             )}}),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.question.aiAnalysisEnable),expression:"question.aiAnalysisEnable"}],staticClass:"ibs-ai-explain ibs-mt16"},[_c('div',{staticClass:"ibs-ai-left"},[_c('p',{staticClass:"ai-left-tittle"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.aiAssistant"))+" ")]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.isShowAiExplain),expression:"isShowAiExplain"}],staticClass:"ai-left-btn",on:{"click":function($event){return _vm.aiGeneration()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("84fb")}}),_c('span',{staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.analysis")))])]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.stopAiExplain),expression:"stopAiExplain"}],staticClass:"ai-left-stopbtn",on:{"click":function($event){return _vm.stopAiGeneration()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("d7aa")}}),_c('span',{staticClass:"ai-left-text"},[_vm._v(_vm._s(_vm.t("itemEngine.stopGeneration")))])]),_c('button',{directives:[{name:"show",rawName:"v-show",value:(_vm.anewAiExplain),expression:"anewAiExplain"}],staticClass:"ai-left-stopbtn",on:{"click":function($event){return _vm.anewAiGeneration()}}},[_c('img',{staticClass:"ai-left-img",attrs:{"src":__webpack_require__("7ca4")}}),_c('span',{staticClass:"ai-left-text"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.reGenerate")))])]),_c('span',{staticClass:"ai-left-content"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.aiAnalysisRefer"))+" ")])]),_c('div',{staticClass:"ibs-ai-right"},[_c('img',{staticClass:"ai-right-img",attrs:{"src":__webpack_require__("89fb")}})])]),(_vm.getAttachmentTypeData('analysis').length > 0)?_c('div',{staticClass:"ibs-mt16",staticStyle:{"padding":"8px 8px 0","background-color":"#f5f5f5","border":"1px solid #f2f3f5","border-radius":"6px"}},_vm._l((_vm.getAttachmentTypeData('analysis')),function(item){return _c('attachment-preview',{key:item.no,attrs:{"fileData":item,"cdnHost":_vm.cdnHost,"mode":"do"}})}),1):_vm._e()],2)],2):_c('a-col',{staticClass:"ibs-text-center",attrs:{"xs":_vm.showScoreAndSeq ? 21 : 24,"sm":_vm.showScoreAndSeq ? 22 : 24}},[_vm._v(_vm._s(_vm.deleteTip))])],1)],1)])}
-var answer_modelvue_type_template_id_6548d449_staticRenderFns = []
+var answer_modelvue_type_template_id_2324ad4f_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/answer-model.vue?vue&type=template&id=6548d449&
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/answer-model.vue?vue&type=template&id=2324ad4f&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/answer-model.vue?vue&type=script&lang=js&
 function component_answer_modelvue_type_script_lang_js_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -52733,7 +52394,7 @@ function component_answer_modelvue_type_script_lang_js_defineProperty(obj, key, 
       this.$emit("aiGenerates", this.question.id, this.finished);
     },
     aiGenerationBtn: function aiGenerationBtn() {
-      this.$emit("getAiAnalysis1", this.disable, this.enable, this.complete, this.finish);
+      this.$emit("getAiAnalysis", this.disable, this.enable, this.complete, this.finish);
     },
     disable: function disable() {
       this.unableGenerateTips = true;
@@ -52793,8 +52454,8 @@ function component_answer_modelvue_type_script_lang_js_defineProperty(obj, key, 
 
 var component_answer_model_component = normalizeComponent(
   item_engine_src_component_answer_modelvue_type_script_lang_js_,
-  answer_modelvue_type_template_id_6548d449_render,
-  answer_modelvue_type_template_id_6548d449_staticRenderFns,
+  answer_modelvue_type_template_id_2324ad4f_render,
+  answer_modelvue_type_template_id_2324ad4f_staticRenderFns,
   false,
   null,
   null,
@@ -53057,8 +52718,11 @@ function component_judgevue_type_script_lang_js_extends() { component_judgevue_t
         return [];
       }
     },
-    items: {
-      type: String
+    item: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
     }
   },
   mounted: function mounted() {
@@ -53116,9 +52780,9 @@ function component_judgevue_type_script_lang_js_extends() { component_judgevue_t
       var data = {};
       var question = JSON.parse(JSON.stringify(this.question));
       data.stem = question.stem;
-      data.answer = question.answe == "T" ? "正确" : "错误";
+      data.answer = question.answer === "T" ? "正确" : "错误";
 
-      if (this.items.type === "material") {
+      if (this.item.type === "material") {
         data.type = "material-determine";
       } else {
         data.type = "determine";
@@ -53143,8 +52807,8 @@ function component_judgevue_type_script_lang_js_extends() { component_judgevue_t
 
 var component_judge_component = normalizeComponent(
   item_engine_src_component_judgevue_type_script_lang_js_,
-  judgevue_type_template_id_fedfc43a_render,
-  judgevue_type_template_id_fedfc43a_staticRenderFns,
+  judgevue_type_template_id_17c07bfc_render,
+  judgevue_type_template_id_17c07bfc_staticRenderFns,
   false,
   null,
   null,
@@ -53153,16 +52817,16 @@ var component_judge_component = normalizeComponent(
 )
 
 /* harmony default export */ var component_judge = (component_judge_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/single-choice.vue?vue&type=template&id=7e6719ea&
-var single_choicevue_type_template_id_7e6719ea_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._g(_vm._b({attrs:{"question":_vm.question,"questionFavoritesItem":_vm.questionFavoritesItem,"mode":_vm.mode,"form":_vm.form,"needScore":_vm.needScore,"keys":_vm.keys,"seq":_vm.seq,"section_responses":_vm.section_responses},on:{"changeTag":_vm.changeTag,"changeCollect":_vm.changeCollect,"getAiAnalysis1":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('div',{staticClass:"ibs-answer"},[_c('a-radio-group',{class:{ 'ibs-prevent-click ibs-width-full': _vm.mode !== 'do' },on:{"change":_vm.changeAnswer},model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.question.response_points),function(item,index){return _c('a-radio',{key:index,class:_vm.statusClass(item.radio.val),attrs:{"value":item.radio.val}},[(item.radio.val === _vm.question.answer[0] && _vm.mode == 'report')?_c('div',{staticClass:"ibs-table ibs-success-color"},[_c('span',[_vm._v(_vm._s(item.radio.val)+".")]),_c('div',{staticClass:"ibs-table-cell ibs-editor-text",domProps:{"innerHTML":_vm._s(item.radio.text)}})]):(
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/single-choice.vue?vue&type=template&id=646710a8&
+var single_choicevue_type_template_id_646710a8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._g(_vm._b({attrs:{"question":_vm.question,"questionFavoritesItem":_vm.questionFavoritesItem,"mode":_vm.mode,"form":_vm.form,"needScore":_vm.needScore,"keys":_vm.keys,"seq":_vm.seq,"section_responses":_vm.section_responses},on:{"changeTag":_vm.changeTag,"changeCollect":_vm.changeCollect,"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('div',{staticClass:"ibs-answer"},[_c('a-radio-group',{class:{ 'ibs-prevent-click ibs-width-full': _vm.mode !== 'do' },on:{"change":_vm.changeAnswer},model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.question.response_points),function(item,index){return _c('a-radio',{key:index,class:_vm.statusClass(item.radio.val),attrs:{"value":item.radio.val}},[(item.radio.val === _vm.question.answer[0] && _vm.mode == 'report')?_c('div',{staticClass:"ibs-table ibs-success-color"},[_c('span',[_vm._v(_vm._s(item.radio.val)+".")]),_c('div',{staticClass:"ibs-table-cell ibs-editor-text",domProps:{"innerHTML":_vm._s(item.radio.text)}})]):(
                 (_vm.mode === 'preview' || _vm.mode === 'import') &&
                   _vm.question.errors &&
                   _vm.question.errors[("options_" + index)]
               )?_c('div',{staticClass:"ibs-table"},[_c('span',[_vm._v(_vm._s(item.radio.val)+".")]),_c('div',{staticClass:"ibs-table-cell ibs-danger-color"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.choiceErrorMessage"))+" ")])]):(_vm.mode === 'analysis')?_c('div',[_c('div',{staticClass:"ibs-table ibs-table--analysis"},[_c('span',[_vm._v(_vm._s(item.radio.val)+".")]),_c('div',{staticClass:"ibs-table-cell ibs-editor-text",domProps:{"innerHTML":_vm._s(item.radio.text)}})]),(item.radio.val == _vm.question.answer[0])?_c('div',{staticClass:"ibs-analysis-status ibs-success-color"},[_vm._v(" "+_vm._s(_vm.countNumList[index].num)+_vm._s(_vm.t("itemEngine.manCount"))+" ")]):_c('div',{staticClass:"ibs-analysis-status"},[_vm._v(" "+_vm._s(_vm.countNumList[index].num)+_vm._s(_vm.t("itemEngine.manCount"))+" ")])]):_c('div',{staticClass:"ibs-table"},[_c('span',[_vm._v(_vm._s(item.radio.val)+".")]),_c('div',{staticClass:"ibs-table-cell ibs-editor-text",domProps:{"innerHTML":_vm._s(item.radio.text)}})])])}),1),(_vm.mode == 'preview' || _vm.mode == 'analysis' || _vm.mode === 'import')?_c('div',{staticClass:"ibs-answer ibs-answer-part"},[(_vm.question.errors && _vm.question.errors.answers)?_c('div',{staticClass:"ibs-danger-color"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.answerErrorMessage"))+" ")]):[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.rightAnswerShow"))+" "+_vm._s(_vm.question.answer[0])+" ")])]],2):_vm._e(),(_vm.mode == 'report')?_c('div',{staticClass:"ibs-answer ibs-answer-part"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.rightAnswer"))),_c('span',{staticClass:"ibs-success-color"},[_vm._v(_vm._s(_vm.question.answer[0])+" ")]),_vm._v("， "),(_vm.reportAnswer.status !== 'right')?_c('span',{staticClass:"ibs-mr8"},[_vm._v(_vm._s(_vm.t("itemEngine.memberAnswer"))),_c('span',{staticClass:"ibs-danger-color"},[_vm._v(_vm._s(_vm.reportAnswer.response[0]))])]):_vm._e(),_c('span',[_vm._v(_vm._s(_vm.statusText))])]):_vm._e()],1)]},proxy:true},{key:"analysis_response_points",fn:function(){return [_c('div',{staticClass:"ibs-answer ibs-answer-part"},[[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.rightAnswerShow"))+" "+_vm._s(_vm.question.answer[0])+" ")])]],2)]},proxy:true}])},'answer-model',_vm.$attrs,false),_vm.$listeners))],1)}
-var single_choicevue_type_template_id_7e6719ea_staticRenderFns = []
+var single_choicevue_type_template_id_646710a8_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/single-choice.vue?vue&type=template&id=7e6719ea&
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/single-choice.vue?vue&type=template&id=646710a8&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/single-choice.vue?vue&type=script&lang=js&
 function component_single_choicevue_type_script_lang_js_extends() { component_single_choicevue_type_script_lang_js_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return component_single_choicevue_type_script_lang_js_extends.apply(this, arguments); }
@@ -53392,8 +53056,11 @@ function component_single_choicevue_type_script_lang_js_extends() { component_si
         return [];
       }
     },
-    items: {
-      type: String
+    item: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
     }
   },
   mounted: function mounted() {
@@ -53452,7 +53119,7 @@ function component_single_choicevue_type_script_lang_js_extends() { component_si
         data.options.push("".concat(_this.optionKey[index], ".").concat(item.radio.text));
       });
 
-      if (this.items.type === "material") {
+      if (this.item.type === "material") {
         data.type = "material-choice";
       } else {
         data.type = "choice";
@@ -53477,8 +53144,8 @@ function component_single_choicevue_type_script_lang_js_extends() { component_si
 
 var component_single_choice_component = normalizeComponent(
   item_engine_src_component_single_choicevue_type_script_lang_js_,
-  single_choicevue_type_template_id_7e6719ea_render,
-  single_choicevue_type_template_id_7e6719ea_staticRenderFns,
+  single_choicevue_type_template_id_646710a8_render,
+  single_choicevue_type_template_id_646710a8_staticRenderFns,
   false,
   null,
   null,
@@ -53487,8 +53154,8 @@ var component_single_choice_component = normalizeComponent(
 )
 
 /* harmony default export */ var component_single_choice = (component_single_choice_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/choice.vue?vue&type=template&id=183e8ac0&
-var choicevue_type_template_id_183e8ac0_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._g(_vm._b({attrs:{"question":_vm.question,"questionFavoritesItem":_vm.questionFavoritesItem,"needScore":_vm.needScore,"mode":_vm.mode,"keys":_vm.keys,"seq":_vm.seq,"form":_vm.form,"section_responses":_vm.section_responses},on:{"changeTag":_vm.changeTag,"changeCollect":_vm.changeCollect,"getAiAnalysis1":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('div',{staticClass:"ibs-answer"},[_c('a-checkbox-group',{class:{ 'ibs-prevent-click ibs-width-full': _vm.mode !== 'do' },on:{"change":_vm.changeAnswer},model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.question.response_points),function(item,index){return _c('a-checkbox',{key:index,class:_vm.statusClass(item.checkbox.val),attrs:{"value":item.checkbox.val}},[(
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/choice.vue?vue&type=template&id=049c346a&
+var choicevue_type_template_id_049c346a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._g(_vm._b({attrs:{"question":_vm.question,"questionFavoritesItem":_vm.questionFavoritesItem,"needScore":_vm.needScore,"mode":_vm.mode,"keys":_vm.keys,"seq":_vm.seq,"form":_vm.form,"section_responses":_vm.section_responses},on:{"changeTag":_vm.changeTag,"changeCollect":_vm.changeCollect,"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [_c('div',{staticClass:"ibs-answer"},[_c('a-checkbox-group',{class:{ 'ibs-prevent-click ibs-width-full': _vm.mode !== 'do' },on:{"change":_vm.changeAnswer},model:{value:(_vm.answer),callback:function ($$v) {_vm.answer=$$v},expression:"answer"}},_vm._l((_vm.question.response_points),function(item,index){return _c('a-checkbox',{key:index,class:_vm.statusClass(item.checkbox.val),attrs:{"value":item.checkbox.val}},[(
                 _vm.question.answer.includes(item.checkbox.val) &&
                   _vm.mode == 'report'
               )?_c('div',{staticClass:"ibs-table ibs-success-color"},[_c('span',[_vm._v(_vm._s(item.checkbox.val)+".")]),_c('div',{staticClass:"ibs-table-cell ibs-editor-text",domProps:{"innerHTML":_vm._s(item.checkbox.text)}})]):(
@@ -53496,10 +53163,10 @@ var choicevue_type_template_id_183e8ac0_render = function () {var _vm=this;var _
                   _vm.question.errors &&
                   _vm.question.errors[("options_" + index)]
               )?_c('div',{staticClass:"ibs-table"},[_c('span',[_vm._v(_vm._s(item.checkbox.val)+".")]),_c('div',{staticClass:"ibs-table-cell ibs-danger-color"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.choiceErrorMessage"))+" ")])]):(_vm.mode === 'analysis')?_c('div',[_c('div',{staticClass:"ibs-table ibs-table--analysis"},[_c('span',[_vm._v(_vm._s(item.checkbox.val)+".")]),_c('div',{staticClass:"ibs-table-cell ibs-editor-text",domProps:{"innerHTML":_vm._s(item.checkbox.text)}})]),(_vm.question.answer.includes(item.checkbox.val))?_c('div',{staticClass:"ibs-analysis-status ibs-success-color"},[_vm._v(" "+_vm._s(_vm.countNumList[index].num)+_vm._s(_vm.t("itemEngine.manCount"))+" ")]):_c('div',{staticClass:"ibs-analysis-status"},[_vm._v(" "+_vm._s(_vm.countNumList[index].num)+_vm._s(_vm.t("itemEngine.manCount"))+" ")])]):_c('div',{staticClass:"ibs-table"},[_c('span',[_vm._v(_vm._s(item.checkbox.val)+".")]),_c('div',{staticClass:"ibs-table-cell ibs-editor-text",domProps:{"innerHTML":_vm._s(item.checkbox.text)}})])])}),1),(_vm.mode == 'preview' || _vm.mode == 'analysis' || _vm.mode === 'import')?_c('div',{staticClass:"ibs-answer ibs-answer-part"},[(_vm.question.errors && _vm.question.errors.answers)?_c('div',{staticClass:"ibs-danger-color"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.answerErrorMessage"))+" ")]):[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.rightAnswerShow"))+" "+_vm._s(_vm.question.answer.join(","))+" ")])]],2):_vm._e(),(_vm.mode == 'report')?_c('div',{staticClass:"ibs-answer ibs-answer-part"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.rightAnswer"))),_c('span',{staticClass:"ibs-success-color"},[_vm._v(_vm._s(_vm.question.answer.join(","))+" ")]),_vm._v("， "),_c('span',{directives:[{name:"show",rawName:"v-show",value:(_vm.reportAnswer.status !== 'right'),expression:"reportAnswer.status !== 'right'"}],staticClass:"ibs-mr8"},[_vm._v(_vm._s(_vm.t("itemEngine.memberAnswer"))),_c('span',{staticClass:"ibs-danger-color"},[_vm._v(_vm._s(_vm.reportAnswer.response.join(",")))])]),_c('span',[_vm._v(_vm._s(_vm.statusText))])]):_vm._e()],1)]},proxy:true},{key:"analysis_response_points",fn:function(){return [_c('div',{staticClass:"ibs-answer ibs-answer-part"},[[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.rightAnswerShow"))+" "+_vm._s(_vm.question.answer.join(","))+" ")])]],2)]},proxy:true}])},'answer-model',_vm.$attrs,false),_vm.$listeners))],1)}
-var choicevue_type_template_id_183e8ac0_staticRenderFns = []
+var choicevue_type_template_id_049c346a_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/choice.vue?vue&type=template&id=183e8ac0&
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/choice.vue?vue&type=template&id=049c346a&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/choice.vue?vue&type=script&lang=js&
 function component_choicevue_type_script_lang_js_extends() { component_choicevue_type_script_lang_js_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return component_choicevue_type_script_lang_js_extends.apply(this, arguments); }
@@ -53738,8 +53405,11 @@ function component_choicevue_type_script_lang_js_extends() { component_choicevue
         return [];
       }
     },
-    items: {
-      type: String
+    item: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
     }
   },
   mounted: function mounted() {
@@ -53800,7 +53470,7 @@ function component_choicevue_type_script_lang_js_extends() { component_choicevue
         data.options.push("".concat(_this.optionKey[index], ".").concat(item.checkbox.text));
       });
 
-      if (this.items.type === "material") {
+      if (this.item.type === "material") {
         data.type = "material-choice";
       } else {
         data.type = "choice";
@@ -53825,8 +53495,8 @@ function component_choicevue_type_script_lang_js_extends() { component_choicevue
 
 var component_choice_component = normalizeComponent(
   item_engine_src_component_choicevue_type_script_lang_js_,
-  choicevue_type_template_id_183e8ac0_render,
-  choicevue_type_template_id_183e8ac0_staticRenderFns,
+  choicevue_type_template_id_049c346a_render,
+  choicevue_type_template_id_049c346a_staticRenderFns,
   false,
   null,
   null,
@@ -53835,16 +53505,16 @@ var component_choice_component = normalizeComponent(
 )
 
 /* harmony default export */ var component_choice = (component_choice_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/essay.vue?vue&type=template&id=32a2cb78&
-var essayvue_type_template_id_32a2cb78_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._g(_vm._b({attrs:{"question":_vm.question,"mode":_vm.mode,"needScore":_vm.needScore,"assessmentStatus":_vm.assessmentStatus,"questionFavoritesItem":_vm.questionFavoritesItem,"section_responses":_vm.section_responses,"keys":_vm.keys,"form":_vm.form},on:{"changeTag":_vm.changeTag,"changeCollect":_vm.changeCollect,"getAiAnalysis1":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [(_vm.mode === 'do')?_c('div',{staticClass:"ibs-mb16 ibs-mt16"},[_c('a-textarea',{attrs:{"rows":0,"id":("essay-do-answer" + (_vm.question.id)),"data-image-download-url":_vm.showCKEditorData.filebrowserImageDownloadUrl}}),(_vm.showAttachment && _vm.assessmentStatus !== 'preview')?_c('div',{staticClass:"ibs-mt16"},[_c('attachment-upload',{attrs:{"mode":_vm.uploadMode,"module":"answer","uploaderData":_vm.uploadSDKInitData,"cdnHost":_vm.cdnHost,"fileShowData":_vm.getAttachmentTypeData('answer')},on:{"getFileInfo":_vm.getFileInfo,"deleteFile":_vm.deleteFile}})],1):_vm._e()],1):_vm._e(),(_vm.mode == 'preview' || _vm.mode === 'import')?_c('div',{staticClass:"ibs-answer-part"},[(_vm.question.errors && _vm.question.errors.answer)?_c('div',{staticClass:"ibs-danger-color"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.answerErrorMessage"))+" ")]):[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.question.answer[0])}})]],2):_vm._e(),(_vm.mode == 'analysis')?_c('div',[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.question.answer[0])}}),(_vm.needScore)?_c('div',{staticClass:"ibs-content"},[_c('div',{staticClass:"ibs-position-relative"},[_vm._v(" "+_vm._s(_vm.t("Get"))+" "+_vm._s(_vm.question.score)+" "+_vm._s(_vm.t("itemEngine.score"))),_c('span',{staticClass:"ibs-analysis-status"},[_vm._v(_vm._s(Number(_vm.analysisData.right_num))+_vm._s(_vm.t("itemEngine.manCount")))])]),_c('div',{staticClass:"ibs-position-relative"},[_vm._v(" "+_vm._s(_vm.t("Get"))+" 0 - "+_vm._s(_vm.question.score)+" "+_vm._s(_vm.t("itemEngine.score"))),_c('span',{staticClass:"ibs-analysis-status"},[_vm._v(_vm._s(Number(_vm.analysisData.part_right_num))+_vm._s(_vm.t("itemEngine.manCount")))])]),_c('div',{staticClass:"ibs-position-relative"},[_vm._v(" "+_vm._s(_vm.t("Get"))+" 0 "+_vm._s(_vm.t("itemEngine.score"))),_c('span',{staticClass:"ibs-analysis-status"},[_vm._v(_vm._s(Number(_vm.analysisData.wrong_num) + Number(_vm.analysisData.no_answer_num))+_vm._s(_vm.t("itemEngine.manCount")))])])]):_vm._e()]):_vm._e(),(_vm.mode == 'report' || _vm.mode == 'review')?_c('div',{staticClass:"ibs-answer-part"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.answerResult")))]),_c('div',{staticClass:"ibs-content"},[_c('div',{staticClass:"ibs-mb4"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.question.answer[0])}})]),_c('div',{staticClass:"ibs-mb4"},[_c('span',{staticClass:"ibs-label"},[_vm._v(" "+_vm._s(_vm.answerText))]),(
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/essay.vue?vue&type=template&id=8eed2428&
+var essayvue_type_template_id_8eed2428_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._g(_vm._b({attrs:{"question":_vm.question,"mode":_vm.mode,"needScore":_vm.needScore,"assessmentStatus":_vm.assessmentStatus,"questionFavoritesItem":_vm.questionFavoritesItem,"section_responses":_vm.section_responses,"keys":_vm.keys,"form":_vm.form},on:{"changeTag":_vm.changeTag,"changeCollect":_vm.changeCollect,"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [(_vm.mode === 'do')?_c('div',{staticClass:"ibs-mb16 ibs-mt16"},[_c('a-textarea',{attrs:{"rows":0,"id":("essay-do-answer" + (_vm.question.id)),"data-image-download-url":_vm.showCKEditorData.filebrowserImageDownloadUrl}}),(_vm.showAttachment && _vm.assessmentStatus !== 'preview')?_c('div',{staticClass:"ibs-mt16"},[_c('attachment-upload',{attrs:{"mode":_vm.uploadMode,"module":"answer","uploaderData":_vm.uploadSDKInitData,"cdnHost":_vm.cdnHost,"fileShowData":_vm.getAttachmentTypeData('answer')},on:{"getFileInfo":_vm.getFileInfo,"deleteFile":_vm.deleteFile}})],1):_vm._e()],1):_vm._e(),(_vm.mode == 'preview' || _vm.mode === 'import')?_c('div',{staticClass:"ibs-answer-part"},[(_vm.question.errors && _vm.question.errors.answer)?_c('div',{staticClass:"ibs-danger-color"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.answerErrorMessage"))+" ")]):[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.question.answer[0])}})]],2):_vm._e(),(_vm.mode == 'analysis')?_c('div',[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.question.answer[0])}}),(_vm.needScore)?_c('div',{staticClass:"ibs-content"},[_c('div',{staticClass:"ibs-position-relative"},[_vm._v(" "+_vm._s(_vm.t("Get"))+" "+_vm._s(_vm.question.score)+" "+_vm._s(_vm.t("itemEngine.score"))),_c('span',{staticClass:"ibs-analysis-status"},[_vm._v(_vm._s(Number(_vm.analysisData.right_num))+_vm._s(_vm.t("itemEngine.manCount")))])]),_c('div',{staticClass:"ibs-position-relative"},[_vm._v(" "+_vm._s(_vm.t("Get"))+" 0 - "+_vm._s(_vm.question.score)+" "+_vm._s(_vm.t("itemEngine.score"))),_c('span',{staticClass:"ibs-analysis-status"},[_vm._v(_vm._s(Number(_vm.analysisData.part_right_num))+_vm._s(_vm.t("itemEngine.manCount")))])]),_c('div',{staticClass:"ibs-position-relative"},[_vm._v(" "+_vm._s(_vm.t("Get"))+" 0 "+_vm._s(_vm.t("itemEngine.score"))),_c('span',{staticClass:"ibs-analysis-status"},[_vm._v(_vm._s(Number(_vm.analysisData.wrong_num) + Number(_vm.analysisData.no_answer_num))+_vm._s(_vm.t("itemEngine.manCount")))])])]):_vm._e()]):_vm._e(),(_vm.mode == 'report' || _vm.mode == 'review')?_c('div',{staticClass:"ibs-answer-part"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.answerResult")))]),_c('div',{staticClass:"ibs-content"},[_c('div',{staticClass:"ibs-mb4"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.question.answer[0])}})]),_c('div',{staticClass:"ibs-mb4"},[_c('span',{staticClass:"ibs-label"},[_vm._v(" "+_vm._s(_vm.answerText))]),(
                 _vm.reportAnswer.response[0] !== '' && _vm.reportAnswer.response[0]
               )?_c('div',{staticClass:"ibs-content ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.reportAnswer.response[0])}}):_c('div',{staticClass:"ibs-content"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.answerStatus.no_answer"))+" ")]),(_vm.getAttachmentTypeData('answer').length > 0)?_c('div',{staticClass:"ibs-mt8",staticStyle:{"padding":"8px 8px 0","background-color":"#f5f5f5","border":"1px solid #F2F3F5","border-radius":"6px"}},_vm._l((_vm.getAttachmentTypeData('answer')),function(fileData){return _c('attachment-preview',{key:fileData.id,attrs:{"cdnHost":_vm.cdnHost,"fileData":fileData}})}),1):_vm._e()]),(_vm.mode == 'report')?[(_vm.needMarking)?_c('div',[(_vm.answerRecord.status !== 'reviewing')?_c('div',[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.needScore),expression:"needScore"}],staticClass:"ibs-mb4"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.getScore")))]),_c('div',{staticClass:"ibs-content ibs-success-color"},[_vm._v(" "+_vm._s(_vm.reportAnswer.score)+_vm._s(_vm.t("itemEngine.score"))+" ")])]),_c('div',{staticClass:"ibs-mb4"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.comment")))]),_c('div',{staticClass:"ibs-content ibs-editor-text",domProps:{"innerHTML":_vm._s(
                       ("" + (_vm.reportAnswer.comment || _vm.t('itemReport.no_comment')))
                     )}})])]):_c('div',{staticClass:"ibs-mark-status"},[_c('div',[_vm._v(_vm._s(_vm.t("itemEngine.teacher_comment")))])])]):_c('div',{staticClass:"ibs-mark-status"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.noNeed_comment"))+" ")])]:_vm._e()],2),(_vm.mode == 'review')?_vm._t("review"):_vm._e()],2):_vm._e()]},proxy:true},{key:"analysis_response_points",fn:function(){return [_c('div',[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content ibs-editor-text",domProps:{"innerHTML":_vm._s(_vm.question.answer[0])}})])]},proxy:true}],null,true)},'answer-model',_vm.$attrs,false),_vm.$listeners))],1)}
-var essayvue_type_template_id_32a2cb78_staticRenderFns = []
+var essayvue_type_template_id_8eed2428_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/essay.vue?vue&type=template&id=32a2cb78&
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/essay.vue?vue&type=template&id=8eed2428&
 
 // CONCATENATED MODULE: ./src/utils/debounce.js
 var debounce = function debounce(fn, delay, isDebounce) {
@@ -54191,8 +53861,11 @@ function component_essayvue_type_script_lang_js_extends() { component_essayvue_t
         return [];
       }
     },
-    items: {
-      type: String
+    item: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
     }
   },
   inject: ["showCKEditorData", "showAttachment", "cdnHost"],
@@ -54276,7 +53949,7 @@ function component_essayvue_type_script_lang_js_extends() { component_essayvue_t
       data.stem = question.stem;
       data.answer = tempArr.concat(question.answer).join();
 
-      if (this.items.type === "material") {
+      if (this.item.type === "material") {
         data.type = "material-essay";
       } else {
         data.type = "essay";
@@ -54301,8 +53974,8 @@ function component_essayvue_type_script_lang_js_extends() { component_essayvue_t
 
 var component_essay_component = normalizeComponent(
   item_engine_src_component_essayvue_type_script_lang_js_,
-  essayvue_type_template_id_32a2cb78_render,
-  essayvue_type_template_id_32a2cb78_staticRenderFns,
+  essayvue_type_template_id_8eed2428_render,
+  essayvue_type_template_id_8eed2428_staticRenderFns,
   false,
   null,
   null,
@@ -54311,14 +53984,14 @@ var component_essay_component = normalizeComponent(
 )
 
 /* harmony default export */ var component_essay = (component_essay_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/fill.vue?vue&type=template&id=482b23f8&
-var fillvue_type_template_id_482b23f8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._g(_vm._b({attrs:{"question":_vm.formateQuestion,"questionFavoritesItem":_vm.questionFavoritesItem,"needScore":_vm.needScore,"mode":_vm.mode,"keys":_vm.keys,"seq":_vm.seq,"section_responses":_vm.section_responses,"form":_vm.form},on:{"changeTag":_vm.changeTag,"changeCollect":_vm.changeCollect,"getAiAnalysis1":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [(_vm.mode == 'do')?_c('div',_vm._l((_vm.answer),function(item,index){return _c('a-input',{key:index,staticClass:"ibs-mt16",attrs:{"placeholder":_vm.getFillOrder(index + 1)},on:{"blur":_vm.changeAnswer},model:{value:(_vm.answer[index]),callback:function ($$v) {_vm.$set(_vm.answer, index, $$v)},expression:"answer[index]"}})}),1):_vm._e(),(_vm.mode == 'preview' || _vm.mode == 'analysis' || _vm.mode === 'import')?_c('div',{staticClass:"ibs-answer-part"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content"},_vm._l((_vm.question.answer),function(item,index){return _c('div',{key:index,staticClass:"ibs-position-relative",class:{ 'ibs-position-relative': _vm.mode == 'analysis' }},[_vm._v(" "+_vm._s(_vm.t("itemEngine.fillText"))+" "+_vm._s(("(" + (index + 1) + ")"))+" ： "),(_vm.question.errors && _vm.question.errors[("answers_" + index)])?_c('span',{staticClass:"ibs-danger-color"},[_vm._v(_vm._s(_vm.t("itemEngine.rightAnswerErrorMessage")))]):(_vm.mode == 'preview' || _vm.mode === 'import')?_c('span',[_vm._v(_vm._s(_vm.answerFill(item))+" ")]):_c('span',[_c('span',{staticClass:"ibs-success-color"},[_vm._v(_vm._s(_vm.answerFill(item)))]),_c('span',{staticClass:"ibs-analysis-status"},[_vm._v(_vm._s(_vm.countNumList[index].num)+_vm._s(_vm.t("itemEngine.manCount")))])])])}),0)]):_vm._e(),(_vm.mode == 'report')?_c('div',{staticClass:"ibs-answer-part"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.answerResult")))]),_c('div',{staticClass:"ibs-content",staticStyle:{"padding-right":"100px"}},[_vm._l((_vm.question.answer),function(item,index){return _c('div',{key:index,staticClass:"ibs-mb4"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.fillText"))+" "+_vm._s(("(" + (index + 1) + ")"))+" ："),_c('span',[_vm._v(_vm._s(_vm.t("itemEngine.rightAnswer")))]),_c('span',{staticClass:"ibs-success-color"},[_vm._v(_vm._s(_vm.answerFill(item)))]),(_vm.reportAnswer.status !== 'right')?_c('span',{staticClass:"ibs-ml8"},[_vm._v(_vm._s(_vm.t("itemEngine.memberAnswer"))+" "),(_vm.finalAnswer.length)?_c('span',{staticClass:"ibs-danger-color"},[_vm._v(_vm._s(_vm.finalAnswer[index]))]):_c('span',[_vm._v(_vm._s(_vm.t("itemEngine.answerStatus.no_answer")))])]):_vm._e(),(_vm.isErrorCorrection && !_vm.correctionRequired[index])?_c('a-radio-group',{staticClass:"ibs-ml24",attrs:{"default-value":0,"value":_vm.correctionAnwer[index]},on:{"change":function (e) {
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/fill.vue?vue&type=template&id=f5345d34&
+var fillvue_type_template_id_f5345d34_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._g(_vm._b({attrs:{"question":_vm.formateQuestion,"questionFavoritesItem":_vm.questionFavoritesItem,"needScore":_vm.needScore,"mode":_vm.mode,"keys":_vm.keys,"seq":_vm.seq,"section_responses":_vm.section_responses,"form":_vm.form},on:{"changeTag":_vm.changeTag,"changeCollect":_vm.changeCollect,"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis},scopedSlots:_vm._u([{key:"response_points",fn:function(){return [(_vm.mode == 'do')?_c('div',_vm._l((_vm.answer),function(item,index){return _c('a-input',{key:index,staticClass:"ibs-mt16",attrs:{"placeholder":_vm.getFillOrder(index + 1)},on:{"blur":_vm.changeAnswer},model:{value:(_vm.answer[index]),callback:function ($$v) {_vm.$set(_vm.answer, index, $$v)},expression:"answer[index]"}})}),1):_vm._e(),(_vm.mode == 'preview' || _vm.mode == 'analysis' || _vm.mode === 'import')?_c('div',{staticClass:"ibs-answer-part"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content"},_vm._l((_vm.question.answer),function(item,index){return _c('div',{key:index,staticClass:"ibs-position-relative",class:{ 'ibs-position-relative': _vm.mode == 'analysis' }},[_vm._v(" "+_vm._s(_vm.t("itemEngine.fillText"))+" "+_vm._s(("(" + (index + 1) + ")"))+" ： "),(_vm.question.errors && _vm.question.errors[("answers_" + index)])?_c('span',{staticClass:"ibs-danger-color"},[_vm._v(_vm._s(_vm.t("itemEngine.rightAnswerErrorMessage")))]):(_vm.mode == 'preview' || _vm.mode === 'import')?_c('span',[_vm._v(_vm._s(_vm.answerFill(item))+" ")]):_c('span',[_c('span',{staticClass:"ibs-success-color"},[_vm._v(_vm._s(_vm.answerFill(item)))]),_c('span',{staticClass:"ibs-analysis-status"},[_vm._v(_vm._s(_vm.countNumList[index].num)+_vm._s(_vm.t("itemEngine.manCount")))])])])}),0)]):_vm._e(),(_vm.mode == 'report')?_c('div',{staticClass:"ibs-answer-part"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.answerResult")))]),_c('div',{staticClass:"ibs-content",staticStyle:{"padding-right":"100px"}},[_vm._l((_vm.question.answer),function(item,index){return _c('div',{key:index,staticClass:"ibs-mb4"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.fillText"))+" "+_vm._s(("(" + (index + 1) + ")"))+" ："),_c('span',[_vm._v(_vm._s(_vm.t("itemEngine.rightAnswer")))]),_c('span',{staticClass:"ibs-success-color"},[_vm._v(_vm._s(_vm.answerFill(item)))]),(_vm.reportAnswer.status !== 'right')?_c('span',{staticClass:"ibs-ml8"},[_vm._v(_vm._s(_vm.t("itemEngine.memberAnswer"))+" "),(_vm.finalAnswer.length)?_c('span',{staticClass:"ibs-danger-color"},[_vm._v(_vm._s(_vm.finalAnswer[index]))]):_c('span',[_vm._v(_vm._s(_vm.t("itemEngine.answerStatus.no_answer")))])]):_vm._e(),(_vm.isErrorCorrection && !_vm.correctionRequired[index])?_c('a-radio-group',{staticClass:"ibs-ml24",attrs:{"default-value":0,"value":_vm.correctionAnwer[index]},on:{"change":function (e) {
                   _vm.handleChangeErrorCorrection(e.target.value, index);
                 }}},[_c('a-radio',{attrs:{"value":1}},[_vm._v(" "+_vm._s(_vm.t("Right"))+" ")]),_c('a-radio',{attrs:{"value":0}},[_vm._v(" "+_vm._s(_vm.t("Wrong"))+" ")])],1):_vm._e()],1)}),(_vm.isErrorCorrection)?_c('div',{staticClass:"lib-error-correction"},[_c('a-button',{attrs:{"type":"link"},on:{"click":_vm.handleClickSave}},[_vm._v(" "+_vm._s(_vm.t("confirm"))+" ")]),_c('a-button',{attrs:{"type":"link"},on:{"click":function($event){_vm.isErrorCorrection = false}}},[_vm._v(" "+_vm._s(_vm.t("cancel"))+" ")])],1):(_vm.isErrorCorrectionBtn && !_vm.isErrorCorrection)?_c('a-button',{staticClass:"lib-error-correction",attrs:{"type":"link"},on:{"click":function($event){_vm.isErrorCorrection = true}}},[_vm._v(" "+_vm._s(_vm.t("errorCorrection"))+" ")]):_vm._e()],2)]):_vm._e()]},proxy:true},{key:"analysis_response_points",fn:function(){return [_c('div',{staticClass:"ibs-answer ibs-answer-part"},[_c('span',{staticClass:"ibs-label"},[_vm._v(_vm._s(_vm.t("itemEngine.standard_answer")))]),_c('div',{staticClass:"ibs-content"},_vm._l((_vm.question.answer),function(item,index){return _c('div',{key:index,staticClass:"ibs-position-relative"},[_vm._v(" "+_vm._s(_vm.t("itemEngine.fillText"))+" "+_vm._s(("(" + (index + 1) + ")"))+" ： "),_c('span',[_c('span',{staticClass:"ibs-success-color"},[_vm._v(_vm._s(_vm.answerFill(item)))])])])}),0)])]},proxy:true}])},'answer-model',_vm.$attrs,false),_vm.$listeners))],1)}
-var fillvue_type_template_id_482b23f8_staticRenderFns = []
+var fillvue_type_template_id_f5345d34_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-engine/src/component/fill.vue?vue&type=template&id=482b23f8&
+// CONCATENATED MODULE: ./src/components/item-engine/src/component/fill.vue?vue&type=template&id=f5345d34&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-engine/src/component/fill.vue?vue&type=script&lang=js&
 function component_fillvue_type_script_lang_js_extends() { component_fillvue_type_script_lang_js_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return component_fillvue_type_script_lang_js_extends.apply(this, arguments); }
@@ -54556,8 +54229,11 @@ function component_fillvue_type_script_lang_js_extends() { component_fillvue_typ
         return [];
       }
     },
-    items: {
-      type: String
+    item: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
     }
   },
   computed: {
@@ -54714,7 +54390,7 @@ function component_fillvue_type_script_lang_js_extends() { component_fillvue_typ
       data.stem = question.stem;
       data.answer = this.getFillAnswer(question.stem);
 
-      if (this.items.type === "material") {
+      if (this.item.type === "material") {
         data.type = "material-fill";
       } else {
         data.type = "fill";
@@ -54739,8 +54415,8 @@ function component_fillvue_type_script_lang_js_extends() { component_fillvue_typ
 
 var component_fill_component = normalizeComponent(
   item_engine_src_component_fillvue_type_script_lang_js_,
-  fillvue_type_template_id_482b23f8_render,
-  fillvue_type_template_id_482b23f8_staticRenderFns,
+  fillvue_type_template_id_f5345d34_render,
+  fillvue_type_template_id_f5345d34_staticRenderFns,
   false,
   null,
   null,
@@ -55098,6 +54774,11 @@ var preview_model_component = normalizeComponent(
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -55147,6 +54828,10 @@ var preview_model_component = normalizeComponent(
       default: "create"
     },
     isDisable: {
+      type: Boolean,
+      default: false
+    },
+    aiAnalysisEnable: {
       type: Boolean,
       default: false
     },
@@ -55303,8 +54988,8 @@ var preview_model_component = normalizeComponent(
 
 var material_component = normalizeComponent(
   component_materialvue_type_script_lang_js_,
-  materialvue_type_template_id_3864c146_render,
-  materialvue_type_template_id_3864c146_staticRenderFns,
+  materialvue_type_template_id_0ed1ec16_render,
+  materialvue_type_template_id_0ed1ec16_staticRenderFns,
   false,
   null,
   null,
@@ -55316,6 +55001,12 @@ var material_component = normalizeComponent(
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/item.vue?vue&type=script&lang=js&
 function itemvue_type_script_lang_js_extends() { itemvue_type_script_lang_js_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return itemvue_type_script_lang_js_extends.apply(this, arguments); }
 
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -55525,6 +55216,10 @@ var baseCKEditorData = {
       type: Boolean,
       default: false
     },
+    aiAnalysisEnable: {
+      type: Boolean,
+      default: false
+    },
     errorList: {
       type: Array,
       default: function _default() {
@@ -55627,7 +55322,7 @@ var baseCKEditorData = {
 
 var item_component = normalizeComponent(
   src_itemvue_type_script_lang_js_,
-  itemvue_type_template_id_70386ad2_render,
+  itemvue_type_template_id_a743ec8c_render,
   staticRenderFns,
   false,
   null,
@@ -59770,15 +59465,15 @@ item_preview_src_item.install = function (Vue) {
 };
 
 /* harmony default export */ var item_preview = (item_preview_src_item);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-import/src/item.vue?vue&type=template&id=215a2583&
-var itemvue_type_template_id_215a2583_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-item-import",attrs:{"id":"item-bank-sdk-import"}},[(_vm.analysisTipClose)?_c('div',{staticClass:"ai-problem-analysis-tips",on:{"click":_vm.TipClose}},[_c('div',{staticClass:"ai-problem-analysis-tips-left"},[_c('img',{attrs:{"src":__webpack_require__("d2b5"),"alt":""}}),_c('span',[_vm._v(_vm._s(_vm.t("itemEngine.aiAnalysisTips")))])]),_vm._m(0)]):_vm._e(),_c('a-row',{staticClass:"ibs-item-import-content"},[_c('a-col',{staticClass:"ibs-import-left",attrs:{"span":6}},[_c('import-data',{attrs:{"totalItem":_vm.items.length,"totalTypes":_vm.allTypes,"allScore":_vm.allScore,"importType":_vm.importType}}),_c('import-list',{attrs:{"items":_vm.items,"totalTypes":_vm.allTypes,"typeIndex":_vm.typeIndex,"category":_vm.category,"errorList":_vm.errorList,"repeatList":_vm.repeatList},on:{"setCategory":_vm.setCategory,"setDifficult":_vm.setDifficult,"setScore":_vm.setScore}})],1),(_vm.items.length > 0)?_c('a-col',{staticClass:"ibs-import-right",attrs:{"span":17,"offset":1}},[(_vm.importType === 'testpaper')?_c('div',{staticClass:"ibs-item-import-testpapername"},[_c('a-input',{attrs:{"placeholder":_vm.t('itemImport.SetTitle_tip')},model:{value:(_vm.fileName),callback:function ($$v) {_vm.fileName=$$v},expression:"fileName"}})],1):_vm._e(),_vm._l((_vm.items),function(item,itemIndex){return _c('div',{key:itemIndex,attrs:{"id":("ibs-import-" + itemIndex)}},[_c('div',{staticClass:"ibs-import-item"},[_c('a-row',[_c('a-col',{staticClass:"ibs-text-right ibs-mt16",attrs:{"span":2}},[_c('span',[_vm._v(_vm._s(itemIndex + 1)+"、")])]),_c('a-col',{attrs:{"span":22}},[_c('material-title',{directives:[{name:"show",rawName:"v-show",value:(item.type === 'material'),expression:"item.type === 'material'"}],attrs:{"material":item.material,"item":_vm.items}}),_vm._l((item.questions),function(question,questionIndex){return _c('div',{key:questionIndex + question.answer,staticClass:"ibs-pl16 ibs-pr16"},[_c('a-row',[_c('a-col',{directives:[{name:"show",rawName:"v-show",value:(item.type === 'material'),expression:"item.type === 'material'"}],staticClass:"ibs-text-right ibs-mt16",attrs:{"span":2}},[_c('span',[_vm._v("（"+_vm._s(questionIndex + 1)+"） ")])]),_c('a-col',{attrs:{"span":item.type === 'material' ? 22 : 24}},[(question.answer_mode === 'true_false')?_c('judge-type',{attrs:{"question":question,"item":item,"items":item.type,"mode":_vm.mode,"showScoreAndSeq":false,"seq":(itemIndex + "-" + questionIndex)},on:{"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis}}):_vm._e(),(question.answer_mode === 'single_choice')?_c('single-choice',{attrs:{"question":question,"item":item,"items":item.type,"mode":_vm.mode,"showScoreAndSeq":false,"seq":(itemIndex + "-" + questionIndex)},on:{"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis}}):_vm._e(),(
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-import/src/item.vue?vue&type=template&id=79efd5dc&
+var itemvue_type_template_id_79efd5dc_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-item-import",attrs:{"id":"item-bank-sdk-import"}},[(_vm.analysisTipClose)?_c('div',{staticClass:"ai-problem-analysis-tips",on:{"click":_vm.TipClose}},[_c('div',{staticClass:"ai-problem-analysis-tips-left"},[_c('img',{attrs:{"src":__webpack_require__("d2b5"),"alt":""}}),_c('span',[_vm._v(_vm._s(_vm.t("itemEngine.aiAnalysisTips")))])]),_vm._m(0)]):_vm._e(),_c('a-row',{staticClass:"ibs-item-import-content"},[_c('a-col',{staticClass:"ibs-import-left",attrs:{"span":6}},[_c('import-data',{attrs:{"totalItem":_vm.items.length,"totalTypes":_vm.allTypes,"allScore":_vm.allScore,"importType":_vm.importType}}),_c('import-list',{attrs:{"items":_vm.items,"totalTypes":_vm.allTypes,"typeIndex":_vm.typeIndex,"category":_vm.category,"errorList":_vm.errorList,"repeatList":_vm.repeatList},on:{"setCategory":_vm.setCategory,"setDifficult":_vm.setDifficult,"setScore":_vm.setScore}})],1),(_vm.items.length > 0)?_c('a-col',{staticClass:"ibs-import-right",attrs:{"span":17,"offset":1}},[(_vm.importType === 'testpaper')?_c('div',{staticClass:"ibs-item-import-testpapername"},[_c('a-input',{attrs:{"placeholder":_vm.t('itemImport.SetTitle_tip')},model:{value:(_vm.fileName),callback:function ($$v) {_vm.fileName=$$v},expression:"fileName"}})],1):_vm._e(),_vm._l((_vm.items),function(item,itemIndex){return _c('div',{key:itemIndex,attrs:{"id":("ibs-import-" + itemIndex)}},[_c('div',{staticClass:"ibs-import-item"},[_c('a-row',[_c('a-col',{staticClass:"ibs-text-right ibs-mt16",attrs:{"span":2}},[_c('span',[_vm._v(_vm._s(itemIndex + 1)+"、")])]),_c('a-col',{attrs:{"span":22}},[_c('material-title',{directives:[{name:"show",rawName:"v-show",value:(item.type === 'material'),expression:"item.type === 'material'"}],attrs:{"material":item.material,"item":_vm.items}}),_vm._l((item.questions),function(question,questionIndex){return _c('div',{key:questionIndex + question.answer,staticClass:"ibs-pl16 ibs-pr16"},[_c('a-row',[_c('a-col',{directives:[{name:"show",rawName:"v-show",value:(item.type === 'material'),expression:"item.type === 'material'"}],staticClass:"ibs-text-right ibs-mt16",attrs:{"span":2}},[_c('span',[_vm._v("（"+_vm._s(questionIndex + 1)+"） ")])]),_c('a-col',{attrs:{"span":item.type === 'material' ? 22 : 24}},[(question.answer_mode === 'true_false')?_c('judge-type',{attrs:{"question":question,"item":item,"mode":_vm.mode,"showScoreAndSeq":false,"seq":(itemIndex + "-" + questionIndex)},on:{"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis}}):_vm._e(),(question.answer_mode === 'single_choice')?_c('single-choice',{attrs:{"question":question,"item":item,"mode":_vm.mode,"showScoreAndSeq":false,"seq":(itemIndex + "-" + questionIndex)},on:{"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis}}):_vm._e(),(
                         question.answer_mode === 'choice' ||
                           question.answer_mode === 'uncertain_choice'
-                      )?_c('choice',{attrs:{"question":question,"item":item,"items":item.type,"mode":_vm.mode,"showScoreAndSeq":false,"seq":(itemIndex + "-" + questionIndex)},on:{"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis}}):_vm._e(),(question.answer_mode === 'rich_text')?_c('essay',{attrs:{"question":question,"item":item,"items":item.type,"mode":_vm.mode,"showScoreAndSeq":false,"seq":(itemIndex + "-" + questionIndex)},on:{"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis}}):_vm._e(),(question.answer_mode === 'text')?_c('fill',{attrs:{"question":question,"item":item,"items":item.type,"mode":_vm.mode,"showScoreAndSeq":false,"seq":(itemIndex + "-" + questionIndex)},on:{"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis}}):_vm._e()],1)],1)],1)}),_c('div',{staticClass:"ibs-import-material-analysis"},[_c('material-analysis',{directives:[{name:"show",rawName:"v-show",value:(item.type === 'material' && item.analysis),expression:"item.type === 'material' && item.analysis"}],attrs:{"analysis":item.analysis,"attachments":item.attachments}})],1),_c('a-row',{staticClass:"ibs-mt16"},[_c('a-col',{attrs:{"span":24}},[_c('item-footer',{attrs:{"categoryName":item.category_name,"difficulty":item.difficulty,"score":_vm.getScore(item)}}),_c('div',{staticClass:"ibs-sub-operation ibs-import-edit"},[_c('a-button',{staticClass:"ibs-mr8 ibs-pl0",attrs:{"type":"link"},on:{"click":function($event){return _vm.showEditModal(item, itemIndex)}}},[_c('i',{staticClass:"ib-icon ib-icon-setting"}),_vm._v(_vm._s(_vm.t("Edit")))]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"link"},on:{"click":function($event){return _vm.deleteItem(itemIndex)}}},[_c('i',{staticClass:"ib-icon ib-icon-delete"}),_vm._v(_vm._s(_vm.t("Delete"))+" ")]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"link"},on:{"click":function($event){return _vm.createItem(item, itemIndex)}}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("itemImport.AfterAddItem"))+" ")])],1)],1)],1)],2)],1)],1)])}),_c('div',{ref:"ibsImportBtn",staticClass:"ibs-item-import__footer ibs-mb16"},[_c('a-button',{staticClass:"ibs-item-import-btn",attrs:{"type":"primary","disabled":_vm.errorList.length > 0,"loading":_vm.loading},on:{"click":_vm.finishImport}},[_vm._v(_vm._s(_vm.t("itemImport.FinishImport")))])],1)],2):_vm._e()],1),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showFixBtn),expression:"showFixBtn"}],staticClass:"ibs-item-import__footer--fix"},[_c('a-button',{staticClass:"ibs-item-import-btn",attrs:{"type":"primary","disabled":_vm.errorList.length > 0,"loading":_vm.loading},on:{"click":_vm.finishImport}},[_vm._v(_vm._s(_vm.t("itemImport.FinishImport")))])],1),_c('a-modal',{attrs:{"title":_vm.modelData.title,"width":"800px","cancelText":_vm.t('cancel'),"bodyStyle":{ textAlign: 'left' },"destroyOnClose":true,"footer":null,"getContainer":_vm.getContainer},on:{"ok":_vm.handleOk,"cancel":_vm.handleCancel},model:{value:(_vm.visible),callback:function ($$v) {_vm.visible=$$v},expression:"visible"}},[(_vm.modelData.mode === 'edit')?_c('item-manage',{attrs:{"showAttachment":_vm.showAttachment,"showCKEditorData":_vm.showCKEditorData,"deleteAttachmentCallback":_vm.deleteAttachmentCallback,"previewAttachmentCallback":_vm.previewAttachmentCallback,"mode":_vm.modelData.mode,"cdnHost":"service-cdn.qiqiuyun.net","uploadSDKInitData":_vm.uploadSDKInitData,"category":_vm.modelData.category,"subject":_vm.modelData.subject,"type":_vm.modelData.type,"showModelBtn":true,"errorList":_vm.errorList},on:{"deleteAttachment":_vm.deleteAttachment,"previewAttachment":_vm.previewAttachment,"renderFormula":_vm.renderFormula,"getData":_vm.getEditData,"changeEditor":_vm.changeEditor,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.modelData.mode === 'create')?_c('item-manage',{attrs:{"showAttachment":_vm.showAttachment,"showCKEditorData":_vm.showCKEditorData,"cdnHost":"service-cdn.qiqiuyun.net","uploadSDKInitData":_vm.uploadSDKInitData,"deleteAttachmentCallback":_vm.deleteAttachmentCallback,"previewAttachmentCallback":_vm.previewAttachmentCallback,"mode":_vm.modelData.mode,"category":_vm.modelData.category,"type":_vm.modelData.type,"showModelBtn":true,"errorList":_vm.errorList},on:{"deleteAttachment":_vm.deleteAttachment,"previewAttachment":_vm.previewAttachment,"renderFormula":_vm.renderFormula,"getData":_vm.getCreateData,"changeEditor":_vm.changeEditor,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e()],1),_c('a-modal',{attrs:{"title":_vm.t('itemImport.Add_new_item'),"destroyOnClose":true,"footer":null,"getContainer":_vm.getContainer},model:{value:(_vm.modelTypeVisible),callback:function ($$v) {_vm.modelTypeVisible=$$v},expression:"modelTypeVisible"}},[_c('a-row',[_c('a-col',{staticClass:"model-type-text",attrs:{"span":4}},[_vm._v(_vm._s(_vm.t("itemImport.Choose_type")))]),_c('a-col',{attrs:{"span":20}},[_c('a-row',[_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('single_choice')}}},[_vm._v(_vm._s(_vm.t("single_choice")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('choice')}}},[_vm._v(_vm._s(_vm.t("choice")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('uncertain_choice')}}},[_vm._v(_vm._s(_vm.t("uncertain_choice_1")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('determine')}}},[_vm._v(_vm._s(_vm.t("determine")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('fill')}}},[_vm._v(_vm._s(_vm.t("fill")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('essay')}}},[_vm._v(_vm._s(_vm.t("essay")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('material')}}},[_vm._v(_vm._s(_vm.t("material")))])],1)],1)],1)],1)],1)],1)}
-var itemvue_type_template_id_215a2583_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ai-problem-analysis-tips-right"},[_c('img',{attrs:{"src":__webpack_require__("2c0c"),"alt":""}})])}]
+                      )?_c('choice',{attrs:{"question":question,"item":item,"mode":_vm.mode,"showScoreAndSeq":false,"seq":(itemIndex + "-" + questionIndex)},on:{"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis}}):_vm._e(),(question.answer_mode === 'rich_text')?_c('essay',{attrs:{"question":question,"item":item,"mode":_vm.mode,"showScoreAndSeq":false,"seq":(itemIndex + "-" + questionIndex)},on:{"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis}}):_vm._e(),(question.answer_mode === 'text')?_c('fill',{attrs:{"question":question,"item":item,"mode":_vm.mode,"showScoreAndSeq":false,"seq":(itemIndex + "-" + questionIndex)},on:{"getAiAnalysis":_vm.getAiAnalysis,"changeAnalysis":_vm.changeAnalysis}}):_vm._e()],1)],1)],1)}),_c('div',{staticClass:"ibs-import-material-analysis"},[_c('material-analysis',{directives:[{name:"show",rawName:"v-show",value:(item.type === 'material' && item.analysis),expression:"item.type === 'material' && item.analysis"}],attrs:{"analysis":item.analysis,"attachments":item.attachments}})],1),_c('a-row',{staticClass:"ibs-mt16"},[_c('a-col',{attrs:{"span":24}},[_c('item-footer',{attrs:{"categoryName":item.category_name,"difficulty":item.difficulty,"score":_vm.getScore(item)}}),_c('div',{staticClass:"ibs-sub-operation ibs-import-edit"},[_c('a-button',{staticClass:"ibs-mr8 ibs-pl0",attrs:{"type":"link"},on:{"click":function($event){return _vm.showEditModal(item, itemIndex)}}},[_c('i',{staticClass:"ib-icon ib-icon-setting"}),_vm._v(_vm._s(_vm.t("Edit")))]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"link"},on:{"click":function($event){return _vm.deleteItem(itemIndex)}}},[_c('i',{staticClass:"ib-icon ib-icon-delete"}),_vm._v(_vm._s(_vm.t("Delete"))+" ")]),_c('a-button',{staticClass:"ibs-mr8",attrs:{"type":"link"},on:{"click":function($event){return _vm.createItem(item, itemIndex)}}},[_c('i',{staticClass:"ib-icon ib-icon-add"}),_vm._v(_vm._s(_vm.t("itemImport.AfterAddItem"))+" ")])],1)],1)],1)],2)],1)],1)])}),_c('div',{ref:"ibsImportBtn",staticClass:"ibs-item-import__footer ibs-mb16"},[_c('a-button',{staticClass:"ibs-item-import-btn",attrs:{"type":"primary","disabled":_vm.errorList.length > 0,"loading":_vm.loading},on:{"click":_vm.finishImport}},[_vm._v(_vm._s(_vm.t("itemImport.FinishImport")))])],1)],2):_vm._e()],1),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showFixBtn),expression:"showFixBtn"}],staticClass:"ibs-item-import__footer--fix"},[_c('a-button',{staticClass:"ibs-item-import-btn",attrs:{"type":"primary","disabled":_vm.errorList.length > 0,"loading":_vm.loading},on:{"click":_vm.finishImport}},[_vm._v(_vm._s(_vm.t("itemImport.FinishImport")))])],1),_c('a-modal',{attrs:{"title":_vm.modelData.title,"width":"800px","cancelText":_vm.t('cancel'),"bodyStyle":{ textAlign: 'left' },"destroyOnClose":true,"footer":null,"getContainer":_vm.getContainer},on:{"ok":_vm.handleOk,"cancel":_vm.handleCancel},model:{value:(_vm.visible),callback:function ($$v) {_vm.visible=$$v},expression:"visible"}},[(_vm.modelData.mode === 'edit')?_c('item-manage',{attrs:{"showAttachment":_vm.showAttachment,"showCKEditorData":_vm.showCKEditorData,"deleteAttachmentCallback":_vm.deleteAttachmentCallback,"previewAttachmentCallback":_vm.previewAttachmentCallback,"mode":_vm.modelData.mode,"cdnHost":"service-cdn.qiqiuyun.net","uploadSDKInitData":_vm.uploadSDKInitData,"category":_vm.modelData.category,"subject":_vm.modelData.subject,"type":_vm.modelData.type,"showModelBtn":true,"errorList":_vm.errorList,"aiAnalysisEnable":_vm.aiAnalysisEnable},on:{"deleteAttachment":_vm.deleteAttachment,"previewAttachment":_vm.previewAttachment,"renderFormula":_vm.renderFormula,"getData":_vm.getEditData,"changeEditor":_vm.changeEditor,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e(),(_vm.modelData.mode === 'create')?_c('item-manage',{attrs:{"showAttachment":_vm.showAttachment,"showCKEditorData":_vm.showCKEditorData,"cdnHost":"service-cdn.qiqiuyun.net","uploadSDKInitData":_vm.uploadSDKInitData,"deleteAttachmentCallback":_vm.deleteAttachmentCallback,"previewAttachmentCallback":_vm.previewAttachmentCallback,"mode":_vm.modelData.mode,"category":_vm.modelData.category,"type":_vm.modelData.type,"showModelBtn":true,"errorList":_vm.errorList,"aiAnalysisEnable":_vm.aiAnalysisEnable},on:{"deleteAttachment":_vm.deleteAttachment,"previewAttachment":_vm.previewAttachment,"renderFormula":_vm.renderFormula,"getData":_vm.getCreateData,"changeEditor":_vm.changeEditor,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis}}):_vm._e()],1),_c('a-modal',{attrs:{"title":_vm.t('itemImport.Add_new_item'),"destroyOnClose":true,"footer":null,"getContainer":_vm.getContainer},model:{value:(_vm.modelTypeVisible),callback:function ($$v) {_vm.modelTypeVisible=$$v},expression:"modelTypeVisible"}},[_c('a-row',[_c('a-col',{staticClass:"model-type-text",attrs:{"span":4}},[_vm._v(_vm._s(_vm.t("itemImport.Choose_type")))]),_c('a-col',{attrs:{"span":20}},[_c('a-row',[_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('single_choice')}}},[_vm._v(_vm._s(_vm.t("single_choice")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('choice')}}},[_vm._v(_vm._s(_vm.t("choice")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('uncertain_choice')}}},[_vm._v(_vm._s(_vm.t("uncertain_choice_1")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('determine')}}},[_vm._v(_vm._s(_vm.t("determine")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('fill')}}},[_vm._v(_vm._s(_vm.t("fill")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('essay')}}},[_vm._v(_vm._s(_vm.t("essay")))])],1),_c('a-col',{staticClass:"ibs-mb24",attrs:{"span":8}},[_c('a-button',{attrs:{"type":"primary","ghost":""},on:{"click":function($event){return _vm.showCreateModal('material')}}},[_vm._v(_vm._s(_vm.t("material")))])],1)],1)],1)],1)],1)],1)}
+var itemvue_type_template_id_79efd5dc_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ai-problem-analysis-tips-right"},[_c('img',{attrs:{"src":__webpack_require__("2c0c"),"alt":""}})])}]
 
 
-// CONCATENATED MODULE: ./src/components/item-import/src/item.vue?vue&type=template&id=215a2583&
+// CONCATENATED MODULE: ./src/components/item-import/src/item.vue?vue&type=template&id=79efd5dc&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-import/src/components/import-data.vue?vue&type=template&id=381b4c22&
 var import_datavue_type_template_id_381b4c22_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ibs-import-list"},[_c('div',{staticClass:"ibs-clearfix ibs-subject-rect__title"},[_c('span',{staticClass:"ibs-left"},[_vm._v(_vm._s(_vm.t("itemImport.Topic_statistics")))]),_c('span',{directives:[{name:"show",rawName:"v-show",value:(_vm.importType === 'item'),expression:"importType === 'item'"}],staticClass:"ibs-right ibs-subject-data__num"},[_vm._v(_vm._s(_vm.t("itemImport.Number_of_topics")(_vm.totalItem))+" ")])]),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.importType === 'testpaper'),expression:"importType === 'testpaper'"}],staticClass:"ibs-clearfix ibs-subject-data__item"},[_c('span',{staticClass:"ibs-left ibs-subject-data__num"},[_vm._v(_vm._s(_vm.t("itemImport.Number_of_topics")(_vm.totalItem)))]),_c('span',{staticClass:"ibs-right ibs-subject-data__num"},[_vm._v(_vm._s(_vm.t("itemImport.allScore")(_vm.allScore)))])]),_vm._l((_vm.totalTypes),function(value,key,index){return _c('div',{key:index,staticClass:"ibs-clearfix ibs-subject-data__item"},[_c('span',{staticClass:"ibs-left"},[_vm._v(_vm._s(_vm.getTypeName(key)))]),_c('span',{staticClass:"ibs-right ibs-subject-data__num"},[_vm._v(_vm._s(_vm.t("itemImport.Number_of_topics")(value)))])])})],2)}
@@ -61050,9 +60745,6 @@ function itemvue_type_script_lang_js_arrayWithHoles(arr) { if (Array.isArray(arr
 //
 //
 //
-//
-//
-//
 
 
 
@@ -61610,6 +61302,10 @@ var item_import_src_itemvue_type_script_lang_js_baseCKEditorData = {
     loading: {
       type: Boolean,
       default: false
+    },
+    aiAnalysisEnable: {
+      type: Boolean,
+      default: false
     }
   },
   data: function data() {
@@ -62020,8 +61716,8 @@ var item_import_src_itemvue_type_script_lang_js_baseCKEditorData = {
 
 var item_import_src_item_component = normalizeComponent(
   components_item_import_src_itemvue_type_script_lang_js_,
-  itemvue_type_template_id_215a2583_render,
-  itemvue_type_template_id_215a2583_staticRenderFns,
+  itemvue_type_template_id_79efd5dc_render,
+  itemvue_type_template_id_79efd5dc_staticRenderFns,
   false,
   null,
   null,
@@ -64939,9 +64635,12 @@ var SingleSelector = {
 
   render: function render() {
     var h = arguments[0];
+    var _$props$showArrow = this.$props.showArrow,
+        showArrow = _$props$showArrow === undefined ? true : _$props$showArrow;
 
     var props = {
       props: extends_default()({}, Object(props_util["l" /* getOptionProps */])(this), {
+        showArrow: showArrow,
         renderSelection: this.renderSelection
       }),
       on: Object(props_util["k" /* getListeners */])(this),
@@ -65416,15 +65115,19 @@ var MultipleSelector = {
 
   render: function render() {
     var h = arguments[0];
-    var $slots = this.$slots;
+    var $slots = this.$slots,
+        $props = this.$props;
 
     var listeners = Object(props_util["k" /* getListeners */])(this);
+    var _$props$showArrow = $props.showArrow,
+        showArrow = _$props$showArrow === undefined ? false : _$props$showArrow;
+
     return h(
       MultipleSelector_Selector,
       {
         props: extends_default()({}, this.$props, {
+          showArrow: showArrow,
           tabIndex: -1,
-          showArrow: false,
           renderSelection: this.renderSelection,
           renderPlaceholder: this._renderPlaceholder
         }),
@@ -66034,7 +65737,6 @@ var Select_Select = {
   }, {
     prefixCls: 'rc-tree-select',
     prefixAria: 'rc-tree-select',
-    showArrow: true,
     showSearch: true,
     autoClearSearchValue: true,
     showCheckedStrategy: SHOW_CHILD,
@@ -77214,6 +76916,7 @@ var is_mobile = __webpack_require__("8df8");
 
 
 
+
 var ActionMap = {
   click: 'click',
   hover: 'mouseover'
@@ -77228,11 +76931,16 @@ var ActionMap = {
     event: 'change.value'
   },
   props: extends_default()({}, input_inputProps, {
-    prefixCls: vue_types["a" /* default */].string.def('ant-input-password'),
-    inputPrefixCls: vue_types["a" /* default */].string.def('ant-input'),
+    prefixCls: vue_types["a" /* default */].string,
+    inputPrefixCls: vue_types["a" /* default */].string,
     action: vue_types["a" /* default */].string.def('click'),
     visibilityToggle: vue_types["a" /* default */].bool.def(true)
   }),
+  inject: {
+    configProvider: { 'default': function _default() {
+        return ConfigConsumerProps;
+      } }
+  },
   data: function data() {
     return {
       visible: false
@@ -77254,13 +76962,11 @@ var ActionMap = {
         visible: !this.visible
       });
     },
-    getIcon: function getIcon() {
+    getIcon: function getIcon(prefixCls) {
       var _on;
 
       var h = this.$createElement;
-      var _$props = this.$props,
-          prefixCls = _$props.prefixCls,
-          action = _$props.action;
+      var action = this.$props.action;
 
       var iconTrigger = ActionMap[action] || '';
       var iconProps = {
@@ -77286,14 +76992,18 @@ var ActionMap = {
     var h = arguments[0];
 
     var _getOptionProps = Object(props_util["l" /* getOptionProps */])(this),
-        prefixCls = _getOptionProps.prefixCls,
-        inputPrefixCls = _getOptionProps.inputPrefixCls,
+        customizePrefixCls = _getOptionProps.prefixCls,
+        customizeInputPrefixCls = _getOptionProps.inputPrefixCls,
         size = _getOptionProps.size,
         suffix = _getOptionProps.suffix,
         visibilityToggle = _getOptionProps.visibilityToggle,
         restProps = objectWithoutProperties_default()(_getOptionProps, ['prefixCls', 'inputPrefixCls', 'size', 'suffix', 'visibilityToggle']);
 
-    var suffixIcon = visibilityToggle && this.getIcon();
+    var getPrefixCls = this.configProvider.getPrefixCls;
+    var inputPrefixCls = getPrefixCls('input', customizeInputPrefixCls);
+    var prefixCls = getPrefixCls('input-password', customizePrefixCls);
+
+    var suffixIcon = visibilityToggle && this.getIcon(prefixCls);
     var inputClassName = classnames_default()(prefixCls, defineProperty_default()({}, prefixCls + '-' + size, !!size));
     var inputProps = {
       props: extends_default()({}, restProps, {
@@ -82456,7 +82166,7 @@ var ExpandableTable = {
   }),
   data: function data() {
     this.preData = [].concat(toConsumableArray_default()(this.data));
-    this.store = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.observable({
+    this.store = (this.$root.constructor.observable || external_commonjs_vue_commonjs2_vue_root_Vue_default.a.observable)({
       currentHoverKey: null,
       fixedColumnsHeadRowsHeight: [],
       fixedColumnsBodyRowsHeight: {},
@@ -86782,7 +86492,7 @@ function isFiltersChanged(state, filters) {
     _util_warning(!props.expandedRowRender || !('scroll' in props) || !props.scroll.x, '`expandedRowRender` and `scroll` are not compatible. Please use one of them at one time.');
     this.CheckboxPropsCache = {};
 
-    this.store = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.observable({
+    this.store = (this.$root.constructor.observable || external_commonjs_vue_commonjs2_vue_root_Vue_default.a.observable)({
       selectedRowKeys: getRowSelection(this.$props).selectedRowKeys || [],
       selectionDirty: false
     });
@@ -87830,7 +87540,8 @@ function isFiltersChanged(state, filters) {
           showHeader = _getOptionProps.showHeader,
           locale = _getOptionProps.locale,
           getPopupContainer = _getOptionProps.getPopupContainer,
-          restProps = objectWithoutProperties_default()(_getOptionProps, ['showHeader', 'locale', 'getPopupContainer']);
+          expandIcon = _getOptionProps.expandIcon,
+          restProps = objectWithoutProperties_default()(_getOptionProps, ['showHeader', 'locale', 'getPopupContainer', 'expandIcon']);
 
       var data = this.getCurrentPageData();
       var expandIconAsCell = this.expandedRowRender && this.expandIconAsCell !== false;
@@ -87870,7 +87581,7 @@ function isFiltersChanged(state, filters) {
       var vcTableProps = {
         key: 'table',
         props: extends_default()({
-          expandIcon: this.renderExpandIcon(prefixCls)
+          expandIcon: expandIcon || this.renderExpandIcon(prefixCls)
         }, restProps, {
           customRow: function customRow(record, index) {
             return _this12.onRow(prefixCls, record, index);
@@ -88087,7 +87798,8 @@ var es_table_Table = {
     var slotTitle = $scopedSlots.title,
         slotFooter = $scopedSlots.footer,
         _$scopedSlots$expande = $scopedSlots.expandedRowRender,
-        expandedRowRender = _$scopedSlots$expande === undefined ? props.expandedRowRender : _$scopedSlots$expande;
+        expandedRowRender = _$scopedSlots$expande === undefined ? props.expandedRowRender : _$scopedSlots$expande,
+        expandIcon = $scopedSlots.expandIcon;
 
     title = title || slotTitle;
     footer = footer || slotFooter;
@@ -88096,7 +87808,8 @@ var es_table_Table = {
         columns: columns,
         title: title,
         footer: footer,
-        expandedRowRender: expandedRowRender
+        expandedRowRender: expandedRowRender,
+        expandIcon: this.$props.expandIcon || expandIcon
       }),
       on: Object(props_util["k" /* getListeners */])(this)
     };
@@ -88546,6 +88259,7 @@ var inputNumberProps = {
   autoComplete: vue_types["a" /* default */].string,
   title: vue_types["a" /* default */].string,
   name: vue_types["a" /* default */].string,
+  type: vue_types["a" /* default */].string,
   id: vue_types["a" /* default */].string
 };
 

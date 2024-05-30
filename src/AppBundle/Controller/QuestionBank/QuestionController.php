@@ -203,7 +203,7 @@ class QuestionController extends BaseController
                 $question['scoreType'] = $question['score_rule']['scoreType'];
                 $question['otherScore'] = $question['score_rule']['otherScore'];
             }
-            $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysis($question, $item);
+            $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForTeacher($question, $item);
         }
 
         return $item;
