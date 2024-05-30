@@ -72,7 +72,7 @@ class AnswerRecord extends AbstractResource
         foreach ($assessment['sections'] as &$section) {
             foreach ($section['items'] as &$item) {
                 foreach ($item['questions'] as &$question) {
-                    $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysis($question, $item);
+                    $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForStudent($question, $item);
                 }
             }
         }

@@ -13,6 +13,7 @@
       :loading="loading"
       :isVisiblePopconfim="isVisiblePopconfim"
       :uploadSDKInitData="uploadSDKInitData"
+      :aiAnalysisEnable="aiAnalysisEnable"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
@@ -82,7 +83,8 @@ export default {
       isWrong: false,
       duplicatedIds: [],
       ids: null,
-      stopAnswer: {}
+      stopAnswer: {},
+      aiAnalysisEnable: $("[name=ai_analysis_enable]").val() == 1 ? true : false,
     }
   },
   created() {

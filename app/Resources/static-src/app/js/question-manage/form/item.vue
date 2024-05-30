@@ -11,6 +11,7 @@
       :cdnHost="cdnHost"
       :isDownload="isDownload"
       :isDisable="isDisable"
+      :aiAnalysisEnable="aiAnalysisEnable"
       :uploadSDKInitData="uploadSDKInitData"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
@@ -34,6 +35,7 @@
       :cdnHost="cdnHost"
       :isDownload="isDownload"
       :isDisable="isDisable"
+      :aiAnalysisEnable="aiAnalysisEnable"
       :uploadSDKInitData="uploadSDKInitData"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
@@ -95,6 +97,7 @@ export default {
       fileId: 0,
       isDownload: false,
       isDisable: null,
+      aiAnalysisEnable: $("[name=ai_analysis_enable]").val() == 1 ? true : false,
     };
   },
   provide() {

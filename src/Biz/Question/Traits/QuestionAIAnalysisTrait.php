@@ -17,12 +17,28 @@ trait QuestionAIAnalysisTrait
         return $this->aiAnalysisSetting;
     }
 
-    private function canGenerateAIAnalysis($question, $item = [])
+    private function canGenerateAIAnalysisForStudent($question, $item = [])
     {
         $aiAnalysisSetting = $this->getQuestionAIAnalysisSetting();
         if (empty($aiAnalysisSetting['student_enabled'])) {
             return false;
         }
+
+        return $this->canGenerateAIAnalysis($question, $item);
+    }
+
+    private function canGenerateAIAnalysisForTeacher($question, $item = [])
+    {
+        $aiAnalysisSetting = $this->getQuestionAIAnalysisSetting();
+        if (empty($aiAnalysisSetting['teacher_enabled'])) {
+            return false;
+        }
+
+        return $this->canGenerateAIAnalysis($question, $item);
+    }
+
+    private function canGenerateAIAnalysis($question, $item)
+    {
         if (!empty($question['analysis']) || !empty($question['attachments']) || !empty($item['attachments']) || empty($question['answer']) || !empty($item['includeImg'])) {
             return false;
         }
