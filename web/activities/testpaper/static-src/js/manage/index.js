@@ -99,6 +99,7 @@ class Testpaper {
     this.initAddComment();
     this.initDatePicker();
     this.initFormItemData();
+    this.initAdvancedSettings();
 
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {
@@ -132,23 +133,6 @@ class Testpaper {
         $this.next().val(reverseEnable);
       });
     }
-    $('#toggle-advanced-settings').on('click', function() {
-      var $advancedSettings = $('#advanced-settings');
-      var $icon = $(this).find('.es-icon');
-
-      if ($icon.hasClass('es-icon-xiangshang')) {
-        $icon.removeClass('es-icon-xiangshang').addClass('es-icon-xiangxia');
-      } else {
-        $icon.removeClass('es-icon-xiangxia').addClass('es-icon-xiangshang');
-      }
-
-      if ($advancedSettings.css('display') === 'none') {
-        $advancedSettings.css('display', 'block');
-      } else {
-        $advancedSettings.css('display', 'none');
-      }
-    });
-
   }
 
   initDatePicker() {
@@ -211,6 +195,25 @@ class Testpaper {
     } else if(validPeriodMode == 2) {
       this.$rangeStartTime.val(defaultStartTime)
     }
+  }
+
+  initAdvancedSettings() {
+    $('#toggle-advanced-settings').on('click', function() {
+      var $advancedSettings = $('#advanced-settings');
+      var $icon = $(this).find('.es-icon');
+
+      if ($icon.hasClass('es-icon-xiangshang')) {
+        $icon.removeClass('es-icon-xiangshang').addClass('es-icon-xiangxia');
+      } else {
+        $icon.removeClass('es-icon-xiangxia').addClass('es-icon-xiangshang');
+      }
+
+      if ($advancedSettings.css('display') === 'none') {
+        $advancedSettings.css('display', 'block');
+      } else {
+        $advancedSettings.css('display', 'none');
+      }
+    });
   }
 
   setValidateRule() {
