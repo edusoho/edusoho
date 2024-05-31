@@ -38032,8 +38032,8 @@ var judgevue_type_template_id_154dd270_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/components/item-manage/src/component/judge.vue?vue&type=template&id=154dd270&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"14ea0092-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/answer-model.vue?vue&type=template&id=6b016356&
-var answer_modelvue_type_template_id_6b016356_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('base-type',_vm._b({attrs:{"form":_vm.form,"mode":_vm.mode,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"clickConfirm":_vm.clickConfirm,"closeConfirm":_vm.closeConfirm,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion},scopedSlots:_vm._u([{key:"questions",fn:function(){return [_vm._t("stem",[_c('a-form-item',{attrs:{"label":_vm.t('Stem'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":"","validate-status":_vm.stem.validateStatus,"help":_vm.stem.errorMsg}},[_c('div',{class:{ 'is-wrong': _vm.isWrong }},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"14ea0092-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/answer-model.vue?vue&type=template&id=9a76d360&
+var answer_modelvue_type_template_id_9a76d360_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('base-type',_vm._b({attrs:{"form":_vm.form,"mode":_vm.mode,"isDisable":_vm.isDisable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"clickConfirm":_vm.clickConfirm,"closeConfirm":_vm.closeConfirm,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion},scopedSlots:_vm._u([{key:"questions",fn:function(){return [_vm._t("stem",[_c('a-form-item',{attrs:{"label":_vm.t('Stem'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":"","validate-status":_vm.stem.validateStatus,"help":_vm.stem.errorMsg}},[_c('div',{class:{ 'is-wrong': _vm.isWrong }},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
               "questions['stem']",
               {
                 initialValue: _vm.questions.stem,
@@ -38082,10 +38082,10 @@ var answer_modelvue_type_template_id_6b016356_render = function () {var _vm=this
                 initialValue: _vm.questions.scoreType || 'question'
               }
             ]),expression:"[\n              `questions['scoreType']`,\n              {\n                initialValue: questions.scoreType || 'question'\n              }\n            ]"}],attrs:{"name":"scoreType"}},[_c('a-radio',{attrs:{"value":"question"}},[_vm._v(" 每题得分 ")]),_c('a-radio',{attrs:{"value":"option"}},[_vm._v(" 每空得分 ")])],1)],1):_vm._e()],1)],1)]},proxy:true}],null,true)},'base-type',_vm.$attrs,false))}
-var answer_modelvue_type_template_id_6b016356_staticRenderFns = []
+var answer_modelvue_type_template_id_9a76d360_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-manage/src/component/answer-model.vue?vue&type=template&id=6b016356&
+// CONCATENATED MODULE: ./src/components/item-manage/src/component/answer-model.vue?vue&type=template&id=9a76d360&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"14ea0092-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/base.vue?vue&type=template&id=df3603d0&
 var basevue_type_template_id_df3603d0_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"item-bank-sdk ibs-base",attrs:{"id":"ib-treeSelect"}},[_c('a-form-item',{attrs:{"label":"","label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":""}},[_c('a-input',{directives:[{name:"decorator",rawName:"v-decorator",value:([
@@ -46242,13 +46242,21 @@ var answer_modelvue_type_script_lang_js_base = {
       this.$emit("renderFormula");
     },
     aiGeneration: function aiGeneration() {
-      this.$emit("getAiAnalysis", this.disable, this.enable, this.complete, this.finish);
+      var _this4 = this;
+
+      this.form.validateFields(function (err) {
+        if (err) {
+          _this4.getFromInfo();
+        } else {
+          _this4.$emit("getAiAnalysis", _this4.disable, _this4.enable, _this4.complete, _this4.finish);
+        }
+      });
     },
     disable: function disable() {
       this.unableGenerateTips = true;
     },
     enable: function enable() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.isShowAiExplain = false;
       this.stopAiExplain = true;
@@ -46257,18 +46265,18 @@ var answer_modelvue_type_script_lang_js_base = {
       this.answers = [];
       this.isStopComplete = false;
       var typingTimer = setInterval(function () {
-        if (_this4.answers.length === 0) {
+        if (_this5.answers.length === 0) {
           return;
         }
 
-        if (_this4.isStopComplete) {
+        if (_this5.isStopComplete) {
           clearInterval(typingTimer);
         }
 
-        _this4.analysisEditor.insertHtml(_this4.answers.shift());
+        _this5.analysisEditor.insertHtml(_this5.answers.shift());
 
-        if (_this4.answers.length === 0 && _this4.isMessageEnd) {
-          _this4.finished();
+        if (_this5.answers.length === 0 && _this5.isMessageEnd) {
+          _this5.finished();
 
           clearInterval(typingTimer);
         }
@@ -46302,8 +46310,8 @@ var answer_modelvue_type_script_lang_js_base = {
 
 var answer_model_component = normalizeComponent(
   component_answer_modelvue_type_script_lang_js_,
-  answer_modelvue_type_template_id_6b016356_render,
-  answer_modelvue_type_template_id_6b016356_staticRenderFns,
+  answer_modelvue_type_template_id_9a76d360_render,
+  answer_modelvue_type_template_id_9a76d360_staticRenderFns,
   false,
   null,
   null,
