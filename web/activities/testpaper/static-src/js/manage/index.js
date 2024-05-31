@@ -80,6 +80,7 @@ class Testpaper {
     this.$element = $element;
     this.$form = this.$element.find('#step2-form');
     this.$questionBankSelector = this.$element.find('#question-bank');
+    this.$testpaperTypeSelector = this.$element.find('#testpaper-type');
     this.$testpaperSelector = this.$element.find('#testpaper-media');
     this.$questionItemShow = this.$element.find('#questionItemShowDiv');
     this.$scoreItem = this.$element.find('.js-score-form-group');
@@ -232,6 +233,7 @@ class Testpaper {
 
   initEvent() {
     this.$element.find('#question-bank').on('change', event => this.changeQuestionBank(event));
+    this.$element.find('#testpaper-type').on('change', event => this.changeTestpaperType(event));
     this.$element.find('#testpaper-media').on('change', event => this.changeTestPaper(event));
     this.$element.find('input[name=validPeriodMode]').on('change', event => this.showRedoExamination(event));
     this.$element.find('input[name=isLimitDoTimes]').on('change', event => this.showRedoInterval(event));
@@ -364,6 +366,18 @@ class Testpaper {
     }
   }
 
+  initEmptyTestPaperTypeSelector() {
+    this.$testpaperSelector.select2({
+      data: [
+        {
+          id: '0',
+          text: '请选择试卷类型',
+          selected: true,
+        }
+      ],
+    });
+  }
+
   initEmptyTestPaperSelector() {
     this.$testpaperSelector.select2({
       data: [
@@ -375,6 +389,36 @@ class Testpaper {
       ],
     });
   }
+
+  initAjaxTestPaperTypeSelector() {
+    let self = this;
+    this.$testpaperTypeSelector.removeClass('hidden');
+    this.$testpaperTypeSelector.select2({
+      ajax: {
+        url: self.$testpaperTypeSelector.data('url'),
+        dataType: 'json',
+        quietMillis: 250,
+        results: function (data) {
+          if (data && Array.isArray(data.assessmentType)) {
+            let results = data.assessmentType.map(function(type) {
+              return {
+                id: type,
+                text: type
+              };
+            });
+            return {
+              results: results
+            };
+          } else {
+            return {
+              results: []
+            };
+          }
+        }
+      }
+    });
+  }
+
 
   initAjaxTestPaperSelector() {
     let self = this;
@@ -459,6 +503,34 @@ class Testpaper {
   changeQuestionBank(event) {
     let $helpBlock = $('.js-help-block');
     $helpBlock.addClass('hidden');
+    let selected = this.$questionBankSelector.select2('data');
+    let bankId = selected.id;
+    if (!parseInt(bankId)) {
+      this.initEmptyTestPaperSelector();
+      return;
+    }
+    let url = this.$questionBankSelector.data('url');
+    url = url.replace(/[0-9]/, bankId);
+    let self = this;
+    $.post(url, function (resp) {
+      if (resp.totalCount === 0) {
+        $helpBlock.addClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.empty_tips')).show();
+        return;
+      }
+      if (resp.openCount === 0) {
+        $helpBlock.removeClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.no_open_tips')).show();
+        return;
+      }
+      self.$testpaperTypeSelector.data('url', url);
+      self.initAjaxTestPaperTypeSelector();
+    }).error(function (e) {
+      cd.message({ type: 'danger', message: e.responseJson.error.message });
+    });
+  }
+
+  changeTestpaperType(event) {
+    let $helpBlock = $('.js-help-block');
+    $helpBlock.addClass('hidden');
     this.$testpaperSelector.addClass('hidden');
     this.$questionItemShow.hide();
     this.$scoreItem.hide();
@@ -470,7 +542,9 @@ class Testpaper {
       this.initEmptyTestPaperSelector();
       return;
     }
-    let url = this.$questionBankSelector.data('url');
+    let typeSelected = this.$testpaperTypeSelector.select2('data');
+    let type = typeSelected.id;
+    let url = this.$testpaperTypeSelector.data('url');
     url = url.replace(/[0-9]/, bankId);
     let self = this;
     $.post(url, function (resp) {

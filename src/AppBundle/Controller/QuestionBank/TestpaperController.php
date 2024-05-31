@@ -451,6 +451,7 @@ class TestpaperController extends BaseController
             'testPapers' => $testPapers,
             'totalCount' => $totalCount,
             'openCount' => $openCount,
+            'assessmentType' => ['regular', 'random'],
         ]);
     }
 

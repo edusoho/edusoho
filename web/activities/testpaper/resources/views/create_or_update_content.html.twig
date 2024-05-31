@@ -101,7 +101,7 @@
         <div class="col-sm-2 control-label">
           <label for="testpaper-media" class="control-label-required">{{ 'course.plan_task.activity_manage.testpaper'|trans }}</label>
         </div>
-        <div class="col-sm-5 controls">
+        <div class="col-sm-3 controls">
           <select id="question-bank" class="form-control" name="questionBankId" data-url="{{ path('question_bank_manage_testpaper_json', {id:0}) }}">
             {% if questionBankTree %}
               <option value="0">{{ 'question.select_question_bank'|trans }}</option>
@@ -118,7 +118,10 @@
           </select>
           <div class="help-block hidden js-help-block"></div>
         </div>
-        <div class="col-sm-5 controls">
+        <div class="col-sm-3 controls">
+          <input id="testpaper-type" class="form-control hidden" name="type" value="{{ type|default(0) }}" data-url="{% if testpaper %}{{ path('question_bank_manage_testpaper_json', {id:testpaper.bank_id}) }}{% endif %}" >
+        </div>
+        <div class="col-sm-3 controls">
           <input id="testpaper-media" class="form-control hidden" name="testpaperId" value="{{ testpaper.id|default(0) }}" data-url="{% if testpaper %}{{ path('question_bank_manage_testpaper_json', {id:testpaper.bank_id}) }}{% endif %}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
           {% if testpaper|default() %}
             <input type="hidden" id="testPaperName" value="{{ testpaper.name }}">
