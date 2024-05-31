@@ -52,7 +52,7 @@ class AnswerRecord extends AbstractResource
         $activity['isOnlyStudent'] = $user['roles'] == ['ROLE_USER'];
         $resultShow = empty($testpaperActivity) || $this->getResultShow($answerRecord, $answerScene, $answerReport);
         if ($resultShow) {
-            $assessment = $this->wrapAIAnalysis($assessment);
+            $assessment = $this->wrapAIAnalysis($assessment, $answerRecord);
         }
 
         return [
@@ -67,12 +67,13 @@ class AnswerRecord extends AbstractResource
         ];
     }
 
-    private function wrapAIAnalysis($assessment)
+    private function wrapAIAnalysis($assessment, $answerRecord)
     {
+        $user = $this->getCurrentUser();
         foreach ($assessment['sections'] as &$section) {
             foreach ($section['items'] as &$item) {
                 foreach ($item['questions'] as &$question) {
-                    $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForStudent($question, $item);
+                    $question['aiAnalysisEnable'] = $answerRecord['user_id'] == $user['id'] && $this->canGenerateAIAnalysisForStudent($question, $item);
                 }
             }
         }
