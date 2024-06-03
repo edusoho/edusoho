@@ -1,6 +1,6 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
-{% set modal_class = 'cd-modal-dialog administrator-perspective-modal' %}
+{% set modal_class = 'cd-modal-dialog ai-analysis-intro-modal' %}
 
 {% block title %}
   {{ 'question_manage.ai_analysis.introduction'|trans }}
@@ -26,5 +26,5 @@
 {% endblock %}
 
 {% block footer %}
-  <a class="js-close-btn" href="javascript:;">{{ 'question_manage.ai_analysis.introduction.close'|trans }}</a>
+  <a class="js-close-btn ai-analysis-intro-btn" href="javascript:;">{{ 'question_manage.ai_analysis.introduction.close'|trans }}</a>
 {% endblock %}
