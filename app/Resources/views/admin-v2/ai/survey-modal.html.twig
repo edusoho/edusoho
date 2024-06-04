@@ -10,14 +10,14 @@
 
 {% block body %}
   <div>
-    <a href="{{ path('admin_v2_question_ai_analysis') }}" target="_blank" data-url="{{ path('admin_v2_ai_feature_like', {feature: 'question_analysis'}) }}">AI题目解析</a>
-    <a href="javascript:;" data-url="{{ path('admin_v2_ai_feature_like', {feature: 'customer_service_bot'}) }}">AI客服机器人</a>
-    <a href="javascript:;" data-url="{{ path('admin_v2_ai_feature_like', {feature: 'study_assistant'}) }}">AI学习助手</a>
-    <a href="javascript:;" data-url="{{ path('admin_v2_ai_feature_like', {feature: 'personal_test_paper'}) }}">AI个性卷</a>
-    <a href="javascript:;" data-url="{{ path('admin_v2_ai_feature_like', {feature: 'question_marking'}) }}">AI主观题批阅</a>
-    <a href="javascript:;" data-url="{{ path('admin_v2_ai_feature_like', {feature: 'teach_assistant'}) }}">AI助教</a>
-    <a href="javascript:;" data-url="{{ path('admin_v2_ai_feature_like', {feature: 'marketing_poster'}) }}">AI营销海报</a>
-    <a href="javascript:;" data-url="{{ path('admin_v2_ai_feature_like', {feature: 'workbench'}) }}">AI应用工具台</a>
+    <a href="{{ path('admin_v2_question_ai_analysis') }}" target="_blank" data-url="{{ path('admin_v2_ai_like_feature', {feature: 'question_analysis'}) }}">AI题目解析</a>
+    <a href="javascript:;" data-url="{{ path('admin_v2_ai_apply', {feature: 'customer_service_bot'}) }}">AI客服机器人</a>
+    <a href="javascript:;" data-url="{{ path('admin_v2_ai_apply', {feature: 'study_assistant'}) }}">AI学习助手</a>
+    <a href="javascript:;" data-url="{{ path('admin_v2_ai_like_feature', {feature: 'personal_test_paper'}) }}">AI个性卷</a>
+    <a href="javascript:;" data-url="{{ path('admin_v2_ai_like_feature', {feature: 'question_marking'}) }}">AI主观题批阅</a>
+    <a href="javascript:;" data-url="{{ path('admin_v2_ai_like_feature', {feature: 'teach_assistant'}) }}">AI助教</a>
+    <a href="javascript:;" data-url="{{ path('admin_v2_ai_like_feature', {feature: 'marketing_poster'}) }}">AI营销海报</a>
+    <a href="javascript:;" data-url="{{ path('admin_v2_ai_like_feature', {feature: 'workbench'}) }}">AI应用工具台</a>
   </div>
 {% endblock %}
 

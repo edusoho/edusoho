@@ -1,0 +1,13 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog ai-apply-modal' %}
+
+{% do script(['app/js/admin-v2/ai/apply/index.js']) %}
+
+{% block body %}
+  <form action="{{ path('admin_v2_ai_like_feature', {feature: feature}) }}">
+    <input type="text" name="name" value="{{ name }}"/>
+    <input type="text" name="mobile" value="{{ mobile }}"/>
+    <input type="hidden" name="feature" value="{{ feature }}">
+  </form>
+{% endblock %}

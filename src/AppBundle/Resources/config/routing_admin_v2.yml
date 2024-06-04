@@ -46,10 +46,14 @@ admin_v2_ai_survey:
   path: '/ai_survey'
   defaults:
     _controller: 'AppBundle:AdminV2/AI:survey'
-admin_v2_ai_feature_like:
-  path: '/ai_feature_like'
+admin_v2_ai_apply:
+  path: '/ai_apply'
   defaults:
-    _controller: 'AppBundle:AdminV2/Ai:like'
+    _controller: 'AppBundle:AdminV2/AI:apply'
+admin_v2_ai_like_feature:
+  path: '/ai_like_feature'
+  defaults:
+    _controller: 'AppBundle:AdminV2/Ai:likeFeature'
   methods:
     - POST
 admin_v2_multi_class_data_overview:
