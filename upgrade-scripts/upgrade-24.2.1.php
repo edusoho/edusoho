@@ -78,7 +78,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function changeUploadFilesSize()
     {
-        if ($this->isTableExist('upload_files') && $this->isFieldExist('fileSize')){
+        if ($this->isTableExist('upload_files') && $this->isFieldExist('upload_files', 'fileSize')) {
             $this->getConnection()->exec("alter table `upload_files` modify column `fileSize` bigint(20) not null default '0' comment '文件大小';");
         }
 
