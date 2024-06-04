@@ -15,6 +15,7 @@ use Biz\System\Constant\LogAction;
 use Biz\System\Constant\LogModule;
 use Biz\System\Service\LogService;
 use Biz\User\UserException;
+use Biz\WrongBook\Service\WrongQuestionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
@@ -281,6 +282,10 @@ class AiGenerate extends AbstractResource
                 'assessment' => 'itembank-assessment',
             ][$module['type']];
         }
+        $pool = $this->getWrongQuestionService()->getPoolBySceneId($answerSceneId);
+        if ($pool) {
+            return 'wrong-question';
+        }
 
         return 'unknown';
     }
@@ -332,6 +337,14 @@ class AiGenerate extends AbstractResource
     private function getItemBankExerciseModuleService()
     {
         return $this->service('ItemBankExercise:ExerciseModuleService');
+    }
+
+    /**
+     * @return WrongQuestionService
+     */
+    private function getWrongQuestionService()
+    {
+        return $this->service('WrongBook:WrongQuestionService');
     }
 
     /**

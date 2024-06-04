@@ -12,10 +12,10 @@ class AIQuestionAnalysisLogReportJob extends AbstractJob
 {
     public function execute()
     {
-        $startTime = strtotime(date('Y-m-d', strtotime('-1 day')));
-        $endTime = strtotime(date('Y-m-d'));
-        $teacherLogCount = $this->getLogService()->searchLogCount(['module' => LogModule::AI, 'action' => LogAction::TEACHER_GENERATE_QUESTION_ANALYSIS, 'startDateTime' => $startTime, 'endDateTime' => $endTime]);
-        $studentLogs = $this->getLogService()->searchLogs(['module' => LogModule::AI, 'action' => LogAction::STUDENT_GENERATE_QUESTION_ANALYSIS, 'startDateTime' => $startTime, 'endDateTime' => $endTime], [], 0, PHP_INT_MAX);
+        $startDate = date('Y-m-d', strtotime('-1 day'));
+        $endDate = date('Y-m-d');
+        $teacherLogCount = $this->getLogService()->searchLogCount(['module' => LogModule::AI, 'action' => LogAction::TEACHER_GENERATE_QUESTION_ANALYSIS, 'startDateTime' => $startDate, 'endDateTime' => $endDate]);
+        $studentLogs = $this->getLogService()->searchLogs(['module' => LogModule::AI, 'action' => LogAction::STUDENT_GENERATE_QUESTION_ANALYSIS, 'startDateTime' => $startDate, 'endDateTime' => $endDate], [], 0, PHP_INT_MAX);
         if (empty($teacherLogCount) && empty($studentLogs)) {
             return;
         }
@@ -27,6 +27,8 @@ class AIQuestionAnalysisLogReportJob extends AbstractJob
                     'course-exercise' => 0,
                     'itembank-chapter' => 0,
                     'itembank-assessment' => 0,
+                    'wrong-question' => 0,
+                    'unknown' => 0,
                 ],
             ],
             'teacher' => [
@@ -34,9 +36,8 @@ class AIQuestionAnalysisLogReportJob extends AbstractJob
             ],
         ];
         foreach ($studentLogs as $studentLog) {
-            $data = json_decode($studentLog['data'], true);
-            if (isset($body['student']['count'][$data['scene']])) {
-                $body['student']['count'][$data['scene']]++;
+            if (isset($body['student']['count'][$studentLog['data']['scene']])) {
+                $body['student']['count'][$studentLog['data']['scene']]++;
             }
         }
         $this->getCloudDataService()->push('ai.generate.question_analysis', $body);

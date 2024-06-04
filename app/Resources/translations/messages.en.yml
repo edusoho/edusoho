@@ -8257,6 +8257,8 @@ log.module.question_bank: 'Question Bank'
 log.module.item_bank_exercise: 'Item Bank Exercise'
 log.module.multi_class_assistant: Multi class assistant
 log.module.multi_class: Multi class
+log.module.wrong_question: 'Wrong Question'
+log.module.ai: AI
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
