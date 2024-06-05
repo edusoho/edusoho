@@ -42,6 +42,9 @@ trait QuestionAIAnalysisTrait
         if (!empty($question['analysis']) || !empty($question['attachments']) || !empty($item['attachments']) || empty($question['answer']) || !empty($item['includeImg'])) {
             return false;
         }
+        if (empty(array_filter($question['answer']))) {
+            return false;
+        }
         $contents = [];
         if (!empty($question['stem'])) {
             $contents[] = $question['stem'];
@@ -59,6 +62,9 @@ trait QuestionAIAnalysisTrait
             if (preg_match('/<img .*?>/', $content)) {
                 return false;
             }
+        }
+        if (preg_match('/ data-tex=/', json_encode($question))) {
+            return false;
         }
 
         return true;
