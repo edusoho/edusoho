@@ -18,6 +18,7 @@
       :all="allList.length"
       :is-exercise="true"
       :mode="mode"
+      :exerciseInfo="result"
     />
     <!-- 底部 -->
     <div class="paper-footer">
@@ -181,7 +182,7 @@ export default {
       res.items.forEach(item => {
         if (item.type != 'material') {
           const detail = this.analysisSixType(item.type, item);
-          
+
           this.setData(detail.item, detail.answer);
         }
         if (item.type == 'material') {

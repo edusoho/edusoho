@@ -71,9 +71,32 @@
           <div class="ibs-analysis-color">
             {{ $t('courseLearning.analyze') }}：
             <span v-if="commonData.analysis" v-html="commonData.analysis" @click="handleClickImage($event.target.src)"/>
-            <div v-else>{{ $t('courseLearning.noParsing') }}</div>
+            <div v-else ref="aiAnalysis">{{ $t('courseLearning.noParsing') }}</div>
           </div>
-          <attachement-preview 
+          <div class="ai-analysis" v-show="commonData.aiAnalysisEnable">
+          <p class="ai-tittle">{{$t('courseLearning.aiAssistant')}}</p>
+          <div class="ai-content">
+            <div class="ai-content-left">
+              <button class="ai-btn"  @click="aiGeneration()"  v-show="isShowAiExplain">
+                <img src="static/images/explain-ai.png" class="ai-img" />
+                <span class="ai-left-text">{{$t('courseLearning.analysis')}}</span>
+              </button>
+              <button class="ai-stopbtn" @click="stopAiGeneration()"  v-show="stopAiExplain">
+                <img src="static/images/explain-stop.png" class="ai-img" />
+                <span class="ai-left-text">{{$t('courseLearning.stopGeneration')}}</span>
+              </button>
+              <button class="ai-stopbtn" @click="anewAiGeneration" v-show="anewAiExplain">
+                <img src="static/images/explain-anew.png" class="ai-img" />
+                <span class="ai-left-text">{{$t('courseLearning.reGenerate')}}</span>
+              </button>
+              <p class="ai-left-tittle" v-show="stopAiExplain">{{$t('courseLearning.beGenerating')}}</p>
+            </div>
+            <div ai-content-right>
+              <img src="static/images/explain-ai-img.png" class="ai-right-img" />
+            </div>
+          </div>
+        </div>
+          <attachement-preview
             v-for="item in getAttachmentTypeData('analysis')"
             :attachment="item"
             :key="item.id" />
@@ -85,7 +108,7 @@
       {{ $t('courseLearning.analyze') }}：
       <span v-if="currentItem.analysis !== ''" v-html="currentItem.analysis" @click="handleClickImage($event.target.src)"/>
       <span v-else>{{ $t('courseLearning.noParsing') }}</span>
-      <attachement-preview 
+      <attachement-preview
         v-for="item in getAttachementByType('analysis')"
         :attachment="item"
         :key="item.id" />
@@ -116,6 +139,7 @@ import answerMode from "@/src/utils/filterAnswerMode";
 import itemBankMixins from "@/src/mixins/itemBankMixins.js"
 import attachementPreview from "./attachement-preview.vue";
 import { Dialog } from 'vant'
+import store from "@/store";
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
@@ -132,11 +156,22 @@ export default {
       isShowUpIcon: false,
       question: [],
       refreshKey: true,
-      status: ''
+      status: '',
+      answerData: {},
+      stopAnswer: {},
+      isShowAiExplain: true,
+      stopAiExplain: false,
+      anewAiExplain: false
     };
   },
   components: {
     attachementPreview
+  },
+  props: {
+    exerciseInfo: {
+      type: Object,
+      default: () => {}
+    },
   },
   inject: ['brushDo'],
   computed: {
@@ -167,7 +202,7 @@ export default {
     if (questionStatus.length > 0) {
       this.status = questionStatus[0].status
     }
-  
+
     const stemDom = document.getElementById(`current${this.currentItem.id}`)
     if (stemDom) {
       this.isShowDownIcon = stemDom.childNodes[0].offsetWidth > 234
@@ -195,14 +230,14 @@ export default {
     },
     submitTopic() {
       const thereNoAnswer = this.answer.some(item => {
-        return item === '' 
+        return item === ''
       })
       const data = {
         item_id: this.commonData.item_id,
         question_id: this.commonData.questionId,
         seq: Number(this.commonData.current)
       }
-      
+
       if (!thereNoAnswer) {
         this.$emit('changeTouch')
         this.$emit('submitSingleAnswer', this.answer, data, 'fill');
@@ -237,6 +272,84 @@ export default {
       this.isShowUpIcon = false
       this.isShowDownIcon = true
     },
+    async getAiAnalysis() {
+      const questionId = this.commonData.questionId
+      const data = {
+        role: "student",
+        questionId,
+        answerRecordId: this.exerciseInfo.id,
+      }
+      let messageEnd = false;
+      const answers = [];
+      this.answerData[questionId] = '';
+      this.stopAnswer[questionId] = false;
+      const typingTimer = setInterval(() => {
+        if (answers.length === 0) {
+          return;
+        }
+        if (this.stopAnswer[questionId]) {
+          clearInterval(typingTimer);
+        }
+        this.answerData[questionId] += answers.shift();
+        if (answers.length === 0 && messageEnd) {
+          clearInterval(typingTimer);
+          this.stopAiExplain = false;
+          this.anewAiExplain = true;
+        }
+        this.$refs.aiAnalysis.innerHTML = this.answerData[questionId];
+      }, 50);
+      const response = await fetch("/api/ai/question_analysis/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          Accept: "application/vnd.edusoho.v2+json",
+          'X-Auth-Token': store.state.token,
+        },
+        body: JSON.stringify(data),
+      });
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let lastMessgae = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        const messages = (lastMessgae + decoder.decode(value)).split("\n\n");
+        let key = 1;
+        for (const message of messages) {
+          if (key == messages.length) {
+            lastMessgae = message;
+          } else {
+            const parseMessage = JSON.parse(message.slice(5));
+            if (parseMessage.event === "message") {
+              answers.push(parseMessage.answer);
+            }
+            key++;
+          }
+        }
+        if (done) {
+          messageEnd = true;
+          break;
+        }
+      }
+    },
+    stopAiAnalysis() {
+      const questionId = this.commonData.questionId;
+      this.stopAnswer[questionId] = true;
+    },
+    aiGeneration() {
+      this.isShowAiExplain = false;
+      this.stopAiExplain = true;
+      this.anewAiExplain = false;
+      this.getAiAnalysis();
+    },
+    stopAiGeneration() {
+      this.stopAiExplain = false;
+      this.isShowAiExplain = false;
+      this.anewAiExplain = true;
+      this.stopAiAnalysis();
+    },
+    anewAiGeneration() {
+      this.getAiAnalysis();
+    }
   }
 };
 </script>
@@ -269,5 +382,76 @@ export default {
   .ibs-show-up-icon {
     display: block;
     cursor: pointer;
+  }
+  .ai-analysis {
+    margin-top: 12px 16px;
+    padding: 16px;
+    background-color: #F5F5F5;
+    border: 1px dashed rgba(66, 143, 250, 0.30);
+    line-height: 20px;
+    border-radius: 4px;
+    .ai-tittle {
+      color: #428FFA;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+    }
+    .ai-content {
+      display: flex;
+      justify-content: space-between;
+      .ai-content-left {
+        .ai-btn {
+          margin-top: 16px;
+          padding: 4px 15px;
+          height: 32px;
+          color: #fff;
+          border-radius: 4px;
+          border: 1px solid #428FFA;
+          border-style: none;
+          background-color: #428FFA;
+          .ai-left-text {
+            font-size: 14px;
+            color: #fff;
+            line-height: 16px;
+          }
+          .ai-img {
+            margin-right: 5px;
+            width: 16px;
+            height: 16px;
+          }
+        }
+        .ai-stopbtn {
+          margin-top: 16px;
+          padding: 4px 15px;
+          height: 32px;
+          color: #428FFA;
+          border-radius: 4px;
+          border: 1px solid #428FFA;
+          .ai-left-text {
+            font-size: 14px;
+            color: #428FFA;
+            line-height: 16px;
+          }
+          .ai-img {
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+          }
+        }
+        .ai-left-tittle {
+          margin-top: 5px;
+          color: #919399;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 20px;
+        }
+      }
+    }
+    .ai-right-img {
+      width: 44.8px;
+      height: 56px;
+    }
   }
 </style>

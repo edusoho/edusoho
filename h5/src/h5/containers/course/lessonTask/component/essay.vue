@@ -10,7 +10,7 @@
       </div>
       <i @click="changeUpIcon" :class="['iconfont', 'icon-arrow-up', {'show-up-icon': isShowDownIcon }]"></i>
       <i @click="changeDownIcon" :class="['iconfont', 'icon-arrow-down', {'show-down-icon': isShowUpIcon }]"></i>
-      <attachement-preview 
+      <attachement-preview
         v-for="item in getAttachementMaterialType('material')"
         :canLoadPlayer="isCurrent"
         :attachment="item"
@@ -24,18 +24,18 @@
         <div class="serial-number">{{ itemdata.seq }}、</div>
         <div class="rich-text" v-html="stem" @click="handleClickImage($event.target.src)" />
       </div>
-  
+
       <div v-if="itemdata.parentTitle" :class="['material-title',{'material-title-weight': itemdata.parentTitle}]">
         <span class="serial-number"><span class="material-type">[{{ $t('courseLearning.essay') }}] </span> {{ itemdata.materialIndex }}、</span>
         <div class="rich-text" v-html="itemdata.stem" @click="handleClickImage($event.target.src)" />
       </div>
-  
-      <attachement-preview 
+
+      <attachement-preview
         v-for="item in getAttachementByType('stem')"
         :canLoadPlayer="isCurrent"
         :attachment="item"
         :key="item.id" />
-  
+
       <div v-if="disabledData" class="answer-paper">
         <van-field
           v-model="answerText"
@@ -55,7 +55,7 @@
             @delete="deleteImgItem"
           />
         </div>
-        
+
       </div>
       <div v-if="!disabledData" class="answer-paper">
         <div v-if="!disabledData" class="answer-paper">
@@ -63,10 +63,10 @@
           <div>
             <div v-if="mode === 'exam' && !canDo">
               <img v-if="(exerciseMode == '' &&  question.length > 0 && question[0].status === 'right') || (itemdata.testResult.status === 'right' && itemdata.testResult.status !== 'none')" :src="rigth" alt="" class="fill-status">
-              <img 
-                v-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'partRight')" 
-                :src="wrong" 
-                alt="" 
+              <img
+                v-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'partRight')"
+                :src="wrong"
+                alt=""
                 class="fill-status">
               <span class="is-right-answer" v-if="(exerciseMode == '' &&  question.length > 0 && question[0].status === 'right') || (itemdata.testResult.status === 'right' && itemdata.testResult.status !== 'none')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
               <span class="is-wrong-answer" v-else-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'partRight')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
@@ -82,7 +82,7 @@
             {{ $t('courseLearning.correctAnswer') }}：
           </div>
           <div class="mb-16">
-            <span class="is-right-answer" v-html="itemdata.answer[0]" @click="handleClickImage($event.target.src)" /> 
+            <span class="is-right-answer" v-html="itemdata.answer[0]" @click="handleClickImage($event.target.src)" />
           </div>
           <div v-if="mode === 'exam'" class="analysis-color mb-8">
             {{ $t('courseLearning.score') }}：<div>{{ itemdata.testResult ? itemdata.testResult.score : 0.0 }}</div>
@@ -93,9 +93,32 @@
           <div class="analysis-color">
             {{ $t('courseLearning.analyze') }}：
             <span v-if="analysis" v-html="analysis" @click="handleClickImage($event.target.src)" />
-            <div v-else>{{ $t('courseLearning.noParsing') }}</div>
+            <div v-else ref="aiAnalysis">{{ $t('courseLearning.noParsing') }}</div>
           </div>
-          <attachement-preview 
+          <div class="ai-analysis" v-show="itemdata.aiAnalysisEnable">
+            <p class="ai-tittle">{{$t('courseLearning.aiAssistant')}}</p>
+            <div class="ai-content">
+              <div class="ai-content-left">
+                <button class="ai-btn"  @click="aiGeneration()"  v-show="isShowAiExplain">
+                  <img src="static/images/explain-ai.png" class="ai-img" />
+                  <span class="ai-left-text">{{$t('courseLearning.analysis')}}</span>
+                </button>
+                <button class="ai-stopbtn" @click="stopAiGeneration()"  v-show="stopAiExplain">
+                  <img src="static/images/explain-stop.png" class="ai-img" />
+                  <span class="ai-left-text">{{$t('courseLearning.stopGeneration')}}</span>
+                </button>
+                <button class="ai-stopbtn" @click="anewAiGeneration" v-show="anewAiExplain">
+                  <img src="static/images/explain-anew.png" class="ai-img" />
+                  <span class="ai-left-text">{{$t('courseLearning.reGenerate')}}</span>
+                </button>
+                <p class="ai-left-tittle" v-show="stopAiExplain">{{$t('courseLearning.beGenerating')}}</p>
+              </div>
+              <div ai-content-right>
+                <img src="static/images/explain-ai-img.png" class="ai-right-img" />
+              </div>
+            </div>
+          </div>
+          <attachement-preview
             v-for="item in getAttachementByType('analysis')"
             :canLoadPlayer="isCurrent"
             :attachment="item"
@@ -109,7 +132,7 @@
       {{ $t('courseLearning.analyze') }}：
       <span v-if="parentTitleAnalysis !== ''" v-html="parentTitleAnalysis" @click="handleClickImage($event.target.src)" />
       <div v-else>{{ $t('courseLearning.noParsing') }}</div>
-      <attachement-preview 
+      <attachement-preview
         v-for="item in getAttachementMaterialType('analysis')"
         :canLoadPlayer="isCurrent"
         :attachment="item"
@@ -143,6 +166,7 @@ import { Dialog, Toast } from 'vant'
 import isShowFooterShardow from '@/mixins/lessonTask/footerShardow';
 import refreshChoice from '@/mixins/lessonTask/swipeRefResh.js';
 import handleClickImage from '@/mixins/lessonTask/handleClickImage.js';
+import store from "@/store";
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
@@ -199,6 +223,10 @@ export default {
       type: String,
       default: ''
     },
+    exerciseInfo: {
+      type: Object,
+      default: () => {}
+    },
     mode: {
       type: String,
       default: ''
@@ -242,7 +270,12 @@ export default {
       width: WINDOWWIDTH,
       rigth: 'static/images/exercise/rigth.png',
       wrong: 'static/images/exercise/wrong.png',
-      answerText: ''
+      answerText: '',
+      answerData: {},
+      stopAnswer: {},
+      isShowAiExplain: true,
+      stopAiExplain: false,
+      anewAiExplain: false
     };
   },
   computed: {
@@ -325,6 +358,84 @@ export default {
     },
     goResults() {
       this.$emit('goResults');
+    },
+    async getAiAnalysis() {
+      const questionId = this.itemdata.id
+      const data = {
+        role: "student",
+        questionId,
+        answerRecordId: this.exerciseInfo.id,
+      }
+      let messageEnd = false;
+      let answers = [];
+      this.answerData[questionId] = '';
+      this.stopAnswer[questionId] = false;
+      const typingTimer = setInterval(() => {
+        if (answers.length === 0) {
+          return;
+        }
+        if (this.stopAnswer[questionId]) {
+          clearInterval(typingTimer);
+        }
+        this.answerData[questionId] += answers.shift();
+        if (answers.length === 0 && messageEnd) {
+          clearInterval(typingTimer);
+          this.stopAiExplain = false;
+          this.anewAiExplain = true;
+        }
+        this.$refs.aiAnalysis.innerHTML = this.answerData[questionId];
+      }, 50);
+      const response = await fetch("/api/ai/question_analysis/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          Accept: "application/vnd.edusoho.v2+json",
+          'X-Auth-Token': store.state.token,
+        },
+        body: JSON.stringify(data),
+      });
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let lastMessage = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        const messages = (lastMessage + decoder.decode(value)).split("\n\n");
+        let key = 1;
+        for (let message of messages) {
+          if (key === messages.length) {
+            lastMessage = message;
+          } else {
+            const parseMessage = JSON.parse(message.slice(5));
+            if (parseMessage.event === "message") {
+              answers.push(parseMessage.answer);
+            }
+            key++;
+          }
+        }
+        if (done) {
+          messageEnd = true;
+          break;
+        }
+      }
+    },
+    stopAiAnalysis() {
+      const questionId = this.itemdata.id;
+      this.stopAnswer[questionId] = true;
+    },
+    aiGeneration() {
+      this.isShowAiExplain = false;
+      this.stopAiExplain = true;
+      this.anewAiExplain = false;
+      this.getAiAnalysis();
+    },
+    stopAiGeneration() {
+      this.stopAiExplain = false;
+      this.isShowAiExplain = false;
+      this.anewAiExplain = true;
+      this.stopAiAnalysis();
+    },
+    anewAiGeneration() {
+      this.getAiAnalysis();
     }
   },
 };
@@ -404,6 +515,78 @@ export default {
       margin-bottom: vw(8);
       border-radius: vw(8);
       height: vw(175);
+    }
+  }
+
+  .ai-analysis {
+    margin-top: 12px 16px;
+    padding: 16px;
+    background-color: #F5F5F5;
+    border: 1px dashed rgba(66, 143, 250, 0.30);
+    line-height: 20px;
+    border-radius: 4px;
+    .ai-tittle {
+      color: #428FFA;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+    }
+    .ai-content {
+      display: flex;
+      justify-content: space-between;
+      .ai-content-left {
+        .ai-btn {
+          margin-top: 16px;
+          padding: 4px 15px;
+          height: 32px;
+          color: #fff;
+          border-radius: 4px;
+          border: 1px solid #428FFA;
+          border-style: none;
+          background-color: #428FFA;
+          .ai-left-text {
+            font-size: 14px;
+            color: #fff;
+            line-height: 16px;
+          }
+          .ai-img {
+            margin-right: 5px;
+            width: 16px;
+            height: 16px;
+          }
+        }
+        .ai-stopbtn {
+          margin-top: 16px;
+          padding: 4px 15px;
+          height: 32px;
+          color: #428FFA;
+          border-radius: 4px;
+          border: 1px solid #428FFA;
+          .ai-left-text {
+            font-size: 14px;
+            color: #428FFA;
+            line-height: 16px;
+          }
+          .ai-img {
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+          }
+        }
+        .ai-left-tittle {
+          margin-top: 5px;
+          color: #919399;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 20px;
+        }
+      }
+    }
+    .ai-right-img {
+      width: 44.8px;
+      height: 56px;
     }
   }
 </style>
