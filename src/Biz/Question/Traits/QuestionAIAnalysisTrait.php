@@ -63,6 +63,9 @@ trait QuestionAIAnalysisTrait
                 return false;
             }
         }
+        if (preg_match('/ data-tex=/', json_encode($question))) {
+            return false;
+        }
 
         return true;
     }
