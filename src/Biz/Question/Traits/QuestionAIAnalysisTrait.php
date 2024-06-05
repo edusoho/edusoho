@@ -42,6 +42,9 @@ trait QuestionAIAnalysisTrait
         if (!empty($question['analysis']) || !empty($question['attachments']) || !empty($item['attachments']) || empty($question['answer']) || !empty($item['includeImg'])) {
             return false;
         }
+        if (empty(array_filter($question['answer']))) {
+            return false;
+        }
         $contents = [];
         if (!empty($question['stem'])) {
             $contents[] = $question['stem'];
