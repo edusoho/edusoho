@@ -97,7 +97,7 @@
                   <img src="static/images/explain-stop.png" class="ai-img" />
                   <span class="ai-left-text">{{$t('courseLearning.stopGeneration')}}</span>
                 </button>
-                <button class="ai-stopbtn" @click="anewAiGeneration" v-show="anewAiExplain">
+                <button class="ai-stopbtn" @click="aiGeneration()" v-show="anewAiExplain">
                   <img src="static/images/explain-anew.png" class="ai-img" />
                   <span class="ai-left-text">{{$t('courseLearning.reGenerate')}}</span>
                 </button>
@@ -372,9 +372,6 @@ export default {
       this.isShowAiExplain = false;
       this.anewAiExplain = true;
       this.stopAiAnalysis();
-    },
-    anewAiGeneration() {
-      this.getAiAnalysis();
     }
   }
 };
