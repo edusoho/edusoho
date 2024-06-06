@@ -62,6 +62,7 @@ class Client implements ClientInterface
                 }
                 if ($canEcho) {
                     echo $data;
+                    flush();
                 }
                 $streamRawResponse .= $data;
                 return strlen($data);
