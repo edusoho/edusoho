@@ -64,7 +64,24 @@
   justify-content: center;
   align-items: center;
 
-
+  .controls {
+    position: relative;
+    .apply-modal-name-image {
+      position: absolute;
+      top: 53px;
+      left: 7px;
+      z-index: 3;
+      width: 16px;
+      height: 16px;
+    }
+    .apply-modal-mobile-image {
+      position: absolute;
+      top: 25px;
+      left: 7px;
+      z-index: 3;
+      width: 16px;
+      height: 16px;
+    }
   .apply-modal-name {
     margin-top: 44px;
     padding: 6px;
@@ -74,10 +91,6 @@
     border-radius: 6px;
     border: 1px solid #F2F3F5;
     background: #FFF;
-    background-image: url('/static-dist/app/img/admin-v2/apply-modeal-user-line.png');
-    background-size: 16px;
-    background-position: 7px 8px;
-    background-repeat: no-repeat;
   }
 
   .apply-modal-mobile {
@@ -89,11 +102,8 @@
     border-radius: 6px;
     border: 1px solid #F2F3F5;
     background: #FFF;
-    background-image: url('/static-dist/app/img/admin-v2/apply-modeal-smartphone-line.png');
-    background-size: 16px;
-    background-position: 7px 8px;
-    background-repeat: no-repeat;
   }
+}
 
   .apply-modal-apply {
     margin-top: 48px;
@@ -115,14 +125,38 @@
 
 .apply-success {
   display: none;
-
+  
   .apply-success-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
     color: #37393D;
     font-size: 24px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
     text-align: center;
+    .apply-success-title-left {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 74px;
+      height: 2px;
+      background: linear-gradient(-90deg, #35C7AC 0%, rgba(255, 255, 255, 0.00) 118.24%);
+    }
+    .apply-success-title-center {
+      margin: 0 12px;
+    }
+    .apply-success-title-right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 74px;
+      height: 2px;
+      background: linear-gradient(90deg, #35C7AC 0%, rgba(255, 255, 255, 0.00) 118.24%);
+    }
+
   }
 
   .apply-success-text-wrap {
