@@ -50887,8 +50887,8 @@ var essay_component = normalizeComponent(
 )
 
 /* harmony default export */ var essay = (essay_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/fill.vue?vue&type=template&id=11449196&
-var fillvue_type_template_id_11449196_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._b({attrs:{"questions":_vm.questions,"form":_vm.form,"mode":_vm.mode,"isSubItem":_vm.isSubItem,"itemType":_vm.type,"isDisable":_vm.isDisable,"aiAnalysisEnable":_vm.aiAnalysisEnable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis},scopedSlots:_vm._u([{key:"stem",fn:function(){return [_c('a-form-item',{attrs:{"label":_vm.t('Stem'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":"","validate-status":_vm.stemText.validateStatus,"help":_vm.stemText.errorMsg}},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4f9bf6f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/fill.vue?vue&type=template&id=72878f94&
+var fillvue_type_template_id_72878f94_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a-form',{attrs:{"form":_vm.form}},[_c('answer-model',_vm._b({attrs:{"questions":_vm.questions,"form":_vm.form,"mode":_vm.mode,"isSubItem":_vm.isSubItem,"itemType":_vm.type,"isDisable":_vm.isDisable,"aiAnalysisEnable":_vm.aiAnalysisEnable,"errorList":_vm.errorList},on:{"getFromInfo":_vm.getFromInfo,"changeEditor":_vm.changeEditor,"renderFormula":_vm.renderFormula,"getInitRepeatQuestion":_vm.getInitRepeatQuestion,"getAiAnalysis":_vm.getAiAnalysis},scopedSlots:_vm._u([{key:"stem",fn:function(){return [_c('a-form-item',{attrs:{"label":_vm.t('Stem'),"label-col":{ span: 4 },"wrapper-col":{ span: 16 },"required":"","validate-status":_vm.stemText.validateStatus,"help":_vm.stemText.errorMsg}},[_c('a-textarea',{directives:[{name:"decorator",rawName:"v-decorator",value:([
             "questions['stem']",
             {
               initialValue: _vm.questions.stem,
@@ -50900,10 +50900,10 @@ var fillvue_type_template_id_11449196_render = function () {var _vm=this;var _h=
               initialValue: _vm.questions.case_sensitive == 0 ? false : true
             }
           ]),expression:"[\n            `questions['case_sensitive']`,\n            {\n              initialValue: questions.case_sensitive == 0 ? false : true\n            }\n          ]"}],ref:"initMessage",attrs:{"default-checked":_vm.questions.case_sensitive == 0 ? false : true},on:{"click":_vm.checkItem}}),_c('div',{staticClass:"ibs-dark-assist",attrs:{"id":"checkbox"},domProps:{"innerHTML":_vm._s(_vm.message)}})],1)]},proxy:true}])},'answer-model',_vm.$attrs,false))],1)}
-var fillvue_type_template_id_11449196_staticRenderFns = []
+var fillvue_type_template_id_72878f94_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/item-manage/src/component/fill.vue?vue&type=template&id=11449196&
+// CONCATENATED MODULE: ./src/components/item-manage/src/component/fill.vue?vue&type=template&id=72878f94&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/item-manage/src/component/fill.vue?vue&type=script&lang=js&
 function fillvue_type_script_lang_js_extends() { fillvue_type_script_lang_js_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return fillvue_type_script_lang_js_extends.apply(this, arguments); }
@@ -51256,7 +51256,7 @@ var fillvue_type_script_lang_js_base = {
           var question = JSON.parse(JSON.stringify(_this4.questions));
           question = fillvue_type_script_lang_js_extends(question, values.questions);
           data.stem = question.stem;
-          data.answer = _this4.getFillAnswer(question.stem);
+          data.answers = _this4.getFillAnswer(question.stem);
 
           if (_this4.isSubItem) {
             data.type = "material-fill";
@@ -51281,8 +51281,8 @@ var fillvue_type_script_lang_js_base = {
 
 var fill_component = normalizeComponent(
   component_fillvue_type_script_lang_js_,
-  fillvue_type_template_id_11449196_render,
-  fillvue_type_template_id_11449196_staticRenderFns,
+  fillvue_type_template_id_72878f94_render,
+  fillvue_type_template_id_72878f94_staticRenderFns,
   false,
   null,
   null,
