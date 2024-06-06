@@ -8,6 +8,13 @@
 
 {% block container %}
   <div class="container admin-v2-container">
+    <div class="ai-notice js-ai-notice">
+      <div class="ai-notice-left">
+        <span>{{ 'EduSoho 全面融合 AI ，赋能在线教育 —— 限时免费体验，开启智慧教学新时代！' }}</span>
+      </div>
+      <div class="ai-notice-right">
+      </div>
+    </div>
     {# S2B2C 通知提示 #}
     {% include 'admin-v2/default/s2b2c-notice.html.twig' %}
     <div class="alert-list">
@@ -23,7 +30,7 @@
       {% endif %}
     </div>
 
-    <div class="row cd-mt24">
+    <div class="row">
       <div class="col-md-9 pr8">
         {# 任务助手 #}
         {% if not isNewcomerTaskAllDone %}

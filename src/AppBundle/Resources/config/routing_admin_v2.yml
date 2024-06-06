@@ -53,7 +53,7 @@ admin_v2_ai_apply:
 admin_v2_ai_like_feature:
   path: '/ai_like_feature'
   defaults:
-    _controller: 'AppBundle:AdminV2/Ai:likeFeature'
+    _controller: 'AppBundle:AdminV2/AI:likeFeature'
   methods:
     - POST
 admin_v2_multi_class_data_overview:

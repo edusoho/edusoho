@@ -1,28 +1,36 @@
-let $applyModal = $('#attachment-modal');
-let $apply = $('.apply-moda-apply');
+let $form = $('#apply-form');
+let validator = $form.validate({
+  rules: {
+    name: {
+      required: true
+    },
+    mobile: {
+      required: true
+    },
+  },
+  messages: {
+    name: {
+      required: '请输入姓名'
+    },
+    mobile: {
+      required: '请输入手机号'
+    },
+  }
+});
 
+$('.js-apply-btn').on('click', e => {
+  if (validator.form()) {
+    $.post($form.attr('action'), $form.serialize(), resp => {});
+    $('.apply-modal-title').hide();
+    $('.apply-success').css('display', 'block');
+    $('.apply-modal-form').css('display', 'none');
+  }
+});
 
-$apply.on('click', function (e) {
-    let $name = $('.apply-moda-name').val();
-    let $mobile = $('.apply-moda-mobile').val();
-    let $success = $('.apply-success');
-    let $form = $('.apply-modal-form');
-    if ($name && $mobile) {
-        $success.css('display', 'block');
-        $form.css('display', 'none');
-    } else {
-        $('.apply-moda-name').css('borderColor', 'red');
-        $('.name-tips').css('display', 'block');
-        $('.apply-moda-mobile').css('borderColor', 'red');
-        $('.mobile-tips').css('display', 'block');
-    }
-})
-
-let $knowBtn = $('.apply-moda-btn')
-$knowBtn.on('click', function (e) {
-    let $target = $(e.currentTarget);
-    let $modal = $('#modal');
-    $modal.load($target.data('url'));
-    $modal.modal('show');
-    $applyModal.modal('hide');
-})
+$('.js-confirm').on('click', e => {
+  let $target = $(e.currentTarget);
+  let $modal = $('#modal');
+  $modal.load($target.data('url'));
+  $modal.modal('show');
+  $('#attachment-modal').modal('hide');
+});

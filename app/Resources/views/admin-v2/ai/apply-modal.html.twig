@@ -2,9 +2,15 @@
 
 {% set modal_class = 'cd-modal-dialog ai-apply-modal' %}
 
-{% do script(['app/js/admin-v2/ai/apply/index.js']) %}
+{% do script(['libs/jquery-validation.js', 'app/js/admin-v2/ai/apply/index.js']) %}
+
 {% block modal_header %}
     <div class="apply-modal-header">
+      <div class="apply-modal-title">
+        <span class="apply-modal-title-left"></span>
+        <p class="apply-modal-center">免费试用</p>
+        <span class="apply-modal-title-right"></span>
+      </div>
       <button type="button" class="close apply-modal-close" data-dismiss="modal" aria-hidden="true">
         <i class="cd-icon cd-icon-close"></i>
       </button>         
@@ -12,26 +18,26 @@
  {% endblock %}
 
 {% block body %}
-  <form action="{{ path('admin_v2_ai_like_feature', {feature: feature}) }}" class="apply-modal-form">
-    
-    <div class="apply-moda-title">
-      <span class="apply-moda-title-left"></span>
-      <p class="apply-moda-center">免费试用</p>
-       <span class="apply-moda-title-right"></span>
+  <form id="apply-form" action="{{ path('admin_v2_ai_like_feature') }}" class="apply-modal-form">
+    <div class="controls">
+      <input type="text" name="name" value="{{ name }}" class="apply-modal-name" placeholder="请输入姓名"/>
+      <div class="help-block" style="display:none;"></div>
     </div>
-    <input type="text" name="name" value="{{ name }}" class="apply-moda-name" placeholder="请输入姓名"/>
-    <p class="name-tips">请输入内容</p>
-    <input type="text" name="mobile" value="{{ mobile }}" class="apply-moda-mobile" placeholder="请输入手机号"/>
-    <p class="mobile-tips">请输入内容</p>
-    {# <input type="hidden" name="feature" value="{{ feature }}"> #}
-    <div class="apply-moda-apply">申请试用</div>
+    <div class="controls">
+      <input type="text" name="mobile" value="{{ mobile }}" class="apply-modal-mobile" placeholder="请输入手机号"/>
+      <div class="help-block" style="display:none;"></div>
+    </div>
+    <input type="hidden" name="feature" value="{{ feature }}">
+    <div class="apply-modal-apply js-apply-btn">申请试用</div>
   </form>
   <div class="apply-success">
     <span class="apply-success-img">
       <img src="{{ asset('static-dist/app/img/admin-v2/success-img.png') }}" alt="">
     </span>
     <h3 class="apply-success-title">提交申请成功</h3>
-    <p class="apply-success-text">在此期间，请保持您所提供的联系方式畅通。我们将尽快与您取得联系，以便进一步讨论您的需求或提供相关帮助。</p>
-    <div class="apply-moda-btn">知道了</div>
+    <div class="apply-success-text-wrap">
+      <p class="apply-success-text">在此期间，请保持您所提供的联系方式畅通。我们将尽快与您取得联系，以便进一步讨论您的需求或提供相关帮助。</p>
+    </div>
+    <div class="apply-modal-btn js-confirm">知道了</div>
   </div>
 {% endblock %}

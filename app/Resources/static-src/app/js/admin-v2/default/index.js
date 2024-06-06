@@ -17,6 +17,12 @@ $('.js-show-toggle').on('click', (event) => {
   $target.find('i').toggleClass('es-icon-keyboardarrowup es-icon-keyboardarrowdown');
 });
 
+$('.js-ai-notice').on('click', event => {
+  let $modal = $('#modal');
+  $modal.load($('[name=aiSurveyUrl]').val());
+  $modal.modal('show');
+});
+
 const showAdImage = ($cloudAd, img, res) => {
   const $img = $(img);
   const $box = $cloudAd.find('.modal-dialog');
