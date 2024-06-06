@@ -290,8 +290,8 @@ export default {
           return;
         }
         if (this.stopAnswer[questionId]) {
-          
           clearInterval(typingTimer);
+          return;
         }
         this.answerText[questionId] += answers.shift();
         if (answers.length === 0 && messageEnd) {

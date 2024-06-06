@@ -219,7 +219,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
         };
 
         $biz['ESCloudSdk.ai'] = function ($biz) use ($that) {
-            $sdk = $that->generateEsCloudSdk($biz, [], $biz['logger']);
+            $sdk = $that->generateEsCloudSdk($biz, $this->getAIConfig($biz), $biz['logger']);
 
             if (null !== $sdk) {
                 return $sdk->getAIService();
@@ -278,6 +278,23 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         return $sdk;
+    }
+
+    protected function getAIConfig(Biz $biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', []);
+        if (!empty($developerSetting['ai_api_server'])) {
+            $urlSegments = explode('://', $developerSetting['ai_api_server']);
+            if (2 === count($urlSegments)) {
+                $hostUrl = $urlSegments[1];
+            }
+        }
+        if (empty($hostUrl)) {
+            $hostUrl = '';
+        }
+
+        return ['ai' => ['host' => $hostUrl]];
     }
 
     public function getSCRMConfig(Biz $biz)

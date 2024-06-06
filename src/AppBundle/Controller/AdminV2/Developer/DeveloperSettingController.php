@@ -63,6 +63,7 @@ class DeveloperSettingController extends BaseController
             $storageSetting['platform_news_api_server'] = $developerSetting['platform_news_api_server'];
             $storageSetting['es_live_api_server'] = $developerSetting['es_live_api_server'];
             $storageSetting['question_parse_api_server'] = $developerSetting['question_parse_api_server'];
+            $storageSetting['ai_api_server'] = $developerSetting['ai_api_server'];
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
