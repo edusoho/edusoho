@@ -333,7 +333,7 @@ export default {
       if (/<img .*>/.test(JSON.stringify(data))) {
         disable();
         return;
-      };
+      }
       enable();
       data.role = "teacher";
       const response = await fetch("/api/ai/question_analysis/generate", {
