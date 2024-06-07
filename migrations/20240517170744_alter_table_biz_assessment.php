@@ -26,16 +26,8 @@ class AlterTableBizAssessment extends Migration
         $biz = $this->getContainer();
         if ($this->isFieldExist('biz_assessment', 'type') && $this->isFieldExist('biz_assessment', 'parent_id')) {
             $biz['db']->exec('ALTER TABLE `biz_assessment` DROP COLUMN `type`');
-            $biz['db']->exec('ALTER TABLE `biz_assessment` DROP COLUMN `parent_assessment_id`');
+            $biz['db']->exec('ALTER TABLE `biz_assessment` DROP COLUMN `parent_id`');
         }
-    }
-
-    private function isIndexExist($table, $indexName)
-    {
-        $sql = "show index from `{$table}` where Key_name='{$indexName}';";
-        $result = $this->getContainer()['db']->fetchAssoc($sql);
-
-        return !empty($result);
     }
 
     protected function isFieldExist($table, $filedName)
