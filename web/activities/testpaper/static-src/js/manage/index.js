@@ -366,6 +366,20 @@ class Testpaper {
     }
   }
 
+  initSelectRandomTestPaper($selected) {
+    let mediaId = parseInt($selected.id);
+    if (mediaId) {
+      this.getItemsTable(this.$testpaperSelector.data('getTestpaperItems'), mediaId);
+      if (!$('input[name="title"]').val()) {
+        $('input[name="title"]').val($selected.text);
+      }
+      this.initScoreSlider();
+    } else {
+      $('#questionItemShowDiv').hide();
+      $('#js-test-and-comment').hide();
+    }
+  }
+
   initEmptyTestPaperTypeSelector() {
     this.$testpaperSelector.select2({
       data: [
@@ -403,7 +417,7 @@ class Testpaper {
             let results = data.assessmentType.map(function(type) {
               return {
                 id: type,
-                text: type
+                text: Translator.trans('activity.testpaper_'+type)
               };
             });
             return {
@@ -415,7 +429,16 @@ class Testpaper {
             };
           }
         }
-      }
+      },
+      initSelection: function (element, callback) {
+        let testPaperType = $('#testPaperType').val();
+        let data = {
+          id: element.val(),
+          text: testPaperType ? testPaperType : Translator.trans('activity.testpaper_manage.media_type_required'),
+        };
+
+        callback(data);
+      },
     });
   }
 
@@ -503,6 +526,12 @@ class Testpaper {
   changeQuestionBank(event) {
     let $helpBlock = $('.js-help-block');
     $helpBlock.addClass('hidden');
+    this.$testpaperSelector.addClass('hidden');
+    this.$testpaperTypeSelector.addClass('hidden');
+    this.$questionItemShow.hide();
+    this.$scoreItem.hide();
+    this.$testpaperSelector.val('0');
+    this.$testpaperTypeSelector.val('0');
     let selected = this.$questionBankSelector.select2('data');
     let bankId = selected.id;
     if (!parseInt(bankId)) {
@@ -545,7 +574,7 @@ class Testpaper {
     let typeSelected = this.$testpaperTypeSelector.select2('data');
     let type = typeSelected.id;
     let url = this.$testpaperTypeSelector.data('url');
-    url = url.replace(/[0-9]/, bankId);
+    url = url.replace(/[0-9]/, bankId)+'?type='+type;
     let self = this;
     $.post(url, function (resp) {
       if (resp.totalCount === 0) {
@@ -567,7 +596,13 @@ class Testpaper {
 
   changeTestPaper(event) {
     let $selected = this.$testpaperSelector.select2('data');
-    this.initSelectTestPaper($selected);
+    let typeSelected = this.$testpaperTypeSelector.select2('data');
+    let type = typeSelected.id;
+    if (type == 'regular') {
+      this.initSelectTestPaper($selected);
+    }else if (type == 'random') {
+      this.initSelectRandomTestPaper($selected);
+    }
   }
 
   showRedoExamination(event) {
@@ -608,6 +643,7 @@ class Testpaper {
   }
 
   getItemsTable(url, testpaperId) {
+    console.log(url);
     $.post(url, { testpaperId: testpaperId }, function (html) {
       $('#questionItemShowTable').html(html);
       $('#questionItemShowDiv').show();
