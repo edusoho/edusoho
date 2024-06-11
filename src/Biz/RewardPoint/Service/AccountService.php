@@ -20,6 +20,10 @@ interface AccountService
 
     public function countAccounts($conditions);
 
+    public function countJoinUser($conditions);
+
+    public function searchJoinUser($conditions, $orderBys, $start, $limit);
+
     public function waveBalance($id, $value);
 
     public function waveDownBalance($id, $value);

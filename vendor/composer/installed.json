@@ -716,17 +716,17 @@
         },
         {
             "name": "codeages/escloud-php-sdk",
-            "version": "v1.2.2",
-            "version_normalized": "1.2.2.0",
+            "version": "v1.2.8",
+            "version_normalized": "1.2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/escloud-php-sdk.git",
-                "reference": "037f95ec86d09418e5ec7b27e5f235ef9a867fd0"
+                "reference": "a61063548fd24a9059e84ccb97385ba598f3226b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/037f95ec86d09418e5ec7b27e5f235ef9a867fd0",
-                "reference": "037f95ec86d09418e5ec7b27e5f235ef9a867fd0",
+                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/a61063548fd24a9059e84ccb97385ba598f3226b",
+                "reference": "a61063548fd24a9059e84ccb97385ba598f3226b",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -747,7 +747,7 @@
                 "monolog/monolog": "^1.18",
                 "phpunit/phpunit": "^4 || ^5 || ^6"
             },
-            "time": "2021-08-24T07:12:49+00:00",
+            "time": "2024-05-24T13:48:11+00:00",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -767,6 +767,10 @@
                 }
             ],
             "description": "ESCloud PHP SDK",
+            "support": {
+                "issues": "https://github.com/codeages/escloud-php-sdk/issues",
+                "source": "https://github.com/codeages/escloud-php-sdk/tree/v1.2.8"
+            },
             "install-path": "../codeages/escloud-php-sdk"
         },
         {

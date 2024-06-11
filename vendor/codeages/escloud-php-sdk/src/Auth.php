@@ -102,4 +102,9 @@ class Auth
     {
         return JWT::encode($payload, $this->secretKey, 'HS256');
     }
+
+    public function makeJwtTokenWithKid($payload = array())
+    {
+        return JWT::encode($payload, $this->secretKey, 'HS256', $this->accessKey);
+    }
 }

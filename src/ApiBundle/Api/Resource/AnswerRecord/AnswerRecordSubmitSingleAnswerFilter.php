@@ -20,6 +20,7 @@ class AnswerRecordSubmitSingleAnswerFilter extends Filter
         'reviewedCount',
         'totalCount',
         'isAnswerFinished',
+        'aiAnalysisEnable',
     ];
 
     protected function publicFields(&$result)

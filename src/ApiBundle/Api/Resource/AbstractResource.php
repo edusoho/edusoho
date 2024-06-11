@@ -11,6 +11,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -60,6 +61,20 @@ abstract class AbstractResource
         @trigger_error("renderView in Api is not recommended, dont't use in the future，will removed soon", E_USER_DEPRECATED);
 
         return $this->container->get('templating')->render($view, $parameters);
+    }
+
+    protected function createStreamedResponse(callable $callback)
+    {
+        return new StreamedResponse(
+            $callback,
+            200,
+            [
+                'Content-Type' => 'text/event-stream',
+                'Cache-Control' => 'no-cache',
+                'Connection' => 'keep-alive',
+                'X-Accel-Buffering' => 'no',
+            ]
+        );
     }
 
     /**
@@ -172,19 +187,6 @@ abstract class AbstractResource
     public function isPluginInstalled($code)
     {
         return $this->container->get('api.plugin.config.manager')->isPluginInstalled($code);
-    }
-
-    public function getPluginVersion($code)
-    {
-        $plugins = $this->container->get('kernel')->getPluginConfigurationManager()->getInstalledPlugins();
-
-        foreach ($plugins as $plugin) {
-            if (strtolower($plugin['code']) == strtolower($code)) {
-                return $plugin['version'];
-            }
-        }
-
-        return null;
     }
 
     public function getClientIp()
