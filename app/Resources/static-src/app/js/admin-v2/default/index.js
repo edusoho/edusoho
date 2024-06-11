@@ -17,6 +17,17 @@ $('.js-show-toggle').on('click', (event) => {
   $target.find('i').toggleClass('es-icon-keyboardarrowup es-icon-keyboardarrowdown');
 });
 
+$('.js-ai-notice').on('click', event => {
+  let $modal = $('#modal');
+  $modal.load($('[name=aiSurveyUrl]').val());
+  $modal.modal('show');
+});
+
+$('.js-ai-notice-close').on('click',event => {
+  event.stopPropagation();
+  $('.js-ai-notice').hide();
+})
+
 const showAdImage = ($cloudAd, img, res) => {
   const $img = $(img);
   const $box = $cloudAd.find('.modal-dialog');

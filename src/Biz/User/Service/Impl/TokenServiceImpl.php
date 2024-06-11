@@ -4,6 +4,7 @@ namespace Biz\User\Service\Impl;
 
 use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
+use Biz\User\Dao\TokenDao;
 use Biz\User\Service\TokenService;
 use Ramsey\Uuid\Uuid;
 
@@ -22,9 +23,27 @@ class TokenServiceImpl extends BaseService implements TokenService
         $token['remainedTimes'] = $token['times'];
         $token['userId'] = empty($args['userId']) ? 0 : $args['userId'];
         $token['expiredTime'] = empty($args['duration']) ? 0 : time() + $args['duration'];
-        $token['createdTime'] = time();
 
         return $this->getTokenDao()->create($token);
+    }
+
+    public function makeTokens($type, array $argsGroup = [])
+    {
+        $tokens = [];
+        foreach ($argsGroup as $args) {
+            $tokens[] = [
+                'type' => $type,
+                'token' => $this->_makeTokenValue(),
+                'data' => !isset($args['data']) ? '' : $args['data'],
+                'times' => empty($args['times']) ? 0 : (int) $args['times'],
+                'remainedTimes' => empty($args['times']) ? 0 : (int) $args['times'],
+                'userId' => empty($args['userId']) ? 0 : $args['userId'],
+                'expiredTime' => empty($args['duration']) ? 0 : time() + $args['duration'],
+            ];
+        }
+        $this->getTokenDao()->batchCreate($tokens);
+
+        return $this->getTokenDao()->findByTokens(array_column($tokens, 'token'));
     }
 
     //length 被多处调用，length参数可认为是无效,插件等外部调用清除后，去掉length参数
@@ -126,6 +145,9 @@ class TokenServiceImpl extends BaseService implements TokenService
         return $uuid->getHex();
     }
 
+    /**
+     * @return TokenDao
+     */
     protected function getTokenDao()
     {
         return $this->createDao('User:TokenDao');

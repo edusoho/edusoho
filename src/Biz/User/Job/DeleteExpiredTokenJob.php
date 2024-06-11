@@ -4,7 +4,6 @@ namespace Biz\User\Job;
 
 use Biz\User\Service\TokenService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use Topxia\Service\Common\ServiceKernel;
 
 class DeleteExpiredTokenJob extends AbstractJob
 {
@@ -19,11 +18,6 @@ class DeleteExpiredTokenJob extends AbstractJob
      */
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->createService('User:TokenService');
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
+        return $this->biz->service('User:TokenService');
     }
 }

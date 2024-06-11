@@ -8,11 +8,14 @@ use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Activity\Type\Testpaper;
+use Biz\Question\Traits\QuestionAIAnalysisTrait;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
 class AnswerRecord extends AbstractResource
 {
+    use QuestionAIAnalysisTrait;
+
     public function get(ApiRequest $request, $id)
     {
         $answerRecord = $this->getAnswerRecordService()->get($id);
@@ -47,6 +50,10 @@ class AnswerRecord extends AbstractResource
 
         $user = $this->getCurrentUser();
         $activity['isOnlyStudent'] = $user['roles'] == ['ROLE_USER'];
+        $resultShow = empty($testpaperActivity) || $this->getResultShow($answerRecord, $answerScene, $answerReport);
+        if ($resultShow) {
+            $assessment = $this->wrapAIAnalysis($assessment, $answerRecord);
+        }
 
         return [
             'answer_report' => $answerReport,
@@ -54,10 +61,24 @@ class AnswerRecord extends AbstractResource
             'assessment_response' => $assessmentResponse,
             'assessment' => $assessment,
             'answer_scene' => $this->wrapperAnswerScene($answerScene),
-            'resultShow' => empty($testpaperActivity) ? true : $this->getResultShow($answerRecord, $answerScene, $answerReport),
+            'resultShow' => $resultShow,
             'activity' => empty($testpaperActivity) ? (object) [] : $testpaperActivity,
             'metaActivity' => empty($activity) ? (object) [] : $activity,
         ];
+    }
+
+    private function wrapAIAnalysis($assessment, $answerRecord)
+    {
+        $user = $this->getCurrentUser();
+        foreach ($assessment['sections'] as &$section) {
+            foreach ($section['items'] as &$item) {
+                foreach ($item['questions'] as &$question) {
+                    $question['aiAnalysisEnable'] = $answerRecord['user_id'] == $user['id'] && $this->canGenerateAIAnalysisForStudent($question, $item);
+                }
+            }
+        }
+
+        return $assessment;
     }
 
     protected function wrapperAnswerScene($answerScene)

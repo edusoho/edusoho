@@ -592,6 +592,7 @@ admin_v2.question_bank.basic_tab: Question Bank
 admin_v2.question_bank.basic_tab.create_btn: Create
 admin_v2.question_bank.category_tab: Question Bank Category
 admin_v2.question_bank.category_tab.create_btn: Create
+admin_v2.question.ai_analysis_tab: AI Question Analysis
 
 # 通用按钮
 admin_v2.btn.sms_send_btn: Notify the publish

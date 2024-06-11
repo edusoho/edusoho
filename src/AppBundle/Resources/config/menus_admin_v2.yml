@@ -595,6 +595,10 @@ admin_v2:
                                             router_name: admin_v2_question_bank_category_manage_create
                                             group: topBtn
                                             mode: modal
+                                admin_v2_question_ai_analysis:
+                                   name: admin_v2.question.ai_analysis_tab
+                                   router_name: admin_v2_question_ai_analysis
+                                   disable: true
         # 营销管理模块
         admin_v2_marketing:
             quick_entrance_icon_class: 'icon-color-orange'

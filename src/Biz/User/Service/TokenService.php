@@ -12,7 +12,9 @@ interface TokenService
      *
      * @return array 生成的Token
      */
-    public function makeToken($type, array $args = array());
+    public function makeToken($type, array $args = []);
+
+    public function makeTokens($type, array $argsGroup = []);
 
     /**
      * 生成一个假的Token.
@@ -22,13 +24,13 @@ interface TokenService
     /**
      * 校验Token.
      *
-     * @param string $type Token类型
-     * @param string $key  Token的值
-     * @param array  $data data的值(有值则更新)
+     * @param string $type  Token类型
+     * @param string $value Token的值
+     * @param array  $data  data的值(有值则更新)
      *
      * @return bool 该Token值是否OK
      */
-    public function verifyToken($type, $value, array $data = array());
+    public function verifyToken($type, $value, array $data = []);
 
     /**
      * 作废一个Token.
