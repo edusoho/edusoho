@@ -21,7 +21,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         $assessment = [
             'bank_id' => $fields['itemBankId'],
             'name' => $fields['name'],
-            'displayable' => 1,
+            'displayable' => $fields['displayable'] ?? 1,
             'description' => $fields['description'],
             'sections' => $sections,
             'type' => $fields['type'] ?? 'regular',

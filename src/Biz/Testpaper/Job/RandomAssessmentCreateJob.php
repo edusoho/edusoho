@@ -27,6 +27,7 @@ class RandomAssessmentCreateJob extends AbstractJob
             'scores' => $assessmentGenerateRule['question_setting']['scores'],
             'scoreType' => $assessmentGenerateRule['question_setting']['scoreType'],
             'choiceScore' => $assessmentGenerateRule['question_setting']['choiceScore'],
+            'displayable' => '0',
         ];
 
         try {
@@ -38,8 +39,8 @@ class RandomAssessmentCreateJob extends AbstractJob
             $this->getAssessmentService()->updateBasicAssessmentByParentId($assessment['id'], ['status' => 'draft']);
             $this->biz['db']->commit();
         } catch (\Exception $e) {
-            $this->getAssessmentService()->updateAssessment($assessment['id'], ['status' => 'failure']);
             $this->biz['db']->rollback();
+            $this->getAssessmentService()->updateAssessment($assessment['id'], ['status' => 'failure']);
             throw $e;
         }
     }
