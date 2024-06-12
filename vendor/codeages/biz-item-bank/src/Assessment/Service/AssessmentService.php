@@ -10,6 +10,8 @@ interface AssessmentService
 
     const CLOSED = 'closed';
 
+    const FAILURE = 'failure';
+
     public function getAssessment($id);
 
     public function findAssessmentsByIds($assessmentIds);
@@ -25,6 +27,8 @@ interface AssessmentService
     public function updateAssessment($id, $assessment);
 
     public function updateBasicAssessment($assessmentId, $assessment);
+
+    public function updateBasicAssessmentByParentId($parentId, $assessment);
 
     public function deleteAssessment($id);
 

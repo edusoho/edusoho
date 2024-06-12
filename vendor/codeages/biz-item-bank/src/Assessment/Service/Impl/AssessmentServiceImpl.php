@@ -67,6 +67,13 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
 
     public function createBasicAssessment($assessment)
     {
+        $defaultAssessment = [
+            'type' => 'regular',
+            'parentId' => '0',
+            'status' => 'draft',
+        ];
+
+        $assessment = array_merge($defaultAssessment, $assessment);
         $assessment = $this->getValidator()->validate($assessment, [
             'bank_id' => ['required', 'integer', ['min', 1]],
             'name' => ['required', ['lengthBetween', 1, 255]],
@@ -75,6 +82,9 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             'item_count' => ['integer', ['min', 0]],
             'question_count' => ['integer', ['min', 0]],
             'displayable' => ['required', ['in', [0, 1]]],
+            'type' => ['required', ['in', ['regular', 'random', 'ai_personality']]],
+            'parent_id' => ['required', ['min', 0]],
+            'status' => ['required', ['in', ['generating', 'draft']]],
         ]);
 
         $itemBank = $this->getItemBankService()->getItemBank($assessment['bank_id']);
@@ -202,7 +212,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             'bank_id' => ['integer', ['min', 1]],
             'name' => [['lengthBetween', 1, 255]],
             'updated_user_id' => ['integer', ['min', 0]],
-            'status' => [['in', [self::DRAFT, self::OPEN, self::CLOSED]]],
+            'status' => [['in', [self::DRAFT, self::OPEN, self::CLOSED, self::FAILURE]]],
             'item_count' => ['integer', ['min', 0]],
             'question_count' => ['integer', ['min', 0]],
             'total_score' => [],
@@ -212,6 +222,28 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         isset($assessment['description']) && $assessment['description'] = $this->biz['item_bank_html_helper']->purify($assessment['description']);
 
         return $this->getAssessmentDao()->update($assessmentId, $assessment);
+    }
+
+    public function updateBasicAssessmentByParentId($parentId, $assessment)
+    {
+        $ids = $this->searchAssessments(['parent_id' => $parentId], [] , 0, PHP_INT_MAX, ['id']);
+        if (empty($ids)) {
+            throw new AssessmentException('Assessment not found', ErrorCode::ASSESSMENT_NOTFOUND);
+        }
+        $assessment = $this->getValidator()->validate($assessment, [
+            'bank_id' => ['integer', ['min', 1]],
+            'name' => [['lengthBetween', 1, 255]],
+            'updated_user_id' => ['integer', ['min', 0]],
+            'status' => [['in', [self::DRAFT, self::OPEN, self::CLOSED]]],
+            'item_count' => ['integer', ['min', 0]],
+            'question_count' => ['integer', ['min', 0]],
+            'total_score' => [],
+            'description' => [],
+        ]);
+        $assessment['updated_user_id'] = empty($assessment['updated_user_id']) ? empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'] : $assessment['updated_user_id'];
+        isset($assessment['description']) && $assessment['description'] = $this->biz['item_bank_html_helper']->purify($assessment['description']);
+
+        return $this->getAssessmentDao()->update(['ids' => array_column($ids, 'id')], $assessment);
     }
 
     protected function createAssessmentSectionsAndItems($assessmentId, $sections)

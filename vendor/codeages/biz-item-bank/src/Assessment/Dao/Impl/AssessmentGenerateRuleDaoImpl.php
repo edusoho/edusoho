@@ -4,14 +4,15 @@ namespace Codeages\Biz\ItemBank\Assessment\Dao\Impl;
 
 use Codeages\Biz\ItemBank\Assessment\Dao\AssessmentDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
+use Codeages\Biz\ItemBank\Assessment\Dao\AssessmentGenerateRuleDao;
 
-class AssessmentDaoImpl extends AdvancedDaoImpl implements AssessmentDao
+class AssessmentGenerateRuleDaoImpl extends AdvancedDaoImpl implements AssessmentGenerateRuleDao
 {
-    protected $table = 'biz_assessment';
+    protected $table = 'biz_assessment_generate_rule';
 
-    public function findByIds($ids)
+    public function getByAssessmentId($assessmentId)
     {
-        return $this->findInField('id', $ids);
+        return $this->getByFields(['assessment_id' => $assessmentId]);
     }
 
     public function declares()
@@ -25,15 +26,15 @@ class AssessmentDaoImpl extends AdvancedDaoImpl implements AssessmentDao
                 'created_time',
                 'updated_time',
             ],
+            'serializes' => [
+                'question_setting' => 'json',
+                'difficulty' => 'json'
+            ],
             'conditions' => [
                 'id = :id',
                 'id IN (:ids)',
                 'id NOT IN (:notInIds)',
-                'bank_id = :bank_id',
-                'parent_id = :parent_id',
-                'name like :nameLike',
-                'status = :status',
-                'displayable = :displayable',
+                'assessment_id = :assessment_id',
             ],
         );
     }
