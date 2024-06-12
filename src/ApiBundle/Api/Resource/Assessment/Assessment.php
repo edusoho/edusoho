@@ -4,6 +4,8 @@ namespace ApiBundle\Api\Resource\Assessment;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
@@ -30,28 +32,39 @@ class Assessment extends AbstractResource
         if (!$this->check($fields)) {
             throw AssessmentException::CHECK_FAILED();
         }
-        $this->biz['db']->beginTransaction();
-        $assessment = $this->getBiz()['testpaper_builder.random_testpaper']->build($fields);
+        try {
+            $this->biz['db']->beginTransaction();
+            $assessment = $this->getBiz()['testpaper_builder.random_testpaper']->build($fields);
 
-        $this->createAssessmentGenerateRule($fields, $assessment);
+            $this->createAssessmentGenerateRule($fields, $assessment);
 
-        $this->getSchedulerService()->register([
-            'name' => 'RandomAssessmentCreateJob_'.$assessment['id'],
-            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-            'expression' => intval(time() + 10),
-            'misfire_policy' => 'executing',
-            'class' => 'Biz\Testpaper\Job\RandomAssessmentCreateJob',
-            'args' => ['assessmentId' => $assessment['id'], 'questionBankId' => $fields['questionBankId']],
-        ]);
-        $this->biz['db']->commit();
+            $this->getSchedulerService()->register([
+                'name' => 'RandomAssessmentCreateJob_'.$assessment['id'],
+                'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                'expression' => intval(time() + 10),
+                'misfire_policy' => 'executing',
+                'class' => 'Biz\Testpaper\Job\RandomAssessmentCreateJob',
+                'args' => ['assessmentId' => $assessment['id'], 'questionBankId' => $fields['questionBankId']],
+            ]);
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+        }
 
-        return 'true';
+        return true;
     }
 
     private function validate($fields)
     {
-        $questionBankId = $fields['questionBankId'] ?? null;
-        if (empty($questionBankId)) {
+        $requiredFields = [
+            'name', 'type', 'questionBankId', 'mode', 'num', 'generateType',
+            'questionCategoryCounts', 'scores', 'scoreType', 'choiceScore',
+            'questionCount', 'percentages',
+        ];
+        if (!ArrayToolkit::requireds($fields, $requiredFields)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        if (empty($fields['questionBankId'])) {
             throw QuestionBankException::NOT_FOUND_BANK();
         }
         if (!$this->getQuestionBankService()->canManageBank($fields['questionBankId'])) {
@@ -72,7 +85,7 @@ class Assessment extends AbstractResource
 
     private function buildAssessmentGenerateRule($fields, $assessment)
     {
-        $question_setting[] = [
+        $questionSetting = [
             'questionCategoryCounts' => $fields['questionCategoryCounts'],
             'scores' => $fields['scores'],
             'scoreType' => $fields['scoreType'],
@@ -82,7 +95,7 @@ class Assessment extends AbstractResource
             'num' => $fields['num'],
             'type' => $fields['generateType'],
             'assessment_id' => $assessment['id'],
-            'question_setting' => $question_setting,
+            'question_setting' => $questionSetting,
             'difficulty' => $fields['percentages'],
             'wrong_question_rate' => $fields['wrongQuestionRate'],
         ];
