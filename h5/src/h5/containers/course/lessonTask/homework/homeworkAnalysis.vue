@@ -16,6 +16,7 @@
       :slide-index.sync="slideIndex"
       :can-do="canDo"
       :all="allList.length"
+      :exerciseInfo="result"
     />
     <!-- 底部 -->
     <div class="paper-footer">

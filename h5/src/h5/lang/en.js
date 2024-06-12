@@ -643,6 +643,11 @@ export default {
     examTotalTips: 'Exam used time',
     examTotalTime: 'Exam time has reached {number} minutes',
     examNotStart: 'The current exam has not yet started',
+    aiAssistant: 'I am your Al problem assistant, click "Al analysis" to see the problem analysis I search for you, the analysis content is for reference only',
+    analysis: 'analysis',
+    stopGeneration: 'stopGeneration',
+    reGenerate: 'reGenerate',
+    beGenerating: 'Generating, please be patient～'
   },
   classLearning: {
     intor: 'Intro',
@@ -674,18 +679,18 @@ export default {
     viewReport: 'View report',
     continue: 'Continue',
   },
-  closed: {  
-    exerciseTitle: 'Question bank exercise closed, unable to learn',  
-    exerciseContent: 'Exercise results can be viewed',  
-    courseTitle: 'Course closed, unable to learn',  
-    courseContent: 'Exam and homework results can be viewed',  
-    classroomTitle: 'Class closed, unable to learn',  
+  closed: {
+    exerciseTitle: 'Question bank exercise closed, unable to learn',
+    exerciseContent: 'Exercise results can be viewed',
+    courseTitle: 'Course closed, unable to learn',
+    courseContent: 'Exam and homework results can be viewed',
+    classroomTitle: 'Class closed, unable to learn',
     classroomContent: 'Exam and homework results in the course can be viewed',
-    cannotLearn: 'Cannot continue learning',  
-    goLearnPage: 'Go to learning page',  
-    course: 'Current course is closed',  
-    classroom: 'Current classroom is closed',  
-    exercise: 'Current exercise library is closed'  
+    cannotLearn: 'Cannot continue learning',
+    goLearnPage: 'Go to learning page',
+    course: 'Current course is closed',
+    classroom: 'Current classroom is closed',
+    exercise: 'Current exercise library is closed'
   },
   filters: {
     free: 'Free',

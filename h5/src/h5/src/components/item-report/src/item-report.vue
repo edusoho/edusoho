@@ -31,6 +31,7 @@
               :current="current"
               :wrong="wrong"
               :itemLength="items.length"
+              :exerciseInfo="answerRecord"
               @itemSlideNext="itemSlideNext"
               @itemSlidePrev="itemSlidePrev"
             />
@@ -115,10 +116,10 @@ export default {
   data() {
     return {
       section_responses: [],
-      height: 0, //swiper高低
+      height: 0, // swiper高低
       cardShow: false,
-      wrongMode: false, //错题模式
-      currentItemIndex: 0, //当前题目索引
+      wrongMode: false, // 错题模式
+      currentItemIndex: 0, // 当前题目索引
       sourceMap: {},
       hasWrong: false,
       current: 0,
@@ -155,7 +156,7 @@ export default {
       questionIndex = 0;
       itemIndex = 0;
     },
-    //题卡定位
+    // 题卡定位
     slideTo(keys) {
       const itemKey = `item${keys.itemId}`;
       let itemSlide = Math.max(keys.itemIndex - 1, 0);
@@ -184,7 +185,7 @@ export default {
       this.section_responses = this.answerReport.section_reports;
       this.formateSections();
     },
-    //遍历获取答案体结构
+    // 遍历获取答案体结构
     formateSections() {
       this.getResponseAttachments();
       this.assessment.sections.forEach((item, sectionIndex) => {
@@ -299,7 +300,7 @@ export default {
         return;
       }
       const item = this.items[this.current];
-      //如果当前是错题，停留在当前题
+      // 如果当前是错题，停留在当前题
       const itemId = Number(item.id);
       const itemKey = `item${itemId}`;
       const currentItem = this.sourceMap[`item_${itemId}`];
@@ -316,7 +317,7 @@ export default {
         this.changeRenderItems(this.current);
         this.fastSlide();
         if (question.wrongIndex) {
-          //子级swiper滑动
+          // 子级swiper滑动
           this.$nextTick(() => {
             childSwiper.$swiper.slideTo(question.wrongIndex, 0, false);
           });

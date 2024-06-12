@@ -32,6 +32,7 @@
               :showReview="true"
               :current="current"
               :itemLength="items.length"
+              :exerciseInfo="answerRecord"
               @itemSlideNext="itemSlideNext"
               @itemSlidePrev="itemSlidePrev"
               @changeStatus="changeStatus"
@@ -105,9 +106,9 @@ export default {
   data() {
     return {
       section_responses: [],
-      height: 0, //swiper高低
+      height: 0, // swiper高低
       cardShow: false,
-      currentItemIndex: 0, //当前题目索引
+      currentItemIndex: 0, // 当前题目索引
       sourceMap: {},
       sections: [],
       question_reports: [],
@@ -144,7 +145,7 @@ export default {
       itemIndex = 0;
       richTextIndex = 0;
     },
-    //题卡定位
+    // 题卡定位
     slideTo(keys) {
       const itemKey = `item${keys.itemId}`;
       this.current = Math.max(
@@ -178,7 +179,7 @@ export default {
         });
       });
     },
-    //遍历获取答案体结构
+    // 遍历获取答案体结构
     formateSections() {
       this.getResponseAttachments();
       this.assessment.sections.forEach((item, sectionIndex) => {

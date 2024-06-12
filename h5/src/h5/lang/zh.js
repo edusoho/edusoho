@@ -629,6 +629,11 @@ export default {
     examTotalTips: '考试用时',
     examTotalTime: '考试用时已达 {number}分钟',
     examNotStart: '当前考试暂未开始',
+    aiAssistant: '我是你的 Al 题目助手，点击“Al 解析”查看我为你搜寻的题目解析，解析内容仅供参考。',
+    analysis: '解析',
+    stopGeneration: '停止生成',
+    reGenerate: '重新生成',
+    beGenerating: '正在生成，请耐心等待哦～'
   },
   classLearning: {
     intor: '班级介绍',

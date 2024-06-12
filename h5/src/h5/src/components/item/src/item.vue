@@ -156,11 +156,11 @@
                 @goBrushResult="goBrushResult"
               />
             </answer-model>
-            
+
           </template>
-          
+
         </swiper-slide>
-        
+
         <swiper-slide
           v-if="getShow(questionIndex, question) && wrong"
           :key="question.id"
@@ -309,7 +309,7 @@
             </answer-model>
           </template>
         </swiper-slide>
-        
+
       </template>
     </swiper>
     <ibs-slide
@@ -363,62 +363,62 @@ export default {
   },
   props: {
     item: {
-      //题目
+      // 题目
       type: Object,
       default: () => {}
     },
     mode: {
-      //当前模式
+      // 当前模式
       type: String,
       default: "do"
     },
     itemUserAnswer: {
-      //用户答案
+      // 用户答案
       type: Object,
       default: () => {}
     },
     needScore: {
-      //是否展示分数
+      // 是否展示分数
       type: Boolean,
       default: true
     },
     all: {
-      //题目总数
+      // 题目总数
       type: Number,
       default: 0
     },
     keys: {
-      //当前索引
+      // 当前索引
       type: Array,
       default: () => []
     },
     iscando: {
-      //当前索引
+      // 当前索引
       type: Array,
       default: () => []
     },
     choiceIsCando: {
-      //当前索引
+      // 当前索引
       type: Array,
       default: () => []
     },
     question_reports: {
-      //当前索引
+      // 当前索引
       type: Array,
       default: () => []
     },
     itemUserReport: {
-      //用户答题结果
+      // 用户答题结果
       type: Object,
       default: () => {}
     },
     wrongMode: {
-      //是否为做题模式
+      // 是否为做题模式
       type: Boolean,
       default: false
     },
     doLookAnalysis: {
-      //是否做题时可以查看解析
+      // 是否做题时可以查看解析
       type: Boolean,
       default: false
     },
@@ -435,8 +435,8 @@ export default {
       default: 0
     },
     exerciseInfo: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {}
     },
     items: {
       type: Array,
@@ -512,7 +512,7 @@ export default {
     changeReviewList(status) {
       this.$emit('changeStatus', status)
     },
-    
+
     slideChange() {
       const swiperName = `childSwiper${this.item.id}`;
       this.swiperActiveIndex = this.$refs[swiperName].$swiper.activeIndex;
@@ -538,7 +538,7 @@ export default {
     changeAnswer(value, keys, data) {
       this.itemUserAnswer.question_responses[keys].response = [value];
       this.$emit("changeAnswer", this.itemUserAnswer, this.keys);
-      
+
       if(this.brushDo.answerRecord.exercise_mode === '1' && data.type !== 'essay') {
         this.notSwiperChangeTouch(false);
         this.touchable = false;
@@ -561,7 +561,7 @@ export default {
           response: response,
         }
       }).then(res=> {
-        const idx = data.seq - 1 
+        const idx = data.seq - 1
         this.$refs['submit'+idx][0].refreshChoice(res)
         this.status = res.status
         if (this.wrong) {
@@ -634,6 +634,7 @@ export default {
         doLookAnalysis: this.doLookAnalysis,
         questionId: question.id,
         item_id: question.item_id,
+        aiAnalysisEnable: question.aiAnalysisEnable,
       };
       return data;
     },

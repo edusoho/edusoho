@@ -48,7 +48,7 @@
                     {isWrong: question.length > 0 && filterOrder(index).replace('.','') === question[0].response[0] && question[0].response[0] !== question[0].answer[0]}
                   ]"
         >
-        <!-- {isWrong: question.length > 0 && filterOrder(index).replace('.','') === myAnswer && myAnswer !== question[0].answer[0]} -->
+          <!-- {isWrong: question.length > 0 && filterOrder(index).replace('.','') === myAnswer && myAnswer !== question[0].answer[0]} -->
           <i class="iconfont icon-cuowu2"></i>
           <i class="iconfont icon-zhengque1"></i>
           <i class="iconfont icon-a-Frame34723"></i>
@@ -78,7 +78,30 @@
         <div class="analysis-color">
           <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
           <span v-if="analysis" v-html="analysis" @click="handleClickImage($event.target.src)" />
-          <span v-else>{{ $t('courseLearning.noParsing') }}</span>
+          <span v-else ref="aiAnalysis">{{ $t('courseLearning.noParsing') }}</span>
+        </div>
+        <div class="ai-analysis" v-show="itemdata.aiAnalysisEnable">
+          <p class="ai-tittle">{{$t('courseLearning.aiAssistant')}}</p>
+          <div class="ai-content">
+            <div class="ai-content-left">
+              <button class="ai-btn"  @click="aiGeneration()"  v-show="isShowAiExplain">
+                <img src="static/images/explain-ai.png" class="ai-img" />
+                <span class="ai-left-text">{{$t('courseLearning.analysis')}}</span>
+              </button>
+              <button class="ai-stopbtn" @click="stopAiGeneration()"  v-show="stopAiExplain">
+                <img src="static/images/explain-stop.png" class="ai-img" />
+                <span class="ai-left-text">{{$t('courseLearning.stopGeneration')}}</span>
+              </button>
+              <button class="ai-stopbtn" @click="aiGeneration()" v-show="anewAiExplain">
+                <img src="static/images/explain-anew.png" class="ai-img" />
+                <span class="ai-left-text">{{$t('courseLearning.reGenerate')}}</span>
+              </button>
+              <p class="ai-left-tittle" v-show="stopAiExplain">{{$t('courseLearning.beGenerating')}}</p>
+            </div>
+            <div ai-content-right>
+              <img src="static/images/explain-ai-img.png" class="ai-right-img" />
+            </div>
+          </div>
         </div>
         <attachement-preview
           v-for="item in getAttachementByType('analysis')"
@@ -105,7 +128,7 @@
         :style="{width:width - 20 + 'px'}"
         type="primary"
         @click="goResults()"
-        >{{ $t('courseLearning.viewResult2') }}</van-button
+      >{{ $t('courseLearning.viewResult2') }}</van-button
       >
     </div>
   </div>
@@ -118,6 +141,7 @@ import isShowFooterShardow from '@/mixins/lessonTask/footerShardow';
 import refreshChoice from '@/mixins/lessonTask/swipeRefResh.js';
 import handleClickImage from '@/mixins/lessonTask/handleClickImage.js';
 import attachementPreview from './attachement-preview.vue';
+import store from '@/store';
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
@@ -221,6 +245,11 @@ export default {
       refreshKey: true,
       myAnswer:'C',
       width: WINDOWWIDTH,
+      answerData: {},
+      stopAnswer: {},
+      isShowAiExplain: true,
+      stopAiExplain: false,
+      anewAiExplain: false
     };
   },
   mounted() {
@@ -269,88 +298,236 @@ export default {
     },
     goResults() {
       this.$emit('goResults');
+    },
+    async getAiAnalysis() {
+      const questionId = this.itemdata.id
+      const data = {
+        role: "student",
+        questionId,
+        answerRecordId: this.exerciseInfo.id,
+      }
+      let messageEnd = false;
+      let answers = [];
+      this.answerData[questionId] = '';
+      this.stopAnswer[questionId] = false;
+      const typingTimer = setInterval(() => {
+        if (answers.length === 0) {
+          return;
+        }
+        if (this.stopAnswer[questionId]) {
+          clearInterval(typingTimer);
+        }
+        this.answerData[questionId] += answers.shift();
+        if (answers.length === 0 && messageEnd) {
+          clearInterval(typingTimer);
+          this.stopAiExplain = false;
+          this.anewAiExplain = true;
+        }
+        this.$refs.aiAnalysis.innerHTML = this.answerData[questionId];
+      }, 50);
+      const response = await fetch("/api/ai/question_analysis/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          Accept: "application/vnd.edusoho.v2+json",
+          'X-Auth-Token': store.state.token,
+        },
+        body: JSON.stringify(data),
+      });
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let lastMessgae = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        const messages = (lastMessgae + decoder.decode(value)).split("\n\n");
+        let key = 1;
+        for (let message of messages) {
+          if (key == messages.length) {
+            lastMessgae = message;
+          } else {
+            const parseMessage = JSON.parse(message.slice(5));
+            if (parseMessage.event === "message") {
+              answers.push(parseMessage.answer);
+            }
+            key++;
+          }
+        }
+        if (done) {
+          messageEnd = true;
+          break;
+        }
+      }
+    },
+    stopAiAnalysis() {
+      const questionId = this.itemdata.id;
+      this.stopAnswer[questionId] = true;
+    },
+    aiGeneration() {
+      this.isShowAiExplain = false;
+      this.stopAiExplain = true;
+      this.anewAiExplain = false;
+      this.getAiAnalysis();
+    },
+    stopAiGeneration() {
+      this.stopAiExplain = false;
+      this.isShowAiExplain = false;
+      this.anewAiExplain = true;
+      this.stopAiAnalysis();
     }
   },
 };
 </script>
 <style scoped lang="scss">
-  ::v-deep .van-radio {
-    position: relative;
+::v-deep .van-radio {
+  position: relative;
+  display: block;
+}
+.icon-a-Frame34723 {
+  display: none;
+  position: absolute;
+  top: -2px;
+  right: -5px;
+  color: #428FFA;
+  width: 20px;
+  height: 20px;
+}
+.icon-zhengque1 {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  margin-top: -8px;
+  color: #00B42A;
+}
+.icon-cuowu2 {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  margin-top: -8px;
+  color: #F53F3F;
+}
+.not-can-do {
+  margin-right: vw(40);
+}
+
+.exercise-do .active,
+.convention .active {
+  background: #F6F9FF;
+  border: 1px solid #428FFA;
+  .icon-a-Frame34723 {
     display: block;
   }
-  .icon-a-Frame34723 {
-    display: none;
-    position: absolute;
-    top: -2px;
-    right: -5px;
-    color: #428FFA;
-    width: 20px;
-    height: 20px;
+}
+.icon-arrow-up {
+  display: none;
+  position: absolute;
+  top: vw(26);
+  right: vw(18);
+  margin-top: vw(-8);
+  color: #D2D3D4;
+}
+.icon-arrow-down {
+  display: none;
+  position: absolute;
+  top: vw(26);
+  right: vw(18);
+  margin-top: vw(-12);
+  color: #D2D3D4;
+}
+/deep/.material-text {
+  img {
+    display: block !important;
+    margin-bottom: vw(8);
+    width: vw(156);
+    height: vw(88);
+    border-radius: vw(8);
   }
-  .icon-zhengque1 {
-    display: none;
-    position: absolute;
-    top: 50%;
-    right: 16px;
-    margin-top: -8px;
-    color: #00B42A;
+  p {
+    display: inline !important;
+    font-size: vw(14);
+    overflow: hidden;
   }
-  .icon-cuowu2 {
-    display: none;
-    position: absolute;
-    top: 50%;
-    right: 16px;
-    margin-top: -8px;
-    color: #F53F3F;
-  }
-  .not-can-do {
-    margin-right: vw(40);
-  }
+}
+.show-down-icon {
+  display: block;
+  cursor: pointer;
+}
+.show-up-icon {
+  display: block;
+  cursor: pointer;
+}
 
-  .exercise-do .active,
-  .convention .active {
-      background: #F6F9FF;
-      border: 1px solid #428FFA;
-      .icon-a-Frame34723 {
-        display: block;
+.ai-analysis {
+  margin-top: 12px 16px;
+  padding: 16px;
+  background-color: #FAFAFA;
+  border: 1px dashed rgba(66, 143, 250, 0.30);
+  line-height: 20px;
+  border-radius: 4px;
+  .ai-tittle {
+    color: #428FFA;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+  }
+  .ai-content {
+    display: flex;
+    justify-content: space-between;
+    .ai-content-left {
+      .ai-btn {
+        margin-top: 16px;
+        padding: 4px 15px;
+        height: 32px;
+        color: #fff;
+        border-radius: 4px;
+        border: 1px solid #428FFA;
+        border-style: none;
+        background-color: #428FFA;
+        .ai-left-text {
+          font-size: 14px;
+          color: #fff;
+          line-height: 16px;
+        }
+        .ai-img {
+          margin-right: 5px;
+          width: 16px;
+          height: 16px;
+        }
+      }
+      .ai-stopbtn {
+        margin-top: 16px;
+        padding: 4px 15px;
+        height: 32px;
+        color: #428FFA;
+        border-radius: 4px;
+        border: 1px solid #428FFA;
+        background: #fff;
+        .ai-left-text {
+          font-size: 14px;
+          color: #428FFA;
+          line-height: 16px;
+        }
+        .ai-img {
+          margin-right: 10px;
+          width: 16px;
+          height: 16px;
+        }
+      }
+      .ai-left-tittle {
+        margin-top: 5px;
+        color: #919399;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
       }
     }
-  .icon-arrow-up {
-    display: none;
-    position: absolute;
-    top: vw(26);
-    right: vw(18);
-    margin-top: vw(-8);
-    color: #D2D3D4;
   }
-  .icon-arrow-down {
-    display: none;
-    position: absolute;
-    top: vw(26);
-    right: vw(18);
-    margin-top: vw(-12);
-    color: #D2D3D4;
+  .ai-right-img {
+    width: 44.8px;
+    height: 56px;
   }
-  /deep/.material-text {
-    img {
-      display: block !important;
-      margin-bottom: vw(8);
-      width: vw(156);
-      height: vw(88);
-      border-radius: vw(8);
-    }
-    p {
-      display: inline !important;
-      font-size: vw(14);
-      overflow: hidden;
-    }
-  }
-  .show-down-icon {
-    display: block;
-    cursor: pointer;
-  }
-  .show-up-icon {
-    display: block;
-    cursor: pointer;
-  }
+}
 </style>

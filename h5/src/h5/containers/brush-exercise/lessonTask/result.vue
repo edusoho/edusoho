@@ -145,7 +145,7 @@ export default {
     doAgain() {
       if (this.ItemBankExercise?.status == 'closed') {
         closedToast('exercise')
-        return 
+        return
       }
 
       if (this.$route.query.type === "assessment") {
@@ -163,7 +163,7 @@ export default {
         } else {
           query.assessmentId = this.$route.query.assessmentId;
         }
-        
+
         this.$router.replace({ path: '/brushDo', query });
       } else {
         const query = {
