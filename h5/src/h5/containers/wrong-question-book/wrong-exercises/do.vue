@@ -4,6 +4,7 @@
     <div v-else class="ibs-wap-vue">
       <item-engine
         ref="itemEngine"
+        :wrong="true"
         :answerRecord="answerRecord"
         :assessmentResponse="assessmentResponse"
         :assessment="assessment"
@@ -20,10 +21,13 @@ import _ from 'lodash';
 import Api from '@/api';
 import { mapState } from 'vuex';
 import { Toast } from 'vant';
+import itemEngine from '@/src/components/item-engine/src/item-engine.vue';
 
 export default {
   name: 'WrongQuestionDo',
-
+  components: {
+    itemEngine
+  },
   data() {
     return {
       poolId: this.$route.query.id,
@@ -32,6 +36,11 @@ export default {
       answerScene: {},
       answerRecord: {},
       assessmentResponse: {},
+      status: '',
+      reviewedCount: 0,
+      recordId: '',
+      exerciseModes: this.$route.query.exerciseMode,
+      type: 'wrongQuestionBook',
     };
   },
 
@@ -40,11 +49,19 @@ export default {
       storageSetting: state => state.storageSetting
     }),
   },
-
+  beforeRouteEnter(to, from, next) {
+    document.getElementById('app').style.background = '#f6f6f6';
+    next();
+  },
+  beforeRouteLeave(to, from, next) {
+    document.getElementById('app').style.background = '';
+    next();
+  },
   provide() {
     return {
       getResourceToken: this.getResourceToken,
-      settings: this.storageSetting
+      settings: this.storageSetting,
+      brushDo: this
     }
   },
 
@@ -55,13 +72,13 @@ export default {
   methods: {
     fetchQuestion() {
       this.isLoading = true;
-      const params = _.assign({}, this.$route.query);
-      delete params.id;
+      const data = _.assign({}, this.$route.query);
+      delete data.id;
       Api.getWrongQuestionStartAnswer({
         query: {
           poolId: this.poolId,
         },
-        params,
+        data
       }).then(res => {
         const {
           assessment,
@@ -74,7 +91,9 @@ export default {
           answerScene: answer_scene,
           answerRecord: answer_record,
           assessmentResponse: assessment_response,
+          status: answer_record.status
         });
+        this.recordId = answer_record.id
         this.isLoading = false;
       });
     },

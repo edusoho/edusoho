@@ -8,6 +8,8 @@
         :assessmentResponse="assessmentResponse"
         :assessment="assessment"
         :answerScene="answerScene"
+        :exerciseId="exerciseId"
+        :exerciseInfo="exerciseInfo"
         @saveAnswerData="saveAnswerData"
         @getAnswerData="getAnswerData"
         @timeSaveAnswerData="timeSaveAnswerData"
@@ -22,7 +24,7 @@ import { mapState } from 'vuex';
 import * as types from '@/store/mutation-types.js';
 import { Dialog, Toast } from 'vant';
 import isAuthorized from '@/mixins/isAuthorized';
-
+import itemEngine from '@/src/components/item-engine/src/item-engine.vue';
 const config = {
   assessment: {
     api: 'getAssessmentExerciseRecord',
@@ -31,18 +33,28 @@ const config = {
     api: 'getChapterExerciseRecord',
   },
 };
+let backUrl = '';
+
 export default {
   mixins: [isAuthorized],
-  components: {},
+  components: {itemEngine},
   data() {
     return {
+      exerciseId: '',
       isLoading: true,
       assessment: {},
       answerScene: {},
       answerRecord: {},
       assessmentResponse: {},
       canLeave: false,
-      resources: [{ id: '1' }, { id: '2' }]
+      resources: [{ id: '1' }, { id: '2' }],
+      exerciseModes: this.$route.query.exerciseMode,
+      status: '',
+      reviewedCount: 0,
+      recordId: '',
+      backUrl: '',
+      type: 'lessonTask',
+      exerciseInfo: []
     };
   },
   computed: {
@@ -53,31 +65,48 @@ export default {
   watch: {},
   created() {
     const mode = this.$route.query.mode;
-    mode === 'start' ? this.getStart() : this.getContinue();
+    
+    if (mode === 'start' && !localStorage.getItem('exerciseId_'+this.$route.query.exerciseId)) {
+      this.getStart()
+    } else {
+      this.getContinue()
+    }
   },
   provide() {
     return {
       getResourceToken: this.getResourceToken,
-      settings: this.storageSetting
+      settings: this.storageSetting,
+      brushDo:this
     }
   },
-  mounted() {},
+  mounted() {
+    this.exerciseId = this.$route.query.exerciseId
+  },
+  beforeRouteEnter(to, from, next) {
+    document.getElementById('app').style.background = '#f6f6f6';
+    next();
+  },
   beforeRouteLeave(to, from, next) {
-    // 可捕捉离开提醒
-    if (this.canLeave) {
+    document.getElementById('app').style.background = '';
+    if (this.canLeave || to.query.isLeave) {
       next();
     } else {
-      this.$refs.itemEngine.submitPaper(true);
+      this.$refs.itemEngine.submitPaper(true)
     }
   },
   methods: {
     getContinue() {
       this.isLoading = true;
-      const data = { answer_record_id: this.$route.query.answer_record_id };
+      const data = { answer_record_id: this.$route.query.answer_record_id ? this.$route.query.answer_record_id : localStorage.getItem('exerciseId_'+this.$route.query.exerciseId) };
       Api.continueAnswer({ data })
         .then(res => {
+          this.recordId = res.answer_record.id
+          this.reviewedCount = res.reviewedCount
+          this.exerciseModes = res.answer_record.exercise_mode;
+          this.status = res.answer_record.status;
           this.assignData(res);
           this.isLoading = false;
+          this.exerciseInfo = res.submittedQuestions
         })
         .catch(err => {
           this.handleError(err);
@@ -92,7 +121,7 @@ export default {
       this.isLoading = true;
       const type = this.$route.query.type;
       const query = { exerciseId: this.$route.query.exerciseId };
-      const data = { moduleId: this.$route.query.moduleId };
+      const data = { moduleId: this.$route.query.moduleId ,exerciseMode: this.exerciseModes};
       if (type === 'assessment') {
         data.assessmentId = this.$route.query.assessmentId;
       } else {
@@ -100,8 +129,12 @@ export default {
       }
       Api[config[type].api]({ query, data })
         .then(res => {
+          this.recordId = res.answer_record.id
+          this.exerciseModes = res.answer_record.exercise_mode
+          this.status = res.answer_record.status;
           this.isLoading = false;
           this.assignData(res);
+          localStorage.setItem('exerciseId_'+this.$route.query.exerciseId,res.answer_record.id)
         })
         .catch(err => {
           this.handleError(err);
@@ -202,6 +235,7 @@ export default {
         assessmentId: this.$route.query.assessmentId,
         moduleId: this.$route.query.moduleId,
         categoryId: this.$route.query.categoryId,
+        backUrl: backUrl,
       };
       const answerRecordId = this.assessmentResponse.answer_record_id;
       this.$router.replace({
@@ -213,6 +247,9 @@ export default {
       this.canLeave = true
       this.$router.replace(`/my/courses/learning?active=2`)
     }
+  },
+  destroyed(){
+    localStorage.removeItem('exerciseId_'+this.$route.query.exerciseId)
   },
 };
 </script>

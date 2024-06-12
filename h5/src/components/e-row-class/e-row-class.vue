@@ -1,21 +1,22 @@
 <template>
-  <div class="e-row-class" 
-    @click="onClick(course.hasCertificate, $event)" 
+  <div class="e-row-class"
+    @click="onClick(course.hasCertificate, $event)"
     :style="{ marginLeft: typeList === 'classroom_list' ? '30px' : '16px' }">
     <div class="relative row-class-left">
-      <img 
+      <img
         v-if="typeList === 'classroom_list'"
         style="height: 90%;left: -15px;top: 50%;transform: translateY(-50%);"
         class="absolute z-1"
-        src="static/images/classroom/classroom-icon.png" 
+        src="static/images/classroom/classroom-icon.png"
         srcset="static/images/classroom/classroom-icon@2x.png" />
 
-      <img class="relative z-10 cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
-      
+      <img class="relative z-1 cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
+
       <div v-if="Number(isVip)" class="row-class-left__member">{{ $t('e.freeForMembers') }}</div>
     </div>
 
-    <div class="row-class-right">
+    <div class="row-class-right relative">
+      <img v-if="isShowErrImg" class="err-img" :src="errImgUrl" />
       <div class="row-class-right__top">
         <div v-if="discountNum" style="height:14px;margin: 3px 4px 0 0;text-align: center;line-height: 14px;border: 1px solid #ff900e;border-radius: 2px;">
           <div style="font-size: 12px; transform: scale(0.75); color: #FF900E;">{{ $t('e.discount') }}</div>
@@ -45,5 +46,37 @@
 import eClassMixins from '@/mixins/eClass';
 export default {
   mixins: [eClassMixins],
+  computed: {
+    isShowErrImg() {
+      if(this.course?.bottom?.data?.itemBankExercise?.status == 'closed') {
+        return true;
+      }
+
+      if(this.course?.bottom?.data?.isExpired) {
+        return true;
+      }
+
+      return false;
+    },
+    errImgUrl() {
+      if(this.course?.bottom?.data?.itemBankExercise?.status == 'closed') {
+        return 'static/images/closed.png';
+      }
+
+      if(this.course?.bottom?.data?.isExpired) {
+        return 'static/images/expired.png';
+      }
+
+      return '';
+    }
+  }
 };
 </script>
+<style scoped>
+.err-img {
+    position: absolute;
+    height: 40px;
+    top: 0;
+    right: 0;
+  }
+</style>

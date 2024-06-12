@@ -37,7 +37,16 @@
 			}
 
 			.graphicNavigation__text {
+				max-width: vw(112);
 				min-height: vw(17);
+			}
+
+			.graphicNavigationFour__text {
+				max-width: vw(84);
+			}
+
+			.graphicNavigationFive__text {
+				max-width: vw(66);
 			}
 
 			span {

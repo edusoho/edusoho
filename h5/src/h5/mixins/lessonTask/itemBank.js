@@ -10,7 +10,7 @@ export default {
           (rightanswer.includes(index) && !answer.includes(index)) ||
           (!rightanswer.includes(index) && answer.includes(index))
         ) {
-          return 'subject-option__order_wrong';
+          return 'van-checked__wrong';
         }
       }
       return '';

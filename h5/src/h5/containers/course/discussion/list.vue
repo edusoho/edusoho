@@ -19,7 +19,7 @@
       :text="emptyText"
     />
 
-    <div class="create-btn">
+    <div v-if="details.courseSet.status != 'closed'" class="create-btn">
       <van-button
         type="primary"
         block
@@ -36,6 +36,8 @@ import _ from 'lodash';
 import Api from '@/api';
 import DiscussionItem from './components/DiscussionItem.vue';
 import Empty from '&/components/e-empty/e-empty.vue';
+import { closedToast } from '@/utils/on-status.js';
+
 
 export default {
   name: 'DiscussionList',
@@ -49,6 +51,10 @@ export default {
     type: {
       type: String,
       required: true
+    },
+    details: {
+      type: Object,
+      default: () => ({})
     }
   },
 
@@ -108,6 +114,10 @@ export default {
     },
 
     handleClickCreateDiscussion() {
+      if(this.details?.courseSet?.status == 'closed') {
+        return closedToast('course')
+      }
+
       this.$emit('change-current-component', { component: 'Create' });
     }
   }

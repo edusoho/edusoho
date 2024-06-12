@@ -2,8 +2,8 @@
   <div :class="{ more__still: selecting }" class="more">
   <div style="display: flex;background-color: #fff;box-shadow: 0 2px 12px rgb(100 101 102 / 12%);">
       <div
-        v-if="dropdownData && dropdownData.length > 0" 
-        class="class-category text-overflow" 
+        v-if="dropdownData && dropdownData.length > 0"
+        class="class-category text-overflow"
         @click="showClassCategoryPopup = true"
       >
         <span class="class-category__title">{{ currentClassCategoryText }}</span>
@@ -78,7 +78,6 @@ export default {
       selecting: false,
       dataDefault: CATEGORY_DEFAULT.new_classroom_list,
       dropdownData: [],
-      showNumberData: '',
       classCategories: [],
       showClassCategoryPopup: false,
       currentClassCategoryText: this.$t('more.Classification'),
@@ -91,6 +90,7 @@ export default {
       vipLevels: state => state.vip.vipLevels,
       vipSwitch: state => state.vipSwitch,
       vipOpenStatus: state => state.vip.vipOpenStatus,
+      showNumberData: state => state.goodsSettings.show_number_data
     }),
   },
   watch: {
@@ -190,7 +190,7 @@ export default {
         }
 
         if (item.children && item.children.length > 0) {
-          optionItem.children = this.initOptions({ 
+          optionItem.children = this.initOptions({
             text: this.$t('more.all'),
             value: item.id,
             data: item.children
@@ -307,15 +307,6 @@ export default {
 
       return true;
     },
-    getGoodSettings() {
-      Api.getSettings({
-        query: {
-          type: 'goods',
-        },
-      }).then(res => {
-        this.showNumberData = res.show_number_data;
-      });
-    },
     getCategoryDescById(categories, categoryId) {
       if (!categories || categories.length === 0) return null
 
@@ -342,7 +333,7 @@ export default {
   .more {
     background-color: #f7f9fa;
   }
-  
+
   .class-category {
     display: flex;
     flex: 1;

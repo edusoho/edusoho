@@ -147,6 +147,7 @@ export default {
         homeworkId: this.homework.id,
         userId: this.user.id,
         homeworkResultId: this.homework.latestHomeworkResult.id,
+        courseId: this.courseId
       };
       // 提交作业+跳转到结果页
       this.handHomeworkdo(datas)

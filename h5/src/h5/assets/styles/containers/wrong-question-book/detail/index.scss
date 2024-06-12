@@ -23,4 +23,18 @@
 		align-items: center;
 		color: #fff;
 	}
+	.intro-footer {
+    position: fixed;
+    bottom: 0;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 16px;
+    background-color: #fff;
+    box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.04);
+	
+    .intro-footer__btn {
+      width: 100%;
+      border-radius: 4px;
+    }
+	}
 }

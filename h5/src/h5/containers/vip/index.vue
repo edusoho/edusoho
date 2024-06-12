@@ -1,7 +1,7 @@
 <template>
   <div class="vip-detail">
     <e-loading v-if="isLoading" />
-    
+
     <div class="flex px-16 pt-12" v-if="user">
       <img v-if="user.avatar" :src="user.avatar.large" style="width: 40px;height: 40px;border-radius: 50%;" />
       <div class="ml-8 text-text-1" style="color: #464244;">
@@ -22,7 +22,7 @@
           </div>
           <div class="absolute flex items-center justify-center font-normal text-12"
             @click="$router.push(`/vip/${item.id}/desc`)"
-            style="width: 74px;height: 24px;color: #fff;border: 1px solid #fff;border-radius: 16px;right: 16px;bottom: 30px;">
+            style="width: 74px;height: 24px;mix-blend-mode: screen;border: 1px solid #fff;border-radius: 16px;right: 16px;bottom: 30px;background-color: white;font-weight: 600;">
             {{ $t('vip.exclusiveIntroduction') }} >
           </div>
         </swiper-slide>
@@ -62,20 +62,34 @@
 
     <div class="fixed bottom-0 left-0 right-0 z-20 px-16 py-8 bg-text-1">
       <div class="flex items-center justify-center w-full font-bold text-text-1"
-        style="height: 40px; border-radius: 20px; background-color: #E7B15C;" :class="{ disabled: !vipBuyStatu.status }"
+        style="height: 40px; border-radius: 20px; background-color: #E7B15C;" :class="{ disabled: !vipBuyStatus.status }"
         @click="clickVipBuy">
-        {{ vipBuyStatu.text }}
+        {{ vipBuyStatus.text }}
       </div>
     </div>
 
-    <e-row-class v-show="typeList === 'course_list'" v-for="item in courseData.items" :key="item.id"
-      :course="item | courseListData({ ...config, typeList: 'course_list' }, 'new')"
-      :discountType="item.courseSet.discountType" :discount="item.courseSet.discount" :course-type="item.courseSet.type"
-      type-list="course_list" type="price" :showNumberData="showNumberData" />
+    <van-list
+      v-if="typeList === 'course_list' && currentLevel.id"
+      v-model="ajaxLoading"
+      :finished="currentCourseList.getDataFinished"
+      style="padding-bottom: 40px;"
+      @load="getVipCourseData">
+      <e-row-class v-for="item in currentCourseList.data" :key="item.id"
+                   :course="item | courseListData({ ...config, typeList: 'course_list' }, 'new')"
+                   :discountType="item.courseSet.discountType" :discount="item.courseSet.discount" :course-type="item.courseSet.type"
+                   type-list="course_list" type="price" :showNumberData="showNumberData" />
+    </van-list>
 
-    <e-row-class v-show="typeList === 'classroom_list'" v-for="item in classroomData.items" :key="item.id"
-      :course="item | courseListData({ ...config, typeList: 'classroom_list' }, 'new')" type-list="classroom_list"
-      type="price" :showNumberData="showNumberData" />
+    <van-list
+      v-if="typeList === 'classroom_list' && currentLevel.id"
+      v-model="ajaxLoading"
+      :finished="currentClassroomList.getDataFinished"
+      style="padding-bottom: 40px;"
+      @load="getVipClassroomData">
+      <e-row-class v-for="item in currentClassroomList.data" :key="item.id"
+        :course="item | courseListData({ ...config, typeList: 'classroom_list' }, 'new')" type-list="classroom_list"
+        type="price" :showNumberData="showNumberData" />
+    </van-list>
   </div>
 </template>
 
@@ -83,10 +97,8 @@
 import Api from '@/api';
 import { mapState, mapActions } from 'vuex';
 import * as types from '@/store/mutation-types';
-
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import 'swiper/css/swiper.css';
-
 import PriceItem from './price-item';
 import courseListData from '@/utils/filter-course.js';
 import eRowClass from '&/components/e-row-class/e-row-class';
@@ -131,8 +143,11 @@ export default {
       activeIndex: 0,
       activePrice: null,
       isLoading: false,
-      showNumberData: '',
-      typeList: 'course_list'
+      typeList: 'course_list',
+      ajaxLoading: false,
+      getDataFinished: false,
+      vipCourseData: {},
+      vipClassroomData: {}
     };
   },
   filters: {
@@ -144,7 +159,24 @@ export default {
       userInfo: state => state.user,
       vipOpenStatus: state => state.vip.vipOpenStatus,
       upgradeMode: state => state.vip.upgradeMode,
+      showNumberData: state => state.goodsSettings.show_number_data
     }),
+
+    currentCourseList() {
+      if (!this.currentLevel) return {}
+
+      if (!this.vipCourseData[this.currentLevel.id]) return {}
+
+      return this.vipCourseData[this.currentLevel.id]
+    },
+
+    currentClassroomList() {
+      if (!this.currentLevel) return {}
+
+      if (!this.vipClassroomData[this.currentLevel.id]) return {}
+
+      return this.vipClassroomData[this.currentLevel.id]
+    },
 
     config() {
       return {
@@ -191,7 +223,7 @@ export default {
       return 'low';
     },
 
-    vipBuyStatu() {
+    vipBuyStatus() {
       const title = this.activePrice ? this.activePrice.title : '';
       const actions = {
         opening: {
@@ -219,44 +251,13 @@ export default {
       return actions[this.userLevelStatus];
     },
 
-    courseData() {
-      if (!this.currentLevel.courses) return {}
-      
-      const { data, paging } = this.currentLevel.courses;
-      if (data.length == 0) return false;
-      const dataFormat = {
-        items: [],
-        title: this.$t('vip.membersCourseTotal', { total: paging.total }),
-        source: {},
-        limit: 4,
-        vipCenter: true,
-      };
-      dataFormat.items = data.slice(0, 3);
-      return dataFormat;
-    },
-
-    classroomData() {
-      if (!this.currentLevel.classrooms) return {}
-      
-      const { data, paging } = this.currentLevel.classrooms;
-      if (data.length == 0) return false;
-      const dataFormat = {
-        items: [],
-        title: this.$t('vip.membersClassTotal', { total: paging.total }),
-        source: {},
-        limit: 4,
-        vipCenter: true,
-      };
-      dataFormat.items = data.slice(0, 3);
-      return dataFormat;
-    },
-
     vipUpgradeMode() {
       return (
         this.userLevelStatus == 'upgrade' && this.upgradeMode == 'remain_period'
       );
     },
   },
+
   async created() {
     this.isLoading = true;
 
@@ -285,10 +286,57 @@ export default {
       return;
     }
     this.getVipDetail();
-    this.getGoodSettings();
   },
   methods: {
     ...mapActions('vip', ['getVipOpenStatus']),
+
+    getVipCourseData() {
+      if (!this.currentLevel) return
+
+      const courseList = this.vipCourseData[this.currentLevel.id] || { offset: 0, data: [] }
+
+      if (courseList.getDataFinished) return
+
+      const params = { levelId: this.currentLevel.id, offset: courseList.offset }
+
+      Api.getVipCourses({ params }).then(({ data, paging }) => {
+        courseList.data = [...courseList.data, ...data]
+        courseList.offset = courseList.data.length
+        courseList.paging = paging
+
+        if (courseList.data.length == paging.total) {
+          courseList.getDataFinished = true
+        }
+
+        this.$set(this.vipCourseData, this.currentLevel.id, courseList)
+      }).finally(() => {
+        this.ajaxLoading = false
+      })
+    },
+
+    getVipClassroomData() {
+      if (!this.currentLevel) return
+
+      const classroomList = this.vipClassroomData[this.currentLevel.id] || { offset: 0, data: [] }
+
+      if (classroomList.getDataFinished) return
+
+      const params = { levelId: this.currentLevel.id, offset: classroomList.offset }
+
+      Api.getVipClasses({ params }).then(({ data, paging }) => {
+        classroomList.data = [...classroomList.data, ...data]
+        classroomList.offset = classroomList.data.length
+        classroomList.paging = paging
+
+        if (classroomList.data.length == paging.total) {
+          classroomList.getDataFinished = true
+        }
+
+        this.$set(this.vipClassroomData, this.currentLevel.id, classroomList)
+      }).finally(() => {
+        this.ajaxLoading = false
+      })
+    },
 
     getVipDetail() {
       const queryId = this.$route.query.id;
@@ -379,7 +427,7 @@ export default {
         return;
       }
 
-      if (!this.vipBuyStatu.status) return;
+      if (!this.vipBuyStatus.status) return;
 
       // 没有价格选项，不能创建订单
       if (!this.activePrice) {
@@ -392,24 +440,14 @@ export default {
           id: this.activePrice.id,
           unit: this.activePrice.specUnit,
           num: this.activePrice.duration,
-          type: this.vipBuyStatu.type,
+          type: this.vipBuyStatus.type,
         },
         query: {
           targetType: 'vip',
         },
       });
     },
-
-    getGoodSettings() {
-      Api.getSettings({
-        query: {
-          type: 'goods',
-        },
-      }).then(res => {
-        this.showNumberData = res.show_number_data;
-      });
-    },
-  },
+  }
 };
 </script>
 

@@ -24,6 +24,7 @@
               :unit-num="item[slideIndex].unitNum"
               v-bind="$attrs"
               v-on="$listeners"
+              :course-set="courseSet"
             />
           </div>
         </template>
@@ -35,6 +36,7 @@
             :unit-num="item[slideIndex].unitNum"
             v-bind="$attrs"
             v-on="$listeners"
+            :course-set="courseSet"
           />
         </div>
       </div>
@@ -58,6 +60,12 @@ export default {
     swiperDirectory,
     utilDirectory,
     lessonDirectory,
+  },
+  props: {
+    courseSet: {
+      type: Object,
+      default: () => {},
+    }
   },
   data() {
     return {
@@ -84,7 +92,7 @@ export default {
       OptimizationCourseLessons: state => state.OptimizationCourseLessons,
       details: state => state.details,
       // allTask: state => state.allTask,
-      taskStatus: state => state.taskStatus,
+      taskStatus: state => state.taskStatus
     }),
     hasChapter: function() {
       return this.chapterNum > 0;
@@ -336,3 +344,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.mb-60 {
+  margin-bottom: 60px;
+}
+</style>

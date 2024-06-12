@@ -7,9 +7,10 @@ export default {
   footer: {
     discover: 'Discover',
     learn: 'Learn',
-    me: 'Me'
+    me: 'Me',
   },
   e: {
+    searchCourse: 'Find courses',
     freeForMembers: 'Free for members',
     live: 'Live',
     certificate: 'Cert.',
@@ -49,7 +50,7 @@ export default {
     moreCourse: 'More courses are waiting for you to join',
     moreClass: 'More classes are waiting for you to join',
     moreQuestionBanks: 'More question banks are waiting for you to join',
-    browse: ' people browse'
+    browse: ' people browse',
   },
   title: {
     me: 'Me',
@@ -93,14 +94,14 @@ export default {
     certificateAvailable: 'Certificate available',
     testDescription: 'Test description',
     jobDescription: 'Job description',
-    exerciseInstructions: 'Exercise instructions',
+    exerciseInstructions: 'Exercise',
     studentEvaluation: 'Student evaluation',
     informationFilling: 'Information filling',
     faceRecognitionLogin: 'Face recognition login',
     faceAuthentication: 'Face authentication',
     groupFreeLearningCourse: 'Group free learning course',
     productPage: 'Product page',
-    preview: 'Preview'
+    preview: 'Preview',
   },
   btn: {
     save: 'Save',
@@ -118,20 +119,25 @@ export default {
     userServiceAgreement: 'User Service Agreement',
     privacyAgreemen: 'Privacy Agreement',
     viewAfterLogin: 'View after login',
-    loginNow: 'Login now'
+    loginNow: 'Login now',
+    agreeAndSignin: 'Agree and sign in',
+    agreeAndRegister: 'Agree and register',
+    PleaseReadAgreeAndTerms: 'Please read and agree to the following terms',
   },
   toast: {
     switchSucceeded: 'Switch succeeded',
     pleaseWait: 'Please wait',
     signInSuccessfully: 'Sign in successfully',
-    contactTheAdministrator: 'The online school has not opened the mobile phone registration, please contact the administrator',
+    contactTheAdministrator:
+      'The online school has not opened the mobile phone registration, please contact the administrator',
     enterUpTo20Characters: 'Enter up to 20 characters',
     bindingSuccess: 'Binding success',
     registrationSuccess: 'Registration success',
-    pleaseCompleteThePuzzleVerification: 'Please complete the puzzle verification',
+    pleaseCompleteThePuzzleVerification:
+      'Please complete the puzzle verification',
     oasswordResetSuccessful: 'Password reset successful',
     verificationLinkHasBeenSentTo: 'Verification link has been sent to',
-    loading: 'Loading...'
+    loading: 'Loading...',
   },
   placeholder: {
     voucherCode: 'Voucher Code (8 Digits)',
@@ -141,7 +147,7 @@ export default {
     setPassword: 'Set password(5-20 characters)',
     verificationCode: 'Verification code',
     mobileNumberOrEmail: 'Mobile number or email',
-    dragTheSliderToCompleteThePuzzle: 'Drag the slider to complete the puzzle'
+    dragTheSliderToCompleteThePuzzle: 'Drag the slider to complete the puzzle',
   },
   enter: {
     coupon: 'Coupon',
@@ -155,7 +161,7 @@ export default {
   },
   tips: {
     iHaveReadAndAgreeToThe: 'I have read and agree to the',
-    and: 'and'
+    and: 'and',
   },
   setting: {
     heads: 'Heads',
@@ -165,7 +171,7 @@ export default {
     dropOutCancelConfirm: 'Drop out Cancel Confirm ?',
     fileTypeOnlySupportsImageFormat: 'File type only supports image format',
     fileSizeMustNotExceed2MB: 'File size must not exceed 2 MB',
-    modifySuccess: 'Modify success'
+    modifySuccess: 'Modify success',
   },
   vip: {
     title: 'Vip center',
@@ -196,10 +202,11 @@ export default {
     membersClassTotal: 'Members class({total})',
     membershipExpired: 'Membership expired',
     membershipUntil: 'Membership until',
-    notMemberPleaseUpgrade: 'You are not a member of this level. Please upgrade',
+    notMemberPleaseUpgrade:
+      'You are not a member of this level. Please upgrade',
     upgrade: 'Upgrade',
     cny: 'CNY',
-    piece: 'Piece'
+    piece: 'Piece',
   },
   certificate: {
     title: 'My certificate',
@@ -217,9 +224,12 @@ export default {
     certificateNumber: 'Certificate number',
     getTime2: 'Get time',
     effectiveTime2: 'Effective time',
-    longPressToSaveThePicture: 'Long press to save the picture'
+    longPressToSaveThePicture: 'Long press to save the picture',
   },
   wrongQuestion: {
+    questionNotReviewed: 'The current question has not been reviewed',
+    completeReview: 'Complete review',
+    topicList: 'Topic List',
     title: 'Mistakes collection',
     fromCourse: 'From course',
     fromClass: 'From class',
@@ -228,22 +238,29 @@ export default {
     searchClass: 'Search Class',
     searchByQuestionBank: 'Search by question bank',
     question: 'question',
-    numberOfWrongQuestionsInTheCourse: 'Number of wrong questions in the course',
+    numberOfWrongQuestionsInTheCourse:
+      'Number of wrong questions in the course',
     numberOfWrongQuestionsInTheClass: 'Number of wrong questions in the Class',
-    numberOfWrongQuestionsInTheQuestionBank: 'Number of wrong questions in the question bank',
+    numberOfWrongQuestionsInTheQuestionBank:
+      'Number of wrong questions in the question bank',
     empty: 'Empty',
     filter: 'Filter',
     exercise: 'Exercise',
-    systemRandomlySelectsQuestions: 'The system randomly selects up to 20 questions for you',
+    systemRandomlySelectsQuestions:
+      'The system randomly selects up to 20 questions for you',
     iKnow: 'I know',
     singleChoice: 'Single choice',
     fill: 'Gap filling',
-    uncertainChoice: "Indefinite choice",
-    choice: "Multiple choice",
-    determine: "True or false",
+    uncertainChoice: 'Indefinite choice',
+    choice: 'Multiple choice',
+    determine: 'True or false',
     answerResult: 'Answer result',
     yourAnswer: 'Your answer',
     correctAnswer: 'Correct answer',
+    theNumberAnswers: 'The number of answers cannot be 0',
+    theNumberblank: 'The number of answers cannot be blank',
+    placeEntAnswer : 'Please fill in the answer',
+    questionNotAnswer: 'The current question has not been answered, do you confirm to submit?',
     parsing: 'Parsing',
     source: 'Source',
     frequency: 'Frequency',
@@ -277,15 +294,16 @@ export default {
     correctRate: 'Correct rate',
     timeSpentOnTheQuestion: 'Time spent on the question',
     minutes: 'Minutes',
-    viewParsed: 'View parsed'
+    viewParsed: 'View parsed',
   },
   search: {
     title: 'Search',
-    placeholder: 'Search course/class/question bank',
+    placeholder: 'Search course/class/question bank exercise',
     course: 'Course',
     classroom: 'Classroom',
     questionBank: 'Question bank',
-    noFound: 'Sorry, no related content was found'
+    noFound: 'Sorry, no related content was found',
+    emptyCourse: 'There are currently no suitable courses available～'
   },
   learning: {
     title: 'Learn',
@@ -294,7 +312,8 @@ export default {
     questionBank: 'Question bank',
     noCourses: 'No courses',
     noClass: 'No class',
-    noQuestionBank: 'No question bank'
+    noQuestionBank: 'No question bank',
+    expired: 'The course has expired and cannot be continued'
   },
   more: {
     membersClass: 'Members class',
@@ -312,7 +331,7 @@ export default {
     noClass: 'No class',
     all: 'All',
     course: 'Course',
-    live: 'Live'
+    live: 'Live',
   },
   goods: {
     title: 'Details',
@@ -394,10 +413,30 @@ export default {
     pm: 'PM',
     night: 'Night',
     toLearn: 'To learn',
-    buy: 'Buy now'
+    buy: 'Buy now',
+    goHome: "Go back to home page",
+    closed_title: "The current content is closed",
+    closed_course: "The current course is closed",
+    closed_classroom: "The current classroom is closed",
+    closed_exercise: "The current question bank is closed",
+    closed_content: "Cannot continue viewing",
   },
   courseLearning: {
-    times: "times",
+    selfJudging: 'Self judging',
+    haveMastered: 'Have mastered',
+    notQuiteUnderstand: 'Not quite understand',
+    yourAreAnswer: 'Your answer',
+    analyze: 'analyze',
+    selectedAnswer: 'Selected answer',
+    score: 'score',
+    comment: 'comment',
+    referenceAnswer: 'Reference answer',
+    submitATopic: 'Submit a topic',
+    answerProgress: 'Answer progress',
+    endAnswer: 'End answer',
+    answerSheet: 'Answer sheet',
+    pleaseEnterYourAnswer: 'Please enter your answer',
+    times: 'times',
     leftTime: 'Remaining time: ',
     hourUnit: 'hr',
     minuteUnit: 'min.',
@@ -423,14 +462,18 @@ export default {
     submit: 'Submit',
     scoreCannotBeBlank: 'Score cannot be blank~',
     evaluationContentCannotBeEmpty: 'Evaluation content cannot be empty~',
-    addTeachingAssistantWeChat: 'For better learning, click here to add teaching assistant WeChat',
+    addTeachingAssistantWeChat:
+      'For better learning, click here to add teaching assistant WeChat',
     picture: 'Picture',
-    addTheTeachingAssistant: 'Please be sure to add the teaching assistant WeChat, otherwise you will not be able to attend the class~',
+    addTheTeachingAssistant:
+      'Please be sure to add the teaching assistant WeChat, otherwise you will not be able to attend the class~',
     qRCodePicture: 'QR code picture',
     longPressThePicture: 'Long press the picture to identify the QR code',
-    longPressThePicture2: 'Long press the picture to save the QR code, and go to WeChat to add',
+    longPressThePicture2:
+      'Long press the picture to save the QR code, and go to WeChat to add',
     viewDetails: 'View details',
-    curriculumHasExpired: 'Curriculum has expired, can not continue to learn, whether to exit',
+    curriculumHasExpired:
+      'Curriculum has expired, can not continue to learn, whether to exit',
     failedToExitClass: 'Failed to exit class, please try again later',
     certificate: 'Certificate',
     certificate2: 'Certificate',
@@ -461,6 +504,9 @@ export default {
     preview: 'Preview',
     pleaseJoinFirst: 'Please join first',
     pleaseJoinTheCourses: 'Please join the courses',
+    courseClosedToast: 'The current course has been closed and cannot continue learning',
+    classroomClosedToast: 'The current classroom is closed, so you cannot continue studying',
+    exerciseClosedToast: 'The current exercise is closed, so you cannot continue working on it',
     needToUnlockThePreviousTask: 'Need to unlock the previous task',
     stayTuned: 'Stay tuned',
     doesNotSupportThisType: 'Does not support this type',
@@ -468,24 +514,30 @@ export default {
     manuscripts: 'Manuscripts',
     learned: 'Learned',
     completionConditions: 'Completion conditions',
-    pleaseClickSubscribe: 'Please click here to subscribe to course related notices',
+    pleaseClickSubscribe:
+      'Please click here to subscribe to course related notices',
     subscribe: 'Subscribe',
     subscriptionSucceeded: 'Subscription succeeded',
     learningCompletion: 'Learning completion',
     congratulationsOnCompletion: 'Congratulations on completion',
     nextLesson: 'Next lesson',
     openingTime: 'Opening time',
-		testStartTime: 'Test start time',
-		examDeadline: 'Exam deadline',
+    testStartTime: 'Test start time',
+    examDeadline: 'Exam deadline',
     examinationDuration: 'Test duration',
-    noLimitTips: 'Kind tips: Once the test starts, the test will be handed in automatically after the countdown is over',
-    noLimitTips1: 'Kind tips: This test will not be handed in automatically, and the time spent on the exam will be displayed in real time, and the time will not be counted if you leave in the middle',
-    oneTips: 'Kind tips: There is only one chance to test. Once the test starts, the test will be handed in automatically after the countdown is over',
-    oneTips1: 'Kind tips: There is only one chance to take the test, and the test will not be handed in automatically. The test time will be displayed in real time, and the time will not be counted if you leave in the middle',
+    noLimitTips:
+      'Kind tips: Once the test starts, the test will be handed in automatically after the countdown is over',
+    noLimitTips1:
+      'Kind tips: This test will not be handed in automatically, and the time spent on the exam will be displayed in real time, and the time will not be counted if you leave in the middle',
+    oneTips:
+      'Kind tips: There is only one chance to test. Once the test starts, the test will be handed in automatically after the countdown is over',
+    oneTips1:
+      'Kind tips: There is only one chance to take the test, and the test will not be handed in automatically. The test time will be displayed in real time, and the time will not be counted if you leave in the middle',
     minutes: 'Minutes',
+    questionsNumTips: 'Note: The number of customized questions can only be an integer, range: 1 ≤ Number of questions ≤ A single error book All error questions, and the effect is only this time, the next time you enter the default value',
     second: 'Second',
     testTips: 'Test Notes',
-		examOver: 'Exam is over',
+    examOver: 'Exam is over',
     testName: 'Paper title',
     noRestrictions: 'Without limiting',
     unlimited: 'unlimited',
@@ -493,8 +545,8 @@ export default {
     numberOfTopics: 'Number of topics',
     fullScoreOfTestPaper: 'Full marks',
     validityPeriodOfExamination: 'Validity period of examination',
-		numberOfRemainingTests: 'Number of remaining tests',
-		unlimitedDuration: 'Unlimited duration',
+    numberOfRemainingTests: 'Number of remaining tests',
+    unlimitedDuration: 'Unlimited duration',
     topic: 'question',
     total: 'Total',
     viewResult: 'View result',
@@ -503,9 +555,9 @@ export default {
     iKnow: 'I know',
     singleChoice: 'Single choice',
     fill: 'Gap filling',
-    uncertainChoice: "Indefinite choice",
-    choice: "Multiple choice",
-    determine: "True or false",
+    uncertainChoice: 'Indefinite choice',
+    choice: 'Multiple choice',
+    determine: 'True or false',
     essay: 'Essay',
     material: 'Material',
     thisScore: 'Score',
@@ -537,12 +589,22 @@ export default {
     jobName: 'Job name',
     jobDescription: 'Job description',
     viewResult2: 'View result',
+    returnList: 'Return list',
+    doYouToResults: 'The current exercise is complete. Do you want to see the results?',
     startAnsweringQuestions: 'Start answering questions',
+    chooseQuestionAnsweringMode:'Choose a question answering mode',
+    answerMode:'Answer mode',
+    chapterName: 'Chapter name',
+    testMode: 'Test mode',
+    answerOneQuestionAtTime: 'Answer one question at a time',
+    pleaseEnterNumberQuestions: 'Please enter the number of questions',
+    displayQuantity: 'Display quantity',
     subjectiveQuestion: 'Subjective question',
     accuracyOfObjectiveQuestions: 'Accuracy of objective questions',
     exerciseName: 'Exercise name',
     sureSubmit: 'The title has been completed. Are you sure to submit it?',
-    notSureSubmit: 'Complete the exam with {number} questions left. Are you sure to submit?',
+    notSureSubmit:
+      'Complete the exam with {number} questions left. Are you sure to submit?',
     submitNow: 'Submit now',
     check: 'Continue',
     confirmSubmission: 'OK',
@@ -576,9 +638,16 @@ export default {
     continueLearning: 'Continue learning',
     startLearning: 'Start learning',
     continueExam: 'Continue exam',
+    examOverExam: 'The current exam is over, please re-select the exam',
     continueAnswer: 'continue answering',
     examTotalTips: 'Exam used time',
     examTotalTime: 'Exam time has reached {number} minutes',
+    examNotStart: 'The current exam has not yet started',
+    aiAssistant: 'I am your Al problem assistant, click "Al analysis" to see the problem analysis I search for you, the analysis content is for reference only',
+    analysis: 'analysis',
+    stopGeneration: 'stopGeneration',
+    reGenerate: 'reGenerate',
+    beGenerating: 'Generating, please be patient～'
   },
   classLearning: {
     intor: 'Intro',
@@ -608,7 +677,20 @@ export default {
     free: 'Free',
     personStudying: '{number} person studying',
     viewReport: 'View report',
-    continue: 'Continue'
+    continue: 'Continue',
+  },
+  closed: {
+    exerciseTitle: 'Question bank exercise closed, unable to learn',
+    exerciseContent: 'Exercise results can be viewed',
+    courseTitle: 'Course closed, unable to learn',
+    courseContent: 'Exam and homework results can be viewed',
+    classroomTitle: 'Class closed, unable to learn',
+    classroomContent: 'Exam and homework results in the course can be viewed',
+    cannotLearn: 'Cannot continue learning',
+    goLearnPage: 'Go to learning page',
+    course: 'Current course is closed',
+    classroom: 'Current classroom is closed',
+    exercise: 'Current exercise library is closed'
   },
   filters: {
     free: 'Free',
@@ -627,7 +709,7 @@ export default {
     vipJoinForfree: 'Vip join for free',
     totalOfTwoCourses: 'Total of {number} courses',
     answerRate: 'Answer rate ',
-    accuracy: 'Accuracy '
+    accuracy: 'Accuracy ',
   },
   order: {
     coupon: 'Coupon',
@@ -643,13 +725,13 @@ export default {
     noCouponsAvailable: 'No coupons available',
     available: 'available',
     longTermEffective: 'Permanent',
-    noOrderRecord: 'No order record'
+    noOrderRecord: 'No order record',
   },
   coupon: {
     allCourse: 'Applicable to all course',
     allClass: 'Applicable to all class',
     allGoods: 'Applicable to all goods',
-    allMember: 'Applicable to all member'
+    allMember: 'Applicable to all member',
   },
   attachment: {
     waiting: 'Waiting for transcoding',
@@ -657,12 +739,12 @@ export default {
     error: 'Transcoding failed',
     other: 'download at PC',
     disableVideo: 'do not support, please use WeChat or APP',
-    disableVideo2: 'do not support, please use APP'
+    disableVideo2: 'do not support, please use APP',
   },
   marketingPay: {
     amountLabel: 'Payment amount',
     orderSnLabel: 'Order number',
     acceptLabel: 'recipient',
-    payNow: 'Pay Now'
-  }
+    payNow: 'Pay Now',
+  },
 };

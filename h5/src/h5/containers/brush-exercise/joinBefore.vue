@@ -18,8 +18,9 @@
       </van-tab>
     </van-tabs>
     <!-- 加入学习 -->
-    <e-footer @click.native="handleJoin">
-      加入题库
+    <e-footer>
+    <closedFixed v-if="ItemBankExercise.status == 'closed'" :isJoin="false" :title="$t('closed.exerciseTitle')" />
+      <div @click="handleJoin">加入题库</div>
     </e-footer>
   </div>
 </template>
@@ -33,6 +34,9 @@ import { Toast } from 'vant';
 import reviewList from './review-list';
 import introduction from './introduction';
 import { learnExpiry } from '@/utils/itemBank-status';
+import { closedToast } from '@/utils/on-status.js';
+import closedFixed from '@/components/closed-fixed.vue'
+
 const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
   'ItemBank',
 );
@@ -41,6 +45,7 @@ export default {
     directory,
     reviewList,
     introduction,
+    closedFixed
   },
   data() {
     return {
@@ -65,6 +70,11 @@ export default {
     ...mapActions(['setItemBankExercise']),
     ...mapMutations({ changJoinStatus: types.CHANGE_ITEMBANK_JOINSTATUS }),
     handleJoin() {
+      if (this.ItemBankExercise?.status == 'closed') {
+        this.$router.push({ path: '/goods/closed', query: { type: 'exercise' } });
+        return 
+      }
+
       if (!this.$store.state.token) {
         this.$router.push({
           name: 'login',

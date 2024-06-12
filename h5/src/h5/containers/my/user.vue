@@ -1,7 +1,7 @@
 <template>
   <div class="user">
-    <div class="flex items-center px-16 py-24">
-      <div class="user-img" @click="$router.push('/settings')">
+    <div class="flex items-center px-16 py-24" @click="$router.push('/settings')">
+      <div class="user-img">
         <img v-if="user.avatar" :src="user.avatar.large" />
         <img
           class="user-vip-icon"
@@ -14,6 +14,7 @@
         <div class="font-bold text-text-5 text-20">{{ user.nickname }}</div>
         <div class="w-full mt-4 font-bold text-overflow text-text-3 text-14" style="line-height: 22px;height: 22px;" v-html="user.about || ''"></div>
       </div>
+      <i class="van-icon van-icon-arrow"></i>
     </div>
 
     <div v-if="vipSwitch" class="mx-16 mb-16" style="background-color: #202212; border-radius: 6px;">

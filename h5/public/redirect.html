@@ -2,23 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" viewport-fit=“cover” />
   <title>跳转中...</title>
 </head>
 <body>
 <script>
-  //获取地址参数信息
-  let url = location.href.split("?");
-  let params = url[1].split("&");
-  let data = {};
-  params.forEach((n, i) => {
-    let p = n.split("=");
-    data[p[0]] = p[1];
-  });
+  function redirect() {
+    // 获取地址参数信息
+    let url = location.href.split("?");
+    let params = url[1].split("&");
+    let data = {};
+    params.forEach((n, i) => {
+      let p = n.split("=");
+      data[p[0]] = p[1];
+    });
 
-  if (!!data.shareRedirect) {
-    window.location.href = decodeURIComponent(data.shareRedirect);
+    if (!!data.shareRedirect) {
+      const validUrlPattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
+      if (!validUrlPattern.test(decodeURIComponent(data.shareRedirect))) {
+        console.error("Invalid URL");
+        return;
+      }
+      window.location.href = decodeURIComponent(data.shareRedirect);
+    }
   }
+
+  redirect();
 </script>
 </body>
 </html>

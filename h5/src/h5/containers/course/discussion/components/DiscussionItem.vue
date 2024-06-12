@@ -4,34 +4,59 @@
     <p class="discussion-desc" v-html="content" />
     <div class="discussion-details">
       <div class="discussion-details__left">
-        <img class="user-avatar" :src="item.user.avatar.small">
-        <span>{{ item.user.nickname }} {{ item.createdTime | formatCourseTime }}</span>
+        <img class="user-avatar" :src="item.user.avatar.small" />
+        <span
+          >{{ item.user.nickname }}
+          {{ item.createdTime | formatCourseTime }}</span
+        >
       </div>
       <div class="discussion-details__right">
         <i class="iconfont icon-review"></i>
         {{ item.postNum }}
       </div>
     </div>
+    <div class="discussion-list">
+      <van-image
+        v-for="(item, index) in item.imgs"
+        :key="index"
+        width="100"
+        height="100"
+        :src="item"
+        @click.stop="readFile(index)"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import { ImagePreview } from 'vant';
 export default {
   name: 'DiscussionItem',
 
   props: {
     item: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
+  },
+  methods: {
+    readFile(index) {
+      ImagePreview({
+        images: this.item.imgs, // 需要预览的图片 URL 数组
+        showIndex: true, // 是否显示页码
+        loop: true, // 是否开启循环播放
+        closeOnPopstate: true, // 是否在页面回退时自动关闭
+        startPosition: index, // 图片预览起始位置索引
+      });
+    },
   },
 
   computed: {
     content() {
       return this.item.content.replace(/<img .*?>/g, '');
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -39,6 +64,26 @@ export default {
   padding: vw(16);
   border-bottom: 1px solid #f5f5f5;
 
+  .discussion-list {
+    margin-top: vw(16);
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none; /* firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+    &::-webkit-scrollbar {
+      display: none; /* Chrome Safari */
+    }
+    .van-image {
+      margin-right: vw(12);
+      width: 64px !important;
+      height: 64px !important;
+      border-radius: vw(4);
+      overflow: hidden;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
   .discussion-title {
     margin: 0;
     font-size: vw(16);

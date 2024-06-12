@@ -21,11 +21,14 @@
 <script>
 import { getBtnText } from '@/utils/itemBank-status.js';
 import { mapState } from 'vuex';
+import { closedToast } from '@/utils/on-status.js';
+
 export default {
   nama: 'exercise-section',
   components: {},
   data() {
-    return {};
+    return {
+    };
   },
   props: {
     section: {},
@@ -41,6 +44,7 @@ export default {
   computed: {
     ...mapState('ItemBank', {
       isMember: state => state.ItemBankExercise.isMember,
+      ItemBankExercise: state => state.ItemBankExercise,
     }),
     btnText() {
       return getBtnText(this.section.latestAnswerRecord?.status || '');
@@ -65,7 +69,8 @@ export default {
     },
   },
   watch: {},
-  created() {},
+  created() {
+  },
   methods: {
     clickBtn() {
       const status = this.section.latestAnswerRecord?.status;
@@ -84,27 +89,31 @@ export default {
       }
     },
     startDo(item) {
+      if (this.ItemBankExercise?.status == 'closed') {
+        closedToast('exercise')
+        return 
+      }
+
       const query = {
-        mode: 'start',
-        type: 'chapter',
-        title: item.name,
-        exerciseId: this.exerciseId,
-        categoryId: item.id,
         moduleId: this.moduleId,
+        categoryId: item.id,
+        exerciseId: this.exerciseId,
       };
-      this.$router.push({ path: '/brushDo', query });
+      this.$router.push({ path: '/brushIntro', query });
     },
     continueDo(item) {
+      if (this.ItemBankExercise?.status == 'closed') {
+        closedToast('exercise')
+        return 
+      }
+
       const query = {
-        mode: 'continue',
-        type: 'chapter',
-        title: item.name,
-        exerciseId: this.exerciseId,
-        categoryId: item.id,
         moduleId: this.moduleId,
-        answer_record_id: item.latestAnswerRecord.answerRecordId,
+        categoryId: item.id,
+        exerciseId: this.exerciseId,
+        answer_record_id: item.latestAnswerRecord.answerRecordId
       };
-      this.$router.push({ path: '/brushDo', query });
+      this.$router.push({ path: '/brushIntro', query });
     },
     goResult(item) {
       const query = {

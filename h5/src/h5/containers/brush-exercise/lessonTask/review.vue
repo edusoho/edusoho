@@ -18,8 +18,9 @@ import Api from '@/api';
 import { mapState } from 'vuex';
 import * as types from '@/store/mutation-types.js';
 import { Toast } from 'vant';
+import itemReview from '@/src/components/item-review/src/item-review.vue';
 export default {
-  components: {},
+  components: {itemReview},
   data() {
     return {
       isLoading: true,
@@ -27,8 +28,18 @@ export default {
       answerScene: {},
       answerReport: {},
       answerRecord: {},
-      assessmentResponse: {}
+      assessmentResponse: {},
+      exerciseModes: '',
+      status: ''
     };
+  },
+  beforeRouteEnter(to, from, next) {
+    document.getElementById('app').style.background = '#f6f6f6';
+    next();
+  },
+  beforeRouteLeave(to, from, next) {
+    document.getElementById('app').style.background = '';
+    next();
   },
   computed: {
     ...mapState({
@@ -42,7 +53,8 @@ export default {
   provide() {
     return {
       getResourceToken: this.getResourceToken,
-      settings: this.storageSetting
+      settings: this.storageSetting,
+      brushDo:this
     }
   },
   methods: {
@@ -59,6 +71,8 @@ export default {
         query,
       })
         .then(res => {
+          this.exerciseModes = res.answer_record.exercise_mode;
+          this.status = res.answer_record.status;
           this.assessment = res.assessment;
           this.answerScene = res.answer_scene;
           this.answerReport = res.answer_report;

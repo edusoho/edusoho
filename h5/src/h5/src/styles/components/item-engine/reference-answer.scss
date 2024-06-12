@@ -1,0 +1,13 @@
+.ibs-reference {
+  margin-left: 5.3333333333vw;
+  color: #333333;
+  word-break: break-all;
+  font-weight: normal;
+  font-size: 14px;
+  &-content__item {
+    display: flex;
+    &-right{
+      color: $primary-color;
+    }
+  }
+}

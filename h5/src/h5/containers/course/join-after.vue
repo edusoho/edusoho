@@ -1,7 +1,6 @@
 <template>
   <div class="join-after">
     <detail-head :course-set="details.courseSet" />
-
     <van-tabs
       v-show="showTabs"
       class="tabs"
@@ -62,7 +61,8 @@
             </van-popup>
           </div>
 
-          <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" />
+          <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" :course-set="details.courseSet" />
+          <div class="white-space" v-if="isShowClosedFooter"></div>
         </div>
 
         <!-- 问答、话题、笔记、评价 通过动态组件实现 -->
@@ -110,6 +110,9 @@
         {{ isWeixin ? $t('courseLearning.longPressThePicture') : $t('courseLearning.longPressThePicture2') }}
       </van-button>
     </van-popup>
+    <div class="footer">
+      <closedFixed v-if="isShowClosedFooter" :isJoin="true" :title="$t('closed.courseTitle')" :content="$t('closed.courseContent')" />
+    </div>
   </div>
 </template>
 <script>
@@ -122,6 +125,8 @@ import { Dialog, Toast } from 'vant';
 import infoCollection from '@/components/info-collection.vue';
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
+import closedFixed from '@/components/closed-fixed.vue'
+
 
 // tabs 子组件
 import firstDiscussion from './discussion/index.vue'; // 问答
@@ -164,7 +169,8 @@ export default {
     firstDiscussion,
     secondDiscussion,
     Notes,
-    Reviews
+    Reviews,
+    closedFixed
   },
 
   props: {
@@ -212,6 +218,12 @@ export default {
     progress() {
       if (!Number(this.details.publishedTaskNum)) return '0%';
       return parseInt(this.details.progress.percent) + '%';
+    },
+
+    isShowClosedFooter() {
+      const { status: courseSetStatus } = this.details.courseSet;
+      
+      return courseSetStatus == 'closed'
     },
 
     summary() {
@@ -269,6 +281,7 @@ export default {
     },
 
     details(newDetails, oldDetails) {
+      this.showDialog();
       const drainage = newDetails.drainage;
 
       if (drainage && drainage.enabled == '1' && !localStorage.getItem('first_drainage')) {
@@ -565,6 +578,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.white-space {
+  height: 60px;
+}
 .tabs {
   box-shadow: 0px 2px 6px 0px rgba(49, 49, 49, 0.1);
 
@@ -731,4 +747,11 @@ export default {
     left: 0;
   }
 }
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
 </style>

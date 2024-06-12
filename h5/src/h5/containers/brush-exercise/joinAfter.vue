@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="brush-exercise-detail-bank">
     <img :src="cover.large" class="brush-exercise-cover" />
     <van-tabs v-model="active" sticky>
@@ -18,6 +19,10 @@
       </van-tab>
     </van-tabs>
   </div>
+  <div class="footer">
+    <closedFixed v-if="ItemBankExercise.status == 'closed'" :isJoin="true" :title="$t('closed.exerciseTitle')" :content="$t('closed.exerciseContent')" />
+  </div>
+</div>
 </template>
 
 <script>
@@ -25,12 +30,15 @@ import { createNamespacedHelpers } from 'vuex';
 import directory from './directory';
 import reviewList from './review-list';
 import introduction from './introduction';
+import closedFixed from '@/components/closed-fixed.vue'
+
 const { mapState } = createNamespacedHelpers('ItemBank');
 export default {
   components: {
     directory,
     reviewList,
     introduction,
+    closedFixed
   },
   props: ['details'],
   data() {
@@ -38,16 +46,26 @@ export default {
       active: 1,
       show_question_bank_review: this.$store.state.goods
         .show_question_bank_review,
+      isOpen: true
     };
   },
   computed: {
     ...mapState({
+      ItemBankExercise: state => state.ItemBankExercise,
       cover: state => state.ItemBankExercise.cover,
       id: state => state.ItemBankExercise.id,
     }),
   },
   watch: {},
   created() {},
-  methods: {},
+  methods: {
+  },
 };
 </script>
+<style scoped>
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+</style>

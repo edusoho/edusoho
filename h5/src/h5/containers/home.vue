@@ -69,7 +69,7 @@ export default {
         },
       });
     }
-  },
+   },
   methods: {
     onChange(index) {
       this.firstVisit = 0;
@@ -77,6 +77,6 @@ export default {
         name: this.items[index].name,
       });
     },
-  },
+  }
 };
 </script>

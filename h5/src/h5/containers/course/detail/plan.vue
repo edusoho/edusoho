@@ -79,12 +79,8 @@ export default {
   data() {
     return {
       items: [],
-      isFree: false,
-      showNumberData: '',
+      isFree: false
     };
-  },
-  created() {
-    this.getGoodSettings();
   },
   watch: {
     selectedPlanId: {
@@ -121,6 +117,9 @@ export default {
       details: state => state.details,
       selectedPlanId: state => state.selectedPlanId,
       joinStatus: state => state.joinStatus,
+    }),
+    ...mapState({
+      showNumberData: state => state.goodsSettings.show_number_data
     }),
     ...mapState(['courseSettings', 'vipSwitch']),
     learnExpiryHtml() {
@@ -212,15 +211,6 @@ export default {
             },
           });
         });
-    },
-    getGoodSettings() {
-      Api.getSettings({
-        query: {
-          type: 'goods',
-        },
-      }).then(res => {
-        this.showNumberData = res.show_number_data;
-      });
     },
     filterPrice() {
       const details = this.details;

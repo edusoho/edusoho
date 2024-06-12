@@ -24,9 +24,8 @@
           :currentSku="currentSku"
           :type="goods.type"
         />
-
         <specs
-          v-if="goods.specs.length > 1 || currentSku.services.length"
+          v-if="goods.specs.length > 1 || currentSku.services"
           :goods="goods"
           :currentSku="currentSku"
           @changeSku="changeSku"
@@ -88,7 +87,7 @@
         >
           <div class="goods-info__title">{{ $t('goods.tableOfContents') }}</div>
           <!-- 课程详情 -->
-          <afterjoin-directory v-if="currentSku.taskDisplay == 1" />
+          <afterjoin-directory v-if="currentSku.taskDisplay == 1" :goods="goods" />
           <div class="goods-empty-content" v-else>
             <img src="static/images/goods/empty-content.png" alt="">
             <p>{{ $t('goods.tableOfContentsEmpty') }}</p>
@@ -100,11 +99,21 @@
           class="js-scroll-top goods-info__item"
           id="catalog"
         >
-          <div class="goods-info__title">{{ $t('goods.learningCatalog') }}</div>
+          <div class="flex justify-between items-center">
+            <div class="goods-info__title">{{ $t('goods.learningCatalog') }}</div>
+            <div class="flex items-center bg-fill-7 py-4 px-12 rounded-full" @click="goSearch">
+              <IconSearch />
+              <label class="ml-4 text-text-6">{{ $t('e.searchCourse') }}</label>
+            </div>
+          </div>
           <!-- 学习课程目录 -->
-          <classroom-courses
+          <classroom-courses v-if="componentsInfo.classroomCourses.length > 0"
             :classroomCourses="componentsInfo.classroomCourses"
           />
+          <div class="w-full flex flex-col items-center pt-28" style="height: 223px;" v-else>
+            <img style="width: 142px; height: 116px;" src="static/images/classroom/none-course.png" alt="暂无课程" />
+            <span class="mt-12 text-text-6 text-14">暂无课程</span>
+          </div>
         </section>
 
         <!-- 评价 -->
@@ -167,7 +176,7 @@ import Specs from './components/specs';
 import Certificate from './components/certificate';
 import Vip from './components/vip';
 import EnterLearning from './components/enter-learning';
-
+import IconSearch from '&/components/IconSvg/IconSearch.vue'
 import Teacher from './components/teacher';
 import Reviews from '@/containers/review';
 import Recommend from './components/recommend';
@@ -193,7 +202,6 @@ export default {
       backToTopShow: false, // 是否显示回到顶部
       componentsInfo: {}, // 组件数据
       isLoading: true,
-      goodsSetting: {},
       show_review: this.$store.state.goods.show_review,
       show_course_review: this.$store.state.goods.show_course_review,
       show_classroom_review: this.$store.state.goods.show_classroom_review,
@@ -213,10 +221,13 @@ export default {
     Certificate,
     EnterLearning,
     Vip,
+    IconSearch
   },
   computed: {
     ...mapState(['vipSwitch']),
-
+    ...mapState({
+      goodsSetting: state => state.goodsSettings
+    }),
     summary() {
       if (!this.goods.summary) return this.$t('goods.noIntrodution');
       return this.goods.summary;
@@ -227,8 +238,11 @@ export default {
     getGoodsCourse() {
       Api.getGoodsCourse({
         query: {
-          id: this.$route.params.id,
+          id: this.$route.params.id
         },
+        params: {
+          preview: 1
+        }
       })
         .then(res => {
           this.goods = res;
@@ -255,6 +269,9 @@ export default {
           Toast.fail(err.message);
         });
       this.getGoodsCourseComponents();
+    },
+    goSearch() {
+      this.$router.push({ path: '/search', query: { id: this.goods.product.targetId } });
     },
     share(message) {
       let desc = ''
@@ -346,18 +363,6 @@ export default {
     },
     init() {
       this.getGoodsCourse();
-      Api.getSettings({
-        query: {
-          type: 'goods',
-        },
-      })
-        .then(resp => {
-          this.goodsSetting = resp;
-          console.log(resp.show_review);
-        })
-        .catch(err => {
-          console.error(err);
-        });
     },
   },
   created() {

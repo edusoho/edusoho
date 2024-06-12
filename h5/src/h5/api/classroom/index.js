@@ -35,4 +35,10 @@ export default [
     method: 'DELETE',
     disableLoading: true,
   },
+  {
+    // 班级里搜索课程
+    name: 'searchCourse',
+    url: '/classrooms/{id}/courses',
+    method: 'GET'
+  },
 ];

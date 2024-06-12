@@ -68,4 +68,11 @@ export default [
     method: 'POST',
     disableLoading: true,
   },
+  {
+    // 获取章节练习说明信息
+    name: 'getExerciseInfro',
+    url: '/item_bank_exercises/{exerciseId}/chapter_exercise_info',
+    method: 'GET',
+    disableLoading: true,
+  }
 ];

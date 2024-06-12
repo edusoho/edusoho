@@ -34,8 +34,8 @@
 
 		&__member {
 			position: absolute;
-			top: -1px;
-			right: -5px;
+			bottom: -1px;
+			left: -5px;
 			z-index: 11;
 			padding: 2px 8px;
 			color: #fff;
@@ -49,8 +49,8 @@
 
 		&__live {
 			position: absolute;
-			top: 0;
-			left: 0;
+			right: 0;
+			bottom: 0;
 			z-index: 11;
 			width: 44px;
 			height: 18px;
@@ -60,7 +60,7 @@
 			line-height: 18px;
 			text-align: center;
 			background: #ff900e;
-			border-radius: 6px 0;
+			border-radius: 6px 0 0;
 
 			.icon-renqi {
 				margin-right: vw(2);

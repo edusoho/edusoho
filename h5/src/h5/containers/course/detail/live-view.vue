@@ -9,6 +9,7 @@
     <e-loading v-if="isLoading" />
     <!-- web-view -->
     <iframe id="player" :src="playUrl" width="100%" frameborder="0" />
+    <open-app-dialog v-if="appShow" :openAppUrl="openAppUrl" @cancel="cancel()" ></open-app-dialog>
   </div>
 </template>
 <script>
@@ -19,10 +20,12 @@ import { Toast } from 'vant';
 import redirectMixin from '@/mixins/saveRedirect';
 import report from '@/mixins/course/report';
 import OutFocusMask from '@/components/out-focus-mask.vue';
+import openAppDialog from '../components/openAppDialog.vue';
 
 export default {
   components: {
     OutFocusMask,
+    openAppDialog
   },
   mixins: [redirectMixin, report],
   data() {
@@ -31,9 +34,12 @@ export default {
       requestCount: 0,
       courseId: '',
       taskId: '',
+      openAppUrl: '',
+      appShow: false
     };
   },
   computed: {
+    ...mapState([ 'courseSettings','course']),
     ...mapState('course', {
       joinStatus: state => state.joinStatus,
     }),
@@ -59,7 +65,38 @@ export default {
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE,
     }),
+    ...mapMutations('course', {
+      setSourceType: types.SET_SOURCETYPE
+    }),
+
+    cancel() {
+      this.setSourceType({
+        sourceType: '',
+        taskId: ''
+      })
+      this.appShow = false;
+      this.$router.go(-1)
+    },
+    handleOnlyLearnOnApp() {
+      if (this.courseSettings.only_learning_on_APP == 0) return false
+
+      const { goodsId, id } = this.course.details;
+      const { host, protocol } = window.location;
+
+      if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+        this.openAppUrl = `kuozhi://${host}?courseId=${id}&goodsId=${goodsId}`;
+      } else {
+        this.openAppUrl = `kuozhi://${host}?protocol=${protocol.replace(":","")}&courseId=${id}&goodsId=${goodsId}`;
+      }
+
+      this.appShow = true;
+
+      return true;
+    },
     handleLive() {
+      if (this.handleOnlyLearnOnApp()) {
+        return;
+      }
       const { taskId, replay, title } = this.$route.query;
       this.setNavbarTitle(title);
 

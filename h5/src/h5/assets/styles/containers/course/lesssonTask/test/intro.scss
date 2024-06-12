@@ -28,6 +28,7 @@
 		font-size: 16px;
 		text-align: center;
 		background-color: #fff;
+		border-radius: 8px;
 	}
 }
 
@@ -95,6 +96,46 @@
 	box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.04);
 
 	.intro-footer__btn {
+		width: 100%;
+		border-radius: 4px;
+	}
+}
+
+.choose-mode-popup {
+	padding: vw(24) vw(16) 0;
+	text-align: center;
+
+	.choose-mode-title {
+		color: #272e3b;
+		font-weight: 500;
+		font-size: 16px;
+		line-height: 24px;
+	}
+
+	.choose-mode-change-radio {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: vw(94);
+		margin: vw(38) 0;
+
+		.choose-mode-group-radio {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.choose-mode-radio {
+			display: flex;
+			flex-direction: column;
+
+      &:nth-child(1) {
+        margin-right: vw(64);
+      }
+		}
+	}
+
+	.choose-mode__btn {
 		width: 100%;
 		border-radius: 4px;
 	}

@@ -126,11 +126,13 @@ export default {
       imageMode: ['responsive', 'size-fit'],
       showFlag: true,
       closeDate: 'closedDate',
-      showNumberData: '',
     };
   },
   computed: {
     ...mapState(['vipSwitch', 'isLoading', 'wechatSwitch', 'couponSwitch']),
+    ...mapState({
+      showNumberData: state => state.goodsSettings.show_number_data
+    })
   },
   created() {
     const { preview, token } = this.$route.query;
@@ -172,7 +174,6 @@ export default {
       // 判断用户当天是否手动触发过关闭
       this.showFlag = localStorage.getItem(this.closeDate) !== today;
     }
-    this.getGoodSettings();
   },
   methods: {
     fetchCourse({ params, index, typeList }) {
@@ -192,16 +193,7 @@ export default {
     },
     goSearch() {
       this.$router.push({ name: 'search' });
-    },
-    getGoodSettings() {
-      Api.getSettings({
-        query: {
-          type: 'goods',
-        },
-      }).then(res => {
-        this.showNumberData = res.show_number_data;
-      });
-    },
+    }
   },
 };
 </script>

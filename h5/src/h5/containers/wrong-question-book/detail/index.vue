@@ -11,11 +11,11 @@
       :lazy-render="true"
       :initial-swipe="currentIndex"
       @change="onChange"
-      style="overflow-y: auto;"
-    >
+      >
       <van-swipe-item
         v-for="(question, index) in questionList"
         :key="question.id + index"
+        style="overflow-y: auto;"
       >
         <question
           :total="pagination.total"
@@ -65,13 +65,21 @@
       @on-search="onSearch"
     />
 
-    <div
+    <div v-if="questionList.length" class="intro-footer">
+      <van-button
+        class="intro-footer__btn"
+        type="primary"
+        @click="onClickWrongExercise"
+        >{{ $t('wrongQuestion.exercise') }}</van-button
+      >
+    </div>
+    <!-- <div
       v-if="questionList.length"
       class="question-foot"
       @click="onClickWrongExercise"
     >
       {{ $t('wrongQuestion.exercise') }}
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -80,7 +88,6 @@ import _ from 'lodash';
 import { mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import Api from '@/api';
-import { Dialog } from 'vant';
 import Question from './Question/index.vue';
 import CourseSearch from './Search/Course.vue';
 import ClassroomSearch from './Search/Classroom.vue';
@@ -136,7 +143,14 @@ export default {
       return this.searchComponents[this.targetType];
     },
   },
-
+  beforeRouteEnter(to, from, next) {
+    document.getElementById('app').style.background = '#f6f6f6';
+    next();
+  },
+  beforeRouteLeave(to, from, next) {
+    document.getElementById('app').style.background = '';
+    next();
+  },
   created() {
     this.setNavbarTitle(this.$route.query.title);
     this.fetchWrongQuestion();
@@ -214,20 +228,16 @@ export default {
     },
 
     onClickWrongExercise() {
-      if (!localStorage.getItem('first_wrong_exercises')) {
-        Dialog.alert({
-          message: this.$t('wrongQuestion.systemRandomlySelectsQuestions'),
-          confirmButtonText: this.$t('wrongQuestion.iKnow'),
-          confirmButtonColor: '#03c777 !important',
-        }).then(() => {
-          this.goToStartAnswer();
-        });
-        localStorage.setItem('first_wrong_exercises', true);
-        return;
-      }
-      this.goToStartAnswer();
+      this.$router.replace({
+        name: 'WrongExercisesIntro',
+        query: {
+          targetType: this.$route.params.type,
+          id: this.targetId,
+          ...this.searchParams,
+        },
+      });
     },
-
+    // WrongExercisesIntro
     goToStartAnswer() {
       this.$router.replace({
         name: 'WrongExercisesDo',

@@ -1,0 +1,52 @@
+.ibs-review{
+  font-size: vw(14);
+  overflow: hidden;
+  border-radius: vw(12);
+  .ibs-review-title {
+    color: #333333;
+    font-size: 14px;
+    font-weight: 500;
+    span{
+      font-size: vw(12);
+      color:#999999;
+      font-weight: 400;
+    }
+  }
+  .ibs-self-judging {
+    margin: vw(4) vw(16) 0;
+    padding: vw(12) vw(16) vw(32) vw(16);
+    border-radius: vw(12);
+    background: #FFF;
+    box-shadow: 0 vw(4) vw(24) 0 rgba(0, 0, 0, 0.05);
+
+    .ibs-self-judging-title {
+      color: #37393D;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 22px;
+    }
+
+    .ibs-self-judging-change-radio {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: vw(94);
+      margin: vw(16) 0 0 0;
+  
+      .ibs-self-judging-group-radio {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+  
+      .ibs-self-judging-radio {
+        display: flex;
+        flex-direction: column;
+  
+        &:nth-child(1) {
+          margin-right: vw(64);
+        }
+      }
+    }
+  }
+}

@@ -8,7 +8,9 @@
         @click="handleClickGoToList"
       />
       <h3 class="create-header__title">{{ text.title }}</h3>
-      <span class="create-header__btn" @click="createDiscussion">{{ $t('courseLearning.publish') }}</span>
+      <span class="create-header__btn" @click="createDiscussion">{{
+        $t('courseLearning.publish')
+      }}</span>
     </div>
 
     <van-form ref="form">
@@ -17,7 +19,9 @@
           v-model="title"
           :error="false"
           :placeholder="text.placeholderTitle"
-          :rules="[{ required: true, message: $t('courseLearning.pleaseEnterATitle') }]"
+          :rules="[
+            { required: true, message: $t('courseLearning.pleaseEnterATitle') },
+          ]"
         />
       </div>
 
@@ -29,7 +33,20 @@
           :error="false"
           autosize
           :placeholder="text.placeholderContent"
-          :rules="[{ required: true, message: $t('courseLearning.pleaseEnterContent') }]"
+          :rules="[
+            {
+              required: true,
+              message: $t('courseLearning.pleaseEnterContent'),
+            },
+          ]"
+        />
+      </div>
+      <div class="discussion-create__upload">
+        <van-uploader
+          v-model="fileList"
+          :after-read="afterRead"
+          :max-count="6"
+          @delete="deleteImgItem"
         />
       </div>
     </van-form>
@@ -39,6 +56,7 @@
 <script>
 import _ from 'lodash';
 import Api from '@/api';
+import { Toast } from 'vant';
 
 export default {
   name: 'DiscussionCreate',
@@ -46,15 +64,17 @@ export default {
   props: {
     type: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data() {
     return {
       title: '',
-      content: ''
-    }
+      content: '',
+      fileList: [],
+      imgs: [],
+    };
   },
 
   computed: {
@@ -63,14 +83,14 @@ export default {
         question: {
           title: 'courseLearning.sendQA',
           placeholderTitle: 'courseLearning.QATitle',
-          placeholderContent: 'courseLearning.QAContent'
+          placeholderContent: 'courseLearning.QAContent',
         },
         discussion: {
           title: 'courseLearning.postTopic',
           placeholderTitle: 'courseLearning.topicTitle',
-          placeholderContent: 'courseLearning.topicContent'
-        }
-      }
+          placeholderContent: 'courseLearning.topicContent',
+        },
+      };
       const langObj = langKey[this.type];
 
       _.forEach(langObj, (value, key) => {
@@ -78,7 +98,7 @@ export default {
       });
 
       return langObj;
-    }
+    },
   },
 
   methods: {
@@ -92,26 +112,42 @@ export default {
 
         await Api.createCoursesThread({
           query: {
-            courseId
+            courseId,
           },
           data: {
             content: this.content,
             courseId,
             type: this.type,
-            title: this.title
-          }
+            title: this.title,
+            imgs: this.imgs,
+          },
         });
         this.handleClickGoToList();
       });
-    }
-  }
-}
+    },
+    afterRead(file) {
+      const formData = new FormData();
+      formData.append('file', file.content);
+      formData.append('group', 'course');
+      Api.updateFile({
+        data: formData,
+      })
+        .then(res => {
+          this.imgs.push(res.uri);
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+    },
+    deleteImgItem(e, detail) {
+      this.imgs.splice(detail.index, 1);
+    },
+  },
+};
 </script>
-
 
 <style lang="scss" scoped>
 .discussion-create {
-
   .create-header {
     position: relative;
     padding: vw(16);
@@ -151,6 +187,43 @@ export default {
       font-size: vw(16);
       font-weight: 500;
       color: #999;
+    }
+  }
+
+  &__upload {
+    margin: vw(16);
+
+    /deep/.van-uploader__wrapper :nth-child(4) {
+      margin: 0 0;
+    }
+    /deep/.van-uploader__upload {
+      margin: 0 0;
+      width: vw(72) !important;
+      height: vw(72) !important;
+      border-radius: vw(4);
+      overflow: hidden;
+    }
+    /deep/.van-uploader__preview {
+      margin: 0 vw(16) vw(16) 0;
+    }
+    /deep/.van-uploader__preview-image {
+      width: vw(72) !important;
+      height: vw(72) !important;
+      border-radius: vw(4);
+      overflow: hidden;
+    }
+    /deep/.van-uploader__preview-delete {
+      border-radius: 50%;
+    }
+
+    /deep/.van-uploader__preview-delete-icon {
+      position: absolute;
+      top: vw(-1);
+      right: vw(-1);
+      color: #fff;
+      font-size: vw(16);
+      -webkit-transform: scale(0.5);
+      transform: scale(0.5);
     }
   }
 

@@ -25,6 +25,12 @@ export default {
     })
   },
 
+  provide() {
+    return {
+      getDetailsContent: this.getData,
+    }
+  },
+
   watch: {
     $route(to, from) {
       this.getData();
@@ -42,8 +48,8 @@ export default {
       setSourceType: types.SET_SOURCETYPE,
     }),
 
-    getData() {
-      this.getCourseLessons({
+    async getData() {
+      await this.getCourseLessons({
         courseId: this.$route.params.id,
       }).then(res => {
         if (!res.member && !Number(this.details.parentId)) {
@@ -62,6 +68,13 @@ export default {
         this.$toast.fail(err.message);
       });
     }
+  },
+
+  beforeRouteEnter(to, from, next) {
+		if (to.name === 'course' && from.name === 'testpaperResult' || to.name === 'course' && from.name === 'testpaperIntro') {
+			window.location.reload();
+		}
+    next();
   },
 
   beforeRouteLeave(to, from, next) {

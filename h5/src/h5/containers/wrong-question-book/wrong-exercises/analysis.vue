@@ -4,6 +4,7 @@
     <template v-else>
       <div class="ibs-wap-vue">
         <item-report
+          :wrong="true"
           :answerRecord="answerRecord"
           :answerReport="answerReport"
           :assessment="assessment"
@@ -19,10 +20,13 @@
 import _ from 'lodash';
 import Api from '@/api';
 import { mapState } from 'vuex';
+import itemReport from '@/src/components/item-report/src/item-report.vue';
 
 export default {
   name: 'WrongExercisesAnalysis',
-
+  components:{
+    itemReport
+  },
   data() {
     return {
       isLoading: false,
@@ -37,7 +41,14 @@ export default {
   created() {
     this.fetchData();
   },
-
+  beforeRouteEnter(to, from, next) {
+    document.getElementById('app').style.background = '#f6f6f6';
+    next();
+  },
+  beforeRouteLeave(to, from, next) {
+    document.getElementById('app').style.background = '';
+    next();
+  },
   computed: {
     ...mapState({
       storageSetting: state => state.storageSetting
@@ -47,7 +58,8 @@ export default {
   provide() {
     return {
       getResourceToken: this.getResourceToken,
-      settings: this.storageSetting
+      settings: this.storageSetting,
+      brushDo: this
     }
   },
 

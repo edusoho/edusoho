@@ -32,7 +32,7 @@
 
         <van-cell class="intro-cell" :border="false" :title="$t('courseLearning.fullScoreOfTestPaper')" :value="score + ' ' + $t('courseLearning.branch')" />
 
-        <van-cell class="intro-cell" :border="false" :title="$t('courseLearning.numberOfRemainingTests')" :value="info.doTimes == '0' ? $t('courseLearning.unlimited') : info.doTimes + ' ' + $t('courseLearning.times')"   />
+        <van-cell class="intro-cell" :border="false" :title="$t('courseLearning.numberOfRemainingTests')" :value="info.doTimes == '0' ? $t('courseLearning.unlimited') : info.remainderDoTimes + ' ' + $t('courseLearning.times')"   />
 
 				<van-cell v-if="info.startTime == null && info.endTime == null" class="intro-cell" :border="false" :title="$t('courseLearning.validityPeriodOfExamination')" :value="$t('courseLearning.unlimited')" />
 
@@ -46,7 +46,7 @@
 
         <template #footer>
           <div v-if="info.examMode == '0'" class="testpaper-tips">
-            {{ info.doTimes == '0' ? $t('courseLearning.noLimitTips') : $t('courseLearning.oneTips') }}
+            {{ $t('courseLearning.noLimitTips') }}
           </div>
           <!-- <div v-if="info.examMode == '1'" class="testpaper-tips">
             {{ info.doTimes == '0' ? $t('courseLearning.noLimitTips1') : $t('courseLearning.oneTips1') }}
@@ -76,18 +76,18 @@
     <div class="intro-footer">
       <template v-if="result">
         <van-button
-          v-if="result.status === 'doing'"
+          v-if="result.status === 'doing' && canDoAgain"
           class="intro-footer__btn"
           type="primary"
-          @click="startTestpaper(true)"
+          @click="startTestpaper(true, true)"
           >
           {{ $t('courseLearning.continueExam') }}
         </van-button>
         <van-button
-          v-else-if="hasRemainderDoTimes"
+          v-else-if="canDoAgain"
           class="intro-footer__btn"
           type="primary"
-          @click="startTestpaper(false, true)"
+          @click="startTestpaper(true, true)"
         >{{ $t('courseLearning.startTheExam') }}</van-button>
         <van-button
           v-else
@@ -106,10 +106,9 @@
 					>{{ $t('courseLearning.ViewDetail') }}</van-button
 				>
 				<van-button v-else
-					:disabled="startTime > Date.now()"
 					class="intro-footer__btn"
 					type="primary"
-					@click="startTestpaper()"
+					@click="startTestpaper(true,true)"
 					>{{ $t('courseLearning.startTheExam') }}</van-button
 				>
 			</template>
@@ -155,6 +154,8 @@ export default {
       answer: null,
       time: null,
       interval: null,
+			canDoAgain:'',
+			courseId: '',
       countDown: {
         hours: '00',
         minutes: '00',
@@ -190,9 +191,11 @@ export default {
       selectedPlanId: state => state.course.selectedPlanId,
     }),
   },
+	created(){
+    this.getInfo();
+	},
   mounted() {
     this.initReport();
-    this.getInfo();
   },
   beforeRouteEnter(to, from, next) {
     document.getElementById('app').style.background = '#f6f6f6';
@@ -232,11 +235,11 @@ export default {
           this.counts = res.items;
           this.testpaperTitle = res.testpaper.name;
           this.testpaper = res.testpaper;
+					this.courseId = res.task.activity.fromCourseId
           this.result = res.testpaperResult;
           this.info = res.task.activity.testpaperInfo;
           this.enable_facein = res.task.enable_facein;
-          this.hasRemainderDoTimes = this.info.isLimitDoTimes === '0' || (this.info.isLimitDoTimes === '1' && this.info.remainderDoTimes > 0)
-
+          this.canDoAgain = this.info.canDoAgain === '1';
           this.score = this.testpaper.score;
           this.startTime = parseInt(this.info.startTime) * 1000;
           this.endTime = parseInt(this.info.endTime) * 1000;
@@ -259,6 +262,7 @@ export default {
         userId: this.user.id,
         beginTime: Number(this.result.beginTime),
         endTime,
+        courseId: this.courseId
       };
       // 交卷+跳转到结果页
       this.handExamdo(datas)
@@ -269,17 +273,52 @@ export default {
           Toast.fail(err.message);
         });
     },
-    startTestpaper(KeepDoing = false, reDo = false) {
-      if (this.enable_facein === 1) {
-        Dialog.alert({
-          title: '',
-          confirmButtonText: this.$t('courseLearning.iKnow'),
-          message:
-            '本场考试已开启云监考，暂不支持在移动端答题，请前往PC端进行答题。',
-        }).then(() => {});
-      } else {
-        this.goDoTestpaper(KeepDoing, reDo);
-      }
+    startTestpaper(KeepDoing, reDo) {
+			if(this.startTime > Date.now()) {
+			 	Toast.fail(this.$t('courseLearning.examNotStart'))
+				return
+			} 
+
+      this.testId = this.$route.query.testId;
+      this.targetId = this.$route.query.targetId;
+      Api.testpaperIntro({
+        params: {
+          targetId: this.targetId,
+          targetType: 'task',
+        },
+        query: {
+          testId: this.testId,
+        },
+      })
+        .then(res => {
+          this.testId = res.testpaper.id
+          this.canDoAgain = res.task.activity.testpaperInfo.canDoAgain === '1';
+					if(this.canDoAgain){
+						if (this.enable_facein === 1) {
+							Dialog.alert({
+								title: '',
+								confirmButtonText: this.$t('courseLearning.iKnow'),
+								message:
+									'本场考试已开启云监考，暂不支持在移动端答题，请前往PC端进行答题。',
+							}).then(() => {});
+						} else {
+							this.goDoTestpaper(KeepDoing, reDo);
+						}
+					}else {
+						Dialog.alert({
+							message: this.$t('courseLearning.examOverExam'),
+						}).then(() => {
+							this.$router.push(`/course/${this.courseId}`)
+						});
+					}
+
+          if (this.startTime > Date.now()) {
+            this.startCountDown()
+          }
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
     },
     goDoTestpaper(KeepDoing, reDo) {
       this.$router.push({
@@ -289,6 +328,7 @@ export default {
           targetId: this.targetId,
           title: this.testpaperTitle,
           action: reDo ? 'redo' : 'do',
+          courseId: this.courseId
         },
         params: {
           KeepDoing,

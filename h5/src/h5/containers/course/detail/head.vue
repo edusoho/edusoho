@@ -1,5 +1,6 @@
 <template>
   <div id="course-detail__head" class="course-detail__head pos-rl">
+
     <video-report-mask
       :type="outFocusMaskType"
       :isShow="isShowOutFocusMask"
@@ -38,7 +39,7 @@
       </div>
     </div>
     <div
-      v-show="sourceType === 'img' || isEncryptionPlus || finishDialog"
+      v-show="sourceType === 'img' || finishDialog || isShowVedioIframe"
       id="course-detail__head--img"
       class="course-detail__head--img"
     >
@@ -68,8 +69,8 @@
       <div
         v-show="
           ['video', 'audio', 'ppt'].includes(sourceType) &&
-            !isEncryptionPlus &&
-            !finishDialog
+          !isShowVedioIframe &&
+          !finishDialog
         "
         id="course-detail__head--video"
         ref="video"
@@ -111,6 +112,10 @@
       :courseId="selectedPlanId"
       @closeFinishDialog="closeFinishDialog"
     ></finishDialog>
+
+    <open-app-dialog v-if="appShow"
+                     :openAppUrl="openAppUrl" :courseId="course.details.id"
+                     :goodsId="course.details.goodsId" @cancel="cancel()" ></open-app-dialog>
   </div>
 </template>
 <script>
@@ -128,6 +133,8 @@ import WechatSubscribe from '../components/wechat-subscribe';
 import * as types from '@/store/mutation-types.js';
 import copyUrl from '@/mixins/copyUrl';
 import { getLanguage } from '@/lang/index.js'
+import { closedToast } from '@/utils/on-status.js';
+import openAppDialog from '../components/openAppDialog.vue'
 
 export default {
   components: {
@@ -136,6 +143,7 @@ export default {
     finishDialog,
     VideoReportMask,
     WechatSubscribe,
+    openAppDialog
   },
   mixins: [report, copyUrl],
   props: {
@@ -152,6 +160,8 @@ export default {
   },
   data() {
     return {
+      media: {},
+      isShowVedioIframe: false,
       finishCondition: undefined,
       learnMode: false,
       enableFinish: false,
@@ -176,12 +186,16 @@ export default {
       finishDialog: false, // 下一课时弹出模态框
       lastWatchTime: 0, // 上一次暂停上报的视频时间
       nowWatchTime: 0, // 当前刚看时间计时
-      activity: {}
+      activity: {},
+      openAppUrl: '',
+      appShow: false
     };
   },
+  inject: ['getDetailsContent'],
   computed: {
-    ...mapState(['DrpSwitch', 'cloudSdkCdn']),
+    ...mapState(['DrpSwitch', 'cloudSdkCdn', 'courseSettings','course']),
     ...mapState('course', {
+      course: state => state,
       sourceType: state => state.sourceType,
       selectedPlanId: state => state.selectedPlanId,
       taskId: state => state.taskId,
@@ -237,6 +251,9 @@ export default {
    */
   methods: {
     ...mapActions(['setCloudAddress']),
+    ...mapMutations('course', {
+      setSourceType: types.SET_SOURCETYPE,
+    }),
 
     ...mapMutations('course', {
       setSourceType: types.SET_SOURCETYPE
@@ -277,10 +294,10 @@ export default {
       this.IsLivePlayback();
     },
     getFinishCondition() {
-      this.getCourseData(this.selectedPlanId, this.taskId).then(res => {
-        this.activity = res.activity;
-        this.finishCondition = res.activity && res.activity.finishCondition;
-      });
+        this.getCourseData(this.selectedPlanId, this.taskId).then(res => {
+          this.activity = res.activity;
+          this.finishCondition = res.activity && res.activity.finishCondition;
+        });
     },
     // 直播视频回放刚进入课程就算学习完成
     IsLivePlayback() {
@@ -346,6 +363,8 @@ export default {
             mediaType,
           } = res;
 
+          this.media = res.media
+
           if (resNo === '0') {
             const media = await Api.getLocalMediaLive({
               query: {
@@ -386,10 +405,16 @@ export default {
     },
     formateAudioData(player) {
       const media = player.media;
+
       if (!media.isFinishConvert) {
         Toast('课程内容准备中，请稍候查看');
         return;
       }
+
+      if (this.handleOnlyLearnOnApp()) {
+        return;
+      }
+
       // 不支持浏览器判断
       this.isEncryptionPlus = media.isEncryptionPlus;
       if (media.isEncryptionPlus) {
@@ -423,6 +448,31 @@ export default {
       return android;
     },
 
+    cancel() {
+      this.setSourceType({
+        sourceType: '',
+        taskId: ''
+      })
+      this.appShow = false;
+     },
+
+    handleOnlyLearnOnApp() {
+      if (this.courseSettings.only_learning_on_APP == 0) return false
+
+      const { goodsId, id } = this.course.details;
+      const { host, protocol } = window.location;
+
+      if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+        this.openAppUrl = `kuozhi://${host}?courseId=${id}&goodsId=${goodsId}`;
+      } else {
+        this.openAppUrl = `kuozhi://${host}?protocol=${protocol.replace(":","")}&courseId=${id}&goodsId=${goodsId}`;
+      }
+
+      this.appShow = true;
+
+      return true;
+    },
+
     formateVedioData(player) {
       const media = player.media;
       const timelimit = media.timeLimit;
@@ -435,14 +485,22 @@ export default {
         Toast('课程内容准备中，请稍候查看');
         return;
       }
-      this.isEncryptionPlus = media.isEncryptionPlus;
-      if (media.isEncryptionPlus && !this.isWechat() && securityVideoPlayer) {
-        Toast('该浏览器不支持云视频播放，请用微信打开或下载App');
+
+      if (this.handleOnlyLearnOnApp()) {
         return;
-      } else if (media.isEncryptionPlus && !securityVideoPlayer) {
-        Toast('该浏览器不支持云视频播放，请下载App');
-        // else if (media.isEncryptionPlus && !securityVideoPlayer && (!this.isWechat() || !this.isAndroid()))
-        // Toast('该浏览器不支持云视频播放，请下载App，安卓端仅允许在微信App内置浏览器中观看');
+      }
+
+      this.isEncryptionPlus = media.isEncryptionPlus;
+
+      if (media.isEncryptionPlus && securityVideoPlayer) {
+        Toast('请在APP学习');
+        this.isShowVedioIframe = true
+        return;
+      }
+
+      if (media.isEncryptionPlus && !securityVideoPlayer && !this.detectBrowserInfo()) {
+        Toast('请在APP学习或使用钉钉/飞书/微信/企业微信内置浏览器打开');
+        this.isShowVedioIframe = true
         return;
       }
 
@@ -455,6 +513,10 @@ export default {
         pluck: {
           timelimit: timelimit,
         },
+        fingerprint: {
+          html: player.fingerPrintSetting?.video_fingerprint,
+          duration: player.fingerPrintSetting?.video_fingerprint_time * 100
+        },
         playbackRates: [0.75, 1, 1.25, 1.5, 2, 3],
         resNo: media.resNo,
         disableDataUpload: true,
@@ -462,6 +524,7 @@ export default {
           pos: 'top.right',
           width: 30,
           height: 30,
+          file: player.watermarkSetting?.video_watermark_image
         },
         language: getLanguage(),
         token: media.token,
@@ -542,7 +605,7 @@ export default {
         if (options.language === 'zh-cn' || !options.language) {
           options.language = 'zh-CN'
         }
-        
+
         const player = new window.QiQiuYun.Player(options);
         this.player = player;
         player.on('unablePlay', () => {
@@ -588,6 +651,26 @@ export default {
       } else {
         return false;
       }
+    },
+    detectBrowserInfo() {
+      const userAgent = navigator.userAgent.toLowerCase();
+
+      // 判断是否为微信浏览器
+      const isWechat = /micromessenger/i.test(userAgent);
+      // 判断是否为企业微信（即微信工作版）
+      const isWechatWork = /wxwork/i.test(userAgent);
+
+      // 判断是否为钉钉内置浏览器
+      const isDingTalk = /dingtalk/i.test(userAgent);
+
+      // 飞书内置浏览器可能包含 "lark" 关键字，但请核实最新版本 UA 以确保准确性
+      const isFeishu = /lark/i.test(userAgent);
+
+      if (isWechat || isWechatWork || isDingTalk || isFeishu) {
+        return true;
+      }
+
+      return false;
     },
     expire() {
       this.counting = false;
@@ -653,16 +736,31 @@ export default {
       this.finishDialog = false;
     },
 
-    handleClickContinueLearning() {
+    async handleClickContinueLearning() {
+      await this.getDetailsContent()
+
+      if(this.courseSet?.status == 'closed') {
+        return closedToast('course');
+      }
+
+      if (this.course?.details?.learningExpiryDate?.expired) {
+        return Toast(this.$t('learning.expired'));
+      }
+
       const { id } = this.nextStudy.nextTask;
+
       const params = {
         courseId: this.selectedPlanId,
         taskId: id
       };
 
-      Api.getCourseData({ query: params }).then(res => {
-        this.toLearnTask(res);
-      });
+      try {
+        Api.getCourseData({ query: params }).then(res => {
+          this.toLearnTask(res);
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
 
      // 跳转到task
@@ -824,7 +922,7 @@ export default {
           },
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>

@@ -9,7 +9,7 @@
         <div class="text-10">{{ scopeFilter(item) }}</div>
       </div>
 
-      <div v-if="num == 1" class="flex flex-col justify-center h-full text-text-1">
+      <div v-if="num == 1" class="flex flex-col justify-center h-full text-text-1 w-148">
         <div class="mb-4 font-medium text-overflow text-14">{{ item.name }}</div>
         
         <!-- 兼容老版本优惠券无有效期功能或者非有效期模式 -->

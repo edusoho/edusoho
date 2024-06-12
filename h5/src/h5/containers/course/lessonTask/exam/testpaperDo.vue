@@ -250,6 +250,7 @@ export default {
           this.afterGetData(res);
         })
         .catch(err => {
+
           /**
            * 4032207:考试正在批阅中
            * 4032204：考试只能考一次，不能重复考试
@@ -480,19 +481,26 @@ export default {
       if (index > 0) {
         message = this.$t('courseLearning.notSureSubmit', { number: index });
       }
+
+      this.saveAnswerInterval();
+
       return new Promise((resolve, reject) => {
         Dialog.confirm({
           title: this.$t('courseLearning.handInThePaper'),
           cancelButtonText: this.$t('courseLearning.confirmSubmission'),
           confirmButtonText: this.$t('courseLearning.check'),
           message: message,
+					className: 'backDialog'
         })
           .then(res => {
+						// 销毁dialog Dom
+						document.getElementsByClassName('backDialog')[0].remove();
             // 显示答题卡
             this.cardShow = true;
             reject(res);
           })
           .catch(() => {
+						document.getElementsByClassName('backDialog')[0].remove();
             this.clearTime();
             this.submitExam(answer)
               .then(res => {
@@ -522,6 +530,7 @@ export default {
         userId: this.user.id,
         endTime,
         beginTime: Number(this.testpaperResult.beginTime),
+        courseId: this.$route.query.courseId
       };
 
       return new Promise((resolve, reject) => {
@@ -552,8 +561,10 @@ export default {
       });
     },
     saveAnswerInterval() {
+      clearInterval(this.interval);
+
       this.interval = setInterval(() => {
-        this.saveAnswerAjax()
+        this.saveAnswerAjax();
       }, 30 * 1000)
     },
     saveAnswerAjax() {
@@ -563,6 +574,7 @@ export default {
         answer: JSON.parse(JSON.stringify(this.answer)),
         resultId: this.testpaperResult.id,
         used_time,
+        courseId: this.$route.query.courseId
       })
       .catch((error) => {
         const { code: errorCode, message, traceId } = error;
@@ -595,6 +607,8 @@ export default {
           }).then(() => this.exitPage())
           return
         }
+
+        Toast.fail(err.message);
 
         Dialog.confirm({
           title: '网络连接不可用，自动保存失败',

@@ -12,7 +12,7 @@
 
     <div class="discussion-body">
       <div class="discussion-body__info">
-        <img class="avatar" :src="discussion.user.avatar.small">
+        <img class="avatar" :src="discussion.user.avatar.small" />
         <div class="info-right">
           <span>{{ discussion.user.nickname }}</span>
           <span>{{ discussion.createdTime | formatCourseTime }}</span>
@@ -20,6 +20,16 @@
       </div>
       <div class="discussion-body__title">{{ discussion.title }}</div>
       <div class="discussion-body__content" v-html="discussion.content" />
+      <div class="discussion-list">
+        <van-image
+          v-for="(item, index) in discussion.imgs"
+          :key="index"
+          width="100"
+          height="100"
+          :src="item"
+          @click.stop="readFile(index)"
+        />
+      </div>
     </div>
 
     <van-list
@@ -36,7 +46,9 @@
         v-model="content"
         :placeholder="$t('courseLearning.reply2')"
       />
-      <span class="reply-btn" @click="handleClickEnter">{{ $t('courseLearning.reply') }}</span>
+      <span class="reply-btn" @click="handleClickEnter">{{
+        $t('courseLearning.reply')
+      }}</span>
     </div>
   </div>
 </template>
@@ -44,25 +56,31 @@
 <script>
 import Api from '@/api';
 import _ from 'lodash';
-import ReplyItem from './components/ReplyItem.vue'
+import ReplyItem from './components/ReplyItem.vue';
+import { ImagePreview } from 'vant';
+import { closedToast } from '@/utils/on-status.js';
+
 
 export default {
   name: 'DiscussionDetail',
 
   components: {
-    ReplyItem
+    ReplyItem,
   },
 
   props: {
     discussion: {
       type: Object,
-      required: true
+      required: true,
     },
-
+    details: {
+      type: Object,
+      default: () => {}
+    },
     type: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data() {
@@ -73,34 +91,48 @@ export default {
       finished: false,
       paging: {
         offset: 0,
-        limit: 10
+        limit: 10,
       },
-      replyList: []
-    }
+      replyList: [],
+    };
   },
 
   computed: {
     titleText() {
-      return this.type === 'question' ? this.$t('courseLearning.QADetails') : this.$t('courseLearning.topicDetails');
-    }
+      return this.type === 'question'
+        ? this.$t('courseLearning.QADetails')
+        : this.$t('courseLearning.topicDetails');
+    },
   },
 
   methods: {
+    readFile(index) {
+      ImagePreview({
+        images: this.discussion.imgs, // 需要预览的图片 URL 数组
+        showIndex: true, // 是否显示页码
+        loop: true, // 是否开启循环播放
+        closeOnPopstate: true, // 是否在页面回退时自动关闭
+        startPosition: index, // 图片预览起始位置索引
+      });
+    },
     async fetchCourseThreadPost() {
       const { offset, limit } = this.paging;
-      const { data, paging: { total} } = await Api.getCoursesThreadPost({
+      const {
+        data,
+        paging: { total },
+      } = await Api.getCoursesThreadPost({
         query: {
           courseId: this.courseId,
-          threadId: this.discussion.id
+          threadId: this.discussion.id,
         },
         params: {
           limit: limit,
-          offset: offset * limit
-        }
+          offset: offset * limit,
+        },
       });
       _.assign(this, {
         replyList: _.concat(this.replyList, data),
-        loading: false
+        loading: false,
       });
 
       this.paging.offset++;
@@ -115,34 +147,57 @@ export default {
     },
 
     async handleClickEnter() {
+      if(this.details.courseSet.status == 'closed') {
+        return closedToast('course')
+      }
+
       const content = _.trim(this.content);
 
       if (!content) {
         this.$toast(this.$t('courseLearning.pleaseEnterContent'));
         return;
-      };
+      }
 
       const result = await Api.createCoursesThreadPost({
         query: {
           courseId: this.courseId,
-          threadId: this.discussion.id
+          threadId: this.discussion.id,
         },
         data: {
-          content
-        }
+          content,
+        },
       });
 
       this.replyList.unshift(result);
       this.content = '';
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .discussion-detail {
   padding-bottom: vw(60);
-
+  .discussion-list {
+    margin-top: vw(16);
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none; /* firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+    &::-webkit-scrollbar {
+      display: none; /* Chrome Safari */
+    }
+    .van-image {
+      margin-right: vw(12);
+      width: 64px !important;
+      height: 64px !important;
+      border-radius: vw(4);
+      overflow: hidden;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
   .detail-header {
     position: relative;
     padding: vw(16);
@@ -163,7 +218,6 @@ export default {
       line-height: vw(24);
     }
   }
-
 
   .discussion-body {
     padding: vw(2) vw(16) vw(16);
@@ -196,7 +250,6 @@ export default {
       color: #333;
       line-height: vw(24);
       word-break: break-word;
-
     }
 
     &__content {

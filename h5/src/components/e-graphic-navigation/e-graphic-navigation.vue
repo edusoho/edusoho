@@ -18,7 +18,11 @@
           :src="getDefaultImg(item.link.type)"
         />
         <img v-else class="graphicNavigation__img" :src="item.image.uri" />
-        <span class="graphicNavigation__text">{{ item.title }}</span>
+        <span
+          class="graphicNavigation__text text-overflow"
+          :class="getTitleClass(graphicNavigation.length)"
+          >{{ item.title }}</span
+        >
       </div>
     </div>
   </div>
@@ -48,6 +52,10 @@ export default {
         return 'graphicNavigation__warp__small';
       }
       return 'graphicNavigation__warp__normal';
+    },
+    getTitleClass(itemCount) {
+      if (itemCount === 4) return 'graphicNavigationFour__text';
+      if (itemCount >= 5) return 'graphicNavigationFive__text';
     },
     getDefaultImg(type) {
       switch (type) {

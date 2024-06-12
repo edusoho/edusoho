@@ -52,11 +52,13 @@
       <div v-show="active == 1">
         <course-set-list
           ref="course"
+          :details="details"
           :feedback="!errorMsg"
           :course-sets="details.courses"
           :disable-mask="true"
           :title="$t('classLearning.course')"
           :defaul-value="$t('classLearning.empty')"
+          :classId="details.classId"
           @click.native="showDialog('click')"
         />
       </div>
@@ -79,12 +81,16 @@
     </van-action-sheet>
     <e-footer
       @click.native="gotoGoodsPage"
-      v-if="active == 0 && this.details.goodsId && this.details.status !== 'closed'"
+      v-if="active == 0 && details.goodsId && details.status !== 'closed'"
     >
       {{ $t('classLearning.viewDetails') }}
     </e-footer>
 
     <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
+
+    <div class="footer">
+    <closedFixed v-if="details.status == 'closed'" :isJoin="true" :title="$t('closed.classroomTitle')" :content="$t('closed.classroomContent')" />
+  </div>
   </div>
 </template>
 
@@ -101,6 +107,8 @@ import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
+import closedFixed from '@/components/closed-fixed.vue'
+
 // eslint-disable-next-line no-unused-vars
 const TAB_HEIGHT = 44;
 
@@ -114,6 +122,7 @@ export default {
     courseSetList,
     infoCollection,
     Reviews,
+    closedFixed
   },
   props: ['details', 'planDetails'],
   data() {
@@ -131,7 +140,6 @@ export default {
         targetType: 'classroom',
         targetId: this.details.classId,
       },
-      showNumberData: '',
       show: false,
       show_classroom_review: this.$store.state.goods.show_classroom_review,
     };
@@ -141,6 +149,9 @@ export default {
     ...mapState('classroom', {
       currentJoin: state => state.currentJoin,
     }),
+    ...mapState({
+      showNumberData: state => state.goodsSettings.show_number_data
+    })
   },
   async created() {
     this.classroomSettings = await Api.getSettings({
@@ -150,7 +161,6 @@ export default {
     }).catch(err => {
       console.error(err);
     });
-    this.getGoodSettings();
   },
   watch: {
     currentJoin: {
@@ -398,16 +408,14 @@ export default {
     onCancelForm() {
       this.setCurrentJoin(false);
       this.isShowForm = false;
-    },
-    getGoodSettings() {
-      Api.getSettings({
-        query: {
-          type: 'goods',
-        },
-      }).then(res => {
-        this.showNumberData = res.show_number_data;
-      });
-    },
+    }
   },
 };
 </script>
+<style scoped>
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+</style>

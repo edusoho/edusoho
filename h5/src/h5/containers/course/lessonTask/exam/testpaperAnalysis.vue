@@ -17,6 +17,8 @@
       :can-do="canDo"
       :all="allList.length"
       :result-show="resultShow"
+      :mode="mode"
+      :exerciseInfo="result"
     />
     <!-- 底部 -->
     <div class="paper-footer">
@@ -149,6 +151,7 @@ export default {
       slideIndex: 0, // 题库组件当前所在的划片位置
       canDo: false, // 是否能答题，解析模式下不能答题
       resultShow: false,
+      mode: 'exam'
     };
   },
   computed: {

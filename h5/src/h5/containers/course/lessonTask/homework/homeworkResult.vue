@@ -224,6 +224,7 @@ export default {
         homeworkId: this.$route.query.homeworkId,
         userId: this.user.id,
         homeworkResultId: this.$route.query.homeworkResultId,
+        courseId: this.courseId
       };
       // 提交作业+跳转到结果页
       this.handHomeworkdo(datas)

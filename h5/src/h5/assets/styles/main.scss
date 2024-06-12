@@ -3,7 +3,7 @@
 @import './global.scss';
 @import './vant.scss';
 @import '../fonts/iconfont.css';
-
+@import '../../src/styles/index.scss';
 // components
 @import './components/reviews.scss';
 @import './components/report-mask.scss';
@@ -73,7 +73,8 @@
 
 .ibs-wap-vue {
 	// $primary-color: #fb40d2;
-	@import '~wap-sdk/src/styles/index.scss';
+	@import '../../src/styles/index.scss';
+	// @import '~wap-sdk/src/styles/index.scss';
 }
 //隐藏滚动条
 html,

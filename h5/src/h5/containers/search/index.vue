@@ -11,6 +11,24 @@
         @cancel="onCancel"
       />
     </form>
+    <lazyLoading
+          v-if="searchByClassroom && courseList.length > 0"
+          :course-list="courseList"
+          :is-all-data="true"
+          :vip-tag-show="true"
+          course-item-type="price"
+          :is-request-compile="true"
+          :type-list="'classroom_course_list'"
+          @needRequest="sendRequestCourse"
+          :showNumberData="showNumberData"
+        />
+    <emptyCourse
+        v-if="searchByClassroom && courseList.length === 0"
+        :has-button="false"
+        :text="$t('search.emptyCourse')"
+        :type="'course_list'"
+        :isSearch="true"
+      />
     <van-tabs
       v-if="isSearch"
       v-model="active"
@@ -85,6 +103,7 @@
 import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
 import emptyCourse from '@/containers/learning/emptyCourse/emptyCourse.vue';
 import Api from '@/api';
+import {mapState} from "vuex";
 export default {
   nama: 'search',
   components: {
@@ -94,6 +113,7 @@ export default {
   data() {
     return {
       active: 0,
+      searchByClassroom: false,
       selectedData: {
         courseSetTitle: '',
       },
@@ -121,16 +141,22 @@ export default {
         isRequestCompile: false,
         offset: 0,
         limit: 10,
-      },
-      showNumberData: {
-        type: String,
-        default: '',
-      },
+      }
     };
+  },
+  computed: {
+    ...mapState({
+      showNumberData: state => state.goodsSettings.show_number_data
+    })
   },
   methods: {
     onSearch() {
-      this.isSearch = true;
+      if (this.$route.query.id) {
+        this.searchByClassroom = true
+      } else {
+        this.isSearch = true;
+      }
+
       this.initCourseList();
       this.requestCourses();
 
@@ -139,11 +165,10 @@ export default {
 
       this.initItemBankList();
       this.requestItemBanks();
-      this.getGoodSettings();
     },
     onCancel() {
       this.isSearch = false;
-      this.$router.push({ path: '/' });
+      this.$router.go(-1);
     },
     initClassroomList() {
       this.classroom.isRequestCompile = false;
@@ -210,6 +235,17 @@ export default {
         limit: this.course.limit,
       };
       const config = Object.assign({}, this.selectedData, setting);
+
+      if (this.$route.query.id) {
+        return Api.searchCourse({ query: { id: this.$route.query.id }, params: { title: this.selectedData.courseSetTitle } })
+          .then((res) => {
+            this.courseList = res;
+            })
+          .catch(err => {
+              console.log(err, 'error');
+            });
+      }
+
       return Api.getCourseList({
         params: config,
       })
@@ -280,16 +316,7 @@ export default {
 
     sendRequestItemBank() {
       if (!this.isAllItemBank) this.requestItemBanks();
-    },
-    getGoodSettings() {
-      Api.getSettings({
-        query: {
-          type: 'goods',
-        },
-      }).then(res => {
-        this.showNumberData = res.show_number_data;
-      });
-    },
+    }
   },
 };
 </script>

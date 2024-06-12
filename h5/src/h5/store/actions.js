@@ -30,14 +30,14 @@ export const fastLogin = ({ commit }, data) =>
 export const getUserInfo = ({ commit }) =>
   Api.getUserInfo({}).then(res => {
     const userInfo = res;
-    
-    // html字符串处理，删除所有的P标签
-    const delPResult = res.about.replace(/<p>|<\/p>/g, '');
 
-    // 对img标签进行处理，固定图片的高度
-    const changeImgResult = delPResult.replace(/<img/g, '<img style="height:22px !important;"');
-    
-    userInfo.about = changeImgResult;
+    if (res.about) {
+      const delPResult = res.about?.replace(/<p>|<\/p>/g, '');
+      const changeImgResult = delPResult.replace(/<img/g, '<img style="height:22px !important;"');
+
+      userInfo.about = changeImgResult;
+    }
+
     commit(types.USER_INFO, userInfo);
     return userInfo;
   });
@@ -123,34 +123,35 @@ export const setAvatar = ({ commit }, { avatarId }) =>
   });
 
 // 全局设置
-export const getGlobalSettings = ({ commit }, { type, key }) =>
-  Api.getSettings({
+export const getGlobalSettings = ({ commit }, { type, key }) => {
+  return Api.getSettings({
     query: {
       type,
     },
   }).then(res => {
-    if (type === 'site') {
-      document.title = res.name;
-    }
     commit(types.GET_SETTINGS, {
       key,
       setting: res || {},
     });
+
     return res;
   });
-
+}
 // 全局vip元素显示开关
 export const setVipSwitch = ({ commit }, isOn) =>
   new Promise(resolve => {
     if (!isOn) {
       commit(types.GET_SETTINGS, { key: 'vipSwitch', setting: isOn });
       resolve(isOn);
+
       return isOn;
     }
+
     return Api.getVipLevels().then(levels => {
       const levelsExist = !!(levels && levels.length);
       commit(types.GET_SETTINGS, { key: 'vipSwitch', setting: levelsExist });
       resolve(levelsExist);
+
       return levelsExist;
     });
   });

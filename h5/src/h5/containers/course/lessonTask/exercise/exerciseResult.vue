@@ -75,7 +75,7 @@
           v-if="isReadOver"
           class="result-footer__btn"
           type="primary"
-          @click="startExercise()"
+          @click="skipExerciseInfo()"
           >{{ $t('courseLearning.doItAgain') }}
         </van-button>
       </div>
@@ -218,6 +218,16 @@ export default {
         },
       });
     },
+    skipExerciseInfo() {
+      this.$router.replace({
+        name: 'exerciseIntro',
+        query: {
+          courseId: this.$route.query.courseId,
+          taskId: this.$route.query.taskId,
+          answerAgain: true,
+        },
+      })
+    },
     // 交练习
     submitExercise(answer) {
       const datas = {
@@ -225,6 +235,7 @@ export default {
         exerciseId: this.$route.query.exerciseId,
         userId: this.user.id,
         exerciseResultId: this.$route.query.exerciseResultId,
+        courseId: this.$route.query.courseId,
       };
       // 提交练习+跳转到结果页
       this.handExercisedo(datas)

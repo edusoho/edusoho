@@ -40,6 +40,13 @@ export default [
     disableLoading: true,
   },
   {
+    // 获取全局设置
+    name: 'getAllSettings',
+    url: '/settings',
+    method: 'GET',
+    disableLoading: true,
+  },
+  {
     // 后台配置保存草稿数据
     name: 'saveDraftDate',
     url: '/pages/h5/settings/{type}/draft',
