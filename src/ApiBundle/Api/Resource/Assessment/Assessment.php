@@ -9,6 +9,7 @@ use Biz\Common\CommonException;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentGenerateRuleService;
@@ -52,6 +53,38 @@ class Assessment extends AbstractResource
         }
 
         return true;
+    }
+
+    public function search(ApiRequest $request)
+    {
+        $conditions = $request->query->all();
+        if (empty($conditions['itemBankId'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $conditions['displayable'] = 1;
+        $conditions['parent_id'] = 0;
+        $conditions['bank_id'] = $conditions['itemBankId'];
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $total = $this->getAssessmentService()->countAssessments($conditions);
+        $assessments = $this->getAssessmentService()->searchAssessments(
+            $conditions,
+            ['created_time' => 'DESC'],
+            $offset,
+            $limit
+        );
+
+        $userIds = array_unique(array_column($assessments, 'created_user_id'));
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $ids = array_column($assessments, 'id');
+        $assessmentGenerateRules = $this->getAssessmentGenerateRuleService()->findAssessmentGenerateRuleByAssessmentIds($ids);
+        $assessmentRulesMap = array_column($assessmentGenerateRules, 'num', 'assessment_id');
+        foreach ($assessments as &$assessment) {
+            $userId = $assessment['created_user_id'];
+            $assessment['created_user'] = $users[$userId] ?? null;
+            $assessment['num'] = $assessmentRulesMap[$assessment['id']] ?? null;
+        }
+
+        return $this->makePagingObject($assessments, $total, $offset, $limit);
     }
 
     private function validate($fields)
@@ -133,5 +166,13 @@ class Assessment extends AbstractResource
     private function getSchedulerService()
     {
         return $this->service('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }

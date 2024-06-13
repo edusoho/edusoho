@@ -15,6 +15,11 @@ class AssessmentGenerateRuleDaoImpl extends AdvancedDaoImpl implements Assessmen
         return $this->getByFields(['assessment_id' => $assessmentId]);
     }
 
+    public function findByAssessmentIds($assessmentIds)
+    {
+        return $this->findInField('assessment_id', $assessmentIds);
+    }
+
     public function declares()
     {
         return array(
