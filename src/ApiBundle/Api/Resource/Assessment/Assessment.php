@@ -75,17 +75,13 @@ class Assessment extends AbstractResource
 
         $userIds = array_unique(array_column($assessments, 'created_user_id'));
         $users = $this->getUserService()->findUsersByIds($userIds);
+        $ids = array_column($assessments, 'id');
+        $assessmentGenerateRules = $this->getAssessmentGenerateRuleService()->findAssessmentGenerateRuleByAssessmentIds($ids);
+        $assessmentRulesMap = array_column($assessmentGenerateRules, 'num', 'assessment_id');
         foreach ($assessments as &$assessment) {
             $userId = $assessment['created_user_id'];
             $assessment['created_user'] = $users[$userId] ?? null;
-        }
-        $ids = array_column($assessments, 'id');
-        $assessmentGenerateRules = $this->getAssessmentGenerateRuleService()->findAssessmentGenerateRuleByAssessmentIds($ids);
-        if (!empty($assessmentGenerateRules)) {
-            $assessmentRulesMap = array_column($assessmentGenerateRules, 'num', 'assessment_id');
-            foreach ($assessments as &$assessment) {
-                $assessment['num'] = $assessmentRulesMap[$assessment['id']] ?? null;
-            }
+            $assessment['num'] = $assessmentRulesMap[$assessment['id']] ?? null;
         }
 
         return $this->makePagingObject($assessments, $total, $offset, $limit);

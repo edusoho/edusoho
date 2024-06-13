@@ -35,9 +35,11 @@ class AssessmentFilter extends Filter
     {
         $itemFilter = new ItemFilter();
         $assessment['description'] = $this->convertAbsoluteUrl($assessment['description']);
-//        foreach ($assessment['sections'] as &$section) {
-//            $itemFilter->filters($section['items']);
-//        }
+        if (!empty($assessment['sections'])) {
+            foreach ($assessment['sections'] as &$section) {
+                $itemFilter->filters($section['items']);
+            }
+        }
 
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);
