@@ -57,4 +57,6 @@ interface AssessmentService
     public function getAssessmentSnapshotBySnapshotAssessmentId($snapshotAssessmentId);
 
     public function isEmptyAssessment($assessmentId);
+    
+    public function findAssessmentTypes();
 }
