@@ -23,10 +23,11 @@ class RandomAssessmentCreateJob extends AbstractJob
             'mode' => 'rand',
             'status' => 'generating',
             'parentId' => $assessment['id'],
-            'questionCategoryCounts' => $assessmentGenerateRule['question_setting'][0]['questionCategoryCounts'],
-            'scores' => $assessmentGenerateRule['question_setting'][0]['scores'],
-            'scoreType' => $assessmentGenerateRule['question_setting'][0]['scoreType'],
-            'choiceScore' => $assessmentGenerateRule['question_setting'][0]['choiceScore'],
+            'questionCategoryCounts' => $assessmentGenerateRule['question_setting']['questionCategoryCounts'],
+            'scores' => $assessmentGenerateRule['question_setting']['scores'],
+            'scoreType' => $assessmentGenerateRule['question_setting']['scoreType'],
+            'choiceScore' => $assessmentGenerateRule['question_setting']['choiceScore'],
+            'displayable' => '0',
         ];
 
         try {
@@ -38,6 +39,7 @@ class RandomAssessmentCreateJob extends AbstractJob
             $this->getAssessmentService()->updateBasicAssessmentByParentId($assessment['id'], ['status' => 'draft']);
             $this->biz['db']->commit();
         } catch (\Exception $e) {
+            $this->biz['db']->rollback();
             $this->getAssessmentService()->updateAssessment($assessment['id'], ['status' => 'failure']);
             throw $e;
         }

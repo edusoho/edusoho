@@ -10,9 +10,8 @@ class CreateTableBizAssessmentGenerateRule extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        if (!$this->isTableExist('biz_assessment_generate_rule')) {
-            $biz['db']->exec("
-            CREATE TABLE `biz_assessment_generate_rule` (
+        $biz['db']->exec("
+            CREATE TABLE IF NOT EXISTS `biz_assessment_generate_rule` (
             `id` int(10) NOT NULL AUTO_INCREMENT,
             `num` int(10) NOT NULL COMMENT '试卷份数',
             `type` varchar(255) NOT NULL COMMENT '抽题方式(按题型抽题questionType，题型分类questionTypeCategory)',
@@ -25,7 +24,6 @@ class CreateTableBizAssessmentGenerateRule extends Migration
             PRIMARY KEY (`id`)
             )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='试卷生成规则表';
         ");
-        }
     }
 
     /**
@@ -34,25 +32,6 @@ class CreateTableBizAssessmentGenerateRule extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        if ($this->isTableExist('biz_assessment_generate_rule')) {
-            $biz['db']->exec('DROP TABLE IF EXISTS `biz_assessment_generate_rule`;');
-        }
-    }
-
-    private function isIndexExist($table, $indexName)
-    {
-        $sql = "show index from `{$table}` where Key_name='{$indexName}';";
-        $result = $this->getContainer()['db']->fetchAssoc($sql);
-
-        return !empty($result);
-    }
-
-    protected function isTableExist($table)
-    {
-        $biz = $this->getContainer();
-        $sql = "SHOW TABLES LIKE '{$table}'";
-        $result = $biz['db']->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
+        $biz['db']->exec('DROP TABLE IF EXISTS `biz_assessment_generate_rule`;');
     }
 }
