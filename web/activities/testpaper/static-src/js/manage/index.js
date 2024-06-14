@@ -101,6 +101,7 @@ class Testpaper {
     this.initDatePicker();
     this.initFormItemData();
     this.initAdvancedSettings();
+    this.changeContentHight();
 
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {
@@ -134,6 +135,17 @@ class Testpaper {
         $this.next().val(reverseEnable);
       });
     }
+  }
+
+  changeContentHight() {
+    $('.testpaperTimeRange').on('focus', function() {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height + 358.8 + 'px';
+    });
+    $('.testpaperTimeRange').on('blur', function() {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height - 358.8 + 'px';
+    });
   }
 
   initDatePicker() {
@@ -385,7 +397,7 @@ class Testpaper {
       data: [
         {
           id: '0',
-          text: '请选择试卷类型',
+          text: Translator.trans('activity.testpaper_manage.media_type_required'),
           selected: true,
         }
       ],
@@ -643,7 +655,6 @@ class Testpaper {
   }
 
   getItemsTable(url, testpaperId) {
-    console.log(url);
     $.post(url, { testpaperId: testpaperId }, function (html) {
       $('#questionItemShowTable').html(html);
       $('#questionItemShowDiv').show();

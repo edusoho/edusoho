@@ -214,11 +214,11 @@
           <input type="hidden" name="endTime" value="{% if activity.ext.answerScene.end_time|default(0) > 0 %}{{ activity.ext.answerScene.end_time|date('Y-m-d H:i:s') }}{% else %}0{% endif %}" size="25" >
         <div class="col-sm-offset-2 col-sm-10 controls">
           <input type="{% if activity.ext.validPeriodMode|default('0') != 1 %}hidden{% else %}text{% endif %}" readonly  unselectable="on"
-            id="rangeTime" name="rangeTime" size="25" class="form-control js-realTimeRange-data" autocomplete="off" style="width: 320px;">
+            id="rangeTime" name="rangeTime" size="25" class="form-control js-realTimeRange-data testpaperTimeRange" autocomplete="off" style="width: 320px;">
         </div>
         <div class="col-sm-offset-2 col-sm-10 controls">
           <input type="{% if activity.ext.validPeriodMode|default('0') != 2 %}hidden{% else %}text{% endif %}" readonly  unselectable="on"
-            size="25" id="rangeStartTime" name="rangeStartTime" class="form-control js-start-range" style="width: 160px;" >
+            size="25" id="rangeStartTime" name="rangeStartTime" class="form-control js-start-range testpaperTimeRange" style="width: 160px;" >
         </div>
 			</div>
 
