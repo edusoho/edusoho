@@ -48,7 +48,6 @@
                     {isWrong: question.length > 0 && filterOrder(index).replace('.','') === question[0].response[0] && question[0].response[0] !== question[0].answer[0]}
                   ]"
         >
-          <!-- {isWrong: question.length > 0 && filterOrder(index).replace('.','') === myAnswer && myAnswer !== question[0].answer[0]} -->
           <i class="iconfont icon-cuowu2"></i>
           <i class="iconfont icon-zhengque1"></i>
           <i class="iconfont icon-a-Frame34723"></i>
@@ -98,7 +97,7 @@
               </button>
               <p class="ai-left-tittle" v-show="stopAiExplain">{{$t('courseLearning.beGenerating')}}</p>
             </div>
-            <div ai-content-right>
+            <div>
               <img src="static/images/explain-ai-img.png" class="ai-right-img" />
             </div>
           </div>

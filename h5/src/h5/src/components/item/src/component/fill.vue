@@ -91,7 +91,7 @@
               </button>
               <p class="ai-left-tittle" v-show="stopAiExplain">{{$t('courseLearning.beGenerating')}}</p>
             </div>
-            <div ai-content-right>
+            <div>
               <img src="static/images/explain-ai-img.png" class="ai-right-img" />
             </div>
           </div>
