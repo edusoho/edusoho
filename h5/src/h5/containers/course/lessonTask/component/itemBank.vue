@@ -8,6 +8,7 @@
       :touchable="touchable"
       :loop="false"
       :duration="100"
+      :lazy-render="true"
       @change="changeswiper"
     >
       <van-swipe-item
