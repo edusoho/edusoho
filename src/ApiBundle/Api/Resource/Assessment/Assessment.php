@@ -87,6 +87,27 @@ class Assessment extends AbstractResource
         return $this->makePagingObject($assessments, $total, $offset, $limit);
     }
 
+    public function remove(ApiRequest $request)
+    {
+        $assessmentId = $request->request->get('id', 0);
+        if (empty($assessmentId)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        try {
+            $this->biz['db']->beginTransaction();
+            $this->getAssessmentService()->deleteAssessment($assessmentId);
+            if ('random' == $assessment['type']) {
+                $this->getAssessmentService()->deleteAssessmentByParentId($assessmentId);
+            }
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+        }
+
+        return ['ok' => true];
+    }
+
     private function validate($fields)
     {
         $requiredFields = [

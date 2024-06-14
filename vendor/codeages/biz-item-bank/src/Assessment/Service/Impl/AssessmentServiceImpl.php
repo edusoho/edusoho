@@ -159,6 +159,37 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         }
     }
 
+    public function deleteAssessmentByParentId($parentId)
+    {
+        $assessments = $this->getAssessmentDao()->search(['parent_id' => $parentId], [], 0, PHP_INT_MAX);
+        $assessmentIds = array_column($assessments, 'id');
+        if (empty($assessmentIds)) {
+            throw new AssessmentException('assessment not found', ErrorCode::ASSESSMENT_NOTFOUND);
+        }
+
+        try {
+            $this->beginTransaction();
+            $this->getAssessmentDao()->batchDelete(['ids'=> $assessmentIds]);
+            $this->processBatchDeleteAssessment($assessmentIds);
+            $this->dispatch('assessment.batch.delete', $assessmentIds);
+            $this->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    protected function processBatchDeleteAssessment($assessmentIds){
+        $this->getSectionService()->deleteAssessmentSectionsByAssessmentIds($assessmentIds);
+        $this->getSectionItemService()->deleteAssessmentSectionItemsByAssessmentIds($assessmentIds);
+        $daoArr = ['AnswerReportDao', 'AnswerRecordDao', 'AnswerQuestionReportDao'];
+        foreach ($daoArr as $dao){
+            $this->biz->dao('ItemBank:Answer:'.$dao)->batchDelete(['assessment_ids' => $assessmentIds]);
+        }
+    }
+
     protected function processDeleteAssessment($assessment){
         $this->getSectionService()->deleteAssessmentSectionsByAssessmentId($assessment['id']);
         $this->getSectionItemService()->deleteAssessmentSectionItemsByAssessmentId($assessment['id']);
