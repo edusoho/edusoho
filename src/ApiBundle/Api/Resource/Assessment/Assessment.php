@@ -103,6 +103,7 @@ class Assessment extends AbstractResource
             $this->biz['db']->commit();
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
+            throw $e;
         }
 
         return ['ok' => true];
