@@ -28,6 +28,11 @@ class AssessmentGenerateRuleServiceImpl extends BaseService implements Assessmen
         return $this->getAssessmentGenerateRuleDao()->findByAssessmentIds($assessmentIds);
     }
 
+    public function search($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getAssessmentGenerateRuleDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
     /**
      * @return AssessmentGenerateRuleDao
      */

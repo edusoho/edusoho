@@ -9,4 +9,6 @@ interface AssessmentGenerateRuleService
     public function createAssessmentGenerateRule($assessmentGenerateRule);
     
     public function findAssessmentGenerateRuleByAssessmentIds($assessmentIds);
+
+    public function search($conditions, $orderBy, $start, $limit);
 }
