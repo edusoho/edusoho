@@ -71,6 +71,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             'type' => 'regular',
             'parentId' => '0',
             'status' => 'draft',
+            'parent_id' => '0'
         ];
 
         $assessment = array_merge($defaultAssessment, $assessment);
@@ -212,7 +213,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             'bank_id' => ['integer', ['min', 1]],
             'name' => [['lengthBetween', 1, 255]],
             'updated_user_id' => ['integer', ['min', 0]],
-            'status' => [['in', [self::DRAFT, self::OPEN, self::CLOSED, self::FAILURE]]],
+            'status' => [['in', [self::GENERATING, self::DRAFT, self::OPEN, self::CLOSED, self::FAILURE]]],
             'item_count' => ['integer', ['min', 0]],
             'question_count' => ['integer', ['min', 0]],
             'total_score' => [],
