@@ -452,7 +452,7 @@ export default {
           .ai-img {
             margin-right: 5px;
             width: 16px;
-            height: 16px;
+            height: 17px;
           }
         }
         .ai-stopbtn {
