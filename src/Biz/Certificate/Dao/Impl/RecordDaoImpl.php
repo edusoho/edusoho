@@ -9,6 +9,11 @@ class RecordDaoImpl extends AdvancedDaoImpl implements RecordDao
 {
     protected $table = 'certificate_record';
 
+    public function getByCode($code)
+    {
+        return $this->getByFields(['certificateCode' => $code]);
+    }
+
     public function findByCertificateId($certificateId)
     {
         return $this->findByFields(['certificateId' => $certificateId]);
