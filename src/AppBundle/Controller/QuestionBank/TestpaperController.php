@@ -371,9 +371,17 @@ class TestpaperController extends BaseController
         if (empty($assessment['item_count'])) {
             return $this->createMessageResponse('warning', '当前试卷所有题目内容均已被删除');
         }
+        $assessmentChildIds = [];
+        if ('random' == $assessment['type']) {
+            if ('generating' == $assessment['status']) {
+                return $this->createMessageResponse('warning', '试卷生成中，请稍后再试');
+            }
+            $assessmentChildIds = $this->getAssessmentService()->searchAssessments(['parent_id' => $id], [], 0, PHP_INT_MAX, 'id');
+        }
 
         return $this->render('testpaper/manage/preview.html.twig', [
             'assessment' => $this->addArrayEmphasisStyle($assessment),
+            'assessmentChildIds' => $assessmentChildIds,
         ]);
     }
 
