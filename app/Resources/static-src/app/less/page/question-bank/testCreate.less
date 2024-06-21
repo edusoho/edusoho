@@ -1,10 +1,12 @@
 .test-create {
-    padding: 0 25px;
-
+    .panel-default {
+        padding: 0;
+    }
     .test-create-title {
         display: flex;
         justify-content: space-between;
-
+        align-items: center;
+        padding: 0 25px 16px 25px;
         .test-create-title-left {
             display: flex;
             justify-content: space-between;
@@ -83,6 +85,8 @@
 
     .test-create-content {
         margin: 32px 0;
+        padding: 0 25px;
+        position: relative;
 
         .ant-form-item {
             display: flex;
@@ -102,6 +106,13 @@
 
         .ant-form-item-control-wrapper {
             flex: 1;
+        }
+
+        .maxNum {
+            position: absolute;
+            right: 10px;
+            color: #C0C0C2;
+            font-size: 14px;
         }
 
         .test-paper-number {
@@ -145,6 +156,126 @@
             position: absolute;
             left: 12px;
             top: 121px;
+        }
+
+        .extraction-method-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .question-type-show {
+                margin: 0;
+
+                img {
+                    width: 16px;
+                    height: 16px;
+                }
+
+                span {
+                    color: #37393D;
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 22px
+                }
+            }
+
+            .ant-radio-wrapper {
+                font-weight: normal;
+            }
+        }
+
+        .question-type {
+            padding-left: 98px;
+            margin-bottom: 24px;
+            width: 1098px;
+
+            .question-typ-top {
+                .question-typ-top-list {
+                    display: flex;
+
+                    span {
+                        padding: 16px;
+                        width: 138px;
+                        height: 54px;
+                        font-size: 14px;
+                        font-weight: bolder;
+                        line-height: 22px;
+                    }
+                }
+            }
+
+            .question-type-content {
+                .question-type-content-list {
+                    display: flex;
+                    margin: 0;
+
+                    span {
+                        padding: 16px;
+                        width: 125px;
+                        height: 54px;
+                        border: 1px solid #F2F3F5;
+                        font-size: 14px;
+                        line-height: 22px;
+                    }
+
+                    input {
+                        padding: 16px;
+                        width: 125px;
+                        height: 54px;
+                        border: 1px solid #F2F3F5;
+                    }
+
+                    .question-type-content-list-total {
+                        padding: 16px;
+                        width: 125px;
+                        height: 54px;
+                        background: #FAFAFA;
+                        border: 1px solid #F2F3F5;
+                        font-size: 14px;
+                        font-weight: bolder;
+                        line-height: 22px;
+
+                        i {
+                            font-size: 12px;
+                            font-style: normal;
+                            font-weight: normal;
+                            color: #5E6166;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        .test-create-save {
+            padding: 4px 15px;
+            color: #FFF;
+            text-align: center;
+            font-size: 14px;
+            border: none;
+            border-radius: 2px;
+            background: #46C37B;
+            box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.04);
+            line-height: 22px;
+        }
+
+        .test-create-cancel {
+            margin-left: 16px;
+            padding: 4px 15px;
+            color: #37393D;
+            text-align: center;
+            font-size: 14px;
+            border-radius: 2px;
+            border: 1px solid #DCDEE0;
+            background: #FFF;
+            box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.02);
+            line-height: 22px;
         }
     }
 }
