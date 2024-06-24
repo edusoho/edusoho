@@ -17,6 +17,11 @@ class RecordServiceImpl extends BaseService implements RecordService
         return $this->getRecordDao()->get($id);
     }
 
+    public function getByCode($code)
+    {
+        return $this->getRecordDao()->getByCode($code);
+    }
+
     public function count($conditions)
     {
         return $this->getRecordDao()->count($conditions);
