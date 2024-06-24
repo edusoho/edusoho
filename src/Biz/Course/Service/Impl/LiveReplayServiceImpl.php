@@ -13,6 +13,7 @@ use Biz\Course\LiveReplayException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Course\Service\MemberService;
+use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskService;
@@ -251,6 +252,9 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             return $replayDatas;
         }
         $liveActivity = $this->getLiveActivityService()->getByLiveId($liveId);
+        if (empty($liveActivity)) {
+            return $replayDatas;
+        }
         $activity = $this->getActivityService()->getByMediaIdAndMediaType($liveActivity['id'], 'live');
         $replayCount = $this->getLessonReplayDao()->count([
             'courseId' => $activity['fromCourseId'],
@@ -279,6 +283,27 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         }
 
         return $replayDatas;
+    }
+
+    public function handleReplayGenerateEventForOpenCourse($liveId, $replayDatas)
+    {
+        $lesson = $this->getOpenCourseService()->getLiveOpenLessonByLiveId($liveId);
+        if (empty($lesson)) {
+            return;
+        }
+        $replays = [];
+        foreach ($replayDatas as $replay) {
+            $replays[] = $this->addReplay([
+                'courseId' => $lesson['courseId'],
+                'lessonId' => $lesson['id'],
+                'title' => $replay['subject'],
+                'replayId' => $replay['id'],
+                'globalId' => empty($replay['resourceNo']) ? '' : $replay['resourceNo'],
+                'type' => 'liveOpen',
+            ]);
+        }
+
+        $this->dispatchEvent('live.replay.generate', $replays);
     }
 
     /**
@@ -346,6 +371,14 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     protected function getS2B2CFacadeService()
     {
         return $this->createService('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return OpenCourseService
+     */
+    protected function getOpenCourseService()
+    {
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 
     /**

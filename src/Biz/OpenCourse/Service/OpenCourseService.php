@@ -89,6 +89,8 @@ interface OpenCourseService
 
     public function getCourseLesson($courseId, $lessonId);
 
+    public function getLiveOpenLessonByLiveId($liveId);
+
     public function findLessonsByIds(array $ids);
 
     public function findLessonsByCourseId($courseId);

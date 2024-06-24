@@ -595,6 +595,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $lesson;
     }
 
+    public function getLiveOpenLessonByLiveId($liveId)
+    {
+        return $this->getOpenCourseLessonDao()->getLiveOpenLessonByMediaId($liveId);
+    }
+
     public function getNextLesson($courseId, $lessonId)
     {
         $lesson = $this->getCourseLesson($courseId, $lessonId);
