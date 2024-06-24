@@ -7,6 +7,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Question\QuestionException;
 use Biz\Question\QuestionParseClient;
+use Biz\Question\Traits\QuestionAIAnalysisTrait;
 use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
@@ -18,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 class QuestionController extends BaseController
 {
     use QuestionImportTrait;
+    use QuestionAIAnalysisTrait;
 
     public function indexAction(Request $request, $id)
     {
@@ -69,6 +71,11 @@ class QuestionController extends BaseController
     public function importIntroAction()
     {
         return $this->render('question-bank/question/import-intro-modal.html.twig');
+    }
+
+    public function aiAnalysisIntroAction()
+    {
+        return $this->render('question-bank/question/ai-analysis-intro-modal.html.twig');
     }
 
     public function importAction(Request $request, $id)
@@ -196,6 +203,7 @@ class QuestionController extends BaseController
                 $question['scoreType'] = $question['score_rule']['scoreType'];
                 $question['otherScore'] = $question['score_rule']['otherScore'];
             }
+            $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForTeacher($question, $item);
         }
 
         return $item;

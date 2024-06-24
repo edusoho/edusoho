@@ -6,6 +6,8 @@ interface RecordService
 {
     public function get($id);
 
+    public function getByCode($code);
+
     public function count($conditions);
 
     public function search($conditions, $orderBys, $start, $limit, $columns = []);

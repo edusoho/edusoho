@@ -44,6 +44,10 @@ login:
     defaults:
         _controller: 'AppBundle:Login:index'
     h5: true
+external_login:
+  path:  '/login/external'
+  defaults:
+        _controller: 'AppBundle:Login:externalLogin'
 login_check:
     path: '/login_check'
 logout:
@@ -3667,6 +3671,10 @@ question_bank_manage_import_intro:
     path: '/question_bank/import_intro'
     defaults:
         _controller: 'AppBundle:QuestionBank/Question:importIntro'
+question_bank_manage_ai_analysis_intro:
+    path: '/question_bank/ai_analysis_intro'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/Question:aiAnalysisIntro'
 question_bank_manage_question_import:
     path: '/question_bank/{id}/question/import'
     defaults:

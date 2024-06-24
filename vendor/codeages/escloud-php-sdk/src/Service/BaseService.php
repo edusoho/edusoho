@@ -98,7 +98,7 @@ abstract class BaseService
      * @throws SDKException
      * @throws SDK\HttpClient\ClientException
      */
-    protected function request($method, $uri, array $data = array(), array $headers = array(), $node = 'root')
+    protected function request($method, $uri, array $data = array(), array $headers = array(), $node = 'root', $stream = false)
     {
         $options = array();
 
@@ -125,7 +125,14 @@ abstract class BaseService
         $headers['Content-Type'] = 'application/json';
         $options['headers'] = $headers;
 
+        if ($stream) {
+            $options['stream'] = $stream;
+        }
+
         $response = $this->createClient()->request($method, $this->getRequestUri($uri, 'http', $node), $options);
+        if ($stream) {
+            return $this->extractResultFromStreamResponse($response);
+        }
 
         return $this->extractResultFromResponse($response);
     }
@@ -140,17 +147,30 @@ abstract class BaseService
      */
     protected function extractResultFromResponse(Response $response)
     {
+        $this->checkResponseHttpCode($response);
         try {
             $result = SDK\json_decode($response->getBody(), true);
         } catch (\Exception $e) {
             throw new SDKException($e->getMessage() . "(response: {$response->getBody()}");
         }
 
-        $responseCode = $response->getHttpResponseCode();
+        if (isset($result['error'])) {
+            $this->handleErrorResponse($response);
+        }
 
-        if ($responseCode < 200 || $responseCode > 299 || isset($result['error'])) {
-            $this->logger && $this->logger->error((string)$response);
-            throw new ResponseException($response);
+        return $result;
+    }
+
+    protected function extractResultFromStreamResponse(Response $response)
+    {
+        $this->checkResponseHttpCode($response);
+        $result = [];
+        try {
+            foreach (array_filter(explode("\n\n", $response->getBody())) as $data) {
+                $result[] = SDK\json_decode(substr($data, 5), true);
+            }
+        } catch (\Exception $e) {
+            throw new SDKException($e->getMessage() . "(response: {$response->getBody()}");
         }
 
         return $result;
@@ -203,5 +223,21 @@ abstract class BaseService
         }
 
         return $this->host;
+    }
+
+    private function checkResponseHttpCode(Response $response)
+    {
+        $responseCode = $response->getHttpResponseCode();
+
+        if ($responseCode < 200 || $responseCode > 299) {
+            $this->handleErrorResponse($response);
+        }
+    }
+
+    private function handleErrorResponse(Response $response)
+    {
+        $this->logger && $this->logger->error((string)$response);
+
+        throw new ResponseException($response);
     }
 }

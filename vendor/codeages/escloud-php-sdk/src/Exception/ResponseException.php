@@ -16,8 +16,8 @@ class ResponseException extends SDKException
         $this->response = $response;
         $this->responseData = SDK\json_decode($response->getBody(), true);
 
-        $errorCode = $this->get('code', -1);
-        $errorMessage = $this->get('message', 'Unknow error');
+        $errorCode = (int) $this->get('code', -1);
+        $errorMessage = $this->get('message', 'Unknown error');
 
         parent::__construct($errorMessage, $errorCode);
     }
@@ -51,6 +51,10 @@ class ResponseException extends SDKException
     {
         if (isset($this->responseData['error'][$key])) {
             return $this->responseData['error'][$key];
+        }
+
+        if (isset($this->responseData[$key])) {
+            return $this->responseData[$key];
         }
 
         return $default;

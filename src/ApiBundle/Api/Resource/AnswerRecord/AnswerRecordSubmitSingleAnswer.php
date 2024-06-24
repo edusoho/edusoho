@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
+use Biz\Question\Traits\QuestionAIAnalysisTrait;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
@@ -20,6 +21,8 @@ use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class AnswerRecordSubmitSingleAnswer extends AbstractResource
 {
+    use QuestionAIAnalysisTrait;
+
     public function add(ApiRequest $request, $answerRecordId)
     {
         $params = $this->convertParams($answerRecordId, $request->request->all());
@@ -50,6 +53,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
             'reviewedCount' => $reviewedCount,
             'totalCount' => $assessment['question_count'],
             'isAnswerFinished' => (AnswerRecordStatus::FINISHED == $answerRecord['status']) ? 1 : 0,
+            'aiAnalysisEnable' => $this->canGenerateAIAnalysisForStudent($question, $item),
         ];
     }
 

@@ -587,6 +587,7 @@ admin_v2.question_bank.basic_tab: 题库管理
 admin_v2.question_bank.basic_tab.create_btn: 创建题库
 admin_v2.question_bank.category_tab: 题库分类管理
 admin_v2.question_bank.category_tab.create_btn: 添加分类
+admin_v2.question.ai_analysis_tab: AI题目解析
 
 #通用按钮
 admin_v2.btn.recommend_cancel_btn: 取消推荐

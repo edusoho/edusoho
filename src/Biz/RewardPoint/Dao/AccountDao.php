@@ -8,9 +8,13 @@ interface AccountDao extends AdvancedDaoInterface
 {
     public function deleteByUserId($userId);
 
-    public function getByUserId($userId, $potions = array());
+    public function getByUserId($userId, $potions = []);
 
     public function waveBalance($id, $value);
 
     public function waveDownBalance($id, $value);
+
+    public function countJoinUser($conditions);
+
+    public function searchJoinUser($conditions, $orderBys, $start, $limit);
 }

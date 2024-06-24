@@ -58,6 +58,8 @@ interface ItemService
 
     public function getQuestionIncludeDeleted($questionId);
 
+    public function getQuestion($questionId);
+
     public function countItemTypesNum($items);
 
     public function findDuplicatedMaterialIds($itemBankId, $items);

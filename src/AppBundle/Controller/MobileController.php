@@ -80,12 +80,12 @@ class MobileController extends BaseController
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
 
         return $this->render('/mobile/download-middle-page.html.twig', [
-            'mobileCode'=> $mobileCode,
-            'mobile'=> $mobile,
-            'site'=> $site,
-            'maincolor'=> $themeConfig['config']['maincolor'],
-            'courseId'=> $courseId,
-            'goodsId'=> $goodsId,
+            'mobileCode' => $mobileCode,
+            'mobile' => $mobile,
+            'site' => $site,
+            'maincolor' => $themeConfig['config']['maincolor'],
+            'courseId' => $courseId,
+            'goodsId' => $goodsId,
             'userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
         ]);
     }

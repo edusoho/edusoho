@@ -47,7 +47,7 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
      * @see UnifiedPaymentService::createPlatformTradeByTradeSn() 实际发起支付
      *
      * @param array $fields
-     * @param bool $createPlatformTrade
+     * @param bool  $createPlatformTrade
      *
      * @return array
      */
@@ -210,6 +210,9 @@ class UnifiedPaymentServiceImpl extends BaseService implements UnifiedPaymentSer
         }
 
         $trades = $this->getTradeRefundDao()->findByTradeSn($fields['tradeSn']);
+        $trades = array_filter($trades, function ($trade) {
+            return 'failed' != $trade['status'];
+        });
         $refundAmount = array_sum(ArrayToolkit::column($trades, 'refundAmount'));
         if ($refundAmount + $fields['refundAmount'] > (int) $trade['amount']) {
             throw new AccessDeniedException('can not refund, because the refund amount is greater than the trade amount');

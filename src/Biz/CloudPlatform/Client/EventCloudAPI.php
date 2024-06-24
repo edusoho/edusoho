@@ -4,14 +4,14 @@ namespace Biz\CloudPlatform\Client;
 
 class EventCloudAPI extends AbstractCloudAPI
 {
-    public function push($name, array $body = array(), $timestamp = 0)
+    public function push($name, array $body = [], $timestamp = 0)
     {
-        $event = array(
+        $event = [
             'name' => $name,
             'body' => $body,
-            'timestamp' => $timestamp,
+            'timestamp' => $timestamp ?: time(),
             'nonce' => substr(md5(uniqid('', true)), -16),
-        );
+        ];
 
         $event['user'] = $this->accessKey;
         $event['signature'] = $this->makeSignature($event);
@@ -19,7 +19,7 @@ class EventCloudAPI extends AbstractCloudAPI
         return $this->_request('POST', '/events', $event);
     }
 
-    protected function _request($method, $uri, $params, $headers = array())
+    protected function _request($method, $uri, $params, $headers = [])
     {
         $requestId = substr(md5(uniqid('', true)), -16);
 
@@ -27,10 +27,10 @@ class EventCloudAPI extends AbstractCloudAPI
 
         if ($this->isWithoutNetwork()) {
             if ($this->debug && $this->logger) {
-                $this->logger->debug("NetWork Off, So Block:[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
+                $this->logger->debug("NetWork Off, So Block:[{$requestId}] {$method} {$url}", ['params' => $params, 'headers' => $headers]);
             }
 
-            return array('network' => 'off');
+            return ['network' => 'off'];
         }
 
         $headers[] = 'Content-type: application/json';
@@ -82,11 +82,11 @@ class EventCloudAPI extends AbstractCloudAPI
 
         curl_close($curl);
 
-        $context = array(
+        $context = [
             'CURLINFO' => $curlinfo,
             'HEADER' => $header,
             'BODY' => $body,
-        );
+        ];
 
         if (empty($curlinfo['namelookup_time'])) {
             $this->logger && $this->logger->error("[{$requestId}] NAME_LOOK_UP_TIMEOUT", $context);
@@ -115,7 +115,7 @@ class EventCloudAPI extends AbstractCloudAPI
         }
 
         if ($this->debug && $this->logger) {
-            $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
+            $this->logger->debug("[{$requestId}] {$method} {$url}", ['params' => $params, 'headers' => $headers]);
         }
 
         return $result;
