@@ -1,0 +1,364 @@
+.test-create {
+  .test-create-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 46px;
+    border-bottom: 1px solid var(---Line-1, #F2F3F5);
+
+    .test-create-title-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      .test-create-title-left-back {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+
+        .test-create-title-left-back-img {
+          display: flex;
+          padding: 2px;
+          align-items: flex-start;
+
+          img {
+            width: 7px;
+            height: 14px;
+            stroke-width: 1.5px;
+            stroke: var(---Text-4, #5E6166);
+          }
+        }
+
+        .test-create-title-left-back-text {
+          color: var(---Text-5, #37393D);
+          text-align: center;
+          font-feature-settings: 'clig' off, 'liga' off;
+          font-family: "PingFang SC";
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 24px;
+          letter-spacing: 0.1px;
+        }
+      }
+
+      i {
+        width: 1px;
+        height: 12px;
+        border-left: 1px solid var(---Line-2, #E5E6EB);
+      }
+
+      .test-create-title-left-type {
+        display: flex;
+        padding: 4px 16px;
+        justify-content: center;
+        align-items: center;
+        width: 92px;
+        border-radius: 4px;
+        background: #FFF3E8;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 16px;
+        color: #F77234;
+      }
+    }
+
+    .test-create-title-right {
+      display: flex;
+      padding: 16px;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      border-radius: 8px;
+      background: var(---fill-1, #FAFAFA);
+
+      .test-create-title-right-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .test-create-title-right-text {
+        color: var(---Text-3, #919399);
+        font-family: "PingFang SC";
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+      }
+
+      .test-create-title-right-number {
+        color: #000;
+        font-family: D-DIN;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 32px;
+      }
+
+      i {
+        width: 1px;
+        height: 17px;
+        background: #E5E6EB;
+      }
+    }
+  }
+
+  .test-create-content {
+    margin: 32px 0;
+    padding: 0 25px;
+    position: relative;
+
+    .ant-form-item {
+      display: flex;
+    }
+
+    .ant-form-item-label {
+      width: 82px;
+      color: #37393D;
+      font-size: 14px;
+      font-style: normal;
+
+      label {
+        font-weight: normal;
+        margin-right: 16px;
+      }
+    }
+
+    .ant-form-item-control-wrapper {
+      flex: 1;
+    }
+
+    .maxNum {
+      position: absolute;
+      right: 10px;
+      color: #C0C0C2;
+      font-size: 14px;
+    }
+
+    .test-paper-number {
+      .test-paper-number-text {
+        margin: 0 8px;
+        color: #5E6166;
+        font-size: 14px;
+      }
+
+      .test-num-tips-image {
+        img {
+          margin-top: -3px;
+          width: 14px;
+          height: 14px;
+        }
+      }
+
+    }
+
+    .test-num-tips {
+      position: relative;
+      padding: 8px;
+      margin-left: 235px;
+      width: 298px;
+      height: 122px;
+      border-radius: 2px;
+      background: #37393D;
+      color: #FFF;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 22px;
+    }
+
+    .test-num-tips::after {
+      display: block;
+      content: '';
+      border-width: 6px 6px 6px 6px;
+      border-style: solid;
+      border-color: #37393D transparent transparent transparent;
+      position: absolute;
+      left: 12px;
+      top: 121px;
+    }
+
+    .extraction-method-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .question-type-show {
+        margin: 0;
+        cursor: pointer;
+
+        img {
+          width: 16px;
+          height: 16px;
+        }
+
+        span {
+          color: #37393D;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 22px
+        }
+      }
+
+      .ant-radio-wrapper {
+        font-weight: normal;
+      }
+    }
+
+    .question-type {
+      padding-left: 98px;
+      margin-bottom: 24px;
+      width: 1098px;
+
+      .question-typ-top {
+        .question-typ-top-list {
+          display: flex;
+
+          span {
+            padding: 16px;
+            width: 138px;
+            height: 54px;
+            font-size: 14px;
+            font-weight: bolder;
+            line-height: 22px;
+          }
+        }
+      }
+
+      .question-type-content {
+        .question-type-content-list {
+          display: flex;
+          margin: 0;
+
+          span {
+            padding: 16px;
+            width: 125px;
+            height: 54px;
+            border: 1px solid #F2F3F5;
+            font-size: 14px;
+            line-height: 22px;
+          }
+
+          input {
+            padding: 16px;
+            width: 125px;
+            height: 54px;
+            border: 1px solid #F2F3F5;
+          }
+
+          .question-type-content-list-total {
+            padding: 16px;
+            width: 125px;
+            height: 54px;
+            background: #FAFAFA;
+            border: 1px solid #F2F3F5;
+            font-size: 14px;
+            font-weight: bolder;
+            line-height: 22px;
+
+            i {
+              font-size: 12px;
+              font-style: normal;
+              font-weight: normal;
+              color: #5E6166;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    .test-create-save {
+      padding: 4px 15px;
+      color: #FFF;
+      text-align: center;
+      font-size: 14px;
+      border: none;
+      border-radius: 2px;
+      background: #46C37B;
+      box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.04);
+      line-height: 22px;
+    }
+
+    .test-create-cancel {
+      margin-left: 16px;
+      padding: 4px 15px;
+      color: #37393D;
+      text-align: center;
+      font-size: 14px;
+      border-radius: 2px;
+      border: 1px solid #DCDEE0;
+      background: #FFF;
+      box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.02);
+      line-height: 22px;
+    }
+  }
+}
+
+.question-type-setting-menu {
+  display: flex;
+  padding: var(--Number, 4px) 0 !important;
+  flex-direction: column;
+  align-items: flex-start;
+
+  border-radius: 2px !important;
+  background: var(--Conditional-pop-over, #FFF);
+  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05) !important;
+
+  .question-type-setting-menu-item {
+    display: flex;
+    padding: 5px 12px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    gap: 16px;
+
+    .question-type-setting-menu-item-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .question-type-setting-menu-item-label-icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      .question-type-setting-menu-item-label-text {
+        color: var(---Text-5, #37393D);
+        font-family: "PingFang SC";
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+      }
+    }
+
+    .question-type-setting-menu-item-switch {
+      display: flex;
+      padding: 2px 2px 2px 14px;
+      justify-content: flex-end;
+      align-items: center;
+
+      border-radius: 16px;
+      min-width: 28px;
+      width: 28px;
+      height: 16px;
+
+      &:after {
+        width: 12px;
+        height: 12px;
+      }
+    }
+  }
+}
